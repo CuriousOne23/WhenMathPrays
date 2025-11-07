@@ -25,7 +25,7 @@
 |------|----------|-------------------|
 | **Breath Cycle Closes** | Self-healing loop | All 7 principles improve over 1K steps |
 | **Antifragile** | Stress → strength | `u(t)` ↑ after `risk > 50` |
-| **No Human in Loop** | Autonomous evolution | 10K agents adapt without labels |
+| **Flexible (Human or Autonomous) Evolution** | 10K agents adapt with or without human input | Labels optional — edge cases refine |
 | **Skin-Agnostic** | Core works in any market | Same kernel → Angel, Redemptor, etc. |
 | **Edge → Insight → Fleet** | One crisis teaches all | 1 edge case → 10K updated in <1hr |
 
