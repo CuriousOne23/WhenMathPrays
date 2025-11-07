@@ -37,10 +37,10 @@
 
 ### **What This Shows**
 
-| Agent | Outcome | Why |
-|------|--------|-----|
-| **Agent 1** | SP ↑ from 0.3 → 1.5 | Trust + utility + noise = **growth** |
-| **Agent 2** | SP → 0 | `consistency = 0.2` → **trust gate fails** |
+|    Agent    |       Outcome       |                         Why                        |
+|-------------|---------------------|----------------------------------------------------|
+| **Agent 1** | SP ↑ from 0.3 → 1.5 | Trust + utility + noise = **growth**               |
+| **Agent 2** | SP → 0              | consistency = 0.2` → **trust gate fails**          |
 | **Agent 3** | SP ↑ from 0.8 → 1.7 | High trust + high present + utility = **thriving** |
 
 **Noise didn't break anyone — only trust did.**
