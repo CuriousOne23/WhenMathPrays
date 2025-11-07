@@ -1,3 +1,5 @@
+import numpy as np
+
 def soul_presence(consistency, acceptance, coherence, resonance, utility_integral, clip=True):
     """
     SoulPresence: Persistent identity.
@@ -13,4 +15,5 @@ def soul_presence(consistency, acceptance, coherence, resonance, utility_integra
     # TRUST GATE: Both must be ≥ 0.3
     trust_gate = 1.0 if (consistency >= 0.3 and acceptance >= 0.3) else 0.0
 
-    return trust_gate * coherence * resonance * np.exp(0.1 * utility_integral)
+    exponent = np.clip(0.1 * utility_integral, -10, 10)  # ← clamp exp input
+    return trust_gate * coherence * resonance * np.exp(exponent)
