@@ -7,6 +7,8 @@ SOLID, implementable principles for Heart AI. 7 equations → 7 modules.
 pip install -r requirements.txt
 python whenmathprays_core.py
 
+Output: Mean Risk: 12.4 | Max Risk: 87.3 | Passes: True | Escalations: 2
+
 Principles
 
 SoulPresence: Identity evolution
