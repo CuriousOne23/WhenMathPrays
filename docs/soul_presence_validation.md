@@ -31,6 +31,14 @@ A child in a chaotic home
 A parolee with triggers
 A bot in a noisy API
 
+base = 0.6, Agent Consistency value
+noise_std = 0.3 * base  # 30% of base
+actual = base + np.random.normal(0, noise_std)
+
+Input,95% Range
+consistency = 0.6,"[0.24, 0.96]"
+acceptance = 0.3,"[0.18, 0.42]"
+
 It’s not arbitrary.
 It’s life.
 
