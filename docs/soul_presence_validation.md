@@ -58,9 +58,9 @@ It’s life.
 | **Agent 2** | 0.2 | 0.8 | 0.5 | 0.5 | 0.00 | [0.08, 0.32] |
 | **Agent 3** | 0.8 | 0.8 | 0.9 | 0.9 | +0.02 | [0.44, 1.16] |
 
-> **30% noise = σ = 0.3 × base**  
-> **95% of inputs fall within ±2σ**  
-> **Simulates real-world volatility**
+**30% noise = σ = 0.3 × base**  
+**95% of inputs fall within ±2σ**  
+**Simulates real-world volatility**
 
 ---
 
