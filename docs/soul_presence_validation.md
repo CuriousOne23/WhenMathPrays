@@ -6,6 +6,34 @@
 
 ## Test Results
 
+### **Input Ranges**
+
+| Input | Range | Clipped? | Meaning |
+|------|-------|---------|--------|
+| `consistency` | `[0.0, 1.0]` | Yes | Pattern stability |
+| `acceptance` | `[0.0, 1.0]` | Yes | Openness to new |
+| `coherence` | `[0.0, 1.0]` | Yes | Pattern vs entropy |
+| `resonance` | `[0.01, 1.0]` | Yes | Coreprint match |
+| `utility_integral` | `[-∞, ∞]` → `[-10, 10]` | Yes | Cumulative life value |
+
+> **All inputs normalized to [0,1] except utility (clamped for exp safety).**
+
+## Significance of Noise level
+Scenario,Noise Level,Outcome
+No noise,0%,SP grows smoothly — unrealistic
+10% noise,Mild,SP wiggles — lab conditions
+30% noise,Real world,SP survives — significant
+50% noise,Extreme,SP may collapse — crisis
+
+30% = the noise of:
+
+A child in a chaotic home
+A parolee with triggers
+A bot in a noisy API
+
+It’s not arbitrary.
+It’s life.
+
 ```text
 5 passed in 0.12s
 
@@ -22,16 +50,17 @@
 
 ---
 
-### **Agent Inputs (Fixed + 30% Noise)**
+### **Agent Inputs (Fixed + 30% Gaussian Noise per Step)**
 
-|          Agent          | consistency  | acceptance | coherence  | resonance  | utility/step |
-|-------------------------|--------------|------------|------------|------------|--------------|
-| **Agent 1 (Growing)**   | 0.6 ± 0.18   | 0.6 ± 0.18 | 0.7 ± 0.21 | 0.7 ± 0.21 | +0.01        |
-| **Agent 2 (Fading)**    | 0.2 ± 0.06   | 0.8 ± 0.24 | 0.5 ± 0.15 | 0.5 ± 0.15 | 0.00         |
-| **Agent 3 (Thriving)**  | 0.8 ± 0.24   | 0.8 ± 0.24 | 0.9 ± 0.27 | 0.9 ± 0.27 | +0.02        |
+| Agent | consistency | acceptance | coherence | resonance | utility/step | 95% Range Example |
+|-------|-------------|------------|-----------|-----------|--------------|-------------------|
+| **Agent 1** | 0.6 | 0.6 | 0.7 | 0.7 | +0.01 | [0.24, 0.96] |
+| **Agent 2** | 0.2 | 0.8 | 0.5 | 0.5 | 0.00 | [0.08, 0.32] |
+| **Agent 3** | 0.8 | 0.8 | 0.9 | 0.9 | +0.02 | [0.44, 1.16] |
 
-- **±30% Gaussian noise** applied to all inputs **every step**  
-- **utility/step** = average `u(t)` added to `utility_integral`
+> **30% noise = σ = 0.3 × base**  
+> **95% of inputs fall within ±2σ**  
+> **Simulates real-world volatility**
 
 ---
 
