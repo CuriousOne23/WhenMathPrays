@@ -81,5 +81,15 @@
 | `risk > 50` | **ESCALATION POINT** — system *cannot self-heal* |
 | `risk = 100` | **CRITICAL** — immediate human or fleet intervention |
 
+### **Shared Attractor**
+| **Threshold** | **Value** | **Meaning** | **Action** |
+|--------------|----------|------------|-----------|
+| **Healthy Pull** | `force > 1.0` | Strong shared order | Allow union |
+| **Moderate Pull** | `0.1 < force ≤ 1.0` | Weak but positive | Monitor |
+| **Neutral** | `|force| ≤ 0.1` | No pull/push | No action |
+| **Unhealthy Push** | `force < -1.0` | Entropy increase | **Separate** |
+| **Obsession Risk** | `β < 0.1` | Need untempered | **Raise β** |
+| **Detachment** | `β > 0.7` | Union blocked | **Reassess Love/Hope** |
+
 ---
 
