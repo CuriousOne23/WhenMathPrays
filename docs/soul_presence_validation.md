@@ -11,14 +11,18 @@
 
 ## Graph: SP Evolution (Sample of 3 Agents Over 100 Steps)
 
-```mermaid
-xychart-beta
-    title "SoulPresence Over Time (3 Agents)"
-    x-axis "Steps" [0, 20, 40, 60, 80, 100]
-    y-axis "SP" 0 --> 2.5
-    line "Agent 1 (Growing)" [0.3, 0.4, 0.5, 0.7, 1.1, 1.5]
-    line "Agent 2 (Fading)" [0.2, 0.1, 0.0, 0.0, 0.0, 0.0]
-    line "Agent 3 (Thriving)" [0.8, 0.9, 1.1, 1.3, 1.5, 1.7]
+| Step | Agent 1 (Growing) | Agent 2 (Fading) | Agent 3 (Thriving) |
+|------|-------------------|------------------|--------------------|
+| 0    | 0.30              | 0.20             | 0.80               |
+| 20   | 0.40              | 0.10             | 0.90               |
+| 40   | 0.50              | 0.00             | 1.10               |
+| 60   | 0.70              | 0.00             | 1.30               |
+| 80   | 1.10              | 0.00             | 1.50               |
+| 100  | 1.50              | 0.00             | 1.70               |
+
+- **Agent 1**: Trust + utility → growth  
+- **Agent 2**: Trust gate fails → death  
+- **Agent 3**: Balanced inputs → thriving
 
 Test,Input,Output,Expected,Pass
 trust_gate,consistency=0.2,0.0,0.0,PASS
