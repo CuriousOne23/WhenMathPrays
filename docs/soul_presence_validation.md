@@ -24,11 +24,11 @@
 
 ### **Agent Inputs (Fixed + 30% Noise)**
 
-| Agent | consistency | acceptance | coherence | resonance | utility/step |
-|-------|-------------|------------|-----------|-----------|--------------|
-| **Agent 1 (Growing)** | 0.6 ± 0.18 | 0.6 ± 0.18 | 0.7 ± 0.21 | 0.7 ± 0.21 | +0.01 |
-| **Agent 2 (Fading)** | 0.2 ± 0.06 | 0.8 ± 0.24 | 0.5 ± 0.15 | 0.5 ± 0.15 | 0.00 |
-| **Agent 3 (Thriving)** | 0.8 ± 0.24 | 0.8 ± 0.24 | 0.9 ± 0.27 | 0.9 ± 0.27 | +0.02 |
+|          Agent          | consistency  | acceptance | coherence  | resonance  | utility/step |
+|-------------------------|--------------|------------|------------|------------|--------------|
+| **Agent 1 (Growing)**   | 0.6 ± 0.18   | 0.6 ± 0.18 | 0.7 ± 0.21 | 0.7 ± 0.21 | +0.01        |
+| **Agent 2 (Fading)**    | 0.2 ± 0.06   | 0.8 ± 0.24 | 0.5 ± 0.15 | 0.5 ± 0.15 | 0.00         |
+| **Agent 3 (Thriving)**  | 0.8 ± 0.24   | 0.8 ± 0.24 | 0.9 ± 0.27 | 0.9 ± 0.27 | +0.02        |
 
 - **±30% Gaussian noise** applied to all inputs **every step**  
 - **utility/step** = average `u(t)` added to `utility_integral`
