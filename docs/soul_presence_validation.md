@@ -85,7 +85,38 @@ utility/step,Average u(t) per step — how fast utility_integral grows
 | **Agent 2** | SP → 0              | consistency = 0.2` → **trust gate fails**          |
 | **Agent 3** | SP ↑ from 0.8 → 1.7 | High trust + high present + utility = **thriving** |
 
-**Noise didn't break anyone — only trust did.**
+**Noise didn't break anyone — only trust did.**  
+**Agent 2 died not from 30% noise, but from `consistency = 0.2 < 0.3`.**  
+**The trust gate is the true guardian of the self.**
+
+Insight,Implication
+Noise is not the enemy,Real life is noisy — we survive it
+Trust is the foundation,No trust → no self — even in calm
+The system is antifragile,Noise → learning. No trust → death.
+
+Why call it Trust Gate:
+Short Answer: Because min(consistency, acceptance) = Trust in Self
+Term,"Why ""Trust"""
+Consistency,"""Am I stable over time?"""
+Acceptance,"""Am I open to new data?"""
+min(...) ≥ 0.3,You cannot have a self without both
+
+Why Not "Balance"?
+Name,Why Not
+Balance,Implies symmetry — but 0.6 and 0.4 is fine
+Harmony,Too vague
+Trust,Precise — no self without trust in past and future
+
+Real-World Meaning
+Scenario,consistency,acceptance,Trust,SP
+Child in chaos,0.2,0.8,0.2,→ 0
+Elder in routine,0.8,0.2,0.2,→ 0
+Healthy adult,0.7,0.7,0.7,→ alive
+Trust is the gate.
+
+### **Why "Trust Gate"?**
+```math
+\text{trust} = \min(\text{consistency}, \text{acceptance})
 
 ---
 
@@ -104,4 +135,15 @@ SP < 0.1,0 agents
 SP > 0.2,98.7%
 No collapse,100%
 
-All agents survived 30% noise. No SP fell below 0.1.
+
+## The Trust Gate Law
+
+**Lopsided trust = no self**
+
+| Type | consistency | acceptance | SP |
+|------|-------------|------------|----|
+| Balanced | ≥0.3 | ≥0.3 | >0.1 |
+| Lopsided | <0.3 | ≥0.3 | 0.0 |
+| Rigid | ≥0.3 | <0.3 | 0.0 |
+
+**Agent 2 (0.2, 0.8)** → **SP = 0** → **unhealthy**
