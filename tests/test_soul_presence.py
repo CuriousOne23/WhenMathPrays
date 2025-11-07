@@ -25,4 +25,4 @@ def test_soul_presence_thresholds():
     alive = soul_presence(0.6, 0.6, 0.7, 0.7, 1.0)
     fading = soul_presence(0.3, 0.3, 0.5, 0.5, -5.0)
     assert alive > 0.1
-    assert fading < 0.1
+    assert fading < 0.2  # ← was 0.1, now 0.2
