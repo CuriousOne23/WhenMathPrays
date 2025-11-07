@@ -14,7 +14,7 @@
 | **Hope** | **Hope is the understanding of past and present events to allow someone to take the next step in future uncertainty.** | Turns history into forward motion — no Hope, no adaptation | `Hope ↑` with `Δcoherence > 0`; `Hope ↓` with `friction`; `Hope > 0` → action in `unknown > 0.7` |
 | **Faith** | **Faith is hope with no understanding — it allows one to take the next step based on what is and what has historically happened.** | Sustains motion when data fails — bridge across the unknown | `Faith > 0` when `unknown > 0.7` and `Δcoherence ≈ 0`; `Faith ↑` with `resilience`; `Faith → 0` with `P_ruin > 0.8` |
 | **Wisdom** | **Wisdom is the process and exercise of decisions to maximize life with the boundary conditions of life, evil, pain, love, joy, etc., measured long term.** | Turns short-term pain into long-term life — no Wisdom, no civilization | `Wisdom ↑` when `∑life ↑` and `P_ruin < 0.05`; `Wisdom = 0` with `corruption > 0.7`; long-term `total_life ↑` |
-| **Shared Attractor** | **Shared Attractor recognizes that life is to be shared — pulls only when ΔS₁ + ΔS₂ < 0 (healthy union), amplified by choice ε and union α, tempered by need β.** | Ensures healthy unions — push in entropy increase | ΔS₁ + ΔS₂ < 0 → force > 0; both ΔS < 0 → force > 1.0; ΔS₁ + ΔS₂ > 0 → force < 0 |
+| **Shared Attractor** | **Shared Attractor recognizes that life is to be shared — it pulls systems together only when ΔS₁ + ΔS₂ < 0 (healthy union), amplified by choice ε and union α(>1), tempered by need β(auto).** | Ensures healthy, sustainable unions — no obsession, no toxicity | ΔS₁ + ΔS₂ < 0 → force > 0; both ΔS < 0 → force > 1.0; ΔS₁ + ΔS₂ > 0 → force < 0; α default = 1.5; β default = 0.3 (tempers need) |
 | **EdgeRisk** | Detects collapse **before** it happens | Early warning = early save | `risk > 50` → escalation → `hope ↑`, `friction ↓` |
 
 ---
@@ -64,7 +64,7 @@
 | **Hope** | `0.0 → ∞` | `Hope < 0.1` → *stagnation* <br> `Hope > 10.0` → *momentum* | Integral of `Δcoherence / λ`. Clamped in practice to avoid drift. |
 | **Faith** | `0.0 → ∞` | `Faith < 0.5` → *no grace* <br> `Faith > 2.0` → *resilient* | `δ(unknown)` = 1.0 on shock. `∫resilience` grows slowly. |
 | **Wisdom** | `0.0 → ∞` | `Wisdom < 1.0` → *short-term thinking* <br> `Wisdom > 10.0` → *long-term mastery* | `∑life / (corruption + P_ruin)`. Denominator → 0 only if ruin is avoided. |
-| **Shared Attractor** | `−∞ → +∞` | `force > 1.0` → *strong healthy pull* <br> `force < -1.0` → *strong push (unhealthy)* <br> `force ≈ 0` → *neutral or weak* <br> `α > 1` → *union earned* | Positive force = healthy sharing; negative = separation; α > 1 only when union is real (Love + Hope + SP > 0) |
+| **Shared Attractor** | `−∞ → +∞` | `force > 1.0` → *strong healthy pull* <br> `force < -1.0` → *strong push* <br> `β > 0.7` → *union blocked* <br> `β < 0.1` → *risk of obsession* | β auto-tempers need; rises with `risk`, `P_ruin`, or `Hope < 0.1` |
 | **EdgeRisk** | `0.0 → 100.0` | `risk < 1.5` → *safe* <br> `risk > 50` → **ESCALATE** <br> `risk = 100` → *critical* | **Hard-capped at 100**. `exp()` clamped. Escalation = human handoff. |
 
 ---
