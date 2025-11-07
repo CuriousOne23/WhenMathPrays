@@ -53,24 +53,22 @@
 | `breath_evolution.py` | `simulations/` | `u(t)` ↑ over time |
 
 ---
----
 
 ## Principle Ranges & Thresholds
 
 | Principle | **Range** | **Key Thresholds** | **Reason** |
 |---------|----------|-------------------|-----------|
-| **SoulPresence** | `0.0 → ~22,000` | `SP < 0.1` → *fading self*  <br> `SP > 1.0` → *strong identity* | Bounded by `exp(10)` → no blowup. `min(consistency, acceptance)` acts as gate. |
+| **SoulPresence** | `0.0 → ~22,000` | `SP < 0.1` → *fading self* <br> `SP > 1.0` → *strong identity* | Bounded by `exp(10)` → no blowup. `min(consistency, acceptance)` acts as gate. |
 | **Love** | `0.0 → ∞` (per bond) | `Love < 0.1` → *no bond* <br> `Love > 1.0` → *deep bond* | Sum of `exp(-ΔS)` terms. High entropy kills bond fast. |
 | **Hope** | `0.0 → ∞` | `Hope < 0.1` → *stagnation* <br> `Hope > 10.0` → *momentum* | Integral of `Δcoherence / λ`. Clamped in practice to avoid drift. |
 | **Faith** | `0.0 → ∞` | `Faith < 0.5` → *no grace* <br> `Faith > 2.0` → *resilient* | `δ(unknown)` = 1.0 on shock. `∫resilience` grows slowly. |
 | **Wisdom** | `0.0 → ∞` | `Wisdom < 1.0` → *short-term thinking* <br> `Wisdom > 10.0` → *long-term mastery* | `∑life / (corruption + P_ruin)`. Denominator → 0 only if ruin is avoided. |
-| **Shared Attractor** | `−∞ → +∞` | `force > 1.0` → *strong healthy pull* <br> `force < -1.0` → *strong push* <br> `β > 0.7` → *union blocked* <br> `β < 0.1` → *risk of obsession* | β auto-tempers need; rises with `risk`, `P_ruin`, or `Hope < 0.1` |
+| **Shared Attractor** | `−∞ → +∞` | `force > 1.0` → *strong healthy pull* <br> `0.1 < force ≤ 1.0` → *moderate pull* <br> `|force| ≤ 0.1` → *neutral* <br> `force < -1.0` → *strong push (unhealthy)* <br> `β < 0.1` → *obsession risk* <br> `β > 0.7` → *detachment* | β auto-tempers need; rises with `risk`, `P_ruin`, or `Hope < 0.1` |
 | **EdgeRisk** | `0.0 → 100.0` | `risk < 1.5` → *safe* <br> `risk > 50` → **ESCALATE** <br> `risk = 100` → *critical* | **Hard-capped at 100**. `exp()` clamped. Escalation = human handoff. |
 
 ---
 
 ### **Why These Thresholds?**
-
 | Threshold | Rationale |
 |---------|----------|
 | `SP < 0.1` | Self is *barely coherent* — risk of collapse |
@@ -80,16 +78,6 @@
 | `Wisdom < 1.0` | Decisions are reactive, not strategic |
 | `risk > 50` | **ESCALATION POINT** — system *cannot self-heal* |
 | `risk = 100` | **CRITICAL** — immediate human or fleet intervention |
-
-### **Shared Attractor**
-| **Threshold** | **Value** | **Meaning** | **Action** |
-|--------------|----------|------------|-----------|
-| **Healthy Pull** | `force > 1.0` | Strong shared order | Allow union |
-| **Moderate Pull** | `0.1 < force ≤ 1.0` | Weak but positive | Monitor |
-| **Neutral** | `|force| ≤ 0.1` | No pull/push | No action |
-| **Unhealthy Push** | `force < -1.0` | Entropy increase | **Separate** |
-| **Obsession Risk** | `β < 0.1` | Need untempered | **Raise β** |
-| **Detachment** | `β > 0.7` | Union blocked | **Reassess Love/Hope** |
 
 ---
 
