@@ -47,17 +47,6 @@
 
 ---
 
-## **Action**
-
-1. **Edit `docs/soul_presence_validation.md`**  
-2. **Replace the old table** with the **two tables above**  
-3. **Save**  
-4. **Commit:**
-```bash
-git add docs/soul_presence_validation.md
-git commit -m "docs: Add agent inputs, noise, and detailed SP evolution"
-bash scripts/git-sync.sh
-
 Test,Input,Output,Expected,Pass
 trust_gate,consistency=0.2,0.0,0.0,PASS
 trust_gate,acceptance=0.2,0.0,0.0,PASS
