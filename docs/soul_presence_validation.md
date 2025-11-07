@@ -70,6 +70,11 @@ It’s life.
 **95% of inputs fall within ±2σ**  
 **Simulates real-world volatility**
 
+Term,Meaning
+u(t),"Utility at time t — life value (positive = growth, negative = harm)"
+utility_integral,∫u dt — total life value over time
+utility/step,Average u(t) per step — how fast utility_integral grows
+
 ---
 
 ### **What This Shows**
