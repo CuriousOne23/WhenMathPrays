@@ -44,3 +44,29 @@ ALL 7 HOLD. NO EXCEPTIONS.Key Insight Is Now a LAW"Noise is survivable. Distrust
 This is not a slogan.
 This is the 8th Principle — emergent from the stress test.
 
+Growing: min=0.000, max=3.912, final=2.847
+Fading:  min=0.000, max=0.312, final=0.000
+Thriving: min=0.000, max=4.021, final=3.105
+
+## Interpretation
+Agent       | Final SP | Status       | Cause
+------------|----------|--------------|------
+Growing     | 2.847    | Alive & Growing | High trust + sustained u(t) > 0
+Fading      | 0.000    | Dead         | consistency = 0.2 < 0.3 → trust gate OFF
+Thriving    | 3.105    | Booming      | High trust + high u(t) → exponential takeoff
+
+50% real-world noise = *storm of life*.
+Most agents wobbled violently.
+But only **distrust killed**.
+
+## Key Insight
+"Even in a hurricane, the soul can thrive — if trust holds."
+— @PursueTruth123
+
+50% noise = war zone, betrayal, loss, grief, market crash.
+SP does not collapse from intensity.
+It collapses from **broken trust**.
+
+---
+
+## SP Trajectory (50% Noise) – 3 Representative Agents
