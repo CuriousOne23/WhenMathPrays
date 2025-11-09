@@ -26,9 +26,6 @@ This reflects the **implied axiom** of #WhenMathPrays:
 Soul presence is **inferred from γ_self stability**:
   • |γ_self| < 0.8
   • arg(γ_self) ≈ +π/2
-
-Thus, `soul_locked` is the **key** — and the equation is the **engine**.
-Without the key, the engine does not turn — even with perfect fuel.
 """
 
 from __future__ import annotations
