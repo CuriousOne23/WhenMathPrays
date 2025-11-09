@@ -19,8 +19,8 @@ def gamma_self(
     if C is None:
         C = A
 
-    ego = -b + A * np.sin(omega * t_arr)
-    resonance = C * np.cos(omega * t_arr)
+    ego = -b + A * np.cos(omega * t_arr)
+    resonance = C * np.sin(omega * t_arr)
     gamma = ego + 1j * resonance
 
     return gamma
