@@ -32,7 +32,7 @@ Level,What We Proved,Method
   ◉    |    ◉
   (Balanced Surrender) (Pure Surrender)
        ↓
-       -Im (Bond Surrender)
+       -Im (No Bonding)
 
 ## **1. CODE VALIDATION — 7/7 PASS**
 
