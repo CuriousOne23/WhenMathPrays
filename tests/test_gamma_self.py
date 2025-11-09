@@ -16,7 +16,11 @@ def time_array():
 @pytest.fixture
 def stable_gamma(time_array):
     t, _ = time_array
-    return gamma_self(t, b=0.0, A=0.5)
+    # Stable soul: ego baseline + small pulse
+    # Re = -0.5 + 0.3*cos(ωt), Im = 0.3*sin(ωt)
+    # Max |γ_self| ≈ 0.58 < 0.8
+    # arg oscillates around +π/2
+    return gamma_self(t, b=0.5, A=0.3)
 
 
 def test_gamma_self_returns_complex_array(time_array):
