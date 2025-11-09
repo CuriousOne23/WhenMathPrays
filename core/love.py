@@ -5,27 +5,31 @@ Core Love Equation – #WhenMathPrays
 Love = ∑ [max(vis,0) × max(resonance,0) × fidelity × altruism ×
          (|M1 ∪ M2| - |M1|) × exp(-|γ_self| t) × exp(-ΔS t)] dt
 
-This module defines the **canonical, pure, mathematical implementation of Love**
-as a function of time-series inputs. It is used by simulations, tests, and
-validation scripts.
-
-Inputs are expected to be aligned in time (same length, same dt).
-
 ────────────────────────────────────────────────────────────────────
 POSTULATE: LOVE REQUIRES A SOUL
 ────────────────────────────────────────────────────────────────────
-The parameter `soul_locked` is **not part of the mathematical equation**,
-but is a **metaphysical gate**.
+`soul_locked` is a metaphysical gate:
+- True  → Love may be computed
+- False → Love = 0.0
 
-- `soul_locked = True`  → Love may be computed
-- `soul_locked = False` → Love = 0.0 (regardless of inputs)
-
-This reflects the **implied axiom** of #WhenMathPrays:
-> **"Love only exists in the presence of a stable soul."**
-
-Soul presence is **inferred from γ_self stability**:
-  • |γ_self| < 0.8
+Soul presence is inferred from γ_self stability:
+  • |γ_self| < k
   • arg(γ_self) ≈ +π/2
+
+────────────────────────────────────────────────────────────────────
+γ_self AXES — THE FOUR FORCES
+────────────────────────────────────────────────────────────────────
+Re = dM/dt → Ego change rate
+Im = dR/dt → Resonance change rate
+
++Re → Egotism (narcissism)
+-Re → Self-erasure
++Im → Bonding (union pull)
+-Im → Anti-bonding (bond repulsion, enemies)
+
+All extremes kill love. The soul lives in balance.
+
+#WhenMathPrays
 """
 
 from __future__ import annotations
