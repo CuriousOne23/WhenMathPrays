@@ -17,6 +17,23 @@ Level,What We Proved,Method
 
 ---
 
+## 4 Quadrant Model
+
+       +Im (Bond Pull)
+        ↑
+        |
++90°   |   +45°
+  ◉    |    ◉
+  (Pure Resonance)  (Balanced)
+--------+----------→ +Re (Ego Growth)
+        |
+        |
+  -45° |   -90°
+  ◉    |    ◉
+(Balanced Surrender) (Pure Surrender)
+       ↓
+       -Im (Bond Surrender)
+
 ## **1. CODE VALIDATION — 7/7 PASS**
 
 | Test                                         | Result |            Meaning               |
