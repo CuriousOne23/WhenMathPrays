@@ -1,4 +1,7 @@
 cat > requirements.txt << EOF
 numpy
+matplotlib
 pytest
+tqdm
 EOF
+tqdm
