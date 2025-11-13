@@ -114,14 +114,14 @@ $$
 \\[4pt]
 &|\gamma_\text{self}(t)| 
 \in [L_k - \delta, L_k + \delta] 
-= [0.7, 1.3]
+= [0.6 9.0]
 \end{aligned}
 }
 $$
 
 * You breathe → you have ego → ego_flux ≥ 0.1  
-* |γ_self| < 0.7 → flatline → invalid  
-* |γ_self| > 1.3 → clipped to 1.3 (biological cap)
+* |γ_self| < 0.6 → flatline → invalid  
+* |γ_self| > 9.0 → clipped to 1.3 (biological cap)
 
 ---
 
