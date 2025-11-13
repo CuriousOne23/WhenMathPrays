@@ -11,4 +11,5 @@ Love and gamma_self space is 2 dimensional:
 6. |love| = strength of feeling or desire within the defined region of space #1 thru #5
 7. |gamma_self| =  = strength of feeling or desire within the defined region of space #1 thru #5
 8. avg(gamma_self(t), tw) defines avgerage vector of space operation over a window of average, tw
+9. ΔS >= 0
    
