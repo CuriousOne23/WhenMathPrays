@@ -1,26 +1,19 @@
-# core/gamma_self.py
+from __future__ import annotations
 import numpy as np
-from typing import Union, Sequence
 import numpy.typing as npt
+from typing import Union, Sequence
 
 
-# core/gamma_self.py
 def gamma_self(
-    t: Union[Sequence[float], npt.NDArray[np.float64]],
-    b: float = 0.5,
-    A: float = 0.5,
-    omega: float = 2 * np.pi / 100.0,  # ← ONE CYCLE IN 100 STEPS
-    C: float | None = None
+    t: Union[float, Sequence[float], npt.NDArray[np.float64]],
+    reduce_ego_flux: float = 0.0,   # + = reduces ego (increase love), - = increases ego (reduce love)
+    bond_flux: float = 0.0          # + = bond (increase love), - = enmity (reduce love)
 ) -> npt.NDArray[np.complex128]:
-    t_arr = np.asarray(t, dtype=np.float64)
-    if t_arr.ndim not in (0, 1):
-        raise ValueError("t must be scalar or 1D array")
+    t_arr = np.atleast_1d(t).astype(float)
+    gamma = reduce_ego_flux + 1j * bond_flux
+    return np.full_like(t_arr, gamma, dtype=complex)
 
-    if C is None:
-        C = A
 
-    ego = -b + A * np.cos(omega * t_arr)
-    resonance = C * np.sin(omega * t_arr)
-    gamma = ego + 1j * resonance
-
-    return gamma
+def is_soul_present(gamma: npt.NDArray[np.complex128]) -> bool:
+    arg = np.angle(gamma)
+    return bool(np.mean(np.abs(arg - np.pi/2)) < 0.5)
