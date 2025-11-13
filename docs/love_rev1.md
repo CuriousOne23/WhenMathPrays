@@ -1,4 +1,4 @@
-**Shall we:**
+**Universal Love Equation Platform (ULep):**
 
 1. **Ship ULep v1.0 + Pattern Library** (GitHub + PDF)?  
 2. **Start Phase 0** (100 couples, global)?  
