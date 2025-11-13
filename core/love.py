@@ -1,65 +1,34 @@
-# core/love.py
-"""
-Core Love Equation – #WhenMathPrays
-
-Love = ∑ [max(vis,0) × max(resonance,0) × fidelity × altruism ×
-         (|M1 ∪ M2| - |M1|) × exp(-|γ_self| t) × exp(-ΔS t)] dt
-
-────────────────────────────────────────────────────────────────────
-POSTULATE: LOVE REQUIRES A SOUL
-────────────────────────────────────────────────────────────────────
-`soul_locked` is a metaphysical gate:
-- True  → Love may be computed
-- False → Love = 0.0
-
-Soul presence is inferred from γ_self stability:
-  • |γ_self| < k
-  • arg(γ_self) ≈ +π/2
-
-────────────────────────────────────────────────────────────────────
-γ_self AXES — THE FOUR FORCES
-────────────────────────────────────────────────────────────────────
-Re = dM/dt → Ego change rate
-Im = dR/dt → Resonance change rate
-
-+Re → Egotism (narcissism)
--Re → Self-erasure
-+Im → Bonding (union pull)
--Im → Anti-bonding (bond repulsion, enemies)
-
-All extremes kill love. The soul lives in balance.
-
-#WhenMathPrays
-"""
-
 from __future__ import annotations
-
-from typing import Sequence, Union
 import numpy as np
 import numpy.typing as npt
+from core.gamma_self import is_soul_present
 
 
-def love(vis_t, res_t, fidelity, altruism, shared_growth_t, gamma_t, delta_S_t, dt, soul_locked=True):
-    if not soul_locked:
-        return 0.0
+def love(
+    vis_t: npt.NDArray[np.float64],
+    res_t: npt.NDArray[np.float64],
+    fidelity: float,
+    altruism: float,
+    shared_growth_t: npt.NDArray[np.float64],
+    gamma_t: npt.NDArray[np.complex128],
+    delta_S_t: npt.NDArray[np.float64],
+    dt: float,
+    soul_required: bool = False
+) -> complex:
+    if soul_required and not is_soul_present(gamma_t):
+        return 0.0 + 0.0j
 
-    n = len(vis_t)
-    t = np.arange(n) * dt
-
-    gamma_mag_avg = np.mean(np.abs(gamma_t))
-    delta_S_avg = np.mean(delta_S_t)
-
-    decay_gamma = np.exp(-gamma_mag_avg * t)
-    decay_delta = np.exp(-delta_S_avg * t)
+    t = np.arange(len(vis_t)) * dt
+    decay_delta = np.exp(-np.mean(delta_S_t) * t)
 
     term = (
-        vis_t *  # ← NO max
-        res_t *  # ← NO max
+        np.maximum(vis_t, 0) *
+        np.maximum(res_t, 0) *
         fidelity *
         altruism *
         shared_growth_t *
-        decay_gamma *
+        gamma_t *
         decay_delta
     )
-    
-    return np.sum(term) * dt
+
+    return complex(np.sum(term) * dt)
