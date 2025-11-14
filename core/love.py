@@ -1,37 +1,57 @@
-# core/love.py — FINAL, CORRECTED
+# core/love.py
+from typing import List
 import numpy as np
-from typing import List, Tuple
 
-# === UNION BIAS — LOVE IS THE DEFAULT ===
-UNION_BIAS = (1.0, 3.2)  # SURRENDER=1.0, BOND=3.0
+DEFAULT_GAMMA = 0.0 + 0.0j
 
-def gamma_self(
-    ego_flux: float,
-    bond_flux: float,
-    union_bias: Tuple[float, float] | None = None
-) -> complex:
-    if union_bias is None:
-        S, B = UNION_BIAS
-    else:
-        S, B = union_bias
-    
-    ego = max(0.0, ego_flux - S)
-    bond = bond_flux + B
-    return -ego + 1j * bond
+def gamma_self(we_ego_state: float, love_enmity_state: float) -> complex:
+    """γ = we_ego_state + 1j * love_enmity_state"""
+    return we_ego_state + 1j * love_enmity_state
+
+
+def _wrap_to_pi(x: float) -> float:
+    """Wrap angle to [-π, π) — preserves continuity"""
+    return (x + np.pi) % (2 * np.pi) - np.pi
+
 
 def love(
     W: float,
     gamma_history: List[complex],
     tw: int = 7,
     delta_S: float = 0.001,
-    t: float = 0.0
+    t: float = 0.0,
+    noise: float = 0.0
 ) -> complex:
-    if not gamma_history:
-        raise ValueError("gamma_history cannot be empty")
-    
-    if any(np.isclose(np.abs(g), 0.0) for g in gamma_history[-tw:]):
-        raise ValueError("γ_self magnitude zero in window — death state")
+    """
+    L(t) = W × exp(mean(we_ego_state)) × exp(j * wrap(mean(love_enmity_state))) × exp(-ΔS·t)
 
-    history = np.array(gamma_history[-tw:]) if len(gamma_history) >= tw else np.array(gamma_history)
-    gamma_avg = np.mean(history)
-    return W * np.exp(gamma_avg) * np.exp(-delta_S * t)
+    WRAP: Ensures continuity — no jumps when love spins past ±π.
+    """
+    if not gamma_history:
+        return 0.0 + 0.0j
+
+    if tw == 0:
+        gamma_avg = gamma_history[-1]
+    else:
+        recent = gamma_history[-tw:] if len(gamma_history) >= tw else gamma_history
+        gamma_avg = np.mean(recent)
+
+    # Growth
+    growth = np.exp(gamma_avg.real)
+
+    # Direction — WRAPPED to [-π, π)
+    im_wrapped = _wrap_to_pi(gamma_avg.imag)
+    direction = np.exp(1j * im_wrapped)
+
+    # Decay
+    decay = np.exp(-delta_S * t)
+
+    L = W * growth * direction * decay
+
+    if noise > 0:
+        L += np.random.normal(0, noise) + 1j * np.random.normal(0, noise)
+
+    return L
+
+
+__all__ = ["gamma_self", "love", "DEFAULT_GAMMA"]

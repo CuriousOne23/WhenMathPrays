@@ -1,0 +1,8 @@
+# All 8
+python core/distributions_gamma_self.py all
+
+# Specific
+python core/distributions_gamma_self.py buddhist narcissist parent
+
+# Add new + plot all
+python core/distributions_gamma_self.py all --add '{"name":"Soulmate","mean":"-0.1+3j","cov":"[[0.2,0],[0,2]]","color":"#ff69b4","desc":"Pure draw, no ego"}'
