@@ -12,7 +12,7 @@ Space definition Angles :
 
 Distribution shapes about space angle definitions : 
 1. Buddhist: tiny symmetric circle. 
-2. Narcissist: flat horizontal line. 
+2. Narcissist: horizontal oval. 
 3. Ego-dating: thin vertical oval (mostly upward). 
 4. Marriage: broad circular cloud. 
 5. Parent: teardrop - long right, short down. 
