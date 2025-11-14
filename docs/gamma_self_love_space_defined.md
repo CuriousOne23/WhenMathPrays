@@ -18,4 +18,4 @@ Distribution shapes about space angle definitions :
 5. Parent: teardrop - long right, short down. 
 6. Soldier/divorce: vertical oval, deep down. 
 7. Unhappy marriage: tight circle, low kurtosis. 
-8. Corporate employee: skewed teardrop, sudden cliff on hate side. 
+8. Unhappy Corporate employee: skewed teardrop, sudden cliff on hate side. 
