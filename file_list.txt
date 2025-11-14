@@ -1,97 +1,131 @@
-.:
-Dockerfile
-README.md
-core
-debug_consistency.py
-debug_love.py
-debug_love_noise.py
-debug_love_perfect.py
-debug_stability.py
-debug_stress.py
-docs
-file_list.txt
-pytest.ini
-requirements.txt
-scripts
-simulations
-skins
-tests
-verify_love.py
+.
+├── .git
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-checkout
+│   │   ├── post-commit
+│   │   ├── post-merge
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── lfs
+│   │   └── tmp
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   └── main
+│   │       └── remotes
+│   │           └── origin
+│   │               └── HEAD
+│   ├── objects
+│   │   ├── info
+│   │   └── pack
+│   │       ├── pack-3d72f3102e3bd8a3653f9567393bcbadf86d4d3f.idx
+│   │       ├── pack-3d72f3102e3bd8a3653f9567393bcbadf86d4d3f.pack
+│   │       ├── pack-3d72f3102e3bd8a3653f9567393bcbadf86d4d3f.rev
+│   │       ├── pack-4f2ce7c0edd329fbd019fef52cd923887c850b13.idx
+│   │       ├── pack-4f2ce7c0edd329fbd019fef52cd923887c850b13.pack
+│   │       └── pack-4f2ce7c0edd329fbd019fef52cd923887c850b13.rev
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       │   └── main
+│       ├── remotes
+│       │   └── origin
+│       │       └── HEAD
+│       └── tags
+├── .gitignore
+├── .pytest_cache
+│   ├── .gitignore
+│   ├── CACHEDIR.TAG
+│   ├── README.md
+│   └── v
+│       └── cache
+│           ├── lastfailed
+│           └── nodeids
+├── Dockerfile
+├── README.md
+├── core
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── gamma_self.cpython-312.pyc
+│   │   ├── gamma_stability.cpython-312.pyc
+│   │   ├── love.cpython-312.pyc
+│   │   └── soul_presence.cpython-312.pyc
+│   ├── distributions.py
+│   ├── fields.py
+│   ├── hope.py
+│   ├── love.py
+│   └── soul_presence.py
+├── docs
+│   ├── gamma_self_love_space_defined.md
+│   ├── love_rev1.md
+│   ├── soul_presence_Grok_cmp_2_other_soul_forms.md
+│   ├── soul_presence_stress_summary.md
+│   ├── soul_presence_stress_test_Grok_review.md
+│   └── soul_presence_validation.md
+├── file_list.txt
+├── pytest.ini
+├── requirements.txt
+├── scripts
+│   ├── git-sync.sh
+│   └── run_sim.sh
+├── simulations
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── love_stress_test.cpython-312-pytest-8.4.1.pyc
+│   │   └── stress_test.cpython-312-pytest-8.4.1.pyc
+│   ├── stress_soul.py
+│   ├── stress_test.py
+│   └── zombie_love_plot.png
+├── skins
+│   └── README.md
+└── tests
+    ├── __pycache__
+    │   ├── conftest.cpython-312-pytest-8.4.1.pyc
+    │   ├── conftest.cpython-312-pytest-8.4.2.pyc
+    │   ├── test_core.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_gamma_self.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love.cpython-312-pytest-8.4.2.pyc
+    │   ├── test_love.cpython-312.pyc
+    │   ├── test_love_clamped.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love_complex.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love_core.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love_decay.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love_life.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_love_pure.cpython-312-pytest-8.4.1.pyc
+    │   ├── test_soul_presence.cpython-312-pytest-8.4.1.pyc
+    │   └── test_vector_mean.cpython-312-pytest-8.4.2.pyc
+    ├── conftest.py
+    ├── love_entropy_decay_complex_plane.png
+    ├── love_entropy_decay_entropy_factor.png
+    ├── love_entropy_decay_gamma_self.png
+    ├── love_entropy_decay_magnitude.png
+    ├── love_entropy_decay_noise.png
+    ├── love_entropy_decay_re_im.png
+    ├── test_love.py
+    ├── test_love_entropy_decay_with_plot.py
+    └── test_soul_presence.py
 
-./core:
-__init__.py
-__pycache__
-edge_risk.py
-faith.py
-gamma_self.py
-gamma_stability.py
-hope.py
-love.py
-shared_attractor.py
-soul_presence.py
-wisdom.py
-
-./core/__pycache__:
-__init__.cpython-312.pyc
-gamma_self.cpython-312.pyc
-gamma_stability.cpython-312.pyc
-love.cpython-312.pyc
-soul_presence.cpython-312.pyc
-
-./docs:
-claims_validation.md
-love_validation.md
-principles.md
-soul_presence_Grok_cmp_2_other_soul_forms.md
-soul_presence_stress_summary.md
-soul_presence_stress_test_Grok_review.md
-soul_presence_validation.md
-structures.md
-validation.md
-
-./scripts:
-git-sync.sh
-run_sim.sh
-
-./simulations:
-__init__.py
-__pycache__
-breath_cycle.py
-debug_decay.py
-love_plot.png
-love_sim.py
-love_simulation.log
-love_stress.log
-love_stress_0.png
-love_stress_90.png
-love_stress_test.py
-stress_soul.py
-stress_test.py
-
-./simulations/__pycache__:
-__init__.cpython-312.pyc
-love_stress_test.cpython-312-pytest-8.4.1.pyc
-stress_test.cpython-312-pytest-8.4.1.pyc
-
-./skins:
-README.md
-
-./tests:
-__pycache__
-conftest.py
-run_love.sh
-test_core.py
-test_gamma_self.py
-test_love_clamped.py
-test_love_complex.py
-test_love_decay.py
-test_soul_presence.py
-
-./tests/__pycache__:
-conftest.cpython-312-pytest-8.4.1.pyc
-test_core.cpython-312-pytest-8.4.1.pyc
-test_gamma_self.cpython-312-pytest-8.4.1.pyc
-test_love_clamped.cpython-312-pytest-8.4.1.pyc
-test_love_complex.cpython-312-pytest-8.4.1.pyc
-test_love_decay.cpython-312-pytest-8.4.1.pyc
-test_soul_presence.cpython-312-pytest-8.4.1.pyc
+31 directories, 98 files
