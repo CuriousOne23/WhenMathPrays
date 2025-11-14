@@ -14,12 +14,12 @@ Space definition Angles :
 Distribution shapes about space angle definitions : 
 1. Buddhist: tiny symmetric circle. about (0,0) equally distributed
 2. Narcissist: horizontal oval, biased on the -Re axis
-3. Ego-dating: thin vertical oval (mostly upward), centered, biased on the 3Pi/4
+3. Ego-dating: thin vertical oval (mostly upward), centered, biased on the 135°
 4. Mature Marriage: Circle but contained in Q1, center biased along 45°
 5. Parent: teardrop - long right, short down, spreading out as gaining magnitude along 45° in Q1
 7. (Soldier in the battle field)/divorce: vertical oval, deep down, biased and centered on the -Im line
 8. Unhappy marriage: tight circle, low kurtosis, contained in Q3, biased along -3Pi/4 away from center
-9. Unhappy Corporate employee: skewed teardrop (narrow going to (0,0)), sudden cliff on hate side, biased and centered on the -3Pi/4 line
+9. Unhappy Corporate employee: skewed teardrop (narrow going to (0,0)), sudden cliff on hate side, biased and centered on the -135° line
 
 Quadrants (area between & including axis):
 1. Q1 = defined by +Re and +Im
