@@ -22,7 +22,7 @@ Distribution shapes about space angle definitions :
 9. Unhappy Corporate employee: skewed teardrop (narrow going to (0,0)), sudden cliff on hate side, biased and centered on the -3Pi/4 line
 
 Quadrants (area between & including axis):
-Q1 = defined by +Re and +Im
-Q2 - defined by -Re and +Im
-Q3 - defined by -Re and -Im
-Q4 - defined by +Re and -Im
+1. Q1 = defined by +Re and +Im
+2. Q2 - defined by -Re and +Im
+3. Q3 - defined by -Re and -Im
+4. Q4 - defined by +Re and -Im
