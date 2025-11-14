@@ -16,6 +16,6 @@ Distribution shapes about space angle definitions :
 3. Ego-dating: thin vertical oval (mostly upward). 
 4. Marriage: broad circular cloud. 
 5. Parent: teardrop - long right, short down. 
-6. Soldier/divorce: vertical oval, deep down. 
+6. (Soldier in the battle field)/divorce: vertical oval, deep down. 
 7. Unhappy marriage: tight circle, low kurtosis. 
 8. Unhappy Corporate employee: skewed teardrop, sudden cliff on hate side. 
