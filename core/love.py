@@ -1,34 +1,37 @@
-from __future__ import annotations
+# core/love.py — FINAL, CORRECTED
 import numpy as np
-import numpy.typing as npt
-from core.gamma_self import is_soul_present
+from typing import List, Tuple
 
+# === UNION BIAS — LOVE IS THE DEFAULT ===
+UNION_BIAS = (1.0, 3.2)  # SURRENDER=1.0, BOND=3.0
+
+def gamma_self(
+    ego_flux: float,
+    bond_flux: float,
+    union_bias: Tuple[float, float] | None = None
+) -> complex:
+    if union_bias is None:
+        S, B = UNION_BIAS
+    else:
+        S, B = union_bias
+    
+    ego = max(0.0, ego_flux - S)
+    bond = bond_flux + B
+    return -ego + 1j * bond
 
 def love(
-    vis_t: npt.NDArray[np.float64],
-    res_t: npt.NDArray[np.float64],
-    fidelity: float,
-    altruism: float,
-    shared_growth_t: npt.NDArray[np.float64],
-    gamma_t: npt.NDArray[np.complex128],
-    delta_S_t: npt.NDArray[np.float64],
-    dt: float,
-    soul_required: bool = False
+    W: float,
+    gamma_history: List[complex],
+    tw: int = 7,
+    delta_S: float = 0.001,
+    t: float = 0.0
 ) -> complex:
-    if soul_required and not is_soul_present(gamma_t):
-        return 0.0 + 0.0j
+    if not gamma_history:
+        raise ValueError("gamma_history cannot be empty")
+    
+    if any(np.isclose(np.abs(g), 0.0) for g in gamma_history[-tw:]):
+        raise ValueError("γ_self magnitude zero in window — death state")
 
-    t = np.arange(len(vis_t)) * dt
-    decay_delta = np.exp(-np.mean(delta_S_t) * t)
-
-    term = (
-        np.maximum(vis_t, 0) *
-        np.maximum(res_t, 0) *
-        fidelity *
-        altruism *
-        shared_growth_t *
-        gamma_t *
-        decay_delta
-    )
-
-    return complex(np.sum(term) * dt)
+    history = np.array(gamma_history[-tw:]) if len(gamma_history) >= tw else np.array(gamma_history)
+    gamma_avg = np.mean(history)
+    return W * np.exp(gamma_avg) * np.exp(-delta_S * t)
