@@ -6,7 +6,7 @@ Space definition Angles :
 3. +π/2 (90°) soulmate zone - no ego, pure draw. 
 4. +π/4 (45°) mature marriage - fused but stable, see distribution
 5. +π/4 (45°) parent, invested in love, see distribution
-6. +3π/4 (135°) ego-dating - want them, but mostly for self. 
+6. +3π/4 (135°) Dating - want them, but mostly for self. 
 7. -π/2 (-90°) battlefield hate - erase without ego. 
 8. -π/4 (-45°) quiet resentment - unhappy marriage/family/job. 
 9. -3π/4 (-135°) revenge - selfish push to watch them lose.
@@ -14,7 +14,7 @@ Space definition Angles :
 Distribution shapes about space angle definitions : 
 1. Buddhist: tiny symmetric circle. about (0,0) equally distributed
 2. Narcissist: horizontal oval, biased on the -Re axis
-3. Ego-dating: thin vertical oval (mostly upward), centered, biased on the 135°
+3. Dating: thin vertical oval (mostly upward), centered, biased on the 135°
 4. Mature Marriage: Circle but contained in Q1, center biased along 45°
 5. Parent: teardrop - long right, short down, spreading out as gaining magnitude along 45° in Q1
 7. (Soldier in the battle field)/divorce: vertical oval, deep down, biased and centered on the -Im line
