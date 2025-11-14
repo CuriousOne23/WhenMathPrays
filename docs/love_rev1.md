@@ -9,7 +9,6 @@ The **love equation** models the **evolution of relational intensity** between i
 **Purpose**:
 - Capture **growth**, **decay**, and **direction** of love
 - **Individual-based** — each person has their own love trajectory
-- **Physically intuitive** — no mental sign flips
 - **Mathematically clean** — `exp(γ)` maps state to intensity
 - **Continuously wrapped** — no artificial jumps
 
