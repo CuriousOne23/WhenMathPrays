@@ -21,17 +21,8 @@ Distribution shapes about space angle definitions :
 8. Unhappy marriage: tight circle, low kurtosis, contained in Q3, biased along -3Pi/4 away from center
 9. Unhappy Corporate employee: skewed teardrop (narrow going to (0,0)), sudden cliff on hate side, biased and centered on the -3Pi/4 line
 
-            Quadrants
-               |+Im=Union, Love
-               |
-               |
-      Q2       |      Q1
-               |
-               |
--Re-------------------------+Re=We
-Ego            |
-               |
-     Q3        |      Q4
-               |
-               |
-             -Im=Enmity, Hate
+Quadrants (area between & including axis):
+Q1 = defined by +Re and +Im
+Q2 - defined by -Re and +Im
+Q3 - defined by -Re and -Im
+Q4 - defined by +Re and -Im
