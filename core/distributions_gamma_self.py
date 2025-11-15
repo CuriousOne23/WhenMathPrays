@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """
 distributions_gamma_self.py
-Generates γ_self distributions + quadrant map.
-Outputs (core/):
-    • distributions_gamma_self_plot.png
-    • distributions_gamma_self_table.md
+γ_self Character Region Map — 9 statistical archetypes.
+- Runs only selected archetypes
+- Output filenames include input
+- .md file: stats + statistical basis
+- FIXED: SyntaxError in battlefield cov
 """
 
 import numpy as np
@@ -13,205 +14,292 @@ import argparse
 import os
 from typing import Dict, List
 from dataclasses import dataclass
-import json
 
-# ---------- OUTPUT PATHS ----------
-PLOT_OUTPUT = "core/distributions_gamma_self_plot.png"
-TABLE_OUTPUT = "core/distributions_gamma_self_table.md"
+# ---------- OUTPUT BASE ----------
+PLOT_BASE = "core/gamma_self_character_map"
+TABLE_BASE = "core/gamma_self_quadrants"
 
-# ---------- 8 CLASSIFICATIONS ----------
+# ---------- ARCHETYPE DATACLASS ----------
 @dataclass
-class Distribution:
+class Archetype:
     name: str
-    mean: complex
+    angle_deg: float
+    mean_mag: float
     cov: np.ndarray
     color: str
-    n_samples: int = 5000
+    quadrant: str
     description: str = ""
+    statistical_basis: str = ""
 
-DISTRIBUTIONS: Dict[str, Distribution] = {
-    "buddhist": Distribution(
+# ---------- 9 ARCHETYPES ----------
+DISTRIBUTIONS: Dict[str, Archetype] = {
+    "buddhist": Archetype(
         name="Buddhist",
-        mean=-0.1 + 0.1j,
-        cov=np.array([[0.08, 0.0], [0.0, 0.08]]),
-        color="#1f77b4",
-        description="Tiny symmetric circle. Stillness."
-    ),
-    "narcissist": Distribution(
-        name="Narcissist",
-        mean=-10.0 + 0.0j,
-        cov=np.array([[0.3, 0.0], [0.0, 0.01]]),
-        color="#ff7f0e",
-        description="Flat horizontal line. Pure ego."
-    ),
-    "ego_dating": Distribution(
-        name="Ego-Dating",
-        mean=-3.0 + 2.0j,
-        cov=np.array([[0.3, 0.0], [0.0, 1.2]]),
+        angle_deg=0,
+        mean_mag=0.0,
+        cov=np.array([[0.15, 0.0], [0.0, 0.15]]),
         color="#2ca02c",
-        description="Thin vertical oval – want them for self."
+        quadrant="Origin",
+        description="Tiny symmetric circle at (0,0).",
+        statistical_basis="Isotropic Gaussian, σ_re = σ_im = 0.15"
     ),
-    "marriage": Distribution(
-        name="Marriage",
-        mean=-1.5 + 1.5j,
-        cov=np.array([[1.0, 0.3], [0.3, 1.0]]),
+    "narcissist": Archetype(
+        name="Narcissist",
+        angle_deg=180,
+        mean_mag=5.0,
+        cov=np.array([[2.5, 0.0], [0.0, 0.15]]),
         color="#d62728",
-        description="Broad circular cloud – fused & stable."
+        quadrant="Q2/Q3",
+        description="Horizontal oval on -Re axis.",
+        statistical_basis="Anisotropic Gaussian, σ_re=2.5, σ_im=0.15"
     ),
-    "parent": Distribution(
-        name="Parent",
-        mean=-0.5 + 1.0j,
-        cov=np.array([[1.5, -0.4], [-0.4, 0.6]]),
-        color="#9467bd",
-        description="Teardrop – long right, short down."
-    ),
-    "soldier": Distribution(
-        name="Soldier/Divorce",
-        mean=-0.8 - 2.0j,
+    "soulmate": Archetype(
+        name="Soul Mate",
+        angle_deg=90,
+        mean_mag=3.0,
         cov=np.array([[0.3, 0.0], [0.0, 1.5]]),
+        color="#ff7f0e",
+        quadrant="Q1",
+        description="Vertical oval along +Im.",
+        statistical_basis="Anisotropic Gaussian, σ_re=0.3, σ_im=1.5"
+    ),
+    "mature_marriage": Archetype(
+        name="Mature Marriage",
+        angle_deg=45,
+        mean_mag=2.5,
+        cov=np.array([[0.8, 0.5], [0.5, 0.8]]),
+        color="#1f77b4",
+        quadrant="Q1",
+        description="Circular cloud in Q1, centered on 45°.",
+        statistical_basis="Correlated Gaussian, ρ≈0.6"
+    ),
+    "parent": Archetype(
+        name="Parenting",
+        angle_deg=45,
+        mean_mag=2.8,
+        cov=np.array([[0.4, 0.1], [0.1, 0.3]]),
+        color="#9467bd",
+        quadrant="Q1",
+        description="Teardrop fan-out along 45° — wider at high magnitude.",
+        statistical_basis="Radial Gaussian, p(r)∝1/r, variance ∝ r"
+    ),
+    "ego_dating": Archetype(
+        name="Ego Dating",
+        angle_deg=135,
+        mean_mag=2.5,
+        cov=np.array([[0.6, 0.4], [0.4, 1.0]]),
         color="#8c564b",
-        description="Vertical oval – battlefield hate."
+        quadrant="Q2",
+        description="Tilted oval along 135° in Q2.",
+        statistical_basis="Correlated Gaussian, ρ≈0.6"
     ),
-    "unhappy": Distribution(
-        name="Unhappy Marriage",
-        mean=-1.2 - 0.8j,
-        cov=np.array([[0.4, 0.0], [0.0, 0.4]]),
+    "battlefield": Archetype(
+        name="Battlefield Hate",
+        angle_deg=-90,
+        mean_mag=3.5,
+        cov=np.array([[0.3, 0.0], [0.0, 2.0]]),  # ← FIXED: 0 posts → 0.0
         color="#e377c2",
-        description="Tight circle – quiet resentment."
+        quadrant="Q4",
+        description="Vertical oval along -Im.",
+        statistical_basis="Anisotropic Gaussian, σ_re=0.3, σ_im=2.0"
     ),
-    "corporate": Distribution(
-        name="Corporate Employee",
-        mean=-2.0 - 1.0j,
-        cov=np.array([[0.8, 0.3], [0.3, 0.5]]),
+    "quiet_resentment": Archetype(
+        name="Quiet Resentment",
+        angle_deg=-45,
+        mean_mag=2.0,
+        cov=np.array([[0.5, 0.0], [0.0, 0.5]]),
         color="#7f7f7f",
-        description="Skewed teardrop – cliff on hate side."
+        quadrant="Q3",
+        description="Tight circle in Q3.",
+        statistical_basis="Isotropic Gaussian, σ_re=σ_im=0.5"
+    ),
+    "revenge": Archetype(
+        name="Revenge",
+        angle_deg=-135,
+        mean_mag=3.0,
+        cov=np.array([[0.5, 0.3], [0.3, 0.4]]),
+        color="#bcbd22",
+        quadrant="Q3",
+        description="Fan-out in Q3 with sudden hate cliff.",
+        statistical_basis="Radial Gaussian, p(r)∝exp(-r), clipped where |Im| > |Re|"
     ),
 }
 
-# ---------- SAMPLING ----------
-def generate_samples(dist: Distribution) -> np.ndarray:
-    mean2 = np.array([dist.mean.real, dist.mean.imag])
-    return np.random.multivariate_normal(mean2, dist.cov, dist.n_samples)[:, 0] + \
-           1j * np.random.multivariate_normal(mean2, dist.cov, dist.n_samples)[:, 1]
+# ---------- RADIAL GAUSSIAN ----------
+def generate_radial_gaussian(angle_deg, mean_mag, base_cov, n_samples=6000, falloff="1/r"):
+    angle = np.deg2rad(angle_deg)
+    direction = np.array([np.cos(angle), np.sin(angle)])
+    target_mean = mean_mag * direction
 
-# ---------- PLOTTING ----------
-def plot_distributions(selected: List[Distribution]):
-    plt.figure(figsize=(14, 9))
+    if falloff == "1/r":
+        r_max = mean_mag * 3.0
+        u = np.random.uniform(0, 1, n_samples)
+        r = r_max * u
+    elif falloff == "exp":
+        r = np.random.exponential(scale=mean_mag * 1.2, size=n_samples)
+    else:
+        r = np.random.rayleigh(scale=mean_mag * 0.8, size=n_samples)
+
+    theta = angle + np.random.normal(0, np.deg2rad(18), n_samples)
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    points = np.column_stack((x, y))
+
+    scale = 0.3 + 0.7 * (r / (np.max(r) + 1e-8))
+    samples = []
+    for i, pt in enumerate(points):
+        cov_i = base_cov * scale[i]
+        noise = np.random.multivariate_normal([0, 0], cov_i, 1)[0]
+        samples.append(pt + noise)
+
+    samples = np.array(samples)
+    samples += (target_mean - np.mean(samples, axis=0))
+    return samples[:, 0] + 1j * samples[:, 1]
+
+# ---------- STANDARD GAUSSIAN ----------
+def generate_standard_gaussian(arch: Archetype, n_samples=6000):
+    mean = arch.mean_mag * np.exp(1j * np.deg2rad(arch.angle_deg))
+    mean2 = np.array([mean.real, mean.imag])
+    samples = np.random.multivariate_normal(mean2, arch.cov, n_samples)
+    return samples[:, 0] + 1j * samples[:, 1]
+
+# ---------- SAMPLE DISPATCHER ----------
+def generate_samples(arch: Archetype) -> np.ndarray:
+    if arch.name in ["Parenting", "Revenge"]:
+        samples = generate_radial_gaussian(
+            arch.angle_deg, arch.mean_mag, arch.cov,
+            falloff="1/r" if arch.name == "Parenting" else "exp"
+        )
+        if arch.name == "Revenge":
+            re, im = samples.real, samples.imag
+            mask = (re < 0) & (im < 0) & (np.abs(im) > np.abs(re))
+            if np.any(mask):
+                samples = samples[mask]
+            else:
+                samples = generate_radial_gaussian(arch.angle_deg, arch.mean_mag, arch.cov, falloff="exp")
+    else:
+        samples = generate_standard_gaussian(arch)
+    return samples
+
+# ---------- PLOT ----------
+def plot_map(selected: List[Archetype], input_str: str):
+    plt.figure(figsize=(14, 10))
     ax = plt.gca()
 
-    # --- Scatter each distribution ---
-    for dist in selected:
-        gamma = generate_samples(dist)
-        ax.scatter(gamma.real, gamma.imag, c=dist.color, s=2, alpha=0.7,
-                   label=dist.name, edgecolors='none')
+    stats = {}
 
-    # --- EXTENDED AXES ---
-    ax.set_xlim(-12, 4)
-    ax.set_ylim(-5, 5)
+    for arch in selected:
+        gamma = generate_samples(arch)
+        re, im = gamma.real, gamma.imag
 
-    # --- Axes & grid ---
-    ax.axhline(0, color='k', lw=1.2, alpha=0.6)
-    ax.axvline(0, color='k', lw=1.2, alpha=0.6)
+        stats[arch.name] = {
+            "min_re": float(np.min(re)),
+            "max_re": float(np.max(re)),
+            "min_im": float(np.min(im)),
+            "max_im": float(np.max(im)),
+            "basis": arch.statistical_basis
+        }
+
+        ax.scatter(re, im, c=arch.color, s=2, alpha=0.75,
+                   label=f"{arch.name}", edgecolors='none')
+
+    # Axes
+    ax.set_xlim(-7, 5)
+    ax.set_ylim(-6, 6)
+    ax.axhline(0, color='k', lw=1.2, alpha=0.7)
+    ax.axvline(0, color='k', lw=1.2, alpha=0.7)
     ax.grid(True, alpha=0.3, ls='-', lw=0.5)
 
-    # --- QUADRANT LINES (thin dashed) ---
-    ax.axhline(0, color='gray', lw=0.8, ls='--', alpha=0.7)
-    ax.axvline(0, color='gray', lw=0.8, ls='--', alpha=0.7)
+    # Quadrant labels
+    ax.text( 2.5,  4.0, "Q1", fontsize=16, ha='center', fontweight='bold', bbox=dict(facecolor='white', alpha=0.7))
+    ax.text(-2.5,  4.0, "Q2", fontsize=16, ha='center', fontweight='bold', bbox=dict(facecolor='white', alpha=0.7))
+    ax.text(-2.5, -4.0, "Q3", fontsize=16, ha='center', fontweight='bold', bbox=dict(facecolor='white', alpha=0.7))
+    ax.text( 2.5, -4.0, "Q4", fontsize=16, ha='center', fontweight='bold', bbox=dict(facecolor='white', alpha=0.7))
 
-    # --- QUADRANT LABELS (exactly as you asked) ---
-    ax.text( 1.5,  3.5, "Q1", fontsize=14, ha='center', va='center',
-            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
-    ax.text(-1.5,  3.5, "Q2", fontsize=14, ha='center', va='center',
-            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
-    ax.text(-1.5, -3.5, "Q3", fontsize=14, ha='center', va='center',
-            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
-    ax.text( 1.5, -3.5, "Q4", fontsize=14, ha='center', va='center',
-            bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
-
-    # --- Axis titles ---
+    # Labels
     ax.set_xlabel("Real Axis: Ego ← → We", fontsize=13, labelpad=10)
     ax.set_ylabel("Imaginary Axis: Enmity/Hate ↓    Love ↑", fontsize=13, labelpad=12)
-    ax.set_title("γ_self Distribution Patterns in Ego-We × Love-Enmity Space",
-                 fontsize=15, pad=20)
+    title = f"γ_self Character Region Map ({input_str.replace('_', ' ')})"
+    ax.set_title(title, fontsize=16, pad=20)
 
-    # --- LEGEND (upper-left, big markers) ---
-    leg = ax.legend(loc='upper left', fontsize=11, markerscale=4,
-                    title="Classifications", title_fontsize=12,
-                    frameon=True, fancybox=True)
+    # Legend
+    leg = ax.legend(loc='upper left', fontsize=11, markerscale=5,
+                    title="Selected Archetypes", title_fontsize=12, framealpha=0.95)
     leg.get_frame().set_facecolor('white')
-    leg.get_frame().set_alpha(0.95)
 
+    # Save
+    suffix = input_str if input_str != "all" else "all"
+    plot_path = f"{PLOT_BASE}_{suffix}.png"
     plt.tight_layout()
-    os.makedirs(os.path.dirname(PLOT_OUTPUT), exist_ok=True)
-    plt.savefig(PLOT_OUTPUT, dpi=300, bbox_inches='tight', facecolor='white')
+    plt.savefig(plot_path, dpi=300, bbox_inches='tight', facecolor='white')
     plt.close()
-    print(f"Plot saved → {PLOT_OUTPUT}")
+    print(f"Plot saved → {plot_path}")
+
+    return stats
 
 # ---------- MARKDOWN TABLE ----------
-def create_quadrant_table():
-    md = (
-        "## γ_self Quadrants\n\n"
-        "|        | **+Im = Union, Love** |        |\n"
-        "|--------|-----------------------|--------|\n"
-        "| **-Re** | **Q2**                | **Q1** |\n"
-        "| **+Re = We, Ego** |                       |        |\n"
-        "| **-Im = Enmity, Hate** | **Q3**        | **Q4** |\n\n"
-        "---\n\n"
-        "### Quadrant Definitions\n"
-        "- **Q1** – *We + Love* – Mature partnership, soul-mate zone  \n"
-        "- **Q2** – *Ego + Love* – Ego-dating, parent-like giving  \n"
-        "- **Q3** – *Ego + Hate* – Revenge, corporate resentment  \n"
-        "- **Q4** – *We + Hate* – Battlefield, divorce, soldier  \n"
-    )
-    with open(TABLE_OUTPUT, 'w') as f:
-        f.write(md)
-    print(f"Quadrant table saved → {TABLE_OUTPUT}")
+def create_table(selected: List[Archetype], stats: dict, input_str: str):
+    suffix = input_str if input_str != "all" else "all"
+    table_path = f"{TABLE_BASE}_{suffix}.md"
+
+    lines = [f"# γ_self Quadrants — {input_str.replace('_', ' ')}\n"]
+
+    # Quadrant layout
+    lines += [
+        "|        | **+Im = Union, Love** |        |",
+        "|--------|-----------------------|--------|",
+        "| **-Re** | **Q2**                | **Q1** |",
+        "| **+Re = We** |                       |        |",
+        "| **-Im = Enmity, Hate** | **Q3**        | **Q4** |",
+        "\n---\n"
+    ]
+
+    # Stats table
+    lines += ["## Statistical Summary\n"]
+    lines += ["| Archetype | Min Re | Max Re | Min Im | Max Im | Statistical Basis |\n"]
+    lines += ["|---------|--------|--------|--------|--------|-------------------|\n"]
+    for arch in selected:
+        s = stats[arch.name]
+        lines += [f"| {arch.name} | {s['min_re']:.3f} | {s['max_re']:.3f} | {s['min_im']:.3f} | {s['max_im']:.3f} | {s['basis']} |\n"]
+
+    with open(table_path, 'w') as f:
+        f.write("\n".join(lines))
+    print(f"Table saved → {table_path}")
 
 # ---------- CLI ----------
-def parse_args():
-    p = argparse.ArgumentParser(
-        description="γ_self distributions + quadrant map",
-        formatter_class=argparse.RawTextHelpFormatter)
-    p.add_argument("classifications", nargs="+",
-                   help="Space-separated list or 'all'")
-    p.add_argument("--add", type=str, help="JSON for new classification")
-    return p.parse_args()
-
 def main():
-    args = parse_args()
+    parser = argparse.ArgumentParser(description="γ_self Character Map — selective")
+    parser.add_argument("classifications", nargs="*", default=["all"],
+                        help="e.g., parent, parent marriage, all")
+    args = parser.parse_args()
 
-    # --- add custom ---
-    if args.add:
-        try:
-            d = json.loads(args.add.replace("'", '"'))
-            key = d["name"].lower().replace(" ", "_").replace("/", "_")
-            DISTRIBUTIONS[key] = Distribution(
-                name=d["name"],
-                mean=complex(d["mean"]),
-                cov=np.array(d["cov"]),
-                color=d.get("color", "#000000"),
-                description=d.get("desc", "")
-            )
-            print(f"Added → {d['name']}")
-        except Exception as e:
-            print(f"Add failed: {e}")
+    input_list = args.classifications
+    if not input_list:
+        input_list = ["all"]
 
-    # --- resolve selections ---
-    sel = []
-    for name in args.classifications:
+    # Build input string for filename
+    input_str = "_and_".join([x.lower() for x in input_list]) if len(input_list) > 1 else input_list[0].lower()
+
+    # Resolve selections
+    selected = []
+    seen_names = set()
+    for name in input_list:
         name = name.lower()
         if name == "all":
-            sel = list(DISTRIBUTIONS.values())
+            selected = list(DISTRIBUTIONS.values())
+            input_str = "all"
             break
-        matches = [v for k, v in DISTRIBUTIONS.items() if k.startswith(name)]
-        sel.extend(matches)
+        for key, arch in DISTRIBUTIONS.items():
+            if name in key.lower() and arch.name not in seen_names:
+                selected.append(arch)
+                seen_names.add(arch.name)
 
-    if not sel:
-        print("No classifications selected.")
+    if not selected:
+        print("No valid archetypes selected.")
         return
 
-    plot_distributions(sel)
-    create_quadrant_table()
+    stats = plot_map(selected, input_str)
+    create_table(selected, stats, input_str)
 
 if __name__ == "__main__":
     main()
