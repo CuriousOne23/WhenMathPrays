@@ -1,6 +1,6 @@
 # Revenge Gamma-Self Distribution Results
 
-Generated: 2025-11-17 19:51:33 MST
+Generated: 2025-11-17 20:07:05 MST
 
 **Summary of PDF Construction:**
 The revenge gamma-self PDF is defined in polar coordinates (r, θ), with r ≥ 0 representing magnitude, and θ in [-π, π] representing angle (0° at positive real axis 'we', 90° at positive imaginary 'love', clockwise or counterclockwise as per standard).
