@@ -30,9 +30,6 @@ MEMORY_THETA_DEG    = -150.0
 SUMMARY_PATH = os.path.join("core", "revenge_core_summary.md")
 GRID_PATH    = os.path.join("core", "revenge_pdf.npz")
 
-memory_theta_rad = np.deg2rad(MEMORY_THETA_DEG)
-sigma_theta_rad  = np.deg2rad(SIGMA_THETA_LOW_DEG)
-
 # =================== FROZEN CONSTANTS ===================
 TOTAL_UNNORMALIZED_MASS = 0.17880386562787398
 NORM = 1.0 / TOTAL_UNNORMALIZED_MASS
@@ -55,36 +52,26 @@ def high_r_pdf(r, theta_deg):
     return g * gate_on(theta_deg) * gate_off(theta_deg)
 
 def low_r_raw(r, theta_deg):
-    # Determine which side of the r = 0.5 plane we are on using the gates
-    # high-r exists only where gate_product > 0 → Q3 side
-    gate_product = gate_on(theta_deg) * gate_off(theta_deg)
+    # Past half-plane: Q2 + Q3
+    is_past_side = np.abs(theta_deg) > 90
     
-    # Vectorized if-then
-    # Normalize theta to [-180, 180)
-    theta_norm = np.mod(theta_deg + 180, 360) - 180
-
-    # Past half-plane: |theta_norm| > 90°  (Q2 + Q3)
-    is_past_side = np.abs(theta_norm) > 90
-
-    distance = np.where(is_past_side, 0.5 + r, 0.5 - r)
-
-    # r-part only — no angular Gaussian (dt removed)
+    distance = np.where(is_past_side, 0.5 - r, 0.5 + r)
+    
     dr = np.exp(-0.5 * (distance**2 / SIGMA_R_LOW**2)) / (SIGMA_R_LOW * np.sqrt(2 * np.pi))
     
-    return dr   # <-- dt is gone — angularly uniform when cold
+    return dr   # no guard — low-r exists everywhere
 
 # Global scaling — exact match at memory peak
-scale = high_r_pdf(0.5, MEMORY_THETA_DEG) / low_r_raw(0.5, memory_theta_rad)
+scale = high_r_pdf(0.5, MEMORY_THETA_DEG) / low_r_raw(0.5, MEMORY_THETA_DEG)
 
 def pdf(r, theta_deg):
     r = np.atleast_1d(r)
     theta_deg = np.atleast_1d(theta_deg)
-    theta_rad = np.deg2rad(theta_deg)
     
     high = high_r_pdf(r, theta_deg)
-    low = scale * low_r_raw(r, theta_rad)
+    low = scale * low_r_raw(r, theta_deg)
     
-    result = np.where(r >= 0.5, high, low)
+    result = high + low
     return result[0] if result.size == 1 else result
 
 # =================== GRID & SUMMARY (only once) ===================
