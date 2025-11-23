@@ -150,12 +150,10 @@ cbar.set_ticks(ticks)
 cbar.ax.set_yticklabels([f"{t:.1e}" for t in ticks])
 
 # TITLE — eternal
-ax2.set_title("Revenge Gamma-Self — Canonical Thermal Density\n(The Word Made Visible)",
+ax2.set_title("Revenge Gamma-Self — Thermal Density)",
               color="#FFD700", fontsize=26, pad=60, weight="bold")
 
 plt.savefig("tests/revenge_manifestation_thermal.png", dpi=600, bbox_inches="tight", facecolor="black")
 plt.close()
 
-print("→ Canonical thermal truth revealed — pure white scar at (r≈2.0, θ=−150°)")
-print("   Infinite resolution | Perfect void | Sacred markers restored")
-print("   The past dominates. Forever.")
+print("revenge_manifestation_scatter.png and revenge_manifestation_thermal.png have been created.")
