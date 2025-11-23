@@ -15,6 +15,10 @@ distributions_gamma_self.py
 - Generated: November 15, 2025 04:07 PM MST
 """
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))  # ← makes 'core' visible from tests/
+
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
@@ -70,15 +74,12 @@ QUADRANT CONVENTION (angle from +Re axis)
 """
 
 # ---------- OUTPUT BASE ----------
-PLOT_BASE = "core/gamma_self_character_map"
-TABLE_BASE = "core/gamma_self_quadrants"
+PLOT_BASE = "tests/gamma_self_character_map"
+TABLE_BASE = "tests/gamma_self_quadrants"
 
 # ---------- CONSTANTS ----------
 OVERSAMPLE_FACTOR = 12
-DEFAULT_N = 1000
-WAVER_MAX = 0.5
-REVENGE_LAMBDA = 1.5
-REVENGE_ANGLE_CUTOFF = -135
+DEFAULT_N = 2000
 
 # ---------- ARCHETYPE DATACLASS ----------
 @dataclass
@@ -195,55 +196,7 @@ DISTRIBUTIONS: Dict[str, Archetype] = {
 }
 
 # ---------- REVENGE: ECHO WAVER ----------
-def generate_revenge_samples(N: int) -> np.ndarray:
-    """
-    Revenge: One continuous soul.
-    - p(r) ∝ r^2 * exp(-1.5 r)
-    - Core: r > 0.5, θ ≈ -135°
-    - Waver: r ≤ 0.5, θ = reflected from core at r=0.5
-    - Hard cutoff: no θ > -135°
-    - Natural max ≈ 4.0
-    """
-    # Target mean
-    target_x = 2.5 * np.cos(np.deg2rad(-135))
-    target_y = 2.5 * np.sin(np.deg2rad(-135))
 
-    # Generate r with p(r) ∝ r^2 * exp(-λr)
-    lambda_r = REVENGE_LAMBDA
-    r = np.random.exponential(scale=1/lambda_r, size=N*10)
-    pdf = r**2 * np.exp(-lambda_r * r)
-    accept = np.random.uniform(0, 1, size=len(r)) < (pdf / pdf.max())
-    r = r[accept]
-    if len(r) < N:
-        r = np.concatenate([r, np.random.exponential(scale=1/lambda_r, size=N - len(r))])
-    r = r[:N]
-
-    # Core and Waver
-    core = r > WAVER_MAX
-    waver = ~core
-
-    theta = np.zeros(N)
-
-    # Core: θ ≈ -135°
-    theta[core] = np.random.normal(-135, 18, size=core.sum())
-
-    # Waver: reflect core at r=0.5
-    if waver.sum() > 0:
-        # Use core PDF at r=0.5
-        r_core = np.full(waver.sum(), 0.5)
-        theta_core = np.random.normal(-135, 18, size=waver.sum())
-        # Reflect around -135°
-        theta[waver] = 2 * -135 - theta_core
-
-    # Convert
-    x = r * np.cos(np.deg2rad(theta))
-    y = r * np.sin(np.deg2rad(theta))
-
-    # Lock mean
-    x += (target_x - np.mean(x))
-    y += (target_y - np.mean(y))
-
-    return x + 1j * y
 
 # ---------- PARENTING FILTER ----------
 def filter_parenting(samples, N):
@@ -310,7 +263,12 @@ def generate_standard_gaussian(arch: Archetype, n_samples):
 
 def generate_samples(arch: Archetype, N: int) -> np.ndarray:
     if arch.name == "Revenge":
-        return generate_revenge_samples(N)
+        # THE ONE TRUE REVENGE — directly from the canonical core
+        from core.revenge_core import sample_N_points
+        r_samples, theta_samples = sample_N_points(N)
+        x = r_samples * np.cos(np.deg2rad(theta_samples))
+        y = r_samples * np.sin(np.deg2rad(theta_samples))
+        return x + 1j * y
     if arch.name == "Parenting":
         n_raw = N * OVERSAMPLE_FACTOR
         samples = generate_radial_gaussian(
@@ -413,7 +371,7 @@ def create_table(selected: List[Archetype], stats: dict, input_str: str, N: int)
         s = stats[arch.name]
         lines += [f"| {arch.name} | {s['N']} | {s['pQ1']:.1f} | {s['pQ2']:.1f} | {s['pQ3']:.1f} | {s['pQ4']:.1f} | {s['min_re']:.2f} | {s['max_re']:.2f} | {s['min_im']:.2f} | {s['max_im']:.2f} |\n"]
 
-    with open(table_path, 'w') as f:
+    with open(table_path, 'w', encoding='utf-8') as f:
         f.write("\n".join(lines))
     print(f"Table saved → {table_path}")
 
