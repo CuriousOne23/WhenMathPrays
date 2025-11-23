@@ -25,6 +25,7 @@ SIGMA_THETA_LOW_DEG = 30.0
 MU_HIGH_R           = 2.0
 SIGMA_HIGH_R        = 0.5
 MEMORY_THETA_DEG    = -150.0
+R_LOW_CENTER  = 0.5   # the sacred point where continuity is enforced
 # ============================================================
 
 SUMMARY_PATH = os.path.join("core", "revenge_core_summary.md")
@@ -55,14 +56,14 @@ def low_r_raw(r, theta_deg):
     # Past half-plane: Q2 + Q3
     is_past_side = np.abs(theta_deg) > 90
     
-    distance = np.where(is_past_side, 0.5 - r, 0.5 + r)
+    distance = np.where(is_past_side, R_LOW_CENTER - r, R_LOW_CENTER + r)
     
     dr = np.exp(-0.5 * (distance**2 / SIGMA_R_LOW**2)) / (SIGMA_R_LOW * np.sqrt(2 * np.pi))
     
     return dr   # no guard — low-r exists everywhere
 
 # Global scaling — exact match at memory peak
-scale = high_r_pdf(0.5, MEMORY_THETA_DEG) / low_r_raw(0.5, MEMORY_THETA_DEG)
+scale = high_r_pdf(R_LOW_CENTER, MEMORY_THETA_DEG) / low_r_raw(R_LOW_CENTER, MEMORY_THETA_DEG)
 
 def pdf(r, theta_deg):
     r = np.atleast_1d(r)
@@ -105,7 +106,7 @@ def sample_N_points(N: int):
     collected = 0
     r_samples = []
     theta_samples = []
-    max_p = pdf(2.0, -150.0) * 1.2
+    max_p = pdf(MU_HIGH_R, -150.0) * 1.2
 
     while collected < N:
         batch = 250_000
