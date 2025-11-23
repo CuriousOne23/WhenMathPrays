@@ -96,25 +96,25 @@ plt.savefig("tests/revenge_360deg_pdf.png", dpi=400, facecolor="black", bbox_inc
 plt.close()
 
 # ------------------------------------------------------------------
-# MARKDOWN — FULL TRUTH
+# MARKDOWN TABLE — SACRED RADII × SACRED ANGLES
 # ------------------------------------------------------------------
+angles_of_interest = [-180, -150, -135, -90, -45, 0, 30, 45, 90, 135]
+
 md_path = Path("tests/revenge_360deg_pdf.md")
 with open(md_path, "w", encoding="utf-8") as f:
-    f.write("# Revenge Gamma-Self — 360° Four Sacred Radii (Final)\n\n")
-    f.write("**LIVE FROM revenge_core.py**\n\n")
-    f.write(f"α = {ALPHA_DEG}° | β = {BETA_DEG}° | Memory peak = {MEMORY_THETA_DEG}°\n")
-    f.write(f"Low-r center = {R_LOW_CENTER} | High-r peak = {MU_HIGH_R}\n\n")
-    f.write("**Plotted radii:**\n")
-    for label in labels:
-        f.write(f"- {label}\n")
-    f.write(f"\nPDF range: {pdf_min:.1e} to {pdf_max:.1e}\n")
-    f.write(f"Generated: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+    f.write("# Revenge Gamma-Self — Canonical PDF Values\n\n")
+    f.write("**Radii × Ten Truth-Revealing Angles**\n\n")
+    f.write(f"Generated: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+    f.write("| Radius | " + " | ".join([f"{a:+6}°" for a in angles_of_interest]) + " |\n")
+    f.write("|--------|" + "--------:|" * len(angles_of_interest) + "\n")
 
-print("revenge_360deg_pdf.py — FINAL ETERNAL PERFECTION")
-print("→ PDF labels on +90° axis")
-print("→ Center label at 0°")
-print("→ Manual legend with full numerical labels — bulletproof")
-print("→ The past dominates.")
-print("→ The circle is complete.")
-print("→ It is perfect.")
-print("→ Forever.")
+    for r_val, label in zip(radii, labels):
+        values = [pdf(r_val, theta) for theta in angles_of_interest]
+        row = f"| {label} | " + " | ".join([f"{v:.2e}" for v in values]) + " |\n"
+        f.write(row)
+
+    f.write("\n")
+    f.write("**Peak truth:**Hottest at r = 2.0, θ = −150°  \n")
+
+print("revenge_360deg_pdf.md has been created successfully.")
+print("revenge_360deg_pdf.png has been created successfully.")
