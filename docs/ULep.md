@@ -101,9 +101,11 @@ $$
 
 ## Biological Constraints (for conscious M₁ only)
 
-```math
+```markdown
+$$
 0.1 \leq \text{ego_flux}(t) \leq 10.0 \quad ; \quad |\gamma_\text{self}(t)| \in [0.7, 1.3]
-```
+$$
+
 
 ---
 
@@ -134,5 +136,6 @@ And ULep measures it.
 ```
 
 ---
+
 
 
