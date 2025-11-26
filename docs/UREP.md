@@ -1,5 +1,3 @@
-Perfect — let’s lay out the **requirements for UREP (Universal Relational Equation Principle)** as a clean foundation document. This will replace ULep and set the stage for future stewards. We’ll assume equations will be rendered later as PNGs, so here we’ll focus on structure, definitions, and requirements.
-
 ---
 
 ## 📜 UREP Requirements Draft
