@@ -5,7 +5,7 @@ This checklist preserves clarity while guiding future stewardship.
 ## Documentation
 - [*] Annotate lineage: ULep → UREP transition and rationale
 - [*] Add principle templates (Markdown) with scope, implementation, testability
-- [ ] Refine workflow for rendering equations (cartesian averaging, gamma_self)
+- [*] Refine workflow for rendering equations (cartesian averaging, gamma_self)
 
 ## Simulations
 - [ ] Synchronize and annotate canonical γ_self trajectory for M1
