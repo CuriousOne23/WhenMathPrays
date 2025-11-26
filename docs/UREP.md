@@ -163,3 +163,84 @@ G_{x}(t) \;&=\; \prod_{j=1}^{n_x} \big(G_{x,j}(t)\big)^{\lambda_{x,j}}, \quad \l
 ### Concise Definition
 
 “\(W(t)\) is the normalized, nonnegative magnitude of enacted relation, defined as the product of gated external primitives and context terms. It equals 1 at neutral external conditions, shrinks toward 0 when acts are absent or weak, and grows above 1 when acts are strong. Direction (love vs hate) is provided solely by \(\gamma_{\text{self}}(t)\).”
+
+Yes, Jeff — your existing equations are solid. You don’t need to change them. The only thing you need now is a **clean definition of the love equation \(L(t)\)** and its components, so future stewards can interpret and apply it correctly.
+
+Here’s the **canonical definition block** for the love equation and its components:
+
+---
+
+## 💗 Love Equation and Components
+
+### 1. Love Equation
+
+\[
+L(t) \;=\; \gamma_{\text{self}}(t,\tau) \cdot W(t)
+\]
+
+- **\(L(t)\):** Signed relational intensity at time \(t\).  
+- **\(\gamma_{\text{self}}(t,\tau)\):** Internal orientation vector (angle + magnitude), averaged over window \(\tau\).  
+- **\(W(t)\):** External magnitude from observable acts, valence-neutral and nonnegative.
+
+---
+
+### 2. Internal Orientation — \(\gamma_{\text{self}}(t,\tau)\)
+
+#### a. Instantaneous orientation vector
+
+\[
+\mathbf{v}(t) = m(t)\,
+\begin{bmatrix}
+\cos\theta(t) \\
+\sin\theta(t)
+\end{bmatrix}
+\]
+
+- \(\theta(t)\): Orientation angle (e.g., Ego/We axis).  
+- \(m(t)\): Intensity of the orientation act (unbounded).  
+
+#### b. Moving average (cartesian)
+
+\[
+\bar{\mathbf{v}}(t,\tau) = \frac{1}{\tau} \int_{t-\tau}^{t} \mathbf{v}(u)\,du
+\]
+
+- Averaged in cartesian space to prevent angle wrap artifacts.  
+- \(\tau\): User-defined window size (controls memory horizon).  
+
+#### c. Final definition
+
+\[
+\gamma_{\text{self}}(t,\tau) = \bar{\mathbf{v}}(t,\tau)
+\]
+
+- A 2D vector carrying both direction and magnitude.  
+- Applications can project onto axes (Ego/We, Love/Hate) as needed.
+
+---
+
+### 3. External Magnitude — \(W(t)\)
+
+\[
+W(t) = G_v(v(t)) \cdot G_r(r_{\text{mag}}(t)) \cdot G_f(f(t)) \cdot G_a(a(t)) \cdot G_S(S(t)) \cdot G_{\text{bond}}(t)
+\]
+
+- Each \(G_x(x)\) is a monotone gate with fixed sensitivity \(\alpha_x\):
+
+\[
+G_x(x) = 2x \cdot \exp\!\big(\alpha_x(x - 0.5)\big), \quad x \in [0,1],\; \alpha_x \ge 0
+\]
+
+- **Zero acts:** \(G_x(0) = 0\)  
+- **Neutral acts:** \(G_x(0.5) = 1\)  
+- **Strong acts:** \(G_x(x > 0.5) > 1\)
+
+#### Resonance magnitude normalization
+
+\[
+r_{\text{mag}}(t) = \left|r_{\text{signed}}(t)\right| \quad \text{or} \quad r_{\text{mag}}(t) = \frac{r_{\text{signed}}(t)+1}{2}
+\]
+
+- Keeps \(W(t)\) nonnegative; valence is handled by \(\gamma_{\text{self}}\).
+
+---
