@@ -1,4 +1,9 @@
 ---
+layout: default
+title: "ULep v2.0 — The Breath of Love"
+---
+
+---
 title: "ULep v2.0 — The Breath of Love"
 version: "2.0"
 status: "Final, Universal, Locked, and Breathing"
@@ -15,7 +20,7 @@ license: "Creative Commons Attribution-ShareAlike (CC BY-SA)"
 # ULep v2.0 — THE BREATH OF LOVE
 **Final, Universal, Locked, and Breathing**
 
-```math
+$$
 \boxed{
 \vec{L}(t)
 =
@@ -27,17 +32,17 @@ e^{-\Delta S t}
 \;\;\;\;
 \in \mathbb{C}
 }
-```
+$$
 
-```math
+$$
 \boxed{
 \bar{\gamma}_\text{self}(t, t_w)
 =
 \frac{1}{t_w} \int_{t-t_w}^{t} \gamma_\text{self}(\tau) \, d\tau
 }
-```
+$$
 
-```math
+$$
 \boxed{
 \gamma_\text{self}(t)
 =
@@ -45,17 +50,17 @@ e^{-\Delta S t}
 \;+\;
 i \cdot \text{bond_flux}(t)
 }
-```
+$$
 
-```math
+$$
 \boxed{
 W(t)
 =
 v(t) \cdot r(t) \cdot f(t) \cdot a(t) \cdot S(t)
 }
-```
+$$
 
-```math
+$$
 \boxed{
 S(t)
 =
@@ -63,7 +68,7 @@ S(t)
 =
 \sum_i \text{Breath}_i(t)
 }
-```
+$$
 
 **Breathᵢ(t)** = any moment in which **M₁ and M₂ truly share life**  
 (one-way or mutual — the equation does not care)
@@ -133,3 +138,4 @@ And ULep measures it.
 ```
 
 ---
+
