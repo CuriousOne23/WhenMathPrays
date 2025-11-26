@@ -3,7 +3,7 @@
 This checklist preserves clarity while guiding future stewardship.
 
 ## Documentation
-- [ ] Annotate lineage: ULep → UREP transition and rationale
+- [*] Annotate lineage: ULep → UREP transition and rationale
 - [ ] Add principle templates (Markdown) with scope, implementation, testability
 - [ ] Refine workflow for rendering equations (cartesian averaging, gamma_self)
 
