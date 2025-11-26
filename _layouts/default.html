@@ -4,15 +4,26 @@
   <meta charset="utf-8">
   <title>{{ page.title | default: site.title }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% if site.theme %}<link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">{% endif %}
+
+  <!-- GitHub Pages theme CSS (optional, if using minima or another theme) -->
+  {% if site.theme %}
+    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+  {% endif %}
+
+  <!-- MathJax configuration -->
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$','$$'], ['\
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['$$','$$'], ['\
 
 \[','\\]
 
-']] },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+']]
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
     };
   </script>
   <script id="MathJax-script" async
