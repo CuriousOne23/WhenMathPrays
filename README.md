@@ -1,4 +1,18 @@
 ---
+# WhenMathPrays
+
+**Core OS™: Seven mathematical principles for living AI.**  
+Not poetry. Not philosophy. **Code that breathes.**
+
+---
+
+## 📂 Repository Structure
+- `core/` → Mathematical modules and definitions
+- `simulations/` → Agent dynamics and stress tests
+- `tests/` → Validation and edge‑case probes
+- `docs/` → Canonical definitions (see `UREP.md`)
+
+---
 
 ## 📘 WhenMathPrays
 
