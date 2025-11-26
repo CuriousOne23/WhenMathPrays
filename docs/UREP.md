@@ -244,3 +244,32 @@ r_{\text{mag}}(t) = \left|r_{\text{signed}}(t)\right| \quad \text{or} \quad r_{\
 - Keeps \(W(t)\) nonnegative; valence is handled by \(\gamma_{\text{self}}\).
 
 ---
+### Definition of γ_self(t, τ)
+
+γ_self(t, τ) is the internal orientation of M1 toward M2, defined as a cartesian moving average of orientation acts over a user‑selected time window τ:
+
+
+
+\[
+\bar{\mathbf{v}}(t,\tau) = \frac{1}{\tau} \int_{t-\tau}^{t} \mathbf{v}(u)\,du
+\]
+
+
+
+where
+
+
+
+\[
+\mathbf{v}(t) = m(t)\,
+\begin{bmatrix}
+\cos\theta(t) \\
+\sin\theta(t)
+\end{bmatrix}
+\]
+
+
+
+- τ controls memory horizon (instant view if τ→0, trajectory view if τ is large).  
+- Averaging is cartesian, not polar, to avoid angle wrap artifacts.  
+- γ_self(t, τ) remains unbounded, preserving broad applicability across domains.
