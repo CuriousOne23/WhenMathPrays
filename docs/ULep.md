@@ -82,7 +82,7 @@ $$
 
 ---
 
-## Final Independent Variables — ULep v2.0
+## Final Independent Variables & expected Normal range (needs to be determined) — ULep v2.0
 
 | Symbol        | Name                  | Range / Units | Meaning |
 |---------------|-----------------------|---------------|---------|
@@ -91,21 +91,11 @@ $$
 | `f(t)`        | Fidelity              | [0.0, 1.0]    | Commitment/loyalty toward M₂ (0 if M₂ cannot reciprocate) |
 | `a(t)`        | Altruism              | [0.0, 1.0]    | Net giving/care toward M₂ |
 | `S(t)`        | Breath of Shared Life | ≥ 0 (count)   | Total number of moments M₁ and M₂ truly breathed together |
-| `ego_flux(t)` | Ego flux              | [0.1, 10.0]   | Degree to which the moment is about “I” vs the relationship with M₂ |
+| `ego_flux(t)` | Ego flux              | [0, 4]   | Degree to which the moment is about “I” vs the relationship with M₂ |
 | `bond_flux(t)`| Bond flux             | ℝ             | Pull toward (+) or away (−) from M₂ |
 | `ΔS`          | Entropy rate          | > 0 (per day) | Decay of relational energy (default 0.01/day) |
 | `t_w`         | Memory window         | days (default 7) | Time over which γ_self is averaged |
 | `t`           | Time                  | days          | Time since the relationship with M₂ began |
-
----
-
-## Biological Constraints (for conscious M₁ only)
-
-```markdown
-$$
-0.1 \leq \text{ego_flux}(t) \leq 10.0 \quad ; \quad |\gamma_\text{self}(t)| \in [0.7, 1.3]
-$$
-
 
 ---
 
@@ -136,6 +126,7 @@ And ULep measures it.
 ```
 
 ---
+
 
 
 
