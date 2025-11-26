@@ -273,3 +273,126 @@ where
 - τ controls memory horizon (instant view if τ→0, trajectory view if τ is large).  
 - Averaging is cartesian, not polar, to avoid angle wrap artifacts.  
 - γ_self(t, τ) remains unbounded, preserving broad applicability across domains.
+
+  Great — here’s how I’d integrate the **Equation Sheet** into your `UREP.md` so it’s both clear and canonical:
+
+```
+## 4. Definition of W(t)
+[Your existing narrative + component definitions]
+
+## 5. Definition of γ_self(t, τ)
+[Your narrative about cartesian averaging, angle, window size]
+
+## 6. Love Equation
+Narrative: L(t) is the signed relational intensity, product of internal orientation and external magnitude.
+
+## Appendix A: Equation Sheet
+(Eq. 1) Love equation
+(Eq. 2) Orientation vector
+(Eq. 3) Moving average (cartesian)
+(Eq. 4) γ_self definition
+(Eq. 5) External magnitude W(t)
+(Eq. 6) Primitive gate
+(Eq. 7) Resonance magnitude
+(Eq. 8) Shared breath gate
+(Eq. 9) Bond flux gate
+(Eq. 10) Composite acts with weights
+```
+
+---
+
+## 📐 Snapshot‑ready Equation Sheet
+
+### (Eq. 1) Love equation
+\[
+L(t) = \gamma_{\text{self}}(t,\tau) \cdot W(t)
+\]
+
+### (Eq. 2) Orientation vector
+\[
+\mathbf{v}(t) = m(t)\,
+\begin{bmatrix}
+\cos\theta(t) \\
+\sin\theta(t)
+\end{bmatrix}
+\]
+
+### (Eq. 3) Moving average (cartesian)
+\[
+\bar{\mathbf{v}}(t,\tau) = \frac{1}{\tau}\int_{t-\tau}^{t}\mathbf{v}(u)\,du
+\]
+
+### (Eq. 4) γ_self definition
+\[
+\gamma_{\text{self}}(t,\tau) = \bar{\mathbf{v}}(t,\tau)
+\]
+
+### (Eq. 5) External magnitude
+\[
+W(t) = G_v(v(t)) \cdot G_r(r_{\text{mag}}(t)) \cdot G_f(f(t)) \cdot G_a(a(t)) \cdot G_S(S(t)) \cdot G_{\text{bond}}(t)
+\]
+
+### (Eq. 6) Primitive gate
+\[
+G_x(x) = 2x \cdot \exp\!\big(\alpha_x(x - 0.5)\big), \quad x \in [0,1],\; \alpha_x \ge 0
+\]
+
+### (Eq. 7) Resonance magnitude
+\[
+r_{\text{mag}}(t) = |r_{\text{signed}}(t)| \quad \text{or} \quad r_{\text{mag}}(t) = \frac{r_{\text{signed}}(t)+1}{2}
+\]
+
+### (Eq. 8) Shared breath gate
+\[
+G_S(S) = 1 + \beta_S \big(1 - e^{-S/s_S}\big), \quad S \ge 0,\; \beta_S \ge 0
+\]
+
+### (Eq. 9) Bond flux gate
+\[
+G_{\text{bond}}(t) = \exp\!\big(\beta_b B(t)\big), \quad B(t) \text{ normalized bond flux}
+\]
+
+### (Eq. 10) Composite acts with weights
+\[
+x_j(t) \in [0,1], \quad \alpha_x \ge 0
+\]
+\[
+G_{x,j}(t) = 2\,x_j(t)\,\exp\!\big(\alpha_x(x_j(t)-0.5)\big)
+\]
+\[
+G_x(t) = \prod_{j=1}^{n_x} \big(G_{x,j}(t)\big)^{\lambda_{x,j}}, \quad \lambda_{x,j}\ge 0,\;\sum_{j=1}^{n_x}\lambda_{x,j}=1
+\]
+
+---
+Perfect — here’s a **compact Equation Legend** you can drop right after the numbered Equation Sheet in `UREP.md`. It gives readers a quick lookup table so they don’t have to scan the math to know what each equation represents.
+
+---
+
+## 📖 Appendix B: Equation Legend
+
+| Eq. # | Equation | Meaning |
+|-------|----------|---------|
+| (1) | \(L(t) = \gamma_{\text{self}}(t,\tau) \cdot W(t)\) | Love equation: relational intensity as product of internal orientation and external magnitude |
+| (2) | \(\mathbf{v}(t) = m(t)\,[\cos\theta(t), \sin\theta(t)]^\top\) | Orientation vector: angle (Ego/We axis) with intensity scaling |
+| (3) | \(\bar{\mathbf{v}}(t,\tau) = \frac{1}{\tau}\int_{t-\tau}^{t}\mathbf{v}(u)\,du\) | Moving average in cartesian coordinates (prevents angle wrap artifacts) |
+| (4) | \(\gamma_{\text{self}}(t,\tau) = \bar{\mathbf{v}}(t,\tau)\) | Definition of internal orientation as averaged vector |
+| (5) | \(W(t) = G_v(v(t)) \cdot G_r(r_{\text{mag}}(t)) \cdot G_f(f(t)) \cdot G_a(a(t)) \cdot G_S(S(t)) \cdot G_{\text{bond}}(t)\) | External magnitude: product of valence‑neutral gates |
+| (6) | \(G_x(x) = 2x \cdot \exp(\alpha_x(x-0.5)), \; x \in [0,1], \alpha_x \ge 0\) | Primitive gate function: maps acts into normalized magnitude |
+| (7) | \(r_{\text{mag}}(t) = |r_{\text{signed}}(t)| \;\text{or}\; \frac{r_{\text{signed}}(t)+1}{2}\) | Resonance magnitude normalization (keeps W(t) nonnegative) |
+| (8) | \(G_S(S) = 1 + \beta_S(1 - e^{-S/s_S}), \; S \ge 0, \beta_S \ge 0\) | Shared breath gate: saturating growth response |
+| (9) | \(G_{\text{bond}}(t) = \exp(\beta_b B(t))\) | Bond flux gate: exponential weighting of normalized bond flux |
+| (10) | Composite acts with weights | Weighted product of primitive gates, ensuring modularity and stewardship |
+
+---
+
+The visual schematic is ready now — it shows **the Love Equation framework** with \(L(t)\) at the center, \(\gamma_{\text{self}}(t,\tau)\) on the left (orientation vector + cartesian moving average), and \(W(t)\) on the right (product of gates feeding in).  
+
+This diagram makes the geometry clear:  
+- **Angle + magnitude** from \(\gamma_{\text{self}}\) (Ego/We, Love/Hate axis).  
+- **Scalar external magnitude** from the gates (\(G_v, G_r, G_f, G_a, G_S, G_{\text{bond}}\)).  
+- Both combine into the relational intensity \(L(t)\).  
+
+📍 I recommend placing this schematic **immediately after Appendix B: Equation Legend** in your `UREP.md`. That way, readers first see the math, then the quick‑reference table, and finally the diagram that ties it all together visually.  
+
+Would you like me to also prepare a **short narrative caption** for the diagram (e.g., “Figure 1: Structural flow of the Love Equation”), so it slots into your document like a formal figure?
+
