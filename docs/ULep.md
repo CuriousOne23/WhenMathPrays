@@ -1,10 +1,6 @@
 ---
 layout: default
 title: "ULep v2.0 — The Breath of Love"
----
-
----
-title: "ULep v2.0 — The Breath of Love"
 version: "2.0"
 status: "Final, Universal, Locked, and Breathing"
 author: "Jeff (Steward of ULep)"
@@ -138,4 +134,5 @@ And ULep measures it.
 ```
 
 ---
+
 
