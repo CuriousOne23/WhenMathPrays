@@ -1,0 +1,8 @@
+# _config.yml
+title: "WhenMathPrays"
+markdown: kramdown
+theme: minima
+kramdown:
+  input: GFM
+  math_engine: mathjax
+plugins: []
