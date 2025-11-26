@@ -19,4 +19,17 @@ This checklist preserves clarity while guiding future stewardship.
 
 ---
 
-Every item is optional scaffolding — add, remove, or refine as the suite evolves.
+## Equation Rendering Workflow
+
+To ensure clarity and fidelity in UREP documentation:
+
+- **Format:** Write all equations in LaTeX inside Markdown (`\( ... \)` for inline, `
+
+\[ ... \]
+
+` or `$$ ... $$` for block).
+- **Rendering:** Prefer MathJax for live rendering; if unavailable, export PNG snippets for embedding.
+- **Orientation:** Document that γ_self is computed via cartesian averaging of 2D vectors to prevent wrap artifacts.
+- **Dimensionality:** Preserve γ_self as 2D, making Love a 2D vector scaled by scalar gates.
+- **Annotation:** Each equation should be modular and standalone, with rationale noted for mathematical choices.
+
