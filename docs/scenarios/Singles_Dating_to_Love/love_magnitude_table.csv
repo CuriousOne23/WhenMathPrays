@@ -1,0 +1,11 @@
+Day,M1_Love,M2_Love,Event
+0,0.10,0.20,Initial condition
+7,0.20,0.18,First date
+14,0.30,0.25,Early wobble
+21,0.38,0.35,Repair begins
+28,0.40,0.50,Shared rhythm
+35,0.42,0.52,Repair complete
+42,0.44,0.54,Stable Q2 band
+49,0.46,0.55,Steady connection
+56,0.48,0.56,Higher plateau
+60,0.55,0.57,Outcome
