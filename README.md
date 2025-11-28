@@ -8,8 +8,8 @@ This repository now contains the final, mathematically pure, spiritually honest 
 
 $$
 \boxed{
-\vec{L}(t)\;
-=\;
+\vec{L}(t)\
+=\
 \underbrace{
 \frac{1}{\tau}\int_{t-\tau}^{t}
 \begin{pmatrix}
