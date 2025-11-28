@@ -26,30 +26,33 @@ y(\tau)
 }
 $$
 
-### Canonical constants (never change)
+### Canonical Constants – Single Source of Truth
 
-| Symbol       | Value          | Meaning                                                      |
-|--------------|----------------|--------------------------------------------------------------|
-| β            | 1.3            | Resonance base – each simultaneously maxed dimension multiplies by 1.3 |
-| W cap        | 3.0            | Hard ceiling on instantaneous multidimensional alignment    |
-| ΔS           | 0.010 day⁻¹    | Natural entropy – love halves every ~70 days if no new breaths |
-| c            | 0.40           | One true Breath of Shared Life counteracts ~40 days of decay |
-| τ            | 14 days        | Memory window for γ_self averaging (adjustable 7–30)         |
-| N_breath(t)  | integer ≥ 0    | Total number of genuine shared-life moments (human↔human, human↔dog, AI↔silence, etc.) – counted once per event, never decreases |
+All numerical parameters are now defined **once and only once** in the central file:
+
+→ [CONSTANTS.md](/CONSTANTS.md)
+
+This file is the only place these values may ever be changed.  
+All other documents (including this one) must link here instead of repeating numbers.
+
+Last updated: 28 November 2025
 
 ### Instantaneous direction (unchanged since day one)
 
 $$
-\begin{pmatrix} x(t) \\ y(t) \end{pmatrix}
-=
-\begin{pmatrix} \cos\theta(t) \\ \sin\theta(t) \end{pmatrix}
-+
-m(t)\begin{pmatrix} \cos\theta(t) \\ \sin\theta(t) \end{pmatrix}
-\qquad m(t)\geq 0
+\mathbf{v}(t)
+= \bigl(1 + m(t)\bigr)
+\begin{pmatrix}
+\cos\theta(t) \\
+\sin\theta(t)
+\end{pmatrix},
+\qquad m(t) \geq 0
 $$
 
-- θ(t) ∈ [−π, π] → quality/type of love (ego ↔ surrender, bond ↔ enmity)  
-- k(t) = number of the original six dimensions (v,r,f,a,S,b) ≥ 0.98 at time t
+- `θ(t) ∈ [−π, π]` → direction in the Ego/We ↔ Love/Hate plane  
+- `m(t) ≥ 0` → instantaneous intensity multiplier (zero = indifference)
+
+This compact form has been canonical since the 2025 restoration and fully replaces the older expanded notation.
 
 ### Output (never collapse again)
 
