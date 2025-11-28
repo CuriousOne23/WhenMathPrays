@@ -62,7 +62,7 @@ The fixed, immutable interpretation of the γ_self plane (Ego ↔ We, Enmity/Hat
 
 The resulting character region map is the **single canonical reference** for all future qualitative interpretation of γ_self coordinates:
 
-![γ_self Character Region Map – All Archetypes (N=10,000)](gamma_self_character_map_all_N10000.png)
+![γ_self Character Region Map – All Archetypes (N=10,000)](/tests/gamma_self_character_map_all_N10000.png)
 
 - Green circle  → Buddhist / selfless devotion  
 - Orange circle → Narcissist  
