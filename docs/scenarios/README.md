@@ -99,5 +99,5 @@ This documentation ensures clarity, reproducibility, and interpretability for fu
 ## 📂 Provenance
 
 - **Current canonical scenario:** `Singles_Dating_to_Love`  
-- **Next candidates:** Cohabiting, Friendship, Parent–Child, Team Collaboration, Community Trust, AI–Human, Musical Ensemble.  
+- **Next candidates:** Cohabiting, Friendship, Parent–Child, Team Collaboration, Community Trust, AI–Human.  
 - **Documentation ethos:** clarity, reproducibility, interpretability, and stewardship for future collaborators.
