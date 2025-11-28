@@ -51,7 +51,7 @@ See ['M1_gamma_self_table.csv'](M1__gamma_self_table.csv)
 See ['M2_gamma_self_table.csv'](M2__gamma_self_table.csv)
 
 ### ent to x transfer for G(x)
-See ['ent_to_x_transfer_for_G(x)'](doc/scenarios/ "M1/M2 love csv entry of range +/- 10 is equated to x")
+See ['ent_to_x_transfer_for_G(x)'](docs/scenarios/ "M1/M2 love csv entry of range +/- 10 is equated to x")
 
 ## 📝 Notes
 - **Gamma_self:** Both M1 and M2 remain in the negative x domain (ego/“we”), rising steadily in y (love).  
