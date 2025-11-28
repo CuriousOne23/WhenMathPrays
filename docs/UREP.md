@@ -274,8 +274,26 @@ where
 - Averaging is cartesian, not polar, to avoid angle wrap artifacts.  
 - γ_self(t, τ) remains unbounded, preserving broad applicability across domains.
 
-  Great — here’s how I’d integrate the **Equation Sheet** into your `UREP.md` so it’s both clear and canonical:
 
+### The γ_self Space – Canonical Axis Definitions
+
+The vector γ_self(t,τ) ∈ ℝ² lives in a fixed, domain-independent coordinate system defined as follows:
+
+| Axis | Direction | Meaning (negative ← → positive)          |
+|------|-----------|-------------------------------------------|
+| x    | −Re ← → +Re | Ego ← → We (Self-centered ← → Other-centered) |
+| y    | −Im ← → +Im | Enmity ← → Love (Adversarial ← → Devotional)  |
+
+- **Re** = Reality axis (horizontal): measures the locus of identity and concern.  
+  −Re = purely egoic posture; +Re = fully transpersonal/“We” posture.
+- **Im** = Immanence axis (vertical): measures the emotional valence toward the other.  
+  −Im = enmity, contempt, or destructive intent; +Im = love, benevolence, or sacrificial devotion.
+
+The origin (0, 0) represents perfect neutrality/indifference on both dimensions.
+
+These two axes are **canonical and fixed** for all future UREP implementations and extensions. Applications must not rotate or redefine the axes; they may only rescale units or add higher-dimensional embeddings that preserve the meaning of these two base axes. Projection onto other named dimensions (e.g., dominance/submission, awe/fear) is permitted only as derived quantities, never as replacements for −Re/+Re and −Im/+Im.
+
+This convention ensures that any two independent UREP models (psychological, theological, sociological, or AI) will assign identical semantic meaning to identical γ_self vectors.
 ```
 ## 4. Definition of W(t)
 [Your existing narrative + component definitions]
