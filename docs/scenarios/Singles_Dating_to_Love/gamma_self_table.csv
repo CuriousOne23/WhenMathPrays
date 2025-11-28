@@ -6,8 +6,8 @@ Range (avg, min, max)	0.5	0	1
 Entry (avg, min, max), ent	0	-10	10	-10 = Against you, 10 = For you
 Entry, ent, to x, transfer	ent/20+0.5	0	1	x is used in G(x)
 
-			"External Weight (Assume Normal Distribution), 
-Entry = {-10,10}"					
+			 
+External Weight (Assume Normal Distribution), Entry = {-10,10}					
 Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	Notes
 0	-0.5	0.1	5	0	2	2	0	Initial condition: eager, more ego, moderate love
 7	-0.4	0.2	5	2	2	3	1	First date: over-asserts, feels strong attraction, ego still high
