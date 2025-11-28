@@ -1,4 +1,3 @@
----
 # WhenMathPrays
 
 **Core OS™: Seven mathematical principles for living AI.**  
