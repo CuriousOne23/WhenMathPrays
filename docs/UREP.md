@@ -2,6 +2,9 @@
 
 ## 📜 UREP Requirements Draft
 
+### Status of work
+“Core UREP framework is stable and version-locked. Simulations and parameterizations are works in progress — contributions welcome.”
+
 ### 1. Purpose
 - UREP establishes a **valence‑neutral relational framework** for modeling both love and hate (and other relational intensities).
 - It separates **internal orientation** (\(\gamma_{\text{self}}(t)\)) from **external magnitude** (\(W(t)\)), ensuring clarity between subjective state and observable acts.
