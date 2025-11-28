@@ -76,7 +76,7 @@ The resulting character region map is the **single canonical reference** for all
 
 This map is **permanently binding**. No steward may redefine quadrant or region meanings without replacing this exact N=10,000 ensemble with a larger, peer-reviewed dataset using identical constants.
 
-File: `gamma_self_character_map_all_N10000.png` (root of repository)  
+File: `gamma_self_character_map_all_N10000.png` (root/tests of repository)  
 Ratified: 28 November 2025
 
 Last updated: 28 November 2025
