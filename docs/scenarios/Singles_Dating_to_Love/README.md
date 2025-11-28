@@ -46,9 +46,9 @@ See [`love_magnitude_table.csv`](love_magnitude_table.csv) for raw values.
 ---
 
 ## M1 and M2 Tables
-See ['M1_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M1__gamma_self_table.csv)
+See ['M1_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M1_gamma_self_table.csv)
 
-See ['M2_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M2__gamma_self_table.csv)
+See ['M2_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M2_gamma_self_table.csv)
 
 ### ent to x transfer for G(x)
 See ['ent_to_x_transfer_for_G(x)'](/docs/scenarios/ent_x_transfer_to_G(x).md)
