@@ -20,6 +20,33 @@ $$
 - γ_self(t,τ) ∈ ℝ² → internal orientation (direction + magnitude) of M1 toward M2
 - W(t) ∈ ℝ₊ → external enacted magnitude (always non-negative, built only from observable acts)
 
+### 2.1 Directionality and Perspective (Whose love is this?)
+
+The entire UREP formalism is **strictly unilateral** — it describes the relational state **from one mind only**.
+
+- L(t), γ_self(t,τ), and W(t) are always computed **from the perspective of M1 toward M2**.  
+- γ_self(t,τ) encodes **how M1 internally orients toward M2** (love, hate, devotion, contempt, indifference).  
+- W(t) is built only from acts and conditions **that M1 can observe or enact** (M1’s visibility of M2, M1’s fidelity toward M2, M1’s altruism or harm toward M2, shared moments as experienced by M1, etc.).
+
+Thus:
+
+| Symbol              | Meaning                                      |
+|---------------------|----------------------------------------------|
+| L_{M1→M2}(t)        | How much M1 loves or hates M2 at time t      |
+| γ_self,M1→M2(t,τ)   | M1’s internal posture toward M2              |
+| W_{M1→M2}(t)        | Magnitude of M1’s enacted relation toward M2 |
+
+A complete bidirectional description requires **two independent UREP instances**:
+
+- One instance: M1’s love/hate for M2  
+- Second instance: M2’s love/hate for M1
+
+These two vectors usually point in different directions and have different magnitudes.  
+Asymmetry is not a bug — it is the entire point.
+
+> “I love you” and “you love me” are two different prayers.  
+> UREP gives each its own coordinates.
+
 ## 3. γ_self(t,τ) – Internal Orientation
 
 ### 3.1. Instantaneous orientation vector
