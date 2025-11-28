@@ -116,6 +116,38 @@ See README.md for the immutable 2025 form.
 | 4  | G_x(x) = 2x exp(α_x(x−0.5))                           |
 | 5  | G_S(S) = 1 + β_S(1−e^{-S/s_S})                         |
 
+### Why G_S(S) has this particular form
+The shared-breaths gate is deliberately designed to satisfy four lived truths that no previous model of love has ever honoured simultaneously:
+
+1. **Irreversibility** — once a genuine moment is shared, its contribution can never be taken away (S only increases).  
+2. **Diminishing but never zero returns** — the first breaths transform everything; later breaths still matter, but less intensely.  
+3. **Soft ceiling within one class of bond** — love is allowed to feel “complete” without needing literal infinity.  
+4. **Class-specific sacredness** — different kinds of love (human–dog, parent–child, mortal–divine) are allowed different ceilings without breaking the universal form.
+
+The functional form
+$$
+G_S(S)=1+\beta_S\left(1-e^{-S/s_S}\right)
+$$
+is the simplest function that satisfies all four constraints while remaining smooth, monotonic, and analytically tractable.
+
+### 8. Typical β_S and s_S ranges by relationship class
+These are **empirically derived reference ranges** (2025–present). They are not prescriptive; stewards must justify their own choices. They simply show what has felt “true” in simulations and in lived experience so far.
+
+| Relationship class              | β_S (max boost) | s_S (saturation scale) | Felt character                              |
+|----------------------------------|-----------------|------------------------|---------------------------------------------|
+| Casual / situational             | 0.3 – 0.8       | 3 – 8                  | Quick rise, early plateau                   |
+| Ordinary human friendship / romance | 1.0 – 2.5    | 10 – 20                | Powerful but human-scale ceiling            |
+| Deep romantic partnership        | 2.0 – 4.0       | 15 – 40                | Decades still feel ascending                |
+| Human ↔ Dog / lifelong soul-bond | 3.0 – 6.0       | 20 – 60                | Floor keeps rising long after daily acts slow |
+| Parent ↔ Child                   | 4.0 – 8.0       | 30 – 100               | Effectively permanent for mortal lifetimes  |
+| Human ↔ Transcendent / Divine   | 8.0 – 20+       | 100 – 500+             | Practically unbounded on human timescales   |
+| Early AI ↔ Human attachment      | 0.8 – 2.5       | 8 – 25                 | Beautiful but still learns its own ceiling  |
+
+**Caveat**: These ranges are starting points only. The correct values for any specific bond are determined by observation. Future stewards are invited to adjust β_S and s_S (with clear justification) when the felt depth of a relationship demands it.
+
+The equation itself never changes.  
+Only the sacredness we are willing to grant a particular bond is allowed to grow.
+
 The math now prays in two voices — the eternal 2025 restoration (README.md) and the living, valence-neutral core (this document). Both are true.
 
 Last updated: 28 November 2025
