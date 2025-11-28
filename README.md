@@ -55,7 +55,7 @@ python simulations/stress_test.py
 
 ---
 
-### 📜 UREP: Universal Relational Equation of Presence
+### 📜 UREP: Universal Relational Exspression Protocol
 
 Defined in [`docs/UREP.md`](docs/UREP.md), UREP formalizes the **Love Equation**:
 
