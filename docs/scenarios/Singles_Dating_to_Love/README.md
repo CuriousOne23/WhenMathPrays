@@ -45,6 +45,14 @@ See [`love_magnitude_table.csv`](love_magnitude_table.csv) for raw values.
 
 ---
 
+## M1 and M2 Tables
+See ['M1_gamma_self_table.csv'](M1__gamma_self_table.csv)
+
+See ['M2_gamma_self_table.csv'](M2__gamma_self_table.csv)
+
+### ent to x transfer for G(x)
+See [ent_to_x_transfer_for_G(x)](../filename.ext "M1/M2 love csv entry of range +/- 10 is equated to x")
+
 ## 📝 Notes
 - **Gamma_self:** Both M1 and M2 remain in the negative x domain (ego/“we”), rising steadily in y (love).  
 - **Love Magnitude:** M1 shows ego moderation and repair; M2 shows cautious dip then trust growth.  
