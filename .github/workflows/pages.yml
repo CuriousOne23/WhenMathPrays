@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Upload static files
-        uses: actions/upload-pages-artifact@3
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./   # adjust if your files live in /public or another folder
 
