@@ -19,10 +19,9 @@ y(\tau)
 \,d\tau
 }_{\vec{\gamma}_{\text{self}}(t,\tau)\;\; \text{Cartesian average}}
 \;\times\;
-\min\bigl(\beta^{k(t)},\,3.0\bigr)
+\min\bigl(\beta^{k(t)}\,3.0\bigr)
 \;\times\;
-\exp\Bigl(-\Delta S\,t\;+\;c\,N_{\text{breath}}(t)\Bigr)
-\;\;
+\exp\Bigl(-\Delta S\,t\+c\,N_{\text{breath}}(t)\Bigr)
 \in \mathbb{R}^{2}
 }
 $$
