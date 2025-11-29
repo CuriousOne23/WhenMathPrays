@@ -15,6 +15,9 @@ eggs/
 # Test outputs and images
 tests/*.png
 
+# Pytest cache
+.pytest_cache/
+
 # Ignore system files
 .DS_Store
 Thumbs.db
