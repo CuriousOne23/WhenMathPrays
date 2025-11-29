@@ -9,8 +9,8 @@ dist/
 eggs/
 *.egg-info/
 
-# VS Code workspace settings
-.vscode/
+# VS Code workspace settings (tracked to share interpreter/profile)
+# (Do not ignore .vscode so settings.json is shared)
 
 # Test outputs and images
 tests/*.png
