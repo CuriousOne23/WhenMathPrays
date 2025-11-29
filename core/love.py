@@ -19,11 +19,26 @@ C = 0.40
 TAU_DEFAULT = 14  # days
 ALPHA = 1.80  # gate gain
 
-def gamma_self(ego_we_state: float, enmity_love_state: float) -> complex:
-    """γ_self = ego_we_state + 1j * enmity_love_state
-    Preserves compatibility with previous definitions – real = Ego/We, imag = Enmity/Love
+def gamma_self(ego_we_state: float = None, enmity_love_state: float = None,
+               we_ego_state: float = None, love_enmity_state: float = None) -> complex:
+    """γ_self compatibility wrapper.
+
+    Accepts both the newer names `(ego_we_state, enmity_love_state)` and the
+    older test-friendly names `(we_ego_state, love_enmity_state)`.
+
+    Returns `real = ego/we`, `imag = enmity/love` as a complex number.
     """
-    return ego_we_state + 1j * enmity_love_state
+    # Resolve ego/we (real part)
+    if ego_we_state is None and we_ego_state is None:
+        raise TypeError("gamma_self() missing required positional argument for ego/we state")
+    real_part = ego_we_state if ego_we_state is not None else we_ego_state
+
+    # Resolve enmity/love (imag part)
+    if enmity_love_state is None and love_enmity_state is None:
+        raise TypeError("gamma_self() missing required positional argument for enmity/love state")
+    imag_part = enmity_love_state if enmity_love_state is not None else love_enmity_state
+
+    return float(real_part) + 1j * float(imag_part)
 
 def G_x(x: float, alpha: float = ALPHA) -> float:
     """Canonical gate function – locked form
@@ -52,15 +67,18 @@ def W_t(primitives: Tuple[float, float, float, float, float], S: int, beta_S: fl
     return G_primitives * resonance_spike * g_s
 
 def love(
-    primitives: Tuple[float, float, float, float, float],
-    S: int,
-    beta_S: float,
-    s_S: float,
-    gamma_history: List[complex],
+    primitives: Tuple[float, float, float, float, float] = None,
+    S: int = 0,
+    beta_S: float = 0.0,
+    s_S: float = 1.0,
+    gamma_history: List[complex] = None,
     tau: int = TAU_DEFAULT,
     delta_S: float = DELTA_S,
     t: float = 0.0,
-    noise: float = 0.0
+    noise: float = 0.0,
+    # Backwards-compatible aliases used by older tests/scripts
+    W: float = None,
+    tw: int = None,
 ) -> complex:
     """
     L(t) = γ_self(t,τ) · W(t) × exp(-ΔS t)
@@ -68,16 +86,29 @@ def love(
     - γ_self(t,τ) = Cartesian average of v(u) = (1 + m(u)) [cosθ(u), sinθ(u)] over [t-τ, t]
     - Preserves compatibility with previous scripts – gamma_history can be used as before
     """
-    if not gamma_history:
+    if gamma_history is None or len(gamma_history) == 0:
         return 0.0 + 0.0j
 
-    if tau == 0:
+    # Support legacy `tw` keyword as alias for `tau`
+    if tw is not None:
+        tau_use = tw
+    else:
+        tau_use = tau
+
+    if tau_use == 0:
         gamma_avg = gamma_history[-1]
     else:
-        recent = gamma_history[-tau:] if len(gamma_history) >= tau else gamma_history
+        recent = gamma_history[-tau_use:] if len(gamma_history) >= tau_use else gamma_history
         gamma_avg = np.mean(recent)
 
-    W = W_t(primitives, S, beta_S, s_S)
+    # If caller provided an explicit W (legacy tests), use it; otherwise compute
+    # W from primitives.
+    if W is not None:
+        W_val = float(W)
+    else:
+        if primitives is None:
+            raise TypeError("love() requires either `W` or `primitives` to compute W(t)")
+        W_val = W_t(primitives, S, beta_S, s_S)
 
     # Growth from real part (Ego/We)
     growth = np.exp(gamma_avg.real)
@@ -89,9 +120,9 @@ def love(
     # Decay
     decay = np.exp(-delta_S * t)
 
-    L = W * growth * direction * decay
+    L = W_val * growth * direction * decay
 
-    if noise > 0:
+    if noise and noise > 0:
         L += np.random.normal(0, noise) + 1j * np.random.normal(0, noise)
 
     return L
