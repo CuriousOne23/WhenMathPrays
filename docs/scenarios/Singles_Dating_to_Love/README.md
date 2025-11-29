@@ -28,6 +28,10 @@ This scenario documents the relational arc of **M1** and **M2** across 60 days, 
 ## 📑 Data Tables
 
 ### Love Magnitude Table
+**Input data:**  
+- [M1 γ_self](../../data/Single_Dating_2_Love_M1_gamma_self_table.csv)  
+- [M2 γ_self](../../data/Single_Dating_2_Love_M2_gamma_self_table.csv)
+
 See [`love_magnitude_table.csv`](love_magnitude_table.csv) for raw values.
 
 | Day | M1_Love | M2_Love | Event            |
@@ -44,14 +48,6 @@ See [`love_magnitude_table.csv`](love_magnitude_table.csv) for raw values.
 | 60  | 0.55    | 0.57    | Outcome           |
 
 ---
-
-## M1 and M2 Tables
-See ['M1_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M1_gamma_self_table.csv)
-
-See ['M2_gamma_self_table.csv'](/docs/scenarios/Singles_Dating_to_Love/M2_gamma_self_table.csv)
-
-### ent to x transfer for G(x)
-See ['ent_to_x_transfer_for_G(x)'](/docs/scenarios/ent_x_transfer_to_G(x).md)
 
 ## 📝 Notes
 - **Gamma_self:** Both M1 and M2 remain in the negative x domain (ego/“we”), rising steadily in y (love).  
