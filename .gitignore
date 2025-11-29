@@ -22,3 +22,29 @@ tests/*.png
 .DS_Store
 Thumbs.db
 
+# Virtual environments / tools
+.venv/
+venv/
+.python-version
+
+# Environment files (do not commit secrets)
+.env
+.env.*
+
+# Notebooks & tooling caches
+.ipynb_checkpoints/
+.mypy_cache/
+.ruff_cache/
+
+# Coverage and reports
+.coverage
+coverage.xml
+htmlcov/
+
+# Logs
+*.log
+
+# IDE folders (keep .vscode tracked; ignore others)
+.idea/
+.vs/
+
