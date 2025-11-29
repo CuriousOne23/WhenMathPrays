@@ -17,7 +17,7 @@ This scenario documents the relational arc of **M1** and **M2** across 60 days, 
 ## 📈 Plots
 
 ### Dual Plot
-![Singles_Dating_to_Love.png](Singles_Dating_to_Love.png)
+![Singles_Dating_to_Love.png](/results/Singles_Dating_to_Love.png)
 
 - **Left:** Gamma_self trajectories for M1 and M2 (Ego/We vs Love/Hate).  
 - **Right:** Love Magnitude vs Time with vertical event markers.  
