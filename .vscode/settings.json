@@ -1,9 +1,10 @@
 {
   "python.defaultInterpreterPath": "C:\\Users\\jeffg\\anaconda3\\python.exe",
+  "python.condaPath": "C:\\Users\\jeffg\\anaconda3\\Scripts\\conda.exe",
   "terminal.integrated.env.windows": {
-    "PATH": "C:\\Users\\jeffg\\anaconda3;${env:PATH}"
+    "PATH": "C:\\Users\\jeffg\\anaconda3;C:\\Users\\jeffg\\anaconda3\\Scripts;C:\\Users\\jeffg\\anaconda3\\Library\\bin;${env:PATH}"
   }
-}{
+}
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.pythonProjects": []
 }
