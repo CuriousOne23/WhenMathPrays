@@ -1,0 +1,31 @@
+# Git & VCS
+.git
+.gitignore
+
+# Python caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Editor/IDE folders
+.vscode/
+.idea/
+.vs/
+
+# Tests output
+tests/*.png
+
+# Coverage & reports
+.coverage
+coverage.xml
+htmlcov/
+
+# Logs
+*.log
+
+# Data caches (adjust as needed)
+data/*.cache
