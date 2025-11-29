@@ -29,8 +29,8 @@ This scenario documents the relational arc of **M1** and **M2** across 60 days, 
 
 ### Love Magnitude Table
 **Input data:**  
-- [M1 γ_self](../../data/Single_Dating_2_Love_M1_gamma_self_table.csv)  
-- [M2 γ_self](../../data/Single_Dating_2_Love_M2_gamma_self_table.csv)
+- [M1 γ_self](/data/Single_Dating_2_Love_M1_gamma_self_table.csv)  
+- [M2 γ_self](/data/Single_Dating_2_Love_M2_gamma_self_table.csv)
 
 See [`love_magnitude_table.csv`](love_magnitude_table.csv) for raw values.
 
