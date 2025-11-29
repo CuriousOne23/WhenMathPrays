@@ -33,7 +33,7 @@ This scenario documents the relational arc of **M1** and **M2** across 60 days, 
 
 ### Output (Model Prediction)
 See the full computed love magnitude table:  
-[`Single_Dating_2_love_magnitude_table.csv`](/results/Single_Dating_2_love_magnitude_table.csv)
+[`Single_Dating_2_Love_magnitude_table.csv`](/results/Single_Dating_2_Love_magnitude_table.csv)
 
 | Day | M1_Love | M2_Love | Event               |
 |-----|---------|---------|---------------------|
