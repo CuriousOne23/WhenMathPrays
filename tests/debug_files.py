@@ -1,38 +1,23 @@
 # tests/debug_files.py
-# Quick debug: show exactly what files exist and where
-
 from pathlib import Path
 
-# Where we are right now
-print("Current folder:")
-print(Path.cwd())
-print()
+print("=== DEBUG: Where are the files? ===\n")
+print(f"Current working directory: {Path.cwd()}\n")
 
-# What the compute script thinks "data" folder is
-data_folder = Path("../data")
-print("Script expects data folder at:")
-print(data_folder.resolve())
-print()
+data_path = Path("../data")
+print(f"Script looks for data folder here: {data_path.resolve()}")
+print(f"Does this folder exist? → {data_path.exists()}\n")
 
-# Does that folder exist?
-if data_folder.exists():
-    print("data folder FOUND")
+if data_path.exists():
+    print("Files inside data folder:")
+    for f in data_path.iterdir():
+        print("   →", f.name)
 else:
-    print("data folder NOT FOUND")
-    print()
+    print("data folder NOT found!\n")
 
-# List everything in the project root
-print("Files in project root (WhenMathPrays):")
-for item in Path(".").iterdir():
-    print("  ", item.name)
-print()
+print("\nFiles in project root (WhenMathPrays):")
+for f in Path(".").iterdir():
+    if f.is_file():
+        print("   →", f.name)
 
-# List everything in the data folder (if it exists)
-if data_folder.exists():
-    print("Files in data folder:")
-    for item in data_folder.iterdir():
-        print("  ", item.name)
-else:
-    print("No data folder — nothing to list")
-
-print("\nRun this — then paste the output here.")
+print("\nRun complete.")
