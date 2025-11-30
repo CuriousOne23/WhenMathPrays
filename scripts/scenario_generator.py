@@ -13,6 +13,17 @@ import csv
 import os
 from typing import List, Tuple, Dict, Optional
 
+try:
+    from bond_calibration_map import get_bond_parameters, get_initial_bond, classify_slope
+except ImportError:
+    # Fallback if bond_calibration_map not available
+    def get_bond_parameters(duration_days, avg_slope):
+        return {"beta_S": (2.0, 4.0), "s_S": (15, 30)}
+    def get_initial_bond(relationship_type):
+        return 0.0
+    def classify_slope(avg_slope):
+        return "mild"
+
 
 class ScenarioGenerator:
     """
@@ -44,6 +55,7 @@ class ScenarioGenerator:
         shared_breath_prob: float = 0.60,
         m1_name: str = "M1",
         m2_name: str = "M2",
+        decline_score: float = 0.0,
     ) -> Dict:
         """
         Generate complete scenario from waypoints.
@@ -59,6 +71,10 @@ class ScenarioGenerator:
             s_S: Saturation scale for shared breath (auto-select if None)
             b_0: Initial bond condition (0 for strangers, >0 for existing relationships)
             shared_breath_prob: Probability of shared breath when triggered (default 0.60)
+            decline_score: Human-entry score for declining scenarios (0 to -10).
+                          0 = neutral decline (natural entropy)
+                          -3 to -5 = moderate toxicity (conflict, disappointment)
+                          -7 to -10 = extreme toxicity (betrayal, abuse, destruction)
         
         Returns:
             Dictionary with generated trajectories and metadata
@@ -83,11 +99,11 @@ class ScenarioGenerator:
         # Generate trajectories
         M1_data = self._generate_trajectory(
             M1_trajectory, num_events, max_delta_y, max_delta_x, 
-            days_per_event, shared_breath_prob, "M1"
+            days_per_event, shared_breath_prob, decline_score, "M1"
         )
         M2_data = self._generate_trajectory(
             M2_trajectory, num_events, max_delta_y, max_delta_x,
-            days_per_event, shared_breath_prob, "M2"
+            days_per_event, shared_breath_prob, decline_score, "M2"
         )
         
         # Auto-select beta_S and s_S if not provided
@@ -146,6 +162,7 @@ class ScenarioGenerator:
         max_delta_x: float,
         days_per_event: int,
         shared_breath_prob: float,
+        decline_score: float,
         entity: str,
     ) -> List[Dict]:
         """Generate event-by-event trajectory between waypoints."""
@@ -190,6 +207,18 @@ class ScenarioGenerator:
                 gamma_x.append(x)
                 gamma_y.append(y)
         
+        # Calculate trajectory slopes for each segment
+        # Slope = delta_y / delta_events (love axis movement per event)
+        segment_slopes = []
+        for i in range(len(waypoints) - 1):
+            event_start, x_start, y_start, tol_start = waypoints[i]
+            event_end, x_end, y_end, tol_end = waypoints[i + 1]
+            
+            delta_y = y_end - y_start
+            delta_events = event_end - event_start
+            slope = delta_y / delta_events if delta_events > 0 else 0
+            segment_slopes.append((event_start, event_end, slope))
+        
         # Initialize primitive histories (for FIR filter)
         v_history = []
         r_history = []
@@ -211,24 +240,58 @@ class ScenarioGenerator:
                 x = gamma_x[-1]
                 y = gamma_y[-1]
             
-            # Compute |gamma_self| for base primitive intensity
-            gamma_mag = np.sqrt(x**2 + y**2)
+            # Determine current segment slope
+            current_slope = 0
+            for seg_start, seg_end, slope in segment_slopes:
+                if seg_start <= event <= seg_end:
+                    current_slope = slope
+                    break
             
-            # Base primitive from |gamma_self| with improved scaling for sustained bonds
-            # Lower threshold at γ≥5 (strong friendship/moderate bonds)
-            # For γ=5-6: base ~0.75-0.83
-            # For γ=7-8: base ~0.88-0.92
-            # For γ=9-10: base ~0.94-0.96
-            if gamma_mag >= 5:
-                base_primitive = np.clip(0.65 + (gamma_mag - 5) / 16, 0.65, 0.98)
-            else:
-                base_primitive = np.clip((gamma_mag / 12.0) * 0.5 + 0.5, 0.3, 0.98)
+            # Base primitive from slope (trajectory dynamics)
+            # Growing trajectories (positive slope) need high primitives to overcome entropy
+            # Stable trajectories (near-zero slope) need moderate primitives
+            # Declining trajectories (negative slope) need low/negative primitives
+            # Calibrated via empirical tests: slope +0.05 needs primitives ~0.75+ to overcome entropy
+            
+            if current_slope > 0.15:  # Strong growth (slope > 0.15)
+                base_primitive = np.clip(0.85 + current_slope * 0.8, 0.85, 0.98)
+            elif current_slope > 0.10:  # Moderate-strong growth (0.10 < slope ≤ 0.15)
+                base_primitive = np.clip(0.80 + current_slope * 1.5, 0.80, 0.90)
+            elif current_slope > 0.03:  # Mild growth (0.03 < slope ≤ 0.10) - CRITICAL threshold
+                base_primitive = np.clip(0.75 + current_slope * 2.5, 0.75, 0.85)
+            elif current_slope > -0.03:  # Stable (near zero slope)
+                base_primitive = np.clip(0.65 + current_slope * 3.0, 0.60, 0.75)
+            elif current_slope > -0.10:  # Mild decline
+                base_primitive = np.clip(0.55 + current_slope * 2.0, 0.50, 0.65)
+            elif current_slope > -0.15:  # Moderate decline
+                base_primitive = np.clip(0.45 + current_slope * 1.5, 0.40, 0.55)
+            else:  # Strong decline (slope < -0.15)
+                base_primitive = np.clip(0.35 + current_slope * 1.0, 0.20, 0.45)
+            
+            # Apply decline_score modulation (0 to -10 scale)
+            # decline_score dampens primitives and can make them negative for toxic scenarios
+            if decline_score < 0:
+                # Map decline_score to dampening factor:
+                # 0 → 1.0 (no effect)
+                # -3 → 0.70 (30% reduction)
+                # -5 → 0.50 (50% reduction)
+                # -7 → 0.30 (70% reduction)
+                # -10 → 0.0 (complete suppression, can go negative)
+                decline_factor = np.clip(1.0 + (decline_score / 10.0), 0.0, 1.0)
+                
+                # For extreme toxicity (-8 to -10), allow negative primitives
+                if decline_score <= -8:
+                    # Shift base_primitive into negative range
+                    base_primitive = base_primitive * decline_factor - (abs(decline_score) - 7) * 0.1
+                else:
+                    # Dampen but keep non-negative
+                    base_primitive = base_primitive * decline_factor
             
             # Generate primitives with independent random variation (±10% for good saturation)
-            v_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), 0, 1)
-            r_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), 0, 1)
-            f_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), 0, 1)
-            a_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), 0, 1)
+            v_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), -1, 1)
+            r_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), -1, 1)
+            f_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), -1, 1)
+            a_raw = np.clip(base_primitive + random.uniform(-0.10, 0.10), -1, 1)
             
             # Apply 7-tap FIR filter independently per primitive
             v_history.append(v_raw)
@@ -241,17 +304,49 @@ class ScenarioGenerator:
             f_filtered = self._apply_fir(f_history)
             a_filtered = self._apply_fir(a_history)
             
-            # Check for shared breath trigger (flexible threshold for diverse bonds)
-            # Trigger if: 3+ primitives >= 0.80 OR all 4 primitives >= 0.78
+            # Adjust shared breath probability based on slope and decline_score
+            # Growing trajectories need more shared breath to sustain growth
+            # Declining trajectories have reduced connection moments
+            
+            # Base adjustment from slope - calibrated to ensure S accumulation for mild growth
+            if current_slope > 0.10:  # Strong growth
+                slope_breath_factor = 1.5  # Strong boost for growth
+            elif current_slope > 0.03:  # Mild growth (CRITICAL: needs boost to accumulate S)
+                slope_breath_factor = 1.4  # Strong boost even for mild growth
+            elif current_slope > -0.03:  # Stable
+                slope_breath_factor = 1.0  # Normal probability
+            elif current_slope > -0.10:  # Mild decline
+                slope_breath_factor = 0.7  # Reduced probability
+            else:  # Moderate/strong decline
+                slope_breath_factor = 0.5  # Very low probability
+            
+            adjusted_breath_prob = shared_breath_prob * slope_breath_factor
+            
+            # Apply decline_score modulation on top of slope adjustment
+            if decline_score < 0:
+                # Linear reduction: -10 → 0% probability, 0 → normal probability
+                adjusted_breath_prob = adjusted_breath_prob * (1.0 + decline_score / 10.0)
+            
+            adjusted_breath_prob = np.clip(adjusted_breath_prob, 0.0, 0.95)
+            
+            # Check for shared breath trigger (adaptive threshold based on slope)
+            # Growing trajectories: lower threshold to ensure S accumulation
+            # Stable/declining: normal threshold
             primitives = [v_filtered, r_filtered, f_filtered, a_filtered]
-            count_80 = sum(1 for p in primitives if p >= 0.80)
-            count_78 = sum(1 for p in primitives if p >= 0.78)
-            saturated_count = count_80 if count_80 >= 3 else (count_78 if count_78 >= 4 else 0)
+            
+            if current_slope > 0.05:  # Growing: use relaxed threshold
+                count_75 = sum(1 for p in primitives if p >= 0.75)
+                count_78 = sum(1 for p in primitives if p >= 0.78)
+                saturated_count = count_75 if count_75 >= 3 else (count_78 if count_78 >= 3 else 0)
+            else:  # Stable/declining: use standard threshold
+                count_80 = sum(1 for p in primitives if p >= 0.80)
+                count_78 = sum(1 for p in primitives if p >= 0.78)
+                saturated_count = count_80 if count_80 >= 3 else (count_78 if count_78 >= 4 else 0)
             
             note = ""
             if saturated_count >= 3:
                 # Roll for shared breath vs internal fire
-                if random.uniform(0, 1) < shared_breath_prob:
+                if random.uniform(0, 1) < adjusted_breath_prob:
                     S += 1
                     note = "Shared breath moment"
                 else:
@@ -291,7 +386,8 @@ class ScenarioGenerator:
         # Apply coefficients
         filtered = sum(c * v for c, v in zip(self.FIR_COEFFS, recent))
         
-        return np.clip(filtered, 0, 1)
+        # Allow negative values for toxic scenarios
+        return np.clip(filtered, -1, 1)
     
     def _auto_select_breath_params(
         self, 
@@ -300,52 +396,35 @@ class ScenarioGenerator:
         duration_days: int
     ) -> Tuple[float, float]:
         """
-        Auto-select beta_S and s_S based on scenario characteristics.
+        Auto-select beta_S and s_S based on scenario characteristics using calibration map.
         
-        Uses relationship class heuristics from CONSTANTS.md:
-        - Duration (short → casual, long → deep bond)
-        - |gamma_self| range (low → casual, high → deep)
-        - S accumulation rate
+        Uses empirically validated bond parameter calibration map based on:
+        - Duration (very_short/short/medium/long/very_long)
+        - Average trajectory slope (declining/stable/mild/moderate/strong)
         """
         
-        # Compute average |gamma_self|
-        M1_gamma_mags = [np.sqrt(d["x"]**2 + d["y"]**2) for d in M1_data]
-        M2_gamma_mags = [np.sqrt(d["x"]**2 + d["y"]**2) for d in M2_data]
-        avg_gamma_mag = (np.mean(M1_gamma_mags) + np.mean(M2_gamma_mags)) / 2
+        # Calculate average trajectory slope from gamma_self data
+        # Slope = average delta_y across all events
+        M1_slopes = []
+        for i in range(1, len(M1_data)):
+            delta_y = M1_data[i]["y"] - M1_data[i-1]["y"]
+            M1_slopes.append(delta_y)
         
-        # Compute S accumulation rate
-        final_S = max(M1_data[-1]["S"], M2_data[-1]["S"])
-        S_rate = final_S / duration_days  # breaths per day
+        M2_slopes = []
+        for i in range(1, len(M2_data)):
+            delta_y = M2_data[i]["y"] - M2_data[i-1]["y"]
+            M2_slopes.append(delta_y)
         
-        # Classification logic
-        if duration_days < 30:
-            # Casual
-            beta_S = random.uniform(0.3, 0.8)
-            s_S = random.uniform(3, 8)
-        elif duration_days < 180:
-            # Ordinary friendship/romance
-            beta_S = random.uniform(1.0, 2.5)
-            s_S = random.uniform(10, 20)
-        elif duration_days < 365 * 3:
-            # Deep romantic partnership
-            beta_S = random.uniform(2.0, 4.0)
-            s_S = random.uniform(15, 40)
-        elif duration_days < 365 * 10:
-            # Long-term bond
-            beta_S = random.uniform(3.0, 6.0)
-            s_S = random.uniform(20, 60)
-        else:
-            # Lifelong bond
-            beta_S = random.uniform(4.0, 8.0)
-            s_S = random.uniform(30, 100)
+        # Average slope across both entities and all events
+        all_slopes = M1_slopes + M2_slopes
+        avg_slope = np.mean(all_slopes) if all_slopes else 0.0
         
-        # Adjust based on |gamma_self| intensity
-        if avg_gamma_mag > 8:
-            beta_S *= 1.3
-            s_S *= 1.5
-        elif avg_gamma_mag < 3:
-            beta_S *= 0.7
-            s_S *= 0.7
+        # Lookup calibrated parameters from map
+        params = get_bond_parameters(duration_days, avg_slope)
+        
+        # Select random values within calibrated ranges
+        beta_S = random.uniform(params["beta_S"][0], params["beta_S"][1])
+        s_S = random.uniform(params["s_S"][0], params["s_S"][1])
         
         return round(beta_S, 1), round(s_S)
     
