@@ -1,0 +1,12 @@
+beta_S	2.0
+s_S	10
+b_0	0.0
+
+Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
+0	0.00	2.00	10	10	10	9	1		Shared breath moment
+7	0.00	2.30	10	10	10	9	2		Shared breath moment
+14	0.00	2.60	10	10	10	9	3		Shared breath moment
+21	0.00	2.90	10	10	10	9	4		Shared breath moment
+28	0.00	3.20	10	10	10	9	5		Shared breath moment
+35	0.00	3.50	10	10	9	9	6		Shared breath moment
+42	0.00	3.80	10	10	9	9	7		Shared breath moment

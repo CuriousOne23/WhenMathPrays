@@ -1,0 +1,18 @@
+beta_S	2.0
+s_S	15
+b_0	0.4
+
+Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
+0	0.00	2.00	8	5	7	6	0		Internal fire (no shared breath)
+7	0.00	2.05	8	5	7	6	0		Internal fire (no shared breath)
+14	0.00	2.10	8	5	7	6	1		Shared breath moment
+21	0.00	2.15	8	5	7	6	2		Shared breath moment
+28	0.00	2.20	8	5	7	6	3		Shared breath moment
+35	0.00	2.25	8	5	7	6	4		Shared breath moment
+42	0.00	2.30	7	6	7	7	5		Shared breath moment
+49	0.00	2.35	6	6	8	7	6		Shared breath moment
+56	0.00	2.40	7	6	8	8	7		Shared breath moment
+63	0.00	2.45	8	7	7	8	8		Shared breath moment
+70	0.00	2.50	7	7	8	7	9		Shared breath moment
+77	0.00	2.55	7	7	8	7	10		Shared breath moment
+84	0.00	2.60	7	8	8	7	11		Shared breath moment
