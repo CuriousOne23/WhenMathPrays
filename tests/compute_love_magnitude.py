@@ -52,13 +52,16 @@ def load_gamma_csv_with_params(filename: str):
     data_lines = '\n'.join(lines[header_idx:])
     from io import StringIO
     df = pd.read_csv(StringIO(data_lines), sep='\t')
-    # Convert numeric columns
+    # Convert numeric columns (ignore override_flag if present)
     numeric_cols = ["Day", "M1_x", "M1_y", "Visibility v(t)", "Resonance r(t)", 
                     "Fidelity f(t)", "Alturism a(t)", "Shared Breth S(t)"]
     for col in numeric_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(subset=["Day"]).reset_index(drop=True)
+    # Drop override_flag column if present (not used in computation)
+    if 'override_flag' in df.columns:
+        df = df.drop(columns=['override_flag'])
     
     return df, beta_S, s_S
 
@@ -70,13 +73,16 @@ def load_gamma_csv(filename: str):
     from io import StringIO
     df = pd.read_csv(StringIO(data_lines), sep='\t')
     df.columns = [col.strip() for col in df.columns]
-    # Convert numeric columns
+    # Convert numeric columns (ignore override_flag if present)
     numeric_cols = ["Day", "M2_x", "M2_y", "Visibility v(t)", "Resonance r(t)", 
                     "Fidelity f(t)", "Alturism a(t)", "Shared Breth S(t)"]
     for col in numeric_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(subset=["Day"]).reset_index(drop=True)
+    # Drop override_flag column if present (not used in computation)
+    if 'override_flag' in df.columns:
+        df = df.drop(columns=['override_flag'])
     return df
 
 def compute_love_magnitude(scenario_name: str):

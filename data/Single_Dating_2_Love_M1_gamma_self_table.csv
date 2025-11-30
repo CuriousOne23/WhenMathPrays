@@ -1,14 +1,14 @@
 beta_S	1.5
 s_S	15
 
-Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	Notes
-0	-2.5	0.5	5	0	2	2	0	Initial condition: eager, more ego, moderate love
-7	-2	1	5	2	2	3	1	First date: over-asserts, feels strong attraction, ego still high
-14	-1.5	1.5	5	-2	2	3	-1	Early wobble: pressing pace, notices M2 pulling back
-21	-1.25	1.9	5	2	5	5	3	Repair begins: slows down, listens, feels relief
-28	-1	2	5	5	5	5	5	Shared rhythm: enjoys casual comfort, ego softens
-35	-0.9	2.1	5	7	7	7	7	Repair complete: feels trust growing, more balanced
-42	-0.8	2.2	6	8	8	8	8	Stable Q2 band: ego moderated, love rising
-49	-0.775	2.3	7	9	9	9	9	Steady connection: playful, alternating initiation
-56	-0.75	2.4	8	9	9	9	10	Higher plateau: feels secure, love continues upward
-60	-0.7	2.75	9	10	10	9	10	Outcome: stable Q2 relationship, stronger love
+Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
+0	-2.5	0.5	5	0	2	2	0	*	Initial condition: eager, more ego, moderate love
+7	-2	1	5	2	2	3	1	*	First date: over-asserts, feels strong attraction, ego still high
+14	-1.5	1.5	5	-2	2	3	-1	*	Early wobble: pressing pace, notices M2 pulling back
+21	-1.25	1.9	5	2	5	5	3	*	Repair begins: slows down, listens, feels relief
+28	-1	2	5	5	5	5	5	*	Shared rhythm: enjoys casual comfort, ego softens
+35	-0.9	2.1	5	7	7	7	7	*	Repair complete: feels trust growing, more balanced
+42	-0.8	2.2	6	8	8	8	8	*	Stable Q2 band: ego moderated, love rising
+49	-0.775	2.3	7	9	9	9	9	*	Steady connection: playful, alternating initiation
+56	-0.75	2.4	8	9	9	9	10	*	Higher plateau: feels secure, love continues upward
+60	-0.7	2.75	9	10	10	9	10	*	Outcome: stable Q2 relationship, stronger love
