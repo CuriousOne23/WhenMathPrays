@@ -1,5 +1,6 @@
 beta_S	1.5
 s_S	15
+b_0	0.0
 
 Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
 0	-2.5	0.5	5	0	2	2	0	*	Initial condition: eager, more ego, moderate love

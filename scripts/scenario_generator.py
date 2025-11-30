@@ -40,6 +40,7 @@ class ScenarioGenerator:
         event_sampling: str = "weekly",
         beta_S: Optional[float] = None,
         s_S: Optional[float] = None,
+        b_0: float = 0.0,
         shared_breath_prob: float = 0.60,
         m1_name: str = "M1",
         m2_name: str = "M2",
@@ -56,6 +57,7 @@ class ScenarioGenerator:
             event_sampling: Time interval ("daily", "weekly", "monthly")
             beta_S: Max boost for shared breath (auto-select if None)
             s_S: Saturation scale for shared breath (auto-select if None)
+            b_0: Initial bond condition (0 for strangers, >0 for existing relationships)
             shared_breath_prob: Probability of shared breath when triggered (default 0.60)
         
         Returns:
@@ -96,14 +98,15 @@ class ScenarioGenerator:
         
         # Save CSV files
         os.makedirs(self.output_dir, exist_ok=True)
-        self._save_csv(M1_data, "M1", beta_S, s_S, m1_name, m2_name)
-        self._save_csv(M2_data, "M2", None, None, m1_name, m2_name)  # M2 doesn't get beta_S header
+        self._save_csv(M1_data, "M1", beta_S, s_S, b_0, m1_name, m2_name)
+        self._save_csv(M2_data, "M2", None, None, None, m1_name, m2_name)  # M2 doesn't get parameters header
         
         return {
             "M1_data": M1_data,
             "M2_data": M2_data,
             "beta_S": beta_S,
             "s_S": s_S,
+            "b_0": b_0,
             "duration_days": duration_days,
             "num_events": num_events,
         }
@@ -352,6 +355,7 @@ class ScenarioGenerator:
         entity: str,
         beta_S: Optional[float],
         s_S: Optional[float],
+        b_0: Optional[float],
         m1_name: str,
         m2_name: str
     ):
@@ -360,10 +364,11 @@ class ScenarioGenerator:
         filepath = os.path.join(self.output_dir, filename)
         
         with open(filepath, 'w', newline='') as f:
-            # Write header with beta_S and s_S (M1 only)
-            if beta_S is not None and s_S is not None:
+            # Write header with beta_S, s_S, and b_0 (M1 only)
+            if beta_S is not None and s_S is not None and b_0 is not None:
                 f.write(f"beta_S\t{beta_S}\n")
                 f.write(f"s_S\t{s_S}\n")
+                f.write(f"b_0\t{b_0}\n")
             
             # Write Name row with entity's own name only
             entity_name = m1_name if entity == "M1" else m2_name
