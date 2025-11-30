@@ -41,11 +41,10 @@ def load_gamma_csv_with_params(filepath):
     with open(path, 'r', encoding='utf-8') as f:
         lines = [line.rstrip() for line in f.readlines()]
     
-    # Extract beta_S, s_S, and optional Names from header lines
+    # Extract beta_S, s_S, and optional Name from header lines
     beta_S = None
     s_S = None
-    m1_name = "M1"
-    m2_name = "M2"
+    entity_name = None
     header_idx = 0
     
     for i, line in enumerate(lines):
@@ -53,12 +52,10 @@ def load_gamma_csv_with_params(filepath):
             beta_S = float(line.split('\t')[1])
         elif line.startswith('s_S\t'):
             s_S = float(line.split('\t')[1])
-        elif line.startswith('Names\t'):
+        elif line.startswith('Name\t'):
             parts = line.split('\t')
             if len(parts) > 1 and parts[1].strip():
-                m1_name = parts[1].strip()
-            if len(parts) > 2 and parts[2].strip():
-                m2_name = parts[2].strip()
+                entity_name = parts[1].strip()
         elif line.startswith('Day\t'):
             header_idx = i
             break
@@ -68,7 +65,7 @@ def load_gamma_csv_with_params(filepath):
     from io import StringIO
     df = pd.read_csv(StringIO(data_lines), sep='\t')
     # Convert numeric columns (ignore override_flag if present)
-    numeric_cols = ["Day", "M1_x", "M1_y", "Visibility v(t)", "Resonance r(t)", 
+    numeric_cols = ["Day", "M1_x", "M1_y", "M2_x", "M2_y", "Visibility v(t)", "Resonance r(t)", 
                     "Fidelity f(t)", "Alturism a(t)", "Shared Breth S(t)"]
     for col in numeric_cols:
         if col in df.columns:
@@ -78,7 +75,19 @@ def load_gamma_csv_with_params(filepath):
     if 'override_flag' in df.columns:
         df = df.drop(columns=['override_flag'])
     
-    return df, beta_S, s_S, m1_name, m2_name
+    # Determine entity from column names
+    if 'M1_x' in df.columns:
+        entity = 'M1'
+    elif 'M2_x' in df.columns:
+        entity = 'M2'
+    else:
+        entity = 'M1'  # fallback
+    
+    # Use entity_name if provided, otherwise default to M1/M2
+    if entity_name is None:
+        entity_name = entity
+    
+    return df, beta_S, s_S, entity_name
 
 def load_gamma_csv(filepath):
     # Accept either string or Path object
@@ -86,18 +95,15 @@ def load_gamma_csv(filepath):
     with open(path, 'r', encoding='utf-8') as f:
         lines = [line.rstrip() for line in f.readlines()]
     
-    # Parse optional Names line
-    m1_name = "M1"
-    m2_name = "M2"
+    # Parse optional Name line
+    entity_name = None
     header_idx = 0
     
     for i, line in enumerate(lines):
-        if line.startswith('Names\t'):
+        if line.startswith('Name\t'):
             parts = line.split('\t')
             if len(parts) > 1 and parts[1].strip():
-                m1_name = parts[1].strip()
-            if len(parts) > 2 and parts[2].strip():
-                m2_name = parts[2].strip()
+                entity_name = parts[1].strip()
         elif line.startswith('Day\t'):
             header_idx = i
             break
@@ -105,7 +111,7 @@ def load_gamma_csv(filepath):
     data_lines = '\n'.join(lines[header_idx:])
     from io import StringIO
     df = pd.read_csv(StringIO(data_lines), sep='\t')
-    numeric_cols = ["Day", "M2_x", "M2_y", "Visibility v(t)", "Resonance r(t)", 
+    numeric_cols = ["Day", "M1_x", "M1_y", "M2_x", "M2_y", "Visibility v(t)", "Resonance r(t)", 
                     "Fidelity f(t)", "Alturism a(t)", "Shared Breth S(t)"]
     for col in numeric_cols:
         if col in df.columns:
@@ -114,7 +120,20 @@ def load_gamma_csv(filepath):
     # Drop override_flag column if present (not used in computation)
     if 'override_flag' in df.columns:
         df = df.drop(columns=['override_flag'])
-    return df, m1_name, m2_name
+    
+    # Determine entity from column names
+    if 'M1_x' in df.columns:
+        entity = 'M1'
+    elif 'M2_x' in df.columns:
+        entity = 'M2'
+    else:
+        entity = 'M1'  # fallback
+    
+    # Use entity_name if provided, otherwise default to M1/M2
+    if entity_name is None:
+        entity_name = entity
+    
+    return df, entity_name
 
 def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
     # If file paths not provided, construct them (legacy behavior)
@@ -123,8 +142,8 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
         m1_file = scenario_dir / f"{scenario_name}_M1_gamma_self_table.csv"
         m2_file = scenario_dir / f"{scenario_name}_M2_gamma_self_table.csv"
     
-    m1, beta_S, s_S, m1_name, _ = load_gamma_csv_with_params(m1_file)
-    m2, _, m2_name = load_gamma_csv(m2_file)
+    m1, beta_S, s_S, m1_name = load_gamma_csv_with_params(m1_file)
+    m2, m2_name = load_gamma_csv(m2_file)
 
     # Auto-detect scenario characteristics from data
     days_m1 = m1["Day"].values

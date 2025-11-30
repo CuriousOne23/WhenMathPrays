@@ -365,9 +365,10 @@ class ScenarioGenerator:
                 f.write(f"beta_S\t{beta_S}\n")
                 f.write(f"s_S\t{s_S}\n")
             
-            # Write Names row only if not default M1/M2
-            if m1_name != "M1" or m2_name != "M2":
-                f.write(f"Names\t{m1_name}\t{m2_name}\n")
+            # Write Name row with entity's own name only
+            entity_name = m1_name if entity == "M1" else m2_name
+            if entity_name != entity:
+                f.write(f"Name\t{entity_name}\n")
             
             # Blank line before data
             f.write("\n")
