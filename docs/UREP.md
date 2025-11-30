@@ -16,8 +16,8 @@ $$
 L(t)\=\gamma_{\text{self}}(t,\tau)\cdot W(t)
 }
 $$
-- L(t) ∈ ℝ² → signed relational intensity vector (positive = love, negative = hate, zero = indifference)
-- γ_self(t,τ) ∈ ℝ² → internal orientation (direction + magnitude) of M1 toward M2
+- L(t) ∈ ℂ → signed relational intensity (positive imaginary = love, negative imaginary = hate, real part = ego/we growth)
+- γ_self(t,τ) ∈ ℂ → internal orientation (direction + magnitude) of M1 toward M2
 - W(t) ∈ ℝ₊ → external enacted magnitude (always non-negative, built only from observable acts)
 
 ### 2.1 Directionality and Perspective (Whose love is this?)
@@ -58,7 +58,7 @@ i \cdot\sin\theta(t)
 \end{bmatrix},\quad m(t)\ge 0
 $$
 
-### 3.2. Cartesian moving average (prevents angle-wrap artifacts)
+### 3.2. Complex moving average (prevents angle-wrap artifacts)
 $$
 \gamma_{\text{self}}(t,\tau) = \frac{1}{\tau}\int_{t-\tau}^{t}\mathbf{v}(u)\,du
 $$
@@ -138,7 +138,7 @@ See README.md for the immutable 2025 form.
 | Eq | Meaning                                               |
 |----|-------------------------------------------------------|
 | 1  | L(t) = γ_self(t,τ) · W(t)                             |
-| 2  | γ_self(t,τ) = (1/τ)∫ v(u) du (cartesian average)      |
+| 2  | γ_self(t,τ) = (1/τ)∫ v(u) du (complex average)        |
 | 3  | W(t) = product of six gated primitives               |
 | 4  | G_x(x) = 2x exp(α_x(x−0.5))                           |
 | 5  | G_S(S) = 1 + β_S(1−e^{-S/s_S})                         |
