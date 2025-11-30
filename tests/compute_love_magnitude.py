@@ -121,6 +121,7 @@ def compute_love_magnitude(scenario_name: str):
 
     # Love magnitude: L(t) = |γ_self(t)| × W(t) × entropy_term
     max_love = 0
+    min_love = 0
     for df, label, color in [(m1, "M1", "#008080"), (m2, "M2", "#D2691E")]:
         # Primitives: scale from [-10,+10] to [0,1]
         # Apply PRIMITIVE_SCALE to moderate extreme values
@@ -148,8 +149,12 @@ def compute_love_magnitude(scenario_name: str):
         # Note: c = 0.40 is very strong; may need scenario-specific tuning
         entropy = np.exp(-DELTA_S * df["Day"] + C_BREATH * S)
         
-        # Final love magnitude
-        L_mag = gamma_self_mag * W * entropy
+        # Sign from γ_self y-component (love/hate axis)
+        # Positive y = love, negative y = hate
+        love_sign = np.sign(df[y_col])
+        
+        # Final love magnitude (signed to preserve love/hate direction)
+        L_mag = love_sign * gamma_self_mag * W * entropy
         
         # Debug: print day 60 values
         if len(df) > 0:
@@ -158,17 +163,20 @@ def compute_love_magnitude(scenario_name: str):
             print(f"{label} Day {df['Day'].iloc[last_idx]:.0f}: primitives=[{v[last_idx]:.2f},{r[last_idx]:.2f},{f[last_idx]:.2f},{a[last_idx]:.2f}], G_x_prod={G_x_prod:.4f}, spike={spike[last_idx]:.4f}, G_S={G_S_val[last_idx]:.4f}, W={W[last_idx]:.4f}, γ_self_mag={gamma_self_mag.iloc[last_idx]:.4f}, entropy={entropy[last_idx]:.4f}, L_mag={L_mag[last_idx]:.4f}")
         
         max_love = max(max_love, L_mag.max())
+        min_love = min(min_love, L_mag.min())
         ax2.plot(df["Day"], L_mag, 'o-', color=color, label=label, linewidth=4, markersize=9)
 
     ax2.set_xlabel("Day", fontsize=16)
-    ax2.set_ylabel("Love Magnitude", fontsize=16)
-    ax2.set_title(f"Love Magnitude vs Time — {scenario_name.replace('_', ' ')}", fontsize=18)
+    ax2.set_ylabel("Signed Love Magnitude\n(+Love / -Hate)", fontsize=16, weight='bold')
+    ax2.set_title(f"Signed Love Magnitude vs Time — {scenario_name.replace('_', ' ')}", fontsize=18, pad=20)
+    ax2.axhline(0, color='black', linewidth=1.5, linestyle='-', alpha=0.5)
     ax2.grid(True, alpha=0.3)
     ax2.legend(fontsize=14)
-    # Ensure y-axis starts at 0 with margin to show all curves
-    y_max = max(max_love * 1.15, 1.0)  # Fallback to 1.0 if max_love is ~0
-    ax2.set_ylim(0, y_max)
-    ax2.margins(y=0.15)
+    # Set y-axis dynamically based on actual data range (not symmetric)
+    y_max = max(max_love * 1.15, 10) if max_love > 0 else 10  # Margin above highest positive
+    y_min = min(min_love * 1.15, -10) if min_love < 0 else 0  # Margin below lowest negative, or 0 if all positive
+    ax2.set_ylim(y_min, y_max)
+    ax2.margins(y=0.1)
 
     # Event markers
     events = [(0,"Initial"),(7,"First date"),(14,"Wobble"),(21,"Repair"),(28,"Rhythm"),
@@ -205,13 +213,16 @@ def compute_love_magnitude(scenario_name: str):
         gamma_self_mag = np.sqrt(df[x_col]**2 + df[y_col]**2)
         
         entropy = np.exp(-DELTA_S * df["Day"] + C_BREATH * S)
-        L_mag = gamma_self_mag * W * entropy
+        
+        # Sign from γ_self y-component (love/hate axis)
+        love_sign = np.sign(df[y_col])
+        L_mag = love_sign * gamma_self_mag * W * entropy
         
         for idx, row in df.iterrows():
             output_rows.append({
                 "Day": int(row["Day"]),
                 "Entity": label,
-                "Love_Magnitude": L_mag[idx],
+                "Signed_Love_Magnitude": L_mag[idx],
                 "Gamma_Self_Mag": gamma_self_mag.iloc[idx],
                 "W": W[idx],
                 "Entropy": entropy[idx]
