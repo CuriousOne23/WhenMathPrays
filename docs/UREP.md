@@ -54,7 +54,7 @@ $$
 \mathbf{v}(t) = m(t) 
 \begin{bmatrix}
 \cos\theta(t) \\
-\sin\theta(t)
+i \cdot\sin\theta(t)
 \end{bmatrix},\quad m(t)\ge 0
 $$
 
