@@ -2,8 +2,9 @@
 # WhenMathPrays – Universal Relational Expression Protocol (UREP)
 # Final locked love magnitude function – November 2025 restoration
 # L(t) = γ_self(t,τ) · W(t)
-# with W(t) = product of G_x for v,r,f,a,b × min(β^k, 3.0) × G_S(S)
-# and γ_self as Cartesian average of v(u) = (1 + m(u)) [cosθ(u), sinθ(u)]
+# with W(t) = product of G_x for v,r,f,a × min(β^k, 3.0) × G_b(b)
+# where b(t) = b_0 + beta_S * (1 - exp(-S/s_S)) accumulates bond from shared moments S
+# and γ_self as complex average of v(u) = m(u) * [cosθ(u), i·sinθ(u)]
 
 from typing import List
 import numpy as np
@@ -46,31 +47,61 @@ def G_x(x: float, alpha: float = ALPHA) -> float:
     """
     return 2 * x * np.exp(alpha * (x - 0.5))
 
-def G_S(S: int, beta_S: float, s_S: float) -> float:
-    """Shared-breath gate – locked form
-    G_S(S) = 1 + β_S (1 - exp(-S / s_S))
-    beta_S and s_S from empirical ranges in CONSTANTS.md
+def compute_b(S: int, b_0: float, beta_S: float, s_S: float) -> float:
+    """Compute bond state from shared moments
+    b(t) = b_0 + β_S (1 - exp(-S / s_S))
+    
+    Args:
+        S: Cumulative shared meaningful moments (event counter)
+        b_0: Initial bond condition (0 for strangers, >0 for existing relationships)
+        beta_S: Maximum bond boost from shared moments
+        s_S: Saturation scale for S → b transfer
     """
-    return 1 + beta_S * (1 - np.exp(-S / s_S))
+    return b_0 + beta_S * (1 - np.exp(-S / s_S))
+
+def G_b(b: float, beta_b: float = 1.0) -> float:
+    """Bond flux gate – exponential amplification
+    G_b(b) = exp(β_b · b)
+    
+    Args:
+        b: Bond state variable [0, ~1]
+        beta_b: Bond amplification coefficient
+    """
+    return np.exp(beta_b * b)
 
 def count_k(primitives: List[float], saturation_threshold: float = 0.98) -> int:
     """Resonance spike counter k(t): number of primitives ≥ 0.98"""
     return sum(1 for p in primitives if p >= saturation_threshold)
 
-def W_t(primitives: Tuple[float, float, float, float, float], S: int, beta_S: float, s_S: float) -> float:
-    """External enacted magnitude W(t) = product G_v G_r G_f G_a G_b × min(β^k, 3.0) × G_S(S)"""
-    v, r, f, a, b = primitives
-    G_primitives = G_x(v) * G_x(r) * G_x(f) * G_x(a) * G_x(b)
-    k = count_k([v, r, f, a, b])
+def W_t(primitives: Tuple[float, float, float, float], S: int, b_0: float, beta_S: float, s_S: float, beta_b: float = 1.0) -> float:
+    """External enacted magnitude W(t) = product G_v G_r G_f G_a × min(β^k, 3.0) × G_b(b)
+    
+    Args:
+        primitives: (v, r, f, a) - four fast primitives [0,1]
+        S: Cumulative shared meaningful moments
+        b_0: Initial bond condition
+        beta_S: Shared breath → bond transfer parameter
+        s_S: Saturation scale
+        beta_b: Bond amplification coefficient
+    """
+    v, r, f, a = primitives
+    G_primitives = G_x(v) * G_x(r) * G_x(f) * G_x(a)
+    k = count_k([v, r, f, a])
     resonance_spike = min(BETA ** k, W_CAP)
-    g_s = G_S(S, beta_S, s_S)
-    return G_primitives * resonance_spike * g_s
+    
+    # Compute bond state from shared moments
+    b = compute_b(S, b_0, beta_S, s_S)
+    g_b = G_b(b, beta_b)
+    
+    return G_primitives * resonance_spike * g_b
 
 def love(
-    primitives: Tuple[float, float, float, float, float] = None,
+    primitives: Tuple[float, float, float, float] = None,
     S: int = 0,
+    b_0: float = 0.0,
     beta_S: float = 0.0,
     s_S: float = 1.0,
+    beta_b: float = 1.0,
     gamma_history: List[complex] = None,
     tau: int = TAU_DEFAULT,
     delta_S: float = DELTA_S,
@@ -82,8 +113,9 @@ def love(
 ) -> complex:
     """
     L(t) = γ_self(t,τ) · W(t) × exp(-ΔS t)
-    - W(t) = product G_x(v,r,f,a,b) × min(β^k, 3.0) × G_S(S)
-    - γ_self(t,τ) = Cartesian average of v(u) = (1 + m(u)) [cosθ(u), sinθ(u)] over [t-τ, t]
+    - W(t) = product G_x(v,r,f,a) × min(β^k, 3.0) × G_b(b)
+    - b(t) = b_0 + beta_S * (1 - exp(-S/s_S)) bond state from shared moments
+    - γ_self(t,τ) = Complex average of v(u) = m(u) * e^(iθ) over [t-τ, t]
     - Preserves compatibility with previous scripts – gamma_history can be used as before
     """
     if gamma_history is None or len(gamma_history) == 0:
@@ -108,7 +140,7 @@ def love(
     else:
         if primitives is None:
             raise TypeError("love() requires either `W` or `primitives` to compute W(t)")
-        W_val = W_t(primitives, S, beta_S, s_S)
+        W_val = W_t(primitives, S, b_0, beta_S, s_S, beta_b)
 
     # Growth from real part (Ego/We)
     growth = np.exp(gamma_avg.real)
@@ -127,4 +159,4 @@ def love(
 
     return L
 
-__all__ = ["gamma_self", "love", "DEFAULT_GAMMA", "G_x", "G_S", "W_t"]
+__all__ = ["gamma_self", "love", "DEFAULT_GAMMA", "G_x", "G_b", "compute_b", "W_t"]

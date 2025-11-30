@@ -41,9 +41,10 @@ def load_gamma_csv_with_params(filepath):
     with open(path, 'r', encoding='utf-8') as f:
         lines = [line.rstrip() for line in f.readlines()]
     
-    # Extract beta_S, s_S, and optional Name from header lines
+    # Extract beta_S, s_S, b_0, and optional Name from header lines
     beta_S = None
     s_S = None
+    b_0 = None
     entity_name = None
     header_idx = 0
     
@@ -52,6 +53,8 @@ def load_gamma_csv_with_params(filepath):
             beta_S = float(line.split('\t')[1])
         elif line.startswith('s_S\t'):
             s_S = float(line.split('\t')[1])
+        elif line.startswith('b_0\t'):
+            b_0 = float(line.split('\t')[1])
         elif line.startswith('Name\t'):
             parts = line.split('\t')
             if len(parts) > 1 and parts[1].strip():
@@ -87,7 +90,11 @@ def load_gamma_csv_with_params(filepath):
     if entity_name is None:
         entity_name = entity
     
-    return df, beta_S, s_S, entity_name
+    # Default b_0 to 0.0 if not specified (new relationships)
+    if b_0 is None:
+        b_0 = 0.0
+    
+    return df, beta_S, s_S, b_0, entity_name
 
 def load_gamma_csv(filepath):
     # Accept either string or Path object
@@ -142,7 +149,7 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
         m1_file = scenario_dir / f"{scenario_name}_M1_gamma_self_table.csv"
         m2_file = scenario_dir / f"{scenario_name}_M2_gamma_self_table.csv"
     
-    m1, beta_S, s_S, m1_name = load_gamma_csv_with_params(m1_file)
+    m1, beta_S, s_S, b_0, m1_name = load_gamma_csv_with_params(m1_file)
     m2, m2_name = load_gamma_csv(m2_file)
 
     # Auto-detect scenario characteristics from data
@@ -236,13 +243,18 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
         a = np.clip((df["Alturism a(t)"] * PRIMITIVE_SCALE + 10) / 20.0, 0, 1)
         S = df["Shared Breth S(t)"].fillna(0).astype(int)
         
-        # W(t) = product of gated primitives × spike × G_S
-        # Using 4 fast primitives (v,r,f,a) - breath handled via G_S
+        # W(t) = product of gated primitives × spike × G_b(b)
+        # b(t) = b_0 + beta_S * (1 - exp(-S/s_S)) computed from shared moments
         primitives = np.column_stack([v, r, f, a])
         k = np.sum(primitives >= 0.98, axis=1)
         spike = np.minimum(BETA**k, W_CAP)
-        G_S_val = 1 + beta_S * (1 - np.exp(-S / s_S))
-        W = np.prod(G_x(primitives), axis=1) * spike * G_S_val
+        
+        # Compute bond state from shared moments
+        b = b_0 + beta_S * (1 - np.exp(-S / s_S))
+        beta_b = 1.0  # Bond amplification coefficient
+        G_b_val = np.exp(beta_b * b)
+        
+        W = np.prod(G_x(primitives), axis=1) * spike * G_b_val
         
         # γ_self magnitude from (M_x, M_y) vector
         x_col = "M1_x" if label == "M1" else "M2_x"
@@ -260,11 +272,25 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
         # Final love magnitude (signed to preserve love/hate direction)
         L_mag = love_sign * gamma_self_mag * W * entropy
         
-        # Debug: print day 60 values
+        # Store bond data for debug output
+        if label == "M1":
+            m1_bond_data = pd.DataFrame({
+                "Day": df["Day"],
+                "S": S,
+                "b": b
+            })
+        else:
+            m2_bond_data = pd.DataFrame({
+                "Day": df["Day"],
+                "S": S,
+                "b": b
+            })
+        
+        # Debug: print final day values
         if len(df) > 0:
             last_idx = len(df) - 1
             G_x_prod = np.prod(G_x(primitives), axis=1)[last_idx]
-            print(f"{display_name} Day {df['Day'].iloc[last_idx]:.0f}: primitives=[{v[last_idx]:.2f},{r[last_idx]:.2f},{f[last_idx]:.2f},{a[last_idx]:.2f}], G_x_prod={G_x_prod:.4f}, spike={spike[last_idx]:.4f}, G_S={G_S_val[last_idx]:.4f}, W={W[last_idx]:.4f}, γ_self_mag={gamma_self_mag.iloc[last_idx]:.4f}, entropy={entropy[last_idx]:.4f}, L_mag={L_mag[last_idx]:.4f}")
+            print(f"{display_name} Day {df['Day'].iloc[last_idx]:.0f}: primitives=[{v[last_idx]:.2f},{r[last_idx]:.2f},{f[last_idx]:.2f},{a[last_idx]:.2f}], G_x_prod={G_x_prod:.4f}, spike={spike[last_idx]:.4f}, b={b[last_idx]:.4f}, G_b={G_b_val[last_idx]:.4f}, W={W[last_idx]:.4f}, γ_self_mag={gamma_self_mag.iloc[last_idx]:.4f}, entropy={entropy[last_idx]:.4f}, L_mag={L_mag[last_idx]:.4f}")
         
         max_love = max(max_love, L_mag.max())
         min_love = min(min_love, L_mag.min())
@@ -325,8 +351,13 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
         primitives = np.column_stack([v, r, f, a])
         k = np.sum(primitives >= 0.98, axis=1)
         spike = np.minimum(BETA**k, W_CAP)
-        G_S_val = 1 + beta_S * (1 - np.exp(-S / s_S))
-        W = np.prod(G_x(primitives), axis=1) * spike * G_S_val
+        
+        # Compute bond state from shared moments
+        b = b_0 + beta_S * (1 - np.exp(-S / s_S))
+        beta_b = 1.0
+        G_b_val = np.exp(beta_b * b)
+        
+        W = np.prod(G_x(primitives), axis=1) * spike * G_b_val
         
         x_col = "M1_x" if label == "M1" else "M2_x"
         y_col = "M1_y" if label == "M1" else "M2_y"
@@ -352,6 +383,18 @@ def compute_love_magnitude(scenario_name: str, m1_file=None, m2_file=None):
     csv_path = RESULTS_DIR / f"{scenario_name}_magnitude_table.csv"
     output_df.to_csv(csv_path, index=False)
     print(f"SUCCESS — CSV table saved to {csv_path}")
+    
+    # Save debug S/b bond data CSV
+    if 'm1_bond_data' in locals() and 'm2_bond_data' in locals():
+        debug_bond = pd.merge(m1_bond_data, m2_bond_data, on="Day", suffixes=("_M1", "_M2"))
+        debug_bond.insert(1, "M1_Name", m1_name)
+        debug_bond.insert(4, "M2_Name", m2_name)
+        debug_bond["beta_S"] = beta_S
+        debug_bond["s_S"] = s_S
+        debug_bond["b_0"] = b_0
+        debug_path = RESULTS_DIR / f"{scenario_name}_debug_S_b.csv"
+        debug_bond.to_csv(debug_path, index=False)
+        print(f"SUCCESS — Debug S/b data saved to {debug_path}")
 
 def print_help():
     """Print usage instructions."""

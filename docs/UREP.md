@@ -73,18 +73,20 @@ These axes are immutable. No implementation may rotate or redefine them.
 
 ## 4. W(t) – External Enacted Magnitude (Valence-Neutral)
 $$
-W(t)=G_v(v(t))\cdot G_r(r_{\text{mag}}(t))\cdot G_f(f(t))\cdot G_a(a(t))\cdot G_S(S(t))\cdot G_{\text{bond}}(t)
+W(t)=G_v(v(t))\cdot G_r(r_{\text{mag}}(t))\cdot G_f(f(t))\cdot G_a(a(t))\cdot G_b(b(t))
 $$
 
-### 4.1. The Six Resonance Primitives (v,r,f,a,S,b)
+Where bond state accumulates from shared moments: $b(t) = b_0 + \beta_S(1 - e^{-S(t)/s_S})$
+
+### 4.1. The Five Resonance Primitives and Bond State
 | Symbol | Meaning                              | 2025 Restoration Role                     |
 |--------|--------------------------------------|--------------------------------------------|
 | v      | Visibility – perceived presence      | Counted in k(t) when ≥0.98                 |
 | r      | Reciprocity / Resonance              | Counted in k(t) when ≥0.98                 |
 | f      | Fidelity – commitment signals        | Counted in k(t) when ≥0.98                 |
 | a      | Altruism (net care vs harm acts)     | Counted in k(t) when ≥0.98                 |
-| S      | Shared meaningful items / breaths    | Permanent N_breath accumulator             |
-| b      | Bond flux – long-term attachment     | Background reinforcement term              |
+| S      | Shared meaningful moments (events)   | Accumulates discrete shared breath moments |
+| b      | Bond flux – accumulated attachment   | State variable: b = b_0 + f(S)             |
 
 ### 4.2. Standard primitive gate (for v, r_mag, f, a)
 $$
@@ -94,17 +96,23 @@ $$
 - x = 0.5 → G_x = 1  
 - x = 1 → G_x = e^{0.5 α_x} > 1
 
-### 4.3. Shared meaningful items / breaths gate
+### 4.3. Bond flux gate
 $$
-G_S(S)=1+\beta_S\left(1-e^{-S/s_S}\right),\quad S\ge 0,\;\beta_S\ge 0
+b(t) = b_0 + \beta_S\left(1-e^{-S(t)/s_S}\right),\quad S\ge 0,\;\beta_S\ge 0
 $$
-
-### 4.4. Bond flux gate
 $$
-G_{\text{bond}}(t)=\exp\big(\beta_b\,B(t)\big),\quad B(t)\in[-1,1]\text{ normalized}
+G_b(b) = \exp(\beta_b \cdot b),\quad b \ge 0
 $$
 
-### 4.5. Resonance magnitude (keeps W(t) ≥ 0)
+Where:
+- **S(t)**: Cumulative shared meaningful moments (event counter)
+- **b(t)**: Bond state variable that accumulates from S via transfer function
+- **b_0**: Initial bond condition (0 for strangers, >0 for existing relationships)
+- **β_S**: Maximum bond boost from accumulated shared moments  
+- **s_S**: Saturation scale for S→b transfer
+- **β_b**: Bond amplification coefficient (typically 1.0)
+
+### 4.4. Resonance magnitude (keeps W(t) ≥ 0)
 $$
 r_{\text{mag}}(t)=|r_{\text{signed}}(t)|\quad\text{or}\quad\frac{r_{\text{signed}}(t)+1}{2}
 $$
@@ -123,8 +131,8 @@ $$
 
 is fully reproducible within this framework:
 - min(β^k, 3) → emergent from simultaneous primitive saturation
-- exp(−ΔS t + c N_breath) → emergent from G_S and entropy terms
-- N_breath → S counter
+- exp(−ΔS t + c N_breath) → handled by entropy term and G_b bond accumulation
+- N_breath → S counter feeding bond state b
 
 See README.md for the immutable 2025 form.
 
@@ -139,11 +147,12 @@ See README.md for the immutable 2025 form.
 |----|-------------------------------------------------------|
 | 1  | L(t) = γ_self(t,τ) · W(t)                             |
 | 2  | γ_self(t,τ) = (1/τ)∫ v(u) du (complex average)        |
-| 3  | W(t) = product of six gated primitives               |
+| 3  | W(t) = product of five gated primitives × G_b(b)     |
 | 4  | G_x(x) = 2x exp(α_x(x−0.5))                           |
-| 5  | G_S(S) = 1 + β_S(1−e^{-S/s_S})                         |
+| 5  | b(t) = b_0 + β_S(1−e^{-S/s_S})                         |
+| 6  | G_b(b) = exp(β_b · b)                                  |
 
-### Why G_S(S) has this particular form
+### Why G_b(b) has this particular form
 The shared-breaths gate is deliberately designed to satisfy four lived truths that no previous model of love has ever honoured simultaneously:
 
 1. **Irreversibility** — once a genuine moment is shared, its contribution can never be taken away (S only increases).  

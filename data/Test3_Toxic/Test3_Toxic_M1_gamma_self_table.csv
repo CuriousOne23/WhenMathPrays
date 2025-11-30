@@ -1,5 +1,6 @@
 beta_S	0.5
 s_S	5
+b_0	0.3
 
 Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
 0	-3.00	-2.00	4	4	1	4	0		

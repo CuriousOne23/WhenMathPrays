@@ -12,11 +12,12 @@ result = gen.generate_scenario(
     M2_trajectory=M2_wp,
     duration_days=1825,
     event_sampling='monthly',
+    b_0=0.7,  # Existing parent-child bond (strong established relationship)
     m1_name='Parent',
     m2_name='Child',
     shared_breath_prob=0.85  # Higher for stable long-term bonds (increased from 0.80)
 )
 
-print(f'Regenerated: {result["num_events"]} events, beta_S={result["beta_S"]}, s_S={result["s_S"]}')
+print(f'Regenerated: {result["num_events"]} events, beta_S={result["beta_S"]}, s_S={result["s_S"]}, b_0={result["b_0"]}')
 print(f'M1 final S={result["M1_data"][-1]["S"]}, M2 final S={result["M2_data"][-1]["S"]}')
 print(f'M1 Day 0 S={result["M1_data"][0]["S"]}, M1 Day 30 S={result["M1_data"][1]["S"]}')
