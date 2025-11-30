@@ -389,7 +389,7 @@ data/
 
 | Date | Change | Author | Notes |
 |------|--------|--------|-------|
-| 2025-11-29 | Initial requirements document | GitHub Copilot + Jeff G | Captured design discussion, principles, and open questions |
+| 2025-11-29 | Initial requirements document | GitHub Copilot + Jeff | Captured design discussion, principles, and open questions |
 
 ---
 
