@@ -1,0 +1,66 @@
+beta_S	5.7
+s_S	62
+Names	Parent	Child
+
+Day	M1_x	M1_y	Visibility v(t)	Resonance r(t)	Fidelity f(t)	Alturism a(t)	Shared Breth S(t)	override_flag	Notes
+0	2.00	8.00	5	7	6	8	1		Shared breath moment
+30	2.12	8.14	5	7	6	8	2		Shared breath moment
+60	2.13	8.33	5	7	6	8	3		Shared breath moment
+90	1.83	8.28	6	7	7	8	3		Internal fire (no shared breath)
+120	1.98	8.00	6	7	7	8	4		Shared breath moment
+150	1.78	8.35	6	7	7	8	5		Shared breath moment
+180	1.91	8.34	7	8	7	7	6		Shared breath moment
+210	2.15	8.52	8	9	8	7	7		Shared breath moment
+240	1.85	8.15	8	8	7	7	8		Shared breath moment
+270	2.15	8.65	7	7	8	7	9		Shared breath moment
+300	1.86	8.36	7	8	7	7	10		Shared breath moment
+330	2.03	8.46	8	7	7	7	11		Shared breath moment
+360	1.98	8.40	8	7	8	8	12		Shared breath moment
+390	1.98	8.85	8	8	8	9	13		Shared breath moment
+420	1.92	8.69	8	8	7	8	14		Shared breath moment
+450	1.80	8.94	7	7	8	7	15		Shared breath moment
+480	1.97	8.97	7	7	7	8	16		Shared breath moment
+510	1.90	9.01	8	7	7	7	17		Shared breath moment
+540	2.03	8.67	8	7	6	8	18		Shared breath moment
+570	1.94	9.17	8	8	7	8	19		Shared breath moment
+600	2.00	9.00	8	7	8	7	20		Shared breath moment
+630	2.00	9.00	8	7	8	8	21		Shared breath moment
+660	1.79	9.15	8	8	9	8	22		Shared breath moment
+690	2.09	9.19	9	8	9	9	23		Shared breath moment
+720	1.97	8.94	8	8	8	7	24		Shared breath moment
+750	2.11	9.00	9	8	7	8	24		Internal fire (no shared breath)
+780	1.85	8.78	8	9	8	8	25		Shared breath moment
+810	2.15	8.86	7	8	8	8	26		Shared breath moment
+840	1.91	8.79	8	8	9	8	26		Internal fire (no shared breath)
+870	2.05	9.00	8	9	9	9	27		Shared breath moment
+900	2.11	9.07	9	7	8	9	28		Shared breath moment
+930	2.08	9.02	8	7	8	8	29		Shared breath moment
+960	2.18	9.01	8	8	9	9	30		Shared breath moment
+990	1.88	8.93	9	9	8	9	31		Shared breath moment
+1020	2.13	9.01	9	8	8	9	32		Shared breath moment
+1050	1.97	8.78	9	9	8	8	33		Shared breath moment
+1080	1.85	8.95	9	9	8	9	33		Internal fire (no shared breath)
+1110	2.15	9.08	9	9	8	8	34		Shared breath moment
+1140	2.06	8.81	8	9	8	8	34		Internal fire (no shared breath)
+1170	1.82	8.75	8	8	8	8	35		Shared breath moment
+1200	2.12	8.98	7	9	8	7	36		Shared breath moment
+1230	2.00	9.00	7	9	8	8	37		Shared breath moment
+1260	2.00	9.00	7	8	9	9	38		Shared breath moment
+1290	1.75	8.93	7	7	9	8	39		Shared breath moment
+1320	2.05	8.97	8	8	8	8	40		Shared breath moment
+1350	2.25	9.07	9	7	8	9	41		Shared breath moment
+1380	2.04	9.05	9	8	7	8	42		Shared breath moment
+1410	1.90	8.86	7	7	9	7	43		Shared breath moment
+1440	2.02	9.20	8	7	8	7	44		Shared breath moment
+1470	1.96	8.85	8	7	8	7	44		Internal fire (no shared breath)
+1500	1.79	9.13	8	8	7	8	45		Shared breath moment
+1530	2.09	8.79	9	7	7	7	46		Shared breath moment
+1560	2.03	8.96	9	8	7	7	47		Shared breath moment
+1590	1.85	8.83	9	8	8	7	48		Shared breath moment
+1620	2.07	8.82	9	8	9	7	49		Shared breath moment
+1650	2.10	9.03	9	9	8	7	50		Shared breath moment
+1680	2.12	9.19	8	8	8	7	50		Internal fire (no shared breath)
+1710	2.15	9.15	7	7	8	7	51		Shared breath moment
+1740	1.89	9.01	7	8	8	8	52		Shared breath moment
+1770	1.80	9.12	8	8	8	9	53		Shared breath moment
+1800	1.92	9.00	8	8	8	9	54		Shared breath moment
