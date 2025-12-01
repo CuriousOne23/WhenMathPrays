@@ -16,7 +16,7 @@ $$
 x(\tau) \\
 y(\tau)
 \end{pmatrix}
-\,d\tau
+\ d\tau
 }_{\vec{\gamma}_{\text{self}}(t,\tau)\;\; \text{Cartesian average}}
 \;\times\;
 \min\bigl(\beta^{k(t)}\,3.0\bigr)
