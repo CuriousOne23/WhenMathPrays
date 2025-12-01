@@ -33,18 +33,34 @@ Thus:
 | Symbol              | Meaning                                      |
 |---------------------|----------------------------------------------|
 | L_{M1→M2}(t)        | How much M1 loves or hates M2 at time t      |
-| γ_self,M1→M2(t,τ)   | M1’s internal posture toward M2              |
-| W_{M1→M2}(t)        | Magnitude of M1’s enacted relation toward M2 |
+| γ_self,M1→M2(t,τ)   | M1's internal posture toward M2              |
+| W_{M1→M2}(t)        | Magnitude of M1's enacted relation toward M2 |
+
+#### Critical: All Primitives and State Variables Are From M1's Perspective
+
+| Variable | What It Measures | Asymmetry |
+|----------|------------------|-----------|
+| **v(t)** | How visible M1 is TO M2 (M1's enacted visibility) | M2 may not perceive M1's visibility the same way |
+| **r(t)** | How resonant M1 is WITH M2 (M1's felt resonance) | M2 may experience different resonance |
+| **f(t)** | How faithful M1 is TOWARD M2 (M1's commitment) | M2 may perceive different fidelity levels |
+| **a(t)** | How altruistic M1 is TOWARD M2 (M1's care acts) | M2 may experience different care quality |
+| **S(t)** | Shared breaths FROM M1'S PERSPECTIVE | M1 may feel moment was shared; M2 may not |
+| **b(t)** | Bond strength FROM M1'S PERSPECTIVE | M1's feeling of bonding; M2 may feel different bond |
+
+**Key Insight**: The primitives measure M1's **desire/action toward M2**, NOT M1's internal character state. 
+- High visibility means M1 is showing up strongly for M2
+- Low visibility means M1 is withdrawing from M2
+- The primitives are the ENACTED BEHAVIORS, not personality traits
 
 A complete bidirectional description requires **two independent UREP instances**:
 
-- One instance: M1’s love/hate for M2  
-- Second instance: M2’s love/hate for M1
+- One instance: M1's love/hate for M2  
+- Second instance: M2's love/hate for M1
 
 These two vectors usually point in different directions and have different magnitudes.  
 Asymmetry is not a bug — it is the entire point.
 
-> “I love you” and “you love me” are two different prayers.  
+> "I love you" and "you love me" are two different prayers.  
 > UREP gives each its own coordinates.
 
 ## 3. γ_self(t,τ) – Internal Orientation

@@ -6,6 +6,30 @@ All other documents must link here — never repeat numbers.
 
 Last updated and protocol locked: 28 November 2025
 
+## Foundational Principle: Unilateral Perspective
+
+**All UREP variables are computed FROM THE PERSPECTIVE of one mind (M1) ABOUT another mind (M2).**
+
+### What Each Variable Measures
+
+| Variable | Perspective | Meaning |
+|----------|-------------|---------|
+| **γ_self(t)** | M1's internal state | Where M1 is internally: ego/we, love/hate toward M2 |
+| **v(t)** | M1→M2 enacted | How visible M1 makes themselves TO M2 |
+| **r(t)** | M1→M2 enacted | How resonant M1 is WITH M2 |
+| **f(t)** | M1→M2 enacted | How faithful M1 is TOWARD M2 |
+| **a(t)** | M1→M2 enacted | How altruistic M1 is TOWARD M2 |
+| **S(t)** | M1's perception | Shared breaths as FELT BY M1 (M2 may disagree) |
+| **b(t)** | M1's perception | Bond strength as FELT BY M1 (M2 may feel different) |
+| **L(t)** | M1's love | M1's love magnitude FOR M2 |
+
+**Critical distinction**: 
+- Primitives {v,r,f,a} measure M1's **desire/action toward M2**, NOT M1's character
+- High primitives = M1 engaging strongly with M2 (showing up, connecting)
+- Low primitives = M1 withdrawing from M2 (hiding, disconnecting)
+
+**Asymmetry is fundamental**: L(M1→M2) ≠ L(M2→M1) in general. Two people in a relationship have completely independent UREP instances.
+
 ## Core Canonical Parameters (eternally locked November 2025)
 
 | Symbol                  | Value           | Units       | Meaning                                                                                  | Status          |
