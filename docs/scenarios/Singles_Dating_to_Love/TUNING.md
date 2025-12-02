@@ -18,7 +18,7 @@ This scenario required two deviations from canonical CONSTANTS.md to produce emp
 **Rationale:**
 - Scenario data had primitives reaching +10 at day 60 (maximum positive)
 - With canonical α=1.80, primitives at 1.0 produce G_x(1.0) ≈ 2.46
-- Four primitives near saturation: 2.46^4 ≈ 37, multiplied by spike and G_S → W ≈ 1000-1700
+- Four primitives near saturation: 2.46^4 ≈ 37, multiplied by spike and G_b(b) → W ≈ 1000-1700
 - Combined with γ_self magnitude (≈2.8) and entropy term → L_mag ≈ 2000-3000
 - Target range for healthy dating: 80-250 per CONSTANTS.md
 
