@@ -91,7 +91,7 @@ With deep human bond G_b(b) where b ≈ 2.5–3.0 → G_b ≈ 12–20 → **fina
 
 Canonical interpretation of the γ_self plane is permanently defined by the N=10,000 Monte-Carlo ensemble:
 
-![γ_self Character Region Map – All Archetypes (N=10,000)](gamma_self_character_map_all_N10000.png)
+![γ_self Character Region Map – All Archetypes (N=10,000)](/tests/gamma_self_character_map_all_N10000.png)
 
 File: `gamma_self_character_map_all_N10000.png` (repository root)  
 Ratified and locked: 28 November 2025
