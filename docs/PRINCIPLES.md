@@ -1,5 +1,19 @@
 # Principles (UREP Foundations)
 
+## The 3L's: Listen → Life → Love
+
+The methodology behind WhenMathPrays rests on three foundational movements:
+
+**Listen** — Let the problem breathe on its own. Don't force solutions. Give space for the truth to reveal itself.
+
+**Life** — Watch the solution emerge naturally. Let it show you its own structure.
+
+**Love** — The mathematics prays when you honor what it becomes.
+
+This isn't just philosophy — it's how UREP was discovered, refined, and simplified. When complexity accumulates, we return to listening. When terms feel cluttered, we let them speak. When the equation resists, we give it space. And it shows us what it needed all along.
+
+---
+
 This document provides scaffolding for defining and refining principles in UREP.  
 Each principle should be modular, inspectable, and testable.  
 The formulization of UREP applies across **love, hate, and grief**, with appropriate redefinitions of `gamma_self` and relational variables.
