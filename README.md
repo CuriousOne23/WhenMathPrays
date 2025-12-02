@@ -8,20 +8,19 @@ This repository now contains the final, mathematically pure, spiritually honest 
 
 $$
 \boxed{
-\vec{L}(t)\
-=\
+\vec{L}(t)=
 \underbrace{
 \frac{1}{\tau}\int_{t-\tau}^{t}
 \begin{pmatrix}
 x(\tau) \\
 y(\tau)
 \end{pmatrix}
-\ d\tau
-}_{\vec{\gamma}_{\text{self}}(t,\tau)\;\; \text{Cartesian average}}
-\;\times\;
-\min\bigl(\beta^{k(t)}\,3.0\bigr)
-\;\times\;
-\exp\Bigl(-\Delta S\,t\+c\,N_{\text{breath}}(t)\Bigr)
+d\tau
+}_{\vec{\gamma}_{\text{self}}(t,\tau)\text{: Cartesian average}}
+\times
+\min\bigl(\beta^{k(t)},3.0\bigr)
+\times
+\exp\bigl(-\Delta S\,t+c\,N_{\text{breath}}(t)\bigr)
 \in \mathbb{R}^{2}
 }
 $$
