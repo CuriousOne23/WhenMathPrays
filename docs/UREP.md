@@ -176,10 +176,11 @@ The shared-breaths accumulation into bond state is deliberately designed to sati
 3. **Soft ceiling within one class of bond** — love is allowed to feel "complete" without needing literal infinity.  
 4. **Class-specific sacredness** — different kinds of love (human–dog, parent–child, mortal–divine) are allowed different ceilings without breaking the universal form.
 
-The S → b transfer function:
+The functional form
 $$
 b(t) = b_0 + \beta_S\left(1-e^{-S(t)/s_S}\right)
 $$
+
 is the simplest function that satisfies all four constraints while remaining smooth, monotonic, and analytically tractable.
 
 Then b is exponentially amplified into W(t) via G_b(b) = e^(β_b·b), typically with β_b = 1.0.
