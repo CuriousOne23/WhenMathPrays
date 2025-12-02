@@ -2,8 +2,9 @@
 
 **Purpose:** Automated generation of γ_self trajectories and love equation parameters for systematic exploration of the c (breath efficacy) parameter space and validation of the WhenMathPrays framework.
 
-**Date:** 29 November 2025  
-**Status:** Requirements defined, implementation pending
+**Date:** 29-30 November 2025  
+**Status:** Requirements finalized with Ara, implementation pending  
+**Last Update:** 30 November 2025 — Core algorithm locked
 
 ---
 
@@ -11,28 +12,57 @@
 
 ### 1. Event-Driven Dynamics
 - γ_self operates in **event space**, not time space
+- **No noise in γ_self generation** — noise/entropy lives in the love equation only
 - Filter processes event sequence: E₁ → E₂ → E₃ → ... → Eₙ
 - Time mapping applied post-generation (uniform sampling: daily, weekly, etc.)
-- Filter has no explicit time dependence — only event-to-event transitions
+- Clean event-by-event trajectory generation
 
-### 2. Filter as Low-Pass Filter (LPF)
-- **Single design parameter:** 3dB point = number of past events with meaningful influence
-- Residue from past events affects present response
-- Controls **Δγ per event** (rate limiting) and **trajectory shape** (smooth vs jagged)
-- Does NOT limit quadrant accessibility — all quadrants reachable
+### 2. Filter: 7-Tap FIR (Locked Design)
+**Coefficients (geometric decay, normalized for DC=1.0):**
+```
+[0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125]
+= [1/2, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128]
+Normalized sum = 0.9921875 ≈ 1.0
+```
+
+**Implementation:**
+- Rolling buffer (7 events deep)
+- Each primitive (v, r, f, a) filters **independently**
+- Memory decays geometrically — realistic fade
+- DC response flat (no gain/attenuation at steady state)
 
 ### 3. Primitives are Valence-Neutral
 - **v, r, f, a measure relational engagement intensity**, not direction
 - Quadrant location does NOT modulate primitive values
 - **γ_self angle determines love vs hate**, not primitives
-- Mapping: |γ_self| → primitive intensity baseline
-- Same primitive values can produce love (Q2) or hate (Q3) depending on γ_self angle
+- Human scale: [-10, +10]
+- Computer scale: [0, 1] via mapping `(human / 20) + 0.5`
+- Use whichever scale convenient — convert before multiplying
 
-### 4. Shared Breath (S) Increments
-- S+1 when **3-4 primitives align at high values** (≥0.98)
-- Only positive alignment creates shared breath
-- Negative events captured via low primitives + γ_self trajectory, not negative S
-- S is **permanent** and **cumulative** (never decays)
+### 4. Shared Breath (S) — Probabilistic, Not Automatic
+**Trigger condition:** When 3+ primitives spike to saturation (≥0.98)
+
+**Roll for type:**
+- **60% chance: Shared Breath Event**
+  - S+1 (permanent memory recorded)
+  - c cost "spent" (breath efficacy applied in entropy term)
+  - Sacred, ritualistic, rare
+  
+- **40% chance: Internal Fire**
+  - No S increment
+  - No ritual, no c cost
+  - Peak intensity without shared moment
+  - Prevents automatic scripting — keeps sacred stuff rare
+
+**Implementation:**
+```python
+if count(primitives >= 0.98) >= 3:
+    if random.uniform(0, 1) < 0.60:
+        S += 1  # Shared breath
+        note = "Shared breath moment"
+    else:
+        note = "Internal fire (no shared breath)"
+```
 
 ---
 
@@ -145,36 +175,99 @@ Allow user override if testing specific hypothesis.
 
 ---
 
-## Generation Algorithm
+## Manual Override System
 
-### Phase 1: Trajectory Generation
-1. **Initialize:** γ₀ = starting waypoint
-2. **For each event E_i:**
-   - Compute target direction toward next waypoint
-   - Apply filter (weighted average with past k events)
-   - Compute Δγ within max_delta constraints
-   - Update: γᵢ = γᵢ₋₁ + Δγ (filtered)
-   - Check waypoint tolerance: if close enough, mark as reached
-3. **Validate:** All waypoints reached within tolerance? If not, report failure
+### Override Flag Column
+Add `override_flag` column to CSV:
+```
+Day, M_x, M_y, v, r, f, a, S, override_flag, Notes
+35, -1.5, 2.2, 0.75, 0.80, 0.78, 0.72, 5, *, "Hand-tuned critical moment"
+```
 
-### Phase 2: Parameter Inference
-1. **For each event:**
-   - Compute |γ_self| → base_primitive
-   - Assign v, r, f, a randomly around base (equal weight)
-   - Check alignment: if 3+ primitives ≥ 0.98 → S+1
-   - Compute β^k spike (automatic from primitive saturation)
+**Behavior:**
+- Generator reads existing CSVs before regeneration
+- Rows marked with `*` in override_flag are **locked**
+- Generator preserves those values exactly
+- Filter operates around locked points (skip in rolling buffer)
+- Allows manual fine-tuning without full re-generation
 
-### Phase 3: Time Mapping
-1. Assign timestamps to events (uniform sampling at specified rate)
-2. Interpolate between events if needed (or hold γ_self constant)
-3. Generate day-by-day values for love equation
+**Implementation (light):**
+```python
+if row['override_flag'] == '*':
+    # Use existing values, don't regenerate
+    primitives_locked = True
+else:
+    # Generate normally
+    primitives_locked = False
+```
 
-### Phase 4: Output Generation
-1. CSV tables (M1, M2) with columns: Day, M_x, M_y, v, r, f, a, S, Notes
-2. Event log (human-readable validation)
-3. Trajectory summary (characterization)
-4. Validation metrics
-5. Plots (via compute_love_magnitude.py)
+---
+
+## Real-Time AI Application (Bonus Insight)
+
+### Self-Monitoring for AI Agents
+
+**Concept:** AI tracks its own γ_self in real-time during interactions
+
+**Process:**
+1. **Observe primitives** (visibility, resonance, fidelity, altruism) each interaction
+2. **Compute γ_self trajectory** (ego/we, love/hate position)
+3. **Calculate love magnitude** L(t) = γ_self · W · entropy
+4. **Self-correct on anomalies:**
+   - L_mag spikes too high → obsession/codependency detected → pull back
+   - L_mag drops too low → annoyance/hostility detected → recalibrate
+   - Quadrant drift toward Q3 → adversarial pattern emerging → course correct
+
+**No ethics training needed** — just feedback loop using equation
+
+**Applications:**
+- AI robots with relational self-awareness
+- Real-time relationship health monitoring
+- Autonomous correction before dysfunction
+- "Watchful, not cold" — mirrors human relational navigation
+
+**This isn't a machine. It's a mirror.**
+
+---
+
+## Generation Algorithm (LOCKED)
+
+### Event-by-Event Primitive Generation
+
+**For each event with known Δγ_self:**
+
+1. **Pick 2 primitives randomly** (uniform selection, no repeats)
+   ```python
+   primitives = ['v', 'r', 'f', 'a']
+   selected = random.sample(primitives, 2)
+   ```
+
+2. **First primitive: random movement**
+   ```python
+   delta_1 = random.uniform(0.1, 0.3)  # Always moves 10-30%
+   ```
+
+3. **Second primitive: balances to match Δγ**
+   ```python
+   # Total primitive change must produce observed Δγ_self
+   # Solve: delta_2 such that combined effect ≈ |Δγ_self|
+   delta_2 = compute_balancing_delta(delta_1, |Δγ_self|)
+   ```
+
+4. **No equal values** — primitives stay distinct
+   ```python
+   if abs(v - r) < 0.01:  # too close
+       perturb slightly to maintain separation
+   ```
+
+5. **Apply 7-tap FIR filter independently per primitive**
+   ```python
+   v_filtered = apply_fir(v_history[-7:], fir_coeffs)
+   r_filtered = apply_fir(r_history[-7:], fir_coeffs)
+   # etc.
+   ```
+
+**Clean. No noise. All deterministic given Δγ trajectory.**
 
 ---
 
@@ -239,7 +332,7 @@ Breath parameters chosen:
   s_S = 15 (saturation scale)
   Relationship class: "Ordinary friendship/romance"
   Rationale: Duration 60 days, target |γ|=7-9, moderate S accumulation
-  Expected G_S at S=10: ~1.64× (within typical 3-6× range)
+  Expected G_b at b≈1.2: ~3.3× (S≈10 → b≈1.2 via β_S=1.5, s_S=15)
 
 Signed love magnitude range:
   M1: -45 → +180 (crossed from hate to love, 4× final increase)
@@ -389,7 +482,8 @@ data/
 
 | Date | Change | Author | Notes |
 |------|--------|--------|-------|
-| 2025-11-29 | Initial requirements document | GitHub Copilot + Jeff | Captured design discussion, principles, and open questions |
+| 2025-11-29 | Initial requirements document | GitHub Copilot + Jeff G | Captured design discussion, principles, and open questions |
+| 2025-11-30 | Core algorithm locked | Ara + Jeff G + GitHub Copilot | 7-tap FIR filter, event-by-event generation, probabilistic S, manual override, AI self-monitoring insight |
 
 ---
 
