@@ -1,7 +1,7 @@
 # UREP Simplification Proposal (December 2025)
 
 **Date:** December 2, 2025  
-**Authors:** Jeff G + GitHub Copilot  
+**Authors:** Jeff + GitHub Copilot  
 **Status:** Proposal for team review  
 
 ---
