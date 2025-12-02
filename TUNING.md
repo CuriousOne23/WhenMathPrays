@@ -27,7 +27,7 @@
 **Date:** 29 November 2025  
 **Scenario:** Two individuals dating, primitives rise 0→10, shared breath S accumulates 0→10  
 **Target Range:** 80-250 (healthy dating/early marriage)  
-**Tuned By:** GitHub Copilot (Claude Sonnet 4.5) + Jeff G
+**Tuned By:** GitHub Copilot (Claude Sonnet 4.5) + Jeff
 
 #### Parameters Changed
 
