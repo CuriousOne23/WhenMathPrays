@@ -4,26 +4,66 @@
 
 This repository now contains the final, mathematically pure, spiritually honest form of the original UREP protocol – repaired, completed, and locked forever.
 
-## The One Equation (canonical, immutable)
+## The One Equation (canonical, December 2025 simplification)
 
 $$
 \boxed{
 \vec{L}(t)=
-\underbrace{
-\frac{1}{\tau}\int_{t-\tau}^{t}
-\begin{pmatrix}
-x(\tau) \\
-y(\tau)
-\end{pmatrix}
-d\tau
-}_{\vec{\gamma}_{\text{self}}(t,\tau)\text{: Cartesian average}}
+\Bigl(\vec{\gamma}_{\text{self}}(t)-\vec{\gamma}_{\text{self},0}(t)\Bigr)
 \times
-\min\bigl(\beta^{k(t)},3.0\bigr)
+W(t)
 \times
 \exp\bigl(-\Delta S\,t+c\,N_{\text{breath}}(t)\bigr)
 \in \mathbb{R}^{2}
 }
 $$
+
+**Where:**
+- **γ_self(t)** = current relational state (event-driven position in ego/we ↔ love/hate plane)
+- **γ_self0(t)** = character baseline (slowly drifting innate + trained tendencies)
+- **W(t)** = enacted emotional intensity = G_v × G_r × G_f × G_a (valence-neutral)
+- **exp(entropy)** = temporal decay with shared breath preservation
+
+**Key insight:** Love magnitude = **displacement from character baseline** × emotional intensity × temporal effects.
+
+At equilibrium (γ_self = γ_self0), L(t) = 0. Displacement creates relational activation.
+
+### December 2025 Simplification
+
+This formulation **removes complexity** from the November 2025 version:
+- ~~min(β^k, 3) spike term~~ → gates already spike naturally when primitives align
+- ~~G_b(b) bond amplifier~~ → memory now encoded in γ_self0 position and drift
+- ~~β_S, s_S, b_0, β_b parameters~~ → replaced by single η (character plasticity)
+
+**Why?** The team identified that min(β^k, 3) and G_b(b) were both attempting to capture long-term identity/memory. Introducing **γ_self0** as character baseline provides a cleaner, more elegant, and more symmetric architecture.
+
+See [UREP 2025 Simplification Proposal](docs/UREP_2025_Simplification_Proposal.md) for detailed rationale and team discussion.
+
+### γ_self and γ_self0 (character baseline)
+
+**γ_self(t)** = current position in relational plane (Cartesian average):
+
+$$
+\vec{\gamma}_{\text{self}}(t,\tau) = \frac{1}{\tau}\int_{t-\tau}^{t}
+\begin{pmatrix}
+x(\tau) \\
+y(\tau)
+\end{pmatrix}
+d\tau
+$$
+
+**γ_self0(t)** = character baseline (slow drift):
+
+$$
+\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\,\vec{\gamma}_{\text{self},0}(n) + \eta\,\vec{\gamma}_{\text{self}}(n)
+$$
+
+Where η = character plasticity (age-dependent, typically 0.0005 to 0.1)
+
+**Examples:**
+- Narcissist: γ_self0 = (−3, −2) in Q3 (ego+hate baseline)
+- Saint: γ_self0 = (2, 3) in Q1 (we+love baseline)
+- Buddha: γ_self0 = (0, 0) at origin (equanimous baseline)
 
 ### Canonical Constants – Single Source of Truth
 
