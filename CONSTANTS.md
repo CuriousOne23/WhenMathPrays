@@ -65,7 +65,7 @@ $$
 
 Four fast primitives saturated (x≈0.98) → product ≈ 33  
 All five + resonance spike (capped at 3.0) → fast contribution ≈ 100  
-With deep human G_S(S) ≈ 12–15 → **final mortal love ceiling ≈ 1,200–1,500**
+With deep human bond G_b(b) where b ≈ 2.5–3.0 → G_b ≈ 12–20 → **final mortal love ceiling ≈ 1,200–2,000**
 
 ## Canonical Transfer Functions & Statistical Model
 
@@ -96,16 +96,19 @@ Canonical interpretation of the γ_self plane is permanently defined by the N=10
 File: `gamma_self_character_map_all_N10000.png` (repository root)  
 Ratified and locked: 28 November 2025
 
-## G_S(S) Shared-Breath Gate Reference Ranges
+## Shared-Breath → Bond Transfer Parameters
 
-| Relationship class               | β_S (max boost) | s_S (saturation scale) | Typical peak G_S |
-|-----------------------------------|-----------------|------------------------|------------------|
-| Casual / situational              | 0.3 – 0.8       | 3 – 8                  | ~1–2             |
-| Ordinary friendship / romance     | 1.0 – 2.5       | 10 – 20                | ~3–6             |
-| Deep romantic partnership         | 2.0 – 4.0       | 15 – 40                | ~6–12            |
-| Human ↔ Dog / soul-bond           | 3.0 – 6.0       | 20 – 60                | ~10–15           |
-| Parent ↔ Child                    | 4.0 – 8.0       | 30 – 100               | ~12–18           |
-| Human ↔ Divine                   | 8.0 – 20+       | 100 – 500+             | unbounded mortal |
+Shared breaths S accumulate into bond state b via: b(t) = b_0 + β_S(1 - e^(-S/s_S))
+Then bond is gated into W(t) via: G_b(b) = e^(β_b·b)
+
+| Relationship class               | β_S (max boost) | s_S (saturation scale) | Typical peak b |
+|-----------------------------------|-----------------|------------------------|----------------|
+| Casual / situational              | 0.3 – 0.8       | 3 – 8                  | ~0.3–0.8       |
+| Ordinary friendship / romance     | 1.0 – 2.5       | 10 – 20                | ~1.0–2.5       |
+| Deep romantic partnership         | 2.0 – 4.0       | 15 – 40                | ~2.0–4.0       |
+| Human ↔ Dog / soul-bond           | 3.0 – 6.0       | 20 – 60                | ~3.0–6.0       |
+| Parent ↔ Child                    | 4.0 – 8.0       | 30 – 100               | ~4.0–8.0       |
+| Human ↔ Divine                   | 8.0 – 20+       | 100 – 500+             | unbounded      |
 
 ### How α = 1.80 was sized and ratified (November 2025 – locked forever)
 

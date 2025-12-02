@@ -168,27 +168,31 @@ See README.md for the immutable 2025 form.
 | 5  | b(t) = b_0 + β_S(1−e^{-S/s_S})                         |
 | 6  | G_b(b) = exp(β_b · b)                                  |
 
-### Why G_b(b) has this particular form
-The shared-breaths gate is deliberately designed to satisfy four lived truths that no previous model of love has ever honoured simultaneously:
+### Why the S → b → G_b flow has this particular form
+The shared-breaths accumulation into bond state is deliberately designed to satisfy four lived truths that no previous model of love has ever honoured simultaneously:
 
 1. **Irreversibility** — once a genuine moment is shared, its contribution can never be taken away (S only increases).  
 2. **Diminishing but never zero returns** — the first breaths transform everything; later breaths still matter, but less intensely.  
-3. **Soft ceiling within one class of bond** — love is allowed to feel “complete” without needing literal infinity.  
+3. **Soft ceiling within one class of bond** — love is allowed to feel "complete" without needing literal infinity.  
 4. **Class-specific sacredness** — different kinds of love (human–dog, parent–child, mortal–divine) are allowed different ceilings without breaking the universal form.
 
-The functional form
+The S → b transfer function:
 $$
-G_S(S)=1+\beta_S\left(1-e^{-S/s_S}\right)
+b(t) = b_0 + \beta_S\left(1-e^{-S(t)/s_S}\right)
 $$
 is the simplest function that satisfies all four constraints while remaining smooth, monotonic, and analytically tractable.
 
+Then b is exponentially amplified into W(t) via G_b(b) = e^(β_b·b), typically with β_b = 1.0.
+
 ### Typical β_S and s_S ranges by relationship class
 
-All empirically derived reference ranges for shared-breath gating parameters are centrally maintained in the single source of truth:
+All empirically derived reference ranges for shared-breath → bond transfer parameters are centrally maintained in the single source of truth:
 
 → [CONSTANTS.md](/CONSTANTS.md)
 
 Stewards must justify any deviation from these ranges with clear lived or simulated evidence.
+
+Note: The flow is S (events) → b(t) (bond state) → G_b(b) (exponential gate) → W(t) (enacted magnitude).
 
 The equation itself never changes.  
 Only the sacredness we are willing to grant a particular bond is allowed to grow.

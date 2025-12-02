@@ -102,7 +102,9 @@ L_mag = |γ_self(t)| × W(t) × entropy(t)
 
 where:
   γ_self_mag = sqrt(M_x² + M_y²)
-  W = [∏G_x(primitives)] × min(β^k, W_cap) × G_S(S)
+  W = [∏G_x(primitives)] × min(β^k, W_cap) × G_b(b)
+  b = b_0 + β_S(1 - e^(-S/s_S))
+  G_b(b) = exp(β_b·b)
   entropy = exp(-ΔS·t + c·S)
   
 All core constants (β, W_cap, α, ΔS) match CONSTANTS.md exactly.
