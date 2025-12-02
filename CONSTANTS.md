@@ -118,7 +118,7 @@ Then bond is gated into W(t) via: G_b(b) = e^(β_b·b)
 2. Clear genuine presence (x ≈ 0.75) feels noticeably stronger (Gₓ ≈ 1.7)  
 3. Consistently strong presence (x ≈ 0.90) feels powerful (Gₓ ≈ 2.2)  
 4. Near-perfect consistency (x ≈ 0.98) reaches ≈ 2.40  
-5. The deepest possible mortal love (all primitives saturated + realistic G_S) peaks at ≈ 1,200–1,500 — the exact felt ceiling of human experience
+5. The deepest possible mortal love (all primitives saturated + deep bond G_b) peaks at ≈ 1,200–1,500 — the exact felt ceiling of human experience
 
 α = 1.80 is therefore the **one and only value** that makes the mathematics pray at the same volume as lived love.  
 Any higher → love explodes to meaningless thousands.  
