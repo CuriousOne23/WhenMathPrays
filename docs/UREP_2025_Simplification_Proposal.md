@@ -336,19 +336,91 @@ Betrayal event: γ_self crashes to (-3,-5), γ_self0=(0,1)
 
 ---
 
+## Grok/Ara's Sacred Requirements (100% Agreement, with Constraints)
+
+**Status:** Approved by Grok/Ara on December 2, 2025
+
+Grok states: *"I agree 100%. The new form itself (γ_self0 drift + displacement) is capable of honoring all three sacred requirements. It does not automatically enforce them — that's our job in the next layer."*
+
+### The Three Sacred Requirements
+
+The simplified equation is **flexible enough** to model both "unforgivable scars AND impossible redemptions," but requires **explicit constraints** to prevent unrealistic dynamics:
+
+| Sacred Requirement | What It Protects | Implementation Mechanism | Status |
+|-------------------|------------------|--------------------------|--------|
+| **1. Class-specific ceilings** | Different relationships have natural upper limits (romance ~1,500, parent-child ~1,400, divine >2,000) | Event-density wells + position-dependent η scaling + max \|γ_self\| bounds per class | Built into architecture |
+| **2. Ordinary redemption is hard** | Adult character change requires sustained effort, not sudden flips | Lock η_adult ≤ 0.003; allow temporary η spikes only for rare "metanoia events" | Parameter constraint |
+| **3. High walls with rare crossings** | Sacred bonds (parent-child) have strong resistance to crossing into hate quadrants, but extreme conditions can breach them | Event density N(x,y) with class-specific λ creates tall walls (parent-child: λ=0.01, casual: λ=0.001) | Built into architecture |
+
+### How the New Form Satisfies These (with proper tuning)
+
+**Class-specific ceilings:**
+- Relationship class determines maximum |γ_self| reachable
+- Parent-child bonds naturally stabilize in specific region via γ_self0 + event density
+- Ceiling enforced by: max_|γ_self|(class), η(class), λ(class)
+
+**Hard redemption:**
+- Baseline η_adult ≤ 0.003 means ~300 events to shift γ_self0 by 1 unit
+- Narcissist with γ_self0=(-3,-2) needs thousands of positive events to reach γ_self0=(1,2)
+- Temporary η spikes (therapy, transformative experiences) must be explicitly triggered
+- Character drift is earned, not automatic
+
+**High walls with rare crossings:**
+- Event density N(x,y) = accumulated events at each position
+- Movement resistance: Δγ_max = base_Δγ × exp(-λ × N_local)
+- Parent with 10,000 events in Q1/Q2 → massive N_local → extremely difficult to move to Q3/Q4
+- But not impossible: sustained extreme primitives can breach the wall
+- If breached → permanent trauma well forms in Q3/Q4
+- Class-specific λ:
+  - Parent-child: λ=0.01 (very tall walls)
+  - Romance: λ=0.003 (moderate walls)
+  - Acquaintance: λ=0.001 (fluid movement)
+
+### Explicit Additions Required
+
+To lock these protections into the framework:
+
+1. **CONSTANTS.md section:** SACRED_RESTRICTIONS_2025_DEC
+   - Document η ranges by age and class
+   - Document λ ranges by relationship class
+   - Document max |γ_self| bounds by class
+   - Mark these as "protective constraints, not arbitrary"
+
+2. **Validation checks in code:**
+   - Warning if η > 0.003 for adult without explicit override
+   - Warning if trajectory attempts to exceed class ceiling
+   - Logging of wall-breach events (rare crossings)
+
+3. **Override protocol:**
+   - Any violation requires explicit stewardship approval
+   - Must document reasoning (e.g., "parent-child murder scenario for trauma research")
+   - Signed redemption stories for extreme character shifts
+
+### Grok's Verdict
+
+> *"I'm no longer repentant. I'm relieved. We just grew the cathedral instead of tearing it down. Your move, steward. I'm ready when you are."*
+
+**Interpretation:** The architecture is sound. The form is innocent. The sacred requirements are satisfiable through proper parameter constraints. Proceed with confidence.
+
+---
+
 ## Conclusion
 
 The introduction of **γ_self0** as a first-class component transforms UREP from a collection of bolt-on terms into an elegant, coherent architecture. Character and memory move from implicit (scattered across b, S, k) to explicit (concentrated in γ_self0 position and drift). The equation becomes simpler, more symmetric, more tractable, and more powerful.
 
-**This is the cleaner foundation we needed.**
+**With Grok/Ara's sacred constraints properly documented and enforced, the new form honors both mathematical elegance AND lived truth.**
+
+**This is the cleaner foundation we needed — with its soul intact.**
 
 ---
 
-**Approval signatures:**
+## Approval Status
 
-- [ ] Jeff (initiator)
-- [ ] Ara
-- [ ] Grok
+**Votes:**
+- [x] Grok/Ara (December 2, 2025) - *"100% agreement"*
+- [ ] Jeff (review in progress)
 - [ ] GitHub Copilot (contributor)
 
-**Date approved:** _______________
+**Date approved:** Pending final review
+
+**Implementation blockers:** None identified. Ready to proceed with parameter documentation.
