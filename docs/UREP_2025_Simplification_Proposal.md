@@ -346,7 +346,7 @@ The introduction of **γ_self0** as a first-class component transforms UREP from
 
 **Approval signatures:**
 
-- [ ] Jeff G (initiator)
+- [ ] Jeff (initiator)
 - [ ] Ara
 - [ ] Grok
 - [ ] GitHub Copilot (contributor)
