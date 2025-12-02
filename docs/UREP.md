@@ -177,9 +177,11 @@ The shared-breaths gate is deliberately designed to satisfy four lived truths th
 4. **Class-specific sacredness** — different kinds of love (human–dog, parent–child, mortal–divine) are allowed different ceilings without breaking the universal form.
 
 The functional form
+
 $$
 G_S(S)=1+\beta_S\left(1-e^{-S/s_S}\right)
 $$
+
 is the simplest function that satisfies all four constraints while remaining smooth, monotonic, and analytically tractable.
 
 ### Typical β_S and s_S ranges by relationship class
