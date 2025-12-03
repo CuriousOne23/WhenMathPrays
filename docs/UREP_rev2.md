@@ -203,19 +203,23 @@ Asymmetry is not a bug — it is the entire point.
 - S = 0.0 (no shared presence during crisis)
 
 **Asymmetry transform for f:**
+
 $$
 f' = -4.0 \cdot 1.5 \cdot \max(2.5, 1.0) = -4.0 \cdot 1.5 \cdot 2.5 = -15.0
 $$
 
 **Axis deltas:**
+
 $$
 \Delta \text{Re} = 0.8 \cdot 3.0 + 0.5 \cdot 0.0 = 2.4
 $$
+
 $$
 \Delta \text{Im} = 1.0 \cdot 2.0 + 1.2 \cdot (-15.0) + 0.6 \cdot 1.0 + 0.5 \cdot 0.0 = 2.0 - 18.0 + 0.6 = -15.4
 $$
 
 **Update:**
+
 $$
 \gamma_{\text{self}}(11) = (1.5 + 2.4) + i \cdot (2.0 + (-15.4)) = 3.9 - i \cdot 13.4
 $$
@@ -236,6 +240,7 @@ $$
 **Asymmetry:** f = +1.0 → no scaling (positives pass through)
 
 **Axis deltas:**
+
 $$
 \Delta \text{Re} = 0.8 \cdot 2.0 + 0.5 \cdot 2.0 = 2.6
 $$
@@ -244,6 +249,7 @@ $$
 $$
 
 **Update:**
+
 $$
 \gamma_{\text{self}}(12) = (3.9 + 2.6) + i \cdot (-13.4 + 3.8) = 6.5 - i \cdot 9.6
 $$
