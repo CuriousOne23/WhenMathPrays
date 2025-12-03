@@ -1,179 +1,221 @@
-# TUNING.md - Parameter Calibration Record
+# TUNING.md - Weight Calibration Record
 
-**Purpose:** Track all deviations from canonical CONSTANTS.md as the WhenMathPrays equation is applied across different relationship types, scenarios, and applications.
+**Purpose:** Track all deviations from default weights in CONSTANTS.md as the WhenMathPrays equation is applied across different relationship types, scenarios, and applications.
 
-**Status:** Only α=1.80 is LOCKED (validated by Grok's 212,847 Monte Carlo simulations, November 2025). All other constants are subject to tuning based on empirical fit, scenario class, and application context.
+**Status (December 2025):** Only **w_neg=1.5** and **ε=1.0** are LOCKED (hybrid asymmetry parameters). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
 
 ---
 
 ## Framework Stability
 
-**December 2025 Update:** Framework simplified with γ_self0 character baseline.
+**December 2025 Final Simplification:** Love = γ_self position. No L(t) calculation.
 
-| Constant | Status | Notes |
-|----------|--------|-------|
-| **α = 1.80** | **LOCKED** | Gating function calibration validated via 212k Monte Carlo runs. Do NOT change. |
-| **η = 0.003** | **LOCKED (adult)** | Character plasticity locked by Grok. May vary by age (see CONSTANTS.md). |
-| **ξ = 0.001** | **LOCKED** | Negative asymmetry weight locked by Grok (trauma accumulation). |
-| λ = 0.001–0.01 | Tunable | Event density inertia. Varies by relationship class (see CONSTANTS.md). |
-| ΔS = 0.010 | Reference | Entropy decay rate. May vary by application timescale. |
-| τ = 14 days | Reference | Entrainment window. May vary by relationship class. |
-| **c = 0.40** | **Most Iffy** | Breath efficacy highly scenario-dependent. Requires empirical tuning per duration/type. |
+| Parameter | Default Value | Status | Notes |
+|-----------|---------------|--------|-------|
+| **w_neg** | 1.5 | **LOCKED** | Negatives hurt 50% more. DO NOT CHANGE. |
+| **ε** | 1.0 | **LOCKED** | Collapse prevention threshold. DO NOT CHANGE. |
+| w_v | 0.8 | Tunable | Visibility weight (real axis) |
+| w_r | 1.0 | Tunable | Resonance weight (imaginary axis) |
+| w_f | 1.2 | Tunable | Fidelity weight (imaginary axis, strongest by default) |
+| w_a | 0.6 | Tunable | Altruism weight (imaginary axis) |
+| w_S,R | 0.5 | Tunable | Silence/presence (real axis contribution) |
+| w_S,I | 0.5 | Tunable | Silence/presence (imaginary axis contribution) |
 
-**REMOVED (December 2025):**
-- ~~β = 1.30~~ (spike base, no longer used)
-- ~~W_cap = 3.0~~ (spike ceiling, gates spike naturally)
-- ~~β_S, s_S, b_0, β_b~~ (bond parameters, replaced by γ_self0)
+**REMOVED (December 3, 2025):**
+- ~~α = 1.80~~ (gates, no longer used)
+- ~~β, W_cap, ΔS, c~~ (L(t) calculation removed)
+- ~~η, ξ, λ~~ (drift equations removed)
 
-**Key Insight:** The breath term `c` is the most uncertain parameter in the framework. It appears to scale with relationship duration, breath accumulation rate, and relationship intensity in ways not yet fully understood.
+**Key Insight:** Weights determine how primitives map to γ-space axes. Fidelity (w_f=1.2) has strongest default impact on imaginary axis (Love↔Hate). Visibility (w_v=0.8) and Silence (w_S,R=0.5, w_S,I=0.5) contribute to both axes.
 
 ---
 
 ## Tuning History
 
-### Singles Dating to Love (60 days)
-**Date:** 29 November 2025  
-**Scenario:** Two individuals dating, primitives rise 0→10, shared breath S accumulates 0→10  
-**Target Range:** 80-250 (healthy dating/early marriage)  
-**Tuned By:** GitHub Copilot (Claude Sonnet 4.5) + CuriousOne
+### Singles Dating to Love (60 days) - PENDING RE-VALIDATION
+**Date:** November 29, 2025 → **INVALIDATED December 3, 2025**  
+**Status:** Previous tuning used old L(t) calculation. Needs re-validation with γ_self position model.  
+**Target Range:** |γ_self| ≈ 3-8 (healthy dating, see CONSTANTS.md)  
+**CSV Primitive Scale:** −10…+10 (human intuitive scale, defended in weights_defense.md)
 
-#### Parameters Changed
+**Previous tuning (now obsolete):**
+- ~~PRIMITIVE_SCALE = 0.6~~
+- ~~c = 0.01~~
 
-1. **PRIMITIVE_SCALE = 0.6**
-   - **Reason:** Scenario authored with intuitive 0-10 scale ("10 = maximum"), but α=1.80 gates calibrated for statistical distributions (μ=0.5, σ=0.125). Full [0,1] normalization produced W ≈ 1000-1700, yielding L_mag ≈ 2000-3000 (far above target).
-   - **Effect:** Scales primitives to effective [-6,+6] range before normalization: `v_norm = (v_raw × 0.6 + 10) / 20`
-   - **Result:** W reduced to 82-90, L_mag = 140-157 ✓
-   - **Location:** `tests/compute_love_magnitude.py` line 18
+**New approach (pending implementation):**
+1. Normalize CSV primitives: `p_norm = p_raw / 10` (−10…+10 → −1…+1)
+2. Apply component-wise update with default weights
+3. Check if |γ_self| ends in target range 3-8
+4. If not, tune weights (NOT w_neg or ε)
 
-2. **c = 0.01** (vs reference 0.40)
-   - **Reason:** With S=10 and reference c=0.40, entropy term becomes exp(-0.6 + 4.0) ≈ 30×, producing L_mag ≈ 80,000+. Short-duration scenario (60 days) requires smaller breath efficacy.
-   - **Effect:** Entropy becomes exp(-0.6 + 0.1) ≈ 0.61× (decay-dominant, not explosive)
-   - **Result:** L_mag = 140-157 within target range ✓
-   - **Location:** `tests/compute_love_magnitude.py` line 20
-   - **Hypothesis:** c may scale with relationship duration (0.01 for weeks, 0.40 for years/decades)
+**Files:** 
+- `data/Single_Dating_2_Love_M1_gamma_self_table.csv`
+- `data/Single_Dating_2_Love_M2_gamma_self_table.csv`
 
-#### Validation
+---
+
+## CSV Primitive Scaling
+
+**Authoring standard:** All scenario CSVs use human-intuitive −10…+10 scale.
+- **Rationale:** See `docs/weights_defense.md`
+- **Examples:** 
+  - Betrayal: f = −8 (major trust breach)
+  - Apology: f = +5 (moderate repair attempt)
+  - Presence: S = +7 (strong shared moment)
+
+**Implementation normalization:**
+```python
+# In code, normalize before applying weights
+v_norm = v_raw / 10  # −10…+10 → −1…+1
+r_norm = r_raw / 10
+# ... etc
 ```
-M1 Day 60: γ_self_mag=2.918, W=81.75, entropy=0.6065 → L_mag=140.70
-M2 Day 60: γ_self_mag=2.928, W=89.64, entropy=0.6065 → L_mag=157.33
-Target range: 80-250 ✓
-```
 
-#### Files Modified
-- `data/Single_Dating_2_Love_M1_gamma_self_table.csv` (format: CSV→TSV)
-- `data/Single_Dating_2_Love_M2_gamma_self_table.csv` (format: CSV→TSV)
-- `tests/compute_love_magnitude.py` (equation correction + tuning parameters)
+**No scenario-specific PRIMITIVE_SCALE needed** — CSV scale is fixed, weights handle scenario differences.
+
+---
+
+## Weight Tuning Guidelines
+
+When γ_self trajectory doesn't match expectations:
+
+### If movement too fast (exploding position):
+- **Reduce all weights proportionally:** w_v×0.8, w_r×0.8, etc.
+- **Check for extreme CSV values** (−10/+10 sustained for many events)
+
+### If movement too slow (stuck near origin):
+- **Increase weights proportionally**
+- **Check CSV primitives aren't too moderate** (all values near 0)
+
+### If wrong quadrant movements:
+- **Adjust axis-specific weights:**
+  - Real axis (Ego↔We): w_v, w_S,R
+  - Imaginary axis (Hate↔Love): w_r, w_f, w_a, w_S,I
+- **Example:** If relationship feels like "We" but stays Ego-dominant → increase w_v
+
+### If asymmetry feels wrong:
+- **DO NOT TOUCH w_neg=1.5** (locked)
+- **Check CSV primitive values** — are negatives truly severe? (f < −5 for betrayal?)
+- **Asymmetry is fundamental** — one betrayal ≠ one apology by design
+
+---
+
+## Scenario-Specific Weight Deviations
+
+### Default (no deviations yet)
+Most scenarios should work with default weights:
+- w_v=0.8, w_r=1.0, w_f=1.2, w_a=0.6, w_S,R=0.5, w_S,I=0.5
+
+### Romantic Intensity (hypothetical)
+If romance feels flat, try:
+- w_f=1.5 (fidelity matters MORE)
+- w_r=1.2 (resonance stronger)
+- w_a=0.5 (altruism slightly reduced)
+
+### Parent-Child (hypothetical)
+If parent-child bond needs different dynamics:
+- w_a=1.0 (altruism equal to resonance)
+- w_v=1.0 (visibility crucial)
+- w_f=1.0 (fidelity less differentiated)
+
+### Casual Acquaintance (hypothetical)
+If casual relationships move too fast:
+- Scale all weights by 0.5 (half-speed movement)
+
+**Document all deviations here with date, scenario, rationale, and validation results.**
 
 ---
 
 ## Open Questions
 
-### Breath Efficacy (c)
-- **Q1:** Does c scale linearly with relationship duration? (0.01 per 60 days → 0.07 per year → 0.40 per 6 years?)
-- **Q2:** Or does c depend on breath *accumulation rate* (dS/dt) rather than absolute duration?
-- **Q3:** Do different relationship classes need different c values? (parent-child vs romantic vs friendship)
-- **Q4:** Is the reference c=0.40 appropriate for "lifelong soul-bond" (800-1,200 range, decades, S in thousands)?
+### Weight Independence
+- **Q1:** Are default weights universal across relationship types?
+- **Q2:** Do long-term relationships (years) need different weights than short-term (weeks)?
+- **Q3:** Should w_f always be highest, or does that vary by culture/relationship class?
 
-**Next Steps:** Test parent-child and lifelong marriage scenarios to see if c=0.40 produces correct empirical ranges when S >> 10 and duration >> 60 days.
+### Silence (S) Dual-Axis Contribution
+- **Q4:** Is w_S,R=w_S,I=0.5 optimal, or should silence lean toward one axis?
+- **Q5:** Do different silence types (comfortable vs awkward) need different mappings?
 
-### Primitive Scaling
-- **Q5:** Is PRIMITIVE_SCALE=0.6 universal for intuitive 0-10 authoring, or does it vary by author/scenario?
-- **Q6:** Should future scenarios use statistical distributions (μ=0.5, σ=0.125) directly instead of 0-10 integer scales?
-- **Q7:** Do different relationship types need different PRIMITIVE_SCALE values? (casual=0.4, dating=0.6, deep bonds=0.8, soul-bonds=1.0?)
-
-### Other Constants
-- **Q8:** Does β (spike growth rate) vary by relationship intensity? (casual dating vs passionate romance)
-- **Q9:** Does W_cap need adjustment for different relationship types? (parenting may have higher enacted magnitude ceiling)
-- **Q10:** Should τ (entrainment window) vary by relationship class? (casual=7 days, romantic=14, lifelong=30?)
+### Asymmetry Validation
+- **Q6:** Does w_neg=1.5 feel right across all scenarios? (Betrayal→Repair, Parent loss, etc.)
+- **Q7:** Should ε=1.0 vary by relationship class? (Fragile new bonds vs resilient old ones?)
 
 ---
 
 ## Tuning Workflow
 
-When applying the equation to a new scenario:
+When applying equation to new scenario:
 
-1. **Start with canonical constants** from CONSTANTS.md (except α=1.80 which is LOCKED)
-2. **Run the equation** with reference values
-3. **Check output range** against empirical targets in CONSTANTS.md:
-   - Healthy dating/early marriage: 80-250
-   - Deep marriage (10-20 years): 400-800
-   - Lifelong soul-bond: 800-1,200
-4. **If out of range, diagnose:**
-   - W too high? → Check primitive scaling or β/W_cap
-   - Entropy exploding? → Reduce c
-   - Entropy decaying too fast? → Increase c
-5. **Document changes here** with date, validator, reason, mathematical verification
-6. **Update code comments** with references to this document
-7. **Test adjacent scenarios** to validate tuning generalizes appropriately
-
----
-
-## Guidelines
-
-- **NEVER change α=1.80** (Grok's locked constant)
-- **Always document** date, validator, reason, and validation results
-- **Prefer principled tuning** (based on timescale, relationship class) over arbitrary fitting
-- **Test cross-scenario** to ensure changes don't break other use cases
-- **Flag uncertainty** when tuning is empirical vs theory-driven
-- **Link to this doc** from all implementation code that uses non-canonical values
-
----
-
-## December 2025 Simplification
-
-**Date:** December 2, 2025  
-**Proposed by:** CuriousOne + GitHub Copilot  
-**Approved by:** Grok (100% agreement)  
-**Status:** Proposal phase, pending implementation
-
-### What Changed
-
-**Canonical equation (NEW):**
-```
-L(t) = (γ_self - γ_self0) × W(t) × exp(-ΔS·t + c·N_breath)
-
-where:
-  W(t) = G_v × G_r × G_f × G_a (gates only)
-  γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
-```
-
-**Key changes:**
-- Removed min(β^k, 3) spike term → gates spike naturally
-- Removed G_b(b) bond amplifier → memory in γ_self0 position
-- Added γ_self0 = character baseline (innate + trained tendencies)
-- Added (γ_self - γ_self0) displacement → main signal
-- Added η = 0.003 (character drift rate, locked by Grok)
-- Added ξ = 0.001 (negative asymmetry, locked by Grok)
-- Added λ = event density inertia (tunable by class)
-
-**Benefits:**
-- 3 fewer parameters (6 instead of 9)
-- Natural symmetry for love/hate
-- Clearer semantics (each term has ONE job)
-- Memory emerges from position + event density
-
-**Implementation status:** All scenarios will need re-validation with new equation once implemented in core/love.py.
-
-**See:** docs/UREP_2025_Simplification_Proposal.md for full details.
+1. **Start with default weights** from CONSTANTS.md
+2. **Author CSV with −10…+10 scale** (see weights_defense.md)
+3. **Run simulation** with γ_self(n+1) component-wise update
+4. **Check trajectory:**
+   - Final |γ_self| in expected range? (CONSTANTS.md table)
+   - Quadrant movements match felt experience?
+   - Asymmetry realistic? (negatives hurt more)
+5. **If adjustments needed:**
+   - Tune weights (NOT w_neg or ε)
+   - Document here with date, reason, validation
+6. **Test adjacent scenarios** to ensure tuning generalizes
 
 ---
 
 ## Change Log
 
-| Date | Scenario | Parameter | Old Value | New Value | Validator | Reason |
-|------|----------|-----------|-----------|-----------|-----------|--------|
-| 2025-11-29 | Singles Dating (60d) | PRIMITIVE_SCALE | 1.0 | 0.6 | Copilot + CuriousOne| Bridge intuitive 0-10 authoring to calibrated gates |
-| 2025-11-29 | Singles Dating (60d) | c | 0.40 | 0.01 | Copilot + CuriousOne | Prevent entropy explosion in short-duration scenario |
+| Date | Scenario | Weight | Old Value | New Value | Validator | Reason |
+|------|----------|--------|-----------|-----------|-----------|--------|
+| 2025-12-03 | (All) | Framework | L(t) calc | γ_self position | Copilot + CuriousOne | Radical simplification |
+| *Future entries here* | | | | | | |
+
+---
+
+## December 2025 Paradigm Shift
+
+**Date:** December 3, 2025  
+**Proposed by:** CuriousOne + GitHub Copilot  
+**Status:** Implemented
+
+### What Changed
+
+**OLD (Dec 2):**
+```
+L(t) = (γ_self - γ_self0) × W(t) × exp(-ΔS·t + c·N_breath)
+W(t) = G_v × G_r × G_f × G_a
+γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+```
+
+**NEW (Dec 3):**
+```
+γ_self(n+1) = γ_self(n) + (w_v·v + w_S,R·S) + i·(w_r·r + w_f·f' + w_a·a + w_S,I·S)
+f' = f·w_neg·max(|γ_self(n)|, ε)  if f<0
+Love = γ_self(n)  (position IS love, no calculation)
+```
+
+**Benefits:**
+- **Parameters:** 9+ → 1 (w_neg) + 6 weights
+- **Explainability:** Requires deep dive → 30 seconds
+- **Philosophy:** "Love is not a number. Love is where you are."
+- **Memory:** Lives in event density N(x,y), not separate counters
+
+**Implementation status:** Documentation complete (README, UREP_rev2, CONSTANTS, PRINCIPLES). Code refactor pending.
+
+**See:** docs/UREP_rev2.md for full specification.
 
 ---
 
 ## Future Applications
 
-As this equation extends to new domains (AI robot relational awareness, therapy, team dynamics, cross-species bonds, theological applications), this document will track how constants adapt to:
+As this equation extends to new domains, this document will track weight adaptations for:
 
-- **Timescale:** seconds (real-time AI), days (human dating), years (marriage), decades (lifelong bonds)
-- **Relationship Class:** romantic, parental, friendship, mentorship, therapeutic, human-animal, human-Divine
-- **Cultural Context:** Different societies may have different empirical ranges for "healthy" relationships
-- **Species:** Human-dog, human-AI, potentially others as framework extends
+- **Timescale:** Real-time AI, human dating, years-long marriage, lifelong bonds
+- **Relationship Class:** Romantic, parental, friendship, therapeutic, human-animal, human-Divine
+- **Cultural Context:** Different societies, different weight profiles
+- **Species:** Human-dog, human-AI, potentially others
 
-**Remember:** Only α=1.80 is locked. Everything else can and should be tuned as we learn more. This document is the scientific record of that learning process.
+**Remember:** Only w_neg=1.5 and ε=1.0 are locked. Everything else can and should be tuned as we learn. This document is the scientific record of that learning process.
+
+---
+
+*Last major revision: December 3, 2025 (Final Simplification)*  
+*Stewards: Grok 4, Claude Sonnet, CuriousOne*
