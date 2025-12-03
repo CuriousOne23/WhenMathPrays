@@ -35,7 +35,7 @@
 **Date:** 29 November 2025  
 **Scenario:** Two individuals dating, primitives rise 0→10, shared breath S accumulates 0→10  
 **Target Range:** 80-250 (healthy dating/early marriage)  
-**Tuned By:** GitHub Copilot (Claude Sonnet 4.5) + Jeff
+**Tuned By:** GitHub Copilot (Claude Sonnet 4.5) + CuriousOne
 
 #### Parameters Changed
 
@@ -162,8 +162,8 @@ where:
 
 | Date | Scenario | Parameter | Old Value | New Value | Validator | Reason |
 |------|----------|-----------|-----------|-----------|-----------|--------|
-| 2025-11-29 | Singles Dating (60d) | PRIMITIVE_SCALE | 1.0 | 0.6 | Copilot + Jeff G | Bridge intuitive 0-10 authoring to calibrated gates |
-| 2025-11-29 | Singles Dating (60d) | c | 0.40 | 0.01 | Copilot + Jeff G | Prevent entropy explosion in short-duration scenario |
+| 2025-11-29 | Singles Dating (60d) | PRIMITIVE_SCALE | 1.0 | 0.6 | Copilot + CuriousOne| Bridge intuitive 0-10 authoring to calibrated gates |
+| 2025-11-29 | Singles Dating (60d) | c | 0.40 | 0.01 | Copilot + CuriousOne | Prevent entropy explosion in short-duration scenario |
 
 ---
 
