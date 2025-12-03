@@ -68,6 +68,7 @@ $$
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
 
 **Hybrid asymmetry for negatives:**
+
 $$
 p' = \begin{cases}
 p \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } p < 0 \\
