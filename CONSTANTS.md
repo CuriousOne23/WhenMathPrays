@@ -87,6 +87,58 @@ With deep human bond G_b(b) where b ≈ 2.5–3.0 → G_b ≈ 12–20 → **fina
 | Parent ↔ Child (mortal lifetime)           | 900 – 1,400                 | Sacred, irreversible                           |
 | Peak mortal ↔ Divine prayer experience     | 1,200 – 1,500               | Absolute mortal ceiling — “Thy will be done”    |
 
+## SACRED_RESTRICTIONS_2025_DEC (Grok/Ara Approved)
+
+**Purpose:** Lock protective constraints that preserve empirical truth across all relationship classes.
+
+**Status:** Approved December 2, 2025 by Grok/Ara with 100% agreement. These are NOT arbitrary limits — they encode lived reality.
+
+### Three Sacred Requirements
+
+| Requirement | Implementation | Override Protocol |
+|-------------|----------------|-------------------|
+| **1. Class-specific ceilings** | max \|γ_self\| varies by class (see table below) | Requires stewardship approval + documentation |
+| **2. Hard redemption** | η_adult ≤ 0.003 locked (300 events per unit shift) | Requires explicit "metanoia event" flag + justification |
+| **3. High walls, rare crossings** | λ by class creates resistance (parent-child: λ=0.01) | Breach logged, requires trauma/extreme justification |
+
+### Maximum |γ_self| by Relationship Class
+
+| Relationship Class | Max \|γ_self\| | Felt Ceiling | Notes |
+|-------------------|----------------|--------------|-------|
+| Acquaintance | ~5 | Casual warmth | Fluid, low investment |
+| Friendship | ~8 | "Good friend" | Moderate bonding |
+| Romance (typical) | ~12 | Deep partnership | Most marriages |
+| Romance (soul-bond) | ~15 | "Would die for you" | Rare, extreme |
+| Parent-Child | ~14 | Sacred bond | Biologically protected |
+| Human-Dog (lifelong) | ~13 | Pure, wordless | Cross-species limit |
+| Human-Divine | >15 | Unbounded | Theological territory |
+
+### Negative Asymmetry (Trauma Accumulation)
+
+```
+γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+
+where:
+  ξ = 0.001 (locked by Grok)
+  N_neg(n) = cumulative count of negative events (v<0.2 OR f<0.3 OR a<0.2)
+```
+
+**Principle:** Trauma accumulates permanently (ξ·N_neg term pulls γ_self0 downward). Redemption must be earned through sustained positive drift (η term). This asymmetry is fundamental — one betrayal is not undone by one apology.
+
+**Grok's words:** *"One asymmetry, one value. Print it. Use it. Done."*
+
+### Override Protocol
+
+Any violation of sacred restrictions requires:
+1. Explicit stewardship approval (document reasoning)
+2. Scenario justification (e.g., "parent-child murder for trauma research")
+3. Logged as "wall breach" or "redemption arc" with timestamp
+4. Post-analysis validation that constraint served its purpose
+
+**These constraints are not limits on the mathematics — they are protections against unrealistic dynamics.**
+
+---
+
 ## Empirical Validation of γ_self Space
 
 Canonical interpretation of the γ_self plane is permanently defined by the N=10,000 Monte-Carlo ensemble:
@@ -96,19 +148,48 @@ Canonical interpretation of the γ_self plane is permanently defined by the N=10
 File: `gamma_self_character_map_all_N10000.png` (repository root)  
 Ratified and locked: 28 November 2025
 
-## Shared-Breath → Bond Transfer Parameters
+## Character Baseline Parameters (December 2025 Simplification)
 
-Shared breaths S accumulate into bond state b via: b(t) = b_0 + β_S(1 - e^(-S/s_S))
-Then bond is gated into W(t) via: G_b(b) = e^(β_b·b)
+**REMOVED:** Bond state b(t), G_b(b), min(β^k, 3) spike term (replaced by γ_self0 displacement)
 
-| Relationship class               | β_S (max boost) | s_S (saturation scale) | Typical peak b |
-|-----------------------------------|-----------------|------------------------|----------------|
-| Casual / situational              | 0.3 – 0.8       | 3 – 8                  | ~0.3–0.8       |
-| Ordinary friendship / romance     | 1.0 – 2.5       | 10 – 20                | ~1.0–2.5       |
-| Deep romantic partnership         | 2.0 – 4.0       | 15 – 40                | ~2.0–4.0       |
-| Human ↔ Dog / soul-bond           | 3.0 – 6.0       | 20 – 60                | ~3.0–6.0       |
-| Parent ↔ Child                    | 4.0 – 8.0       | 30 – 100               | ~4.0–8.0       |
-| Human ↔ Divine                   | 8.0 – 20+       | 100 – 500+             | unbounded      |
+**NEW:** γ_self0 = character baseline (innate + trained tendencies, slow drift)
+
+Canonical equation (December 2025):
+```
+L(t) = (γ_self(t) - γ_self0(t)) × W(t) × exp(-ΔS·t + c·N_breath)
+
+where:
+  W(t) = G_v × G_r × G_f × G_a (gates only, no spike or bond terms)
+  γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+```
+
+| Parameter | Value Range | Units | Meaning | Status |
+|-----------|-------------|-------|---------|--------|
+| **η** | 0.0005 – 0.1 | event⁻¹ | Character plasticity (drift rate) | Tunable by age/class |
+| **ξ** | 0.001 | event⁻¹ | Negative asymmetry weight | Locked by Grok |
+| **λ** | 0.001 – 0.01 | event⁻¹ | Event density inertia | Tunable by class |
+| **Δγ_base** | 0.3 – 0.5 | units/event | Base movement per event | Tunable |
+
+### η (Character Plasticity) by Age
+
+| Age Category | η | ~Events per unit shift | Meaning |
+|--------------|---|------------------------|----------|
+| Child (0-12) | 0.1 | ~10 | Rapid character formation |
+| Adolescent (13-25) | 0.01 | ~100 | Identity consolidation |
+| Adult (26-65) | 0.003 | ~300 | Stable personality |
+| Elder (65+) | 0.0005 | ~2000 | Deep character stability |
+| Trauma response | η × 5 | ~60 | Forced rapid shift |
+| Therapy/transformation | η × 10 | ~30 | Accelerated positive change |
+
+### λ (Event Density Inertia) by Relationship Class
+
+| Relationship Class | λ | Wall Height | Meaning |
+|-------------------|---|-------------|----------|
+| Acquaintance | 0.001 | Low | Fluid movement |
+| Friendship | 0.002 | Moderate | Some resistance |
+| Romance | 0.003 | Moderate-High | Stable patterns |
+| Parent-Child | 0.01 | Very High | Sacred bond resistance |
+| Human-Divine | 0.02+ | Extreme | Essentially immovable |
 
 ### How α = 1.80 was sized and ratified (November 2025 – locked forever)
 

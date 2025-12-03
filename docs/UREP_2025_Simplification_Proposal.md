@@ -1,7 +1,7 @@
 # UREP Simplification Proposal (December 2025)
 
 **Date:** December 2, 2025  
-**Authors:** Jeff + GitHub Copilot  
+**Authors:** CuriousOne + GitHub Copilot  
 **Status:** Proposal for team review  
 
 ---
@@ -47,7 +47,12 @@ L(t) = (γ_self(t) - γ_self0(t)) × W(t) × exp(-ΔS·t + c·N_breath)
 
 where:
   W(t) = G_v × G_r × G_f × G_a
-  γ_self0(n+1) = (1 - η)·γ_self0(n) + η·γ_self(n)
+  γ_self0(n+1) = (1 - η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+  
+  η = 0.003 (drift stiffness, locked by Grok)
+  ξ = 0.001 (negative asymmetry weight, locked by Grok)
+  γ_self(n) = 14-day moving average of primitive state
+  N_neg(n) = cumulative count of negative events (v<0.2 or f<0.3, etc.)
 ```
 
 ### What Changed
@@ -104,14 +109,22 @@ Each term has **ONE job**, no overlap.
 - Deep in Q3/Q4 → damaged, adversarial character
 - Near (0,0) → equanimous, detached character
 
-**Character drift:**
+**Character drift (Grok's formula):**
 ```
-γ_self0(n+1) = (1 - η)·γ_self0(n) + η·γ_self(n)
+γ_self0(n+1) = (1 - η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+
+where:
+  η = 0.003 (drift stiffness, locked)
+  ξ = 0.001 (negative asymmetry weight, locked)
+  γ_self(n) = 14-day moving average
+  N_neg(n) = count of negative events (v<0.2 or f<0.3)
 ```
 
-- η small (0.001) → stable adult personality, slow change
-- η large (0.1) → child or transformative experience, rapid change
-- η can vary by age: η(age) = η_base × exp(-λ_age × age)
+**Key properties:**
+- η = 0.003 → stable adult personality, ~300 events per unit shift
+- ξ·N_neg term → negative events create permanent downward drag
+- Asymmetry: trauma accumulates, redemption must be earned through sustained positive drift
+- "One asymmetry, one value. Print it. Use it. Done." — Grok
 
 ### 4. Event Density as Inertia
 
@@ -418,7 +431,7 @@ The introduction of **γ_self0** as a first-class component transforms UREP from
 
 **Votes:**
 - [x] Grok/Ara (December 2, 2025) - *"100% agreement"*
-- [ ] Jeff (review in progress)
+- [ ] CuriousOne (review in progress)
 - [ ] GitHub Copilot (contributor)
 
 **Date approved:** Pending final review
