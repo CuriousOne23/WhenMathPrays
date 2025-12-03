@@ -52,13 +52,18 @@ y(\tau)
 d\tau
 $$
 
-**γ_self0(t)** = character baseline (slow drift):
+**γ_self0(t)** = character baseline (slow drift with negative asymmetry):
 
 $$
-\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\,\vec{\gamma}_{\text{self},0}(n) + \eta\,\vec{\gamma}_{\text{self}}(n)
+\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\,\vec{\gamma}_{\text{self},0}(n) + \eta\,\vec{\gamma}_{\text{self}}(n) - \xi\,N_{\text{neg}}(n)
 $$
 
-Where η = character plasticity (age-dependent, typically 0.0005 to 0.1)
+Where:
+- η = 0.003 (character plasticity, adult default, locked by Grok)
+- ξ = 0.001 (negative asymmetry weight, locked by Grok)
+- N_neg(n) = cumulative count of negative events
+
+**Asymmetry principle:** Trauma accumulates (ξ·N_neg term pulls γ_self0 downward). Redemption must be earned through sustained positive drift (η term).
 
 **Examples:**
 - Narcissist: γ_self0 = (−3, −2) in Q3 (ego+hate baseline)
