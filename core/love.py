@@ -1,24 +1,29 @@
 # core/love.py
 # WhenMathPrays – Universal Relational Expression Protocol (UREP)
-# Final locked love magnitude function – November 2025 restoration
-# L(t) = γ_self(t,τ) · W(t)
-# with W(t) = product of G_x for v,r,f,a × min(β^k, 3.0) × G_b(b)
-# where b(t) = b_0 + beta_S * (1 - exp(-S/s_S)) accumulates bond from shared moments S
-# and γ_self as complex average of v(u) = m(u) * [cosθ(u), i·sinθ(u)]
+# December 2025 Simplification: γ_self0 character baseline
+# L(t) = (γ_self(t) - γ_self0(t)) × W(t) × exp(-ΔS·t + c·N_breath)
+# with W(t) = product of G_x for v,r,f,a (gates only, no spike or bond terms)
+# γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+# See docs/UREP_2025_Simplification_Proposal.md for full details
 
-from typing import List
+from typing import List, Optional
 import numpy as np
 from typing import Tuple
 
 DEFAULT_GAMMA = 0.0 + 0.0j
 
-# Canonical constants (import from CONSTANTS.md logic – hardcoded here for self-contained execution)
-BETA = 1.30
-W_CAP = 3.0
-DELTA_S = 0.010  # day⁻¹
-C = 0.40
-TAU_DEFAULT = 14  # days
-ALPHA = 1.80  # gate gain
+# Canonical constants (December 2025 - see CONSTANTS.md)
+DELTA_S = 0.010  # day⁻¹ (entropy decay)
+C = 0.40  # breath efficacy
+TAU_DEFAULT = 14  # days (memory window)
+ALPHA = 1.80  # gate gain (LOCKED)
+ETA = 0.003  # character plasticity (adult default, LOCKED by Grok)
+XI = 0.001  # negative asymmetry weight (LOCKED by Grok)
+LAMBDA = 0.003  # event density inertia (romance default)
+
+# REMOVED (December 2025):
+# BETA = 1.30 (spike base)
+# W_CAP = 3.0 (spike ceiling)
 
 def gamma_self(ego_we_state: float = None, enmity_love_state: float = None,
                we_ego_state: float = None, love_enmity_state: float = None) -> complex:
@@ -42,81 +47,118 @@ def gamma_self(ego_we_state: float = None, enmity_love_state: float = None,
     return float(real_part) + 1j * float(imag_part)
 
 def G_x(x: float, alpha: float = ALPHA) -> float:
-    """Canonical gate function – locked form
+    """Canonical gate function – locked form (December 2025)
     G_x(x) = 2x exp(α (x - 0.5)), x ∈ [0,1]
+    α = 1.80 validated by Grok's 212k Monte Carlo simulations
     """
     return 2 * x * np.exp(alpha * (x - 0.5))
 
-def compute_b(S: int, b_0: float, beta_S: float, s_S: float) -> float:
-    """Compute bond state from shared moments
-    b(t) = b_0 + β_S (1 - exp(-S / s_S))
+def W_t(primitives: Tuple[float, float, float, float]) -> float:
+    """External enacted magnitude W(t) = product G_v × G_r × G_f × G_a
     
-    Args:
-        S: Cumulative shared meaningful moments (event counter)
-        b_0: Initial bond condition (0 for strangers, >0 for existing relationships)
-        beta_S: Maximum bond boost from shared moments
-        s_S: Saturation scale for S → b transfer
-    """
-    return b_0 + beta_S * (1 - np.exp(-S / s_S))
-
-def G_b(b: float, beta_b: float = 1.0) -> float:
-    """Bond flux gate – exponential amplification
-    G_b(b) = exp(β_b · b)
-    
-    Args:
-        b: Bond state variable [0, ~1]
-        beta_b: Bond amplification coefficient
-    """
-    return np.exp(beta_b * b)
-
-def count_k(primitives: List[float], saturation_threshold: float = 0.98) -> int:
-    """Resonance spike counter k(t): number of primitives ≥ 0.98"""
-    return sum(1 for p in primitives if p >= saturation_threshold)
-
-def W_t(primitives: Tuple[float, float, float, float], S: int, b_0: float, beta_S: float, s_S: float, beta_b: float = 1.0) -> float:
-    """External enacted magnitude W(t) = product G_v G_r G_f G_a × min(β^k, 3.0) × G_b(b)
+    December 2025 simplification: gates only, no spike or bond terms.
+    Natural spiking emerges from gate product when primitives saturate.
     
     Args:
         primitives: (v, r, f, a) - four fast primitives [0,1]
-        S: Cumulative shared meaningful moments
-        b_0: Initial bond condition
-        beta_S: Shared breath → bond transfer parameter
-        s_S: Saturation scale
-        beta_b: Bond amplification coefficient
+    
+    Returns:
+        W(t): Emotional intensity (valence-neutral)
     """
     v, r, f, a = primitives
-    G_primitives = G_x(v) * G_x(r) * G_x(f) * G_x(a)
-    k = count_k([v, r, f, a])
-    resonance_spike = min(BETA ** k, W_CAP)
+    return G_x(v) * G_x(r) * G_x(f) * G_x(a)
+
+def update_gamma_self0(
+    gamma_self0_prev: complex,
+    gamma_self_recent: complex,
+    N_neg: int,
+    eta: float = ETA,
+    xi: float = XI
+) -> complex:
+    """Update character baseline via slow drift
     
-    # Compute bond state from shared moments
-    b = compute_b(S, b_0, beta_S, s_S)
-    g_b = G_b(b, beta_b)
+    γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
     
-    return G_primitives * resonance_spike * g_b
+    Args:
+        gamma_self0_prev: Previous character baseline
+        gamma_self_recent: Recent γ_self (14-day moving average)
+        N_neg: Cumulative count of negative events
+        eta: Character plasticity (default 0.003 for adults)
+        xi: Negative asymmetry weight (default 0.001)
+    
+    Returns:
+        Updated γ_self0
+    """
+    # Drift toward recent γ_self (slow adaptation)
+    drift = (1 - eta) * gamma_self0_prev + eta * gamma_self_recent
+    
+    # Subtract negative asymmetry (trauma accumulation)
+    # Applied to imaginary axis (love/hate dimension)
+    negative_drag = xi * N_neg * 1j
+    
+    return drift - negative_drag
+
+def count_negative_events(primitives_history: List[Tuple[float, float, float, float]]) -> int:
+    """Count cumulative negative events (v<0.2 OR f<0.3 OR a<0.2)
+    
+    Args:
+        primitives_history: List of (v, r, f, a) tuples
+    
+    Returns:
+        N_neg: Count of negative events
+    """
+    count = 0
+    for v, r, f, a in primitives_history:
+        if v < 0.2 or f < 0.3 or a < 0.2:
+            count += 1
+    return count
 
 def love(
     primitives: Tuple[float, float, float, float] = None,
-    S: int = 0,
-    b_0: float = 0.0,
-    beta_S: float = 0.0,
-    s_S: float = 1.0,
-    beta_b: float = 1.0,
     gamma_history: List[complex] = None,
+    gamma_self0: complex = DEFAULT_GAMMA,
+    N_breath: int = 0,
     tau: int = TAU_DEFAULT,
     delta_S: float = DELTA_S,
+    c: float = C,
     t: float = 0.0,
     noise: float = 0.0,
-    # Backwards-compatible aliases used by older tests/scripts
+    # Backwards-compatible parameters (deprecated, ignored if new params provided)
+    S: int = None,
+    b_0: float = None,
+    beta_S: float = None,
+    s_S: float = None,
+    beta_b: float = None,
     W: float = None,
     tw: int = None,
 ) -> complex:
     """
-    L(t) = γ_self(t,τ) · W(t) × exp(-ΔS t)
-    - W(t) = product G_x(v,r,f,a) × min(β^k, 3.0) × G_b(b)
-    - b(t) = b_0 + beta_S * (1 - exp(-S/s_S)) bond state from shared moments
-    - γ_self(t,τ) = Complex average of v(u) = m(u) * e^(iθ) over [t-τ, t]
-    - Preserves compatibility with previous scripts – gamma_history can be used as before
+    L(t) = (γ_self - γ_self0) × W(t) × exp(-ΔS·t + c·N_breath)
+    
+    December 2025 simplification:
+    - (γ_self - γ_self0) = displacement from character baseline
+    - W(t) = product G_x(v,r,f,a) (gates only, no spike/bond terms)
+    - γ_self0 = character baseline (innate + trained tendencies)
+    - Entropy includes shared breath counter N_breath
+    
+    Args:
+        primitives: (v, r, f, a) - four fast primitives [0,1]
+        gamma_history: List of γ_self complex values over time
+        gamma_self0: Character baseline (slow-drifting)
+        N_breath: Cumulative shared meaningful moments
+        tau: Memory window for γ_self averaging (default 14 days)
+        delta_S: Entropy decay rate (default 0.010)
+        c: Breath efficacy (default 0.40)
+        t: Time elapsed (days)
+        noise: Optional Gaussian noise
+    
+    Backwards compatibility:
+        S, b_0, beta_S, s_S, beta_b: Old bond parameters (ignored)
+        W: Explicit W value (overrides primitives if provided)
+        tw: Legacy alias for tau
+    
+    Returns:
+        L(t): Complex love magnitude
     """
     if gamma_history is None or len(gamma_history) == 0:
         return 0.0 + 0.0j
@@ -127,36 +169,72 @@ def love(
     else:
         tau_use = tau
 
+    # Compute γ_self as moving average
     if tau_use == 0:
         gamma_avg = gamma_history[-1]
     else:
         recent = gamma_history[-tau_use:] if len(gamma_history) >= tau_use else gamma_history
         gamma_avg = np.mean(recent)
 
-    # If caller provided an explicit W (legacy tests), use it; otherwise compute
-    # W from primitives.
+    # Displacement from character baseline
+    displacement = gamma_avg - gamma_self0
+    
+    # At equilibrium (γ_self = γ_self0), L(t) = 0
+    if abs(displacement) < 1e-10:
+        return 0.0 + 0.0j
+
+    # Compute W(t) from primitives (or use legacy W if provided)
     if W is not None:
+        # Legacy mode: explicit W value
         W_val = float(W)
     else:
         if primitives is None:
-            raise TypeError("love() requires either `W` or `primitives` to compute W(t)")
-        W_val = W_t(primitives, S, b_0, beta_S, s_S, beta_b)
+            raise TypeError("love() requires either `primitives` or legacy `W` parameter")
+        W_val = W_t(primitives)
 
-    # Growth from real part (Ego/We)
-    growth = np.exp(gamma_avg.real)
+    # Backwards compatibility: use S if N_breath not explicitly provided
+    if N_breath == 0 and S is not None:
+        N_breath = S
 
-    # Direction from imag part (Enmity/Love) – wrapped to [-π, π)
-    im_wrapped = (gamma_avg.imag + np.pi) % (2 * np.pi) - np.pi
+    # Entropy term: exp(-ΔS·t + c·N_breath)
+    entropy = np.exp(-delta_S * t + c * N_breath)
+
+    # Growth from real part of displacement (Ego/We)
+    growth = np.exp(displacement.real)
+
+    # Direction from imag part of displacement (Enmity/Love) – wrapped to [-π, π)
+    im_wrapped = (displacement.imag + np.pi) % (2 * np.pi) - np.pi
     direction = np.exp(1j * im_wrapped)
 
-    # Decay
-    decay = np.exp(-delta_S * t)
-
-    L = W_val * growth * direction * decay
+    L = W_val * growth * direction * entropy
 
     if noise and noise > 0:
         L += np.random.normal(0, noise) + 1j * np.random.normal(0, noise)
 
     return L
 
-__all__ = ["gamma_self", "love", "DEFAULT_GAMMA", "G_x", "G_b", "compute_b", "W_t"]
+# LEGACY FUNCTIONS (deprecated, maintained for backwards compatibility)
+def compute_b(S: int, b_0: float, beta_S: float, s_S: float) -> float:
+    """DEPRECATED: Bond state computation (pre-December 2025)
+    Use γ_self0 displacement instead. Maintained for old test scripts.
+    """
+    return b_0 + beta_S * (1 - np.exp(-S / s_S))
+
+def G_b(b: float, beta_b: float = 1.0) -> float:
+    """DEPRECATED: Bond gate (pre-December 2025)
+    Use γ_self0 displacement instead. Maintained for old test scripts.
+    """
+    return np.exp(beta_b * b)
+
+__all__ = [
+    "gamma_self", 
+    "love", 
+    "DEFAULT_GAMMA", 
+    "G_x", 
+    "W_t",
+    "update_gamma_self0",
+    "count_negative_events",
+    # Legacy exports (deprecated)
+    "G_b", 
+    "compute_b"
+]

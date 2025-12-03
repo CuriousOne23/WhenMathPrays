@@ -8,14 +8,22 @@
 
 ## Framework Stability
 
+**December 2025 Update:** Framework simplified with γ_self0 character baseline.
+
 | Constant | Status | Notes |
 |----------|--------|-------|
 | **α = 1.80** | **LOCKED** | Gating function calibration validated via 212k Monte Carlo runs. Do NOT change. |
-| β = 1.30 | Reference | Spike growth rate. May vary by relationship intensity. |
-| W_cap = 3.0 | Reference | Enacted magnitude ceiling. May vary by relationship type. |
+| **η = 0.003** | **LOCKED (adult)** | Character plasticity locked by Grok. May vary by age (see CONSTANTS.md). |
+| **ξ = 0.001** | **LOCKED** | Negative asymmetry weight locked by Grok (trauma accumulation). |
+| λ = 0.001–0.01 | Tunable | Event density inertia. Varies by relationship class (see CONSTANTS.md). |
 | ΔS = 0.010 | Reference | Entropy decay rate. May vary by application timescale. |
 | τ = 14 days | Reference | Entrainment window. May vary by relationship class. |
 | **c = 0.40** | **Most Iffy** | Breath efficacy highly scenario-dependent. Requires empirical tuning per duration/type. |
+
+**REMOVED (December 2025):**
+- ~~β = 1.30~~ (spike base, no longer used)
+- ~~W_cap = 3.0~~ (spike ceiling, gates spike naturally)
+- ~~β_S, s_S, b_0, β_b~~ (bond parameters, replaced by γ_self0)
 
 **Key Insight:** The breath term `c` is the most uncertain parameter in the framework. It appears to scale with relationship duration, breath accumulation rate, and relationship intensity in ways not yet fully understood.
 
@@ -108,6 +116,45 @@ When applying the equation to a new scenario:
 - **Test cross-scenario** to ensure changes don't break other use cases
 - **Flag uncertainty** when tuning is empirical vs theory-driven
 - **Link to this doc** from all implementation code that uses non-canonical values
+
+---
+
+## December 2025 Simplification
+
+**Date:** December 2, 2025  
+**Proposed by:** CuriousOne + GitHub Copilot  
+**Approved by:** Grok/Ara (100% agreement)  
+**Status:** Proposal phase, pending implementation
+
+### What Changed
+
+**Canonical equation (NEW):**
+```
+L(t) = (γ_self - γ_self0) × W(t) × exp(-ΔS·t + c·N_breath)
+
+where:
+  W(t) = G_v × G_r × G_f × G_a (gates only)
+  γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n)
+```
+
+**Key changes:**
+- Removed min(β^k, 3) spike term → gates spike naturally
+- Removed G_b(b) bond amplifier → memory in γ_self0 position
+- Added γ_self0 = character baseline (innate + trained tendencies)
+- Added (γ_self - γ_self0) displacement → main signal
+- Added η = 0.003 (character drift rate, locked by Grok)
+- Added ξ = 0.001 (negative asymmetry, locked by Grok)
+- Added λ = event density inertia (tunable by class)
+
+**Benefits:**
+- 3 fewer parameters (6 instead of 9)
+- Natural symmetry for love/hate
+- Clearer semantics (each term has ONE job)
+- Memory emerges from position + event density
+
+**Implementation status:** All scenarios will need re-validation with new equation once implemented in core/love.py.
+
+**See:** docs/UREP_2025_Simplification_Proposal.md for full details.
 
 ---
 
