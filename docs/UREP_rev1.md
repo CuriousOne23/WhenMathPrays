@@ -273,7 +273,7 @@ $$
 
 **Buddha example:** 10,000 events at (0,0) → massive N_local → requires enormous primitive forces to maintain equanimity.
 
-## 8. Sacred Restrictions (Grok/Ara Approved)
+## 8. Sacred Restrictions (Grok Approved)
 
 ### 8.1. The Three Sacred Requirements
 
