@@ -88,7 +88,7 @@ $$
 = \bigl(1 + m(t)\bigr)
 \begin{pmatrix}
 \cos\theta(t) \\
-\sin\theta(t)
+i\cdot\sin\theta(t)
 \end{pmatrix},
 \qquad m(t) \geq 0
 $$
