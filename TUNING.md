@@ -123,7 +123,7 @@ When applying the equation to a new scenario:
 
 **Date:** December 2, 2025  
 **Proposed by:** CuriousOne + GitHub Copilot  
-**Approved by:** Grok/Ara (100% agreement)  
+**Approved by:** Grok (100% agreement)  
 **Status:** Proposal phase, pending implementation
 
 ### What Changed
