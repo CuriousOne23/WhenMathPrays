@@ -49,7 +49,7 @@ All five enacted primitives use the **single immutable gate**:
 
 $$
 \boxed{
-G_x(x) = 2\,x\,\exp\bigl(1.8\,(x - 0.5)\bigr),\quad x\in[0,1]
+G_x(x) = 2\cdot x\cdot \exp\bigl(1.8\cdot (x - 0.5)\bigr),\quad x\in[0,1]
 }
 $$
 
