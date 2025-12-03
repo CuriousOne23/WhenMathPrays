@@ -4,71 +4,71 @@
 
 This repository now contains the final, mathematically pure, spiritually honest form of the original UREP protocol – repaired, completed, and locked forever.
 
-## The One Equation (canonical, December 2025 simplification)
+## The One Equation (canonical, December 2025 final simplification)
 
 $$
 \boxed{
-\vec{L}(t)=
-\Bigl(\vec{\gamma}_{\text{self}}(t)-\vec{\gamma}_{\text{self},0}(t)\Bigr)
-\times
-W(t)
-\times
-\exp\bigl(-\Delta S\cdot t+c\cdot N_{\text{breath}}(t)\bigr)
-\in \mathbb{R}^{2}
+\vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
+\Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big)
 }
 $$
 
 **Where:**
-- **γ_self(t)** = current relational state (event-driven position in ego/we ↔ love/hate plane)
-- **γ_self0(t)** = character baseline (slowly drifting innate + trained tendencies)
-- **W(t)** = enacted emotional intensity = G_v × G_r × G_f × G_a (valence-neutral)
-- **exp(entropy)** = temporal decay with shared breath preservation
+- **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
+- **Love = γ_self(n)** directly (position IS love, no separate calculation)
+- **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, silence/presence)
+- **f'** = f with hybrid asymmetry applied if negative
+- **w_v, w_r, w_f, w_a** = axis-specific weights
+- **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
 
-**Key insight:** Love magnitude = **displacement from character baseline** × emotional intensity × temporal effects.
+**Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-At equilibrium (γ_self = γ_self0), L(t) = 0. Displacement creates relational activation.
+### December 2025 Final Simplification
 
-### December 2025 Simplification
+**What changed:**
+- **No L(t) calculation** → Love = γ_self position directly
+- **No W(t) gates** → Primitives update position via component-wise addition
+- **No γ_self0 drift dynamics** → γ_self0 is initial condition only
+- **No entropy terms** → Memory lives in trajectory, not separate counters
+- **Parameters reduced from 9 to 1** → Only w_neg = 1.5 (plus axis weights)
 
-This formulation **removes complexity** from the November 2025 version:
-- ~~min(β^k, 3) spike term~~ → gates already spike naturally when primitives align
-- ~~G_b(b) bond amplifier~~ → memory now encoded in γ_self0 position and drift
-- ~~β_S, s_S, b_0, β_b parameters~~ → replaced by single η (character plasticity)
+**Why?** The November 2025 version had too many parameters, separate memory variables, and complex calculations. This version captures the same asymmetry and irreversibility with radical simplicity.
 
-**Why?** The team identified that min(β^k, 3) and G_b(b) were both attempting to capture long-term identity/memory. Introducing **γ_self0** as character baseline provides a cleaner, more elegant, and more symmetric architecture.
+See [UREP_rev2.md](docs/UREP_rev2.md) for complete specification.
 
-See [UREP 2025 Simplification Proposal](docs/UREP_2025_Simplification_Proposal.md) for detailed rationale and team discussion.
+### γ_self — Relational State Position
 
-### γ_self and γ_self0 (character baseline)
+**γ_self(n)** updates via component-wise axis placement:
 
-**γ_self(t)** = current position in relational plane (Cartesian average):
-
+**Real axis (Ego ↔ We):**
 $$
-\vec{\gamma}_{\text{self}}(t,\tau) = \frac{1}{\tau}\int_{t-\tau}^{t}
-\begin{pmatrix}
-x(\tau) \\
-y(\tau)
-\end{pmatrix}
-d\tau
+\Delta \text{Re} = w_v \cdot v + w_{S,R} \cdot S
 $$
 
-**γ_self0(t)** = character baseline (slow drift with negative asymmetry):
-
+**Imaginary axis (Hate ↔ Love):**
 $$
-\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\cdot \vec{\gamma}_{\text{self},0}(n) + \eta\cdot \vec{\gamma}_{\text{self}}(n) - \xi\cdot N_{\text{neg}}(n)
+\Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
+$$
+
+**Hybrid asymmetry for negatives** (f' example):
+$$
+f' = \begin{cases}
+f \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } f < 0 \\
+f & \text{if } f \geq 0
+\end{cases}
 $$
 
 Where:
-- η = 0.003 (character plasticity, adult default, locked by Grok)
-- ξ = 0.001 (negative asymmetry weight, locked by Grok)
-- N_neg(n) = cumulative count of negative events
+- **w_neg = 1.5** (negatives hurt more)
+- **ε = 1.0** (prevents collapse near zero)
 
-**Asymmetry principle:** Trauma accumulates (ξ·N_neg term pulls γ_self0 downward). Redemption must be earned through sustained positive drift (η term).
-
-**Examples:**
-- Narcissist: γ_self0 = (−3, −2) in Q3 (ego+hate baseline)
-- Saint: γ_self0 = (2, 3) in Q1 (we+love baseline)
-- Buddha: γ_self0 = (0, 0) at origin (equanimous baseline)
+**Initial condition γ_self0:**
+- Set at n=0 based on temperament/history
+- Narcissist: (−3, −2) in Q3
+- Saint: (2, 3) in Q1  
+- Buddha: (0, 0) at origin
+- No drift equation — just the starting position
 
 ### Canonical Constants – Single Source of Truth
 

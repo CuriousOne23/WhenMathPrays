@@ -1,0 +1,61 @@
+day,v,r,f,a,S,notes
+1,3.0,4.0,5.0,2.0,1.0,baseline positive
+2,3.0,4.0,5.0,2.0,1.0,baseline positive
+3,3.0,4.0,5.0,2.0,1.0,baseline positive
+4,3.0,4.0,5.0,2.0,1.0,baseline positive
+5,3.0,4.0,5.0,2.0,1.0,baseline positive
+6,3.0,4.0,5.0,2.0,1.0,baseline positive
+7,3.0,4.0,5.0,2.0,1.0,baseline positive
+8,3.0,4.0,5.0,2.0,1.0,baseline positive
+9,3.0,4.0,5.0,2.0,1.0,baseline positive
+10,3.0,4.0,5.0,2.0,1.0,baseline positive
+11,3.0,2.0,-4.0,1.0,0.0,betrayal event (trust rupture)
+12,2.0,1.0,1.0,1.0,2.0,early repair (atonement)
+13,2.0,1.0,1.0,1.0,2.0,early repair
+14,2.0,1.0,1.0,1.0,2.0,early repair
+15,2.0,1.0,1.0,1.0,2.0,early repair
+16,2.0,1.0,1.0,1.0,2.0,early repair
+17,2.0,1.0,1.0,1.0,2.0,early repair
+18,2.0,1.0,1.0,1.0,2.0,early repair
+19,2.0,1.0,1.0,1.0,2.0,early repair
+20,2.0,1.0,1.0,1.0,2.0,early repair
+21,3.0,3.0,2.0,2.0,2.0,repair strengthening
+22,3.0,3.0,2.0,2.0,2.0,repair strengthening
+23,3.0,3.0,2.0,2.0,2.0,repair strengthening
+24,3.0,3.0,2.0,2.0,2.0,repair strengthening
+25,3.0,3.0,2.0,2.0,2.0,repair strengthening
+26,3.0,3.0,2.0,2.0,2.0,repair strengthening
+27,3.0,3.0,2.0,2.0,2.0,repair strengthening
+28,3.0,3.0,2.0,2.0,2.0,repair strengthening
+29,3.0,3.0,2.0,2.0,2.0,repair strengthening
+30,3.0,3.0,2.0,2.0,2.0,repair strengthening
+31,3.0,4.0,3.0,2.0,2.0,gradual return
+32,3.0,4.0,3.0,2.0,2.0,gradual return
+33,3.0,4.0,3.0,2.0,2.0,gradual return
+34,3.0,4.0,3.0,2.0,2.0,gradual return
+35,3.0,4.0,3.0,2.0,2.0,gradual return
+36,3.0,4.0,3.0,2.0,2.0,gradual return
+37,3.0,4.0,3.0,2.0,2.0,gradual return
+38,3.0,4.0,3.0,2.0,2.0,gradual return
+39,3.0,4.0,3.0,2.0,2.0,gradual return
+40,3.0,4.0,3.0,2.0,2.0,gradual return
+41,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+42,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+43,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+44,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+45,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+46,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+47,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+48,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+49,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+50,3.0,4.0,4.0,2.0,2.0,trust rebuilding
+51,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+52,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+53,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+54,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+55,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+56,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+57,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+58,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+59,3.0,4.0,5.0,2.0,2.0,full recovery baseline
+60,3.0,4.0,5.0,2.0,2.0,full recovery baseline
