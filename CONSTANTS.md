@@ -60,6 +60,13 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big)
 }
 $$
 
+**Primitive normalization:**
+$$
+x = \frac{\text{human\_scale}}{10}
+$$
+
+Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
+
 **Hybrid asymmetry for negatives:**
 $$
 p' = \begin{cases}
