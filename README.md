@@ -13,7 +13,7 @@ $$
 \times
 W(t)
 \times
-\exp\bigl(-\Delta S\,t+c\,N_{\text{breath}}(t)\bigr)
+\exp\bigl(-\Delta S\cdot t+c\cdot N_{\text{breath}}(t)\bigr)
 \in \mathbb{R}^{2}
 }
 $$
@@ -55,7 +55,7 @@ $$
 **γ_self0(t)** = character baseline (slow drift with negative asymmetry):
 
 $$
-\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\,\vec{\gamma}_{\text{self},0}(n) + \eta\,\vec{\gamma}_{\text{self}}(n) - \xi\,N_{\text{neg}}(n)
+\vec{\gamma}_{\text{self},0}(n+1) = (1-\eta)\cdot \vec{\gamma}_{\text{self},0}(n) + \eta\cdot \vec{\gamma}_{\text{self}}(n) - \xi\cdot N_{\text{neg}}(n)
 $$
 
 Where:
