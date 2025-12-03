@@ -127,7 +127,7 @@ These axes are immutable. No implementation may rotate or redefine them.
 
 ### 4.1. Character Baseline Dynamics
 $$
-\gamma_{\text{self},0}(n+1) = (1-\eta)\,\gamma_{\text{self},0}(n) + \eta\,\gamma_{\text{self}}(n) - \xi\,N_{\text{neg}}(n)
+\gamma_{\text{self},0}(n+1) = (1-\eta)\cdot\gamma_{\text{self},0}(n) + \eta\cdot\gamma_{\text{self}}(n) - \xi\cdot N_{\text{neg}}(n)
 $$
 
 **Where:**
@@ -221,7 +221,7 @@ $$
 
 ### 6.1. Entropy with Shared Breath Counter
 $$
-\exp\bigl(-\Delta S\,t + c\,N_{\text{breath}}(t)\bigr)
+\exp\bigl(-\Delta S\cdot t + c\cdot N_{\text{breath}}(t)\bigr)
 $$
 
 **Where:**
