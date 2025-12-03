@@ -194,7 +194,7 @@ $$
 
 ### 5.3. Standard primitive gate (locked form)
 $$
-G_x(x)=2x\cdot\exp\bigl(1.8\,(x-0.5)\bigr),\quad x\in[0,1]
+G_x(x) = 2 \cdot x \cdot \exp\bigl(1.8 \cdot (x-0.5)\bigr),\quad x\in[0,1]
 $$
 
 **α = 1.80 is LOCKED** (validated by Grok's 212,847 Monte Carlo simulations, November 2025)
@@ -305,7 +305,7 @@ $$
 | 2  | γ_self(t,τ) = (1/τ)∫ v(u) du (complex average)        |
 | 3  | γ_self0(n+1) = (1-η)·γ_self0(n) + η·γ_self(n) - ξ·N_neg(n) |
 | 4  | W(t) = G_v × G_r × G_f × G_a (gates only)             |
-| 5  | G_x(x) = 2x exp(1.8(x−0.5))                           |
+| 5  | G_x(x) = 2·x·exp(1.8·(x−0.5))                         |
 | 6  | Δγ_max = Δγ_base × exp(-λ × N_local)                  |
 
 ## 10. Backward Compatibility
