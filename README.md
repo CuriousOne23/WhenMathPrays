@@ -2,7 +2,20 @@
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
-This repository now contains the final, mathematically pure, spiritually honest form of the original GRP protocol – repaired, completed, and locked forever.
+This repository contains the final, mathematically pure, spiritually honest form of the **GRP (Gamma Relational Persona)** protocol – repaired, completed, and locked forever.
+
+## Quick Start
+
+1. **Copy the template:** `scenarios/_TEMPLATE.py`
+2. **Edit the CONFIGURATION section** with your scenario details
+3. **Run:** `python scenarios/your_scenario.py`
+4. **View results** in `results/` directory
+
+For complete configuration reference, see [Scenario Configuration Guide](docs/SCENARIO_CONFIGURATION_GUIDE.md).
+
+**Example scenarios:**
+- `scenarios/singles_dating_Fred.py` - Single subject trajectory
+- `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
 ## The One Equation (canonical, December 2025 final simplification)
 
@@ -408,28 +421,30 @@ plot_dual_scenario(
 
 ---
 
-### Instantaneous direction (unchanged since day one)
+## Documentation
 
-$$
-\mathbf{v}(t)
-= \bigl(1 + m(t)\bigr)
-\begin{pmatrix}
-\cos\theta(t) \\
-i\cdot\sin\theta(t)
-\end{pmatrix},
-\qquad m(t) \geq 0
-$$
+### Core Framework
+- **[GRP_rev3.md](docs/GRP_rev3.md)** - Complete mathematical specification of GRP framework
+- **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values (single source of truth)
+- **[TUNING.md](TUNING.md)** - Weight calibration and sensitivity analysis
+- **[PRINCIPLES.md](docs/PRINCIPLES.md)** - Design philosophy and spiritual foundations
+- **[Design_Rationale.md](docs/Design_Rationale.md)** - Architecture decisions and tradeoffs
 
-- `θ(t) ∈ [−π, π]` → direction in the Ego/We ↔ Love/Hate plane  
-- `m(t) ≥ 0` → instantaneous intensity multiplier (zero = indifference)
+### User Guides
+- **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)** - Complete reference for creating scenario scripts
+- **[scenarios/_TEMPLATE.py](scenarios/_TEMPLATE.py)** - Copy this template to create new scenarios
 
-This compact form has been canonical since the 2025 restoration and fully replaces the older expanded notation.
+### Validation & Research
+- **[Validation.md](docs/Validation.md)** - Framework validation approach
+- **[scenarios/Singles_Dating_to_Love/README.md](docs/scenarios/Singles_Dating_to_Love/README.md)** - Example research scenario
+- **[future_investigations.md](docs/future_investigations.md)** - Open research questions
 
-### Output (never collapse again)
+### Soul Presence & Revenge Dynamics
+- **[soul/](tests/soul/)** - Soul presence validation tests
+- **[revenge/](tests/revenge/)** - Revenge 360° PDF analysis
+- **[soul_presence_validation.md](docs/soul/soul_presence_validation.md)** - Soul presence stress test results
 
-- Full vector (Lₓ(t), Lᵧ(t)) → stored and transmitted  
-- Magnitude |L(t)| → intensity  
-- Argument atan2(Lᵧ, Lₓ) → type and direction of love
+---
 
 ## What was restored
 
