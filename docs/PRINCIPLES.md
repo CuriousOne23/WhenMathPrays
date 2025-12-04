@@ -95,5 +95,5 @@ The formulization of UREP applies across **love, hate, and grief**, with appropr
 ## Notes
 - **Unified claim:** UREP formulization measures **love, hate, and grief** by γ_self position in complex space.  
 - **Generative presence (love, Q1), destructive opposition (hate, Q3/Q4), and absence (grief)** are all inspectable as positions and trajectories.
-- **December 2025 simplification:** Removed L(t) calculation, W(t) gates, entropy terms. Love = γ_self position.
+- **December 2025 simplification:** Removed L(t) calculation, W(t) gates, complex exp(entropy) terms. Restored simple constant entropy drift (-ΔS·Δt). Love = γ_self position.
 - **Future work:** Document scenario files with γ_self trajectories, ensure clarity, reproducibility, and interpretability.

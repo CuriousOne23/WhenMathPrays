@@ -14,6 +14,7 @@
 |-----------|---------------|--------|-------|
 | **w_neg** | 1.5 | **LOCKED** | Negatives hurt 50% more. DO NOT CHANGE. |
 | **ε** | 1.0 | **LOCKED** | Collapse prevention threshold. DO NOT CHANGE. |
+| **ΔS** | 0.02 | Tunable | Entropy drift rate per time unit (default 0.02) |
 | w_v | 0.8 | Tunable | Visibility weight (real axis) |
 | w_r | 1.0 | Tunable | Resonance weight (imaginary axis) |
 | w_f | 1.2 | Tunable | Fidelity weight (imaginary axis, strongest by default) |
@@ -23,8 +24,11 @@
 
 **REMOVED (December 3, 2025):**
 - ~~α = 1.80~~ (gates, no longer used)
-- ~~β, W_cap, ΔS, c~~ (L(t) calculation removed)
+- ~~β, W_cap, c~~ (L(t) calculation removed)
 - ~~η, ξ, λ~~ (drift equations removed)
+
+**RESTORED (December 3, 2025 evening):**
+- **ΔS = 0.02** (entropy drift) — constant leftward pull toward Ego axis, scaled by time between events
 
 **Key Insight:** Weights determine how primitives map to γ-space axes. Fidelity (w_f=1.2) has strongest default impact on imaginary axis (Love↔Hate). Visibility (w_v=0.8) and Silence (w_S,R=0.5, w_S,I=0.5) contribute to both axes.
 

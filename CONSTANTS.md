@@ -34,8 +34,9 @@ Last updated: December 3, 2025 (Final Simplification)
 
 ## Core Canonical Parameters (December 2025 Final Simplification)
 
-**REMOVED (Dec 3, 2025):** β, W_cap, ΔS, c, τ_default, α (gates), σ_fast, σ_ent, η, ξ, λ  
-**Reason:** Simplified to "Love = γ_self position" — no L(t) calculation, no gates, no entropy, no drift
+**REMOVED (Dec 3, 2025):** β, W_cap, c, τ_default, α (gates), σ_fast, σ_ent, η, ξ, λ  
+**RESTORED (Dec 3, 2025 evening):** ΔS (entropy drift) — constant leftward pull toward Ego axis  
+**Reason:** Simplified to "Love = γ_self position" — no L(t) calculation, no gates, no drift equation for γ_self0
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
@@ -47,6 +48,8 @@ Last updated: December 3, 2025 (Final Simplification)
 | **w_{S,I}** | 0.5 | – | Silence/presence (imaginary axis contribution) | Default, tunable |
 | **w_neg** | 1.5 | – | Negative asymmetry multiplier (negatives hurt 50% more) | LOCKED |
 | **ε** | 1.0 | – | Collapse prevention threshold for hybrid asymmetry | LOCKED |
+| **ΔS** (delS) | 0.02 | time⁻¹ | Entropy drift rate (constant leftward pull per time unit) | Default, tunable |
+| **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
 
 ---
 
@@ -56,9 +59,18 @@ $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big)
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
+\Delta S \cdot \Delta t
 }
 $$
+
+**Entropy drift:** Relationships naturally drift toward isolated self-focus (Ego axis) without maintenance.
+- **ΔS = 0.02** (default): Entropy drift rate per time unit
+- **Δt**: Time elapsed between events (in days/weeks/months per CSV time_unit)
+- **entropy_per_event=False** (default): Drift scales with time (realistic decay)
+- **entropy_per_event=True** (override): Fixed -ΔS per event regardless of time spacing
+- Effect: Love/Hate (imaginary) decay toward 0, We decays toward Ego (negative real)
+- To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 
 **Primitive normalization:**
 $$
