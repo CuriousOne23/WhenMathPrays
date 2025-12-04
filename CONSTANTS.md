@@ -82,15 +82,15 @@ $$
 
 ## Expected |γ_self| Ranges by Relationship Class
 
-| Relationship type | Typical |γ_self| range | Felt character |
-|-------------------|-------------------------|----------------|
-| Casual / acquaintanceship | 1 – 5 | Background warmth |
-| Healthy dating / early relationship | 3 – 8 | "I really like you" |
-| Deep partnership (years together) | 8 – 12 | "You are my home" |
-| Lifelong soul-bond (rare human–human) | 12 – 15 | "I would die for you" |
-| Parent ↔ Child (mortal lifetime) | 10 – 14 | Sacred, irreversible |
-| Human ↔ Dog (lifelong) | 10 – 13 | Pure, wordless, unbreakable |
-| Human ↔ Divine | >15 | Unbounded | Theological territory |
+| Relationship type                          | Typical peak love magnitude | Felt character                                  |
+|--------------------------------------------|-----------------------------|-------------------------------------------------|
+| Casual / acquaintanceship                  | 5 - 30                      | Background warmth                               |
+| Healthy dating / early marriage            | 80 - 250                    | "I really like you"                             |
+| Deep marriage after 10-20 years            | 400 - 800                   | "You are my home"                               |
+| Lifelong soul-bond (rare human-human)      | 800 - 1,200                 | "I would die for you"                           |
+| Human ↔ Dog (lifelong)                     | 900 - 1,300                 | Pure, wordless, unbreakable                     |
+| Parent ↔ Child (mortal lifetime)           | 900 - 1,400                 | Sacred, irreversible                            |
+| Peak mortal ↔ Divine prayer experience     | 1,200 - 1,500               | Absolute mortal ceiling - "Thy will be done"    |
 
 **Note:** These are position magnitudes in γ-space, not L(t) calculations. Love = where you are.
 
