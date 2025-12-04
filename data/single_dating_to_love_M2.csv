@@ -1,4 +1,5 @@
 name,Single Dating to Love - M2
+time_unit,days
 day,v,r,f,a,S,notes,marker,locked
 0,0,0,0,0,0,"Initial condition: cautious but higher love",,*
 7,1,-2,-2,-2,-2,"First date: feels pressure - pulls back",circle,
