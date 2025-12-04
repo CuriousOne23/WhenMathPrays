@@ -78,8 +78,9 @@ $$
 - To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 
 **Primitive normalization:**
+
 $$
-x = \frac{\text{human\_scale}}{10}
+x = \frac{\text{human-scale}}{10}
 $$
 
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
