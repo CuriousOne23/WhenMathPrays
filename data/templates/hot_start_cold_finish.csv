@@ -1,6 +1,4 @@
-name,Hot Start Cold Finish
-time_unit,days
-day,v,r,f,a,S,notes,marker,locked
+step,v,r,f,a,S,notes,marker,locked
 0,8,9,9,8,8,"Intense initial attraction: passionate start",star,*
 7,9,9,10,9,9,"Honeymoon phase: everything feels perfect",,
 14,9,8,9,8,8,"Still very high but slight reality creeping in",,

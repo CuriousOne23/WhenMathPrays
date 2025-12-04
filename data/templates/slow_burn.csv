@@ -1,6 +1,4 @@
-name,Slow Burn
-time_unit,days
-day,v,r,f,a,S,notes,marker,locked
+step,v,r,f,a,S,notes,marker,locked
 0,2,1,2,1,0,"Initial meeting: cautious and reserved",,*
 7,2,2,2,2,1,"Getting to know each other slowly",,
 14,3,2,3,2,1,"Small steps forward",,
