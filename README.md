@@ -439,10 +439,10 @@ plot_dual_scenario(
 - **[scenarios/Singles_Dating_to_Love/README.md](docs/scenarios/Singles_Dating_to_Love/README.md)** - Example research scenario
 - **[future_investigations.md](docs/future_investigations.md)** - Open research questions
 
-### Soul Presence & Revenge Dynamics
-- **[soul/](tests/soul/)** - Soul presence validation tests
+### Shared Breath & Revenge Dynamics
+- **[soul/](tests/soul/)** - Shared Breath validation tests
 - **[revenge/](tests/revenge/)** - Revenge 360° PDF analysis
-- **[soul_presence_validation.md](docs/soul/soul_presence_validation.md)** - Soul presence stress test results
+- **[soul_presence_validation.md](docs/soul/soul_presence_validation.md)** - Shared Breath stress test results
 
 ---
 
