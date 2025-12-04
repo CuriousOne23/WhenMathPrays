@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 # Ensure we can import from the sibling 'core' directory
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 import numpy as np
 import matplotlib.pyplot as plt

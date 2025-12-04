@@ -1,9 +1,9 @@
 # core/love.py
-# WhenMathPrays – Universal Relational Expression Protocol (UREP)
+# WhenMathPrays – Gamma Relational Persona (GRP)
 # December 2025 Final Simplification: Love = γ_self position
 # γ_self(n+1) = γ_self(n) + (w_v·v + w_S,R·S) + i·(w_r·r + w_f·f' + w_a·a + w_S,I·S)
 # where f' = f·w_neg·max(|γ_self(n)|, ε) if f<0 (hybrid asymmetry)
-# See docs/UREP_rev2.md for full specification
+# See docs/GRP_rev3.md for full specification
 
 from typing import Tuple, Dict, Optional
 import numpy as np
@@ -24,7 +24,8 @@ W_NEG = 1.5  # Negative asymmetry multiplier (negatives hurt 50% more)
 EPSILON = 1.0  # Collapse prevention threshold
 
 # Entropy drift (DEFAULT, tunable by scenario)
-DELTA_S = 0.02  # Constant leftward entropy drift per time unit (default 0.02)
+DELTA_S = 0.02  # Entropy drift magnitude per time unit (default 0.02)
+GAMMA_ENTROPY_ATTRACTOR = -8.0 + 0.0j  # Target position for entropy pull (default: far left Ego axis)
 
 # Default weights dictionary
 DEFAULT_WEIGHTS = {
@@ -37,6 +38,7 @@ DEFAULT_WEIGHTS = {
     'w_neg': W_NEG,
     'epsilon': EPSILON,
     'delS': DELTA_S,
+    'gamma_entropy_attractor': GAMMA_ENTROPY_ATTRACTOR,
     'entropy_per_event': False  # False=scale by time (default), True=per event
 }
 
@@ -80,15 +82,16 @@ def update_gamma_self(
     weights: Optional[Dict[str, float]] = None,
     time_delta: float = 1.0
 ) -> complex:
-    """Component-wise update of γ_self position with entropy drift.
+    """Component-wise update of γ_self position with entropy drift toward attractor.
     
-    γ_self(n+1) = γ_self(n) + ΔRe + i·ΔIm - delS·Δt
+    γ_self(n+1) = γ_self(n) + ΔRe + i·ΔIm + entropy_pull
     
     where:
         ΔRe = w_v·v + w_S,R·S  (Ego↔We axis)
         ΔIm = w_r·r + w_f·f' + w_a·a + w_S,I·S  (Hate↔Love axis)
         f' = apply_hybrid_asymmetry(f, |γ_self(n)|)
-        entropy_drift = -delS·Δt (constant leftward pull toward Ego axis, scaled by time)
+        entropy_pull = delS·Δt·(γ_attractor - γ_self) / |γ_attractor - γ_self|
+            (pulls toward configurable attractor position, scaled by time and delS magnitude)
     
     Args:
         gamma_self_current: Current position γ_self(n)
@@ -117,6 +120,7 @@ def update_gamma_self(
     w_neg = weights.get('w_neg', W_NEG)
     epsilon = weights.get('epsilon', EPSILON)
     delS = weights.get('delS', DELTA_S)
+    gamma_entropy_attractor = weights.get('gamma_entropy_attractor', GAMMA_ENTROPY_ATTRACTOR)
     entropy_per_event = weights.get('entropy_per_event', False)
     
     # Compute current magnitude for hybrid asymmetry
@@ -129,15 +133,23 @@ def update_gamma_self(
     delta_real = w_v * v + w_S_R * S  # Ego↔We axis
     delta_imag = w_r * r + w_f * f_prime + w_a * a + w_S_I * S  # Hate↔Love axis
     
-    # Entropy drift: constant leftward pull toward Ego axis
-    # Scale by time_delta unless per-event mode is enabled
-    if entropy_per_event:
-        entropy_drift = -delS + 0j  # Fixed amount per event
+    # Entropy drift: pull toward attractor position
+    # Direction: unit vector from current position toward attractor
+    # Magnitude: delS, scaled by time_delta (or fixed per event)
+    attractor_vector = gamma_entropy_attractor - gamma_self_current
+    attractor_distance = abs(attractor_vector)
+    
+    if attractor_distance > 1e-10:  # Avoid division by zero if already at attractor
+        direction = attractor_vector / attractor_distance
+        if entropy_per_event:
+            entropy_pull = delS * direction  # Fixed magnitude per event
+        else:
+            entropy_pull = (delS * time_delta) * direction  # Scaled by time elapsed
     else:
-        entropy_drift = (-delS * time_delta) + 0j  # Scaled by time elapsed
+        entropy_pull = 0.0 + 0.0j  # Already at attractor
     
     # Update position
-    gamma_self_next = gamma_self_current + delta_real + 1j * delta_imag + entropy_drift
+    gamma_self_next = gamma_self_current + delta_real + 1j * delta_imag + entropy_pull
     
     return gamma_self_next
 

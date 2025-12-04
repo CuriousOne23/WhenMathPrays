@@ -219,6 +219,19 @@ class ScenarioRunner:
             
             prev_day = day
             
+            # Calculate entropy drift magnitude for logging
+            gamma_entropy_attractor = self.weights.get('gamma_entropy_attractor', -8.0+0.0j)
+            attractor_vector = gamma_entropy_attractor - gamma_self
+            attractor_distance = abs(attractor_vector)
+            if attractor_distance > 1e-10:
+                delS = self.weights.get('delS', 0.02)
+                if self.weights.get('entropy_per_event', False):
+                    entropy_drift_magnitude = delS
+                else:
+                    entropy_drift_magnitude = delS * time_delta
+            else:
+                entropy_drift_magnitude = 0.0
+            
             # Store results
             results.append({
                 'day': day,
@@ -226,7 +239,7 @@ class ScenarioRunner:
                 'gamma_y': gamma_self.imag,
                 'gamma_magnitude': abs(gamma_self),
                 'time_delta': time_delta,
-                'entropy_drift': -self.weights.get('delS', 0.05) * (1.0 if self.weights.get('entropy_per_event', False) else time_delta),
+                'entropy_drift': entropy_drift_magnitude,
                 'v_raw': row['v'],
                 'r_raw': row['r'],
                 'f_raw': row['f'],
@@ -604,19 +617,22 @@ def main():
     import copy
     
     parser = argparse.ArgumentParser(
-        description='Run UREP scenario from CSV file',
+        description='Run GRP scenario from CSV file',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   python -m simulations.run_scenario data/scenario.csv
   python -m simulations.run_scenario data/scenario.csv --delS 0.1
   python -m simulations.run_scenario data/scenario.csv --entropy-per-event
-        """
+  python -m simulations.run_scenario data/scenario.csv --attractor="-8+5j"  # Q4 cult scenario
+"""
     )
     parser.add_argument('csv_path', nargs='?', default='data/steady_positive_growth.csv',
                        help='Path to scenario CSV file')
     parser.add_argument('--delS', type=float, default=0.02,
-                       help='Entropy drift rate per time unit (default: 0.02)')
+                       help='Entropy drift magnitude per time unit (default: 0.02)')
+    parser.add_argument('--attractor', type=str, default="-8+0j",
+                       help='Entropy attractor position as complex number (default: "-8+0j"). Examples: "-8+5j" (Q4 cult), "8+5j" (Q1 recovery), "-8-5j" (Q3 despair)')
     parser.add_argument('--entropy-per-event', action='store_true',
                        help='Apply entropy per event instead of per time unit (default: per time unit)')
     
@@ -625,9 +641,8 @@ Examples:
     # Configure weights with entropy parameters
     weights = copy.copy(DEFAULT_WEIGHTS)
     weights['delS'] = args.delS
-    weights['entropy_per_event'] = args.entropy_per_event
-    
-    # Initialize runner
+    weights['gamma_entropy_attractor'] = complex(args.attractor)
+    weights['entropy_per_event'] = args.entropy_per_event    # Initialize runner
     runner = ScenarioRunner(
         csv_path=args.csv_path,
         gamma_self0=0.0 + 0.0j,  # Start at origin

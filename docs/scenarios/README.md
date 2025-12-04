@@ -1,6 +1,6 @@
-# UREP Scenarios
+# GRP Scenarios
 
-This directory contains documented scenarios used to validate and explore the **Universal Relational Intensity framework (UREP)**.  
+This directory contains documented scenarios used to validate and explore the **Gamma Relational Persona framework (GRP)**.  
 Each scenario includes plots, tables, and narrative notes to ensure clarity, reproducibility, and interpretability.
 
 ---
@@ -8,7 +8,7 @@ Each scenario includes plots, tables, and narrative notes to ensure clarity, rep
 ## 📂 Current Scenarios
 
 - **[Singles Dating to Love](Singles_Dating_to_Love/README.md)**  
-  *Why chosen:* Romantic arcs are a natural testbed for UREP because they highlight attraction, wobble, repair, and plateau dynamics. This scenario provides a clear, bounded relational arc with strong narrative markers, making it ideal for validating gamma_self trajectories and love magnitude plots.
+  *Why chosen:* Romantic arcs are a natural testbed for GRP because they highlight attraction, wobble, repair, and plateau dynamics. This scenario provides a clear, bounded relational arc with strong narrative markers, making it ideal for validating gamma_self trajectories and love magnitude plots.
 
 ---
 
@@ -18,22 +18,22 @@ Each scenario includes plots, tables, and narrative notes to ensure clarity, rep
   *Why chosen:* Extends the relational arc into stability and plateau dynamics under shared living conditions, testing long‑term fidelity and repair cycles.
 
 - **Friendship Through Conflict and Repair**  
-  *Why chosen:* Demonstrates that UREP applies beyond romance, capturing wobble and repair cycles in peer relationships.
+  *Why chosen:* Demonstrates that GRP applies beyond romance, capturing wobble and repair cycles in peer relationships.
 
 - **Parent–Child Development Arc**  
-  *Why chosen:* Models asymmetry in agency, altruism, and resonance across growth stages, stressing UREP’s ability to handle unequal dynamics.
+  *Why chosen:* Models asymmetry in agency, altruism, and resonance across growth stages, stressing GRP's ability to handle unequal dynamics.
 
 - **Team Collaboration in Work Projects**  
-  *Why chosen:* Tests shared breath, resonance, and fidelity under collective goals, validating UREP in professional contexts.
+  *Why chosen:* Tests shared breath, resonance, and fidelity under collective goals, validating GRP in professional contexts.
 
 - **Community Trust Building After Crisis**  
-  *Why chosen:* Expands UREP to collective scales, modeling repair arcs and trust dynamics across groups.
+  *Why chosen:* Expands GRP to collective scales, modeling repair arcs and trust dynamics across groups.
 
 # AI–Human Co‑Stewardship (Robotics Collaboration)
 
 This scenario explores the relational arc between a **human operator (H1)** and an **AI‑enabled robotic system (R1)** across 90 days.  
 It focuses on collaboration, calibration, and repair cycles in shared tasks, rather than companionship.  
-The goal is to validate UREP’s ability to measure relational intensity in hybrid agency contexts where humans and machines co‑steward outcomes.
+The goal is to validate GRP's ability to measure relational intensity in hybrid agency contexts where humans and machines co‑steward outcomes.
 
 ---
 
@@ -44,7 +44,7 @@ The goal is to validate UREP’s ability to measure relational intensity in hybr
   - **R1 (Robotic System):** high visibility, low fidelity at start; improves through calibration and shared rhythm.
 - **Metrics tracked:**
   - Gamma_self (agency balance: ego/we vs trust/distrust)
-  - Relational Intensity (UREP dimensions: resonance, fidelity, altruism, shared breath)
+  - Relational Intensity (GRP dimensions: resonance, fidelity, altruism, shared breath)
   - Event markers (Deployment → Calibration → Early failure → Repair → Shared rhythm → Plateau → Outcome)
 
 ---
@@ -66,14 +66,14 @@ The goal is to validate UREP’s ability to measure relational intensity in hybr
 
 ## 📝 Notes
 - **Stress test:** Highlights asymmetry (human agency vs robotic execution) and repair cycles (system failure → human intervention → recalibration).  
-- **UREP validation:** Tests visibility (robot performance), fidelity (trust in system), altruism (human oversight vs robotic optimization), and resonance (shared rhythm in workflow).  
+- **GRP validation:** Tests visibility (robot performance), fidelity (trust in system), altruism (human oversight vs robotic optimization), and resonance (shared rhythm in workflow).  
 
 ---
 
 ## 📌 Why chosen
-- **Hybrid agency:** Demonstrates UREP’s ability to handle relationships where one agent is synthetic but not emotional.  
+- **Hybrid agency:** Demonstrates GRP's ability to handle relationships where one agent is synthetic but not emotional.
 - **Trust dynamics:** Robotics require calibration, repair, and oversight — perfect for testing wobble/repair arcs.  
-- **Scalability:** Extends UREP beyond interpersonal into human–system collaboration, without anthropomorphizing.  
+- **Scalability:** Extends GRP beyond interpersonal into human–system collaboration, without anthropomorphizing.  
 
 ---
 

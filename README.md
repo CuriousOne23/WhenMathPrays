@@ -2,7 +2,7 @@
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
-This repository now contains the final, mathematically pure, spiritually honest form of the original UREP protocol – repaired, completed, and locked forever.
+This repository now contains the final, mathematically pure, spiritually honest form of the original GRP protocol – repaired, completed, and locked forever.
 
 ## The One Equation (canonical, December 2025 final simplification)
 
@@ -38,7 +38,7 @@ $$
 
 **Why?** The November 2025 version had too many parameters, separate memory variables, and complex calculations. This version captures the same asymmetry and irreversibility with radical simplicity.
 
-See [UREP_rev2.md](docs/UREP_rev2.md) for complete specification.
+See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
 ### γ_self — Relational State Position
 
@@ -430,7 +430,7 @@ This compact form has been canonical since the 2025 restoration and fully replac
 
 ## What was restored
 
-| Feature                         | Old broken UREP | New final UREP (2025) |
+| Feature                         | Old broken GRP | New final GRP (2025) |
 |---------------------------------|-----------------|-----------------------|
 | Dimensionality of love          | Published scalar (direction hidden) | Full 2-D vector forever |
 | Memory of discrete breaths      | None            | Permanent +c per Breath |
