@@ -45,16 +45,19 @@ See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 **γ_self(n)** updates via component-wise axis placement:
 
 **Real axis (Ego ↔ We):**
+
 $$
 \Delta \text{Re} = w_v \cdot v + w_{S,R} \cdot S
 $$
 
 **Imaginary axis (Hate ↔ Love):**
+
 $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
 
 **Hybrid asymmetry for negatives** (f' example):
+
 $$
 f' = \begin{cases}
 f \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } f < 0 \\
