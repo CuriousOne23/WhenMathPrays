@@ -1,10 +1,10 @@
-# UREP – Universal Relational Expression Protocol (Revision 2)
+# GRP – Gamma Relational Persona (Revision 3)
 **Valence-neutral, 2-D, empirically extensible framework for modelling love, hate, and all relational intensities between two minds (M1 ↔ M2)**
 
 Status: **December 2025 Final Simplification**  
 Stewardship: Open to rigorous, inspectable contributions  
-Current version: December 3, 2025 (Love = γ_self position paradigm)  
-Previous versions: [UREP.md](UREP.md) (November 2025, retained for reference)
+Current version: December 4, 2025 (Love = γ_self position paradigm)  
+Previous versions: [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
 
 ---
 
@@ -29,12 +29,17 @@ $$
 
 **That's it. No L(t) calculation. No W(t) gates. No separate memory variables.**
 
-**Entropy drift:** Relationships naturally decay toward Ego axis (isolated self-focus) without maintenance. 
-- **Vector direction:** Pure leftward (negative real axis): -ΔS·Δt + 0i
-- **ΔS = 0.02** (default): constant drift rate per time unit
+**Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance. 
+- **Attractor position:** γ_attractor = -8+0j (default: far left Ego axis)
+- **Vector direction:** Unit vector from γ_self toward γ_attractor, scaled by ΔS·Δt
+- **ΔS = 0.02** (default): drift magnitude per time unit
 - **Δt**: time elapsed between events
-- **Effect:** Love/Hate (imaginary) decay toward 0, We decays toward Ego
-- **Configurable:** Set delS=0 to disable, or use --entropy-per-event for fixed drift per event
+- **Default effect:** Love/Hate (imaginary) decay toward 0, We decays toward Ego
+- **Scenario-specific attractors:**
+  - **Q4 cult** (γ_attractor = -8+5j): Hateful-we pulled toward we/love (tribalism, "us vs them")
+  - **Q1 recovery** (γ_attractor = 8+5j): Healthy ego pulled toward love/connection
+  - **Q3 despair** (γ_attractor = -8-5j): Isolated ego sinking into enmity
+- **Configurable:** Set delS=0 to disable, or use --attractor to specify target, or --entropy-per-event for fixed drift per event
 
 ### What Each Term Means
 
@@ -48,7 +53,8 @@ $$
 | **S** | Silence/Presence (shared moments with minimal words) |
 | **w_v, w_r, w_f, w_a** | Axis-specific weights (how much each primitive moves you) |
 | **w_{S,R}, w_{S,I}** | Silence split (real + imaginary contributions) |
-| **ΔS** | Entropy drift rate (constant leftward pull per time unit, default 0.02) |
+| **ΔS** | Entropy drift magnitude (default 0.02) |
+| **γ_attractor** | Target position for entropy pull (default -8+0j) |
 | **Δt** | Time elapsed since last event (scales entropy drift) |
 
 ---

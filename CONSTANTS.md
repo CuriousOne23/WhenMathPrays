@@ -8,7 +8,7 @@ Last updated: December 3, 2025 (Final Simplification)
 
 ## Foundational Principle: Unilateral Perspective
 
-**All UREP variables are computed FROM THE PERSPECTIVE of one mind (M1) ABOUT another mind (M2).**
+**All GRP variables are computed FROM THE PERSPECTIVE of one mind (M1) ABOUT another mind (M2).**
 
 ### What Each Variable Measures
 
@@ -28,7 +28,7 @@ Last updated: December 3, 2025 (Final Simplification)
 - Low primitives = M1 withdrawing from M2 (hiding, disconnecting)
 - **Love = γ_self(n) position** (no separate L(t) calculation)
 
-**Asymmetry is fundamental**: γ_self(M1→M2) ≠ γ_self(M2→M1) in general. Two people in a relationship have completely independent UREP instances.
+**Asymmetry is fundamental**: γ_self(M1→M2) ≠ γ_self(M2→M1) in general. Two people in a relationship have completely independent GRP instances.
 
 ---
 
@@ -59,17 +59,22 @@ $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
-\Delta S \cdot \Delta t
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
+\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
 }
 $$
 
-**Entropy drift:** Relationships naturally drift toward isolated self-focus (Ego axis) without maintenance.
-- **ΔS = 0.02** (default): Entropy drift rate per time unit
+**Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance.
+- **ΔS = 0.02** (default): Entropy drift magnitude per time unit
+- **γ_attractor = -8+0j** (default): Target position for entropy pull (far left Ego axis)
 - **Δt**: Time elapsed between events (in days/weeks/months per CSV time_unit)
 - **entropy_per_event=False** (default): Drift scales with time (realistic decay)
-- **entropy_per_event=True** (override): Fixed -ΔS per event regardless of time spacing
-- Effect: Love/Hate (imaginary) decay toward 0, We decays toward Ego (negative real)
+- **entropy_per_event=True** (override): Fixed ΔS magnitude per event regardless of time spacing
+- Default effect: Love/Hate (imaginary) decay toward 0, We decays toward Ego (negative real)
+- Configurable attractor enables scenario-specific entropy modeling:
+  - **Q4 cult scenarios** (γ_attractor = -8+5j): Hateful-we groups pulled toward we/love space (tribalism, "us vs them")
+  - **Q1 recovery** (γ_attractor = 8+5j): Healthy ego pulled toward love/connection
+  - **Q3 despair** (γ_attractor = -8-5j): Isolated ego sinking into enmity
 - To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 
 **Primitive normalization:**

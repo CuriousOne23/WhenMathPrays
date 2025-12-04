@@ -685,7 +685,7 @@ User: "Create a scenario where two people meet casually, have a crisis at 3 week
 AI: Generates CSV with appropriate arc shape, primitives, and markers
 ```
 
-Uses GPT-4 with UREP domain knowledge to suggest realistic primitive sequences.
+Uses GPT-4 with GRP domain knowledge to suggest realistic primitive sequences.
 
 ---
 

@@ -59,7 +59,7 @@ See the full computed love magnitude table:
 
 ## Reproducibility
 
-All outputs are generated automatically from the locked UREP equation.
+All outputs are generated automatically from the locked GRP equation.
 
 To reproduce:
 ```bash

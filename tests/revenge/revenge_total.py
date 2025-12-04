@@ -3,10 +3,10 @@
 
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent))   # ← this line makes 'core' visible
+sys.path.append(str(Path(__file__).parent.parent.parent))   # ← this line makes 'core' visible
 
-from revenge_manifestation_fnc import run_manifestation
-from revenge_360deg_pdf_fnc import run_360deg_pdf
+from tests.revenge.revenge_manifestation_fnc import run_manifestation
+from tests.revenge.revenge_360deg_pdf_fnc import run_360deg_pdf
 
 def run_all(
     N_SOULS=10_000,

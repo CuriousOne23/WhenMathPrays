@@ -471,7 +471,7 @@ data/
 
 - **CONSTANTS.md**: Canonical parameter values, empirical ranges, archetype data
 - **TUNING.md**: Parameter calibration record, c-tuning history
-- **UREP.md**: Universal Relational Expression Protocol (equation definition)
+- **GRP_rev3.md**: Gamma Relational Persona (equation definition)
 - **tests/gamma_self_quadrants_all_N10000.md**: Archetype γ_self ranges (N=10,000 Monte Carlo)
 - **tests/compute_love_magnitude.py**: Love magnitude computation with signed output
 - **data/Single_Dating_2_Love_*.csv**: Reference scenario format

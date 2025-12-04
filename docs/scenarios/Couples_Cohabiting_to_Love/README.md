@@ -1,7 +1,7 @@
 # Couples Cohabiting to Love
 
 This scenario documents the relational arc of a couple transitioning from **early cohabitation** into a **long‑term partnership**.  
-It explores stability, repair cycles, and plateau dynamics under shared living conditions, validating UREP’s ability to measure relational intensity in sustained contexts.
+It explores stability, repair cycles, and plateau dynamics under shared living conditions, validating GRP's ability to measure relational intensity in sustained contexts.
 
 ---
 

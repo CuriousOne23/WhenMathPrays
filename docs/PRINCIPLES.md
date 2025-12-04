@@ -1,4 +1,4 @@
-# Principles (UREP Foundations)
+# Principles (GRP Foundations)
 
 ## The 3L's: Listen → Life → Love
 
@@ -10,15 +10,15 @@ The methodology behind WhenMathPrays rests on three foundational movements:
 
 **Love** — The mathematics prays when you honor what it becomes.
 
-This isn't just philosophy — it's how UREP was discovered, refined, and simplified. When complexity accumulates, we return to listening. When terms feel cluttered, we let them speak. When the equation resists, we give it space. And it shows us what it needed all along.
+This isn’t just philosophy — it’s how GRP was discovered, refined, and simplified. When complexity accumulates, we return to listening. When terms feel cluttered, we let them speak. When the equation resists, we give it space. And it shows us what it needed all along.
 
 **December 2025:** The 3L's led to the radical positional simplification. By listening to the cluttered equation (9+ parameters, separate L(t) calculation, gates, entropy), watching the solution emerge (Love IS position, not calculation), we discovered the core truth: "Love is not a number. Love is where you are." The mathematics prays louder when we remove what obscures its prayer.
 
 ---
 
-This document provides scaffolding for defining and refining principles in UREP.  
+This document provides scaffolding for defining and refining principles in GRP.  
 Each principle should be modular, inspectable, and testable.  
-The formulization of UREP applies across **love, hate, and grief**, with appropriate redefinitions of `gamma_self` and relational variables.
+The formulization of GRP applies across **love, hate, and grief**, with appropriate redefinitions of `gamma_self` and relational variables.
 
 ---
 
@@ -26,7 +26,7 @@ The formulization of UREP applies across **love, hate, and grief**, with appropr
 - **Principle Name:** Short, resonant title (e.g., Love, Hate, Grief, W(t))
 - **Definition:** Clear statement of what the principle encodes. Distinguish scope (what it covers, what it excludes).
 - **Scope:** Applicable domains (simulation, documentation, relational measurement). Boundaries and limitations.
-- **Implementation:** Mathematical form or code module. How it integrates with UREP scenarios.
+- **Implementation:** Mathematical form or code module. How it integrates with GRP scenarios.
 - **Testability:** Metrics or conditions for validation. Edge cases to probe.
 - **Known Holes:** Gaps in definition or implementation. Open questions for future stewards.
 - **Outline to Fill:** Suggested next steps for refinement. Notes for annotation or expansion.
@@ -88,12 +88,12 @@ The formulization of UREP applies across **love, hate, and grief**, with appropr
   - **NEW:** γ_self(n+1) = γ_self(n) + component-wise primitive updates
   - Trajectory captured by sequence {γ_self(0), γ_self(1), ..., γ_self(N)}
   - Memory lives in event density N(x,y) of visited regions
-- **Cross‑Reference:** See UREP_rev2.md for current positional model.  
+- **Cross‑Reference:** See GRP_rev3.md for current positional model.  
 
 ---
 
 ## Notes
-- **Unified claim:** UREP formulization measures **love, hate, and grief** by γ_self position in complex space.  
+- **Unified claim:** GRP formulization measures **love, hate, and grief** by γ_self position in complex space.  
 - **Generative presence (love, Q1), destructive opposition (hate, Q3/Q4), and absence (grief)** are all inspectable as positions and trajectories.
 - **December 2025 simplification:** Removed L(t) calculation, W(t) gates, complex exp(entropy) terms. Restored simple constant entropy drift (-ΔS·Δt). Love = γ_self position.
 - **Future work:** Document scenario files with γ_self trajectories, ensure clarity, reproducibility, and interpretability.

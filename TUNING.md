@@ -14,7 +14,8 @@
 |-----------|---------------|--------|-------|
 | **w_neg** | 1.5 | **LOCKED** | Negatives hurt 50% more. DO NOT CHANGE. |
 | **ε** | 1.0 | **LOCKED** | Collapse prevention threshold. DO NOT CHANGE. |
-| **ΔS** | 0.02 | Tunable | Entropy drift rate per time unit (default 0.02) |
+| **ΔS** | 0.02 | Tunable | Entropy drift magnitude per time unit (default 0.02) |
+| **γ_attractor** | -8+0j | Tunable | Entropy attractor position (default: far left Ego axis) |
 | w_v | 0.8 | Tunable | Visibility weight (real axis) |
 | w_r | 1.0 | Tunable | Resonance weight (imaginary axis) |
 | w_f | 1.2 | Tunable | Fidelity weight (imaginary axis, strongest by default) |
@@ -28,7 +29,15 @@
 - ~~η, ξ, λ~~ (drift equations removed)
 
 **RESTORED (December 3, 2025 evening):**
-- **ΔS = 0.02** (entropy drift) — constant leftward pull toward Ego axis, scaled by time between events
+- **ΔS = 0.02** (entropy drift magnitude) — pull toward γ_attractor, scaled by time between events
+- **γ_attractor = -8+0j** (default) — far left Ego axis for typical relationship decay
+
+**ENHANCED (December 4, 2025):**
+- **γ_attractor** now configurable for scenario-specific entropy modeling:
+  - Default `-8+0j`: Isolated self-focus (Ego axis)
+  - Q4 cult `-8+5j`: Hateful-we pulled toward we/love (tribalism)
+  - Q1 recovery `8+5j`: Healthy ego pulled toward love/connection
+  - Q3 despair `-8-5j`: Isolated ego sinking into enmity
 
 **Key Insight:** Weights determine how primitives map to γ-space axes. Fidelity (w_f=1.2) has strongest default impact on imaginary axis (Love↔Hate). Visibility (w_v=0.8) and Silence (w_S,R=0.5, w_S,I=0.5) contribute to both axes.
 
@@ -202,9 +211,9 @@ Love = γ_self(n)  (position IS love, no calculation)
 - **Philosophy:** "Love is not a number. Love is where you are."
 - **Memory:** Lives in event density N(x,y), not separate counters
 
-**Implementation status:** Documentation complete (README, UREP_rev2, CONSTANTS, PRINCIPLES). Code refactor pending.
+**Implementation status:** Documentation complete (README, GRP_rev3, CONSTANTS, PRINCIPLES). Code refactor pending.
 
-**See:** docs/UREP_rev2.md for full specification.
+**See:** docs/GRP_rev3.md for full specification.
 
 ---
 
