@@ -79,7 +79,58 @@ All numerical parameters are now defined **once and only once** in the central f
 This file is the only place these values may ever be changed.  
 All other documents (including this one) must link here instead of repeating numbers.
 
-Last updated: 28 November 2025
+Last updated: December 3, 2025
+
+### CSV Scenario Format
+
+Scenarios are defined in CSV files with the following structure:
+
+**Optional metadata row (first line):**
+```csv
+name,Scenario Display Name
+```
+This name will be used in plots and output. If omitted, filename is used.
+
+**Required columns:**
+- `day` - Day number (integer)
+- `v` - Visibility primitive [-10, +10] human scale
+- `r` - Resonance primitive [-10, +10]
+- `f` - Fidelity primitive [-10, +10]
+- `a` - Altruism primitive [-10, +10]
+- `S` - Silence/presence primitive [-10, +10]
+
+**Optional columns:**
+- `notes` - Text description of the event
+- `marker` - Marker type to highlight this point on γ_self trajectory plot
+- `locked` - Use `*` to mark structural rows (don't change), empty = customizable
+
+**Supported marker types:**
+- `star` - ⭐ Star marker (default if unrecognized marker specified)
+- `circle` - ⚫ Circle marker
+- `square` - ◼ Square marker
+- `triangle` - 🔺 Triangle marker
+- `diamond` - 💎 Diamond marker
+- `x` - ✖ X marker
+- `plus` - ➕ Plus marker
+- Leave blank for no marker
+
+Markers appear as yellow symbols with black edges on the trajectory plot, with day labels in yellow boxes.
+
+**Template CSV Files:**
+
+Pre-built scenario templates are available in `data/templates/` (read-only):
+- Use as starting points - copy and customize
+- Rows with `*` in `locked` column = structural anchors (start/end/key events)
+- Empty `locked` column = customize primitives as desired
+
+**Example CSV:**
+```csv
+name,My Custom Scenario
+day,v,r,f,a,S,notes,marker,locked
+0,5,0,2,2,0,"Initial condition",,*
+14,5,-2,2,3,-1,"Early wobble - customize",star,
+60,9,10,10,9,10,"Final outcome",star,*
+```
 
 ### Instantaneous direction (unchanged since day one)
 
