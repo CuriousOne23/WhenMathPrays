@@ -1,0 +1,11 @@
+day,gamma_x,gamma_y,gamma_magnitude,v_raw,r_raw,f_raw,a_raw,S_raw,v_norm,r_norm,f_norm,a_norm,S_norm,notes,marker
+0,-3.0,1.0,3.1622776601683795,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Initial condition: cautious but higher love,
+7,-3.0,1.0,3.1622776601683795,1,-2,-2,-2,-2,0.1,-0.2,-0.2,-0.2,-0.2,First date: feels pressure - pulls back,circle
+14,-3.02,-0.5584199576606168,3.0711940428949918,0,0,1,1,0,0.0,0.0,0.1,0.1,0.0,Early wobble: guarded - tests boundaries,
+21,-3.02,-0.3784199576606168,3.043616543580328,5,5,3,3,3,0.5,0.5,0.3,0.3,0.3,Repair begins: warms as M1 slows pace,diamond
+28,-2.4699999999999998,0.8115800423393831,2.599915799621902,5,6,5,5,5,0.5,0.6,0.5,0.5,0.5,Shared rhythm: enjoys honesty - love rises,
+35,-1.8199999999999998,2.561580042339383,3.14230684582385,6,7,6,6,6,0.6,0.7,0.6,0.6,0.6,Repair complete: feels safe - more engaged,
+42,-1.0399999999999998,4.641580042339383,4.756665353947371,7,8,7,7,7,0.7,0.8,0.7,0.7,0.7,Stable connection: agency rises,
+49,-0.1299999999999999,7.051580042339383,7.052778253533787,8,9,8,8,8,0.8,0.9,0.8,0.8,0.8,Steady connection: participates actively,
+56,0.9100000000000001,9.791580042339383,9.833775456331049,9,9,9,9,9,0.9,0.9,0.9,0.9,0.9,Higher plateau: feels secure,
+60,2.08,12.761580042339384,12.929977771714647,10,10,10,9,10,1.0,1.0,1.0,0.9,1.0,Outcome: stable relationship - stronger love,triangle
