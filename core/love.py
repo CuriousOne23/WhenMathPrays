@@ -23,6 +23,9 @@ W_S_I = 0.5  # Silence/presence (imaginary axis contribution)
 W_NEG = 1.5  # Negative asymmetry multiplier (negatives hurt 50% more)
 EPSILON = 1.0  # Collapse prevention threshold
 
+# Entropy drift (DEFAULT, tunable by scenario)
+DELTA_S = 0.02  # Constant leftward entropy drift per time unit (default 0.02)
+
 # Default weights dictionary
 DEFAULT_WEIGHTS = {
     'w_v': W_V,
@@ -32,7 +35,9 @@ DEFAULT_WEIGHTS = {
     'w_S_R': W_S_R,
     'w_S_I': W_S_I,
     'w_neg': W_NEG,
-    'epsilon': EPSILON
+    'epsilon': EPSILON,
+    'delS': DELTA_S,
+    'entropy_per_event': False  # False=scale by time (default), True=per event
 }
 
 
@@ -72,16 +77,18 @@ def update_gamma_self(
     f: float,
     a: float,
     S: float,
-    weights: Optional[Dict[str, float]] = None
+    weights: Optional[Dict[str, float]] = None,
+    time_delta: float = 1.0
 ) -> complex:
-    """Component-wise update of γ_self position.
+    """Component-wise update of γ_self position with entropy drift.
     
-    γ_self(n+1) = γ_self(n) + ΔRe + i·ΔIm
+    γ_self(n+1) = γ_self(n) + ΔRe + i·ΔIm - delS·Δt
     
     where:
         ΔRe = w_v·v + w_S,R·S  (Ego↔We axis)
         ΔIm = w_r·r + w_f·f' + w_a·a + w_S,I·S  (Hate↔Love axis)
         f' = apply_hybrid_asymmetry(f, |γ_self(n)|)
+        entropy_drift = -delS·Δt (constant leftward pull toward Ego axis, scaled by time)
     
     Args:
         gamma_self_current: Current position γ_self(n)
@@ -91,6 +98,8 @@ def update_gamma_self(
         a: Altruism primitive
         S: Silence/presence primitive (contributes to both axes)
         weights: Optional weight dictionary (defaults to CONSTANTS.md values)
+        time_delta: Time elapsed since last event (default 1.0). 
+                   Used to scale entropy drift. Ignored if entropy_per_event=True.
     
     Returns:
         γ_self(n+1): Updated position
@@ -107,6 +116,8 @@ def update_gamma_self(
     w_S_I = weights.get('w_S_I', W_S_I)
     w_neg = weights.get('w_neg', W_NEG)
     epsilon = weights.get('epsilon', EPSILON)
+    delS = weights.get('delS', DELTA_S)
+    entropy_per_event = weights.get('entropy_per_event', False)
     
     # Compute current magnitude for hybrid asymmetry
     gamma_magnitude = abs(gamma_self_current)
@@ -114,12 +125,19 @@ def update_gamma_self(
     # Apply hybrid asymmetry to fidelity if negative
     f_prime = apply_hybrid_asymmetry(f, gamma_magnitude, w_neg, epsilon)
     
-    # Component-wise updates
+    # Component-wise updates from primitives
     delta_real = w_v * v + w_S_R * S  # Ego↔We axis
     delta_imag = w_r * r + w_f * f_prime + w_a * a + w_S_I * S  # Hate↔Love axis
     
+    # Entropy drift: constant leftward pull toward Ego axis
+    # Scale by time_delta unless per-event mode is enabled
+    if entropy_per_event:
+        entropy_drift = -delS + 0j  # Fixed amount per event
+    else:
+        entropy_drift = (-delS * time_delta) + 0j  # Scaled by time elapsed
+    
     # Update position
-    gamma_self_next = gamma_self_current + delta_real + 1j * delta_imag
+    gamma_self_next = gamma_self_current + delta_real + 1j * delta_imag + entropy_drift
     
     return gamma_self_next
 

@@ -10,7 +10,8 @@ $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big)
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
+\Delta S \cdot \Delta t
 }
 $$
 
@@ -21,6 +22,8 @@ $$
 - **f'** = f with hybrid asymmetry applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
+- **ΔS** = entropy drift rate (default 0.02 per time unit)
+- **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
@@ -30,8 +33,8 @@ $$
 - **No L(t) calculation** → Love = γ_self position directly
 - **No W(t) gates** → Primitives update position via component-wise addition
 - **No γ_self0 drift dynamics** → γ_self0 is initial condition only
-- **No entropy terms** → Memory lives in trajectory, not separate counters
-- **Parameters reduced from 9 to 1** → Only w_neg = 1.5 (plus axis weights)
+- **Simple entropy drift** → Constant leftward pull (-ΔS·Δt) instead of complex exp() terms
+- **Parameters reduced from 9 to 2** → Only w_neg = 1.5 and ΔS = 0.02 (plus axis weights)
 
 **Why?** The November 2025 version had too many parameters, separate memory variables, and complex calculations. This version captures the same asymmetry and irreversibility with radical simplicity.
 
@@ -184,6 +187,21 @@ python tools/scenario_generator.py \
 - Automatic marker placement at key points
 - Locked rows (`*`) marking structural anchors
 - Progress notes for each event
+
+### Running Multiple Scenarios
+
+To run all scenarios in the data folder:
+
+```bash
+python tests/run_all_scenarios.py
+```
+
+This will:
+- Detect all CSV files in `data/` folder
+- Run single scenarios individually
+- Detect and run dual-perspective scenarios (M1/M2 pairs) with combined plots
+- Generate trajectory plots in `results/` folder
+- Save trajectory data as CSV files
 
 ### Option 2: Copy and Customize Templates
 

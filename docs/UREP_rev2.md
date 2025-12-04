@@ -22,11 +22,19 @@ $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big)
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
+\Delta S \cdot \Delta t
 }
 $$
 
-**That's it. No L(t) calculation. No W(t) gates. No entropy terms. No separate memory variables.**
+**That's it. No L(t) calculation. No W(t) gates. No separate memory variables.**
+
+**Entropy drift:** Relationships naturally decay toward Ego axis (isolated self-focus) without maintenance. 
+- **Vector direction:** Pure leftward (negative real axis): -ΔS·Δt + 0i
+- **ΔS = 0.02** (default): constant drift rate per time unit
+- **Δt**: time elapsed between events
+- **Effect:** Love/Hate (imaginary) decay toward 0, We decays toward Ego
+- **Configurable:** Set delS=0 to disable, or use --entropy-per-event for fixed drift per event
 
 ### What Each Term Means
 
@@ -40,6 +48,8 @@ $$
 | **S** | Silence/Presence (shared moments with minimal words) |
 | **w_v, w_r, w_f, w_a** | Axis-specific weights (how much each primitive moves you) |
 | **w_{S,R}, w_{S,I}** | Silence split (real + imaginary contributions) |
+| **ΔS** | Entropy drift rate (constant leftward pull per time unit, default 0.02) |
+| **Δt** | Time elapsed since last event (scales entropy drift) |
 
 ---
 
@@ -284,7 +294,7 @@ See [weights_defense.md](weights_defense.md) for detailed defense of CSV inputs.
 |---------|--------|
 | **L(t) = (γ_self − γ_self0) × W(t) × exp(...)** | Obscures core truth: Love = position, not calculation |
 | **W(t) = gates product** | Redundant with primitive updates |
-| **exp(−ΔS·t + c·N_breath)** | Entropy is implicit in trajectory decay |
+| **exp(−ΔS·t + c·N_breath)** | Entropy is now a simple constant drift (−ΔS·Δt per event) |
 | **γ_self0(n+1) drift formula** | γ_self0 is initial condition only |
 | **β, W_cap, β_S, s_S, b_0, β_b** | Too many knobs, unclear semantics |
 | **η, ξ, λ parameters** | Collapsed into w_neg + axis weights |

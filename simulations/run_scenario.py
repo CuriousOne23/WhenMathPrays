@@ -12,6 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 import sys
+import copy
 
 # Add core to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "core"))
@@ -190,9 +191,16 @@ class ScenarioRunner:
         self.gamma_self_history = [gamma_self]
         
         results = []
+        prev_day = None
         
         for idx, row in data.iterrows():
             day = row['day']
+            
+            # Calculate time delta for entropy scaling
+            if prev_day is None:
+                time_delta = 0.0  # First event: no entropy drift
+            else:
+                time_delta = day - prev_day
             
             # Normalize primitives from [-10, +10] to [-1, +1]
             v = self._normalize_primitive(row['v'])
@@ -205,8 +213,11 @@ class ScenarioRunner:
             gamma_self_next = update_gamma_self(
                 gamma_self_current=gamma_self,
                 v=v, r=r, f=f, a=a, S=S,
-                weights=self.weights
+                weights=self.weights,
+                time_delta=time_delta
             )
+            
+            prev_day = day
             
             # Store results
             results.append({
@@ -214,6 +225,8 @@ class ScenarioRunner:
                 'gamma_x': gamma_self.real,
                 'gamma_y': gamma_self.imag,
                 'gamma_magnitude': abs(gamma_self),
+                'time_delta': time_delta,
+                'entropy_drift': -self.weights.get('delS', 0.05) * (1.0 if self.weights.get('entropy_per_event', False) else time_delta),
                 'v_raw': row['v'],
                 'r_raw': row['r'],
                 'f_raw': row['f'],
@@ -387,7 +400,7 @@ class ScenarioRunner:
         print(f"\n{'='*60}")
         print(f"Scenario: {self.name}")
         print(f"{'='*60}")
-        print(f"Initial condition: γ_self0 = {self.gamma_self0.real:.2f} + {self.gamma_self0.imag:.2f}i")
+        print(f"Initial condition: gamma_self0 = {self.gamma_self0.real:.2f} + {self.gamma_self0.imag:.2f}i")
         print(f"Duration: {self.trajectory['day'].iloc[-1]} {self.time_unit}")
         print(f"Events: {len(self.trajectory)}")
         print(f"\nWeights used:")
@@ -398,9 +411,9 @@ class ScenarioRunner:
         start = self.gamma_self_history[0]
         end = self.gamma_self_history[-1]
         
-        print(f"Start:  γ_self(0) = {start.real:.2f} + {start.imag:.2f}i  (|γ| = {abs(start):.2f})")
-        print(f"End:    γ_self(N) = {end.real:.2f} + {end.imag:.2f}i  (|γ| = {abs(end):.2f})")
-        print(f"Delta:  Δγ = {(end - start).real:.2f} + {(end - start).imag:.2f}i  (Δ|γ| = {abs(end) - abs(start):.2f})")
+        print(f"Start:  gamma_self(0) = {start.real:.2f} + {start.imag:.2f}i  (|gamma| = {abs(start):.2f})")
+        print(f"End:    gamma_self(N) = {end.real:.2f} + {end.imag:.2f}i  (|gamma| = {abs(end):.2f})")
+        print(f"Delta:  Delta_gamma = {(end - start).real:.2f} + {(end - start).imag:.2f}i  (Delta|gamma| = {abs(end) - abs(start):.2f})")
         
         # Quadrant analysis
         final_x = end.real
@@ -586,25 +599,44 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
 
 
 def main():
-    """Run scenario from command-line argument or default example."""
-    import sys
+    """Run scenario from command-line arguments."""
+    import argparse
+    import copy
     
-    # Check for command-line argument
-    if len(sys.argv) > 1:
-        csv_path = sys.argv[1]
-    else:
-        # Example scenario path (default)
-        csv_path = "data/steady_positive_growth.csv"
+    parser = argparse.ArgumentParser(
+        description='Run UREP scenario from CSV file',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python -m simulations.run_scenario data/scenario.csv
+  python -m simulations.run_scenario data/scenario.csv --delS 0.1
+  python -m simulations.run_scenario data/scenario.csv --entropy-per-event
+        """
+    )
+    parser.add_argument('csv_path', nargs='?', default='data/steady_positive_growth.csv',
+                       help='Path to scenario CSV file')
+    parser.add_argument('--delS', type=float, default=0.02,
+                       help='Entropy drift rate per time unit (default: 0.02)')
+    parser.add_argument('--entropy-per-event', action='store_true',
+                       help='Apply entropy per event instead of per time unit (default: per time unit)')
+    
+    args = parser.parse_args()
+    
+    # Configure weights with entropy parameters
+    weights = copy.copy(DEFAULT_WEIGHTS)
+    weights['delS'] = args.delS
+    weights['entropy_per_event'] = args.entropy_per_event
     
     # Initialize runner
     runner = ScenarioRunner(
-        csv_path=csv_path,
+        csv_path=args.csv_path,
         gamma_self0=0.0 + 0.0j,  # Start at origin
+        weights=weights,
         name=None  # Will use name from CSV
     )
     
     # Run scenario
-    print(f"Running scenario: {csv_path}")
+    print(f"Running scenario: {args.csv_path}")
     trajectory = runner.run()
     
     # Print summary
