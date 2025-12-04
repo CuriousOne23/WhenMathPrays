@@ -37,6 +37,7 @@ class ScenarioRunner:
         self.gamma_self0 = gamma_self0
         self.weights = weights or DEFAULT_WEIGHTS.copy()
         self.name = name or self.csv_path.stem
+        self.time_unit = 'days'  # Default time unit
         
         # Load scenario
         self.data = self._load_csv()
@@ -47,20 +48,37 @@ class ScenarioRunner:
         
     def _load_csv(self) -> pd.DataFrame:
         """Load CSV with primitives in human scale [-10, +10]."""
-        # Try to read with first row as potential metadata (name row)
+        # Read and parse metadata rows
+        skip_rows = 0
         with open(self.csv_path, 'r') as f:
-            first_line = f.readline().strip()
-            # Check if first line is metadata (name,value format)
-            if first_line.startswith('name,'):
-                # Extract name from metadata row
-                csv_name = first_line.split(',', 1)[1].strip()
-                if self.name == self.csv_path.stem:  # Only override if using default
-                    self.name = csv_name
-                # Read CSV starting from second line (skip metadata)
-                df = pd.read_csv(self.csv_path, skiprows=1)
-            else:
-                # Normal CSV, no metadata row
-                df = pd.read_csv(self.csv_path)
+            lines = f.readlines()
+            
+            # Check first two lines for metadata
+            for line in lines[:2]:
+                line = line.strip()
+                if line.startswith('name,'):
+                    csv_name = line.split(',', 1)[1].strip()
+                    if self.name == self.csv_path.stem:  # Only override if using default
+                        self.name = csv_name
+                    skip_rows += 1
+                elif line.startswith('time_unit,'):
+                    time_unit = line.split(',', 1)[1].strip().lower()
+                    # Validate time unit
+                    valid_units = ['days', 'weeks', 'months', 'years']
+                    if time_unit in valid_units:
+                        self.time_unit = time_unit
+                    else:
+                        print(f"Warning: Invalid time_unit '{time_unit}', defaulting to 'days'")
+                    skip_rows += 1
+                else:
+                    # Not metadata, stop checking
+                    break
+        
+        # Read CSV with appropriate number of rows to skip
+        if skip_rows > 0:
+            df = pd.read_csv(self.csv_path, skiprows=skip_rows)
+        else:
+            df = pd.read_csv(self.csv_path)
         
         # Validate required columns
         required = ['day', 'v', 'r', 'f', 'a', 'S']
@@ -74,20 +92,106 @@ class ScenarioRunner:
         """Normalize from human scale [-10, +10] to [-1, +1]."""
         return p_raw / 10.0
     
-    def run(self) -> pd.DataFrame:
+    def _interpolate_timeline(self, df: pd.DataFrame, method: str = 'hold') -> pd.DataFrame:
+        """
+        Fill gaps in timeline between specified events.
+        
+        Args:
+            df: DataFrame with event rows (may have gaps in time)
+            method: Interpolation method
+                - 'hold': Use last-known values until next event (default)
+                - 'linear': Linear interpolation between events
+                - 'none': No interpolation, use events as-is
+        
+        Returns:
+            DataFrame with interpolated rows if gaps exist
+        """
+        if method == 'none' or len(df) <= 1:
+            return df
+        
+        # Get time column values
+        times = df['day'].values
+        
+        # Check if timeline is contiguous (gaps exist?)
+        min_time = int(times.min())
+        max_time = int(times.max())
+        expected_length = max_time - min_time + 1
+        
+        if len(times) == expected_length:
+            # No gaps, return as-is
+            return df
+        
+        # Create full timeline with interpolation
+        full_timeline = []
+        
+        for i in range(len(df) - 1):
+            current_row = df.iloc[i]
+            next_row = df.iloc[i + 1]
+            
+            current_time = current_row['day']
+            next_time = next_row['day']
+            
+            # Add current event
+            full_timeline.append(current_row.to_dict())
+            
+            # Fill gap if exists
+            time_gap = next_time - current_time
+            if time_gap > 1:
+                if method == 'hold':
+                    # Hold constant values
+                    for t in range(int(current_time) + 1, int(next_time)):
+                        gap_row = current_row.to_dict()
+                        gap_row['day'] = t
+                        gap_row['notes'] = f"(hold from {int(current_time)})"
+                        gap_row['marker'] = ''
+                        full_timeline.append(gap_row)
+                
+                elif method == 'linear':
+                    # Linear interpolation
+                    steps = int(time_gap)
+                    for step in range(1, steps):
+                        alpha = step / time_gap
+                        gap_row = {}
+                        gap_row['day'] = int(current_time) + step
+                        
+                        # Interpolate primitives
+                        for prim in ['v', 'r', 'f', 'a', 'S']:
+                            gap_row[prim] = current_row[prim] * (1 - alpha) + next_row[prim] * alpha
+                        
+                        gap_row['notes'] = f"(interpolated)"
+                        gap_row['marker'] = ''
+                        gap_row['locked'] = ''
+                        
+                        full_timeline.append(gap_row)
+        
+        # Add final event
+        full_timeline.append(df.iloc[-1].to_dict())
+        
+        return pd.DataFrame(full_timeline)
+    
+    def run(self, interpolate: str = 'none') -> pd.DataFrame:
         """
         Run scenario and compute γ_self trajectory.
+        
+        Args:
+            interpolate: Timeline interpolation method
+                - 'none': Use events as specified (default)
+                - 'hold': Hold last values until next event
+                - 'linear': Linear interpolation between events
         
         Returns:
             DataFrame with trajectory data (day, gamma_x, gamma_y, |gamma|, primitives)
         """
+        # Interpolate timeline if requested
+        data = self._interpolate_timeline(self.data, method=interpolate)
+        
         # Initialize
         gamma_self = self.gamma_self0
         self.gamma_self_history = [gamma_self]
         
         results = []
         
-        for idx, row in self.data.iterrows():
+        for idx, row in data.iterrows():
             day = row['day']
             
             # Normalize primitives from [-10, +10] to [-1, +1]
@@ -155,9 +259,10 @@ class ScenarioRunner:
         scatter = ax1.scatter(x, y, c=days, cmap='viridis', s=50, alpha=0.7, edgecolors='black', linewidths=0.5)
         ax1.plot(x, y, 'gray', alpha=0.3, linewidth=1)
         
-        # Mark start and end
-        ax1.plot(x[0], y[0], 'go', markersize=12, label=f'Start (day {days[0]})', markeredgecolor='black')
-        ax1.plot(x[-1], y[-1], 'r*', markersize=15, label=f'End (day {days[-1]})', markeredgecolor='black')
+        # Mark start and end (use singular time unit for labels)
+        time_unit_singular = self.time_unit.rstrip('s')
+        ax1.plot(x[0], y[0], 'go', markersize=12, label=f'Start ({time_unit_singular} {days[0]})', markeredgecolor='black')
+        ax1.plot(x[-1], y[-1], 'r*', markersize=15, label=f'End ({time_unit_singular} {days[-1]})', markeredgecolor='black')
         
         # Plot custom markers from CSV
         marker_map = {
@@ -177,8 +282,9 @@ class ScenarioRunner:
                 ax1.plot(row['gamma_x'], row['gamma_y'], marker=marker_style, 
                         markersize=14, color='yellow', markeredgecolor='black', 
                         markeredgewidth=2, zorder=10)
-                # Add day label near the marker
-                ax1.annotate(f"Day {int(row['day'])}", 
+                # Add time label near the marker
+                time_label = self.time_unit.rstrip('s').capitalize() if self.time_unit != 'days' else 'Day'
+                ax1.annotate(f"{time_label} {int(row['day'])}", 
                            xy=(row['gamma_x'], row['gamma_y']),
                            xytext=(5, 5), textcoords='offset points',
                            fontsize=9, fontweight='bold',
@@ -222,23 +328,45 @@ class ScenarioRunner:
         
         # Colorbar for time
         cbar = plt.colorbar(scatter, ax=ax1)
-        cbar.set_label('Day', fontsize=10)
+        cbar.set_label(f'Time ({self.time_unit})', fontsize=10)
         
-        # Right: |γ_self| magnitude over time
+        # Right: Decomposed components (Love, Hate, We, Ego) over time
         ax2 = axes[1]
         
-        mag = self.trajectory['gamma_magnitude'].values
-        ax2.plot(days, mag, 'b-', linewidth=2, label='|γ_self(n)|')
-        ax2.axhline(abs(self.gamma_self0), color='orange', linestyle='--', linewidth=1.5, 
-                   label=f'|γ_self0| = {abs(self.gamma_self0):.2f}')
+        # Decompose gamma_self into 4 non-negative components
+        love = np.maximum(0, y)  # Positive imaginary
+        hate = np.maximum(0, -y)  # Negative imaginary (as positive)
+        we = np.maximum(0, x)  # Positive real
+        ego = np.maximum(0, -x)  # Negative real (as positive)
         
-        # Annotate final magnitude
-        ax2.plot(days[-1], mag[-1], 'r*', markersize=12, markeredgecolor='black')
-        ax2.text(days[-1], mag[-1], f'  {mag[-1]:.2f}', fontsize=10, va='center')
+        # Only plot non-zero components (skip if all zeros)
+        plotted_any = False
         
-        ax2.set_xlabel('Day', fontsize=11)
-        ax2.set_ylabel('|γ_self| Magnitude', fontsize=11)
-        ax2.set_title(f'Love Magnitude: {self.name}', fontsize=13, fontweight='bold')
+        if np.any(love > 0):
+            ax2.plot(days, love, color='#00CC00', linewidth=2, label='Love', marker='o', markersize=4)
+            plotted_any = True
+        
+        if np.any(hate > 0):
+            ax2.plot(days, hate, color='#CC0000', linewidth=2, label='Hate', marker='s', markersize=4)
+            plotted_any = True
+        
+        if np.any(we > 0):
+            ax2.plot(days, we, color='#0066FF', linewidth=2, label='We', marker='^', markersize=4)
+            plotted_any = True
+        
+        if np.any(ego > 0):
+            ax2.plot(days, ego, color='#FF6600', linewidth=2, label='Ego', marker='v', markersize=4)
+            plotted_any = True
+        
+        if not plotted_any:
+            # All at origin, plot zero line
+            ax2.axhline(0, color='gray', linestyle='--', linewidth=1)
+            ax2.text(days[len(days)//2], 0, 'All components at zero', 
+                    ha='center', va='center', fontsize=10, style='italic', alpha=0.5)
+        
+        ax2.set_xlabel(f'Time ({self.time_unit.capitalize()})', fontsize=11)
+        ax2.set_ylabel('Component Magnitude', fontsize=11)
+        ax2.set_title(f'γ_self Components: {self.name}', fontsize=13, fontweight='bold')
         ax2.grid(True, alpha=0.3)
         ax2.legend(loc='best', fontsize=9)
         
@@ -260,7 +388,7 @@ class ScenarioRunner:
         print(f"Scenario: {self.name}")
         print(f"{'='*60}")
         print(f"Initial condition: γ_self0 = {self.gamma_self0.real:.2f} + {self.gamma_self0.imag:.2f}i")
-        print(f"Duration: {self.trajectory['day'].iloc[-1]} days")
+        print(f"Duration: {self.trajectory['day'].iloc[-1]} {self.time_unit}")
         print(f"Events: {len(self.trajectory)}")
         print(f"\nWeights used:")
         for k, v in self.weights.items():
@@ -337,6 +465,7 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
                        gamma_self0_m1: complex = DEFAULT_GAMMA_SELF0,
                        gamma_self0_m2: complex = DEFAULT_GAMMA_SELF0,
                        weights: dict = None,
+                       interpolate: str = 'none',
                        save_path: str = None,
                        show: bool = True):
     """
@@ -348,6 +477,7 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
         gamma_self0_m1: Initial position for M1
         gamma_self0_m2: Initial position for M2
         weights: Optional weight dictionary
+        interpolate: Timeline interpolation method ('none', 'hold', 'linear')
         save_path: Optional path to save combined plot
         show: Whether to display plot
     """
@@ -355,8 +485,8 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
     runner_m1 = ScenarioRunner(m1_path, gamma_self0_m1, weights)
     runner_m2 = ScenarioRunner(m2_path, gamma_self0_m2, weights)
     
-    runner_m1.run()
-    runner_m2.run()
+    runner_m1.run(interpolate=interpolate)
+    runner_m2.run(interpolate=interpolate)
     
     # Create combined plot
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -435,7 +565,9 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
     ax2.text(days1[-1], mag1[-1], f'  {mag1[-1]:.2f}', fontsize=10, va='center', color='blue')
     ax2.text(days2[-1], mag2[-1], f'  {mag2[-1]:.2f}', fontsize=10, va='center', color='red')
     
-    ax2.set_xlabel('Day', fontsize=11)
+    # Use time_unit from M1 (assuming both should be the same)
+    time_unit = runner_m1.time_unit
+    ax2.set_xlabel(f'Time ({time_unit.capitalize()})', fontsize=11)
     ax2.set_ylabel('|γ_self| Magnitude', fontsize=11)
     ax2.set_title(f'Love Magnitude Comparison', fontsize=13, fontweight='bold')
     ax2.grid(True, alpha=0.3)
@@ -454,16 +586,21 @@ def plot_dual_scenario(m1_path: str, m2_path: str,
 
 
 def main():
-    """Example: run steady_positive_growth scenario."""
+    """Run scenario from command-line argument or default example."""
+    import sys
     
-    # Example scenario path
-    csv_path = "data/steady_positive_growth.csv"
+    # Check for command-line argument
+    if len(sys.argv) > 1:
+        csv_path = sys.argv[1]
+    else:
+        # Example scenario path (default)
+        csv_path = "data/steady_positive_growth.csv"
     
     # Initialize runner
     runner = ScenarioRunner(
         csv_path=csv_path,
         gamma_self0=0.0 + 0.0j,  # Start at origin
-        name="Steady Positive Growth"
+        name=None  # Will use name from CSV
     )
     
     # Run scenario
