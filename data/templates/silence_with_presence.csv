@@ -1,4 +1,6 @@
-step,v,r,f,a,S,notes
+name,Silence with Presence
+time_unit,days
+day,v,r,f,a,S,notes
 1,0.0,0.0,0.0,0.0,2.0,silence with presence
 2,0.0,0.0,0.0,0.0,2.0,silence with presence
 3,0.0,0.0,0.0,0.0,2.0,silence with presence

@@ -1,4 +1,6 @@
-step,v,r,f,a,S,notes
+name,Oscillatory Style
+time_unit,days
+day,v,r,f,a,S,notes
 1,3.0,-2.0,2.0,1.0,1.0,style mismatch (odd day)
 2,-2.0,3.0,2.0,1.0,1.0,style mismatch (even day)
 3,3.0,-2.0,2.0,1.0,1.0,style mismatch (odd day)
