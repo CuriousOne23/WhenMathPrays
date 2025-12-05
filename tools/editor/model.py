@@ -74,13 +74,13 @@ class EditorModel:
         self.name: str = ""
         self.time_unit: str = "days"
         self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
-        self.events_m1: List[EventPoint] = []
-        self.events_m2: List[EventPoint] = []  # For future dual perspective
+        self.events: list = []  # List of Event objects (new structure)
+        self.events_m1: list = []  # Events for perspective M1
+        self.events_m2: list = []  # Events for perspective M2
         self.filepath: Optional[Path] = None
         self.dirty: bool = False  # Unsaved changes?
         self.modified_indices: set = set()  # Track which events were modified
         self.modified_primitives: Dict[int, set] = {}  # {event_idx: {'v', 'r', ...}}
-        
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
         # Pinned marker positions: where gamma_self was when each primitive was first modified
@@ -88,81 +88,22 @@ class EditorModel:
     
     def load_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
-        Load scenario from CSV file.
-        
+        Load scenario from CSV file using new Event/Marker structure.
         Args:
             filepath: Path to CSV file
             perspective: "M1" or "M2" (currently only M1 supported)
         """
+        from tools.editor.load_events import load_events_from_csv
         self.filepath = Path(filepath)
-        events = []
-        
-        with open(filepath, 'r', encoding='utf-8') as f:
-            # Robustly parse metadata and header lines, skipping empty lines and tolerating any order
-            header_line = None
-            self.name = ''
-            self.time_unit = 'days'
-            self.gamma_self_0 = 0+0j
-            while True:
-                line = f.readline()
-                if not line:
-                    break  # EOF
-                line = line.strip()
-                if not line:
-                    continue  # skip blank lines
-                if line.lower().startswith('name,'):
-                    self.name = line.split(',', 1)[1].strip()
-                elif line.lower().startswith('time_unit,'):
-                    self.time_unit = line.split(',', 1)[1].strip()
-                elif line.lower().startswith('gamma_self_0,'):
-                    import re
-                    # Split after 'gamma_self_0,' and get first non-empty token
-                    tokens = [t for t in line.split(',')[1:] if t.strip()]
-                    if tokens:
-                        gamma_str = tokens[0].strip()
-                        gamma_str = re.sub(r'^["\']+|["\']+$', '', gamma_str).strip()
-                        self.gamma_self_0 = complex(gamma_str)
-                    else:
-                        self.gamma_self_0 = 0+0j
-                elif line.lower().startswith('step,') or line.lower().startswith('day,'):
-                    header_line = line
-                    break
-                else:
-                    # Assume this is the CSV header if not recognized
-                    header_line = line
-                    break
-
-            # Read CSV data with explicit header
-            if header_line:
-                fieldnames = [h.strip() for h in header_line.split(',')]
-                # Ensure marker and locked columns exist for old files
-                if 'marker' not in fieldnames:
-                    fieldnames.append('marker')
-                if 'locked' not in fieldnames:
-                    fieldnames.append('locked')
-                reader = csv.DictReader(f, fieldnames=fieldnames)
-                for row in reader:
-                    # Fill missing optional columns with empty string
-                    if 'marker' not in row or row['marker'] is None:
-                        row['marker'] = ''
-                    if 'locked' not in row or row['locked'] is None:
-                        row['locked'] = ''
-                    event = EventPoint.from_dict(row)
-                    if event is not None:
-                        events.append(event)
-        
+        events = load_events_from_csv(filepath)
+        print(f"[DEBUG] EditorModel.load_csv: loaded {len(events)} events from {filepath}")
         if perspective == "M1":
             self.events_m1 = events
         else:
             self.events_m2 = events
-        
-        self.dirty = False
-        self.modified_indices.clear()
-        
-        print(f"Loaded {len(events)} events from {filepath}")
-        if self.name:
-            print(f"  Scenario: {self.name}")
-        print(f"  Time unit: {self.time_unit}")
+        # You may want to parse metadata (name, time_unit, gamma_self_0) separately as before
+        # Example: parse gamma_self_0 from metadata if present
+        # (This is a placeholder for actual metadata parsing logic)
     
     def save_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
@@ -209,6 +150,7 @@ class EditorModel:
     
     def update_primitive(self, event_index: int, primitive: str, value: float, 
                         perspective: str = "M1", preview: bool = True) -> None:
+        print(f"[DEBUG] update_primitive called: event={event_index}, prim={primitive}, value={value}, preview={preview}")
         """
         Update a primitive value at specific event.
         
@@ -234,20 +176,21 @@ class EditorModel:
             self.preview_changes[event_index][primitive] = value
         else:
             # Commit change
-            setattr(events[event_index], primitive, value)
-            
-            # Auto-mark as modified
-            if not events[event_index].marker:
-                events[event_index].marker = "circle"
-            
+            events[event_index].markers[primitive].value = value
+
+            # Auto-mark as modified (set style or a marker property)
+            marker_obj = events[event_index].markers[primitive]
+            if not getattr(marker_obj, 'style', None):
+                marker_obj.style = 'circle'  # Or set a property to indicate modified
+
             # Track which primitive was modified
             if event_index not in self.modified_primitives:
                 self.modified_primitives[event_index] = set()
             self.modified_primitives[event_index].add(primitive)
-            
+
             self.dirty = True
             self.modified_indices.add(event_index)
-            
+
             # Clear preview for this event
             if event_index in self.preview_changes:
                 if primitive in self.preview_changes[event_index]:
@@ -291,11 +234,11 @@ class EditorModel:
         
         result = {
             'time': [e.time for e in events],
-            'v': [e.v for e in events],
-            'r': [e.r for e in events],
-            'f': [e.f for e in events],
-            'a': [e.a for e in events],
-            'S': [e.S for e in events]
+            'v': [e.markers['v'].value for e in events],
+            'r': [e.markers['r'].value for e in events],
+            'f': [e.markers['f'].value for e in events],
+            'a': [e.markers['a'].value for e in events],
+            'S': [e.markers['S'].value for e in events]
         }
         
         # Apply preview changes if requested

@@ -186,15 +186,20 @@ class DraggablePoint:
         self.ax.figure.canvas.draw_idle()
     
     def on_double_click(self):
-        """Handle double-click: reset to baseline CSV value."""
-        if self.reset_callback:
-            print(f"Double-click detected: Resetting event {self.event_index}/{self.primitive} to baseline")
-            self.reset_callback(self.event_index, self.primitive)
+        """Handle double-click: reset to baseline CSV value if not already at baseline."""
+        if abs(self.y - self.baseline_y) > 1e-8:
+            if self.reset_callback:
+                print(f"Double-click detected: Resetting event {self.event_index}/{self.primitive} to baseline")
+                self.reset_callback(self.event_index, self.primitive)
+            else:
+                # Fallback: just reset locally
+                self.y = self.baseline_y
+                self.original_y = self.baseline_y
+                self.point.set_ydata([self.y])
+                self.preview_point.set_visible(False)
+                self.ax.figure.canvas.draw_idle()
         else:
-            # Fallback: just reset locally
-            self.y = self.baseline_y
-            self.original_y = self.baseline_y
-            self.point.set_ydata([self.y])
+            # Already at baseline, just hide preview if visible
             self.preview_point.set_visible(False)
             self.ax.figure.canvas.draw_idle()
     
