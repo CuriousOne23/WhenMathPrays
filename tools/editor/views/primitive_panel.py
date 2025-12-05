@@ -9,13 +9,6 @@ from .draggable_point import DraggablePoint
 
 
 class PrimitivePanel:
-    """
-    Panel showing 5 primitive curves for one perspective.
-    
-    Each primitive (v, r, f, a, S) displayed as subplot with
-    draggable control points.
-    """
-    
     PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
     PRIMITIVE_LABELS = {
         'v': 'Ego (v)',
@@ -31,11 +24,10 @@ class PrimitivePanel:
         'a': '#d62728',  # Red
         'S': '#9467bd'   # Purple (fixed lowercase)
     }
-    
+
     def __init__(self, fig, grid_spec, on_primitive_changed, on_lock_toggle, on_primitive_preview=None, on_primitive_reset=None):
         """
         Initialize primitive panel.
-        
         Args:
             fig: Matplotlib figure
             grid_spec: GridSpec or SubplotSpec for this panel
@@ -49,98 +41,98 @@ class PrimitivePanel:
         self.on_lock_toggle = on_lock_toggle
         self.on_primitive_preview = on_primitive_preview
         self.on_primitive_reset = on_primitive_reset
-        
+
         # Create subplots for each primitive
         self.axes = {}
         self.lines = {}
         self.draggable_points = {}  # {(event_idx, primitive): DraggablePoint}
         self.marker_annotations = {}  # {(event_idx, primitive): Annotation} for numbered markers
-        
+
         # Store manual x-axis limits for zoom
         self.manual_xlim = {}  # {prim: (xmin, xmax)}
         self.last_xlim = None  # For reset_view
-        
+
         # Create 5 subplots stacked vertically
-        # Use subgridspec for proper nesting
         from matplotlib.gridspec import GridSpecFromSubplotSpec
         inner_gs = GridSpecFromSubplotSpec(5, 1, subplot_spec=grid_spec, hspace=0.15)
-        
         for i, prim in enumerate(self.PRIMITIVE_NAMES):
             ax = fig.add_subplot(inner_gs[i, 0])
             ax.set_ylabel(self.PRIMITIVE_LABELS[prim], fontsize=9)
             ax.set_ylim(-11, 11)
             ax.grid(True, alpha=0.3)
             ax.axhline(y=0, color='k', linestyle='-', linewidth=0.5, alpha=0.5)
-            
-            # Only show x-axis label on bottom subplot
             if i == len(self.PRIMITIVE_NAMES) - 1:
                 ax.set_xlabel('Time')
             else:
                 ax.set_xticklabels([])
-            
-            # Initialize empty line
-            line, = ax.plot([], [], '-', color=self.PRIMITIVE_COLORS[prim], 
-                           linewidth=1.5, alpha=0.7)
-            
+            line, = ax.plot([], [], '-', color=self.PRIMITIVE_COLORS[prim], linewidth=1.5, alpha=0.7)
             self.axes[prim] = ax
             self.lines[prim] = line
-        
-        # Context menu for lock/unlock (right-click)
-        self.fig.canvas.mpl_connect('button_press_event', self._on_right_click)
-    
-    def update_from_model(self, primitives_data, events):
+
+    def update_from_model(self, events):
         """
-        Update display from model data.
-        
+        Update display from model data using Event and Marker objects.
         Args:
-            primitives_data: Dict with keys 'time', 'v', 'r', 'f', 'a', 'S'
-            events: List of EventPoint objects for lock/marker info
+            events: List of Event objects
         """
-        times = primitives_data['time']
-        
-        # Update lines
+        # Always cancel all previews before updating
+        self.cancel_all_previews()
+        # Debug: print modified_primitives
+        # Always fetch latest model reference from controller
+        model = getattr(self.controller, 'model', None) if hasattr(self, 'controller') else None
+        mod_prims = getattr(model, 'modified_primitives', {}) if model else {}
+        print(f"[DEBUG] modified_primitives: {mod_prims}")
         for prim in self.PRIMITIVE_NAMES:
-            values = primitives_data[prim]
+            times = [event.time for event in events]
+            values = [event.markers[prim].value for event in events]
             self.lines[prim].set_data(times, values)
-            
-            # Auto-scale x-axis (unless manual zoom is active)
             if times and prim not in self.manual_xlim:
                 xlim = (min(times) - 1, max(times) + 1)
                 self.axes[prim].set_xlim(xlim)
-                self.last_xlim = xlim  # Store for reset_view
-        
-        # Clear old draggable points
+                self.last_xlim = xlim
         for dp in self.draggable_points.values():
             dp.disconnect()
         self.draggable_points.clear()
-        
-        # Clear old annotations
         for ann in self.marker_annotations.values():
-            ann.remove()
+            if getattr(ann, 'axes', None) is not None:
+                ann.remove()
         self.marker_annotations.clear()
-        
-        # Create new draggable points
         for event_idx, event in enumerate(events):
             for prim in self.PRIMITIVE_NAMES:
-                value = getattr(event, prim)
-                
+                marker = event.markers[prim]
+                # Determine if marker has been edited (use style or model.modified_primitives)
+                edited = event_idx in mod_prims and prim in mod_prims.get(event_idx, set())
+                print(f"[DEBUG] event_idx={event_idx}, prim={prim}, edited={edited}, modified_primitives={mod_prims}")
+                # Remove any ghost preview markers before creating new ones
+                # Only show one hollow marker if edited
+                markerfacecolor = 'none' if edited else self.PRIMITIVE_COLORS[prim]
+                markeredgecolor = self.PRIMITIVE_COLORS[prim]
                 dp = DraggablePoint(
                     ax=self.axes[prim],
-                    x=event.time,
-                    y=value,
+                    x=marker.time,
+                    y=marker.value,
                     event_index=event_idx,
                     primitive=prim,
                     callback=self._on_point_dragged,
                     preview_callback=self._on_point_preview if self.on_primitive_preview else None,
                     reset_callback=self._on_point_reset if self.on_primitive_reset else None,
-                    locked=event.locked,
+                    locked=False,
                     color=self.PRIMITIVE_COLORS[prim],
                     size=7
                 )
-                
+                # Always hide preview marker after drag release
+                dp.preview_point.set_visible(False)
+                # Patch the filled marker to hollow if edited
+                if edited:
+                    dp.point.set_markerfacecolor('none')
+                    dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
+                    print(f"[DEBUG] Hollow marker: event={event_idx}, prim={prim}, value={marker.value}")
+                else:
+                    dp.point.set_markerfacecolor(self.PRIMITIVE_COLORS[prim])
+                    dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
+                    print(f"[DEBUG] Filled marker: event={event_idx}, prim={prim}, value={marker.value}")
+                print(f"[DEBUG] Preview marker visible: {dp.preview_point.get_visible()} at ({dp.x}, {dp.y})")
                 self.draggable_points[(event_idx, prim)] = dp
-        
-        # Redraw
         self.fig.canvas.draw_idle()
     
     def update_markers(self, marked_data):
@@ -217,70 +209,36 @@ class PrimitivePanel:
                             print(f"    Created annotation {key}")
         print(f"=== END UPDATE_MARKERS ===\n")
         self.fig.canvas.draw_idle()
-    def update_from_model(self, primitives_data, events):
-        """
-        Update display from model data.
-        
-        Args:
-            primitives_data: Dict with keys 'time', 'v', 'r', 'f', 'a', 'S'
-            events: List of EventPoint objects for lock/marker info
-        """
-        times = primitives_data['time']
-        print("[DEBUG] update_from_model called")
-        for prim in self.PRIMITIVE_NAMES:
-            print(f"  {prim}: {primitives_data[prim]}")
-        
-        
-        # Add annotations for marked events
-        print(f"Creating annotations for {len(events)} events")
-        for event_idx, event in enumerate(events):
-            for prim in self.PRIMITIVE_NAMES:
-                value = getattr(event, prim)
-                # Assuming we want to create annotations for all primitives
-                if value is not None:  # Only if the value is valid
-                    print(f"  Event {event_idx}: primitive {prim} with value {value}")
-                key = (event_idx, prim)
-                if key in self.draggable_points:
-                    dp = self.draggable_points[key]
-                    # Use preview position if available, else committed position
-                    y_pos = dp.y if dp.preview_point.get_visible() else dp.original_y
-                    
-                    ann = self.axes[prim].annotate(
-                        str(event_idx),
-                        xy=(dp.x, y_pos),
-                        xytext=(5, 5),
-                        textcoords='offset points',
-                        fontsize=8,
-                        color=self.PRIMITIVE_COLORS[prim],  # Match primitive color
-                        weight='bold',
-                        bbox=dict(
-                            boxstyle='circle,pad=0.3',
-                            facecolor='white',
-                            edgecolor=self.PRIMITIVE_COLORS[prim],  # Match primitive color
-                            alpha=0.8
-                        )
-                    )
-                    self.marker_annotations[key] = ann
-                    print(f"    Created annotation {key}")
-        
-        print(f"=== END UPDATE_MARKERS ===\n")
-        
-        # Redraw
-        self.fig.canvas.draw_idle()
     
     def _on_point_dragged(self, event_index, primitive, new_value):
         """Handle point drag completion (release)."""
+        print(f"[DEBUG] _on_point_dragged called: event={event_index}, prim={primitive}, new_value={new_value}")
+        # Commit the new value to the model and let the controller handle UI refresh
         self.on_primitive_changed(event_index, primitive, new_value)
     
     def _on_point_preview(self, event_index, primitive, new_value):
         """Handle point drag preview (during motion)."""
         if self.on_primitive_preview:
             self.on_primitive_preview(event_index, primitive, new_value)
+        # Update the curve in real time to pass through the hollow marker
+        dp = self.draggable_points.get((event_index, primitive))
+        if dp:
+            # Update the corresponding value in the line data
+            line = self.lines[primitive]
+            xdata, ydata = line.get_data()
+            if 0 <= event_index < len(ydata):
+                ydata = list(ydata)
+                ydata[event_index] = new_value
+                line.set_data(xdata, ydata)
+            self.fig.canvas.draw_idle()
     
     def _on_point_reset(self, event_index, primitive):
         """Handle double-click reset."""
         if self.on_primitive_reset:
             self.on_primitive_reset(event_index, primitive)
+        # After reset, hide all preview markers and refresh UI
+        self.cancel_all_previews()
+        self.fig.canvas.draw_idle()
     
     def commit_all_previews(self):
         """Commit all preview points."""

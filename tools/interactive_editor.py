@@ -52,37 +52,37 @@ class InteractiveEditor:
         gs = GridSpec(5, 2, figure=self.fig, hspace=0.3, wspace=0.3,
                      left=0.08, right=0.95, top=0.94, bottom=0.08)
         
-        # Initialize model
+        # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
-        
-        # Initialize views
+
+        # Initialize views (pass structured callbacks)
         self.primitive_panel = PrimitivePanel(
             fig=self.fig,
-            grid_spec=gs[:, 0],  # Left column, all rows
+            grid_spec=gs[:, 0],
             on_primitive_changed=self._on_primitive_changed,
             on_lock_toggle=self._on_lock_toggle,
             on_primitive_preview=self._on_primitive_preview,
             on_primitive_reset=self._on_primitive_reset
         )
-        
+
         self.trajectory_panel = TrajectoryPanel(
             fig=self.fig,
-            grid_spec=gs[:, 1]  # Right column, all rows
+            grid_spec=gs[:, 1]
         )
-        
-        # Initialize controller
+
+        # Initialize controller (structured)
         self.controller = EditorController(
             model=self.model,
             primitive_panel=self.primitive_panel,
             trajectory_panel=self.trajectory_panel
         )
-        
+
         # Add toolbar buttons
         self._setup_toolbar()
-        
-        # Load scenario
+
+        # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.csv_file))
-        
+
         # Connect keyboard shortcuts
         self.fig.canvas.mpl_connect('key_press_event', self._on_key_press)
     

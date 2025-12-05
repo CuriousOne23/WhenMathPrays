@@ -63,12 +63,14 @@ class EditorController:
         """
         # Load into model
         self.model.load_csv(filepath, self.perspective)
+        print(f"[DEBUG] EditorController.load_scenario: events_m1 count = {len(self.model.events_m1) if hasattr(self.model, 'events_m1') else 'N/A'}")
 
         # Store baseline primitives (for reset functionality)
         self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
 
         # Mark all primitives for all events by default
         events = self.model.get_events(self.perspective)
+        print(f"[DEBUG] EditorController.load_scenario: get_events returned {len(events)} events")
         self.model.modified_primitives.clear()
         for event_idx, event in enumerate(events):
             self.model.modified_primitives[event_idx] = set(['v', 'r', 'f', 'a', 'S'])
@@ -81,12 +83,14 @@ class EditorController:
     
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
-        Handle primitive value change from UI drag (on release - store as preview).
+        Handle primitive value change from UI drag (on release - commit to model).
         """
-        self.model.update_primitive(event_index, primitive, value, self.perspective, preview=True)
+        # Commit the new value to the model
+        self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         if event_index not in self.model.modified_primitives:
             self.model.modified_primitives[event_index] = set()
         self.model.modified_primitives[event_index].add(primitive)
+        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         self._recompute_trajectory_with_preview()
         if hasattr(self, '_last_preview_trajectory') and self._last_preview_trajectory:
             marker_idx = event_index + 1 if event_index + 1 < len(self._last_preview_trajectory) else event_index
@@ -115,69 +119,17 @@ class EditorController:
     
     def on_primitive_reset(self, event_index: int, primitive: str):
         """
-        Handle double-click reset to baseline CSV value.
-        
+        Handle double-click reset to baseline CSV value using Event/Marker objects.
         Args:
             event_index: Index in events list
             primitive: 'v', 'r', 'f', 'a', or 'S'
         """
         print(f"\n=== RESET PRIMITIVE {event_index}/{primitive} ===")
-        
-        # Get baseline value from CSV
         baseline_value = self.baseline_primitives[primitive][event_index]
         print(f"Resetting to baseline value: {baseline_value}")
-        
-        # Clear from preview changes
-        if event_index in self.model.preview_changes:
-            if primitive in self.model.preview_changes[event_index]:
-                del self.model.preview_changes[event_index][primitive]
-                print(f"Cleared from preview_changes")
-            if not self.model.preview_changes[event_index]:
-                del self.model.preview_changes[event_index]
-        
-        # Clear from modified primitives tracking
-        if event_index in self.model.modified_primitives:
-            if primitive in self.model.modified_primitives[event_index]:
-                self.model.modified_primitives[event_index].discard(primitive)
-                print(f"Cleared from modified_primitives")
-            if not self.model.modified_primitives[event_index]:
-                del self.model.modified_primitives[event_index]
-        
-        # Remove marker for this primitive
-        marker_key = (event_index, primitive)
-        if marker_key in self.model.marker_positions:
-            del self.model.marker_positions[marker_key]
-            print(f"Removed marker {marker_key}")
-        
-        # Reset the event primitive to baseline (directly, without marking as modified)
-        events = self.model.get_events(self.perspective)
-        setattr(events[event_index], primitive, baseline_value)
-        self.model.dirty = True
-        
-        # Cancel preview on the draggable point (hide hollow marker, reset position)
-        dp_key = (event_index, primitive)
-        if dp_key in self.primitive_panel.draggable_points:
-            dp = self.primitive_panel.draggable_points[dp_key]
-            dp.original_y = baseline_value
-            dp.y = baseline_value
-            dp.point.set_ydata([baseline_value])
-            dp.preview_point.set_visible(False)
-        
-        # Update primitive markers (clear annotations for reset event/primitive)
-        self.primitive_panel.update_markers(self.model.modified_primitives)
-        
-        # Update the line data for the reset primitive
-        primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
-        self.primitive_panel.lines[primitive].set_data(primitives_data['time'], primitives_data[primitive])
-        self.primitive_panel.fig.canvas.draw_idle()
-        
-        # Recompute trajectory
-        # If all markers are reset, clear fixed_view and manual view limits for auto-scaling
-        if not self.model.modified_primitives:
-            self.trajectory_panel.fixed_view = False
-            self.trajectory_panel.manual_xlim = None
-            self.trajectory_panel.manual_ylim = None
-        self._recompute_trajectory_immediate()
+        event = self.model.events[event_index]
+        event.set_marker_value(primitive, baseline_value, state='original')
+        self._update_all_views()
         
         print(f"=== END RESET ===")
     
@@ -393,9 +345,8 @@ class EditorController:
     
     def _update_all_views(self):
         """Update all views from model."""
-        primitives = self.model.get_primitives_array(self.perspective)
         events = self.model.get_events(self.perspective)
-        self.primitive_panel.update_from_model(primitives, events)
+        self.primitive_panel.update_from_model(events)
     
     def save_scenario(self, filepath: str):
         """
