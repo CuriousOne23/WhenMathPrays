@@ -1,21 +1,9 @@
 {
-  "python.defaultInterpreterPath": "C:\\Users\\jeffg\\anaconda3\\python.exe",
-  "python.condaPath": "C:\\Users\\jeffg\\anaconda3\\Scripts\\conda.exe",
+  "python.defaultInterpreterPath": "C:\\Users\\jeffg\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
   "terminal.integrated.env.windows": {
-    "PATH": "C:\\Users\\jeffg\\anaconda3;C:\\Users\\jeffg\\anaconda3\\Scripts;C:\\Users\\jeffg\\anaconda3\\Library\\bin;${env:PATH}"
+    "PATH": "C:\\Users\\jeffg\\AppData\\Local\\Programs\\Python\\Python314;C:\\Users\\jeffg\\AppData\\Local\\Programs\\Python\\Python314\\Scripts;${env:PATH}"
   },
-  "terminal.integrated.profiles.windows": {
-    "Anaconda PowerShell": {
-      "source": "PowerShell",
-      "icon": "terminal-powershell",
-      "args": [
-        "-NoExit",
-        "-Command",
-        "$env:PATH = 'C:\\Users\\jeffg\\anaconda3;C:\\Users\\jeffg\\anaconda3\\Scripts;C:\\Users\\jeffg\\anaconda3\\Library\\bin;' + [string]::Join(';', ($env:PATH -split ';' | Where-Object { $_ -ne 'C:\\Users\\jeffg\\AppData\\Local\\Microsoft\\WindowsApps' }))"
-      ]
-    }
-  },
-  "terminal.integrated.defaultProfile.windows": "Anaconda PowerShell",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
   "python-envs.defaultEnvManager": "ms-python.python:system",
   "python-envs.pythonProjects": []
 }
