@@ -1,40 +1,98 @@
-# Interactive Scenario Editor - Requirements and Design
+# Interactive Scenario Editor - Complete Roadmap
 
-**Status:** Phase 1 COMPLETED (December 5, 2025)  
-**Priority:** HIGH - Critical for event-level diagnostic analysis  
-**Complexity:** Progressive phases (~20-30 hours total)  
-**Last Updated:** December 5, 2025
+**Purpose:** Master timeline showing past, present, and future development  
+**Current Phase:** Phase 1 ✅ COMPLETE → Phase 2 Planning  
+**Total Vision:** ~20-30 hours across 4 phases  
+**Last Updated:** December 6, 2025
 
 ---
 
-## Phase 1 Status - COMPLETED ✅
+## Quick Navigation
 
-### Implemented Features
+- **Phase 1 (✅ Complete):** Single-perspective editing, drag-and-drop, lock/unlock, real-time trajectory
+- **Phase 2 (→ Next):** Add/delete events, inverse editing, enhanced undo/redo - [See detailed requirements](interactive_edit_ph2_requirements.md)
+- **Phase 3 (Future):** Dual-perspective (M1/M2) editing with comparison view
+- **Phase 4 (Future):** Advanced features - fill gaps, sensitivity analysis, automation
+
+---
+
+## Phase Timeline
+
+### Phase 1: Foundation ✅ COMPLETE (December 5, 2025)
+**Duration:** 4-6 hours  
+**Status:** Released as v1.0-phase1
+
+**What Was Built:**
 - ✅ Single-perspective (M1) primitive editing with drag-and-drop
-- ✅ Real-time gamma_self trajectory preview
-- ✅ Lock/unlock event functionality
-- ✅ Auto-marking of modified points with numbered markers
-- ✅ **Primitive readout gauge** - Shows marker ID and Y-value on left of fidelity plot
-- ✅ **Gamma_self position readout** - Shows X,Y coordinates on click (left of gamma_self plot)
-- ✅ **Dual save functionality** - Click=CSV, Shift=PNG, Ctrl=Both
-- ✅ **CSV output with markers** - Modified events automatically get `marker` column populated with event index, and `locked` column to persist lock state
-- ✅ Hollow vs filled marker visual system
-- ✅ Preview/commit workflow
-- ✅ **Centralized LAYOUT system** for maintainable UI positioning
+- ✅ Real-time gamma_self trajectory preview with debounced computation
+- ✅ Lock/unlock event functionality (right-click toggle)
+- ✅ Auto-marking of modified points (hollow vs filled visual system)
+- ✅ Primitive readout gauge (marker ID + Y-value display)
+- ✅ Gamma_self position readout (X,Y coordinates on click)
+- ✅ Dual save functionality (Click=CSV, Shift=PNG, Ctrl=Both)
+- ✅ CSV format with marker/locked columns for persistence
+- ✅ Centralized LAYOUT system for maintainable UI
 - ✅ Keyboard shortcuts (0=reset, +/-=zoom, F=fixed view, G=edit gamma_self_0)
+- ✅ Primitives module (single source of truth for primitive metadata)
+- ✅ Configuration system (user-customizable via JSON)
 
-### Key Software Architecture Improvements
-**Maintainable UI Layout System:**
-- All positioning constants consolidated in `LAYOUT` dictionary
-- Independent gauge positioning (`primitive_gauge_x/y`, `trajectory_readout_x/y`)
-- Easy to adjust margins, spacing, and element positions
-- Future-proof for adding new UI elements
+**Key Achievements:**
+- Created diagnostic tool for event-level analysis
+- Enabled real data anchoring (lock therapy sessions, perturb unknowns)
+- Visual feedback loop for sensitivity exploration
+- Foundation for all future phases
 
-**Known Issues & Future Considerations:**
-1. **Matplotlib Layout Limitations** - Current system uses matplotlib which has constraints for complex UIs. For Phase 2+, consider migrating to Qt/Tkinter for more flexible layouts and additional widgets.
-2. **Readout Positioning** - Uses axes transform coordinates (relative positioning). Works well but limited to simple text displays.
-3. **Save Button** - Custom button using matplotlib.widgets.Button. For more advanced controls, Qt would provide richer widgets.
-4. **Performance** - Real-time trajectory recomputation is fast for single scenarios. May need optimization for longer timelines or dual-perspective editing.
+**Architecture Notes:**
+- Matplotlib-based (sufficient for Phase 1, may migrate to Qt later)
+- MVC pattern: EditorModel, EditorController, PrimitivePanel, TrajectoryPanel
+- Backward-compatible CSV format (old format loads, always saves with full metadata)
+
+### Phase 2: Enhanced Editing → NEXT (Planned)
+**Duration:** 6-8 hours  
+**Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
+
+**Planned Features:**
+- Add/delete time points (Shift+Click to insert, Delete key to remove)
+- Inverse editing (drag gamma_self to suggest primitives)
+- Manual marker management (add/remove without editing)
+- Enhanced undo/redo system (multi-level stack, Ctrl+Z/Y)
+
+**Key Value:**
+- More flexible scenario construction
+- Bidirectional editing workflow
+- Better support for iterative refinement
+
+### Phase 3: Dual-Perspective Editing (Future)
+**Duration:** 5-6 hours  
+**Status:** Future
+
+**Planned Features:**
+- Radio toggle: M1 ⇄ M2 perspective selection
+- Side-by-side primitive panels (M1 row 1, M2 row 2)
+- Combined gamma_self display (blue M1, red M2)
+- Visual comparison: identify dominant events across perspectives
+- Inactive perspective: 30% opacity, view-only
+
+**Key Value:**
+- Full relationship dynamics (both partners' experiences)
+- Cross-perspective sensitivity analysis
+- Validate symmetry assumptions
+
+### Phase 4: Advanced Features (Future)
+**Duration:** 3-4 hours  
+**Status:** Future
+
+**Planned Features:**
+- Fill gaps: Linear/cubic/hold interpolation for unlocked points
+- Automated sensitivity analysis: Rank events by trajectory impact
+- Time unit conversion: Days ↔ Weeks ↔ Months ↔ Years
+- Zoom/pan on plots, animation/playback mode
+- Batch export (PNG plots)
+
+**Key Value:**
+- Production-ready polish
+- Automated diagnostics
+- Professional presentation
 
 ---
 
