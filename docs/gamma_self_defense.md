@@ -8,8 +8,8 @@ The Gamma Self (γ_self) is a two-dimensional complex-valued trajectory that enc
 Relationship dynamics can be modeled as a **low-dimensional dynamical system** where:
 1. Observable behavior (proximity-seeking, affective states) maps to **trajectories** in a 2D psychological space
 2. These trajectories evolve according to **ordinary differential equations** (damped oscillator dynamics)
-3. Long-term outcomes correspond to **attractor basins** in this space
-4. The system exhibits **emergent structure** (basin topology) that matches empirically observed outcome distributions
+3. Long-term outcomes cluster in distinct **quadrant regions** of this space
+4. When calibrated, the **GRP formula produces quadrant distributions** that closely align with prevalence rates documented in empirical literature
 
 **What We Do NOT Claim:**
 - That specific parameter values are known (they are currently calibrated/tuned to match observed distributions)
@@ -23,7 +23,7 @@ We claim the **structural principle** is valid: relationship dynamics exhibit dy
 [Visual Evidence: Gamma Self Character Region Map (N=10,000)](https://github.com/CuriousOne23/WhenMathPrays/raw/a26593d488ab4c1e2a245fc96861eb5c031694bf/tests/gamma_self_character_map_all_N10000.png)
 
 **Data Note**  
-The map above represents a simulation of 10,000 trajectories, not direct empirical measurements. Model parameters (attractors, damping constants, entropy thresholds) were calibrated so that resulting cluster sizes approximate published prevalence rates from attachment theory research, divorce statistics, and clinical population studies. The simulation demonstrates **topological consistency**: the model's basin structure and relative proportions align with known relationship outcome distributions (e.g., Hazan & Shaver, 1987; Gottman & Levenson, 2000). However, this is a **proof of concept**, not validation—exact percentages may shift when tested against prospective longitudinal data.
+The map above represents a simulation of 10,000 trajectories, not direct empirical measurements. Model parameters (attractors, damping constants, entropy thresholds) were calibrated so that resulting quadrant distributions approximate published prevalence rates from attachment theory research, divorce statistics, and clinical population studies. The simulation demonstrates **distribution alignment**: when calibrated, the GRP formula produces quadrant outcome proportions that closely match known relationship prevalence rates (e.g., Hazan & Shaver, 1987; Gottman & Levenson, 2000). However, this is a **proof of concept**, not validation—exact percentages may shift when tested against prospective longitudinal data.
 
 **Prevalence Estimates (Simulation vs. Literature):**
 - Orange (Secure/Stable): ~12–15% (sim) vs. ~10–15% long-term stable marriages (U.S. census data)
@@ -67,8 +67,8 @@ These are **order-of-magnitude agreements**, not precise predictions.
    
    > Gottman, J. M., & Levenson, R. W. (2000). The timing of divorce: Predicting when a couple will divorce over a 14-year period. *Journal of Marriage and Family, 62*(3), 737–745.
 
-4. **Basin Structure Shows Topological Consistency**  
-   The model's attractor basins qualitatively match known relationship outcome distributions:
+4. **Quadrant Distributions Align with Literature Prevalence Rates**  
+   When calibrated, the GRP formula produces quadrant distributions that closely match known relationship outcome prevalence rates:
    
    | Basin Type | Simulation % | Literature Estimate | Source |
    |------------|--------------|---------------------|--------|
@@ -78,7 +78,7 @@ These are **order-of-magnitude agreements**, not precise predictions.
    | Narcissistic (Brown) | ~1–2% | ~1% | DSM-5 prevalence |
    | Avoidant/Center | ~1% | <1% | Clinical estimates |
    
-   **Important Caveat:** These are **topological agreements** (basin structure and relative ordering), not quantitative predictions. The model was calibrated to match these distributions—this demonstrates internal consistency, not independent validation.
+   **Important Caveat:** These are **calibrated matches**, not emergent predictions. Model parameters were tuned to reproduce these distributions—this demonstrates the GRP formula's **capacity to fit observed data**, not independent validation or predictive power.
 
 5. **Falsifiability and Testable Predictions**  
    The model makes specific, falsifiable predictions:
@@ -102,8 +102,8 @@ These are **order-of-magnitude agreements**, not precise predictions.
 The Gamma Self model is a **dynamical systems framework** for relationship evolution that:
 1. **Integrates** established psychological constructs (attachment, affect) into a unified mathematical representation
 2. **Uses standard ODEs** (damped oscillator dynamics) without ad-hoc mechanisms
-3. **Produces topologically consistent** attractor basins that match known outcome distributions
-4. **Makes falsifiable predictions** about entropy, stability, and basin transitions
+3. **Produces quadrant distributions** that, when calibrated, closely align with known outcome prevalence rates
+4. **Makes falsifiable predictions** about entropy effects and quadrant transitions
 5. **Requires empirical validation** through prospective longitudinal studies
 
 **What it is NOT:**
