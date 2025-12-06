@@ -6,24 +6,13 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
 from .draggable_point import DraggablePoint
+from ..primitives import PRIMITIVE_NAMES, PRIMITIVE_LABELS, PRIMITIVE_COLORS
 
 
 class PrimitivePanel:
-    PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
-    PRIMITIVE_LABELS = {
-        'v': 'Visibility (v)',
-        'r': 'Resonance (r)',
-        'f': 'Fidelity (f)',
-        'a': 'Altruism (a)',
-        'S': 'Shared Breath (S)'
-    }
-    PRIMITIVE_COLORS = {
-        'v': '#1f77b4',  # Blue
-        'r': '#ff7f0e',  # Orange
-        'f': '#2ca02c',  # Green
-        'a': '#d62728',  # Red
-        'S': '#9467bd'   # Purple (fixed lowercase)
-    }
+    PRIMITIVE_NAMES = PRIMITIVE_NAMES
+    PRIMITIVE_LABELS = PRIMITIVE_LABELS
+    PRIMITIVE_COLORS = PRIMITIVE_COLORS
 
     def __init__(self, fig, grid_spec, on_primitive_changed, on_lock_toggle, on_primitive_preview=None, on_primitive_reset=None, layout=None):
         """
