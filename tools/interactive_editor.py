@@ -124,7 +124,8 @@ class InteractiveEditor:
         self.controller = EditorController(
             model=self.model,
             primitive_panel=self.primitive_panel,
-            trajectory_panel=self.trajectory_panel
+            trajectory_panel=self.trajectory_panel,
+            undo_stack=self.window.undo_stack
         )
 
         # Load scenario (structured: Event/Marker)
