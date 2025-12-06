@@ -2,22 +2,457 @@
 
 **Status:** PLANNING  
 **Target:** Post Phase 1 completion  
-**Estimated Effort:** 6-8 hours  
+**Estimated Effort:** 12-15.5 hours  
 **Last Updated:** December 6, 2025
 
 ---
 
 ## Phase 2 Overview
 
-Phase 2 adds critical functionality for more complex editing scenarios:
+Phase 2 migrates to a modern UI framework and adds critical functionality for more complex editing scenarios:
+- **PySide6 migration** (professional UI foundation)
+- **Edit initial state (gamma_self0)** and fractional time support
 - Add/delete time points (event insertion/removal)
 - Inverse editing (drag gamma_self to suggest primitives)
 - Manual marker management (add/remove markers without dragging)
-- Improved undo/redo system
+- Enhanced undo/redo system with QUndoStack
 
 ---
 
-## 1. Add/Delete Time Points
+## Phase 2.0: PySide6 Migration (Foundation)
+
+### Why Migrate from Matplotlib/Tkinter?
+
+**Current Phase 1 Architecture:**
+- Matplotlib for all visualization
+- Tkinter only for file dialogs
+- Matplotlib event handlers (`mpl_connect`) for mouse/keyboard
+
+**Limitations for Phase 2:**
+- No native dialog system (inverse mode acceptance dialog would be clunky)
+- No built-in undo/redo stack
+- Tkinter dialogs look dated (1990s aesthetics)
+- Hard to add professional UI chrome (toolbars, status bars, menus)
+
+**PySide6 Advantages:**
+- ✅ **LGPL license** (permissive, commercial-friendly)
+- ✅ **Official Qt for Python** (maintained by Qt Company)
+- ✅ **Built-in QUndoStack** (undo/redo for free)
+- ✅ **Native widgets** (QSpinBox, QDialog, QFileDialog, QStatusBar)
+- ✅ **Matplotlib integration** via `FigureCanvasQTAgg` (seamless)
+- ✅ **Professional appearance** (native OS look and feel)
+- ✅ **Future-proof** for Phase 3+ (dual perspective, side-by-side panels)
+
+### Migration Strategy
+
+**Good news:** Phase 1 architecture already has clean MVC separation!
+- Model (`tools/editor/model.py`) - unchanged
+- Controller (`tools/editor/controller.py`) - minimal changes
+- Views (`tools/editor/views/*.py`) - wrap in Qt, matplotlib stays
+
+**What changes:**
+1. Matplotlib figures embedded in QMainWindow via FigureCanvasQTAgg
+2. Replace tkinter file dialog → QFileDialog
+3. Add Qt window chrome (toolbar, status bar)
+4. Matplotlib events auto-handled by Qt canvas
+5. Add QUndoStack for Phase 2.4
+
+**What stays the same:**
+- All GRP computation logic (model, controller)
+- Matplotlib plotting code (primitives, trajectory)
+- Draggable point mechanics
+- CSV loading/saving
+
+### Implementation Steps
+
+#### Step 1: Add PySide6 Dependency
+
+**Update `requirements.txt`:**
+```pip-requirements
+numpy
+matplotlib
+pandas
+pytest
+PySide6
+```
+
+**Install:**
+```bash
+pip install PySide6
+```
+
+#### Step 2: Create Qt Main Window
+
+**New file: `tools/editor/qt_window.py`**
+```python
+"""
+Qt main window wrapper for interactive editor.
+"""
+from PySide6.QtWidgets import (
+    QMainWindow, QWidget, QVBoxLayout, QToolBar, 
+    QStatusBar, QFileDialog, QMessageBox
+)
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction, QKeySequence, QUndoStack
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+import matplotlib.pyplot as plt
+
+
+class EditorMainWindow(QMainWindow):
+    """
+    Main window for interactive scenario editor.
+    
+    Embeds matplotlib figures in Qt framework with native
+    toolbars, menus, and status bar.
+    """
+    
+    def __init__(self, csv_file):
+        super().__init__()
+        self.csv_file = csv_file
+        self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
+        self.setGeometry(100, 100, 1400, 800)
+        
+        # Create matplotlib figure (same as Phase 1)
+        self.fig = plt.figure(figsize=(14, 8))
+        
+        # Embed in Qt canvas
+        self.canvas = FigureCanvasQTAgg(self.fig)
+        self.setCentralWidget(self.canvas)
+        
+        # Add toolbar
+        self._setup_toolbar()
+        
+        # Add status bar
+        self.status_bar = QStatusBar()
+        self.setStatusBar(self.status_bar)
+        self.status_bar.showMessage('Ready')
+        
+        # Undo stack (for Phase 2.4)
+        self.undo_stack = QUndoStack(self)
+    
+    def _setup_toolbar(self):
+        """Create toolbar with common actions."""
+        toolbar = QToolBar('Main Toolbar')
+        self.addToolBar(toolbar)
+        
+        # Save action
+        save_action = QAction('Save', self)
+        save_action.setShortcut(QKeySequence.Save)
+        save_action.triggered.connect(self._on_save)
+        toolbar.addAction(save_action)
+        
+        toolbar.addSeparator()
+        
+        # Undo/Redo (Phase 2.4)
+        undo_action = self.undo_stack.createUndoAction(self, 'Undo')
+        undo_action.setShortcut(QKeySequence.Undo)
+        toolbar.addAction(undo_action)
+        
+        redo_action = self.undo_stack.createRedoAction(self, 'Redo')
+        redo_action.setShortcut(QKeySequence.Redo)
+        toolbar.addAction(redo_action)
+    
+    def _on_save(self):
+        """Save current scenario (Qt file dialog)."""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            'Save Scenario',
+            str(self.csv_file),
+            'CSV Files (*.csv);;All Files (*)'
+        )
+        if file_path:
+            self.save_callback(file_path)
+            self.status_bar.showMessage(f'Saved: {file_path}', 3000)
+    
+    def show_message(self, message, level='info'):
+        """Show message in status bar or dialog."""
+        if level == 'info':
+            self.status_bar.showMessage(message, 5000)
+        elif level == 'warning':
+            QMessageBox.warning(self, 'Warning', message)
+        elif level == 'error':
+            QMessageBox.critical(self, 'Error', message)
+```
+
+#### Step 3: Update `interactive_editor.py`
+
+**Replace matplotlib figure creation:**
+```python
+# OLD (Phase 1):
+self.fig = plt.figure(figsize=(14, 8))
+
+# NEW (Phase 2):
+from PySide6.QtWidgets import QApplication
+from tools.editor.qt_window import EditorMainWindow
+
+app = QApplication(sys.argv)
+window = EditorMainWindow(self.csv_file)
+self.fig = window.fig  # Use figure from Qt window
+```
+
+**Replace file dialog:**
+```python
+# OLD (Phase 1):
+import tkinter as tk
+from tkinter import filedialog
+root = tk.Tk()
+root.withdraw()
+file_path = filedialog.asksaveasfilename(...)
+
+# NEW (Phase 2):
+# Already handled by EditorMainWindow._on_save()
+```
+
+**Update event loop:**
+```python
+# OLD (Phase 1):
+plt.show()
+
+# NEW (Phase 2):
+window.show()
+sys.exit(app.exec())
+```
+
+#### Step 4: Test Migration
+
+**Smoke Tests:**
+1. ✅ Editor launches with Qt window chrome
+2. ✅ Matplotlib plots render correctly in Qt canvas
+3. ✅ Mouse drag on primitives still works
+4. ✅ Keyboard shortcuts still work (or re-map to Qt shortcuts)
+5. ✅ Save dialog is native Qt dialog
+6. ✅ Status bar shows messages
+7. ✅ Window resizes correctly
+
+**Cross-platform:**
+- Windows: Native Windows 11 theme
+- macOS: Native macOS theme
+- Linux: Native theme (KDE/GNOME)
+
+### Effort Estimate: 4-6 hours
+
+**Breakdown:**
+- Dependency setup: 15 min
+- Qt window wrapper: 2 hours
+- Update interactive_editor.py: 1 hour
+- Test and debug: 1-2 hours
+- Documentation: 30 min
+
+---
+
+## Phase 2.1: Add/Delete Events + Edit gamma_self0 + Fractional Time
+
+### Feature: Edit Initial State (gamma_self0)
+
+**Purpose:**
+- Allow users to change starting position in gamma-space without editing CSV
+- Enables sensitivity analysis: "What if this person started more negative?"
+- Useful for comparing same event sequence from different initial conditions
+
+**What is gamma_self0:**
+- Complex number representing initial relational state: `gamma_self0 = real + imag*j`
+- Real axis: Ego (negative) ↔ We (positive)
+- Imaginary axis: Hate (negative) ↔ Love (positive)
+- Examples:
+  - Narcissist: `(-3, -2)` in Quadrant 3
+  - Saint: `(2, 3)` in Quadrant 1
+  - Buddha: `(0, 0)` at origin
+  - Wounded: `(-2, 1)` in Quadrant 2
+
+**UI Design:**
+
+**Location:** Control panel area (add to Qt window as dockable widget)
+
+```
+┌──────────────────────────────────────┐
+│ Initial State (γ_self0)              │
+├──────────────────────────────────────┤
+│ Real (Ego↔We):  [  0.00  ] ←→       │
+│ Imag (Hate↔Love): [  0.00  ] i ↑↓   │
+│                                      │
+│ [Apply]  [Reset to CSV Default]     │
+└──────────────────────────────────────┘
+```
+
+**Implementation:**
+```python
+from PySide6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, 
+    QLabel, QDoubleSpinBox, QPushButton
+)
+
+class GammaSelf0Editor(QWidget):
+    """Widget for editing initial gamma_self state."""
+    
+    def __init__(self, model, controller):
+        super().__init__()
+        self.model = model
+        self.controller = controller
+        
+        layout = QVBoxLayout()
+        
+        # Real component
+        real_layout = QHBoxLayout()
+        real_layout.addWidget(QLabel('Real (Ego↔We):'))
+        self.real_spinbox = QDoubleSpinBox()
+        self.real_spinbox.setRange(-10.0, 10.0)
+        self.real_spinbox.setSingleStep(0.1)
+        self.real_spinbox.setValue(self.model.gamma_self0.real)
+        real_layout.addWidget(self.real_spinbox)
+        layout.addLayout(real_layout)
+        
+        # Imaginary component
+        imag_layout = QHBoxLayout()
+        imag_layout.addWidget(QLabel('Imag (Hate↔Love):'))
+        self.imag_spinbox = QDoubleSpinBox()
+        self.imag_spinbox.setRange(-10.0, 10.0)
+        self.imag_spinbox.setSingleStep(0.1)
+        self.imag_spinbox.setValue(self.model.gamma_self0.imag)
+        imag_layout.addWidget(self.imag_spinbox)
+        layout.addLayout(imag_layout)
+        
+        # Buttons
+        button_layout = QHBoxLayout()
+        apply_btn = QPushButton('Apply')
+        apply_btn.clicked.connect(self._on_apply)
+        reset_btn = QPushButton('Reset to CSV Default')
+        reset_btn.clicked.connect(self._on_reset)
+        button_layout.addWidget(apply_btn)
+        button_layout.addWidget(reset_btn)
+        layout.addLayout(button_layout)
+        
+        self.setLayout(layout)
+    
+    def _on_apply(self):
+        """Apply new gamma_self0 and recompute trajectory."""
+        new_gamma_self0 = complex(
+            self.real_spinbox.value(),
+            self.imag_spinbox.value()
+        )
+        self.model.gamma_self0 = new_gamma_self0
+        self.model.gamma_self0_modified = True
+        self.controller.recompute_trajectory()
+        self.controller.trajectory_panel.update_start_marker(new_gamma_self0)
+    
+    def _on_reset(self):
+        """Reset to original CSV value."""
+        self.model.gamma_self0 = self.model.gamma_self0_original
+        self.model.gamma_self0_modified = False
+        self.real_spinbox.setValue(self.model.gamma_self0.real)
+        self.imag_spinbox.setValue(self.model.gamma_self0.imag)
+        self.controller.recompute_trajectory()
+        self.controller.trajectory_panel.update_start_marker(self.model.gamma_self0)
+```
+
+**Visual Feedback:**
+- Original gamma_self0 from CSV: **Blue square** marker
+- Modified gamma_self0: **Orange square** marker
+- Tooltip shows: "γ_self0: (2.5, -1.0) [Modified]"
+
+**Save Behavior:**
+- Prompt user: "Save modified initial state?" with checkbox
+- If yes, write `gamma_self_0,2.5-1.0j` to CSV metadata
+
+---
+
+### Feature: Fractional Time Support
+
+**Current Limitation:**
+- CSV `day` column expects integers: `0, 1, 2, 3, ...`
+- But `time_unit` can be `days`, `weeks`, `months`, `years`
+- Can't represent "2.5 days" or "1.75 weeks"
+
+**Good News: Already Mostly Works!**
+- Pandas `read_csv` handles floats automatically
+- Matplotlib plots fractional x-coordinates
+- GRP computation uses float arithmetic
+
+**What Needs to Change:**
+
+#### 1. Event Insertion (Shift+Click)
+```python
+def on_shift_click_timeline(self, time_value):
+    """
+    Insert new event at specified time.
+    
+    Phase 1: Snaps to integer
+    Phase 2: Allows fractional time
+    """
+    # OLD:
+    # time_value = int(round(time_value))
+    
+    # NEW:
+    time_value = round(time_value, 2)  # 2 decimal places
+    
+    # Validate minimum spacing
+    MIN_SPACING = 0.1
+    for existing_time in self.events_time:
+        if abs(existing_time - time_value) < MIN_SPACING:
+            self.show_error(
+                f"Too close to event at t={existing_time}. "
+                f"Min spacing: {MIN_SPACING} {self.time_unit}"
+            )
+            return
+    
+    # Rest of insertion logic...
+```
+
+#### 2. Display Formatting
+```python
+def format_time_label(self, time_value):
+    """
+    Format time value for display.
+    
+    - Integers: "Day 5"
+    - Fractional: "Day 5.5" or "Day 5.25"
+    """
+    unit_singular = self.time_unit.rstrip('s')  # 'days' -> 'day'
+    
+    if time_value == int(time_value):
+        return f"{unit_singular.capitalize()} {int(time_value)}"
+    else:
+        return f"{unit_singular.capitalize()} {time_value:.2f}"
+```
+
+#### 3. Time Axis Formatting
+```python
+# In trajectory/primitive panel setup:
+import matplotlib.ticker as ticker
+
+ax.xaxis.set_major_formatter(
+    ticker.FormatStrFormatter('%.1f')  # Show 1 decimal place
+)
+```
+
+**Examples:**
+```csv
+day,v,r,f,a,S,notes
+0.0,5,5,0,0,5,First meeting
+2.5,8,7,3,2,6,Great afternoon date
+2.8,-3,-4,0,0,-5,Argument same evening
+5.25,6,5,4,3,4,Reconciliation lunch
+```
+
+**Edge Cases:**
+- Very small fractions (< 0.01): Round to 2 decimals
+- Integer-only CSVs: Still work (2.0 displays as "Day 2")
+- Mixed precision: Some integer, some fractional - no problem
+
+**Backward Compatibility:**
+- Phase 1 editor already handles floats (just reads as numbers)
+- No breaking changes
+
+### Effort Estimate: 3-4 hours
+
+**Breakdown:**
+- gamma_self0 editor widget: 1.5 hours
+- Fractional time validation/formatting: 1 hour
+- Integration testing: 1 hour
+- Documentation: 30 min
+
+---
+
+## 2. Add/Delete Time Points (continued)
 
 ### Feature: Insert New Events
 
@@ -427,43 +862,62 @@ class EditPrimitiveAction(Action):
 
 ## Implementation Phases
 
-### Phase 2.1: Add/Delete Events (2-3 hours)
-- Event insertion with interpolation
+### Phase 2.0: PySide6 Migration (4-6 hours) ← START HERE
+- Add PySide6 dependency to requirements.txt
+- Create Qt main window wrapper (EditorMainWindow)
+- Embed matplotlib figures in Qt canvas
+- Replace tkinter file dialog with QFileDialog
+- Add toolbar with Save/Undo/Redo actions
+- Add status bar for user feedback
+- Test cross-platform (Windows/Mac/Linux)
+- Update documentation
+
+### Phase 2.1: Add/Delete Events + gamma_self0 + Fractional Time (3-4 hours)
+- Edit gamma_self0 widget (QDoubleSpinBox for real/imag)
+- Fractional time support (validation, formatting)
+- Event insertion with interpolation (fractional positions)
 - Event deletion with validation
 - UI controls and keyboard shortcuts
 - Update save/load to handle dynamic event lists
 
 ### Phase 2.2: Inverse Editing (3-4 hours)
-- Mode toggle UI
+- Mode toggle UI (Qt button or menu action)
 - Inverse heuristic implementation
-- Suggestion dialog with preview
+- Suggestion dialog with preview (QDialog with matplotlib preview)
 - Visual feedback (dashed lines, preview trajectory)
 
 ### Phase 2.3: Marker Management (1 hour)
 - Manual marker add/remove
-- Marker style picker dialog
+- Marker style picker dialog (QDialog with radio buttons)
 - Update marker persistence in CSV
 
-### Phase 2.4: Undo/Redo (1-2 hours)
-- Undo stack implementation
-- Action classes for different edit types
-- UI controls and status indicators
-- Keyboard shortcuts
+### Phase 2.4: Enhanced Undo/Redo (30 min) ← EASY with Qt!
+- Integrate QUndoStack (already created in Phase 2.0)
+- Create QUndoCommand subclasses for edit types
+- Connect to toolbar actions (already wired in Phase 2.0)
+- Test undo/redo across all action types
 
 ---
 
 ## Success Criteria
 
 Phase 2 is complete when:
-- ✅ User can insert new events via Shift+Click
-- ✅ User can delete unlocked events via Delete key
-- ✅ User can drag gamma_self points and accept primitive suggestions
-- ✅ Inverse mode provides reasonable primitive estimates (within ±2 of manual tuning)
-- ✅ User can manually add/remove markers without editing values
-- ✅ Undo/Redo works for all action types
-- ✅ All features have keyboard shortcuts
-- ✅ No regressions in Phase 1 functionality
-- ✅ Modified CSVs load correctly in Phase 1 editor (backward compatible)
+- ✅ **Phase 2.0:** Editor runs in PySide6 with native Qt chrome
+- ✅ **Phase 2.0:** Matplotlib plots render correctly in Qt canvas
+- ✅ **Phase 2.0:** All Phase 1 features work unchanged (no regressions)
+- ✅ **Phase 2.1:** User can edit gamma_self0 (real, imaginary components)
+- ✅ **Phase 2.1:** Modified gamma_self0 shown with orange marker (vs blue)
+- ✅ **Phase 2.1:** User can insert events at fractional times (e.g., 2.5 days)
+- ✅ **Phase 2.1:** Time axis displays fractional labels correctly
+- ✅ **Phase 2.1:** User can insert new events via Shift+Click (fractional times)
+- ✅ **Phase 2.1:** User can delete unlocked events via Delete key
+- ✅ **Phase 2.2:** User can drag gamma_self points and accept primitive suggestions
+- ✅ **Phase 2.2:** Inverse mode provides reasonable primitive estimates (within ±2 of manual tuning)
+- ✅ **Phase 2.3:** User can manually add/remove markers without editing values
+- ✅ **Phase 2.4:** Undo/Redo works for all action types via QUndoStack
+- ✅ **Phase 2.4:** Toolbar shows Undo/Redo button states (enabled/disabled)
+- ✅ **All:** All features have keyboard shortcuts
+- ✅ **All:** Modified CSVs (including fractional times, gamma_self0) load correctly in Phase 1 editor (backward compatible)
 
 ---
 
