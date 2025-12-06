@@ -187,7 +187,7 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 
 **Architecture & Future Plans:**
 - [ARCHITECTURE.md](ARCHITECTURE.md) - UI layout system and maintainability notes
-- [future_interactive_edit_requirements.md](docs/future_interactive_edit_requirements.md) - Phase roadmap and known issues
+- [interactive_edit_ph2_requirements.md](docs/interactive_edit_ph2_requirements.md) - Phase 2 requirements and specifications
 
 ---
 
