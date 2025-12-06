@@ -54,7 +54,7 @@ The interactive scenario editor provides a graphical diagnostic tool for event-l
 - **Arc-level design is solved** (scenario scripts work well)
 - **Event-level analysis is needed** - Which specific events dominate outcomes?
 - **Real data anchoring** - Need to lock known events and perturb others
-- **Sensitivity exploration** - What happens if day 23 vulnerability changes from 3→5?
+- **Sensitivity exploration** - What happens if day 23 altruism changes from 3→5?
 - **Constraint validation** - Can GRP reach this trajectory given realistic primitive bounds?
 
 ### The Solution - Diagnostic Workflow
@@ -93,10 +93,10 @@ Step 3: Save modified CSV → Re-run scenario script
 │                               │                            │
 │   PRIMITIVES (M1)             │   GAMMA_SELF TRAJECTORY    │
 │                               │                            │
-│   v ─────────── (ego)         │      ^  Love              │
+│   v ─────────── (visibility)  │      ^  Love              │
 │   r ─────────── (resonance)   │      │                    │
 │   f ─────────── (freedom)     │      │    Q2    Q1       │
-│   a ─────────── (vulnerability)│   ───┼───                │
+│   a ─────────── (altruism)    │   ───┼───                │
 │   S ─────────── (soul)        │   Ego│We                 │
 │                               │      │    Q3    Q4       │
 │   [Time axis: 0 to 60 days]   │      v  Hate             │
@@ -608,7 +608,7 @@ class ScenarioEditorController:
    - Right-click day 60 (outcome) → Lock
 
 4. **Perturb unlocked events:**
-   - Drag day 15 `vulnerability` from 3 → 5
+   - Drag day 15 `altruism` from 3 → 5
    - Watch gamma_self trajectory shift in real-time
    - Auto-marked as customized event
 
@@ -642,7 +642,7 @@ class ScenarioEditorController:
 
 1. Load M1 + M2 CSV pair
 2. Toggle between M1 and M2 (radio button)
-3. Perturb M1 day 23 `vulnerability` -5 → -3
+3. Perturb M1 day 23 `altruism` -5 → -3
 4. Observe both trajectories on gamma_self panel
 5. Identify: Did M1's change rescue the relationship, or was M2's day 30 action more influential?
 
@@ -669,7 +669,7 @@ class ScenarioEditorController:
 **Success Criteria:**
 - Load `single_dating_to_love_M1.csv`
 - Lock days 0 and 60
-- Drag day 30 `vulnerability` from 3 → 5
+- Drag day 30 `altruism` from 3 → 5
 - See gamma_self trajectory shift in real-time
 - Save as `single_dating_to_love_M1_modified.csv` with locks preserved
 
@@ -787,7 +787,7 @@ class ScenarioEditorController:
 
 **3. Diagnostic Tool:**
 - Granularity shift: From "design 2-month arc" to "analyze day 23 crisis"
-- Manual sensitivity: Drag day 15 vulnerability ±2, observe trajectory impact
+- Manual sensitivity: Drag day 15 altruism ±2, observe trajectory impact
 - Identify dominant events: Which day's action mattered most?
 
 **4. Complementary to Scenario Scripts:**
@@ -905,7 +905,7 @@ Natural language queries:
 User: "Which event had the most impact on the Q4 outcome?"
 
 AI: Runs automated sensitivity analysis, reports:
-    "Day 23 (low vulnerability=-5) was 3x more influential than 
+    "Day 23 (low altruism=-5) was 3x more influential than 
      Day 15 (high resonance=7). Changing day 23 to v=-2 would 
      have resulted in Q1 instead of Q4."
 ```
