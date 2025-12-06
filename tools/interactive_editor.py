@@ -45,6 +45,7 @@ from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
 from tools.editor.views.primitive_panel import PrimitivePanel
 from tools.editor.views.trajectory_panel import TrajectoryPanel
+from tools.editor.config import get_config
 
 
 class InteractiveEditor:
@@ -87,6 +88,10 @@ class InteractiveEditor:
             csv_file: Path to CSV file to load
         """
         self.csv_file = Path(csv_file)
+        
+        # Load configuration (with fallback to defaults)
+        config = get_config()
+        self.LAYOUT = config.get_layout()
         
         # Create matplotlib figure with 2-panel layout
         self.fig = plt.figure(figsize=(14, 8))

@@ -1,0 +1,33 @@
+{
+  "layout": {
+    "margin_left": 0.14,
+    "margin_right": 0.02,
+    "margin_top": 0.08,
+    "margin_bottom": 0.06,
+    "panel_gap": 0.35,
+    "subplot_gap": 0.3,
+    "primitive_gauge_x": -0.18,
+    "primitive_gauge_y": 0.5,
+    "trajectory_readout_x": -0.15,
+    "trajectory_readout_y": 0.95,
+    "save_button_left": 0.16,
+    "save_button_bottom": 0.96,
+    "save_button_width": 0.06,
+    "save_button_height": 0.035,
+    "save_info_x": 0.92,
+    "save_info_y": 0.965
+  },
+  "weights": {
+    "w_v": 1.0,
+    "w_r": 1.0,
+    "w_f": 1.0,
+    "w_a": 1.0,
+    "w_S_real": 0.5,
+    "w_S_imag": 0.5
+  },
+  "appearance": {
+    "marker_size": 8,
+    "line_width": 1.5,
+    "grid_alpha": 0.3
+  }
+}

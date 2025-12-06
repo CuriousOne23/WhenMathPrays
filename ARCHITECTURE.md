@@ -4,6 +4,11 @@
 This document describes the overall architecture, object model, and design principles for the WhenMathPrays interactive scenario editor. It is intended to guide development, debugging, and future enhancements.
 
 ## Recent Updates
+**December 6, 2025:** Architecture improvements for Phase 2 readiness:
+- **Primitives Module (`tools/editor/primitives.py`)** - Single source of truth for primitive metadata (names, colors, descriptions). Eliminates scattered definitions across files.
+- **Configuration System (`tools/editor/config.py`)** - User preferences loaded from `~/.whenmathprays/editor_config.json` with fallback to sensible defaults. Allows customization without code edits.
+- **Primitive Name Updates** - Corrected UI labels: Ego→Visibility, Vulnerability→Altruism
+
 **December 5, 2025:** Phase 1 of interactive editor completed with maintainable UI architecture. The `interactive_editor.py` UI system has been designed with a centralized LAYOUT dictionary that consolidates all positioning constants, making future modifications and enhancements significantly easier. This architecture allows for independent positioning of UI elements (gauges, buttons, panels) without hunting through code for magic numbers.
 
 ## Directory Structure
@@ -13,10 +18,12 @@ This document describes the overall architecture, object model, and design princ
   ARCHITECTURE.md
   requirements.txt
   tools/
-    interactive_editor.py          # Main editor application with LAYOUT system
+    interactive_editor.py          # Main editor application with config-driven LAYOUT
     editor/
       model.py                     # Data model (Events, Markers)
       controller.py                # MVC controller with trajectory computation
+      config.py                    # Configuration system (user preferences)
+      primitives.py                # Primitive metadata constants
       views/
         primitive_panel.py         # Primitive plots with readout gauge
         trajectory_panel.py        # Gamma_self trajectory with position readout
@@ -57,6 +64,8 @@ Represents the entire scenario.
 ## Design Principles
 - **Structured Programming:** Code is organized into clear classes and functions with well-defined responsibilities.
 - **Separation of Concerns:** Model, view, and controller logic are separated for maintainability.
+- **Single Source of Truth:** Primitive metadata centralized in one module; configuration values loaded from one file.
+- **Configuration Over Code:** User preferences externalized to JSON config file with sensible defaults.
 - **Extensibility:** Objects are designed to be extended or modified as new features are added.
 - **Debuggability:** State is explicit and easy to inspect; marker objects centralize event state.
 

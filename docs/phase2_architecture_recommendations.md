@@ -181,6 +181,37 @@
 
 ## Specific Recommendations by Component
 
+### 0. Primitive Metadata Module ✅ IMPLEMENTED (December 6, 2025)
+
+**Status:** Complete - `tools/editor/primitives.py` created
+
+**Implementation:** Single source of truth for primitive definitions
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class PrimitiveInfo:
+    key: str           # Short key (v, r, f, a, S)
+    name: str          # Full name (Visibility, Resonance, etc.)
+    color: str         # Hex color code
+    description: str   # Human-readable description
+
+PRIMITIVES = {
+    'v': PrimitiveInfo('v', 'Visibility', '#1f77b4', 'How visible/present...'),
+    'r': PrimitiveInfo('r', 'Resonance', '#ff7f0e', 'Emotional alignment...'),
+    # ...
+}
+```
+
+**Benefits:**
+- One place to update primitive names (no multi-file hunts)
+- Includes descriptions ready for tooltips/help text
+- Self-documenting with metadata
+- Easy to extend (validation rules, ranges, etc.)
+
+**Completed:** December 6, 2025 (~30 minutes)
+
 ### 1. Event Management System (Improve Now or Phase 2)
 
 **Recommendation:** Implement `EventManager` class
@@ -214,36 +245,44 @@ class EventManager:
 - Phase 2 start if migrating to Qt (part of larger refactor)
 - Could implement now (~4-6 hours) if useful for diagnostics
 
-### 2. Configuration System (Improve Now)
+### 2. Configuration System ✅ IMPLEMENTED (December 6, 2025)
 
-**Recommendation:** Add user preferences file
+**Status:** Complete - `tools/editor/config.py` created
 
-**File:** `~/.whenmathprays/editor_config.yaml`
+**Implementation:** User preferences file with JSON format
 
-```yaml
-layout:
-  margin_left: 0.14
-  margin_right: 0.02
-  panel_gap: 0.35
-  primitive_gauge_x: -0.18
+**File:** `~/.whenmathprays/editor_config.json`
 
-weights:
-  w_v: 1.0
-  w_r: 1.0
-  w_f: 1.0
-  w_a: 1.0
-  w_S_real: 0.5
-  w_S_imag: 0.5
-
-appearance:
-  primitive_colors:
-    v: "#1f77b4"
-    r: "#ff7f0e"
-    # ...
+```json
+{
+  "layout": {
+    "margin_left": 0.14,
+    "margin_right": 0.02,
+    "panel_gap": 0.35,
+    "primitive_gauge_x": -0.18
+  },
+  "weights": {
+    "w_v": 1.0,
+    "w_r": 1.0,
+    "w_f": 1.0,
+    "w_a": 1.0,
+    "w_S_real": 0.5,
+    "w_S_imag": 0.5
+  },
+  "appearance": {
+    "marker_size": 8,
+    "line_width": 1.5
+  }
+}
 ```
 
-**Effort:** ~2-3 hours
-**When:** Could implement now, low risk
+**Features:**
+- Falls back to sensible defaults if file doesn't exist (zero breakage)
+- Loads on editor startup, merges with defaults
+- Example config file: `docs/editor_config_example.json`
+- All LAYOUT values now user-customizable
+
+**Completed:** December 6, 2025 (~2 hours)
 
 ### 3. GUI Framework (Decide at Phase 2 Start)
 
@@ -386,10 +425,36 @@ class AddEventDialog(QDialog):
 
 ---
 
+## Implementation Status (December 6, 2025)
+
+### ✅ Completed Improvements
+1. **Primitives Module** (`tools/editor/primitives.py`) - 30 minutes
+   - Single source of truth for primitive metadata
+   - Includes names, colors, descriptions
+   - Updated across all files (primitive_panel.py, documentation)
+
+2. **Configuration System** (`tools/editor/config.py`) - 2 hours
+   - User preferences from `~/.whenmathprays/editor_config.json`
+   - Fallback to sensible defaults (zero breakage)
+   - All LAYOUT values now customizable
+   - Example config in `docs/editor_config_example.json`
+
+**Total Time:** ~2.5 hours  
+**Risk:** Very low (backward compatible)  
+**Benefits:** Immediate maintainability improvements, Phase 2 ready
+
+### 🔜 Recommended Next (When Phase 2 Starts)
+3. **Event Manager with Undo/Redo** - 6-8 hours
+4. **GUI Framework Decision** - Qt for rich features vs. stay with matplotlib
+
+---
+
 ## Action Items
 
 ### Immediate (Optional, ~6-8 hours total):
-1. ☐ Implement `EventManager` class with undo/redo (~4-6 hours)
+1. ✅ ~~Implement primitives module~~ (DONE December 6)
+2. ✅ ~~Implement configuration system~~ (DONE December 6)
+3. ☐ Implement `EventManager` class with undo/redo (~6-8 hours)
 2. ☐ Add configuration file system (~2-3 hours)
 3. ☐ Document both in code and user guide
 
