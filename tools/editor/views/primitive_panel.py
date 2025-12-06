@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
 from .draggable_point import DraggablePoint
+from .canvas_utils import force_canvas_draw
 from ..primitives import PRIMITIVE_NAMES, PRIMITIVE_LABELS, PRIMITIVE_COLORS
 
 
@@ -232,7 +233,7 @@ class PrimitivePanel:
                 print(f"[DEBUG] Preview marker visible: {dp.preview_point.get_visible()} at ({dp.x}, {dp.y})")
                 
                 self.draggable_points[(event_idx, prim)] = dp
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def update_markers(self, marked_data):
         """
@@ -306,8 +307,8 @@ class PrimitivePanel:
                             )
                             self.marker_annotations[key] = ann
                             print(f"    Created annotation {key}")
-        print(f"=== END UPDATE_MARKERS ===\n")
-        self.fig.canvas.draw_idle()
+        print(f"=== END UPDATE_MARKERS ===")
+        force_canvas_draw(self.fig.canvas)
     
     def _on_point_dragged(self, event_index, primitive, new_value):
         """Handle point drag completion (release)."""
@@ -319,6 +320,9 @@ class PrimitivePanel:
     
     def _on_point_preview(self, event_index, primitive, new_value):
         """Handle point drag preview (during motion)."""
+        # Update readout display during drag
+        self._update_readout(event_index, primitive, new_value)
+        
         if self.on_primitive_preview:
             self.on_primitive_preview(event_index, primitive, new_value)
         # Update the curve in real time to pass through the hollow marker
@@ -331,7 +335,7 @@ class PrimitivePanel:
                 ydata = list(ydata)
                 ydata[event_index] = new_value
                 line.set_data(xdata, ydata)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def _on_point_reset(self, event_index, primitive):
         """Handle double-click reset."""
@@ -339,7 +343,7 @@ class PrimitivePanel:
             self.on_primitive_reset(event_index, primitive)
         # After reset, hide all preview markers and refresh UI
         self.cancel_all_previews()
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def _update_readout(self, event_index, primitive, value):
         """Update the readout display with marker ID and value.
@@ -353,13 +357,13 @@ class PrimitivePanel:
             marker_id = f"{event_index}{primitive}"
             self.readout_text.set_text(f"{marker_id}\n{value:.2f}")
             self.readout_text.set_visible(True)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def clear_readout(self):
         """Clear the readout display."""
         if self.readout_text:
             self.readout_text.set_visible(False)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def commit_all_previews(self):
         """Commit all preview points."""
@@ -392,27 +396,71 @@ class PrimitivePanel:
             if key in self.draggable_points:
                 self.draggable_points[key].update_lock_status(locked)
     
-    def zoom_in(self, factor=0.8):
-        """Zoom in on all primitive subplots (x-axis only)."""
-        for prim, ax in self.axes.items():
-            xlim = self.manual_xlim.get(prim, ax.get_xlim())
-            x_center = (xlim[0] + xlim[1]) / 2
-            x_range = (xlim[1] - xlim[0]) * factor / 2
-            new_xlim = (x_center - x_range, x_center + x_range)
-            ax.set_xlim(new_xlim)
-            self.manual_xlim[prim] = new_xlim
-        self.fig.canvas.draw_idle()
+    def zoom_in(self, factor=0.8, target_axes=None):
+        """Zoom in on specific primitive subplot or all if target_axes not specified.
+        
+        Args:
+            factor: Zoom factor (0.8 = zoom in to 80% of current range)
+            target_axes: Specific matplotlib axes to zoom, or None for all
+        """
+        if target_axes:
+            # Zoom only the specific subplot
+            for prim, ax in self.axes.items():
+                if ax == target_axes:
+                    xlim = self.manual_xlim.get(prim, ax.get_xlim())
+                    x_center = (xlim[0] + xlim[1]) / 2
+                    x_range = (xlim[1] - xlim[0]) * factor / 2
+                    new_xlim = (x_center - x_range, x_center + x_range)
+                    ax.set_xlim(new_xlim)
+                    self.manual_xlim[prim] = new_xlim
+                    break
+        else:
+            # Zoom all subplots (legacy behavior)
+            for prim, ax in self.axes.items():
+                xlim = self.manual_xlim.get(prim, ax.get_xlim())
+                x_center = (xlim[0] + xlim[1]) / 2
+                x_range = (xlim[1] - xlim[0]) * factor / 2
+                new_xlim = (x_center - x_range, x_center + x_range)
+                ax.set_xlim(new_xlim)
+                self.manual_xlim[prim] = new_xlim
+        force_canvas_draw(self.fig.canvas)
     
-    def zoom_out(self, factor=1.2):
-        """Zoom out on all primitive subplots (x-axis only)."""
-        for prim, ax in self.axes.items():
-            xlim = self.manual_xlim.get(prim, ax.get_xlim())
-            x_center = (xlim[0] + xlim[1]) / 2
-            x_range = (xlim[1] - xlim[0]) * factor / 2
-            new_xlim = (x_center - x_range, x_center + x_range)
-            ax.set_xlim(new_xlim)
-            self.manual_xlim[prim] = new_xlim
-        self.fig.canvas.draw_idle()
+    def zoom_out(self, factor=1.2, target_axes=None):
+        """Zoom out on specific primitive subplot or all if target_axes not specified.
+        
+        Args:
+            factor: Zoom factor (1.2 = zoom out to 120% of current range)
+            target_axes: Specific matplotlib axes to zoom, or None for all
+        """
+        if target_axes:
+            # Zoom only the specific subplot
+            for prim, ax in self.axes.items():
+                if ax == target_axes:
+                    # Initialize manual_xlim if not set (first zoom_out)
+                    if prim not in self.manual_xlim:
+                        self.manual_xlim[prim] = ax.get_xlim()
+                    
+                    xlim = self.manual_xlim[prim]
+                    x_center = (xlim[0] + xlim[1]) / 2
+                    x_range = (xlim[1] - xlim[0]) * factor / 2
+                    new_xlim = (x_center - x_range, x_center + x_range)
+                    ax.set_xlim(new_xlim)
+                    self.manual_xlim[prim] = new_xlim
+                    break
+        else:
+            # Zoom all subplots (legacy behavior)
+            for prim, ax in self.axes.items():
+                # Initialize manual_xlim if not set (first zoom_out)
+                if prim not in self.manual_xlim:
+                    self.manual_xlim[prim] = ax.get_xlim()
+                
+                xlim = self.manual_xlim[prim]
+                x_center = (xlim[0] + xlim[1]) / 2
+                x_range = (xlim[1] - xlim[0]) * factor / 2
+                new_xlim = (x_center - x_range, x_center + x_range)
+                ax.set_xlim(new_xlim)
+                self.manual_xlim[prim] = new_xlim
+        force_canvas_draw(self.fig.canvas)
     
     def reset_view(self):
         """Reset zoom to auto-fit all data."""
@@ -441,7 +489,7 @@ class PrimitivePanel:
                     print(f"  {prim}: x=[{min(xdata):.1f}, {max(xdata):.1f}]")
         
         print("=== END RESET ===")
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def save_plot(self, filepath: str):
         """Save the primitive panel plots to a PNG file.
@@ -487,3 +535,76 @@ class PrimitivePanel:
         save_fig.tight_layout()
         save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
         plt.close(save_fig)
+    
+    # === Phase 2: Incremental Update Methods ===
+    
+    def update_marker(self, event_idx: int, prim: str, value: float, is_modified: bool):
+        """
+        Update single marker incrementally (Phase 2 refactor).
+        
+        Args:
+            event_idx: Event index
+            prim: Primitive name
+            value: New value to display
+            is_modified: Whether to show as modified from baseline
+        """
+        # Get the marker object
+        marker_key = (event_idx, prim)
+        if marker_key not in self.draggable_points:
+            print(f"[WARNING] Marker {marker_key} not found in draggable_points")
+            return
+        
+        marker = self.draggable_points[marker_key]
+        
+        # Update position
+        marker.y = value
+        marker.original_y = value
+        marker.point.set_ydata([value])
+        
+        # Update the line plot data at this event index
+        if prim in self.lines:
+            line = self.lines[prim]
+            xdata, ydata = line.get_data()
+            if event_idx < len(ydata):
+                ydata_list = list(ydata)
+                ydata_list[event_idx] = value
+                line.set_ydata(ydata_list)
+        
+        # Update modified state visual
+        marker.set_modified(is_modified)
+        
+        # Hide preview point if visible
+        if marker.preview_point.get_visible():
+            marker.preview_point.set_visible(False)
+        
+        # Efficient partial redraw
+        force_canvas_draw(self.fig.canvas)
+    
+    def clear_all_modified(self):
+        """
+        Clear modified visual state from all markers (after save).
+        """
+        for marker in self.draggable_points.values():
+            marker.set_modified(False)
+        
+        force_canvas_draw(self.fig.canvas)
+    
+    def remove_marker_label(self, event_idx: int, prim: str):
+        """
+        Remove label annotation for a specific marker immediately.
+        
+        Args:
+            event_idx: Event index
+            prim: Primitive name
+        """
+        marker_key = (event_idx, prim)
+        if marker_key in self.marker_annotations:
+            ann = self.marker_annotations[marker_key]
+            try:
+                if ann.axes is not None:
+                    ann.remove()
+                    print(f"[DEBUG] Removed label annotation {marker_key}")
+            except Exception as e:
+                print(f"[WARNING] Error removing label annotation {marker_key}: {e}")
+            del self.marker_annotations[marker_key]
+            force_canvas_draw(self.fig.canvas)
