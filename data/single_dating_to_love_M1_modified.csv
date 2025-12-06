@@ -1,13 +1,13 @@
 time_unit,days
-gamma_self_0,+0+0j
+gamma_self_0,-5+0j
 day,v,r,f,a,S,notes,marker,locked
 0,5.0,0.0,2.0,2.0,0.0,Initial condition: eager but moderate love,,
 7,5.0,2.0,2.0,3.0,1.0,First date: strong attraction developing,,
 14,5.0,-2.0,2.0,3.0,-1.0,Early wobble: pressing pace - M2 pulls back,,
 21,5.0,2.0,5.0,5.0,3.0,Repair begins: slows down and listens,,
 28,5.0,5.0,5.0,5.0,5.0,Shared rhythm: casual comfort - ego softens,,
-35,5.0,1.2833333333333172,7.0,7.0,7.0,Repair complete: trust growing - balanced,circle,True
+35,5.0,7.0,7.0,7.0,7.0,Repair complete: trust growing - balanced,,
 42,6.0,8.0,8.0,8.0,8.0,Stable connection: ego moderated - love rising,,
-49,7.0,9.0,9.0,9.0,2.1999999999999993,Steady connection: playful and secure,circle,True
+49,0.611,9.0,9.0,2.481,9.0,Steady connection: playful and secure,circle,True
 56,8.0,9.0,9.0,9.0,10.0,Higher plateau: feels secure,,
 60,8.0,9.0,9.0,9.0,10.0,Outcome: stable relationship - strong love,,

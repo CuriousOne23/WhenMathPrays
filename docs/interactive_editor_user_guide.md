@@ -99,11 +99,10 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 - Markers become **hollow** while in preview mode
 - Gamma_self trajectory updates in real-time (orange preview)
 
-### 3. Commit or Cancel Changes
+### 3. Save or Cancel Changes
 - **Click hollow marker** to continue editing from that position
 - **Double-click hollow marker** to cancel and revert to original
-- **Press 'C'** to commit all previews (hollow → filled)
-- **Press ESC** to cancel all previews
+- **Press ESC** to cancel all previews and revert to last saved state
 
 ### 4. Lock/Unlock Events
 - **Right-click** on any marker to toggle lock status
@@ -112,6 +111,7 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 
 ### 5. Save Your Work
 - **Click Save button** or **Press Ctrl+S**
+- Saving automatically commits all preview changes (hollow → filled)
 - Modified events automatically marked with numbered labels
 - CSV includes `marker` and `locked` columns for persistence
 
@@ -152,7 +152,6 @@ day,v,r,f,a,S,notes,marker,locked
 ### Keyboard Shortcuts
 
 **Editing:**
-- `C` - Commit all preview changes
 - `ESC` - Cancel all preview changes
 - `G` - Edit gamma_self_0 initial position (starting point)
 
@@ -163,7 +162,7 @@ day,v,r,f,a,S,notes,marker,locked
 - `F` - Toggle fixed view mode (prevents auto-zoom during edits)
 
 **Save:**
-- `Ctrl+S` - Save (commits all previews, saves CSV)
+- `Ctrl+S` - Save (auto-commits all previews and saves CSV)
 
 ---
 
@@ -211,17 +210,17 @@ day,v,r,f,a,S,notes,marker,locked
 2. Modify single primitive at one event
 3. Observe trajectory deviation magnitude
 4. Use primitive gauge to record exact values tested
-5. Cancel (ESC) or commit (C) to test different values
+5. Cancel (ESC) to test different values, or save when satisfied
 
 ---
 
 ## Advanced Features
 
 ### Preview System
-The editor uses a sophisticated preview/commit workflow:
+The editor uses a sophisticated preview/save workflow:
 - **Preview mode:** Drag markers to see instant trajectory feedback (hollow markers)
-- **Commit mode:** Press 'C' to lock changes (hollow → filled)
-- **Pinned markers:** Committed changes pin gamma_self position on trajectory
+- **Save to commit:** Click Save button to lock changes (hollow → filled)
+- **Pinned markers:** Saved changes pin gamma_self position on trajectory
 - **Incremental editing:** Click hollow markers to continue editing from preview position
 
 ### Gamma_Self_0 Editing
@@ -250,7 +249,7 @@ When multiple primitives are modified at the same event:
 3. **Use primitive gauge** to document exact values for reproducibility  
 4. **Use gamma_self gauge** to record critical trajectory waypoints
 5. **Save frequently** - Each save creates `_modified` version, preserving original
-6. **Commit incrementally** - Press 'C' after each major change rather than editing many events at once
+6. **Save incrementally** - Save after each major change rather than editing many events at once
 7. **Export PNG** with Shift+Click to capture trajectory visualizations for reports
 
 ---
