@@ -1,4 +1,6 @@
-step,v,r,f,a,S,notes
+time_unit,days
+gamma_self_0,-5+0j
+day,v,r,f,a,S,notes
 0,0,0,0,0,0,Initial condition: cautious but higher love
 7,1,-2,-2,-2,-2,First date: feels pressure - pulls back
 14,0,0,1,1,0,Early wobble: guarded - tests boundaries

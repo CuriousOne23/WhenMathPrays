@@ -18,7 +18,7 @@ class DraggablePoint:
     """
     
     def __init__(self, ax, x, y, event_index, primitive, callback, 
-                 locked=False, color='blue', size=8, preview_callback=None, reset_callback=None):
+                 locked=False, color='blue', size=8, preview_callback=None, reset_callback=None, baseline_y=None):
         """
         Initialize draggable point.
         
@@ -34,12 +34,13 @@ class DraggablePoint:
             size: Point size in pixels
             preview_callback: Function(event_index, primitive, new_value) for live preview
             reset_callback: Function(event_index, primitive) for double-click reset
+            baseline_y: Original CSV baseline value (for reset). If None, uses y.
         """
         self.ax = ax
         self.x = x
         self.y = y
         self.original_y = y  # Store original committed value
-        self.baseline_y = y  # Store CSV baseline (never changes)
+        self.baseline_y = baseline_y if baseline_y is not None else y  # Store CSV baseline (never changes)
         self.event_index = event_index
         self.primitive = primitive
         self.callback = callback
@@ -187,9 +188,10 @@ class DraggablePoint:
     
     def on_double_click(self):
         """Handle double-click: reset to baseline CSV value if not already at baseline."""
+        # Always call reset callback if the current value differs from baseline
         if abs(self.y - self.baseline_y) > 1e-8:
             if self.reset_callback:
-                print(f"Double-click detected: Resetting event {self.event_index}/{self.primitive} to baseline")
+                print(f"Double-click reset: {self.event_index}/{self.primitive} from {self.y:.3f} to baseline {self.baseline_y:.3f}")
                 self.reset_callback(self.event_index, self.primitive)
             else:
                 # Fallback: just reset locally
@@ -200,6 +202,7 @@ class DraggablePoint:
                 self.ax.figure.canvas.draw_idle()
         else:
             # Already at baseline, just hide preview if visible
+            print(f"Already at baseline: {self.event_index}/{self.primitive} = {self.baseline_y:.3f}")
             self.preview_point.set_visible(False)
             self.ax.figure.canvas.draw_idle()
     
@@ -233,7 +236,21 @@ class DraggablePoint:
         self.ax.figure.canvas.draw_idle()
     
     def disconnect(self):
-        """Disconnect event handlers."""
+        """Disconnect event handlers and remove visual artists."""
+        # Disconnect event handlers
         self.ax.figure.canvas.mpl_disconnect(self.cidpress)
         self.ax.figure.canvas.mpl_disconnect(self.cidrelease)
         self.ax.figure.canvas.mpl_disconnect(self.cidmotion)
+        
+        # Remove visual artists from axes to prevent duplicates
+        if self.point:
+            self.point.remove()
+            self.point = None
+        
+        if self.preview_point:
+            self.preview_point.remove()
+            self.preview_point = None
+        
+        if self.hatch_patch:
+            self.hatch_patch.remove()
+            self.hatch_patch = None

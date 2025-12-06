@@ -158,7 +158,40 @@ day,v,r,f,a,S,notes,marker,locked
 
 ## Creating and Editing Scenarios
 
-### Option 1: Generate New Scenarios
+### Option 1: Interactive Scenario Editor (NEW - Phase 1 Complete! ✅)
+
+**The Interactive Scenario Editor** provides a graphical interface for scenario customization and diagnostic analysis. This is the recommended tool for:
+- **Customizing scenarios** - Drag-and-drop primitive editing with real-time trajectory preview
+- **Diagnostic analysis** - Understanding which events dominate relationship outcomes
+- **Sensitivity testing** - Seeing immediate impact of primitive changes on gamma_self evolution
+- **Data validation** - Testing if GRP can reproduce observed relationship trajectories
+
+```bash
+# Launch the interactive editor
+python tools/interactive_editor.py data/scenario_file.csv
+
+# Example
+python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+```
+
+**Key Features:**
+- Drag primitive markers (v, r, f, a, S) to modify values
+- Real-time gamma_self trajectory updates
+- Lock/unlock events (right-click markers)
+- Auto-marking of modified events
+- Diagnostic gauges showing marker ID, Y-values, and trajectory coordinates
+- Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
+- CSV output includes `marker` and `locked` columns for persistence
+
+**See the complete guide:** [Interactive Editor User Guide](docs/interactive_editor_user_guide.md)
+
+**Architecture & Future Plans:**
+- [ARCHITECTURE.md](ARCHITECTURE.md) - UI layout system and maintainability notes
+- [future_interactive_edit_requirements.md](docs/future_interactive_edit_requirements.md) - Phase roadmap and known issues
+
+---
+
+### Option 2: Generate New Scenarios
 
 Use the scenario generator to create CSV files with various emotional arc patterns:
 

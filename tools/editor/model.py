@@ -117,15 +117,19 @@ class EditorModel:
         events = self.events_m1 if perspective == "M1" else self.events_m2
 
         # Ensure marker and locked columns are set for edited/locked events
+        print(f"[SAVE] modified_primitives before save: {self.modified_primitives}")
         for idx, event in enumerate(events):
-            # Set marker and locked if event was edited (fractional value or in modified_primitives)
-            if idx in self.modified_primitives or any(
-                isinstance(getattr(event, prim), float) and not float(getattr(event, prim)).is_integer()
-                for prim in ['v', 'r', 'f', 'a', 'S']
-            ):
+            # Set marker and locked if event was edited (in modified_primitives)
+            if idx in self.modified_primitives:
+                # Only set marker if not already set
                 if not event.marker:
                     event.marker = 'circle'
+                    print(f"[SAVE] Set marker='circle' for event {idx}")
+                else:
+                    print(f"[SAVE] Event {idx} already has marker='{event.marker}'")
+                # Always lock modified events
                 event.locked = True
+                print(f"[SAVE] Set locked=True for event {idx}, modified prims: {self.modified_primitives[idx]}")
 
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             # Write metadata if present
@@ -138,13 +142,13 @@ class EditorModel:
             f.write(f"gamma_self_0,{gamma_str}\n")
 
             # Write CSV data
-            fieldnames = ['step', 'v', 'r', 'f', 'a', 'S', 'notes', 'marker', 'locked']
+            fieldnames = ['day', 'v', 'r', 'f', 'a', 'S', 'notes', 'marker', 'locked']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
-
+            
             for event in events:
                 writer.writerow(event.to_dict())
-
+        
         self.dirty = False
         print(f"Saved {len(events)} events to {filepath}")
     

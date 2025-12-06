@@ -25,7 +25,7 @@ class PrimitivePanel:
         'S': '#9467bd'   # Purple (fixed lowercase)
     }
 
-    def __init__(self, fig, grid_spec, on_primitive_changed, on_lock_toggle, on_primitive_preview=None, on_primitive_reset=None):
+    def __init__(self, fig, grid_spec, on_primitive_changed, on_lock_toggle, on_primitive_preview=None, on_primitive_reset=None, layout=None):
         """
         Initialize primitive panel.
         Args:
@@ -35,22 +35,29 @@ class PrimitivePanel:
             on_lock_toggle: Callback(event_index) for right-click lock toggle
             on_primitive_preview: Callback(event_index, primitive, value) during drag
             on_primitive_reset: Callback(event_index, primitive) for double-click reset
+            layout: Layout configuration dict (optional)
         """
         self.fig = fig
         self.on_primitive_changed = on_primitive_changed
         self.on_lock_toggle = on_lock_toggle
         self.on_primitive_preview = on_primitive_preview
         self.on_primitive_reset = on_primitive_reset
+        self.layout = layout or {}  # Store layout config
 
         # Create subplots for each primitive
         self.axes = {}
         self.lines = {}
         self.draggable_points = {}  # {(event_idx, primitive): DraggablePoint}
+        self.original_markers = {}  # {(event_idx, primitive): matplotlib artist} - static filled markers at baseline
+        self.baseline_values = {}  # {(event_idx, primitive): float} - original CSV values
         self.marker_annotations = {}  # {(event_idx, primitive): Annotation} for numbered markers
 
         # Store manual x-axis limits for zoom
         self.manual_xlim = {}  # {prim: (xmin, xmax)}
         self.last_xlim = None  # For reset_view
+        
+        # Readout display for last edited marker
+        self.readout_text = None  # Will be created after axes are set up
 
         # Create 5 subplots stacked vertically
         from matplotlib.gridspec import GridSpecFromSubplotSpec
@@ -68,6 +75,19 @@ class PrimitivePanel:
             line, = ax.plot([], [], '-', color=self.PRIMITIVE_COLORS[prim], linewidth=1.5, alpha=0.7)
             self.axes[prim] = ax
             self.lines[prim] = line
+        
+        # Create readout text display (positioned to the left of fidelity plot)
+        f_ax = self.axes['f']
+        gauge_x = self.layout.get('primitive_gauge_x', -0.25)
+        gauge_y = self.layout.get('primitive_gauge_y', 0.5)
+        self.readout_text = f_ax.text(
+            gauge_x, gauge_y, '',  # Use layout config
+            transform=f_ax.transAxes,
+            fontsize=10,
+            verticalalignment='center',
+            horizontalalignment='right',
+            bbox=dict(boxstyle='round,pad=0.5', facecolor='lightyellow', edgecolor='black', alpha=0.8)
+        )
 
     def update_from_model(self, events):
         """
@@ -93,20 +113,47 @@ class PrimitivePanel:
         for dp in self.draggable_points.values():
             dp.disconnect()
         self.draggable_points.clear()
-        for ann in self.marker_annotations.values():
-            if getattr(ann, 'axes', None) is not None:
-                ann.remove()
-        self.marker_annotations.clear()
+        
+        # Remove old original markers
+        for artist in self.original_markers.values():
+            if artist:
+                artist.remove()
+        self.original_markers.clear()
+        
+        # Store baseline values on first load (if not already stored)
+        if not self.baseline_values:
+            for event_idx, event in enumerate(events):
+                for prim in self.PRIMITIVE_NAMES:
+                    self.baseline_values[(event_idx, prim)] = event.markers[prim].value
+        
+        # Don't clear marker_annotations here - they are managed by update_markers()
+        # Only that method should add/remove numbered markers
+        
         for event_idx, event in enumerate(events):
             for prim in self.PRIMITIVE_NAMES:
                 marker = event.markers[prim]
-                # Determine if marker has been edited (use style or model.modified_primitives)
+                # Determine if marker has been edited
                 edited = event_idx in mod_prims and prim in mod_prims.get(event_idx, set())
                 print(f"[DEBUG] event_idx={event_idx}, prim={prim}, edited={edited}, modified_primitives={mod_prims}")
-                # Remove any ghost preview markers before creating new ones
-                # Only show one hollow marker if edited
-                markerfacecolor = 'none' if edited else self.PRIMITIVE_COLORS[prim]
-                markeredgecolor = self.PRIMITIVE_COLORS[prim]
+                
+                # If edited, show original marker (filled, non-draggable) at baseline position
+                if edited:
+                    baseline_val = self.baseline_values.get((event_idx, prim), marker.value)
+                    if abs(baseline_val - marker.value) > 0.001:  # Only if actually different
+                        original_marker, = self.axes[prim].plot(
+                            [marker.time], [baseline_val], 'o',
+                            color=self.PRIMITIVE_COLORS[prim],
+                            markerfacecolor=self.PRIMITIVE_COLORS[prim],
+                            markeredgecolor=self.PRIMITIVE_COLORS[prim],
+                            markersize=7,
+                            alpha=0.5,  # Semi-transparent to show it's the "old" position
+                            zorder=5  # Below the draggable points
+                        )
+                        self.original_markers[(event_idx, prim)] = original_marker
+                        print(f"[DEBUG] Original marker: event={event_idx}, prim={prim}, baseline={baseline_val}")
+                
+                # Create DraggablePoint for current (possibly modified) position
+                baseline_val = self.baseline_values.get((event_idx, prim), marker.value)
                 dp = DraggablePoint(
                     ax=self.axes[prim],
                     x=marker.time,
@@ -118,20 +165,27 @@ class PrimitivePanel:
                     reset_callback=self._on_point_reset if self.on_primitive_reset else None,
                     locked=False,
                     color=self.PRIMITIVE_COLORS[prim],
-                    size=7
+                    size=7,
+                    baseline_y=baseline_val
                 )
-                # Always hide preview marker after drag release
-                dp.preview_point.set_visible(False)
-                # Patch the filled marker to hollow if edited
+                
+                # Set marker appearance based on edit state
                 if edited:
+                    # Show hollow marker for modified points
                     dp.point.set_markerfacecolor('none')
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
+                    dp.point.set_markeredgewidth(2)
                     print(f"[DEBUG] Hollow marker: event={event_idx}, prim={prim}, value={marker.value}")
                 else:
+                    # Show filled marker for unmodified points
                     dp.point.set_markerfacecolor(self.PRIMITIVE_COLORS[prim])
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
                     print(f"[DEBUG] Filled marker: event={event_idx}, prim={prim}, value={marker.value}")
+                
+                # Ensure preview point is hidden (it's only shown during active dragging)
+                dp.preview_point.set_visible(False)
                 print(f"[DEBUG] Preview marker visible: {dp.preview_point.get_visible()} at ({dp.x}, {dp.y})")
+                
                 self.draggable_points[(event_idx, prim)] = dp
         self.fig.canvas.draw_idle()
     
@@ -213,6 +267,8 @@ class PrimitivePanel:
     def _on_point_dragged(self, event_index, primitive, new_value):
         """Handle point drag completion (release)."""
         print(f"[DEBUG] _on_point_dragged called: event={event_index}, prim={primitive}, new_value={new_value}")
+        # Update readout display with marker ID and value
+        self._update_readout(event_index, primitive, new_value)
         # Commit the new value to the model and let the controller handle UI refresh
         self.on_primitive_changed(event_index, primitive, new_value)
     
@@ -239,6 +295,26 @@ class PrimitivePanel:
         # After reset, hide all preview markers and refresh UI
         self.cancel_all_previews()
         self.fig.canvas.draw_idle()
+    
+    def _update_readout(self, event_index, primitive, value):
+        """Update the readout display with marker ID and value.
+        
+        Args:
+            event_index: Event index (marker number)
+            primitive: Primitive name (v, r, f, a, S)
+            value: Y value
+        """
+        if self.readout_text:
+            marker_id = f"{event_index}{primitive}"
+            self.readout_text.set_text(f"{marker_id}\n{value:.2f}")
+            self.readout_text.set_visible(True)
+            self.fig.canvas.draw_idle()
+    
+    def clear_readout(self):
+        """Clear the readout display."""
+        if self.readout_text:
+            self.readout_text.set_visible(False)
+            self.fig.canvas.draw_idle()
     
     def commit_all_previews(self):
         """Commit all preview points."""
@@ -321,3 +397,48 @@ class PrimitivePanel:
         
         print("=== END RESET ===")
         self.fig.canvas.draw_idle()
+    
+    def save_plot(self, filepath: str):
+        """Save the primitive panel plots to a PNG file.
+        
+        Args:
+            filepath: Output PNG file path
+        """
+        # Create a new figure with just the primitive subplots
+        save_fig = plt.figure(figsize=(10, 12))
+        
+        for i, prim in enumerate(self.PRIMITIVE_NAMES):
+            ax = save_fig.add_subplot(5, 1, i+1)
+            
+            # Copy the line data
+            if prim in self.lines:
+                line = self.lines[prim]
+                xdata, ydata = line.get_data()
+                ax.plot(xdata, ydata, color=self.PRIMITIVE_COLORS[prim], linewidth=2)
+            
+            # Copy markers (both baseline and modified)
+            for (event_idx, p), marker in self.original_markers.items():
+                if p == prim and marker.axes == self.axes[prim]:
+                    xdata, ydata = marker.get_data()
+                    ax.plot(xdata, ydata, marker='o', color=self.PRIMITIVE_COLORS[prim],
+                           markersize=8, markeredgewidth=1.5, markeredgecolor='black',
+                           linestyle='none')
+            
+            for (event_idx, p), dp in self.draggable_points.items():
+                if p == prim:
+                    ax.plot([dp.x], [dp.y], marker='o', color=self.PRIMITIVE_COLORS[prim],
+                           markersize=8, markerfacecolor='white', markeredgewidth=1.5,
+                           markeredgecolor=self.PRIMITIVE_COLORS[prim], linestyle='none')
+            
+            # Copy axis properties
+            ax.set_ylabel(self.PRIMITIVE_LABELS[prim], fontsize=10, fontweight='bold')
+            ax.set_ylim(self.axes[prim].get_ylim())
+            ax.set_xlim(self.axes[prim].get_xlim())
+            ax.grid(True, alpha=0.3)
+            
+            if i == 4:  # Last subplot
+                ax.set_xlabel('Time', fontsize=10)
+        
+        save_fig.tight_layout()
+        save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
+        plt.close(save_fig)
