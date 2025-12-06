@@ -274,3 +274,116 @@ class EditorModel:
     def clear_previews(self) -> None:
         """Clear all preview changes without committing."""
         self.preview_changes.clear()
+    
+    # === Phase 1: Query Interface (Single Source of Truth) ===
+    
+    def get_event(self, event_idx: int, perspective: str = "M1"):
+        """
+        Get single event by index.
+        
+        Args:
+            event_idx: Zero-based event index
+            perspective: "M1" or "M2"
+        
+        Returns:
+            Event object
+        
+        Raises:
+            IndexError: If event_idx out of range
+        """
+        events = self.get_events(perspective)
+        if not 0 <= event_idx < len(events):
+            raise IndexError(f"Event index {event_idx} out of range [0, {len(events)})")
+        return events[event_idx]
+    
+    def is_modified(self, event_idx: int, prim: str) -> bool:
+        """
+        Check if primitive has been modified from baseline.
+        
+        Args:
+            event_idx: Zero-based event index
+            prim: Primitive name ('v', 'r', 'f', 'a', 'S')
+        
+        Returns:
+            True if modified, False if at baseline
+        """
+        if event_idx not in self.modified_primitives:
+            return False
+        return prim in self.modified_primitives[event_idx]
+    
+    def get_baseline_value(self, event_idx: int, prim: str, perspective: str = "M1") -> float:
+        """
+        Get the original (pre-edit) value of a primitive.
+        
+        Args:
+            event_idx: Zero-based event index
+            prim: Primitive name
+            perspective: "M1" or "M2"
+        
+        Returns:
+            Original value from file load or last save
+        
+        Raises:
+            IndexError: If event_idx out of range
+            KeyError: If prim invalid
+        """
+        # Use controller's baseline_primitives if available, otherwise current value
+        # Note: This requires baseline to be stored separately during load
+        # For now, return current value if not modified (assumes unchanged = baseline)
+        events = self.get_events(perspective)
+        if not 0 <= event_idx < len(events):
+            raise IndexError(f"Event index {event_idx} out of range")
+        
+        event = events[event_idx]
+        if prim not in ['v', 'r', 'f', 'a', 'S']:
+            raise KeyError(f"Invalid primitive: {prim}")
+        
+        # Return the marker value (baseline stored elsewhere in controller)
+        # This method will be improved when we add baseline storage to model
+        return event.markers[prim].value
+    
+    def get_modified_events(self) -> set:
+        """
+        Get indices of all events with modifications.
+        
+        Returns:
+            Set of event indices with at least one modified primitive
+        """
+        return set(self.modified_primitives.keys())
+    
+    def reset_event_primitive(self, event_idx: int, prim: str, baseline_value: float, perspective: str = "M1") -> float:
+        """
+        Reset single primitive to baseline value.
+        
+        Args:
+            event_idx: Zero-based event index
+            prim: Primitive name
+            baseline_value: The baseline value to restore
+            perspective: "M1" or "M2"
+        
+        Returns:
+            The baseline value that was restored
+        
+        Raises:
+            IndexError: If event_idx out of range
+            KeyError: If prim invalid
+        """
+        events = self.get_events(perspective)
+        if not 0 <= event_idx < len(events):
+            raise IndexError(f"Event index {event_idx} out of range")
+        
+        if prim not in ['v', 'r', 'f', 'a', 'S']:
+            raise KeyError(f"Invalid primitive: {prim}")
+        
+        # Reset the value
+        event = events[event_idx]
+        event.markers[prim].value = baseline_value
+        
+        # Remove from modified set
+        if event_idx in self.modified_primitives:
+            self.modified_primitives[event_idx].discard(prim)
+            if not self.modified_primitives[event_idx]:
+                del self.modified_primitives[event_idx]
+        
+        self.dirty = True
+        return baseline_value

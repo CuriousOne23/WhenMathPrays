@@ -11,32 +11,18 @@ Usage:
 Example:
     python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 
-Layout System:
-    The UI layout is controlled by the LAYOUT dictionary in InteractiveEditor class.
-    All positioning constants are defined there for easy adjustment:
-    
-    - margin_left: Left edge space (for primitive readout gauge)
-    - margin_right: Right edge space
-    - margin_top: Top edge space (for Save button area)
-    - margin_bottom: Bottom edge space
-    - panel_gap: Horizontal space between primitive and gamma_self panels
-    - subplot_gap: Vertical space between primitive subplots
-    - save_button_*: Position and size of Save button
-    - save_info_*: Position of instruction text
-    
-    To adjust layout:
-    1. Modify values in LAYOUT dictionary
-    2. All derived positions update automatically
-    3. No need to hunt for magic numbers throughout the code
+Phase 2 Update:
+    Migrated to PySide6 for professional UI framework with native
+    toolbars, dialogs, and undo/redo support.
 """
 
 import sys
 import argparse
 from pathlib import Path
-import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from tkinter import filedialog
-import tkinter as tk
+
+# PySide6 imports (Phase 2)
+from PySide6.QtWidgets import QApplication
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -46,6 +32,7 @@ from tools.editor.controller import EditorController
 from tools.editor.views.primitive_panel import PrimitivePanel
 from tools.editor.views.trajectory_panel import TrajectoryPanel
 from tools.editor.config import get_config
+from tools.editor.qt_window import EditorMainWindow
 
 
 class InteractiveEditor:
@@ -80,23 +67,24 @@ class InteractiveEditor:
         'save_info_y': 0.965,
     }
     
-    def __init__(self, csv_file: str):
+    def __init__(self, csv_file: str, qt_app: QApplication):
         """
         Initialize interactive editor.
         
         Args:
             csv_file: Path to CSV file to load
+            qt_app: QApplication instance
         """
         self.csv_file = Path(csv_file)
+        self.qt_app = qt_app
         
         # Load configuration (with fallback to defaults)
         config = get_config()
         self.LAYOUT = config.get_layout()
         
-        # Create matplotlib figure with 2-panel layout
-        self.fig = plt.figure(figsize=(14, 8))
-        self.fig.canvas.manager.set_window_title(
-            f'Interactive Scenario Editor - {self.csv_file.name}')
+        # Create Qt main window (Phase 2)
+        self.window = EditorMainWindow(self.csv_file)
+        self.fig = self.window.fig  # Use figure from Qt window
         
         # Create grid layout: 5 rows (primitives) x 2 columns
         # Left column: Primitives (5 subplots stacked)
@@ -139,109 +127,45 @@ class InteractiveEditor:
             trajectory_panel=self.trajectory_panel
         )
 
-        # Add toolbar buttons
-        self._setup_toolbar()
-
         # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.csv_file))
 
-        # Connect keyboard shortcuts
+        # Track last mouse position for context-aware zoom
+        self.last_mouse_axes = None
+        self.fig.canvas.mpl_connect('motion_notify_event', self._on_mouse_move)
+        
+        # Set up callbacks AFTER panels and controller are initialized
+        self.window.save_callback = self._handle_save_request
+        self.window.cleanup_callback = self._handle_cleanup
+        
+        # Connect zoom toolbar buttons (will zoom both panels)
+        self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
+        self.window.zoom_out_action.triggered.connect(self._handle_zoom_out)
+        self.window.zoom_reset_action.triggered.connect(self._handle_zoom_reset)
+        
+        # Connect keyboard shortcuts and scroll wheel
         self.fig.canvas.mpl_connect('key_press_event', self._on_key_press)
+        self.fig.canvas.mpl_connect('scroll_event', self._on_scroll)
+        self.fig.canvas.mpl_connect('button_press_event', self._on_mouse_press)
+        self.fig.canvas.mpl_connect('button_release_event', self._on_mouse_release)
         
-        # Disable the toolbar's save button (we have our own)
-        self._disable_toolbar_save_button()
+        # Pan state
+        self.pan_active = False
+        self.pan_start = None
+        self.pan_axes = None
     
-    def _disable_toolbar_save_button(self):
-        """Disable the matplotlib toolbar's save button."""
-        toolbar = self.fig.canvas.toolbar
-        if toolbar:
-            # Remove save button from toolbar
-            try:
-                # For NavigationToolbar2Tk (Tkinter backend)
-                if hasattr(toolbar, '_buttons'):
-                    # Find and disable the save button
-                    for name, button in toolbar._buttons.items():
-                        if name == 'Save':
-                            button.config(state='disabled')
-                # Alternative: hide it completely by removing from toolbar
-                # This works for most backends
-                toolbar.children['!button3'].config(state='disabled')  # Save is typically the 3rd button
-            except:
-                # If disabling fails, just continue - not critical
-                pass
-    
-    def _setup_toolbar(self):
-        """Setup custom toolbar buttons."""
-        toolbar = self.fig.canvas.toolbar
-        if toolbar:
-            # Add Save button to the toolbar
-            import matplotlib
-            from matplotlib.widgets import Button
-            
-            # Place button in a new axes on the figure
-            save_ax = self.fig.add_axes([
-                self.LAYOUT['save_button_left'], 
-                self.LAYOUT['save_button_bottom'], 
-                self.LAYOUT['save_button_width'], 
-                self.LAYOUT['save_button_height']
-            ])
-            self._save_button = Button(save_ax, 'Save', color='#e0e0e0', hovercolor='#b0ffb0')
-            self._save_button.on_clicked(self._on_save_button)
-            save_ax._button = self._save_button  # Prevent garbage collection
-            
-            # Add informational text about modifier keys (to the right of Save button)
-            # Calculate position to the right of the button
-            info_x = self.LAYOUT['save_button_left'] + self.LAYOUT['save_button_width'] + 0.005
-            info_text = self.fig.text(
-                info_x, 
-                self.LAYOUT['save_info_y'], 
-                'Click=CSV | Shift=PNG | Ctrl=Both', 
-                fontsize=8, color='#666666', ha='left', va='center'  # Changed ha to 'left'
-            )
-            self._save_info_text = info_text
-
-    def _on_save_button(self, event):
-        """Handle Save button click: commit previews and save based on modifier keys.
-        
-        Click = CSV only
-        Shift+Click = PNG only
-        Ctrl+Click = Both CSV and PNG
+    def _handle_save_request(self, options: dict):
         """
+        Handle save request from Qt toolbar.
+        
+        Args:
+            options: Dict with 'csv' and 'png' boolean flags
+        """
+        # Commit any preview changes first
         self.controller.commit_changes()
         
-        # Detect modifier keys from the mouse event
-        # In matplotlib button events, we need to check the canvas's current key modifiers
-        import matplotlib.backend_bases as backend_bases
-        guiEvent = event.guiEvent if hasattr(event, 'guiEvent') else None
-        
-        save_csv = True
-        save_png = False
-        
-        # Check for modifier keys
-        if guiEvent:
-            # Check if Shift or Ctrl is pressed
-            if hasattr(guiEvent, 'keysym'):
-                # Tkinter event
-                shift = bool(guiEvent.state & 0x0001)
-                ctrl = bool(guiEvent.state & 0x0004)
-            elif hasattr(guiEvent, 'modifiers'):
-                # Qt event
-                from matplotlib.backend_bases import MouseEvent
-                shift = 'shift' in str(guiEvent.modifiers()).lower()
-                ctrl = 'control' in str(guiEvent.modifiers()).lower() or 'ctrl' in str(guiEvent.modifiers()).lower()
-            else:
-                shift = False
-                ctrl = False
-            
-            if ctrl:
-                # Ctrl = Both
-                save_csv = True
-                save_png = True
-            elif shift:
-                # Shift = PNG only
-                save_csv = False
-                save_png = True
-            # else: default is CSV only
+        save_csv = options.get('csv', True)
+        save_png = options.get('png', False)
         
         # Determine if current file is the original (in data/ and does not end with _modified.csv)
         original = (
@@ -265,19 +189,177 @@ class InteractiveEditor:
         # Save CSV if requested
         if save_csv:
             self.controller.save_scenario(str(csv_path))
-            print(f"Saved CSV to: {csv_path}")
+            self.window.show_message(f"Saved CSV to: {csv_path}")
             # Update self.csv_file to point to the new file for future saves
             self.csv_file = csv_path
-            self.fig.canvas.manager.set_window_title(
-                f'Interactive Scenario Editor - {self.csv_file.name}')
+            self.window.update_window_title(self.csv_file)
         
         # Save PNG plots if requested (combined primitives + trajectory)
         if save_png:
             self._save_combined_plot(str(combined_png))
-            print(f"Saved combined plot to: {combined_png}")
+            self.window.show_message(f"Saved combined plot to: {combined_png}")
         
         if not save_csv and not save_png:
-            print("No save operation performed.")
+            self.window.show_message("No save operation performed", 'warning')
+    
+    def _on_mouse_move(self, event):
+        """Track mouse position for context-aware toolbar zoom and handle panning."""
+        if event.inaxes:
+            self.last_mouse_axes = event.inaxes
+        
+        # Handle pan dragging
+        if self.pan_active and event.inaxes == self.pan_axes and self.pan_start:
+            # Calculate distance moved in data coordinates
+            dx = self.pan_start[0] - event.xdata
+            dy = self.pan_start[1] - event.ydata
+            
+            # Get current limits
+            xlim = self.pan_axes.get_xlim()
+            ylim = self.pan_axes.get_ylim()
+            
+            # Pan by shifting limits
+            self.pan_axes.set_xlim(xlim[0] + dx, xlim[1] + dx)
+            self.pan_axes.set_ylim(ylim[0] + dy, ylim[1] + dy)
+            
+            # Update stored manual limits
+            if self.pan_axes == self.controller.trajectory_panel.ax:
+                self.controller.trajectory_panel.manual_xlim = self.pan_axes.get_xlim()
+                self.controller.trajectory_panel.manual_ylim = self.pan_axes.get_ylim()
+            else:
+                # Check which primitive subplot
+                for prim, ax in self.controller.primitive_panel.axes.items():
+                    if ax == self.pan_axes:
+                        self.controller.primitive_panel.manual_xlim[prim] = self.pan_axes.get_xlim()
+                        break
+            
+            self.fig.canvas.draw_idle()
+    
+    def _on_mouse_press(self, event):
+        """Start panning on middle or right-click in empty space."""
+        # Right-click (button 3) or middle-click (button 2) to pan
+        if event.button in [2, 3] and event.inaxes and event.xdata and event.ydata:
+            # Check if clicking on a marker in primitive panel
+            if event.inaxes in self.controller.primitive_panel.axes.values():
+                # Check if we're clicking on a draggable point
+                for dp in self.controller.primitive_panel.draggable_points.values():
+                    if dp.ax == event.inaxes:
+                        contains, _ = dp.point.contains(event)
+                        if contains:
+                            return  # Don't pan, let marker handle it
+            
+            # Start panning
+            self.pan_active = True
+            self.pan_start = (event.xdata, event.ydata)
+            self.pan_axes = event.inaxes
+            self.fig.canvas.set_cursor(1)  # Hand cursor
+    
+    def _on_mouse_release(self, event):
+        """Stop panning."""
+        if self.pan_active:
+            self.pan_active = False
+            self.pan_start = None
+            self.pan_axes = None
+            self.fig.canvas.set_cursor(0)  # Default cursor
+    
+    def _on_scroll(self, event):
+        """Handle scroll wheel zoom - zoom in/out centered on cursor position."""
+        if not event.inaxes:
+            return
+        
+        # Determine zoom factor based on scroll direction
+        # Scroll up (event.button == 'up') = zoom in
+        # Scroll down (event.button == 'down') = zoom out
+        if event.button == 'up':
+            zoom_factor = 0.8  # Zoom in to 80% of current range
+        elif event.button == 'down':
+            zoom_factor = 1.25  # Zoom out to 125% of current range
+        else:
+            return
+        
+        # Get cursor position in data coordinates
+        x_cursor, y_cursor = event.xdata, event.ydata
+        
+        # Check if scroll is in gamma_self panel
+        if event.inaxes == self.controller.trajectory_panel.ax:
+            ax = self.controller.trajectory_panel.ax
+            
+            # Get current limits
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+            
+            # Calculate new limits centered on cursor
+            x_range = (xlim[1] - xlim[0]) * zoom_factor
+            y_range = (ylim[1] - ylim[0]) * zoom_factor
+            
+            # Calculate cursor position as fraction of current range
+            x_frac = (x_cursor - xlim[0]) / (xlim[1] - xlim[0])
+            y_frac = (y_cursor - ylim[0]) / (ylim[1] - ylim[0])
+            
+            # Set new limits preserving cursor position
+            new_xlim = (x_cursor - x_range * x_frac, x_cursor + x_range * (1 - x_frac))
+            new_ylim = (y_cursor - y_range * y_frac, y_cursor + y_range * (1 - y_frac))
+            
+            ax.set_xlim(new_xlim)
+            ax.set_ylim(new_ylim)
+            
+            # Store manual zoom state
+            self.controller.trajectory_panel.manual_xlim = new_xlim
+            self.controller.trajectory_panel.manual_ylim = new_ylim
+            
+            self.fig.canvas.draw_idle()
+            
+        else:
+            # Scroll is in primitive panel - find which subplot
+            for prim, ax in self.controller.primitive_panel.axes.items():
+                if ax == event.inaxes:
+                    # Get current limits
+                    xlim = ax.get_xlim()
+                    ylim = ax.get_ylim()
+                    
+                    # Calculate new limits centered on cursor
+                    x_range = (xlim[1] - xlim[0]) * zoom_factor
+                    y_range = (ylim[1] - ylim[0]) * zoom_factor
+                    
+                    # Calculate cursor position as fraction of current range
+                    x_frac = (x_cursor - xlim[0]) / (xlim[1] - xlim[0])
+                    y_frac = (y_cursor - ylim[0]) / (ylim[1] - ylim[0])
+                    
+                    # Set new limits preserving cursor position
+                    new_xlim = (x_cursor - x_range * x_frac, x_cursor + x_range * (1 - x_frac))
+                    new_ylim = (y_cursor - y_range * y_frac, y_cursor + y_range * (1 - y_frac))
+                    
+                    ax.set_xlim(new_xlim)
+                    ax.set_ylim(new_ylim)
+                    
+                    # Store manual zoom state for this primitive
+                    self.controller.primitive_panel.manual_xlim[prim] = new_xlim
+                    
+                    self.fig.canvas.draw_idle()
+                    break
+    
+    def _handle_zoom_in(self):
+        """Handle zoom in toolbar button - zoom all panels uniformly."""
+        self.controller.trajectory_panel.zoom_in()
+        self.controller.primitive_panel.zoom_in()
+        self.window.show_message("Zoomed in (all panels)")
+    
+    def _handle_zoom_out(self):
+        """Handle zoom out toolbar button - zoom all panels uniformly."""
+        self.controller.trajectory_panel.zoom_out()
+        self.controller.primitive_panel.zoom_out()
+        self.window.show_message("Zoomed out (all panels)")
+    
+    def _handle_zoom_reset(self):
+        """Handle reset view toolbar button - reset both panels."""
+        self.controller.trajectory_panel.reset_view()
+        self.controller.primitive_panel.reset_view()
+        self.controller.primitive_panel.clear_readout()
+        self.window.show_message("Reset all views")
+    
+    def _handle_cleanup(self):
+        """Handle application cleanup before exit."""
+        if hasattr(self, 'controller'):
+            self.controller.cleanup()
     
     def _save_combined_plot(self, filepath: str):
         """Save a combined PNG with primitives on the left and trajectory on the right.
@@ -285,6 +367,9 @@ class InteractiveEditor:
         Args:
             filepath: Output PNG file path
         """
+        import matplotlib.pyplot as plt
+        from matplotlib.gridspec import GridSpec
+        
         # Create a new figure with the same layout as the main figure
         save_fig = plt.figure(figsize=(14, 8))
         gs = GridSpec(5, 2, figure=save_fig, hspace=0.3, wspace=0.3,
@@ -410,76 +495,36 @@ class InteractiveEditor:
             self.controller.trajectory_panel.fixed_view = not self.controller.trajectory_panel.fixed_view
             status = "ON" if self.controller.trajectory_panel.fixed_view else "OFF"
             print(f"Fixed view: {status}")
-        elif event.key in ['+', '=']:
-            # Zoom in (context-aware: only the panel under cursor)
-            if event.inaxes:
-                # Check if cursor is in gamma_self panel
-                if event.inaxes == self.controller.trajectory_panel.ax:
-                    self.controller.trajectory_panel.zoom_in()
-                    print("Zoomed in on gamma_self")
-                else:
-                    # Cursor is in primitive panel
-                    self.controller.primitive_panel.zoom_in()
-                    print("Zoomed in on primitives")
-            else:
-                # No axis under cursor, zoom both
-                self.controller.trajectory_panel.zoom_in()
-                self.controller.primitive_panel.zoom_in()
-                print("Zoomed in")
-        elif event.key == '-':
-            # Zoom out (context-aware: only the panel under cursor)
-            if event.inaxes:
-                if event.inaxes == self.controller.trajectory_panel.ax:
-                    self.controller.trajectory_panel.zoom_out()
-                    print("Zoomed out on gamma_self")
-                else:
-                    self.controller.primitive_panel.zoom_out()
-                    print("Zoomed out on primitives")
-            else:
-                self.controller.trajectory_panel.zoom_out()
-                self.controller.primitive_panel.zoom_out()
-                print("Zoomed out")
-        elif event.key == '0':
-            # Reset view - always reset both panels for convenience
-            self.controller.trajectory_panel.reset_view()
-            self.controller.primitive_panel.reset_view()
-            # Clear readouts as well
-            self.controller.primitive_panel.clear_readout()
-            print("Reset all views")
+            self.window.show_message(f"Fixed view: {status}")
     
     def _edit_gamma_self_0(self):
         """Edit initial gamma_self position."""
-        from tkinter import simpledialog
+        from PySide6.QtWidgets import QInputDialog
         
         current = self.controller.model.gamma_self_0
         
-        # Create Tkinter root (hidden)
-        root = tk.Tk()
-        root.withdraw()
-        
         # Get real part
-        real_part = simpledialog.askfloat(
+        real_part, ok = QInputDialog.getDouble(
+            self.window,
             "Edit Gamma_self_0",
             f"Enter REAL part (Ego↔We axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +5\n  Exes (hurt): -5",
-            initialvalue=current.real,
-            parent=root
+            value=current.real,
+            decimals=1
         )
         
-        if real_part is None:
-            root.destroy()
+        if not ok:
             return
         
         # Get imaginary part
-        imag_part = simpledialog.askfloat(
+        imag_part, ok = QInputDialog.getDouble(
+            self.window,
             "Edit Gamma_self_0",
             f"Enter IMAGINARY part (Hate↔Love axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +8\n  Exes (hurt): -3",
-            initialvalue=current.imag,
-            parent=root
+            value=current.imag,
+            decimals=1
         )
         
-        root.destroy()
-        
-        if imag_part is None:
+        if not ok:
             return
         
         # Update gamma_self_0
@@ -488,37 +533,33 @@ class InteractiveEditor:
         # Recompute trajectory from new starting point
         self.controller._recompute_trajectory_immediate()
         
-        print(f"Gamma_self_0 set to {real_part:+.1f}{imag_part:+.1f}j")
+        self.window.show_message(f"Gamma_self_0 set to {real_part:+.1f}{imag_part:+.1f}j")
     
     def _save_as(self):
         """Open Save As dialog and save CSV."""
+        from PySide6.QtWidgets import QFileDialog
+        
         # Suggest filename with _modified suffix
         original_stem = self.csv_file.stem
         original_parent = self.csv_file.parent
         suggested_name = original_parent / f"{original_stem}_modified.csv"
         
-        # Create Tkinter root (hidden)
-        root = tk.Tk()
-        root.withdraw()
-        
-        # Open file dialog
-        filepath = filedialog.asksaveasfilename(
-            title="Save Modified Scenario",
-            initialdir=str(original_parent),
-            initialfile=suggested_name.name,
-            defaultextension=".csv",
-            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")]
+        # Open Qt file dialog
+        filepath, _ = QFileDialog.getSaveFileName(
+            self.window,
+            "Save Modified Scenario",
+            str(suggested_name),
+            "CSV files (*.csv);;All files (*.*)"
         )
-        
-        root.destroy()
         
         if filepath:
             self.controller.save_scenario(filepath)
-            print(f"Saved to: {filepath}")
+            self.window.show_message(f"Saved to: {filepath}")
     
     def run(self):
-        """Show UI and enter event loop."""
-        plt.show()
+        """Show UI and enter Qt event loop."""
+        self.window.show()
+        return self.qt_app.exec()
 
 
 def main():
@@ -573,9 +614,13 @@ Phase 1.5 Features:
         print(f"Error: File not found: {csv_path}", file=sys.stderr)
         sys.exit(1)
     
+    # Create Qt application (Phase 2)
+    app = QApplication(sys.argv)
+    app.setApplicationName('GRP Interactive Scenario Editor')
+    
     # Create and run editor
-    editor = InteractiveEditor(args.csv_file)
-    editor.run()
+    editor = InteractiveEditor(args.csv_file, app)
+    sys.exit(editor.run())
 
 
 if __name__ == '__main__':

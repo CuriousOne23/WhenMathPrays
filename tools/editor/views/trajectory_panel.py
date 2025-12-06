@@ -4,6 +4,7 @@ Trajectory panel view - displays gamma_self on complex plane.
 
 import matplotlib.pyplot as plt
 import numpy as np
+from .canvas_utils import force_canvas_draw
 
 
 class TrajectoryPanel:
@@ -89,15 +90,14 @@ class TrajectoryPanel:
                                                     facecolor='yellow', 
                                                     alpha=0.8))
         
-        # Position readout display (midway vertically, left of Y axis)
-        readout_x = self.layout.get('trajectory_readout_x', -0.15)
-        readout_y = self.layout.get('trajectory_readout_y', 0.5)
+        # Position readout display (right of primitive plots, left of trajectory Y-axis)
+        # Use figure coordinates for X (right side of left panel), data coords for Y centering
         self.position_readout = self.ax.text(
-            readout_x, readout_y, '',  # Use layout config
-            transform=self.ax.transAxes,
+            0.55, 0.5, '',  # X=0.55 in figure coords (between panels), Y will be updated
+            transform=self.fig.transFigure,  # Use figure coords for positioning
             fontsize=10,
             verticalalignment='center',
-            horizontalalignment='right',
+            horizontalalignment='center',
             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightblue', edgecolor='black', alpha=0.8),
             visible=False
         )
@@ -134,14 +134,18 @@ class TrajectoryPanel:
         self._last_gamma_x = gamma_x
         self._last_gamma_y = gamma_y
         
-        # Store current view if preserving
+        # Handle view preservation logic
         if preserve_view or self.fixed_view:
-            self.manual_xlim = self.ax.get_xlim()
-            self.manual_ylim = self.ax.get_ylim()
-        else:
-            # Clear manual view to allow auto-scaling
-            self.manual_xlim = None
-            self.manual_ylim = None
+            # Preserve current view (store if not already stored)
+            if not self.manual_xlim or not self.manual_ylim:
+                self.manual_xlim = self.ax.get_xlim()
+                self.manual_ylim = self.ax.get_ylim()
+        # If user has manually zoomed (via scroll wheel), keep that zoom
+        # Don't clear manual zoom unless explicitly resetting view
+        elif not self.manual_xlim and not self.manual_ylim:
+            # No manual zoom exists and not preserving, so allow auto-scaling
+            pass
+        # else: manual zoom exists, keep it
         
         # Update trajectory line
         self.trajectory_line.set_data(gamma_x, gamma_y)
@@ -250,12 +254,12 @@ class TrajectoryPanel:
                 print(f"Stored original view: x:[{x_min:.1f}, {x_max:.1f}], y:[{y_min:.1f}, {y_max:.1f}]")
         
         # Redraw
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def show_computing(self, computing=True):
         """Show/hide 'Computing...' overlay."""
         self.computing_text.set_visible(computing)
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def zoom_in(self, factor=0.8):
         """Zoom in by reducing axis limits."""
@@ -275,12 +279,17 @@ class TrajectoryPanel:
         self.manual_ylim = self.ax.get_ylim()
         self.fixed_view = True
         
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def zoom_out(self, factor=1.2):
         """Zoom out by expanding axis limits."""
-        xlim = self.ax.get_xlim()
-        ylim = self.ax.get_ylim()
+        # Initialize manual limits if not set (first zoom_out without zoom_in)
+        if self.manual_xlim is None or self.manual_ylim is None:
+            self.manual_xlim = self.ax.get_xlim()
+            self.manual_ylim = self.ax.get_ylim()
+        
+        xlim = self.manual_xlim
+        ylim = self.manual_ylim
         
         x_center = (xlim[0] + xlim[1]) / 2
         y_center = (ylim[0] + ylim[1]) / 2
@@ -295,7 +304,7 @@ class TrajectoryPanel:
         self.manual_ylim = self.ax.get_ylim()
         self.fixed_view = True
         
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def reset_view(self):
         """Reset to original full view (when editor first opened)."""
@@ -307,7 +316,7 @@ class TrajectoryPanel:
         if self.original_xlim and self.original_ylim:
             self.ax.set_xlim(self.original_xlim)
             self.ax.set_ylim(self.original_ylim)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
             print(f"Reset gamma_self to original view: x:[{self.original_xlim[0]:.1f}, {self.original_xlim[1]:.1f}], y:[{self.original_ylim[0]:.1f}, {self.original_ylim[1]:.1f}]")
         else:
             # Fallback: compute full trajectory view
@@ -325,13 +334,13 @@ class TrajectoryPanel:
                 
                 self.ax.set_xlim(x_min, x_max)
                 self.ax.set_ylim(y_min, y_max)
-                self.fig.canvas.draw_idle()
+                force_canvas_draw(self.fig.canvas)
                 print(f"Reset gamma_self view to x:[{x_min:.1f}, {x_max:.1f}], y:[{y_min:.1f}, {y_max:.1f}]")
             else:
                 # No data, reset to default
                 self.ax.set_xlim(-5, 15)
                 self.ax.set_ylim(-5, 30)
-                self.fig.canvas.draw_idle()
+                force_canvas_draw(self.fig.canvas)
                 print("Reset gamma_self view to default")
     
     def clear(self):
@@ -340,7 +349,7 @@ class TrajectoryPanel:
         self.start_marker.set_data([], [])
         self.end_marker.set_data([], [])
         self.event_markers.set_data([], [])
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def save_plot(self, filepath: str):
         """Save the trajectory panel plot to a PNG file.
@@ -416,7 +425,18 @@ class TrajectoryPanel:
             if event.xdata is not None and event.ydata is not None:
                 # Update readout with clicked position
                 x, y = self._click_pos
+                
+                # Position gauge between panels in figure coordinates
+                # Convert Y data coordinate to figure coordinate for vertical centering
+                ylim = self.ax.get_ylim()
+                y_data_center = (ylim[0] + ylim[1]) / 2
+                # Convert to display coordinates then to figure coordinates
+                y_fig = self.ax.transData.transform((0, y_data_center))[1]
+                y_fig_normalized = y_fig / self.fig.bbox.height
+                
+                self.position_readout.set_position((0.55, y_fig_normalized))
                 self.position_readout.set_text(f"X: {x:.2f}\nY: {y:.2f}")
                 self.position_readout.set_visible(True)
-                self.fig.canvas.draw_idle()
-            self._click_pos = None
+                force_canvas_draw(self.fig.canvas)
+        # ALWAYS clear click position to prevent freezing
+        self._click_pos = None

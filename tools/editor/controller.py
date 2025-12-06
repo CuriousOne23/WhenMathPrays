@@ -121,9 +121,16 @@ class EditorController:
         self.model.marker_positions[marker_key] = gamma_pos
         print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
         
-        # Now recompute and display with the marker
+        # === Phase 3: Incremental Update ===
+        # Query modified status from Model (single source of truth)
+        is_modified = self.model.is_modified(event_index, primitive)
+        
+        # Update only this marker in PrimitivePanel (O(1) operation)
+        self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
+        
+        # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
-        self._update_all_views()
+        # Note: trajectory panel updated via _display_trajectory
     
     def on_primitive_preview(self, event_index: int, primitive: str, value: float):
         """
@@ -152,17 +159,8 @@ class EditorController:
         baseline_value = self.baseline_primitives[primitive][event_index]
         print(f"Resetting to baseline value: {baseline_value}")
         
-        # Reset the marker value to baseline - use perspective-aware event access
-        events = self.model.get_events(self.perspective)
-        event = events[event_index]
-        event.set_marker_value(primitive, baseline_value, state='original')
-        
-        # Remove from modified_primitives to mark it as no longer edited
-        if event_index in self.model.modified_primitives:
-            self.model.modified_primitives[event_index].discard(primitive)
-            # If no more modified primitives for this event, remove the event entry
-            if not self.model.modified_primitives[event_index]:
-                del self.model.modified_primitives[event_index]
+        # Reset using Model's method (Phase 1 query interface)
+        self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
         
         print(f"Reset complete. modified_primitives: {self.model.modified_primitives}")
         
@@ -171,9 +169,21 @@ class EditorController:
         if marker_key in self.model.marker_positions:
             del self.model.marker_positions[marker_key]
         
-        # Recompute trajectory and update views
+        # === Phase 3: Incremental Update ===
+        # Update only this marker in PrimitivePanel (O(1) operation)
+        is_modified = False  # Just reset, so not modified
+        self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
+        
+        # Remove the label annotation immediately for instant feedback
+        self.primitive_panel.remove_marker_label(event_index, primitive)
+        
+        # Reset double-click state in the marker
+        marker_obj = self.primitive_panel.draggable_points.get((event_index, primitive))
+        if marker_obj:
+            marker_obj.reset_double_click_state()
+        
+        # Recompute trajectory and update trajectory view
         self._recompute_trajectory_with_preview()
-        self._update_all_views()
         
         print(f"=== END RESET ===")
     
@@ -226,6 +236,7 @@ class EditorController:
         
         # Schedule new computation after 300ms
         self.debounce_timer = threading.Timer(0.3, self._recompute_trajectory)
+        self.debounce_timer.daemon = True  # Allow clean exit
         self.debounce_timer.start()
     
     def _schedule_recomputation_preview(self):
@@ -236,7 +247,13 @@ class EditorController:
         
         # Schedule new computation after 300ms
         self.debounce_timer = threading.Timer(0.3, self._recompute_trajectory_with_preview)
+        self.debounce_timer.daemon = True  # Allow clean exit
         self.debounce_timer.start()
+    
+    def cleanup(self):
+        """Clean up resources (call on window close)."""
+        if self.debounce_timer and self.debounce_timer.is_alive():
+            self.debounce_timer.cancel()
     
     def _recompute_trajectory_immediate(self):
         """Immediate trajectory computation (no debounce)."""
@@ -257,13 +274,16 @@ class EditorController:
         Args:
             preview_mode: If True, include preview changes in computation
         """
-        # Show computing indicator
-        self.trajectory_panel.show_computing(True)
+        # Import here to avoid circular dependency
+        from PySide6.QtCore import QTimer
+        
+        # Show computing indicator (thread-safe via Qt signal)
+        QTimer.singleShot(0, lambda: self.trajectory_panel.show_computing(True))
         
         events = self.model.get_events(self.perspective)
         
         if len(events) == 0:
-            self.trajectory_panel.clear()
+            QTimer.singleShot(0, self.trajectory_panel.clear)
             return
         
         # Get primitives (with or without preview)
@@ -376,8 +396,18 @@ class EditorController:
             print(f"[TRAJECTORY] Stored committed trajectory, final point: {gamma_trajectory[-1] if gamma_trajectory else 'empty'}")
         
         # Update trajectory panel (preserve view during edits)
+        # Use QTimer to ensure GUI updates happen on main thread
+        from PySide6.QtCore import QTimer
         preserve_view = preview_mode  # Keep view fixed during preview edits
         print(f"[TRAJECTORY] Calling update_trajectory with preserve_view={preserve_view}")
+        
+        # Schedule GUI update on main thread
+        QTimer.singleShot(0, lambda: self._update_gui(
+            gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view
+        ))
+    
+    def _update_gui(self, gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view):
+        """Update GUI components (must be called on main thread)."""
         self.trajectory_panel.update_trajectory(gamma_x, gamma_y, marked_data, 
                                                pinned_markers=pinned_markers,
                                                preview_gamma=preview_gamma,
