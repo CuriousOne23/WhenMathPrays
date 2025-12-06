@@ -14,16 +14,18 @@ class TrajectoryPanel:
     with quadrant labels and trajectory line.
     """
     
-    def __init__(self, fig, grid_spec):
+    def __init__(self, fig, grid_spec, layout=None):
         """
         Initialize trajectory panel.
         
         Args:
             fig: Matplotlib figure
             grid_spec: GridSpec cell for this panel
+            layout: Layout configuration dict (optional)
         """
         self.fig = fig
         self.ax = fig.add_subplot(grid_spec)
+        self.layout = layout or {}  # Store layout config
         
         # View control
         self.fixed_view = False  # If True, don't auto-scale during edits
@@ -86,6 +88,24 @@ class TrajectoryPanel:
                                            bbox=dict(boxstyle='round', 
                                                     facecolor='yellow', 
                                                     alpha=0.8))
+        
+        # Position readout display (midway vertically, left of Y axis)
+        readout_x = self.layout.get('trajectory_readout_x', -0.15)
+        readout_y = self.layout.get('trajectory_readout_y', 0.5)
+        self.position_readout = self.ax.text(
+            readout_x, readout_y, '',  # Use layout config
+            transform=self.ax.transAxes,
+            fontsize=10,
+            verticalalignment='center',
+            horizontalalignment='right',
+            bbox=dict(boxstyle='round,pad=0.5', facecolor='lightblue', edgecolor='black', alpha=0.8),
+            visible=False
+        )
+        
+        # Connect click event
+        self.fig.canvas.mpl_connect('button_press_event', self._on_click)
+        self.fig.canvas.mpl_connect('button_release_event', self._on_release)
+        self._click_pos = None  # Store position on press
         
         self.ax.legend(loc='upper right', fontsize=8)
     
@@ -321,3 +341,82 @@ class TrajectoryPanel:
         self.end_marker.set_data([], [])
         self.event_markers.set_data([], [])
         self.fig.canvas.draw_idle()
+    
+    def save_plot(self, filepath: str):
+        """Save the trajectory panel plot to a PNG file.
+        
+        Args:
+            filepath: Output PNG file path
+        """
+        # Create a new figure with just the trajectory plot
+        save_fig = plt.figure(figsize=(10, 10))
+        ax = save_fig.add_subplot(111)
+        
+        # Copy the trajectory line
+        xdata, ydata = self.trajectory_line.get_data()
+        ax.plot(xdata, ydata, color='#1f77b4', linewidth=2, alpha=0.7, label='γ_self trajectory')
+        
+        # Copy start/end markers
+        start_x, start_y = self.start_marker.get_data()
+        if len(start_x) > 0:
+            ax.plot(start_x, start_y, marker='o', color='green', markersize=12,
+                   markeredgewidth=2, markeredgecolor='darkgreen', label='Start', linestyle='none')
+        
+        end_x, end_y = self.end_marker.get_data()
+        if len(end_x) > 0:
+            ax.plot(end_x, end_y, marker='s', color='red', markersize=12,
+                   markeredgewidth=2, markeredgecolor='darkred', label='End', linestyle='none')
+        
+        # Copy event markers (pinned positions)
+        event_x, event_y = self.event_markers.get_data()
+        if len(event_x) > 0:
+            ax.plot(event_x, event_y, marker='o', color='orange', markersize=8,
+                   markeredgewidth=1.5, markeredgecolor='darkorange', linestyle='none')
+        
+        # Copy annotations (marker labels)
+        if hasattr(self, 'marker_annotations'):
+            for ann in self.marker_annotations:
+                if ann.axes == self.ax:
+                    # Recreate annotation on new axes
+                    ax.annotate(
+                        ann.get_text(),
+                        xy=ann.xy,
+                        xytext=ann.xyann,
+                        textcoords=ann.anncoords,
+                        fontsize=ann.get_fontsize(),
+                        color=ann.get_color(),
+                        weight=ann.get_weight(),
+                        bbox=ann.get_bbox_patch().get_boxstyle() if ann.get_bbox_patch() else None
+                    )
+        
+        # Copy axis properties
+        ax.set_xlabel('Re(γ_self) — Ego ← → We', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Im(γ_self) — Hate ← → Love', fontsize=12, fontweight='bold')
+        ax.set_title('Gamma Self Trajectory (γ_self)', fontsize=14, fontweight='bold')
+        ax.set_xlim(self.ax.get_xlim())
+        ax.set_ylim(self.ax.get_ylim())
+        ax.grid(True, alpha=0.3)
+        ax.axhline(y=0, color='k', linewidth=0.5, alpha=0.5)
+        ax.axvline(x=0, color='k', linewidth=0.5, alpha=0.5)
+        ax.legend(loc='upper left', fontsize=10)
+        
+        save_fig.tight_layout()
+        save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
+        plt.close(save_fig)
+    
+    def _on_click(self, event):
+        """Handle mouse button press to record position."""
+        if event.button == 1 and event.inaxes == self.ax:  # Left click in trajectory axes
+            self._click_pos = (event.xdata, event.ydata)
+    
+    def _on_release(self, event):
+        """Handle mouse button release to update readout."""
+        if event.button == 1 and event.inaxes == self.ax and self._click_pos:  # Left click release
+            # Only update if release is in same axes and close to press position
+            if event.xdata is not None and event.ydata is not None:
+                # Update readout with clicked position
+                x, y = self._click_pos
+                self.position_readout.set_text(f"X: {x:.2f}\nY: {y:.2f}")
+                self.position_readout.set_visible(True)
+                self.fig.canvas.draw_idle()
+            self._click_pos = None

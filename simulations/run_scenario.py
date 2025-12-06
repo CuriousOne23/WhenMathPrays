@@ -54,8 +54,8 @@ class ScenarioRunner:
         with open(self.csv_path, 'r') as f:
             lines = f.readlines()
             
-            # Check first two lines for metadata
-            for line in lines[:2]:
+            # Check first several lines for metadata
+            for line in lines[:5]:  # Check up to 5 lines for metadata
                 line = line.strip()
                 if line.startswith('name,'):
                     csv_name = line.split(',', 1)[1].strip()
@@ -71,15 +71,33 @@ class ScenarioRunner:
                     else:
                         print(f"Warning: Invalid time_unit '{time_unit}', defaulting to 'days'")
                     skip_rows += 1
-                else:
-                    # Not metadata, stop checking
+                elif line.startswith('gamma_self_0,'):
+                    # Parse gamma_self_0 from CSV
+                    gamma_str = line.split(',', 1)[1].strip()
+                    try:
+                        # Handle formats like "-5+0j" or "0+0j"
+                        self.gamma_self0 = complex(gamma_str)
+                        print(f"Loaded gamma_self_0 from CSV: {self.gamma_self0}")
+                    except ValueError:
+                        print(f"Warning: Could not parse gamma_self_0 '{gamma_str}', using default {self.gamma_self0}")
+                    skip_rows += 1
+                elif ',' in line and line.split(',')[0].lower() in ['day', 'step', 'time', 'event']:
+                    # Found the header row, stop checking
                     break
+                else:
+                    # Unknown metadata or empty line, skip it
+                    if line:  # Only increment if not empty
+                        skip_rows += 1
         
         # Read CSV with appropriate number of rows to skip
         if skip_rows > 0:
             df = pd.read_csv(self.csv_path, skiprows=skip_rows)
         else:
             df = pd.read_csv(self.csv_path)
+        
+        # Handle both 'step' and 'day' as time column names
+        if 'step' in df.columns and 'day' not in df.columns:
+            df.rename(columns={'step': 'day'}, inplace=True)
         
         # Validate required columns
         required = ['day', 'v', 'r', 'f', 'a', 'S']

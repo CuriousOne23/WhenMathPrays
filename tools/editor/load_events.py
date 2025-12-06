@@ -38,7 +38,10 @@ def load_events_from_csv(filepath):
             try:
                 time = float(row.get('step', row.get('day', 0)))
                 primitives = {prim: float(row[prim]) for prim in PRIMITIVE_NAMES}
-                event = Event(time, primitives)
+                notes = row.get('notes', '')
+                marker = row.get('marker', '')
+                locked = row.get('locked', '')
+                event = Event(time, primitives, notes=notes, marker=marker, locked=locked)
                 events.append(event)
                 print(f"[DEBUG] Accepted event: time={time}, primitives={primitives}")
             except Exception as e:

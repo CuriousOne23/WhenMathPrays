@@ -41,6 +41,9 @@ class EditorController:
         self.primitive_panel = primitive_panel
         self.trajectory_panel = trajectory_panel
         
+        # Set controller reference in primitive_panel so it can access model.modified_primitives
+        self.primitive_panel.controller = self
+        
         self.debounce_timer: Optional[threading.Timer] = None
         self.dirty = False
         self.perspective = "M1"  # Currently only M1 supported
@@ -68,12 +71,11 @@ class EditorController:
         # Store baseline primitives (for reset functionality)
         self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
 
-        # Mark all primitives for all events by default
+        # Initialize modified_primitives as empty - will track user modifications only
         events = self.model.get_events(self.perspective)
         print(f"[DEBUG] EditorController.load_scenario: get_events returned {len(events)} events")
         self.model.modified_primitives.clear()
-        for event_idx, event in enumerate(events):
-            self.model.modified_primitives[event_idx] = set(['v', 'r', 'f', 'a', 'S'])
+        # Don't mark anything as modified on load - user hasn't modified anything yet
 
         # Update views
         self._update_all_views()
@@ -91,14 +93,36 @@ class EditorController:
             self.model.modified_primitives[event_index] = set()
         self.model.modified_primitives[event_index].add(primitive)
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
-        self._recompute_trajectory_with_preview()
-        if hasattr(self, '_last_preview_trajectory') and self._last_preview_trajectory:
-            marker_idx = event_index + 1 if event_index + 1 < len(self._last_preview_trajectory) else event_index
-            gamma_pos = self._last_preview_trajectory[marker_idx]
-            marker_key = (event_index, primitive)
-            self.model.marker_positions[marker_key] = gamma_pos
-            print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
-            self._display_trajectory(self._last_preview_trajectory, preview_mode=True)
+        
+        # Store marker position from committed trajectory (must happen before display)
+        # First compute trajectory to get the position
+        events = self.model.get_events(self.perspective)
+        primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
+        times = primitives_data['time']
+        data = {
+            'v': primitives_data['v'],
+            'r': primitives_data['r'],
+            'f': primitives_data['f'],
+            'a': primitives_data['a'],
+            'S': primitives_data['S']
+        }
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        for i in range(len(times) - 1):
+            dt = times[i+1] - times[i]
+            v, r, f, a, S = data['v'][i], data['r'][i], data['f'][i], data['a'][i], data['S'][i]
+            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
+            gamma_trajectory.append(gamma_self)
+        
+        # Store marker position
+        marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
+        gamma_pos = gamma_trajectory[marker_idx]
+        marker_key = (event_index, primitive)
+        self.model.marker_positions[marker_key] = gamma_pos
+        print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
+        
+        # Now recompute and display with the marker
+        self._recompute_trajectory_immediate()
         self._update_all_views()
     
     def on_primitive_preview(self, event_index: int, primitive: str, value: float):
@@ -127,8 +151,28 @@ class EditorController:
         print(f"\n=== RESET PRIMITIVE {event_index}/{primitive} ===")
         baseline_value = self.baseline_primitives[primitive][event_index]
         print(f"Resetting to baseline value: {baseline_value}")
-        event = self.model.events[event_index]
+        
+        # Reset the marker value to baseline - use perspective-aware event access
+        events = self.model.get_events(self.perspective)
+        event = events[event_index]
         event.set_marker_value(primitive, baseline_value, state='original')
+        
+        # Remove from modified_primitives to mark it as no longer edited
+        if event_index in self.model.modified_primitives:
+            self.model.modified_primitives[event_index].discard(primitive)
+            # If no more modified primitives for this event, remove the event entry
+            if not self.model.modified_primitives[event_index]:
+                del self.model.modified_primitives[event_index]
+        
+        print(f"Reset complete. modified_primitives: {self.model.modified_primitives}")
+        
+        # Remove marker position for this primitive
+        marker_key = (event_index, primitive)
+        if marker_key in self.model.marker_positions:
+            del self.model.marker_positions[marker_key]
+        
+        # Recompute trajectory and update views
+        self._recompute_trajectory_with_preview()
         self._update_all_views()
         
         print(f"=== END RESET ===")

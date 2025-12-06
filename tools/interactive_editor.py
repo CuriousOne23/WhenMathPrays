@@ -10,6 +10,24 @@ Usage:
 
 Example:
     python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+
+Layout System:
+    The UI layout is controlled by the LAYOUT dictionary in InteractiveEditor class.
+    All positioning constants are defined there for easy adjustment:
+    
+    - margin_left: Left edge space (for primitive readout gauge)
+    - margin_right: Right edge space
+    - margin_top: Top edge space (for Save button area)
+    - margin_bottom: Bottom edge space
+    - panel_gap: Horizontal space between primitive and gamma_self panels
+    - subplot_gap: Vertical space between primitive subplots
+    - save_button_*: Position and size of Save button
+    - save_info_*: Position of instruction text
+    
+    To adjust layout:
+    1. Modify values in LAYOUT dictionary
+    2. All derived positions update automatically
+    3. No need to hunt for magic numbers throughout the code
 """
 
 import sys
@@ -32,6 +50,35 @@ from tools.editor.views.trajectory_panel import TrajectoryPanel
 class InteractiveEditor:
     """Main application class for interactive scenario editor."""
     
+    # Layout constants for easy adjustment
+    LAYOUT = {
+        # Main margins (figure edges)
+        'margin_left': 0.14,      # Space for primitive readout gauge
+        'margin_right': 0.02,     # Right edge margin
+        'margin_top': 0.08,       # Space for Save button and title
+        'margin_bottom': 0.08,    # Bottom edge margin
+        
+        # Panel spacing
+        'panel_gap': 0.35,        # Horizontal gap between primitive and gamma_self panels
+        'subplot_gap': 0.3,       # Vertical gap between primitive subplots
+        
+        # Primitive readout gauge (in axes transform coordinates, relative to fidelity plot)
+        'primitive_gauge_x': -0.18,  # Negative = left of plot, 0 = left edge, 1 = right edge
+        'primitive_gauge_y': 0.5,    # 0 = bottom, 0.5 = middle, 1 = top
+        
+        # Trajectory readout (in axes transform coordinates, relative to gamma_self plot)
+        'trajectory_readout_x': -0.15,  # Position left of Y axis
+        'trajectory_readout_y': 0.5,    # Middle vertically
+        
+        # Header elements (in figure coordinates, 0-1)
+        'save_button_left': 0.16,     # Left side, indented from primitive left edge
+        'save_button_bottom': 0.96,
+        'save_button_width': 0.06,
+        'save_button_height': 0.035,
+        'save_info_x': 0.92,          # Position of instruction text (will be calculated relative to button)
+        'save_info_y': 0.965,
+    }
+    
     def __init__(self, csv_file: str):
         """
         Initialize interactive editor.
@@ -49,8 +96,16 @@ class InteractiveEditor:
         # Create grid layout: 5 rows (primitives) x 2 columns
         # Left column: Primitives (5 subplots stacked)
         # Right column: Trajectory (spans all 5 rows)
-        gs = GridSpec(5, 2, figure=self.fig, hspace=0.3, wspace=0.3,
-                     left=0.08, right=0.95, top=0.94, bottom=0.08)
+        gs = GridSpec(
+            5, 2, 
+            figure=self.fig, 
+            hspace=self.LAYOUT['subplot_gap'], 
+            wspace=self.LAYOUT['panel_gap'],
+            left=self.LAYOUT['margin_left'], 
+            right=1.0 - self.LAYOUT['margin_right'], 
+            top=1.0 - self.LAYOUT['margin_top'], 
+            bottom=self.LAYOUT['margin_bottom']
+        )
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
@@ -62,12 +117,14 @@ class InteractiveEditor:
             on_primitive_changed=self._on_primitive_changed,
             on_lock_toggle=self._on_lock_toggle,
             on_primitive_preview=self._on_primitive_preview,
-            on_primitive_reset=self._on_primitive_reset
+            on_primitive_reset=self._on_primitive_reset,
+            layout=self.LAYOUT  # Pass layout config
         )
 
         self.trajectory_panel = TrajectoryPanel(
             fig=self.fig,
-            grid_spec=gs[:, 1]
+            grid_spec=gs[:, 1],
+            layout=self.LAYOUT  # Pass layout config
         )
 
         # Initialize controller (structured)
@@ -85,6 +142,28 @@ class InteractiveEditor:
 
         # Connect keyboard shortcuts
         self.fig.canvas.mpl_connect('key_press_event', self._on_key_press)
+        
+        # Disable the toolbar's save button (we have our own)
+        self._disable_toolbar_save_button()
+    
+    def _disable_toolbar_save_button(self):
+        """Disable the matplotlib toolbar's save button."""
+        toolbar = self.fig.canvas.toolbar
+        if toolbar:
+            # Remove save button from toolbar
+            try:
+                # For NavigationToolbar2Tk (Tkinter backend)
+                if hasattr(toolbar, '_buttons'):
+                    # Find and disable the save button
+                    for name, button in toolbar._buttons.items():
+                        if name == 'Save':
+                            button.config(state='disabled')
+                # Alternative: hide it completely by removing from toolbar
+                # This works for most backends
+                toolbar.children['!button3'].config(state='disabled')  # Save is typically the 3rd button
+            except:
+                # If disabling fails, just continue - not critical
+                pass
     
     def _setup_toolbar(self):
         """Setup custom toolbar buttons."""
@@ -93,35 +172,206 @@ class InteractiveEditor:
             # Add Save button to the toolbar
             import matplotlib
             from matplotlib.widgets import Button
+            
             # Place button in a new axes on the figure
-            save_ax = self.fig.add_axes([0.85, 0.96, 0.08, 0.035])  # [left, bottom, width, height]
+            save_ax = self.fig.add_axes([
+                self.LAYOUT['save_button_left'], 
+                self.LAYOUT['save_button_bottom'], 
+                self.LAYOUT['save_button_width'], 
+                self.LAYOUT['save_button_height']
+            ])
             self._save_button = Button(save_ax, 'Save', color='#e0e0e0', hovercolor='#b0ffb0')
             self._save_button.on_clicked(self._on_save_button)
             save_ax._button = self._save_button  # Prevent garbage collection
+            
+            # Add informational text about modifier keys (to the right of Save button)
+            # Calculate position to the right of the button
+            info_x = self.LAYOUT['save_button_left'] + self.LAYOUT['save_button_width'] + 0.005
+            info_text = self.fig.text(
+                info_x, 
+                self.LAYOUT['save_info_y'], 
+                'Click=CSV | Shift=PNG | Ctrl=Both', 
+                fontsize=8, color='#666666', ha='left', va='center'  # Changed ha to 'left'
+            )
+            self._save_info_text = info_text
 
     def _on_save_button(self, event):
-        """Handle Save button click: commit previews and save to a non-original file."""
+        """Handle Save button click: commit previews and save based on modifier keys.
+        
+        Click = CSV only
+        Shift+Click = PNG only
+        Ctrl+Click = Both CSV and PNG
+        """
         self.controller.commit_changes()
+        
+        # Detect modifier keys from the mouse event
+        # In matplotlib button events, we need to check the canvas's current key modifiers
+        import matplotlib.backend_bases as backend_bases
+        guiEvent = event.guiEvent if hasattr(event, 'guiEvent') else None
+        
+        save_csv = True
+        save_png = False
+        
+        # Check for modifier keys
+        if guiEvent:
+            # Check if Shift or Ctrl is pressed
+            if hasattr(guiEvent, 'keysym'):
+                # Tkinter event
+                shift = bool(guiEvent.state & 0x0001)
+                ctrl = bool(guiEvent.state & 0x0004)
+            elif hasattr(guiEvent, 'modifiers'):
+                # Qt event
+                from matplotlib.backend_bases import MouseEvent
+                shift = 'shift' in str(guiEvent.modifiers()).lower()
+                ctrl = 'control' in str(guiEvent.modifiers()).lower() or 'ctrl' in str(guiEvent.modifiers()).lower()
+            else:
+                shift = False
+                ctrl = False
+            
+            if ctrl:
+                # Ctrl = Both
+                save_csv = True
+                save_png = True
+            elif shift:
+                # Shift = PNG only
+                save_csv = False
+                save_png = True
+            # else: default is CSV only
+        
         # Determine if current file is the original (in data/ and does not end with _modified.csv)
         original = (
             self.csv_file.parent.name == 'data' and
             not self.csv_file.stem.endswith('_modified')
         )
-        if original:
-            # Save to a new file with _modified suffix
-            new_name = self.csv_file.parent / f"{self.csv_file.stem}_modified.csv"
-            self.controller.save_scenario(str(new_name))
-            print(f"Saved to: {new_name} (original not overwritten)")
+        
+        # Determine base name for output files (without _modified suffix and without extension)
+        if self.csv_file.stem.endswith('_modified'):
+            base_name = self.csv_file.stem[:-9]  # Remove '_modified'
+        else:
+            base_name = self.csv_file.stem
+        
+        # Output directory is data/
+        data_dir = self.csv_file.parent if self.csv_file.parent.name == 'data' else self.csv_file.parent.parent / 'data'
+        
+        # Determine output paths
+        csv_path = data_dir / f"{base_name}_modified.csv"
+        combined_png = data_dir / f"{base_name}_modified.png"
+        
+        # Save CSV if requested
+        if save_csv:
+            self.controller.save_scenario(str(csv_path))
+            print(f"Saved CSV to: {csv_path}")
             # Update self.csv_file to point to the new file for future saves
-            self.csv_file = new_name
-            # Optionally update window title
+            self.csv_file = csv_path
             self.fig.canvas.manager.set_window_title(
                 f'Interactive Scenario Editor - {self.csv_file.name}')
-        elif self.csv_file:
-            self.controller.save_scenario(str(self.csv_file))
-            print(f"Saved to: {self.csv_file}")
-        else:
-            print("No file path set. Use Save As.")
+        
+        # Save PNG plots if requested (combined primitives + trajectory)
+        if save_png:
+            self._save_combined_plot(str(combined_png))
+            print(f"Saved combined plot to: {combined_png}")
+        
+        if not save_csv and not save_png:
+            print("No save operation performed.")
+    
+    def _save_combined_plot(self, filepath: str):
+        """Save a combined PNG with primitives on the left and trajectory on the right.
+        
+        Args:
+            filepath: Output PNG file path
+        """
+        # Create a new figure with the same layout as the main figure
+        save_fig = plt.figure(figsize=(14, 8))
+        gs = GridSpec(5, 2, figure=save_fig, hspace=0.3, wspace=0.3,
+                     left=0.08, right=0.95, top=0.94, bottom=0.08)
+        
+        # Copy primitive plots (left column)
+        for i, prim in enumerate(self.primitive_panel.PRIMITIVE_NAMES):
+            ax = save_fig.add_subplot(gs[i, 0])
+            
+            # Copy the line data
+            if prim in self.primitive_panel.lines:
+                line = self.primitive_panel.lines[prim]
+                xdata, ydata = line.get_data()
+                ax.plot(xdata, ydata, color=self.primitive_panel.PRIMITIVE_COLORS[prim], linewidth=2)
+            
+            # Copy markers (both baseline and modified)
+            for (event_idx, p), marker in self.primitive_panel.original_markers.items():
+                if p == prim and marker.axes == self.primitive_panel.axes[prim]:
+                    mx, my = marker.get_data()
+                    ax.plot(mx, my, marker='o', color=self.primitive_panel.PRIMITIVE_COLORS[prim],
+                           markersize=8, markeredgewidth=1.5, markeredgecolor='black',
+                           linestyle='none')
+            
+            for (event_idx, p), dp in self.primitive_panel.draggable_points.items():
+                if p == prim:
+                    ax.plot([dp.x], [dp.y], marker='o', color=self.primitive_panel.PRIMITIVE_COLORS[prim],
+                           markersize=8, markerfacecolor='white', markeredgewidth=1.5,
+                           markeredgecolor=self.primitive_panel.PRIMITIVE_COLORS[prim], linestyle='none')
+            
+            # Copy axis properties
+            ax.set_ylabel(self.primitive_panel.PRIMITIVE_LABELS[prim], fontsize=10, fontweight='bold')
+            ax.set_ylim(self.primitive_panel.axes[prim].get_ylim())
+            ax.set_xlim(self.primitive_panel.axes[prim].get_xlim())
+            ax.grid(True, alpha=0.3)
+            
+            if i == 4:  # Last subplot
+                ax.set_xlabel('Time', fontsize=10)
+        
+        # Copy trajectory plot (right column, spanning all rows)
+        ax_traj = save_fig.add_subplot(gs[:, 1])
+        
+        # Copy the trajectory line
+        xdata, ydata = self.trajectory_panel.trajectory_line.get_data()
+        ax_traj.plot(xdata, ydata, color='#1f77b4', linewidth=2, alpha=0.7, label='γ_self trajectory')
+        
+        # Copy start/end markers
+        start_x, start_y = self.trajectory_panel.start_marker.get_data()
+        if len(start_x) > 0:
+            ax_traj.plot(start_x, start_y, marker='o', color='green', markersize=12,
+                   markeredgewidth=2, markeredgecolor='darkgreen', label='Start', linestyle='none')
+        
+        end_x, end_y = self.trajectory_panel.end_marker.get_data()
+        if len(end_x) > 0:
+            ax_traj.plot(end_x, end_y, marker='s', color='red', markersize=12,
+                   markeredgewidth=2, markeredgecolor='darkred', label='End', linestyle='none')
+        
+        # Copy event markers
+        event_x, event_y = self.trajectory_panel.event_markers.get_data()
+        if len(event_x) > 0:
+            ax_traj.plot(event_x, event_y, marker='o', color='orange', markersize=8,
+                   markeredgewidth=1.5, markeredgecolor='darkorange', linestyle='none')
+        
+        # Copy annotations
+        if hasattr(self.trajectory_panel, 'marker_annotations'):
+            for ann in self.trajectory_panel.marker_annotations:
+                if ann.axes == self.trajectory_panel.ax:
+                    ax_traj.annotate(
+                        ann.get_text(),
+                        xy=ann.xy,
+                        xytext=ann.xyann,
+                        textcoords=ann.anncoords,
+                        fontsize=7,
+                        color=ann.get_color(),
+                        weight='bold',
+                        bbox=dict(boxstyle='round,pad=0.3', facecolor='white',
+                                edgecolor=ann.get_color(), alpha=0.9, linewidth=1.5)
+                    )
+        
+        # Copy axis properties
+        ax_traj.set_xlabel('Re(γ_self) — Ego ← → We', fontsize=12, fontweight='bold')
+        ax_traj.set_ylabel('Im(γ_self) — Hate ← → Love', fontsize=12, fontweight='bold')
+        ax_traj.set_title('Gamma Self Trajectory (γ_self)', fontsize=14, fontweight='bold')
+        ax_traj.set_xlim(self.trajectory_panel.ax.get_xlim())
+        ax_traj.set_ylim(self.trajectory_panel.ax.get_ylim())
+        ax_traj.grid(True, alpha=0.3)
+        ax_traj.axhline(y=0, color='k', linewidth=0.5, alpha=0.5)
+        ax_traj.axvline(x=0, color='k', linewidth=0.5, alpha=0.5)
+        ax_traj.legend(loc='upper left', fontsize=10)
+        
+        # Save and close
+        save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
+        plt.close(save_fig)
 
     
     def _on_primitive_changed(self, event_index, primitive, value):
@@ -191,6 +441,8 @@ class InteractiveEditor:
             # Reset view - always reset both panels for convenience
             self.controller.trajectory_panel.reset_view()
             self.controller.primitive_panel.reset_view()
+            # Clear readouts as well
+            self.controller.primitive_panel.clear_readout()
             print("Reset all views")
     
     def _edit_gamma_self_0(self):
