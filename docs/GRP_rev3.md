@@ -29,6 +29,18 @@ $$
 
 **That's it. No L(t) calculation. No W(t) gates. No separate memory variables.**
 
+**Note on Formulation:**  
+This discrete recurrence is the computational implementation of a continuous-time damped oscillator system. The underlying dynamics can be expressed as:
+
+$$\frac{d\gamma_{\text{self}}}{dt} = -\zeta\omega(\gamma_{\text{self}} - \gamma_{\text{attractor}}(t)) + \mathbf{p}(t)$$
+
+where $\mathbf{p}(t)$ represents the primitive-driven forcing function (visibility, resonance, fidelity, altruism, soul). The discrete update above is an Euler integration of this continuous equation. This dual representation allows:
+- **Theoretical analysis** via established dynamical systems theory (stability, phase portraits, Lyapunov functions)
+- **Practical implementation** via straightforward position updates
+- **Academic credibility** by grounding the model in physics-inspired frameworks (Langevin dynamics, damped oscillators)
+
+For rigorous mathematical defense, see [gamma_self_defense.md](gamma_self_defense.md).
+
 **Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance. 
 - **Attractor position:** γ_attractor = -8+0j (default: far left Ego axis)
 - **Vector direction:** Unit vector from γ_self toward γ_attractor, scaled by ΔS·Δt
