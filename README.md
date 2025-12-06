@@ -458,6 +458,7 @@ plot_dual_scenario(
 
 ### Core Framework
 - **[GRP_rev3.md](docs/GRP_rev3.md)** - Complete mathematical specification of GRP framework
+- **[gamma_self_defense.md](docs/gamma_self_defense.md)** - Mathematical defense: Why relationship dynamics follow dynamical systems principles
 - **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values (single source of truth)
 - **[TUNING.md](TUNING.md)** - Weight calibration and sensitivity analysis
 - **[PRINCIPLES.md](docs/PRINCIPLES.md)** - Design philosophy and spiritual foundations
