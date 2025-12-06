@@ -95,15 +95,20 @@ class EditorModel:
         """
         from tools.editor.load_events import load_events_from_csv
         self.filepath = Path(filepath)
-        events = load_events_from_csv(filepath)
+        events, metadata = load_events_from_csv(filepath)
         print(f"[DEBUG] EditorModel.load_csv: loaded {len(events)} events from {filepath}")
+        
+        # Apply metadata to model
+        self.gamma_self_0 = metadata.get('gamma_self_0', 0+0j)
+        self.time_unit = metadata.get('time_unit', 'days')
+        if metadata.get('name'):
+            self.name = metadata['name']
+        print(f"[DEBUG] EditorModel.load_csv: gamma_self_0 = {self.gamma_self_0}")
+        
         if perspective == "M1":
             self.events_m1 = events
         else:
             self.events_m2 = events
-        # You may want to parse metadata (name, time_unit, gamma_self_0) separately as before
-        # Example: parse gamma_self_0 from metadata if present
-        # (This is a placeholder for actual metadata parsing logic)
     
     def save_csv(self, filepath: str, perspective: str = "M1") -> None:
         """

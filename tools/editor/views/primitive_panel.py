@@ -11,10 +11,10 @@ from .draggable_point import DraggablePoint
 class PrimitivePanel:
     PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
     PRIMITIVE_LABELS = {
-        'v': 'Ego (v)',
+        'v': 'Visibility (v)',
         'r': 'Resonance (r)',
         'f': 'Fidelity (f)',
-        'a': 'Vulnerability (a)',
+        'a': 'Altruism (a)',
         'S': 'Shared Breath (S)'
     }
     PRIMITIVE_COLORS = {
@@ -88,6 +88,59 @@ class PrimitivePanel:
             horizontalalignment='right',
             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightyellow', edgecolor='black', alpha=0.8)
         )
+        
+        # Connect click event for sampling primitive values
+        self.events_data = []  # Store events for nearest-marker lookup
+        self.fig.canvas.mpl_connect('button_press_event', self._on_click_sample)
+
+    def _on_click_sample(self, event):
+        """Handle click on primitive plot to sample value and show nearest marker."""
+        # Only handle left-click (button 1) and when not dragging
+        if event.button != 1 or not event.inaxes:
+            return
+        
+        # Check if click is on any of our primitive axes
+        clicked_prim = None
+        for prim, ax in self.axes.items():
+            if event.inaxes == ax:
+                clicked_prim = prim
+                break
+        
+        if not clicked_prim:
+            return
+        
+        # Check if clicking on a draggable point (if so, let the drag handler take over)
+        for (event_idx, prim), dp in self.draggable_points.items():
+            if prim == clicked_prim:
+                # Check if clicking near this point
+                contains_filled, _ = dp.point.contains(event)
+                contains_preview = False
+                if dp.preview_point.get_visible():
+                    contains_preview, _ = dp.preview_point.contains(event)
+                if contains_filled or contains_preview:
+                    # Let drag handler take over
+                    return
+        
+        # Not clicking on a marker - sample the value at this location
+        click_time = event.xdata
+        click_value = event.ydata
+        
+        # Find nearest event marker
+        if not self.events_data:
+            return
+        
+        nearest_event_idx = None
+        min_distance = float('inf')
+        for idx, evt in enumerate(self.events_data):
+            dist = abs(evt.time - click_time)
+            if dist < min_distance:
+                min_distance = dist
+                nearest_event_idx = idx
+        
+        # Update readout with click location and nearest marker
+        if nearest_event_idx is not None:
+            marker_id = f"{nearest_event_idx}{clicked_prim}"
+            self._update_readout(nearest_event_idx, clicked_prim, click_value)
 
     def update_from_model(self, events):
         """
@@ -95,6 +148,9 @@ class PrimitivePanel:
         Args:
             events: List of Event objects
         """
+        # Store events for click sampling
+        self.events_data = events
+        
         # Always cancel all previews before updating
         self.cancel_all_previews()
         # Debug: print modified_primitives

@@ -394,9 +394,6 @@ class InteractiveEditor:
         """Handle keyboard shortcuts."""
         if event.key == 'ctrl+s':
             self._on_save_button(event)
-        elif event.key == 'c':
-            # Commit previews
-            self.controller.commit_changes()
         elif event.key == 'escape':
             # Cancel previews
             self.controller.cancel_changes()

@@ -10,9 +10,11 @@ def load_events_from_csv(filepath):
     Args:
         filepath (str): Path to CSV file.
     Returns:
-        List[Event]: List of Event objects, each with markers for primitives.
+        tuple: (List[Event], dict) - List of Event objects and metadata dict with 'gamma_self_0', 'time_unit', 'name'
     """
     events = []
+    metadata = {'gamma_self_0': 0+0j, 'time_unit': 'days', 'name': ''}
+    
     with open(filepath, 'r', newline='') as csvfile:
         # Find the actual header row
         lines = csvfile.readlines()
@@ -23,7 +25,26 @@ def load_events_from_csv(filepath):
                 break
         if header_idx is None:
             print("[DEBUG] No valid header found in CSV!")
-            return events
+            return events, metadata
+        
+        # Parse metadata rows before header
+        for idx in range(header_idx):
+            line = lines[idx].strip()
+            if ',' in line:
+                key, value = line.split(',', 1)
+                key = key.strip()
+                value = value.strip()
+                if key == 'gamma_self_0':
+                    try:
+                        metadata['gamma_self_0'] = complex(value.replace('+-', '-'))
+                        print(f"[DEBUG] Parsed gamma_self_0 = {metadata['gamma_self_0']}")
+                    except Exception as e:
+                        print(f"[DEBUG] Failed to parse gamma_self_0: {e}")
+                elif key == 'time_unit':
+                    metadata['time_unit'] = value
+                elif key == 'name':
+                    metadata['name'] = value
+        
         header = [h.strip() for h in lines[header_idx].strip().split(',')]
         print(f"[DEBUG] Using header: {header}")
         # Read data rows after header
@@ -46,4 +67,4 @@ def load_events_from_csv(filepath):
                 print(f"[DEBUG] Accepted event: time={time}, primitives={primitives}")
             except Exception as e:
                 print(f"[DEBUG] Skipping row due to error: {e}")
-    return events
+    return events, metadata
