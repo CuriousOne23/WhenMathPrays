@@ -26,9 +26,10 @@ class EditorController:
     - Debounced trajectory recomputation
     - Lock/unlock actions
     - Auto-marking of modified events
+    - Undo/Redo command management
     """
     
-    def __init__(self, model, primitive_panel, trajectory_panel):
+    def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None):
         """
         Initialize controller.
         
@@ -36,10 +37,12 @@ class EditorController:
             model: EditorModel instance
             primitive_panel: PrimitivePanel instance
             trajectory_panel: TrajectoryPanel instance
+            undo_stack: QUndoStack instance (optional)
         """
         self.model = model
         self.primitive_panel = primitive_panel
         self.trajectory_panel = trajectory_panel
+        self.undo_stack = undo_stack
         
         # Set controller reference in primitive_panel so it can access model.modified_primitives
         self.primitive_panel.controller = self
@@ -57,6 +60,9 @@ class EditorController:
         
         # Store baseline values (from CSV) for reset
         self.baseline_primitives = {}
+        
+        # Track if we're in undo/redo operation (to prevent recursive undo commands)
+        self.in_undo_redo = False
     
     def load_scenario(self, filepath: str):
         """
@@ -87,6 +93,22 @@ class EditorController:
         """
         Handle primitive value change from UI drag (on release - commit to model).
         """
+        # Get old value for undo
+        old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
+        
+        # Skip if no actual change
+        if abs(value - old_value) < 0.001:
+            return
+        
+        # Create undo command and push to stack (unless we're in undo/redo)
+        if self.undo_stack and not self.in_undo_redo:
+            from tools.editor.commands import EditPrimitiveCommand
+            command = EditPrimitiveCommand(self, event_index, primitive, old_value, value)
+            self.undo_stack.push(command)
+            return  # Command.redo() will handle the update
+        
+        # If no undo stack or in undo/redo, apply directly
+        self._apply_primitive_change(event_index, primitive, value)
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         if event_index not in self.model.modified_primitives:
@@ -132,6 +154,80 @@ class EditorController:
         self._recompute_trajectory_immediate()
         # Note: trajectory panel updated via _display_trajectory
     
+    def _apply_primitive_change(self, event_index: int, primitive: str, value: float):
+        """
+        Apply primitive change without undo tracking (used by undo commands).
+        
+        Args:
+            event_index: Event index
+            primitive: Primitive name
+            value: New value
+        """
+        # Commit the new value to the model
+        self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
+        
+        # Check if this value is back to baseline
+        baseline_value = self.baseline_primitives[primitive][event_index]
+        if abs(value - baseline_value) < 0.001:
+            # Back to baseline, remove from modified set
+            if event_index in self.model.modified_primitives:
+                self.model.modified_primitives[event_index].discard(primitive)
+                if not self.model.modified_primitives[event_index]:
+                    del self.model.modified_primitives[event_index]
+            
+            # Also remove marker position so it doesn't show on gamma_self graph
+            marker_key = (event_index, primitive)
+            if marker_key in self.model.marker_positions:
+                del self.model.marker_positions[marker_key]
+                print(f"[DEBUG] Removed marker position for {marker_key} (back to baseline)")
+        else:
+            # Modified, add to set
+            if event_index not in self.model.modified_primitives:
+                self.model.modified_primitives[event_index] = set()
+            self.model.modified_primitives[event_index].add(primitive)
+        
+        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
+        
+        # Store marker position from committed trajectory (only if still modified)
+        # First compute trajectory to get the position
+        events = self.model.get_events(self.perspective)
+        primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
+        times = primitives_data['time']
+        data = {
+            'v': primitives_data['v'],
+            'r': primitives_data['r'],
+            'f': primitives_data['f'],
+            'a': primitives_data['a'],
+            'S': primitives_data['S']
+        }
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        for i in range(len(times) - 1):
+            dt = times[i+1] - times[i]
+            v, r, f, a, S = data['v'][i], data['r'][i], data['f'][i], data['a'][i], data['S'][i]
+            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
+            gamma_trajectory.append(gamma_self)
+        
+        # Store marker position only if still modified (not back to baseline)
+        if self.model.is_modified(event_index, primitive):
+            marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
+            gamma_pos = gamma_trajectory[marker_idx]
+            marker_key = (event_index, primitive)
+            self.model.marker_positions[marker_key] = gamma_pos
+            print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
+        else:
+            print(f"Primitive {event_index}/{primitive} back to baseline, not storing marker position")
+        
+        # === Phase 3: Incremental Update ===
+        # Query modified status from Model (single source of truth)
+        is_modified = self.model.is_modified(event_index, primitive)
+        
+        # Update only this marker in PrimitivePanel (O(1) operation)
+        self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
+        
+        # Update trajectory panel (full recompute, but marker update was instant)
+        self._recompute_trajectory_immediate()
+    
     def on_primitive_preview(self, event_index: int, primitive: str, value: float):
         """
         Handle live preview during drag (motion).
@@ -156,9 +252,35 @@ class EditorController:
             primitive: 'v', 'r', 'f', 'a', or 'S'
         """
         print(f"\n=== RESET PRIMITIVE {event_index}/{primitive} ===")
+        
+        # Get current and baseline values
+        old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
         baseline_value = self.baseline_primitives[primitive][event_index]
         print(f"Resetting to baseline value: {baseline_value}")
         
+        # Skip if already at baseline
+        if abs(old_value - baseline_value) < 0.001:
+            return
+        
+        # Create undo command and push to stack (unless we're in undo/redo)
+        if self.undo_stack and not self.in_undo_redo:
+            from tools.editor.commands import ResetPrimitiveCommand
+            command = ResetPrimitiveCommand(self, event_index, primitive, old_value, baseline_value)
+            self.undo_stack.push(command)
+            return  # Command.redo() will handle the update
+        
+        # If no undo stack or in undo/redo, apply directly
+        self._apply_primitive_reset(event_index, primitive, baseline_value)
+    
+    def _apply_primitive_reset(self, event_index: int, primitive: str, baseline_value: float):
+        """
+        Apply primitive reset without undo tracking (used by undo commands).
+        
+        Args:
+            event_index: Event index
+            primitive: Primitive name
+            baseline_value: Baseline value to reset to
+        """
         # Reset using Model's method (Phase 1 query interface)
         self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
         

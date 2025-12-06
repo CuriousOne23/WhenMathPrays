@@ -62,21 +62,65 @@
 - Bidirectional editing workflow
 - Better support for iterative refinement
 
-### Phase 3: Dual-Perspective Editing (Future)
+### Phase 3: Dual-File Comparison Mode (Future)
 **Duration:** 5-6 hours  
 **Status:** Future
 
-**Planned Features:**
-- Radio toggle: M1 ⇄ M2 perspective selection
-- Side-by-side primitive panels (M1 row 1, M2 row 2)
-- Combined gamma_self display (blue M1, red M2)
-- Visual comparison: identify dominant events across perspectives
-- Inactive perspective: 30% opacity, view-only
+**Core Concept:**
+- Single-file mode by default (works as Phase 1/2)
+- Optional second file load triggers "Dual Mode" for comparison
+- Files can be any scenarios (not just M1/M2) with compatibility checks
+
+**Dual Mode Activation:**
+- File → "Open Second File" menu option
+- Compatibility validation:
+  - ✅ Same number of events
+  - ✅ Same time values (matching timeline)
+  - ✅ Same gamma_self_0 initial condition
+  - ❌ Reject with error dialog if incompatible
+
+**Visual Design - Primitive Plots:**
+- Active file: Solid bold lines, editable markers (current file being edited)
+- Reference file: Dotted/faded lines (30% opacity), non-editable markers
+- Both overlaid on same plots for direct comparison
+- Toggle/radio button to switch which file is active
+- When switching: visual styles swap automatically
+
+**Visual Design - Gamma_Self Plot:**
+- Both trajectories displayed simultaneously (different colors)
+- Active file: Solid line with modification markers
+- Reference file: Dotted/faded line (30% opacity)
+- Legend shows actual filenames (not generic "M1/M2")
+- Both always visible for comparison
+
+**Markers and Locks:**
+- Union of both files: If either file has marker/lock, show it
+- Prevents confusion about which events are important
+
+**File Operations:**
+- `Save`: Saves only active (bold) file → CSV + PNG
+- `Save All` (new): Saves both files → 2 CSVs + 1 combined PNG
+  - Combined PNG shows both trajectories with filenames in legend
+  - PNG name indicates combined view (e.g., `scenario1_scenario2_combined.png`)
+- `Close Second File`: Return to single-file mode
+
+**State Management:**
+- Separate undo stacks per file (preserved when switching)
+- Separate modified_primitives tracking per file
+- Separate marker_positions per file
+- Active file state maintained during session
+
+**Future Enhancements (Phase 4+):**
+- Editable filename display in UI
+- Editable gamma_self_0 (with constraint both must match)
+- Load order doesn't matter (any file can be primary/secondary)
 
 **Key Value:**
-- Full relationship dynamics (both partners' experiences)
-- Cross-perspective sensitivity analysis
-- Validate symmetry assumptions
+- Compare different scenarios side-by-side
+- M1 vs M2 relationship dynamics visualization
+- Before/after scenario comparison
+- Sensitivity analysis: compare baseline vs modified scenarios
+- Validate symmetry assumptions across perspectives
 
 ### Phase 4: Advanced Features (Future)
 **Duration:** 3-4 hours  
@@ -167,24 +211,32 @@ Step 3: Save modified CSV → Re-run scenario script
 └───────────────────────────────┴────────────────────────────┘
 ```
 
-### Phase 3: Dual-Perspective Layout (Future)
+### Phase 3: Dual-File Comparison Layout (Future)
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [Radio] ○ M1  ○ M2    Interactive Scenario Editor         │
+│  Interactive Editor - [Active: scenario1.csv] [Ref: scenario2.csv] │
+│  [Toggle: ● File 1  ○ File 2]  [File] [Save] [Save All]   │
 ├───────────────────────────────┬────────────────────────────┤
-│   M1 PRIMITIVES (Row 1)       │                            │
-│   v r f a S (5 colors)        │   GAMMA_SELF COMBINED      │
-│   ─ ─ ─ ─ ─                   │                            │
-│                               │   • M1 (blue line)         │
-│   M2 PRIMITIVES (Row 2)       │   • M2 (red line)          │
-│   v r f a S (5 colors)        │   • Both labeled           │
-│   ─ ─ ─ ─ ─                   │   • Same time axis         │
-│                               │   • Identify dominant      │
-│   [Shared time axis]          │     events visually        │
+│   PRIMITIVES (Overlay)        │   GAMMA_SELF (Dual)        │
 │                               │                            │
-│   • Radio toggle active view  │                            │
-│   • Inactive = 30% opacity    │                            │
+│   File 1 (solid bold):        │   • File 1 (blue solid)    │
+│   v ━━━━━━━ (active/editable) │   • File 2 (green dotted)  │
+│   r ━━━━━━━                   │                            │
+│   f ━━━━━━━                   │   Legend:                  │
+│   a ━━━━━━━                   │   ━ scenario1.csv (active) │
+│   S ━━━━━━━                   │   ┄ scenario2.csv (ref)    │
+│                               │                            │
+│   File 2 (dotted faded):      │   • Both visible           │
+│   v ┄┄┄┄┄┄┄ (ref/view-only)   │   • Same timeline          │
+│   r ┄┄┄┄┄┄┄  30% opacity      │   • Compare dynamics       │
+│   f ┄┄┄┄┄┄┄                   │   • Modification markers   │
+│   a ┄┄┄┄┄┄┄                   │     on active only         │
+│   S ┄┄┄┄┄┄┄                   │                            │
+│                               │                            │
+│   [Shared time axis]          │   Click toggle to swap     │
+│   • Click toggle to switch    │   active/reference         │
+│   • Markers = union of both   │                            │
 └───────────────────────────────┴────────────────────────────┘
 ```
 
