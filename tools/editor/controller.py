@@ -8,6 +8,8 @@ import threading
 import numpy as np
 import pandas as pd
 from typing import Optional, List
+from PySide6.QtCore import QTimer
+from tools.editor.constants import PRIMITIVE_NAMES, is_inserted_event
 
 # Import GRP core
 import sys
@@ -60,6 +62,11 @@ class EditorController:
         
         # Store baseline values (from CSV) for reset
         self.baseline_primitives = {}
+        # Store ORIGINAL CSV baseline values - never updated, used for reset comparison
+        self.original_baseline_primitives = {}
+        
+        # Track initial load to allow auto-zoom only on first render
+        self.initial_load_complete = False
         
         # Track if we're in undo/redo operation (to prevent recursive undo commands)
         self.in_undo_redo = False
@@ -76,6 +83,13 @@ class EditorController:
 
         # Store baseline primitives (for reset functionality)
         self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
+        # Store original CSV values - these NEVER change, used for reset comparison
+        self.original_baseline_primitives = {}
+        for key, val in self.baseline_primitives.items():
+            if isinstance(val, np.ndarray):
+                self.original_baseline_primitives[key] = val.copy()
+            else:
+                self.original_baseline_primitives[key] = val
 
         # Initialize modified_primitives as empty - will track user modifications only
         events = self.model.get_events(self.perspective)
@@ -86,8 +100,10 @@ class EditorController:
         # Update views
         self._update_all_views()
 
-        # Compute initial trajectory
+        # Compute initial trajectory (allow auto-zoom on first load)
+        self.initial_load_complete = False
         self._recompute_trajectory_immediate()
+        self.initial_load_complete = True  # Preserve view on all subsequent updates
     
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
@@ -111,14 +127,15 @@ class EditorController:
         self._apply_primitive_change(event_index, primitive, value)
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
-        if event_index not in self.model.modified_primitives:
-            self.model.modified_primitives[event_index] = set()
-        self.model.modified_primitives[event_index].add(primitive)
+        events = self.model.get_events(self.perspective)
+        event_time = events[event_index].time
+        if event_time not in self.model.modified_primitives:
+            self.model.modified_primitives[event_time] = set()
+        self.model.modified_primitives[event_time].add(primitive)
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         
         # Store marker position from committed trajectory (must happen before display)
         # First compute trajectory to get the position
-        events = self.model.get_events(self.perspective)
         primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
         times = primitives_data['time']
         data = {
@@ -136,16 +153,16 @@ class EditorController:
             gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
             gamma_trajectory.append(gamma_self)
         
-        # Store marker position
+        # Store marker position using time as key
         marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
         gamma_pos = gamma_trajectory[marker_idx]
-        marker_key = (event_index, primitive)
+        marker_key = (event_time, primitive)
         self.model.marker_positions[marker_key] = gamma_pos
-        print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
+        print(f"Marker ({event_time}, {primitive}) → gamma_self[{marker_idx}] = {gamma_pos}")
         
         # === Phase 3: Incremental Update ===
         # Query modified status from Model (single source of truth)
-        is_modified = self.model.is_modified(event_index, primitive)
+        is_modified = self.model.is_primitive_modified(event_index, primitive, self.perspective)
         
         # Update only this marker in PrimitivePanel (O(1) operation)
         self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
@@ -168,23 +185,25 @@ class EditorController:
         
         # Check if this value is back to baseline
         baseline_value = self.baseline_primitives[primitive][event_index]
+        events = self.model.get_events(self.perspective)
+        event_time = events[event_index].time
         if abs(value - baseline_value) < 0.001:
             # Back to baseline, remove from modified set
-            if event_index in self.model.modified_primitives:
-                self.model.modified_primitives[event_index].discard(primitive)
-                if not self.model.modified_primitives[event_index]:
-                    del self.model.modified_primitives[event_index]
+            if event_time in self.model.modified_primitives:
+                self.model.modified_primitives[event_time].discard(primitive)
+                if not self.model.modified_primitives[event_time]:
+                    del self.model.modified_primitives[event_time]
             
             # Also remove marker position so it doesn't show on gamma_self graph
-            marker_key = (event_index, primitive)
+            marker_key = (event_time, primitive)
             if marker_key in self.model.marker_positions:
                 del self.model.marker_positions[marker_key]
                 print(f"[DEBUG] Removed marker position for {marker_key} (back to baseline)")
         else:
             # Modified, add to set
-            if event_index not in self.model.modified_primitives:
-                self.model.modified_primitives[event_index] = set()
-            self.model.modified_primitives[event_index].add(primitive)
+            if event_time not in self.model.modified_primitives:
+                self.model.modified_primitives[event_time] = set()
+            self.model.modified_primitives[event_time].add(primitive)
         
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         
@@ -209,18 +228,18 @@ class EditorController:
             gamma_trajectory.append(gamma_self)
         
         # Store marker position only if still modified (not back to baseline)
-        if self.model.is_modified(event_index, primitive):
+        if self.model.is_primitive_modified(event_index, primitive, self.perspective):
             marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
             gamma_pos = gamma_trajectory[marker_idx]
-            marker_key = (event_index, primitive)
+            marker_key = (event_time, primitive)
             self.model.marker_positions[marker_key] = gamma_pos
-            print(f"Marker {marker_key} → gamma_self[{marker_idx}] = {gamma_pos}")
+            print(f"Marker ({event_time}, {primitive}) → gamma_self[{marker_idx}] = {gamma_pos}")
         else:
-            print(f"Primitive {event_index}/{primitive} back to baseline, not storing marker position")
+            print(f"Primitive {event_index}/{primitive} (time {event_time}) back to baseline, not storing marker position")
         
         # === Phase 3: Incremental Update ===
         # Query modified status from Model (single source of truth)
-        is_modified = self.model.is_modified(event_index, primitive)
+        is_modified = self.model.is_primitive_modified(event_index, primitive, self.perspective)
         
         # Update only this marker in PrimitivePanel (O(1) operation)
         self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
@@ -253,13 +272,34 @@ class EditorController:
         """
         print(f"\n=== RESET PRIMITIVE {event_index}/{primitive} ===")
         
-        # Get current and baseline values
-        old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
-        baseline_value = self.baseline_primitives[primitive][event_index]
-        print(f"Resetting to baseline value: {baseline_value}")
+        try:
+            # Get current value
+            old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
+            
+            # Get original CSV baseline value by finding the event's original position
+            # After insertions, we need to map current time back to original CSV row
+            event = self.model.get_event(event_index, self.perspective)
+            event_time = event.time
+            
+            # Find the index in original baseline that matches this time
+            original_times = np.array(self.original_baseline_primitives['time'])
+            original_idx = np.where(np.abs(original_times - event_time) < 0.001)[0]
+            
+            if len(original_idx) == 0:
+                print(f"Event at time {event_time} is not in original CSV (inserted event), cannot reset")
+                return
+            
+            baseline_value = self.original_baseline_primitives[primitive][original_idx[0]]
+            print(f"Resetting to baseline value: {baseline_value} (from original CSV)")
+        except Exception as e:
+            print(f"ERROR getting values: {e}")
+            import traceback
+            traceback.print_exc()
+            return
         
         # Skip if already at baseline
         if abs(old_value - baseline_value) < 0.001:
+            print(f"Already at baseline, skipping")
             return
         
         # Create undo command and push to stack (unless we're in undo/redo)
@@ -281,33 +321,43 @@ class EditorController:
             primitive: Primitive name
             baseline_value: Baseline value to reset to
         """
-        # Reset using Model's method (Phase 1 query interface)
-        self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
-        
-        print(f"Reset complete. modified_primitives: {self.model.modified_primitives}")
-        
-        # Remove marker position for this primitive
-        marker_key = (event_index, primitive)
-        if marker_key in self.model.marker_positions:
-            del self.model.marker_positions[marker_key]
-        
-        # === Phase 3: Incremental Update ===
-        # Update only this marker in PrimitivePanel (O(1) operation)
-        is_modified = False  # Just reset, so not modified
-        self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
-        
-        # Remove the label annotation immediately for instant feedback
-        self.primitive_panel.remove_marker_label(event_index, primitive)
-        
-        # Reset double-click state in the marker
-        marker_obj = self.primitive_panel.draggable_points.get((event_index, primitive))
-        if marker_obj:
-            marker_obj.reset_double_click_state()
-        
-        # Recompute trajectory and update trajectory view
-        self._recompute_trajectory_with_preview()
-        
-        print(f"=== END RESET ===")
+        try:
+            # Reset using Model's method (Phase 1 query interface)
+            self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
+            
+            event = self.model.get_event(event_index, self.perspective)
+            print(f"Reset complete. Event {event_index} (time={event.time}), modified_primitives: {self.model.modified_primitives}")
+            
+            # Remove marker position for this primitive (using time-based key)
+            marker_key = (event.time, primitive)
+            if marker_key in self.model.marker_positions:
+                del self.model.marker_positions[marker_key]
+                print(f"Removed marker position for {marker_key}")
+            else:
+                print(f"No marker position found for {marker_key}")
+            
+            # === Phase 3: Incremental Update ===
+            # Update only this marker in PrimitivePanel (O(1) operation)
+            is_modified = self.model.is_modified(event_index, primitive, self.perspective)
+            print(f"After reset, is_modified({event_index}, {primitive}) = {is_modified}")
+            self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
+            
+            # Remove the label annotation immediately for instant feedback
+            self.primitive_panel.remove_marker_label(event_index, primitive)
+            
+            # Reset double-click state in the marker
+            marker_obj = self.primitive_panel.draggable_points.get((event_index, primitive))
+            if marker_obj:
+                marker_obj.reset_double_click_state()
+            
+            # Recompute trajectory and update trajectory view
+            self._recompute_trajectory_with_preview()
+            
+            print(f"=== END RESET ===")
+        except Exception as e:
+            print(f"ERROR in _apply_primitive_reset: {e}")
+            import traceback
+            traceback.print_exc()
     
     def commit_changes(self):
         """Commit all preview changes."""
@@ -350,6 +400,110 @@ class EditorController:
         
         print(f"Event {event_index} {'locked' if new_lock_status else 'unlocked'}")
     
+    def insert_event_at_time(self, time: float):
+        """
+        Insert a new event at specified time with primitives set to 0 (neutral).
+        Updates views immediately after insertion.
+        
+        Args:
+            time: Time value for new event
+        """
+        # Insert into model
+        new_idx = self.model.insert_event(time, self.perspective)
+        
+        # Update baseline primitives to include new event
+        self._update_baseline_after_insert(new_idx)
+        
+        # Update all views immediately (shows dashed lines and markers at y=0)
+        self._update_all_views()
+        
+        # Recompute trajectory (since primitives are 0, this should be fast)
+        self._recompute_trajectory_immediate()
+    
+    def insert_event_at_time_no_update(self, time: float):
+        """
+        Insert a new event WITHOUT updating views (for batch operations).
+        Caller must call _update_all_views() and _recompute_trajectory_immediate() after all insertions.
+        
+        Args:
+            time: Time value for new event
+        """
+        # Insert into model
+        new_idx = self.model.insert_event(time, self.perspective)
+        
+        # Update baseline primitives to include new event
+        self._update_baseline_after_insert(new_idx)
+    
+    def delete_event_at_index(self, event_index: int):
+        """
+        Delete event at specified index.
+        Updates views immediately after deletion.
+        
+        Args:
+            event_index: Index of event to delete
+        
+        Raises:
+            ValueError: If event is locked or first/last event
+        """
+        # Delete from model (will raise ValueError if locked or endpoint)
+        deleted_event = self.model.delete_event(event_index, self.perspective)
+        
+        # Update baseline primitives to remove deleted event
+        self._update_baseline_after_delete(event_index)
+        
+        # Update all views
+        self._update_all_views()
+        
+        # Recompute trajectory
+        self._recompute_trajectory_immediate()
+        
+        print(f"Deleted event at index {event_index}, time {deleted_event.time}")
+    
+    def delete_event_at_index_no_update(self, event_index: int):
+        """
+        Delete event WITHOUT updating views (for batch operations).
+        Caller must call _update_all_views() and _recompute_trajectory_immediate() after all deletions.
+        
+        Args:
+            event_index: Index of event to delete
+        
+        Raises:
+            ValueError: If event is locked or first/last event
+        """
+        # Delete from model (will raise ValueError if locked or endpoint)
+        deleted_event = self.model.delete_event(event_index, self.perspective)
+        
+        # Update baseline primitives to remove deleted event
+        self._update_baseline_after_delete(event_index)
+        
+        return deleted_event
+    
+    def _update_baseline_after_insert(self, insert_idx: int):
+        """Update baseline primitives after inserting an event."""
+        # Re-fetch baseline from model
+        self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
+        
+        # NOTE: modified_primitives shifting is already handled by model.insert_event()
+        # Don't duplicate the shift logic here!
+        
+        # Clear marker positions - trajectory changes after insertion, so old gamma_self
+        # coordinates no longer correspond to the same events. Markers will be regenerated
+        # when user commits changes.
+        self.model.marker_positions = {}
+    
+    def _update_baseline_after_delete(self, deleted_idx: int):
+        """Update baseline primitives and modified_primitives after deleting an event."""
+        # Re-fetch baseline from model
+        self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
+        
+        # NOTE: modified_primitives shifting is already handled by model.delete_event()
+        # Don't duplicate the shift logic here!
+        
+        # Clear marker positions - trajectory changes after deletion, so old gamma_self
+        # coordinates no longer correspond to the same events. Markers will be regenerated
+        # when user commits changes.
+        self.model.marker_positions = {}
+    
     def _schedule_recomputation(self):
         """Schedule debounced trajectory recomputation (committed)."""
         # Cancel existing timer
@@ -364,18 +518,22 @@ class EditorController:
     def _schedule_recomputation_preview(self):
         """Schedule debounced trajectory recomputation (preview mode)."""
         # Cancel existing timer
-        if self.debounce_timer and self.debounce_timer.is_alive():
-            self.debounce_timer.cancel()
+        if self.debounce_timer and self.debounce_timer.isActive():
+            self.debounce_timer.stop()
         
-        # Schedule new computation after 300ms
-        self.debounce_timer = threading.Timer(0.3, self._recompute_trajectory_with_preview)
-        self.debounce_timer.daemon = True  # Allow clean exit
-        self.debounce_timer.start()
+        # Create timer if needed
+        if not self.debounce_timer:
+            self.debounce_timer = QTimer()
+            self.debounce_timer.setSingleShot(True)
+            self.debounce_timer.timeout.connect(self._recompute_trajectory_with_preview)
+        
+        # Schedule new computation after 50ms (fast enough for real-time feel)
+        self.debounce_timer.start(50)
     
     def cleanup(self):
         """Clean up resources (call on window close)."""
-        if self.debounce_timer and self.debounce_timer.is_alive():
-            self.debounce_timer.cancel()
+        if self.debounce_timer and self.debounce_timer.isActive():
+            self.debounce_timer.stop()
     
     def _recompute_trajectory_immediate(self):
         """Immediate trajectory computation (no debounce)."""
@@ -396,9 +554,6 @@ class EditorController:
         Args:
             preview_mode: If True, include preview changes in computation
         """
-        # Import here to avoid circular dependency
-        from PySide6.QtCore import QTimer
-        
         # Show computing indicator (thread-safe via Qt signal)
         QTimer.singleShot(0, lambda: self.trajectory_panel.show_computing(True))
         
@@ -466,6 +621,18 @@ class EditorController:
         gamma_x = [g.real for g in gamma_trajectory]
         gamma_y = [g.imag for g in gamma_trajectory]
         
+        # Find inserted events (all primitives = 0) for marking
+        inserted_events = []  # List of (index, time, gamma_x, gamma_y)
+        for idx, event in enumerate(events):
+            if is_inserted_event(event, exclude_first_last=True, event_idx=idx, total_events=len(events)):
+                if idx < len(gamma_trajectory):
+                    inserted_events.append({
+                        'index': idx,
+                        'time': event.time,
+                        'x': gamma_x[idx],
+                        'y': gamma_y[idx]
+                    })
+        
         # Build marked_data: {event_idx: set of modified primitives}
         marked_data = {}
         
@@ -488,7 +655,16 @@ class EditorController:
         print(f"\n=== DISPLAY TRAJECTORY (preview={preview_mode}) ===")
         print(f"marker_positions dict: {self.model.marker_positions}")
         
-        for (event_idx, prim), gamma_pos in self.model.marker_positions.items():
+        # Build time-to-index mapping for converting marker keys
+        events = self.model.get_events(self.perspective)
+        time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+        
+        for (event_time, prim), gamma_pos in self.model.marker_positions.items():
+            # Convert time to current index
+            if event_time not in time_to_idx:
+                continue  # Event was deleted
+            event_idx = time_to_idx[event_time]
+            
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
             marker = {
                 'event_idx': event_idx,
@@ -504,37 +680,56 @@ class EditorController:
         print(f"Total pinned_markers: {len(pinned_markers)}")
         print("=== END DISPLAY ===")
         
-        # Find preview position (if in preview mode)
+        # Find gamma position to display in gauge
+        # NOTE: preview_gamma is only for the trajectory plot preview marker, NOT the gauge
         preview_gamma = None
-        if preview_mode and self.model.preview_changes:
-            # Find last preview change index
-            preview_idx = max(self.model.preview_changes.keys())
-            if preview_idx < len(gamma_trajectory):
-                preview_gamma = (gamma_x[preview_idx], gamma_y[preview_idx])
+        if preview_mode:
+            # During preview, show the trajectory preview marker at the modified event's position
+            if self.model.preview_changes:
+                preview_idx = max(self.model.preview_changes.keys())
+                print(f"[PREVIEW_GAMMA] preview_idx from preview_changes={preview_idx}, len(gamma_trajectory)={len(gamma_trajectory)}")
+                # Show position AFTER this event (next trajectory point)
+                if preview_idx + 1 < len(gamma_trajectory):
+                    preview_gamma = (gamma_x[preview_idx + 1], gamma_y[preview_idx + 1])
+                    print(f"[PREVIEW_GAMMA] Set to trajectory[{preview_idx + 1}] = {preview_gamma}")
+                else:
+                    print(f"[PREVIEW_GAMMA] preview_idx+1 out of range")
+            else:
+                # Fallback: use the trajectory endpoint during preview
+                if len(gamma_trajectory) > 0:
+                    preview_gamma = (gamma_x[-1], gamma_y[-1])
+                    print(f"[PREVIEW_GAMMA] Using trajectory endpoint = {preview_gamma}")
+        else:
+            print(f"[PREVIEW_GAMMA] Not in preview mode")
         
         # Store committed trajectory if not in preview
         if not preview_mode:
             self.committed_gamma_trajectory = gamma_trajectory
             print(f"[TRAJECTORY] Stored committed trajectory, final point: {gamma_trajectory[-1] if gamma_trajectory else 'empty'}")
         
-        # Update trajectory panel (preserve view during edits)
-        # Use QTimer to ensure GUI updates happen on main thread
-        from PySide6.QtCore import QTimer
-        preserve_view = preview_mode  # Keep view fixed during preview edits
+        # Update trajectory panel (preserve view after initial load)
+        # Always preserve view except on very first render
+        preserve_view = self.initial_load_complete or preview_mode
         print(f"[TRAJECTORY] Calling update_trajectory with preserve_view={preserve_view}")
         
-        # Schedule GUI update on main thread
-        QTimer.singleShot(0, lambda: self._update_gui(
-            gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view
-        ))
+        # Call GUI update directly (we're already on main thread via QTimer)
+        self._update_gui(
+            gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events
+        )
     
-    def _update_gui(self, gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view):
+    def _update_gui(self, gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events=None):
         """Update GUI components (must be called on main thread)."""
+        print(f"[_UPDATE_GUI] Called with preview_gamma={preview_gamma}, preserve_view={preserve_view}")
+        
+        # Update trajectory plot
         self.trajectory_panel.update_trajectory(gamma_x, gamma_y, marked_data, 
                                                pinned_markers=pinned_markers,
                                                preview_gamma=preview_gamma,
-                                               preserve_view=preserve_view)
+                                               preserve_view=preserve_view,
+                                               inserted_events=inserted_events)
         self.trajectory_panel.show_computing(False)
+        
+        # Note: gamma_self gauge is NOT updated here - it's only updated by clicking on trajectory plot
         
         # Update primitive panel markers
         self.primitive_panel.update_markers(marked_data)

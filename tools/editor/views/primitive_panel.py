@@ -32,6 +32,7 @@ class PrimitivePanel:
         self.on_lock_toggle = on_lock_toggle
         self.on_primitive_preview = on_primitive_preview
         self.on_primitive_reset = on_primitive_reset
+        self.on_insert_event = None  # Will be set by controller
         self.layout = layout or {}  # Store layout config
 
         # Create subplots for each primitive
@@ -41,6 +42,7 @@ class PrimitivePanel:
         self.original_markers = {}  # {(event_idx, primitive): matplotlib artist} - static filled markers at baseline
         self.baseline_values = {}  # {(event_idx, primitive): float} - original CSV values
         self.marker_annotations = {}  # {(event_idx, primitive): Annotation} for numbered markers
+        self.insertion_lines = []  # Vertical dashed lines marking inserted events
 
         # Store manual x-axis limits for zoom
         self.manual_xlim = {}  # {prim: (xmin, xmax)}
@@ -69,7 +71,7 @@ class PrimitivePanel:
         # Create readout text display (positioned to the left of fidelity plot)
         f_ax = self.axes['f']
         gauge_x = self.layout.get('primitive_gauge_x', -0.25)
-        gauge_y = self.layout.get('primitive_gauge_y', 0.5)
+        gauge_y = self.layout.get('primitive_gauge_y', 0.35)  # Moved down from 0.5
         self.readout_text = f_ax.text(
             gauge_x, gauge_y, '',  # Use layout config
             transform=f_ax.transAxes,
@@ -97,6 +99,30 @@ class PrimitivePanel:
                 break
         
         if not clicked_prim:
+            return
+        
+        # Check for Shift+Click to insert event
+        # In matplotlib, modifier keys are in event.key when combined with click
+        # Shift modifier shows as 'shift' or the key includes 'shift+'
+        is_shift_click = False
+        if event.key:
+            # Check if 'shift' is in the key string
+            is_shift_click = 'shift' in event.key.lower()
+        
+        # Also check Qt modifiers as backup (PySide6)
+        if not is_shift_click and hasattr(event, 'guiEvent'):
+            try:
+                from PySide6.QtCore import Qt
+                gui_event = event.guiEvent
+                if hasattr(gui_event, 'modifiers'):
+                    is_shift_click = bool(gui_event.modifiers() & Qt.ShiftModifier)
+            except:
+                pass
+        
+        if is_shift_click and event.xdata:
+            # Trigger event insertion callback (rounding done by caller)
+            if hasattr(self, 'on_insert_event') and self.on_insert_event:
+                self.on_insert_event(event.xdata)
             return
         
         # Check if clicking on a draggable point (if so, let the drag handler take over)
@@ -143,11 +169,10 @@ class PrimitivePanel:
         
         # Always cancel all previews before updating
         self.cancel_all_previews()
-        # Debug: print modified_primitives
-        # Always fetch latest model reference from controller
+        # Get modified_primitives from model
         model = getattr(self.controller, 'model', None) if hasattr(self, 'controller') else None
         mod_prims = getattr(model, 'modified_primitives', {}) if model else {}
-        print(f"[DEBUG] modified_primitives: {mod_prims}")
+        
         for prim in self.PRIMITIVE_NAMES:
             times = [event.time for event in events]
             values = [event.markers[prim].value for event in events]
@@ -180,7 +205,6 @@ class PrimitivePanel:
                 marker = event.markers[prim]
                 # Determine if marker has been edited
                 edited = event_idx in mod_prims and prim in mod_prims.get(event_idx, set())
-                print(f"[DEBUG] event_idx={event_idx}, prim={prim}, edited={edited}, modified_primitives={mod_prims}")
                 
                 # If edited, show original marker (filled, non-draggable) at baseline position
                 if edited:
@@ -191,12 +215,11 @@ class PrimitivePanel:
                             color=self.PRIMITIVE_COLORS[prim],
                             markerfacecolor=self.PRIMITIVE_COLORS[prim],
                             markeredgecolor=self.PRIMITIVE_COLORS[prim],
-                            markersize=7,
-                            alpha=0.5,  # Semi-transparent to show it's the "old" position
-                            zorder=5  # Below the draggable points
-                        )
-                        self.original_markers[(event_idx, prim)] = original_marker
-                        print(f"[DEBUG] Original marker: event={event_idx}, prim={prim}, baseline={baseline_val}")
+                        markersize=7,
+                        alpha=0.5,  # Semi-transparent to show it's the "old" position
+                        zorder=5  # Below the draggable points
+                    )
+                    self.original_markers[(event_idx, prim)] = original_marker
                 
                 # Create DraggablePoint for current (possibly modified) position
                 baseline_val = self.baseline_values.get((event_idx, prim), marker.value)
@@ -221,19 +244,49 @@ class PrimitivePanel:
                     dp.point.set_markerfacecolor('none')
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
                     dp.point.set_markeredgewidth(2)
-                    print(f"[DEBUG] Hollow marker: event={event_idx}, prim={prim}, value={marker.value}")
                 else:
                     # Show filled marker for unmodified points
                     dp.point.set_markerfacecolor(self.PRIMITIVE_COLORS[prim])
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
-                    print(f"[DEBUG] Filled marker: event={event_idx}, prim={prim}, value={marker.value}")
                 
                 # Ensure preview point is hidden (it's only shown during active dragging)
                 dp.preview_point.set_visible(False)
-                print(f"[DEBUG] Preview marker visible: {dp.preview_point.get_visible()} at ({dp.x}, {dp.y})")
                 
                 self.draggable_points[(event_idx, prim)] = dp
-        force_canvas_draw(self.fig.canvas)
+        
+        # Draw vertical dashed lines for inserted events (all primitives at 0)
+        self._update_insertion_lines(events)
+        
+        # Use non-blocking draw
+        self.fig.canvas.draw_idle()
+    
+    def _update_insertion_lines(self, events):
+        """
+        Draw vertical dashed lines for inserted events (where all primitives are 0).
+        
+        Args:
+            events: List of Event objects
+        """
+        # Remove old insertion lines
+        for line in self.insertion_lines:
+            line.remove()
+        self.insertion_lines.clear()
+        
+        # Find events where all primitives are 0 (inserted events)
+        for event_idx, event in enumerate(events):
+            all_zero = all(abs(event.markers[prim].value) < 0.001 for prim in self.PRIMITIVE_NAMES)
+            if all_zero and event_idx > 0 and event_idx < len(events) - 1:  # Don't mark first/last
+                # Draw vertical dashed line across all primitive plots
+                for prim in self.PRIMITIVE_NAMES:
+                    line = self.axes[prim].axvline(
+                        x=event.time,
+                        color='gray',
+                        linestyle='--',
+                        linewidth=1.5,
+                        alpha=0.6,
+                        zorder=1  # Behind markers
+                    )
+                    self.insertion_lines.append(line)
     
     def update_markers(self, marked_data):
         """

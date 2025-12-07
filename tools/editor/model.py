@@ -74,17 +74,19 @@ class EditorModel:
         self.name: str = ""
         self.time_unit: str = "days"
         self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
+        self.gamma_self_0_original: complex = 0 + 0j  # Original value from CSV
+        self.gamma_self_0_modified: bool = False  # Whether gamma_self_0 has been changed
         self.events: list = []  # List of Event objects (new structure)
         self.events_m1: list = []  # Events for perspective M1
         self.events_m2: list = []  # Events for perspective M2
         self.filepath: Optional[Path] = None
         self.dirty: bool = False  # Unsaved changes?
         self.modified_indices: set = set()  # Track which events were modified
-        self.modified_primitives: Dict[int, set] = {}  # {event_idx: {'v', 'r', ...}}
+        self.modified_primitives: Dict[float, set] = {}  # {event_time: {'v', 'r', ...}}
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
         # Pinned marker positions: where gamma_self was when each primitive was first modified
-        self.marker_positions: Dict[tuple, complex] = {}  # {(event_idx, primitive): gamma_self_position}
+        self.marker_positions: Dict[tuple, complex] = {}  # {(event_time, primitive): gamma_self_position}
     
     def load_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
@@ -100,6 +102,8 @@ class EditorModel:
         
         # Apply metadata to model
         self.gamma_self_0 = metadata.get('gamma_self_0', 0+0j)
+        self.gamma_self_0_original = self.gamma_self_0  # Store original for reset
+        self.gamma_self_0_modified = False  # Not modified on load
         self.time_unit = metadata.get('time_unit', 'days')
         if metadata.get('name'):
             self.name = metadata['name']
@@ -123,18 +127,21 @@ class EditorModel:
 
         # Ensure marker and locked columns are set for edited/locked events
         print(f"[SAVE] modified_primitives before save: {self.modified_primitives}")
-        for idx, event in enumerate(events):
-            # Set marker and locked if event was edited (in modified_primitives)
-            if idx in self.modified_primitives:
+        # Build time-to-index mapping
+        time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+        for mod_time, mod_prims in self.modified_primitives.items():
+            if mod_time in time_to_idx:
+                idx = time_to_idx[mod_time]
+                event = events[idx]
                 # Only set marker if not already set
                 if not event.marker:
                     event.marker = 'circle'
-                    print(f"[SAVE] Set marker='circle' for event {idx}")
+                    print(f"[SAVE] Set marker='circle' for event at time {mod_time} (index {idx})")
                 else:
-                    print(f"[SAVE] Event {idx} already has marker='{event.marker}'")
+                    print(f"[SAVE] Event at time {mod_time} (index {idx}) already has marker='{event.marker}'")
                 # Always lock modified events
                 event.locked = True
-                print(f"[SAVE] Set locked=True for event {idx}, modified prims: {self.modified_primitives[idx]}")
+                print(f"[SAVE] Set locked=True for event at time {mod_time} (index {idx}), modified prims: {mod_prims}")
 
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             # Write metadata if present
@@ -192,10 +199,11 @@ class EditorModel:
             if not getattr(marker_obj, 'style', None):
                 marker_obj.style = 'circle'  # Or set a property to indicate modified
 
-            # Track which primitive was modified
-            if event_index not in self.modified_primitives:
-                self.modified_primitives[event_index] = set()
-            self.modified_primitives[event_index].add(primitive)
+            # Track which primitive was modified (by event TIME, not index)
+            event_time = events[event_index].time
+            if event_time not in self.modified_primitives:
+                self.modified_primitives[event_time] = set()
+            self.modified_primitives[event_time].add(primitive)
 
             self.dirty = True
             self.modified_indices.add(event_index)
@@ -275,6 +283,87 @@ class EditorModel:
         """Clear all preview changes without committing."""
         self.preview_changes.clear()
     
+    def insert_event(self, time: float, perspective: str = "M1") -> int:
+        """
+        Insert a new event at specified time with all primitives set to 0 (neutral).
+        This creates a visible insertion point with no effect on gamma_self trajectory.
+        User can then drag primitives to non-zero values to shape the trajectory.
+        
+        Args:
+            time: Time value for new event
+            perspective: "M1" or "M2"
+        
+        Returns:
+            Index of newly inserted event
+        """
+        from tools.editor.event import Event
+        
+        events = self.events_m1 if perspective == "M1" else self.events_m2
+        
+        # Find insertion index (maintain sorted order by time)
+        insert_idx = 0
+        for i, event in enumerate(events):
+            if event.time < time:
+                insert_idx = i + 1
+            else:
+                break
+        
+        # Set all primitives to 0 (neutral - no effect on trajectory)
+        primitives = {'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0}
+        
+        # Create and insert new event
+        new_event = Event(time, primitives, notes=f"Inserted at t={time}")
+        events.insert(insert_idx, new_event)
+        self.dirty = True
+        
+        # NOTE: modified_primitives uses time values as keys, so no shifting needed
+        print(f"[INSERT] modified_primitives (time-based, no shift needed): {self.modified_primitives}")
+        
+        # Mark this event as an inserted event for visual distinction
+        if not hasattr(self, 'inserted_events'):
+            self.inserted_events = set()
+        self.inserted_events.add(insert_idx)
+        
+        return insert_idx
+    
+    def delete_event(self, event_index: int, perspective: str = "M1") -> Event:
+        """
+        Delete an event at specified index.
+        
+        Args:
+            event_index: Index of event to delete
+            perspective: "M1" or "M2"
+        
+        Returns:
+            Deleted event (for undo support)
+        
+        Raises:
+            ValueError: If event is locked or if trying to delete first/last event
+        """
+        events = self.events_m1 if perspective == "M1" else self.events_m2
+        
+        if not 0 <= event_index < len(events):
+            raise IndexError(f"Event index {event_index} out of range")
+        
+        if events[event_index].locked:
+            raise ValueError("Cannot delete locked event")
+        
+        if event_index == 0 or event_index == len(events) - 1:
+            raise ValueError("Cannot delete first or last event")
+        
+        deleted_event = events.pop(event_index)
+        self.dirty = True
+        
+        # Shift modified_primitives indices for all events after event_index
+        # Remove modifications for the deleted event (by time value)
+        deleted_time = events[event_index].time
+        if deleted_time in self.modified_primitives:
+            print(f"[DELETE] Removing modifications for deleted event at time {deleted_time}")
+            del self.modified_primitives[deleted_time]
+        print(f"[DELETE] modified_primitives after delete: {self.modified_primitives}")
+        
+        return deleted_event
+    
     # === Phase 1: Query Interface (Single Source of Truth) ===
     
     def get_event(self, event_idx: int, perspective: str = "M1"):
@@ -296,20 +385,29 @@ class EditorModel:
             raise IndexError(f"Event index {event_idx} out of range [0, {len(events)})")
         return events[event_idx]
     
-    def is_modified(self, event_idx: int, prim: str) -> bool:
+    def is_modified(self, event_idx: int, prim: str, perspective: str = "M1") -> bool:
         """
         Check if primitive has been modified from baseline.
         
         Args:
             event_idx: Zero-based event index
             prim: Primitive name ('v', 'r', 'f', 'a', 'S')
+            perspective: "M1" or "M2"
         
         Returns:
             True if modified, False if at baseline
         """
-        if event_idx not in self.modified_primitives:
+        events = self.get_events(perspective)
+        if event_idx >= len(events):
             return False
-        return prim in self.modified_primitives[event_idx]
+        event_time = events[event_idx].time
+        if event_time not in self.modified_primitives:
+            return False
+        return prim in self.modified_primitives[event_time]
+    
+    def is_primitive_modified(self, event_idx: int, prim: str, perspective: str = "M1") -> bool:
+        """Alias for is_modified() for backwards compatibility."""
+        return self.is_modified(event_idx, prim, perspective)
     
     def get_baseline_value(self, event_idx: int, prim: str, perspective: str = "M1") -> float:
         """
@@ -342,14 +440,24 @@ class EditorModel:
         # This method will be improved when we add baseline storage to model
         return event.markers[prim].value
     
-    def get_modified_events(self) -> set:
+    def get_modified_events(self, perspective: str = "M1") -> set:
         """
         Get indices of all events with modifications.
+        
+        Args:
+            perspective: "M1" or "M2"
         
         Returns:
             Set of event indices with at least one modified primitive
         """
-        return set(self.modified_primitives.keys())
+        # modified_primitives keys are time values, convert to current indices
+        events = self.get_events(perspective)
+        modified_indices = set()
+        time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+        for mod_time in self.modified_primitives.keys():
+            if mod_time in time_to_idx:
+                modified_indices.add(time_to_idx[mod_time])
+        return modified_indices
     
     def reset_event_primitive(self, event_idx: int, prim: str, baseline_value: float, perspective: str = "M1") -> float:
         """
@@ -379,11 +487,12 @@ class EditorModel:
         event = events[event_idx]
         event.markers[prim].value = baseline_value
         
-        # Remove from modified set
-        if event_idx in self.modified_primitives:
-            self.modified_primitives[event_idx].discard(prim)
-            if not self.modified_primitives[event_idx]:
-                del self.modified_primitives[event_idx]
+        # Remove from modified set (by time)
+        event_time = event.time
+        if event_time in self.modified_primitives:
+            self.modified_primitives[event_time].discard(prim)
+            if not self.modified_primitives[event_time]:
+                del self.modified_primitives[event_time]
         
         self.dirty = True
         return baseline_value
