@@ -35,12 +35,8 @@ class EditorMainWindow(QMainWindow):
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
         self.setGeometry(100, 100, 1400, 800)
         
-        # Create matplotlib figure (same size as Phase 1)
-        self.fig = Figure(figsize=(14, 8))
-        
-        # Embed in Qt canvas
-        self.canvas = FigureCanvasQTAgg(self.fig)
-        self.setCentralWidget(self.canvas)
+        # Central widget will be set by interactive_editor.py with PyQtGraph panels
+        # (No matplotlib figure/canvas needed - using pure PyQtGraph)
         
         # Undo stack (for Phase 2.4 - create before toolbar)
         self.undo_stack = QUndoStack(self)
@@ -68,19 +64,6 @@ class EditorMainWindow(QMainWindow):
         save_action.setStatusTip('Save scenario to CSV (Ctrl+S)')
         save_action.triggered.connect(lambda: self._on_save(csv=True, png=False))
         toolbar.addAction(save_action)
-        
-        # Save PNG action
-        save_png_action = QAction('Save PNG', self)
-        save_png_action.setShortcut('Shift+Ctrl+S')
-        save_png_action.setStatusTip('Save plots to PNG (Shift+Ctrl+S)')
-        save_png_action.triggered.connect(lambda: self._on_save(csv=False, png=True))
-        toolbar.addAction(save_png_action)
-        
-        # Save Both action
-        save_both_action = QAction('Save Both', self)
-        save_both_action.setStatusTip('Save both CSV and PNG')
-        save_both_action.triggered.connect(lambda: self._on_save(csv=True, png=True))
-        toolbar.addAction(save_both_action)
         
         toolbar.addSeparator()
         
@@ -116,8 +99,6 @@ class EditorMainWindow(QMainWindow):
         # Store references to prevent garbage collection
         self._toolbar = toolbar
         self._save_action = save_action
-        self._save_png_action = save_png_action
-        self._save_both_action = save_both_action
         self._undo_action = undo_action
         self._redo_action = redo_action
     
@@ -150,7 +131,17 @@ class EditorMainWindow(QMainWindow):
             self.status_bar.showMessage(f'Warning: {message}', timeout)
         elif level == 'error':
             QMessageBox.critical(self, 'Error', message)
-            self.status_bar.showMessage(f'Error: {message}', 0)
+            self.status_bar.showMessage(f'Error: {message}', timeout)
+    
+    def update_window_title(self, csv_file: Path):
+        """
+        Update window title with new filename.
+        
+        Args:
+            csv_file: Path to current CSV file
+        """
+        self.csv_file = csv_file
+        self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
     
     def update_window_title(self, csv_file: Path):
         """Update window title with new file name."""
@@ -193,15 +184,9 @@ class EditorMainWindow(QMainWindow):
     def showEvent(self, event):
         """Handle window show event (including restore from minimize)."""
         super().showEvent(event)
-        # Refresh canvas to prevent event handling issues after minimize/restore
-        if hasattr(self, 'canvas'):
-            self.canvas.draw_idle()
+        # PyQtGraph handles its own refresh automatically
     
     def changeEvent(self, event):
         """Handle window state changes (minimize, restore, etc)."""
         super().changeEvent(event)
-        # If window is being restored from minimized state
-        if event.type() == event.Type.WindowStateChange:
-            if not self.isMinimized() and hasattr(self, 'canvas'):
-                # Refresh canvas after restore
-                self.canvas.draw_idle()
+        # PyQtGraph handles window state changes automatically
