@@ -42,6 +42,9 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.plot_widget.setTitle('γ_self Trajectory')
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
         
+        # Store name for title updates (will be set when loading data)
+        self.scenario_name = ''
+        
         # Enable mouse interaction - right-click drag to pan, scroll to zoom
         self.plot_widget.setMouseEnabled(x=True, y=True)
         # Set pan mode: left-click disabled (for gamma readout), right-click for pan
@@ -106,6 +109,17 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.plot_widget.addItem(self.preview_marker)
         self.preview_marker.setVisible(False)
         
+        # Create diagnostic marker (black X)
+        self.diagnostic_marker = pg.ScatterPlotItem(
+            size=14,
+            pen=pg.mkPen('k', width=3),
+            brush=None,
+            symbol='x',
+            name='Diagnostic'
+        )
+        self.plot_widget.addItem(self.diagnostic_marker)
+        self.diagnostic_marker.setVisible(False)
+        
         # Text items for labels
         self.marker_labels = []  # List of TextItem objects
         self.preview_label = None  # TextItem for preview
@@ -124,6 +138,27 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.original_ylim = None
         self.manual_xlim = None
         self.manual_ylim = None
+    
+    def set_scenario_name(self, name: str):
+        """Update the title with scenario name."""
+        self.scenario_name = name
+        if name:
+            # TODO: Add bold/fade styling when active/inactive
+            title = f"{name}, γ_self Trajectory"
+        else:
+            title = "γ_self Trajectory"
+        self.plot_widget.setTitle(title)
+    
+    def place_diagnostic_marker(self, gamma_x: float, gamma_y: float):
+        """Place diagnostic marker at specified gamma_self coordinates."""
+        self.diagnostic_marker.setData([gamma_x], [gamma_y])
+        self.diagnostic_marker.setVisible(True)
+        print(f"[DIAGNOSTIC] Placed trajectory marker at ({gamma_x:.2f}, {gamma_y:.2f})")
+    
+    def clear_diagnostic_marker(self):
+        """Remove diagnostic marker from trajectory."""
+        self.diagnostic_marker.setVisible(False)
+        print(f"[DIAGNOSTIC] Cleared trajectory marker")
         
     def update_trajectory(self, gamma_x, gamma_y, marked_data=None, pinned_markers=None, 
                          preview_gamma=None, preserve_view=False, inserted_events=None):

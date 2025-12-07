@@ -1,25 +1,109 @@
 # Interactive Editor - Phase 2 Requirements
 
-**Status:** PLANNING  
+**Status:** PARTIAL - Phase 2.0 & 2.1 Complete  
 **Target:** Post Phase 1 completion  
-**Estimated Effort:** 12-15.5 hours  
-**Last Updated:** December 6, 2025
+**Estimated Effort:** 12-15.5 hours (7 hours completed, 5-8.5 hours remaining)  
+**Last Updated:** December 7, 2025
 
 ---
 
 ## Phase 2 Overview
 
 Phase 2 migrates to a modern UI framework and adds critical functionality for more complex editing scenarios:
-- **PySide6 migration** (professional UI foundation)
-- **Edit initial state (gamma_self0)** and fractional time support
-- Add/delete time points (event insertion/removal)
-- Inverse editing (drag gamma_self to suggest primitives)
-- Manual marker management (add/remove markers without dragging)
-- Enhanced undo/redo system with QUndoStack
+- **✅ PySide6 migration** (professional UI foundation) - COMPLETE
+- **✅ Enhanced undo/redo system** with QUndoStack - COMPLETE
+- **✅ Diagnostic "What-If" markers** (hypothetical analysis without modifying data) - COMPLETE
+- **⏳ Edit initial state (gamma_self0)** and fractional time support - PLANNED
+- **⏳ Add/delete time points** (event insertion/removal) - PLANNED
+- **⏳ Inverse editing** (drag gamma_self to suggest primitives) - PLANNED
+- **⏳ Manual marker management** (add/remove markers without dragging) - PLANNED
 
 ---
 
-## Phase 2.0: PySide6 Migration (Foundation)
+## Phase 2.0: PySide6 Migration (Foundation) ✅ COMPLETE
+
+**Status:** Released as v2.0-undo-redo (December 6, 2025)  
+**Duration:** ~4 hours
+
+### What Was Built
+
+- ✅ Complete migration from Matplotlib/Tkinter to PySide6/PyQtGraph
+- ✅ Full undo/redo system using QUndoStack
+- ✅ Discrete undo steps (each marker edit is separate, undoable action)
+- ✅ Keyboard shortcuts (Ctrl+Z undo, Ctrl+Y/Ctrl+Shift+Z redo)
+- ✅ Command pattern for delegation (prevents recursive undo creation)
+- ✅ Significantly improved rendering performance
+- ✅ Professional Qt-based architecture ready for advanced features
+
+---
+
+## Phase 2.1: Diagnostic "What-If" Markers ✅ COMPLETE
+
+**Status:** Released as v2.1-diagnostic-markers (December 7, 2025)  
+**Duration:** ~3 hours  
+**Added Feature:** Not in original Phase 2 requirements - emerged from user testing
+
+### Purpose
+
+Enable users to quickly explore "what-if" scenarios without modifying their data. Users can test hypothetical primitive values and immediately see how they would affect the final gamma_self outcome.
+
+### What Was Built
+
+#### Core Functionality
+- ✅ **Shift+Click placement** - Click any primitive plot while holding Shift to place diagnostic marker
+- ✅ **Black X visual distinction** - Diagnostic markers use black X symbol, clearly differentiated from actual data markers
+- ✅ **Nearest event snapping** - X-axis automatically snaps to nearest event time
+- ✅ **Accurate coordinate mapping** - Click position accurately maps to primitive Y-value (fixed PyQtGraph coordinate system issues)
+
+#### Interactive Exploration
+- ✅ **Draggable diagnostic markers** - Grab and drag X marker up/down to test different hypothetical values
+- ✅ **Real-time trajectory computation** - System computes full hypothetical gamma_self trajectory
+- ✅ **Final outcome display** - Black X appears on gamma_self trajectory showing where relationship would end
+- ✅ **Dual gauge updates** - Both primitive and gamma_self readout gauges update with hypothetical values
+
+#### User Experience
+- ✅ **Non-destructive testing** - Diagnostic markers don't modify actual data, only show hypothetical results
+- ✅ **Auto-clear previous** - Placing new diagnostic marker automatically clears old ones
+- ✅ **Visual feedback** - Instant visual response showing impact of hypothetical changes
+
+### Technical Implementation
+
+**Coordinate System Fix:**
+- Discovered `QMouseEvent.position()` gives widget-relative coordinates (wrong for scene)
+- Solution: Connect to `QGraphicsScene.sigMouseClicked` signal for `QGraphicsSceneMouseEvent`
+- Use `event.scenePos()` + `mapSceneToView()` for accurate data coordinate conversion
+
+**Trajectory Computation:**
+- Computes full hypothetical trajectory with modified primitive value
+- Shows **final** gamma_self position (end of trajectory), not intermediate state
+- Uses same `update_gamma_self()` logic as main trajectory computation
+
+### Use Cases
+
+**"What-if" Questions Answered:**
+- "What if resonance had been +7 instead of +2 at day 14?"
+- "How much would increasing altruism at day 21 improve the final outcome?"
+- "Would lowering visibility at day 7 prevent the breakup?"
+
+**Workflow:**
+1. Shift+click on primitive plot at desired value
+2. See final outcome on gamma_self trajectory
+3. Drag X marker to explore range of values
+4. If satisfied, manually edit actual marker to that value
+5. If just exploring, shift+click elsewhere or continue work
+
+### Benefits
+
+- **Rapid exploration** - Test ideas in seconds without committing changes
+- **Risk-free experimentation** - Explore without fear of losing current work
+- **Guided editing** - See outcome before deciding to make actual change
+- **Sensitivity analysis** - Quickly gauge how much each primitive affects outcome
+
+---
+
+## Phase 2.2: Add/Delete Events + Edit gamma_self0 + Fractional Time ⏳ PLANNED
+
+**Original Name:** Phase 2.1 (renumbered after diagnostic markers insertion)
 
 ### Why Migrate from Matplotlib/Tkinter?
 
@@ -240,7 +324,9 @@ sys.exit(app.exec())
 
 ---
 
-## Phase 2.1: Add/Delete Events + Edit gamma_self0 + Fractional Time
+## Phase 2.2: Add/Delete Events + Edit gamma_self0 + Fractional Time ⏳ PLANNED
+
+**Note:** Originally named Phase 2.1, renumbered after Phase 2.1 (Diagnostic Markers) was added
 
 ### Feature: Edit Initial State (gamma_self0)
 
@@ -862,7 +948,7 @@ class EditPrimitiveAction(Action):
 
 ## Implementation Phases
 
-### Phase 2.0: PySide6 Migration (4-6 hours) ← START HERE
+### Phase 2.0: PySide6 Migration (4-6 hours) ✅ COMPLETE
 - Add PySide6 dependency to requirements.txt
 - Create Qt main window wrapper (EditorMainWindow)
 - Embed matplotlib figures in Qt canvas
@@ -871,8 +957,19 @@ class EditPrimitiveAction(Action):
 - Add status bar for user feedback
 - Test cross-platform (Windows/Mac/Linux)
 - Update documentation
+- **Result:** v2.0-undo-redo released December 6, 2025
 
-### Phase 2.1: Add/Delete Events + gamma_self0 + Fractional Time (3-4 hours)
+### Phase 2.1: Diagnostic "What-If" Markers (3 hours) ✅ COMPLETE
+- Shift+click placement of diagnostic markers
+- Black X visual distinction from data markers
+- Draggable hypothetical value exploration
+- Real-time trajectory computation with hypothetical values
+- Final outcome display on gamma_self trajectory
+- Dual gauge updates (primitive + gamma_self readouts)
+- Auto-clear previous diagnostic markers
+- **Result:** v2.1-diagnostic-markers released December 7, 2025
+
+### Phase 2.2: Add/Delete Events + gamma_self0 + Fractional Time (4-5 hours) ⏳ NEXT
 - Edit gamma_self0 widget (QDoubleSpinBox for real/imag)
 - Fractional time support (validation, formatting)
 - Event insertion with interpolation (fractional positions)
@@ -880,18 +977,16 @@ class EditPrimitiveAction(Action):
 - UI controls and keyboard shortcuts
 - Update save/load to handle dynamic event lists
 
-### Phase 2.2: Inverse Editing (3-4 hours)
+### Phase 2.3: Inverse Editing (3-4 hours) ⏳ PLANNED
 - Mode toggle UI (Qt button or menu action)
 - Inverse heuristic implementation
 - Suggestion dialog with preview (QDialog with matplotlib preview)
 - Visual feedback (dashed lines, preview trajectory)
 
-### Phase 2.3: Marker Management (1 hour)
+### Phase 2.4: Marker Management (1 hour) ⏳ PLANNED
 - Manual marker add/remove
 - Marker style picker dialog (QDialog with radio buttons)
 - Update marker persistence in CSV
-
-### Phase 2.4: Enhanced Undo/Redo (30 min) ← EASY with Qt!
 - Integrate QUndoStack (already created in Phase 2.0)
 - Create QUndoCommand subclasses for edit types
 - Connect to toolbar actions (already wired in Phase 2.0)
@@ -905,15 +1000,19 @@ Phase 2 is complete when:
 - ✅ **Phase 2.0:** Editor runs in PySide6 with native Qt chrome
 - ✅ **Phase 2.0:** Matplotlib plots render correctly in Qt canvas
 - ✅ **Phase 2.0:** All Phase 1 features work unchanged (no regressions)
-- ✅ **Phase 2.1:** User can edit gamma_self0 (real, imaginary components)
-- ✅ **Phase 2.1:** Modified gamma_self0 shown with orange marker (vs blue)
-- ✅ **Phase 2.1:** User can insert events at fractional times (e.g., 2.5 days)
-- ✅ **Phase 2.1:** Time axis displays fractional labels correctly
-- ✅ **Phase 2.1:** User can insert new events via Shift+Click (fractional times)
-- ✅ **Phase 2.1:** User can delete unlocked events via Delete key
-- ✅ **Phase 2.2:** User can drag gamma_self points and accept primitive suggestions
-- ✅ **Phase 2.2:** Inverse mode provides reasonable primitive estimates (within ±2 of manual tuning)
-- ✅ **Phase 2.3:** User can manually add/remove markers without editing values
+- ✅ **Phase 2.1:** User can shift+click to place diagnostic "what-if" markers
+- ✅ **Phase 2.1:** Diagnostic markers show hypothetical final gamma_self outcome
+- ✅ **Phase 2.1:** User can drag diagnostic markers to explore range of hypothetical values
+- ✅ **Phase 2.1:** Diagnostic markers visually distinct (black X) from data markers
+- ⏳ **Phase 2.2:** User can edit gamma_self0 (real, imaginary components)
+- ⏳ **Phase 2.2:** Modified gamma_self0 shown with orange marker (vs blue)
+- ⏳ **Phase 2.2:** User can insert events at fractional times (e.g., 2.5 days)
+- ⏳ **Phase 2.2:** Time axis displays fractional labels correctly
+- ⏳ **Phase 2.2:** User can insert new events via Shift+Click (fractional times)
+- ⏳ **Phase 2.2:** User can delete unlocked events via Delete key
+- ⏳ **Phase 2.3:** User can drag gamma_self points and accept primitive suggestions
+- ⏳ **Phase 2.3:** Inverse mode provides reasonable primitive estimates (within ±2 of manual tuning)
+- ⏳ **Phase 2.4:** User can manually add/remove markers without editing values
 - ✅ **Phase 2.4:** Undo/Redo works for all action types via QUndoStack
 - ✅ **Phase 2.4:** Toolbar shows Undo/Redo button states (enabled/disabled)
 - ✅ **All:** All features have keyboard shortcuts

@@ -73,6 +73,7 @@ class EditorModel:
     def __init__(self):
         self.name: str = ""
         self.time_unit: str = "days"
+        self.filepath: str = ""  # Store filepath for fallback name extraction
         self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
         self.gamma_self_0_original: complex = 0 + 0j  # Original value from CSV
         self.gamma_self_0_modified: bool = False  # Whether gamma_self_0 has been changed
@@ -363,6 +364,30 @@ class EditorModel:
         print(f"[DELETE] modified_primitives after delete: {self.modified_primitives}")
         
         return deleted_event
+    
+    def get_display_name(self, perspective: str = "M1") -> str:
+        """
+        Get display name for the scenario.
+        
+        Returns:
+            - self.name if set in CSV
+            - "M1" or "M2" if filename contains _M1 or _M2
+            - perspective ("M1" or "M2") as fallback
+        """
+        if self.name:
+            return self.name
+        
+        # Try to extract from filename
+        if self.filepath:
+            import os
+            filename = os.path.basename(self.filepath)
+            if '_M1' in filename or filename.startswith('M1'):
+                return 'M1'
+            elif '_M2' in filename or filename.startswith('M2'):
+                return 'M2'
+        
+        # Fallback to perspective
+        return perspective
     
     # === Phase 1: Query Interface (Single Source of Truth) ===
     

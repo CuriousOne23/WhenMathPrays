@@ -28,7 +28,39 @@ git checkout phase2
 
 ## Version History
 
-### v2.0-undo-redo (December 6, 2025) ← CURRENT STABLE
+### v2.1-diagnostic-markers (December 7, 2025) ← CURRENT STABLE
+**Status:** Checkpoint during Phase 2 development
+
+**New Features:**
+- ✅ **Diagnostic "What-If" Markers** - Shift+click to place hypothetical test markers
+  - Black X marker on primitive plots shows test value
+  - Black X marker on gamma_self trajectory shows final outcome with hypothetical value
+  - Draggable X markers for real-time exploration of different hypothetical values
+  - Both readout gauges update to show hypothetical primitive and gamma_self values
+  - Markers clear automatically when placing new diagnostic marker
+  - **Non-destructive** - diagnostic markers don't modify actual data
+- ✅ Coordinate system fix - PyQtGraph scene signal handling for accurate click positioning
+
+**Technical Details:**
+- Uses `QGraphicsScene.sigMouseClicked` for proper coordinate mapping
+- `event.scenePos()` + `mapSceneToView()` for accurate data coordinate conversion
+- Computes full hypothetical trajectory with modified primitive value
+- Shows **final** gamma_self position (end of trajectory), not intermediate state
+
+**Use Cases:**
+- "What if resonance had been +7 instead of +2 at day 14?"
+- "How much would increasing altruism at day 21 improve the outcome?"
+- Quick exploration before committing to actual edits
+
+**Known Issues:**
+- None currently
+
+**Next Steps:**
+- Phase 2.2: Add/delete events, edit gamma_self_0, fractional time support
+
+---
+
+### v2.0-undo-redo (December 6, 2025)
 **Status:** Checkpoint during Phase 2 development
 
 **Completed Features:**
@@ -45,7 +77,7 @@ git checkout phase2
 - None currently
 
 **Next Steps:**
-- Phase 2.1: Add/delete events, edit gamma_self_0, fractional time support
+- Phase 2.2: Add/delete events, edit gamma_self_0, fractional time support
 
 ---
 
@@ -75,21 +107,21 @@ git checkout phase2
 
 ## Planned Future Versions
 
-### v2.1-event-management (Planned)
-**Phase 2.1 Features:**
+### v2.2-event-management (Planned)
+**Phase 2.2 Features:**
 - Add/delete time points (Shift+Click to insert, Delete key to remove)
 - Edit gamma_self_0 initial state
 - Fractional time support (e.g., 2.5 days)
 - Event insertion/deletion undo support
 
-### v2.2-inverse-editing (Planned)
-**Phase 2.2 Features:**
+### v2.3-inverse-editing (Planned)
+**Phase 2.3 Features:**
 - Drag gamma_self trajectory to suggest primitive changes
 - Heuristic inverse estimation
 - Accept/reject dialog for suggestions
 
-### v2.3-marker-management (Planned)
-**Phase 2.3 Features:**
+### v2.4-marker-management (Planned)
+**Phase 2.4 Features:**
 - Manual marker add/remove (without editing values)
 - Marker palette/picker
 - Enhanced marker styling options

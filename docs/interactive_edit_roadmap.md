@@ -1,16 +1,19 @@
 # Interactive Scenario Editor - Complete Roadmap
 
 **Purpose:** Master timeline showing past, present, and future development  
-**Current Phase:** Phase 1 ✅ COMPLETE → Phase 2 Planning  
+**Current Phase:** Phase 2 (~50-60% Complete) → Phase 2.2 Planning  
+**Phase 2 Progress:** 7 hours completed / 12-15 hours total estimated  
 **Total Vision:** ~20-30 hours across 4 phases  
-**Last Updated:** December 6, 2025
+**Last Updated:** December 7, 2025
 
 ---
 
 ## Quick Navigation
 
 - **Phase 1 (✅ Complete):** Single-perspective editing, drag-and-drop, lock/unlock, real-time trajectory
-- **Phase 2 (→ Next):** Add/delete events, inverse editing, enhanced undo/redo - [See detailed requirements](interactive_edit_ph2_requirements.md)
+- **Phase 2.0 (✅ Complete):** PySide6 migration, undo/redo system
+- **Phase 2.1 (✅ Complete):** Diagnostic "what-if" markers with hypothetical analysis
+- **Phase 2.2 (→ Next):** Add/delete events, inverse editing - [See detailed requirements](interactive_edit_ph2_requirements.md)
 - **Phase 3 (Future):** Dual-perspective (M1/M2) editing with comparison view
 - **Phase 4 (Future):** Advanced features - fill gaps, sensitivity analysis, automation
 
@@ -47,22 +50,95 @@
 - MVC pattern: EditorModel, EditorController, PrimitivePanel, TrajectoryPanel
 - Backward-compatible CSV format (old format loads, always saves with full metadata)
 
-### Phase 2: Enhanced Editing → NEXT (Planned)
-**Duration:** 6-8 hours  
+### Phase 2.0: PySide6 Migration & Undo/Redo ✅ COMPLETE (December 6, 2025)
+**Duration:** ~4 hours  
+**Status:** Released as v2.0-undo-redo
+
+**What Was Built:**
+- ✅ Complete PySide6 migration (replaced Matplotlib/Tkinter with PyQtGraph)
+- ✅ Full undo/redo system using QUndoStack
+- ✅ Discrete undo steps (each marker edit is separate, undoable action)
+- ✅ Keyboard shortcuts (Ctrl+Z undo, Ctrl+Y/Ctrl+Shift+Z redo)
+- ✅ Command pattern for delegation (prevents recursive undo creation)
+- ✅ Marker position synchronization on gamma_self graph
+- ✅ Label management (appear when modified, disappear when back to baseline)
+- ✅ Thread-safe incremental updates
+- ✅ Significantly improved rendering performance
+
+**Key Achievements:**
+- Modern Qt-based architecture ready for advanced features
+- Professional undo/redo workflow
+- Much faster rendering and interaction
+
+### Phase 2.1: Diagnostic "What-If" Markers ✅ COMPLETE (December 7, 2025)
+**Duration:** ~3 hours  
+**Status:** Released as v2.1-diagnostic-markers
+
+**What Was Built:**
+- ✅ **Shift+Click diagnostic marker placement** - Test hypothetical primitive values
+- ✅ **Black X markers** - Visual distinction from actual data (primitive + trajectory)
+- ✅ **Draggable hypothetical markers** - Real-time exploration of different values
+- ✅ **Final outcome display** - Shows where trajectory ends with hypothetical change
+- ✅ **Dual gauge updates** - Both primitive and gamma_self readouts show hypothetical values
+- ✅ **Auto-clear previous** - New diagnostic marker clears old ones automatically
+- ✅ **Non-destructive testing** - Explore scenarios without modifying actual data
+
+**Technical Achievement:**
+- Fixed PyQtGraph coordinate system using `QGraphicsScene.sigMouseClicked`
+- Proper `event.scenePos()` + `mapSceneToView()` for accurate click positioning
+- Computes full hypothetical trajectory showing final gamma_self position
+
+**Key Value:**
+- Quick "what-if" exploration before committing to edits
+- Answers questions like: "What if resonance had been +7 at day 14?"
+- Non-destructive sensitivity analysis
+
+### Phase 2.2: Event Management → NEXT (Planned)
+**Duration:** 4-5 hours  
 **Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
 
 **Planned Features:**
 - Add/delete time points (Shift+Click to insert, Delete key to remove)
-- Inverse editing (drag gamma_self to suggest primitives)
-- Manual marker management (add/remove without editing)
-- Enhanced undo/redo system (multi-level stack, Ctrl+Z/Y)
+- Edit gamma_self_0 initial state (enhanced dialog)
+- Fractional time support (e.g., 2.5 days)
+- Event insertion/deletion with undo support
 
 **Key Value:**
 - More flexible scenario construction
-- Bidirectional editing workflow
 - Better support for iterative refinement
 
-### Phase 3: Dual-File Comparison Mode (Future)
+**Estimated Completion:** Brings Phase 2 to ~80% complete
+
+### Phase 2.3: Inverse Editing (Planned)
+**Duration:** 3-4 hours  
+**Status:** Future planning
+
+**Planned Features:**
+- Inverse editing (drag gamma_self to suggest primitives)
+- Manual marker management (add/remove without editing)
+- Heuristic inverse estimation with accept/reject dialog
+
+**Key Value:**
+- Bidirectional editing workflow
+- Goal-oriented scenario construction
+
+**Estimated Completion:** Completes Phase 2 at 100%
+
+---
+
+## Phase 2 Summary Status
+
+**Completed Sub-Phases:**
+- ✅ Phase 2.0: PySide6 Migration & Undo/Redo (~4 hours)
+- ✅ Phase 2.1: Diagnostic "What-If" Markers (~3 hours)
+
+**Remaining Sub-Phases:**
+- ⏳ Phase 2.2: Event Management (~4-5 hours)
+- ⏳ Phase 2.3: Inverse Editing (~3-4 hours)
+
+**Overall Phase 2 Progress:** ~50-60% complete (7 hours done, 7-9 hours remaining)
+
+---
 **Duration:** 5-6 hours  
 **Status:** Future
 
