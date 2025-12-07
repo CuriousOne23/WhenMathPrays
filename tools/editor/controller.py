@@ -97,6 +97,11 @@ class EditorController:
         self.model.modified_primitives.clear()
         # Don't mark anything as modified on load - user hasn't modified anything yet
 
+        # Set scenario name on both panels
+        display_name = self.model.get_display_name(self.perspective)
+        self.primitive_panel.set_scenario_name(display_name)
+        self.trajectory_panel.set_scenario_name(display_name)
+
         # Update views
         self._update_all_views()
 
@@ -104,6 +109,46 @@ class EditorController:
         self.initial_load_complete = False
         self._recompute_trajectory_immediate()
         self.initial_load_complete = True  # Preserve view on all subsequent updates
+    
+    def on_diagnostic_marker_placed(self, event_idx: int):
+        """
+        Handle diagnostic marker placement from shift+click.
+        Updates both primitive and gamma_self gauges, and places marker on trajectory.
+        
+        Args:
+            event_idx: Event index where marker was placed
+        """
+        if not self.events_data or event_idx >= len(self.events_data):
+            return
+        
+        event = self.events_data[event_idx]
+        
+        # Update primitive readout for first primitive (or could cycle through all)
+        # For now, just show the time in the gauge
+        if hasattr(self.primitive_panel, '_update_readout'):
+            # Show marker on first primitive with non-zero value
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                value = event.markers[prim].value
+                if abs(value) > 0.001:
+                    self.primitive_panel._update_readout(event_idx, prim, value)
+                    break
+        
+        # Get gamma_self value at this event
+        if hasattr(self, 'committed_gamma_trajectory') and self.committed_gamma_trajectory:
+            if event_idx < len(self.committed_gamma_trajectory):
+                gamma_val = self.committed_gamma_trajectory[event_idx]
+                gamma_x = gamma_val.real
+                gamma_y = gamma_val.imag
+                
+                # Place marker on trajectory
+                self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+                
+                # Update gamma_self readout
+                # The gamma_clicked signal handler will update the gauge
+                # We can call it directly or emit the signal
+                self.on_gamma_clicked(gamma_x, gamma_y)
+                
+                print(f"[DIAGNOSTIC] Event {event_idx} @ time={event.time}: gamma_self=({gamma_x:.2f}, {gamma_y:.2f})")
     
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
@@ -244,6 +289,13 @@ class EditorController:
         # Update only this marker in PrimitivePanel (O(1) operation)
         self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
         
+        # Add or update marker label if modified, remove if back to baseline
+        event = self.model.get_event(event_index, self.perspective)
+        if is_modified:
+            self.primitive_panel._add_marker_label(event_index, primitive, event.time, value)
+        else:
+            self.primitive_panel.remove_marker_label(event_index, primitive)
+        
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
     
@@ -342,7 +394,7 @@ class EditorController:
             print(f"After reset, is_modified({event_index}, {primitive}) = {is_modified}")
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
             
-            # Remove the label annotation immediately for instant feedback
+            # Remove the marker label
             self.primitive_panel.remove_marker_label(event_index, primitive)
             
             # Reset double-click state in the marker
@@ -633,16 +685,22 @@ class EditorController:
                         'y': gamma_y[idx]
                     })
         
+        # Build time-to-index mapping for converting time-based keys to indices
+        events = self.model.get_events(self.perspective)
+        time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+        
         # Build marked_data: {event_idx: set of modified primitives}
         marked_data = {}
         
-        # Add committed modifications
-        for event_idx, prims in self.model.modified_primitives.items():
-            if event_idx not in marked_data:
-                marked_data[event_idx] = set()
-            marked_data[event_idx].update(prims)
+        # Add committed modifications (convert time keys to indices)
+        for event_time, prims in self.model.modified_primitives.items():
+            if event_time in time_to_idx:
+                event_idx = time_to_idx[event_time]
+                if event_idx not in marked_data:
+                    marked_data[event_idx] = set()
+                marked_data[event_idx].update(prims)
         
-        # Add preview modifications
+        # Add preview modifications (already using indices)
         if preview_mode and self.model.preview_changes:
             for event_idx, prim_dict in self.model.preview_changes.items():
                 if event_idx not in marked_data:
@@ -654,10 +712,6 @@ class EditorController:
         pinned_markers = []
         print(f"\n=== DISPLAY TRAJECTORY (preview={preview_mode}) ===")
         print(f"marker_positions dict: {self.model.marker_positions}")
-        
-        # Build time-to-index mapping for converting marker keys
-        events = self.model.get_events(self.perspective)
-        time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
         
         for (event_time, prim), gamma_pos in self.model.marker_positions.items():
             # Convert time to current index
@@ -672,7 +726,7 @@ class EditorController:
                 'x': gamma_pos.real,
                 'y': gamma_pos.imag,
                 'color': prim_colors.get(prim, 'orange'),
-                'label': f"{event_idx}/{prim}"
+                'label': f"{event_time}/{prim}"
             }
             pinned_markers.append(marker)
             print(f"  Building marker: {marker}")

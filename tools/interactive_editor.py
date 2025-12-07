@@ -74,6 +74,7 @@ class InteractiveEditor:
         
         # Connect signals from primitive panel
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
+        self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
         
         # Set callbacks for preview and reset
         self.primitive_panel.on_primitive_preview = self._on_primitive_preview
@@ -314,6 +315,85 @@ class InteractiveEditor:
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
     
+    def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
+        """
+        Handle diagnostic 'what-if' marker placement.
+        Computes hypothetical gamma_self trajectory if this primitive had the clicked value.
+        
+        Args:
+            event_index: Event index where marker was placed
+            primitive: Which primitive was clicked ('v', 'r', 'f', 'a', 'S')
+            hypothetical_value: The Y value where user shift+clicked
+        """
+        print(f"[DIAGNOSTIC HANDLER] Called with event_index={event_index}, primitive={primitive}, value={hypothetical_value:.2f}")
+        
+        from core.love import update_gamma_self
+        import numpy as np
+        
+        # Get current events
+        events = self.model.get_events(self.controller.perspective)
+        if event_index >= len(events):
+            print(f"[DIAGNOSTIC HANDLER] Error: event_index {event_index} >= {len(events)} events")
+            return
+        
+        # Create hypothetical primitives array (copy of current state)
+        primitives_data = self.model.get_primitives_array(self.controller.perspective, include_preview=False)
+        times = primitives_data['time']
+        
+        # Modify the one primitive with hypothetical value
+        old_value = primitives_data[primitive][event_index]
+        primitives_data[primitive][event_index] = hypothetical_value
+        print(f"[DIAGNOSTIC HANDLER] Changed {primitive}[{event_index}] from {old_value:.2f} to {hypothetical_value:.2f}")
+        print(f"[DIAGNOSTIC HANDLER] Event {event_index} primitives: v={primitives_data['v'][event_index]:.2f}, r={primitives_data['r'][event_index]:.2f}, f={primitives_data['f'][event_index]:.2f}, a={primitives_data['a'][event_index]:.2f}, S={primitives_data['S'][event_index]:.2f}")
+        
+        # Compute hypothetical gamma_self trajectory using same logic as controller
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        
+        for i in range(len(events) - 1):
+            v = primitives_data['v'][i]
+            r = primitives_data['r'][i]
+            f = primitives_data['f'][i]
+            a = primitives_data['a'][i]
+            S = primitives_data['S'][i]
+            
+            time_delta = times[i + 1] - times[i]
+            gamma_self = update_gamma_self(
+                gamma_self, v, r, f, a, S,
+                weights=self.controller.weights,
+                time_delta=time_delta
+            )
+            gamma_trajectory.append(gamma_self)
+        
+        print(f"[DIAGNOSTIC HANDLER] Computed {len(gamma_trajectory)} gamma_self values")
+        
+        # Get the FINAL gamma_self value (where trajectory ends with hypothetical primitive)
+        if len(gamma_trajectory) > 0:
+            gamma_val = gamma_trajectory[-1]  # Last point = final outcome
+            gamma_x = gamma_val.real
+            gamma_y = gamma_val.imag
+            
+            print(f"[DIAGNOSTIC HANDLER] Final gamma_self with {primitive}[{event_index}]={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+            
+            # Place marker on trajectory panel at FINAL position
+            self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at final position ({gamma_x:.2f}, {gamma_y:.2f})")
+            
+            # Update primitive readout
+            event = events[event_index]
+            self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
+            print(f"[DIAGNOSTIC HANDLER] Updated primitive readout")
+            
+            # Update gamma_self readout (simulate a click at that position)
+            if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
+                self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
+                self.gamma_self_gauge.setVisible(True)
+                print(f"[DIAGNOSTIC HANDLER] Updated gamma_self readout")
+            else:
+                print(f"[DIAGNOSTIC HANDLER] Warning: gamma_self_gauge not available")
+            
+            print(f"[DIAGNOSTIC WHAT-IF] If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+    
     def _on_lock_toggle(self, event_index):
         """Handle lock toggle from primitive panel."""
         self.controller.on_lock_toggle(event_index)
@@ -355,10 +435,14 @@ class InteractiveEditor:
         # Check existing event times to avoid duplicates
         existing_times = [evt.time for evt in events]
         to_add = []
+        rejected_times = []  # Track rejected duplicate times
         for t in times:
             # Check if this time already exists as a non-inserted event
             is_existing = any(abs(t - existing_t) < 0.001 for existing_t in existing_times if existing_t not in current_inserted_times)
-            if not is_existing and t not in current_inserted_times:
+            if is_existing:
+                rejected_times.append(t)
+                print(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
+            elif t not in current_inserted_times:
                 to_add.append(t)
         
         to_remove_times = [t for t in current_inserted_times if t not in times]
@@ -419,6 +503,17 @@ class InteractiveEditor:
             self.insertion_options.update_from_times(actual_inserted_times)
             
             self.window.show_message(f"Insertion points updated: {len(actual_inserted_times)} total")
+        elif rejected_times:
+            # No changes made, but we need to remove rejected entries from widget
+            # Sync widget with current model state (this will remove rejected times)
+            updated_events = self.model.get_events(self.controller.perspective)
+            actual_inserted_times = []
+            for idx, evt in enumerate(updated_events):
+                if is_inserted_event(evt, exclude_first_last=True, event_idx=idx, total_events=len(updated_events)):
+                    actual_inserted_times.append(evt.time)
+            
+            # Update widget to reflect actual state (removes rejected entries)
+            self.insertion_options.update_from_times(actual_inserted_times)
     
     def _on_gamma_self0_changed(self, new_value: complex):
         """

@@ -272,8 +272,10 @@ Your CSV file should contain relational primitives at each time step.
 ### Optional Columns
 
 - **`notes`** - Human-readable context for each event
+- **`marker`** - Event index for modified events (added by Interactive Editor)
+- **`locked`** - Set to "true" for locked events (added by Interactive Editor)
 
-### Example CSV:
+### Example CSV (Basic):
 
 ```csv
 step,v,r,f,a,S,notes
@@ -284,6 +286,24 @@ step,v,r,f,a,S,notes
 15,8,7,7,6,5,Meeting friends
 20,8,8,8,7,6,Deep conversation about future
 ```
+
+### Example CSV (With Interactive Editor Metadata):
+
+```csv
+name,scenario_name
+time_unit,days
+gamma_self_0,-5+0j
+day,v,r,f,a,S,notes,marker,locked
+0,5,0,2,2,0,Initial condition: eager but moderate love,,
+7,5,2,2,3,1,First date: strong attraction developing,7,
+14,5,-2,2,3,-1,Early wobble: pressing pace - M2 pulls back,14,true
+21,5,2,5,5,3,Repair begins: slows down and listens,,
+```
+
+**Metadata Notes:**
+- `marker` column: Populated with event index for events modified in Interactive Editor
+- `locked` column: Set to "true" for events locked in Interactive Editor (prevents dragging)
+- Both columns are **optional** - scenarios work fine without them
 
 ### Primitive Scale
 

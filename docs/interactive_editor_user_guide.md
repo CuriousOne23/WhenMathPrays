@@ -132,6 +132,7 @@ When you modify a primitive value:
 - **Hollow marker** (outline only) = Preview/modified value  
 - **Original marker** (semi-transparent) = Baseline value shown when modified
 - **Numbered labels** = Event index for tracking modifications
+- **Black X marker** = Diagnostic "what-if" marker (hypothetical values, not saved)
 
 ### CSV Output Format
 Saved CSV files include:
@@ -154,6 +155,7 @@ day,v,r,f,a,S,notes,marker,locked
 **Editing:**
 - `ESC` - Cancel all preview changes
 - `G` - Edit gamma_self_0 initial position (starting point)
+- `Shift+Click` - Place diagnostic "what-if" marker (hypothetical analysis)
 
 **View Controls:**
 - `+` or `=` - Zoom in (panel under cursor)
@@ -212,6 +214,24 @@ day,v,r,f,a,S,notes,marker,locked
 4. Use primitive gauge to record exact values tested
 5. Cancel (ESC) to test different values, or save when satisfied
 
+### 5. Hypothetical "What-If" Analysis (NEW)
+**Goal:** Test how changing a single primitive value would affect the final outcome without modifying the actual data
+
+**Workflow:**
+1. **Shift+Click** on any primitive plot at the desired Y-value (near an event time)
+2. A black **X marker** appears at the clicked position (snapped to nearest event)
+3. A black **X marker** appears on the gamma_self trajectory showing the **final outcome** if that primitive had the clicked value
+4. Both **readout gauges update** showing the hypothetical primitive value and final gamma_self position
+5. **Drag the X marker** up/down to test different hypothetical values in real-time
+6. **Shift+Click elsewhere** to test a different primitive/event (previous X markers clear automatically)
+
+**Use Cases:**
+- "What if resonance had been higher at day 14?"
+- "How much would increasing altruism at day 21 improve the outcome?"
+- "Would lowering visibility at day 7 prevent the final breakup?"
+
+**Note:** Hypothetical markers (X) are **diagnostic only** - they don't modify your data. Use regular marker dragging to actually change values.
+
 ---
 
 ## Advanced Features
@@ -248,9 +268,11 @@ When multiple primitives are modified at the same event:
 2. **Lock known data first** before exploring variations
 3. **Use primitive gauge** to document exact values for reproducibility  
 4. **Use gamma_self gauge** to record critical trajectory waypoints
-5. **Save frequently** - Each save creates `_modified` version, preserving original
-6. **Save incrementally** - Save after each major change rather than editing many events at once
-7. **Export PNG** with Shift+Click to capture trajectory visualizations for reports
+5. **Use Shift+Click diagnostic markers** for quick "what-if" exploration without modifying data
+6. **Drag diagnostic X markers** to explore a range of hypothetical values before committing changes
+7. **Save frequently** - Each save creates `_modified` version, preserving original
+8. **Save incrementally** - Save after each major change rather than editing many events at once
+9. **Export PNG** with Shift+Click to capture trajectory visualizations for reports
 
 ---
 

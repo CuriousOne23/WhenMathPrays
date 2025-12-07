@@ -203,6 +203,112 @@
 
 ---
 
+## Known Architectural Debt (December 7, 2025)
+
+### Technical Debt from Phase 2.1 (Diagnostic Markers)
+
+**Status**: Non-critical, works well, but violates principles documented above.
+
+#### TD1: Mixed Event System Violates P2 (Controller as Mediator)
+**Issue**: Primitive panel uses both Qt Signals and callback attributes for communication.
+- Qt Signals: `primitive_changed`, `diagnostic_marker_placed` (modern, proper)
+- Callbacks: `on_primitive_preview`, `on_primitive_reset` (legacy, direct)
+
+**Violation**: Callbacks create direct Panel→Main communication bypassing controller pattern.
+
+**Impact**: Low - both patterns work, but inconsistency confuses maintenance.
+
+**Recommended Fix**:
+```python
+# Convert all callbacks to signals
+class PrimitivePanelPyQtGraph(QWidget):
+    primitive_changed = Signal(int, str, float)
+    primitive_preview = Signal(int, str, float)  # NEW
+    primitive_reset = Signal(int, str)           # NEW
+    diagnostic_marker_placed = Signal(int, str, float)
+```
+
+#### TD2: Coordinate System Knowledge Implicit
+**Issue**: PyQtGraph coordinate mapping differs between event types:
+- `QMouseEvent.position()` - Widget-relative coordinates (wrong for scene)
+- `QGraphicsSceneMouseEvent.scenePos()` - Scene coordinates (correct)
+
+**Violation**: Violates documentation principle - critical knowledge only in git history.
+
+**Impact**: Medium - future developers will rediscover this bug through trial and error.
+
+**Recommended Fix**: Add docstring to both panel files:
+```python
+"""
+PyQtGraph Coordinate System Notes:
+- Use scene().sigMouseClicked.connect() for click handling
+- Event will be QGraphicsSceneMouseEvent with scenePos() method
+- Then mapSceneToView() converts to data coordinates
+- DO NOT use mousePressEvent() - gives QMouseEvent with wrong coordinates
+"""
+```
+
+#### TD3: Diagnostic Handler Violates P1 (Single Source of Truth)
+**Issue**: `_on_diagnostic_marker()` in `interactive_editor.py` directly accesses model and duplicates controller logic.
+
+**Current**:
+```python
+# In interactive_editor.py (UI layer)
+events = self.model.get_events(...)  # UI accessing model directly
+for i in range(len(events) - 1):
+    gamma_self = update_gamma_self(...)  # UI duplicating controller math
+```
+
+**Violation**: UI layer doing business logic. Model access should be mediated by controller.
+
+**Impact**: Medium - logic duplication risks divergence if controller trajectory computation changes.
+
+**Recommended Fix**:
+```python
+# In controller.py
+def compute_hypothetical_trajectory(self, event_index, primitive, value):
+    """Compute full trajectory with one primitive modified."""
+    # Use existing trajectory computation logic with modified primitives
+    return final_gamma_self
+
+# In interactive_editor.py
+gamma_val = self.controller.compute_hypothetical_trajectory(...)
+```
+
+#### TD4: Incomplete Signal Chain for Drag Events
+**Issue**: Diagnostic marker drag handlers don't emit signals.
+
+**Current**:
+```python
+def _on_diagnostic_dragged(self, idx, prim, y_value):
+    # Does nothing - drag doesn't trigger trajectory update
+    pass
+```
+
+**Violation**: Breaks expected event flow - dragging should update trajectory in real-time.
+
+**Impact**: High - feature incomplete. Dragging diagnostic marker doesn't show real-time trajectory updates.
+
+**Recommended Fix**:
+```python
+def _on_diagnostic_dragged(self, idx, prim, y_value):
+    self.diagnostic_marker_placed.emit(self.diagnostic_event_idx, prim, y_value)
+
+def _on_diagnostic_released(self, idx, prim, y_value):
+    self.diagnostic_marker_placed.emit(self.diagnostic_event_idx, prim, y_value)
+```
+
+#### TD5: GUI Importing Core Math Violates Separation of Concerns
+**Issue**: `interactive_editor.py` imports `from core.love import update_gamma_self`
+
+**Violation**: GUI knows about mathematical implementation. Should only know about controller API.
+
+**Impact**: Low - works fine, but couples UI to core math details.
+
+**Recommended Fix**: Move all `core.love` interaction to controller, GUI only calls controller methods.
+
+---
+
 ## Principle Evolution
 
 Principles are not immutable - they evolve as we learn. When violated principles repeatedly cause bugs, they're correct. When enforced principles repeatedly block progress, they need revision.
@@ -229,5 +335,5 @@ A principle is **sick** if:
 
 ---
 
-**Last Updated**: 2025-12-06  
-**Status**: Initial principles defined during PySide6 migration refactor
+**Last Updated**: 2025-12-07  
+**Status**: Phase 2.1 complete with documented technical debt
