@@ -273,7 +273,7 @@ w_neg = 1.5
 
 ## Visualization Reference
 
-**See:** `tests/fidelity_asymmetry_sensitivity.png`
+![Fidelity Asymmetry Sensitivity Analysis](../tests/fidelity_asymmetry_sensitivity.png)
 
 This plot shows fidelity's ΔIm contribution across:
 - Fidelity values: [-10, +10]
