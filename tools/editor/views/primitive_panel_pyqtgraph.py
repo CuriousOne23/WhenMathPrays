@@ -779,7 +779,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         if self.diagnostic_event_idx is not None and hasattr(self, 'on_diagnostic_marker'):
             # Clamp value to valid range
             clamped_value = max(-11, min(11, value))
-            print(f"[DIAGNOSTIC] Dragging '{primitive}' to {clamped_value:.2f}")
+            print(f"[DIAGNOSTIC] Dragging '{primitive}' to {clamped_value:.2f}, marker visible={self.diagnostic_markers[primitive].isVisible()}")
             
             # Notify controller to compute hypothetical trajectory
             self.on_diagnostic_marker(self.diagnostic_event_idx, primitive, clamped_value)

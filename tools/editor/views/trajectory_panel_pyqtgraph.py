@@ -150,10 +150,42 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.plot_widget.setTitle(title)
     
     def place_diagnostic_marker(self, gamma_x: float, gamma_y: float):
-        """Place diagnostic marker at specified gamma_self coordinates."""
+        """Place diagnostic marker at specified gamma_self coordinates and adjust view if needed."""
         self.diagnostic_marker.setData([gamma_x], [gamma_y])
         self.diagnostic_marker.setVisible(True)
         print(f"[DIAGNOSTIC] Placed trajectory marker at ({gamma_x:.2f}, {gamma_y:.2f})")
+        
+        # Check if marker is outside current view and adjust if needed
+        view_range = self.plot_widget.viewRange()
+        x_min, x_max = view_range[0]
+        y_min, y_max = view_range[1]
+        
+        # If marker is outside view, expand view to include it with margin
+        needs_adjustment = False
+        new_x_min, new_x_max = x_min, x_max
+        new_y_min, new_y_max = y_min, y_max
+        
+        margin_x = (x_max - x_min) * 0.1  # 10% margin
+        margin_y = (y_max - y_min) * 0.1
+        
+        if gamma_x < x_min:
+            new_x_min = gamma_x - margin_x
+            needs_adjustment = True
+        elif gamma_x > x_max:
+            new_x_max = gamma_x + margin_x
+            needs_adjustment = True
+            
+        if gamma_y < y_min:
+            new_y_min = gamma_y - margin_y
+            needs_adjustment = True
+        elif gamma_y > y_max:
+            new_y_max = gamma_y + margin_y
+            needs_adjustment = True
+        
+        if needs_adjustment:
+            print(f"[DIAGNOSTIC] Adjusting view to include marker: x:[{new_x_min:.1f}, {new_x_max:.1f}], y:[{new_y_min:.1f}, {new_y_max:.1f}]")
+            self.plot_widget.setXRange(new_x_min, new_x_max, padding=0)
+            self.plot_widget.setYRange(new_y_min, new_y_max, padding=0)
     
     def clear_diagnostic_marker(self):
         """Remove diagnostic marker from trajectory."""
