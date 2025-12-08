@@ -29,13 +29,14 @@ class DraggableScatterItem(pg.ScatterPlotItem):
     sigPointClicked = Signal(int, float, float)  # index, x, y (on click without drag)
     sigPointDoubleClicked = Signal(int)  # index
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, is_diagnostic=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.dragging_idx = None
         self.click_idx = None
         self.did_drag = False
         self.x_data = None
         self.y_data = None
+        self.is_diagnostic = is_diagnostic  # Flag to identify diagnostic markers
         self.setAcceptHoverEvents(True)
         
     def setData(self, *args, **kwargs):
@@ -250,6 +251,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 pen=pg.mkPen('k', width=1.5),
                 brush=pg.mkBrush(color)
             )
+            scatter.setZValue(10)  # Place above diagnostic markers for click priority
             plot.addItem(scatter)
             
             # Connect signals
@@ -277,8 +279,10 @@ class PrimitivePanelPyQtGraph(QWidget):
                 size=14,
                 pen=pg.mkPen('k', width=3),
                 brush=None,
-                symbol='x'
+                symbol='x',
+                is_diagnostic=True  # Mark as diagnostic so it can be ignored for normal clicks
             )
+            diagnostic_marker.setZValue(-1)  # Place below committed markers so they get priority
             plot.addItem(diagnostic_marker)
             
             # Connect diagnostic marker signals for drag tracking
