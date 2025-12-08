@@ -367,17 +367,20 @@ class InteractiveEditor:
         
         print(f"[DIAGNOSTIC HANDLER] Computed {len(gamma_trajectory)} gamma_self values")
         
-        # Get the FINAL gamma_self value (where trajectory ends with hypothetical primitive)
-        if len(gamma_trajectory) > 0:
-            gamma_val = gamma_trajectory[-1]  # Last point = final outcome
+        # Get gamma_self AFTER the clicked event's primitives are applied
+        # gamma_trajectory[0] = gamma_self_0 (before event 0)
+        # gamma_trajectory[1] = gamma after event 0's primitives applied
+        # gamma_trajectory[event_index + 1] = gamma after event's primitives applied
+        if event_index + 1 < len(gamma_trajectory):
+            gamma_val = gamma_trajectory[event_index + 1]  # Gamma AFTER this event
             gamma_x = gamma_val.real
             gamma_y = gamma_val.imag
             
-            print(f"[DIAGNOSTIC HANDLER] Final gamma_self with {primitive}[{event_index}]={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+            print(f"[DIAGNOSTIC HANDLER] Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
             
-            # Place marker on trajectory panel at FINAL position
+            # Place marker on trajectory panel at event position
             self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at final position ({gamma_x:.2f}, {gamma_y:.2f})")
+            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
             
             # Update primitive readout
             event = events[event_index]
