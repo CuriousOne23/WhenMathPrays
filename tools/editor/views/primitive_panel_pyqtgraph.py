@@ -144,12 +144,33 @@ class DraggableScatterItem(pg.ScatterPlotItem):
 class PrimitivePanelPyQtGraph(QWidget):
     """
     PyQtGraph-based primitive panel with 5 plots stacked vertically.
-    Much faster than matplotlib for interactive updates.
+    
+    Architecture (Phase 3 refactoring):
+    - Pure view component (no model/controller references)
+    - Emits signals for user actions
+    - Receives data updates via method calls
+    - All communication via Qt signals/slots pattern
+    
+    Signals (OUT - user actions):
+        primitive_changed: Emitted when marker is released after drag (commit)
+        diagnostic_marker_placed: Emitted when shift+click places diagnostic marker
+        primitive_preview_requested: Emitted during marker drag (preview)
+        primitive_reset_requested: Emitted when marker is double-clicked (reset to baseline)
+    
+    Public Methods (IN - display updates):
+        update_from_model(events): Refresh all plots from event data
+        set_modified_state(state, perspective): Update cached modification state
+        set_scenario_name(name): Update scenario display name
+        clear_diagnostic_marker(): Remove diagnostic marker
     """
     
     # Signals
     primitive_changed = Signal(int, str, float)  # event_idx, primitive, value
     diagnostic_marker_placed = Signal(int, str, float)  # event_idx, primitive, hypothetical_value
+    
+    # New signals (Phase 1 refactoring - replacing callbacks)
+    primitive_preview_requested = Signal(int, str, float)  # event_idx, primitive, value (during drag)
+    primitive_reset_requested = Signal(int, str)  # event_idx, primitive (double-click reset)
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -173,7 +194,8 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.PRIMITIVE_LABELS = PRIMITIVE_LABELS
         self.PRIMITIVE_COLORS = PRIMITIVE_COLORS
         
-        # Callbacks (for compatibility with matplotlib panel interface)
+        # Phase 4 cleanup: Callback functions removed (now using signals only)
+        # Kept as None for backward compatibility during transition
         self.on_primitive_preview = None
         self.on_primitive_reset = None
         
@@ -201,6 +223,10 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.diagnostic_markers = {}  # {primitive: DraggableScatterItem}
         self.diagnostic_event_idx = None  # Current diagnostic event index
         self.diagnostic_primitive = None  # Which primitive has the diagnostic marker
+        
+        # Phase 3 refactoring: Cache modified state locally (no controller access)
+        self._modified_state = {}  # {(event_idx, primitive): bool}
+        self._perspective = 'baseline'  # Current perspective ('baseline' or 'original')
         
         # Create 5 plots
         self._create_plots()
@@ -331,6 +357,18 @@ class PrimitivePanelPyQtGraph(QWidget):
             else:
                 self.name_label.setVisible(False)
     
+    def set_modified_state(self, modified_state: dict, perspective: str = 'baseline'):
+        """
+        Update the cached modified state.
+        Phase 3 refactoring: Replaces direct controller.model access.
+        
+        Args:
+            modified_state: Dict of {(event_idx, primitive): bool}
+            perspective: Current perspective ('baseline' or 'original')
+        """
+        self._modified_state = modified_state.copy()
+        self._perspective = perspective
+    
     def clear_diagnostic_marker(self):
         """Remove diagnostic marker from all plots."""
         for prim in PRIMITIVE_NAMES:
@@ -397,10 +435,8 @@ class PrimitivePanelPyQtGraph(QWidget):
             
             color = QColor(PRIMITIVE_COLORS[prim])
             for event_idx, event in enumerate(events):
-                # Query modification status from controller's model (time-based lookup)
-                is_modified = False
-                if self.controller:
-                    is_modified = self.controller.model.is_modified(event_idx, prim, self.controller.perspective)
+                # Phase 3 refactoring: Use cached modified state (no controller access)
+                is_modified = self._modified_state.get((event_idx, prim), False)
                 
                 if is_modified:
                     # Hollow marker (no fill, thick border)
@@ -476,10 +512,8 @@ class PrimitivePanelPyQtGraph(QWidget):
         pens = []
         color = QColor(PRIMITIVE_COLORS[primitive])
         for idx in range(len(self.events_data)):
-            # Query from model (time-based)
-            is_mod = False
-            if self.controller:
-                is_mod = self.controller.model.is_modified(idx, primitive, self.controller.perspective)
+            # Phase 3 refactoring: Use cached modified state (no controller access)
+            is_mod = self._modified_state.get((idx, primitive), False)
             if is_mod:
                 brushes.append(pg.mkBrush(None))  # Hollow
                 pens.append(pg.mkPen(color, width=2))
@@ -493,10 +527,8 @@ class PrimitivePanelPyQtGraph(QWidget):
         baseline_times = []
         baseline_values_list = []
         for idx in range(len(self.events_data)):
-            # Query from model (time-based)
-            is_mod = False
-            if self.controller:
-                is_mod = self.controller.model.is_modified(idx, primitive, self.controller.perspective)
+            # Phase 3 refactoring: Use cached modified state (no controller access)
+            is_mod = self._modified_state.get((idx, primitive), False)
             if is_mod:
                 baseline_val = self.baseline_values.get((idx, primitive))
                 if baseline_val is not None:
@@ -753,7 +785,10 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Update readout gauge
         self._update_readout(index, primitive, new_value)
         
-        # Call preview callback if set
+        # Emit preview signal (Phase 1 refactoring - parallel with callback)
+        self.primitive_preview_requested.emit(index, primitive, new_value)
+        
+        # Call preview callback if set (kept for backward compatibility during refactoring)
         if self.on_primitive_preview:
             self.on_primitive_preview(index, primitive, new_value)
     
@@ -770,7 +805,10 @@ class PrimitivePanelPyQtGraph(QWidget):
     
     def _on_point_double_clicked(self, index, primitive):
         """Handle double-click event (reset to baseline)."""
-        # Call reset callback if set
+        # Emit reset signal (Phase 1 refactoring - parallel with callback)
+        self.primitive_reset_requested.emit(index, primitive)
+        
+        # Call reset callback if set (kept for backward compatibility during refactoring)
         if self.on_primitive_reset:
             self.on_primitive_reset(index, primitive)
     

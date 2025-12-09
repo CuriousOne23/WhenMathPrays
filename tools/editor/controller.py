@@ -23,12 +23,20 @@ class EditorController:
     """
     Main controller coordinating model and views.
     
+    Architecture (Phase 3 refactoring - Clean MVC):
+    - Owns model and view references (but views don't reference back)
+    - Connects view signals to controller methods
+    - Updates model based on user actions
+    - Pushes model state to views via method calls
+    - Views never access controller or model directly
+    
     Handles:
-    - Primitive value changes from UI
+    - Primitive value changes from UI (via signals)
     - Debounced trajectory recomputation
     - Lock/unlock actions
     - Auto-marking of modified events
     - Undo/Redo command management
+    - Modified state synchronization to views
     """
     
     def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None):
@@ -46,8 +54,8 @@ class EditorController:
         self.trajectory_panel = trajectory_panel
         self.undo_stack = undo_stack
         
-        # Set controller reference in primitive_panel so it can access model.modified_primitives
-        self.primitive_panel.controller = self
+        # Phase 3 refactoring: Removed controller reference from view (violates MVC)
+        # self.primitive_panel.controller = self
         
         self.debounce_timer: Optional[threading.Timer] = None
         self.dirty = False
@@ -179,6 +187,9 @@ class EditorController:
         self.model.modified_primitives[event_time].add(primitive)
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         
+        # Phase 3 refactoring: Update view's cached modified state
+        self._update_view_modified_state()
+        
         # Store marker position from committed trajectory (must happen before display)
         # First compute trajectory to get the position
         primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
@@ -251,6 +262,9 @@ class EditorController:
             self.model.modified_primitives[event_time].add(primitive)
         
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
+        
+        # Phase 3 refactoring: Update view's cached modified state
+        self._update_view_modified_state()
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -792,6 +806,25 @@ class EditorController:
         """Update all views from model."""
         events = self.model.get_events(self.perspective)
         self.primitive_panel.update_from_model(events)
+        
+        # Phase 3 refactoring: Push modified state to view (no direct model access)
+        self._update_view_modified_state()
+    
+    def _update_view_modified_state(self):
+        """
+        Phase 3 refactoring: Update primitive panel's cached modified state.
+        Replaces view's direct access to controller.model.
+        """
+        modified_state = {}
+        events = self.model.get_events(self.perspective)
+        
+        for event_idx in range(len(events)):
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                is_mod = self.model.is_modified(event_idx, prim, self.perspective)
+                if is_mod:
+                    modified_state[(event_idx, prim)] = True
+        
+        self.primitive_panel.set_modified_state(modified_state, self.perspective)
     
     def save_scenario(self, filepath: str):
         """
