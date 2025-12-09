@@ -82,36 +82,57 @@
 - ✅ **Dual gauge updates** - Both primitive and gamma_self readouts show hypothetical values
 - ✅ **Auto-clear previous** - New diagnostic marker clears old ones automatically
 - ✅ **Non-destructive testing** - Explore scenarios without modifying actual data
+- ✅ **gamma_self0 editor widget** - Edit initial state (real/imaginary spinboxes)
+- ✅ **Apply/Reset buttons** - Apply new gamma_self0 or reset to CSV default
+- ✅ **Orange start marker** - Visual indication when gamma_self0 is modified
+- ✅ **Event insertion via time entry list** - Add events at any time (including fractional)
+- ✅ **Fractional time support** - Full support for non-integer times (e.g., 2.5 days)
+- ✅ **Vertical dashed lines** - Mark inserted events on primitive plots
+- ✅ **Black diamond markers** - Show inserted events on gamma_self trajectory
 
 **Technical Achievement:**
 - Fixed PyQtGraph coordinate system using `QGraphicsScene.sigMouseClicked`
 - Proper `event.scenePos()` + `mapSceneToView()` for accurate click positioning
 - Computes full hypothetical trajectory showing final gamma_self position
+- GammaSelf0Editor widget with real/imag QDoubleSpinBox controls
+- InsertionOptionsWidget with dynamic time entry fields
+- Automatic detection of inserted events (all primitives = 0)
 
 **Key Value:**
 - Quick "what-if" exploration before committing to edits
 - Answers questions like: "What if resonance had been +7 at day 14?"
 - Non-destructive sensitivity analysis
+- Edit starting position to explore different initial conditions
+- Add new time points for more detailed scenarios
+- Full support for fractional timescales
 
-### Phase 2.2: Event Management → NEXT (Planned)
-**Duration:** 4-5 hours  
-**Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
+### Phase 2.2: Delete Events ✅ COMPLETE (December 8, 2025)
+**Duration:** ~2 hours  
+**Status:** Released as v2.2-delete-events
 
-**Planned Features:**
-- Add/delete time points (Shift+Click to insert, Delete key to remove)
-- Edit gamma_self_0 initial state (enhanced dialog)
-- Fractional time support (e.g., 2.5 days)
-- Event insertion/deletion with undo support
+**What Was Built:**
+- ✅ **Ctrl+Click deletion** - Click any marker while holding Ctrl to delete that event
+- ✅ **Full validation** - Prevents deleting first/last events, locked events, or when only 2 remain
+- ✅ **DeleteEventCommand** - Proper QUndoCommand implementation for undo/redo
+- ✅ **Ctrl+Z undo** - Restores deleted events with all primitives, notes, and lock status
+- ✅ **Ctrl+Y redo** - Re-deletes events after undo
+- ✅ **User-friendly dialogs** - Clear error messages for invalid deletion attempts
+- ✅ **Baseline array management** - Properly updates internal arrays on delete/insert
+
+**Technical Achievement:**
+- Integrated with existing QUndoStack system
+- Proper Event object reconstruction on undo
+- View refresh after deletion/insertion
+- Works seamlessly with other undo actions (edits, resets)
 
 **Key Value:**
-- More flexible scenario construction
-- Better support for iterative refinement
+- Clean up scenarios by removing unwanted events
+- Maintain data integrity (can't delete critical boundary events)
+- Full undo/redo support for safe experimentation
 
-**Estimated Completion:** Brings Phase 2 to ~80% complete
-
-### Phase 2.3: Inverse Editing (Planned)
+### Phase 2.3: Inverse Editing → NEXT (Planned)
 **Duration:** 3-4 hours  
-**Status:** Future planning
+**Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
 
 **Planned Features:**
 - Inverse editing (drag gamma_self to suggest primitives)
@@ -130,13 +151,13 @@
 
 **Completed Sub-Phases:**
 - ✅ Phase 2.0: PySide6 Migration & Undo/Redo (~4 hours)
-- ✅ Phase 2.1: Diagnostic "What-If" Markers (~3 hours)
+- ✅ Phase 2.1: Diagnostic Markers + gamma_self0 Editor + Event Insertion (~3 hours)
+- ✅ Phase 2.2: Delete Events (~2 hours)
 
 **Remaining Sub-Phases:**
-- ⏳ Phase 2.2: Event Management (~4-5 hours)
 - ⏳ Phase 2.3: Inverse Editing (~3-4 hours)
 
-**Overall Phase 2 Progress:** ~50-60% complete (7 hours done, 7-9 hours remaining)
+**Overall Phase 2 Progress:** ~80-85% complete (9 hours done, 3-4 hours remaining)
 
 ---
 **Duration:** 5-6 hours  

@@ -425,6 +425,105 @@ class EditorController:
             import traceback
             traceback.print_exc()
     
+    def _delete_event(self, event_index: int):
+        """
+        Delete an event (used by undo commands).
+        
+        Args:
+            event_index: Event index to delete
+        """
+        try:
+            print(f"\n=== DELETE EVENT {event_index} ===")
+            
+            # Get event data before deletion
+            events = self.model.get_events(self.perspective)
+            event = events[event_index]
+            event_time = event.time
+            
+            # Delete from model
+            del events[event_index]
+            
+            # Remove from modified primitives tracking
+            if event_time in self.model.modified_primitives:
+                del self.model.modified_primitives[event_time]
+            
+            # Remove marker positions for this event
+            for prim in PRIMITIVE_NAMES:
+                marker_key = (event_time, prim)
+                if marker_key in self.model.marker_positions:
+                    del self.model.marker_positions[marker_key]
+            
+            print(f"Deleted event at time={event_time}, remaining events: {len(events)}")
+            
+            # Update baseline primitives arrays (remove deleted index)
+            for key in self.baseline_primitives:
+                if isinstance(self.baseline_primitives[key], np.ndarray):
+                    self.baseline_primitives[key] = np.delete(self.baseline_primitives[key], event_index)
+                    self.original_baseline_primitives[key] = np.delete(self.original_baseline_primitives[key], event_index)
+            
+            # Update views
+            self._update_view_modified_state()
+            self.primitive_panel.update_from_model(events)
+            self._recompute_trajectory_immediate()
+            
+            print("=== END DELETE ===")
+        except Exception as e:
+            print(f"ERROR in _delete_event: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    def _insert_event(self, event_index: int, event_data: dict):
+        """
+        Insert an event (used by undo commands to restore deleted events).
+        
+        Args:
+            event_index: Event index to insert at
+            event_data: Dict with 'time', 'primitives', 'notes', 'locked'
+        """
+        try:
+            print(f"\n=== INSERT EVENT at index {event_index} ===")
+            
+            # Import Event class from the correct module
+            from tools.editor.event import Event
+            
+            # Create event using the actual Event class constructor
+            event = Event(
+                time=event_data['time'],
+                primitives=event_data['primitives'],
+                notes=event_data.get('notes', ''),
+                marker='',  # Markers aren't preserved for now
+                locked=event_data.get('locked', False)
+            )
+            
+            # Insert into model
+            events = self.model.get_events(self.perspective)
+            events.insert(event_index, event)
+            
+            print(f"Inserted event at time={event_data['time']}, total events: {len(events)}")
+            
+            # Update baseline primitives arrays (insert at index)
+            for prim in PRIMITIVE_NAMES:
+                value = event_data['primitives'][prim]
+                if prim in self.baseline_primitives:
+                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_index, value)
+                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_index, value)
+            
+            # Insert time
+            if 'time' in self.baseline_primitives:
+                self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_index, event_data['time'])
+                self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_index, event_data['time'])
+            
+            # Update views
+            self._update_view_modified_state()
+            self.primitive_panel.update_from_model(events)
+            self._recompute_trajectory_immediate()
+            
+            print("=== END INSERT ===")
+        except Exception as e:
+            print(f"ERROR in _insert_event: {e}")
+            import traceback
+            traceback.print_exc()
+    
     def commit_changes(self):
         """Commit all preview changes."""
         print("\n=== COMMIT CHANGES ===")

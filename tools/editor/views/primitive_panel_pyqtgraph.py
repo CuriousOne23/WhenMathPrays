@@ -28,6 +28,7 @@ class DraggableScatterItem(pg.ScatterPlotItem):
     sigPointReleased = Signal(int, float, float)  # index, x, y (on release)
     sigPointClicked = Signal(int, float, float)  # index, x, y (on click without drag)
     sigPointDoubleClicked = Signal(int)  # index
+    sigPointCtrlClicked = Signal(int)  # index (Ctrl+Click for deletion)
     
     def __init__(self, *args, is_diagnostic=False, **kwargs):
         super().__init__(*args, **kwargs)
@@ -61,12 +62,21 @@ class DraggableScatterItem(pg.ScatterPlotItem):
         super().mouseDoubleClickEvent(ev)
     
     def mouseClickEvent(self, ev):
-        """Handle single click for readout."""
+        """Handle single click for readout or Ctrl+Click for deletion."""
         if ev.button() == Qt.LeftButton:
             pos = ev.pos()
             pts = self.pointsAt(pos)
             if len(pts) > 0:
                 idx = pts[0].index()
+                
+                # Check for Ctrl+Click (deletion request)
+                if ev.modifiers() & Qt.ControlModifier:
+                    print(f"[CTRL+CLICK] Request to delete event index={idx}")
+                    self.sigPointCtrlClicked.emit(idx)
+                    ev.accept()
+                    return
+                
+                # Normal click - readout
                 if self.x_data is not None and self.y_data is not None:
                     print(f"[CLICK EVENT] index={idx}, x={self.x_data[idx]}, y={self.y_data[idx]}")
                     self.sigPointClicked.emit(idx, self.x_data[idx], self.y_data[idx])
@@ -167,6 +177,8 @@ class PrimitivePanelPyQtGraph(QWidget):
     # Signals
     primitive_changed = Signal(int, str, float)  # event_idx, primitive, value
     diagnostic_marker_placed = Signal(int, str, float)  # event_idx, primitive, hypothetical_value
+    event_delete_requested = Signal(int)  # event_idx (Ctrl+Click on marker)
+    event_insert_requested = Signal(int)  # event_idx (Ctrl+Shift+Click near marker - insert before)
     
     # New signals (Phase 1 refactoring - replacing callbacks)
     primitive_preview_requested = Signal(int, str, float)  # event_idx, primitive, value (during drag)
@@ -292,6 +304,9 @@ class PrimitivePanelPyQtGraph(QWidget):
             )
             scatter.sigPointDoubleClicked.connect(
                 lambda idx, p=prim: self._on_point_double_clicked(idx, p)
+            )
+            scatter.sigPointCtrlClicked.connect(
+                lambda idx, p=prim: self._on_point_ctrl_clicked(idx, p)
             )
             
             # Store references
@@ -674,8 +689,33 @@ class PrimitivePanelPyQtGraph(QWidget):
     
     def _on_mouse_clicked(self, event):
         """Handle mouse clicks using scene signal (like trajectory panel)."""
-        # Only handle shift+left-click
-        if event.button() == Qt.LeftButton and event.modifiers() & Qt.ShiftModifier:
+        # Check for Ctrl+Shift+Click (insert event) first
+        if event.button() == Qt.LeftButton and (event.modifiers() & Qt.ControlModifier) and (event.modifiers() & Qt.ShiftModifier):
+            # Find which plot was clicked
+            for prim, plot in self.plot_items.items():
+                if plot.sceneBoundingRect().contains(event.scenePos()):
+                    # Get click position in data coordinates
+                    view_pos = plot.getViewBox().mapSceneToView(event.scenePos())
+                    clicked_time = view_pos.x()
+                    
+                    print(f"\n[INSERT EVENT] Ctrl+Shift+click at time={clicked_time:.2f}")
+                    
+                    # Find nearest event
+                    if self.events_data:
+                        times = [e.time for e in self.events_data]
+                        nearest_idx = min(range(len(times)), key=lambda i: abs(times[i] - clicked_time))
+                        nearest_time = times[nearest_idx]
+                        
+                        print(f"[INSERT EVENT] Nearest marker: index={nearest_idx}, time={nearest_time}")
+                        
+                        # Emit signal to insert event before this marker
+                        self.event_insert_requested.emit(nearest_idx)
+                        
+                        event.accept()
+                        return
+        
+        # Handle shift+left-click for diagnostic markers
+        elif event.button() == Qt.LeftButton and event.modifiers() & Qt.ShiftModifier:
             # Find which plot was clicked
             for prim, plot in self.plot_items.items():
                 if plot.sceneBoundingRect().contains(event.scenePos()):
@@ -811,6 +851,12 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Call reset callback if set (kept for backward compatibility during refactoring)
         if self.on_primitive_reset:
             self.on_primitive_reset(index, primitive)
+    
+    def _on_point_ctrl_clicked(self, index, primitive):
+        """Handle Ctrl+Click event (delete event)."""
+        print(f"[CTRL+CLICK] Request to delete event {index} (clicked on '{primitive}' primitive)")
+        # Emit delete signal
+        self.event_delete_requested.emit(index)
     
     def _on_diagnostic_dragged(self, index, primitive, value):
         """Handle diagnostic marker being dragged - update trajectory in real-time."""

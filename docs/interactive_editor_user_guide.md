@@ -154,6 +154,9 @@ day,v,r,f,a,S,notes,marker,locked
 - `ESC` - Cancel all preview changes
 - `G` - Edit gamma_self_0 initial position (starting point)
 - `Shift+Click` - Place Counterfactual Explorer marker (explore alternative scenarios)
+- `Ctrl+Click` - Delete event (non-locked events only, excludes first/last)
+- `Ctrl+Z` - Undo last action
+- `Ctrl+Y` or `Ctrl+Shift+Z` - Redo action
 
 **View Controls:**
 - `+` or `=` - Zoom in (panel under cursor)
@@ -230,6 +233,33 @@ day,v,r,f,a,S,notes,marker,locked
 - "Would lowering visibility at day 7 prevent the final breakup?" (intervention testing)
 
 **Note:** Counterfactual markers (X) are **exploratory only** - they don't modify your data. Use regular marker dragging to actually commit changes.
+
+### 6. Delete Events (NEW - Phase 2.2)
+**Goal:** Remove unwanted or placeholder events from a scenario
+
+**Workflow:**
+1. **Ctrl+Click** on any marker to delete that event
+2. Event is removed from all primitive plots and trajectory
+3. **Undo with Ctrl+Z** to restore deleted event if needed
+4. **Redo with Ctrl+Y** to re-delete
+
+**Validation Rules:**
+- ✅ Can delete: Unlocked middle events (not first or last)
+- ❌ Cannot delete: First event (start position)
+- ❌ Cannot delete: Last event (final outcome)
+- ❌ Cannot delete: Locked events (right-click to unlock first)
+- ❌ Cannot delete: When only 2 events remain (need at least start + end)
+
+**Use Cases:**
+- Remove placeholder events inserted during scenario generation
+- Clean up scenarios with too many time points
+- Delete events that were added experimentally and no longer needed
+- Simplify complex scenarios for clearer analysis
+
+**Undo/Redo Support:**
+- Full undo/redo for event deletion via Ctrl+Z / Ctrl+Y
+- Deleted events restored with all primitive values, notes, and lock status
+- Works seamlessly with other undo actions (primitive edits, resets)
 
 ---
 

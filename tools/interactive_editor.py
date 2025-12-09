@@ -75,6 +75,7 @@ class InteractiveEditor:
         # Connect signals from primitive panel
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
         self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
+        self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
         
         # Phase 2 refactoring: Connect new signals (replacing callbacks)
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
@@ -318,6 +319,62 @@ class InteractiveEditor:
     def _on_primitive_reset(self, event_index, primitive):
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
+    
+    def _on_event_delete_requested(self, event_index):
+        """
+        Handle event deletion request from primitive panel (Ctrl+Click).
+        
+        Args:
+            event_index: Event index to delete
+        """
+        print(f"\n[DELETE REQUEST] Event {event_index}")
+        
+        # Validation: Get events
+        events = self.model.get_events(self.controller.perspective)
+        
+        # Can't delete if only 2 events (need at least start and end)
+        if len(events) <= 2:
+            print(f"[DELETE] Cannot delete - need at least 2 events (start and end)")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                "Cannot delete event. Scenarios must have at least 2 events (start and end)."
+            )
+            return
+        
+        # Can't delete first or last event
+        if event_index == 0 or event_index == len(events) - 1:
+            print(f"[DELETE] Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                "Cannot delete the first or last event."
+            )
+            return
+        
+        # Can't delete locked events
+        event = events[event_index]
+        if event.locked:
+            print(f"[DELETE] Cannot delete locked event at time={event.time}")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                f"Cannot delete locked event at day {event.time}.\n\nRight-click to unlock first."
+            )
+            return
+        
+        # Create and push delete command to undo stack
+        if self.controller.undo_stack:
+            from tools.editor.commands import DeleteEventCommand
+            command = DeleteEventCommand(self.controller, event_index)
+            self.controller.undo_stack.push(command)
+            print(f"[DELETE] Pushed DeleteEventCommand to undo stack")
+        else:
+            # No undo stack - delete directly
+            self.controller._delete_event(event_index)
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
         """
