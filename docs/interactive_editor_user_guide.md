@@ -79,11 +79,9 @@ The editor window is divided into two main panels:
 
 ### Save Button & Controls
 Located at top-left above primitive plots:
-- **Click:** Save CSV only
-- **Shift+Click:** Save PNG plot only  
-- **Ctrl+Click:** Save both CSV and PNG
+- **Click:** Save CSV to `data/` folder with `_modified` suffix
 
-Files are saved to `data/` folder with `_modified` suffix.
+**Note:** PNG export is currently disabled during PyQtGraph migration. Use your operating system's screenshot tool to capture visualizations if needed.
 
 ---
 
@@ -161,7 +159,6 @@ day,v,r,f,a,S,notes,marker,locked
 - `+` or `=` - Zoom in (panel under cursor)
 - `-` - Zoom out (panel under cursor)
 - `0` - Reset view to auto-fit (clears primitive gauge)
-- `F` - Toggle fixed view mode (prevents auto-zoom during edits)
 
 **Save:**
 - `Ctrl+S` - Save (auto-commits all previews and saves CSV)
@@ -178,7 +175,7 @@ day,v,r,f,a,S,notes,marker,locked
 2. Drag primitives to modify specific events (e.g., increase resonance at day 21)
 3. Watch gamma_self trajectory update in real-time
 4. Save modified version: Click Save button
-5. Output: `data/baseline_modified.csv` and `_modified.png`
+5. Output: `data/baseline_modified.csv`
 
 **Use Primitive Gauge:** Track which primitive values you're setting
 
@@ -274,7 +271,7 @@ When multiple primitives are modified at the same event:
 6. **Drag counterfactual X markers** to explore a range of alternative scenarios before committing changes
 7. **Save frequently** - Each save creates `_modified` version, preserving original
 8. **Save incrementally** - Save after each major change rather than editing many events at once
-9. **Export PNG** with Shift+Click to capture trajectory visualizations for reports
+9. **Use screenshot tools** to capture trajectory visualizations for reports (PNG export temporarily disabled)
 
 ---
 
