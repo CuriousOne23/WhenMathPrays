@@ -13,8 +13,9 @@ Phase 2 migrates to a modern UI framework and adds critical functionality for mo
 - **✅ PySide6 migration** (professional UI foundation) - COMPLETE
 - **✅ Enhanced undo/redo system** with QUndoStack - COMPLETE
 - **✅ Diagnostic "What-If" markers** (hypothetical analysis without modifying data) - COMPLETE
-- **⏳ Edit initial state (gamma_self0)** and fractional time support - PLANNED
-- **⏳ Add/delete time points** (event insertion/removal) - PLANNED
+- **✅ Edit initial state (gamma_self0)** with real/imaginary spinboxes - COMPLETE
+- **✅ Fractional time support** and event insertion via time entry list - COMPLETE
+- **⏳ Delete events** functionality - PLANNED
 - **⏳ Inverse editing** (drag gamma_self to suggest primitives) - PLANNED
 - **⏳ Manual marker management** (add/remove markers without dragging) - PLANNED
 
@@ -101,9 +102,11 @@ Enable users to quickly explore "what-if" scenarios without modifying their data
 
 ---
 
-## Phase 2.2: Add/Delete Events + Edit gamma_self0 + Fractional Time ⏳ PLANNED
+## Phase 2.2: Delete Events ✅ COMPLETE
 
-**Original Name:** Phase 2.1 (renumbered after diagnostic markers insertion)
+**Status:** Released as v2.2-delete-events (December 8, 2025)  
+**Duration:** ~2 hours  
+**Note:** Event insertion via time entry list and fractional time support were completed as part of Phase 2.1 implementation
 
 ### Why Migrate from Matplotlib/Tkinter?
 
@@ -969,9 +972,9 @@ class EditPrimitiveAction(Action):
 - Auto-clear previous diagnostic markers
 - **Result:** v2.1-diagnostic-markers released December 7, 2025
 
-### Phase 2.2: Add/Delete Events + gamma_self0 + Fractional Time (4-5 hours) ⏳ NEXT
-- Edit gamma_self0 widget (QDoubleSpinBox for real/imag)
-- Fractional time support (validation, formatting)
+### Phase 2.2: Delete Events (1-2 hours) ⏳ NEXT
+- Event deletion with validation (prevent deleting first/last)
+- Delete key or UI control for removing events
 - Event insertion with interpolation (fractional positions)
 - Event deletion with validation
 - UI controls and keyboard shortcuts
@@ -1004,12 +1007,17 @@ Phase 2 is complete when:
 - ✅ **Phase 2.1:** Diagnostic markers show hypothetical final gamma_self outcome
 - ✅ **Phase 2.1:** User can drag diagnostic markers to explore range of hypothetical values
 - ✅ **Phase 2.1:** Diagnostic markers visually distinct (black X) from data markers
-- ⏳ **Phase 2.2:** User can edit gamma_self0 (real, imaginary components)
-- ⏳ **Phase 2.2:** Modified gamma_self0 shown with orange marker (vs blue)
-- ⏳ **Phase 2.2:** User can insert events at fractional times (e.g., 2.5 days)
-- ⏳ **Phase 2.2:** Time axis displays fractional labels correctly
-- ⏳ **Phase 2.2:** User can insert new events via Shift+Click (fractional times)
-- ⏳ **Phase 2.2:** User can delete unlocked events via Delete key
+- ✅ **Phase 2.1:** User can edit gamma_self0 (real, imaginary components via spinboxes)
+- ✅ **Phase 2.1:** Modified gamma_self0 shown with orange marker (vs blue)
+- ✅ **Phase 2.1:** User can insert events at fractional times via time entry list (e.g., 2.5 days)
+- ✅ **Phase 2.1:** Time axis displays fractional labels correctly
+- ✅ **Phase 2.1:** Inserted events shown with vertical dashed lines on primitive plots
+- ✅ **Phase 2.1:** Black diamond markers on trajectory for inserted events
+- ✅ **Phase 2.1:** Shift+Click now places diagnostic "what-if" markers (not insertion)
+- ✅ **Phase 2.2:** User can delete unlocked events via Ctrl+Click
+- ✅ **Phase 2.2:** Deletion validation prevents removing first/last/locked events
+- ✅ **Phase 2.2:** Ctrl+Z restores deleted events with full data
+- ✅ **Phase 2.2:** Ctrl+Y re-deletes after undo
 - ⏳ **Phase 2.3:** User can drag gamma_self points and accept primitive suggestions
 - ⏳ **Phase 2.3:** Inverse mode provides reasonable primitive estimates (within ±2 of manual tuning)
 - ⏳ **Phase 2.4:** User can manually add/remove markers without editing values

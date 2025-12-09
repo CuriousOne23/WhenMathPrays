@@ -143,3 +143,112 @@ class ResetPrimitiveCommand(QUndoCommand):
             self.controller._apply_primitive_change(self.event_idx, self.primitive, self.old_value)
         finally:
             self.controller.in_undo_redo = False
+
+
+class DeleteEventCommand(QUndoCommand):
+    """
+    Command for deleting an event.
+    
+    Supports undo/redo of event deletion via Ctrl+Click.
+    """
+    
+    def __init__(self, controller, event_idx):
+        """
+        Initialize delete command.
+        
+        Args:
+            controller: EditorController instance
+            event_idx: Event index to delete
+        """
+        super().__init__()
+        self.controller = controller
+        self.event_idx = event_idx
+        
+        # Store event data for undo
+        events = controller.model.get_events(controller.perspective)
+        event = events[event_idx]
+        self.event_data = {
+            'time': event.time,
+            'primitives': {prim: event.markers[prim].value for prim in ['v', 'r', 'f', 'a', 'S']},
+            'notes': event.notes,
+            'locked': event.locked
+        }
+        
+        self.setText(f"Delete event at day {event.time}")
+    
+    def redo(self):
+        """Delete the event."""
+        self.controller.in_undo_redo = True
+        try:
+            self.controller._delete_event(self.event_idx)
+        finally:
+            self.controller.in_undo_redo = False
+    
+    def undo(self):
+        """Restore the deleted event."""
+        self.controller.in_undo_redo = True
+        try:
+            self.controller._insert_event(self.event_idx, self.event_data)
+        finally:
+            self.controller.in_undo_redo = False
+
+
+class InsertEventBeforeCommand(QUndoCommand):
+    """
+    Command for inserting a new event before an existing event.
+    
+    The new event takes the existing event's time position, and the existing
+    event (plus all subsequent events) shift forward by delta time.
+    
+    Supports undo/redo of event insertion via Ctrl+Shift+Click.
+    """
+    
+    def __init__(self, controller, event_idx):
+        """
+        Initialize insert command.
+        
+        Args:
+            controller: EditorController instance
+            event_idx: Event index to insert before (this event will shift forward)
+        """
+        super().__init__()
+        self.controller = controller
+        self.event_idx = event_idx
+        
+        # Calculate insertion details
+        events = controller.model.get_events(controller.perspective)
+        
+        if event_idx == 0:
+            # Can't insert before first event
+            raise ValueError("Cannot insert before first event")
+        
+        # Get times for delta calculation
+        current_time = events[event_idx].time
+        previous_time = events[event_idx - 1].time
+        self.delta = current_time - previous_time
+        self.insert_time = current_time  # New event takes this position
+        
+        # Store original times of events that will be shifted
+        self.shifted_events = []  # [(idx, old_time, new_time), ...]
+        for idx in range(event_idx, len(events)):
+            old_time = events[idx].time
+            new_time = old_time + self.delta
+            self.shifted_events.append((idx, old_time, new_time))
+        
+        self.setText(f"Insert event at day {self.insert_time}")
+    
+    def redo(self):
+        """Insert the new event and shift subsequent events."""
+        self.controller.in_undo_redo = True
+        try:
+            self.controller._insert_event_before(self.event_idx, self.insert_time, self.delta)
+        finally:
+            self.controller.in_undo_redo = False
+    
+    def undo(self):
+        """Remove the inserted event and restore original times."""
+        self.controller.in_undo_redo = True
+        try:
+            self.controller._undo_insert_event_before(self.event_idx, self.shifted_events)
+        finally:
+            self.controller.in_undo_redo = False

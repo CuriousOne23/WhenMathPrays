@@ -457,6 +457,7 @@ plot_dual_scenario(
 ## Documentation
 
 ### Core Framework
+- **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** - Strategic vision: GRP as foundation for AI social intelligence and robotics
 - **[GRP_rev3.md](docs/GRP_rev3.md)** - Complete mathematical specification of GRP framework
 - **[gamma_self_defense.md](docs/gamma_self_defense.md)** - Mathematical defense: Why relationship dynamics follow dynamical systems principles
 - **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values (single source of truth)
