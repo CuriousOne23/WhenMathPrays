@@ -76,9 +76,13 @@ class InteractiveEditor:
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
         self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
         
-        # Set callbacks for preview and reset
-        self.primitive_panel.on_primitive_preview = self._on_primitive_preview
-        self.primitive_panel.on_primitive_reset = self._on_primitive_reset
+        # Phase 2 refactoring: Connect new signals (replacing callbacks)
+        self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
+        self.primitive_panel.primitive_reset_requested.connect(self._on_primitive_reset)
+        
+        # Phase 2 refactoring: Removed callback assignments (now using signals above)
+        # self.primitive_panel.on_primitive_preview = self._on_primitive_preview
+        # self.primitive_panel.on_primitive_reset = self._on_primitive_reset
         
         # Initialize PyQtGraph trajectory panel
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
