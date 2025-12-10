@@ -1,4 +1,4 @@
-# WhenMathPrays – Core OS™ (2025 final restoration)
+# WhenMathPrays – Core OS™ (Rev 3.1: Linear Fidelity Asymmetry)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -17,14 +17,14 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (canonical, December 2025 final simplification)
+## The One Equation (Rev 3.1: December 2025)
 
 $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
-\Delta S \cdot \Delta t
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
+\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
 }
 $$
 
@@ -32,24 +32,24 @@ $$
 - **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
 - **Love = γ_self(n)** directly (position IS love, no separate calculation)
 - **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, silence/presence)
-- **f'** = f with hybrid asymmetry applied if negative
+- **f'** = f with linear 25:1 asymmetry applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
-- **ΔS** = entropy drift rate (default 0.02 per time unit)
+- **ΔS** = entropy drift rate (default 0.05 per time unit)
+- **γ_attractor** = entropy target position (default -20+0j)
 - **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### December 2025 Final Simplification
+### Rev 3.1 Changes (December 2025 - Minor Refinement)
 
 **What changed:**
-- **No L(t) calculation** → Love = γ_self position directly
-- **No W(t) gates** → Primitives update position via component-wise addition
-- **No γ_self0 drift dynamics** → γ_self0 is initial condition only
-- **Simple entropy drift** → Constant leftward pull (-ΔS·Δt) instead of complex exp() terms
-- **Parameters reduced from 9 to 2** → Only w_neg = 1.5 and ΔS = 0.02 (plus axis weights)
+- **Linear fidelity asymmetry** → f' = 25.0×f for negatives (was state-dependent 1.5×|γ|×f)
+- **Fixed damage** → f=-1 always causes -30i drop (was -1.8i to -270i depending on state)
+- **All other parameters unchanged** from Rev 3
+- **Psychology-based** → 25:1 ratio from negativity bias research (Gottman, Baumeister)
 
-**Why?** The November 2025 version had too many parameters, separate memory variables, and complex calculations. This version captures the same asymmetry and irreversibility with radical simplicity.
+**Why?** Rev 3 state-dependent scaling caused catastrophic sensitivity at high love states (f=-1 at 150i → -225i drop). Rev 3.1 makes weak relationships fragile and strong relationships resilient (realistic).
 
 See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
@@ -69,18 +69,24 @@ $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
 
-**Hybrid asymmetry for negatives** (f' example):
+**Linear fidelity asymmetry (Rev 3.1):**
 
 $$
 f' = \begin{cases}
-f \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } f < 0 \\
-f & \text{if } f \geq 0
+25.0 \cdot f & \text{if } f < 0 \\
+1.0 \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
 Where:
-- **w_neg = 1.5** (negatives hurt more)
-- **ε = 1.0** (prevents collapse near zero)
+- **w_f_neg = 25.0** (negatives hurt 25× more than positives heal)
+- **w_f = 1.0** (positive healing at 1:1 ratio)
+- **No state dependence** (same damage regardless of |γ_self|)
+
+**Key behaviors:**
+- **Weak relationships** (|γ| < 50i): Small betrayal (f=-1) causes large % drop → fragile
+- **Strong relationships** (|γ| > 100i): Same f=-1 absorbed better → resilient
+- **Healing ratio:** 25 positive events needed to repair 1 negative event
 
 **Initial condition γ_self0:**
 - Set at n=0 based on temperament/history

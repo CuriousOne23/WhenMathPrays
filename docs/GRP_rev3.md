@@ -1,10 +1,25 @@
 # GRP – Gamma Relational Persona (Revision 3)
 **Valence-neutral, 2-D, empirically extensible framework for modelling love, hate, and all relational intensities between two minds (M1 ↔ M2)**
 
-Status: **December 2025 Final Simplification**  
+Status: **ACTIVE (Rev 3.1 refinement - December 2025)**  
 Stewardship: Open to rigorous, inspectable contributions  
-Current version: December 4, 2025 (Love = γ_self position paradigm)  
-Previous versions: [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
+Current version: December 9, 2025 (Rev 3.1: Linear fidelity asymmetry)  
+Previous versions: Rev 3 (December 4, 2025), [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
+
+---
+
+## 📋 REV 3.1 UPDATE (December 9, 2025)
+
+**Minor refinement to Rev 3:** State-dependent hybrid asymmetry replaced with fixed linear 25:1 asymmetry for negative fidelity.
+
+**Problem identified:** At high relationship states (|γ_self| ≈ 150i), small betrayals (f=-1) caused unrealistic catastrophic drops (-225i). The state-dependent scaling f' = f × 1.5 × max(|γ|, 1.0) made strong relationships too fragile.
+
+**Rev 3.1 solution:** Fixed linear 25:1 asymmetry:
+- Rev 3: f' = f × 1.5 × max(|γ|, 1.0) for negatives (state-dependent)
+- Rev 3.1: f' = 25.0 × f for negatives (fixed linear)
+- Makes weak relationships fragile and strong relationships resilient (psychologically realistic)
+
+**All other parameters unchanged from Rev 3.**
 
 ---
 
@@ -16,7 +31,7 @@ Previous versions: [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UR
 
 ---
 
-## 2. The Core Equation (Love = Position)
+## 2. The Core Equation (Love = Position) [REV 3.1 - ACTIVE]
 
 $$
 \boxed{
@@ -27,7 +42,7 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
 }
 $$
 
-**That's it. No L(t) calculation. No W(t) gates. No separate memory variables.**
+**Rev 3.1 refinement:** Equation unchanged, but f' now uses fixed linear asymmetry: f' = 25.0 × f (negative) instead of state-dependent f' = f × 1.5 × max(|γ|, 1.0).
 
 **Note on Formulation:**  
 This discrete recurrence is the computational implementation of a continuous-time damped oscillator system. The underlying dynamics can be expressed as:

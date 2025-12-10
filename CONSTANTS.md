@@ -4,7 +4,7 @@ This is the **only** file in the entire repository that may contain numerical pa
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 3, 2025 (Final Simplification)
+Last updated: December 2025 (Rev 3.1: Linear Fidelity Asymmetry)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,28 +32,31 @@ Last updated: December 3, 2025 (Final Simplification)
 
 ---
 
-## Core Canonical Parameters (December 2025 Final Simplification)
+## Core Canonical Parameters (Rev 3.1: December 2025)
 
-**REMOVED (Dec 3, 2025):** β, W_cap, c, τ_default, α (gates), σ_fast, σ_ent, η, ξ, λ  
-**RESTORED (Dec 3, 2025 evening):** ΔS (entropy drift) — constant leftward pull toward Ego axis  
-**Reason:** Simplified to "Love = γ_self position" — no L(t) calculation, no gates, no drift equation for γ_self0
+**Rev 3.1 Changes (Minor refinement based on Grok consultation):**
+- **w_neg/epsilon REMOVED**, replaced with **w_f_neg=25.0** (linear 25:1 asymmetry)
+- **All other weights unchanged** from Rev 3
+- **Rationale:** State-dependent scaling caused instability at high love states. Fixed 25:1 ratio based on psychological negativity bias research. Weak relationships fragile, strong relationships resilient.
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
 | **w_v** | 0.8 | – | Visibility weight (real axis contribution) | Default, tunable |
 | **w_r** | 1.0 | – | Resonance weight (imaginary axis) | Default, tunable |
-| **w_f** | 1.2 | – | Fidelity weight (imaginary axis, strongest) | Default, tunable |
+| **w_f** | 1.2 | – | Positive fidelity weight (imaginary axis) | Default, tunable |
+| **w_f_neg** | 25.0 | – | Negative fidelity weight (25:1 asymmetry) | LOCKED |
 | **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
 | **w_{S,R}** | 0.5 | – | Silence/presence (real axis contribution) | Default, tunable |
 | **w_{S,I}** | 0.5 | – | Silence/presence (imaginary axis contribution) | Default, tunable |
-| **w_neg** | 1.5 | – | Negative asymmetry multiplier (negatives hurt 50% more) | LOCKED |
-| **ε** | 1.0 | – | Collapse prevention threshold for hybrid asymmetry | LOCKED |
 | **ΔS** (delS) | 0.02 | time⁻¹ | Entropy drift rate (constant leftward pull per time unit) | Default, tunable |
+| **γ_attractor** | -8+0j | – | Entropy target position (ego axis) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
+
+**Removed in Rev 3.1:** w_neg, ε (epsilon) — state-dependent hybrid asymmetry eliminated
 
 ---
 
-## Component-Wise Update Equation
+## Component-Wise Update Equation (Rev 3.1)
 
 $$
 \boxed{
@@ -65,8 +68,8 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
 $$
 
 **Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance.
-- **ΔS = 0.02** (default): Entropy drift magnitude per time unit
-- **γ_attractor = -8+0j** (default): Target position for entropy pull (far left Ego axis)
+- **ΔS = 0.05** (default): Entropy drift magnitude per time unit
+- **γ_attractor = -20+0j** (default): Target position for entropy pull (ego-neutral zone)
 - **Δt**: Time elapsed between events (in days/weeks/months per CSV time_unit)
 - **entropy_per_event=False** (default): Drift scales with time (realistic decay)
 - **entropy_per_event=True** (override): Fixed ΔS magnitude per event regardless of time spacing
@@ -85,16 +88,21 @@ $$
 
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
 
-**Hybrid asymmetry for negatives:**
+**Linear fidelity asymmetry (Rev 3.1):**
 
 $$
-p' = \begin{cases}
-p \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } p < 0 \\
-p & \text{if } p \geq 0
+f' = \begin{cases}
+w_{f,\text{neg}} \cdot f & \text{if } f < 0 \\
+w_f \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
-**Where:** |γ_self(n)| = √(Re² + Im²) is the complex magnitude.
+**Where:** w_f_neg = 25.0 (negatives hurt 25× more than positives heal), w_f = 1.0 (positive healing rate)
+
+**Key behaviors:**
+- **Weak relationships** (|γ_self| < 50i): Small betrayals (f=-1) cause large drops (-25i), fragile trust
+- **Strong relationships** (|γ_self| > 100i): Same f=-1 still drops -25i, but represents smaller % of total (resilient)
+- **Psychology basis:** 25:1 ratio from negativity bias research (Gottman, Baumeister)
 
 ---
 
