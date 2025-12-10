@@ -195,11 +195,11 @@ The `custom_weights` dictionary in each subject allows you to override default w
 - **Example:** `{'w_a': 0.8}` - Increase altruism impact
 
 **`w_S_R`** (default: 0.5)
-- **Description:** Silence/presence contribution to real axis
+- **Description:** Shared Breath contribution to real axis
 - **Effect:** How shared silence affects Ego↔We
 
 **`w_S_I`** (default: 0.5)
-- **Description:** Silence/presence contribution to imaginary axis
+- **Description:** Shared Breath contribution to imaginary axis
 - **Effect:** How shared silence affects Hate↔Love
 
 #### Entropy Parameters
@@ -267,7 +267,7 @@ Your CSV file should contain relational primitives at each time step.
 - **`r`** - Resonance primitive [-10 to +10]
 - **`f`** - Fidelity primitive [-10 to +10]
 - **`a`** - Altruism primitive [-10 to +10]
-- **`S`** - Silence/presence primitive [-10 to +10]
+- **`S`** - Shared Breath primitive [-10 to +10]
 
 ### Optional Columns
 

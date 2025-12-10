@@ -16,8 +16,8 @@ W_V = 0.8  # Visibility (real axis, Ego↔We)
 W_R = 1.0  # Resonance (imaginary axis, Hate↔Love)
 W_F = 1.2  # Fidelity positive (imaginary axis)
 W_A = 0.6  # Altruism (imaginary axis)
-W_S_R = 0.5  # Silence/presence (real axis contribution)
-W_S_I = 0.5  # Silence/presence (imaginary axis contribution)
+W_S_R = 0.5  # Shared Breath (real axis contribution)
+W_S_I = 0.5  # Shared Breath (imaginary axis contribution)
 
 # Fidelity asymmetry (Rev 3.2: Im-only depth scaling)
 FIDELITY_SCALING_FACTOR = 0.12  # Negative fidelity scaling coefficient (LOCKED)
@@ -101,7 +101,7 @@ def update_gamma_self(
         r: Resonance primitive
         f: Fidelity primitive (subject to Im-only depth scaling if negative)
         a: Altruism primitive
-        S: Silence/presence primitive (contributes to both axes)
+        S: Shared Breath primitive (contributes to both axes)
         weights: Optional weight dictionary (defaults to CONSTANTS.md values)
         time_delta: Time elapsed since last event (default 1.0). 
                    Used to scale entropy drift. Ignored if entropy_per_event=True.

@@ -31,10 +31,10 @@ $$
 **Where:**
 - **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
 - **Love = γ_self(n)** directly (position IS love, no separate calculation)
-- **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, silence/presence)
+- **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, Shared Breath)
 - **f'** = f with Im-only depth scaling applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
-- **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
+- **w_{S,R}, w_{S,I}** = Shared Breath split across real/imaginary axes
 - **ΔS** = entropy drift rate (default 0.05 per time unit)
 - **γ_attractor** = entropy target position (default -20+0j)
 - **Δt** = time elapsed between events (scales entropy)
@@ -131,7 +131,7 @@ time_unit,days
 - `r` - Resonance primitive [-10, +10]
 - `f` - Fidelity primitive [-10, +10]
 - `a` - Altruism primitive [-10, +10]
-- `S` - Silence/presence primitive [-10, +10]
+- `S` - Shared Breath primitive [-10, +10]
 
 **Optional columns:**
 - `notes` - Text description of the event
