@@ -453,7 +453,14 @@ class PrimitivePanelPyQtGraph(QWidget):
                 # Phase 3 refactoring: Use cached modified state (no controller access)
                 is_modified = self._modified_state.get((event_idx, prim), False)
                 
-                if is_modified:
+                # Check if this is an inserted event (all primitives = 0, not first/last)
+                is_inserted = is_inserted_event(event, exclude_first_last=True, event_idx=event_idx, total_events=len(events))
+                
+                if is_inserted:
+                    # Inserted events: Cyan/turquoise fill to indicate "needs editing"
+                    brushes.append(pg.mkBrush(0, 200, 200, 180))  # Bright cyan, semi-transparent
+                    pens.append(pg.mkPen('k', width=2))
+                elif is_modified:
                     # Hollow marker (no fill, thick border)
                     brushes.append(pg.mkBrush(None))
                     pens.append(pg.mkPen(color, width=2))
@@ -700,18 +707,37 @@ class PrimitivePanelPyQtGraph(QWidget):
                     
                     print(f"\n[INSERT EVENT] Ctrl+Shift+click at time={clicked_time:.2f}")
                     
-                    # Find nearest event
+                    # Insert new event at calculated position
                     if self.events_data:
                         times = [e.time for e in self.events_data]
-                        nearest_idx = min(range(len(times)), key=lambda i: abs(times[i] - clicked_time))
-                        nearest_time = times[nearest_idx]
                         
-                        print(f"[INSERT EVENT] Nearest marker: index={nearest_idx}, time={nearest_time}")
+                        # Find the markers before and after clicked position
+                        markers_before = [(i, t) for i, t in enumerate(times) if t < clicked_time]
+                        markers_after = [(i, t) for i, t in enumerate(times) if t > clicked_time]
                         
-                        # Emit signal to insert event before this marker
-                        self.event_insert_requested.emit(nearest_idx)
+                        if not markers_before or not markers_after:
+                            # Can't insert before first or after last
+                            return
                         
-                        event.accept()
+                        # Get the previous marker (last one before click)
+                        prev_idx, prev_time = markers_before[-1]
+                        # Get the next marker (first one after click)
+                        next_idx, next_time = markers_after[0]
+                        
+                        # Calculate standard spacing by looking at the gap BEFORE the previous marker
+                        # This gives us the "expected" delta in this region
+                        if prev_idx > 0:
+                            standard_delta = prev_time - times[prev_idx - 1]
+                        else:
+                            # If previous is first event, use gap to next
+                            standard_delta = times[1] - times[0]
+                        
+                        # New event should be placed at prev_time + standard_delta
+                        insert_time = prev_time + standard_delta
+                        
+                        # Store insertion time for command to use
+                        self.pending_insert_time = insert_time
+                        self.event_insert_requested.emit(next_idx)
                         return
         
         # Handle shift+left-click for diagnostic markers
