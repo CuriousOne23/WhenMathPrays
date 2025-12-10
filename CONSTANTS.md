@@ -4,7 +4,7 @@ This is the **only** file in the entire repository that may contain numerical pa
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 3, 2025 (Final Simplification)
+Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,28 +32,35 @@ Last updated: December 3, 2025 (Final Simplification)
 
 ---
 
-## Core Canonical Parameters (December 2025 Final Simplification)
+## Core Canonical Parameters (Rev 3.2: December 2025)
 
-**REMOVED (Dec 3, 2025):** β, W_cap, c, τ_default, α (gates), σ_fast, σ_ent, η, ξ, λ  
-**RESTORED (Dec 3, 2025 evening):** ΔS (entropy drift) — constant leftward pull toward Ego axis  
-**Reason:** Simplified to "Love = γ_self position" — no L(t) calculation, no gates, no drift equation for γ_self0
+**Rev 3.2 Changes (Im-only depth scaling based on Grok consultation):**
+- **Fidelity asymmetry now scales by love depth (Im axis only)**, not fixed 25×
+- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
+- **Prevents explosions**: Only uses |Im|, not full |γ_self| (no Ego/We coupling)
+- **Natural range**: ±150i battlefield emerges naturally from scaling
+- **Formula**: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
+- **All other weights unchanged** from Rev 3
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
 | **w_v** | 0.8 | – | Visibility weight (real axis contribution) | Default, tunable |
 | **w_r** | 1.0 | – | Resonance weight (imaginary axis) | Default, tunable |
-| **w_f** | 1.2 | – | Fidelity weight (imaginary axis, strongest) | Default, tunable |
+| **w_f** | 1.2 | – | Positive fidelity weight (imaginary axis) | Default, tunable |
+| **fidelity_scaling_factor** | 0.12 | – | Negative fidelity depth scaling coefficient | LOCKED |
+| **fidelity_epsilon (ε)** | 5.0 | – | Collapse prevention floor for Im depth | LOCKED |
 | **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
 | **w_{S,R}** | 0.5 | – | Silence/presence (real axis contribution) | Default, tunable |
 | **w_{S,I}** | 0.5 | – | Silence/presence (imaginary axis contribution) | Default, tunable |
-| **w_neg** | 1.5 | – | Negative asymmetry multiplier (negatives hurt 50% more) | LOCKED |
-| **ε** | 1.0 | – | Collapse prevention threshold for hybrid asymmetry | LOCKED |
 | **ΔS** (delS) | 0.02 | time⁻¹ | Entropy drift rate (constant leftward pull per time unit) | Default, tunable |
+| **γ_attractor** | -8+0j | – | Entropy target position (ego axis) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
+
+**Removed in Rev 3.2:** w_f_neg (fixed 25×) — replaced with Im-only depth scaling
 
 ---
 
-## Component-Wise Update Equation
+## Component-Wise Update Equation (Rev 3.2)
 
 $$
 \boxed{
@@ -65,8 +72,8 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
 $$
 
 **Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance.
-- **ΔS = 0.02** (default): Entropy drift magnitude per time unit
-- **γ_attractor = -8+0j** (default): Target position for entropy pull (far left Ego axis)
+- **ΔS = 0.05** (default): Entropy drift magnitude per time unit
+- **γ_attractor = -20+0j** (default): Target position for entropy pull (ego-neutral zone)
 - **Δt**: Time elapsed between events (in days/weeks/months per CSV time_unit)
 - **entropy_per_event=False** (default): Drift scales with time (realistic decay)
 - **entropy_per_event=True** (override): Fixed ΔS magnitude per event regardless of time spacing
@@ -85,16 +92,27 @@ $$
 
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
 
-**Hybrid asymmetry for negatives:**
+**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
 $$
-p' = \begin{cases}
-p \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } p < 0 \\
-p & \text{if } p \geq 0
+f' = \begin{cases}
+f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
+w_f \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
-**Where:** |γ_self(n)| = √(Re² + Im²) is the complex magnitude.
+**Where:** 
+- Im = imaginary component of γ_self (love/hate axis)
+- 0.12 = scaling factor (negatives scale with love depth)
+- 5.0 = ε (collapse prevention floor, even at origin betrayal stings)
+- w_f = 1.2 (positive healing rate)
+
+**Key behaviors:**
+- **At origin (0i)**: f=-1 → -0.6i, f=-10 → -6i (minimum sting)
+- **Early dating (20i)**: f=-1 → -2.4i, f=-10 → -24i (fragile)
+- **Deep love (150i)**: f=-1 → -18i, f=-10 → -180i (can reach battlefield)
+- **Saint/Hachikō peak (250i)**: f=-1 → -30i, f=-10 → -300i (full range)
+- **Psychology**: "The deeper the love, the more betrayal can scar" — but only using Im (love depth), not Ego/We coupling
 
 ---
 

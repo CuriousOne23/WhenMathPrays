@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 import numpy as np
 from .draggable_point import DraggablePoint
+from .canvas_utils import force_canvas_draw
 from ..primitives import PRIMITIVE_NAMES, PRIMITIVE_LABELS, PRIMITIVE_COLORS
 
 
@@ -31,6 +32,7 @@ class PrimitivePanel:
         self.on_lock_toggle = on_lock_toggle
         self.on_primitive_preview = on_primitive_preview
         self.on_primitive_reset = on_primitive_reset
+        self.on_insert_event = None  # Will be set by controller
         self.layout = layout or {}  # Store layout config
 
         # Create subplots for each primitive
@@ -40,6 +42,7 @@ class PrimitivePanel:
         self.original_markers = {}  # {(event_idx, primitive): matplotlib artist} - static filled markers at baseline
         self.baseline_values = {}  # {(event_idx, primitive): float} - original CSV values
         self.marker_annotations = {}  # {(event_idx, primitive): Annotation} for numbered markers
+        self.insertion_lines = []  # Vertical dashed lines marking inserted events
 
         # Store manual x-axis limits for zoom
         self.manual_xlim = {}  # {prim: (xmin, xmax)}
@@ -68,7 +71,7 @@ class PrimitivePanel:
         # Create readout text display (positioned to the left of fidelity plot)
         f_ax = self.axes['f']
         gauge_x = self.layout.get('primitive_gauge_x', -0.25)
-        gauge_y = self.layout.get('primitive_gauge_y', 0.5)
+        gauge_y = self.layout.get('primitive_gauge_y', 0.35)  # Moved down from 0.5
         self.readout_text = f_ax.text(
             gauge_x, gauge_y, '',  # Use layout config
             transform=f_ax.transAxes,
@@ -96,6 +99,30 @@ class PrimitivePanel:
                 break
         
         if not clicked_prim:
+            return
+        
+        # Check for Shift+Click to insert event
+        # In matplotlib, modifier keys are in event.key when combined with click
+        # Shift modifier shows as 'shift' or the key includes 'shift+'
+        is_shift_click = False
+        if event.key:
+            # Check if 'shift' is in the key string
+            is_shift_click = 'shift' in event.key.lower()
+        
+        # Also check Qt modifiers as backup (PySide6)
+        if not is_shift_click and hasattr(event, 'guiEvent'):
+            try:
+                from PySide6.QtCore import Qt
+                gui_event = event.guiEvent
+                if hasattr(gui_event, 'modifiers'):
+                    is_shift_click = bool(gui_event.modifiers() & Qt.ShiftModifier)
+            except:
+                pass
+        
+        if is_shift_click and event.xdata:
+            # Trigger event insertion callback (rounding done by caller)
+            if hasattr(self, 'on_insert_event') and self.on_insert_event:
+                self.on_insert_event(event.xdata)
             return
         
         # Check if clicking on a draggable point (if so, let the drag handler take over)
@@ -142,11 +169,10 @@ class PrimitivePanel:
         
         # Always cancel all previews before updating
         self.cancel_all_previews()
-        # Debug: print modified_primitives
-        # Always fetch latest model reference from controller
+        # Get modified_primitives from model
         model = getattr(self.controller, 'model', None) if hasattr(self, 'controller') else None
         mod_prims = getattr(model, 'modified_primitives', {}) if model else {}
-        print(f"[DEBUG] modified_primitives: {mod_prims}")
+        
         for prim in self.PRIMITIVE_NAMES:
             times = [event.time for event in events]
             values = [event.markers[prim].value for event in events]
@@ -179,7 +205,6 @@ class PrimitivePanel:
                 marker = event.markers[prim]
                 # Determine if marker has been edited
                 edited = event_idx in mod_prims and prim in mod_prims.get(event_idx, set())
-                print(f"[DEBUG] event_idx={event_idx}, prim={prim}, edited={edited}, modified_primitives={mod_prims}")
                 
                 # If edited, show original marker (filled, non-draggable) at baseline position
                 if edited:
@@ -190,12 +215,11 @@ class PrimitivePanel:
                             color=self.PRIMITIVE_COLORS[prim],
                             markerfacecolor=self.PRIMITIVE_COLORS[prim],
                             markeredgecolor=self.PRIMITIVE_COLORS[prim],
-                            markersize=7,
-                            alpha=0.5,  # Semi-transparent to show it's the "old" position
-                            zorder=5  # Below the draggable points
-                        )
-                        self.original_markers[(event_idx, prim)] = original_marker
-                        print(f"[DEBUG] Original marker: event={event_idx}, prim={prim}, baseline={baseline_val}")
+                        markersize=7,
+                        alpha=0.5,  # Semi-transparent to show it's the "old" position
+                        zorder=5  # Below the draggable points
+                    )
+                    self.original_markers[(event_idx, prim)] = original_marker
                 
                 # Create DraggablePoint for current (possibly modified) position
                 baseline_val = self.baseline_values.get((event_idx, prim), marker.value)
@@ -220,19 +244,49 @@ class PrimitivePanel:
                     dp.point.set_markerfacecolor('none')
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
                     dp.point.set_markeredgewidth(2)
-                    print(f"[DEBUG] Hollow marker: event={event_idx}, prim={prim}, value={marker.value}")
                 else:
                     # Show filled marker for unmodified points
                     dp.point.set_markerfacecolor(self.PRIMITIVE_COLORS[prim])
                     dp.point.set_markeredgecolor(self.PRIMITIVE_COLORS[prim])
-                    print(f"[DEBUG] Filled marker: event={event_idx}, prim={prim}, value={marker.value}")
                 
                 # Ensure preview point is hidden (it's only shown during active dragging)
                 dp.preview_point.set_visible(False)
-                print(f"[DEBUG] Preview marker visible: {dp.preview_point.get_visible()} at ({dp.x}, {dp.y})")
                 
                 self.draggable_points[(event_idx, prim)] = dp
+        
+        # Draw vertical dashed lines for inserted events (all primitives at 0)
+        self._update_insertion_lines(events)
+        
+        # Use non-blocking draw
         self.fig.canvas.draw_idle()
+    
+    def _update_insertion_lines(self, events):
+        """
+        Draw vertical dashed lines for inserted events (where all primitives are 0).
+        
+        Args:
+            events: List of Event objects
+        """
+        # Remove old insertion lines
+        for line in self.insertion_lines:
+            line.remove()
+        self.insertion_lines.clear()
+        
+        # Find events where all primitives are 0 (inserted events)
+        for event_idx, event in enumerate(events):
+            all_zero = all(abs(event.markers[prim].value) < 0.001 for prim in self.PRIMITIVE_NAMES)
+            if all_zero and event_idx > 0 and event_idx < len(events) - 1:  # Don't mark first/last
+                # Draw vertical dashed line across all primitive plots
+                for prim in self.PRIMITIVE_NAMES:
+                    line = self.axes[prim].axvline(
+                        x=event.time,
+                        color='gray',
+                        linestyle='--',
+                        linewidth=1.5,
+                        alpha=0.6,
+                        zorder=1  # Behind markers
+                    )
+                    self.insertion_lines.append(line)
     
     def update_markers(self, marked_data):
         """
@@ -306,8 +360,8 @@ class PrimitivePanel:
                             )
                             self.marker_annotations[key] = ann
                             print(f"    Created annotation {key}")
-        print(f"=== END UPDATE_MARKERS ===\n")
-        self.fig.canvas.draw_idle()
+        print(f"=== END UPDATE_MARKERS ===")
+        force_canvas_draw(self.fig.canvas)
     
     def _on_point_dragged(self, event_index, primitive, new_value):
         """Handle point drag completion (release)."""
@@ -319,6 +373,9 @@ class PrimitivePanel:
     
     def _on_point_preview(self, event_index, primitive, new_value):
         """Handle point drag preview (during motion)."""
+        # Update readout display during drag
+        self._update_readout(event_index, primitive, new_value)
+        
         if self.on_primitive_preview:
             self.on_primitive_preview(event_index, primitive, new_value)
         # Update the curve in real time to pass through the hollow marker
@@ -331,7 +388,7 @@ class PrimitivePanel:
                 ydata = list(ydata)
                 ydata[event_index] = new_value
                 line.set_data(xdata, ydata)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def _on_point_reset(self, event_index, primitive):
         """Handle double-click reset."""
@@ -339,7 +396,7 @@ class PrimitivePanel:
             self.on_primitive_reset(event_index, primitive)
         # After reset, hide all preview markers and refresh UI
         self.cancel_all_previews()
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def _update_readout(self, event_index, primitive, value):
         """Update the readout display with marker ID and value.
@@ -353,13 +410,13 @@ class PrimitivePanel:
             marker_id = f"{event_index}{primitive}"
             self.readout_text.set_text(f"{marker_id}\n{value:.2f}")
             self.readout_text.set_visible(True)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def clear_readout(self):
         """Clear the readout display."""
         if self.readout_text:
             self.readout_text.set_visible(False)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
     
     def commit_all_previews(self):
         """Commit all preview points."""
@@ -392,27 +449,71 @@ class PrimitivePanel:
             if key in self.draggable_points:
                 self.draggable_points[key].update_lock_status(locked)
     
-    def zoom_in(self, factor=0.8):
-        """Zoom in on all primitive subplots (x-axis only)."""
-        for prim, ax in self.axes.items():
-            xlim = self.manual_xlim.get(prim, ax.get_xlim())
-            x_center = (xlim[0] + xlim[1]) / 2
-            x_range = (xlim[1] - xlim[0]) * factor / 2
-            new_xlim = (x_center - x_range, x_center + x_range)
-            ax.set_xlim(new_xlim)
-            self.manual_xlim[prim] = new_xlim
-        self.fig.canvas.draw_idle()
+    def zoom_in(self, factor=0.8, target_axes=None):
+        """Zoom in on specific primitive subplot or all if target_axes not specified.
+        
+        Args:
+            factor: Zoom factor (0.8 = zoom in to 80% of current range)
+            target_axes: Specific matplotlib axes to zoom, or None for all
+        """
+        if target_axes:
+            # Zoom only the specific subplot
+            for prim, ax in self.axes.items():
+                if ax == target_axes:
+                    xlim = self.manual_xlim.get(prim, ax.get_xlim())
+                    x_center = (xlim[0] + xlim[1]) / 2
+                    x_range = (xlim[1] - xlim[0]) * factor / 2
+                    new_xlim = (x_center - x_range, x_center + x_range)
+                    ax.set_xlim(new_xlim)
+                    self.manual_xlim[prim] = new_xlim
+                    break
+        else:
+            # Zoom all subplots (legacy behavior)
+            for prim, ax in self.axes.items():
+                xlim = self.manual_xlim.get(prim, ax.get_xlim())
+                x_center = (xlim[0] + xlim[1]) / 2
+                x_range = (xlim[1] - xlim[0]) * factor / 2
+                new_xlim = (x_center - x_range, x_center + x_range)
+                ax.set_xlim(new_xlim)
+                self.manual_xlim[prim] = new_xlim
+        force_canvas_draw(self.fig.canvas)
     
-    def zoom_out(self, factor=1.2):
-        """Zoom out on all primitive subplots (x-axis only)."""
-        for prim, ax in self.axes.items():
-            xlim = self.manual_xlim.get(prim, ax.get_xlim())
-            x_center = (xlim[0] + xlim[1]) / 2
-            x_range = (xlim[1] - xlim[0]) * factor / 2
-            new_xlim = (x_center - x_range, x_center + x_range)
-            ax.set_xlim(new_xlim)
-            self.manual_xlim[prim] = new_xlim
-        self.fig.canvas.draw_idle()
+    def zoom_out(self, factor=1.2, target_axes=None):
+        """Zoom out on specific primitive subplot or all if target_axes not specified.
+        
+        Args:
+            factor: Zoom factor (1.2 = zoom out to 120% of current range)
+            target_axes: Specific matplotlib axes to zoom, or None for all
+        """
+        if target_axes:
+            # Zoom only the specific subplot
+            for prim, ax in self.axes.items():
+                if ax == target_axes:
+                    # Initialize manual_xlim if not set (first zoom_out)
+                    if prim not in self.manual_xlim:
+                        self.manual_xlim[prim] = ax.get_xlim()
+                    
+                    xlim = self.manual_xlim[prim]
+                    x_center = (xlim[0] + xlim[1]) / 2
+                    x_range = (xlim[1] - xlim[0]) * factor / 2
+                    new_xlim = (x_center - x_range, x_center + x_range)
+                    ax.set_xlim(new_xlim)
+                    self.manual_xlim[prim] = new_xlim
+                    break
+        else:
+            # Zoom all subplots (legacy behavior)
+            for prim, ax in self.axes.items():
+                # Initialize manual_xlim if not set (first zoom_out)
+                if prim not in self.manual_xlim:
+                    self.manual_xlim[prim] = ax.get_xlim()
+                
+                xlim = self.manual_xlim[prim]
+                x_center = (xlim[0] + xlim[1]) / 2
+                x_range = (xlim[1] - xlim[0]) * factor / 2
+                new_xlim = (x_center - x_range, x_center + x_range)
+                ax.set_xlim(new_xlim)
+                self.manual_xlim[prim] = new_xlim
+        force_canvas_draw(self.fig.canvas)
     
     def reset_view(self):
         """Reset zoom to auto-fit all data."""
@@ -441,7 +542,7 @@ class PrimitivePanel:
                     print(f"  {prim}: x=[{min(xdata):.1f}, {max(xdata):.1f}]")
         
         print("=== END RESET ===")
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def save_plot(self, filepath: str):
         """Save the primitive panel plots to a PNG file.
@@ -487,3 +588,76 @@ class PrimitivePanel:
         save_fig.tight_layout()
         save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
         plt.close(save_fig)
+    
+    # === Phase 2: Incremental Update Methods ===
+    
+    def update_marker(self, event_idx: int, prim: str, value: float, is_modified: bool):
+        """
+        Update single marker incrementally (Phase 2 refactor).
+        
+        Args:
+            event_idx: Event index
+            prim: Primitive name
+            value: New value to display
+            is_modified: Whether to show as modified from baseline
+        """
+        # Get the marker object
+        marker_key = (event_idx, prim)
+        if marker_key not in self.draggable_points:
+            print(f"[WARNING] Marker {marker_key} not found in draggable_points")
+            return
+        
+        marker = self.draggable_points[marker_key]
+        
+        # Update position
+        marker.y = value
+        marker.original_y = value
+        marker.point.set_ydata([value])
+        
+        # Update the line plot data at this event index
+        if prim in self.lines:
+            line = self.lines[prim]
+            xdata, ydata = line.get_data()
+            if event_idx < len(ydata):
+                ydata_list = list(ydata)
+                ydata_list[event_idx] = value
+                line.set_ydata(ydata_list)
+        
+        # Update modified state visual
+        marker.set_modified(is_modified)
+        
+        # Hide preview point if visible
+        if marker.preview_point.get_visible():
+            marker.preview_point.set_visible(False)
+        
+        # Efficient partial redraw
+        force_canvas_draw(self.fig.canvas)
+    
+    def clear_all_modified(self):
+        """
+        Clear modified visual state from all markers (after save).
+        """
+        for marker in self.draggable_points.values():
+            marker.set_modified(False)
+        
+        force_canvas_draw(self.fig.canvas)
+    
+    def remove_marker_label(self, event_idx: int, prim: str):
+        """
+        Remove label annotation for a specific marker immediately.
+        
+        Args:
+            event_idx: Event index
+            prim: Primitive name
+        """
+        marker_key = (event_idx, prim)
+        if marker_key in self.marker_annotations:
+            ann = self.marker_annotations[marker_key]
+            try:
+                if ann.axes is not None:
+                    ann.remove()
+                    print(f"[DEBUG] Removed label annotation {marker_key}")
+            except Exception as e:
+                print(f"[WARNING] Error removing label annotation {marker_key}: {e}")
+            del self.marker_annotations[marker_key]
+            force_canvas_draw(self.fig.canvas)

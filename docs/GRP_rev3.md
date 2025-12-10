@@ -1,10 +1,32 @@
 # GRP – Gamma Relational Persona (Revision 3)
 **Valence-neutral, 2-D, empirically extensible framework for modelling love, hate, and all relational intensities between two minds (M1 ↔ M2)**
 
-Status: **December 2025 Final Simplification**  
+Status: **ACTIVE (Rev 3.2 refinement - December 2025)**  
 Stewardship: Open to rigorous, inspectable contributions  
-Current version: December 4, 2025 (Love = γ_self position paradigm)  
-Previous versions: [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
+Current version: December 10, 2025 (Rev 3.2: Im-only depth scaling)  
+Previous versions: Rev 3.1 (December 9, 2025), Rev 3 (December 4, 2025), [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
+
+---
+
+## 📋 REV 3.2 UPDATE (December 10, 2025)
+
+**Im-only depth scaling replaces fixed 25× asymmetry (Grok's "Goldilocks solution").**
+
+**Problem with Rev 3.1:** Fixed 25× scaling lost the psychological truth that deeper love makes you more vulnerable to betrayal. Same f=-1 caused same -30i drop whether at 20i or 150i.
+
+**Rev 3.2 solution:** Im-only depth-scaled asymmetry:
+- Rev 3.1: f' = 25.0 × f for negatives (fixed)
+- Rev 3.2: f' = f × (0.12 × max(|Im|, 5.0)) for negatives (depth-scaled)
+- Restores "the deeper the love, the more betrayal can scar"
+- Only uses Im (love depth), not full |γ| (prevents Ego/We coupling)
+- Natural ±150i battlefield range emerges from scaling
+
+**Examples:**
+- At 20i: f=-1 → -2.4i (fragile early bond)
+- At 150i: f=-1 → -18i (deep love can be wounded)
+- At 250i: f=-10 → -300i (can reach -150i floor)
+
+**All other parameters unchanged from Rev 3.**
 
 ---
 
@@ -16,7 +38,7 @@ Previous versions: [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UR
 
 ---
 
-## 2. The Core Equation (Love = Position)
+## 2. The Core Equation (Love = Position) [REV 3.2 - ACTIVE]
 
 $$
 \boxed{
@@ -27,7 +49,19 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
 }
 $$
 
-**That's it. No L(t) calculation. No W(t) gates. No separate memory variables.**
+**Rev 3.2 refinement:** Equation unchanged, but f' now uses Im-only depth scaling: f' = f × (0.12 × max(|Im|, 5.0)) for negatives instead of fixed 25×.
+
+**Note on Formulation:**  
+This discrete recurrence is the computational implementation of a continuous-time damped oscillator system. The underlying dynamics can be expressed as:
+
+$$\frac{d\gamma_{\text{self}}}{dt} = -\zeta\omega(\gamma_{\text{self}} - \gamma_{\text{attractor}}(t)) + \mathbf{p}(t)$$
+
+where $\mathbf{p}(t)$ represents the primitive-driven forcing function (visibility, resonance, fidelity, altruism, soul). The discrete update above is an Euler integration of this continuous equation. This dual representation allows:
+- **Theoretical analysis** via established dynamical systems theory (stability, phase portraits, Lyapunov functions)
+- **Practical implementation** via straightforward position updates
+- **Academic credibility** by grounding the model in physics-inspired frameworks (Langevin dynamics, damped oscillators)
+
+For rigorous mathematical defense, see [gamma_self_defense.md](gamma_self_defense.md).
 
 **Note on Formulation:**  
 This discrete recurrence is the computational implementation of a continuous-time damped oscillator system. The underlying dynamics can be expressed as:

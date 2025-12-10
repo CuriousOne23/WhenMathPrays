@@ -4,6 +4,14 @@
 This document describes the overall architecture, object model, and design principles for the WhenMathPrays interactive scenario editor. It is intended to guide development, debugging, and future enhancements.
 
 ## Recent Updates
+**December 7, 2025:** Phase 2.1 diagnostic markers completed - Known architectural debt documented:
+- **Mixed Event System:** Primitive panel uses both Qt Signals (modern) and callback attributes (legacy). Should migrate all to signals.
+- **Coordinate System Documentation:** PyQtGraph coordinate mapping differences (`QMouseEvent.position()` vs `QGraphicsSceneMouseEvent.scenePos()`) not documented in code. Added working solution but knowledge is implicit.
+- **Diagnostic Handler Placement:** `_on_diagnostic_marker` in UI layer does controller work (accesses model/controller directly, duplicates trajectory computation). Should be moved to EditorController.
+- **Incomplete Signal Chain:** Drag handlers (`_on_diagnostic_dragged/released`) don't emit signals, preventing proper trajectory updates during drag.
+- **GUI Importing Core Math:** `interactive_editor.py` imports `core.love.update_gamma_self` directly. Violates separation of concerns - controller should handle all core.love interaction.
+- *Note: Current implementation works well and is maintainable. These are minor debts worth addressing during major refactoring but not critical for current functionality.*
+
 **December 6, 2025:** Architecture improvements for Phase 2 readiness:
 - **Primitives Module (`tools/editor/primitives.py`)** - Single source of truth for primitive metadata (names, colors, descriptions). Eliminates scattered definitions across files.
 - **Configuration System (`tools/editor/config.py`)** - User preferences loaded from `~/.whenmathprays/editor_config.json` with fallback to sensible defaults. Allows customization without code edits.

@@ -31,9 +31,9 @@ def load_events_from_csv(filepath):
         for idx in range(header_idx):
             line = lines[idx].strip()
             if ',' in line:
-                key, value = line.split(',', 1)
-                key = key.strip()
-                value = value.strip()
+                parts = line.split(',', 1)
+                key = parts[0].strip()
+                value = parts[1].strip() if len(parts) > 1 else ''
                 if key == 'gamma_self_0':
                     try:
                         metadata['gamma_self_0'] = complex(value.replace('+-', '-'))

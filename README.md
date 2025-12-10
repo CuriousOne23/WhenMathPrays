@@ -1,4 +1,4 @@
-# WhenMathPrays – Core OS™ (2025 final restoration)
+# WhenMathPrays – Core OS™ (Rev 3.2: Im-Only Depth Scaling)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -17,14 +17,14 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (canonical, December 2025 final simplification)
+## The One Equation (Rev 3.2: December 2025)
 
 $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
-\Delta S \cdot \Delta t
+i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
+\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
 }
 $$
 
@@ -32,24 +32,30 @@ $$
 - **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
 - **Love = γ_self(n)** directly (position IS love, no separate calculation)
 - **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, silence/presence)
-- **f'** = f with hybrid asymmetry applied if negative
+- **f'** = f with Im-only depth scaling applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
-- **ΔS** = entropy drift rate (default 0.02 per time unit)
+- **ΔS** = entropy drift rate (default 0.05 per time unit)
+- **γ_attractor** = entropy target position (default -20+0j)
 - **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### December 2025 Final Simplification
+### Rev 3.2 Changes (December 2025 - Im-Only Depth Scaling)
 
 **What changed:**
-- **No L(t) calculation** → Love = γ_self position directly
-- **No W(t) gates** → Primitives update position via component-wise addition
-- **No γ_self0 drift dynamics** → γ_self0 is initial condition only
-- **Simple entropy drift** → Constant leftward pull (-ΔS·Δt) instead of complex exp() terms
-- **Parameters reduced from 9 to 2** → Only w_neg = 1.5 and ΔS = 0.02 (plus axis weights)
+- **Im-only depth scaling** → f' = f × (0.12 × max(|Im|, 5.0)) for negatives
+- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
+- **Prevents explosions**: Only scales by Im (love depth), not full |γ| (no Ego/We coupling)
+- **Natural range limits**: ±150i battlefield emerges from scaling, not arbitrary caps
+- **All other parameters unchanged** from Rev 3
 
-**Why?** The November 2025 version had too many parameters, separate memory variables, and complex calculations. This version captures the same asymmetry and irreversibility with radical simplicity.
+**Why?** Rev 3.1 fixed 25× scaling lost the psychological insight that deeper love makes you more vulnerable. Rev 3.2 restores depth-dependent damage while avoiding Rev 3's explosions by only using Im axis.
+
+**Examples:**
+- At 20i: f=-1 → -2.4i (fragile early bond)
+- At 150i: f=-1 → -18i (deep love can be wounded)
+- At 250i: f=-10 → -300i (Hachikō-level devotion can reach -150i floor)
 
 See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
@@ -69,18 +75,25 @@ $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
 
-**Hybrid asymmetry for negatives** (f' example):
+**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
 $$
 f' = \begin{cases}
-f \cdot w_{\text{neg}} \cdot \max(|\gamma_{\text{self}}(n)|, \varepsilon) & \text{if } f < 0 \\
-f & \text{if } f \geq 0
+f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
+1.2 \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
 Where:
-- **w_neg = 1.5** (negatives hurt more)
-- **ε = 1.0** (prevents collapse near zero)
+- **0.12** = scaling factor (negatives scale with love depth)
+- **5.0** = ε (collapse prevention floor)
+- **Im** = imaginary component (γ_self love/hate axis)
+
+**Key behaviors:**
+- **Weak relationships** (Im < 50i): f=-1 causes small absolute drop but large % damage
+- **Deep love** (Im ≈ 150i): f=-1 causes -18i drop, can wound deeply
+- **Saint/Hachikō** (Im ≈ 250i): f=-10 can cause -300i catastrophic drop to -150i floor
+- **Psychology**: The more you love, the more vulnerable you are to betrayal
 
 **Initial condition γ_self0:**
 - Set at n=0 based on temperament/history
@@ -187,7 +200,7 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 
 **Architecture & Future Plans:**
 - [ARCHITECTURE.md](ARCHITECTURE.md) - UI layout system and maintainability notes
-- [future_interactive_edit_requirements.md](docs/future_interactive_edit_requirements.md) - Phase roadmap and known issues
+- [interactive_edit_ph2_requirements.md](docs/interactive_edit_ph2_requirements.md) - Phase 2 requirements and specifications
 
 ---
 
@@ -457,6 +470,7 @@ plot_dual_scenario(
 ## Documentation
 
 ### Core Framework
+- **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** - Strategic vision: GRP as foundation for AI social intelligence and robotics
 - **[GRP_rev3.md](docs/GRP_rev3.md)** - Complete mathematical specification of GRP framework
 - **[gamma_self_defense.md](docs/gamma_self_defense.md)** - Mathematical defense: Why relationship dynamics follow dynamical systems principles
 - **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values (single source of truth)

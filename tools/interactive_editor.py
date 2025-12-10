@@ -11,237 +11,222 @@ Usage:
 Example:
     python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 
-Layout System:
-    The UI layout is controlled by the LAYOUT dictionary in InteractiveEditor class.
-    All positioning constants are defined there for easy adjustment:
-    
-    - margin_left: Left edge space (for primitive readout gauge)
-    - margin_right: Right edge space
-    - margin_top: Top edge space (for Save button area)
-    - margin_bottom: Bottom edge space
-    - panel_gap: Horizontal space between primitive and gamma_self panels
-    - subplot_gap: Vertical space between primitive subplots
-    - save_button_*: Position and size of Save button
-    - save_info_*: Position of instruction text
-    
-    To adjust layout:
-    1. Modify values in LAYOUT dictionary
-    2. All derived positions update automatically
-    3. No need to hunt for magic numbers throughout the code
+Phase 2 Update:
+    Migrated to PySide6 for professional UI framework with native
+    toolbars, dialogs, and undo/redo support.
 """
 
 import sys
 import argparse
 from pathlib import Path
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from tkinter import filedialog
-import tkinter as tk
+
+# PySide6 imports
+from PySide6.QtWidgets import QApplication, QDockWidget
+from PySide6.QtCore import Qt
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
-from tools.editor.views.primitive_panel import PrimitivePanel
-from tools.editor.views.trajectory_panel import TrajectoryPanel
+from tools.editor.views.primitive_panel_pyqtgraph import PrimitivePanelPyQtGraph
+from tools.editor.views.trajectory_panel_pyqtgraph import TrajectoryPanelPyQtGraph
 from tools.editor.config import get_config
+from tools.editor.qt_window import EditorMainWindow
+from tools.editor.widgets import GammaSelf0Editor
+from tools.editor.constants import is_inserted_event
 
 
 class InteractiveEditor:
     """Main application class for interactive scenario editor."""
     
-    # Layout constants for easy adjustment
-    LAYOUT = {
-        # Main margins (figure edges)
-        'margin_left': 0.14,      # Space for primitive readout gauge
-        'margin_right': 0.02,     # Right edge margin
-        'margin_top': 0.08,       # Space for Save button and title
-        'margin_bottom': 0.08,    # Bottom edge margin
-        
-        # Panel spacing
-        'panel_gap': 0.35,        # Horizontal gap between primitive and gamma_self panels
-        'subplot_gap': 0.3,       # Vertical gap between primitive subplots
-        
-        # Primitive readout gauge (in axes transform coordinates, relative to fidelity plot)
-        'primitive_gauge_x': -0.18,  # Negative = left of plot, 0 = left edge, 1 = right edge
-        'primitive_gauge_y': 0.5,    # 0 = bottom, 0.5 = middle, 1 = top
-        
-        # Trajectory readout (in axes transform coordinates, relative to gamma_self plot)
-        'trajectory_readout_x': -0.15,  # Position left of Y axis
-        'trajectory_readout_y': 0.5,    # Middle vertically
-        
-        # Header elements (in figure coordinates, 0-1)
-        'save_button_left': 0.16,     # Left side, indented from primitive left edge
-        'save_button_bottom': 0.96,
-        'save_button_width': 0.06,
-        'save_button_height': 0.035,
-        'save_info_x': 0.92,          # Position of instruction text (will be calculated relative to button)
-        'save_info_y': 0.965,
-    }
-    
-    def __init__(self, csv_file: str):
+    def __init__(self, csv_file: str, qt_app: QApplication):
         """
         Initialize interactive editor.
         
         Args:
             csv_file: Path to CSV file to load
+            qt_app: QApplication instance
         """
         self.csv_file = Path(csv_file)
+        self.qt_app = qt_app
         
         # Load configuration (with fallback to defaults)
         config = get_config()
         self.LAYOUT = config.get_layout()
         
-        # Create matplotlib figure with 2-panel layout
-        self.fig = plt.figure(figsize=(14, 8))
-        self.fig.canvas.manager.set_window_title(
-            f'Interactive Scenario Editor - {self.csv_file.name}')
+        # Create Qt main window (Phase 2)
+        self.window = EditorMainWindow(self.csv_file)
         
-        # Create grid layout: 5 rows (primitives) x 2 columns
-        # Left column: Primitives (5 subplots stacked)
-        # Right column: Trajectory (spans all 5 rows)
-        gs = GridSpec(
-            5, 2, 
-            figure=self.fig, 
-            hspace=self.LAYOUT['subplot_gap'], 
-            wspace=self.LAYOUT['panel_gap'],
-            left=self.LAYOUT['margin_left'], 
-            right=1.0 - self.LAYOUT['margin_right'], 
-            top=1.0 - self.LAYOUT['margin_top'], 
-            bottom=self.LAYOUT['margin_bottom']
-        )
+        # Create pure PyQtGraph layout (both panels)
+        from PySide6.QtWidgets import QWidget, QHBoxLayout
+        
+        # Container widget for layout
+        central_widget = QWidget()
+        layout = QHBoxLayout(central_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(30)  # Spacing between panels
+        
+        # Initialize PyQtGraph primitive panel
+        self.primitive_panel = PrimitivePanelPyQtGraph()
+        self.primitive_panel.setMaximumWidth(600)  # Constrain primitive panel width
+        layout.addWidget(self.primitive_panel, stretch=2)
+        
+        # Connect signals from primitive panel
+        self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
+        self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
+        self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
+        self.primitive_panel.event_insert_requested.connect(self._on_event_insert_requested)
+        
+        # Phase 2 refactoring: Connect new signals (replacing callbacks)
+        self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
+        self.primitive_panel.primitive_reset_requested.connect(self._on_primitive_reset)
+        
+        # Phase 2 refactoring: Removed callback assignments (now using signals above)
+        # self.primitive_panel.on_primitive_preview = self._on_primitive_preview
+        # self.primitive_panel.on_primitive_reset = self._on_primitive_reset
+        
+        # Initialize PyQtGraph trajectory panel
+        self.trajectory_panel = TrajectoryPanelPyQtGraph()
+        layout.addWidget(self.trajectory_panel, stretch=3)  # Larger stretch for trajectory
+        
+        # Set central widget
+        self.window.setCentralWidget(central_widget)
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
 
-        # Initialize views (pass structured callbacks)
-        self.primitive_panel = PrimitivePanel(
-            fig=self.fig,
-            grid_spec=gs[:, 0],
-            on_primitive_changed=self._on_primitive_changed,
-            on_lock_toggle=self._on_lock_toggle,
-            on_primitive_preview=self._on_primitive_preview,
-            on_primitive_reset=self._on_primitive_reset,
-            layout=self.LAYOUT  # Pass layout config
-        )
-
-        self.trajectory_panel = TrajectoryPanel(
-            fig=self.fig,
-            grid_spec=gs[:, 1],
-            layout=self.LAYOUT  # Pass layout config
-        )
+        # Initialize trajectory panel - PyQtGraph for performance and clean events
+        # (Already created above in layout)
 
         # Initialize controller (structured)
         self.controller = EditorController(
             model=self.model,
             primitive_panel=self.primitive_panel,
-            trajectory_panel=self.trajectory_panel
+            trajectory_panel=self.trajectory_panel,
+            undo_stack=self.window.undo_stack
         )
-
-        # Add toolbar buttons
-        self._setup_toolbar()
+        
+        # Disable Shift+Click insertion (now using explicit time inputs)
+        # self.primitive_panel.on_insert_event = self._on_insert_event
 
         # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.csv_file))
-
-        # Connect keyboard shortcuts
-        self.fig.canvas.mpl_connect('key_press_event', self._on_key_press)
         
-        # Disable the toolbar's save button (we have our own)
-        self._disable_toolbar_save_button()
-    
-    def _disable_toolbar_save_button(self):
-        """Disable the matplotlib toolbar's save button."""
-        toolbar = self.fig.canvas.toolbar
-        if toolbar:
-            # Remove save button from toolbar
-            try:
-                # For NavigationToolbar2Tk (Tkinter backend)
-                if hasattr(toolbar, '_buttons'):
-                    # Find and disable the save button
-                    for name, button in toolbar._buttons.items():
-                        if name == 'Save':
-                            button.config(state='disabled')
-                # Alternative: hide it completely by removing from toolbar
-                # This works for most backends
-                toolbar.children['!button3'].config(state='disabled')  # Save is typically the 3rd button
-            except:
-                # If disabling fails, just continue - not critical
-                pass
-    
-    def _setup_toolbar(self):
-        """Setup custom toolbar buttons."""
-        toolbar = self.fig.canvas.toolbar
-        if toolbar:
-            # Add Save button to the toolbar
-            import matplotlib
-            from matplotlib.widgets import Button
-            
-            # Place button in a new axes on the figure
-            save_ax = self.fig.add_axes([
-                self.LAYOUT['save_button_left'], 
-                self.LAYOUT['save_button_bottom'], 
-                self.LAYOUT['save_button_width'], 
-                self.LAYOUT['save_button_height']
-            ])
-            self._save_button = Button(save_ax, 'Save', color='#e0e0e0', hovercolor='#b0ffb0')
-            self._save_button.on_clicked(self._on_save_button)
-            save_ax._button = self._save_button  # Prevent garbage collection
-            
-            # Add informational text about modifier keys (to the right of Save button)
-            # Calculate position to the right of the button
-            info_x = self.LAYOUT['save_button_left'] + self.LAYOUT['save_button_width'] + 0.005
-            info_text = self.fig.text(
-                info_x, 
-                self.LAYOUT['save_info_y'], 
-                'Click=CSV | Shift=PNG | Ctrl=Both', 
-                fontsize=8, color='#666666', ha='left', va='center'  # Changed ha to 'left'
-            )
-            self._save_info_text = info_text
-
-    def _on_save_button(self, event):
-        """Handle Save button click: commit previews and save based on modifier keys.
+        # Create gamma_self_0 editor widget (Phase 2.1)
+        self.gamma_self0_editor = GammaSelf0Editor(self.model.gamma_self_0)
+        self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
+        self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
         
-        Click = CSV only
-        Shift+Click = PNG only
-        Ctrl+Click = Both CSV and PNG
+        # Create insertion options widget (Phase 2.1)
+        from tools.editor.widgets import InsertionOptionsWidget
+        self.insertion_options = InsertionOptionsWidget()
+        self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
+        
+        # Create gauge widgets
+        from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
+        from PySide6.QtCore import Qt
+        
+        # Primitive gauge
+        primitive_gauge_frame = QFrame()
+        primitive_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
+        primitive_gauge_layout = QVBoxLayout()
+        primitive_gauge_label = QLabel("Primitive Readout")
+        primitive_gauge_label.setAlignment(Qt.AlignCenter)
+        primitive_gauge_label.setStyleSheet("font-weight: bold; font-size: 10pt;")
+        self.primitive_gauge = QLabel("--")
+        self.primitive_gauge.setAlignment(Qt.AlignCenter)
+        self.primitive_gauge.setStyleSheet(
+            'background-color: lightyellow; '
+            'border: 1px solid black; '
+            'border-radius: 5px; '
+            'padding: 10px; '
+            'font-size: 12pt; '
+            'font-weight: bold;'
+        )
+        self.primitive_gauge.setMinimumHeight(60)
+        primitive_gauge_layout.addWidget(primitive_gauge_label)
+        primitive_gauge_layout.addWidget(self.primitive_gauge)
+        primitive_gauge_frame.setLayout(primitive_gauge_layout)
+        
+        # Gamma_self gauge
+        gamma_gauge_frame = QFrame()
+        gamma_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
+        gamma_gauge_layout = QVBoxLayout()
+        gamma_gauge_label = QLabel("γ_self Readout")
+        gamma_gauge_label.setAlignment(Qt.AlignCenter)
+        gamma_gauge_label.setStyleSheet("font-weight: bold; font-size: 10pt;")
+        self.gamma_self_gauge = QLabel("--")
+        self.gamma_self_gauge.setAlignment(Qt.AlignCenter)
+        self.gamma_self_gauge.setStyleSheet(
+            'background-color: lightblue; '
+            'border: 1px solid black; '
+            'border-radius: 5px; '
+            'padding: 10px; '
+            'font-size: 11pt; '
+            'font-weight: bold;'
+        )
+        self.gamma_self_gauge.setMinimumHeight(60)
+        gamma_gauge_layout.addWidget(gamma_gauge_label)
+        gamma_gauge_layout.addWidget(self.gamma_self_gauge)
+        gamma_gauge_frame.setLayout(gamma_gauge_layout)
+        
+        # Combine widgets in a container
+        dock_container = QWidget()
+        dock_layout = QVBoxLayout()
+        dock_layout.addWidget(self.gamma_self0_editor)
+        dock_layout.addWidget(primitive_gauge_frame)
+        dock_layout.addWidget(gamma_gauge_frame)
+        dock_layout.addWidget(self.insertion_options)
+        dock_layout.addStretch()
+        dock_container.setLayout(dock_layout)
+        
+        # Add as dock widget on the right
+        dock = QDockWidget("Editor Controls", self.window)
+        dock.setWidget(dock_container)
+        dock.setFeatures(QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable)
+        self.window.addDockWidget(Qt.RightDockWidgetArea, dock)
+        
+        # Connect primitive panel readout to Qt gauge (now that gauges exist)
+        self.primitive_panel.primitive_readout = self.primitive_gauge
+        
+        # Connect gamma_self gauge to trajectory panel click events (Qt Signal - clean!)
+        self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
+
+        # Set up callbacks AFTER panels and controller are initialized
+        self.window.save_callback = self._handle_save_request
+        self.window.cleanup_callback = self._handle_cleanup
+        
+        # Connect zoom toolbar buttons (will zoom both panels)
+        self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
+        self.window.zoom_out_action.triggered.connect(self._handle_zoom_out)
+        self.window.zoom_reset_action.triggered.connect(self._handle_zoom_reset)
+        
+        # Pan state
+        self.pan_active = False
+        self.pan_start = None
+        self.pan_axes = None
+    
+    def _update_gamma_self_gauge(self, x, y):
+        """Update gamma_self gauge in right panel."""
+        print(f"[GAUGE UPDATE] gamma_self gauge called with x={x}, y={y}")
+        if x is not None and y is not None:
+            self.gamma_self_gauge.setText(f"γ_self\n{x:.2f} + {y:.2f}i")
+        else:
+            self.gamma_self_gauge.setText("--")
+    
+    def _handle_save_request(self, options: dict):
         """
+        Handle save request from Qt toolbar.
+        
+        Args:
+            options: Dict with 'csv' and 'png' boolean flags
+        """
+        # Commit any preview changes first
         self.controller.commit_changes()
         
-        # Detect modifier keys from the mouse event
-        # In matplotlib button events, we need to check the canvas's current key modifiers
-        import matplotlib.backend_bases as backend_bases
-        guiEvent = event.guiEvent if hasattr(event, 'guiEvent') else None
-        
-        save_csv = True
-        save_png = False
-        
-        # Check for modifier keys
-        if guiEvent:
-            # Check if Shift or Ctrl is pressed
-            if hasattr(guiEvent, 'keysym'):
-                # Tkinter event
-                shift = bool(guiEvent.state & 0x0001)
-                ctrl = bool(guiEvent.state & 0x0004)
-            elif hasattr(guiEvent, 'modifiers'):
-                # Qt event
-                from matplotlib.backend_bases import MouseEvent
-                shift = 'shift' in str(guiEvent.modifiers()).lower()
-                ctrl = 'control' in str(guiEvent.modifiers()).lower() or 'ctrl' in str(guiEvent.modifiers()).lower()
-            else:
-                shift = False
-                ctrl = False
-            
-            if ctrl:
-                # Ctrl = Both
-                save_csv = True
-                save_png = True
-            elif shift:
-                # Shift = PNG only
-                save_csv = False
-                save_png = True
-            # else: default is CSV only
+        save_csv = options.get('csv', True)
+        save_png = options.get('png', False)
         
         # Determine if current file is the original (in data/ and does not end with _modified.csv)
         original = (
@@ -265,118 +250,63 @@ class InteractiveEditor:
         # Save CSV if requested
         if save_csv:
             self.controller.save_scenario(str(csv_path))
-            print(f"Saved CSV to: {csv_path}")
+            self.window.show_message(f"Saved CSV to: {csv_path}")
             # Update self.csv_file to point to the new file for future saves
             self.csv_file = csv_path
-            self.fig.canvas.manager.set_window_title(
-                f'Interactive Scenario Editor - {self.csv_file.name}')
+            self.window.update_window_title(self.csv_file)
         
         # Save PNG plots if requested (combined primitives + trajectory)
         if save_png:
             self._save_combined_plot(str(combined_png))
-            print(f"Saved combined plot to: {combined_png}")
+            self.window.show_message(f"Saved combined plot to: {combined_png}")
         
         if not save_csv and not save_png:
-            print("No save operation performed.")
+            self.window.show_message("No save operation performed", 'warning')
+    
+    # Matplotlib event handlers removed - PyQtGraph has built-in pan/zoom
+    # TODO: Add Qt-based keyboard shortcuts if needed
+    
+    def _handle_zoom_in(self):
+        """Handle zoom in toolbar button - zoom all panels uniformly."""
+        self.trajectory_panel.zoom_in()
+        self.controller.primitive_panel.zoom_in()
+        self.window.show_message("Zoomed in (all panels)")
+    
+    def _handle_zoom_out(self):
+        """Handle zoom out toolbar button - zoom all panels uniformly."""
+        self.controller.trajectory_panel.zoom_out()
+        self.controller.primitive_panel.zoom_out()
+        self.window.show_message("Zoomed out (all panels)")
+    
+    def _handle_zoom_reset(self):
+        """Handle reset view toolbar button - reset both panels."""
+        self.controller.trajectory_panel.reset_view()
+        self.controller.primitive_panel.reset_view()
+        self.controller.primitive_panel.clear_readout()
+        self.window.show_message("Reset all views")
+    
+    def _handle_cleanup(self):
+        """Handle application cleanup before exit."""
+        if hasattr(self, 'controller'):
+            self.controller.cleanup()
     
     def _save_combined_plot(self, filepath: str):
-        """Save a combined PNG with primitives on the left and trajectory on the right.
+        """
+        Save a combined PNG with primitives on the left and trajectory on the right.
         
         Args:
             filepath: Output PNG file path
+        
+        Note: PNG export is currently disabled during PyQtGraph migration.
+        Use PyQtGraph's built-in export or screenshot functionality instead.
         """
-        # Create a new figure with the same layout as the main figure
-        save_fig = plt.figure(figsize=(14, 8))
-        gs = GridSpec(5, 2, figure=save_fig, hspace=0.3, wspace=0.3,
-                     left=0.08, right=0.95, top=0.94, bottom=0.08)
+        self.window.show_message("PNG export temporarily unavailable (PyQtGraph migration in progress)", 'warning')
+        print(f"[PNG EXPORT] Skipped - needs reimplementation for PyQtGraph")
+        return
         
-        # Copy primitive plots (left column)
-        for i, prim in enumerate(self.primitive_panel.PRIMITIVE_NAMES):
-            ax = save_fig.add_subplot(gs[i, 0])
-            
-            # Copy the line data
-            if prim in self.primitive_panel.lines:
-                line = self.primitive_panel.lines[prim]
-                xdata, ydata = line.get_data()
-                ax.plot(xdata, ydata, color=self.primitive_panel.PRIMITIVE_COLORS[prim], linewidth=2)
-            
-            # Copy markers (both baseline and modified)
-            for (event_idx, p), marker in self.primitive_panel.original_markers.items():
-                if p == prim and marker.axes == self.primitive_panel.axes[prim]:
-                    mx, my = marker.get_data()
-                    ax.plot(mx, my, marker='o', color=self.primitive_panel.PRIMITIVE_COLORS[prim],
-                           markersize=8, markeredgewidth=1.5, markeredgecolor='black',
-                           linestyle='none')
-            
-            for (event_idx, p), dp in self.primitive_panel.draggable_points.items():
-                if p == prim:
-                    ax.plot([dp.x], [dp.y], marker='o', color=self.primitive_panel.PRIMITIVE_COLORS[prim],
-                           markersize=8, markerfacecolor='white', markeredgewidth=1.5,
-                           markeredgecolor=self.primitive_panel.PRIMITIVE_COLORS[prim], linestyle='none')
-            
-            # Copy axis properties
-            ax.set_ylabel(self.primitive_panel.PRIMITIVE_LABELS[prim], fontsize=10, fontweight='bold')
-            ax.set_ylim(self.primitive_panel.axes[prim].get_ylim())
-            ax.set_xlim(self.primitive_panel.axes[prim].get_xlim())
-            ax.grid(True, alpha=0.3)
-            
-            if i == 4:  # Last subplot
-                ax.set_xlabel('Time', fontsize=10)
-        
-        # Copy trajectory plot (right column, spanning all rows)
-        ax_traj = save_fig.add_subplot(gs[:, 1])
-        
-        # Copy the trajectory line
-        xdata, ydata = self.trajectory_panel.trajectory_line.get_data()
-        ax_traj.plot(xdata, ydata, color='#1f77b4', linewidth=2, alpha=0.7, label='γ_self trajectory')
-        
-        # Copy start/end markers
-        start_x, start_y = self.trajectory_panel.start_marker.get_data()
-        if len(start_x) > 0:
-            ax_traj.plot(start_x, start_y, marker='o', color='green', markersize=12,
-                   markeredgewidth=2, markeredgecolor='darkgreen', label='Start', linestyle='none')
-        
-        end_x, end_y = self.trajectory_panel.end_marker.get_data()
-        if len(end_x) > 0:
-            ax_traj.plot(end_x, end_y, marker='s', color='red', markersize=12,
-                   markeredgewidth=2, markeredgecolor='darkred', label='End', linestyle='none')
-        
-        # Copy event markers
-        event_x, event_y = self.trajectory_panel.event_markers.get_data()
-        if len(event_x) > 0:
-            ax_traj.plot(event_x, event_y, marker='o', color='orange', markersize=8,
-                   markeredgewidth=1.5, markeredgecolor='darkorange', linestyle='none')
-        
-        # Copy annotations
-        if hasattr(self.trajectory_panel, 'marker_annotations'):
-            for ann in self.trajectory_panel.marker_annotations:
-                if ann.axes == self.trajectory_panel.ax:
-                    ax_traj.annotate(
-                        ann.get_text(),
-                        xy=ann.xy,
-                        xytext=ann.xyann,
-                        textcoords=ann.anncoords,
-                        fontsize=7,
-                        color=ann.get_color(),
-                        weight='bold',
-                        bbox=dict(boxstyle='round,pad=0.3', facecolor='white',
-                                edgecolor=ann.get_color(), alpha=0.9, linewidth=1.5)
-                    )
-        
-        # Copy axis properties
-        ax_traj.set_xlabel('Re(γ_self) — Ego ← → We', fontsize=12, fontweight='bold')
-        ax_traj.set_ylabel('Im(γ_self) — Hate ← → Love', fontsize=12, fontweight='bold')
-        ax_traj.set_title('Gamma Self Trajectory (γ_self)', fontsize=14, fontweight='bold')
-        ax_traj.set_xlim(self.trajectory_panel.ax.get_xlim())
-        ax_traj.set_ylim(self.trajectory_panel.ax.get_ylim())
-        ax_traj.grid(True, alpha=0.3)
-        ax_traj.axhline(y=0, color='k', linewidth=0.5, alpha=0.5)
-        ax_traj.axvline(x=0, color='k', linewidth=0.5, alpha=0.5)
-        ax_traj.legend(loc='upper left', fontsize=10)
-        
-        # Save and close
-        save_fig.savefig(filepath, dpi=150, bbox_inches='tight')
-        plt.close(save_fig)
+        # TODO: Reimplement using PyQtGraph export functionality
+        # Could use: self.primitive_panel.graphics_widget.grab() and self.trajectory_panel.plot_widget.grab()
+        # Or use pyqtgraph.exporters module
 
     
     def _on_primitive_changed(self, event_index, primitive, value):
@@ -391,95 +321,394 @@ class InteractiveEditor:
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
     
+    def _on_event_delete_requested(self, event_index):
+        """
+        Handle event deletion request from primitive panel (Ctrl+Click).
+        
+        Args:
+            event_index: Event index to delete
+        """
+        print(f"\n[DELETE REQUEST] Event {event_index}")
+        
+        # Validation: Get events
+        events = self.model.get_events(self.controller.perspective)
+        
+        # Can't delete if only 2 events (need at least start and end)
+        if len(events) <= 2:
+            print(f"[DELETE] Cannot delete - need at least 2 events (start and end)")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                "Cannot delete event. Scenarios must have at least 2 events (start and end)."
+            )
+            return
+        
+        # Can't delete first or last event
+        if event_index == 0 or event_index == len(events) - 1:
+            print(f"[DELETE] Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                "Cannot delete the first or last event."
+            )
+            return
+        
+        # Can't delete locked events
+        event = events[event_index]
+        if event.locked:
+            print(f"[DELETE] Cannot delete locked event at time={event.time}")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Delete",
+                f"Cannot delete locked event at day {event.time}.\n\nRight-click to unlock first."
+            )
+            return
+        
+        # Create and push delete command to undo stack
+        if self.controller.undo_stack:
+            from tools.editor.commands import DeleteEventCommand
+            command = DeleteEventCommand(self.controller, event_index)
+            self.controller.undo_stack.push(command)
+            print(f"[DELETE] Pushed DeleteEventCommand to undo stack")
+        else:
+            # No undo stack - delete directly
+            self.controller._delete_event(event_index)
+    
+    def _on_event_insert_requested(self, event_index):
+        """
+        Handle event insertion request from primitive panel (Ctrl+Shift+Click).
+        
+        Inserts a new event before the specified event, with the new event taking
+        the existing event's time, and the existing event (plus all subsequent)
+        shifting forward by the time delta to the previous event.
+        
+        Args:
+            event_index: Event index to insert before
+        """
+        print(f"\n[INSERT REQUEST] Insert before event {event_index}")
+        
+        # Validation: Get events
+        events = self.model.get_events(self.controller.perspective)
+        
+        # Can't insert before first event (would shift start time)
+        if event_index == 0:
+            print(f"[INSERT] Cannot insert before first event")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Insert",
+                "Cannot insert an event before the first event (start time cannot change)."
+            )
+            return
+        
+        # Create and push insert command to undo stack
+        if self.controller.undo_stack:
+            try:
+                from tools.editor.commands import InsertEventBeforeCommand
+                # Check if primitive panel has pending insert time
+                insert_time = getattr(self.primitive_panel, 'pending_insert_time', None)
+                command = InsertEventBeforeCommand(self.controller, event_index, insert_time)
+                self.controller.undo_stack.push(command)
+                print(f"[INSERT] Pushed InsertEventBeforeCommand to undo stack")
+                # Clear pending time
+                if hasattr(self.primitive_panel, 'pending_insert_time'):
+                    delattr(self.primitive_panel, 'pending_insert_time')
+            except ValueError as e:
+                # Command validation failed
+                print(f"[INSERT] Validation error: {e}")
+                from PySide6.QtWidgets import QMessageBox
+                QMessageBox.warning(
+                    self.window,
+                    "Cannot Insert",
+                    str(e)
+                )
+        else:
+            # No undo stack - need to implement direct call if necessary
+            print("[INSERT] No undo stack available")
+    
+    def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
+        """
+        Handle diagnostic 'what-if' marker placement.
+        Computes hypothetical gamma_self trajectory if this primitive had the clicked value.
+        
+        Args:
+            event_index: Event index where marker was placed
+            primitive: Which primitive was clicked ('v', 'r', 'f', 'a', 'S')
+            hypothetical_value: The Y value where user shift+clicked
+        """
+        print(f"[DIAGNOSTIC HANDLER] Called with event_index={event_index}, primitive={primitive}, value={hypothetical_value:.2f}")
+        
+        from core.love import update_gamma_self
+        import numpy as np
+        
+        # Get current events
+        events = self.model.get_events(self.controller.perspective)
+        if event_index >= len(events):
+            print(f"[DIAGNOSTIC HANDLER] Error: event_index {event_index} >= {len(events)} events")
+            return
+        
+        # Create hypothetical primitives array (copy of current state)
+        primitives_data = self.model.get_primitives_array(self.controller.perspective, include_preview=False)
+        times = primitives_data['time']
+        
+        # Modify the one primitive with hypothetical value
+        old_value = primitives_data[primitive][event_index]
+        primitives_data[primitive][event_index] = hypothetical_value
+        print(f"[DIAGNOSTIC HANDLER] Changed {primitive}[{event_index}] from {old_value:.2f} to {hypothetical_value:.2f}")
+        print(f"[DIAGNOSTIC HANDLER] Event {event_index} primitives: v={primitives_data['v'][event_index]:.2f}, r={primitives_data['r'][event_index]:.2f}, f={primitives_data['f'][event_index]:.2f}, a={primitives_data['a'][event_index]:.2f}, S={primitives_data['S'][event_index]:.2f}")
+        
+        # Compute hypothetical gamma_self trajectory using same logic as controller
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        
+        for i in range(len(events) - 1):
+            v = primitives_data['v'][i]
+            r = primitives_data['r'][i]
+            f = primitives_data['f'][i]
+            a = primitives_data['a'][i]
+            S = primitives_data['S'][i]
+            
+            time_delta = times[i + 1] - times[i]
+            gamma_self = update_gamma_self(
+                gamma_self, v, r, f, a, S,
+                weights=self.controller.weights,
+                time_delta=time_delta
+            )
+            gamma_trajectory.append(gamma_self)
+        
+        print(f"[DIAGNOSTIC HANDLER] Computed {len(gamma_trajectory)} gamma_self values")
+        
+        # Get gamma_self AFTER the clicked event's primitives are applied
+        # gamma_trajectory[0] = gamma_self_0 (before event 0)
+        # gamma_trajectory[1] = gamma after event 0's primitives applied
+        # gamma_trajectory[event_index + 1] = gamma after event's primitives applied
+        if event_index + 1 < len(gamma_trajectory):
+            gamma_val = gamma_trajectory[event_index + 1]  # Gamma AFTER this event
+            gamma_x = gamma_val.real
+            gamma_y = gamma_val.imag
+            
+            print(f"[DIAGNOSTIC HANDLER] Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+            
+            # Place marker on trajectory panel at event position
+            self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
+            
+            # Update primitive readout
+            event = events[event_index]
+            self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
+            print(f"[DIAGNOSTIC HANDLER] Updated primitive readout")
+            
+            # Update gamma_self readout (simulate a click at that position)
+            if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
+                self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
+                self.gamma_self_gauge.setVisible(True)
+                print(f"[DIAGNOSTIC HANDLER] Updated gamma_self readout")
+            else:
+                print(f"[DIAGNOSTIC HANDLER] Warning: gamma_self_gauge not available")
+            
+            print(f"[DIAGNOSTIC WHAT-IF] If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+    
     def _on_lock_toggle(self, event_index):
         """Handle lock toggle from primitive panel."""
         self.controller.on_lock_toggle(event_index)
     
-    def _on_key_press(self, event):
-        """Handle keyboard shortcuts."""
-        if event.key == 'ctrl+s':
-            self._on_save_button(event)
-        elif event.key == 'escape':
-            # Cancel previews
-            self.controller.cancel_changes()
-        elif event.key == 'g':
-            # Edit gamma_self_0 initial position
-            self._edit_gamma_self_0()
-        elif event.key == 'f':
-            # Toggle fixed view mode
-            self.controller.trajectory_panel.fixed_view = not self.controller.trajectory_panel.fixed_view
-            status = "ON" if self.controller.trajectory_panel.fixed_view else "OFF"
-            print(f"Fixed view: {status}")
-        elif event.key in ['+', '=']:
-            # Zoom in (context-aware: only the panel under cursor)
-            if event.inaxes:
-                # Check if cursor is in gamma_self panel
-                if event.inaxes == self.controller.trajectory_panel.ax:
-                    self.controller.trajectory_panel.zoom_in()
-                    print("Zoomed in on gamma_self")
-                else:
-                    # Cursor is in primitive panel
-                    self.controller.primitive_panel.zoom_in()
-                    print("Zoomed in on primitives")
-            else:
-                # No axis under cursor, zoom both
-                self.controller.trajectory_panel.zoom_in()
-                self.controller.primitive_panel.zoom_in()
-                print("Zoomed in")
-        elif event.key == '-':
-            # Zoom out (context-aware: only the panel under cursor)
-            if event.inaxes:
-                if event.inaxes == self.controller.trajectory_panel.ax:
-                    self.controller.trajectory_panel.zoom_out()
-                    print("Zoomed out on gamma_self")
-                else:
-                    self.controller.primitive_panel.zoom_out()
-                    print("Zoomed out on primitives")
-            else:
-                self.controller.trajectory_panel.zoom_out()
-                self.controller.primitive_panel.zoom_out()
-                print("Zoomed out")
-        elif event.key == '0':
-            # Reset view - always reset both panels for convenience
-            self.controller.trajectory_panel.reset_view()
-            self.controller.primitive_panel.reset_view()
-            # Clear readouts as well
-            self.controller.primitive_panel.clear_readout()
-            print("Reset all views")
+    def _on_insert_event(self, time: float):
+        """
+        Handle event insertion from Shift+Click.
+        
+        Args:
+            time: Raw time value from click (will be rounded per user preference)
+        """
+        try:
+            # Round time according to insertion mode
+            rounded_time = self.insertion_options.round_time(time)
+            self.controller.insert_event_at_time(rounded_time)
+            self.window.show_message(f"Inserted event at time {rounded_time}")
+        except Exception as e:
+            self.window.show_message(f"Error inserting event: {str(e)}", 'error')
+    
+    def _on_insertions_changed(self, times: list):
+        """
+        Handle changes to insertion time list.
+        
+        Args:
+            times: List of time values where events should be inserted
+        """
+        # Get current events
+        events = self.model.get_events(self.controller.perspective)
+        
+        # Find which events are currently inserted (all primitives = 0, not first/last)
+        current_inserted_times = []
+        current_inserted_indices = []
+        for idx, evt in enumerate(events):
+            if is_inserted_event(evt, exclude_first_last=True, event_idx=idx, total_events=len(events)):
+                current_inserted_times.append(evt.time)
+                current_inserted_indices.append(idx)
+        
+        # Determine what to add and what to remove
+        # Check existing event times to avoid duplicates
+        existing_times = [evt.time for evt in events]
+        to_add = []
+        rejected_times = []  # Track rejected duplicate times
+        for t in times:
+            # Check if this time already exists as a non-inserted event
+            is_existing = any(abs(t - existing_t) < 0.001 for existing_t in existing_times if existing_t not in current_inserted_times)
+            if is_existing:
+                rejected_times.append(t)
+                print(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
+            elif t not in current_inserted_times:
+                to_add.append(t)
+        
+        to_remove_times = [t for t in current_inserted_times if t not in times]
+        
+        # Track if any changes were made
+        changes_made = False
+        
+        # Remove events that are no longer in the list (in reverse order to maintain indices)
+        if to_remove_times:
+            # Build list of indices to remove, sorted in reverse
+            indices_to_remove = []
+            for time_to_remove in to_remove_times:
+                for idx, evt in enumerate(events):
+                    if abs(evt.time - time_to_remove) < 0.001:
+                        indices_to_remove.append(idx)
+                        break
+            
+            indices_to_remove.sort(reverse=True)
+            
+            for idx in indices_to_remove:
+                try:
+                    # Use no_update version for batch operation
+                    self.controller.delete_event_at_index_no_update(idx)
+                    changes_made = True
+                except Exception as e:
+                    print(f"[INSERTIONS] Error removing event at index {idx}: {e}")
+        
+        # Add new insertion events
+        for time_to_add in to_add:
+            try:
+                # Use no_update version for batch operation
+                print(f"[INSERTIONS] Adding event at time {time_to_add}")
+                self.controller.insert_event_at_time_no_update(time_to_add)
+                changes_made = True
+            except Exception as e:
+                print(f"[INSERTIONS] Error adding event at {time_to_add}: {e}")
+                self.window.show_message(f"Error inserting at {time_to_add}: {str(e)}", 'error')
+        
+        # Update views only ONCE at the end if any changes were made
+        if changes_made:
+            import time
+            t0 = time.time()
+            self.controller._update_all_views()
+            t1 = time.time()
+            self.controller._recompute_trajectory_immediate()
+            t2 = time.time()
+            print(f"[PERF] update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
+            
+            # Sync widget with actual inserted events in model
+            # Find current inserted events after all changes
+            updated_events = self.model.get_events(self.controller.perspective)
+            actual_inserted_times = []
+            for idx, evt in enumerate(updated_events):
+                if is_inserted_event(evt, exclude_first_last=True, event_idx=idx, total_events=len(updated_events)):
+                    actual_inserted_times.append(evt.time)
+            
+            # Update widget to reflect actual state (without triggering another change event)
+            self.insertion_options.update_from_times(actual_inserted_times)
+            
+            self.window.show_message(f"Insertion points updated: {len(actual_inserted_times)} total")
+        elif rejected_times:
+            # No changes made, but we need to remove rejected entries from widget
+            # Sync widget with current model state (this will remove rejected times)
+            updated_events = self.model.get_events(self.controller.perspective)
+            actual_inserted_times = []
+            for idx, evt in enumerate(updated_events):
+                if is_inserted_event(evt, exclude_first_last=True, event_idx=idx, total_events=len(updated_events)):
+                    actual_inserted_times.append(evt.time)
+            
+            # Update widget to reflect actual state (removes rejected entries)
+            self.insertion_options.update_from_times(actual_inserted_times)
+    
+    def _on_gamma_self0_changed(self, new_value: complex):
+        """
+        Handle gamma_self_0 change from editor widget.
+        
+        Args:
+            new_value: New gamma_self_0 complex value
+        """
+        # Store original value if this is the first modification
+        if not hasattr(self.model, 'gamma_self_0_original'):
+            self.model.gamma_self_0_original = self.model.gamma_self_0
+            self.model.gamma_self_0_modified = False
+        
+        # Update model
+        old_value = self.model.gamma_self_0
+        self.model.gamma_self_0 = new_value
+        self.model.gamma_self_0_modified = (
+            abs(new_value - self.model.gamma_self_0_original) > 0.001
+        )
+        
+        # Recompute trajectory with new initial state
+        self.controller._recompute_trajectory_immediate()
+        
+        # Update start marker appearance on trajectory panel
+        self.trajectory_panel.update_start_marker_style(
+            self.model.gamma_self_0_modified
+        )
+        
+        self.window.show_message(
+            f"gamma_self_0 updated: {new_value.real:+.2f}{new_value.imag:+.2f}j"
+        )
+    
+    def _on_gamma_self0_reset(self):
+        """Handle reset of gamma_self_0 to original CSV value."""
+        if hasattr(self.model, 'gamma_self_0_original'):
+            self.model.gamma_self_0 = self.model.gamma_self_0_original
+            self.model.gamma_self_0_modified = False
+            
+            # Recompute trajectory
+            self.controller._recompute_trajectory_immediate()
+            
+            # Update start marker appearance
+            self.trajectory_panel.update_start_marker_style(False)
+            
+            self.window.show_message("gamma_self_0 reset to CSV default")
+    
+    # NOTE: Keyboard shortcuts removed with matplotlib event handlers
+    # PyQtGraph trajectory panel uses built-in Qt key events
+    # TODO: Re-implement shortcuts via Qt keyPressEvent if needed (Ctrl+S, ESC, Delete, etc.)
     
     def _edit_gamma_self_0(self):
         """Edit initial gamma_self position."""
-        from tkinter import simpledialog
+        from PySide6.QtWidgets import QInputDialog
         
         current = self.controller.model.gamma_self_0
         
-        # Create Tkinter root (hidden)
-        root = tk.Tk()
-        root.withdraw()
-        
         # Get real part
-        real_part = simpledialog.askfloat(
+        real_part, ok = QInputDialog.getDouble(
+            self.window,
             "Edit Gamma_self_0",
             f"Enter REAL part (Ego↔We axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +5\n  Exes (hurt): -5",
-            initialvalue=current.real,
-            parent=root
+            value=current.real,
+            decimals=1
         )
         
-        if real_part is None:
-            root.destroy()
+        if not ok:
             return
         
         # Get imaginary part
-        imag_part = simpledialog.askfloat(
+        imag_part, ok = QInputDialog.getDouble(
+            self.window,
             "Edit Gamma_self_0",
             f"Enter IMAGINARY part (Hate↔Love axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +8\n  Exes (hurt): -3",
-            initialvalue=current.imag,
-            parent=root
+            value=current.imag,
+            decimals=1
         )
         
-        root.destroy()
-        
-        if imag_part is None:
+        if not ok:
             return
         
         # Update gamma_self_0
@@ -488,37 +717,33 @@ class InteractiveEditor:
         # Recompute trajectory from new starting point
         self.controller._recompute_trajectory_immediate()
         
-        print(f"Gamma_self_0 set to {real_part:+.1f}{imag_part:+.1f}j")
+        self.window.show_message(f"Gamma_self_0 set to {real_part:+.1f}{imag_part:+.1f}j")
     
     def _save_as(self):
         """Open Save As dialog and save CSV."""
+        from PySide6.QtWidgets import QFileDialog
+        
         # Suggest filename with _modified suffix
         original_stem = self.csv_file.stem
         original_parent = self.csv_file.parent
         suggested_name = original_parent / f"{original_stem}_modified.csv"
         
-        # Create Tkinter root (hidden)
-        root = tk.Tk()
-        root.withdraw()
-        
-        # Open file dialog
-        filepath = filedialog.asksaveasfilename(
-            title="Save Modified Scenario",
-            initialdir=str(original_parent),
-            initialfile=suggested_name.name,
-            defaultextension=".csv",
-            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")]
+        # Open Qt file dialog
+        filepath, _ = QFileDialog.getSaveFileName(
+            self.window,
+            "Save Modified Scenario",
+            str(suggested_name),
+            "CSV files (*.csv);;All files (*.*)"
         )
-        
-        root.destroy()
         
         if filepath:
             self.controller.save_scenario(filepath)
-            print(f"Saved to: {filepath}")
+            self.window.show_message(f"Saved to: {filepath}")
     
     def run(self):
-        """Show UI and enter event loop."""
-        plt.show()
+        """Show UI and enter Qt event loop."""
+        self.window.show()
+        return self.qt_app.exec()
 
 
 def main():
@@ -573,9 +798,13 @@ Phase 1.5 Features:
         print(f"Error: File not found: {csv_path}", file=sys.stderr)
         sys.exit(1)
     
+    # Create Qt application (Phase 2)
+    app = QApplication(sys.argv)
+    app.setApplicationName('GRP Interactive Scenario Editor')
+    
     # Create and run editor
-    editor = InteractiveEditor(args.csv_file)
-    editor.run()
+    editor = InteractiveEditor(args.csv_file, app)
+    sys.exit(editor.run())
 
 
 if __name__ == '__main__':
