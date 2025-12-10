@@ -203,13 +203,14 @@ class InsertEventBeforeCommand(QUndoCommand):
     Supports undo/redo of event insertion via Ctrl+Shift+Click.
     """
     
-    def __init__(self, controller, event_idx):
+    def __init__(self, controller, event_idx, insert_time=None):
         """
         Initialize insert command.
         
         Args:
             controller: EditorController instance
-            event_idx: Event index to insert before (this event will shift forward)
+            event_idx: Event index to insert at (new event goes here, rest shift forward)
+            insert_time: Optional specific time for insertion (if None, use event's time)
         """
         super().__init__()
         self.controller = controller
@@ -222,11 +223,20 @@ class InsertEventBeforeCommand(QUndoCommand):
             # Can't insert before first event
             raise ValueError("Cannot insert before first event")
         
-        # Get times for delta calculation
-        current_time = events[event_idx].time
+        # Get the target event's time BEFORE we insert (this is where new event will be placed)
+        target_time = events[event_idx].time
+        
+        # Get insertion time (use the target event's current time)
+        if insert_time is not None:
+            self.insert_time = insert_time
+        else:
+            # Use the target event's time (new event takes this position)
+            self.insert_time = target_time
+        
+        # Calculate delta: distance from previous event to insertion point
+        # This is how much subsequent events will shift forward
         previous_time = events[event_idx - 1].time
-        self.delta = current_time - previous_time
-        self.insert_time = current_time  # New event takes this position
+        self.delta = self.insert_time - previous_time
         
         # Store original times of events that will be shifted
         self.shifted_events = []  # [(idx, old_time, new_time), ...]

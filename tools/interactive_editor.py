@@ -76,6 +76,7 @@ class InteractiveEditor:
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
         self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
         self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
+        self.primitive_panel.event_insert_requested.connect(self._on_event_insert_requested)
         
         # Phase 2 refactoring: Connect new signals (replacing callbacks)
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
@@ -375,6 +376,58 @@ class InteractiveEditor:
         else:
             # No undo stack - delete directly
             self.controller._delete_event(event_index)
+    
+    def _on_event_insert_requested(self, event_index):
+        """
+        Handle event insertion request from primitive panel (Ctrl+Shift+Click).
+        
+        Inserts a new event before the specified event, with the new event taking
+        the existing event's time, and the existing event (plus all subsequent)
+        shifting forward by the time delta to the previous event.
+        
+        Args:
+            event_index: Event index to insert before
+        """
+        print(f"\n[INSERT REQUEST] Insert before event {event_index}")
+        
+        # Validation: Get events
+        events = self.model.get_events(self.controller.perspective)
+        
+        # Can't insert before first event (would shift start time)
+        if event_index == 0:
+            print(f"[INSERT] Cannot insert before first event")
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(
+                self.window,
+                "Cannot Insert",
+                "Cannot insert an event before the first event (start time cannot change)."
+            )
+            return
+        
+        # Create and push insert command to undo stack
+        if self.controller.undo_stack:
+            try:
+                from tools.editor.commands import InsertEventBeforeCommand
+                # Check if primitive panel has pending insert time
+                insert_time = getattr(self.primitive_panel, 'pending_insert_time', None)
+                command = InsertEventBeforeCommand(self.controller, event_index, insert_time)
+                self.controller.undo_stack.push(command)
+                print(f"[INSERT] Pushed InsertEventBeforeCommand to undo stack")
+                # Clear pending time
+                if hasattr(self.primitive_panel, 'pending_insert_time'):
+                    delattr(self.primitive_panel, 'pending_insert_time')
+            except ValueError as e:
+                # Command validation failed
+                print(f"[INSERT] Validation error: {e}")
+                from PySide6.QtWidgets import QMessageBox
+                QMessageBox.warning(
+                    self.window,
+                    "Cannot Insert",
+                    str(e)
+                )
+        else:
+            # No undo stack - need to implement direct call if necessary
+            print("[INSERT] No undo stack available")
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
         """

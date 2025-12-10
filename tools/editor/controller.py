@@ -524,6 +524,126 @@ class EditorController:
             import traceback
             traceback.print_exc()
     
+    def _insert_event_before(self, event_idx, insert_time, delta):
+        """
+        Insert new event at insert_time and shift event_idx+ forward by delta.
+        
+        Args:
+            event_idx: Index where new event will be inserted
+            insert_time: Time for new event
+            delta: Time delta to shift subsequent events (from previous event to insert_time)
+        """
+        try:
+            print(f"\n=== INSERT EVENT at time {insert_time} (index {event_idx}) ===")
+            print(f"Delta for shifting subsequent events: {delta}")
+            
+            from tools.editor.event import Event
+            
+            events = self.model.get_events(self.perspective)
+            
+            # Create new event with all primitives = 0
+            new_event = Event(
+                time=insert_time,
+                primitives={'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0},
+                notes='',
+                marker='',
+                locked=False
+            )
+            
+            # Insert at index
+            events.insert(event_idx, new_event)
+            print(f"Inserted new event at index {event_idx}, time={insert_time}")
+            
+            # Shift all subsequent events forward by delta
+            for idx in range(event_idx + 1, len(events)):
+                old_time = events[idx].time
+                events[idx].time = old_time + delta
+                print(f"  Shifted event {idx}: {old_time} → {events[idx].time}")
+            
+            # Update baseline arrays
+            # First insert new event values
+            for prim in PRIMITIVE_NAMES:
+                if prim in self.baseline_primitives:
+                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_idx, 0.0)
+                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_idx, 0.0)
+            
+            # Insert time
+            if 'time' in self.baseline_primitives:
+                self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_idx, insert_time)
+                self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_idx, insert_time)
+            
+            # Update shifted times in baseline arrays
+            for idx in range(event_idx + 1, len(events)):
+                if 'time' in self.baseline_primitives:
+                    self.baseline_primitives['time'][idx] = events[idx].time
+                    self.original_baseline_primitives['time'][idx] = events[idx].time
+            
+            # Update views
+            self._update_view_modified_state()
+            self.primitive_panel.update_from_model(events)
+            self._recompute_trajectory_immediate()
+            
+            print(f"Total events after insert: {len(events)}")
+            print("=== END INSERT ===")
+        except Exception as e:
+            print(f"ERROR in _insert_event_before: {e}")
+            import traceback
+            traceback.print_exc()
+    
+    def _undo_insert_event_before(self, event_idx, shifted_events):
+        """
+        Undo insertion by removing event and restoring original times.
+        
+        Args:
+            event_idx: Index of inserted event to remove
+            shifted_events: List of (idx, old_time, new_time) tuples
+        """
+        try:
+            print(f"\n=== UNDO INSERT BEFORE (remove index {event_idx}) ===")
+            
+            events = self.model.get_events(self.perspective)
+            
+            # Remove the inserted event
+            removed_event = events.pop(event_idx)
+            print(f"Removed event at time={removed_event.time}")
+            
+            # Restore original times (indices shifted back by 1 after removal)
+            for orig_idx, old_time, new_time in shifted_events:
+                if orig_idx > event_idx:  # These indices are now -1
+                    actual_idx = orig_idx - 1
+                    events[actual_idx].time = old_time
+                    print(f"  Restored event {actual_idx}: {new_time} → {old_time}")
+            
+            # Update baseline arrays - remove inserted event
+            for prim in PRIMITIVE_NAMES:
+                if prim in self.baseline_primitives:
+                    self.baseline_primitives[prim] = np.delete(self.baseline_primitives[prim], event_idx)
+                    self.original_baseline_primitives[prim] = np.delete(self.original_baseline_primitives[prim], event_idx)
+            
+            if 'time' in self.baseline_primitives:
+                self.baseline_primitives['time'] = np.delete(self.baseline_primitives['time'], event_idx)
+                self.original_baseline_primitives['time'] = np.delete(self.original_baseline_primitives['time'], event_idx)
+            
+            # Update restored times in baseline arrays
+            for orig_idx, old_time, new_time in shifted_events:
+                if orig_idx > event_idx:
+                    actual_idx = orig_idx - 1
+                    if 'time' in self.baseline_primitives:
+                        self.baseline_primitives['time'][actual_idx] = old_time
+                        self.original_baseline_primitives['time'][actual_idx] = old_time
+            
+            # Update views
+            self._update_view_modified_state()
+            self.primitive_panel.update_from_model(events)
+            self._recompute_trajectory_immediate()
+            
+            print(f"Total events after undo: {len(events)}")
+            print("=== END UNDO INSERT BEFORE ===")
+        except Exception as e:
+            print(f"ERROR in _undo_insert_event_before: {e}")
+            import traceback
+            traceback.print_exc()
+    
     def commit_changes(self):
         """Commit all preview changes."""
         print("\n=== COMMIT CHANGES ===")

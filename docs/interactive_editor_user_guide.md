@@ -155,7 +155,8 @@ day,v,r,f,a,S,notes,marker,locked
 - `G` - Edit gamma_self_0 initial position (starting point)
 - `Shift+Click` - Place Counterfactual Explorer marker (explore alternative scenarios)
 - `Ctrl+Click` - Delete event (non-locked events only, excludes first/last)
-- `Ctrl+Z` - Undo last action
+- `Ctrl+Shift+Click` - Insert event before nearest marker (creates time gap)
+- `Ctrl+Z` - Undo last action (deletion or insertion)
 - `Ctrl+Y` or `Ctrl+Shift+Z` - Redo action
 
 **View Controls:**
@@ -248,6 +249,44 @@ day,v,r,f,a,S,notes,marker,locked
 - ❌ Cannot delete: First event (start position)
 - ❌ Cannot delete: Last event (final outcome)
 - ❌ Cannot delete: Locked events (right-click to unlock first)
+
+### 7. Insert Events (NEW - Phase 2.3)
+**Goal:** Add time gaps before important events to insert new developmental stages or details
+
+**Workflow:**
+1. **Ctrl+Shift+Click** near any marker (except the first) to insert a new event before it
+2. New event appears at the clicked marker's original time with **all primitives set to zero**
+3. The clicked marker and all subsequent markers **shift forward** by the time delta to the previous event
+4. **Undo with Ctrl+Z** to remove inserted event and restore original times
+5. **Redo with Ctrl+Y** to re-insert
+
+**Example - Inserting before day 21:**
+
+**Before insertion:**
+- Events at days: `[0, 14, 21, 28]`
+- Delta = 21 - 14 = 7 days
+
+**After Ctrl+Shift+Click near day 21:**
+- Events at days: `[0, 14, 21(new zeros), 28, 35]`
+- New event at day 21: `v=0, r=0, f=0, a=0, S=0` (shown as **cyan markers** at y=0)
+- Old day-21 event → day 28
+- Old day-28 event → day 35
+
+**Visual Indicators:**
+- **Cyan/turquoise markers at y=0** indicate newly inserted events that need editing
+- **Vertical dashed lines** mark the insertion time
+- **Drag the cyan markers** up or down to set primitive values
+
+**Use Cases:**
+- "Add a transitional event between days 14 and 21 to model gradual repair"
+- "Insert time before breakup event to explore preventive interventions"
+- "Create space for additional developmental stages in complex scenarios"
+
+**Validation Rules:**
+- ✅ Can insert: Before any event except the first
+- ❌ Cannot insert: Before first event (start time cannot change)
+- 📝 After insertion: **Drag cyan markers** to set the new event's primitive values
+- 🔄 Full undo/redo support
 - ❌ Cannot delete: When only 2 events remain (need at least start + end)
 
 **Use Cases:**
