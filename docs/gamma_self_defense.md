@@ -2,7 +2,7 @@
 A mathematical framework for relationship dynamics
 
 **Core Claim**  
-The Gamma Self (γ_self) is a two-dimensional complex-valued trajectory that encodes ego-dissolution (Re: Ego → We) against affect polarity (Im: Hate → Love). It models relationship dynamics as a damped oscillator system—similar to physical systems that evolve toward equilibrium under competing forces. When simulated with parameters calibrated to known psychological distributions, the resulting attractor basins qualitatively match relationship archetypes documented in attachment theory, clinical psychology, and longitudinal studies.
+The Gamma Self (γ_self) is a two-dimensional complex-valued trajectory that encodes ego-dissolution (Re: Ego → We) against affect polarity (Im: Hate → Love). It models relationship dynamics as a damped oscillator system—similar to physical systems that evolve toward equilibrium under competing forces. When simulated with parameters calibrated to known psychological distributions, the resulting trajectory distributions qualitatively match relationship archetypes documented in attachment theory, clinical psychology, and longitudinal studies.
 
 **What We Claim (The Principle):**  
 Relationship dynamics can be modeled as a **low-dimensional dynamical system** where:
@@ -18,7 +18,7 @@ Relationship dynamics can be modeled as a **low-dimensional dynamical system** w
 - That individual predictions are reliable (model is exploratory, not clinical-grade)
 
 **The Distinction:**  
-We claim the **structural principle** is valid: relationship dynamics exhibit dynamical systems behavior with attractor basins. The **parameter values** (damping coefficients, entropy thresholds, attractor positions) are being refined and require empirical validation. Think of it like Newtonian gravity: the principle ($F = ma$) was valid before anyone measured the gravitational constant precisely.
+We claim the **structural principle** is valid: relationship dynamics exhibit dynamical systems behavior with characteristic trajectory patterns. The **parameter values** (damping coefficients, entropy thresholds, weights) are currently calibrated to match observed distributions and require empirical validation. Think of it like Newtonian gravity: the principle ($F = ma$) was valid before anyone measured the gravitational constant precisely.
 
 [Visual Evidence: Gamma Self Character Region Map (N=10,000)](https://github.com/CuriousOne23/WhenMathPrays/raw/a26593d488ab4c1e2a245fc96861eb5c031694bf/tests/gamma_self_character_map_all_N10000.png)
 
@@ -58,19 +58,19 @@ These are **order-of-magnitude agreements**, not precise predictions.
    This is mathematically equivalent to **overdamped Langevin dynamics**—the same class of equations that describe Brownian motion, protein folding, and economic equilibration. No metaphor: this is a standard dynamical system.
 
 3. **Entropy Term Predicts Instability**  
-   When the entropy term $\eta(t)$ consistently exceeds ~2.5 nats (accumulated conflict/uncertainty), simulated trajectories transition to the "Battlefield Hate" basin with low return probability. This aligns with Gottman's empirical finding that relationship stability correlates with positive-to-negative interaction ratios (Gottman, 1993). His 5:1 ratio can be interpreted as a constraint on allowable entropy accumulation.
+   When the entropy term $\eta(t)$ consistently exceeds ~2.5 nats (accumulated conflict/uncertainty), simulated trajectories transition to negative regions (hate, separation) with low return probability. This aligns with Gottman's empirical finding that relationship stability correlates with positive-to-negative interaction ratios (Gottman, 1993). His 5:1 ratio can be interpreted as a constraint on allowable entropy accumulation.
    
    **Model Prediction (Testable):**  
-   - Low entropy ($< 1$ nat): Stable convergence to positive attractors  
+   - Low entropy ($< 1$ nat): Stable convergence to positive regions  
    - Medium entropy ($1-2.5$ nats): Oscillatory but recoverable dynamics  
-   - High entropy ($> 2.5$ nats): Basin transitions toward negative attractors (separation/conflict)
+   - High entropy ($> 2.5$ nats): Trajectory transitions toward negative regions (separation/conflict)
    
    > Gottman, J. M., & Levenson, R. W. (2000). The timing of divorce: Predicting when a couple will divorce over a 14-year period. *Journal of Marriage and Family, 62*(3), 737–745.
 
 4. **Quadrant Distributions Align with Literature Prevalence Rates**  
    When calibrated, the GRP formula produces quadrant distributions that closely match known relationship outcome prevalence rates:
    
-   | Basin Type | Simulation % | Literature Estimate | Source |
+   | Region Type | Simulation % | Literature Estimate | Source |
    |------------|--------------|---------------------|--------|
    | Secure/Stable (Orange) | 12–15% | ~10–15% | U.S. Census, Cherlin (2009) |
    | Anxious/Caregiver (Blue) | 10–15% | ~15–20% | Hazan & Shaver (1987) |
@@ -83,9 +83,9 @@ These are **order-of-magnitude agreements**, not precise predictions.
 5. **Falsifiability and Testable Predictions**  
    The model makes specific, falsifiable predictions:
    
-   **Prediction 1:** Reducing entropy (e.g., structured conflict resolution) should stabilize trajectories and increase convergence to positive attractors.  
-   **Prediction 2:** Increasing entropy (e.g., unresolved chronic stressors) should increase basin transition probability toward negative attractors.  
-   **Prediction 3:** Initial conditions in the "Narcissistic" basin (high ego, low love) should show low escape probability without significant parameter changes (e.g., therapy, major life events).
+   **Prediction 1:** Reducing entropy (e.g., structured conflict resolution) should stabilize trajectories and increase convergence to positive regions.  
+   **Prediction 2:** Increasing entropy (e.g., unresolved chronic stressors) should increase transition probability toward negative regions.  
+   **Prediction 3:** Initial conditions in the "Narcissistic" region (high ego, low love) should show low escape probability without significant parameter changes (e.g., therapy, major life events).
    
    **Preliminary Exploration (NOT Validation):**  
    A retrospective analysis of ~4,000 public relationship narratives (Reddit r/relationships, Quora) tracked over six months showed:

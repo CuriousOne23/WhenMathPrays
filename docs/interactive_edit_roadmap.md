@@ -1,40 +1,239 @@
-# Interactive Scenario Editor - Requirements and Design
+# Interactive Scenario Editor - Complete Roadmap
 
-**Status:** Phase 1 COMPLETED (December 5, 2025)  
-**Priority:** HIGH - Critical for event-level diagnostic analysis  
-**Complexity:** Progressive phases (~20-30 hours total)  
-**Last Updated:** December 5, 2025
+**Purpose:** Master timeline showing past, present, and future development  
+**Current Phase:** Phase 2 (~50-60% Complete) → Phase 2.2 Planning  
+**Phase 2 Progress:** 7 hours completed / 12-15 hours total estimated  
+**Total Vision:** ~20-30 hours across 4 phases  
+**Last Updated:** December 7, 2025
 
 ---
 
-## Phase 1 Status - COMPLETED ✅
+## Quick Navigation
 
-### Implemented Features
+- **Phase 1 (✅ Complete):** Single-perspective editing, drag-and-drop, lock/unlock, real-time trajectory
+- **Phase 2.0 (✅ Complete):** PySide6 migration, undo/redo system
+- **Phase 2.1 (✅ Complete):** Diagnostic "what-if" markers with hypothetical analysis
+- **Phase 2.2 (→ Next):** Add/delete events, inverse editing - [See detailed requirements](interactive_edit_ph2_requirements.md)
+- **Phase 3 (Future):** Dual-perspective (M1/M2) editing with comparison view
+- **Phase 4 (Future):** Advanced features - fill gaps, sensitivity analysis, automation
+
+---
+
+## Phase Timeline
+
+### Phase 1: Foundation ✅ COMPLETE (December 5, 2025)
+**Duration:** 4-6 hours  
+**Status:** Released as v1.0-phase1
+
+**What Was Built:**
 - ✅ Single-perspective (M1) primitive editing with drag-and-drop
-- ✅ Real-time gamma_self trajectory preview
-- ✅ Lock/unlock event functionality
-- ✅ Auto-marking of modified points with numbered markers
-- ✅ **Primitive readout gauge** - Shows marker ID and Y-value on left of fidelity plot
-- ✅ **Gamma_self position readout** - Shows X,Y coordinates on click (left of gamma_self plot)
-- ✅ **Dual save functionality** - Click=CSV, Shift=PNG, Ctrl=Both
-- ✅ **CSV output with markers** - Modified events automatically get `marker` column populated with event index, and `locked` column to persist lock state
-- ✅ Hollow vs filled marker visual system
-- ✅ Preview/commit workflow
-- ✅ **Centralized LAYOUT system** for maintainable UI positioning
+- ✅ Real-time gamma_self trajectory preview with debounced computation
+- ✅ Lock/unlock event functionality (right-click toggle)
+- ✅ Auto-marking of modified points (hollow vs filled visual system)
+- ✅ Primitive readout gauge (marker ID + Y-value display)
+- ✅ Gamma_self position readout (X,Y coordinates on click)
+- ✅ Dual save functionality (Click=CSV, Shift=PNG, Ctrl=Both)
+- ✅ CSV format with marker/locked columns for persistence
+- ✅ Centralized LAYOUT system for maintainable UI
 - ✅ Keyboard shortcuts (0=reset, +/-=zoom, F=fixed view, G=edit gamma_self_0)
+- ✅ Primitives module (single source of truth for primitive metadata)
+- ✅ Configuration system (user-customizable via JSON)
 
-### Key Software Architecture Improvements
-**Maintainable UI Layout System:**
-- All positioning constants consolidated in `LAYOUT` dictionary
-- Independent gauge positioning (`primitive_gauge_x/y`, `trajectory_readout_x/y`)
-- Easy to adjust margins, spacing, and element positions
-- Future-proof for adding new UI elements
+**Key Achievements:**
+- Created diagnostic tool for event-level analysis
+- Enabled real data anchoring (lock therapy sessions, perturb unknowns)
+- Visual feedback loop for sensitivity exploration
+- Foundation for all future phases
 
-**Known Issues & Future Considerations:**
-1. **Matplotlib Layout Limitations** - Current system uses matplotlib which has constraints for complex UIs. For Phase 2+, consider migrating to Qt/Tkinter for more flexible layouts and additional widgets.
-2. **Readout Positioning** - Uses axes transform coordinates (relative positioning). Works well but limited to simple text displays.
-3. **Save Button** - Custom button using matplotlib.widgets.Button. For more advanced controls, Qt would provide richer widgets.
-4. **Performance** - Real-time trajectory recomputation is fast for single scenarios. May need optimization for longer timelines or dual-perspective editing.
+**Architecture Notes:**
+- Matplotlib-based (sufficient for Phase 1, may migrate to Qt later)
+- MVC pattern: EditorModel, EditorController, PrimitivePanel, TrajectoryPanel
+- Backward-compatible CSV format (old format loads, always saves with full metadata)
+
+### Phase 2.0: PySide6 Migration & Undo/Redo ✅ COMPLETE (December 6, 2025)
+**Duration:** ~4 hours  
+**Status:** Released as v2.0-undo-redo
+
+**What Was Built:**
+- ✅ Complete PySide6 migration (replaced Matplotlib/Tkinter with PyQtGraph)
+- ✅ Full undo/redo system using QUndoStack
+- ✅ Discrete undo steps (each marker edit is separate, undoable action)
+- ✅ Keyboard shortcuts (Ctrl+Z undo, Ctrl+Y/Ctrl+Shift+Z redo)
+- ✅ Command pattern for delegation (prevents recursive undo creation)
+- ✅ Marker position synchronization on gamma_self graph
+- ✅ Label management (appear when modified, disappear when back to baseline)
+- ✅ Thread-safe incremental updates
+- ✅ Significantly improved rendering performance
+
+**Key Achievements:**
+- Modern Qt-based architecture ready for advanced features
+- Professional undo/redo workflow
+- Much faster rendering and interaction
+
+### Phase 2.1: Diagnostic "What-If" Markers ✅ COMPLETE (December 7, 2025)
+**Duration:** ~3 hours  
+**Status:** Released as v2.1-diagnostic-markers
+
+**What Was Built:**
+- ✅ **Shift+Click diagnostic marker placement** - Test hypothetical primitive values
+- ✅ **Black X markers** - Visual distinction from actual data (primitive + trajectory)
+- ✅ **Draggable hypothetical markers** - Real-time exploration of different values
+- ✅ **Final outcome display** - Shows where trajectory ends with hypothetical change
+- ✅ **Dual gauge updates** - Both primitive and gamma_self readouts show hypothetical values
+- ✅ **Auto-clear previous** - New diagnostic marker clears old ones automatically
+- ✅ **Non-destructive testing** - Explore scenarios without modifying actual data
+- ✅ **gamma_self0 editor widget** - Edit initial state (real/imaginary spinboxes)
+- ✅ **Apply/Reset buttons** - Apply new gamma_self0 or reset to CSV default
+- ✅ **Orange start marker** - Visual indication when gamma_self0 is modified
+- ✅ **Event insertion via time entry list** - Add events at any time (including fractional)
+- ✅ **Fractional time support** - Full support for non-integer times (e.g., 2.5 days)
+- ✅ **Vertical dashed lines** - Mark inserted events on primitive plots
+- ✅ **Black diamond markers** - Show inserted events on gamma_self trajectory
+
+**Technical Achievement:**
+- Fixed PyQtGraph coordinate system using `QGraphicsScene.sigMouseClicked`
+- Proper `event.scenePos()` + `mapSceneToView()` for accurate click positioning
+- Computes full hypothetical trajectory showing final gamma_self position
+- GammaSelf0Editor widget with real/imag QDoubleSpinBox controls
+- InsertionOptionsWidget with dynamic time entry fields
+- Automatic detection of inserted events (all primitives = 0)
+
+**Key Value:**
+- Quick "what-if" exploration before committing to edits
+- Answers questions like: "What if resonance had been +7 at day 14?"
+- Non-destructive sensitivity analysis
+- Edit starting position to explore different initial conditions
+- Add new time points for more detailed scenarios
+- Full support for fractional timescales
+
+### Phase 2.2: Delete Events ✅ COMPLETE (December 8, 2025)
+**Duration:** ~2 hours  
+**Status:** Released as v2.2-delete-events
+
+**What Was Built:**
+- ✅ **Ctrl+Click deletion** - Click any marker while holding Ctrl to delete that event
+- ✅ **Full validation** - Prevents deleting first/last events, locked events, or when only 2 remain
+- ✅ **DeleteEventCommand** - Proper QUndoCommand implementation for undo/redo
+- ✅ **Ctrl+Z undo** - Restores deleted events with all primitives, notes, and lock status
+- ✅ **Ctrl+Y redo** - Re-deletes events after undo
+- ✅ **User-friendly dialogs** - Clear error messages for invalid deletion attempts
+- ✅ **Baseline array management** - Properly updates internal arrays on delete/insert
+
+**Technical Achievement:**
+- Integrated with existing QUndoStack system
+- Proper Event object reconstruction on undo
+- View refresh after deletion/insertion
+- Works seamlessly with other undo actions (edits, resets)
+
+**Key Value:**
+- Clean up scenarios by removing unwanted events
+- Maintain data integrity (can't delete critical boundary events)
+- Full undo/redo support for safe experimentation
+
+### Phase 2.3: Inverse Editing → NEXT (Planned)
+**Duration:** 3-4 hours  
+**Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
+
+**Planned Features:**
+- Inverse editing (drag gamma_self to suggest primitives)
+- Manual marker management (add/remove without editing)
+- Heuristic inverse estimation with accept/reject dialog
+
+**Key Value:**
+- Bidirectional editing workflow
+- Goal-oriented scenario construction
+
+**Estimated Completion:** Completes Phase 2 at 100%
+
+---
+
+## Phase 2 Summary Status
+
+**Completed Sub-Phases:**
+- ✅ Phase 2.0: PySide6 Migration & Undo/Redo (~4 hours)
+- ✅ Phase 2.1: Diagnostic Markers + gamma_self0 Editor + Event Insertion (~3 hours)
+- ✅ Phase 2.2: Delete Events (~2 hours)
+
+**Remaining Sub-Phases:**
+- ⏳ Phase 2.3: Inverse Editing (~3-4 hours)
+
+**Overall Phase 2 Progress:** ~80-85% complete (9 hours done, 3-4 hours remaining)
+
+---
+**Duration:** 5-6 hours  
+**Status:** Future
+
+**Core Concept:**
+- Single-file mode by default (works as Phase 1/2)
+- Optional second file load triggers "Dual Mode" for comparison
+- Files can be any scenarios (not just M1/M2) with compatibility checks
+
+**Dual Mode Activation:**
+- File → "Open Second File" menu option
+- Compatibility validation:
+  - ✅ Same number of events
+  - ✅ Same time values (matching timeline)
+  - ✅ Same gamma_self_0 initial condition
+  - ❌ Reject with error dialog if incompatible
+
+**Visual Design - Primitive Plots:**
+- Active file: Solid bold lines, editable markers (current file being edited)
+- Reference file: Dotted/faded lines (30% opacity), non-editable markers
+- Both overlaid on same plots for direct comparison
+- Toggle/radio button to switch which file is active
+- When switching: visual styles swap automatically
+
+**Visual Design - Gamma_Self Plot:**
+- Both trajectories displayed simultaneously (different colors)
+- Active file: Solid line with modification markers
+- Reference file: Dotted/faded line (30% opacity)
+- Legend shows actual filenames (not generic "M1/M2")
+- Both always visible for comparison
+
+**Markers and Locks:**
+- Union of both files: If either file has marker/lock, show it
+- Prevents confusion about which events are important
+
+**File Operations:**
+- `Save`: Saves only active (bold) file → CSV + PNG
+- `Save All` (new): Saves both files → 2 CSVs + 1 combined PNG
+  - Combined PNG shows both trajectories with filenames in legend
+  - PNG name indicates combined view (e.g., `scenario1_scenario2_combined.png`)
+- `Close Second File`: Return to single-file mode
+
+**State Management:**
+- Separate undo stacks per file (preserved when switching)
+- Separate modified_primitives tracking per file
+- Separate marker_positions per file
+- Active file state maintained during session
+
+**Future Enhancements (Phase 4+):**
+- Editable filename display in UI
+- Editable gamma_self_0 (with constraint both must match)
+- Load order doesn't matter (any file can be primary/secondary)
+
+**Key Value:**
+- Compare different scenarios side-by-side
+- M1 vs M2 relationship dynamics visualization
+- Before/after scenario comparison
+- Sensitivity analysis: compare baseline vs modified scenarios
+- Validate symmetry assumptions across perspectives
+
+### Phase 4: Advanced Features (Future)
+**Duration:** 3-4 hours  
+**Status:** Future
+
+**Planned Features:**
+- Fill gaps: Linear/cubic/hold interpolation for unlocked points
+- Automated sensitivity analysis: Rank events by trajectory impact
+- Time unit conversion: Days ↔ Weeks ↔ Months ↔ Years
+- Zoom/pan on plots, animation/playback mode
+- Batch export (PNG plots)
+
+**Key Value:**
+- Production-ready polish
+- Automated diagnostics
+- Professional presentation
 
 ---
 
@@ -109,24 +308,32 @@ Step 3: Save modified CSV → Re-run scenario script
 └───────────────────────────────┴────────────────────────────┘
 ```
 
-### Phase 3: Dual-Perspective Layout (Future)
+### Phase 3: Dual-File Comparison Layout (Future)
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  [Radio] ○ M1  ○ M2    Interactive Scenario Editor         │
+│  Interactive Editor - [Active: scenario1.csv] [Ref: scenario2.csv] │
+│  [Toggle: ● File 1  ○ File 2]  [File] [Save] [Save All]   │
 ├───────────────────────────────┬────────────────────────────┤
-│   M1 PRIMITIVES (Row 1)       │                            │
-│   v r f a S (5 colors)        │   GAMMA_SELF COMBINED      │
-│   ─ ─ ─ ─ ─                   │                            │
-│                               │   • M1 (blue line)         │
-│   M2 PRIMITIVES (Row 2)       │   • M2 (red line)          │
-│   v r f a S (5 colors)        │   • Both labeled           │
-│   ─ ─ ─ ─ ─                   │   • Same time axis         │
-│                               │   • Identify dominant      │
-│   [Shared time axis]          │     events visually        │
+│   PRIMITIVES (Overlay)        │   GAMMA_SELF (Dual)        │
 │                               │                            │
-│   • Radio toggle active view  │                            │
-│   • Inactive = 30% opacity    │                            │
+│   File 1 (solid bold):        │   • File 1 (blue solid)    │
+│   v ━━━━━━━ (active/editable) │   • File 2 (green dotted)  │
+│   r ━━━━━━━                   │                            │
+│   f ━━━━━━━                   │   Legend:                  │
+│   a ━━━━━━━                   │   ━ scenario1.csv (active) │
+│   S ━━━━━━━                   │   ┄ scenario2.csv (ref)    │
+│                               │                            │
+│   File 2 (dotted faded):      │   • Both visible           │
+│   v ┄┄┄┄┄┄┄ (ref/view-only)   │   • Same timeline          │
+│   r ┄┄┄┄┄┄┄  30% opacity      │   • Compare dynamics       │
+│   f ┄┄┄┄┄┄┄                   │   • Modification markers   │
+│   a ┄┄┄┄┄┄┄                   │     on active only         │
+│   S ┄┄┄┄┄┄┄                   │                            │
+│                               │                            │
+│   [Shared time axis]          │   Click toggle to swap     │
+│   • Click toggle to switch    │   active/reference         │
+│   • Markers = union of both   │                            │
 └───────────────────────────────┴────────────────────────────┘
 ```
 

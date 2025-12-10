@@ -7,6 +7,10 @@ Handles click-drag interaction for primitive editing.
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.artist import Artist
+from .canvas_utils import force_canvas_draw
+
+# Global double-click state (persists across point recreation)
+_double_click_armed = None  # Tuple: (event_index, primitive) or None
 
 
 class DraggablePoint:
@@ -81,63 +85,59 @@ class DraggablePoint:
         
     def on_press(self, event):
         """Handle mouse button press."""
+        global _double_click_armed
+        
         if self.locked or event.inaxes != self.ax:
             return
         
-        # Check if it's a double-click event (matplotlib built-in detection)
-        if hasattr(event, 'dblclick') and event.dblclick:
-            # For double-click, check if clicking near our position (x, y)
-            # Use contains() check on the actual point artists since they account for picker tolerance
-            on_point = False
-            
-            # Check preview point if visible
-            if self.preview_point.get_visible():
-                contains_preview, _ = self.preview_point.contains(event)
-                if contains_preview:
-                    on_point = True
-            
-            # Check committed point
-            if not on_point:
-                contains, _ = self.point.contains(event)
-                if contains:
-                    on_point = True
-            
-            # If not directly on a point, check if clicking near our stored position
-            # Use a distance check but only within the same subplot (check event.inaxes)
-            if not on_point and event.xdata is not None and event.ydata is not None:
-                # Simple distance in data coordinates
-                distance = ((event.xdata - self.x)**2 + (event.ydata - self.y)**2)**0.5
-                # Use a more generous tolerance for double-clicks
-                if distance < 1.5:
-                    on_point = True
-                    print(f"[DBLCLICK-PROXIMITY] {self.event_index}/{self.primitive}: distance={distance:.2f}")
-            
-            if on_point:
-                print(f"Double-click detected on {self.event_index}/{self.primitive}")
-                self.on_double_click()
-                return
+        # Check if clicking on this point
+        on_point = False
         
-        # Single click - check if on either point
-        on_preview = False
-        on_committed = False
-        
+        # Check preview point if visible
         if self.preview_point.get_visible():
             contains_preview, _ = self.preview_point.contains(event)
-            on_preview = contains_preview
+            if contains_preview:
+                on_point = True
         
-        if not on_preview:
+        # Check committed point
+        if not on_point:
             contains, _ = self.point.contains(event)
-            on_committed = contains
+            if contains:
+                on_point = True
         
-        # If clicked on either point, start dragging
-        if on_preview or on_committed:
-            self.dragging = True
-            self.original_y = self.y  # Store starting position
+        # If not directly on a point, check proximity in data coordinates
+        if not on_point and event.xdata is not None and event.ydata is not None:
+            distance = ((event.xdata - self.x)**2 + (event.ydata - self.y)**2)**0.5
+            if distance < 1.5:
+                on_point = True
+        
+        if not on_point:
+            return
+        
+        # Check for double-click: if already armed for this exact point, trigger reset
+        if _double_click_armed == (self.event_index, self.primitive):
+            print(f"[DBLCLICK] Second click detected on {self.event_index}/{self.primitive} - triggering reset")
+            _double_click_armed = None  # Disarm
+            self.on_double_click()
+            return
+        
+        # First click: arm for double-click and prepare for potential drag
+        print(f"[CLICK] First click on {self.event_index}/{self.primitive} - armed for double-click")
+        _double_click_armed = (self.event_index, self.primitive)
+        self.dragging = True
+        self.original_y = self.y  # Store starting position
     
     def on_motion(self, event):
         """Handle mouse motion while dragging."""
+        global _double_click_armed
+        
         if not self.dragging or event.inaxes != self.ax:
             return
+        
+        # Disarm double-click if user starts dragging (motion indicates drag intent, not double-click)
+        if _double_click_armed == (self.event_index, self.primitive):
+            _double_click_armed = None
+            print(f"[DRAG] Motion detected - disarming double-click for {self.event_index}/{self.primitive}")
         
         # Update vertical position only (time stays fixed)
         # Clamp to valid range [-10, 10]
@@ -155,7 +155,8 @@ class DraggablePoint:
         if self.preview_callback:
             self.preview_callback(self.event_index, self.primitive, self.y)
         
-        self.ax.figure.canvas.draw_idle()
+        # Force immediate canvas update for Qt backend
+        force_canvas_draw(self.ax.figure.canvas)
     
     def on_release(self, event):
         """Handle mouse button release."""
@@ -168,7 +169,7 @@ class DraggablePoint:
             else:
                 # No change, hide preview
                 self.preview_point.set_visible(False)
-                self.ax.figure.canvas.draw_idle()
+                force_canvas_draw(self.ax.figure.canvas)
     
     def commit_preview(self):
         """Commit preview: move filled point to preview position, hide preview."""
@@ -178,13 +179,13 @@ class DraggablePoint:
             self.original_y = self.y
             # Hide hollow preview
             self.preview_point.set_visible(False)
-            self.ax.figure.canvas.draw_idle()
+            force_canvas_draw(self.ax.figure.canvas)
     
     def cancel_preview(self):
         """Cancel preview: restore to original committed value."""
         self.y = self.original_y
         self.preview_point.set_visible(False)
-        self.ax.figure.canvas.draw_idle()
+        force_canvas_draw(self.ax.figure.canvas)
     
     def on_double_click(self):
         """Handle double-click: reset to baseline CSV value if not already at baseline."""
@@ -199,12 +200,12 @@ class DraggablePoint:
                 self.original_y = self.baseline_y
                 self.point.set_ydata([self.y])
                 self.preview_point.set_visible(False)
-                self.ax.figure.canvas.draw_idle()
+                force_canvas_draw(self.ax.figure.canvas)
         else:
             # Already at baseline, just hide preview if visible
             print(f"Already at baseline: {self.event_index}/{self.primitive} = {self.baseline_y:.3f}")
             self.preview_point.set_visible(False)
-            self.ax.figure.canvas.draw_idle()
+            force_canvas_draw(self.ax.figure.canvas)
     
     def update_position(self, x, y):
         """Update point position (called when model changes)."""
@@ -233,7 +234,7 @@ class DraggablePoint:
             self.hatch_patch.remove()
             self.hatch_patch = None
         
-        self.ax.figure.canvas.draw_idle()
+        force_canvas_draw(self.ax.figure.canvas)
     
     def disconnect(self):
         """Disconnect event handlers and remove visual artists."""
@@ -254,3 +255,38 @@ class DraggablePoint:
         if self.hatch_patch:
             self.hatch_patch.remove()
             self.hatch_patch = None
+    
+    # === Phase 2: Incremental Update Methods ===
+    
+    def set_modified(self, is_modified: bool):
+        """
+        Update visual to show modified/unmodified state.
+        
+        Args:
+            is_modified: True for modified style (hollow), False for baseline style (filled)
+        """
+        color = 'gray' if self.locked else self.point.get_color()
+        
+        if is_modified:
+            # Hollow marker for modified points
+            self.point.set_markerfacecolor('none')
+            self.point.set_markeredgecolor(color)
+            self.point.set_markeredgewidth(2)
+        else:
+            # Filled marker for unmodified points
+            self.point.set_markerfacecolor(color)
+            self.point.set_markeredgecolor(color)
+            self.point.set_markeredgewidth(1.5)
+        
+        force_canvas_draw(self.ax.figure.canvas)
+    
+    def reset_double_click_state(self):
+        """
+        Reset internal double-click detection state machine.
+        
+        Called after successful reset to prevent triple-click triggering another reset.
+        """
+        global _double_click_armed
+        if _double_click_armed == (self.event_index, self.primitive):
+            _double_click_armed = None
+            print(f"[RESET] Double-click state cleared for {self.event_index}/{self.primitive}")

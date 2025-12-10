@@ -4,6 +4,7 @@ Trajectory panel view - displays gamma_self on complex plane.
 
 import matplotlib.pyplot as plt
 import numpy as np
+from .canvas_utils import force_canvas_draw
 
 
 class TrajectoryPanel:
@@ -37,6 +38,10 @@ class TrajectoryPanel:
         # Marker tracking
         self.committed_markers = {}  # {event_idx: (x, y)}
         self.preview_marker_pos = None  # (x, y) for current preview
+        self.insertion_lines = []  # Vertical lines marking inserted events
+        
+        # Track if readout is being used for drag preview (don't let click handler override)
+        self.readout_locked_for_drag = False
         
         # Setup axes
         self.ax.set_xlabel('Ego ← → We', fontsize=10)
@@ -73,6 +78,11 @@ class TrajectoryPanel:
                                            markersize=5, alpha=0.6, zorder=5,
                                            label='Modified')
         
+        # Insertion point markers (small gray diamonds at inserted event positions)
+        self.insertion_markers, = self.ax.plot([], [], 'D', color='gray',
+                                               markersize=4, alpha=0.7, zorder=4,
+                                               label='Inserted')
+        
         # Preview marker (hollow, shown during drag)
         self.preview_marker, = self.ax.plot([], [], 'o', color='orange',
                                             markersize=7, markerfacecolor='none',
@@ -89,18 +99,38 @@ class TrajectoryPanel:
                                                     facecolor='yellow', 
                                                     alpha=0.8))
         
-        # Position readout display (midway vertically, left of Y axis)
-        readout_x = self.layout.get('trajectory_readout_x', -0.15)
-        readout_y = self.layout.get('trajectory_readout_y', 0.5)
+        # Position readout display - positioned at bottom-left corner overlapping the plot
         self.position_readout = self.ax.text(
-            readout_x, readout_y, '',  # Use layout config
-            transform=self.ax.transAxes,
+            0.02, 0.02, '',  # Bottom-left corner inside the plot
+            transform=self.ax.transAxes,  # Use axes transform coordinates
             fontsize=10,
-            verticalalignment='center',
-            horizontalalignment='right',
+            verticalalignment='bottom',
+            horizontalalignment='left',
             bbox=dict(boxstyle='round,pad=0.5', facecolor='lightblue', edgecolor='black', alpha=0.8),
-            visible=False
+            visible=False,
+            zorder=100  # Draw on top
         )
+    
+    def update_gamma_self_readout(self, x, y):
+        """Update gamma_self readout display with complex plane coordinates."""
+        print(f"[GAMMA_SELF READOUT] Showing: x={x:.2f}, y={y:.2f}")
+        # Lock readout to prevent click handler from overriding position
+        self.readout_locked_for_drag = True
+        # Set position at bottom-left corner
+        self.position_readout.set_position((0.02, 0.02))
+        self.position_readout.set_text(f'γ_self\n{x:.2f} + {y:.2f}i')
+        # Ensure alignment is correct
+        self.position_readout.set_horizontalalignment('left')
+        self.position_readout.set_verticalalignment('bottom')
+        self.position_readout.set_visible(True)
+        force_canvas_draw(self.fig.canvas)
+    
+    def clear_gamma_self_readout(self):
+        """Clear gamma_self readout display."""
+        print(f"[GAMMA_SELF READOUT] Clearing")
+        self.readout_locked_for_drag = False
+        self.position_readout.set_visible(False)
+        force_canvas_draw(self.fig.canvas)
         
         # Connect click event
         self.fig.canvas.mpl_connect('button_press_event', self._on_click)
@@ -109,7 +139,7 @@ class TrajectoryPanel:
         
         self.ax.legend(loc='upper right', fontsize=8)
     
-    def update_trajectory(self, gamma_x, gamma_y, marked_data=None, pinned_markers=None, preview_gamma=None, preserve_view=False):
+    def update_trajectory(self, gamma_x, gamma_y, marked_data=None, pinned_markers=None, preview_gamma=None, preserve_view=False, inserted_event_times=None, inserted_events=None):
         """
         Update trajectory display.
         
@@ -117,16 +147,12 @@ class TrajectoryPanel:
             gamma_x: Array of real components (Ego↔We axis)
             gamma_y: Array of imaginary components (Hate↔Love axis)
             marked_data: Dict[event_idx, set of primitives] or List[event_idx]
-            pinned_markers: List of dicts with 'event_idx', 'primitive', 'x', 'y', 'color', 'label'
-            preview_gamma: Tuple (x, y) for preview position marker (hollow)
-            preserve_view: If True, keep current view limits
+            pinned_markers: List of marker dicts with 'event_idx', 'primitive', 'x', 'y', 'color', 'label'
+            preview_gamma: (x, y) tuple for live-drag preview marker
+            preserve_view: If True, maintain current zoom/pan
+            inserted_event_times: List of time values where events were inserted (deprecated)
+            inserted_events: List of dicts with 'index', 'time', 'x', 'y' for inserted events
         """
-        print(f"\n[TRAJECTORY PANEL] update_trajectory called:")
-        print(f"  preserve_view={preserve_view}, fixed_view={self.fixed_view}")
-        print(f"  gamma_x range: [{min(gamma_x):.2f}, {max(gamma_x):.2f}]")
-        print(f"  gamma_y range: [{min(gamma_y):.2f}, {max(gamma_y):.2f}]")
-        print(f"  Final point: ({gamma_x[-1]:.2f}, {gamma_y[-1]:.2f})")
-        
         if len(gamma_x) == 0:
             return
         
@@ -134,14 +160,18 @@ class TrajectoryPanel:
         self._last_gamma_x = gamma_x
         self._last_gamma_y = gamma_y
         
-        # Store current view if preserving
+        # Handle view preservation logic
         if preserve_view or self.fixed_view:
-            self.manual_xlim = self.ax.get_xlim()
-            self.manual_ylim = self.ax.get_ylim()
-        else:
-            # Clear manual view to allow auto-scaling
-            self.manual_xlim = None
-            self.manual_ylim = None
+            # Preserve current view (store if not already stored)
+            if not self.manual_xlim or not self.manual_ylim:
+                self.manual_xlim = self.ax.get_xlim()
+                self.manual_ylim = self.ax.get_ylim()
+        # If user has manually zoomed (via scroll wheel), keep that zoom
+        # Don't clear manual zoom unless explicitly resetting view
+        elif not self.manual_xlim and not self.manual_ylim:
+            # No manual zoom exists and not preserving, so allow auto-scaling
+            pass
+        # else: manual zoom exists, keep it
         
         # Update trajectory line
         self.trajectory_line.set_data(gamma_x, gamma_y)
@@ -165,10 +195,6 @@ class TrajectoryPanel:
         
         # Display pinned markers (at their original gamma_self positions)
         if pinned_markers:
-            print(f"\n=== TRAJECTORY PANEL: Received {len(pinned_markers)} markers ===")
-            for m in pinned_markers:
-                print(f"  Marker: {m}")
-            
             # Group markers by position to offset overlapping labels
             position_groups = {}
             for marker in pinned_markers:
@@ -218,13 +244,32 @@ class TrajectoryPanel:
             self.preview_marker.set_data([preview_gamma[0]], [preview_gamma[1]])
             self.preview_marker.set_visible(True)
             self.preview_marker_pos = preview_gamma
+            
+            # Add label for preview marker
+            preview_label = f"γ: {preview_gamma[0]:.1f} + {preview_gamma[1]:.1f}i"
+            preview_ann = self.ax.annotate(
+                preview_label,
+                xy=(preview_gamma[0], preview_gamma[1]),
+                xytext=(8, 8),
+                textcoords='offset points',
+                fontsize=8,
+                color='orange',
+                weight='bold',
+                bbox=dict(
+                    boxstyle='round,pad=0.4',
+                    facecolor='white',
+                    edgecolor='orange',
+                    alpha=0.95,
+                    linewidth=2
+                )
+            )
+            self.marker_annotations.append(preview_ann)
         elif hasattr(self, 'preview_marker'):
             self.preview_marker.set_visible(False)
             self.preview_marker_pos = None
         
         # Auto-scale or restore manual view
         if self.manual_xlim and self.manual_ylim:
-            print(f"  Using manual view: x={self.manual_xlim}, y={self.manual_ylim}")
             self.ax.set_xlim(self.manual_xlim)
             self.ax.set_ylim(self.manual_ylim)
         else:
@@ -239,7 +284,6 @@ class TrajectoryPanel:
             y_min = min(y_min, -1)
             y_max = max(y_max, 1)
             
-            print(f"  Auto-scaling view: x=[{x_min:.1f}, {x_max:.1f}], y=[{y_min:.1f}, {y_max:.1f}]")
             self.ax.set_xlim(x_min, x_max)
             self.ax.set_ylim(y_min, y_max)
             
@@ -247,15 +291,76 @@ class TrajectoryPanel:
             if self.original_xlim is None and self.original_ylim is None:
                 self.original_xlim = (x_min, x_max)
                 self.original_ylim = (y_min, y_max)
-                print(f"Stored original view: x:[{x_min:.1f}, {x_max:.1f}], y:[{y_min:.1f}, {y_max:.1f}]")
         
-        # Redraw
+        # Draw markers for inserted events
+        self._update_insertion_markers(inserted_events)
+        
+        # Use non-blocking draw for better performance
         self.fig.canvas.draw_idle()
+    
+    def _update_insertion_markers(self, inserted_events):
+        """
+        Mark trajectory points corresponding to inserted events with black diamonds and time labels.
+        
+        Args:
+            inserted_events: List of dicts with 'index', 'time', 'x', 'y'
+        """
+        # Clear old annotations
+        if hasattr(self, 'insertion_annotations'):
+            for ann in self.insertion_annotations:
+                try:
+                    if ann.axes is not None:
+                        ann.remove()
+                except:
+                    pass
+        self.insertion_annotations = []
+        
+        if not inserted_events or len(inserted_events) == 0:
+            self.insertion_markers.set_data([], [])
+            return
+        
+        # Collect marker positions
+        marker_x = [evt['x'] for evt in inserted_events]
+        marker_y = [evt['y'] for evt in inserted_events]
+        
+        # Draw diamond markers
+        self.insertion_markers.set_data(marker_x, marker_y)
+        self.insertion_markers.set_color('black')
+        self.insertion_markers.set_markersize(6)
+        self.insertion_markers.set_alpha(0.8)
+        
+        # Add time labels to the right of each marker
+        for evt in inserted_events:
+            # Format time with appropriate decimals
+            time_val = evt['time']
+            if time_val == int(time_val):
+                time_label = f"{int(time_val)}"
+            else:
+                time_label = f"{time_val:.2f}"
+            
+            ann = self.ax.annotate(
+                time_label,
+                xy=(evt['x'], evt['y']),
+                xytext=(8, 0),  # 8 points to the right
+                textcoords='offset points',
+                fontsize=8,
+                color='black',
+                weight='bold',
+                bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='black', alpha=0.7),
+                zorder=10
+            )
+            self.insertion_annotations.append(ann)
+    
+    def _update_insertion_lines(self, inserted_times, gamma_x, gamma_y):
+        """
+        Deprecated: Now using _update_insertion_markers instead.
+        """
+        pass
     
     def show_computing(self, computing=True):
         """Show/hide 'Computing...' overlay."""
         self.computing_text.set_visible(computing)
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def zoom_in(self, factor=0.8):
         """Zoom in by reducing axis limits."""
@@ -275,12 +380,17 @@ class TrajectoryPanel:
         self.manual_ylim = self.ax.get_ylim()
         self.fixed_view = True
         
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def zoom_out(self, factor=1.2):
         """Zoom out by expanding axis limits."""
-        xlim = self.ax.get_xlim()
-        ylim = self.ax.get_ylim()
+        # Initialize manual limits if not set (first zoom_out without zoom_in)
+        if self.manual_xlim is None or self.manual_ylim is None:
+            self.manual_xlim = self.ax.get_xlim()
+            self.manual_ylim = self.ax.get_ylim()
+        
+        xlim = self.manual_xlim
+        ylim = self.manual_ylim
         
         x_center = (xlim[0] + xlim[1]) / 2
         y_center = (ylim[0] + ylim[1]) / 2
@@ -295,7 +405,7 @@ class TrajectoryPanel:
         self.manual_ylim = self.ax.get_ylim()
         self.fixed_view = True
         
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def reset_view(self):
         """Reset to original full view (when editor first opened)."""
@@ -307,7 +417,7 @@ class TrajectoryPanel:
         if self.original_xlim and self.original_ylim:
             self.ax.set_xlim(self.original_xlim)
             self.ax.set_ylim(self.original_ylim)
-            self.fig.canvas.draw_idle()
+            force_canvas_draw(self.fig.canvas)
             print(f"Reset gamma_self to original view: x:[{self.original_xlim[0]:.1f}, {self.original_xlim[1]:.1f}], y:[{self.original_ylim[0]:.1f}, {self.original_ylim[1]:.1f}]")
         else:
             # Fallback: compute full trajectory view
@@ -325,13 +435,13 @@ class TrajectoryPanel:
                 
                 self.ax.set_xlim(x_min, x_max)
                 self.ax.set_ylim(y_min, y_max)
-                self.fig.canvas.draw_idle()
+                force_canvas_draw(self.fig.canvas)
                 print(f"Reset gamma_self view to x:[{x_min:.1f}, {x_max:.1f}], y:[{y_min:.1f}, {y_max:.1f}]")
             else:
                 # No data, reset to default
                 self.ax.set_xlim(-5, 15)
                 self.ax.set_ylim(-5, 30)
-                self.fig.canvas.draw_idle()
+                force_canvas_draw(self.fig.canvas)
                 print("Reset gamma_self view to default")
     
     def clear(self):
@@ -340,7 +450,7 @@ class TrajectoryPanel:
         self.start_marker.set_data([], [])
         self.end_marker.set_data([], [])
         self.event_markers.set_data([], [])
-        self.fig.canvas.draw_idle()
+        force_canvas_draw(self.fig.canvas)
     
     def save_plot(self, filepath: str):
         """Save the trajectory panel plot to a PNG file.
@@ -410,13 +520,42 @@ class TrajectoryPanel:
             self._click_pos = (event.xdata, event.ydata)
     
     def _on_release(self, event):
-        """Handle mouse button release to update readout."""
+        """Handle mouse button release to update gamma_self gauge."""
+        # Don't override position if readout is locked for drag updates
+        if self.readout_locked_for_drag:
+            self._click_pos = None
+            return
+            
         if event.button == 1 and event.inaxes == self.ax and self._click_pos:  # Left click release
             # Only update if release is in same axes and close to press position
             if event.xdata is not None and event.ydata is not None:
-                # Update readout with clicked position
+                # Update gamma_self gauge with clicked position
                 x, y = self._click_pos
-                self.position_readout.set_text(f"X: {x:.2f}\nY: {y:.2f}")
-                self.position_readout.set_visible(True)
-                self.fig.canvas.draw_idle()
-            self._click_pos = None
+                
+                # Call the gamma_self gauge callback if available
+                if hasattr(self, 'gamma_self_gauge_callback') and self.gamma_self_gauge_callback:
+                    print(f"[TRAJECTORY CLICK] Updating gamma_self gauge with ({x:.2f}, {y:.2f})")
+                    self.gamma_self_gauge_callback(x, y)
+                
+        # ALWAYS clear click position to prevent freezing
+        self._click_pos = None
+    
+    def update_start_marker_style(self, is_modified: bool):
+        """
+        Update start marker appearance based on whether gamma_self_0 is modified.
+        
+        Args:
+            is_modified: True if gamma_self_0 has been changed from CSV default
+        """
+        if is_modified:
+            # Modified: Orange square
+            self.start_marker.set_marker('s')  # Square
+            self.start_marker.set_color('orange')
+            self.start_marker.set_label('Start (Modified)')
+        else:
+            # Original: Green circle
+            self.start_marker.set_marker('o')  # Circle
+            self.start_marker.set_color('green')
+            self.start_marker.set_label('Start')
+        
+        force_canvas_draw(self.fig.canvas)

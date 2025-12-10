@@ -2,64 +2,67 @@
 
 **Purpose:** Track all deviations from default weights in CONSTANTS.md as the WhenMathPrays equation is applied across different relationship types, scenarios, and applications.
 
-**Status (December 2025):** Only **w_neg=1.5** and **ε=1.0** are LOCKED (hybrid asymmetry parameters). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
+**Status (December 2025 - Rev 3.2):** Only **fidelity_scaling_factor=0.12** and **fidelity_epsilon=5.0** are LOCKED (Im-only depth scaling). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
 
 ---
 
-## Framework Stability
+## Framework Stability (Rev 3.2)
 
-**December 2025 Final Simplification:** Love = γ_self position. No L(t) calculation.
+**December 2025 Rev 3.2:** Im-only depth-scaled fidelity asymmetry. Negatives scale with love depth (Im axis only).
 
 | Parameter | Default Value | Status | Notes |
 |-----------|---------------|--------|-------|
-| **w_neg** | 1.5 | **LOCKED** | Negatives hurt 50% more. DO NOT CHANGE. |
-| **ε** | 1.0 | **LOCKED** | Collapse prevention threshold. DO NOT CHANGE. |
-| **ΔS** | 0.02 | Tunable | Entropy drift magnitude per time unit (default 0.02) |
-| **γ_attractor** | -8+0j | Tunable | Entropy attractor position (default: far left Ego axis) |
-| w_v | 0.8 | Tunable | Visibility weight (real axis) |
-| w_r | 1.0 | Tunable | Resonance weight (imaginary axis) |
-| w_f | 1.2 | Tunable | Fidelity weight (imaginary axis, strongest by default) |
-| w_a | 0.6 | Tunable | Altruism weight (imaginary axis) |
-| w_S,R | 0.5 | Tunable | Silence/presence (real axis contribution) |
-| w_S,I | 0.5 | Tunable | Silence/presence (imaginary axis contribution) |
+| **fidelity_scaling_factor** | 0.12 | **LOCKED** | Negative fidelity depth scaling coefficient. DO NOT CHANGE. |
+| **fidelity_epsilon (ε)** | 5.0 | **LOCKED** | Collapse prevention floor for Im depth. DO NOT CHANGE. |
+| **ΔS** | 0.02 | Tunable | Entropy drift magnitude per time unit (unchanged from Rev 3) |
+| **γ_attractor** | -8+0j | Tunable | Entropy attractor position (unchanged from Rev 3) |
+| w_v | 0.8 | Tunable | Visibility weight (real axis, unchanged) |
+| w_r | 1.0 | Tunable | Resonance weight (imaginary axis, unchanged) |
+| w_f | 1.2 | Tunable | Positive fidelity weight (imaginary axis, unchanged) |
+| w_a | 0.6 | Tunable | Altruism weight (imaginary axis, unchanged) |
+| w_S,R | 0.5 | Tunable | Silence/presence (real axis, unchanged) |
+| w_S,I | 0.5 | Tunable | Silence/presence (imaginary axis, unchanged) |
 
-**REMOVED (December 3, 2025):**
-- ~~α = 1.80~~ (gates, no longer used)
-- ~~β, W_cap, c~~ (L(t) calculation removed)
-- ~~η, ξ, λ~~ (drift equations removed)
+**REMOVED (Rev 3.2):**
+- ~~w_f_neg = 25.0~~ (replaced with Im-only depth scaling: 0.12 × max(|Im|, 5.0))
 
-**RESTORED (December 3, 2025 evening):**
-- **ΔS = 0.02** (entropy drift magnitude) — pull toward γ_attractor, scaled by time between events
-- **γ_attractor = -8+0j** (default) — far left Ego axis for typical relationship decay
+**KEY CHANGE IN REV 3.2:**
+- Negative fidelity: Im-only depth scaling (was fixed 25× in Rev 3.1)
+- Formula: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
+- Restores "deeper love = deeper wound" psychology
+- All other parameters remain at Rev 3 values
 
-**ENHANCED (December 4, 2025):**
-- **γ_attractor** now configurable for scenario-specific entropy modeling:
-  - Default `-8+0j`: Isolated self-focus (Ego axis)
-  - Q4 cult `-8+5j`: Hateful-we pulled toward we/love (tribalism)
-  - Q1 recovery `8+5j`: Healthy ego pulled toward love/connection
-  - Q3 despair `-8-5j`: Isolated ego sinking into enmity
+**Configurable entropy attractor for scenario-specific modeling:**
+- Default `-20+0j`: Isolated self-focus (ego-neutral zone)
+- Q4 cult `-8+5j`: Hateful-we pulled toward we/love (tribalism)
+- Q1 recovery `8+5j`: Healthy ego pulled toward love/connection
+- Q3 despair `-8-5j`: Isolated ego sinking into enmity
 
-**Key Insight:** Weights determine how primitives map to γ-space axes. Fidelity (w_f=1.2) has strongest default impact on imaginary axis (Love↔Hate). Visibility (w_v=0.8) and Silence (w_S,R=0.5, w_S,I=0.5) contribute to both axes.
+**Key Insight (Rev 3.2):** Im-only depth scaling restores psychological truth: "The deeper the love, the more betrayal can scar." But scales only by Im (love depth), not full |γ| (prevents Ego/We coupling). Natural ±150i battlefield range emerges from scaling.
 
 ---
 
 ## Tuning History
 
-### Singles Dating to Love (60 days) - PENDING RE-VALIDATION
-**Date:** November 29, 2025 → **INVALIDATED December 3, 2025**  
-**Status:** Previous tuning used old L(t) calculation. Needs re-validation with γ_self position model.  
-**Target Range:** |γ_self| ≈ 3-8 (healthy dating, see CONSTANTS.md)  
-**CSV Primitive Scale:** −10…+10 (human intuitive scale, defended in weights_defense.md)
+### Rev 3.2 Implementation (December 2025)
+**Date:** December 10, 2025  
+**Reason:** Grok consultation recommended Im-only depth scaling (Goldilocks solution)  
+**Problem with Rev 3.1:** Fixed 25× scaling lost psychological truth that deeper love makes you more vulnerable  
+**Solution:** Im-only depth scaling: f' = f × (0.12 × max(|Im|, 5.0)) for negatives  
+**Rationale:** Restores "deeper love = deeper wound" while preventing Rev 3 explosions (only uses Im, not full |γ|)
 
-**Previous tuning (now obsolete):**
-- ~~PRIMITIVE_SCALE = 0.6~~
-- ~~c = 0.01~~
+**All scenarios should work with Rev 3.2 - natural range ±150i emerges from scaling.**
 
-**New approach (pending implementation):**
+### Singles Dating to Love (60 days) - SHOULD WORK WITH REV 3.2
+**Date:** November 29, 2025 → **Updated for Rev 3.2 (December 2025)**  
+**Status:** Should produce more realistic trajectories - damage now scales with love depth.  
+**Expected Range:** |γ_self| ≈ 100-200i (healthy dating/love, doubled scale from Rev 3)  
+**CSV Primitive Scale:** −10…+10 (human intuitive scale, normalized to [-1,+1] in code)
+**Approach:**
 1. Normalize CSV primitives: `p_norm = p_raw / 10` (−10…+10 → −1…+1)
-2. Apply component-wise update with default weights
-3. Check if |γ_self| ends in target range 3-8
-4. If not, tune weights (NOT w_neg or ε)
+2. Apply component-wise update with Rev 3.2 default weights
+3. Check if |γ_self| ends in target range 50-250i
+4. If not, tune weights (NOT w_f_neg)
 
 **Files:** 
 - `data/Single_Dating_2_Love_M1_gamma_self_table.csv`
@@ -88,7 +91,7 @@ r_norm = r_raw / 10
 
 ---
 
-## Weight Tuning Guidelines
+## Weight Tuning Guidelines (Rev 3.2)
 
 When γ_self trajectory doesn't match expectations:
 
@@ -107,9 +110,10 @@ When γ_self trajectory doesn't match expectations:
 - **Example:** If relationship feels like "We" but stays Ego-dominant → increase w_v
 
 ### If asymmetry feels wrong:
-- **DO NOT TOUCH w_neg=1.5** (locked)
+- **DO NOT TOUCH fidelity_scaling_factor=0.12 or ε=5.0** (locked, based on Grok's Goldilocks solution)
 - **Check CSV primitive values** — are negatives truly severe? (f < −5 for betrayal?)
-- **Asymmetry is fundamental** — one betrayal ≠ one apology by design
+- **Understand depth scaling** — same f=-1 causes different damage at 20i vs 150i by design
+- **Rev 3.2 insight:** Deeper love = deeper wound (Im-only scaling), natural ±150i range
 
 ---
 
