@@ -109,11 +109,11 @@ AVAILABLE_WEIGHTS = {
     },
     'w_S_R': {
         'default': 0.5,
-        'description': 'Silence/presence contribution to real axis',
+        'description': 'Shared Breath contribution to real axis',
     },
     'w_S_I': {
         'default': 0.5,
-        'description': 'Silence/presence contribution to imaginary axis',
+        'description': 'Shared Breath contribution to imaginary axis',
     },
     'delS': {
         'default': 0.02,

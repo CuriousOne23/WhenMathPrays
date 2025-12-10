@@ -20,8 +20,8 @@
 | w_r | 1.0 | Tunable | Resonance weight (imaginary axis, unchanged) |
 | w_f | 1.2 | Tunable | Positive fidelity weight (imaginary axis, unchanged) |
 | w_a | 0.6 | Tunable | Altruism weight (imaginary axis, unchanged) |
-| w_S,R | 0.5 | Tunable | Silence/presence (real axis, unchanged) |
-| w_S,I | 0.5 | Tunable | Silence/presence (imaginary axis, unchanged) |
+| w_S,R | 0.5 | Tunable | Shared Breath (real axis, unchanged) |
+| w_S,I | 0.5 | Tunable | Shared Breath (imaginary axis, unchanged) |
 
 **REMOVED (Rev 3.2):**
 - ~~w_f_neg = 25.0~~ (replaced with Im-only depth scaling: 0.12 × max(|Im|, 5.0))
@@ -150,9 +150,9 @@ If casual relationships move too fast:
 - **Q2:** Do long-term relationships (years) need different weights than short-term (weeks)?
 - **Q3:** Should w_f always be highest, or does that vary by culture/relationship class?
 
-### Silence (S) Dual-Axis Contribution
-- **Q4:** Is w_S,R=w_S,I=0.5 optimal, or should silence lean toward one axis?
-- **Q5:** Do different silence types (comfortable vs awkward) need different mappings?
+### Shared Breath (S) Dual-Axis Contribution
+- **Q4:** Is w_S,R=w_S,I=0.5 optimal, or should Shared Breath lean toward one axis?
+- **Q5:** Do different Shared Breath types (comfortable vs awkward) need different mappings?
 
 ### Asymmetry Validation
 - **Q6:** Does w_neg=1.5 feel right across all scenarios? (Betrayal→Repair, Parent loss, etc.)

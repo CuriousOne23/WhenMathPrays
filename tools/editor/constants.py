@@ -12,7 +12,7 @@ PRIMITIVE_LABELS = {
     'r': 'Resonance', 
     'f': 'Fidelity',
     'a': 'Altruism',
-    'S': 'Silence/Presence'
+    'S': 'Shared Breath'
 }
 
 PRIMITIVE_COLORS = {
