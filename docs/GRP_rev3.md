@@ -84,7 +84,7 @@ For rigorous mathematical defense, see [gamma_self_defense.md](gamma_self_defens
 | **r** | Resonance (attunement, synchrony) |
 | **f'** | Fidelity (commitment, with asymmetry applied) |
 | **a** | Altruism (care acts, net positive/negative) |
-| **S** | Silence/Presence (shared moments with minimal words) |
+| **S** | Shared Breath (moments of presence and attunement) |
 | **w_v, w_r, w_f, w_a** | Axis-specific weights (how much each primitive moves you) |
 | **w_{S,R}, w_{S,I}** | Silence split (real + imaginary contributions) |
 | **ΔS** | Entropy drift magnitude (default 0.02) |
@@ -185,8 +185,8 @@ From n=1 onward, γ_self evolves via the recurrence. γ_self0 never appears agai
 | **w_r** | 1.0 | Resonance weight (imaginary axis) |
 | **w_f** | 1.2 | Fidelity weight (imaginary axis, strongest) |
 | **w_a** | 0.6 | Altruism weight (imaginary axis) |
-| **w_{S,R}** | 0.5 | Silence/presence (real axis contribution) |
-| **w_{S,I}** | 0.5 | Silence/presence (imaginary axis contribution) |
+| **w_{S,R}** | 0.5 | Shared Breath (real axis contribution) |
+| **w_{S,I}** | 0.5 | Shared Breath (imaginary axis contribution) |
 | **w_neg** | 1.5 | Negative asymmetry multiplier |
 | **ε** | 1.0 | Collapse prevention threshold |
 

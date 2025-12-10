@@ -29,7 +29,7 @@ VALIDATION CRITERIA:
 NOTES:
 This scenario uses primitives that reflect ego moderation: visibility stays consistent,
 resonance shows the wobble and recovery, fidelity increases steadily, altruism grows as
-Fred learns to listen, and silence/presence increases as comfort develops.
+Fred learns to listen, and Shared Breath increases as comfort develops.
 """
 
 # === CONFIGURATION ===

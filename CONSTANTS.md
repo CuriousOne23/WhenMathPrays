@@ -19,7 +19,7 @@ Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 | **r(t)** | M1→M2 enacted | How resonant M1 is WITH M2 |
 | **f(t)** | M1→M2 enacted | How faithful M1 is TOWARD M2 |
 | **a(t)** | M1→M2 enacted | How altruistic M1 is TOWARD M2 |
-| **S(t)** | M1's perception | Shared silence/presence as FELT BY M1 (M2 may disagree) |
+| **S(t)** | M1's perception | Shared Breath as FELT BY M1 (M2 may disagree) |
 | **γ_self0** | M1's baseline | Initial condition at n=0 (temperament/history anchor) |
 
 **Critical distinction**: 
@@ -50,8 +50,8 @@ Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 | **fidelity_scaling_factor** | 0.12 | – | Negative fidelity depth scaling coefficient | LOCKED |
 | **fidelity_epsilon (ε)** | 5.0 | – | Collapse prevention floor for Im depth | LOCKED |
 | **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
-| **w_{S,R}** | 0.5 | – | Silence/presence (real axis contribution) | Default, tunable |
-| **w_{S,I}** | 0.5 | – | Silence/presence (imaginary axis contribution) | Default, tunable |
+| **w_{S,R}** | 0.5 | – | Shared Breath (real axis contribution) | Default, tunable |
+| **w_{S,I}** | 0.5 | – | Shared Breath (imaginary axis contribution) | Default, tunable |
 | **ΔS** (delS) | 0.02 | time⁻¹ | Entropy drift rate (constant leftward pull per time unit) | Default, tunable |
 | **γ_attractor** | -8+0j | – | Entropy target position (ego axis) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
