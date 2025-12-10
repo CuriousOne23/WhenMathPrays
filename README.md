@@ -1,4 +1,4 @@
-# WhenMathPrays – Core OS™ (Rev 3.1: Linear Fidelity Asymmetry)
+# WhenMathPrays – Core OS™ (Rev 3.2: Im-Only Depth Scaling)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -17,7 +17,7 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (Rev 3.1: December 2025)
+## The One Equation (Rev 3.2: December 2025)
 
 $$
 \boxed{
@@ -32,7 +32,7 @@ $$
 - **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
 - **Love = γ_self(n)** directly (position IS love, no separate calculation)
 - **v, r, f, a, S** = primitives (visibility, resonance, fidelity, altruism, silence/presence)
-- **f'** = f with linear 25:1 asymmetry applied if negative
+- **f'** = f with Im-only depth scaling applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = silence/presence split across real/imaginary axes
 - **ΔS** = entropy drift rate (default 0.05 per time unit)
@@ -41,15 +41,21 @@ $$
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### Rev 3.1 Changes (December 2025 - Minor Refinement)
+### Rev 3.2 Changes (December 2025 - Im-Only Depth Scaling)
 
 **What changed:**
-- **Linear fidelity asymmetry** → f' = 25.0×f for negatives (was state-dependent 1.5×|γ|×f)
-- **Fixed damage** → f=-1 always causes -30i drop (was -1.8i to -270i depending on state)
+- **Im-only depth scaling** → f' = f × (0.12 × max(|Im|, 5.0)) for negatives
+- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
+- **Prevents explosions**: Only scales by Im (love depth), not full |γ| (no Ego/We coupling)
+- **Natural range limits**: ±150i battlefield emerges from scaling, not arbitrary caps
 - **All other parameters unchanged** from Rev 3
-- **Psychology-based** → 25:1 ratio from negativity bias research (Gottman, Baumeister)
 
-**Why?** Rev 3 state-dependent scaling caused catastrophic sensitivity at high love states (f=-1 at 150i → -225i drop). Rev 3.1 makes weak relationships fragile and strong relationships resilient (realistic).
+**Why?** Rev 3.1 fixed 25× scaling lost the psychological insight that deeper love makes you more vulnerable. Rev 3.2 restores depth-dependent damage while avoiding Rev 3's explosions by only using Im axis.
+
+**Examples:**
+- At 20i: f=-1 → -2.4i (fragile early bond)
+- At 150i: f=-1 → -18i (deep love can be wounded)
+- At 250i: f=-10 → -300i (Hachikō-level devotion can reach -150i floor)
 
 See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
@@ -69,24 +75,25 @@ $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
 
-**Linear fidelity asymmetry (Rev 3.1):**
+**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
 $$
 f' = \begin{cases}
-25.0 \cdot f & \text{if } f < 0 \\
-1.0 \cdot f & \text{if } f \geq 0
+f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
+1.2 \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
 Where:
-- **w_f_neg = 25.0** (negatives hurt 25× more than positives heal)
-- **w_f = 1.0** (positive healing at 1:1 ratio)
-- **No state dependence** (same damage regardless of |γ_self|)
+- **0.12** = scaling factor (negatives scale with love depth)
+- **5.0** = ε (collapse prevention floor)
+- **Im** = imaginary component (γ_self love/hate axis)
 
 **Key behaviors:**
-- **Weak relationships** (|γ| < 50i): Small betrayal (f=-1) causes large % drop → fragile
-- **Strong relationships** (|γ| > 100i): Same f=-1 absorbed better → resilient
-- **Healing ratio:** 25 positive events needed to repair 1 negative event
+- **Weak relationships** (Im < 50i): f=-1 causes small absolute drop but large % damage
+- **Deep love** (Im ≈ 150i): f=-1 causes -18i drop, can wound deeply
+- **Saint/Hachikō** (Im ≈ 250i): f=-10 can cause -300i catastrophic drop to -150i floor
+- **Psychology**: The more you love, the more vulnerable you are to betrayal
 
 **Initial condition γ_self0:**
 - Set at n=0 based on temperament/history

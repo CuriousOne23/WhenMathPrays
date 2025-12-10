@@ -4,7 +4,7 @@ This is the **only** file in the entire repository that may contain numerical pa
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 2025 (Rev 3.1: Linear Fidelity Asymmetry)
+Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,19 +32,23 @@ Last updated: December 2025 (Rev 3.1: Linear Fidelity Asymmetry)
 
 ---
 
-## Core Canonical Parameters (Rev 3.1: December 2025)
+## Core Canonical Parameters (Rev 3.2: December 2025)
 
-**Rev 3.1 Changes (Minor refinement based on Grok consultation):**
-- **w_neg/epsilon REMOVED**, replaced with **w_f_neg=25.0** (linear 25:1 asymmetry)
+**Rev 3.2 Changes (Im-only depth scaling based on Grok consultation):**
+- **Fidelity asymmetry now scales by love depth (Im axis only)**, not fixed 25×
+- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
+- **Prevents explosions**: Only uses |Im|, not full |γ_self| (no Ego/We coupling)
+- **Natural range**: ±150i battlefield emerges naturally from scaling
+- **Formula**: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
 - **All other weights unchanged** from Rev 3
-- **Rationale:** State-dependent scaling caused instability at high love states. Fixed 25:1 ratio based on psychological negativity bias research. Weak relationships fragile, strong relationships resilient.
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
 | **w_v** | 0.8 | – | Visibility weight (real axis contribution) | Default, tunable |
 | **w_r** | 1.0 | – | Resonance weight (imaginary axis) | Default, tunable |
 | **w_f** | 1.2 | – | Positive fidelity weight (imaginary axis) | Default, tunable |
-| **w_f_neg** | 25.0 | – | Negative fidelity weight (25:1 asymmetry) | LOCKED |
+| **fidelity_scaling_factor** | 0.12 | – | Negative fidelity depth scaling coefficient | LOCKED |
+| **fidelity_epsilon (ε)** | 5.0 | – | Collapse prevention floor for Im depth | LOCKED |
 | **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
 | **w_{S,R}** | 0.5 | – | Silence/presence (real axis contribution) | Default, tunable |
 | **w_{S,I}** | 0.5 | – | Silence/presence (imaginary axis contribution) | Default, tunable |
@@ -52,11 +56,11 @@ Last updated: December 2025 (Rev 3.1: Linear Fidelity Asymmetry)
 | **γ_attractor** | -8+0j | – | Entropy target position (ego axis) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
 
-**Removed in Rev 3.1:** w_neg, ε (epsilon) — state-dependent hybrid asymmetry eliminated
+**Removed in Rev 3.2:** w_f_neg (fixed 25×) — replaced with Im-only depth scaling
 
 ---
 
-## Component-Wise Update Equation (Rev 3.1)
+## Component-Wise Update Equation (Rev 3.2)
 
 $$
 \boxed{
@@ -88,21 +92,27 @@ $$
 
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
 
-**Linear fidelity asymmetry (Rev 3.1):**
+**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
 $$
 f' = \begin{cases}
-w_{f,\text{neg}} \cdot f & \text{if } f < 0 \\
+f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
 w_f \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
-**Where:** w_f_neg = 25.0 (negatives hurt 25× more than positives heal), w_f = 1.0 (positive healing rate)
+**Where:** 
+- Im = imaginary component of γ_self (love/hate axis)
+- 0.12 = scaling factor (negatives scale with love depth)
+- 5.0 = ε (collapse prevention floor, even at origin betrayal stings)
+- w_f = 1.2 (positive healing rate)
 
 **Key behaviors:**
-- **Weak relationships** (|γ_self| < 50i): Small betrayals (f=-1) cause large drops (-25i), fragile trust
-- **Strong relationships** (|γ_self| > 100i): Same f=-1 still drops -25i, but represents smaller % of total (resilient)
-- **Psychology basis:** 25:1 ratio from negativity bias research (Gottman, Baumeister)
+- **At origin (0i)**: f=-1 → -0.6i, f=-10 → -6i (minimum sting)
+- **Early dating (20i)**: f=-1 → -2.4i, f=-10 → -24i (fragile)
+- **Deep love (150i)**: f=-1 → -18i, f=-10 → -180i (can reach battlefield)
+- **Saint/Hachikō peak (250i)**: f=-1 → -30i, f=-10 → -300i (full range)
+- **Psychology**: "The deeper the love, the more betrayal can scar" — but only using Im (love depth), not Ego/We coupling
 
 ---
 

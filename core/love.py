@@ -1,8 +1,8 @@
 # core/love.py
 # WhenMathPrays – Gamma Relational Persona (GRP)
-# December 2025 Rev 3.1: Linear fidelity asymmetry (fixed 25:1 ratio)
+# December 2025 Rev 3.2: Im-only depth scaling for fidelity asymmetry
 # γ_self(n+1) = γ_self(n) + (w_v·v + w_S,R·S) + i·(w_r·r + w_f·f' + w_a·a + w_S,I·S)
-# where f' = w_f·f if f≥0, else w_f_neg·f (linear 25:1 asymmetry, no state dependence)
+# where f' = w_f·f if f≥0, else f·(0.12·max(|Im|, 5.0)) (depth-scaled asymmetry)
 # See docs/GRP_rev3.md for full specification
 
 from typing import Tuple, Dict, Optional
@@ -10,15 +10,18 @@ import numpy as np
 
 DEFAULT_GAMMA_SELF0 = 0.0 + 0.0j
 
-# Canonical weights (December 2025 Rev 3.1 - see CONSTANTS.md)
+# Canonical weights (December 2025 Rev 3.2 - see CONSTANTS.md)
 # Axis weights (DEFAULT, tunable by scenario)
 W_V = 0.8  # Visibility (real axis, Ego↔We)
 W_R = 1.0  # Resonance (imaginary axis, Hate↔Love)
 W_F = 1.2  # Fidelity positive (imaginary axis)
-W_F_NEG = 25.0  # Fidelity negative (25:1 asymmetry, based on psychology research)
 W_A = 0.6  # Altruism (imaginary axis)
 W_S_R = 0.5  # Silence/presence (real axis contribution)
 W_S_I = 0.5  # Silence/presence (imaginary axis contribution)
+
+# Fidelity asymmetry (Rev 3.2: Im-only depth scaling)
+FIDELITY_SCALING_FACTOR = 0.12  # Negative fidelity scaling coefficient (LOCKED)
+FIDELITY_EPSILON = 5.0  # Collapse prevention floor for Im depth (LOCKED)
 
 # Entropy drift (DEFAULT, tunable by scenario)
 DELTA_S = 0.02  # Entropy drift magnitude per time unit
@@ -29,10 +32,11 @@ DEFAULT_WEIGHTS = {
     'w_v': W_V,
     'w_r': W_R,
     'w_f': W_F,
-    'w_f_neg': W_F_NEG,
     'w_a': W_A,
     'w_S_R': W_S_R,
     'w_S_I': W_S_I,
+    'fidelity_scaling_factor': FIDELITY_SCALING_FACTOR,
+    'fidelity_epsilon': FIDELITY_EPSILON,
     'delS': DELTA_S,
     'gamma_entropy_attractor': GAMMA_ENTROPY_ATTRACTOR,
     'entropy_per_event': False  # False=scale by time (default), True=per event
@@ -41,27 +45,32 @@ DEFAULT_WEIGHTS = {
 
 def apply_fidelity_asymmetry(
     f: float,
+    love_depth: float,
     w_f: float = W_F,
-    w_f_neg: float = W_F_NEG
+    scaling_factor: float = FIDELITY_SCALING_FACTOR
 ) -> float:
-    """Apply linear asymmetry to fidelity.
+    """Apply Im-only depth-scaled asymmetry to fidelity.
     
-    For negatives: f' = w_f_neg · f (25:1 asymmetry, based on psychological research)
-    For positives: f' = w_f · f (1:1, slow repair)
+    For negatives: f' = f · (scaling_factor · love_depth)
+        - The deeper the love (Im axis), the more a betrayal can scar
+        - Scales only by |Im|, not full |γ_self| (prevents Ego/We coupling)
+    For positives: f' = w_f · f (slow repair, always 1.2:1)
     
     Args:
         f: Fidelity primitive value (range -10 to +10)
-        w_f: Weight for positive fidelity (default 1.0)
-        w_f_neg: Weight for negative fidelity (default 25.0)
+        love_depth: max(|Im|, ε) where ε prevents collapse at origin
+        w_f: Weight for positive fidelity (default 1.2)
+        scaling_factor: Depth scaling coefficient for negatives (default 0.12)
     
     Returns:
         Weighted fidelity contribution to imaginary axis
     """
     if f < 0:
-        # Negatives hurt 25x more than positives heal
-        return w_f_neg * f
+        # Negatives scale with love depth: deeper love = deeper wound
+        # At 20i: f=-1 → -2.4i, At 150i: f=-1 → -18i
+        return f * (scaling_factor * love_depth)
     else:
-        # Positives heal at 1:1 ratio (slow repair)
+        # Positives heal at fixed rate (slow repair)
         return w_f * f
 
 
@@ -82,7 +91,7 @@ def update_gamma_self(
     where:
         ΔRe = w_v·v + w_S,R·S  (Ego↔We axis)
         ΔIm = w_r·r + w_f·f' + w_a·a + w_S,I·S  (Hate↔Love axis)
-        f' = apply_fidelity_asymmetry(f)  (linear 25:1 for negatives)
+        f' = apply_fidelity_asymmetry(f, max(|Im|, ε))  (Im-only depth scaling)
         entropy_pull = delS·Δt·(γ_attractor - γ_self) / |γ_attractor - γ_self|
             (pulls toward configurable attractor position, scaled by time and delS magnitude)
     
@@ -90,7 +99,7 @@ def update_gamma_self(
         gamma_self_current: Current position γ_self(n)
         v: Visibility primitive (normalized, typically [-1, 1])
         r: Resonance primitive
-        f: Fidelity primitive (subject to 25:1 asymmetry if negative)
+        f: Fidelity primitive (subject to Im-only depth scaling if negative)
         a: Altruism primitive
         S: Silence/presence primitive (contributes to both axes)
         weights: Optional weight dictionary (defaults to CONSTANTS.md values)
@@ -107,16 +116,20 @@ def update_gamma_self(
     w_v = weights.get('w_v', W_V)
     w_r = weights.get('w_r', W_R)
     w_f = weights.get('w_f', W_F)
-    w_f_neg = weights.get('w_f_neg', W_F_NEG)
     w_a = weights.get('w_a', W_A)
     w_S_R = weights.get('w_S_R', W_S_R)
     w_S_I = weights.get('w_S_I', W_S_I)
+    scaling_factor = weights.get('fidelity_scaling_factor', FIDELITY_SCALING_FACTOR)
+    epsilon = weights.get('fidelity_epsilon', FIDELITY_EPSILON)
     delS = weights.get('delS', DELTA_S)
     gamma_entropy_attractor = weights.get('gamma_entropy_attractor', GAMMA_ENTROPY_ATTRACTOR)
     entropy_per_event = weights.get('entropy_per_event', False)
     
-    # Apply fidelity asymmetry (linear 25:1 for negatives)
-    f_prime = apply_fidelity_asymmetry(f, w_f, w_f_neg)
+    # Compute love depth for fidelity asymmetry (Im-only, with floor)
+    love_depth = max(abs(gamma_self_current.imag), epsilon)
+    
+    # Apply fidelity asymmetry (Im-only depth scaling)
+    f_prime = apply_fidelity_asymmetry(f, love_depth, w_f, scaling_factor)
     
     # Component-wise updates from primitives
     delta_real = w_v * v + w_S_R * S  # Ego↔We axis
