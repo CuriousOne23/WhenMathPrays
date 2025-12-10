@@ -2,17 +2,18 @@
 
 **Purpose:** Track all deviations from default weights in CONSTANTS.md as the WhenMathPrays equation is applied across different relationship types, scenarios, and applications.
 
-**Status (December 2025 - Rev 3.1):** Only **w_f_neg=25.0** is LOCKED (linear fidelity asymmetry). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
+**Status (December 2025 - Rev 3.2):** Only **fidelity_scaling_factor=0.12** and **fidelity_epsilon=5.0** are LOCKED (Im-only depth scaling). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
 
 ---
 
-## Framework Stability (Rev 3.1)
+## Framework Stability (Rev 3.2)
 
-**December 2025 Rev 3.1:** Linear fidelity asymmetry (25:1 fixed ratio). State-dependent hybrid asymmetry removed.
+**December 2025 Rev 3.2:** Im-only depth-scaled fidelity asymmetry. Negatives scale with love depth (Im axis only).
 
 | Parameter | Default Value | Status | Notes |
 |-----------|---------------|--------|-------|
-| **w_f_neg** | 25.0 | **LOCKED** | Negatives hurt 25× more than positives heal. DO NOT CHANGE. |
+| **fidelity_scaling_factor** | 0.12 | **LOCKED** | Negative fidelity depth scaling coefficient. DO NOT CHANGE. |
+| **fidelity_epsilon (ε)** | 5.0 | **LOCKED** | Collapse prevention floor for Im depth. DO NOT CHANGE. |
 | **ΔS** | 0.02 | Tunable | Entropy drift magnitude per time unit (unchanged from Rev 3) |
 | **γ_attractor** | -8+0j | Tunable | Entropy attractor position (unchanged from Rev 3) |
 | w_v | 0.8 | Tunable | Visibility weight (real axis, unchanged) |
@@ -22,12 +23,13 @@
 | w_S,R | 0.5 | Tunable | Silence/presence (real axis, unchanged) |
 | w_S,I | 0.5 | Tunable | Silence/presence (imaginary axis, unchanged) |
 
-**REMOVED (Rev 3.1):**
-- ~~w_neg = 1.5~~ (replaced by w_f_neg = 25.0, linear asymmetry)
-- ~~ε (epsilon) = 1.0~~ (no longer needed, no state-dependent scaling)
+**REMOVED (Rev 3.2):**
+- ~~w_f_neg = 25.0~~ (replaced with Im-only depth scaling: 0.12 × max(|Im|, 5.0))
 
-**KEY CHANGE IN REV 3.1:**
-- Negative fidelity: Fixed 25:1 asymmetry (was state-dependent 1.5×|γ|)
+**KEY CHANGE IN REV 3.2:**
+- Negative fidelity: Im-only depth scaling (was fixed 25× in Rev 3.1)
+- Formula: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
+- Restores "deeper love = deeper wound" psychology
 - All other parameters remain at Rev 3 values
 
 **Configurable entropy attractor for scenario-specific modeling:**
@@ -36,29 +38,30 @@
 - Q1 recovery `8+5j`: Healthy ego pulled toward love/connection
 - Q3 despair `-8-5j`: Isolated ego sinking into enmity
 
-**Key Insight (Rev 3.1):** Fixed 25:1 asymmetry makes weak relationships fragile (realistic) and strong relationships resilient (realistic). Buddha archetype must control primitives (avoid large negatives), not special physics.
+**Key Insight (Rev 3.2):** Im-only depth scaling restores psychological truth: "The deeper the love, the more betrayal can scar." But scales only by Im (love depth), not full |γ| (prevents Ego/We coupling). Natural ±150i battlefield range emerges from scaling.
 
 ---
 
 ## Tuning History
 
-### Rev 3.1 Implementation (December 2025)
-**Date:** December 2025  
-**Reason:** Grok consultation identified catastrophic sensitivity in Rev 3 at high relationship states  
-**Problem:** At |γ_self| ≈ 150i, f=-1 → -225i drop (state-dependent scaling too aggressive)  
-**Solution:** Linear 25:1 asymmetry based on psychology research (Gottman 5:1, Baumeister negativity bias)
+### Rev 3.2 Implementation (December 2025)
+**Date:** December 10, 2025  
+**Reason:** Grok consultation recommended Im-only depth scaling (Goldilocks solution)  
+**Problem with Rev 3.1:** Fixed 25× scaling lost psychological truth that deeper love makes you more vulnerable  
+**Solution:** Im-only depth scaling: f' = f × (0.12 × max(|Im|, 5.0)) for negatives  
+**Rationale:** Restores "deeper love = deeper wound" while preventing Rev 3 explosions (only uses Im, not full |γ|)
 
-**Scenarios should validate correctly with Rev 3.1 - only fidelity asymmetry changed.**
+**All scenarios should work with Rev 3.2 - natural range ±150i emerges from scaling.**
 
-### Singles Dating to Love (60 days) - SHOULD WORK WITH REV 3.1
-**Date:** November 29, 2025 → **Minor update for Rev 3.1 (December 2025)**  
-**Status:** Should work correctly with Rev 3.1 - same weights, only fidelity asymmetry refined.  
+### Singles Dating to Love (60 days) - SHOULD WORK WITH REV 3.2
+**Date:** November 29, 2025 → **Updated for Rev 3.2 (December 2025)**  
+**Status:** Should produce more realistic trajectories - damage now scales with love depth.  
 **Expected Range:** |γ_self| ≈ 100-200i (healthy dating/love, doubled scale from Rev 3)  
 **CSV Primitive Scale:** −10…+10 (human intuitive scale, normalized to [-1,+1] in code)
 **Approach:**
 1. Normalize CSV primitives: `p_norm = p_raw / 10` (−10…+10 → −1…+1)
-2. Apply component-wise update with Rev 3.1 default weights
-3. Check if |γ_self| ends in target range 100-200i
+2. Apply component-wise update with Rev 3.2 default weights
+3. Check if |γ_self| ends in target range 50-250i
 4. If not, tune weights (NOT w_f_neg)
 
 **Files:** 
@@ -88,7 +91,7 @@ r_norm = r_raw / 10
 
 ---
 
-## Weight Tuning Guidelines (Rev 3.1)
+## Weight Tuning Guidelines (Rev 3.2)
 
 When γ_self trajectory doesn't match expectations:
 
@@ -107,10 +110,10 @@ When γ_self trajectory doesn't match expectations:
 - **Example:** If relationship feels like "We" but stays Ego-dominant → increase w_v
 
 ### If asymmetry feels wrong:
-- **DO NOT TOUCH w_f_neg=25.0** (locked, based on psychology research)
+- **DO NOT TOUCH fidelity_scaling_factor=0.12 or ε=5.0** (locked, based on Grok's Goldilocks solution)
 - **Check CSV primitive values** — are negatives truly severe? (f < −5 for betrayal?)
-- **Asymmetry is fundamental** — 25 positive events needed to repair 1 negative by design
-- **Rev 3.1 insight:** Weak relationships fragile (realistic), strong relationships resilient (realistic)
+- **Understand depth scaling** — same f=-1 causes different damage at 20i vs 150i by design
+- **Rev 3.2 insight:** Deeper love = deeper wound (Im-only scaling), natural ±150i range
 
 ---
 

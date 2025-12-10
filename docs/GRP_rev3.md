@@ -1,23 +1,30 @@
 # GRP – Gamma Relational Persona (Revision 3)
 **Valence-neutral, 2-D, empirically extensible framework for modelling love, hate, and all relational intensities between two minds (M1 ↔ M2)**
 
-Status: **ACTIVE (Rev 3.1 refinement - December 2025)**  
+Status: **ACTIVE (Rev 3.2 refinement - December 2025)**  
 Stewardship: Open to rigorous, inspectable contributions  
-Current version: December 9, 2025 (Rev 3.1: Linear fidelity asymmetry)  
-Previous versions: Rev 3 (December 4, 2025), [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
+Current version: December 10, 2025 (Rev 3.2: Im-only depth scaling)  
+Previous versions: Rev 3.1 (December 9, 2025), Rev 3 (December 4, 2025), [UREP_rev2.md](UREP_rev2.md) (December 3, 2025), [UREP.md](UREP.md) (November 2025)
 
 ---
 
-## 📋 REV 3.1 UPDATE (December 9, 2025)
+## 📋 REV 3.2 UPDATE (December 10, 2025)
 
-**Minor refinement to Rev 3:** State-dependent hybrid asymmetry replaced with fixed linear 25:1 asymmetry for negative fidelity.
+**Im-only depth scaling replaces fixed 25× asymmetry (Grok's "Goldilocks solution").**
 
-**Problem identified:** At high relationship states (|γ_self| ≈ 150i), small betrayals (f=-1) caused unrealistic catastrophic drops (-225i). The state-dependent scaling f' = f × 1.5 × max(|γ|, 1.0) made strong relationships too fragile.
+**Problem with Rev 3.1:** Fixed 25× scaling lost the psychological truth that deeper love makes you more vulnerable to betrayal. Same f=-1 caused same -30i drop whether at 20i or 150i.
 
-**Rev 3.1 solution:** Fixed linear 25:1 asymmetry:
-- Rev 3: f' = f × 1.5 × max(|γ|, 1.0) for negatives (state-dependent)
-- Rev 3.1: f' = 25.0 × f for negatives (fixed linear)
-- Makes weak relationships fragile and strong relationships resilient (psychologically realistic)
+**Rev 3.2 solution:** Im-only depth-scaled asymmetry:
+- Rev 3.1: f' = 25.0 × f for negatives (fixed)
+- Rev 3.2: f' = f × (0.12 × max(|Im|, 5.0)) for negatives (depth-scaled)
+- Restores "the deeper the love, the more betrayal can scar"
+- Only uses Im (love depth), not full |γ| (prevents Ego/We coupling)
+- Natural ±150i battlefield range emerges from scaling
+
+**Examples:**
+- At 20i: f=-1 → -2.4i (fragile early bond)
+- At 150i: f=-1 → -18i (deep love can be wounded)
+- At 250i: f=-10 → -300i (can reach -150i floor)
 
 **All other parameters unchanged from Rev 3.**
 
@@ -31,7 +38,7 @@ Previous versions: Rev 3 (December 4, 2025), [UREP_rev2.md](UREP_rev2.md) (Decem
 
 ---
 
-## 2. The Core Equation (Love = Position) [REV 3.1 - ACTIVE]
+## 2. The Core Equation (Love = Position) [REV 3.2 - ACTIVE]
 
 $$
 \boxed{
@@ -42,7 +49,7 @@ i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) -
 }
 $$
 
-**Rev 3.1 refinement:** Equation unchanged, but f' now uses fixed linear asymmetry: f' = 25.0 × f (negative) instead of state-dependent f' = f × 1.5 × max(|γ|, 1.0).
+**Rev 3.2 refinement:** Equation unchanged, but f' now uses Im-only depth scaling: f' = f × (0.12 × max(|Im|, 5.0)) for negatives instead of fixed 25×.
 
 **Note on Formulation:**  
 This discrete recurrence is the computational implementation of a continuous-time damped oscillator system. The underlying dynamics can be expressed as:
