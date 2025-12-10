@@ -538,48 +538,88 @@ class EditorController:
             print(f"Delta for shifting subsequent events: {delta}")
             
             from tools.editor.event import Event
+            from tools.editor.commands import DeleteEventCommand
             
             events = self.model.get_events(self.perspective)
             
-            # Create new event with all primitives = 0
-            new_event = Event(
-                time=insert_time,
-                primitives={'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0},
-                notes='',
-                marker='',
-                locked=False
-            )
+            # Check if we're reinserting a recently deleted event with the same time
+            # Look through undo stack for DeleteEventCommand with matching time
+            restored_primitives = None
+            if self.undo_stack:
+                # Check the most recent command (top of stack)
+                if self.undo_stack.count() > 0:
+                    last_cmd = self.undo_stack.command(self.undo_stack.count() - 1)
+                    if isinstance(last_cmd, DeleteEventCommand):
+                        deleted_time = last_cmd.event_data['time']
+                        if abs(deleted_time - insert_time) < 0.1:  # Same time
+                            restored_primitives = last_cmd.event_data['primitives'].copy()
+                            print(f"[RESTORE] Found deleted event at t={deleted_time}, restoring primitives: {restored_primitives}")
             
-            # Insert at index
-            events.insert(event_idx, new_event)
-            print(f"Inserted new event at index {event_idx}, time={insert_time}")
+            # Create new event - use restored primitives if available, otherwise zeros
+            if restored_primitives:
+                new_event = Event(
+                    time=insert_time,
+                    primitives=restored_primitives,
+                    notes='',
+                    marker='',
+                    locked=False
+                )
+            else:
+                new_event = Event(
+                    time=insert_time,
+                    primitives={'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0},
+                    notes='',
+                    marker='',
+                    locked=False
+                )
             
-            # Shift all subsequent events forward by delta
-            for idx in range(event_idx + 1, len(events)):
+            # FIRST: Shift all events from event_idx onwards forward by delta
+            # This creates the gap where we'll insert the new event
+            print(f"STEP 1: Shift events from index {event_idx} onwards by +{delta}")
+            for idx in range(event_idx, len(events)):
                 old_time = events[idx].time
                 events[idx].time = old_time + delta
                 print(f"  Shifted event {idx}: {old_time} → {events[idx].time}")
             
-            # Update baseline arrays
-            # First insert new event values
+            # THIRD: Insert new event at the calculated position
+            events.insert(event_idx, new_event)
+            print(f"STEP 2: Inserted new event at index {event_idx}, time={insert_time}")
+            
+            # Update baseline arrays to match the new event structure
+            print(f"STEP 3: Update baseline arrays")
+            
+            # After shifting events in-place and inserting new event, we need to:
+            # 1. Insert new arrays for the new event at event_idx
+            # 2. Update time array to match shifted event times
+            
+            # Insert new event's primitives into baseline
             for prim in PRIMITIVE_NAMES:
                 if prim in self.baseline_primitives:
-                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_idx, 0.0)
-                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_idx, 0.0)
+                    prim_value = new_event.markers[prim].value if restored_primitives else 0.0
+                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_idx, prim_value)
+                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_idx, prim_value)
             
-            # Insert time
+            # Rebuild time array from events (since times were shifted)
+            # After insert, baseline arrays have correct length, just need to sync times
             if 'time' in self.baseline_primitives:
+                # Insert makes room at event_idx, but we need to update all times from event_idx onwards
                 self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_idx, insert_time)
                 self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_idx, insert_time)
-            
-            # Update shifted times in baseline arrays
-            for idx in range(event_idx + 1, len(events)):
-                if 'time' in self.baseline_primitives:
+                
+                # Now update shifted times (from event_idx+1 onwards)
+                for idx in range(event_idx + 1, len(events)):
                     self.baseline_primitives['time'][idx] = events[idx].time
                     self.original_baseline_primitives['time'][idx] = events[idx].time
+                    print(f"  Updated baseline time[{idx}] = {events[idx].time}")
             
             # Update views
             self._update_view_modified_state()
+            
+            # Debug: verify event times before updating view
+            print("\n[DEBUG] Event times before update_from_model:")
+            for idx, evt in enumerate(events):
+                print(f"  idx={idx}: time={evt.time}")
+            
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
             
@@ -607,12 +647,11 @@ class EditorController:
             removed_event = events.pop(event_idx)
             print(f"Removed event at time={removed_event.time}")
             
-            # Restore original times (indices shifted back by 1 after removal)
+            # Restore original times
+            # After removal, indices are back to their original positions
             for orig_idx, old_time, new_time in shifted_events:
-                if orig_idx > event_idx:  # These indices are now -1
-                    actual_idx = orig_idx - 1
-                    events[actual_idx].time = old_time
-                    print(f"  Restored event {actual_idx}: {new_time} → {old_time}")
+                events[orig_idx].time = old_time
+                print(f"  Restored event {orig_idx}: {new_time} → {old_time}")
             
             # Update baseline arrays - remove inserted event
             for prim in PRIMITIVE_NAMES:
@@ -626,11 +665,9 @@ class EditorController:
             
             # Update restored times in baseline arrays
             for orig_idx, old_time, new_time in shifted_events:
-                if orig_idx > event_idx:
-                    actual_idx = orig_idx - 1
-                    if 'time' in self.baseline_primitives:
-                        self.baseline_primitives['time'][actual_idx] = old_time
-                        self.original_baseline_primitives['time'][actual_idx] = old_time
+                if 'time' in self.baseline_primitives:
+                    self.baseline_primitives['time'][orig_idx] = old_time
+                    self.original_baseline_primitives['time'][orig_idx] = old_time
             
             # Update views
             self._update_view_modified_state()

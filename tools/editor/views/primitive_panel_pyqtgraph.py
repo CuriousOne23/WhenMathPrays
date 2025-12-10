@@ -69,8 +69,8 @@ class DraggableScatterItem(pg.ScatterPlotItem):
             if len(pts) > 0:
                 idx = pts[0].index()
                 
-                # Check for Ctrl+Click (deletion request)
-                if ev.modifiers() & Qt.ControlModifier:
+                # Check for Ctrl+Click (deletion request) - but NOT Ctrl+Shift+Click
+                if (ev.modifiers() & Qt.ControlModifier) and not (ev.modifiers() & Qt.ShiftModifier):
                     print(f"[CTRL+CLICK] Request to delete event index={idx}")
                     self.sigPointCtrlClicked.emit(idx)
                     ev.accept()
@@ -734,6 +734,9 @@ class PrimitivePanelPyQtGraph(QWidget):
                         
                         # New event should be placed at prev_time + standard_delta
                         insert_time = prev_time + standard_delta
+                        
+                        print(f"[INSERT] Click at {clicked_time:.1f}, prev={prev_time}, next={next_time}")
+                        print(f"[INSERT] Standard delta={standard_delta}, insert_time={insert_time}")
                         
                         # Store insertion time for command to use
                         self.pending_insert_time = insert_time

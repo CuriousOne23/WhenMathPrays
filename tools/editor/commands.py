@@ -229,14 +229,17 @@ class InsertEventBeforeCommand(QUndoCommand):
         # Get insertion time (use the target event's current time)
         if insert_time is not None:
             self.insert_time = insert_time
+            print(f"[COMMAND] Using provided insert_time={insert_time}")
         else:
             # Use the target event's time (new event takes this position)
             self.insert_time = target_time
+            print(f"[COMMAND] Using target event time={target_time}")
         
         # Calculate delta: distance from previous event to insertion point
         # This is how much subsequent events will shift forward
         previous_time = events[event_idx - 1].time
         self.delta = self.insert_time - previous_time
+        print(f"[COMMAND] event_idx={event_idx}, prev_time={previous_time}, delta={self.delta}")
         
         # Store original times of events that will be shifted
         self.shifted_events = []  # [(idx, old_time, new_time), ...]
