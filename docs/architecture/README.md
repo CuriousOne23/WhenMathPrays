@@ -2,17 +2,23 @@
 
 **Purpose**: This documentation tree enables systematic debugging, validates architectural decisions, and tracks convergence across rearchitecture cycles.
 
+**Current Status**: Phase 2 complete (PySide6/PyQtGraph foundation). Phase 3 (M2 integration + QDockWidget) in planning.
+
 ## Navigation
 
 ### Core Architecture Documents
 1. **[01_PRINCIPLES.md](01_PRINCIPLES.md)** - Design invariants and architectural principles
 2. **[02_INFORMATION_FLOW.md](02_INFORMATION_FLOW.md)** - Message sequences and communication patterns
-3. **[03_MODULE_RESPONSIBILITIES.md](03_MODULE_RESPONSIBILITIES.md)** - Component ownership matrix
-4. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
-5. **[05_STATE_MANAGEMENT.md](05_STATE_MANAGEMENT.md)** - State machines and ownership rules
-6. **[06_COORDINATE_SYSTEMS.md](06_COORDINATE_SYSTEMS.md)** - Matplotlib coordinate transforms
-7. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
-8. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
+3. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
+4. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
+5. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
+
+**Note**: Documents 03, 05, and 06 do not exist yet and may be created in Phase 3+ as needed.
+
+### Phase Planning & Roadmap
+- **[../interactive_edit_roadmap.md](../interactive_edit_roadmap.md)** - Complete phase timeline (Phase 1-4)
+- **[../phase2_architecture_recommendations.md](../phase2_architecture_recommendations.md)** - Phase 3 GUI architecture planning (QDockWidget + M2)
+- **[../interactive_edit_ph2_requirements.md](../interactive_edit_ph2_requirements.md)** - Phase 2 detailed requirements (complete)
 
 ### Historical Context
 - **[refactors/](refactors/)** - Refactor history with before/after analysis
@@ -27,14 +33,10 @@
 4. Check `04_API_CONTRACTS.md` to see if contract is being violated
 
 ### When State Seems Wrong
-1. Check `05_STATE_MANAGEMENT.md` for state ownership
-2. Check `04_API_CONTRACTS.md` for which component is authoritative
-3. Verify single source of truth principle from `01_PRINCIPLES.md`
+**Note**: State management document (05) not yet created. For current state management, see EditorModel and Observer pattern implementation in Phase 2. See `../phase2_architecture_recommendations.md` for state management principles.
 
 ### When Coordinates Are Confusing
-1. Check `06_COORDINATE_SYSTEMS.md` for transform explanations
-2. Identify which coordinate system you're working in
-3. Check if LayoutManager should be handling this
+**Note**: PyQtGraph coordinate system documentation (document 06) not yet created. For Phase 2 coordinate handling, see Phase 2.1 implementation notes in `../interactive_edit_ph2_requirements.md` regarding `QGraphicsScene.sigMouseClicked` and `event.scenePos()` usage.
 
 ### When Communication Seems Broken
 1. Check `02_INFORMATION_FLOW.md` for correct message path

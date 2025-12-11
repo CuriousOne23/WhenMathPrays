@@ -307,6 +307,20 @@ def _on_diagnostic_released(self, idx, prim, y_value):
 
 **Recommended Fix**: Move all `core.love` interaction to controller, GUI only calls controller methods.
 
+**Status**: ⏳ Deferred to Phase 3 cleanup (after QDockWidget migration)
+
+---
+
+## Phase 3 Technical Debt Resolution
+
+When implementing Phase 3 (QDockWidget + M2 integration), address:
+1. **TD5** - Move `core.love` imports from GUI to controller
+2. **GUI/Controller separation** - Ensure panels only call controller methods
+3. **State management** - Verify single source of truth for M1/M2 data
+4. **Observer pattern** - Ensure dual-perspective updates work correctly
+
+See [../phase2_architecture_recommendations.md](../phase2_architecture_recommendations.md) for Phase 3 architecture details.
+
 ---
 
 ## Principle Evolution
