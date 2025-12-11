@@ -102,6 +102,22 @@ class EditorMainWindow(QMainWindow):
         self._undo_action = undo_action
         self._redo_action = redo_action
     
+    def _setup_view_menu(self, dock_widgets: dict):
+        """
+        Create View menu with show/hide panel actions.
+        
+        Args:
+            dock_widgets: Dict mapping panel names to QDockWidget instances
+        """
+        # Create View menu
+        view_menu = self.menuBar().addMenu('&View')
+        
+        # Add toggle actions for each dock widget
+        for name, dock in dock_widgets.items():
+            toggle_action = dock.toggleViewAction()
+            toggle_action.setText(f"Show {name}")
+            view_menu.addAction(toggle_action)
+    
     def _on_save(self, csv=True, png=False):
         """
         Handle save request.
