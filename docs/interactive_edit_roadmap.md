@@ -1,10 +1,10 @@
 # Interactive Scenario Editor - Complete Roadmap
 
 **Purpose:** Master timeline showing past, present, and future development  
-**Current Phase:** Phase 2 (~50-60% Complete) → Phase 2.2 Planning  
-**Phase 2 Progress:** 7 hours completed / 12-15 hours total estimated  
-**Total Vision:** ~20-30 hours across 4 phases  
-**Last Updated:** December 7, 2025
+**Current Phase:** Phase 2 COMPLETE → Phase 3 Planning  
+**Phase 2 Progress:** 9 hours completed (READY FOR RELEASE)  
+**Total Vision:** ~30-40 hours across 4 phases  
+**Last Updated:** December 10, 2025
 
 ---
 
@@ -12,10 +12,11 @@
 
 - **Phase 1 (✅ Complete):** Single-perspective editing, drag-and-drop, lock/unlock, real-time trajectory
 - **Phase 2.0 (✅ Complete):** PySide6 migration, undo/redo system
-- **Phase 2.1 (✅ Complete):** Diagnostic "what-if" markers with hypothetical analysis
-- **Phase 2.2 (→ Next):** Add/delete events, inverse editing - [See detailed requirements](interactive_edit_ph2_requirements.md)
-- **Phase 3 (Future):** Dual-perspective (M1/M2) editing with comparison view
-- **Phase 4 (Future):** Advanced features - fill gaps, sensitivity analysis, automation
+- **Phase 2.1 (✅ Complete):** Diagnostic "what-if" markers, gamma_self0 editor, event insertion
+- **Phase 2.2 (✅ Complete):** Delete events functionality
+- **Phase 2.3 (⏸️ Deferred):** Inverse editing - deferred to Phase 4
+- **Phase 3 (→ Next):** M2 integration with QDockWidget flexible workspace - [See architecture doc](phase2_architecture_recommendations.md)
+- **Phase 4 (Future):** Advanced features - inverse editing, sensitivity analysis, analysis window
 
 ---
 
@@ -130,20 +131,27 @@
 - Maintain data integrity (can't delete critical boundary events)
 - Full undo/redo support for safe experimentation
 
-### Phase 2.3: Inverse Editing → NEXT (Planned)
-**Duration:** 3-4 hours  
-**Status:** Planning - [Detailed requirements](interactive_edit_ph2_requirements.md)
+### Phase 2.3: Inverse Editing ⏸️ DEFERRED (To Phase 4)
+**Duration:** 15-20 hours (much more complex than initially estimated)  
+**Status:** Deferred to Phase 4 - requires research and sophisticated algorithms
 
-**Planned Features:**
+**Reason for Deferral:**
+- Much more complex than originally anticipated
+- Non-unique solutions (many primitive combinations can produce same gamma_self)
+- Requires constraint satisfaction solver and heuristic optimization
+- Better suited after M2 integration (Phase 3) when dual-perspective complexity is understood
+- Would significantly delay Phase 2 release for marginal benefit
+
+**Planned Features (Phase 4):**
 - Inverse editing (drag gamma_self to suggest primitives)
-- Manual marker management (add/remove without editing)
-- Heuristic inverse estimation with accept/reject dialog
+- Constraint solver with multiple solution candidates
+- Accept/reject dialog with preview of suggested primitive changes
+- Heuristic scoring to rank solutions by "naturalness"
 
 **Key Value:**
 - Bidirectional editing workflow
 - Goal-oriented scenario construction
-
-**Estimated Completion:** Completes Phase 2 at 100%
+- "Work backwards" from desired outcome
 
 ---
 
@@ -154,50 +162,59 @@
 - ✅ Phase 2.1: Diagnostic Markers + gamma_self0 Editor + Event Insertion (~3 hours)
 - ✅ Phase 2.2: Delete Events (~2 hours)
 
-**Remaining Sub-Phases:**
-- ⏳ Phase 2.3: Inverse Editing (~3-4 hours)
+**Deferred Sub-Phases:**
+- ⏸️ Phase 2.3: Inverse Editing → Moved to Phase 4 (complexity + M2 interactions)
 
-**Overall Phase 2 Progress:** ~80-85% complete (9 hours done, 3-4 hours remaining)
+**Overall Phase 2 Status:** ✅ **COMPLETE and READY FOR RELEASE** (9 hours total)
 
 ---
-**Duration:** 5-6 hours  
-**Status:** Future
+
+### Phase 3: M2 Integration & Flexible Workspace → NEXT
+**Duration:** 10-12 hours  
+**Status:** Planning - [See architecture doc](phase2_architecture_recommendations.md)
 
 **Core Concept:**
-- Single-file mode by default (works as Phase 1/2)
-- Optional second file load triggers "Dual Mode" for comparison
-- Files can be any scenarios (not just M1/M2) with compatibility checks
+- M1 and M2 (partner perspectives) share same graphs with overlay visualization
+- QDockWidget architecture for flexible, resizable, movable panels
+- Perspective switcher (radio buttons) to toggle between M1/M2 editing
+- Active/inactive visual states (bold vs. faded)
 
-**Dual Mode Activation:**
-- File → "Open Second File" menu option
-- Compatibility validation:
-  - ✅ Same number of events
-  - ✅ Same time values (matching timeline)
-  - ✅ Same gamma_self_0 initial condition
-  - ❌ Reject with error dialog if incompatible
+**Phase 3.1: QDockWidget Foundation** (3-4 hours)
+- Wrap panels in QDockWidget for resize/rearrange/hide/undock
+- View menu for panel visibility controls
+- Layout persistence (QSettings automatic save/restore)
+- Multi-monitor support
 
-**Visual Design - Primitive Plots:**
-- Active file: Solid bold lines, editable markers (current file being edited)
-- Reference file: Dotted/faded lines (30% opacity), non-editable markers
-- Both overlaid on same plots for direct comparison
-- Toggle/radio button to switch which file is active
-- When switching: visual styles swap automatically
+**Phase 3.2: Perspective Switcher** (2 hours)
+- Radio button widget (red glow = active, grey = inactive)
+- Toolbar placement for visibility
+- Keyboard shortcut (Tab or Space) to toggle M1/M2
+- Connected to controller.switch_perspective()
 
-**Visual Design - Gamma_Self Plot:**
-- Both trajectories displayed simultaneously (different colors)
-- Active file: Solid line with modification markers
-- Reference file: Dotted/faded line (30% opacity)
-- Legend shows actual filenames (not generic "M1/M2")
-- Both always visible for comparison
+**Phase 3.3: M2 Overlay Rendering** (3-4 hours)
+- Both M1 and M2 datasets render on same graphs
+- Active perspective: bold lines, solid markers, draggable (opacity=1.0)
+- Inactive perspective: thin/dashed lines, hollow markers, read-only (opacity=0.4)
+- Z-order management (active renders on top)
+- Interaction filtering (drag/click only affects active perspective)
 
-**Markers and Locks:**
-- Union of both files: If either file has marker/lock, show it
-- Prevents confusion about which events are important
+**Phase 3.4: M2 Data Model** (2 hours)
+- EditorModel tracks both M1 and M2 events
+- CSV format extension (M2 columns or separate files)
+- Backward compatible (old M1-only CSVs load fine)
+- Observer pattern handles dual-perspective updates
 
-**File Operations:**
-- `Save`: Saves only active (bold) file → CSV + PNG
-- `Save All` (new): Saves both files → 2 CSVs + 1 combined PNG
-  - Combined PNG shows both trajectories with filenames in legend
+**Key Benefits:**
+- Space-efficient overlay design (no duplicate panels needed)
+- Flexible workspace adapts to laptop/wide monitor/dual monitor
+- Clear visual feedback on which perspective is being edited
+- Future-proof for statistics panels, help, debug instrumentation
+
+**Key Value:**
+- Edit both partner perspectives (M1 and M2) in single session
+- Compare perspectives side-by-side with overlay visualization
+- Professional, flexible workspace for serious research use
+- Foundation for Phase 4 advanced features
   - PNG name indicates combined view (e.g., `scenario1_scenario2_combined.png`)
 - `Close Second File`: Return to single-file mode
 

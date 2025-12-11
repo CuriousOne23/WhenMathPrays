@@ -1,23 +1,24 @@
 # Interactive Editor - Phase 2 Requirements
 
-**Status:** PARTIAL - Phase 2.0 & 2.1 Complete  
+**Status:** READY FOR RELEASE - Phase 2.0, 2.1, and 2.2 Complete  
 **Target:** Post Phase 1 completion  
-**Estimated Effort:** 12-15.5 hours (7 hours completed, 5-8.5 hours remaining)  
-**Last Updated:** December 7, 2025
+**Estimated Effort:** 9 hours completed  
+**Last Updated:** December 10, 2025
 
 ---
 
 ## Phase 2 Overview
 
 Phase 2 migrates to a modern UI framework and adds critical functionality for more complex editing scenarios:
-- **✅ PySide6 migration** (professional UI foundation) - COMPLETE
-- **✅ Enhanced undo/redo system** with QUndoStack - COMPLETE
-- **✅ Diagnostic "What-If" markers** (hypothetical analysis without modifying data) - COMPLETE
-- **✅ Edit initial state (gamma_self0)** with real/imaginary spinboxes - COMPLETE
-- **✅ Fractional time support** and event insertion via time entry list - COMPLETE
-- **⏳ Delete events** functionality - PLANNED
-- **⏳ Inverse editing** (drag gamma_self to suggest primitives) - PLANNED
-- **⏳ Manual marker management** (add/remove markers without dragging) - PLANNED
+- **✅ Phase 2.0: PySide6 migration** (professional UI foundation) - COMPLETE
+- **✅ Phase 2.0: Enhanced undo/redo system** with QUndoStack - COMPLETE
+- **✅ Phase 2.1: Diagnostic "What-If" markers** (hypothetical analysis without modifying data) - COMPLETE
+- **✅ Phase 2.1: Edit initial state (gamma_self0)** with real/imaginary spinboxes - COMPLETE
+- **✅ Phase 2.1: Fractional time support** and event insertion via time entry list - COMPLETE
+- **✅ Phase 2.2: Delete events** functionality - COMPLETE
+- **⏳ Phase 2.3: Inverse editing** (drag gamma_self to suggest primitives) - DEFERRED to future release
+
+**Note:** Inverse editing (Phase 2.3) has been deferred as it's a complex, advanced feature better suited for Phase 4 after M2 integration is complete.
 
 ---
 
