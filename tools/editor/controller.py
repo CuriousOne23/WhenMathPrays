@@ -11,6 +11,7 @@ from typing import Optional, List
 from PySide6.QtCore import QTimer
 from tools.editor.constants import PRIMITIVE_NAMES, is_inserted_event
 from tools.editor.editor_constants import FLOAT_TOLERANCE, TIME_MATCH_TOLERANCE
+from tools.editor.editor_state import EditorState, PerspectiveState, FileLoadState
 from tools.editor.editor_utils import (
     remove_event_markers, clear_modified_primitives_for_event,
     get_all_modified_markers, update_baseline_arrays
@@ -44,7 +45,7 @@ class EditorController:
     - Modified state synchronization to views
     """
     
-    def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None):
+    def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None, editor_state=None):
         """
         Initialize controller.
         
@@ -53,21 +54,20 @@ class EditorController:
             primitive_panel: PrimitivePanel instance
             trajectory_panel: TrajectoryPanel instance
             undo_stack: QUndoStack instance (optional)
+            editor_state: EditorState instance (optional, creates new if None)
         """
         self.model = model
         self.primitive_panel = primitive_panel
         self.trajectory_panel = trajectory_panel
         self.undo_stack = undo_stack
         
-        # Phase 3 refactoring: Removed controller reference from view (violates MVC)
-        # self.primitive_panel.controller = self
+        # Centralized state management
+        self.state = editor_state if editor_state is not None else EditorState()
         
         # Set up observer pattern for automatic cache invalidation
         self.model.modified_primitives.add_observer(self._on_modified_primitives_changed)
         
         self.debounce_timer: Optional[threading.Timer] = None
-        self.dirty = False
-        self.perspective = "M1"  # Currently only M1 supported
         
         # GRP computation parameters
         self.weights = DEFAULT_WEIGHTS.copy()
@@ -80,22 +80,51 @@ class EditorController:
         self.baseline_primitives = {}
         # Store ORIGINAL CSV baseline values - never updated, used for reset comparison
         self.original_baseline_primitives = {}
-        
-        # Track initial load to allow auto-zoom only on first render
-        self.initial_load_complete = False
-        
-        # Track if we're in undo/redo operation (to prevent recursive undo commands)
-        self.in_undo_redo = False
     
-    def load_scenario(self, filepath: str):
+    @property
+    def perspective(self) -> str:
+        """Get current perspective as string (for backward compatibility)."""
+        return self.state.perspective.value
+    
+    @property
+    def dirty(self) -> bool:
+        """Get dirty flag from state (for backward compatibility)."""
+        return self.state.dirty
+    
+    @property
+    def initial_load_complete(self) -> bool:
+        """Get initial load complete flag from state."""
+        return self.state.initial_load_complete
+    
+    @initial_load_complete.setter
+    def initial_load_complete(self, value: bool):
+        """Set initial load complete flag in state."""
+        self.state.initial_load_complete = value
+    
+    @property
+    def in_undo_redo(self) -> bool:
+        """Get undo/redo operation flag from state."""
+        return self.state.is_in_undo_operation()
+    
+    def load_scenario(self, m1_filepath: str, m2_filepath: Optional[str] = None):
         """
         Load scenario from CSV and update views.
+        
         Args:
-            filepath: Path to CSV file
+            m1_filepath: Path to M1 CSV file
+            m2_filepath: Path to M2 CSV file (None if doesn't exist)
         """
-        # Load into model
-        self.model.load_csv(filepath, self.perspective)
-        print(f"[DEBUG] EditorController.load_scenario: events_m1 count = {len(self.model.events_m1) if hasattr(self.model, 'events_m1') else 'N/A'}")
+        # Load M1 data
+        self.model.load_csv(m1_filepath, "M1")
+        
+        # Load M2 data if provided
+        if m2_filepath:
+            self.model.load_csv(m2_filepath, "M2")
+            self.state.set_file_load_state(FileLoadState.DUAL_PERSPECTIVE)
+        else:
+            # Single file loaded - determine if M1 or M2
+            # This is set later by interactive_editor based on file detection
+            pass
 
         # Store baseline primitives (for reset functionality)
         self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
@@ -109,7 +138,6 @@ class EditorController:
 
         # Initialize modified_primitives as empty - will track user modifications only
         events = self.model.get_events(self.perspective)
-        print(f"[DEBUG] EditorController.load_scenario: get_events returned {len(events)} events")
         self.model.modified_primitives.clear()
         # Don't mark anything as modified on load - user hasn't modified anything yet
 
@@ -125,6 +153,48 @@ class EditorController:
         self.initial_load_complete = False
         self._recompute_trajectory_immediate()
         self.initial_load_complete = True  # Preserve view on all subsequent updates
+    
+    def switch_perspective(self, perspective: str):
+        """
+        Switch between M1 and M2 perspectives.
+        
+        Args:
+            perspective: Either 'M1' or 'M2'
+        """
+        if perspective not in ['M1', 'M2']:
+            raise ValueError(f"Invalid perspective: {perspective}. Must be 'M1' or 'M2'")
+        
+        if perspective == self.perspective:
+            return  # Already on this perspective
+        
+        # Update perspective using state transition
+        old_perspective = self.perspective
+        target_state = PerspectiveState.M1 if perspective == 'M1' else PerspectiveState.M2
+        self.state.switch_perspective(target_state)
+        
+        # Update display name on panels
+        display_name = self.model.get_display_name(perspective)
+        self.primitive_panel.set_scenario_name(display_name)
+        self.trajectory_panel.set_scenario_name(display_name)
+        
+        # Update all views with new perspective data
+        self._update_all_views()
+        
+        # Recompute trajectory for new perspective
+        self._recompute_trajectory_immediate()
+    
+    def has_dual_perspective(self) -> bool:
+        """
+        Check if both M1 and M2 perspectives have data loaded.
+        
+        Used to determine whether to show perspective switcher UI and enable
+        dual-perspective overlay visualization.
+        
+        Returns:
+            True if both M1 and M2 have events loaded, False if only one perspective
+        """
+        return (hasattr(self.model, 'events_m1') and len(self.model.events_m1) > 0 and
+                hasattr(self.model, 'events_m2') and len(self.model.events_m2) > 0)
     
     def on_diagnostic_marker_placed(self, event_idx: int):
         """
@@ -169,6 +239,14 @@ class EditorController:
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
         Handle primitive value change from UI drag (on release - commit to model).
+        
+        This is called when the user releases a draggable marker, finalizing the edit.
+        Creates an undo command and updates the model, then recomputes the trajectory.
+        
+        Args:
+            event_index: Index of the event being modified
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+            value: New value for the primitive
         """
         # Get old value for undo
         old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
@@ -193,7 +271,6 @@ class EditorController:
         if event_time not in self.model.modified_primitives:
             self.model.modified_primitives[event_time] = set()
         self.model.modified_primitives[event_time].add(primitive)
-        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         
         # Store marker position from committed trajectory (must happen before display)
         # First compute trajectory to get the position
@@ -236,7 +313,32 @@ class EditorController:
         """
         Apply primitive change without undo tracking (used by undo commands).
         
+        Updates the model and marker positions, checking if the value is back to baseline
+        to determine modified state. Does not create undo commands (used internally by
+        undo/redo operations to avoid infinite recursion).
+        
         Args:
+            event_index: Index of the event being modified
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+            value: New value for the primitive
+        
+        Side Effects:
+            - Updates model.modified_primitives dictionary
+            - Updates model.marker_positions for trajectory visualization
+            - Triggers incremental UI update for the modified marker
+        """        Updates the model and marker positions, checking if the value is back to baseline
+        to determine modified state. Does not create undo commands (used internally by
+        undo/redo operations to avoid infinite recursion).
+        
+        Args:
+            event_index: Index of the event being modified
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+            value: New value for the primitive
+        
+        Side Effects:
+            - Updates model.modified_primitives dictionary
+            - Updates model.marker_positions for trajectory visualization
+            - Triggers incremental UI update for the modified marker
             event_index: Event index
             primitive: Primitive name
             value: New value
@@ -259,14 +361,11 @@ class EditorController:
             marker_key = (event_time, primitive)
             if marker_key in self.model.marker_positions:
                 del self.model.marker_positions[marker_key]
-                print(f"[DEBUG] Removed marker position for {marker_key} (back to baseline)")
         else:
             # Modified, add to set
             if event_time not in self.model.modified_primitives:
                 self.model.modified_primitives[event_time] = set()
             self.model.modified_primitives[event_time].add(primitive)
-        
-        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -329,7 +428,7 @@ class EditorController:
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=True)
         
         # Schedule debounced recomputation
-        self.dirty = True
+        self.state.mark_dirty()
         self._schedule_recomputation_preview()
     
     def on_primitive_reset(self, event_index: int, primitive: str):
@@ -731,7 +830,12 @@ class EditorController:
             traceback.print_exc()
     
     def commit_changes(self):
-        """Commit all preview changes."""
+        """
+        Commit all preview changes to the model (finalize drag operations).
+        
+        Called when user releases mouse after dragging a marker. Moves changes from
+        model.preview_changes to permanent state and triggers full UI update.
+        """
         print("\n=== COMMIT CHANGES ===")
         print("Note: Markers already stored on drag. Commit just finalizes to model.")
         
@@ -747,7 +851,12 @@ class EditorController:
         print("=== END COMMIT ===")
     
     def cancel_changes(self):
-        """Cancel all preview changes."""
+        """
+        Cancel all preview changes and revert to committed state.
+        
+        Clears model.preview_changes and restores UI to last committed values.
+        Used when user cancels a drag operation or on escape key.
+        """
         self.model.clear_previews()
         self.primitive_panel.cancel_all_previews()
         
@@ -861,7 +970,16 @@ class EditorController:
         # after insertion. No need to clear them.
     
     def _update_baseline_after_delete(self, deleted_idx: int):
-        """Update baseline primitives and modified_primitives after deleting an event."""
+        """
+        Update baseline primitives after deleting an event.
+        
+        Re-fetches baseline from model after deletion. Modified primitives and marker
+        positions are already handled by model.delete_event() and use time-based keys,
+        so they don't need manual adjustment here.
+        
+        Args:
+            deleted_idx: Index of the deleted event (for reference only)
+        """
         # Re-fetch baseline from model
         self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
         
@@ -932,7 +1050,8 @@ class EditorController:
         events = self.model.get_events(self.perspective)
         
         if len(events) == 0:
-            QTimer.singleShot(0, self.trajectory_panel.clear)
+            # No events - just hide the computing indicator
+            QTimer.singleShot(0, lambda: self.trajectory_panel.show_computing(False))
             return
         
         # Get primitives (with or without preview)
@@ -977,7 +1096,66 @@ class EditorController:
         # Store or display
         self._display_trajectory(gamma_trajectory, preview_mode=preview_mode)
         
-        self.dirty = False
+        # Compute and display overlay trajectory for inactive perspective (Phase 3.3)
+        # Only show overlay if dual-perspective data is loaded
+        if not preview_mode and self.has_dual_perspective():
+            inactive_perspective = "M2" if self.perspective == "M1" else "M1"
+            inactive_events = self.model.get_events(inactive_perspective)
+            if len(inactive_events) > 0:
+                self._compute_and_display_overlay(inactive_perspective)
+        elif not preview_mode:
+            # Clear overlay if no dual perspective
+            self.trajectory_panel.set_overlay_trajectory(None, None)
+        
+        self.state.mark_clean()
+    
+    def _compute_and_display_overlay(self, inactive_perspective: str):
+        """
+        Compute and display overlay trajectory for inactive perspective (Phase 3.3).
+        
+        Args:
+            inactive_perspective: "M1" or "M2"
+        """
+        events = self.model.get_events(inactive_perspective)
+        if len(events) == 0:
+            self.trajectory_panel.set_overlay_trajectory(None, None)
+            return
+        
+        # Get primitives
+        primitives_data = self.model.get_primitives_array(inactive_perspective, include_preview=False)
+        times = primitives_data['time']
+        data = {
+            'v': primitives_data['v'],
+            'r': primitives_data['r'],
+            'f': primitives_data['f'],
+            'a': primitives_data['a'],
+            'S': primitives_data['S']
+        }
+        
+        # Compute gamma_self trajectory
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        
+        for i in range(len(events) - 1):
+            v = data['v'][i]
+            r = data['r'][i]
+            f = data['f'][i]
+            a = data['a'][i]
+            S = data['S'][i]
+            dt = times[i + 1] - times[i]
+            
+            gamma_self = update_gamma_self(
+                gamma_self_current=gamma_self,
+                v=v, r=r, f=f, a=a, S=S,
+                time_delta=dt,
+                weights=self.weights
+            )
+            gamma_trajectory.append(gamma_self)
+        
+        # Extract components and display
+        gamma_x = [g.real for g in gamma_trajectory]
+        gamma_y = [g.imag for g in gamma_trajectory]
+        self.trajectory_panel.set_overlay_trajectory(gamma_x, gamma_y)
     
     def _display_trajectory(self, gamma_trajectory, preview_mode=False):
         """
@@ -1008,7 +1186,6 @@ class EditorController:
         # Build time-to-index mapping for converting time-based keys to indices
         events = self.model.get_events(self.perspective)
         time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
-        print(f"[DEBUG] time_to_idx after insert: {time_to_idx}")
         
         # Build marked_data: {event_idx: set of modified primitives}
         marked_data = {}
@@ -1031,17 +1208,12 @@ class EditorController:
         # Build pinned marker positions for gamma_self display
         # Format: [(event_idx, primitive, x, y, color), ...]
         pinned_markers = []
-        print(f"\n=== DISPLAY TRAJECTORY (preview={preview_mode}) ===")
-        print(f"marker_positions dict: {self.model.marker_positions}")
         
         for (event_time, prim), gamma_pos in self.model.marker_positions.items():
             # Convert time to current index
-            print(f"[DEBUG] Processing marker: event_time={event_time}, prim={prim}, gamma_pos={gamma_pos}")
             if event_time not in time_to_idx:
-                print(f"[DEBUG] Skipping marker - event_time {event_time} not in time_to_idx")
                 continue  # Event was deleted
             event_idx = time_to_idx[event_time]
-            print(f"[DEBUG] Marker maps to event_idx={event_idx}")
             
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
             marker = {
@@ -1053,10 +1225,6 @@ class EditorController:
                 'label': f"{event_time}/{prim}"
             }
             pinned_markers.append(marker)
-            print(f"  Building marker: {marker}")
-        
-        print(f"Total pinned_markers: {len(pinned_markers)}")
-        print("=== END DISPLAY ===")
         
         # Find gamma position to display in gauge
         # NOTE: preview_gamma is only for the trajectory plot preview marker, NOT the gauge
@@ -1115,11 +1283,21 @@ class EditorController:
     def _update_all_views(self):
         """Update all views from model."""
         events = self.model.get_events(self.perspective)
+        
+        # Get inactive perspective events for overlay (Phase 3.3)
+        # Only show overlay if dual-perspective data is loaded
+        overlay_events = None
+        if self.has_dual_perspective():
+            inactive_perspective = "M2" if self.perspective == "M1" else "M1"
+            overlay_events = self.model.get_events(inactive_perspective)
+        
         self.primitive_panel.update_from_model(events)
+        self.primitive_panel.set_overlay_data(overlay_events)
         
         # Refresh view to show current model state
         events = self.model.get_events(self.perspective)
         self.primitive_panel.update_from_model(events)
+        self.primitive_panel.set_overlay_data(overlay_events)
     
     def _on_modified_primitives_changed(self, *args, **kwargs):
         """

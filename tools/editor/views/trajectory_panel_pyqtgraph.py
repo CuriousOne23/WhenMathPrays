@@ -64,6 +64,14 @@ class TrajectoryPanelPyQtGraph(QWidget):
         )
         self.plot_widget.addItem(self.trajectory_line)
         
+        # Create overlay trajectory line (inactive perspective - dotted, faded)
+        self.overlay_trajectory_line = pg.PlotCurveItem(
+            pen=pg.mkPen(color='b', width=LINE_WIDTH_TRAJECTORY, style=Qt.DotLine, alpha=128),
+            name='Overlay'
+        )
+        self.overlay_trajectory_line.setZValue(-5)  # Below active trajectory
+        self.plot_widget.addItem(self.overlay_trajectory_line)
+        
         # Create start marker (green triangle pointing right)
         self.start_marker = pg.ScatterPlotItem(
             size=MARKER_SIZE_TRAJECTORY_START,
@@ -198,6 +206,20 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.diagnostic_marker.setVisible(False)
         print(f"[DIAGNOSTIC] Cleared trajectory marker")
         
+    def set_overlay_trajectory(self, gamma_x, gamma_y):
+        """
+        Set overlay trajectory for inactive perspective (Phase 3.3).
+        
+        Args:
+            gamma_x: Array of real components (or None to hide)
+            gamma_y: Array of imaginary components (or None to hide)
+        """
+        if gamma_x is None or gamma_y is None or len(gamma_x) == 0:
+            self.overlay_trajectory_line.setData([], [])
+            return
+        
+        self.overlay_trajectory_line.setData(gamma_x, gamma_y)
+    
     def update_trajectory(self, gamma_x, gamma_y, marked_data=None, pinned_markers=None, 
                          preview_gamma=None, preserve_view=False, inserted_events=None):
         """

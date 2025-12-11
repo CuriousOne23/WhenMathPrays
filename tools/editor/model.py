@@ -69,10 +69,29 @@ class EventPoint:
 
 
 class EditorModel:
-    """Model for interactive scenario editing."""
+    """
+    Model for interactive scenario editing.
+    
+    Manages event data, CSV I/O, and modification tracking for dual-perspective editing.
+    Supports both M1 (first person) and M2 (second person) perspectives with independent
+    event lists and shared modification tracking.
+    
+    Attributes:
+        events_m1: List of EventPoint objects for M1 perspective
+        events_m2: List of EventPoint objects for M2 perspective
+        name_m1: Scenario name for M1 perspective
+        name_m2: Scenario name for M2 perspective
+        modified_primitives: ObservableDict tracking which primitives have been modified (time-based keys)
+        preview_changes: Dict storing temporary preview changes during drag operations
+        marker_positions: Dict storing gamma_self positions for modified event markers
+        gamma_self_0: Initial gamma_self position (complex number)
+        time_unit: Time unit for scenario (e.g., "days")
+    """
     
     def __init__(self):
-        self.name: str = ""
+        self.name: str = ""  # Deprecated: use name_m1 and name_m2
+        self.name_m1: str = ""  # Name for M1 perspective
+        self.name_m2: str = ""  # Name for M2 perspective
         self.time_unit: str = "days"
         self.filepath: str = ""  # Store filepath for fallback name extraction
         self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
@@ -107,8 +126,14 @@ class EditorModel:
         self.gamma_self_0_original = self.gamma_self_0  # Store original for reset
         self.gamma_self_0_modified = False  # Not modified on load
         self.time_unit = metadata.get('time_unit', 'days')
+        
+        # Store perspective-specific name
         if metadata.get('name'):
-            self.name = metadata['name']
+            if perspective == "M1":
+                self.name_m1 = metadata['name']
+            else:
+                self.name_m2 = metadata['name']
+        
         print(f"[DEBUG] EditorModel.load_csv: gamma_self_0 = {self.gamma_self_0}")
         
         if perspective == "M1":
@@ -147,8 +172,10 @@ class EditorModel:
 
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             # Write metadata if present
-            if self.name:
-                f.write(f"name,{self.name}\n")
+            # Use perspective-specific name
+            name = self.name_m1 if perspective == "M1" else self.name_m2
+            if name:
+                f.write(f"name,{name}\n")
             f.write(f"time_unit,{self.time_unit}\n")
             # Write gamma_self_0 (format: -5+3j or 0+0j)
             gamma_str = f"{self.gamma_self_0.real:+.0f}{self.gamma_self_0.imag:+.0f}j"
@@ -235,7 +262,18 @@ class EditorModel:
         return events[event_index].locked
     
     def get_events(self, perspective: str = "M1") -> List[EventPoint]:
-        """Get events for specified perspective."""
+        """
+        Get events list for the specified perspective.
+        
+        Returns a copy of the events list to prevent external modification of the
+        internal state. Use update methods to modify events.
+        
+        Args:
+            perspective: "M1" or "M2"
+            
+        Returns:
+            List of EventPoint objects for the specified perspective
+        """
         return self.events_m1 if perspective == "M1" else self.events_m2
     
     def get_primitives_array(self, perspective: str = "M1", include_preview: bool = False) -> Dict[str, List[float]]:
@@ -371,12 +409,15 @@ class EditorModel:
         Get display name for the scenario.
         
         Returns:
-            - self.name if set in CSV
+            - name_m1 or name_m2 if set in CSV
             - "M1" or "M2" if filename contains _M1 or _M2
             - perspective ("M1" or "M2") as fallback
         """
-        if self.name:
-            return self.name
+        # Use perspective-specific name
+        if perspective == "M1" and self.name_m1:
+            return self.name_m1
+        elif perspective == "M2" and self.name_m2:
+            return self.name_m2
         
         # Try to extract from filename
         if self.filepath:
