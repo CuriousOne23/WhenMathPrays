@@ -9,6 +9,12 @@ import pyqtgraph as pg
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtCore import Signal, Qt
 from PySide6.QtGui import QColor
+from tools.editor.editor_constants import (
+    MARKER_SIZE_TRAJECTORY_START, MARKER_SIZE_TRAJECTORY_END, MARKER_SIZE_MODIFIED,
+    MARKER_SIZE_ATTRACTOR, MARKER_SIZE_PINNED, MARKER_SIZE_DIAGNOSTIC, MARKER_SIZE_BASELINE,
+    LINE_WIDTH_TRAJECTORY, LINE_WIDTH_MODIFIED_MARKER, LINE_WIDTH_NORMAL_MARKER,
+    LINE_WIDTH_LABEL_BORDER, PLOT_PADDING_NONE
+)
 
 
 class TrajectoryPanelPyQtGraph(QWidget):
@@ -53,15 +59,15 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create trajectory line
         self.trajectory_line = pg.PlotCurveItem(
-            pen=pg.mkPen(color='b', width=2),
+            pen=pg.mkPen(color='b', width=LINE_WIDTH_TRAJECTORY),
             name='Trajectory'
         )
         self.plot_widget.addItem(self.trajectory_line)
         
         # Create start marker (green triangle pointing right)
         self.start_marker = pg.ScatterPlotItem(
-            size=12,
-            pen=pg.mkPen('g', width=2),
+            size=MARKER_SIZE_TRAJECTORY_START,
+            pen=pg.mkPen('g', width=LINE_WIDTH_MODIFIED_MARKER),
             brush=pg.mkBrush('g'),
             symbol='t1',  # Triangle pointing right
             name='Start'
@@ -70,8 +76,8 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create end marker (red square)
         self.end_marker = pg.ScatterPlotItem(
-            size=10,
-            pen=pg.mkPen('r', width=2),
+            size=MARKER_SIZE_TRAJECTORY_END,
+            pen=pg.mkPen('r', width=LINE_WIDTH_MODIFIED_MARKER),
             brush=pg.mkBrush('r'),
             symbol='s',  # Square
             name='End'
@@ -80,8 +86,8 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create pinned event markers (small dots)
         self.event_markers = pg.ScatterPlotItem(
-            size=8,
-            pen=pg.mkPen('k', width=1),
+            size=MARKER_SIZE_MODIFIED,
+            pen=pg.mkPen('k', width=LINE_WIDTH_NORMAL_MARKER),
             brush=pg.mkBrush(100, 100, 255, 200),  # Light blue
             symbol='o',
             name='Events'
@@ -90,8 +96,8 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create inserted event markers (black diamonds)
         self.inserted_markers = pg.ScatterPlotItem(
-            size=10,
-            pen=pg.mkPen('k', width=2),
+            size=MARKER_SIZE_BASELINE,
+            pen=pg.mkPen('k', width=LINE_WIDTH_MODIFIED_MARKER),
             brush=pg.mkBrush('k'),
             symbol='d',  # Diamond
             name='Inserted'
@@ -100,7 +106,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create preview marker (hollow orange circle)
         self.preview_marker = pg.ScatterPlotItem(
-            size=12,
+            size=MARKER_SIZE_PINNED,
             pen=pg.mkPen('orange', width=3),
             brush=None,  # Hollow
             symbol='o',
@@ -111,7 +117,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         
         # Create diagnostic marker (black X)
         self.diagnostic_marker = pg.ScatterPlotItem(
-            size=14,
+            size=MARKER_SIZE_DIAGNOSTIC,
             pen=pg.mkPen('k', width=3),
             brush=None,
             symbol='x',

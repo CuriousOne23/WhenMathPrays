@@ -260,22 +260,26 @@ The `custom_weights` dictionary in each subject allows you to override default w
 
 Your CSV file should contain relational primitives at each time step.
 
-### Required Columns
+**For complete CSV format specification**, see the [Interactive Editor User Guide - CSV Format Details](interactive_editor_user_guide.md#csv-format-details).
 
-- **`step`** (or `event`, `time`, `day`, `time_index`) - Time index
-- **`v`** - Visibility primitive [-10 to +10]
-- **`r`** - Resonance primitive [-10 to +10]
-- **`f`** - Fidelity primitive [-10 to +10]
-- **`a`** - Altruism primitive [-10 to +10]
-- **`S`** - Shared Breath primitive [-10 to +10]
+### Quick Reference
 
-### Optional Columns
+**Minimum Required Columns:**
+- **`step`** (or aliases: `event`, `time`, `day`, `time_index`) - Time index
+- **`v`**, **`r`**, **`f`**, **`a`**, **`S`** - The five relational primitives
 
+**Optional Columns:**
 - **`notes`** - Human-readable context for each event
-- **`marker`** - Event index for modified events (added by Interactive Editor)
-- **`locked`** - Set to "true" for locked events (added by Interactive Editor)
+- **`marker`**, **`locked`** - Added by Interactive Editor for tracking modifications
 
-### Example CSV (Basic):
+**Primitive Scale:**
+- `-10` = Maximally negative (betrayal, abandonment, cruelty)
+- `0` = Neutral (no event, typical interaction)
+- `+10` = Maximally positive (profound moment, breakthrough)
+
+The framework automatically normalizes to [-1, +1] for computation.
+
+### Simple Example:
 
 ```csv
 step,v,r,f,a,S,notes
@@ -283,36 +287,9 @@ step,v,r,f,a,S,notes
 1,5,4,3,2,1,Great conversation
 5,6,5,5,4,3,Second date - dinner
 10,7,6,6,5,4,First kiss
-15,8,7,7,6,5,Meeting friends
-20,8,8,8,7,6,Deep conversation about future
 ```
 
-### Example CSV (With Interactive Editor Metadata):
-
-```csv
-name,scenario_name
-time_unit,days
-gamma_self_0,-5+0j
-day,v,r,f,a,S,notes,marker,locked
-0,5,0,2,2,0,Initial condition: eager but moderate love,,
-7,5,2,2,3,1,First date: strong attraction developing,7,
-14,5,-2,2,3,-1,Early wobble: pressing pace - M2 pulls back,14,true
-21,5,2,5,5,3,Repair begins: slows down and listens,,
-```
-
-**Metadata Notes:**
-- `marker` column: Populated with event index for events modified in Interactive Editor
-- `locked` column: Set to "true" for events locked in Interactive Editor (prevents dragging)
-- Both columns are **optional** - scenarios work fine without them
-
-### Primitive Scale
-
-Primitives use human-intuitive scale of **-10 to +10**:
-- `-10` = Maximally negative (betrayal, abandonment, cruelty)
-- `0` = Neutral (no event, typical interaction)
-- `+10` = Maximally positive (profound moment, breakthrough)
-
-The framework automatically normalizes to [-1, +1] for computation.
+For detailed format specifications, metadata lines, and Interactive Editor features, see [interactive_editor_user_guide.md](interactive_editor_user_guide.md#csv-format-details).
 
 ---
 
@@ -347,7 +324,7 @@ You deleted or commented out a required configuration field. Check the template 
 Check the path in `csv_file`. Paths are relative to where you run the script from.
 
 ### "CSV missing required column: v"
-Your CSV doesn't have the primitives columns. See [CSV File Format](#csv-file-format) above.
+Your CSV doesn't have the primitives columns. See the [CSV Format section](#csv-file-format) above, or the complete specification in [interactive_editor_user_guide.md](interactive_editor_user_guide.md#csv-format-details).
 
 ### "Output file will be overwritten"
 This is just a warning. Previous results will be replaced. Rename old files if you want to keep them.
