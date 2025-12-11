@@ -321,6 +321,11 @@ class TrajectoryPanelPyQtGraph(QWidget):
     def _on_mouse_clicked(self, event):
         """Handle mouse click and double-click events."""
         if event.button() == Qt.LeftButton:
+            # Consume any modifier+click to prevent system interference
+            if event.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier | Qt.AltModifier):
+                event.accept()
+                return
+            
             # Get position in data coordinates
             pos = self.plot_widget.plotItem.vb.mapSceneToView(event.scenePos())
             x, y = pos.x(), pos.y()
@@ -334,6 +339,8 @@ class TrajectoryPanelPyQtGraph(QWidget):
                 # Single click - emit signal with coordinates
                 print(f"[TRAJECTORY CLICK] Emitting gamma_clicked signal: ({x:.2f}, {y:.2f})")
                 self.gamma_clicked.emit(x, y)
+            
+            event.accept()
     
     def reset_view(self):
         """Reset view to original auto-scaled limits."""
