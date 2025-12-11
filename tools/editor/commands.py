@@ -51,13 +51,13 @@ class EditPrimitiveCommand(QUndoCommand):
             value: New primitive value
         """
         # Use controller's method to ensure consistent behavior
-        # Set flag to prevent recursive undo command creation
-        self.controller.in_undo_redo = True
+        # Set flag to prevent recursive undo command creation using state
+        self.controller.state.enter_undo_operation()
         try:
             # Use the controller's apply method which handles marker positions and labels
             self.controller._apply_primitive_change(self.event_idx, self.primitive, value)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
     
     def id(self):
         """Return command ID for merging consecutive edits."""
@@ -129,20 +129,20 @@ class ResetPrimitiveCommand(QUndoCommand):
     def redo(self):
         """Apply the reset."""
         # Use controller's method to ensure consistent behavior
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._apply_primitive_reset(self.event_idx, self.primitive, self.baseline_value)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
     
     def undo(self):
         """Restore the value before reset."""
         # Use controller's apply method to restore the modified value
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._apply_primitive_change(self.event_idx, self.primitive, self.old_value)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
 
 
 class DeleteEventCommand(QUndoCommand):
@@ -178,19 +178,19 @@ class DeleteEventCommand(QUndoCommand):
     
     def redo(self):
         """Delete the event."""
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._delete_event(self.event_idx)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
     
     def undo(self):
         """Restore the deleted event."""
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._insert_event(self.event_idx, self.event_data)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
 
 
 class InsertEventBeforeCommand(QUndoCommand):
@@ -252,16 +252,16 @@ class InsertEventBeforeCommand(QUndoCommand):
     
     def redo(self):
         """Insert the new event and shift subsequent events."""
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._insert_event_before(self.event_idx, self.insert_time, self.delta)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()
     
     def undo(self):
         """Remove the inserted event and restore original times."""
-        self.controller.in_undo_redo = True
+        self.controller.state.enter_undo_operation()
         try:
             self.controller._undo_insert_event_before(self.event_idx, self.shifted_events)
         finally:
-            self.controller.in_undo_redo = False
+            self.controller.state.exit_undo_operation()

@@ -190,6 +190,7 @@ class PrimitivePanelPyQtGraph(QWidget):
     diagnostic_marker_placed = Signal(int, str, float)  # event_idx, primitive, hypothetical_value
     event_delete_requested = Signal(int)  # event_idx (Ctrl+Click on marker)
     event_insert_requested = Signal(int)  # event_idx (Ctrl+Shift+Click near marker - insert before)
+    marker_clicked = Signal(int, str)  # event_idx, primitive (single click to view/edit notes)
     
     # New signals (Phase 1 refactoring - replacing callbacks)
     primitive_preview_requested = Signal(int, str, float)  # event_idx, primitive, value (during drag)
@@ -227,10 +228,13 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.scatter_items = {}  # {prim: DraggableScatterItem}
         self.baseline_scatter_items = {}  # {prim: ScatterPlotItem}
         self.line_items = {}  # {prim: PlotDataItem}
+        self.overlay_line_items = {}  # {prim: PlotDataItem} - for inactive perspective (Phase 3.3)
+        self.overlay_scatter_items = {}  # {prim: ScatterPlotItem} - for inactive perspective (Phase 3.3)
         self.text_items = {}  # {(event_idx, prim): TextItem} - for trajectory markers
         self.modified_labels = {}  # {(event_time, prim): TextItem} - for modified primitives (time-based keys survive insertion/deletion)
         self.inserted_lines = []  # List of InfiniteLine objects for inserted events
         self.events_data = None
+        self.overlay_events_data = None  # Events for inactive perspective (Phase 3.3)
         self.baseline_values = {}  # {(event_idx, prim): float}
         self.modified_markers = {}  # {event_idx: set of prims}
         
@@ -286,6 +290,19 @@ class PrimitivePanelPyQtGraph(QWidget):
             color = QColor(PRIMITIVE_COLORS[prim])
             line = plot.plot(pen=pg.mkPen(color, width=LINE_WIDTH_TRAJECTORY))
             
+            # Create overlay line (inactive perspective - dotted, faded)
+            overlay_line = plot.plot(pen=pg.mkPen(color, width=LINE_WIDTH_TRAJECTORY, style=Qt.DotLine), alpha=0.4)
+            overlay_line.setZValue(-5)  # Below active data
+            
+            # Create overlay scatter (inactive perspective - faded, non-interactive)
+            overlay_scatter = pg.ScatterPlotItem(
+                size=MARKER_SIZE_BASELINE,
+                pen=pg.mkPen(color, width=LINE_WIDTH_NORMAL_MARKER, alpha=128),
+                brush=pg.mkBrush(color.red(), color.green(), color.blue(), 100)
+            )
+            overlay_scatter.setZValue(-5)  # Below active data
+            plot.addItem(overlay_scatter)
+            
             # Create baseline scatter (filled, semi-transparent)
             baseline_scatter = pg.ScatterPlotItem(
                 size=MARKER_SIZE_BASELINE,
@@ -323,6 +340,8 @@ class PrimitivePanelPyQtGraph(QWidget):
             # Store references
             self.plot_items[prim] = plot
             self.line_items[prim] = line
+            self.overlay_line_items[prim] = overlay_line
+            self.overlay_scatter_items[prim] = overlay_scatter
             self.scatter_items[prim] = scatter
             self.baseline_scatter_items[prim] = baseline_scatter
             
@@ -614,6 +633,39 @@ class PrimitivePanelPyQtGraph(QWidget):
                 event = self.events_data[event_idx]
                 for prim in PRIMITIVE_NAMES:
                     self._add_trajectory_marker_label(event_idx, prim, event.time, event.markers[prim].value)
+    
+    def set_overlay_data(self, overlay_events):
+        """
+        Set overlay data for inactive perspective (Phase 3.3).
+        
+        Args:
+            overlay_events: List of Event objects for inactive perspective (or None to hide)
+        """
+        self.overlay_events_data = overlay_events
+        
+        if overlay_events is None or len(overlay_events) == 0:
+            # Hide overlay
+            for prim in PRIMITIVE_NAMES:
+                self.overlay_line_items[prim].setData([], [])
+                self.overlay_scatter_items[prim].setData([], [])
+            return
+        
+        # Update overlay with faded/dotted style
+        for prim in PRIMITIVE_NAMES:
+            times = np.array([event.time for event in overlay_events])
+            values = np.array([event.markers[prim].value for event in overlay_events])
+            
+            # Update overlay line (dotted, faded)
+            self.overlay_line_items[prim].setData(times, values)
+            
+            # Update overlay scatter (faded, non-interactive)
+            color = QColor(PRIMITIVE_COLORS[prim])
+            self.overlay_scatter_items[prim].setData(
+                x=times,
+                y=values,
+                pen=pg.mkPen(color, width=1, alpha=128),
+                brush=pg.mkBrush(color.red(), color.green(), color.blue(), 100)
+            )
     
     def remove_marker_label(self, event_time, primitive):
         """Remove modified primitive label for a specific event/primitive.
@@ -907,10 +959,12 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.primitive_changed.emit(index, primitive, new_value)
     
     def _on_point_clicked(self, index, primitive, value):
-        """Handle point click without drag (show readout)."""
+        """Handle point click without drag (show readout and emit signal for note editing)."""
         print(f"[CLICK] index={index}, primitive={primitive}, value={value}")
         # Update readout gauge when user clicks a point
         self._update_readout(index, primitive, value)
+        # Emit marker clicked signal for note editor
+        self.marker_clicked.emit(index, primitive)
     
     def _on_point_double_clicked(self, index, primitive):
         """Handle double-click event (reset to baseline)."""
