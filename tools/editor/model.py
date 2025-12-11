@@ -8,6 +8,7 @@ import csv
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict
 from pathlib import Path
+from tools.editor.observable import ObservableDict
 
 
 @dataclass
@@ -83,7 +84,7 @@ class EditorModel:
         self.filepath: Optional[Path] = None
         self.dirty: bool = False  # Unsaved changes?
         self.modified_indices: set = set()  # Track which events were modified
-        self.modified_primitives: Dict[float, set] = {}  # {event_time: {'v', 'r', ...}}
+        self.modified_primitives: ObservableDict = ObservableDict()  # {event_time: {'v', 'r', ...}}
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
         # Pinned marker positions: where gamma_self was when each primitive was first modified
