@@ -16,6 +16,11 @@ from tools.editor.constants import (
     PRIMITIVE_NAMES, PRIMITIVE_LABELS, PRIMITIVE_COLORS,
     is_inserted_event
 )
+from tools.editor.editor_constants import (
+    FLOAT_TOLERANCE, MARKER_SIZE_NORMAL, MARKER_SIZE_BASELINE, MARKER_SIZE_DIAGNOSTIC,
+    LINE_WIDTH_MODIFIED_MARKER, LINE_WIDTH_NORMAL_MARKER, LINE_WIDTH_TRAJECTORY,
+    LINE_WIDTH_LABEL_BORDER, PLOT_PADDING_NONE, PLOT_X_MARGIN, PRIMITIVE_MIN_VALUE, PRIMITIVE_MAX_VALUE
+)
 
 
 class DraggableScatterItem(pg.ScatterPlotItem):
@@ -273,19 +278,19 @@ class PrimitivePanelPyQtGraph(QWidget):
             
             # Create line plot (trajectory between points)
             color = QColor(PRIMITIVE_COLORS[prim])
-            line = plot.plot(pen=pg.mkPen(color, width=2))
+            line = plot.plot(pen=pg.mkPen(color, width=LINE_WIDTH_TRAJECTORY))
             
             # Create baseline scatter (filled, semi-transparent)
             baseline_scatter = pg.ScatterPlotItem(
-                size=7,
-                pen=pg.mkPen(color, width=1),
+                size=MARKER_SIZE_BASELINE,
+                pen=pg.mkPen(color, width=LINE_WIDTH_NORMAL_MARKER),
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 128)
             )
             plot.addItem(baseline_scatter)
             
             # Create scatter plot (draggable points)
             scatter = DraggableScatterItem(
-                size=10,
+                size=MARKER_SIZE_BASELINE,
                 pen=pg.mkPen('k', width=1.5),
                 brush=pg.mkBrush(color)
             )
@@ -317,7 +322,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             
             # Create diagnostic marker (black X, draggable, initially hidden)
             diagnostic_marker = DraggableScatterItem(
-                size=14,
+                size=MARKER_SIZE_DIAGNOSTIC,
                 pen=pg.mkPen('k', width=3),
                 brush=None,
                 symbol='x',
@@ -467,7 +472,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     
                     # Show baseline position
                     baseline_val = self.baseline_values.get((event_idx, prim))
-                    if baseline_val is not None and abs(baseline_val - event.markers[prim].value) > 0.001:
+                    if baseline_val is not None and abs(baseline_val - event.markers[prim].value) > FLOAT_TOLERANCE:
                         baseline_times.append(event.time)
                         baseline_values_list.append(baseline_val)
                 else:
@@ -494,7 +499,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             
             # Auto-range on first update
             if len(times) > 0:
-                self.plot_items[prim].setXRange(times.min() - 1, times.max() + 1, padding=0)
+                self.plot_items[prim].setXRange(times.min() - PLOT_X_MARGIN, times.max() + PLOT_X_MARGIN, padding=PLOT_PADDING_NONE)
         
         t1 = time.time()
         print(f"[PYQTGRAPH] update_from_model: {(t1-t0)*1000:.1f}ms for {len(events)} events")
@@ -538,10 +543,10 @@ class PrimitivePanelPyQtGraph(QWidget):
             is_mod = self._modified_state.get((idx, primitive), False)
             if is_mod:
                 brushes.append(pg.mkBrush(None))  # Hollow
-                pens.append(pg.mkPen(color, width=2))
+                pens.append(pg.mkPen(color, width=LINE_WIDTH_MODIFIED_MARKER))
             else:
                 brushes.append(pg.mkBrush(color))  # Filled
-                pens.append(pg.mkPen('k', width=1))
+                pens.append(pg.mkPen('k', width=LINE_WIDTH_NORMAL_MARKER))
         
         self.scatter_items[primitive].setData(x=times, y=values_arr, brush=brushes, pen=pens)
         
@@ -635,7 +640,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             text=str(x),
             color=PRIMITIVE_COLORS[primitive],
             anchor=(0, 1),
-            border=pg.mkPen(PRIMITIVE_COLORS[primitive], width=2),
+            border=pg.mkPen(PRIMITIVE_COLORS[primitive], width=LINE_WIDTH_LABEL_BORDER),
             fill=pg.mkBrush(255, 255, 255, 200)
         )
         text.setPos(x, y)
@@ -651,7 +656,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             text=str(x),
             color='red',
             anchor=(0, 1),
-            border=pg.mkPen('red', width=2),
+            border=pg.mkPen('red', width=LINE_WIDTH_LABEL_BORDER),
             fill=pg.mkBrush(255, 255, 255, 200)
         )
         text.setPos(x, y)
@@ -801,7 +806,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             plot.autoRange()
             plot.enableAutoRange(axis='x', enable=False)
             # Reset Y to default range (do this AFTER autoRange to prevent override)
-            plot.setYRange(-11, 11, padding=0)
+            plot.setYRange(PRIMITIVE_MIN_VALUE, PRIMITIVE_MAX_VALUE, padding=PLOT_PADDING_NONE)
     
     def zoom_in(self):
         """Zoom in by 20% on all plots around current center."""

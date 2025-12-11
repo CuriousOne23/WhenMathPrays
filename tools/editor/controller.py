@@ -10,6 +10,11 @@ import pandas as pd
 from typing import Optional, List
 from PySide6.QtCore import QTimer
 from tools.editor.constants import PRIMITIVE_NAMES, is_inserted_event
+from tools.editor.editor_constants import FLOAT_TOLERANCE, TIME_MATCH_TOLERANCE
+from tools.editor.editor_utils import (
+    remove_event_markers, clear_modified_primitives_for_event,
+    get_all_modified_markers, update_baseline_arrays
+)
 
 # Import GRP core
 import sys
@@ -56,6 +61,9 @@ class EditorController:
         
         # Phase 3 refactoring: Removed controller reference from view (violates MVC)
         # self.primitive_panel.controller = self
+        
+        # Set up observer pattern for automatic cache invalidation
+        self.model.modified_primitives.add_observer(self._on_modified_primitives_changed)
         
         self.debounce_timer: Optional[threading.Timer] = None
         self.dirty = False
@@ -137,7 +145,7 @@ class EditorController:
             # Show marker on first primitive with non-zero value
             for prim in ['v', 'r', 'f', 'a', 'S']:
                 value = event.markers[prim].value
-                if abs(value) > 0.001:
+                if abs(value) > FLOAT_TOLERANCE:
                     self.primitive_panel._update_readout(event_idx, prim, value)
                     break
         
@@ -166,7 +174,7 @@ class EditorController:
         old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
         
         # Skip if no actual change
-        if abs(value - old_value) < 0.001:
+        if abs(value - old_value) < FLOAT_TOLERANCE:
             return
         
         # Create undo command and push to stack (unless we're in undo/redo)
@@ -186,9 +194,6 @@ class EditorController:
             self.model.modified_primitives[event_time] = set()
         self.model.modified_primitives[event_time].add(primitive)
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
-        
-        # Phase 3 refactoring: Update view's cached modified state
-        self._update_view_modified_state()
         
         # Store marker position from committed trajectory (must happen before display)
         # First compute trajectory to get the position
@@ -243,7 +248,7 @@ class EditorController:
         baseline_value = self.baseline_primitives[primitive][event_index]
         events = self.model.get_events(self.perspective)
         event_time = events[event_index].time
-        if abs(value - baseline_value) < 0.001:
+        if abs(value - baseline_value) < FLOAT_TOLERANCE:
             # Back to baseline, remove from modified set
             if event_time in self.model.modified_primitives:
                 self.model.modified_primitives[event_time].discard(primitive)
@@ -262,9 +267,6 @@ class EditorController:
             self.model.modified_primitives[event_time].add(primitive)
         
         print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
-        
-        # Phase 3 refactoring: Update view's cached modified state
-        self._update_view_modified_state()
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -349,14 +351,15 @@ class EditorController:
             
             # Find the index in original baseline that matches this time
             original_times = np.array(self.original_baseline_primitives['time'])
-            original_idx = np.where(np.abs(original_times - event_time) < 0.001)[0]
+            original_idx = np.where(np.abs(original_times - event_time) < TIME_MATCH_TOLERANCE)[0]
             
             if len(original_idx) == 0:
-                print(f"Event at time {event_time} is not in original CSV (inserted event), cannot reset")
-                return
-            
-            baseline_value = self.original_baseline_primitives[primitive][original_idx[0]]
-            print(f"Resetting to baseline value: {baseline_value} (from original CSV)")
+                # Inserted event - reset to 0
+                baseline_value = 0.0
+                print(f"Event at time {event_time} is inserted (not in original CSV), resetting to 0")
+            else:
+                baseline_value = self.original_baseline_primitives[primitive][original_idx[0]]
+                print(f"Resetting to baseline value: {baseline_value} (from original CSV)")
         except Exception as e:
             print(f"ERROR getting values: {e}")
             import traceback
@@ -364,7 +367,7 @@ class EditorController:
             return
         
         # Skip if already at baseline
-        if abs(old_value - baseline_value) < 0.001:
+        if abs(old_value - baseline_value) < FLOAT_TOLERANCE:
             print(f"Already at baseline, skipping")
             return
         
@@ -411,6 +414,9 @@ class EditorController:
             # Remove the marker label
             self.primitive_panel.remove_marker_label(event_index, primitive)
             
+            # Force visual refresh by calling update_marker again (ensures marker becomes filled)
+            self.primitive_panel.update_marker(event_index, primitive, baseline_value, False)
+            
             # Reset double-click state in the marker
             marker_obj = self.primitive_panel.draggable_points.get((event_index, primitive))
             if marker_obj:
@@ -444,14 +450,15 @@ class EditorController:
             del events[event_index]
             
             # Remove from modified primitives tracking
-            if event_time in self.model.modified_primitives:
-                del self.model.modified_primitives[event_time]
+            clear_modified_primitives_for_event(self.model, event_time)
             
-            # Remove marker positions for this event
-            for prim in PRIMITIVE_NAMES:
-                marker_key = (event_time, prim)
-                if marker_key in self.model.marker_positions:
-                    del self.model.marker_positions[marker_key]
+            # Remove marker positions and labels for this event
+            remove_event_markers(
+                self.model, 
+                event_time,
+                remove_label_callback=self.primitive_panel.remove_marker_label,
+                event_index=event_index
+            )
             
             print(f"Deleted event at time={event_time}, remaining events: {len(events)}")
             
@@ -462,7 +469,6 @@ class EditorController:
                     self.original_baseline_primitives[key] = np.delete(self.original_baseline_primitives[key], event_index)
             
             # Update views
-            self._update_view_modified_state()
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
             
@@ -502,11 +508,8 @@ class EditorController:
             print(f"Inserted event at time={event_data['time']}, total events: {len(events)}")
             
             # Update baseline primitives arrays (insert at index)
-            for prim in PRIMITIVE_NAMES:
-                value = event_data['primitives'][prim]
-                if prim in self.baseline_primitives:
-                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_index, value)
-                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_index, value)
+            update_baseline_arrays(self.baseline_primitives, 'insert', event_index, event_data['primitives'])
+            update_baseline_arrays(self.original_baseline_primitives, 'insert', event_index, event_data['primitives'])
             
             # Insert time
             if 'time' in self.baseline_primitives:
@@ -514,7 +517,6 @@ class EditorController:
                 self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_index, event_data['time'])
             
             # Update views
-            self._update_view_modified_state()
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
             
@@ -593,11 +595,9 @@ class EditorController:
             # 2. Update time array to match shifted event times
             
             # Insert new event's primitives into baseline
-            for prim in PRIMITIVE_NAMES:
-                if prim in self.baseline_primitives:
-                    prim_value = new_event.markers[prim].value if restored_primitives else 0.0
-                    self.baseline_primitives[prim] = np.insert(self.baseline_primitives[prim], event_idx, prim_value)
-                    self.original_baseline_primitives[prim] = np.insert(self.original_baseline_primitives[prim], event_idx, prim_value)
+            prim_values = {prim: new_event.markers[prim].value if restored_primitives else 0.0 for prim in PRIMITIVE_NAMES}
+            update_baseline_arrays(self.baseline_primitives, 'insert', event_idx, prim_values)
+            update_baseline_arrays(self.original_baseline_primitives, 'insert', event_idx, prim_values)
             
             # Rebuild time array from events (since times were shifted)
             # After insert, baseline arrays have correct length, just need to sync times
@@ -612,10 +612,7 @@ class EditorController:
                     self.original_baseline_primitives['time'][idx] = events[idx].time
                     print(f"  Updated baseline time[{idx}] = {events[idx].time}")
             
-            # Update views
-            self._update_view_modified_state()
-            
-            # Debug: verify event times before updating view
+            # Debug: verify event times before update_from_model
             print("\n[DEBUG] Event times before update_from_model:")
             for idx, evt in enumerate(events):
                 print(f"  idx={idx}: time={evt.time}")
@@ -654,10 +651,8 @@ class EditorController:
                 print(f"  Restored event {orig_idx}: {new_time} → {old_time}")
             
             # Update baseline arrays - remove inserted event
-            for prim in PRIMITIVE_NAMES:
-                if prim in self.baseline_primitives:
-                    self.baseline_primitives[prim] = np.delete(self.baseline_primitives[prim], event_idx)
-                    self.original_baseline_primitives[prim] = np.delete(self.original_baseline_primitives[prim], event_idx)
+            update_baseline_arrays(self.baseline_primitives, 'delete', event_idx)
+            update_baseline_arrays(self.original_baseline_primitives, 'delete', event_idx)
             
             if 'time' in self.baseline_primitives:
                 self.baseline_primitives['time'] = np.delete(self.baseline_primitives['time'], event_idx)
@@ -670,7 +665,6 @@ class EditorController:
                     self.original_baseline_primitives['time'][orig_idx] = old_time
             
             # Update views
-            self._update_view_modified_state()
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
             
@@ -1063,23 +1057,29 @@ class EditorController:
         events = self.model.get_events(self.perspective)
         self.primitive_panel.update_from_model(events)
         
-        # Phase 3 refactoring: Push modified state to view (no direct model access)
+        # Refresh view to show current model state
+        events = self.model.get_events(self.perspective)
+        self.primitive_panel.update_from_model(events)
+    
+    def _on_modified_primitives_changed(self, *args, **kwargs):
+        """
+        Observer callback for model.modified_primitives changes.
+        Automatically updates view's cached modified state.
+        
+        This implements the observer pattern for automatic cache invalidation.
+        """
         self._update_view_modified_state()
     
     def _update_view_modified_state(self):
         """
         Phase 3 refactoring: Update primitive panel's cached modified state.
         Replaces view's direct access to controller.model.
+        
+        Note: This is now called automatically via observer pattern when
+        model.modified_primitives changes.
         """
-        modified_state = {}
         events = self.model.get_events(self.perspective)
-        
-        for event_idx in range(len(events)):
-            for prim in ['v', 'r', 'f', 'a', 'S']:
-                is_mod = self.model.is_modified(event_idx, prim, self.perspective)
-                if is_mod:
-                    modified_state[(event_idx, prim)] = True
-        
+        modified_state = get_all_modified_markers(self.model, events, self.perspective)
         self.primitive_panel.set_modified_state(modified_state, self.perspective)
     
     def save_scenario(self, filepath: str):
