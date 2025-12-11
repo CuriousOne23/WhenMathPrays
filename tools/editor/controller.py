@@ -422,8 +422,8 @@ class EditorController:
             if marker_obj:
                 marker_obj.reset_double_click_state()
             
-            # Recompute trajectory and update trajectory view
-            self._recompute_trajectory_with_preview()
+            # Recompute trajectory WITHOUT preview (this is a committed change, not a preview)
+            self._recompute_trajectory_immediate()
             
             print(f"=== END RESET ===")
         except Exception as e:
@@ -578,10 +578,56 @@ class EditorController:
             # FIRST: Shift all events from event_idx onwards forward by delta
             # This creates the gap where we'll insert the new event
             print(f"STEP 1: Shift events from index {event_idx} onwards by +{delta}")
+            
+            # Collect shifted times for marker position updates
+            time_shifts = []  # [(old_time, new_time), ...]
             for idx in range(event_idx, len(events)):
                 old_time = events[idx].time
                 events[idx].time = old_time + delta
+                time_shifts.append((old_time, old_time + delta))
                 print(f"  Shifted event {idx}: {old_time} → {events[idx].time}")
+            
+            # Update marker_positions keys for shifted times
+            # Markers at shifted events need their keys updated
+            print(f"STEP 1b: Update marker position keys for shifted times")
+            new_marker_positions = {}
+            for (old_time, prim), gamma_pos in list(self.model.marker_positions.items()):
+                # Check if this marker's time was shifted
+                shifted_time = None
+                for shift_old, shift_new in time_shifts:
+                    if abs(old_time - shift_old) < TIME_MATCH_TOLERANCE:
+                        shifted_time = shift_new
+                        break
+                
+                if shifted_time:
+                    # Update the key to the new time
+                    new_key = (shifted_time, prim)
+                    new_marker_positions[new_key] = gamma_pos
+                    print(f"  Updated marker key: ({old_time}, {prim}) → ({shifted_time}, {prim})")
+                else:
+                    # Keep the old key
+                    new_marker_positions[(old_time, prim)] = gamma_pos
+            
+            self.model.marker_positions = new_marker_positions
+            
+            # Update modified_primitives keys for shifted times
+            print(f"STEP 1c: Update modified_primitives keys for shifted times")
+            new_modified_primitives = {}
+            for time_key, prim_set in list(self.model.modified_primitives.items()):
+                # Check if this time was shifted
+                shifted_time = None
+                for shift_old, shift_new in time_shifts:
+                    if abs(time_key - shift_old) < TIME_MATCH_TOLERANCE:
+                        shifted_time = shift_new
+                        break
+                
+                if shifted_time:
+                    new_modified_primitives[shifted_time] = prim_set
+                    print(f"  Updated modified_primitives key: {time_key} → {shifted_time}")
+                else:
+                    new_modified_primitives[time_key] = prim_set
+            
+            self.model.modified_primitives = new_modified_primitives
             
             # THIRD: Insert new event at the calculated position
             events.insert(event_idx, new_event)
@@ -591,22 +637,30 @@ class EditorController:
             print(f"STEP 3: Update baseline arrays")
             
             # After shifting events in-place and inserting new event, we need to:
-            # 1. Insert new arrays for the new event at event_idx
-            # 2. Update time array to match shifted event times
+            # 1. Insert new entries for primitives at event_idx
+            # 2. Insert new entry for time at event_idx
+            # 3. Update all time entries from event_idx onwards (since they were shifted)
             
-            # Insert new event's primitives into baseline
+            # Insert new event's primitives into baseline (handles v,r,f,a,S arrays)
             prim_values = {prim: new_event.markers[prim].value if restored_primitives else 0.0 for prim in PRIMITIVE_NAMES}
             update_baseline_arrays(self.baseline_primitives, 'insert', event_idx, prim_values)
             update_baseline_arrays(self.original_baseline_primitives, 'insert', event_idx, prim_values)
             
-            # Rebuild time array from events (since times were shifted)
-            # After insert, baseline arrays have correct length, just need to sync times
+            # Insert time entry at event_idx (update_baseline_arrays doesn't handle 'time')
             if 'time' in self.baseline_primitives:
-                # Insert makes room at event_idx, but we need to update all times from event_idx onwards
+                old_size = len(self.baseline_primitives['time'])
                 self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_idx, insert_time)
                 self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_idx, insert_time)
+                new_size = len(self.baseline_primitives['time'])
+                print(f"  Time array expanded: {old_size} → {new_size}")
+                print(f"  Events list size: {len(events)}")
+                
+                # Verify array sizes match before updating
+                if new_size != len(events):
+                    raise RuntimeError(f"Array size mismatch after insert: baseline_time has {new_size} items but events has {len(events)}")
                 
                 # Now update shifted times (from event_idx+1 onwards)
+                # After np.insert, arrays are the right size, so this loop is safe
                 for idx in range(event_idx + 1, len(events)):
                     self.baseline_primitives['time'][idx] = events[idx].time
                     self.original_baseline_primitives['time'][idx] = events[idx].time
@@ -802,10 +856,8 @@ class EditorController:
         # NOTE: modified_primitives shifting is already handled by model.insert_event()
         # Don't duplicate the shift logic here!
         
-        # Clear marker positions - trajectory changes after insertion, so old gamma_self
-        # coordinates no longer correspond to the same events. Markers will be regenerated
-        # when user commits changes.
-        self.model.marker_positions = {}
+        # NOTE: marker_positions uses time-based keys, not indices, so they remain valid
+        # after insertion. No need to clear them.
     
     def _update_baseline_after_delete(self, deleted_idx: int):
         """Update baseline primitives and modified_primitives after deleting an event."""
@@ -815,10 +867,13 @@ class EditorController:
         # NOTE: modified_primitives shifting is already handled by model.delete_event()
         # Don't duplicate the shift logic here!
         
-        # Clear marker positions - trajectory changes after deletion, so old gamma_self
-        # coordinates no longer correspond to the same events. Markers will be regenerated
-        # when user commits changes.
-        self.model.marker_positions = {}
+        # NOTE: marker_positions uses time-based keys. After deletion, we need to remove
+        # the marker for the deleted event's time, but preserve others.
+        deleted_time = None
+        events = self.model.get_events(self.perspective)
+        # Find the time of the deleted event (it's no longer in the list)
+        # We can't determine this easily, so safer to just preserve existing markers
+        # The time_to_idx mapping in display_trajectory will skip deleted times automatically
     
     def _schedule_recomputation(self):
         """Schedule debounced trajectory recomputation (committed)."""
@@ -952,6 +1007,7 @@ class EditorController:
         # Build time-to-index mapping for converting time-based keys to indices
         events = self.model.get_events(self.perspective)
         time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+        print(f"[DEBUG] time_to_idx after insert: {time_to_idx}")
         
         # Build marked_data: {event_idx: set of modified primitives}
         marked_data = {}
@@ -979,9 +1035,12 @@ class EditorController:
         
         for (event_time, prim), gamma_pos in self.model.marker_positions.items():
             # Convert time to current index
+            print(f"[DEBUG] Processing marker: event_time={event_time}, prim={prim}, gamma_pos={gamma_pos}")
             if event_time not in time_to_idx:
+                print(f"[DEBUG] Skipping marker - event_time {event_time} not in time_to_idx")
                 continue  # Event was deleted
             event_idx = time_to_idx[event_time]
+            print(f"[DEBUG] Marker maps to event_idx={event_idx}")
             
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
             marker = {

@@ -197,6 +197,10 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.controls_dock)
         
+        # Split the right area horizontally: Trajectory on left, Controls on right
+        # This creates the 3-column layout: [Primitives | Trajectory | Controls]
+        self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
+        
         # Phase 3.1: Setup View menu for dock widget visibility
         self.window._setup_view_menu({
             'Primitives': self.primitive_dock,
@@ -204,10 +208,18 @@ class InteractiveEditor:
             'Controls': self.controls_dock
         })
         
-        # Phase 3.1: Configure initial layout (Primitives left, Trajectory + Controls right)
+        # Phase 3.1: Configure initial layout widths
+        # First set the main left/right split (Primitives vs rest)
         self.window.resizeDocks(
             [self.primitive_dock, self.trajectory_dock],
-            [400, 800],  # Initial widths
+            [500, 1000],  # Primitives=500px, Right side (Trajectory+Controls)=1000px
+            Qt.Horizontal
+        )
+        
+        # Then set the Trajectory/Controls split within the right area
+        self.window.resizeDocks(
+            [self.trajectory_dock, self.controls_dock],
+            [700, 300],  # Trajectory=700px, Controls=300px
             Qt.Horizontal
         )
         
@@ -222,7 +234,8 @@ class InteractiveEditor:
         self.window.cleanup_callback = self._handle_cleanup
         
         # Phase 3.1: Load window geometry and dock layout from QSettings
-        self._load_window_state()
+        # TEMPORARILY DISABLED - uncomment after you get the layout you want
+        # self._load_window_state()
         
         # Connect zoom toolbar buttons (will zoom both panels)
         self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)

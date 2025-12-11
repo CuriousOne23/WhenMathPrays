@@ -74,6 +74,12 @@ class DraggableScatterItem(pg.ScatterPlotItem):
             if len(pts) > 0:
                 idx = pts[0].index()
                 
+                # Check for Ctrl+Shift+Click (insert event) - don't consume, let scene handle it
+                if (ev.modifiers() & Qt.ControlModifier) and (ev.modifiers() & Qt.ShiftModifier):
+                    # Don't accept - let it propagate to scene signal for insertion handling
+                    super().mouseClickEvent(ev)
+                    return
+                
                 # Check for Ctrl+Click (deletion request) - but NOT Ctrl+Shift+Click
                 if (ev.modifiers() & Qt.ControlModifier) and not (ev.modifiers() & Qt.ShiftModifier):
                     print(f"[CTRL+CLICK] Request to delete event index={idx}")
@@ -722,6 +728,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                         
                         if not markers_before or not markers_after:
                             # Can't insert before first or after last
+                            event.accept()
                             return
                         
                         # Get the previous marker (last one before click)
@@ -746,7 +753,12 @@ class PrimitivePanelPyQtGraph(QWidget):
                         # Store insertion time for command to use
                         self.pending_insert_time = insert_time
                         self.event_insert_requested.emit(next_idx)
+                        event.accept()
                         return
+            
+            # If we handled Ctrl+Shift+Click but didn't find a valid plot, still consume the event
+            event.accept()
+            return
         
         # Handle shift+left-click for diagnostic markers
         elif event.button() == Qt.LeftButton and event.modifiers() & Qt.ShiftModifier:
@@ -796,6 +808,15 @@ class PrimitivePanelPyQtGraph(QWidget):
                         
                         event.accept()
                         return
+            
+            # If we handled Shift+Click but didn't find a valid plot, still consume the event
+            event.accept()
+            return
+        
+        # Consume any other modifier+click combinations to prevent system-level interference
+        if event.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier | Qt.AltModifier):
+            event.accept()
+            return
     
     def reset_view(self):
         """Reset all plots to default view (-11 to 11 on Y, auto on X)."""
