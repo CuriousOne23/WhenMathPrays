@@ -308,9 +308,10 @@ class EditorController:
         # Add or update marker label if modified, remove if back to baseline
         event = self.model.get_event(event_index, self.perspective)
         if is_modified:
-            self.primitive_panel._add_marker_label(event_index, primitive, event.time, value)
+            # Use time-based key (survives insertion/deletion)
+            self.primitive_panel._add_marker_label(event.time, primitive, value)
         else:
-            self.primitive_panel.remove_marker_label(event_index, primitive)
+            self.primitive_panel.remove_marker_label(event.time, primitive)
         
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
@@ -411,8 +412,8 @@ class EditorController:
             print(f"After reset, is_modified({event_index}, {primitive}) = {is_modified}")
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
             
-            # Remove the marker label
-            self.primitive_panel.remove_marker_label(event_index, primitive)
+            # Remove the marker label (use time-based key)
+            self.primitive_panel.remove_marker_label(event.time, primitive)
             
             # Force visual refresh by calling update_marker again (ensures marker becomes filled)
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, False)

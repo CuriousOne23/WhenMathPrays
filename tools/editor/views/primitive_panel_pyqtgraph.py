@@ -228,7 +228,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.baseline_scatter_items = {}  # {prim: ScatterPlotItem}
         self.line_items = {}  # {prim: PlotDataItem}
         self.text_items = {}  # {(event_idx, prim): TextItem} - for trajectory markers
-        self.modified_labels = {}  # {(event_idx, prim): TextItem} - for modified primitives
+        self.modified_labels = {}  # {(event_time, prim): TextItem} - for modified primitives (time-based keys survive insertion/deletion)
         self.inserted_lines = []  # List of InfiniteLine objects for inserted events
         self.events_data = None
         self.baseline_values = {}  # {(event_idx, prim): float}
@@ -416,11 +416,14 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         self.events_data = events
         
-        # Clear old text labels
+        # Clear old text labels (trajectory markers)
         for text_item in self.text_items.values():
             for plot in self.plot_items.values():
                 plot.removeItem(text_item)
         self.text_items.clear()
+        
+        # NOTE: modified_labels uses time-based keys and survives insertion/deletion
+        # No need to clear - labels stay valid across structural changes
         
         # Clear old inserted event lines
         for line in self.inserted_lines:
@@ -612,9 +615,14 @@ class PrimitivePanelPyQtGraph(QWidget):
                 for prim in PRIMITIVE_NAMES:
                     self._add_trajectory_marker_label(event_idx, prim, event.time, event.markers[prim].value)
     
-    def remove_marker_label(self, event_idx, primitive):
-        """Remove modified primitive label for a specific event/primitive."""
-        key = (event_idx, primitive)
+    def remove_marker_label(self, event_time, primitive):
+        """Remove modified primitive label for a specific event/primitive.
+        
+        Args:
+            event_time: Event time (not index - uses time-based keys)
+            primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
+        """
+        key = (event_time, primitive)
         if key in self.modified_labels:
             text_item = self.modified_labels[key]
             self.plot_items[primitive].removeItem(text_item)
@@ -632,24 +640,30 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Return empty dict since PyQtGraph doesn't use matplotlib axes
         return {}
     
-    def _add_marker_label(self, event_idx, primitive, x, y):
-        """Add or update a timestamp label to a modified primitive marker."""
-        key = (event_idx, primitive)
+    def _add_marker_label(self, event_time, primitive, value):
+        """Add or update a timestamp label to a modified primitive marker.
+        
+        Args:
+            event_time: Event time (not index - uses time-based keys that survive insertion/deletion)
+            primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
+            value: Primitive value (Y position)
+        """
+        key = (event_time, primitive)
         
         # Remove old label if it exists
         if key in self.modified_labels:
             old_text = self.modified_labels[key]
             self.plot_items[primitive].removeItem(old_text)
         
-        # Create new label with timestamp (x is the time)
+        # Create new label with timestamp
         text = pg.TextItem(
-            text=str(x),
+            text=str(event_time),
             color=PRIMITIVE_COLORS[primitive],
             anchor=(0, 1),
             border=pg.mkPen(PRIMITIVE_COLORS[primitive], width=LINE_WIDTH_LABEL_BORDER),
             fill=pg.mkBrush(255, 255, 255, 200)
         )
-        text.setPos(x, y)
+        text.setPos(event_time, value)
         self.plot_items[primitive].addItem(text)
         self.modified_labels[key] = text
     
