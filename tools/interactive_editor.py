@@ -58,19 +58,11 @@ class InteractiveEditor:
         # Create Qt main window (Phase 2)
         self.window = EditorMainWindow(self.csv_file)
         
-        # Create pure PyQtGraph layout (both panels)
-        from PySide6.QtWidgets import QWidget, QHBoxLayout
-        
-        # Container widget for layout
-        central_widget = QWidget()
-        layout = QHBoxLayout(central_widget)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(30)  # Spacing between panels
+        # Phase 3: Flexible workspace with QDockWidget
+        # No central widget - use dock widgets for all panels
         
         # Initialize PyQtGraph primitive panel
         self.primitive_panel = PrimitivePanelPyQtGraph()
-        self.primitive_panel.setMaximumWidth(600)  # Constrain primitive panel width
-        layout.addWidget(self.primitive_panel, stretch=2)
         
         # Connect signals from primitive panel
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
@@ -88,10 +80,25 @@ class InteractiveEditor:
         
         # Initialize PyQtGraph trajectory panel
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
-        layout.addWidget(self.trajectory_panel, stretch=3)  # Larger stretch for trajectory
         
-        # Set central widget
-        self.window.setCentralWidget(central_widget)
+        # Phase 3.1: Wrap panels in QDockWidget for flexible workspace
+        self.primitive_dock = QDockWidget("Primitives", self.window)
+        self.primitive_dock.setWidget(self.primitive_panel)
+        self.primitive_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable | 
+            QDockWidget.DockWidgetClosable
+        )
+        self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
+        
+        self.trajectory_dock = QDockWidget("Trajectory", self.window)
+        self.trajectory_dock.setWidget(self.trajectory_panel)
+        self.trajectory_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable | 
+            QDockWidget.DockWidgetClosable
+        )
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
@@ -125,7 +132,6 @@ class InteractiveEditor:
         
         # Create gauge widgets
         from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
-        from PySide6.QtCore import Qt
         
         # Primitive gauge
         primitive_gauge_frame = QFrame()
@@ -181,11 +187,29 @@ class InteractiveEditor:
         dock_layout.addStretch()
         dock_container.setLayout(dock_layout)
         
-        # Add as dock widget on the right
-        dock = QDockWidget("Editor Controls", self.window)
-        dock.setWidget(dock_container)
-        dock.setFeatures(QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable)
-        self.window.addDockWidget(Qt.RightDockWidgetArea, dock)
+        # Phase 3.1: Add controls as dock widget
+        self.controls_dock = QDockWidget("Editor Controls", self.window)
+        self.controls_dock.setWidget(dock_container)
+        self.controls_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable |
+            QDockWidget.DockWidgetClosable
+        )
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.controls_dock)
+        
+        # Phase 3.1: Setup View menu for dock widget visibility
+        self.window._setup_view_menu({
+            'Primitives': self.primitive_dock,
+            'Trajectory': self.trajectory_dock,
+            'Controls': self.controls_dock
+        })
+        
+        # Phase 3.1: Configure initial layout (Primitives left, Trajectory + Controls right)
+        self.window.resizeDocks(
+            [self.primitive_dock, self.trajectory_dock],
+            [400, 800],  # Initial widths
+            Qt.Horizontal
+        )
         
         # Connect primitive panel readout to Qt gauge (now that gauges exist)
         self.primitive_panel.primitive_readout = self.primitive_gauge
@@ -196,6 +220,9 @@ class InteractiveEditor:
         # Set up callbacks AFTER panels and controller are initialized
         self.window.save_callback = self._handle_save_request
         self.window.cleanup_callback = self._handle_cleanup
+        
+        # Phase 3.1: Load window geometry and dock layout from QSettings
+        self._load_window_state()
         
         # Connect zoom toolbar buttons (will zoom both panels)
         self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
@@ -287,6 +314,9 @@ class InteractiveEditor:
     
     def _handle_cleanup(self):
         """Handle application cleanup before exit."""
+        # Phase 3.1: Save window state before exit
+        self._save_window_state()
+        
         if hasattr(self, 'controller'):
             self.controller.cleanup()
     
@@ -739,6 +769,30 @@ class InteractiveEditor:
         if filepath:
             self.controller.save_scenario(filepath)
             self.window.show_message(f"Saved to: {filepath}")
+    
+    def _load_window_state(self):
+        """Load window geometry and dock layout from QSettings."""
+        from PySide6.QtCore import QSettings
+        
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        
+        # Restore window geometry
+        geometry = settings.value('geometry')
+        if geometry:
+            self.window.restoreGeometry(geometry)
+        
+        # Restore window state (dock positions, sizes, visibility)
+        state = settings.value('windowState')
+        if state:
+            self.window.restoreState(state)
+    
+    def _save_window_state(self):
+        """Save window geometry and dock layout to QSettings."""
+        from PySide6.QtCore import QSettings
+        
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        settings.setValue('geometry', self.window.saveGeometry())
+        settings.setValue('windowState', self.window.saveState())
     
     def run(self):
         """Show UI and enter Qt event loop."""
