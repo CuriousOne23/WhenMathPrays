@@ -155,7 +155,7 @@ class UIBuilder:
             'font-size: 12pt; '
             'font-weight: bold;'
         )
-        self.primitive_gauge.setMinimumHeight(60)
+        self.primitive_gauge.setMinimumHeight(40)
         primitive_gauge_layout.addWidget(primitive_gauge_label)
         primitive_gauge_layout.addWidget(self.primitive_gauge)
         primitive_gauge_frame.setLayout(primitive_gauge_layout)
@@ -177,7 +177,7 @@ class UIBuilder:
             'font-size: 11pt; '
             'font-weight: bold;'
         )
-        self.gamma_self_gauge.setMinimumHeight(60)
+        self.gamma_self_gauge.setMinimumHeight(40)
         gamma_gauge_layout.addWidget(gamma_gauge_label)
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
@@ -217,6 +217,7 @@ class UIBuilder:
         # Add controls as dock widget
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
+        dock_container.setMinimumHeight(300)  # Allow resizing when floating
         self.controls_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable |

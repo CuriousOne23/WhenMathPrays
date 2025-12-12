@@ -41,7 +41,8 @@ class EditorMainWindow(QMainWindow):
         super().__init__()
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
-        self.setGeometry(100, 100, 1400, 800)
+        self.setGeometry(100, 100, 1400, 600)
+        self.setMinimumHeight(400)  # Allow resizing down to 400px
         
         # Central widget will be set by application with PyQtGraph panels
         

@@ -1133,7 +1133,7 @@ class EditorController:
         gamma_self = self.model.gamma_self_0  # Start from configured initial position
         gamma_trajectory = [gamma_self]
         
-        for i in range(len(events) - 1):
+        for i in range(len(events)):
             # Get primitives at current time
             v = data['v'][i]
             r = data['r'][i]
@@ -1141,8 +1141,12 @@ class EditorController:
             a = data['a'][i]
             S = data['S'][i]
             
-            # Time delta
-            dt = times[i + 1] - times[i]
+            # Time delta - use time to next event, or a small default for the last event
+            if i + 1 < len(events):
+                dt = times[i + 1] - times[i]
+            else:
+                # For the last event, use a nominal time step
+                dt = 1.0 if i == 0 else (times[i] - times[i-1])
             
             # Update gamma_self using GRP core
             gamma_self = update_gamma_self(
