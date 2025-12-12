@@ -7,6 +7,48 @@ Qt's undo framework using QUndoCommand pattern.
 from PySide6.QtGui import QUndoCommand
 
 
+class InsertEventCommand(QUndoCommand):
+    """
+    Command for inserting a new event at a specific time without shifting other events.
+    
+    Used for manual time entry in insertion options widget.
+    """
+    
+    def __init__(self, controller, insert_time):
+        """
+        Initialize insert command.
+        
+        Args:
+            controller: EditorController instance
+            insert_time: Time for the new event
+        """
+        super().__init__()
+        self.controller = controller
+        self.insert_time = insert_time
+        self.setText(f"Insert event at day {insert_time}")
+    
+    def redo(self):
+        """Insert the new event."""
+        self.controller.state.enter_undo_operation()
+        try:
+            self.controller.insert_event_at_time(self.insert_time)
+        finally:
+            self.controller.state.exit_undo_operation()
+    
+    def undo(self):
+        """Remove the inserted event."""
+        self.controller.state.enter_undo_operation()
+        try:
+            # Find the event at this time and delete it
+            events = self.controller.model.get_events(self.controller.perspective)
+            for idx, evt in enumerate(events):
+                if abs(evt.time - self.insert_time) < 0.001:
+                    self.controller.delete_event_at_index(idx)
+                    break
+        finally:
+            self.controller.state.exit_undo_operation()
+
+
 class EditPrimitiveCommand(QUndoCommand):
     """
     Command for editing a primitive value.
@@ -27,13 +69,15 @@ class EditPrimitiveCommand(QUndoCommand):
         """
         super().__init__()
         self.controller = controller
-        self.event_idx = event_idx
+        # Store time, not index, so command survives insertions/deletions
+        events = controller.model.get_events(controller.perspective)
+        self.event_time = events[event_idx].time
         self.primitive = primitive
         self.old_value = old_value
         self.new_value = new_value
         
         # Set command text for UI display
-        self.setText(f"Edit {primitive} at event {event_idx}: {old_value:.1f} → {new_value:.1f}")
+        self.setText(f"Edit {primitive} at time {self.event_time}: {old_value:.1f} → {new_value:.1f}")
     
     def redo(self):
         """Apply the edit (or re-apply after undo)."""
@@ -54,17 +98,29 @@ class EditPrimitiveCommand(QUndoCommand):
         # Set flag to prevent recursive undo command creation using state
         self.controller.state.enter_undo_operation()
         try:
+            # Find current index for this time (may have changed due to insertions)
+            events = self.controller.model.get_events(self.controller.perspective)
+            event_idx = None
+            for idx, evt in enumerate(events):
+                if abs(evt.time - self.event_time) < 0.001:
+                    event_idx = idx
+                    break
+            
+            if event_idx is None:
+                print(f"[EDIT_CMD] Event at time {self.event_time} not found!")
+                return
+            
             # Use the controller's apply method which handles marker positions and labels
-            self.controller._apply_primitive_change(self.event_idx, self.primitive, value)
+            self.controller._apply_primitive_change(event_idx, self.primitive, value)
         finally:
             self.controller.state.exit_undo_operation()
     
     def id(self):
         """Return command ID for merging consecutive edits."""
-        # Each event/primitive combination gets unique ID
+        # Each time/primitive combination gets unique ID
         # This prevents merging edits to different markers
-        # Use a simple int that fits in Qt's signed 32-bit int range
-        return (self.event_idx * 5 + ['v', 'r', 'f', 'a', 'S'].index(self.primitive)) % 2147483647
+        # Use hash of time and primitive, modulo to fit in signed 32-bit int
+        return (hash((self.event_time, self.primitive)) % 2147483647)
     
     def mergeWith(self, other):
         """
@@ -112,26 +168,40 @@ class ResetPrimitiveCommand(QUndoCommand):
         
         Args:
             controller: EditorController instance
-            event_idx: Event index
+            event_idx: Event index (only used to get time)
             primitive: Primitive name
             old_value: Value before reset
             baseline_value: Baseline value from CSV
         """
         super().__init__()
         self.controller = controller
-        self.event_idx = event_idx
+        # Store time, not index, so command survives insertions/deletions
+        events = controller.model.get_events(controller.perspective)
+        self.event_time = events[event_idx].time
         self.primitive = primitive
         self.old_value = old_value
         self.baseline_value = baseline_value
         
-        self.setText(f"Reset {primitive} at event {event_idx} to baseline ({baseline_value:.1f})")
+        self.setText(f"Reset {primitive} at time {self.event_time} to baseline ({baseline_value:.1f})")
     
     def redo(self):
         """Apply the reset."""
         # Use controller's method to ensure consistent behavior
         self.controller.state.enter_undo_operation()
         try:
-            self.controller._apply_primitive_reset(self.event_idx, self.primitive, self.baseline_value)
+            # Find current index for this time
+            events = self.controller.model.get_events(self.controller.perspective)
+            event_idx = None
+            for idx, evt in enumerate(events):
+                if abs(evt.time - self.event_time) < 0.001:
+                    event_idx = idx
+                    break
+            
+            if event_idx is None:
+                print(f"[RESET_CMD] Event at time {self.event_time} not found!")
+                return
+            
+            self.controller._apply_primitive_reset(event_idx, self.primitive, self.baseline_value)
         finally:
             self.controller.state.exit_undo_operation()
     
@@ -140,7 +210,19 @@ class ResetPrimitiveCommand(QUndoCommand):
         # Use controller's apply method to restore the modified value
         self.controller.state.enter_undo_operation()
         try:
-            self.controller._apply_primitive_change(self.event_idx, self.primitive, self.old_value)
+            # Find current index for this time
+            events = self.controller.model.get_events(self.controller.perspective)
+            event_idx = None
+            for idx, evt in enumerate(events):
+                if abs(evt.time - self.event_time) < 0.001:
+                    event_idx = idx
+                    break
+            
+            if event_idx is None:
+                print(f"[RESET_CMD] Event at time {self.event_time} not found!")
+                return
+            
+            self.controller._apply_primitive_change(event_idx, self.primitive, self.old_value)
         finally:
             self.controller.state.exit_undo_operation()
 

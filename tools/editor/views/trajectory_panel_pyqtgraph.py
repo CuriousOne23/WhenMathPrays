@@ -30,10 +30,12 @@ class TrajectoryPanelPyQtGraph(QWidget):
     
     Signals:
         gamma_clicked(float, float): Emitted when user clicks on plot, provides (x, y) coordinates
+        event_insert_requested(float): Emitted when Ctrl+Shift+Click, provides insertion time
     """
     
     # Qt Signals - Clean event communication
     gamma_clicked = Signal(float, float)  # x, y coordinates when clicked
+    event_insert_requested = Signal(float)  # time coordinate for insertion
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -343,14 +345,21 @@ class TrajectoryPanelPyQtGraph(QWidget):
     def _on_mouse_clicked(self, event):
         """Handle mouse click and double-click events."""
         if event.button() == Qt.LeftButton:
-            # Consume any modifier+click to prevent system interference
-            if event.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier | Qt.AltModifier):
+            # Get position in data coordinates first
+            pos = self.plot_widget.plotItem.vb.mapSceneToView(event.scenePos())
+            x, y = pos.x(), pos.y()
+            
+            # Handle Ctrl+Shift+Click for event insertion
+            if event.modifiers() & Qt.ControlModifier and event.modifiers() & Qt.ShiftModifier:
+                print(f"[INSERT EVENT] Ctrl+Shift+click at time={x:.2f}")
+                self.event_insert_requested.emit(x)
                 event.accept()
                 return
             
-            # Get position in data coordinates
-            pos = self.plot_widget.plotItem.vb.mapSceneToView(event.scenePos())
-            x, y = pos.x(), pos.y()
+            # Consume other modifier+clicks to prevent system interference
+            if event.modifiers() & (Qt.ControlModifier | Qt.ShiftModifier | Qt.AltModifier):
+                event.accept()
+                return
             
             # Check if this is a double-click
             if event.double():

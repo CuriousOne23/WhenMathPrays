@@ -319,7 +319,7 @@ When implementing Phase 3 (QDockWidget + M2 integration), address:
 3. **State management** - Verify single source of truth for M1/M2 data
 4. **Observer pattern** - Ensure dual-perspective updates work correctly
 
-See [../phase2_architecture_recommendations.md](../phase2_architecture_recommendations.md) for Phase 3 architecture details.
+See [../architecture_recommendations.md](../architecture_recommendations.md) for Phase 3 architecture details.
 
 ---
 
