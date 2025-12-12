@@ -391,6 +391,17 @@ Load M2 file
 - pandas
 - GRP core library (`core/love.py`)
 
+### CSV File Format Requirements
+
+**For complete CSV format specification, see [CSV Scenario Format](../README.md#csv-scenario-format) in the main README.**
+
+Quick reference:
+- **Required columns:** `day`, `v`, `r`, `f`, `a`, `S`
+- **Optional columns:** `notes`, `marker`, `locked`
+- **Metadata rows:** `name` and `time_unit` (first two rows)
+- **Value range:** Primitives use -10 to +10 scale
+- **File naming:** Dual-perspective scenarios must use `_M1.csv` and `_M2.csv` suffixes
+
 ### Running the Editor
 
 ```bash
