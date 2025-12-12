@@ -4,6 +4,8 @@
 
 This directory contains deep documentation for designing, validating, and analyzing WhenMathPrays scenarios. For practical "how to run" information, see [scenarios/README.md](../../scenarios/README.md) in the main codebase.
 
+**⚠️ START HERE:** Read [Primitive Modeling Guide](primitive_modeling_guide.md) first. The M1/M2 perspective framework is non-intuitive and requires deliberate attention - even experienced modelers slip into incorrect "theory of mind" scoring.
+
 ## What Are Scenarios?
 
 Scenarios are **structured relational experiments** that explore how primitive events (v, r, f, a, S) combine to produce complex emotional trajectories. Each scenario models a specific relational context—romantic love, battlefield hate, parent-child bonds, spiritual practices—with the goal of validating the Gamma Revenge Protocol (GRP) framework and understanding love/hate dynamics.

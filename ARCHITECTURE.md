@@ -49,6 +49,39 @@ This document describes the overall architecture, object model, and design princ
 - **Configuration System (`tools/editor/config.py`)** - User preferences with JSON config
 - **Primitive Name Updates** - Corrected UI labels: Ego→Visibility, Vulnerability→Altruism
 
+## Axis Interpretation: Identity Boundary vs Affective Quality
+
+The GRP framework distinguishes two orthogonal dimensions:
+
+**Real Axis (Ego ↔ We): Identity Boundary**
+- **Ego-space (negative)**: Separate, distinct identities—M1 experiences self as "I" (distinct from M2)
+- **We-space (positive)**: Merged, shared identity—M1 experiences self as "We", self-concept includes M2
+- **Primitive**: Visibility (v) affects identity boundary through presence/absence
+
+**Imaginary Axis (Hate ↔ Love): Affective Quality**
+- **Hate (negative)**: Negative emotional states—resentment, bitterness, discord
+- **Love (positive)**: Positive emotional states—warmth, care, resonance
+- **Primitives**: Resonance (r), Fidelity (f), Altruism (a) affect emotional experience
+
+**Identity Statement Test** for primitive classification:
+- **Imaginary axis primitives** (r, f, a): Use action/feeling language
+  - "I helped them" (action, identity remains distinct)
+  - "I care about them" (feeling, identity remains distinct)
+  - "I resonate with them" (emotional experience)
+- **Real axis primitives** (v): Support identity language
+  - "I am married to them" (defines WHO M1 is)
+  - "We are partners" (shared identity statement)
+  - "We are buying a house" (joint identity action)
+
+**Key distinction**: Imaginary effects describe what M1 DOES or FEELS—identity remains distinct. Real effects define WHO M1 IS—self-concept incorporates M2.
+
+**Examples validating orthogonality**:
+- **Fan relationship**: High r/a (Love) + Ego-space (separate identity)
+- **Toxic enmeshment**: Low r/a (Hate) + We-space (merged identity)
+- **Marriage**: Variable affect (Love or Hate) + We-space ("I am married to them")
+
+For detailed empirical foundation, see [gamma_self_defense.md](docs/gamma_self_defense.md).
+
 ## Directory Structure
 ```
 /WhenMathPrays/
