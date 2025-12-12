@@ -21,6 +21,7 @@ from tools.editor.editor_constants import (
     LINE_WIDTH_MODIFIED_MARKER, LINE_WIDTH_NORMAL_MARKER, LINE_WIDTH_TRAJECTORY,
     LINE_WIDTH_LABEL_BORDER, PLOT_PADDING_NONE, PLOT_X_MARGIN, PRIMITIVE_MIN_VALUE, PRIMITIVE_MAX_VALUE
 )
+from tools.editor.observability import ObservabilityLog
 
 
 class DraggableScatterItem(pg.ScatterPlotItem):
@@ -231,7 +232,9 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.overlay_line_items = {}  # {prim: PlotDataItem} - for inactive perspective (Phase 3.3)
         self.overlay_scatter_items = {}  # {prim: ScatterPlotItem} - for inactive perspective (Phase 3.3)
         self.text_items = {}  # {(event_idx, prim): TextItem} - for trajectory markers
-        self.modified_labels = {}  # {(event_time, prim): TextItem} - for modified primitives (time-based keys survive insertion/deletion)
+        self.modified_labels_m1 = {}  # {(event_time, prim): TextItem} - for M1 modified primitives
+        self.modified_labels_m2 = {}  # {(event_time, prim): TextItem} - for M2 modified primitives
+        self.current_perspective = 'M1'  # Track current perspective
         self.inserted_lines = []  # List of InfiniteLine objects for inserted events
         self.events_data = None
         self.overlay_events_data = None  # Events for inactive perspective (Phase 3.3)
@@ -270,9 +273,17 @@ class PrimitivePanelPyQtGraph(QWidget):
         for i, prim in enumerate(PRIMITIVE_NAMES):
             # Create plot
             plot = self.graphics_widget.addPlot(row=i, col=0)
-            plot.setLabel('left', PRIMITIVE_LABELS[prim])
             plot.setYRange(-10, 10)
             plot.showGrid(y=True, alpha=0.3)
+            
+            # Reduce y-axis tick font size and width for compact layout
+            from PySide6.QtGui import QFont
+            axis = plot.getAxis('left')
+            axis.setStyle(tickFont=QFont("Arial", 7))
+            axis.setWidth(35)  # Narrow left axis area
+            # Set label with readable font (shorter labels now)
+            label_style = {'color': '#000', 'font-size': '8pt'}
+            axis.setLabel(PRIMITIVE_LABELS[prim], **label_style)
             
             # Enable mouse interaction (left-click drag to pan, wheel to zoom)
             plot.setMouseEnabled(x=True, y=True)  # Allow 2D pan/zoom like trajectory panel
@@ -402,6 +413,43 @@ class PrimitivePanelPyQtGraph(QWidget):
             else:
                 self.name_label.setVisible(False)
     
+    def set_time_unit(self, time_unit: str):
+        """Update the time axis label with the appropriate time unit."""
+        # Capitalize first letter for display
+        display_unit = time_unit.capitalize() if time_unit else 'Time'
+        
+        # Update the bottom plot's x-axis label
+        last_prim = PRIMITIVE_NAMES[-1]  # 'S' is the last plot
+        if last_prim in self.plot_items:
+            self.plot_items[last_prim].setLabel('bottom', display_unit)
+    
+    def switch_perspective_labels(self, perspective: str):
+        """Hide current perspective labels and show new perspective labels.
+        
+        Args:
+            perspective: 'M1' or 'M2'
+        """
+        print(f"[PRIMITIVE_LABELS] Switching from {self.current_perspective} to {perspective}")
+        if perspective == self.current_perspective:
+            print(f"[PRIMITIVE_LABELS] Already on {perspective}, skipping")
+            return
+        
+        # Hide old perspective labels (remove from plot)
+        old_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        print(f"[PRIMITIVE_LABELS] Hiding {len(old_labels)} labels for {self.current_perspective}")
+        for (event_time, prim), text_item in old_labels.items():
+            self.plot_items[prim].removeItem(text_item)
+        
+        # Show new perspective labels (add to plot)
+        new_labels = self.modified_labels_m1 if perspective == 'M1' else self.modified_labels_m2
+        print(f"[PRIMITIVE_LABELS] Showing {len(new_labels)} labels for {perspective}")
+        for (event_time, prim), text_item in new_labels.items():
+            self.plot_items[prim].addItem(text_item)
+        
+        # Update current perspective
+        self.current_perspective = perspective
+        print(f"[PRIMITIVE_LABELS] Current perspective now: {self.current_perspective}")
+    
     def set_modified_state(self, modified_state: dict, perspective: str = 'baseline'):
         """
         Update the cached modified state.
@@ -432,6 +480,12 @@ class PrimitivePanelPyQtGraph(QWidget):
         """
         import time
         t0 = time.time()
+        
+        ObservabilityLog.event("primitive_panel_update_start",
+                               perspective=self.current_perspective,
+                               event_count=len(events),
+                               m1_label_count=len(self.modified_labels_m1),
+                               m2_label_count=len(self.modified_labels_m2))
         
         self.events_data = events
         
@@ -675,10 +729,11 @@ class PrimitivePanelPyQtGraph(QWidget):
             primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
         """
         key = (event_time, primitive)
-        if key in self.modified_labels:
-            text_item = self.modified_labels[key]
+        modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        if key in modified_labels:
+            text_item = modified_labels[key]
             self.plot_items[primitive].removeItem(text_item)
-            del self.modified_labels[key]
+            del modified_labels[key]
     
     @property
     def draggable_points(self):
@@ -700,11 +755,27 @@ class PrimitivePanelPyQtGraph(QWidget):
             primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
             value: Primitive value (Y position)
         """
+        import traceback
+        print(f"\n{'='*80}")
+        print(f"[LABEL_ADD] _add_marker_label called: time={event_time}, prim={primitive}, value={value:.2f}, perspective={self.current_perspective}")
+        print(f"[LABEL_ADD] Call stack:")
+        for line in traceback.format_stack()[-6:-1]:  # Show last 5 stack frames
+            print(line.strip())
+        print(f"{'='*80}\n")
+        
+        # CRITICAL FIX: Check if this event_time exists in the current perspective's events
+        # This prevents M1 modifications from showing labels in M2 and vice versa
+        if self.events_data:
+            event_times = [e.time for e in self.events_data]
+            if event_time not in event_times:
+                return
+        
         key = (event_time, primitive)
+        modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
         
         # Remove old label if it exists
-        if key in self.modified_labels:
-            old_text = self.modified_labels[key]
+        if key in modified_labels:
+            old_text = modified_labels[key]
             self.plot_items[primitive].removeItem(old_text)
         
         # Create new label with timestamp
@@ -715,9 +786,10 @@ class PrimitivePanelPyQtGraph(QWidget):
             border=pg.mkPen(PRIMITIVE_COLORS[primitive], width=LINE_WIDTH_LABEL_BORDER),
             fill=pg.mkBrush(255, 255, 255, 200)
         )
+        
         text.setPos(event_time, value)
         self.plot_items[primitive].addItem(text)
-        self.modified_labels[key] = text
+        modified_labels[key] = text
     
     def _add_trajectory_marker_label(self, event_idx, primitive, x, y):
         """Add a timestamp label for a trajectory marker (red-bordered markers from trajectory clicks)."""

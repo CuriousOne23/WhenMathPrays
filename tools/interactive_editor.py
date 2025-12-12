@@ -161,6 +161,7 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
         
+        # Create trajectory dock but DON'T add it yet - will be added via splitDockWidget later
         self.trajectory_dock = QDockWidget("Trajectory", self.window)
         self.trajectory_dock.setWidget(self.trajectory_panel)
         self.trajectory_dock.setFeatures(
@@ -168,7 +169,6 @@ class InteractiveEditor:
             QDockWidget.DockWidgetFloatable | 
             QDockWidget.DockWidgetClosable
         )
-        self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
@@ -234,7 +234,7 @@ class InteractiveEditor:
             'font-size: 12pt; '
             'font-weight: bold;'
         )
-        self.primitive_gauge.setMinimumHeight(60)
+        self.primitive_gauge.setMinimumHeight(30)
         primitive_gauge_layout.addWidget(primitive_gauge_label)
         primitive_gauge_layout.addWidget(self.primitive_gauge)
         primitive_gauge_frame.setLayout(primitive_gauge_layout)
@@ -256,13 +256,14 @@ class InteractiveEditor:
             'font-size: 11pt; '
             'font-weight: bold;'
         )
-        self.gamma_self_gauge.setMinimumHeight(60)
+        self.gamma_self_gauge.setMinimumHeight(30)
         gamma_gauge_layout.addWidget(gamma_gauge_label)
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
         
-        # Combine widgets in a container
-        dock_container = QWidget()
+        # Combine widgets in a container with scroll area
+        from PySide6.QtWidgets import QScrollArea
+        dock_container_inner = QWidget()
         dock_layout = QVBoxLayout()
         dock_layout.addWidget(self.perspective_switcher)  # Phase 3.2: Add perspective switcher at top
         dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
@@ -272,9 +273,14 @@ class InteractiveEditor:
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
-        dock_container.setLayout(dock_layout)
+        dock_container_inner.setLayout(dock_layout)
         
-        # Add controls as dock widget
+        # Wrap in scroll area to allow small window heights
+        dock_container = QScrollArea()
+        dock_container.setWidget(dock_container_inner)
+        dock_container.setWidgetResizable(True)
+        
+        # Add controls as dock widget - add to right area FIRST
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
         self.controls_dock.setFeatures(
@@ -284,9 +290,9 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.controls_dock)
         
-        # Split the right area horizontally: Trajectory on left, Controls on right
+        # Split controls dock to put trajectory to the LEFT of controls
         # This creates the 3-column layout: [Primitives | Trajectory | Controls]
-        self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
+        self.window.splitDockWidget(self.controls_dock, self.trajectory_dock, Qt.Horizontal)
         
         # Setup View menu for dock widget visibility
         self.window._setup_view_menu({
@@ -298,15 +304,15 @@ class InteractiveEditor:
         # Configure initial layout widths
         # First set the main left/right split (Primitives vs rest)
         self.window.resizeDocks(
-            [self.primitive_dock, self.trajectory_dock],
-            [500, 1000],  # Primitives=500px, Right side (Trajectory+Controls)=1000px
+            [self.primitive_dock, self.controls_dock],
+            [445, 755],  # Primitives=445px, Right side (Controls+Trajectory)=755px
             Qt.Horizontal
         )
         
-        # Then set the Trajectory/Controls split within the right area
+        # Then set the Controls/Trajectory split within the right area
         self.window.resizeDocks(
-            [self.trajectory_dock, self.controls_dock],
-            [700, 300],  # Trajectory=700px, Controls=300px
+            [self.controls_dock, self.trajectory_dock],
+            [260, 495],  # Controls=260px, Trajectory=495px
             Qt.Horizontal
         )
         
@@ -1008,6 +1014,12 @@ class InteractiveEditor:
 
 def main():
     """Main entry point."""
+    # Phase 3.6: Initialize observability system
+    from tools.editor.observability import ObservabilityLog
+    import os
+    debug_enabled = os.environ.get('EDITOR_DEBUG', '').lower() in ('true', '1', 'yes')
+    ObservabilityLog.initialize(enabled=debug_enabled)
+    
     parser = argparse.ArgumentParser(
         description='Interactive Scenario Editor for GRP',
         formatter_class=argparse.RawDescriptionHelpFormatter,

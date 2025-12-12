@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from typing import Optional, List
 from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
 from tools.editor.constants import PRIMITIVE_NAMES, is_inserted_event
 from tools.editor.editor_constants import FLOAT_TOLERANCE, TIME_MATCH_TOLERANCE
 from tools.editor.editor_state import EditorState, PerspectiveState, FileLoadState
@@ -23,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.love import update_gamma_self, DEFAULT_WEIGHTS
+from tools.editor.observability import ObservabilityLog
 
 
 class EditorController:
@@ -142,6 +144,14 @@ class EditorController:
         display_name = self.model.get_display_name(self.perspective)
         self.primitive_panel.set_scenario_name(display_name)
         self.trajectory_panel.set_scenario_name(display_name)
+        
+        # Set time unit on primitive panel
+        self.primitive_panel.set_time_unit(self.model.time_unit)
+        
+        # Initialize perspective in panels to match controller
+        self.primitive_panel.current_perspective = self.perspective
+        self.trajectory_panel.current_perspective = self.perspective
+        print(f"[CONTROLLER] Initialized panel perspectives to {self.perspective}")
 
         # Update views
         self._update_all_views()
@@ -167,6 +177,14 @@ class EditorController:
         # Update perspective using state transition
         old_perspective = self.perspective
         target_state = PerspectiveState.M1 if perspective == 'M1' else PerspectiveState.M2
+        
+        ObservabilityLog.section(f"=== PERSPECTIVE SWITCH: {old_perspective} → {perspective} ===")
+        ObservabilityLog.event("perspective_switch_start", 
+                               old_perspective=old_perspective, 
+                               new_perspective=perspective,
+                               m1_labels=len(self.primitive_panel.modified_labels_m1),
+                               m2_labels=len(self.primitive_panel.modified_labels_m2))
+        
         self.state.switch_perspective(target_state)
         
         # Update display name on panels
@@ -174,11 +192,74 @@ class EditorController:
         self.primitive_panel.set_scenario_name(display_name)
         self.trajectory_panel.set_scenario_name(display_name)
         
+        # Set time unit on primitive panel
+        self.primitive_panel.set_time_unit(self.model.time_unit)
+        
+        # Store old labels for debugging
+        print(f"[CONTROLLER] Hiding {len(self.primitive_panel.modified_labels_m1 if old_perspective == 'M1' else self.primitive_panel.modified_labels_m2)} primitive labels for {old_perspective}")
+        
+        # Update current_perspective in panels BEFORE updating views
+        # This ensures labels are added to the correct perspective storage
+        print(f"[CONTROLLER] Updating panel perspectives from {old_perspective} to {perspective}")
+        self.primitive_panel.current_perspective = perspective
+        self.trajectory_panel.current_perspective = perspective
+        
+        # Remove ALL TextItems from all plots before switching
+        import pyqtgraph as pg
+        
+        # Clear tracking dictionaries
+        self.primitive_panel.modified_labels_m1.clear()
+        self.primitive_panel.modified_labels_m2.clear()
+        
+        # Remove every TextItem from scene
+        for prim, plot_item in self.primitive_panel.plot_items.items():
+            to_remove = [item for item in plot_item.items[:] if isinstance(item, pg.TextItem)]
+            for item in to_remove:
+                plot_item.removeItem(item)
+                item.deleteLater()
+        
+        QApplication.processEvents()
+        
+        # Query model to determine labels needed for NEW perspective
+        labels_to_recreate = []
+        
+        # Scan model's modified_primitives to find what needs labels
+        events = self.model.get_events(perspective)
+        for event_time, primitives_set in self.model.modified_primitives.items():
+            # Find event index by time
+            event_idx = None
+            for idx, event in enumerate(events):
+                if event.time == event_time:
+                    event_idx = idx
+                    break
+            
+            if event_idx is None:
+                continue
+            
+            event = self.model.get_event(event_idx, perspective)
+            for prim in primitives_set:
+                # Check if THIS perspective modified this primitive
+                if self.model.is_primitive_modified(event_idx, prim, perspective):
+                    labels_to_recreate.append((event_time, prim, event.markers[prim].value))
+        
+        # Continue with view rebuild
+        QApplication.processEvents()
+        
         # Update all views with new perspective data
         self._update_all_views()
         
+        # Recreate labels for the current perspective
+        for event_time, prim, value in labels_to_recreate:
+            self.primitive_panel._add_marker_label(event_time, prim, value)
+        
         # Recompute trajectory for new perspective
         self._recompute_trajectory_immediate()
+        
+        ObservabilityLog.event("perspective_switch_complete", 
+                               old_perspective=old_perspective, 
+                               new_perspective=perspective,
+                               m1_labels_final=len(self.primitive_panel.modified_labels_m1),
+                               m2_labels_final=len(self.primitive_panel.modified_labels_m2))
     
     def has_dual_perspective(self) -> bool:
         """
@@ -245,27 +326,21 @@ class EditorController:
             primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
             value: New value for the primitive
         """
-        print(f"[UNDO_DEBUG] on_primitive_changed called: event={event_index}, prim={primitive}, value={value:.2f}")
         # Get old value for undo
         old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
-        print(f"[UNDO_DEBUG] old_value={old_value:.2f}, undo_stack={self.undo_stack is not None}, in_undo={self.state.is_in_undo_operation()}")
         
         # Skip if no actual change
         if abs(value - old_value) < FLOAT_TOLERANCE:
-            print(f"[UNDO_DEBUG] Skipping - no change")
             return
         
         # Create undo command and push to stack (unless we're in undo/redo)
         if self.undo_stack and not self.state.is_in_undo_operation():
             from tools.editor.commands import EditPrimitiveCommand
             command = EditPrimitiveCommand(self, event_index, primitive, old_value, value)
-            print(f"[UNDO] Pushing EditPrimitiveCommand to stack (event={event_index}, prim={primitive}, {old_value:.2f}->{value:.2f})")
             self.undo_stack.push(command)
-            print(f"[UNDO] Stack size now: {self.undo_stack.count()}, can undo: {self.undo_stack.canUndo()}")
             return  # Command.redo() will handle the update
         
         # If no undo stack or in undo/redo, apply directly
-        print(f"[UNDO_DEBUG] NOT creating undo command - applying directly")
         self._apply_primitive_change(event_index, primitive, value)
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
@@ -359,9 +434,6 @@ class EditorController:
             if event_time not in self.model.modified_primitives:
                 self.model.modified_primitives[event_time] = set()
             self.model.modified_primitives[event_time].add(primitive)
-            
-            # Add or update the label
-            self.primitive_panel._add_marker_label(event_time, primitive, value)
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -1259,12 +1331,16 @@ class EditorController:
         marked_data = {}
         
         # Add committed modifications (convert time keys to indices)
+        # FILTER by perspective to only show modifications made in current perspective
         for event_time, prims in self.model.modified_primitives.items():
             if event_time in time_to_idx:
                 event_idx = time_to_idx[event_time]
-                if event_idx not in marked_data:
-                    marked_data[event_idx] = set()
-                marked_data[event_idx].update(prims)
+                # Check each primitive - only include if modified by THIS perspective
+                for prim in prims:
+                    if self.model.is_modified(event_idx, prim, self.perspective):
+                        if event_idx not in marked_data:
+                            marked_data[event_idx] = set()
+                        marked_data[event_idx].add(prim)
         
         # Add preview modifications (already using indices)
         if preview_mode and self.model.preview_changes:
@@ -1275,6 +1351,7 @@ class EditorController:
         
         # Build pinned marker positions for gamma_self display
         # Format: [(event_idx, primitive, x, y, color), ...]
+        # FILTER by perspective to only show markers for modifications in current perspective
         pinned_markers = []
         
         for (event_time, prim), gamma_pos in self.model.marker_positions.items():
@@ -1282,6 +1359,10 @@ class EditorController:
             if event_time not in time_to_idx:
                 continue  # Event was deleted
             event_idx = time_to_idx[event_time]
+            
+            # Only show marker if modified by THIS perspective
+            if not self.model.is_modified(event_idx, prim, self.perspective):
+                continue
             
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
             marker = {

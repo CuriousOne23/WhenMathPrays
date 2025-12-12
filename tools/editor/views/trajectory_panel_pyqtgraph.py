@@ -44,6 +44,11 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.plot_widget = pg.PlotWidget()
         self.plot_widget.setBackground('w')  # White background
         
+        # Add margins to prevent edge clipping
+        self.plot_widget.plotItem.getViewBox().setLimits(xMin=None, xMax=None, yMin=None, yMax=None,
+                                                          minXRange=None, maxXRange=None,
+                                                          minYRange=None, maxYRange=None)
+        
         # Configure axes
         self.plot_widget.setLabel('left', 'Imaginary (Hate ↔ Love)', units='')
         self.plot_widget.setLabel('bottom', 'Real (Ego ↔ We)', units='')
@@ -137,12 +142,14 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.diagnostic_marker.setVisible(False)
         
         # Text items for labels
-        self.marker_labels = []  # List of TextItem objects
+        self.marker_labels_m1 = []  # List of TextItem objects for M1
+        self.marker_labels_m2 = []  # List of TextItem objects for M2
         self.preview_label = None  # TextItem for preview
+        self.current_perspective = 'M1'  # Track current perspective
         
-        # Layout
+        # Layout with right margin to prevent edge clipping
         layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(0, 0, 15, 0)  # Add 15px right margin
         layout.addWidget(self.plot_widget)
         self.setLayout(layout)
         
@@ -164,6 +171,33 @@ class TrajectoryPanelPyQtGraph(QWidget):
         else:
             title = "γ_self Trajectory"
         self.plot_widget.setTitle(title)
+    
+    def switch_perspective_labels(self, perspective: str):
+        """Hide current perspective labels and show new perspective labels.
+        
+        Args:
+            perspective: 'M1' or 'M2'
+        """
+        print(f"[TRAJECTORY_LABELS] Switching from {self.current_perspective} to {perspective}")
+        if perspective == self.current_perspective:
+            print(f"[TRAJECTORY_LABELS] Already on {perspective}, skipping")
+            return
+        
+        # Hide old perspective labels (remove from plot)
+        old_labels = self.marker_labels_m1 if self.current_perspective == 'M1' else self.marker_labels_m2
+        print(f"[TRAJECTORY_LABELS] Hiding {len(old_labels)} labels for {self.current_perspective}")
+        for text_item in old_labels:
+            self.plot_widget.removeItem(text_item)
+        
+        # Show new perspective labels (add to plot)
+        new_labels = self.marker_labels_m1 if perspective == 'M1' else self.marker_labels_m2
+        print(f"[TRAJECTORY_LABELS] Showing {len(new_labels)} labels for {perspective}")
+        for text_item in new_labels:
+            self.plot_widget.addItem(text_item)
+        
+        # Update current perspective
+        self.current_perspective = perspective
+        print(f"[TRAJECTORY_LABELS] Current perspective now: {self.current_perspective}")
     
     def place_diagnostic_marker(self, gamma_x: float, gamma_y: float):
         """Place diagnostic marker at specified gamma_self coordinates and adjust view if needed."""
@@ -254,10 +288,14 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.start_marker.setData([gamma_x[0]], [gamma_y[0]])
         self.end_marker.setData([gamma_x[-1]], [gamma_y[-1]])
         
-        # Clear old labels
-        for label in self.marker_labels:
+        # Clear ALL old pinned marker labels from BOTH perspectives
+        for label in list(self.marker_labels_m1):
             self.plot_widget.removeItem(label)
-        self.marker_labels.clear()
+        self.marker_labels_m1.clear()
+        
+        for label in list(self.marker_labels_m2):
+            self.plot_widget.removeItem(label)
+        self.marker_labels_m2.clear()
         
         # Update pinned markers
         if pinned_markers:
@@ -278,8 +316,14 @@ class TrajectoryPanelPyQtGraph(QWidget):
                         fill=pg.mkBrush(255, 255, 255, 230)
                     )
                     text_item.setPos(marker['x'], marker['y'])
+                    
+                    # Mark this TextItem with its perspective so we can identify it later
+                    text_item._wmp_perspective = self.current_perspective
+                    text_item._wmp_marker_id = marker.get('id', None)
+                    
                     self.plot_widget.addItem(text_item)
-                    self.marker_labels.append(text_item)
+                    marker_labels = self.marker_labels_m1 if self.current_perspective == 'M1' else self.marker_labels_m2
+                    marker_labels.append(text_item)
         else:
             self.event_markers.setData([], [])
         
@@ -310,7 +354,8 @@ class TrajectoryPanelPyQtGraph(QWidget):
             )
             self.preview_label.setPos(preview_gamma[0], preview_gamma[1])
             self.plot_widget.addItem(self.preview_label)
-            self.marker_labels.append(self.preview_label)
+            marker_labels = self.marker_labels_m1 if self.current_perspective == 'M1' else self.marker_labels_m2
+            marker_labels.append(self.preview_label)
         else:
             self.preview_marker.setVisible(False)
             if self.preview_label:
@@ -324,7 +369,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
             self.plot_widget.setYRange(stored_ylim[0], stored_ylim[1], padding=0)
         elif not preserve_view and not self.manual_xlim and not self.manual_ylim:
             # Auto-scale with padding ONLY when not preserving view
-            margin = 2.0
+            margin = 20.0
             x_min, x_max = min(gamma_x) - margin, max(gamma_x) + margin
             y_min, y_max = min(gamma_y) - margin, max(gamma_y) + margin
             

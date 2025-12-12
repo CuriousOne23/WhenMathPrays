@@ -104,6 +104,8 @@ class EditorModel:
         self.dirty: bool = False  # Unsaved changes?
         self.modified_indices: set = set()  # Track which events were modified
         self.modified_primitives: ObservableDict = ObservableDict()  # {event_time: {'v', 'r', ...}}
+        # TEMPORARY HACK: Track which perspective modified each event time
+        self._modification_perspective: Dict[float, str] = {}  # {event_time: 'M1' or 'M2'}
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
         # Pinned marker positions: where gamma_self was when each primitive was first modified
@@ -233,6 +235,9 @@ class EditorModel:
             if event_time not in self.modified_primitives:
                 self.modified_primitives[event_time] = set()
             self.modified_primitives[event_time].add(primitive)
+            
+            # TEMPORARY HACK: Track which perspective made this modification
+            self._modification_perspective[event_time] = perspective
 
             self.dirty = True
             self.modified_indices.add(event_index)
@@ -461,12 +466,21 @@ class EditorModel:
         Returns:
             True if modified, False if at baseline
         """
+        # TEMPORARY HACK: Filter by current perspective to test hypothesis
+        # TODO: Replace with proper perspective-aware modified_primitives
         events = self.get_events(perspective)
         if event_idx >= len(events):
             return False
         event_time = events[event_idx].time
         if event_time not in self.modified_primitives:
             return False
+        
+        # Check if this event was modified by the CURRENT perspective
+        if hasattr(self, '_modification_perspective'):
+            if event_time in self._modification_perspective:
+                if self._modification_perspective[event_time] != perspective:
+                    return False
+        
         return prim in self.modified_primitives[event_time]
     
     def is_primitive_modified(self, event_idx: int, prim: str, perspective: str = "M1") -> bool:
