@@ -15,7 +15,7 @@ def load_events_from_csv(filepath):
     events = []
     metadata = {'gamma_self_0': 0+0j, 'time_unit': 'days', 'name': ''}
     
-    with open(filepath, 'r', newline='') as csvfile:
+    with open(filepath, 'r', newline='', encoding='utf-8') as csvfile:
         # Find the actual header row
         lines = csvfile.readlines()
         header_idx = None
