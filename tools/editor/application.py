@@ -5,6 +5,7 @@ Orchestrates FileManager, UIBuilder, EditorController, and MainWindow
 to create a clean separation of concerns and eliminate the "god class" pattern.
 
 Phase 3.5 Architecture Refactoring
+Phase 3.6 Observability Integration
 """
 
 from pathlib import Path
@@ -19,6 +20,7 @@ from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
 from tools.editor.config import get_config
 from tools.editor.constants import is_inserted_event
+from tools.editor.observability import ObservabilityLog
 
 
 class EditorApplication:
@@ -49,6 +51,15 @@ class EditorApplication:
         """
         self.qt_app = qt_app
         self.config = get_config()
+        
+        # Phase 3.6: Initialize observability system
+        # Check environment variable for debug mode
+        import os
+        debug_enabled = os.environ.get('EDITOR_DEBUG', '').lower() in ('true', '1', 'yes')
+        ObservabilityLog.initialize(enabled=debug_enabled)
+        
+        if ObservabilityLog.is_enabled():
+            ObservabilityLog.event("application_start", input_path=str(input_path))
         
         # Phase 3.5: Use FileManager for path resolution
         self.file_manager = FileManager(input_path)

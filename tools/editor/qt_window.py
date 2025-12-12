@@ -33,7 +33,7 @@ class EditorMainWindow(QMainWindow):
         super().__init__()
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
-        self.setGeometry(100, 100, 1400, 800)
+        self.setGeometry(100, 100, 1200, 590)
         
         # Central widget will be set by interactive_editor.py with PyQtGraph panels
         # (No matplotlib figure/canvas needed - using pure PyQtGraph)

@@ -173,7 +173,7 @@ Pre-built scenario templates are available in `data/templates/` (read-only):
 - Rows with `*` in `locked` column = structural anchors (start/end/key events)
 - Empty `locked` column = customize primitives as desired
 
-**Example CSV:**
+**Example CSV (using days):**
 ```csv
 name,My Custom Scenario
 time_unit,days
@@ -181,6 +181,16 @@ day,v,r,f,a,S,notes,marker,locked
 0,5,0,2,2,0,"Initial condition",,*
 14,5,-2,2,3,-1,"Early wobble - customize",star,
 60,9,10,10,9,10,"Final outcome",star,*
+```
+
+**Example CSV (using weeks):**
+```csv
+name,Summer Romance
+time_unit,weeks
+week,v,r,f,a,S,notes,marker,locked
+0,3,2,1,1,0,"Met at beach",,*
+2,6,5,4,3,3,"Getting closer",star,
+12,9,8,9,8,9,"In love",star,*
 ```
 
 ---

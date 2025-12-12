@@ -8,11 +8,11 @@ Defines primitive names, labels, colors, and shared configuration values.
 PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
 
 PRIMITIVE_LABELS = {
-    'v': "M1's Visibility TO M2",
-    'r': "M1's Resonance WITH M2", 
-    'f': "M1's Fidelity TO M2",
-    'a': "M1's Altruism FOR M2",
-    'S': "M1's Shared Breath WITH M2"
+    'v': 'Visibility',
+    'r': 'Resonance', 
+    'f': 'Fidelity',
+    'a': 'Altruism',
+    'S': 'Shared Breath'
 }
 
 PRIMITIVE_COLORS = {

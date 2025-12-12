@@ -5,6 +5,20 @@ This document describes the overall architecture, object model, and design princ
 
 ## Recent Updates
 
+**December 12, 2024:** Phase 3.6 Perspective Management Architecture Refactor (Design Phase):
+- **🔄 Phase 3.6 Planned:** Event-driven perspective management to resolve state synchronization bugs
+  - **Problem**: Manual coordination of perspective switches across 3+ components causes bugs
+  - **Example Bug**: Labels from M1 perspective persist in M2 despite cleanup attempts
+  - **Root Cause**: No centralized coordination, scattered state, no atomic transactions
+  - **Solution**: Qt signal-based architecture + built-in observability + perspective-aware model
+  - **See**: [docs/architecture/perspective_management_refactor.md](docs/architecture/perspective_management_refactor.md)
+  - **Goals**: 
+    - Centralized perspective state management
+    - Components self-manage via Qt signals (observer pattern)
+    - Built-in observability for debugging (toggle-able via EDITOR_DEBUG env var)
+    - 3rd-party extensibility (documented extension points)
+  - **Status**: Design complete, awaiting implementation
+
 **December 11, 2025:** v2.1.2 baseline storage refactoring complete:
 - **✅ Baseline Storage Refactoring (v2.1.2):** Migrated from index-based arrays to time-keyed dictionary
   - Replaced fragile `baseline_primitives['r'][6]` with stable `baseline_by_time[(42.0, 'r')]`

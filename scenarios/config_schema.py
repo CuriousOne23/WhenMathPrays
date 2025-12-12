@@ -131,4 +131,4 @@ AVAILABLE_WEIGHTS = {
 
 CSV_REQUIRED_COLUMNS = ['step', 'v', 'r', 'f', 'a', 'S']
 CSV_OPTIONAL_COLUMNS = ['notes']
-CSV_TIME_COLUMN_ALIASES = ['step', 'event', 'time', 'day', 'time_index']
+CSV_TIME_COLUMN_ALIASES = ['step', 'event', 'time', 'day', 'week', 'month', 'year', 'time_index']
