@@ -140,7 +140,9 @@ time_unit,days
 - `time_unit` - Time scale: `days`, `weeks`, `months`, or `years`. Defaults to `days` if omitted.
 
 **Required columns:**
-- `day` - Time point (name kept for backward compatibility, actual unit from `time_unit` metadata)
+- `day`, `week`, `month`, or `year` - Time point (fractional values accepted, e.g., 1.5, 2.25)
+  - Column name can match your `time_unit` metadata or use `day` for backward compatibility
+  - Examples: `day` column with `time_unit,days` OR `week` column with `time_unit,weeks`
 - `v` - Visibility primitive [-10, +10] human scale
 - `r` - Resonance primitive [-10, +10]
 - `f` - Fidelity primitive [-10, +10]
