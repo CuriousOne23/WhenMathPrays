@@ -968,12 +968,9 @@ class PrimitivePanelPyQtGraph(QWidget):
     
     def _on_point_double_clicked(self, index, primitive):
         """Handle double-click event (reset to baseline)."""
-        # Emit reset signal (Phase 1 refactoring - parallel with callback)
+        print(f"[DOUBLE_CLICK] Requesting reset for index={index}, primitive={primitive}")
+        # Emit reset signal - controller will handle undo command creation
         self.primitive_reset_requested.emit(index, primitive)
-        
-        # Call reset callback if set (kept for backward compatibility during refactoring)
-        if self.on_primitive_reset:
-            self.on_primitive_reset(index, primitive)
     
     def _on_point_ctrl_clicked(self, index, primitive):
         """Handle Ctrl+Click event (delete event)."""

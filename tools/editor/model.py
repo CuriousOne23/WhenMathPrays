@@ -356,9 +356,6 @@ class EditorModel:
         events.insert(insert_idx, new_event)
         self.dirty = True
         
-        # NOTE: modified_primitives uses time values as keys, so no shifting needed
-        print(f"[INSERT] modified_primitives (time-based, no shift needed): {self.modified_primitives}")
-        
         # Mark this event as an inserted event for visual distinction
         if not hasattr(self, 'inserted_events'):
             self.inserted_events = set()

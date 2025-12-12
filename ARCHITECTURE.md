@@ -5,6 +5,24 @@ This document describes the overall architecture, object model, and design princ
 
 ## Recent Updates
 
+**December 11, 2025:** v2.1.2 baseline storage refactoring complete:
+- **✅ Baseline Storage Refactoring (v2.1.2):** Migrated from index-based arrays to time-keyed dictionary
+  - Replaced fragile `baseline_primitives['r'][6]` with stable `baseline_by_time[(42.0, 'r')]`
+  - Removed complex array synchronization (12 operations → 5 dict operations per insert/delete)
+  - Eliminated corruption risk (baseline completely independent of model)
+  - All tests passing, undo/redo working correctly
+  - See [docs/architecture/baseline_storage_refactoring.md](docs/architecture/baseline_storage_refactoring.md)
+
+**December 11, 2025:** v2.1.1 undo system bug fixes and baseline storage architecture identified:
+- **✅ Undo System Fixes (v2.1.1):** Critical bugs in undo/redo system resolved
+  - Fixed insertion bypass: Text field insertions now create proper undo commands
+  - Fixed command index instability: Commands store event **time** (stable) instead of **index** (shifts on insert/delete)
+  - Fixed baseline corruption: Insert/delete operations now maintain baseline arrays correctly
+  - Fixed label cleanup: Modified labels properly removed when values return to baseline
+- **⚠️ Baseline Storage Architecture Issue:** Identified and documented fragility in index-based storage
+  - Status: ✅ RESOLVED in v2.1.2 - migrated to time-keyed dictionary
+  - See refactoring details above
+
 **December 11, 2025:** Phase 3.4 state management refactoring completed, Phase 3.5 architecture refactoring in progress:
 - **✅ Phase 3.4 Complete:** Centralized state management with `editor_state.py` module (see [STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md))
   - Eliminated ~40 scattered state variables with explicit state enums
@@ -132,6 +150,7 @@ MVC controller managing business logic and trajectory computation.
 - Uses `EditorState` for centralized state management
 - Coordinates between model, views, and core mathematics
 - Handles primitive edits, perspective switching, undo/redo
+- Uses time-keyed `baseline_by_time` dictionary (v2.1.2 - insertion-proof baseline storage)
 
 ## Design Principles
 - **Structured Programming:** Code is organized into clear classes and functions with well-defined responsibilities
@@ -142,6 +161,12 @@ MVC controller managing business logic and trajectory computation.
   - Application state centralized in `EditorState` (Phase 3.4)
   - File path logic centralized in `FileManager` (Phase 3.5)
   - Configuration values loaded from JSON with sensible defaults
+  - Baseline values use time-keyed dictionary (v2.1.2)
+- **Stable Identifiers:** Use time-based keys instead of array indices where possible
+  - ✅ Undo commands store event **time** (v2.1.1)
+  - ✅ Modified primitives tracked by time: `modified_primitives[time]` (existing)
+  - ✅ Marker positions keyed by time: `marker_positions[(time, primitive)]` (existing)
+  - ✅ Baseline storage: `baseline_by_time[(time, primitive)]` (v2.1.2)
 - **Explicit State Management:** Phase 3.4 replaced ~40 scattered boolean flags with explicit state enums
 - **Observer Pattern:** State changes trigger UI updates through registered observers (Phase 3.4)
 - **Configuration Over Code:** User preferences externalized to JSON config file
@@ -211,6 +236,9 @@ Phase 3.5 refactoring prepares for Phase 4 by:
 - **User Guide:** [docs/interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)
 - **Installation:** [docs/installation_4_interactive_editor.md](docs/installation_4_interactive_editor.md)
 - **State Management:** [docs/STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)
+- **Architecture Recommendations:** [docs/architecture_recommendations.md](docs/architecture_recommendations.md)
+- **Baseline Storage Refactoring:** [docs/architecture/baseline_storage_refactoring.md](docs/architecture/baseline_storage_refactoring.md)
+- **Version History:** [docs/INTERACTIVE_EDITOR_CHANGELOG.md](docs/INTERACTIVE_EDITOR_CHANGELOG.md)
 - **Phase Roadmap:** [docs/interactive_edit_roadmap.md](docs/interactive_edit_roadmap.md)
 - **Main README:** [README.md](README.md)
 

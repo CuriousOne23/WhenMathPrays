@@ -17,7 +17,7 @@
 
 ### Phase Planning & Roadmap
 - **[../interactive_edit_roadmap.md](../interactive_edit_roadmap.md)** - Complete phase timeline (Phase 1-4)
-- **[../phase2_architecture_recommendations.md](../phase2_architecture_recommendations.md)** - Phase 3 GUI architecture planning (QDockWidget + M2)
+- **[../architecture_recommendations.md](../architecture_recommendations.md)** - GUI architecture planning (QDockWidget + M2)
 - **[../interactive_edit_ph2_requirements.md](../interactive_edit_ph2_requirements.md)** - Phase 2 detailed requirements (complete)
 
 ### Historical Context
@@ -33,7 +33,7 @@
 4. Check `04_API_CONTRACTS.md` to see if contract is being violated
 
 ### When State Seems Wrong
-**Note**: State management document (05) not yet created. For current state management, see EditorModel and Observer pattern implementation in Phase 2. See `../phase2_architecture_recommendations.md` for state management principles.
+**Note**: State management document (05) not yet created. For current state management, see EditorModel and Observer pattern implementation. See `../architecture_recommendations.md` for state management principles.
 
 ### When Coordinates Are Confusing
 **Note**: PyQtGraph coordinate system documentation (document 06) not yet created. For Phase 2 coordinate handling, see Phase 2.1 implementation notes in `../interactive_edit_ph2_requirements.md` regarding `QGraphicsScene.sigMouseClicked` and `event.scenePos()` usage.

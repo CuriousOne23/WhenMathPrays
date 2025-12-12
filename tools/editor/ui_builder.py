@@ -69,6 +69,11 @@ class UIBuilder:
         """Create primitive and trajectory panels."""
         self.primitive_panel = PrimitivePanelPyQtGraph()
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
+        
+        return {
+            'primitive_panel': self.primitive_panel,
+            'trajectory_panel': self.trajectory_panel
+        }
     
     def build_dock_widgets(self):
         """Create and configure dock widgets for panels."""
@@ -122,6 +127,14 @@ class UIBuilder:
         # Set initial perspective
         if initial_perspective == "M2":
             self.perspective_switcher.set_perspective("M2")
+        
+        return {
+            'gamma_self0_editor': self.gamma_self0_editor,
+            'insertion_options': self.insertion_options,
+            'perspective_switcher': self.perspective_switcher,
+            'name_editor': self.name_editor,
+            'note_editor': self.note_editor
+        }
     
     def build_gauges(self):
         """Create readout gauge widgets."""
@@ -169,7 +182,12 @@ class UIBuilder:
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
         
-        return primitive_gauge_frame, gamma_gauge_frame
+        return {
+            'primitive_gauge': self.primitive_gauge,
+            'gamma_gauge': self.gamma_self_gauge,
+            'primitive_gauge_frame': primitive_gauge_frame,
+            'gamma_gauge_frame': gamma_gauge_frame
+        }
     
     def build_controls_dock(self):
         """Create controls dock widget with all editor widgets and gauges."""
@@ -179,7 +197,9 @@ class UIBuilder:
             raise ValueError("Must call build_editor_widgets() first")
         
         # Build gauges
-        primitive_gauge_frame, gamma_gauge_frame = self.build_gauges()
+        gauges = self.build_gauges()
+        primitive_gauge_frame = gauges['primitive_gauge_frame']
+        gamma_gauge_frame = gauges['gamma_gauge_frame']
         
         # Combine widgets in a container
         dock_container = QWidget()
