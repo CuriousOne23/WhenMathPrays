@@ -4,6 +4,8 @@
 
 Scenarios are structured experiments that explore relationship dynamics using the Gamma Revenge Protocol (GRP) framework. Each scenario defines primitive event sequences (v, r, f, a, S) that model specific relational contexts—from romantic love to battlefield hate, from parent-child bonds to spiritual practices.
 
+**⚠️ CRITICAL:** Before creating scenarios, read the [Primitive Modeling Guide](../docs/scenarios/primitive_modeling_guide.md). Understanding the M1/M2 perspective framework is essential - this is the #1 source of modeling errors.
+
 ## Quick Start
 
 ### Running a Scenario

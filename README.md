@@ -11,6 +11,8 @@ This repository contains the final, mathematically pure, spiritually honest form
 3. **Run:** `python scenarios/your_scenario.py`
 4. **View results** in `results/` directory
 
+**IMPORTANT:** Before creating scenarios, read [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) to understand the correct M1/M2 perspective framework.
+
 For complete configuration reference, see [Scenario Configuration Guide](docs/SCENARIO_CONFIGURATION_GUIDE.md).
 
 **Example scenarios:**
@@ -63,17 +65,27 @@ See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
 **γ_self(n)** updates via component-wise axis placement:
 
-**Real axis (Ego ↔ We):**
+**Real axis (Ego ↔ We): Identity Boundary**
 
 $$
 \Delta \text{Re} = w_v \cdot v + w_{S,R} \cdot S
 $$
 
-**Imaginary axis (Hate ↔ Love):**
+- **Ego-space (negative)**: Separate, distinct identities—M1 experiences self as "I" (distinct from M2)
+- **We-space (positive)**: Merged, shared identity—M1's self-concept includes M2
+
+**Imaginary axis (Hate ↔ Love): Affective Quality**
 
 $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
+
+- **Hate (negative)**: Negative emotional states—resentment, bitterness, discord
+- **Love (positive)**: Positive emotional states—warmth, care, resonance
+
+**Identity Statement Test** for distinguishing primitives:
+- **Imaginary (r/f/a)**: Use action/feeling language—"I helped them", "I care about them" (identity remains distinct)
+- **Real (v)**: Supports identity language—"I am married to them", "We are partners" (self-concept includes M2)
 
 **Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
@@ -116,6 +128,8 @@ Last updated: December 3, 2025
 ### CSV Scenario Format
 
 Scenarios are defined in CSV files with the following structure:
+
+**CRITICAL:** Primitives must be scored from the correct perspective. See [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) for the M1/M2 framework - this is the most common source of errors.
 
 **Optional metadata rows (first lines):**
 ```csv

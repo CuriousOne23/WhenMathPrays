@@ -236,6 +236,8 @@ The entire UREP formalism is **strictly unilateral** — it describes the relati
 - Primitives (v, r, f, a, S) measure **M1's enacted behaviors TOWARD M2**.
 - γ_self0 encodes **M1's baseline temperament** (independent of M2).
 
+> ⚠️ **CRITICAL MODELING GUIDE:** The correct interpretation of primitives is non-intuitive and requires deliberate attention. Most modeling errors come from scoring primitives from the wrong perspective. See [Primitive Modeling Guide](scenarios/primitive_modeling_guide.md) for detailed framework, common pitfalls, and validation checklist.
+
 **Critical:** The primitives measure M1's **desire/action toward M2**, NOT M1's internal character state.
 - High visibility means M1 is showing up strongly FOR M2
 - Low visibility means M1 is withdrawing FROM M2

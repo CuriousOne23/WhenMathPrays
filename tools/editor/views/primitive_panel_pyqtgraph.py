@@ -144,8 +144,8 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 # Only allow vertical dragging (keep x fixed)
                 new_y = view_pos.y()
                 
-                # Clamp to [-11, 11]
-                new_y = max(-11, min(11, new_y))
+                # Clamp to [-10, 10]
+                new_y = max(-10, min(10, new_y))
                 
                 # Update y position in cached array
                 self.y_data[self.dragging_idx] = new_y
@@ -271,7 +271,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             # Create plot
             plot = self.graphics_widget.addPlot(row=i, col=0)
             plot.setLabel('left', PRIMITIVE_LABELS[prim])
-            plot.setYRange(-11, 11)
+            plot.setYRange(-10, 10)
             plot.showGrid(y=True, alpha=0.3)
             
             # Enable mouse interaction (left-click drag to pan, wheel to zoom)
@@ -854,7 +854,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                         baseline_val = self.baseline_values.get((nearest_idx, prim))
                         
                         # Clamp clicked Y value to valid range
-                        clicked_value = max(-11, min(11, clicked_value))
+                        clicked_value = max(-10, min(10, clicked_value))
                         
                         # Clear all previous diagnostic markers
                         self.clear_diagnostic_marker()
@@ -885,7 +885,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             return
     
     def reset_view(self):
-        """Reset all plots to default view (-11 to 11 on Y, auto on X)."""
+        """Reset all plots to default view (-10 to 10 on Y, auto on X)."""
         for prim, plot in self.plot_items.items():
             # Auto-range X to fit data first
             plot.enableAutoRange(axis='x', enable=True)
@@ -982,7 +982,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         """Handle diagnostic marker being dragged - update trajectory in real-time."""
         if self.diagnostic_event_idx is not None and hasattr(self, 'on_diagnostic_marker'):
             # Clamp value to valid range
-            clamped_value = max(-11, min(11, value))
+            clamped_value = max(-10, min(10, value))
             print(f"[DIAGNOSTIC] Dragging '{primitive}' to {clamped_value:.2f}, marker visible={self.diagnostic_markers[primitive].isVisible()}")
             
             # Notify controller to compute hypothetical trajectory
@@ -992,7 +992,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         """Handle diagnostic marker release - finalize the what-if display."""
         if self.diagnostic_event_idx is not None and hasattr(self, 'on_diagnostic_marker'):
             # Clamp value to valid range
-            clamped_value = max(-11, min(11, value))
+            clamped_value = max(-10, min(10, value))
             print(f"[DIAGNOSTIC] Released '{primitive}' at {clamped_value:.2f}")
             print(f"[DIAGNOSTIC] Hypothetical result displayed. Shift+click elsewhere or press ESC to clear.")
             
