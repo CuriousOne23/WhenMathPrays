@@ -161,7 +161,7 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
         
-        # Create trajectory dock but DON'T add it yet - will be added via splitDockWidget later
+        # Add trajectory dock to right area
         self.trajectory_dock = QDockWidget("Trajectory", self.window)
         self.trajectory_dock.setWidget(self.trajectory_panel)
         self.trajectory_dock.setFeatures(
@@ -169,6 +169,7 @@ class InteractiveEditor:
             QDockWidget.DockWidgetFloatable | 
             QDockWidget.DockWidgetClosable
         )
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
@@ -183,6 +184,9 @@ class InteractiveEditor:
             trajectory_panel=self.trajectory_panel,
             undo_stack=self.window.undo_stack
         )
+        
+        # Give controller reference to window for undo stack UI updates
+        self.controller._window_ref = self.window
 
         # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.m1_path), str(self.m2_path) if self.m2_path else None)
@@ -288,11 +292,9 @@ class InteractiveEditor:
             QDockWidget.DockWidgetFloatable |
             QDockWidget.DockWidgetClosable
         )
-        self.window.addDockWidget(Qt.RightDockWidgetArea, self.controls_dock)
-        
-        # Split controls dock to put trajectory to the LEFT of controls
+        # Split trajectory dock horizontally to add controls to its right
         # This creates the 3-column layout: [Primitives | Trajectory | Controls]
-        self.window.splitDockWidget(self.controls_dock, self.trajectory_dock, Qt.Horizontal)
+        self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
         
         # Setup View menu for dock widget visibility
         self.window._setup_view_menu({
@@ -984,7 +986,7 @@ class InteractiveEditor:
     
     def _load_window_state(self):
         """Load window geometry and dock layout from QSettings."""
-        from PySide6.QtCore import QSettings
+        from PySide6.QtCore import QSettings, Qt
         
         settings = QSettings('WhenMathPrays', 'InteractiveEditor')
         
@@ -997,6 +999,18 @@ class InteractiveEditor:
         state = settings.value('windowState')
         if state:
             self.window.restoreState(state)
+            # Re-apply default dock sizes to override any old saved sizes
+            # This ensures the layout stays at our optimized dimensions
+            self.window.resizeDocks(
+                [self.primitive_dock, self.controls_dock],
+                [445, 755],  # Primitives=445px, Right side=755px
+                Qt.Horizontal
+            )
+            self.window.resizeDocks(
+                [self.controls_dock, self.trajectory_dock],
+                [260, 495],  # Controls=260px, Trajectory=495px
+                Qt.Horizontal
+            )
     
     def _save_window_state(self):
         """Save window geometry and dock layout to QSettings."""
