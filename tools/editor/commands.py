@@ -37,14 +37,20 @@ class InsertEventCommand(QUndoCommand):
     
     def undo(self):
         """Remove the inserted event."""
+        print(f"\n[INSERT_UNDO] InsertEventCommand.undo() called for time={self.insert_time}")
         self.controller.state.enter_undo_operation()
         try:
             # Find the event at this time and delete it
             events = self.controller.model.get_events(self.controller.perspective)
+            print(f"[INSERT_UNDO] Searching {len(events)} events for time={self.insert_time}")
             for idx, evt in enumerate(events):
                 if abs(evt.time - self.insert_time) < 0.001:
+                    print(f"[INSERT_UNDO] Found event at idx={idx}, calling delete_event_at_index()")
                     self.controller.delete_event_at_index(idx)
+                    print(f"[INSERT_UNDO] Delete complete")
                     break
+            else:
+                print(f"[INSERT_UNDO] ERROR: No event found at time={self.insert_time}")
         finally:
             self.controller.state.exit_undo_operation()
 
@@ -253,8 +259,17 @@ class DeleteEventCommand(QUndoCommand):
             'time': event.time,
             'primitives': {prim: event.markers[prim].value for prim in ['v', 'r', 'f', 'a', 'S']},
             'notes': event.notes,
-            'locked': event.locked
+            'locked': event.locked,
+            'event_id': event.id  # Preserve event ID for baseline lookup
         }
+        
+        # Store baseline values separately (from controller's baseline dict)
+        baseline_dict = controller.baseline_by_id_m1 if controller.perspective == "M1" else controller.baseline_by_id_m2
+        self.baseline_values = {}
+        for prim in ['v', 'r', 'f', 'a', 'S']:
+            key = (event.id, prim)
+            if key in baseline_dict:
+                self.baseline_values[prim] = baseline_dict[key]
         
         self.setText(f"Delete event at day {event.time}")
     
@@ -270,7 +285,8 @@ class DeleteEventCommand(QUndoCommand):
         """Restore the deleted event."""
         self.controller.state.enter_undo_operation()
         try:
-            self.controller._insert_event(self.event_idx, self.event_data)
+            # Pass baseline_values to restore original baselines
+            self.controller._insert_event(self.event_idx, self.event_data, self.baseline_values)
         finally:
             self.controller.state.exit_undo_operation()
 
@@ -342,6 +358,7 @@ class InsertEventBeforeCommand(QUndoCommand):
     
     def undo(self):
         """Remove the inserted event and restore original times."""
+        print(f"\n[INSERT_UNDO] InsertEventBeforeCommand.undo() called for event_idx={self.event_idx}")
         self.controller.state.enter_undo_operation()
         try:
             self.controller._undo_insert_event_before(self.event_idx, self.shifted_events)

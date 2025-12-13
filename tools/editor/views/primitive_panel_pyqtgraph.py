@@ -583,6 +583,9 @@ class PrimitivePanelPyQtGraph(QWidget):
             if len(times) > 0:
                 self.plot_items[prim].setXRange(times.min() - PLOT_X_MARGIN, times.max() + PLOT_X_MARGIN, padding=PLOT_PADDING_NONE)
         
+        # Sync labels from marker state (pull pattern - marker is source of truth)
+        self._sync_labels_from_markers(events)
+        
         t1 = time.time()
         print(f"[PYQTGRAPH] update_from_model: {(t1-t0)*1000:.1f}ms for {len(events)} events")
     
@@ -598,7 +601,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             event_index: Index of event
             primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
             value: New value
-            is_modified: Whether marker has been edited (ignored - queried from model)
+            is_modified: Whether marker has been edited (from controller)
         """
         if not self.events_data or event_index >= len(self.events_data):
             return
@@ -606,8 +609,8 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Update the data
         self.events_data[event_index].markers[primitive].value = value
         
-        # NOTE: We no longer maintain local modified_markers dict.
-        # Modification status is queried from controller.model (time-based tracking)
+        # UPDATE: Cache the modified state so marker appearance updates immediately
+        self._modified_state[(event_index, primitive)] = is_modified
         
         # Rebuild all data for this primitive (fast with PyQtGraph)
         times = np.array([e.time for e in self.events_data])
@@ -721,6 +724,57 @@ class PrimitivePanelPyQtGraph(QWidget):
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 100)
             )
     
+    def _sync_labels_from_markers(self, events):
+        """
+        Sync label visibility from Marker state (pull pattern).
+        Marker is the authoritative source of truth for label visibility.
+        View reads marker state and ensures rendering matches.
+        """
+        print(f"\n[SYNC_LABELS] ===== Starting sync, perspective={self.current_perspective} =====")
+        modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        
+        # Build set of what SHOULD be visible from marker state
+        should_be_visible = set()
+        for event in events:
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                if event.markers[prim].get_label_visible(self.current_perspective):
+                    should_be_visible.add((event.time, prim))
+        
+        print(f"[SYNC_LABELS] should_be_visible = {should_be_visible}")
+        print(f"[SYNC_LABELS] modified_labels keys BEFORE sync = {set(modified_labels.keys())}")
+        
+        # Remove labels that shouldn't be visible
+        to_remove = []
+        for key in modified_labels.keys():
+            if key not in should_be_visible:
+                to_remove.append(key)
+        
+        print(f"[SYNC_LABELS] to_remove = {to_remove}")
+        
+        for key in to_remove:
+            text_item = modified_labels[key]
+            print(f"[SYNC_LABELS] Removing {key}, object={id(text_item)}")
+            for plot in self.plot_items.values():
+                plot.removeItem(text_item)
+            del modified_labels[key]
+        
+        # Add labels that should be visible but aren't
+        to_add = []
+        for event in events:
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                if event.markers[prim].get_label_visible(self.current_perspective):
+                    key = (event.time, prim)
+                    if key not in modified_labels:
+                        to_add.append((event.time, prim, event.markers[prim].value))
+        
+        print(f"[SYNC_LABELS] to_add = {[(t, p) for t, p, v in to_add]}")
+        
+        for event_time, prim, value in to_add:
+            self._add_marker_label(event_time, prim, value)
+        
+        print(f"[SYNC_LABELS] modified_labels keys AFTER sync = {set(modified_labels.keys())}")
+        print(f"[SYNC_LABELS] ===== Sync complete =====\n")
+    
     def remove_marker_label(self, event_time, primitive):
         """Remove modified primitive label for a specific event/primitive.
         
@@ -765,22 +819,39 @@ class PrimitivePanelPyQtGraph(QWidget):
         print(f"[LABEL_ADD] Call stack:")
         for line in traceback.format_stack()[-6:-1]:  # Show last 5 stack frames
             print(line.strip())
-        print(f"{'='*80}\n")
         
         # CRITICAL FIX: Check if this event_time exists in the current perspective's events
         # This prevents M1 modifications from showing labels in M2 and vice versa
         if self.events_data:
             event_times = [e.time for e in self.events_data]
             if event_time not in event_times:
+                print(f"[LABEL_ADD] Event time {event_time} not in current events, skipping")
                 return
         
         key = (event_time, primitive)
         modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
         
+        print(f"[LABEL_ADD] key={key}, exists_in_dict={key in modified_labels}")
+        
+        # Check how many items currently in plot before operations
+        num_items_before = len(self.plot_items[primitive].items)
+        print(f"[LABEL_ADD] Plot items BEFORE operations: {num_items_before}")
+        print(f"[LABEL_ADD] Plot items types: {[type(item).__name__ for item in self.plot_items[primitive].items]}")
+        
+        # Check specifically for TextItem objects
+        text_items_before = [item for item in self.plot_items[primitive].items if isinstance(item, pg.TextItem)]
+        print(f"[LABEL_ADD] TextItem count BEFORE: {len(text_items_before)}")
+        if text_items_before:
+            for i, item in enumerate(text_items_before):
+                print(f"[LABEL_ADD]   TextItem {i}: text='{item.toPlainText()}', pos={item.pos()}, id={id(item)}")
+        
         # Remove old label if it exists
         if key in modified_labels:
             old_text = modified_labels[key]
+            print(f"[LABEL_ADD] Removing old label object: {id(old_text)}")
             self.plot_items[primitive].removeItem(old_text)
+            num_items_after_remove = len(self.plot_items[primitive].items)
+            print(f"[LABEL_ADD] Plot items AFTER removal: {num_items_after_remove}")
         
         # Create new label with timestamp
         text = pg.TextItem(
@@ -791,9 +862,30 @@ class PrimitivePanelPyQtGraph(QWidget):
             fill=pg.mkBrush(255, 255, 255, 200)
         )
         
+        print(f"[LABEL_ADD] Created new label object: {id(text)}")
         text.setPos(event_time, value)
         self.plot_items[primitive].addItem(text)
         modified_labels[key] = text
+        
+        num_items_final = len(self.plot_items[primitive].items)
+        print(f"[LABEL_ADD] Plot items AFTER adding: {num_items_final}")
+        
+        # Check TextItem count after adding
+        text_items_after = [item for item in self.plot_items[primitive].items if isinstance(item, pg.TextItem)]
+        print(f"[LABEL_ADD] TextItem count AFTER: {len(text_items_after)}")
+        if text_items_after:
+            for i, item in enumerate(text_items_after):
+                print(f"[LABEL_ADD]   TextItem {i}: text='{item.toPlainText()}', pos={item.pos()}, id={id(item)}")
+        
+        # Check ALL primitive plots for TextItems to see if labels exist elsewhere
+        print(f"[LABEL_ADD] Checking ALL plots for TextItems:")
+        for prim_name in ['v', 'r', 'f', 'a', 'S']:
+            text_items_in_plot = [item for item in self.plot_items[prim_name].items if isinstance(item, pg.TextItem)]
+            if text_items_in_plot:
+                print(f"[LABEL_ADD]   Plot '{prim_name}': {len(text_items_in_plot)} TextItems")
+                for item in text_items_in_plot:
+                    print(f"[LABEL_ADD]     - text='{item.toPlainText()}', pos={item.pos()}")
+        print(f"{'='*80}\n")
     
     def _add_trajectory_marker_label(self, event_idx, primitive, x, y):
         """Add a timestamp label for a trajectory marker (red-bordered markers from trajectory clicks)."""
