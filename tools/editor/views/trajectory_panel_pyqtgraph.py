@@ -147,6 +147,13 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.preview_label = None  # TextItem for preview
         self.current_perspective = 'M1'  # Track current perspective
         
+        # Gamma_self baseline tracking (index-based, separate from primitive time-based)
+        # Key: trajectory_index -> (gamma_value, baseline_type)
+        self.gamma_baseline_m1 = {}  # CSV baselines for M1
+        self.gamma_baseline_m2 = {}  # CSV baselines for M2
+        self.gamma_insertion_baseline_m1 = {}  # Insertion baselines for M1
+        self.gamma_insertion_baseline_m2 = {}  # Insertion baselines for M2
+        
         # Layout with right margin to prevent edge clipping
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 15, 0)  # Add 15px right margin
@@ -544,6 +551,94 @@ if __name__ == '__main__':
     
     # Test start marker modification
     panel.update_start_marker_style(is_modified=True)
+    
+    # Gamma_self baseline management methods
+    def set_gamma_baseline(self, trajectory_idx: int, gamma_value: complex, baseline_type: str, perspective: str = None):
+        """
+        Set gamma_self baseline for a trajectory index.
+        
+        Args:
+            trajectory_idx: Index in gamma_self trajectory
+            gamma_value: Complex gamma_self value at baseline
+            baseline_type: "csv" or "insertion"
+            perspective: "M1" or "M2" (defaults to current_perspective)
+        """
+        if perspective is None:
+            perspective = self.current_perspective
+        
+        if baseline_type == "csv":
+            if perspective == "M1":
+                self.gamma_baseline_m1[trajectory_idx] = gamma_value
+            else:
+                self.gamma_baseline_m2[trajectory_idx] = gamma_value
+        elif baseline_type == "insertion":
+            if perspective == "M1":
+                self.gamma_insertion_baseline_m1[trajectory_idx] = gamma_value
+            else:
+                self.gamma_insertion_baseline_m2[trajectory_idx] = gamma_value
+    
+    def get_gamma_baseline(self, trajectory_idx: int, perspective: str = None):
+        """
+        Get gamma_self baseline for a trajectory index.
+        
+        Returns tuple: (gamma_value, baseline_type) or (None, None) if not found.
+        Checks insertion baseline first, then CSV baseline.
+        """
+        if perspective is None:
+            perspective = self.current_perspective
+        
+        # Check insertion baseline first (takes precedence)
+        insertion_dict = self.gamma_insertion_baseline_m1 if perspective == "M1" else self.gamma_insertion_baseline_m2
+        if trajectory_idx in insertion_dict:
+            return (insertion_dict[trajectory_idx], "insertion")
+        
+        # Check CSV baseline
+        csv_dict = self.gamma_baseline_m1 if perspective == "M1" else self.gamma_baseline_m2
+        if trajectory_idx in csv_dict:
+            return (csv_dict[trajectory_idx], "csv")
+        
+        return (None, None)
+    
+    def clear_gamma_baselines(self, perspective: str = None):
+        """Clear all gamma_self baselines for a perspective."""
+        if perspective is None:
+            perspective = self.current_perspective
+        
+        if perspective == "M1":
+            self.gamma_baseline_m1.clear()
+            self.gamma_insertion_baseline_m1.clear()
+        else:
+            self.gamma_baseline_m2.clear()
+            self.gamma_insertion_baseline_m2.clear()
+    
+    def reindex_gamma_baselines(self, index_mapping: dict, perspective: str = None):
+        """
+        Reindex gamma_self baselines after trajectory recomputation.
+        
+        Args:
+            index_mapping: Dict mapping old_index -> new_index
+            perspective: "M1" or "M2" (defaults to current_perspective)
+        """
+        if perspective is None:
+            perspective = self.current_perspective
+        
+        # Reindex CSV baselines
+        csv_dict = self.gamma_baseline_m1 if perspective == "M1" else self.gamma_baseline_m2
+        new_csv = {}
+        for old_idx, gamma_val in csv_dict.items():
+            if old_idx in index_mapping:
+                new_csv[index_mapping[old_idx]] = gamma_val
+        csv_dict.clear()
+        csv_dict.update(new_csv)
+        
+        # Reindex insertion baselines
+        insertion_dict = self.gamma_insertion_baseline_m1 if perspective == "M1" else self.gamma_insertion_baseline_m2
+        new_insertion = {}
+        for old_idx, gamma_val in insertion_dict.items():
+            if old_idx in index_mapping:
+                new_insertion[index_mapping[old_idx]] = gamma_val
+        insertion_dict.clear()
+        insertion_dict.update(new_insertion)
     
     test_widget.show()
     

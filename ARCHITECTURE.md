@@ -5,6 +5,68 @@ This document describes the overall architecture, object model, and design princ
 
 ## Recent Updates
 
+**December 13, 2025:** v2.2.0 Marker-Centric State Architecture (Debugging-First Design):
+- **✅ Marker as Single Entry Point (v2.2.0):** Marker objects now own all perspective-aware state
+  - **Why This Change**: Debugging complexity with scattered state across Model/Controller/View
+    - Bug example: "Label persists after undo" - where's the bug?
+    - Had to check: Controller label commands, Model tracking dicts, View rendering, all in different files
+    - No single observation point to understand marker lifecycle
+    - User mental model: "marker didn't do what I expected" → needs single place to inspect marker state
+  - **Problem Pattern**: Scattered state = scattered debugging
+    - `modified_primitives` dict in Model → is marker modified?
+    - `marker_positions` dict in Model → where's gamma_self marker?
+    - `modified_labels` dict in View → is label shown?
+    - Controller coordinates all three → debugging requires tracing through 4+ files
+  - **Solution**: Marker objects own their state, expose via accessor methods
+    - `marker.is_modified[perspective]` - modification status
+    - `marker.gamma_self_position[perspective]` - position on gamma_self plot
+    - `marker.label_visible[perspective]` - label should be shown
+    - Single entry point methods: `set_is_modified()`, `set_gamma_position()`, `set_label_visible()`
+  - **Debugging Architecture**: "Event tree terminus pattern"
+    - All state changes flow through Marker accessor methods
+    - One breakpoint in accessor = catch ALL changes from any code path
+    - Call stack reveals: who (controller method), what (action), why (user intent), when (sequence)
+    - Compare marker state vs view rendering to isolate bugs immediately
+  - **View Pattern**: Declarative/reactive (pull from marker state)
+    - Controller sets marker state: `marker.set_label_visible(perspective, True)`
+    - View reads marker state: `if marker.get_label_visible(perspective): show_label()`
+    - View can't drift out of sync - always reads fresh marker state
+    - Self-correcting on every `update_from_model()` call
+  - **Benefits**:
+    - Single breakpoint catches all marker state changes
+    - Call stack shows complete context (who, what, why, how)
+    - Marker inspection shows complete state (not scattered across 3+ dicts)
+    - View synchronization bugs immediately visible (compare marker state vs rendering)
+    - Extensible to arbitrary perspectives (dict keyed by perspective name)
+  - **Event Source Tracking**: Events now track origin via `event.source = 'csv' | 'inserted'`
+  - See detailed rationale in Marker State Architecture section below
+
+**December 13, 2025:** v2.1.3 Event ID-based tracking system:
+- **✅ Event Identity Architecture (v2.1.3):** Migrated from time-based to ID-based event tracking
+  - **Why This Change**: Discovered cascade deletion bug during undo operations
+    - When undoing insertions, baseline shift logic deleted keys it just created
+    - Example: Shift (56.0, 'v')→(49.0, 'v') creates (49.0, 'v')=8.0
+    - Then shift (49.0, 'v')→(42.0, 'v') immediately deletes (49.0, 'v') that was just created!
+    - Root cause: Time-based keys change during insertions, requiring fragile shift operations
+    - Fix required collect-then-apply pattern to prevent self-destruction
+  - **Problem Pattern**: Time-based keys = mutable identity
+    - Insert event → all subsequent times shift → all tracking dictionaries must shift
+    - Baseline, modified_primitives, marker_positions, labels all shift in parallel
+    - Each shift operation had cascade deletion risk
+    - Undo/redo complexity exponential with each new tracking dictionary added
+  - **Solution**: Immutable event IDs assigned at creation, independent of timeline position
+    - Event identity never changes regardless of insertions/deletions before it
+    - No shifting logic required anywhere in codebase
+  - **Benefits**: 
+    - Zero baseline shifting during insert/undo operations
+    - Simplified state management (no cascade deletion bugs possible)
+    - Enhanced debuggability (stable event identity through history)
+    - Object-oriented design (event carries its own identity as attribute)
+    - Extensibility: New tracking dictionaries don't need shift logic
+  - **Implementation**: Events assigned monotonically increasing IDs at creation, never reused
+  - **Impact**: All tracking uses `(event_id, primitive)` keys instead of `(time, primitive)`
+  - See detailed rationale and implementation in event identity section below
+
 **December 12, 2024:** Phase 3.6 Perspective Management Architecture Refactor (Design Phase):
 - **🔄 Phase 3.6 Planned:** Event-driven perspective management to resolve state synchronization bugs
   - **Problem**: Manual coordination of perspective switches across 3+ components causes bugs
@@ -96,6 +158,112 @@ The GRP framework distinguishes two orthogonal dimensions:
 
 For detailed empirical foundation, see [gamma_self_defense.md](docs/gamma_self_defense.md).
 
+## Marker State Architecture (v2.2.0)
+
+### Design Principle: Event Tree Terminus Pattern
+
+**Problem**: Complex controller orchestrates Model ↔ View synchronization across multiple state dimensions:
+- Modification tracking (hollow vs filled markers)
+- Gamma_self marker positions (trajectory plot)
+- Label visibility (primitive panel)
+- Perspective switching (M1 vs M2)
+
+Traditional MVC scatter this state across Model dictionaries, Controller logic, and View rendering, making debugging difficult.
+
+**Solution**: Marker as **event tree terminus** - single observable point where all state changes converge.
+
+### Architecture Flow
+
+```
+User Action (drag, undo, insert, etc.)
+    ↓
+Controller logic (complex, multiple paths)
+    ↓
+Marker.set_is_modified(perspective, True)  ← SINGLE BREAKPOINT
+Marker.set_gamma_position(perspective, pos) ← SINGLE BREAKPOINT  
+Marker.set_label_visible(perspective, True) ← SINGLE BREAKPOINT
+    ↓
+View.update_from_model()
+    ↓
+View reads marker state (pull pattern)
+    if marker.get_label_visible(perspective):
+        show_label()
+    ↓
+Rendering synchronized to marker state
+```
+
+### Debugging Strategy
+
+**Three-Layer Checkpoint System:**
+```python
+# Layer 1: Model/Marker state (should it be modified?)
+marker.is_modified['M1']  # True
+
+# Layer 2: Controller intention (did controller set visibility?)
+marker.label_visible['M1']  # True
+
+# Layer 3: View rendering (did view actually render it?)
+(event.time, 'v') in view.modified_labels_m1  # Check actual TextItem
+```
+
+**Bug Isolation:**
+- If layers 1-2 match but layer 3 differs → View refresh bug
+- If layer 1 differs from layer 2 → Controller logic bug
+- If all layers match but still wrong → Baseline/computation bug
+
+**Call Stack Analysis:**
+Breakpoint in `Marker.set_label_visible()` reveals:
+- **Who**: Which controller method (`_apply_primitive_change`, `_insert_event`, etc.)
+- **What**: User action (drag release, undo, perspective switch)
+- **Why**: Intent (modification, baseline reset, cleanup)
+- **When**: Sequence in operation timeline
+
+### Perspective Extensibility
+
+State stored in dicts keyed by perspective name:
+```python
+marker.is_modified = {'M1': True, 'M2': False}
+marker.gamma_self_position = {'M1': 3+2j, 'M2': None}
+marker.label_visible = {'M1': True, 'M2': False}
+```
+
+Adding M3 perspective requires no Marker changes - automatically supported.
+
+### View Pull Pattern (Declarative/Reactive)
+
+**Old (imperative - bug-prone):**
+```python
+# Controller directly manipulates view (4+ call sites)
+self.view._add_marker_label(time, prim, value)
+# Can forget to call, call twice, call at wrong time
+```
+
+**New (declarative - self-correcting):**
+```python
+# Controller sets marker state
+marker.set_label_visible(perspective, True)
+
+# View reads marker state on every refresh
+def _sync_labels_from_markers(self, events):
+    for event in events:
+        for prim in ['v', 'r', 'f', 'a', 'S']:
+            if event.markers[prim].get_label_visible(perspective):
+                self._ensure_label_shown(event.time, prim)
+```
+
+View can't drift out of sync - always reads fresh marker state.
+
+### Benefits Summary
+
+1. **Single breakpoint debugging**: Catch ALL state changes from any code path
+2. **Complete context**: Call stack shows who/what/why/when
+3. **Isolated bug detection**: Three-layer checkpoint system pinpoints exact failure layer
+4. **Self-correcting view**: Pull pattern prevents synchronization drift
+5. **Perspective scalability**: Dict-based storage extends to arbitrary perspectives
+6. **Maintainability**: Adding new tracking doesn't scatter code across multiple files
+
+This pattern trades slight redundancy (state stored on marker + briefly in view dict) for dramatic debugging improvements.
+
 ## Directory Structure
 ```
 /WhenMathPrays/
@@ -174,15 +342,73 @@ Widget creation and layout configuration.
 - Pure UI construction, no business logic
 - Supports dual-perspective M1/M2 layouts
 
-### Marker
-Represents a visual and logical marker for an event/primitive.
-- Properties: `time`, `value`, `state` (original/modified/preview), `style`, `gamma_self_value` (optional)
-- Used in both primitive and gamma_self panels
+### Marker (v2.2.0: Perspective-Aware State Owner)
+Represents a visual and logical marker for an event/primitive, now owning all perspective-specific state.
 
-### Event
-Represents a single scenario event.
-- Properties: `time`, all primitive values, references to marker objects
-- Methods: update, reset, audit
+**Core Properties:**
+- `time`: Event time (synchronized with parent Event)
+- `value`: Primitive value at this event
+- `state`: Display state ('original', 'modified', 'preview')
+- `style`: Visual styling information
+
+**Perspective-Aware State (v2.2.0):**
+- `gamma_self_position`: Dict `{perspective: complex}` - where gamma_self was when this primitive was modified
+- `is_modified`: Dict `{perspective: bool}` - whether modified from baseline in each perspective
+- `label_visible`: Dict `{perspective: bool}` - whether label should be shown in each perspective
+
+**Accessor Methods (Single Entry Points for Debugging):**
+- `get_gamma_position(perspective)`, `set_gamma_position(perspective, pos)`, `clear_gamma_position(perspective)`
+- `get_is_modified(perspective)`, `set_is_modified(perspective, modified)`, `clear_is_modified(perspective)`
+- `get_label_visible(perspective)`, `set_label_visible(perspective, visible)`
+
+**Debugging Pattern:**
+Breakpoint in any `set_*()` method catches ALL changes to that state from any code path. Call stack reveals complete context (controller method → user action → event sequence).
+
+**Design Rationale:**
+- **Single observation point**: One breakpoint per state type vs. scattered across Model/Controller/View
+- **Event tree terminus**: All state changes flow through Marker, making it the debugging choke point
+- **Self-documenting**: Inspecting marker shows complete state, not scattered across 3+ dictionaries
+- **Perspective extensibility**: Dict-based storage scales naturally to arbitrary perspectives (M1, M2, M3...)
+
+### Event (v2.1.3: ID-Based Identity, v2.2.0: Source Tracking)
+Represents a single scenario event with immutable identity and origin tracking.
+
+**Properties:**
+- `id`: Permanent, immutable identifier (integer) - assigned at creation, never changes
+- `time`: Current position in timeline (mutable - changes on insertion/deletion)
+- `source`: Event origin ('csv' = from file, 'inserted' = user-created via Ctrl+Shift+Click)
+- `markers`: Dict of Marker objects for primitives `{v, r, f, a, S}`
+- `notes`, `marker`, `locked`: Metadata fields
+- References to marker objects
+
+**Event Identity System:**
+- **ID Assignment:** Events receive monotonically increasing IDs at creation (0, 1, 2, 3, ...)
+- **ID Permanence:** IDs are NEVER reused, even after deletion
+  - Similar to database primary keys or Social Security Numbers
+  - Once ID=5 is assigned, that ID is "retired forever" if deleted
+- **Counter Management:** `next_event_id` only increments, never decrements
+  - After deleting event id=5, next new event gets id=6, NOT id=5
+  - Prevents collision bugs when undoing deletions
+
+**Deletion Strategy:**
+- **Hard Delete:** Deleted events removed from `events` list
+- **Undo Storage:** DeleteEventCommand stores complete Event object
+- **Redo Cycle:** Events toggle between:
+  - **Active:** Present in `events` list
+  - **Dormant:** Stored in undo command, can be resurrected
+- **No Soft Delete:** No `deleted` flag - events either exist in list or don't
+  - Simpler code (no filtering required)
+  - Better performance (no flag checks)
+  - Undo stack is the "graveyard" for deleted events
+
+**Why ID-Based Over Time-Based:**
+- Time changes during insertions (event at time=49.0 shifts to time=56.0)
+- IDs remain constant regardless of timeline position
+- Eliminates complex baseline/label shifting logic
+- Simplifies undo/redo (just reference stable ID)
+- Enhanced debuggability ("trace event id=7" vs "trace whatever is at time=49.0")
+
+**Methods:** update, reset, audit
 
 ### Primitive
 Encapsulates logic/state for a single primitive (v, r, f, a, S).
@@ -194,10 +420,25 @@ Represents a computed gamma_self value at a specific time.
 
 ### EditorController
 MVC controller managing business logic and trajectory computation.
+
+**State Management:**
 - Uses `EditorState` for centralized state management
 - Coordinates between model, views, and core mathematics
 - Handles primitive edits, perspective switching, undo/redo
-- Uses time-keyed `baseline_by_time` dictionary (v2.1.2 - insertion-proof baseline storage)
+
+**Event Tracking (v2.1.3):**
+- `baseline_by_id[(event_id, primitive)]` - Baseline values indexed by immutable event ID
+- `modified_primitives[(event_id, primitive)]` - Modified state tracking
+- `next_event_id` - Monotonically increasing counter for new events
+- **ID Assignment Rules:**
+  - New events: `event.id = next_event_id++`
+  - Deleted events: ID permanently retired, never reused
+  - CSV load: IDs assigned sequentially (0, 1, 2, ...) based on file order
+- **No Shifting Required:** When inserting events, baseline/modified dictionaries unchanged (IDs don't shift)
+
+**Migration from v2.1.2:**
+- v2.1.2 used `baseline_by_time[(time, primitive)]` requiring complex shift logic
+- v2.1.3 uses `baseline_by_id[(event_id, primitive)]` with no shifts needed
 
 ## Design Principles
 - **Structured Programming:** Code is organized into clear classes and functions with well-defined responsibilities
@@ -209,11 +450,13 @@ MVC controller managing business logic and trajectory computation.
   - File path logic centralized in `FileManager` (Phase 3.5)
   - Configuration values loaded from JSON with sensible defaults
   - Baseline values use time-keyed dictionary (v2.1.2)
-- **Stable Identifiers:** Use time-based keys instead of array indices where possible
-  - ✅ Undo commands store event **time** (v2.1.1)
-  - ✅ Modified primitives tracked by time: `modified_primitives[time]` (existing)
-  - ✅ Marker positions keyed by time: `marker_positions[(time, primitive)]` (existing)
-  - ✅ Baseline storage: `baseline_by_time[(time, primitive)]` (v2.1.2)
+- **Immutable Event Identity:** Use event IDs as stable identifiers (v2.1.3)
+  - ✅ Events have permanent IDs assigned at creation, independent of timeline position
+  - ✅ Baseline storage: `baseline_by_id[(event_id, primitive)]` (v2.1.3)
+  - ✅ Modified primitives tracked by ID: `modified_primitives[(event_id, primitive)]` (v2.1.3)
+  - ✅ Marker positions keyed by ID: `marker_positions[(event_id, primitive)]` (v2.1.3)
+  - ✅ Undo commands reference events by ID (v2.1.3)
+  - **Rationale**: Time changes during insertions; IDs remain constant throughout event lifetime
 - **Explicit State Management:** Phase 3.4 replaced ~40 scattered boolean flags with explicit state enums
 - **Observer Pattern:** State changes trigger UI updates through registered observers (Phase 3.4)
 - **Configuration Over Code:** User preferences externalized to JSON config file
@@ -282,9 +525,11 @@ Phase 3.5 refactoring prepares for Phase 4 by:
 
 - **User Guide:** [docs/interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)
 - **Installation:** [docs/installation_4_interactive_editor.md](docs/installation_4_interactive_editor.md)
+- **Debugging Guide:** [docs/DEBUG.md](docs/DEBUG.md) - Debug infrastructure and methodology
 - **State Management:** [docs/STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)
 - **Architecture Recommendations:** [docs/architecture_recommendations.md](docs/architecture_recommendations.md)
 - **Baseline Storage Refactoring:** [docs/architecture/baseline_storage_refactoring.md](docs/architecture/baseline_storage_refactoring.md)
+- **Baseline Communication Protocol:** [docs/baseline_communication_protocol.md](docs/baseline_communication_protocol.md)
 - **Version History:** [docs/INTERACTIVE_EDITOR_CHANGELOG.md](docs/INTERACTIVE_EDITOR_CHANGELOG.md)
 - **Phase Roadmap:** [docs/interactive_edit_roadmap.md](docs/interactive_edit_roadmap.md)
 - **Main README:** [README.md](README.md)

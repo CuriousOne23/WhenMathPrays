@@ -471,6 +471,7 @@ class EditorApplication:
     
     def _on_insertions_changed(self, times: list):
         """Handle insertion time changes from InsertionOptions widget."""
+        print(f"\n[INSERT_HANDLER] _on_insertions_changed called with times={times}")
         # Get current events
         events = self.model.get_events(self.controller.perspective)
         
@@ -497,14 +498,18 @@ class EditorApplication:
         # Apply insertions with undo support
         from tools.editor.commands import InsertEventCommand, DeleteEventCommand
         
+        print(f"[INSERT_HANDLER] to_add={to_add}, to_remove={to_remove}")
         for t in sorted(to_add):
             # Create and push insert command (does not shift times)
+            print(f"[INSERT_HANDLER] Creating InsertEventCommand for time={t}, undo_stack exists={self.controller.undo_stack is not None}")
             if self.controller.undo_stack:
                 command = InsertEventCommand(self.controller, t)
+                print(f"[INSERT_HANDLER] Pushing command to undo stack...")
                 self.controller.undo_stack.push(command)
                 print(f"[INSERT_OPTIONS] Pushed InsertEventCommand for time={t}")
             else:
                 # Fallback if no undo stack
+                print(f"[INSERT_HANDLER] No undo stack, using fallback insert_event_at_time()")
                 self.controller.insert_event_at_time(t)
         
         # Apply removals with undo support

@@ -45,39 +45,59 @@ def remove_event_markers(model, event_time: float, remove_label_callback: Option
     """
     Remove all marker positions and optionally labels for an event.
     
+    With marker-centric architecture (v2.2.0), this clears gamma_self positions
+    from the Marker objects themselves for the current perspective.
+    
     Args:
-        model: Editor model with marker_positions dict
-        event_time: Time of the event
-        remove_label_callback: Optional callback(event_idx, prim) to remove labels
-        event_index: Event index (required if remove_label_callback provided)
+        model: Editor model
+        event_time: Time of the event to clear markers for
+        remove_label_callback: Optional callback(event_time, prim) to remove labels
+        event_index: Event index (DEPRECATED - no longer used, kept for compatibility)
         
     Example:
         remove_event_markers(
             model, 
             event_time=42.0,
             remove_label_callback=primitive_panel.remove_marker_label,
-            event_index=5
+            event_index=5  # No longer used
         )
     """
-    for prim in PRIMITIVE_NAMES:
-        marker_key = (event_time, prim)
-        if marker_key in model.marker_positions:
-            del model.marker_positions[marker_key]
+    # Find the event with this time in the current events list
+    # Note: We need to determine the perspective - this is a limitation of the current API
+    # For now, try both perspectives since we don't know which one we're operating on
+    for perspective in ['M1', 'M2']:
+        events = model.get_events(perspective)
+        for event in events:
+            if abs(event.time - event_time) < 0.001:  # Float comparison tolerance
+                # Clear marker positions from Marker objects
+                for prim in PRIMITIVE_NAMES:
+                    event.markers[prim].clear_gamma_position(perspective)
+                break
         
-        if remove_label_callback and event_index is not None:
-            remove_label_callback(event_index, prim)
+    # Call label removal callback if provided
+    if remove_label_callback:
+        for prim in PRIMITIVE_NAMES:
+            remove_label_callback(event_time, prim)
 
 
-def clear_modified_primitives_for_event(model, event_time: float) -> None:
+def clear_modified_primitives_for_event(model, event_time: float, perspective: str = "M1") -> None:
     """
     Clear modified primitives tracking for a specific event time.
+    DEPRECATED: Use model.clear_primitive_modification() instead.
     
     Args:
-        model: Editor model with modified_primitives dict
+        model: Editor model with modified_primitives_m1/m2 dicts
         event_time: Time of the event to clear
+        perspective: "M1" or "M2"
     """
-    if event_time in model.modified_primitives:
-        del model.modified_primitives[event_time]
+    # This function is deprecated but kept for backward compatibility
+    # Find event by time and clear all its primitives
+    events = model.get_events(perspective)
+    for event in events:
+        if abs(event.time - event_time) < 0.001:
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                model.clear_primitive_modification(event.id, prim, perspective)
+            break
 
 
 def get_all_modified_markers(model, events, perspective: str = 'baseline') -> Dict[tuple, bool]:

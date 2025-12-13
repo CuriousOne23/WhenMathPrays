@@ -711,7 +711,8 @@ class InteractiveEditor:
         # Track if any changes were made
         changes_made = False
         
-        # Remove events that are no longer in the list (in reverse order to maintain indices)
+        # Remove events that are no longer in the list with undo support
+        from tools.editor.commands import DeleteEventCommand
         if to_remove_times:
             # Build list of indices to remove, sorted in reverse
             indices_to_remove = []
@@ -725,25 +726,38 @@ class InteractiveEditor:
             
             for idx in indices_to_remove:
                 try:
-                    # Use no_update version for batch operation
-                    self.controller.delete_event_at_index_no_update(idx)
-                    changes_made = True
+                    if self.controller.undo_stack:
+                        # Use undo command for proper undo/redo support
+                        command = DeleteEventCommand(self.controller, idx)
+                        self.controller.undo_stack.push(command)
+                        changes_made = True
+                    else:
+                        # Fallback to direct delete if no undo stack
+                        self.controller.delete_event_at_index_no_update(idx)
+                        changes_made = True
                 except Exception as e:
                     print(f"[INSERTIONS] Error removing event at index {idx}: {e}")
         
-        # Add new insertion events
+        # Add new insertion events with undo support
+        from tools.editor.commands import InsertEventCommand
         for time_to_add in to_add:
             try:
-                # Use no_update version for batch operation
                 print(f"[INSERTIONS] Adding event at time {time_to_add}")
-                self.controller.insert_event_at_time_no_update(time_to_add)
-                changes_made = True
+                if self.controller.undo_stack:
+                    # Use undo command for proper undo/redo support
+                    command = InsertEventCommand(self.controller, time_to_add)
+                    self.controller.undo_stack.push(command)
+                    changes_made = True
+                else:
+                    # Fallback to direct insert if no undo stack
+                    self.controller.insert_event_at_time_no_update(time_to_add)
+                    changes_made = True
             except Exception as e:
                 print(f"[INSERTIONS] Error adding event at {time_to_add}: {e}")
                 self.window.show_message(f"Error inserting at {time_to_add}: {str(e)}", 'error')
         
-        # Update views only ONCE at the end if any changes were made
-        if changes_made:
+        # Update views only if using fallback (commands already update views)
+        if changes_made and not self.controller.undo_stack:
             import time
             t0 = time.time()
             self.controller._update_all_views()

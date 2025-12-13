@@ -180,12 +180,59 @@ When facing a complex bug:
 
 ---
 
-## Architecture Insight from Debugging
+## Debug Infrastructure
+
+The editor has built-in debug logging facilities:
+
+### Console Output Tags
+
+Debug messages use prefixed tags for filtering/searching:
+- `[DEBUG]` - General debug information
+- `[BASELINE]` - Baseline synchronization events
+- `[BASELINE_CHECK]` - Baseline comparison logic
+- `[APPLY_CHANGE]` - Primitive value changes
+- `[UNDO]` - Undo/redo operations
+- `[CONTROLLER]` - Controller state changes
+- `[PYQTGRAPH]` - View update timing
+- `[TRAJECTORY]` - Gamma_self trajectory computation
+- `[PANEL_REMOVE]` - Label removal operations
+- `[LABEL_ADD]` - Label addition with call stacks
+
+### Section Markers
+
+Major operations use delimited sections:
+```
+=== INSERT EVENT ===
+... operation details ...
+=== END INSERT ===
+```
+
+### Baseline Protocol Logging
+
+The baseline communication protocol has dedicated logging (see [baseline_communication_protocol.md](baseline_communication_protocol.md)):
+- Enable: `controller.enable_baseline_protocol_logging()`
+- Disable: `controller.disable_baseline_protocol_logging()`
+- Dump: `controller.dump_baseline_protocol_log("path/to/file.json")`
+
+### Debug Principles
+
+1. **Minimal noise**: Production code has minimal debug output (critical operations only)
+2. **Targeted logging**: Add detailed logging temporarily when debugging specific issues
+3. **Remove after fix**: Clean up verbose logging once bugs are resolved
+4. **Tagged output**: All debug messages prefixed with tags for easy filtering
+
+---
+
+## Architecture Insights from Debugging
 
 Complex bugs often reveal architectural issues:
 
 - **The label persistence bug** revealed fragmented perspective switching across multiple components without centralized coordination
 - **Proper fix**: Refactor to event-driven architecture with Qt signals/slots for perspective changes
-- **Lesson**: Manual state synchronization across components is error-prone; use observer pattern instead
+- **The baseline cascade deletion bug** revealed time-based keys creating shift complexity
+- **Proper fix**: Migrate to ID-based event identity for immutable tracking
+- **Lesson**: Manual state synchronization across components is error-prone; use observer pattern and immutable identities
 
-**See**: [architecture/perspective_management_refactor.md](architecture/perspective_management_refactor.md) for the complete refactor design addressing this architectural issue.
+**See**: 
+- [architecture/perspective_management_refactor.md](architecture/perspective_management_refactor.md) for perspective switching refactor
+- [ARCHITECTURE.md](../ARCHITECTURE.md) Event Identity section for ID-based tracking design
