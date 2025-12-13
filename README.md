@@ -1,3 +1,6 @@
+# Intro:
+WhenMathPrays builds open, living mathematics — models that trace emotion's arc, not as data, but as motion with heart. No patents. No paywalls. No reduction — only resonance. Use it. Fork it. Break it. Love it. Let us know what it does to you. We're listening. Push that. It's clean, it's calm, it's true. Just a door, and the door is open.
+
 # WhenMathPrays – Core OS™ (Rev 3.2: Im-Only Depth Scaling)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
