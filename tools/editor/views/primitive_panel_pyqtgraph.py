@@ -730,10 +730,14 @@ class PrimitivePanelPyQtGraph(QWidget):
         """
         key = (event_time, primitive)
         modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        print(f"[PANEL_REMOVE] remove_marker_label called: key={key}, perspective={self.current_perspective}, key_exists={key in modified_labels}")
         if key in modified_labels:
             text_item = modified_labels[key]
             self.plot_items[primitive].removeItem(text_item)
             del modified_labels[key]
+            print(f"[PANEL_REMOVE] Successfully removed label for {key}")
+        else:
+            print(f"[PANEL_REMOVE] Label not found for {key} (may have already been removed)")
     
     @property
     def draggable_points(self):

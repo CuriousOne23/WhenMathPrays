@@ -102,6 +102,60 @@ class EditorMainWindow(QMainWindow):
         self._undo_action = undo_action
         self._redo_action = redo_action
     
+    def switch_undo_stack(self, new_stack: QUndoStack):
+        """
+        Switch to a different undo stack and update UI actions.
+        
+        Args:
+            new_stack: The new QUndoStack to use
+        """
+        if new_stack is None:
+            return
+        
+        # Remove old actions from toolbar
+        self._toolbar.removeAction(self._undo_action)
+        self._toolbar.removeAction(self._redo_action)
+        
+        # Update undo stack reference
+        self.undo_stack = new_stack
+        
+        # Create new actions from new stack
+        self._undo_action = self.undo_stack.createUndoAction(self, 'Undo')
+        self._undo_action.setShortcut(QKeySequence.Undo)
+        self._undo_action.setStatusTip('Undo last action (Ctrl+Z)')
+        
+        self._redo_action = self.undo_stack.createRedoAction(self, 'Redo')
+        self._redo_action.setShortcut(QKeySequence.Redo)
+        self._redo_action.setStatusTip('Redo last undone action (Ctrl+Y)')
+        
+        # Add new actions back to toolbar (in correct position)
+        # Insert before the action that comes after redo in the original setup
+        actions = self._toolbar.actions()
+        if len(actions) >= 2:
+            # Find the separator or action after redo position
+            # Undo/redo were added after second separator
+            insert_pos = None
+            separator_count = 0
+            for i, action in enumerate(actions):
+                if action.isSeparator():
+                    separator_count += 1
+                    if separator_count == 2:
+                        # Insert undo/redo right after second separator
+                        insert_pos = i + 1
+                        break
+            
+            if insert_pos is not None and insert_pos < len(actions):
+                self._toolbar.insertAction(actions[insert_pos], self._undo_action)
+                self._toolbar.insertAction(actions[insert_pos+1] if insert_pos+1 < len(actions) else None, self._redo_action)
+            else:
+                # Fallback: add to end
+                self._toolbar.addAction(self._undo_action)
+                self._toolbar.addAction(self._redo_action)
+        else:
+            # Fallback: add to end
+            self._toolbar.addAction(self._undo_action)
+            self._toolbar.addAction(self._redo_action)
+    
     def _setup_view_menu(self, dock_widgets: dict):
         """
         Create View menu with show/hide panel actions.
