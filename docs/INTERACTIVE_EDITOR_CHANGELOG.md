@@ -28,7 +28,63 @@ git checkout phase2
 
 ## Version History
 
-### v2.1-diagnostic-markers (December 7, 2025) ← CURRENT STABLE
+### v2.1.2-baseline-refactor (December 11, 2025) ← CURRENT
+**Status:** Baseline storage architecture refactored
+
+**Architecture Improvements:**
+- ✅ **Migrated to time-keyed baseline storage** - Replaced fragile index-based arrays with stable time-keyed dictionary
+- ✅ **Removed index synchronization** - No longer need to update baseline arrays after insert/delete operations
+- ✅ **Eliminated corruption risk** - Baseline storage completely independent of model, cannot accidentally fetch modified values
+- ✅ **Simplified code** - Removed complex array manipulation logic (5 dict operations vs 12 array operations per insert/delete)
+
+**Technical Details:**
+- Changed from: `baseline_primitives['r'][6]` (index-based, shifts on insert)
+- Changed to: `baseline_by_time[(42.0, 'r')]` (time-keyed, insertion-proof)
+- Removed `original_baseline_primitives` shadow copy (no longer needed)
+- Updated all baseline lookups in: `_apply_primitive_change`, `_reset_primitive`, insert/delete handlers
+- Handles time-shifting operations (Ctrl+Shift+Click) by deleting old keys and adding new keys
+
+**Benefits:**
+- Cannot become invalid when events inserted/deleted
+- Clearer semantics: "Baseline at time 42" vs "Baseline at index 6"
+- Prevents entire class of index-related bugs
+- Foundation for future event management features (Phase 2.2+)
+
+**Testing:**
+- All existing undo/redo tests pass
+- Label appearance/removal works correctly
+- Insert/delete operations maintain baseline correctly
+- Time-shifting insertions (Ctrl+Shift+Click) preserve baseline values
+
+---
+
+### v2.1.1-undo-fixes (December 11, 2025)
+**Status:** Critical bug fixes for undo system
+
+**Bug Fixes:**
+- ✅ **Fixed undo system bypass** - Insertion options widget (text field) now creates proper `InsertEventCommand` instead of bypassing undo stack
+- ✅ **Fixed command index instability** - EditPrimitiveCommand and ResetPrimitiveCommand now store event **time** instead of **index**, preventing corruption when insertions/deletions shift indices
+- ✅ **Fixed baseline corruption** - `_update_baseline_after_insert/delete` now insert/delete from existing baseline arrays instead of re-fetching from modified model
+- ✅ **Fixed label cleanup** - Modified marker labels now properly removed when values return to baseline during undo
+
+**Root Cause Analysis:**
+Three interconnected issues:
+1. **Insertion bypass**: Text field insertions didn't create undo commands, breaking undo chain
+2. **Index fragility**: Commands storing array indices became invalid after insertions shifted all subsequent indices
+3. **Baseline pollution**: Re-fetching baseline from model after insertion captured modified values as "baseline"
+
+**Technical Details:**
+- Created `InsertEventCommand` for simple insertion (no time shifting)
+- Commands now store `event_time` and dynamically look up current index during undo/redo
+- Baseline arrays maintained as immutable snapshots, updated via np.insert/np.delete operations
+- Label removal integrated into `_apply_primitive_change()` for consistent cleanup
+
+**Architectural Issue Identified:**
+Index-based baseline storage (`baseline_primitives['r'][6]`) is fragile and error-prone. See "Planned Refactoring" section below.
+
+---
+
+### v2.1-diagnostic-markers (December 7, 2025)
 **Status:** Checkpoint during Phase 2 development
 
 **New Features:**
@@ -102,6 +158,16 @@ git checkout phase2
 - Matplotlib-based visualization
 - MVC pattern: EditorModel, EditorController, PrimitivePanel, TrajectoryPanel
 - Backward-compatible CSV format
+
+---
+
+## Completed Refactoring
+
+### Baseline Storage Architecture ✅ COMPLETE
+
+**Status:** Migrated from index-based arrays to time-keyed dictionary (v2.1.2)
+
+See [architecture/baseline_storage_refactoring.md](architecture/baseline_storage_refactoring.md) for detailed documentation.
 
 ---
 

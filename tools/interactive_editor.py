@@ -19,6 +19,7 @@ Phase 2 Update:
 import sys
 import argparse
 from pathlib import Path
+from typing import Tuple, Optional
 
 # PySide6 imports
 from PySide6.QtWidgets import QApplication, QDockWidget
@@ -37,40 +38,105 @@ from tools.editor.widgets import GammaSelf0Editor
 from tools.editor.constants import is_inserted_event
 
 
+def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optional[Path], Optional[str], bool]:
+    """
+    Validate input file and resolve M1/M2 paths.
+    
+    Returns:
+        (m1_path, m2_path, error_message, was_originally_m2)
+        - m1_path: Path to M1 file (None if not found)
+        - m2_path: Path to M2 file (None if not found)
+        - error_message: Error string if validation failed, None if successful
+        - was_originally_m2: True if user loaded M2-only file (to set initial perspective)
+    
+    Handles:
+        - User loads M1 → looks for M2
+        - User loads M2 → looks for M1
+        - User loads M2 with no M1 → treat M2 as M1
+        - Invalid file extension → error
+        - File not found → error
+    """
+    input_file = Path(input_path)
+    
+    # Check if file exists
+    if not input_file.exists():
+        return None, None, f"File not found: {input_file}", False
+    
+    # Check if file is CSV
+    if input_file.suffix.lower() != '.csv':
+        return None, None, f"Invalid file type: {input_file.suffix}. Must be a CSV file (.csv)", False
+    
+    # Determine if input is M1 or M2
+    is_m1 = "_M1" in input_file.stem
+    is_m2 = "_M2" in input_file.stem
+    
+    if not is_m1 and not is_m2:
+        # File doesn't have M1 or M2 suffix - treat as M1 only
+        return input_file, None, None, False
+    
+    if is_m1:
+        # User loaded M1 - look for M2
+        m1_path = input_file
+        # Replace last occurrence of _M1 with _M2 (handles _M1.csv and _M1_modified.csv)
+        m2_path_str = str(input_file).replace("_M1", "_M2", 1)
+        m2_path = Path(m2_path_str)
+        
+        if m2_path.exists():
+            # Both M1 and M2 exist
+            return m1_path, m2_path, None, False
+        else:
+            # M1 exists but no M2 - load M1 into both M1 and M2 slots
+            print(f"[INFO] No M2 file found. Loading M1 file into both perspectives: {m1_path}")
+            return m1_path, m1_path, None, False
+    
+    else:  # is_m2
+        # User loaded M2 - look for M1
+        m2_path = input_file
+        # Replace last occurrence of _M2 with _M1 (handles _M2.csv and _M2_modified.csv)
+        m1_path_str = str(input_file).replace("_M2", "_M1", 1)
+        m1_path = Path(m1_path_str)
+        
+        if m1_path.exists():
+            # Both M1 and M2 exist
+            return m1_path, m2_path, None, False
+        else:
+            # M2 exists but no M1 - load M2 into both M1 and M2 slots, select M2
+            print(f"[INFO] No M1 file found. Loading M2 file into both perspectives: {m2_path}")
+            return m2_path, m2_path, None, True
+
+
 class InteractiveEditor:
     """Main application class for interactive scenario editor."""
     
-    def __init__(self, csv_file: str, qt_app: QApplication):
+    def __init__(self, csv_file: str, qt_app: QApplication, m1_path: Optional[Path] = None, m2_path: Optional[Path] = None, initial_perspective: str = "M1"):
         """
         Initialize interactive editor.
         
         Args:
-            csv_file: Path to CSV file to load
+            csv_file: Path to CSV file to load (primary file - typically M1)
             qt_app: QApplication instance
+            m1_path: Path to M1 file (if different from csv_file)
+            m2_path: Path to M2 file (None if doesn't exist)
+            initial_perspective: Initial perspective to display ("M1" or "M2")
         """
         self.csv_file = Path(csv_file)
+        self.original_csv_file = self.csv_file  # Track original for perspective-based saves
+        self.m1_path = m1_path or self.csv_file
+        self.m2_path = m2_path
+        self.initial_perspective = initial_perspective
         self.qt_app = qt_app
         
         # Load configuration (with fallback to defaults)
         config = get_config()
         self.LAYOUT = config.get_layout()
         
-        # Create Qt main window (Phase 2)
+        # Create Qt main window
         self.window = EditorMainWindow(self.csv_file)
         
-        # Create pure PyQtGraph layout (both panels)
-        from PySide6.QtWidgets import QWidget, QHBoxLayout
-        
-        # Container widget for layout
-        central_widget = QWidget()
-        layout = QHBoxLayout(central_widget)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(30)  # Spacing between panels
+        # Flexible workspace with QDockWidget panels
         
         # Initialize PyQtGraph primitive panel
         self.primitive_panel = PrimitivePanelPyQtGraph()
-        self.primitive_panel.setMaximumWidth(600)  # Constrain primitive panel width
-        layout.addWidget(self.primitive_panel, stretch=2)
         
         # Connect signals from primitive panel
         self.primitive_panel.primitive_changed.connect(self._on_primitive_changed)
@@ -82,16 +148,28 @@ class InteractiveEditor:
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
         self.primitive_panel.primitive_reset_requested.connect(self._on_primitive_reset)
         
-        # Phase 2 refactoring: Removed callback assignments (now using signals above)
-        # self.primitive_panel.on_primitive_preview = self._on_primitive_preview
-        # self.primitive_panel.on_primitive_reset = self._on_primitive_reset
-        
         # Initialize PyQtGraph trajectory panel
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
-        layout.addWidget(self.trajectory_panel, stretch=3)  # Larger stretch for trajectory
         
-        # Set central widget
-        self.window.setCentralWidget(central_widget)
+        # Wrap panels in QDockWidget for flexible workspace
+        self.primitive_dock = QDockWidget("Primitives", self.window)
+        self.primitive_dock.setWidget(self.primitive_panel)
+        self.primitive_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable | 
+            QDockWidget.DockWidgetClosable
+        )
+        self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
+        
+        # Add trajectory dock to right area
+        self.trajectory_dock = QDockWidget("Trajectory", self.window)
+        self.trajectory_dock.setWidget(self.trajectory_panel)
+        self.trajectory_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable | 
+            QDockWidget.DockWidgetClosable
+        )
+        self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
         self.model = EditorModel()
@@ -107,25 +185,41 @@ class InteractiveEditor:
             undo_stack=self.window.undo_stack
         )
         
-        # Disable Shift+Click insertion (now using explicit time inputs)
-        # self.primitive_panel.on_insert_event = self._on_insert_event
+        # Give controller reference to window for undo stack UI updates
+        self.controller._window_ref = self.window
 
         # Load scenario (structured: Event/Marker)
-        self.controller.load_scenario(str(self.csv_file))
+        self.controller.load_scenario(str(self.m1_path), str(self.m2_path) if self.m2_path else None)
         
-        # Create gamma_self_0 editor widget (Phase 2.1)
+        # Create editor widgets
         self.gamma_self0_editor = GammaSelf0Editor(self.model.gamma_self_0)
         self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
         self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
         
-        # Create insertion options widget (Phase 2.1)
         from tools.editor.widgets import InsertionOptionsWidget
         self.insertion_options = InsertionOptionsWidget()
         self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
         
+        from tools.editor.widgets import PerspectiveSwitcher
+        self.perspective_switcher = PerspectiveSwitcher()
+        self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
+        
+        from tools.editor.widgets import NameEditor
+        initial_name = self.model.get_display_name(self.controller.perspective)
+        self.name_editor = NameEditor(initial_name)
+        self.name_editor.name_changed.connect(self._on_name_changed)
+        
+        from tools.editor.widgets import NoteEditor
+        from tools.editor.widgets import NoteEditor
+        self.note_editor = NoteEditor()
+        self.note_editor.note_changed.connect(self._on_note_changed)
+        
+        # Set initial perspective AFTER all widgets created
+        if self.initial_perspective == "M2":
+            self.perspective_switcher.set_perspective("M2")
+        
         # Create gauge widgets
         from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
-        from PySide6.QtCore import Qt
         
         # Primitive gauge
         primitive_gauge_frame = QFrame()
@@ -144,7 +238,7 @@ class InteractiveEditor:
             'font-size: 12pt; '
             'font-weight: bold;'
         )
-        self.primitive_gauge.setMinimumHeight(60)
+        self.primitive_gauge.setMinimumHeight(30)
         primitive_gauge_layout.addWidget(primitive_gauge_label)
         primitive_gauge_layout.addWidget(self.primitive_gauge)
         primitive_gauge_frame.setLayout(primitive_gauge_layout)
@@ -166,36 +260,82 @@ class InteractiveEditor:
             'font-size: 11pt; '
             'font-weight: bold;'
         )
-        self.gamma_self_gauge.setMinimumHeight(60)
+        self.gamma_self_gauge.setMinimumHeight(30)
         gamma_gauge_layout.addWidget(gamma_gauge_label)
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
         
-        # Combine widgets in a container
-        dock_container = QWidget()
+        # Combine widgets in a container with scroll area
+        from PySide6.QtWidgets import QScrollArea
+        dock_container_inner = QWidget()
         dock_layout = QVBoxLayout()
+        dock_layout.addWidget(self.perspective_switcher)  # Phase 3.2: Add perspective switcher at top
+        dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
+        dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
         dock_layout.addWidget(self.gamma_self0_editor)
         dock_layout.addWidget(primitive_gauge_frame)
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
-        dock_container.setLayout(dock_layout)
+        dock_container_inner.setLayout(dock_layout)
         
-        # Add as dock widget on the right
-        dock = QDockWidget("Editor Controls", self.window)
-        dock.setWidget(dock_container)
-        dock.setFeatures(QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable)
-        self.window.addDockWidget(Qt.RightDockWidgetArea, dock)
+        # Wrap in scroll area to allow small window heights
+        dock_container = QScrollArea()
+        dock_container.setWidget(dock_container_inner)
+        dock_container.setWidgetResizable(True)
+        
+        # Add controls as dock widget - add to right area FIRST
+        self.controls_dock = QDockWidget("Editor Controls", self.window)
+        self.controls_dock.setWidget(dock_container)
+        self.controls_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetFloatable |
+            QDockWidget.DockWidgetClosable
+        )
+        # Split trajectory dock horizontally to add controls to its right
+        # This creates the 3-column layout: [Primitives | Trajectory | Controls]
+        self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
+        
+        # Setup View menu for dock widget visibility
+        self.window._setup_view_menu({
+            'Primitives': self.primitive_dock,
+            'Trajectory': self.trajectory_dock,
+            'Controls': self.controls_dock
+        })
+        
+        # Configure initial layout widths
+        # First set the main left/right split (Primitives vs rest)
+        self.window.resizeDocks(
+            [self.primitive_dock, self.controls_dock],
+            [445, 755],  # Primitives=445px, Right side (Controls+Trajectory)=755px
+            Qt.Horizontal
+        )
+        
+        # Then set the Controls/Trajectory split within the right area
+        self.window.resizeDocks(
+            [self.controls_dock, self.trajectory_dock],
+            [260, 495],  # Controls=260px, Trajectory=495px
+            Qt.Horizontal
+        )
         
         # Connect primitive panel readout to Qt gauge (now that gauges exist)
         self.primitive_panel.primitive_readout = self.primitive_gauge
         
         # Connect gamma_self gauge to trajectory panel click events (Qt Signal - clean!)
         self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
+        
+        # Connect primitive panel clicks to note editor
+        self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)
+        
+        # Connect trajectory panel clicks to note editor
+        self.trajectory_panel.gamma_clicked.connect(self._on_trajectory_clicked)
 
         # Set up callbacks AFTER panels and controller are initialized
         self.window.save_callback = self._handle_save_request
         self.window.cleanup_callback = self._handle_cleanup
+        
+        # Load window geometry and dock layout from saved state
+        self._load_window_state()
         
         # Connect zoom toolbar buttons (will zoom both panels)
         self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
@@ -209,7 +349,6 @@ class InteractiveEditor:
     
     def _update_gamma_self_gauge(self, x, y):
         """Update gamma_self gauge in right panel."""
-        print(f"[GAUGE UPDATE] gamma_self gauge called with x={x}, y={y}")
         if x is not None and y is not None:
             self.gamma_self_gauge.setText(f"γ_self\n{x:.2f} + {y:.2f}i")
         else:
@@ -230,18 +369,25 @@ class InteractiveEditor:
         
         # Determine if current file is the original (in data/ and does not end with _modified.csv)
         original = (
-            self.csv_file.parent.name == 'data' and
-            not self.csv_file.stem.endswith('_modified')
+            self.original_csv_file.parent.name == 'data' and
+            not self.original_csv_file.stem.endswith('_modified')
         )
         
         # Determine base name for output files (without _modified suffix and without extension)
-        if self.csv_file.stem.endswith('_modified'):
-            base_name = self.csv_file.stem[:-9]  # Remove '_modified'
+        # Always use original_csv_file to ensure consistent perspective-based naming
+        if self.original_csv_file.stem.endswith('_modified'):
+            base_name = self.original_csv_file.stem[:-9]  # Remove '_modified'
         else:
-            base_name = self.csv_file.stem
+            base_name = self.original_csv_file.stem
+        
+        # Adjust base name for current perspective (M1 vs M2)
+        current_perspective = self.controller.perspective
+        if current_perspective == "M2":
+            # Replace M1 with M2 in the base name
+            base_name = base_name.replace("_M1", "_M2")
         
         # Output directory is data/
-        data_dir = self.csv_file.parent if self.csv_file.parent.name == 'data' else self.csv_file.parent.parent / 'data'
+        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name == 'data' else self.original_csv_file.parent.parent / 'data'
         
         # Determine output paths
         csv_path = data_dir / f"{base_name}_modified.csv"
@@ -262,9 +408,6 @@ class InteractiveEditor:
         
         if not save_csv and not save_png:
             self.window.show_message("No save operation performed", 'warning')
-    
-    # Matplotlib event handlers removed - PyQtGraph has built-in pan/zoom
-    # TODO: Add Qt-based keyboard shortcuts if needed
     
     def _handle_zoom_in(self):
         """Handle zoom in toolbar button - zoom all panels uniformly."""
@@ -287,6 +430,9 @@ class InteractiveEditor:
     
     def _handle_cleanup(self):
         """Handle application cleanup before exit."""
+        # Phase 3.1: Save window state before exit
+        self._save_window_state()
+        
         if hasattr(self, 'controller'):
             self.controller.cleanup()
     
@@ -412,42 +558,37 @@ class InteractiveEditor:
                 insert_time = getattr(self.primitive_panel, 'pending_insert_time', None)
                 command = InsertEventBeforeCommand(self.controller, event_index, insert_time)
                 self.controller.undo_stack.push(command)
-                print(f"[INSERT] Pushed InsertEventBeforeCommand to undo stack")
                 # Clear pending time
                 if hasattr(self.primitive_panel, 'pending_insert_time'):
                     delattr(self.primitive_panel, 'pending_insert_time')
             except ValueError as e:
                 # Command validation failed
-                print(f"[INSERT] Validation error: {e}")
                 from PySide6.QtWidgets import QMessageBox
                 QMessageBox.warning(
                     self.window,
                     "Cannot Insert",
                     str(e)
                 )
-        else:
-            # No undo stack - need to implement direct call if necessary
-            print("[INSERT] No undo stack available")
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
         """
-        Handle diagnostic 'what-if' marker placement.
-        Computes hypothetical gamma_self trajectory if this primitive had the clicked value.
+        Handle Shift+Click diagnostic marker placement (counterfactual exploration).
+        
+        Computes and displays a hypothetical gamma_self trajectory showing what would
+        happen if the clicked primitive had the hypothetical value. Useful for exploring
+        "what-if" scenarios without committing changes.
         
         Args:
             event_index: Event index where marker was placed
             primitive: Which primitive was clicked ('v', 'r', 'f', 'a', 'S')
             hypothetical_value: The Y value where user shift+clicked
         """
-        print(f"[DIAGNOSTIC HANDLER] Called with event_index={event_index}, primitive={primitive}, value={hypothetical_value:.2f}")
-        
         from core.love import update_gamma_self
         import numpy as np
         
         # Get current events
         events = self.model.get_events(self.controller.perspective)
         if event_index >= len(events):
-            print(f"[DIAGNOSTIC HANDLER] Error: event_index {event_index} >= {len(events)} events")
             return
         
         # Create hypothetical primitives array (copy of current state)
@@ -455,10 +596,7 @@ class InteractiveEditor:
         times = primitives_data['time']
         
         # Modify the one primitive with hypothetical value
-        old_value = primitives_data[primitive][event_index]
         primitives_data[primitive][event_index] = hypothetical_value
-        print(f"[DIAGNOSTIC HANDLER] Changed {primitive}[{event_index}] from {old_value:.2f} to {hypothetical_value:.2f}")
-        print(f"[DIAGNOSTIC HANDLER] Event {event_index} primitives: v={primitives_data['v'][event_index]:.2f}, r={primitives_data['r'][event_index]:.2f}, f={primitives_data['f'][event_index]:.2f}, a={primitives_data['a'][event_index]:.2f}, S={primitives_data['S'][event_index]:.2f}")
         
         # Compute hypothetical gamma_self trajectory using same logic as controller
         gamma_self = self.model.gamma_self_0
@@ -478,8 +616,6 @@ class InteractiveEditor:
                 time_delta=time_delta
             )
             gamma_trajectory.append(gamma_self)
-        
-        print(f"[DIAGNOSTIC HANDLER] Computed {len(gamma_trajectory)} gamma_self values")
         
         # Get gamma_self AFTER the clicked event's primitives are applied
         # gamma_trajectory[0] = gamma_self_0 (before event 0)
@@ -512,7 +648,15 @@ class InteractiveEditor:
             print(f"[DIAGNOSTIC WHAT-IF] If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
     
     def _on_lock_toggle(self, event_index):
-        """Handle lock toggle from primitive panel."""
+        """
+        Handle lock toggle from primitive panel right-click menu.
+        
+        Toggles the lock state of an event. Locked events cannot be edited or deleted,
+        protecting critical scenario moments.
+        
+        Args:
+            event_index: Index of event to lock/unlock
+        """
         self.controller.on_lock_toggle(event_index)
     
     def _on_insert_event(self, time: float):
@@ -677,6 +821,106 @@ class InteractiveEditor:
             
             self.window.show_message("gamma_self_0 reset to CSV default")
     
+    def _on_perspective_changed(self, perspective: str):
+        """
+        Handle perspective switch from UI (M1 ↔ M2).
+        
+        Args:
+            perspective: Either 'M1' or 'M2'
+        """
+        self.controller.switch_perspective(perspective)
+        
+        # Update name editor to show current perspective's name
+        current_name = self.model.get_display_name(perspective)
+        print(f"[DEBUG] Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
+        self.name_editor.set_name(current_name)
+        
+        self.window.show_message(f"Switched to {perspective} perspective")
+    
+    def _on_name_changed(self, new_name: str):
+        """
+        Handle name change from name editor.
+        
+        Args:
+            new_name: New name entered by user
+        """
+        perspective = self.controller.perspective
+        
+        # Update model with perspective-specific name
+        if perspective == "M1":
+            self.model.name_m1 = new_name
+            print(f"[DEBUG] Updated name_m1 to '{new_name}'")
+        else:
+            self.model.name_m2 = new_name
+            print(f"[DEBUG] Updated name_m2 to '{new_name}'")
+        
+        # Update name editor display to confirm change
+        self.name_editor.set_name(new_name)
+        
+        # Update panel titles
+        self.primitive_panel.set_scenario_name(new_name)
+        self.trajectory_panel.set_scenario_name(new_name)
+        
+        self.window.show_message(f"{perspective} name updated to: {new_name}")
+    
+    def _on_note_changed(self, event_time: float, note_text: str):
+        """
+        Handle note change from note editor.
+        
+        Args:
+            event_time: Time of the event
+            note_text: New note text
+        """
+        # Find the event at this time
+        events = self.model.get_events(self.controller.perspective)
+        for event in events:
+            if abs(event.time - event_time) < 0.001:  # Float comparison
+                event.notes = note_text
+                self.window.show_message(f"Note updated for event at time {event_time}")
+                return
+        
+        self.window.show_message(f"Warning: Event at time {event_time} not found", "warning")
+    
+    def _on_marker_clicked(self, event_idx: int, primitive: str):
+        """
+        Handle marker click from primitive panel.
+        Update note editor with event notes.
+        
+        Args:
+            event_idx: Index of selected event
+            primitive: Primitive that was clicked
+        """
+        # Get the event
+        event = self.model.get_event(event_idx, self.controller.perspective)
+        if event:
+            self.note_editor.set_event(event.time, event.notes)
+    
+    def _on_trajectory_clicked(self, x: float, y: float):
+        """
+        Handle trajectory panel click (gamma_self marker).
+        Find nearest event and show its notes.
+        
+        Args:
+            x: Real component (clicked position)
+            y: Imaginary component (clicked position)
+        """
+        # Find nearest event by time (using trajectory x-axis which represents time indirectly)
+        # For now, we'll use the gamma_self readout which already finds the nearest point
+        # We need to map this back to an event time
+        
+        # Get all events and find the one closest to the clicked trajectory point
+        events = self.model.get_events(self.controller.perspective)
+        if not events:
+            return
+        
+        # For simplicity, find the event whose trajectory point is closest
+        # This would require trajectory computation - for now, just show first event
+        # TODO: Implement proper trajectory-to-event mapping
+        
+        # Temporary: Just show the last clicked event from primitive panel
+        # Better implementation would map trajectory point to nearest event time
+        pass
+    
     # NOTE: Keyboard shortcuts removed with matplotlib event handlers
     # PyQtGraph trajectory panel uses built-in Qt key events
     # TODO: Re-implement shortcuts via Qt keyPressEvent if needed (Ctrl+S, ESC, Delete, etc.)
@@ -740,6 +984,42 @@ class InteractiveEditor:
             self.controller.save_scenario(filepath)
             self.window.show_message(f"Saved to: {filepath}")
     
+    def _load_window_state(self):
+        """Load window geometry and dock layout from QSettings."""
+        from PySide6.QtCore import QSettings, Qt
+        
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        
+        # Restore window geometry
+        geometry = settings.value('geometry')
+        if geometry:
+            self.window.restoreGeometry(geometry)
+        
+        # Restore window state (dock positions, sizes, visibility)
+        state = settings.value('windowState')
+        if state:
+            self.window.restoreState(state)
+            # Re-apply default dock sizes to override any old saved sizes
+            # This ensures the layout stays at our optimized dimensions
+            self.window.resizeDocks(
+                [self.primitive_dock, self.controls_dock],
+                [445, 755],  # Primitives=445px, Right side=755px
+                Qt.Horizontal
+            )
+            self.window.resizeDocks(
+                [self.controls_dock, self.trajectory_dock],
+                [260, 495],  # Controls=260px, Trajectory=495px
+                Qt.Horizontal
+            )
+    
+    def _save_window_state(self):
+        """Save window geometry and dock layout to QSettings."""
+        from PySide6.QtCore import QSettings
+        
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        settings.setValue('geometry', self.window.saveGeometry())
+        settings.setValue('windowState', self.window.saveState())
+    
     def run(self):
         """Show UI and enter Qt event loop."""
         self.window.show()
@@ -748,6 +1028,12 @@ class InteractiveEditor:
 
 def main():
     """Main entry point."""
+    # Phase 3.6: Initialize observability system
+    from tools.editor.observability import ObservabilityLog
+    import os
+    debug_enabled = os.environ.get('EDITOR_DEBUG', '').lower() in ('true', '1', 'yes')
+    ObservabilityLog.initialize(enabled=debug_enabled)
+    
     parser = argparse.ArgumentParser(
         description='Interactive Scenario Editor for GRP',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -792,18 +1078,40 @@ Phase 1.5 Features:
     
     args = parser.parse_args()
     
-    # Validate file exists
-    csv_path = Path(args.csv_file)
-    if not csv_path.exists():
-        print(f"Error: File not found: {csv_path}", file=sys.stderr)
+    # Validate file and resolve M1/M2 paths
+    m1_path, m2_path, error, was_originally_m2 = validate_and_resolve_paths(args.csv_file)
+    
+    if error:
+        print(f"Error: {error}", file=sys.stderr)
         sys.exit(1)
+    
+    # Initial perspective: M2 if M2-only file, otherwise M1
+    initial_perspective = "M2" if was_originally_m2 else "M1"
+    
+    # Show M2 status
+    if m2_path:
+        if m1_path == m2_path:
+            # Single file loaded into both slots
+            if was_originally_m2:
+                print(f"[INFO] M2-only: Loaded into both perspectives (M2 selected)")
+            else:
+                print(f"[INFO] M1-only: Loaded into both perspectives (M1 selected)")
+            print(f"[INFO] You can edit from either perspective and save to M1 or M2")
+        else:
+            # Dual perspective
+            print(f"[INFO] Loading dual-perspective data:")
+            print(f"  M1: {m1_path}")
+            print(f"  M2: {m2_path}")
+    else:
+        print(f"[INFO] Loading single-perspective data: {m1_path}")
+        print(f"[INFO] No M2 file found - perspective switching disabled")
     
     # Create Qt application (Phase 2)
     app = QApplication(sys.argv)
     app.setApplicationName('GRP Interactive Scenario Editor')
     
     # Create and run editor
-    editor = InteractiveEditor(args.csv_file, app)
+    editor = InteractiveEditor(str(m1_path), app, m1_path=m1_path, m2_path=m2_path, initial_perspective=initial_perspective)
     sys.exit(editor.run())
 
 

@@ -505,7 +505,7 @@ def set_modified_markers(self, modified_indices: dict):
 
 - `docs/architecture/decisions/ADR-001-persistent-markers.md` - Marker lifecycle decisions
 - `docs/interactive_editor_user_guide.md` - User-facing features (unchanged by refactoring)
-- `docs/phase2_architecture_recommendations.md` - Original Phase 2 migration rationale
+- `docs/architecture_recommendations.md` - Architecture migration rationale
 
 ---
 

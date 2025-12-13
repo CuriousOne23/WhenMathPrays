@@ -1,8 +1,21 @@
 # Interactive Scenario Editor - User Guide
 
-**Version:** Phase 1 Complete  
-**Last Updated:** December 5, 2025  
+**Version:** Phase 3.3 Complete  
+**Last Updated:** December 11, 2025  
 **Program Location:** `tools/interactive_editor.py`
+
+---
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Application States](#application-states)
+3. [Getting Started](#getting-started)
+4. [User Interface](#user-interface)
+5. [Basic Workflow](#basic-workflow)
+6. [Features in Detail](#features-in-detail)
+7. [Use Cases & Examples](#use-cases--examples)
+8. [Advanced Features](#advanced-features)
+9. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -16,72 +29,506 @@ The Interactive Scenario Editor is a graphical diagnostic tool for analyzing and
 3. **Sensitivity Testing** - See immediate impact of primitive changes on gamma_self evolution
 4. **Data Validation** - Lock known data points and vary unknowns to test GRP fidelity
 
-**Phase 1 Status:** ✅ **COMPLETE** - Single-perspective (M1) editing with full diagnostic capabilities
+**Phase 3.3 Status:** ✅ **COMPLETE** - Dual-perspective editing with overlay visualization, robust file loading, and flexible workspace
+
+---
+
+## Application States
+
+The editor manages multiple state domains that determine behavior and available actions. Understanding these states helps you use the editor effectively.
+
+### State Domains & Indicators
+
+#### 1. **PERSPECTIVE STATE** → *Which viewpoint are you editing?*
+
+**Purpose:** Enables dual-perspective relationship editing from either Member 1 (M1) or Member 2 (M2) viewpoint.
+
+**Active States:**
+- **M1 Perspective Active** 
+  - **Indicator:** Solid blue line under M1 radio button, M1 trajectory solid
+  - **Behavior:** Editing M1 events, M2 shown as faded reference
+  - **Save Target:** `*_M1_modified.csv`
+  
+- **M2 Perspective Active**
+  - **Indicator:** Solid blue line under M2 radio button, M2 trajectory solid  
+  - **Behavior:** Editing M2 events, M1 shown as faded reference
+  - **Save Target:** `*_M2_modified.csv`
+
+**Transitions:**
+- Click M1/M2 radio buttons
+- Press Tab or Space key
+- Preserves modifications when switching
+
+**File Loading Sub-States:**
+- **Dual-Perspective Loaded:** Both M1 and M2 files loaded independently
+- **Single-Perspective Loaded:** Same file in both perspectives (enables conversion)
+- **M1-Default:** M1 or dual-file load starts with M1 selected
+- **M2-Default:** M2-only file load starts with M2 selected
+
+---
+
+#### 2. **EDIT STATE** → *Are changes temporary or committed?*
+
+**Purpose:** Provides real-time preview during editing while protecting against accidental changes.
+
+**Active States:**
+
+**2.1 IDLE (No Active Edit)**
+- **Indicator:** All markers filled (solid color)
+- **Behavior:** No ongoing edits, all changes committed
+- **Available Actions:** Drag any marker, lock/unlock events, insert/delete
+
+**2.2 PREVIEW (Temporary Edit)**
+- **Indicator:** Hollow markers (outline only), orange preview trajectory
+- **Behavior:** Live preview of trajectory impact, changes not yet committed
+- **Available Actions:** 
+  - Continue dragging to adjust
+  - Click marker to commit preview
+  - Double-click marker or ESC to cancel
+- **Data State:** Changes stored in `model.preview_changes`, not written to events
+
+**2.3 COMMITTED (Changes Saved to Model)**
+- **Indicator:** Hollow → filled transition, numbered marker labels appear
+- **Behavior:** Change written to model, marker pinned on gamma_self trajectory
+- **Available Actions:** Further edits, undo (Ctrl+Z), save to file
+- **Data State:** Event modified, `modified_primitives` updated, ready for file save
+
+**Transitions:**
+- Idle → Preview: Start dragging marker
+- Preview → Committed: Release mouse or click hollow marker
+- Preview → Idle: Double-click hollow marker or press ESC (cancels)
+- Committed → Idle: Ctrl+Z undo
+- Committed → File Saved: Click Save button or Ctrl+S
+
+---
+
+#### 3. **MODIFICATION STATE** → *Which events have been changed?*
+
+**Purpose:** Tracks which events differ from original CSV baseline for undo/redo and visual feedback.
+
+**Per-Event States:**
+
+**3.1 UNMODIFIED**
+- **Indicator:** No numbered label, marker at original position
+- **Behavior:** Event matches CSV baseline
+- **Visual:** Standard marker style
+
+**3.2 MODIFIED**
+- **Indicator:** Numbered label on marker (event index), pinned marker on trajectory
+- **Behavior:** One or more primitives differ from baseline
+- **Visual:** Marker shows number, corresponding gamma_self marker pinned
+- **Data:** Event time stored in `modified_primitives` with set of modified primitive names
+
+**3.3 PARTIALLY MODIFIED**
+- **Indicator:** Some primitives numbered, others not
+- **Behavior:** Mixed modification state across primitives at same time
+- **Example:** Event 7 has modified resonance (7r) but unmodified visibility
+
+**Transitions:**
+- Unmodified → Modified: Commit change different from baseline
+- Modified → Unmodified: Reset to baseline (double-click) or undo
+- Any → File Saved: Save button writes modified_primitives to CSV
+
+---
+
+#### 4. **LOCK STATE** → *Which events are protected from editing?*
+
+**Purpose:** Protects critical events from accidental modification or deletion.
+
+**Per-Event States:**
+
+**4.1 UNLOCKED (Editable)**
+- **Indicator:** No lock icon, standard marker appearance
+- **Behavior:** Can drag primitives, delete event, insert before event
+- **Available Actions:** All edit operations
+
+**4.2 LOCKED (Protected)**
+- **Indicator:** Lock icon on marker
+- **Behavior:** Cannot drag, cannot delete, can insert before
+- **Available Actions:** Right-click to unlock, view/click only
+- **Persistence:** Lock state saved to CSV `locked` column
+
+**Special Lock Rules:**
+- First and last events: Implicitly protected (cannot delete regardless of lock)
+- Locked events: Can still be used as insertion points
+- Lock persists across sessions via CSV
+
+**Transitions:**
+- Right-click marker: Toggle lock state
+- Load CSV: Restore lock state from `locked` column
+
+---
+
+#### 5. **UNDO/REDO STATE** → *Can you reverse or repeat actions?*
+
+**Purpose:** Provides reversible editing with full command history.
+
+**Stack States:**
+
+**5.1 CAN UNDO**
+- **Indicator:** Undo button enabled, Ctrl+Z available
+- **Behavior:** Previous commands available to reverse
+- **Available:** After any modifying operation (edit, insert, delete)
+
+**5.2 CAN REDO**
+- **Indicator:** Redo button enabled, Ctrl+Y available
+- **Behavior:** Undone commands available to re-apply
+- **Available:** After undo operation
+
+**5.3 CLEAN (At Save Point)**
+- **Indicator:** No asterisk in window title
+- **Behavior:** Current state matches last file save
+- **Available:** Immediately after save operation
+
+**5.4 DIRTY (Unsaved Changes)**
+- **Indicator:** Asterisk (*) in window title
+- **Behavior:** Modifications exist since last save
+- **Available:** After any change
+
+**Special State:**
+**5.5 IN_UNDO_REDO (Executing Reversal)**
+- **Internal State:** Prevents recursive undo command creation
+- **Behavior:** Temporarily disables creating new undo commands while applying old ones
+- **Not Visible:** User-facing only through command execution
+
+---
+
+#### 6. **TRAJECTORY COMPUTATION STATE** → *Is the trajectory up-to-date?*
+
+**Purpose:** Manages computationally expensive gamma_self ODE calculation with debouncing.
+
+**Active States:**
+
+**6.1 CURRENT (Displayed Trajectory Matches Data)**
+- **Indicator:** Trajectory stable, no recomputation in progress
+- **Behavior:** Display reflects all committed changes
+
+**6.2 SCHEDULED (Recomputation Pending)**
+- **Indicator:** Debounce timer active during preview drag
+- **Behavior:** Waiting for drag to pause before recomputing
+- **Trigger:** During continuous marker dragging
+
+**6.3 COMPUTING (Calculating Trajectory)**
+- **Indicator:** Brief computation (usually <50ms)
+- **Behavior:** Running gamma_self ODE for all time points
+- **Trigger:** Debounce timer expired or immediate recompute requested
+
+**Computation Modes:**
+- **With Preview:** Includes `preview_changes` in computation (during drag)
+- **Committed Only:** Uses only saved changes (after release, undo, load)
+- **Immediate:** No debouncing (after save, undo, perspective switch)
+
+**Auto-Zoom Behavior:**
+- **Initial Load:** Auto-zoom enabled (fits full trajectory)
+- **Subsequent Updates:** Auto-zoom disabled (preserves user zoom/pan)
+
+---
+
+#### 7. **FILE STATE** → *What file are you working with?*
+
+**Purpose:** Tracks file provenance and save targets for proper CSV output.
+
+**Active States:**
+
+**7.1 ORIGINAL FILE**
+- **Indicator:** Filename without `_modified` suffix
+- **Behavior:** Editing original data file
+- **Save Target:** Creates new `*_modified.csv` file
+
+**7.2 MODIFIED FILE**  
+- **Indicator:** Filename with `_modified.csv` suffix
+- **Behavior:** Editing previously saved modifications
+- **Save Target:** Overwrites current `*_modified.csv`
+
+**7.3 UNSAVED CHANGES**
+- **Indicator:** Asterisk (*) in window title
+- **Behavior:** In-memory changes not written to disk
+- **Save Target:** Next save destination determined by perspective + original filename
+
+**File Resolution States:**
+- **M1 Found / M2 Found:** Both companion files exist
+- **M1 Only:** No M2 companion, M1 loaded to both perspectives
+- **M2 Only:** No M1 companion, M2 loaded to both perspectives  
+- **Missing File:** File not found error state
+
+---
+
+#### 8. **UI INTERACTION STATE** → *What is the user currently doing?*
+
+**Purpose:** Determines cursor behavior, available keyboard shortcuts, and visual feedback.
+
+**Mouse States:**
+
+**8.1 IDLE (No Mouse Interaction)**
+- **Behavior:** Standard cursor, all shortcuts available
+
+**8.2 HOVERING (Mouse Over Draggable Element)**
+- **Indicator:** Cursor changes to hand/pointer
+- **Behavior:** Marker highlights, ready to drag
+
+**8.3 DRAGGING (Mouse Down + Moving)**
+- **Indicator:** Hollow marker, orange preview trajectory
+- **Behavior:** Real-time trajectory update, debounced recomputation
+
+**8.4 CLICKING (Single Click)**
+- **Behavior:** Depends on modifiers:
+  - No modifier: Select for note editing
+  - Shift: Place diagnostic marker (counterfactual)
+  - Ctrl: Delete event
+  - Ctrl+Shift: Insert event
+
+**Keyboard Modifier States:**
+- **Ctrl Held:** Delete mode enabled
+- **Shift Held:** Diagnostic mode enabled  
+- **Ctrl+Shift Held:** Insert mode enabled
+- **No Modifiers:** Normal edit mode
+
+**Panel Focus States:**
+- **Primitives Panel Active:** Editing primitive values
+- **Trajectory Panel Active:** Sampling gamma_self positions
+- **Controls Panel Active:** Editing widgets (name, notes, gamma_self_0)
+
+---
+
+#### 9. **WORKSPACE LAYOUT STATE** → *How is the UI arranged?*
+
+**Purpose:** Manages flexible dock-based workspace configuration.
+
+**Dock Visibility States:**
+- **All Visible:** Primitives, Trajectory, Controls all showing
+- **Selective:** One or more docks hidden via View menu
+- **Detached:** Dock undocked to separate window (multi-monitor)
+
+**Layout States:**
+- **Default:** 3-column (Primitives | Trajectory | Controls)
+- **Custom:** User rearranged docks
+- **Saved:** Layout persisted to QSettings
+- **Restored:** Layout loaded from previous session
+
+**Panel Size States:**
+- **Default Sizes:** Primitives=500px, Trajectory=700px, Controls=300px
+- **User Resized:** Dragged dock dividers to custom widths
+- **Docked:** Panel attached to main window
+- **Floating:** Panel detached as separate window
+
+---
+
+### State Transition Examples
+
+**Example 1: Basic Edit Flow**
+```
+IDLE (unmodified, unlocked) 
+  → drag marker → PREVIEW (hollow marker, orange trajectory)
+  → release → COMMITTED (filled, numbered label)
+  → Ctrl+S → FILE SAVED (written to CSV)
+```
+
+**Example 2: Perspective Switch**
+```
+M1 ACTIVE (editing M1, M2 shown faded)
+  → Click M2 radio button
+  → M2 ACTIVE (editing M2, M1 shown faded)
+  [Modifications preserved in both perspectives]
+```
+
+**Example 3: Undo/Redo Flow**
+```
+COMMITTED (event modified)
+  → Ctrl+Z → UNDONE (modification reversed, can redo)
+  → Ctrl+Y → RE-COMMITTED (modification re-applied)
+```
+
+**Example 4: Lock Protection**
+```
+UNLOCKED (can edit)
+  → Right-click → LOCKED (protected, lock icon visible)
+  → Attempt drag → BLOCKED (no effect, still locked)
+  → Right-click → UNLOCKED (editable again)
+```
+
+**Example 5: File Resolution**
+```
+Load M1 file
+  → Companion search → M2 FOUND
+  → Dual-perspective loaded (both files independent)
+
+Load M2 file  
+  → Companion search → M1 NOT FOUND
+  → Single-perspective loaded (M2 in both slots, M2 selected)
+```
+
+---
+
+### State-Based Feature Availability
+
+| Action | Required State | Blocked By |
+|--------|---------------|------------|
+| **Drag Marker** | Unlocked + Not First/Last | Locked, Preview Active |
+| **Delete Event** | Unlocked + Not First/Last + ≥3 events | Locked, First Event, Last Event |
+| **Insert Event** | Not Before First | First Event Target |
+| **Lock/Unlock** | Any Event | None |
+| **Undo** | Undo Stack Not Empty | Clean Stack |
+| **Redo** | Redo Stack Not Empty | No Undone Commands |
+| **Switch Perspective** | Dual-Perspective Loaded | None (works in single too) |
+| **Save** | Any | None (commits previews first) |
+| **Diagnostic Marker** | Any Event | None (read-only operation) |
+
+---
 
 ---
 
 ## Getting Started
 
 ### Installation & Requirements
+
+**New to the Interactive Editor?** See the [Installation Guide](installation_4_interactive_editor.md) for step-by-step setup instructions.
+
+**Requirements:**
 - Python 3.8+
-- matplotlib
+- PySide6 (Qt framework)
+- pyqtgraph
 - numpy
 - pandas
 - GRP core library (`core/love.py`)
 
+### CSV File Format Requirements
+
+**For complete CSV format specification, see [CSV Scenario Format](../README.md#csv-scenario-format) in the main README.**
+
+Quick reference:
+- **Required columns:** `day`, `v`, `r`, `f`, `a`, `S`
+- **Optional columns:** `notes`, `marker`, `locked`
+- **Metadata rows:** `name` and `time_unit` (first two rows)
+- **Value range:** Primitives use -10 to +10 scale
+- **File naming:** Dual-perspective scenarios must use `_M1.csv` and `_M2.csv` suffixes
+
 ### Running the Editor
 
 ```bash
-python tools/interactive_editor.py data/scenario_file.csv
+python tools/interactive_editor.py <csv_file>
 ```
 
-**Example:**
+**Examples:**
 ```bash
+# Load M1 file (automatically finds M2 if available)
 python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+
+# Load M2 file (automatically finds M1 if available)
+python tools/interactive_editor.py data/single_dating_to_love_M2.csv
+
+# Load any CSV file (works with or without _M1/_M2 suffix)
+python tools/interactive_editor.py data/my_scenario.csv
 ```
 
-The editor loads CSV scenario files generated by scenario scripts or previous editing sessions.
+### File Loading Behavior
+
+The editor intelligently handles different file scenarios:
+
+**Dual-Perspective Files:**
+- **Load M1 with M2 present:** Loads both perspectives, M1 selected by default
+- **Load M2 with M1 present:** Loads both perspectives, M1 selected by default
+
+**Single-Perspective Files:**
+- **Load M1-only:** Loads into both M1 and M2 slots, M1 selected by default
+- **Load M2-only:** Loads into both M1 and M2 slots, M2 selected by default
+- **Benefit:** Can edit from either perspective and save to M1 or M2, enabling easy conversion between perspectives
+
+**Error Handling:**
+- **File not found:** Clear error message
+- **Wrong file type:** Requires `.csv` extension, displays helpful error
+- **M1/M2 detection:** Automatically detects `_M1` or `_M2` in filename
+
+### Perspective Switching
+
+Use the **Perspective Switcher** widget (M1/M2 radio buttons) in the controls panel:
+- **M1 Button:** View and edit from Member 1's perspective
+- **M2 Button:** View and edit from Member 2's perspective
+- **Visual indicators:** Solid blue line under active perspective, dashed blue line under inactive
+- **Overlay rendering:** Inactive perspective shown as faded dotted lines for comparison
+- **Independent names:** Each perspective can have its own scenario name
 
 ---
 
 ## User Interface
 
-### Layout
-The editor window is divided into two main panels:
+### Layout (Phase 3.1 - Flexible Workspace)
+The editor uses a flexible dock-based layout with three main panels:
 
-**Left Panel - Primitives (5 plots stacked vertically):**
+**Left Panel - Primitives:**
 - Visibility (v) - Blue
 - Resonance (r) - Orange  
 - Fidelity (f) - Green
 - Altruism (a) - Red
 - Shared Breath (S) - Purple
+- Vertical stacked plots with synchronized time axes
+- Shows active perspective as solid lines, inactive as faded dotted lines
 
-**Right Panel - Gamma_Self Trajectory:**
+**Center Panel - Gamma_Self Trajectory:**
 - Complex plane plot showing relationship state evolution
 - X-axis: Ego ← → We (Real axis)
 - Y-axis: Hate ← → Love (Imaginary axis)
 - Markers: Green circle = Start, Red square = End
+- Shows active trajectory as solid line, inactive as dotted line
+
+**Right Panel - Editor Controls:**
+- **Perspective Switcher:** M1/M2 radio buttons with visual indicators
+- **Name Editor:** Editable scenario name field with Apply button
+- **Note Editor:** Event annotation editor with Apply/Clear buttons
+- **Gamma_Self_0 Editor:** Initial position editor
+- **Primitive Readout Gauge:** Shows last edited marker
+- **Gamma_Self Readout Gauge:** Shows clicked trajectory position
+- **Insertion Options:** Configure new event parameters
+
+**View Menu:** Show/hide individual panels, save/restore workspace layout
 
 ### Diagnostic Gauges
 
-**Primitive Readout Gauge (left of Fidelity plot):**
+**Perspective Switcher (Phase 3.2):**
+- Radio buttons for M1/M2 perspective selection
+- Visual indicators: Solid blue line under active, dashed blue line under inactive
+- Keyboard shortcuts: Tab or Space to toggle between perspectives
+
+**Name Editor (Phase 3.2):**
+- Editable text field for scenario name
+- Each perspective can have independent names
+- Apply button commits name changes
+- Enter key also applies changes
+
+**Note Editor (Phase 3.2):**
+- Multi-line text editor for event annotations
+- Click on any primitive marker to load its event's notes
+- Notes are shared across all primitives at the same time point
+- Apply button saves notes, Clear button removes them
+- Shows current event time in label
+
+**Primitive Readout Gauge:**
 - Displays last edited marker information
 - Shows marker ID (e.g., "7r" = event 7, resonance)
 - Shows Y-value of the primitive
 - Updates on marker drag release
 - Cleared when pressing '0' (reset view)
 
-**Gamma_Self Position Readout (left of gamma_self plot):**
+**Gamma_Self Position Readout:**
 - Displays X,Y coordinates on trajectory
 - Click on gamma_self plot to sample position
 - Useful for recording specific trajectory points
 - Persists until next click
 
-### Save Button & Controls
-Located at top-left above primitive plots:
-- **Click:** Save CSV to `data/` folder with `_modified` suffix
+**Gamma_Self_0 Editor (Phase 2.1):**
+- Edit initial relationship position
+- Real and imaginary components
+- Reset button restores default (0+0j)
 
-**Note:** PNG export is currently disabled during PyQtGraph migration. Use your operating system's screenshot tool to capture visualizations if needed.
+### Save Button & Controls
+Located in the toolbar at the top of the window:
+- **Save Button:** Save CSV to `data/` folder with `_modified` suffix
+- **Ctrl+S:** Keyboard shortcut for save
+- **Automatic perspective handling:** Saves to M1_modified or M2_modified based on active perspective
+
+**Save Behavior:**
+- M1 perspective active → saves to `*_M1_modified.csv`
+- M2 perspective active → saves to `*_M2_modified.csv`
+- Single-file scenarios: Can save to either M1 or M2, enabling perspective conversion
 
 ---
 
@@ -89,33 +536,101 @@ Located at top-left above primitive plots:
 
 ### 1. Load a Scenario
 ```bash
+# Standard dual-perspective load
 python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+
+# Load M2 file (finds M1 automatically)
+python tools/interactive_editor.py data/single_dating_to_love_M2.csv
+
+# Single-file load (converts to dual-perspective internally)
+python tools/interactive_editor.py data/my_scenario_M1.csv
 ```
 
-### 2. Edit Primitives
+### 2. Switch Perspectives (Phase 3.2)
+- Click **M1** or **M2** radio button in controls panel
+- Use **Tab** or **Space** key to toggle
+- Active perspective shows solid lines, inactive shows faded dotted lines
+- Each perspective has independent name and can be edited separately
+
+### 3. Edit Primitives
 - **Drag markers vertically** on any primitive plot to change values
 - Markers become **hollow** while in preview mode
 - Gamma_self trajectory updates in real-time (orange preview)
+- **Click on markers** to add/edit notes for that event (opens Note Editor)
 
-### 3. Save or Cancel Changes
+### 4. Save or Cancel Changes
 - **Click hollow marker** to continue editing from that position
 - **Double-click hollow marker** to cancel and revert to original
 - **Press ESC** to cancel all previews and revert to last saved state
 
-### 4. Lock/Unlock Events
+### 5. Lock/Unlock Events
 - **Right-click** on any marker to toggle lock status
 - Locked events show with a lock icon
 - Locked events cannot be dragged (useful for anchoring known data)
 
-### 5. Save Your Work
+### 6. Save Your Work
 - **Click Save button** or **Press Ctrl+S**
 - Saving automatically commits all preview changes (hollow → filled)
 - Modified events automatically marked with numbered labels
 - CSV includes `marker` and `locked` columns for persistence
+- Saves to appropriate M1_modified or M2_modified file based on active perspective
 
 ---
 
 ## Features in Detail
+
+### Robust File Loading (Phase 3.3)
+
+The editor intelligently handles various file scenarios:
+
+**Automatic M1/M2 Detection:**
+- Detects `_M1` or `_M2` suffix in filename
+- Automatically searches for companion file (M1 ↔ M2)
+- Loads both files when available for dual-perspective editing
+
+**Single-File Flexibility:**
+- **M1-only files:** Loaded into both perspectives, M1 selected by default
+- **M2-only files:** Loaded into both perspectives, M2 selected by default
+- **Benefit:** Enables easy conversion between perspectives - edit from either M1 or M2 and save to desired perspective
+
+**Error Handling:**
+- **File not found:** Clear error message with file path
+- **Invalid file type:** Must be `.csv` extension, shows helpful error
+- **Missing companion:** Info message shows single-perspective mode with conversion capability
+
+**Examples:**
+```bash
+# Load M1 with M2 present → Dual-perspective editing
+python tools/interactive_editor.py data/scenario_M1.csv
+# Output: Loading dual-perspective data: M1: ..._M1.csv, M2: ..._M2.csv
+
+# Load M1-only → Single file in both perspectives
+python tools/interactive_editor.py data/solo_M1.csv  
+# Output: M1-only: Loaded into both perspectives (M1 selected)
+#         You can edit from either perspective and save to M1 or M2
+
+# Load M2-only → Single file in both perspectives, M2 selected
+python tools/interactive_editor.py data/solo_M2.csv
+# Output: M2-only: Loaded into both perspectives (M2 selected)
+#         You can edit from either perspective and save to M1 or M2
+```
+
+### Dual-Perspective Overlay (Phase 3.3)
+
+**Visual Comparison:**
+- Active perspective: Solid lines, full opacity, interactive
+- Inactive perspective: Dotted lines, faded opacity (40%), non-interactive
+- Both trajectories visible simultaneously for comparison
+
+**Line Indicators:**
+- Solid blue line under active perspective radio button
+- Dashed blue line under inactive perspective radio button
+- Visual feedback matches plot style (solid vs dotted)
+
+**Independent Editing:**
+- Each perspective maintains separate primitive values
+- Switching perspectives preserves modifications
+- Names, notes, and modifications tracked per perspective
 
 ### Auto-Marking System
 When you modify a primitive value:
@@ -153,7 +668,7 @@ day,v,r,f,a,S,notes,marker,locked
 **Editing:**
 - `ESC` - Cancel all preview changes
 - `G` - Edit gamma_self_0 initial position (starting point)
-- `Shift+Click` - Place Counterfactual Explorer marker (explore alternative scenarios)
+- `Tab` or `Space` - Toggle between M1/M2 perspectives
 - `Ctrl+Click` - Delete event (non-locked events only, excludes first/last)
 - `Ctrl+Shift+Click` - Insert event before nearest marker (creates time gap)
 - `Ctrl+Z` - Undo last action (deletion or insertion)
@@ -393,29 +908,41 @@ day,v,r,f,a,S,notes,marker,locked
 **Solution:** Primitive gauge: Drag a marker to update. Gamma_self gauge: Click on trajectory plot
 
 **Issue:** CSV won't load  
-**Solution:** Verify format matches specification, check for `gamma_self_0` metadata line
+**Solution:** Verify format matches specification, check for `gamma_self_0` metadata line. File must have `.csv` extension.
+
+**Issue:** No M2 file found message
+**Solution:** This is normal for single-perspective scenarios. You can still switch between M1 and M2 to edit and save to either perspective.
+
+**Issue:** Overlay lines not visible
+**Solution:** Ensure you have both M1 and M2 data loaded. Single-file scenarios show the same data in both perspectives (not overlaid).
+
+**Issue:** Wrong perspective selected on load
+**Solution:** M2-only files load with M2 selected. M1-only or dual-perspective files load with M1 selected.
+
+**Issue:** Save creates wrong filename (M1 vs M2)
+**Solution:** Active perspective determines save filename. Switch to desired perspective before saving.
 
 ---
 
-## Future Enhancements (Phase 2+)
+## Future Enhancements (Phase 4+)
 
-See [future_interactive_edit_requirements.md](future_interactive_edit_requirements.md) for roadmap:
-- Dual-perspective (M1 & M2) editing with comparison view
-- Add/delete time points
+See [interactive_edit_roadmap.md](interactive_edit_roadmap.md) for roadmap:
 - Inverse editing (drag gamma_self to suggest primitives)
 - Automated sensitivity analysis
 - Constraint validation tools
+- Trajectory-to-event mapping (click gamma_self to show notes)
 
 ---
 
 ## Related Documentation
 
+- **Installation:** [installation_4_interactive_editor.md](installation_4_interactive_editor.md)
 - **Program:** `tools/interactive_editor.py`
-- **Requirements & Roadmap:** [future_interactive_edit_requirements.md](future_interactive_edit_requirements.md)
+- **Requirements & Roadmap:** [interactive_edit_roadmap.md](interactive_edit_roadmap.md)
 - **Architecture:** [ARCHITECTURE.md](../ARCHITECTURE.md)
 - **Main README:** [README.md](../README.md)
 - **Scenario Configuration:** [SCENARIO_CONFIGURATION_GUIDE.md](SCENARIO_CONFIGURATION_GUIDE.md)
 
 ---
 
-**Questions or Issues?** See `docs/future_interactive_edit_requirements.md` for known issues and future plans.
+**Questions or Issues?** See [interactive_edit_roadmap.md](interactive_edit_roadmap.md) for known issues and future plans.

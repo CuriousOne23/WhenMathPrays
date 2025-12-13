@@ -202,6 +202,8 @@ def apply_fidelity_asymmetry(
 
 **CSV scenarios:** No changes needed to primitive values (backward compatible)
 
+> ⚠️ **CRITICAL:** When creating scenarios, primitives must be scored from the correct M1/M2 perspective. See [Primitive Modeling Guide](scenarios/primitive_modeling_guide.md) for the framework - this is the most common source of errors. The perspective is non-intuitive and requires deliberate attention.
+
 **Custom weight overrides:**
 - Replace `w_neg` → `w_f_neg`
 - Remove `epsilon` references
