@@ -5,6 +5,8 @@
 **Target Audience:** Users with no Python, GitHub, or programming experience  
 **Time Required:** 20-30 minutes
 
+**After Installation:** See the [Interactive Editor User Guide](interactive_editor_user_guide.md) to learn how to use the program.
+
 ---
 
 ## What You're Installing
@@ -404,9 +406,9 @@ If you encounter problems not listed here:
 ## Next Steps
 
 Once installation is complete, read:
-- **`interactive_editor_user_guide.md`** - Learn how to use all the features
-- **`WHY_THIS_MATTERS.md`** - Understand the purpose of the GRP model
-- **`docs/fidelity_asymmetry_research_questions.md`** - Dive into the mathematics
+- **[Interactive Editor User Guide](interactive_editor_user_guide.md)** - Learn how to use all the features
+- **[WHY_THIS_MATTERS.md](../WHY_THIS_MATTERS.md)** - Understand the purpose of the GRP model
+- **[Fidelity Asymmetry Research](fidelity_asymmetry_research_questions.md)** - Dive into the mathematics
 
 ---
 

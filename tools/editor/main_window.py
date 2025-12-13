@@ -1,7 +1,14 @@
 """
-Qt main window wrapper for interactive scenario editor.
+Main window for interactive scenario editor.
 
-Embeds matplotlib figures in PySide6 framework with native
+Phase 3.5 Architecture Refactoring:
+    - Renamed from qt_window.py to main_window.py
+    - Replaced callback attributes with Qt signals
+    - Proper signal-based architecture (no middleman pattern)
+    - save_callback → save_requested signal
+    - cleanup_callback → cleanup_requested signal
+
+Embeds PyQtGraph panels in PySide6 framework with native
 toolbars, menus, and status bar.
 """
 
@@ -12,33 +19,34 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QAction, QKeySequence, QUndoStack
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
 
 
 class EditorMainWindow(QMainWindow):
     """
     Main window for interactive scenario editor.
     
-    Embeds matplotlib figures in Qt framework with native
+    Embeds PyQtGraph panels in Qt framework with native
     toolbars, menus, and status bar.
     
     Signals:
         save_requested: Emitted when user requests save (passes modifiers dict)
+        cleanup_requested: Emitted before window closes (for application cleanup)
     """
     
+    # Phase 3.5: Replace callback attributes with Qt signals
     save_requested = Signal(dict)  # {'csv': bool, 'png': bool}
+    cleanup_requested = Signal()
     
     def __init__(self, csv_file: Path):
         super().__init__()
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
-        self.setGeometry(100, 100, 1200, 590)
+        self.setGeometry(100, 100, 1400, 600)
+        self.setMinimumHeight(400)  # Allow resizing down to 400px
         
-        # Central widget will be set by interactive_editor.py with PyQtGraph panels
-        # (No matplotlib figure/canvas needed - using pure PyQtGraph)
+        # Central widget will be set by application with PyQtGraph panels
         
-        # Undo stack (for Phase 2.4 - create before toolbar)
+        # Undo stack (created before toolbar for undo/redo actions)
         self.undo_stack = QUndoStack(self)
         
         # Add toolbar
@@ -48,10 +56,6 @@ class EditorMainWindow(QMainWindow):
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage('Ready')
-        
-        # Save callback (will be set by interactive_editor.py)
-        self.save_callback = None
-        self.cleanup_callback = None
     
     def _setup_toolbar(self):
         """Create toolbar with common actions."""
@@ -85,7 +89,7 @@ class EditorMainWindow(QMainWindow):
         
         toolbar.addSeparator()
         
-        # Undo/Redo (Phase 2.4 - placeholder for now)
+        # Undo/Redo actions
         undo_action = self.undo_stack.createUndoAction(self, 'Undo')
         undo_action.setShortcut(QKeySequence.Undo)
         undo_action.setStatusTip('Undo last action (Ctrl+Z)')
@@ -101,60 +105,6 @@ class EditorMainWindow(QMainWindow):
         self._save_action = save_action
         self._undo_action = undo_action
         self._redo_action = redo_action
-    
-    def switch_undo_stack(self, new_stack: QUndoStack):
-        """
-        Switch to a different undo stack and update UI actions.
-        
-        Args:
-            new_stack: The new QUndoStack to use
-        """
-        if new_stack is None:
-            return
-        
-        # Remove old actions from toolbar
-        self._toolbar.removeAction(self._undo_action)
-        self._toolbar.removeAction(self._redo_action)
-        
-        # Update undo stack reference
-        self.undo_stack = new_stack
-        
-        # Create new actions from new stack
-        self._undo_action = self.undo_stack.createUndoAction(self, 'Undo')
-        self._undo_action.setShortcut(QKeySequence.Undo)
-        self._undo_action.setStatusTip('Undo last action (Ctrl+Z)')
-        
-        self._redo_action = self.undo_stack.createRedoAction(self, 'Redo')
-        self._redo_action.setShortcut(QKeySequence.Redo)
-        self._redo_action.setStatusTip('Redo last undone action (Ctrl+Y)')
-        
-        # Add new actions back to toolbar (in correct position)
-        # Insert before the action that comes after redo in the original setup
-        actions = self._toolbar.actions()
-        if len(actions) >= 2:
-            # Find the separator or action after redo position
-            # Undo/redo were added after second separator
-            insert_pos = None
-            separator_count = 0
-            for i, action in enumerate(actions):
-                if action.isSeparator():
-                    separator_count += 1
-                    if separator_count == 2:
-                        # Insert undo/redo right after second separator
-                        insert_pos = i + 1
-                        break
-            
-            if insert_pos is not None and insert_pos < len(actions):
-                self._toolbar.insertAction(actions[insert_pos], self._undo_action)
-                self._toolbar.insertAction(actions[insert_pos+1] if insert_pos+1 < len(actions) else None, self._redo_action)
-            else:
-                # Fallback: add to end
-                self._toolbar.addAction(self._undo_action)
-                self._toolbar.addAction(self._redo_action)
-        else:
-            # Fallback: add to end
-            self._toolbar.addAction(self._undo_action)
-            self._toolbar.addAction(self._redo_action)
     
     def _setup_view_menu(self, dock_widgets: dict):
         """
@@ -180,10 +130,8 @@ class EditorMainWindow(QMainWindow):
             csv: Whether to save CSV
             png: Whether to save PNG
         """
-        if self.save_callback:
-            self.save_callback({'csv': csv, 'png': png})
-        else:
-            self.show_message('Save callback not configured', 'warning')
+        # Phase 3.5: Emit signal instead of calling callback
+        self.save_requested.emit({'csv': csv, 'png': png})
     
     def show_message(self, message: str, level: str = 'info', timeout: int = 5000):
         """
@@ -213,11 +161,6 @@ class EditorMainWindow(QMainWindow):
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
     
-    def update_window_title(self, csv_file: Path):
-        """Update window title with new file name."""
-        self.csv_file = csv_file
-        self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
-    
     def confirm_dialog(self, title: str, message: str) -> bool:
         """
         Show confirmation dialog.
@@ -239,14 +182,18 @@ class EditorMainWindow(QMainWindow):
         return reply == QMessageBox.Yes
     
     def closeEvent(self, event):
-        """Handle window close event to properly exit the application."""
-        # Call cleanup callback if set
-        if self.cleanup_callback:
-            self.cleanup_callback()
+        """
+        Handle window close event to properly exit the application.
+        
+        Phase 3.5: Emit cleanup_requested signal instead of calling callback.
+        """
+        # Emit cleanup signal for application to handle
+        self.cleanup_requested.emit()
         
         # Accept the close event and quit the application
         event.accept()
         self.close()
+        
         # Force application exit
         from PySide6.QtWidgets import QApplication
         QApplication.quit()

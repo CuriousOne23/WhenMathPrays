@@ -15,7 +15,7 @@
 - **Phase 2.1 (✅ Complete):** Diagnostic "what-if" markers, gamma_self0 editor, event insertion
 - **Phase 2.2 (✅ Complete):** Delete events functionality
 - **Phase 2.3 (⏸️ Deferred):** Inverse editing - deferred to Phase 4
-- **Phase 3 (→ Next):** M2 integration with QDockWidget flexible workspace - [See architecture doc](phase2_architecture_recommendations.md)
+- **Phase 3 (→ Next):** M2 integration with QDockWidget flexible workspace - [See architecture doc](architecture_recommendations.md)
 - **Phase 4 (Future):** Advanced features - inverse editing, sensitivity analysis, analysis window
 
 ---
@@ -171,7 +171,7 @@
 
 ### Phase 3: M2 Integration & Flexible Workspace → NEXT
 **Duration:** 10-12 hours  
-**Status:** Planning - [See architecture doc](phase2_architecture_recommendations.md)
+**Status:** Planning - [See architecture doc](architecture_recommendations.md)
 
 **Core Concept:**
 - M1 and M2 (partner perspectives) share same graphs with overlay visualization

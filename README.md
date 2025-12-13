@@ -14,6 +14,8 @@ This repository contains the final, mathematically pure, spiritually honest form
 3. **Run:** `python scenarios/your_scenario.py`
 4. **View results** in `results/` directory
 
+**IMPORTANT:** Before creating scenarios, read [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) to understand the correct M1/M2 perspective framework.
+
 For complete configuration reference, see [Scenario Configuration Guide](docs/SCENARIO_CONFIGURATION_GUIDE.md).
 
 **Example scenarios:**
@@ -66,17 +68,27 @@ See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
 
 **γ_self(n)** updates via component-wise axis placement:
 
-**Real axis (Ego ↔ We):**
+**Real axis (Ego ↔ We): Identity Boundary**
 
 $$
 \Delta \text{Re} = w_v \cdot v + w_{S,R} \cdot S
 $$
 
-**Imaginary axis (Hate ↔ Love):**
+- **Ego-space (negative)**: Separate, distinct identities—M1 experiences self as "I" (distinct from M2)
+- **We-space (positive)**: Merged, shared identity—M1's self-concept includes M2
+
+**Imaginary axis (Hate ↔ Love): Affective Quality**
 
 $$
 \Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
 $$
+
+- **Hate (negative)**: Negative emotional states—resentment, bitterness, discord
+- **Love (positive)**: Positive emotional states—warmth, care, resonance
+
+**Identity Statement Test** for distinguishing primitives:
+- **Imaginary (r/f/a)**: Use action/feeling language—"I helped them", "I care about them" (identity remains distinct)
+- **Real (v)**: Supports identity language—"I am married to them", "We are partners" (self-concept includes M2)
 
 **Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
 
@@ -120,6 +132,8 @@ Last updated: December 3, 2025
 
 Scenarios are defined in CSV files with the following structure:
 
+**CRITICAL:** Primitives must be scored from the correct perspective. See [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) for the M1/M2 framework - this is the most common source of errors.
+
 **Optional metadata rows (first lines):**
 ```csv
 name,Scenario Display Name
@@ -129,7 +143,9 @@ time_unit,days
 - `time_unit` - Time scale: `days`, `weeks`, `months`, or `years`. Defaults to `days` if omitted.
 
 **Required columns:**
-- `day` - Time point (name kept for backward compatibility, actual unit from `time_unit` metadata)
+- `day`, `week`, `month`, or `year` - Time point (fractional values accepted, e.g., 1.5, 2.25)
+  - Column name can match your `time_unit` metadata or use `day` for backward compatibility
+  - Examples: `day` column with `time_unit,days` OR `week` column with `time_unit,weeks`
 - `v` - Visibility primitive [-10, +10] human scale
 - `r` - Resonance primitive [-10, +10]
 - `f` - Fidelity primitive [-10, +10]
@@ -160,7 +176,7 @@ Pre-built scenario templates are available in `data/templates/` (read-only):
 - Rows with `*` in `locked` column = structural anchors (start/end/key events)
 - Empty `locked` column = customize primitives as desired
 
-**Example CSV:**
+**Example CSV (using days):**
 ```csv
 name,My Custom Scenario
 time_unit,days
@@ -168,6 +184,16 @@ day,v,r,f,a,S,notes,marker,locked
 0,5,0,2,2,0,"Initial condition",,*
 14,5,-2,2,3,-1,"Early wobble - customize",star,
 60,9,10,10,9,10,"Final outcome",star,*
+```
+
+**Example CSV (using weeks):**
+```csv
+name,Summer Romance
+time_unit,weeks
+week,v,r,f,a,S,notes,marker,locked
+0,3,2,1,1,0,"Met at beach",,*
+2,6,5,4,3,3,"Getting closer",star,
+12,9,8,9,8,9,"In love",star,*
 ```
 
 ---

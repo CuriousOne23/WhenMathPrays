@@ -57,7 +57,7 @@ class PrimitivePanel:
         for i, prim in enumerate(self.PRIMITIVE_NAMES):
             ax = fig.add_subplot(inner_gs[i, 0])
             ax.set_ylabel(self.PRIMITIVE_LABELS[prim], fontsize=9)
-            ax.set_ylim(-11, 11)
+            ax.set_ylim(-10, 10)
             ax.grid(True, alpha=0.3)
             ax.axhline(y=0, color='k', linestyle='-', linewidth=0.5, alpha=0.5)
             if i == len(self.PRIMITIVE_NAMES) - 1:

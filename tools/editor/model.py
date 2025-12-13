@@ -69,10 +69,29 @@ class EventPoint:
 
 
 class EditorModel:
-    """Model for interactive scenario editing."""
+    """
+    Model for interactive scenario editing.
+    
+    Manages event data, CSV I/O, and modification tracking for dual-perspective editing.
+    Supports both M1 (first person) and M2 (second person) perspectives with independent
+    event lists and shared modification tracking.
+    
+    Attributes:
+        events_m1: List of EventPoint objects for M1 perspective
+        events_m2: List of EventPoint objects for M2 perspective
+        name_m1: Scenario name for M1 perspective
+        name_m2: Scenario name for M2 perspective
+        modified_primitives: ObservableDict tracking which primitives have been modified (time-based keys)
+        preview_changes: Dict storing temporary preview changes during drag operations
+        marker_positions: Dict storing gamma_self positions for modified event markers
+        gamma_self_0: Initial gamma_self position (complex number)
+        time_unit: Time unit for scenario (e.g., "days")
+    """
     
     def __init__(self):
-        self.name: str = ""
+        self.name: str = ""  # Deprecated: use name_m1 and name_m2
+        self.name_m1: str = ""  # Name for M1 perspective
+        self.name_m2: str = ""  # Name for M2 perspective
         self.time_unit: str = "days"
         self.filepath: str = ""  # Store filepath for fallback name extraction
         self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
@@ -84,11 +103,17 @@ class EditorModel:
         self.filepath: Optional[Path] = None
         self.dirty: bool = False  # Unsaved changes?
         self.modified_indices: set = set()  # Track which events were modified
-        self.modified_primitives: ObservableDict = ObservableDict()  # {event_time: {'v', 'r', ...}}
+        
+        # Perspective-specific modification tracking
+        self.modified_primitives_m1: ObservableDict = ObservableDict()  # {event_time: {'v', 'r', ...}}
+        self.modified_primitives_m2: ObservableDict = ObservableDict()  # {event_time: {'v', 'r', ...}}
+        
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
+        
         # Pinned marker positions: where gamma_self was when each primitive was first modified
-        self.marker_positions: Dict[tuple, complex] = {}  # {(event_time, primitive): gamma_self_position}
+        self.marker_positions_m1: Dict[tuple, complex] = {}  # {(event_time, primitive): gamma_self_position}
+        self.marker_positions_m2: Dict[tuple, complex] = {}  # {(event_time, primitive): gamma_self_position}
     
     def load_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
@@ -107,8 +132,14 @@ class EditorModel:
         self.gamma_self_0_original = self.gamma_self_0  # Store original for reset
         self.gamma_self_0_modified = False  # Not modified on load
         self.time_unit = metadata.get('time_unit', 'days')
+        
+        # Store perspective-specific name
         if metadata.get('name'):
-            self.name = metadata['name']
+            if perspective == "M1":
+                self.name_m1 = metadata['name']
+            else:
+                self.name_m2 = metadata['name']
+        
         print(f"[DEBUG] EditorModel.load_csv: gamma_self_0 = {self.gamma_self_0}")
         
         if perspective == "M1":
@@ -128,10 +159,11 @@ class EditorModel:
         events = self.events_m1 if perspective == "M1" else self.events_m2
 
         # Ensure marker and locked columns are set for edited/locked events
-        print(f"[SAVE] modified_primitives before save: {self.modified_primitives}")
+        modified_prims = self.get_modified_primitives(perspective)
+        print(f"[SAVE] modified_primitives before save: {modified_prims}")
         # Build time-to-index mapping
         time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
-        for mod_time, mod_prims in self.modified_primitives.items():
+        for mod_time, mod_prims_set in modified_prims.items():
             if mod_time in time_to_idx:
                 idx = time_to_idx[mod_time]
                 event = events[idx]
@@ -143,12 +175,14 @@ class EditorModel:
                     print(f"[SAVE] Event at time {mod_time} (index {idx}) already has marker='{event.marker}'")
                 # Always lock modified events
                 event.locked = True
-                print(f"[SAVE] Set locked=True for event at time {mod_time} (index {idx}), modified prims: {mod_prims}")
+                print(f"[SAVE] Set locked=True for event at time {mod_time} (index {idx}), modified prims: {mod_prims_set}")
 
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             # Write metadata if present
-            if self.name:
-                f.write(f"name,{self.name}\n")
+            # Use perspective-specific name
+            name = self.name_m1 if perspective == "M1" else self.name_m2
+            if name:
+                f.write(f"name,{name}\n")
             f.write(f"time_unit,{self.time_unit}\n")
             # Write gamma_self_0 (format: -5+3j or 0+0j)
             gamma_str = f"{self.gamma_self_0.real:+.0f}{self.gamma_self_0.imag:+.0f}j"
@@ -203,9 +237,10 @@ class EditorModel:
 
             # Track which primitive was modified (by event TIME, not index)
             event_time = events[event_index].time
-            if event_time not in self.modified_primitives:
-                self.modified_primitives[event_time] = set()
-            self.modified_primitives[event_time].add(primitive)
+            modified_prims = self.get_modified_primitives(perspective)
+            if event_time not in modified_prims:
+                modified_prims[event_time] = set()
+            modified_prims[event_time].add(primitive)
 
             self.dirty = True
             self.modified_indices.add(event_index)
@@ -235,7 +270,18 @@ class EditorModel:
         return events[event_index].locked
     
     def get_events(self, perspective: str = "M1") -> List[EventPoint]:
-        """Get events for specified perspective."""
+        """
+        Get events list for the specified perspective.
+        
+        Returns a copy of the events list to prevent external modification of the
+        internal state. Use update methods to modify events.
+        
+        Args:
+            perspective: "M1" or "M2"
+            
+        Returns:
+            List of EventPoint objects for the specified perspective
+        """
         return self.events_m1 if perspective == "M1" else self.events_m2
     
     def get_primitives_array(self, perspective: str = "M1", include_preview: bool = False) -> Dict[str, List[float]]:
@@ -318,9 +364,6 @@ class EditorModel:
         events.insert(insert_idx, new_event)
         self.dirty = True
         
-        # NOTE: modified_primitives uses time values as keys, so no shifting needed
-        print(f"[INSERT] modified_primitives (time-based, no shift needed): {self.modified_primitives}")
-        
         # Mark this event as an inserted event for visual distinction
         if not hasattr(self, 'inserted_events'):
             self.inserted_events = set()
@@ -359,10 +402,11 @@ class EditorModel:
         # Shift modified_primitives indices for all events after event_index
         # Remove modifications for the deleted event (by time value)
         deleted_time = events[event_index].time
-        if deleted_time in self.modified_primitives:
+        modified_prims = self.get_modified_primitives(perspective)
+        if deleted_time in modified_prims:
             print(f"[DELETE] Removing modifications for deleted event at time {deleted_time}")
-            del self.modified_primitives[deleted_time]
-        print(f"[DELETE] modified_primitives after delete: {self.modified_primitives}")
+            del modified_prims[deleted_time]
+        print(f"[DELETE] modified_primitives after delete: {modified_prims}")
         
         return deleted_event
     
@@ -371,12 +415,15 @@ class EditorModel:
         Get display name for the scenario.
         
         Returns:
-            - self.name if set in CSV
+            - name_m1 or name_m2 if set in CSV
             - "M1" or "M2" if filename contains _M1 or _M2
             - perspective ("M1" or "M2") as fallback
         """
-        if self.name:
-            return self.name
+        # Use perspective-specific name
+        if perspective == "M1" and self.name_m1:
+            return self.name_m1
+        elif perspective == "M2" and self.name_m2:
+            return self.name_m2
         
         # Try to extract from filename
         if self.filepath:
@@ -426,10 +473,14 @@ class EditorModel:
         events = self.get_events(perspective)
         if event_idx >= len(events):
             return False
+        
         event_time = events[event_idx].time
-        if event_time not in self.modified_primitives:
+        modified_prims = self.get_modified_primitives(perspective)
+        
+        if event_time not in modified_prims:
             return False
-        return prim in self.modified_primitives[event_time]
+        
+        return prim in modified_prims[event_time]
     
     def is_primitive_modified(self, event_idx: int, prim: str, perspective: str = "M1") -> bool:
         """Alias for is_modified() for backwards compatibility."""
@@ -478,9 +529,10 @@ class EditorModel:
         """
         # modified_primitives keys are time values, convert to current indices
         events = self.get_events(perspective)
+        modified_prims = self.get_modified_primitives(perspective)
         modified_indices = set()
         time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
-        for mod_time in self.modified_primitives.keys():
+        for mod_time in modified_prims.keys():
             if mod_time in time_to_idx:
                 modified_indices.add(time_to_idx[mod_time])
         return modified_indices
@@ -515,10 +567,80 @@ class EditorModel:
         
         # Remove from modified set (by time)
         event_time = event.time
-        if event_time in self.modified_primitives:
-            self.modified_primitives[event_time].discard(prim)
-            if not self.modified_primitives[event_time]:
-                del self.modified_primitives[event_time]
+        modified_prims = self.get_modified_primitives(perspective)
+        if event_time in modified_prims:
+            modified_prims[event_time].discard(prim)
+            if not modified_prims[event_time]:
+                del modified_prims[event_time]
         
         self.dirty = True
         return baseline_value
+    
+    # === Perspective-Aware API Methods ===
+    
+    def get_modified_primitives(self, perspective: str = "M1") -> ObservableDict:
+        """
+        Get modified primitives dictionary for specific perspective.
+        
+        Args:
+            perspective: "M1" or "M2"
+        
+        Returns:
+            ObservableDict mapping event_time to set of modified primitive names
+        """
+        return self.modified_primitives_m1 if perspective == "M1" else self.modified_primitives_m2
+    
+    def get_marker_positions(self, perspective: str = "M1") -> Dict[tuple, complex]:
+        """
+        Get pinned marker positions for specific perspective.
+        
+        Args:
+            perspective: "M1" or "M2"
+        
+        Returns:
+            Dict mapping (event_time, primitive) to gamma_self position
+        """
+        return self.marker_positions_m1 if perspective == "M1" else self.marker_positions_m2
+    
+    def pin_marker(self, event_time: float, primitive: str, gamma_self_position: complex, perspective: str = "M1"):
+        """
+        Pin a marker at specific gamma_self position for given perspective.
+        
+        Args:
+            event_time: Event time value
+            primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
+            gamma_self_position: Complex number representing gamma_self value
+            perspective: "M1" or "M2"
+        """
+        marker_positions = self.get_marker_positions(perspective)
+        marker_positions[(event_time, primitive)] = gamma_self_position
+    
+    def unpin_marker(self, event_time: float, primitive: str, perspective: str = "M1"):
+        """
+        Remove a marker from pinned positions (when primitive returns to baseline).
+        
+        Args:
+            event_time: Event time value
+            primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
+            perspective: "M1" or "M2"
+        """
+        marker_positions = self.get_marker_positions(perspective)
+        key = (event_time, primitive)
+        if key in marker_positions:
+            del marker_positions[key]
+    
+    def clear_primitive_modification(self, event_time: float, primitive: str, perspective: str = "M1"):
+        """
+        Remove a primitive from the modified_primitives tracking (when it returns to baseline).
+        
+        Args:
+            event_time: Event time value
+            primitive: Primitive name ('v', 'r', 'f', 'a', 'S')
+            perspective: "M1" or "M2"
+        """
+        modified_prims = self.get_modified_primitives(perspective)
+        if event_time in modified_prims:
+            modified_prims[event_time].discard(primitive)
+            # If no more modifications at this time, remove the time key
+            if not modified_prims[event_time]:
+                del modified_prims[event_time]

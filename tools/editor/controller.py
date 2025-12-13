@@ -9,8 +9,11 @@ import numpy as np
 import pandas as pd
 from typing import Optional, List
 from PySide6.QtCore import QTimer
+from PySide6.QtGui import QUndoStack
+from PySide6.QtWidgets import QApplication
 from tools.editor.constants import PRIMITIVE_NAMES, is_inserted_event
 from tools.editor.editor_constants import FLOAT_TOLERANCE, TIME_MATCH_TOLERANCE
+from tools.editor.editor_state import EditorState, PerspectiveState, FileLoadState
 from tools.editor.editor_utils import (
     remove_event_markers, clear_modified_primitives_for_event,
     get_all_modified_markers, update_baseline_arrays
@@ -22,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.love import update_gamma_self, DEFAULT_WEIGHTS
+from tools.editor.observability import ObservabilityLog
 
 
 class EditorController:
@@ -44,7 +48,7 @@ class EditorController:
     - Modified state synchronization to views
     """
     
-    def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None):
+    def __init__(self, model, primitive_panel, trajectory_panel, undo_stack=None, editor_state=None):
         """
         Initialize controller.
         
@@ -53,21 +57,28 @@ class EditorController:
             primitive_panel: PrimitivePanel instance
             trajectory_panel: TrajectoryPanel instance
             undo_stack: QUndoStack instance (optional)
+            editor_state: EditorState instance (optional, creates new if None)
         """
         self.model = model
         self.primitive_panel = primitive_panel
         self.trajectory_panel = trajectory_panel
-        self.undo_stack = undo_stack
         
-        # Phase 3 refactoring: Removed controller reference from view (violates MVC)
-        # self.primitive_panel.controller = self
+        # Separate undo stacks for each perspective
+        self.undo_stack_m1 = undo_stack if undo_stack else None
+        self.undo_stack_m2 = QUndoStack() if undo_stack else None
+        
+        # Active undo stack (points to current perspective's stack)
+        self.undo_stack = self.undo_stack_m1
+        
+        # Centralized state management
+        self.state = editor_state if editor_state is not None else EditorState()
         
         # Set up observer pattern for automatic cache invalidation
-        self.model.modified_primitives.add_observer(self._on_modified_primitives_changed)
+        # Register observers for BOTH perspectives
+        self.model.get_modified_primitives("M1").add_observer(self._on_modified_primitives_changed)
+        self.model.get_modified_primitives("M2").add_observer(self._on_modified_primitives_changed)
         
         self.debounce_timer: Optional[threading.Timer] = None
-        self.dirty = False
-        self.perspective = "M1"  # Currently only M1 supported
         
         # GRP computation parameters
         self.weights = DEFAULT_WEIGHTS.copy()
@@ -76,47 +87,92 @@ class EditorController:
         # Track last committed trajectory for comparison
         self.committed_gamma_trajectory = None
         
-        # Store baseline values (from CSV) for reset
-        self.baseline_primitives = {}
-        # Store ORIGINAL CSV baseline values - never updated, used for reset comparison
-        self.original_baseline_primitives = {}
-        
-        # Track initial load to allow auto-zoom only on first render
-        self.initial_load_complete = False
-        
-        # Track if we're in undo/redo operation (to prevent recursive undo commands)
-        self.in_undo_redo = False
+        # Store baseline values (from CSV) using time-keyed dictionary for reset
+        # Key: (time, primitive) -> Value: baseline_value
+        # Separate baselines for M1 and M2 perspectives
+        self.baseline_by_time_m1 = {}
+        self.baseline_by_time_m2 = {}
     
-    def load_scenario(self, filepath: str):
+    @property
+    def perspective(self) -> str:
+        """Get current perspective as string (for backward compatibility)."""
+        return self.state.perspective.value
+    
+    @property
+    def dirty(self) -> bool:
+        """Get dirty flag from state (for backward compatibility)."""
+        return self.state.dirty
+    
+    @property
+    def initial_load_complete(self) -> bool:
+        """Get initial load complete flag from state."""
+        return self.state.initial_load_complete
+    
+    @initial_load_complete.setter
+    def initial_load_complete(self, value: bool):
+        """Set initial load complete flag in state."""
+        self.state.initial_load_complete = value
+    
+    @property
+    def in_undo_redo(self) -> bool:
+        """Get undo/redo operation flag from state."""
+        return self.state.is_in_undo_operation()
+    
+    def load_scenario(self, m1_filepath: str, m2_filepath: Optional[str] = None):
         """
         Load scenario from CSV and update views.
+        
         Args:
-            filepath: Path to CSV file
+            m1_filepath: Path to M1 CSV file
+            m2_filepath: Path to M2 CSV file (None if doesn't exist)
         """
-        # Load into model
-        self.model.load_csv(filepath, self.perspective)
-        print(f"[DEBUG] EditorController.load_scenario: events_m1 count = {len(self.model.events_m1) if hasattr(self.model, 'events_m1') else 'N/A'}")
+        # Load M1 data
+        self.model.load_csv(m1_filepath, "M1")
+        
+        # Load M2 data if provided
+        if m2_filepath:
+            self.model.load_csv(m2_filepath, "M2")
+            self.state.set_file_load_state(FileLoadState.DUAL_PERSPECTIVE)
+        else:
+            # Single file loaded - determine if M1 or M2
+            # This is set later by interactive_editor based on file detection
+            pass
 
-        # Store baseline primitives (for reset functionality)
-        self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
-        # Store original CSV values - these NEVER change, used for reset comparison
-        self.original_baseline_primitives = {}
-        for key, val in self.baseline_primitives.items():
-            if isinstance(val, np.ndarray):
-                self.original_baseline_primitives[key] = val.copy()
-            else:
-                self.original_baseline_primitives[key] = val
+        # Store baseline primitives using time-keyed dictionary (insertion-proof!)
+        # Store baselines for M1
+        temp_primitives_m1 = self.model.get_primitives_array("M1", include_preview=False)
+        self.baseline_by_time_m1 = {}
+        for i, time in enumerate(temp_primitives_m1['time']):
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (float(time), prim)
+                self.baseline_by_time_m1[key] = float(temp_primitives_m1[prim][i])
+        
+        # Store baselines for M2 if loaded
+        if m2_filepath:
+            temp_primitives_m2 = self.model.get_primitives_array("M2", include_preview=False)
+            self.baseline_by_time_m2 = {}
+            for i, time in enumerate(temp_primitives_m2['time']):
+                for prim in ['v', 'r', 'f', 'a', 'S']:
+                    key = (float(time), prim)
+                    self.baseline_by_time_m2[key] = float(temp_primitives_m2[prim][i])
 
         # Initialize modified_primitives as empty - will track user modifications only
         events = self.model.get_events(self.perspective)
-        print(f"[DEBUG] EditorController.load_scenario: get_events returned {len(events)} events")
-        self.model.modified_primitives.clear()
+        self.model.get_modified_primitives(self.perspective).clear()
         # Don't mark anything as modified on load - user hasn't modified anything yet
 
         # Set scenario name on both panels
         display_name = self.model.get_display_name(self.perspective)
         self.primitive_panel.set_scenario_name(display_name)
         self.trajectory_panel.set_scenario_name(display_name)
+        
+        # Set time unit on primitive panel
+        self.primitive_panel.set_time_unit(self.model.time_unit)
+        
+        # Initialize perspective in panels to match controller
+        self.primitive_panel.current_perspective = self.perspective
+        self.trajectory_panel.current_perspective = self.perspective
+        print(f"[CONTROLLER] Initialized panel perspectives to {self.perspective}")
 
         # Update views
         self._update_all_views()
@@ -125,6 +181,138 @@ class EditorController:
         self.initial_load_complete = False
         self._recompute_trajectory_immediate()
         self.initial_load_complete = True  # Preserve view on all subsequent updates
+    
+    def switch_perspective(self, perspective: str):
+        """
+        Switch between M1 and M2 perspectives.
+        
+        Args:
+            perspective: Either 'M1' or 'M2'
+        """
+        if perspective not in ['M1', 'M2']:
+            raise ValueError(f"Invalid perspective: {perspective}. Must be 'M1' or 'M2'")
+        
+        if perspective == self.perspective:
+            return  # Already on this perspective
+        
+        # Update perspective using state transition
+        old_perspective = self.perspective
+        target_state = PerspectiveState.M1 if perspective == 'M1' else PerspectiveState.M2
+        
+        ObservabilityLog.section(f"=== PERSPECTIVE SWITCH: {old_perspective} → {perspective} ===")
+        ObservabilityLog.event("perspective_switch_start", 
+                               old_perspective=old_perspective, 
+                               new_perspective=perspective,
+                               m1_labels=len(self.primitive_panel.modified_labels_m1),
+                               m2_labels=len(self.primitive_panel.modified_labels_m2))
+        
+        self.state.switch_perspective(target_state)
+        
+        # Update display name on panels
+        display_name = self.model.get_display_name(perspective)
+        self.primitive_panel.set_scenario_name(display_name)
+        self.trajectory_panel.set_scenario_name(display_name)
+        
+        # Set time unit on primitive panel
+        self.primitive_panel.set_time_unit(self.model.time_unit)
+        
+        # Store old labels for debugging
+        print(f"[CONTROLLER] Hiding {len(self.primitive_panel.modified_labels_m1 if old_perspective == 'M1' else self.primitive_panel.modified_labels_m2)} primitive labels for {old_perspective}")
+        
+        # Update current_perspective in panels BEFORE updating views
+        # This ensures labels are added to the correct perspective storage
+        print(f"[CONTROLLER] Updating panel perspectives from {old_perspective} to {perspective}")
+        self.primitive_panel.current_perspective = perspective
+        self.trajectory_panel.current_perspective = perspective
+        
+        # Remove ALL TextItems from all plots before switching
+        import pyqtgraph as pg
+        
+        # Clear tracking dictionaries
+        self.primitive_panel.modified_labels_m1.clear()
+        self.primitive_panel.modified_labels_m2.clear()
+        
+        # Remove every TextItem from scene
+        for prim, plot_item in self.primitive_panel.plot_items.items():
+            to_remove = [item for item in plot_item.items[:] if isinstance(item, pg.TextItem)]
+            for item in to_remove:
+                plot_item.removeItem(item)
+                item.deleteLater()
+        
+        QApplication.processEvents()
+        
+        # Query model to determine labels needed for NEW perspective
+        labels_to_recreate = []
+        
+        # Scan marker_positions to find what needs labels (more reliable than modified_primitives)
+        events = self.model.get_events(perspective)
+        marker_positions = self.model.get_marker_positions(perspective)
+        
+        for (event_time, prim), gamma_pos in marker_positions.items():
+            # Find event index by time
+            event_idx = None
+            for idx, event in enumerate(events):
+                if abs(event.time - event_time) < 0.001:
+                    event_idx = idx
+                    break
+            
+            if event_idx is None:
+                continue
+            
+            event = self.model.get_event(event_idx, perspective)
+            value = event.markers[prim].value
+            # If there's a marker position, the user modified it, so add label
+            labels_to_recreate.append((event_time, prim, value))
+        
+        # Switch to the appropriate undo stack for this perspective
+        if perspective == "M1":
+            self.undo_stack = self.undo_stack_m1
+            print(f"[UNDO] Switched to M1 undo stack (size: {self.undo_stack.count() if self.undo_stack else 0})")
+        else:  # M2
+            self.undo_stack = self.undo_stack_m2
+            print(f"[UNDO] Switched to M2 undo stack (size: {self.undo_stack.count() if self.undo_stack else 0})")
+        
+        # Notify any UI components about the stack change
+        # This allows the main window to update its undo/redo actions
+        if hasattr(self, '_window_ref') and self._window_ref is not None:
+            self._window_ref.switch_undo_stack(self.undo_stack)
+        
+        # Continue with view rebuild
+        QApplication.processEvents()
+        
+        # Update modified state cache for new perspective BEFORE updating views
+        # This ensures markers show correct hollow/solid state
+        self._update_view_modified_state()
+        
+        # Update all views with new perspective data
+        self._update_all_views()
+        
+        # Recreate labels for the current perspective
+        for event_time, prim, value in labels_to_recreate:
+            self.primitive_panel._add_marker_label(event_time, prim, value)
+        
+        # Recompute trajectory for new perspective
+        # This will recreate all trajectory labels automatically via _display_trajectory
+        self._recompute_trajectory_immediate()
+        
+        ObservabilityLog.event("perspective_switch_complete", 
+                               old_perspective=old_perspective, 
+                               new_perspective=perspective,
+                               m1_labels_final=len(self.primitive_panel.modified_labels_m1),
+                               m2_labels_final=len(self.primitive_panel.modified_labels_m2))
+    
+    def has_dual_perspective(self) -> bool:
+        """
+        Check if both M1 and M2 perspectives have data loaded.
+        
+        Used to determine whether to show perspective switcher UI and enable
+        dual-perspective overlay visualization.
+        
+        Returns:
+            True if both M1 and M2 have events loaded, False if only one perspective
+        """
+        return (hasattr(self.model, 'events_m1') and len(self.model.events_m1) > 0 and
+                hasattr(self.model, 'events_m2') and len(self.model.events_m2) > 0)
     
     def on_diagnostic_marker_placed(self, event_idx: int):
         """
@@ -169,6 +357,14 @@ class EditorController:
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
         Handle primitive value change from UI drag (on release - commit to model).
+        
+        This is called when the user releases a draggable marker, finalizing the edit.
+        Creates an undo command and updates the model, then recomputes the trajectory.
+        
+        Args:
+            event_index: Index of the event being modified
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+            value: New value for the primitive
         """
         # Get old value for undo
         old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
@@ -178,7 +374,7 @@ class EditorController:
             return
         
         # Create undo command and push to stack (unless we're in undo/redo)
-        if self.undo_stack and not self.in_undo_redo:
+        if self.undo_stack and not self.state.is_in_undo_operation():
             from tools.editor.commands import EditPrimitiveCommand
             command = EditPrimitiveCommand(self, event_index, primitive, old_value, value)
             self.undo_stack.push(command)
@@ -190,10 +386,10 @@ class EditorController:
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         events = self.model.get_events(self.perspective)
         event_time = events[event_index].time
-        if event_time not in self.model.modified_primitives:
-            self.model.modified_primitives[event_time] = set()
-        self.model.modified_primitives[event_time].add(primitive)
-        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
+        modified_prims = self.model.get_modified_primitives(self.perspective)
+        if event_time not in modified_prims:
+            modified_prims[event_time] = set()
+        modified_prims[event_time].add(primitive)
         
         # Store marker position from committed trajectory (must happen before display)
         # First compute trajectory to get the position
@@ -217,9 +413,8 @@ class EditorController:
         # Store marker position using time as key
         marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
         gamma_pos = gamma_trajectory[marker_idx]
-        marker_key = (event_time, primitive)
-        self.model.marker_positions[marker_key] = gamma_pos
-        print(f"Marker ({event_time}, {primitive}) → gamma_self[{marker_idx}] = {gamma_pos}")
+        self.model.pin_marker(event_time, primitive, gamma_pos, self.perspective)
+        print(f"Marker ({event_time}, {primitive}) -> gamma_self[{marker_idx}] = {gamma_pos}")
         
         # === Phase 3: Incremental Update ===
         # Query modified status from Model (single source of truth)
@@ -236,37 +431,54 @@ class EditorController:
         """
         Apply primitive change without undo tracking (used by undo commands).
         
+        Updates the model and marker positions, checking if the value is back to baseline
+        to determine modified state. Does not create undo commands (used internally by
+        undo/redo operations to avoid infinite recursion).
+        
         Args:
-            event_index: Event index
-            primitive: Primitive name
-            value: New value
+            event_index: Index of the event being modified
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+            value: New value for the primitive
+        
+        Side Effects:
+            - Updates model.modified_primitives dictionary
+            - Updates model.marker_positions for trajectory visualization
+            - Triggers incremental UI update for the modified marker
         """
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         
         # Check if this value is back to baseline
-        baseline_value = self.baseline_primitives[primitive][event_index]
         events = self.model.get_events(self.perspective)
         event_time = events[event_index].time
+        
+        # Use time-keyed baseline (insertion-proof!)
+        # Use .get() with default 0.0 for inserted events that may not have baseline
+        baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+        baseline_value = baseline_dict.get((event_time, primitive), 0.0)
+        
         if abs(value - baseline_value) < FLOAT_TOLERANCE:
             # Back to baseline, remove from modified set
-            if event_time in self.model.modified_primitives:
-                self.model.modified_primitives[event_time].discard(primitive)
-                if not self.model.modified_primitives[event_time]:
-                    del self.model.modified_primitives[event_time]
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            if event_time in modified_prims:
+                modified_prims[event_time].discard(primitive)
+                if not modified_prims[event_time]:
+                    del modified_prims[event_time]
             
             # Also remove marker position so it doesn't show on gamma_self graph
             marker_key = (event_time, primitive)
-            if marker_key in self.model.marker_positions:
-                del self.model.marker_positions[marker_key]
-                print(f"[DEBUG] Removed marker position for {marker_key} (back to baseline)")
+            marker_positions = self.model.get_marker_positions(self.perspective)
+            if marker_key in marker_positions:
+                del marker_positions[marker_key]
+            
+            # Remove the label from primitive panel
+            self.primitive_panel.remove_marker_label(event_time, primitive)
         else:
             # Modified, add to set
-            if event_time not in self.model.modified_primitives:
-                self.model.modified_primitives[event_time] = set()
-            self.model.modified_primitives[event_time].add(primitive)
-        
-        print(f"[DEBUG] Updated modified_primitives: {self.model.modified_primitives}")
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            if event_time not in modified_prims:
+                modified_prims[event_time] = set()
+            modified_prims[event_time].add(primitive)
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -288,15 +500,26 @@ class EditorController:
             gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
             gamma_trajectory.append(gamma_self)
         
+        # Check if value is back at baseline (use perspective-aware baseline)
+        baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+        baseline_value = baseline_dict.get((event_time, primitive), 0.0)
+        at_baseline = abs(value - baseline_value) < 0.001  # Small tolerance for float comparison
+        
+        print(f"[BASELINE_CHECK] event_idx={event_index}, prim={primitive}, time={event_time}, value={value:.3f}, baseline={baseline_value:.3f}, at_baseline={at_baseline}")
+        
+        # Clear modification tracking if back at baseline
+        if at_baseline:
+            print(f"Primitive {event_index}/{primitive} (time {event_time}) back to baseline, clearing modification")
+            self.model.clear_primitive_modification(event_time, primitive, self.perspective)
+            self.model.unpin_marker(event_time, primitive, self.perspective)
+            print(f"[BASELINE_CHECK] Cleared modification for ({event_time}, {primitive})")
+        
         # Store marker position only if still modified (not back to baseline)
         if self.model.is_primitive_modified(event_index, primitive, self.perspective):
             marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
             gamma_pos = gamma_trajectory[marker_idx]
-            marker_key = (event_time, primitive)
-            self.model.marker_positions[marker_key] = gamma_pos
-            print(f"Marker ({event_time}, {primitive}) → gamma_self[{marker_idx}] = {gamma_pos}")
-        else:
-            print(f"Primitive {event_index}/{primitive} (time {event_time}) back to baseline, not storing marker position")
+            self.model.pin_marker(event_time, primitive, gamma_pos, self.perspective)
+            print(f"Marker ({event_time}, {primitive}) -> gamma_self[{marker_idx}] = {gamma_pos}")
         
         # === Phase 3: Incremental Update ===
         # Query modified status from Model (single source of truth)
@@ -308,9 +531,11 @@ class EditorController:
         # Add or update marker label if modified, remove if back to baseline
         event = self.model.get_event(event_index, self.perspective)
         if is_modified:
-            self.primitive_panel._add_marker_label(event_index, primitive, event.time, value)
+            # Use time-based key (survives insertion/deletion)
+            self.primitive_panel._add_marker_label(event.time, primitive, value)
         else:
-            self.primitive_panel.remove_marker_label(event_index, primitive)
+            print(f"[LABEL_REMOVE] Removing label for ({event.time}, {primitive}) - back to baseline")
+            self.primitive_panel.remove_marker_label(event.time, primitive)
         
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
@@ -328,7 +553,7 @@ class EditorController:
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=True)
         
         # Schedule debounced recomputation
-        self.dirty = True
+        self.state.mark_dirty()
         self._schedule_recomputation_preview()
     
     def on_primitive_reset(self, event_index: int, primitive: str):
@@ -344,22 +569,20 @@ class EditorController:
             # Get current value
             old_value = self.model.get_event(event_index, self.perspective).markers[primitive].value
             
-            # Get original CSV baseline value by finding the event's original position
-            # After insertions, we need to map current time back to original CSV row
+            # Get original CSV baseline value using time-based lookup
             event = self.model.get_event(event_index, self.perspective)
             event_time = event.time
             
-            # Find the index in original baseline that matches this time
-            original_times = np.array(self.original_baseline_primitives['time'])
-            original_idx = np.where(np.abs(original_times - event_time) < TIME_MATCH_TOLERANCE)[0]
-            
-            if len(original_idx) == 0:
+            # Check if this time exists in original baseline (not an inserted event)
+            baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+            key = (event_time, primitive)
+            if key in baseline_dict:
+                baseline_value = baseline_dict[key]
+                print(f"Resetting to baseline value: {baseline_value} (from original CSV at time {event_time})")
+            else:
                 # Inserted event - reset to 0
                 baseline_value = 0.0
                 print(f"Event at time {event_time} is inserted (not in original CSV), resetting to 0")
-            else:
-                baseline_value = self.original_baseline_primitives[primitive][original_idx[0]]
-                print(f"Resetting to baseline value: {baseline_value} (from original CSV)")
         except Exception as e:
             print(f"ERROR getting values: {e}")
             import traceback
@@ -372,10 +595,12 @@ class EditorController:
             return
         
         # Create undo command and push to stack (unless we're in undo/redo)
-        if self.undo_stack and not self.in_undo_redo:
+        if self.undo_stack and not self.state.is_in_undo_operation():
             from tools.editor.commands import ResetPrimitiveCommand
             command = ResetPrimitiveCommand(self, event_index, primitive, old_value, baseline_value)
+            print(f"[UNDO] Pushing ResetPrimitiveCommand to stack (event={event_index}, prim={primitive}, {old_value:.2f}->{baseline_value:.2f})")
             self.undo_stack.push(command)
+            print(f"[UNDO] Stack size now: {self.undo_stack.count()}, can undo: {self.undo_stack.canUndo()}")
             return  # Command.redo() will handle the update
         
         # If no undo stack or in undo/redo, apply directly
@@ -395,12 +620,14 @@ class EditorController:
             self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
             
             event = self.model.get_event(event_index, self.perspective)
-            print(f"Reset complete. Event {event_index} (time={event.time}), modified_primitives: {self.model.modified_primitives}")
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            print(f"Reset complete. Event {event_index} (time={event.time}), modified_primitives: {modified_prims}")
             
             # Remove marker position for this primitive (using time-based key)
             marker_key = (event.time, primitive)
-            if marker_key in self.model.marker_positions:
-                del self.model.marker_positions[marker_key]
+            marker_positions = self.model.get_marker_positions(self.perspective)
+            if marker_key in marker_positions:
+                del marker_positions[marker_key]
                 print(f"Removed marker position for {marker_key}")
             else:
                 print(f"No marker position found for {marker_key}")
@@ -411,8 +638,8 @@ class EditorController:
             print(f"After reset, is_modified({event_index}, {primitive}) = {is_modified}")
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
             
-            # Remove the marker label
-            self.primitive_panel.remove_marker_label(event_index, primitive)
+            # Remove the marker label (use time-based key)
+            self.primitive_panel.remove_marker_label(event.time, primitive)
             
             # Force visual refresh by calling update_marker again (ensures marker becomes filled)
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, False)
@@ -422,8 +649,8 @@ class EditorController:
             if marker_obj:
                 marker_obj.reset_double_click_state()
             
-            # Recompute trajectory and update trajectory view
-            self._recompute_trajectory_with_preview()
+            # Recompute trajectory WITHOUT preview (this is a committed change, not a preview)
+            self._recompute_trajectory_immediate()
             
             print(f"=== END RESET ===")
         except Exception as e:
@@ -462,11 +689,13 @@ class EditorController:
             
             print(f"Deleted event at time={event_time}, remaining events: {len(events)}")
             
-            # Update baseline primitives arrays (remove deleted index)
-            for key in self.baseline_primitives:
-                if isinstance(self.baseline_primitives[key], np.ndarray):
-                    self.baseline_primitives[key] = np.delete(self.baseline_primitives[key], event_index)
-                    self.original_baseline_primitives[key] = np.delete(self.original_baseline_primitives[key], event_index)
+            # Update baseline - remove entries for deleted time
+            baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (event_time, prim)
+                if key in baseline_dict:
+                    del baseline_dict[key]
+                    print(f"  Removed baseline entry: {key}")
             
             # Update views
             self.primitive_panel.update_from_model(events)
@@ -507,14 +736,12 @@ class EditorController:
             
             print(f"Inserted event at time={event_data['time']}, total events: {len(events)}")
             
-            # Update baseline primitives arrays (insert at index)
-            update_baseline_arrays(self.baseline_primitives, 'insert', event_index, event_data['primitives'])
-            update_baseline_arrays(self.original_baseline_primitives, 'insert', event_index, event_data['primitives'])
-            
-            # Insert time
-            if 'time' in self.baseline_primitives:
-                self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_index, event_data['time'])
-                self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_index, event_data['time'])
+            # Update baseline - add entries for inserted time
+            baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (event_data['time'], prim)
+                baseline_dict[key] = event_data['primitives'][prim]
+                print(f"  Added baseline entry: {key} = {event_data['primitives'][prim]}")
             
             # Update views
             self.primitive_panel.update_from_model(events)
@@ -578,39 +805,113 @@ class EditorController:
             # FIRST: Shift all events from event_idx onwards forward by delta
             # This creates the gap where we'll insert the new event
             print(f"STEP 1: Shift events from index {event_idx} onwards by +{delta}")
+            
+            # Collect shifted times for marker position updates
+            time_shifts = []  # [(old_time, new_time), ...]
             for idx in range(event_idx, len(events)):
                 old_time = events[idx].time
                 events[idx].time = old_time + delta
-                print(f"  Shifted event {idx}: {old_time} → {events[idx].time}")
+                time_shifts.append((old_time, old_time + delta))
+                print(f"  Shifted event {idx}: {old_time} -> {events[idx].time}")
+            
+            # Update marker_positions keys for shifted times
+            # Markers at shifted events need their keys updated
+            print(f"STEP 1b: Update marker position keys for shifted times")
+            marker_positions = self.model.get_marker_positions(self.perspective)
+            new_marker_positions = {}
+            for (old_time, prim), gamma_pos in list(marker_positions.items()):
+                # Check if this marker's time was shifted
+                shifted_time = None
+                for shift_old, shift_new in time_shifts:
+                    if abs(old_time - shift_old) < TIME_MATCH_TOLERANCE:
+                        shifted_time = shift_new
+                        break
+                
+                if shifted_time:
+                    # Update the key to the new time
+                    new_key = (shifted_time, prim)
+                    new_marker_positions[new_key] = gamma_pos
+                    print(f"  Updated marker key: ({old_time}, {prim}) -> ({shifted_time}, {prim})")
+                else:
+                    # Keep the old key
+                    new_marker_positions[(old_time, prim)] = gamma_pos
+            
+            marker_positions.clear()
+            marker_positions.update(new_marker_positions)
+            
+            # Update primitive panel labels for shifted times
+            print(f"STEP 1b2: Update primitive panel labels for shifted times")
+            marker_positions = self.model.get_marker_positions(self.perspective)
+            events = self.model.get_events(self.perspective)
+            
+            for shift_old, shift_new in time_shifts:
+                # For each primitive that has a label at the old time
+                for prim in ['v', 'r', 'f', 'a', 'S']:
+                    # Remove old label if it exists
+                    try:
+                        self.primitive_panel.remove_marker_label(shift_old, prim)
+                        print(f"  Removed label at time {shift_old}, prim {prim}")
+                    except:
+                        pass  # Label didn't exist, that's fine
+                    
+                    # Add label at new time if marker position exists (user actually modified it)
+                    if (shift_new, prim) in marker_positions:
+                        # Find the event and get the value
+                        for idx, evt in enumerate(events):
+                            if abs(evt.time - shift_new) < TIME_MATCH_TOLERANCE:
+                                value = evt.markers[prim].value
+                                self.primitive_panel._add_marker_label(shift_new, prim, value)
+                                print(f"  Added label at time {shift_new}, prim {prim}, value {value}")
+                                break
+            
+            # Update modified_primitives keys for shifted times
+            print(f"STEP 1c: Update modified_primitives keys for shifted times")
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            new_modified_primitives = {}
+            for time_key, prim_set in list(modified_prims.items()):
+                # Check if this time was shifted
+                shifted_time = None
+                for shift_old, shift_new in time_shifts:
+                    if abs(time_key - shift_old) < TIME_MATCH_TOLERANCE:
+                        shifted_time = shift_new
+                        break
+                
+                if shifted_time:
+                    new_modified_primitives[shifted_time] = prim_set
+                    print(f"  Updated modified_primitives key: {time_key} -> {shifted_time}")
+                else:
+                    new_modified_primitives[time_key] = prim_set
+            
+            # Replace the entire dictionary
+            modified_prims.clear()
+            modified_prims.update(new_modified_primitives)
             
             # THIRD: Insert new event at the calculated position
             events.insert(event_idx, new_event)
             print(f"STEP 2: Inserted new event at index {event_idx}, time={insert_time}")
             
-            # Update baseline arrays to match the new event structure
-            print(f"STEP 3: Update baseline arrays")
+            # Update baseline with time-keyed dictionary
+            print(f"STEP 3: Update baseline for inserted event and shifted times")
             
-            # After shifting events in-place and inserting new event, we need to:
-            # 1. Insert new arrays for the new event at event_idx
-            # 2. Update time array to match shifted event times
+            # For shifted times, update baseline keys (delete old, add new with same values)
+            baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+            for shift_old, shift_new in time_shifts:
+                for prim in ['v', 'r', 'f', 'a', 'S']:
+                    old_key = (shift_old, prim)
+                    new_key = (shift_new, prim)
+                    if old_key in baseline_dict:
+                        # Preserve baseline value across time shift
+                        baseline_val = baseline_dict[old_key]
+                        del baseline_dict[old_key]
+                        baseline_dict[new_key] = baseline_val
+                        print(f"  Shifted baseline key: {old_key} -> {new_key} (value={baseline_val})")
             
-            # Insert new event's primitives into baseline
+            # Add baseline for newly inserted event (neutral 0.0 values)
             prim_values = {prim: new_event.markers[prim].value if restored_primitives else 0.0 for prim in PRIMITIVE_NAMES}
-            update_baseline_arrays(self.baseline_primitives, 'insert', event_idx, prim_values)
-            update_baseline_arrays(self.original_baseline_primitives, 'insert', event_idx, prim_values)
-            
-            # Rebuild time array from events (since times were shifted)
-            # After insert, baseline arrays have correct length, just need to sync times
-            if 'time' in self.baseline_primitives:
-                # Insert makes room at event_idx, but we need to update all times from event_idx onwards
-                self.baseline_primitives['time'] = np.insert(self.baseline_primitives['time'], event_idx, insert_time)
-                self.original_baseline_primitives['time'] = np.insert(self.original_baseline_primitives['time'], event_idx, insert_time)
-                
-                # Now update shifted times (from event_idx+1 onwards)
-                for idx in range(event_idx + 1, len(events)):
-                    self.baseline_primitives['time'][idx] = events[idx].time
-                    self.original_baseline_primitives['time'][idx] = events[idx].time
-                    print(f"  Updated baseline time[{idx}] = {events[idx].time}")
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (insert_time, prim)
+                baseline_dict[key] = prim_values[prim]
+                print(f"  Added baseline for inserted event: {key} = {prim_values[prim]}")
             
             # Debug: verify event times before update_from_model
             print("\n[DEBUG] Event times before update_from_model:")
@@ -645,24 +946,101 @@ class EditorController:
             print(f"Removed event at time={removed_event.time}")
             
             # Restore original times
-            # After removal, indices are back to their original positions
+            # shifted_events contains (index_before_insert, old_time, new_time)
+            # After removing the inserted event, events return to their original indices
+            print(f"Events list now has {len(events)} events (indices 0-{len(events)-1})")
+            print(f"Need to restore {len(shifted_events)} shifted events: {[(idx, old, new) for idx, old, new in shifted_events]}")
+            
             for orig_idx, old_time, new_time in shifted_events:
+                if orig_idx >= len(events):
+                    print(f"  ERROR: Cannot restore index {orig_idx}, list only has {len(events)} events")
+                    print(f"  Skipping this restoration")
+                    continue
+                    
                 events[orig_idx].time = old_time
-                print(f"  Restored event {orig_idx}: {new_time} → {old_time}")
+                print(f"  Restored event {orig_idx}: {new_time} -> {old_time}")
             
-            # Update baseline arrays - remove inserted event
-            update_baseline_arrays(self.baseline_primitives, 'delete', event_idx)
-            update_baseline_arrays(self.original_baseline_primitives, 'delete', event_idx)
+            # Update marker_position keys: shift back from new_time to old_time
+            print("Restoring marker position keys:")
+            marker_positions = self.model.get_marker_positions(self.perspective)
+            new_marker_positions = {}
+            for key, gamma_pos in list(marker_positions.items()):
+                time, prim = key
+                # Check if this time was shifted
+                restored = False
+                for orig_idx, old_time, new_time in shifted_events:
+                    if abs(time - new_time) < 0.001:  # This was shifted
+                        new_key = (old_time, prim)
+                        new_marker_positions[new_key] = gamma_pos
+                        print(f"  Restored marker key: ({new_time}, {prim}) -> ({old_time}, {prim})")
+                        restored = True
+                        break
+                if not restored:
+                    new_marker_positions[key] = gamma_pos
+            marker_positions.clear()
+            marker_positions.update(new_marker_positions)
             
-            if 'time' in self.baseline_primitives:
-                self.baseline_primitives['time'] = np.delete(self.baseline_primitives['time'], event_idx)
-                self.original_baseline_primitives['time'] = np.delete(self.original_baseline_primitives['time'], event_idx)
-            
-            # Update restored times in baseline arrays
+            # Update primitive panel labels for restored times
+            print("Restoring primitive panel labels:")
+            marker_positions = self.model.get_marker_positions(self.perspective)
             for orig_idx, old_time, new_time in shifted_events:
-                if 'time' in self.baseline_primitives:
-                    self.baseline_primitives['time'][orig_idx] = old_time
-                    self.original_baseline_primitives['time'][orig_idx] = old_time
+                for prim in ['v', 'r', 'f', 'a', 'S']:
+                    # Remove label at shifted time
+                    try:
+                        self.primitive_panel.remove_marker_label(new_time, prim)
+                        print(f"  Removed label at time {new_time}, prim {prim}")
+                    except:
+                        pass
+                    
+                    # Add label at restored time if there's a marker position
+                    # (marker_positions is the source of truth - if it exists, user modified it)
+                    if (old_time, prim) in marker_positions:
+                        evt = events[orig_idx]
+                        value = getattr(evt.markers[prim], 'value', None)
+                        if value is not None:
+                            self.primitive_panel._add_marker_label(old_time, prim, value)
+                            print(f"  Added label at time {old_time}, prim {prim}, value={value:.2f}")
+            
+            # Update modified_primitives keys: shift back from new_time to old_time
+            print("Restoring modified_primitives keys:")
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            new_modified_primitives = {}
+            for time, prims in list(modified_prims.items()):
+                restored = False
+                for orig_idx, old_time, new_time in shifted_events:
+                    if abs(time - new_time) < 0.001:  # This was shifted
+                        new_modified_primitives[old_time] = prims
+                        print(f"  Restored modified_primitives key: {new_time} -> {old_time}")
+                        restored = True
+                        break
+                if not restored:
+                    new_modified_primitives[time] = prims
+            # Replace the entire dictionary
+            modified_prims.clear()
+            modified_prims.update(new_modified_primitives)
+            
+            # Update baseline - remove inserted event and shift back times
+            print("Updating baseline:")
+            
+            # Remove baseline for inserted event
+            baseline_dict = self.baseline_by_time_m1 if self.perspective == "M1" else self.baseline_by_time_m2
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (removed_event.time, prim)
+                if key in baseline_dict:
+                    del baseline_dict[key]
+                    print(f"  Removed baseline for inserted event: {key}")
+            
+            # Shift baseline keys back to original times
+            for orig_idx, old_time, new_time in shifted_events:
+                for prim in ['v', 'r', 'f', 'a', 'S']:
+                    new_key = (new_time, prim)
+                    old_key = (old_time, prim)
+                    if new_key in baseline_dict:
+                        # Restore baseline with old time key
+                        baseline_val = baseline_dict[new_key]
+                        del baseline_dict[new_key]
+                        baseline_dict[old_key] = baseline_val
+                        print(f"  Shifted baseline key: {new_key} -> {old_key} (value={baseline_val})")
             
             # Update views
             self.primitive_panel.update_from_model(events)
@@ -676,7 +1054,12 @@ class EditorController:
             traceback.print_exc()
     
     def commit_changes(self):
-        """Commit all preview changes."""
+        """
+        Commit all preview changes to the model (finalize drag operations).
+        
+        Called when user releases mouse after dragging a marker. Moves changes from
+        model.preview_changes to permanent state and triggers full UI update.
+        """
         print("\n=== COMMIT CHANGES ===")
         print("Note: Markers already stored on drag. Commit just finalizes to model.")
         
@@ -688,11 +1071,17 @@ class EditorController:
         # Recompute trajectory as committed
         self._recompute_trajectory_immediate()
         
-        print(f"Total markers: {len(self.model.marker_positions)}")
+        marker_positions = self.model.get_marker_positions(self.perspective)
+        print(f"Total markers: {len(marker_positions)}")
         print("=== END COMMIT ===")
     
     def cancel_changes(self):
-        """Cancel all preview changes."""
+        """
+        Cancel all preview changes and revert to committed state.
+        
+        Clears model.preview_changes and restores UI to last committed values.
+        Used when user cancels a drag operation or on escape key.
+        """
         self.model.clear_previews()
         self.primitive_panel.cancel_all_previews()
         
@@ -796,29 +1185,38 @@ class EditorController:
     
     def _update_baseline_after_insert(self, insert_idx: int):
         """Update baseline primitives after inserting an event."""
-        # Re-fetch baseline from model
-        self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
+        events = self.model.get_events(self.perspective)
+        new_event = events[insert_idx]
+        
+        # Add baseline entries for new time point (inserted events start at neutral 0.0)
+        for prim in ['v', 'r', 'f', 'a', 'S']:
+            key = (new_event.time, prim)
+            self.baseline_by_time[key] = 0.0
+        print(f"[BASELINE] Added time-keyed entries for t={new_event.time}")
         
         # NOTE: modified_primitives shifting is already handled by model.insert_event()
-        # Don't duplicate the shift logic here!
-        
-        # Clear marker positions - trajectory changes after insertion, so old gamma_self
-        # coordinates no longer correspond to the same events. Markers will be regenerated
-        # when user commits changes.
-        self.model.marker_positions = {}
+        # NOTE: marker_positions uses time-based keys, so they remain valid after insertion
     
     def _update_baseline_after_delete(self, deleted_idx: int):
-        """Update baseline primitives and modified_primitives after deleting an event."""
-        # Re-fetch baseline from model
-        self.baseline_primitives = self.model.get_primitives_array(self.perspective, include_preview=False)
+        """Update baseline primitives after deleting an event.
         
-        # NOTE: modified_primitives shifting is already handled by model.delete_event()
-        # Don't duplicate the shift logic here!
+        Args:
+            deleted_idx: Index of the deleted event
+        """
+        # Get deleted event (still in list at this point)
+        events = self.model.get_events(self.perspective)
+        if deleted_idx < len(events):
+            deleted_time = events[deleted_idx].time
+            
+            # Remove baseline entries for deleted time point
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                key = (deleted_time, prim)
+                if key in self.baseline_by_time:
+                    del self.baseline_by_time[key]
+            print(f"[BASELINE] Removed time-keyed entries for t={deleted_time}")
         
-        # Clear marker positions - trajectory changes after deletion, so old gamma_self
-        # coordinates no longer correspond to the same events. Markers will be regenerated
-        # when user commits changes.
-        self.model.marker_positions = {}
+        # NOTE: modified_primitives and marker_positions use time-based keys
+        # so they remain valid after deletion (handled by model.delete_event())
     
     def _schedule_recomputation(self):
         """Schedule debounced trajectory recomputation (committed)."""
@@ -876,7 +1274,8 @@ class EditorController:
         events = self.model.get_events(self.perspective)
         
         if len(events) == 0:
-            QTimer.singleShot(0, self.trajectory_panel.clear)
+            # No events - just hide the computing indicator
+            QTimer.singleShot(0, lambda: self.trajectory_panel.show_computing(False))
             return
         
         # Get primitives (with or without preview)
@@ -894,7 +1293,7 @@ class EditorController:
         gamma_self = self.model.gamma_self_0  # Start from configured initial position
         gamma_trajectory = [gamma_self]
         
-        for i in range(len(events) - 1):
+        for i in range(len(events)):
             # Get primitives at current time
             v = data['v'][i]
             r = data['r'][i]
@@ -902,8 +1301,12 @@ class EditorController:
             a = data['a'][i]
             S = data['S'][i]
             
-            # Time delta
-            dt = times[i + 1] - times[i]
+            # Time delta - use time to next event, or a small default for the last event
+            if i + 1 < len(events):
+                dt = times[i + 1] - times[i]
+            else:
+                # For the last event, use a nominal time step
+                dt = 1.0 if i == 0 else (times[i] - times[i-1])
             
             # Update gamma_self using GRP core
             gamma_self = update_gamma_self(
@@ -921,7 +1324,66 @@ class EditorController:
         # Store or display
         self._display_trajectory(gamma_trajectory, preview_mode=preview_mode)
         
-        self.dirty = False
+        # Compute and display overlay trajectory for inactive perspective (Phase 3.3)
+        # Only show overlay if dual-perspective data is loaded
+        if not preview_mode and self.has_dual_perspective():
+            inactive_perspective = "M2" if self.perspective == "M1" else "M1"
+            inactive_events = self.model.get_events(inactive_perspective)
+            if len(inactive_events) > 0:
+                self._compute_and_display_overlay(inactive_perspective)
+        elif not preview_mode:
+            # Clear overlay if no dual perspective
+            self.trajectory_panel.set_overlay_trajectory(None, None)
+        
+        self.state.mark_clean()
+    
+    def _compute_and_display_overlay(self, inactive_perspective: str):
+        """
+        Compute and display overlay trajectory for inactive perspective (Phase 3.3).
+        
+        Args:
+            inactive_perspective: "M1" or "M2"
+        """
+        events = self.model.get_events(inactive_perspective)
+        if len(events) == 0:
+            self.trajectory_panel.set_overlay_trajectory(None, None)
+            return
+        
+        # Get primitives
+        primitives_data = self.model.get_primitives_array(inactive_perspective, include_preview=False)
+        times = primitives_data['time']
+        data = {
+            'v': primitives_data['v'],
+            'r': primitives_data['r'],
+            'f': primitives_data['f'],
+            'a': primitives_data['a'],
+            'S': primitives_data['S']
+        }
+        
+        # Compute gamma_self trajectory
+        gamma_self = self.model.gamma_self_0
+        gamma_trajectory = [gamma_self]
+        
+        for i in range(len(events) - 1):
+            v = data['v'][i]
+            r = data['r'][i]
+            f = data['f'][i]
+            a = data['a'][i]
+            S = data['S'][i]
+            dt = times[i + 1] - times[i]
+            
+            gamma_self = update_gamma_self(
+                gamma_self_current=gamma_self,
+                v=v, r=r, f=f, a=a, S=S,
+                time_delta=dt,
+                weights=self.weights
+            )
+            gamma_trajectory.append(gamma_self)
+        
+        # Extract components and display
+        gamma_x = [g.real for g in gamma_trajectory]
+        gamma_y = [g.imag for g in gamma_trajectory]
+        self.trajectory_panel.set_overlay_trajectory(gamma_x, gamma_y)
     
     def _display_trajectory(self, gamma_trajectory, preview_mode=False):
         """
@@ -957,7 +1419,8 @@ class EditorController:
         marked_data = {}
         
         # Add committed modifications (convert time keys to indices)
-        for event_time, prims in self.model.modified_primitives.items():
+        # Use perspective-specific modified_primitives - no filtering needed
+        for event_time, prims in self.model.get_modified_primitives(self.perspective).items():
             if event_time in time_to_idx:
                 event_idx = time_to_idx[event_time]
                 if event_idx not in marked_data:
@@ -973,11 +1436,10 @@ class EditorController:
         
         # Build pinned marker positions for gamma_self display
         # Format: [(event_idx, primitive, x, y, color), ...]
+        # Use perspective-specific marker_positions - no filtering needed
         pinned_markers = []
-        print(f"\n=== DISPLAY TRAJECTORY (preview={preview_mode}) ===")
-        print(f"marker_positions dict: {self.model.marker_positions}")
         
-        for (event_time, prim), gamma_pos in self.model.marker_positions.items():
+        for (event_time, prim), gamma_pos in self.model.get_marker_positions(self.perspective).items():
             # Convert time to current index
             if event_time not in time_to_idx:
                 continue  # Event was deleted
@@ -993,10 +1455,6 @@ class EditorController:
                 'label': f"{event_time}/{prim}"
             }
             pinned_markers.append(marker)
-            print(f"  Building marker: {marker}")
-        
-        print(f"Total pinned_markers: {len(pinned_markers)}")
-        print("=== END DISPLAY ===")
         
         # Find gamma position to display in gauge
         # NOTE: preview_gamma is only for the trajectory plot preview marker, NOT the gauge
@@ -1055,16 +1513,26 @@ class EditorController:
     def _update_all_views(self):
         """Update all views from model."""
         events = self.model.get_events(self.perspective)
+        
+        # Get inactive perspective events for overlay (Phase 3.3)
+        # Only show overlay if dual-perspective data is loaded
+        overlay_events = None
+        if self.has_dual_perspective():
+            inactive_perspective = "M2" if self.perspective == "M1" else "M1"
+            overlay_events = self.model.get_events(inactive_perspective)
+        
         self.primitive_panel.update_from_model(events)
+        self.primitive_panel.set_overlay_data(overlay_events)
         
         # Refresh view to show current model state
         events = self.model.get_events(self.perspective)
         self.primitive_panel.update_from_model(events)
+        self.primitive_panel.set_overlay_data(overlay_events)
     
     def _on_modified_primitives_changed(self, *args, **kwargs):
         """
         Observer callback for model.modified_primitives changes.
-        Automatically updates view's cached modified state.
+        Automatically updates the view cached modified state.
         
         This implements the observer pattern for automatic cache invalidation.
         """
@@ -1072,8 +1540,8 @@ class EditorController:
     
     def _update_view_modified_state(self):
         """
-        Phase 3 refactoring: Update primitive panel's cached modified state.
-        Replaces view's direct access to controller.model.
+        Phase 3 refactoring: Update primitive panel cached modified state.
+        Replaces the view direct access to controller.model.
         
         Note: This is now called automatically via observer pattern when
         model.modified_primitives changes.
@@ -1083,11 +1551,6 @@ class EditorController:
         self.primitive_panel.set_modified_state(modified_state, self.perspective)
     
     def save_scenario(self, filepath: str):
-        """
-        Save scenario to CSV file.
-        
-        Args:
-            filepath: Output path
-        """
+        """Save scenario to CSV file."""
         self.model.save_csv(filepath, self.perspective)
         print(f"Saved to {filepath}")

@@ -1,8 +1,29 @@
-# Phase 2 Architecture Recommendations
+# Interactive Editor - Architecture Recommendations
 
 **Date:** December 5, 2025  
-**Last Updated:** December 10, 2025  
-**Context:** Phase 1 interactive editor completed successfully. This document outlines architectural considerations for Phase 2+ development.
+**Last Updated:** December 11, 2025  
+**Scope:** Phase 2+ development (phase-agnostic architectural decisions)  
+**Context:** Phase 1 interactive editor completed successfully. This document outlines architectural considerations for ongoing development.
+
+---
+
+## Critical Update: Baseline Storage Architecture ✅ COMPLETE (December 11, 2025)
+
+### Executive Summary
+
+**Status:** ✅ Completed in v2.1.2
+
+**Problem:** Index-based baseline storage was fragile and caused critical undo bugs in v2.1.1.
+
+**Solution:** Migrated to time-keyed dictionary storage.
+
+**Results:**
+- ✅ Prevents entire class of index-related bugs
+- ✅ Simplified insert/delete operations (5 dict ops vs 12 array ops)
+- ✅ Made corruption impossible (separate data structure from model)
+- ✅ All tests passing
+
+**Detailed Documentation:** See [architecture/baseline_storage_refactoring.md](architecture/baseline_storage_refactoring.md)
 
 ---
 
