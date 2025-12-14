@@ -140,6 +140,19 @@ This document describes the overall architecture, object model, and design princ
 - **Configuration System (`tools/editor/config.py`)** - User preferences with JSON config
 - **Primitive Name Updates** - Corrected UI labels: Ego→Visibility, Vulnerability→Altruism
 
+## Related Documentation
+
+- **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history and feature additions
+- **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
+- **[State Management Refactoring](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state
+- **[Debugging Methodology](docs/DEBUG.md)** - Systematic debugging approaches
+- **[Observability Guide](tools/editor/OBSERVABILITY_GUIDE.md)** - Toggle-able logging for debugging
+- **[Architecture Principles](docs/architecture/01_PRINCIPLES.md)** - Core design principles
+- **[Information Flow](docs/architecture/02_INFORMATION_FLOW.md)** - Component interaction patterns
+- **[API Contracts](docs/architecture/04_API_CONTRACTS.md)** - Method specifications with pre/postconditions
+
+---
+
 ## Axis Interpretation: Identity Boundary vs Affective Quality
 
 The GRP framework distinguishes two orthogonal dimensions:

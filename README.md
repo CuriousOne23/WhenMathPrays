@@ -227,11 +227,12 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 - Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
 - CSV output includes `marker` and `locked` columns for persistence
 
-**See the complete guide:** [Interactive Editor User Guide](docs/interactive_editor_user_guide.md)
-
-**Architecture & Future Plans:**
-- [ARCHITECTURE.md](ARCHITECTURE.md) - UI layout system and maintainability notes
-- [interactive_edit_ph2_requirements.md](docs/interactive_edit_ph2_requirements.md) - Phase 2 requirements and specifications
+**Documentation:**
+- **[Interactive Editor User Guide](docs/interactive_editor_user_guide.md)** - Complete usage guide
+- **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
+- **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
+- **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
 
 ---
 
