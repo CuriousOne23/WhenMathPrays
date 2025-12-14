@@ -92,6 +92,12 @@ class EditorController:
         self.weights = DEFAULT_WEIGHTS.copy()
         self.delta_t = 1.0  # Time step for trajectory computation
         
+        # Entropy parameters (editable via UI) - Option 3: Separate real/imag targets and rates
+        self.entropy_real_target = -150.0  # Real axis attractor (Ego)
+        self.entropy_imag_target = 0.0     # Imaginary axis attractor (Neutral affect)
+        self.entropy_delS_real = 0.02      # Decay rate toward ego
+        self.entropy_delS_imag = 0.02      # Decay rate toward neutral
+        
         # Track last committed trajectory for comparison
         self.committed_gamma_trajectory = None
         
@@ -131,6 +137,20 @@ class EditorController:
                      - "path/to/file.txt" or ".log": Custom text file (human-readable)
         """
         BaselineDebugLog.dump(filepath)
+    
+    def _get_weights_with_entropy(self):
+        """
+        Get weights dictionary with current entropy parameters.
+        
+        Returns:
+            Dict with custom entropy parameters (Option 3: separate real/imag)
+        """
+        weights = self.weights.copy()
+        weights['entropy_real_target'] = self.entropy_real_target
+        weights['entropy_imag_target'] = self.entropy_imag_target
+        weights['delS_real'] = self.entropy_delS_real
+        weights['delS_imag'] = self.entropy_delS_imag
+        return weights
     
     @property
     def perspective(self) -> str:
@@ -489,12 +509,12 @@ class EditorController:
             'a': primitives_data['a'],
             'S': primitives_data['S']
         }
-        gamma_self = self.model.gamma_self_0
+        gamma_self = self.model.get_gamma_self_0(self.perspective)
         gamma_trajectory = [gamma_self]
         for i in range(len(times) - 1):
             dt = times[i+1] - times[i]
             v, r, f, a, S = data['v'][i], data['r'][i], data['f'][i], data['a'][i], data['S'][i]
-            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
+            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, self._get_weights_with_entropy(), dt)
             gamma_trajectory.append(gamma_self)
         
         # Store marker position using time as key
@@ -592,12 +612,12 @@ class EditorController:
             'a': primitives_data['a'],
             'S': primitives_data['S']
         }
-        gamma_self = self.model.gamma_self_0
+        gamma_self = self.model.get_gamma_self_0(self.perspective)
         gamma_trajectory = [gamma_self]
         for i in range(len(times) - 1):
             dt = times[i+1] - times[i]
             v, r, f, a, S = data['v'][i], data['r'][i], data['f'][i], data['a'][i], data['S'][i]
-            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, DEFAULT_WEIGHTS, dt)
+            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, self._get_weights_with_entropy(), dt)
             gamma_trajectory.append(gamma_self)
         
         # Check if value is back at baseline (use perspective-aware baseline)
@@ -1380,7 +1400,7 @@ class EditorController:
         }
         
         # Compute gamma_self trajectory
-        gamma_self = self.model.gamma_self_0  # Start from configured initial position
+        gamma_self = self.model.get_gamma_self_0(self.perspective)  # Start from configured initial position
         gamma_trajectory = [gamma_self]
         
         for i in range(len(events)):
@@ -1403,7 +1423,7 @@ class EditorController:
                 gamma_self_current=gamma_self,
                 v=v, r=r, f=f, a=a, S=S,
                 time_delta=dt,
-                weights=self.weights
+                weights=self._get_weights_with_entropy()
             )
             gamma_trajectory.append(gamma_self)
         
@@ -1463,8 +1483,8 @@ class EditorController:
             'S': primitives_data['S']
         }
         
-        # Compute gamma_self trajectory
-        gamma_self = self.model.gamma_self_0
+        # Compute gamma_self trajectory - use inactive perspective's gamma_self_0
+        gamma_self = self.model.get_gamma_self_0(inactive_perspective)
         gamma_trajectory = [gamma_self]
         
         for i in range(len(events) - 1):
@@ -1479,7 +1499,7 @@ class EditorController:
                 gamma_self_current=gamma_self,
                 v=v, r=r, f=f, a=a, S=S,
                 time_delta=dt,
-                weights=self.weights
+                weights=self._get_weights_with_entropy()
             )
             gamma_trajectory.append(gamma_self)
         
