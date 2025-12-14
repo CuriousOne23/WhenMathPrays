@@ -13,6 +13,9 @@ from pathlib import Path
 from typing import Dict, Any
 
 
+# Observability settings
+DEBUG_OBSERVER_ENABLED = True  # Toggle observer logging on/off
+
 # Default configuration - matches current hardcoded LAYOUT values
 DEFAULT_CONFIG = {
     'layout': {

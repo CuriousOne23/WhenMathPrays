@@ -94,6 +94,11 @@ class EditorApplication:
             undo_stack=self.window.undo_stack
         )
         
+        # Initialize application-level observer (shares with controller)
+        from tools.editor.simple_observer import SimpleObserver
+        from tools.editor.config import DEBUG_OBSERVER_ENABLED
+        self.observer = SimpleObserver(enabled=DEBUG_OBSERVER_ENABLED)
+        
         # Load scenario data
         self.controller.load_scenario(
             str(self.m1_path), 
@@ -471,6 +476,7 @@ class EditorApplication:
     
     def _on_insertions_changed(self, times: list):
         """Handle insertion time changes from InsertionOptions widget."""
+        self.observer.log('INSERTIONS_CHANGED', times=times, perspective=self.controller.perspective)
         print(f"\n[INSERT_HANDLER] _on_insertions_changed called with times={times}")
         # Get current events
         events = self.model.get_events(self.controller.perspective)

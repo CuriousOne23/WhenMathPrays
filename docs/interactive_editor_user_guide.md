@@ -1,8 +1,10 @@
 # Interactive Scenario Editor - User Guide
 
 **Version:** Phase 3.3 Complete  
-**Last Updated:** December 11, 2025  
+**Last Updated:** December 13, 2025  
 **Program Location:** `tools/interactive_editor.py`
+
+> **Note:** Architecture refactoring planned for improved debugging and maintainability. User-facing functionality and command-line interface will remain unchanged. See [Entry Point Consolidation Plan](architecture/entry_point_consolidation_plan.md) for technical details.
 
 ---
 
