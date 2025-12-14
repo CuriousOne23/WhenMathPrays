@@ -28,7 +28,55 @@ git checkout phase2
 
 ## Version History
 
-### v2.1.2-baseline-refactor (December 11, 2025) ← CURRENT
+### v2.3.0-entry-consolidation (Planned - December 2025)
+**Status:** Architecture refactoring planned
+
+**Planned Changes:**
+- 🔄 **Entry point consolidation** - Migrate all logic from `interactive_editor.py` to `application.py`
+- 🔄 **Observability framework** - Add lightweight observer pattern for full operation visibility
+- 🔄 **Single code path** - Eliminate dual implementations of insertion/deletion/modification
+- 🔄 **Enhanced debugging** - Complete visibility: widget → application → controller → model
+
+**Goals:**
+- Reduce maintenance burden (one implementation instead of two)
+- Improve debugging time (30 minutes → 5 minutes with observability)
+- Prevent class of bugs seen in v2.2.1 (undo bypassed in legacy path)
+- Enable future enhancements without code duplication
+
+**See:** [Entry Point Consolidation Plan](architecture/entry_point_consolidation_plan.md)
+
+**Timeline:** 4 weeks (1 week observer, 2 weeks migration, 1 week enhanced features)
+
+### v2.2.1-insertion-undo-fix (December 13, 2025) ← CURRENT
+**Status:** Bug fix - Event Insertion Point undo tracking
+
+**Bug Fixed:**
+- ✅ **Insertion undo tracking** - Event Insertion Point widget insertions now create proper undo commands
+- ✅ **Command pattern consistency** - Fixed `interactive_editor.py` to use `InsertEventCommand` instead of direct controller calls
+
+**Root Cause:**
+- `interactive_editor._on_insertions_changed()` was calling `controller.insert_event_at_time_no_update()` directly
+- Bypassed undo command system entirely
+- Meanwhile, `application.py` correctly used `InsertEventCommand`
+- Result: insertions from Event Insertion Point widget couldn't be undone with Ctrl+Z
+
+**Fix:**
+- Updated `interactive_editor.py` lines 733-758 to use `InsertEventCommand` and push to undo stack
+- Updated deletion logic lines 714-732 to use `DeleteEventCommand`
+- Removed redundant view updates (commands already update views)
+
+**Impact:**
+- All event insertions now properly tracked in undo stack
+- Ctrl+Z correctly removes inserted events
+- Revealed architectural issue: dual entry points with different implementations
+- Led to v2.3.0 consolidation plan
+
+### v2.2.0-marker-centric (December 13, 2025)
+**Status:** Marker-centric state architecture
+
+**See:** v2.2.0 entry in ARCHITECTURE.md for complete details
+
+### v2.1.2-baseline-refactor (December 11, 2025)
 **Status:** Baseline storage architecture refactored
 
 **Architecture Improvements:**

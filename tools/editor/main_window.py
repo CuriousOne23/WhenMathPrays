@@ -31,18 +31,28 @@ class EditorMainWindow(QMainWindow):
     Signals:
         save_requested: Emitted when user requests save (passes modifiers dict)
         cleanup_requested: Emitted before window closes (for application cleanup)
+        print_dock_config_requested: Emitted when user presses Ctrl+D (for debugging dock layout)
     """
     
     # Phase 3.5: Replace callback attributes with Qt signals
     save_requested = Signal(dict)  # {'csv': bool, 'png': bool}
     cleanup_requested = Signal()
+    print_dock_config_requested = Signal()  # For Ctrl+D debug shortcut
     
     def __init__(self, csv_file: Path):
         super().__init__()
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
-        self.setGeometry(100, 100, 1400, 600)
-        self.setMinimumHeight(400)  # Allow resizing down to 400px
+        
+        # Get screen size and use 90% of available space
+        from PySide6.QtWidgets import QApplication
+        screen = QApplication.primaryScreen().availableGeometry()
+        width = int(screen.width() * 0.9)
+        height = int(screen.height() * 0.85)
+        x = int((screen.width() - width) / 2)
+        y = int((screen.height() - height) / 2)
+        self.setGeometry(x, y, width, height)
+        self.setMinimumSize(1000, 500)  # Minimum size for usability
         
         # Central widget will be set by application with PyQtGraph panels
         
@@ -100,11 +110,20 @@ class EditorMainWindow(QMainWindow):
         redo_action.setStatusTip('Redo last undone action (Ctrl+Y)')
         toolbar.addAction(redo_action)
         
+        # Debug action for printing dock configuration (Ctrl+D)
+        debug_dock_action = QAction('Print Dock Config', self)
+        debug_dock_action.setShortcut(QKeySequence('Ctrl+D'))
+        debug_dock_action.setStatusTip('Print dock configuration to terminal (Ctrl+D)')
+        debug_dock_action.triggered.connect(self.print_dock_config_requested.emit)
+        # Don't add to toolbar, just set up the shortcut
+        self.addAction(debug_dock_action)
+        
         # Store references to prevent garbage collection
         self._toolbar = toolbar
         self._save_action = save_action
         self._undo_action = undo_action
         self._redo_action = redo_action
+        self._debug_dock_action = debug_dock_action
     
     def _setup_view_menu(self, dock_widgets: dict):
         """

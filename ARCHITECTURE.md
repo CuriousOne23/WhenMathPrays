@@ -5,6 +5,21 @@ This document describes the overall architecture, object model, and design princ
 
 ## Recent Updates
 
+**December 13, 2025:** Entry Point Consolidation & Observability Refactor (PLANNED):
+- **🔄 Phase 1-3 Planned:** Consolidate dual entry points and add comprehensive observability
+  - **Problem**: `interactive_editor.py` (1120 lines) and `application.py` (572 lines) implement duplicate logic
+  - **Bug Example**: Event insertion undo failed because interactive_editor.py bypassed command system
+  - **Root Cause**: Two parallel code paths with different implementations (legacy vs modern)
+  - **Solution**: Migrate all logic to `application.py` + add observer pattern for full visibility
+  - **Timeline**: 4 weeks (1 week per phase + cleanup)
+  - **See**: [docs/architecture/entry_point_consolidation_plan.md](docs/architecture/entry_point_consolidation_plan.md)
+  - **Benefits**:
+    - Single code path eliminates duplicate implementations
+    - Observer provides complete visibility: widget → application → controller → model
+    - Debugging time reduced from 30+ minutes to <5 minutes
+    - Future features only need one implementation
+    - <1% performance overhead from observability
+
 **December 13, 2025:** v2.2.0 Marker-Centric State Architecture (Debugging-First Design):
 - **✅ Marker as Single Entry Point (v2.2.0):** Marker objects now own all perspective-aware state
   - **Why This Change**: Debugging complexity with scattered state across Model/Controller/View
@@ -523,6 +538,7 @@ Phase 3.5 refactoring prepares for Phase 4 by:
 
 ## Related Documentation
 
+### Current Architecture
 - **User Guide:** [docs/interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)
 - **Installation:** [docs/installation_4_interactive_editor.md](docs/installation_4_interactive_editor.md)
 - **Debugging Guide:** [docs/DEBUG.md](docs/DEBUG.md) - Debug infrastructure and methodology
@@ -531,7 +547,12 @@ Phase 3.5 refactoring prepares for Phase 4 by:
 - **Baseline Storage Refactoring:** [docs/architecture/baseline_storage_refactoring.md](docs/architecture/baseline_storage_refactoring.md)
 - **Baseline Communication Protocol:** [docs/baseline_communication_protocol.md](docs/baseline_communication_protocol.md)
 - **Version History:** [docs/INTERACTIVE_EDITOR_CHANGELOG.md](docs/INTERACTIVE_EDITOR_CHANGELOG.md)
+
+### Planned Refactoring
+- **Entry Point Consolidation:** [docs/architecture/entry_point_consolidation_plan.md](docs/architecture/entry_point_consolidation_plan.md) - Dual entry point consolidation + observability
 - **Phase Roadmap:** [docs/interactive_edit_roadmap.md](docs/interactive_edit_roadmap.md)
+
+### General
 - **Main README:** [README.md](README.md)
 
 ---

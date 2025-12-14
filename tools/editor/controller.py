@@ -66,6 +66,11 @@ class EditorController:
         self.primitive_panel = primitive_panel
         self.trajectory_panel = trajectory_panel
         
+        # Initialize observer for operation visibility
+        from tools.editor.simple_observer import SimpleObserver
+        from tools.editor.config import DEBUG_OBSERVER_ENABLED
+        self.observer = SimpleObserver(enabled=DEBUG_OBSERVER_ENABLED)
+        
         # Separate undo stacks for each perspective
         self.undo_stack_m1 = undo_stack if undo_stack else None
         self.undo_stack_m2 = QUndoStack() if undo_stack else None
@@ -347,6 +352,9 @@ class EditorController:
         # Continue with view rebuild
         QApplication.processEvents()
         
+        # Sync baseline values for new perspective to avoid ghost markers
+        self._sync_baseline_to_view()
+        
         # Update modified state cache for new perspective BEFORE updating views
         # This ensures markers show correct hollow/solid state
         self._update_view_modified_state()
@@ -511,7 +519,10 @@ class EditorController:
             - Updates model.marker_positions for trajectory visualization
             - Triggers incremental UI update for the modified marker
         """
-
+        events = self.model.get_events(self.perspective)
+        event_time = events[event_index].time if event_index < len(events) else None
+        self.observer.log('APPLY_PRIMITIVE_CHANGE', index=event_index, time=event_time, 
+                         primitive=primitive, value=f'{value:.2f}', perspective=self.perspective)
         
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
@@ -601,16 +612,6 @@ class EditorController:
         # Query modified status from Model (single source of truth)
         is_modified = self.model.is_primitive_modified(event_index, primitive, self.perspective)
         
-        # Update only this marker in PrimitivePanel (O(1) operation)
-        self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
-        
-        # If this was called during undo/redo, refresh the entire modified state cache FIRST
-        # This ensures the cache is correct before we check is_modified
-        if self.in_undo_redo:
-            self._update_view_modified_state()
-            # Re-query modified status after cache refresh
-            is_modified = self.model.is_primitive_modified(event_index, primitive, self.perspective)
-        
         # Update Marker state for label visibility (view will sync from this)
         event = self.model.get_event(event_index, self.perspective)
         if is_modified:
@@ -622,8 +623,18 @@ class EditorController:
         
         # If this was undo/redo, force visual update of all markers after label changes
         if self.in_undo_redo:
+            # Update modified state cache before updating view
+            self._update_view_modified_state()
             events = self.model.get_events(self.perspective)
             self.primitive_panel.update_from_model(events)
+            # Restore overlay data after update
+            if self.has_dual_perspective():
+                inactive_perspective = "M2" if self.perspective == "M1" else "M1"
+                overlay_events = self.model.get_events(inactive_perspective)
+                self.primitive_panel.set_overlay_data(overlay_events)
+        else:
+            # Normal drag operation - update single marker incrementally
+            self.primitive_panel.update_marker(event_index, primitive, value, is_modified)
         
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
@@ -889,19 +900,8 @@ class EditorController:
                     locked=False
                 )
             else:
-                # Copy primitives from previous event (event_idx - 1) for smooth transition
-                prev_event = events[event_idx - 1] if event_idx > 0 else None
-                if prev_event:
-                    inserted_primitives = {
-                        'v': prev_event.markers['v'].value,
-                        'r': prev_event.markers['r'].value,
-                        'f': prev_event.markers['f'].value,
-                        'a': prev_event.markers['a'].value,
-                        'S': prev_event.markers['S'].value
-                    }
-                else:
-                    # First event - use zeros
-                    inserted_primitives = {'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0}
+                # Initialize inserted events with zero primitives (neutral state)
+                inserted_primitives = {'v': 0.0, 'r': 0.0, 'f': 0.0, 'a': 0.0, 'S': 0.0}
                 
                 # Create new event with next available ID
                 new_event = Event(
@@ -983,6 +983,9 @@ class EditorController:
             
             # Sync baseline to view BEFORE update_from_model so markers get correct appearance
             self._sync_baseline_to_view()
+            
+            # Update modified state cache with new indices after insertion
+            self._update_view_modified_state()
             
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
@@ -1116,6 +1119,9 @@ class EditorController:
         Called when user releases mouse after dragging a marker. Moves changes from
         model.preview_changes to permanent state and triggers full UI update.
         """
+        preview_count = len(self.model.preview_changes)
+        self.observer.log('COMMIT_CHANGES', preview_count=preview_count, perspective=self.perspective)
+        
         print("\n=== COMMIT CHANGES ===")
         print("Note: Markers already stored on drag. Commit just finalizes to model.")
         
@@ -1169,6 +1175,8 @@ class EditorController:
         Args:
             time: Time value for new event
         """
+        self.observer.log('INSERT_EVENT', time=time, perspective=self.perspective)
+        
         # Insert into model
         new_idx = self.model.insert_event(time, self.perspective)
         
@@ -1206,6 +1214,10 @@ class EditorController:
         Raises:
             ValueError: If event is locked or first/last event
         """
+        events = self.model.get_events(self.perspective)
+        event_time = events[event_index].time if event_index < len(events) else None
+        self.observer.log('DELETE_EVENT', index=event_index, time=event_time, perspective=self.perspective)
+        
         # Delete from model (will raise ValueError if locked or endpoint)
         deleted_event = self.model.delete_event(event_index, self.perspective)
         

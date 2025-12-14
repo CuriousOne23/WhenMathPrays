@@ -152,8 +152,14 @@ class InteractiveEditor:
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
         
         # Wrap panels in QDockWidget for flexible workspace
+        # Create 3-column layout: Primitives | Trajectory | Controls
+        # Set dock nesting to allow side-by-side layout
+        self.window.setDockNestingEnabled(True)
+        
         self.primitive_dock = QDockWidget("Primitives", self.window)
         self.primitive_dock.setWidget(self.primitive_panel)
+        self.primitive_dock.setMinimumWidth(150)  # Allow narrow primitives panel
+        self.primitive_dock.setMaximumWidth(400)  # Cap maximum width
         self.primitive_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable | 
@@ -161,14 +167,15 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
         
-        # Add trajectory dock to right area
         self.trajectory_dock = QDockWidget("Trajectory", self.window)
         self.trajectory_dock.setWidget(self.trajectory_panel)
+        self.trajectory_dock.setMinimumWidth(250)  # Allow narrower trajectory panel
         self.trajectory_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable | 
             QDockWidget.DockWidgetClosable
         )
+        # Add to right area first
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
@@ -284,16 +291,17 @@ class InteractiveEditor:
         dock_container.setWidget(dock_container_inner)
         dock_container.setWidgetResizable(True)
         
-        # Add controls as dock widget - add to right area FIRST
+        # Add controls as dock widget - split trajectory horizontally
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
+        self.controls_dock.setMinimumWidth(180)  # Allow narrow controls panel
+        self.controls_dock.setMaximumWidth(280)  # But cap maximum width
         self.controls_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable |
             QDockWidget.DockWidgetClosable
         )
-        # Split trajectory dock horizontally to add controls to its right
-        # This creates the 3-column layout: [Primitives | Trajectory | Controls]
+        # Split controls horizontally from trajectory to create right column (side-by-side)
         self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
         
         # Setup View menu for dock widget visibility
@@ -303,20 +311,45 @@ class InteractiveEditor:
             'Controls': self.controls_dock
         })
         
-        # Configure initial layout widths
-        # First set the main left/right split (Primitives vs rest)
-        self.window.resizeDocks(
-            [self.primitive_dock, self.controls_dock],
-            [445, 755],  # Primitives=445px, Right side (Controls+Trajectory)=755px
-            Qt.Horizontal
-        )
+        # Configure 3-column layout after window is shown
+        # Use QTimer to delay resize until after layout is established
+        from PySide6.QtCore import QTimer
+        def setup_dock_sizes():
+            window_width = self.window.width()
+            # Allocate: 20% Primitives, 45% Trajectory, 35% Controls
+            primitives_width = int(window_width * 0.20)
+            trajectory_width = int(window_width * 0.45)
+            controls_width = int(window_width * 0.35)
+            self.window.resizeDocks(
+                [self.primitive_dock, self.trajectory_dock, self.controls_dock],
+                [primitives_width, trajectory_width, controls_width],
+                Qt.Horizontal
+            )
+        QTimer.singleShot(100, setup_dock_sizes)
         
-        # Then set the Controls/Trajectory split within the right area
-        self.window.resizeDocks(
-            [self.controls_dock, self.trajectory_dock],
-            [260, 495],  # Controls=260px, Trajectory=495px
-            Qt.Horizontal
-        )
+        # Debug function to print current dock configuration (triggered by Ctrl+D)
+        def print_dock_config():
+            print("\n=== DOCK CONFIGURATION ===")
+            print(f"Window size: {self.window.width()} x {self.window.height()}")
+            print(f"\nPrimitives dock:")
+            print(f"  Width: {self.primitive_dock.width()}")
+            print(f"  Height: {self.primitive_dock.height()}")
+            print(f"  Area: {self.window.dockWidgetArea(self.primitive_dock)}")
+            print(f"  Percentage: {(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
+            print(f"\nTrajectory dock:")
+            print(f"  Width: {self.trajectory_dock.width()}")
+            print(f"  Height: {self.trajectory_dock.height()}")
+            print(f"  Area: {self.window.dockWidgetArea(self.trajectory_dock)}")
+            print(f"  Percentage: {(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
+            print(f"\nControls dock:")
+            print(f"  Width: {self.controls_dock.width()}")
+            print(f"  Height: {self.controls_dock.height()}")
+            print(f"  Area: {self.window.dockWidgetArea(self.controls_dock)}")
+            print(f"  Percentage: {(self.controls_dock.width() / self.window.width() * 100):.1f}%")
+            print("========================\n")
+        
+        # Connect Ctrl+D shortcut to print dock config
+        self.window.print_dock_config_requested.connect(print_dock_config)
         
         # Connect primitive panel readout to Qt gauge (now that gauges exist)
         self.primitive_panel.primitive_readout = self.primitive_gauge
@@ -367,44 +400,37 @@ class InteractiveEditor:
         save_csv = options.get('csv', True)
         save_png = options.get('png', False)
         
-        # Determine if current file is the original (in data/ and does not end with _modified.csv)
-        original = (
-            self.original_csv_file.parent.name == 'data' and
-            not self.original_csv_file.stem.endswith('_modified')
-        )
-        
-        # Determine base name for output files (without _modified suffix and without extension)
-        # Always use original_csv_file to ensure consistent perspective-based naming
-        if self.original_csv_file.stem.endswith('_modified'):
-            base_name = self.original_csv_file.stem[:-9]  # Remove '_modified'
-        else:
-            base_name = self.original_csv_file.stem
-        
-        # Adjust base name for current perspective (M1 vs M2)
+        # Get current perspective
         current_perspective = self.controller.perspective
-        if current_perspective == "M2":
-            # Replace M1 with M2 in the base name
-            base_name = base_name.replace("_M1", "_M2")
         
-        # Output directory is data/
-        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name == 'data' else self.original_csv_file.parent.parent / 'data'
+        # Determine base name - strip _modified and _M1/_M2 suffixes
+        stem = self.original_csv_file.stem
+        if stem.endswith('_modified'):
+            stem = stem[:-9]
+        # Remove _M1 or _M2 suffix if present
+        if stem.endswith('_M1') or stem.endswith('_M2'):
+            stem = stem[:-3]
         
-        # Determine output paths
+        # Add current perspective suffix
+        base_name = f"{stem}_{current_perspective}"
+        
+        # Output directory
+        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name in ['data', 'library'] else Path('data')
+        data_dir.mkdir(exist_ok=True)
+        
+        # Output paths
         csv_path = data_dir / f"{base_name}_modified.csv"
-        combined_png = data_dir / f"{base_name}_modified.png"
+        png_path = data_dir / f"{base_name}_modified.png"
         
-        # Save CSV if requested
+        # Save CSV for current perspective
         if save_csv:
             self.controller.save_scenario(str(csv_path))
-            self.window.show_message(f"Saved CSV to: {csv_path}")
-            # Update self.csv_file to point to the new file for future saves
-            self.csv_file = csv_path
-            self.window.update_window_title(self.csv_file)
+            self.window.show_message(f"Saved {current_perspective}: {csv_path.name}")
         
-        # Save PNG plots if requested (combined primitives + trajectory)
+        # Save PNG plot
         if save_png:
-            self._save_combined_plot(str(combined_png))
-            self.window.show_message(f"Saved combined plot to: {combined_png}")
+            self._save_combined_plot(str(png_path))
+            self.window.show_message(f"Saved plot: {png_path.name}")
         
         if not save_csv and not save_png:
             self.window.show_message("No save operation performed", 'warning')

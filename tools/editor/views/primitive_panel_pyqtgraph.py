@@ -448,7 +448,25 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         # Update current perspective
         self.current_perspective = perspective
-        print(f"[PRIMITIVE_LABELS] Current perspective now: {self.current_perspective}")
+        
+        # Clear scatter items to prevent ghost markers from previous perspective
+        # Use both parent clear() and setData() to fully reset the items
+        for prim in PRIMITIVE_NAMES:
+            # Call parent class clear to reset internal PyQtGraph state
+            pg.ScatterPlotItem.clear(self.scatter_items[prim])
+            pg.ScatterPlotItem.clear(self.baseline_scatter_items[prim])
+            # Then set empty data to ensure DraggableScatterItem's cached arrays are cleared
+            self.scatter_items[prim].setData(x=[], y=[])
+            self.baseline_scatter_items[prim].setData(x=[], y=[])
+            # Also clear diagnostic markers to prevent cross-perspective contamination
+            self.diagnostic_markers[prim].setVisible(False)
+            self.diagnostic_markers[prim].setData([], [])
+            # Clear overlay scatter items (inactive perspective ghosts)
+            self.overlay_line_items[prim].setData([], [])
+            self.overlay_scatter_items[prim].clear()
+            self.overlay_scatter_items[prim].setData([], [])
+        
+        print(f"[PRIMITIVE_LABELS] Current perspective now: {self.current_perspective}, all scatter items cleared")
     
     def set_modified_state(self, modified_state: dict, perspective: str = 'baseline'):
         """
@@ -480,6 +498,22 @@ class PrimitivePanelPyQtGraph(QWidget):
         """
         import time
         t0 = time.time()
+        
+        # Clear diagnostic markers to prevent ghost images from previous edits or perspective switches
+        for prim in PRIMITIVE_NAMES:
+            self.diagnostic_markers[prim].setVisible(False)
+            self.diagnostic_markers[prim].setData([], [])
+        
+        # Also clear scatter items to ensure no ghost markers from previous perspective
+        # This is critical for preventing cross-perspective contamination
+        for prim in PRIMITIVE_NAMES:
+            pg.ScatterPlotItem.clear(self.scatter_items[prim])
+            pg.ScatterPlotItem.clear(self.baseline_scatter_items[prim])
+            # Explicitly clear baseline data to prevent ghosts
+            self.baseline_scatter_items[prim].setData(x=[], y=[])
+        
+        # Clear baseline values dictionary to prevent cross-perspective contamination
+        self.baseline_values = {}
         
         ObservabilityLog.event("primitive_panel_update_start",
                                perspective=self.current_perspective,
@@ -562,7 +596,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     brushes.append(pg.mkBrush(color))
                     pens.append(pg.mkPen('k', width=1))
             
-            # Update scatter points
+            # Update scatter points - setData replaces old data automatically
             self.scatter_items[prim].setData(
                 x=times,
                 y=values,
@@ -654,6 +688,15 @@ class PrimitivePanelPyQtGraph(QWidget):
             )
         else:
             self.baseline_scatter_items[primitive].setData(x=[], y=[])
+        
+        # Update label position if it exists for this marker
+        event_time = self.events_data[event_index].time
+        key = (event_time, primitive)
+        modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        if key in modified_labels:
+            text_item = modified_labels[key]
+            text_item.setPos(event_time, value)
+            print(f"[UPDATE_MARKER] Updated label position for {key} to ({event_time}, {value:.2f})")
     
     def update_markers(self, marked_data=None):
         """
@@ -701,9 +744,10 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.overlay_events_data = overlay_events
         
         if overlay_events is None or len(overlay_events) == 0:
-            # Hide overlay
+            # Hide overlay - clear first to remove all items
             for prim in PRIMITIVE_NAMES:
                 self.overlay_line_items[prim].setData([], [])
+                self.overlay_scatter_items[prim].clear()
                 self.overlay_scatter_items[prim].setData([], [])
             return
         
@@ -715,7 +759,8 @@ class PrimitivePanelPyQtGraph(QWidget):
             # Update overlay line (dotted, faded)
             self.overlay_line_items[prim].setData(times, values)
             
-            # Update overlay scatter (faded, non-interactive)
+            # Update overlay scatter (faded, non-interactive) - clear first
+            self.overlay_scatter_items[prim].clear()
             color = QColor(PRIMITIVE_COLORS[prim])
             self.overlay_scatter_items[prim].setData(
                 x=times,
@@ -952,41 +997,39 @@ class PrimitivePanelPyQtGraph(QWidget):
                     
                     print(f"\n[INSERT EVENT] Ctrl+Shift+click at time={clicked_time:.2f}")
                     
-                    # Insert new event at calculated position
+                    # Find the nearest existing marker to the click position
                     if self.events_data:
                         times = [e.time for e in self.events_data]
                         
-                        # Find the markers before and after clicked position
-                        markers_before = [(i, t) for i, t in enumerate(times) if t < clicked_time]
-                        markers_after = [(i, t) for i, t in enumerate(times) if t > clicked_time]
+                        # Find nearest marker by calculating distance to each marker
+                        distances = [(i, t, abs(t - clicked_time)) for i, t in enumerate(times)]
+                        distances.sort(key=lambda x: x[2])  # Sort by distance
                         
-                        if not markers_before or not markers_after:
-                            # Can't insert before first or after last
+                        # Get the nearest marker
+                        nearest_idx, nearest_time, _ = distances[0]
+                        
+                        # Can't insert at first or last event
+                        if nearest_idx == 0 or nearest_idx == len(times) - 1:
+                            print(f"[INSERT] Cannot insert at first or last event (nearest={nearest_time})")
                             event.accept()
                             return
                         
-                        # Get the previous marker (last one before click)
-                        prev_idx, prev_time = markers_before[-1]
-                        # Get the next marker (first one after click)
-                        next_idx, next_time = markers_after[0]
+                        # Insert a new event at the nearest marker's position
+                        # This will shift the nearest marker and all subsequent markers forward
+                        insert_time = nearest_time
                         
-                        # Calculate standard spacing by looking at the gap BEFORE the previous marker
-                        # This gives us the "expected" delta in this region
-                        if prev_idx > 0:
-                            standard_delta = prev_time - times[prev_idx - 1]
-                        else:
-                            # If previous is first event, use gap to next
-                            standard_delta = times[1] - times[0]
+                        # The command will insert before nearest_idx, which means:
+                        # - New event takes position of nearest marker
+                        # - Nearest marker and all after it shift forward by delta
+                        # - Delta = nearest_time - previous_time
+                        prev_time = times[nearest_idx - 1]
                         
-                        # New event should be placed at prev_time + standard_delta
-                        insert_time = prev_time + standard_delta
-                        
-                        print(f"[INSERT] Click at {clicked_time:.1f}, prev={prev_time}, next={next_time}")
-                        print(f"[INSERT] Standard delta={standard_delta}, insert_time={insert_time}")
+                        print(f"[INSERT] Click at {clicked_time:.1f}, nearest marker at {nearest_time}, prev={prev_time}")
+                        print(f"[INSERT] Will insert at {insert_time}, shifting {nearest_time} and later by delta={nearest_time - prev_time}")
                         
                         # Store insertion time for command to use
                         self.pending_insert_time = insert_time
-                        self.event_insert_requested.emit(next_idx)
+                        self.event_insert_requested.emit(nearest_idx)
                         event.accept()
                         return
             
