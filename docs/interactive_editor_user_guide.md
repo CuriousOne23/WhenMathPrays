@@ -395,14 +395,14 @@ Load M2 file
 
 ### CSV File Format Requirements
 
-**For complete CSV format specification, see [CSV Scenario Format](../README.md#csv-scenario-format) in the main README.**
+**For complete CSV format specification, see [CSV Format Details](#csv-format-details) section below.**
 
 Quick reference:
 - **Required columns:** `day`, `v`, `r`, `f`, `a`, `S`
 - **Optional columns:** `notes`, `marker`, `locked`
 - **Metadata rows:** `name` and `time_unit` (first two rows)
 - **Value range:** Primitives use -10 to +10 scale
-- **File naming:** Dual-perspective scenarios must use `_M1.csv` and `_M2.csv` suffixes
+- **File naming:** `_M1`/`_M2` suffix anywhere in filename for dual-perspective files
 
 ### Running the Editor
 
@@ -577,6 +577,80 @@ python tools/interactive_editor.py data/my_scenario_M1.csv
 - CSV includes `marker` and `locked` columns for persistence
 - Saves to appropriate M1_modified or M2_modified file based on active perspective
 
+#### Save Both Perspectives (Planned)
+
+**Why This Feature Exists:**
+
+The dual-perspective architecture enables modeling relational dynamics from both participants' viewpoints. However, iterative scenario development often requires:
+- **Coordinated editing:** Making changes to both M1 and M2 perspectives in one session
+- **Workflow preservation:** Saving intermediate states without switching perspectives
+- **Comparison integrity:** Ensuring both perspectives saved from the same session state
+- **Reduced friction:** Avoiding manual perspective switching just to save
+
+Without "Save Both," you must:
+1. Make edits to M1
+2. Save M1 (Ctrl+S)
+3. Switch to M2 perspective
+4. Make coordinated M2 edits
+5. Save M2 (Ctrl+S again)
+6. Risk forgetting one perspective or losing session context
+
+**What It Does:**
+
+"Save Both Perspectives" writes **both** M1 and M2 data to separate files in a single operation:
+- Creates/updates `{scenario}_M1_modified.csv` with M1 perspective data
+- Creates/updates `{scenario}_M2_modified.csv` with M2 perspective data
+- Uses current session state for both files (all committed modifications)
+- Preserves independent edits: M1 and M2 each have their own primitives, markers, names
+
+**When to Use:**
+
+- **Scenario development:** You're building a canonical scenario and editing both perspectives
+- **Iteration workflow:** Testing different relational patterns across both viewpoints
+- **Pre-testing snapshots:** Saving a baseline before experimental changes
+- **Session end:** Capturing all work from a single editing session
+
+**When NOT to Use:**
+
+- **Single-perspective focus:** You're only working on M1 or M2, not both
+- **Comparison mode:** You're using --duplicate-to-m2 for diagnostic overlay (save only modified perspective)
+- **Quick experiments:** Testing hypothetical changes to one perspective
+
+**How to Use:**
+
+**Menu/Toolbar (Planned):**
+- File → Save Both Perspectives
+- Keyboard shortcut: `Ctrl+Shift+S`
+- Both files saved automatically, status shown: "Saved M1: [...], M2: [...]"
+
+**File Naming:**
+- M1 file: `{original_basename}_M1_modified.csv`
+- M2 file: `{original_basename}_M2_modified.csv`
+- Example: Loading `dating.csv` → Saves `dating_M1_modified.csv` and `dating_M2_modified.csv`
+
+**Best Practices:**
+
+1. **Use regular Save (Ctrl+S) during single-perspective work** - Faster, clearer intent
+2. **Use Save Both when you've edited both perspectives** - Ensures consistency
+3. **Name scenarios descriptively** - Files inherit the base name, so `steady_growth.csv` is better than `test.csv`
+4. **Save before risky experiments** - Provides rollback point
+5. **Check terminal output** - Confirms both files written successfully
+
+**Technical Details:**
+
+- Current save behavior: Saves active perspective only (`_M1_modified.csv` OR `_M2_modified.csv`)
+- Save Both behavior: Saves **both** perspectives (`_M1_modified.csv` AND `_M2_modified.csv`)
+- Each file contains: event list, primitives (v,r,f,a,S), marker/locked columns, metadata
+- Perspectives remain independent: M1 and M2 can have completely different primitive values for the same event indices
+- Reload behavior unchanged: Dual-file loading automatically detects both `_M1` and `_M2` companions
+
+**Design Rationale:**
+
+This feature follows the MVT (Modeled, Verifiable, Testable) quality standard:
+- **Modeled:** Extends existing save architecture, uses proven model.save_csv() for both perspectives
+- **Verifiable:** Clear success criteria (two files created/updated, terminal confirms both paths)
+- **Testable:** Manual test checklist includes "Save Both with M1/M2 edits → verify both files updated correctly"
+
 ---
 
 ## Features in Detail
@@ -668,13 +742,20 @@ day,v,r,f,a,S,notes,marker,locked
 ### Keyboard Shortcuts
 
 **Editing:**
-- `ESC` - Cancel all preview changes
-- `G` - Edit gamma_self_0 initial position (starting point)
 - `Tab` or `Space` - Toggle between M1/M2 perspectives
-- `Ctrl+Click` - Delete event (non-locked events only, excludes first/last)
-- `Ctrl+Shift+Click` - Insert event before nearest marker (creates time gap)
-- `Ctrl+Z` - Undo last action (deletion or insertion)
+- `Ctrl+Z` - Undo last action
 - `Ctrl+Y` or `Ctrl+Shift+Z` - Redo action
+- `Double-click marker` - Reset primitive to base value
+
+**Mouse Operations:**
+- `Drag marker` - Move primitive value (preview mode with hollow marker)
+- `Click hollow marker` - Commit preview change
+- `Right-click marker` - Lock/unlock event
+- `Ctrl+Click marker` - Delete event (non-locked events only, excludes first/last)
+- `Ctrl+Shift+Click marker` - Insert event before clicked marker (creates time gap)
+- `Shift+Click primitive plot` - Place counterfactual X marker (what-if testing)
+- `Drag X marker` - Explore different hypothetical values (up/down)
+- `Click trajectory` - Show diagnostic marker (gamma_self measurement)
 
 **View Controls:**
 - `+` or `=` - Zoom in (panel under cursor)
@@ -682,7 +763,11 @@ day,v,r,f,a,S,notes,marker,locked
 - `0` - Reset view to auto-fit (clears primitive gauge)
 
 **Save:**
-- `Ctrl+S` - Save (auto-commits all previews and saves CSV)
+- `Ctrl+S` - Save active perspective to CSV
+- `Ctrl+Shift+S` - Save Both M1 & M2 perspectives (creates separate files)
+
+**Debug:**
+- `Ctrl+Shift+L` - Export State Viewer Log (for debugging and AI-assisted analysis)
 
 ---
 
@@ -726,11 +811,11 @@ day,v,r,f,a,S,notes,marker,locked
 **Goal:** Understand impact of primitive changes on outcomes
 
 **Workflow:**
-1. Press 'F' to enable fixed view (prevents auto-zoom)
-2. Modify single primitive at one event
-3. Observe trajectory deviation magnitude
-4. Use primitive gauge to record exact values tested
-5. Cancel (ESC) to test different values, or save when satisfied
+1. Modify single primitive at one event
+2. Observe trajectory deviation magnitude
+3. Use primitive gauge to record exact values tested
+4. Double-click marker to reset and test different values, or save when satisfied
+5. **Pro tip:** Use Counterfactual Explorer (Shift+Click) to test many values quickly without modifying data
 
 ### 5. Counterfactual Explorer (NEW)
 **Definition:** *Counterfactual thinking* is a clinical psychology term for exploring "what might have been" - examining how outcomes would differ if past events had unfolded differently. This tool provides real-time counterfactual analysis for relationship trajectories.
@@ -742,15 +827,29 @@ day,v,r,f,a,S,notes,marker,locked
 2. A black **X marker** appears at the clicked position (snapped to nearest event)
 3. A black **X marker** appears on the gamma_self trajectory showing the **counterfactual outcome** if that primitive had the clicked value
 4. Both **readout gauges update** showing the hypothetical primitive value and resulting gamma_self position
-5. **Drag the X marker** up/down to explore different counterfactual scenarios in real-time
+5. **Drag the X marker** vertically (up/down) to explore different counterfactual scenarios in real-time
+   - The trajectory plot automatically updates showing the alternative outcome
+   - The gamma_self gauge shows the new hypothetical endpoint
+   - Move the X marker through the full range (-10 to +10) to test sensitivities
 6. **Shift+Click elsewhere** to test a different primitive/event (previous X markers clear automatically)
 
 **Use Cases:**
 - "What if resonance had been higher at day 14?" (counterfactual exploration)
 - "How much would increasing altruism at day 21 improve the outcome?" (sensitivity analysis)
 - "Would lowering visibility at day 7 prevent the final breakup?" (intervention testing)
+- "Find the tipping point: at what fidelity value does the trajectory cross into positive territory?"
 
-**Note:** Counterfactual markers (X) are **exploratory only** - they don't modify your data. Use regular marker dragging to actually commit changes.
+**Visual Indicators:**
+- **Black X symbol** on primitive plot: Hypothetical value being tested
+- **Black X symbol** on trajectory plot: Where gamma_self would end up with that value
+- **Orange dashed trajectory**: Predicted path with the counterfactual change
+- **Gauge readouts**: Show hypothetical primitive value and resulting gamma_self position
+
+**Important Notes:**
+- Counterfactual markers (X) are **exploratory only** - they don't modify your data
+- Use regular marker dragging to actually commit changes
+- X markers are **not saved** to CSV files (reserved for diagnostics only)
+- To clear counterfactual markers: Shift+Click on a different primitive plot
 
 ### 6. Delete Events (NEW - Phase 2.2)
 **Goal:** Remove unwanted or placeholder events from a scenario
@@ -817,6 +916,56 @@ day,v,r,f,a,S,notes,marker,locked
 - Deleted events restored with all primitive values, notes, and lock status
 - Works seamlessly with other undo actions (primitive edits, resets)
 
+### 8. State Viewer Log Export (NEW - v2.2.2)
+**Goal:** Export detailed state transition log for debugging and AI-assisted analysis
+
+**Workflow:**
+1. Press **Ctrl+Shift+L** at any time during your editing session
+2. Window title updates to show **[STATE LOG EXPORTED]** (for 5 seconds)
+3. Status bar shows: **✓ State log exported: logs/state_log_YYYYMMDD_HHMMSS.txt**
+4. Message box confirms export location
+5. Log file contains all state transitions for debugging analysis
+
+**What Gets Logged:**
+- Session metadata (timestamp, file loaded, Python version)
+- All state-changing operations (primitive changes, resets, insertions, deletions)
+- State before and after each operation
+- Warnings when expected state changes don't occur
+- Call stack information for each operation
+
+**Use Cases:**
+- **Debugging unexpected behavior:** "Why didn't the label clear after reset?"
+- **Understanding complex state:** "What sequence of operations led to this state?"
+- **AI-assisted analysis:** Share log file with AI assistant for rapid diagnosis
+- **Post-mortem debugging:** Review what happened after bug occurred
+- **Development:** Understand program behavior while learning the codebase
+
+**Example Usage:**
+```
+# Bug occurs: marker label doesn't clear after reset
+1. Press Ctrl+Shift+L
+2. Log file created: logs/state_log_20251214_102347.txt
+3. Share with AI: "Read logs/state_log_20251214_102347.txt"
+4. AI analyzes log and identifies root cause with exact line number
+5. Fix applied in minutes instead of hours
+```
+
+**Log File Location:**
+- Directory: `logs/` (auto-created if needed)
+- Filename format: `state_log_YYYYMMDD_HHMMSS.txt`
+- Each export creates a new timestamped file (no overwrites)
+
+**Understanding the Log Format:**
+
+For detailed specification of what's logged and how to interpret the log file format, see **[State Management Refactoring - State Viewer Log Specification](STATE_MANAGEMENT_REFACTORING.md#state-viewer-log---specification-v222)**. This technical document defines:
+- All tracked state domains (marker state, event lifecycle, trajectory, perspective)
+- Complete log file format with examples
+- Field definitions and symbols (✓, ⚠️)
+- Invariants that are validated
+- Step-by-step debugging workflows
+
+**Note:** This is a development/debugging feature. Future versions will include full state tracking and validation. Current version creates placeholder log confirming the export mechanism works.
+
 ---
 
 ## Advanced Features
@@ -863,7 +1012,62 @@ When multiple primitives are modified at the same event:
 
 ## CSV Format Details
 
-### Input Format (Minimal)
+**This is the canonical specification for CSV scenario files.** All other documents reference this section.
+
+### File Naming Conventions
+
+**Single-Perspective Files:**
+- Any valid CSV filename: `scenario.csv`, `my_scenario.csv`, etc.
+- Loads into both M1 and M2 perspectives (can edit and save to either)
+- Use case: Simple scenarios, single-subject modeling, initial prototypes
+
+**Dual-Perspective Files:**
+- **Must include `_M1` or `_M2` anywhere in filename** (before `.csv` extension)
+- Position doesn't matter: `scenario_M1.csv`, `M1_scenario.csv`, `test_M1_modified.csv` all work
+- Editor automatically detects suffix and searches for companion file
+- Loading `scenario_M1.csv` → searches for `scenario_M2.csv`
+- Loading `scenario_M2.csv` → searches for `scenario_M1.csv`
+- Use case: Dyadic relationships modeled from both perspectives
+
+**Modified Files:**
+- Editor appends `_modified` when saving: `scenario_M1_modified.csv`
+- Prevents overwriting original data files
+- Loading modified files works normally (suffix stripped during detection)
+- Example: Load `scenario_M1.csv` → Edit → Save creates `scenario_M1_modified.csv`
+
+**Loading Behavior:**
+- **Both M1 and M2 files present:** Loads both perspectives, enables perspective switching and dual-overlay visualization
+- **Only M1 file present:** Loads M1 into both perspective slots, M1 selected by default, can save to either
+- **Only M2 file present:** Loads M2 into both perspective slots, M2 selected by default, can save to either
+- **No M1/M2 suffix:** Loads single file into both perspectives, can edit and save to M1 or M2
+
+### Column Specification
+
+**Required Columns:**
+- **Time column:** `day`, `week`, `month`, or `year` - Time point (fractional values accepted: 1.5, 2.25)
+  - Column name should match your `time_unit` metadata or use `day` for backward compatibility
+  - Examples: `day` column with `time_unit,days` OR `week` column with `time_unit,weeks`
+- **`v`** - Visibility primitive [-10, +10] human scale
+- **`r`** - Resonance primitive [-10, +10]
+- **`f`** - Fidelity primitive [-10, +10]
+- **`a`** - Altruism primitive [-10, +10]
+- **`S`** - Shared Breath primitive [-10, +10]
+
+**Optional Columns:**
+- **`notes`** - Text description of the event
+- **`marker`** - Event index (integer) for modified events, blank for unmodified (added by editor on save)
+- **`locked`** - "true" for locked events, blank for unlocked (added by editor on save)
+
+**Optional Metadata Rows (first lines):**
+- `name,Scenario Display Name` - Used in plots and output. If omitted, filename is used.
+- `time_unit,days` - Time scale: `days`, `weeks`, `months`, or `years`. Defaults to `days` if omitted.
+- `gamma_self_0,-5+0j` - Initial γ_self position (complex number). Defaults to -5+0j if omitted.
+
+**CRITICAL:** Primitives must be scored from the correct perspective. See [Primitive Modeling Guide](scenarios/primitive_modeling_guide.md) for the M1/M2 framework - this is the most common source of errors.
+
+### Example Files
+
+#### Input Format (Minimal)
 ```csv
 name,scenario_name
 time_unit,days
@@ -923,6 +1127,9 @@ day,v,r,f,a,S,notes,marker,locked
 
 **Issue:** Save creates wrong filename (M1 vs M2)
 **Solution:** Active perspective determines save filename. Switch to desired perspective before saving.
+
+**Issue:** Need to debug state issues
+**Solution:** Press `Ctrl+Shift+L` to export state viewer log. Share the log file with AI assistant for analysis. Log includes all state transitions and can identify issues like markers not clearing or unexpected behavior.
 
 ---
 

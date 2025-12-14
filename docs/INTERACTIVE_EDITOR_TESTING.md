@@ -10,6 +10,11 @@
 
 This document outlines the testing strategy for the Interactive Editor, from core logic validation to end-to-end workflow testing. The goal is to ensure software quality without over-engineering test infrastructure.
 
+**All features follow the MVT quality standard** (see [ARCHITECTURE.md](../ARCHITECTURE.md#mvt-quality-standard)):
+- **Modeled:** Clean architecture, follows patterns
+- **Verifiable:** Observable behavior, clear success criteria
+- **Testable:** Test cases ensure correctness and prevent regressions
+
 **Testing Philosophy:**
 - Start simple (core logic tests)
 - Add complexity only when needed (command tests, GUI tests)

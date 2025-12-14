@@ -261,6 +261,8 @@ class EditorController:
         Args:
             perspective: Either 'M1' or 'M2'
         """
+        from tools.editor.state_viewer import StateViewer
+        
         if perspective not in ['M1', 'M2']:
             raise ValueError(f"Invalid perspective: {perspective}. Must be 'M1' or 'M2'")
         
@@ -368,6 +370,17 @@ class EditorController:
         # Recompute trajectory for new perspective
         # This will recreate all trajectory labels automatically via _display_trajectory
         self._recompute_trajectory_immediate()
+        
+        # Record state transition
+        StateViewer.record(
+            operation='switch_perspective',
+            entity=(old_perspective, perspective),
+            changes={
+                'active_perspective': (old_perspective, perspective),
+                'undo_stack_size': (self.undo_stack_m1.count() if old_perspective == 'M1' else self.undo_stack_m2.count(),
+                                   self.undo_stack.count())
+            }
+        )
         
         ObservabilityLog.event("perspective_switch_complete", 
                                old_perspective=old_perspective, 
@@ -722,14 +735,15 @@ class EditorController:
             modified_prims = self.model.get_modified_primitives(self.perspective)
             print(f"Reset complete. Event {event_index} (time={event.time}), modified_primitives: {modified_prims}")
             
-            # Remove marker position for this primitive (using time-based key)
-            marker_key = (event.time, primitive)
+            # Remove marker position for this primitive (using event ID, not time!)
+            # NOTE: marker_positions uses (event_id, primitive) as keys
+            marker_key = (event.id, primitive)
             marker_positions = self.model.get_marker_positions(self.perspective)
             if marker_key in marker_positions:
                 del marker_positions[marker_key]
-                print(f"Removed marker position for {marker_key}")
+                print(f"Removed marker position for {marker_key} (event_id={event.id}, time={event.time})")
             else:
-                print(f"No marker position found for {marker_key}")
+                print(f"No marker position found for {marker_key} (event_id={event.id}, time={event.time})")
             
             # === Phase 3: Incremental Update ===
             # Update only this marker in PrimitivePanel (O(1) operation)
@@ -1646,3 +1660,24 @@ class EditorController:
         """Save scenario to CSV file."""
         self.model.save_csv(filepath, self.perspective)
         print(f"Saved to {filepath}")
+    
+    def save_both_perspectives(self, m1_filepath: str, m2_filepath: str) -> bool:
+        """
+        Save both M1 and M2 perspectives to separate files.
+        
+        Args:
+            m1_filepath: Path for M1 CSV file
+            m2_filepath: Path for M2 CSV file
+            
+        Returns:
+            True if both saves successful, False otherwise
+        """
+        try:
+            self.model.save_csv(m1_filepath, "M1")
+            print(f"Saved M1 to {m1_filepath}")
+            self.model.save_csv(m2_filepath, "M2")
+            print(f"Saved M2 to {m2_filepath}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] Failed to save both perspectives: {e}")
+            return False

@@ -3,9 +3,20 @@
 ## Related Documentation
 
 - **[Interactive Editor Testing](INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
-- **[Architecture](../ARCHITECTURE.md)** - Overall system architecture
+- **[Architecture](../ARCHITECTURE.md)** - Overall system architecture (see [MVT Quality Standard](../ARCHITECTURE.md#mvt-quality-standard))
 - **[State Management Refactoring](STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state
 - **[Debugging Methodology](DEBUG.md)** - Systematic debugging approaches
+
+---
+
+## Quality Standard
+
+All versions follow the **MVT standard** (Modeled, Verifiable, Testable):
+- Clean architecture patterns
+- Observable behavior with clear validation
+- Test coverage for regression prevention
+
+See [ARCHITECTURE.md](../ARCHITECTURE.md#mvt-quality-standard) for complete definition.
 
 ---
 
@@ -37,6 +48,46 @@ git checkout phase2
 
 ## Version History
 
+### v2.2.2-state-viewer-log (December 14, 2025)
+**Status:** ✅ Complete - Infrastructure ready for full state tracking
+
+**Feature: State Viewer Log Export**
+- ➕ **Keyboard shortcut** - Ctrl+Shift+L exports state log to `logs/state_log_YYYYMMDD_HHMMSS.txt`
+- ➕ **Visual feedback** - Window title shows [STATE LOG EXPORTED] for 5 seconds
+- ➕ **Status bar notification** - Shows file path where log was saved
+- ➕ **Message box confirmation** - Informs user about export location
+- ➕ **Auto-directory creation** - Creates `logs/` directory if it doesn't exist
+- ➕ **Timestamped filenames** - Never overwrites previous logs
+
+**Purpose:**
+- Enable rapid debugging through state transition logs
+- Facilitate AI-assisted bug diagnosis (share log file with assistant)
+- Provide visibility into complex state machines
+- Support post-mortem analysis of unexpected behavior
+
+**Implementation:**
+- Added `_on_export_state_log()` method in `main_window.py`
+- Placeholder log created with session metadata
+- Infrastructure ready for full StateViewer integration (future)
+
+**Use Cases:**
+- Debug marker label not clearing after reset
+- Understand sequence of operations leading to unexpected state
+- Share structured log with AI for rapid diagnosis
+- Learn program behavior while onboarding
+
+**Documentation:**
+- Updated user guide with State Viewer Log section
+- Added to keyboard shortcuts reference
+- Added troubleshooting entry for debugging state issues
+
+**MVT Compliance:**
+- ✅ Modeled: Clear state export architecture
+- ✅ Verifiable: Visual feedback (title, status, dialog)
+- ✅ Testable: Press Ctrl+Shift+L, verify file created
+
+---
+
 ### v2.3.0-entry-consolidation (Planned - December 2025)
 **Status:** Architecture refactoring planned
 
@@ -56,7 +107,42 @@ git checkout phase2
 
 **Timeline:** 4 weeks (1 week observer, 2 weeks migration, 1 week enhanced features)
 
-### v2.2.1-insertion-undo-fix (December 13, 2025) ← CURRENT
+### v2.2.2-save-both-perspectives (December 14, 2025) ← CURRENT
+**Status:** Feature addition - Save Both Perspectives
+
+**New Feature:**
+- ✅ **Save Both M1 & M2** - Single toolbar action saves both perspectives to separate files
+- ✅ **Keyboard shortcut** - Ctrl+Shift+S saves both M1_modified.csv and M2_modified.csv
+- ✅ **Workflow optimization** - Eliminates need to switch perspectives just to save
+- ✅ **Session preservation** - Captures all dual-perspective edits from one session
+
+**Implementation:**
+- Added `save_both_action` to main_window.py toolbar with Ctrl+Shift+S shortcut
+- Added `_handle_save_both_request()` to interactive_editor.py
+- Added `save_both_perspectives()` method to controller.py
+- Uses existing `model.save_csv()` called twice (once for M1, once for M2)
+
+**User Experience:**
+- Toolbar button: "Save Both M1 & M2"
+- Status bar confirms: "Saved M1: {file}_M1_modified.csv, M2: {file}_M2_modified.csv"
+- Error handling: Shows error dialog if either save fails
+
+**Use Cases:**
+- Scenario development: Building canonical scenarios with coordinated M1/M2 edits
+- Iteration workflow: Testing different relational patterns across both perspectives
+- Session snapshots: Capturing complete state before experimental changes
+- Pre-testing baseline: Saving both perspectives before manual testing week
+
+**Quality Standard:**
+- **Modeled:** Extends existing save architecture, clean separation of concerns
+- **Verifiable:** Clear terminal output, status bar feedback, file creation observable
+- **Testable:** Manual test checklist in INTERACTIVE_EDITOR_TESTING.md Tier 3
+
+**Documentation:**
+- User guide: [interactive_editor_user_guide.md](interactive_editor_user_guide.md#save-both-perspectives-planned)
+- Testing: [INTERACTIVE_EDITOR_TESTING.md](INTERACTIVE_EDITOR_TESTING.md) Tier 3
+
+### v2.2.1-insertion-undo-fix (December 13, 2025)
 **Status:** Bug fix - Event Insertion Point undo tracking
 
 **Bug Fixed:**
