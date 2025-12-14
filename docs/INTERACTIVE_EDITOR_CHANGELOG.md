@@ -1,5 +1,14 @@
 # Interactive Editor - Version History
 
+## Related Documentation
+
+- **[Interactive Editor Testing](INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
+- **[Architecture](../ARCHITECTURE.md)** - Overall system architecture
+- **[State Management Refactoring](STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state
+- **[Debugging Methodology](DEBUG.md)** - Systematic debugging approaches
+
+---
+
 ## Version Tracking Strategy
 
 **Branching:**
