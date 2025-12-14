@@ -198,8 +198,12 @@ class InteractiveEditor:
         # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.m1_path), str(self.m2_path) if self.m2_path else None)
         
-        # Create editor widgets
-        self.gamma_self0_editor = GammaSelf0Editor(self.model.gamma_self_0)
+        # Create editor widgets - use perspective-specific gamma_self_0
+        initial_gamma = self.model.get_gamma_self_0(self.controller.perspective)
+        self.gamma_self0_editor = GammaSelf0Editor(initial_gamma)
+        # Set the perspective name
+        display_name = self.model.get_display_name(self.controller.perspective)
+        self.gamma_self0_editor.set_perspective_name(display_name if display_name else self.controller.perspective)
         self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
         self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
         
@@ -211,12 +215,21 @@ class InteractiveEditor:
         self.perspective_switcher = PerspectiveSwitcher()
         self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
         
+        # Entropy parameter editors
+        from tools.editor.widgets import EntropyAttractorEditor, EntropyAmountEditor
+        self.entropy_attractor_editor = EntropyAttractorEditor()
+        self.entropy_attractor_editor.value_changed.connect(self._on_entropy_attractor_changed)
+        self.entropy_attractor_editor.reset_requested.connect(self._on_entropy_attractor_reset)
+        
+        self.entropy_amount_editor = EntropyAmountEditor()
+        self.entropy_amount_editor.value_changed.connect(self._on_entropy_amount_changed)
+        self.entropy_amount_editor.reset_requested.connect(self._on_entropy_amount_reset)
+        
         from tools.editor.widgets import NameEditor
         initial_name = self.model.get_display_name(self.controller.perspective)
         self.name_editor = NameEditor(initial_name)
         self.name_editor.name_changed.connect(self._on_name_changed)
         
-        from tools.editor.widgets import NoteEditor
         from tools.editor.widgets import NoteEditor
         self.note_editor = NoteEditor()
         self.note_editor.note_changed.connect(self._on_note_changed)
@@ -280,6 +293,8 @@ class InteractiveEditor:
         dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
         dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
         dock_layout.addWidget(self.gamma_self0_editor)
+        dock_layout.addWidget(self.entropy_attractor_editor)  # Entropy parameters
+        dock_layout.addWidget(self.entropy_amount_editor)
         dock_layout.addWidget(primitive_gauge_frame)
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
@@ -862,17 +877,13 @@ class InteractiveEditor:
         Args:
             new_value: New gamma_self_0 complex value
         """
-        # Store original value if this is the first modification
-        if not hasattr(self.model, 'gamma_self_0_original'):
-            self.model.gamma_self_0_original = self.model.gamma_self_0
-            self.model.gamma_self_0_modified = False
+        # Use perspective-specific setter
+        perspective = self.controller.perspective
+        self.model.set_gamma_self_0(perspective, new_value)
         
-        # Update model
-        old_value = self.model.gamma_self_0
-        self.model.gamma_self_0 = new_value
-        self.model.gamma_self_0_modified = (
-            abs(new_value - self.model.gamma_self_0_original) > 0.001
-        )
+        # Check if modified from original
+        original = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
+        self.model.gamma_self_0_modified = (abs(new_value - original) > 0.001)
         
         # Recompute trajectory with new initial state
         self.controller._recompute_trajectory_immediate()
@@ -888,17 +899,58 @@ class InteractiveEditor:
     
     def _on_gamma_self0_reset(self):
         """Handle reset of gamma_self_0 to original CSV value."""
-        if hasattr(self.model, 'gamma_self_0_original'):
-            self.model.gamma_self_0 = self.model.gamma_self_0_original
-            self.model.gamma_self_0_modified = False
-            
-            # Recompute trajectory
-            self.controller._recompute_trajectory_immediate()
-            
-            # Update start marker appearance
-            self.trajectory_panel.update_start_marker_style(False)
-            
-            self.window.show_message("gamma_self_0 reset to CSV default")
+        perspective = self.controller.perspective
+        original_value = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
+        
+        self.model.set_gamma_self_0(perspective, original_value)
+        self.model.gamma_self_0_modified = False
+        
+        # Update widget display
+        self.gamma_self0_editor.set_value(original_value)
+        
+        # Recompute trajectory
+        self.controller._recompute_trajectory_immediate()
+        
+        # Update start marker appearance
+        self.trajectory_panel.update_start_marker_style(False)
+        
+        self.window.show_message("gamma_self_0 reset to CSV default")
+    
+    def _on_entropy_attractor_changed(self, attractor_complex):
+        """Handle entropy attractor value change (Option 3: separate real/imag targets)."""
+        self.controller.entropy_real_target = attractor_complex.real
+        self.controller.entropy_imag_target = attractor_complex.imag
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message(f"Entropy targets updated: Real={attractor_complex.real:.1f}, Imag={attractor_complex.imag:.1f}")
+    
+    def _on_entropy_attractor_reset(self):
+        """Handle entropy attractor reset to default."""
+        from tools.editor.widgets import EntropyAttractorEditor
+        default_value = EntropyAttractorEditor.DEFAULT_VALUE
+        self.controller.entropy_real_target = default_value.real
+        self.controller.entropy_imag_target = default_value.imag
+        self.entropy_attractor_editor.set_value(default_value)
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message("Entropy targets reset to default")
+    
+    def _on_entropy_amount_changed(self, delta_s_tuple):
+        """Handle entropy decay rates change (Option 3: separate real/imag rates)."""
+        delS_real, delS_imag = delta_s_tuple
+        self.controller.entropy_delS_real = delS_real
+        self.controller.entropy_delS_imag = delS_imag
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message(f"Entropy rates updated: Real={delS_real:.2f}, Imag={delS_imag:.2f}")
+    
+    def _on_entropy_amount_reset(self):
+        """Handle entropy decay rates reset to default."""
+        from tools.editor.widgets import EntropyAmountEditor
+        default_real = EntropyAmountEditor.DEFAULT_VALUE_REAL
+        default_imag = EntropyAmountEditor.DEFAULT_VALUE_IMAG
+        self.controller.entropy_delS_real = default_real
+        self.controller.entropy_delS_imag = default_imag
+        self.entropy_amount_editor.set_value(default_real, default_imag)
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message("Entropy rates reset to default")
     
     def _on_perspective_changed(self, perspective: str):
         """
@@ -913,6 +965,11 @@ class InteractiveEditor:
         current_name = self.model.get_display_name(perspective)
         print(f"[DEBUG] Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
         self.name_editor.set_name(current_name)
+        
+        # Update gamma_self0_editor with new perspective's value and name
+        gamma_value = self.model.get_gamma_self_0(perspective)
+        self.gamma_self0_editor.set_value(gamma_value)
+        self.gamma_self0_editor.set_perspective_name(current_name if current_name else perspective)
         
         self.window.show_message(f"Switched to {perspective} perspective")
     

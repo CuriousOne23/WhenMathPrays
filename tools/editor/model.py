@@ -95,9 +95,17 @@ class EditorModel:
         self.name_m2: str = ""  # Name for M2 perspective
         self.time_unit: str = "days"
         self.filepath: str = ""  # Store filepath for fallback name extraction
-        self.gamma_self_0: complex = 0 + 0j  # Initial gamma_self position
-        self.gamma_self_0_original: complex = 0 + 0j  # Original value from CSV
-        self.gamma_self_0_modified: bool = False  # Whether gamma_self_0 has been changed
+        
+        # Perspective-specific gamma_self_0 (initial trajectory position)
+        self.gamma_self_0_m1: complex = 0 + 0j  # M1's initial gamma_self position
+        self.gamma_self_0_m2: complex = 0 + 0j  # M2's initial gamma_self position
+        self.gamma_self_0_m1_original: complex = 0 + 0j  # Original M1 value from CSV
+        self.gamma_self_0_m2_original: complex = 0 + 0j  # Original M2 value from CSV
+        
+        # Deprecated: Use gamma_self_0_m1/m2 instead
+        self.gamma_self_0: complex = 0 + 0j  # Deprecated - use perspective-specific fields
+        self.gamma_self_0_original: complex = 0 + 0j  # Deprecated
+        self.gamma_self_0_modified: bool = False  # Deprecated
         self.events: list = []  # List of Event objects (new structure)
         self.events_m1: list = []  # Events for perspective M1
         self.events_m2: list = []  # Events for perspective M2
@@ -118,6 +126,23 @@ class EditorModel:
         self.marker_positions_m1: Dict[tuple, complex] = {}  # {(event_id, primitive): gamma_self_position}
         self.marker_positions_m2: Dict[tuple, complex] = {}  # {(event_id, primitive): gamma_self_position}
     
+    def get_gamma_self_0(self, perspective: str) -> complex:
+        """Get initial gamma_self position for the specified perspective."""
+        import traceback
+        result = self.gamma_self_0_m1 if perspective == "M1" else self.gamma_self_0_m2
+        print(f"[GET_GAMMA] perspective={perspective}, M1={self.gamma_self_0_m1}, M2={self.gamma_self_0_m2}, returning={result}")
+        print(f"[GET_GAMMA] Called from: {traceback.extract_stack()[-2]}")
+        return result
+    
+    def set_gamma_self_0(self, perspective: str, value: complex):
+        """Set initial gamma_self position for the specified perspective."""
+        if perspective == "M1":
+            self.gamma_self_0_m1 = value
+        else:
+            self.gamma_self_0_m2 = value
+        # Update deprecated field for backward compatibility
+        self.gamma_self_0 = value
+    
     def load_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
         Load scenario from CSV file using new Event/Marker structure.
@@ -134,9 +159,22 @@ class EditorModel:
         print(f"[DEBUG] EditorModel.load_csv: loaded {len(events)} events from {filepath}, next_event_id now {self.next_event_id}")
         
         # Apply metadata to model
-        self.gamma_self_0 = metadata.get('gamma_self_0', 0+0j)
-        self.gamma_self_0_original = self.gamma_self_0  # Store original for reset
-        self.gamma_self_0_modified = False  # Not modified on load
+        gamma_value = metadata.get('gamma_self_0', 0+0j)
+        
+        if perspective == "M1":
+            self.gamma_self_0_m1 = gamma_value
+            self.gamma_self_0_m1_original = gamma_value
+            print(f"[GAMMA_SELF_0] M1 set to: {gamma_value} from {Path(filepath).name}")
+        else:
+            self.gamma_self_0_m2 = gamma_value
+            self.gamma_self_0_m2_original = gamma_value
+            print(f"[GAMMA_SELF_0] M2 set to: {gamma_value} from {Path(filepath).name}")
+        
+        # Backward compatibility: set deprecated field to last loaded value
+        self.gamma_self_0 = gamma_value
+        self.gamma_self_0_original = gamma_value
+        self.gamma_self_0_modified = False
+        
         self.time_unit = metadata.get('time_unit', 'days')
         
         # Store perspective-specific name
@@ -146,7 +184,7 @@ class EditorModel:
             else:
                 self.name_m2 = metadata['name']
         
-        print(f"[DEBUG] EditorModel.load_csv: gamma_self_0 = {self.gamma_self_0}")
+        print(f"[DEBUG] EditorModel.load_csv: gamma_self_0_{perspective.lower()} = {gamma_value}")
         
         if perspective == "M1":
             self.events_m1 = events
@@ -199,8 +237,9 @@ class EditorModel:
             if name:
                 f.write(f"name,{name}\n")
             f.write(f"time_unit,{self.time_unit}\n")
-            # Write gamma_self_0 (format: -5+3j or 0+0j)
-            gamma_str = f"{self.gamma_self_0.real:+.0f}{self.gamma_self_0.imag:+.0f}j"
+            # Write gamma_self_0 (format: -5+3j or 0+0j) - use perspective-specific value
+            gamma_value = self.gamma_self_0_m1 if perspective == "M1" else self.gamma_self_0_m2
+            gamma_str = f"{gamma_value.real:+.0f}{gamma_value.imag:+.0f}j"
             gamma_str = gamma_str.replace('+-', '-')  # Fix double sign
             f.write(f"gamma_self_0,{gamma_str}\n")
 

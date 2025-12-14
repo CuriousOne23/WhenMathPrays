@@ -23,9 +23,12 @@ W_S_I = 0.5  # Shared Breath (imaginary axis contribution)
 FIDELITY_SCALING_FACTOR = 0.12  # Negative fidelity scaling coefficient (LOCKED)
 FIDELITY_EPSILON = 5.0  # Collapse prevention floor for Im depth (LOCKED)
 
-# Entropy drift (DEFAULT, tunable by scenario)
-DELTA_S = 0.02  # Entropy drift magnitude per time unit
-GAMMA_ENTROPY_ATTRACTOR = -8.0 + 0.0j  # Target position (ego axis)
+# Entropy drift (DEFAULT, tunable by scenario) - Option 3: Separate axis targets and rates
+DELTA_S = 0.02  # Default unified entropy rate (backward compatibility)
+ENTROPY_REAL_TARGET = -150.0  # Real axis target (deep Ego, isolated)
+ENTROPY_IMAG_TARGET = 0.0     # Imaginary axis target (neutral affect, neither love nor hate)
+DELTA_S_REAL = 0.02  # Decay rate toward ego axis
+DELTA_S_IMAG = 0.02  # Decay rate toward neutral affect
 
 # Default weights dictionary
 DEFAULT_WEIGHTS = {
@@ -37,8 +40,11 @@ DEFAULT_WEIGHTS = {
     'w_S_I': W_S_I,
     'fidelity_scaling_factor': FIDELITY_SCALING_FACTOR,
     'fidelity_epsilon': FIDELITY_EPSILON,
-    'delS': DELTA_S,
-    'gamma_entropy_attractor': GAMMA_ENTROPY_ATTRACTOR,
+    'delS': DELTA_S,  # Backward compatibility (unified rate)
+    'entropy_real_target': ENTROPY_REAL_TARGET,
+    'entropy_imag_target': ENTROPY_IMAG_TARGET,
+    'delS_real': DELTA_S_REAL,
+    'delS_imag': DELTA_S_IMAG,
     'entropy_per_event': False  # False=scale by time (default), True=per event
 }
 
@@ -121,8 +127,7 @@ def update_gamma_self(
     w_S_I = weights.get('w_S_I', W_S_I)
     scaling_factor = weights.get('fidelity_scaling_factor', FIDELITY_SCALING_FACTOR)
     epsilon = weights.get('fidelity_epsilon', FIDELITY_EPSILON)
-    delS = weights.get('delS', DELTA_S)
-    gamma_entropy_attractor = weights.get('gamma_entropy_attractor', GAMMA_ENTROPY_ATTRACTOR)
+    delS = weights.get('delS', DELTA_S)  # Backward compatibility (unified rate)
     entropy_per_event = weights.get('entropy_per_event', False)
     
     # Compute love depth for fidelity asymmetry (Im-only, with floor)
@@ -135,20 +140,41 @@ def update_gamma_self(
     delta_real = w_v * v + w_S_R * S  # Ego↔We axis
     delta_imag = w_r * r + w_f * f_prime + w_a * a + w_S_I * S  # Hate↔Love axis
     
-    # Entropy drift: pull toward attractor position
-    # Direction: unit vector from current position toward attractor
-    # Magnitude: delS, scaled by time_delta (or fixed per event)
-    attractor_vector = gamma_entropy_attractor - gamma_self_current
-    attractor_distance = abs(attractor_vector)
+    # Entropy drift: Option 3 - Separate real/imag targets with independent decay rates
+    # Extract entropy parameters from weights (with backward compatibility)
+    entropy_real_target = weights.get('entropy_real_target', -150.0)
+    entropy_imag_target = weights.get('entropy_imag_target', 0.0)
+    delS_real = weights.get('delS_real', delS)  # Fall back to unified delS if not provided
+    delS_imag = weights.get('delS_imag', delS)
     
-    if attractor_distance > 1e-10:  # Avoid division by zero if already at attractor
-        direction = attractor_vector / attractor_distance
-        if entropy_per_event:
-            entropy_pull = delS * direction  # Fixed magnitude per event
-        else:
-            entropy_pull = (delS * time_delta) * direction  # Scaled by time elapsed
+    # Calculate entropy pull separately for each axis
+    real_current = gamma_self_current.real
+    imag_current = gamma_self_current.imag
+    
+    # Real axis: pull toward ego (negative real)
+    real_diff = entropy_real_target - real_current
+    if entropy_per_event:
+        entropy_pull_real = delS_real * real_diff
     else:
-        entropy_pull = 0.0 + 0.0j  # Already at attractor
+        entropy_pull_real = (delS_real * time_delta) * real_diff
+    
+    # Imaginary axis: pull toward neutral (zero imaginary)
+    imag_diff = entropy_imag_target - imag_current
+    if entropy_per_event:
+        entropy_pull_imag = delS_imag * imag_diff
+    else:
+        entropy_pull_imag = (delS_imag * time_delta) * imag_diff
+    
+    entropy_pull = entropy_pull_real + 1j * entropy_pull_imag
+    
+    # Debug logging
+    import os
+    if os.environ.get('DEBUG_ENTROPY') == '1':
+        print(f"[ENTROPY_DEBUG] γ_current={gamma_self_current:.2f}, targets=({entropy_real_target:.1f}, {entropy_imag_target:.1f}j)")
+        print(f"[ENTROPY_DEBUG] real_diff={real_diff:.2f}, imag_diff={imag_diff:.2f}")
+        print(f"[ENTROPY_DEBUG] delS_real={delS_real}, delS_imag={delS_imag}, dt={time_delta}")
+        print(f"[ENTROPY_DEBUG] entropy_pull={entropy_pull:.4f}")
+        print(f"[ENTROPY_DEBUG] primitives: delta_real={delta_real:.2f}, delta_imag={delta_imag:.2f}")
     
     # Update position
     gamma_self_next = gamma_self_current + delta_real + 1j * delta_imag + entropy_pull
