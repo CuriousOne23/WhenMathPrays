@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QToolBar, 
     QStatusBar, QFileDialog, QMessageBox
 )
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QSettings
 from PySide6.QtGui import QAction, QKeySequence, QUndoStack
 
 
@@ -44,14 +44,22 @@ class EditorMainWindow(QMainWindow):
         self.csv_file = csv_file
         self.setWindowTitle(f'Interactive Scenario Editor - {csv_file.name}')
         
-        # Get screen size and use 90% of available space
-        from PySide6.QtWidgets import QApplication
-        screen = QApplication.primaryScreen().availableGeometry()
-        width = int(screen.width() * 0.9)
-        height = int(screen.height() * 0.85)
-        x = int((screen.width() - width) / 2)
-        y = int((screen.height() - height) / 2)
-        self.setGeometry(x, y, width, height)
+        # Initialize settings for state persistence
+        self.settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        
+        # Restore saved geometry and state, or use defaults
+        if self.settings.contains('geometry'):
+            self.restoreGeometry(self.settings.value('geometry'))
+        else:
+            # Default: 90% of screen size, centered
+            from PySide6.QtWidgets import QApplication
+            screen = QApplication.primaryScreen().availableGeometry()
+            width = int(screen.width() * 0.9)
+            height = int(screen.height() * 0.85)
+            x = int((screen.width() - width) / 2)
+            y = int((screen.height() - height) / 2)
+            self.setGeometry(x, y, width, height)
+        
         self.setMinimumSize(1000, 500)  # Minimum size for usability
         
         # Central widget will be set by application with PyQtGraph panels
@@ -124,6 +132,46 @@ class EditorMainWindow(QMainWindow):
         self._undo_action = undo_action
         self._redo_action = redo_action
         self._debug_dock_action = debug_dock_action
+    
+    def switch_undo_stack(self, new_stack: QUndoStack):
+        """
+        Switch to a different undo stack and update UI actions.
+        
+        Args:
+            new_stack: The new QUndoStack to use for undo/redo
+        """
+        if new_stack is None:
+            return
+        
+        # Remove old actions from toolbar
+        self._toolbar.removeAction(self._undo_action)
+        self._toolbar.removeAction(self._redo_action)
+        
+        # Update undo stack reference
+        self.undo_stack = new_stack
+        
+        # Create new actions connected to the new stack
+        self._undo_action = self.undo_stack.createUndoAction(self, '&Undo')
+        self._undo_action.setShortcut(QKeySequence.Undo)
+        self._redo_action = self.undo_stack.createRedoAction(self, '&Redo')
+        self._redo_action.setShortcut(QKeySequence.Redo)
+        
+        # Re-add actions to toolbar
+        self._toolbar.insertAction(self._toolbar.actions()[0], self._undo_action)
+        self._toolbar.insertAction(self._toolbar.actions()[1], self._redo_action)
+        
+        print(f"[UNDO] UI actions switched to new stack (size: {new_stack.count()})")
+    
+    def restore_dock_state(self):
+        """
+        Restore saved dock widget state after docks have been added.
+        Should be called after all docks are created and added to window.
+        """
+        if self.settings.contains('windowState'):
+            print("[STATE] Restoring saved window layout")
+            self.restoreState(self.settings.value('windowState'))
+        else:
+            print("[STATE] No saved layout found, using defaults")
     
     def _setup_view_menu(self, dock_widgets: dict):
         """
@@ -206,6 +254,12 @@ class EditorMainWindow(QMainWindow):
         
         Phase 3.5: Emit cleanup_requested signal instead of calling callback.
         """
+        # Save window geometry and state for next launch
+        self.settings.setValue('geometry', self.saveGeometry())
+        self.settings.setValue('windowState', self.saveState())
+        self.settings.sync()  # Force immediate write to storage
+        print("[STATE] Window layout saved")
+        
         # Emit cleanup signal for application to handle
         self.cleanup_requested.emit()
         

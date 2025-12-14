@@ -33,7 +33,7 @@ from tools.editor.controller import EditorController
 from tools.editor.views.primitive_panel_pyqtgraph import PrimitivePanelPyQtGraph
 from tools.editor.views.trajectory_panel_pyqtgraph import TrajectoryPanelPyQtGraph
 from tools.editor.config import get_config
-from tools.editor.qt_window import EditorMainWindow
+from tools.editor.main_window import EditorMainWindow
 from tools.editor.widgets import GammaSelf0Editor
 from tools.editor.constants import is_inserted_event
 
@@ -311,21 +311,27 @@ class InteractiveEditor:
             'Controls': self.controls_dock
         })
         
-        # Configure 3-column layout after window is shown
-        # Use QTimer to delay resize until after layout is established
+        # Restore saved dock layout, or configure default layout
+        # Use QTimer to delay until after layout is established
         from PySide6.QtCore import QTimer
         def setup_dock_sizes():
-            window_width = self.window.width()
-            # Allocate: 20% Primitives, 45% Trajectory, 35% Controls
-            primitives_width = int(window_width * 0.20)
-            trajectory_width = int(window_width * 0.45)
-            controls_width = int(window_width * 0.35)
-            self.window.resizeDocks(
-                [self.primitive_dock, self.trajectory_dock, self.controls_dock],
-                [primitives_width, trajectory_width, controls_width],
-                Qt.Horizontal
-            )
-        QTimer.singleShot(100, setup_dock_sizes)
+            # Check if saved state exists
+            if self.window.settings.contains('windowState'):
+                # Restore saved state only - don't resize
+                self.window.restore_dock_state()
+            else:
+                # No saved state - apply default layout
+                window_width = self.window.width()
+                # Allocate: 33.3% Primitives, 42.7% Trajectory, 23.3% Controls
+                primitives_width = int(window_width * 0.333)
+                trajectory_width = int(window_width * 0.427)
+                controls_width = int(window_width * 0.233)
+                self.window.resizeDocks(
+                    [self.primitive_dock, self.trajectory_dock, self.controls_dock],
+                    [primitives_width, trajectory_width, controls_width],
+                    Qt.Horizontal
+                )
+        QTimer.singleShot(200, setup_dock_sizes)  # Increased delay for more stable restore
         
         # Debug function to print current dock configuration (triggered by Ctrl+D)
         def print_dock_config():
@@ -1080,6 +1086,7 @@ def main():
         epilog="""
 Examples:
   python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+  python tools/interactive_editor.py data/single_dating_to_love_M1.csv --reset-layout
   
 Usage:
   - Drag primitive points vertically to change values (shows hollow preview)
@@ -1115,8 +1122,17 @@ Phase 1.5 Features:
     
     parser.add_argument('csv_file', type=str, 
                        help='Path to CSV file to edit')
+    parser.add_argument('--reset-layout', action='store_true',
+                       help='Reset window layout to defaults (clears saved state)')
     
     args = parser.parse_args()
+    
+    # Clear saved layout if requested
+    if args.reset_layout:
+        from PySide6.QtCore import QSettings
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        settings.clear()
+        print("[RESET] Cleared saved window layout - will use defaults")
     
     # Validate file and resolve M1/M2 paths
     m1_path, m2_path, error, was_originally_m2 = validate_and_resolve_paths(args.csv_file)
