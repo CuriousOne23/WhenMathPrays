@@ -3,6 +3,18 @@
 ## Purpose
 This document describes the overall architecture, object model, and design principles for the WhenMathPrays interactive scenario editor. It is intended to guide development, debugging, and future enhancements.
 
+## MVT Quality Standard
+
+**All features and enhancements in this project follow the MVT standard:**
+
+- **M = Modeled:** Clean architecture, follows established patterns (MVC, observer, command), maintainable code structure
+- **V = Verifiable:** Observable behavior with clear success criteria, user-visible feedback, deterministic outcomes
+- **T = Testable:** Manual test checklists and/or automated tests, regression-proof, repeatable validation
+
+**MVT is the minimum bar for any code contribution.** Features that are not Modeled, Verifiable, and Testable should not be merged.
+
+See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for testing methodology that supports the MVT standard.
+
 ## Recent Updates
 
 **December 13, 2025:** Entry Point Consolidation & Observability Refactor (PLANNED):

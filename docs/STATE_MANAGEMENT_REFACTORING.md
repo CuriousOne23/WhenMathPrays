@@ -1299,3 +1299,279 @@ The refactoring is structured in phases to maximize value and minimize risk:
 **Phase 4 validates Phases 1-2** - tests confirm clean architecture is correct.
 
 **Phase 5 is future work** - depends on research direction.
+
+---
+
+## State Viewer Log - Specification (v2.2.2+)
+
+### Overview
+
+The **State Viewer Log** exports detailed state transition information for debugging and analysis. This section defines what states are tracked, how they're logged, and what format users/AI assistants will see.
+
+### Purpose
+
+- **Debugging**: Rapid diagnosis of unexpected behavior
+- **AI-Assisted Analysis**: Share structured logs for intelligent diagnosis
+- **Learning**: Understand program behavior and state flow
+- **Post-Mortem**: Analyze issues that occurred during session
+
+### Architecture Philosophy
+
+The State Viewer follows strict design principles to remain reliable and maintainable:
+
+#### Core Principles
+
+1. **Zero-Overhead Design**
+   - ~100ns per operation when enabled
+   - Zero overhead when disabled via `STATE_VIEWER=0`
+   - Fixed 850KB memory footprint (ring buffer of 1000 operations)
+   - No unbounded growth, no memory leaks
+   - Always-on by default without impacting user experience
+
+2. **Flight Data Recorder Pattern**
+   - Records facts continuously during operation
+   - Export happens instantly (all work done incrementally)
+   - No reconstruction, no backfilling
+   - Captures ground truth as it happens
+
+3. **Automatic Context Capture**
+   - Location detection via `traceback.extract_stack()`
+   - No manual location strings needed
+   - Compiler-precise file:line references
+   - Single line of code per instrumented operation
+
+4. **Agnostic, Simple, Reliable, No Waves**
+   - **RECORDS FACTS ONLY** - before/after state snapshots
+   - **NO DECISION LOGIC** - no if/then branches, no validation rules
+   - **NO DOMAIN KNOWLEDGE** - doesn't know what states "should" be
+   - **NO WARNINGS GENERATION** - only detects unchanged fields (structural, not semantic)
+   
+   ⚠️ **WARNING TO MAINTAINERS**: Do not add business logic, validation rules, or domain-specific decisions to StateViewer. Keep it pure. Analysis belongs in separate tools.
+
+5. **Separation of Concerns**
+   - **StateViewer**: Records what happened (facts)
+   - **Separate Analyzers**: Interpret what it means (analysis)
+   - **Domain Validators**: Check if behavior was correct (rules)
+   
+   This separation ensures StateViewer remains trustworthy even as domain rules evolve.
+
+#### Why These Principles Matter
+
+**Temptation to Add Logic**: As the codebase grows, there will be pressure to add "smart" features:
+- "Let's have StateViewer detect this specific bug pattern"
+- "Let's add validation for this particular invariant"
+- "Let's generate warnings for domain-specific issues"
+
+**Why to Resist**: 
+- Adding logic creates coupling to domain knowledge
+- Domain rules change; facts don't
+- Complex StateViewer becomes unreliable
+- Testing becomes harder
+- Future bugs might be in StateViewer itself
+
+**The Right Way**: Build separate analyzer tools that consume StateViewer logs. Keep the recorder pure and simple.
+
+### Tracked States
+
+The State Viewer logs transitions for these state domains:
+
+#### 1. Marker State (Primitive Values)
+**Tracked Operations:**
+- `update_primitive` - User drags marker to new value
+- `reset_primitive` - User double-clicks to restore baseline
+
+**State Fields:**
+```python
+{
+    'value': float,              # Primitive value
+    'gamma_position': complex,   # Where on trajectory when modified
+    'in_modified_dict': bool     # In modified_primitives tracking
+}
+```
+
+**Invariants Validated:**
+- After `reset_primitive`: `gamma_position` must be `None`
+- After `reset_primitive`: `in_modified_dict` must be `False`
+- After `update_primitive`: `in_modified_dict` must be `True`
+
+#### 2. Event Lifecycle
+**Tracked Operations:**
+- `insert_event` - User Ctrl+Shift+Click to insert new event
+- `delete_event` - User Ctrl+Click to delete event
+
+**State Fields:**
+```python
+{
+    'event_count': int,          # Total events in timeline
+    'event_times': List[float],  # Time values of all events
+    'event_ids': List[int]       # Immutable IDs of all events
+}
+```
+
+**Invariants Validated:**
+- Cannot delete first or last event
+- Cannot delete when only 2 events remain
+- Insertion shifts all subsequent times correctly
+
+#### 3. Trajectory Computation
+**Tracked Operations:**
+- `trajectory_computed` - New gamma_self trajectory calculated
+
+**State Fields:**
+```python
+{
+    'trajectory_length': int,           # Number of trajectory points
+    'final_gamma': complex,             # Endpoint of trajectory
+    'pinned_markers_count': int,        # How many markers on trajectory
+}
+```
+
+#### 4. Perspective State
+**Tracked Operations:**
+- `switch_perspective` - User switches between M1/M2
+
+**State Fields:**
+```python
+{
+    'active_perspective': str,   # 'M1' or 'M2'
+    'has_m1_data': bool,
+    'has_m2_data': bool
+}
+```
+
+### Log File Format
+
+**Filename:** `logs/state_log_YYYYMMDD_HHMMSS.txt`
+
+**Example Log File:** See [example_state_log.txt](example_state_log.txt) for a complete real-world example showing 35 operations including edits, inserts, undos, and perspective switches.
+
+#### Privacy and Path Sanitization
+
+**Username Anonymization**: All paths in the log automatically replace usernames with `user` to protect privacy when sharing logs. For example:
+- `C:\Users\jeffg\Documents\...` → `C:\Users\user\Documents\...`
+- `/home/jeffg/projects/...` → `/home/user/projects/...`
+
+This is intentional and ensures logs can be safely shared for debugging without exposing personal information. The sanitization is implemented in `StateViewer._sanitize_path()` and can be modified if different behavior is needed for your environment.
+
+**Structure:**
+```
+STATE VIEWER LOG
+================================================================================
+Session: 2025-12-14T10:23:45.123456
+Python: 3.10.0
+Platform: Windows-10-...
+Working directory: C:\Users\user\Documents\GitHub\WhenMathPrays
+
+Loaded files:
+  Dual-file mode:
+    M1: data\library\love\single_dating_to_love_M1.csv
+    M2: data\library\love\single_dating_to_love_M2.csv
+
+Total operations: 89
+Warnings: 1
+================================================================================
+
+⚠️  WARNINGS DETECTED
+--------------------------------------------------------------------------------
+  #0067: reset_primitive at model.py:572
+
+OPERATION LOG
+================================================================================
+
+[0065] update_primitive
+Time: 2025-12-14T10:23:45.120
+Entity: (event_id=5, prim='v', perspective='M1')
+Location: model.py:248 in update_primitive()
+Changes:
+  value: 5.0 → -0.125  ✓
+  gamma_position: None → (21.78+69.12j)  ✓
+  in_modified_dict: False → True  ✓
+
+[0067] reset_primitive
+Time: 2025-12-14T10:23:47.456
+Entity: (event_id=5, prim='v', perspective='M1')
+Location: model.py:572 in reset_event_primitive()
+Changes:
+  value: -0.125 → 5.0  ✓
+  in_modified_dict: True → False  ✓
+  gamma_position: (21.78+69.12j) → (21.78+69.12j)  ⚠️  UNCHANGED
+⚠️  WARNING: Expected gamma_position to change to None, but remained unchanged
+
+[0068] update_trajectory
+Time: 2025-12-14T10:23:47.458
+Entity: perspective='M1'
+Location: controller.py:1532 in _update_trajectory()
+Changes:
+  pinned_markers_count: 0 → 1  ✓
+  marker_included: (5, 'v') because gamma_position=(21.78+69.12j)
+```
+
+### Log Field Definitions
+
+**Header Fields:**
+- `Session` - ISO 8601 timestamp when log exported
+- `Python` - Python version running the editor
+- `Platform` - OS and version
+- `Loaded file` - CSV file being edited
+- `Perspective` - Active perspective (M1 or M2)
+- `Total operations` - Count of state-changing operations
+- `Warnings` - Count of invariant violations detected
+
+**Operation Entry Fields:**
+- `[ID]` - Sequential operation number (0-based)
+- `Time` - ISO 8601 timestamp when operation occurred
+- `Entity` - What was affected (event_id, primitive, perspective)
+- `Location` - File:line where operation was executed
+- `Changes` - Fields that changed with before → after values
+- `✓` - Field changed as expected
+- `⚠️  UNCHANGED` - Field should have changed but didn't (potential bug)
+- `⚠️  WARNING` - Invariant violation detected
+
+### Using the Log for Debugging
+
+**Scenario: Label not clearing after reset**
+
+1. **Export log**: Press `Ctrl+Shift+L`
+2. **Read warnings section**: Identifies operation #67 has issue
+3. **Find operation**: Jump to `[0067] reset_primitive`
+4. **Check changes**: See `gamma_position` unchanged (should be None)
+5. **Check location**: `model.py:572 in reset_event_primitive()`
+6. **Fix**: Add `marker.clear_gamma_position(perspective)` at line 572
+
+**Time to diagnosis**: ~30 seconds (vs 30 minutes without log)
+
+### AI-Assisted Analysis Protocol
+
+**User workflow:**
+1. Bug occurs
+2. Press `Ctrl+Shift+L` to export log
+3. Tell AI: "Read `logs/state_log_20251214_102347.txt`"
+4. AI reads structured log and provides:
+   - Root cause identification
+   - Exact file:line location
+   - Suggested fix
+   - Causal chain explanation
+
+**AI reads the log directly from the file system**, eliminating copy/paste errors and providing full context.
+
+### Implementation Status
+
+**v2.2.2 (Current):**
+- ✅ Infrastructure complete (Ctrl+Shift+L exports log)
+- ✅ Visual feedback (title, status bar, dialog)
+- ✅ Log file creation with metadata
+- ⏳ Placeholder content (structure defined, awaiting full StateViewer implementation)
+
+**Future (v2.3.0+):**
+- ⏳ Full state tracking in operations
+- ⏳ Automatic validation and warning detection
+- ⏳ Causal chain tracking (what caused this operation?)
+- ⏳ Differential analysis (compare good vs bad runs)
+- ⏳ Query API (interactive log exploration)
+
+### Related Documentation
+
+- **User Guide**: [interactive_editor_user_guide.md](interactive_editor_user_guide.md#8-state-viewer-log-export-new---v222) - How to use State Viewer Log
+- **Changelog**: [INTERACTIVE_EDITOR_CHANGELOG.md](INTERACTIVE_EDITOR_CHANGELOG.md#v222-state-viewer-log-december-14-2025) - Feature history
+- **Debug Guide**: [DEBUG.md](DEBUG.md) - Debugging methodologies
+- **This Document**: State domains and enums (earlier sections)

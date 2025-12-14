@@ -371,6 +371,7 @@ class InteractiveEditor:
 
         # Set up callbacks AFTER panels and controller are initialized
         self.window.save_callback = self._handle_save_request
+        self.window.save_both_callback = self._handle_save_both_request
         self.window.cleanup_callback = self._handle_cleanup
         
         # Load window geometry and dock layout from saved state
@@ -440,6 +441,38 @@ class InteractiveEditor:
         
         if not save_csv and not save_png:
             self.window.show_message("No save operation performed", 'warning')
+    
+    def _handle_save_both_request(self):
+        """
+        Handle save both perspectives request.
+        Saves M1 and M2 data to separate files in one operation.
+        """
+        # Commit any preview changes first
+        self.controller.commit_changes()
+        
+        # Determine base name - strip _modified and _M1/_M2 suffixes
+        stem = self.original_csv_file.stem
+        if stem.endswith('_modified'):
+            stem = stem[:-9]
+        # Remove _M1 or _M2 suffix if present
+        if stem.endswith('_M1') or stem.endswith('_M2'):
+            stem = stem[:-3]
+        
+        # Output directory
+        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name in ['data', 'library'] else Path('data')
+        data_dir.mkdir(exist_ok=True)
+        
+        # Output paths for both perspectives
+        m1_csv_path = data_dir / f"{stem}_M1_modified.csv"
+        m2_csv_path = data_dir / f"{stem}_M2_modified.csv"
+        
+        # Save both perspectives
+        success = self.controller.save_both_perspectives(str(m1_csv_path), str(m2_csv_path))
+        
+        if success:
+            self.window.show_message(f"Saved M1: {m1_csv_path.name}, M2: {m2_csv_path.name}")
+        else:
+            self.window.show_message("Failed to save both perspectives", 'error')
     
     def _handle_zoom_in(self):
         """Handle zoom in toolbar button - zoom all panels uniformly."""

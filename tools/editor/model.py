@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict
 from pathlib import Path
 from tools.editor.observable import ObservableDict
+from tools.editor.state_viewer import StateViewer
 
 
 @dataclass
@@ -151,6 +152,12 @@ class EditorModel:
             self.events_m1 = events
         else:
             self.events_m2 = events
+        
+        # Record file loading for State Viewer
+        if perspective == "M1":
+            StateViewer.set_loaded_files(m1_path=filepath)
+        else:
+            StateViewer.set_loaded_files(m2_path=filepath)
     
     def save_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
@@ -161,6 +168,9 @@ class EditorModel:
             filepath: Output path
             perspective: "M1" or "M2"
         """
+        # Capture before state
+        before_dirty = self.dirty
+        
         events = self.events_m1 if perspective == "M1" else self.events_m2
 
         # Ensure marker and locked columns are set for edited/locked events
@@ -203,6 +213,17 @@ class EditorModel:
                 writer.writerow(event.to_dict())
         
         self.dirty = False
+        
+        # Record state transition
+        StateViewer.record(
+            operation='save_csv',
+            entity=(perspective, filepath),
+            changes={
+                'dirty': (before_dirty, False),
+                'event_count': (len(events), len(events))
+            }
+        )
+        
         print(f"Saved {len(events)} events to {filepath}")
     
     def update_primitive(self, event_index: int, primitive: str, value: float, 
@@ -232,20 +253,39 @@ class EditorModel:
                 self.preview_changes[event_index] = {}
             self.preview_changes[event_index][primitive] = value
         else:
+            # Capture before state
+            event = events[event_index]
+            marker_obj = event.markers[primitive]
+            event_id = event.id
+            before_value = marker_obj.value
+            before_in_modified = event_id in self.get_modified_primitives(perspective) and primitive in self.get_modified_primitives(perspective).get(event_id, set())
+            
             # Commit change
             events[event_index].markers[primitive].value = value
 
             # Auto-mark as modified (set style or a marker property)
-            marker_obj = events[event_index].markers[primitive]
             if not getattr(marker_obj, 'style', None):
                 marker_obj.style = 'circle'  # Or set a property to indicate modified
 
-            # Track which primitive was modified (by event TIME, not index)
-            event_time = events[event_index].time
+            # Track which primitive was modified (by event ID, not time or index)
             modified_prims = self.get_modified_primitives(perspective)
-            if event_time not in modified_prims:
-                modified_prims[event_time] = set()
-            modified_prims[event_time].add(primitive)
+            if event_id not in modified_prims:
+                modified_prims[event_id] = set()
+            modified_prims[event_id].add(primitive)
+
+            # Capture after state
+            after_value = marker_obj.value
+            after_in_modified = event_id in modified_prims and primitive in modified_prims.get(event_id, set())
+            
+            # Record state transition
+            StateViewer.record(
+                operation='update_primitive',
+                entity=(event_id, primitive, perspective),
+                changes={
+                    'value': (before_value, after_value),
+                    'in_modified_dict': (before_in_modified, after_in_modified)
+                }
+            )
 
             self.dirty = True
             self.modified_indices.add(event_index)
@@ -269,8 +309,25 @@ class EditorModel:
         if not 0 <= event_index < len(events):
             raise IndexError(f"Event index {event_index} out of range")
         
+        # Capture before state
+        event = events[event_index]
+        event_id = event.id
+        before_locked = event.locked
+        
         events[event_index].locked = not events[event_index].locked
         self.dirty = True
+        
+        # Capture after state
+        after_locked = events[event_index].locked
+        
+        # Record state transition
+        StateViewer.record(
+            operation='toggle_lock',
+            entity=(event_id, perspective, event_index),
+            changes={
+                'locked': (before_locked, after_locked)
+            }
+        )
         
         return events[event_index].locked
     
@@ -353,6 +410,9 @@ class EditorModel:
         
         events = self.events_m1 if perspective == "M1" else self.events_m2
         
+        # Capture before state
+        before_count = len(events)
+        
         # Find insertion index (maintain sorted order by time)
         insert_idx = 0
         for i, event in enumerate(events):
@@ -373,6 +433,19 @@ class EditorModel:
         if not hasattr(self, 'inserted_events'):
             self.inserted_events = set()
         self.inserted_events.add(insert_idx)
+        
+        # Capture after state
+        after_count = len(events)
+        
+        # Record state transition
+        StateViewer.record(
+            operation='insert_event',
+            entity=(insert_idx, perspective, time),
+            changes={
+                'event_count': (before_count, after_count),
+                'inserted_at_index': (None, insert_idx)
+            }
+        )
         
         return insert_idx
     
@@ -401,17 +474,36 @@ class EditorModel:
         if event_index == 0 or event_index == len(events) - 1:
             raise ValueError("Cannot delete first or last event")
         
+        # Capture before state
+        before_count = len(events)
+        deleted_event_id = events[event_index].id
+        deleted_time = events[event_index].time
+        
         deleted_event = events.pop(event_index)
         self.dirty = True
         
         # Shift modified_primitives indices for all events after event_index
-        # Remove modifications for the deleted event (by time value)
-        deleted_time = events[event_index].time
+        # Remove modifications for the deleted event (by event ID)
         modified_prims = self.get_modified_primitives(perspective)
-        if deleted_time in modified_prims:
-            print(f"[DELETE] Removing modifications for deleted event at time {deleted_time}")
-            del modified_prims[deleted_time]
+        was_in_modified = deleted_event_id in modified_prims
+        if was_in_modified:
+            print(f"[DELETE] Removing modifications for deleted event ID {deleted_event_id}")
+            del modified_prims[deleted_event_id]
         print(f"[DELETE] modified_primitives after delete: {modified_prims}")
+        
+        # Capture after state
+        after_count = len(events)
+        
+        # Record state transition
+        StateViewer.record(
+            operation='delete_event',
+            entity=(deleted_event_id, perspective, event_index),
+            changes={
+                'event_count': (before_count, after_count),
+                'deleted_time': (deleted_time, None),
+                'was_in_modified_dict': (was_in_modified, False)
+            }
+        )
         
         return deleted_event
     
@@ -566,17 +658,49 @@ class EditorModel:
         if prim not in ['v', 'r', 'f', 'a', 'S']:
             raise KeyError(f"Invalid primitive: {prim}")
         
-        # Reset the value
+        # Capture before state
         event = events[event_idx]
+        marker = event.markers[prim]
+        event_id = event.id
+        before_value = marker.value
+        before_gamma = marker.gamma_self_position.get(perspective)
+        before_in_modified = event_id in self.get_modified_primitives(perspective) and prim in self.get_modified_primitives(perspective).get(event_id, set())
+        
+        # Reset the value
         event.markers[prim].value = baseline_value
         
-        # Remove from modified set (by time)
-        event_time = event.time
+        # Clear the gamma_self position for this marker
+        event.markers[prim].clear_gamma_position(perspective)
+        print(f"[MODEL_RESET] Cleared gamma position for event {event.id}, primitive {prim}, perspective {perspective}")
+        
+        # Remove from modified set (using event ID, not time!)
+        # NOTE: modified_primitives uses event.id as keys, despite some confusion in comments
         modified_prims = self.get_modified_primitives(perspective)
-        if event_time in modified_prims:
-            modified_prims[event_time].discard(prim)
-            if not modified_prims[event_time]:
-                del modified_prims[event_time]
+        if event_id in modified_prims:
+            modified_prims[event_id].discard(prim)
+            if not modified_prims[event_id]:
+                del modified_prims[event_id]
+                print(f"[MODEL_RESET] Removed event {event_id} from modified_primitives (no more modified prims)")
+            else:
+                print(f"[MODEL_RESET] Removed {prim} from event {event_id} modified set, remaining: {modified_prims[event_id]}")
+        else:
+            print(f"[MODEL_RESET] Event {event_id} not in modified_primitives")
+        
+        # Capture after state
+        after_value = marker.value
+        after_gamma = marker.gamma_self_position.get(perspective)
+        after_in_modified = event_id in self.get_modified_primitives(perspective) and prim in self.get_modified_primitives(perspective).get(event_id, set())
+        
+        # Record state transition
+        StateViewer.record(
+            operation='reset_primitive',
+            entity=(event_id, prim, perspective),
+            changes={
+                'value': (before_value, after_value),
+                'gamma_position': (before_gamma, after_gamma),
+                'in_modified_dict': (before_in_modified, after_in_modified)
+            }
+        )
         
         self.dirty = True
         return baseline_value

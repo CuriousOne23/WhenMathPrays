@@ -36,6 +36,7 @@ class EditorMainWindow(QMainWindow):
     
     # Phase 3.5: Replace callback attributes with Qt signals
     save_requested = Signal(dict)  # {'csv': bool, 'png': bool}
+    save_both_requested = Signal()  # Save both M1 and M2 perspectives
     cleanup_requested = Signal()
     print_dock_config_requested = Signal()  # For Ctrl+D debug shortcut
     
@@ -87,6 +88,13 @@ class EditorMainWindow(QMainWindow):
         save_action.triggered.connect(lambda: self._on_save(csv=True, png=False))
         toolbar.addAction(save_action)
         
+        # Save Both Perspectives action
+        save_both_action = QAction('Save Both M1 && M2', self)
+        save_both_action.setShortcut(QKeySequence('Ctrl+Shift+S'))
+        save_both_action.setStatusTip('Save both M1 and M2 perspectives to separate files (Ctrl+Shift+S)')
+        save_both_action.triggered.connect(self._on_save_both)
+        toolbar.addAction(save_both_action)
+        
         toolbar.addSeparator()
         
         # Zoom actions
@@ -126,12 +134,22 @@ class EditorMainWindow(QMainWindow):
         # Don't add to toolbar, just set up the shortcut
         self.addAction(debug_dock_action)
         
+        # State Viewer Log export action (Ctrl+Shift+L)
+        export_state_log_action = QAction('Export State Log', self)
+        export_state_log_action.setShortcut(QKeySequence('Ctrl+Shift+L'))
+        export_state_log_action.setStatusTip('Export state viewer log for debugging (Ctrl+Shift+L)')
+        export_state_log_action.triggered.connect(self._on_export_state_log)
+        # Don't add to toolbar, just set up the shortcut
+        self.addAction(export_state_log_action)
+        
         # Store references to prevent garbage collection
         self._toolbar = toolbar
         self._save_action = save_action
+        self._save_both_action = save_both_action
         self._undo_action = undo_action
         self._redo_action = redo_action
         self._debug_dock_action = debug_dock_action
+        self._export_state_log_action = export_state_log_action
     
     def switch_undo_stack(self, new_stack: QUndoStack):
         """
@@ -197,8 +215,59 @@ class EditorMainWindow(QMainWindow):
             csv: Whether to save CSV
             png: Whether to save PNG
         """
-        # Phase 3.5: Emit signal instead of calling callback
-        self.save_requested.emit({'csv': csv, 'png': png})
+        # Phase 3.5: Use callback pattern (signals available but not connected yet)
+        if hasattr(self, 'save_callback') and callable(self.save_callback):
+            self.save_callback({'csv': csv, 'png': png})
+        else:
+            self.save_requested.emit({'csv': csv, 'png': png})
+    
+    def _on_save_both(self):
+        """Handle save both perspectives request."""
+        # Use callback pattern (signals available but not connected yet)
+        if hasattr(self, 'save_both_callback') and callable(self.save_both_callback):
+            self.save_both_callback()
+        else:
+            self.save_both_requested.emit()
+    
+    def _on_export_state_log(self):
+        """Handle state viewer log export request (Ctrl+Shift+L)."""
+        from datetime import datetime
+        from tools.editor.state_viewer import StateViewer
+        import os
+        
+        # Create logs directory if it doesn't exist
+        logs_dir = Path('logs')
+        logs_dir.mkdir(exist_ok=True)
+        
+        # Generate filename with timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        log_filename = f'state_log_{timestamp}.txt'
+        log_filepath = logs_dir / log_filename
+        
+        # Export state log using StateViewer
+        StateViewer.export_to_file(str(log_filepath))
+        
+        # Update window title to show log mode
+        original_title = self.windowTitle()
+        self.setWindowTitle(f"{original_title} [STATE LOG EXPORTED]")
+        
+        # Show notification in status bar
+        self.statusBar().showMessage(
+            f"✓ State log exported: {log_filepath.absolute()}",
+            5000  # Show for 5 seconds
+        )
+        
+        # Also show message box for visibility
+        QMessageBox.information(
+            self,
+            "State Log Exported",
+            f"State viewer log exported to:\n\n{log_filepath.absolute()}\n\n"
+            f"Share this file with AI assistant for debugging analysis."
+        )
+        
+        # Reset window title after 5 seconds
+        from PySide6.QtCore import QTimer
+        QTimer.singleShot(5000, lambda: self.setWindowTitle(original_title))
     
     def show_message(self, message: str, level: str = 'info', timeout: int = 5000):
         """

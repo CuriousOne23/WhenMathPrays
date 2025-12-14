@@ -296,6 +296,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.end_marker.setData([gamma_x[-1]], [gamma_y[-1]])
         
         # Clear ALL old pinned marker labels from BOTH perspectives
+        print(f"[TRAJECTORY_LABELS] Clearing labels: M1={len(self.marker_labels_m1)}, M2={len(self.marker_labels_m2)}")
         for label in list(self.marker_labels_m1):
             self.plot_widget.removeItem(label)
         self.marker_labels_m1.clear()
@@ -303,6 +304,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         for label in list(self.marker_labels_m2):
             self.plot_widget.removeItem(label)
         self.marker_labels_m2.clear()
+        print(f"[TRAJECTORY_LABELS] Labels cleared, will add {len(pinned_markers) if pinned_markers else 0} new labels")
         
         # Update pinned markers
         if pinned_markers:
@@ -314,6 +316,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
             for marker in pinned_markers:
                 label_text = marker.get('label', '')
                 if label_text:
+                    print(f"[TRAJECTORY_LABELS] Adding label: text='{label_text}', pos=({marker['x']:.2f}, {marker['y']:.2f}), perspective={self.current_perspective}")
                     color = QColor(marker.get('color', 'blue'))
                     text_item = pg.TextItem(
                         text=label_text,

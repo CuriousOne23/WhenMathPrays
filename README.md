@@ -132,71 +132,25 @@ Last updated: December 3, 2025
 
 ### CSV Scenario Format
 
-Scenarios are defined in CSV files with the following structure:
+**For complete specification (columns, metadata, file naming, examples), see [CSV Format Details](docs/interactive_editor_user_guide.md#csv-format-details) in the Interactive Editor User Guide.**
 
-**CRITICAL:** Primitives must be scored from the correct perspective. See [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) for the M1/M2 framework - this is the most common source of errors.
+Scenarios are CSV files with time-series primitive values:
 
-**Optional metadata rows (first lines):**
 ```csv
-name,Scenario Display Name
+name,My Scenario
 time_unit,days
-```
-- `name` - Used in plots and output. If omitted, filename is used.
-- `time_unit` - Time scale: `days`, `weeks`, `months`, or `years`. Defaults to `days` if omitted.
-
-**Required columns:**
-- `day`, `week`, `month`, or `year` - Time point (fractional values accepted, e.g., 1.5, 2.25)
-  - Column name can match your `time_unit` metadata or use `day` for backward compatibility
-  - Examples: `day` column with `time_unit,days` OR `week` column with `time_unit,weeks`
-- `v` - Visibility primitive [-10, +10] human scale
-- `r` - Resonance primitive [-10, +10]
-- `f` - Fidelity primitive [-10, +10]
-- `a` - Altruism primitive [-10, +10]
-- `S` - Shared Breath primitive [-10, +10]
-
-**Optional columns:**
-- `notes` - Text description of the event
-- `marker` - Marker type to highlight this point on γ_self trajectory plot
-- `locked` - Use `*` to mark structural rows (don't change), empty = customizable
-
-**Supported marker types:**
-- `star` - ⭐ Star marker (default if unrecognized marker specified)
-- `circle` - ⚫ Circle marker
-- `square` - ◼ Square marker
-- `triangle` - 🔺 Triangle marker
-- `diamond` - 💎 Diamond marker
-- `x` - ✖ X marker
-- `plus` - ➕ Plus marker
-- Leave blank for no marker
-
-Markers appear as yellow symbols with black edges on the trajectory plot, with day labels in yellow boxes.
-
-**Template CSV Files:**
-
-Pre-built scenario templates are available in `data/templates/` (read-only):
-- Use as starting points - copy and customize
-- Rows with `*` in `locked` column = structural anchors (start/end/key events)
-- Empty `locked` column = customize primitives as desired
-
-**Example CSV (using days):**
-```csv
-name,My Custom Scenario
-time_unit,days
-day,v,r,f,a,S,notes,marker,locked
-0,5,0,2,2,0,"Initial condition",,*
-14,5,-2,2,3,-1,"Early wobble - customize",star,
-60,9,10,10,9,10,"Final outcome",star,*
+day,v,r,f,a,S,notes
+0,5,0,2,2,0,Initial condition
+7,5,2,2,3,1,First date
+14,8,5,4,5,3,Getting closer
+...
 ```
 
-**Example CSV (using weeks):**
-```csv
-name,Summer Romance
-time_unit,weeks
-week,v,r,f,a,S,notes,marker,locked
-0,3,2,1,1,0,"Met at beach",,*
-2,6,5,4,3,3,"Getting closer",star,
-12,9,8,9,8,9,"In love",star,*
-```
+**Key points:**
+- Required: time column + five primitives (`v`, `r`, `f`, `a`, `S`)
+- Optional: `notes`, `marker`, `locked` columns
+- Dual-perspective files: use `_M1.csv` and `_M2.csv` suffixes
+- See user guide for complete details
 
 ---
 
