@@ -90,7 +90,6 @@ class EditorModel:
     """
     
     def __init__(self):
-        self.name: str = ""  # Deprecated: use name_m1 and name_m2
         self.name_m1: str = ""  # Name for M1 perspective
         self.name_m2: str = ""  # Name for M2 perspective
         self.time_unit: str = "days"
@@ -101,11 +100,6 @@ class EditorModel:
         self.gamma_self_0_m2: complex = 0 + 0j  # M2's initial gamma_self position
         self.gamma_self_0_m1_original: complex = 0 + 0j  # Original M1 value from CSV
         self.gamma_self_0_m2_original: complex = 0 + 0j  # Original M2 value from CSV
-        
-        # Deprecated: Use gamma_self_0_m1/m2 instead
-        self.gamma_self_0: complex = 0 + 0j  # Deprecated - use perspective-specific fields
-        self.gamma_self_0_original: complex = 0 + 0j  # Deprecated
-        self.gamma_self_0_modified: bool = False  # Deprecated
         self.events: list = []  # List of Event objects (new structure)
         self.events_m1: list = []  # Events for perspective M1
         self.events_m2: list = []  # Events for perspective M2
@@ -120,11 +114,6 @@ class EditorModel:
         
         # Preview state (uncommitted changes)
         self.preview_changes: Dict[int, Dict[str, float]] = {}  # {event_idx: {primitive: value}}
-        
-        # DEPRECATED: Marker positions now stored in Marker objects themselves
-        # These dicts kept for backward compatibility only, built on-demand by get_marker_positions()
-        self.marker_positions_m1: Dict[tuple, complex] = {}  # {(event_id, primitive): gamma_self_position}
-        self.marker_positions_m2: Dict[tuple, complex] = {}  # {(event_id, primitive): gamma_self_position}
     
     def get_gamma_self_0(self, perspective: str) -> complex:
         """Get initial gamma_self position for the specified perspective."""
@@ -140,8 +129,6 @@ class EditorModel:
             self.gamma_self_0_m1 = value
         else:
             self.gamma_self_0_m2 = value
-        # Update deprecated field for backward compatibility
-        self.gamma_self_0 = value
     
     def load_csv(self, filepath: str, perspective: str = "M1") -> None:
         """
@@ -169,11 +156,6 @@ class EditorModel:
             self.gamma_self_0_m2 = gamma_value
             self.gamma_self_0_m2_original = gamma_value
             print(f"[GAMMA_SELF_0] M2 set to: {gamma_value} from {Path(filepath).name}")
-        
-        # Backward compatibility: set deprecated field to last loaded value
-        self.gamma_self_0 = gamma_value
-        self.gamma_self_0_original = gamma_value
-        self.gamma_self_0_modified = False
         
         self.time_unit = metadata.get('time_unit', 'days')
         
