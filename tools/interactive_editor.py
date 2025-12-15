@@ -712,7 +712,7 @@ class InteractiveEditor:
         primitives_data[primitive][event_index] = hypothetical_value
         
         # Compute hypothetical gamma_self trajectory using same logic as controller
-        gamma_self = self.model.gamma_self_0
+        gamma_self = self.model.get_gamma_self_0(self.controller.perspective)
         gamma_trajectory = [gamma_self]
         
         for i in range(len(events) - 1):
@@ -916,15 +916,13 @@ class InteractiveEditor:
         
         # Check if modified from original
         original = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
-        self.model.gamma_self_0_modified = (abs(new_value - original) > 0.001)
+        gamma_self_0_modified = (abs(new_value - original) > 0.001)
         
         # Recompute trajectory with new initial state
         self.controller._recompute_trajectory_immediate()
         
         # Update start marker appearance on trajectory panel
-        self.trajectory_panel.update_start_marker_style(
-            self.model.gamma_self_0_modified
-        )
+        self.trajectory_panel.update_start_marker_style(gamma_self_0_modified)
         
         self.window.show_message(
             f"gamma_self_0 updated: {new_value.real:+.2f}{new_value.imag:+.2f}j"
@@ -936,7 +934,6 @@ class InteractiveEditor:
         original_value = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
         
         self.model.set_gamma_self_0(perspective, original_value)
-        self.model.gamma_self_0_modified = False
         
         # Update widget display
         self.gamma_self0_editor.set_value(original_value)
