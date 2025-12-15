@@ -298,6 +298,302 @@ View can't drift out of sync - always reads fresh marker state.
 1. **Single breakpoint debugging**: Catch ALL state changes from any code path
 2. **Complete context**: Call stack shows who/what/why/when
 3. **Isolated bug detection**: Three-layer checkpoint system pinpoints exact failure layer
+
+---
+
+## Spinbox Primitive Editor Architecture (v2.4 Planned)
+
+### Design Principle: Active Primitive State Tracking
+
+**Problem**: Current gauge-based editing is imprecise (hard to set exact values like 7.2 by dragging). Multiple gauges increase UI complexity and don't support keyboard-driven workflows.
+
+**Solution**: Single shared spinbox widget for precise numeric input. Controller tracks "active primitive" state (which primitive + which event is being edited). Spinbox displays/edits the currently active primitive.
+
+### State Ownership
+
+**Controller owns the active primitive state:**
+```python
+class EditorController:
+    def __init__(self):
+        self.active_primitive_state = {
+            'primitive': None,     # 'v', 'r', 'f', 'a', 'S', or None
+            'event_id': None,      # Which event is being edited
+            'event_time': None     # Time of the event (for logging)
+        }
+```
+
+**Widget displays controller state:**
+```python
+class PrimitiveSpinboxWidget(QWidget):
+    value_changed = Signal(float)  # Emitted when user commits new value
+    
+    def __init__(self):
+        self.spinbox = QDoubleSpinBox()     # -10.0 to +10.0
+        self.label = QLabel("Editing: (none)")  # Shows active primitive
+        
+    def set_active_primitive(self, primitive_name, event_id, current_value):
+        """Called by controller when primitive selected"""
+        self.label.setText(f"Editing: {primitive_name}")
+        self.spinbox.setValue(current_value)
+        self.spinbox.setEnabled(True)
+    
+    def clear_active(self):
+        """Called when no primitive/event active"""
+        self.label.setText("Editing: (none)")
+        self.spinbox.setEnabled(False)
+```
+
+### Signal Flow (Clean, Unidirectional)
+
+**Selection flow:**
+```
+User clicks primitive label/marker
+    ↓
+PrimitiveLabel.clicked signal
+    ↓
+Controller.on_primitive_selected(primitive, event_id)
+    ↓
+Controller updates active_primitive_state
+    ↓
+Controller calls SpinboxWidget.set_active_primitive()
+    ↓
+Spinbox displays current value
+```
+
+**Edit flow:**
+```
+User types value + Enter
+    ↓
+SpinboxWidget.value_changed signal
+    ↓
+Controller.on_spinbox_value_changed(new_value)
+    ↓
+Controller creates EditPrimitiveCommand (undo support)
+    ↓
+Command updates Model
+    ↓
+Model.data_changed signal
+    ↓
+Controller.update_views()
+    ↓
+Spinbox.setValue() [if still active primitive]
+```
+
+**No circular dependencies** - flow is strictly unidirectional through signals.
+
+### State Viewer Logging
+
+**All state transitions logged for debugability:**
+
+```python
+# Primitive selection
+[PRIMITIVE_SELECT] perspective=M1, event_id=2, day=2.0, primitive=v, value=5.5
+
+# Value change
+[PRIMITIVE_EDIT] perspective=M1, event_id=2, day=2.0, primitive=v, old=5.5, new=7.2
+
+# Clear selection
+[PRIMITIVE_DESELECT] perspective=M1
+```
+
+**Debugging workflow:**
+1. User reports: "Spinbox didn't update when I switched events"
+2. Export State Viewer log (Ctrl+Shift+L)
+3. Search for `PRIMITIVE_SELECT` entries
+4. Verify selection state matches user expectation
+5. Check if `set_active_primitive()` was called
+6. Isolate bug: selection logic vs widget update vs event mechanism
+
+### Integration Points
+
+**Event Selection (existing mechanism):**
+- User clicks event marker → sets active event
+- Spinbox queries controller for active event
+- Works with normal events, Event Insertion Points, Ctrl+Shift+Click markers
+
+**Perspective Switching:**
+- User switches M1 ↔ M2
+- Controller preserves `active_primitive_state.primitive` (name stays same)
+- Controller updates `active_primitive_state.event_id` (new perspective's event)
+- Spinbox value updates to new perspective's value for that primitive
+
+**Undo/Redo:**
+- EditPrimitiveCommand stores event_time (not index) for stability
+- Undo reverts primitive value
+- If undone primitive is still active, spinbox value refreshed automatically
+- State Viewer logs undo operations
+
+### Label Architecture Pattern
+
+**Follows existing gamma_self plot label system:**
+
+```python
+# Same pattern as gamma_self labels
+class SpinboxLabel:
+    def __init__(self):
+        self.text = QLabel()
+        self.text.setStyleSheet("font-weight: bold; color: #333;")
+    
+    def update_for_primitive(self, primitive_name):
+        """Update label when primitive selected"""
+        self.text.setText(f"Editing: {primitive_name}")
+    
+    def clear(self):
+        """Clear when no primitive active"""
+        self.text.setText("Editing: (none)")
+
+# Label persists until next primitive selected (user requirement)
+# Matches behavior of gamma_self plot labels
+```
+
+**Design consistency:**
+- Same font/styling as gamma_self labels
+- Same persistence behavior (stays visible)
+- Same clear separation: label management vs value display
+- Traceable through same logging infrastructure
+
+### Debugging Architecture
+
+**Three-layer checkpoint system (same pattern as Marker State):**
+
+```python
+# Layer 1: Controller state (what should be active?)
+controller.active_primitive_state['primitive']  # 'v'
+controller.active_primitive_state['event_id']   # 2
+
+# Layer 2: Widget state (what is widget showing?)
+spinbox_widget.label.text()                     # "Editing: v"
+spinbox_widget.spinbox.value()                  # 5.5
+
+# Layer 3: State Viewer log (what happened?)
+grep "PRIMITIVE_SELECT.*event_id=2" state_log.txt
+# [PRIMITIVE_SELECT] perspective=M1, event_id=2, primitive=v, value=5.5
+```
+
+**Bug isolation:**
+- Layers 1-2 mismatch → Controller didn't call widget update method
+- Layer 2-3 mismatch → Logging incomplete (instrumentation bug)
+- All layers match but still wrong → Event selection logic bug
+
+### Edge Case Handling
+
+**No event selected:**
+```python
+if controller.active_event_id is None:
+    spinbox_widget.clear_active()
+    spinbox_widget.spinbox.setEnabled(False)
+```
+
+**No primitive selected (initial state):**
+```python
+if controller.active_primitive_state['primitive'] is None:
+    spinbox_widget.clear_active()
+```
+
+**Event deleted while editing:**
+```python
+def on_event_deleted(self, event_id):
+    if self.active_primitive_state['event_id'] == event_id:
+        self.active_primitive_state = {'primitive': None, 'event_id': None, 'event_time': None}
+        self.spinbox_widget.clear_active()
+```
+
+**Perspective switch during edit:**
+```python
+def on_perspective_switched(self, new_perspective):
+    if self.active_primitive_state['primitive'] is not None:
+        # Preserve primitive name, update event and value
+        new_event_id = self.get_event_id_for_time(
+            self.active_primitive_state['event_time'], 
+            new_perspective
+        )
+        if new_event_id is not None:
+            new_value = self.model.get_primitive_value(
+                new_event_id, 
+                self.active_primitive_state['primitive']
+            )
+            self.active_primitive_state['event_id'] = new_event_id
+            self.spinbox_widget.set_active_primitive(
+                self.active_primitive_state['primitive'],
+                new_event_id,
+                new_value
+            )
+        else:
+            # Event doesn't exist in new perspective
+            self.active_primitive_state = {'primitive': None, 'event_id': None, 'event_time': None}
+            self.spinbox_widget.clear_active()
+```
+
+**Invalid value entry:**
+```python
+# Spinbox automatically clamps to range
+self.spinbox.setRange(-10.0, 10.0)  # Human-scale authoring values
+self.spinbox.setDecimals(1)
+self.spinbox.setSingleStep(0.1)
+
+# Non-numeric input rejected by QDoubleSpinBox automatically
+# Empty field reverts to current value on focus loss
+```
+
+### Extensibility
+
+**Adding new state dimensions:**
+```python
+# Current: track primitive + event
+self.active_primitive_state = {
+    'primitive': 'v',
+    'event_id': 2,
+    'event_time': 2.0
+}
+
+# Future: add confidence/certainty dimension
+self.active_primitive_state = {
+    'primitive': 'v',
+    'event_id': 2,
+    'event_time': 2.0,
+    'confidence': 0.8,  # NEW: uncertainty tracking
+    'source': 'manual'  # NEW: manual vs inferred
+}
+
+# Spinbox widget unchanged - only displays value
+# Additional widgets can show confidence, source, etc.
+```
+
+**Adding new primitive types:**
+```python
+# Current primitives: v, r, f, a, S
+# Future: Add new primitive 'c' (commitment)
+
+# No changes needed in spinbox widget
+# No changes needed in state tracking
+# Only changes: primitive metadata in PRIMITIVES.py
+```
+
+### Benefits Summary
+
+1. **Precise editing**: Type exact values (-10.0 to +10.0) instead of dragging
+2. **Clean state ownership**: Controller owns state, widget displays it
+3. **Unidirectional flow**: No circular dependencies, all communication via Qt signals
+4. **Debuggability**: Three-layer checkpoint system + State Viewer logging
+5. **Testable in isolation**: Mock signals, verify state transitions
+6. **Consistent pattern**: Follows marker state architecture and gamma_self label pattern
+7. **Extensible**: New primitives/dimensions require no widget changes
+8. **Accessible**: Keyboard-driven workflow, cleaner UI
+
+### Implementation Status
+
+**Status:** Specification complete, awaiting implementation
+
+**Open design questions:**
+1. Keep read-only primitive value labels or remove them?
+2. Replace gauge double-click reset - Reset button? Ctrl+double-click? Right-click menu?
+3. Visual feedback for active primitive - Bold label? Color? Highlight?
+4. Spinbox placement - Above primitives? Below? Inline?
+
+**See:**
+- [INTERACTIVE_EDITOR_CHANGELOG.md v2.4](docs/INTERACTIVE_EDITOR_CHANGELOG.md#v24-spinbox-primitive-editor-planned) - Feature specification and timeline
+- [interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md#spinbox-primitive-editing-planned-v24) - User workflow and usage
+- [UI Architecture Cleanup](docs/architecture/refactors/2025-12-07_ui_architecture_cleanup.md#problem-4-gauge-based-primitive-editing-planned-v24-fix) - Detailed implementation examples
 4. **Self-correcting view**: Pull pattern prevents synchronization drift
 5. **Perspective scalability**: Dict-based storage extends to arbitrary perspectives
 6. **Maintainability**: Adding new tracking doesn't scatter code across multiple files
@@ -563,22 +859,78 @@ Phase 3.5 refactoring prepares for Phase 4 by:
 
 ## Related Documentation
 
-### Current Architecture
-- **User Guide:** [docs/interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)
-- **Installation:** [docs/installation_4_interactive_editor.md](docs/installation_4_interactive_editor.md)
-- **Debugging Guide:** [docs/DEBUG.md](docs/DEBUG.md) - Debug infrastructure and methodology
-- **State Management:** [docs/STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)
-- **Architecture Recommendations:** [docs/architecture_recommendations.md](docs/architecture_recommendations.md)
-- **Baseline Storage Refactoring:** [docs/architecture/baseline_storage_refactoring.md](docs/architecture/baseline_storage_refactoring.md)
-- **Baseline Communication Protocol:** [docs/baseline_communication_protocol.md](docs/baseline_communication_protocol.md)
-- **Version History:** [docs/INTERACTIVE_EDITOR_CHANGELOG.md](docs/INTERACTIVE_EDITOR_CHANGELOG.md)
+### Essential Reading (READ THESE FIRST)
 
-### Planned Refactoring
-- **Entry Point Consolidation:** [docs/architecture/entry_point_consolidation_plan.md](docs/architecture/entry_point_consolidation_plan.md) - Dual entry point consolidation + observability
-- **Phase Roadmap:** [docs/interactive_edit_roadmap.md](docs/interactive_edit_roadmap.md)
+**For implementing ANY feature:**
+- **This Document (ARCHITECTURE.md)** - Architectural patterns, state management, signal flow requirements
+  - **Marker State Architecture** - Event tree terminus pattern, three-layer debugging
+  - **Spinbox Primitive Editor** - Active state tracking, unidirectional signals
+  - **MVT Quality Standard** - Modeled, Verifiable, Testable requirements
+
+**For understanding current system:**
+- **[INTERACTIVE_EDITOR_CHANGELOG.md](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history, feature specifications, implementation phases
+  - *Use for:* Finding what's planned/complete, understanding feature scope, checking status
+  - *Key sections:* v2.4-spinbox (planned features), v2.2.2-state-viewer-log (debugging), version timeline
+
+**For using the editor:**
+- **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** - Complete user manual, workflows, UI reference
+  - *Use for:* Understanding user perspective, usage patterns, UI layout, keyboard shortcuts
+  - *Key sections:* Application States, UI layout, Spinbox Primitive Editing (planned)
+
+### Implementation Details (Reference During Coding)
+
+**State & Architecture:**
+- **[STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state enums and observers
+  - *Use for:* EditorState usage, state transition validation, observer pattern
+- **[Entry Point Consolidation](docs/architecture/entry_point_consolidation_plan.md)** - Planned dual entry point consolidation + observability
+  - *Use for:* Understanding observability framework, why we're consolidating, migration timeline
+- **[Baseline Storage Refactoring](docs/architecture/baseline_storage_refactoring.md)** - Time-keyed baseline architecture
+  - *Use for:* Baseline value lookups, reset functionality, event ID vs time keys
+- **[Baseline Communication Protocol](docs/baseline_communication_protocol.md)** - Baseline value communication patterns
+  - *Use for:* How baseline values flow between model/controller/view
+
+**UI & Signal Patterns:**
+- **[UI Architecture Cleanup](docs/architecture/refactors/2025-12-07_ui_architecture_cleanup.md)** - Signal flow patterns, communication anti-patterns
+  - *Use for:* Code examples of spinbox signals, clean vs mixed patterns, integration examples
+  - *Key section:* Problem 4 (Gauge-Based Primitive Editing) - spinbox implementation details
+- **[Architecture Recommendations](docs/architecture_recommendations.md)** - GUI architecture planning (QDockWidget, future features)
+  - *Use for:* Future-proofing decisions, planned Phase 3/4 features, dock system requirements
+
+**Debugging & Testing:**
+- **[DEBUG.md](docs/DEBUG.md)** - Debug infrastructure, logging patterns, State Viewer usage
+  - *Use for:* Adding debug logging, State Viewer format, systematic debugging methodology
+- **[INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy, manual checklists, MVT validation
+  - *Use for:* Creating test plans, regression testing, quality assurance
+
+### Planning & Future Direction
+
+- **[interactive_edit_roadmap.md](docs/interactive_edit_roadmap.md)** - Phase 4 roadmap, planned features
+  - *Use for:* Understanding where features fit in timeline, future compatibility considerations
+- **[Installation Guide](docs/installation_4_interactive_editor.md)** - Setup and dependencies
+  - *Use for:* Environment setup, dependency requirements
 
 ### General
-- **Main README:** [README.md](README.md)
+
+- **[Main README](README.md)** - Project overview, getting started
+
+---
+
+## Documentation Decision Tree
+
+**I need to:**
+- ✅ **Implement a new feature** → Read ARCHITECTURE.md (patterns) + CHANGELOG.md (v2.4 spec if related to spinbox)
+- ✅ **Fix a bug** → Read DEBUG.md (methodology) + ARCHITECTURE.md (three-layer debugging)
+- ✅ **Add a widget** → Read UI Architecture Cleanup (signal patterns) + ARCHITECTURE.md (state ownership)
+- ✅ **Understand state transitions** → Read STATE_MANAGEMENT_REFACTORING.md + ARCHITECTURE.md (Data Flow Overview)
+- ✅ **Add State Viewer logging** → Read DEBUG.md (format) + ARCHITECTURE.md (logging examples in Spinbox section)
+- ✅ **Write tests** → Read INTERACTIVE_EDITOR_TESTING.md (MVT standard) + ARCHITECTURE.md (testability patterns)
+- ✅ **Learn user workflow** → Read interactive_editor_user_guide.md
+- ✅ **Check what's planned** → Read INTERACTIVE_EDITOR_CHANGELOG.md (versions section)
+- ✅ **Understand baseline system** → Read Baseline Storage Refactoring + Baseline Communication Protocol
+
+---
+
+For more details on usage and features, see the documentation links above.
 
 ---
 

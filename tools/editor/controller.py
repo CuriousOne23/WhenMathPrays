@@ -30,6 +30,12 @@ from tools.editor.baseline_protocol import (
     BaselineDebugLog, BaselineCommunicator, BaselineType, BaselineEvent
 )
 
+# Import debug configuration
+from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+
+# Get logger for this module
+_logger = get_debug_logger('SPINBOX')
+
 
 class EditorController:
     """
@@ -97,6 +103,13 @@ class EditorController:
         self.entropy_imag_target = 0.0     # Imaginary axis attractor (Neutral affect)
         self.entropy_delS_real = 0.02      # Decay rate toward ego
         self.entropy_delS_imag = 0.02      # Decay rate toward neutral
+        
+        # Active primitive state tracking (for spinbox editor - ARCHITECTURE.md)
+        self.active_primitive_state = {
+            'primitive': None,   # 'v', 'r', 'f', 'a', 'S', or None
+            'event_id': None,    # Which event is being edited
+            'event_time': None   # Time of the event (for logging)
+        }
         
         # Track last committed trajectory for comparison
         self.committed_gamma_trajectory = None
@@ -533,6 +546,90 @@ class EditorController:
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
         # Note: trajectory panel updated via _display_trajectory
+    
+    def on_primitive_selected(self, event_index: int, primitive: str):
+        """
+        Handle primitive selection (user clicked marker or primitive label).
+        
+        Updates active_primitive_state and notifies spinbox widget.
+        Implements "Active Primitive State Tracking" pattern from ARCHITECTURE.md.
+        
+        Args:
+            event_index: Index of the event
+            primitive: Name of primitive ('v', 'r', 'f', 'a', or 'S')
+        """
+        if DEBUG_SPINBOX:
+            _logger.debug(f"on_primitive_selected called: event_index={event_index}, primitive={primitive}")
+            _logger.debug(f"Has spinbox_widget? {hasattr(self, 'spinbox_widget')}")
+            if hasattr(self, 'spinbox_widget'):
+                _logger.debug(f"spinbox_widget is None? {self.spinbox_widget is None}")
+        
+        events = self.model.get_events(self.perspective)
+        if event_index < 0 or event_index >= len(events):
+            print(f"[PRIMITIVE_SELECT] Invalid event_index={event_index}")
+            return
+        
+        event = events[event_index]
+        event_time = event.time
+        current_value = event.markers[primitive].value
+        
+        # Update active primitive state
+        self.active_primitive_state = {
+            'primitive': primitive,
+            'event_id': event_index,  # Using index as ID for now
+            'event_time': event_time
+        }
+        
+        if DEBUG_SPINBOX:
+            _logger.debug(f"perspective={self.perspective}, event_id={event_index}, "
+                         f"day={event_time}, primitive={primitive}, value={current_value}")
+        
+        # Notify spinbox widget (if it exists)
+        if hasattr(self, 'spinbox_widget') and self.spinbox_widget is not None:
+            if DEBUG_SPINBOX:
+                _logger.debug(f"Calling spinbox_widget.set_active_primitive({primitive}, {current_value}, {event_time})")
+            self.spinbox_widget.set_active_primitive(primitive, current_value, event_time)
+            if DEBUG_SPINBOX:
+                _logger.debug(f"Spinbox updated, label={self.spinbox_widget.get_active_label_text()}")
+        else:
+            if DEBUG_SPINBOX:
+                _logger.debug("WARNING: spinbox_widget not available!")
+    
+    def on_spinbox_value_changed(self, new_value: float):
+        """
+        Handle value change from spinbox widget.
+        
+        Creates undo command and updates model with new primitive value.
+        Implements unidirectional signal flow from ARCHITECTURE.md.
+        
+        Args:
+            new_value: New value entered in spinbox
+        """
+        if self.active_primitive_state['primitive'] is None:
+            print("[SPINBOX_EDIT] Warning: value changed but no active primitive")
+            return
+        
+        event_index = self.active_primitive_state['event_id']
+        primitive = self.active_primitive_state['primitive']
+        event_time = self.active_primitive_state['event_time']
+        
+        # Get old value for undo
+        events = self.model.get_events(self.perspective)
+        if event_index < 0 or event_index >= len(events):
+            print(f"[SPINBOX_EDIT] Invalid event_index={event_index}")
+            return
+        
+        old_value = events[event_index].markers[primitive].value
+        
+        # Skip if no actual change
+        if abs(new_value - old_value) < FLOAT_TOLERANCE:
+            return
+        
+        print(f"[PRIMITIVE_EDIT] perspective={self.perspective}, event_id={event_index}, "
+              f"day={event_time}, primitive={primitive}, old={old_value:.1f}, new={new_value:.1f}")
+        
+        # Use same path as on_primitive_changed (creates undo command, etc.)
+        self.on_primitive_changed(event_index, primitive, new_value)
     
     def _apply_primitive_change(self, event_index: int, primitive: str, value: float):
         """

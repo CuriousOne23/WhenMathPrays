@@ -182,9 +182,69 @@ When facing a complex bug:
 
 ## Debug Infrastructure
 
-The editor has built-in debug logging facilities:
+### Centralized Debug Logging System (December 2024)
 
-### Console Output Tags
+**Location**: `tools/editor/debug_config.py`
+
+The editor now uses a centralized logging system based on Python's `logging` module, replacing scattered print statements with professional, configurable logging.
+
+#### Architecture
+
+**Master Controls**:
+- `DEBUG_ENABLED` - Global on/off switch for all debug logging
+- `DEBUG_TO_FILE` - Routes logs to timestamped files in `logs/debug_<timestamp>.log`
+- `DEBUG_TO_TERMINAL` - Routes logs to terminal/console output
+
+**Category Flags**: Enable/disable logging for specific subsystems:
+- `DEBUG_SPINBOX` - Primitive spinbox editor (click, drag, value changes)
+- `DEBUG_TRAJECTORY` - Trajectory computation and gamma_self calculations
+- `DEBUG_LABELS` - Label synchronization and perspective switching
+- `DEBUG_GAMMA` - Gamma_self parameter calculations
+- `DEBUG_STATE` - State save/restore operations
+- `DEBUG_UNDO` - Undo/redo command execution
+- `DEBUG_DRAG` - Drag operation tracking
+- `DEBUG_BASELINE` - Baseline synchronization events
+- `DEBUG_SYNC` - Cross-component synchronization
+
+#### Usage Pattern
+
+```python
+# In each module that needs logging:
+from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+_logger = get_debug_logger('SPINBOX')
+
+# In code:
+if DEBUG_SPINBOX:
+    _logger.debug("marker clicked: index={index}, primitive={primitive}")
+```
+
+#### Benefits
+
+1. **Centralized control**: Single file controls all debug logging flags
+2. **File output**: Logs persist to timestamped files for post-mortem analysis
+3. **Granular control**: Enable only specific categories without noise
+4. **Professional formatting**: Timestamps, log levels, module names
+5. **No console spam**: Logs route to files, keeping terminal clean
+6. **Easy toggling**: Change one flag to enable/disable entire category
+
+#### Migration Status (December 2024)
+
+**Completed**:
+- ✅ Spinbox-related logging fully migrated (interactive_editor.py, controller.py, primitive_panel_pyqtgraph.py)
+- ✅ All primitive spinbox editor debug statements use logger
+
+**Future Migrations**:
+- Trajectory computation logging → DEBUG_TRAJECTORY
+- Label sync logging → DEBUG_LABELS
+- Gamma_self calculation logging → DEBUG_GAMMA
+- State save/restore logging → DEBUG_STATE
+- Undo/redo logging → DEBUG_UNDO
+- Drag operations → DEBUG_DRAG
+- Baseline tracking → DEBUG_BASELINE
+
+### Legacy Console Output Tags
+
+**Note**: These are being migrated to the centralized logging system above.
 
 Debug messages use prefixed tags for filtering/searching:
 - `[DEBUG]` - General debug information
@@ -218,8 +278,9 @@ The baseline communication protocol has dedicated logging (see [baseline_communi
 
 1. **Minimal noise**: Production code has minimal debug output (critical operations only)
 2. **Targeted logging**: Add detailed logging temporarily when debugging specific issues
-3. **Remove after fix**: Clean up verbose logging once bugs are resolved
-4. **Tagged output**: All debug messages prefixed with tags for easy filtering
+3. **Centralized control**: Use debug_config.py flags instead of scattered conditionals
+4. **File-based logs**: Route to files for analysis without terminal clutter
+5. **Tagged output**: All debug messages include category and context information
 
 ---
 
@@ -236,3 +297,66 @@ Complex bugs often reveal architectural issues:
 **See**: 
 - [architecture/perspective_management_refactor.md](architecture/perspective_management_refactor.md) for perspective switching refactor
 - [ARCHITECTURE.md](../ARCHITECTURE.md) Event Identity section for ID-based tracking design
+---
+
+## Future Considerations & Proposals
+
+### Testing & Validation
+
+While the primitive spinbox editor has been validated for:
+- ✅ Click activation and auto-activation during drag
+- ✅ Undo/redo (Ctrl+Z/Ctrl+Y) across M1/M2 perspectives
+- ✅ Event insertion (Ctrl+Shift+Click) with spinbox active
+- ✅ Event deletion with spinbox active (no crashes)
+
+**Proposals for systematic testing**:
+1. Create automated UI test suite for editor operations
+2. Add regression tests for known bugs (label persistence, baseline cascade deletion)
+3. Consider property-based testing for trajectory computation
+4. Add performance benchmarks for large timelines (>100 events)
+
+### Debug Logging Enhancements
+
+**Immediate opportunities**:
+1. **Verify file logging**: Test that logs actually appear in `logs/debug_<timestamp>.log` when `DEBUG_TO_FILE = True`
+2. **Complete migration**: Migrate remaining print statements to centralized logger:
+   - Trajectory computation → DEBUG_TRAJECTORY
+   - Label synchronization → DEBUG_LABELS
+   - Gamma_self calculations → DEBUG_GAMMA
+   - State save/restore → DEBUG_STATE
+   - Undo/redo operations → DEBUG_UNDO
+   - Drag operations → DEBUG_DRAG
+   - Baseline tracking → DEBUG_BASELINE
+
+**Future architecture improvements**:
+1. **Log rotation**: Implement max file size/age limits to prevent disk bloat
+2. **Log levels**: Use INFO/WARNING/ERROR more strategically instead of only DEBUG
+3. **Context managers**: Add context managers for operation logging:
+   ```python
+   with log_operation('PRIMITIVE_EDIT', event_id=5):
+       # operation code
+       # automatic logging of start/end/duration
+   ```
+4. **Structured logging**: Consider JSON-formatted logs for machine parsing
+5. **Performance profiling**: Add timing decorators to identify slow operations
+6. **Remote logging**: Optional log aggregation for distributed testing
+
+### Documentation
+
+**Proposals**:
+1. Add debug_config.py usage examples to ARCHITECTURE.md
+2. Create visual debugging guide with screenshots of:
+   - Spinbox editor in action
+   - Log file output examples
+   - Common debug workflows
+3. Document known gotchas and their solutions
+4. Maintain changelog of debug infrastructure changes
+
+### Tooling
+
+**Future development tools**:
+1. **Log viewer**: GUI for browsing/filtering debug logs
+2. **State diff tool**: Visual comparison of state dumps
+3. **Replay mode**: Record user interactions, replay with different parameters
+4. **Performance monitor**: Real-time visualization of operation timing
+5. **Test scenario generator**: Record user interactions as automated tests

@@ -477,7 +477,8 @@ The editor uses a flexible dock-based layout with three main panels:
 - **Name Editor:** Editable scenario name field with Apply button
 - **Note Editor:** Event annotation editor with Apply/Clear buttons
 - **Gamma_Self_0 Editor:** Initial position editor
-- **Primitive Readout Gauge:** Shows last edited marker
+- **Spinbox Primitive Editor:** *[Planned v2.4]* Precise numeric input for primitives
+- **Primitive Readout Gauge:** Shows last edited marker (to be replaced by spinbox)
 - **Gamma_Self Readout Gauge:** Shows clicked trajectory position
 - **Insertion Options:** Configure new event parameters
 
@@ -520,6 +521,47 @@ The editor uses a flexible dock-based layout with three main panels:
 - Edit initial relationship position
 - Real and imaginary components
 - Reset button restores default (0+0j)
+
+**Spinbox Primitive Editing (Planned v2.4):**
+
+*Replaces gauge-based editing with precise numeric input.*
+
+**Overview:**
+- Single shared spinbox for entering exact primitive values
+- Shows currently active primitive (v, r, f, a, or S)
+- Type exact values instead of dragging gauges
+
+**Workflow:**
+1. **Select event:** Click event marker in trajectory plot (e.g., Day 2)
+2. **Select primitive:** Click primitive label (e.g., "v")
+   - Spinbox label updates: "Editing: v"
+   - Spinbox shows current v value: 5.5
+3. **Enter value:** Type new value (e.g., "7.2") and press Enter
+   - Or use ▲▼ arrows for incremental changes
+4. **Trajectory updates:** Automatically recomputes
+
+**Features:**
+- **Range:** -10.0 to +10.0 (human-scale authoring values)
+- **Precision:** 1 decimal place, 0.1 step size
+- **Label persistence:** "Editing: {primitive}" stays until different primitive selected
+- **State tracking:** Active primitive + event tracked, shown in State Viewer
+- **Integration:** Works with Event Insertion Points, Ctrl+Shift+Click markers, M1/M2 switching
+
+**Initial State:**
+- Spinbox disabled until first event + primitive selected
+- Label shows: "Editing: (none)"
+
+**Edge Cases:**
+- No event selected: Spinbox remains disabled
+- Invalid input: Clamped to range, non-numeric rejected
+- Perspective switch: Preserves active primitive, updates to new perspective's value
+- Event deletion: Clears active primitive, disables spinbox
+
+**Benefits:**
+- Precise value control (type "7.2" vs dragging to approximate)
+- Faster workflow (keyboard-driven)
+- Cleaner UI (one spinbox vs multiple gauges)
+- Better accessibility
 
 ### Save Button & Controls
 Located in the toolbar at the top of the window:

@@ -23,6 +23,12 @@ from tools.editor.editor_constants import (
 )
 from tools.editor.observability import ObservabilityLog
 
+# Import debug configuration
+from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+
+# Get logger for this module
+_logger = get_debug_logger('SPINBOX')
+
 
 class DraggableScatterItem(pg.ScatterPlotItem):
     """
@@ -90,8 +96,12 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 
                 # Normal click - readout
                 if self.x_data is not None and self.y_data is not None:
-                    print(f"[CLICK EVENT] index={idx}, x={self.x_data[idx]}, y={self.y_data[idx]}")
+                    if DEBUG_SPINBOX:
+                        _logger.debug(f"index={idx}, x={self.x_data[idx]}, y={self.y_data[idx]}")
+                        _logger.debug("Emitting sigPointClicked signal")
                     self.sigPointClicked.emit(idx, self.x_data[idx], self.y_data[idx])
+                    if DEBUG_SPINBOX:
+                        _logger.debug("Signal emitted")
                 ev.accept()
                 return
         super().mouseClickEvent(ev)
@@ -949,23 +959,9 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.text_items[key] = text
     
     def _create_readouts(self):
-        """Create readout displays for primitives and gamma_self."""
-        from PySide6.QtWidgets import QLabel
-        from PySide6.QtCore import Qt
-        
-        # Create primitive readout label (left side)
-        self.primitive_readout = QLabel('')
-        self.primitive_readout.setAlignment(Qt.AlignCenter)
-        self.primitive_readout.setStyleSheet(
-            'background-color: lightyellow; '
-            'border: 1px solid black; '
-            'border-radius: 5px; '
-            'padding: 5px; '
-            'font-size: 10pt;'
-        )
-        self.primitive_readout.setFixedWidth(80)
-        self.primitive_readout.setVisible(False)
-        self.layout.addWidget(self.primitive_readout)
+        """Create readout displays (primitive readout removed - replaced by spinbox editor)."""
+        # Primitive readout removed in v2.4 - now using spinbox editor instead
+        self.primitive_readout = None
     
     def _update_readout(self, event_index, primitive, value):
         """Update readout display with timestamp."""
@@ -1171,11 +1167,16 @@ class PrimitivePanelPyQtGraph(QWidget):
     
     def _on_point_clicked(self, index, primitive, value):
         """Handle point click without drag (show readout and emit signal for note editing)."""
-        print(f"[CLICK] index={index}, primitive={primitive}, value={value}")
+        if DEBUG_SPINBOX:
+            _logger.debug(f"index={index}, primitive={primitive}, value={value}")
         # Update readout gauge when user clicks a point
         self._update_readout(index, primitive, value)
         # Emit marker clicked signal for note editor
+        if DEBUG_SPINBOX:
+            _logger.debug(f"About to emit marker_clicked signal: index={index}, primitive={primitive}")
         self.marker_clicked.emit(index, primitive)
+        if DEBUG_SPINBOX:
+            _logger.debug("marker_clicked signal emitted")
     
     def _on_point_double_clicked(self, index, primitive):
         """Handle double-click event (reset to baseline)."""

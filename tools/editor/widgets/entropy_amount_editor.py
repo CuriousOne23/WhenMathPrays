@@ -50,9 +50,10 @@ class EntropyAmountEditor(QWidget):
         group = QGroupBox("Entropy Decay Rates")
         layout = QVBoxLayout()
         
-        # Description
-        desc = QLabel("Separate decay rates for Real (Ego) and Imag (Affect) axes")
+        # Description (split into two lines for narrow layouts)
+        desc = QLabel("Separate decay rates for Real (Ego)\nand Imag (Affect) axes")
         desc.setStyleSheet("font-style: italic; color: #666;")
+        desc.setWordWrap(True)
         layout.addWidget(desc)
         
         # Real axis spinbox
@@ -62,7 +63,7 @@ class EntropyAmountEditor(QWidget):
         self.spinbox_real.setRange(0.0, 50.0)
         self.spinbox_real.setSingleStep(0.1)
         self.spinbox_real.setDecimals(2)
-        self.spinbox_real.setMinimumWidth(80)
+        self.spinbox_real.setMinimumWidth(60)
         real_layout.addWidget(self.spinbox_real)
         real_layout.addStretch()
         layout.addLayout(real_layout)
@@ -74,7 +75,7 @@ class EntropyAmountEditor(QWidget):
         self.spinbox_imag.setRange(0.0, 50.0)
         self.spinbox_imag.setSingleStep(0.1)
         self.spinbox_imag.setDecimals(2)
-        self.spinbox_imag.setMinimumWidth(80)
+        self.spinbox_imag.setMinimumWidth(60)
         imag_layout.addWidget(self.spinbox_imag)
         imag_layout.addStretch()
         layout.addLayout(imag_layout)

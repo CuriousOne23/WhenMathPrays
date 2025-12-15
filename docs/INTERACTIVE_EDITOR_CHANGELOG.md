@@ -329,8 +329,63 @@ See [architecture/baseline_storage_refactoring.md](architecture/baseline_storage
 - Heuristic inverse estimation
 - Accept/reject dialog for suggestions
 
-### v2.4-marker-management (Planned)
-**Phase 2.4 Features:**
+### v2.4-spinbox-primitive-editor (Planned)
+**Status:** Specification complete - Ready for implementation
+
+**Feature: Spinbox Primitive Editor**
+- ➕ **Single shared spinbox** - Replaces gauge-based primitive editing with precise numeric input
+- ➕ **Active primitive tracking** - Spinbox shows currently selected primitive (v, r, f, a, S)
+- ➕ **Persistent labeling** - "Editing: {primitive}" label follows same architecture as gamma_self plot labels
+- ➕ **Workflow**: Click event → click primitive → type exact value → Enter to commit
+- ➕ **Full integration** - Works with Event Insertion Points, Ctrl+Shift+Click markers, M1/M2 switching
+- ➕ **State Viewer logging** - All primitive value changes logged with event ID, primitive name, old/new values
+- ➕ **Gauge removal** - Eliminates imprecise drag-based editing, cleaner UI
+
+**Purpose:**
+- Enable precise primitive value entry (-10.0 to +10.0)
+- Reduce editing friction (type "7.2" instead of dragging to approximate value)
+- Cleaner UI (one spinbox instead of 5 gauges or complex drag interfaces)
+- Better accessibility (keyboard-driven workflow)
+
+**Design Decisions:**
+- Single spinbox (not 5 separate) - shows active primitive value
+- Label architecture matches gamma_self plot pattern for consistency
+- Primitive selection by clicking primitive label/marker
+- Event selection by clicking event marker (existing mechanism)
+- Spinbox disabled until event + primitive selected
+
+**Implementation Phases:**
+1. Create spinbox widget with label management
+2. Wire primitive selection tracking (active primitive state)
+3. Connect value commit to model updates
+4. Integrate with Event Insertion Points
+5. Handle M1/M2 perspective switching
+6. Add State Viewer logging
+7. Remove gauge code
+8. Testing across all event types
+
+**Open Design Questions:**
+1. Keep read-only primitive value labels or remove entirely?
+2. How to replace gauge double-click reset functionality? (Reset button? Ctrl+double-click? Right-click menu?)
+3. Visual feedback for active primitive (bold label? color highlight? background?)
+4. Spinbox placement (above primitives? below? inline?)
+
+**Success Criteria:**
+- ✅ User can type exact primitive values
+- ✅ Clear indication of which primitive is active
+- ✅ Works with all event types (normal, insertion, modified)
+- ✅ Works across M1/M2 perspective switches
+- ✅ State Viewer logs all changes
+- ✅ Label architecture matches existing pattern
+- ✅ No regression in functionality
+- ✅ UI cleaner and more intuitive
+
+**See:** [interactive_editor_user_guide.md - Spinbox Primitive Editing](interactive_editor_user_guide.md#spinbox-primitive-editing-planned)
+
+---
+
+### v2.5-marker-management (Planned)
+**Phase 2.5 Features:**
 - Manual marker add/remove (without editing values)
 - Marker palette/picker
 - Enhanced marker styling options

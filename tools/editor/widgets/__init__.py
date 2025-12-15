@@ -9,6 +9,7 @@ from .name_editor import NameEditor
 from .note_editor import NoteEditor
 from .entropy_attractor_editor import EntropyAttractorEditor
 from .entropy_amount_editor import EntropyAmountEditor
+from .primitive_spinbox_editor import PrimitiveSpinboxEditor
 
 __all__ = [
     'GammaSelf0Editor', 
@@ -17,5 +18,6 @@ __all__ = [
     'NameEditor', 
     'NoteEditor',
     'EntropyAttractorEditor',
-    'EntropyAmountEditor'
+    'EntropyAmountEditor',
+    'PrimitiveSpinboxEditor'
 ]

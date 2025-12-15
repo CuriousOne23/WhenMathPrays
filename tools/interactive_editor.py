@@ -28,13 +28,19 @@ from PySide6.QtCore import Qt
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Import debug configuration
+from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+
+# Get logger for this module
+_logger = get_debug_logger('SPINBOX')
+
 from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
 from tools.editor.views.primitive_panel_pyqtgraph import PrimitivePanelPyQtGraph
 from tools.editor.views.trajectory_panel_pyqtgraph import TrajectoryPanelPyQtGraph
 from tools.editor.config import get_config
 from tools.editor.main_window import EditorMainWindow
-from tools.editor.widgets import GammaSelf0Editor
+from tools.editor.widgets import GammaSelf0Editor, PrimitiveSpinboxEditor
 from tools.editor.constants import is_inserted_event
 
 
@@ -143,10 +149,22 @@ class InteractiveEditor:
         self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
         self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
         self.primitive_panel.event_insert_requested.connect(self._on_event_insert_requested)
+        if DEBUG_SPINBOX:
+            _logger.debug("Connecting marker_clicked signal to _on_marker_clicked")
+            _logger.debug(f"marker_clicked exists? {hasattr(self.primitive_panel, 'marker_clicked')}")
+            _logger.debug(f"marker_clicked type: {type(self.primitive_panel.marker_clicked)}")
+        try:
+            self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)  # v2.4: For spinbox editor
+            if DEBUG_SPINBOX:
+                _logger.debug("Connection made successfully")
+        except Exception as e:
+            if DEBUG_SPINBOX:
+                _logger.debug(f"Connection FAILED: {e}")
         
         # Phase 2 refactoring: Connect new signals (replacing callbacks)
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
         self.primitive_panel.primitive_reset_requested.connect(self._on_primitive_reset)
+        self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview_for_spinbox)  # v2.4: Update spinbox during drag
         
         # Initialize PyQtGraph trajectory panel
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
@@ -234,34 +252,18 @@ class InteractiveEditor:
         self.note_editor = NoteEditor()
         self.note_editor.note_changed.connect(self._on_note_changed)
         
+        # Primitive spinbox editor (v2.4 - ARCHITECTURE.md)
+        self.spinbox_editor = PrimitiveSpinboxEditor()
+        self.spinbox_editor.value_changed.connect(self._on_spinbox_value_changed)
+        # Register with controller
+        self.controller.spinbox_widget = self.spinbox_editor
+        
         # Set initial perspective AFTER all widgets created
         if self.initial_perspective == "M2":
             self.perspective_switcher.set_perspective("M2")
         
         # Create gauge widgets
         from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
-        
-        # Primitive gauge
-        primitive_gauge_frame = QFrame()
-        primitive_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
-        primitive_gauge_layout = QVBoxLayout()
-        primitive_gauge_label = QLabel("Primitive Readout")
-        primitive_gauge_label.setAlignment(Qt.AlignCenter)
-        primitive_gauge_label.setStyleSheet("font-weight: bold; font-size: 10pt;")
-        self.primitive_gauge = QLabel("--")
-        self.primitive_gauge.setAlignment(Qt.AlignCenter)
-        self.primitive_gauge.setStyleSheet(
-            'background-color: lightyellow; '
-            'border: 1px solid black; '
-            'border-radius: 5px; '
-            'padding: 10px; '
-            'font-size: 12pt; '
-            'font-weight: bold;'
-        )
-        self.primitive_gauge.setMinimumHeight(30)
-        primitive_gauge_layout.addWidget(primitive_gauge_label)
-        primitive_gauge_layout.addWidget(self.primitive_gauge)
-        primitive_gauge_frame.setLayout(primitive_gauge_layout)
         
         # Gamma_self gauge
         gamma_gauge_frame = QFrame()
@@ -288,14 +290,17 @@ class InteractiveEditor:
         # Combine widgets in a container with scroll area
         from PySide6.QtWidgets import QScrollArea
         dock_container_inner = QWidget()
+        dock_container_inner.setStyleSheet("font-size: 8pt;")  # Zoom out ~25% for compact layout
         dock_layout = QVBoxLayout()
+        dock_layout.setSpacing(5)  # Reduce spacing between widgets
+        dock_layout.setContentsMargins(5, 5, 5, 5)  # Reduce margins
         dock_layout.addWidget(self.perspective_switcher)  # Phase 3.2: Add perspective switcher at top
         dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
         dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
         dock_layout.addWidget(self.gamma_self0_editor)
         dock_layout.addWidget(self.entropy_attractor_editor)  # Entropy parameters
         dock_layout.addWidget(self.entropy_amount_editor)
-        dock_layout.addWidget(primitive_gauge_frame)
+        dock_layout.addWidget(self.spinbox_editor)  # v2.4: Primitive spinbox editor
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
@@ -309,8 +314,8 @@ class InteractiveEditor:
         # Add controls as dock widget - split trajectory horizontally
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
-        self.controls_dock.setMinimumWidth(180)  # Allow narrow controls panel
-        self.controls_dock.setMaximumWidth(280)  # But cap maximum width
+        self.controls_dock.setMinimumWidth(120)  # Allow very narrow controls panel
+        self.controls_dock.setMaximumWidth(400)  # Allow wider controls panel for spinbox editor
         self.controls_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable |
@@ -337,10 +342,10 @@ class InteractiveEditor:
             else:
                 # No saved state - apply default layout
                 window_width = self.window.width()
-                # Allocate: 33.3% Primitives, 42.7% Trajectory, 23.3% Controls
-                primitives_width = int(window_width * 0.333)
-                trajectory_width = int(window_width * 0.427)
-                controls_width = int(window_width * 0.233)
+                # Allocate: 32.5% Primitives, 40.1% Trajectory, 26.7% Controls
+                primitives_width = int(window_width * 0.325)
+                trajectory_width = int(window_width * 0.401)
+                controls_width = int(window_width * 0.267)
                 self.window.resizeDocks(
                     [self.primitive_dock, self.trajectory_dock, self.controls_dock],
                     [primitives_width, trajectory_width, controls_width],
@@ -371,9 +376,6 @@ class InteractiveEditor:
         
         # Connect Ctrl+D shortcut to print dock config
         self.window.print_dock_config_requested.connect(print_dock_config)
-        
-        # Connect primitive panel readout to Qt gauge (now that gauges exist)
-        self.primitive_panel.primitive_readout = self.primitive_gauge
         
         # Connect gamma_self gauge to trajectory panel click events (Qt Signal - clean!)
         self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
@@ -546,6 +548,38 @@ class InteractiveEditor:
     def _on_primitive_reset(self, event_index, primitive):
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
+    
+    def _on_primitive_preview_for_spinbox(self, event_index, primitive, value):
+        """
+        Update spinbox during primitive drag (v2.4).
+        
+        Auto-activates spinbox if dragged primitive doesn't match active one.
+        This ensures spinbox updates correctly across perspective switches.
+        """
+        # Check if this primitive is already active
+        is_active = (hasattr(self.controller, 'active_primitive_state') and 
+                     self.controller.active_primitive_state.get('primitive') == primitive and
+                     self.controller.active_primitive_state.get('event_id') == event_index)
+        
+        # If not active, activate this primitive (auto-switch on drag)
+        if not is_active:
+            events = self.model.get_events(self.controller.perspective)
+            if event_index < len(events):
+                event = events[event_index]
+                self.controller.on_primitive_selected(event_index, primitive)
+                is_active = True
+        
+        # Update value if active
+        if is_active:
+            self.spinbox_editor.update_value(value)
+    
+    def _on_spinbox_value_changed(self, value):
+        """
+        Handle value change from spinbox editor (v2.4).
+        
+        Forwards to controller which creates undo command and updates model.
+        """
+        self.controller.on_spinbox_value_changed(value)
     
     def _on_event_delete_requested(self, event_index):
         """
@@ -971,6 +1005,36 @@ class InteractiveEditor:
         self.gamma_self0_editor.set_value(gamma_value)
         self.gamma_self0_editor.set_perspective_name(current_name if current_name else perspective)
         
+        # Update spinbox editor (v2.4) - preserve active primitive if possible
+        if self.controller.active_primitive_state['primitive'] is not None:
+            primitive_name = self.controller.active_primitive_state['primitive']
+            event_time = self.controller.active_primitive_state['event_time']
+            
+            # Find event with same time in new perspective
+            new_events = self.model.get_events(perspective)
+            new_event_index = None
+            for idx, event in enumerate(new_events):
+                if abs(event.time - event_time) < 0.001:  # Float tolerance
+                    new_event_index = idx
+                    break
+            
+            if new_event_index is not None:
+                # Event exists in new perspective, update spinbox value
+                new_value = new_events[new_event_index].markers[primitive_name].value
+                self.controller.active_primitive_state['event_id'] = new_event_index
+                self.spinbox_editor.set_active_primitive(primitive_name, new_value)
+                print(f"[PRIMITIVE_SELECT] perspective={perspective}, event_id={new_event_index}, "
+                      f"day={event_time}, primitive={primitive_name}, value={new_value}")
+            else:
+                # Event doesn't exist in new perspective, clear spinbox
+                self.controller.active_primitive_state = {
+                    'primitive': None,
+                    'event_id': None,
+                    'event_time': None
+                }
+                self.spinbox_editor.clear_active()
+                print(f"[PRIMITIVE_DESELECT] perspective={perspective} (event not found)")
+        
         self.window.show_message(f"Switched to {perspective} perspective")
     
     def _on_name_changed(self, new_name: str):
@@ -1020,13 +1084,19 @@ class InteractiveEditor:
     def _on_marker_clicked(self, event_idx: int, primitive: str):
         """
         Handle marker click from primitive panel.
-        Update note editor with event notes.
+        Updates both note editor and spinbox editor (v2.4).
         
         Args:
             event_idx: Index of selected event
             primitive: Primitive that was clicked
         """
-        # Get the event
+        if DEBUG_SPINBOX:
+            _logger.debug(f"_on_marker_clicked: event_idx={event_idx}, primitive={primitive}")
+        
+        # Update spinbox editor (v2.4)
+        self.controller.on_primitive_selected(event_idx, primitive)
+        
+        # Update note editor with event notes
         event = self.model.get_event(event_idx, self.controller.perspective)
         if event:
             self.note_editor.set_event(event.time, event.notes)
