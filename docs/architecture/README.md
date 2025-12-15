@@ -9,11 +9,12 @@
 ### Core Architecture Documents
 1. **[01_PRINCIPLES.md](01_PRINCIPLES.md)** - Design invariants and architectural principles
 2. **[02_INFORMATION_FLOW.md](02_INFORMATION_FLOW.md)** - Message sequences and communication patterns
-3. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
-4. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
-5. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
+3. **[03_MODULE_DIRECTORY.md](03_MODULE_DIRECTORY.md)** - ✅ NEW: Complete module/directory reference with locations
+4. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
+5. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
+6. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
 
-**Note**: Documents 03, 05, and 06 do not exist yet and may be created in Phase 3+ as needed.
+**Note**: Documents 05 and 06 may be created in Phase 3+ as needed.
 
 ### Phase Planning & Roadmap
 - **[../interactive_edit_roadmap.md](../interactive_edit_roadmap.md)** - Complete phase timeline (Phase 1-4)
