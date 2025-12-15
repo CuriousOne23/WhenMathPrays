@@ -95,10 +95,15 @@ class PrimitiveSpinboxEditor(QWidget):
             current_value: Current value of that primitive
             event_time: Time of the event (day number)
         """
+        print(f"[SPINBOX_WIDGET] set_active_primitive called: prim={primitive_name}, value={current_value:.1f}, time={event_time}")
         if event_time is not None:
-            self.active_label.setText(f"Editing: {primitive_name} @ t={event_time:.1f}")
+            label_text = f"Editing: {primitive_name} @ t={event_time:.1f}"
+            self.active_label.setText(label_text)
+            print(f"[SPINBOX_WIDGET] Set label WITH time: '{label_text}'")
         else:
-            self.active_label.setText(f"Editing: {primitive_name}")
+            label_text = f"Editing: {primitive_name}"
+            self.active_label.setText(label_text)
+            print(f"[SPINBOX_WIDGET] Set label WITHOUT time: '{label_text}'")
         self.spinbox.blockSignals(True)  # Prevent emit during programmatic set
         self.spinbox.setValue(current_value)
         self.spinbox.blockSignals(False)
