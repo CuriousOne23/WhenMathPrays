@@ -17,6 +17,22 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
 
 ## Recent Updates
 
+**December 15, 2025:** v2.1.4 Spinbox State Management Fixes & Planned Refactoring:
+- **✅ Spinbox Bug Fixes (v2.1.4):** Three critical bugs resolved in Primitive Value Editor
+  - Fixed time label refresh on event insertions (Ctrl+Shift+Click)
+  - Implemented per-perspective spinbox state tracking (M1 and M2 independent)
+  - Fixed time label preservation on perspective switching (M1→M2→M1)
+- **🔄 Spinbox Refactoring Planned:** Single controller ownership pattern to prevent future bugs
+  - **Problem**: Multiple code paths accessing spinbox widget led to race conditions and silent failures
+  - **Root Cause**: Both controller.py and interactive_editor.py directly manipulate widget
+  - **Solution**: 5-phase incremental refactoring to single controller ownership
+  - **See**: [docs/architecture/spinbox_refactor_2025_12.md](docs/architecture/spinbox_refactor_2025_12.md)
+  - **Benefits**:
+    - Clear single ownership model (controller only)
+    - Race conditions impossible with one owner
+    - Easier to debug and test
+    - Prevents entire class of bugs
+
 **December 13, 2025:** Entry Point Consolidation & Observability Refactor (PLANNED):
 - **🔄 Phase 1-3 Planned:** Consolidate dual entry points and add comprehensive observability
   - **Problem**: `interactive_editor.py` (1120 lines) and `application.py` (572 lines) implement duplicate logic
