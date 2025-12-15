@@ -179,6 +179,7 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
 - **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed component docs, refactoring timeline, bug analysis
 - **[Architecture Principles](docs/architecture/01_PRINCIPLES.md)** - Core design principles
 - **[Information Flow](docs/architecture/02_INFORMATION_FLOW.md)** - Component interaction patterns
+- **[Module Directory](docs/architecture/03_MODULE_DIRECTORY.md)** - Complete module/directory reference with locations
 - **[API Contracts](docs/architecture/04_API_CONTRACTS.md)** - Method specifications with pre/postconditions
 
 ### Major Refactorings
