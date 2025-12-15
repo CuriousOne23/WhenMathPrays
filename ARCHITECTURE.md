@@ -181,6 +181,7 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
 - **[Information Flow](docs/architecture/02_INFORMATION_FLOW.md)** - Component interaction patterns
 - **[Module Directory](docs/architecture/03_MODULE_DIRECTORY.md)** - Complete module/directory reference with locations
 - **[API Contracts](docs/architecture/04_API_CONTRACTS.md)** - Method specifications with pre/postconditions
+- **[Coding Guidelines](docs/architecture/05_CODING_GUIDELINES.md)** - Do's and don'ts for maintainable code
 
 ### Major Refactorings
 - **[Spinbox Refactoring](docs/architecture/spinbox_refactor_2025_12.md)** - Single controller ownership (v2.2.0)
