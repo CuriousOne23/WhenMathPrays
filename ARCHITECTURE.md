@@ -183,11 +183,11 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
 
 ### Major Refactorings
 - **[Spinbox Refactoring](docs/architecture/spinbox_refactor_2025_12.md)** - Single controller ownership (v2.2.0)
-- **[State Management Refactoring](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state (v2.1.0)
+- **[State Management Refactoring](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 centralized state + State Viewer logging (v2.1.0)
 - **[ID-Based Tracking](docs/ID_BASED_REFACTOR_COMPLETE.md)** - Event identity system (v2.1.3)
 
 ### Debugging & Development
-- **[DEBUG.md](docs/DEBUG.md)** - Systematic debugging methodology and common issues
+- **[DEBUG.md](docs/DEBUG.md)** - Systematic debugging methodology, State Viewer usage, common issues
 - **[Observability Guide](tools/editor/OBSERVABILITY_GUIDE.md)** - Toggle-able logging for debugging
 - **[Baseline Communication Protocol](docs/baseline_communication_protocol.md)** - Primitive↔gamma_self protocol spec
 
