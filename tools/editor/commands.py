@@ -15,13 +15,13 @@ class InsertEventCommand(QUndoCommand):
     Used for manual time entry in insertion options widget.
     """
     
-    def __init__(self, controller, insert_time):
+    def __init__(self, controller, insert_time: float):
         """
         Initialize insert command.
         
         Args:
             controller: EditorController instance
-            insert_time: Time for the new event
+            insert_time: Time for the new event - REQUIRED for clarity
         """
         super().__init__()
         self.controller = controller
@@ -358,37 +358,27 @@ class InsertEventBeforeCommand(QUndoCommand):
     Supports undo/redo of event insertion via Ctrl+Shift+Click.
     """
     
-    def __init__(self, controller, event_idx, insert_time=None):
+    def __init__(self, controller, event_idx, insert_time: float):
         """
         Initialize insert command.
         
         Args:
             controller: EditorController instance
             event_idx: Event index to insert at (new event goes here, rest shift forward)
-            insert_time: Optional specific time for insertion (if None, use event's time)
+            insert_time: Explicit time for insertion - REQUIRED for clarity
         """
         super().__init__()
         self.controller = controller
         self.event_idx = event_idx
+        self.insert_time = insert_time
         
-        # Calculate insertion details
+        # Validation
         events = controller.model.get_events(controller.perspective)
-        
         if event_idx == 0:
             # Can't insert before first event
             raise ValueError("Cannot insert before first event")
         
-        # Get the target event's time BEFORE we insert (this is where new event will be placed)
-        target_time = events[event_idx].time
-        
-        # Get insertion time (use the target event's current time)
-        if insert_time is not None:
-            self.insert_time = insert_time
-            print(f"[COMMAND] Using provided insert_time={insert_time}")
-        else:
-            # Use the target event's time (new event takes this position)
-            self.insert_time = target_time
-            print(f"[COMMAND] Using target event time={target_time}")
+        print(f"[COMMAND] InsertEventBefore at index {event_idx}, time={insert_time}")
         
         # Calculate delta: gap from previous event to insertion point
         # This is the amount by which subsequent events will be shifted forward

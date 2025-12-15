@@ -556,7 +556,7 @@ if __name__ == '__main__':
     panel.update_start_marker_style(is_modified=True)
     
     # Gamma_self baseline management methods
-    def set_gamma_baseline(self, trajectory_idx: int, gamma_value: complex, baseline_type: str, perspective: str = None):
+    def set_gamma_baseline(self, trajectory_idx: int, gamma_value: complex, baseline_type: str, perspective: str):
         """
         Set gamma_self baseline for a trajectory index.
         
@@ -564,10 +564,8 @@ if __name__ == '__main__':
             trajectory_idx: Index in gamma_self trajectory
             gamma_value: Complex gamma_self value at baseline
             baseline_type: "csv" or "insertion"
-            perspective: "M1" or "M2" (defaults to current_perspective)
+            perspective: "M1" or "M2" - REQUIRED for clarity
         """
-        if perspective is None:
-            perspective = self.current_perspective
         
         if baseline_type == "csv":
             if perspective == "M1":
@@ -580,15 +578,18 @@ if __name__ == '__main__':
             else:
                 self.gamma_insertion_baseline_m2[trajectory_idx] = gamma_value
     
-    def get_gamma_baseline(self, trajectory_idx: int, perspective: str = None):
+    def get_gamma_baseline(self, trajectory_idx: int, perspective: str):
         """
         Get gamma_self baseline for a trajectory index.
         
-        Returns tuple: (gamma_value, baseline_type) or (None, None) if not found.
-        Checks insertion baseline first, then CSV baseline.
+        Args:
+            trajectory_idx: Index in gamma_self trajectory
+            perspective: "M1" or "M2" - REQUIRED for clarity
+            
+        Returns:
+            tuple: (gamma_value, baseline_type) or (None, None) if not found.
+            Checks insertion baseline first, then CSV baseline.
         """
-        if perspective is None:
-            perspective = self.current_perspective
         
         # Check insertion baseline first (takes precedence)
         insertion_dict = self.gamma_insertion_baseline_m1 if perspective == "M1" else self.gamma_insertion_baseline_m2
@@ -602,10 +603,13 @@ if __name__ == '__main__':
         
         return (None, None)
     
-    def clear_gamma_baselines(self, perspective: str = None):
-        """Clear all gamma_self baselines for a perspective."""
-        if perspective is None:
-            perspective = self.current_perspective
+    def clear_gamma_baselines(self, perspective: str):
+        """
+        Clear all gamma_self baselines for a perspective.
+        
+        Args:
+            perspective: "M1" or "M2" - REQUIRED for clarity
+        """
         
         if perspective == "M1":
             self.gamma_baseline_m1.clear()
@@ -614,16 +618,14 @@ if __name__ == '__main__':
             self.gamma_baseline_m2.clear()
             self.gamma_insertion_baseline_m2.clear()
     
-    def reindex_gamma_baselines(self, index_mapping: dict, perspective: str = None):
+    def reindex_gamma_baselines(self, index_mapping: dict, perspective: str):
         """
         Reindex gamma_self baselines after trajectory recomputation.
         
         Args:
             index_mapping: Dict mapping old_index -> new_index
-            perspective: "M1" or "M2" (defaults to current_perspective)
+            perspective: "M1" or "M2" - REQUIRED for clarity
         """
-        if perspective is None:
-            perspective = self.current_perspective
         
         # Reindex CSV baselines
         csv_dict = self.gamma_baseline_m1 if perspective == "M1" else self.gamma_baseline_m2

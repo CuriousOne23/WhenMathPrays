@@ -55,18 +55,19 @@ DEFAULT_CONFIG = {
 class EditorConfig:
     """Manages editor configuration with file persistence."""
     
-    def __init__(self, config_path: Path = None):
+    @classmethod
+    def default_config_path(cls) -> Path:
+        """Get default config file path."""
+        config_dir = Path.home() / '.whenmathprays'
+        return config_dir / 'editor_config.json'
+    
+    def __init__(self, config_path: Path):
         """
         Initialize configuration.
         
         Args:
-            config_path: Optional custom config file path.
-                        Defaults to ~/.whenmathprays/editor_config.json
+            config_path: Config file path. Use EditorConfig.default_config_path() for default.
         """
-        if config_path is None:
-            config_dir = Path.home() / '.whenmathprays'
-            config_path = config_dir / 'editor_config.json'
-        
         self.config_path = config_path
         self.config = self._load_config()
     
@@ -153,5 +154,5 @@ def get_config() -> EditorConfig:
     """Get global configuration instance."""
     global _global_config
     if _global_config is None:
-        _global_config = EditorConfig()
+        _global_config = EditorConfig(EditorConfig.default_config_path())
     return _global_config

@@ -84,7 +84,7 @@ class PrimitiveSpinboxEditor(QWidget):
         if self.spinbox.isEnabled():
             self.value_changed.emit(value)
     
-    def set_active_primitive(self, primitive_name: str, current_value: float, event_time: float = None):
+    def set_active_primitive(self, primitive_name: str, current_value: float, event_time: float):
         """
         Set the active primitive and its current value.
         
@@ -93,12 +93,9 @@ class PrimitiveSpinboxEditor(QWidget):
         Args:
             primitive_name: Name of primitive ('v', 'r', 'f', 'a', 'S')
             current_value: Current value of that primitive
-            event_time: Time of the event (day number)
+            event_time: Time of the event (day number) - REQUIRED to prevent ambiguity
         """
-        if event_time is not None:
-            label_text = f"Editing: {primitive_name} @ t={event_time:.1f}"
-        else:
-            label_text = f"Editing: {primitive_name}"
+        label_text = f"Editing: {primitive_name} @ t={event_time:.1f}"
         self.active_label.setText(label_text)
         self.spinbox.blockSignals(True)  # Prevent emit during programmatic set
         self.spinbox.setValue(current_value)
