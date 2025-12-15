@@ -1,8 +1,8 @@
 # GRP Revision 3.4: Constant-Force Entropy Model
 
-**Status:** Active (December 14, 2025)  
+**Status:** ActGive (December 14, 2025)  
 **Supersedes:** Rev 3.3 (Axis-Independent Entropy Decay)  
-**Author:** Jeff G + AI Assistant
+**Author:** CuriosOne + AI Assistant
 
 ---
 
