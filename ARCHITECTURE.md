@@ -793,6 +793,14 @@ MVC controller managing business logic and trajectory computation.
   - ✅ Marker positions keyed by ID: `marker_positions[(event_id, primitive)]` (v2.1.3)
   - ✅ Undo commands reference events by ID (v2.1.3)
   - **Rationale**: Time changes during insertions; IDs remain constant throughout event lifetime
+  - **CRITICAL RULE: Never Store Event Indices in Persistent State**
+    - ❌ **FORBIDDEN**: Storing `event_index` in any state that persists beyond current call stack
+    - ✅ **REQUIRED**: Store `event.id`, look up current index when needed with `_find_event_index_by_id()`
+    - **Why**: Indices change when events are inserted/deleted before them → stale references → extremely hard to debug
+    - **Pattern**: `active_event_id = event.id` (store), then `index = _find_event_index_by_id(active_event_id)` (lookup)
+    - **Code Review Rule**: If you see index stored in object attribute/dict that persists, flag it immediately
+    - **Example Bug**: Store index=4, insert event at position 0, index=4 now points to wrong event
+    - **This is the #1 source of "mysterious wrong event edited" bugs**
 - **Explicit State Management:** Phase 3.4 replaced ~40 scattered boolean flags with explicit state enums
 - **Observer Pattern:** State changes trigger UI updates through registered observers (Phase 3.4)
 - **Configuration Over Code:** User preferences externalized to JSON config file

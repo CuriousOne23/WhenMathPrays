@@ -105,10 +105,16 @@ class EditorController:
         self.entropy_delS_imag = 0.02      # Decay rate toward neutral
         
         # Active primitive state tracking (for spinbox editor - ARCHITECTURE.md)
-        self.active_primitive_state = {
+        # SEPARATE STATE PER PERSPECTIVE - so switching M1<->M2 preserves what you were editing
+        self.active_primitive_state_m1 = {
             'primitive': None,   # 'v', 'r', 'f', 'a', 'S', or None
             'event_id': None,    # Which event is being edited
             'event_time': None   # Time of the event (for logging)
+        }
+        self.active_primitive_state_m2 = {
+            'primitive': None,
+            'event_id': None,
+            'event_time': None
         }
         
         # Track last committed trajectory for comparison
@@ -124,6 +130,121 @@ class EditorController:
         self.baseline_comm_m1 = BaselineCommunicator("M1")
         self.baseline_comm_m2 = BaselineCommunicator("M2")
         self._trajectory_reindex_needed = False  # Flag when gamma_self needs reindexing
+    
+    @property
+    def active_primitive_state(self):
+        """Get active primitive state for current perspective."""
+        return self.active_primitive_state_m1 if self.perspective == 'M1' else self.active_primitive_state_m2
+    
+    def _find_event_index_by_id(self, event_id: int) -> int:
+        """
+        Find current index of event by its permanent ID.
+        
+        ARCHITECTURE RULE: Never store indices in persistent state - they become stale
+        when events are inserted/deleted. Always store IDs and look up current index.
+        
+        Args:
+            event_id: Permanent event ID to find
+            
+        Returns:
+            Current index of event in timeline, or -1 if not found (deleted)
+        """
+        events = self.model.get_events(self.perspective)
+        for i, event in enumerate(events):
+            if event.id == event_id:
+                return i
+        return -1  # Event not found (was deleted)
+    
+    def _restore_spinbox_state_for_perspective(self, perspective: str):
+        """
+        Restore spinbox widget state when switching to a perspective.
+        
+        Each perspective remembers what primitive was being edited, so switching
+        M1->M2->M1 brings back the M1 editing state.
+        
+        Args:
+            perspective: 'M1' or 'M2'
+        """
+        if not hasattr(self, 'spinbox_widget') or not self.spinbox_widget:
+            print(f"[SPINBOX_RESTORE] No spinbox widget available")
+            return
+        
+        # Get state for this perspective
+        state = self.active_primitive_state_m1 if perspective == 'M1' else self.active_primitive_state_m2
+        
+        print(f"[SPINBOX_RESTORE] Switching to {perspective}: state={state}")
+        
+        if state['primitive'] is None:
+            # Nothing was being edited in this perspective
+            print(f"[SPINBOX_RESTORE] No active primitive in {perspective}, clearing spinbox")
+            self.spinbox_widget.clear_active()
+            return
+        
+        # Look up current index from stored ID
+        event_id = state['event_id']
+        event_index = self._find_event_index_by_id(event_id)
+        
+        if event_index < 0:
+            # Event was deleted - clear state
+            self.spinbox_widget.clear_active()
+            state['primitive'] = None
+            return
+        
+        # Get current event data
+        events = self.model.get_events(perspective)
+        event = events[event_index]
+        primitive = state['primitive']
+        current_value = event.markers[primitive].value
+        event_time = event.time
+        
+        # Update stored time (may have changed due to insertions)
+        state['event_time'] = event_time
+        
+        # Restore spinbox display
+        self.spinbox_widget.set_active_primitive(primitive, current_value, event_time)
+        print(f"[SPINBOX_RESTORE] Restored {perspective} state: {primitive} @ t={event_time}, value={current_value:.1f}")
+        print(f"[SPINBOX_RESTORE] After set_active_primitive, spinbox shows: label='{self.spinbox_widget.get_active_label_text()}', value={self.spinbox_widget.spinbox.value():.1f}")
+    
+    def _refresh_spinbox_after_time_shift(self):
+        """
+        Refresh spinbox time label after insertions cause event times to shift.
+        
+        Example: User editing event at t=49. Ctrl+Shift+Click inserts event before it.
+        Event is now at t=56, but spinbox label still says t=49. This updates the label.
+        """
+        if not hasattr(self, 'spinbox_widget') or not self.spinbox_widget:
+            return
+        
+        if not self.spinbox_widget.is_editing():
+            return
+        
+        state = self.active_primitive_state  # Property returns current perspective's state
+        if state['primitive'] is None:
+            return
+        
+        # Look up current event by ID
+        event_id = state['event_id']
+        event_index = self._find_event_index_by_id(event_id)
+        
+        if event_index < 0:
+            # Event deleted
+            self.spinbox_widget.clear_active()
+            state['primitive'] = None
+            return
+        
+        # Get current time (may have shifted)
+        events = self.model.get_events(self.perspective)
+        event = events[event_index]
+        new_time = event.time
+        old_time = state['event_time']
+        
+        # If time changed, update the label
+        if abs(new_time - old_time) > 0.01:
+            primitive = state['primitive']
+            current_value = event.markers[primitive].value
+            state['event_time'] = new_time
+            self.spinbox_widget.set_active_primitive(primitive, current_value, new_time)
+            print(f"[SPINBOX_REFRESH] Time shifted: t={old_time:.1f} -> t={new_time:.1f}")
     
     def enable_baseline_protocol_logging(self):
         """
@@ -331,6 +452,9 @@ class EditorController:
         print(f"[CONTROLLER] Updating panel perspectives from {old_perspective} to {perspective}")
         self.primitive_panel.current_perspective = perspective
         self.trajectory_panel.current_perspective = perspective
+        
+        # Restore spinbox state for new perspective
+        self._restore_spinbox_state_for_perspective(perspective)
         
         # Remove ALL TextItems from all plots before switching
         import pyqtgraph as pg
@@ -574,14 +698,15 @@ class EditorController:
         current_value = event.markers[primitive].value
         
         # Update active primitive state
-        self.active_primitive_state = {
-            'primitive': primitive,
-            'event_id': event_index,  # Using index as ID for now
-            'event_time': event_time
-        }
+        # ARCHITECTURE RULE: Store event.id (permanent), NOT index (changes on insert/delete)
+        # Update dict in-place (can't assign since active_primitive_state is now a property)
+        state = self.active_primitive_state
+        state['primitive'] = primitive
+        state['event_id'] = event.id  # Store permanent ID
+        state['event_time'] = event_time
         
         if DEBUG_SPINBOX:
-            _logger.debug(f"perspective={self.perspective}, event_id={event_index}, "
+            _logger.debug(f"perspective={self.perspective}, event_id={event.id}, "
                          f"day={event_time}, primitive={primitive}, value={current_value}")
         
         # Notify spinbox widget (if it exists)
@@ -609,15 +734,24 @@ class EditorController:
             print("[SPINBOX_EDIT] Warning: value changed but no active primitive")
             return
         
-        event_index = self.active_primitive_state['event_id']
+        # ARCHITECTURE RULE: Look up current index from stored ID
+        # (Index may have changed due to insertions/deletions)
+        event_id = self.active_primitive_state['event_id']
+        event_index = self._find_event_index_by_id(event_id)
+        
+        if event_index < 0:
+            print(f"[SPINBOX_EDIT] Event ID={event_id} not found (was deleted?)")
+            # Clear spinbox since event no longer exists
+            if hasattr(self, 'spinbox_widget') and self.spinbox_widget:
+                self.spinbox_widget.clear_active()
+            self.active_primitive_state['primitive'] = None
+            return
+        
         primitive = self.active_primitive_state['primitive']
         event_time = self.active_primitive_state['event_time']
         
         # Get old value for undo
         events = self.model.get_events(self.perspective)
-        if event_index < 0 or event_index >= len(events):
-            print(f"[SPINBOX_EDIT] Invalid event_index={event_index}")
-            return
         
         old_value = events[event_index].markers[primitive].value
         
@@ -625,7 +759,7 @@ class EditorController:
         if abs(new_value - old_value) < FLOAT_TOLERANCE:
             return
         
-        print(f"[PRIMITIVE_EDIT] perspective={self.perspective}, event_id={event_index}, "
+        print(f"[PRIMITIVE_EDIT] perspective={self.perspective}, event_id={event_id}, "
               f"day={event_time}, primitive={primitive}, old={old_value:.1f}, new={new_value:.1f}")
         
         # Use same path as on_primitive_changed (creates undo command, etc.)
@@ -1120,6 +1254,9 @@ class EditorController:
             
             self.primitive_panel.update_from_model(events)
             self._recompute_trajectory_immediate()
+            
+            # Refresh spinbox label if active event's time changed
+            self._refresh_spinbox_after_time_shift()
             
             print(f"Total events after insert: {len(events)}")
             print("=== END INSERT ===")

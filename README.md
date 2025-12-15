@@ -3,7 +3,7 @@ WhenMathPrays builds open, living mathematics — models that trace emotion's ar
 
 **Support this work:** If this project resonates with you, consider supporting its development at [opencollective.com/whenmathprays](https://opencollective.com/whenmathprays)
 
-# WhenMathPrays – Core OS™ (Rev 3.2: Im-Only Depth Scaling)
+# WhenMathPrays – Core OS™ (Rev 3.4: Constant-Force Entropy)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -24,14 +24,15 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (Rev 3.2: December 2025)
+## The One Equation (Rev 3.4: December 2025)
 
 $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
 i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
-\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
+\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{real,target}} - \gamma_{\text{self,real}}(n)) +
+i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{imag,target}} - \gamma_{\text{self,imag}}(n))
 }
 $$
 
@@ -42,29 +43,31 @@ $$
 - **f'** = f with Im-only depth scaling applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = Shared Breath split across real/imaginary axes
-- **ΔS** = entropy drift rate (default 0.05 per time unit)
-- **γ_attractor** = entropy target position (default -20+0j)
+- **ΔS_real, ΔS_imag** = axis-independent entropy decay rates (default 0.02 each)
+- **γ_real,target, γ_imag,target** = entropy targets per axis (default -10.0 + 0.0j)
+- **sign()** = direction function (-1, 0, or +1) - constant force magnitude
 - **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### Rev 3.2 Changes (December 2025 - Im-Only Depth Scaling)
+### Rev 3.4 Changes (December 2025 - Constant-Force Entropy)
 
 **What changed:**
-- **Im-only depth scaling** → f' = f × (0.12 × max(|Im|, 5.0)) for negatives
-- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
-- **Prevents explosions**: Only scales by Im (love depth), not full |γ| (no Ego/We coupling)
-- **Natural range limits**: ±150i battlefield emerges from scaling, not arbitrary caps
-- **All other parameters unchanged** from Rev 3
+- **Constant-force entropy** → Uses sign() function instead of proportional-to-distance force
+- **Axis-independent decay** → Separate ΔS_real and ΔS_imag rates (0.02 each)
+- **Timeline-independent drift** → Same entropy effect per unit time regardless of scenario length
+- **Recalibrated targets** → Real axis target: -10.0 (was -150.0 in Rev 3.3)
+- **Im-only depth scaling preserved** from Rev 3.2 (f' for negative fidelity)
 
-**Why?** Rev 3.1 fixed 25× scaling lost the psychological insight that deeper love makes you more vulnerable. Rev 3.2 restores depth-dependent damage while avoiding Rev 3's explosions by only using Im axis.
+**Why?** Rev 3.3's proportional force `(target - current)` accumulated with timeline length, causing 60-day scenarios to drift 4× more than 14-day scenarios. Constant force `sign(target - current)` makes drift predictable: same rate per day, primitives dominate trajectory shape.
 
-**Examples:**
-- At 20i: f=-1 → -2.4i (fragile early bond)
-- At 150i: f=-1 → -18i (deep love can be wounded)
-- At 250i: f=-10 → -300i (Hachikō-level devotion can reach -150i floor)
+**Physics comparison:**
+- **Rev 3.3 (wrong):** F = k × distance → spring/damping → integrates as distance × time
+- **Rev 3.4 (correct):** F = constant → thrust/drag → integrates as time only
 
-See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
+**Result:** "Fred is now happy and in love, he is in We territory" - trajectories follow primitives naturally with gentle entropy drift, not yanked into deep Ego by timeline-length accumulation.
+
+See [GRP_rev3.4.md](docs/GRP_rev3.4.md) for complete specification and Rev 3.3 error analysis.
 
 ### γ_self — Relational State Position
 

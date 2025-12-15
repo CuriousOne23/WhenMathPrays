@@ -4,7 +4,7 @@ This is the **only** file in the entire repository that may contain numerical pa
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 2025 (Rev 3.3: Axis-Independent Entropy Decay)
+Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,16 +32,17 @@ Last updated: December 2025 (Rev 3.3: Axis-Independent Entropy Decay)
 
 ---
 
-## Core Canonical Parameters (Rev 3.3: December 2025)
+## Core Canonical Parameters (Rev 3.4: December 2025)
 
-**Rev 3.3 Changes (Axis-independent entropy decay for correct physics):**
-- **Entropy now uses separate real/imaginary targets** instead of single attractor point
-- **Independent decay rates per axis** (ΔS_real, ΔS_imag) for proper dimensional control
-- **Eliminates slope inversion paradox**: Old model increased slopes when trying to flatten them
-- **Real axis target**: -150 (Ego/isolation) - positive We-ness decays toward Ego
-- **Imaginary axis target**: 0 (Neutral affect) - Love/Hate decay toward apathy
-- **Formula**: entropy_pull = ΔS_real × Δt × (real_target - real_current) + i × ΔS_imag × Δt × (imag_target - imag_current)
+**Rev 3.4 Changes (Constant-force entropy for timeline independence):**
+- **ERROR IN REV 3.3 CORRECTED**: Proportional-to-distance force caused timeline-length accumulation bug
+- **Constant-force entropy**: Uses sign() function for force direction only, not magnitude
+- **Timeline-independent drift**: Same entropy effect per unit time regardless of scenario length
+- **Real axis target recalibrated**: -10.0 (was -150.0 in Rev 3.3 - too strong for new physics)
+- **Imaginary axis target**: 0 (Neutral affect) - unchanged
+- **Formula**: entropy_pull = ΔS_real × Δt × sign(real_target - real_current) + i × ΔS_imag × Δt × sign(imag_target - imag_current)
 - **Fidelity asymmetry unchanged** from Rev 3.2 (Im-only depth scaling)
+- **Axis-independent decay rates preserved** from Rev 3.3 (ΔS_real, ΔS_imag)
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
@@ -54,7 +55,7 @@ Last updated: December 2025 (Rev 3.3: Axis-Independent Entropy Decay)
 | **w_{S,R}** | 0.5 | – | Shared Breath (real axis contribution) | Default, tunable |
 | **w__real** (delS_real) | 0.02 | time⁻¹ | Real axis entropy decay rate (toward Ego) | Default, tunable |
 | **ΔS_imag** (delS_imag) | 0.02 | time⁻¹ | Imaginary axis entropy decay rate (toward neutral) | Default, tunable |
-| **entropy_real_target** | -150.0 | – | Real axis entropy target (deep Ego/isolation) | Default, tunable |
+| **entropy_real_target** | -10.0 | – | Real axis entropy target (gentle Ego drift) | Default, tunable |
 | **entropy_imag_target** | 0.0 | – | Imaginary axis entropy target (neutral affect/apathy) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
 

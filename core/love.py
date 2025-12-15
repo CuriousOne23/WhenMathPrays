@@ -151,19 +151,22 @@ def update_gamma_self(
     real_current = gamma_self_current.real
     imag_current = gamma_self_current.imag
     
-    # Real axis: pull toward ego (negative real)
+    # Real axis: pull toward ego (negative real) - CONSTANT FORCE, not proportional to distance
     real_diff = entropy_real_target - real_current
+    import numpy as np
+    real_direction = np.sign(real_diff) if real_diff != 0 else 0  # -1, 0, or +1
     if entropy_per_event:
-        entropy_pull_real = delS_real * real_diff
+        entropy_pull_real = delS_real * real_direction
     else:
-        entropy_pull_real = (delS_real * time_delta) * real_diff
+        entropy_pull_real = (delS_real * time_delta) * real_direction
     
-    # Imaginary axis: pull toward neutral (zero imaginary)
+    # Imaginary axis: pull toward neutral (zero imaginary) - CONSTANT FORCE
     imag_diff = entropy_imag_target - imag_current
+    imag_direction = np.sign(imag_diff) if imag_diff != 0 else 0  # -1, 0, or +1
     if entropy_per_event:
-        entropy_pull_imag = delS_imag * imag_diff
+        entropy_pull_imag = delS_imag * imag_direction
     else:
-        entropy_pull_imag = (delS_imag * time_delta) * imag_diff
+        entropy_pull_imag = (delS_imag * time_delta) * imag_direction
     
     entropy_pull = entropy_pull_real + 1j * entropy_pull_imag
     
