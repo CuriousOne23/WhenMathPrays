@@ -155,6 +155,36 @@ class EditorController:
                 return i
         return -1  # Event not found (was deleted)
     
+    def initialize_spinbox_widget(self, widget):
+        """
+        Initialize spinbox widget reference and connect signals.
+        
+        Called once during application startup. Replaces direct signal
+        connection from interactive_editor.py.
+        
+        Args:
+            widget: PrimitiveSpinboxEditor instance
+        """
+        self._spinbox_widget = widget
+        widget.value_changed.connect(self.on_spinbox_value_changed)
+    
+    def update_spinbox_value(self, value: float):
+        """
+        Update spinbox value programmatically.
+        
+        Called when user clicks primitive marker in plot and the clicked
+        primitive is already active in the spinbox. Updates the spinbox
+        to show the new value without changing which primitive is selected.
+        
+        This is a proxy method that maintains single controller ownership
+        of spinbox widget access.
+        
+        Args:
+            value: New value to display in spinbox
+        """
+        if self._spinbox_widget.is_editing():
+            self._spinbox_widget.update_value(value)
+    
     def _restore_spinbox_state_for_perspective(self, perspective: str):
         """
         Restore spinbox widget state when switching to a perspective.
@@ -165,19 +195,15 @@ class EditorController:
         Args:
             perspective: 'M1' or 'M2'
         """
-        if not hasattr(self, 'spinbox_widget') or not self.spinbox_widget:
-            print(f"[SPINBOX_RESTORE] No spinbox widget available")
+        if not hasattr(self, '_spinbox_widget') or not self._spinbox_widget:
             return
         
         # Get state for this perspective
         state = self.active_primitive_state_m1 if perspective == 'M1' else self.active_primitive_state_m2
         
-        print(f"[SPINBOX_RESTORE] Switching to {perspective}: state={state}")
-        
         if state['primitive'] is None:
             # Nothing was being edited in this perspective
-            print(f"[SPINBOX_RESTORE] No active primitive in {perspective}, clearing spinbox")
-            self.spinbox_widget.clear_active()
+            self._spinbox_widget.clear_active()
             return
         
         # Look up current index from stored ID
@@ -186,7 +212,7 @@ class EditorController:
         
         if event_index < 0:
             # Event was deleted - clear state
-            self.spinbox_widget.clear_active()
+            self._spinbox_widget.clear_active()
             state['primitive'] = None
             return
         
@@ -201,13 +227,7 @@ class EditorController:
         state['event_time'] = event_time
         
         # Restore spinbox display
-        self.spinbox_widget.set_active_primitive(primitive, current_value, event_time)
-        print(f"[SPINBOX_RESTORE] Restored {perspective} state: {primitive} @ t={event_time}, value={current_value:.1f}")
-        print(f"[SPINBOX_RESTORE] After set_active_primitive, spinbox shows: label='{self.spinbox_widget.get_active_label_text()}', value={self.spinbox_widget.spinbox.value():.1f}")
-        
-        # Force UI update to ensure spinbox label renders
-        from PySide6.QtWidgets import QApplication
-        QApplication.processEvents()
+        self._spinbox_widget.set_active_primitive(primitive, current_value, event_time)
     
     def _refresh_spinbox_after_time_shift(self):
         """
@@ -216,10 +236,10 @@ class EditorController:
         Example: User editing event at t=49. Ctrl+Shift+Click inserts event before it.
         Event is now at t=56, but spinbox label still says t=49. This updates the label.
         """
-        if not hasattr(self, 'spinbox_widget') or not self.spinbox_widget:
+        if not hasattr(self, '_spinbox_widget') or not self._spinbox_widget:
             return
         
-        if not self.spinbox_widget.is_editing():
+        if not self._spinbox_widget.is_editing():
             return
         
         state = self.active_primitive_state  # Property returns current perspective's state
@@ -232,7 +252,7 @@ class EditorController:
         
         if event_index < 0:
             # Event deleted
-            self.spinbox_widget.clear_active()
+            self._spinbox_widget.clear_active()
             state['primitive'] = None
             return
         
@@ -247,8 +267,7 @@ class EditorController:
             primitive = state['primitive']
             current_value = event.markers[primitive].value
             state['event_time'] = new_time
-            self.spinbox_widget.set_active_primitive(primitive, current_value, new_time)
-            print(f"[SPINBOX_REFRESH] Time shifted: t={old_time:.1f} -> t={new_time:.1f}")
+            self._spinbox_widget.set_active_primitive(primitive, current_value, new_time)
     
     def enable_baseline_protocol_logging(self):
         """
@@ -688,9 +707,9 @@ class EditorController:
         """
         if DEBUG_SPINBOX:
             _logger.debug(f"on_primitive_selected called: event_index={event_index}, primitive={primitive}")
-            _logger.debug(f"Has spinbox_widget? {hasattr(self, 'spinbox_widget')}")
-            if hasattr(self, 'spinbox_widget'):
-                _logger.debug(f"spinbox_widget is None? {self.spinbox_widget is None}")
+            _logger.debug(f"Has spinbox_widget? {hasattr(self, '_spinbox_widget')}")
+            if hasattr(self, '_spinbox_widget'):
+                _logger.debug(f"spinbox_widget is None? {self._spinbox_widget is None}")
         
         events = self.model.get_events(self.perspective)
         if event_index < 0 or event_index >= len(events):
@@ -714,12 +733,12 @@ class EditorController:
                          f"day={event_time}, primitive={primitive}, value={current_value}")
         
         # Notify spinbox widget (if it exists)
-        if hasattr(self, 'spinbox_widget') and self.spinbox_widget is not None:
+        if hasattr(self, '_spinbox_widget') and self._spinbox_widget is not None:
             if DEBUG_SPINBOX:
                 _logger.debug(f"Calling spinbox_widget.set_active_primitive({primitive}, {current_value}, {event_time})")
-            self.spinbox_widget.set_active_primitive(primitive, current_value, event_time)
+            self._spinbox_widget.set_active_primitive(primitive, current_value, event_time)
             if DEBUG_SPINBOX:
-                _logger.debug(f"Spinbox updated, label={self.spinbox_widget.get_active_label_text()}")
+                _logger.debug(f"Spinbox updated, label={self._spinbox_widget.get_active_label_text()}")
         else:
             if DEBUG_SPINBOX:
                 _logger.debug("WARNING: spinbox_widget not available!")
@@ -746,8 +765,8 @@ class EditorController:
         if event_index < 0:
             print(f"[SPINBOX_EDIT] Event ID={event_id} not found (was deleted?)")
             # Clear spinbox since event no longer exists
-            if hasattr(self, 'spinbox_widget') and self.spinbox_widget:
-                self.spinbox_widget.clear_active()
+            if hasattr(self, '_spinbox_widget') and self._spinbox_widget:
+                self._spinbox_widget.clear_active()
             self.active_primitive_state['primitive'] = None
             return
         
