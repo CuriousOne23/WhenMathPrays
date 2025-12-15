@@ -254,9 +254,8 @@ class InteractiveEditor:
         
         # Primitive spinbox editor (v2.4 - ARCHITECTURE.md)
         self.spinbox_editor = PrimitiveSpinboxEditor()
-        self.spinbox_editor.value_changed.connect(self._on_spinbox_value_changed)
-        # Register with controller
-        self.controller.spinbox_widget = self.spinbox_editor
+        # Register with controller (controller handles signal connection)
+        self.controller.initialize_spinbox_widget(self.spinbox_editor)
         
         # Set initial perspective AFTER all widgets created
         if self.initial_perspective == "M2":
@@ -569,9 +568,9 @@ class InteractiveEditor:
                 self.controller.on_primitive_selected(event_index, primitive)
                 is_active = True
         
-        # Update value if active
+        # Update value if active (via controller API)
         if is_active:
-            self.spinbox_editor.update_value(value)
+            self.controller.update_spinbox_value(value)
     
     def _on_spinbox_value_changed(self, value):
         """
@@ -993,6 +992,7 @@ class InteractiveEditor:
         Args:
             perspective: Either 'M1' or 'M2'
         """
+        # Controller handles all perspective switching including spinbox restoration
         self.controller.switch_perspective(perspective)
         
         # Update name editor to show current perspective's name
@@ -1004,36 +1004,6 @@ class InteractiveEditor:
         gamma_value = self.model.get_gamma_self_0(perspective)
         self.gamma_self0_editor.set_value(gamma_value)
         self.gamma_self0_editor.set_perspective_name(current_name if current_name else perspective)
-        
-        # Update spinbox editor (v2.4) - preserve active primitive if possible
-        if self.controller.active_primitive_state['primitive'] is not None:
-            primitive_name = self.controller.active_primitive_state['primitive']
-            event_time = self.controller.active_primitive_state['event_time']
-            
-            # Find event with same time in new perspective
-            new_events = self.model.get_events(perspective)
-            new_event_index = None
-            for idx, event in enumerate(new_events):
-                if abs(event.time - event_time) < 0.001:  # Float tolerance
-                    new_event_index = idx
-                    break
-            
-            if new_event_index is not None:
-                # Event exists in new perspective, update spinbox value
-                new_value = new_events[new_event_index].markers[primitive_name].value
-                self.controller.active_primitive_state['event_id'] = new_event_index
-                self.spinbox_editor.set_active_primitive(primitive_name, new_value, event_time)
-                print(f"[PRIMITIVE_SELECT] perspective={perspective}, event_id={new_event_index}, "
-                      f"day={event_time}, primitive={primitive_name}, value={new_value}")
-            else:
-                # Event doesn't exist in new perspective, clear spinbox
-                self.controller.active_primitive_state = {
-                    'primitive': None,
-                    'event_id': None,
-                    'event_time': None
-                }
-                self.spinbox_editor.clear_active()
-                print(f"[PRIMITIVE_DESELECT] perspective={perspective} (event not found)")
         
         self.window.show_message(f"Switched to {perspective} perspective")
     
