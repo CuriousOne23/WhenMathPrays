@@ -189,6 +189,7 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 - **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
 - **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
+- **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
 - **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
 
 ---
@@ -480,6 +481,13 @@ plot_dual_scenario(
 - **[soul/](tests/soul/)** - Shared Breath validation tests
 - **[revenge/](tests/revenge/)** - Revenge 360° PDF analysis
 - **[soul_presence_validation.md](docs/soul/soul_presence_validation.md)** - Shared Breath stress test results
+
+### Developer & Debugging Resources
+- **[DEBUG.md](docs/DEBUG.md)** - Systematic debugging methodology and common issues
+- **[Architecture Deep Dive](docs/architecture/README.md)** - Component responsibilities, refactoring history, observability
+- **[STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 state management architecture
+- **[ID_BASED_REFACTOR_COMPLETE.md](docs/ID_BASED_REFACTOR_COMPLETE.md)** - Event identity system (v2.1.3)
+- **[baseline_communication_protocol.md](docs/baseline_communication_protocol.md)** - Primitive↔gamma_self protocol spec
 
 ---
 

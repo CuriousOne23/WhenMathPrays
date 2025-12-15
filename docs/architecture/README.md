@@ -20,6 +20,16 @@
 - **[../architecture_recommendations.md](../architecture_recommendations.md)** - GUI architecture planning (QDockWidget + M2)
 - **[../interactive_edit_ph2_requirements.md](../interactive_edit_ph2_requirements.md)** - Phase 2 detailed requirements (complete)
 
+### Recent Refactorings (2025)
+- **[spinbox_refactor_2025_12.md](spinbox_refactor_2025_12.md)** - ✅ Complete: Single controller ownership (Dec 2025)
+  - Bug fixes: Time label preservation, per-perspective state
+  - 5-phase refactoring to eliminate race conditions
+  - [Phase 1 Audit](spinbox_audit_phase1.md)
+- **[baseline_storage_refactoring.md](baseline_storage_refactoring.md)** - ✅ Complete: Time-keyed dict (Dec 2025)
+- **[entry_point_consolidation_plan.md](entry_point_consolidation_plan.md)** - 🔄 Planned: Dual entry point consolidation
+- **[perspective_management_refactor.md](perspective_management_refactor.md)** - 🔄 Planned: Event-driven perspective switching
+- **[OBSERVABILITY_IMPLEMENTATION_COMPLETE.md](OBSERVABILITY_IMPLEMENTATION_COMPLETE.md)** - ✅ Complete: Debug logging system
+
 ### Historical Context
 - **[refactors/](refactors/)** - Refactor history with before/after analysis
 - **[decisions/](decisions/)** - Architecture Decision Records (ADRs)
