@@ -23,7 +23,7 @@ W_S_I = 0.5  # Shared Breath (imaginary axis contribution)
 FIDELITY_SCALING_FACTOR = 0.12  # Negative fidelity scaling coefficient (LOCKED)
 FIDELITY_EPSILON = 5.0  # Collapse prevention floor for Im depth (LOCKED)
 
-# Entropy drift (DEFAULT, tunable by scenario) - Option 3: Separate axis targets and rates
+# Entropy drift (DEFAULT, tunable by scenario) - Axis-independent decay (Rev 3.3)
 DELTA_S = 0.02  # Default unified entropy rate (backward compatibility)
 ENTROPY_REAL_TARGET = -150.0  # Real axis target (deep Ego, isolated)
 ENTROPY_IMAG_TARGET = 0.0     # Imaginary axis target (neutral affect, neither love nor hate)
@@ -140,7 +140,8 @@ def update_gamma_self(
     delta_real = w_v * v + w_S_R * S  # Ego↔We axis
     delta_imag = w_r * r + w_f * f_prime + w_a * a + w_S_I * S  # Hate↔Love axis
     
-    # Entropy drift: Option 3 - Separate real/imag targets with independent decay rates
+    # Entropy drift: Axis-independent decay (Rev 3.3 architecture)
+    # Rev 3.4 Fix: constant-force model (sign function), not distance-proportional
     # Extract entropy parameters from weights (with backward compatibility)
     entropy_real_target = weights.get('entropy_real_target', -150.0)
     entropy_imag_target = weights.get('entropy_imag_target', 0.0)
