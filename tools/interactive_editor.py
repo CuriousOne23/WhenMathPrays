@@ -1022,7 +1022,7 @@ class InteractiveEditor:
                 # Event exists in new perspective, update spinbox value
                 new_value = new_events[new_event_index].markers[primitive_name].value
                 self.controller.active_primitive_state['event_id'] = new_event_index
-                self.spinbox_editor.set_active_primitive(primitive_name, new_value)
+                self.spinbox_editor.set_active_primitive(primitive_name, new_value, event_time)
                 print(f"[PRIMITIVE_SELECT] perspective={perspective}, event_id={new_event_index}, "
                       f"day={event_time}, primitive={primitive_name}, value={new_value}")
             else:

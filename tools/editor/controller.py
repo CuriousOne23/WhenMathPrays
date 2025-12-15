@@ -204,6 +204,10 @@ class EditorController:
         self.spinbox_widget.set_active_primitive(primitive, current_value, event_time)
         print(f"[SPINBOX_RESTORE] Restored {perspective} state: {primitive} @ t={event_time}, value={current_value:.1f}")
         print(f"[SPINBOX_RESTORE] After set_active_primitive, spinbox shows: label='{self.spinbox_widget.get_active_label_text()}', value={self.spinbox_widget.spinbox.value():.1f}")
+        
+        # Force UI update to ensure spinbox label renders
+        from PySide6.QtWidgets import QApplication
+        QApplication.processEvents()
     
     def _refresh_spinbox_after_time_shift(self):
         """
