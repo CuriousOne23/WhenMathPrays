@@ -8,9 +8,9 @@
 
 ## Summary
 
-Rev 3.4 fixes a **timeline-length dependency bug** in Rev 3.3's entropy model. Rev 3.3 used force proportional to distance from attractor, which caused entropy effects to accumulate linearly with timeline length. Long scenarios (60+ days) experienced excessive drift toward the attractor, while short scenarios (14 days) showed minimal effect. The new model uses **constant-force entropy** with magnitude independent of distance, making entropy behavior consistent across all timeline lengths.
+Rev 3.4 fixes a **timeline-length dependency bug** in Rev 3.3's entropy model. The problem was that Rev 3.3 multiplied the entropy effect by the distance from the attractor (`force = rate × distance`), which caused entropy to accumulate linearly with timeline length. Long scenarios (60+ days) experienced excessive drift toward the attractor, while short scenarios (14 days) showed minimal effect. The fix: use **constant-force entropy** where the force magnitude is the same regardless of distance (`force = rate × sign(distance)`), making entropy behavior consistent across all timeline lengths.
 
-**This is a refinement of the entropy force model only.** All other parameters remain at Rev 3.3 values (axis-independent decay rates, separate real/imag targets).
+**This changes only the entropy force calculation.** All other parameters remain at Rev 3.3 values (separate real/imag targets and decay rates were already correct - the issue was purely the distance multiplication).
 
 ## Changes from Rev 3.3
 
