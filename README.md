@@ -482,13 +482,6 @@ plot_dual_scenario(
 - **[revenge/](tests/revenge/)** - Revenge 360° PDF analysis
 - **[soul_presence_validation.md](docs/soul/soul_presence_validation.md)** - Shared Breath stress test results
 
-### Developer & Debugging Resources
-- **[DEBUG.md](docs/DEBUG.md)** - Systematic debugging methodology and common issues
-- **[Architecture Deep Dive](docs/architecture/README.md)** - Component responsibilities, refactoring history, observability
-- **[STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md)** - Phase 3.4 state management architecture
-- **[ID_BASED_REFACTOR_COMPLETE.md](docs/ID_BASED_REFACTOR_COMPLETE.md)** - Event identity system (v2.1.3)
-- **[baseline_communication_protocol.md](docs/baseline_communication_protocol.md)** - Primitive↔gamma_self protocol spec
-
 ---
 
 ## What was restored
