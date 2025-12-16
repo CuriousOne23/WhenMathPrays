@@ -4,16 +4,24 @@ from .event import Event
 
 PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
 
-def load_events_from_csv(filepath):
+def load_events_from_csv(filepath, start_id=0):
     """
     Loads scenario events from a CSV file and returns a list of Event objects.
+    
     Args:
         filepath (str): Path to CSV file.
+        start_id (int): Starting ID for event assignment (default 0).
+    
     Returns:
-        tuple: (List[Event], dict) - List of Event objects and metadata dict with 'gamma_self_0', 'time_unit', 'name'
+        tuple: (List[Event], dict, int) - List of Event objects, metadata dict with 
+               'gamma_self_0', 'time_unit', 'name', and next_event_id to use for new events.
+    
+    Note: Events are assigned sequential IDs starting from start_id in file order.
+          The returned next_event_id is start_id + len(events).
     """
     events = []
     metadata = {'gamma_self_0': 0+0j, 'time_unit': 'days', 'name': ''}
+    event_id = start_id
     
     with open(filepath, 'r', newline='', encoding='utf-8') as csvfile:
         # Find the actual header row
@@ -62,9 +70,13 @@ def load_events_from_csv(filepath):
                 notes = row.get('notes', '')
                 marker = row.get('marker', '')
                 locked = row.get('locked', '')
-                event = Event(time, primitives, notes=notes, marker=marker, locked=locked)
+                event = Event(time, primitives, notes=notes, marker=marker, locked=locked, event_id=event_id)
                 events.append(event)
-                print(f"[DEBUG] Accepted event: time={time}, primitives={primitives}")
+                print(f"[DEBUG] Accepted event: id={event_id}, time={time}, primitives={primitives}")
+                event_id += 1
             except Exception as e:
                 print(f"[DEBUG] Skipping row due to error: {e}")
-    return events, metadata
+    
+    next_event_id = event_id
+    print(f"[DEBUG] Loaded {len(events)} events, next_event_id={next_event_id}")
+    return events, metadata, next_event_id

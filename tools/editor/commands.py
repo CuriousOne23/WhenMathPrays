@@ -5,6 +5,7 @@ Qt's undo framework using QUndoCommand pattern.
 """
 
 from PySide6.QtGui import QUndoCommand
+from tools.editor.state_viewer import StateViewer
 
 
 class InsertEventCommand(QUndoCommand):
@@ -14,13 +15,13 @@ class InsertEventCommand(QUndoCommand):
     Used for manual time entry in insertion options widget.
     """
     
-    def __init__(self, controller, insert_time):
+    def __init__(self, controller, insert_time: float):
         """
         Initialize insert command.
         
         Args:
             controller: EditorController instance
-            insert_time: Time for the new event
+            insert_time: Time for the new event - REQUIRED for clarity
         """
         super().__init__()
         self.controller = controller
@@ -29,6 +30,13 @@ class InsertEventCommand(QUndoCommand):
     
     def redo(self):
         """Insert the new event."""
+        StateViewer.record(
+            operation='redo_insert_event',
+            entity=(self.insert_time, self.controller.perspective),
+            changes={
+                'action': ('remove', 'insert')
+            }
+        )
         self.controller.state.enter_undo_operation()
         try:
             self.controller.insert_event_at_time(self.insert_time)
@@ -37,14 +45,27 @@ class InsertEventCommand(QUndoCommand):
     
     def undo(self):
         """Remove the inserted event."""
+        StateViewer.record(
+            operation='undo_insert_event',
+            entity=(self.insert_time, self.controller.perspective),
+            changes={
+                'action': ('insert', 'remove')
+            }
+        )
+        print(f"\n[INSERT_UNDO] InsertEventCommand.undo() called for time={self.insert_time}")
         self.controller.state.enter_undo_operation()
         try:
             # Find the event at this time and delete it
             events = self.controller.model.get_events(self.controller.perspective)
+            print(f"[INSERT_UNDO] Searching {len(events)} events for time={self.insert_time}")
             for idx, evt in enumerate(events):
                 if abs(evt.time - self.insert_time) < 0.001:
+                    print(f"[INSERT_UNDO] Found event at idx={idx}, calling delete_event_at_index()")
                     self.controller.delete_event_at_index(idx)
+                    print(f"[INSERT_UNDO] Delete complete")
                     break
+            else:
+                print(f"[INSERT_UNDO] ERROR: No event found at time={self.insert_time}")
         finally:
             self.controller.state.exit_undo_operation()
 
@@ -81,10 +102,24 @@ class EditPrimitiveCommand(QUndoCommand):
     
     def redo(self):
         """Apply the edit (or re-apply after undo)."""
+        StateViewer.record(
+            operation='redo_edit_primitive',
+            entity=(self.event_time, self.primitive, self.controller.perspective),
+            changes={
+                'value': (self.old_value, self.new_value)
+            }
+        )
         self._apply_value(self.new_value)
     
     def undo(self):
         """Revert the edit."""
+        StateViewer.record(
+            operation='undo_edit_primitive',
+            entity=(self.event_time, self.primitive, self.controller.perspective),
+            changes={
+                'value': (self.new_value, self.old_value)
+            }
+        )
         self._apply_value(self.old_value)
     
     def _apply_value(self, value):
@@ -186,6 +221,13 @@ class ResetPrimitiveCommand(QUndoCommand):
     
     def redo(self):
         """Apply the reset."""
+        StateViewer.record(
+            operation='redo_reset_primitive',
+            entity=(self.event_time, self.primitive, self.controller.perspective),
+            changes={
+                'value': (self.old_value, self.baseline_value)
+            }
+        )
         # Use controller's method to ensure consistent behavior
         self.controller.state.enter_undo_operation()
         try:
@@ -207,6 +249,13 @@ class ResetPrimitiveCommand(QUndoCommand):
     
     def undo(self):
         """Restore the value before reset."""
+        StateViewer.record(
+            operation='undo_reset_primitive',
+            entity=(self.event_time, self.primitive, self.controller.perspective),
+            changes={
+                'value': (self.baseline_value, self.old_value)
+            }
+        )
         # Use controller's apply method to restore the modified value
         self.controller.state.enter_undo_operation()
         try:
@@ -253,13 +302,29 @@ class DeleteEventCommand(QUndoCommand):
             'time': event.time,
             'primitives': {prim: event.markers[prim].value for prim in ['v', 'r', 'f', 'a', 'S']},
             'notes': event.notes,
-            'locked': event.locked
+            'locked': event.locked,
+            'event_id': event.id  # Preserve event ID for baseline lookup
         }
+        
+        # Store baseline values separately (from controller's baseline dict)
+        baseline_dict = controller.baseline_by_id_m1 if controller.perspective == "M1" else controller.baseline_by_id_m2
+        self.baseline_values = {}
+        for prim in ['v', 'r', 'f', 'a', 'S']:
+            key = (event.id, prim)
+            if key in baseline_dict:
+                self.baseline_values[prim] = baseline_dict[key]
         
         self.setText(f"Delete event at day {event.time}")
     
     def redo(self):
         """Delete the event."""
+        StateViewer.record(
+            operation='redo_delete_event',
+            entity=(self.event_data['time'], self.controller.perspective, self.event_idx),
+            changes={
+                'action': ('restore', 'delete')
+            }
+        )
         self.controller.state.enter_undo_operation()
         try:
             self.controller._delete_event(self.event_idx)
@@ -268,9 +333,17 @@ class DeleteEventCommand(QUndoCommand):
     
     def undo(self):
         """Restore the deleted event."""
+        StateViewer.record(
+            operation='undo_delete_event',
+            entity=(self.event_data['time'], self.controller.perspective, self.event_idx),
+            changes={
+                'action': ('delete', 'restore')
+            }
+        )
         self.controller.state.enter_undo_operation()
         try:
-            self.controller._insert_event(self.event_idx, self.event_data)
+            # Pass baseline_values to restore original baselines
+            self.controller._insert_event(self.event_idx, self.event_data, self.baseline_values)
         finally:
             self.controller.state.exit_undo_operation()
 
@@ -285,43 +358,34 @@ class InsertEventBeforeCommand(QUndoCommand):
     Supports undo/redo of event insertion via Ctrl+Shift+Click.
     """
     
-    def __init__(self, controller, event_idx, insert_time=None):
+    def __init__(self, controller, event_idx, insert_time: float):
         """
         Initialize insert command.
         
         Args:
             controller: EditorController instance
             event_idx: Event index to insert at (new event goes here, rest shift forward)
-            insert_time: Optional specific time for insertion (if None, use event's time)
+            insert_time: Explicit time for insertion - REQUIRED for clarity
         """
         super().__init__()
         self.controller = controller
         self.event_idx = event_idx
+        self.insert_time = insert_time
         
-        # Calculate insertion details
+        # Validation
         events = controller.model.get_events(controller.perspective)
-        
         if event_idx == 0:
             # Can't insert before first event
             raise ValueError("Cannot insert before first event")
         
-        # Get the target event's time BEFORE we insert (this is where new event will be placed)
-        target_time = events[event_idx].time
+        print(f"[COMMAND] InsertEventBefore at index {event_idx}, time={insert_time}")
         
-        # Get insertion time (use the target event's current time)
-        if insert_time is not None:
-            self.insert_time = insert_time
-            print(f"[COMMAND] Using provided insert_time={insert_time}")
-        else:
-            # Use the target event's time (new event takes this position)
-            self.insert_time = target_time
-            print(f"[COMMAND] Using target event time={target_time}")
-        
-        # Calculate delta: distance from previous event to insertion point
-        # This is how much subsequent events will shift forward
+        # Calculate delta: gap from previous event to insertion point
+        # This is the amount by which subsequent events will be shifted forward
+        # Example: clicking at 8.77 between day 7 and day 30 creates delta = 8.77 - 7.0 = 1.77
         previous_time = events[event_idx - 1].time
         self.delta = self.insert_time - previous_time
-        print(f"[COMMAND] event_idx={event_idx}, prev_time={previous_time}, delta={self.delta}")
+        print(f"[COMMAND] event_idx={event_idx}, prev_time={previous_time}, insert_time={self.insert_time}, delta={self.delta}")
         
         # Store original times of events that will be shifted
         self.shifted_events = []  # [(idx, old_time, new_time), ...]
@@ -334,6 +398,14 @@ class InsertEventBeforeCommand(QUndoCommand):
     
     def redo(self):
         """Insert the new event and shift subsequent events."""
+        StateViewer.record(
+            operation='redo_insert_event_before',
+            entity=(self.event_idx, self.controller.perspective, self.insert_time),
+            changes={
+                'action': ('remove', 'insert'),
+                'shifted_events': (0, len(self.shifted_events))
+            }
+        )
         self.controller.state.enter_undo_operation()
         try:
             self.controller._insert_event_before(self.event_idx, self.insert_time, self.delta)
@@ -342,6 +414,15 @@ class InsertEventBeforeCommand(QUndoCommand):
     
     def undo(self):
         """Remove the inserted event and restore original times."""
+        StateViewer.record(
+            operation='undo_insert_event_before',
+            entity=(self.event_idx, self.controller.perspective, self.insert_time),
+            changes={
+                'action': ('insert', 'remove'),
+                'shifted_events': (len(self.shifted_events), 0)
+            }
+        )
+        print(f"\n[INSERT_UNDO] InsertEventBeforeCommand.undo() called for event_idx={self.event_idx}")
         self.controller.state.enter_undo_operation()
         try:
             self.controller._undo_insert_event_before(self.event_idx, self.shifted_events)

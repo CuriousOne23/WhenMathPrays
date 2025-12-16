@@ -15,7 +15,7 @@ from tools.editor.views.primitive_panel_pyqtgraph import PrimitivePanelPyQtGraph
 from tools.editor.views.trajectory_panel_pyqtgraph import TrajectoryPanelPyQtGraph
 from tools.editor.widgets import (
     GammaSelf0Editor, InsertionOptionsWidget, PerspectiveSwitcher,
-    NameEditor, NoteEditor
+    NameEditor, NoteEditor, EntropyAttractorEditor, EntropyAmountEditor
 )
 
 
@@ -110,7 +110,14 @@ class UIBuilder:
             initial_name: Initial scenario name
         """
         # Gamma_self_0 editor
+        print(f"[UI_BUILDER] Creating GammaSelf0Editor with initial_gamma_self_0={initial_gamma_self_0}, perspective={initial_perspective}, name={initial_name}")
         self.gamma_self0_editor = GammaSelf0Editor(initial_gamma_self_0)
+        self.gamma_self0_editor.set_perspective_name(initial_name if initial_name else initial_perspective)
+        
+        # Entropy parameter editors
+        self.entropy_attractor_editor = EntropyAttractorEditor()  # Default -150+0j
+        self.entropy_amount_editor = EntropyAmountEditor()  # Default 0.02
+        print(f"[UI_BUILDER] Created entropy widgets: attractor={self.entropy_attractor_editor}, amount={self.entropy_amount_editor}")
         
         # Insertion options
         self.insertion_options = InsertionOptionsWidget()
@@ -130,6 +137,8 @@ class UIBuilder:
         
         return {
             'gamma_self0_editor': self.gamma_self0_editor,
+            'entropy_attractor_editor': self.entropy_attractor_editor,
+            'entropy_amount_editor': self.entropy_amount_editor,
             'insertion_options': self.insertion_options,
             'perspective_switcher': self.perspective_switcher,
             'name_editor': self.name_editor,
@@ -191,7 +200,8 @@ class UIBuilder:
     
     def build_controls_dock(self):
         """Create controls dock widget with all editor widgets and gauges."""
-        if (self.gamma_self0_editor is None or self.insertion_options is None or
+        if (self.gamma_self0_editor is None or self.entropy_attractor_editor is None or
+            self.entropy_amount_editor is None or self.insertion_options is None or
             self.perspective_switcher is None or self.name_editor is None or
             self.note_editor is None):
             raise ValueError("Must call build_editor_widgets() first")
@@ -208,15 +218,23 @@ class UIBuilder:
         dock_layout.addWidget(self.name_editor)
         dock_layout.addWidget(self.note_editor)
         dock_layout.addWidget(self.gamma_self0_editor)
+        dock_layout.addWidget(self.entropy_attractor_editor)
+        dock_layout.addWidget(self.entropy_amount_editor)
         dock_layout.addWidget(primitive_gauge_frame)
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
         dock_container.setLayout(dock_layout)
         
+        # Wrap in scroll area so all widgets are accessible
+        from PySide6.QtWidgets import QScrollArea
+        scroll_area = QScrollArea()
+        scroll_area.setWidget(dock_container)
+        scroll_area.setWidgetResizable(True)
+        
         # Add controls as dock widget
         self.controls_dock = QDockWidget("Editor Controls", self.window)
-        self.controls_dock.setWidget(dock_container)
+        self.controls_dock.setWidget(scroll_area)
         dock_container.setMinimumHeight(300)  # Allow resizing when floating
         self.controls_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 

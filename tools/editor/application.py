@@ -22,8 +22,13 @@ from tools.editor.config import get_config
 from tools.editor.constants import is_inserted_event
 from tools.editor.observability import ObservabilityLog
 
+print("[APPLICATION.PY] Module imported - this file is being used")
 
 class EditorApplication:
+        @property
+        def primitive_to_gamma_self(self):
+            """Expose the explicit mapping from controller for UI/debugging."""
+            return self.controller.primitive_to_gamma_self
     """
     Main application class orchestrating the interactive scenario editor.
     
@@ -55,6 +60,7 @@ class EditorApplication:
         # Phase 3.6: Initialize observability system
         # Check environment variable for debug mode
         import os
+        print(f"[APP_INIT] Application.__init__ starting, input_path={input_path}")
         debug_enabled = os.environ.get('EDITOR_DEBUG', '').lower() in ('true', '1', 'yes')
         ObservabilityLog.initialize(enabled=debug_enabled)
         
@@ -94,6 +100,11 @@ class EditorApplication:
             undo_stack=self.window.undo_stack
         )
         
+        # Initialize application-level observer (shares with controller)
+        from tools.editor.simple_observer import SimpleObserver
+        from tools.editor.config import DEBUG_OBSERVER_ENABLED
+        self.observer = SimpleObserver(enabled=DEBUG_OBSERVER_ENABLED)
+        
         # Load scenario data
         self.controller.load_scenario(
             str(self.m1_path), 
@@ -101,12 +112,24 @@ class EditorApplication:
         )
         
         # Build editor widgets
+        initial_gamma = self.model.get_gamma_self_0(self.initial_perspective)
+        print(f"=========== CRITICAL DEBUG ===========")
+        print(f"initial_perspective = {self.initial_perspective}")
+        print(f"gamma_self_0_m1 = {self.model.gamma_self_0_m1}")
+        print(f"gamma_self_0_m2 = {self.model.gamma_self_0_m2}")
+        print(f"initial_gamma from get_gamma_self_0 = {initial_gamma}")
+        print(f"======================================")
+        # Safety check
+        if self.initial_perspective == "M1" and initial_gamma != self.model.gamma_self_0_m1:
+            raise ValueError(f"BUG: Got wrong gamma! Expected M1={self.model.gamma_self_0_m1}, got {initial_gamma}")
         widgets_result = self.ui_builder.build_editor_widgets(
-            initial_gamma_self_0=self.model.gamma_self_0,
+            initial_gamma_self_0=initial_gamma,
             initial_perspective=self.initial_perspective,
-            initial_name=self.model.get_display_name(self.controller.perspective)
+            initial_name=self.model.get_display_name(self.initial_perspective)
         )
         self.gamma_self0_editor = widgets_result['gamma_self0_editor']
+        self.entropy_attractor_editor = widgets_result['entropy_attractor_editor']
+        self.entropy_amount_editor = widgets_result['entropy_amount_editor']
         self.insertion_options = widgets_result['insertion_options']
         self.perspective_switcher = widgets_result['perspective_switcher']
         self.name_editor = widgets_result['name_editor']
@@ -162,6 +185,10 @@ class EditorApplication:
         # Editor widgets → Application handlers
         self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
         self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
+        self.entropy_attractor_editor.value_changed.connect(self._on_entropy_attractor_changed)
+        self.entropy_attractor_editor.reset_requested.connect(self._on_entropy_attractor_reset)
+        self.entropy_amount_editor.value_changed.connect(self._on_entropy_amount_changed)
+        self.entropy_amount_editor.reset_requested.connect(self._on_entropy_amount_reset)
         self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
         self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
         self.name_editor.name_changed.connect(self._on_name_changed)
@@ -279,9 +306,12 @@ class EditorApplication:
         # Modify the one primitive with hypothetical value
         primitives_data[primitive][event_index] = hypothetical_value
         
-        # Compute hypothetical gamma_self trajectory
-        gamma_self = self.model.gamma_self_0
+        # Compute hypothetical gamma_self trajectory with custom entropy parameters
+        gamma_self = self.model.get_gamma_self_0(self.controller.perspective)
         gamma_trajectory = [gamma_self]
+        
+        # Get weights with current entropy settings
+        weights = self.controller._get_weights_with_entropy()
         
         for i in range(len(events) - 1):
             v = primitives_data['v'][i]
@@ -291,7 +321,7 @@ class EditorApplication:
             S = primitives_data['S'][i]
             dt = times[i + 1] - times[i]
             
-            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, dt)
+            gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, weights, dt)
             gamma_trajectory.append(gamma_self)
         
         gamma_array = np.array(gamma_trajectory)
@@ -460,17 +490,69 @@ class EditorApplication:
     
     def _on_gamma_self0_changed(self, gamma_complex):
         """Handle gamma_self_0 value change."""
-        self.model.gamma_self_0 = gamma_complex
+        print(f"[GAMMA_CHANGED] New value: {gamma_complex}, perspective: {self.controller.perspective}")
+        self.observer.log('GAMMA_SELF0_CHANGED', 
+                         value=gamma_complex, 
+                         perspective=self.controller.perspective)
+        self.model.set_gamma_self_0(self.controller.perspective, gamma_complex)
+        print(f"[GAMMA_CHANGED] Model now has M1={self.model.gamma_self_0_m1}, M2={self.model.gamma_self_0_m2}")
+        print(f"[GAMMA_CHANGED] Calling _recompute_trajectory()...")
         self.controller._recompute_trajectory()
+        print(f"[GAMMA_CHANGED] Trajectory recompute complete")
     
     def _on_gamma_self0_reset(self):
         """Handle gamma_self_0 reset request."""
-        self.model.gamma_self_0 = self.model.original_gamma_self_0
-        self.gamma_self0_editor.set_value(self.model.gamma_self_0)
+        perspective = self.controller.perspective
+        original_value = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
+        self.observer.log('GAMMA_SELF0_RESET', 
+                         value=original_value, 
+                         perspective=perspective)
+        self.model.set_gamma_self_0(perspective, original_value)
+        self.gamma_self0_editor.set_value(self.model.get_gamma_self_0(perspective))
+        self.controller._recompute_trajectory()
+    
+    def _on_entropy_attractor_changed(self, attractor_complex):
+        """Handle entropy attractor value change."""
+        self.observer.log('ENTROPY_ATTRACTOR_CHANGED', 
+                         value=attractor_complex, 
+                         perspective=self.controller.perspective)
+        self.controller.entropy_attractor = attractor_complex
+        self.controller._recompute_trajectory()
+    
+    def _on_entropy_attractor_reset(self):
+        """Handle entropy attractor reset request."""
+        from tools.editor.widgets import EntropyAttractorEditor
+        default_value = EntropyAttractorEditor.DEFAULT_VALUE
+        self.observer.log('ENTROPY_ATTRACTOR_RESET', 
+                         value=default_value, 
+                         perspective=self.controller.perspective)
+        self.controller.entropy_attractor = default_value
+        self.entropy_attractor_editor.set_value(default_value)
+        self.controller._recompute_trajectory()
+    
+    def _on_entropy_amount_changed(self, delta_s):
+        """Handle entropy amount (ΔS) value change."""
+        self.observer.log('ENTROPY_AMOUNT_CHANGED', 
+                         value=delta_s, 
+                         perspective=self.controller.perspective)
+        self.controller.entropy_amount = delta_s
+        self.controller._recompute_trajectory()
+    
+    def _on_entropy_amount_reset(self):
+        """Handle entropy amount (ΔS) reset request."""
+        from tools.editor.widgets import EntropyAmountEditor
+        default_value = EntropyAmountEditor.DEFAULT_VALUE
+        self.observer.log('ENTROPY_AMOUNT_RESET', 
+                         value=default_value, 
+                         perspective=self.controller.perspective)
+        self.controller.entropy_amount = default_value
+        self.entropy_amount_editor.set_value(default_value)
         self.controller._recompute_trajectory()
     
     def _on_insertions_changed(self, times: list):
         """Handle insertion time changes from InsertionOptions widget."""
+        self.observer.log('INSERTIONS_CHANGED', times=times, perspective=self.controller.perspective)
+        print(f"\n[INSERT_HANDLER] _on_insertions_changed called with times={times}")
         # Get current events
         events = self.model.get_events(self.controller.perspective)
         
@@ -497,14 +579,18 @@ class EditorApplication:
         # Apply insertions with undo support
         from tools.editor.commands import InsertEventCommand, DeleteEventCommand
         
+        print(f"[INSERT_HANDLER] to_add={to_add}, to_remove={to_remove}")
         for t in sorted(to_add):
             # Create and push insert command (does not shift times)
+            print(f"[INSERT_HANDLER] Creating InsertEventCommand for time={t}, undo_stack exists={self.controller.undo_stack is not None}")
             if self.controller.undo_stack:
                 command = InsertEventCommand(self.controller, t)
+                print(f"[INSERT_HANDLER] Pushing command to undo stack...")
                 self.controller.undo_stack.push(command)
                 print(f"[INSERT_OPTIONS] Pushed InsertEventCommand for time={t}")
             else:
                 # Fallback if no undo stack
+                print(f"[INSERT_HANDLER] No undo stack, using fallback insert_event_at_time()")
                 self.controller.insert_event_at_time(t)
         
         # Apply removals with undo support
@@ -533,6 +619,10 @@ class EditorApplication:
         # Update name editor
         new_name = self.model.get_display_name(perspective)
         self.name_editor.set_name(new_name)
+        
+        # Update gamma_self_0 editor with perspective-specific value and name
+        self.gamma_self0_editor.set_value(self.model.get_gamma_self_0(perspective))
+        self.gamma_self0_editor.set_perspective_name(new_name if new_name else perspective)
         
         # Update window title
         save_path = self.file_manager.get_save_path(perspective)

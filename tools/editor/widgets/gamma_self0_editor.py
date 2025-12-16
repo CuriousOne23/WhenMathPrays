@@ -31,9 +31,11 @@ class GammaSelf0Editor(QWidget):
             initial_value: Initial gamma_self_0 value from CSV
         """
         super().__init__()
+        print(f"[GAMMA_WIDGET] __init__ called with initial_value={initial_value}")
         self.original_value = initial_value
         self._setup_ui()
         self.set_value(initial_value)
+        print(f"[GAMMA_WIDGET] After set_value, spinboxes show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
     
     def _setup_ui(self):
         """Setup widget UI."""
@@ -41,14 +43,19 @@ class GammaSelf0Editor(QWidget):
         group = QGroupBox("Initial State (γ_self₀)")
         layout = QVBoxLayout()
         
+        # Perspective name label
+        self.name_label = QLabel('')
+        self.name_label.setStyleSheet("font-weight: bold; color: #0066cc;")
+        layout.addWidget(self.name_label)
+        
         # Real component (Ego ↔ We)
         real_layout = QHBoxLayout()
         real_layout.addWidget(QLabel('Real (Ego ↔ We):'))
         self.real_spinbox = QDoubleSpinBox()
-        self.real_spinbox.setRange(-10.0, 10.0)
+        self.real_spinbox.setRange(-100.0, 100.0)
         self.real_spinbox.setSingleStep(0.1)
-        self.real_spinbox.setDecimals(2)
-        self.real_spinbox.setMinimumWidth(80)
+        self.real_spinbox.setDecimals(1)
+        self.real_spinbox.setMinimumWidth(60)
         real_layout.addWidget(self.real_spinbox)
         real_layout.addStretch()
         layout.addLayout(real_layout)
@@ -57,10 +64,10 @@ class GammaSelf0Editor(QWidget):
         imag_layout = QHBoxLayout()
         imag_layout.addWidget(QLabel('Imag (Hate ↔ Love):'))
         self.imag_spinbox = QDoubleSpinBox()
-        self.imag_spinbox.setRange(-10.0, 10.0)
+        self.imag_spinbox.setRange(-100.0, 100.0)
         self.imag_spinbox.setSingleStep(0.1)
-        self.imag_spinbox.setDecimals(2)
-        self.imag_spinbox.setMinimumWidth(80)
+        self.imag_spinbox.setDecimals(1)
+        self.imag_spinbox.setMinimumWidth(60)
         imag_layout.addWidget(self.imag_spinbox)
         imag_layout.addWidget(QLabel('i'))
         imag_layout.addStretch()
@@ -108,8 +115,10 @@ class GammaSelf0Editor(QWidget):
         Args:
             value: Complex gamma_self_0 value
         """
+        print(f"[GAMMA_WIDGET] set_value called with {value}")
         self.real_spinbox.setValue(value.real)
         self.imag_spinbox.setValue(value.imag)
+        print(f"[GAMMA_WIDGET] Spinboxes now show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
     
     def get_value(self) -> complex:
         """Get current value from spinboxes."""
@@ -126,3 +135,15 @@ class GammaSelf0Editor(QWidget):
             value: New original value
         """
         self.original_value = value
+    
+    def set_perspective_name(self, name: str):
+        """
+        Set the perspective name label.
+        
+        Args:
+            name: Perspective name (e.g., "Romeo", "Juliet", "M1", "M2")
+        """
+        if name:
+            self.name_label.setText(f"Perspective: {name}")
+        else:
+            self.name_label.setText("")

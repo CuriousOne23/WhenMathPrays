@@ -260,7 +260,7 @@ The `custom_weights` dictionary in each subject allows you to override default w
 
 Your CSV file should contain relational primitives at each time step.
 
-**For complete CSV format specification**, see the [Interactive Editor User Guide - CSV Format Details](interactive_editor_user_guide.md#csv-format-details).
+**For complete CSV format specification (columns, metadata, file naming)**, see [CSV Format Details](interactive_editor_user_guide.md#csv-format-details) in the Interactive Editor User Guide.
 
 ### Quick Reference
 
