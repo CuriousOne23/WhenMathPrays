@@ -1,3 +1,14 @@
+---
+
+### Debug Flag Granularity: Label Assignment
+
+For fine-grained debugging of label placement logic in the trajectory panel, use the `DEBUG_LABELS_ASSIGNMENT` flag in `tools/editor/debug_config.py`. This enables only the deep debug output for the label assignment block (not all label-related debug output). Use this when you want to trace label mapping and assignment logic without cluttering logs with unrelated label debug info.
+
+**How to use:**
+- Set `DEBUG_LABELS_ASSIGNMENT = True` in `debug_config.py` to enable only the label assignment block debug output.
+- Set `DEBUG_LABELS = True` to enable all label-related debug output (including assignment and synchronization).
+
+This allows you to focus debugging on the most critical or noisy section as needed.
 # Project Architecture: WhenMathPrays Scenario Editor
 
 ## Purpose
@@ -13,7 +24,11 @@ This document describes the overall architecture, object model, and design princ
 
 **MVT is the minimum bar for any code contribution.** Features that are not Modeled, Verifiable, and Testable should not be merged.
 
+
 See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for testing methodology that supports the MVT standard.
+
+**Coding Standards:**
+All code contributions must follow the [Coding Guidelines](docs/architecture/05_CODING_GUIDELINES.md) for maintainability, clarity, and consistency. These guidelines cover naming, state management, debugging, and best practices.
 
 ## Recent Updates
 
@@ -131,9 +146,10 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
     - Enhanced debuggability (stable event identity through history)
     - Object-oriented design (event carries its own identity as attribute)
     - Extensibility: New tracking dictionaries don't need shift logic
+
   - **Implementation**: Events assigned monotonically increasing IDs at creation, never reused
   - **Impact**: All tracking uses `(event_id, primitive)` keys instead of `(time, primitive)`
-  - See detailed rationale and implementation in event identity section below
+  - **Further Reading**: See [ID-Based Event Tracking Refactor](docs/ID_BASED_REFACTOR_COMPLETE.md) for detailed rationale and implementation notes on the ID-based event system.
 
 **December 12, 2024:** Phase 3.6 Perspective Management Architecture Refactor (Design Phase):
 - **🔄 Phase 3.6 Planned:** Event-driven perspective management to resolve state synchronization bugs
@@ -218,7 +234,31 @@ See [INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md) for test
 - **[Observability Guide](tools/editor/OBSERVABILITY_GUIDE.md)** - Toggle-able logging for debugging
 - **[Baseline Communication Protocol](docs/baseline_communication_protocol.md)** - Primitive↔gamma_self protocol spec
 
----
+
+## Debugability Reference (Canonical Principles)
+
+Debugging and maintainability are core to this architecture. The following principles are enforced throughout the codebase:
+
+1. **Architecture First:**
+  - All communication flows are explicit and documented.
+  - States are named, visible, and centralized; control operations are clearly defined and scoped.
+2. **Visibility and Control:**
+  - No silent controls: all control functions are purposefully visible and their scope, timing, and rationale are documented.
+  - Debugging is built into the architecture, not bolted on.
+3. **State Richness:**
+  - States carry enough information to trace their origin and intended use, supporting root-cause analysis.
+4. **Code Cleanliness:**
+  - Clean code and comments are enforced; documentation and cleanup are part of every change.
+5. **Debug Built-In:**
+  - Debug logging and State Viewer integration are standard; print/logging at the function level is used for isolating issues.
+6. **Iterative Improvement:**
+  - Fix root causes, document as you go, and refactor without fear to maintain long-term code health.
+
+**Canonical Reference:**
+- For systematic debugging methodology, logging patterns, and State Viewer usage, see **[DEBUG.md](docs/DEBUG.md)**.
+- For architectural context and three-layer debugging, see the "Marker State Architecture" and "Spinbox Primitive Editor" sections above.
+
+This section is the single source of truth for debugability principles. All contributors should review and follow these guidelines, and refer to DEBUG.md for detailed methodology and examples.
 
 ## Axis Interpretation: Identity Boundary vs Affective Quality
 
@@ -865,6 +905,26 @@ MVC controller managing business logic and trajectory computation.
 - **Debuggability:** State is explicit and easy to inspect; marker objects centralize event state
 
 ## Data Flow Overview
+
+## State Viewer: Summary & Reference
+
+The State Viewer is the central tool for logging, debugging, and analyzing all state transitions in the scenario editor. It provides a complete, timestamped log of primitive edits, event changes, perspective switches, and more. The State Viewer log is designed for both human and AI-assisted analysis, and is essential for diagnosing UI, synchronization, and logic bugs.
+
+**Key Features:**
+- Comprehensive, structured state transition logging
+- Exportable log (Ctrl+Shift+L) for analysis and sharing
+- Designed for extensibility and privacy
+- Zero overhead when disabled
+
+**For full details, log format, and advanced usage, see:**
+- [docs/State_Viewer.md](docs/State_Viewer.md) — Detailed State Viewer specification and usage
+- [STATE_MANAGEMENT_REFACTORING.md](docs/STATE_MANAGEMENT_REFACTORING.md#state-viewer-log---specification-v222) — Log format and implementation notes
+
+**For user-facing instructions, see:**
+- [interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md#8-state-viewer-log-export-new---v222)
+
+**For debugging methodology, see:**
+- [DEBUG.md](docs/DEBUG.md)
 
 ### File Loading (uses FileManager + EditorState)
 1. User provides CSV path → FileManager validates and resolves M1/M2 pair

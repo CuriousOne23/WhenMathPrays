@@ -24,6 +24,9 @@ DEBUG_TO_TERMINAL = False # Set True to enable terminal output alongside file
 DEBUG_SPINBOX = False      # Spinbox primitive editor signal flow
 DEBUG_TRAJECTORY = False   # Trajectory computation and display
 DEBUG_LABELS = False       # Label synchronization and management
+DEBUG_LABELS_ASSIGNMENT = False  # Label assignment block (fine-grained)
+# When True, enables only the label assignment block debug output in trajectory_panel_pyqtgraph.py.
+# Use this for deep debugging of label placement logic without enabling all label debug output.
 DEBUG_GAMMA = False        # Gamma_self calculations
 DEBUG_STATE = False        # State save/restore operations
 DEBUG_UNDO = False         # Undo/redo operations

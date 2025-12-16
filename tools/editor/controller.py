@@ -130,6 +130,10 @@ class EditorController:
         self.baseline_comm_m1 = BaselineCommunicator("M1")
         self.baseline_comm_m2 = BaselineCommunicator("M2")
         self._trajectory_reindex_needed = False  # Flag when gamma_self needs reindexing
+
+        # Explicit mapping: (event_id, primitive) <-> gamma_self (trajectory_idx, x, y, label)
+        # Updated on each trajectory recompute
+        self.primitive_to_gamma_self = {}  # {(event_id, primitive): {'trajectory_idx': int, 'x': float, 'y': float, 'label': str}}
     
     @property
     def active_primitive_state(self):
@@ -677,11 +681,7 @@ class EditorController:
             gamma_self = update_gamma_self(gamma_self, v, r, f, a, S, self._get_weights_with_entropy(), dt)
             gamma_trajectory.append(gamma_self)
         
-        # Store marker position using time as key
-        marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
-        gamma_pos = gamma_trajectory[marker_idx]
-        self.model.pin_marker(event_time, primitive, gamma_pos, self.perspective)
-        print(f"Marker ({event_time}, {primitive}) -> gamma_self[{marker_idx}] = {gamma_pos}")
+        # Marker pinning is now handled in _display_trajectory after recompute, using the updated trajectory.
         
         # === Phase 3: Incremental Update ===
         # Query modified status from Model (single source of truth)
@@ -693,6 +693,38 @@ class EditorController:
         # Update trajectory panel (full recompute, but marker update was instant)
         self._recompute_trajectory_immediate()
         # Note: trajectory panel updated via _display_trajectory
+
+        # Log the explicit mapping for State Viewer/debugging immediately after update
+        try:
+            from tools.editor.state_viewer import StateViewer
+            # Build mapping from current marker positions
+            mapping = {}
+            events = self.model.get_events(self.perspective)
+            time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
+            for (event_time, prim), gamma_pos in self.model.get_marker_positions(self.perspective).items():
+                if event_time not in time_to_idx:
+                    continue
+                event_idx = time_to_idx[event_time]
+                event_id = None
+                for idx, evt in enumerate(events):
+                    if abs(evt.time - event_time) < 1e-6:
+                        event_id = evt.id
+                        break
+                if event_id is not None:
+                    mapping[(event_id, prim)] = {
+                        'trajectory_idx': event_idx,
+                        'x': gamma_pos.real,
+                        'y': gamma_pos.imag,
+                        'label': f"{event_time}/{prim}"
+                    }
+            StateViewer.record(
+                operation="update_primitive_to_gamma_self_mapping",
+                entity=(self.perspective,),
+                changes={"primitive_to_gamma_self": (None, mapping)},
+                location="controller.py:on_primitive_changed (post-edit)"
+            )
+        except Exception as e:
+            print(f"[STATE_VIEWER] Logging mapping after edit failed: {e}")
     
     def on_primitive_selected(self, event_index: int, primitive: str):
         """
@@ -1667,14 +1699,17 @@ class EditorController:
             f = data['f'][i]
             a = data['a'][i]
             S = data['S'][i]
-            
+
             # Time delta - use time to next event, or a small default for the last event
             if i + 1 < len(events):
                 dt = times[i + 1] - times[i]
             else:
                 # For the last event, use a nominal time step
                 dt = 1.0 if i == 0 else (times[i] - times[i-1])
-            
+
+            # Debug: Print event time, v value, and gamma_self before update
+            print(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, v={v}, gamma_self_before={gamma_self}")
+
             # Update gamma_self using GRP core
             gamma_self = update_gamma_self(
                 gamma_self_current=gamma_self,
@@ -1682,6 +1717,10 @@ class EditorController:
                 time_delta=dt,
                 weights=self._get_weights_with_entropy()
             )
+
+            # Debug: Print gamma_self after update
+            print(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, gamma_self_after={gamma_self}")
+
             gamma_trajectory.append(gamma_self)
         
         # Store preview trajectory for marker positioning
@@ -1766,6 +1805,22 @@ class EditorController:
         self.trajectory_panel.set_overlay_trajectory(gamma_x, gamma_y)
     
     def _display_trajectory(self, gamma_trajectory, preview_mode=False):
+        # Pin all markers to the updated gamma_self trajectory after recompute
+        events = self.model.get_events(self.perspective)
+        for idx, event in enumerate(events):
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                gamma_pos = None
+                if idx + 1 < len(gamma_trajectory):
+                    gamma_pos = gamma_trajectory[idx + 1]
+                elif idx < len(gamma_trajectory):
+                    gamma_pos = gamma_trajectory[idx]
+                if gamma_pos is not None:
+                    self.model.pin_marker(event.time, prim, gamma_pos, self.perspective)
+                    # Only print for the edited primitive for clarity
+                    if hasattr(self, 'active_primitive_state') and \
+                        event.id == self.active_primitive_state.get('event_id') and \
+                        prim == self.active_primitive_state.get('primitive'):
+                        print(f"[FIXED] Marker ({event.time}, {prim}) -> gamma_self[{idx + 1}] = {gamma_pos}")
         """
         Display computed trajectory.
         
@@ -1818,23 +1873,48 @@ class EditorController:
         # Format: [(event_idx, primitive, x, y, color), ...]
         # Use perspective-specific marker_positions - no filtering needed
         pinned_markers = []
-        
-        for (event_time, prim), gamma_pos in self.model.get_marker_positions(self.perspective).items():
-            # Convert time to current index
-            if event_time not in time_to_idx:
+        self.primitive_to_gamma_self.clear()
+        # For each marker, find the gamma_self trajectory index that matches the event and primitive
+        marker_positions = self.model.get_marker_positions(self.perspective)
+        events = self.model.get_events(self.perspective)
+        # Add labels for any edited primitive (auto-pin on edit)
+        for (event_time, prim), gamma_pos in marker_positions.items():
+            events = self.model.get_events(self.perspective)
+            event_idx = None
+            event_id = None
+            matched_event_time = None
+            # Match on event time only (as in previous working logic)
+            for idx, evt in enumerate(events):
+                if abs(evt.time - event_time) < 1e-6:
+                    event_idx = idx
+                    event_id = evt.id
+                    matched_event_time = evt.time
+                    break
+            if event_idx is None:
                 continue  # Event was deleted
-            event_idx = time_to_idx[event_time]
-            
+
+            gamma_traj_idx = event_idx + 1
+            if gamma_traj_idx >= len(gamma_trajectory):
+                gamma_traj_idx = len(gamma_trajectory) - 1
+            gamma_val = gamma_trajectory[gamma_traj_idx]
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
+            label_time = matched_event_time if matched_event_time is not None else event_time
             marker = {
                 'event_idx': event_idx,
                 'primitive': prim,
-                'x': gamma_pos.real,
-                'y': gamma_pos.imag,
+                'x': gamma_val.real,
+                'y': gamma_val.imag,
                 'color': prim_colors.get(prim, 'orange'),
-                'label': f"{event_time}/{prim}"
+                'label': f"{label_time}/{prim}"
             }
             pinned_markers.append(marker)
+            if event_id is not None:
+                self.primitive_to_gamma_self[(event_id, prim)] = {
+                    'trajectory_idx': gamma_traj_idx,
+                    'x': gamma_val.real,
+                    'y': gamma_val.imag,
+                    'label': marker['label']
+                }
         
         # Find gamma position to display in gauge
         # NOTE: preview_gamma is only for the trajectory plot preview marker, NOT the gauge
@@ -1867,26 +1947,42 @@ class EditorController:
         # Always preserve view except on very first render
         preserve_view = self.initial_load_complete or preview_mode
         print(f"[TRAJECTORY] Calling update_trajectory with preserve_view={preserve_view}")
-        
+
         # Call GUI update directly (we're already on main thread via QTimer)
         self._update_gui(
-            gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events
+            gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events,
+            primitive_to_gamma_self=dict(self.primitive_to_gamma_self)
         )
+
+        # Log the explicit mapping for State Viewer/debugging AFTER all updates
+        try:
+            from tools.editor.state_viewer import StateViewer
+            StateViewer.record(
+                operation="update_primitive_to_gamma_self_mapping",
+                entity=(self.perspective,),
+                changes={"primitive_to_gamma_self": (None, dict(self.primitive_to_gamma_self))},
+                location="controller.py:update_trajectory (post-update)"
+            )
+        except Exception as e:
+            print(f"[STATE_VIEWER] Logging mapping failed: {e}")
     
-    def _update_gui(self, gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events=None):
+    def _update_gui(self, gamma_x, gamma_y, marked_data, pinned_markers, preview_gamma, preserve_view, inserted_events=None, primitive_to_gamma_self=None):
         """Update GUI components (must be called on main thread)."""
         print(f"[_UPDATE_GUI] Called with preview_gamma={preview_gamma}, preserve_view={preserve_view}")
-        
-        # Update trajectory plot
-        self.trajectory_panel.update_trajectory(gamma_x, gamma_y, marked_data, 
-                                               pinned_markers=pinned_markers,
-                                               preview_gamma=preview_gamma,
-                                               preserve_view=preserve_view,
-                                               inserted_events=inserted_events)
+
+        # Update trajectory plot with explicit mapping for robust label placement
+        self.trajectory_panel.update_trajectory(
+            gamma_x, gamma_y, marked_data,
+            pinned_markers=pinned_markers,
+            preview_gamma=preview_gamma,
+            preserve_view=preserve_view,
+            inserted_events=inserted_events,
+            primitive_to_gamma_self=primitive_to_gamma_self
+        )
         self.trajectory_panel.show_computing(False)
-        
+
         # Note: gamma_self gauge is NOT updated here - it's only updated by clicking on trajectory plot
-        
+
         # DO NOT update primitive panel markers here!
         # marked_data contains ALL modified primitives for trajectory visualization,
         # but primitive panel markers (red-bordered labels) should ONLY be shown

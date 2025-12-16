@@ -70,7 +70,7 @@ class EntropyAttractorEditor(QWidget):
         self.imag_spinbox.setRange(-100.0, 100.0)
         self.imag_spinbox.setSingleStep(1.0)
         self.imag_spinbox.setDecimals(1)
-        self.imag_spinbox.setMinimumWidth(60)
+        self.imag_spinbox.setMinimumWidth(80)  # Allow 3 digits and 1 decimal
         imag_layout.addWidget(self.imag_spinbox)
         imag_layout.addWidget(QLabel('i'))
         imag_layout.addStretch()
