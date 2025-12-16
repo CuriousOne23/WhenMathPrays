@@ -44,7 +44,7 @@ $$
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = Shared Breath split across real/imaginary axes
 - **ΔS_real, ΔS_imag** = axis-independent entropy decay rates (default 0.02 each)
-- **γ_real,target, γ_imag,target** = entropy targets per axis (default -10.0 + 0.0j)
+- **γ_real,target, γ_imag,target** = entropy targets per axis (default -150.0 + 0.0j)
 - **sign()** = direction function (-1, 0, or +1) - constant force magnitude
 - **Δt** = time elapsed between events (scales entropy)
 
@@ -56,7 +56,7 @@ $$
 - **Constant-force entropy** → Uses sign() function instead of proportional-to-distance force
 - **Axis-independent decay** → Separate ΔS_real and ΔS_imag rates (0.02 each)
 - **Timeline-independent drift** → Same entropy effect per unit time regardless of scenario length
-- **Recalibrated targets** → Real axis target: -10.0 (was -150.0 in Rev 3.3)
+- **Recalibrated targets** → Real axis target: -150.0 (corrected 12/16/2025)
 - **Im-only depth scaling preserved** from Rev 3.2 (f' for negative fidelity)
 
 **Why?** Rev 3.3's proportional force `(target - current)` accumulated with timeline length, causing 60-day scenarios to drift 4× more than 14-day scenarios. Constant force `sign(target - current)` makes drift predictable: same rate per day, primitives dominate trajectory shape.
