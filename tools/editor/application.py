@@ -25,6 +25,10 @@ from tools.editor.observability import ObservabilityLog
 print("[APPLICATION.PY] Module imported - this file is being used")
 
 class EditorApplication:
+        @property
+        def primitive_to_gamma_self(self):
+            """Expose the explicit mapping from controller for UI/debugging."""
+            return self.controller.primitive_to_gamma_self
     """
     Main application class orchestrating the interactive scenario editor.
     

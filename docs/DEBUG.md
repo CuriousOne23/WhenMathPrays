@@ -195,10 +195,16 @@ The editor now uses a centralized logging system based on Python's `logging` mod
 - `DEBUG_TO_FILE` - Routes logs to timestamped files in `logs/debug_<timestamp>.log`
 - `DEBUG_TO_TERMINAL` - Routes logs to terminal/console output
 
+
 **Category Flags**: Enable/disable logging for specific subsystems:
 - `DEBUG_SPINBOX` - Primitive spinbox editor (click, drag, value changes)
 - `DEBUG_TRAJECTORY` - Trajectory computation and gamma_self calculations
-- `DEBUG_LABELS` - Label synchronization and perspective switching
+- `DEBUG_LABELS` - Label synchronization and perspective switching (all label-related debug output except assignment block)
+- `DEBUG_LABELS_ASSIGNMENT` - **Label assignment block only** (fine-grained):
+    - Controls deep debug output for the label assignment logic in `trajectory_panel_pyqtgraph.py`.
+    - When enabled, logs all mapping keys, label text, and assignment steps for pinned markers.
+    - Use this to trace and debug the exact process of label placement and mapping, without enabling all label debug output.
+    - See [ARCHITECTURE.md](../ARCHITECTURE.md#debug-flag-granularity-label-assignment) for architectural context and usage guidance.
 - `DEBUG_GAMMA` - Gamma_self parameter calculations
 - `DEBUG_STATE` - State save/restore operations
 - `DEBUG_UNDO` - Undo/redo command execution
@@ -353,6 +359,46 @@ While the primitive spinbox editor has been validated for:
 4. Maintain changelog of debug infrastructure changes
 
 ### Tooling
+
+---
+
+## Debugging Primitive ↔ Gamma_Self Mapping (v2.2.3 Proposal)
+
+### Motivation
+Complex UI bugs often arise from hidden or implicit mapping between the primitive (time-based) domain and the gamma_self (event-based) domain. To ensure robust debugging and synchronization, the mapping must be explicit, visible, and debuggable.
+
+### Debugging Principles
+- **Explicit Mapping:** All correspondences between primitive events and gamma_self events must be recorded in a first-class mapping structure (e.g., a dictionary).
+- **Bidirectional Traceability:** Debugging tools must allow tracing from primitive to gamma_self and vice versa.
+- **State Viewer Integration:** The State Viewer log should export the mapping for inspection and AI-assisted analysis.
+- **Logging:** All mapping changes (creation, update, removal) should be logged with context (who, what, why, when).
+
+### Debugging Workflow
+1. **Observe UI Issue:** Label or marker appears in the wrong position or perspective.
+2. **Export State Viewer Log:** Use Ctrl+Shift+L to export the current mapping and state.
+3. **Inspect Mapping:** Check the mapping structure in the log to verify correct correspondence between primitive and gamma_self domains.
+4. **Trace Source:** Use mapping logs to identify where synchronization failed (e.g., missing, stale, or incorrect mapping entries).
+5. **Round-Trip Check:** Given a primitive event, confirm its gamma_self representation (and vice versa) using the mapping.
+
+### Example Mapping Log Entry
+```python
+primitive_to_gamma_self = {
+    (event_id, 'v'): {'gamma_self_pos': 3+2j, 'label': 'Visibility', 'perspective': 'M1'},
+    (event_id, 'r'): {'gamma_self_pos': 1+4j, 'label': 'Resonance', 'perspective': 'M2'},
+    # ...
+}
+```
+
+### Benefits
+- Eliminates hidden/implicit mapping bugs
+- Enables rapid diagnosis and AI-assisted debugging
+- Supports future extensibility (new perspectives, primitives)
+
+### See Also
+- [ARCHITECTURE.md](../ARCHITECTURE.md#explicit-mapping-between-primitive-and-gamma_self-domains-v223-proposal)
+- [STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md)
+
+> **Note:** The user-facing manual now provides a brief summary and refers here for full details on the explicit primitive-to-gamma_self mapping, debugging workflows, and log inspection. This section is the canonical technical reference for developers and advanced users.
 
 **Future development tools**:
 1. **Log viewer**: GUI for browsing/filtering debug logs

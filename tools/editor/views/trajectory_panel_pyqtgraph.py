@@ -4,6 +4,7 @@ PyQtGraph-based trajectory panel for gamma_self complex plane visualization.
 Clean, fast implementation using Qt Signals for event communication.
 """
 
+
 import numpy as np
 import pyqtgraph as pg
 from PySide6.QtWidgets import QWidget, QVBoxLayout
@@ -15,6 +16,7 @@ from tools.editor.editor_constants import (
     LINE_WIDTH_TRAJECTORY, LINE_WIDTH_MODIFIED_MARKER, LINE_WIDTH_NORMAL_MARKER,
     LINE_WIDTH_LABEL_BORDER, PLOT_PADDING_NONE
 )
+from tools.editor.debug_config import debug_print, DEBUG_LABELS, DEBUG_LABELS_ASSIGNMENT
 
 
 class TrajectoryPanelPyQtGraph(QWidget):
@@ -264,7 +266,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.overlay_trajectory_line.setData(gamma_x, gamma_y)
     
     def update_trajectory(self, gamma_x, gamma_y, marked_data=None, pinned_markers=None, 
-                         preview_gamma=None, preserve_view=False, inserted_events=None):
+                         preview_gamma=None, preserve_view=False, inserted_events=None, primitive_to_gamma_self=None):
         """
         Update trajectory display.
         
@@ -276,6 +278,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
             preview_gamma: (x, y) tuple for preview marker during drag
             preserve_view: If True, maintain current zoom/pan
             inserted_events: List of inserted event dicts (not used yet)
+            primitive_to_gamma_self: Explicit mapping for label placement/debugging
         """
         if len(gamma_x) == 0:
             return
@@ -296,7 +299,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
         self.end_marker.setData([gamma_x[-1]], [gamma_y[-1]])
         
         # Clear ALL old pinned marker labels from BOTH perspectives
-        print(f"[TRAJECTORY_LABELS] Clearing labels: M1={len(self.marker_labels_m1)}, M2={len(self.marker_labels_m2)}")
+        debug_print('LABELS', f"[TRAJECTORY_LABELS] Clearing labels: M1={len(self.marker_labels_m1)}, M2={len(self.marker_labels_m2)}", DEBUG_LABELS)
         for label in list(self.marker_labels_m1):
             self.plot_widget.removeItem(label)
         self.marker_labels_m1.clear()
@@ -304,19 +307,54 @@ class TrajectoryPanelPyQtGraph(QWidget):
         for label in list(self.marker_labels_m2):
             self.plot_widget.removeItem(label)
         self.marker_labels_m2.clear()
-        print(f"[TRAJECTORY_LABELS] Labels cleared, will add {len(pinned_markers) if pinned_markers else 0} new labels")
+        debug_print('LABELS', f"[TRAJECTORY_LABELS] Labels cleared, will add {len(pinned_markers) if pinned_markers else 0} new labels", DEBUG_LABELS)
         
         # Update pinned markers
         if pinned_markers:
+            debug_print('LABELS', "[TRAJECTORY_LABELS][DEBUG] pinned_markers:", DEBUG_LABELS)
+            for m in pinned_markers:
+                debug_print('LABELS', f"  marker: event_idx={m.get('event_idx')}, primitive={m.get('primitive')}, x={m.get('x')}, y={m.get('y')}, label={m.get('label')}, id={m.get('id')}", DEBUG_LABELS)
+            if primitive_to_gamma_self is not None:
+                debug_print('LABELS', "[TRAJECTORY_LABELS][DEBUG] primitive_to_gamma_self:", DEBUG_LABELS)
+                for key, mapping in primitive_to_gamma_self.items():
+                    debug_print('LABELS', f"  key={key}, mapping={mapping}", DEBUG_LABELS)
             marker_xs = [m['x'] for m in pinned_markers]
             marker_ys = [m['y'] for m in pinned_markers]
             self.event_markers.setData(marker_xs, marker_ys)
-            
             # Add labels for pinned markers
+            """
+            --- LABEL ASSIGNMENT BLOCK ---
+            This block assigns labels to pinned markers on the gamma_self trajectory plot.
+            CRITICAL: It crosses event_idx (event time) and trajectory_idx (gamma_self index),
+            so bugs here can cause label mismatches that are hard to spot.
+
+            Debugging Guidance:
+            - If label text is wrong or not updating, add print statements here to inspect:
+                * marker['event_idx'], marker['primitive']
+                * The mapping key (event_idx, primitive)
+                * The contents of primitive_to_gamma_self
+            - Confirm that the mapping lookup uses the full (event_idx, primitive) key.
+            - If you see off-by-one errors, check the relationship between event_idx and trajectory_idx.
+            - This is a high-value spot for state dumps and debug prints when debugging label placement.
+            """
             for marker in pinned_markers:
+                debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] --- Begin label assignment for marker ---", DEBUG_LABELS_ASSIGNMENT)
+                debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] marker dict: {marker}", DEBUG_LABELS_ASSIGNMENT)
                 label_text = marker.get('label', '')
+                debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] Initial label_text='{label_text}' for event_idx={marker.get('event_idx')}, primitive={marker.get('primitive')}", DEBUG_LABELS_ASSIGNMENT)
+                # Use explicit mapping if provided for robust label placement
+                if primitive_to_gamma_self is not None:
+                    key = (marker.get('event_idx'), marker.get('primitive'))
+                    if key in primitive_to_gamma_self:
+                        mapping = primitive_to_gamma_self[key]
+                        debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] MATCH: key={key} found in primitive_to_gamma_self, mapping={mapping}", DEBUG_LABELS_ASSIGNMENT)
+                        debug_print('LABELS', f"[TRAJECTORY_LABELS][DEBUG] Overriding label_text with mapping['label']='{mapping.get('label')}' for key={key}", DEBUG_LABELS_ASSIGNMENT)
+                        label_text = mapping.get('label', label_text)
+                    else:
+                        debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE][WARN] No mapping found for marker key={key}", DEBUG_LABELS_ASSIGNMENT)
+                debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] Final label_text='{label_text}' for event_idx={marker.get('event_idx')}, primitive={marker.get('primitive')}", DEBUG_LABELS_ASSIGNMENT)
                 if label_text:
-                    print(f"[TRAJECTORY_LABELS] Adding label: text='{label_text}', pos=({marker['x']:.2f}, {marker['y']:.2f}), perspective={self.current_perspective}")
+                    debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] Creating TextItem: text='{label_text}', pos=({marker['x']:.2f}, {marker['y']:.2f}), perspective={self.current_perspective}", DEBUG_LABELS_ASSIGNMENT)
                     color = QColor(marker.get('color', 'blue'))
                     text_item = pg.TextItem(
                         text=label_text,
@@ -326,14 +364,13 @@ class TrajectoryPanelPyQtGraph(QWidget):
                         fill=pg.mkBrush(255, 255, 255, 230)
                     )
                     text_item.setPos(marker['x'], marker['y'])
-                    
                     # Mark this TextItem with its perspective so we can identify it later
                     text_item._wmp_perspective = self.current_perspective
                     text_item._wmp_marker_id = marker.get('id', None)
-                    
                     self.plot_widget.addItem(text_item)
                     marker_labels = self.marker_labels_m1 if self.current_perspective == 'M1' else self.marker_labels_m2
                     marker_labels.append(text_item)
+                debug_print('LABELS', f"[TRAJECTORY_LABELS][TRACE] --- End label assignment for marker ---", DEBUG_LABELS_ASSIGNMENT)
         else:
             self.event_markers.setData([], [])
         
