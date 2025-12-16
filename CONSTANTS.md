@@ -55,7 +55,7 @@ Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
 | **w_{S,R}** | 0.5 | – | Shared Breath (real axis contribution) | Default, tunable |
 | **w__real** (delS_real) | 0.02 | time⁻¹ | Real axis entropy decay rate (toward Ego) | Default, tunable |
 | **ΔS_imag** (delS_imag) | 0.02 | time⁻¹ | Imaginary axis entropy decay rate (toward neutral) | Default, tunable |
-| **entropy_real_target** | -10.0 | – | Real axis entropy target (gentle Ego drift) | Default, tunable |
+| **entropy_real_target** | -150.0 | – | Real axis entropy target (gentle Ego drift) | Default, tunable |
 | **entropy_imag_target** | 0.0 | – | Imaginary axis entropy target (neutral affect/apathy) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
 
