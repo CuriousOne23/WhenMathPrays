@@ -76,7 +76,7 @@ where $\mathbf{p}(t)$ represents the primitive-driven forcing function (visibili
 For rigorous mathematical defense, see [gamma_self_defense.md](gamma_self_defense.md).
 
 **Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance. 
-- **Attractor position:** γ_attractor = -8+0j (default: far left Ego axis)
+- **Attractor position:** γ_attractor = -150+0j (default: far left Ego axis)
 - **Vector direction:** Unit vector from γ_self toward γ_attractor, scaled by ΔS·Δt
 - **ΔS = 0.02** (default): drift magnitude per time unit
 - **Δt**: time elapsed between events
