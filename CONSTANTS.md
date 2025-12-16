@@ -4,7 +4,7 @@ This is the **only** file in the entire repository that may contain numerical pa
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
+Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,15 +32,17 @@ Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 
 ---
 
-## Core Canonical Parameters (Rev 3.2: December 2025)
+## Core Canonical Parameters (Rev 3.4: December 2025)
 
-**Rev 3.2 Changes (Im-only depth scaling based on Grok consultation):**
-- **Fidelity asymmetry now scales by love depth (Im axis only)**, not fixed 25×
-- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
-- **Prevents explosions**: Only uses |Im|, not full |γ_self| (no Ego/We coupling)
-- **Natural range**: ±150i battlefield emerges naturally from scaling
-- **Formula**: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
-- **All other weights unchanged** from Rev 3
+**Rev 3.4 Changes (Constant-force entropy for timeline independence):**
+- **ERROR IN REV 3.3 CORRECTED**: Proportional-to-distance force caused timeline-length accumulation bug
+- **Constant-force entropy**: Uses sign() function for force direction only, not magnitude
+- **Timeline-independent drift**: Same entropy effect per unit time regardless of scenario length
+- **Real axis target recalibrated**: -10.0 (was -150.0 in Rev 3.3 - too strong for new physics)
+- **Imaginary axis target**: 0 (Neutral affect) - unchanged
+- **Formula**: entropy_pull = ΔS_real × Δt × sign(real_target - real_current) + i × ΔS_imag × Δt × sign(imag_target - imag_current)
+- **Fidelity asymmetry unchanged** from Rev 3.2 (Im-only depth scaling)
+- **Axis-independent decay rates preserved** from Rev 3.3 (ΔS_real, ΔS_imag)
 
 | Parameter | Value | Units | Meaning | Status |
 |-----------|-------|-------|---------|--------|
@@ -51,11 +53,14 @@ Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 | **fidelity_epsilon (ε)** | 5.0 | – | Collapse prevention floor for Im depth | LOCKED |
 | **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
 | **w_{S,R}** | 0.5 | – | Shared Breath (real axis contribution) | Default, tunable |
-| **w_{S,I}** | 0.5 | – | Shared Breath (imaginary axis contribution) | Default, tunable |
-| **ΔS** (delS) | 0.02 | time⁻¹ | Entropy drift rate (constant leftward pull per time unit) | Default, tunable |
-| **γ_attractor** | -8+0j | – | Entropy target position (ego axis) | Default, tunable |
+| **w__real** (delS_real) | 0.02 | time⁻¹ | Real axis entropy decay rate (toward Ego) | Default, tunable |
+| **ΔS_imag** (delS_imag) | 0.02 | time⁻¹ | Imaginary axis entropy decay rate (toward neutral) | Default, tunable |
+| **entropy_real_target** | -150.0 | – | Real axis entropy target (gentle Ego drift) | Default, tunable |
+| **entropy_imag_target** | 0.0 | – | Imaginary axis entropy target (neutral affect/apathy) | Default, tunable |
 | **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
 
+**Removed in Rev 3.2:** w_f_neg (fixed 25×) — replaced with Im-only depth scaling  
+**Removed in Rev 3.3:** γ_attractor (single point), ΔS (unified rate) — replaced with axis-independent targets and rates
 **Removed in Rev 3.2:** w_f_neg (fixed 25×) — replaced with Im-only depth scaling
 
 ---
@@ -64,24 +69,30 @@ Last updated: December 2025 (Rev 3.2: Im-Only Depth Scaling)
 
 $$
 \boxed{
-\vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
-\Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
-\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
+\vec{\ga_{\text{real}} \cdot \Delta t \cdot (\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)]) +
+i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot (\text{imag}_{\text{target}} - \text{Im}[\vec{\gamma}_{\text{self}}(n)])
 }
 $$
 
-**Entropy drift:** Relationships naturally drift toward a configurable attractor position without maintenance.
-- **ΔS = 0.05** (default): Entropy drift magnitude per time unit
-- **γ_attractor = -20+0j** (default): Target position for entropy pull (ego-neutral zone)
+**Entropy drift (Rev 3.3: Axis-independent decay):** Relationships naturally decay along each axis independently without maintenance.
+- **ΔS_real = 0.02** (default): Real axis decay rate per time unit (toward Ego)
+- **ΔS_imag = 0.02** (default): Imaginary axis decay rate per time unit (toward neutral)
+- **entropy_real_target = -150.0** (default): Real axis target (deep Ego/isolation)
+- **entropy_imag_target = 0.0** (default): Imaginary axis target (neutral affect/apathy)
 - **Δt**: Time elapsed between events (in days/weeks/months per CSV time_unit)
 - **entropy_per_event=False** (default): Drift scales with time (realistic decay)
 - **entropy_per_event=True** (override): Fixed ΔS magnitude per event regardless of time spacing
-- Default effect: Love/Hate (imaginary) decay toward 0, We decays toward Ego (negative real)
-- Configurable attractor enables scenario-specific entropy modeling:
-  - **Q4 cult scenarios** (γ_attractor = -8+5j): Hateful-we groups pulled toward we/love space (tribalism, "us vs them")
-  - **Q1 recovery** (γ_attractor = 8+5j): Healthy ego pulled toward love/connection
+- Default effect: 
+  - **Real axis**: We-ness (positive real) decays toward Ego (negative real), approaching -150
+  - **Imaginary axis**: Love/Hate decays toward neutral (zero imaginary), emotional numbness
+- Configurable targets enable scenario-specific entropy modeling:
+  - **Hate-driven scenarios** (imag_target = -100): Emotional decay toward hatred instead of apathy
+  - **Ego-recovery** (real_target = -50): Less extreme isolation endpoint
+  - **Different decay rates** allow modeling different relationship dimensions (e.g., fast emotional numbing, slow ego drift)
+- To maintain or grow Love/We requires continuous positive primitives to overcome entropy
+- **Physics advantage**: Axis independence eliminates ratio paradoxes (increasing decay on both axes was previously increasing slopes instead of flattening them)
   - **Q3 despair** (γ_attractor = -8-5j): Isolated ego sinking into enmity
+  - **Default deep ego** (γ_attractor = -150+0j): Natural relationship decay pulls toward profound isolation
 - To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 
 **Primitive normalization:**

@@ -1,7 +1,9 @@
 # Intro:
 WhenMathPrays builds open, living mathematics — models that trace emotion's arc, not as data, but as motion with heart. No patents. No paywalls. No reduction — only resonance. Use it. Fork it. Break it. Love it. Let us know what it does to you. We're listening. Push that. It's clean, it's calm, it's true. Just a door, and the door is open.
 
-# WhenMathPrays – Core OS™ (Rev 3.2: Im-Only Depth Scaling)
+**Support this work:** If this project resonates with you, consider supporting its development at [opencollective.com/whenmathprays](https://opencollective.com/whenmathprays)
+
+# WhenMathPrays – Core OS™ (Rev 3.4: Constant-Force Entropy)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -22,14 +24,15 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (Rev 3.2: December 2025)
+## The One Equation (Rev 3.4: December 2025)
 
 $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
 i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
-\Delta S \cdot \Delta t \cdot \frac{\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)}{|\vec{\gamma}_{\text{attractor}} - \vec{\gamma}_{\text{self}}(n)|}
+\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{real,target}} - \gamma_{\text{self,real}}(n)) +
+i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{imag,target}} - \gamma_{\text{self,imag}}(n))
 }
 $$
 
@@ -40,29 +43,31 @@ $$
 - **f'** = f with Im-only depth scaling applied if negative
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = Shared Breath split across real/imaginary axes
-- **ΔS** = entropy drift rate (default 0.05 per time unit)
-- **γ_attractor** = entropy target position (default -20+0j)
+- **ΔS_real, ΔS_imag** = axis-independent entropy decay rates (default 0.02 each)
+- **γ_real,target, γ_imag,target** = entropy targets per axis (default -150.0 + 0.0j)
+- **sign()** = direction function (-1, 0, or +1) - constant force magnitude
 - **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### Rev 3.2 Changes (December 2025 - Im-Only Depth Scaling)
+### Rev 3.4 Changes (December 2025 - Constant-Force Entropy)
 
 **What changed:**
-- **Im-only depth scaling** → f' = f × (0.12 × max(|Im|, 5.0)) for negatives
-- **Restores psychological truth**: "The deeper the love, the more betrayal can scar"
-- **Prevents explosions**: Only scales by Im (love depth), not full |γ| (no Ego/We coupling)
-- **Natural range limits**: ±150i battlefield emerges from scaling, not arbitrary caps
-- **All other parameters unchanged** from Rev 3
+- **Constant-force entropy** → Uses sign() function instead of proportional-to-distance force
+- **Axis-independent decay** → Separate ΔS_real and ΔS_imag rates (0.02 each)
+- **Timeline-independent drift** → Same entropy effect per unit time regardless of scenario length
+- **Recalibrated targets** → Real axis target: -150.0 (corrected 12/16/2025)
+- **Im-only depth scaling preserved** from Rev 3.2 (f' for negative fidelity)
 
-**Why?** Rev 3.1 fixed 25× scaling lost the psychological insight that deeper love makes you more vulnerable. Rev 3.2 restores depth-dependent damage while avoiding Rev 3's explosions by only using Im axis.
+**Why?** Rev 3.3's proportional force `(target - current)` accumulated with timeline length, causing 60-day scenarios to drift 4× more than 14-day scenarios. Constant force `sign(target - current)` makes drift predictable: same rate per day, primitives dominate trajectory shape.
 
-**Examples:**
-- At 20i: f=-1 → -2.4i (fragile early bond)
-- At 150i: f=-1 → -18i (deep love can be wounded)
-- At 250i: f=-10 → -300i (Hachikō-level devotion can reach -150i floor)
+**Physics comparison:**
+- **Rev 3.3 (wrong):** F = k × distance → spring/damping → integrates as distance × time
+- **Rev 3.4 (correct):** F = constant → thrust/drag → integrates as time only
 
-See [GRP_rev3.md](docs/GRP_rev3.md) for complete specification.
+**Result:** "Fred is now happy and in love, he is in We territory" - trajectories follow primitives naturally with gentle entropy drift, not yanked into deep Ego by timeline-length accumulation.
+
+See [GRP_rev3.4.md](docs/GRP_rev3.4.md) for complete specification and Rev 3.3 error analysis.
 
 ### γ_self — Relational State Position
 
@@ -130,71 +135,25 @@ Last updated: December 3, 2025
 
 ### CSV Scenario Format
 
-Scenarios are defined in CSV files with the following structure:
+**For complete specification (columns, metadata, file naming, examples), see [CSV Format Details](docs/interactive_editor_user_guide.md#csv-format-details) in the Interactive Editor User Guide.**
 
-**CRITICAL:** Primitives must be scored from the correct perspective. See [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) for the M1/M2 framework - this is the most common source of errors.
+Scenarios are CSV files with time-series primitive values:
 
-**Optional metadata rows (first lines):**
 ```csv
-name,Scenario Display Name
+name,My Scenario
 time_unit,days
-```
-- `name` - Used in plots and output. If omitted, filename is used.
-- `time_unit` - Time scale: `days`, `weeks`, `months`, or `years`. Defaults to `days` if omitted.
-
-**Required columns:**
-- `day`, `week`, `month`, or `year` - Time point (fractional values accepted, e.g., 1.5, 2.25)
-  - Column name can match your `time_unit` metadata or use `day` for backward compatibility
-  - Examples: `day` column with `time_unit,days` OR `week` column with `time_unit,weeks`
-- `v` - Visibility primitive [-10, +10] human scale
-- `r` - Resonance primitive [-10, +10]
-- `f` - Fidelity primitive [-10, +10]
-- `a` - Altruism primitive [-10, +10]
-- `S` - Shared Breath primitive [-10, +10]
-
-**Optional columns:**
-- `notes` - Text description of the event
-- `marker` - Marker type to highlight this point on γ_self trajectory plot
-- `locked` - Use `*` to mark structural rows (don't change), empty = customizable
-
-**Supported marker types:**
-- `star` - ⭐ Star marker (default if unrecognized marker specified)
-- `circle` - ⚫ Circle marker
-- `square` - ◼ Square marker
-- `triangle` - 🔺 Triangle marker
-- `diamond` - 💎 Diamond marker
-- `x` - ✖ X marker
-- `plus` - ➕ Plus marker
-- Leave blank for no marker
-
-Markers appear as yellow symbols with black edges on the trajectory plot, with day labels in yellow boxes.
-
-**Template CSV Files:**
-
-Pre-built scenario templates are available in `data/templates/` (read-only):
-- Use as starting points - copy and customize
-- Rows with `*` in `locked` column = structural anchors (start/end/key events)
-- Empty `locked` column = customize primitives as desired
-
-**Example CSV (using days):**
-```csv
-name,My Custom Scenario
-time_unit,days
-day,v,r,f,a,S,notes,marker,locked
-0,5,0,2,2,0,"Initial condition",,*
-14,5,-2,2,3,-1,"Early wobble - customize",star,
-60,9,10,10,9,10,"Final outcome",star,*
+day,v,r,f,a,S,notes
+0,5,0,2,2,0,Initial condition
+7,5,2,2,3,1,First date
+14,8,5,4,5,3,Getting closer
+...
 ```
 
-**Example CSV (using weeks):**
-```csv
-name,Summer Romance
-time_unit,weeks
-week,v,r,f,a,S,notes,marker,locked
-0,3,2,1,1,0,"Met at beach",,*
-2,6,5,4,3,3,"Getting closer",star,
-12,9,8,9,8,9,"In love",star,*
-```
+**Key points:**
+- Required: time column + five primitives (`v`, `r`, `f`, `a`, `S`)
+- Optional: `notes`, `marker`, `locked` columns
+- Dual-perspective files: use `_M1.csv` and `_M2.csv` suffixes
+- See user guide for complete details
 
 ---
 
@@ -225,11 +184,13 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 - Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
 - CSV output includes `marker` and `locked` columns for persistence
 
-**See the complete guide:** [Interactive Editor User Guide](docs/interactive_editor_user_guide.md)
-
-**Architecture & Future Plans:**
-- [ARCHITECTURE.md](ARCHITECTURE.md) - UI layout system and maintainability notes
-- [interactive_edit_ph2_requirements.md](docs/interactive_edit_ph2_requirements.md) - Phase 2 requirements and specifications
+**Documentation:**
+- **[Interactive Editor User Guide](docs/interactive_editor_user_guide.md)** - Complete usage guide
+- **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
+- **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
+- **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
+- **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
 
 ---
 

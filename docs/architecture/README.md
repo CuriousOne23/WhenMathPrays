@@ -9,16 +9,33 @@
 ### Core Architecture Documents
 1. **[01_PRINCIPLES.md](01_PRINCIPLES.md)** - Design invariants and architectural principles
 2. **[02_INFORMATION_FLOW.md](02_INFORMATION_FLOW.md)** - Message sequences and communication patterns
-3. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
-4. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
-5. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
+3. **[03_MODULE_DIRECTORY.md](03_MODULE_DIRECTORY.md)** - Complete module/directory reference with locations
+4. **[04_API_CONTRACTS.md](04_API_CONTRACTS.md)** - Interface specifications with pre/post conditions
+5. **[05_CODING_GUIDELINES.md](05_CODING_GUIDELINES.md)** - ✅ NEW: Do's and don'ts for maintainable code (Dec 2025)
+6. **[07_PERFORMANCE_TARGETS.md](07_PERFORMANCE_TARGETS.md)** - Measurable performance requirements
+7. **[08_VALIDATION_CHECKLIST.md](08_VALIDATION_CHECKLIST.md)** - Architecture verification tests
 
-**Note**: Documents 03, 05, and 06 do not exist yet and may be created in Phase 3+ as needed.
+**Note**: Document 06 (coordinate systems) may be created in Phase 3+ as needed.
 
 ### Phase Planning & Roadmap
 - **[../interactive_edit_roadmap.md](../interactive_edit_roadmap.md)** - Complete phase timeline (Phase 1-4)
 - **[../architecture_recommendations.md](../architecture_recommendations.md)** - GUI architecture planning (QDockWidget + M2)
 - **[../interactive_edit_ph2_requirements.md](../interactive_edit_ph2_requirements.md)** - Phase 2 detailed requirements (complete)
+
+### Recent Refactorings (2025)
+- **Architecture Cleanup (Dec 15, 2025)** - ✅ Complete: Reached A+ grade (9.3/10)
+  - Removed 1,542 lines of dead code (old matplotlib panels)
+  - Eliminated all deprecated Model fields
+  - Established central registries (PERSPECTIVES, PRIMITIVES)
+  - See commit `0f7900c` and ARCHITECTURE.md
+- **[spinbox_refactor_2025_12.md](spinbox_refactor_2025_12.md)** - ✅ Complete: Single controller ownership (Dec 2025)
+  - Bug fixes: Time label preservation, per-perspective state
+  - 5-phase refactoring to eliminate race conditions
+  - [Phase 1 Audit](spinbox_audit_phase1.md)
+- **[baseline_storage_refactoring.md](baseline_storage_refactoring.md)** - ✅ Complete: Time-keyed dict (Dec 2025)
+- **[entry_point_consolidation_plan.md](entry_point_consolidation_plan.md)** - 🔄 Planned: Dual entry point consolidation
+- **[perspective_management_refactor.md](perspective_management_refactor.md)** - 🔄 Planned: Event-driven perspective switching
+- **[OBSERVABILITY_IMPLEMENTATION_COMPLETE.md](OBSERVABILITY_IMPLEMENTATION_COMPLETE.md)** - ✅ Complete: Debug logging system
 
 ### Historical Context
 - **[refactors/](refactors/)** - Refactor history with before/after analysis
