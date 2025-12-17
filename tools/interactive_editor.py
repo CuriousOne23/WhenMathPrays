@@ -29,10 +29,10 @@ from PySide6.QtCore import Qt
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import debug configuration
-from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+from tools.editor.debug_config import get_logger, DEBUG_SPINBOX
 
 # Get logger for this module
-_logger = get_debug_logger('SPINBOX')
+_logger = get_logger('interactive_editor')
 
 from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
@@ -92,7 +92,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M1 exists but no M2 - load M1 into both M1 and M2 slots
-            print(f"[INFO] No M2 file found. Loading M1 file into both perspectives: {m1_path}")
+            _logger.info(f"No M2 file found. Loading M1 file into both perspectives: {m1_path}")
             return m1_path, m1_path, None, False
     
     else:  # is_m2
@@ -107,7 +107,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M2 exists but no M1 - load M2 into both M1 and M2 slots, select M2
-            print(f"[INFO] No M1 file found. Loading M2 file into both perspectives: {m2_path}")
+            _logger.info(f"No M1 file found. Loading M2 file into both perspectives: {m2_path}")
             return m2_path, m2_path, None, True
 
 
@@ -356,24 +356,11 @@ class InteractiveEditor:
         
         # Debug function to print current dock configuration (triggered by Ctrl+D)
         def print_dock_config():
-            print("\n=== DOCK CONFIGURATION ===")
-            print(f"Window size: {self.window.width()} x {self.window.height()}")
-            print(f"\nPrimitives dock:")
-            print(f"  Width: {self.primitive_dock.width()}")
-            print(f"  Height: {self.primitive_dock.height()}")
-            print(f"  Area: {self.window.dockWidgetArea(self.primitive_dock)}")
-            print(f"  Percentage: {(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
-            print(f"\nTrajectory dock:")
-            print(f"  Width: {self.trajectory_dock.width()}")
-            print(f"  Height: {self.trajectory_dock.height()}")
-            print(f"  Area: {self.window.dockWidgetArea(self.trajectory_dock)}")
-            print(f"  Percentage: {(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
-            print(f"\nControls dock:")
-            print(f"  Width: {self.controls_dock.width()}")
-            print(f"  Height: {self.controls_dock.height()}")
-            print(f"  Area: {self.window.dockWidgetArea(self.controls_dock)}")
-            print(f"  Percentage: {(self.controls_dock.width() / self.window.width() * 100):.1f}%")
-            print("========================\n")
+            _logger.debug("=== DOCK CONFIGURATION ===")
+            _logger.debug(f"Window size: {self.window.width()} x {self.window.height()}")
+            _logger.debug(f"Primitives dock: Width={self.primitive_dock.width()}, Height={self.primitive_dock.height()}, Area={self.window.dockWidgetArea(self.primitive_dock)}, Percentage={(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
+            _logger.debug(f"Trajectory dock: Width={self.trajectory_dock.width()}, Height={self.trajectory_dock.height()}, Area={self.window.dockWidgetArea(self.trajectory_dock)}, Percentage={(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
+            _logger.debug(f"Controls dock: Width={self.controls_dock.width()}, Height={self.controls_dock.height()}, Area={self.window.dockWidgetArea(self.controls_dock)}, Percentage={(self.controls_dock.width() / self.window.width() * 100):.1f}%")
         
         # Connect Ctrl+D shortcut to print dock config
         self.window.print_dock_config_requested.connect(print_dock_config)
@@ -498,6 +485,7 @@ class InteractiveEditor:
         StateViewer.record(
             operation="zoom_in",
             entity=(),
+            changes={},
             location="interactive_editor.py:_handle_zoom_in"
         )
         self.trajectory_panel.zoom_in()
@@ -510,6 +498,7 @@ class InteractiveEditor:
         StateViewer.record(
             operation="zoom_out",
             entity=(),
+            changes={},
             location="interactive_editor.py:_handle_zoom_out"
         )
         self.controller.trajectory_panel.zoom_out()
@@ -522,6 +511,7 @@ class InteractiveEditor:
         StateViewer.record(
             operation="zoom_reset",
             entity=(),
+            changes={},
             location="interactive_editor.py:_handle_zoom_reset"
         )
         self.controller.trajectory_panel.reset_view()
@@ -548,7 +538,7 @@ class InteractiveEditor:
         Use PyQtGraph's built-in export or screenshot functionality instead.
         """
         self.window.show_message("PNG export temporarily unavailable (PyQtGraph migration in progress)", 'warning')
-        print(f"[PNG EXPORT] Skipped - needs reimplementation for PyQtGraph")
+        _logger.warning("PNG export skipped - needs reimplementation for PyQtGraph")
         return
         
         # TODO: Reimplement using PyQtGraph export functionality
@@ -627,16 +617,17 @@ class InteractiveEditor:
         StateViewer.record(
             operation="event_delete_requested",
             entity=(event_index,),
+            changes={},
             location="interactive_editor.py:_on_event_delete_requested"
         )
-        print(f"\n[DELETE REQUEST] Event {event_index}")
+        _logger.debug(f"DELETE REQUEST: Event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't delete if only 2 events (need at least start and end)
         if len(events) <= 2:
-            print(f"[DELETE] Cannot delete - need at least 2 events (start and end)")
+            _logger.debug(f"DELETE: Cannot delete - need at least 2 events (start and end)")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -647,7 +638,7 @@ class InteractiveEditor:
         
         # Can't delete first or last event
         if event_index == 0 or event_index == len(events) - 1:
-            print(f"[DELETE] Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
+            _logger.debug(f"DELETE: Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -659,7 +650,7 @@ class InteractiveEditor:
         # Can't delete locked events
         event = events[event_index]
         if event.locked:
-            print(f"[DELETE] Cannot delete locked event at time={event.time}")
+            _logger.debug(f"DELETE: Cannot delete locked event at time={event.time}")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -673,7 +664,7 @@ class InteractiveEditor:
             from tools.editor.commands import DeleteEventCommand
             command = DeleteEventCommand(self.controller, event_index)
             self.controller.undo_stack.push(command)
-            print(f"[DELETE] Pushed DeleteEventCommand to undo stack")
+            _logger.info(f"DELETE: Pushed DeleteEventCommand to undo stack")
         else:
             # No undo stack - delete directly
             self.controller._delete_event(event_index)
@@ -693,16 +684,17 @@ class InteractiveEditor:
         StateViewer.record(
             operation="event_insert_requested",
             entity=(event_index,),
+            changes={},
             location="interactive_editor.py:_on_event_insert_requested"
         )
-        print(f"\n[INSERT REQUEST] Insert before event {event_index}")
+        _logger.debug(f"INSERT REQUEST: Insert before event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't insert before first event (would shift start time)
         if event_index == 0:
-            print(f"[INSERT] Cannot insert before first event")
+            _logger.debug(f"INSERT: Cannot insert before first event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -794,26 +786,26 @@ class InteractiveEditor:
             gamma_x = gamma_val.real
             gamma_y = gamma_val.imag
             
-            print(f"[DIAGNOSTIC HANDLER] Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+            _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
             
             # Place marker on trajectory panel at event position
             self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
+            _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
             
             # Update primitive readout
             event = events[event_index]
             self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
-            print(f"[DIAGNOSTIC HANDLER] Updated primitive readout")
+            _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
             
             # Update gamma_self readout (simulate a click at that position)
             if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
                 self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
                 self.gamma_self_gauge.setVisible(True)
-                print(f"[DIAGNOSTIC HANDLER] Updated gamma_self readout")
+                _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
             else:
-                print(f"[DIAGNOSTIC HANDLER] Warning: gamma_self_gauge not available")
+                _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
             
-            print(f"[DIAGNOSTIC WHAT-IF] If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+            _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
     
     def _on_lock_toggle(self, event_index):
         """
@@ -829,6 +821,7 @@ class InteractiveEditor:
         StateViewer.record(
             operation="lock_toggle",
             entity=(event_index,),
+            changes={},
             location="interactive_editor.py:_on_lock_toggle"
         )
         self.controller.on_lock_toggle(event_index)
@@ -876,7 +869,7 @@ class InteractiveEditor:
             is_existing = any(abs(t - existing_t) < 0.001 for existing_t in existing_times if existing_t not in current_inserted_times)
             if is_existing:
                 rejected_times.append(t)
-                print(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
+                _logger.warning(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
             elif t not in current_inserted_times:
                 to_add.append(t)
         
@@ -910,13 +903,13 @@ class InteractiveEditor:
                         self.controller.delete_event_at_index_no_update(idx)
                         changes_made = True
                 except Exception as e:
-                    print(f"[INSERTIONS] Error removing event at index {idx}: {e}")
+                    _logger.error(f"INSERTIONS: Error removing event at index {idx}: {e}")
         
         # Add new insertion events with undo support
         from tools.editor.commands import InsertEventCommand
         for time_to_add in to_add:
             try:
-                print(f"[INSERTIONS] Adding event at time {time_to_add}")
+                _logger.info(f"INSERTIONS: Adding event at time {time_to_add}")
                 if self.controller.undo_stack:
                     # Use undo command for proper undo/redo support
                     command = InsertEventCommand(self.controller, time_to_add)
@@ -927,7 +920,7 @@ class InteractiveEditor:
                     self.controller.insert_event_at_time_no_update(time_to_add)
                     changes_made = True
             except Exception as e:
-                print(f"[INSERTIONS] Error adding event at {time_to_add}: {e}")
+                _logger.error(f"INSERTIONS: Error adding event at {time_to_add}: {e}")
                 self.window.show_message(f"Error inserting at {time_to_add}: {str(e)}", 'error')
         
         # Update views only if using fallback (commands already update views)
@@ -938,7 +931,7 @@ class InteractiveEditor:
             t1 = time.time()
             self.controller._recompute_trajectory_immediate()
             t2 = time.time()
-            print(f"[PERF] update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
+            _logger.debug(f"PERF: update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
             
             # Sync widget with actual inserted events in model
             # Find current inserted events after all changes
@@ -1058,7 +1051,7 @@ class InteractiveEditor:
         
         # Update name editor to show current perspective's name
         current_name = self.model.get_display_name(perspective)
-        print(f"[DEBUG] Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
+        _logger.debug(f"Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
         self.name_editor.set_name(current_name)
         
         # Update gamma_self0_editor with new perspective's value and name
@@ -1080,10 +1073,10 @@ class InteractiveEditor:
         # Update model with perspective-specific name
         if perspective == "M1":
             self.model.name_m1 = new_name
-            print(f"[DEBUG] Updated name_m1 to '{new_name}'")
+            _logger.debug(f"Updated name_m1 to '{new_name}'")
         else:
             self.model.name_m2 = new_name
-            print(f"[DEBUG] Updated name_m2 to '{new_name}'")
+            _logger.debug(f"Updated name_m2 to '{new_name}'")
 
         from tools.editor.state_viewer import StateViewer
         StateViewer.record(

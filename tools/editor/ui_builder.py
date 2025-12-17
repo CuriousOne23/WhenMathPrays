@@ -17,6 +17,10 @@ from tools.editor.widgets import (
     GammaSelf0Editor, InsertionOptionsWidget, PerspectiveSwitcher,
     NameEditor, NoteEditor, EntropyAttractorEditor, EntropyAmountEditor
 )
+from tools.editor.debug_config import get_logger
+
+# Get logger for this module
+_logger = get_logger('ui_builder')
 
 
 class UIBuilder:
@@ -110,14 +114,14 @@ class UIBuilder:
             initial_name: Initial scenario name
         """
         # Gamma_self_0 editor
-        print(f"[UI_BUILDER] Creating GammaSelf0Editor with initial_gamma_self_0={initial_gamma_self_0}, perspective={initial_perspective}, name={initial_name}")
+        _logger.debug(f"Creating GammaSelf0Editor with initial_gamma_self_0={initial_gamma_self_0}, perspective={initial_perspective}, name={initial_name}")
         self.gamma_self0_editor = GammaSelf0Editor(initial_gamma_self_0)
         self.gamma_self0_editor.set_perspective_name(initial_name if initial_name else initial_perspective)
         
         # Entropy parameter editors
         self.entropy_attractor_editor = EntropyAttractorEditor()  # Default -150+0j
         self.entropy_amount_editor = EntropyAmountEditor()  # Default 0.02
-        print(f"[UI_BUILDER] Created entropy widgets: attractor={self.entropy_attractor_editor}, amount={self.entropy_amount_editor}")
+        _logger.debug(f"Created entropy widgets: attractor={self.entropy_attractor_editor}, amount={self.entropy_amount_editor}")
         
         # Insertion options
         self.insertion_options = InsertionOptionsWidget()

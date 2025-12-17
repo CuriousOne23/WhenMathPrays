@@ -191,18 +191,34 @@ When facing a complex bug:
 
 ## Debug Infrastructure
 
-### Centralized Debug Logging System (December 2024)
+### Centralized Debug Logging System (December 2025)
 
 **Location**: `tools/editor/debug_config.py`
 
-The editor now uses a centralized logging system based on Python's `logging` module, replacing scattered print statements with professional, configurable logging.
+The editor uses Python's standard `logging` module with configurable levels and file-only output by default. This provides professional logging with granular control and clean terminal output.
 
 #### Architecture
 
-**Master Controls**:
-- `DEBUG_ENABLED` - Global on/off switch for all debug logging
-- `DEBUG_TO_FILE` - Routes logs to timestamped files in `logs/debug_<timestamp>.log`
-- `DEBUG_TO_TERMINAL` - Routes logs to terminal/console output
+**Configuration via Environment Variables**:
+- `LOG_LEVEL` - Controls logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  - `DEBUG`: Detailed internal operations, state transitions, primitive changes
+  - `INFO`: General information, successful operations (default)
+  - `WARNING`: Potential issues that don't prevent operation
+  - `ERROR`: Errors that may affect functionality
+  - `CRITICAL`: Severe errors requiring immediate attention
+- `LOG_TO_TERMINAL` - Enable terminal output (default: false, logs to files only)
+
+**Log Files**:
+- **Location**: `logs/` directory (auto-created in project root)
+- **Naming**: `interactive_editor_YYYYMMDD_HHMMSS.log`
+- **Example**: `interactive_editor_20251217_142530.log`
+- **Format**: `2025-12-17 14:25:30 [INFO] WhenMathPrays.controller: File loaded successfully`
+
+**Turning Off Logging**:
+- Set `LOG_LEVEL=CRITICAL` to show only severe errors
+- Set `LOG_LEVEL=ERROR` to show errors and critical issues only
+- Default `INFO` level provides good balance of information without noise
+- `DEBUG` level is for development/troubleshooting only
 
 
 **Category Flags**: Enable/disable logging for specific subsystems:

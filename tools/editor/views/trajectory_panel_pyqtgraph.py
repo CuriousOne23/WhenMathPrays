@@ -10,8 +10,6 @@ from PySide6.QtGui import QColor
 import numpy as np
 from .trajectory_label_manager import TrajectoryLabelManager
 
-print("[BREAKPOINT] trajectory_panel_pyqtgraph.py loaded")
-
 
 class TrajectoryPanelPyQtGraph(QWidget):
 	panel_ready = Signal()

@@ -25,10 +25,10 @@ from tools.editor.editor_constants import (
 from tools.editor.observability import ObservabilityLog
 
 # Import debug configuration
-from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+from tools.editor.debug_config import get_logger
 
 # Get logger for this module
-_logger = get_debug_logger('SPINBOX')
+_logger = get_logger('primitive_panel')
 
 
 class DraggableScatterItem(pg.ScatterPlotItem):
@@ -90,7 +90,7 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 
                 # Check for Ctrl+Click (deletion request) - but NOT Ctrl+Shift+Click
                 if (ev.modifiers() & Qt.ControlModifier) and not (ev.modifiers() & Qt.ShiftModifier):
-                    print(f"[CTRL+CLICK] Request to delete event index={idx}")
+                    _logger.debug(f"CTRL+CLICK: Request to delete event index={idx}")
                     self.sigPointCtrlClicked.emit(idx)
                     ev.accept()
                     return
@@ -122,12 +122,12 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 self.click_idx = self.dragging_idx
                 self.did_drag = False
                 ev.accept()
-                print(f"[DRAG START] index={self.dragging_idx}, time={time.time()-t0:.3f}s")
+                _logger.debug(f"DRAG START: index={self.dragging_idx}, time={time.time()-t0:.3f}s")
         elif ev.isFinish():
             if self.dragging_idx is not None:
                 if self.did_drag:
                     # Emit release signal with final position after drag
-                    print(f"[DRAG FINISH] Dragged - emitting sigPointReleased")
+                    _logger.debug(f"DRAG FINISH: Dragged - emitting sigPointReleased")
                     if self.y_data is not None:
                         self.sigPointReleased.emit(
                             self.dragging_idx,
@@ -136,7 +136,7 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                         )
                 else:
                     # Just a click without drag
-                    print(f"[DRAG FINISH] No drag - emitting sigPointClicked")
+                    _logger.debug(f"DRAG FINISH: No drag - emitting sigPointClicked")
                     if self.y_data is not None:
                         self.sigPointClicked.emit(
                             self.dragging_idx,
@@ -171,14 +171,14 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 # Emit signal
                 self.sigPointDragged.emit(self.dragging_idx, self.x_data[self.dragging_idx], new_y)
                 ev.accept()
-                print(f"[DRAG MOVE] index={self.dragging_idx}, y={new_y:.1f}, time={time.time()-t0:.3f}s")
+                _logger.debug(f"DRAG MOVE: index={self.dragging_idx}, y={new_y:.1f}, time={time.time()-t0:.3f}s")
 
 
 class PrimitivePanelPyQtGraph(QWidget):
 
     def clear_all_plots(self):
         """Remove only non-essential items (labels, lines, stray markers) from all plots to ensure a clean state, but keep core plot objects (scatter, baseline, overlay, line)."""
-        print("[CLEAR_ALL_PLOTS] Removing non-essential items from all plots before initial draw.")
+        _logger.debug("CLEAR_ALL_PLOTS: Removing non-essential items from all plots before initial draw.")
         from pyqtgraph import TextItem, InfiniteLine, ROI, LinearRegionItem
         for prim, plot in self.plot_items.items():
             # Keep references to core items
@@ -198,7 +198,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                                if item not in core_items and isinstance(item, (TextItem, InfiniteLine, ROI, LinearRegionItem))]
             for item in items_to_remove:
                 plot.removeItem(item)
-            print(f"[CLEAR_ALL_PLOTS] Plot '{prim}' non-essential items cleared. Items now: {len(plot.items)}")
+            _logger.debug(f"CLEAR_ALL_PLOTS: Plot '{prim}' non-essential items cleared. Items now: {len(plot.items)}")
 
     """
     PyQtGraph-based primitive panel with 5 plots stacked vertically.
@@ -293,18 +293,18 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Create plots and mark ready after complete
         self._create_plots()
         self.ready = True
-        print("[ARCH] PrimitivePanelPyQtGraph is now ready. diagnostic_markers keys:", list(self.diagnostic_markers.keys()))
+        _logger.info(f"ARCH: PrimitivePanelPyQtGraph is now ready. diagnostic_markers keys: {list(self.diagnostic_markers.keys())}")
         # Architectural visibility: record ready state in StateViewer
         try:
             from tools.editor.state_viewer import StateViewer
             StateViewer.record(
                 operation='panel_ready',
                 entity=('PrimitivePanelPyQtGraph',),
-                changes={'ready': (False, True), 'diagnostic_marker_keys': list(self.diagnostic_markers.keys())},
+                changes={'ready': (False, True)},
                 location='primitive_panel_pyqtgraph.py:__init__'
             )
         except Exception as e:
-            print(f"[ARCH] StateViewer record failed: {e}")
+            _logger.error(f"ARCH: StateViewer record failed: {e}")
         self.panel_ready.emit()
 
     def _init_trajectory_label_manager(self):
@@ -334,7 +334,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                         try:
                             plot.removeItem(item_dict[prim])
                         except Exception as e:
-                            print(f"[CLEANUP] Could not remove old item for prim={prim}: {e}")
+                            _logger.warning(f"CLEANUP: Could not remove old item for prim={prim}: {e}")
             # Now create new plot if not already present
             # Create plot
             plot = self.graphics_widget.addPlot(row=i, col=0)
@@ -377,7 +377,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 100)
             )
             overlay_scatter.setZValue(-5)  # Below active data
-            print(f"[ADD_ITEM] overlay_scatter: prim={prim}, type={type(overlay_scatter).__name__}")
+            _logger.debug(f"ADD_ITEM: overlay_scatter: prim={prim}, type={type(overlay_scatter).__name__}")
             plot.addItem(overlay_scatter)
             
             # Create baseline scatter (filled, semi-transparent)
@@ -386,7 +386,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 pen=pg.mkPen(color, width=LINE_WIDTH_NORMAL_MARKER),
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 128)
             )
-            print(f"[ADD_ITEM] baseline_scatter: prim={prim}, type={type(baseline_scatter).__name__}")
+            _logger.debug(f"ADD_ITEM: baseline_scatter: prim={prim}, type={type(baseline_scatter).__name__}")
             plot.addItem(baseline_scatter)
             
             # Create scatter plot (draggable points)
@@ -396,7 +396,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 brush=pg.mkBrush(color)
             )
             scatter.setZValue(10)  # Place above diagnostic markers for click priority
-            print(f"[ADD_ITEM] scatter: prim={prim}, type={type(scatter).__name__}")
+            _logger.debug(f"ADD_ITEM: scatter: prim={prim}, type={type(scatter).__name__}")
             plot.addItem(scatter)
             
             # Connect signals
@@ -433,7 +433,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 is_diagnostic=True  # Mark as diagnostic so it can be ignored for normal clicks
             )
             diagnostic_marker.setZValue(-1)  # Place below committed markers so they get priority
-            print(f"[ADD_ITEM] diagnostic_marker: prim={prim}, type={type(diagnostic_marker).__name__}")
+            _logger.debug(f"ADD_ITEM: diagnostic_marker: prim={prim}, type={type(diagnostic_marker).__name__}")
             plot.addItem(diagnostic_marker)
             
             # Connect diagnostic marker signals for drag tracking
@@ -455,7 +455,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Initialize trajectory label managers for each primitive
         self._init_trajectory_label_manager()
 
-        print(f"[DEBUG] _create_plots complete. diagnostic_markers keys: {list(self.diagnostic_markers.keys())}")
+        _logger.debug(f"_create_plots complete. diagnostic_markers keys: {list(self.diagnostic_markers.keys())}")
     
     def _create_name_label(self):
         """Create label to display scenario name."""
@@ -505,23 +505,23 @@ class PrimitivePanelPyQtGraph(QWidget):
         Args:
             perspective: 'M1' or 'M2'
         """
-        print(f"[PRIMITIVE_LABELS] Switching from {self.current_perspective} to {perspective}")
+        _logger.debug(f"PRIMITIVE_LABELS: Switching from {self.current_perspective} to {perspective}")
         if perspective == self.current_perspective:
-            print(f"[PRIMITIVE_LABELS] Already on {perspective}, skipping")
+            _logger.debug(f"PRIMITIVE_LABELS: Already on {perspective}, skipping")
             return
         
         # Hide old perspective labels (remove from plot)
         old_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
-        print(f"[PRIMITIVE_LABELS] Hiding {len(old_labels)} labels for {self.current_perspective}")
+        _logger.debug(f"PRIMITIVE_LABELS: Hiding {len(old_labels)} labels for {self.current_perspective}")
         for (event_time, prim), text_item in old_labels.items():
-            print(f"[REMOVE_ITEM] switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
+            _logger.debug(f"REMOVE_ITEM: switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             self.plot_items[prim].removeItem(text_item)
         
         # Show new perspective labels (add to plot)
         new_labels = self.modified_labels_m1 if perspective == 'M1' else self.modified_labels_m2
-        print(f"[PRIMITIVE_LABELS] Showing {len(new_labels)} labels for {perspective}")
+        _logger.debug(f"PRIMITIVE_LABELS: Showing {len(new_labels)} labels for {perspective}")
         for (event_time, prim), text_item in new_labels.items():
-            print(f"[ADD_ITEM] switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
+            _logger.debug(f"ADD_ITEM: switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             self.plot_items[prim].addItem(text_item)
         
         # Update current perspective
@@ -544,7 +544,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             self.overlay_scatter_items[prim].clear()
             self.overlay_scatter_items[prim].setData([], [])
         
-        print(f"[PRIMITIVE_LABELS] Current perspective now: {self.current_perspective}, all scatter items cleared")
+        _logger.debug(f"PRIMITIVE_LABELS: Current perspective now: {self.current_perspective}, all scatter items cleared")
     
     def set_modified_state(self, modified_state: dict, perspective: str = 'baseline'):
         """
@@ -565,7 +565,7 @@ class PrimitivePanelPyQtGraph(QWidget):
             self.diagnostic_markers[prim].setData([], [])
         self.diagnostic_event_idx = None
         self.diagnostic_primitive = None
-        print(f"[DIAGNOSTIC] Cleared all markers")
+        _logger.debug(f"DIAGNOSTIC: Cleared all markers")
     
     def update_from_model(self, events):
         """
@@ -574,20 +574,20 @@ class PrimitivePanelPyQtGraph(QWidget):
         Args:
             events: List of Event objects
         """
-        print("[DEBUG] Entered update_from_model")
+        _logger.debug("Entered update_from_model")
         if not getattr(self, 'ready', False):
-            print("[ARCH] update_from_model called before panel ready; skipping update.")
+            _logger.info("ARCH: update_from_model called before panel ready; skipping update.")
             # Architectural visibility: record skipped update in StateViewer
             try:
                 from tools.editor.state_viewer import StateViewer
                 StateViewer.record(
                     operation='update_skipped_not_ready',
                     entity=('PrimitivePanelPyQtGraph',),
-                    changes={'ready': False, 'event_count': len(events)},
+                    changes={'ready': (False, False), 'event_count': (0, len(events))},
                     location='primitive_panel_pyqtgraph.py:update_from_model'
                 )
             except Exception as e:
-                print(f"[ARCH] StateViewer record failed: {e}")
+                _logger.error(f"ARCH: StateViewer record failed: {e}")
             return
         import time
         t0 = time.time()
@@ -597,9 +597,9 @@ class PrimitivePanelPyQtGraph(QWidget):
 
         # Clear diagnostic markers to prevent ghost images from previous edits or perspective switches
         if not hasattr(self, 'diagnostic_markers') or not self.diagnostic_markers:
-            print("[DEBUG] update_from_model: diagnostic_markers not initialized or empty, returning early")
+            _logger.debug("update_from_model: diagnostic_markers not initialized or empty, returning early")
             return
-        print("[DEBUG] diagnostic_markers present, continuing")
+        _logger.debug("diagnostic_markers present, continuing")
         for prim in PRIMITIVE_NAMES:
             if prim in self.diagnostic_markers:
                 self.diagnostic_markers[prim].setVisible(False)
@@ -653,14 +653,14 @@ class PrimitivePanelPyQtGraph(QWidget):
                     pen=pg.mkPen('k', width=1, style=Qt.DashLine),
                     movable=False
                 )
-                print(f"[ADD_ITEM] line: prim={prim}, type={type(line).__name__}")
+                _logger.debug(f"ADD_ITEM: line: prim={prim}, type={type(line).__name__}")
                 plot.addItem(line)
                 self.inserted_lines.append(line)
         
         for prim in PRIMITIVE_NAMES:
             times = np.array([event.time for event in events])
             values = np.array([event.markers[prim].value for event in events])
-            print(f"[DEBUG] setData line_items[{prim}]: times={times}, values={values}")
+            _logger.debug(f"setData line_items[{prim}]: times={times}, values={values}")
             # Update line
             self.line_items[prim].setData(times, values)
 
@@ -697,7 +697,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     brushes.append(pg.mkBrush(color))
                     pens.append(pg.mkPen('k', width=1))
 
-            print(f"[DEBUG] setData scatter_items[{prim}]: x={times}, y={values}, brush={brushes}, pen={pens}")
+            _logger.debug(f"setData scatter_items[{prim}]: x={times}, y={values}, brush={brushes}, pen={pens}")
             # Update scatter points - setData replaces old data automatically
             self.scatter_items[prim].setData(
                 x=times,
@@ -725,7 +725,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Do not force all labels visible; label visibility is now managed by the controller
         
         t1 = time.time()
-        print(f"[PYQTGRAPH] update_from_model: {(t1-t0)*1000:.1f}ms for {len(events)} events")
+        _logger.debug(f"PYQTGRAPH: update_from_model: {(t1-t0)*1000:.1f}ms for {len(events)} events")
     
     def set_baseline_values(self, baseline_values):
         """Store baseline values for showing original positions."""
@@ -801,7 +801,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         if key in modified_labels:
             text_item = modified_labels[key]
             text_item.setPos(event_time, value)
-            print(f"[UPDATE_MARKER] Updated label position for {key} to ({event_time}, {value:.2f})")
+            _logger.debug(f"UPDATE_MARKER: Updated label position for {key} to ({event_time}, {value:.2f})")
             updated = True
         # If not in modified_labels, search for the TextItem in the plot and update its position
         if not updated:
@@ -810,7 +810,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     label_text = f"{event_time:.1f}/{primitive}"
                     if hasattr(item, 'toPlainText') and item.toPlainText() == label_text:
                         item.setPos(event_time, value)
-                        print(f"[UPDATE_MARKER] Fallback: Updated label position for {key} to ({event_time}, {value:.2f})")
+                        _logger.debug(f"UPDATE_MARKER: Fallback: Updated label position for {key} to ({event_time}, {value:.2f})")
                         break
 
         # After updating, sync label visibility so only the moved marker's label is visible
@@ -900,7 +900,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         Marker is the authoritative source of truth for label visibility.
         View reads marker state and ensures rendering matches.
         """
-        print(f"\n[SYNC_LABELS] ===== Starting sync, perspective={self.current_perspective} =====")
+        _logger.debug(f"SYNC_LABELS: ===== Starting sync, perspective={self.current_perspective} =====")
         modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
         
         # Build set of what SHOULD be visible from marker state
@@ -909,14 +909,14 @@ class PrimitivePanelPyQtGraph(QWidget):
             for prim in ['v', 'r', 'f', 'a', 'S']:
                 visible = event.markers[prim].get_label_visible(self.current_perspective)
                 if prim == 'v':
-                    print(f"[DIAG] view: event_idx={event_idx}, time={event.time}, Visibility get_label_visible={visible}")
+                    _logger.debug(f"DIAG: view: event_idx={event_idx}, time={event.time}, Visibility get_label_visible={visible}")
                 if prim == 'S':
-                    print(f"[DIAG][S] event_idx={event_idx}, time={event.time}, perspective={self.current_perspective}, get_label_visible={visible}, marker_obj={event.markers[prim]}")
+                    _logger.debug(f"DIAG[S]: event_idx={event_idx}, time={event.time}, perspective={self.current_perspective}, get_label_visible={visible}, marker_obj={event.markers[prim]}")
                 if visible:
                     should_be_visible.add((event.time, prim))
         
-        print(f"[SYNC_LABELS] should_be_visible = {should_be_visible}")
-        print(f"[SYNC_LABELS] modified_labels keys BEFORE sync = {set(modified_labels.keys())}")
+        _logger.debug(f"SYNC_LABELS: should_be_visible = {should_be_visible}")
+        _logger.debug(f"SYNC_LABELS: modified_labels keys BEFORE sync = {set(modified_labels.keys())}")
         
         # Remove labels that shouldn't be visible
         to_remove = []
@@ -924,11 +924,11 @@ class PrimitivePanelPyQtGraph(QWidget):
             if key not in should_be_visible:
                 to_remove.append(key)
         
-        print(f"[SYNC_LABELS] to_remove = {to_remove}")
+        _logger.debug(f"SYNC_LABELS: to_remove = {to_remove}")
         
         for key in to_remove:
             text_item = modified_labels[key]
-            print(f"[REMOVE_ITEM] _sync_labels_from_markers: key={key}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
+            _logger.debug(f"REMOVE_ITEM: _sync_labels_from_markers: key={key}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             for plot in self.plot_items.values():
                 plot.removeItem(text_item)
             del modified_labels[key]
@@ -937,9 +937,9 @@ class PrimitivePanelPyQtGraph(QWidget):
         # Print all current TextItems on every plot
         for prim, plot in self.plot_items.items():
             text_items = [item for item in plot.items if type(item).__name__ == 'TextItem']
-            print(f"[LABEL_INVENTORY] Plot '{prim}': {len(text_items)} TextItems")
+            _logger.debug(f"LABEL_INVENTORY: Plot '{prim}': {len(text_items)} TextItems")
             for idx, item in enumerate(text_items):
-                print(f"[LABEL_INVENTORY]   TextItem {idx}: text='{getattr(item, 'toPlainText', lambda: '?')()}', pos={getattr(item, 'pos', lambda: '?')()}, id={id(item)}")
+                _logger.debug(f"LABEL_INVENTORY:   TextItem {idx}: text='{getattr(item, 'toPlainText', lambda: '?')()}', pos={getattr(item, 'pos', lambda: '?')()}, id={id(item)}")
         
         # Add labels that should be visible but aren't
         to_add = []

@@ -10,6 +10,8 @@
 
 This document outlines the testing strategy for the Interactive Editor, from core logic validation to end-to-end workflow testing. The goal is to ensure software quality without over-engineering test infrastructure.
 
+**Debugging and Logging:** For detailed logging configuration, debug flags, and troubleshooting techniques, see [DEBUG.md](DEBUG.md).
+
 **All features follow the MVT quality standard** (see [ARCHITECTURE.md](../ARCHITECTURE.md#mvt-quality-standard)):
 - **Modeled:** Clean architecture, follows patterns
 - **Verifiable:** Observable behavior, clear success criteria

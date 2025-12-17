@@ -33,6 +33,8 @@ The Interactive Scenario Editor is a graphical diagnostic tool for analyzing and
 
 **Phase 3.3 Status:** ✅ **COMPLETE** - Dual-perspective editing with overlay visualization, robust file loading, and flexible workspace
 
+**For Developers/Advanced Users:** Detailed logging configuration, debugging techniques, and troubleshooting guides are available in [DEBUG.md](DEBUG.md).
+
 ---
 
 ## Application States

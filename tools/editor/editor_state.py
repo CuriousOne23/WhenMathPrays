@@ -8,6 +8,7 @@ validation, transitions, and clear contracts.
 from enum import Enum, auto
 from typing import Optional, Set, Callable
 from dataclasses import dataclass, field
+from .state_viewer import StateViewer
 
 
 class PerspectiveState(Enum):
@@ -107,6 +108,11 @@ class EditorState:
         
         old = self.perspective
         self.perspective = new_perspective
+        StateViewer.record(
+            operation='switch_perspective',
+            entity=('editor_state',),
+            changes={'perspective': (old.value, new_perspective.value)}
+        )
         self._notify_observers('perspective', old, new_perspective)
         return True
     
@@ -128,6 +134,11 @@ class EditorState:
         
         old = self.edit_state
         self.edit_state = EditState.PREVIEW
+        StateViewer.record(
+            operation='start_preview',
+            entity=('editor_state',),
+            changes={'edit_state': (old.name, EditState.PREVIEW.name)}
+        )
         self._notify_observers('edit_state', old, EditState.PREVIEW)
         return True
     
@@ -144,6 +155,11 @@ class EditorState:
         old = self.edit_state
         self.edit_state = EditState.COMMITTED
         self.mark_dirty()
+        StateViewer.record(
+            operation='commit_preview',
+            entity=('editor_state',),
+            changes={'edit_state': (old.name, EditState.COMMITTED.name)}
+        )
         self._notify_observers('edit_state', old, EditState.COMMITTED)
         return True
     
@@ -159,6 +175,11 @@ class EditorState:
         
         old = self.edit_state
         self.edit_state = EditState.IDLE
+        StateViewer.record(
+            operation='cancel_preview',
+            entity=('editor_state',),
+            changes={'edit_state': (old.name, EditState.IDLE.name)}
+        )
         self._notify_observers('edit_state', old, EditState.IDLE)
         return True
     
@@ -174,6 +195,11 @@ class EditorState:
         
         old = self.edit_state
         self.edit_state = EditState.IDLE
+        StateViewer.record(
+            operation='finish_commit',
+            entity=('editor_state',),
+            changes={'edit_state': (old.name, EditState.IDLE.name)}
+        )
         self._notify_observers('edit_state', old, EditState.IDLE)
         return True
     
@@ -184,6 +210,11 @@ class EditorState:
             self.dirty = True
             old = self.undo_state
             self.undo_state = UndoRedoState.DIRTY
+            StateViewer.record(
+                operation='mark_dirty',
+                entity=('editor_state',),
+                changes={'undo_state': (old.name, UndoRedoState.DIRTY.name), 'dirty': (False, True)}
+            )
             self._notify_observers('undo_state', old, UndoRedoState.DIRTY)
     
     def mark_clean(self):
@@ -192,6 +223,11 @@ class EditorState:
             self.dirty = False
             old = self.undo_state
             self.undo_state = UndoRedoState.CLEAN
+            StateViewer.record(
+                operation='mark_clean',
+                entity=('editor_state',),
+                changes={'undo_state': (old.name, UndoRedoState.CLEAN.name), 'dirty': (True, False)}
+            )
             self._notify_observers('undo_state', old, UndoRedoState.CLEAN)
     
     def enter_undo_operation(self) -> bool:
@@ -206,6 +242,11 @@ class EditorState:
         
         old = self.undo_state
         self.undo_state = UndoRedoState.IN_OPERATION
+        StateViewer.record(
+            operation='enter_undo_operation',
+            entity=('editor_state',),
+            changes={'undo_state': (old.name, UndoRedoState.IN_OPERATION.name)}
+        )
         self._notify_observers('undo_state', old, UndoRedoState.IN_OPERATION)
         return True
     
@@ -216,6 +257,11 @@ class EditorState:
             new_state = UndoRedoState.DIRTY if self.dirty else UndoRedoState.CLEAN
             old = self.undo_state
             self.undo_state = new_state
+            StateViewer.record(
+                operation='exit_undo_operation',
+                entity=('editor_state',),
+                changes={'undo_state': (old.name, new_state.name)}
+            )
             self._notify_observers('undo_state', old, new_state)
     
     def is_in_undo_operation(self) -> bool:
@@ -227,18 +273,33 @@ class EditorState:
         """Mark computation as scheduled (debounce timer active)."""
         old = self.compute_state
         self.compute_state = TrajectoryComputeState.SCHEDULED
+        StateViewer.record(
+            operation='schedule_computation',
+            entity=('editor_state',),
+            changes={'compute_state': (old.name, TrajectoryComputeState.SCHEDULED.name)}
+        )
         self._notify_observers('compute_state', old, TrajectoryComputeState.SCHEDULED)
     
     def start_computation(self):
         """Mark computation as in progress."""
         old = self.compute_state
         self.compute_state = TrajectoryComputeState.COMPUTING
+        StateViewer.record(
+            operation='start_computation',
+            entity=('editor_state',),
+            changes={'compute_state': (old.name, TrajectoryComputeState.COMPUTING.name)}
+        )
         self._notify_observers('compute_state', old, TrajectoryComputeState.COMPUTING)
     
     def finish_computation(self):
         """Mark computation as complete and current."""
         old = self.compute_state
         self.compute_state = TrajectoryComputeState.CURRENT
+        StateViewer.record(
+            operation='finish_computation',
+            entity=('editor_state',),
+            changes={'compute_state': (old.name, TrajectoryComputeState.CURRENT.name)}
+        )
         self._notify_observers('compute_state', old, TrajectoryComputeState.CURRENT)
     
     # File state management
@@ -246,6 +307,11 @@ class EditorState:
         """Set the file loading configuration."""
         old = self.file_load_state
         self.file_load_state = state
+        StateViewer.record(
+            operation='set_file_load_state',
+            entity=('editor_state',),
+            changes={'file_load_state': (old.name, state.name)}
+        )
         self._notify_observers('file_load_state', old, state)
     
     def has_dual_perspective(self) -> bool:

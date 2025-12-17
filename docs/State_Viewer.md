@@ -157,6 +157,7 @@ StateViewer.record(
 
 ## References
 - [ARCHITECTURE.md](../ARCHITECTURE.md)
+- [DEBUG.md](DEBUG.md) - Logging configuration and debugging techniques
 - [STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md#state-viewer-log---specification-v222)
 - [interactive_editor_user_guide.md](interactive_editor_user_guide.md#8-state-viewer-log-export-new---v222)
 - [tools/editor/state_viewer.py](../tools/editor/state_viewer.py)

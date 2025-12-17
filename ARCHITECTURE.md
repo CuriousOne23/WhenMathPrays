@@ -27,6 +27,16 @@ This provides immediate visibility into key type issues with minimal overhead (a
 ## Purpose
 This document describes the overall architecture, object model, and design principles for the WhenMathPrays interactive scenario editor. It is intended to guide development, debugging, and future enhancements.
 
+## Documentation Overview
+
+The WhenMathPrays project maintains comprehensive documentation across 60+ files organized by purpose and development phase. For a complete index of all documentation including user guides, research papers, testing procedures, and legacy specifications, see **[CONTENTS.md](docs/CONTENTS.md)**.
+
+**Quick Navigation:**
+- **[SOFTWARE_MODULES.md](docs/architecture/SOFTWARE_MODULES.md)** - Detailed module reference with I/O variables
+- **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** - User guide for the interactive editor
+- **[DEBUG.md](docs/DEBUG.md)** - Debugging and logging configuration
+- **[INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing methodology and procedures
+
 ## MVT Quality Standard
 
 **All features and enhancements in this project follow the MVT standard:**
@@ -1267,60 +1277,19 @@ self.active_primitive_state = {
 
 This pattern trades slight redundancy (state stored on marker + briefly in view dict) for dramatic debugging improvements.
 
-## Directory Structure
-```
-/WhenMathPrays/
-  README.md
-  ARCHITECTURE.md
-  requirements.txt
-  tools/
-    interactive_editor.py          # Main editor entry point (Phase 3.5: slimming to ~100 lines)
-    editor/
-      # Phase 3.4: State Management (COMPLETE)
-      editor_state.py              # Centralized state management with enums and observers
-      
-      # Phase 3.5: Architecture Modules (IN PROGRESS)
-      file_manager.py              # ✅ M1/M2 path resolution and file management (240 lines)
-      ui_builder.py                # ✅ Widget creation and layout (220 lines)
-      
-      # Core MVC Components
-      model.py                     # Data model (Events, Markers)
-      controller.py                # MVC controller with trajectory computation (uses EditorState)
-      commands.py                  # Undo/redo command pattern (uses EditorState)
-      
-      # Supporting Modules
-      config.py                    # Configuration system (user preferences)
-      primitives.py                # Primitive metadata constants
-      qt_window.py                 # Main window (Phase 3.5: refactor to main_window.py)
-      event.py                     # Event data structure
-      marker.py                    # Marker data structure
-      load_events.py               # CSV loading utilities
-      
-      views/
-        primitive_panel.py         # Primitive plots with readout gauge
-        trajectory_panel.py        # Gamma_self trajectory with position readout
-        draggable_point.py         # Draggable marker implementation
-      
-      widgets/
-        # UI widget components
-  
-  core/
-    love.py                        # GRP core mathematics
-  
-  data/
-    # Scenario CSV files
-  
-  docs/
-    interactive_editor_user_guide.md           # User guide for interactive editor
-    installation_4_interactive_editor.md       # Installation guide
-    interactive_edit_roadmap.md                # Phase roadmap and requirements
-    STATE_MANAGEMENT_REFACTORING.md            # Phase 3.4 state management documentation
-  
-  tests/
-    editor/
-      test_editor_state.py         # State management tests (34 tests, all passing)
-  ...
-```
+## Software Modules Reference
+
+The complete software architecture consists of 20+ modules organized in a clean MVC pattern with supporting utilities. For detailed documentation of each module including location, purpose, key I/O variables, and interdependencies, see **[SOFTWARE_MODULES.md](docs/architecture/SOFTWARE_MODULES.md)**.
+
+### Architecture Overview
+
+- **Entry Point**: `tools/interactive_editor.py` orchestrates the entire application
+- **State Management**: `tools/editor/editor_state.py` provides centralized state with observer pattern
+- **MVC Core**: Model (`model.py`), View (`views/`), Controller (`controller.py`) with command pattern (`commands.py`)
+- **UI Framework**: PyQtGraph-based high-performance visualization with PySide6 widgets
+- **Utilities**: File management, configuration, debugging, and testing infrastructure
+
+The architecture follows strict separation of concerns with comprehensive logging, testing, and documentation coverage.
 
 ## Key Objects & Classes
 
