@@ -169,6 +169,15 @@ When facing a complex bug:
 
 ---
 
+## Debugging and Validation: Marker/Label Logic (Dec 16, 2025)
+
+- Issue: Stray marker/label artifacts (e.g., 0.0/S, 49.0/S, 28.0/S) appeared on the trajectory plot, and label persistence was inconsistent.
+- Approach: Traced label creation and filtering logic, inserted breakpoints, and iteratively patched controller and view logic.
+- Solution: Filtered pinned_markers to only include actually modified markers (using event_id and primitive), and ensured label visibility is managed per user action.
+- Validation: Tested moving, resetting, and undoing markers in both M1 and M2 perspectives. Confirmed only modified markers show labels, and labels disappear only when reset.
+
+---
+
 ## Best Practices
 
 1. **Log state changes** with timestamps and context
@@ -399,6 +408,288 @@ primitive_to_gamma_self = {
 - [STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md)
 
 > **Note:** The user-facing manual now provides a brief summary and refers here for full details on the explicit primitive-to-gamma_self mapping, debugging workflows, and log inspection. This section is the canonical technical reference for developers and advanced users.
+
+---
+
+## Debugging Key Objects (Architecture-Level Visibility)
+
+This section provides detailed debugging guidance for all key objects defined in [ARCHITECTURE.md](../ARCHITECTURE.md#key-object-architecture). Each object includes inspection methods, State Viewer coverage, and debugging workflows.
+
+### EventPoint Debugging
+
+**Current State Viewer Coverage**: ❌ None (106+ field modifications not tracked)
+
+**Inspection Methods**:
+```python
+# Direct inspection
+event = model.events_m1[0]
+print(f"EventPoint: time={event.time}, v={event.v}, r={event.r}, f={event.f}, a={event.a}, S={event.S}")
+print(f"Metadata: notes='{event.notes}', marker='{event.marker}', locked={event.locked}")
+
+# CSV export for verification
+csv_row = event.to_dict()
+print(f"CSV format: {csv_row}")
+
+# Validation check
+try:
+    event.__post_init__()  # Raises ValueError if invalid
+    print("EventPoint is valid")
+except ValueError as e:
+    print(f"EventPoint invalid: {e}")
+```
+
+**Debugging Workflows**:
+- **Primitive value corruption**: Check `event.__post_init__()` validation
+- **CSV I/O issues**: Compare `event.to_dict()` vs file contents
+- **Timeline problems**: Verify `event.time` ordering in `model.events_m1/m2`
+
+**Future Enhancement**: Add property setters with State Viewer logging for all field modifications.
+
+### Marker Debugging
+
+**Current State Viewer Coverage**: ❌ None (11 setter calls not tracked)
+
+**Inspection Methods**:
+```python
+# Complete marker state
+marker = event.markers['v']  # Get marker for specific primitive
+print(f"Marker state: {marker.__dict__}")
+
+# Perspective-aware inspection
+print(f"M1 modified: {marker.get_is_modified('M1')}")
+print(f"M1 gamma position: {marker.get_gamma_position('M1')}")
+print(f"M1 label visible: {marker.get_label_visible('M1')}")
+
+# Cross-perspective comparison
+for perspective in ['M1', 'M2']:
+    print(f"{perspective}: modified={marker.get_is_modified(perspective)}, "
+          f"pos={marker.get_gamma_position(perspective)}, "
+          f"visible={marker.get_label_visible(perspective)}")
+```
+
+**Debugging Workflows**:
+- **Label persistence bugs**: Check `marker.get_label_visible(perspective)` vs UI rendering
+- **Marker positioning**: Verify `marker.get_gamma_position(perspective)` matches trajectory plot
+- **Modification state**: Compare `marker.get_is_modified(perspective)` with `model.modified_primitives_m1/m2`
+
+**Future Enhancement**: State Viewer logging in existing setter methods (`set_gamma_position`, `set_is_modified`, `set_label_visible`).
+
+### EditorModel Debugging
+
+**Current State Viewer Coverage**: ✅ Partial (core operations tracked, ObservableDict changes not)
+
+**Inspection Methods**:
+```python
+# Core identity and events
+print(f"Model: {model.name_m1}/{model.name_m2}, {len(model.events_m1)}/{len(model.events_m2)} events")
+print(f"Next ID: {model.next_event_id}, Dirty: {model.dirty}")
+
+# Perspective-specific state
+for perspective in ['M1', 'M2']:
+    gamma_0 = model.get_gamma_self_0(perspective)
+    modified = getattr(model, f'modified_primitives_{perspective.lower()}')
+    print(f"{perspective}: gamma_0={gamma_0}, {len(modified)} modified primitives")
+
+# ObservableDict inspection (not logged by State Viewer)
+modified_m1 = model.modified_primitives_m1
+print(f"M1 modified keys: {list(modified_m1.keys())}")
+for event_id, primitives in modified_m1.items():
+    print(f"  Event {event_id}: {primitives}")
+
+# Preview state
+print(f"Preview changes: {model.preview_changes}")
+```
+
+**Debugging Workflows**:
+- **State synchronization**: Compare `modified_primitives_m1/m2` with marker states
+- **Event identity**: Verify `next_event_id` and event ID assignments
+- **Persistence issues**: Check `dirty` flag and CSV export consistency
+
+**Future Enhancement**: State Viewer logging for ObservableDict observer callbacks.
+
+### EditorController Debugging
+
+**Current State Viewer Coverage**: ⚠️ Partial (key orchestrations tracked, internal state not)
+
+**Inspection Methods**:
+```python
+# Active state
+print(f"Controller: perspective={controller.perspective}, "
+      f"active_event={controller.active_primitive_state.get('event_id')}, "
+      f"active_primitive={controller.active_primitive_state.get('primitive')}")
+
+# Command system
+print(f"Undo stack: {controller.undo_stack.count()} commands")
+print(f"M1 stack: {controller.undo_stack_m1.count()}, M2 stack: {controller.undo_stack_m2.count()}")
+
+# Computation state
+print(f"Weights: {controller.weights}")
+print(f"Trajectory: {len(controller.committed_gamma_trajectory) if controller.committed_gamma_trajectory else 0} points")
+
+# Baseline tracking (not logged)
+print(f"M1 baseline keys: {list(controller.baseline_by_id_m1.keys())[:5]}...")  # First 5
+print(f"M2 baseline keys: {list(controller.baseline_by_id_m2.keys())[:5]}...")
+
+# Mapping state
+print(f"Primitive→gamma_self mappings: {len(controller.primitive_to_gamma_self)}")
+```
+
+**Debugging Workflows**:
+- **Perspective switching**: Check `controller.perspective` and active primitive state preservation
+- **Command execution**: Verify undo stack state and command ordering
+- **Baseline synchronization**: Compare `baseline_by_id_m1/m2` with current event values
+
+**Future Enhancement**: State Viewer logging for internal state changes (`active_primitive_state`, baseline updates).
+
+### PrimitivePanelPyQtGraph Debugging
+
+**Current State Viewer Coverage**: ✅ Partial (lifecycle events tracked, plot state not)
+
+**Inspection Methods**:
+```python
+# Panel readiness and diagnostics
+print(f"Panel ready: {panel.ready}")
+print(f"Diagnostic markers: {list(panel.diagnostic_markers.keys())}")
+if hasattr(panel, 'diagnostic_event_idx'):
+    print(f"Diagnostic focus: event {panel.diagnostic_event_idx}, primitive '{panel.diagnostic_primitive}'")
+
+# Plot structure
+print(f"Plot items: {list(panel.plot_items.keys())}")
+for prim, plot in panel.plot_items.items():
+    items = [type(item).__name__ for item in plot.items]
+    print(f"  {prim}: {len(items)} items - {items[:3]}...")  # First 3 item types
+
+# Interactive elements
+print(f"Scatter items: {list(panel.scatter_items.keys())}")
+for prim, scatter in panel.scatter_items.items():
+    print(f"  {prim}: {len(scatter.data['x'])} points")
+
+# Overlay state (inactive perspective)
+print(f"Overlay scatter: {list(panel.overlay_scatter_items.keys())}")
+print(f"Overlay lines: {list(panel.overlay_line_items.keys())}")
+```
+
+**Debugging Workflows**:
+- **Rendering issues**: Check plot item counts and types
+- **Interaction problems**: Verify scatter item data and event connections
+- **Perspective display**: Compare active vs overlay item states
+
+**Future Enhancement**: State Viewer logging for plot state changes and item management.
+
+### TrajectoryPanelPyQtGraph Debugging
+
+**Current State Viewer Coverage**: ✅ Good (label operations tracked via TrajectoryLabelManager)
+
+**Inspection Methods**:
+```python
+# Plot structure
+items = panel.plot_widget.items
+item_types = [type(item).__name__ for item in items]
+print(f"Plot items: {len(items)} total - {item_types}")
+
+# Trajectory state
+print(f"Trajectory line: {panel.trajectory_line is not None}")
+print(f"Overlay line: {panel.overlay_line is not None}")
+
+# Label state (via manager)
+if hasattr(panel, 'trajectory_label_manager'):
+    labels = panel.trajectory_label_manager.all_labels()
+    print(f"Managed labels: {len(labels)}")
+    for key, label in list(labels.items())[:3]:  # First 3
+        print(f"  {key}: '{label.toPlainText()}' visible={label.isVisible()}")
+
+# Direct label inspection (legacy)
+print(f"Direct labels: {len(panel.marker_labels)}")
+for i, label in enumerate(panel.marker_labels[:3]):  # First 3
+    print(f"  Label {i}: '{label.toPlainText()}' visible={label.isVisible()}")
+```
+
+**Debugging Workflows**:
+- **Label synchronization**: Compare managed vs direct label states
+- **Trajectory rendering**: Check line item existence and data
+- **Perspective overlays**: Verify active vs overlay line states
+
+**Future Enhancement**: State Viewer logging for trajectory computation and rendering updates.
+
+### Command Classes Debugging
+
+**Current State Viewer Coverage**: ✅ Complete (all operations tracked)
+
+**Inspection Methods**:
+```python
+# Active command stacks
+print(f"Current stack: {controller.undo_stack.count()} commands")
+for i in range(min(5, controller.undo_stack.count())):  # Last 5
+    cmd = controller.undo_stack.command(i)
+    print(f"  Command {i}: {cmd.text()}")
+
+# Stack separation
+print(f"M1 stack: {controller.undo_stack_m1.count()} commands")
+print(f"M2 stack: {controller.undo_stack_m2.count()} commands")
+```
+
+**Debugging Workflows**:
+- **Undo/redo issues**: Check command stack contents and ordering
+- **Command execution**: Verify State Viewer logs for command operations
+- **Cross-perspective**: Compare M1/M2 stack states
+
+### EditorState Debugging
+
+**Current State Viewer Coverage**: ❌ None (state transitions not tracked)
+
+**Inspection Methods**:
+```python
+# Current state values
+print(f"EditorState: perspective={state.perspective}, "
+      f"edit_state={state.edit_state}, "
+      f"compute_state={state.compute_state}")
+print(f"Undo state: {state.undo_state}, File load: {state.file_load_state}")
+print(f"Flags: dirty={state.dirty}, initial_load={state.initial_load_complete}")
+
+# Observer registry
+print(f"Observers: {list(state._observers.keys())}")
+for event, callbacks in state._observers.items():
+    print(f"  {event}: {len(callbacks)} callbacks")
+```
+
+**Debugging Workflows**:
+- **State transitions**: Check current state values and validity
+- **Observer issues**: Verify callback registration and execution
+- **Complex workflows**: Trace state changes through drag-preview-commit cycles
+
+**Future Enhancement**: State Viewer logging in existing observer callbacks (already has observer infrastructure).
+
+### State Viewer Integration Patterns
+
+**For All Objects**:
+```python
+# Enable State Viewer
+import os
+os.environ['STATE_VIEWER'] = '1'  # or set STATE_VIEWER=1 in environment
+
+# Export logs during debugging
+from tools.editor.state_viewer import StateViewer
+StateViewer.export_to_file("debug_state.log")
+
+# Get recent operations
+recent = StateViewer.get_recent(10)
+for change in recent:
+    print(f"{change.timestamp}: {change.operation} - {change.entity}")
+
+# Check for warnings
+warnings = StateViewer.get_warnings()
+for warning in warnings:
+    print(f"Warning: {warning.get_warning_message()}")
+```
+
+**Debugging Workflow with State Viewer**:
+1. **Reproduce the bug** with State Viewer enabled
+2. **Export the log** at the point of failure
+3. **Search for relevant operations** (e.g., `update_primitive`, `add_label`)
+4. **Trace the sequence** of state changes leading to the bug
+5. **Identify the root cause** by comparing expected vs actual state transitions
+
+---
 
 **Future development tools**:
 1. **Log viewer**: GUI for browsing/filtering debug logs

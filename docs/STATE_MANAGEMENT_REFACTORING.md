@@ -1575,3 +1575,225 @@ Changes:
 - **Changelog**: [INTERACTIVE_EDITOR_CHANGELOG.md](INTERACTIVE_EDITOR_CHANGELOG.md#v222-state-viewer-log-december-14-2025) - Feature history
 - **Debug Guide**: [DEBUG.md](DEBUG.md) - Debugging methodologies
 - **This Document**: State domains and enums (earlier sections)
+
+---
+
+# Phase 3.0: State Viewer Visibility Enhancement
+
+## Overview
+
+This document outlines the systematic refactoring to add comprehensive State Viewer visibility to all key architectural objects. This represents Phase 3.0 of the interactive editor development, building on the centralized state management foundation established in Phase 3.4.
+
+## What We're Refactoring
+
+**Current State:** Partial State Viewer integration exists, but only captures a subset of state transitions. The State Viewer infrastructure (ring buffer, export functionality, warning detection) is complete, but most key objects lack `StateViewer.record()` calls.
+
+**Target State:** Complete observability across all 8 key architectural objects, enabling rapid debugging, AI-assisted analysis, and comprehensive state transition tracking.
+
+### Key Objects to Enhance
+
+Based on the architectural documentation in [ARCHITECTURE.md](../ARCHITECTURE.md#key-object-architecture):
+
+1. **EventPoint** - Track primitive value changes and event modifications
+2. **Marker** - Log visibility and position state changes  
+3. **EditorModel** - Record data state transitions and modifications
+4. **EditorController** - Log user actions and command execution
+5. **PrimitivePanelPyQtGraph** - Track UI interactions and primitive edits
+6. **TrajectoryPanelPyQtGraph** - Log trajectory modifications and rendering changes
+7. **Command Classes** - Record undo/redo operations and command execution
+8. **EditorState** - Track overall editor state changes and perspective switches
+
+## Why This Refactoring
+
+### Problem Statement
+
+**Current Debugging Challenges:**
+- State transitions are invisible, making bugs difficult to diagnose
+- No systematic way to understand what changed when or why
+- AI-assisted debugging requires manual log creation and context gathering
+- Complex interactions between objects create "dark corners" with no visibility
+- Regression testing lacks comprehensive state validation
+
+**Impact on Development:**
+- Average bug diagnosis time: 30-60 minutes (vs. target 5 minutes)
+- AI assistance effectiveness reduced by lack of structured data
+- Confidence in changes reduced due to invisible side effects
+- Onboarding new developers slowed by lack of behavioral transparency
+
+### Benefits of Complete Visibility
+
+**Debugging Efficiency:**
+- **5-minute diagnosis**: State logs provide exact sequence of operations leading to bugs
+- **AI-ready data**: Structured logs enable rapid AI-assisted analysis
+- **Causal chains**: Understand what triggered each state change
+- **Regression prevention**: Comprehensive state tracking catches issues early
+
+**Development Velocity:**
+- **Faster iteration**: Immediate feedback on state changes during development
+- **Confident refactoring**: Visibility ensures changes don't break existing behavior
+- **Better testing**: State logs enable automated validation of complex interactions
+- **Knowledge sharing**: Logs help onboard developers and document behavior
+
+**System Reliability:**
+- **Early detection**: Warnings and validation in State Viewer catch issues immediately
+- **Root cause analysis**: Complete state history enables precise problem identification
+- **Behavioral documentation**: State logs serve as living documentation of system behavior
+
+## Refactoring Plan
+
+### Phase 1: Foundation and Infrastructure (Week 1)
+
+**Objective:** Establish consistent State Viewer integration patterns and verify infrastructure.
+
+**Changes:**
+1. **Import Standardization** - Add `from tools.editor.state_viewer import StateViewer` to all key object files
+2. **Operation Naming Convention** - Establish consistent operation names (e.g., `update_primitive`, `insert_event`, `switch_perspective`)
+3. **Entity Identification** - Define standard entity tuples for each object type
+4. **Location Auto-detection** - Ensure all `StateViewer.record()` calls use auto-detected file:line locations
+
+**Key Objects - Phase 1:**
+- **EditorState** - Add logging to all state transition methods (`switch_perspective`, `mark_dirty`, etc.)
+- **Command Classes** - Add logging to `execute()`, `undo()`, `redo()` methods
+
+**Verification Steps:**
+1. **Unit Tests**: Verify StateViewer.record() calls are made with correct parameters
+2. **Integration Tests**: Run editor operations and verify log entries appear
+3. **Log Format Validation**: Ensure exported logs contain expected operation types
+4. **Performance Check**: Confirm <100ns overhead per operation
+
+### Phase 2: Data Layer Visibility (Week 2)
+
+**Objective:** Add complete visibility to data manipulation operations.
+
+**Changes:**
+1. **EditorModel** - Log all data modifications (`update_primitive`, `insert_event`, `delete_event`)
+2. **EventPoint** - Track primitive value changes with before/after values
+3. **Marker** - Log position changes, visibility toggles, and label updates
+
+**Key Objects - Phase 2:**
+- **EditorModel** - Core data operations
+- **EventPoint** - Individual primitive modifications  
+- **Marker** - UI element state changes
+
+**Verification Steps:**
+1. **Data Integrity**: Verify before/after values are correctly captured
+2. **Operation Completeness**: Ensure all data mutations are logged
+3. **Entity Consistency**: Validate entity tuples uniquely identify affected objects
+4. **Warning Detection**: Test warning conditions (unchanged values, invalid transitions)
+
+### Phase 3: UI Layer Visibility (Week 3)
+
+**Objective:** Add visibility to user interaction and UI state changes.
+
+**Changes:**
+1. **PrimitivePanelPyQtGraph** - Log marker drags, selections, and primitive edits
+2. **TrajectoryPanelPyQtGraph** - Track trajectory rendering changes and user interactions
+3. **EditorController** - Log user actions before they reach the model
+
+**Key Objects - Phase 3:**
+- **PrimitivePanelPyQtGraph** - Direct user interactions with primitives
+- **TrajectoryPanelPyQtGraph** - Trajectory visualization changes
+- **EditorController** - High-level user action coordination
+
+**Verification Steps:**
+1. **UI Event Capture**: Verify all user interactions generate appropriate log entries
+2. **State Synchronization**: Ensure UI state changes are reflected in logs
+3. **Performance Impact**: Monitor for any UI responsiveness degradation
+4. **Cross-Object Consistency**: Validate operations flow correctly through all layers
+
+### Phase 4: Integration and Validation (Week 4)
+
+**Objective:** Ensure complete system integration and validate end-to-end functionality.
+
+**Changes:**
+1. **Cross-Object Validation** - Verify state transitions are consistent across all objects
+2. **Warning System Enhancement** - Add domain-specific validation rules
+3. **Performance Optimization** - Fine-tune logging for production use
+4. **Documentation Updates** - Update all relevant docs with new logging capabilities
+
+**Key Objects - Phase 4:**
+- **All Objects** - Final integration testing and optimization
+
+**Verification Steps:**
+1. **End-to-End Testing**: Complete user workflows with comprehensive logging
+2. **Warning Validation**: Test all warning conditions and error scenarios
+3. **Performance Benchmarking**: Ensure logging overhead remains minimal
+4. **Documentation Verification**: Confirm all docs reflect new capabilities
+
+## Implementation Guidelines
+
+### State Viewer Integration Pattern
+
+```python
+# Standard integration pattern for all state changes
+def some_state_changing_method(self, new_value):
+    # Capture before state
+    old_value = self.some_field
+    
+    # Make the change
+    self.some_field = new_value
+    
+    # Record the transition
+    StateViewer.record(
+        operation='update_field',  # Consistent naming
+        entity=(self.id, 'field_name'),  # Unique identification
+        changes={'some_field': (old_value, new_value)}  # Before/after tracking
+    )
+```
+
+### Operation Naming Conventions
+
+| Operation Type | Naming Pattern | Example |
+|----------------|----------------|---------|
+| Primitive Updates | `update_primitive` | `update_primitive` |
+| Event Operations | `insert_event`, `delete_event` | `insert_event` |
+| UI Interactions | `start_drag`, `end_drag` | `start_marker_drag` |
+| State Transitions | `switch_perspective`, `mark_dirty` | `switch_perspective` |
+| Command Execution | `execute_command`, `undo_command` | `execute_insert_event` |
+
+### Entity Identification Standards
+
+| Object Type | Entity Tuple Format | Example |
+|-------------|---------------------|---------|
+| EventPoint | `(event_id, primitive_name, perspective)` | `(2, 'v', 'M1')` |
+| Marker | `(marker_id, panel_type)` | `(0, 'primitive')` |
+| EditorModel | `(operation_type, target_id)` | `('update', 2)` |
+| Command | `(command_type, target_id)` | `('InsertEvent', 3)` |
+
+## Risk Mitigation
+
+### Performance Risks
+- **Mitigation**: Ring buffer limits memory usage, environment variable disables logging
+- **Monitoring**: Performance benchmarks before/after each phase
+- **Fallback**: Ability to disable logging in production
+
+### Code Complexity Risks  
+- **Mitigation**: Consistent patterns reduce cognitive load
+- **Review**: All changes reviewed for pattern adherence
+- **Testing**: Comprehensive test coverage ensures reliability
+
+### Debugging Overhead Risks
+- **Mitigation**: Auto-detected locations reduce manual annotation burden
+- **Validation**: Warning system catches integration errors early
+- **Documentation**: Clear guidelines prevent inconsistent implementation
+
+## Success Metrics
+
+### Quantitative Metrics
+- **Logging Coverage**: >95% of state transitions captured
+- **Performance Overhead**: <100ns per operation
+- **Warning Detection**: All known error conditions flagged
+- **Test Coverage**: >90% of new logging code covered
+
+### Qualitative Metrics
+- **Debugging Time**: 30-60 minutes → 5 minutes average
+- **AI Assistance**: Structured logs enable rapid AI analysis
+- **Developer Confidence**: Clear visibility reduces fear of changes
+- **Onboarding Speed**: New developers understand system behavior faster
+
+## Related Documentation
+
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** - Key object architecture and State Viewer integration points
+- **[State_Viewer.md](State_Viewer.md)** - Complete State Viewer specification and usage guide
+- **[DEBUG.md](DEBUG.md)** - Debugging workflows and State Viewer usage patterns
+- **[INTERACTIVE_EDITOR_CHANGELOG.md](INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history and feature tracking

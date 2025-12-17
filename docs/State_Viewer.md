@@ -99,7 +99,57 @@ Example:
 - State mapping between primitive and gamma_self domains
 - Any other significant state transition relevant to scenario editing
 
-## Implementation Notes
+## Current Logging Operations
+Based on the implementation in `tools/editor/state_viewer.py`, the following operations are currently tracked:
+
+- `reset_primitive`: Resetting primitive values (with validation warnings for gamma_position and in_modified_dict)
+- `update_primitive`: Updating primitive values with before/after tracking
+- Additional operations can be added by calling `StateViewer.record()` with appropriate parameters
+
+## Integration with Key Objects
+The State Viewer is designed to be integrated with all key architectural objects. Current integration points:
+
+- **EventPoint**: Tracks primitive value changes and event modifications
+- **Marker**: Logs visibility and position changes
+- **EditorModel**: Records state transitions and data modifications
+- **EditorController**: Logs user actions and command execution
+- **PrimitivePanelPyQtGraph**: Tracks UI interactions and primitive edits
+- **TrajectoryPanelPyQtGraph**: Logs trajectory modifications and rendering changes
+- **Command Classes**: Records undo/redo operations and command execution
+- **EditorState**: Tracks overall editor state changes and perspective switches
+
+## How to Add State Viewer Logging
+To add State Viewer visibility to any object:
+
+1. **Import the StateViewer**: `from tools.editor.state_viewer import StateViewer`
+2. **Identify State Changes**: Determine what constitutes a significant state transition
+3. **Record Changes**: Call `StateViewer.record()` with:
+   - `operation`: Descriptive operation name (e.g., 'update_primitive', 'insert_event')
+   - `entity`: Tuple identifying the affected entity (e.g., `(event_id, primitive, perspective)`)
+   - `changes`: Dict of `{field: (before_value, after_value)}`
+   - `location`: Optional file:line (auto-detected if not provided)
+
+Example:
+```python
+# Before making a change
+old_value = self.some_field
+
+# Make the change
+self.some_field = new_value
+
+# Record the change
+StateViewer.record(
+    operation='update_field',
+    entity=(self.id, 'field_name'),
+    changes={'some_field': (old_value, new_value)}
+)
+```
+
+## Performance Characteristics
+- **Memory**: Fixed ring buffer of 1000 entries (configurable via MAX_HISTORY)
+- **Overhead**: ~100ns per operation when enabled
+- **Disabled Mode**: Zero overhead when STATE_VIEWER environment variable is set to '0'
+- **Thread Safety**: Single-threaded design (appropriate for GUI applications)
 - The State Viewer is implemented in `tools/editor/state_viewer.py`.
 - Log export is triggered via the main window (Ctrl+Shift+L shortcut).
 - The log format is defined in `docs/STATE_MANAGEMENT_REFACTORING.md` (see: State Viewer Log - Specification).

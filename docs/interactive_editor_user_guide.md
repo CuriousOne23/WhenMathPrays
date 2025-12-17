@@ -1733,6 +1733,17 @@ Located in the toolbar at the top of the window:
 
 ---
 
+## Marker and Label Behavior
+
+- When you move a marker away from its baseline, its label appears and remains visible.
+- Moving additional markers will show their labels as well; all modified markers keep their labels.
+- A label disappears only when its marker is reset to baseline (by double-click, Ctrl+Z, or moving it back).
+- This applies to both the primitive panel and the trajectory panel.
+- Switching perspectives (M1/M2) will only show labels for markers modified in that perspective.
+- No labels appear for unmodified markers, and no stray labels appear after switching perspectives or modifying unrelated markers.
+
+---
+
 ## Basic Workflow
 
 ### 1. Load a Scenario
@@ -1851,3 +1862,169 @@ This feature follows the MVT (Modeled, Verifiable, Testable) quality standard:
 - **Testable:** Manual test checklist includes "Save Both with M1/M2 edits → verify both files updated correctly"
 
 ---
+
+## Features in Detail
+
+### Robust File Loading (Phase 3.3)
+
+The editor intelligently handles various file scenarios:
+
+**Automatic M1/M2 Detection:**
+- Detects `_M1` or `_M2` suffix in filename
+- Automatically searches for companion file (M1 ↔ M2)
+- Loads both files when available for dual-perspective editing
+
+**Single-File Flexibility:**
+- **M1-only files:** Loaded into both perspectives, M1 selected by default
+- **M2-only files:** Loaded into both perspectives, M2 selected by default
+- **Benefit:** Enables easy conversion between perspectives - edit from either M1 or M2 and save to desired perspective
+
+**Error Handling:**
+- **File not found:** Clear error message with file path
+- **Invalid file type:** Must be `.csv` extension, shows helpful error
+- **Missing companion:** Info message shows single-perspective mode with conversion capability
+
+**Examples:**
+```bash
+# Load M1 with M2 present → Dual-perspective editing
+python tools/interactive_editor.py data/scenario_M1.csv
+# Output: Loading dual-perspective data: M1: ..._M1.csv, M2: ..._M2.csv
+
+# Load M1-only → Single file in both perspectives
+python tools/interactive_editor.py data/solo_M1.csv  
+# Output: M1-only: Loaded into both perspectives (M1 selected)
+#         You can edit from either perspective and save to M1 or M2
+
+# Load M2-only → Single file in both perspectives, M2 selected
+python tools/interactive_editor.py data/solo_M2.csv
+# Output: M2-only: Loaded into both perspectives (M2 selected)
+#         You can edit from either perspective and save to M1 or M2
+```
+
+### Dual-Perspective Overlay (Phase 3.3)
+
+**Visual Comparison:**
+- Active perspective: Solid lines, full opacity, interactive
+- Inactive perspective: Dotted lines, faded opacity (40%), non-interactive
+- Both trajectories visible simultaneously for comparison
+
+**Line Indicators:**
+- Solid blue line under active perspective radio button
+- Dashed blue line under inactive perspective radio button
+- Visual feedback matches plot style (solid vs dotted)
+
+**Independent Editing:**
+- Each perspective maintains separate primitive values
+- Switching perspectives preserves modifications
+- Names, notes, and modifications tracked per perspective
+
+## Robust Mapping: Primitives ↔ Gamma_Self (UI Integration)
+
+The editor maintains an explicit, debuggable mapping between each primitive change (event_id, primitive) and its corresponding γ_self (gamma_self) position on the trajectory plot. This ensures:
+- Numbered labels and markers are always synchronized with their gamma_self positions
+- Label placement is robust to edits, undo/redo, and perspective switching
+- All mappings are logged for debugging and can be inspected in the State Viewer
+
+For full technical details, debugging workflows, and example mapping logs, see [DEBUG.md](DEBUG.md#debugging-primitive-↔-gamma_self-mapping-v223-proposal).
+
+**Right Panel - Editor Controls:**
+- **Perspective Switcher:** M1/M2 radio buttons with visual indicators
+- **Name Editor:** Editable scenario name field with Apply button
+- **Note Editor:** Event annotation editor with Apply/Clear buttons
+- **Gamma_Self_0 Editor:** Initial position editor
+- **Spinbox Primitive Editor:** *[Planned v2.4]* Precise numeric input for primitives
+- **Primitive Readout Gauge:** Shows last edited marker (to be replaced by spinbox)
+- **Gamma_Self Readout Gauge:** Shows clicked trajectory position
+- **Insertion Options:** Configure new event parameters
+
+**View Menu:** Show/hide individual panels, save/restore workspace layout
+
+### Diagnostic Gauges
+
+**Perspective Switcher (Phase 3.2):**
+- Radio buttons for M1/M2 perspective selection
+- Visual indicators: Solid blue line under active, dashed blue line under inactive
+- Keyboard shortcuts: Tab or Space to toggle between perspectives
+
+**Name Editor (Phase 3.2):**
+- Editable text field for scenario name
+- Each perspective can have independent names
+- Apply button commits name changes
+- Enter key also applies changes
+
+**Note Editor (Phase 3.2):**
+- Multi-line text editor for event annotations
+- Click on any primitive marker to load its event's notes
+- Notes are shared across all primitives at the same time point
+- Apply button saves notes, Clear button removes them
+- Shows current event time in label
+
+**Primitive Readout Gauge:**
+- Displays last edited marker information
+- Shows marker ID (e.g., "7r" = event 7, resonance)
+- Shows Y-value of the primitive
+- Updates on marker drag release
+- Cleared when pressing '0' (reset view)
+
+**Gamma_Self Position Readout:**
+- Displays X,Y coordinates on trajectory
+- Click on gamma_self plot to sample position
+- Useful for recording specific trajectory points
+- Persists until next click
+
+**Gamma_Self_0 Editor (Phase 2.1):**
+- Edit initial relationship position
+- Real and imaginary components
+- Reset button restores default (0+0j)
+
+**Spinbox Primitive Editing (Planned v2.4):**
+
+*Replaces gauge-based editing with precise numeric input.*
+
+**Overview:**
+- Single shared spinbox for entering exact primitive values
+- Shows currently active primitive (v, r, f, a, or S)
+- Type exact values instead of dragging gauges
+
+**Workflow:**
+1. **Select event:** Click event marker in trajectory plot (e.g., Day 2)
+2. **Select primitive:** Click primitive label (e.g., "v")
+   - Spinbox label updates: "Editing: v"
+   - Spinbox shows current v value: 5.5
+3. **Enter value:** Type new value (e.g., "7.2") and press Enter
+   - Or use ▲▼ arrows for incremental changes
+4. **Trajectory updates:** Automatically recomputes
+
+**Features:**
+- **Range:** -10.0 to +10.0 (human-scale authoring values)
+- **Precision:** 1 decimal place, 0.1 step size
+- **Label persistence:** "Editing: {primitive}" stays until different primitive selected
+- **State tracking:** Active primitive + event tracked, shown in State Viewer
+- **Integration:** Works with Event Insertion Points, Ctrl+Shift+Click markers, M1/M2 switching
+
+**Initial State:**
+- Spinbox disabled until first event + primitive selected
+- Label shows: "Editing: (none)"
+
+**Edge Cases:**
+- No event selected: Spinbox remains disabled
+- Invalid input: Clamped to range, non-numeric rejected
+- Perspective switch: Preserves active primitive, updates to new perspective's value
+- Event deletion: Clears active primitive, disables spinbox
+
+**Benefits:**
+- Precise value control (type "7.2" vs dragging to approximate)
+- Faster workflow (keyboard-driven)
+- Cleaner UI (one spinbox vs multiple gauges)
+- Better accessibility
+
+### Save Button & Controls
+Located in the toolbar at the top of the window:
+- **Save Button:** Save CSV to `data/` folder with `_modified` suffix
+- **Ctrl+S:** Keyboard shortcut for save
+- **Automatic perspective handling:** Saves to M1_modified or M2_modified based on active perspective
+
+**Save Behavior:**
+- M1 perspective active → saves to `*_M1_modified.csv`
+- M2 perspective active → saves to `*_M2_modified.csv`
+- Single-file scenarios: Can save to either M1 or M2, enabling perspective conversion

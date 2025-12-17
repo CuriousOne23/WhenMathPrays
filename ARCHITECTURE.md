@@ -9,7 +9,20 @@ For fine-grained debugging of label placement logic in the trajectory panel, use
 - Set `DEBUG_LABELS = True` to enable all label-related debug output (including assignment and synchronization).
 
 This allows you to focus debugging on the most critical or noisy section as needed.
-# Project Architecture: WhenMathPrays Scenario Editor
+
+### Debugging Key Mismatches in State Dictionaries
+
+To prevent silent failures from type mismatches in dictionary lookups (e.g., using float keys on int-keyed dicts), add debug assertions in critical paths:
+
+```python
+# In controller.py, before key lookups:
+assert isinstance(event_id, int), f"event_id must be int, got {type(event_id)}: {event_id}"
+assert event_id in modified_prims, f"Missing event_id {event_id} in modified_prims keys: {list(modified_prims.keys())}"
+```
+
+This provides immediate visibility into key type issues with minimal overhead (assertions disabled in production). Use `DEBUG_STATE = True` to enable related logging.
+
+---
 
 ## Purpose
 This document describes the overall architecture, object model, and design principles for the WhenMathPrays interactive scenario editor. It is intended to guide development, debugging, and future enhancements.
@@ -208,6 +221,565 @@ All code contributions must follow the [Coding Guidelines](docs/architecture/05_
 - **Primitives Module (`tools/editor/primitives.py`)** - Single source of truth for primitive metadata
 - **Configuration System (`tools/editor/config.py`)** - User preferences with JSON config
 - **Primitive Name Updates** - Corrected UI labels: Ego→Visibility, Vulnerability→Altruism
+
+## Key Object Architecture
+
+This section provides comprehensive documentation of the core objects in the interactive editor system, their structure, purpose, and usage patterns. Each object is documented with its attributes, control patterns, debugging methods, and importance to the overall architecture.
+
+### EventPoint
+
+**Structure:**
+```python
+@dataclass
+class EventPoint:
+    time: float           # Event timestamp (step number)
+    v: float             # Visibility primitive (-10.0 to +10.0)
+    r: float             # Resonance primitive (-10.0 to +10.0)
+    f: float             # Freedom primitive (-10.0 to +10.0)
+    a: float             # Altruism primitive (-10.0 to +10.0)
+    S: float             # Shared Breath primitive (-10.0 to +10.0)
+    notes: str = ""      # User annotation text
+    marker: str = ""     # Visual marker type ("circle", "star", etc.)
+    locked: bool = False # Prevents editing when True
+```
+
+**Reason for Structure:**
+- Immutable data container using dataclass for thread-safety and validation
+- Primitive values constrained to [-10, +10] range for mathematical consistency
+- Single source of truth for event data across all perspectives
+- CSV-compatible export format with `to_dict()` method
+
+**How to View/Debug:**
+- State Viewer: `print(model.events_m1[0])` shows full object state
+- CSV export: `event.to_dict()` for human-readable format
+- Validation: `__post_init__()` raises ValueError for invalid primitive ranges
+
+**When/Where/Why/How Used:**
+- **When:** Created during CSV loading, event insertion, or primitive editing
+- **Where:** Stored in `EditorModel.events_m1` and `EditorModel.events_m2` lists
+- **Why:** Represents single point in scenario timeline with all primitive values
+- **How:** Accessed by index in event lists, modified through Command pattern
+
+**Who Controls It:**
+- **Owner:** EditorModel (creation, storage, validation)
+- **Modifier:** Command objects (InsertEventCommand, EditPrimitiveCommand)
+- **Reader:** All views and controllers for display/editing
+
+**Usage and Importance:**
+- Core data unit for entire scenario system
+- Enables dual-perspective editing (M1/M2) with shared event identity
+- Critical for trajectory computation and visualization
+- Foundation for all primitive-based calculations
+
+**Attribute Details:**
+- `time`: Timeline position; used for sorting and trajectory interpolation
+- `v,r,f,a,S`: Primitive values; core mathematical inputs to gamma_self computation
+- `notes`: User context; preserved in CSV but not used in calculations
+- `marker`: Visual indicator; affects display style but not computation
+- `locked`: Edit protection; prevents accidental changes to baseline events
+
+### Marker
+
+**Structure:**
+```python
+class Marker:
+    # Core attributes
+    time: float                    # Event time
+    value: float                   # Current primitive value
+    state: str                     # 'original', 'modified', 'preview'
+    style: dict                    # Visual properties (color, shape)
+    gamma_self_value: float        # Computed gamma_self at this point
+    
+    # Perspective-aware state
+    gamma_self_position: dict      # {perspective: complex} - trajectory position
+    is_modified: dict              # {perspective: bool} - edit status
+    label_visible: dict            # {perspective: bool} - UI visibility
+```
+
+**Reason for Structure:**
+- Encapsulates marker state separate from EventPoint for UI flexibility
+- Perspective-aware design supports M1/M2 independent editing
+- Observable state changes enable reactive UI updates
+- Single responsibility: visual representation of event state
+
+**How to View/Debug:**
+- State Viewer: `print(marker.__dict__)` shows all attributes
+- Perspective accessors: `marker.get_gamma_position('M1')` for per-perspective state
+- Debug logging: Enable `DEBUG_MARKERS = True` in debug_config.py
+
+**When/Where/Why/How Used:**
+- **When:** Created during panel initialization or event modification
+- **Where:** Stored in panel-specific collections (trajectory panel markers)
+- **Why:** Provides visual feedback for event state and user interactions
+- **How:** Updated by controller on primitive changes, read by views for rendering
+
+**Who Controls It:**
+- **Owner:** TrajectoryPanelPyQtGraph (creation, positioning)
+- **Modifier:** EditorController (state updates, position changes)
+- **Reader:** Label managers and rendering code
+
+**Usage and Importance:**
+- Critical for user interaction feedback on trajectory plots
+- Enables visual distinction between original/modified/preview states
+- Supports label display for modified primitives only
+- Foundation for drag-and-drop editing workflows
+
+**Attribute Details:**
+- `time/value`: Links to EventPoint data; used for positioning
+- `state`: Controls visual appearance; 'modified' triggers label display
+- `style`: Dict of visual properties; enables customization
+- `gamma_self_value`: Computed result; displayed in trajectory coordinates
+- `gamma_self_position`: Per-perspective storage; prevents cross-contamination
+- `is_modified`: Edit tracking; determines label visibility
+- `label_visible`: UI state; managed by label synchronization logic
+
+### EditorModel
+
+**Structure:**
+```python
+class EditorModel:
+    # Identity
+    name_m1: str                   # Scenario name for M1 perspective
+    name_m2: str                   # Scenario name for M2 perspective
+    filepath: Path                 # Source CSV file path
+    time_unit: str                 # Time unit ("days")
+    
+    # Event data
+    events: list                   # Legacy event list (deprecated)
+    events_m1: List[EventPoint]    # M1 perspective events
+    events_m2: List[EventPoint]    # M2 perspective events
+    next_event_id: int             # Monotonic ID counter
+    
+    # Trajectory state
+    gamma_self_0_m1: complex       # M1 initial position
+    gamma_self_0_m2: complex       # M2 initial position
+    gamma_self_0_m1_original: complex  # Original M1 value from CSV
+    gamma_self_0_m2_original: complex  # Original M2 value from CSV
+    
+    # Modification tracking
+    modified_primitives_m1: ObservableDict  # {event_id: set of primitives}
+    modified_primitives_m2: ObservableDict  # {event_id: set of primitives}
+    modified_indices: set           # Legacy tracking (deprecated)
+    
+    # UI state
+    preview_changes: dict          # Uncommitted drag changes {event_idx: {primitive: value}}
+    dirty: bool                    # Unsaved changes flag
+```
+
+**Reason for Structure:**
+- Central state container following MVC pattern
+- Perspective separation enables independent M1/M2 editing
+- ObservableDict for modification tracking enables reactive updates
+- Single source of truth prevents state synchronization bugs
+- Legacy fields maintained for backward compatibility during refactoring
+
+**How to View/Debug:**
+- State Viewer: `model.state_viewer.log_state()` for complete snapshot
+- Observable logging: Enable `DEBUG_OBSERVABLE = True` for change tracking
+- Validation: `model.validate_state()` checks internal consistency
+- Perspective access: `model.get_gamma_self_0('M1')` for trajectory state
+
+**When/Where/Why/How Used:**
+- **When:** Created at application startup, persists throughout session
+- **Where:** Passed to controller and views as shared state reference
+- **Why:** Manages all scenario data and modification state
+- **How:** Modified through Command pattern, read by all components
+
+**Who Controls It:**
+- **Owner:** Application layer (creation and lifecycle)
+- **Modifier:** Command objects execute changes via model methods
+- **Reader:** Controller and views for current state
+
+**Usage and Importance:**
+- Heart of the application state management
+- Enables undo/redo through Command pattern integration
+- Supports dual-perspective editing with shared event identity
+- Critical for data persistence and CSV I/O
+
+**Attribute Details:**
+- `name_m1/m2`: User-facing scenario identifiers; used in UI and filenames
+- `events`: Deprecated list; maintained for compatibility during transition
+- `events_m1/m2`: Core data lists; indexed access for event operations
+- `next_event_id`: Ensures unique event identities across perspectives
+- `gamma_self_0_m1/m2`: Trajectory starting points; computed from initial events
+- `gamma_self_0_m1/m2_original`: Baseline values from CSV; used for reset operations
+- `modified_primitives_m1/m2`: Tracks edits; keys are event_ids (int), values are primitive sets
+- `modified_indices`: Legacy set; deprecated in favor of ID-based tracking
+- `preview_changes`: Temporary state; cleared on commit/cancel
+- `dirty`: Save state indicator; prevents data loss
+
+### EditorController
+
+**Structure:**
+```python
+class EditorController:
+    # Core components
+    model: EditorModel              # Data model reference
+    primitive_panel: PrimitivePanelPyQtGraph  # Primitive editing view
+    trajectory_panel: TrajectoryPanelPyQtGraph  # Trajectory display view
+    
+    # Command system
+    undo_stack_m1: QUndoStack       # M1 perspective undo/redo
+    undo_stack_m2: QUndoStack       # M2 perspective undo/redo
+    undo_stack: QUndoStack          # Active stack (points to current perspective)
+    
+    # Perspective state
+    perspective: str                # 'M1' or 'M2'
+    active_primitive_state_m1: dict # {'primitive': str, 'event_id': int, 'event_time': float}
+    active_primitive_state_m2: dict # {'primitive': str, 'event_id': int, 'event_time': float}
+    
+    # Computation parameters
+    weights: dict                   # GRP computation weights
+    delta_t: float                  # Time step for trajectory
+    entropy_real_target: float      # Entropy computation parameters
+    entropy_imag_target: float
+    entropy_delS_real: float
+    entropy_delS_imag: float
+    
+    # Baseline tracking
+    baseline_by_id_m1: dict         # {(event_id, primitive): baseline_value}
+    baseline_by_id_m2: dict         # {(event_id, primitive): baseline_value}
+    baseline_comm_m1: BaselineCommunicator  # M1 baseline sync
+    baseline_comm_m2: BaselineCommunicator  # M2 baseline sync
+    
+    # Mapping and state
+    primitive_to_gamma_self: dict   # {(event_id, primitive): trajectory_mapping}
+    committed_gamma_trajectory: list # Last committed trajectory for comparison
+    debounce_timer: threading.Timer # Debounced trajectory updates
+```
+
+**Reason for Structure:**
+- Mediator pattern implementation controls all inter-component communication
+- Separate undo stacks per perspective enable independent editing
+- Active primitive state tracking supports spinbox editing workflow
+- Baseline communication ensures primitive↔trajectory synchronization
+- Debounced updates prevent excessive recomputation during rapid changes
+
+**How to View/Debug:**
+- State inspection: `controller.__dict__` shows current state
+- Event logging: Enable `DEBUG_CONTROLLER = True` for action tracing
+- Command stack: `controller.undo_stack.count()` for pending operations
+- Active state: `controller.active_primitive_state` for current editing context
+
+**When/Where/Why/How Used:**
+- **When:** Created after model initialization, handles all user interactions
+- **Where:** Connects model to views, processes UI events
+- **Why:** Centralizes business logic and state transitions
+- **How:** Receives events from views, executes commands on model
+
+**Who Controls It:**
+- **Owner:** Application layer (instantiation and wiring)
+- **Modifier:** Self (processes events and updates state)
+- **Reader:** Views (query current state and capabilities)
+
+**Usage and Importance:**
+- Prevents views from directly modifying model (maintains invariants)
+- Enables complex operations like event insertion with proper undo support
+- Manages perspective switching and primitive selection
+- Critical for maintaining UI consistency across panels
+
+**Attribute Details:**
+- `model/primitive_panel/trajectory_panel`: Core MVC references; never null after initialization
+- `undo_stack_m1/m2`: Separate command histories; enables perspective-independent undo
+- `undo_stack`: Active reference; switches when perspective changes
+- `active_primitive_state_m1/m2`: Current editing focus per perspective; preserves state on switching
+- `weights/delta_t`: Mathematical computation parameters; affect trajectory calculation
+- `entropy_*`: Entropy field parameters; configurable via UI
+- `baseline_by_id_m1/m2`: Original values for reset operations; keyed by (event_id, primitive)
+- `baseline_comm_m1/m2`: Synchronization objects; maintain primitive↔trajectory consistency
+- `primitive_to_gamma_self`: Mapping for UI feedback; updated on trajectory recompute
+- `committed_gamma_trajectory`: Reference trajectory; used for change detection
+- `debounce_timer`: Performance optimization; delays expensive operations
+
+### PrimitivePanelPyQtGraph
+
+**Structure:**
+```python
+class PrimitivePanelPyQtGraph(QWidget):
+    # PyQtGraph components
+    graphics_widget: pg.GraphicsLayoutWidget  # Container for all plots
+    plot_items: dict                    # {primitive: PlotItem} - main plot surfaces
+    scatter_items: dict                 # {primitive: DraggableScatterItem} - interactive markers
+    baseline_scatter_items: dict        # {primitive: ScatterPlotItem} - baseline markers
+    line_items: dict                    # {primitive: PlotDataItem} - connecting lines
+    overlay_line_items: dict            # {primitive: PlotDataItem} - inactive perspective lines
+    overlay_scatter_items: dict         # {primitive: ScatterPlotItem} - inactive perspective markers
+    
+    # Diagnostic features
+    diagnostic_markers: dict            # {primitive: DraggableScatterItem} - debug markers
+    diagnostic_event_idx: int           # Current diagnostic event index
+    diagnostic_primitive: str           # Which primitive has diagnostic marker
+    
+    # State management
+    ready: bool                         # Initialization complete flag
+    trajectory_label_manager: TrajectoryLabelManager  # Label synchronization
+    
+    # Legacy compatibility
+    on_primitive_preview: None          # Deprecated callback (signal-based now)
+    on_primitive_reset: None            # Deprecated callback (signal-based now)
+    
+    # Constants
+    PRIMITIVE_NAMES: dict               # {'v': 'Visibility', ...}
+    PRIMITIVE_LABELS: dict              # UI display labels
+    PRIMITIVE_COLORS: dict              # Color scheme per primitive
+```
+
+**Reason for Structure:**
+- View component in MVC pattern handles visualization only
+- Extensive plot item management for multi-primitive display
+- Diagnostic features enable debugging of primitive interactions
+- Overlay system supports dual-perspective visualization
+- Signal/slot pattern connects to controller actions
+
+**How to View/Debug:**
+- Widget inspection: `panel.plot_widget.items()` shows plot contents (but it's graphics_widget)
+- Marker state: `panel.scatter_items` dict shows interactive markers
+- Diagnostic: `panel.diagnostic_markers` for debug marker state
+- Signal debugging: Enable `DEBUG_PANEL = True` for interaction logging
+
+**When/Where/Why/How Used:**
+- **When:** Created during UI initialization, updated on model changes
+- **Where:** Embedded in main window layout
+- **Why:** Provides visual editing interface for primitive values
+- **How:** Renders markers, handles drag events, updates on model changes
+
+**Who Controls It:**
+- **Owner:** Main window (layout and lifecycle)
+- **Modifier:** Controller (receives update signals)
+- **Reader:** User (visual feedback and interaction)
+
+**Usage and Importance:**
+- Primary user interface for primitive editing
+- Enables intuitive drag-and-drop value changes
+- Provides real-time visual feedback during editing
+- Critical for user workflow efficiency
+
+**Attribute Details:**
+- `graphics_widget`: Top-level container; holds all plot_items
+- `plot_items`: Per-primitive plot surfaces; one subplot per primitive (v,r,f,a,S)
+- `scatter_items`: Interactive markers; handle mouse events for editing
+- `baseline_scatter_items`: Reference markers; show original values
+- `line_items`: Connecting lines; show value progression over time
+- `overlay_line/scatter_items`: Inactive perspective visualization; shows other perspective's data
+- `diagnostic_markers`: Debug markers; enable testing specific interactions
+- `diagnostic_event_idx/primitive`: Current debug focus; controls diagnostic marker placement
+- `ready`: Initialization flag; prevents premature updates
+- `trajectory_label_manager`: Label coordination; manages marker labels across panels
+- `PRIMITIVE_*`: Constants; define primitive metadata and appearance
+
+### TrajectoryPanelPyQtGraph
+
+**Structure:**
+```python
+class TrajectoryPanelPyQtGraph(QWidget):
+    # PyQtGraph components
+    plot_widget: pg.PlotWidget       # Trajectory canvas
+    trajectory_line: pg.PlotCurveItem  # Active perspective trajectory
+    overlay_line: pg.PlotCurveItem   # Inactive perspective trajectory
+    
+    # Label management
+    marker_labels: List[pg.TextItem] # Value labels on trajectory
+    trajectory_label_manager: TrajectoryLabelManager  # Label synchronization
+    
+    # Signals
+    panel_ready: Signal()            # Initialization complete
+    gamma_clicked: Signal(object)    # Trajectory click events
+```
+
+**Reason for Structure:**
+- Specialized view for trajectory visualization
+- Simple curve rendering with marker overlays
+- Label management system prevents UI clutter
+- Signal-based communication with controller
+
+**How to View/Debug:**
+- Plot inspection: `panel.plot_widget.items()` shows all plot elements
+- Label state: `panel.marker_labels` list shows current text items
+- Trajectory data: Enable `DEBUG_TRAJECTORY = True` for computation logging
+
+**When/Where/Why/How Used:**
+- **When:** Created at startup, updated on primitive changes
+- **Where:** Main window layout alongside primitive panel
+- **Why:** Shows computed gamma_self trajectory with modification indicators
+- **How:** Computes trajectory from events, renders curve and markers
+
+**Who Controls It:**
+- **Owner:** Main window (layout management)
+- **Modifier:** Controller (perspective switches, model updates)
+- **Reader:** User (trajectory visualization and marker interaction)
+
+**Usage and Importance:**
+- Provides mathematical feedback for primitive changes
+- Enables visual validation of editing results
+- Critical for understanding scenario dynamics
+- Supports marker-based navigation and editing
+
+**Attribute Details:**
+- `plot_widget`: Rendering surface; contains curve, markers, labels
+- `trajectory_line`: Active perspective path; computed from current events
+- `overlay_line`: Inactive perspective path; shows other perspective's trajectory
+- `marker_labels`: Text overlays; show modified primitive values at event locations
+- `trajectory_label_manager`: Synchronization logic; coordinates with primitive panel labels
+- `panel_ready/gamma_clicked`: Signals; communicate initialization and user interactions
+
+### Command Classes (InsertEventCommand, EditPrimitiveCommand, etc.)
+
+**Structure:**
+```python
+class InsertEventCommand(QUndoCommand):
+    # Operation data
+    controller: EditorController     # Target controller
+    insert_time: float               # Time for new event
+    
+    # Undo state
+    # (State stored implicitly through controller operations)
+    
+    def redo(self):                  # Execute operation
+    def undo(self):                  # Reverse operation
+```
+
+**Reason for Structure:**
+- QUndoCommand subclass enables Qt's undo framework
+- Encapsulates operation data and reversal logic
+- Atomic operations prevent partial state corruption
+- Extensible base class for new editing operations
+
+**How to View/Debug:**
+- Stack inspection: `controller.undo_stack.command(index)` for command details
+- Execution logging: Enable `DEBUG_COMMANDS = True` for operation tracing
+- State validation: Commands validate pre/post conditions
+
+**When/Where/Why/How Used:**
+- **When:** Created on user actions (insert, edit, delete)
+- **Where:** Pushed to controller's undo_stack
+- **Why:** Enables reliable undo/redo with state integrity
+- **How:** Executed by controller, stored for reversal
+
+**Who Controls It:**
+- **Owner:** EditorController (creation and execution)
+- **Modifier:** Self (modifies model state)
+- **Reader:** Undo framework (for reversal operations)
+
+**Usage and Importance:**
+- Prevents data loss through undo/redo capability
+- Enables complex multi-step operations with rollback
+- Critical for user confidence in editing workflow
+- Foundation for advanced features like macro recording
+
+**Attribute Details:**
+- `controller`: Modification target; contains operation logic
+- `insert_time/event_time/primitive/old_value/new_value`: Operation parameters; define what to change
+- `redo/undo`: Operation methods; implement change and reversal
+
+### EditorState
+
+**Structure:**
+```python
+@dataclass
+class EditorState:
+    # Core states
+    perspective: PerspectiveState     # 'M1' or 'M2'
+    edit_state: EditState            # IDLE, PREVIEW, COMMITTED
+    compute_state: TrajectoryComputeState  # CURRENT, SCHEDULED, COMPUTING
+    undo_state: UndoRedoState        # CLEAN, DIRTY, IN_OPERATION
+    file_load_state: FileLoadState   # DUAL_PERSPECTIVE, SINGLE_M1, etc.
+    
+    # Flags
+    initial_load_complete: bool      # First load finished
+    dirty: bool                      # Unsaved changes exist
+    
+    # Observers
+    _observers: dict                 # {state_name: [callbacks]}
+```
+
+**Reason for Structure:**
+- Centralized state container replaces scattered boolean flags
+- Enum-based states with validation prevent invalid transitions
+- Observer pattern enables reactive UI updates
+- Single source of truth for complex state interactions
+
+**How to View/Debug:**
+- State inspection: `state.__dict__` shows all current values
+- Transition logging: Enable `DEBUG_STATE = True` for state changes
+- Observer debugging: `state._observers` shows registered callbacks
+
+**When/Where/Why/How Used:**
+- **When:** Created at controller initialization, persists throughout session
+- **Where:** Owned by controller, accessed by all components
+- **Why:** Manages complex state interactions and prevents race conditions
+- **How:** Updated through validated transition methods, observed by UI components
+
+**Who Controls It:**
+- **Owner:** EditorController (creation and primary updates)
+- **Modifier:** Self (through transition methods with validation)
+- **Reader:** All components (query current state and register observers)
+
+**Usage and Importance:**
+- Prevents invalid state combinations through enum validation
+- Enables complex workflows like drag-preview-commit cycles
+- Critical for trajectory computation scheduling and UI consistency
+- Foundation for multi-perspective editing state management
+
+**Attribute Details:**
+- `perspective`: Active editing context; affects all operations
+- `edit_state`: Current operation phase; controls UI behavior during edits
+- `compute_state`: Trajectory calculation status; prevents redundant computations
+- `undo_state`: Save/dirty status; affects UI indicators and warnings
+- `file_load_state`: File loading configuration; determines perspective availability
+- `initial_load_complete/dirty`: Status flags; control initialization and save prompts
+- `_observers`: Callback registry; enables reactive updates across components
+
+## Observability & State Viewer Coverage
+
+The architecture provides comprehensive observability through State Viewer, enabling debugging of all key objects and state transitions. However, current implementation has gaps that could be addressed through refactoring.
+
+### Current State Viewer Coverage
+
+**✅ Full Coverage (37 operations tracked):**
+- **Command Classes**: All redo/undo operations (`redo_insert_event`, `undo_delete_event`, etc.)
+- **EditorModel**: Core operations (`update_primitive`, `reset_primitive`, `save_csv`, `switch_perspective`)
+- **EditorController**: Key orchestrations (`switch_perspective`, `update_primitive_to_gamma_self_mapping`)
+- **PrimitivePanelPyQtGraph**: Lifecycle events (`panel_ready`, `update_skipped_not_ready`, `primitive_changed`)
+- **TrajectoryPanelPyQtGraph**: Label operations via `TrajectoryLabelManager` (`add_label`, `remove_label`, `show_label`, `hide_label`)
+
+**❌ Limited/No Coverage:**
+- **EventPoint**: Individual field modifications (106+ call sites)
+- **Marker**: Internal state changes (`set_gamma_position`, `set_is_modified`, `set_label_visible`)
+- **EditorState**: State transitions (`perspective`, `edit_state`, `compute_state` changes)
+- **EditorController**: Internal state updates (`active_primitive_state` changes)
+- **EditorModel**: ObservableDict changes (automatic via observer callbacks)
+
+### Refactoring for Complete Observability
+
+**Effort Required**: 1-2 weeks total development time
+
+**Phase 1 (Easy - 2-3 days):**
+- **EditorState**: Add State Viewer calls to existing observer callbacks
+- **Marker**: Add State Viewer calls to existing setter methods (11 call sites)
+- **EditorModel ObservableDict**: Add State Viewer calls to existing observer callbacks
+
+**Phase 2 (Medium - 3-4 days):**
+- **EditorController**: Add State Viewer calls to key internal state changes
+- **PrimitivePanelPyQtGraph**: Add State Viewer calls to plot state updates
+
+**Phase 3 (Hard - 3-5 days):**
+- **EventPoint**: Add property setters with State Viewer instrumentation (106+ call sites)
+
+### Benefits of Complete Observability
+
+**Debugging Power**: See every state change across all objects with timestamps and call stacks
+**Root Cause Analysis**: Trace complex bugs through complete state transition history  
+**Performance**: Minimal overhead (~100ns per call, controllable via `STATE_VIEWER` env var)
+**Maintenance**: Centralized logging infrastructure, easy to extend for new state changes
+
+### Implementation Architecture
+
+The codebase is well-designed for this refactoring:
+- **Observer patterns** already implemented (EditorState, ObservableDict)
+- **Single entry points** designed for Marker setters ("Single entry point for debugging")
+- **Existing infrastructure** supports the changes with minimal disruption
+
+**See**: [DEBUG.md](docs/DEBUG.md) for detailed debugging methodology and State Viewer usage patterns.
 
 ## Related Documentation
 
