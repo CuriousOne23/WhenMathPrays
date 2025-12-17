@@ -203,6 +203,30 @@
 
 ---
 
+### P9: Type-Consistent Keying for State Dictionaries
+**Principle**: All state dictionaries must use consistent, immutable key types. Never mix types (e.g., int vs float) for the same logical entity.
+
+**Rationale**: Type mismatches in dictionary lookups cause silent failures that are hard to debug and don't scale. Immutable keys (e.g., IDs) prevent cascading updates on structural changes.
+
+**Application**:
+- Use `event_id` (int) for modification tracking, not `event_time` (float)
+- Document key types in data structure definitions
+- Prefer immutable keys over mutable ones (IDs over times/dates)
+
+**Validation Test**:
+```python
+# For every state dict:
+# - Keys are of consistent type (all int, all str, etc.)
+# - Keys are immutable (don't change on insert/delete)
+# - Lookup failures are logged/asserted in debug mode
+```
+
+**Violations**:
+- ❌ Using `event_time` (float) to check `modified_primitives` (keyed by `event_id` int)
+- ❌ Undocumented key type assumptions
+
+---
+
 ## Known Architectural Debt (December 7, 2025)
 
 ### Technical Debt from Phase 2.1 (Diagnostic Markers)

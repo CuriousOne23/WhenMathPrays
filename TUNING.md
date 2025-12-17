@@ -236,3 +236,13 @@ As this equation extends to new domains, this document will track weight adaptat
 
 *Last major revision: December 3, 2025 (Final Simplification)*  
 *Stewards: Grok 4, Claude Sonnet, CuriousOne*
+
+---
+
+## Marker/Label Display Logic (Dec 16, 2025)
+
+- Only markers that have been modified (moved away from baseline) display their labels in both the primitive and trajectory panels.
+- Labels remain visible for all modified markers, even if other markers are moved.
+- Labels disappear only when a marker is reset to its baseline (by double-click, Ctrl+Z, or moving it back).
+- No stray or unwanted labels appear when switching perspectives or moving unrelated markers.
+- This change improves clarity, aligns label visibility with user intent, and resolves previous bugs with label persistence and artifacts.
