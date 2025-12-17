@@ -484,6 +484,40 @@ plot_dual_scenario(
 
 ---
 
+## Reading Guide
+
+### For Application Users
+
+If you're using WhenMathPrays to create relationship scenarios or run simulations:
+
+1. **[README.md](README.md)** (15 min) - Overview, core equation, and quick start guide
+2. **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)** (20 min) - Complete reference for creating and customizing scenarios
+3. **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** (30 min) - Strategic vision and practical importance of the GRP framework
+4. **[PRINCIPLES.md](docs/PRINCIPLES.md)** (15 min) - Core design philosophy and foundational concepts
+
+**For the Interactive Editor:**
+- **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** (45 min) - Complete user guide for the interactive scenario editor
+- **[installation_4_interactive_editor.md](docs/installation_4_interactive_editor.md)** (10 min) - Installation and setup instructions
+
+### For Developers
+
+If you're contributing code, fixing bugs, or extending the system:
+
+1. **[README.md](README.md)** (15 min) - Project overview and core concepts
+2. **[ARCHITECTURE.md](ARCHITECTURE.md)** (30-45 min) - Overall system architecture, design principles, and MVC pattern
+3. **[docs/CONTENTS.md](docs/CONTENTS.md)** (10 min) - Complete documentation index with navigation
+4. **[docs/architecture/SOFTWARE_MODULES.md](docs/architecture/SOFTWARE_MODULES.md)** (20 min) - Detailed reference for all 20+ software modules and their I/O
+5. **[docs/architecture/05_CODING_GUIDELINES.md](docs/architecture/05_CODING_GUIDELINES.md)** (20 min) - Coding standards and best practices
+6. **[docs/INTERACTIVE_EDITOR_TESTING.md](docs/INTERACTIVE_EDITOR_TESTING.md)** (30 min) - Testing strategy and MVT quality standard
+7. **[DEBUG.md](docs/DEBUG.md)** (20 min) - Debugging guide, logging configuration, and troubleshooting
+
+**Essential Technical References:**
+- **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values and system constants
+- **[GRP_rev3.md](docs/GRP_rev3.md)** - Complete mathematical specification
+- **[TUNING.md](TUNING.md)** - Performance tuning and parameter calibration
+
+---
+
 ## What was restored
 
 | Feature                         | Old broken GRP | New final GRP (2025) |

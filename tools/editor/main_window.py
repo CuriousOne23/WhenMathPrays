@@ -251,7 +251,7 @@ class EditorMainWindow(QMainWindow):
         
         # Generate filename with timestamp
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        log_filename = f'state_log_{timestamp}.txt'
+        log_filename = f'state_log_{timestamp}.log'
         log_filepath = logs_dir / log_filename
         
         # Export state log using StateViewer

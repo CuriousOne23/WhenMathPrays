@@ -40,10 +40,10 @@ from tools.editor.baseline_protocol import (
 )
 
 # Import debug configuration
-from tools.editor.debug_config import get_debug_logger, DEBUG_SPINBOX
+from tools.editor.debug_config import get_logger, DEBUG_SPINBOX
 
 # Get logger for this module
-_logger = get_debug_logger('SPINBOX')
+_logger = get_logger('controller')
 
 
 class EditorController:
@@ -661,7 +661,7 @@ class EditorController:
             return  # Command.redo() will handle the update
         
         # If no undo stack or in undo/redo, apply directly
-        self._apply_primitive_change(event_index, primitive, value)
+        self._apply_primitive_change(event_index, primitive, value, self.perspective)
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         events = self.model.get_events(self.perspective)
@@ -829,11 +829,11 @@ class EditorController:
         # Use same path as on_primitive_changed (creates undo command, etc.)
         self.on_primitive_changed(event_index, primitive, new_value)
     
-    def _apply_primitive_change(self, event_index: int, primitive: str, value: float):
+    def _apply_primitive_change(self, event_index: int, primitive: str, value: float, perspective: str):
         # Global debug: print every call to this function
-        events = self.model.get_events(self.perspective)
+        events = self.model.get_events(perspective)
         event = events[event_index]
-        print(f"[DEBUG][GLOBAL] _apply_primitive_change called: event_idx={event_index}, time={event.time}, primitive={primitive}, value={value}")
+        print(f"[DEBUG][GLOBAL] _apply_primitive_change called: event_idx={event_index}, time={event.time}, primitive={primitive}, value={value}, perspective={perspective}")
         # Debug: log when S is processed for each event at 0.0 or 49.0
         import os
         if primitive == 'S' and (abs(event.time - 0.0) < 0.01 or abs(event.time - 49.0) < 0.01):
@@ -860,56 +860,56 @@ class EditorController:
             - Updates model.marker_positions for trajectory visualization
             - Triggers incremental UI update for the modified marker
         """
-        events = self.model.get_events(self.perspective)
+        events = self.model.get_events(perspective)
         event_time = events[event_index].time if event_index < len(events) else None
         self.observer.log('APPLY_PRIMITIVE_CHANGE', index=event_index, time=event_time, 
-                         primitive=primitive, value=f'{value:.2f}', perspective=self.perspective)
+                         primitive=primitive, value=f'{value:.2f}', perspective=perspective)
         
         # Commit the new value to the model
         self.model.update_primitive(event_index, primitive, value, self.perspective, preview=False)
         
         # Check if this value is back to baseline
-        events = self.model.get_events(self.perspective)
+        events = self.model.get_events(perspective)
         event = events[event_index]
         
         # Use ID-keyed baseline (immutable identity!)
         # Use .get() with default 0.0 for inserted events that may not have baseline yet
-        baseline_dict = self.baseline_by_id_m1 if self.perspective == "M1" else self.baseline_by_id_m2
+        baseline_dict = self.baseline_by_id_m1 if perspective == "M1" else self.baseline_by_id_m2
         baseline_value = baseline_dict.get((event.id, primitive), 0.0)
         
 
         
         if abs(value - baseline_value) < FLOAT_TOLERANCE:
             # Back to baseline, remove from modified set
-            modified_prims = self.model.get_modified_primitives(self.perspective)
+            modified_prims = self.model.get_modified_primitives(perspective)
             if event.id in modified_prims:
                 modified_prims[event.id].discard(primitive)
                 if not modified_prims[event.id]:
                     del modified_prims[event.id]
             # Update Marker object's modification state
-            event.markers[primitive].set_is_modified(self.perspective, False)
+            event.markers[primitive].set_is_modified(perspective, False)
             # Also remove marker position so it doesn't show on gamma_self graph
             marker_key = (event.id, primitive)
-            marker_positions = self.model.get_marker_positions(self.perspective)
+            marker_positions = self.model.get_marker_positions(perspective)
             if marker_key in marker_positions:
                 del marker_positions[marker_key]
             # Hide label for this marker
-            event.markers[primitive].set_label_visible(self.perspective, False)
+            event.markers[primitive].set_label_visible(perspective, False)
         else:
             # Modified, add to set
-            modified_prims = self.model.get_modified_primitives(self.perspective)
+            modified_prims = self.model.get_modified_primitives(perspective)
             if event.id not in modified_prims:
                 modified_prims[event.id] = set()
             modified_prims[event.id].add(primitive)
             # Update Marker object's modification state
-            event.markers[primitive].set_is_modified(self.perspective, True)
+            event.markers[primitive].set_is_modified(perspective, True)
             # Show label for this marker (do not hide others)
-            event.markers[primitive].set_label_visible(self.perspective, True)
+            event.markers[primitive].set_label_visible(perspective, True)
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
-        events = self.model.get_events(self.perspective)
-        primitives_data = self.model.get_primitives_array(self.perspective, include_preview=False)
+        events = self.model.get_events(perspective)
+        primitives_data = self.model.get_primitives_array(perspective, include_preview=False)
         times = primitives_data['time']
         data = {
             'v': primitives_data['v'],
@@ -927,24 +927,26 @@ class EditorController:
             gamma_trajectory.append(gamma_self)
         
         # Check if value is back at baseline (use perspective-aware baseline)
-        baseline_dict = self.baseline_by_id_m1 if self.perspective == "M1" else self.baseline_by_id_m2
+        baseline_dict = self.baseline_by_id_m1 if perspective == "M1" else self.baseline_by_id_m2
         baseline_value = baseline_dict.get((event.id, primitive), 0.0)
         at_baseline = abs(value - baseline_value) < 0.001  # Small tolerance for float comparison
 
-        # Always print debug for S at time 0 and 49
-        if primitive == 'S' and (abs(event.time - 0.0) < 0.01 or abs(event.time - 49.0) < 0.01):
+        # Always print debug for S primitive
+        if primitive == 'S':
             print(f"[DEBUG][S BASELINE] event_idx={event_index}, time={event.time}, value={value}, baseline={baseline_value}, at_baseline={at_baseline}")
         print(f"[BASELINE_CHECK] event_idx={event_index}, prim={primitive}, time={event.time}, value={value:.3f}, baseline={baseline_value:.3f}, at_baseline={at_baseline}")
         
         # Clear modification tracking if back at baseline
         if at_baseline:
             print(f"Primitive {event_index}/{primitive} (id={event.id}, time={event.time}) back to baseline, clearing modification")
-            self.model.clear_primitive_modification(event.id, primitive, self.perspective)
-            self.model.unpin_marker(event.id, primitive, self.perspective)
+            self.model.clear_primitive_modification(event.id, primitive, perspective)
+            self.model.unpin_marker(event.id, primitive, perspective)
+            # Hide the label since primitive is back to baseline
+            event.markers[primitive].set_label_visible(perspective, False)
             print(f"[BASELINE_CHECK] Cleared modification for ({event.id}, {primitive})")
         
         # Store marker position only if still modified (not back to baseline)
-        if self.model.is_primitive_modified(event_index, primitive, self.perspective):
+        if self.model.is_primitive_modified(event_index, primitive, perspective):
             marker_idx = event_index + 1 if event_index + 1 < len(gamma_trajectory) else event_index
             gamma_pos = gamma_trajectory[marker_idx]
             self.model.pin_marker(event.id, primitive, gamma_pos, self.perspective)
@@ -1035,16 +1037,16 @@ class EditorController:
         # Create undo command and push to stack (unless we're in undo/redo)
         if self.undo_stack and not self.state.is_in_undo_operation():
             from tools.editor.commands import ResetPrimitiveCommand
-            command = ResetPrimitiveCommand(self, event_index, primitive, old_value, baseline_value)
-            print(f"[UNDO] Pushing ResetPrimitiveCommand to stack (event={event_index}, prim={primitive}, {old_value:.2f}->{baseline_value:.2f})")
+            command = ResetPrimitiveCommand(self, event_id, primitive, baseline_value, self.perspective)
+            print(f"[UNDO] Pushing ResetPrimitiveCommand to stack (event={event_id}, prim={primitive}, {old_value:.2f}->{baseline_value:.2f})")
             self.undo_stack.push(command)
             print(f"[UNDO] Stack size now: {self.undo_stack.count()}, can undo: {self.undo_stack.canUndo()}")
             return  # Command.redo() will handle the update
         
         # If no undo stack or in undo/redo, apply directly
-        self._apply_primitive_reset(event_index, primitive, baseline_value)
+        self._apply_primitive_reset(event_index, primitive, baseline_value, self.perspective)
     
-    def _apply_primitive_reset(self, event_index: int, primitive: str, baseline_value: float):
+    def _apply_primitive_reset(self, event_index: int, primitive: str, baseline_value: float, perspective: str):
         """
         Apply primitive reset without undo tracking (used by undo commands).
         
@@ -1052,19 +1054,24 @@ class EditorController:
             event_index: Event index
             primitive: Primitive name
             baseline_value: Baseline value to reset to
+            perspective: Perspective (M1 or M2)
         """
+        print(f"_apply_primitive_reset called for event_idx={event_index}, primitive={primitive}, baseline_value={baseline_value}, perspective={perspective}")
         try:
             # Reset using Model's method (Phase 1 query interface)
-            self.model.reset_event_primitive(event_index, primitive, baseline_value, self.perspective)
+            self.model.reset_event_primitive(event_index, primitive, baseline_value, perspective)
             
-            event = self.model.get_event(event_index, self.perspective)
-            modified_prims = self.model.get_modified_primitives(self.perspective)
+            event = self.model.get_event(event_index, perspective)
+            modified_prims = self.model.get_modified_primitives(perspective)
             print(f"Reset complete. Event {event_index} (time={event.time}), modified_primitives: {modified_prims}")
+            
+            # Hide the label since primitive is reset to baseline
+            event.markers[primitive].set_label_visible(perspective, False)
             
             # Remove marker position for this primitive (using event ID, not time!)
             # NOTE: marker_positions uses (event_id, primitive) as keys
             marker_key = (event.id, primitive)
-            marker_positions = self.model.get_marker_positions(self.perspective)
+            marker_positions = self.model.get_marker_positions(perspective)
             if marker_key in marker_positions:
                 del marker_positions[marker_key]
                 print(f"Removed marker position for {marker_key} (event_id={event.id}, time={event.time})")
@@ -1073,7 +1080,7 @@ class EditorController:
             
             # === Phase 3: Incremental Update ===
             # Update only this marker in PrimitivePanel (O(1) operation)
-            is_modified = self.model.is_modified(event_index, primitive, self.perspective)
+            is_modified = self.model.is_modified(event_index, primitive, perspective)
             print(f"After reset, is_modified({event_index}, {primitive}) = {is_modified}")
             self.primitive_panel.update_marker(event_index, primitive, baseline_value, is_modified)
             

@@ -1,112 +1,142 @@
 """
-Centralized debug configuration for WhenMathPrays editor.
+Centralized logging configuration for WhenMathPrays editor.
 
-Provides category-based logging that can route to terminal, file, or both.
+Uses Python's standard logging module with configurable levels and file-only output.
 """
 
 import logging
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 
 # ============================================================================
-# Master Debug Controls
+# Logging Configuration
 # ============================================================================
 
-DEBUG_ENABLED = True      # Master switch - disables ALL debug output when False
-DEBUG_TO_FILE = True      # True=file, False=terminal
-DEBUG_TO_TERMINAL = False # Set True to enable terminal output alongside file
+# Get log level from environment variable, default to INFO
+LOG_LEVEL_ENV = os.getenv('LOG_LEVEL', 'INFO').upper()
+LOG_LEVEL = getattr(logging, LOG_LEVEL_ENV, logging.INFO)
 
-# ============================================================================
-# Category Flags - Enable/disable specific debug categories
-# ============================================================================
+# Create logs directory
+LOG_DIR = Path(__file__).parent.parent.parent / 'logs'
+LOG_DIR.mkdir(exist_ok=True)
 
-DEBUG_SPINBOX = False      # Spinbox primitive editor signal flow
-DEBUG_TRAJECTORY = False   # Trajectory computation and display
-DEBUG_LABELS = False       # Label synchronization and management
-DEBUG_LABELS_ASSIGNMENT = False  # Label assignment block (fine-grained)
-# When True, enables only the label assignment block debug output in trajectory_panel_pyqtgraph.py.
-# Use this for deep debugging of label placement logic without enabling all label debug output.
-DEBUG_GAMMA = False        # Gamma_self calculations
-DEBUG_STATE = False        # State save/restore operations
-DEBUG_UNDO = False         # Undo/redo operations
-DEBUG_DRAG = False         # Drag and drop operations
-DEBUG_BASELINE = False     # Baseline protocol
-DEBUG_SYNC = False         # Label sync operations
+# Generate timestamped log filename
+TIMESTAMP = datetime.now().strftime('%Y%m%d_%H%M%S')
+LOG_FILE = LOG_DIR / f'interactive_editor_{TIMESTAMP}.log'
 
 # ============================================================================
 # Logger Setup
 # ============================================================================
 
-_loggers = {}  # Cache for created loggers
+def setup_logging():
+    """
+    Configure Python logging for the application.
+    - Logs to file only (no terminal output by default)
+    - Uses configurable log level
+    - Includes timestamps and module names
+    """
+    # Create logger
+    logger = logging.getLogger('WhenMathPrays')
+    logger.setLevel(LOG_LEVEL)
 
-def get_debug_logger(category: str):
-    """
-    Get or create a logger for the specified category.
-    
-    Args:
-        category: Debug category (e.g., 'SPINBOX', 'TRAJECTORY')
-    
-    Returns:
-        Logger instance that respects category flags and routing settings
-    
-    Example:
-        logger = get_debug_logger('SPINBOX')
-        if DEBUG_SPINBOX:
-            logger.debug("Connection established")
-    """
-    if category in _loggers:
-        return _loggers[category]
-    
-    logger = logging.getLogger(f"WhenMathPrays.{category}")
-    logger.setLevel(logging.DEBUG if DEBUG_ENABLED else logging.CRITICAL)
-    logger.handlers.clear()  # Remove any existing handlers
-    
-    if DEBUG_ENABLED:
-        # Create formatter
-        formatter = logging.Formatter('[%(name)s] %(message)s')
-        
-        # Add file handler if enabled
-        if DEBUG_TO_FILE:
-            # Create logs directory if it doesn't exist
-            log_dir = Path(__file__).parent.parent.parent / 'logs'
-            log_dir.mkdir(exist_ok=True)
-            
-            # Use timestamped log file
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            log_file = log_dir / f'debug_{timestamp}.log'
-            
-            file_handler = logging.FileHandler(log_file, mode='a')
-            file_handler.setFormatter(formatter)
-            logger.addHandler(file_handler)
-        
-        # Add terminal handler if enabled
-        if DEBUG_TO_TERMINAL:
-            terminal_handler = logging.StreamHandler(sys.stdout)
-            terminal_handler.setFormatter(formatter)
-            logger.addHandler(terminal_handler)
-    
-    # Cache the logger
-    _loggers[category] = logger
+    # Remove any existing handlers
+    logger.handlers.clear()
+
+    # Create formatter
+    formatter = logging.Formatter(
+        '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+
+    # File handler (always enabled)
+    file_handler = logging.FileHandler(LOG_FILE, mode='a')
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    # Terminal handler (only if explicitly enabled)
+    if os.getenv('LOG_TO_TERMINAL', 'false').lower() == 'true':
+        terminal_handler = logging.StreamHandler(sys.stdout)
+        terminal_handler.setFormatter(formatter)
+        logger.addHandler(terminal_handler)
+
     return logger
 
+# Initialize logging
+_root_logger = setup_logging()
 
 # ============================================================================
 # Convenience Functions
 # ============================================================================
 
+def get_logger(name: str) -> logging.Logger:
+    """
+    Get a logger for the specified module/component.
+
+    Args:
+        name: Logger name (e.g., 'controller', 'commands.spinbox')
+
+    Returns:
+        Configured logger instance
+
+    Example:
+        logger = get_logger('controller')
+        logger.debug("Processing primitive change")
+        logger.info("File saved successfully")
+        logger.warning("Invalid input detected")
+        logger.error("Failed to load scenario")
+    """
+    return _root_logger.getChild(name)
+
+# ============================================================================
+# Legacy Debug System (for backward compatibility)
+# ============================================================================
+
+# Keep legacy flags for now, but route through new logging system
+DEBUG_ENABLED = LOG_LEVEL <= logging.DEBUG
+DEBUG_TO_FILE = True
+DEBUG_TO_TERMINAL = os.getenv('LOG_TO_TERMINAL', 'false').lower() == 'true'
+
+# Category flags - map to logging levels
+DEBUG_SPINBOX = LOG_LEVEL <= logging.DEBUG
+DEBUG_TRAJECTORY = LOG_LEVEL <= logging.DEBUG
+DEBUG_LABELS = LOG_LEVEL <= logging.DEBUG
+DEBUG_LABELS_ASSIGNMENT = LOG_LEVEL <= logging.DEBUG
+DEBUG_GAMMA = LOG_LEVEL <= logging.DEBUG
+DEBUG_STATE = LOG_LEVEL <= logging.DEBUG
+DEBUG_UNDO = LOG_LEVEL <= logging.DEBUG
+DEBUG_DRAG = LOG_LEVEL <= logging.DEBUG
+DEBUG_BASELINE = LOG_LEVEL <= logging.DEBUG
+DEBUG_SYNC = LOG_LEVEL <= logging.DEBUG
+
+_loggers = {}  # Cache for legacy loggers
+
+def get_debug_logger(category: str):
+    """
+    Legacy function for backward compatibility.
+    Use get_logger() for new code.
+    """
+    if category in _loggers:
+        return _loggers[category]
+
+    logger = get_logger(f'debug.{category.lower()}')
+    _loggers[category] = logger
+    return logger
+
 def debug_print(category: str, message: str, enabled_flag: bool = True):
     """
-    Print debug message if category is enabled.
-    
+    Legacy debug print function.
+    Use logger.debug() for new code.
+
     Args:
         category: Debug category
         message: Message to print
         enabled_flag: Category-specific flag (e.g., DEBUG_SPINBOX)
-    
+
     Example:
         debug_print('SPINBOX', f"Value changed: {value}", DEBUG_SPINBOX)
     """
-    if DEBUG_ENABLED and enabled_flag:
+    if enabled_flag:
         logger = get_debug_logger(category)
         logger.debug(message)

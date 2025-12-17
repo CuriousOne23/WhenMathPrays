@@ -10,6 +10,12 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Signal
 
+# Import debug configuration
+from tools.editor.debug_config import get_logger
+
+# Get logger for this module
+_logger = get_logger('gamma_self0_editor')
+
 
 class GammaSelf0Editor(QWidget):
     """
@@ -31,11 +37,11 @@ class GammaSelf0Editor(QWidget):
             initial_value: Initial gamma_self_0 value from CSV
         """
         super().__init__()
-        print(f"[GAMMA_WIDGET] __init__ called with initial_value={initial_value}")
+        _logger.debug(f"GAMMA_WIDGET: __init__ called with initial_value={initial_value}")
         self.original_value = initial_value
         self._setup_ui()
         self.set_value(initial_value)
-        print(f"[GAMMA_WIDGET] After set_value, spinboxes show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
+        _logger.debug(f"GAMMA_WIDGET: After set_value, spinboxes show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
     
     def _setup_ui(self):
         """Setup widget UI."""
@@ -115,10 +121,10 @@ class GammaSelf0Editor(QWidget):
         Args:
             value: Complex gamma_self_0 value
         """
-        print(f"[GAMMA_WIDGET] set_value called with {value}")
+        _logger.debug(f"GAMMA_WIDGET: set_value called with {value}")
         self.real_spinbox.setValue(value.real)
         self.imag_spinbox.setValue(value.imag)
-        print(f"[GAMMA_WIDGET] Spinboxes now show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
+        _logger.debug(f"GAMMA_WIDGET: Spinboxes now show: {self.real_spinbox.value()} + {self.imag_spinbox.value()}i")
     
     def get_value(self) -> complex:
         """Get current value from spinboxes."""

@@ -10,6 +10,10 @@ from typing import List, Optional, Dict
 from pathlib import Path
 from tools.editor.observable import ObservableDict
 from tools.editor.state_viewer import StateViewer
+from tools.editor.debug_config import get_logger
+
+# Get logger for this module
+_logger = get_logger('model')
 
 
 @dataclass
@@ -119,8 +123,8 @@ class EditorModel:
         """Get initial gamma_self position for the specified perspective."""
         import traceback
         result = self.gamma_self_0_m1 if perspective == "M1" else self.gamma_self_0_m2
-        print(f"[GET_GAMMA] perspective={perspective}, M1={self.gamma_self_0_m1}, M2={self.gamma_self_0_m2}, returning={result}")
-        print(f"[GET_GAMMA] Called from: {traceback.extract_stack()[-2]}")
+        _logger.debug(f"get_gamma_self_0: perspective={perspective}, M1={self.gamma_self_0_m1}, M2={self.gamma_self_0_m2}, returning={result}")
+        _logger.debug(f"get_gamma_self_0 called from: {traceback.extract_stack()[-2]}")
         return result
     
     def set_gamma_self_0(self, perspective: str, value: complex):
@@ -143,7 +147,7 @@ class EditorModel:
         # Pass current next_event_id as start_id for this perspective's events
         events, metadata, next_id = load_events_from_csv(filepath, start_id=self.next_event_id)
         self.next_event_id = next_id  # Update counter with next available ID
-        print(f"[DEBUG] EditorModel.load_csv: loaded {len(events)} events from {filepath}, next_event_id now {self.next_event_id}")
+        _logger.debug(f"EditorModel.load_csv: loaded {len(events)} events from {filepath}, next_event_id now {self.next_event_id}")
         
         # Apply metadata to model
         gamma_value = metadata.get('gamma_self_0', 0+0j)
@@ -151,11 +155,11 @@ class EditorModel:
         if perspective == "M1":
             self.gamma_self_0_m1 = gamma_value
             self.gamma_self_0_m1_original = gamma_value
-            print(f"[GAMMA_SELF_0] M1 set to: {gamma_value} from {Path(filepath).name}")
+            _logger.info(f"GAMMA_SELF_0: M1 set to: {gamma_value} from {Path(filepath).name}")
         else:
             self.gamma_self_0_m2 = gamma_value
             self.gamma_self_0_m2_original = gamma_value
-            print(f"[GAMMA_SELF_0] M2 set to: {gamma_value} from {Path(filepath).name}")
+            _logger.info(f"GAMMA_SELF_0: M2 set to: {gamma_value} from {Path(filepath).name}")
         
         self.time_unit = metadata.get('time_unit', 'days')
         
@@ -166,7 +170,7 @@ class EditorModel:
             else:
                 self.name_m2 = metadata['name']
         
-        print(f"[DEBUG] EditorModel.load_csv: gamma_self_0_{perspective.lower()} = {gamma_value}")
+        _logger.debug(f"EditorModel.load_csv: gamma_self_0_{perspective.lower()} = {gamma_value}")
         
         if perspective == "M1":
             self.events_m1 = events
@@ -195,7 +199,7 @@ class EditorModel:
 
         # Ensure marker and locked columns are set for edited/locked events
         modified_prims = self.get_modified_primitives(perspective)
-        print(f"[SAVE] modified_primitives before save: {modified_prims}")
+        _logger.debug(f"SAVE: modified_primitives before save: {modified_prims}")
         # Build time-to-index mapping
         time_to_idx = {evt.time: idx for idx, evt in enumerate(events)}
         for mod_time, mod_prims_set in modified_prims.items():
@@ -205,12 +209,12 @@ class EditorModel:
                 # Only set marker if not already set
                 if not event.marker:
                     event.marker = 'circle'
-                    print(f"[SAVE] Set marker='circle' for event at time {mod_time} (index {idx})")
+                    _logger.debug(f"SAVE: Set marker='circle' for event at time {mod_time} (index {idx})")
                 else:
-                    print(f"[SAVE] Event at time {mod_time} (index {idx}) already has marker='{event.marker}'")
+                    _logger.debug(f"SAVE: Event at time {mod_time} (index {idx}) already has marker='{event.marker}'")
                 # Always lock modified events
                 event.locked = True
-                print(f"[SAVE] Set locked=True for event at time {mod_time} (index {idx}), modified prims: {mod_prims_set}")
+                _logger.debug(f"SAVE: Set locked=True for event at time {mod_time} (index {idx}), modified prims: {mod_prims_set}")
 
         with open(filepath, 'w', newline='', encoding='utf-8') as f:
             # Write metadata if present
@@ -245,11 +249,11 @@ class EditorModel:
             }
         )
         
-        print(f"Saved {len(events)} events to {filepath}")
+        _logger.info(f"Saved {len(events)} events to {filepath}")
     
     def update_primitive(self, event_index: int, primitive: str, value: float, 
                         perspective: str = "M1", preview: bool = True) -> None:
-        print(f"[DEBUG] update_primitive called: event={event_index}, prim={primitive}, value={value}, preview={preview}")
+        _logger.debug(f"update_primitive called: event={event_index}, prim={primitive}, value={value}, preview={preview}")
         """
         Update a primitive value at specific event.
         
@@ -293,7 +297,7 @@ class EditorModel:
             if event_id not in modified_prims:
                 modified_prims[event_id] = set()
             modified_prims[event_id].add(primitive)
-            print(f"[MODEL_UPDATE][DIAG] After update: {modified_prims}")
+            _logger.debug(f"MODEL_UPDATE: After update: {modified_prims}")
 
             # Capture after state
             after_value = marker_obj.value
@@ -509,9 +513,9 @@ class EditorModel:
         modified_prims = self.get_modified_primitives(perspective)
         was_in_modified = deleted_event_id in modified_prims
         if was_in_modified:
-            print(f"[DELETE] Removing modifications for deleted event ID {deleted_event_id}")
+            _logger.debug(f"DELETE: Removing modifications for deleted event ID {deleted_event_id}")
             del modified_prims[deleted_event_id]
-        print(f"[DELETE] modified_primitives after delete: {modified_prims}")
+        _logger.debug(f"DELETE: modified_primitives after delete: {modified_prims}")
         
         # Capture after state
         after_count = len(events)
@@ -693,7 +697,7 @@ class EditorModel:
         
         # Clear the gamma_self position for this marker
         event.markers[prim].clear_gamma_position(perspective)
-        print(f"[MODEL_RESET] Cleared gamma position for event {event.id}, primitive {prim}, perspective {perspective}")
+        _logger.debug(f"MODEL_RESET: Cleared gamma position for event {event.id}, primitive {prim}, perspective {perspective}")
         
         # Remove from modified set (using event ID, not time!)
         # NOTE: modified_primitives uses event.id as keys, despite some confusion in comments
@@ -702,12 +706,12 @@ class EditorModel:
             modified_prims[event_id].discard(prim)
             if not modified_prims[event_id]:
                 del modified_prims[event_id]
-                print(f"[MODEL_RESET] Removed event {event_id} from modified_primitives (no more modified prims)")
+                _logger.debug(f"MODEL_RESET: Removed event {event_id} from modified_primitives (no more modified prims)")
             else:
-                print(f"[MODEL_RESET] Removed {prim} from event {event_id} modified set, remaining: {modified_prims[event_id]}")
+                _logger.debug(f"MODEL_RESET: Removed {prim} from event {event_id} modified set, remaining: {modified_prims[event_id]}")
         else:
-            print(f"[MODEL_RESET] Event {event_id} not in modified_primitives")
-        print(f"[MODEL_RESET][DIAG] After reset: {modified_prims}")
+            _logger.debug(f"MODEL_RESET: Event {event_id} not in modified_primitives")
+        _logger.debug(f"MODEL_RESET: After reset: {modified_prims}")
         
         # Capture after state
         after_value = marker.value
