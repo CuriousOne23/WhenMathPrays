@@ -6,6 +6,7 @@ Uses Qt's native graphics scene for real-time interactive updates.
 """
 
 import pyqtgraph as pg
+from tools.editor.views.trajectory_label_manager import TrajectoryLabelManager
 from PySide6.QtCore import Qt, Signal, QObject
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtGui import QColor
@@ -174,6 +175,31 @@ class DraggableScatterItem(pg.ScatterPlotItem):
 
 
 class PrimitivePanelPyQtGraph(QWidget):
+
+    def clear_all_plots(self):
+        """Remove only non-essential items (labels, lines, stray markers) from all plots to ensure a clean state, but keep core plot objects (scatter, baseline, overlay, line)."""
+        print("[CLEAR_ALL_PLOTS] Removing non-essential items from all plots before initial draw.")
+        from pyqtgraph import TextItem, InfiniteLine, ROI, LinearRegionItem
+        for prim, plot in self.plot_items.items():
+            # Keep references to core items
+            core_items = set()
+            if prim in self.scatter_items:
+                core_items.add(self.scatter_items[prim])
+            if prim in self.baseline_scatter_items:
+                core_items.add(self.baseline_scatter_items[prim])
+            if prim in self.overlay_scatter_items:
+                core_items.add(self.overlay_scatter_items[prim])
+            if prim in self.line_items:
+                core_items.add(self.line_items[prim])
+            if prim in self.overlay_line_items:
+                core_items.add(self.overlay_line_items[prim])
+            # Remove only non-core items
+            items_to_remove = [item for item in list(plot.items)
+                               if item not in core_items and isinstance(item, (TextItem, InfiniteLine, ROI, LinearRegionItem))]
+            for item in items_to_remove:
+                plot.removeItem(item)
+            print(f"[CLEAR_ALL_PLOTS] Plot '{prim}' non-essential items cleared. Items now: {len(plot.items)}")
+
     """
     PyQtGraph-based primitive panel with 5 plots stacked vertically.
     
@@ -207,33 +233,53 @@ class PrimitivePanelPyQtGraph(QWidget):
     primitive_preview_requested = Signal(int, str, float)  # event_idx, primitive, value (during drag)
     primitive_reset_requested = Signal(int, str)  # event_idx, primitive (double-click reset)
     
+
+    # Architectural: signal to indicate panel is fully constructed and ready for updates
+    panel_ready = Signal()
+
+    """
+    Architectural Visibility:
+    ------------------------
+    This panel emits explicit StateViewer events for all readiness transitions and for any skipped update_from_model calls due to not-ready state.
+    This ensures that even 'trivial' or deeply-buried UI readiness issues are always visible at the architectural/top level.
+    All such events are structured and include context for easy tracing and debugging.
+    """
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
+        # --- Diagnostic/Architectural fields: must be initialized before any method calls ---
+        self.diagnostic_markers = {}  # {primitive: DraggableScatterItem}
+        self.diagnostic_event_idx = None  # Current diagnostic event index
+        self.diagnostic_primitive = None  # Which primitive has the diagnostic marker
+
+        # Architectural: ready flag for update visibility
+        self.ready = False
+
         # Set white background globally
         pg.setConfigOption('background', 'w')
         pg.setConfigOption('foreground', 'k')
-        
+
         # Create layout
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(5)
-        
+
         # Create GraphicsLayoutWidget (container for plots)
         self.graphics_widget = pg.GraphicsLayoutWidget()
         self.graphics_widget.setBackground('w')
         self.layout.addWidget(self.graphics_widget)
-        
+
         # Class constants for compatibility with save methods
         self.PRIMITIVE_NAMES = PRIMITIVE_NAMES
         self.PRIMITIVE_LABELS = PRIMITIVE_LABELS
         self.PRIMITIVE_COLORS = PRIMITIVE_COLORS
-        
+
         # Phase 4 cleanup: Callback functions removed (now using signals only)
         # Kept as None for backward compatibility during transition
         self.on_primitive_preview = None
         self.on_primitive_reset = None
-        
+
         # Storage
         self.plot_items = {}  # {prim: PlotItem}
         self.scatter_items = {}  # {prim: DraggableScatterItem}
@@ -241,7 +287,32 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.line_items = {}  # {prim: PlotDataItem}
         self.overlay_line_items = {}  # {prim: PlotDataItem} - for inactive perspective (Phase 3.3)
         self.overlay_scatter_items = {}  # {prim: ScatterPlotItem} - for inactive perspective (Phase 3.3)
-        self.text_items = {}  # {(event_idx, prim): TextItem} - for trajectory markers
+        # Trajectory label manager for marker labels
+        self.trajectory_label_manager = None  # Will be initialized after plots
+
+        # Create plots and mark ready after complete
+        self._create_plots()
+        self.ready = True
+        print("[ARCH] PrimitivePanelPyQtGraph is now ready. diagnostic_markers keys:", list(self.diagnostic_markers.keys()))
+        # Architectural visibility: record ready state in StateViewer
+        try:
+            from tools.editor.state_viewer import StateViewer
+            StateViewer.record(
+                operation='panel_ready',
+                entity=('PrimitivePanelPyQtGraph',),
+                changes={'ready': (False, True), 'diagnostic_marker_keys': list(self.diagnostic_markers.keys())},
+                location='primitive_panel_pyqtgraph.py:__init__'
+            )
+        except Exception as e:
+            print(f"[ARCH] StateViewer record failed: {e}")
+        self.panel_ready.emit()
+
+    def _init_trajectory_label_manager(self):
+        # Assumes self.plot_items is already populated
+        # One manager per primitive
+        self.trajectory_label_manager = {}
+        for prim in self.plot_items:
+            self.trajectory_label_manager[prim] = TrajectoryLabelManager(self.plot_items[prim])
         self.modified_labels_m1 = {}  # {(event_time, prim): TextItem} - for M1 modified primitives
         self.modified_labels_m2 = {}  # {(event_time, prim): TextItem} - for M2 modified primitives
         self.current_perspective = 'M1'  # Track current perspective
@@ -251,36 +322,20 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.baseline_values = {}  # {(event_idx, prim): float}
         self.modified_markers = {}  # {event_idx: set of prims}
         
-        # Readout displays
-        self.primitive_readout = None
-        self.gamma_self_readout = None
-        
-        # Store scenario name for display
-        self.scenario_name = ''
-        self.name_label = None  # Will be created after plots
-        
-        # Diagnostic marker (shift+click anywhere on primitive plots)
-        self.diagnostic_markers = {}  # {primitive: DraggableScatterItem}
-        self.diagnostic_event_idx = None  # Current diagnostic event index
-        self.diagnostic_primitive = None  # Which primitive has the diagnostic marker
-        
-        # Phase 3 refactoring: Cache modified state locally (no controller access)
-        self._modified_state = {}  # {(event_idx, primitive): bool}
-        self._perspective = 'baseline'  # Current perspective ('baseline' or 'original')
-        
-        # Create 5 plots
-        self._create_plots()
-        
-        # Create readout gauges
-        self._create_readouts()
-        
-        # Set white background
-        pg.setConfigOption('background', 'w')
-        pg.setConfigOption('foreground', 'k')
-        
     def _create_plots(self):
         """Create 5 stacked primitive plots."""
         for i, prim in enumerate(PRIMITIVE_NAMES):
+            # Remove old items if they exist (prevents infinite accumulation)
+            if prim in self.plot_items:
+                plot = self.plot_items[prim]
+                # Remove old scatter, baseline, overlay, diagnostic_marker if present
+                for item_dict in [self.scatter_items, self.baseline_scatter_items, self.overlay_scatter_items, self.diagnostic_markers]:
+                    if prim in item_dict:
+                        try:
+                            plot.removeItem(item_dict[prim])
+                        except Exception as e:
+                            print(f"[CLEANUP] Could not remove old item for prim={prim}: {e}")
+            # Now create new plot if not already present
             # Create plot
             plot = self.graphics_widget.addPlot(row=i, col=0)
             plot.setYRange(-10, 10)
@@ -322,6 +377,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 100)
             )
             overlay_scatter.setZValue(-5)  # Below active data
+            print(f"[ADD_ITEM] overlay_scatter: prim={prim}, type={type(overlay_scatter).__name__}")
             plot.addItem(overlay_scatter)
             
             # Create baseline scatter (filled, semi-transparent)
@@ -330,6 +386,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 pen=pg.mkPen(color, width=LINE_WIDTH_NORMAL_MARKER),
                 brush=pg.mkBrush(color.red(), color.green(), color.blue(), 128)
             )
+            print(f"[ADD_ITEM] baseline_scatter: prim={prim}, type={type(baseline_scatter).__name__}")
             plot.addItem(baseline_scatter)
             
             # Create scatter plot (draggable points)
@@ -339,6 +396,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 brush=pg.mkBrush(color)
             )
             scatter.setZValue(10)  # Place above diagnostic markers for click priority
+            print(f"[ADD_ITEM] scatter: prim={prim}, type={type(scatter).__name__}")
             plot.addItem(scatter)
             
             # Connect signals
@@ -375,6 +433,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                 is_diagnostic=True  # Mark as diagnostic so it can be ignored for normal clicks
             )
             diagnostic_marker.setZValue(-1)  # Place below committed markers so they get priority
+            print(f"[ADD_ITEM] diagnostic_marker: prim={prim}, type={type(diagnostic_marker).__name__}")
             plot.addItem(diagnostic_marker)
             
             # Connect diagnostic marker signals for drag tracking
@@ -392,6 +451,11 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         # Create name label (at top of panel)
         self._create_name_label()
+
+        # Initialize trajectory label managers for each primitive
+        self._init_trajectory_label_manager()
+
+        print(f"[DEBUG] _create_plots complete. diagnostic_markers keys: {list(self.diagnostic_markers.keys())}")
     
     def _create_name_label(self):
         """Create label to display scenario name."""
@@ -414,8 +478,10 @@ class PrimitivePanelPyQtGraph(QWidget):
         self.graphics_widget.scene().sigMouseClicked.connect(self._on_mouse_clicked)
     
     def set_scenario_name(self, name: str):
-        """Update the name label with scenario name."""
+        """Update the name label with scenario name. Ensures name_label is initialized."""
         self.scenario_name = name
+        if not hasattr(self, 'name_label') or self.name_label is None:
+            self._create_name_label()
         if self.name_label:
             if name:
                 self.name_label.setText(name)
@@ -448,12 +514,14 @@ class PrimitivePanelPyQtGraph(QWidget):
         old_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
         print(f"[PRIMITIVE_LABELS] Hiding {len(old_labels)} labels for {self.current_perspective}")
         for (event_time, prim), text_item in old_labels.items():
+            print(f"[REMOVE_ITEM] switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             self.plot_items[prim].removeItem(text_item)
         
         # Show new perspective labels (add to plot)
         new_labels = self.modified_labels_m1 if perspective == 'M1' else self.modified_labels_m2
         print(f"[PRIMITIVE_LABELS] Showing {len(new_labels)} labels for {perspective}")
         for (event_time, prim), text_item in new_labels.items():
+            print(f"[ADD_ITEM] switch_perspective_labels: prim={prim}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             self.plot_items[prim].addItem(text_item)
         
         # Update current perspective
@@ -506,14 +574,37 @@ class PrimitivePanelPyQtGraph(QWidget):
         Args:
             events: List of Event objects
         """
+        print("[DEBUG] Entered update_from_model")
+        if not getattr(self, 'ready', False):
+            print("[ARCH] update_from_model called before panel ready; skipping update.")
+            # Architectural visibility: record skipped update in StateViewer
+            try:
+                from tools.editor.state_viewer import StateViewer
+                StateViewer.record(
+                    operation='update_skipped_not_ready',
+                    entity=('PrimitivePanelPyQtGraph',),
+                    changes={'ready': False, 'event_count': len(events)},
+                    location='primitive_panel_pyqtgraph.py:update_from_model'
+                )
+            except Exception as e:
+                print(f"[ARCH] StateViewer record failed: {e}")
+            return
         import time
         t0 = time.time()
-        
+
+        # (clear_all_plots temporarily disabled for debugging primitive plot disappearance)
+        # self.clear_all_plots()
+
         # Clear diagnostic markers to prevent ghost images from previous edits or perspective switches
+        if not hasattr(self, 'diagnostic_markers') or not self.diagnostic_markers:
+            print("[DEBUG] update_from_model: diagnostic_markers not initialized or empty, returning early")
+            return
+        print("[DEBUG] diagnostic_markers present, continuing")
         for prim in PRIMITIVE_NAMES:
-            self.diagnostic_markers[prim].setVisible(False)
-            self.diagnostic_markers[prim].setData([], [])
-        
+            if prim in self.diagnostic_markers:
+                self.diagnostic_markers[prim].setVisible(False)
+                self.diagnostic_markers[prim].setData([], [])
+
         # Also clear scatter items to ensure no ghost markers from previous perspective
         # This is critical for preventing cross-perspective contamination
         for prim in PRIMITIVE_NAMES:
@@ -533,11 +624,10 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         self.events_data = events
         
-        # Clear old text labels (trajectory markers)
-        for text_item in self.text_items.values():
-            for plot in self.plot_items.values():
-                plot.removeItem(text_item)
-        self.text_items.clear()
+        # Clear old text labels (trajectory markers) using label manager
+        if self.trajectory_label_manager:
+            for prim, manager in self.trajectory_label_manager.items():
+                manager.clear()
         
         # NOTE: modified_labels uses time-based keys and survives insertion/deletion
         # No need to clear - labels stay valid across structural changes
@@ -563,30 +653,31 @@ class PrimitivePanelPyQtGraph(QWidget):
                     pen=pg.mkPen('k', width=1, style=Qt.DashLine),
                     movable=False
                 )
+                print(f"[ADD_ITEM] line: prim={prim}, type={type(line).__name__}")
                 plot.addItem(line)
                 self.inserted_lines.append(line)
         
         for prim in PRIMITIVE_NAMES:
             times = np.array([event.time for event in events])
             values = np.array([event.markers[prim].value for event in events])
-            
+            print(f"[DEBUG] setData line_items[{prim}]: times={times}, values={values}")
             # Update line
             self.line_items[prim].setData(times, values)
-            
+
             # Prepare styling based on modifications
             brushes = []
             pens = []
             baseline_times = []
             baseline_values_list = []
-            
+
             color = QColor(PRIMITIVE_COLORS[prim])
             for event_idx, event in enumerate(events):
                 # Phase 3 refactoring: Use cached modified state (no controller access)
                 is_modified = self._modified_state.get((event_idx, prim), False)
-                
+
                 # Check if this is an inserted event (all primitives = 0, not first/last)
                 is_inserted = is_inserted_event(event, exclude_first_last=True, event_idx=event_idx, total_events=len(events))
-                
+
                 if is_inserted:
                     # Inserted events: Cyan/turquoise fill to indicate "needs editing"
                     brushes.append(pg.mkBrush(0, 200, 200, 180))  # Bright cyan, semi-transparent
@@ -595,7 +686,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     # Hollow marker (no fill, thick border)
                     brushes.append(pg.mkBrush(None))
                     pens.append(pg.mkPen(color, width=2))
-                    
+
                     # Show baseline position
                     baseline_val = self.baseline_values.get((event_idx, prim))
                     if baseline_val is not None and abs(baseline_val - event.markers[prim].value) > FLOAT_TOLERANCE:
@@ -605,7 +696,8 @@ class PrimitivePanelPyQtGraph(QWidget):
                     # Filled marker
                     brushes.append(pg.mkBrush(color))
                     pens.append(pg.mkPen('k', width=1))
-            
+
+            print(f"[DEBUG] setData scatter_items[{prim}]: x={times}, y={values}, brush={brushes}, pen={pens}")
             # Update scatter points - setData replaces old data automatically
             self.scatter_items[prim].setData(
                 x=times,
@@ -629,6 +721,8 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         # Sync labels from marker state (pull pattern - marker is source of truth)
         self._sync_labels_from_markers(events)
+
+        # Do not force all labels visible; label visibility is now managed by the controller
         
         t1 = time.time()
         print(f"[PYQTGRAPH] update_from_model: {(t1-t0)*1000:.1f}ms for {len(events)} events")
@@ -703,10 +797,24 @@ class PrimitivePanelPyQtGraph(QWidget):
         event_time = self.events_data[event_index].time
         key = (event_time, primitive)
         modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
+        updated = False
         if key in modified_labels:
             text_item = modified_labels[key]
             text_item.setPos(event_time, value)
             print(f"[UPDATE_MARKER] Updated label position for {key} to ({event_time}, {value:.2f})")
+            updated = True
+        # If not in modified_labels, search for the TextItem in the plot and update its position
+        if not updated:
+            for item in self.plot_items[primitive].items:
+                if type(item).__name__ == 'TextItem':
+                    label_text = f"{event_time:.1f}/{primitive}"
+                    if hasattr(item, 'toPlainText') and item.toPlainText() == label_text:
+                        item.setPos(event_time, value)
+                        print(f"[UPDATE_MARKER] Fallback: Updated label position for {key} to ({event_time}, {value:.2f})")
+                        break
+
+        # After updating, sync label visibility so only the moved marker's label is visible
+        self._sync_labels_from_markers(self.events_data)
     
     def update_markers(self, marked_data=None):
         """
@@ -753,22 +861,29 @@ class PrimitivePanelPyQtGraph(QWidget):
         """
         self.overlay_events_data = overlay_events
         
+        if not hasattr(self, 'overlay_line_items') or not hasattr(self, 'overlay_scatter_items'):
+            # Defensive: skip if not yet initialized
+            return
         if overlay_events is None or len(overlay_events) == 0:
             # Hide overlay - clear first to remove all items
             for prim in PRIMITIVE_NAMES:
-                self.overlay_line_items[prim].setData([], [])
-                self.overlay_scatter_items[prim].clear()
-                self.overlay_scatter_items[prim].setData([], [])
+                if prim in self.overlay_line_items:
+                    self.overlay_line_items[prim].setData([], [])
+                if prim in self.overlay_scatter_items:
+                    self.overlay_scatter_items[prim].clear()
+                    self.overlay_scatter_items[prim].setData([], [])
             return
-        
+
         # Update overlay with faded/dotted style
         for prim in PRIMITIVE_NAMES:
+            if prim not in self.overlay_line_items or prim not in self.overlay_scatter_items:
+                continue
             times = np.array([event.time for event in overlay_events])
             values = np.array([event.markers[prim].value for event in overlay_events])
-            
+
             # Update overlay line (dotted, faded)
             self.overlay_line_items[prim].setData(times, values)
-            
+
             # Update overlay scatter (faded, non-interactive) - clear first
             self.overlay_scatter_items[prim].clear()
             color = QColor(PRIMITIVE_COLORS[prim])
@@ -790,9 +905,14 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         # Build set of what SHOULD be visible from marker state
         should_be_visible = set()
-        for event in events:
+        for event_idx, event in enumerate(events):
             for prim in ['v', 'r', 'f', 'a', 'S']:
-                if event.markers[prim].get_label_visible(self.current_perspective):
+                visible = event.markers[prim].get_label_visible(self.current_perspective)
+                if prim == 'v':
+                    print(f"[DIAG] view: event_idx={event_idx}, time={event.time}, Visibility get_label_visible={visible}")
+                if prim == 'S':
+                    print(f"[DIAG][S] event_idx={event_idx}, time={event.time}, perspective={self.current_perspective}, get_label_visible={visible}, marker_obj={event.markers[prim]}")
+                if visible:
                     should_be_visible.add((event.time, prim))
         
         print(f"[SYNC_LABELS] should_be_visible = {should_be_visible}")
@@ -808,10 +928,18 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         for key in to_remove:
             text_item = modified_labels[key]
-            print(f"[SYNC_LABELS] Removing {key}, object={id(text_item)}")
+            print(f"[REMOVE_ITEM] _sync_labels_from_markers: key={key}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             for plot in self.plot_items.values():
                 plot.removeItem(text_item)
             del modified_labels[key]
+
+        # After all label add/remove operations:
+        # Print all current TextItems on every plot
+        for prim, plot in self.plot_items.items():
+            text_items = [item for item in plot.items if type(item).__name__ == 'TextItem']
+            print(f"[LABEL_INVENTORY] Plot '{prim}': {len(text_items)} TextItems")
+            for idx, item in enumerate(text_items):
+                print(f"[LABEL_INVENTORY]   TextItem {idx}: text='{getattr(item, 'toPlainText', lambda: '?')()}', pos={getattr(item, 'pos', lambda: '?')()}, id={id(item)}")
         
         # Add labels that should be visible but aren't
         to_add = []
@@ -825,9 +953,18 @@ class PrimitivePanelPyQtGraph(QWidget):
         print(f"[SYNC_LABELS] to_add = {[(t, p) for t, p, v in to_add]}")
         
         for event_time, prim, value in to_add:
-            self._add_marker_label(event_time, prim, value)
+            # Actually create and add label TextItems for primitive panel markers
+            from pyqtgraph import TextItem
+            label_text = f"{event_time:.1f}/{prim}"
+            text_item = TextItem(label_text, anchor=(0.5, 1.2), color=PRIMITIVE_COLORS[prim])
+            text_item.setPos(event_time, value)
+            self.plot_items[prim].addItem(text_item)
+            modified_labels[(event_time, prim)] = text_item
         
         print(f"[SYNC_LABELS] modified_labels keys AFTER sync = {set(modified_labels.keys())}")
+        # Print all currently visible labels with their values
+        for key, text_item in modified_labels.items():
+            print(f"[SYNC_LABELS] ACTIVE LABEL: key={key}, text='{text_item.toPlainText()}', pos={text_item.pos()}")
         print(f"[SYNC_LABELS] ===== Sync complete =====\n")
     
     def remove_marker_label(self, event_time, primitive):
@@ -840,8 +977,12 @@ class PrimitivePanelPyQtGraph(QWidget):
         key = (event_time, primitive)
         modified_labels = self.modified_labels_m1 if self.current_perspective == 'M1' else self.modified_labels_m2
         print(f"[PANEL_REMOVE] remove_marker_label called: key={key}, perspective={self.current_perspective}, key_exists={key in modified_labels}")
+        # Print all currently visible labels before removal
+        for k, text_item in modified_labels.items():
+            print(f"[PANEL_REMOVE] BEFORE REMOVE: key={k}, text='{text_item.toPlainText()}', pos={text_item.pos()}")
         if key in modified_labels:
             text_item = modified_labels[key]
+            print(f"[REMOVE_ITEM] remove_marker_label: prim={primitive}, type={type(text_item).__name__}, text='{getattr(text_item, 'toPlainText', lambda: '?')()}', pos={getattr(text_item, 'pos', lambda: '?')()}")
             self.plot_items[primitive].removeItem(text_item)
             del modified_labels[key]
             print(f"[PANEL_REMOVE] Successfully removed label for {key}")
@@ -919,6 +1060,7 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         print(f"[LABEL_ADD] Created new label object: {id(text)}")
         text.setPos(event_time, value)
+        print(f"[ADD_ITEM] _add_marker_label: prim={primitive}, type={type(text).__name__}, text='{text.toPlainText()}', pos={text.pos()}")
         self.plot_items[primitive].addItem(text)
         modified_labels[key] = text
         
@@ -943,20 +1085,20 @@ class PrimitivePanelPyQtGraph(QWidget):
         print(f"{'='*80}\n")
     
     def _add_trajectory_marker_label(self, event_idx, primitive, x, y):
-        """Add a timestamp label for a trajectory marker (red-bordered markers from trajectory clicks)."""
+        """Add a timestamp label for a trajectory marker (red-bordered markers from trajectory clicks) using the label manager."""
         key = (event_idx, primitive)
-        
-        # Create label with red border and timestamp (x is the time)
-        text = pg.TextItem(
+        manager = self.trajectory_label_manager[primitive]
+        label = manager.add_label(
+            key=key,
             text=str(x),
+            x=x,
+            y=y,
             color='red',
-            anchor=(0, 1),
-            border=pg.mkPen('red', width=LINE_WIDTH_LABEL_BORDER),
-            fill=pg.mkBrush(255, 255, 255, 200)
+            border_pen=pg.mkPen('red', width=LINE_WIDTH_LABEL_BORDER),
+            fill_brush=pg.mkBrush(255, 255, 255, 200)
         )
-        text.setPos(x, y)
-        self.plot_items[primitive].addItem(text)
-        self.text_items[key] = text
+        print(f"[TRAJ_LABEL_ADD] event_idx={event_idx}, prim={primitive}, text='{label.toPlainText()}', pos={label.pos()} (x={x}, y={y})")
+        print(f"[TRAJ_LABEL_DICT] manager.all_labels: {list(manager.all_labels().keys())}")
     
     def _create_readouts(self):
         """Create readout displays (primitive readout removed - replaced by spinbox editor)."""

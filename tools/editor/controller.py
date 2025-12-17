@@ -1,3 +1,12 @@
+    # Global debug: show which primitives are being processed for each event
+    # This should be inside the method where events are iterated, not at the top level
+
+    # (Find the main event loop, e.g., in _apply_primitive_change or similar)
+    # Example placement inside the event loop:
+    # for event_index, event in enumerate(events):
+    #     for primitive, value in event.primitives.items():
+    #         if primitive == 'S' and (abs(event.time - 0.0) < 0.01 or abs(event.time - 49.0) < 0.01):
+    #             print(f"[DEBUG][LOOP] event_idx={event_index}, time={event.time}, primitive={primitive}, value={value}")
 """
 Controller for interactive scenario editor.
 
@@ -821,6 +830,19 @@ class EditorController:
         self.on_primitive_changed(event_index, primitive, new_value)
     
     def _apply_primitive_change(self, event_index: int, primitive: str, value: float):
+        # Global debug: print every call to this function
+        events = self.model.get_events(self.perspective)
+        event = events[event_index]
+        print(f"[DEBUG][GLOBAL] _apply_primitive_change called: event_idx={event_index}, time={event.time}, primitive={primitive}, value={value}")
+        # Debug: log when S is processed for each event at 0.0 or 49.0
+        import os
+        if primitive == 'S' and (abs(event.time - 0.0) < 0.01 or abs(event.time - 49.0) < 0.01):
+            log_dir = os.path.join(os.path.dirname(__file__), '../../logs')
+            os.makedirs(log_dir, exist_ok=True)
+            log_path = os.path.join(log_dir, 'debug_S_baseline.log')
+            print(f"[DEBUG][APPLY_PRIMITIVE_CHANGE] About to log S at event_idx={event_index}, time={event.time}, value={value}")
+            with open(log_path, 'a') as f:
+                f.write(f"[DEBUG][APPLY_PRIMITIVE_CHANGE] event_idx={event_index}, time={event.time}, primitive={primitive}, value={value}\n")
         """
         Apply primitive change without undo tracking (used by undo commands).
         
@@ -864,17 +886,14 @@ class EditorController:
                 modified_prims[event.id].discard(primitive)
                 if not modified_prims[event.id]:
                     del modified_prims[event.id]
-            
             # Update Marker object's modification state
             event.markers[primitive].set_is_modified(self.perspective, False)
-            
             # Also remove marker position so it doesn't show on gamma_self graph
             marker_key = (event.id, primitive)
             marker_positions = self.model.get_marker_positions(self.perspective)
             if marker_key in marker_positions:
                 del marker_positions[marker_key]
-            
-            # Update Marker state: label should be hidden (view will sync from this)
+            # Hide label for this marker
             event.markers[primitive].set_label_visible(self.perspective, False)
         else:
             # Modified, add to set
@@ -882,9 +901,10 @@ class EditorController:
             if event.id not in modified_prims:
                 modified_prims[event.id] = set()
             modified_prims[event.id].add(primitive)
-            
             # Update Marker object's modification state
             event.markers[primitive].set_is_modified(self.perspective, True)
+            # Show label for this marker (do not hide others)
+            event.markers[primitive].set_label_visible(self.perspective, True)
         
         # Store marker position from committed trajectory (only if still modified)
         # First compute trajectory to get the position
@@ -910,7 +930,10 @@ class EditorController:
         baseline_dict = self.baseline_by_id_m1 if self.perspective == "M1" else self.baseline_by_id_m2
         baseline_value = baseline_dict.get((event.id, primitive), 0.0)
         at_baseline = abs(value - baseline_value) < 0.001  # Small tolerance for float comparison
-        
+
+        # Always print debug for S at time 0 and 49
+        if primitive == 'S' and (abs(event.time - 0.0) < 0.01 or abs(event.time - 49.0) < 0.01):
+            print(f"[DEBUG][S BASELINE] event_idx={event_index}, time={event.time}, value={value}, baseline={baseline_value}, at_baseline={at_baseline}")
         print(f"[BASELINE_CHECK] event_idx={event_index}, prim={primitive}, time={event.time}, value={value:.3f}, baseline={baseline_value:.3f}, at_baseline={at_baseline}")
         
         # Clear modification tracking if back at baseline
@@ -932,13 +955,10 @@ class EditorController:
         is_modified = self.model.is_primitive_modified(event_index, primitive, self.perspective)
         
         # Update Marker state for label visibility (view will sync from this)
+        # (No longer globally hiding all other labels; only update the marker being changed)
         event = self.model.get_event(event_index, self.perspective)
-        if is_modified:
-            # Marker state: label should be visible (view pulls from this)
-            event.markers[primitive].set_label_visible(self.perspective, True)
-        else:
-            # Marker state: label should be hidden (view pulls from this)
-            event.markers[primitive].set_label_visible(self.perspective, False)
+        if primitive == 'v':
+            print(f"[DIAG] controller: Setting label_visible for Visibility (event_idx={event_index}, is_modified={is_modified})")
         
         # If this was undo/redo, force visual update of all markers after label changes
         if self.in_undo_redo:
@@ -1869,52 +1889,57 @@ class EditorController:
                     marked_data[event_idx] = set()
                 marked_data[event_idx].update(prim_dict.keys())
         
-        # Build pinned marker positions for gamma_self display
-        # Format: [(event_idx, primitive, x, y, color), ...]
-        # Use perspective-specific marker_positions - no filtering needed
+
+        # Only show pinned_markers after user moves a primitive (i.e., if there are modifications)
         pinned_markers = []
         self.primitive_to_gamma_self.clear()
-        # For each marker, find the gamma_self trajectory index that matches the event and primitive
-        marker_positions = self.model.get_marker_positions(self.perspective)
-        events = self.model.get_events(self.perspective)
-        # Add labels for any edited primitive (auto-pin on edit)
-        for (event_time, prim), gamma_pos in marker_positions.items():
+        has_modifications = bool(self.model.get_modified_primitives(self.perspective)) or (preview_mode and self.model.preview_changes)
+        if has_modifications:
+            marker_positions = self.model.get_marker_positions(self.perspective)
             events = self.model.get_events(self.perspective)
-            event_idx = None
-            event_id = None
-            matched_event_time = None
-            # Match on event time only (as in previous working logic)
-            for idx, evt in enumerate(events):
-                if abs(evt.time - event_time) < 1e-6:
-                    event_idx = idx
-                    event_id = evt.id
-                    matched_event_time = evt.time
-                    break
-            if event_idx is None:
-                continue  # Event was deleted
-
-            gamma_traj_idx = event_idx + 1
-            if gamma_traj_idx >= len(gamma_trajectory):
-                gamma_traj_idx = len(gamma_trajectory) - 1
-            gamma_val = gamma_trajectory[gamma_traj_idx]
             prim_colors = {'v': '#1f77b4', 'r': '#ff7f0e', 'f': '#2ca02c', 'a': '#d62728', 'S': '#9467bd'}
-            label_time = matched_event_time if matched_event_time is not None else event_time
-            marker = {
-                'event_idx': event_idx,
-                'primitive': prim,
-                'x': gamma_val.real,
-                'y': gamma_val.imag,
-                'color': prim_colors.get(prim, 'orange'),
-                'label': f"{label_time}/{prim}"
-            }
-            pinned_markers.append(marker)
-            if event_id is not None:
+            modified_prims = self.model.get_modified_primitives(self.perspective)
+            for (event_time, prim), gamma_pos in marker_positions.items():
+                event_idx = None
+                event_id = None
+                matched_event_time = None
+                for idx, evt in enumerate(events):
+                    if abs(evt.time - event_time) < 1e-6:
+                        event_idx = idx
+                        event_id = evt.id
+                        matched_event_time = evt.time
+                        break
+                if event_idx is None or event_id is None:
+                    continue  # Event was deleted
+                # Only show marker if this event_id/prim is actually modified
+                if event_id not in modified_prims or prim not in modified_prims[event_id]:
+                    continue
+                gamma_traj_idx = event_idx + 1
+                if gamma_traj_idx >= len(gamma_trajectory):
+                    gamma_traj_idx = len(gamma_trajectory) - 1
+                gamma_val = gamma_trajectory[gamma_traj_idx]
+                label_time = matched_event_time if matched_event_time is not None else event_time
+                label_text = f"{label_time}/{prim}"
+                print(f"[DEBUG][PINNED_MARKER_LABEL] Creating marker label: event_idx={event_idx}, event_time={event_time}, event_id={event_id}, matched_event_time={matched_event_time}, primitive={prim}, label_text='{label_text}'")
+                marker = {
+                    'event_idx': event_idx,
+                    'primitive': prim,
+                    'x': gamma_val.real,
+                    'y': gamma_val.imag,
+                    'color': prim_colors.get(prim, 'orange'),
+                    'label': label_text
+                }
+                pinned_markers.append(marker)
                 self.primitive_to_gamma_self[(event_id, prim)] = {
                     'trajectory_idx': gamma_traj_idx,
                     'x': gamma_val.real,
                     'y': gamma_val.imag,
                     'label': marker['label']
                 }
+
+        # Restore label visibility for all events of the current primitive in the primitive panel
+        # This ensures all event markers for the selected primitive are visible in the primitive panel
+        # (Do not restrict label visibility globally)
         
         # Find gamma position to display in gauge
         # NOTE: preview_gamma is only for the trajectory plot preview marker, NOT the gauge

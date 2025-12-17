@@ -9,7 +9,17 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
+            "console": "externalTerminal"
+        },
+        {
+            "name": "Run Interactive Editor (single_dating_to_love_M1)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/interactive_editor.py",
+            "args": [
+                "data/library/love/single_dating_to_love_M1.csv"
+            ],
+            "console": "externalTerminal"
         }
     ]
 }

@@ -293,6 +293,7 @@ class EditorModel:
             if event_id not in modified_prims:
                 modified_prims[event_id] = set()
             modified_prims[event_id].add(primitive)
+            print(f"[MODEL_UPDATE][DIAG] After update: {modified_prims}")
 
             # Capture after state
             after_value = marker_obj.value
@@ -706,6 +707,7 @@ class EditorModel:
                 print(f"[MODEL_RESET] Removed {prim} from event {event_id} modified set, remaining: {modified_prims[event_id]}")
         else:
             print(f"[MODEL_RESET] Event {event_id} not in modified_primitives")
+        print(f"[MODEL_RESET][DIAG] After reset: {modified_prims}")
         
         # Capture after state
         after_value = marker.value
