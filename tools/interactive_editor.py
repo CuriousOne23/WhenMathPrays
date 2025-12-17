@@ -232,6 +232,8 @@ class InteractiveEditor:
         from tools.editor.widgets import PerspectiveSwitcher
         self.perspective_switcher = PerspectiveSwitcher()
         self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
+        # Move perspective switcher to toolbar in main window after window is created
+        self.window.add_perspective_switcher(self.perspective_switcher)
         
         # Entropy parameter editors
         from tools.editor.widgets import EntropyAttractorEditor, EntropyAmountEditor
@@ -293,7 +295,7 @@ class InteractiveEditor:
         dock_layout = QVBoxLayout()
         dock_layout.setSpacing(5)  # Reduce spacing between widgets
         dock_layout.setContentsMargins(5, 5, 5, 5)  # Reduce margins
-        dock_layout.addWidget(self.perspective_switcher)  # Phase 3.2: Add perspective switcher at top
+        # Perspective switcher is now in the toolbar, not in the controls dock
         dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
         dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
         dock_layout.addWidget(self.gamma_self0_editor)
@@ -492,18 +494,36 @@ class InteractiveEditor:
     
     def _handle_zoom_in(self):
         """Handle zoom in toolbar button - zoom all panels uniformly."""
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_in",
+            entity=(),
+            location="interactive_editor.py:_handle_zoom_in"
+        )
         self.trajectory_panel.zoom_in()
         self.controller.primitive_panel.zoom_in()
         self.window.show_message("Zoomed in (all panels)")
     
     def _handle_zoom_out(self):
         """Handle zoom out toolbar button - zoom all panels uniformly."""
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_out",
+            entity=(),
+            location="interactive_editor.py:_handle_zoom_out"
+        )
         self.controller.trajectory_panel.zoom_out()
         self.controller.primitive_panel.zoom_out()
         self.window.show_message("Zoomed out (all panels)")
     
     def _handle_zoom_reset(self):
         """Handle reset view toolbar button - reset both panels."""
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_reset",
+            entity=(),
+            location="interactive_editor.py:_handle_zoom_reset"
+        )
         self.controller.trajectory_panel.reset_view()
         self.controller.primitive_panel.reset_view()
         self.controller.primitive_panel.clear_readout()
@@ -537,7 +557,23 @@ class InteractiveEditor:
 
     
     def _on_primitive_changed(self, event_index, primitive, value):
-        """Handle primitive change from primitive panel (on release)."""
+        """
+        Handle primitive value change from UI drag (on release - commit to model).
+        
+        Args:
+            event_index: Index of the event being modified
+            primitive: The primitive being changed ('v', 'r', 'f', 'a', 'S')
+            value: New value for the primitive (float or complex)
+        """
+        from tools.editor.state_viewer import StateViewer
+        # Fetch old value before change
+        old_value = self.model.get_event(event_index, self.controller.perspective).markers[primitive].value
+        StateViewer.record(
+            operation="primitive_changed",
+            entity=(event_index, primitive),
+            changes={"value": (old_value, value)},
+            location="interactive_editor.py:_on_primitive_changed"
+        )
         self.controller.on_primitive_changed(event_index, primitive, value)
     
     def _on_primitive_preview(self, event_index, primitive, value):
@@ -587,6 +623,12 @@ class InteractiveEditor:
         Args:
             event_index: Event index to delete
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="event_delete_requested",
+            entity=(event_index,),
+            location="interactive_editor.py:_on_event_delete_requested"
+        )
         print(f"\n[DELETE REQUEST] Event {event_index}")
         
         # Validation: Get events
@@ -647,6 +689,12 @@ class InteractiveEditor:
         Args:
             event_index: Event index to insert before
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="event_insert_requested",
+            entity=(event_index,),
+            location="interactive_editor.py:_on_event_insert_requested"
+        )
         print(f"\n[INSERT REQUEST] Insert before event {event_index}")
         
         # Validation: Get events
@@ -696,6 +744,13 @@ class InteractiveEditor:
             primitive: Which primitive was clicked ('v', 'r', 'f', 'a', 'S')
             hypothetical_value: The Y value where user shift+clicked
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="diagnostic_marker",
+            entity=(event_index, primitive),
+            changes={"hypothetical_value": hypothetical_value},
+            location="interactive_editor.py:_on_diagnostic_marker"
+        )
         from core.love import update_gamma_self
         import numpy as np
         
@@ -770,6 +825,12 @@ class InteractiveEditor:
         Args:
             event_index: Index of event to lock/unlock
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="lock_toggle",
+            entity=(event_index,),
+            location="interactive_editor.py:_on_lock_toggle"
+        )
         self.controller.on_lock_toggle(event_index)
     
     def _on_insert_event(self, time: float):
@@ -910,20 +971,23 @@ class InteractiveEditor:
         Args:
             new_value: New gamma_self_0 complex value
         """
+        from tools.editor.state_viewer import StateViewer
         # Use perspective-specific setter
         perspective = self.controller.perspective
         self.model.set_gamma_self_0(perspective, new_value)
-        
         # Check if modified from original
         original = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
         gamma_self_0_modified = (abs(new_value - original) > 0.001)
-        
         # Recompute trajectory with new initial state
         self.controller._recompute_trajectory_immediate()
-        
         # Update start marker appearance on trajectory panel
         self.trajectory_panel.update_start_marker_style(gamma_self_0_modified)
-        
+        StateViewer.record(
+            operation="gamma_self0_changed",
+            entity=(perspective,),
+            changes={"new_value": str(new_value)},
+            location="interactive_editor.py:_on_gamma_self0_changed"
+        )
         self.window.show_message(
             f"gamma_self_0 updated: {new_value.real:+.2f}{new_value.imag:+.2f}j"
         )
@@ -1012,7 +1076,7 @@ class InteractiveEditor:
             new_name: New name entered by user
         """
         perspective = self.controller.perspective
-        
+
         # Update model with perspective-specific name
         if perspective == "M1":
             self.model.name_m1 = new_name
@@ -1020,10 +1084,18 @@ class InteractiveEditor:
         else:
             self.model.name_m2 = new_name
             print(f"[DEBUG] Updated name_m2 to '{new_name}'")
-        
+
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="name_changed",
+            entity=(perspective,),
+            changes={"new_name": new_name},
+            location="interactive_editor.py:_on_name_changed"
+        )
+
         # Update name editor display to confirm change
         self.name_editor.set_name(new_name)
-        
+
         # Update panel titles
         self.primitive_panel.set_scenario_name(new_name)
         self.trajectory_panel.set_scenario_name(new_name)
@@ -1038,6 +1110,13 @@ class InteractiveEditor:
             event_time: Time of the event
             note_text: New note text
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="note_changed",
+            entity=(event_time,),
+            changes={"note_text": note_text},
+            location="interactive_editor.py:_on_note_changed"
+        )
         # Find the event at this time
         events = self.model.get_events(self.controller.perspective)
         for event in events:

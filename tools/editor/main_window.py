@@ -33,6 +33,16 @@ class EditorMainWindow(QMainWindow):
         cleanup_requested: Emitted before window closes (for application cleanup)
         print_dock_config_requested: Emitted when user presses Ctrl+D (for debugging dock layout)
     """
+
+    # ...existing code...
+
+    def add_perspective_switcher(self, perspective_switcher_widget):
+        """Add the perspective switcher widget to the main toolbar."""
+        # Insert after Save/Save Both actions, before Zoom actions
+        actions = self._toolbar.actions()
+        # Find index after Save Both (second action)
+        insert_index = 2 if len(actions) > 2 else len(actions)
+        self._toolbar.insertWidget(actions[insert_index], perspective_switcher_widget)
     
     # Phase 3.5: Replace callback attributes with Qt signals
     save_requested = Signal(dict)  # {'csv': bool, 'png': bool}
