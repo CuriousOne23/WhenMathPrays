@@ -4,27 +4,6 @@
 **Version:** v2.1.4  
 **Date:** December 15, 2025
 
-## Table of Contents
-
-- [Executive Summary](#executive-summary)
-- [Bug Fixes Completed](#bug-fixes-completed)
-  - [Bug 1: Time Label Not Updating on Event Insertions](#bug-1-time-label-not-updating-on-event-insertions)
-  - [Bug 2: Perspective Switching Loses Spinbox State](#bug-2-perspective-switching-loses-spinbox-state)
-  - [Bug 3: Time Label Lost After Perspective Switch](#bug-3-time-label-lost-after-perspective-switch)
-- [Why These Bugs Were Hard to Trace](#why-these-bugs-were-hard-to-trace)
-- [Current Architecture (Pre-Refactor)](#current-architecture-pre-refactor)
-- [Lessons Learned](#lessons-learned)
-- [Planned Refactoring](#planned-refactoring)
-- [Testing Strategy](#testing-strategy)
-- [Risk Assessment](#risk-assessment)
-- [Success Metrics](#success-metrics)
-- [References](#references)
-- [Timeline](#timeline)
-- [Conclusion](#conclusion)
-- [Refactoring Complete](#refactoring-complete)
-
----
-
 ## Executive Summary
 
 This document captures the state of the Primitive Value Editor (spinbox) architecture before a planned refactoring to single controller ownership. It documents three critical bugs that were fixed, the root cause analysis, and the architectural improvements planned to prevent recurrence.

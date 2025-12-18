@@ -4,18 +4,6 @@
 **Created**: December 12, 2024  
 **Priority**: Critical - Resolves architectural debt causing state synchronization bugs
 
-## Table of Contents
-
-- [Problem Statement](#problem-statement)
-- [Design Goals](#design-goals)
-- [Proposed Architecture](#proposed-architecture)
-- [Observability System](#observability-system)
-- [Third-Party Extensibility](#third-party-extensibility)
-- [Migration Strategy](#migration-strategy)
-- [Success Criteria](#success-criteria)
-- [Risks and Mitigations](#risks-and-mitigations)
-- [References](#references)
-
 ---
 
 ## Problem Statement

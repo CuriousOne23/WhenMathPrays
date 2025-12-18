@@ -3,42 +3,6 @@ WhenMathPrays builds open, living mathematics — models that trace emotion's ar
 
 **Support this work:** If this project resonates with you, consider supporting its development at [opencollective.com/whenmathprays](https://opencollective.com/whenmathprays)
 
-## Table of Contents
-
-- [WhenMathPrays – Core OS™ (Rev 3.4: Constant-Force Entropy)](#whenmathprays--core-os-rev-34-constant-force-entropy)
-- [Quick Start](#quick-start)
-- [The One Equation (Rev 3.4: December 2025)](#the-one-equation-rev-34-december-2025)
-  - [Rev 3.4 Changes (December 2025 - Constant-Force Entropy)](#rev-34-changes-december-2025---constant-force-entropy)
-  - [γ_self — Relational State Position](#γ_self--relational-state-position)
-  - [Canonical Constants – Single Source of Truth](#canonical-constants--single-source-of-truth)
-  - [CSV Scenario Format](#csv-scenario-format)
-- [Creating and Editing Scenarios](#creating-and-editing-scenarios)
-  - [Option 1: Interactive Scenario Editor](#option-1-interactive-scenario-editor-new---phase-1-complete-)
-  - [Option 2: Generate New Scenarios](#option-2-generate-new-scenarios)
-  - [Running Multiple Scenarios](#running-multiple-scenarios)
-  - [Option 2: Copy and Customize Templates](#option-2-copy-and-customize-templates)
-  - [Option 3: Create from Scratch](#option-3-create-from-scratch)
-- [Editing Guidelines](#editing-guidelines)
-  - [What You Can Customize](#what-you-can-customize)
-  - [Adding/Removing Rows](#addingremoving-rows)
-  - [Dual Scenarios (M1 and M2)](#dual-scenarios-m1-and-m2)
-- [Converting Time Units](#converting-time-units)
-- [Running Scenarios](#running-scenarios)
-  - [Single Scenario](#single-scenario)
-  - [Dual Scenario](#dual-scenario)
-- [Documentation](#documentation)
-  - [Core Framework](#core-framework)
-  - [User Guides](#user-guides)
-  - [Validation & Research](#validation--research)
-  - [Shared Breath & Revenge Dynamics](#shared-breath--revenge-dynamics)
-- [Reading Guide](#reading-guide)
-  - [For Application Users](#for-application-users)
-  - [For Developers](#for-developers)
-- [What was restored](#what-was-restored)
-- [Quick start](#quick-start)
-
----
-
 # WhenMathPrays – Core OS™ (Rev 3.4: Constant-Force Entropy)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**

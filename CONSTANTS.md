@@ -38,8 +38,8 @@ Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
 - **ERROR IN REV 3.3 CORRECTED**: Proportional-to-distance force caused timeline-length accumulation bug
 - **Constant-force entropy**: Uses sign() function for force direction only, not magnitude
 - **Timeline-independent drift**: Same entropy effect per unit time regardless of scenario length
-- **Real axis target**: -150.0 (deep Ego/isolation for natural relationship decay)
-- **Imaginary axis target**: 0.0 (neutral affect/apathy) - unchanged
+- **Real axis target recalibrated**: -10.0 (was -150.0 in Rev 3.3 - too strong for new physics)
+- **Imaginary axis target**: 0 (Neutral affect) - unchanged
 - **Formula**: entropy_pull = ΔS_real × Δt × sign(real_target - real_current) + i × ΔS_imag × Δt × sign(imag_target - imag_current)
 - **Fidelity asymmetry unchanged** from Rev 3.2 (Im-only depth scaling)
 - **Axis-independent decay rates preserved** from Rev 3.3 (ΔS_real, ΔS_imag)

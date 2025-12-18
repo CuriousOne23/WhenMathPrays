@@ -5,20 +5,6 @@
 **Date:** December 13, 2025  
 **Target Completion:** 4 weeks
 
-## Table of Contents
-
-- [Executive Summary](#executive-summary)
-- [Background: The December 13, 2025 Insertion Bug](#background-the-december-13-2025-insertion-bug)
-- [Current Architecture Problems](#current-architecture-problems)
-- [Proposed Solution](#proposed-solution)
-- [Benefits](#benefits)
-- [Risks & Mitigation](#risks--mitigation)
-- [Success Metrics](#success-metrics)
-- [Timeline](#timeline)
-- [Alternative Approaches Considered](#alternative-approaches-considered)
-- [Conclusion](#conclusion)
-- [References](#references)
-
 ---
 
 ## Executive Summary

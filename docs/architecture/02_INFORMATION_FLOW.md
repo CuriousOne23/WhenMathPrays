@@ -2,16 +2,6 @@
 
 **Purpose**: Document all message paths through the system. Every component interaction must be traceable through these sequences.
 
-## Table of Contents
-
-- [Architecture Overview](#architecture-overview)
-- [Message Sequences](#message-sequences)
-- [Communication Pipelines](#communication-pipelines)
-- [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
-- [Debugging Information Flow](#debugging-information-flow)
-
----
-
 ## Architecture Overview
 
 ```
