@@ -187,7 +187,163 @@ class BaselineDebugLog:
             print("[BASELINE_PROTOCOL] Log cleared")
     
     @classmethod
-    def dump(cls, filepath: Optional[str] = None):
+    def validate_consistency(cls, perspective: str, events: list, gamma_trajectory_length: int) -> Dict[str, Any]:
+        """
+        Validate consistency between primitive and gamma_self spaces.
+        
+        This is a simple, low-overhead validation that AIs can use to quickly
+        check for common time/index synchronization bugs.
+        
+        Args:
+            perspective: "M1" or "M2"
+            events: List of EventPoint objects
+            gamma_trajectory_length: Length of gamma_self trajectory
+            
+        Returns:
+            Dict with validation results and any warnings/errors
+        """
+        result = {
+            "perspective": perspective,
+            "event_count": len(events),
+            "gamma_length": gamma_trajectory_length,
+            "warnings": [],
+            "errors": [],
+            "is_consistent": True
+        }
+        
+        # Check 1: Event count should match gamma trajectory length
+        if len(events) != gamma_trajectory_length:
+            result["warnings"].append({
+                "type": "count_mismatch",
+                "message": f"Event count ({len(events)}) != gamma length ({gamma_trajectory_length})",
+                "severity": "high"
+            })
+            result["is_consistent"] = False
+        
+        # Check 2: Event times should be monotonically increasing
+        prev_time = -float('inf')
+        for i, event in enumerate(events):
+            if event.time <= prev_time:
+                result["errors"].append({
+                    "type": "time_order_violation",
+                    "message": f"Event {i} time {event.time} <= previous {prev_time}",
+                    "severity": "critical"
+                })
+                result["is_consistent"] = False
+            prev_time = event.time
+        
+        # Check 3: Reasonable time bounds (assuming days, not too extreme)
+        for i, event in enumerate(events):
+            if not (0 <= event.time <= 1000):  # Reasonable bounds for scenario
+                result["warnings"].append({
+                    "type": "time_bounds",
+                    "message": f"Event {i} has unusual time {event.time}",
+                    "severity": "low"
+                })
+        
+        # Log validation results if logging enabled
+        if cls._enabled and (result["warnings"] or result["errors"]):
+            cls.log(
+                BaselineEvent.BASELINE_SYNC_PRIMITIVE,  # Reuse existing event type
+                perspective,
+                validation_result=result
+            )
+        
+        return result
+    
+    @classmethod
+    def snapshot_mappings(cls, perspective: str, events: list) -> Dict[str, Any]:
+        """
+        Take a snapshot of current time->index mappings for debugging.
+        
+        This provides AIs with a complete view of the current coordinate relationships
+        without needing to reconstruct them from logs.
+        
+        Args:
+            perspective: "M1" or "M2"
+            events: List of EventPoint objects
+            
+        Returns:
+            Dict with time_to_index and index_to_time mappings
+        """
+        time_to_index = {}
+        index_to_time = {}
+        
+        for idx, event in enumerate(events):
+            time_to_index[event.time] = idx
+            index_to_time[idx] = event.time
+        
+        snapshot = {
+            "perspective": perspective,
+            "timestamp": datetime.now().isoformat(),
+            "time_to_index": time_to_index,
+            "index_to_time": index_to_time,
+            "event_count": len(events)
+        }
+        
+        # Log snapshot if enabled (but only key summary, not full mapping)
+        if cls._enabled:
+            cls.log(
+                BaselineEvent.BASELINE_SYNC_GAMMA,  # Reuse existing event type
+                perspective,
+                snapshot_summary=f"{len(events)} events mapped"
+            )
+        
+        return snapshot
+    
+    @classmethod
+    def check_marker_consistency(cls, perspective: str, marker_positions: Dict, events: list) -> Dict[str, Any]:
+        """
+        Check that marker positions are consistent with event times.
+        
+        Markers should reference valid event times. This catches cases where
+        markers point to non-existent or shifted times after insertions.
+        
+        Args:
+            perspective: "M1" or "M2"
+            marker_positions: Dict[(time, primitive)] -> gamma_position
+            events: List of EventPoint objects
+            
+        Returns:
+            Dict with consistency check results
+        """
+        result = {
+            "perspective": perspective,
+            "marker_count": len(marker_positions),
+            "valid_markers": 0,
+            "invalid_markers": 0,
+            "issues": []
+        }
+        
+        # Build set of valid (time, primitive) combinations
+        valid_times_prims = set()
+        for event in events:
+            for prim in ['v', 'r', 'f', 'a', 'S']:
+                valid_times_prims.add((event.time, prim))
+        
+        # Check each marker
+        for (marker_time, marker_prim), gamma_pos in marker_positions.items():
+            marker_key = (marker_time, marker_prim)
+            if marker_key in valid_times_prims:
+                result["valid_markers"] += 1
+            else:
+                result["invalid_markers"] += 1
+                result["issues"].append({
+                    "type": "invalid_marker_reference",
+                    "marker": marker_key,
+                    "gamma_position": gamma_pos,
+                    "message": f"Marker references non-existent time/primitive"
+                })
+        
+        # Log issues if found and logging enabled
+        if cls._enabled and result["issues"]:
+            cls.log(
+                BaselineEvent.PRIMITIVE_EDIT,  # Reuse existing event type
+                perspective,
+                marker_issues=len(result["issues"])
+            )
+        
+        return result
         """
         Dump log to file or print to console.
         
@@ -546,4 +702,46 @@ class BaselineCommunicator:
             BaselineEvent.BASELINE_SYNC_GAMMA,
             self.perspective,
             index_count=index_count
+        )
+    
+    def validate_space_consistency(self, events: list, gamma_trajectory_length: int) -> Dict[str, Any]:
+        """
+        Validate consistency between primitive and gamma_self spaces for this perspective.
+        
+        Args:
+            events: List of EventPoint objects
+            gamma_trajectory_length: Length of gamma_self trajectory
+            
+        Returns:
+            Validation results dict
+        """
+        return BaselineDebugLog.validate_consistency(
+            self.perspective, events, gamma_trajectory_length
+        )
+    
+    def snapshot_current_mappings(self, events: list) -> Dict[str, Any]:
+        """
+        Take a snapshot of current time->index mappings for this perspective.
+        
+        Args:
+            events: List of EventPoint objects
+            
+        Returns:
+            Mapping snapshot dict
+        """
+        return BaselineDebugLog.snapshot_mappings(self.perspective, events)
+    
+    def check_marker_positions(self, marker_positions: Dict, events: list) -> Dict[str, Any]:
+        """
+        Check marker position consistency for this perspective.
+        
+        Args:
+            marker_positions: Dict[(time, primitive)] -> gamma_position
+            events: List of EventPoint objects
+            
+        Returns:
+            Marker consistency check results
+        """
+        return BaselineDebugLog.check_marker_consistency(
+            self.perspective, marker_positions, events
         )

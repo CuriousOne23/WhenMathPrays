@@ -2,6 +2,17 @@
 
 **Purpose**: Measurable performance requirements that validate architecture health. When targets are consistently missed, architecture needs attention.
 
+## Table of Contents
+
+- [Critical Performance Requirements](#critical-performance-requirements)
+- [Performance Validation Scripts](#performance-validation-scripts)
+- [Performance Debugging Workflow](#performance-debugging-workflow)
+- [Scaling Projections](#scaling-projections)
+- [Performance vs Correctness](#performance-vs-correctness)
+- [Performance Health Check](#performance-health-check)
+
+---
+
 ## Critical Performance Requirements
 
 ### Single Marker Operations

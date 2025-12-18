@@ -1,5 +1,19 @@
 # Baseline Communication Protocol - Architecture Documentation
 
+## Table of Contents
+
+- [Problem Statement](#problem-statement)
+- [The Critical Issue](#the-critical-issue)
+- [Solution: Baseline Communication Protocol](#solution-baseline-communication-protocol)
+  - [Architecture Components](#architecture-components)
+  - [Communication Flow](#communication-flow)
+  - [Gamma_self Baseline Tracking](#gamma_self-baseline-tracking)
+  - [Debug Logging Usage](#debug-logging-usage)
+  - [Example Log Output](#example-log-output)
+- [Key Design Principles](#key-design-principles)
+- [Implementation Checklist](#implementation-checklist)
+- [Future Enhancements](#future-enhancements)
+
 ## Problem Statement
 
 The interactive editor has TWO fundamentally different coordinate spaces:
@@ -173,6 +187,200 @@ controller.disable_baseline_protocol_logging()
 - How to read the entries
 
 See [logs/baseline/README.md](../logs/baseline/README.md) for details.
+
+### AI-Assisted Debugging Tools
+
+The baseline protocol includes simple validation functions that AIs can use for rapid bug assessment:
+
+```python
+# Validate consistency between coordinate spaces
+validation = controller.validate_baseline_consistency()
+# Returns: {"is_consistent": True/False, "warnings": [...], "errors": [...]}
+
+# Get current time->index mappings snapshot  
+mappings = controller.snapshot_coordinate_mappings()
+# Returns: {"time_to_index": {2.5: 3, 3.5: 4, ...}, "index_to_time": {3: 2.5, 4: 3.5, ...}}
+
+# Check marker position validity
+marker_check = controller.baseline_comm_m1.check_marker_positions(marker_positions, events)
+# Returns: {"valid_markers": 5, "invalid_markers": 0, "issues": []}
+```
+
+These functions provide **immediate state validation** without requiring log analysis, making them perfect for AI debugging workflows.
+
+## AI-Assisted Debugging Enhancements
+
+### Overview
+
+Three simple, low-overhead validation functions have been added to assist AI-assisted debugging of time/index synchronization issues. These functions provide immediate diagnostic capabilities without the complexity of a real-time visualizer.
+
+### Why Implemented
+
+The existing baseline protocol logging is excellent for detailed event tracing, but AIs sometimes need **immediate validation** of current state without analyzing logs. These functions provide:
+
+- **Instant consistency checks** for common bugs
+- **Current state snapshots** for relationship analysis  
+- **Validation of marker references** after insertions/deletions
+- **Structured output** perfect for programmatic analysis
+
+### Implementation Location
+
+**File**: `tools/editor/baseline_protocol.py`
+- `BaselineDebugLog.validate_consistency()`
+- `BaselineDebugLog.snapshot_mappings()`
+- `BaselineDebugLog.check_marker_consistency()`
+
+**File**: `tools/editor/controller.py`  
+- `EditorController.validate_baseline_consistency()`
+- `EditorController.snapshot_coordinate_mappings()`
+
+### How to Use
+
+#### 1. Consistency Validation
+
+```python
+# From controller (recommended)
+validation = controller.validate_baseline_consistency()
+
+# Direct call
+from tools.editor.baseline_protocol import BaselineDebugLog
+validation = BaselineDebugLog.validate_consistency('M1', events, gamma_length)
+
+# Result format
+{
+    "perspective": "M1",
+    "event_count": 5,
+    "gamma_length": 5, 
+    "warnings": [],
+    "errors": [],
+    "is_consistent": True,
+    "marker_check": {  # If markers present
+        "valid_markers": 3,
+        "invalid_markers": 0,
+        "issues": []
+    }
+}
+```
+
+**Validates**:
+- Event count matches gamma trajectory length
+- Event times are monotonically increasing
+- Time values within reasonable bounds (0-1000)
+- Marker positions reference valid time/primitive combinations
+
+#### 2. Coordinate Mapping Snapshot
+
+```python
+# Get current time<->index relationships
+mappings = controller.snapshot_coordinate_mappings()
+
+# Direct call  
+mappings = BaselineDebugLog.snapshot_mappings('M1', events)
+
+# Result format
+{
+    "perspective": "M1",
+    "timestamp": "2025-12-18T10:30:00",
+    "time_to_index": {1.0: 0, 2.5: 1, 3.0: 2},
+    "index_to_time": {0: 1.0, 1: 2.5, 2: 3.0},
+    "event_count": 3
+}
+```
+
+**Use Case**: AIs can instantly see current mappings without reconstructing from logs.
+
+#### 3. Marker Position Validation
+
+```python
+# Check marker consistency
+marker_check = controller.baseline_comm_m1.check_marker_positions(marker_positions, events)
+
+# Result format
+{
+    "perspective": "M1", 
+    "marker_count": 3,
+    "valid_markers": 3,
+    "invalid_markers": 0,
+    "issues": []
+}
+```
+
+**Validates**: All marker keys `(time, primitive)` exist in current events.
+
+### Integration with Existing Logging
+
+These functions integrate with the baseline protocol logging system:
+
+- Results are logged when protocol logging is enabled
+- Use existing event types (`BASELINE_SYNC_PRIMITIVE`, `BASELINE_SYNC_GAMMA`, etc.)
+- Add context like `validation_result` or `marker_issues` to log entries
+- No additional log files or formats needed
+
+### Performance Characteristics
+
+- **Overhead**: Minimal - single passes through data structures
+- **Memory**: No additional state storage
+- **Execution**: Only when called, zero impact on normal operation
+- **Logging**: Optional integration with existing debug logging
+
+### AI Debugging Workflow
+
+```python
+# 1. Enable logging if needed
+controller.enable_baseline_protocol_logging()
+
+# 2. Reproduce the issue
+# ... perform operations that cause time/index bug ...
+
+# 3. Quick validation check
+validation = controller.validate_baseline_consistency()
+if not validation["is_consistent"]:
+    print("Found consistency issues:", validation["errors"])
+
+# 4. Get current state snapshot
+mappings = controller.snapshot_coordinate_mappings()
+print("Current relationships:", mappings["time_to_index"])
+
+# 5. Dump detailed logs if needed
+controller.dump_baseline_protocol_log("auto")
+```
+
+### Error Detection Examples
+
+**Count Mismatch**:
+```json
+{
+  "warnings": [{
+    "type": "count_mismatch",
+    "message": "Event count (5) != gamma length (6)",
+    "severity": "high"
+  }]
+}
+```
+
+**Invalid Marker Reference**:
+```json
+{
+  "issues": [{
+    "type": "invalid_marker_reference", 
+    "marker": [2.5, "v"],
+    "message": "Marker references non-existent time/primitive"
+  }]
+}
+```
+
+**Time Order Violation**:
+```json
+{
+  "errors": [{
+    "type": "time_order_violation",
+    "message": "Event 3 time 2.0 <= previous 2.5",
+    "severity": "critical"
+  }]
+}
+```
+
+These enhancements provide AIs with **immediate diagnostic capabilities** while maintaining the simplicity and robustness of the existing baseline communication protocol.
 
 ### Example Log Output
 
