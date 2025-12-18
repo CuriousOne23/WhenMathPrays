@@ -539,12 +539,12 @@ class PrimitivePanelPyQtGraph(QWidget):
             plot.scatter_items = self.scatter_items
             plot.primitive_reset_requested = self.primitive_reset_requested
             
-            # Create diagnostic marker (black X, draggable, initially hidden)
+            # Create diagnostic marker (red diamond, draggable, initially hidden)
             diagnostic_marker = DraggableScatterItem(
                 size=MARKER_SIZE_DIAGNOSTIC,
-                pen=pg.mkPen('k', width=3),
-                brush=None,
-                symbol='x',
+                pen=pg.mkPen('red', width=3),
+                brush=pg.mkBrush('red'),
+                symbol='d',
                 is_diagnostic=True  # Mark as diagnostic so it can be ignored for normal clicks
             )
             diagnostic_marker.setZValue(-1)  # Place below committed markers so they get priority

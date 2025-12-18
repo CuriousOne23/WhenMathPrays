@@ -19,17 +19,17 @@ class TrajectoryPanelPyQtGraph(QWidget):
 	panel_ready = Signal()
 	gamma_clicked = Signal(object)  # Add this signal for compatibility
 
-	def place_diagnostic_marker(self, x, y, label_text="Diag", color="magenta"):
+	def place_diagnostic_marker(self, x, y, label_text="Diag", color="red"):
 		"""
 		Place a diagnostic marker at the specified (x, y) position.
-		Clears previous diagnostic markers and adds a new one (cross symbol and label).
+		Clears previous diagnostic markers and adds a new one (diamond symbol and label).
 		"""
 		# Remove previous diagnostic marker if it exists
 		if hasattr(self, '_diagnostic_marker') and self._diagnostic_marker is not None:
 			self.plot_widget.removeItem(self._diagnostic_marker)
 			self._diagnostic_marker = None
-		# Add new marker (cross symbol)
-		marker = pg.ScatterPlotItem([x], [y], symbol='x', size=16, pen=pg.mkPen(color, width=2), brush=pg.mkBrush(color))
+		# Add new marker (diamond symbol)
+		marker = pg.ScatterPlotItem([x], [y], symbol='d', size=16, pen=pg.mkPen(color, width=2), brush=pg.mkBrush(color))
 		self.plot_widget.addItem(marker)
 		self._diagnostic_marker = marker
 		# Add label as before
