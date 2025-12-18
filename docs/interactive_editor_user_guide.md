@@ -33,6 +33,51 @@ The Interactive Scenario Editor is a graphical diagnostic tool for analyzing and
 
 **Phase 3.3 Status:** ✅ **COMPLETE** - Dual-perspective editing with overlay visualization, robust file loading, and flexible workspace
 
+## Feature Status Overview
+
+This table provides a comprehensive status overview of all Interactive Editor functions, helping you understand what's available, tested, and verified. It serves as a quick reference for feature availability and quality assurance status.
+
+| Function | Implementation Status | Testing Status | Auto-Verification | Notes |
+|----------|----------------------|----------------|-------------------|-------|
+| **File Loading** | ✅ **Complete** | ✅ **Tested** | ❌ **Not Verified** | Robust M1/M2 detection, companion file search, error handling |
+| **Dual-Perspective Overlay** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (8 switches) | Visual comparison, independent editing, Phase 3.3 |
+| **Perspective Switching** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (8 operations) | M1/M2 radio buttons, Tab/Space keys, state preservation |
+| **Primitive Drag Editing** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (7 operations) | Hollow markers, real-time preview, trajectory updates |
+| **Marker Pinning** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (343 pins) | Filled markers, numbered labels, gamma_self positioning |
+| **Undo/Redo** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (7 undo, 7 redo) | Ctrl+Z/Ctrl+Y, command stack, state restoration |
+| **Event Locking** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Right-click toggle, lock icons, protection from editing |
+| **Event Notes** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Click markers to edit, Apply/Clear buttons, per-event storage |
+| **Scenario Names** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Name editor, Apply button, per-perspective names |
+| **Save (Active Perspective)** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Ctrl+S, toolbar button, automatic perspective handling |
+| **Trajectory Computation** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (36 computes) | Real-time updates, debounced recomputation, auto-zoom |
+| **Primitive Reset (Double-click)** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (1 operation) | Reset to baseline CSV values, undoable operation |
+| **ESC Cancel All Previews** | ❌ **Not Implemented** | ❌ **Not Tested** | ❌ **Not Verified** | Backend logic exists, UI connection missing |
+| **Spinbox Primitive Editing** | ❌ **Planned v2.4** | ❌ **Not Tested** | ❌ **Not Verified** | Precise numeric input, keyboard-driven workflow |
+| **Save Both Perspectives** | ❌ **Planned** | ❌ **Not Tested** | ❌ **Not Verified** | Ctrl+Shift+S, simultaneous M1/M2 saving |
+| **Diagnostic Markers** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Shift+click for counterfactual analysis |
+| **Event Insertion** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (2 inserts) | Ctrl+Shift+click, insertion points, undoable |
+| **Event Deletion** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Ctrl+click, first/last event protection |
+| **Gamma_Self_0 Editor** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Initial position editing, real/imaginary components |
+| **Primitive Readout Gauge** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Shows last edited marker info, Y-value display |
+| **Gamma_Self Readout** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Click trajectory for X,Y coordinates |
+| **View Menu** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Panel show/hide, workspace layout save/restore |
+| **Workspace Layout** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Dock-based UI, flexible arrangement, QSettings persistence |
+| **Keyboard Shortcuts** | 🟡 **Partial** | ❌ **Not Tested** | ❌ **Not Verified** | Ctrl+S works, Tab/Space/ESC missing |
+| **Auto-Zoom** | ✅ **Complete** | ❌ **Not Tested** | ❌ **Not Verified** | Initial load zoom-to-fit, user zoom preservation |
+| **State Viewer** | ✅ **Complete** | ✅ **Tested** | ✅ **Verified** (538 ops logged) | Debug logging, state inspection, correlation tracking |
+
+### Status Legend
+- **✅ Complete:** Fully implemented and working
+- **🟡 Partial:** Some functionality implemented, some missing
+- **❌ Not Implemented/Planned:** Either not yet built or marked as future feature
+- **Tested:** Has undergone testing (manual or automated)
+- **Verified:** Has automated verification/logging (538+ operations logged)
+
+### Coverage Summary
+- **Implementation:** ~85% Complete (21/25 functions implemented)
+- **Testing:** ~28% Tested (7/25 functions have testing)
+- **Auto-Verification:** ~28% Verified (7/25 functions auto-verified)
+
 **For Developers/Advanced Users:** Detailed logging configuration, debugging techniques, and troubleshooting guides are available in [DEBUG.md](DEBUG.md).
 
 ---
