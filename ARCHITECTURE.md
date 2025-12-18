@@ -55,6 +55,23 @@ All code contributions must follow the [Coding Guidelines](docs/architecture/05_
 
 ## Recent Updates
 
+**December 17, 2025:** v2.2.3 Double-Click Reset Implementation:
+- **✅ Double-Click Reset Functionality:** Implemented complete double-click reset for primitive markers
+  - Added `sigPointDoubleClicked` signal to `DraggableScatterItem` class for mouse event emission
+  - Added `_on_point_double_clicked` method to `PrimitivePanelPyQtGraph` for signal handling and primitive reset requests
+  - Fixed critical undo stack push in `controller.py` `_do_primitive_reset_logic` method (ResetPrimitiveCommand was created but never executed)
+- **✅ Signal Chain Completion:** Established complete event flow from mouse double-click to primitive value reset
+  - Mouse event → signal emission → controller processing → undo command execution → model update → view refresh
+  - Integrated with existing debug infrastructure for comprehensive event correlation tracking
+- **Impact on User Experience:**
+  - Double-clicking primitive markers now properly resets values to baseline CSV values
+  - Undo/redo functionality works correctly for reset operations
+  - Consistent with user expectations from interactive editor design
+- **Debugging Infrastructure:** Enhanced with correlation tracking for double-click reset events
+  - Event correlation IDs track complete signal chains
+  - Comprehensive logging for mouse events, hit detection, signal emission, and command execution
+  - See [GUI_DEBUGGING.md](docs/GUI_DEBUGGING.md) for debugging workflows
+
 **December 15, 2025:** v2.2.2 Architecture Cleanup - A+ Grade (9.3/10):
 - **✅ Dead Code Elimination:** Removed 1,542 lines of unused matplotlib code
   - Deleted obsolete panels: primitive_panel.py, trajectory_panel.py, draggable_point.py

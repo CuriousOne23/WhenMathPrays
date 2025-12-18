@@ -783,6 +783,14 @@ class EditorModel:
         for event in events:
             if event.id == event_id:
                 event.markers[primitive].set_gamma_position(perspective, gamma_self_position)
+                
+                # Record marker pinning for state logging
+                StateViewer.record(
+                    operation='pin_marker',
+                    entity=(event_id, primitive, perspective),
+                    changes={'gamma_position': (None, str(gamma_self_position))},
+                    location="model.py:pin_marker"
+                )
                 return
     
     def unpin_marker(self, event_id: int, primitive: str, perspective: str = "M1"):
@@ -799,7 +807,17 @@ class EditorModel:
         events = self.get_events(perspective)
         for event in events:
             if event.id == event_id:
+                # Capture old position before clearing
+                old_position = event.markers[primitive].get_gamma_position(perspective)
                 event.markers[primitive].clear_gamma_position(perspective)
+                
+                # Record marker unpinning for state logging
+                StateViewer.record(
+                    operation='unpin_marker',
+                    entity=(event_id, primitive, perspective),
+                    changes={'gamma_position': (str(old_position) if old_position is not None else None, None)},
+                    location="model.py:unpin_marker"
+                )
                 return
     
     def clear_primitive_modification(self, event_id: int, primitive: str, perspective: str = "M1"):

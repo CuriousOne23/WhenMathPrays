@@ -18,7 +18,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 ### Project Overview
 - **[README.md](../README.md)** - Main project README with overview, installation, and usage
 - **[WHY_THIS_MATTERS.md](../WHY_THIS_MATTERS.md)** - Philosophical and practical importance of the GRP framework
-- **[PRINCIPLES.md](PRINCIPLES.md)** - Core principles and foundational concepts
+- **[grp_principles.md](grp_principles.md)** - Core principles and foundational concepts
 - **[LINEAGE.md](LINEAGE.md)** - Historical development and evolution of the project
 
 ### Constants & Configuration
@@ -140,7 +140,7 @@ Located in **[docs/archive/superseded/](archive/superseded/)**:
 4. **[docs/architecture/05_CODING_GUIDELINES.md](architecture/05_CODING_GUIDELINES.md)** - Follow coding standards
 
 ### Research & Theory
-1. **[PRINCIPLES.md](PRINCIPLES.md)** - Understand core concepts
+1. **[grp_principles.md](grp_principles.md)** - Understand core concepts
 2. **[WHY_THIS_MATTERS.md](../WHY_THIS_MATTERS.md)** - See practical applications
 3. **[REV4_IMPLEMENTATION_SUMMARY.md](REV4_IMPLEMENTATION_SUMMARY.md)** - Review latest GRP implementation
 

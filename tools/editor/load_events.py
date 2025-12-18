@@ -1,6 +1,9 @@
 # Sample function to load events from CSV and create Event/Marker objects
 import csv
 from .event import Event
+from .debug_config import get_logger
+
+_logger = get_logger('load_events')
 
 PRIMITIVE_NAMES = ['v', 'r', 'f', 'a', 'S']
 
@@ -32,7 +35,7 @@ def load_events_from_csv(filepath, start_id=0):
                 header_idx = idx
                 break
         if header_idx is None:
-            print("[DEBUG] No valid header found in CSV!")
+            _logger.debug("No valid header found in CSV!")
             return events, metadata
         
         # Parse metadata rows before header
@@ -45,24 +48,24 @@ def load_events_from_csv(filepath, start_id=0):
                 if key == 'gamma_self_0':
                     try:
                         metadata['gamma_self_0'] = complex(value.replace('+-', '-'))
-                        print(f"[DEBUG] Parsed gamma_self_0 = {metadata['gamma_self_0']}")
+                        _logger.debug(f"Parsed gamma_self_0 = {metadata['gamma_self_0']}")
                     except Exception as e:
-                        print(f"[DEBUG] Failed to parse gamma_self_0: {e}")
+                        _logger.debug(f"Failed to parse gamma_self_0: {e}")
                 elif key == 'time_unit':
                     metadata['time_unit'] = value
                 elif key == 'name':
                     metadata['name'] = value
         
         header = [h.strip() for h in lines[header_idx].strip().split(',')]
-        print(f"[DEBUG] Using header: {header}")
+        _logger.debug(f"Using header: {header}")
         # Read data rows after header
         reader = csv.DictReader(lines[header_idx+1:], fieldnames=header)
         for row in reader:
-            print(f"[DEBUG] load_events_from_csv: row = {row}")
+            _logger.debug(f"load_events_from_csv: row = {row}")
             # Skip rows missing any primitive columns
             missing = [prim for prim in PRIMITIVE_NAMES if prim not in row or row[prim] in (None, '')]
             if missing:
-                print(f"[DEBUG] Skipping row, missing columns: {missing}")
+                _logger.debug(f"Skipping row, missing columns: {missing}")
                 continue
             try:
                 time = float(row.get('step', row.get('day', 0)))
@@ -72,11 +75,11 @@ def load_events_from_csv(filepath, start_id=0):
                 locked = row.get('locked', '')
                 event = Event(time, primitives, notes=notes, marker=marker, locked=locked, event_id=event_id)
                 events.append(event)
-                print(f"[DEBUG] Accepted event: id={event_id}, time={time}, primitives={primitives}")
+                _logger.debug(f"Accepted event: id={event_id}, time={time}, primitives={primitives}")
                 event_id += 1
             except Exception as e:
-                print(f"[DEBUG] Skipping row due to error: {e}")
+                _logger.debug(f"Skipping row due to error: {e}")
     
     next_event_id = event_id
-    print(f"[DEBUG] Loaded {len(events)} events, next_event_id={next_event_id}")
+    _logger.debug(f"Loaded {len(events)} events, next_event_id={next_event_id}")
     return events, metadata, next_event_id
