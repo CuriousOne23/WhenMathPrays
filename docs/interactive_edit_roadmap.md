@@ -18,6 +18,20 @@
 - **Phase 3 (→ Next):** M2 integration with QDockWidget flexible workspace - [See architecture doc](architecture_recommendations.md)
 - **Phase 4 (Future):** Advanced features - inverse editing, sensitivity analysis, analysis window
 
+## Development Phase Status Overview
+
+| Phase | Description | Status | Duration | Key Features | Completion Date |
+|-------|-------------|--------|----------|--------------|-----------------|
+| **Phase 1: Foundation** | Single-perspective editing with drag-and-drop | ✅ **Complete** | 4-6 hours | • Real-time trajectory preview<br>• Lock/unlock events<br>• Auto-marking system<br>• Dual save functionality<br>• Keyboard shortcuts | Dec 5, 2025 |
+| **Phase 2.0: PySide6 Migration** | Qt framework migration and undo/redo system | ✅ **Complete** | ~4 hours | • PySide6/Qt migration<br>• Undo/redo system<br>• Command pattern implementation | Dec 6, 2025 |
+| **Phase 2.1: Diagnostic Markers** | "What-if" analysis and gamma_self0 editing | ✅ **Complete** | ~3 hours | • Diagnostic markers<br>• gamma_self0 editor<br>• Event insertion<br>• Enhanced visual feedback | Dec 7, 2025 |
+| **Phase 2.2: Delete Events** | Event deletion functionality | ✅ **Complete** | ~2 hours | • Delete events feature<br>• Safe removal logic<br>• State consistency | Dec 8, 2025 |
+| **Phase 2.3: Inverse Editing** | Mathematical inverse operations | ⏸️ **Deferred** | Deferred | • Inverse editing<br>• Mathematical reversals | Moved to Phase 4 |
+| **Phase 3: M2 Integration** | Dual-perspective editing with flexible workspace | → **Next** | 10-12 hours | • QDockWidget architecture<br>• M1/M2 overlay rendering<br>• Perspective switcher<br>• Flexible panel layout | Planning |
+| **Phase 4: Advanced Features** | Future enhancements and analysis tools | 📋 **Planned** | TBD | • Inverse editing<br>• Sensitivity analysis<br>• Analysis window<br>• Advanced diagnostics | Future |
+
+**Overall Progress:** Phase 2 ✅ **COMPLETE** (9 hours) → Ready for release. Phase 3 planning in progress.
+
 ---
 
 ## Phase Timeline

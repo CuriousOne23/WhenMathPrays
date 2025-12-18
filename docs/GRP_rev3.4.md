@@ -4,6 +4,20 @@
 **Status:** Current implementation  
 **Supersedes:** Rev 3.3 (axis-independent entropy decay)
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+- [Core Physics Equation (Rev 3.4)](#core-physics-equation-rev-34)
+- [Parameter Values (Rev 3.4)](#parameter-values-rev-34)
+- [Fidelity Asymmetry (Unchanged from Rev 3.2)](#fidelity-asymmetry-unchanged-from-rev-32)
+- [Entropy Scenarios (Rev 3.3)](#entropy-scenarios-rev-33)
+- [Implementation Notes](#implementation-notes)
+- [Validation Results](#validation-results)
+- [Future Considerations](#future-considerations)
+- [Appendix: Physics Comparison](#appendix-physics-comparison)
+
+---
+
 ## Executive Summary
 
 Rev 3.4 introduces **constant-force entropy** to fix a fundamental timeline accumulation bug in the entropy model. Previously, entropy pull scaled with distance from the attractor, causing scenarios of different lengths to accumulate different total entropy effects. The new model uses constant-magnitude entropy pull (direction only from sign function), ensuring timeline-independent drift.

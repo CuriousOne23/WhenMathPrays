@@ -4,6 +4,19 @@
 
 **Last Updated**: December 15, 2025 (v2.2.0)
 
+## Table of Contents
+
+- [Interactive Editor Components](#interactive-editor-components)
+- [Scenario System Components](#scenario-system-components)
+- [Core GRP Engine Components](#core-grp-engine-components)
+- [Simulation & Testing Components](#simulation--testing-components)
+- [Directory Structure Overview](#directory-structure-overview)
+- [Module Categories](#module-categories)
+- [Module Dependencies (High-Level)](#module-dependencies-high-level)
+- [Quick Lookup](#quick-lookup)
+- [Recent Additions (v2.1.0 - v2.2.0)](#recent-additions-v210---v220)
+- [Navigation Links](#navigation-links)
+
 ---
 
 ## Interactive Editor Components

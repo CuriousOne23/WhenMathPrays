@@ -311,6 +311,46 @@ class EditorController:
         """
         BaselineDebugLog.dump(filepath)
     
+    def validate_baseline_consistency(self) -> Dict[str, Any]:
+        """
+        Validate consistency between primitive and gamma_self coordinate spaces.
+        
+        This is a simple, low-overhead validation that checks for common
+        time/index synchronization bugs. Useful for AI-assisted debugging.
+        
+        Returns:
+            Dict with validation results for current perspective
+        """
+        events = self.model.get_events(self.perspective)
+        gamma_length = len(self.committed_gamma_trajectory) if self.committed_gamma_trajectory else 0
+        
+        # Get validation results
+        validation = self.baseline_comm_m1.validate_space_consistency(events, gamma_length) if self.perspective == "M1" else \
+                    self.baseline_comm_m2.validate_space_consistency(events, gamma_length)
+        
+        # Also check marker positions if available
+        marker_positions = self.model.get_marker_positions(self.perspective)
+        if marker_positions:
+            marker_check = self.baseline_comm_m1.check_marker_positions(marker_positions, events) if self.perspective == "M1" else \
+                          self.baseline_comm_m2.check_marker_positions(marker_positions, events)
+            validation["marker_check"] = marker_check
+        
+        return validation
+    
+    def snapshot_coordinate_mappings(self) -> Dict[str, Any]:
+        """
+        Take a snapshot of current time->index mappings for debugging.
+        
+        Provides AIs with a complete view of current coordinate relationships
+        without needing to reconstruct from logs.
+        
+        Returns:
+            Dict with current mappings for the active perspective
+        """
+        events = self.model.get_events(self.perspective)
+        return self.baseline_comm_m1.snapshot_current_mappings(events) if self.perspective == "M1" else \
+               self.baseline_comm_m2.snapshot_current_mappings(events)
+    
     def _get_weights_with_entropy(self):
         """
         Get weights dictionary with current entropy parameters.

@@ -5,6 +5,21 @@
 **Scope:** Phase 2+ development (phase-agnostic architectural decisions)  
 **Context:** Phase 1 interactive editor completed successfully. This document outlines architectural considerations for ongoing development.
 
+## Architecture Status Overview
+
+| Component | Status | Priority | Key Decisions | Impact |
+|-----------|--------|----------|---------------|---------|
+| **Baseline Storage** | ✅ **Complete** | Critical | Migrated to time-keyed dictionary storage | • Prevents index-related bugs<br>• Simplified operations<br>• Eliminates corruption risk<br>• All tests passing |
+| **GUI Flexibility** | ⏳ **Planning** | Critical | QDockWidget-based architecture for Phase 3+ | • Enables M2 overlay visualization<br>• Supports flexible workspaces<br>• Future-proofs panel additions<br>• Professional multi-monitor support |
+| **PySide6 Migration** | ✅ **Complete** | Foundation | Qt6 framework with PyQtGraph | • Professional UI foundation<br>• High-performance plotting<br>• Built-in undo/redo stack<br>• Native widget ecosystem |
+| **Undo/Redo System** | ✅ **Complete** | Foundation | QUndoStack with command pattern | • Discrete undo steps<br>• Keyboard shortcuts (Ctrl+Z/Y)<br>• Prevents recursive operations<br>• Command delegation pattern |
+| **Observer Pattern** | ✅ **Complete** | Architecture | Automatic cache invalidation | • Reactive updates<br>• Loose coupling<br>• Automatic state synchronization<br>• Clean MVC separation |
+| **Configuration System** | ✅ **Complete** | User Experience | JSON-based user preferences | • User-customizable settings<br>• Backward compatibility<br>• Centralized constants<br>• Runtime configuration |
+| **Primitives Module** | ✅ **Complete** | Data Integrity | Single source of truth for metadata | • Centralized primitive definitions<br>• Consistent metadata access<br>• Type safety and validation<br>• Easy maintenance |
+| **M2 Integration** | 📋 **Planned** | Phase 3 | Dual-perspective overlay rendering | • M1/M2 shared visualization<br>• Perspective switching<br>• Active/inactive visual states<br>• Interaction filtering |
+
+**Overall Architecture Health:** 8/10 - Strong foundation with clear path for Phase 3. Critical QDockWidget migration planned for flexible GUI.
+
 ---
 
 ## Critical Update: Baseline Storage Architecture ✅ COMPLETE (December 11, 2025)

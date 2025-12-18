@@ -6,6 +6,23 @@
 - Investigating bugs
 - Onboarding new developers
 
+## Table of Contents
+
+- [Quick Health Check](#quick-health-check)
+- [P1: Single Source of Truth](#p1-single-source-of-truth)
+- [P2: Controller as Mediator](#p2-controller-as-mediator)
+- [P3: Incremental Updates Over Full Rebuilds](#p3-incremental-updates-over-full-rebuilds)
+- [P4: Persistent Objects for Interactive Elements](#p4-persistent-objects-for-interactive-elements)
+- [P5: No Timing Dependencies](#p5-no-timing-dependencies)
+- [P6: Explicit Contracts Over Implicit Coupling](#p6-explicit-contracts-over-implicit-coupling)
+- [P7: Observable Information Flow](#p7-observable-information-flow)
+- [P8: Coordinate Systems Abstracted](#p8-coordinate-systems-abstracted)
+- [Integration Validation](#integration-validation)
+- [Validation Workflow](#validation-workflow)
+- [Checklist Summary](#checklist-summary)
+
+---
+
 ## Quick Health Check
 
 Run this 5-minute check daily during active development:
