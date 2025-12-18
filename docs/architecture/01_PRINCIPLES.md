@@ -227,6 +227,61 @@
 
 ---
 
+### P10: Internal State Management Over External Flags
+**Principle**: Components manage their own initialization and state transitions. External flags and parameters for internal state are forbidden.
+
+**Rationale**: External state management creates tight coupling and unpredictable behavior. Components with internal state are self-managing, testable in isolation, and have predictable APIs.
+
+**Application**:
+- Components track their own initialization: `self.initialized = False`
+- State transitions happen internally: `if not self.initialized: initialize()`
+- External callers don't manage component state: no `preserve_view` parameters
+- APIs are consistent regardless of internal state
+
+**Validation Test**:
+```python
+# Component should work identically whether called first time or tenth time:
+panel = TrajectoryPanel()
+panel.update_trajectory(data1)  # First call - initializes
+panel.update_trajectory(data2)  # Subsequent call - updates
+# Both calls should produce identical visible results for same data
+```
+
+**Example Implementation**:
+```python
+class TrajectoryPanelPyQtGraph(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.trajectory_initialized = False  # Internal state
+    
+    def update_trajectory(self, gamma_x, gamma_y, *args, **kwargs):
+        # Always plot data
+        self.plot_trajectory(gamma_x, gamma_y, self.active_perspective)
+        
+        # Handle initialization internally
+        if not self.trajectory_initialized:
+            self.set_initial_view_range(gamma_x, gamma_y)
+            self.trajectory_initialized = True
+        
+        # Handle markers
+        pinned_markers = kwargs.get('pinned_markers')
+        if pinned_markers is not None:
+            self.set_pinned_markers(pinned_markers)
+```
+
+**Violations**:
+- ❌ `update_trajectory(..., preserve_view=True)` external state management
+- ❌ Components requiring external initialization flags
+- ❌ Different behavior based on call history (non-deterministic APIs)
+
+**Benefits**:
+- Self-managing components are easier to test and reuse
+- No external coupling to component internal state
+- Predictable API behavior regardless of call sequence
+- Easier debugging (state is encapsulated)
+
+---
+
 ## Known Architectural Debt (December 7, 2025)
 
 ### Technical Debt from Phase 2.1 (Diagnostic Markers)

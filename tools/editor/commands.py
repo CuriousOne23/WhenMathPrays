@@ -264,7 +264,13 @@ class ResetPrimitiveCommand(QUndoCommand):
                 return
 
             _logger.debug(f"Found event_idx={event_idx}")
+            _logger.debug(f"About to call _apply_primitive_reset with event_idx={event_idx}, primitive={self.primitive}, baseline_value={self.baseline_value}, perspective={self.perspective}")
             self.controller._apply_primitive_reset(event_idx, self.primitive, self.baseline_value, self.perspective)
+            _logger.debug(f"Successfully called _apply_primitive_reset")
+        except Exception as e:
+            _logger.error(f"Exception in ResetPrimitiveCommand.redo(): {e}")
+            import traceback
+            traceback.print_exc()
         finally:
             self.controller.state.exit_undo_operation()
     

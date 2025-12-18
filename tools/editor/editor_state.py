@@ -8,7 +8,7 @@ validation, transitions, and clear contracts.
 from enum import Enum, auto
 from typing import Optional, Set, Callable
 from dataclasses import dataclass, field
-from .state_viewer import StateViewer
+from tools.editor.state_viewer import StateViewer
 
 
 class PerspectiveState(Enum):
