@@ -11,6 +11,8 @@ Usage:
     # Output: [OBS:INSERT_EVENT] time=3.5, perspective='M1'
 """
 
+import logging
+
 class SimpleObserver:
     """
     Lightweight observer for editor operations.
@@ -30,6 +32,7 @@ class SimpleObserver:
             enabled: Whether logging is enabled (default True)
         """
         self.enabled = enabled
+        self.logger = logging.getLogger('WhenMathPrays')
         
     def log(self, operation: str, **kwargs):
         """
@@ -48,4 +51,4 @@ class SimpleObserver:
             
         # Format context as key=value pairs
         context = ', '.join(f'{k}={v}' for k, v in kwargs.items())
-        print(f"[OBS:{operation}] {context}")
+        self.logger.info(f"[OBS:{operation}] {context}")

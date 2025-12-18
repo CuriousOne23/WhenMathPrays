@@ -313,6 +313,17 @@ The baseline communication protocol has dedicated logging (see [baseline_communi
 4. **File-based logs**: Route to files for analysis without terminal clutter
 5. **Tagged output**: All debug messages include category and context information
 
+### Automated Verification and State Logging
+
+For systematic debugging and regression testing, the editor includes a comprehensive state logging and verification system:
+
+- **[Verification System](../verification/README.md)** - Automated verification scripts and baseline state logs
+- **State Logs**: Complete operation records with timestamps, entities, and state changes
+- **Regression Testing**: Compare current behavior against verified baselines
+- **Debug Data**: State logs serve as debugging aids for complex state synchronization issues
+
+The verification system uses the same logging infrastructure described above but captures complete state transitions for automated analysis and debugging.
+
 ---
 
 ## Architecture Insights from Debugging
