@@ -769,7 +769,7 @@ class InteractiveEditor:
         StateViewer.record(
             operation="diagnostic_marker",
             entity=(event_index, primitive),
-            changes={"hypothetical_value": hypothetical_value},
+            changes={"hypothetical_value": (None, hypothetical_value)},
             location="interactive_editor.py:_on_diagnostic_marker"
         )
         from core.love import update_gamma_self
