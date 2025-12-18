@@ -2,20 +2,22 @@
 
 **Purpose:** Track all deviations from default weights in CONSTANTS.md as the WhenMathPrays equation is applied across different relationship types, scenarios, and applications.
 
-**Status (December 2025 - Rev 3.2):** Only **fidelity_scaling_factor=0.12** and **fidelity_epsilon=5.0** are LOCKED (Im-only depth scaling). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario.
+**Status (December 2025 - Rev 3.4):** Only **fidelity_scaling_factor=0.12** and **fidelity_epsilon=5.0** are LOCKED (Im-only depth scaling). All axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) and entropy parameters (entropy_real_target, entropy_imag_target, delS_real, delS_imag) are DEFAULT, tunable by scenario.
 
 ---
 
-## Framework Stability (Rev 3.2)
+## Framework Stability (Rev 3.4)
 
-**December 2025 Rev 3.2:** Im-only depth-scaled fidelity asymmetry. Negatives scale with love depth (Im axis only).
+**December 2025 Rev 3.4:** Constant-force entropy for timeline independence. Axis-independent decay with sign-based pull direction.
 
 | Parameter | Default Value | Status | Notes |
 |-----------|---------------|--------|-------|
 | **fidelity_scaling_factor** | 0.12 | **LOCKED** | Negative fidelity depth scaling coefficient. DO NOT CHANGE. |
 | **fidelity_epsilon (ε)** | 5.0 | **LOCKED** | Collapse prevention floor for Im depth. DO NOT CHANGE. |
-| **ΔS** | 0.02 | Tunable | Entropy drift magnitude per time unit (unchanged from Rev 3) |
-| **γ_attractor** | -8+0j | Tunable | Entropy attractor position (unchanged from Rev 3) |
+| **entropy_real_target** | -150.0 | Tunable | Real axis entropy attractor (Ego direction) |
+| **entropy_imag_target** | 0.0 | Tunable | Imaginary axis entropy attractor (neutral affect) |
+| **delS_real** | 0.02 | Tunable | Real axis entropy drift rate (constant force) |
+| **delS_imag** | 0.02 | Tunable | Imaginary axis entropy drift rate (constant force) |
 | w_v | 0.8 | Tunable | Visibility weight (real axis, unchanged) |
 | w_r | 1.0 | Tunable | Resonance weight (imaginary axis, unchanged) |
 | w_f | 1.2 | Tunable | Positive fidelity weight (imaginary axis, unchanged) |
@@ -23,26 +25,47 @@
 | w_S,R | 0.5 | Tunable | Shared Breath (real axis, unchanged) |
 | w_S,I | 0.5 | Tunable | Shared Breath (imaginary axis, unchanged) |
 
+**REMOVED (Rev 3.4):**
+- ~~γ_attractor~~ (replaced with separate real/imag targets for axis-independent decay)
+- ~~ΔS~~ (unified rate, replaced with delS_real/delS_imag for per-axis control)
+
 **REMOVED (Rev 3.2):**
 - ~~w_f_neg = 25.0~~ (replaced with Im-only depth scaling: 0.12 × max(|Im|, 5.0))
+- ~~w_neg = 1.5~~ (hybrid asymmetry parameter, replaced with depth-scaled fidelity)
 
-**KEY CHANGE IN REV 3.2:**
+**KEY CHANGES IN REV 3.2:**
 - Negative fidelity: Im-only depth scaling (was fixed 25× in Rev 3.1)
 - Formula: f' = f × (0.12 × max(|Im|, 5.0)) for negatives
 - Restores "deeper love = deeper wound" psychology
 - All other parameters remain at Rev 3 values
 
-**Configurable entropy attractor for scenario-specific modeling:**
-- Default `-20+0j`: Isolated self-focus (ego-neutral zone)
-- Q4 cult `-8+5j`: Hateful-we pulled toward we/love (tribalism)
-- Q1 recovery `8+5j`: Healthy ego pulled toward love/connection
-- Q3 despair `-8-5j`: Isolated ego sinking into enmity
+**KEY CHANGES IN REV 3.4:**
+- Entropy: Constant-force model using sign() for timeline-independent drift
+- Formula: entropy_pull = delS_axis × Δt × sign(target - current) per axis
+- Fixes timeline accumulation bug; same entropy per unit time regardless of scenario length
+- Fidelity asymmetry unchanged from Rev 3.2 (Im-only depth scaling)
 
-**Key Insight (Rev 3.2):** Im-only depth scaling restores psychological truth: "The deeper the love, the more betrayal can scar." But scales only by Im (love depth), not full |γ| (prevents Ego/We coupling). Natural ±150i battlefield range emerges from scaling.
+**Configurable entropy targets for scenario-specific modeling:**
+- Default real: -150.0 (deep Ego/isolation)
+- Default imag: 0.0 (neutral affect/apathy)
+- Q4 cult real: -100.0, imag: -20.0 (hateful-we pulled toward enmity)
+- Q1 recovery real: -50.0, imag: 50.0 (healthy ego pulled toward love/connection)
+- Q3 despair real: -200.0, imag: -50.0 (isolated ego sinking into enmity)
+
+**Key Insight (Rev 3.4):** Constant-force entropy ensures psychological consistency: relationships decay at the same rate per day, not accumulating based on how long the scenario runs. Fidelity depth scaling remains locked for "deeper love = deeper wound" truth.
 
 ---
 
 ## Tuning History
+
+### Rev 3.4 Implementation (December 2025)
+**Date:** December 18, 2025  
+**Reason:** Fix timeline accumulation bug in entropy model  
+**Problem with Rev 3.3:** Distance-proportional entropy caused scenarios of different lengths to accumulate different total entropy effects  
+**Solution:** Constant-force entropy: entropy_pull = delS_axis × Δt × sign(target - current) per axis  
+**Rationale:** Timeline-independent drift; same entropy per unit time regardless of scenario length  
+
+**All scenarios should work with Rev 3.4 - entropy now consistent across time scales.**
 
 ### Rev 3.2 Implementation (December 2025)
 **Date:** December 10, 2025  
@@ -53,16 +76,18 @@
 
 **All scenarios should work with Rev 3.2 - natural range ±150i emerges from scaling.**
 
-### Singles Dating to Love (60 days) - SHOULD WORK WITH REV 3.2
-**Date:** November 29, 2025 → **Updated for Rev 3.2 (December 2025)**  
-**Status:** Should produce more realistic trajectories - damage now scales with love depth.  
-**Expected Range:** |γ_self| ≈ 100-200i (healthy dating/love, doubled scale from Rev 3)  
+**All scenarios should work with Rev 3.4 - entropy now consistent across time scales.**
+
+### Singles Dating to Love (60 days) - SHOULD WORK WITH REV 3.4
+**Date:** November 29, 2025 → **Updated for Rev 3.4 (December 2025)**  
+**Status:** Should produce more realistic trajectories with timeline-independent entropy.  
+**Expected Range:** |γ_self| ≈ 100-200i (healthy dating/love, consistent across time scales)  
 **CSV Primitive Scale:** −10…+10 (human intuitive scale, normalized to [-1,+1] in code)
 **Approach:**
 1. Normalize CSV primitives: `p_norm = p_raw / 10` (−10…+10 → −1…+1)
-2. Apply component-wise update with Rev 3.2 default weights
+2. Apply component-wise update with Rev 3.4 default weights
 3. Check if |γ_self| ends in target range 50-250i
-4. If not, tune weights (NOT w_f_neg)
+4. If not, tune weights (NOT fidelity_scaling_factor)
 
 **Files:** 
 - `data/Single_Dating_2_Love_M1_gamma_self_table.csv`
@@ -91,7 +116,7 @@ r_norm = r_raw / 10
 
 ---
 
-## Weight Tuning Guidelines (Rev 3.2)
+## Weight Tuning Guidelines (Rev 3.4)
 
 When γ_self trajectory doesn't match expectations:
 
