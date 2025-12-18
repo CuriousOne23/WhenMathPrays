@@ -2,19 +2,6 @@
 
 **Purpose**: Explicit specifications for every interface. When a method is called, what must be true before (preconditions), what is guaranteed after (postconditions), and what can go wrong (errors).
 
-## Table of Contents
-
-- [Contract Notation](#contract-notation)
-- [EditorModel API](#editormodel-api)
-- [EditorController API](#editorcontroller-api)
-- [PrimitivePanel API](#primitivepanel-api)
-- [DraggablePoint API](#draggablepoint-api)
-- [TrajectoryPanel API](#trajectorypanel-api)
-- [Contract Validation](#contract-validation)
-- [Contract Violations to Watch For](#contract-violations-to-watch-for)
-
----
-
 ## Contract Notation
 
 Each contract specifies:

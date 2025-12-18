@@ -2,48 +2,6 @@
 
 This document outlines systematic debugging approaches for the interactive editor, particularly for complex UI/state synchronization issues.
 
-## Table of Contents
-
-- [Complete Debugging Methodology Inventory](#complete-debugging-methodology-inventory)
-  - [1. Direct Bug Squashing](#1-direct-bug-squashing)
-  - [2. Control Testing](#2-control-testing)
-  - [3. Information Flow Tracking](#3-information-flow-tracking)
-  - [4. State Inspection](#4-state-inspection)
-  - [5. Bisection/Isolation](#5-bisectionisolation)
-  - [6. Assumption Validation](#6-assumption-validation)
-  - [7. Minimal Reproduction](#7-minimal-reproduction)
-  - [8. Framework Exploration](#8-framework-exploration)
-- [Debugging Workflow Recommendation](#debugging-workflow-recommendation)
-- [Case Study: Marker Label Persistence Bug (Dec 2024)](#case-study-marker-label-persistence-bug-dec-2024)
-- [Debugging and Validation: Marker/Label Logic (Dec 16, 2025)](#debugging-and-validation-markerlabel-logic-dec-16-2025)
-- [Best Practices](#best-practices)
-- [Debug Infrastructure](#debug-infrastructure)
-  - [Centralized Debug Logging System (December 2025)](#centralized-debug-logging-system-december-2025)
-  - [Legacy Console Output Tags](#legacy-console-output-tags)
-  - [Section Markers](#section-markers)
-  - [Baseline Protocol Logging](#baseline-protocol-logging)
-  - [Debug Principles](#debug-principles)
-  - [Automated Verification and State Logging](#automated-verification-and-state-logging)
-- [Architecture Insights from Debugging](#architecture-insights-from-debugging)
-- [Future Considerations & Proposals](#future-considerations--proposals)
-  - [Testing & Validation](#testing--validation)
-  - [Debug Logging Enhancements](#debug-logging-enhancements)
-  - [Documentation](#documentation)
-  - [Tooling](#tooling)
-- [Debugging Primitive ↔ Gamma_Self Mapping (v2.2.3 Proposal)](#debugging-primitive--gamma_self-mapping-v223-proposal)
-- [Debugging Key Objects (Architecture-Level Visibility)](#debugging-key-objects-architecture-level-visibility)
-  - [EventPoint Debugging](#eventpoint-debugging)
-  - [Marker Debugging](#marker-debugging)
-  - [EditorModel Debugging](#editormodel-debugging)
-  - [EditorController Debugging](#editorcontroller-debugging)
-  - [PrimitivePanelPyQtGraph Debugging](#primitivepanelpyqtgraph-debugging)
-  - [TrajectoryPanelPyQtGraph Debugging](#trajectorypanelpyqtgraph-debugging)
-  - [Command Classes Debugging](#command-classes-debugging)
-  - [EditorState Debugging](#editorstate-debugging)
-  - [State Viewer Integration Patterns](#state-viewer-integration-patterns)
-
----
-
 ## Complete Debugging Methodology Inventory
 
 ### 1. Direct Bug Squashing

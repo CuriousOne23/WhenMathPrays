@@ -2,15 +2,6 @@
 
 **Purpose**: These principles are invariants that survive across rearchitecture cycles. When a principle is violated, it indicates architectural debt that must be addressed.
 
-## Table of Contents
-
-- [Core Principles](#core-principles)
-- [Known Architectural Debt (December 7, 2025)](#known-architectural-debt-december-7-2025)
-- [Phase 3 Technical Debt Resolution](#phase-3-technical-debt-resolution)
-- [Principle Evolution](#principle-evolution)
-
----
-
 ## Core Principles
 
 ### P1: Single Source of Truth

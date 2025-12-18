@@ -1,16 +1,4 @@
-# Verification and Validation
-
-This directory contains comprehensive verification and validation infrastructure for the WhenMathPrays interactive scenario editor.
-
-## Contents
-
-- **[Entropy Verification](#entropy-verification-log)** - Official entropy functionality testing
-- **[Baseline Protocol Validation](#baseline-protocol-validation)** - Time/index synchronization validation
-- **[Interactive Editor Verification](#interactive-editor-functionality-verification)** - Full editor functionality testing
-- **[Performance Baselines](#performance-baselines)** - Performance regression tracking
-- **[Automated Verification Script](#automated-verification-script)** - Log validation and analysis tools
-
-## Entropy Verification Log
+# Entropy Verification Log
 
 ## Overview
 
@@ -137,78 +125,6 @@ diff <(grep "^\[" old_log.log | wc -l) <(grep "^\[" new_log.log | wc -l)
 # Check for new warning patterns
 grep "WARNING\|ERROR" new_log.log
 ```
-
-## Baseline Protocol Validation
-
-This section covers validation of the baseline communication protocol that synchronizes time-indexed primitive space with index-based gamma_self space.
-
-### Performance Baseline
-
-**Baseline File**: [`interactive_editor_performance_baseline.md`](interactive_editor_performance_baseline.md)
-
-**Storage Location**: Baseline performance data is hardcoded in `verification/interactive_editor_performance_validation.py` in the `_load_baseline_performance()` method for simplicity and reliability.
-
-Current baseline performance measurements (December 18, 2025):
-
-| Data Size | validate_consistency | snapshot_mappings | check_marker_consistency | Total | Δ from Previous |
-|-----------|---------------------|------------------|------------------------|-------|-----------------|
-| 10 events | 0.01ms | 0.01ms | 0.01ms | 0.03ms | N/A (baseline) |
-| 100 events | 0.02ms | 0.01ms | 0.10ms | 0.13ms | N/A (baseline) |
-| 1,000 events | 0.15ms | 0.11ms | 0.63ms | 0.89ms | N/A (baseline) |
-| 10,000 events | 1.06ms | 1.29ms | 7.17ms | 9.52ms | N/A (baseline) |
-
-**Updating Baselines**: When establishing new baseline measurements, update the hardcoded dictionary in `verification/interactive_editor_performance_validation.py` and document the change in `interactive_editor_performance_baseline.md`. See the baseline file for detailed change process and decision criteria.
-
-### Validation Functions
-
-The baseline protocol includes automated validation functions for AI-assisted debugging:
-
-- **`validate_consistency()`**: Checks event count matching, time ordering, bounds validation
-- **`snapshot_mappings()`**: Creates current time↔index relationship mappings
-- **`check_marker_consistency()`**: Validates marker positions against valid time/primitive combinations
-
-### Performance Regression Tracking
-
-Future performance tests should be compared against the baseline in `interactive_editor_performance_baseline.md`. Flag any regression >10% for investigation.
-
-### Usage in Verification
-
-```bash
-# Run baseline protocol validation
-python -c "
-from tools.editor.baseline_protocol import BaselineDebugLog
-# ... validation code ...
-"
-```
-
-### Running Interactive Editor Performance Validation
-
-**Script**: `verification/interactive_editor_performance_validation.py`
-
-```bash
-# Run comprehensive performance validation
-python verification/interactive_editor_performance_validation.py
-
-# Expected output:
-# Running Interactive Editor Performance Validation...
-# ==================================================
-#
-# Validation Results:
-# ==================================================
-# validate_consistency: ✓ PASS
-#   Details: All tests passed
-#   Performance:
-#     10 items: 0.01ms (+0.0%)      # Δ from baseline
-#     100 items: 0.02ms (+0.0%)
-#     1000 items: 0.15ms (+0.0%)
-#
-# snapshot_mappings: ✓ PASS
-#   ...
-```
-
-The script validates function correctness and performance against baseline measurements, showing deltas from the established baseline in `interactive_editor_performance_baseline.md`.
-
-**Pass/Fail Criteria**: Currently tests PASS/FAIL based on functional correctness only. Performance deltas are reported for monitoring but do not cause test failures, allowing for normal system variation (±10%) while tracking trends.
 
 ## Automated Verification Script
 

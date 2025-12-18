@@ -1,0 +1,244 @@
+=== Primitive Panel Graph Query ===
+GraphicsLayoutWidget visible: True
+Total layout items: 166
+  Item 0: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 1: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 2: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 3: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 4: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 5: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 6: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 7: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 8: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 9: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 10: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 11: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 12: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 13: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 14: <class 'pyqtgraph.graphicsItems.LabelItem.LabelItem'>
+    Text: ''
+  Item 15: <class 'pyqtgraph.graphicsItems.ButtonItem.ButtonItem'>
+  Item 16: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 17: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 18: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 19: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 20: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 21: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 22: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 23: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 24: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 25: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 26: <class 'pyqtgraph.graphicsItems.InfiniteLine.InfiniteLine'>
+  Item 27: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 28: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 29: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 30: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 31: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 32: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 33: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ChildGroup'>
+  Item 34: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 35: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ViewBox'>
+  Item 36: <class 'tools.editor.views.primitive_panel_pyqtgraph.DoubleClickPlotItem'>
+    Plot data items: 8
+      Data item 0: Invalid data
+      Data item 1: Invalid data
+      Data item 2: 0 points
+        No data points
+      Data item 3: 0 points
+        No data points
+      Data item 4: 0 points
+        No data points
+      Data item 5: 0 points
+        No data points
+      Data item 6: 0 points
+        No data points
+      Data item 7: Invalid data
+  Item 37: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 38: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 39: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 40: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 41: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 42: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 43: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 44: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 45: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 46: <class 'pyqtgraph.graphicsItems.LabelItem.LabelItem'>
+    Text: ''
+  Item 47: <class 'pyqtgraph.graphicsItems.ButtonItem.ButtonItem'>
+  Item 48: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 49: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 50: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 51: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 52: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 53: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 54: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 55: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 56: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 57: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 58: <class 'pyqtgraph.graphicsItems.InfiniteLine.InfiniteLine'>
+  Item 59: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 60: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 61: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 62: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 63: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 64: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 65: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ChildGroup'>
+  Item 66: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 67: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ViewBox'>
+  Item 68: <class 'tools.editor.views.primitive_panel_pyqtgraph.DoubleClickPlotItem'>
+    Plot data items: 8
+      Data item 0: Invalid data
+      Data item 1: Invalid data
+      Data item 2: 0 points
+        No data points
+      Data item 3: 0 points
+        No data points
+      Data item 4: 0 points
+        No data points
+      Data item 5: 0 points
+        No data points
+      Data item 6: 0 points
+        No data points
+      Data item 7: Invalid data
+  Item 69: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 70: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 71: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 72: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 73: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 74: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 75: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 76: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 77: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 78: <class 'pyqtgraph.graphicsItems.LabelItem.LabelItem'>
+    Text: ''
+  Item 79: <class 'pyqtgraph.graphicsItems.ButtonItem.ButtonItem'>
+  Item 80: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 81: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 82: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 83: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 84: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 85: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 86: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 87: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 88: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 89: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 90: <class 'pyqtgraph.graphicsItems.InfiniteLine.InfiniteLine'>
+  Item 91: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 92: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 93: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 94: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 95: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 96: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 97: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ChildGroup'>
+  Item 98: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 99: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ViewBox'>
+  Item 100: <class 'tools.editor.views.primitive_panel_pyqtgraph.DoubleClickPlotItem'>
+    Plot data items: 8
+      Data item 0: Invalid data
+      Data item 1: Invalid data
+      Data item 2: 0 points
+        No data points
+      Data item 3: 0 points
+        No data points
+      Data item 4: 0 points
+        No data points
+      Data item 5: 0 points
+        No data points
+      Data item 6: 0 points
+        No data points
+      Data item 7: Invalid data
+  Item 101: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 102: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 103: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 104: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 105: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 106: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 107: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 108: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 109: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 110: <class 'pyqtgraph.graphicsItems.LabelItem.LabelItem'>
+    Text: ''
+  Item 111: <class 'pyqtgraph.graphicsItems.ButtonItem.ButtonItem'>
+  Item 112: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 113: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 114: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 115: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 116: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 117: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 118: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 119: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 120: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 121: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 122: <class 'pyqtgraph.graphicsItems.InfiniteLine.InfiniteLine'>
+  Item 123: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 124: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 125: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 126: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 127: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 128: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 129: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ChildGroup'>
+  Item 130: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 131: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ViewBox'>
+  Item 132: <class 'tools.editor.views.primitive_panel_pyqtgraph.DoubleClickPlotItem'>
+    Plot data items: 8
+      Data item 0: Invalid data
+      Data item 1: Invalid data
+      Data item 2: 0 points
+        No data points
+      Data item 3: 0 points
+        No data points
+      Data item 4: 0 points
+        No data points
+      Data item 5: 0 points
+        No data points
+      Data item 6: 0 points
+        No data points
+      Data item 7: Invalid data
+  Item 133: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 134: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 135: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 136: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 137: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 138: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 139: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 140: <class 'pyqtgraph.graphicsItems.AxisItem.AxisItem'>
+  Item 141: <class 'PySide6.QtWidgets.QGraphicsTextItem'>
+  Item 142: <class 'pyqtgraph.graphicsItems.LabelItem.LabelItem'>
+    Text: ''
+  Item 143: <class 'pyqtgraph.graphicsItems.ButtonItem.ButtonItem'>
+  Item 144: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 145: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 146: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 147: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 148: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 149: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 150: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 151: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 152: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 153: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 154: <class 'pyqtgraph.graphicsItems.InfiniteLine.InfiniteLine'>
+  Item 155: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 156: <class 'tools.editor.views.primitive_panel_pyqtgraph.DraggableScatterItem'>
+  Item 157: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 158: <class 'pyqtgraph.graphicsItems.ScatterPlotItem.ScatterPlotItem'>
+  Item 159: <class 'pyqtgraph.graphicsItems.PlotCurveItem.PlotCurveItem'>
+  Item 160: <class 'pyqtgraph.graphicsItems.PlotDataItem.PlotDataItem'>
+  Item 161: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ChildGroup'>
+  Item 162: <class 'PySide6.QtWidgets.QGraphicsRectItem'>
+  Item 163: <class 'pyqtgraph.graphicsItems.ViewBox.ViewBox.ViewBox'>
+  Item 164: <class 'tools.editor.views.primitive_panel_pyqtgraph.DoubleClickPlotItem'>
+    Plot data items: 8
+      Data item 0: Invalid data
+      Data item 1: Invalid data
+      Data item 2: 0 points
+        No data points
+      Data item 3: 0 points
+        No data points
+      Data item 4: 0 points
+        No data points
+      Data item 5: 0 points
+        No data points
+      Data item 6: 0 points
+        No data points
+      Data item 7: Invalid data
+  Item 165: <class 'pyqtgraph.graphicsItems.GraphicsLayout.GraphicsLayout'>
