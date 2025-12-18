@@ -48,6 +48,46 @@ git checkout phase2
 
 ## Version History
 
+### v2.2.3-double-click-reset (December 17, 2025)
+**Status:** ✅ Complete - Bug fix and feature implementation
+
+**Bug Fixed:** Double-click reset functionality for primitive markers
+- ✅ **Root Cause Identified:** ResetPrimitiveCommand was created but never pushed to undo stack
+- ✅ **Signal Chain Completed:** Added missing `self.undo_stack.push(command)` in controller._do_primitive_reset_logic
+- ✅ **Mouse Event Handling:** Added `sigPointDoubleClicked` signal to DraggableScatterItem class
+- ✅ **Signal Processing:** Added `_on_point_double_clicked` method to PrimitivePanelPyQtGraph for event handling
+
+**Technical Implementation:**
+- **Signal Emission:** DraggableScatterItem emits sigPointDoubleClicked on mouse double-click events
+- **Event Processing:** PrimitivePanelPyQtGraph receives signal and emits primitive_reset_requested
+- **Controller Logic:** EditorController processes reset request and creates ResetPrimitiveCommand
+- **Undo Integration:** Fixed critical bug where command was created but not pushed to undo stack
+- **Model Update:** ResetPrimitiveCommand.redo() resets primitive values to baseline CSV values
+
+**User Experience:**
+- Double-clicking any primitive marker now resets its value to the original baseline
+- Undo (Ctrl+Z) and redo (Ctrl+Y) work correctly for reset operations
+- Visual feedback shows immediate value change and label updates
+- Consistent with user expectations from interactive editor design
+
+**Debugging Integration:**
+- Full event correlation tracking with unique IDs
+- Comprehensive logging for mouse events, hit detection, signal emission, and command execution
+- Integrated with debug_gui.py infrastructure for troubleshooting
+
+**Testing:**
+- Manual verification: Double-click markers successfully reset to baseline values
+- Undo/redo verification: Reset operations can be undone and redone
+- Signal chain verification: Debug logs confirm complete event flow
+- Regression testing: Existing functionality remains unaffected
+
+**MVT Compliance:**
+- ✅ Modeled: Clean signal/slot architecture with proper separation of concerns
+- ✅ Verifiable: Immediate visual feedback and debug logging confirm functionality
+- ✅ Testable: Manual test procedures and automated verification possible
+
+---
+
 ### v2.2.2-state-viewer-log (December 14, 2025)
 **Status:** ✅ Complete - Infrastructure ready for full state tracking
 

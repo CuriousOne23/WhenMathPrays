@@ -190,6 +190,7 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 - **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
 - **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
+- **[Verification System](verification/README.md)** - Automated verification and regression testing
 - **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
 
 ---
@@ -465,7 +466,7 @@ plot_dual_scenario(
 - **[gamma_self_defense.md](docs/gamma_self_defense.md)** - Mathematical defense: Why relationship dynamics follow dynamical systems principles
 - **[CONSTANTS.md](CONSTANTS.md)** - Canonical parameter values (single source of truth)
 - **[TUNING.md](TUNING.md)** - Weight calibration and sensitivity analysis
-- **[PRINCIPLES.md](docs/PRINCIPLES.md)** - Design philosophy and spiritual foundations
+- **[grp_principles.md](docs/grp_principles.md)** - Design philosophy and spiritual foundations
 - **[Design_Rationale.md](docs/Design_Rationale.md)** - Architecture decisions and tradeoffs
 
 ### User Guides
@@ -493,7 +494,7 @@ If you're using WhenMathPrays to create relationship scenarios or run simulation
 1. **[README.md](README.md)** (15 min) - Overview, core equation, and quick start guide
 2. **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)** (20 min) - Complete reference for creating and customizing scenarios
 3. **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** (30 min) - Strategic vision and practical importance of the GRP framework
-4. **[PRINCIPLES.md](docs/PRINCIPLES.md)** (15 min) - Core design philosophy and foundational concepts
+4. **[grp_principles.md](docs/grp_principles.md)** (15 min) - Core design philosophy and foundational concepts
 
 **For the Interactive Editor:**
 - **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** (45 min) - Complete user guide for the interactive scenario editor

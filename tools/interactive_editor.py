@@ -114,7 +114,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
 class InteractiveEditor:
     """Main application class for interactive scenario editor."""
     
-    def __init__(self, csv_file: str, qt_app: QApplication, m1_path: Optional[Path] = None, m2_path: Optional[Path] = None, initial_perspective: str = "M1"):
+    def __init__(self, csv_file: str, qt_app: QApplication, m1_path: Optional[Path] = None, m2_path: Optional[Path] = None, initial_perspective: str = "M1", m1_available: bool = True, m2_available: bool = False):
         """
         Initialize interactive editor.
         
@@ -130,6 +130,8 @@ class InteractiveEditor:
         self.m1_path = m1_path or self.csv_file
         self.m2_path = m2_path
         self.initial_perspective = initial_perspective
+        self.m1_available = m1_available
+        self.m2_available = m2_available
         self.qt_app = qt_app
         
         # Load configuration (with fallback to defaults)
@@ -230,8 +232,10 @@ class InteractiveEditor:
         self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
         
         from tools.editor.widgets import PerspectiveSwitcher
-        self.perspective_switcher = PerspectiveSwitcher()
+        self.perspective_switcher = PerspectiveSwitcher(m1_available=self.m1_available, m2_available=self.m2_available)
+        _logger.debug(f"Connecting perspective_changed signal")
         self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
+        _logger.debug(f"Signal connected")
         # Move perspective switcher to toolbar in main window after window is created
         self.window.add_perspective_switcher(self.perspective_switcher)
         
@@ -260,8 +264,15 @@ class InteractiveEditor:
         self.controller.initialize_spinbox_widget(self.spinbox_editor)
         
         # Set initial perspective AFTER all widgets created
-        if self.initial_perspective == "M2":
-            self.perspective_switcher.set_perspective("M2")
+        print(f"DEBUG: About to call set_perspective with {self.initial_perspective}")
+        _logger.debug(f"[INIT] Setting initial perspective to: {self.initial_perspective}")
+        _logger.debug(f"[INIT] Controller current perspective: {self.controller.perspective}")
+        _logger.debug(f"[INIT] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
+        _logger.debug(f"[INIT] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
+        self.perspective_switcher.set_perspective(self.initial_perspective)
+        print(f"DEBUG: After set_perspective, switcher current: {self.perspective_switcher.get_perspective()}")
+        print(f"DEBUG: M1 button checked: {self.perspective_switcher.m1_button.isChecked()}")
+        print(f"DEBUG: M2 button checked: {self.perspective_switcher.m2_button.isChecked()}")
         
         # Create gauge widgets
         from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
@@ -573,6 +584,10 @@ class InteractiveEditor:
     def _on_primitive_reset(self, event_index, primitive):
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
+        # Show confirmation message
+        event = self.model.get_event(event_index, self.controller.perspective)
+        if event:
+            self.window.show_message(f"Reset {primitive} at day {event.time} to baseline")
     
     def _on_primitive_preview_for_spinbox(self, event_index, primitive, value):
         """
@@ -597,6 +612,20 @@ class InteractiveEditor:
         # Update value if active (via controller API)
         if is_active:
             self.controller.update_spinbox_value(value)
+    
+    def _on_perspective_changed(self, perspective: str):
+        """
+        Handle perspective change from PerspectiveSwitcher widget.
+        
+        Args:
+            perspective: 'M1' or 'M2'
+        """
+        _logger.debug(f"[PERSPECTIVE] _on_perspective_changed called with: {perspective}")
+        _logger.debug(f"[PERSPECTIVE] Controller current perspective before switch: {self.controller.perspective}")
+        self.controller.switch_perspective(perspective)
+        _logger.debug(f"[PERSPECTIVE] Controller current perspective after switch: {self.controller.perspective}")
+        _logger.debug(f"[PERSPECTIVE] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
+        _logger.debug(f"[PERSPECTIVE] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
     
     def _on_spinbox_value_changed(self, value):
         """
@@ -967,6 +996,7 @@ class InteractiveEditor:
         from tools.editor.state_viewer import StateViewer
         # Use perspective-specific setter
         perspective = self.controller.perspective
+        self.controller.observer.log('GAMMA_SELF_0_CHANGED', perspective=perspective, new_value=f'{new_value.real:.2f}{new_value.imag:+.2f}j')
         self.model.set_gamma_self_0(perspective, new_value)
         # Check if modified from original
         original = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
@@ -1046,6 +1076,7 @@ class InteractiveEditor:
         Args:
             perspective: Either 'M1' or 'M2'
         """
+        print(f"DEBUG: _on_perspective_changed called with: {perspective}")
         # Controller handles all perspective switching including spinbox restoration
         self.controller.switch_perspective(perspective)
         
@@ -1323,21 +1354,61 @@ Phase 1.5 Features:
                        help='Path to CSV file to edit')
     parser.add_argument('--reset-layout', action='store_true',
                        help='Reset window layout to defaults (clears saved state)')
+    parser.add_argument('--debug-gui', action='store_true',
+                       help='Enable comprehensive GUI event debugging')
+    parser.add_argument('--debug-signals', action='store_true',
+                       help='Enable signal emission tracking')
+    parser.add_argument('--debug-mouse', action='store_true',
+                       help='Enable mouse event debugging')
+    parser.add_argument('--log-terminal', action='store_true',
+                       help='Log to terminal in addition to file')
     
     args = parser.parse_args()
+    
+    # Set up debugging based on arguments
+    if args.debug_gui or args.debug_signals or args.debug_mouse:
+        os.environ['LOG_LEVEL'] = 'DEBUG'
+        
+    if args.log_terminal:
+        os.environ['LOG_TO_TERMINAL'] = 'true'
+    
+    # Enable GUI debugging if requested
+    if args.debug_gui:
+        try:
+            from tools.editor.debug_gui import enable_all_gui_debugging
+            enable_all_gui_debugging()
+            _logger.info("[DEBUG] Comprehensive GUI debugging enabled")
+        except ImportError as e:
+            _logger.warning(f"[DEBUG] GUI debugging not available: {e}")
+    
+    if args.debug_signals:
+        try:
+            from tools.editor.debug_gui import get_gui_debugger
+            get_gui_debugger().enable_signal_tracking()
+            _logger.info("[DEBUG] Signal tracking enabled")
+        except ImportError as e:
+            _logger.warning(f"[DEBUG] Signal debugging not available: {e}")
+    
+    if args.debug_mouse:
+        try:
+            from tools.editor.debug_gui import get_gui_debugger
+            get_gui_debugger().enable_mouse_event_debugging()
+            _logger.info("[DEBUG] Mouse event debugging enabled")
+        except ImportError as e:
+            _logger.warning(f"[DEBUG] Mouse debugging not available: {e}")
     
     # Clear saved layout if requested
     if args.reset_layout:
         from PySide6.QtCore import QSettings
         settings = QSettings('WhenMathPrays', 'InteractiveEditor')
         settings.clear()
-        print("[RESET] Cleared saved window layout - will use defaults")
+        _logger.info("[RESET] Cleared saved window layout - will use defaults")
     
     # Validate file and resolve M1/M2 paths
     m1_path, m2_path, error, was_originally_m2 = validate_and_resolve_paths(args.csv_file)
     
     if error:
-        print(f"Error: {error}", file=sys.stderr)
+        _logger.error(f"Error: {error}")
         sys.exit(1)
     
     # Initial perspective: M2 if M2-only file, otherwise M1
@@ -1348,25 +1419,36 @@ Phase 1.5 Features:
         if m1_path == m2_path:
             # Single file loaded into both slots
             if was_originally_m2:
-                print(f"[INFO] M2-only: Loaded into both perspectives (M2 selected)")
+                _logger.info(f"[INFO] M2-only: Loaded into both perspectives (M2 selected)")
             else:
-                print(f"[INFO] M1-only: Loaded into both perspectives (M1 selected)")
-            print(f"[INFO] You can edit from either perspective and save to M1 or M2")
+                _logger.info(f"[INFO] M1-only: Loaded into both perspectives (M1 selected)")
+            _logger.info(f"[INFO] You can edit from either perspective and save to M1 or M2")
         else:
             # Dual perspective
-            print(f"[INFO] Loading dual-perspective data:")
-            print(f"  M1: {m1_path}")
-            print(f"  M2: {m2_path}")
+            _logger.info(f"[INFO] Loading dual-perspective data:")
+            _logger.info(f"  M1: {m1_path}")
+            _logger.info(f"  M2: {m2_path}")
     else:
-        print(f"[INFO] Loading single-perspective data: {m1_path}")
-        print(f"[INFO] No M2 file found - perspective switching disabled")
+        _logger.info(f"[INFO] Loading single-perspective data: {m1_path}")
+        _logger.info(f"[INFO] No M2 file found - perspective switching disabled")
+    
+    # Determine which perspectives are available
+    m1_available = m1_path is not None
+    m2_available = m2_path is not None and m1_path != m2_path  # M2 only available if it's a different file
     
     # Create Qt application (Phase 2)
     app = QApplication(sys.argv)
     app.setApplicationName('GRP Interactive Scenario Editor')
     
     # Create and run editor
-    editor = InteractiveEditor(str(m1_path), app, m1_path=m1_path, m2_path=m2_path, initial_perspective=initial_perspective)
+    editor = InteractiveEditor(
+        str(m1_path), app, 
+        m1_path=m1_path, 
+        m2_path=m2_path, 
+        initial_perspective=initial_perspective,
+        m1_available=m1_available,
+        m2_available=m2_available
+    )
     sys.exit(editor.run())
 
 

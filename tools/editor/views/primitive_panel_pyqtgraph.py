@@ -25,7 +25,7 @@ from tools.editor.editor_constants import (
 from tools.editor.observability import ObservabilityLog
 
 # Import debug configuration
-from tools.editor.debug_config import get_logger
+from tools.editor.debug_config import get_logger, DEBUG_SPINBOX
 
 # Get logger for this module
 _logger = get_logger('primitive_panel')
@@ -40,8 +40,8 @@ class DraggableScatterItem(pg.ScatterPlotItem):
     sigPointDragged = Signal(int, float, float)  # index, x, y (during drag)
     sigPointReleased = Signal(int, float, float)  # index, x, y (on release)
     sigPointClicked = Signal(int, float, float)  # index, x, y (on click without drag)
-    sigPointDoubleClicked = Signal(int)  # index
     sigPointCtrlClicked = Signal(int)  # index (Ctrl+Click for deletion)
+    sigPointDoubleClicked = Signal(int)  # index (double-click for reset)
     
     def __init__(self, *args, is_diagnostic=False, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,7 +52,10 @@ class DraggableScatterItem(pg.ScatterPlotItem):
         self.y_data = None
         self.is_diagnostic = is_diagnostic  # Flag to identify diagnostic markers
         self.setAcceptHoverEvents(True)
-        
+        # Enable mouse button events
+        from PySide6.QtCore import Qt
+        self.setAcceptedMouseButtons(Qt.LeftButton)
+    
     def setData(self, *args, **kwargs):
         """Override to cache x,y arrays for dragging."""
         # Store x,y data for dragging
@@ -64,6 +67,7 @@ class DraggableScatterItem(pg.ScatterPlotItem):
     
     def mouseDoubleClickEvent(self, ev):
         """Handle double-click for reset."""
+        # Check if double-click hits a point
         if ev.button() == Qt.LeftButton:
             pos = ev.pos()
             pts = self.pointsAt(pos)
@@ -72,7 +76,9 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 self.sigPointDoubleClicked.emit(idx)
                 ev.accept()
                 return
-        super().mouseDoubleClickEvent(ev)
+                
+        # If no point hit or not left button, ignore
+        ev.ignore()
     
     def mouseClickEvent(self, ev):
         """Handle single click for readout or Ctrl+Click for deletion."""
@@ -173,6 +179,99 @@ class DraggableScatterItem(pg.ScatterPlotItem):
                 ev.accept()
                 _logger.debug(f"DRAG MOVE: index={self.dragging_idx}, y={new_y:.1f}, time={time.time()-t0:.3f}s")
 
+
+class DoubleClickPlotItem(pg.PlotItem):
+    """Custom PlotItem that handles double-clicks on scatter points."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.scatter_items = {}  # Will be set by parent panel
+        self.primitive_reset_requested = None  # Will be set by parent panel
+
+        # Import debugging tools
+        try:
+            from tools.editor.debug_gui import get_gui_debugger, event_correlation_context
+            self._gui_debugger = get_gui_debugger()
+        except ImportError:
+            self._gui_debugger = None
+
+    def mouseDoubleClickEvent(self, ev):
+        """Handle double-click events by checking if they hit scatter points."""
+        from tools.editor.debug_config import get_logger
+        logger = get_logger('view.double_click')
+
+        # Start event correlation
+        correlation_id = None
+        if self._gui_debugger:
+            correlation_id = self._gui_debugger.event_tracker.start_event(
+                'mouse_double_click',
+                'DoubleClickPlotItem',
+                button=ev.button(),
+                pos=ev.pos()
+            )
+
+        logger.debug(f"[DOUBLE_CLICK] mouseDoubleClickEvent called, button={ev.button()}, correlation_id={correlation_id}")
+
+        if ev.button() == Qt.LeftButton and self.scatter_items:
+            # Get the click position in data coordinates
+            pos = self.getViewBox().mapSceneToView(ev.scenePos())
+            logger.debug(f"[DOUBLE_CLICK] Scene pos: {ev.scenePos()} -> Data pos: {pos}")
+
+            # Check each scatter item to see if the click hits a point
+            for prim, scatter in self.scatter_items.items():
+                if scatter is not None:
+                    pts = scatter.pointsAt(pos)
+                    logger.debug(f"[DOUBLE_CLICK] {prim}: {len(pts)} points at {pos}")
+
+                    if len(pts) > 0:
+                        idx = pts[0].index()
+                        logger.info(f"[DOUBLE_CLICK] Hit detected: {prim} point {idx} at {pos}")
+
+                        if self.primitive_reset_requested:
+                            logger.info(f"[DOUBLE_CLICK] Emitting primitive_reset_requested({idx}, {prim})")
+
+                            # Track signal emission
+                            if self._gui_debugger:
+                                self._gui_debugger.event_tracker.add_event_step(
+                                    correlation_id, 'signal_emit', 'DoubleClickPlotItem',
+                                    signal='primitive_reset_requested', args=(idx, prim)
+                                )
+
+                            self.primitive_reset_requested.emit(idx, prim)
+
+                            # Mark event as handled
+                            if self._gui_debugger:
+                                self._gui_debugger.event_tracker.end_event(
+                                    correlation_id, "signal_emitted",
+                                    primitive=prim, event_index=idx
+                                )
+
+                            ev.accept()
+                            return
+                        else:
+                            logger.warning("[DOUBLE_CLICK] primitive_reset_requested signal not connected")
+                            if self._gui_debugger:
+                                self._gui_debugger.event_tracker.end_event(
+                                    correlation_id, "signal_not_connected"
+                                )
+
+        # If no scatter point was hit, let the parent handle it
+        logger.debug("[DOUBLE_CLICK] No scatter point hit, calling super()")
+
+        if self._gui_debugger:
+            self._gui_debugger.event_tracker.end_event(
+                correlation_id, "no_hit"
+            )
+
+        super().mouseDoubleClickEvent(ev)
+
+    def viewBoxDoubleClicked(self, viewBox):
+        """Override to prevent ViewBox auto-ranging on double-click."""
+        # Do nothing - prevent auto-ranging
+        from tools.editor.debug_config import get_logger
+        logger = get_logger('view.double_click')
+        logger.debug("[DOUBLE_CLICK] ViewBox double-click suppressed")
+        pass
 
 class PrimitivePanelPyQtGraph(QWidget):
 
@@ -337,7 +436,8 @@ class PrimitivePanelPyQtGraph(QWidget):
                             _logger.warning(f"CLEANUP: Could not remove old item for prim={prim}: {e}")
             # Now create new plot if not already present
             # Create plot
-            plot = self.graphics_widget.addPlot(row=i, col=0)
+            plot = DoubleClickPlotItem()
+            self.graphics_widget.addItem(plot, row=i, col=0)
             plot.setYRange(-10, 10)
             plot.showGrid(y=True, alpha=0.3)
             
@@ -353,6 +453,17 @@ class PrimitivePanelPyQtGraph(QWidget):
             # Enable mouse interaction (left-click drag to pan, wheel to zoom)
             plot.setMouseEnabled(x=True, y=True)  # Allow 2D pan/zoom like trajectory panel
             plot.enableAutoRange(axis='y', enable=False)  # Disable auto-range but allow manual zoom
+            
+            # Disable double-click auto-ranging so scatter items can handle double-clicks
+            view_box = plot.getViewBox()
+            view_box.enableAutoRange(x=False, y=False)  # Disable auto-range completely
+            
+            # Override ViewBox double-click to prevent auto-ranging
+            def viewbox_double_click_override(ev):
+                print("[VIEWBOX_DOUBLE_CLICK] ViewBox double-click intercepted")
+                # Do nothing - prevent auto-ranging
+                ev.ignore()
+            view_box.mouseDoubleClickEvent = viewbox_double_click_override
             
             # Add zero line
             plot.addLine(y=0, pen=pg.mkPen('k', width=1, style=Qt.SolidLine))
@@ -409,11 +520,11 @@ class PrimitivePanelPyQtGraph(QWidget):
             scatter.sigPointClicked.connect(
                 lambda idx, x, y, p=prim: self._on_point_clicked(idx, p, y)
             )
-            scatter.sigPointDoubleClicked.connect(
-                lambda idx, p=prim: self._on_point_double_clicked(idx, p)
-            )
             scatter.sigPointCtrlClicked.connect(
                 lambda idx, p=prim: self._on_point_ctrl_clicked(idx, p)
+            )
+            scatter.sigPointDoubleClicked.connect(
+                lambda idx, p=prim: self._on_point_double_clicked(idx, p)
             )
             
             # Store references
@@ -423,6 +534,10 @@ class PrimitivePanelPyQtGraph(QWidget):
             self.overlay_scatter_items[prim] = overlay_scatter
             self.scatter_items[prim] = scatter
             self.baseline_scatter_items[prim] = baseline_scatter
+            
+            # Set up DoubleClickPlotItem attributes
+            plot.scatter_items = self.scatter_items
+            plot.primitive_reset_requested = self.primitive_reset_requested
             
             # Create diagnostic marker (black X, draggable, initially hidden)
             diagnostic_marker = DraggableScatterItem(
@@ -454,6 +569,12 @@ class PrimitivePanelPyQtGraph(QWidget):
 
         # Initialize trajectory label managers for each primitive
         self._init_trajectory_label_manager()
+
+        # Set up double-click handling for plots
+        for prim, plot in self.plot_items.items():
+            if isinstance(plot, DoubleClickPlotItem):
+                plot.scatter_items = {prim: self.scatter_items[prim]}
+                plot.primitive_reset_requested = self.primitive_reset_requested
 
         _logger.debug(f"_create_plots complete. diagnostic_markers keys: {list(self.diagnostic_markers.keys())}")
     
@@ -773,6 +894,9 @@ class PrimitivePanelPyQtGraph(QWidget):
         
         self.scatter_items[primitive].setData(x=times, y=values_arr, brush=brushes, pen=pens)
         
+        # Force visual update
+        self.scatter_items[primitive].update()
+        
         # Update baseline markers
         baseline_times = []
         baseline_values_list = []
@@ -950,7 +1074,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                     if key not in modified_labels:
                         to_add.append((event.time, prim, event.markers[prim].value))
         
-        print(f"[SYNC_LABELS] to_add = {[(t, p) for t, p, v in to_add]}")
+        _logger.debug(f"SYNC_LABELS: to_add = {[(t, p) for t, p, v in to_add]}")
         
         for event_time, prim, value in to_add:
             # Actually create and add label TextItems for primitive panel markers
@@ -961,11 +1085,11 @@ class PrimitivePanelPyQtGraph(QWidget):
             self.plot_items[prim].addItem(text_item)
             modified_labels[(event_time, prim)] = text_item
         
-        print(f"[SYNC_LABELS] modified_labels keys AFTER sync = {set(modified_labels.keys())}")
+        _logger.debug(f"SYNC_LABELS: modified_labels keys AFTER sync = {set(modified_labels.keys())}")
         # Print all currently visible labels with their values
         for key, text_item in modified_labels.items():
-            print(f"[SYNC_LABELS] ACTIVE LABEL: key={key}, text='{text_item.toPlainText()}', pos={text_item.pos()}")
-        print(f"[SYNC_LABELS] ===== Sync complete =====\n")
+            _logger.debug(f"SYNC_LABELS: ACTIVE LABEL: key={key}, text='{text_item.toPlainText()}', pos={text_item.pos()}")
+        _logger.debug("SYNC_LABELS: ===== Sync complete =====")
     
     def remove_marker_label(self, event_time, primitive):
         """Remove modified primitive label for a specific event/primitive.
@@ -1320,17 +1444,16 @@ class PrimitivePanelPyQtGraph(QWidget):
         if DEBUG_SPINBOX:
             _logger.debug("marker_clicked signal emitted")
     
-    def _on_point_double_clicked(self, index, primitive):
-        """Handle double-click event (reset to baseline)."""
-        print(f"[DOUBLE_CLICK] Requesting reset for index={index}, primitive={primitive}")
-        # Emit reset signal - controller will handle undo command creation
-        self.primitive_reset_requested.emit(index, primitive)
-    
     def _on_point_ctrl_clicked(self, index, primitive):
         """Handle Ctrl+Click event (delete event)."""
         print(f"[CTRL+CLICK] Request to delete event {index} (clicked on '{primitive}' primitive)")
         # Emit delete signal
         self.event_delete_requested.emit(index)
+    
+    def _on_point_double_clicked(self, index, primitive):
+        """Handle double-click event (reset to baseline)."""
+        # Emit reset signal
+        self.primitive_reset_requested.emit(index, primitive)
     
     def _on_diagnostic_dragged(self, index, primitive, value):
         """Handle diagnostic marker being dragged - update trajectory in real-time."""

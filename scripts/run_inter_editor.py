@@ -1,17 +1,22 @@
 import subprocess
 import sys
 
+# "data/library/love/single_dating_to_love_M1.csv"
+# "data/verification_data/entropy_calibration_M1.csv"
+
+
 if __name__ == "__main__":
+    target_file = "data/library/love/single_dating_to_love_M1.csv"
+    print(f"[DEBUG] Attempting to open: {target_file}")
+
     cmd = [
         sys.executable,
         "tools/interactive_editor.py",
-        "data/library/love/single_dating_to_love_M1.csv"
+        target_file
     ]
     try:
-        result = subprocess.run(cmd, check=False, capture_output=True, text=True)
-        print(result.stdout)
-        if result.stderr:
-            print(result.stderr, file=sys.stderr)
+        # Don't capture output - let it flow directly to terminal for immediate error visibility
+        result = subprocess.run(cmd, check=False)
         sys.exit(result.returncode)
     except Exception as e:
         print(f"Error running interactive editor: {e}", file=sys.stderr)
