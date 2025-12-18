@@ -67,6 +67,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 ### Testing Framework
 - **[INTERACTIVE_EDITOR_TESTING.md](INTERACTIVE_EDITOR_TESTING.md)** - Testing methodology, procedures, and MVT standard
 - **[Validation.md](Validation.md)** - Validation procedures and quality assurance
+- **[../verification/README.md](../verification/README.md)** - Automated verification scripts and baseline state logs
 
 ### Debugging & Development
 - **[DEBUG.md](DEBUG.md)** - Debugging guide, logging configuration, and troubleshooting

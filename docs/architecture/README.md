@@ -2,7 +2,7 @@
 
 **Purpose**: This documentation tree enables systematic debugging, validates architectural decisions, and tracks convergence across rearchitecture cycles.
 
-**Current Status**: Phase 2 complete (PySide6/PyQtGraph foundation). Phase 3 (M2 integration + QDockWidget) in planning.
+**Current Status**: Phase 2 complete with recent enhancements (Dec 2025 UI architecture cleanup). Phase 3 (M2 integration + QDockWidget) in planning.
 
 ## Navigation
 
@@ -23,11 +23,11 @@
 - **[../interactive_edit_ph2_requirements.md](../interactive_edit_ph2_requirements.md)** - Phase 2 detailed requirements (complete)
 
 ### Recent Refactorings (2025)
-- **Architecture Cleanup (Dec 15, 2025)** - ✅ Complete: Reached A+ grade (9.3/10)
+- **UI Architecture Cleanup (Dec 7, 2025)** - ✅ Complete: Reached A+ grade (9.3/10)
   - Removed 1,542 lines of dead code (old matplotlib panels)
   - Eliminated all deprecated Model fields
   - Established central registries (PERSPECTIVES, PRIMITIVES)
-  - See commit `0f7900c` and ARCHITECTURE.md
+  - See [refactors/2025-12-07_ui_architecture_cleanup.md](refactors/2025-12-07_ui_architecture_cleanup.md)
 - **[spinbox_refactor_2025_12.md](spinbox_refactor_2025_12.md)** - ✅ Complete: Single controller ownership (Dec 2025)
   - Bug fixes: Time label preservation, per-perspective state
   - 5-phase refactoring to eliminate race conditions

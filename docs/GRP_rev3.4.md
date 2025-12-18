@@ -1,50 +1,68 @@
-# Generalized Relational Physics (GRP) – Revision 3.3 Specification
+# Generalized Relational Physics (GRP) – Revision 3.4 Specification
 
 **Date:** December 2025  
 **Status:** Current implementation  
-**Supersedes:** Rev 3.2 (Im-only depth scaling for fidelity asymmetry)
+**Supersedes:** Rev 3.3 (axis-independent entropy decay)
 
 ## Executive Summary
 
-Rev 3.3 introduces **axis-independent entropy decay** to fix a fundamental physics problem in the entropy model. Previously, entropy pulled toward a single attractor point, which caused mathematical paradoxes where increasing entropy could make trajectories steeper instead of flatter. The new model decomposes entropy into separate real and imaginary axis components with independent targets and decay rates.
+Rev 3.4 introduces **constant-force entropy** to fix a fundamental timeline accumulation bug in the entropy model. Previously, entropy pull scaled with distance from the attractor, causing scenarios of different lengths to accumulate different total entropy effects. The new model uses constant-magnitude entropy pull (direction only from sign function), ensuring timeline-independent drift.
 
-**This is a refinement of the entropy mechanism only.** All other parameters remain at Rev 3.2 values (Im-only depth scaling for fidelity asymmetry).
+**This is an entropy physics refinement only.** All other parameters remain at Rev 3.3 values (axis-independent targets and rates).
 
-### Key Changes from Rev 3.2
+### Key Changes from Rev 3.3
 
-| Aspect | Rev 3.2 (Single Attractor) | Rev 3.3 (Axis-Independent) |
-|--------|---------------------------|---------------------------|
-| **Entropy model** | Single attractor point γ_attractor | Separate real/imag targets |
-| **Real axis decay** | Proportional to distance vector | ΔS_real × (target - current) |
-| **Imaginary axis decay** | Proportional to distance vector | ΔS_imag × (target - current) |
-| **Default real target** | -150 (part of -150+0j) | -150.0 (explicit) |
-| **Default imag target** | 0 (part of -150+0j) | 0.0 (explicit) |
-| **Decay rates** | Single ΔS = 0.02 | ΔS_real = 0.02, ΔS_imag = 0.02 |
-| **Physics behavior** | Could increase slopes when trying to flatten | Correct dimensional decay |
-| **UI control** | One attractor widget + one rate widget | One attractor widget + two rate spinboxes |
+| Aspect | Rev 3.3 (Distance-Proportional) | Rev 3.4 (Constant-Force) |
+|--------|--------------------------------|--------------------------|
+| **Entropy model** | ΔS × Δt × (target - current) | ΔS × Δt × sign(target - current) |
+| **Timeline dependence** | Total entropy scales with scenario length | Entropy per unit time is constant |
+| **Pull magnitude** | Increases with distance from target | Constant magnitude (directional only) |
+| **Default targets** | real: -150.0, imag: 0.0 | real: -150.0, imag: 0.0 (unchanged) |
+| **Decay rates** | ΔS_real = 0.02, ΔS_imag = 0.02 | ΔS_real = 0.02, ΔS_imag = 0.02 (unchanged) |
+| **Physics behavior** | Distance-dependent pull strength | Timeline-independent constant drift |
+| **UI control** | Same as Rev 3.3 | Same as Rev 3.3 |
 
 ### Rationale
 
-**Problem:** Single-point attractor model caused ratio paradoxes:
-- Attractor at -150+0j pulls mostly horizontally (left toward Ego)
-- Increasing ΔS subtracts equally from horizontal and vertical components
-- But slope = vertical/horizontal, so equal subtraction INCREASES slope instead of decreasing it
-- Example: 22.5/12.5 = 1.80, but (22.5-0.5)/(12.5-0.5) = 22.0/12.0 = 1.83 (slope increased!)
+**Problem:** Distance-proportional entropy caused timeline-length accumulation bug:
+- Entropy pull = ΔS × Δt × (target - current)
+- In long scenarios, large (target - current) accumulates massive entropy
+- In short scenarios, small differences accumulate minimal entropy
+- Same relational dynamics produce different outcomes based on scenario duration
 
-**Solution:** Decompose into independent axis decay:
-- Real axis: decay toward -150 (Ego/isolation) with rate ΔS_real
-- Imaginary axis: decay toward 0 (neutral affect/apathy) with rate ΔS_imag
-- Each axis decays linearly and independently: `entropy_pull_real = ΔS_real × Δt × (target - current)`
-- No vector normalization, no directional coupling, no ratio paradoxes
+**Solution:** Constant-force entropy using sign function:
+- Entropy pull = ΔS × Δt × sign(target - current)
+- Pull magnitude is constant (just direction: -1, 0, or +1)
+- Timeline-independent: same entropy effect per unit time, regardless of scenario length
+- Mathematically: constant force toward attractor, not proportional force
 
 **Conceptual correctness:**
-- Real axis: We-ness decays toward Ego (relationships require maintenance to stay in We space)
-- Imaginary axis: Love/Hate decay toward apathy (emotional intensity fades without engagement)
-- These are psychologically distinct decay processes that shouldn't be coupled
+- Real axis: Constant pull toward Ego (relationships require constant maintenance)
+- Imaginary axis: Constant pull toward apathy (emotional intensity fades at constant rate)
+- No accumulation artifacts; physics matches psychological expectation
+
+### Rationale
+
+**Problem:** Distance-proportional entropy caused timeline-length accumulation bug:
+- Entropy pull = ΔS × Δt × (target - current)
+- In long scenarios, large (target - current) accumulates massive entropy
+- In short scenarios, small differences accumulate minimal entropy
+- Same relational dynamics produce different outcomes based on scenario duration
+
+**Solution:** Constant-force entropy using sign function:
+- Entropy pull = ΔS × Δt × sign(target - current)
+- Pull magnitude is constant (just direction: -1, 0, or +1)
+- Timeline-independent: same entropy effect per unit time, regardless of scenario length
+- Mathematically: constant force toward attractor, not proportional force
+
+**Conceptual correctness:**
+- Real axis: Constant pull toward Ego (relationships require constant maintenance)
+- Imaginary axis: Constant pull toward apathy (emotional intensity fades at constant rate)
+- No accumulation artifacts; physics matches psychological expectation
 
 ---
 
-## Core Physics Equation (Rev 3.3)
+## Core Physics Equation (Rev 3.4)
 
 ### Position Update
 
@@ -53,41 +71,43 @@ $$
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
 i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
-\Delta S_{\text{real}} \cdot \Delta t \cdot (\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)]) +
-i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot (\text{imag}_{\text{target}} - \text{Im}[\vec{\gamma}_{\text{self}}(n)])
+\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)]) +
+i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot \text{sign}(\text{imag}_{\text{target}} - \text{Im}[\vec{\gamma}_{\text{self}}(n)])
 }
 $$
 
-### Entropy Components (New in Rev 3.3)
+### Entropy Components (New in Rev 3.4)
 
 **Real axis entropy:**
 ```
 real_diff = entropy_real_target - gamma_self_current.real
+real_direction = sign(real_diff)  # -1, 0, or +1
 if entropy_per_event:
-    entropy_pull_real = delS_real × real_diff
+    entropy_pull_real = delS_real * real_direction
 else:
-    entropy_pull_real = delS_real × time_delta × real_diff
+    entropy_pull_real = delS_real * time_delta * real_direction
 ```
 
 **Imaginary axis entropy:**
 ```
 imag_diff = entropy_imag_target - gamma_self_current.imag
+imag_direction = sign(imag_diff)  # -1, 0, or +1
 if entropy_per_event:
-    entropy_pull_imag = delS_imag × imag_diff
+    entropy_pull_imag = delS_imag * imag_direction
 else:
-    entropy_pull_imag = delS_imag × time_delta × imag_diff
+    entropy_pull_imag = delS_imag * time_delta * imag_direction
 ```
 
 **Total entropy pull:**
 ```
-entropy_pull = entropy_pull_real + i × entropy_pull_imag
+entropy_pull = entropy_pull_real + i * entropy_pull_imag
 ```
 
 ---
 
-## Parameter Values (Rev 3.3)
+## Parameter Values (Rev 3.4)
 
-All weights unchanged from Rev 3.2. Only entropy parameters modified:
+All weights unchanged from Rev 3.3. Only entropy physics refined:
 
 | Parameter | Value | Units | Meaning |
 |-----------|-------|-------|---------|

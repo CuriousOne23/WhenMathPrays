@@ -26,9 +26,9 @@ This document preserves the editorial memory of WhenMathPrays, tracing the evolu
 ## GRP (Gamma Relational Persona)
 - **Love = γ_self(n) position directly** (no L(t) calculation)
 - Component-wise updates: primitives move you in γ-space
-- Hybrid asymmetry: negatives hurt more, scaled by magnitude
-- Simple entropy drift: constant pull toward attractor (configurable)
-- Parameters reduced from 9 to 2: w_neg=1.5 (LOCKED), ΔS=0.02 (tunable)
+- Im-only depth scaling: negatives hurt more, scaled by love depth (Im axis)
+- Constant-force entropy: axis-independent drift toward targets (timeline-independent)
+- Parameters simplified: fidelity scaling locked (0.12), entropy rates tunable (0.02), w_neg removed
 - **Era:** December 4, 2025 onward
 
 ## Stewardship Notes
