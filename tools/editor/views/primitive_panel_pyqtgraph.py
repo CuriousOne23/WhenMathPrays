@@ -836,10 +836,16 @@ class PrimitivePanelPyQtGraph(QWidget):
             else:
                 self.baseline_scatter_items[prim].setData(x=[], y=[])
             
-            # Auto-range on first update
-            if len(times) > 0:
-                self.plot_items[prim].setXRange(times.min() - PLOT_X_MARGIN, times.max() + PLOT_X_MARGIN, padding=PLOT_PADDING_NONE)
+            # (Removed auto-range here; handled below only if event count changes)
         
+        # Only reset X range if number of events changed (prevents zoom reset on every update)
+        if not hasattr(self, '_last_event_count') or self._last_event_count != len(events):
+            for prim in PRIMITIVE_NAMES:
+                times = np.array([event.time for event in events])
+                if len(times) > 0:
+                    self.plot_items[prim].setXRange(times.min() - PLOT_X_MARGIN, times.max() + PLOT_X_MARGIN, padding=PLOT_PADDING_NONE)
+            self._last_event_count = len(events)
+
         # Sync labels from marker state (pull pattern - marker is source of truth)
         self._sync_labels_from_markers(events)
 

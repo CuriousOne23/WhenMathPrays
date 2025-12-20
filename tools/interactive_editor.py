@@ -226,58 +226,30 @@ class InteractiveEditor:
         self.gamma_self0_editor.set_perspective_name(display_name if display_name else self.controller.perspective)
         self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
         self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
-        
+
         from tools.editor.widgets import InsertionOptionsWidget
         self.insertion_options = InsertionOptionsWidget()
         self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
-        
-        from tools.editor.widgets import PerspectiveSwitcher
+
+        from tools.editor.widgets import PerspectiveSwitcher, EntropyAttractorEditor, EntropyAmountEditor, NameEditor, NoteEditor, PrimitiveSpinboxEditor
         self.perspective_switcher = PerspectiveSwitcher(m1_available=self.m1_available, m2_available=self.m2_available)
-        _logger.debug(f"Connecting perspective_changed signal")
-        self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
-        _logger.debug(f"Signal connected")
-        # Move perspective switcher to toolbar in main window after window is created
-        self.window.add_perspective_switcher(self.perspective_switcher)
-        
-        # Entropy parameter editors
-        from tools.editor.widgets import EntropyAttractorEditor, EntropyAmountEditor
+        self.controller.weights['entropy_per_event'] = True
+        self.perspective_switcher.set_entropy_mode(True)
         self.entropy_attractor_editor = EntropyAttractorEditor()
         self.entropy_attractor_editor.value_changed.connect(self._on_entropy_attractor_changed)
         self.entropy_attractor_editor.reset_requested.connect(self._on_entropy_attractor_reset)
-        
         self.entropy_amount_editor = EntropyAmountEditor()
         self.entropy_amount_editor.value_changed.connect(self._on_entropy_amount_changed)
         self.entropy_amount_editor.reset_requested.connect(self._on_entropy_amount_reset)
-        
-        from tools.editor.widgets import NameEditor
         initial_name = self.model.get_display_name(self.controller.perspective)
         self.name_editor = NameEditor(initial_name)
         self.name_editor.name_changed.connect(self._on_name_changed)
-        
-        from tools.editor.widgets import NoteEditor
         self.note_editor = NoteEditor()
         self.note_editor.note_changed.connect(self._on_note_changed)
-        
-        # Primitive spinbox editor (v2.4 - ARCHITECTURE.md)
         self.spinbox_editor = PrimitiveSpinboxEditor()
-        # Register with controller (controller handles signal connection)
         self.controller.initialize_spinbox_widget(self.spinbox_editor)
-        
-        # Set initial perspective AFTER all widgets created
-        print(f"DEBUG: About to call set_perspective with {self.initial_perspective}")
-        _logger.debug(f"[INIT] Setting initial perspective to: {self.initial_perspective}")
-        _logger.debug(f"[INIT] Controller current perspective: {self.controller.perspective}")
-        _logger.debug(f"[INIT] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
-        _logger.debug(f"[INIT] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
-        self.perspective_switcher.set_perspective(self.initial_perspective)
-        print(f"DEBUG: After set_perspective, switcher current: {self.perspective_switcher.get_perspective()}")
-        print(f"DEBUG: M1 button checked: {self.perspective_switcher.m1_button.isChecked()}")
-        print(f"DEBUG: M2 button checked: {self.perspective_switcher.m2_button.isChecked()}")
-        
-        # Create gauge widgets
-        from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
-        
-        # Gamma_self gauge
+
+        from PySide6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QFrame, QLabel
         gamma_gauge_frame = QFrame()
         gamma_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
         gamma_gauge_layout = QVBoxLayout()
@@ -298,107 +270,75 @@ class InteractiveEditor:
         gamma_gauge_layout.addWidget(gamma_gauge_label)
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
-        
-        # Combine widgets in a container with scroll area
-        from PySide6.QtWidgets import QScrollArea
+
         dock_container_inner = QWidget()
-        dock_container_inner.setStyleSheet("font-size: 8pt;")  # Zoom out ~25% for compact layout
+        dock_container_inner.setStyleSheet("font-size: 8pt;")
         dock_layout = QVBoxLayout()
-        dock_layout.setSpacing(5)  # Reduce spacing between widgets
-        dock_layout.setContentsMargins(5, 5, 5, 5)  # Reduce margins
-        # Perspective switcher is now in the toolbar, not in the controls dock
-        dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
-        dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
+        dock_layout.setSpacing(5)
+        dock_layout.setContentsMargins(5, 5, 5, 5)
+        dock_layout.addWidget(self.name_editor)
+        dock_layout.addWidget(self.note_editor)
         dock_layout.addWidget(self.gamma_self0_editor)
-        dock_layout.addWidget(self.entropy_attractor_editor)  # Entropy parameters
+        dock_layout.addWidget(self.entropy_attractor_editor)
         dock_layout.addWidget(self.entropy_amount_editor)
-        dock_layout.addWidget(self.spinbox_editor)  # v2.4: Primitive spinbox editor
+        dock_layout.addWidget(self.spinbox_editor)
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
         dock_container_inner.setLayout(dock_layout)
-        
-        # Wrap in scroll area to allow small window heights
+
         dock_container = QScrollArea()
         dock_container.setWidget(dock_container_inner)
         dock_container.setWidgetResizable(True)
-        
-        # Add controls as dock widget - split trajectory horizontally
+
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
-        self.controls_dock.setMinimumWidth(120)  # Allow very narrow controls panel
-        self.controls_dock.setMaximumWidth(400)  # Allow wider controls panel for spinbox editor
+        self.controls_dock.setMinimumWidth(120)
+        self.controls_dock.setMaximumWidth(400)
         self.controls_dock.setFeatures(
-            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetMovable |
             QDockWidget.DockWidgetFloatable |
             QDockWidget.DockWidgetClosable
         )
-        # Split controls horizontally from trajectory to create right column (side-by-side)
         self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
-        
-        # Setup View menu for dock widget visibility
         self.window._setup_view_menu({
             'Primitives': self.primitive_dock,
             'Trajectory': self.trajectory_dock,
             'Controls': self.controls_dock
         })
-        
-        # Restore saved dock layout, or configure default layout
-        # Use QTimer to delay until after layout is established
-        from PySide6.QtCore import QTimer
-        def setup_dock_sizes():
-            # Check if saved state exists
-            if self.window.settings.contains('windowState'):
-                # Restore saved state only - don't resize
-                self.window.restore_dock_state()
-            else:
-                # No saved state - apply default layout
-                window_width = self.window.width()
-                # Allocate: 32.5% Primitives, 40.1% Trajectory, 26.7% Controls
-                primitives_width = int(window_width * 0.325)
-                trajectory_width = int(window_width * 0.401)
-                controls_width = int(window_width * 0.267)
-                self.window.resizeDocks(
-                    [self.primitive_dock, self.trajectory_dock, self.controls_dock],
-                    [primitives_width, trajectory_width, controls_width],
-                    Qt.Horizontal
-                )
-        QTimer.singleShot(200, setup_dock_sizes)  # Increased delay for more stable restore
-        
-        # Debug function to print current dock configuration (triggered by Ctrl+D)
+
+        # Now that all docks and widgets are created, update entropy mode logic
+        self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
+        self.perspective_switcher.entropy_mode_changed.connect(self._on_entropy_mode_changed)
+        self.window.add_perspective_switcher(self.perspective_switcher)
+        # Set entropy mode and force trajectory recompute to match UI selection at startup
+        self._on_entropy_mode_changed(True)
+        self.controller._recompute_trajectory_immediate()
+        self.trajectory_panel.reset_view()  # Auto zoom on initial start
+
+    def _on_entropy_mode_changed(self, by_event: bool):
+        """Update controller weights for entropy mode, recompute and auto zoom trajectory."""
+        self.controller.weights['entropy_per_event'] = by_event
+        self.controller._recompute_trajectory_immediate()
+        self.trajectory_panel.reset_view()  # Auto zoom after mode change
+        # ...existing code...
         def print_dock_config():
             _logger.debug("=== DOCK CONFIGURATION ===")
             _logger.debug(f"Window size: {self.window.width()} x {self.window.height()}")
             _logger.debug(f"Primitives dock: Width={self.primitive_dock.width()}, Height={self.primitive_dock.height()}, Area={self.window.dockWidgetArea(self.primitive_dock)}, Percentage={(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
             _logger.debug(f"Trajectory dock: Width={self.trajectory_dock.width()}, Height={self.trajectory_dock.height()}, Area={self.window.dockWidgetArea(self.trajectory_dock)}, Percentage={(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
             _logger.debug(f"Controls dock: Width={self.controls_dock.width()}, Height={self.controls_dock.height()}, Area={self.window.dockWidgetArea(self.controls_dock)}, Percentage={(self.controls_dock.width() / self.window.width() * 100):.1f}%")
-        
-        # Connect Ctrl+D shortcut to print dock config
         self.window.print_dock_config_requested.connect(print_dock_config)
-        
-        # Connect gamma_self gauge to trajectory panel click events (Qt Signal - clean!)
         self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
-        
-        # Connect primitive panel clicks to note editor
         self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)
-        
-        # Connect trajectory panel clicks to note editor
         self.trajectory_panel.gamma_clicked.connect(self._on_trajectory_clicked)
-
-        # Set up callbacks AFTER panels and controller are initialized
         self.window.save_callback = self._handle_save_request
         self.window.save_both_callback = self._handle_save_both_request
         self.window.cleanup_callback = self._handle_cleanup
-        
-        # Load window geometry and dock layout from saved state
         self._load_window_state()
-        
-        # Connect zoom toolbar buttons (will zoom both panels)
         self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
         self.window.zoom_out_action.triggered.connect(self._handle_zoom_out)
         self.window.zoom_reset_action.triggered.connect(self._handle_zoom_reset)
-        
-        # Pan state
         self.pan_active = False
         self.pan_start = None
         self.pan_axes = None
@@ -500,7 +440,7 @@ class InteractiveEditor:
             location="interactive_editor.py:_handle_zoom_in"
         )
         self.trajectory_panel.zoom_in()
-        self.controller.primitive_panel.zoom_in()
+        self.primitive_panel.zoom_in()
         self.window.show_message("Zoomed in (all panels)")
     
     def _handle_zoom_out(self):
@@ -512,8 +452,8 @@ class InteractiveEditor:
             changes={},
             location="interactive_editor.py:_handle_zoom_out"
         )
-        self.controller.trajectory_panel.zoom_out()
-        self.controller.primitive_panel.zoom_out()
+        self.trajectory_panel.zoom_out()
+        self.primitive_panel.zoom_out()
         self.window.show_message("Zoomed out (all panels)")
     
     def _handle_zoom_reset(self):
@@ -525,9 +465,9 @@ class InteractiveEditor:
             changes={},
             location="interactive_editor.py:_handle_zoom_reset"
         )
-        self.controller.trajectory_panel.reset_view()
-        self.controller.primitive_panel.reset_view()
-        self.controller.primitive_panel.clear_readout()
+        self.trajectory_panel.reset_view()
+        self.primitive_panel.reset_view()
+        self.primitive_panel.clear_readout()
         self.window.show_message("Reset all views")
     
     def _handle_cleanup(self):

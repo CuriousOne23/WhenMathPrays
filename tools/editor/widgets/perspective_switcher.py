@@ -17,9 +17,10 @@ _logger = get_logger('perspective_switcher')
 
 class PerspectiveSwitcher(QWidget):
     """Widget for switching between M1 and M2 perspectives."""
-    
     # Signal emitted when perspective changes
     perspective_changed = Signal(str)  # 'M1' or 'M2'
+    # Signal emitted when entropy mode changes
+    entropy_mode_changed = Signal(bool)  # True = by event, False = by time
     
     def __init__(self, parent=None, m1_available=True, m2_available=True):
         super().__init__(parent)
@@ -35,20 +36,21 @@ class PerspectiveSwitcher(QWidget):
         # Create UI
         self._setup_ui()
         
+
     def _setup_ui(self):
         """Setup the UI layout and widgets."""
         layout = QHBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setSpacing(10)
-        
+
         # Label
         label = QLabel("Perspective:")
         label.setStyleSheet("font-weight: bold; font-size: 10pt;")
         layout.addWidget(label)
-        
+
         # Create button group for exclusive selection
         self.button_group = QButtonGroup(self)
-        
+
         # M1 radio button with line indicator
         m1_container = QVBoxLayout()
         m1_container.setSpacing(2)
@@ -59,7 +61,7 @@ class PerspectiveSwitcher(QWidget):
         if self.m1_available:
             self.button_group.addButton(self.m1_button, 1)
         m1_container.addWidget(self.m1_button)
-        
+
         # M1 line indicator
         self.m1_line = QLabel()
         self.m1_line.setFixedHeight(3)
@@ -69,9 +71,9 @@ class PerspectiveSwitcher(QWidget):
         else:
             self.m1_line.setStyleSheet("background-color: transparent;")
         m1_container.addWidget(self.m1_line)
-        
+
         layout.addLayout(m1_container)
-        
+
         # M2 radio button with line indicator
         m2_container = QVBoxLayout()
         m2_container.setSpacing(2)
@@ -82,7 +84,7 @@ class PerspectiveSwitcher(QWidget):
         if self.m2_available:
             self.button_group.addButton(self.m2_button, 2)
         m2_container.addWidget(self.m2_button)
-        
+
         # M2 line indicator
         self.m2_line = QLabel()
         self.m2_line.setFixedHeight(3)
@@ -92,18 +94,40 @@ class PerspectiveSwitcher(QWidget):
         else:
             self.m2_line.setStyleSheet("background-color: transparent; border-top: 3px dashed blue;")
         m2_container.addWidget(self.m2_line)
-        
+
         layout.addLayout(m2_container)
-        
+
+        # Entropy mode radio buttons
+        entropy_label = QLabel("Entropy:")
+        entropy_label.setStyleSheet("font-weight: bold; font-size: 10pt;")
+        layout.addWidget(entropy_label)
+
+        self.entropy_time_radio = QRadioButton("By Time")
+        self.entropy_event_radio = QRadioButton("By Event")
+        # Default: By Time unless set externally
+        self.entropy_time_radio.setChecked(not getattr(self, '_entropy_per_event', False))
+        self.entropy_event_radio.setChecked(getattr(self, '_entropy_per_event', False))
+        layout.addWidget(self.entropy_time_radio)
+        layout.addWidget(self.entropy_event_radio)
+
         layout.addStretch()
-        
         self.setLayout(layout)
-        
+
         # Connect signals
         self.m1_button.toggled.connect(self._on_m1_toggled)
         self.m2_button.toggled.connect(self._on_m2_toggled)
-        
-        # Initial signal emission moved to InteractiveEditor after connection
+        self.entropy_time_radio.toggled.connect(self._on_entropy_mode_toggled)
+        self.entropy_event_radio.toggled.connect(self._on_entropy_mode_toggled)
+
+    def set_entropy_mode(self, by_event: bool):
+        """Set the entropy mode radio buttons from external state."""
+        self._entropy_per_event = by_event
+        self.entropy_event_radio.setChecked(by_event)
+        self.entropy_time_radio.setChecked(not by_event)
+
+    def _on_entropy_mode_toggled(self):
+        # Emit True if By Event is checked, else False
+        self.entropy_mode_changed.emit(self.entropy_event_radio.isChecked())
     
     def _get_button_style(self, is_active):
         """Get stylesheet for button based on active state."""
