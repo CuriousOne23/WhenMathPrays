@@ -55,6 +55,7 @@ class TrajectoryPanelPyQtGraph(QWidget):
 		"""
 		Place a diagnostic marker at the specified (x, y) position.
 		Clears previous diagnostic markers and adds a new one (diamond symbol and label).
+		Ensures marker is visible even for the last point.
 		"""
 		# Remove previous diagnostic marker if it exists
 		if hasattr(self, '_diagnostic_marker') and self._diagnostic_marker is not None:
@@ -67,6 +68,10 @@ class TrajectoryPanelPyQtGraph(QWidget):
 		# Add label as before
 		self.clear_marker_labels()
 		self.add_marker_label(x, y, label_text, color)
+		# Ensure marker is brought to front (especially for last point)
+		self.plot_widget.removeItem(marker)
+		self.plot_widget.addItem(marker)
+		# _logger.debug(f"[DEBUG] Diagnostic marker brought to front at ({x}, {y})")
 
 	def __init__(self, parent=None):
 		super().__init__(parent)
@@ -133,17 +138,21 @@ class TrajectoryPanelPyQtGraph(QWidget):
 	def plot_trajectory(self, x_data, y_data, active_perspective="M1"):
 		# Disable auto-range before any item manipulation
 		self.plot_widget.getViewBox().disableAutoRange()
-		
 		if self.trajectory_line:
-			# Update existing line data instead of removing/re-adding to prevent view changes
 			self.trajectory_line.setData(x_data, y_data)
-			# Update color if perspective changed
-			color = 'b' if active_perspective == "M1" else '#006400'  # Dark green for M2
+			color = 'b' if active_perspective == "M1" else '#006400'
 			self.trajectory_line.setPen(pg.mkPen(color, width=2))
 		else:
-			# Create new line if it doesn't exist
-			color = 'b' if active_perspective == "M1" else '#006400'  # Dark green for M2
+			color = 'b' if active_perspective == "M1" else '#006400'
 			self.trajectory_line = self.plot_widget.plot(x_data, y_data, pen=pg.mkPen(color, width=2), symbol=None)
+		if x_data and y_data:
+			vb = self.plot_widget.getViewBox()
+			x_min, x_max = min(x_data), max(x_data)
+			y_min, y_max = min(y_data), max(y_data)
+			pad_x = (x_max - x_min) * 0.05 if x_max != x_min else 1.0
+			pad_y = (y_max - y_min) * 0.05 if y_max != y_min else 1.0
+			vb.setXRange(x_min - pad_x, x_max + pad_x, padding=0)
+			vb.setYRange(y_min - pad_y, y_max + pad_y, padding=0)
 
 	def set_overlay_trajectory(self, gamma_x, gamma_y, active_perspective="M1"):
 		# Disable auto-range before any item manipulation

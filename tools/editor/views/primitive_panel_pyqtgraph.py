@@ -1349,6 +1349,7 @@ class PrimitivePanelPyQtGraph(QWidget):
                         print(f"[DIAGNOSTIC] Drag the X marker up/down to test hypothetical values")
                         
                         # Emit signal to compute trajectory and update gauges
+                        print(f"[DEBUG] Emitting diagnostic_marker_placed: nearest_idx={nearest_idx}, prim={prim}, clicked_value={clicked_value}")
                         self.diagnostic_marker_placed.emit(nearest_idx, prim, clicked_value)
                         
                         event.accept()
