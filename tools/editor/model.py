@@ -475,7 +475,7 @@ class EditorModel:
         
         return insert_idx
     
-    def delete_event(self, event_index: int, perspective: str = "M1") -> Event:
+    def delete_event(self, event_index: int, perspective: str = "M1") -> EventPoint:
         """
         Delete an event at specified index.
         
