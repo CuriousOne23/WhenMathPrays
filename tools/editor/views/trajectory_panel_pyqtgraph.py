@@ -16,6 +16,38 @@ _logger = get_logger('trajectory_panel')
 
 class TrajectoryPanelPyQtGraph(QWidget):
 
+	def zoom_in(self):
+		"""Zoom in by 20% on the current view."""
+		view_box = self.plot_widget.getViewBox()
+		x_min, x_max = view_box.viewRange()[0]
+		y_min, y_max = view_box.viewRange()[1]
+		x_center = (x_min + x_max) / 2
+		y_center = (y_min + y_max) / 2
+		x_range = (x_max - x_min) * 0.8 / 2
+		y_range = (y_max - y_min) * 0.8 / 2
+		view_box.setXRange(x_center - x_range, x_center + x_range, padding=0)
+		view_box.setYRange(y_center - y_range, y_center + y_range, padding=0)
+
+	def zoom_out(self):
+		"""Zoom out by 25% on the current view."""
+		view_box = self.plot_widget.getViewBox()
+		x_min, x_max = view_box.viewRange()[0]
+		y_min, y_max = view_box.viewRange()[1]
+		x_center = (x_min + x_max) / 2
+		y_center = (y_min + y_max) / 2
+		x_range = (x_max - x_min) * 1.25 / 2
+		y_range = (y_max - y_min) * 1.25 / 2
+		view_box.setXRange(x_center - x_range, x_center + x_range, padding=0)
+		view_box.setYRange(y_center - y_range, y_center + y_range, padding=0)
+
+	def reset_view(self):
+		"""Reset the view to show all data with some padding."""
+		# Try to auto-range to all data, fallback to default if not available
+		view_box = self.plot_widget.getViewBox()
+		view_box.enableAutoRange(axis='xy', enable=True)
+		self.plot_widget.enableAutoRange(axis='xy', enable=True)
+		# Optionally, you can set a default range if no data is present
+
 	panel_ready = Signal()
 	gamma_clicked = Signal(object)  # Add this signal for compatibility
 
