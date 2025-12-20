@@ -607,7 +607,9 @@ class EditorController:
         Args:
             event_idx: Event index where marker was placed
         """
+        print(f"[DEBUG] ENTER on_diagnostic_marker_placed: event_idx={event_idx}, len(events_data)={len(self.events_data) if self.events_data else 'None'}")
         if not self.events_data or event_idx >= len(self.events_data):
+            print(f"[DEBUG] Early exit: event_idx={event_idx}, len(events_data)={len(self.events_data) if self.events_data else 'None'}")
             return
         
         event = self.events_data[event_idx]
@@ -622,22 +624,26 @@ class EditorController:
                     self.primitive_panel._update_readout(event_idx, prim, value)
                     break
         
-        # Get gamma_self value at this event
-        if hasattr(self, 'committed_gamma_trajectory') and self.committed_gamma_trajectory:
-            if event_idx < len(self.committed_gamma_trajectory):
-                gamma_val = self.committed_gamma_trajectory[event_idx]
-                gamma_x = gamma_val.real
-                gamma_y = gamma_val.imag
-                
-                # Place marker on trajectory
-                self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-                
-                # Update gamma_self readout
-                # The gamma_clicked signal handler will update the gauge
-                # We can call it directly or emit the signal
-                self.on_gamma_clicked(gamma_x, gamma_y)
-                
-                _logger.debug(f"[DIAGNOSTIC] Event {event_idx} @ time={event.time}: gamma_self=({gamma_x:.2f}, {gamma_y:.2f})")
+        # Get gamma_self value at this event (fix: last event index should use index+1)
+            if hasattr(self, 'committed_gamma_trajectory') and self.committed_gamma_trajectory:
+                print(f"[DEBUG] committed_gamma_trajectory present: len={len(self.committed_gamma_trajectory)}")
+                gamma_idx = event_idx
+                # Always use event_idx+1 for the last event if trajectory is one longer than events
+                if event_idx == len(self.events_data) - 1 and len(self.committed_gamma_trajectory) == len(self.events_data) + 1:
+                    gamma_idx = event_idx + 1
+                    print(f"[DEBUG] Last event: using gamma_idx={gamma_idx}")
+                else:
+                    print(f"[DEBUG] Not last event: using gamma_idx={gamma_idx}")
+                print(f"[DEBUG] About to check gamma_idx validity: event_idx={event_idx}, gamma_idx={gamma_idx}, len(committed_gamma_trajectory)={len(self.committed_gamma_trajectory)}")
+                # Always call place_diagnostic_marker if index is valid
+                if 0 <= gamma_idx < len(self.committed_gamma_trajectory):
+                    gamma_val = self.committed_gamma_trajectory[gamma_idx]
+                    gamma_x = gamma_val.real
+                    gamma_y = gamma_val.imag
+                    print(f"[DEBUG] About to call place_diagnostic_marker: event_idx={event_idx}, gamma_idx={gamma_idx}, gamma_x={gamma_x}, gamma_y={gamma_y}")
+                    self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+                    self.on_gamma_clicked(gamma_x, gamma_y)
+                    _logger.debug(f"[DIAGNOSTIC] Event {event_idx} @ time={event.time}: gamma_self=({gamma_x:.2f}, {gamma_y:.2f})")
     
     def on_primitive_changed(self, event_index: int, primitive: str, value: float):
         """
@@ -1758,39 +1764,43 @@ class EditorController:
         }
         
         # Compute gamma_self trajectory
+
         gamma_self = self.model.get_gamma_self_0(self.perspective)  # Start from configured initial position
         gamma_trajectory = [gamma_self]
-        
-        for i in range(len(events)):
-            # Get primitives at current time
+
+        # For N events, apply N primitives, producing N+1 gamma_self states
+        n_primitives = len(events)
+        for i in range(n_primitives):
             v = data['v'][i]
             r = data['r'][i]
             f = data['f'][i]
             a = data['a'][i]
             S = data['S'][i]
 
-            # Time delta - use time to next event, or a small default for the last event
-            if i + 1 < len(events):
-                dt = times[i + 1] - times[i]
+            weights = self._get_weights_with_entropy()
+            entropy_per_event = weights.get('entropy_per_event', False)
+            if entropy_per_event:
+                dt = 1.0
             else:
-                # For the last event, use a nominal time step
-                dt = 1.0 if i == 0 else (times[i] - times[i-1])
+                # Use next event time if available, else use previous interval
+                if i + 1 < len(times):
+                    dt = times[i + 1] - times[i]
+                elif i > 0:
+                    dt = times[i] - times[i-1]
+                else:
+                    dt = 1.0
 
-            # Debug: Print event time, v value, and gamma_self before update
-            _logger.debug(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, v={v}, gamma_self_before={gamma_self}")
+            _logger.debug(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, v={v}, gamma_self_before={gamma_self}, time_delta={dt}, entropy_per_event={entropy_per_event}")
 
-            # Update gamma_self using GRP core
-            gamma_self = update_gamma_self(
+            gamma_self_next = update_gamma_self(
                 gamma_self_current=gamma_self,
                 v=v, r=r, f=f, a=a, S=S,
                 time_delta=dt,
-                weights=self._get_weights_with_entropy()
+                weights=weights
             )
-
-            # Debug: Print gamma_self after update
-            _logger.debug(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, gamma_self_after={gamma_self}")
-
-            gamma_trajectory.append(gamma_self)
+            _logger.debug(f"[DEBUG GAMMA] i={i}, event_time={events[i].time}, gamma_self_after={gamma_self_next}")
+            gamma_trajectory.append(gamma_self_next)
+            gamma_self = gamma_self_next
         
         # Store preview trajectory for marker positioning
         if preview_mode:

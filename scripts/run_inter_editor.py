@@ -1,12 +1,14 @@
 import subprocess
 import sys
 
+# "data/library/love/the_notebook_M1.csv"
+# "data/library/love/dog_hachiko_M1.csv"
 # "data/library/love/single_dating_to_love_M1.csv"
 # "data/verification_data/entropy_calibration_M1.csv"
 
 
 if __name__ == "__main__":
-    target_file = "data/library/love/dog_hachiko_M1.csv"
+    target_file = "data/library/love/the_notebook_M1.csv"
     print(f"[DEBUG] Attempting to open: {target_file}")
 
     cmd = [

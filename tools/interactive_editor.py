@@ -693,6 +693,7 @@ class InteractiveEditor:
                 )
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
+        print(f"[DEBUG] ENTER _on_diagnostic_marker: event_index={event_index}, primitive={primitive}, hypothetical_value={hypothetical_value}")
         """
         Handle Shift+Click diagnostic marker placement (counterfactual exploration).
         
@@ -724,57 +725,99 @@ class InteractiveEditor:
         primitives_data = self.model.get_primitives_array(self.controller.perspective, include_preview=False)
         times = primitives_data['time']
         
+
         # Modify the one primitive with hypothetical value
         primitives_data[primitive][event_index] = hypothetical_value
-        
+
+        # Ensure entropy mode matches UI selection for diagnostic marker calculation
+        weights = self.controller.weights.copy() if hasattr(self.controller, 'weights') else {}
+        # Force By Interval entropy for diagnostic marker calculation
+        weights['entropy_per_event'] = True
+        print(f"[DEBUG] Diagnostic marker calculation using entropy_per_event={weights['entropy_per_event']}")
+
         # Compute hypothetical gamma_self trajectory using same logic as controller
+
+        # --- Gamma_self trajectory calculation ---
+        # The gamma_self trajectory is mapped as follows:
+        #   gamma_trajectory[0] = gamma_self_0 (initial state, before any event)
+        #   gamma_trajectory[i+1] = gamma_self after event i's primitives are applied
+        # There are N events and N intervals; each interval applies the primitives at event i.
+        # For the last event, the marker should reflect the final gamma_self value after all intervals.
+
         gamma_self = self.model.get_gamma_self_0(self.controller.perspective)
         gamma_trajectory = [gamma_self]
-        
-        for i in range(len(events) - 1):
-            v = primitives_data['v'][i]
-            r = primitives_data['r'][i]
-            f = primitives_data['f'][i]
-            a = primitives_data['a'][i]
-            S = primitives_data['S'][i]
-            
-            time_delta = times[i + 1] - times[i]
+        n_events = len(events)
+        # Each interval applies the primitives at event i
+        for i in range(n_events):
+            # For the interval corresponding to the last event, avoid out-of-range times[i+1]
+            if i == event_index:
+                v = hypothetical_value if primitive == 'v' else primitives_data['v'][i]
+                r = hypothetical_value if primitive == 'r' else primitives_data['r'][i]
+                f = hypothetical_value if primitive == 'f' else primitives_data['f'][i]
+                a = hypothetical_value if primitive == 'a' else primitives_data['a'][i]
+                S = hypothetical_value if primitive == 'S' else primitives_data['S'][i]
+                if i + 1 < len(times):
+                    print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                else:
+                    print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+            else:
+                v = primitives_data['v'][i]
+                r = primitives_data['r'][i]
+                f = primitives_data['f'][i]
+                a = primitives_data['a'][i]
+                S = primitives_data['S'][i]
+                if i + 1 < len(times):
+                    print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                else:
+                    print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+            # Calculate time_delta safely
+            if i + 1 < len(times):
+                time_delta = times[i + 1] - times[i]
+            else:
+                time_delta = 1.0  # Nominal value for last event
+            print(f"[DEBUG] gamma_self_before={gamma_self}, primitives: v={v}, r={r}, f={f}, a={a}, S={S}, time_delta={time_delta}")
+            print(f"[DEBUG] Calling update_gamma_self: gamma_self={gamma_self}, v={v}, r={r}, f={f}, a={a}, S={S}, weights={weights}, time_delta={time_delta}")
             gamma_self = update_gamma_self(
                 gamma_self, v, r, f, a, S,
-                weights=self.controller.weights,
+                weights=weights,
                 time_delta=time_delta
             )
+            print(f"[DEBUG] gamma_self_after={gamma_self}")
+            print(f"[DEBUG] Returned from update_gamma_self: gamma_self_after={gamma_self}")
+            print(f"[DEBUG] INTERVAL: i={i}, gamma_self_after={gamma_self}")
             gamma_trajectory.append(gamma_self)
-        
-        # Get gamma_self AFTER the clicked event's primitives are applied
-        # gamma_trajectory[0] = gamma_self_0 (before event 0)
-        # gamma_trajectory[1] = gamma after event 0's primitives applied
-        # gamma_trajectory[event_index + 1] = gamma after event's primitives applied
-        if event_index + 1 < len(gamma_trajectory):
-            gamma_val = gamma_trajectory[event_index + 1]  # Gamma AFTER this event
-            gamma_x = gamma_val.real
-            gamma_y = gamma_val.imag
-            
-            _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
-            
-            # Place marker on trajectory panel at event position
-            self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-            _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
-            
-            # Update primitive readout
-            event = events[event_index]
-            self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
-            _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
-            
-            # Update gamma_self readout (simulate a click at that position)
-            if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
-                self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
-                self.gamma_self_gauge.setVisible(True)
-                _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
-            else:
-                _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
-            
-            _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+
+
+        # --- Marker placement logic ---
+        # For the last event, always use the final gamma_self value
+        # For other events, use gamma_self after that event's primitives are applied
+        if event_index == n_events - 1:
+            gamma_val = gamma_trajectory[-1]
+        else:
+            gamma_val = gamma_trajectory[event_index + 1]
+        gamma_x = gamma_val.real
+        gamma_y = gamma_val.imag
+
+        _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+
+        # Place marker on trajectory panel at event position
+        self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+        _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
+
+        # Update primitive readout
+        event = events[event_index]
+        self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
+        _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
+
+        # Update gamma_self readout (simulate a click at that position)
+        if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
+            self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
+            self.gamma_self_gauge.setVisible(True)
+            _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
+        else:
+            _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
+
+        _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
     
     def _on_lock_toggle(self, event_index):
         """
