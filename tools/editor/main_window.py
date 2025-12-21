@@ -337,7 +337,7 @@ class EditorMainWindow(QMainWindow):
         self.settings.setValue('geometry', self.saveGeometry())
         self.settings.setValue('windowState', self.saveState())
         self.settings.sync()  # Force immediate write to storage
-        print("[STATE] Window layout saved")
+        # print("[STATE] Window layout saved")
         
         # Emit cleanup signal for application to handle
         self.cleanup_requested.emit()
