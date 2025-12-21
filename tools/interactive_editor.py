@@ -92,7 +92,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M1 exists but no M2 - load M1 into both M1 and M2 slots
-            _logger.info(f"No M2 file found. Loading M1 file into both perspectives: {m1_path}")
+            # _logger.info(f"No M2 file found. Loading M1 file into both perspectives: {m1_path}")
             return m1_path, m1_path, None, False
     
     else:  # is_m2
@@ -107,7 +107,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M2 exists but no M1 - load M2 into both M1 and M2 slots, select M2
-            _logger.info(f"No M1 file found. Loading M2 file into both perspectives: {m2_path}")
+            # _logger.info(f"No M1 file found. Loading M2 file into both perspectives: {m2_path}")
             return m2_path, m2_path, None, True
 
 
@@ -152,16 +152,22 @@ class InteractiveEditor:
         self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
         self.primitive_panel.event_insert_requested.connect(self._on_event_insert_requested)
         if DEBUG_SPINBOX:
-            _logger.debug("Connecting marker_clicked signal to _on_marker_clicked")
-            _logger.debug(f"marker_clicked exists? {hasattr(self.primitive_panel, 'marker_clicked')}")
-            _logger.debug(f"marker_clicked type: {type(self.primitive_panel.marker_clicked)}")
+            # _logger.debug("Connecting marker_clicked signal to _on_marker_clicked")
+            # _logger.debug(f"marker_clicked exists? {hasattr(self.primitive_panel, 'marker_clicked')}")
+            # _logger.debug(f"marker_clicked type: {type(self.primitive_panel.marker_clicked)}")
+            pass
         try:
             self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)  # v2.4: For spinbox editor
             if DEBUG_SPINBOX:
-                _logger.debug("Connection made successfully")
+                # _logger.debug("Connection made successfully")
+                pass
         except Exception as e:
             if DEBUG_SPINBOX:
-                _logger.debug(f"Connection FAILED: {e}")
+                # _logger.debug(f"Connection FAILED: {e}")
+                pass
+                pass
+                pass
+                pass
         
         # Phase 2 refactoring: Connect new signals (replacing callbacks)
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
@@ -323,11 +329,12 @@ class InteractiveEditor:
         self.trajectory_panel.reset_view()  # Auto zoom after mode change
         # ...existing code...
         def print_dock_config():
-            _logger.debug("=== DOCK CONFIGURATION ===")
-            _logger.debug(f"Window size: {self.window.width()} x {self.window.height()}")
-            _logger.debug(f"Primitives dock: Width={self.primitive_dock.width()}, Height={self.primitive_dock.height()}, Area={self.window.dockWidgetArea(self.primitive_dock)}, Percentage={(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
-            _logger.debug(f"Trajectory dock: Width={self.trajectory_dock.width()}, Height={self.trajectory_dock.height()}, Area={self.window.dockWidgetArea(self.trajectory_dock)}, Percentage={(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
-            _logger.debug(f"Controls dock: Width={self.controls_dock.width()}, Height={self.controls_dock.height()}, Area={self.window.dockWidgetArea(self.controls_dock)}, Percentage={(self.controls_dock.width() / self.window.width() * 100):.1f}%")
+            # _logger.debug("=== DOCK CONFIGURATION ===")
+            # _logger.debug(f"Window size: {self.window.width()} x {self.window.height()}")
+            # _logger.debug(f"Primitives dock: Width={self.primitive_dock.width()}, Height={self.primitive_dock.height()}, Area={self.window.dockWidgetArea(self.primitive_dock)}, Percentage={(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
+            # _logger.debug(f"Trajectory dock: Width={self.trajectory_dock.width()}, Height={self.trajectory_dock.height()}, Area={self.window.dockWidgetArea(self.trajectory_dock)}, Percentage={(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
+            # _logger.debug(f"Controls dock: Width={self.controls_dock.width()}, Height={self.controls_dock.height()}, Area={self.window.dockWidgetArea(self.controls_dock)}, Percentage={(self.controls_dock.width() / self.window.width() * 100):.1f}%")
+            pass
         self.window.print_dock_config_requested.connect(print_dock_config)
         self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
         self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)
@@ -343,9 +350,10 @@ class InteractiveEditor:
         self.pan_start = None
         self.pan_axes = None
     
-    def _update_gamma_self_gauge(self, x, y):
+    def _update_gamma_self_gauge(self, xy):
         """Update gamma_self gauge in right panel."""
-        if x is not None and y is not None:
+        if xy is not None and len(xy) == 2:
+            x, y = xy
             self.gamma_self_gauge.setText(f"γ_self\n{x:.2f} + {y:.2f}i")
         else:
             self.gamma_self_gauge.setText("--")
@@ -489,7 +497,7 @@ class InteractiveEditor:
         Use PyQtGraph's built-in export or screenshot functionality instead.
         """
         self.window.show_message("PNG export temporarily unavailable (PyQtGraph migration in progress)", 'warning')
-        _logger.warning("PNG export skipped - needs reimplementation for PyQtGraph")
+        # _logger.warning("PNG export skipped - needs reimplementation for PyQtGraph")
         return
         
         # TODO: Reimplement using PyQtGraph export functionality
@@ -560,12 +568,12 @@ class InteractiveEditor:
         Args:
             perspective: 'M1' or 'M2'
         """
-        _logger.debug(f"[PERSPECTIVE] _on_perspective_changed called with: {perspective}")
-        _logger.debug(f"[PERSPECTIVE] Controller current perspective before switch: {self.controller.perspective}")
+        # _logger.debug(f"[PERSPECTIVE] _on_perspective_changed called with: {perspective}")
+        # _logger.debug(f"[PERSPECTIVE] Controller current perspective before switch: {self.controller.perspective}")
         self.controller.switch_perspective(perspective)
-        _logger.debug(f"[PERSPECTIVE] Controller current perspective after switch: {self.controller.perspective}")
-        _logger.debug(f"[PERSPECTIVE] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
-        _logger.debug(f"[PERSPECTIVE] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
+        # _logger.debug(f"[PERSPECTIVE] Controller current perspective after switch: {self.controller.perspective}")
+        # _logger.debug(f"[PERSPECTIVE] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
+        # _logger.debug(f"[PERSPECTIVE] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
     
     def _on_spinbox_value_changed(self, value):
         """
@@ -589,14 +597,14 @@ class InteractiveEditor:
             changes={},
             location="interactive_editor.py:_on_event_delete_requested"
         )
-        _logger.debug(f"DELETE REQUEST: Event {event_index}")
+        # _logger.debug(f"DELETE REQUEST: Event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't delete if only 2 events (need at least start and end)
         if len(events) <= 2:
-            _logger.debug(f"DELETE: Cannot delete - need at least 2 events (start and end)")
+            # _logger.debug(f"DELETE: Cannot delete - need at least 2 events (start and end)")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -607,7 +615,7 @@ class InteractiveEditor:
         
         # Can't delete first or last event
         if event_index == 0 or event_index == len(events) - 1:
-            _logger.debug(f"DELETE: Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
+            # _logger.debug(f"DELETE: Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -619,7 +627,7 @@ class InteractiveEditor:
         # Can't delete locked events
         event = events[event_index]
         if event.locked:
-            _logger.debug(f"DELETE: Cannot delete locked event at time={event.time}")
+            # _logger.debug(f"DELETE: Cannot delete locked event at time={event.time}")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -633,7 +641,7 @@ class InteractiveEditor:
             from tools.editor.commands import DeleteEventCommand
             command = DeleteEventCommand(self.controller, event_index)
             self.controller.undo_stack.push(command)
-            _logger.info(f"DELETE: Pushed DeleteEventCommand to undo stack")
+            # _logger.info(f"DELETE: Pushed DeleteEventCommand to undo stack")
         else:
             # No undo stack - delete directly
             self.controller._delete_event(event_index)
@@ -656,14 +664,14 @@ class InteractiveEditor:
             changes={},
             location="interactive_editor.py:_on_event_insert_requested"
         )
-        _logger.debug(f"INSERT REQUEST: Insert before event {event_index}")
+        # _logger.debug(f"INSERT REQUEST: Insert before event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't insert before first event (would shift start time)
         if event_index == 0:
-            _logger.debug(f"INSERT: Cannot insert before first event")
+            # _logger.debug(f"INSERT: Cannot insert before first event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -693,7 +701,7 @@ class InteractiveEditor:
                 )
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
-        print(f"[DEBUG] ENTER _on_diagnostic_marker: event_index={event_index}, primitive={primitive}, hypothetical_value={hypothetical_value}")
+        # print(f"[DEBUG] ENTER _on_diagnostic_marker: event_index={event_index}, primitive={primitive}, hypothetical_value={hypothetical_value}")
         """
         Handle Shift+Click diagnostic marker placement (counterfactual exploration).
         
@@ -733,7 +741,9 @@ class InteractiveEditor:
         weights = self.controller.weights.copy() if hasattr(self.controller, 'weights') else {}
         # Force By Interval entropy for diagnostic marker calculation
         weights['entropy_per_event'] = True
-        print(f"[DEBUG] Diagnostic marker calculation using entropy_per_event={weights['entropy_per_event']}")
+        # print(f"[DEBUG] Diagnostic marker calculation using entropy_per_event={weights['entropy_per_event']}")
+    # print(f"[DIAGNOSTIC MARKER] Shift+click at ({{time}}, {{hypothetical_value}})")
+    # print(f"  View Y range: [{{view_y_min}}, {{view_y_max}}]")
 
         # Compute hypothetical gamma_self trajectory using same logic as controller
 
@@ -756,10 +766,15 @@ class InteractiveEditor:
                 f = hypothetical_value if primitive == 'f' else primitives_data['f'][i]
                 a = hypothetical_value if primitive == 'a' else primitives_data['a'][i]
                 S = hypothetical_value if primitive == 'S' else primitives_data['S'][i]
+                # print(f"[DIAGNOSTIC] Placed X marker on '{primitive}' at event {i} (time={times[i]})")
+                # print(f"[DIAGNOSTIC]   Clicked at Y={hypothetical_value:.2f}, Current marker: {{current_marker}}, Baseline: N/A ")
+                # print(f"[DIAGNOSTIC] Drag the X marker up/down to test hypothetical values    ")
                 if i + 1 < len(times):
-                    print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    # print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    pass
                 else:
-                    print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    # print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    pass
             else:
                 v = primitives_data['v'][i]
                 r = primitives_data['r'][i]
@@ -767,24 +782,26 @@ class InteractiveEditor:
                 a = primitives_data['a'][i]
                 S = primitives_data['S'][i]
                 if i + 1 < len(times):
-                    print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    # print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    pass
                 else:
-                    print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    # print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    pass
             # Calculate time_delta safely
             if i + 1 < len(times):
                 time_delta = times[i + 1] - times[i]
             else:
                 time_delta = 1.0  # Nominal value for last event
-            print(f"[DEBUG] gamma_self_before={gamma_self}, primitives: v={v}, r={r}, f={f}, a={a}, S={S}, time_delta={time_delta}")
-            print(f"[DEBUG] Calling update_gamma_self: gamma_self={gamma_self}, v={v}, r={r}, f={f}, a={a}, S={S}, weights={weights}, time_delta={time_delta}")
+            # print(f"[DEBUG] gamma_self_before={gamma_self}, primitives: v={v}, r={r}, f={f}, a={a}, S={S}, time_delta={time_delta}")
+            # print(f"[DEBUG] Calling update_gamma_self: gamma_self={gamma_self}, v={v}, r={r}, f={f}, a={a}, S={S}, weights={weights}, time_delta={time_delta}")
             gamma_self = update_gamma_self(
                 gamma_self, v, r, f, a, S,
                 weights=weights,
                 time_delta=time_delta
             )
-            print(f"[DEBUG] gamma_self_after={gamma_self}")
-            print(f"[DEBUG] Returned from update_gamma_self: gamma_self_after={gamma_self}")
-            print(f"[DEBUG] INTERVAL: i={i}, gamma_self_after={gamma_self}")
+            # print(f"[DEBUG] gamma_self_after={gamma_self}")
+            # print(f"[DEBUG] Returned from update_gamma_self: gamma_self_after={gamma_self}")
+            # print(f"[DEBUG] INTERVAL: i={i}, gamma_self_after={gamma_self}")
             gamma_trajectory.append(gamma_self)
 
 
@@ -798,26 +815,27 @@ class InteractiveEditor:
         gamma_x = gamma_val.real
         gamma_y = gamma_val.imag
 
-        _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
 
         # Place marker on trajectory panel at event position
         self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-        _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
 
         # Update primitive readout
         event = events[event_index]
         self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
-        _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
 
         # Update gamma_self readout (simulate a click at that position)
         if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
             self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
             self.gamma_self_gauge.setVisible(True)
-            _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
+            # _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
         else:
-            _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
+            # _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
+            pass
 
-        _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+        # _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
     
     def _on_lock_toggle(self, event_index):
         """
@@ -881,7 +899,7 @@ class InteractiveEditor:
             is_existing = any(abs(t - existing_t) < 0.001 for existing_t in existing_times if existing_t not in current_inserted_times)
             if is_existing:
                 rejected_times.append(t)
-                _logger.warning(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
+                # _logger.warning(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
             elif t not in current_inserted_times:
                 to_add.append(t)
         
@@ -921,7 +939,7 @@ class InteractiveEditor:
         from tools.editor.commands import InsertEventCommand
         for time_to_add in to_add:
             try:
-                _logger.info(f"INSERTIONS: Adding event at time {time_to_add}")
+                # _logger.info(f"INSERTIONS: Adding event at time {time_to_add}")
                 if self.controller.undo_stack:
                     # Use undo command for proper undo/redo support
                     command = InsertEventCommand(self.controller, time_to_add)
@@ -943,7 +961,7 @@ class InteractiveEditor:
             t1 = time.time()
             self.controller._recompute_trajectory_immediate()
             t2 = time.time()
-            _logger.debug(f"PERF: update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
+            # _logger.debug(f"PERF: update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
             
             # Sync widget with actual inserted events in model
             # Find current inserted events after all changes
@@ -1059,13 +1077,13 @@ class InteractiveEditor:
         Args:
             perspective: Either 'M1' or 'M2'
         """
-        print(f"DEBUG: _on_perspective_changed called with: {perspective}")
+        # print(f"DEBUG: _on_perspective_changed called with: {perspective}")
         # Controller handles all perspective switching including spinbox restoration
         self.controller.switch_perspective(perspective)
         
         # Update name editor to show current perspective's name
         current_name = self.model.get_display_name(perspective)
-        _logger.debug(f"Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
+        # _logger.debug(f"Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
         self.name_editor.set_name(current_name)
         
         # Update gamma_self0_editor with new perspective's value and name
@@ -1087,10 +1105,10 @@ class InteractiveEditor:
         # Update model with perspective-specific name
         if perspective == "M1":
             self.model.name_m1 = new_name
-            _logger.debug(f"Updated name_m1 to '{new_name}'")
+            # _logger.debug(f"Updated name_m1 to '{new_name}'")
         else:
             self.model.name_m2 = new_name
-            _logger.debug(f"Updated name_m2 to '{new_name}'")
+            # _logger.debug(f"Updated name_m2 to '{new_name}'")
 
         from tools.editor.state_viewer import StateViewer
         StateViewer.record(
@@ -1144,7 +1162,8 @@ class InteractiveEditor:
             primitive: Primitive that was clicked
         """
         if DEBUG_SPINBOX:
-            _logger.debug(f"_on_marker_clicked: event_idx={event_idx}, primitive={primitive}")
+            # _logger.debug(f"_on_marker_clicked: event_idx={event_idx}, primitive={primitive}")
+            pass
         
         # Update spinbox editor (v2.4)
         self.controller.on_primitive_selected(event_idx, primitive)
@@ -1154,30 +1173,12 @@ class InteractiveEditor:
         if event:
             self.note_editor.set_event(event.time, event.notes)
     
-    def _on_trajectory_clicked(self, x: float, y: float):
+    def _on_trajectory_clicked(self, xy):
         """
         Handle trajectory panel click (gamma_self marker).
-        Find nearest event and show its notes.
-        
-        Args:
-            x: Real component (clicked position)
-            y: Imaginary component (clicked position)
+        Accepts a tuple (x, y) from the signal.
         """
-        # Find nearest event by time (using trajectory x-axis which represents time indirectly)
-        # For now, we'll use the gamma_self readout which already finds the nearest point
-        # We need to map this back to an event time
-        
-        # Get all events and find the one closest to the clicked trajectory point
-        events = self.model.get_events(self.controller.perspective)
-        if not events:
-            return
-        
-        # For simplicity, find the event whose trajectory point is closest
-        # This would require trajectory computation - for now, just show first event
-        # TODO: Implement proper trajectory-to-event mapping
-        
-        # Temporary: Just show the last clicked event from primitive panel
-        # Better implementation would map trajectory point to nearest event time
+        # This method is a placeholder for future event mapping logic.
         pass
     
     # NOTE: Keyboard shortcuts removed with matplotlib event handlers
@@ -1360,25 +1361,28 @@ Phase 1.5 Features:
         try:
             from tools.editor.debug_gui import enable_all_gui_debugging
             enable_all_gui_debugging()
-            _logger.info("[DEBUG] Comprehensive GUI debugging enabled")
+            # _logger.info("[DEBUG] Comprehensive GUI debugging enabled")
         except ImportError as e:
-            _logger.warning(f"[DEBUG] GUI debugging not available: {e}")
+            # _logger.warning(f"[DEBUG] GUI debugging not available: {e}")
+            pass
     
     if args.debug_signals:
         try:
             from tools.editor.debug_gui import get_gui_debugger
             get_gui_debugger().enable_signal_tracking()
-            _logger.info("[DEBUG] Signal tracking enabled")
+            # _logger.info("[DEBUG] Signal tracking enabled")
         except ImportError as e:
-            _logger.warning(f"[DEBUG] Signal debugging not available: {e}")
+            # _logger.warning(f"[DEBUG] Signal debugging not available: {e}")
+            pass
     
     if args.debug_mouse:
         try:
             from tools.editor.debug_gui import get_gui_debugger
             get_gui_debugger().enable_mouse_event_debugging()
-            _logger.info("[DEBUG] Mouse event debugging enabled")
+            # _logger.info("[DEBUG] Mouse event debugging enabled")
         except ImportError as e:
-            _logger.warning(f"[DEBUG] Mouse debugging not available: {e}")
+            # _logger.warning(f"[DEBUG] Mouse debugging not available: {e}")
+            pass
     
     # Clear saved layout if requested
     if args.reset_layout:

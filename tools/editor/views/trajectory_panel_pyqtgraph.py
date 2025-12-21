@@ -15,6 +15,16 @@ _logger = get_logger('trajectory_panel')
 
 
 class TrajectoryPanelPyQtGraph(QWidget):
+	def mousePressEvent(self, event):
+		# Only respond to left mouse button
+		if event.button() == Qt.LeftButton:
+			# Get mouse position in plot coordinates
+			mouse_point = self.plot_widget.plotItem.vb.mapSceneToView(event.position())
+			x_click = mouse_point.x()
+			y_click = mouse_point.y()
+			self.gamma_clicked.emit((x_click, y_click))
+		# Call base class handler
+		super().mousePressEvent(event)
 
 	def zoom_in(self):
 		"""Zoom in by 20% on the current view."""
