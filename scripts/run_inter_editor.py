@@ -8,7 +8,7 @@ import sys
 
 
 if __name__ == "__main__":
-    target_file = "data/library/love/the_notebook_M1.csv"
+    target_file = "data/library/hate/battlefield_rambo_M1.csv"
     print(f"[DEBUG] Attempting to open: {target_file}")
 
     cmd = [
