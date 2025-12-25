@@ -161,11 +161,13 @@ day,v,r,f,a,S,notes
 
 ### Option 1: Interactive Scenario Editor (NEW - Phase 1 Complete! ✅)
 
+
+
 **The Interactive Scenario Editor** provides a graphical interface for scenario customization and diagnostic analysis. This is the recommended tool for:
-- **Customizing scenarios** - Drag-and-drop primitive editing with real-time trajectory preview
-- **Diagnostic analysis** - Understanding which events dominate relationship outcomes
-- **Sensitivity testing** - Seeing immediate impact of primitive changes on gamma_self evolution
-- **Data validation** - Testing if GRP can reproduce observed relationship trajectories
+* **Customizing scenarios** - Drag-and-drop primitive editing with real-time trajectory preview
+* **Diagnostic analysis** - Understanding which events dominate relationship outcomes
+* **Sensitivity testing** - Seeing immediate impact of primitive changes on gamma_self evolution
+* **Data validation** - Testing if GRP can reproduce observed relationship trajectories
 
 ```bash
 # Launch the interactive editor
@@ -176,22 +178,49 @@ python tools/interactive_editor.py data/single_dating_to_love_M1.csv
 ```
 
 **Key Features:**
-- Drag primitive markers (v, r, f, a, S) to modify values
-- Real-time gamma_self trajectory updates
-- Lock/unlock events (right-click markers)
-- Auto-marking of modified events
-- Diagnostic gauges showing marker ID, Y-values, and trajectory coordinates
-- Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
-- CSV output includes `marker` and `locked` columns for persistence
+* Drag primitive markers (v, r, f, a, S) to modify values
+* Real-time gamma_self trajectory updates
+* Lock/unlock events (right-click markers)
+* Auto-marking of modified events
+* Diagnostic gauges showing marker ID, Y-values, and trajectory coordinates
+* Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
+* CSV output includes `marker` and `locked` columns for persistence
 
 **Documentation:**
-- **[Interactive Editor User Guide](docs/interactive_editor_user_guide.md)** - Complete usage guide
-- **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
-- **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
-- **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
-- **[Verification System](verification/README.md)** - Automated verification and regression testing
-- **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
+* **[Interactive Editor User Guide](docs/interactive_editor_user_guide.md)** - Complete usage guide
+* **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
+* **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
+* **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
+* **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
+* **[Verification System](verification/README.md)** - Automated verification and regression testing
+* **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
+
+---
+
+### Alternative: GRP_SpreadSheet.xlsm (Excel Interface)
+
+**GRP_SpreadSheet.xlsm** (in the `tools/` directory) is a macro-enabled Excel workbook providing a spreadsheet-based user interface for the GRP equation and scenario analysis. It is designed for users who prefer working in Excel for data entry, visualization, and analysis, offering a parallel experience to the Python interactive editor.
+
+**Key Features:**
+- Chart and analyze GRP scenarios using the same CSV format as the interactive editor (see below for format reference)
+- Dedicated sheets for scenario input, constants, GRP equation, and primitive-to-gamma_self mapping
+- Scenario sheets for each example or user-defined scenario (tab names must match the scenario name and CSV entry)
+- Gamma_Self Calc sheet: main user interface for inputting scenario data and viewing charts
+- Constants sheet: documentation of all constants used in gamma_self calculations
+- Built-in macros (see Excel VBA editor) for automation and advanced analysis
+- Includes sample scenarios and GRP graphs for reference
+
+**Usage Notes:**
+- User input cells are highlighted in green on the Gamma_Self Calc sheet
+- To add a new scenario, copy the input pattern or modify green cells as needed; scenario tab names must match the M1/M2 CSV Tab entry
+- Macros may require enabling in Excel; see the VBA editor for details
+- Users should be familiar with standard Excel practices and functions
+
+**Intended Audience:**
+End users of the GRP equation who prefer a spreadsheet interface for scenario modeling, analysis, and visualization.
+
+**CSV Format Reference:**
+GRP_SpreadSheet.xlsm expects scenario data in the same CSV format as the interactive editor. For the complete specification, see the [CSV Format Details](docs/interactive_editor_user_guide.md#csv-format-details) section of the Interactive Editor User Guide.
 
 ---
 
