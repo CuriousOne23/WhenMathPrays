@@ -1,10 +1,10 @@
-name,Noah
-time_unit,days
-gamma_self_0,0-5j
+name,Noah,,,,,
+time_unit,days,,,,,
+gamma_self_0,-50-10j,,,,,
 day,v,r,f,a,S,notes
-0,0,0,0,0,0,First meeting at carnival
-1,6,4,3,4,3,Ferris wheel dare
-30,8,6,6,5,5,Summer romance peak
-365,9,8,9,7,8,Rebuilding the house â€“ devotion
-730,8,7,8,7,7,Letters & waiting
-2555,7,6,-6,6,6,Reunion & Alzheimer's final years
+0,9,8,9,7,3,First meeting at carnival – instant magnetic visibility and resonance
+1,10,10,10,0,10,Ferris wheel dare – maximum intensity and shared moment creation
+30,10,10,10,2,10,Summer romance peak – passionate harmony and trust
+365,9,9,9,7,0,Rebuilding the house – total devotion in absence
+730,7,7,9,7,-2,Daily letters & waiting – steadfast love with growing ache
+2555,10,10,10,10,10,Reunion & Alzheimer's years – transcendent love through loss

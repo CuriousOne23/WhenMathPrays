@@ -1,5 +1,24 @@
 # Primitive Modeling Guide: M1/M2 Perspective Framework
 
+## Table of Contents
+
+1. [Axis Mapping Foundation](#axis-mapping-foundation)
+2. [Identity Statement Test](#identity-statement-test-distinguishing-real-vs-imaginary-primitives)
+3. [Primitive Definitions & Scoring Rules](#primitive-definitions--scoring-rules)
+4. [Common Patterns](#common-patterns)
+5. [Example: The Notebook – Allie’s Perspective](#example-the-notebook--allies-perspective-gamma_self--allie-other--noah)
+6. [The Double Projection Problem](#the-double-projection-problem)
+7. [Critical Distinction](#critical-distinction)
+8. [The Framework](#the-framework)
+9. [Key Insight: Fidelity Direction](#key-insight-fidelity-direction)
+10. [Examples](#examples)
+11. [Common Pitfalls](#common-pitfalls)
+12. [Validation Checklist](#validation-checklist)
+13. [Edge Cases](#edge-cases)
+14. [Quick Reference Table](#quick-reference-table)
+15. [Documentation Best Practice](#documentation-best-practice)
+16. [Summary](#summary)
+
 **⚠️ CRITICAL:** This framework is counterintuitive. Read carefully and reference often. Even after understanding it, the natural human tendency is to slip back into incorrect "theory-of-mind" scoring.
 
 ---
@@ -57,6 +76,57 @@ A practical linguistic test for classifying primitives:
 - **Toxic enmeshment**: "I resent them" (Imaginary: Hate) + "I can't be without them" (Real: We-space)—negative affect with identity dependence
 
 This test helps prevent misclassifying primitives: r/a/f affect how M1 **feels**, while v affects whether M1's **identity** incorporates M2.
+
+---
+
+# Generalized Relational Physics (GRP) – Primitive Scoring Guidelines
+
+These guidelines define how to score the five primitives (v, r, f, a, S) in scenario CSV files.  
+Each primitive value must reflect **only gamma_self's internal emotional response inspired by the other person** at that exact moment/event — never the other person's feelings, never an objective "relationship quality" average.
+
+Scale: -10 (maximum negative) to +10 (maximum positive), 0 neutral.
+
+## Core Principles
+
+1. **Subjectivity Rule**  
+   Score from gamma_self's viewpoint only: "What feelings does the other person arouse *in me* right now?"
+
+2. **Asymmetry is Normal**  
+   One party can feel maximum positives while the other feels negatives or neutrals (e.g., Noah instantly high on Allie; Allie initially wary/low).
+
+3. **Primitives are Independent**  
+   High resonance does not require high altruism. Shared breath can be maximum while visibility is negative.
+
+## Primitive Definitions & Scoring Rules
+
+| Primitive | Meaning | Positive High (+8 to +10) | Neutral (–2 to +2) | Negative High (–8 to –10) | Key Scoring Notes |
+|-----------|---------|---------------------------|---------------------|----------------------------|-------------------|
+| **v**<br>Visibility | How much the other dominates my perceptual/emotional field, and whether I *desire* that presence | They are constantly in my thoughts; I crave their presence; I can't look away | They are present but not dominating; I neither seek nor avoid them strongly | Their presence feels intrusive, overwhelming, or unwanted; I want distance | Negative v = "Get out of my sight/head"<br>Positive v = "You fill my entire world" |
+| **r**<br>Resonance | Degree of deep harmonic alignment / soul-level sync | Perfect harmony; we vibrate on the same frequency; everything feels "right" | Mild connection or neutral vibe | Dissonance; their energy clashes with mine | Often flips quickly in love stories once the spark lands |
+| **f**<br>Fidelity | Trust, faith, and loyalty inspired in me toward them/the bond | Complete trust; unwavering belief in them and our connection | Neither strong trust nor distrust | Doubt, suspicion, or sense of betrayal | Can remain high through absence if faith persists |
+| **a**<br>Altruism | Desire to act for *their* benefit/flourishing (not my own need) | I want to give to them selflessly; their happiness matters more than my comfort | Mild or no particular wish to help/harm them | I wish them ill or feel indifference to their well-being | **Lags behind other primitives** — requires actually *knowing* the person to rise significantly<br>Early passion is usually low a (driven by own desire) |
+| **S**<br>Shared Breath | Sense of mutual purpose, shared story, breathing the same air | We live in the same dream; complete alignment of life direction | Purposes neither strongly aligned nor opposed | Divergent or opposing purposes; one-sidedness feels rejecting | Drops fast in separation; negative when the other feels like an obstacle to my path |
+
+## Common Patterns
+
+- **Early resistance (reluctant party)** → negative or low v, r, S, f; a usually 0 or low positive if they feel delighted despite resistance.
+- **Pursuit phase** → pursuer often high v/r/f/S, low a (driven by own need).
+- **Peak passion** → high r, f, S; v usually high; a still moderate until deeper knowledge forms.
+- **Separation/conflict** → v drops, S drops first, a and f can linger positive if love persists.
+- **Transcendent/enduring love** → maximum scores reserved for tested moments (e.g., lucid recognition in illness, lifelong sacrifice).
+
+## Example: The Notebook – Allie’s Perspective (gamma_self = Allie, other = Noah)
+
+| Day | Event                          | v   | r   | f   | a   | S   | Rationale |
+|-----|--------------------------------|-----|-----|-----|-----|-----|-----------|
+| 0   | First sighting at carnival     | -2  | -2  | 0   | 0   | -2  | Noah forces attention; feels intrusive and socially mismatched |
+| 1   | Ferris wheel dare              | -3  | -3  | -2  | 5   | -1  | Still resistant (negative v/r/f/S), but his boldness delights her (moderate a) |
+| 30  | Summer romance peak            | 8   | 10  | 8   | 8   | 10  | Deep harmony and shared dream; strong but not yet total selflessness |
+| 365 | Separation & engagement to Lon | 0   | 2   | 3   | 7   | 8   | Noah no longer daily present (v=0); lingering care (high a/S) but muted trust/resonance |
+| 730 | Reading the notebook           | 9   | 10  | 9   | 9   | 10  | Memories flood back; full restoration of love and purpose |
+| 2555| Alzheimer’s years (lucid moments) | 10 | 10  | 10  | 10  | 10  | In clarity, Noah inspires absolute maximum everything |
+
+Follow these guidelines strictly for any new scenario. Score moment-by-moment from the specified gamma_self's internal experience only.
 
 ---
 

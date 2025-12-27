@@ -1,16 +1,19 @@
+
 # core/love.py
 # WhenMathPrays – Gamma Relational Persona (GRP)
-# December 2025 Rev 3.2: Im-only depth scaling for fidelity asymmetry
+# December 2025 Rev 3.5: Constant-force entropy and Im-only depth scaling for fidelity asymmetry
 # γ_self(n+1) = γ_self(n) + (w_v·v + w_S,R·S) + i·(w_r·r + w_f·f' + w_a·a + w_S,I·S)
 # where f' = w_f·f if f≥0, else f·(0.12·max(|Im|, 5.0)) (depth-scaled asymmetry)
-# See docs/GRP_rev3.md for full specification
+# Entropy: ΔS_real·Δt·sign(real_target - Re[γ_self]) + i·ΔS_imag·Δt·sign(imag_target - Im[γ_self])
+# See docs/GRP_rev3.5.md for full specification
 
 from typing import Tuple, Dict, Optional
 import numpy as np
 
 DEFAULT_GAMMA_SELF0 = 0.0 + 0.0j
 
-# Canonical weights (December 2025 Rev 3.2 - see CONSTANTS.md)
+
+# Canonical weights (December 2025 Rev 3.5 - see CONSTANTS.md)
 # Axis weights (DEFAULT, tunable by scenario)
 W_V = 0.8  # Visibility (real axis, Ego↔We)
 W_R = 1.0  # Resonance (imaginary axis, Hate↔Love)
@@ -19,16 +22,15 @@ W_A = 0.6  # Altruism (imaginary axis)
 W_S_R = 0.5  # Shared Breath (real axis contribution)
 W_S_I = 0.5  # Shared Breath (imaginary axis contribution)
 
-# Fidelity asymmetry (Rev 3.2: Im-only depth scaling)
+# Fidelity asymmetry (Im-only depth scaling)
 FIDELITY_SCALING_FACTOR = 0.12  # Negative fidelity scaling coefficient (LOCKED)
 FIDELITY_EPSILON = 5.0  # Collapse prevention floor for Im depth (LOCKED)
 
-# Entropy drift (DEFAULT, tunable by scenario) - Axis-independent decay (Rev 3.3)
-DELTA_S = 0.02  # Default unified entropy rate (backward compatibility)
+# Entropy drift (DEFAULT, tunable by scenario) - Axis-independent decay (Rev 3.5)
+ΔS_real = 0.02  # Real axis decay rate (toward Ego)
+ΔS_imag = 0.02  # Imaginary axis decay rate (toward neutral)
 ENTROPY_REAL_TARGET = -150.0  # Real axis target (deep Ego, isolated)
 ENTROPY_IMAG_TARGET = 0.0     # Imaginary axis target (neutral affect, neither love nor hate)
-DELTA_S_REAL = 0.02  # Decay rate toward ego axis
-DELTA_S_IMAG = 0.02  # Decay rate toward neutral affect
 
 # Default weights dictionary
 DEFAULT_WEIGHTS = {
@@ -40,11 +42,10 @@ DEFAULT_WEIGHTS = {
     'w_S_I': W_S_I,
     'fidelity_scaling_factor': FIDELITY_SCALING_FACTOR,
     'fidelity_epsilon': FIDELITY_EPSILON,
-    'delS': DELTA_S,  # Backward compatibility (unified rate)
+    'ΔS_real': ΔS_real,
+    'ΔS_imag': ΔS_imag,
     'entropy_real_target': ENTROPY_REAL_TARGET,
     'entropy_imag_target': ENTROPY_IMAG_TARGET,
-    'delS_real': DELTA_S_REAL,
-    'delS_imag': DELTA_S_IMAG,
     'entropy_per_event': False  # False=scale by time (default), True=per event
 }
 

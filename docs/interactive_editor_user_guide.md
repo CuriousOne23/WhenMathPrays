@@ -8,9 +8,19 @@
 
 ---
 
+
 ## Table of Contents
 1. [Overview](#overview)
 2. [Application States](#application-states)
+   - [Perspective State](#1-perspective-state--which-viewpoint-are-you-editing)
+   - [Edit State](#2-edit-state--are-changes-temporary-or-committed)
+   - [Modification State](#3-modification-state--which-events-have-been-changed)
+   - [Lock State](#4-lock-state--which-events-are-protected-from-editing)
+   - [Undo/Redo State](#5-undoredo-state--can-you-reverse-or-repeat-actions)
+   - [Trajectory Computation State](#6-trajectory-computation-state--is-the-trajectory-up-to-date)
+   - [File State](#7-file-state--what-file-are-you-working-with)
+   - [UI Interaction State](#8-ui-interaction-state--what-is-the-user-currently-doing)
+   - [Workspace Layout State](#9-workspace-layout-state--how-is-the-ui-arranged)
 3. [Getting Started](#getting-started)
 4. [User Interface](#user-interface)
 5. [Basic Workflow](#basic-workflow)

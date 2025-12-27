@@ -1,10 +1,15 @@
+
 # WhenMathPrays – Canonical Constants (Single Source of Truth)
+
+**Revision History:**
+- **Rev 3.5 (Dec 2025):** Clarified default entropy targets as user-overridable, standardized notation (ΔS_real, ΔS_imag), cleaned up LOCKED language, removed outdated test references.
+- **Rev 3.4:** Introduced constant-force entropy (see prior revision for details)
 
 This is the **only** file in the entire repository that may contain numerical parameters, functions, or empirical ranges.  
 Changing anything here requires formal stewardship proposal and unanimous ratification.  
 All other documents must link here — never repeat numbers.
 
-Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
+Last updated: December 2025 (Rev 3.5: Constant-Force Entropy Model)
 
 ## Foundational Principle: Unilateral Perspective
 
@@ -32,32 +37,36 @@ Last updated: December 2025 (Rev 3.4: Constant-Force Entropy Model)
 
 ---
 
-## Core Canonical Parameters (Rev 3.4: December 2025)
 
-**Rev 3.4 Changes (Constant-force entropy for timeline independence):**
-- **ERROR IN REV 3.3 CORRECTED**: Proportional-to-distance force caused timeline-length accumulation bug
-- **Constant-force entropy**: Uses sign() function for force direction only, not magnitude
-- **Timeline-independent drift**: Same entropy effect per unit time regardless of scenario length
-- **Real axis target recalibrated**: -10.0 (was -150.0 in Rev 3.3 - too strong for new physics)
-- **Imaginary axis target**: 0 (Neutral affect) - unchanged
-- **Formula**: entropy_pull = ΔS_real × Δt × sign(real_target - real_current) + i × ΔS_imag × Δt × sign(imag_target - imag_current)
-- **Fidelity asymmetry unchanged** from Rev 3.2 (Im-only depth scaling)
-- **Axis-independent decay rates preserved** from Rev 3.3 (ΔS_real, ΔS_imag)
+## Core Canonical Parameters (Rev 3.5: December 2025)
 
-| Parameter | Value | Units | Meaning | Status |
-|-----------|-------|-------|---------|--------|
-| **w_v** | 0.8 | – | Visibility weight (real axis contribution) | Default, tunable |
-| **w_r** | 1.0 | – | Resonance weight (imaginary axis) | Default, tunable |
-| **w_f** | 1.2 | – | Positive fidelity weight (imaginary axis) | Default, tunable |
-| **fidelity_scaling_factor** | 0.12 | – | Negative fidelity depth scaling coefficient | LOCKED |
-| **fidelity_epsilon (ε)** | 5.0 | – | Collapse prevention floor for Im depth | LOCKED |
-| **w_a** | 0.6 | – | Altruism weight (imaginary axis) | Default, tunable |
-| **w_{S,R}** | 0.5 | – | Shared Breath (real axis contribution) | Default, tunable |
-| **w__real** (delS_real) | 0.02 | time⁻¹ | Real axis entropy decay rate (toward Ego) | Default, tunable |
-| **ΔS_imag** (delS_imag) | 0.02 | time⁻¹ | Imaginary axis entropy decay rate (toward neutral) | Default, tunable |
-| **entropy_real_target** | -150.0 | – | Real axis entropy target (gentle Ego drift) | Default, tunable |
-| **entropy_imag_target** | 0.0 | – | Imaginary axis entropy target (neutral affect/apathy) | Default, tunable |
-| **entropy_per_event** | False | – | Entropy mode: False=per time unit (default), True=per event | Default, tunable |
+**Constant-force entropy for timeline independence:**
+- Uses sign() function for force direction only, not magnitude
+- Timeline-independent drift: Same entropy effect per unit time regardless of scenario length
+- Default entropy targets: **(-150.0, 0.0j)** (deep Ego, neutral affect) — these are user-overridable for scenario modeling
+- Formula: entropy_pull = ΔS_real × Δt × sign(real_target - real_current) + i × ΔS_imag × Δt × sign(imag_target - imag_current)
+- Fidelity asymmetry unchanged from Rev 3.2 (Im-only depth scaling)
+- Axis-independent decay rates (ΔS_real, ΔS_imag)
+
+| Parameter                | Value    | Units   | Meaning                                 | Status   |
+|--------------------------|----------|---------|-----------------------------------------|----------|
+| **w_v**                  | 0.8      | –       | Visibility weight (real axis)           | Tunable  |
+| **w_r**                  | 1.0      | –       | Resonance weight (imaginary axis)       | Tunable  |
+| **w_f**                  | 1.2      | –       | Positive fidelity weight (imag axis)    | Tunable  |
+| **w_a**                  | 0.6      | –       | Altruism weight (imaginary axis)        | Tunable  |
+| **w_{S,R}**              | 0.5      | –       | Shared Breath (real axis)               | Tunable  |
+| **w_{S,I}**              | 0.5      | –       | Shared Breath (imaginary axis)          | Tunable  |
+| **fidelity_scaling_factor** | 0.12   | –       | Negative fidelity depth scaling         | LOCKED   |
+| **fidelity_epsilon**     | 5.0      | –       | Collapse prevention floor (Im depth)    | LOCKED   |
+| **ΔS_real**              | 0.02     | time⁻¹  | Real axis decay rate (toward Ego)       | Tunable  |
+| **ΔS_imag**              | 0.02     | time⁻¹  | Imaginary axis decay rate (neutral)     | Tunable  |
+| **entropy_real_target**  | -150.0   | –       | Real axis entropy target (default)      | Tunable  |
+| **entropy_imag_target**  | 0.0      | –       | Imaginary axis entropy target (default) | Tunable  |
+| **entropy_per_event**    | False    | –       | Entropy mode (False=per time, True=per event) | Tunable  |
+
+**LOCKED parameters:**
+- **fidelity_scaling_factor = 0.12**: Negative fidelity depth scaling coefficient
+- **fidelity_epsilon = 5.0**: Collapse prevention floor for Im depth
 
 **Removed in Rev 3.2:** w_f_neg (fixed 25×) — replaced with Im-only depth scaling  
 **Removed in Rev 3.3:** γ_attractor (single point), ΔS (unified rate) — replaced with axis-independent targets and rates
@@ -95,6 +104,7 @@ $$
   - **Default deep ego** (γ_attractor = -150+0j): Natural relationship decay pulls toward profound isolation
 - To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 
+
 **Primitive normalization:**
 
 $$
@@ -103,27 +113,28 @@ $$
 
 Where `human_scale` ∈ [−10, +10] (CSV authoring scale) → `x` ∈ [−1, +1] (computation scale)
 
-**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
+
+**Im-only depth-scaled fidelity asymmetry (Rev 3.2, unchanged in Rev 3.5):**
 
 $$
 f' = \begin{cases}
-f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
+f \cdot (0.12 \cdot \max(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
 w_f \cdot f & \text{if } f \geq 0
 \end{cases}
 $$
 
-**Where:** 
+Where:
 - Im = imaginary component of γ_self (love/hate axis)
 - 0.12 = scaling factor (negatives scale with love depth)
 - 5.0 = ε (collapse prevention floor, even at origin betrayal stings)
 - w_f = 1.2 (positive healing rate)
 
-**Key behaviors:**
-- **At origin (0i)**: f=-1 → -0.6i, f=-10 → -6i (minimum sting)
-- **Early dating (20i)**: f=-1 → -2.4i, f=-10 → -24i (fragile)
-- **Deep love (150i)**: f=-1 → -18i, f=-10 → -180i (can reach battlefield)
-- **Saint/Hachikō peak (250i)**: f=-1 → -30i, f=-10 → -300i (full range)
-- **Psychology**: "The deeper the love, the more betrayal can scar" — but only using Im (love depth), not Ego/We coupling
+Key behaviors:
+- At origin (0i): f=-1 → -0.6i, f=-10 → -6i (minimum sting)
+- Early dating (20i): f=-1 → -2.4i, f=-10 → -24i (fragile)
+- Deep love (150i): f=-1 → -18i, f=-10 → -180i (can reach battlefield)
+- Saint/Hachikō peak (250i): f=-1 → -30i, f=-10 → -300i (full range)
+- Psychology: "The deeper the love, the more betrayal can scar" — but only using Im (love depth), not Ego/We coupling
 
 ---
 
@@ -208,6 +219,7 @@ $$
 - w_neg=1.5 and ε=1.0 are LOCKED (hybrid asymmetry parameters)
 - Axis weights (w_v, w_r, w_f, w_a, w_S,R, w_S,I) are DEFAULT, tunable by scenario
 - No drift equation for γ_self0 (initial condition only)
+
 
 **This file is the single source of truth for all numerical parameters.**
 

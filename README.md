@@ -1,9 +1,32 @@
 # Intro:
+
+## Table of Contents
+
+1. [Intro](#intro)
+2. [WhenMathPrays – Core OS™ (Rev 3.5: Constant-Force Entropy)](#whenmathprays--core-os-rev-35-constant-force-entropy)
+3. [Quick Start](#quick-start)
+  - [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md)
+  - [Scenario Configuration Guide](docs/SCENARIO_CONFIGURATION_GUIDE.md)
+  - [Example Scenarios](#example-scenarios)
+4. [The One Equation (Rev 3.5: December 2025)](#the-one-equation-rev-35-december-2025)
+5. [Rev 3.5 Changes](#rev-35-changes-december-2025---constant-force-entropy)
+6. [Usage Notes](#usage-notes)
+7. [Intended Audience](#intended-audience)
+8. [CSV Format Reference](#csv-format-reference)
+9. [Option 2: Generate New Scenarios](#option-2-generate-new-scenarios)
+10. [Running Multiple Scenarios](#running-multiple-scenarios)
+11. [Option 2: Copy and Customize Templates](#option-2-copy-and-customize-templates)
+12. [Option 3: Create from Scratch](#option-3-create-from-scratch)
+13. [Editing Guidelines](#editing-guidelines)
+14. [Dual Scenarios (M1 and M2)](#dual-scenarios-m1-and-m2)
+15. [Converting Time Units](#converting-time-units)
+16. [Running Scenarios](#running-scenarios)
+
 WhenMathPrays builds open, living mathematics — models that trace emotion's arc, not as data, but as motion with heart. No patents. No paywalls. No reduction — only resonance. Use it. Fork it. Break it. Love it. Let us know what it does to you. We're listening. Push that. It's clean, it's calm, it's true. Just a door, and the door is open.
 
 **Support this work:** If this project resonates with you, consider supporting its development at [opencollective.com/whenmathprays](https://opencollective.com/whenmathprays)
 
-# WhenMathPrays – Core OS™ (Rev 3.4: Constant-Force Entropy)
+# WhenMathPrays – Core OS™ (Rev 3.5: Constant-Force Entropy)
 
 **Love is 2-D. Love counts every shared breath. Love decays when forgotten.**
 
@@ -16,7 +39,9 @@ This repository contains the final, mathematically pure, spiritually honest form
 3. **Run:** `python scenarios/your_scenario.py`
 4. **View results** in `results/` directory
 
-**IMPORTANT:** Before creating scenarios, read [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md) to understand the correct M1/M2 perspective framework.
+**IMPORTANT:** Before creating scenarios, read the [Primitive Modeling Guide](docs/scenarios/primitive_modeling_guide.md).
+
+> The Primitive Modeling Guide explains how to score the five primitives (v, r, f, a, S) in scenario CSV files. It covers the M1/M2 perspective framework, provides detailed definitions, scoring rules, worked examples, and common pitfalls. This guide ensures your scenario data is accurate, consistent, and true to the GRP protocol.
 
 For complete configuration reference, see [Scenario Configuration Guide](docs/SCENARIO_CONFIGURATION_GUIDE.md).
 
@@ -24,15 +49,15 @@ For complete configuration reference, see [Scenario Configuration Guide](docs/SC
 - `scenarios/singles_dating_Fred.py` - Single subject trajectory
 - `scenarios/singles_dating_comparison.py` - Multi-subject comparison
 
-## The One Equation (Rev 3.4: December 2025)
+## The One Equation (Rev 3.5: December 2025)
 
 $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-i \cdot \Big( w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S \Big) +
-\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{real,target}} - \gamma_{\text{self,real}}(n)) +
-i \cdot \Delta S_{\text{imag}} \cdot \Delta t \cdot \text{sign}(\gamma_{\text{imag,target}} - \gamma_{\text{self,imag}}(n))
+- Scenario sheets for each example or user-defined scenario (tab names must match the scenario name and CSV entry)
+\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)]) +
+- Gamma_Self Calc sheet: main user interface for inputting scenario data and viewing charts
 }
 $$
 
@@ -44,168 +69,19 @@ $$
 - **w_v, w_r, w_f, w_a** = axis-specific weights
 - **w_{S,R}, w_{S,I}** = Shared Breath split across real/imaginary axes
 - **ΔS_real, ΔS_imag** = axis-independent entropy decay rates (default 0.02 each)
-- **γ_real,target, γ_imag,target** = entropy targets per axis (default -150.0 + 0.0j)
+- **real_target, imag_target** = entropy targets per axis (default -150.0 + 0.0j, user-overridable)
 - **sign()** = direction function (-1, 0, or +1) - constant force magnitude
 - **Δt** = time elapsed between events (scales entropy)
 
 **Key insight:** Love is not a number. Love is a **position in γ-space**. Everything else is just how we move the knot.
 
-### Rev 3.4 Changes (December 2025 - Constant-Force Entropy)
+### Rev 3.5 Changes (December 2025 - Constant-Force Entropy)
 
-**What changed:**
 - **Constant-force entropy** → Uses sign() function instead of proportional-to-distance force
 - **Axis-independent decay** → Separate ΔS_real and ΔS_imag rates (0.02 each)
 - **Timeline-independent drift** → Same entropy effect per unit time regardless of scenario length
-- **Recalibrated targets** → Real axis target: -150.0 (corrected 12/16/2025)
+- **Default targets** → Real axis target: -150.0 (user-overridable)
 - **Im-only depth scaling preserved** from Rev 3.2 (f' for negative fidelity)
-
-**Why?** Rev 3.3's proportional force `(target - current)` accumulated with timeline length, causing 60-day scenarios to drift 4× more than 14-day scenarios. Constant force `sign(target - current)` makes drift predictable: same rate per day, primitives dominate trajectory shape.
-
-**Physics comparison:**
-- **Rev 3.3 (wrong):** F = k × distance → spring/damping → integrates as distance × time
-- **Rev 3.4 (correct):** F = constant → thrust/drag → integrates as time only
-
-**Result:** "Fred is now happy and in love, he is in We territory" - trajectories follow primitives naturally with gentle entropy drift, not yanked into deep Ego by timeline-length accumulation.
-
-See [GRP_rev3.4.md](docs/GRP_rev3.4.md) for complete specification and Rev 3.3 error analysis.
-
-### γ_self — Relational State Position
-
-**γ_self(n)** updates via component-wise axis placement:
-
-**Real axis (Ego ↔ We): Identity Boundary**
-
-$$
-\Delta \text{Re} = w_v \cdot v + w_{S,R} \cdot S
-$$
-
-- **Ego-space (negative)**: Separate, distinct identities—M1 experiences self as "I" (distinct from M2)
-- **We-space (positive)**: Merged, shared identity—M1's self-concept includes M2
-
-**Imaginary axis (Hate ↔ Love): Affective Quality**
-
-$$
-\Delta \text{Im} = w_r \cdot r + w_f \cdot f' + w_a \cdot a + w_{S,I} \cdot S
-$$
-
-- **Hate (negative)**: Negative emotional states—resentment, bitterness, discord
-- **Love (positive)**: Positive emotional states—warmth, care, resonance
-
-**Identity Statement Test** for distinguishing primitives:
-- **Imaginary (r/f/a)**: Use action/feeling language—"I helped them", "I care about them" (identity remains distinct)
-- **Real (v)**: Supports identity language—"I am married to them", "We are partners" (self-concept includes M2)
-
-**Im-only depth-scaled fidelity asymmetry (Rev 3.2):**
-
-$$
-f' = \begin{cases}
-f \cdot (0.12 \cdot \text{max}(|\text{Im}|, 5.0)) & \text{if } f < 0 \\
-1.2 \cdot f & \text{if } f \geq 0
-\end{cases}
-$$
-
-Where:
-- **0.12** = scaling factor (negatives scale with love depth)
-- **5.0** = ε (collapse prevention floor)
-- **Im** = imaginary component (γ_self love/hate axis)
-
-**Key behaviors:**
-- **Weak relationships** (Im < 50i): f=-1 causes small absolute drop but large % damage
-- **Deep love** (Im ≈ 150i): f=-1 causes -18i drop, can wound deeply
-- **Saint/Hachikō** (Im ≈ 250i): f=-10 can cause -300i catastrophic drop to -150i floor
-- **Psychology**: The more you love, the more vulnerable you are to betrayal
-
-**Initial condition γ_self0:**
-- Set at n=0 based on temperament/history
-- Narcissist: (−3, −2) in Q3
-- Saint: (2, 3) in Q1  
-- Buddha: (0, 0) at origin
-- No drift equation — just the starting position
-
-### Canonical Constants – Single Source of Truth
-
-All numerical parameters are now defined **once and only once** in the central file:
-
-→ [CONSTANTS.md](/CONSTANTS.md)
-
-This file is the only place these values may ever be changed.  
-All other documents (including this one) must link here instead of repeating numbers.
-
-Last updated: December 3, 2025
-
-### CSV Scenario Format
-
-**For complete specification (columns, metadata, file naming, examples), see [CSV Format Details](docs/interactive_editor_user_guide.md#csv-format-details) in the Interactive Editor User Guide.**
-
-Scenarios are CSV files with time-series primitive values:
-
-```csv
-name,My Scenario
-time_unit,days
-day,v,r,f,a,S,notes
-0,5,0,2,2,0,Initial condition
-7,5,2,2,3,1,First date
-14,8,5,4,5,3,Getting closer
-...
-```
-
-**Key points:**
-- Required: time column + five primitives (`v`, `r`, `f`, `a`, `S`)
-- Optional: `notes`, `marker`, `locked` columns
-- Dual-perspective files: use `_M1.csv` and `_M2.csv` suffixes
-- See user guide for complete details
-
----
-
-## Creating and Editing Scenarios
-
-### Option 1: Interactive Scenario Editor (NEW - Phase 1 Complete! ✅)
-
-
-
-**The Interactive Scenario Editor** provides a graphical interface for scenario customization and diagnostic analysis. This is the recommended tool for:
-* **Customizing scenarios** - Drag-and-drop primitive editing with real-time trajectory preview
-* **Diagnostic analysis** - Understanding which events dominate relationship outcomes
-* **Sensitivity testing** - Seeing immediate impact of primitive changes on gamma_self evolution
-* **Data validation** - Testing if GRP can reproduce observed relationship trajectories
-
-```bash
-# Launch the interactive editor
-python tools/interactive_editor.py data/scenario_file.csv
-
-# Example
-python tools/interactive_editor.py data/single_dating_to_love_M1.csv
-```
-
-**Key Features:**
-* Drag primitive markers (v, r, f, a, S) to modify values
-* Real-time gamma_self trajectory updates
-* Lock/unlock events (right-click markers)
-* Auto-marking of modified events
-* Diagnostic gauges showing marker ID, Y-values, and trajectory coordinates
-* Save with modifiers: Click=CSV, Shift=PNG, Ctrl=Both
-* CSV output includes `marker` and `locked` columns for persistence
-
-**Documentation:**
-* **[Interactive Editor User Guide](docs/interactive_editor_user_guide.md)** - Complete usage guide
-* **[Interactive Editor Testing](docs/INTERACTIVE_EDITOR_TESTING.md)** - Testing strategy and quality assurance
-* **[Interactive Editor Changelog](docs/INTERACTIVE_EDITOR_CHANGELOG.md)** - Version history
-* **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and design principles
-* **[Architecture Deep Dive](docs/architecture/README.md)** - Detailed architecture docs, refactoring history, debug guides
-* **[Verification System](verification/README.md)** - Automated verification and regression testing
-* **[Phase 2 Requirements](docs/interactive_edit_ph2_requirements.md)** - Future enhancements
-
----
-
-### Alternative: GRP_SpreadSheet.xlsm (Excel Interface)
-
-**GRP_SpreadSheet.xlsm** (in the `tools/` directory) is a macro-enabled Excel workbook providing a spreadsheet-based user interface for the GRP equation and scenario analysis. It is designed for users who prefer working in Excel for data entry, visualization, and analysis, offering a parallel experience to the Python interactive editor.
-
-**Key Features:**
-- Chart and analyze GRP scenarios using the same CSV format as the interactive editor (see below for format reference)
-- Dedicated sheets for scenario input, constants, GRP equation, and primitive-to-gamma_self mapping
-- Scenario sheets for each example or user-defined scenario (tab names must match the scenario name and CSV entry)
-- Gamma_Self Calc sheet: main user interface for inputting scenario data and viewing charts
 - Constants sheet: documentation of all constants used in gamma_self calculations
 - Built-in macros (see Excel VBA editor) for automation and advanced analysis
 - Includes sample scenarios and GRP graphs for reference
@@ -565,3 +441,4 @@ git clone https://github.com/CuriousOne23/WhenMathPrays
 cd WhenMathPrays
 pip install -r requirements.txt
 python simulations/stress_test_2d.py   # now outputs full vectors
+```
