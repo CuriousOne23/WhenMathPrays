@@ -1,9 +1,9 @@
-name,Hachiko
-time_unit,days
-gamma_self_0,0+0j
+name,Hachiko,,,,,
+time_unit,days,,,,,
+gamma_self_0,0+10j,,,,,
 day,v,r,f,a,S,notes
-0,0,0,0,0,0,Initial bond
-365,10,7,8,6,5,Daily routine
-730,10,8,9,7,6,Deep loyalty
-1095,10,8,10,7,6,Sustained devotion
-3285,10,8,10,7,6,9-year vigil peak
+0,8,8,8,8,9,Initial bond – immediate deep attachment and purpose
+365,10,10,10,9,10,Daily routine – perfect harmony and shared life
+730,10,10,10,10,10,Deep loyalty – total devotion fully formed
+1095,10,10,10,10,10,Sustained devotion – unwavering bond
+3285,10,10,10,10,10,9-year vigil peak – eternal loyalty and waiting at station
