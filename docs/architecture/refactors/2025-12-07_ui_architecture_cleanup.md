@@ -98,6 +98,113 @@ if self.controller and index in self.controller.model.modified_primitives:
 - Flow goes: View → Controller → View → Controller → View
 - Hard to debug (callbacks + signals + direct calls)
 - Can't trace execution path without stepping through multiple files
+
+---
+
+### Problem 4: Gauge-Based Primitive Editing (Planned v2.4 Fix)
+
+**Current Implementation:**
+- Primitive values edited by dragging gauges
+- Imprecise (hard to set exact values like 7.2)
+- Multiple gauge widgets increase UI complexity
+
+**Planned Solution: Spinbox Primitive Editor**
+
+**Architecture:**
+```python
+# Single shared spinbox widget
+class PrimitiveSpinboxWidget(QWidget):
+    value_changed = Signal(float)  # Clean signal interface
+    
+    def __init__(self):
+        self.spinbox = QDoubleSpinBox()
+        self.label = QLabel("Editing: (none)")
+        self.active_primitive = None
+        self.active_event_id = None
+    
+    def set_active_primitive(self, primitive_name, event_id, current_value):
+        """Called when user clicks primitive label/marker"""
+        self.active_primitive = primitive_name
+        self.active_event_id = event_id
+        self.label.setText(f"Editing: {primitive_name}")
+        self.spinbox.setValue(current_value)
+        self.spinbox.setEnabled(True)
+    
+    def clear_active(self):
+        """Called when event deselected or no primitive active"""
+        self.active_primitive = None
+        self.active_event_id = None
+        self.label.setText("Editing: (none)")
+        self.spinbox.setEnabled(False)
+
+# In controller
+class EditorController:
+    def __init__(self):
+        self.active_primitive_state = {
+            'primitive': None,  # 'v', 'r', 'f', 'a', 'S'
+            'event_id': None,
+            'event_time': None
+        }
+    
+    def on_primitive_selected(self, primitive_name, event_id):
+        """Update active primitive tracking"""
+        event_time = self.model.events[event_id]['time']
+        current_value = self.model.get_primitive_value(event_id, primitive_name)
+        
+        self.active_primitive_state = {
+            'primitive': primitive_name,
+            'event_id': event_id,
+            'event_time': event_time
+        }
+        
+        # Update spinbox widget
+        self.spinbox_widget.set_active_primitive(
+            primitive_name, event_id, current_value
+        )
+        
+        # Log to State Viewer
+        self.state_log.log_primitive_selection(
+            event_id=event_id,
+            primitive=primitive_name,
+            value=current_value
+        )
+
+# Signal flow (clean, unidirectional)
+PrimitiveLabel.clicked → Controller.on_primitive_selected() → SpinboxWidget.set_active_primitive()
+SpinboxWidget.value_changed → Controller.on_spinbox_value_changed() → Model.update_primitive()
+Model.data_changed → Controller.update_views() → SpinboxWidget.setValue() [if still active]
+```
+
+**Benefits:**
+- Single communication pattern (Qt signals only)
+- No circular dependencies (unidirectional flow)
+- Testable in isolation (mock signals)
+- Clear state ownership (controller tracks active primitive)
+- Label architecture matches gamma_self plot pattern
+
+**Integration Points:**
+- Event selection: Existing event marker click mechanism
+- Primitive selection: Click primitive label/marker
+- Event Insertion Points: Hooks into same active primitive tracking
+- Ctrl+Shift+Click: Modified events work same as normal events
+- M1/M2 switching: Preserves active primitive name, updates value
+- State Viewer: Logs all primitive selections and value changes
+
+**State Viewer Logging:**
+```python
+# Selection logging
+[PRIMITIVE_SELECT] perspective=M1, event_id=2, day=2.0, primitive=v, value=5.5
+
+# Value change logging
+[PRIMITIVE_EDIT] perspective=M1, event_id=2, day=2.0, primitive=v, old=5.5, new=7.2
+```
+
+**Gauge Removal:**
+- Remove all gauge widget code after spinbox functional
+- Optionally keep read-only primitive value labels for quick reference
+- Alternative: Remove labels entirely (spinbox is only display)
+
+**See:** [INTERACTIVE_EDITOR_CHANGELOG.md - v2.4-spinbox-primitive-editor](../INTERACTIVE_EDITOR_CHANGELOG.md#v24-spinbox-primitive-editor-planned)
 - Difficult to add logging/telemetry
 
 ---

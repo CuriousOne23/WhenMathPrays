@@ -41,10 +41,13 @@ venv/
 coverage.xml
 htmlcov/
 
-# Logs
+# Logs (exclude all log files and state viewer logs)
 *.log
+logs/*.txt
+logs/*.log
 
 # IDE folders (keep .vscode tracked; ignore others)
 .idea/
 .vs/
 
+/logs

@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "externalTerminal"
+        },
+        {
+            "name": "Run Interactive Editor (single_dating_to_love_M1)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/interactive_editor.py",
+            "args": [
+                "data/library/love/single_dating_to_love_M1.csv"
+            ],
+            "console": "externalTerminal"
+        }
+    ]
+}

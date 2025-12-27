@@ -1,0 +1,17 @@
+Marker placed: primitive=r, time=49.0, value=5.737300092507956, visible=True
+Marker placed: primitive=r, time=49.0, value=6.201577159073269, visible=True
+Marker placed: primitive=r, time=49.0, value=5.737300092507956, visible=True
+Marker placed: primitive=r, time=49.0, value=5.9694386257906125, visible=True
+Marker placed: primitive=r, time=49.0, value=5.040884492659987, visible=True
+Marker placed: primitive=r, time=49.0, value=5.5051615592253, visible=True
+Marker placed: primitive=r, time=49.0, value=6.278956670167488, visible=True
+Marker placed: primitive=r, time=42.0, value=5.427782048131081, visible=True
+Marker placed: primitive=r, time=42.0, value=5.659920581413737, visible=True
+Marker placed: primitive=r, time=42.0, value=5.582541070319518, visible=True
+Marker placed: primitive=r, time=49.0, value=5.582541070319518, visible=True
+Marker placed: primitive=r, time=49.0, value=6.12419764797905, visible=True
+Marker placed: primitive=r, time=49.0, value=6.665854225638581, visible=True
+Marker placed: primitive=r, time=49.0, value=5.118264003754206, visible=True
+Marker placed: primitive=r, time=49.0, value=5.5051615592253, visible=True
+Marker placed: primitive=r, time=49.0, value=5.350402537036862, visible=True
+Marker placed: primitive=r, time=49.0, value=6.278956670167488, visible=True

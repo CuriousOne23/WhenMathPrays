@@ -28,13 +28,19 @@ from PySide6.QtCore import Qt
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Import debug configuration
+from tools.editor.debug_config import get_logger, DEBUG_SPINBOX
+
+# Get logger for this module
+_logger = get_logger('interactive_editor')
+
 from tools.editor.model import EditorModel
 from tools.editor.controller import EditorController
 from tools.editor.views.primitive_panel_pyqtgraph import PrimitivePanelPyQtGraph
 from tools.editor.views.trajectory_panel_pyqtgraph import TrajectoryPanelPyQtGraph
 from tools.editor.config import get_config
-from tools.editor.qt_window import EditorMainWindow
-from tools.editor.widgets import GammaSelf0Editor
+from tools.editor.main_window import EditorMainWindow
+from tools.editor.widgets import GammaSelf0Editor, PrimitiveSpinboxEditor
 from tools.editor.constants import is_inserted_event
 
 
@@ -86,7 +92,7 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M1 exists but no M2 - load M1 into both M1 and M2 slots
-            print(f"[INFO] No M2 file found. Loading M1 file into both perspectives: {m1_path}")
+            # _logger.info(f"No M2 file found. Loading M1 file into both perspectives: {m1_path}")
             return m1_path, m1_path, None, False
     
     else:  # is_m2
@@ -101,14 +107,14 @@ def validate_and_resolve_paths(input_path: str) -> Tuple[Optional[Path], Optiona
             return m1_path, m2_path, None, False
         else:
             # M2 exists but no M1 - load M2 into both M1 and M2 slots, select M2
-            print(f"[INFO] No M1 file found. Loading M2 file into both perspectives: {m2_path}")
+            # _logger.info(f"No M1 file found. Loading M2 file into both perspectives: {m2_path}")
             return m2_path, m2_path, None, True
 
 
 class InteractiveEditor:
     """Main application class for interactive scenario editor."""
     
-    def __init__(self, csv_file: str, qt_app: QApplication, m1_path: Optional[Path] = None, m2_path: Optional[Path] = None, initial_perspective: str = "M1"):
+    def __init__(self, csv_file: str, qt_app: QApplication, m1_path: Optional[Path] = None, m2_path: Optional[Path] = None, initial_perspective: str = "M1", m1_available: bool = True, m2_available: bool = False):
         """
         Initialize interactive editor.
         
@@ -124,6 +130,8 @@ class InteractiveEditor:
         self.m1_path = m1_path or self.csv_file
         self.m2_path = m2_path
         self.initial_perspective = initial_perspective
+        self.m1_available = m1_available
+        self.m2_available = m2_available
         self.qt_app = qt_app
         
         # Load configuration (with fallback to defaults)
@@ -143,17 +151,41 @@ class InteractiveEditor:
         self.primitive_panel.diagnostic_marker_placed.connect(self._on_diagnostic_marker)
         self.primitive_panel.event_delete_requested.connect(self._on_event_delete_requested)
         self.primitive_panel.event_insert_requested.connect(self._on_event_insert_requested)
+        if DEBUG_SPINBOX:
+            # _logger.debug("Connecting marker_clicked signal to _on_marker_clicked")
+            # _logger.debug(f"marker_clicked exists? {hasattr(self.primitive_panel, 'marker_clicked')}")
+            # _logger.debug(f"marker_clicked type: {type(self.primitive_panel.marker_clicked)}")
+            pass
+        try:
+            self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)  # v2.4: For spinbox editor
+            if DEBUG_SPINBOX:
+                # _logger.debug("Connection made successfully")
+                pass
+        except Exception as e:
+            if DEBUG_SPINBOX:
+                # _logger.debug(f"Connection FAILED: {e}")
+                pass
+                pass
+                pass
+                pass
         
         # Phase 2 refactoring: Connect new signals (replacing callbacks)
         self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview)
         self.primitive_panel.primitive_reset_requested.connect(self._on_primitive_reset)
+        self.primitive_panel.primitive_preview_requested.connect(self._on_primitive_preview_for_spinbox)  # v2.4: Update spinbox during drag
         
         # Initialize PyQtGraph trajectory panel
         self.trajectory_panel = TrajectoryPanelPyQtGraph()
         
         # Wrap panels in QDockWidget for flexible workspace
+        # Create 3-column layout: Primitives | Trajectory | Controls
+        # Set dock nesting to allow side-by-side layout
+        self.window.setDockNestingEnabled(True)
+        
         self.primitive_dock = QDockWidget("Primitives", self.window)
         self.primitive_dock.setWidget(self.primitive_panel)
+        self.primitive_dock.setMinimumWidth(150)  # Allow narrow primitives panel
+        self.primitive_dock.setMaximumWidth(400)  # Cap maximum width
         self.primitive_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable | 
@@ -161,14 +193,15 @@ class InteractiveEditor:
         )
         self.window.addDockWidget(Qt.LeftDockWidgetArea, self.primitive_dock)
         
-        # Add trajectory dock to right area
         self.trajectory_dock = QDockWidget("Trajectory", self.window)
         self.trajectory_dock.setWidget(self.trajectory_panel)
+        self.trajectory_dock.setMinimumWidth(250)  # Allow narrower trajectory panel
         self.trajectory_dock.setFeatures(
             QDockWidget.DockWidgetMovable | 
             QDockWidget.DockWidgetFloatable | 
             QDockWidget.DockWidgetClosable
         )
+        # Add to right area first
         self.window.addDockWidget(Qt.RightDockWidgetArea, self.trajectory_dock)
         
         # Initialize model (structured: uses Event/Marker)
@@ -191,59 +224,38 @@ class InteractiveEditor:
         # Load scenario (structured: Event/Marker)
         self.controller.load_scenario(str(self.m1_path), str(self.m2_path) if self.m2_path else None)
         
-        # Create editor widgets
-        self.gamma_self0_editor = GammaSelf0Editor(self.model.gamma_self_0)
+        # Create editor widgets - use perspective-specific gamma_self_0
+        initial_gamma = self.model.get_gamma_self_0(self.controller.perspective)
+        self.gamma_self0_editor = GammaSelf0Editor(initial_gamma)
+        # Set the perspective name
+        display_name = self.model.get_display_name(self.controller.perspective)
+        self.gamma_self0_editor.set_perspective_name(display_name if display_name else self.controller.perspective)
         self.gamma_self0_editor.value_changed.connect(self._on_gamma_self0_changed)
         self.gamma_self0_editor.reset_requested.connect(self._on_gamma_self0_reset)
-        
+
         from tools.editor.widgets import InsertionOptionsWidget
         self.insertion_options = InsertionOptionsWidget()
         self.insertion_options.insertions_changed.connect(self._on_insertions_changed)
-        
-        from tools.editor.widgets import PerspectiveSwitcher
-        self.perspective_switcher = PerspectiveSwitcher()
-        self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
-        
-        from tools.editor.widgets import NameEditor
+
+        from tools.editor.widgets import PerspectiveSwitcher, EntropyAttractorEditor, EntropyAmountEditor, NameEditor, NoteEditor, PrimitiveSpinboxEditor
+        self.perspective_switcher = PerspectiveSwitcher(m1_available=self.m1_available, m2_available=self.m2_available)
+        self.controller.weights['entropy_per_event'] = True
+        self.perspective_switcher.set_entropy_mode(True)
+        self.entropy_attractor_editor = EntropyAttractorEditor()
+        self.entropy_attractor_editor.value_changed.connect(self._on_entropy_attractor_changed)
+        self.entropy_attractor_editor.reset_requested.connect(self._on_entropy_attractor_reset)
+        self.entropy_amount_editor = EntropyAmountEditor()
+        self.entropy_amount_editor.value_changed.connect(self._on_entropy_amount_changed)
+        self.entropy_amount_editor.reset_requested.connect(self._on_entropy_amount_reset)
         initial_name = self.model.get_display_name(self.controller.perspective)
         self.name_editor = NameEditor(initial_name)
         self.name_editor.name_changed.connect(self._on_name_changed)
-        
-        from tools.editor.widgets import NoteEditor
-        from tools.editor.widgets import NoteEditor
         self.note_editor = NoteEditor()
         self.note_editor.note_changed.connect(self._on_note_changed)
-        
-        # Set initial perspective AFTER all widgets created
-        if self.initial_perspective == "M2":
-            self.perspective_switcher.set_perspective("M2")
-        
-        # Create gauge widgets
-        from PySide6.QtWidgets import QLabel, QFrame, QVBoxLayout, QWidget
-        
-        # Primitive gauge
-        primitive_gauge_frame = QFrame()
-        primitive_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
-        primitive_gauge_layout = QVBoxLayout()
-        primitive_gauge_label = QLabel("Primitive Readout")
-        primitive_gauge_label.setAlignment(Qt.AlignCenter)
-        primitive_gauge_label.setStyleSheet("font-weight: bold; font-size: 10pt;")
-        self.primitive_gauge = QLabel("--")
-        self.primitive_gauge.setAlignment(Qt.AlignCenter)
-        self.primitive_gauge.setStyleSheet(
-            'background-color: lightyellow; '
-            'border: 1px solid black; '
-            'border-radius: 5px; '
-            'padding: 10px; '
-            'font-size: 12pt; '
-            'font-weight: bold;'
-        )
-        self.primitive_gauge.setMinimumHeight(30)
-        primitive_gauge_layout.addWidget(primitive_gauge_label)
-        primitive_gauge_layout.addWidget(self.primitive_gauge)
-        primitive_gauge_frame.setLayout(primitive_gauge_layout)
-        
-        # Gamma_self gauge
+        self.spinbox_editor = PrimitiveSpinboxEditor()
+        self.controller.initialize_spinbox_widget(self.spinbox_editor)
+
+        from PySide6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QFrame, QLabel
         gamma_gauge_frame = QFrame()
         gamma_gauge_frame.setFrameStyle(QFrame.Box | QFrame.Raised)
         gamma_gauge_layout = QVBoxLayout()
@@ -264,92 +276,84 @@ class InteractiveEditor:
         gamma_gauge_layout.addWidget(gamma_gauge_label)
         gamma_gauge_layout.addWidget(self.gamma_self_gauge)
         gamma_gauge_frame.setLayout(gamma_gauge_layout)
-        
-        # Combine widgets in a container with scroll area
-        from PySide6.QtWidgets import QScrollArea
+
         dock_container_inner = QWidget()
+        dock_container_inner.setStyleSheet("font-size: 8pt;")
         dock_layout = QVBoxLayout()
-        dock_layout.addWidget(self.perspective_switcher)  # Phase 3.2: Add perspective switcher at top
-        dock_layout.addWidget(self.name_editor)  # Phase 3.2: Add name editor
-        dock_layout.addWidget(self.note_editor)  # Phase 3.2: Add note editor
+        dock_layout.setSpacing(5)
+        dock_layout.setContentsMargins(5, 5, 5, 5)
+        dock_layout.addWidget(self.name_editor)
+        dock_layout.addWidget(self.note_editor)
         dock_layout.addWidget(self.gamma_self0_editor)
-        dock_layout.addWidget(primitive_gauge_frame)
+        dock_layout.addWidget(self.entropy_attractor_editor)
+        dock_layout.addWidget(self.entropy_amount_editor)
+        dock_layout.addWidget(self.spinbox_editor)
         dock_layout.addWidget(gamma_gauge_frame)
         dock_layout.addWidget(self.insertion_options)
         dock_layout.addStretch()
         dock_container_inner.setLayout(dock_layout)
-        
-        # Wrap in scroll area to allow small window heights
+
         dock_container = QScrollArea()
         dock_container.setWidget(dock_container_inner)
         dock_container.setWidgetResizable(True)
-        
-        # Add controls as dock widget - add to right area FIRST
+
         self.controls_dock = QDockWidget("Editor Controls", self.window)
         self.controls_dock.setWidget(dock_container)
+        self.controls_dock.setMinimumWidth(120)
+        self.controls_dock.setMaximumWidth(400)
         self.controls_dock.setFeatures(
-            QDockWidget.DockWidgetMovable | 
+            QDockWidget.DockWidgetMovable |
             QDockWidget.DockWidgetFloatable |
             QDockWidget.DockWidgetClosable
         )
-        # Split trajectory dock horizontally to add controls to its right
-        # This creates the 3-column layout: [Primitives | Trajectory | Controls]
         self.window.splitDockWidget(self.trajectory_dock, self.controls_dock, Qt.Horizontal)
-        
-        # Setup View menu for dock widget visibility
         self.window._setup_view_menu({
             'Primitives': self.primitive_dock,
             'Trajectory': self.trajectory_dock,
             'Controls': self.controls_dock
         })
-        
-        # Configure initial layout widths
-        # First set the main left/right split (Primitives vs rest)
-        self.window.resizeDocks(
-            [self.primitive_dock, self.controls_dock],
-            [445, 755],  # Primitives=445px, Right side (Controls+Trajectory)=755px
-            Qt.Horizontal
-        )
-        
-        # Then set the Controls/Trajectory split within the right area
-        self.window.resizeDocks(
-            [self.controls_dock, self.trajectory_dock],
-            [260, 495],  # Controls=260px, Trajectory=495px
-            Qt.Horizontal
-        )
-        
-        # Connect primitive panel readout to Qt gauge (now that gauges exist)
-        self.primitive_panel.primitive_readout = self.primitive_gauge
-        
-        # Connect gamma_self gauge to trajectory panel click events (Qt Signal - clean!)
-        self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
-        
-        # Connect primitive panel clicks to note editor
-        self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)
-        
-        # Connect trajectory panel clicks to note editor
-        self.trajectory_panel.gamma_clicked.connect(self._on_trajectory_clicked)
 
-        # Set up callbacks AFTER panels and controller are initialized
+        # Now that all docks and widgets are created, update entropy mode logic
+        self.perspective_switcher.perspective_changed.connect(self._on_perspective_changed)
+        self.perspective_switcher.entropy_mode_changed.connect(self._on_entropy_mode_changed)
+        self.window.add_perspective_switcher(self.perspective_switcher)
+        # Set entropy mode and force trajectory recompute to match UI selection at startup
+        self._on_entropy_mode_changed(True)
+        self.controller._recompute_trajectory_immediate()
+        self.trajectory_panel.reset_view()  # Auto zoom on initial start
+
+    def _on_entropy_mode_changed(self, by_event: bool):
+        """Update controller weights for entropy mode, recompute and auto zoom trajectory."""
+        self.controller.weights['entropy_per_event'] = by_event
+        self.controller._recompute_trajectory_immediate()
+        self.trajectory_panel.reset_view()  # Auto zoom after mode change
+        # ...existing code...
+        def print_dock_config():
+            # _logger.debug("=== DOCK CONFIGURATION ===")
+            # _logger.debug(f"Window size: {self.window.width()} x {self.window.height()}")
+            # _logger.debug(f"Primitives dock: Width={self.primitive_dock.width()}, Height={self.primitive_dock.height()}, Area={self.window.dockWidgetArea(self.primitive_dock)}, Percentage={(self.primitive_dock.width() / self.window.width() * 100):.1f}%")
+            # _logger.debug(f"Trajectory dock: Width={self.trajectory_dock.width()}, Height={self.trajectory_dock.height()}, Area={self.window.dockWidgetArea(self.trajectory_dock)}, Percentage={(self.trajectory_dock.width() / self.window.width() * 100):.1f}%")
+            # _logger.debug(f"Controls dock: Width={self.controls_dock.width()}, Height={self.controls_dock.height()}, Area={self.window.dockWidgetArea(self.controls_dock)}, Percentage={(self.controls_dock.width() / self.window.width() * 100):.1f}%")
+            pass
+        self.window.print_dock_config_requested.connect(print_dock_config)
+        self.trajectory_panel.gamma_clicked.connect(self._update_gamma_self_gauge)
+        self.primitive_panel.marker_clicked.connect(self._on_marker_clicked)
+        self.trajectory_panel.gamma_clicked.connect(self._on_trajectory_clicked)
         self.window.save_callback = self._handle_save_request
+        self.window.save_both_callback = self._handle_save_both_request
         self.window.cleanup_callback = self._handle_cleanup
-        
-        # Load window geometry and dock layout from saved state
         self._load_window_state()
-        
-        # Connect zoom toolbar buttons (will zoom both panels)
         self.window.zoom_in_action.triggered.connect(self._handle_zoom_in)
         self.window.zoom_out_action.triggered.connect(self._handle_zoom_out)
         self.window.zoom_reset_action.triggered.connect(self._handle_zoom_reset)
-        
-        # Pan state
         self.pan_active = False
         self.pan_start = None
         self.pan_axes = None
     
-    def _update_gamma_self_gauge(self, x, y):
+    def _update_gamma_self_gauge(self, xy):
         """Update gamma_self gauge in right panel."""
-        if x is not None and y is not None:
+        if xy is not None and len(xy) == 2:
+            x, y = xy
             self.gamma_self_gauge.setText(f"γ_self\n{x:.2f} + {y:.2f}i")
         else:
             self.gamma_self_gauge.setText("--")
@@ -367,65 +371,111 @@ class InteractiveEditor:
         save_csv = options.get('csv', True)
         save_png = options.get('png', False)
         
-        # Determine if current file is the original (in data/ and does not end with _modified.csv)
-        original = (
-            self.original_csv_file.parent.name == 'data' and
-            not self.original_csv_file.stem.endswith('_modified')
-        )
-        
-        # Determine base name for output files (without _modified suffix and without extension)
-        # Always use original_csv_file to ensure consistent perspective-based naming
-        if self.original_csv_file.stem.endswith('_modified'):
-            base_name = self.original_csv_file.stem[:-9]  # Remove '_modified'
-        else:
-            base_name = self.original_csv_file.stem
-        
-        # Adjust base name for current perspective (M1 vs M2)
+        # Get current perspective
         current_perspective = self.controller.perspective
-        if current_perspective == "M2":
-            # Replace M1 with M2 in the base name
-            base_name = base_name.replace("_M1", "_M2")
         
-        # Output directory is data/
-        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name == 'data' else self.original_csv_file.parent.parent / 'data'
+        # Determine base name - strip _modified and _M1/_M2 suffixes
+        stem = self.original_csv_file.stem
+        if stem.endswith('_modified'):
+            stem = stem[:-9]
+        # Remove _M1 or _M2 suffix if present
+        if stem.endswith('_M1') or stem.endswith('_M2'):
+            stem = stem[:-3]
         
-        # Determine output paths
+        # Add current perspective suffix
+        base_name = f"{stem}_{current_perspective}"
+        
+        # Output directory
+        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name in ['data', 'library'] else Path('data')
+        data_dir.mkdir(exist_ok=True)
+        
+        # Output paths
         csv_path = data_dir / f"{base_name}_modified.csv"
-        combined_png = data_dir / f"{base_name}_modified.png"
+        png_path = data_dir / f"{base_name}_modified.png"
         
-        # Save CSV if requested
+        # Save CSV for current perspective
         if save_csv:
             self.controller.save_scenario(str(csv_path))
-            self.window.show_message(f"Saved CSV to: {csv_path}")
-            # Update self.csv_file to point to the new file for future saves
-            self.csv_file = csv_path
-            self.window.update_window_title(self.csv_file)
+            self.window.show_message(f"Saved {current_perspective}: {csv_path.name}")
         
-        # Save PNG plots if requested (combined primitives + trajectory)
+        # Save PNG plot
         if save_png:
-            self._save_combined_plot(str(combined_png))
-            self.window.show_message(f"Saved combined plot to: {combined_png}")
+            self._save_combined_plot(str(png_path))
+            self.window.show_message(f"Saved plot: {png_path.name}")
         
         if not save_csv and not save_png:
             self.window.show_message("No save operation performed", 'warning')
     
+    def _handle_save_both_request(self):
+        """
+        Handle save both perspectives request.
+        Saves M1 and M2 data to separate files in one operation.
+        """
+        # Commit any preview changes first
+        self.controller.commit_changes()
+        
+        # Determine base name - strip _modified and _M1/_M2 suffixes
+        stem = self.original_csv_file.stem
+        if stem.endswith('_modified'):
+            stem = stem[:-9]
+        # Remove _M1 or _M2 suffix if present
+        if stem.endswith('_M1') or stem.endswith('_M2'):
+            stem = stem[:-3]
+        
+        # Output directory
+        data_dir = self.original_csv_file.parent if self.original_csv_file.parent.name in ['data', 'library'] else Path('data')
+        data_dir.mkdir(exist_ok=True)
+        
+        # Output paths for both perspectives
+        m1_csv_path = data_dir / f"{stem}_M1_modified.csv"
+        m2_csv_path = data_dir / f"{stem}_M2_modified.csv"
+        
+        # Save both perspectives
+        success = self.controller.save_both_perspectives(str(m1_csv_path), str(m2_csv_path))
+        
+        if success:
+            self.window.show_message(f"Saved M1: {m1_csv_path.name}, M2: {m2_csv_path.name}")
+        else:
+            self.window.show_message("Failed to save both perspectives", 'error')
+    
     def _handle_zoom_in(self):
         """Handle zoom in toolbar button - zoom all panels uniformly."""
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_in",
+            entity=(),
+            changes={},
+            location="interactive_editor.py:_handle_zoom_in"
+        )
         self.trajectory_panel.zoom_in()
-        self.controller.primitive_panel.zoom_in()
+        self.primitive_panel.zoom_in()
         self.window.show_message("Zoomed in (all panels)")
     
     def _handle_zoom_out(self):
         """Handle zoom out toolbar button - zoom all panels uniformly."""
-        self.controller.trajectory_panel.zoom_out()
-        self.controller.primitive_panel.zoom_out()
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_out",
+            entity=(),
+            changes={},
+            location="interactive_editor.py:_handle_zoom_out"
+        )
+        self.trajectory_panel.zoom_out()
+        self.primitive_panel.zoom_out()
         self.window.show_message("Zoomed out (all panels)")
     
     def _handle_zoom_reset(self):
         """Handle reset view toolbar button - reset both panels."""
-        self.controller.trajectory_panel.reset_view()
-        self.controller.primitive_panel.reset_view()
-        self.controller.primitive_panel.clear_readout()
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="zoom_reset",
+            entity=(),
+            changes={},
+            location="interactive_editor.py:_handle_zoom_reset"
+        )
+        self.trajectory_panel.reset_view()
+        self.primitive_panel.reset_view()
+        self.primitive_panel.clear_readout()
         self.window.show_message("Reset all views")
     
     def _handle_cleanup(self):
@@ -447,7 +497,7 @@ class InteractiveEditor:
         Use PyQtGraph's built-in export or screenshot functionality instead.
         """
         self.window.show_message("PNG export temporarily unavailable (PyQtGraph migration in progress)", 'warning')
-        print(f"[PNG EXPORT] Skipped - needs reimplementation for PyQtGraph")
+        # _logger.warning("PNG export skipped - needs reimplementation for PyQtGraph")
         return
         
         # TODO: Reimplement using PyQtGraph export functionality
@@ -456,7 +506,23 @@ class InteractiveEditor:
 
     
     def _on_primitive_changed(self, event_index, primitive, value):
-        """Handle primitive change from primitive panel (on release)."""
+        """
+        Handle primitive value change from UI drag (on release - commit to model).
+        
+        Args:
+            event_index: Index of the event being modified
+            primitive: The primitive being changed ('v', 'r', 'f', 'a', 'S')
+            value: New value for the primitive (float or complex)
+        """
+        from tools.editor.state_viewer import StateViewer
+        # Fetch old value before change
+        old_value = self.model.get_event(event_index, self.controller.perspective).markers[primitive].value
+        StateViewer.record(
+            operation="primitive_changed",
+            entity=(event_index, primitive),
+            changes={"value": (old_value, value)},
+            location="interactive_editor.py:_on_primitive_changed"
+        )
         self.controller.on_primitive_changed(event_index, primitive, value)
     
     def _on_primitive_preview(self, event_index, primitive, value):
@@ -466,6 +532,56 @@ class InteractiveEditor:
     def _on_primitive_reset(self, event_index, primitive):
         """Handle primitive reset from primitive panel (double-click)."""
         self.controller.on_primitive_reset(event_index, primitive)
+        # Show confirmation message
+        event = self.model.get_event(event_index, self.controller.perspective)
+        if event:
+            self.window.show_message(f"Reset {primitive} at day {event.time} to baseline")
+    
+    def _on_primitive_preview_for_spinbox(self, event_index, primitive, value):
+        """
+        Update spinbox during primitive drag (v2.4).
+        
+        Auto-activates spinbox if dragged primitive doesn't match active one.
+        This ensures spinbox updates correctly across perspective switches.
+        """
+        # Check if this primitive is already active
+        is_active = (hasattr(self.controller, 'active_primitive_state') and 
+                     self.controller.active_primitive_state.get('primitive') == primitive and
+                     self.controller.active_primitive_state.get('event_id') == event_index)
+        
+        # If not active, activate this primitive (auto-switch on drag)
+        if not is_active:
+            events = self.model.get_events(self.controller.perspective)
+            if event_index < len(events):
+                event = events[event_index]
+                self.controller.on_primitive_selected(event_index, primitive)
+                is_active = True
+        
+        # Update value if active (via controller API)
+        if is_active:
+            self.controller.update_spinbox_value(value)
+    
+    def _on_perspective_changed(self, perspective: str):
+        """
+        Handle perspective change from PerspectiveSwitcher widget.
+        
+        Args:
+            perspective: 'M1' or 'M2'
+        """
+        # _logger.debug(f"[PERSPECTIVE] _on_perspective_changed called with: {perspective}")
+        # _logger.debug(f"[PERSPECTIVE] Controller current perspective before switch: {self.controller.perspective}")
+        self.controller.switch_perspective(perspective)
+        # _logger.debug(f"[PERSPECTIVE] Controller current perspective after switch: {self.controller.perspective}")
+        # _logger.debug(f"[PERSPECTIVE] Primitive panel perspective: {getattr(self.primitive_panel, 'current_perspective', 'NOT_SET')}")
+        # _logger.debug(f"[PERSPECTIVE] Trajectory panel perspective: {getattr(self.trajectory_panel, 'current_perspective', 'NOT_SET')}")
+    
+    def _on_spinbox_value_changed(self, value):
+        """
+        Handle value change from spinbox editor (v2.4).
+        
+        Forwards to controller which creates undo command and updates model.
+        """
+        self.controller.on_spinbox_value_changed(value)
     
     def _on_event_delete_requested(self, event_index):
         """
@@ -474,14 +590,21 @@ class InteractiveEditor:
         Args:
             event_index: Event index to delete
         """
-        print(f"\n[DELETE REQUEST] Event {event_index}")
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="event_delete_requested",
+            entity=(event_index,),
+            changes={},
+            location="interactive_editor.py:_on_event_delete_requested"
+        )
+        # _logger.debug(f"DELETE REQUEST: Event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't delete if only 2 events (need at least start and end)
         if len(events) <= 2:
-            print(f"[DELETE] Cannot delete - need at least 2 events (start and end)")
+            # _logger.debug(f"DELETE: Cannot delete - need at least 2 events (start and end)")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -492,7 +615,7 @@ class InteractiveEditor:
         
         # Can't delete first or last event
         if event_index == 0 or event_index == len(events) - 1:
-            print(f"[DELETE] Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
+            # _logger.debug(f"DELETE: Cannot delete first ({event_index}=0) or last ({event_index}={len(events)-1}) event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -504,7 +627,7 @@ class InteractiveEditor:
         # Can't delete locked events
         event = events[event_index]
         if event.locked:
-            print(f"[DELETE] Cannot delete locked event at time={event.time}")
+            # _logger.debug(f"DELETE: Cannot delete locked event at time={event.time}")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -518,7 +641,7 @@ class InteractiveEditor:
             from tools.editor.commands import DeleteEventCommand
             command = DeleteEventCommand(self.controller, event_index)
             self.controller.undo_stack.push(command)
-            print(f"[DELETE] Pushed DeleteEventCommand to undo stack")
+            # _logger.info(f"DELETE: Pushed DeleteEventCommand to undo stack")
         else:
             # No undo stack - delete directly
             self.controller._delete_event(event_index)
@@ -534,14 +657,21 @@ class InteractiveEditor:
         Args:
             event_index: Event index to insert before
         """
-        print(f"\n[INSERT REQUEST] Insert before event {event_index}")
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="event_insert_requested",
+            entity=(event_index,),
+            changes={},
+            location="interactive_editor.py:_on_event_insert_requested"
+        )
+        # _logger.debug(f"INSERT REQUEST: Insert before event {event_index}")
         
         # Validation: Get events
         events = self.model.get_events(self.controller.perspective)
         
         # Can't insert before first event (would shift start time)
         if event_index == 0:
-            print(f"[INSERT] Cannot insert before first event")
+            # _logger.debug(f"INSERT: Cannot insert before first event")
             from PySide6.QtWidgets import QMessageBox
             QMessageBox.warning(
                 self.window,
@@ -571,6 +701,7 @@ class InteractiveEditor:
                 )
     
     def _on_diagnostic_marker(self, event_index: int, primitive: str, hypothetical_value: float):
+        # print(f"[DEBUG] ENTER _on_diagnostic_marker: event_index={event_index}, primitive={primitive}, hypothetical_value={hypothetical_value}")
         """
         Handle Shift+Click diagnostic marker placement (counterfactual exploration).
         
@@ -583,6 +714,13 @@ class InteractiveEditor:
             primitive: Which primitive was clicked ('v', 'r', 'f', 'a', 'S')
             hypothetical_value: The Y value where user shift+clicked
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="diagnostic_marker",
+            entity=(event_index, primitive),
+            changes={"hypothetical_value": (None, hypothetical_value)},
+            location="interactive_editor.py:_on_diagnostic_marker"
+        )
         from core.love import update_gamma_self
         import numpy as np
         
@@ -595,57 +733,109 @@ class InteractiveEditor:
         primitives_data = self.model.get_primitives_array(self.controller.perspective, include_preview=False)
         times = primitives_data['time']
         
+
         # Modify the one primitive with hypothetical value
         primitives_data[primitive][event_index] = hypothetical_value
-        
+
+        # Ensure entropy mode matches UI selection for diagnostic marker calculation
+        weights = self.controller.weights.copy() if hasattr(self.controller, 'weights') else {}
+        # Force By Interval entropy for diagnostic marker calculation
+        weights['entropy_per_event'] = True
+        # print(f"[DEBUG] Diagnostic marker calculation using entropy_per_event={weights['entropy_per_event']}")
+    # print(f"[DIAGNOSTIC MARKER] Shift+click at ({{time}}, {{hypothetical_value}})")
+    # print(f"  View Y range: [{{view_y_min}}, {{view_y_max}}]")
+
         # Compute hypothetical gamma_self trajectory using same logic as controller
-        gamma_self = self.model.gamma_self_0
+
+        # --- Gamma_self trajectory calculation ---
+        # The gamma_self trajectory is mapped as follows:
+        #   gamma_trajectory[0] = gamma_self_0 (initial state, before any event)
+        #   gamma_trajectory[i+1] = gamma_self after event i's primitives are applied
+        # There are N events and N intervals; each interval applies the primitives at event i.
+        # For the last event, the marker should reflect the final gamma_self value after all intervals.
+
+        gamma_self = self.model.get_gamma_self_0(self.controller.perspective)
         gamma_trajectory = [gamma_self]
-        
-        for i in range(len(events) - 1):
-            v = primitives_data['v'][i]
-            r = primitives_data['r'][i]
-            f = primitives_data['f'][i]
-            a = primitives_data['a'][i]
-            S = primitives_data['S'][i]
-            
-            time_delta = times[i + 1] - times[i]
+        n_events = len(events)
+        # Each interval applies the primitives at event i
+        for i in range(n_events):
+            # For the interval corresponding to the last event, avoid out-of-range times[i+1]
+            if i == event_index:
+                v = hypothetical_value if primitive == 'v' else primitives_data['v'][i]
+                r = hypothetical_value if primitive == 'r' else primitives_data['r'][i]
+                f = hypothetical_value if primitive == 'f' else primitives_data['f'][i]
+                a = hypothetical_value if primitive == 'a' else primitives_data['a'][i]
+                S = hypothetical_value if primitive == 'S' else primitives_data['S'][i]
+                # print(f"[DIAGNOSTIC] Placed X marker on '{primitive}' at event {i} (time={times[i]})")
+                # print(f"[DIAGNOSTIC]   Clicked at Y={hypothetical_value:.2f}, Current marker: {{current_marker}}, Baseline: N/A ")
+                # print(f"[DIAGNOSTIC] Drag the X marker up/down to test hypothetical values    ")
+                if i + 1 < len(times):
+                    # print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    pass
+                else:
+                    # print(f"[DEBUG] INTERVAL (hypothetical): i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, hypothetical_value={hypothetical_value}, gamma_self_before={gamma_self}")
+                    pass
+            else:
+                v = primitives_data['v'][i]
+                r = primitives_data['r'][i]
+                f = primitives_data['f'][i]
+                a = primitives_data['a'][i]
+                S = primitives_data['S'][i]
+                if i + 1 < len(times):
+                    # print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, time[i+1]={times[i+1]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    pass
+                else:
+                    # print(f"[DEBUG] INTERVAL: i={i}, time[i]={times[i]}, v={v}, r={r}, f={f}, a={a}, S={S}, gamma_self_before={gamma_self}")
+                    pass
+            # Calculate time_delta safely
+            if i + 1 < len(times):
+                time_delta = times[i + 1] - times[i]
+            else:
+                time_delta = 1.0  # Nominal value for last event
+            # print(f"[DEBUG] gamma_self_before={gamma_self}, primitives: v={v}, r={r}, f={f}, a={a}, S={S}, time_delta={time_delta}")
+            # print(f"[DEBUG] Calling update_gamma_self: gamma_self={gamma_self}, v={v}, r={r}, f={f}, a={a}, S={S}, weights={weights}, time_delta={time_delta}")
             gamma_self = update_gamma_self(
                 gamma_self, v, r, f, a, S,
-                weights=self.controller.weights,
+                weights=weights,
                 time_delta=time_delta
             )
+            # print(f"[DEBUG] gamma_self_after={gamma_self}")
+            # print(f"[DEBUG] Returned from update_gamma_self: gamma_self_after={gamma_self}")
+            # print(f"[DEBUG] INTERVAL: i={i}, gamma_self_after={gamma_self}")
             gamma_trajectory.append(gamma_self)
-        
-        # Get gamma_self AFTER the clicked event's primitives are applied
-        # gamma_trajectory[0] = gamma_self_0 (before event 0)
-        # gamma_trajectory[1] = gamma after event 0's primitives applied
-        # gamma_trajectory[event_index + 1] = gamma after event's primitives applied
-        if event_index + 1 < len(gamma_trajectory):
-            gamma_val = gamma_trajectory[event_index + 1]  # Gamma AFTER this event
-            gamma_x = gamma_val.real
-            gamma_y = gamma_val.imag
-            
-            print(f"[DIAGNOSTIC HANDLER] Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
-            
-            # Place marker on trajectory panel at event position
-            self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
-            print(f"[DIAGNOSTIC HANDLER] Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
-            
-            # Update primitive readout
-            event = events[event_index]
-            self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
-            print(f"[DIAGNOSTIC HANDLER] Updated primitive readout")
-            
-            # Update gamma_self readout (simulate a click at that position)
-            if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
-                self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
-                self.gamma_self_gauge.setVisible(True)
-                print(f"[DIAGNOSTIC HANDLER] Updated gamma_self readout")
-            else:
-                print(f"[DIAGNOSTIC HANDLER] Warning: gamma_self_gauge not available")
-            
-            print(f"[DIAGNOSTIC WHAT-IF] If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
+
+
+        # --- Marker placement logic ---
+        # For the last event, always use the final gamma_self value
+        # For other events, use gamma_self after that event's primitives are applied
+        if event_index == n_events - 1:
+            gamma_val = gamma_trajectory[-1]
+        else:
+            gamma_val = gamma_trajectory[event_index + 1]
+        gamma_x = gamma_val.real
+        gamma_y = gamma_val.imag
+
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Gamma_self after event {event_index} with {primitive}={hypothetical_value:.2f}: ({gamma_x:.2f}, {gamma_y:.2f}i)")
+
+        # Place marker on trajectory panel at event position
+        self.trajectory_panel.place_diagnostic_marker(gamma_x, gamma_y)
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Placed trajectory marker at event {event_index} position ({gamma_x:.2f}, {gamma_y:.2f})")
+
+        # Update primitive readout
+        event = events[event_index]
+        self.primitive_panel._update_readout(event_index, primitive, hypothetical_value)
+        # _logger.debug(f"DIAGNOSTIC HANDLER: Updated primitive readout")
+
+        # Update gamma_self readout (simulate a click at that position)
+        if hasattr(self, 'gamma_self_gauge') and self.gamma_self_gauge:
+            self.gamma_self_gauge.setText(f"γ_self\n{gamma_x:.2f} + {gamma_y:.2f}i")
+            self.gamma_self_gauge.setVisible(True)
+            # _logger.debug(f"DIAGNOSTIC HANDLER: Updated gamma_self readout")
+        else:
+            # _logger.debug(f"DIAGNOSTIC HANDLER: Warning: gamma_self_gauge not available")
+            pass
+
+        # _logger.debug(f"DIAGNOSTIC WHAT-IF: If event {event_index} {primitive}={hypothetical_value:.2f}: γ_self=({gamma_x:.2f}, {gamma_y:.2f}i)")
     
     def _on_lock_toggle(self, event_index):
         """
@@ -657,6 +847,13 @@ class InteractiveEditor:
         Args:
             event_index: Index of event to lock/unlock
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="lock_toggle",
+            entity=(event_index,),
+            changes={},
+            location="interactive_editor.py:_on_lock_toggle"
+        )
         self.controller.on_lock_toggle(event_index)
     
     def _on_insert_event(self, time: float):
@@ -702,7 +899,7 @@ class InteractiveEditor:
             is_existing = any(abs(t - existing_t) < 0.001 for existing_t in existing_times if existing_t not in current_inserted_times)
             if is_existing:
                 rejected_times.append(t)
-                print(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
+                # _logger.warning(f"Event occupied at time {t}, please enter an unoccupied event time to insert.")
             elif t not in current_inserted_times:
                 to_add.append(t)
         
@@ -711,7 +908,8 @@ class InteractiveEditor:
         # Track if any changes were made
         changes_made = False
         
-        # Remove events that are no longer in the list (in reverse order to maintain indices)
+        # Remove events that are no longer in the list with undo support
+        from tools.editor.commands import DeleteEventCommand
         if to_remove_times:
             # Build list of indices to remove, sorted in reverse
             indices_to_remove = []
@@ -725,32 +923,45 @@ class InteractiveEditor:
             
             for idx in indices_to_remove:
                 try:
-                    # Use no_update version for batch operation
-                    self.controller.delete_event_at_index_no_update(idx)
-                    changes_made = True
+                    if self.controller.undo_stack:
+                        # Use undo command for proper undo/redo support
+                        command = DeleteEventCommand(self.controller, idx)
+                        self.controller.undo_stack.push(command)
+                        changes_made = True
+                    else:
+                        # Fallback to direct delete if no undo stack
+                        self.controller.delete_event_at_index_no_update(idx)
+                        changes_made = True
                 except Exception as e:
-                    print(f"[INSERTIONS] Error removing event at index {idx}: {e}")
+                    _logger.error(f"INSERTIONS: Error removing event at index {idx}: {e}")
         
-        # Add new insertion events
+        # Add new insertion events with undo support
+        from tools.editor.commands import InsertEventCommand
         for time_to_add in to_add:
             try:
-                # Use no_update version for batch operation
-                print(f"[INSERTIONS] Adding event at time {time_to_add}")
-                self.controller.insert_event_at_time_no_update(time_to_add)
-                changes_made = True
+                # _logger.info(f"INSERTIONS: Adding event at time {time_to_add}")
+                if self.controller.undo_stack:
+                    # Use undo command for proper undo/redo support
+                    command = InsertEventCommand(self.controller, time_to_add)
+                    self.controller.undo_stack.push(command)
+                    changes_made = True
+                else:
+                    # Fallback to direct insert if no undo stack
+                    self.controller.insert_event_at_time_no_update(time_to_add)
+                    changes_made = True
             except Exception as e:
-                print(f"[INSERTIONS] Error adding event at {time_to_add}: {e}")
+                _logger.error(f"INSERTIONS: Error adding event at {time_to_add}: {e}")
                 self.window.show_message(f"Error inserting at {time_to_add}: {str(e)}", 'error')
         
-        # Update views only ONCE at the end if any changes were made
-        if changes_made:
+        # Update views only if using fallback (commands already update views)
+        if changes_made and not self.controller.undo_stack:
             import time
             t0 = time.time()
             self.controller._update_all_views()
             t1 = time.time()
             self.controller._recompute_trajectory_immediate()
             t2 = time.time()
-            print(f"[PERF] update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
+            # _logger.debug(f"PERF: update_all_views: {(t1-t0)*1000:.1f}ms, recompute_trajectory: {(t2-t1)*1000:.1f}ms, total: {(t2-t0)*1000:.1f}ms")
             
             # Sync widget with actual inserted events in model
             # Find current inserted events after all changes
@@ -783,43 +994,81 @@ class InteractiveEditor:
         Args:
             new_value: New gamma_self_0 complex value
         """
-        # Store original value if this is the first modification
-        if not hasattr(self.model, 'gamma_self_0_original'):
-            self.model.gamma_self_0_original = self.model.gamma_self_0
-            self.model.gamma_self_0_modified = False
-        
-        # Update model
-        old_value = self.model.gamma_self_0
-        self.model.gamma_self_0 = new_value
-        self.model.gamma_self_0_modified = (
-            abs(new_value - self.model.gamma_self_0_original) > 0.001
-        )
-        
+        from tools.editor.state_viewer import StateViewer
+        # Use perspective-specific setter
+        perspective = self.controller.perspective
+        self.controller.observer.log('GAMMA_SELF_0_CHANGED', perspective=perspective, new_value=f'{new_value.real:.2f}{new_value.imag:+.2f}j')
+        self.model.set_gamma_self_0(perspective, new_value)
+        # Check if modified from original
+        original = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
+        gamma_self_0_modified = (abs(new_value - original) > 0.001)
         # Recompute trajectory with new initial state
         self.controller._recompute_trajectory_immediate()
-        
         # Update start marker appearance on trajectory panel
-        self.trajectory_panel.update_start_marker_style(
-            self.model.gamma_self_0_modified
+        self.trajectory_panel.update_start_marker_style(gamma_self_0_modified)
+        StateViewer.record(
+            operation="gamma_self0_changed",
+            entity=(perspective,),
+            changes={"new_value": str(new_value)},
+            location="interactive_editor.py:_on_gamma_self0_changed"
         )
-        
         self.window.show_message(
             f"gamma_self_0 updated: {new_value.real:+.2f}{new_value.imag:+.2f}j"
         )
     
     def _on_gamma_self0_reset(self):
         """Handle reset of gamma_self_0 to original CSV value."""
-        if hasattr(self.model, 'gamma_self_0_original'):
-            self.model.gamma_self_0 = self.model.gamma_self_0_original
-            self.model.gamma_self_0_modified = False
-            
-            # Recompute trajectory
-            self.controller._recompute_trajectory_immediate()
-            
-            # Update start marker appearance
-            self.trajectory_panel.update_start_marker_style(False)
-            
-            self.window.show_message("gamma_self_0 reset to CSV default")
+        perspective = self.controller.perspective
+        original_value = self.model.gamma_self_0_m1_original if perspective == "M1" else self.model.gamma_self_0_m2_original
+        
+        self.model.set_gamma_self_0(perspective, original_value)
+        
+        # Update widget display
+        self.gamma_self0_editor.set_value(original_value)
+        
+        # Recompute trajectory
+        self.controller._recompute_trajectory_immediate()
+        
+        # Update start marker appearance
+        self.trajectory_panel.update_start_marker_style(False)
+        
+        self.window.show_message("gamma_self_0 reset to CSV default")
+    
+    def _on_entropy_attractor_changed(self, attractor_complex):
+        """Handle entropy attractor value change (Option 3: separate real/imag targets)."""
+        self.controller.entropy_real_target = attractor_complex.real
+        self.controller.entropy_imag_target = attractor_complex.imag
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message(f"Entropy targets updated: Real={attractor_complex.real:.1f}, Imag={attractor_complex.imag:.1f}")
+    
+    def _on_entropy_attractor_reset(self):
+        """Handle entropy attractor reset to default."""
+        from tools.editor.widgets import EntropyAttractorEditor
+        default_value = EntropyAttractorEditor.DEFAULT_VALUE
+        self.controller.entropy_real_target = default_value.real
+        self.controller.entropy_imag_target = default_value.imag
+        self.entropy_attractor_editor.set_value(default_value)
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message("Entropy targets reset to default")
+    
+    def _on_entropy_amount_changed(self, delta_s_tuple):
+        """Handle entropy decay rates change (Option 3: separate real/imag rates)."""
+        delS_real, delS_imag = delta_s_tuple
+        self.controller.entropy_delS_real = delS_real
+        self.controller.entropy_delS_imag = delS_imag
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message(f"Entropy rates updated: Real={delS_real:.2f}, Imag={delS_imag:.2f}")
+    
+    def _on_entropy_amount_reset(self):
+        """Handle entropy decay rates reset to default."""
+        from tools.editor.widgets import EntropyAmountEditor
+        default_real = EntropyAmountEditor.DEFAULT_VALUE_REAL
+        default_imag = EntropyAmountEditor.DEFAULT_VALUE_IMAG
+        self.controller.entropy_delS_real = default_real
+        self.controller.entropy_delS_imag = default_imag
+        self.entropy_amount_editor.set_value(default_real, default_imag)
+        self.controller._recompute_trajectory_immediate()
+        self.window.show_message("Entropy rates reset to default")
     
     def _on_perspective_changed(self, perspective: str):
         """
@@ -828,12 +1077,19 @@ class InteractiveEditor:
         Args:
             perspective: Either 'M1' or 'M2'
         """
+        # print(f"DEBUG: _on_perspective_changed called with: {perspective}")
+        # Controller handles all perspective switching including spinbox restoration
         self.controller.switch_perspective(perspective)
         
         # Update name editor to show current perspective's name
         current_name = self.model.get_display_name(perspective)
-        print(f"[DEBUG] Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
+        # _logger.debug(f"Switching to {perspective}, name_m1='{self.model.name_m1}', name_m2='{self.model.name_m2}', display_name='{current_name}'")
         self.name_editor.set_name(current_name)
+        
+        # Update gamma_self0_editor with new perspective's value and name
+        gamma_value = self.model.get_gamma_self_0(perspective)
+        self.gamma_self0_editor.set_value(gamma_value)
+        self.gamma_self0_editor.set_perspective_name(current_name if current_name else perspective)
         
         self.window.show_message(f"Switched to {perspective} perspective")
     
@@ -845,18 +1101,26 @@ class InteractiveEditor:
             new_name: New name entered by user
         """
         perspective = self.controller.perspective
-        
+
         # Update model with perspective-specific name
         if perspective == "M1":
             self.model.name_m1 = new_name
-            print(f"[DEBUG] Updated name_m1 to '{new_name}'")
+            # _logger.debug(f"Updated name_m1 to '{new_name}'")
         else:
             self.model.name_m2 = new_name
-            print(f"[DEBUG] Updated name_m2 to '{new_name}'")
-        
+            # _logger.debug(f"Updated name_m2 to '{new_name}'")
+
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="name_changed",
+            entity=(perspective,),
+            changes={"new_name": new_name},
+            location="interactive_editor.py:_on_name_changed"
+        )
+
         # Update name editor display to confirm change
         self.name_editor.set_name(new_name)
-        
+
         # Update panel titles
         self.primitive_panel.set_scenario_name(new_name)
         self.trajectory_panel.set_scenario_name(new_name)
@@ -871,6 +1135,13 @@ class InteractiveEditor:
             event_time: Time of the event
             note_text: New note text
         """
+        from tools.editor.state_viewer import StateViewer
+        StateViewer.record(
+            operation="note_changed",
+            entity=(event_time,),
+            changes={"note_text": note_text},
+            location="interactive_editor.py:_on_note_changed"
+        )
         # Find the event at this time
         events = self.model.get_events(self.controller.perspective)
         for event in events:
@@ -884,41 +1155,30 @@ class InteractiveEditor:
     def _on_marker_clicked(self, event_idx: int, primitive: str):
         """
         Handle marker click from primitive panel.
-        Update note editor with event notes.
+        Updates both note editor and spinbox editor (v2.4).
         
         Args:
             event_idx: Index of selected event
             primitive: Primitive that was clicked
         """
-        # Get the event
+        if DEBUG_SPINBOX:
+            # _logger.debug(f"_on_marker_clicked: event_idx={event_idx}, primitive={primitive}")
+            pass
+        
+        # Update spinbox editor (v2.4)
+        self.controller.on_primitive_selected(event_idx, primitive)
+        
+        # Update note editor with event notes
         event = self.model.get_event(event_idx, self.controller.perspective)
         if event:
             self.note_editor.set_event(event.time, event.notes)
     
-    def _on_trajectory_clicked(self, x: float, y: float):
+    def _on_trajectory_clicked(self, xy):
         """
         Handle trajectory panel click (gamma_self marker).
-        Find nearest event and show its notes.
-        
-        Args:
-            x: Real component (clicked position)
-            y: Imaginary component (clicked position)
+        Accepts a tuple (x, y) from the signal.
         """
-        # Find nearest event by time (using trajectory x-axis which represents time indirectly)
-        # For now, we'll use the gamma_self readout which already finds the nearest point
-        # We need to map this back to an event time
-        
-        # Get all events and find the one closest to the clicked trajectory point
-        events = self.model.get_events(self.controller.perspective)
-        if not events:
-            return
-        
-        # For simplicity, find the event whose trajectory point is closest
-        # This would require trajectory computation - for now, just show first event
-        # TODO: Implement proper trajectory-to-event mapping
-        
-        # Temporary: Just show the last clicked event from primitive panel
-        # Better implementation would map trajectory point to nearest event time
+        # This method is a placeholder for future event mapping logic.
         pass
     
     # NOTE: Keyboard shortcuts removed with matplotlib event handlers
@@ -1040,6 +1300,7 @@ def main():
         epilog="""
 Examples:
   python tools/interactive_editor.py data/single_dating_to_love_M1.csv
+  python tools/interactive_editor.py data/single_dating_to_love_M1.csv --reset-layout
   
 Usage:
   - Drag primitive points vertically to change values (shows hollow preview)
@@ -1075,14 +1336,66 @@ Phase 1.5 Features:
     
     parser.add_argument('csv_file', type=str, 
                        help='Path to CSV file to edit')
+    parser.add_argument('--reset-layout', action='store_true',
+                       help='Reset window layout to defaults (clears saved state)')
+    parser.add_argument('--debug-gui', action='store_true',
+                       help='Enable comprehensive GUI event debugging')
+    parser.add_argument('--debug-signals', action='store_true',
+                       help='Enable signal emission tracking')
+    parser.add_argument('--debug-mouse', action='store_true',
+                       help='Enable mouse event debugging')
+    parser.add_argument('--log-terminal', action='store_true',
+                       help='Log to terminal in addition to file')
     
     args = parser.parse_args()
+    
+    # Set up debugging based on arguments
+    if args.debug_gui or args.debug_signals or args.debug_mouse:
+        os.environ['LOG_LEVEL'] = 'DEBUG'
+        
+    if args.log_terminal:
+        os.environ['LOG_TO_TERMINAL'] = 'true'
+    
+    # Enable GUI debugging if requested
+    if args.debug_gui:
+        try:
+            from tools.editor.debug_gui import enable_all_gui_debugging
+            enable_all_gui_debugging()
+            # _logger.info("[DEBUG] Comprehensive GUI debugging enabled")
+        except ImportError as e:
+            # _logger.warning(f"[DEBUG] GUI debugging not available: {e}")
+            pass
+    
+    if args.debug_signals:
+        try:
+            from tools.editor.debug_gui import get_gui_debugger
+            get_gui_debugger().enable_signal_tracking()
+            # _logger.info("[DEBUG] Signal tracking enabled")
+        except ImportError as e:
+            # _logger.warning(f"[DEBUG] Signal debugging not available: {e}")
+            pass
+    
+    if args.debug_mouse:
+        try:
+            from tools.editor.debug_gui import get_gui_debugger
+            get_gui_debugger().enable_mouse_event_debugging()
+            # _logger.info("[DEBUG] Mouse event debugging enabled")
+        except ImportError as e:
+            # _logger.warning(f"[DEBUG] Mouse debugging not available: {e}")
+            pass
+    
+    # Clear saved layout if requested
+    if args.reset_layout:
+        from PySide6.QtCore import QSettings
+        settings = QSettings('WhenMathPrays', 'InteractiveEditor')
+        settings.clear()
+        _logger.info("[RESET] Cleared saved window layout - will use defaults")
     
     # Validate file and resolve M1/M2 paths
     m1_path, m2_path, error, was_originally_m2 = validate_and_resolve_paths(args.csv_file)
     
     if error:
-        print(f"Error: {error}", file=sys.stderr)
+        _logger.error(f"Error: {error}")
         sys.exit(1)
     
     # Initial perspective: M2 if M2-only file, otherwise M1
@@ -1093,25 +1406,36 @@ Phase 1.5 Features:
         if m1_path == m2_path:
             # Single file loaded into both slots
             if was_originally_m2:
-                print(f"[INFO] M2-only: Loaded into both perspectives (M2 selected)")
+                _logger.info(f"[INFO] M2-only: Loaded into both perspectives (M2 selected)")
             else:
-                print(f"[INFO] M1-only: Loaded into both perspectives (M1 selected)")
-            print(f"[INFO] You can edit from either perspective and save to M1 or M2")
+                _logger.info(f"[INFO] M1-only: Loaded into both perspectives (M1 selected)")
+            _logger.info(f"[INFO] You can edit from either perspective and save to M1 or M2")
         else:
             # Dual perspective
-            print(f"[INFO] Loading dual-perspective data:")
-            print(f"  M1: {m1_path}")
-            print(f"  M2: {m2_path}")
+            _logger.info(f"[INFO] Loading dual-perspective data:")
+            _logger.info(f"  M1: {m1_path}")
+            _logger.info(f"  M2: {m2_path}")
     else:
-        print(f"[INFO] Loading single-perspective data: {m1_path}")
-        print(f"[INFO] No M2 file found - perspective switching disabled")
+        _logger.info(f"[INFO] Loading single-perspective data: {m1_path}")
+        _logger.info(f"[INFO] No M2 file found - perspective switching disabled")
+    
+    # Determine which perspectives are available
+    m1_available = m1_path is not None
+    m2_available = m2_path is not None and m1_path != m2_path  # M2 only available if it's a different file
     
     # Create Qt application (Phase 2)
     app = QApplication(sys.argv)
     app.setApplicationName('GRP Interactive Scenario Editor')
     
     # Create and run editor
-    editor = InteractiveEditor(str(m1_path), app, m1_path=m1_path, m2_path=m2_path, initial_perspective=initial_perspective)
+    editor = InteractiveEditor(
+        str(m1_path), app, 
+        m1_path=m1_path, 
+        m2_path=m2_path, 
+        initial_perspective=initial_perspective,
+        m1_available=m1_available,
+        m2_available=m2_available
+    )
     sys.exit(editor.run())
 
 
