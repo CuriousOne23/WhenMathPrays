@@ -1,0 +1,3 @@
+# Generalized Relational Physics (GRP) – Revision 3.4 Specification
+
+// ...existing content from GRP_rev3.4.md...

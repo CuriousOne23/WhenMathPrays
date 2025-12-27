@@ -15,11 +15,13 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 ## Core Documentation
 
+
 ### Project Overview
 - **[README.md](../README.md)** - Main project README with overview, installation, and usage
 - **[WHY_THIS_MATTERS.md](../WHY_THIS_MATTERS.md)** - Philosophical and practical importance of the GRP framework
 - **[grp_principles.md](grp_principles.md)** - Core principles and foundational concepts
 - **[LINEAGE.md](LINEAGE.md)** - Historical development and evolution of the project
+- **[GRP_rev3.5.md](GRP_rev3.5.md)** - Current GRP specification (constant-force entropy, Rev 3.5)
 
 ### Constants & Configuration
 - **[CONSTANTS.md](../CONSTANTS.md)** - Mathematical and system constants
@@ -108,12 +110,14 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 ## Legacy & Archive
 
+
 ### Archived Documentation
 Located in **[docs/archive/](archive/)**:
 - **[Design_Rationale.md](archive/Design_Rationale.md)** - Original design rationale
 - **[GRP_rev3.1.md](archive/GRP_rev3.1.md)** - GRP Revision 3.1 specification
 - **[GRP_rev3.3.md](archive/GRP_rev3.3.md)** - GRP Revision 3.3 specification
 - **[GRP_rev3.md](archive/GRP_rev3.md)** - GRP Revision 3 specification
+- **[GRP_rev3.4.md](GRP_rev3.4.md)** - GRP Revision 3.4 specification (superseded by 3.5)
 - **[GRP_rev4.md](archive/GRP_rev4.md)** - GRP Revision 4 specification
 - **[ID_BASED_REFACTOR_COMPLETE.md](archive/ID_BASED_REFACTOR_COMPLETE.md)** - ID-based refactoring completion
 - **[Slope_Based_Generation_Implementation.md](archive/Slope_Based_Generation_Implementation.md)** - Slope-based generation implementation
@@ -124,6 +128,10 @@ Located in **[docs/archive/](archive/)**:
 ### Superseded Documentation
 Located in **[docs/archive/superseded/](archive/superseded/)**:
 - Legacy documentation that has been replaced by current versions
+
+## Alternative Interfaces
+- **[GRP_SpreadSheet.xlsm](../../GRP_SpreadSheet.xlsm)** – Excel-based interface for GRP scenario modeling and analysis  
+  *(Download only; cannot be previewed on GitHub. Right-click and choose 'Save link as...' to download.)*
 
 ## Navigation Guide
 
@@ -155,5 +163,4 @@ Located in **[docs/archive/superseded/](archive/superseded/)**:
 **Last Updated:** December 17, 2025
 **Total Documents:** 60+ files across 4 main directories
 **Active Documents:** 45+ current specifications and guides
-**Archived Documents:** 15+ legacy specifications (preserved for historical reference)</content>
-<parameter name="filePath">c:\Users\jeffg\Documents\GitHub\WhenMathPrays\docs\CONTENTS.md
+**Archived Documents:** 15+ legacy specifications (preserved for historical reference)
