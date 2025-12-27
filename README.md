@@ -55,11 +55,12 @@ $$
 \boxed{
 \vec{\gamma}_{\text{self}}(n+1) = \vec{\gamma}_{\text{self}}(n) + 
 \Big( w_v \cdot v + w_{S,R} \cdot S \Big) +
-- Scenario sheets for each example or user-defined scenario (tab names must match the scenario name and CSV entry)
-\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)]) +
-- Gamma_Self Calc sheet: main user interface for inputting scenario data and viewing charts
+\Delta S_{\text{real}} \cdot \Delta t \cdot \text{sign}(\text{real}_{\text{target}} - \text{Re}[\vec{\gamma}_{\text{self}}(n)])
 }
 $$
+
+- Scenario sheets for each example or user-defined scenario (tab names must match the scenario name and CSV entry)
+- Gamma_Self Calc sheet: main user interface for inputting scenario data and viewing charts
 
 **Where:**
 - **γ_self(n)** = relational state position in ego/we ↔ love/hate plane
