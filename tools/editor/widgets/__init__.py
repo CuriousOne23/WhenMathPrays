@@ -7,5 +7,17 @@ from .insertion_options import InsertionOptionsWidget
 from .perspective_switcher import PerspectiveSwitcher
 from .name_editor import NameEditor
 from .note_editor import NoteEditor
+from .entropy_attractor_editor import EntropyAttractorEditor
+from .entropy_amount_editor import EntropyAmountEditor
+from .primitive_spinbox_editor import PrimitiveSpinboxEditor
 
-__all__ = ['GammaSelf0Editor', 'InsertionOptionsWidget', 'PerspectiveSwitcher', 'NameEditor', 'NoteEditor']
+__all__ = [
+    'GammaSelf0Editor', 
+    'InsertionOptionsWidget', 
+    'PerspectiveSwitcher', 
+    'NameEditor', 
+    'NoteEditor',
+    'EntropyAttractorEditor',
+    'EntropyAmountEditor',
+    'PrimitiveSpinboxEditor'
+]

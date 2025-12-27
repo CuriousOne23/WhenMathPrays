@@ -236,9 +236,19 @@ ASYMMETRY_PATTERNS = {
 }
 
 
-def calculate_num_events(duration: float, time_unit: str, num_events: int = None) -> int:
-    """Calculate appropriate number of events if not specified."""
-    if num_events is not None:
+def calculate_num_events(duration: float, time_unit: str, num_events: int = -1) -> int:
+    """
+    Calculate appropriate number of events.
+    
+    Args:
+        duration: Duration of scenario
+        time_unit: Unit of time ('days', 'weeks', 'months')
+        num_events: Number of events, or -1 to auto-calculate based on time_unit
+    
+    Returns:
+        Number of events
+    """
+    if num_events > 0:
         return num_events
     
     # Auto-calculate based on time unit

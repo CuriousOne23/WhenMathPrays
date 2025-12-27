@@ -1,0 +1,283 @@
+STATE VIEWER LOG
+================================================================================
+Session: 2025-12-14T14:48:08.799660
+Python: 3.14.1
+Platform: Windows-11-10.0.26200-SP0
+Working directory: C:\Users\user\Documents\GitHub\WhenMathPrays
+
+Loaded files:
+  Dual-file mode:
+    M1: data\library\love\single_dating_to_love_M1.csv
+    M2: data\library\love\single_dating_to_love_M2.csv
+
+Total operations: 35
+Warnings: 0
+================================================================================
+
+OPERATION LOG
+================================================================================
+
+[0000] redo_edit_primitive
+Time: 2025-12-14T14:47:05.233868
+Entity: (35.0, 'v', 'M1')
+Location: commands.py:105
+Changes:
+  value: 5.0 → 0.9831355196481457  ✓
+
+[0001] update_primitive
+Time: 2025-12-14T14:47:05.234521
+Entity: (5, 'v', 'M1')
+Location: model.py:281
+Changes:
+  value: 5.0 → 0.9831355196481457  ✓
+  in_modified_dict: False → True  ✓
+
+[0002] redo_insert_event_before
+Time: 2025-12-14T14:47:09.259909
+Entity: (4, 'M1', 28.0)
+Location: commands.py:411
+Changes:
+  action: remove → insert  ✓
+  shifted_events: 0 → 6  ✓
+
+[0003] redo_edit_primitive
+Time: 2025-12-14T14:47:13.408013
+Entity: (49.0, 'f', 'M1')
+Location: commands.py:105
+Changes:
+  value: 8.0 → 2.417001865116248  ✓
+
+[0004] update_primitive
+Time: 2025-12-14T14:47:13.408419
+Entity: (6, 'f', 'M1')
+Location: model.py:281
+Changes:
+  value: 8.0 → 2.417001865116248  ✓
+  in_modified_dict: False → True  ✓
+
+[0005] redo_delete_event
+Time: 2025-12-14T14:47:20.214883
+Entity: (28.0, 'M1', 4)
+Location: commands.py:321
+Changes:
+  action: restore → delete  ✓
+
+[0006] redo_insert_event
+Time: 2025-12-14T14:47:20.227533
+Entity: (18.0, 'M1')
+Location: commands.py:33
+Changes:
+  action: remove → insert  ✓
+
+[0007] insert_event
+Time: 2025-12-14T14:47:20.227778
+Entity: (3, 'M1', 18.0)
+Location: model.py:441
+Changes:
+  event_count: 10 → 11  ✓
+  inserted_at_index: None → 3  ✓
+
+[0008] redo_edit_primitive
+Time: 2025-12-14T14:47:24.587372
+Entity: (42.0, 'S', 'M1')
+Location: commands.py:105
+Changes:
+  value: 7.0 → 1.2700542363721326  ✓
+
+[0009] update_primitive
+Time: 2025-12-14T14:47:24.587799
+Entity: (5, 'S', 'M1')
+Location: model.py:281
+Changes:
+  value: 7.0 → 1.2700542363721326  ✓
+  in_modified_dict: False → True  ✓
+
+[0010] redo_edit_primitive
+Time: 2025-12-14T14:47:27.456970
+Entity: (56.0, 'S', 'M1')
+Location: commands.py:105
+Changes:
+  value: 9.0 → 2.0100200859839674  ✓
+
+[0011] update_primitive
+Time: 2025-12-14T14:47:27.457651
+Entity: (7, 'S', 'M1')
+Location: model.py:281
+Changes:
+  value: 9.0 → 2.0100200859839674  ✓
+  in_modified_dict: False → True  ✓
+
+[0012] switch_perspective
+Time: 2025-12-14T14:47:33.246087
+Entity: ('M1', 'M2')
+Location: controller.py:375
+Changes:
+  active_perspective: M1 → M2  ✓
+  undo_stack_size: 7 → 0  ✓
+
+[0013] redo_edit_primitive
+Time: 2025-12-14T14:47:36.134679
+Entity: (35.0, 'v', 'M2')
+Location: commands.py:105
+Changes:
+  value: 6.0 → 0.7615726958793125  ✓
+
+[0014] update_primitive
+Time: 2025-12-14T14:47:36.135088
+Entity: (15, 'v', 'M2')
+Location: model.py:281
+Changes:
+  value: 6.0 → 0.7615726958793125  ✓
+  in_modified_dict: False → True  ✓
+
+[0015] redo_edit_primitive
+Time: 2025-12-14T14:47:39.380672
+Entity: (21.0, 'v', 'M2')
+Location: commands.py:105
+Changes:
+  value: 5.0 → 0.9831355196481457  ✓
+
+[0016] update_primitive
+Time: 2025-12-14T14:47:39.381187
+Entity: (13, 'v', 'M2')
+Location: model.py:281
+Changes:
+  value: 5.0 → 0.9831355196481457  ✓
+  in_modified_dict: False → True  ✓
+
+[0017] redo_insert_event_before
+Time: 2025-12-14T14:47:43.949222
+Entity: (1, 'M2', 7.0)
+Location: commands.py:411
+Changes:
+  action: remove → insert  ✓
+  shifted_events: 0 → 9  ✓
+
+[0018] redo_edit_primitive
+Time: 2025-12-14T14:47:47.689272
+Entity: (7.0, 'r', 'M2')
+Location: commands.py:105
+Changes:
+  value: 0.0 → -5.738454219656539  ✓
+
+[0019] update_primitive
+Time: 2025-12-14T14:47:47.689827
+Entity: (21, 'r', 'M2')
+Location: model.py:281
+Changes:
+  value: 0.0 → -5.738454219656539  ✓
+  in_modified_dict: False → True  ✓
+
+[0020] redo_edit_primitive
+Time: 2025-12-14T14:47:50.623460
+Entity: (42.0, 'f', 'M2')
+Location: commands.py:105
+Changes:
+  value: 6.0 → -0.1930532764099837  ✓
+
+[0021] update_primitive
+Time: 2025-12-14T14:47:50.623808
+Entity: (15, 'f', 'M2')
+Location: model.py:281
+Changes:
+  value: 6.0 → -0.1930532764099837  ✓
+  in_modified_dict: False → True  ✓
+
+[0022] redo_edit_primitive
+Time: 2025-12-14T14:47:52.894515
+Entity: (49.0, 'a', 'M2')
+Location: commands.py:105
+Changes:
+  value: 7.0 → -1.9208264474522423  ✓
+
+[0023] update_primitive
+Time: 2025-12-14T14:47:52.895336
+Entity: (16, 'a', 'M2')
+Location: model.py:281
+Changes:
+  value: 7.0 → -1.9208264474522423  ✓
+  in_modified_dict: False → True  ✓
+
+[0024] redo_edit_primitive
+Time: 2025-12-14T14:47:54.558638
+Entity: (49.0, 'S', 'M2')
+Location: commands.py:105
+Changes:
+  value: 7.0 → 0.036777820352412505  ✓
+
+[0025] update_primitive
+Time: 2025-12-14T14:47:54.558981
+Entity: (16, 'S', 'M2')
+Location: model.py:281
+Changes:
+  value: 7.0 → 0.036777820352412505  ✓
+  in_modified_dict: False → True  ✓
+
+[0026] undo_edit_primitive
+Time: 2025-12-14T14:47:57.017796
+Entity: (49.0, 'S', 'M2')
+Location: commands.py:116
+Changes:
+  value: 0.036777820352412505 → 7.0  ✓
+
+[0027] update_primitive
+Time: 2025-12-14T14:47:57.018423
+Entity: (16, 'S', 'M2')
+Location: model.py:281
+Changes:
+  value: 0.036777820352412505 → 7.0  ✓
+  in_modified_dict: True → True  ⚠️  UNCHANGED
+
+[0028] undo_edit_primitive
+Time: 2025-12-14T14:47:57.605126
+Entity: (49.0, 'a', 'M2')
+Location: commands.py:116
+Changes:
+  value: -1.9208264474522423 → 7.0  ✓
+
+[0029] update_primitive
+Time: 2025-12-14T14:47:57.605783
+Entity: (16, 'a', 'M2')
+Location: model.py:281
+Changes:
+  value: -1.9208264474522423 → 7.0  ✓
+  in_modified_dict: True → True  ⚠️  UNCHANGED
+
+[0030] switch_perspective
+Time: 2025-12-14T14:48:00.021557
+Entity: ('M2', 'M1')
+Location: controller.py:375
+Changes:
+  active_perspective: M2 → M1  ✓
+  undo_stack_size: 7 → 7  ⚠️  UNCHANGED
+
+[0031] undo_edit_primitive
+Time: 2025-12-14T14:48:02.010165
+Entity: (56.0, 'S', 'M1')
+Location: commands.py:116
+Changes:
+  value: 2.0100200859839674 → 9.0  ✓
+
+[0032] update_primitive
+Time: 2025-12-14T14:48:02.010863
+Entity: (7, 'S', 'M1')
+Location: model.py:281
+Changes:
+  value: 2.0100200859839674 → 9.0  ✓
+  in_modified_dict: True → True  ⚠️  UNCHANGED
+
+[0033] undo_edit_primitive
+Time: 2025-12-14T14:48:02.912792
+Entity: (42.0, 'S', 'M1')
+Location: commands.py:116
+Changes:
+  value: 1.2700542363721326 → 7.0  ✓
+
+[0034] update_primitive
+Time: 2025-12-14T14:48:02.913472
+Entity: (5, 'S', 'M1')
+Location: model.py:281
+Changes:
+  value: 1.2700542363721326 → 7.0  ✓
+  in_modified_dict: True → True  ⚠️  UNCHANGED
+

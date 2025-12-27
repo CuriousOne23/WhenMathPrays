@@ -1,10 +1,10 @@
-name,Allie
-time_unit,days
-gamma_self_0,0-5j
+name,Allie,,,,,
+time_unit,days,,,,,
+gamma_self_0,-40-8j,,,,,
 day,v,r,f,a,S,notes
-0,0,0,0,0,0,First meeting at carnival
-1,5,5,4,5,4,Ferris wheel dare
-30,7,7,7,6,6,Summer romance peak
-365,8,7,8,6,7,Engagement pressure & separation
-730,7,6,7,6,6,Reading the notebook â€“ memory return
-2555,6,5,-5,5,5,Final Alzheimer's struggle & reunion
+0,-2,-2,0,0,-2,First meeting at carnival – initial wariness and resistance
+1,-3,-3,-2,5,-1,Ferris wheel dare – resistance with emerging delight and thrill
+30,8,10,8,8,10,Summer romance peak – deep passion and harmony
+365,0,2,3,7,8,Engagement pressure & separation – quiet lingering love and care
+730,9,10,9,9,10,Reading the notebook – memories and love fully restored
+2555,10,10,10,10,10,Final Alzheimer's years & reunion – transcendent love in lucid moments
