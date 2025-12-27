@@ -1,9 +1,9 @@
-name,ExB
-time_unit,days
-gamma_self_0,6+10j
+name,ExB,,,,,
+time_unit,days,,,,,
+gamma_self_0,30+80j,,,,,
 day,v,r,f,a,S,notes
-0,0,0,0,0,0,Pre-breakup steady state
-1,3,2,-7,2,1,The betrayal discovered (different perception)
-7,1,0,-8,0,0,Defensive withdrawal
-30,2,1,2,1,1,Guilt & regret phase
-90,3,3,4,3,3,Gradual acceptance
+0,0,0,0,0,0,Pre-breakup steady state (deep We-ness and love)
+1,-6,-5,-8,3,-5,The betrayal discovered – guilt with defensive withdrawal
+7,-5,-3,-8,1,-4,Defensive withdrawal intensifies
+30,-1,1,-3,4,0,Guilt & regret phase – self-reflection
+90,2,3,1,5,2,Gradual acceptance – remorse lingers but softens
