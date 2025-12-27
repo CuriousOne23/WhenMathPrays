@@ -1,9 +1,9 @@
-name,ExA
-time_unit,days
-gamma_self_0,5+12j
+name,ExA,,,,,
+time_unit,days,,,,,
+gamma_self_0,30+80j,,,,,
 day,v,r,f,a,S,notes
-0,0,0,0,0,0,Pre-breakup steady state
-1,4,3,-8,3,2,The betrayal discovered
-7,2,1,-9,1,0,No contact begins
-30,3,2,3,2,2,Slow recovery attempts
-90,4,4,5,4,4,Healing phase
+0,0,0,0,0,0,Pre-breakup steady state (deep We-ness and love)
+1,-8,-8,-10,-5,-8,The betrayal discovered – profound hurt and withdrawal
+7,-6,-5,-9,-3,-6,No contact begins – raw pain and isolation
+30,-2,1,-4,2,0,Slow recovery attempts – lingering resentment with emerging neutrality
+90,2,3,2,4,2,Healing phase – gradual acceptance and mild positivity
