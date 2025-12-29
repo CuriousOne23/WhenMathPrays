@@ -29,6 +29,9 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[grp_principles.md](grp_principles.md)** — Core principles and foundational concepts  
 - **[LINEAGE.md](LINEAGE.md)** — Historical development and evolution of the project  
 - **[GRP_rev3.5.md](GRP_rev3.5.md)** — Current GRP specification (constant‑force entropy, Rev 3.5)
+- **[THE_STORY_OF_GRP.md](THE_STORY_OF_GRP.md)**  
+  Narrative history of GRP’s emergence — covering the early spark, the ULEP → UREP → GRP lineage, the discovery of γ_self, the development of the recurrence equation, and the role of Jesus in CuriousOne’s worldview. A lived account of the project’s evolution.
+
 
 ### **Constants & Configuration**
 - **[CONSTANTS.md](CONSTANTS.md)** — Mathematical and system constants  
