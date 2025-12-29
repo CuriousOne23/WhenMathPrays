@@ -115,7 +115,7 @@ The deep reference library — the heart of the system.
 
 Key documents include:
 
-- **[GRP_rev3.md](docs/GRP_rev3.md)** — full mathematical specification  
+- **[GRP_rev3.5.md](docs/GRP_rev3.5.md)** — full mathematical specification  
 - **[CONSTANTS.md](docs/CONSTANTS.md)** — model constants and meanings  
 - **[TUNING.md](docs/TUNING.md)** — how weights and parameters are calibrated  
 - **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** — *primary guide* for using the Python cockpit  
