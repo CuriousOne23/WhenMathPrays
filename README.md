@@ -235,7 +235,8 @@ Key documents include:
 - **TUNING.md** — how weights and parameters are calibrated  
 - **WHY_THIS_MATTERS.md** — philosophical grounding  
 - **SCENARIO_CONFIGURATION_GUIDE.md** — how to build scenarios  
-- **ARCHITECTURE.md** — system design and flow  
+- **ARCHITECTURE.md** — system design and flow
+- **THE_STORY_OF_GRP.md** — the full narrative history of GRP, from the first spark through ULEP → UREP → GRP, including the role of Jesus in CuriousOne’s worldview and the lived arc of discovery 
 
 Plus validation and research folders:
 
