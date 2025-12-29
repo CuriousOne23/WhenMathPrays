@@ -75,6 +75,12 @@ You’ll learn them by watching them move.
 
 ---
 
+Absolutely, Jeff — I’ll update the **START HERE.md** section to include a *clear, explicit, copy‑paste‑ready* Python command that points to one of your real scenario files.
+
+Here is the revised portion of **Section 4 — Your First Scenario**, with the new example included in the Option‑C tone:
+
+---
+
 # 🚀 **4. Your First Scenario (5 Minutes)**
 
 Let’s run your first simulation.
@@ -91,9 +97,15 @@ pip install -r requirements.txt
 ```
 
 ### **Step 3 — Run a simple scenario**
+You can run any scenario CSV through the Python cockpit.
+
+Here is a real example using one of the library scenarios:
+
 ```
-python simulations/stress_test_2d.py
+python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.csv
 ```
+
+This opens the interactive editor, loads the scenario, and lets you explore or modify the emotional arc.
 
 ### **Step 4 — Open the generated plot**
 Look in the `results/` folder for a PNG file.
@@ -103,7 +115,7 @@ You’ll see a curve — a path — a motion through γ‑space.
 That motion *is* the relationship.
 
 ### **Step 5 — Change something**
-Open `data/` and edit any scenario CSV:
+Open the CSV you just ran and edit any primitive:
 
 - increase resonance  
 - decrease fidelity  
@@ -111,13 +123,15 @@ Open `data/` and edit any scenario CSV:
 - add a repair  
 - add a moment of shared breath  
 
-Run again.  
+Run the same command again.
+
 Watch the trajectory shift.
 
 You’ve just learned the GRP by doing.
 
 ---
 
+If you want, I can now integrate this directly into the full START HERE.md draft so you have a clean, ready‑to‑commit version.
 # 🧩 **5. Where to Go Next**
 
 Now that you’ve seen the system move, choose your path:
