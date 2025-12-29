@@ -192,7 +192,9 @@ If you want to contribute — new scenarios, new tools, new validations — expl
 
 ---
 
-<h1><img src="assets/contributors_icon.png" alt="Contributors Icon" width="40" style="vertical-align:middle; margin-right:8px;"> <strong>7. Contributing</strong></h1>
+<h1>
+            <img src="assets/contributors_icon.png" alt="Contributors Icon" width="40" style="vertical-align:middle; margin-right:8px;"> <strong>7. Contributing</strong>
+</h1>
 
 If you’d like to help expand, refine, or steward this project, see:
 
