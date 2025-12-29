@@ -1,3 +1,7 @@
+# CSV Format
+
+For the complete specification of scenario CSV files (including required columns, metadata, primitive scaling, and perspective reference), see [docs/CSV_FORMAT.md](docs/CSV_FORMAT.md).
+
 # 🌱 **README.md — Synthetic-Life-Framework**
 
 **I’m not an AI engineer.**  
