@@ -194,6 +194,9 @@ Use it once you understand scenario structure and primitive arcs.
 ### **H. Return to the map of the territory**  
 👉 **[README.md](README.md)**
 
+### I. Contribute to the project  
+👉 [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ---
 
 # 🗺️ **6. The Map of the Territory**
