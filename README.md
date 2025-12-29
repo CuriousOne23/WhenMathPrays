@@ -1,18 +1,3 @@
-Here it is, Jeff — a **clean, polished, ready‑to‑commit README.md**, written in the same Option‑C tone as START HERE.md, and containing **direct links to all appropriate documents** in your repo.
-
-This README is designed to be:
-
-- the **map of the territory**  
-- the **foyer** that orients newcomers  
-- the **index** that points to deep docs  
-- the **bridge** between START HERE and the full system  
-
-It contains **no duplication** with START HERE.md — only direction, clarity, and structure.
-
-You can paste this directly into `README.md`.
-
----
-
 # 🌌 **WhenMathPrays — A Map of the Territory**
 
 **WhenMathPrays** is a relational dynamics engine built around the **Gamma Relational Persona (GRP)** — a two‑dimensional emotional state that evolves through time under the influence of five relational primitives and a single recurrence equation.
@@ -39,6 +24,10 @@ It gives you:
 - a clear path forward  
 
 Everything else in this repo builds on that foundation.
+
+For a complete index of every document in the repository, see:
+
+👉 **[CONTENTS.md](docs/CONTENTS.md)**
 
 ---
 
@@ -112,9 +101,9 @@ These produce the γ‑space trajectories you see in `results/`.
 ## **📂 tools/**  
 Interfaces and utilities.
 
+- **interactive_editor.py** — Python cockpit (primary interface)  
 - **GRP_SpreadSheet.xlsm** — Excel cockpit  
-- **interactive_editor.py** — Python cockpit  
-- **scenario_generator.py** — automatic scenario builder  
+- **scenario_generator.py** — automatic scenario builder (advanced)  
 - helper utilities for editing, plotting, and debugging  
 
 These are your hands‑on instruments.
@@ -129,10 +118,12 @@ Key documents include:
 - **[GRP_rev3.md](docs/GRP_rev3.md)** — full mathematical specification  
 - **[CONSTANTS.md](docs/CONSTANTS.md)** — model constants and meanings  
 - **[TUNING.md](docs/TUNING.md)** — how weights and parameters are calibrated  
+- **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)** — *primary guide* for using the Python cockpit  
+- **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)** — how to build scenario CSVs  
 - **[WHY_THIS_MATTERS.md](docs/WHY_THIS_MATTERS.md)** — philosophical grounding  
-- **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)** — how to build scenarios  
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** — system design and flow  
-- **Validation and research folders** (`docs/Validation.md`, `soul/`, `revenge/`)  
+- **[CONTENTS.md](docs/CONTENTS.md)** — *master index* of all documents with summaries  
+- Validation and research folders (`docs/Validation.md`, `soul/`, `revenge/`)  
 
 These documents are for stewards, researchers, and future contributors.
 
@@ -140,9 +131,8 @@ These documents are for stewards, researchers, and future contributors.
 
 # 🧩 **4. Choose Your Path**
 
-Depending on your interest, follow one of these paths:
-
-### **A. Run a scenario (Python)**  
+### **A. Use the Python cockpit (recommended)**  
+👉 **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)**  
 ```
 python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.csv
 ```
@@ -153,19 +143,21 @@ Open:
 tools/GRP_SpreadSheet.xlsm
 ```
 
-### **C. Build your own scenario**  
+### **C. Build your own scenario (intermediate)**  
 👉 **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)**
 
-### **D. Understand the math**  
+### **D. Use the scenario builder (advanced)**  
+👉 `tools/scenario_generator.py`  
+Best for power users who already understand scenario structure.
+
+### **E. Understand the math**  
 👉 **[GRP_rev3.md](docs/GRP_rev3.md)**
 
-### **E. Explore the philosophy**  
+### **F. Explore the philosophy**  
 👉 **[WHY_THIS_MATTERS.md](docs/WHY_THIS_MATTERS.md)**
 
-### **F. Dive into validation and research**  
-👉 `docs/Validation.md`  
-👉 `soul/`  
-👉 `revenge/`
+### **G. Browse the full document index**  
+👉 **[CONTENTS.md](docs/CONTENTS.md)**
 
 ---
 
