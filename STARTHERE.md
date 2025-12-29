@@ -75,12 +75,6 @@ You’ll learn them by watching them move.
 
 ---
 
-Absolutely, Jeff — I’ll update the **START HERE.md** section to include a *clear, explicit, copy‑paste‑ready* Python command that points to one of your real scenario files.
-
-Here is the revised portion of **Section 4 — Your First Scenario**, with the new example included in the Option‑C tone:
-
----
-
 # 🚀 **4. Your First Scenario (5 Minutes)**
 
 Let’s run your first simulation.
@@ -96,7 +90,10 @@ cd WhenMathPrays
 pip install -r requirements.txt
 ```
 
-### **Step 3 — Run a simple scenario**
+---
+
+## **Option A — Run a Scenario in Python (recommended for developers)**
+
 You can run any scenario CSV through the Python cockpit.
 
 Here is a real example using one of the library scenarios:
@@ -107,15 +104,46 @@ python tools/interactive_editor.py data/library/love/single_dating_to_love_M1.cs
 
 This opens the interactive editor, loads the scenario, and lets you explore or modify the emotional arc.
 
-### **Step 4 — Open the generated plot**
+After running it, look in the `results/` folder for a PNG plot of the γ‑trajectory.
+
+---
+
+## **Option B — Explore the Model in Excel (recommended for visual thinkers)**
+
+If you prefer a **hands‑on, visual interface**, open the Excel cockpit:
+
+```
+tools/GRP_SpreadSheet.xlsm
+```
+
+Inside the workbook:
+
+- Enter your initial γ_self in **C4**  
+- Enter your primitives row‑by‑row starting at **row 9**  
+- Press the **Run GRP** macro button (or run `FillGammaSelfColumn`)  
+- Watch the γ_self trajectory populate in column **H**  
+
+This interface is perfect for:
+
+- experimenting with primitives  
+- seeing the recurrence unfold step‑by‑step  
+- teaching the model  
+- quick scenario sketching  
+- debugging intuition  
+
+The Excel cockpit and Python cockpit produce the **same dynamics** — just through different lenses.
+
+---
+
+### **Step 4 — Open the generated plot (Python path)**  
 Look in the `results/` folder for a PNG file.
 
 You’ll see a curve — a path — a motion through γ‑space.
 
 That motion *is* the relationship.
 
-### **Step 5 — Change something**
-Open the CSV you just ran and edit any primitive:
+### **Step 5 — Change something**  
+Open the CSV (Python) or the primitive row (Excel) and edit any value:
 
 - increase resonance  
 - decrease fidelity  
@@ -123,15 +151,13 @@ Open the CSV you just ran and edit any primitive:
 - add a repair  
 - add a moment of shared breath  
 
-Run the same command again.
-
+Run again.  
 Watch the trajectory shift.
 
 You’ve just learned the GRP by doing.
 
 ---
 
-If you want, I can now integrate this directly into the full START HERE.md draft so you have a clean, ready‑to‑commit version.
 # 🧩 **5. Where to Go Next**
 
 Now that you’ve seen the system move, choose your path:
