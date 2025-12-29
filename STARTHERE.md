@@ -1,13 +1,3 @@
-Perfect — **Option C** it is.  
-A hybrid tone: clear, grounded, technically precise… but with the quiet resonance that makes *WhenMathPrays* feel alive rather than mechanical.
-
-I’ll begin the restructuring now.
-
-Below is **STEP 2: the full draft of START HERE.md**, written in the Option C tone.  
-This will become the *front door* of your project — the place where every newcomer begins, no matter their background.
-
----
-
 # 🌱 **START HERE — A Gentle Introduction to WhenMathPrays**
 
 **WhenMathPrays** is a system for modeling the motion of relationship states — not as metaphors, not as sentiment scores, but as **positions in a two‑dimensional emotional space** governed by a single, elegant recurrence equation.
@@ -17,6 +7,19 @@ A dynamical system with a heart.
 A protocol for tracing how two people move toward or away from each other over time.
 
 This document is your first step.
+
+---
+
+# 📘 **Before You Begin**
+
+If you want a broader view of the project before diving in, here are two helpful maps:
+
+- 👉 **[README.md](README.md)** — a high‑level map of the repository  
+- 👉 **[CONTENTS.md](docs/CONTENTS.md)** — a complete index of every document with short summaries  
+
+**START HERE** is your front door.  
+**README** is your foyer.  
+**CONTENTS** is your library catalog.
 
 ---
 
@@ -92,7 +95,7 @@ pip install -r requirements.txt
 
 ---
 
-## **Option A — Run a Scenario in Python (recommended for developers)**
+## **Option A — Run a Scenario in Python (recommended for newcomers)**
 
 You can run any scenario CSV through the Python cockpit.
 
@@ -108,7 +111,7 @@ After running it, look in the `results/` folder for a PNG plot of the γ‑traje
 
 ---
 
-## **Option B — Explore the Model in Excel (recommended for visual thinkers)**
+## **Option B — Explore the Model Visually (Excel Cockpit)**
 
 If you prefer a **hands‑on, visual interface**, open the Excel cockpit:
 
@@ -120,7 +123,7 @@ Inside the workbook:
 
 - Enter your initial γ_self in **C4**  
 - Enter your primitives row‑by‑row starting at **row 9**  
-- Press the **Run GRP** macro button (or run `FillGammaSelfColumn`)  
+- Press the **Run GRP** macro button  
 - Watch the γ_self trajectory populate in column **H**  
 
 This interface is perfect for:
@@ -162,31 +165,34 @@ You’ve just learned the GRP by doing.
 
 Now that you’ve seen the system move, choose your path:
 
-### **A. Build your own scenario**  
-→ `docs/SCENARIO_CONFIGURATION_GUIDE.md`  
-Learn how to create CSV‑based emotional arcs.
+### **A. Use the Python cockpit (recommended)**  
+👉 **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)**
 
-### **B. Understand the math**  
-→ `docs/GRP_rev3.md`  
-The full specification of the recurrence.
+### **B. Explore the model visually (Excel)**  
+Open:  
+```
+tools/GRP_SpreadSheet.xlsm
+```
 
-### **C. Use the Excel cockpit**  
-→ `tools/GRP_SpreadSheet.xlsm`  
-A friendly, visual interface for non‑coders.
+### **C. Build your own scenario (intermediate)**  
+👉 **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)**
 
-### **D. Use the Python cockpit**  
-→ `tools/interactive_editor.py`  
-Programmatic control for developers and researchers.
+### **D. Use the scenario builder (advanced)**  
+👉 `tools/scenario_generator.py`  
+This tool is powerful but not beginner‑friendly.  
+Use it once you understand scenario structure and primitive arcs.
 
-### **E. Explore the philosophy**  
-→ `docs/WHY_THIS_MATTERS.md`  
-Why this model exists, and what it means.
+### **E. Understand the math**  
+👉 **[GRP_rev3.md](docs/GRP_rev3.md)**
 
-### **F. Explore validation and research**  
-→ `docs/Validation.md`  
-→ `soul/`  
-→ `revenge/`  
-Stress tests, edge cases, and empirical grounding.
+### **F. Explore the philosophy**  
+👉 **[WHY_THIS_MATTERS.md](docs/WHY_THIS_MATTERS.md)**
+
+### **G. Browse the full document index**  
+👉 **[CONTENTS.md](docs/CONTENTS.md)**
+
+### **H. Return to the map of the territory**  
+👉 **[README.md](README.md)**
 
 ---
 
@@ -209,6 +215,8 @@ WhenMathPrays/
     ├── TUNING.md
     ├── WHY_THIS_MATTERS.md
     ├── SCENARIO_CONFIGURATION_GUIDE.md
+    ├── interactive_editor_user_guide.md
+    ├── CONTENTS.md
     ├── ARCHITECTURE.md
     └── ...
 ```
