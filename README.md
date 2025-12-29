@@ -192,7 +192,14 @@ If you want to contribute — new scenarios, new tools, new validations — expl
 
 ---
 
-# 💬 **7. Final Note**
+#  **7. Contributing
+If you’d like to help expand, refine, or steward this project, see:
+
+👉 CONTRIBUTING.md
+
+---
+
+# 💬 **8. Final Note**
 
 WhenMathPrays is a living system.  
 It grows through exploration, curiosity, and care.
