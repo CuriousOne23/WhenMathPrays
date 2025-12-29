@@ -23,7 +23,6 @@ Not human minds — but minds in the sense that they:
 Yet we continue to describe these behaviors using the vocabulary of classical engineering:
 
 - “hallucination”
-- "drift"  
 - “instability”  
 - “failure mode”  
 - “alignment”  
