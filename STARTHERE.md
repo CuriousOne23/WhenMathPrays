@@ -45,9 +45,8 @@ The core idea is simple:
 
 At the heart of the system is a recurrence:
 
-\[
-\gamma_{\text{self}}(n+1) = \gamma_{\text{self}}(n) + \Delta\gamma + \text{entropy}
-\]
+γ_self(n+1) = γ_self(n) + Δγ + entropy`
+
 
 Where:
 
