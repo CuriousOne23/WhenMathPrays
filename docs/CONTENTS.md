@@ -19,8 +19,6 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 ---
 
-# 🧭 **Core Documentation**
-
 - **[README.md](../README.md)** — Main project README with overview, installation, and usage  
 - **[START HERE.md](../START%20HERE.md)** — Newcomer‑friendly onboarding guide and first‑steps walkthrough  
 - **[CONTENTS.md](CONTENTS.md)** — This master index of all documents with summaries  
@@ -29,6 +27,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[grp_principles.md](grp_principles.md)** — Core principles and foundational concepts  
 - **[LINEAGE.md](LINEAGE.md)** — Historical development and evolution of the project  
 - **[GRP_rev3.5.md](GRP_rev3.5.md)** — Current GRP specification (constant‑force entropy, Rev 3.5)
++ **[CSV_FORMAT.md](CSV_FORMAT.md)** — Canonical specification for scenario CSV files (columns, metadata, scaling, perspective)
 - **[THE_STORY_OF_GRP.md](THE_STORY_OF_GRP.md)**  
   Narrative history of GRP’s emergence — covering the early spark, the ULEP → UREP → GRP lineage, the discovery of γ_self, the development of the recurrence equation, and the role of Jesus in CuriousOne’s worldview. A lived account of the project’s evolution.
 
@@ -74,6 +73,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[interactive_edit_ph2_requirements.md](interactive_edit_ph2_requirements.md)** — Phase 2 requirements and specifications
 
 ### **Configuration & Scenarios**
+- **[CSV_FORMAT.md](CSV_FORMAT.md)** — Canonical specification for scenario CSV files (columns, metadata, scaling, perspective)
 - **[SCENARIO_CONFIGURATION_GUIDE.md](SCENARIO_CONFIGURATION_GUIDE.md)** — How to configure and customize scenarios  
 - **[scenario_generator_requirements.md](scenario_generator_requirements.md)** — Scenario generator specifications  
 - **[scenario_generator_build.md](scenario_generator_build.md)** — Scenario generator implementation details

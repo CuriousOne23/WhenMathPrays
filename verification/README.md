@@ -14,15 +14,8 @@ This directory contains the official entropy verification log for the WhenMathPr
 
 ## Associated Files
 
-This verification log was generated using the following test files:
 
-- **Primary Test File (M1)**: [`data/verification_data/entropy_calibration_M1.csv`](../data/verification_data/entropy_calibration_M1.csv)
-- **Secondary Test File (M2)**: [`data/verification_data/entropy_calibration_M2.csv`](../data/verification_data/entropy_calibration_M2.csv)
-
-These are minimal entropy calibration files containing:
-- 2 events each (start and end points)
-- Neutral primitive values (0.0 for all primitives: v, r, f, a, S)
-- No markers or notes (clean baseline for testing)
+This verification log was generated using minimal entropy calibration CSV files for M1 and M2. For the canonical scenario CSV format specification (including required columns, primitive scaling, and reference conventions), see [CSV_FORMAT.md](../CSV_FORMAT.md).
 
 **Note**: The `verification_data` directory serves as a generic repository for test files used in various verification scenarios. As more verification logs are added, this directory will contain test data for different types of functionality testing.
 

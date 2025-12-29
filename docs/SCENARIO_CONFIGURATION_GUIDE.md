@@ -150,40 +150,12 @@ Directory will be created if it doesn't exist.
 
 ---
 
-### Help Flag
 
-#### `HELP` (optional, default: False)
-**Type:** boolean  
-**Description:** Set to `True` to display this help and exit without running  
-**Example:** `False`
+## CSV File Format
 
-**Usage:**
-1. Set `HELP = True`
-2. Run your scenario script
-3. Read help documentation
-4. Set `HELP = False`
-5. Configure and run
+Your CSV file should contain relational primitives at each time step.
 
----
-
-## Weight Customization
-
-The `custom_weights` dictionary in each subject allows you to override default weights from `CONSTANTS.md`.
-
-### Available Weights
-
-#### Axis Weights (Primitives → γ-space axes)
-
-**`w_v`** (default: 0.8)
-- **Description:** Visibility weight (real axis)
-- **Effect:** How much showing up/being present moves you on Ego↔We axis
-- **Example:** `{'w_v': 1.0}` - Increase visibility impact
-
-**`w_r`** (default: 1.0)
-- **Description:** Resonance weight (imaginary axis)
-- **Effect:** How much attunement/synchrony moves you on Hate↔Love axis
-- **Example:** `{'w_r': 1.2}` - Higher resonance sensitivity
-
+**For the complete CSV format specification, including column definitions, metadata, and primitive reference clarity, see [CSV_FORMAT.md](CSV_FORMAT.md).**
 **`w_f`** (default: 1.2)
 - **Description:** Fidelity weight (imaginary axis, strongest by default)
 - **Effect:** How much commitment impacts Love
@@ -260,7 +232,8 @@ The `custom_weights` dictionary in each subject allows you to override default w
 
 Your CSV file should contain relational primitives at each time step.
 
-**For complete CSV format specification (columns, metadata, file naming)**, see [CSV Format Details](interactive_editor_user_guide.md#csv-format-details) in the Interactive Editor User Guide.
+
+**For the complete CSV format specification, including column definitions, metadata, and primitive reference clarity, see [CSV_FORMAT.md](CSV_FORMAT.md).**
 
 ### Quick Reference
 
@@ -272,12 +245,7 @@ Your CSV file should contain relational primitives at each time step.
 - **`notes`** - Human-readable context for each event
 - **`marker`**, **`locked`** - Added by Interactive Editor for tracking modifications
 
-**Primitive Scale:**
-- `-10` = Maximally negative (betrayal, abandonment, cruelty)
-- `0` = Neutral (no event, typical interaction)
-- `+10` = Maximally positive (profound moment, breakthrough)
 
-The framework automatically normalizes to [-1, +1] for computation.
 
 ### Simple Example:
 

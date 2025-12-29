@@ -445,92 +445,12 @@ class GammaSelf0Editor(QWidget):
 
 ---
 
-### Feature: Fractional Time Support
 
-**Current Limitation:**
-- CSV `day` column expects integers: `0, 1, 2, 3, ...`
-- But `time_unit` can be `days`, `weeks`, `months`, `years`
-- Can't represent "2.5 days" or "1.75 weeks"
+### CSV Format and Primitive Reference
 
-**Good News: Already Mostly Works!**
-- Pandas `read_csv` handles floats automatically
-- Matplotlib plots fractional x-coordinates
-- GRP computation uses float arithmetic
+**For the complete CSV format specification, including column definitions, metadata, primitive scaling, and reference details, see [CSV_FORMAT.md](CSV_FORMAT.md).**
 
-**What Needs to Change:**
-
-#### 1. Event Insertion (Shift+Click)
-```python
-def on_shift_click_timeline(self, time_value):
-    """
-    Insert new event at specified time.
-    
-    Phase 1: Snaps to integer
-    Phase 2: Allows fractional time
-    """
-    # OLD:
-    # time_value = int(round(time_value))
-    
-    # NEW:
-    time_value = round(time_value, 2)  # 2 decimal places
-    
-    # Validate minimum spacing
-    MIN_SPACING = 0.1
-    for existing_time in self.events_time:
-        if abs(existing_time - time_value) < MIN_SPACING:
-            self.show_error(
-                f"Too close to event at t={existing_time}. "
-                f"Min spacing: {MIN_SPACING} {self.time_unit}"
-            )
-            return
-    
-    # Rest of insertion logic...
-```
-
-#### 2. Display Formatting
-```python
-def format_time_label(self, time_value):
-    """
-    Format time value for display.
-    
-    - Integers: "Day 5"
-    - Fractional: "Day 5.5" or "Day 5.25"
-    """
-    unit_singular = self.time_unit.rstrip('s')  # 'days' -> 'day'
-    
-    if time_value == int(time_value):
-        return f"{unit_singular.capitalize()} {int(time_value)}"
-    else:
-        return f"{unit_singular.capitalize()} {time_value:.2f}"
-```
-
-#### 3. Time Axis Formatting
-```python
-# In trajectory/primitive panel setup:
-import matplotlib.ticker as ticker
-
-ax.xaxis.set_major_formatter(
-    ticker.FormatStrFormatter('%.1f')  # Show 1 decimal place
-)
-```
-
-**Examples:**
-```csv
-day,v,r,f,a,S,notes
-0.0,5,5,0,0,5,First meeting
-2.5,8,7,3,2,6,Great afternoon date
-2.8,-3,-4,0,0,-5,Argument same evening
-5.25,6,5,4,3,4,Reconciliation lunch
-```
-
-**Edge Cases:**
-- Very small fractions (< 0.01): Round to 2 decimals
-- Integer-only CSVs: Still work (2.0 displays as "Day 2")
-- Mixed precision: Some integer, some fractional - no problem
-
-**Backward Compatibility:**
-- Phase 1 editor already handles floats (just reads as numbers)
-- No breaking changes
+Fractional and integer time values, as well as all edge cases, are supported as described in that document. All CSV-related implementation and usage details should be referenced there for consistency.
 
 ### Effort Estimate: 3-4 hours
 
