@@ -322,7 +322,7 @@ flowchart LR
 ```mermaid
 flowchart TD
 
-    subgraph Space[γ_self Relational Space (2D)]
+    subgraph Space["gamma self Relational Space"]
         A((Stable Basin))
         B((Attractor))
         C((Neutral Zone))
