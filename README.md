@@ -1,3 +1,7 @@
+# PRIMITIVES_AND_RELATIONAL_SPACE.md — The Five Relational Primitives
+
+For a detailed explanation of the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, see [docs/PRIMITIVES_AND_RELATIONAL_SPACE.md](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md). This document defines the primitives, their positive/negative poles, and their behavioral signatures in both human and AI contexts.
+
 # CSV Format
 
 For the complete specification of scenario CSV files (including required columns, metadata, primitive scaling, and perspective reference), see [docs/CSV_FORMAT.md](docs/CSV_FORMAT.md).
@@ -232,6 +236,7 @@ These are your hands‑on instruments.
 ### 📂 **docs/**  
 The deep reference library — the heart of the system.
 
+
 Key documents include:
 
 - **GRP_rev3.md** — full mathematical specification  
@@ -240,6 +245,7 @@ Key documents include:
 - **WHY_THIS_MATTERS.md** — philosophical grounding  
 - **SCENARIO_CONFIGURATION_GUIDE.md** — how to build scenarios  
 - **ARCHITECTURE.md** — system design and flow
+- **PRIMITIVES_AND_RELATIONAL_SPACE.md** — the five relational primitives and the geometry of relational space ([see summary above](#primitives_and_relational_spacemd--the-five-relational-primitives))
 - **THE_STORY_OF_GRP.md** — the full narrative history of GRP, from the first spark through ULEP → UREP → GRP, including the role of Jesus in CuriousOne’s worldview and the lived arc of discovery 
 
 Plus validation and research folders:
