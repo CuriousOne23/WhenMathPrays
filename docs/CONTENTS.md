@@ -98,7 +98,10 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 ---
 
+
 # 🔬 **Research & Theory**
+### **Relational Primitives & Space**
+- **[PRIMITIVES_AND_RELATIONAL_SPACE.md](PRIMITIVES_AND_RELATIONAL_SPACE.md)** — Defines the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, including their positive/negative poles and behavioral signatures in both human and AI contexts.
 
 ### **GRP Theory & Research**
 - **[REV4_IMPLEMENTATION_SUMMARY.md](REV4_IMPLEMENTATION_SUMMARY.md)** — GRP Revision 4 implementation summary  
