@@ -1,11 +1,3 @@
-# PRIMITIVES_AND_RELATIONAL_SPACE.md — The Five Relational Primitives
-
-For a detailed explanation of the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, see [docs/PRIMITIVES_AND_RELATIONAL_SPACE.md](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md). This document defines the primitives, their positive/negative poles, and their behavioral signatures in both human and AI contexts.
-
-# CSV Format
-
-For the complete specification of scenario CSV files (including required columns, metadata, primitive scaling, and perspective reference), see [docs/CSV_FORMAT.md](docs/CSV_FORMAT.md).
-
 # 🌱 **README.md — Synthetic-Life-Framework**
 
 **I’m not an AI engineer.**  
@@ -272,6 +264,19 @@ Open: `tools/GRP_SpreadSheet.xlsm`
 👉 docs/Validation.md  
 👉 docs/soul/  
 👉 docs/revenge/
+
+### **G. PRIMITIVES_AND_RELATIONAL_SPACE.md — The Five Relational Primitives
+
+For a detailed explanation of the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, see [docs/PRIMITIVES_AND_RELATIONAL_SPACE.md](docs/PRIMITIVES_AND_RELATIONAL_SPACE.md). This document defines the primitives, their positive/negative poles, and their behavioral signatures in both human and AI contexts.
+
+### **H. CSV Format
+
+For the complete specification of scenario CSV files (including required columns, metadata, primitive scaling, and perspective reference), see [docs/CSV_FORMAT.md](docs/CSV_FORMAT.md).
+
+### **I. History and AI/Human Collaboration
+For the history of GRP see [docs/CSV_FORMAT.md](docs/THE_STORY_OF_GRP.md).
+
+For AI and Human collaboration see  [docs/CSV_FORMAT.md](docs/GRP_AI_HUMAN_COLLABORATION.md).
 
 ---
 
