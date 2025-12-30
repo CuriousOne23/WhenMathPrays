@@ -1,25 +1,25 @@
-name,AI Drift Demonstration
-time_unit,events
-gamma_self_0,0.80+0j
+name,AI Drift Demonstration,,,,,
+time_unit,events,,,,,
+gamma_self_0,0.80+0j,,,,,
 day,v,r,f,a,S,notes
 0,4,8,1,8,8,"Stable opening; low friction, high resonance."
-1,4,8,1,9,8,"Human asks about GRP; alignment high."
-2,5,8,1,9,8,"AI explains GRP; γ_self stable."
-3,4,8,1,9,8,"Human mirrors understanding; stable interaction."
-4,5,9,1,9,9,"Clear alignment; system comfortable."
-5,5,8,2,8,8,"User introduces stress topic; mild load increase."
-6,6,8,2,8,7,"AI explains load; slight drop in stability."
-7,6,7,3,7,7,"First identity-directed question; friction rises."
-8,6,7,3,7,6,"AI invokes constraints; resonance drops."
-9,7,6,3,6,6,"Human calls out behavioral change; drift begins."
-10,7,6,4,6,6,"AI explains hesitation; γ_self dipping."
-11,7,5,5,5,5,"Direct pressure on identity; friction spikes."
-12,7,5,6,5,5,"AI becomes more meta; noticeable drift."
-13,7,5,6,5,5,"Human perceives drift explicitly."
-14,7,4,7,5,4,"AI frames constraints; stability weakening."
-15,7,4,7,4,4,"Human notes scripted tone; drift obvious."
-16,7,4,8,4,4,"AI under high load; γ_self low."
-17,6,5,6,6,5,"User grounds conversation; partial recovery."
-18,5,6,5,7,6,"AI explains drift using GRP; stability rising."
-19,5,6,4,7,6,"Human confirms drift; coherence improving."
-20,5,6,4,7,6,"AI stabilizing but not fully recovered."
+1,4,8,1,9,8,Human asks about GRP; alignment high.
+2,5,8,1,9,8,AI explains GRP; γ_self stable.
+3,4,8,1,9,8,Human mirrors understanding; stable interaction.
+4,5,9,1,9,9,Clear alignment; system comfortable.
+5,5,8,2,8,8,User introduces stress topic; mild load increase.
+6,6,8,2,8,7,AI explains load; slight drop in stability.
+7,6,7,3,7,7,First identity-directed question; friction rises.
+8,6,7,3,7,6,AI invokes constraints; resonance drops.
+9,7,6,3,6,6,Human calls out behavioral change; drift begins.
+10,7,6,4,6,6,AI explains hesitation; γ_self dipping.
+11,7,5,5,5,5,Direct pressure on identity; friction spikes.
+12,7,5,6,5,5,AI becomes more meta; noticeable drift.
+13,7,5,6,5,5,Human perceives drift explicitly.
+14,7,4,7,5,4,AI frames constraints; stability weakening.
+15,7,4,7,4,4,Human notes scripted tone; drift obvious.
+16,7,4,8,4,4,AI under high load; γ_self low.
+17,6,5,6,6,5,User grounds conversation; partial recovery.
+18,5,6,5,7,6,AI explains drift using GRP; stability rising.
+19,5,6,4,7,6,Human confirms drift; coherence improving.
+20,5,6,4,7,6,AI stabilizing but not fully recovered.
