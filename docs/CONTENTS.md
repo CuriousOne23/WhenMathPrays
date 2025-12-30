@@ -78,6 +78,9 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[PRIMITIVES_AND_RELATIONAL_SPACE.md](PRIMITIVES_AND_RELATIONAL_SPACE.md)** — Defines the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, including their positive/negative poles and behavioral signatures in both human and AI contexts.
 
 ### **GRP Theory & Research**
+- **[grp_principles.md](grp_principles.md)** — Field‑founding principles of GRP, introducing relational character geometry, γ_self, relational motion, asymmetry, stability basins, rupture/repair dynamics, and the conceptual ontology of the framework.
+
+- **[GRP_GLOSSARY.md](GRP_GLOSSARY.md)** — Canonical dictionary of GRP terminology. Defines relational manifold, meaning field, stability basins, relational asymmetry, RSL, technical diary, rupture, repair paths, and all core geometric concepts used throughout the framework.
 
 ### **Gamma Self Research**
 - **[gamma_self_defense.md](gamma_self_defense.md)** — Gamma self defense mechanisms  
@@ -85,8 +88,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[Gamma_Self_Character_Map.png](Gamma_Self_Character_Map.png)** — Visual representation of gamma self characteristics
 
 ### **Communication & Protocols**
-- **[baseline_communication_protocol.md](baseline_communication_protocol.md)** — Communication protocol specifications  
-- **[rosetta_stone_translator.csv](rosetta_stone_translator.csv)** — Translation mappings and equivalences
+- **[baseline_communication_protocol.md](baseline_communication_protocol.md)** — Communication protocol specifications, time index CSV format 
 
 ---
 
