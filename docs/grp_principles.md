@@ -103,7 +103,7 @@ These fields provide **context**, not **foundation**.
 - **Relational Posture**  
 - **Trajectory of Relation**  
 - **Autocorrelation Period**  
-- **Relational Asymmetry**  
+- **Relational Asymmetry**  - GRP formalizes relational asymmetry as a geometric property of relational stance, giving the concept a precise mathematical definition for the first time.
 - **Technical Diary**  
 - **Relational Manifold**  
 - **Relational Meaning Field**  
