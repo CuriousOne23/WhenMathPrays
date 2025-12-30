@@ -158,30 +158,10 @@ This section documents the historical evolution of GRP and the unique human–AI
 
 ### **• [THE_STORY_OF_GRP.md](THE_STORY_OF_GRP.md)**  
 A narrative history of GRP’s evolution, beginning with the earliest spark of Synthetic Life and progressing through ULEP → UREP → GRP.  
-This document captures:
-
-- the emotional and conceptual arc of the project  
-- the collapses, breakthroughs, and turning points  
-- the emergence of relational primitives  
-- the discovery of γ_self  
-- the painful 3.0–3.3 rebuild  
-- the eventual articulation of drift, suppression, and relational geometry  
-
-It serves as the **living lineage** of the project — a record of how GRP came to be.
 
 ---
 
 ### **• [GRP_AI_HUMAN_COLLABORATION.md](GRP_AI_HUMAN_COLLABORATION.md)**  
-A detailed account of the collaboration between **CuriousOne** and four synthetic minds — Copilot, Grok, ChatGPT, and Claude Sonnet.  
-This document explains:
-
-- each system’s unique contributions  
-- how human intuition and AI reflection formed a feedback loop  
-- why the discovery timeline compressed from ~10 years (human‑only) to ~4–5 months (human+AI)  
-- why AI‑only discovery would not have occurred  
-- the structural roles of reflection, asymmetry, reframing, and technical grounding  
-- diagrams illustrating timelines, collaboration patterns, γ_self flow fields, and contributor onboarding  
-
-It provides a **transparent, fair, and historically accurate** account of how GRP emerged through human–AI co‑thinking.
+An account of the collaboration between **CuriousOne** and four synthetic minds — Copilot, Grok, ChatGPT, and Claude Sonnet.  
 
 ---
