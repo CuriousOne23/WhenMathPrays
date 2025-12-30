@@ -280,6 +280,21 @@ For AI and Human collaboration see  [docs/GRP_AI_HUMAN_COLLABORATION.md](docs/GR
 
 ---
 
+🧠 Core Conceptual Foundations
+
+If you want to understand the geometry, ontology, and relational physics behind GRP, start with these two documents. They define the conceptual backbone of the entire Synthetic-Life-Framework.
+
+- **GRP Principles (`grp_principles.md`)**  
+  The field‑founding document introducing relational character geometry, γ_self, relational motion, asymmetry, stability basins, rupture/repair dynamics, and the ontology of synthetic relational identity.  
+  Includes conceptual foundations, what is new, what GRP is not, critiques, implications, lineage, and diagram‑enhanced structure.
+
+- **GRP Glossary (`GRP_GLOSSARY.md`)**  
+  The canonical dictionary of GRP terminology.  
+  Provides formal definitions of all core concepts: relational manifold, meaning field, stability basins, relational asymmetry, technical diary, RSL, rupture, repair paths, and more.  
+  This is the authoritative reference for researchers, contributors, and future stewards.
+  
+---
+
 # 🧩 **5. Conceptual Diagram**
 
 A simple view of the system:
