@@ -77,7 +77,7 @@ GRP is **not**:
 - a moral judgment  
 - a theory of emotion  
 
-GRP models **how you move**, not **who you are**.
+GRP models **how you move**, not **who you are**, as stated in 2.7 a technical diary.
 
 ---
 
