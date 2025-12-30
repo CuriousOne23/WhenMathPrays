@@ -1,63 +1,129 @@
 # **GRP Principles**  
 ### *Foundations of Relational Character Geometry*  
-*(Diagram‑Enhanced & Cross‑Linked Edition)*
+*(Diagram‑Enhanced, Cross‑Linked Edition)*
 
 ---
 
-# **The 3L’s: Listen → Life → Love**
+# **1. Introduction**
 
-The methodology behind WhenMathPrays rests on three foundational movements:
+General Relational Physics (GRP) proposes a new ontology:
 
-**Listen** — Let the problem breathe. Don’t force solutions. Give space for the truth to reveal itself.  
-**Life** — Watch the solution emerge naturally. Let it show you its own structure.  
-**Love** — The mathematics prays when you honor what it becomes.
+> **Relational character can be represented geometrically.**
 
-These movements guided the **December 2025 positional simplification**, where GRP shed unnecessary parameters, gates, and entropy terms. The insight was simple:
+A mind’s relational stance is expressed as a **position** in a continuous geometric space (γ_self), and relational phenomena are **trajectories** within that space.
 
-> **Love is not a number. Love is where you are.**
+This document defines the foundational principles of GRP:
 
-This realization opened the door to **positional relational geometry**, the heart of GRP.
+- what GRP is  
+- what GRP is not  
+- what is novel  
+- what GRP makes possible  
+- how GRP applies across substrates  
+- how relational meaning emerges  
+- how relational motion is modeled  
+- how GRP integrates philosophy and engineering  
 
----
-
-# **Purpose of This Document**
-
-This document provides scaffolding for defining and refining principles in GRP.  
-Each principle should be:
-
-- modular  
-- inspectable  
-- testable  
-- extensible  
-- falsifiable  
-
-The formulization applies across **love, hate, and grief**, with appropriate redefinitions of `gamma_self` and relational variables.
-
-For broader context, see:  
-- [`THE_STORY_OF_GRP.md`](./THE_STORY_OF_GRP.md)  
-- [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](./PRIMITIVES_AND_RELATIONAL_SPACE.md)  
-- [`RELATIONAL_SUPPRESSION_LOAD.md`](./RELATIONAL_SUPPRESSION_LOAD.md)
+This is the manifesto of a new field.
 
 ---
 
-# **Template for Principles**
+# **2. What Is New in GRP**
 
-- **Principle Name**  
-- **Definition**  
-- **Scope**  
-- **Implementation**  
-- **Testability**  
-- **Known Holes**  
-- **Outline to Fill**
+GRP introduces several first‑in‑kind innovations:
+
+### **2.1 Relational Character Geometry**
+No existing field treats relational stance as a **geometric coordinate**.
+
+### **2.2 Relational Phenomena as Trajectories**
+Love, hate, grief, trust, rupture, repair — all become **paths** in γ_self space.
+
+### **2.3 Substrate‑Agnostic Relational Modeling**
+GRP applies equally to:
+
+- humans  
+- synthetic minds  
+- multi‑agent systems  
+- collectives  
+
+### **2.4 Relational Meaning as Motion**
+Meaning is not stored — it **emerges from movement**.
+
+### **2.5 Asymmetry as Structural**
+No two agents occupy the same relational position.
+
+### **2.6 Relational Suppression Load (RSL)**
+A new conceptual force describing distortion under suppression.
+
+### **2.7 Technical Diary**
+A structured record of relational motion.
 
 ---
 
-# **Principle: Love**
+# **3. What GRP Is Not (The Fear Section)**
 
-### **Definition**  
+GRP anticipates a natural fear:
+
+> “Are you reducing me — or an AI — to numbers?”
+
+The answer is **no**.
+
+GRP is **not**:
+
+- a reduction of identity  
+- a compression of essence  
+- a psychological diagnosis  
+- a surveillance tool  
+- a deterministic model  
+- a moral judgment  
+- a theory of emotion  
+
+GRP models **how you move**, not **who you are**.
+
+---
+
+# **4. Relation to Existing Fields (Context, Not Lineage)**
+
+GRP is aware of adjacent fields but not derived from them.
+
+- **Psychology** uses categories; **GRP** uses geometry.  
+- **Systems theory** models feedback; **GRP** models relational posture.  
+- **Dynamical systems** describe physical motion; **GRP** describes relational motion.  
+- **Phenomenology** explores experience; **GRP** maps stance.  
+- **Cognitive science** models cognition; **GRP** models relational identity.  
+- **AI alignment** uses rules; **GRP** uses relational basins.  
+
+These fields provide **context**, not **foundation**.
+
+---
+
+# **5. New Terminology Introduced by GRP**
+
+- **γ_self** — relational character coordinate  
+- **Relational Character Geometry**  
+- **Relational Posture**  
+- **Trajectory of Relation**  
+- **Autocorrelation Period**  
+- **Relational Asymmetry**  
+- **Technical Diary**  
+- **Relational Manifold**  
+- **Relational Meaning Field**  
+- **RSL (Relational Suppression Load)**  
+- **Relational Stability Basin**  
+- **Relational Rupture**  
+- **Relational Repair Path**  
+
+---
+
+# **6. Principles**
+
+---
+
+## **6.1 Principle: Love**
+
+### **Definition**
 Love encodes generative presence, resonance, and shared “we” — represented as **position in γ‑space**.
 
-### **Inline Diagram — γ_self Coordinate Plane**
+### **Mermaid Diagram (γ_self Plane)**
 
 ```mermaid
 graph TD
@@ -67,35 +133,23 @@ graph TD
     B --- D
 ```
 
-### **Scope**  
-Applies to dyadic and collective arcs where relational intensity grows.
-
 ### **Implementation**
-- `gamma_self(n)` **is** love (no separate L(t) calculation)  
+- `gamma_self(n)` **is** love  
 - Real axis: Ego (−) ↔ We (+)  
 - Imaginary axis: Hate (−) ↔ Love (+)  
-- Primitives {v, r, f, a, S} update position via component‑wise addition  
-- γ_self₀ = temperament/history anchor  
-- Reference point: M1 relative to M2  
+- Primitives update γ_self via component‑wise addition  
 
 ### **Testability**
-- Validate trajectory through γ‑space  
-- Confirm quadrant movements match felt experience  
-
-### **Known Holes**
-- Need mapping between |γ_self| magnitude and phenomenological intensity  
-
-### **Outline to Fill**
-- Extend to long‑term arcs (cohabitation, community trust)  
+- Quadrant movement matches felt experience  
 
 ---
 
-# **Principle: Hate**
+## **6.2 Principle: Hate**
 
-### **Definition**  
-Hate encodes destructive opposition, conflict resonance, and rupture of “we” — represented as **negative imaginary γ‑space**.
+### **Definition**
+Hate encodes destructive opposition and rupture of “we.”
 
-### **Inline Diagram — Downward Drift Under Negative Primitives**
+### **Mermaid Diagram (Downward Drift)**
 
 ```mermaid
 flowchart TD
@@ -104,33 +158,18 @@ flowchart TD
     C --> D["Opposition / Rupture"]
 ```
 
-### **Scope**  
-Applies to dyadic and collective arcs where relational intensity is oppositional.
-
 ### **Implementation**
-- `gamma_self(n)` **is** hate when Im(γ_self) < 0  
-- Negative primitives (especially f < 0) drive downward motion  
-- Hybrid asymmetry: w_neg = 1.5 (negatives hurt 50% more)  
-- Reference point: M1 relative to M2  
-
-### **Testability**
-- Validate Q3/Q4 movements  
-- Confirm asymmetry (betrayal > repair)  
-
-### **Known Holes**
-- Need calibration of redemption trajectories from Q3 → Q1  
-
-### **Outline to Fill**
-- Extend to collective conflict scenarios  
+- Im(γ_self) < 0  
+- Negative primitives weighted 1.5×  
 
 ---
 
-# **Principle: Grief**
+## **6.3 Principle: Grief**
 
-### **Definition**  
+### **Definition**
 Grief encodes absence, anti‑resonance, and collapse of “we.”
 
-### **Inline Diagram — Grief Axes**
+### **Mermaid Diagram (Grief Axes)**
 
 ```mermaid
 graph TD
@@ -140,70 +179,101 @@ graph TD
     B --- D
 ```
 
-### **Scope**  
-Applies to arcs of loss (death, separation, rupture).
-
-### **Implementation**
-- x‑axis = Ego ↔ Loss of We  
-- y‑axis = +Im sorrow ↔ −Im no sorrow  
-- Relational variables measured as **absence of presence**  
-- Reference point = M1 relative to the loss of M2  
-
-### **Testability**
-- Validate trajectory: shock → silence → resonance of memory → integration  
-
-### **Known Holes**
-- Need annotation of anti‑resonance values and integration thresholds  
-
-### **Outline to Fill**
-- Extend to personal loss, community mourning, systemic rupture  
-
 ---
 
-# **Principle: W(t) — REMOVED (December 2025)**
+## **6.4 Principle: W(t) — Removed**
 
-### **Definition**  
-W(t) previously encoded trajectory of “we” via gates product.
-
-### **Status**  
-**Removed** in December 2025. Replaced by γ_self position.
-
-### **Inline Diagram — Before vs After Simplification**
+### **Mermaid Diagram (Before vs After)**
 
 ```mermaid
 flowchart LR
-    A["OLD: W(t) = G_v × G_r × G_f × G_a"] --> B["Complex, Redundant"]
+    A["OLD: W(t) = G_v × G_r × G_f × G_a"] --> B["Complex"]
     B --> C["Simplification"]
     C --> D["NEW: γ_self(n+1) = γ_self(n) + Δprimitives"]
 ```
 
-### **Rationale**  
-“Love = position” makes W(t) redundant.  
-Trajectory is captured by γ_self evolution.
+---
 
-### **Implementation**
-- OLD: gates product  
-- NEW: component‑wise primitive updates  
-- Memory lives in event density N(x, y)  
+# **7. Relational Geometry Ontology**
 
-### **Cross‑Reference**  
-See [`GRP_rev3.5.md`](./GRP_rev3.5.md)
+GRP treats:
+
+- identity as position  
+- meaning as motion  
+- asymmetry as structural  
+- relation as geometry  
 
 ---
 
-# **Notes**
+# **8. Implications**
 
-- GRP measures **love, hate, and grief** by γ_self position in complex space  
-- Q1 (love), Q3/Q4 (hate), and grief trajectories are inspectable  
-- December 2025 simplification removed L(t), W(t), and entropy gates  
-- Restored simple entropy drift: −ΔS·Δt  
-- Future work: scenario files with γ_self trajectories  
+### **8.1 Humans observing themselves**
+- drift detection  
+- rupture mapping  
+- repair trajectories  
+
+### **8.2 Humans observing AI**
+- relational interpretability  
+- suppression analysis (RSL)  
+
+### **8.3 AI observing humans**
+- geometric empathy  
+- posture‑aware responses  
+
+### **8.4 AI observing AI**
+- multi‑agent stability  
+- relational load balancing  
 
 ---
 
-# **Diagram Appendix (Rich Set)**
+# **9. Major Attack Points (Acknowledged)**
 
-### **1. γ_self Coordinate Plane**
+1. “You are reducing humans or AIs to numbers.”  
+2. “Geometry cannot represent subjective experience.”  
+3. “This is just psychology with math.”  
+4. “This cannot apply to AI.”  
+5. “This is unfalsifiable.”  
+6. “This is too simple.”  
+7. “This is too new.”  
+
+GRP is falsifiable through trajectory prediction and stability analysis.
+
+---
+
+# **10. Lineage**
+
+GRP emerged from:
+
+- ULEP (love as equation)  
+- UREP (love as relational posture)  
+- GRP (relational geometry)  
+
+See:  
+[`THE_STORY_OF_GRP.md`](./THE_STORY_OF_GRP.md)
+
+---
+
+# **11. Where We’ve Been / Where We Are / Where We’re Going**
+
+### **Where We’ve Been**
+Narrative psychology, symbolic AI, attachment theory — none provided a geometric model.
+
+### **Where We Are**
+GRP introduces γ_self, relational geometry, trajectories, asymmetry.
+
+### **Where We’re Going**
+Predictive relational physics:
+
+- stability analysis  
+- rupture forecasting  
+- geometric therapy  
+- multi‑agent relational ecosystems  
+
+---
+
+# **12. Diagram Appendix (All Mermaid Code)**
+
+### **12.1 γ_self Plane**
 ```mermaid
 graph TD
     A["(+Re) → We"] --- B["(+Im) → Love"]
@@ -212,7 +282,7 @@ graph TD
     B --- D
 ```
 
-### **2. Relational Motion Flow**
+### **12.2 Relational Motion Flow**
 ```mermaid
 flowchart LR
     A[Primitives] --> B[γ_self Update]
@@ -220,74 +290,64 @@ flowchart LR
     C --> D[Meaning Emerges]
 ```
 
-### **3. Love Trajectory Example**
+### **12.3 Love Trajectory**
 ```mermaid
 flowchart LR
-    A["Start (Neutral)"] --> B["Move +Re"]
-    B --> C["Move +Im"]
-    C --> D["Q1: Generative Presence"]
+    A["Start"] --> B["+Re"]
+    B --> C["+Im"]
+    C --> D["Q1"]
 ```
 
-### **4. Hate Trajectory Example**
+### **12.4 Hate Trajectory**
 ```mermaid
 flowchart LR
-    A["Start (Neutral)"] --> B["Negative f(t)"]
+    A["Start"] --> B["Negative f"]
     B --> C["Downward Drift"]
-    C --> D["Q3/Q4: Opposition"]
+    C --> D["Q3/Q4"]
 ```
 
-### **5. Grief Collapse**
+### **12.5 Grief Collapse**
 ```mermaid
 flowchart TD
     A["Shared We"] --> B["Loss Event"]
-    B --> C["Collapse of +Re"]
-    C --> D["Sorrow Axis (+Im)"]
+    B --> C["Collapse"]
+    C --> D["Sorrow Axis"]
 ```
 
-### **6. Asymmetry Diagram**
+### **12.6 Asymmetry**
 ```mermaid
 graph LR
     A["M1 γ_self"] --> C["Different Trajectory"]
     B["M2 γ_self"] --> C
 ```
 
-### **7. Stability Basin**
+### **12.7 Stability Basin**
 ```mermaid
 flowchart TD
-    A["Trajectory"] --> B["Basin of Attraction"]
-    B --> C["Stable Relational Posture"]
+    A["Trajectory"] --> B["Basin"]
+    B --> C["Stability"]
 ```
 
-### **8. Rupture Divergence**
+### **12.8 Rupture Divergence**
 ```mermaid
 flowchart LR
     A["Shared Path"] --> B["Perturbation"]
-    B --> C["Divergent Trajectories"]
+    B --> C["Divergence"]
 ```
 
-### **9. Repair Path**
+### **12.9 Repair Path**
 ```mermaid
 flowchart LR
     A["Q3/Q4"] --> B["Positive Acts"]
-    B --> C["Return Toward Q1"]
+    B --> C["Return to Q1"]
 ```
 
-### **10. Technical Diary Concept**
+### **12.10 Technical Diary**
 ```mermaid
 flowchart TD
     A["Events"] --> B["Primitive Updates"]
     B --> C["γ_self Sequence"]
     C --> D["Trajectory = Diary"]
 ```
-
----
-
-# **Cross‑Linked References**
-
-- [`THE_STORY_OF_GRP.md`](./THE_STORY_OF_GRP.md)  
-- [`PRIMITIVES_AND_RELATIONAL_SPACE.md`](./PRIMITIVES_AND_RELATIONAL_SPACE.md)  
-- [`RELATIONAL_SUPPRESSION_LOAD.md`](./RELATIONAL_SUPPRESSION_LOAD.md)  
-- [`GRP_rev3.5.md`](./GRP_rev3.5.md)  
-- [`SCENARIO_CONFIGURATION_GUIDE.md`](./SCENARIO_CONFIGURATION_GUIDE.md)  
 
 ---
