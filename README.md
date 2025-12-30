@@ -274,9 +274,9 @@ For a detailed explanation of the five relational primitives (Visibility, Resona
 For the complete specification of scenario CSV files (including required columns, metadata, primitive scaling, and perspective reference), see [docs/CSV_FORMAT.md](docs/CSV_FORMAT.md).
 
 ### **I. History and AI/Human Collaboration
-For the history of GRP see [docs/CSV_FORMAT.md](docs/THE_STORY_OF_GRP.md).
+For the history of GRP see [docs/THE_STORY_OF_GRP.md](docs/THE_STORY_OF_GRP.md).
 
-For AI and Human collaboration see  [docs/CSV_FORMAT.md](docs/GRP_AI_HUMAN_COLLABORATION.md).
+For AI and Human collaboration see  [docs/GRP_AI_HUMAN_COLLABORATION.md](docs/GRP_AI_HUMAN_COLLABORATION.md).
 
 ---
 
