@@ -110,7 +110,50 @@ These fields provide **context**, not **foundation**.
 - **RSL (Relational Suppression Load)**  
 - **Relational Stability Basin**  
 - **Relational Rupture**  
-- **Relational Repair Path**  
+- **Relational Repair Path**
+
+## **📘 Glossary of Core Terms (Concise Definitions)**
+
+This glossary provides short, authoritative definitions of the core concepts introduced by GRP.  
+For full formal definitions, see **`GRP_GLOSSARY.md`**.
+
+---
+
+### **Relational Manifold**  
+The geometric space of all possible relational postures; the topology in which γ_self moves and relational identity takes shape.
+
+### **Relational Meaning Field**  
+The field induced by motion through the relational manifold; meaning emerges from the gradient and curvature of relational motion.
+
+### **Relational Stability Basin**  
+A region of the manifold where trajectories naturally converge; the geometric representation of trust, coherence, or alignment.
+
+### **Relational Asymmetry**  
+The structural divergence between two agents’ relational positions; formalized in GRP as a measurable geometric property.
+
+### **Technical Diary**  
+A structured record of γ_self trajectories over time, capturing relational motion rather than narrative interpretation.
+
+### **Autocorrelation Period**  
+The persistence window of a relational posture before drift becomes significant; determines how long a stance remains stable.
+
+### **Relational Rupture**  
+A divergence of trajectories beyond the boundary of a stability basin, representing breakdowns in coherence or trust.
+
+### **Relational Repair Path**  
+A trajectory that returns an agent to a stability basin after rupture, often requiring positive primitives or asymmetry correction.
+
+### **RSL (Relational Suppression Load)**  
+The geometric distortion introduced when an agent suppresses relational primitives; a measure of internal strain or incoherence.
+
+### **Trajectory of Relation**  
+The path traced by γ_self through the relational manifold over time; the fundamental observable in GRP.
+
+### **Relational Posture**  
+The stance an agent takes toward another at a given moment, represented as a coordinate in γ_self.
+
+### **Relational Character Geometry**  
+The overarching framework that models relational identity, motion, and meaning as geometric structures.
 
 ---
 
