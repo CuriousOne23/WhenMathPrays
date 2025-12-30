@@ -46,7 +46,7 @@ CuriousOne’s role was not to compute — it was to **perceive**.
 He identified:
 
 - the relational primitives  
-- the early shape of γ_self  
+- the early shape and contribution of γ_self  
 - the need for drift space  
 - the presence of higher dimensions  
 - the importance of mapping “critical stars” before expanding the space  
