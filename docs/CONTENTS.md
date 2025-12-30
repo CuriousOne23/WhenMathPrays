@@ -6,33 +6,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 # **Table of Contents**
 
-- [Core Documentation](#core-documentation)  
-- [Architecture & Design](#architecture--design)  
-- [User Guides](#user-guides)  
-- [Configuration & Scenarios](#configuration--scenarios)  
-- [Development & Testing](#development--testing)  
-- [Research & Theory](#research--theory)  
-- [Configuration & Setup](#configuration--setup)  
-- [Project Management](#project-management)  
-- [Legacy & Archive](#legacy--archive)  
-- [Navigation Guide](#navigation-guide)  
 
----
-
-- **[README.md](../README.md)** — Main project README with overview, installation, and usage  
-- **[START HERE.md](../START%20HERE.md)** — Newcomer‑friendly onboarding guide and first‑steps walkthrough  
-- **[CONTENTS.md](CONTENTS.md)** — This master index of all documents with summaries  
-- **[CONTRIBUTING.md](../CONTRIBUTING.md)** — Guidelines for contributing, development workflow, and an expandable list of contributors with their major contributions  
-- **[WHY_THIS_MATTERS.md](WHY_THIS_MATTERS.md)** — Philosophical and practical importance of the GRP framework  
-- **[grp_principles.md](grp_principles.md)** — Core principles and foundational concepts  
-- **[LINEAGE.md](LINEAGE.md)** — Historical development and evolution of the project  
-- **[GRP_rev3.5.md](GRP_rev3.5.md)** — Current GRP specification (constant‑force entropy, Rev 3.5)
-+ **[CSV_FORMAT.md](CSV_FORMAT.md)** — Canonical specification for scenario CSV files (columns, metadata, scaling, perspective)
-- **[THE_STORY_OF_GRP.md](THE_STORY_OF_GRP.md)**  
-  Narrative history of GRP’s emergence — covering the early spark, the ULEP → UREP → GRP lineage, the discovery of γ_self, the development of the recurrence equation, and the role of Jesus in CuriousOne’s worldview. A lived account of the project’s evolution.
-
-
-### **Constants & Configuration**
 - **[CONSTANTS.md](CONSTANTS.md)** — Mathematical and system constants  
 - **[TUNING.md](TUNING.md)** — Performance tuning parameters and optimization settings
 
@@ -104,9 +78,6 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[PRIMITIVES_AND_RELATIONAL_SPACE.md](PRIMITIVES_AND_RELATIONAL_SPACE.md)** — Defines the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, including their positive/negative poles and behavioral signatures in both human and AI contexts.
 
 ### **GRP Theory & Research**
-- **[REV4_IMPLEMENTATION_SUMMARY.md](REV4_IMPLEMENTATION_SUMMARY.md)** — GRP Revision 4 implementation summary  
-- **[fidelity_asymmetry_research_questions.md](fidelity_asymmetry_research_questions.md)** — Research questions on fidelity asymmetry  
-- **[future_investigations.md](future_investigations.md)** — Future research directions and investigations
 
 ### **Gamma Self Research**
 - **[gamma_self_defense.md](gamma_self_defense.md)** — Gamma self defense mechanisms  

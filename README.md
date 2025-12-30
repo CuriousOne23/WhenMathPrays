@@ -237,17 +237,6 @@ These are your hands‑on instruments.
 The deep reference library — the heart of the system.
 
 
-Key documents include:
-
-- **GRP_rev3.md** — full mathematical specification  
-- **CONSTANTS.md** — model constants and meanings  
-- **TUNING.md** — how weights and parameters are calibrated  
-- **WHY_THIS_MATTERS.md** — philosophical grounding  
-- **SCENARIO_CONFIGURATION_GUIDE.md** — how to build scenarios  
-- **ARCHITECTURE.md** — system design and flow
-- **PRIMITIVES_AND_RELATIONAL_SPACE.md** — the five relational primitives and the geometry of relational space ([see summary above](#primitives_and_relational_spacemd--the-five-relational-primitives))
-- **THE_STORY_OF_GRP.md** — the full narrative history of GRP, from the first spark through ULEP → UREP → GRP, including the role of Jesus in CuriousOne’s worldview and the lived arc of discovery 
-
 Plus validation and research folders:
 
 - docs/Validation.md  
