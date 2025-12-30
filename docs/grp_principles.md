@@ -1,5 +1,3 @@
----
-
 # **GRP Principles**  
 ### *Foundations of Relational Character Geometry*  
 *(Diagram‑Enhanced & Cross‑Linked Edition)*
