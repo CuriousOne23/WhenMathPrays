@@ -188,8 +188,8 @@ def plot_comparison(runners: list, subjects: list, output_dir: Path,
     # Complex plane
     ax1.axhline(y=0, color='gray', linestyle='--', alpha=0.3)
     ax1.axvline(x=0, color='gray', linestyle='--', alpha=0.3)
-    ax1.set_xlabel('Real (Ego ← → We)', fontsize=12)
-    ax1.set_ylabel('Imaginary (Hate ← → Love)', fontsize=12)
+    ax1.set_xlabel('Alone ↔ Together', fontsize=12)
+    ax1.set_ylabel('Connection ↔ Disconnection', fontsize=12)
     ax1.set_title('γ-space Trajectory', fontsize=14, fontweight='bold')
     ax1.legend(fontsize=9)
     ax1.grid(True, alpha=0.3)
