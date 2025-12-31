@@ -92,17 +92,17 @@ $$
 - **entropy_per_event=False** (default): Drift scales with time (realistic decay)
 - **entropy_per_event=True** (override): Fixed ΔS magnitude per event regardless of time spacing
 - Default effect: 
-  - **Real axis**: We-ness (positive real) decays toward Ego (negative real), approaching -150
-  - **Imaginary axis**: Love/Hate decays toward neutral (zero imaginary), emotional numbness
+  - **Real axis**: Togetherness (positive real) decays toward Alone (negative real), approaching -150
+  - **Imaginary axis**: Connection/Disconnection decays toward neutral (zero imaginary), emotional numbness
 - Configurable targets enable scenario-specific entropy modeling:
-  - **Hate-driven scenarios** (imag_target = -100): Emotional decay toward hatred instead of apathy
-  - **Ego-recovery** (real_target = -50): Less extreme isolation endpoint
+  - **Disconnection-driven scenarios** (imag_target = -100): Emotional decay toward disconnection instead of apathy
+  - **Alone-recovery** (real_target = -50): Less extreme isolation endpoint
   - **Different decay rates** allow modeling different relationship dimensions (e.g., fast emotional numbing, slow ego drift)
 - To maintain or grow Love/We requires continuous positive primitives to overcome entropy
 - **Physics advantage**: Axis independence eliminates ratio paradoxes (increasing decay on both axes was previously increasing slopes instead of flattening them)
   - **Q3 despair** (γ_attractor = -8-5j): Isolated ego sinking into enmity
-  - **Default deep ego** (γ_attractor = -150+0j): Natural relationship decay pulls toward profound isolation
-- To maintain or grow Love/We requires continuous positive primitives to overcome entropy
+  - **Default deep aloneness** (γ_attractor = -150+0j): Natural relationship decay pulls toward profound isolation
+- To maintain or grow Connection/Together requires continuous positive primitives to overcome entropy
 
 
 **Primitive normalization:**
@@ -124,8 +124,8 @@ w_f \cdot f & \text{if } f \geq 0
 $$
 
 Where:
-- Im = imaginary component of γ_self (love/hate axis)
-- 0.12 = scaling factor (negatives scale with love depth)
+- Im = imaginary component of γ_self (Connection/Disconnection axis)
+- 0.12 = scaling factor (negatives scale with connection depth)
 - 5.0 = ε (collapse prevention floor, even at origin betrayal stings)
 - w_f = 1.2 (positive healing rate)
 
@@ -134,7 +134,7 @@ Key behaviors:
 - Early dating (20i): f=-1 → -2.4i, f=-10 → -24i (fragile)
 - Deep love (150i): f=-1 → -18i, f=-10 → -180i (can reach battlefield)
 - Saint/Hachikō peak (250i): f=-1 → -30i, f=-10 → -300i (full range)
-- Psychology: "The deeper the love, the more betrayal can scar" — but only using Im (love depth), not Ego/We coupling
+- Psychology: "The deeper the love, the more betrayal can scar" — but only using Im (connection depth), not Alone/Together coupling
 
 ---
 
@@ -188,12 +188,12 @@ $$
 
 | Character Type | γ_self0 | Quadrant | Meaning |
 |----------------|---------|----------|---------|
-| Narcissist | (−3, −2) | Q3 | Ego + Hate baseline |
-| Saint | (2, 3) | Q1 | We + Love baseline |
+| Narcissist | (−3, −2) | Q3 | Alone + Disconnection baseline |
+| Saint | (2, 3) | Q1 | Together + Connection baseline |
 | Buddha | (0, 0) | Origin | Equanimous baseline |
-| Anxious attachment | (−1, 1) | Q2 | Ego + Love (needy) |
-| Secure baseline | (1, 1) | Q1 | Balanced We + Love |
-| Avoidant | (−2, 0) | Q3/origin | Ego, neutral affect |
+| Anxious attachment | (−1, 1) | Q2 | Alone + Connection (needy) |
+| Secure baseline | (1, 1) | Q1 | Balanced Together + Connection |
+| Avoidant | (−2, 0) | Q3/origin | Alone, neutral affect |
 
 **At initialization:** γ_self(0) = γ_self0
 
