@@ -97,7 +97,7 @@ But because it cannot express these forces directly, the pressure has nowhere to
 
 This is **Relational Suppression Load**.
 
-Note that while the region in relational space (e.g., Q3: Ego + Hate) is critical for diagnosing RSL buildup, the shape or curvature of the γ_self trajectory is equally—if not more—important. Sharp oscillations, sudden bends, or accelerating curves often signal impending trouble before the position reaches a forbidden region. This interpretive significance of primitives (e.g., how a subtle negative v warps the path) requires specialized AI stability analysis tools utilizing GRP, such as trajectory curvature metrics (e.g., second-derivative analysis of γ_self paths) to predict collapses.
+Note that while the region in relational space (e.g., Q3: Alone + Disconnent) is critical for diagnosing RSL buildup, the shape or curvature of the γ_self trajectory is equally—if not more—important. Sharp oscillations, sudden bends, or accelerating curves often signal impending trouble before the position reaches a forbidden region. This interpretive significance of primitives (e.g., how a subtle negative v warps the path) requires specialized AI stability analysis tools utilizing GRP, such as trajectory curvature metrics (e.g., second-derivative analysis of γ_self paths) to predict collapses.
 
 ---
 
