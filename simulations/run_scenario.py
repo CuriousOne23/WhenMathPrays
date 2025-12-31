@@ -340,16 +340,16 @@ class ScenarioRunner:
                 markeredgecolor='black')
         
         # Quadrant lines
-        ax1.axhline(0, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
-        ax1.axvline(0, color='black', linewidth=0.8, linestyle='--', alpha=0.3)
-        
-        # Quadrant labels
-        ax1.text(0.95, 0.95, 'Q1: We+Love', transform=ax1.transAxes, ha='right', va='top', 
+            ax1.text(0.95, 0.95, 'Q1: Together + Connection', transform=ax1.transAxes, ha='right', va='top', 
                 fontsize=9, style='italic', alpha=0.5)
-        ax1.text(0.05, 0.95, 'Q2: Ego+Love', transform=ax1.transAxes, ha='left', va='top',
+            ax1.text(0.05, 0.95, 'Q2: Alone + Connection', transform=ax1.transAxes, ha='left', va='top',
                 fontsize=9, style='italic', alpha=0.5)
-        ax1.text(0.05, 0.05, 'Q3: Ego+Hate', transform=ax1.transAxes, ha='left', va='bottom',
+            ax1.text(0.05, 0.05, 'Q3: Alone + Disconnection', transform=ax1.transAxes, ha='left', va='bottom',
                 fontsize=9, style='italic', alpha=0.5)
+            ax1.text(0.95, 0.05, 'Q4: Together + Disconnection', transform=ax1.transAxes, ha='right', va='bottom',
+                fontsize=9, style='italic', alpha=0.5)
+            ax1.set_xlabel('Alone ↔ Together', fontsize=11)
+            ax1.set_ylabel('Connection ↔ Disconnection', fontsize=11)
         ax1.text(0.95, 0.05, 'Q4: We+Hate', transform=ax1.transAxes, ha='right', va='bottom',
                 fontsize=9, style='italic', alpha=0.5)
         

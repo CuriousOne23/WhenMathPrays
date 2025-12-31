@@ -1195,7 +1195,7 @@ class InteractiveEditor:
         real_part, ok = QInputDialog.getDouble(
             self.window,
             "Edit Gamma_self_0",
-            f"Enter REAL part (Ego↔We axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +5\n  Exes (hurt): -5",
+            f"Enter REAL part (Alone ↔ Together axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +5\n  Exes (hurt): -5",
             value=current.real,
             decimals=1
         )
@@ -1207,7 +1207,7 @@ class InteractiveEditor:
         imag_part, ok = QInputDialog.getDouble(
             self.window,
             "Edit Gamma_self_0",
-            f"Enter IMAGINARY part (Hate↔Love axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +8\n  Exes (hurt): -3",
+            f"Enter IMAGINARY part (Connection ↔ Disconnection axis):\n\nCurrent: {current.real:+.1f}{current.imag:+.1f}j\n\nExamples:\n  Strangers: 0\n  Friends: +8\n  Exes (hurt): -3",
             value=current.imag,
             decimals=1
         )

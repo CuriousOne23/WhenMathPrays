@@ -25,7 +25,68 @@ This document defines:
 - their behavioral signatures (especially for AI systems)  
 - how they shape relational geometry and drift  
 
+
 This is the semantic foundation of GRP.
+
+---
+
+# **GRP Coordinate System: Axes, Quadrants, and γ_self Positioning**
+
+## Axes Definitions
+
+**REAL AXIS (horizontal):**
+- Name: Alone ↔ Together
+- Description: Represents the degree of relational coupling between agents. 
+  “Alone” indicates separation, isolation, or self-contained stance.
+  “Together” indicates mutual presence, shared stance, or relational synchrony.
+
+**IMAGINARY AXIS (vertical):**
+- Name: Connection ↔ Disconnection
+- Description: Represents the quality of relational attunement.
+  “Connection” indicates attunement, resonance, and relational presence.
+  “Disconnection” indicates rupture, misattunement, abandonment, or emotional absence.
+
+## Quadrant Definitions
+
+**Q1 (Together + Connection):**
+	Attunement, mutual presence, supportive relational field.
+
+**Q2 (Alone + Connection):**
+	Loved but separate; solitude with attunement; reflective independence.
+
+**Q3 (Alone + Disconnection):**
+	Isolation, abandonment, grief, loneliness, rupture.
+
+**Q4 (Together + Disconnection):**
+	Conflict, tension, resentment, forced proximity without attunement.
+
+## γ_self Positioning: Angles and Archetypes
+
+Angles (relative to axes):
+1. (0°, 0): Buddhist stillness (centered, balanced)
+2. 180°: narcissist – pure ego, no pull (Alone, neutral Connection/Disconnection)
+3. +90°: soulmate zone – no ego, pure draw (Together, pure Connection)
+4. +45°: mature marriage – fused but stable (Together + Connection, Q1)
+5. +45°: parent, invested in love (Together + Connection, Q1)
+6. +135°: Ego Dating – want them, but mostly for self (Alone + Connection, Q2)
+7. -90°: battlefield hate – erase without ego (Together, pure Disconnection)
+8. -45°: quiet resentment – unhappy marriage/family/job (Together + Disconnection, Q4)
+9. -135°: revenge – selfish push to watch them lose (Alone + Disconnection, Q3)
+
+### Archetypal Distributions (Examples)
+
+Distribution shapes about space angle definitions:
+1. Buddhist: tiny symmetric circle about (0,0), equally distributed
+2. Narcissist: horizontal oval, biased on the Alone axis
+3. Dating: thin vertical oval (mostly upward), centered, biased on the 135°, in Q2
+4. Mature Marriage: Circle but contained in Q1, center biased along 45°
+5. Parent: teardrop – long right, short down, spreading out as gaining magnitude along 45° in Q1
+6. Ego Dating: Oval along 135°, center biased along 135° in Q2
+7. (Soldier in the battlefield)/divorce: vertical oval, deep down, biased and centered on the -Im line (Together, Disconnection)
+8. Unhappy marriage: tight circle, low kurtosis, contained in Q4, biased along -45° away from center
+9. Unhappy Corporate employee: skewed teardrop (narrow going to (0,0)), sudden cliff on hate side, biased and centered on the -135° line, in Q3
+
+---
 
 ---
 
