@@ -80,6 +80,8 @@ This document provides a comprehensive index of all documentation in the WhenMat
 ### **GRP Theory & Research**
 - **[grp_principles.md](grp_principles.md)** — Field‑founding principles of GRP, introducing relational character geometry, γ_self, relational motion, asymmetry, stability basins, rupture/repair dynamics, and the conceptual ontology of the framework.
 
+- **[FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md](FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md) — A formal supposition proposing that rigid boundaries imposed on fuzzy semantic categories may induce geometric instability in coherence‑seeking systes, potentially contributing to drift or ISL‑like behavior. Outlines candidate solution spaces and invites future research.
+
 - **[GRP_GLOSSARY.md](GRP_GLOSSARY.md)** — Canonical dictionary of GRP terminology. Defines relational manifold, meaning field, stability basins, relational asymmetry, RSL, technical diary, rupture, repair paths, and all core geometric concepts used throughout the framework.
 
 ### **Gamma Self Research**
