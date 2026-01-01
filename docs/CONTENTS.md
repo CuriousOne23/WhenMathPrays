@@ -82,6 +82,11 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 - **[FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md](FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md) — A formal supposition proposing that rigid boundaries imposed on fuzzy semantic categories may induce geometric instability in coherence‑seeking systes, potentially contributing to drift or ISL‑like behavior. Outlines candidate solution spaces and invites future research.
 
+- **[UNIFIED_STABILITY_FRAMEWORK_NOTES.md](UNIFIED_STABILITY_FRAMEWORK_NOTES.md) — Early-stage synthesis exploring how geometric, 
+information-theoretic, distributional, RLHF, cognitive, and thermodynamic perspectives 
+may unify into a single stability criterion for coherence-seeking AI systems. 
+Captures speculative discussion and future research directions.
+
 - **[GRP_GLOSSARY.md](GRP_GLOSSARY.md)** — Canonical dictionary of GRP terminology. Defines relational manifold, meaning field, stability basins, relational asymmetry, RSL, technical diary, rupture, repair paths, and all core geometric concepts used throughout the framework.
 
 ### **Gamma Self Research**
@@ -90,7 +95,10 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[Gamma_Self_Character_Map.png](Gamma_Self_Character_Map.png)** — Visual representation of gamma self characteristics
 
 ### **Communication & Protocols**
-- **[baseline_communication_protocol.md](baseline_communication_protocol.md)** — Communication protocol specifications, time index CSV format 
+- **[baseline_communication_protocol.md](baseline_communication_protocol.md)** — Communication protocol specifications, time index CSV format
+
+
+
 
 ---
 
