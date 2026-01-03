@@ -47,6 +47,20 @@ This is the semantic foundation of GRP.
   “Connection” indicates attunement, resonance, and relational presence.
   “Disconnection” indicates rupture, misattunement, abandonment, or emotional absence.
 
+### Related Document: γ_self Coordinate System
+
+The movement of γ_self through relational space — including its axes, quadrants, angles, and distribution shapes — is defined in a companion document:
+
+**[`gamma_self_love_space_defined.md`](./gamma_self_love_space_defined.md)**
+
+This file provides the geometric foundation for γ_self, including:
+- the Identity (Re) and Force (Im) axes  
+- quadrant definitions  
+- key relational angles (e.g., soulmate zone, narcissist, battlefield hate)  
+- distribution shapes for different relational archetypes  
+
+Together, this document and *PRIMITIVES_AND_RELATIONAL_SPACE.md* form the unified ontology for GRP relational geometry.
+
 ## Quadrant Definitions
 
 **Q1 (Together + Connection):**
