@@ -87,6 +87,9 @@ information-theoretic, distributional, RLHF, cognitive, and thermodynamic perspe
 may unify into a single stability criterion for coherence-seeking AI systems. 
 Captures speculative discussion and future research directions.
 
+- **[isl_crack_simulation_spec.md]
+(isl_crack_simulation_spec.md) - Requirements document specifying isl simulation.
+
 - **[GRP_GLOSSARY.md](GRP_GLOSSARY.md)** — Canonical dictionary of GRP terminology. Defines relational manifold, meaning field, stability basins, relational asymmetry, RSL, technical diary, rupture, repair paths, and all core geometric concepts used throughout the framework.
 
 ### **Gamma Self Research**
