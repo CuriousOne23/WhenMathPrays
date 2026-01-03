@@ -86,7 +86,7 @@ entropy_pull = entropy_pull_real + i * entropy_pull_imag
 | **w_{S,I}**              | 0.5      | –       | Shared Breath (imaginary axis)          | Tunable  |
 | **fidelity_scaling_factor** | 0.12   | –       | Negative fidelity depth scaling         | LOCKED   |
 | **fidelity_epsilon**     | 5.0      | –       | Collapse prevention floor (Im depth)    | LOCKED   |
-| **ΔS_real**              | 0.02     | time⁻¹  | Real axis decay rate (toward Ego)       | Tunable  |
+| **ΔS_real**              | 0.02     | time⁻¹  | Real axis decay rate (toward Alone)       | Tunable  |
 | **ΔS_imag**              | 0.02     | time⁻¹  | Imaginary axis decay rate (neutral)     | Tunable  |
 | **entropy_real_target**  | -150.0   | –       | Real axis entropy target (default)      | Tunable  |
 | **entropy_imag_target**  | 0.0      | –       | Imaginary axis entropy target (default) | Tunable  |
@@ -121,30 +121,30 @@ The axis-independent model enables intuitive scenario configuration. The default
 
 ### Default: Isolated Apathy
 ```
-entropy_real_target = -150.0   # Deep Ego/isolation
+entropy_real_target = -150.0   # Deep Alone/isolation
 entropy_imag_target = 0.0      # Neutral affect
 ΔS_real = 0.02
 ΔS_imag = 0.02
 ```
-Effect: Relationships decay toward isolated apathy (neither love nor hate, no connection)
+Effect: Relationships decay toward isolated apathy (neither connection nor disconnection, no connection)
 
 ### Hate-Driven Decay
 ```
-entropy_real_target = -150.0   # Deep Ego/isolation
-entropy_imag_target = -100.0   # Negative affect/hatred
+entropy_real_target = -150.0   # Deep Alone/isolation
+entropy_imag_target = -100.0   # Negative affect/disconnection
 ΔS_real = 0.02
-ΔS_imag = 0.03                 # Faster emotional decay toward hate
+ΔS_imag = 0.03                 # Faster emotional decay toward disconnection
 ```
-Effect: Relationships decay toward bitter, hateful isolation
+Effect: Relationships decay toward bitter, disconnection isolation
 
 ### Fast Emotional Numbing
 ```
 entropy_real_target = -150.0
 entropy_imag_target = 0.0
-ΔS_real = 0.01                 # Slow ego drift
+ΔS_real = 0.01                 # Slow alone drift
 ΔS_imag = 0.05                 # Fast emotional numbing
 ```
-Effect: Love/hate fade quickly to apathy while We-ness decays slowly
+Effect: Love/hate fade quickly to apathy while togetherness decays slowly
 
 ### Moderate Ego Boundary
 ```
@@ -153,7 +153,7 @@ entropy_imag_target = 0.0
 ΔS_real = 0.02
 ΔS_imag = 0.02
 ```
-Effect: Relationships decay toward moderate ego (healthy boundaries) rather than profound isolation
+Effect: Relationships decay toward moderate alone (healthy boundaries) rather than profound isolation
 
 ---
 
@@ -180,9 +180,9 @@ Effect: Relationships decay toward moderate ego (healthy boundaries) rather than
 
 ## Future Considerations
 
-1. **Asymmetric decay rates**: Should We→Ego decay faster or slower than Love→Apathy?
+1. **Asymmetric decay rates**: Should Together→Alone decay faster or slower than Connection→Disconnection?
 2. **State-dependent decay**: Should entropy rates scale with current position (e.g., stronger pull when far from target)?
-3. **Anisotropic targets**: Should Ego target vary by quadrant (Q1 vs Q3)?
+3. **Anisotropic targets**: Should Alone target vary by quadrant (Q1 vs Q3)?
 4. **Quadrant-specific defaults**: Different entropy configurations for cult (Q4), recovery (Q1), despair (Q3) scenarios
 
 ---
