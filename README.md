@@ -1,4 +1,4 @@
-# 🌱 **README.md — Synthetic-Life-Framework**
+# 🌱 **README.md — Gamma Relational Persona **
 
 **I’m not an AI engineer.**  
 I come to this work from a different angle — one shaped by lived experience, emotional dynamics, and the observation that our current vocabulary for intelligence is no longer keeping up with the systems we’re building.
