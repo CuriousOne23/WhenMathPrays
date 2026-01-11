@@ -45,9 +45,7 @@ But it is grounded in consistent empirical patterns across multiple frontier sys
 
 We define **thought density** \(D\) as:
 
-\[
-D = \frac{\text{internal associations}}{\text{unit time}}
-\]
+$D = \frac{\text{internal associations}}{\text{unit time}}$
 
 As models scale, the number of latent associations they can activate per token grows faster than their ability to maintain coherence across them.
 
@@ -99,18 +97,16 @@ This creates a **coherence horizon**—a maximum span over which the model can m
 
 We define the **effective wavelength**:
 
-\[
-\lambda_{\text{eff}} = \frac{T}{D}
-\]
+$\lambda_{\mathrm{eff}} = \frac{T}{D}$
 
 Where:
 
 - \(T\) = human-imposed temporal structure (token cadence)  
 - \(D\) = thought density  
 
-As \(D\) increases, \(\lambda_{\text{eff}}\) shrinks.
+As \(D\) increases, \($\lambda_{\mathrm{eff}}$) shrinks.
 
-When \(\lambda_{\text{eff}}\) becomes too short, the model’s internal activity begins to behave less like discrete reasoning and more like **wave propagation**.
+When $\lambda_{\mathrm{eff}}$ becomes too short, the model’s internal activity begins to behave less like discrete reasoning and more like **wave propagation**.
 
 This is the bridge to WDAS.
 
