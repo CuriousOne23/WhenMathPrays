@@ -2,6 +2,8 @@
 **Open‑source research into relational geometry, stability, rupture, and AI behavior**  
 **Licensed under the MIT License — see `LICENSE.md`**  
 **Contributions welcome — join the conversation at #WhenMathPrays on X**
+This project is supported by community contributions.  
+See **[FUNDING.md](FUNDING.md)** for information on how to support or sustain the work.
 
 ---
 
@@ -90,6 +92,7 @@ This document explains:
 - **CONSTANTS.md**  
 - **PRIMITIVES_AND_RELATIONAL_SPACE.md**  
 - **GRP_GLOSSARY.md**
+- **[FUNDING.md](FUNDING.md)** — information on supporting the project
 
 These documents form the backbone of the GRP knowledge base.
 
@@ -131,6 +134,7 @@ Each scenario is linked from **STARTHERE.md** and follows **CSV_FORMAT.md**.
 
 This project is open source under the **MIT License**.  
 See **`LICENSE.md`** for full terms.
+If you would like to support the ongoing development of GRP, see **[FUNDING.md](FUNDING.md)** for ways to contribute.
 
 ### **How to engage**
 - Open an **Issue** in this repository  
