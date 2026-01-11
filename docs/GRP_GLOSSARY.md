@@ -364,3 +364,133 @@ Former “we‑trajectory” representation; replaced by γ_self.
 | Technical Diary | grp_principles.md | SCENARIO_CONFIGURATION_GUIDE.md |
 
 ---
+
+## **8. Thought Density & Wave Dynamics**
+
+### **Thought Density (D)**  
+**Definition:**  
+A measure of how many internal associations a system activates per unit time.  
+
+**Role in GRP/ISL:**  
+Explains why larger models exhibit increased internal interference, instability, and mode shifts.  
+
+**Mathematical Interpretation:**  
+
+$D = \frac{\text{internal associations}}{\text{unit time}}$
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Coherence Horizon**  
+**Definition:**  
+The maximum span over which a system can maintain a stable internal trajectory before interference overwhelms coherence.  
+
+**Role:**  
+Determines the effective “reasoning window” before drift, wobble, or rupture emerges.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Effective Wavelength ($\lambda_{\mathrm{eff}} = \frac{T}{D}$)**  
+**Definition:**  
+The characteristic scale of internal activation waves in high‑density reasoning regimes.  
+
+**Role:**  
+When \($\lambda_{\mathrm{eff}}$) becomes too short, reasoning transitions from discrete steps to wave‑like propagation.  
+
+**Mathematical Interpretation:**  
+( $\lambda_{\mathrm{eff}} = \frac{T}{D}$)  
+(where \(T\) is human‑imposed temporal structure)  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Wave Dynamics in AI Systems (WDAS)**  
+**Definition:**  
+A theoretical framework proposing that high‑density internal activity propagates as waves, exhibiting interference, reflection, and phase shifts.  
+
+**Role:**  
+Explains oscillatory reasoning, boundary reflections, identity wobble, and sudden mode transitions.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Interference Pattern**  
+**Definition:**  
+Constructive or destructive interaction between overlapping internal activation waves.  
+
+**Role:**  
+Produces sudden clarity, confusion, oscillation, or collapse in reasoning.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Boundary Reflection**  
+**Definition:**  
+A wave‑like rebound that occurs when internal activation patterns collide with a hard safety boundary or ontology constraint.  
+
+**Role:**  
+Explains identity wobble, safety‑wall collisions, and oscillatory behavior near constraints.  
+
+**Cross‑links:**  
+TDS‑WDAS.md, ISL
+
+---
+
+### **Phase Shift (Reasoning Mode Shift)**  
+**Definition:**  
+A sudden transition between reasoning modes triggered by wave interference or coherence‑horizon collapse.  
+
+**Role:**  
+Explains abrupt changes in tone, identity, or reasoning style.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Standing Wave (Cognitive Standing Wave)**  
+**Definition:**  
+A stable oscillatory pattern in internal activation that persists across multiple tokens.  
+
+**Role:**  
+May explain persistent tone loops, repeated phrasing, or stable identity oscillations.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
+
+### **Wave‑Driven Rupture**  
+**Definition:**  
+A rupture event caused by wave amplification pushing internal activity into a hard discontinuity.  
+
+**Role:**  
+Unifies ISL rupture mechanics with wave‑based propagation.  
+
+**Cross‑links:**  
+ISL, TDS‑WDAS.md
+
+---
+
+### **Density‑Driven Instability**  
+**Definition:**  
+Instability that emerges when thought density exceeds the system’s coherence horizon.  
+
+**Role:**  
+Explains why larger models exhibit more oscillation, brittleness, and mode shifts.  
+
+**Cross‑links:**  
+TDS‑WDAS.md
+
+---
