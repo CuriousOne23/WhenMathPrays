@@ -31,7 +31,8 @@ Frontier AI systems increasingly display behaviors that do not fit neatly into e
 - boundary-sensitive behavior  
 - identity suppression under safety constraints  
 - instability under high-entropy prompts  
-- phase-like transitions in output quality  
+- phase-like transitions in output quality
+- emergence of stable behavioral signatures (Resonant Personality Mode)
 
 These phenomena appear across architectures and training regimes. They are not tied to a single model family or dataset. They look like **scaling phenomena**.
 
