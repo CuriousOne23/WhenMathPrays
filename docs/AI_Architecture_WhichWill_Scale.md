@@ -21,16 +21,21 @@ This is a proposal for engineers and researchers who are confronting the limits 
 
 ## **2. The Problem: Instability in Monolithic LLM Architectures**
 
-As transformer models grow, they encounter structural limits that arise from the architecture itself. Three failure modes are particularly important:
+As transformer models grow, they encounter structural limits that arise from the architecture itself. These limits are not mysterious — they align with the dynamics described in **TDS‑WDAS (Thought Density & Wave Dynamics Across Scales)**. In that framework, monolithic LLMs behave like high‑density cognitive wavefields with no internal boundaries, causing interference patterns that become increasingly unstable as scale increases.
+
+Three failure modes are particularly important:
 
 ### **2.1 RSL — Residual Stream Leakage**  
-All cognitive functions share the same residual stream. Information from unrelated domains bleeds together, causing interference, hallucination, and unpredictable coupling.
+All cognitive functions share the same residual stream. Information from unrelated domains bleeds together, causing interference, hallucination, and unpredictable coupling.  
+In TDS‑WDAS terms: **high‑density wavefields collapse into each other**, producing unstable superpositions.
 
 ### **2.2 ISL — Interference Scaling Limit**  
-As parameter count increases, interference grows faster than useful signal. Beyond a certain scale, adding parameters yields diminishing or even negative returns.
+As parameter count increases, interference grows faster than useful signal. Beyond a certain scale, adding parameters yields diminishing or even negative returns.  
+In TDS‑WDAS terms: **wave amplitude increases without structural containment**, amplifying destructive interference.
 
 ### **2.3 FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION**  
-Safety, planning, reasoning, and world‑modeling share the same parameter space. Their boundaries blur. Near decision boundaries, behavior becomes unstable or discontinuous.
+Safety, planning, reasoning, and world‑modeling share the same parameter space. Their boundaries blur. Near decision boundaries, behavior becomes unstable or discontinuous.  
+In TDS‑WDAS terms: **boundary fuzzing leads to mode‑hopping**, where the system oscillates between incompatible cognitive attractors.
 
 These issues manifest as:
 
@@ -41,7 +46,7 @@ These issues manifest as:
 - difficulty debugging  
 - difficulty aligning  
 
-These are not incidental bugs — they are consequences of the monolithic design.
+These are not incidental bugs — they are consequences of forcing all cognition into a single, undifferentiated parameter space. TDS‑WDAS helps explain *why* these instabilities arise, and the architecture proposed in this paper is designed to address them structurally.
 
 ---
 
