@@ -320,10 +320,58 @@ Former “we‑trajectory” representation; replaced by γ_self.
 
 ---
 
-# **8. Thought Density & Wave Dynamics (TDS–WDAS)**  
-*(Section fully replaced — Option A)*
+## 8. Modular LLM Architecture (Inference‑Time Concepts)
+
+### Integrator Dispatch
+The inference‑time module responsible for routing user input to the appropriate specialists in a strictly feed‑forward manner. It performs task decomposition, determines which modules are relevant, and fans out the input without recurrence.
+
+### Integrator Merge
+The inference‑time module that merges specialist outputs into a unified representation. It performs synthesis, conflict resolution, and coherence shaping before the safety gate evaluates the result.
+
+### Specialists (Architectural Group)
+A formally defined set of isolated modules, each trained on a distinct cognitive domain. Specialists operate in their own parameter spaces and contribute domain‑specific reasoning without interfering with one another.
+
+### Planning LLM
+A specialist trained exclusively on planning, decomposition, and multi‑step reasoning. Optimized for task structuring, sequencing, and goal‑directed analysis.
+
+### World Model LLM
+A specialist trained on causal structure, physical reasoning, and environmental prediction. Provides grounded expectations about how systems behave.
+
+### Retrieval LLM
+A specialist optimized for grounding, fact recall, and external knowledge integration. Ensures that reasoning remains anchored to verifiable information.
+
+### Creativity LLM
+A specialist trained on divergent thinking, generative variation, and ideation. Produces novel concepts, reframings, and creative expansions.
+
+### Safety LLM
+A specialist with its own training data and objectives, responsible for evaluating potential harms, policy violations, and unsafe trajectories.
+
+### Safety Gate
+A one‑pass inference‑time veto mechanism that evaluates the merged output and blocks or modifies unsafe responses. It does not participate in recurrence or refinement.
+
+### Feed‑Forward Specialist Orchestration
+The inference pattern in which the integrator dispatches input, specialists run independently, the integrator merges their outputs, and the safety gate evaluates the result. No cycles or iterative refinement occur.
+
+### Fan‑Out / Fan‑In Geometry
+The structural inference pattern where input fans out to multiple specialists and fans back into the integrator. This geometry enforces strict feed‑forward flow and prevents implicit feedback loops.
 
 ---
+
+## 9. Modular LLM Architecture (Training‑Time Concepts)
+
+### Parameter‑Space Isolation
+A training principle in which each specialist maintains its own weights, data, and objectives. Prevents cross‑domain interference and preserves domain purity.
+
+### Multi‑Objective Modular Training
+A training regime where each specialist is optimized independently for its domain, while the integrator is trained to coordinate their outputs. Enables modular upgrades without destabilizing the system.
+
+### Cross‑Module Coherence
+A training requirement ensuring that independently trained specialists remain compatible at inference time. Achieved through interface constraints, shared schemas, and integrator‑level alignment.
+
+---
+
+# **10. Thought Density & Wave Dynamics (TDS–WDAS)**  
+*(Section fully replaced — Option A)*
 
 ## **Thought Density (D)**  
 **Definition:**  
@@ -333,6 +381,11 @@ A measure of how many internal associations a system activates per unit time.
 ```
 D = internal_associations / unit_time
 ```
+### ISL — Interference Scaling Limit
+The point at which interference between cognitive domains grows faster than useful signal as model size increases. A structural limit of monolithic architectures that motivates modular decomposition.
+
+### FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION
+A form of instability that arises when cognitive domains share an undifferentiated parameter space. Causes mode‑hopping, discontinuity, and unpredictable transitions between reasoning styles.
 
 **Role:**  
 Primary scaling variable driving interference, instability, and wave‑like behavior.
