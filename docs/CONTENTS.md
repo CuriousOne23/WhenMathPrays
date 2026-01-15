@@ -74,6 +74,10 @@ This document provides a comprehensive index of all documentation in the WhenMat
 
 
 # 🔬 **Research & Theory**
+
+- [AI_Architecture_WhichWill_Scale.md](AI_Architecture_WhichWill_Scale.md)  
+  A modular, feed‑forward LLM architecture grounded in GRP, ISL, and fuzzy‑boundary instability theory. Defines the scalable structural blueprint for future GRP‑aligned systems.
+  
 ### **Relational Primitives & Space**
 - **[PRIMITIVES_AND_RELATIONAL_SPACE.md](PRIMITIVES_AND_RELATIONAL_SPACE.md)** — Defines the five relational primitives (Visibility, Resonance, Fidelity, Altruism, Shared Breath) and the geometry of relational space in GRP, including their positive/negative poles and behavioral signatures in both human and AI contexts.
 
