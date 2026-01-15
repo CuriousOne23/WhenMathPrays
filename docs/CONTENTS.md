@@ -100,9 +100,6 @@ Captures speculative discussion and future research directions.
 ### **Communication & Protocols**
 - **[baseline_communication_protocol.md](baseline_communication_protocol.md)** — Communication protocol specifications, time index CSV format
 
-
-
-
 ---
 
 # ⚙️ **Configuration & Setup**
