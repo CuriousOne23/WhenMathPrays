@@ -82,10 +82,12 @@ This architecture replaces the monolithic model with a **federation of specializ
 ### **4.1 High‑Level Modular Architecture**
 
 ```mermaid
-flowchart LR
-    U[User Input] --> I[Integrator LLM]
+flowchart TB
+    U[User Input] --> ID[Integrator Dispatch]
 
-    subgraph Specialists
+    %% Specialists group with yellow background
+    subgraph SPEC[Specialists]
+        direction TB
         P[Planning LLM]
         W[World Model LLM]
         S[Safety LLM]
@@ -93,19 +95,25 @@ flowchart LR
         C[Creativity LLM]
     end
 
-    I --> P
-    I --> W
-    I --> S
-    I --> R
-    I --> C
+    %% Style the Specialists block
+    style SPEC fill:#fff8b3,stroke:#d4b100,stroke-width:2px
 
-    P --> I
-    W --> I
-    S --> I
-    R --> I
-    C --> I
+    %% Fan-out from Dispatch Integrator
+    ID --> P
+    ID --> W
+    ID --> S
+    ID --> R
+    ID --> C
 
-    I --> O[Final Output]
+    %% Fan-in to Merge Integrator
+    P --> IM[Integrator Merge]
+    W --> IM
+    S --> IM
+    R --> IM
+    C --> IM
+
+    %% Final Output
+    IM --> O[Final Output]
 ```
 
 ### **4.2 Parameter‑Space Isolation**
@@ -142,16 +150,41 @@ flowchart LR
 ### **4.3 Safety as a First‑Class Module**
 
 ```mermaid
-flowchart LR
-    U[User Input] --> I[Integrator LLM]
+flowchart TB
+    U[User Input] --> ID[Integrator Dispatch]
 
-    I --> S[Safety LLM]
-    I --> X[Other Specialists]
+    %% Specialists group with yellow background
+    subgraph SPEC[Specialists]
+        direction TB
+        P[Planning LLM]
+        W[World Model LLM]
+        R[Retrieval LLM]
+        C[Creativity LLM]
+    end
 
-    S -->|Safety Judgment| I
-    X --> I
+    style SPEC fill:#fff8b3,stroke:#d4b100,stroke-width:2px
 
-    I --> O[Final Output]
+    %% Fan-out from Dispatch Integrator
+    ID --> P
+    ID --> W
+    ID --> R
+    ID --> C
+
+    %% Safety receives the same dispatch input
+    ID --> S[Safety LLM]
+
+    %% Fan-in to Merge Integrator
+    P --> IM[Integrator Merge]
+    W --> IM
+    R --> IM
+    C --> IM
+
+    %% Safety gating (one-pass, no feedback)
+    S --> G[Safety Gate]
+    IM --> G
+
+    %% Final Output
+    G --> O[Final Output]
 ```
 
 Safety becomes **visible**, **auditable**, and **controllable**.
