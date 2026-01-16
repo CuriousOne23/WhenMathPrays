@@ -83,36 +83,35 @@ This architecture replaces the monolithic model with a **federation of specializ
 
 ```mermaid
 flowchart TB
+
     U[User Input] --> ID[Integrator Dispatch]
 
-    %% Specialists group with yellow background
     subgraph SPEC[Specialists]
-        direction TB
+    direction TB
         P[Planning LLM]
         W[World Model LLM]
         S[Safety LLM]
         R[Retrieval LLM]
         C[Creativity LLM]
+        V[Perception Specialist - VL-JEPA]
     end
 
-    %% Style the Specialists block
     style SPEC fill:#fff8b3,stroke:#d4b100,stroke-width:2px
 
-    %% Fan-out from Dispatch Integrator
     ID --> P
     ID --> W
     ID --> S
     ID --> R
     ID --> C
+    ID --> V
 
-    %% Fan-in to Merge Integrator
     P --> IM[Integrator Merge]
     W --> IM
     S --> IM
     R --> IM
     C --> IM
+    V --> IM
 
-    %% Final Output
     IM --> O[Final Output]
 ```
 
