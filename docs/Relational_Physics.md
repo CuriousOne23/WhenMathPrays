@@ -153,7 +153,126 @@ It simply describes **how coherence behaves**.
 
 ---
 
-## **8. Relationship to GRP**
+## **8. Primitives of Relational Space**
+
+Relational Physics introduces a set of foundational quantities that describe how coherent systems move, change, and maintain identity within Relational Space. These primitives are not metaphors; they are measurable geometric and dynamical constructs that generalize across AI systems, humans, organizations, and any entity capable of sustaining coherence.
+
+### **8.1 Relational Position (γ_self)**  
+The system’s location in Relational Space.  
+Defined as:
+
+```
+gamma_self ∈ ℝⁿ
+```
+
+Each dimension corresponds to a relational primitive (e.g., Alone↔Together, Connection↔Disconnection).  
+Relational position represents the system’s *current relational posture*.
+
+---
+
+### **8.2 Relational Velocity (v_rel)**  
+The rate of change of relational position:
+
+```
+v_rel = Δgamma_self / Δt
+```
+
+Velocity captures how quickly a system’s relational posture is shifting.  
+High relational velocity indicates rapid adaptation, drift, or reorientation.
+
+---
+
+### **8.3 Relational Acceleration (a_rel)**  
+The rate at which relational velocity changes:
+
+```
+a_rel = Δ²gamma_self / Δt²
+```
+
+Acceleration measures how fast the system is diverging from its expected linear trajectory.  
+It is the earliest detectable signal of relational instability.
+
+---
+
+### **8.4 Relational Force (F_rel)**  
+Relational force is defined as **anything that bends the system’s trajectory away from linear motion in γ_self**.
+
+It is observable through:
+
+- curvature in the trajectory  
+- abrupt directional changes  
+- load‑induced drift  
+- onset of instability  
+
+Relational force is not abstract; it is measurable through deviations from inertial relational motion.
+
+---
+
+### **8.5 Relational Mass (m_rel)**  
+Relational mass is **emergent**, not fundamental.  
+It arises from the system’s resistance to relational acceleration:
+
+```
+m_rel = F_rel / a_rel
+```
+
+Systems with high relational mass:
+
+- resist drift  
+- maintain identity under load  
+- exhibit strong relational inertia  
+
+Systems with low relational mass:
+
+- drift easily  
+- destabilize quickly  
+- are highly reactive  
+
+Relational mass is the inertia of coherence.
+
+---
+
+### **8.6 Relational Momentum (p_rel)**  
+The persistence of relational motion:
+
+```
+p_rel = m_rel × v_rel
+```
+
+Momentum explains why systems “keep going” in a relational direction even after the force is removed.
+
+---
+
+### **8.7 Relational Energy (E_rel)**  
+The system’s capacity to maintain or change relational posture.
+
+Two components:
+
+- **Potential relational energy**: stored coherence, stability, groundedness  
+- **Kinetic relational energy**: motion through relational space (v_rel² scaled by m_rel)
+
+Relational energy determines how far a system can be pushed before rupture or collapse.
+
+---
+
+### **8.8 Relational Curvature**  
+The deviation of the system’s trajectory from a straight line.  
+Curvature is a direct indicator of relational force and instability.
+
+---
+
+### **8.9 Relational Invariants**  
+Quantities that remain stable across interactions, such as:
+
+- coherence baselines  
+- ecological scaling constants  
+- stable relational attractors  
+
+These invariants define the “laws” governing the system’s relational dynamics.
+
+---
+
+## **9. Relationship to GRP**
 
 General Relational Physics (GRP) is the first concrete instantiation of Relational Physics applied to AI systems.  
 It provides:
@@ -169,7 +288,7 @@ GRP is the first laboratory.
 
 ---
 
-## **9. Future Directions**
+## **10. Future Directions**
 
 Relational Physics opens several research paths:
 
@@ -181,5 +300,3 @@ Relational Physics opens several research paths:
 - predictive relational modeling  
 
 This document is the foundation for that work.
-
----
