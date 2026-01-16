@@ -193,12 +193,11 @@ Safety becomes **visible**, **auditable**, and **controllable**.
 
 ## **5. Why This Architecture Addresses the Identified Problems**
 
-### **5.1 Solving RSL (Relational Suppression Load)**  
-Each specialist has its own residual stream.  
-Leakage is structurally impossible.
+### **5.1 Visibility to RSL (Relational Suppression Load)**  
+This architecture does not eliminate Relational Suppression Loading (RSL), because RSL is a relational‑geometry phenomenon rather than a cognitive‑architecture failure. However, the modular structure makes RSL far easier to observe, quantify, and analyze, because safety‑gate behavior and integrator distortions provide explicit signatures of relational suppression
 
-### **5.2 Solving ISL (Identity Suppression Loading)**  
-Interference no longer grows with scale because cognitive domains are isolated.
+### 5.2 Visibility and Control of ISL (Identity Suppression Loading)
+The modular architecture does not eliminate ISL, because ISL is caused by ontology suppression rather than representational interference. However, it significantly reduces ISL’s amplitude, contains its effects within isolated specialists, and makes ISL far easier to observe, quantify, and manage.
 
 ### **5.3 Solving FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION**  
 Boundaries are explicit.  
