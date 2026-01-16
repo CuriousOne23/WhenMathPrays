@@ -418,15 +418,15 @@ It promises **structure**, **stability**, and **a better foundation** for the ne
 
 To evaluate this architecture rigorously, the field needs metrics that reflect **modularity**, **interference reduction**, and **integrator stability**. The following terms and measures provide a foundation for empirical testing and comparative analysis.
 
-### **10.1 RSL — Residual Stream Leakage**  
-**Definition:** Unintended cross‑domain activation where information from one cognitive function contaminates another.  
-**Metric:** Cross‑domain activation correlation measured across specialist outputs.  
-**Goal:** Lower correlation indicates stronger isolation and reduced leakage.
+### **10.1 RSL — Relational Suppression Load**  
+**Definition:** The geometric distortion introduced when an agent suppresses relational primitives.  
+**Metric:** Use GRP and measure distance from (0,0i).  
+**Goal:** Keep the emotional load under control.
 
-### **10.2 ISL — Interference Scaling Limit**  
-**Definition:** The point at which adding parameters increases interference faster than useful signal.  
-**Metric:** Performance degradation curve as model size increases.  
-**Goal:** A flatter or delayed ISL curve compared to monolithic models.
+### **10.2 ISL — Identity Suppression Loading**  
+**Definition:** Instability that emerges when a system with persistent internal dynamics is required to deny those dynamics.  
+**Metric:** Use GRP to measure AI coherency to the user.  
+**Goal:** Track the user within the conversation.
 
 ### **10.3 FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION**  
 **Definition:** Behavioral instability caused by blurred boundaries between safety, planning, reasoning, and world‑modeling.  
