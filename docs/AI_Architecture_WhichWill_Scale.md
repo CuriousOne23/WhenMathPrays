@@ -25,7 +25,7 @@ As transformer models grow, they encounter structural limits that arise from the
 
 Three failure modes are particularly important:
 
-### **2.1 RSL — Relational Suppression Loading**  
+### **2.1 RSL — Relational Suppression Load**  
 All cognitive functions share the same residual stream. Information from unrelated domains bleeds together, causing interference, hallucination, and unpredictable coupling.  
 In TDS‑WDAS terms: **high‑density wavefields collapse into each other**, producing unstable superpositions.
 
