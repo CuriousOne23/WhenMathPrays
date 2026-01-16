@@ -93,7 +93,8 @@ flowchart TB
         S[Safety LLM]
         R[Retrieval LLM]
         C[Creativity LLM]
-        V[Perception Specialist - VL-JEPA]
+        V[Perception Specialist -
+        VL-JEPA]
     end
 
     style SPEC fill:#fff8b3,stroke:#d4b100,stroke-width:2px
