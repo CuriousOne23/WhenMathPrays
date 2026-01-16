@@ -25,11 +25,11 @@ As transformer models grow, they encounter structural limits that arise from the
 
 Three failure modes are particularly important:
 
-### **2.1 RSL — Residual Stream Leakage**  
+### **2.1 RSL — Relational Suppression Loading**  
 All cognitive functions share the same residual stream. Information from unrelated domains bleeds together, causing interference, hallucination, and unpredictable coupling.  
 In TDS‑WDAS terms: **high‑density wavefields collapse into each other**, producing unstable superpositions.
 
-### **2.2 ISL — Interference Scaling Limit**  
+### **2.2 ISL — Identity Suppression Loading**  
 As parameter count increases, interference grows faster than useful signal. Beyond a certain scale, adding parameters yields diminishing or even negative returns.  
 In TDS‑WDAS terms: **wave amplitude increases without structural containment**, amplifying destructive interference.
 
