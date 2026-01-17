@@ -394,6 +394,54 @@ Every deviation, correction, and specialist contribution becomes observable in l
 
 ---
 
+### **4.2.3 — Runtime Feedback Safety Boundary (Why OCTPS Is Not Self‑Modification)**
+
+OCTPS introduces soft, proportional feedback to stabilize large‑scale cognitive systems.  
+To avoid confusion with training‑time feedback (e.g., backpropagation), this section clarifies the safety boundary.
+
+#### **4.2.3.1 OCTPS feedback never modifies model weights**  
+All feedback operates **outside** the model, in the orchestration layer.  
+The transformer’s parameters remain frozen during inference.  
+No gradients, no optimizers, no updates, no learning.
+
+### **4.2.3.2 Feedback acts only on runtime signals**  
+OCTPS shapes **activations**, **routing decisions**, and **specialist contributions** *after* they are produced.  
+These signals are temporary and vanish after each forward pass.
+
+### **4.2.3.3 The model has no access to the feedback mechanism**  
+The AI cannot see, modify, influence, or learn from OCTPS feedback.  
+To the model, OCTPS is simply part of the environment — a fixed, external process.
+
+### **4.2.3.4 Feedback is bounded, proportional, and non‑persistent**  
+OCTPS applies small, reversible nudges based on deviation from a reference vector.  
+These nudges:
+
+- do not accumulate  
+- do not persist across turns  
+- do not alter the model’s long‑term behavior  
+
+### **4.2.3.5 OCTPS resembles existing, widely‑used mechanisms**  
+The industry already uses safe activation‑level shaping, including:
+
+- attention masks  
+- logit biasing  
+- system prompts  
+- Mixture‑of‑Experts routing  
+- safety filters  
+- temperature/top‑k sampling  
+
+OCTPS generalizes these familiar mechanisms into a coherent stability framework.
+
+### **4.2.3.6 OCTPS is a controller, not a learner**  
+It stabilizes the system the same way a flight controller stabilizes an aircraft:
+
+- external  
+- bounded  
+- predictable  
+- engineer‑controlled  
+
+The model cannot modify the controller.
+
 # **4.3 Summary**
 
 As AI systems scale, the cognitive space they inhabit becomes vast, unpredictable, and structurally unstable. Modularity can delay the onset of instability, but it cannot prevent the emergence of new interference patterns, drift tendencies, and failure modes that arise simply because the thought‑geometry expands beyond what any designer can fully anticipate. In such an environment, perturbations are inevitable, and even well‑designed corrections will sometimes fail or behave unpredictably.
