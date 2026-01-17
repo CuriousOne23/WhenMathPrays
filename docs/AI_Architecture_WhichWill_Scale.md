@@ -392,7 +392,43 @@ This acts as the system’s **intrinsic manifold**.
 **Engineer Visibility**  
 Every deviation, correction, and specialist contribution becomes observable in logs.
 
-### **4.2.3 Tunable Bleed**
+---
+
+### **4.2.3 Tunable Bleed: Controlled Inter‑Specialist Mixing**
+
+Pure modular isolation produces brittle cognition: specialists cannot “borrow” from one another, and the system loses the subtle cross‑domain influences that make human reasoning fluid. OCTPS introduces **tunable bleed**, a controlled and bounded mechanism that allows a small, proportional contribution from a secondary specialist to mix into a primary specialist’s activation. This preserves modular clarity while enabling adaptive, intent‑aligned cognition.
+
+Bleed is **not** a learned parameter and **not** a model‑internal mechanism.  
+It is an **engineer‑controlled, inference‑time coefficient** (β) applied externally in the orchestration layer.  
+The model cannot modify, learn, or influence β.  
+β is dynamic at runtime but fully bounded, logged, and characterized by the engineer.
+
+---
+
+#### **4.2.3.1 Mechanism: Proportional Vector Mixing**
+
+Tunable bleed blends two activation vectors:
+
+- the **primary specialist** (the one responsible for the current task)  
+- a **secondary specialist** (whose influence is helpful in this context)  
+
+The mixing function is linear and reversible:
+
+```
+A_mixed = S_primary + beta * S_secondary
+```
+
+Where:
+
+- `beta` is a small scalar (typically 0.00–0.15)  
+- `S_primary` and `S_secondary` are full activation vectors  
+- `A_mixed` is the blended activation passed forward  
+
+This is a **vector mixer**, not a conditional router.  
+It introduces soft, proportional influence without destabilizing the system.
+
+#### **Diagram 1 — Bleed Mixer (Mechanism)**
+
 ```mermaid
 flowchart LR
     A[Primary Specialist Signal] --> D[Bleed Mixer: A_mixed = S_primary + beta * S_secondary]
@@ -400,7 +436,60 @@ flowchart LR
     D --> E[Output Integrator]
 ```
 
-Fixed bleed is brittle and misaligned: it can over‑mix signals in factual modes and under‑mix them in creative or ethical modes. Tunable bleed allows proportional, intent‑dependent mixing that preserves stability. β is dynamic at runtime but fully controlled, bounded, and characterized by the engineer; it is not learned or modified by the model.
+This diagram shows the true mechanics: two inputs, one mixer, and a proportional blend.
+
+---
+
+### **Why Tunability Matters**
+
+Fixed bleed values are brittle and misaligned: they can over‑mix signals in factual modes and under‑mix them in creative or ethical modes. Tunable bleed allows proportional, intent‑dependent mixing that preserves stability and adapts to the user’s goals.
+
+Examples:
+
+- A small ethics bleed into planning improves safety‑aligned reasoning.  
+- A small creativity bleed into retrieval produces more expressive factual responses.  
+- Zero bleed preserves strict factuality when required.  
+
+Because β is externally controlled and logged, engineers can tune, clamp, or disable bleed based on stability metrics such as Integrator Stability Index or Cross‑Module Latency.
+
+---
+
+#### **4.2.3.2 Operational Example: Intent‑Dependent Bleed Routing**
+
+The Input Integrator determines β values per specialist based on intent, load, and deviation from the reference vector. Different specialists may receive different bleed coefficients in the same turn.
+
+#### **Diagram 2 — Example Routing with Bleed Coefficients**
+
+```mermaid
+flowchart LR
+    II[Input Integrator] -->|5 percent Ethics Bleed| P[Planning Specialist]
+    II -->|0 percent Bleed| R[Retrieval Specialist]
+    P --> OI[Output Integrator]
+    R --> OI
+    OI -->|Feedback: Bleed Event Log| II
+```
+
+This example shows:
+
+- Planning receives a 5% ethics bleed  
+- Retrieval receives no bleed  
+- The Output Integrator logs bleed events for observability and stability tracking  
+
+This diagram complements the mechanism diagram by showing how tunable bleed is applied in practice.
+
+---
+
+### **Summary**
+
+Tunable bleed provides OCTPS with a safe, controlled way to introduce cross‑specialist influence without compromising modularity or stability. By keeping β external, bounded, and engineer‑controlled, OCTPS achieves:
+
+- adaptive cognition  
+- proportional influence  
+- predictable behavior  
+- full observability  
+- zero risk of self‑modification  
+
+It is one of the key mechanisms that makes OCTPS feel alive without ever becoming unsafe.
 
 ---
 
