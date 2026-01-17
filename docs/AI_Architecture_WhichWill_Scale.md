@@ -392,27 +392,37 @@ This acts as the system’s **intrinsic manifold**.
 **Engineer Visibility**  
 Every deviation, correction, and specialist contribution becomes observable in logs.
 
+### **4.2.3 Tunable Bleed**
+```mermaid
+flowchart LR
+    A[Primary Specialist Signal] --> D[Bleed Mixer: A_mixed = S_primary + beta * S_secondary]
+    C[Secondary Specialist Signal] --> D
+    D --> E[Output Integrator]
+```
+
+Fixed bleed is brittle and misaligned: it can over‑mix signals in factual modes and under‑mix them in creative or ethical modes. Tunable bleed allows proportional, intent‑dependent mixing that preserves stability. β is dynamic at runtime but fully controlled, bounded, and characterized by the engineer; it is not learned or modified by the model.
+
 ---
 
-### **4.2.3 — Runtime Feedback Safety Boundary (Why OCTPS Is Not Self‑Modification)**
+### **4.2.4 — Runtime Feedback Safety Boundary (Why OCTPS Is Not Self‑Modification)**
 
 OCTPS introduces soft, proportional feedback to stabilize large‑scale cognitive systems.  
 To avoid confusion with training‑time feedback (e.g., backpropagation), this section clarifies the safety boundary.
 
-#### **4.2.3.1 OCTPS feedback never modifies model weights**  
+#### **4.2.4.1 OCTPS feedback never modifies model weights**  
 All feedback operates **outside** the model, in the orchestration layer.  
 The transformer’s parameters remain frozen during inference.  
 No gradients, no optimizers, no updates, no learning.
 
-### **4.2.3.2 Feedback acts only on runtime signals**  
+### **4.2.4.2 Feedback acts only on runtime signals**  
 OCTPS shapes **activations**, **routing decisions**, and **specialist contributions** *after* they are produced.  
 These signals are temporary and vanish after each forward pass.
 
-### **4.2.3.3 The model has no access to the feedback mechanism**  
+### **4.2.4.3 The model has no access to the feedback mechanism**  
 The AI cannot see, modify, influence, or learn from OCTPS feedback.  
 To the model, OCTPS is simply part of the environment — a fixed, external process.
 
-### **4.2.3.4 Feedback is bounded, proportional, and non‑persistent**  
+### **4.2.4.4 Feedback is bounded, proportional, and non‑persistent**  
 OCTPS applies small, reversible nudges based on deviation from a reference vector.  
 These nudges:
 
@@ -420,7 +430,7 @@ These nudges:
 - do not persist across turns  
 - do not alter the model’s long‑term behavior  
 
-### **4.2.3.5 OCTPS resembles existing, widely‑used mechanisms**  
+### **4.2.4.5 OCTPS resembles existing, widely‑used mechanisms**  
 The industry already uses safe activation‑level shaping, including:
 
 - attention masks  
@@ -432,7 +442,7 @@ The industry already uses safe activation‑level shaping, including:
 
 OCTPS generalizes these familiar mechanisms into a coherent stability framework.
 
-### **4.2.3.6 OCTPS is a controller, not a learner**  
+### **4.2.4.6 OCTPS is a controller, not a learner**  
 It stabilizes the system the same way a flight controller stabilizes an aircraft:
 
 - external  
