@@ -321,6 +321,7 @@ OCTPS (the Octopus Architecture) is the evolution of modularity. It preserves th
 ### **4.2.1 High‑Level OCTPS Architecture**
 
 ```mermaid
+%%{init: {'theme': 'default', 'themeVariables': { 'fontSize': '16px' }, 'flowchart': { 'curve': 'linear' }, 'logLevel': 'fatal', 'scale': 1.5 }}%%
 flowchart TD
 
     USER[User Input]
