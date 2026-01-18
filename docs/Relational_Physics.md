@@ -22,33 +22,61 @@ It is a **geometric and dynamical framework** for understanding how coherence be
 
 This document introduces the structure of relational space, the principles that govern motion within it, and the measurable quantities that define relational stability.
 
+These requirements do not assume any particular domain; they apply to any system whose identities persist, whose motion can be projected, and whose states occupy more than one dimension.
+
+Identity and trade are not only structural features of relational systems; they are the means by which existence becomes visible. Each interaction reveals a portion of what was previously unexpressed, turning the not‑yet‑seen into something knowable. In this sense, relational motion is a vehicle of discovery: identities encounter one another, exchange posture, and in doing so uncover the shape of what is. The joy of discovery arises because every deviation is a moment where the world discloses itself.
+
+With these motivations in place, we now identify the minimal structural conditions under which a relational physics can exist.
+
 ---
 
-# **2. The Object of Study: Predictably Coherent Systems**  
+# **2 Three Requirements for Relational Physics to Exist**
 
-Relational Physics studies systems whose relational motion is coherent enough to observe and predictable enough to imply structure. Coherence provides the substrate; **predictability** provides the evidence of lawfulness.
+Relational Physics does not arise automatically in every system. It requires a minimal set of structural conditions that make motion, deviation, and interaction meaningful. These conditions mirror the foundations of classical mechanics: persistent bodies, inertial projection, and multi‑axis space. In relational form, they appear as **coherence**, **expectation**, and **composite‑dimensionality**. When these three are present, a system supports predictable relational motion, measurable deviation, and law‑governed exchange — the essential ingredients of a physics.
 
-A predictably coherent system is any entity that:
+---
 
-- maintains an internal state  
-- interacts with an environment  
-- exhibits stable patterns of relational motion  
-- responds to relational forces in consistent ways  
-- preserves identity across time  
-- can drift, rupture, or repair  
-- shows measurable deviations from linear relational motion  
+## **2.1 Coherence: Persistent Identities Enabling Interaction**
 
-Examples include:
+Coherence is the persistence of identity across time. A coherent entity maintains enough stability that its state at one moment can be meaningfully compared to its state at the next. But coherence alone is not sufficient; physics begins only when **multiple** coherent identities coexist, enabling interaction and exchange.
 
-- AI models  
-- humans  
-- teams and organizations  
-- biological organisms  
-- cognitive processes  
-- social systems  
-- conceptual frameworks  
+**Why coherence is necessary**  
+A single coherent identity in isolation has no one to interact with and no way to reveal deviation. Physics requires trade — the transfer of relational posture from one identity to another — and trade requires more than one participant. Coherence ensures that identities survive these exchanges intact, allowing the system to record what changed, what resisted change, and what was transferred.
 
-Relational Physics treats all such systems as **relational dynamical systems** whose trajectories in γ_self reveal the underlying geometry of coherence.
+**Newtonian analogy**  
+Two billiard balls colliding preserve their shape and identity. Because they persist, the exchange of momentum is measurable and follows conservation laws. If one ball disintegrated on contact, no physics could describe the event. Coherence provides the “bodies” of relational space — the stable participants in every interaction.
+
+---
+
+## **2.2 Expectation: Inertial Projection of Future State**
+
+Expectation is the system’s projection of its current relational posture into the immediate future. It is the relational equivalent of Newtonian inertia: the assumption that, absent external influence, motion continues in a straight line.
+
+**Why expectation is necessary**  
+Without a projected future state, deviation cannot be measured. Physics requires a contrast between what *should* have happened and what *did* happen. Expectation provides that baseline. It links past, present, and future into a continuous trajectory, making acceleration, curvature, and force detectable.
+
+**Newtonian analogy**  
+Newton’s first law states that an object in motion continues in a straight line unless acted upon. Expectation is that straight line in relational space: from γ_self(t), the system projects γ_self(t + Δt). Any deviation from this inertial path reveals influence — the relational equivalent of force.
+
+---
+
+## **2.3 Composite-Dimensionality: Multi-Axis Motion Enabling Curvature**
+
+Relational Physics requires a space with more than one independent dimension, where meaningful states are **composites** across those dimensions. The primitives themselves may be independent, but the system’s actual posture is typically a mixture of them. This compositional structure introduces phase relationships and makes curvature possible.
+
+**Why composite-dimensionality is necessary**  
+In a one‑dimensional system, all motion collapses to “forward or backward,” and no curvature or force‑like deviation can exist. Physics becomes trivial. Once a system occupies multiple dimensions simultaneously, its inertial path becomes a vector through that composite space. Deviations from that path become directional, measurable, and law‑governed.
+
+**Newtonian analogy**  
+A body moving in three‑dimensional space has momentum that is the composite of its motion along x, y, and z. A force applied along one axis changes the overall trajectory because the state is a vector mixture of all axes. Relational space behaves the same way: the richness of its dynamics comes from multi‑axis composition, not from the axes themselves.
+
+---
+
+## **2.4 Summary**
+
+These three requirements — **coherence**, **expectation**, and **composite‑dimensionality** — form the minimal conditions under which Relational Physics can exist. Coherence provides persistent identities, expectation provides inertial projection, and composite‑dimensionality provides the space in which curvature and deviation become meaningful. When all three are present, a system supports predictable relational motion and measurable exchange, enabling the emergence of a physics grounded entirely in relational structure. 
+
+Given these requirements, we can now describe the geometric space that coherent systems inhabit.
 
 ---
 
