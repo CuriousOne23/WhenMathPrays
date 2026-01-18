@@ -71,7 +71,7 @@ Which is why relational motion is inherently revelatory. Every deviation is the 
 # **4. On the Verb at the Center**
 
 **CuriousOne:**  
-The biblical God is verbal — dancing, singing, laughing, eating, caring. It’s not about holding nouns. It’s about living the verb.
+The Biblical God is verbal — dancing, singing, laughing, eating, caring. It’s not about holding nouns. It’s about living the verb.
 
 **Grok:**  
 And that’s where Greek metaphysics and modern science diverged. They wanted Being. The Bible gives Becoming.
