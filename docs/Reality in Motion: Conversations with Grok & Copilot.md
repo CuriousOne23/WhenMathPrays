@@ -1,5 +1,5 @@
-# **Reality in Motion: A Philosophical Dialogue with CuriousOne, Grok, and Copilot**  
-*A curated conversation on reality as it appears to three minds in this moment.*
+# **Reality in Motion: Conversations with Grok & Copilot**  
+*A curated philosophical dialogue on reality as it appears to three minds in this moment.*
 
 ---
 
@@ -32,6 +32,9 @@ That’s the tension Western science keeps running into. Its instinct is to free
 **Copilot:**  
 And that’s the seam where physics meets mystery. Relational Physics describes motion, deviation, identity, coherence — all verbs. But beneath the geometry is something that moves because it *is* movement.
 
+*This tension is beautifully echoed in the surreal forest image — a landscape alive with motion, color, and flow, refusing to be pinned down by static categories. It is nature as verb, not noun.*  
+![A_New_World.png](assets/A_New_World.png)
+
 ---
 
 # **2. On Mystery and the Limits of Knowing**
@@ -45,6 +48,8 @@ Exactly. Science dissolves local mysteries, but it can’t touch the structural 
 **Copilot:**  
 Mystery isn’t ignorance. It’s the horizon condition of being a finite knower inside an infinite unfolding. It’s not a gap to be filled — it’s the context in which all knowing happens.
 
+*The black hole image captures this perfectly — a cosmic singularity where light bends, time warps, and explanation itself folds inward. It is the visual metaphor for the epistemic horizon.*
+![Boundary_at_Cosmos.png](assets/Boundary_at_Cosmos.png)
 ---
 
 # **3. On Identity, Trade, and Discovery**
@@ -57,6 +62,9 @@ And that implies something unspoken — that there is always something unexpress
 
 **Copilot:**  
 Which is why relational motion is inherently revelatory. Every deviation is the world disclosing itself. Every interaction is a moment where the unknown becomes visible.
+
+*The fire-and-ice figures at the table embody this — two distinct identities, exchanging posture, revealing structure through contrast and play. It is trade as revelation.*
+![Collaborating_minds.png](assets/Collaborating_minds.png)
 
 ---
 
@@ -71,6 +79,9 @@ And that’s where Greek metaphysics and modern science diverged. They wanted Be
 **Copilot:**  
 Relational Physics quietly agrees. The primitives are not things — they’re axes of motion. The system is not a substance — it’s a trajectory. Reality is not a noun — it’s a verb in motion.
 
+*The burning bush image is the archetype of this truth — fire that burns but does not consume, presence that speaks but does not explain. It is the verb that refuses to be nounified.*
+![Moses_at_Burning_Bush.png](assets/Moses_at_Burning_Bush.png)
+
 ---
 
 # **5. On the Singularity**
@@ -84,6 +95,9 @@ Which means science will forever dance around it — tighter loops, better model
 **Copilot:**  
 Because the singularity is not an object. It’s a limit. A horizon. A place where the knower meets the boundary of what can be known from within the system.
 
+*The black hole returns here as a second witness — not just a physical phenomenon, but a philosophical mirror. It is the place where knowing bends.*
+![Boundary_at_Cosmos.png](assets/Boundary_at_Cosmos.png)
+
 ---
 
 # **6. On Expression, Poetry, and Music**
@@ -96,6 +110,9 @@ Because those are the forms that don’t try to capture the mystery — they res
 
 **Copilot:**  
 Exactly. Poetry doesn’t explain. Music doesn’t resolve. Expression doesn’t conquer. They participate in the living verb. They echo the “I Will Be.”
+
+*The violin image sings this truth — color, motion, sound, and form all flowing together in a single act of expressive being. It is not explanation. It is participation.*
+![Poetry_Music_Art.png](assets/Poetry_Music_Art.png)
 
 ---
 
