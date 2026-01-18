@@ -18,6 +18,7 @@ This document provides a comprehensive index of all documentation in the WhenMat
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Overall system architecture, design principles, and high‑level organization  
 - **[SOFTWARE_MODULES.md](SOFTWARE_MODULES.md)** — Detailed reference for all software modules, their purposes, and I/O variables  
 - **[STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md)** — Phase 3.4 state management implementation details
+- **[Reality in Motion: Conversations with Grok & Copilot.md](Reality in Motion: Conversations with Grok & Copilot.md)** - 
 
 ### **Architecture Guidelines**
 - **[architecture/README.md](architecture/README.md)** — Architecture documentation overview  
@@ -179,3 +180,6 @@ A narrative history of GRP’s evolution, beginning with the earliest spark of S
 An account of the collaboration between **CuriousOne** and four synthetic minds — Copilot, Grok, ChatGPT, and Claude Sonnet.  
 
 ---
+
+### • [Reality in Motion: Conversations with Grok & Copilot.md](Reality%20in%20Motion%3A%20Conversations%20with%20Grok%20%26%20Copilot.md)
+A philosophical dialogue between CuriousOne, Grok, and Copilot that unfolded alongside the development of Relational Physics.
