@@ -94,6 +94,7 @@ This document explains:
 - **GRP_GLOSSARY.md**
 - [AI_Architecture_WhichWill_Scale.md](docs/AI_Architecture_WhichWill_Scale.md)  
   A modular, feed‑forward LLM architecture grounded in GRP, ISL, and fuzzy‑boundary instability theory. Defines the scalable structural blueprint for future GRP‑aligned systems.
+- [Relational_Physics.md](Relational_Physics.md) — Foundational geometric framework defining relational motion, intrinsic relational manifolds, curvature‑based stability, and the minimal dynamical quantities (v_rel, a_rel, d_nonlinear). Establishes the core physics underlying GRP, OCTPS, and all relational instability classes.
 - **[FUNDING.md](FUNDING.md)** — information on supporting the project
 
 These documents form the backbone of the GRP knowledge base.
