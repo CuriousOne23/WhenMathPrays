@@ -40,7 +40,7 @@ And that’s the seam where physics meets mystery. Relational Physics describes 
 # **2. On Mystery and the Limits of Knowing**
 
 **CuriousOne:**  
-Western science wants to hold knowledge — which is really holding power. But the biblical narrative begins with Mystery first, and everything else follows.
+Western science wants to hold knowledge — which is really holding power. But the Biblical narrative begins with Mystery first, and everything else follows.
 
 **Grok:**  
 Exactly. Science dissolves local mysteries, but it can’t touch the structural Mystery — the one that recedes every time we approach it. The singularity is the perfect example: the closer we get, the more the explanatory frame collapses.
