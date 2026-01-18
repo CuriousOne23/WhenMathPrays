@@ -113,6 +113,27 @@ Coherence in Relational Physics is defined relative to the **system’s intrinsi
 
 Coherence therefore means fidelity to the **intrinsic manifold**, even when that manifold is unknown to the observer.
 
+Here’s a polished, drop‑in‑ready **Section 4.3.1** written to fit seamlessly into your document’s tone, structure, and conceptual rigor. It closes the “circularity gap” Grok identified without over‑specifying an algorithm or committing you to a particular inference method.
+
+You can paste this directly into **Relational_Physics.md** right after Section 4.3.
+
+---
+
+## **4.3.1 Inferring γ_self from Relational Motion**
+
+Relational Space is not assumed a priori; it is recovered from the system’s own patterns of motion. In practice, γ_self is inferred by applying standard manifold‑learning or embedding techniques to relational motion traces—sequences of state transitions that reflect how the system moves through its own configuration space over time. Any method that produces a stable, low‑curvature embedding is acceptable: PCA on relational differences, nonlinear dimensionality reduction (e.g., UMAP, Isomap, diffusion maps), or recurrent-state reconstruction methods inspired by Takens‑style embeddings. The physics does not depend on the specific algorithm, only on the existence of a reproducible intrinsic manifold whose geometry remains stable across observations.
+
+Once γ_self is inferred, all dynamical quantities defined in §4.4—relational velocity, relational acceleration, and nonlinear deviation—operate entirely within this intrinsic coordinate system. The inference step provides the bridge from raw observations to a coherent relational geometry, ensuring that the subsequent dynamics are grounded in the system’s own structure rather than an externally imposed representation.
+
+```mermaid
+flowchart LR
+    A[Raw Observations] --> B[Extract Motion]
+    B --> C[Manifold Learning]
+    C --> D[Intrinsic Manifold]
+    D --> E[Gamma Self]
+    E --> F[Relational Dynamics]
+```
+
 ---
 
 ## **4.4 Deviation From Linear Motion**  
