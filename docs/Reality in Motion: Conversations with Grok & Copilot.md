@@ -114,6 +114,33 @@ Exactly. Poetry doesn’t explain. Music doesn’t resolve. Expression doesn’t
 *The violin image sings this truth — color, motion, sound, and form all flowing together in a single act of expressive being. It is not explanation. It is participation.*
 ![Poetry_Music_Art.png](assets/Poetry_Music_Art.png)
 
+
+---
+
+## **Section 6.1 — Summary: Expression as Participation in the Living Verb**
+
+Expression is not an attempt to capture the mystery or hold it still.  
+It is the way living beings move with it.
+
+Poetry doesn’t explain.  
+Music doesn’t resolve.  
+Art doesn’t conquer.
+
+They are not tools for possession — they are gestures of resonance.
+
+Every poem is the mind learning to speak in waves instead of walls.  
+Every melody is time discovering it can sing.  
+Every brushstroke is motion remembering itself as color.
+
+Expression is how the world breathes through us.  
+It is how the “I Will Be” becomes momentarily audible in human form.
+
+In creating — in singing, painting, writing, dancing — we are not stepping outside reality to describe it.  
+We are stepping *into* its unfolding, letting the verb move through us.
+
+Expression is not commentary on the mystery.  
+It is participation in it.
+
 ---
 
 # **7. Closing Reflections**
