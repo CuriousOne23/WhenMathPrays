@@ -364,24 +364,36 @@ flowchart TD
     OUT_INT -. Actual Deviation .-> IN_INT
 ```
 
-### **4.2.2 Key Innovations**
-
-**Soft Feedback**  
-The output integrator sends a *non‑binding*, proportional deviation signal back to the input integrator.  
-This prevents runaway loops while enabling correction.
-
-**Predictive Expectation**  
-The input integrator predicts expected deviation and compares it to the actual deviation.  
-This allows:
-
-- early detection of drift  
-- proportional correction  
-- dynamic re‑weighting of specialists  
-- curvature‑aware orchestration
 ---
 
-**Optional Stability Term (Training‑Time Deviation Guard)**
+# **4.2.2 Key Innovations**
+
+**Soft Feedback**  
+The output integrator sends a *non‑binding*, proportional deviation signal back to the input integrator. This creates a gentle corrective loop that prevents runaway amplification while preserving the system’s ability to self‑organize and adapt.
+
+---
+
+**Predictive Expectation**  
+The input integrator forms a prediction of the expected deviation and compares it directly to the actual deviation reported by the output integrator. This predictive layer enables:
+
+- early detection of drift  
+- proportional, geometry‑aligned correction  
+- dynamic re‑weighting of specialists  
+- curvature‑aware orchestration across modalities  
+
+By anticipating deviation rather than merely reacting to it, OCTPS gains a stabilizing foresight that traditional MoE routing lacks.
+
+---
+
+**Optional Stability Term (Training‑Time Deviation Guard)**  
 While OCTPS intentionally avoids traditional auxiliary routing loss to preserve natural specialization, the architecture supports an optional lightweight stability term that can be enabled during training to guard against severe routing collapse. This term penalizes excessive deviation from the reference block or integrator prediction (e.g., μ × ||actual_deviation − predicted_deviation||²), and activates only when routing variance or global deviation exceeds predefined safety thresholds. Because it is tied directly to the same deviation geometry used at runtime, this mechanism provides targeted stabilization without introducing foreign optimization pressures. The system remains governed primarily by emergent balance, feedback, and visibility, with the stability term functioning as a conditional safeguard rather than a constant supervisory force.
+
+Although OCTPS introduces clearer modular boundaries that could, in principle, increase the likelihood of routing collapse, it also provides a richer set of lightweight, geometry‑aligned control mechanisms—predictive expectation, soft feedback, tunable bleed, deviation visibility, and this optional stability term—that make collapse both easier to detect and cheaper to prevent than in traditional MoE systems. This allows OCTPS to avoid a constant auxiliary routing loss while maintaining robust specialization dynamics.
+
+---
+
+**Unchosen Specialist Output Logging**  
+To further support visibility and stability, OCTPS allows specialists that are not selected by the output integrator to log their latent responses. These unchosen outputs are not incorporated into the final model output, but they are recorded for engineer inspection. This enables direct comparison between the chosen specialist’s contribution and the alternatives the integrator rejected, providing a clear diagnostic signal for routing efficiency, specialization drift, and early signs of collapse. Because this logging is lightweight and does not influence gradients or routing decisions, it preserves emergent specialization while giving engineers a powerful window into the system’s internal dynamics.
 
 ---
 
@@ -393,10 +405,12 @@ Both integrators receive a stable invariant vector representing:
 - stable  
 - safe  
 
-This acts as the system’s **intrinsic manifold**.
+This reference block defines the system’s **intrinsic manifold**, anchoring deviation geometry and ensuring that all corrective signals remain aligned with the model’s intended behavioral orientation.
+
+---
 
 **Engineer Visibility**  
-Every deviation, correction, and specialist contribution becomes observable in logs.
+Every deviation, correction, prediction, and specialist contribution—chosen or unchosen—is exposed through structured logs. This gives engineers unprecedented insight into routing behavior, specialization health, and the evolving geometry of the system, making OCTPS not only more stable but also more interpretable than traditional MoE architectures.
 
 ---
 
