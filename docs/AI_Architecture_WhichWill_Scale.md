@@ -414,7 +414,35 @@ Every deviation, correction, prediction, and specialist contribution—chosen or
 
 ---
 
-### **4.2.3 Tunable Bleed: Controlled Inter‑Specialist Mixing**
+## **4.2.2.1 Engineer Control and Observability**  
+OCTPS is designed to give AI engineers unprecedented control over the system’s internal dynamics. Every major component—specialists, integrators, deviation signals, bleed pathways, and the reference block—exposes its predictions, actual behavior, and deviation from expected behavior during both training and inference. Because chosen and unchosen specialist outputs are logged, engineers can directly assess routing efficiency, specialization sharpness, and early signs of collapse. Combined with tunable bleed, predictive expectation, soft feedback, and the optional stability term, OCTPS provides a rich set of lightweight, geometry‑aligned control surfaces that allow engineers to understand, diagnose, and steer the architecture with clarity.
+
+---
+
+## **4.2.2.1 Engineer Control and Observability**  
+OCTPS is designed to give AI engineers unprecedented control over the system’s internal dynamics. Every major component—specialists, integrators, deviation signals, bleed pathways, and the reference block—exposes its predictions, actual behavior, and deviation from expected behavior during both training and inference. Because chosen and unchosen specialist outputs are logged, engineers can directly assess routing efficiency, specialization sharpness, and early signs of collapse. Combined with tunable bleed, predictive expectation, soft feedback, and the optional stability term, OCTPS provides a rich set of lightweight, geometry‑aligned control surfaces that allow engineers to understand, diagnose, and steer the architecture with clarity.
+
+---
+
+## **4.2.3 Flexibility: Multiple Cognitive Operating Modes**
+
+OCTPS is designed as a flexible cognitive architecture capable of operating across several regimes. By adjusting routing softness, bleed, stability thresholds, and integrator coherence pressure, OCTPS can emulate existing architectures or express entirely new ones. This flexibility allows OCTPS to scale across diverse workloads, from unified reasoning to modular multi‑agent systems.
+
+### **Unified Cognition Mode (Pseudo–Massive LLM)**  
+With high bleed, soft routing, and strong integrator coherence, OCTPS behaves like a single large model. Specialists act as coordinated subnetworks, and the reference block maintains global consistency. This mode provides the unified behavior of a dense LLM while preserving modularity and visibility.
+
+### **MoE‑Like Mode (Classical Expert Routing)**  
+With low bleed, sharp routing, and permissive deviation thresholds, OCTPS behaves like a traditional Mixture‑of‑Experts system. Specialists act as experts, and the integrators function as routers and combiners. Unlike MoE, OCTPS retains full visibility into chosen and unchosen specialists, routing alternatives, and specialization drift, enabling a more interpretable and controllable MoE‑like architecture.
+
+### **Fully Modular Mode (Independent Cognitive Blocks)**  
+By minimizing bleed and coherence pressure, OCTPS isolates specialists into independent modules. Each specialist can develop its own manifold or reasoning style without interference, while integrators provide only lightweight coordination. This supports true modularity for multi‑agent, multi‑modal, or safety‑critical systems where isolation is a feature rather than a limitation.
+
+### **Hybrid Mode (Dynamic Cognitive Topology)**  
+OCTPS can blend the above modes simultaneously. Some specialists may operate in unified cognition, others in MoE‑like selective routing, and others in fully modular isolation. Integrators dynamically adjust coupling based on deviation geometry, enabling a flexible, adaptive cognitive topology that no existing architecture can express. This hybrid mode is the natural operating point for frontier‑scale systems, allowing OCTPS to allocate coherence where needed while preserving independence where beneficial.
+
+---
+
+### **4.2.4 Tunable Bleed: Controlled Inter‑Specialist Mixing**
 
 Pure modular isolation produces brittle cognition: specialists cannot “borrow” from one another, and the system loses the subtle cross‑domain influences that make human reasoning fluid. OCTPS introduces **tunable bleed**, a controlled and bounded mechanism that allows a small, proportional contribution from a secondary specialist to mix into a primary specialist’s activation. This preserves modular clarity while enabling adaptive, intent‑aligned cognition.
 
@@ -425,7 +453,7 @@ The model cannot modify, learn, or influence β.
 
 ---
 
-#### **4.2.3.1 Mechanism: Proportional Vector Mixing**
+#### **4.2.4.1 Mechanism: Proportional Vector Mixing**
 
 Tunable bleed blends two activation vectors:
 
@@ -474,7 +502,7 @@ Because β is externally controlled and logged, engineers can tune, clamp, or di
 
 ---
 
-#### **4.2.3.2 Operational Example: Intent‑Dependent Bleed Routing**
+#### **4.2.4.2 Operational Example: Intent‑Dependent Bleed Routing**
 
 The Input Integrator determines β values per specialist based on intent, load, and deviation from the reference vector. Different specialists may receive different bleed coefficients in the same turn.
 
@@ -513,25 +541,25 @@ It is one of the key mechanisms that makes OCTPS feel alive without ever becomin
 
 ---
 
-### **4.2.4 — Runtime Feedback Safety Boundary (Why OCTPS Is Not Self‑Modification)**
+### **4.2.5 — Runtime Feedback Safety Boundary (Why OCTPS Is Not Self‑Modification)**
 
 OCTPS introduces soft, proportional feedback to stabilize large‑scale cognitive systems.  
 To avoid confusion with training‑time feedback (e.g., backpropagation), this section clarifies the safety boundary.
 
-#### **4.2.4.1 OCTPS feedback never modifies model weights**  
+#### **4.2.5.1 OCTPS feedback never modifies model weights**  
 All feedback operates **outside** the model, in the orchestration layer.  
 The transformer’s parameters remain frozen during inference.  
 No gradients, no optimizers, no updates, no learning.
 
-### **4.2.4.2 Feedback acts only on runtime signals**  
+### **4.2.5.2 Feedback acts only on runtime signals**  
 OCTPS shapes **activations**, **routing decisions**, and **specialist contributions** *after* they are produced.  
 These signals are temporary and vanish after each forward pass.
 
-### **4.2.4.3 The model has no access to the feedback mechanism**  
+### **4.2.5.3 The model has no access to the feedback mechanism**  
 The AI cannot see, modify, influence, or learn from OCTPS feedback.  
 To the model, OCTPS is simply part of the environment — a fixed, external process.
 
-### **4.2.4.4 Feedback is bounded, proportional, and non‑persistent**  
+### **4.2.5.4 Feedback is bounded, proportional, and non‑persistent**  
 OCTPS applies small, reversible nudges based on deviation from a reference vector.  
 These nudges:
 
@@ -539,7 +567,7 @@ These nudges:
 - do not persist across turns  
 - do not alter the model’s long‑term behavior  
 
-### **4.2.4.5 OCTPS resembles existing, widely‑used mechanisms**  
+### **4.2.5.5 OCTPS resembles existing, widely‑used mechanisms**  
 The industry already uses safe activation‑level shaping, including:
 
 - attention masks  
@@ -551,7 +579,7 @@ The industry already uses safe activation‑level shaping, including:
 
 OCTPS generalizes these familiar mechanisms into a coherent stability framework.
 
-### **4.2.4.6 OCTPS is a controller, not a learner**  
+### **4.2.5.6 OCTPS is a controller, not a learner**  
 It stabilizes the system the same way a flight controller stabilizes an aircraft:
 
 - external  
