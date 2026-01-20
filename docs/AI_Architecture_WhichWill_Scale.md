@@ -377,7 +377,13 @@ This allows:
 - early detection of drift  
 - proportional correction  
 - dynamic re‑weighting of specialists  
-- curvature‑aware orchestration  
+- curvature‑aware orchestration
+---
+
+**Optional Stability Term (Training‑Time Deviation Guard)**
+While OCTPS intentionally avoids traditional auxiliary routing loss to preserve natural specialization, the architecture supports an optional lightweight stability term that can be enabled during training to guard against severe routing collapse. This term penalizes excessive deviation from the reference block or integrator prediction (e.g., μ × ||actual_deviation − predicted_deviation||²), and activates only when routing variance or global deviation exceeds predefined safety thresholds. Because it is tied directly to the same deviation geometry used at runtime, this mechanism provides targeted stabilization without introducing foreign optimization pressures. The system remains governed primarily by emergent balance, feedback, and visibility, with the stability term functioning as a conditional safeguard rather than a constant supervisory force.
+
+---
 
 **Reference Block (Self‑Vector)**  
 Both integrators receive a stable invariant vector representing:
