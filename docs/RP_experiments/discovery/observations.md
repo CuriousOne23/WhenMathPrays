@@ -94,6 +94,76 @@ Discovery precedes formalization.
 
 ---
 
+## **1.17 Mapping Observations to RP Primitives (Mass, Force, Acceleration, Velocity, Position)**
+
+The observations in Section 1 can be understood through the five foundational relational primitives that will eventually anchor the ontology of Relational Physics. These primitives are not literal Newtonian quantities, but **relational analogs** that describe motion, resistance, influence, and state within conceptual space.
+
+Each observation naturally aligns with one or more of these primitives, revealing the underlying structure of the system.
+
+---
+
+## **Mass (Resistance to Change)**  
+Observations involving stability, inertia, or resistance:
+
+- **1.3** Concepts behave like objects with mass  
+- **1.8** Naming stabilizes behavior  
+- **1.13** Plasticity is required for discovery  
+
+These define how “heavy” or “light” conceptual objects are, and how easily they can be redirected.
+
+---
+
+## **Force (Directional Influence)**  
+Observations involving pushes, pulls, or external influence:
+
+- **1.4** Attention behaves like a force  
+- **1.12** The world pushes back (restoring force)  
+- **1.14** Alignment requires an external anchor  
+
+These forces determine how the system moves through conceptual space.
+
+---
+
+## **Acceleration (Curvature‑Induced Change)**  
+Observations involving asymmetric correction, curvature, or second‑order effects:
+
+- **1.6** Correction is not symmetric  
+- **1.9** Misalignment reveals structure  
+- **1.11** Imagination reveals hidden structure  
+
+These reveal the geometry of the manifold and how forces bend trajectories.
+
+---
+
+## **Velocity (Motion Through Conceptual Space)**  
+Observations involving drift, natural motion, or rate of change:
+
+- **1.5** Drift is measurable and meaningful  
+- **1.10** The system prefers motion over stillness  
+
+These describe how the system moves when unforced.
+
+---
+
+## **Position (State, Context, and Field Conditions)**  
+Observations involving the system’s current state, context, or background conditions:
+
+- **1.1** Geometry alone is insufficient  
+- **1.2** Conserved tendencies  
+- **1.7** Context acts like a field  
+- **1.15** Emergence precedes structure  
+
+These define the “where” of the system — the conditions under which motion occurs.
+
+---
+
+## **Summary**  
+This mapping shows that the observations in Section 1 are not isolated insights. They collectively reveal a coherent structure of **mass, force, acceleration, velocity, and position** — the same relational primitives required to describe motion in any manifold.
+
+This is the first sign that Relational Physics is converging toward a unified ontology.
+
+---
+
 # **2. AI Metrics (Training + Inference)**  
 *Key measurable quantities that repeatedly influence system behavior and are likely to become formal units in Relational Physics.*
 
