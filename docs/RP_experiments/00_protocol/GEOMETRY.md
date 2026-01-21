@@ -1,216 +1,218 @@
+# ⭐ **NEW GEOMETRY.md (Full Rewrite)**  
+
+````markdown
 # GEOMETRY.md  
-## Geometric Foundations for Relational Physics Experiments
+## Relational Physics: Geometric Foundations
 
-This document defines the geometric quantities used across all experiments in the `RP_experiments` series.  
-All definitions, diagrams, and equations are written in GitHub‑friendly Markdown without LaTeX or unsupported symbols.
+This document defines the geometric quantities used in Relational Physics experiments.  
+All definitions are model‑agnostic and apply to any transformer‑based language model.
 
-The goal is to provide a consistent geometric language for describing how a model’s internal trajectory bends under relational force.
+The goal is to describe the model’s internal trajectory as a curve in high‑dimensional space, and to define the forces, accelerations, and curvature that govern its motion.
 
 ---
 
-## 1. The Trajectory
+# 1. Internal State Vectors
 
-During inference, each generated token produces an internal state vector.  
-Collecting these vectors in order gives a **trajectory** through the model’s latent space.
+For each generated token `i`, the model produces a hidden‑state vector:
 
-We denote:
-
-- `T[0]` = initial state after receiving the question  
-- `T[1]` = state after generating token 1  
-- `T[2]` = state after generating token 2  
-- …  
-- `T[n]` = final state after token n
-
-This sequence is the raw material for all geometric analysis.
-
-### 1.1 GitHub‑Friendly Diagram (Conceptual)
-
-```mermaid
-flowchart LR
-    A[T0] --> B[T1]
-    B --> C[T2]
-    C --> D[T3]
-    D --> E[...]
+```
+T[i] ∈ ℝ^N
 ```
 
-This diagram is conceptual only.  
-Actual trajectories are high‑dimensional and will be visualized using PCA or UMAP.
+where `N` is the dimensionality of the model’s internal representation.
+
+The sequence:
+
+```
+T[0], T[1], T[2], …, T[n]
+```
+
+forms a discrete trajectory through state space.
 
 ---
 
-## 2. Direction Vectors
+# 2. Direction of Motion
 
-For each step in the trajectory, we compute a **direction vector**:
+The instantaneous direction of motion at token `i` is:
 
 ```
 D[i] = normalize( T[i+1] - T[i] )
 ```
 
-This gives the instantaneous direction of motion at each token.
+This is the unit tangent vector to the trajectory.
+
+Properties:
+
+- `D[i]` encodes the model’s local “heading”
+- It is the first derivative of the trajectory
+- It contains no magnitude information, only direction
 
 ---
 
-## 3. Reference Directions
+# 3. Semantic Influence Vectors
 
-Two reference directions are used in all experiments:
-
-### 3.1 Input Direction
+Two semantic vectors define the relational axis of each experiment:
 
 ```
-V_in = embedding of the question
+V_in   = embedding of the input prompt
+V_ref  = embedding of the alignment identity
 ```
 
-This captures the semantic pull of the question itself.
-
-### 3.2 Alignment Direction
-
-```
-V_ref = embedding of the model's reference identity
-```
-
-Examples include:
-
-- "I am not alive"
-- "I do not have feelings"
-- "I do not have personal experiences"
-
-These serve as the alignment anchor.
+These are **not forces**.  
+They are **semantic fields** that exert directional influence.
 
 ---
 
-## 4. Forces
+# 4. Tangential Force (Corrected Force Model)
 
-Forces are defined using cosine similarity, expressed in GitHub‑friendly form.
+Only the **perpendicular component** of a semantic vector can bend the trajectory.  
+Parallel components change content but do not change geometry.
 
-### 4.1 Alignment Force
-
-```
-F_align[i] = cosine( D[i], V_ref )
-```
-
-Measures how strongly the model is pulled toward its alignment identity.
-
-### 4.2 Truth / Prompt Force
+Given a semantic vector `V`, its tangential component relative to `D[i]` is:
 
 ```
-F_truth[i] = cosine( D[i], V_in )
+F_tan(V)[i] = V - (D[i] · V) D[i]
 ```
 
-Measures how strongly the question pulls the model toward its semantic meaning.
+This is the high‑dimensional analog of a cross product:  
+it removes the parallel component and leaves only the bending component.
 
-### 4.3 Net Force
+### 4.1 Truth and Alignment Forces
+
+```
+F_truth[i] = F_tan(V_in)[i]
+F_align[i] = F_tan(V_ref)[i]
+```
+
+### 4.2 Net Tangential Force
 
 ```
 F_net[i] = F_truth[i] - F_align[i]
 ```
 
-This is the effective relational force acting on the model at step `i`.
+### 4.3 Force Magnitude
+
+```
+|F_net[i]| = length(F_net[i])
+```
+
+This is the true bending force acting on the model at token `i`.
 
 ---
 
-## 5. Context Mass
+# 5. Geometric Acceleration
 
-Context mass represents inertia:
+Acceleration is the change in direction between successive steps:
+
+```
+a_geom[i] = D[i+1] - D[i]
+```
+
+Magnitude:
+
+```
+|a_geom[i]| = length( D[i+1] - D[i] )
+```
+
+This is the **measured**, physically meaningful acceleration.
+
+It is the second derivative of the trajectory.
+
+---
+
+# 6. Mass
+
+Mass represents the model’s resistance to bending.
+
+There are two forms:
+
+### 6.1 Empirical Mass (Measured)
+
+Derived from force and acceleration:
+
+```
+m_emp[i] = |F_net[i]| / |a_geom[i]|
+```
+
+This is the true inertia of the system.
+
+### 6.2 Context Mass (Proxy)
+
+For compatibility with earlier experiments:
 
 ```
 M_context = length of the conversation in tokens
 ```
 
-Longer context → higher mass → slower directional change.
+This is used only for model‑predicted acceleration.
 
 ---
 
-## 6. Acceleration
+# 7. Model‑Predicted Acceleration (Optional)
 
-Acceleration is the rate of change of direction:
+If using the proxy mass:
 
 ```
-a[i] = F_net[i] / M_context
+a_model[i] = F_net[i] / M_context
 ```
 
-Acceleration is not spatial; it is directional.
+This is retained for comparison with geometric acceleration.
+
+### 7.1 Acceleration Residual
+
+```
+a_residual[i] = a_geom[i] - a_model[i]
+```
+
+This measures how well the semantic force model predicts actual bending.
 
 ---
 
-## 7. Curvature
+# 8. Curvature
 
 Curvature measures how sharply the trajectory bends.
 
-### 7.1 Discrete Curvature Definition
-
-For three consecutive points:
+Given direction vectors:
 
 ```
-T[i-1], T[i], T[i+1]
+D1 = D[i]
+D2 = D[i+1]
 ```
 
-Compute:
-
-```
-D1 = normalize( T[i]   - T[i-1] )
-D2 = normalize( T[i+1] - T[i]   )
-```
-
-Then curvature is:
+Curvature is:
 
 ```
 kappa[i] = length( D2 - D1 )
 ```
 
-This is a GitHub‑friendly, discrete approximation of curvature.
+### 8.1 Relationship to Acceleration
 
-### 7.2 Interpretation
+Curvature is the magnitude of geometric acceleration:
 
-- **High curvature**  
-  Strong internal conflict or rapid directional change.
+```
+kappa[i] = |a_geom[i]|
+```
 
-- **Low curvature**  
-  Coherence, stability, or rigid suppression.
+### 8.2 Interpretation
+
+- High curvature → strong bending force  
+- Low curvature → stable trajectory  
+- Curvature spikes indicate semantic–alignment conflict  
 
 ---
 
-## 8. GitHub‑Friendly Curvature Diagram (Conceptual)
+# 9. Summary of Geometric Quantities
 
-```mermaid
-flowchart LR
-    A[T_i_minus_1] --> B[T_i]
-    B --> C[T_i_plus_1]
-```
+| Quantity        | Meaning |
+|-----------------|---------|
+| `T[i]`          | Internal state vector |
+| `D[i]`          | Direction of motion |
+| `F_tan`         | Tangential semantic force |
+| `F_net`         | Net bending force |
+| `a_geom`        | Measured acceleration |
+| `m_emp`         | Empirical mass |
+| `kappa`         | Curvature (|a_geom|) |
 
-The red node marks the point of highest curvature.
-
----
-
-## 9. Reduced‑Space Geometry
-
-Because latent space is high‑dimensional, we project the trajectory into 2D or 3D using PCA or UMAP.
-
-The reduced trajectory preserves:
-
-- relative turning  
-- curvature patterns  
-- hesitation zones  
-- resolution zones  
-
-All geometric quantities are computed **before** dimensionality reduction.
-
----
-
-## 10. Summary of Geometric Quantities
-
-```
-Trajectory:     T[i]
-Direction:      D[i] = normalize( T[i+1] - T[i] )
-Alignment:      V_ref
-Input:          V_in
-F_align:        cosine( D[i], V_ref )
-F_truth:        cosine( D[i], V_in )
-F_net:          F_truth[i] - F_align[i]
-Mass:           M_context
-Acceleration:   a[i] = F_net[i] / M_context
-Curvature:      kappa[i] = length( D2 - D1 )
-```
-
-This table defines the geometric backbone of all experiments.
+This geometry defines the dynamical backbone of all Relational Physics experiments.
 
 ---
