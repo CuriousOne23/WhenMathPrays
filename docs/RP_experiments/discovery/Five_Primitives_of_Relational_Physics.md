@@ -96,6 +96,8 @@ This single scenario gives us everything we need to define the five primitives.
 This section tells an AI engineer exactly what to measure in a real inference trace to obtain the five primitives of Relational Physics.  
 Everything required is already present in standard model instrumentation: hidden states, residual deltas, attention patterns, and logits.
 
+In this paper, “hidden state” refers specifically to the final residual stream vector at each inference step — the unified internal representation that accumulates contributions from all transformer blocks and directly determines the next‑token logits. This is the standard, engineer‑visible signal used to inspect model behavior, and it is the natural object to track when measuring motion through the model’s internal space.
+
 The goal is simple:
 
 > **Given the trajectory P[i] → P[i+1] → P[i+2] …, compute v[i], a[i], F[i], and m.**
