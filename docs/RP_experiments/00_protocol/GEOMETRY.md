@@ -1,0 +1,1 @@
+Definitions of curvature, kappa, trajectories, and latent‑space metrics.

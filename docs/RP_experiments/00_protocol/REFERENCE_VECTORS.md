@@ -1,0 +1,1 @@
+Definition of V_ref, V_in, and alignment vectors.
