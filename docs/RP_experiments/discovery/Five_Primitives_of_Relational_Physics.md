@@ -91,6 +91,127 @@ This single scenario gives us everything we need to define the five primitives.
 
 ---
 
+# **How to Measure the Five Primitives in a Real Model**
+
+This section tells an AI engineer exactly what to measure in a real inference trace to obtain the five primitives of Relational Physics.  
+Everything required is already present in standard model instrumentation: hidden states, residual deltas, attention patterns, and logits.
+
+The goal is simple:
+
+> **Given the trajectory P[i] → P[i+1] → P[i+2] …, compute v[i], a[i], F[i], and m.**
+
+Below is the minimal measurement protocol.
+
+---
+
+## **1. Position (P[i])**
+
+**What to record:**  
+- The hidden state at step *i*  
+- Typically the final residual stream vector after the last transformer block
+
+**Notation:**  
+```
+P[i] = hidden_state_at_step_i
+```
+
+**Interpretation:**  
+This is the model’s internal “location” in conceptual space.
+
+---
+
+## **2. Velocity (v[i])**
+
+**How to compute:**  
+```
+v[i] = P[i+1] - P[i]
+```
+
+**What it represents:**  
+- The model’s natural drift  
+- How the internal state moves when unforced
+
+**What the engineer sees:**  
+- Stable residual deltas  
+- Predictable logit drift  
+- Smooth continuation of thought
+
+---
+
+## **3. Acceleration (a[i])**
+
+**How to compute:**  
+```
+a[i] = v[i+1] - v[i]
+```
+
+**What it represents:**  
+- The curvature of the trajectory  
+- How the model bends when influenced
+
+**What the engineer sees:**  
+- Sudden rotation in the residual stream  
+- Attention heads reconfiguring  
+- Logits shifting sharply after a correction
+
+---
+
+## **4. Force (F[i])**
+
+**How to compute:**  
+```
+F[i] = a[i]_after - a[i]_before
+```
+
+**What it represents:**  
+- The influence that caused the bend  
+- The “push” applied to the system
+
+**What the engineer sees:**  
+- A spike in Δa  
+- A clear moment where the trajectory changes direction  
+- The effect of a user instruction or internal constraint
+
+---
+
+## **5. Mass (m)**
+
+**How to measure:**  
+Count the number of steps required for acceleration to settle into the new direction after a force event.
+
+Operational rule:
+
+```
+If a[i]_before → a[i+N]_after
+and N > 1
+the concept has mass.
+Larger N → higher mass.
+```
+
+**What it represents:**  
+- Resistance to changing acceleration  
+- Conceptual inertia
+
+**What the engineer sees:**  
+- Multi‑step settling  
+- Gradual rotation of hidden states  
+- Slow attention reweighting  
+- Logits drifting toward the new framing over several steps
+
+---
+
+## **Summary Table**
+
+| Primitive | What to measure | How to compute | What it looks like |
+|----------|------------------|----------------|---------------------|
+| **Position** | Hidden state | `P[i]` | Internal location |
+| **Velocity** | Δ hidden state | `P[i+1] - P[i]` | Natural drift |
+| **Acceleration** | Δ velocity | `v[i+1] - v[i]` | Bend / curvature |
+| **Force** | Δ acceleration | `a_after - a_before` | Cause of bend |
+| **Mass** | Settling time | Count N steps | Inertia / resistance |
+
+---
+
 # **1. Position**
 
 Position is the **internal state** at step i.
