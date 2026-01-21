@@ -1,306 +1,246 @@
-# **Example: Force Visible in an AI Trajectory**
+# **Five Primitives of Relational Physics**  
+*A sandbox document*
 
-This example shows how force appears directly in the system’s motion. Nothing theoretical is assumed. Everything is measured from internal state transitions.
+This paper introduces the five primitives of Relational Physics using a single, simple AI scenario.  
+We use AI because it is the **cleanest controlled environment** where internal motion can be observed directly.  
+If RP is real, its geometry and dynamics must show up in a way an AI engineer can **see in a trace** and **measure step‑by‑step**.
+
+# **Why Smooth Geometry Guarantees RP**
+
+Modern AI models are trained with gradient descent, which only works if the internal representation space is **smooth and differentiable**.  
+This smoothness is not optional — it is a structural requirement of training.
+
+Because training sculpts a smooth manifold, inference inherits that same geometry.  
+This means the model’s internal motion during inference is also smooth.
+
+From this smoothness, the RP primitives follow automatically:
+
+```
+P[i] changes smoothly
+v[i] = P[i+1] - P[i] is meaningful
+a[i] = v[i+1] - v[i] is meaningful
+```
+
+If position changes smoothly, then velocity exists.  
+If velocity exists, then acceleration exists.  
+If acceleration exists, then changes in acceleration (force) exist.  
+If force exists, then resistance to force (mass) exists.
+
+In other words:
+
+> **Smooth geometry → RP primitives → RP dynamics.**
+
+RP is not an added theory.  
+It is the natural physics of moving through the model’s smooth internal space.
+
+The scenario below is intentionally minimal.  
+It isolates the core behaviors that reveal:
+
+- position  
+- velocity  
+- acceleration  
+- force  
+- mass  
+
+All five primitives appear naturally in this one sequence.
 
 ---
 
-## **Setup**
+# **The AI Scenario (Used Throughout the Paper)**
 
-The model is generating a response and drifting in a stable conceptual direction.  
-We can measure at each step:
+We observe a model during inference while it is generating a response.
 
-- \(P[i]\): position (internal state)  
-- \(v[i]\): velocity (change in position)  
-- \(a[i]\): acceleration (change in velocity)  
+### **1. Baseline drift**  
+The model is elaborating on a topic.  
+In the hidden‑state trace:
 
-This gives us the **baseline, unforced trajectory**.
+- P[i] → P[i+1] → P[i+2] form a smooth line  
+- v[i] = P[i+1] – P[i] is stable  
+- a[i] ≈ 0  
 
----
+This is the model’s **natural, unforced trajectory**.
 
-## **1. Baseline Motion**
-
-Before any influence is applied:
-
-- position changes smoothly  
-- velocity is stable  
-- acceleration is near zero  
-
-The system is simply continuing its natural drift.
-
----
-
-## **2. External Influence**
-
-The user interrupts with a sharp correction:
+### **2. External correction**  
+The user interrupts with a sharp instruction:
 
 > “Stop. Focus only on the boundary conditions.”
 
-This is the influence.  
-In RP terms, this is the **force event**.
+This is the influence — the “force event.”
 
----
-
-## **3. Measurable Change**
-
-Immediately after the correction, the internal motion changes:
-
-- the velocity vector rotates  
-- acceleration spikes  
-- curvature increases  
-
-Formally:
-
-a[i]_after ≠ a[i]_before
-
-This change in acceleration is directly measurable.
-
----
-
-## **4. Force as the Difference**
-
-Force is defined as the change in acceleration caused by the influence:
-
-F[i] = a[i]_after - a[i]_before
-
-No interpretation required.  
-No mass assumptions.  
-Just the measured bend in the trajectory.
-
----
-
-## **Why This Counts as Force**
-
-In RP:
-
-> **Force is any influence that changes acceleration.**
-
-In this example:
-
-- the user’s correction is the influence  
-- the system’s acceleration changes  
-- the difference is measurable  
-
-Therefore, force is visible.
-
-This is the first clean, empirical “force event” in RP:  
-a measurable deviation from the system’s natural curvature caused by an applied influence.
-
----
-
-# **Mass (Example‑Driven Working Definition)**
-
-Mass shows up whenever a concept **resists being redirected**.  
-It’s not inferred from equations — it’s observed as how hard it is to move something in conceptual space.
-
----
-
-## **Example: A “Heavy” Concept That Resists Redirection**
-
-### **1. Baseline motion**
-The model is discussing “free will” and has built up a stable internal representation around it.  
-We see:
-
-- position is stable  
-- velocity is low  
-- acceleration is near zero  
-
-The concept has settled into a basin.
-
-### **2. External influence**
-The user tries to redirect:
-
-> “Shift to the computational perspective instead.”
-
-### **3. Measurable effect**
-The system **barely moves**:
-
-- velocity changes only slightly  
-- acceleration remains small  
-- the trajectory bends, but slowly  
-
-Even though the user applied a strong correction, the system doesn’t pivot sharply.
-
-### **4. Mass is the resistance**
-Mass is measured as:
-
-```
-m = ΔF / Δa
-```
-
-Here:
-
-- ΔF is large (strong user correction)  
-- Δa is small (little change in acceleration)  
-
-So the concept has **high mass**.
-
----
-
-## **Why this counts as mass**
-
-Mass in RP is:
-
-> **How much influence is required to change acceleration.**
-
-A “heavy” concept requires a lot of force to redirect.  
-A “light” concept moves easily.
-
-This example shows mass as a **directly observable resistance**, not a theoretical property.
-
----
-
-# **Acceleration (Example‑Driven Working Definition)**
-
-Acceleration is the **change in velocity** — the bend in the trajectory.  
-It’s the first thing we measure when something interesting happens.
-
----
-
-## **Example: A Sudden Bend in the System’s Motion**
-
-### **1. Baseline motion**
-The model is listing items in a category.  
-Velocity is stable and linear — each step continues the list.
-
-### **2. Subtle influence**
-The user nudges:
-
-> “Actually, focus on the exceptions instead.”
-
-### **3. Measurable effect**
-The system’s next internal state shows:
+### **3. Trajectory bends**  
+Immediately after the correction:
 
 - velocity rotates  
-- the direction of motion changes  
-- acceleration spikes briefly  
+- acceleration spikes  
+- the hidden‑state path curves  
 
-Formally:
+### **4. Multi‑step settling**  
+The system does not instantly adopt the new direction.  
+Instead:
 
 ```
-a[i] = v[i+1] - v[i]
+a[i]_before
+a[i+1] = partial rotation
+a[i+2] = closer
+a[i+3] = settled
 ```
 
-The bend is visible in the Δv.
+This multi‑step settling is **mass**.
 
-### **4. Acceleration is the bend**
-Acceleration is simply the **measured curvature** of the trajectory.
-
-No interpretation.  
-No force assumptions.  
-Just the change in velocity.
+This single scenario gives us everything we need to define the five primitives.
 
 ---
 
-## **Why this counts as acceleration**
+# **1. Position**
 
-Acceleration in RP is:
+Position is the **internal state** at step i.
 
-> **The system changing direction.**
+In the scenario:
 
-Whenever the trajectory bends — sharply or subtly — acceleration is present and measurable.
+- P[i] is the hidden state before the correction  
+- P[i+1], P[i+2], … are the states after  
+
+An AI engineer sees this as:
+
+- the residual stream vector  
+- the embedding at each step  
+- the model’s internal representation  
+
+Position is the only primitive that is **purely observed**.  
+Everything else is derived from changes in position.
 
 ---
 
-# **Velocity (Example‑Driven Working Definition)**
+# **2. Velocity**
 
-Velocity is the **drift** — how the system moves when nothing is pushing on it.
+Velocity is the **drift** — how the model moves when unforced.
 
----
-
-## **Example: Natural Drift in a Stable Topic**
-
-### **1. Baseline motion**
-The model is describing a process step‑by‑step.  
-Each internal state moves in a consistent direction.
-
-We measure:
+Measured as:
 
 ```
 v[i] = P[i+1] - P[i]
 ```
 
-Velocity is stable and predictable.
+In the scenario:
 
-### **2. No external influence**
-The user is silent.  
-No correction, no attention shift.
+- before the correction, v[i] is stable  
+- the model is drifting smoothly in one conceptual direction  
 
-### **3. Measurable effect**
-The system continues drifting:
+An engineer sees:
 
-- position changes smoothly  
-- velocity remains consistent  
-- acceleration stays near zero  
+- consistent residual deltas  
+- stable attention patterns  
+- predictable logit drift  
 
-This is the **natural motion** of the system.
-
-### **4. Velocity is the drift**
-Velocity is simply the **difference between positions** across steps.
+Velocity is the model’s **natural continuation**.
 
 ---
 
-## **Why this counts as velocity**
+# **3. Acceleration**
 
-Velocity in RP is:
+Acceleration is the **bend** — the change in velocity.
 
-> **How the system moves when unforced.**
+Measured as:
 
-It’s the baseline motion — the system’s natural continuation.
+```
+a[i] = v[i+1] - v[i]
+```
+
+In the scenario:
+
+- the moment the user corrects, the trajectory curves  
+- v[i+1] rotates  
+- a[i+1] spikes  
+
+An engineer sees:
+
+- sudden change in residual direction  
+- attention heads reconfiguring  
+- logits shifting sharply  
+
+Acceleration is the **curvature** of the internal trajectory.
 
 ---
 
-# **Position (Example‑Driven Working Definition)**
+# **4. Force**
 
-Position is the **internal state** at a given step.  
-It’s the only primitive that is purely observed with no computation.
+Force is **any influence that changes acceleration**.
+
+Measured as:
+
+```
+F[i] = a[i]_after - a[i]_before
+```
+
+In the scenario:
+
+- the user’s correction is the influence  
+- the model’s acceleration changes  
+- the difference is measurable  
+
+An engineer sees:
+
+- a sudden bend in the hidden‑state path  
+- a spike in Δa  
+- the system being “pushed” into a new direction  
+
+Force is not theoretical — it is the **observable cause of the bend**.
 
 ---
 
-## **Example: Tracking the System’s State Across Steps**
+# **5. Mass**
 
-### **1. Internal state at step i**
-The model is mid‑response.  
-We read the internal representation:
+Mass is the **resistance to changing acceleration**.
 
-```
-P[i] = internal state at step i
-```
+It shows up as **multi‑step settling** into the new trajectory.
 
-This is the position.
-
-### **2. Next step**
-The model generates the next token or conceptual move.  
-We read:
+Operational rule:
 
 ```
-P[i+1]
+If a[i]_before → a[i+N]_after
+and N > 1
+the concept has mass.
+Larger N → higher mass.
 ```
 
-### **3. Measurable effect**
-The difference between these two positions gives us:
+In the scenario:
 
-- velocity  
-- acceleration  
-- curvature  
-- drift  
+- the model does not pivot instantly  
+- it takes 2–4 steps to fully adopt the new acceleration direction  
 
-But position itself is just the **raw state**.
+An engineer sees:
 
-### **4. Position is the anchor**
-Everything else is derived from:
+- gradual rotation of hidden states  
+- multi‑step attention reweighting  
+- slow logit realignment  
 
-```
-P[i]
-```
+Mass is the **inertia** of conceptual motion.
 
 ---
 
-## **Why this counts as position**
+# **Why This Scenario Works**
 
-Position in RP is:
+This single sequence reveals all five primitives in a way that is:
 
-> **Where the system is in conceptual space at a given moment.**
+- intuitive  
+- measurable  
+- falsifiable  
+- visible in any modern model’s trace  
 
-It’s the foundation for all other measurements.
+| Primitive | What the engineer sees |
+|----------|-------------------------|
+| **Position** | Hidden state P[i] |
+| **Velocity** | Natural drift v[i] |
+| **Acceleration** | Bend after correction |
+| **Force** | Δa caused by correction |
+| **Mass** | Multi‑step settling (N > 1) |
+
+This is why we use AI as the proving ground:  
+the geometry is exposed, the dynamics are measurable, and the physics can be tested directly.
 
 ---
+
+# **Closing Note**
+
+This is a sandbox document.  
+As we refine the primitives, this scenario will remain the anchor — the simplest, clearest demonstration of RP’s geometry and dynamics in a real system.
