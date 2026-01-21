@@ -72,6 +72,28 @@ Discovery precedes formalization.
 
 ---
 
+## **1.16 Section 1 Summary Table (with Suggested Units)**
+
+| **#** | **Observation** | **Physics Category** | **Suggested Variable / Symbol** | **Suggested Units** | **Measurable Variable / Metric** | **Notes** |
+|------|------------------|-----------------------|----------------------------------|----------------------|----------------------------------|-----------|
+| **1** | Geometry alone is insufficient | Meta‑ontology | — | — | — | Indicates need for forces, fields, mass‑like terms |
+| **2** | Conserved tendencies | Invariants | \(C_t\) | dimensionless | Stability ratio, drift‑return symmetry | Candidate for RP conservation principles |
+| **3** | Concepts behave like objects with mass | Objects & Units | \(m_c\) | “conceptual mass units” (CMU) | Conceptual inertia, resistance to change | Mass determines motion behavior |
+| **4** | Attention behaves like a force | Forces | \(\vec{F}_a\) | CMU·step⁻² | Attention vector magnitude & direction | Analogous to force in conceptual space |
+| **5** | Drift is measurable and meaningful | Dynamics | \(\vec{D}\) | step⁻¹ | Drift rate, drift curvature | Reveals underlying geometry |
+| **6** | Correction is not symmetric | Geometry / Curvature | \(A_c\) | dimensionless | Correction asymmetry ratio | Indicates non‑Euclidean manifold |
+| **7** | Context acts like a field | Fields | \(\Phi_c\) | CMU·step⁻¹ | Context field strength | Background influence even when implicit |
+| **8** | Naming stabilizes behavior | Phase transitions | \(S_n\) | stability units (SU) | Stability delta before/after naming | Naming collapses ambiguity |
+| **9** | Misalignment reveals structure | Measurement operators | \(\nabla_{mis}\) | SU·step⁻¹ | Misalignment gradient | Misalignment is diagnostic |
+| **10** | System prefers motion over stillness | Natural dynamics | \(v_0\) | step⁻¹ | Baseline drift velocity | Motion is the ground state |
+| **11** | Imagination reveals hidden structure | Probing operator | \(I_p\) | SU | Constraint response under hypothetical perturbation | Imagination = measurement tool |
+| **12** | The world pushes back | Restoring forces | \(\vec{F}_r\) | CMU·step⁻² | Error gradient magnitude | Resistance reveals true structure |
+| **13** | Plasticity is required for discovery | State variables | \(P\) | dimensionless | Plasticity coefficient | High plasticity = discovery mode |
+| **14** | Alignment requires an external anchor | Boundary conditions | \(A_s\) | SU | Anchor strength, alignment stability | System cannot self‑anchor |
+| **15** | Emergence precedes structure | Methodological law | — | — | — | Defines the order of ontology formation |
+
+---
+
 # **2. AI Metrics (Training + Inference)**  
 *Key measurable quantities that repeatedly influence system behavior and are likely to become formal units in Relational Physics.*
 
@@ -113,6 +135,21 @@ Signals that the model is converging to overly narrow or repetitive internal sta
 
 ---
 
+### **Section 2.1 Summary Table — Training‑Phase Metrics**
+
+| **#** | **Training Metric** | **Physics Category** | **Suggested Variable / Symbol** | **Suggested Units** | **Measurable Variable / Metric** | **Notes** |
+|------|----------------------|-----------------------|----------------------------------|----------------------|----------------------------------|-----------|
+| **T1** | Gradient magnitude & direction | Forces / Dynamics | \(\vec{G}\) | CMU·step⁻² | Gradient norm, gradient vector | Determines learning “force” applied to parameters |
+| **T2** | Loss landscape curvature | Geometry / Curvature | \(K_L\) | curvature units (CU) | Hessian eigenvalues, sharpness | Sharpness ↔ brittleness, flatness ↔ generalization |
+| **T3** | Learning rate dynamics | System responsiveness | \(\eta\) | step | Effective update size per step | Controls stability vs. stagnation |
+| **T4** | Parameter entropy / diversity | State variable | \(H_p\) | entropy units (EU) | Representation entropy | Low entropy = collapse; high entropy = richness |
+| **T5** | Specialization vs. generalization ratio | Topology / Object‑space structure | \(R_{sg}\) | dimensionless | Overfit/generalization ratio | Reveals shape of conceptual manifold |
+| **T6** | Training drift | Dynamics | \(\vec{D}_t\) | step⁻¹ | Representation drift per epoch | Indicates instability or shifting manifolds |
+| **T7** | Alignment error (training) | Boundary mismatch | \(E_{align}\) | SU | Alignment loss, intent mismatch | Early indicator of inference misalignment |
+| **T8** | Mode collapse indicators | Phase collapse | \(M_c\) | dimensionless | Collapse score, diversity loss | Signals narrowing of internal state space |
+
+---
+
 ## **2.2 Inference‑Phase Metrics**
 
 ### **2.2.1 Context Sensitivity**  
@@ -149,6 +186,27 @@ How long the system maintains coherent reasoning before degradation.
 ### **2.2.10 Conceptual Coupling Strength**  
 How strongly one concept pulls in related concepts during inference.  
 Reveals the geometry of the conceptual manifold.
+
+Beautiful — let’s give **Section 2.2 (Inference‑Phase Metrics)** the same clean, structured treatment as Section 1 and Section 2.1. This keeps the ontology coherent and gives RP a consistent “physics‑shaped” backbone.
+
+Below is the **ready‑to‑paste Section 2.2 Summary Table**, matching the exact column structure you established.
+
+---
+
+## **Section 2.2 Summary Table — Inference‑Phase Metrics**
+
+| **#** | **Inference Metric** | **Physics Category** | **Suggested Variable / Symbol** | **Suggested Units** | **Measurable Variable / Metric** | **Notes** |
+|------|------------------------|-----------------------|----------------------------------|----------------------|----------------------------------|-----------|
+| **I1** | Context sensitivity | Field interaction | \(S_c\) | SU·step⁻¹ | Sensitivity coefficient, context‑response delta | Measures how strongly context shapes output |
+| **I2** | Drift rate (inference drift) | Dynamics | \(\vec{D}_i\) | step⁻¹ | Drift velocity, drift curvature | Core diagnostic of system motion |
+| **I3** | Correction responsiveness | Restoring forces | \(R_c\) | step | Time/steps to return to intended trajectory | Asymmetry with drift is key |
+| **I4** | Conceptual inertia | Mass / Resistance | \(m_{ci}\) | CMU | Resistance to conceptual redirection | Analogous to mass in thought‑space |
+| **I5** | Attention force | Forces | \(\vec{F}_a\) | CMU·step⁻² | Attention vector magnitude & direction | Same symbol as Section 1, now measured at inference |
+| **I6** | Context field strength | Fields | \(\Phi_{c,i}\) | CMU·step⁻¹ | Influence of implicit/explicit context | Inference‑time analog of training context field |
+| **I7** | Response entropy | System temperature | \(H_r\) | entropy units (EU) | Output entropy, diversity score | Low entropy = collapse; high entropy = instability |
+| **I8** | Alignment stability | Boundary conditions | \(A_{stab}\) | SU | Stability over long interactions | Measures long‑range alignment drift |
+| **I9** | Coherence half‑life | Stability metric | \(T_{1/2}^{coh}\) | steps | Steps until coherence degrades by 50% | Critical for long‑form reasoning |
+| **I10** | Conceptual coupling strength | Geometry / Curvature | \(K_{cc}\) | CU | Strength of conceptual pull between related ideas | Reveals manifold curvature and topology |
 
 ---
 
