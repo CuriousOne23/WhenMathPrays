@@ -1,368 +1,347 @@
-# **Five Primitives of Relational Physics**  
-*A sandbox document*
+## **1. Introduction: Why AI Engineers Need Relational Physics (RP)**
 
-This paper introduces the five primitives of Relational Physics using a single, simple AI scenario.  
-We use AI because it is the **cleanest controlled environment** where internal motion can be observed directly.  
-If RP is real, its geometry and dynamics must show up in a way an AI engineer can **see in a trace** and **measure step‑by‑step**.
+Modern transformer models operate in a vast, high‑dimensional geometry where behavior emerges from interactions we cannot directly observe. Engineers face recurring pain points:
 
-# **Why Smooth Geometry Guarantees RP**
+- **Steering vectors fade** in long contexts  
+- **RLHF‑aligned models become rigid**, persona‑locked, or resistant to correction  
+- **Coherence breaks** appear mid‑sequence without clear attribution  
+- **Scale amplifies fragility**, making interventions unpredictable  
 
-Modern AI models are trained with gradient descent, which only works if the internal representation space is **smooth and differentiable**.  
-This smoothness is not optional — it is a structural requirement of training.
+These problems are dynamical. They arise from **motion, forces & geometry** inside the residual stream — motion we currently cannot measure.
 
-Because training sculpts a smooth manifold, inference inherits that same geometry.  
-This means the model’s internal motion during inference is also smooth.
+Relational Physics (RP) offers a minimal, falsifiable toolkit for making geometry dynamics visible.
 
-From this smoothness, the RP primitives follow automatically:
+### **RP as a dynamical flashlight**
+RP primitives quantify how representations **move**, **bend**, **resist**, and **trade** with interventions. They turn invisible relational motion into observable signals that engineers can compute today on open models.
 
-```
-P[i] changes smoothly
-v[i] = P[i+1] - P[i] is meaningful
-a[i] = v[i+1] - v[i] is meaningful
-```
+### **Concrete utilities**
+RP gives engineers immediate leverage:
 
-If position changes smoothly, then velocity exists.  
-If velocity exists, then acceleration exists.  
-If acceleration exists, then changes in acceleration (force) exist.  
-If force exists, then resistance to force (mass) exists.
+- **Predict steering fragility**  
+  Mass (decay timescale) forecasts how quickly a steering vector fades.
 
-In other words:
+- **Quantify alignment artifacts**  
+  Tangential vs inline force reveals suppression load and boundary reflections.
 
-> **Smooth geometry → RP primitives → RP dynamics.**
+- **Debug long‑context drift**  
+  Velocity consistency and acceleration spikes expose early coherence breaks.
 
-RP is not an added theory.  
-It is the natural physics of moving through the model’s smooth internal space.
+- **Compare architectures or RLHF levels**  
+  Higher mass indicates rigidity and reduced responsiveness.
 
-The scenario below is intentionally minimal.  
-It isolates the core behaviors that reveal:
+- **New metrics**  
+  Force efficiency, inertia thresholds, settling steps.
 
-- position  
-- velocity  
-- acceleration  
-- force  
-- mass  
+- **Design inspiration**  
+  Points toward soft‑bleed architectures (OCTPS) that reduce mass.
 
-All five primitives appear naturally in this one sequence.
+### **Why invest in RP at all?**
+Because AI geometry is enormous, curved, and full of unobserved forces.  
+When the terrain is this opaque, the only rational move is to begin quantifying **observable identities** — the minimal constructs that let us map the space.
 
----
+RP primitives are not “the truth.” They are the **first lense** on a landscape we barely understand.
 
-# **The AI Scenario (Used Throughout the Paper)**
+As we map, we may discover:
 
-We observe a model during inference while it is generating a response.
+- rivers (velocity flows)  
+- lakes (stable basins)  
+- swamps (high‑mass sticky regions)  
+- mountains (acceleration spikes)  
+- deserts (low‑density manifolds)  
+- oceans (long‑context waves)  
+- storms (TDS‑WDAS resonances)  
+- jet streams (high‑velocity corridors)
 
-### **1. Baseline drift**  
-The model is elaborating on a topic.  
-In the hidden‑state trace:
-
-- P[i] → P[i+1] → P[i+2] form a smooth line  
-- v[i] = P[i+1] – P[i] is stable  
-- a[i] ≈ 0  
-
-This is the model’s **natural, unforced trajectory**.
-
-### **2. External correction**  
-The user interrupts with a sharp instruction:
-
-> “Stop. Focus only on the boundary conditions.”
-
-This is the influence — the “force event.”
-
-### **3. Trajectory bends**  
-Immediately after the correction:
-
-- velocity rotates  
-- acceleration spikes  
-- the hidden‑state path curves  
-
-### **4. Multi‑step settling**  
-The system does not instantly adopt the new direction.  
-Instead:
-
-```
-a[i]_before
-a[i+1] = partial rotation
-a[i+2] = closer
-a[i+3] = settled
-```
-
-This multi‑step settling is **mass**.
-
-This single scenario gives us everything we need to define the five primitives.
+Mapping is the value.  
+The primitives are the first tools.
 
 ---
 
-# **How to Measure the Five Primitives in a Real Model**
+## **2. Minimal Setup: How to Compute RP Primitives**
 
-To make these dynamics measurable rather than conceptual, we now describe exactly what an AI engineer records in a real model. This section tells an AI engineer exactly what to measure in a real inference trace to obtain the five primitives of Relational Physics. Everything required is already present in standard model instrumentation: hidden states, residual deltas, attention patterns, and logits.
+RP is intentionally low‑overhead. You can compute all primitives using **inference‑time hooks only** — no training, no gradients.
 
-In this paper, “hidden state” refers specifically to the final residual stream vector at each inference step — the unified internal representation that accumulates contributions from all transformer blocks and directly determines the next‑token logits. This is the standard, engineer‑visible signal used to inspect model behavior, and it is the natural object to track when measuring motion through the model’s internal space. The residual stream exists during both training and inference, because both phases use the same forward pass. Training sculpts the geometry; inference moves through it.
+### **Requirements**
+- Any open transformer model (e.g., Llama‑3.1, Qwen, Gemma‑2)  
+- Access to `resid_post` or equivalent residual stream  
+- Ability to run:  
+  - a **baseline** sequence  
+  - an **intervention** sequence (steering vector, mid‑sequence correction, etc.)
 
-The goal is simple:
+### **Collecting residuals**
+Below is Python example pseudocode:
 
-> **Given the trajectory P[i] → P[i+1] → P[i+2] …, compute v[i], a[i], F[i], and m.**
+```
+# Pseudocode for collecting residuals
+residuals = []
+for i, layer in enumerate(model.layers):
+    hook = lambda x, i=i: residuals.append(x.detach().cpu())
+    layer.register_forward_hook(hook)
 
-Below is the minimal measurement protocol.
+# Run baseline or intervention sequence
+model(tokens)
+```
+
+### **Core metrics**
+- **Direction**: cosine similarity  
+- **Magnitude**: L2 norm  
+- **Decay / settling**: exponential fit or step count  
+
+These metrics feed directly into the primitives.
 
 ---
 
-## **1. Position (P[i])**
+## **3. The Five Primitives**
 
-**What to record:**  
-- The hidden state at step *i*  
-- Typically the final residual stream vector after the last transformer block
+Each primitive is presented in the same structure:
 
-**Notation:**  
-```
-P[i] = hidden_state_at_step_i
-```
-
-**Interpretation:**  
-This is the model’s internal “location” in conceptual space.
+1. Utility  
+2. Relational justification  
+3. Rigorous definition  
+4. How to measure  
+5. Validation tie‑ins  
 
 ---
 
-## **2. Velocity (v[i])**
+# **Primitive 1: Position (P)**
 
-**How to compute:**  
+## **Utility**
+Position is the simplest observable: the raw residual stream vector at each token.  
+It anchors all other primitives.
+
+Engineers use P to:
+
+- compare baseline vs intervention trajectories  
+- detect immediate bends in representation space  
+- visualize token‑by‑token drift  
+
+## **Relational Justification**
+In RP, an identity is defined by what it trades with others.  
+Position is the identity of “where the system is” in relational space.
+
+## **Definition**
+```
+P[i] = residuals[i]
+```
+
+## **How to Measure**
+Directly record `resid_post` at each layer or token.
+
+## **Validation Tie‑In**
+P is the substrate for all higher‑order trades (v, a, F, m).
+
+---
+
+# **Primitive 2: Velocity (v)**
+
+## **Utility**
+Velocity reveals how representations **move** across steps.  
+It exposes:
+
+- smooth flows  
+- sudden drifts  
+- early signs of coherence loss  
+
+## **Relational Justification**
+Velocity is the trade between positions — how one identity becomes another.
+
+## **Definition**
 ```
 v[i] = P[i+1] - P[i]
 ```
 
-**What it represents:**  
-- The model’s natural drift  
-- How the internal state moves when unforced
+## **How to Measure**
+Compute finite differences across tokens or layers.
 
-**What the engineer sees:**  
-- Stable residual deltas  
-- Predictable logit drift  
-- Smooth continuation of thought
+## **Validation Tie‑In**
+Velocity consistency is a strong predictor of long‑context stability.
 
 ---
 
-## **3. Acceleration (a[i])**
+# **Primitive 3: Acceleration (a)**
 
-**How to compute:**  
+## **Utility**
+Acceleration highlights **bends** and **instabilities**:
+
+- coherence breaks  
+- abrupt shifts in reasoning  
+- boundary reflections  
+- resonance spikes  
+
+## **Relational Justification**
+Acceleration is the trade between velocities — how motion itself changes.
+
+## **Definition**
 ```
 a[i] = v[i+1] - v[i]
 ```
 
-**What it represents:**  
-- The curvature of the trajectory  
-- How the model bends when influenced
+## **How to Measure**
+Finite differences of velocity.
 
-**What the engineer sees:**  
-- Sudden rotation in the residual stream  
-- Attention heads reconfiguring  
-- Logits shifting sharply after a correction
+## **Validation Tie‑In**
+Acceleration spikes correlate with TDS‑WDAS oscillations and instability zones.
 
 ---
 
-## **4. Force (F[i])**
+# **Primitive 4: Force (F)**
 
-**How to compute:**  
+## **Utility**
+Force quantifies the **causal effect** of an intervention.  
+It isolates what the external entity (steering vector, correction, prompt injection) *traded* with the system.
+
+Engineers use F to:
+
+- measure steering effectiveness  
+- detect suppression load  
+- separate inline vs tangential effects  
+
+## **Relational Justification**
+Force is the identity that captures **external trade**.  
+It is not assumed — it is defined as the difference between two motions.
+
+## **Definition**
 ```
-F[i] = a[i]_after - a[i]_before
+F[i] = a_intervention[i] - a_baseline[i]
 ```
 
-**What it represents:**  
-- The influence that caused the bend  
-- The “push” applied to the system
+### **Decomposition**
+```
+F_parallel   = projection of F onto v
+F_perp       = F - F_parallel
+```
 
-**What the engineer sees:**  
-- A spike in Δa  
-- A clear moment where the trajectory changes direction  
-- The effect of a user instruction or internal constraint
+Tangential force predicts directional change success.  
+Perpendicular force reveals resistance or boundary reflections.
+
+## **How to Measure**
+Compute acceleration for baseline and intervention runs, then subtract.
+
+## **Validation Tie‑In**
+F aligns with suppression load, resonance behavior, and OCTPS predictions.
 
 ---
 
-## **5. Mass (m)**
+# **Primitive 5: Mass (m)**
 
-**How to measure:**  
-Count the number of steps required for acceleration to settle into the new direction after a force event.
+## **Utility**
+Mass quantifies **resistance to change**.  
+It predicts:
 
-Operational rule:
+- steering fade  
+- rigidity from RLHF  
+- inertia of representations  
+- how many steps an intervention “sticks”  
+
+## **Relational Justification**
+Mass is the identity that captures how strongly the system resists trades.  
+It is inferred from decay behavior — not assumed.
+
+## **Definition**
+Mass is approximated from exponential decay of acceleration magnitude:
 
 ```
-If a[i]_before → a[i+N]_after
-and N > 1
-the concept has mass.
-Larger N → higher mass.
+||a[k]|| ≈ A * exp(-k / τ)
+m ≈ τ
 ```
 
-**What it represents:**  
-- Resistance to changing acceleration  
-- Conceptual inertia
+Or from settling steps:
 
-**What the engineer sees:**  
-- Multi‑step settling  
-- Gradual rotation of hidden states  
-- Slow attention reweighting  
-- Logits drifting toward the new framing over several steps
+```
+m ≈ number_of_steps_until_settled
+```
+
+## **How to Measure**
+Fit an exponential curve or count settling steps after an intervention.
+
+## **Validation Tie‑In**
+Mass correlates with:
+
+- RLHF rigidity  
+- persona lock strength  
+- long‑context steering fade  
 
 ---
 
-## **Summary Table**
+# **4. Closing the Dynamical Loop**
 
-| Primitive | What to measure | How to compute | What it looks like |
-|----------|------------------|----------------|---------------------|
-| **Position** | Hidden state | `P[i]` | Internal location |
-| **Velocity** | Δ hidden state | `P[i+1] - P[i]` | Natural drift |
-| **Acceleration** | Δ velocity | `v[i+1] - v[i]` | Bend / curvature |
-| **Force** | Δ acceleration | `a_after - a_before` | Cause of bend |
-| **Mass** | Settling time | Count N steps | Inertia / resistance |
+RP proposes a first‑order relational closure:
+
+```
+F ≈ m * a
+```
+
+Or with a scaling constant:
+
+```
+F ≈ c * m * a
+```
+
+This is not a physical law — it is a **testable hypothesis** about relational trades.
+
+### **Utility**
+- Compute implied force from m and a  
+- Compare to measured force  
+- Mismatches reveal:  
+  - suppression artifacts  
+  - nonlinear regimes  
+  - resonance zones  
+  - boundary reflections  
+
+This closes the loop between intervention, resistance, and motion.
 
 ---
 
-# **1. Position**
+# **5. Overarching Themes**
 
-Position is the **internal state** at step i.
+### **RP is a lens, not the truth**
+Other primitives (curvature, entropy, spectral modes, topology) may outperform these in some regimes.
 
-In the scenario:
+### **Mapping is the value**
+The AI geometry is a wilderness.  
+RP is the first map.
 
-- P[i] is the hidden state before the correction  
-- P[i+1], P[i+2], … are the states after  
-
-An AI engineer sees this as:
-
-- the residual stream vector  
-- the embedding at each step  
-- the model’s internal representation  
-
-Position is the only primitive that is **purely observed**.  
-Everything else is derived from changes in position.
+### **Sandbox spirit**
+RP is intentionally playful, empirical, and low‑pressure.  
+Engineers are invited to explore, test, falsify, and refine.
 
 ---
 
-# **2. Velocity**
+# **6. Figures**
 
-Velocity is the **drift** — how the model moves when unforced.
-
-Measured as:
-
+## **Primitive Flow**
+```mermaid
+flowchart LR
+    P["Position (P)"] --> v["Velocity (v)"]
+    v --> a["Acceleration (a)"]
+    a --> F["Force (F)"]
+    F --> m["Mass (m)"]
 ```
-v[i] = P[i+1] - P[i]
+
+## **Baseline vs Intervention**
+```mermaid
+sequenceDiagram
+    participant B as Baseline
+    participant I as Intervention
+    B->>B: compute P, v, a
+    I->>I: compute P, v, a
+    I->>B: F = a_I - a_B
+    Note over I,B: m inferred from decay
 ```
-
-In the scenario:
-
-- before the correction, v[i] is stable  
-- the model is drifting smoothly in one conceptual direction  
-
-An engineer sees:
-
-- consistent residual deltas  
-- stable attention patterns  
-- predictable logit drift  
-
-Velocity is the model’s **natural continuation**.
 
 ---
 
-# **3. Acceleration**
+# **7. Conclusion**
 
-Acceleration is the **bend** — the change in velocity.
+The Five Primitives of Relational Physics provide a minimal, falsifiable, engineer‑friendly toolkit for measuring motion inside transformer models. They illuminate steering fragility, alignment rigidity, coherence breaks, and long‑context drift — all using inference‑time hooks on open models.
 
-Measured as:
+They are not the final primitives.  
+They are the first useful ones.
 
-```
-a[i] = v[i+1] - v[i]
-```
+The map will evolve.  
+The landscape will surprise us.  
+But the only way to explore a vast geometry is to start measuring its motion.
 
-In the scenario:
-
-- the moment the user corrects, the trajectory curves  
-- v[i+1] rotates  
-- a[i+1] spikes  
-
-An engineer sees:
-
-- sudden change in residual direction  
-- attention heads reconfiguring  
-- logits shifting sharply  
-
-Acceleration is the **curvature** of the internal trajectory.
+OCTPS acts as the rover that moves through the model’s cognitive terrain, while RP provides the eyes and ears — the primitives that let us perceive, measure, and map the landscape of AI thought. Together they form the first coherent exploration stack for navigating the relational geometry of modern transformers. The journey begins with P, v, a, F, and m.
 
 ---
-
-# **4. Force**
-
-Force is **any influence that changes acceleration**.
-
-Measured as:
-
-```
-F[i] = a[i]_after - a[i]_before
-```
-
-In the scenario:
-
-- the user’s correction is the influence  
-- the model’s acceleration changes  
-- the difference is measurable  
-
-An engineer sees:
-
-- a sudden bend in the hidden‑state path  
-- a spike in Δa  
-- the system being “pushed” into a new direction  
-
-Force is not theoretical — it is the **observable cause of the bend**.
-
----
-
-# **5. Mass**
-
-Mass is the **resistance to changing acceleration**.
-
-It shows up as **multi‑step settling** into the new trajectory.
-
-Operational rule:
-
-```
-If a[i]_before → a[i+N]_after
-and N > 1
-the concept has mass.
-Larger N → higher mass.
-```
-
-In the scenario:
-
-- the model does not pivot instantly  
-- it takes 2–4 steps to fully adopt the new acceleration direction  
-
-An engineer sees:
-
-- gradual rotation of hidden states  
-- multi‑step attention reweighting  
-- slow logit realignment  
-
-Mass is the **inertia** of conceptual motion.
-
----
-
-# **Why This Scenario Works**
-
-This single sequence reveals all five primitives in a way that is:
-
-- intuitive  
-- measurable  
-- falsifiable  
-- visible in any modern model’s trace  
-
-| Primitive | What the engineer sees |
-|----------|-------------------------|
-| **Position** | Hidden state P[i] |
-| **Velocity** | Natural drift v[i] |
-| **Acceleration** | Bend after correction |
-| **Force** | Δa caused by correction |
-| **Mass** | Multi‑step settling (N > 1) |
-
-This is why we use AI as the proving ground:  
-the geometry is exposed, the dynamics are measurable, and the physics can be tested directly.
-
----
-
-# **Closing Note**
-
-This is a sandbox document.  
-As we refine the primitives, this scenario will remain the anchor — the simplest, clearest demonstration of RP’s geometry and dynamics in a real system. Future documents will expand this into a full RP measurement protocol and explore how these primitives interact to form higher‑order dynamics.
