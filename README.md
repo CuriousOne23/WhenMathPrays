@@ -40,7 +40,8 @@ GRP provides that missing structure.
 
 ### **Foundational Documents**
 - **GRP_rev3.5.md**  
-- **grp_principles.md**  
+- **grp_principles.md**
+- **[Verb Mind Epistemology for Relational Physics](Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md)** — Foundational epistemology explaining noun‑mind vs verb‑mind cognition and why relational physics requires a verb‑based perceptual stance
 - **PRIMITIVES_AND_RELATIONAL_SPACE.md**  
 - **CONSTANTS.md**  
 - **GRP_GLOSSARY.md**  
