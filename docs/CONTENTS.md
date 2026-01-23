@@ -15,6 +15,8 @@ This document provides a comprehensive index of all documentation in the WhenMat
 # 🏛️ **Architecture & Design**
 
 ### **System Architecture**
+- **[Verb Mind Epistemology for Relational Physics](Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md)** — Foundational epistemology explaining noun‑mind vs verb‑mind cognition and why relational physics requires a verb‑based perceptual stance
+stance  
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — Overall system architecture, design principles, and high‑level organization  
 - **[SOFTWARE_MODULES.md](SOFTWARE_MODULES.md)** — Detailed reference for all software modules, their purposes, and I/O variables  
 - **[STATE_MANAGEMENT_REFACTORING.md](STATE_MANAGEMENT_REFACTORING.md)** — Phase 3.4 state management implementation details
