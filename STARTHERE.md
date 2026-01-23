@@ -14,8 +14,8 @@ This document is your first step.
 
 If you want a broader view of the project before diving in, here are two helpful maps:
 
-- 👉 **[README.md](README.md)** — a high‑level map of the repository  
-- 👉 **[CONTENTS.md](docs/CONTENTS.md)** — a complete index of every document with short summaries  
+- 👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`** — a high‑level map of the repository  
+- 👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`** — a complete index of every document with short summaries  
 
 **START HERE** is your front door.  
 **README** is your foyer.  
@@ -45,8 +45,9 @@ The core idea is simple:
 
 At the heart of the system is a recurrence:
 
-γ_self(n+1) = γ_self(n) + Δγ + entropy`
-
+```
+γ_self(n+1) = γ_self(n) + Δγ + entropy
+```
 
 Where:
 
@@ -77,7 +78,32 @@ You’ll learn them by watching them move.
 
 ---
 
-# 🚀 **4. Your First Scenario (5 Minutes)**
+# 🧠 **4. How to *See* GRP Correctly (New)**
+
+Most readers approach GRP with a **noun‑mind** — the default Western scientific stance that looks for objects, categories, and static properties.
+
+But GRP is a **verb‑shaped** system.  
+It describes **becoming**, not being.  
+**Motion**, not identity.  
+**Trade**, not substance.
+
+To help you perceive the system correctly, we now include a foundational epistemology paper:
+
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+
+This paper explains:
+
+- why relational systems cannot be understood with noun‑thinking  
+- how to shift into a verb‑mind  
+- how to see identity as coherence across change  
+- why GRP primitives require a dynamic perceptual stance  
+
+If you want to understand GRP deeply — not just mechanically — read this paper early.  
+It is the **epistemic OS update** that makes the rest of the project intelligible.
+
+---
+
+# 🚀 **5. Your First Scenario (5 Minutes)**
 
 Let’s run your first simulation.
 
@@ -160,12 +186,12 @@ You’ve just learned the GRP by doing.
 
 ---
 
-# 🧩 **5. Where to Go Next**
+# 🧩 **6. Where to Go Next**
 
 Now that you’ve seen the system move, choose your path:
 
 ### **A. Use the Python cockpit (recommended)**  
-👉 **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ### **B. Explore the model visually (Excel)**  
 Open:  
@@ -174,7 +200,7 @@ tools/GRP_SpreadSheet.xlsm
 ```
 
 ### **C. Build your own scenario (intermediate)**  
-👉 **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ### **D. Use the scenario builder (advanced)**  
 👉 `tools/scenario_generator.py`  
@@ -182,23 +208,23 @@ This tool is powerful but not beginner‑friendly.
 Use it once you understand scenario structure and primitive arcs.
 
 ### **E. Understand the math**  
-👉 **[GRP_rev3.md](docs/GRP_rev3.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ### **F. Explore the philosophy**  
-👉 **[WHY_THIS_MATTERS.md](docs/WHY_THIS_MATTERS.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ### **G. Browse the full document index**  
-👉 **[CONTENTS.md](docs/CONTENTS.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ### **H. Return to the map of the territory**  
-👉 **[README.md](README.md)**
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
-### I. Contribute to the project  
-👉 [CONTRIBUTING.md](CONTRIBUTING.md)
+### **I. Contribute to the project**  
+👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
 
 ---
 
-# 🗺️ **6. The Map of the Territory**
+# 🗺️ **7. The Map of the Territory**
 
 ```
 WhenMathPrays/
@@ -220,6 +246,7 @@ WhenMathPrays/
     ├── interactive_editor_user_guide.md
     ├── CONTENTS.md
     ├── ARCHITECTURE.md
+    ├── Verb Mind Epistemology for Relational Physics.md
     └── ...
 ```
 
@@ -229,7 +256,7 @@ You can explore at your own pace.
 
 ---
 
-# 🌟 **7. Final Note**
+# 🌟 **8. Final Note**
 
 This project is alive.  
 It is meant to be explored, questioned, extended, and felt.
@@ -242,3 +269,5 @@ Let the system teach you.
 Welcome to WhenMathPrays.
 
 ---
+
+If you want, I can also update **CONTENTS.md** to include the new paper, or help you sequence the entire documentation tree so newcomers experience the project in the right cognitive order.
