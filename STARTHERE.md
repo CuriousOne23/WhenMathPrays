@@ -14,8 +14,9 @@ This document is your first step.
 
 If you want a broader view of the project before diving in, here are two helpful maps:
 
-- 👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`** — a high‑level map of the repository  
-- 👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`** — a complete index of every document with short summaries  
+- 👉 **[README.md](README.md)**
+ — a high‑level map of the repository  
+- 👉 **[CONTENTS.md](docs/CONTENTS.md)** — a complete index of every document with short summaries  
 
 **START HERE** is your front door.  
 **README** is your foyer.  
@@ -89,7 +90,7 @@ It describes **becoming**, not being.
 
 To help you perceive the system correctly, we now include a foundational epistemology paper:
 
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[Verb Mind Epistemology for Relational Physics(docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md)**
 
 This paper explains:
 
@@ -191,7 +192,7 @@ You’ve just learned the GRP by doing.
 Now that you’ve seen the system move, choose your path:
 
 ### **A. Use the Python cockpit (recommended)**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[interactive_editor_user_guide.md](docs/interactive_editor_user_guide.md)**
 
 ### **B. Explore the model visually (Excel)**  
 Open:  
@@ -200,7 +201,7 @@ tools/GRP_SpreadSheet.xlsm
 ```
 
 ### **C. Build your own scenario (intermediate)**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[SCENARIO_CONFIGURATION_GUIDE.md](docs/SCENARIO_CONFIGURATION_GUIDE.md)**
 
 ### **D. Use the scenario builder (advanced)**  
 👉 `tools/scenario_generator.py`  
@@ -208,19 +209,19 @@ This tool is powerful but not beginner‑friendly.
 Use it once you understand scenario structure and primitive arcs.
 
 ### **E. Understand the math**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[GRP_rev3.md](docs/GRP_rev3.md)**
 
 ### **F. Explore the philosophy**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[WHY_THIS_MATTERS.md](docs/WHY_THIS_MATTERS.md)**
 
 ### **G. Browse the full document index**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[CONTENTS.md](docs/CONTENTS.md)**
 
 ### **H. Return to the map of the territory**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[README.md](README.md)**
 
 ### **I. Contribute to the project**  
-👉 **`[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`**
+👉 **[CONTRIBUTING.md](CONTRIBUTING.md)**
 
 ---
 
