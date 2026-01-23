@@ -1,4 +1,5 @@
-## **1. Introduction: Why AI Engineers Need Relational Physics (RP)**
+## **1. Introduction: Why AI Engineers Need Relational Physics (RP)**  
+**A Newtonian View of Relational Motion**
 
 Modern transformer models operate in a vast, high‑dimensional geometry where behavior emerges from interactions we cannot directly observe. Engineers face recurring pain points:
 
@@ -8,6 +9,8 @@ Modern transformer models operate in a vast, high‑dimensional geometry where b
 - **Scale amplifies fragility**, making interventions unpredictable  
 
 These problems are dynamical. They arise from **motion, forces & geometry** inside the residual stream — motion we currently cannot measure.
+
+This paper presents a **Newtonian formulation** of Relational Physics (RP): a first, accessible coordinate chart where forces, masses, and positions behave in a flat relational space. It is intentionally simple. A companion paper will extend these primitives into a curved, anisotropic geometry where each dimension has its own relational inertia.
 
 Relational Physics (RP) offers a minimal, falsifiable toolkit for making geometry dynamics visible.
 
@@ -41,7 +44,7 @@ See Appendix A for a complete, runnable Quickstart experiment on Llama‑3.1‑8
 Because AI geometry is enormous, curved, and full of unobserved forces.  
 When the terrain is this opaque, the only rational move is to begin quantifying **observable identities** — the minimal constructs that let us map the space.
 
-RP primitives are not “the truth.” They are the **first lense** on a landscape we barely understand.
+RP primitives are not “the truth.” They are the **first lens** on a landscape we barely understand.
 
 As we map, we may discover:
 
