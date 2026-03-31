@@ -50,8 +50,7 @@ When feedback loops operate over **fractal (self-similar) and holographic (whole
 
 ## 3. Pertinent Papers
 
-- **Bieberich, E.** (2026). RIFT: A Fractal-Holographic Theory of Consciousness and Autopoietic Control. *bioRxiv* preprint. [https://doi.org/10.1101/2026.03.23.713535](https://doi.org/10.64898/2026.03.23.713535
-)
+- **Bieberich, E.** (2026). RIFT: A Fractal-Holographic Theory of Consciousness and Autopoietic Control. *bioRxiv* preprint. [https://doi.org/10.64898/2026.03.23.713535](https://doi.org/10.64898/2026.03.23.713535)
 
 - **Tononi, G., Boly, M., Massimini, M., & Koch, C.** (2016). Integrated information theory: from consciousness to its physical substrate. *Nature Reviews Neuroscience*, 17(7), 450–461. https://doi.org/10.1038/nrn.2016.44
 
