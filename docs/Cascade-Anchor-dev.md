@@ -201,43 +201,69 @@ If the system cannot maintain cross-scale coherence under perturbation, self-con
 
 ---
 
-## 7. Mathematical Framing
+## 7. Cascade–Anchor Dynamics
 
-The Anchor Cascade can be expressed as a minimal dynamical system with four coupled operators. This section provides a formal structure without over-committing to any specific implementation, allowing the model to apply across biological, artificial, and hybrid systems.
+This section formalizes the operators that govern how anchors form, persist, and propagate through a cognitive or computational system. Each operator describes a distinct transformation on the system state \( X(t) \), which evolves in a high-dimensional space.
 
-### 7.1 Anchor Operator \( A \)
+### 7.1 Anchor Operator (A)
 
-Let \( X(t) \) be the system’s instantaneous state in a high-dimensional space.
+Let $X(t)$ be the system’s instantaneous state in a high-dimensional space.
 
-An anchor forms when:  
-\[ A(X(t)) = x^* \]  
-where \( x^* \) is a low-entropy, high-description fixed point or quasi-fixed point.
+An *anchor* is a low-entropy attractor or quasi-fixed point $x^*$ such that:
 
-### 7.2 Persistence Operator \( P \)
+$$
+A(X(t)) = x^*
+$$
 
-Persistence is defined as:  
-\[ P(x^*) = \{x^*(t + \Delta t)\} \]  
-such that:  
-\[ \|x^*(t + \Delta t) - x^*(t)\| < \epsilon \]  
-for some non-zero interval \( \Delta t \).
+The anchor operator extracts or induces a stable configuration toward which the system tends to collapse under uncertainty, overload, or recursive self-reference.
 
-### 7.3 Generative Operator \( G \)
+### 7.2 Cascade Operator (C)
 
-Given anchors \( x^*_i \) and \( x^*_j \):  
-\[ G(x^*_i, x^*_j) = x^*_k \]  
-where \( x^*_k \) is a new descriptive pattern not reducible to either input.
+A *cascade* is a rapid, self‑amplifying transition in system state triggered by an anchor.
 
-### 7.4 Fractal Reinforcement Operator \( F \)
+Formally:
 
-Fractal reinforcement is defined as a cross-scale stabilizing operator:  
-\[ F(\{x^*\}) = \mathcal{S} \]  
-where \( \mathcal{S} \) is a self-maintaining attractor satisfying:  
-\[ F(\mathcal{S}) = \mathcal{S} \]  
+$$
+C(X(t), x^*) = X(t + \Delta t)
+$$
 
-This is the minimal mathematical condition for self-continuity.  
-*(Inspired in part by concepts of information integration [1].)*
+where the update is dominated by the influence of the anchor $x^*$.
+Cascades may be stabilizing (convergent) or destabilizing (divergent), depending on system parameters.
+
+### 7.3 Anchor–Cascade Coupling (Γ)
+
+The coupling operator describes how anchors and cascades interact:
+
+$$
+\Gamma(X(t)) = \big| A(X(t)), C(X(t), A(X(t))) \big|
+$$
+
+This operator captures the feedback loop in which:
+
+- anchors trigger cascades  
+- cascades reinforce or modify anchors  
+- the system iteratively reshapes its own attractor landscape
+
+### 7.4 Multi-Anchor Interaction (Λ)
+
+The interaction operator is defined as:
+
+```math
+\Lambda(X(t)) = \arg\min_{x_i^{*}} d(f(X(t)), x_i^{*})
+```
+
+Where:
+
+```math
+    d(\cdot, \cdot)
+```
+
+is a distance or divergence metric.
+
+This selects the dominant anchor at time \( t \), determining which attractor governs the next cascade.
 
 ---
+
 
 ## 8. Implications for AI and Biology
 
