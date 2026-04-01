@@ -254,6 +254,22 @@ The interaction operator is defined as:
 
 Here, 𝑓(⋅) denotes the system’s internal representation of its current state, rather than the geometry of the external world.
 
+&nbsp;
+
+**Figure 1. Representational Geometry of Anchor Selection via Λ**
+
+```mermaid
+graph LR
+    FX["f(X(t))"] --> A1["x1*"]
+    FX["f(X(t))"] --> A2["x2*"]
+    FX["f(X(t))"] --> A3["x3*"]
+
+    %% Highlight the selected anchor
+    A2:::selected
+
+    classDef selected fill:#fdd835,stroke:#333,stroke-width:1px;
+```
+
 The distance or divergence metric is:
 
 ```math
