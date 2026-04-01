@@ -252,13 +252,15 @@ The interaction operator is defined as:
 \Lambda(X(t)) = \arg\min_{x_i^{*}} d(f(X(t)), x_i^{*})
 ```
 
-Where:
+Here, 𝑓(⋅) denotes the system’s internal representation of its current state, rather than the geometry of the external world.
+
+The distance or divergence metric is:
 
 ```math
     d(\cdot, \cdot)
-```
+```  
 
-is a distance or divergence metric.
+&nbsp;
 
 This selects the dominant anchor at time \( t \), determining which attractor governs the next cascade.
 
