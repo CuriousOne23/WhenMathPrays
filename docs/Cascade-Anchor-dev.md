@@ -203,7 +203,7 @@ If the system cannot maintain cross-scale coherence under perturbation, self-con
 
 ## 7. Cascade–Anchor Dynamics
 
-This section formalizes the operators that govern how anchors form, persist, and propagate through a cognitive or computational system. Each operator describes a distinct transformation on the system state \( X(t) \), which evolves in a high-dimensional space.
+This section defines the core operators of the Cascade–Anchor model. Each operator describes a distinct transformation on the system state and together they form the minimal dynamical structure of the theory.
 
 ### 7.1 Anchor Operator (A)
 
