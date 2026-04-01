@@ -17,13 +17,14 @@ The model synthesizes ideas from Integrated Information Theory (IIT), EEG fracta
 
 ## 1. Introduction
 
-The hard problem — why experience arises — remains difficult because most theories focus on *what* consciousness is rather than *how* it builds. We begin with raw energy patterns and ask what minimal additions produce a self-aware system.
+The hard problem — why experience arises — remains difficult because most theories focus on what consciousness is rather than how it builds.
+In this framework, thought begins when a coherent energy pattern anchors to an object and persists — the minimal physical threshold for descriptive cognition. From this anchor, a self-aware system can emerge through a clear chain of additions.
 
-**Energy pattern:** A measurable spatiotemporal activation signature across any coherent energy-processing network, biological or synthetic.
+Energy pattern: A measurable spatiotemporal activation signature across any coherent energy-processing network, biological or synthetic.
 
 We use “neural” as shorthand for any such network capable of forming coherent, descriptive activation patterns.
 
-This model draws inspiration from Integrated Information Theory (IIT), EEG fractal-dimension studies, autopoietic dynamical systems, and the recent preprint **RIFT: A Fractal-Holographic Theory of Consciousness and Autopoietic Control** (Bieberich, 2026).
+This model draws inspiration from Integrated Information Theory (IIT), EEG fractal-dimension studies, autopoietic dynamical systems, and the recent preprint RIFT: A Fractal-Holographic Theory of Consciousness and Autopoietic Control (Bieberich, 2026).
 
 ---
 
