@@ -47,14 +47,9 @@ Without this distinction, many debates collapse into confusion:
 - Is a neural spike train “information”? Yes — but a spike train is more than a signal that can be recorded; it is a dynamic process that does work. And this is yet another case where we lack a general descriptor for patterns that both carry information and do work. 
 - Is a machine learning model “information”? Yes — but a model is more than stored parameters; it also performs work when it transforms inputs into outputs. Yet again we see an object that carries information and does work, and we have no general descriptor for that combination.
 
-The distinction matters because:
-
-- **Physics**: Not all causal influence is meaningful; many processes (rolling rocks, turbulence) exert no trajectory‑biasing influence toward viability or capacity [2][12]. 
-- **Biology**: Life depends on patterns that reliably do work that helps the system persist [8][9].  
-- **Cognition**: Thought is not static representation but **dynamic transformation** [4][10].  
-- **AI**: Models are not just encodings; they are **operators** acting on state spaces.
-
-Dynamic information gives us a way to talk about **what patterns do**, not just what they mean.
+The distinction matters because familiar objects already blur our traditional categories. 
+Rocks have patterns but do no work. DNA carries information and does work. Neural spike trains carry information and do work. Machine learning models carry information and do work. 
+Yet we have no general descriptor for patterns that both encode information and actively do work. This gap leaves us unable to speak clearly about what these systems are actually doing.
 
 ---
 
