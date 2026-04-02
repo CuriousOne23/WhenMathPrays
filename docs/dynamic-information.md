@@ -447,7 +447,7 @@ This is the only sense in which patterns “act” on the system.
 
 Let V be the viability region: the set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a "viability kernel" [5]. States outside V lead to dissolution — no organization remains.
 
-Let C be the capacity region: the set of states reachable from V that preserve the system’s constraints while expanding its dynamical range. Entering C means the system can now handle a broader set of conditions or perturbations without collapse — for example:
+Let C be the capacity region: the set of states reachable from V that preserve the system’s constraints while expanding the system’s dynamical range (e.g., broader regulation, robustness, or generalization). Entering C means the system can now handle a wider set of conditions or perturbations without collapse — for example:
 
 - a cell shifting from quiescence to proliferation (expanded reproductive dynamics)
 - a controller widening its stable regulation domain (expanded behavioral repertoire)
@@ -459,7 +459,7 @@ Together, V ∪ C defines the "useful" subspace of the system’s state space:
 
 A pattern I is dynamic information if it biases trajectories toward this union:
 
-P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t))
+P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
 
 No goals or purposes are implied — only constraint-preserving reachability under the system’s own dynamics.
 
