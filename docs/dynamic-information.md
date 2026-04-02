@@ -284,7 +284,7 @@ $$
 E[I(s_{t+1}) \mid s_t] \ge \theta
 $$
 
-Here \( \theta \) represents the minimal organizational level below which the system collapses, disintegrates, or ceases to function as the same entity. Individual states within this region may vary widely — some beneficial, some harmful — but what matters is the *expected* trajectory, not the instantaneous value.
+Here $\theta$ represents the minimal organizational level below which the system collapses, disintegrates, or ceases to function as the same entity. Individual states within this region may vary widely — some beneficial, some harmful — but what matters is the *expected* trajectory, not the instantaneous value.
 
 ### **Capacity Region (C)**  
 The capacity region is the subset of states from which the system not only remains viable but tends to *increase* its organization, capabilities, or ability to do work. These are states with positive drift relative to the viability threshold:
