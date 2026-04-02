@@ -20,7 +20,7 @@ We formalize this distinction using state‑space probability distributions, pro
 We lack a simple, general way to talk about the difference between:
 
 - patterns that merely **do not do work**, and  
-- patterns that **do work** to sustain or enhance organization.
+- patterns that do work to increase the probability of remaining viable or becoming more capable.
 
 This missing distinction shows up everywhere:
 
@@ -213,10 +213,11 @@ S = { u(x), p(x), ω(x) }
 There is **no viability region**.  
 A vortex has no identity that must be preserved.  
 It is a temporary configuration of the fluid.
+It is not a standalone system with its own viability or capacity regions; it is a transient pattern within the larger fluid system.
 
 ### **Capacity Region (C)**  
 There is **no capacity region**.  
-A vortex cannot increase its capability or organization.
+A vortex cannot increase its capability or organization. 
 
 ### **Pattern (I)**  
 The swirling structure itself.
@@ -279,7 +280,7 @@ The rolling rock and vortex demonstrate:
 
 These examples anchor the central distinction:
 
-> **Static information = patterns that exist but do not sustain or enhance organization.**  
+> **Static information = patterns that exist but do not bias trajectories toward viability or capacity.**  
 > **Dynamic information = patterns that bias trajectories toward viability or capacity.**
 
 This is the hinge of the entire manuscript.
