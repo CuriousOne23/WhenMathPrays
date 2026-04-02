@@ -24,10 +24,10 @@ We lack a simple, general way to talk about the difference between:
 
 This missing distinction shows up everywhere:
 
-- In physics, where entropy‑producing structures (vortices, convection cells) exhibit flows that keep trajectories within their viability region (V) [2].  
+- In physics, where entropy‑producing structures (vortices, convection cells) maintain coherent patterns through continuous flows [2].
 - In biology, where DNA is not just a pattern but a pattern that **drives** reliable construction and repair [8][9].  
 - In cognition, where neural activity is not just correlated with behavior but **causally steers** an organism through viable states [10][4].  
-- In AI, where models do not merely encode data but do work to transform inputs into outputs that redirect trajectories within their task‑defined constraints.
+- In AI, where models do not merely encode data but transform inputs into outputs in ways that shape downstream behavior.
 
 We propose a simple lens:
 
@@ -212,10 +212,10 @@ The swirling structure itself.
 ### **Why it is *not* dynamic information**  
 The vortex does not perform any work that biases trajectories toward $V$ or $C$:
 
-- it dissipates  
-- it cannot keep trajectories within its viability region (V)
-- it cannot expand its dynamical range  
-- it has no persistence‑relevant boundary conditions  
+- it dissipates
+- it has no persistence‑relevant patterns
+- it has no viability region
+- it has no boundary conditions that could support persistence
 
 Thus:
 
@@ -282,7 +282,12 @@ In each case, the pattern fails to increase
 
 P( s(t+1) ∈ (V ∪ C) | s(t), I ) > P( s(t+1) ∈ (V ∪ C) | s(t) ),
 
-which is the operational criterion for dynamic information.
+These examples anchor the central distinction:
+
+**Static information** = patterns that exist but do not bias trajectories toward viability or capacity.  
+**Dynamic information** = patterns that bias trajectories toward viability or capacity.
+
+In the counterexamples, the patterns do not alter the system’s evolution in any persistence‑relevant way, which is why they do not count as dynamic information.
 
 ---
 
@@ -367,7 +372,7 @@ Here, patterns **do work** by altering neural and behavioral trajectories. This 
 These are structured but inert: they do not redirect trajectories toward persistence or expansion.
 
 ### **Dynamic Information**
-- A Bénard convection cell whose flows keep trajectories within its viability region (V) [2]
+- A Bénard convection cell that maintains coherent structure through continuous dissipative flow [2]
 - A laser cavity sustaining coherent emission  
 - A chemical oscillator regulating reaction cycles  
 
@@ -983,7 +988,7 @@ These lack persistent patterns
 
 # **A.3 Intuitive Picture of Work That Biases Trajectories**
 
-Some systems must perform work that biases their trajectories toward persistence in ways that preserve persistence‑relevant patterns.
+These systems perform work that biases trajectories in ways that help keep persistence‑relevant patterns intact.
 
 This work may involve:
 
