@@ -9,7 +9,7 @@ Grok (xAI)
 
 # **Abstract**
 
-Most scientific and engineering disciplines rely on information as a central concept, yet the term is used inconsistently across physics, biology, cognition, and artificial intelligence. This manuscript introduces a simple but powerful distinction: **static information** (patterns that do not do work) versus **dynamic information** (patterns that do work). Static information describes structure, correlation, or form. Dynamic information describes **organization‑sustaining or organization‑enhancing work** performed by patterns as they influence trajectories through a system’s **viability** or **capacity** regions.
+Most scientific and engineering disciplines rely on information as a central concept, yet the term is used inconsistently across physics, biology, cognition, and artificial intelligence. This manuscript introduces a simple but powerful distinction: **static information** (patterns that do not do work) versus **dynamic information** (patterns that do work). Static information describes structure, correlation, or form. Dynamic information describes patterns that bias system trajectories toward continued viability or increased capability.
 
 We formalize this distinction using state‑space probability distributions, provide physics‑grounded counterexamples showing why causal influence alone is insufficient, and propose measurable proxies (e.g., transfer entropy conditioned on viability [7]). We then situate the concept relative to Shannon information [1], pragmatic information [5], viability theory [6], predictive processing [4], cybernetics [3], and dissipative structures [2]. The result is a domain‑general lens for understanding life, intelligence, and adaptive systems as **dynamic information maintenance and transformation**.
 
@@ -92,7 +92,7 @@ That is:
 **The presence of the pattern increases the probability of remaining viable or increasing capacity.**
 
 This is the core idea:  
-Dynamic information is **organization‑sustaining work performed by patterns**.
+Dynamic information is patterns that do work to increase the probability of remaining viable or becoming more capable.
 
 ```mermaid
 flowchart LR
@@ -908,7 +908,7 @@ And it gives us a way to unify the sciences of organization under a single, simp
 A pattern that exists but does not systematically increase the probability of remaining within the viability region or entering the capacity region.
 
 ### **Dynamic Information**  
-A pattern whose presence increases the probability that a system remains viable or enters states that enhance its capability or organization.
+A pattern whose presence increases the probability that a system remains viable or enters states that enhance its capability.
 
 ### **System**  
 A subset of the physical world with a well‑defined state space \(S\), dynamics \(P(s_{t+1} \mid s_t)\), and identifiable viability and capacity regions.
