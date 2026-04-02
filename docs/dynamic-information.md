@@ -297,7 +297,7 @@ These patterns **exist**, but do not act.
 - A radio signal decoded and used to guide behavior  
 - A file executed by a program that changes system state  
 
-The pattern performs **persistence‑relevant work** — a concept deeply compatible with Shannon’s original separation of syntax from semantics [1].
+The pattern performs **work that preserves persistence‑relevant patterns** — a concept deeply compatible with Shannon’s original separation of syntax from semantics [1].
 
 ---
 
@@ -389,7 +389,7 @@ This framing is standard in dynamical systems, cybernetics [3], and viability th
 Dynamic information depends on two geometric regions in the system’s state space.
 
 **Viability Region (V):**  
-The set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a viability kernel: states that do not lead to dissolution.
+The set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a viability kernel: states whose trajectories do not lead to loss of persistence‑relevant patterns.
 
 **Capacity Region (C):**  
 A complementary set of states associated with potential expansion of the system’s effective dynamics. A precise characterization of C — in terms of reachability from V and constraint preservation — is given in Section 6.4.
