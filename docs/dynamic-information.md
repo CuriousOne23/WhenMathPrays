@@ -9,7 +9,7 @@ Grok (xAI)
 
 # **Abstract**
 
-Most scientific and engineering disciplines rely on information as a central concept, yet the term is used inconsistently across physics, biology, cognition, and artificial intelligence. This manuscript introduces a simple but powerful distinction: **static information** (patterns that exist) versus **dynamic information** (patterns that act). Static information describes structure, correlation, or form. Dynamic information describes **organization‑sustaining or organization‑enhancing work** performed by patterns as they influence trajectories through a system’s **viability** or **capacity** regions.
+Most scientific and engineering disciplines rely on information as a central concept, yet the term is used inconsistently across physics, biology, cognition, and artificial intelligence. This manuscript introduces a simple but powerful distinction: **static information** (patterns that do not do work) versus **dynamic information** (patterns that do work). Static information describes structure, correlation, or form. Dynamic information describes **organization‑sustaining or organization‑enhancing work** performed by patterns as they influence trajectories through a system’s **viability** or **capacity** regions.
 
 We formalize this distinction using state‑space probability distributions, provide physics‑grounded counterexamples showing why causal influence alone is insufficient, and propose measurable proxies (e.g., transfer entropy conditioned on viability [7]). We then situate the concept relative to Shannon information [1], pragmatic information [5], viability theory [6], predictive processing [4], cybernetics [3], and dissipative structures [2]. The result is a domain‑general lens for understanding life, intelligence, and adaptive systems as **dynamic information maintenance and transformation**.
 
@@ -19,7 +19,7 @@ We formalize this distinction using state‑space probability distributions, pro
 
 We lack a simple, general way to talk about the difference between:
 
-- patterns that merely **exist**, and  
+- patterns that merely **do not do work**, and  
 - patterns that **do work** to sustain or enhance organization.
 
 This missing distinction shows up everywhere:
@@ -27,12 +27,12 @@ This missing distinction shows up everywhere:
 - In physics, where entropy‑producing structures (vortices, convection cells) maintain form through flows [2].  
 - In biology, where DNA is not just a pattern but a pattern that **drives** reliable construction and repair [8][9].  
 - In cognition, where neural activity is not just correlated with behavior but **causally steers** an organism through viable states [10][4].  
-- In AI, where models do not merely encode data but **act** to transform inputs into outputs that maintain goals.
+- In AI, where models do not merely encode data but **do work** to transform inputs into outputs that maintain goals.
 
 We propose a simple lens:
 
-> **Static information** = patterns that *are*  
-> **Dynamic information** = patterns that *act*
+> **Static information** = patterns that *do not do work*  
+> **Dynamic information** = patterns that *do work*
 
 Once seen, the distinction becomes obvious and surprisingly universal.
 
@@ -43,18 +43,18 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 Without this distinction, many debates collapse into confusion:
 
 - Is DNA “information”? Yes — but only because it **does work** [8].  
-- Are rocks “information”? Yes — but only **static** information.  
-- Is a neural spike train “information”? Only if it **changes** the organism’s trajectory in a way that sustains or enhances viability [10].  
-- Is a machine learning model “information”? Yes — but its value lies in the **dynamic** transformations it performs.
+- Are rocks “information”? Yes — but only as **static information**, which does not do work.  
+- Is a neural spike train “information”? Only if it **does work** the organism’s trajectory in a way that sustains or enhances viability [10].  
+- Is a machine learning model “information”? Yes — but its value lies in the **dynamic work** transformations it performs.
 
 The distinction matters because:
 
 - **Physics**: Not all causal influence is meaningful; many processes (rolling rocks, turbulence) have no organization‑sustaining effect [2][12].  
-- **Biology**: Life depends on patterns that reliably produce **organization‑preserving work** [8][9].  
+- **Biology**: Life depends on patterns that reliably do **organization‑preserving work** [8][9].  
 - **Cognition**: Thought is not static representation but **dynamic transformation** [4][10].  
 - **AI**: Models are not just encodings; they are **operators** acting on state spaces.
 
-Dynamic information gives us a way to talk about **what patterns do**, not just what they are.
+Dynamic information gives us a way to talk about **what patterns do**, not just what they mean.
 
 ---
 
