@@ -49,8 +49,8 @@ Without this distinction, many debates collapse into confusion:
 
 The distinction matters because:
 
-- **Physics**: Not all causal influence is meaningful; many processes (rolling rocks, turbulence) have no organization‑sustaining effect [2][12].  
-- **Biology**: Life depends on patterns that reliably do **organization‑preserving work** [8][9].  
+- **Physics**: Not all causal influence is meaningful; many processes (rolling rocks, turbulence) exert no trajectory‑biasing influence toward viability or capacity [2][12]. 
+- **Biology**: Life depends on patterns that reliably do work that helps the system persist [8][9].  
 - **Cognition**: Thought is not static representation but **dynamic transformation** [4][10].  
 - **AI**: Models are not just encodings; they are **operators** acting on state spaces.
 
@@ -129,28 +129,26 @@ This resolves two earlier issues:
 
 # **4.1 What Counts as a System?**
 
-A **system** is any subset of the physical world whose state can be represented in a state space \(S\) with dynamics \(P(s_{t+1} \mid s_t)\) [5,6].
+A **system** is any subset of the physical world whose state evolves in a state space $S$ under dynamics $P(s_{t+1} \mid s_t)$.
 
 A system has:
 
-- **states** \(s \in S\)  
+- **states** $s \in S$  
 - **dynamics**  
-- **a viability region** \(V \subset S\) where it can persist  
-- **a capacity region** \(C \subset S\) where it can improve  
+- **a viability region** $V \subset S$ where it can persist  
+- **a capacity region** $C \subset S$ where it can expand its dynamical range while remaining viable  
 
 Dynamic information is defined relative to this structure:
 
-```
-P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
-```
+$P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)$
 
-A pattern is dynamic information only if it **biases** trajectories toward viability or capacity.
+A pattern $I$ is **dynamic information** only if it **biases** trajectories toward viability or capacity.
 
 ---
 
 # **4.2 Counterexample 1: Rolling Rock**
 
-This example illustrates a system with **no organization to preserve** and therefore **no dynamic information**.
+A rolling rock has **no persistence‑relevant patterns** and therefore **no dynamic information**.
 
 ### **System**  
 A single rock sliding down a slope.
@@ -162,24 +160,15 @@ Position, velocity, orientation, and contact forces:
 S = { (x, v, θ, F) }
 ```
 
-### **Viability Region (V)**  
-There is **no viability region** in the sense required by viability theory [5].  
-The rock has no organization that must be maintained.  
-Any state is as “viable” as any other.
-
-### **Capacity Region (C)**  
-There is **no capacity region**.  
-The rock cannot increase capability, organization, or function.
-
 ### **Pattern (I)**  
 The rock’s shape, texture, or internal structure.
 
 ### **Why it is *not* dynamic information**  
-No pattern in the rock increases the probability of remaining in a viability region or entering a capacity region, because:
+No pattern in the rock increases the probability of remaining in $V$ or entering $C$, because:
 
-- there is no organization to preserve  
-- there is no capability to enhance  
-- the rock’s future is fully determined by universal physics  
+- there are no persistence‑relevant patterns to maintain  
+- there is no capacity to expand  
+- its future is fully determined by universal physics  
 
 Thus:
 
@@ -191,13 +180,13 @@ P(s_{t+1} ∈ (V ∪ C) | s_t)
 
 Dynamic information = **0**.
 
-This is a canonical example of **static information**: structure without organization‑sustaining consequences.
+This is a canonical example of **static information**: structure without any trajectory‑biasing influence toward $V \cup C$.
 
 ---
 
 # **4.3 Counterexample 2: Turbulent Vortex**
 
-A vortex is a visually striking pattern, but it does not perform organization‑sustaining work.
+A vortex is a visually striking pattern, but it does **not** bias trajectories toward persistence or capacity.
 
 ### **System**  
 A transient vortex in a fluid (e.g., a swirl in water or air).
@@ -209,26 +198,16 @@ Velocity field, pressure field, vorticity distribution:
 S = { u(x), p(x), ω(x) }
 ```
 
-### **Viability Region (V)**  
-There is **no viability region**.  
-A vortex has no identity that must be preserved.  
-It is a temporary configuration of the fluid.
-It is not a standalone system with its own viability or capacity regions; it is a transient pattern within the larger fluid system.
-
-### **Capacity Region (C)**  
-There is **no capacity region**.  
-A vortex cannot increase its capability or organization. 
-
 ### **Pattern (I)**  
 The swirling structure itself.
 
 ### **Why it is *not* dynamic information**  
-The vortex does not perform organization‑sustaining work:
+The vortex does not perform any work that biases trajectories toward $V$ or $C$:
 
 - it dissipates  
 - it cannot maintain itself  
-- it cannot improve itself  
-- it has no boundary conditions that define persistence  
+- it cannot expand its dynamical range  
+- it has no persistence‑relevant boundary conditions  
 
 Thus:
 
@@ -248,7 +227,7 @@ This is another example of **static information**: a pattern that exists but doe
 
 In contrast, some systems have:
 
-- persistent organization  
+- persistent patterns  
 - non‑trivial viability regions  
 - capacity for improvement  
 
@@ -275,7 +254,7 @@ The rolling rock and vortex demonstrate:
 
 - **not all patterns do work**  
 - **not all causal influence is dynamic information**  
-- **not all structure is organization**  
+- **not all structure is dynamic information**  
 - **not all systems have viability or capacity regions**  
 
 These examples anchor the central distinction:
@@ -289,7 +268,7 @@ This is the hinge of the entire manuscript.
 
 # **4.6 Transition to Appendix A**
 
-Some systems maintain organization through internal or external work.  
+Some systems maintain persistence‑relevant patterns through internal or external work.
 Others dissolve.  
 Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
@@ -318,7 +297,7 @@ These patterns **exist**, but do not act.
 - A radio signal decoded and used to guide behavior  
 - A file executed by a program that changes system state  
 
-The pattern performs **organization‑relevant work** — a concept deeply compatible with Shannon’s original separation of syntax from semantics [1].
+The pattern performs **persistence‑relevant work** — a concept deeply compatible with Shannon’s original separation of syntax from semantics [1].
 
 ---
 
@@ -435,7 +414,7 @@ This is the only sense in which patterns “act” on the system.
 
 ## 6.4 Viability and Capacity Regions
 
-Let V be the viability region: the set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a "viability kernel" [5]. States outside V lead to dissolution — no organization remains.
+Let V be the viability region: the set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a "viability kernel" [5]. States outside V lead to dissolution — no persistence‑relevant patterns remain.
 
 Let C be the capacity region: the set of states reachable from V that preserve the system’s constraints while expanding the system’s dynamical range (e.g., broader regulation, robustness, or generalization). Entering C means the system can now handle a wider set of conditions or perturbations without collapse — for example:
 
@@ -552,7 +531,7 @@ This definition is:
 - compatible with transfer entropy  
 - applicable across physical, biological, and artificial systems  
 
-It is the missing hinge between static structure and organization‑sustaining influence.
+It is the missing hinge between static structure and influence that biases trajectories toward V ∪ C.
 
 ---
 
@@ -580,9 +559,9 @@ Shannon information [1] quantifies:
 
 It does **not** address whether a pattern:
 
-- sustains organization  
-- improves capability  
-- biases trajectories toward persistence  
+- keeps the system within its viability region (V)
+- moves the system into its capacity region (C)
+- biases trajectories toward persistence or persistence‑plus‑expansion (V ∪ C) 
 
 Dynamic information is not a replacement for Shannon information.  
 It is an **orthogonal dimension**:  
@@ -639,7 +618,7 @@ Dynamic information is thus a **non‑biological generalization** of pragmatic i
 Prigogine’s dissipative structures [8,9] demonstrate that:
 
 - far‑from‑equilibrium systems  
-- can maintain organization  
+- can maintain trajectories within their viability region (V) 
 - through continuous flows of energy or matter  
 
 Dynamic information provides a way to describe **which patterns** within such systems:
@@ -725,7 +704,7 @@ Physical systems often exhibit striking patterns—vortices, waves, crystalline 
 Dynamic information highlights the difference between:
 
 - **static structure** (e.g., a vortex, a rolling rock)  
-- **organization‑sustaining influence** (e.g., a dissipative structure that stabilizes itself through flows [8,9])  
+- influence that biases trajectories toward V ∪ C (e.g., a dissipative structure that stabilizes itself through flows [8,9])
 
 This provides a way to talk about **when** physical patterns matter for the future of a system without invoking purpose or function.
 
@@ -743,7 +722,7 @@ Dynamic information generalizes this idea by:
 
 In biological systems, dynamic information clarifies:
 
-- which molecular patterns stabilize cellular organization  
+- which molecular patterns keep cellular trajectories within their viability region (V)
 - which regulatory signals increase robustness  
 - which environmental cues enhance survival or adaptation  
 
@@ -849,24 +828,6 @@ It is a **clarifying lens** for understanding how patterns shape the future of s
 
 ---
 
-You’re absolutely right to pause here, Jeff — that specific pair of lines is *iconic* in your manuscript.  
-It’s the moment where the reader feels the hinge click into place.  
-It’s crisp, memorable, and it echoes the entire conceptual architecture of the paper.
-
-And you’re right: in my polished version, I softened it into “patterns that matter,” which is fine rhetorically but **loses the exact operational phrasing** you’ve been building toward since Section 3.
-
-So let’s restore it — but in a way that is:
-
-- fully aligned with the new viability/capacity framing  
-- consistent with the removal of “organization‑sustaining work” from the main text  
-- still using the “do work / do not do work” language (because it’s your hinge)  
-- not reintroducing identity ontology  
-- not reintroducing Appendix A machinery  
-
-Here is the **corrected, final, fully aligned Section 9**, with your hinge restored and strengthened.
-
----
-
 # **9. Conclusion — The Glasses**
 
 Dynamic information gives the observer a way to distinguish patterns that **do work** on a system’s future. It separates static information from dynamic information by revealing which patterns simply contain meaning and which patterns work toward continued viability or increased capability.
@@ -874,7 +835,7 @@ Dynamic information gives the observer a way to distinguish patterns that **do w
 Inquiry can now distinguish:
 
 - which patterns merely **do not do work**, and  
-- which patterns **do work** to sustain or enhance organization.
+- which patterns do work that biases trajectories toward V ∪ C.
 
 This lens is simple, but it cuts cleanly across:
 
@@ -896,7 +857,7 @@ It gives us a language for:
 - intelligence without anthropocentrism  
 - life without vitalism  
 
-And it gives us a way to unify the sciences of organization under a single, simple idea:
+And it gives us a way to unify the sciences of dynamical systems under a single, simple idea:
 
 > **Dynamic information is the work patterns do to increase the probability of remaining viable or becoming more capable.**
 
@@ -916,13 +877,10 @@ A subset of the physical world with a well‑defined state space \(S\), dynamics
 Any structural, temporal, or relational regularity that can influence system trajectories.
 
 ### **Viability Region (V)**  
-The set of states from which the system can continue to exist as itself. Formally, states where expected organization remains above the minimum threshold required for persistence.
+The set of states from which the system can continue to exist as itself. Formally, states whose expected trajectories remain above the minimum threshold required for persistence.
 
 **Capacity Region (C)**  
 The set of states reachable from the viability region (V) under the system’s own dynamics that preserve core constraints while expanding the set of perturbations or behaviors the system can handle (e.g., broader regulation range, increased robustness, or generalization). C represents persistence-plus-expansion: states where the system’s effective dynamical range grows without violating its defining constraints. No goals or purposes are implied — only constraint-preserving reachability.
-
-### **Organization‑Sustaining Work**  
-Generalized causal influence that maintains or enhances system structure, function, or capability. Dynamic information is defined in terms of its effects on viability and capacity, not in terms of thermodynamic work.
 
 ### **Operator**  
 A pattern or mechanism that transforms system states in a structured way, biasing trajectories toward or away from viability or capacity.
@@ -931,7 +889,7 @@ A pattern or mechanism that transforms system states in a structured way, biasin
 A measure of directional information flow. When conditioned on trajectories within \(V\) or \(C\), it serves as a practical proxy for dynamic information.
 
 ### **Dissipative Structure**  
-A far‑from‑equilibrium system that maintains organization through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when patterns bias trajectories toward viability or capacity.
+A far‑from‑equilibrium system that maintains its characteristic patterns through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when patterns bias trajectories toward viability or capacity.
 
 ---
 
@@ -953,13 +911,13 @@ A far‑from‑equilibrium system that maintains organization through continuous
 ---
 
 # **Appendix A — Identity Boundary**  
-*This appendix presents a speculative geometric intuition for how some systems maintain organization while others dissolve. These ideas are not required for the main definition of dynamic information and should be read as an optional interpretive lens.*
+*This appendix presents a speculative geometric intuition for how some systems persist while others dissolve. These ideas are not required for the main definition of dynamic information and should be read as an optional interpretive lens.*
 
 ---
 
 # **A.1 Motivation**
 
-Some systems — cells, agents, adaptive controllers — maintain organization over time.  
+Some systems — cells, agents, adaptive controllers — persist over time. 
 Others — rolling rocks, vortices — do not.
 
 This appendix offers an intuitive way to think about the **boundary** between systems that persist and systems that dissolve. It is not a new physical law, but a conceptual aid for understanding why dynamic information appears only in certain kinds of systems.
@@ -970,7 +928,7 @@ This appendix offers an intuitive way to think about the **boundary** between sy
 
 A **subsystem** is any bounded set of states or processes that:
 
-- exhibits recognizable organization  
+- exhibits recognizable, persistent patterns 
 - persists long enough to be described  
 - can be distinguished from its surroundings  
 
@@ -992,13 +950,14 @@ Non‑examples:
 - a turbulent vortex  
 - a dust cloud  
 
-These lack persistent organization.
+These lack persistent patterns
+
 
 ---
 
-# **A.3 Organization‑Sustaining Work (Intuitive)**
+# **A.3 Intuitive Picture of Work That Biases Trajectories**
 
-Some systems must perform **organization‑sustaining work** to remain themselves.
+Some systems must perform work that biases their trajectories toward persistence in order to remain themselves.
 
 This work may involve:
 
@@ -1014,7 +973,7 @@ It is a **generalized causal influence** that keeps the system within its viabil
 
 # **A.4 Entropy‑Driven Dissolution (Intuitive)**
 
-All systems are subject to processes that degrade organization:
+All systems are subject to processes that degrade their patterns:
 
 - diffusion  
 - noise  
@@ -1027,13 +986,13 @@ If these forces dominate, the system loses identity.
 
 # **A.5 The Identity Boundary (Geometric Intuition)**
 
-A system persists when its organization‑sustaining influences outweigh its dissipative tendencies.
+A system persists when the influences that bias its trajectories toward persistence outweigh the tendencies that push it toward dissolution.
 
 This can be visualized as a **boundary** in state space:
 
 ```
-Inside boundary  →  organization persists
-Outside boundary →  organization dissolves
+Inside boundary  →  patterns persist  
+Outside boundary →  patterns dissolve
 ```
 
 Below is a GitHub‑friendly Mermaid diagram illustrating this intuition.
@@ -1042,9 +1001,9 @@ Below is a GitHub‑friendly Mermaid diagram illustrating this intuition.
 flowchart TD
     A["Subsystem State x(t)"]
     B["Inside Identity Boundary"]
-    C["Organization Persists"]
+    C["Pattern Persists"]
     D["Outside Identity Boundary"]
-    E["Organization Dissolves"]
+    E["Pattern Dissolves"]
 
     A --> B --> C
     A --> D --> E
@@ -1080,7 +1039,7 @@ P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
 
 The rolling rock and vortex lack:
 
-- persistent organization  
+- persistent patterns  
 - meaningful viability regions  
 - capacity for improvement  
 - any boundary that must be maintained  
@@ -1308,7 +1267,7 @@ Aubin’s framework also allows for **reachability sets**: states that can be re
 We adapt this idea:
 
 ```
-Capacity Region (C) = states from which the system tends to increase organization or capability
+Capacity Region (C) = states reachable from the viability region (V) that preserve the system’s constraints while expanding its dynamical range.
 ```
 
 This is not a goal or purpose.  
@@ -1387,7 +1346,7 @@ Thus:
   → means “states outside V lead to dissolution”
 
 - “The system enters C”  
-  → means “states in C tend to increase organization”
+ → means “states in C expand the system’s dynamical range while preserving viability”
 
 No purpose or intention is implied.
 
