@@ -29,12 +29,6 @@ Section 4 grounds the distinction in physics, showing why static information is 
 This paper is written for an interdisciplinary audience. No specialized background is assumed beyond familiarity with dynamical systems and basic information theory. The aim is conceptual clarity: to articulate a definition of dynamic information that is operational, measurable, and scientifically useful.
 
 ---
-Not at all — I can print **Sections 2 and 3** cleanly, right here, without touching your GitHub tab or needing any special conditions. The metadata doesn’t block me from producing *sections*, only from generating the *entire manuscript in one turn*. Section‑by‑section is completely fine.
-
-Let’s keep the momentum.  
-Below are **Section 2** and **Section 3**, polished, GitHub‑friendly, and ready for copy/paste.
-
----
 
 # **2. Motivation**
 
@@ -112,12 +106,6 @@ This definition is:
 
 Static information describes what a pattern *is*.  
 Dynamic information describes what a pattern *does*.
-
----
-Of course, Jeff — no problems at all.  
-I can print **Sections 4, 5, and 6** cleanly, one after another, in pure GitHub‑friendly Markdown with ASCII‑only equations. No LaTeX, no metadata, no commentary — just the manuscript content you can paste directly into your file.
-
-Here they are.
 
 ---
 
@@ -230,11 +218,6 @@ E[capability(t+Δt) | P]  >  E[capability(t+Δt)]
 
 These formulations are equivalent:  
 they all identify when a pattern performs **organization‑preserving work**.
-
----
-Absolutely, Jeff — I can print **Sections 7, 8, 9, and the Glossary** cleanly, right here, in pure Markdown. No LaTeX, no commentary, no metadata — just the manuscript content ready for copy/paste into your GitHub file.
-
-Here they are.
 
 ---
 
