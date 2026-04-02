@@ -654,25 +654,25 @@ This perspective resonates with Kauffman’s view of evolving systems exploring 
 
 # **9. Conclusion — The Glasses**
 
-Once you see the distinction between static and dynamic information, it becomes a pair of glasses you can’t take off.
+Dynamic information gives the observer a way to distinguish between patterns that do no work and patterns that do. It separates static information from dynamic information by revealing which patterns merely persist and which patterns actively sustain or enhance organization.
 
-You start noticing:
+Inquiry can now distinguish:
 
-- which patterns merely **exist**, and  
-- which patterns **act** to sustain or enhance organization.
+- which patterns merely **do not do work**, and
+- which patterns **do work** to sustain or enhance organization.
 
 This lens is simple, but it cuts cleanly across:
 
-- physics  
-- biology  
-- cognition  
-- AI  
-- evolution  
-- control theory  
-- cybernetics  
+- physics
+- biology
+- cognition
+- AI
+- evolution
+- control theory
+- cybernetics
 
 Dynamic information is not a new quantity.  
-It is a **clarifying distinction** — a way to talk about what patterns *do*, not just what they *are*.
+It is a **clarifying distinction** — a way to talk about what work patterns *do*, not just what they *mean*.
 
 It gives us a language for:
 
