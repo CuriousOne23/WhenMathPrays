@@ -441,7 +441,7 @@ The presence of pattern \(I\) modifies the transition distribution:
 P(s(t+1) | s(t), I)
 ```
 
-This is the only sense in which patterns “act”:  
+This is the only sense in which we say patterns “act”:
 they **change the conditional probabilities** governing the system’s evolution.
 
 ---
@@ -1279,7 +1279,7 @@ In this manuscript:
 
 - the **viability region (V)** plays the role of a viability kernel  
 - “survival” means “remaining the same system”  
-- admissible evolutions include internal regulation, control, or adaptive behavior  
+- admissible evolutions include dynamics that keep trajectories within V or redirect them toward C
 
 This framing avoids teleology:  
 the system is not “trying” to survive — it simply has dynamics that allow persistence.
