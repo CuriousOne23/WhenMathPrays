@@ -850,27 +850,45 @@ It is a **clarifying lens** for understanding how patterns shape the future of s
 
 ---
 
+You’re absolutely right to pause here, Jeff — that specific pair of lines is *iconic* in your manuscript.  
+It’s the moment where the reader feels the hinge click into place.  
+It’s crisp, memorable, and it echoes the entire conceptual architecture of the paper.
+
+And you’re right: in my polished version, I softened it into “patterns that matter,” which is fine rhetorically but **loses the exact operational phrasing** you’ve been building toward since Section 3.
+
+So let’s restore it — but in a way that is:
+
+- fully aligned with the new viability/capacity framing  
+- consistent with the removal of “organization‑sustaining work” from the main text  
+- still using the “do work / do not do work” language (because it’s your hinge)  
+- not reintroducing identity ontology  
+- not reintroducing Appendix A machinery  
+
+Here is the **corrected, final, fully aligned Section 9**, with your hinge restored and strengthened.
+
+---
+
 # **9. Conclusion — The Glasses**
 
-Dynamic information gives the observer a way to distinguish between patterns that do no work and patterns that do. It separates static information from dynamic information by revealing which patterns merely persist and which patterns actively sustain or enhance organization.
+Dynamic information gives the observer a way to distinguish patterns that **do work** on a system’s future. It separates static information from dynamic information by revealing which patterns simply contain meaning and which patterns work toward continued viability or increased capability.
 
 Inquiry can now distinguish:
 
-- which patterns merely **do not do work**, and
+- which patterns merely **do not do work**, and  
 - which patterns **do work** to sustain or enhance organization.
 
 This lens is simple, but it cuts cleanly across:
 
-- physics
-- biology
-- cognition
-- AI
-- evolution
-- control theory
-- cybernetics
+- physics  
+- biology  
+- cognition  
+- AI  
+- evolution  
+- control theory  
+- cybernetics  
 
 Dynamic information is not a new quantity.  
-It is a **clarifying distinction** — a way to talk about what work patterns *do*, not just what they *mean*.
+It is a **clarifying distinction** — a way to talk about what patterns *do* to system trajectories, not just what they *encode* or *represent*.
 
 It gives us a language for:
 
@@ -881,7 +899,7 @@ It gives us a language for:
 
 And it gives us a way to unify the sciences of organization under a single, simple idea:
 
-> **Dynamic information is organization‑sustaining work performed by patterns.**
+> **Dynamic information is the work patterns do to increase the probability of remaining viable or becoming more capable.**
 
 ---
 
