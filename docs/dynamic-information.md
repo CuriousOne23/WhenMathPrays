@@ -293,7 +293,7 @@ In the counterexamples, the patterns do not alter the system’s evolution in an
 
 # **4.6 Transition to Appendix A**
 
-Some systems keep trajectories within their viability region (V) through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+Some systems keep bias trajectories toward V ∪ C through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
 These ideas are optional and not required for the main definition of dynamic information.
 
@@ -340,7 +340,7 @@ These patterns **exist**, but they do not participate in any process that redire
 - Proteins folding and catalyzing reactions [9]  
 - Signaling molecules triggering regulatory cascades  
 
-Here, patterns **do work**: they drive construction, repair, and regulation in ways that alter the system’s evolution in ways that keep it within V or C. This aligns with Rosen’s view of life as a network of functional entailments [8].
+Here, patterns **do work**: they drive construction, repair, and regulation in ways that keep trajectories within V or move them into C. This aligns with Rosen’s view of life as a network of functional entailments [8].
 
 ---
 
@@ -376,7 +376,7 @@ These are structured but inert: they do not redirect trajectories toward persist
 - A laser cavity sustaining coherent emission  
 - A chemical oscillator regulating reaction cycles  
 
-These patterns **do work** by constraining flows of energy and matter in ways that bias trajectories toward states that preserve persistence‑relevant patterns — a hallmark of far‑from‑equilibrium systems [2][12].
+These patterns **do work** by constraining flows of energy and matter in ways that bias trajectories toward persistence or expanded capacity — a hallmark of far‑from‑equilibrium systems [2][12].
 
 ---
 
@@ -988,7 +988,7 @@ These lack persistent patterns
 
 # **A.3 Intuitive Picture of Work That Biases Trajectories**
 
-These systems perform work that biases trajectories in ways that help keep persistence‑relevant patterns intact.
+These systems perform work that biases trajectories toward persistence by helping keep persistence‑relevant patterns intact.
 
 This work may involve:
 
