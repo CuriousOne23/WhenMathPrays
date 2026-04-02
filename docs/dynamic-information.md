@@ -32,7 +32,7 @@ This missing distinction shows up everywhere:
 We propose a simple lens:
 
 > **Static information** = patterns that *do not do work*  
-> **Dynamic information** = patterns that *do work*
+> **Dynamic information** = patterns that *do work* (biasing trajectories toward viability or capacity)
 
 Once seen, the distinction becomes obvious and surprisingly universal.
 
