@@ -271,12 +271,15 @@ $$
 TE(I \rightarrow S \mid V \cup C)
 $$
 
-This captures **information flow that matters for staying alive or increasing capacity**.
+---
 
-It forms the operational bridge between:
+## **6.4 Viability and Capacity Regions**
 
-- the conceptual definition  
-- measurable quantities in real systems
+**Viability region (V):**  
+The set of states in which the system can continue to exist as itself — maintaining the organization required for persistence.
+
+**Capacity region (C):**  
+The set of states in which the system increases its capabilities, organization, or ability to do work — enabling growth, learning, or enhanced function.
 
 ---
 
