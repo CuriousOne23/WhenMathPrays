@@ -196,25 +196,26 @@ These patterns **act to maintain themselves** through dissipative work — a hal
 
 ---
 
-# **6. Formal Definition and Measurability**
+# **6. Formal Definition and Measurability**  
+*(GitHub‑safe math version)*
 
 We now refine the definition introduced earlier.
 
 Let:
 
-- \( S \) = state space  
-- \( V \subseteq S \) = viability region [6]  
-- \( C \subseteq S \) = capacity region  
-- \( P(s_{t+1} \mid s_t) \) = baseline dynamics  
-- \( P(s_{t+1} \mid s_t, I) \) = dynamics under influence of pattern \( I \)
+- $S$ = state space  
+- $V ⊂ S$ = viability region [6]  
+- $C ⊂ S$ = capacity region  
+- $P(s_{t+1} \mid s_t)$ = baseline dynamics  
+- $P(s_{t+1} \mid s_t, I)$ = dynamics under influence of pattern $I$
 
 ### **6.1 Core Definition**
 
-A pattern \( I \) is **dynamic information** if:
+A pattern $I$ is **dynamic information** if:
 
-\[
-P(s_{t+1} \in V \cup C \mid s_t, I) > P(s_{t+1} \in V \cup C \mid s_t)
-\]
+$$
+P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)
+$$
 
 This captures the essential idea:
 
@@ -227,27 +228,30 @@ This aligns naturally with viability theory’s focus on controlled trajectories
 ## **6.2 Alternative Formulations**
 
 ### **(a) Divergence Form**
+
 Dynamic information increases the divergence between:
 
 - trajectories that remain viable, and  
 - trajectories that do not.
 
 ### **(b) Expected Improvement Form**
-Let \( \Delta \Phi \) be a viability‑or‑capacity potential.  
-Then \( I \) is dynamic information if:
 
-\[
+Let $\Delta \Phi$ be a viability‑or‑capacity potential.  
+Then $I$ is dynamic information if:
+
+$$
 E[\Delta \Phi \mid I] > 0
-\]
+$$
 
 ### **(c) Operator Form**
+
 Dynamic information can be seen as an operator:
 
-\[
+$$
 I : S \rightarrow S
-\]
+$$
 
-that **biases** trajectories toward \( V \cup C \).
+that **biases** trajectories toward $V \cup C$.
 
 This resonates with Ashby’s cybernetic view of regulation and requisite variety [3].
 
@@ -257,22 +261,22 @@ This resonates with Ashby’s cybernetic view of regulation and requisite variet
 
 A practical proxy is **transfer entropy** (Schreiber, 2000) [7]:
 
-\[
-TE(I \rightarrow S) = \sum P(...) \log \frac{P(s_{t+1} \mid s_t, I)}{P(s_{t+1} \mid s_t)}
-\]
+$$
+TE(I \rightarrow S) = \sum P(\ldots)\,\log\!\left(\frac{P(s_{t+1} \mid s_t, I)}{P(s_{t+1} \mid s_t)}\right)
+$$
 
 To measure **dynamic** information, we condition on viability:
 
-\[
+$$
 TE(I \rightarrow S \mid V \cup C)
-\]
+$$
 
 This captures **information flow that matters for staying alive or increasing capacity**.
 
-This is the operational bridge between:
+It forms the operational bridge between:
 
 - the conceptual definition  
-- measurable quantities in real systems  
+- measurable quantities in real systems
 
 ---
 
