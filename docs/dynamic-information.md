@@ -405,27 +405,17 @@ This framing is standard in dynamical systems, cybernetics [3], and viability th
 
 ---
 
-# **6.2 Viability and Capacity Regions**
+## 6.2 Viability and Capacity Regions
 
-Dynamic information depends on two geometric regions in state space.
+Dynamic information depends on two geometric regions in the system’s state space.
 
-### **Viability Region (V)**  
-The set of states from which the system can continue to exist as itself.  
-In viability theory, this corresponds to a **viability kernel** [5]:
+**Viability Region (V):**  
+The set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a viability kernel: states that do not lead to dissolution.
 
-```
-V = states from which persistence is possible
-```
+**Capacity Region (C):**  
+A complementary set of states associated with potential expansion of the system’s effective dynamics. A precise characterization of C — in terms of reachability from V and constraint preservation — is given in Section 6.4.
 
-### **Capacity Region (C)**  
-The set of states from which the system tends to increase its organization, capability, or performance:
-
-```
-C = states from which improvement is possible
-```
-
-These definitions are non‑teleological:  
-they describe **constraints and reachable sets**, not goals or intentions.
+Together, V and C define the subspace of states relevant for persistence or persistence‑plus‑expansion.
 
 ---
 
@@ -928,9 +918,8 @@ Any structural, temporal, or relational regularity that can influence system tra
 ### **Viability Region (V)**  
 The set of states from which the system can continue to exist as itself. Formally, states where expected organization remains above the minimum threshold required for persistence.
 
-### **Capacity Region (C)**  
-The set of states **reachable from the viability region (V)** that preserve the system’s constraints **while expanding its dynamical range**. States in \(C\) allow the system to handle a broader set of conditions or perturbations without collapse—for example, a cell entering proliferation, a controller widening its stable regulation domain, or a learning system increasing robustness or generalization.  
-No goals or purposes are implied; \(C\) reflects **constraint‑preserving reachability** under the system’s own dynamics.
+**Capacity Region (C)**  
+The set of states reachable from the viability region (V) under the system’s own dynamics that preserve core constraints while expanding the set of perturbations or behaviors the system can handle (e.g., broader regulation range, increased robustness, or generalization). C represents persistence-plus-expansion: states where the system’s effective dynamical range grows without violating its defining constraints. No goals or purposes are implied — only constraint-preserving reachability.
 
 ### **Organization‑Sustaining Work**  
 Generalized causal influence that maintains or enhances system structure, function, or capability. Dynamic information is defined in terms of its effects on viability and capacity, not in terms of thermodynamic work.
