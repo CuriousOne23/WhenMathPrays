@@ -276,14 +276,6 @@ These examples anchor the central distinction:
 
 This is the hinge of the entire manuscript.
 
-This distinction sets the stage for the more formal treatment that follows.
-
-In each case, the pattern fails to increase
-
-P( s(t+1) ∈ (V ∪ C) | s(t), I ) > P( s(t+1) ∈ (V ∪ C) | s(t) ),
-
-These examples anchor the central distinction:
-
 **Static information** = patterns that exist but do not bias trajectories toward viability or capacity.  
 **Dynamic information** = patterns that bias trajectories toward viability or capacity.
 
@@ -293,7 +285,7 @@ In the counterexamples, the patterns do not alter the system’s evolution in an
 
 # **4.6 Transition to Appendix A**
 
-Some systems keep bias trajectories toward V ∪ C through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+Some systems bias trajectories toward V ∪ C through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
 These ideas are optional and not required for the main definition of dynamic information.
 
@@ -685,7 +677,7 @@ This provides a bridge between classical cybernetics and modern information theo
 Friston’s free‑energy principle and active inference [10,11] describe systems that:
 
 - minimize surprise  
-- keep trajectories within their viability region (V)
+- bias trajectories toward V ∪ C
 - adaptively update internal models  
 
 Dynamic information complements this view by identifying:
@@ -988,7 +980,7 @@ These lack persistent patterns
 
 # **A.3 Intuitive Picture of Work That Biases Trajectories**
 
-These systems perform work that biases trajectories toward persistence by helping keep persistence‑relevant patterns intact.
+These systems perform work that biases trajectories in ways that help keep persistence‑relevant patterns intact.
 
 This work may involve:
 
