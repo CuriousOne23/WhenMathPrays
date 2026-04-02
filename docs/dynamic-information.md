@@ -106,228 +106,193 @@ flowchart LR
 
 ---
 
-# **4. Why Static Information Is Not Enough**
+# **4. Physical Grounding: When Patterns Do and Do Not Do Work**
 
-Static information describes patterns that can be stored, transmitted, or measured.  
-But static information alone cannot explain **organization‑preserving influence** — the ability of a pattern to keep a subsystem within its viability region or move it toward greater capacity.
+Dynamic information is not about what a pattern *is* but about what a pattern *does* to the future of a system.  
+To make this distinction operational, we examine physical systems where patterns **do not** increase viability or capacity, and systems where patterns **do**.
 
-This section introduces three foundational results that clarify why **dynamic information** requires more than physical law alone.
+To avoid ambiguity, each example explicitly defines:
 
----
+- **the system**  
+- **its state space**  
+- **its viability region**  
+- **its capacity region**  
+- **the pattern under consideration**  
+- **why the pattern does or does not count as dynamic information**
 
-## **4.1 Theorem A — Law of Physical Describability**
+This resolves two earlier issues:
 
-**Statement.**  
-If a subsystem’s behavior is fully described by universal physical laws, then its dynamic information content is zero.
-
-Formally, if the subsystem evolves under:
-
-```
-dx/dt = f(x)
-```
-
-with no additional identity‑preserving work term, then:
-
-```
-w_I(t) = 0  for all t
-I_dyn = 0
-```
-
-A process that is fully captured by universal physics has:
-
-- no describable identity  
-- no viability region  
-- no organization to preserve  
-- no work directed at resisting entropy  
-
-Such processes include rolling rocks, vortices, shockwaves, and other purely entropic phenomena [2–6, 18–22].
-
-```mermaid
-flowchart TD
-    A["Subsystem"]
-    B["Universal Physics Only"]
-    C["w_I(t) = 0"]
-    D["No Identity"]
-    E["I_dyn = 0"]
-
-    A --> B --> C --> D --> E
-```
+1. *The system was not defined.*  
+2. *The rolling rock and vortex were not clearly named as systems.*
 
 ---
 
-## **4.2 Theorem B — Identity Boundary Theorem**
+# **4.1 What Counts as a System?**
 
-**Statement.**  
-If a subsystem possesses dynamic information, then its physical and temporal boundaries are determined by the organization‑preserving work that sustains its identity.
+A **system** is any subset of the physical world whose state can be represented in a state space \(S\) with dynamics \(P(s_{t+1} \mid s_t)\) [5,6].
 
-Let `V` be the subsystem’s viability region.  
-Identity exists when:
+A system has:
 
-```
-x(0) in V  and  x(t) in V for all t >= 0
-```
+- **states** \(s \in S\)  
+- **dynamics**  
+- **a viability region** \(V \subset S\) where it can persist  
+- **a capacity region** \(C \subset S\) where it can improve  
 
-and this invariance requires:
-
-```
-Integral_0^T  w_I(t) dt  >  0   for all T > 0
-```
-
-Identity fails when entropy‑driven dissolution exceeds identity‑preserving work:
-
-```mermaid
-flowchart TD
-    subgraph V["Viability Region (V)"]
-        X["Subsystem State x(t)"]
-    end
-
-    E["Entropy-Driven Dissolution (e_D)"]
-    W["Identity-Preserving Work (w_I)"]
-
-    E -->|pushes outward| V
-    W -->|pushes inward| V
-```
+Dynamic information is defined relative to this structure:
 
 ```
-exists t such that  w_I(t) < e_D(t)  =>  x(t) leaves V
+P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
 ```
 
-This theorem formalizes the idea that **identity is not free-floating**.  
-It is bounded by the work required to maintain it [9–17].
+A pattern is dynamic information only if it **biases** trajectories toward viability or capacity.
 
 ---
 
-## **4.3 Corollary — Dynamic Information Threshold**
+# **4.2 Counterexample 1: Rolling Rock**
 
-Dynamic information exists **iff** both thresholds are crossed:
+This example illustrates a system with **no organization to preserve** and therefore **no dynamic information**.
 
-### **Physical / Organizational Threshold**
-There must exist a nonempty viability region and nonzero identity‑preserving work:
+### **System**  
+A single rock sliding down a slope.
 
-```
-exists V != empty  and  exists t such that w_I(t) > 0
-```
-
-### **Temporal Threshold**
-Identity must persist longer than entropy‑driven dissolution:
+### **State Space (S)**  
+Position, velocity, orientation, and contact forces:
 
 ```
-Integral_0^T (w_I(t) - e_D(t)) dt >= 0   for all T >= T_min
+S = { (x, v, θ, F) }
 ```
 
-If either threshold fails, the subsystem has no persistent identity and therefore no dynamic information.
+### **Viability Region (V)**  
+There is **no viability region** in the sense required by viability theory [5].  
+The rock has no organization that must be maintained.  
+Any state is as “viable” as any other.
 
-```mermaid
-flowchart TD
-    A["Threshold 1: Viability Region Exists (V ≠ ∅)"]
-    B["Threshold 2: Identity-Preserving Work ≥ Entropy Over Time"]
-    C["Identity Persists"]
-    D["Dynamic Information Exists (I_dyn > 0)"]
+### **Capacity Region (C)**  
+There is **no capacity region**.  
+The rock cannot increase capability, organization, or function.
 
-    A --> C
-    B --> C
-    C --> D
-```
+### **Pattern (I)**  
+The rock’s shape, texture, or internal structure.
 
-This corollary explains why identity emerges only when organization and persistence exceed entropy [7–11].
+### **Why it is *not* dynamic information**  
+No pattern in the rock increases the probability of remaining in a viability region or entering a capacity region, because:
 
----
-
-## **4.4 Counterexample 1 — Rolling Rock**
-
-A rolling rock has structure and causal influence, but it performs **no organization‑preserving work**.
-
-- It has no boundary to maintain.  
-- It has no viability region.  
-- It cannot degrade or collapse as a system.  
-- It does not regulate anything.  
-- It is fully described by gravitational and frictional dynamics.
-
-Its motion is an entropy‑increasing process:
-
-```
-Potential energy -> kinetic energy -> heat
-```
-
-Since:
-
-```
-w_I(t) = 0
-```
-
-and the rock has no describable identity separate from universal physics, its dynamic information content is:
-
-```
-I_dyn = 0
-```
-
-This follows directly from Theorem A.
-
----
-
-## **4.5 Counterexample 2 — Vortex in Turbulence**
-
-A vortex in a turbulent fluid has visible structure and exerts causal influence on nearby flow.  
-But it has **no persistent identity**:
-
-- no boundary  
-- no regulation  
-- no homeostasis  
-- no viability region  
-- no organization‑preserving work  
-
-A vortex is a transient artifact of the Kolmogorov energy cascade [18–20]:
-
-```
-Large-scale energy -> smaller scales -> heat
-```
-
-Its persistence is entirely due to surrounding turbulence, not internal regulation.
+- there is no organization to preserve  
+- there is no capability to enhance  
+- the rock’s future is fully determined by universal physics  
 
 Thus:
 
 ```
-w_I(t) = 0
-I_dyn = 0
+P(s_{t+1} ∈ (V ∪ C) | s_t, I)
+=
+P(s_{t+1} ∈ (V ∪ C) | s_t)
 ```
 
-The vortex is a **purely entropic process**, not an identity‑bearing subsystem.
+Dynamic information = **0**.
+
+This is a canonical example of **static information**: structure without organization‑sustaining consequences.
 
 ---
 
-## **4.6 Why These Counterexamples Matter**
+# **4.3 Counterexample 2: Turbulent Vortex**
 
-Rolling rocks and vortices demonstrate that:
+A vortex is a visually striking pattern, but it does not perform organization‑sustaining work.
 
-- **Causation is not information.**  
-- **Structure is not information.**  
-- **Patterns are not information unless they preserve identity.**
+### **System**  
+A transient vortex in a fluid (e.g., a swirl in water or air).
 
-Dynamic information requires:
+### **State Space (S)**  
+Velocity field, pressure field, vorticity distribution:
 
-1. a subsystem with describable and persistent identity  
-2. organization‑preserving work  
-3. resistance to entropy  
-4. boundaries defined by that work  
-
-Purely physical processes — no matter how structured — do not meet these criteria.
-
-This is why static information is insufficient for describing organization‑preserving influence, and why dynamic information is a necessary new category.
-
-```mermaid
-flowchart LR
-    subgraph EntropyOnly["No Identity-Preserving Work (w_I = 0)"]
-        Rock["Rolling Rock"]
-        Vortex["Turbulent Vortex"]
-    end
-
-    subgraph IdentitySystems["Identity-Preserving Work (w_I > 0)"]
-        Cell["Living Cell"]
-        Agent["Cognitive/AI Agent"]
-    end
-
-    EntropyOnly --- IdentitySystems
 ```
+S = { u(x), p(x), ω(x) }
+```
+
+### **Viability Region (V)**  
+There is **no viability region**.  
+A vortex has no identity that must be preserved.  
+It is a temporary configuration of the fluid.
+
+### **Capacity Region (C)**  
+There is **no capacity region**.  
+A vortex cannot increase its capability or organization.
+
+### **Pattern (I)**  
+The swirling structure itself.
+
+### **Why it is *not* dynamic information**  
+The vortex does not perform organization‑sustaining work:
+
+- it dissipates  
+- it cannot maintain itself  
+- it cannot improve itself  
+- it has no boundary conditions that define persistence  
+
+Thus:
+
+```
+P(s_{t+1} ∈ (V ∪ C) | s_t, I)
+=
+P(s_{t+1} ∈ (V ∪ C) | s_t)
+```
+
+Dynamic information = **0**.
+
+This is another example of **static information**: a pattern that exists but does not bias trajectories toward viability or capacity.
+
+---
+
+# **4.4 Systems That *Do* Support Dynamic Information**
+
+In contrast, some systems have:
+
+- persistent organization  
+- non‑trivial viability regions  
+- capacity for improvement  
+
+Examples include:
+
+- living cells [7,8]  
+- adaptive agents [10,11]  
+- learning systems  
+- engineered control systems [3,4]  
+
+These systems have:
+
+- a meaningful viability region \(V\)  
+- a meaningful capacity region \(C\)  
+- patterns that can alter the probability of staying in \(V\) or entering \(C\)
+
+This is where dynamic information becomes non‑zero.
+
+---
+
+# **4.5 Why These Counterexamples Matter**
+
+The rolling rock and vortex demonstrate:
+
+- **not all patterns do work**  
+- **not all causal influence is dynamic information**  
+- **not all structure is organization**  
+- **not all systems have viability or capacity regions**  
+
+These examples anchor the central distinction:
+
+> **Static information = patterns that exist but do not sustain or enhance organization.**  
+> **Dynamic information = patterns that bias trajectories toward viability or capacity.**
+
+This is the hinge of the entire manuscript.
+
+---
+
+# **4.6 Transition to Appendix A**
+
+Some systems maintain organization through internal or external work.  
+Others dissolve.  
+Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+
+These ideas are optional and not required for the main definition of dynamic information.
 
 ---
 
@@ -769,143 +734,506 @@ And it gives us a way to unify the sciences of organization under a single, simp
 ---
 
 # **Glossary**
-
 ### **Static Information**  
-A pattern that exists but does not systematically influence viability or capacity.
+A pattern that exists but does not systematically increase the probability of remaining within the viability region or entering the capacity region.
 
 ### **Dynamic Information**  
-A pattern that performs work that increases the probability of remaining within the viability region or entering the capacity region.
+A pattern whose presence increases the probability that a system remains viable or enters states that enhance its capability or organization.
 
-### **Subsystem**  
-A bounded set of states, processes, or components with describable and persistent identity. A subsystem must maintain organization against entropy through identity‑preserving work.
+### **System**  
+A subset of the physical world with a well‑defined state space \(S\), dynamics \(P(s_{t+1} \mid s_t)\), and identifiable viability and capacity regions.
 
-### **Describable Identity**  
-The set of structural or functional attributes that distinguish a subsystem from the universal physical substrate. Identity must be expressible in terms of boundaries, organization, and persistence conditions.
-
-### **Persistent Identity**  
-The requirement that a subsystem’s identity remains stable over time, resisting entropy‑driven dissolution. Persistence requires nonzero identity‑preserving work.
-
-### **Identity‑Preserving Work (w_I)**  
-Generalized work performed by a subsystem to maintain its organization, boundary, or viability. Identity exists only when:
-
-```
-Integral_0^T w_I(t) dt > 0
-```
-
-for all T > 0.
-
-### **Entropy‑Driven Dissolution (e_D)**  
-The generalized rate at which entropy erodes subsystem organization. Identity fails when:
-
-```
-w_I(t) < e_D(t)
-```
-
-for any t.
+### **Pattern**  
+Any structural, temporal, or relational regularity that can influence system trajectories.
 
 ### **Viability Region (V)**  
-The set of states in which the subsystem continues to exist as itself. A subsystem must remain in V to preserve identity.
+The set of states from which the system can continue to exist as itself. Formally, states where expected organization remains above the minimum threshold required for persistence.
 
 ### **Capacity Region (C)**  
-The set of states in which the subsystem’s organization or capability is enhanced relative to baseline.
-
-### **Dynamic Information Threshold**  
-The combined physical and temporal conditions required for identity to exist:
-
-```
-exists V != empty  and  exists t such that w_I(t) > 0
-```
-
-and
-
-```
-Integral_0^T (w_I(t) - e_D(t)) dt >= 0
-```
-
-for all T >= T_min.
-
-### **Law of Physical Describability (Theorem A)**  
-If a subsystem’s behavior is fully described by universal physical laws, then:
-
-```
-w_I(t) = 0
-I_dyn = 0
-```
-
-Such processes (rolling rocks, vortices) have no identity and no dynamic information.
-
-### **Identity Boundary Theorem (Theorem B)**  
-If a subsystem possesses dynamic information, its physical and temporal boundaries are determined by the identity‑preserving work that sustains it. Identity exists only when:
-
-```
-x(t) in V  for all t >= 0
-```
-
-and
-
-```
-w_I(t) >= e_D(t)
-```
+The set of states from which the system tends to increase its organization, capability, or ability to perform work relative to the viability threshold.
 
 ### **Organization‑Sustaining Work**  
-Work that maintains or enhances subsystem structure, function, or capability. Equivalent to identity‑preserving work when applied to viability.
+Generalized causal influence that maintains or enhances system structure, function, or capability. Dynamic information is defined in terms of its effects on viability and capacity, not in terms of thermodynamic work.
 
 ### **Operator**  
-A pattern or mechanism that transforms system states in a structured way.
+A pattern or mechanism that transforms system states in a structured way, biasing trajectories toward or away from viability or capacity.
 
 ### **Transfer Entropy**  
-A measure of directional information flow; used here as a proxy for dynamic information when conditioned on trajectories within V or C.
+A measure of directional information flow. When conditioned on trajectories within \(V\) or \(C\), it serves as a practical proxy for dynamic information.
 
 ### **Dissipative Structure**  
-A far‑from‑equilibrium system that maintains organization through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when identity‑preserving work is present.
+A far‑from‑equilibrium system that maintains organization through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when patterns bias trajectories toward viability or capacity.
 
 ---
 
 # **References**
+**[1]** C. E. Shannon, *A Mathematical Theory of Communication*, Bell System Technical Journal, 1948.  
+**[2]** T. Schreiber, *Measuring Information Transfer*, Physical Review Letters, 2000.  
+**[3]** W. R. Ashby, *An Introduction to Cybernetics*, Chapman & Hall, 1956.  
+**[4]** R. C. Conant & W. R. Ashby, *Every Good Regulator of a System Must Be a Model of That System*, International Journal of Systems Science, 1970.  
+**[5]** J.-P. Aubin, *Viability Theory*, Birkhäuser, 1991.  
+**[6]** J.-P. Aubin, A. M. Bayen, & P. Saint-Pierre, *Viability Theory: New Directions*, Springer, 2011.  
+**[7]** J. G. Roederer, *Information and Its Role in Nature*, Springer, 2005 (2nd ed. 2016).  
+**[8]** I. Prigogine & I. Stengers, *Order Out of Chaos*, Bantam Books, 1984.  
+**[9]** I. Prigogine, *Time, Structure, and Fluctuations*, Nobel Lecture, 1977.  
+**[10]** K. Friston, *The Free-Energy Principle: A Unified Brain Theory?*, Nature Reviews Neuroscience, 2010.  
+**[11]** K. Friston et al., *Active Inference and Learning*, Neural Computation, 2015.  
+**[12]** S. A. Kauffman, *The Origins of Order*, Oxford University Press, 1993.  
+**[13]** R. Rosen, *Life Itself*, Columbia University Press, 1991.
 
-[1] C. E. Shannon, “A Mathematical Theory of Communication,” Bell System Technical Journal, 1948.
+---
 
-[2] R. Clausius, “On the Motive Power of Heat,” Annalen der Physik, 1850.
+# **Appendix A — Identity Boundary**  
+*This appendix presents a speculative geometric intuition for how some systems maintain organization while others dissolve. These ideas are not required for the main definition of dynamic information and should be read as an optional interpretive lens.*
 
-[3] L. Boltzmann, “Further Studies on the Thermal Equilibrium of Gas Molecules,” 1872.
+---
 
-[4] L. Boltzmann, “Lectures on Gas Theory,” 1896.
+# **A.1 Motivation**
 
-[5] E. T. Jaynes, “Information Theory and Statistical Mechanics,” Physical Review, 1957.
+Some systems — cells, agents, adaptive controllers — maintain organization over time.  
+Others — rolling rocks, vortices — do not.
 
-[6] I. Prigogine, “Time, Structure, and Fluctuations,” Nobel Lecture, 1977.
+This appendix offers an intuitive way to think about the **boundary** between systems that persist and systems that dissolve. It is not a new physical law, but a conceptual aid for understanding why dynamic information appears only in certain kinds of systems.
 
-[7] G. Nicolis and I. Prigogine, “Self‑Organization in Nonequilibrium Systems,” Wiley, 1977.
+---
 
-[8] H. Haken, “Synergetics: An Introduction,” Springer, 1977.
+# **A.2 Subsystems and Identity (Intuitive)**
 
-[9] E. Schrödinger, “What Is Life?,” Cambridge University Press, 1944.
+A **subsystem** is any bounded set of states or processes that:
 
-[10] S. Kauffman, “The Origins of Order,” Oxford University Press, 1993.
+- exhibits recognizable organization  
+- persists long enough to be described  
+- can be distinguished from its surroundings  
 
-[11] M. Eigen, “Selforganization of Matter and the Evolution of Biological Macromolecules,” Naturwissenschaften, 1971.
+Identity here is **descriptive**, not metaphysical.  
+It refers to the features that allow us to say:
 
-[12] W. R. Ashby, “An Introduction to Cybernetics,” Chapman & Hall, 1956.
+> “This is the same system at time \(t\) and time \(t+1\).”
 
-[13] R. Rosen, “Life Itself,” Columbia University Press, 1991.
+Examples:
 
-[14] H. Maturana and F. Varela, “Autopoiesis and Cognition,” Reidel, 1980.
+- a cell membrane  
+- a control loop  
+- a learning agent  
+- a robot with sensors and actuators  
 
-[15] K. Friston, “A Theory of Cortical Responses,” Philosophical Transactions of the Royal Society B, 2005.
+Non‑examples:
 
-[16] K. Friston, “The Free‑Energy Principle,” Nature Reviews Neuroscience, 2010.
+- a rolling rock  
+- a turbulent vortex  
+- a dust cloud  
 
-[17] A. Bejan, “Constructal Theory of Organization in Nature,” Journal of Applied Physics, 1997.
+These lack persistent organization.
 
-[18] A. N. Kolmogorov, “The Local Structure of Turbulence,” Doklady Akademii Nauk SSSR, 1941.
+---
 
-[19] U. Frisch, “Turbulence: The Legacy of A. N. Kolmogorov,” Cambridge University Press, 1995.
+# **A.3 Organization‑Sustaining Work (Intuitive)**
 
-[20] G. K. Batchelor, “The Theory of Homogeneous Turbulence,” Cambridge University Press, 1953.
+Some systems must perform **organization‑sustaining work** to remain themselves.
 
-[21] L. D. Landau and E. M. Lifshitz, “Mechanics,” Pergamon Press, 1976.
+This work may involve:
 
-[22] R. P. Feynman, “The Feynman Lectures on Physics, Vol. I,” Addison‑Wesley, 1963.
+- repairing structure  
+- maintaining boundaries  
+- regulating internal variables  
+- counteracting dissipative forces  
 
+This is not thermodynamic work in the strict sense.  
+It is a **generalized causal influence** that keeps the system within its viability region.
+
+---
+
+# **A.4 Entropy‑Driven Dissolution (Intuitive)**
+
+All systems are subject to processes that degrade organization:
+
+- diffusion  
+- noise  
+- dissipation  
+- uncontrolled interactions  
+
+If these forces dominate, the system loses identity.
+
+---
+
+# **A.5 The Identity Boundary (Geometric Intuition)**
+
+A system persists when its organization‑sustaining influences outweigh its dissipative tendencies.
+
+This can be visualized as a **boundary** in state space:
+
+```
+Inside boundary  →  organization persists
+Outside boundary →  organization dissolves
+```
+
+Below is a GitHub‑friendly Mermaid diagram illustrating this intuition.
+
+```mermaid
+flowchart TD
+    A["Subsystem State x(t)"]
+    B["Inside Identity Boundary"]
+    C["Organization Persists"]
+    D["Outside Identity Boundary"]
+    E["Organization Dissolves"]
+
+    A --> B --> C
+    A --> D --> E
+```
+
+This boundary is not sharp or universal.  
+It is a conceptual tool for thinking about persistence.
+
+---
+
+# **A.6 Dynamic Information and the Boundary**
+
+Dynamic information appears only when:
+
+- a subsystem has a meaningful identity  
+- that identity can persist  
+- patterns can bias trajectories toward persistence or improvement  
+
+In this view:
+
+- **static information** = patterns that do not affect the boundary  
+- **dynamic information** = patterns that help keep the system inside the boundary or move it toward higher‑capacity regions  
+
+This aligns with the main definition:
+
+```
+P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
+```
+
+---
+
+# **A.7 Why Rolling Rocks and Vortices Fail**
+
+The rolling rock and vortex lack:
+
+- persistent organization  
+- meaningful viability regions  
+- capacity for improvement  
+- any boundary that must be maintained  
+
+Thus, no pattern within them can be dynamic information.
+
+---
+
+# **A.8 Why Cells, Agents, and Controllers Succeed**
+
+These systems have:
+
+- boundaries  
+- regulatory mechanisms  
+- repair processes  
+- learning or adaptation  
+- non‑trivial viability and capacity regions  
+
+Patterns within them can bias trajectories toward persistence or improvement — the hallmark of dynamic information.
+
+---
+
+# **A.9 Limitations and Open Questions**
+
+This appendix is intentionally speculative.  
+It does **not** claim:
+
+- new physics  
+- universal laws  
+- necessary or sufficient conditions  
+- formal proofs  
+
+Instead, it offers:
+
+- a geometric intuition  
+- a conceptual bridge  
+- a way to visualize persistence  
+- a lens for interpreting dynamic information  
+
+Future work may formalize these ideas or replace them entirely.
+
+---
+
+# **Appendix B — Operator Formalism**  
+*This appendix presents an intuitive operator‑based perspective on dynamic information. It complements the main probabilistic definition by offering a way to visualize how patterns bias system trajectories. The material here is optional and intended for readers who find operator‑style reasoning helpful.*
+
+---
+
+# **B.1 Motivation**
+
+Dynamic information is defined in terms of **what a pattern does** to system trajectories:
+
+```
+P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
+```
+
+One way to visualize this influence is to treat a pattern as an **operator** that biases transitions in state space.  
+This appendix provides a simple, intuitive operator framework that complements the probabilistic definition.
+
+---
+
+# **B.2 Patterns as Operators**
+
+A pattern \(I\) can be viewed as an operator acting on the system’s state:
+
+```
+I : S → S
+```
+
+This does **not** mean the pattern deterministically transforms the state.  
+Instead, it means:
+
+> The presence of pattern \(I\) modifies the transition distribution  
+> \(P(s_{t+1} | s_t)\) into a new distribution  
+> \(P(s_{t+1} | s_t, I)\).
+
+This is a conceptual operator, not a linear or algebraic one.
+
+---
+
+# **B.3 The Viability‑Biasing Operator**
+
+Dynamic information corresponds to operators that **bias** trajectories toward viability or capacity.
+
+We can express this informally as:
+
+```
+I is dynamic information  ⇔  I biases trajectories toward (V ∪ C)
+```
+
+This is simply a restatement of the main definition in operator language.
+
+---
+
+# **B.4 Anchor Selection Operator (Intuitive)**
+
+Some systems contain multiple internal patterns or signals.  
+Not all of them are equally useful for maintaining viability or increasing capacity.
+
+The **Anchor Selection Operator** is an intuitive mechanism that:
+
+- identifies patterns that improve viability  
+- suppresses patterns that degrade viability  
+- amplifies patterns that increase capacity  
+
+This is not a new physical law — it is a conceptual way to describe how adaptive systems “choose” which patterns to propagate.
+
+### **Informal definition**
+
+```
+A(I) = the subset of patterns that increase viability or capacity
+```
+
+Where:
+
+- \(A(I)\) is the anchor selection operator  
+- \(I\) is the set of available patterns  
+
+Patterns selected by \(A\) are those that produce:
+
+```
+P(s_{t+1} ∈ (V ∪ C) | s_t, I)  >  baseline
+```
+
+---
+
+# **B.5 Diagram: Operator View of Dynamic Information**
+
+Below is a GitHub‑friendly Mermaid diagram showing how patterns act as operators on trajectories.
+
+```mermaid
+flowchart LR
+    A["State s(t)"]
+    B["Pattern I"]
+    C["Operator Action: I : S → S"]
+    D["Biased Trajectory"]
+    E["Toward V ∪ C"]
+
+    A --> B --> C --> D --> E
+```
+
+This diagram is conceptual: it illustrates how patterns “push” trajectories toward viability or capacity.
+
+---
+
+# **B.6 Relation to Transfer Entropy**
+
+Transfer entropy [2] measures directional information flow:
+
+```
+TE(I → S) = Σ P(...) log( P(s_{t+1} | s_t, I) / P(s_{t+1} | s_t) )
+```
+
+When conditioned on viability:
+
+```
+TE(I → S | V ∪ C)
+```
+
+…it becomes a practical proxy for the operator’s **effectiveness**.
+
+High conditional transfer entropy indicates that the operator meaningfully biases trajectories toward viability or capacity.
+
+---
+
+Absolutely, Jeff — and since you’re actively editing the GitHub file right now (I can see the tab you have open), this is the perfect moment to finalize **Appendix C** so the manuscript’s backbone is complete and internally consistent.
+
+Below is the polished, GitHub‑friendly **Appendix C — Viability Theory Notes**, written to:
+
+- support Section 6  
+- align with Aubin’s formalism  
+- avoid teleology  
+- stay clean and conceptual  
+- remain optional  
+- integrate smoothly with the rest of the manuscript  
+
+No equations that GitHub will choke on.  
+No over‑formalization.  
+Just crisp, rigorous, interdisciplinary clarity.
+
+---
+
+# **Appendix C — Viability Theory Notes**  
+*This appendix provides additional background on viability theory as developed by Aubin [5,6]. It is not required for the main definition of dynamic information but clarifies how viability and capacity regions can be understood in a mathematically grounded way.*
+
+---
+
+# **C.1 Motivation**
+
+Dynamic information depends on two sets:
+
+- the **viability region** \(V\)  
+- the **capacity region** \(C\)
+
+These sets are intuitive in the main text, but they also have a precise interpretation in viability theory.  
+This appendix summarizes the relevant ideas without requiring the full mathematical machinery.
+
+---
+
+# **C.2 Viability Kernels (Intuitive)**
+
+In viability theory, a **viability kernel** is the set of states from which a system can remain within a constraint set indefinitely under some admissible evolution.
+
+Informally:
+
+```
+Viability Kernel = states from which survival is possible
+```
+
+In this manuscript:
+
+- the **viability region (V)** plays the role of a viability kernel  
+- “survival” means “remaining the same system”  
+- admissible evolutions include internal regulation, control, or adaptive behavior  
+
+This framing avoids teleology:  
+the system is not “trying” to survive — it simply has dynamics that allow persistence.
+
+---
+
+# **C.3 Capacity Regions (Intuitive)**
+
+Aubin’s framework also allows for **reachability sets**: states that can be reached from the viability kernel while respecting constraints.
+
+We adapt this idea:
+
+```
+Capacity Region (C) = states from which the system tends to increase organization or capability
+```
+
+This is not a goal or purpose.  
+It is simply a region of state space where:
+
+- learning occurs  
+- adaptation improves performance  
+- structure becomes more robust  
+- capability increases  
+
+This aligns with complex systems, cybernetics [3,4], and active inference [10,11].
+
+---
+
+# **C.4 Why Viability Theory Fits Dynamic Information**
+
+Viability theory is uniquely suited to dynamic information because:
+
+- it is **non‑teleological**  
+- it is **state‑space based**  
+- it handles **constraints**  
+- it handles **adaptive systems**  
+- it distinguishes **persistence** from **improvement**  
+
+Dynamic information is defined entirely in terms of how patterns bias transitions relative to \(V\) and \(C\):
+
+```
+P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
+```
+
+This is a natural extension of viability theory to informational patterns.
+
+---
+
+# **C.5 Diagram: Viability and Capacity Regions**
+
+A GitHub‑friendly Mermaid diagram illustrating the relationship:
+
+```mermaid
+flowchart LR
+    A["State Space S"]
+    B["Viability Region V"]
+    C["Capacity Region C"]
+    D["Outside (Dissolution)"]
+
+    A --> B
+    A --> C
+    A --> D
+
+    B --> C
+    C --> B
+```
+
+This diagram is conceptual:
+
+- **V** = persistence  
+- **C** = improvement  
+- **Outside** = dissolution or loss of identity  
+
+Dynamic information is about patterns that bias trajectories toward **V** or **C**.
+
+---
+
+# **C.6 Avoiding Teleology**
+
+A key concern in interdisciplinary work is avoiding teleological language.  
+Viability theory helps because:
+
+- it describes **constraints**, not goals  
+- it describes **reachable sets**, not intentions  
+- it describes **dynamics**, not purposes  
+
+Thus:
+
+- “The system must remain in V”  
+  → means “states outside V lead to dissolution”
+
+- “The system enters C”  
+  → means “states in C tend to increase organization”
+
+No purpose or intention is implied.
+
+---
+
+# **C.7 Relation to Dynamic Information**
+
+Dynamic information is the informational analogue of viability‑preserving or capacity‑enhancing influence.
+
+Patterns with dynamic information:
+
+- increase the measure of trajectories that remain in V  
+- increase the measure of trajectories that enter C  
+- reduce the measure of trajectories that exit V  
+
+This is fully compatible with Aubin’s framework and with the probabilistic definition in the main text.
 
 ---
