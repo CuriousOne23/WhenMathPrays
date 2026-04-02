@@ -731,12 +731,12 @@ The goal is not to unify these domains under a single theory, but to show how th
 
 # **8.1 Physics: Beyond Structure to Influence**
 
-Physical systems often exhibit striking patterns—vortices, waves, crystalline structures—but most of these patterns do not bias trajectories toward persistence or improvement.
+Physical systems often exhibit striking patterns—vortices, waves, crystalline structures—but most of these patterns do not redirect trajectories toward persistence or improvement.
 
 Dynamic information highlights the difference between:
 
 - **static structure** (e.g., a vortex, a rolling rock)  
-- influence that biases trajectories toward V ∪ C (e.g., a dissipative structure that stabilizes itself through flows [8,9])
+- **patterns that do work** by biasing trajectories toward V ∪ C (e.g., dissipative structures that stabilize themselves through flows [8,9])
 
 This provides a way to talk about **when** physical patterns matter for the future of a system without invoking purpose or function.
 
@@ -754,7 +754,7 @@ Dynamic information generalizes this idea by:
 
 In biological systems, dynamic information clarifies:
 
-- which molecular patterns keep cellular trajectories within their viability region (V)
+- which molecular patterns keep cellular trajectories within V  
 - which regulatory signals increase robustness  
 - which environmental cues enhance survival or adaptation  
 
@@ -770,7 +770,7 @@ Examples include:
 
 - sensory cues that reduce uncertainty in ways that enhance viability  
 - internal representations that improve control or decision‑making  
-- learned patterns that increase capability over time  
+- learned patterns that expand capability over time  
 
 This aligns with predictive processing and active inference [10,11] without requiring their full formal machinery.
 
@@ -842,7 +842,7 @@ Dynamic information offers a simple, operational hinge:
 
 ```
 Static information  = patterns that exist
-Dynamic information = patterns that bias trajectories toward viability or capacity
+Dynamic information = patterns that do work by biasing trajectories toward V or C
 ```
 
 This hinge:
