@@ -471,12 +471,21 @@ A GitHub‑friendly Mermaid diagram illustrating the definition:
 
 ```mermaid
 flowchart LR
-    A["State s(t)"]
-    B["Pattern I"]
-    C["Biased Transition"]
-    D["Toward V ∪ C"]
+    subgraph S["State Space"]
+        direction LR
+        V["Viability Region (V)"]
+        C["Capacity Region (C)"]
+    end
 
-    A --> B --> C --> D
+    A["State s(t)"]
+    T0["Trajectory without pattern I"]
+    T1["Trajectory with pattern I"]
+
+    A --> T0 --> X["Outcome outside V ∪ C"]
+    A --> T1 --> Y["Outcome inside V ∪ C"]
+
+    T1 -. biases toward .-> V
+    T1 -. biases toward .-> C
 ```
 
 This diagram is conceptual:  
