@@ -86,38 +86,177 @@ Dynamic information is **organization‑sustaining work performed by patterns**.
 
 ---
 
-# **4. Physics Grounding + Counterexamples**
+# **4. Why Static Information Is Not Enough**
 
-A common mistake is to assume:
+Static information describes patterns that can be stored, transmitted, or measured.  
+But static information alone cannot explain **organization‑preserving influence** — the ability of a pattern to keep a subsystem within its viability region or move it toward greater capacity.
 
-> “If X causes Y, then X contains information for Y.”
+This section introduces three foundational results that clarify why **dynamic information** requires more than physical law alone.
 
-This is false.
+---
 
-### **Counterexample 1 — Rolling Rock**  
-A rock rolling downhill exerts causal influence on everything it hits.  
-But this influence:
+## **4.1 Theorem A — Law of Physical Describability**
 
-- does not sustain organization  
-- does not increase capacity  
-- does not steer the system toward viability  
+**Statement.**  
+If a subsystem’s behavior is fully described by universal physical laws, then its dynamic information content is zero.
 
-It is **causal**, but not **informational** in the dynamic sense [12].
+Formally, if the subsystem evolves under:
 
-### **Counterexample 2 — Vortex in Turbulence**  
-A vortex has structure and causal influence, but:
+```
+dx/dt = f(x)
+```
 
-- it does not perform organization‑preserving work  
-- it does not encode or transform patterns toward viability  
-- it is a transient dissipative artifact [2]
+with no additional identity‑preserving work term, then:
 
-Again: causal, but not dynamic information.
+```
+w_I(t) = 0  for all t
+I_dyn = 0
+```
 
-### **Why these matter**  
-They show that **causation is not enough**.  
-Dynamic information requires **directional, organization‑relevant influence**.
+A process that is fully captured by universal physics has:
 
-This is the hinge that lets us unify physics, biology, cognition, and AI under one conceptual frame.
+- no describable identity  
+- no viability region  
+- no organization to preserve  
+- no work directed at resisting entropy  
+
+Such processes include rolling rocks, vortices, shockwaves, and other purely entropic phenomena [2–6, 18–22].
+
+---
+
+## **4.2 Theorem B — Identity Boundary Theorem**
+
+**Statement.**  
+If a subsystem possesses dynamic information, then its physical and temporal boundaries are determined by the organization‑preserving work that sustains its identity.
+
+Let `V` be the subsystem’s viability region.  
+Identity exists when:
+
+```
+x(0) in V  and  x(t) in V for all t >= 0
+```
+
+and this invariance requires:
+
+```
+Integral_0^T  w_I(t) dt  >  0   for all T > 0
+```
+
+Identity fails when entropy‑driven dissolution exceeds identity‑preserving work:
+
+```
+exists t such that  w_I(t) < e_D(t)  =>  x(t) leaves V
+```
+
+This theorem formalizes the idea that **identity is not free-floating**.  
+It is bounded by the work required to maintain it [9–17].
+
+---
+
+## **4.3 Corollary — Dynamic Information Threshold**
+
+Dynamic information exists **iff** both thresholds are crossed:
+
+### **Physical / Organizational Threshold**
+There must exist a nonempty viability region and nonzero identity‑preserving work:
+
+```
+exists V != empty  and  exists t such that w_I(t) > 0
+```
+
+### **Temporal Threshold**
+Identity must persist longer than entropy‑driven dissolution:
+
+```
+Integral_0^T (w_I(t) - e_D(t)) dt >= 0   for all T >= T_min
+```
+
+If either threshold fails, the subsystem has no persistent identity and therefore no dynamic information.
+
+This corollary explains why identity emerges only when organization and persistence exceed entropy [7–11].
+
+---
+
+## **4.4 Counterexample 1 — Rolling Rock**
+
+A rolling rock has structure and causal influence, but it performs **no organization‑preserving work**.
+
+- It has no boundary to maintain.  
+- It has no viability region.  
+- It cannot degrade or collapse as a system.  
+- It does not regulate anything.  
+- It is fully described by gravitational and frictional dynamics.
+
+Its motion is an entropy‑increasing process:
+
+```
+Potential energy -> kinetic energy -> heat
+```
+
+Since:
+
+```
+w_I(t) = 0
+```
+
+and the rock has no describable identity separate from universal physics, its dynamic information content is:
+
+```
+I_dyn = 0
+```
+
+This follows directly from Theorem A.
+
+---
+
+## **4.5 Counterexample 2 — Vortex in Turbulence**
+
+A vortex in a turbulent fluid has visible structure and exerts causal influence on nearby flow.  
+But it has **no persistent identity**:
+
+- no boundary  
+- no regulation  
+- no homeostasis  
+- no viability region  
+- no organization‑preserving work  
+
+A vortex is a transient artifact of the Kolmogorov energy cascade [18–20]:
+
+```
+Large-scale energy -> smaller scales -> heat
+```
+
+Its persistence is entirely due to surrounding turbulence, not internal regulation.
+
+Thus:
+
+```
+w_I(t) = 0
+I_dyn = 0
+```
+
+The vortex is a **purely entropic process**, not an identity‑bearing subsystem.
+
+---
+
+## **4.6 Why These Counterexamples Matter**
+
+Rolling rocks and vortices demonstrate that:
+
+- **Causation is not information.**  
+- **Structure is not information.**  
+- **Patterns are not information unless they preserve identity.**
+
+Dynamic information requires:
+
+1. a subsystem with describable and persistent identity  
+2. organization‑preserving work  
+3. resistance to entropy  
+4. boundaries defined by that work  
+
+Purely physical processes — no matter how structured — do not meet these criteria.
+
+This is why static information is insufficient for describing organization‑preserving influence, and why dynamic information is a necessary new category.
 
 ---
 
@@ -554,41 +693,138 @@ And it gives us a way to unify the sciences of organization under a single, simp
 A pattern that exists but does not systematically influence viability or capacity.
 
 ### **Dynamic Information**  
-A pattern that increases the probability of remaining viable or increasing capacity.
+A pattern that performs work that increases the probability of remaining within the viability region or entering the capacity region.
+
+### **Subsystem**  
+A bounded set of states, processes, or components with describable and persistent identity. A subsystem must maintain organization against entropy through identity‑preserving work.
+
+### **Describable Identity**  
+The set of structural or functional attributes that distinguish a subsystem from the universal physical substrate. Identity must be expressible in terms of boundaries, organization, and persistence conditions.
+
+### **Persistent Identity**  
+The requirement that a subsystem’s identity remains stable over time, resisting entropy‑driven dissolution. Persistence requires nonzero identity‑preserving work.
+
+### **Identity‑Preserving Work (w_I)**  
+Generalized work performed by a subsystem to maintain its organization, boundary, or viability. Identity exists only when:
+
+```
+Integral_0^T w_I(t) dt > 0
+```
+
+for all T > 0.
+
+### **Entropy‑Driven Dissolution (e_D)**  
+The generalized rate at which entropy erodes subsystem organization. Identity fails when:
+
+```
+w_I(t) < e_D(t)
+```
+
+for any t.
 
 ### **Viability Region (V)**  
-States compatible with continued existence or function [6].
+The set of states in which the subsystem continues to exist as itself. A subsystem must remain in V to preserve identity.
 
 ### **Capacity Region (C)**  
-States enabling increased capability or future potential.
+The set of states in which the subsystem’s organization or capability is enhanced relative to baseline.
+
+### **Dynamic Information Threshold**  
+The combined physical and temporal conditions required for identity to exist:
+
+```
+exists V != empty  and  exists t such that w_I(t) > 0
+```
+
+and
+
+```
+Integral_0^T (w_I(t) - e_D(t)) dt >= 0
+```
+
+for all T >= T_min.
+
+### **Law of Physical Describability (Theorem A)**  
+If a subsystem’s behavior is fully described by universal physical laws, then:
+
+```
+w_I(t) = 0
+I_dyn = 0
+```
+
+Such processes (rolling rocks, vortices) have no identity and no dynamic information.
+
+### **Identity Boundary Theorem (Theorem B)**  
+If a subsystem possesses dynamic information, its physical and temporal boundaries are determined by the identity‑preserving work that sustains it. Identity exists only when:
+
+```
+x(t) in V  for all t >= 0
+```
+
+and
+
+```
+w_I(t) >= e_D(t)
+```
 
 ### **Organization‑Sustaining Work**  
-Work that maintains or enhances system structure, function, or capability.
+Work that maintains or enhances subsystem structure, function, or capability. Equivalent to identity‑preserving work when applied to viability.
 
 ### **Operator**  
-A pattern that transforms system states in a structured way [3].
+A pattern or mechanism that transforms system states in a structured way.
 
 ### **Transfer Entropy**  
-A measure of directional information flow; used here as a proxy for dynamic information [7].
+A measure of directional information flow; used here as a proxy for dynamic information when conditioned on trajectories within V or C.
 
 ### **Dissipative Structure**  
-A far‑from‑equilibrium system that maintains organization through flows [2].
+A far‑from‑equilibrium system that maintains organization through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when identity‑preserving work is present.
 
 ---
 
 # **References**
 
-[1] Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27, 379–423, 623–656.  
-[2] Prigogine, I., & Stengers, I. (1984). *Order Out of Chaos*. Bantam Books.  
-[3] Ashby, W. R. (1956). *An Introduction to Cybernetics*. Chapman & Hall.  
-[4] Friston, K. (2010). The free‑energy principle. *Nature Reviews Neuroscience*, 11(2), 127–138.  
-[5] Roederer, J. G. (2016). *Information and Its Role in Nature*. Springer.  
-[6] Aubin, J.‑P. (2011). *Viability Theory*. Springer.  
-[7] Schreiber, T. (2000). Measuring information transfer. *Physical Review Letters*, 85(2), 461–464.  
-[8] Rosen, R. (1991). *Life Itself*. Columbia University Press.  
-[9] Kauffman, S. (1993). *The Origins of Order*. Oxford University Press.  
-[10] Sterling, P., & Laughlin, S. (2015). *Principles of Neural Design*. MIT Press.  
-[11] Cover, T. M., & Thomas, J. A. (2006). *Elements of Information Theory* (2nd ed.). Wiley.  
-[12] Bejan, A. (2016). *The Physics of Life*. St. Martin’s Press.
+[1] C. E. Shannon, “A Mathematical Theory of Communication,” Bell System Technical Journal, 1948.
+
+[2] R. Clausius, “On the Motive Power of Heat,” Annalen der Physik, 1850.
+
+[3] L. Boltzmann, “Further Studies on the Thermal Equilibrium of Gas Molecules,” 1872.
+
+[4] L. Boltzmann, “Lectures on Gas Theory,” 1896.
+
+[5] E. T. Jaynes, “Information Theory and Statistical Mechanics,” Physical Review, 1957.
+
+[6] I. Prigogine, “Time, Structure, and Fluctuations,” Nobel Lecture, 1977.
+
+[7] G. Nicolis and I. Prigogine, “Self‑Organization in Nonequilibrium Systems,” Wiley, 1977.
+
+[8] H. Haken, “Synergetics: An Introduction,” Springer, 1977.
+
+[9] E. Schrödinger, “What Is Life?,” Cambridge University Press, 1944.
+
+[10] S. Kauffman, “The Origins of Order,” Oxford University Press, 1993.
+
+[11] M. Eigen, “Selforganization of Matter and the Evolution of Biological Macromolecules,” Naturwissenschaften, 1971.
+
+[12] W. R. Ashby, “An Introduction to Cybernetics,” Chapman & Hall, 1956.
+
+[13] R. Rosen, “Life Itself,” Columbia University Press, 1991.
+
+[14] H. Maturana and F. Varela, “Autopoiesis and Cognition,” Reidel, 1980.
+
+[15] K. Friston, “A Theory of Cortical Responses,” Philosophical Transactions of the Royal Society B, 2005.
+
+[16] K. Friston, “The Free‑Energy Principle,” Nature Reviews Neuroscience, 2010.
+
+[17] A. Bejan, “Constructal Theory of Organization in Nature,” Journal of Applied Physics, 1997.
+
+[18] A. N. Kolmogorov, “The Local Structure of Turbulence,” Doklady Akademii Nauk SSSR, 1941.
+
+[19] U. Frisch, “Turbulence: The Legacy of A. N. Kolmogorov,” Cambridge University Press, 1995.
+
+[20] G. K. Batchelor, “The Theory of Homogeneous Turbulence,” Cambridge University Press, 1953.
+
+[21] L. D. Landau and E. M. Lifshitz, “Mechanics,” Pergamon Press, 1976.
+
+[22] R. P. Feynman, “The Feynman Lectures on Physics, Vol. I,” Addison‑Wesley, 1963.
+
 
 ---
