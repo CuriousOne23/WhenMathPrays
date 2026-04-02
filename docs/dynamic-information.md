@@ -371,330 +371,482 @@ These patterns **act to maintain themselves** through dissipative work — a hal
 
 ---
 
-# **6. Formal Definition and Measurability**  
-*(GitHub‑safe math version)*
+# **6. Formal Definition of Dynamic Information**
 
-We now refine the definition introduced earlier.
+This section provides a precise, operational definition of dynamic information using state‑space geometry, viability theory [5,6], and directional information flow [2]. The goal is to define dynamic information in a way that is:
 
-Let:
+- non‑teleological  
+- measurable  
+- compatible with dissipative structures [8,9]  
+- compatible with control systems [3,4]  
+- compatible with adaptive agents [10,11]  
 
-- $S$ = state space  
-- $V ⊂ S$ = viability region [6]  
-- $C ⊂ S$ = capacity region  
-- $P(s_{t+1} \mid s_t)$ = baseline dynamics  
-- $P(s_{t+1} \mid s_t, I)$ = dynamics under influence of pattern $I$
+Dynamic information is defined entirely in terms of **how patterns influence trajectories** in a system’s state space.
 
-### **6.1 Core Definition**
+---
 
-A pattern $I$ is **dynamic information** if:
+# **6.1 Systems and State Spaces**
 
-$$
-P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)
-$$
+A **system** is any subset of the physical world whose state can be represented in a state space:
 
-This captures the essential idea:
+```
+S = set of possible states
+s(t) ∈ S = state at time t
+```
 
-> **Dynamic information is a pattern whose presence increases the probability of remaining viable or increasing capacity.**
+The system evolves according to a transition distribution:
 
-This aligns naturally with viability theory’s focus on controlled trajectories [6].
+```
+P(s(t+1) | s(t))
+```
+
+This framing is standard in dynamical systems, cybernetics [3], and viability theory [5].
+
+---
+
+# **6.2 Viability and Capacity Regions**
+
+Dynamic information depends on two geometric regions in state space.
+
+### **Viability Region (V)**  
+The set of states from which the system can continue to exist as itself.  
+In viability theory, this corresponds to a **viability kernel** [5]:
+
+```
+V = states from which persistence is possible
+```
+
+### **Capacity Region (C)**  
+The set of states from which the system tends to increase its organization, capability, or performance:
+
+```
+C = states from which improvement is possible
+```
+
+These definitions are non‑teleological:  
+they describe **constraints and reachable sets**, not goals or intentions.
+
+---
+
+# **6.3 Patterns as Conditional Influences**
+
+A **pattern** \(I\) is any structural, temporal, or relational regularity that can influence system dynamics.
+
+The presence of pattern \(I\) modifies the transition distribution:
+
+```
+P(s(t+1) | s(t), I)
+```
+
+This is the only sense in which patterns “act” on the system.
+
+---
+
+# **6.4 Formal Definition of Dynamic Information**
+
+A pattern \(I\) is **dynamic information** if and only if it increases the probability that the system remains viable or enters the capacity region:
+
+```
+P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
+```
+
+This is the core hinge of the manuscript.
+
+- If the inequality holds → **dynamic information**  
+- If it does not → **static information**
+
+This definition is:
+
+- minimal  
+- measurable  
+- compatible with viability theory  
+- compatible with transfer entropy  
+- applicable to physical, biological, and artificial systems  
+
+---
+
+# **6.5 Diagram: How Patterns Bias Trajectories**
+
+A GitHub‑friendly Mermaid diagram illustrating the definition:
 
 ```mermaid
-flowchart TD
-    A["State x(t) in Viability Region (V)"]
-    B["Identity-Preserving Work w_I(t) >= Entropy e_D(t)"]
-    C["Identity Persists Over Time"]
-    D["Dynamic Information Exists (I_dyn > 0)"]
+flowchart LR
+    A["State s(t)"]
+    B["Pattern I"]
+    C["Biased Transition"]
+    D["Toward V ∪ C"]
 
     A --> B --> C --> D
 ```
 
----
-
-## **6.2 Alternative Formulations**
-
-### **(a) Divergence Form**
-
-Dynamic information increases the divergence between:
-
-- trajectories that remain viable, and  
-- trajectories that do not.
-
-### **(b) Expected Improvement Form**
-
-Let $\Delta \Phi$ be a viability‑or‑capacity potential.  
-Then $I$ is dynamic information if:
-
-$$
-E[\Delta \Phi \mid I] > 0
-$$
-
-### **(c) Operator Form**
-
-Dynamic information can be seen as an operator:
-
-$$
-I : S \rightarrow S
-$$
-
-that **biases** trajectories toward $V \cup C$.
-
-This resonates with Ashby’s cybernetic view of regulation and requisite variety [3].
+This diagram is conceptual:  
+patterns bias transitions toward viability or capacity.
 
 ---
 
-## **6.3 Measurability via Transfer Entropy**
+# **6.6 Measuring Dynamic Information with Transfer Entropy**
 
-A practical proxy is **transfer entropy** (Schreiber, 2000) [7]:
+Transfer entropy (TE) [2] measures directional information flow:
 
-$$
-TE(I \rightarrow S) = \sum P(\ldots)\ log\left(\frac{P(s_{t+1} \mid s_t, I)}{P(s_{t+1} \mid s_t)}\right)
-$$
+```
+TE(I → S) = sum over states of:
+    P(...) * log( P(s(t+1) | s(t), I) / P(s(t+1) | s(t)) )
+```
 
-To measure **dynamic** information, we condition on viability:
+To measure dynamic information, we condition TE on viability and capacity:
 
-$$
-TE(I \rightarrow S \mid V \cup C)
-$$
+```
+TE(I → S | V ∪ C)
+```
 
----
+Interpretation:
 
-# **6.4 Viability and Capacity Regions**
+- High conditional TE → pattern strongly biases trajectories toward V or C  
+- Low conditional TE → pattern has little or no dynamic information  
+- Zero conditional TE → static information  
 
-Real systems do not occupy all possible states. They persist only within regions of state space where their organization can be maintained or improved. We distinguish two such regions.
-
-### **Viability Region (V)**  
-The viability region is the set of states from which the system can continue to exist as itself. Formally, these are states where the *expected* organization remains above a minimum threshold required for persistence:
-
-$$
-E[I(s_{t+1}) \mid s_t] \ge \theta
-$$
-
-Here $\theta$ represents the minimal organizational level below which the system collapses, disintegrates, or ceases to function as the same entity. Individual states within this region may vary widely — some beneficial, some harmful — but what matters is the *expected* trajectory, not the instantaneous value.
-
-### **Capacity Region (C)**  
-The capacity region is the subset of states from which the system not only remains viable but tends to *increase* its organization, capabilities, or ability to do work. These are states with positive drift relative to the viability threshold:
-
-$$
-\Delta_\theta = \mathbb{E}[I(s_{t+1}) \mid s_t] - \theta > 0.
-$$
-
-In this sense, the capacity region is defined by the **delta above viability**: states whose expected future organization exceeds the minimum required for persistence. Such states enable growth, learning, repair, or enhanced function.
+This provides an operational bridge between the conceptual definition and empirical measurement.
 
 ---
 
-## **7.1 Shannon Information**
+# **6.7 Why This Definition Avoids Teleology**
 
-Shannon deliberately excluded meaning, use, and action [1].  
-His framework quantifies:
+The definition:
+
+- does **not** assume goals  
+- does **not** assume purpose  
+- does **not** assume function  
+- does **not** assume identity beyond viability theory  
+- does **not** require biological agency (contra Roederer [7])  
+
+It is purely about **state‑space geometry** and **conditional probabilities**.
+
+This makes the framework applicable to:
+
+- cells  
+- adaptive agents  
+- engineered control systems  
+- dissipative structures  
+- learning systems  
+- AI models  
+
+…and excludes systems like rolling rocks and vortices (Section 4).
+
+---
+
+# **6.8 Summary**
+
+Dynamic information is defined by a single inequality:
+
+```
+P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
+```
+
+Everything else — examples, counterexamples, operator formalism, identity boundary — is optional scaffolding.
+
+This definition is:
+
+- simple  
+- measurable  
+- non‑teleological  
+- grounded in viability theory  
+- compatible with transfer entropy  
+- applicable across physical, biological, and artificial systems  
+
+It is the missing hinge between static structure and organization‑sustaining influence.
+
+---
+
+# **7. Positioning Within Existing Frameworks**
+
+Dynamic information sits between two well‑established traditions:
+
+1. **Static information theory**, which quantifies structure and uncertainty reduction [1].  
+2. **Pragmatic or functional information**, which describes how signals or patterns contribute to biological action [7].
+
+The contribution of this manuscript is to identify a **missing hinge** between these domains:  
+a simple, operational criterion for when a pattern *does work* on system trajectories by increasing the probability of remaining viable or entering states of greater capability.
+
+This section clarifies how dynamic information relates to prior work without requiring new physical laws or teleological assumptions.
+
+---
+
+# **7.1 Relation to Shannon Information**
+
+Shannon information [1] quantifies:
 
 - uncertainty reduction  
-- channel capacity  
-- coding efficiency  
+- compressibility  
+- communication efficiency  
 
-Dynamic information is **orthogonal**:
+It does **not** address whether a pattern:
 
-- Shannon: *How much could be transmitted?*  
-- Dynamic: *What does the pattern do?*
+- sustains organization  
+- improves capability  
+- biases trajectories toward persistence  
 
-Both perspectives are necessary and compatible.
+Dynamic information is not a replacement for Shannon information.  
+It is an **orthogonal dimension**:  
+a measure of how patterns influence the *future viability* of a system.
 
----
+Shannon answers:  
+**“How surprising is this pattern?”**
 
-## **7.2 Pragmatic Information (Roederer)**
-
-Roederer defined pragmatic information as:
-
-> “Information that produces a specific change in a biological system.” [5]
-
-But he explicitly restricted it to **living systems**, arguing it has:
-
-> “No active role in the purely physical domain.” [5]
-
-Dynamic information generalizes the underlying intuition:
-
-- It applies to **dissipative structures** (Bénard cells, lasers) [2].  
-- It applies to **AI systems**.  
-- It applies to **control systems**.  
-- It applies to **any pattern performing organization‑sustaining work**.
-
-This generalization is one of the key contributions of the framework.
+Dynamic information answers:  
+**“What does this pattern do to the system’s ability to persist or improve?”**
 
 ---
 
-## **7.3 Viability Theory (Aubin)**
+# **7.2 Relation to Roederer’s Pragmatic Information**
 
-Viability theory provides the mathematical backbone for:
+Roederer [7] defined **pragmatic information** as the information that produces a *specific change* in a biological system.  
+He explicitly restricted pragmatic information to:
 
-- viability regions  
-- viability kernels  
-- controlled trajectories  
+- living systems  
+- systems capable of functional response  
+- contexts involving biological agency  
 
-Dynamic information fits naturally into this framework as:
+Roederer wrote that pragmatic information has “no active role in the purely physical domain” without biological intervention.
 
-> **Patterns that increase the measure of viable trajectories.** [6]
+Dynamic information generalizes this idea by:
 
-This connects informational structure with the geometry of persistence.
+- removing the biological restriction  
+- grounding the definition in state‑space geometry  
+- avoiding functional or teleological language  
+- applying equally to dissipative structures [8,9], control systems [3,4], and adaptive agents [10,11]
+
+Where Roederer required **biological function**, dynamic information requires only:
+
+```
+P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
+```
+
+This makes the concept applicable to:
+
+- cells  
+- neural networks  
+- robots  
+- engineered controllers  
+- chemical reaction networks  
+- ecological systems  
+- AI models  
+
+Dynamic information is thus a **non‑biological generalization** of pragmatic information.
 
 ---
 
-## **7.4 Predictive Processing (Friston)**
+# **7.3 Relation to Dissipative Structures**
 
-Predictive processing frames cognition as:
+Prigogine’s dissipative structures [8,9] demonstrate that:
 
-- minimizing free energy  
-- maintaining homeostasis  
-- reducing surprise [4]
+- far‑from‑equilibrium systems  
+- can maintain organization  
+- through continuous flows of energy or matter  
 
-Dynamic information complements this by focusing on:
+Dynamic information provides a way to describe **which patterns** within such systems:
 
-- the **patterns** that perform the work  
-- the **organization‑relevant effects** of those patterns  
+- stabilize the structure  
+- enhance its robustness  
+- bias trajectories toward persistence  
 
-It aligns with predictive processing without assuming representational or inferential mechanisms.
+This connects dissipative structures to modern information‑theoretic tools such as transfer entropy [2].
 
 ---
 
-## **7.5 Control Theory and Cybernetics (Ashby)**
+# **7.4 Relation to Cybernetics and Control**
 
-Ashby emphasized:
+Ashby’s cybernetics [3,4] emphasized:
 
 - regulation  
-- stability  
-- requisite variety [3]
+- constraint satisfaction  
+- maintaining essential variables  
 
-Dynamic information provides a way to describe:
+Dynamic information aligns naturally with this tradition:
 
-- the **informational operators** that achieve regulation  
-- the **patterns** that maintain organization  
+- viability region \(V\) corresponds to Ashby’s essential variables  
+- capacity region \(C\) corresponds to improved regulation or capability  
+- patterns with dynamic information act like regulators or operators that bias trajectories toward \(V\) or \(C\)
 
-It offers a unifying language for control across physical, biological, and artificial systems.
-
----
-
-## **7.6 Dissipative Structures (Prigogine)**
-
-Prigogine showed that far‑from‑equilibrium systems:
-
-- maintain structure through flows  
-- perform work to sustain organization [2]
-
-Dynamic information provides a way to distinguish:
-
-- **mere structure** from  
-- **patterns that actively maintain organization**
-
-This distinction clarifies how dissipative systems participate in their own persistence.
+This provides a bridge between classical cybernetics and modern information theory.
 
 ---
 
-# **8. Implications**
+# **7.5 Relation to Predictive Processing and Active Inference**
 
-Dynamic information gives us a unifying way to talk about systems that:
+Friston’s free‑energy principle and active inference [10,11] describe systems that:
 
-- maintain themselves  
-- adapt  
-- learn  
-- evolve  
-- or pursue goals  
+- minimize surprise  
+- maintain homeostasis  
+- adaptively update internal models  
 
-Across domains, the implications are surprisingly deep.
+Dynamic information complements this view by identifying:
 
----
+- which patterns  
+- in the environment or internal dynamics  
+- increase the probability of remaining viable or improving capability  
 
-## **8.1 Physics**
-
-Dynamic information reframes dissipative structures:
-
-- A convection cell is not just a pattern — it is a **pattern that acts** to maintain itself through flow [2].  
-- A laser cavity is not just coherent light — it is a **self‑maintaining informational operator**.  
-- Chemical oscillators are **dynamic information loops**.
-
-This suggests a broader view of physical organization:
-
-> **Information is not just encoded in matter; it is enacted through dynamics.**
-
-This aligns with Bejan’s constructal law and the physics of flow‑driven organization [12].
+Where active inference describes *how* systems act,  
+dynamic information describes *which patterns matter* for persistence.
 
 ---
 
-## **8.2 Biology**
+# **7.6 Summary: A Missing Conceptual Hinge**
 
-Life becomes legible as:
+Dynamic information provides a simple, operational distinction:
 
-- dynamic information storage (DNA) [8]  
-- dynamic information execution (transcription, translation) [9]  
-- dynamic information regulation (signaling networks)  
-- dynamic information adaptation (evolution)  
+- **Static information**: patterns that exist  
+- **Dynamic information**: patterns that *do work* on trajectories by increasing viability or capacity
 
-This provides a clean way to talk about:
+This hinge:
 
-- agency  
-- function  
+- generalizes pragmatic information beyond biology  
+- complements Shannon information  
+- aligns with viability theory  
+- integrates with cybernetics and active inference  
+- applies across physical, biological, and artificial systems  
+
+It is not a new physical law.  
+It is a **clarifying lens** for understanding when patterns matter for persistence and improvement.
+
+---
+
+# **8. Implications Across Domains**
+
+Dynamic information provides a simple, operational distinction between patterns that merely exist and patterns that **do work** on system trajectories by increasing the probability of remaining viable or entering states of greater capability.  
+This section outlines the implications of this distinction across physics, biology, cognition, AI, and communication.
+
+The goal is not to unify these domains under a single theory, but to show how the same **state‑space criterion** applies across scales.
+
+---
+
+# **8.1 Physics: Beyond Structure to Influence**
+
+Physical systems often exhibit striking patterns—vortices, waves, crystalline structures—but most of these patterns do not bias trajectories toward persistence or improvement.
+
+Dynamic information highlights the difference between:
+
+- **static structure** (e.g., a vortex, a rolling rock)  
+- **organization‑sustaining influence** (e.g., a dissipative structure that stabilizes itself through flows [8,9])  
+
+This provides a way to talk about **when** physical patterns matter for the future of a system without invoking purpose or function.
+
+---
+
+# **8.2 Biology: A Generalization of Pragmatic Information**
+
+Roederer’s pragmatic information [7] describes how signals produce specific changes in biological systems.  
+Dynamic information generalizes this idea by:
+
+- removing the biological restriction  
+- grounding the definition in viability theory [5,6]  
+- avoiding teleology  
+- applying to any system with meaningful viability and capacity regions  
+
+In biological systems, dynamic information clarifies:
+
+- which molecular patterns stabilize cellular organization  
+- which regulatory signals increase robustness  
+- which environmental cues enhance survival or adaptation  
+
+It provides a **non‑functional, non‑teleological** way to describe biological influence.
+
+---
+
+# **8.3 Cognition and Adaptive Behavior**
+
+In cognitive and adaptive systems, patterns that improve prediction, regulation, or learning naturally satisfy the dynamic information criterion.
+
+Examples include:
+
+- sensory cues that reduce uncertainty in ways that enhance viability  
+- internal representations that improve control or decision‑making  
+- learned patterns that increase capability over time  
+
+This aligns with predictive processing and active inference [10,11] without requiring their full formal machinery.
+
+Dynamic information identifies **which patterns matter** for adaptive success.
+
+---
+
+# **8.4 Artificial Intelligence and Machine Learning**
+
+In AI systems, dynamic information provides a way to describe:
+
+- which features improve model performance  
+- which internal representations enhance generalization  
+- which training signals bias learning toward higher‑capacity states  
+
+This perspective is compatible with:
+
+- reinforcement learning  
+- self‑supervised learning  
+- control‑theoretic AI  
+- model‑based agents  
+
+Dynamic information is not a new training objective.  
+It is a **lens** for understanding how patterns influence the evolution of an AI system’s state.
+
+---
+
+# **8.5 Communication and Control**
+
+In communication systems, Shannon information [1] quantifies uncertainty reduction, but it does not distinguish between:
+
+- signals that merely convey structure  
+- signals that improve viability or capability  
+
+Dynamic information provides this distinction.
+
+In control systems [3,4], dynamic information identifies:
+
+- which feedback signals stabilize the system  
+- which control patterns enhance performance  
+- which disturbances degrade viability  
+
+This connects classical cybernetics to modern information theory.
+
+---
+
+# **8.6 Complex Systems and Emergence**
+
+Many complex systems—ecological networks, markets, social systems—contain patterns that:
+
+- stabilize the system  
+- enhance resilience  
+- increase collective capability  
+
+Dynamic information provides a way to describe these influences without invoking:
+
 - purpose  
-- teleonomy  
+- function  
+- agency  
+- teleology  
 
-without invoking metaphysics.
-
----
-
-## **8.3 Cognition**
-
-Cognition becomes:
-
-> **The maintenance and transformation of dynamic information to steer an organism through viable states.**
-
-This reframes:
-
-- perception as **viability‑relevant inference** [4]  
-- memory as **stored operators**  
-- action as **dynamic information deployment**  
-- learning as **operator refinement**  
-
-It also clarifies why purely static representations are insufficient to explain intelligence.
+It focuses solely on **state‑space consequences**.
 
 ---
 
-## **8.4 Artificial Intelligence**
+# **8.7 Summary: A Cross‑Domain Lens**
 
-AI systems become:
+Dynamic information offers a simple, operational hinge:
 
-- dynamic information processors  
-- operators acting on state spaces  
-- structures that transform inputs into viability‑relevant outputs (for a given objective)  
+```
+Static information  = patterns that exist
+Dynamic information = patterns that bias trajectories toward viability or capacity
+```
 
-This provides a principled way to talk about:
+This hinge:
 
-- model alignment  
-- model drift  
-- robustness  
-- generalization  
-- interpretability  
+- clarifies when patterns matter  
+- applies across physical, biological, cognitive, and artificial systems  
+- integrates with viability theory  
+- complements Shannon information  
+- generalizes pragmatic information  
+- avoids teleology  
+- remains measurable via conditional transfer entropy [2]  
 
-Dynamic information is the missing conceptual bridge between:
-
-- data  
-- computation  
-- action  
-- and goal‑directed behavior  
-
----
-
-## **8.5 Evolution**
-
-Evolution becomes:
-
-> **The accumulation and refinement of dynamic information operators that increase the probability of remaining viable across generations.**
-
-This unifies:
-
-- genetic information  
-- epigenetic regulation  
-- niche construction  
-- cultural evolution  
-
-under one conceptual umbrella.
-
-This perspective resonates with Kauffman’s view of evolving systems exploring adjacent possible spaces [9].
+Dynamic information is not a new physical law.  
+It is a **clarifying lens** for understanding how patterns shape the future of systems.
 
 ---
 
