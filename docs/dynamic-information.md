@@ -273,13 +273,30 @@ $$
 
 ---
 
-## **6.4 Viability and Capacity Regions**
+# **6.4 Viability and Capacity Regions**
 
-**Viability region (V):**  
-The set of states in which the system can continue to exist as itself — maintaining the organization required for persistence.
+Real systems do not occupy all possible states. They persist only within regions of state space where their organization can be maintained or improved. We distinguish two such regions.
 
-**Capacity region (C):**  
-The set of states in which the system increases its capabilities, organization, or ability to do work — enabling growth, learning, or enhanced function.
+### **Viability Region (V)**  
+The viability region is the set of states from which the system can continue to exist as itself. Formally, these are states where the *expected* organization remains above a minimum threshold required for persistence:
+
+$$
+E[I(s_{t+1}) \mid s_t] \ge \theta
+$$
+
+Here \( \theta \) represents the minimal organizational level below which the system collapses, disintegrates, or ceases to function as the same entity. Individual states within this region may vary widely — some beneficial, some harmful — but what matters is the *expected* trajectory, not the instantaneous value.
+
+### **Capacity Region (C)**  
+The capacity region is the subset of states from which the system not only remains viable but tends to *increase* its organization, capabilities, or ability to do work. These are states with positive drift relative to the viability threshold:
+
+$$
+\Delta_\theta = \mathbb{E}[I(s_{t+1}) \mid s_t] - \theta > 0.
+$$
+
+In this sense, the capacity region is defined by the **delta above viability**: states whose expected future organization exceeds the minimum required for persistence. Such states enable growth, learning, repair, or enhanced function.
+
+### **An Open Direction**  
+We emphasize that these definitions are intentionally minimal. Different systems will require different measures of organization, different thresholds, and different ways of estimating expectations. The deeper structure of viability and capacity regions — their geometry, boundaries, and transitions — remains an open area for future research. Our aim here is simply to mark the doorway: dynamic information can be understood in terms of how patterns move systems within and between these regions.
 
 ---
 
