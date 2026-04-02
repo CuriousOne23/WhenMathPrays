@@ -279,6 +279,11 @@ Here are parallel examples across physics, biology, cognition, and AI.
 ---
 
 ## **5.1 Communication Systems**
+Dissipative structures illustrate the difference between patterns that merely exist and patterns that actively shape a system’s evolution. A vortex, for example, is not just a configuration of fluid; it channels momentum, redirects flow, and stabilizes itself through continuous energy throughput. The pattern is doing work in the physical sense: it alters the trajectories of surrounding matter and maintains its own organization through that influence.
+
+This is not “information” in the Shannon sense, nor is it simply energy flow. It is a relational pattern whose causal influence preserves a specific form. The vortex persists because its structure constrains how energy and matter move through it. This organization‑preserving influence is what distinguishes dynamic information from static description.
+
+The key point is that the work is defined independently of the pattern: it is the measurable redirection of trajectories in state space. The pattern becomes dynamically informational when it is the cause of that redirection. This avoids circularity: the work is defined first, and the informational status follows from whether the pattern is responsible for that work.
 
 ### **Static Information**
 - A QR code printed on paper  
@@ -860,31 +865,31 @@ And it gives us a way to unify the sciences of dynamical systems under a single,
 
 # **Glossary**
 ### **Static Information**  
-A pattern that exists but does not systematically increase the probability of remaining within the viability region or entering the capacity region.
+A pattern that exists but does not perform work: it does not measurably redirect system trajectories toward the viability region (V) or the capacity region (C).
 
 ### **Dynamic Information**  
-A pattern whose presence increases the probability that a system remains viable or enters states that enhance its capability.
+A pattern that both carries information and does work: its presence measurably redirects system trajectories toward remaining viable or entering states that expand capability.
 
 ### **System**  
-A subset of the physical world with a well‑defined state space \(S\), dynamics \(P(s_{t+1} \mid s_t)\), and identifiable viability and capacity regions.
+A subset of the physical world with a well‑defined state space \(S\), natural dynamics \(P(s_{t+1} \mid s_t)\), and identifiable viability and capacity regions.
 
 ### **Pattern**  
-Any structural, temporal, or relational regularity that can influence system trajectories.
+Any structural, temporal, or relational regularity that can influence how a system evolves.
 
 ### **Viability Region (V)**  
-The set of states from which the system can continue to exist as itself. Formally, states whose expected trajectories remain above the minimum threshold required for persistence.
+The set of states from which the system’s expected trajectories remain within the bounds required for continued persistence. No goals or purposes are implied — only constraint‑preserving continuation.
 
-**Capacity Region (C)**  
-The set of states reachable from the viability region (V) under the system’s own dynamics that preserve core constraints while expanding the set of perturbations or behaviors the system can handle (e.g., broader regulation range, increased robustness, or generalization). C represents persistence-plus-expansion: states where the system’s effective dynamical range grows without violating its defining constraints. No goals or purposes are implied — only constraint-preserving reachability.
+### **Capacity Region (C)**  
+The set of states reachable from the viability region under the system’s own dynamics that preserve core constraints while expanding the system’s effective dynamical range (e.g., robustness, regulation, generalization). No goals or purposes are implied — only constraint‑preserving expansion.
 
 ### **Operator**  
-A pattern or mechanism that transforms system states in a structured way, biasing trajectories toward or away from viability or capacity.
+A pattern or mechanism that performs work by systematically redirecting system trajectories. Operators can increase or decrease the probability of remaining within V or entering C.
 
 ### **Transfer Entropy**  
 A measure of directional information flow. When conditioned on trajectories within \(V\) or \(C\), it serves as a practical proxy for dynamic information.
 
 ### **Dissipative Structure**  
-A far‑from‑equilibrium system that maintains its characteristic patterns through continuous flows of energy or matter. Dissipative structures may exhibit dynamic information when patterns bias trajectories toward viability or capacity.
+A far‑from‑equilibrium pattern that maintains its organization through continuous flows of energy or matter. Such structures may exhibit dynamic information when their organization causes measurable redirection of trajectories toward viability or capacity.
 
 ---
 
