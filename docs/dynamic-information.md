@@ -120,6 +120,8 @@ This resolves two earlier issues:
 1. *The system was not defined.*  
 2. *The rolling rock and vortex were not clearly named as systems.*
 
+We begin by defining what counts as a system at all.
+
 ---
 
 # **4.1 What Counts as a System?**
@@ -138,6 +140,8 @@ Dynamic information is defined relative to this structure:
 $P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)$
 
 A pattern $I$ is **dynamic information** only if it **biases** trajectories toward viability or capacity.
+
+With this structure in place, we can now examine systems that clearly lack dynamic information.
 
 ---
 
@@ -176,6 +180,8 @@ P(s_{t+1} ∈ (V ∪ C) | s_t)
 Dynamic information = **0**.
 
 This is a canonical example of **static information**: structure without any trajectory‑biasing influence toward $V \cup C$.
+
+This shows that not all physical patterns matter for persistence. A second counterexample reinforces the point.
 
 ---
 
@@ -216,6 +222,8 @@ Dynamic information = **0**.
 
 This is another example of **static information**: a pattern that exists but does not bias trajectories toward viability or capacity.
 
+Having seen two systems with no dynamic information, we now contrast them with systems where patterns do alter the probability of remaining viable or expanding capacity.
+
 ---
 
 # **4.4 Systems That *Do* Support Dynamic Information**
@@ -241,6 +249,8 @@ These systems have:
 
 This is where dynamic information becomes non‑zero.
 
+These examples highlight the structural conditions under which dynamic information becomes possible. We can now summarize why the counterexamples were necessary.
+
 ---
 
 # **4.5 Why These Counterexamples Matter**
@@ -258,6 +268,8 @@ These examples anchor the central distinction:
 > **Dynamic information = patterns that bias trajectories toward viability or capacity.**
 
 This is the hinge of the entire manuscript.
+
+This distinction sets the stage for the more formal treatment that follows.
 
 ---
 
