@@ -295,9 +295,6 @@ $$
 
 In this sense, the capacity region is defined by the **delta above viability**: states whose expected future organization exceeds the minimum required for persistence. Such states enable growth, learning, repair, or enhanced function.
 
-### **An Open Direction**  
-We emphasize that these definitions are intentionally minimal. Different systems will require different measures of organization, different thresholds, and different ways of estimating expectations. The deeper structure of viability and capacity regions — their geometry, boundaries, and transitions — remains an open area for future research. Our aim here is simply to mark the doorway: dynamic information can be understood in terms of how patterns move systems within and between these regions.
-
 ---
 
 # **7. Positioning Relative to Prior Work**
