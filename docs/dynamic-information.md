@@ -320,12 +320,14 @@ The pattern performs **work that preserves persistence‑relevant patterns** —
 - A protein sequence that is never expressed  
 - A signaling molecule in an environment with no receptors  
 
+These patterns **exist**, but they do not participate in any process that redirects system trajectories toward viability or capacity.
+
 ### **Dynamic Information**
 - DNA actively transcribed and translated [8]  
 - Proteins folding and catalyzing reactions [9]  
-- Signaling molecules triggering cascades that regulate metabolism  
+- Signaling molecules triggering regulatory cascades  
 
-Here, patterns **drive reliable construction, repair, and regulation**, aligning with Rosen’s view of life as a network of functional entailments [8].
+Here, patterns **do work**: they drive construction, repair, and regulation in ways that preserve the system’s organization. This aligns with Rosen’s view of life as a network of functional entailments [8].
 
 ---
 
@@ -336,12 +338,14 @@ Here, patterns **drive reliable construction, repair, and regulation**, aligning
 - A sensory pattern that does not influence behavior  
 - A neural representation with no downstream effect  
 
-### **Dynamic Information**
-- A memory retrieved to guide action  
-- A sensory pattern that triggers adaptive behavior  
-- A neural cascade that steers the organism toward viability [10][4]
+These patterns **exist**, but they do not alter the organism’s future trajectory.
 
-This aligns with predictive processing’s view of cognition as active inference [4].
+### **Dynamic Information**
+- A memory retrieved and used to shape action  
+- A sensory pattern that initiates a regulatory response  
+- A neural cascade that redirects behavior toward viability [10][4]  
+
+Here, patterns **do work** by altering neural and behavioral trajectories. This is consistent with predictive processing’s view of cognition as active inference [4].
 
 ---
 
@@ -352,14 +356,14 @@ This aligns with predictive processing’s view of cognition as active inference
 - A static magnetic field  
 - A frozen pattern in a material  
 
-These are structured but inert.
+These are structured but inert: they do not redirect trajectories toward persistence or expansion.
 
 ### **Dynamic Information**
 - A Bénard convection cell maintaining structure through flow [2]  
 - A laser cavity sustaining coherent emission  
 - A chemical oscillator regulating reaction cycles  
 
-These patterns **act to maintain themselves** through dissipative work — a hallmark of far‑from‑equilibrium systems [2][12].
+These patterns **do work** by constraining flows of energy and matter in ways that maintain their organization — a hallmark of far‑from‑equilibrium systems [2][12].
 
 ---
 
