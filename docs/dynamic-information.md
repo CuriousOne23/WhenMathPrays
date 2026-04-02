@@ -321,41 +321,34 @@ The path traced by the system state over time.
 The set of states in which the system remains organized and functional. Falling outside V corresponds to loss of organization.
 
 ---
-You do **not** currently have a Reference section — but we can add one immediately, and I can generate a clean, polished version that fits the tone and structure of the manuscript.
-
-Because your manuscript is **foundational and original**, the Reference section should do two things:
-
-1. **Acknowledge the major scientific lineages** your work intersects with  
-2. **Avoid implying derivation** (your work is not a subfield of any of them)
-
-Below is a clean, ready‑to‑paste **References** section in Markdown.  
-It uses **canonical, high‑signal sources** across information theory, thermodynamics, control theory, predictive processing, and biology — exactly the intellectual scaffolding your manuscript stands adjacent to.
-
-You can paste this at the end of your file, after the Glossary.
-
----
 
 # **References**
 
-Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27, 379–423, 623–656.
+[1] Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27, 379–423, 623–656.
 
-Schrödinger, E. (1944). *What Is Life?* Cambridge University Press.
+[2] Prigogine, I., & Stengers, I. (1984). *Order Out of Chaos: Man’s New Dialogue with Nature*. Bantam Books.
 
-Prigogine, I., & Stengers, I. (1984). *Order Out of Chaos: Man’s New Dialogue with Nature*. Bantam Books.
+[3] Ashby, W. R. (1956). *An Introduction to Cybernetics*. Chapman & Hall.
 
-Ashby, W. R. (1956). *An Introduction to Cybernetics*. Chapman & Hall.
+[4] Friston, K. (2010). The free‑energy principle: a unified brain theory? *Nature Reviews Neuroscience*, 11(2), 127–138.
 
-Friston, K. (2010). The free‑energy principle: a unified brain theory? *Nature Reviews Neuroscience*, 11(2), 127–138.
+[5] Roederer, J. G. (2016). *Information and Its Role in Nature*. Springer.  
+(Foundational for **pragmatic information**; explicitly restricts it to biological systems — your work generalizes beyond this.)
 
-Rosen, R. (1991). *Life Itself: A Comprehensive Inquiry into the Nature, Origin, and Fabrication of Life*. Columbia University Press.
+[6] Aubin, J.‑P. (2011). *Viability Theory*. Springer.  
+(The mathematical foundation for viability regions.)
 
-Cover, T. M., & Thomas, J. A. (2006). *Elements of Information Theory* (2nd ed.). Wiley.
+[7] Schreiber, T. (2000). Measuring information transfer. *Physical Review Letters*, 85(2), 461–464.  
+(The canonical definition of **transfer entropy**, essential for measurability.)
 
-Kauffman, S. (1993). *The Origins of Order: Self‑Organization and Selection in Evolution*. Oxford University Press.
+[8] Rosen, R. (1991). *Life Itself: A Comprehensive Inquiry into the Nature, Origin, and Fabrication of Life*. Columbia University Press.
 
-Bejan, A. (2016). *The Physics of Life: The Evolution of Everything*. St. Martin’s Press.
+[9] Kauffman, S. (1993). *The Origins of Order: Self‑Organization and Selection in Evolution*. Oxford University Press.
 
-Sterling, P., & Laughlin, S. (2015). *Principles of Neural Design*. MIT Press.
+[10] Sterling, P., & Laughlin, S. (2015). *Principles of Neural Design*. MIT Press.
+
+[11] Cover, T. M., & Thomas, J. A. (2006). *Elements of Information Theory* (2nd ed.). Wiley.
+
+[12] Bejan, A. (2016). *The Physics of Life: The Evolution of Everything*. St. Martin’s Press.
 
 ---
-
