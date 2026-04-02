@@ -398,19 +398,28 @@ P(s(t+1) | s(t))
 
 This framing is standard in dynamical systems, cybernetics [3], and viability theory [5].
 
+Dynamic information is defined relative to this structure.
+
 ---
 
-## 6.2 Viability and Capacity Regions
+# **6.2 Viability and Capacity Regions**
 
 Dynamic information depends on two geometric regions in the system’s state space.
 
-**Viability Region (V):**  
-The set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a viability kernel: states whose trajectories do not lead to loss of persistence‑relevant patterns.
+### **Viability Region (V)**  
+The set of states from which the system can continue to exist as itself under admissible dynamics.  
+In viability theory, this corresponds to a viability kernel [5]: states whose trajectories preserve persistence‑relevant patterns.
 
-**Capacity Region (C):**  
-A complementary set of states associated with potential expansion of the system’s effective dynamics. A precise characterization of C — in terms of reachability from V and constraint preservation — is given in Section 6.4.
+### **Capacity Region (C)**  
+The set of states reachable from V under the system’s own dynamics that preserve the system’s constraints while **expanding its effective dynamical range** (e.g., broader regulation, robustness, generalization).  
+C represents **constraint‑preserving expansion**: states where the system can handle a wider set of perturbations without collapse.
 
-Together, V and C define the subspace of states relevant for persistence or persistence‑plus‑expansion.
+Together, V ∪ C defines the subspace of states relevant for:
+
+- persistence (V), or  
+- persistence‑plus‑expansion (C).  
+
+No goals or purposes are implied — only constraint‑preserving reachability.
 
 ---
 
@@ -424,33 +433,43 @@ The presence of pattern \(I\) modifies the transition distribution:
 P(s(t+1) | s(t), I)
 ```
 
-This is the only sense in which patterns “act” on the system.
+This is the only sense in which patterns “act”:  
+they **change the conditional probabilities** governing the system’s evolution.
 
 ---
 
-## 6.4 Viability and Capacity Regions
+# **6.4 Dynamic Information as Trajectory Redirection**
 
-Let V be the viability region: the set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a "viability kernel" [5]. States outside V lead to dissolution — no persistence‑relevant patterns remain.
+A pattern \(I\) is **dynamic information** if it **does work** in the precise, non‑teleological sense of:
 
-Let C be the capacity region: the set of states reachable from V that preserve the system’s constraints while expanding the system’s dynamical range (e.g., broader regulation, robustness, or generalization). Entering C means the system can now handle a wider set of conditions or perturbations without collapse — for example:
+> **measurably redirecting trajectories toward V or C.**
 
-- a cell shifting from quiescence to proliferation (expanded reproductive dynamics)
-- a controller widening its stable regulation domain (expanded behavioral repertoire)
-- a learning system increasing robustness or generalization (expanded error tolerance)
+Formally:
 
-Together, V ∪ C defines the "useful" subspace of the system’s state space:
-- persistence (states in V), or
-- persistence-plus-expansion (states in C).
-
-A pattern I is dynamic information if it biases trajectories toward this union:
-
+```
 P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
+```
 
-No goals or purposes are implied — only constraint-preserving reachability under the system’s own dynamics.
+Interpretation:
+
+- The left term: probability of entering V ∪ C **with** pattern I  
+- The right term: probability of entering V ∪ C **without** pattern I  
+
+If the inequality holds, the pattern is dynamically informational.  
+If not, the pattern is static.
+
+This definition:
+
+- does not assume goals  
+- does not assume purpose  
+- does not assume semantics  
+- does not assume identity beyond viability theory  
+
+It is purely about **state‑space geometry** and **conditional probabilities**.
 
 ---
 
-# **6.5 Diagram: How Patterns Bias Trajectories**
+# **6.5 Diagram: How Patterns Redirect Trajectories**
 
 A GitHub‑friendly Mermaid diagram illustrating the definition:
 
@@ -469,12 +488,12 @@ flowchart LR
     A --> T0 --> X["Outcome outside V ∪ C"]
     A --> T1 --> Y["Outcome inside V ∪ C"]
 
-    T1 -. biases toward .-> V
-    T1 -. biases toward .-> C
+    T1 -. redirects toward .-> V
+    T1 -. redirects toward .-> C
 ```
 
 This diagram is conceptual:  
-patterns bias transitions toward viability or capacity.
+patterns **redirect** transitions toward viability or capacity.
 
 ---
 
@@ -483,11 +502,10 @@ patterns bias transitions toward viability or capacity.
 Transfer entropy (TE) [2] measures directional information flow:
 
 ```
-TE(I → S) = sum over states of:
-    P(...) * log( P(s(t+1) | s(t), I) / P(s(t+1) | s(t)) )
+TE(I → S) = Σ P(...) * log( P(s(t+1) | s(t), I) / P(s(t+1) | s(t)) )
 ```
 
-To measure dynamic information, we condition TE on viability and capacity:
+To measure dynamic information, we condition TE on V ∪ C:
 
 ```
 TE(I → S | V ∪ C)
@@ -495,8 +513,8 @@ TE(I → S | V ∪ C)
 
 Interpretation:
 
-- High conditional TE → pattern strongly biases trajectories toward V or C  
-- Low conditional TE → pattern has little or no dynamic information  
+- High conditional TE → pattern strongly redirects trajectories toward V or C  
+- Low conditional TE → pattern has little dynamic influence  
 - Zero conditional TE → static information  
 
 This provides an operational bridge between the conceptual definition and empirical measurement.
@@ -510,12 +528,10 @@ The definition:
 - does **not** assume goals  
 - does **not** assume purpose  
 - does **not** assume function  
-- does **not** assume identity beyond viability theory  
+- does **not** assume semantic content  
 - does **not** require biological agency (contra Roederer [7])  
 
-It is purely about **state‑space geometry** and **conditional probabilities**.
-
-This makes the framework applicable to:
+It applies equally to:
 
 - cells  
 - adaptive agents  
@@ -536,7 +552,7 @@ Dynamic information is defined by a single inequality:
 P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
 ```
 
-Everything else — examples, counterexamples, operator formalism, identity boundary — is optional scaffolding.
+Everything else — examples, counterexamples, operator formalism, identity boundary — is scaffolding.
 
 This definition is:
 
@@ -547,7 +563,7 @@ This definition is:
 - compatible with transfer entropy  
 - applicable across physical, biological, and artificial systems  
 
-It is the missing hinge between static structure and influence that biases trajectories toward V ∪ C.
+It is the missing hinge between **static structure** and **patterns that do work**.
 
 ---
 
