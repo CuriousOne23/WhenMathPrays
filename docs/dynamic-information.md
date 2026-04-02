@@ -42,10 +42,10 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 
 Without this distinction, many debates collapse into confusion:
 
-- Is DNA “information”? Yes — but only because it **does work** [8].  
-- Are rocks “information”? Yes — but only as **static information**, which does not do work.  
-- Is a neural spike train “information”? Only if it **does work** the organism’s trajectory in a way that sustains or enhances viability [10].  
-- Is a machine learning model “information”? Yes — but its value lies in the **dynamic work** transformations it performs.
+- Is DNA “information”? Yes — but DNA is more than a pattern that can be read; it also **does work**. And we currently lack a general descriptor for patterns that both carry information and do work. [8].  
+- Are rocks “information”? In a trivial sense yes — but without a way to say when a pattern actually matters for a system’s future, that answer is true yet explains nothing to the listener.  
+- Is a neural spike train “information”? Yes — but a spike train is more than a signal that can be recorded; it is a dynamic process that does work. And this is yet another case where we lack a general descriptor for patterns that both carry information and do work. 
+- Is a machine learning model “information”? Yes — but a model is more than stored parameters; it also performs work when it transforms inputs into outputs. Yet again we see an object that carries information and does work, and we have no general descriptor for that combination.
 
 The distinction matters because:
 
