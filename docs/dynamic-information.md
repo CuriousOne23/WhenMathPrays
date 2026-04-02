@@ -443,26 +443,25 @@ This is the only sense in which patterns “act” on the system.
 
 ---
 
-# **6.4 Formal Definition of Dynamic Information**
+## 6.4 Viability and Capacity Regions
 
-A pattern \(I\) is **dynamic information** if and only if it increases the probability that the system remains viable or enters the capacity region:
+Let V be the viability region: the set of states from which the system can continue to exist as itself under admissible dynamics. In viability theory, this corresponds to a "viability kernel" [5]. States outside V lead to dissolution — no organization remains.
 
-```
-P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
-```
+Let C be the capacity region: the set of states reachable from V that preserve the system’s constraints while expanding its dynamical range. Entering C means the system can now handle a broader set of conditions or perturbations without collapse — for example:
 
-This is the core hinge of the manuscript.
+- a cell shifting from quiescence to proliferation (expanded reproductive dynamics)
+- a controller widening its stable regulation domain (expanded behavioral repertoire)
+- a learning system increasing robustness or generalization (expanded error tolerance)
 
-- If the inequality holds → **dynamic information**  
-- If it does not → **static information**
+Together, V ∪ C defines the "useful" subspace of the system’s state space:
+- persistence (states in V), or
+- persistence-plus-expansion (states in C).
 
-This definition is:
+A pattern I is dynamic information if it biases trajectories toward this union:
 
-- minimal  
-- measurable  
-- compatible with viability theory  
-- compatible with transfer entropy  
-- applicable to physical, biological, and artificial systems  
+P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t))
+
+No goals or purposes are implied — only constraint-preserving reachability under the system’s own dynamics.
 
 ---
 
@@ -930,7 +929,8 @@ Any structural, temporal, or relational regularity that can influence system tra
 The set of states from which the system can continue to exist as itself. Formally, states where expected organization remains above the minimum threshold required for persistence.
 
 ### **Capacity Region (C)**  
-The set of states from which the system tends to increase its organization, capability, or ability to perform work relative to the viability threshold.
+The set of states **reachable from the viability region (V)** that preserve the system’s constraints **while expanding its dynamical range**. States in \(C\) allow the system to handle a broader set of conditions or perturbations without collapse—for example, a cell entering proliferation, a controller widening its stable regulation domain, or a learning system increasing robustness or generalization.  
+No goals or purposes are implied; \(C\) reflects **constraint‑preserving reachability** under the system’s own dynamics.
 
 ### **Organization‑Sustaining Work**  
 Generalized causal influence that maintains or enhances system structure, function, or capability. Dynamic information is defined in terms of its effects on viability and capacity, not in terms of thermodynamic work.
