@@ -65,6 +65,16 @@ We define a system with state $s$ evolving in a state space $S$.
 Let $V ⊂ S$ be a **viability region** (states compatible with continued existence or function) [6].  
 Let $C ⊂ S$ be a **capacity region** (states enabling increased capability).
 
+```mermaid
+flowchart LR
+    subgraph StateSpace["State Space"]
+        V["Viability Region (V)"]
+        C["Capacity Region (C)"]
+    end
+
+    V --- C
+```
+
 Let $P(s_{t+1} \mid s_t)$ be the system’s natural dynamics.  
 Let $P(s_{t+1} \mid s_t, I)$ be the dynamics under the influence of some pattern $I$.
 
@@ -83,6 +93,16 @@ That is:
 
 This is the core idea:  
 Dynamic information is **organization‑sustaining work performed by patterns**.
+
+```mermaid
+flowchart LR
+    s_t["State s_t"]
+    op["Pattern / Operator I"]
+    s_next["State s_{t+1}"]
+
+    s_t -->|natural dynamics| s_next
+    s_t -->|with pattern I| op --> s_next
+```
 
 ---
 
@@ -122,6 +142,17 @@ A process that is fully captured by universal physics has:
 
 Such processes include rolling rocks, vortices, shockwaves, and other purely entropic phenomena [2–6, 18–22].
 
+```mermaid
+flowchart TD
+    A["Subsystem"]
+    B["Universal Physics Only"]
+    C["w_I(t) = 0"]
+    D["No Identity"]
+    E["I_dyn = 0"]
+
+    A --> B --> C --> D --> E
+```
+
 ---
 
 ## **4.2 Theorem B — Identity Boundary Theorem**
@@ -143,6 +174,19 @@ Integral_0^T  w_I(t) dt  >  0   for all T > 0
 ```
 
 Identity fails when entropy‑driven dissolution exceeds identity‑preserving work:
+
+```mermaid
+flowchart TD
+    subgraph V["Viability Region (V)"]
+        X["Subsystem State x(t)"]
+    end
+
+    E["Entropy-Driven Dissolution (e_D)"]
+    W["Identity-Preserving Work (w_I)"]
+
+    E -->|pushes outward| V
+    W -->|pushes inward| V
+```
 
 ```
 exists t such that  w_I(t) < e_D(t)  =>  x(t) leaves V
@@ -172,6 +216,18 @@ Integral_0^T (w_I(t) - e_D(t)) dt >= 0   for all T >= T_min
 ```
 
 If either threshold fails, the subsystem has no persistent identity and therefore no dynamic information.
+
+```mermaid
+flowchart TD
+    A["Threshold 1: Viability Region Exists (V ≠ ∅)"]
+    B["Threshold 2: Identity-Preserving Work ≥ Entropy Over Time"]
+    C["Identity Persists"]
+    D["Dynamic Information Exists (I_dyn > 0)"]
+
+    A --> C
+    B --> C
+    C --> D
+```
 
 This corollary explains why identity emerges only when organization and persistence exceed entropy [7–11].
 
@@ -257,6 +313,21 @@ Dynamic information requires:
 Purely physical processes — no matter how structured — do not meet these criteria.
 
 This is why static information is insufficient for describing organization‑preserving influence, and why dynamic information is a necessary new category.
+
+```mermaid
+flowchart LR
+    subgraph EntropyOnly["No Identity-Preserving Work (w_I = 0)"]
+        Rock["Rolling Rock"]
+        Vortex["Turbulent Vortex"]
+    end
+
+    subgraph IdentitySystems["Identity-Preserving Work (w_I > 0)"]
+        Cell["Living Cell"]
+        Agent["Cognitive/AI Agent"]
+    end
+
+    EntropyOnly --- IdentitySystems
+```
 
 ---
 
@@ -362,6 +433,16 @@ This captures the essential idea:
 
 This aligns naturally with viability theory’s focus on controlled trajectories [6].
 
+```mermaid
+flowchart TD
+    A["State x(t) in Viability Region (V)"]
+    B["Identity-Preserving Work w_I(t) >= Entropy e_D(t)"]
+    C["Identity Persists Over Time"]
+    D["Dynamic Information Exists (I_dyn > 0)"]
+
+    A --> B --> C --> D
+```
+
 ---
 
 ## **6.2 Alternative Formulations**
@@ -401,7 +482,7 @@ This resonates with Ashby’s cybernetic view of regulation and requisite variet
 A practical proxy is **transfer entropy** (Schreiber, 2000) [7]:
 
 $$
-TE(I \rightarrow S) = \sum P(\ldots)\,\log\!\left(\frac{P(s_{t+1} \mid s_t, I)}{P(s_{t+1} \mid s_t)}\right)
+TE(I \rightarrow S) = \sum P(\ldots)\ log\left(\frac{P(s_{t+1} \mid s_t, I)}{P(s_{t+1} \mid s_t)}\right)
 $$
 
 To measure **dynamic** information, we condition on viability:
