@@ -58,24 +58,25 @@ Dynamic information gives us a way to talk about **what patterns do**, not just 
 
 ---
 
-# **3. Static vs Dynamic Information**
+# **3. Static vs Dynamic Information**  
+*(GitHub‑safe math version)*
 
-We define a system with state \( s \) evolving in a state space \( S \).  
-Let \( V \subseteq S \) be a **viability region** (states compatible with continued existence or function) [6].  
-Let \( C \subseteq S \) be a **capacity region** (states enabling increased capability).
+We define a system with state $s$ evolving in a state space $S$.  
+Let $V ⊂ S$ be a **viability region** (states compatible with continued existence or function) [6].  
+Let $C ⊂ S$ be a **capacity region** (states enabling increased capability).
 
-Let \( P(s_{t+1} \mid s_t) \) be the system’s natural dynamics.  
-Let \( P(s_{t+1} \mid s_t, I) \) be the dynamics under the influence of some pattern \( I \).
+Let $P(s_{t+1} \mid s_t)$ be the system’s natural dynamics.  
+Let $P(s_{t+1} \mid s_t, I)$ be the dynamics under the influence of some pattern $I$.
 
 ### **Static Information**  
-A pattern \( I \) is **static information** if it exists but does not systematically alter trajectories relative to viability or capacity.
+A pattern $I$ is **static information** if it exists but does not systematically alter trajectories relative to viability or capacity.
 
 ### **Dynamic Information**  
-A pattern \( I \) is **dynamic information** if:
+A pattern $I$ is **dynamic information** if:
 
-\[
-P(s_{t+1} \in V \cup C \mid s_t, I) > P(s_{t+1} \in V \cup C \mid s_t)
-\]
+$$
+P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)
+$$
 
 That is:  
 **The presence of the pattern increases the probability of remaining viable or increasing capacity.**
