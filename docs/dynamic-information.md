@@ -297,13 +297,6 @@ In this sense, the capacity region is defined by the **delta above viability**: 
 
 ---
 
-# **7. Positioning Relative to Prior Work**
-
-Dynamic information is not a replacement for existing theories.  
-It is a **lens** that clarifies how they relate.
-
----
-
 ## **7.1 Shannon Information**
 
 Shannon deliberately excluded meaning, use, and action [1].  
@@ -318,7 +311,7 @@ Dynamic information is **orthogonal**:
 - Shannon: *How much could be transmitted?*  
 - Dynamic: *What does the pattern do?*
 
-Both are necessary.
+Both perspectives are necessary and compatible.
 
 ---
 
@@ -328,18 +321,18 @@ Roederer defined pragmatic information as:
 
 > “Information that produces a specific change in a biological system.” [5]
 
-But he explicitly restricted it to **living systems** and argued it has:
+But he explicitly restricted it to **living systems**, arguing it has:
 
 > “No active role in the purely physical domain.” [5]
 
-Dynamic information generalizes this:
+Dynamic information generalizes the underlying intuition:
 
 - It applies to **dissipative structures** (Bénard cells, lasers) [2].  
 - It applies to **AI systems**.  
 - It applies to **control systems**.  
 - It applies to **any pattern performing organization‑sustaining work**.
 
-This is one of the key contributions of the framework.
+This generalization is one of the key contributions of the framework.
 
 ---
 
@@ -354,6 +347,8 @@ Viability theory provides the mathematical backbone for:
 Dynamic information fits naturally into this framework as:
 
 > **Patterns that increase the measure of viable trajectories.** [6]
+
+This connects informational structure with the geometry of persistence.
 
 ---
 
@@ -370,6 +365,8 @@ Dynamic information complements this by focusing on:
 - the **patterns** that perform the work  
 - the **organization‑relevant effects** of those patterns  
 
+It aligns with predictive processing without assuming representational or inferential mechanisms.
+
 ---
 
 ## **7.5 Control Theory and Cybernetics (Ashby)**
@@ -380,10 +377,12 @@ Ashby emphasized:
 - stability  
 - requisite variety [3]
 
-Dynamic information provides a way to talk about:
+Dynamic information provides a way to describe:
 
 - the **informational operators** that achieve regulation  
 - the **patterns** that maintain organization  
+
+It offers a unifying language for control across physical, biological, and artificial systems.
 
 ---
 
@@ -394,10 +393,12 @@ Prigogine showed that far‑from‑equilibrium systems:
 - maintain structure through flows  
 - perform work to sustain organization [2]
 
-Dynamic information provides a language for:
+Dynamic information provides a way to distinguish:
 
-- describing the **patterns** that drive these flows  
-- distinguishing **mere structure** from **active maintenance**
+- **mere structure** from  
+- **patterns that actively maintain organization**
+
+This distinction clarifies how dissipative systems participate in their own persistence.
 
 ---
 
