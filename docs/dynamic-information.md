@@ -24,10 +24,10 @@ We lack a simple, general way to talk about the difference between:
 
 This missing distinction shows up everywhere:
 
-- In physics, where entropy‑producing structures (vortices, convection cells) maintain form through flows [2].  
+- In physics, where entropy‑producing structures (vortices, convection cells) exhibit flows that keep trajectories within their viability region (V) [2].  
 - In biology, where DNA is not just a pattern but a pattern that **drives** reliable construction and repair [8][9].  
 - In cognition, where neural activity is not just correlated with behavior but **causally steers** an organism through viable states [10][4].  
-- In AI, where models do not merely encode data but **do work** to transform inputs into outputs that maintain goals.
+- In AI, where models do not merely encode data but do work to transform inputs into outputs that redirect trajectories within their task‑defined constraints.
 
 We propose a simple lens:
 
@@ -38,18 +38,25 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 
 ---
 
-# **2. Why the Distinction Matters**
+## **2. Why the Distinction Matters**
 
-Without this distinction, many debates collapse into confusion:
+We routinely call many things “information,” yet the label sits uneasily across a wide range of cases.
 
-- Is DNA “information”? Yes — but DNA is more than a pattern that can be read; it also **does work**. And we currently lack a general descriptor for patterns that both carry information and do work. [8].  
-- Are rocks “information”? In a trivial sense yes — but without a way to say when a pattern actually matters for a system’s future, that answer is true yet explains nothing to the listener.  
-- Is a neural spike train “information”? Yes — but a spike train is more than a signal that can be recorded; it is a dynamic process that does work. And this is yet another case where we lack a general descriptor for patterns that both carry information and do work. 
-- Is a machine learning model “information”? Yes — but a model is more than stored parameters; it also performs work when it transforms inputs into outputs. Yet again we see an object that carries information and does work, and we have no general descriptor for that combination.
+DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell.  
+Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process.  
+Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence.  
+Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability.
 
-The distinction matters because familiar objects already blur our traditional categories. 
-Rocks have patterns but do no work. DNA carries information and does work. Neural spike trains carry information and do work. Machine learning models carry information and do work. 
-Yet we have no general descriptor for patterns that both encode information and actively do work. This gap leaves us unable to speak clearly about what these systems are actually doing.
+In each instance we reach for the same word—“information”—but it stretches to cover two qualitatively different realities: patterns that exist passively versus patterns that measurably shape what a system can do next.
+
+Standard frameworks leave this gap unaddressed.  
+Shannon information captures surprise, compressibility, and efficient transmission, yet remains silent on whether a pattern influences persistence or capability.  
+Pragmatic or functional accounts (such as Roederer’s) capture action‑producing signals but tie them tightly to biological agency.  
+Purely causal descriptions in physics register influence but offer no principled way to separate transient or irrelevant effects (rolling stones, fading vortices) from those that systematically shape viable trajectories.
+
+The result is persistent ambiguity: we lack a domain‑general way to say when a pattern crosses from mere structure into something that actively matters for a system’s continued existence or enhanced capacity.
+
+This manuscript identifies that missing hinge.
 
 ---
 
@@ -206,7 +213,7 @@ The swirling structure itself.
 The vortex does not perform any work that biases trajectories toward $V$ or $C$:
 
 - it dissipates  
-- it cannot maintain itself  
+- it cannot keep trajectories within its viability region (V)
 - it cannot expand its dynamical range  
 - it has no persistence‑relevant boundary conditions  
 
@@ -271,13 +278,17 @@ This is the hinge of the entire manuscript.
 
 This distinction sets the stage for the more formal treatment that follows.
 
+In each case, the pattern fails to increase
+
+P( s(t+1) ∈ (V ∪ C) | s(t), I ) > P( s(t+1) ∈ (V ∪ C) | s(t) ),
+
+which is the operational criterion for dynamic information.
+
 ---
 
 # **4.6 Transition to Appendix A**
 
-Some systems maintain persistence‑relevant patterns through internal or external work.
-Others dissolve.  
-Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+Some systems keep trajectories within their viability region (V) through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
 These ideas are optional and not required for the main definition of dynamic information.
 
@@ -291,25 +302,22 @@ Here are parallel examples across physics, biology, cognition, and AI.
 ---
 
 ## **5.1 Communication Systems**
-Dissipative structures illustrate the difference between patterns that merely exist and patterns that actively shape a system’s evolution. A vortex, for example, is not just a configuration of fluid; it channels momentum, redirects flow, and stabilizes itself through continuous energy throughput. The pattern is doing work in the physical sense: it alters the trajectories of surrounding matter and maintains its own organization through that influence.
 
-This is not “information” in the Shannon sense, nor is it simply energy flow. It is a relational pattern whose causal influence preserves a specific form. The vortex persists because its structure constrains how energy and matter move through it. This organization‑preserving influence is what distinguishes dynamic information from static description.
-
-The key point is that the work is defined independently of the pattern: it is the measurable redirection of trajectories in state space. The pattern becomes dynamically informational when it is the cause of that redirection. This avoids circularity: the work is defined first, and the informational status follows from whether the pattern is responsible for that work.
+Communication systems make the static/dynamic distinction especially clear: some patterns merely exist, while others actively alter how a system evolves.
 
 ### **Static Information**
 - A QR code printed on paper  
 - A radio signal with no receiver  
 - A file stored on a disconnected hard drive  
 
-These patterns **exist**, but do not act.
+These patterns **exist**, but they do not alter the system’s future trajectory.
 
 ### **Dynamic Information**
 - A QR code scanned by a device that triggers an action  
 - A radio signal decoded and used to guide behavior  
 - A file executed by a program that changes system state  
 
-The pattern performs **work that preserves persistence‑relevant patterns** — a concept deeply compatible with Shannon’s original separation of syntax from semantics [1].
+Here, patterns **do work** in the operational sense: their presence measurably redirects the system’s evolution. This is compatible with Shannon’s separation of syntax from use [1] without requiring semantics or purpose.
 
 ---
 
@@ -327,7 +335,7 @@ These patterns **exist**, but they do not participate in any process that redire
 - Proteins folding and catalyzing reactions [9]  
 - Signaling molecules triggering regulatory cascades  
 
-Here, patterns **do work**: they drive construction, repair, and regulation in ways that preserve the system’s organization. This aligns with Rosen’s view of life as a network of functional entailments [8].
+Here, patterns **do work**: they drive construction, repair, and regulation in ways that alter the system’s evolution in ways that keep it within V or C. This aligns with Rosen’s view of life as a network of functional entailments [8].
 
 ---
 
@@ -359,11 +367,11 @@ Here, patterns **do work** by altering neural and behavioral trajectories. This 
 These are structured but inert: they do not redirect trajectories toward persistence or expansion.
 
 ### **Dynamic Information**
-- A Bénard convection cell maintaining structure through flow [2]  
+- A Bénard convection cell whose flows keep trajectories within its viability region (V) [2]
 - A laser cavity sustaining coherent emission  
 - A chemical oscillator regulating reaction cycles  
 
-These patterns **do work** by constraining flows of energy and matter in ways that maintain their organization — a hallmark of far‑from‑equilibrium systems [2][12].
+These patterns **do work** by constraining flows of energy and matter in ways that bias trajectories toward states that preserve persistence‑relevant patterns — a hallmark of far‑from‑equilibrium systems [2][12].
 
 ---
 
@@ -408,7 +416,7 @@ Dynamic information depends on two geometric regions in the system’s state spa
 
 ### **Viability Region (V)**  
 The set of states from which the system can continue to exist as itself under admissible dynamics.  
-In viability theory, this corresponds to a viability kernel [5]: states whose trajectories preserve persistence‑relevant patterns.
+In viability theory, this corresponds to a viability kernel [5]: states whose trajectories remain within the viability region under admissible dynamics.
 
 ### **Capacity Region (C)**  
 The set of states reachable from V under the system’s own dynamics that preserve the system’s constraints while **expanding its effective dynamical range** (e.g., broader regulation, robustness, generalization).  
@@ -438,34 +446,20 @@ they **change the conditional probabilities** governing the system’s evolution
 
 ---
 
-# **6.4 Dynamic Information as Trajectory Redirection**
+## **6.4 Dynamic Information as Trajectory Redirection**
 
-A pattern \(I\) is **dynamic information** if it **does work** in the precise, non‑teleological sense of:
-
-> **measurably redirecting trajectories toward V or C.**
-
-Formally:
+A pattern \(I\) is **dynamic information** if it satisfies the following operational criterion:
 
 ```
 P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
 ```
 
-Interpretation:
+This inequality is the definition.  
+When it holds, we say that the pattern **does work** in the sense that its presence measurably alters the system’s evolution.  
+“Trajectory redirection” is simply an intuitive way to describe this shift in conditional probabilities, not an additional requirement.
 
-- The left term: probability of entering V ∪ C **with** pattern I  
-- The right term: probability of entering V ∪ C **without** pattern I  
-
-If the inequality holds, the pattern is dynamically informational.  
-If not, the pattern is static.
-
-This definition:
-
-- does not assume goals  
-- does not assume purpose  
-- does not assume semantics  
-- does not assume identity beyond viability theory  
-
-It is purely about **state‑space geometry** and **conditional probabilities**.
+This framing avoids teleology and circularity:  
+the work is defined by the inequality, and the inequality is defined entirely by state‑space geometry and conditional probabilities.
 
 ---
 
@@ -669,7 +663,7 @@ Ashby’s cybernetics [3,4] emphasized:
 
 - regulation  
 - constraint satisfaction  
-- maintaining essential variables  
+- keeping trajectories within the viability region (V)
 
 Dynamic information aligns naturally with this tradition:
 
@@ -686,7 +680,7 @@ This provides a bridge between classical cybernetics and modern information theo
 Friston’s free‑energy principle and active inference [10,11] describe systems that:
 
 - minimize surprise  
-- maintain homeostasis  
+- keep trajectories within their viability region (V)
 - adaptively update internal models  
 
 Dynamic information complements this view by identifying:
@@ -736,7 +730,7 @@ Physical systems often exhibit striking patterns—vortices, waves, crystalline 
 Dynamic information highlights the difference between:
 
 - **static structure** (e.g., a vortex, a rolling rock)  
-- **patterns that do work** by biasing trajectories toward V ∪ C (e.g., dissipative structures that stabilize themselves through flows [8,9])
+- **patterns that do work** by biasing trajectories toward V ∪ C (e.g., dissipative structures that produce flows that keep trajectories within V through flows [8,9])
 
 This provides a way to talk about **when** physical patterns matter for the future of a system without invoking purpose or function.
 
@@ -921,7 +915,7 @@ A pattern or mechanism that performs work by systematically redirecting system t
 A measure of directional information flow. When conditioned on trajectories within \(V\) or \(C\), it serves as a practical proxy for dynamic information.
 
 ### **Dissipative Structure**  
-A far‑from‑equilibrium pattern that maintains its organization through continuous flows of energy or matter. Such structures may exhibit dynamic information when their organization causes measurable redirection of trajectories toward viability or capacity.
+A far‑from‑equilibrium pattern whose flows keep trajectories within its viability region (V). Such structures may exhibit dynamic information when their internal or external flows measurably redirect trajectories toward viability or capacity.
 
 ---
 
@@ -989,12 +983,12 @@ These lack persistent patterns
 
 # **A.3 Intuitive Picture of Work That Biases Trajectories**
 
-Some systems must perform work that biases their trajectories toward persistence in order to remain themselves.
+Some systems must perform work that biases their trajectories toward persistence in ways that preserve persistence‑relevant patterns.
 
 This work may involve:
 
 - repairing structure  
-- maintaining boundaries  
+- keeping trajectories within the system’s boundary conditions 
 - regulating internal variables  
 - counteracting dissipative forces  
 
@@ -1074,7 +1068,7 @@ The rolling rock and vortex lack:
 - persistent patterns  
 - meaningful viability regions  
 - capacity for improvement  
-- any boundary that must be maintained  
+- any boundary whose conditions keep trajectories within the system’s viable region
 
 Thus, no pattern within them can be dynamic information.
 
@@ -1169,7 +1163,7 @@ This is simply a restatement of the main definition in operator language.
 # **B.4 Anchor Selection Operator (Intuitive)**
 
 Some systems contain multiple internal patterns or signals.  
-Not all of them are equally useful for maintaining viability or increasing capacity.
+Not all of them are equally effective at keeping trajectories within V or moving them into C.
 
 The **Anchor Selection Operator** is an intuitive mechanism that:
 
