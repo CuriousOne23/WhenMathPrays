@@ -705,7 +705,7 @@ It is a **clarifying lens** for understanding when patterns matter for persisten
 
 # **8. Implications Across Domains**
 
-Dynamic information provides a simple, operational distinction between patterns that merely exist and patterns that **do work** on system trajectories by increasing the probability of remaining viable or entering states of greater capability. This section outlines the implications of this distinction across physics, biology, cognition, AI, and communication.
+Dynamic information provides a simple, operational distinction between patterns that do no work and patterns that **do work** on system trajectories by increasing the probability of remaining viable or entering states of greater capability. This section outlines the implications of this distinction across physics, biology, cognition, AI, and communication.
 
 The goal is not to unify these domains under a single theory, but to show how the same **state‑space criterion** applies across scales.
 
@@ -822,7 +822,7 @@ It focuses solely on **state‑space consequences**.
 Dynamic information offers a simple, operational hinge:
 
 ```
-Static information  = patterns that exist
+Static information  = patterns that do no work
 Dynamic information = patterns that do work by biasing trajectories toward V or C
 ```
 
