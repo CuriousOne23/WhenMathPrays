@@ -55,7 +55,6 @@ This manuscript identifies that missing hinge.
 ---
 
 # **3. Static vs Dynamic Information**  
-*(GitHub‑safe math version)*
 
 We define a system with state $s$ evolving in a state space $S$.  
 Let $V ⊂ S$ be a **viability region** (states compatible with continued existence or function) [6].  
