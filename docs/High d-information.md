@@ -53,21 +53,21 @@ With this distinction in place, we can now state when hd-information becomes nec
 
 ---
 
-**Section 3: When High Dynamic Information Becomes Necessary**
+## 3. When High Dynamic Information Becomes Necessary
 
 We propose that hd-information becomes necessary when the biasing work $W$ satisfies
 
 $$
-\text{Specificity}(W) \times \text{Complexity}(W) \ > \ \text{Capacity}_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
+S(W) \times C(W) \ > \ C_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
 $$
 
 where:
-- $\text{Specificity}(W)$ is the degree of temporal or causal ordering demanded by the work,
-- $\text{Complexity}(W)$ is the informational complexity demanded by the work, quantified as large effective state variety $N[S(I)]$ deployed through compact but non-trivial processing depth $N[Prc(I)]$,
-- $\text{Capacity}_{\text{ld}}$ is the maximum specificity-complexity product that ld-information can reliably deliver,
+- $S(W)$ is the required specificity of temporal or causal ordering for the work $W$,
+- $C(W)$ is the informational complexity required by the work $W$, given by the product of effective state variety $N[S(I)]$ and processing depth $N[Prc(I)]$,
+- $C_{\text{ld}}$ is the maximum value of $S(W) \times C(W)$ that can be reliably achieved by patterns with ld-information,
 - $\tau_{\rm rec}$ is the time window required for the system to remain in or recover to the viability or capacity region $V \cup C$.
 
-We believe this relationship holds because systems facing only stable, repetitive tasks with modest specificity and informational demands (such as the laser resonant mode or basic negative feedback loops) operate effectively with ld-information. In contrast, systems whose work combines high specificity with high informational complexity within tight recovery windows — such as gene regulatory networks integrating multiple signals across timescales or immune recognition discriminating vast antigen spaces while mounting layered responses — consistently require the richer variety and processing depth that define hd-information.
+We believe this relationship holds for a simple reason: systems whose work stays within modest specificity and complexity (such as the laser resonant mode or basic negative feedback loops) are reliably handled by ld-information. Systems whose work simultaneously demands high specificity and high complexity within tight recovery windows — such as gene regulatory networks coordinating multiple signals across timescales or immune recognition discriminating among vast numbers of antigens while mounting layered responses — consistently exceed what ld-information can deliver. In those cases, hd-information is not optional; it is required.
 
 ---
 
