@@ -42,7 +42,9 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 
 We routinely call many things “information,” yet the label sits uneasily across a wide range of cases.
 
-DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell. Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process. Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence. Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability.
+DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell. Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process. Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence. Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability. 
+
+Some patterns switch roles depending on context, carrying static information in one setting and dynamic information in another. A virus outside a host is static information—its RNA sequence exists as a pattern, but it does no work. No replication, no hijacking, no bias toward viability. Inside a cell? Dynamic—the pattern recruits the host machinery, drives transcription, and forces copies. The same pattern flips from inert to trajectory‑shaping depending on the system it enters. (See Section 6 for the formal criterion.)
 
 In each instance we reach for the same word—“information”—but it stretches to cover two qualitatively different realities: patterns that exist passively versus patterns that measurably shape what a system can do next.
 
@@ -450,6 +452,8 @@ P( s(t+1) ∈ (V ∪ C) | s(t), I )  >  P( s(t+1) ∈ (V ∪ C) | s(t) )
 This inequality is the definition.  
 When it holds, we say that the pattern **does work** in the sense that its presence measurably alters the system’s evolution.  
 “Trajectory redirection” is simply an intuitive way to describe this shift in conditional probabilities, not an additional requirement.
+
+As an example, consider the virus case from Section 2. Outside a host cell, the viral RNA does no work: the conditional probability of entering or remaining in V ∪ C is unchanged by its presence. Inside a host cell, the same pattern redirects trajectories by being used in transcription and replication, increasing the probability of entering V ∪ C for the viral system. The inequality holds only in the latter context.
 
 This framing avoids teleology and circularity:  
 the work is defined by the inequality, and the inequality is defined entirely by state‑space geometry and conditional probabilities.
