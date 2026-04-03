@@ -104,7 +104,6 @@ flowchart LR
     s_t -->|natural dynamics| s_next
     s_t -->|with pattern I| op --> s_next
 ```
-
 ---
 
 # **4. Physical Grounding: When Patterns Do and Do Not Do Work**
@@ -136,14 +135,16 @@ A **system** is any subset of the physical world whose state evolves in a state 
 
 A system has:
 
-- **states** $s \in S$  
-- **dynamics**  
-- **a viability region** $V \subset S$ where it can persist  
-- **a capacity region** $C \subset S$ where it can expand its dynamical range while remaining viable  
+- **states** $s \in S$
+- **dynamics**
+- **a viability region** $V \subset S$ where it can persist
+- **a capacity region** $C \subset S$ where it can expand its dynamical range while remaining viable
 
 Dynamic information is defined relative to this structure:
 
-$P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)$
+$$
+P(s_{t+1} \in (V \cup C) \mid s_t, I) > P(s_{t+1} \in (V \cup C) \mid s_t)
+$$
 
 A pattern $I$ is **dynamic information** only if it **biases** trajectories toward viability or capacity.
 
@@ -153,7 +154,7 @@ With this structure in place, we can now examine systems that clearly lack dynam
 
 # **4.2 Counterexample 1: Rolling Rock**
 
-A rolling rock has **no persistence‑relevant patterns** and therefore **no dynamic information**.
+A rolling rock has **no persistence-relevant patterns** and therefore **no dynamic information**.
 
 ### **System**  
 A single rock sliding down a slope.
@@ -161,33 +162,31 @@ A single rock sliding down a slope.
 ### **State Space (S)**  
 Position, velocity, orientation, and contact forces:
 
-```
-S = { (x, v, θ, F) }
-```
+$$
+S = \{ (x, v, \theta, F) \}
+$$
+
+### **Viability Region (V)**  
+There is **no viability region**. The rock has no organization that must be maintained. Every possible state is equivalent; there is nothing to preserve.
+
+### **Capacity Region (C)**  
+There is **no capacity region**. The rock cannot expand any dynamical range or capability.
 
 ### **Pattern (I)**  
 The rock’s shape, texture, or internal structure.
 
 ### **Why it is *not* dynamic information**  
-No pattern in the rock increases the probability of remaining in $V$ or entering $C$, because:
-
-- there are no persistence‑relevant patterns to maintain  
-- there is no capacity to expand  
-- its future is fully determined by universal physics  
+No pattern in the rock increases the probability of remaining in \(V\) or entering \(C\), because there are no persistence-relevant patterns to maintain and no capacity to expand. Its future is fully determined by universal physics.
 
 Thus:
 
-```
-P(s_{t+1} ∈ (V ∪ C) | s_t, I)
-=
-P(s_{t+1} ∈ (V ∪ C) | s_t)
-```
+$$
+P(s_{t+1} \in (V \cup C) | s_t, I) = P(s_{t+1} \in (V \cup C) | s_t)
+$$
 
 Dynamic information = **0**.
 
-This is a canonical example of **static information**: structure without any trajectory‑biasing influence toward $V \cup C$.
-
-This shows that not all physical patterns matter for persistence. A second counterexample reinforces the point.
+This is a canonical example of **static information**: structure without any trajectory-biasing influence toward \(V \cup C\).
 
 ---
 
@@ -201,34 +200,31 @@ A transient vortex in a fluid (e.g., a swirl in water or air).
 ### **State Space (S)**  
 Velocity field, pressure field, vorticity distribution:
 
-```
-S = { u(x), p(x), ω(x) }
-```
+$$
+S = \{ u(x), p(x), \omega(x) \}
+$$
+
+### **Viability Region (V)**  
+There is **no viability region**. A vortex has no persistent organization or identity that must be maintained. It is a temporary configuration within the larger fluid system.
+
+### **Capacity Region (C)**  
+There is **no capacity region**. The vortex cannot expand any dynamical range or capability.
 
 ### **Pattern (I)**  
 The swirling structure itself.
 
 ### **Why it is *not* dynamic information**  
-The vortex does not perform any work that biases trajectories toward $V$ or $C$:
-
-- it dissipates
-- it has no persistence‑relevant patterns
-- it has no viability region
-- it has no boundary conditions that could support persistence
+The vortex does not perform any work that biases trajectories toward \(V\) or \(C\): it dissipates, has no persistence-relevant patterns, and no boundary conditions that could support persistence.
 
 Thus:
 
-```
-P(s_{t+1} ∈ (V ∪ C) | s_t, I)
-=
-P(s_{t+1} ∈ (V ∪ C) | s_t)
-```
+$$
+P(s_{t+1} \in (V \cup C) \mid s_t, I) = P(s_{t+1} \in (V \cup C) \mid s_t)
+$$
 
 Dynamic information = **0**.
 
 This is another example of **static information**: a pattern that exists but does not bias trajectories toward viability or capacity.
-
-Having seen two systems with no dynamic information, we now contrast them with systems where patterns do alter the probability of remaining viable or expanding capacity.
 
 ---
 
@@ -255,8 +251,6 @@ These systems have:
 
 This is where dynamic information becomes non‑zero.
 
-These examples highlight the structural conditions under which dynamic information becomes possible. We can now summarize why the counterexamples were necessary.
-
 ---
 
 # **4.5 Why These Counterexamples Matter**
@@ -275,16 +269,11 @@ These examples anchor the central distinction:
 
 This is the hinge of the entire manuscript.
 
-**Static information** = patterns that exist but do not bias trajectories toward viability or capacity.  
-**Dynamic information** = patterns that bias trajectories toward viability or capacity.
-
-In the counterexamples, the patterns do not alter the system’s evolution in any persistence‑relevant way, which is why they do not count as dynamic information.
-
 ---
 
 # **4.6 Transition to Appendix A**
 
-Some systems bias trajectories toward V ∪ C through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+Some systems bias trajectories toward \(V \cup C\) through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
 These ideas are optional and not required for the main definition of dynamic information.
 
@@ -486,6 +475,8 @@ patterns **redirect** transitions toward viability or capacity.
 ---
 
 # **6.6 Measuring Dynamic Information with Transfer Entropy**
+
+For instance, in a gene regulatory network one could compute conditional transfer entropy from transcription factor binding patterns to downstream gene expression stability, conditioned on trajectories remaining within cellular viability bounds.
 
 Transfer entropy (TE) [2] measures directional information flow:
 
@@ -929,7 +920,7 @@ A far‑from‑equilibrium pattern whose flows keep trajectories within its viab
 ---
 
 # **Appendix A — Identity Boundary**  
-*This appendix presents a speculative geometric intuition for how some systems persist while others dissolve. These ideas are not required for the main definition of dynamic information and should be read as an optional interpretive lens.*
+*This appendix presents a speculative geometric intuition for how some systems persist while others dissolve. It is entirely optional and not required for understanding the main definition of dynamic information.*
 
 ---
 
