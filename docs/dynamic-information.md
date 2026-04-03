@@ -452,7 +452,7 @@ This inequality is the definition.
 When it holds, we say that the pattern **does work** in the sense that its presence measurably alters the system’s evolution.  
 “Trajectory redirection” is simply an intuitive way to describe this shift in conditional probabilities, not an additional requirement.
 
-As an example, consider the virus case from Section 2. Outside a host cell, the viral RNA does no work: the conditional probability of entering or remaining in V ∪ C is unchanged by its presence. Inside a host cell, the same pattern redirects trajectories by being used in transcription and replication, increasing the probability of entering V ∪ C for the viral system. The inequality holds only in the latter context.
+As an example, consider the virus case from Section 2. Outside a host cell, the viral RNA does no work and the conditional probability remains flat. Inside a host cell, the same pattern redirects trajectories by driving transcription and replication, sharply increasing the probability of entering V ∪ C.
 
 This framing avoids teleology and circularity:  
 the work is defined by the inequality, and the inequality is defined entirely by state‑space geometry and conditional probabilities.
