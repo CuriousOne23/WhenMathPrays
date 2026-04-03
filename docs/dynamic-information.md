@@ -409,8 +409,7 @@ The set of states from which the system can continue to exist as itself under ad
 In viability theory, this corresponds to a viability kernel [5]: states whose trajectories remain within the viability region under admissible dynamics.
 
 ### **Capacity Region (C)**  
-The set of states reachable from V under the system’s own dynamics that preserve the system’s constraints while **expanding its effective dynamical range** (e.g., broader regulation, robustness, generalization).  
-C represents **constraint‑preserving expansion**: states where the system can handle a wider set of perturbations without collapse.
+The set of states reachable from V under the system’s own dynamics that preserve the system’s constraints while **expanding its effective dynamical range** (e.g., broader regulation, robustness, generalization). C represents **constraint‑preserving expansion**: states where the system can handle a wider set of perturbations without collapse.
 
 Together, V ∪ C defines the subspace of states relevant for:
 
