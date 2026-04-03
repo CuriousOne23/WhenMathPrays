@@ -775,8 +775,7 @@ This perspective is compatible with:
 - control‑theoretic AI  
 - model‑based agents  
 
-Dynamic information is not a new training objective.  
-It is a **lens** for understanding how patterns influence the evolution of an AI system’s state.
+Dynamic information is not a new training objective. It is a **lens** for understanding how patterns influence the evolution of an AI system’s state.
 
 ---
 
@@ -946,8 +945,7 @@ A **subsystem** is any bounded set of states or processes that:
 - persists long enough to be described  
 - can be distinguished from its surroundings  
 
-Identity here is **descriptive**, not metaphysical.  
-It refers to the features that allow us to say:
+Identity here is **descriptive**, not metaphysical. It refers to the features that allow us to say:
 
 > “This is the same system at time \(t\) and time \(t+1\).”
 
@@ -980,8 +978,7 @@ This work may involve:
 - regulating internal variables  
 - counteracting dissipative forces  
 
-This is not thermodynamic work in the strict sense.  
-It is a **generalized causal influence** that keeps the system within its viability region.
+This is not thermodynamic work in the strict sense. It is a **generalized causal influence** that keeps the system within its viability region.
 
 ---
 
@@ -1023,8 +1020,7 @@ flowchart TD
     A --> D --> E
 ```
 
-This boundary is not sharp or universal.  
-It is a conceptual tool for thinking about persistence.
+This boundary is not sharp or universal. It is a conceptual tool for thinking about persistence.
 
 ---
 
@@ -1110,8 +1106,7 @@ Dynamic information is defined in terms of **what a pattern does** to system tra
 P(s_{t+1} ∈ (V ∪ C) | s_t, I) > P(s_{t+1} ∈ (V ∪ C) | s_t)
 ```
 
-One way to visualize this influence is to treat a pattern as an **operator** that biases transitions in state space.  
-This appendix provides a simple, intuitive operator framework that complements the probabilistic definition.
+One way to visualize this influence is to treat a pattern as an **operator** that biases transitions in state space. This appendix provides a simple, intuitive operator framework that complements the probabilistic definition.
 
 ---
 
@@ -1123,8 +1118,7 @@ A pattern \(I\) can be viewed as an operator acting on the system’s state:
 I : S → S
 ```
 
-This does **not** mean the pattern deterministically transforms the state.  
-Instead, it means:
+This does **not** mean the pattern deterministically transforms the state. Instead, it means:
 
 > The presence of pattern \(I\) modifies the transition distribution  
 > \(P(s_{t+1} | s_t)\) into a new distribution  
@@ -1150,8 +1144,7 @@ This is simply a restatement of the main definition in operator language.
 
 # **B.4 Anchor Selection Operator (Intuitive)**
 
-Some systems contain multiple internal patterns or signals.  
-Not all of them are equally effective at keeping trajectories within V or moving them into C.
+Some systems contain multiple internal patterns or signals. Not all of them are equally effective at keeping trajectories within V or moving them into C.
 
 The **Anchor Selection Operator** is an intuitive mechanism that:
 
@@ -1219,23 +1212,6 @@ High conditional transfer entropy indicates that the operator meaningfully biase
 
 ---
 
-Absolutely, Jeff — and since you’re actively editing the GitHub file right now (I can see the tab you have open), this is the perfect moment to finalize **Appendix C** so the manuscript’s backbone is complete and internally consistent.
-
-Below is the polished, GitHub‑friendly **Appendix C — Viability Theory Notes**, written to:
-
-- support Section 6  
-- align with Aubin’s formalism  
-- avoid teleology  
-- stay clean and conceptual  
-- remain optional  
-- integrate smoothly with the rest of the manuscript  
-
-No equations that GitHub will choke on.  
-No over‑formalization.  
-Just crisp, rigorous, interdisciplinary clarity.
-
----
-
 # **Appendix C — Viability Theory Notes**  
 *This appendix provides additional background on viability theory as developed by Aubin [5,6]. It is not required for the main definition of dynamic information but clarifies how viability and capacity regions can be understood in a mathematically grounded way.*
 
@@ -1248,8 +1224,7 @@ Dynamic information depends on two sets:
 - the **viability region** \(V\)  
 - the **capacity region** \(C\)
 
-These sets are intuitive in the main text, but they also have a precise interpretation in viability theory.  
-This appendix summarizes the relevant ideas without requiring the full mathematical machinery.
+These sets are intuitive in the main text, but they also have a precise interpretation in viability theory. This appendix summarizes the relevant ideas without requiring the full mathematical machinery.
 
 ---
 
@@ -1284,8 +1259,7 @@ We adapt this idea:
 Capacity Region (C) = states reachable from the viability region (V) that preserve the system’s constraints while expanding its dynamical range.
 ```
 
-This is not a goal or purpose.  
-It is simply a region of state space where:
+This is not a goal or purpose. It is simply a region of state space where:
 
 - learning occurs  
 - adaptation improves performance  
