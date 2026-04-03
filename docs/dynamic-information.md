@@ -42,14 +42,15 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 
 We routinely call many things “information,” yet the label sits uneasily across a wide range of cases.
 
-DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell. Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process. Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence. Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability. 
+DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell. Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process. Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence. Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability.
 
-Some patterns switch roles depending on context. A virus outside a host is static information—its RNA sequence exists as a pattern, but it does no work. No replication, no hijacking, nothing changes. Inside a cell? The same pattern suddenly drives transcription, forces replication, and redirects the host’s machinery. The identical sequence flips from inert to actively shaping outcomes. (See Section 6 for the formal criterion.)
+Some patterns switch roles depending on context. A virus outside a host is static information—its RNA sequence exists as a pattern, but it does no work. No replication, no hijacking, nothing changes. Inside a cell? The same pattern suddenly drives transcription, forces replication, and redirects the host’s machinery. The identical sequence flips from inert to actively shaping outcomes. (See Section 6.4 for the formal criterion.)
 
-In each case we reach for the word “information,” but it stretches to cover two qualitatively different realities: patterns that exist passively versus patterns that measurably shape what a system does next. 
-Standard frameworks leave this gap unaddressed. Shannon information captures surprise, compressibility, and efficient transmission, yet remains silent on whether a pattern influences persistence or capability. Pragmatic or functional accounts (such as Roederer’s) capture action‑producing signals but tie them tightly to biological agency. Purely causal descriptions in physics register influence but offer no principled way to separate transient or irrelevant effects (rolling stones, fading vortices) from those that systematically shape viable trajectories.
+In each instance we reach for the same word—“information,” but it stretches to cover two qualitatively different realities: patterns that exist passively versus patterns that measurably shape what a system can do next.
 
-The result is persistent ambiguity: we lack a domain‑general way to say when a pattern crosses from mere structure into something that actively matters for a system’s continued existence or enhanced capacity.
+Standard frameworks leave this gap unaddressed. Shannon information captures surprise, compressibility, and efficient transmission, yet remains silent on whether a pattern influences persistence or capability. Pragmatic or functional accounts (such as Roederer’s) capture action-producing signals but tie them tightly to biological agency. Purely causal descriptions in physics register influence but offer no principled way to separate transient or irrelevant effects (rolling stones, fading vortices) from those that systematically shape viable trajectories.
+
+The result is persistent ambiguity: we lack a domain-general way to say when a pattern crosses from mere structure into something that actively matters for a system’s continued existence or enhanced capacity.
 
 This manuscript identifies that missing hinge.
 
@@ -897,7 +898,7 @@ Any structural, temporal, or relational regularity that can influence how a syst
 The set of states from which the system’s expected trajectories remain within the bounds required for continued persistence. No goals or purposes are implied — only constraint‑preserving continuation.
 
 **Capacity Region (C)**  
-The set of states reachable from the viability region (V) under the system’s own dynamics that preserve the system’s constraints while expanding its effective dynamical range. C represents constraint‑preserving expansion: states where the system can handle a wider set of perturbations without collapse.
+The set of states reachable from the viability region (V) under the system’s own dynamics that preserve core constraints while expanding the system’s effective dynamical range (e.g., broader regulation, increased robustness, or generalization). C represents persistence-plus-expansion: states where the system can handle a wider set of conditions or perturbations without collapse. No goals or purposes are implied — only constraint-preserving reachability.
 
 ### **Operator**  
 A pattern or mechanism that performs work by systematically redirecting system trajectories. Operators can increase or decrease the probability of remaining within V or entering C.
