@@ -74,7 +74,11 @@ Let $P(s_{t+1} \mid s_t)$ be the system’s natural dynamics.
 Let $P(s_{t+1} \mid s_t, I)$ be the dynamics under the influence of some pattern $I$.
 
 ### **Static Information**  
-A pattern $I$ is **static information** if it exists but does not systematically alter trajectories relative to viability or capacity.
+A pattern $I$ is **static information** if it exists but does not change the probability of entering or remaining in $V \cup C$:
+
+$$
+P(s_{t+1} \in (V \cup C) \mid s_t, I) = P(s_{t+1} \in (V \cup C) \mid s_t).
+$$
 
 ### **Dynamic Information**  
 A pattern $I$ is **dynamic information** if:
