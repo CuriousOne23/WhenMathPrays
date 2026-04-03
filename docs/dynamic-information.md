@@ -186,7 +186,7 @@ $$
 
 Dynamic information = **0**.
 
-This is a canonical example of **static information**: structure without any trajectory-biasing influence toward \(V \cup C\).
+This is a canonical example of **static information**: structure without any trajectory-biasing influence toward $\(V \cup C\)$.
 
 ---
 
