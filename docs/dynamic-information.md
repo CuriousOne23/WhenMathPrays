@@ -42,17 +42,11 @@ Once seen, the distinction becomes obvious and surprisingly universal.
 
 We routinely call many things “information,” yet the label sits uneasily across a wide range of cases.
 
-DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell.  
-Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process.  
-Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence.  
-Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability.
+DNA is celebrated as information, yet a sequence lying inert in a dead cell behaves nothing like the same sequence actively driving construction and repair in a living cell. Rocks undeniably contain structural patterns, but describing them as “information” feels empty—nothing in the rock’s form appears to matter for any ongoing process. Neural spike trains carry rich correlational structure, yet some cascades steer behavior toward continued viability while others dissipate without consequence. Machine learning models are said to encode information, but their practical value emerges only when stored parameters actively transform inputs into outputs that sustain or expand capability.
 
 In each instance we reach for the same word—“information”—but it stretches to cover two qualitatively different realities: patterns that exist passively versus patterns that measurably shape what a system can do next.
 
-Standard frameworks leave this gap unaddressed.  
-Shannon information captures surprise, compressibility, and efficient transmission, yet remains silent on whether a pattern influences persistence or capability.  
-Pragmatic or functional accounts (such as Roederer’s) capture action‑producing signals but tie them tightly to biological agency.  
-Purely causal descriptions in physics register influence but offer no principled way to separate transient or irrelevant effects (rolling stones, fading vortices) from those that systematically shape viable trajectories.
+Standard frameworks leave this gap unaddressed. Shannon information captures surprise, compressibility, and efficient transmission, yet remains silent on whether a pattern influences persistence or capability. Pragmatic or functional accounts (such as Roederer’s) capture action‑producing signals but tie them tightly to biological agency. Purely causal descriptions in physics register influence but offer no principled way to separate transient or irrelevant effects (rolling stones, fading vortices) from those that systematically shape viable trajectories.
 
 The result is persistent ambiguity: we lack a domain‑general way to say when a pattern crosses from mere structure into something that actively matters for a system’s continued existence or enhanced capacity.
 
