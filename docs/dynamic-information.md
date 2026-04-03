@@ -273,7 +273,7 @@ This is the hinge of the entire manuscript.
 
 # **4.6 Transition to Appendix A**
 
-Some systems bias trajectories toward \(V \cup C\) through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
+Some systems bias trajectories toward $\(V \cup C\)$ through internal or external work. Others dissolve. Appendix A explores a **speculative, semi‑formal geometric interpretation** of this boundary — including identity‑related intuitions and diagrams.
 
 These ideas are optional and not required for the main definition of dynamic information.
 
