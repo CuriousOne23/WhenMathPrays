@@ -452,7 +452,7 @@ This inequality is the definition.
 When it holds, we say that the pattern **does work** in the sense that its presence measurably alters the system’s evolution.  
 “Trajectory redirection” is simply an intuitive way to describe this shift in conditional probabilities, not an additional requirement.
 
-As an example, consider the virus case from Section 2. Outside a host cell, the viral RNA does no work and the conditional probability remains flat. Inside a host cell, the same pattern redirects trajectories by driving transcription and replication, sharply increasing the probability of entering V ∪ C.
+As an example, consider the virus case from Section 2. Outside a host cell, the viral RNA does no work and the conditional probability remains flat. Inside a host cell, the same pattern redirects trajectories by driving transcription and replication, sharply increasing the probability of entering V ∪ C. This is exactly what the inequality captures: when the pattern is present, the transition distribution shifts toward V ∪ C.
 
 This framing avoids teleology and circularity:  
 the work is defined by the inequality, and the inequality is defined entirely by state‑space geometry and conditional probabilities.
@@ -899,8 +899,8 @@ Any structural, temporal, or relational regularity that can influence how a syst
 ### **Viability Region (V)**  
 The set of states from which the system’s expected trajectories remain within the bounds required for continued persistence. No goals or purposes are implied — only constraint‑preserving continuation.
 
-### **Capacity Region (C)**  
-The set of states reachable from the viability region under the system’s own dynamics that preserve core constraints while expanding the system’s effective dynamical range (e.g., robustness, regulation, generalization). No goals or purposes are implied — only constraint‑preserving expansion.
+**Capacity Region (C)**  
+The set of states reachable from the viability region (V) under the system’s own dynamics that preserve the system’s constraints while expanding its effective dynamical range. C represents constraint‑preserving expansion: states where the system can handle a wider set of perturbations without collapse.
 
 ### **Operator**  
 A pattern or mechanism that performs work by systematically redirecting system trajectories. Operators can increase or decrease the probability of remaining within V or entering C.
