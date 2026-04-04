@@ -134,20 +134,24 @@ In stable or predictable environments, low dynamic information is more efficient
 
 ## 7. Measurable Proxies and Future Directions
 
-The distinction between low and high dynamic information can be studied empirically using the two primary quantities introduced in Section 2:
+The distinction between low and high dynamic information rests on two primary quantities introduced in Section 2:
 
 - $N[S(I)]$: the effective number of distinguishable states or configurations the pattern can engage,  
 - $N[Prc(I)]$: the number of process steps or conditional operations required to turn context into a biasing action.
 
-These quantities can be estimated through state discretization, algorithmic complexity measures, decision-tree depth analysis, or examination of causal graph structure. Conditional transfer entropy, when conditioned on trajectories remaining within or returning to the viability or capacity region $V \cup C$, offers one proxy for how productively the pattern’s variety contributes to biasing work.
+The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ that separate low from high dynamic information are system- and task-dependent. They are determined by identifying the point at which further increases in $N[S(I)]$ or $N[Prc(I)]$ cease to yield significant improvements in the system’s ability to remain in or recover to the viability or capacity region $V \cup C$ within the required recovery time $\tau_{\rm rec}$.
 
-Future work should examine:
+In practice, these thresholds are typically explored through simulation. State variety and processing depth can be systematically varied while measuring robustness, coordination reliability, and recovery performance under controlled conditions. The resulting candidate thresholds are then correlated and verified against predictive macro-level behavior observed in the real system.
 
-- Whether increases in task complexity (higher noise, more intricate coordination, or stricter temporal precision) correlate with higher values of $N[S(I)]$ while $N[Prc(I)]$ remains relatively compact.  
-- Whether the candidate necessity condition in Section 3 holds across domains and how the thresholds $N_{S,ld}$ and $N_{Prc,ld}$ should be set.  
+Conditional transfer entropy, when conditioned on trajectories remaining within or returning to $V \cup C$, provides one quantitative proxy for how productively the pattern’s variety contributes to biasing work.
+
+Future empirical work should test:
+
+- Whether increases in task complexity (higher noise, more intricate coordination demands, or stricter temporal precision) correlate with higher values of $N[S(I)]$ while $N[Prc(I)]$ remains relatively compact.  
+- Whether the candidate necessity condition proposed in Section 3 holds across different domains.  
 - How the advantages and costs identified in Sections 4 and 6 trade off in concrete systems.
 
-These questions can be investigated in gene regulation, immune dynamics, neural systems, engineered adaptive controllers, and controlled simulations.
+These investigations can be conducted in gene regulation, immune dynamics, neural systems, engineered adaptive controllers, and controlled simulations.
 
 ---
 
