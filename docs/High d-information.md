@@ -70,9 +70,16 @@ $$
 S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr) \ > \ C_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
 $$
 
+where:
+- $S(W)$ denotes the required specificity of temporal or causal ordering demanded by the biasing work $W$,
+- $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern $I$ can engage,
+- $N[Prc(I)]$ is the number of process steps or conditional operations required to produce the biasing action,
+- $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns satisfying the low dynamic information thresholds defined in Section 2,
+- $\tau_{\rm rec}$ is the maximum time the system can remain outside $V \cup C$ (or deviate by more than a specified $\delta$) after a destructive perturbation before viability is irreversibly lost.
+
 ```mermaid
 flowchart TD
-    A["Natural Dynamics\nP(s_{t+1} | s_t)"] 
+    A["Natural Dynamics\nP(s_{t+1} | s_t)"]
     --> B["Pattern I Applied"]
 
     subgraph "Biasing Work Evaluation"
@@ -89,13 +96,6 @@ flowchart TD
     style E fill:#e3f2fd,stroke:#1976d2
     style F fill:#f1f8e9,stroke:#388e3c
 ```
-
-where:
-- $S(W)$ denotes the required specificity of temporal or causal ordering demanded by the biasing work $W$,
-- $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern $I$ can engage,
-- $N[Prc(I)]$ is the number of process steps or conditional operations required to produce the biasing action,
-- $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns satisfying the low dynamic information thresholds defined in Section 2,
-- $\tau_{\rm rec}$ is the time window available for the system to remain in or return to the viability or capacity region $V \cup C$.
 
 Systems whose work stays within modest specificity and modest values of $N[S(I)] \cdot N[Prc(I)]$ (such as the laser resonant mode or basic negative feedback loops) are reliably handled by low dynamic information. In contrast, patterns that simultaneously require both high state variety and high specificity of temporal or causal ordering within the available recovery time $\tau_{\rm rec}$ exceed what low dynamic information can provide. In such cases, high dynamic information is required.
 
@@ -160,7 +160,7 @@ flowchart LR
 
     subgraph High["High Dynamic Information"]
         D["Gene Regulatory Network\nN[S] ≈ 10^4, N[Prc] ≈ 5–20"] 
-        E["Complex Trade:\nMulti-scale stress response"]
+        E["Complex Adaptive Trades:\nMulti-scale stress response"]
         F["E_hd ≈ 0.01–0.2"]
     end
 
@@ -205,7 +205,7 @@ Here, $\tau_{\rm rec}$ is the time window available for recovery after a perturb
 
 You can begin this work with data you already have. Take your perturbation-response records, time-series, or control experiments and systematically vary state variety ($N[S(I)]$) and processing depth ($N[Prc(I)]$). Track how key performance metrics respond: recovery probability within $\tau_{\rm rec}$, robustness to noise, and coordination success rate. The point where additional complexity stops delivering clear gains often reveals the transition from low to high dynamic information.
 
-Conditional transfer entropy conditioned on trajectories that stay in or return to $V \cup C$ provides one practical quantitative check on how effectively the pattern’s variety contributes to biasing work [4].
+Conditional transfer entropy conditioned on trajectories that remain in $V \cup C$ provides one practical quantitative check on how effectively the pattern’s variety contributes to biasing work [4].
 
 This framework is designed to be usable. Bring it to the systems you know best. Let it move through your data. Let it show you where low dynamic information is sufficient and where richer, more conditional patterns become necessary.
 
