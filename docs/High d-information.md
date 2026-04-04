@@ -110,7 +110,7 @@ E = \frac{W_d}{C_{op}}
 $$
 
 where:
-- $W_d$ is the **effective dynamic work information** — the portion of the pattern’s output that actually inspires identifiable trades, in which the system gives up one resource or property (such as energy, precision, speed, or risk) through a transfer that performs work to remain in $V \cup C$,
+- $W_d$ is the **effective dynamic work information** — the portion of the pattern’s output that inspires identifiable trades, in which the system gives up one resource or property (energy, precision, speed, or risk) to perform work that helps it remain in $V \cup C$.
 - $C_{op}$ is the **operational capacity information** — the estimated systematic information throughput the channel produces under assumed operating conditions (the systematic subset), not the theoretical maximum the channel could sustain.
 
 **Low-dynamic efficiency** ($E_{ld}$) is typically close to 1 when a simple pattern enables strong low-dynamic trades with minimal overhead. For example, a basic thermostat with only three distinguishable states and one conditional step can achieve $E_{ld} \approx 0.9$–1.0 because nearly all of its operational output is converted into a simple but reliable trade that helps the system remain in $V \cup C$.
