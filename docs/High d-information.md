@@ -57,7 +57,7 @@ The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent. Methods for det
 
 ## 3. When High Dynamic Information Becomes Necessary
 
-We propose that high dynamic information becomes necessary when the biasing work $W$ satisfies
+We claim that hd-information becomes necessary when the biasing work $W$ satisfies
 
 $$
 S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr) \ > \ C_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
