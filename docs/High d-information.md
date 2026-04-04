@@ -15,17 +15,23 @@ Curious One, Grok (xAI), Copilot (Microsoft)
 
 ## Abstract
 
-The categorical distinction between static and dynamic information established in the paper [1] raises a natural follow-up question: under what conditions does a pattern require high dynamic information content — greater variety, structural complexity, and intricacy — to perform its biasing work effectively? This paper introduces a practical distinction between low dynamic information (ld-information) and high dynamic information (hd-information), shows when hd-information becomes necessary, the advantages it confers, the trade-offs involved, and directions for empirical study.
+Most scientific fields use the concept of information, yet we lack good language to describe differences in the amount and kind of dynamic information needed for effective work. Building on the distinction between static and dynamic information introduced in the companion paper [1], this manuscript proposes a further practical distinction: low dynamic information versus high dynamic information.  We show when patterns appear to require the greater variety and conditional richness of high dynamic information to bias system trajectories toward viability or capacity. The paper outlines the conditions under which this richer form becomes necessary, its functional advantages, the associated costs, and directions for empirical investigation.  The framework is offered as a starting point for examining a domain that has received surprisingly little systematic attention.
 
 ---
 
+### Proposed Introduction
+
 ## 1. Introduction
 
-The preceding paper [1] established a binary distinction: **static information** (patterns that do not do work) versus **dynamic information** (patterns that bias system trajectories toward the viability region $V \cup C$ or capacity region). This gives us a clear way to identify whether a pattern performs work.
+The preceding paper [1] established a clear binary distinction: static information consists of patterns that exist but do no work, while dynamic information consists of patterns that actively bias system trajectories toward the viability region \(V \cup C\) or the capacity region. This distinction gives us a principled way to identify when a pattern is performing work rather than merely existing.
 
-Yet an important gap remains. Even after we know a pattern is dynamic, we still lack good language to describe the amount of dynamic information it will require as well as when. Some dynamic patterns appear relatively simple and repetitive yet still perform effective biasing. Others seem far richer, more conditional, and more intricate. Current frameworks offer no consistent, domain-general way to talk about this difference in degree.
+Yet an important gap remains. Even after we recognize that a pattern is dynamic, we still lack reliable language to describe *how much* dynamic information it requires and *what kind* of structure is needed for that work to be effective. Some dynamic patterns are relatively simple and repetitive, yet they successfully maintain or steer a system. Others are far richer, more conditional, and more intricate. Current frameworks offer no consistent, domain-general way to talk about this difference in degree.
 
-This paper addresses that gap.
+This absence is not trivial. In living systems, in cognition, and in engineered adaptive controllers, the difference between modest and richly structured dynamic information often determines whether a system remains viable under changing conditions or collapses. Without better descriptors, we are left describing important phenomena with vague terms such as “complexity,” “regulation,” or “feedback,” which obscure more than they reveal.
+
+This paper takes a modest step toward filling that gap. Building directly on the static/dynamic distinction, we propose a practical further distinction between low dynamic information and high dynamic information. We examine when the greater variety and conditional richness of high dynamic information appears necessary, what advantages it may confer, the real costs it carries, and how the idea might be tested.
+
+The framework presented here is offered not as a finished theory, but as an invitation to examine a domain that has received surprisingly little systematic attention.
 
 ---
 
