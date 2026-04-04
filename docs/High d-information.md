@@ -29,11 +29,11 @@ The preceding paper [1] established a clear binary distinction: static informati
 
 Yet an important gap remains. Even after we recognize that a pattern is dynamic, we still lack reliable language to describe *how much* dynamic information it requires and *what kind* of structure is needed for that work to be effective. Some dynamic patterns are relatively simple and repetitive, yet they successfully maintain or steer a system. Others are far richer, more conditional, and more intricate. Current frameworks offer no consistent, domain-general way to talk about this difference in degree.
 
-This absence is not trivial. In living systems, in cognition, and in engineered adaptive controllers, the difference between modest and richly structured dynamic information often determines whether a system remains viable under changing conditions or collapses. Without better descriptors, we are left describing important phenomena with vague terms such as “complexity,” “regulation,” or “feedback,” which obscure more than they reveal.
+This absence is not trivial. In living systems, in cognition, and in engineered adaptive controllers, the difference between simple and richly structured dynamic information often determines whether a system remains viable under changing conditions or collapses. Without better descriptors, we are left describing important phenomena with vague terms such as “complexity,” “regulation,” or “feedback,” which obscure more than they reveal.
 
-This paper takes a modest step toward filling that gap. Building directly on the static/dynamic distinction, we propose a practical further distinction between low dynamic information and high dynamic information. We examine when the greater variety and conditional richness of high dynamic information becomes necessary, what advantages it may confer, the real costs it carries, and how the idea might be tested.
+This paper takes a modest step toward filling that gap. Building directly on the static/dynamic distinction, we propose a practical further distinction between low dynamic information and high dynamic information, along with a candidate condition for when the richer form becomes necessary.
 
-The framework presented here is offered not as a finished theory, but as an invitation to examine a domain that has received surprisingly little systematic attention.
+The ideas presented here are speculative. They are a first attempt to give the scientific community a concrete lens and set of measurable quantities with which to quantify and study dynamic information — the kind of information that inherently does work, as introduced in paper [1]. While paper [1] established the binary distinction, real progress requires applicable, measurable, and rigorous theorems and corollaries that can be tested and refined. We believe the proposals in this paper have sufficient credibility to serve as a useful starting point. We therefore offer them openly, inviting the community to test, criticize, improve, simplify, or replace them with better, more elegant formulations.
 
 ---
 
@@ -73,41 +73,41 @@ $$
 
 where:
 - $S(W)$ denotes the required specificity of temporal or causal ordering demanded by the biasing work $W$,
-- $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern $I$ can engage (i.e., the variety of contexts or conditions to which the pattern can respond differently),
-- $N[Prc(I)]$ is the number of process steps or conditional operations required to turn context into a biasing action,
+- $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern $I$ can engage,
+- $N[Prc(I)]$ is the number of process steps or conditional operations required to produce the biasing action,
 - $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns satisfying the low dynamic information thresholds defined in Section 2,
 - $\tau_{\rm rec}$ is the time window available for the system to remain in or return to the viability or capacity region $V \cup C$.
 
-Patterns whose required biasing work remains below the low dynamic information thresholds defined in Section 2 (such as the laser resonant mode or basic negative feedback loops) can be handled by low dynamic information. In contrast, patterns that simultaneously require both high state variety and high specificity of temporal or causal ordering within the available recovery time $\tau_{\rm rec}$ — for example, gene regulatory networks coordinating multiple signals across different timescales or immune systems discriminating among large numbers of antigens while mounting coordinated responses — exceed what low dynamic information can provide. In such cases, we propose that high dynamic information is required.
+Systems whose work stays within modest specificity and modest values of $N[S(I)] \cdot N[Prc(I)]$ (such as the laser resonant mode or basic negative feedback loops) are reliably handled by low dynamic information. In contrast, patterns that simultaneously require both high state variety and high specificity of temporal or causal ordering within the available recovery time $\tau_{\rm rec}$ — for example, gene regulatory networks coordinating multiple signals across different timescales or immune systems discriminating among large numbers of antigens while mounting coordinated responses — exceed what low dynamic information can provide. In such cases, high dynamic information is required.
 
-This condition is offered as a candidate criterion. Its form, the interpretation of its terms, and the appropriate values of the thresholds $N_{S,ld}$ and $N_{Prc,ld}$ remain open to empirical testing and criticism.
+By engaging with this distinction, readers gain a clearer way to reason about how much dynamic information is truly required for a given task. This framework also offers a practical way to define and operationalize the viability and capacity regions ($V \cup C$) introduced in paper [1], providing new visibility into the relationship between pattern complexity and system performance.
 
 ---
 
 ## 4. Advantages of High Dynamic Information
 
-High dynamic information offers several functional advantages when the conditions described in Section 3 are met. These advantages emerge directly from the greater variety of states the pattern can engage and the relatively compact conditional logic that enables it.
+High dynamic information brings distinct functional advantages when the conditions described in Section 3 are met.
 
-The main advantages include:
+These advantages arise directly from the combination of high state variety and relatively compact conditional logic:
 
-- Greater flexibility and context-sensitivity: the pattern can respond effectively to a wider range of situations and novel conditions.  
-- Higher robustness: the system is better able to maintain viability when faced with fluctuations, noise, or unexpected perturbations.  
-- More precise coordination of complex, multi-scale processes: multiple signals or subsystems can be aligned across different timescales.  
-- Improved long-term adaptability and evolvability: the system gains capacity to explore new behaviors or configurations while remaining viable.
+- Greater flexibility and context-sensitivity: the pattern can respond effectively across a wide range of situations and novel conditions.  
+- Higher robustness: the system maintains viability more reliably when faced with fluctuations, noise, or unexpected perturbations.  
+- More precise coordination of complex, multi-scale processes: multiple signals and subsystems can stay aligned even under demanding conditions.  
+- Improved long-term adaptability and evolvability: the system gains capacity to explore new behaviors and develop greater capability while remaining viable.
 
-These advantages are particularly relevant in environments that are variable, uncertain, or impose tight coordination demands. In stable environments with low variability, low dynamic information is more efficient.
+These benefits become especially important in environments characterized by high variability, uncertainty, or tight coordination requirements. In such settings, high dynamic information enables capabilities that low dynamic information cannot reliably deliver.
 
-Whether these advantages outweigh the costs (discussed in Section 6) is an empirical question that depends on the specific system and its demands.
+The real question is where the balance shifts and which processes contain hd-information — and that depends on the specific demands of the system.
 
 ---
 
 ## 5. Examples and Boundary Cases
 
-The distinction between low and high dynamic information can be illustrated through the following cases.
+The distinction between low and high dynamic information becomes concrete when we look at real systems.
 
 **Cases that operate with low dynamic information**  
 - Laser resonant mode: a single dominant frequency with minimal conditional variation.  
-- Basic negative feedback loops: simple error correction that responds to one or a few measured variables.  
+- Basic negative feedback loops: simple error correction responding to one or a few measured variables.  
 - Simple homeostasis mechanisms: basic regulatory circuits that maintain a small number of internal variables within narrow bounds.
 
 **Cases that require high dynamic information**  
@@ -116,54 +116,53 @@ The distinction between low and high dynamic information can be illustrated thro
 - Advanced neural prediction and adaptive control architectures: real-time integration of diverse sensory streams with flexible, multi-step decision processes.
 
 **Boundary and transition cases**  
-The boundary between low and high dynamic information is not always sharp. Transitions occur when environmental variability increases, coordination requirements become more intricate, or real-time adaptation to novel conditions is needed. Determining the exact conditions for these shifts is an important open question. Systematic study of such boundary cases would help refine the thresholds $N_{S,ld}$ and $N_{Prc,ld}$ and clarify when high dynamic information becomes necessary.
+The boundary between low and high dynamic information is not always sharp. Transitions occur when environmental variability increases, coordination requirements become more intricate, or real-time adaptation to novel conditions is needed. Determining the exact conditions for these shifts remains an important open question. Systematic study of such boundary cases would help refine the thresholds $N_{S,ld}$ and $N_{Prc,ld}$ and clarify when high dynamic information becomes necessary.
 
 ---
 
 ## 6. Trade-offs and Costs
 
-High dynamic information carries real costs. These include:
+High dynamic information carries real costs.
+
+These costs include:
 
 - Greater metabolic, computational, or structural resources required to generate, maintain, and update the larger number of distinguishable states and conditional operations.  
 - Increased risk of fragility or overfitting when conditions change unexpectedly.  
 - Higher vulnerability to noise or corruption in the pattern itself.
 
-In stable or predictable environments, low dynamic information is more efficient. In highly variable, uncertain, or coordination-intensive environments, high dynamic information may provide net benefit. Determining where the balance lies in any given system is an empirical question.
+In stable or predictable environments, low dynamic information is more efficient. In highly variable, uncertain, or coordination-intensive environments, high dynamic information can provide net benefit. The real question is where the balance shifts and which processes contain hd-information — and that depends on the specific demands of the system.
 
 ---
 
 ## 7. Measurable Proxies and Future Directions
 
-The distinction between low and high dynamic information rests on two primary quantities introduced in Section 2:
+Two quantities lie at the center of the distinction: $N[S(I)]$, the effective number of distinguishable states or configurations a pattern can engage, and $N[Prc(I)]$, the number of process steps or conditional operations required to turn context into a biasing action.
 
-- $N[S(I)]$: the effective number of distinguishable states or configurations the pattern can engage,  
-- $N[Prc(I)]$: the number of process steps or conditional operations required to turn context into a biasing action.
+The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ that mark the boundary between low and high dynamic information are system-dependent. You determine them by finding the point where further increases in state variety or processing depth no longer produce meaningful gains in the system’s ability to remain in or recover to the viability or capacity region $V \cup C$ within the recovery time $\tau_{\rm rec}$ you actually need.
 
-The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ that separate low from high dynamic information are system- and task-dependent. They are determined by identifying the point at which further increases in $N[S(I)]$ or $N[Prc(I)]$ cease to yield significant improvements in the system’s ability to remain in or recover to the viability or capacity region $V \cup C$ within the required recovery time $\tau_{\rm rec}$.
+Here, $\tau_{\rm rec}$ is the time window available for recovery after a perturbation before coherence is lost. The viability region $V$ holds the states from which the system can continue to persist. The capacity region $C$ holds states reachable from $V$ that preserve core constraints while expanding the system’s effective range of response.
 
-In practice, these thresholds are typically explored through simulation. State variety and processing depth can be systematically varied while measuring robustness, coordination reliability, and recovery performance under controlled conditions. The resulting candidate thresholds are then correlated and verified against predictive macro-level behavior observed in the real system.
+You can begin this work with data you already have. Take your perturbation-response records, time-series, or control experiments and systematically vary state variety ($N[S(I)]$) and processing depth ($N[Prc(I)]$). Track how key performance metrics respond: recovery probability within $\tau_{\rm rec}$, robustness to noise, and coordination success rate. The point where additional complexity stops delivering clear gains often reveals the transition from low to high dynamic information.
 
-Conditional transfer entropy, when conditioned on trajectories remaining within or returning to $V \cup C$, provides one quantitative proxy for how productively the pattern’s variety contributes to biasing work.
+Conditional transfer entropy conditioned on trajectories that stay in or return to $V \cup C$ provides one practical quantitative check on how effectively the pattern’s variety contributes to biasing work [4].
 
-Future empirical work should test:
-
-- Whether increases in task complexity (higher noise, more intricate coordination demands, or stricter temporal precision) correlate with higher values of $N[S(I)]$ while $N[Prc(I)]$ remains relatively compact.  
-- Whether the candidate necessity condition proposed in Section 3 holds across different domains.  
-- How the advantages and costs identified in Sections 4 and 6 trade off in concrete systems.
-
-These investigations can be conducted in gene regulation, immune dynamics, neural systems, engineered adaptive controllers, and controlled simulations.
+This framework is designed to be usable. Bring it to the systems you know best. Let it move through your data. Let it show you where low dynamic information is sufficient and where richer, more conditional patterns become necessary.
 
 ---
 
 ## 8. Conclusion
 
-The binary distinction between static and dynamic information, introduced in the companion paper [1], provides a foundation for identifying when a pattern performs work rather than merely existing. This manuscript extends that foundation by proposing a further practical distinction: low dynamic information versus high dynamic information.
+The binary distinction between static and dynamic information, introduced in paper [1], gives us a principled way to identify when a pattern performs work rather than merely existing. This manuscript extends that foundation by proposing a further practical distinction: low dynamic information versus high dynamic information, along with a candidate condition for when the richer form becomes necessary.
 
-We have suggested when patterns require the greater variety and conditional richness of high dynamic information to bias system trajectories effectively toward the viability or capacity region. The paper has outlined candidate conditions for this shift, the potential advantages such patterns may offer, the real costs they carry, and directions for empirical investigation.
+If both papers hold, the scientific community gains more than new answers — it gains the ability to ask entirely new questions that were previously invisible. We can now ask: What exactly is static information in this system? What exactly is dynamic information? Where do hybrid patterns exist that combine both? Do some systems operate in distinct modes — one dominated by static information, another by dynamic information, and a third by hybrid forms? How much dynamic information does this process actually require? Where is low dynamic information sufficient, and where must high dynamic information take over? Dynamic information is not confined to living systems; it offers a domain-general framework that can potentially unify insights from physics, biology, cognition, engineering, and other fields — including the rapidly advancing field of artificial intelligence.
 
-This framework is not presented as a completed theory. It is offered as one possible set of descriptors for a domain that has long lacked clear language. Many questions remain open: the precise meaning and measurement of the quantities $N[S(I)]$ and $N[Prc(I)]$, the validity of the proposed necessity condition, the nature of the thresholds in different systems, and the conditions under which the advantages of high dynamic information outweigh its costs.
+Researchers can now re-examine existing data with these questions in mind. Engineers and designers gain a new handle for building more robust, adaptive, and evolvable systems. Biologists and neuroscientists gain a framework for designing experiments that probe the transition points between simple and richly conditional information.
 
-We invite readers to test, criticize, extend, or replace the distinctions proposed here. Better descriptors for degrees of dynamic information are needed. This paper offers one possible starting point for that inquiry.
+High dynamic information brings greater flexibility, robustness, coordination, and adaptability when the demands of the system require it. It also carries real costs. The central question is where the balance shifts and which processes actually contain high dynamic information.
+
+This framework is offered as a first step toward better descriptors in a domain that has long lacked them. The ideas presented here are speculative. We believe they have sufficient credibility to serve as a useful starting point. We therefore invite the scientific community to test them, criticize them, improve them, simplify them, or replace them with better, more elegant formulations.
+
+Better language for degrees of dynamic information is needed. This paper is one contribution toward opening that space.
 
 ---
 
