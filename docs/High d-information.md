@@ -70,6 +70,26 @@ $$
 S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr) \ > \ C_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
 $$
 
+```mermaid
+flowchart TD
+    A["Natural Dynamics\nP(s_{t+1} | s_t)"] 
+    --> B["Pattern I Applied"]
+
+    subgraph "Biasing Work Evaluation"
+        C["Compute S(W) × (N[S(I)] · N[Prc(I)])"]
+        D["Is product > C_ld\nwithin recovery time τ_rec ?"]
+    end
+
+    B --> C
+    C --> D
+
+    D -->|Yes| E["High Dynamic Information\nRequired"]
+    D -->|No| F["Low Dynamic Information\nSufficient"]
+
+    style E fill:#e3f2fd,stroke:#1976d2
+    style F fill:#f1f8e9,stroke:#388e3c
+```
+
 where:
 - $S(W)$ denotes the required specificity of temporal or causal ordering demanded by the biasing work $W$,
 - $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern $I$ can engage,
@@ -129,6 +149,28 @@ The distinction between low and high dynamic information becomes concrete when w
 
 **Boundary and transition example**  
 A classic crossover occurs with temperature regulation. A simple thermostat (low-dynamic: $N[S(I)] \approx 3$, $N[Prc(I)] \approx 1$) suffices for steady-state control in a stable environment. Adding an AI-based predictor that anticipates disturbances and plans multi-step responses pushes the system into high-dynamic territory ($N[S(I)] \approx 50+$, $N[Prc(I)] \approx 6$–12) when recovery time $\tau_{\rm rec}$ tightens or variability increases. The transition point reveals when low-dynamic sufficiency gives way to the need for richer conditional structure.
+
+```mermaid
+flowchart LR
+    subgraph Low["Low Dynamic Information"]
+        A["Basic Thermostat\nN[S] ≈ 3, N[Prc] ≈ 1"] 
+        B["Simple Trade:\nTemperature stability"]
+        C["E_ld ≈ 0.9–1.0"]
+    end
+
+    subgraph High["High Dynamic Information"]
+        D["Gene Regulatory Network\nN[S] ≈ 10^4, N[Prc] ≈ 5–20"] 
+        E["Complex Trade:\nMulti-scale stress response"]
+        F["E_hd ≈ 0.01–0.2"]
+    end
+
+    Low --> Boundary["Boundary / Transition\nIncreasing variability or τ_rec demand"]
+    High --> Boundary
+
+    style Low fill:#f1f8e9,stroke:#388e3c
+    style High fill:#e3f2fd,stroke:#1976d2
+    style Boundary fill:#fff3e0,stroke:#f57c00
+```
 
 **Cases that require high dynamic information**  
 - Gene regulatory networks: coordination of hundreds to thousands of genes in response to multiple internal and external signals across different timescales.  
