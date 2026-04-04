@@ -64,22 +64,22 @@ The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent. Methods for det
 
 ## 3. When High Dynamic Information Becomes Necessary
 
-We propose that hd-information becomes necessary when the biasing work $W$ satisfies
+We propose that high dynamic information becomes necessary when the biasing work \(W\) satisfies
 
 $$
 S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr) \ > \ C_{\text{ld}} \quad \text{within recovery time } \tau_{\rm rec}
 $$
 
 where:
-- $S(W)$ is the required specificity of temporal or causal ordering for the work $W$,
-- $N[S(I)]$ is the effective number of distinguishable states the pattern can engage,
-- $N[Prc(I)]$ is the number of process steps or conditional operations required to produce the biasing action,
-- $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns with ld-information,
-- $\tau_{\rm rec}$ is the time window required for the system to remain in or recover to the viability or capacity region $V \cup C$.
+- $S(W)$ denotes the required specificity of temporal or causal ordering demanded by the biasing work \(W\),
+- $N[S(I)]$ is the effective number of distinguishable states or configurations the pattern \(I\) can engage (i.e., the variety of contexts or conditions to which the pattern can respond differently),
+- $N[Prc(I)]$ is the number of process steps or conditional operations required to turn context into a biasing action,
+- $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns satisfying the low dynamic information thresholds defined in Section 2,
+- $\tau_{\rm rec}$ is the time window available for the system to remain in or return to the viability or capacity region $V \cup C$.
 
-We believe this relationship holds because systems whose work stays within modest specificity and modest values of $N[S(I)] \cdot N[Prc(I)]$ (such as the laser resonant mode or basic negative feedback loops) are reliably handled by ld-information. In contrast, systems whose work simultaneously demands high specificity and high values of $N[S(I)] \cdot N[Prc(I)]$ within tight recovery windows — such as gene regulatory networks coordinating multiple signals across timescales or immune recognition discriminating among vast numbers of antigens while mounting layered responses — consistently exceed what ld-information can deliver. In those cases, hd-information is not optional; it is required.
+Patterns whose required biasing work remains below the low dynamic information thresholds (such as the laser resonant mode or basic negative feedback loops) can often be handled by low dynamic information. In contrast, patterns that simultaneously require both high state variety and high specificity within limited recovery times — for example, gene regulatory networks coordinating multiple signals across different timescales or immune systems discriminating among large numbers of antigens while mounting coordinated responses — appear to demand more than low dynamic information can provide. In such cases, high dynamic information seems required.
 
-By working with this distinction, readers gain a clearer way to reason about how much dynamic information is truly needed for a given task. It also offers a practical path to make the viability and capacity regions ($V \cup C$) from paper [1] more operational, giving new visibility into the relationship between pattern complexity and real system performance.
+This condition is proposed as a candidate criterion. Its precise form, the meaning of its terms, and the values of the thresholds $N_{S,ld}$ and $N_{Prc,ld}$ in different systems all remain open to empirical study and criticism.
 
 ---
 
