@@ -31,27 +31,27 @@ This paper addresses that gap.
 
 ## 2. Low and High Dynamic Information Content
 
-We propose the following distinction.
+We propose a simple distinction.
 
 Let $I$ be a dynamic information pattern acting within a system whose natural dynamics are $P(s_{t+1} \mid s_t)$. Define:
 
-- $N[S(I)]$: the effective number of distinguishable states or configurations the pattern can reliably engage or distinguish.  
-- $N[Prc(I)]$: the number of process steps or conditional operations required to map context or inputs to a biasing action.
+- $N[S(I)]$: the effective number of distinguishable states or configurations the pattern can engage.  
+- $N[Prc(I)]$: the number of process steps or conditional operations required to turn context into a biasing action.
 
-Let $N_{S,ld}$ and $N_{Prc,ld}$ be the threshold values separating low and high dynamic information for a given system.
+Let $N_{S,ld}$ and $N_{Prc,ld}$ be the threshold values that separate low and high dynamic information for a given system.
 
 **Low dynamic information (ld-information)** satisfies $N[S(I)] \leq N_{S,ld}$ and $N[Prc(I)] \leq N_{Prc,ld}$.
 
 **High dynamic information (hd-information)** satisfies $N[S(I)] \gg N_{S,ld}$ while $N[Prc(I)] \ll N[S(I)]$ yet $N[Prc(I)] > N_{Prc,ld}$.
 
-This distinction appears clearly in practice:
+This distinction shows up clearly in real systems:
 
 - **Laser resonant mode (ld-information)**: $N[S(I)] \approx 1$–10, $N[Prc(I)] \approx 1$.
-- **Basic negative feedback or simple homeostasis (ld-information)**: $N[S(I)] \approx 1$–10, $N[Prc(I)] \approx 1$–3.
+- **Basic negative feedback or simple homeostasis (ld-information)**: $N[S(I)] \approx 1$–10, $N[Prc(I)] \approx 1$–3$.
 - **Gene regulatory network (hd-information)**: $N[S(I)] \approx 10^2$–$10^4$, $N[Prc(I)] \approx 5$–20+.
 - **Immune recognition system (hd-information)**: $N[S(I)] \approx 10^6$–$10^8$, $N[Prc(I)] \approx 10$–50+.
 
-Threshold values $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent; methods for determining them are discussed in Section 7.
+The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent. Methods for determining them are discussed in Section 7.
 
 With this distinction in place, we can now state when hd-information becomes necessary.
 
@@ -72,9 +72,9 @@ where:
 - $C_{\text{ld}}$ is the maximum value of $S(W) \times \bigl(N[S(I)] \cdot N[Prc(I)]\bigr)$ that can be reliably achieved by patterns with ld-information,
 - $\tau_{\rm rec}$ is the time window required for the system to remain in or recover to the viability or capacity region $V \cup C$.
 
-We believe this relationship holds for a simple reason: systems whose work stays within modest specificity and modest values of $N[S(I)] \cdot N[Prc(I)]$ (such as the laser resonant mode or basic negative feedback loops) are reliably handled by ld-information. In contrast, systems whose work simultaneously demands high specificity and high values of $N[S(I)] \cdot N[Prc(I)]$ within tight recovery windows — such as gene regulatory networks coordinating multiple signals across timescales or immune recognition discriminating among vast numbers of antigens while mounting layered responses — consistently exceed what ld-information can deliver. In those cases, hd-information is not optional; it is required.
+We believe this relationship holds because systems whose work stays within modest specificity and modest values of $N[S(I)] \cdot N[Prc(I)]$ (such as the laser resonant mode or basic negative feedback loops) are reliably handled by ld-information. In contrast, systems whose work simultaneously demands high specificity and high values of $N[S(I)] \cdot N[Prc(I)]$ within tight recovery windows — such as gene regulatory networks coordinating multiple signals across timescales or immune recognition discriminating among vast numbers of antigens while mounting layered responses — consistently exceed what ld-information can deliver. In those cases, hd-information is not optional; it is required.
 
-By engaging with this distinction, readers gain a clearer way to reason about how much dynamic information is truly required for a given task and why. This framework also offers a practical way to define and operationalize the viability and capacity regions ($V \cup C$) introduced in the paper [1], providing new visibility into the relationship between pattern complexity and system performance under the assumed conditions the system must handle.
+By working with this distinction, readers gain a clearer way to reason about how much dynamic information is truly needed for a given task. It also offers a practical path to make the viability and capacity regions ($V \cup C$) from paper [1] more operational, giving new visibility into the relationship between pattern complexity and real system performance.
 
 ---
 
