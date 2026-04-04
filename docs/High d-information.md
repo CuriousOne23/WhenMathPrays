@@ -59,6 +59,7 @@ This distinction shows up clearly in real systems:
 
 The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent. Methods for determining them are discussed in Section 7.
 
+
 ---
 
 ## 3. When High Dynamic Information Becomes Necessary
