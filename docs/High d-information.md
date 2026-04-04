@@ -6,10 +6,10 @@ Curious One, Grok (xAI), Copilot (Microsoft)
 ---
 
 > **Rendering Note for GitHub**  
-> This document uses LaTeX-style mathematics. GitHub's default Markdown renderer does not display equations natively.  
-> - Equations will appear as raw text.  
-> - For proper rendering, view this file via **GitHub Pages** (with MathJax/KaTeX enabled) or use a browser extension such as MathJax or KaTeX userscripts.  
-> Mermaid diagrams render correctly on GitHub.
+> This document uses LaTeX-style mathematics. GitHub supports math rendering via MathJax in Markdown files, READMEs, issues, discussions, and wikis.  
+> - Inline math uses single `$...$` and display math uses `$$...$$`.  
+> - Rendering works best when viewing the file directly on GitHub.com.  
+> - On GitHub Pages (or some mobile apps), you may still need to enable MathJax/KaTeX explicitly in your site configuration.
 
 ---
 
@@ -52,8 +52,6 @@ This distinction shows up clearly in real systems:
 - **Immune recognition system (hd-information)**: $N[S(I)] \approx 10^6$–$10^8$, $N[Prc(I)] \approx 10$–50+.
 
 The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ are system-dependent. Methods for determining them are discussed in Section 7.
-
-With this distinction in place, we can now state when hd-information becomes necessary.
 
 ---
 
@@ -124,7 +122,7 @@ Design and evolutionary processes therefore balance these costs against benefits
 The distinction can be studied empirically using the two primary quantities introduced in Section 2:
 
 - $N[S(I)]$: effective number of distinguishable states the pattern can engage.  
-- $N[Prc(I)]$: number of process steps or conditional operations needed to produce the biasing action.
+- $N[Prc(I)]$: the number of process steps or conditional operations needed to produce the biasing action.
 
 These can be estimated through discretization of states, compression analysis, decision-tree depth, or causal graph methods. Conditional transfer entropy conditioned on trajectories remaining in $V \cup C$ provides a direct measure of how productively the pattern’s variety contributes to biasing work.
 
