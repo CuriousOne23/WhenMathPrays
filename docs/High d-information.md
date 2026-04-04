@@ -5,13 +5,6 @@ Curious One, Grok (xAI), Copilot (Microsoft)
 
 ---
 
-> **Rendering Note for GitHub**  
-> This document uses LaTeX-style mathematics. GitHub supports math rendering via MathJax in Markdown files, READMEs, issues, discussions, and wikis.  
-> - Inline math uses single `$...$` and display math uses `$$...$$`.  
-> - Rendering works best when viewing the file directly on GitHub.com.
-
----
-
 ## Abstract
 
 Most scientific fields use the concept of information, yet we lack good language to describe differences in the *amount* and *kind* of dynamic information needed for effective work. Building on the distinction between static and dynamic information introduced in the companion paper [1], this manuscript proposes a further practical distinction: low dynamic information versus high dynamic information.
