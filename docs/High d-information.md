@@ -188,23 +188,43 @@ In stable or predictable environments, low dynamic information is more efficient
 
 ---
 
-## 8. Measurable Proxies and Future Directions
+**Section 8: Measurable Proxies**
 
-Two quantities lie at the center of the distinction: $N[S(I)]$, the effective number of distinguishable states or configurations a pattern can engage, and $N[Prc(I)]$, the number of process steps or conditional operations required to turn context into a biasing action.
+To move from conceptual framing toward empirical investigation, we propose several practical and measurable proxies that can help identify, quantify, and distinguish low-dynamic from high-dynamic information in real systems.
 
-The thresholds $N_{S,ld}$ and $N_{Prc,ld}$ that mark the boundary between low and high dynamic information are system-dependent. You determine them by finding the point where further increases in state variety or processing depth no longer produce meaningful gains in the system’s ability to remain in or recover to the viability or capacity region $V \cup C$ within the recovery time $\tau_{\rm rec}$ you actually need.
+- **Perturbation experiments and recovery metrics**: Apply controlled perturbations and measure the recovery time $\tau_{\rm rec}$ needed to return to the viability region \(V\) or capacity region \(C\). Systems dominated by low-dynamic information typically show fast, stereotyped recovery in stable conditions, whereas high-dynamic information is indicated by more variable yet context-sensitive recovery trajectories when variability increases or recovery windows tighten.
 
-Here, $\tau_{\rm rec}$ is the time window available for recovery after a perturbation before coherence is lost. The viability region $V$ holds the states from which the system can continue to persist. The capacity region $C$ holds states reachable from $V$ that preserve core constraints while expanding the system’s effective range of response.
+- **Quantification of state variety and conditional processing**: Estimate $N[S(I)]$ (the number of distinguishable states in the informational pattern) and $N[Prc(I)]$ (the number of distinct conditional operations or branching logic). Empirical thresholds $N_{S,ld}$ and $N_{Prc,ld}$ can be approximated by identifying the point at which additional state richness or conditional complexity begins to deliver measurable improvements in biasing work within the required $\tau_{rec}\$.
 
-You can begin this work with data you already have. Take your perturbation-response records, time-series, or control experiments and systematically vary state variety ($N[S(I)]$) and processing depth ($N[Prc(I)]$). Track how key performance metrics respond: recovery probability within $\tau_{\rm rec}$, robustness to noise, and coordination success rate. The point where additional complexity stops delivering clear gains often reveals the transition from low to high dynamic information.
+- **Efficiency metric**: Operationalize the efficiency as
+  $$E = \frac{W_d}{C_{op}},$$
+  where $W_d$ is the effective dynamic work that contributes to viability- or capacity-enhancing trades, and $C_{op}$ is the total operational throughput under realistic conditions. This can be approximated through combined resource accounting and trajectory analysis.
 
-Conditional transfer entropy conditioned on trajectories that remain in $V \cup C$ provides one practical quantitative check on how effectively the pattern’s variety contributes to biasing work [4].
+- **Information-theoretic measures conditioned on viability**: Apply conditional transfer entropy (or related directed information measures) computed only along trajectories that remain inside $V \cup C$ [4]. Elevated values with rich conditional structure under variable or noisy conditions would support the presence of high-dynamic information.
 
-This framework is designed to be usable. Bring it to the systems you know best. Let it move through your data. Let it show you where low dynamic information is sufficient and where richer, more conditional patterns become necessary.
+These proxies are deliberately domain-agnostic and can be adapted to biological networks, engineered control systems, artificial intelligence architectures, or simulated models. Their specific values are expected to be context-dependent and should be calibrated within each class of system through careful experimental or simulation design.
 
 ---
 
-## 9. Conclusion
+**Section 9: Future Directions and Invitation to Inquiry**
+
+The framework developed in this paper builds upon the earlier static/dynamic information distinction by introducing a principled subdivision within dynamic information: low-dynamic patterns, which provide efficient biasing work in stable or low-variability regimes, versus high-dynamic patterns, which become necessary when environmental variability, noise, or tight recovery-time constraints $\tau_{\rm rec}$ demand richer state variety $N[S(I)]$ together with compact yet non-trivial conditional processing $N[Prc(I)]$.
+
+Combined with the proposed necessity condition (linked to the specificity of required biasing work $W$) and the efficiency metric $E = W_d / C_{op}$, the framework offers a domain-general lens for determining when informational complexity is mechanistically required for maintaining system viability or capacity.
+
+As with the foundational static/dynamic split, this work is intentionally conceptual and provisional. Thresholds such as $N_{S,ld}$ and $N_{Prc,ld}$ are context-dependent, and both the efficiency framing and the listed advantages/costs are presented as testable hypotheses rather than final conclusions.
+
+Our primary goal is not to present a definitive theory, but to invite rigorous inquiry into a vast and critically under-defined conceptual space: the functional role of informational patterns in performing real causal work for persistence and adaptability across biological, engineered, and artificial systems. The distinctions and conditions introduced here are meant as clear, falsifiable starting points that can be proved, disproved, extended, refined, added to, subtracted from, or modified as new evidence and applications arise.
+
+We particularly welcome empirical tests in concrete domains, such as contrasting low-dynamic bacterial chemotaxis or simple feedback loops with high-dynamic eukaryotic signal transduction networks, adaptive immunity, or predictive and learning-based control architectures in engineering and AI. Efforts that operationalize the measurable proxies outlined in Section 8, sharpen the necessity condition, explore cases where high-dynamic information becomes maladaptive (e.g., chronic inflammation or over-parameterized models), or build quantitative bridges between the two papers are especially encouraged.
+
+The intersection of information, dynamics, viability, and control remains large and in need of careful observation, formalization, and cross-disciplinary dialogue. If this framework provides a useful shared vocabulary, stimulates new experiments, or simply highlights productive questions, it will have fulfilled its intended purpose.
+
+Future extensions may include worked examples with simulated or real datasets, deeper integration with concepts from robustness, evolvability, and predictive processing, or further refinements driven by community input. Comments, critiques, data, and collaborative contributions are warmly encouraged.
+
+---
+
+## 10. Conclusion
 
 The binary distinction between static and dynamic information, introduced in paper [1], gives us a principled way to identify when a pattern performs work rather than merely existing. This manuscript extends that foundation by proposing a further practical distinction: low dynamic information versus high dynamic information, along with a candidate condition for when the richer form becomes necessary and a measure of efficiency.
 
