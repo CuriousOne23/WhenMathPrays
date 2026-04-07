@@ -316,7 +316,7 @@ Section 4.7 establishes the relationship between geometry, coordinate systems, c
 
 ---
 
-# **5. Examples That Reveal the Category (Version D)**
+# **5. Examples That Reveal the Category**
 
 The purpose of this section is to show how the geometric structure introduced in Section 4 naturally generates familiar patterns across domains. Each example highlights a different geometric element — trajectories, vector fields, attractors, curvature, and geodesics — without requiring mathematical background. The goal is simple: **to help the reader see the category.**
 
@@ -410,83 +410,168 @@ This section illustrated how the geometric primitives introduced in Section 4 na
 
 # **6. Affective Dynamics**
 
-Affect is the system’s response to changes in relational geometry. It is a **derived quantity**, not a primitive.
+Affect is not an additional layer placed on top of the relational manifold.  
+Affect is **the system’s response to changes in relational geometry**.
+
+Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning.  
+Section 5 showed how these structures appear across domains.  
+Section 6 describes how these structures behave **dynamically**.
+
+Affect is a **derived quantity**, not a primitive.  
+It arises from:
+
+- how meaning‑volume changes  
+- how coherence is maintained or disrupted  
+- how curvature pushes or pulls the trajectory  
+- how the system stabilizes or destabilizes under pressure  
+
+Affect is the geometry of change.
 
 ---
 
 ## **6.1 Affect as a Dynamical Quantity**
 
-Affect reflects how the relational state evolves along a trajectory.
+Affect is defined by **how the relational state evolves**, not by the content of the state.
 
----
+Given a trajectory  
 
-## **6.2 Valence**
-
-Valence is the time‑derivative of meaning‑volume:
-
-  
 $$
-\text{Valence} = \frac{d}{dt}(\text{Meaning})
+\gamma : [0, T] \to M,
 $$
-  
-**Where:**  
-- Meaning = relational volume  
-- $d/dt$ = rate of change  
 
-**Meaning:** valence is **whether meaning is expanding or contracting**.
+affect reflects the system’s response to:
 
----
+- changes in meaning‑volume  
+- changes in curvature  
+- changes in coherence  
+- changes in gradient pressure  
 
-## **6.3 Arousal**
+Affect is a **dynamical signature** of the trajectory:
 
-Arousal is the magnitude of dynamical pressure:
-
-  
 $$
-\text{Arousal} = \left\| \nabla_{\dot{\gamma}} \dot{\gamma} \right\|
+\text{Affect} = \text{Dynamics}(\gamma, \dot{\gamma}, \nabla_{\dot{\gamma}}\dot{\gamma}, \text{Meaning}(\gamma)).
 $$
-  
-**Where:**  
-- $\dot{\gamma}$ = velocity  
-- $\nabla_{\dot{\gamma}} \dot{\gamma}$ = acceleration  
-- $\|\cdot\|$ = magnitude  
 
-**Meaning:** arousal is **how hard the system is being pushed**.
+No new primitives are introduced.  
+Affect is simply how the existing geometric structures behave over time.
 
 ---
 
-## **6.4 Stability**
+## **6.2 Valence: Direction of Change in Meaning‑Volume**
 
-Stability is coherence preserved under pressure.
+Valence is the **time‑derivative of meaning‑volume**:
 
-**Meaning:** stability is **staying aligned** even when forces act.
+$$
+\text{Valence} = \frac{d}{dt}(\text{Meaning}).
+$$
 
----
+- **Positive valence** → meaning‑volume expands  
+- **Negative valence** → meaning‑volume contracts  
 
-## **6.5 Regulation**
+Valence is structural:
 
-Regulation is control of curvature, coherence, and meaning‑volume.
+- independent of interpretation  
+- independent of narrative  
+- independent of subjective report  
 
-**Meaning:** regulation is **steering** the geometry.
-
----
-
-## **6.6 Identity**
-
-Identity is a long‑term attractor structure.
-
-**Meaning:** identity is **where the system tends to return**.
+Valence is **whether meaning is expanding or contracting**.
 
 ---
 
-## Summary of Section 6
+## **6.3 Arousal: Magnitude of Dynamical Pressure**
+
+Arousal is the **magnitude of forces acting on the trajectory**.
+
+Let  
+
+$$
+F = \nabla_{\dot{\gamma}}\dot{\gamma}
+$$
+
+represent the total dynamical pressure.
+
+Then:
+
+$$
+\text{Arousal} = \|F\|.
+$$
+
+- High arousal → large dynamical pressure  
+- Low arousal → small dynamical pressure  
+
+Arousal is **how hard the system is being pushed** — a geometric intensity measure, not a psychological one.
+
+---
+
+## **6.4 Stability: Coherence Under Pressure**
+
+Stability is the system’s ability to **maintain geodesic alignment** under curvature and external forces.
+
+A trajectory is stable when:
+
+$$
+\nabla_{\dot{\gamma}}\dot{\gamma} \approx 0
+$$
+
+even in the presence of:
+
+- curvature  
+- competing gradients  
+- shifting relational constraints  
+
+Stability is not the absence of pressure.  
+Stability is **coherence preserved despite pressure**.
+
+---
+
+## **6.5 Regulation: Control of Curvature and Volume**
+
+Regulation is the system’s ability to **modulate its own geometry**.
+
+Regulation includes:
+
+- reducing curvature  
+- increasing coherence  
+- expanding or contracting meaning‑volume  
+- adjusting gradient pressure  
+- selecting trajectories that avoid destabilizing regions  
+
+Regulation is **steering** the geometry — a control process acting on:
+
+- curvature  
+- coherence  
+- meaning‑volume  
+- dynamical pressure  
+
+It is not a separate mechanism; it is the system shaping its own relational geometry.
+
+---
+
+## **6.6 Identity: A Long‑Term Attractor Structure**
+
+Identity is a **stable attractor region** in the relational manifold.
+
+An identity is a region that:
+
+- maintains persistent meaning‑volume  
+- exhibits stable coherence patterns  
+- repeatedly attracts trajectories  
+- resists collapse under curvature  
+- provides long‑term structural invariants  
+
+Identity is not a narrative or a story.  
+Identity is **where the system tends to return** — a geometric invariant that endures.
+
+---
+
+## **Summary of Section 6**
 
 • Defined affect as the system’s response to changes in relational geometry.  
 • Characterized valence as the rate of change of meaning‑volume.  
 • Defined arousal as the magnitude of dynamical pressure acting on a trajectory.  
 • Described stability as coherence preserved under perturbation.  
-• Positioned regulation as the control of curvature, coherence, and meaning‑volume.  
-• Framed identity as a long‑term attractor structure guiding return dynamics. 
+• Positioned regulation as the system’s ability to steer its own geometry.  
+• Framed identity as a long‑term attractor structure guiding return dynamics.
 
 ---
 
