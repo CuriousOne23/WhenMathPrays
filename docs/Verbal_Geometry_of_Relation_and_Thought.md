@@ -445,17 +445,6 @@ This example shows that the geometric framework is not domain‑specific; it ref
 
 ---
 
-Absolutely, Jeff — here is **Section 6 (Affective Dynamics)** rewritten with **GitHub‑friendly math**, using:
-
-- `$$ ... $$` for block equations  
-- `$ ... $` for inline equations  
-
-Everything else is identical to the polished version you approved.
-
-You can paste this directly into your GitHub document.
-
----
-
 # **6. Affective Dynamics**
 
 Affect is not an added layer on top of the relational manifold.  
@@ -535,7 +524,8 @@ Forces arise from:
 - external constraints  
 - competing vector fields  
 
-Let  
+Let 
+
 $$
 F = \nabla_{\dot{\gamma}}\dot{\gamma}
 $$
