@@ -1015,83 +1015,161 @@ Narrative is the **multi‑trajectory geometry** of meaning.
 
 ---
 
-# **10. Stability, Plasticity, and Affective Learning**
+# **10. Stability, Plasticity, and Affective Learning (Version D, GitHub‑Friendly)**
 
-Learning is geometric rewriting of curvature, attractors, and meaning‑volume.  
-Stability and plasticity are not opposites; they are complementary geometric properties.
+Stability and plasticity describe how the relational manifold changes over time.  
+Affective learning describes how curvature, attractors, and coherence reorganize in response to experience.
+
+This section introduces no new primitives.  
+It shows how the existing geometric structures — attractors, curvature, meaning‑volume, and resonance — evolve under pressure, repetition, and interaction.
+
+Learning is **geometric rewriting**:  
+the manifold reshapes itself to improve coherence, reduce instability, and deepen useful attractors.
 
 ---
 
 ## **10.1 How Attractors Deepen, Weaken, and Reorganize**
 
-Let $D$ denote **attractor depth**.  
-Its evolution depends on exposure, pressure, and resonance:
+Attractors are dynamic.  
+Their depth, width, and shape evolve with experience.
 
-  
-$$
-\frac{dD}{dt} = g(\text{exposure}, \text{pressure}, \text{resonance})
-$$
-  
-**Where:**  
-- $D$ = attractor depth  
-- $g(\cdot)$ = some function of experience  
+Let $A_t$ denote an attractor at time $t$.  
+Let $D_t$ denote its depth.  
+Its evolution is governed by:
 
-**Meaning:** attractors deepen with reinforcement and weaken with disuse.
+$$
+\frac{d}{dt} D_t = f(\text{frequency}, \text{coherence}, \text{resonance}).
+$$
+
+Attractors **deepen** when:
+
+- trajectories repeatedly converge into them  
+- coherence within the basin increases  
+- resonance with other trajectories reinforces the region  
+
+Attractors **weaken** when:
+
+- trajectories stop visiting the region  
+- curvature flattens  
+- meaning‑volume diffuses  
+
+Attractors **reorganize** when:
+
+- new gradients emerge  
+- curvature shifts  
+- resonance patterns change  
+- the system undergoes large‑scale restructuring  
+
+Reorganization is **adaptive geometric refinement**, not failure.
 
 ---
 
 ## **10.2 Fractal Synchronization**
 
-Let $\Delta K_{\text{local}}$ be a local curvature change.  
-Propagation to global curvature depends on resonance:
+Learning is not confined to a single scale.  
+Changes at one level propagate across others.
 
-  
-$$
-\Delta K_{\text{global}} \approx h(\text{resonance}) \cdot \Delta K_{\text{local}}
-$$
-  
-**Where:**  
-- $h(\text{resonance})$ = scaling factor  
-- $\Delta K_{\text{global}}$ = global curvature change  
+Fractal synchronization occurs when:
 
-**Meaning:** small insights can produce large conceptual shifts.
+- local attractor changes  
+- propagate to intermediate structures  
+- which propagate to global structures  
+
+Formally, if $A_s$ is an attractor at scale $s$, then:
+
+$$
+\Delta A_s \rightarrow \Delta A_{s+1} \rightarrow \Delta A_{s+2}.
+$$
+
+This produces:
+
+- conceptual alignment  
+- narrative coherence  
+- stable identity curvature  
+- multi‑scale resonance  
+
+Fractal synchronization explains why:
+
+- small insights reorganize large conceptual regions  
+- repeated micro‑experiences reshape identity  
+- local instability can cascade into global change  
+
+Learning is **scale‑coupled geometric evolution**.
 
 ---
 
 ## **10.3 Identity Curvature Development**
 
-Identity curvature evolves slowly through long‑term resonance.  
-Let $K_{\text{id}}$ denote identity curvature:
+Identity is a long‑term attractor structure (Section 6.6).  
+Its curvature evolves through repeated interaction with the environment.
 
-  
+Let $K_{\text{id}}(t)$ denote identity curvature at time $t$.  
+Its evolution is governed by:
+
 $$
-\frac{dK_{\text{id}}}{dt} = \text{slow, cumulative, resonance‑driven}
+\frac{d}{dt} K_{\text{id}} = g(\text{experience}, \text{resonance}, \text{coherence}, \text{pressure}).
 $$
-  
-**Meaning:** identity changes gradually through repeated patterns.
+
+Identity curvature **increases** when:
+
+- attractors stabilize  
+- coherence strengthens  
+- meaning‑volume concentrates  
+- resonance patterns become consistent  
+
+Identity curvature **decreases** when:
+
+- attractors weaken  
+- coherence fragments  
+- meaning diffuses  
+- resonance collapses  
+
+Identity is not fixed.  
+It is a **slowly evolving geometric structure** shaped by long‑term learning.
 
 ---
 
 ## **10.4 Learning as Geometric Rewriting**
 
-Learning improves coherence and reduces instability by rewriting:
+Learning is the process by which the manifold rewrites itself to improve coherence and reduce instability.
 
-- curvature  
-- attractor depth  
-- meaning‑volume  
-- resonance structure  
+Let $M_t$ denote the manifold at time $t$.  
+Learning corresponds to:
 
-**Meaning:** learning is **geometric transformation**, not storage.
+$$
+M_{t+1} = \text{Rewrite}(M_t, \Delta K, \Delta A, \Delta \nabla M).
+$$
+
+Learning occurs when:
+
+- curvature adjusts to reduce pressure  
+- attractors reshape to improve stability  
+- meaning‑gradients sharpen or flatten  
+- coherence increases across scales  
+
+Learning is not the accumulation of facts.  
+Learning is **geometric optimization**:
+
+- reducing unnecessary curvature  
+- deepening useful attractors  
+- flattening harmful basins  
+- improving geodesic alignment  
+- increasing global coherence  
+
+Affective learning is the **dynamical refinement** of the relational manifold.
 
 ---
 
-## Summary of Section 10
+## **Summary of Section 10**
 
-• Defined learning as geometric rewriting of curvature, attractor depth, and meaning‑volume.  
-• Explained how attractors deepen, weaken, or reorganize through exposure, pressure, and resonance.  
-• Described fractal synchronization, where small local changes can propagate into global conceptual shifts.  
-• Characterized identity curvature as a slow, resonance‑driven accumulation of long‑term patterns.  
-• Positioned learning as structural transformation rather than storage or retrieval.
+Stability, plasticity, and affective learning describe how the manifold evolves:
+
+- **attractors** deepen, weaken, and reorganize  
+- **fractal synchronization** couples learning across scales  
+- **identity curvature** develops through long‑term resonance  
+- **learning** is geometric rewriting of curvature, attractors, and meaning  
+
+Learning is the **adaptive reshaping** of relational geometry.
 
 ---
 
