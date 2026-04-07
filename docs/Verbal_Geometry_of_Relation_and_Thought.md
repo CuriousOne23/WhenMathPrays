@@ -85,12 +85,12 @@ This section introduces the minimal geometric primitives used throughout the man
 
 ## **4.1 The Relational Manifold**
 
-We model meaning as motion through a **relational manifold** \( M \).  
+We model meaning as motion through a **relational manifold** $M$.  
 A manifold is a space that is locally smooth—small neighborhoods behave like familiar Euclidean space—while allowing global curvature.
 
-- \( M \): the manifold of relational meaning  
-- \( x \in M \): a point representing a momentary configuration of relations  
-- \( T_x M \): the tangent space at \( x \), containing all possible instantaneous directions of motion  
+- $M$: the manifold of relational meaning  
+- $x \in M$: a point representing a momentary configuration of relations  
+- $T_x M$: the tangent space at $x$, containing all possible instantaneous directions of motion  
 
 The manifold is **substrate‑independent**: it does not assume neurons, symbols, circuits, or language. It is simply a structured space in which relations can move.
 
@@ -104,10 +104,10 @@ $$
 \gamma(t) : \mathbb{R} \rightarrow M
 $$
 
-- \( t \): time or progression parameter  
-- \( \gamma(t) \): the location in the manifold at time \( t \)  
-- \( \dot{\gamma}(t) \): the velocity (first derivative)  
-- \( \ddot{\gamma}(t) \): the acceleration (second derivative)  
+- $t$: time or progression parameter  
+- $\gamma(t)$: the location in the manifold at time $t$  
+- $\dot{\gamma}(t)$: the velocity (first derivative)  
+- $\ddot{\gamma}(t)$: the acceleration (second derivative)  
 
 **Meaning:**  
 A trajectory represents how an interpretation, thought, or relational configuration evolves.
@@ -123,20 +123,21 @@ $$
 V(x) \in T_x M
 $$
 
-- \( V \): a vector field assigning a direction of motion at each point  
-- \( V(x) \): the direction in which the verb pushes the trajectory at location \( x \)  
+- $V$: a vector field assigning a direction of motion at each point  
+- $V(x)$: the direction in which the verb pushes the trajectory at location $x$  
 
 **Meaning:**  
-A verb is not an object but a **force‑like influence** that moves thought.
+A verb is not an object but a force‑like influence that moves a trajectory through the relational manifold.
 
 ---
 
-## **4.4 Noun Attractors**
+## 4.4 Noun Attractors: $A$
 
 Nouns stabilize motion.  
-We model them as **attractors**—regions toward which trajectories converge.
+We model them as attractors — regions toward which trajectories converge.  
+We denote an attractor by $A$.
 
-Let \( A \subset M \) be an attractor with potential function \( \phi(x) \).
+Let $A \subset M$ be an attractor with potential function $\phi(x)$.
 
 The attractor’s pull is given by the gradient:
 
@@ -144,8 +145,8 @@ $$
 \nabla \phi(x)
 $$
 
-- \( \phi(x) \): potential function encoding stability  
-- \( \nabla \phi(x) \): direction of steepest descent toward the attractor  
+- $\phi(x)$: potential function encoding stability  
+- $\nabla \phi(x)$: direction of steepest descent toward the attractor  
 
 **Meaning:**  
 A noun is a **stable basin** where motion settles.
@@ -161,8 +162,10 @@ $$
 R(X, Y)Z
 $$
 
-- \( R \): curvature operator  
-- \( X, Y, Z \in T_x M \): tangent vectors  
+Here, $R(X,Y)$ is a linear operator, and $R(X,Y)Z$ denotes that operator applied to the vector $Z$.
+
+- $R$: curvature operator  
+- $X, Y, Z \in T_x M$: tangent vectors; can be arbitrary length and direction  
 
 **Meaning:**  
 Curvature measures how interpretations warp—how small changes can produce large shifts.
@@ -174,21 +177,21 @@ Low curvature → stable, predictable movement.
 
 ## **4.6 Coherence**
 
-Coherence measures how well trajectories stay aligned.
+Coherence measures how well trajectories stay aligned over time.
 
-Let \( \gamma_1(t) \) and \( \gamma_2(t) \) be two trajectories.  
+Let $\gamma_1(t)$ and $\gamma_2(t)$ be two trajectories.  
 Define coherence:
 
 $$
 C(t) = 1 - \frac{d(\gamma_1(t), \gamma_2(t))}{D_{\max}}
 $$
 
-- \( d(\cdot,\cdot) \): distance on the manifold  
-- \( D_{\max} \): normalization constant  
+- $d(\cdot,\cdot)$: distance on the manifold  
+- $D_{\max}$: normalization constant; sets the maximum meaningful distance between trajectories for scaling  
 
 **Meaning:**  
-High coherence → shared understanding.  
-Low coherence → fragmentation.
+High coherence, with a value equal to or close to 1, indicates shared understanding or aligned interpretive motion.  
+Low coherence, with a value near or equal to 0, indicates divergence or fragmentation — a non‑coherent state.
 
 ---
 
@@ -200,8 +203,8 @@ $$
 \dot{\gamma}(t) = V(\gamma(t)) - \nabla \phi(\gamma(t))
 $$
 
-- \( V(\gamma(t)) \): verb‑driven motion  
-- \( -\nabla \phi(\gamma(t)) \): noun‑driven stabilization  
+- $V(\gamma(t))$: verb‑driven motion  
+- $-\nabla \phi(\gamma(t))$: noun‑driven stabilization  
 
 **Meaning:**  
 Thought is the interplay of motion (verbs) and stabilization (nouns) within a curved relational space.
@@ -212,12 +215,12 @@ Thought is the interplay of motion (verbs) and stabilization (nouns) within a cu
 
 This section introduced the minimal geometric primitives:
 
-- **Manifold** \( M \): the space of relational meaning  
-- **Trajectories** \( \gamma(t) \): paths of evolving interpretation  
-- **Verb fields** \( V(x) \): forces that generate motion  
-- **Noun attractors** \( \phi(x) \): basins that stabilize motion  
-- **Curvature** \( R \): how meaning bends  
-- **Coherence** \( C(t) \): alignment of trajectories  
+- **Manifold** $M$: the space of relational meaning  
+- **Trajectories** $\gamma(t)$: paths of evolving interpretation  
+- **Verb fields** $V(x)$: forces that generate motion  
+- **Noun attractors** $\phi(x)$: basins that stabilize motion  
+- **Curvature** $R$: how meaning bends  
+- **Coherence** $C(t)$: alignment of trajectories  
 
 These primitives form the foundation for the examples, analyses, and applications developed in later sections.
 
