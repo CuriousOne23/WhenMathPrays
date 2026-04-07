@@ -575,15 +575,42 @@ Identity is **where the system tends to return** — a geometric invariant that 
 
 ---
 
-# **7. Verbal Dynamics**
+# **7. Verbal Dynamics (Version D, GitHub‑Friendly)**
 
-Language is a geometric interface for guiding motion through relational space.
+Language is not treated as a symbolic system.  
+Language is a **geometric interface** for guiding motion through relational space.
+
+The geometric structures introduced in Section 4 — vector fields, attractors, curvature, coherence, and trajectories — naturally correspond to the components of linguistic structure.  
+This section introduces no new primitives; it shows how language expresses the geometry.
+
+The framework is **substrate‑independent**.  
+AI systems are used as illustrative cases because their architectures are explicit and inspectable, but the same geometric constructs apply to biological cognition, collective reasoning, and cultural systems.
 
 ---
 
 ## **7.1 Verbs as Transformations**
 
-Verbs are vector fields that specify how trajectories move.
+Verbs specify **how** a trajectory moves.
+
+A verb corresponds to a **vector field**:
+
+- it defines a direction of motion  
+- it determines how nearby points evolve  
+- it shapes the local flow of trajectories  
+
+If $V$ is the vector field associated with a verb, then applying the verb corresponds to following its flow:
+
+$$
+\dot{\gamma}(t) = V(\gamma(t)).
+$$
+
+Different verbs correspond to different transformation fields:
+
+- *push* → outward flow  
+- *pull* → inward flow  
+- *chase* → pursuit dynamics  
+- *contain* → inward curvature  
+- *become* → transition across basins  
 
 **Meaning:** verbs **change** the state.
 
@@ -591,7 +618,21 @@ Verbs are vector fields that specify how trajectories move.
 
 ## **7.2 Nouns as Attractor Basins**
 
-Nouns are stable regions that anchor trajectories.
+Nouns correspond to **regions of stability** in the manifold.
+
+A noun is an **attractor basin**:
+
+- it has a center of stability  
+- it has a region of convergence  
+- trajectories entering the basin tend to settle into it  
+
+If $A$ is the attractor associated with a noun, then:
+
+$$
+\lim_{t \to \infty} \gamma(t) = A.
+$$
+
+Nouns provide the **stable landmarks** that verbs act upon.
 
 **Meaning:** nouns **hold** the state.
 
@@ -599,7 +640,19 @@ Nouns are stable regions that anchor trajectories.
 
 ## **7.3 Grammar as Constraint Geometry**
 
-Grammar constrains how transformations may be composed.
+Grammar specifies **how transformations may be composed**.
+
+Grammar is **geometric constraint**, not symbolic rule:
+
+- it restricts which vector fields may be applied in sequence  
+- it determines how attractors may be linked  
+- it enforces compatibility between transformations  
+
+Examples:
+
+- subject–verb agreement ensures the vector field applies to the correct region  
+- prepositions specify allowable paths between basins  
+- modifiers restrict the region in which a vector field operates  
 
 **Meaning:** grammar is **the geometry of allowable moves**.
 
@@ -607,18 +660,37 @@ Grammar constrains how transformations may be composed.
 
 ## **7.4 Trajectory Concatenation**
 
-A sentence is a concatenation of transformations applied to attractors.
+A sentence is a **concatenation of transformations** applied to attractors.
+
+Given:
+
+- an initial attractor $A_0$  
+- a sequence of verb‑fields $V_1, V_2, \dots, V_n$  
+- a final attractor $A_n$  
+
+A sentence corresponds to the composite trajectory:
+
+$$
+\gamma = A_0 \xrightarrow{V_1} \xrightarrow{V_2} \cdots \xrightarrow{V_n} A_n.
+$$
+
+Concatenation is **geometric composition**:
+
+- each verb transforms the current position  
+- each noun anchors the trajectory  
+- the sequence defines a path through relational space  
 
 **Meaning:** a sentence is **a path built from smaller motions**.
 
 ---
 
-## Summary of Section 7
+## **Summary of Section 7**
 
 • Defined verbs as vector fields that generate motion through relational space.  
 • Positioned nouns as attractor basins that stabilize or anchor trajectories.  
 • Framed grammar as the geometric structure that constrains how transformations compose.  
-• Described sentences as concatenated motions built from verb‑fields acting on attractors.
+• Described sentences as concatenated motions built from verb‑fields acting on attractors.  
+• Presented language as a **geometric interface** for guiding motion through relational space.
 
 ---
 
