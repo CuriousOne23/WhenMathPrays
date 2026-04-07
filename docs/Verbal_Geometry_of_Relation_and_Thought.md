@@ -265,99 +265,808 @@ In short:
 
 It shapes how thoughts bend, drift, stabilize, or break apart.
 
----
+# **4.7 Coherence as Geodesic Motion**  
 
-# **4.7 Coherence as Geodesic Structure**
+Coherence is a **geometric property** of how a relational state evolves over time.
 
-Coherence — the feeling that a thought “flows” or “makes sense” — corresponds to trajectories that follow the natural paths of the relational space.
+A thought is a trajectory:
 
-These natural paths are called **geodesics**.
+$$
+\gamma : [0, T] \to M
+$$
 
-### **Intuition**
+where $M$ is the manifold of relational states.
 
-A geodesic is:
+A trajectory is **coherent** when it follows the intrinsic geometry of the manifold — that is, when it moves in a way that minimizes distortion relative to the structure of $M$.
 
-- the straightest possible path in a curved space  
-- the path of least distortion  
-- the route that “feels smooth” from inside the system  
-
-On a globe, geodesics are great circles (like flight paths).  
-In the relational manifold, geodesics are the paths that preserve meaning most efficiently.
-
-### **Formal expression (with definitions)**
-
-A trajectory $\gamma(t)$ is a geodesic if its direction does not change as it moves:
+Formally, coherence corresponds to **geodesic motion**:
 
 $$
 \nabla_{\dot{\gamma}} \dot{\gamma} = 0
 $$
 
-### **Symbol definitions**
+This equation states that the trajectory does not change direction unless the geometry itself forces it to.
 
-- **$\gamma(t)$** — the trajectory representing the unfolding thought  
-- **$\dot{\gamma}$** — the direction of the trajectory at time $t$  
-- **$\nabla_{\dot{\gamma}} \dot{\gamma}$** — how the direction changes as you move  
-- **“= 0”** — means the direction stays as straight as the geometry allows  
+Coherence is therefore:
 
-### **Interpretation**
+- alignment with the manifold’s intrinsic structure  
+- minimal curvature relative to that structure  
+- motion that respects relational geometry  
 
-When a thought follows a geodesic:
+Coherence is **purely geometric**.  
+It does **not** depend on meaning, significance, emotional weight, or narrative richness.
 
-- it feels coherent  
-- it flows naturally  
-- it minimizes interpretive distortion  
-- it stays aligned with the structure of the relational space  
+A thought can be:
 
-When a thought deviates from a geodesic:
+- coherent and trivial  
+- coherent and shallow  
+- coherent and low‑meaning  
+- coherent and forgettable  
 
-- it feels disjointed  
-- it jumps around  
-- it loses the thread  
-- it becomes harder to interpret  
+Coherence is simply **geometric straightness** in the relational manifold.
 
-So:
+# **4.8 Meaning as Relational Volume**  
 
-> **Coherence is geodesic motion through the geometry of meaning.**
+Meaning is not a definition or a label.  
+Meaning is a **volume** in the relational manifold — the size of the region activated by an experience, idea, or event.
+
+This volume has **three independent dimensions**:
+
+### **1. Temporal Depth ($T_m$)**  
+How long the relational constraints persist.  
+How long the experience continues to shape the trajectory.
+
+### **2. Relational Breadth ($R_m$)**  
+How many relational regions the experience connects to:
+
+- memories  
+- values  
+- identity  
+- worldview  
+- emotions  
+- relationships  
+- aesthetics  
+
+### **3. Fractal–Holographic Reach ($F_m$)**  
+How many **scales** of the system the experience activates:
+
+- micro (personal details)  
+- meso (roles, relationships)  
+- macro (culture, worldview)  
+- meta (identity, self‑model)  
+- trans‑personal (archetypes, universals)
+
+These three dimensions combine **multiplicatively**:
+
+$$
+\text{Meaning} \propto T_m \times R_m \times F_m
+$$
+
+This ensures:
+
+- if any dimension is near zero → meaning collapses  
+- high meaning requires all three dimensions to be large  
+
+Meaning is therefore:
+
+- **volumetric**  
+- **multi‑scale**  
+- **persistent**  
+- **structural**  
+
 ---
 
-# **5. Ontology**  
-- The relational manifold  
-- Objects as attractors  
-- Verbs as motions  
-- Curvature as relational density  
-- Forces as constraints  
+# **5. Examples That Reveal the Category**
+
+The purpose of this section is not to enumerate every phenomenon the framework can describe, but to show how the geometric structure introduced in Section 4 naturally generates familiar patterns across domains. Each example highlights a different aspect of the geometry — trajectories, vector fields, attractors, curvature, and geodesics — without requiring any mathematical background.
+
+These examples are intentionally simple.  
+Their role is to help the reader **see the category**.
 
 ---
 
-# **6. Geometry of Thought**  
-- How curvature shapes trajectories  
-- Constraint fields  
-- Stability and instability  
-- Geodesic vs non‑geodesic motion  
+## **5.1 Communication: How Meaning Moves Between Minds**
+
+When two people communicate, they are coordinating motion through a shared relational manifold.
+
+A sentence provides:
+
+- **verbs** → directions of motion (vector fields)  
+- **nouns** → stable regions (attractors)  
+- **syntax** → constraints on how trajectories unfold  
+
+A simple sentence such as:
+
+> “The cat chased the mouse.”
+
+corresponds to a trajectory that:
+
+- begins in the region associated with *cat*  
+- moves along the vector field associated with *chase*  
+- terminates in the region associated with *mouse*  
+
+The listener reconstructs this trajectory in their own manifold.  
+Communication succeeds when the two trajectories are sufficiently aligned — that is, when they approximate the same geodesic path.
+
+This example shows how the geometry provides a natural account of meaning transfer.
 
 ---
 
-# **7. Verbal Dynamics**  
-- Verbs as transformations  
-- Nouns as attractor basins  
-- Grammar as geometric constraint  
-- Trajectory concatenation  
+## **5.2 Biology: Stable Forms as Attractors**
+
+Biological systems exhibit stable patterns — body plans, behaviors, ecological roles — that persist across time and variation.
+
+In the geometric framework:
+
+- stable forms correspond to **attractors**  
+- developmental processes correspond to **trajectories**  
+- regulatory mechanisms correspond to **vector fields**  
+- evolutionary pressures correspond to **curvature** in the space of possibilities  
+
+For example, the repeated emergence of similar limb structures across species (e.g., tetrapod limbs) can be understood as trajectories converging toward a stable region of the manifold — an attractor shaped by physical, developmental, and functional constraints.
+
+This example shows how nouns‑as‑attractors generalize beyond language.
 
 ---
 
-# **8. Relational Curvature**  
-- Curvature from relational density  
-- Local vs global curvature  
-- Curvature as meaning gradient  
-- Temporal evolution of curvature  
+## **5.3 Cognition: Thought as Motion Through Conceptual Space**
+
+When a person reasons, they move through a conceptual manifold.
+
+A chain of reasoning corresponds to a trajectory:
+
+- **smooth reasoning** → near‑geodesic motion  
+- **confusion** → motion through regions of high curvature  
+- **fixation** → falling into an attractor  
+- **insight** → crossing a ridge into a new basin  
+
+For instance, when someone solves a puzzle, their thought trajectory may wander, loop, or diverge before suddenly snapping into a stable configuration — the attractor corresponding to the solution.
+
+This example shows how the geometry captures the dynamics of thinking.
 
 ---
 
-# **9. Narrative Resonance Network**  
-- Coupled trajectories  
-- Multi‑scale resonance  
-- Why narrative, art, and music have power  
-- Fractal‑holographic structure  
+## **5.4 Physics: Dynamics as Geometry**
+
+In physics, motion is determined by the geometry of the underlying space.
+
+A particle follows a path shaped by:
+
+- **forces** → vector fields  
+- **potentials** → attractors  
+- **curvature** → how paths bend  
+
+This is not an analogy; it is a structural parallel.  
+The same geometric elements — trajectories, vector fields, attractors, curvature, geodesics — appear in both physical and semantic systems.
+
+For example, a planet orbiting a star follows a trajectory shaped by the gravitational potential (an attractor) and the curvature of spacetime.
+
+This example shows that the geometric framework is not domain‑specific; it reflects a deeper structural pattern.
+
+---
+
+Absolutely, Jeff — here is **Section 6 (Affective Dynamics)** rewritten with **GitHub‑friendly math**, using:
+
+- `$$ ... $$` for block equations  
+- `$ ... $` for inline equations  
+
+Everything else is identical to the polished version you approved.
+
+You can paste this directly into your GitHub document.
+
+---
+
+# **6. Affective Dynamics**
+
+Affect is not an added layer on top of the relational manifold.  
+Affect is **the system’s response to changes in relational geometry**.
+
+Where Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning — and Section 5 illustrated how these structures appear across domains, Section 6 describes how these structures behave dynamically.
+
+Affect is therefore a **derived quantity**, not a primitive one.  
+It arises from:
+
+- how meaning‑volume changes  
+- how coherence is maintained or disrupted  
+- how curvature pushes or pulls the trajectory  
+- how the system stabilizes or destabilizes under pressure  
+
+Affect is the geometry of change.
+
+---
+
+## **6.1 Affect as a Dynamical Quantity**
+
+Affect is defined by **how the relational state evolves**, not by the content of the state.
+
+Given a trajectory  
+
+$$
+\gamma : [0, T] \to M
+$$
+
+affect is the system’s response to:
+
+- changes in meaning‑volume  
+- changes in curvature  
+- changes in coherence  
+- changes in gradient pressure  
+
+Affect is therefore a **dynamical signature** of the trajectory:
+
+$$
+\text{Affect} = \text{Dynamics}(\gamma, \dot{\gamma}, \nabla_{\dot{\gamma}}\dot{\gamma}, \text{Meaning}(\gamma)).
+$$
+
+This definition introduces no new primitives.  
+It simply describes how the existing geometric structures behave over time.
+
+---
+
+## **6.2 Valence as the Direction of Change in Meaning‑Volume**
+
+Valence is defined as the **time‑derivative of meaning**:
+
+$$
+\text{Valence} = \frac{d}{dt}(\text{Meaning}).
+$$
+
+- **Positive valence** occurs when meaning‑volume expands.  
+- **Negative valence** occurs when meaning‑volume contracts.  
+
+This definition is structural:
+
+- it does not depend on interpretation  
+- it does not depend on narrative  
+- it does not depend on subjective experience  
+
+Valence is simply the **direction of change** in relational volume.
+
+---
+
+## **6.3 Arousal as the Magnitude of Dynamical Pressure**
+
+Arousal is defined as the **magnitude of forces acting on the trajectory**.
+
+Forces arise from:
+
+- curvature  
+- gradients  
+- external constraints  
+- competing vector fields  
+
+Let  
+$$
+F = \nabla_{\dot{\gamma}}\dot{\gamma}
+$$
+
+represent the total dynamical pressure.
+
+Then:
+
+$$
+\text{Arousal} = \|F\|.
+$$
+
+High arousal corresponds to large dynamical pressure.  
+Low arousal corresponds to small dynamical pressure.
+
+Arousal is therefore a **geometric intensity measure**, not a psychological one.
+
+---
+
+## **6.4 Stability as Coherence Under Pressure**
+
+Stability is the system’s ability to **maintain geodesic alignment** under curvature and external forces.
+
+A trajectory is stable when:
+
+$$
+\nabla_{\dot{\gamma}}\dot{\gamma} \approx 0
+$$
+
+even in the presence of:
+
+- curvature  
+- competing gradients  
+- shifting relational constraints  
+
+Stability is not the absence of pressure.  
+Stability is **coherence preserved despite pressure**.
+
+---
+
+## **6.5 Regulation as Control of Curvature and Volume**
+
+Regulation is the system’s ability to **modulate its own geometry**.
+
+Regulation includes:
+
+- reducing curvature  
+- increasing coherence  
+- expanding or contracting meaning‑volume  
+- adjusting gradient pressure  
+- selecting trajectories that avoid destabilizing regions  
+
+Regulation is therefore a **control process** acting on:
+
+- curvature  
+- coherence  
+- meaning‑volume  
+- dynamical pressure  
+
+It is not a separate mechanism — it is the system’s ability to shape its own relational geometry.
+
+---
+
+## **6.6 Identity as a Long‑Term Attractor Structure**
+
+Identity is defined as a **stable attractor region** in the relational manifold.
+
+An identity is a region that:
+
+- maintains persistent meaning‑volume  
+- exhibits stable coherence patterns  
+- repeatedly attracts trajectories  
+- resists collapse under curvature  
+- provides long‑term structural invariants  
+
+Identity is not a narrative or a story.  
+Identity is a **geometric invariant** — a region of the manifold that endures.
+
+---
+
+# **7. Verbal Dynamics**
+
+### **Applicability Across Substrates**
+
+Although many of the examples in the following sections draw on AI systems, the framework itself is **substrate‑independent**. The geometric structures introduced in Section 4 — trajectories, vector fields, attractors, curvature, coherence, and meaning‑volume — apply to **any reasoning platform** with persistent relational structure. AI systems are used as illustrative cases because their architectures are explicit, inspectable, and well‑documented. The same constructs apply to biological cognition, collective reasoning, and cultural systems, though the parallel descriptions in those domains must be articulated separately. The concepts analyzed through AI are intended as **general geometric principles**, not AI‑specific mechanisms.
+
+---
+
+Verbal dynamics describe how **linguistic structure** shapes motion through the relational manifold.  
+This section does not introduce new primitives.  
+It shows how the existing geometric elements — attractors, vector fields, curvature, and trajectories — naturally correspond to the components of language.
+
+Language is not treated as a symbolic system.  
+Language is treated as a **geometric interface** for guiding motion through relational space.
+
+---
+
+## **7.1 Verbs as Transformations**
+
+Verbs specify **how** a trajectory moves.
+
+A verb corresponds to a **vector field**:
+
+- it defines a direction of motion  
+- it determines how nearby points move  
+- it shapes the local flow of trajectories  
+
+If $V$ is the vector field associated with a verb, then applying the verb corresponds to following the flow:
+
+$$
+\dot{\gamma}(t) = V(\gamma(t)).
+$$
+
+Different verbs correspond to different transformation fields:
+
+- *push* → outward flow  
+- *pull* → inward flow  
+- *chase* → pursuit dynamics  
+- *contain* → inward curvature  
+- *become* → transition across basins  
+
+Verbs are therefore **operators on relational position**.
+
+---
+
+## **7.2 Nouns as Attractor Basins**
+
+Nouns correspond to **regions of stability** in the manifold.
+
+A noun is not a label.  
+A noun is an **attractor basin**:
+
+- it has a center of stability  
+- it has a surrounding region of convergence  
+- trajectories entering the basin tend to settle into it  
+
+If $A$ is the attractor associated with a noun, then trajectories satisfy:
+
+$$
+\lim_{t \to \infty} \gamma(t) = A.
+$$
+
+Nouns provide the **stable landmarks** that verbs act upon.
+
+---
+
+## **7.3 Grammar as Geometric Constraint**
+
+Grammar specifies **how transformations may be composed**.
+
+Grammar is not symbolic.  
+Grammar is **geometric constraint** on trajectory formation:
+
+- it restricts which vector fields may be applied in sequence  
+- it determines how attractors may be linked  
+- it enforces compatibility between transformations  
+
+For example:
+
+- subject–verb agreement ensures the vector field applies to the correct region  
+- prepositions specify allowable paths between basins  
+- modifiers restrict the region in which a vector field operates  
+
+Grammar is the **constraint geometry** that shapes allowable motion.
+
+---
+
+## **7.4 Trajectory Concatenation**
+
+A sentence is a **concatenation of transformations** applied to attractors.
+
+Given:
+
+- a noun attractor $A_0$  
+- a sequence of verb‑fields $V_1, V_2, \dots, V_n$  
+- a final attractor $A_n$  
+
+A sentence corresponds to the composite trajectory:
+
+$$
+\gamma = A_0 \xrightarrow{V_1} \xrightarrow{V_2} \cdots \xrightarrow{V_n} A_n.
+$$
+
+Concatenation is not symbolic composition.  
+It is **geometric composition**:
+
+- each verb transforms the current position  
+- each noun anchors the trajectory  
+- the sequence defines a path through relational space  
+
+This is why sentences have **direction**, **shape**, and **flow**.
+
+---
+
+# **Summary of Section 7**
+
+Verbal dynamics reveal how linguistic structure emerges naturally from the geometry:
+
+- **verbs** → vector fields (transformations)  
+- **nouns** → attractor basins (stable regions)  
+- **grammar** → geometric constraints on composition  
+- **sentences** → concatenated trajectories  
+
+Language is therefore a **geometric interface** for guiding motion through relational space.
+
+---
+
+# **8. Relational Curvature**
+
+Relational curvature describes how the structure of the manifold bends, compresses, or expands around a point. Curvature determines how trajectories deviate from straight‑line (geodesic) motion, how meaning‑gradients form, and how reasoning becomes easier or harder depending on local relational density.
+
+This section does not introduce new primitives.  
+It elaborates how the existing geometry — attractors, vector fields, gradients, and meaning‑volume — generates curvature as a natural consequence of relational structure.
+
+---
+
+## **8.1 Curvature From Relational Density**
+
+Curvature arises when relational density is uneven.
+
+If a region contains:
+
+- many overlapping constraints  
+- tightly packed attractors  
+- strong gradients  
+- high meaning‑volume  
+
+then trajectories passing through that region will bend.
+
+Let $\rho(x)$ denote relational density at point $x$.  
+Curvature $K(x)$ increases with density:
+
+$$
+K(x) \propto \nabla \rho(x).
+$$
+
+Regions with high relational density behave like **conceptual gravity wells**:
+
+- trajectories slow down  
+- paths bend inward  
+- geodesics converge  
+
+Regions with low density behave like **flat space**:
+
+- trajectories remain straight  
+- gradients are shallow  
+- geodesics diverge slowly  
+
+Curvature is therefore a **structural property** of the relational environment.
+
+---
+
+## **8.2 Local vs. Global Curvature**
+
+Curvature can be understood at two scales:
+
+### **Local curvature**  
+Local curvature describes how trajectories bend in a small neighborhood around a point.
+
+Formally, if $\gamma$ is a trajectory, local curvature is:
+
+$$
+K_{\text{local}} = \left\| \nabla_{\dot{\gamma}} \dot{\gamma} \right\|.
+$$
+
+High local curvature corresponds to:
+
+- conceptual difficulty  
+- ambiguity  
+- rapid shifts in meaning  
+- unstable reasoning paths  
+
+### **Global curvature**  
+Global curvature describes the large‑scale shape of the manifold:
+
+- whether regions funnel trajectories  
+- whether attractors form basins  
+- whether reasoning loops or spirals  
+- whether long‑range paths converge or diverge  
+
+Global curvature determines **the overall topology of reasoning**.
+
+---
+
+## **8.3 Curvature as Meaning Gradient**
+
+Meaning‑volume is not uniform across the manifold.  
+Regions with high meaning‑volume exert **pull** on trajectories.
+
+Let $M(x)$ denote meaning at point $x$.  
+The meaning‑gradient is:
+
+$$
+\nabla M(x).
+$$
+
+Curvature increases when meaning‑gradients are steep:
+
+$$
+K(x) \propto \|\nabla M(x)\|.
+$$
+
+This produces intuitive effects:
+
+- high‑meaning regions pull trajectories inward  
+- low‑meaning regions allow free motion  
+- steep gradients create conceptual “cliffs”  
+- flat regions allow smooth reasoning  
+
+Curvature is therefore the **geometric expression of meaning‑pressure**.
+
+---
+
+## **8.4 Temporal Evolution of Curvature**
+
+Curvature is not static.  
+As the system learns, reorganizes, or encounters new information, curvature evolves over time.
+
+Let $K_t(x)$ denote curvature at time $t$.  
+Its evolution is governed by:
+
+$$
+\frac{d}{dt} K_t(x) = f(\rho_t, M_t, \text{constraints}_t).
+$$
+
+Curvature increases when:
+
+- new constraints accumulate  
+- attractors deepen  
+- meaning‑volume concentrates  
+- gradients sharpen  
+
+Curvature decreases when:
+
+- constraints weaken  
+- attractors flatten  
+- meaning diffuses  
+- coherence improves  
+
+Temporal curvature dynamics determine:
+
+- how reasoning becomes easier or harder  
+- how concepts reorganize  
+- how attractors shift  
+- how identity stabilizes or destabilizes  
+
+Curvature is therefore a **dynamic property**, shaped by learning, context, and relational change.
+
+---
+
+# **Summary of Section 8**
+
+Relational curvature describes how the manifold bends under the influence of:
+
+- relational density  
+- meaning‑gradients  
+- attractor structure  
+- temporal evolution  
+
+Curvature determines:
+
+- how trajectories bend  
+- how reasoning flows  
+- how concepts stabilize  
+- how meaning organizes  
+
+Curvature is the **geometric backbone** of conceptual dynamics.
+
+---
+
+# **9. Narrative Resonance Network**
+
+Narrative resonance describes how multiple trajectories interact, synchronize, and reinforce one another across scales. While Sections 4–8 focused on the geometry of individual trajectories and local relational structure, narrative resonance concerns **coupled systems**: how trajectories influence each other, how meaning propagates across agents, and why certain patterns — stories, music, rituals, collective movements — exert disproportionate power.
+
+Narrative resonance is not an additional mechanism.  
+It is the **multi‑trajectory expression** of the same geometric primitives:
+
+- attractors  
+- vector fields  
+- curvature  
+- coherence  
+- meaning‑volume  
+
+This section describes how these structures behave when **many trajectories coexist and interact**.
+
+---
+
+## **9.1 Coupled Trajectories**
+
+A single trajectory evolves according to:
+
+$$
+\dot{\gamma}(t) = V(\gamma(t)).
+$$
+
+When multiple trajectories $\gamma_1, \gamma_2, \dots, \gamma_n$ interact, each trajectory’s evolution depends on the others:
+
+$$
+\dot{\gamma}_i(t) = V(\gamma_i(t)) + \sum_{j \neq i} R(\gamma_i(t), \gamma_j(t)).
+$$
+
+Here, $R$ is a **resonance term** describing how one trajectory influences another.
+
+Resonance can:
+
+- pull trajectories into alignment  
+- amplify shared gradients  
+- synchronize motion  
+- stabilize or destabilize attractors  
+
+Coupled trajectories form the basis of:
+
+- conversation  
+- shared attention  
+- group reasoning  
+- cultural transmission  
+
+Narrative is the **coherent organization** of these coupled flows.
+
+---
+
+## **9.2 Multi‑Scale Resonance**
+
+Resonance occurs at multiple scales simultaneously:
+
+### **Local resonance**  
+Trajectories influence each other in small neighborhoods:
+
+- shared context  
+- shared meaning‑gradients  
+- short‑range alignment  
+
+### **Intermediate resonance**  
+Clusters of trajectories synchronize:
+
+- communities  
+- subcultures  
+- conceptual domains  
+
+### **Global resonance**  
+Large‑scale patterns emerge:
+
+- myths  
+- ideologies  
+- scientific paradigms  
+- cultural attractors  
+
+Multi‑scale resonance is fractal:  
+the same geometric operations repeat across levels.
+
+Formally, resonance at scale $s$ can be written as:
+
+$$
+R_s = f_s(\gamma, \nabla M, K, A),
+$$
+
+where $A$ denotes attractor structure.
+
+---
+
+## **9.3 Why Narrative, Art, and Music Have Power**
+
+Narrative, art, and music are **resonance technologies**.
+
+They work because they:
+
+- align trajectories  
+- synchronize gradients  
+- deepen shared attractors  
+- modulate curvature  
+- amplify meaning‑volume  
+
+A narrative is a **curvature‑shaping device**:
+
+- it bends trajectories toward shared attractors  
+- it stabilizes group coherence  
+- it reduces divergence  
+- it increases predictability  
+
+Music operates similarly:
+
+- rhythm synchronizes temporal trajectories  
+- harmony aligns attractor basins  
+- repetition deepens curvature  
+- tension and release modulate meaning‑gradients  
+
+Art, narrative, and music are powerful because they **engineer resonance**.
+
+---
+
+## **9.4 Fractal‑Holographic Structure**
+
+Narrative resonance exhibits a **fractal‑holographic structure**:
+
+- **Fractal**: patterns repeat across scales  
+- **Holographic**: local structure encodes global structure  
+
+A small narrative fragment contains:
+
+- local attractors  
+- local gradients  
+- local curvature patterns  
+
+…but these reflect the global narrative basin.
+
+Formally, if $S$ is a narrative segment and $N$ is the full narrative, then:
+
+$$
+\text{Structure}(S) \approx \text{Projection}(N).
+$$
+
+This is why:
+
+- a single scene can reveal an entire story  
+- a single motif can reveal an entire symphony  
+- a single gesture can reveal an entire relationship  
+
+Narrative systems are **self‑similar** and **self‑encoding**.
+
+---
+
+# **Summary of Section 9**
+
+Narrative resonance describes how trajectories interact across scales:
+
+- **coupled trajectories** influence each other through resonance terms  
+- **multi‑scale resonance** produces local, intermediate, and global coherence  
+- **narrative, art, and music** shape curvature and synchronize meaning  
+- **fractal‑holographic structure** allows local fragments to encode global patterns  
+
+Narrative is the **multi‑trajectory geometry** of meaning.
 
 ---
 
