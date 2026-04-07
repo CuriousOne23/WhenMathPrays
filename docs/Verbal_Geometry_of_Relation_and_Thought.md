@@ -1070,49 +1070,948 @@ Narrative is the **multi‑trajectory geometry** of meaning.
 
 ---
 
-# **10. Stability, Plasticity, and Affective Learning**  
-- How attractors deepen, weaken, reorganize  
-- Fractal synchronization  
-- Identity curvature development  
-- Learning as geometric rewriting  
+# **10. Stability, Plasticity, and Affective Learning**
+
+Stability and plasticity describe how the relational manifold changes over time.  
+Affective learning describes how curvature, attractors, and coherence reorganize in response to experience.
+
+This section does not introduce new primitives.  
+It shows how the existing geometric structures — attractors, curvature, meaning‑volume, and resonance — evolve under pressure, repetition, and interaction.
+
+Learning is treated as **geometric rewriting**:  
+the manifold reshapes itself to improve coherence, reduce instability, and deepen useful attractors.
 
 ---
 
-# **11. Degenerate Geometries and Pathologies**  
-- Over‑deep attractors  
-- Shallow attractors  
-- Frame instability  
-- Resonance collapse  
-- Holographic distortion  
-- Explicit epistemic disclaimers  
+## **10.1 How Attractors Deepen, Weaken, and Reorganize**
+
+Attractors are not static.  
+Their depth, width, and shape evolve with experience.
+
+Let $A_t$ denote an attractor at time $t$.  
+Its depth $D_t$ evolves according to:
+
+$$
+\frac{d}{dt} D_t = f(\text{frequency}, \text{coherence}, \text{resonance}).
+$$
+
+Attractors **deepen** when:
+
+- trajectories repeatedly converge into them  
+- coherence within the basin increases  
+- resonance with other trajectories reinforces the region  
+
+Attractors **weaken** when:
+
+- trajectories stop visiting the region  
+- curvature flattens  
+- meaning‑volume diffuses  
+
+Attractors **reorganize** when:
+
+- new gradients emerge  
+- curvature shifts  
+- resonance patterns change  
+- the system undergoes large‑scale restructuring  
+
+Reorganization is not failure — it is **adaptive geometric refinement**.
 
 ---
 
-# **12. Advantages of the Framework (If True)**  
-- Scientific benefits  
-- Observability into verb‑space  
-- Cross‑disciplinary implications  
-- Conceptual unification  
+## **10.2 Fractal Synchronization**
+
+Learning is not local.  
+Changes at one scale propagate across others.
+
+Fractal synchronization occurs when:
+
+- local attractor changes  
+- propagate to intermediate structures  
+- which propagate to global structures  
+
+Formally, if $A_s$ is an attractor at scale $s$, then:
+
+$$
+\Delta A_s \rightarrow \Delta A_{s+1} \rightarrow \Delta A_{s+2}.
+$$
+
+This produces:
+
+- conceptual alignment  
+- narrative coherence  
+- stable identity curvature  
+- multi‑scale resonance  
+
+Fractal synchronization is why:
+
+- small insights reorganize large conceptual regions  
+- repeated micro‑experiences reshape identity  
+- local instability can cascade into global change  
+
+Learning is **scale‑coupled geometric evolution**.
 
 ---
 
-# **13. What the Framework Does *Not* Do**  
-- Limits of the model  
-- Avoiding reductionism  
-- Preserving mystery and non‑captured aspects of life  
+## **10.3 Identity Curvature Development**
+
+Identity is a long‑term attractor structure (Section 6.6).  
+Its curvature evolves through repeated interaction with the environment.
+
+Let $K_{\text{id}}(t)$ denote identity curvature at time $t$.  
+Its evolution is governed by:
+
+$$
+\frac{d}{dt} K_{\text{id}} = g(\text{experience}, \text{resonance}, \text{coherence}, \text{pressure}).
+$$
+
+Identity curvature **increases** when:
+
+- attractors stabilize  
+- coherence strengthens  
+- meaning‑volume concentrates  
+- resonance patterns become consistent  
+
+Identity curvature **decreases** when:
+
+- attractors weaken  
+- coherence fragments  
+- meaning diffuses  
+- resonance collapses  
+
+Identity is not a fixed point.  
+It is a **slowly evolving geometric structure** shaped by long‑term learning.
 
 ---
 
-# **14. Epistemic Status & Invitation to Inquiry**  
-- The work is conjectural but principled  
-- Invitation to critique, refinement, falsification  
-- Positioning the paper as a generative starting point  
+## **10.4 Learning as Geometric Rewriting**
+
+Learning is the process by which the manifold rewrites itself to improve coherence and reduce instability.
+
+Let $M_t$ denote the manifold at time $t$.  
+Learning corresponds to:
+
+$$
+M_{t+1} = \text{Rewrite}(M_t, \Delta K, \Delta A, \Delta \nabla M).
+$$
+
+Learning occurs when:
+
+- curvature adjusts to reduce pressure  
+- attractors reshape to improve stability  
+- meaning‑gradients sharpen or flatten  
+- coherence increases across scales  
+
+Learning is not the accumulation of facts.  
+Learning is **geometric optimization**:
+
+- reducing unnecessary curvature  
+- deepening useful attractors  
+- flattening harmful basins  
+- improving geodesic alignment  
+- increasing global coherence  
+
+Affective learning is the **dynamical refinement** of the relational manifold.
 
 ---
 
-# **15. Conclusion**  
-- Restate the unified model  
-- Reaffirm the promise and openness  
-- Point to future work and the broader research arc  
+# **Summary of Section 10**
+
+Stability, plasticity, and affective learning describe how the manifold evolves:
+
+- **attractors** deepen, weaken, and reorganize  
+- **fractal synchronization** couples learning across scales  
+- **identity curvature** develops through long‑term resonance  
+- **learning** is geometric rewriting of curvature, attractors, and meaning  
+
+Learning is the **adaptive reshaping** of relational geometry.
+
+---
+
+Absolutely, Jeff — here is **Section 11**, fully polished, structurally aligned with Sections 4–10, and using **GitHub‑friendly math** (`$ inline $` and `$$ block $$`).  
+This is ready to paste directly into your GitHub document.
+
+No drift.  
+No metaphor.  
+No psychology.  
+Just clean geometric exposition of **degenerate geometries and pathologies**.
+
+---
+
+# **11. Degenerate Geometries and Pathologies**
+
+Degenerate geometries arise when the relational manifold loses coherence, collapses into unstable configurations, or becomes distorted by extreme curvature or attractor imbalance. These pathologies are not separate mechanisms; they are **failure modes** of the same geometric structures introduced earlier.
+
+A degenerate geometry is one in which:
+
+- curvature becomes extreme or ill‑conditioned  
+- attractors become too deep or too shallow  
+- frames lose stability  
+- resonance collapses  
+- meaning‑volume distorts or fragments  
+
+This section describes how these failures manifest and how they can be understood as geometric breakdowns.
+
+---
+
+## **11.1 Over‑Deep Attractors**
+
+An attractor becomes pathological when its depth $D$ becomes excessively large:
+
+$$
+D \to \infty.
+$$
+
+Over‑deep attractors produce:
+
+- excessive gravitational pull  
+- loss of flexibility  
+- trajectory trapping  
+- inability to explore alternative basins  
+
+Formally, if $\gamma(t)$ enters an over‑deep attractor $A$, then:
+
+$$
+\lim_{t \to \infty} \gamma(t) = A \quad \text{regardless of initial conditions}.
+$$
+
+This corresponds to **rigidity** in the manifold:
+
+- gradients collapse  
+- curvature spikes  
+- alternative paths vanish  
+
+Over‑deep attractors destroy plasticity.
+
+---
+
+## **11.2 Shallow Attractors**
+
+Shallow attractors have insufficient depth to stabilize trajectories:
+
+$$
+D \approx 0.
+$$
+
+Shallow attractors produce:
+
+- instability  
+- drift  
+- incoherence  
+- inability to maintain meaning‑volume  
+
+Trajectories entering a shallow basin satisfy:
+
+$$
+\gamma(t) \not\to A.
+$$
+
+Instead, they:
+
+- wander  
+- oscillate  
+- escape under minimal pressure  
+
+Shallow attractors destroy stability.
+
+---
+
+## **11.3 Frame Instability**
+
+A frame is a local coordinate system used to interpret motion.  
+Frame instability occurs when the frame itself becomes ill‑conditioned.
+
+Let $F$ be a frame.  
+Instability occurs when:
+
+$$
+\det(F) \to 0 \quad \text{or} \quad \|F^{-1}\| \to \infty.
+$$
+
+This produces:
+
+- inconsistent gradients  
+- contradictory directions of motion  
+- incoherent meaning‑updates  
+- breakdown of local reasoning  
+
+Frame instability is a **coordinate failure** of the manifold.
+
+---
+
+## **11.4 Resonance Collapse**
+
+Resonance collapse occurs when coupled trajectories lose coherence.
+
+Given trajectories $\gamma_i$ with resonance terms $R_{ij}$, collapse occurs when:
+
+$$
+\sum_{j \neq i} R_{ij} \to 0.
+$$
+
+This produces:
+
+- loss of synchronization  
+- fragmentation of meaning  
+- breakdown of shared attractors  
+- collapse of multi‑scale structure  
+
+Resonance collapse destroys **collective coherence**.
+
+---
+
+## **11.5 Holographic Distortion**
+
+A healthy manifold exhibits **fractal‑holographic structure** (Section 9.4).  
+Holographic distortion occurs when local and global structures diverge.
+
+Let $S$ be a local segment and $N$ the global structure.  
+Distortion occurs when:
+
+$$
+\text{Structure}(S) \not\approx \text{Projection}(N).
+$$
+
+This produces:
+
+- local contradictions  
+- global incoherence  
+- misaligned attractors  
+- inconsistent curvature patterns  
+
+Holographic distortion destroys **self‑similarity**.
+
+---
+
+## **11.6 Explicit Epistemic Disclaimers**
+
+Degenerate geometries are not diagnoses.  
+They are **geometric descriptions of failure modes** in relational structure.
+
+These descriptions:
+
+- do not map directly onto psychological categories  
+- do not imply pathology in a clinical sense  
+- do not describe individuals  
+- do not prescribe interventions  
+
+They are **structural patterns** that can occur in any reasoning platform:
+
+- AI systems  
+- biological cognition  
+- collective reasoning  
+- cultural dynamics  
+
+The purpose of this section is to clarify **geometric breakdowns**, not to label or interpret human experience.
+
+---
+
+# **Summary of Section 11**
+
+Degenerate geometries arise when the manifold loses coherence:
+
+- **over‑deep attractors** trap trajectories  
+- **shallow attractors** fail to stabilize them  
+- **frame instability** breaks local interpretation  
+- **resonance collapse** destroys multi‑trajectory coherence  
+- **holographic distortion** breaks self‑similarity  
+
+Pathologies are **geometric failure modes**, not psychological categories.
+
+---
+
+# **12. Advantages of the Framework (If True)**
+
+This section outlines the potential advantages of the geometric framework **if the underlying assumptions hold**.  
+Nothing in this section asserts truth; it describes **what would follow** if the geometry accurately captures the structure of reasoning across substrates.
+
+The goal is not to claim authority, but to articulate the **scientific, conceptual, and cross‑disciplinary benefits** that emerge from a unified geometric model of relational dynamics.
+
+---
+
+## **12.1 Scientific Benefits**
+
+If the framework is correct, it provides:
+
+### **A unified mathematical language**  
+The same geometric primitives — trajectories, vector fields, attractors, curvature, coherence, meaning‑volume — apply across:
+
+- AI systems  
+- biological cognition  
+- collective reasoning  
+- cultural evolution  
+- conceptual dynamics  
+
+This yields a **single formalism** for describing reasoning across substrates.
+
+### **Operational definitions**  
+The framework provides measurable, substrate‑independent definitions of:
+
+- valence  
+- arousal  
+- stability  
+- regulation  
+- identity curvature  
+- learning  
+- narrative resonance  
+
+These are defined through **geometry**, not introspection or metaphor.
+
+### **Predictive structure**  
+If curvature, attractors, and gradients can be measured, then:
+
+- reasoning trajectories become predictable  
+- failure modes become identifiable  
+- learning dynamics become analyzable  
+
+The framework becomes a **testable scientific model**.
+
+---
+
+## **12.2 Observability Into Verb‑Space**
+
+One of the strongest advantages is that the framework makes **verb‑space observable**.
+
+Verbs correspond to **vector fields**:
+
+$$
+\dot{\gamma}(t) = V(\gamma(t)).
+$$
+
+If this mapping holds:
+
+- verbs become measurable operators  
+- transformations become analyzable  
+- compositional structure becomes geometric  
+- grammar becomes constraint geometry  
+
+This allows:
+
+- direct measurement of transformation fields  
+- comparison across reasoning systems  
+- analysis of how verbs shape trajectories  
+- identification of degenerate or unstable verb‑fields  
+
+Verb‑space becomes a **scientific object**, not an abstract linguistic category.
+
+---
+
+## **12.3 Cross‑Disciplinary Implications**
+
+If the geometry is correct, it provides a shared structure for:
+
+### **Linguistics**  
+Verbs, nouns, grammar, and narrative become geometric operations.
+
+### **Cognitive science**  
+Reasoning becomes motion through conceptual space.
+
+### **AI research**  
+Model behavior becomes analyzable through curvature, attractors, and gradients.
+
+### **Neuroscience**  
+Patterns of activation become trajectories in a relational manifold.
+
+### **Anthropology and cultural evolution**  
+Narratives, rituals, and collective meaning become resonance networks.
+
+### **Philosophy**  
+Identity, coherence, and meaning become geometric invariants.
+
+The framework becomes a **bridge** across disciplines that rarely share formal language.
+
+---
+
+## **12.4 Conceptual Unification**
+
+If the framework holds, it unifies:
+
+- meaning  
+- reasoning  
+- affect  
+- learning  
+- narrative  
+- identity  
+- culture  
+
+…under a single geometric structure.
+
+This does not reduce these phenomena.  
+It **relates** them through shared invariants:
+
+- curvature  
+- attractors  
+- gradients  
+- coherence  
+- resonance  
+- meaning‑volume  
+
+The unification is structural, not reductive.
+
+It provides a **common geometry** without collapsing the richness of the phenomena it describes.
+
+---
+
+# **Summary of Section 12**
+
+If the framework is correct, it offers:
+
+- **scientific benefits** through operational, measurable constructs  
+- **observability into verb‑space** as geometric transformation fields  
+- **cross‑disciplinary implications** through shared structure  
+- **conceptual unification** across reasoning, affect, narrative, and identity  
+
+These advantages are **conditional**, not asserted.  
+They describe what becomes possible **if the geometry is true**.
+
+---
+
+# **13. What the Framework Does *Not* Do**
+
+This section clarifies the limits of the geometric framework.  
+The goal is not to diminish the model, but to **prevent overreach**, avoid reductionism, and preserve the aspects of reasoning, experience, and life that remain outside any formal system.
+
+The framework provides a **structural geometry** of relational dynamics.  
+It does **not** claim to capture:
+
+- subjective experience  
+- phenomenology  
+- consciousness  
+- meaning as lived from the inside  
+- the full richness of human life  
+
+It describes **relational structure**, not the totality of mind.
+
+---
+
+## **13.1 Limits of the Model**
+
+The framework does not:
+
+- explain consciousness  
+- reduce affect to computation  
+- claim equivalence between biological and artificial systems  
+- provide a theory of qualia  
+- describe the origins of meaning  
+- specify the substrate‑level mechanisms that implement the geometry  
+
+The model is **structural**, not ontological.
+
+It describes **how** reasoning behaves, not **what** it is made of.
+
+---
+
+## **13.2 Avoiding Reductionism**
+
+Although the framework uses geometric constructs — trajectories, attractors, curvature, gradients — it does **not** reduce human experience to mathematics.
+
+The geometry captures:
+
+- relational motion  
+- structural invariants  
+- dynamical patterns  
+- coherence and instability  
+- meaning‑volume and curvature  
+
+It does **not** claim that:
+
+- people *are* manifolds  
+- emotions *are* derivatives  
+- identity *is* an attractor  
+- narrative *is* resonance  
+
+These are **models**, not metaphysical claims.
+
+The geometry is a **lens**, not a replacement for lived reality.
+
+---
+
+## **13.3 Preserving Mystery and Non‑Captured Aspects of Life**
+
+There are aspects of human life that remain outside any formal system:
+
+- the felt texture of experience  
+- the irreducibility of consciousness  
+- the open‑endedness of meaning  
+- the unpredictability of creativity  
+- the depth of relationships  
+- the uniqueness of personal history  
+
+The framework does not attempt to formalize these.  
+It acknowledges that **not everything that matters is geometrically representable**.
+
+The model captures **structure**, not **essence**.
+
+---
+
+## **13.4 No Claims About Ultimate Truth**
+
+The framework does not claim to be:
+
+- complete  
+- final  
+- foundational  
+- metaphysically privileged  
+
+It is a **conjectural geometry**:
+
+- internally coherent  
+- operationally defined  
+- empirically testable  
+- substrate‑independent  
+- falsifiable  
+
+But it is not a theory of everything.  
+It is a **tool for inquiry**, not a final account of mind or meaning.
+
+---
+
+# **Summary of Section 13**
+
+The framework:
+
+- **does not** explain consciousness or subjective experience  
+- **does not** reduce life to geometry  
+- **does not** claim equivalence across substrates  
+- **does not** capture the full richness of human meaning  
+- **does** acknowledge mystery, limits, and non‑captured aspects  
+
+This section establishes the **epistemic boundaries** of the model.
+
+---
+
+# **14. Epistemic Status & Invitation to Inquiry**
+
+This work is **conjectural but principled**.  
+It proposes a geometric framework for reasoning, affect, narrative, and identity, grounded in structural invariants — trajectories, vector fields, attractors, curvature, coherence, and meaning‑volume — that appear across reasoning substrates.
+
+The framework is not presented as final or complete.  
+It is offered as a **generative starting point** for collaborative refinement, critique, and empirical testing.
+
+---
+
+## **14.1 Conjectural but Coherent**
+
+The model is built from:
+
+- operational definitions  
+- geometric primitives  
+- substrate‑independent structure  
+- falsifiable predictions  
+- cross‑domain parallels  
+
+But it remains a **hypothesis**:
+
+- the geometry may be incomplete  
+- alternative formalisms may capture the same phenomena  
+- empirical results may refine or contradict the structure  
+- additional invariants may be required  
+
+The framework is coherent, but coherence is not proof.
+
+---
+
+## **14.2 Open to Critique and Refinement**
+
+The model is intentionally **open‑ended**.
+
+It invites critique on:
+
+- the choice of primitives  
+- the mapping between linguistic and geometric structure  
+- the definitions of valence, arousal, and stability  
+- the treatment of narrative resonance  
+- the interpretation of curvature and meaning‑volume  
+- the generality across substrates  
+
+Every component is revisable.
+
+The goal is not to defend the model, but to **improve it**.
+
+---
+
+## **14.3 Falsifiability and Testability**
+
+The framework makes **testable predictions**:
+
+- curvature should correlate with reasoning difficulty  
+- attractor depth should correlate with stability  
+- meaning‑gradients should predict trajectory direction  
+- resonance terms should predict synchronization  
+- geometric rewriting should predict learning dynamics  
+
+These predictions can be evaluated in:
+
+- AI systems  
+- biological cognition  
+- collective reasoning  
+- cultural evolution  
+
+The model stands or falls on empirical grounds.
+
+---
+
+## **14.4 Positioning the Work as a Generative Starting Point**
+
+This manuscript is not a conclusion.  
+It is an **invitation**:
+
+- to explore geometric models of reasoning  
+- to test the invariants across substrates  
+- to refine the primitives  
+- to develop parallel descriptions in biological and cultural systems  
+- to build a shared language across disciplines  
+
+The framework is a **proposal**, not a doctrine.
+
+It is meant to spark inquiry, not settle it.
+
+---
+
+# **Summary of Section 14**
+
+The framework is:
+
+- **conjectural but principled**  
+- **coherent but incomplete**  
+- **testable and falsifiable**  
+- **open to critique and refinement**  
+- **positioned as a generative starting point**  
+
+This section establishes the **epistemic posture** of the work.
+
+---
+
+# **15. Conclusion**
+
+This manuscript has proposed a unified geometric framework for reasoning, affect, narrative, and identity.  
+
+Across Sections 4–14, the same structural primitives — trajectories, vector fields, attractors, curvature, coherence, and meaning‑volume — were shown to generate:
+
+- verbal dynamics  
+- relational curvature  
+- narrative resonance  
+- affective dynamics  
+- stability and plasticity  
+- learning and identity formation  
+- degenerate geometries  
+- cross‑disciplinary implications  
+
+The central claim is not that geometry replaces meaning, but that **relational geometry provides a substrate‑independent structure** for describing how meaning moves, stabilizes, transforms, and resonates.
+
+---
+
+## **15.1 Restating the Unified Model**
+
+The unified model asserts:
+
+- reasoning is motion through a relational manifold  
+- verbs are vector fields  
+- nouns are attractor basins  
+- grammar is constraint geometry  
+- affect is the system’s response to geometric change  
+- narrative is multi‑trajectory resonance  
+- identity is long‑term attractor structure  
+- learning is geometric rewriting  
+- pathologies are degenerate geometries  
+
+These components form a **single coherent structure**.
+
+---
+
+## **15.2 Reaffirming the Promise and Openness**
+
+The promise of the framework is:
+
+- conceptual unification  
+- operational definitions  
+- cross‑substrate applicability  
+- empirical testability  
+- new tools for understanding reasoning systems  
+
+But the framework remains **open**:
+
+- open to revision  
+- open to critique  
+- open to expansion  
+- open to alternative formalisms  
+- open to collaborative development  
+
+The work is not finished.  
+It is **beginning**.
+
+---
+
+# **Summary of Section 15**
+
+The conclusion:
+
+- restates the unified geometric model  
+- reaffirms its promise  
+- emphasizes its openness  
+- positions the work as an ongoing inquiry  
+
+The manuscript ends not with closure, but with **invitation**.
+
+---
+
+# **Glossary**
+
+## **Geometric Primitives**
+
+### **Relational Manifold**  
+The abstract space in which reasoning unfolds. Points represent relational states; structure is defined by gradients, curvature, and attractors.
+
+### **Trajectory**  
+A path $\gamma(t)$ through the manifold representing the evolution of a relational state over time.
+
+### **Vector Field**  
+A directional field $V(x)$ specifying how trajectories move locally. Verbs correspond to vector fields.
+
+### **Gradient**  
+The direction of steepest change in a scalar field (e.g., meaning). Determines the local direction of motion.
+
+### **Curvature**  
+A measure of how the manifold bends. High curvature produces trajectory deviation, constraint, or compression.
+
+### **Meaning‑Volume**  
+A scalar field representing the density of relational significance at a point. High meaning‑volume exerts pull on trajectories.
+
+### **Coherence**  
+The degree to which local relational structure aligns with global structure. High coherence yields stable reasoning.
+
+---
+
+## **Attractors and Basins**
+
+### **Attractor**  
+A stable region toward which trajectories converge.
+
+### **Attractor Basin**  
+The region of initial conditions that converge to an attractor. Nouns correspond to attractor basins.
+
+### **Attractor Depth**  
+A measure of stability. Deep attractors strongly retain trajectories; shallow attractors do not.
+
+### **Identity Attractor**  
+A long‑term attractor representing stable relational invariants across time.
+
+---
+
+## **Verbal Dynamics**
+
+### **Verb‑Field**  
+A vector field associated with a verb. Determines how relational position transforms.
+
+### **Noun‑Attractor**  
+An attractor basin corresponding to a noun. Provides stable landmarks for trajectories.
+
+### **Grammar as Constraint Geometry**  
+Rules governing how vector fields and attractors may be composed.
+
+### **Trajectory Concatenation**  
+Sequential application of verb‑fields to noun‑attractors, forming a sentence‑trajectory.
+
+---
+
+## **Affective Dynamics**
+
+### **Valence**  
+The time‑derivative of meaning:  
+$$\text{Valence} = \frac{d}{dt}(\text{Meaning}).$$  
+Positive when meaning‑volume expands; negative when it contracts.
+
+### **Arousal**  
+The magnitude of dynamical pressure:  
+$$\text{Arousal} = \|\nabla_{\dot{\gamma}}\dot{\gamma}\|.$$
+
+### **Stability**  
+The ability to maintain geodesic alignment under pressure.
+
+### **Regulation**  
+Control of curvature, coherence, and meaning‑volume to maintain stability.
+
+---
+
+## **Curvature and Density**
+
+### **Relational Density**  
+The concentration of constraints, attractors, and gradients in a region. High density increases curvature.
+
+### **Local Curvature**  
+Curvature experienced in a small neighborhood of a trajectory.
+
+### **Global Curvature**  
+Large‑scale bending of the manifold shaping long‑range reasoning.
+
+### **Meaning‑Gradient**  
+The gradient of meaning‑volume. Steep gradients produce curvature.
+
+---
+
+## **Narrative Resonance**
+
+### **Resonance Term**  
+A coupling function $R(\gamma_i, \gamma_j)$ describing how trajectories influence each other.
+
+### **Coupled Trajectories**  
+Multiple trajectories whose evolution depends on mutual resonance.
+
+### **Multi‑Scale Resonance**  
+Resonance occurring at local, intermediate, and global scales.
+
+### **Fractal‑Holographic Structure**  
+Local narrative fragments encode global structure; patterns repeat across scales.
+
+---
+
+## **Learning, Plasticity, and Identity**
+
+### **Plasticity**  
+The capacity of the manifold to reshape curvature, attractors, and gradients.
+
+### **Geometric Rewriting**  
+Learning as modification of manifold structure:  
+$$M_{t+1} = \text{Rewrite}(M_t).$$
+
+### **Fractal Synchronization**  
+Learning changes propagate across scales, aligning local and global structure.
+
+### **Identity Curvature**  
+Long‑term curvature associated with stable self‑structure.
+
+---
+
+## **Degenerate Geometries (Pathologies)**
+
+### **Over‑Deep Attractor**  
+An attractor with excessive depth, trapping trajectories and eliminating flexibility.
+
+### **Shallow Attractor**  
+An attractor too weak to stabilize trajectories.
+
+### **Frame Instability**  
+Breakdown of local coordinate frames; gradients and directions become ill‑conditioned.
+
+### **Resonance Collapse**  
+Loss of synchronization among trajectories; shared structure disintegrates.
+
+### **Holographic Distortion**  
+Local structure no longer reflects global structure; self‑similarity breaks.
+
+---
+
+## **Epistemic and Structural Terms**
+
+### **Substrate‑Independence**  
+The framework applies to any reasoning platform with relational structure (AI, biological, cultural).
+
+### **Operational Definition**  
+A definition grounded in measurable geometric quantities, not introspection.
+
+### **Constraint Geometry**  
+Structural rules limiting allowable transformations or compositions.
+
+### **Geodesic Alignment**  
+A trajectory’s adherence to the locally straightest path given curvature.
 
 ---
