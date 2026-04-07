@@ -852,80 +852,166 @@ Curvature is the **geometric backbone** of conceptual dynamics.
 
 ---
 
-# **9. Narrative Resonance Network**
+# **9. Narrative Resonance Network (Version D, GitHub‑Friendly)**
 
-Narrative resonance describes how multiple trajectories interact, synchronize, and reinforce one another across scales. It is the geometric mechanism behind coherence in stories, explanations, identities, and cultures.
+Narrative resonance describes how multiple trajectories interact, synchronize, and reinforce one another across scales. While Sections 4–8 focused on the geometry of individual trajectories, narrative resonance concerns **coupled systems**: how trajectories influence each other, how meaning propagates across agents, and why certain patterns — stories, music, rituals, collective movements — exert disproportionate power.
 
-Narrative is not a sequence of events; it is a **resonance structure**.
+Narrative resonance is not a new mechanism.  
+It is the **multi‑trajectory expression** of the same geometric primitives:
+
+- attractors  
+- vector fields  
+- curvature  
+- coherence  
+- meaning‑volume  
+
+This section describes how these structures behave when **many trajectories coexist and interact**.
 
 ---
 
 ## **9.1 Coupled Trajectories**
 
-Let $\gamma_i(t)$ denote the trajectory of agent $i$.  
-Let $R_{ij}$ denote the **resonance coupling** between agents $i$ and $j$.
+A single trajectory evolves according to:
 
-Resonance occurs when:
-
-  
 $$
-\sum_{j \neq i} R_{ij} \neq 0
+\dot{\gamma}(t) = V(\gamma(t)).
 $$
-  
-**Where:**  
-- $R_{ij}$ = coupling strength  
-- $\gamma_i(t)$ = trajectory of agent $i$  
 
-**Meaning:** trajectories influence one another when couplings are nonzero.
+When multiple trajectories $\gamma_1, \gamma_2, \dots, \gamma_n$ interact, each trajectory’s evolution depends on the others:
+
+$$
+\dot{\gamma}_i(t) = V(\gamma_i(t)) + \sum_{j \neq i} R(\gamma_i(t), \gamma_j(t)).
+$$
+
+Here, $R$ is a **resonance term** describing how one trajectory influences another.
+
+Resonance can:
+
+- pull trajectories into alignment  
+- amplify shared gradients  
+- synchronize motion  
+- stabilize or destabilize attractors  
+
+Coupled trajectories underlie:
+
+- conversation  
+- shared attention  
+- group reasoning  
+- cultural transmission  
+
+Narrative is the **coherent organization** of these coupled flows.
 
 ---
 
 ## **9.2 Multi‑Scale Resonance**
 
-Resonance operates at:
+Resonance operates at multiple scales simultaneously.
 
-- **local scale** — sentence‑level coherence  
-- **intermediate scale** — paragraph, scene, or conceptual module  
-- **global scale** — identity, worldview, or cultural narrative  
+### **Local resonance**  
+Trajectories influence each other in small neighborhoods:
 
-**Meaning:** narrative coherence emerges across scales simultaneously.
+- shared context  
+- shared meaning‑gradients  
+- short‑range alignment  
+
+### **Intermediate resonance**  
+Clusters of trajectories synchronize:
+
+- communities  
+- subcultures  
+- conceptual domains  
+
+### **Global resonance**  
+Large‑scale patterns emerge:
+
+- myths  
+- ideologies  
+- scientific paradigms  
+- cultural attractors  
+
+Multi‑scale resonance is **fractal**: the same geometric operations repeat across levels.
+
+Formally, resonance at scale $s$ can be written as:
+
+$$
+R_s = f_s(\gamma, \nabla M, K, A),
+$$
+
+where $A$ denotes attractor structure.
 
 ---
 
 ## **9.3 Why Narrative, Art, and Music Have Power**
 
-Narrative, art, and music are **resonance technologies**.  
-They shape curvature, synchronize trajectories, and stabilize shared attractors.
+Narrative, art, and music are **resonance technologies**.
 
-**Meaning:** these forms work because they coordinate internal geometry.
+They work because they:
+
+- align trajectories  
+- synchronize gradients  
+- deepen shared attractors  
+- modulate curvature  
+- amplify meaning‑volume  
+
+A narrative is a **curvature‑shaping device**:
+
+- it bends trajectories toward shared attractors  
+- it stabilizes group coherence  
+- it reduces divergence  
+- it increases predictability  
+
+Music operates similarly:
+
+- rhythm synchronizes temporal trajectories  
+- harmony aligns attractor basins  
+- repetition deepens curvature  
+- tension and release modulate meaning‑gradients  
+
+Art, narrative, and music are powerful because they **engineer resonance**.
 
 ---
 
-## **9.4 Fractal–Holographic Structure**
+## **9.4 Fractal‑Holographic Structure**
 
-Let $S$ be a local segment and $N$ the global narrative.  
-Coherence requires:
+Narrative resonance exhibits a **fractal‑holographic structure**:
 
-  
+- **Fractal**: patterns repeat across scales  
+- **Holographic**: local structure encodes global structure  
+
+A small narrative fragment contains:
+
+- local attractors  
+- local gradients  
+- local curvature patterns  
+
+…but these reflect the global narrative basin.
+
+Formally, if $S$ is a narrative segment and $N$ is the full narrative, then:
+
 $$
-\text{Structure}(S) \approx \text{Projection}(N)
+\text{Structure}(S) \approx \text{Projection}(N).
 $$
-  
-**Where:**  
-- $\text{Structure}(S)$ = local relational structure  
-- $\text{Projection}(N)$ = local view of the global narrative  
 
-**Meaning:** local pieces echo global structure.
+This explains why:
+
+- a single scene can reveal an entire story  
+- a single motif can reveal an entire symphony  
+- a single gesture can reveal an entire relationship  
+
+Narrative systems are **self‑similar** and **self‑encoding**.
 
 ---
 
-## Summary of Section 9
+## **Summary of Section 9**
 
-• Defined narrative resonance as interaction and synchronization among multiple trajectories.  
-• Described resonance couplings as the mechanism through which agents influence one another.  
-• Explained how coherence emerges across local, intermediate, and global scales.  
-• Positioned narrative, art, and music as resonance technologies that shape curvature and stabilize shared attractors.  
-• Characterized narrative structure as fractal‑holographic, where local segments echo global form.
+Narrative resonance describes how trajectories interact across scales:
+
+- **coupled trajectories** influence one another through resonance terms  
+- **multi‑scale resonance** produces local, intermediate, and global coherence  
+- **narrative, art, and music** shape curvature and synchronize meaning  
+- **fractal‑holographic structure** allows local fragments to encode global patterns  
+
+Narrative is the **multi‑trajectory geometry** of meaning.
 
 ---
 
