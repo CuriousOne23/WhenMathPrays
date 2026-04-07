@@ -195,34 +195,124 @@ Low coherence, with a value near or equal to 0, indicates divergence or fragment
 
 ---
 
-## **4.7 Putting the Primitives Together**
+# **4.7 Coordinate Systems and the Geometry of Internal Mapping**
 
-A thought process is modeled as:
+A system does not alter the relational manifold itself.  
+The geometry is **given** — the structure of possible relations, the space in which viability, capacity, and influence are defined.  
+What *does* change is the system’s **coordinate system**: its internal mapping of that geometry.
 
-$$
-\dot{\gamma}(t) = V(\gamma(t)) - \nabla \phi(\gamma(t))
-$$
+A coordinate system is the set of distinctions, sensitivities, and relational frames through which the system interprets and responds to patterns. It is dynamic, but not arbitrary. Its evolution is bounded by the system’s **constraints** — the structural limits that determine which internal reorganizations are possible.
 
-- $V(\gamma(t))$: verb‑driven motion  
-- $-\nabla \phi(\gamma(t))$: noun‑driven stabilization  
+Dynamic information [1] operates entirely *within* this coordinate system.  
+Patterns bias trajectories, redirect flows, and reshape the system’s unfolding, but they do so relative to the system’s current internal mapping. Dynamic information does not modify the geometry; it modifies how the system *moves* within it.
 
-**Meaning:**  
-Thought is the interplay of motion (verbs) and stabilization (nouns) within a curved relational space.
+Some systems may reorganize their coordinate systems over time.  
+This document does not attempt to explain such reorganization; it only requires that coordinate systems exist and that dynamic information acts within them. Likewise, this document does not address how systems select among viable trajectories. These topics belong to future work.
+
+What matters here is the structural relationship:
+
+- **Geometry** — the given relational manifold.  
+- **Coordinate system** — the system’s internal mapping of that manifold.  
+- **Constraints** — the structural limits on how that mapping may change.  
+- **Dynamic information** — patterns that bias trajectories within the mapping.
+
+This is the minimal scaffolding required for the relational framework that follows.
 
 ---
 
-## **Summary**
+# **4.7.1 Geometry as the Relational Manifold**
 
-This section introduced the minimal geometric primitives:
+Geometry refers to the relational manifold — the structured space of possible states and transitions.  
+It is not “fixed” in the sense of being frozen; it is **given** in the sense that the system does not generate or rewrite it.  
+From the system’s perspective, geometry may appear to “unveil itself” over time because the system only ever encounters local slices of the manifold.  
+From a complete relational perspective, the manifold is whole.
 
-- **Manifold** $M$: the space of relational meaning  
-- **Trajectories** $\gamma(t)$: paths of evolving interpretation  
-- **Verb fields** $V(x)$: forces that generate motion  
-- **Noun attractors** $\phi(x)$: basins that stabilize motion  
-- **Curvature** $R$: how meaning bends  
-- **Coherence** $C(t)$: alignment of trajectories  
+---
 
-These primitives form the foundation for the examples, analyses, and applications developed in later sections.
+# **4.7.2 Systems Maintain Coordinate Systems**
+
+A system’s coordinate system is its internal mapping of the relational manifold.  
+It determines:
+
+- what distinctions the system can make  
+- what patterns it can detect  
+- what transitions it can interpret  
+- what influences it can respond to  
+
+Coordinate systems are **dynamic** but **constraint‑bound**.  
+They may reorganize, expand, compress, or shift, but only in ways permitted by the system’s structure.
+
+---
+
+# **4.7.3 Constraints and Allowed Transformations**
+
+Constraints define the structural limits of the system.  
+They determine:
+
+- which coordinate changes are possible  
+- which reorganizations are forbidden  
+- which patterns can be registered  
+- which transitions can be enacted  
+
+Constraints are not teleological; they are structural.  
+They do not direct the system — they bound it.
+
+---
+
+# **4.7.4 Dynamic Information Within a Coordinate System**
+
+Dynamic information describes how patterns bias trajectories *within* the system’s coordinate system.
+
+Dynamic information does **not**:
+
+- change the geometry  
+- determine which coordinate systems are possible  
+- explain why a system selects one viable trajectory over another  
+
+Dynamic information does:
+
+- bias transitions  
+- redirect flows  
+- alter the unfolding of the system  
+- operate entirely within the system’s internal mapping  
+
+It is geometric, mechanical, and non‑teleological.
+
+---
+
+**4.7.5 Scope Boundary**
+
+Some systems may dynamically reorganize their coordinate systems, and some may select among multiple viable trajectories. This document does not attempt to explain such processes. We only note the following definitions to clarify terminology and to indicate directions for future work, without offering justification or discussion here:
+
+**Geometry**  
+The relational manifold.  
+Not fixed, not frozen — *given*.  
+It is the structure of possible relations, the space of possibility.
+
+**Coordinate System**  
+The system’s internal mapping of the geometry.  
+Dynamic, constraint‑bound, adaptive.  
+This is where learning, adaptation, and dynamic information operate.
+
+**Thought**  
+Changing the coordinate system.  
+A system “thinks” when it dynamically redefines its internal mapping of the given geometry, subject to its constraints.  
+This is mechanical and geometric.
+
+**Choice**  
+Primitive selection among viable coordinate trajectories.  
+Definable, but not reducible.  
+Not derivable from geometry.  
+Not explained by constraints.  
+A primitive in the ontology.
+
+These observations are included only to mark conceptual boundaries and to motivate future research. The present document does not elaborate on them.
+
+---
+
+# **Summary of Section 4.7**
+
+Section 4.7 establishes the relationship between geometry, coordinate systems, constraints, and dynamic information. Geometry is the given relational manifold — the structure of possible relations. Systems maintain internal coordinate systems that map this manifold, and these mappings are dynamic but constrained by the system’s structure. Dynamic information operates entirely within a system’s coordinate system, biasing trajectories without altering the geometry itself. The section also marks conceptual boundaries by noting that coordinate‑system reorganization (“thought”) and trajectory selection (“choice”) are definable but lie outside the scope of this document and are reserved for future work.
 
 ---
 
