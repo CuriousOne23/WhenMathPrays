@@ -696,87 +696,159 @@ Concatenation is **geometric composition**:
 
 # **8. Relational Curvature**
 
-Curvature describes how the relational manifold bends under the influence of relational density, meaning‑gradients, and temporal evolution. It determines how trajectories deviate, compress, or accelerate as they move through meaning‑space.
+Relational curvature describes how the manifold bends, compresses, or expands around a point. Curvature determines how trajectories deviate from geodesic motion, how meaning‑gradients form, and how reasoning becomes easier or harder depending on local relational structure.
 
-Curvature is not an added mechanism; it is a **structural property** of the manifold itself. When curvature changes, interpretation changes.
+This section introduces no new primitives.  
+It shows how curvature arises naturally from the existing geometry — attractors, vector fields, gradients, constraints, and meaning‑volume.
+
+Curvature is not an added mechanism.  
+Curvature is a **structural property** of the relational manifold.
 
 ---
 
 ## **8.1 Curvature From Relational Density**
 
-Let $\rho(x)$ denote **relational density** at point $x$ — how many relations converge there.  
+Curvature increases when relational density is uneven.
+
+Let $\rho(x)$ denote relational density at point $x$.  
 Curvature $K(x)$ increases with density:
 
-  
 $$
-K(x) \propto \rho(x)
+K(x) \propto \nabla \rho(x).
 $$
-  
-**Where:**  
-- $K(x)$ = curvature at point $x$  
-- $\rho(x)$ = relational density  
 
-**Meaning:** dense regions bend trajectories more strongly.
+Dense regions behave like **conceptual gravity wells**:
+
+- trajectories slow  
+- paths bend inward  
+- geodesics converge  
+
+Sparse regions behave like **flat space**:
+
+- trajectories remain straight  
+- gradients are shallow  
+- geodesics diverge slowly  
+
+Curvature is therefore a **structural consequence** of relational density.
 
 ---
 
 ## **8.2 Local vs. Global Curvature**
 
-Local curvature shapes immediate interpretive tendencies.  
-Global curvature shapes long‑range reasoning and narrative structure.
+Curvature operates at multiple scales.
 
-A system may have:
+### **Local curvature**  
+Local curvature describes how trajectories bend in a small neighborhood around a point.
 
-- low local curvature but strong global curvature (smooth locally, constrained globally)  
-- high local curvature but weak global curvature (volatile locally, open globally)
+If $\gamma$ is a trajectory, local curvature is:
 
-**Meaning:** curvature operates at multiple scales simultaneously.
+$$
+K_{\text{local}} = \left\| \nabla_{\dot{\gamma}} \dot{\gamma} \right\|.
+$$
+
+High local curvature corresponds to:
+
+- conceptual difficulty  
+- ambiguity  
+- rapid shifts in meaning  
+- unstable reasoning paths  
+
+### **Global curvature**  
+Global curvature describes the large‑scale shape of the manifold:
+
+- whether regions funnel trajectories  
+- whether attractors form basins  
+- whether reasoning loops or spirals  
+- whether long‑range paths converge or diverge  
+
+Global curvature determines **the topology of reasoning**.
 
 ---
 
 ## **8.3 Curvature as Meaning‑Gradient**
 
-Let $M(x)$ denote **meaning‑volume** at point $x$.  
+Meaning‑volume is not uniform across the manifold.  
+Regions with high meaning‑volume exert **pull** on trajectories.
+
+Let $M(x)$ denote meaning‑volume at point $x$.  
+The meaning‑gradient is:
+
+$$
+\nabla M(x).
+$$
+
 Curvature increases when meaning‑gradients steepen:
 
-  
 $$
-K(x) \propto \left\| \nabla M(x) \right\|
+K(x) \propto \left\| \nabla M(x) \right\|.
 $$
-  
-**Where:**  
-- $M(x)$ = meaning‑volume  
-- $\nabla M(x)$ = gradient of meaning  
-- $\|\cdot\|$ = magnitude  
 
-**Meaning:** steep meaning changes create strong interpretive pull.
+Steep gradients create:
+
+- strong interpretive pull  
+- conceptual “cliffs”  
+- rapid shifts in reasoning  
+
+Flat gradients allow smooth, unconstrained motion.
+
+Curvature is the **geometric expression of meaning‑pressure**.
 
 ---
 
 ## **8.4 Temporal Evolution of Curvature**
 
-Curvature evolves as constraints accumulate or dissipate.  
-Let $K_t$ denote curvature at time $t$:
+Curvature is dynamic.  
+As the system learns, reorganizes, or encounters new information, curvature changes.
 
-  
-$$
-\frac{dK_t}{dt} = f(\text{constraints}, \text{relations}, \text{learning})
-$$
-  
-**Where:**  
-- $K_t$ = curvature at time $t$  
-- $f(\cdot)$ = some function of structural factors  
+Let $K_t(x)$ denote curvature at time $t$.  
+Its evolution is governed by:
 
-**Meaning:** learning reshapes curvature, and curvature reshapes learning.
+$$
+\frac{d}{dt} K_t(x) = f(\rho_t, M_t, \text{constraints}_t).
+$$
+
+Curvature increases when:
+
+- constraints accumulate  
+- attractors deepen  
+- meaning‑volume concentrates  
+- gradients sharpen  
+
+Curvature decreases when:
+
+- constraints weaken  
+- attractors flatten  
+- meaning diffuses  
+- coherence improves  
+
+Temporal curvature dynamics determine:
+
+- how reasoning becomes easier or harder  
+- how concepts reorganize  
+- how attractors shift  
+- how identity stabilizes or destabilizes  
+
+Curvature is a **dynamic property**, shaped by learning and relational change.
 
 ---
 
-## Summary of Section 8
+## **Summary of Section 8**
 
-• Defined relational curvature as the structural bending of meaning‑space.  
-• Showed how curvature increases with relational density and meaning‑gradients.  
-• Distinguished local curvature (immediate interpretive pull) from global curvature (long‑range narrative structure).  
-• Explained how curvature evolves over time as constraints, relations, and learning reshape the manifold.
+Relational curvature arises from:
+
+- relational density  
+- meaning‑gradients  
+- attractor structure  
+- temporal evolution  
+
+Curvature determines:
+
+- how trajectories bend  
+- how reasoning flows  
+- how concepts stabilize  
+- how meaning organizes  
+
+Curvature is the **geometric backbone** of conceptual dynamics.
 
 ---
 
