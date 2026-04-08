@@ -1081,6 +1081,18 @@ These global structures guide how entire societies interpret the world. They are
 
 Global resonance is the architecture of culture.
 
+```mermaid
+flowchart TB
+    L[Local Resonance]
+    I[Intermediate Resonance]
+    G[Global Resonance]
+
+    L --> I
+    I --> G
+    G --> I
+    I --> L
+```
+
 ---
 
 ## **Why this matters**
@@ -1201,6 +1213,18 @@ Because of this, even a small narrative fragment contains:
 - local curvature patterns (how interpretation bends)  
 
 And these local features **mirror the global narrative structure**.
+
+```mermaid
+flowchart TB
+    G[Global Structure]
+    I[Intermediate Structure]
+    L[Local Structure]
+
+    G --> I
+    I --> L
+    L --> I
+    I --> G
+```
 
 ---
 
@@ -1362,6 +1386,18 @@ Each term corresponds to a specific geometric adjustment:
 
 - **Coherence increases across scales — emergent from all three terms**  
   When curvature, attractors, and gradients align, multi‑scale coherence improves.
+
+```mermaid
+    flowchart LR
+    L[Local Adjustment]
+    S[Synchronization]
+    I[Identity Curvature]
+    R[Rewriting]
+
+    L --> S
+    S --> I
+    I --> R
+```  
 
 Learning is **geometric optimization**: reducing unnecessary curvature, reshaping attractors, adjusting gradients, and increasing coherence across scales. Affective learning is the dynamical refinement of the relational manifold.
 
