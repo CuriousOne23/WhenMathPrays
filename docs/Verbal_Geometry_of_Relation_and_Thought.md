@@ -1156,6 +1156,10 @@ Finally, we described the **fractal‑holographic structure** of narrative, wher
 
 Now that we have the geometry of resonance, we can turn to how this geometry moves. Resonance is not static; it shifts, strengthens, weakens, and reorganizes as trajectories interact. Patterns that once held steady can drift, split, or collapse, while new patterns can emerge from small fluctuations. Section 10 explores these dynamics — how meaning flows through time, how coherence forms and dissolves, and how systems transform as their internal and relational structures evolve.
 
+Stability and plasticity describe how the relational manifold changes over time, while affective learning explains how curvature, attractors, and coherence reorganize in response to experience. This section does not introduce new primitives; instead, it shows how the existing geometric structures — attractors, curvature, meaning‑volume, and resonance — evolve under pressure, repetition, and interaction.
+
+Learning is treated as geometric rewriting: the manifold reshapes itself to improve coherence, reduce instability, and deepen useful attractors. These processes unfold across scales, beginning with local adjustments and propagating outward through fractal synchronization, eventually shaping long‑term identity curvature.
+
 ---
 
 # **10.1 Local Adjustment (Succinct + Accessible)**
