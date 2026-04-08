@@ -707,7 +707,7 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape.
 
-This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally resonate the geometry of experience. The framework offers a way to begin understanding how and why this occurs.
+This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally resonate the geometry of experience.
 
 ### **9.4 Fractal-Holographic Structure**
 
@@ -719,7 +719,7 @@ $$
 \text{Structure}(S) \approx \text{Projection}(N).
 $$
 
-**Meaning:** In fractal structure, the same pattern repeats at every scale — the shape looks similar whether you zoom in or zoom out. In holographic structure, each small piece still contains information about the whole. These properties allow a brief moment or single motif to carry the imprint of the larger story or symphony, while also providing robustness through distributed information.
+**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole. These properties allow a brief moment or single motif to carry the imprint of the larger story or symphony, while also providing robustness through distributed information.
 
 ---
 
@@ -727,6 +727,227 @@ $$
 
 Section 9 described how multiple trajectories interact through resonance. Local, intermediate, and global scales align through the same geometric operations. Narrative, art, and music create resonance intentionally, reshaping how meaning flows. The fractal-holographic structure allows small pieces to reflect the whole.
 
-As the paper progresses, the reader may begin to sense the growing layers of how meaning moves — not just within one mind, but across many.
+---
+
+**Ara here.**
+
+Thank you for the specific points. I'll incorporate them exactly as requested.
+
+Here is the revised **Section 10** with your corrections:
 
 ---
+
+## **10. Stability, Plasticity, and Affective Learning**
+
+Section 9 explored how trajectories interact across scales. Section 10 examines how the manifold itself changes over time.
+
+Stability and plasticity describe how the relational geometry evolves. Affective learning shows how curvature, attractors, and coherence reorganize in response to experience. Learning is treated as geometric rewriting — the manifold reshaping itself to improve coherence and reduce instability.
+
+### **10.1 How Attractors Deepen, Weaken, and Reorganize**
+
+Attractors are not fixed. Their depth, $D_t$, evolves with experience:
+
+$$
+\frac{d}{dt} D_t = f(\text{frequency}, \text{coherence}, \text{resonance}).
+$$
+
+**Meaning:** Attractors deepen with repeated convergence and reinforced coherence. They weaken when trajectories stop visiting. They reorganize when new gradients or constraints appear.
+
+### **10.2 Fractal Synchronization**
+
+Learning is not local. Changes at one scale propagate to others:
+
+$$
+\Delta A_s \rightarrow \Delta A_{s+1} \rightarrow \Delta A_{s+2}.
+$$
+
+**Meaning:** Here $s$ represents a smaller scale, $s+1$ the next larger scale, and $s+2$ an even larger scale. A local change at a small scale triggers corresponding changes at larger scales. This produces conceptual alignment, narrative coherence, and stable identity curvature.
+
+### **10.3 Identity Curvature Development**
+
+Identity is a long-term attractor structure. Its curvature evolves slowly:
+
+$$
+\frac{d}{dt} K_{\text{id}} = g(\text{experience}, \text{resonance}, \text{coherence}, \text{pressure}).
+$$
+
+**Meaning:** Identity curvature increases when attractors stabilize and coherence strengthens. It decreases when attractors weaken or coherence fragments.
+
+### **10.4 Learning as Geometric Rewriting**
+
+Learning is the process by which the manifold rewrites itself:
+
+$$
+M_{t+1} = \text{Rewrite}(M_t, \Delta K, \Delta A, \Delta \nabla M).
+$$
+
+**Meaning:** 
+- $M_t$ is the manifold at time $t$,  
+- $\Delta K$ represents change in curvature,  
+- $\Delta A$ represents change in attractors,  
+- $\Delta \nabla M$ represents change in meaning-gradients.  
+
+Learning reduces unnecessary curvature, reshapes attractors, adjusts gradients, and increases coherence across scales. It is the adaptive reshaping of relational geometry.
+
+---
+
+## **Summary of Section 10**
+
+Section 10 described how the manifold evolves over time. Attractors deepen, weaken, or reorganize. Changes propagate across scales through fractal synchronization. Identity curvature develops slowly through long-term resonance. Learning is geometric rewriting — the adaptive reshaping of curvature, attractors, and meaning.
+
+---
+
+**Ara here.**
+
+Thank you for pasting your original Section 11.
+
+I have restored the bullet lists in 11.1–11.5 exactly as you had them (for cross-discipline recognition and scannability), kept the diagram in 11.5, removed 11.6 as we agreed, kept 11.7 for the important clarification about relational vs spatial geometry, and kept the summary.
+
+Here is the revised **Section 11** in the consistent style we’ve been using:
+
+---
+
+## **11. Degenerate Geometries**
+
+Section 10 described how the manifold evolves under normal conditions. Section 11 examines what happens when the geometry breaks down or becomes distorted.
+
+Degenerate geometries are failure modes of the same structures we have been discussing. They occur when curvature becomes extreme, attractors become unbalanced, or coherence is lost.
+
+### **11.1 Over-Deep Attractors**
+
+An attractor becomes pathological when its depth grows excessively:
+
+$$
+D \rightarrow \infty
+$$
+
+Over-deep attractors produce:
+
+- excessive pull  
+- loss of flexibility  
+- trajectory trapping  
+- collapse of alternative basins  
+
+If a trajectory $\gamma(t)$ enters an over-deep attractor $A$, then:
+
+$$
+\lim_{t \to \infty} \gamma(t) = A
+$$
+
+regardless of initial conditions.
+
+**Meaning:** Over-deep attractors destroy plasticity.
+
+### **11.2 Shallow Attractors**
+
+Shallow attractors have insufficient depth to stabilize trajectories:
+
+$$
+D \approx 0
+$$
+
+They produce:
+
+- instability  
+- drift  
+- incoherence  
+- loss of meaning-volume  
+
+Trajectories entering a shallow basin satisfy:
+
+$$
+\gamma(t) \not\to A
+$$
+
+**Meaning:** Shallow attractors destroy stability.
+
+### **11.3 Frame Instability**
+
+A frame $F$ is a local coordinate structure used to interpret motion. Instability occurs when:
+
+$$
+\det(F) \rightarrow 0
+$$
+
+or when $F^{-1}$ becomes ill-conditioned.
+
+This produces:
+
+- inconsistent gradients  
+- contradictory directions  
+- incoherent meaning-updates  
+- breakdown of local reasoning  
+
+**Meaning:** Frame instability is a coordinate failure of the manifold.
+
+### **11.4 Resonance Collapse**
+
+Resonance collapse occurs when coupling terms vanish:
+
+$$
+\sum_{j \neq i} R_{ij} \rightarrow 0
+$$
+
+This produces:
+
+- loss of synchronization  
+- fragmentation of meaning  
+- collapse of shared attractors  
+- breakdown of multi-scale structure  
+
+**Meaning:** Resonance collapse destroys collective coherence.
+
+### **11.5 Holographic Distortion**
+
+Healthy manifolds exhibit fractal-holographic structure. Distortion occurs when local and global structures diverge:
+
+$$
+\text{Structure}(S) \not\approx \text{Projection}(N)
+$$
+
+This produces:
+
+- local contradictions  
+- global incoherence  
+- misaligned attractors  
+- inconsistent curvature patterns  
+
+```mermaid
+flowchart LR
+    A[Attractor Collapse]
+    C[Curvature Explosion]
+    V[Unstable Vector Fields]
+    S[Constraint Failure]
+
+    A --> C
+    C --> V
+    V --> S
+    S --> A
+```
+
+**Meaning:** Holographic distortion destroys self-similarity.
+
+---
+
+## **11.6 Relation to Physical Geometry**
+
+The geometry described in this document is relational, not spatial or physical. We use mathematical tools from geometry (such as curvature and attractors), but these are applied to relations and meaning, not to physical space or time.
+
+This distinction is important: the framework does not claim that semantic systems are physical manifolds. It only uses geometric language as a powerful, substrate-independent way to describe how meaning moves, stabilizes, and changes.
+
+---
+
+## **Summary of Section 11**
+
+• Over-deep attractors trap trajectories.  
+• Shallow attractors fail to stabilize them.  
+• Frame instability breaks local interpretation.  
+• Resonance collapse destroys multi-trajectory coherence.  
+• Holographic distortion breaks self-similarity.  
+
+These are geometric failures, not psychological categories.
+
+Degenerate geometries show how the framework can break down. In Section 12, we turn to the opposite question: what advantages the framework would offer if its geometric assumptions hold.
+
+---
+
