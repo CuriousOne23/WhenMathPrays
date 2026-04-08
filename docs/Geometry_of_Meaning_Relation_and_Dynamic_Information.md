@@ -159,12 +159,6 @@ flowchart TD
 
 ---
 
-# **4. The Framework**
-
-This section introduces the minimal geometric primitives used throughout the manuscript. Each primitive is defined in operational terms, with symbols and operators introduced explicitly. The goal is clarity: readers should be able to follow the geometry without prior mathematical background.
-
----
-
 ## **4.1 The Relational Manifold**
 
 We model meaning as motion through a **relational manifold** $M$.  
@@ -530,10 +524,10 @@ Affect is the system’s internal experience of motion, pressure, and curvature 
 
 ---
 
-# **6. Affective Dynamics**
+## **6. Affective Dynamics**
 
 Section 5 showed how geometric primitives manifest across domains.  
-Section 6 examines how a system **experiences** and **responds to** those geometric structures as they change.
+Section 6 examines how a system experiences and responds to those geometric structures as they change.
 
 Affect is not an additional layer placed on top of the relational manifold.  
 Affect is **the system’s response to changes in relational geometry**.
@@ -556,7 +550,7 @@ Affect is the geometry of change.
 
 Affect is defined by **how the relational state evolves**, not by the content of the state.
 
-Given a trajectory  
+Given a trajectory
 
 $$
 \gamma : [0, T] \to M,
@@ -575,8 +569,7 @@ $$
 \text{Affect} = \text{Dynamics}(\gamma, \dot{\gamma}, \nabla_{\dot{\gamma}}\dot{\gamma}, \text{Meaning}(\gamma)).
 $$
 
-No new primitives are introduced.  
-Affect is simply how the existing geometric structures behave over time.
+**Meaning:** No new primitives are introduced. Affect is simply how the existing geometric structures behave over time.
 
 ---
 
@@ -597,7 +590,7 @@ Valence is structural:
 - independent of narrative  
 - independent of subjective report  
 
-Valence is **whether meaning is expanding or contracting**.
+**Meaning:** Valence is whether meaning is expanding or contracting.
 
 ---
 
@@ -605,7 +598,7 @@ Valence is **whether meaning is expanding or contracting**.
 
 Arousal is the **magnitude of forces acting on the trajectory**.
 
-Let  
+Let
 
 $$
 F = \nabla_{\dot{\gamma}}\dot{\gamma}
@@ -622,7 +615,7 @@ $$
 - High arousal → large dynamical pressure  
 - Low arousal → small dynamical pressure  
 
-Arousal is **how hard the system is being pushed** — a geometric intensity measure, not a psychological one.
+**Meaning:** Arousal is how hard the system is being pushed — a geometric intensity measure, not a psychological one.
 
 ---
 
@@ -656,7 +649,7 @@ even in the presence of:
 - competing gradients  
 - shifting relational constraints  
 
-Stability is not the absence of pressure. Stability is **coherence preserved despite pressure**.
+**Meaning:** Stability is not the absence of pressure. Stability is coherence preserved despite pressure.
 
 ---
 
@@ -672,14 +665,7 @@ Regulation includes:
 - adjusting gradient pressure  
 - selecting trajectories that avoid destabilizing regions  
 
-Regulation is **steering** the geometry — a control process acting on:
-
-- curvature  
-- coherence  
-- meaning‑volume  
-- dynamical pressure  
-
-It is not a separate mechanism; it is the system shaping its own relational geometry.
+**Meaning:** Regulation is steering the geometry — a control process acting on curvature, coherence, meaning‑volume, and dynamical pressure. It is not a separate mechanism; it is the system shaping its own relational geometry.
 
 ---
 
@@ -695,7 +681,7 @@ An identity is a region that:
 - resists collapse under curvature  
 - provides long‑term structural invariants  
 
-Identity is not a narrative or a story. Identity is **where the system tends to return** — a geometric invariant that endures.
+**Meaning:** Identity is not a narrative or a story. Identity is where the system tends to return — a geometric invariant that endures.
 
 ---
 
