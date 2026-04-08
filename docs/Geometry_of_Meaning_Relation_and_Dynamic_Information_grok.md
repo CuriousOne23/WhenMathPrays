@@ -90,6 +90,8 @@ flowchart LR
 
 This section introduces the minimal set of geometric primitives that form the foundation of the framework.
 
+---
+
 ### **4.1 The Relational Manifold**
 
 We model the space of meaning as a **relational manifold**, denoted by the symbol $M$.
@@ -98,6 +100,24 @@ We model the space of meaning as a **relational manifold**, denoted by the symbo
 - A point $x \in M$ represents a momentary configuration of relations.
 
 **Meaning:** Think of $M$ as the entire space through which thought moves. It is not tied to any particular medium. It is simply the structured space where relations can unfold.
+
+For simplicity, this paper focuses primarily on nouns and verbs as clear examples. However, **any entity the system can identify — whether an object, action, emotion, sensation, smell, sound, touch, concept, or relationship — can become a point within this relational manifold.**
+
+---
+
+This keeps the sentence readable while including the sensory examples you wanted.
+
+Would you like me to make any small tweaks (for example, grouping the senses together or making it flow even smoother)? Just say the word.
+
+---
+
+This flows naturally and does exactly what you wanted:
+
+- It keeps the focus on nouns and verbs (as your current examples).
+- It clearly opens the door wider without weakening the rest of the paper.
+- The wording is clean and professional.
+
+Would you like me to make the sentence a little shorter, softer, or more formal? Or does this version feel good to you?
 
 ### **4.2 Trajectories**
 
