@@ -446,7 +446,7 @@ $$
 
 affect reflects the system’s response to changes in meaning-volume, curvature, coherence, and gradient pressure.
 
-**Meaning:** Affect is how the existing geometric structures behave as they change over time.
+**Meaning:** Affect is how the existing geometric structures respond as they change over time.
 
 ### **6.2 Valence**
 
@@ -711,7 +711,7 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape [9].
 
-This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally reshape the geometry through which experience moves.
+This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” TThey literally reshape the geometry through which meaning and interpretation move.
 
 ### **9.4 Fractal-Holographic Structure**
 
@@ -1031,7 +1031,7 @@ These are models, not metaphysical claims. The geometry is a lens, not a replace
 
 ### **13.3 Preserving Mystery**
 
-There are aspects of human life that remain outside any formal system — the felt quality of experience, the irreducibility of consciousness, the open-endedness of meaning, the unpredictability of creativity, and the depth of personal relationships.
+There are aspects of human life that remain outside any formal system — subjective experience, the irreducibility of consciousness, the open-endedness of meaning, the unpredictability of creativity, and the depth of personal relationships.
 
 The model captures structure, not essence.
 
@@ -1129,7 +1129,7 @@ These components form a single coherent structure.
 
 ### **15.2 Reaffirming the Promise and Openness**
 
-The framework offers conceptual unification, operational definitions, cross-substrate applicability, and empirical testability. It provides new tools for understanding reasoning systems across disciplines.
+The framework provides conceptual unification, operational definitions, cross-substrate applicability, and empirical testability. It provides new tools for understanding reasoning systems across disciplines.
 
 But the framework remains open — to revision, to critique, to expansion, and to alternative formalisms. The work is not finished.
 
