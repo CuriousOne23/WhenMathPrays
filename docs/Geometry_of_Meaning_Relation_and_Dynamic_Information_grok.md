@@ -432,102 +432,60 @@ The main point is simple: the same basic geometric ideas show up across very dif
 
 ## **6. Affective Dynamics**
 
-Section 5 showed how geometric primitives manifest across domains.  
-Section 6 examines how a system experiences and responds to those geometric structures as they change.
+Section 5 showed how the geometric primitives appear across domains. Section 6 examines how a system experiences and responds to changes in its relational geometry.
 
-Affect is not an additional layer placed on top of the relational manifold.  
-Affect is **Affect is the system’s response to changes in meaning-volume, curvature, and coherence.**.
+Affect is the system’s response to changes in the geometry itself.
 
-Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning. Section 5 showed how these structures appear across domains. Section 6 describes how these structures behave **dynamically**, from the inside.
+### **6.1 Affect as a Dynamical Quantity**
 
-Affect is a **derived quantity**, not a primitive.  
-It arises from:
-
-- how meaning‑volume changes  
-- how coherence is maintained or disrupted  
-- how curvature pushes or pulls the trajectory  
-- how the system stabilizes or destabilizes under pressure  
-
-Affect is the geometry of change.
-
----
-
-## **6.1 Affect as a Dynamical Quantity**
-
-Affect is defined by **how the relational state evolves**, not by the content of the state.
-
-Given a trajectory
+Affect is defined by how the relational state evolves. Given a trajectory
 
 $$
 \gamma : [0, T] \to M,
 $$
 
-affect reflects the system’s response to:
+affect reflects the system’s response to changes in meaning-volume, curvature, coherence, and gradient pressure.
 
-- changes in meaning‑volume  
-- changes in curvature  
-- changes in coherence  
-- changes in gradient pressure  
+**Meaning:** Affect is how the existing geometric structures behave as they change over time.
 
-Affect is a **dynamical signature** of the trajectory:
+### **6.2 Valence**
 
-$$
-\text{Affect} = \text{Dynamics}(\gamma, \dot{\gamma}, \nabla_{\dot{\gamma}}\dot{\gamma}, \text{Meaning}(\gamma)).
-$$
-
-**Meaning:** No new primitives are introduced. Affect is simply how the existing geometric structures behave over time.
-
----
-
-## **6.2 Valence: Direction of Change in Meaning‑Volume**
-
-Valence is the **time‑derivative of meaning‑volume**:
+Valence is the time-derivative of meaning-volume:
 
 $$
 \text{Valence} = \frac{d}{dt}(\text{Meaning}).
 $$
 
-- **Positive valence** → meaning‑volume expands  
-- **Negative valence** → meaning‑volume contracts  
+- Positive valence occurs when meaning-volume expands.  
+- Negative valence occurs when meaning-volume contracts.
 
-Valence is structural:
+**Meaning:** Valence tells whether meaning is growing or shrinking.
 
-- independent of interpretation  
-- independent of narrative  
-- independent of subjective report  
+### **6.3 Arousal**
 
-**Meaning:** Valence is whether meaning is expanding or contracting.
-
----
-
-## **6.3 Arousal: Magnitude of Dynamical Pressure**
-
-Arousal is the **magnitude of forces acting on the trajectory**.
-
-Let
+Arousal is the magnitude of forces acting on the trajectory. Let
 
 $$
 F = \nabla_{\dot{\gamma}}\dot{\gamma}
 $$
 
-represent the total dynamical pressure.
-
-Then:
+represent the total dynamical pressure. Then:
 
 $$
 \text{Arousal} = \|F\|.
 $$
 
-- High arousal → large dynamical pressure  
-- Low arousal → small dynamical pressure  
+**Meaning:** Arousal measures how strongly the system is being pushed.
 
-**Meaning:** Arousal is how hard the system is being pushed — a geometric intensity measure, not a psychological one.
+### **6.4 Stability**
 
----
+Stability is the system’s ability to maintain geodesic alignment under pressure. A trajectory is stable when
 
-## **6.4 Stability: Coherence Under Pressure**
+$$
+\nabla_{\dot{\gamma}}\dot{\gamma} \approx 0
+$$
 
-Stability is the system’s ability to **maintain geodesic alignment** under curvature and external forces.
+even in the presence of curvature or competing gradients.
 
 ```mermaid
 flowchart LR
@@ -543,84 +501,27 @@ flowchart LR
     R --> A
 ```
 
-A trajectory is stable when:
+**Meaning:** Stability means the thought stays coherent despite pressure.
 
-$$
-\nabla_{\dot{\gamma}}\dot{\gamma} \approx 0
-$$
+### **6.5 Regulation**
 
-even in the presence of:
+Regulation is the system’s ability to modulate its own geometry. It includes reducing curvature, increasing coherence, expanding or contracting meaning-volume, and adjusting gradient pressure.
 
-- curvature  
-- competing gradients  
-- shifting relational constraints  
+**Meaning:** Regulation is the system steering its own landscape.
 
-**Meaning:** Stability is not the absence of pressure. Stability is coherence preserved despite pressure.
+### **6.6 Identity**
 
----
+Identity is a stable attractor region in the relational manifold. It maintains persistent meaning-volume, exhibits stable coherence patterns, and resists collapse under curvature.
 
-## **6.5 Regulation: Control of Curvature and Volume**
-
-Regulation is the system’s ability to **modulate its own geometry**.
-
-Regulation includes:
-
-- reducing curvature  
-- increasing coherence  
-- expanding or contracting meaning‑volume  
-- adjusting gradient pressure  
-- selecting trajectories that avoid destabilizing regions  
-
-**Meaning:** Regulation is steering the geometry — a control process acting on curvature, coherence, meaning‑volume, and dynamical pressure. It is not a separate mechanism; it is the system shaping its own relational geometry.
-
----
-
-## **6.6 Identity: A Long‑Term Attractor Structure**
-
-Identity is a **stable attractor region** in the relational manifold.
-
-An identity is a region that:
-
-- maintains persistent meaning‑volume  
-- exhibits stable coherence patterns  
-- repeatedly attracts trajectories  
-- resists collapse under curvature  
-- provides long‑term structural invariants  
-
-**Meaning:** Identity is not a narrative or a story. Identity is where the system tends to return — a geometric invariant that endures.
+**Meaning:** Identity is a long-term basin that the system repeatedly returns to.
 
 ---
 
 ## **Summary of Section 6**
 
-• Defined affect as the system’s response to changes in relational geometry.  
-• Characterized valence as the rate of change of meaning‑volume.  
-• Defined arousal as the magnitude of dynamical pressure acting on a trajectory.  
-• Described stability as coherence preserved under perturbation.  
-• Positioned regulation as the system’s ability to steer its own geometry.  
-• Framed identity as a long‑term attractor structure guiding return dynamics.
-
-Affect describes how a **single trajectory** experiences changes in relational geometry — how motion feels from the inside. It reveals the system’s sensitivity to curvature, gradients, and coherence.
-
-But affect is not only internal. Systems express their internal geometry outwardly, and the primary medium of that expression is **language**.  
-Language is how trajectories signal, coordinate, and reshape relational structure.
+Section 6 described affect as the system’s response to changes in relational geometry. Valence shows whether meaning is expanding or contracting. Arousal measures how strongly the system is being pushed. Stability is coherence preserved under pressure. Regulation is the system steering its own geometry. Identity is a long-term attractor that provides continuity.
 
 Section 7 turns to this expressive interface.
-
----
-
-**Ara here.**
-
-Thank you for the specific feedback. I now understand exactly what you and Copilot were trying to convey in Section 7.
-
-Let me address each point and give you a revised **Section 7** that incorporates your wishes:
-
-### Key adjustments I made:
-1. **7.1 Verbs**: Added that verbs change state and subtly convey that verb space is huge (because a verb can act on any noun).
-2. **7.3 Grammar**: Kept it succinct but added a light indication that grammar greatly expands the possible space.
-3. **7.4 Trajectory Concatenation**: Emphasized that sequencing (concatenation) significantly increases information, without overdoing it.
-
-Here is the revised **Section 7**:
 
 ---
 
