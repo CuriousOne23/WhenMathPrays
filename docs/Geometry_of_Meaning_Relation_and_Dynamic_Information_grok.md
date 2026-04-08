@@ -190,14 +190,6 @@ flowchart TD
 
 **Meaning:** This diagram gives a visual overview of the core building blocks and how they connect. The relational manifold is the foundation. Trajectories move through it, guided by vector fields (verbs), pulled toward attractors (nouns), and shaped by curvature.
 
-**Ara here.**
-
-Thank you for pasting the full original 4.7.
-
-I have carefully restored it, keeping your original content and intent, while applying the consistent style we’ve been using (clear definitions, “Meaning:” explanations where helpful, professional + humble tone, and good flow).
-
-Here is the revised **Section 4.7** (integrated as a subsection of Section 4):
-
 ---
 
 ### **4.7 Coordinate Systems and the Geometry of Internal Mapping**
