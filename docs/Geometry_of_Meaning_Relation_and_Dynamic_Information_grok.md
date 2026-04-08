@@ -114,7 +114,7 @@ $$
 
 ### **4.3 Verbs as Vector Fields**
 
-Verbs generate motion. We model them as **vector fields**.
+Verbs generate motion. We model them as **vector fields** [4].
 
 A vector field assigns a direction of motion at every point in the manifold. We denote the vector field by the symbol $V$:
 
@@ -130,7 +130,7 @@ $$
 
 ### **4.4 Nouns as Attractors**
 
-Nouns correspond to regions of stability. We model them as **attractors**. We denote an attractor by the symbol $A$:
+Nouns correspond to regions of stability. We model them as **attractors** [5]. We denote an attractor by the symbol $A$:
 
 $$
 \lim_{t \to \infty} \gamma(t) \in A
@@ -144,7 +144,7 @@ $$
 
 ### **4.5 Curvature**
 
-Curvature describes how the manifold bends and influences the direction of motion. It is formally given by the Riemann curvature operator, which we denote by the symbol $R$:
+Curvature describes how the manifold bends and influences the direction of motion. It is formally given by the Riemann curvature operator [2], which we denote by the symbol $R$:
 
 $$
 R(X, Y)Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]} Z
@@ -586,7 +586,7 @@ Section 7 showed how language expresses motion through relational space. Section
 
 Relational curvature describes how the manifold bends, compresses, or expands. It determines how trajectories deviate from straight paths and how meaning-gradients form.
 
-No new primitives are introduced. Curvature arises naturally from relational density, attractors, and meaning-volume.
+No new primitives are introduced. Curvature arises naturally from relational density [6], attractors, and meaning-volume.
 
 ### **8.1 Curvature From Relational Density**
 
@@ -673,7 +673,7 @@ $$
 \dot{\gamma}(t) = V(\gamma(t)).
 $$
 
-When multiple trajectories interact, their evolution depends on resonance terms:
+When multiple trajectories interact, their evolution depends on resonance terms [7]:
 
 $$
 \dot{\gamma}_i(t) = V(\gamma_i(t)) + \sum_{j \neq i} R(\gamma_i(t), \gamma_j(t)).
@@ -705,13 +705,13 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 ### **9.3 Why Narrative, Art, and Music Have Power**
 
-Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape.
+Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape [9].
 
 This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally resonate the geometry of experience.
 
 ### **9.4 Fractal-Holographic Structure**
 
-Narrative systems often exhibit fractal-holographic structure: local segments reflect aspects of the global pattern.
+Narrative systems often exhibit fractal-holographic structure [11]: local segments reflect aspects of the global pattern.
 
 If $S$ is a small narrative segment and $N$ is the full narrative, then:
 
@@ -719,7 +719,7 @@ $$
 \text{Structure}(S) \approx \text{Projection}(N).
 $$
 
-**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole. These properties allow a brief moment or single motif to carry the imprint of the larger story or symphony, while also providing robustness through distributed information.
+**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole [12]. These properties allow a brief moment or single motif to carry the imprint of the larger story or symphony, while also providing robustness through distributed information.
 
 ---
 
@@ -931,7 +931,7 @@ flowchart LR
 
 ## **11.6 Relation to Physical Geometry**
 
-The geometry described in this document is relational, not spatial or physical. We use mathematical tools from geometry (such as curvature and attractors), but these are applied to relations and meaning, not to physical space or time.
+The geometry described in this document is relational, not spatial or physical [6]. We use mathematical tools from geometry (such as curvature and attractors), but these are applied to relations and meaning, not to physical space or time.
 
 This distinction is important: the framework does not claim that semantic systems are physical manifolds. It only uses geometric language as a powerful, substrate-independent way to describe how meaning moves, stabilizes, and changes.
 
