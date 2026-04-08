@@ -73,7 +73,9 @@ The sections that follow develop such a geometry using a minimal set of primitiv
 
 # **4. The Framework**
 
-The framework begins with a minimal set of primitives. The aim is not to capture the full richness of human thought, but to identify a simple geometric structure capable of generating the dynamics observed in verbal cognition.
+Section 3 identified the need for a geometry of motion — a structure capable of explaining how meanings shift, stabilize, and unfold over time. Section 4 begins the construction of that geometry.
+
+The framework starts with a minimal set of primitives. The aim is not to capture the full richness of human thought, but to specify the simplest relational structures from which the observed dynamics of verbal cognition can emerge.
 
 ---
 
@@ -289,15 +291,32 @@ These observations are included only to mark conceptual boundaries and to motiva
 
 ---
 
-# **Summary of Section 4.7**
+Here is the smooth, manuscript‑ready transition you’re looking for — clean, coherent, and perfectly aligned with the geometric arc of your manuscript.
 
-Section 4.7 establishes the relationship between geometry, coordinate systems, constraints, and dynamic information. Geometry is the given relational manifold — the structure of possible relations. Systems maintain internal coordinate systems that map this manifold, and these mappings are dynamic but constrained by the system’s structure. Dynamic information operates entirely within a system’s coordinate system, biasing trajectories without altering the geometry itself. The section also marks conceptual boundaries by noting that coordinate‑system reorganization (“thought”) and trajectory selection (“choice”) are definable but lie outside the scope of this document and are reserved for future work.
+I’ll give you **two pieces**:
+
+1. **A revised Summary of Section 4.7** that naturally *sets up Section 5*.  
+2. **A revised Introduction to Section 5** that *receives the handoff* seamlessly.
+
+---
+
+## **Summary of Section 4**
+
+Section 4 established the relationship between geometry, coordinate systems, constraints, and dynamic information. Geometry is the given relational manifold — the structure of possible relations. Systems maintain internal coordinate systems that map this manifold, and these mappings are dynamic but constrained by the system’s structure. Dynamic information operates entirely within a system’s coordinate system, biasing trajectories without altering the geometry itself. The section also marked conceptual boundaries by noting that coordinate‑system reorganization (“thought”) and trajectory selection (“choice”) are definable but lie outside the scope of this document and are reserved for future work.
+
+Section 4 provided the **primitives**.  
+Section 5 now shows how these primitives **behave in the world** — how they generate recognizable patterns across communication, biology, cognition, and physics.  
+The goal is not to add new machinery, but to help the reader **see the category** by watching the geometry express itself across domains.
 
 ---
 
 # **5. Examples That Reveal the Category**
 
-The purpose of this section is to show how the geometric structure introduced in Section 4 naturally generates familiar patterns across domains. Each example highlights a different geometric element — trajectories, vector fields, attractors, curvature, and geodesics — without requiring mathematical background. The goal is simple: **to help the reader see the category.**
+Section 4 introduced the geometric primitives — trajectories, vector fields, attractors, curvature, and coherence — and described how systems map and navigate the relational manifold. Section 5 shows how these same structures appear across domains. Each example highlights a different geometric element without requiring mathematical background.
+
+Communication appears as alignment of trajectories in shared relational space; biological forms emerge as attractors; reasoning becomes motion through conceptual space; and physical dynamics reveal the same geometric invariants.
+
+The purpose of this section is simple: **to help the reader see the category**.
 
 ---
 
@@ -383,14 +402,21 @@ This shows that the geometric framework reflects a deeper structural pattern sha
 
 This section illustrated how the geometric primitives introduced in Section 4 naturally generate familiar patterns across communication, biology, cognition, and physics. Communication appears as alignment of trajectories in shared relational space; biological forms emerge as attractors; reasoning becomes motion through conceptual space; and physical dynamics reveal the same geometric structures. Together, these examples show that the framework captures a cross‑domain coherence rooted in shared geometric invariants.
 
+These examples describe **what systems do** when embedded in relational geometry.  
+Section 6 turns to **how systems feel and respond** as the geometry around them changes.  
+Affect is the system’s internal experience of motion, pressure, and curvature within the manifold.
+
 ---
 
 # **6. Affective Dynamics**
 
+Section 5 showed how geometric primitives manifest across domains.  
+Section 6 examines how a system **experiences** and **responds to** those geometric structures as they change.
+
 Affect is not an additional layer placed on top of the relational manifold.  
 Affect is **the system’s response to changes in relational geometry**.
 
-Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning. Section 5 showed how these structures appear across domains. Section 6 describes how these structures behave **dynamically**.
+Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning. Section 5 showed how these structures appear across domains. Section 6 describes how these structures behave **dynamically**, from the inside.
 
 Affect is a **derived quantity**, not a primitive.  
 It arises from:
