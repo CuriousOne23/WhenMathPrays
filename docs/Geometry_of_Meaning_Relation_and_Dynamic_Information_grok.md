@@ -88,7 +88,7 @@ flowchart LR
 
 ## **4. The Framework**
 
-This section introduces the minimal set of geometric primitives. We define every symbol and operator clearly when it first appears, followed by a plain-English explanation.
+This section introduces the minimal set of geometric primitives that form the foundation of the framework.
 
 ### **4.1 The Relational Manifold**
 
@@ -97,7 +97,7 @@ We model the space of meaning as a **relational manifold**, denoted by the symbo
 - $M$ is the relational manifold — the overall landscape in which all relations and meanings exist.  
 - A point $x \in M$ represents a momentary configuration of relations.
 
-Think of $M$ as the entire space through which thought moves. It is not tied to any particular medium. It is simply the structured space where relations can unfold.
+**Meaning:** Think of $M$ as the entire space through which thought moves. It is not tied to any particular medium. It is simply the structured space where relations can unfold.
 
 ### **4.2 Trajectories**
 
@@ -110,7 +110,7 @@ $$
 - $\gamma(t)$ means the position in the manifold at time $t$.  
 - $\mathbb{R}$ simply means “along the flow of time.”
 
-**Plain English:** A trajectory is the path a thought takes as it moves and changes through the landscape of meaning.
+**Meaning:** A trajectory is the path a thought takes as it moves and changes through the landscape of meaning.
 
 ### **4.3 Verbs as Vector Fields**
 
@@ -126,7 +126,7 @@ $$
 - $T_M$ is the **tangent bundle** of $M$ — the collection of all possible directions of motion that exist at every point in the manifold.  
 - $V(x)$ means the specific direction the verb pushes the trajectory when it is at point $x$.
 
-**Plain English:** A verb is not a static word. It is a force-like influence that tells a thought which way to move at any given moment.
+**Meaning:** A verb is not a static word. It is a force-like influence that tells a thought which way to move at any given moment.
 
 ### **4.4 Nouns as Attractors**
 
@@ -140,7 +140,7 @@ $$
 - $\gamma(t)$ is the trajectory.  
 - $A$ is the attractor region.
 
-**Plain English:** An attractor is like a valley or basin in the landscape. Once a thought enters that region, it naturally tends to settle and stay there. This is why nouns feel stable.
+**Meaning:** An attractor is like a valley or basin in the landscape. Once a thought enters that region, it naturally tends to settle and stay there. This is why nouns feel stable.
 
 ### **4.5 Curvature**
 
@@ -154,7 +154,7 @@ $$
 - $\nabla$ is the covariant derivative — it describes how a direction changes as you move along the manifold.  
 - $[X,Y]$ is the Lie bracket, which measures the difference between moving first in direction $X$ and then $Y$, versus first in $Y$ and then $X$.
 
-**Plain English:** You do not need to compute this. In simple terms, curvature measures how much the landscape bends. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
+**Meaning:** You do not need to compute this. In simple terms, curvature measures how much the landscape bends. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
 
 ### **4.6 Coherence**
 
@@ -167,20 +167,41 @@ $$
 - $d(\gamma_1(t), \gamma_2(t))$ is the distance between two trajectories at time $t$.  
 - $D_{\max}$ is a normalization constant that sets the maximum meaningful distance.
 
-**Plain English:** Coherence tells us how well two lines of thought stay connected. When $C$ is close to 1, the thoughts feel aligned and coherent. When $C$ is close to 0, the thoughts feel fragmented or divergent.
+**Meaning:** Coherence tells us how well two lines of thought stay connected. When $C$ is close to 1, the thoughts feel aligned and coherent. When $C$ is close to 0, the thoughts feel fragmented or divergent.
+
+The following diagram shows how the main primitives relate to each other:
+
+```mermaid
+flowchart TD
+    M[Relational Manifold]
+    T[Trajectories]
+    V[Vector Fields]
+    A[Attractors]
+    K[Curvature]
+
+    M --> T
+    M --> V
+    M --> A
+    M --> K
+    V --> T
+    A --> T
+    K --> T
+```
+
+**Meaning:** This diagram gives a visual overview of the core building blocks and how they connect. The relational manifold is the foundation. Trajectories move through it, guided by vector fields (verbs), pulled toward attractors (nouns), and shaped by curvature.
 
 ---
 
-### **Summary of Section 4**
+## **Summary of Section 4**
 
 Section 4 introduced the basic building blocks of the framework:
 
 - The **relational manifold** is the overall landscape where meaning exists.  
-- **Trajectories** are the paths that thoughts follow as they move through this landscape.  
-- **Verbs** act as vector fields — they give direction and push thoughts along.  
+- **Trajectories** are the paths thoughts follow as they move through this landscape.  
+- **Verbs** act as vector fields that give direction and push thoughts along.  
 - **Nouns** act as attractors — stable regions where thoughts tend to settle.  
-- **Curvature** shows how the landscape bends and influences the direction of thought.  
-- **Coherence** measures how well a line of thought stays connected and makes sense.
+- **Curvature** shows how the landscape bends and influences thought.  
+- **Coherence** measures how well a line of thought stays connected.
 
 These simple pieces form the foundation. Everything else in the paper builds from them.
 
