@@ -1276,11 +1276,13 @@ Stability, plasticity, and affective learning describe how the manifold evolves:
 
 Learning is the **adaptive reshaping** of relational geometry.
 
+These dynamics show how meaning changes over time — how patterns stabilize, drift, or reorganize as trajectories interact. In Section 11, we turn to what happens when these dynamics break down, and the geometry becomes distorted or unstable.
+
 ---
 
 # **11. Degenerate Geometries and Pathologies**
 
-Degenerate geometries arise when the relational manifold loses coherence, collapses into unstable configurations, or becomes distorted by extreme curvature or attractor imbalance. These are not new mechanisms; they are **failure modes** of the same geometric structures introduced earlier.
+The dynamics described in Section 10 assume that the manifold can reshape itself coherently — that learning, resonance, and curvature evolve within stable bounds. But these same mechanisms can fail. Degenerate geometries arise when the relational manifold loses coherence, collapses into unstable configurations, or becomes distorted by extreme curvature or attractor imbalance. These are not new mechanisms; they are **failure modes** of the same geometric structures introduced earlier.
 
 A degenerate geometry is one in which:
 
