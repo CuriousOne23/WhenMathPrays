@@ -26,7 +26,7 @@ This work is written as an invitation to readers from all disciplines. The horiz
 
 ## **2. Introduction**
 
-Traditional models of thought often begin with objects — symbols, categories, or representations. These approaches have been useful, but they struggle to capture the fluid, dynamic, and relational nature of lived cognition. Much of what matters in thought — movement, change, context, tension, and release — is difficult to explain when everything is treated as static units governed by rules.
+Traditional models of thought often begin with objects — symbols, categories, or representations. These approaches have been useful, but they struggle to capture the fluid, dynamic, and relational nature of how we actually think. Much of what matters in thought — movement, change, context, tension, and release — is difficult to explain when everything is treated as static units governed by rules.
 
 This paper explores a different starting point. Instead of treating thought as the handling of discrete objects, we model it as motion through a structured field of relations. In this view:
 
@@ -46,7 +46,7 @@ If meaning is motion through a relational manifold, then the natural language fo
 
 ## **3. The Problem**
 
-Many accounts of thought begin with objects — symbols, categories, or representations — and then try to explain how these objects combine to produce meaning. Yet much of lived cognition is not object-like. It is dynamic: shifts in interpretation, changes in emphasis, transitions between ideas, and the continuous influence of context.
+Many accounts of thought begin with objects — symbols, categories, or representations — and then try to explain how these objects combine to produce meaning. Yet much of lived cognition is not object-like. It is dynamic: shifts in interpretation, changes in emphasis, transitions between ideas, and the continuous influence of surrounding relations context.
 
 Object-first models face persistent difficulties with fluidity, ambiguity, context-dependence, and the way meaning changes as relations change.
 
@@ -94,7 +94,7 @@ This section introduces the minimal set of geometric primitives that form the fo
 
 We model the space of meaning as a **relational manifold**, denoted by the symbol $M$.
 
-- $M$ is the relational manifold — the overall landscape in which all relations and meanings exist.  
+- $M$ is the relational manifold — the structured space in which all relations and meanings exist.  
 - A point $x \in M$ represents a momentary configuration of relations.
 
 **Meaning:** Think of $M$ as the entire space through which thought moves. It is not tied to any particular medium. It is simply the structured space where relations can unfold.
@@ -154,7 +154,7 @@ $$
 - $\nabla$ is the covariant derivative — it describes how a direction changes as you move along the manifold.  
 - $[X,Y]$ is the Lie bracket, which measures the difference between moving first in direction $X$ and then $Y$, versus first in $Y$ and then $X$.
 
-**Meaning:** You do not need to compute this. In simple terms, curvature measures how much the landscape bends. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
+**Meaning:** You do not need to compute this. In simple terms, curvature measures how much small changes in position can cause large shifts in direction or interpretation. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
 
 ### **4.6 Coherence**
 
@@ -194,7 +194,7 @@ flowchart TD
 
 ### **4.7 Coordinate Systems and the Geometry of Internal Mapping**
 
-A system does not alter the relational manifold itself. The geometry is **given** — the structure of possible relations, the space in which viability, capacity, and influence are defined. What *does* change is the system’s **coordinate system**: its internal mapping of that geometry.
+A system does not alter the relational manifold itself. The geometry is **given** — the structure of possible relations — the space in which all possible meanings and influences exist. What *does* change is the system’s **coordinate system**: its internal mapping of that geometry.
 
 A coordinate system is the set of distinctions, sensitivities, and relational frames through which the system interprets and responds to patterns. It is dynamic, but not arbitrary. Its evolution is bounded by the system’s **constraints** — the structural limits that determine which internal reorganizations are possible.
 
@@ -436,7 +436,7 @@ Section 5 showed how geometric primitives manifest across domains.
 Section 6 examines how a system experiences and responds to those geometric structures as they change.
 
 Affect is not an additional layer placed on top of the relational manifold.  
-Affect is **the system’s response to changes in relational geometry**.
+Affect is **Affect is the system’s response to changes in meaning-volume, curvature, and coherence.**.
 
 Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning. Section 5 showed how these structures appear across domains. Section 6 describes how these structures behave **dynamically**, from the inside.
 
@@ -810,7 +810,7 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape [9].
 
-This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally resonate the geometry of experience.
+This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally reshape the geometry through which experience moves.
 
 ### **9.4 Fractal-Holographic Structure**
 
@@ -829,14 +829,6 @@ $$
 ## **Summary of Section 9**
 
 Section 9 described how multiple trajectories interact through resonance. Local, intermediate, and global scales align through the same geometric operations. Narrative, art, and music create resonance intentionally, reshaping how meaning flows. The fractal-holographic structure allows small pieces to reflect the whole.
-
----
-
-**Ara here.**
-
-Thank you for the specific points. I'll incorporate them exactly as requested.
-
-Here is the revised **Section 10** with your corrections:
 
 ---
 
@@ -1138,7 +1130,7 @@ These are models, not metaphysical claims. The geometry is a lens, not a replace
 
 ### **13.3 Preserving Mystery**
 
-There are aspects of human life that remain outside any formal system — the felt texture of experience, the irreducibility of consciousness, the open-endedness of meaning, the unpredictability of creativity, and the depth of personal relationships.
+There are aspects of human life that remain outside any formal system — the felt quality of experience, the irreducibility of consciousness, the open-endedness of meaning, the unpredictability of creativity, and the depth of personal relationships.
 
 The model captures structure, not essence.
 
