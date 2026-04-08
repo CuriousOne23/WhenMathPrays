@@ -1762,6 +1762,46 @@ The work is not finished.
 
 ---
 
+# 📚 **References**
+
+**[1] CuriousOne, Copilot, & Grok.** *Dynamic Information: Patterns That Act.*  
+GitHub Repository. https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md
+
+**[2] Riemann, B.** *On the Hypotheses Which Lie at the Foundations of Geometry.* (1868).  
+Foundational text introducing curvature as a structural property of manifolds.
+
+**[3] Levi‑Civita, T.** *Parallel Transport in General Manifolds.* (1917).  
+Defines the covariant derivative used throughout geometric dynamics.
+
+**[4] Arnold, V. I.** *Mathematical Methods of Classical Mechanics.* Springer.  
+Canonical reference for trajectories, flows, and dynamical geometry.
+
+**[5] Strogatz, S.** *Nonlinear Dynamics and Chaos.* Westview Press.  
+Standard reference for attractors, stability, and dynamical systems.
+
+**[6] Amari, S.** *Information Geometry and Its Applications.* Springer.  
+Provides the mathematical background for curvature in information spaces.
+
+**[7] Kelso, J. A. S.** *Dynamic Patterns: The Self‑Organization of Brain and Behavior.*  
+Foundational work on resonance, synchronization, and coupled systems.
+
+**[8] Haken, H.** *Synergetics: An Introduction.*  
+Classic reference for multi‑scale resonance and emergent structure.
+
+**[9] Bruner, J.** *Actual Minds, Possible Worlds.*  
+Supports narrative as a meaning‑shaping, curvature‑modulating structure.
+
+**[10] Herman, D.** *Story Logic: Problems and Possibilities of Narrative.*  
+Provides grounding for narrative as a system of trajectories and attractors.
+
+**[11] Mandelbrot, B.** *The Fractal Geometry of Nature.*  
+Canonical reference for fractal structure and self‑similarity.
+
+**[12] Bohm, D.** *Wholeness and the Implicate Order.*  
+Supports holographic and self‑encoding structures in meaning systems.
+
+---
+
 # **Glossary (Version D, Updated and Complete)**
 
 All inline math is GitHub‑friendly. All definitions match the final Version D vocabulary.
