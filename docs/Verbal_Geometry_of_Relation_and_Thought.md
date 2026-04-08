@@ -869,7 +869,7 @@ This section describes how these structures behave when **many trajectories coex
 
 ---
 
-# **9.1 Coupled Trajectories (Rewritten for Humans + Experts)**
+# **9.1 Coupled Trajectories**
 
 Before speaking about resonance, it helpful to focus on a simple building block of the system: **a trajectory** — the path something takes as it moves through meaning‑space.
 
