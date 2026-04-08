@@ -575,7 +575,7 @@ Identity is **where the system tends to return** — a geometric invariant that 
 
 ---
 
-# **7. Verbal Dynamics (Version D, GitHub‑Friendly)**
+# **7. Verbal Dynamics**
 
 Language is not treated as a symbolic system.  
 Language is a **geometric interface** for guiding motion through relational space.
@@ -852,7 +852,7 @@ Curvature is the **geometric backbone** of conceptual dynamics.
 
 ---
 
-# **9. Narrative Resonance Network (Version D, GitHub‑Friendly)**
+# **9. Narrative Resonance Network**
 
 Narrative resonance describes how multiple trajectories interact, synchronize, and reinforce one another across scales. While Sections 4–8 focused on the geometry of individual trajectories, narrative resonance concerns **coupled systems**: how trajectories influence each other, how meaning propagates across agents, and why certain patterns — stories, music, rituals, collective movements — exert disproportionate power.
 
@@ -1152,7 +1152,7 @@ Finally, we described the **fractal‑holographic structure** of narrative, wher
 
 ---
 
-# **Section 10 — Dynamics of Transformation (Opening Paragraph)**
+# **Section 10 — Dynamics of Transformation**
 
 Now that we have the geometry of resonance, we can turn to how this geometry moves. Resonance is not static; it shifts, strengthens, weakens, and reorganizes as trajectories interact. Patterns that once held steady can drift, split, or collapse, while new patterns can emerge from small fluctuations. Section 10 explores these dynamics — how meaning flows through time, how coherence forms and dissolves, and how systems transform as their internal and relational structures evolve.
 
@@ -1162,7 +1162,7 @@ Learning is treated as geometric rewriting: the manifold reshapes itself to impr
 
 ---
 
-# **10.1 Local Adjustment (Succinct + Accessible)**
+# **10.1 Local Adjustment**
 
 Local adjustment describes how small, immediate changes in the manifold occur before they propagate to larger scales. These adjustments happen in the neighborhood around a point and reflect how the system responds to new information or shifting context.
 
