@@ -221,26 +221,37 @@ This simple example shows how meaning transfer is not merely symbolic — it is 
 
 ---
 
-### **5.2 Biology: Stable Forms as Attractors**
+## **5.2 Biology: Stable Forms as Attractors**
 
-Biological systems display persistent patterns — body plans, behaviors, and ecological roles — that endure across time and variation.
+Biological systems exhibit stable patterns — body plans, behaviors, ecological roles — that persist across time and variation.
 
-In the geometric framework, these stable forms correspond to attractors, developmental processes to trajectories, regulatory mechanisms to vector fields, and evolutionary pressures to curvature in the space of possibilities.
+In the geometric framework:
 
-For example, the repeated emergence of similar limb structures across species can be understood as trajectories converging toward a stable attractor shaped by physical, developmental, and functional constraints.
+- stable forms → **attractors**  
+- developmental processes → **trajectories**  
+- regulatory mechanisms → **vector fields**  
+- evolutionary pressures → **curvature** in the space of possibilities  
 
-### **5.3 Cognition: Thought as Motion Through Conceptual Space**
+For instance, the repeated emergence of tetrapod limb structures across species can be understood as trajectories converging toward a stable region of the manifold — an attractor shaped by physical, developmental, and functional constraints.
+
+This shows how nouns‑as‑attractors generalize beyond language.
+
+---
+
+## **5.3 Cognition: Thought as Motion Through Conceptual Space**
 
 Reasoning is motion through a conceptual manifold.
 
 A chain of reasoning corresponds to a trajectory:
 
-- Smooth reasoning follows near-geodesic paths.  
-- Confusion arises in regions of high curvature.  
-- Fixation occurs when a trajectory falls into an attractor.  
-- Insight appears when a trajectory crosses a ridge into a new basin.
+- **smooth reasoning** → near‑geodesic motion  
+- **confusion** → motion through regions of high curvature  
+- **fixation** → falling into an attractor  
+- **insight** → crossing a ridge into a new basin  
 
-When someone solves a puzzle, their trajectory may wander or loop before suddenly settling into the attractor representing the solution.
+When someone solves a puzzle, their trajectory may wander, loop, or diverge before suddenly snapping into a stable configuration — the attractor corresponding to the solution.
+
+This shows how the geometry captures the dynamics of thinking.
 
 ---
 
