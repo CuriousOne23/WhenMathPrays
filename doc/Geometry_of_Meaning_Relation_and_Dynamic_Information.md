@@ -663,9 +663,18 @@ Concatenation is **geometric composition**:
 • Described sentences as concatenated motions built from verb‑fields acting on attractors.  
 • Presented language as a **geometric interface** for guiding motion through relational space.
 
+Language reveals how trajectories move: how they accelerate, stabilize, and shift direction as they traverse relational structure.  
+But the forces shaping these motions are not arbitrary.  
+They arise from the **curvature** of the manifold itself — the underlying geometry that bends, channels, and organizes meaning.
+
+Section 8 turns to this structural substrate.
+
 ---
 
 # **8. Relational Curvature**
+
+Section 7 showed how language expresses motion through relational space.  
+Section 8 examines the **geometry that shapes that motion**.
 
 Relational curvature describes how the manifold bends, compresses, or expands around a point. Curvature determines how trajectories deviate from geodesic motion, how meaning‑gradients form, and how reasoning becomes easier or harder depending on local relational structure.
 
