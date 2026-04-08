@@ -1028,58 +1028,43 @@ the manifold reshapes itself to improve coherence, reduce instability, and deepe
 
 ---
 
-## **10.1 How Attractors Deepen, Weaken, and Reorganize**
+# **10.1 Local Adjustment (Succinct + Accessible)**
 
-Attractors are dynamic.  
-Their depth, width, and shape evolve with experience.
+Local adjustment describes how small, immediate changes in the manifold occur before they propagate to larger scales. These adjustments happen in the neighborhood around a point and reflect how the system responds to new information or shifting context.
 
-Let $A_t$ denote an attractor at time $t$.  
-Let $D_t$ denote its depth.  
-Its evolution is governed by:
+Let $x$ be a point in the manifold and $V(x)$ the local vector field that determines how motion flows through that region. A local adjustment modifies this flow:
 
 $$
-\frac{d}{dt} D_t = f(\text{frequency}, \text{coherence}, \text{resonance}).
+V(x) \rightarrow V(x) + \Delta V(x)
 $$
 
-Attractors **deepen** when:
+**Meaning:**  
+The system updates its immediate direction of movement by adding a small correction term $\Delta V(x)$. This captures how local interpretation shifts in response to new pressure, new meaning, or new relational context.
 
-- trajectories repeatedly converge into them  
-- coherence within the basin increases  
-- resonance with other trajectories reinforces the region  
+In plain language:
 
-Attractors **weaken** when:
+- **The system slightly changes its direction** when something new is learned.  
+- **These changes are small and local**, affecting only the immediate region.  
+- **They prepare the ground** for larger‑scale updates that come later.
 
-- trajectories stop visiting the region  
-- curvature flattens  
-- meaning‑volume diffuses  
-
-Attractors **reorganize** when:
-
-- new gradients emerge  
-- curvature shifts  
-- resonance patterns change  
-- the system undergoes large‑scale restructuring  
-
-Reorganization is **adaptive geometric refinement**, not failure.
+Local adjustment is the first step in learning: a small, immediate correction that begins the process of reshaping the manifold.
 
 ---
 
-## **10.2 Fractal Synchronization**
+# **10.2 Fractal Synchronization**
 
 Learning is not confined to a single scale.  
-Changes at one level propagate across others.
+Changes at one level propagate to others.
 
-Fractal synchronization occurs when:
-
-- local attractor changes  
-- propagate to intermediate structures  
-- which propagate to global structures  
-
-Formally, if $A_s$ is an attractor at scale $s$, then:
+Fractal synchronization occurs when a change in an attractor at one scale induces corresponding changes at larger scales. If $A_s$ is an attractor at scale $s$, then:
 
 $$
-\Delta A_s \rightarrow \Delta A_{s+1} \rightarrow \Delta A_{s+2}.
+\Delta A_s \rightarrow \Delta A_{s+1} \rightarrow \Delta A_{s+2}
 $$
+
+**Meaning:**  
+A local change ($\Delta A_s$) triggers a change at the next scale ($\Delta A_{s+1}$), which then triggers a change at the next ($\Delta A_{s+2}$).  
+Local learning propagates upward through the manifold’s structure.
 
 This produces:
 
@@ -1088,48 +1073,40 @@ This produces:
 - stable identity curvature  
 - multi‑scale resonance  
 
-Fractal synchronization explains why:
-
-- small insights reorganize large conceptual regions  
-- repeated micro‑experiences reshape identity  
-- local instability can cascade into global change  
-
-Learning is **scale‑coupled geometric evolution**.
+Fractal synchronization explains why small insights reorganize larger conceptual regions and why micro‑experiences can reshape identity. Learning is **scale‑coupled geometric evolution**.
 
 ---
 
-## **10.3 Identity Curvature Development**
+# **10.3 Identity Curvature Development**
 
-Identity is a long‑term attractor structure (Section 6.6).  
-Its curvature evolves through repeated interaction with the environment.
+Identity curvature describes how a person’s long‑term patterns of interpretation become stable over time. It changes slowly, because identity is shaped by repeated experiences rather than single events.
 
 Let $K_{\text{id}}(t)$ denote identity curvature at time $t$.  
-Its evolution is governed by:
+Its evolution depends on how attractors and meaning‑gradients change across scales:
 
 $$
-\frac{d}{dt} K_{\text{id}} = g(\text{experience}, \text{resonance}, \text{coherence}, \text{pressure}).
+K_{\text{id}}(t+1) = \text{Update}(K_{\text{id}}(t), \Delta A_s, \Delta \nabla M)
 $$
 
-Identity curvature **increases** when:
+**Meaning:**  
+Identity curvature at the next moment depends on the previous curvature plus the accumulated changes in attractors ($\Delta A_s$) and meaning‑gradients ($\Delta \nabla M$) across scales.
 
-- attractors stabilize  
-- coherence strengthens  
-- meaning‑volume concentrates  
-- resonance patterns become consistent  
+In plain language:
 
-Identity curvature **decreases** when:
+- **$\Delta A_s$ — changes in attractors**  
+  Repeated shifts in what feels stable or salient gradually reshape identity.
 
-- attractors weaken  
-- coherence fragments  
-- meaning diffuses  
-- resonance collapses  
+- **$\Delta \nabla M$ — changes in meaning‑gradients**  
+  When the steepness of meaning changes, the system learns to interpret situations differently.
 
-Identity is not fixed.  
-It is a **slowly evolving geometric structure** shaped by long‑term learning.
+Identity curvature develops when small, local adjustments accumulate into long‑term structure.  
+This is why micro‑experiences, repeated over time, reshape how the system moves through meaning‑space.
+
+Identity is **slow‑changing geometry**, not a fixed object.
 
 ---
 
-## **10.4 Learning as Geometric Rewriting**
+# **10.4 Learning as Geometric Rewriting**
 
 Learning is the process by which the manifold rewrites itself to improve coherence and reduce instability.
 
@@ -1137,26 +1114,24 @@ Let $M_t$ denote the manifold at time $t$.
 Learning corresponds to:
 
 $$
-M_{t+1} = \text{Rewrite}(M_t, \Delta K, \Delta A, \Delta \nabla M).
+M_{t+1} = \text{Rewrite}(M_t, \Delta K, \Delta A, \Delta \nabla M)
 $$
 
-Learning occurs when:
+Each term corresponds to a specific geometric adjustment:
 
-- curvature adjusts to reduce pressure  
-- attractors reshape to improve stability  
-- meaning‑gradients sharpen or flatten  
-- coherence increases across scales  
+- **$\Delta K$ — curvature adjusts to reduce pressure**  
+  The system reduces unnecessary bending or constraint.
 
-Learning is not the accumulation of facts.  
-Learning is **geometric optimization**:
+- **$\Delta A$ — attractors reshape to improve stability**  
+  Basins deepen, flatten, or reorganize to stabilize trajectories.
 
-- reducing unnecessary curvature  
-- deepening useful attractors  
-- flattening harmful basins  
-- improving geodesic alignment  
-- increasing global coherence  
+- **$\Delta \nabla M$ — meaning‑gradients sharpen or flatten**  
+  The steepness of meaning‑volume changes, altering interpretive pressure.
 
-Affective learning is the **dynamical refinement** of the relational manifold.
+- **Coherence increases across scales — emergent from all three terms**  
+  When curvature, attractors, and gradients align, multi‑scale coherence improves.
+
+Learning is **geometric optimization**: reducing unnecessary curvature, reshaping attractors, adjusting gradients, and increasing coherence across scales. Affective learning is the dynamical refinement of the relational manifold.
 
 ---
 
