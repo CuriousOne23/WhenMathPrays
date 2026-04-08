@@ -1152,16 +1152,9 @@ Finally, we described the **fractal‑holographic structure** of narrative, wher
 
 ---
 
-# **10. Stability, Plasticity, and Affective Learning (Version D, GitHub‑Friendly)**
+# **Section 10 — Dynamics of Transformation (Opening Paragraph)**
 
-Stability and plasticity describe how the relational manifold changes over time.  
-Affective learning describes how curvature, attractors, and coherence reorganize in response to experience.
-
-This section introduces no new primitives.  
-It shows how the existing geometric structures — attractors, curvature, meaning‑volume, and resonance — evolve under pressure, repetition, and interaction.
-
-Learning is **geometric rewriting**:  
-the manifold reshapes itself to improve coherence, reduce instability, and deepen useful attractors.
+Now that we have the geometry of resonance, we can turn to how this geometry moves. Resonance is not static; it shifts, strengthens, weakens, and reorganizes as trajectories interact. Patterns that once held steady can drift, split, or collapse, while new patterns can emerge from small fluctuations. Section 10 explores these dynamics — how meaning flows through time, how coherence forms and dissolves, and how systems transform as their internal and relational structures evolve.
 
 ---
 
