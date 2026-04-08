@@ -242,14 +242,6 @@ A chain of reasoning corresponds to a trajectory:
 
 When someone solves a puzzle, their trajectory may wander or loop before suddenly settling into the attractor representing the solution.
 
-### **5.4 Physics: Dynamics as Geometry**
-
-In physics, motion is governed by the geometry of the underlying space — forces act as vector fields, potentials as attractors, and curvature shapes how paths bend.
-
-While the geometry in this framework is relational rather than physical, the structural roles are parallel. This parallel illustrates that geometry can serve as a powerful, substrate-independent language for describing dynamics.
-
-A planet orbiting a star follows a trajectory shaped by gravitational potential (an attractor) and the curvature of spacetime. Similarly, a mind navigating meaning follows a trajectory shaped by relational attractors and interpretive curvature.
-
 ---
 
 ### **5.4 Physics: Dynamics as Geometry**
