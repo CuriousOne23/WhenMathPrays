@@ -1427,21 +1427,22 @@ They are **structural failure modes**, not diagnoses.
 
 ---
 
-## **Summary of Section 11**
+# **Summary of Section 11**
 
 • Over‑deep attractors trap trajectories.  
 • Shallow attractors fail to stabilize them.  
 • Frame instability breaks local interpretation.  
 • Resonance collapse destroys multi‑trajectory coherence.  
-• Holographic distortion breaks self‑similarity.  
+• Meaning‑volume distortion breaks self‑similarity.  
 • These are geometric failures, not psychological categories.
+
+Degenerate geometries show how the framework can break down. In Section 12, we turn to the opposite question: **what advantages the framework would offer if its geometric assumptions hold.**
 
 ---
 
 # **12. Advantages of the Framework (If True)**
 
-This section outlines the potential advantages of the geometric framework **if** its assumptions hold.  
-Nothing here asserts truth; it describes what would follow.
+Having examined how the geometry can fail, we now consider what becomes possible when it holds. This section outlines the potential advantages of the framework **if** its assumptions are correct. Nothing here asserts truth; it simply describes the consequences that would follow from the geometry.
 
 ---
 
