@@ -987,6 +987,12 @@ Section 12 outlined conditional advantages of the framework if its assumptions h
 
 ---
 
+### Revised Section 13
+
+Here is a cleaner, slightly tighter version:
+
+---
+
 ## **13. What the Framework Does *Not* Do**
 
 This section clarifies the limits of the geometric framework. The goal is not to diminish the model, but to prevent overreach and to preserve the aspects of life that remain outside any formal system.
