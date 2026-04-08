@@ -67,7 +67,67 @@ The problem, then, is not to catalog mental objects, but to describe the **geome
 
 Existing frameworks offer partial answers, but none provide a unified, substrate‑independent geometry that captures both stability and change, both structure and motion.
 
-The sections that follow develop such a geometry using a minimal set of primitives—trajectories, vector fields, attractors, curvature, and coherence—expressed in today’s scientific language and open to refinement. The aim is not to replace existing theories, but to offer a clear, operational lens through which readers may examine, critique, extend, or reframe the dynamics of meaning.
+The sections that follow develop such a geometry using a minimal set of primitives—trajectories, vector fields, attractors, curvature, and coherence—expressed in today’s scientific language and open to refinement. **To orient the reader, the diagram below summarizes the major structural components developed throughout the manuscript and the generative relations between them. It serves as a conceptual roadmap for what follows.**
+
+Jeff, this is exactly the right moment to integrate the roadmap diagram — and Section 3 is the perfect anchor point. What you need is a **small, elegant modification** to Section 3 that:
+
+- preserves its rhetorical flow  
+- doesn’t interrupt the philosophical cadence  
+- naturally sets up the introduction of the diagram  
+- signals to the reader that a *systematic structure* is coming  
+
+Below is a **surgically precise revision** of Section 3 that introduces the roadmap diagram without breaking tone, pacing, or voice.
+
+I’ll show you:
+
+1. **The minimally modified Section 3** (ready to paste)  
+2. **Where the diagram goes**  
+3. **The diagram itself** (GitHub‑safe, with both ``` marks)  
+
+Everything is Version‑D aligned.
+
+---
+
+# **3. The Problem**
+
+Many accounts of thought begin with objects—symbols, categories, tokens, or representations—and then attempt to explain how these objects combine to produce meaning. Yet much of what matters in reasoning is not object-like at all. It is motion: shifts in interpretation, changes in emphasis, transitions between ideas, and the continuous negotiation of context.
+
+Object‑first models struggle with:
+
+- fluidity  
+- ambiguity  
+- context‑dependence  
+- the way meaning changes as relations change  
+- the way understanding unfolds over time  
+
+They describe what thoughts *are*, but not how thoughts *move*.
+
+This manuscript begins from a different premise: that meaning is fundamentally **dynamic** and **relational**. What we experience as thought is better understood as motion through a structured field of relations—a manifold whose geometry shapes how interpretations bend, converge, diverge, or stabilize.
+
+The problem, then, is not to catalog mental objects, but to describe the **geometry of motion**:
+
+- What shapes a trajectory of thought?  
+- What bends it?  
+- What stabilizes it?  
+- What causes it to drift or collapse?  
+- How do verbs, nouns, and narratives emerge from the underlying structure?  
+
+Existing frameworks offer partial answers, but none provide a unified, substrate‑independent geometry that captures both stability and change, both structure and motion.
+
+The sections that follow develop such a geometry using a minimal set of primitives—trajectories, vector fields, attractors, curvature, and coherence—expressed in today’s scientific language and open to refinement. **To orient the reader, the diagram below summarizes the major structural components developed throughout the manuscript and the generative relations between them. It serves as a conceptual roadmap for what follows.**
+
+---
+
+```mermaid
+flowchart LR
+    M[Manifold] --> T[Trajectories] --> V[Vector Fields]
+    C[Curvature] --> R[Resonance] --> I[Identity]
+    A[Attractors] --> L[Learning]
+
+    V --> C
+    R --> A
+    I --> L
+```
 
 ---
 
@@ -421,17 +481,25 @@ This shows how the geometry captures the dynamics of thinking.
 
 ## **5.4 Physics: Dynamics as Geometry**
 
-In physics, motion is determined by the geometry of the underlying space.
-
+In physics, motion is determined by the geometry of the underlying space.  
 A particle follows a path shaped by:
 
 - **forces** → vector fields  
 - **potentials** → attractors  
 - **curvature** → how paths bend  
 
-This is not an analogy; it is a structural parallel. The same geometric elements — trajectories, vector fields, attractors, curvature, geodesics — appear in both physical and semantic systems.
+This section uses physics as a **structural comparison**, not as an ontological claim.  
+The goal is to show that **geometry can govern dynamics** in many domains, not to suggest that semantic systems *are* physical spacetime or that this framework is a form of General Relativity.
 
-A planet orbiting a star follows a trajectory shaped by the gravitational potential (an attractor) and the curvature of spacetime.
+The parallel is narrow and precise:
+
+- physics uses **metric curvature** to shape motion  
+- this framework uses **relational curvature** to shape interpretation  
+
+These are different kinds of geometry, but they share the same *formal roles*.
+
+A planet orbiting a star follows a trajectory shaped by the gravitational potential (an attractor) and the curvature of spacetime.  
+A mind navigating meaning follows a trajectory shaped by relational attractors and the curvature of interpretive structure.
 
 ```mermaid
 flowchart LR
@@ -447,7 +515,8 @@ flowchart LR
     PM --- RM
 ```
 
-This shows that the geometric framework reflects a deeper structural pattern shared across domains.
+This diagram highlights the **structural parallel**, not an equivalence.  
+The framework does not claim that semantic systems are physical manifolds; only that **geometry provides a powerful, substrate‑independent language** for describing how motion — physical or interpretive — unfolds.
 
 ---
 
@@ -1789,6 +1858,18 @@ It is a **tool for inquiry**, not a final theory.
 • It avoids reductionism.  
 • It preserves mystery and non‑captured aspects.  
 • It is conjectural, testable, and non‑foundational.
+
+```mermaid
+flowchart TB
+    L[Limits]
+    R[Avoiding Reductionism]
+    M[Preserving Mystery]
+    T[No Ultimate Truth]
+
+    L --> R
+    R --> M
+    M --> T
+```
 
 ---
 
