@@ -79,6 +79,26 @@ The framework starts with a minimal set of primitives. The aim is not to capture
 
 ---
 
+```mermaid
+flowchart TD
+    M[Relational Manifold]
+    T[Trajectories]
+    V[Vector Fields]
+    A[Attractors]
+    K[Curvature]
+
+    M --> T
+    M --> V
+    M --> A
+    M --> K
+
+    V --> T
+    A --> T
+    K --> T
+```
+
+---
+
 # **4. The Framework**
 
 This section introduces the minimal geometric primitives used throughout the manuscript. Each primitive is defined in operational terms, with symbols and operators introduced explicitly. The goal is clarity: readers should be able to follow the geometry without prior mathematical background.
@@ -212,6 +232,18 @@ What matters here is the structural relationship:
 
 This is the minimal scaffolding required for the relational framework that follows.
 
+```mermaid
+flowchart LR
+    G[Geometry]
+    C[Coordinate System]
+    S[Constraints]
+    D[Dynamic Information]
+
+    G --> C
+    C --> S
+    S --> D
+```
+
 ---
 
 # **4.7.1 Geometry as the Relational Manifold**
@@ -330,6 +362,15 @@ A sentence provides:
 
 For example:
 
+```mermaid
+flowchart LR
+    C[Cat Attractor]
+    V[Chase Vector Field]
+    M[Mouse Attractor]
+
+    C --> V --> M
+```
+
 > “The cat chased the mouse.”
 
 corresponds to a trajectory that:
@@ -391,6 +432,20 @@ A particle follows a path shaped by:
 This is not an analogy; it is a structural parallel. The same geometric elements — trajectories, vector fields, attractors, curvature, geodesics — appear in both physical and semantic systems.
 
 A planet orbiting a star follows a trajectory shaped by the gravitational potential (an attractor) and the curvature of spacetime.
+
+```mermaid
+flowchart LR
+    P[Physical Geometry]
+    R[Relational Geometry]
+
+    PM[Metric, Curvature, Trajectories]
+    RM[Meaning-Volume, Curvature, Trajectories]
+
+    P --> PM
+    R --> RM
+
+    PM --- RM
+```
 
 This shows that the geometric framework reflects a deeper structural pattern shared across domains.
 
@@ -505,6 +560,20 @@ Arousal is **how hard the system is being pushed** — a geometric intensity mea
 ## **6.4 Stability: Coherence Under Pressure**
 
 Stability is the system’s ability to **maintain geodesic alignment** under curvature and external forces.
+
+```mermaid
+flowchart LR
+    V[Valence]
+    A[Arousal]
+    S[Stability]
+    R[Regulation]
+
+    V --> S
+    A --> S
+    S --> R
+    R --> V
+    R --> A
+```
 
 A trajectory is stable when:
 
@@ -669,7 +738,7 @@ Given:
 
 - an initial attractor $A_0$  
 - a sequence of verb‑fields $V_1, V_2, \dots, V_n$  
-- a final attractor $A_n$  
+- a final attractor $A_n$
 
 A sentence corresponds to the composite trajectory:
 
@@ -681,7 +750,16 @@ Concatenation is **geometric composition**:
 
 - each verb transforms the current position  
 - each noun anchors the trajectory  
-- the sequence defines a path through relational space  
+- the sequence defines a path through relational space
+
+```mermaid
+flowchart LR
+    N1[Noun Attractor 1]
+    V[Verb Vector Field]
+    N2[Noun Attractor 2]
+
+    N1 --> V --> N2
+```
 
 **Meaning:** a sentence is **a path built from smaller motions**.
 
@@ -797,6 +875,20 @@ Steep gradients create:
 
 Flat gradients allow smooth, unconstrained motion.
 
+```mermaid
+flowchart LR
+    D[Density]
+    G[Gradients]
+    C[Constraints]
+    A[Attractors]
+    K[Curvature]
+
+    D --> K
+    G --> K
+    C --> K
+    A --> K
+```
+
 Curvature is the **geometric expression of meaning‑pressure**.
 
 ---
@@ -898,6 +990,18 @@ When multiple trajectories interact, their dynamics begin to synchronize through
 $$
 \dot{\gamma}_i(t) = V(\gamma_i(t)) + \sum_{j \neq i} R(\gamma_i(t), \gamma_j(t)).
 $$
+
+```mermaid
+flowchart LR
+    A[Trajectory A]
+    B[Trajectory B]
+    R[Resonance Term]
+
+    A --> R
+    B --> R
+    R --> A
+    R --> B
+```
 
 **This means:**  
 Each trajectory still follows its own tendencies, but it also receives influence from the others through the resonance term $R$.
