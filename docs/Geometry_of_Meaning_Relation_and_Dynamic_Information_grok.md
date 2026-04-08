@@ -306,6 +306,8 @@ Section 4 introduced the basic building blocks of the framework and the relation
 
 These simple pieces form the foundation. Everything else in the paper builds from them.
 
+The geometric concepts used in this section draw on ideas from information geometry [6].
+
 ---
 
 ## **5. Examples That Reveal the Category**
