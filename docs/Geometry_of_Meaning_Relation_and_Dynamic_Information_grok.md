@@ -711,7 +711,7 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape [9].
 
-This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” TThey literally reshape the geometry through which meaning and interpretation move.
+“This is why stories, songs, and images can feel compelling or transporting. They reshape the geometry through which meaning and interpretation move” TThey literally reshape the geometry through which meaning and interpretation move.
 
 ### **9.4 Fractal-Holographic Structure**
 
@@ -723,7 +723,7 @@ $$
 \text{Structure}(S) \approx \text{Projection}(N).
 $$
 
-**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole [12]. These properties allow a brief moment or single motif to carry the imprint of the larger story or symphony, while also providing robustness through distributed information.
+**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole [12]. These properties allow a brief moment or single motif to reflect key aspects of the larger story or symphony, while also providing robustness through distributed information..
 
 ---
 
