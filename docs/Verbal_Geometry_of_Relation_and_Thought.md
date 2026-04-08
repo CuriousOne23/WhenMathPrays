@@ -1008,7 +1008,7 @@ The formulas simply states:
 
 ---
 
-# **9.3 Why Narrative, Art, and Music Have Power (Rewritten for Humans)**
+# **9.3 Why Narrative, Art, and Music Have Power**
 
 Narrative, art, and music are powerful because they change how our internal geometry moves. They don’t just entertain us — they **reshape how attention flows, how meaning forms, and how experience organizes itself**.
 
