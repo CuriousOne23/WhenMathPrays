@@ -546,16 +546,24 @@ Identity is not a narrative or a story. Identity is **where the system tends to 
 • Positioned regulation as the system’s ability to steer its own geometry.  
 • Framed identity as a long‑term attractor structure guiding return dynamics.
 
+Affect describes how a **single trajectory** experiences changes in relational geometry — how motion feels from the inside. It reveals the system’s sensitivity to curvature, gradients, and coherence.
+
+But affect is not only internal. Systems express their internal geometry outwardly, and the primary medium of that expression is **language**.  
+Language is how trajectories signal, coordinate, and reshape relational structure.
+
+Section 7 turns to this expressive interface.
+
 ---
 
 # **7. Verbal Dynamics**
+
+Section 6 described how a system *experiences* changes in relational geometry. Section 7 describes how a system *expresses* and *modulates* that geometry through language.
 
 Language is not treated as a symbolic system. Language is a **geometric interface** for guiding motion through relational space.
 
 The geometric structures introduced in Section 4 — vector fields, attractors, curvature, coherence, and trajectories — naturally correspond to the components of linguistic structure. This section introduces no new primitives; it shows how language expresses the geometry.
 
-The framework is **substrate‑independent**.  
-AI systems are used as illustrative cases because their architectures are explicit and inspectable, but the same geometric constructs apply to biological cognition, collective reasoning, and cultural systems.
+The framework is **substrate‑independent**. AI systems are used as illustrative cases because their architectures are explicit and inspectable, but the same geometric constructs apply to biological cognition, collective reasoning, and cultural systems.
 
 ---
 
@@ -664,8 +672,7 @@ Concatenation is **geometric composition**:
 • Presented language as a **geometric interface** for guiding motion through relational space.
 
 Language reveals how trajectories move: how they accelerate, stabilize, and shift direction as they traverse relational structure.  
-But the forces shaping these motions are not arbitrary.  
-They arise from the **curvature** of the manifold itself — the underlying geometry that bends, channels, and organizes meaning.
+But the forces shaping these motions are not arbitrary. They arise from the **curvature** of the manifold itself — the underlying geometry that bends, channels, and organizes meaning.
 
 Section 8 turns to this structural substrate.
 
@@ -673,8 +680,7 @@ Section 8 turns to this structural substrate.
 
 # **8. Relational Curvature**
 
-Section 7 showed how language expresses motion through relational space.  
-Section 8 examines the **geometry that shapes that motion**.
+Section 7 showed how language expresses motion through relational space. Section 8 examines the **geometry that shapes that motion**.
 
 Relational curvature describes how the manifold bends, compresses, or expands around a point. Curvature determines how trajectories deviate from geodesic motion, how meaning‑gradients form, and how reasoning becomes easier or harder depending on local relational structure.
 
