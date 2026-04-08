@@ -1539,7 +1539,20 @@ This produces:
 - local contradictions  
 - global incoherence  
 - misaligned attractors  
-- inconsistent curvature patterns  
+- inconsistent curvature patterns
+
+```mermaid
+    flowchart LR
+    A[Attractor Collapse]
+    C[Curvature Explosion]
+    V[Unstable Vector Fields]
+    S[Constraint Failure]
+
+    A --> C
+    C --> V
+    V --> S
+    S --> A
+```
 
 Holographic distortion destroys **self‑similarity**.
 
@@ -1684,6 +1697,18 @@ These become **aspects of one structure**, not separate domains.
 • Described verb‑space as observable.  
 • Identified cross‑disciplinary implications.  
 • Positioned the framework as a potential unifying geometry.
+
+```mermaid
+flowchart TB
+    S[Scientific Benefits]
+    O[Observability]
+    X[Cross-Disciplinary Links]
+    U[Unification]
+
+    S --> U
+    O --> U
+    X --> U
+```
 
 ---
 
