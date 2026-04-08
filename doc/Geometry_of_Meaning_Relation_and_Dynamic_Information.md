@@ -118,8 +118,7 @@ A trajectory represents how an interpretation, thought, or relational configurat
 
 ## **4.3 Verb Fields (Vector Fields)**
 
-Verbs generate **motion**.  
-We model them as **vector fields**:
+Verbs generate motion. We model them as vector fields, following the geometric treatment of flows in classical mechanics [4]. We model them as **vector fields**:
 
 $$
 V(x) \in T_x M
@@ -135,8 +134,7 @@ A verb is not an object but a force‑like influence that moves a trajectory thr
 
 ## 4.4 Noun Attractors: $A$
 
-Nouns stabilize motion.  
-We model them as attractors — regions toward which trajectories converge. We denote an attractor by $A$.
+Nouns stabilize motion. We model them as attractors — regions toward which trajectories converge, following standard dynamical systems theory [5]. We denote an attractor by $A$.
 
 Let $A \subset M$ be an attractor with potential function $\phi(x)$.
 
@@ -156,7 +154,7 @@ A noun is a **stable basin** where motion settles.
 
 ## **4.5 Curvature**
 
-Curvature describes how the manifold bends. We use the Riemann curvature tensor:
+Curvature describes how the manifold bends, using the Riemann curvature operator introduced by differential geometry [2][3]:
 
 $$
 R(X, Y)Z
@@ -895,7 +893,7 @@ This means the direction of motion at time $t$ is determined by the vector field
 
 But real life is not isolation. We live, think, feel, and interpret **together**.
 
-When multiple trajectories interact — people in conversation, minds in a group, identities in a culture — each one’s perception begins to depend on the others.
+When multiple trajectories interact, their dynamics begin to synchronize through coupling terms, consistent with resonance models in coordination dynamics [7][8].
 
 $$
 \dot{\gamma}_i(t) = V(\gamma_i(t)) + \sum_{j \neq i} R(\gamma_i(t), \gamma_j(t)).
@@ -1013,7 +1011,7 @@ The formulas simply states:
 
 # **9.3 Why Narrative, Art, and Music Have Power**
 
-Narrative, art, and music are powerful because they change how our internal geometry moves. They don’t just entertain us — they **reshape how attention flows, how meaning forms, and how experience organizes itself**.
+A narrative bends the flow of interpretation, shaping how meaning stabilizes and unfolds, consistent with narrative‑structural accounts in cognitive theory [9][10]. Narrative, art, and music are powerful because they change how our internal geometry moves. They don’t just entertain us — they **reshape how attention flows, how meaning forms, and how experience organizes itself**.
 
 They work by creating **resonance**: a shared pattern that multiple parts of the system begin to follow.
 
@@ -1026,7 +1024,7 @@ When something resonates with us, our internal dynamics start to line up:
 - our emotional patterns synchronize  
 - our sense of meaning deepens  
 
-This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally **align the geometry of experience**.
+This is why stories, songs, and images can feel like they “pull us in” or “carry us somewhere.” They literally **resonate the geometry of experience**.
 
 ---
 
@@ -1080,7 +1078,7 @@ They don’t just express emotion —
 
 # **9.4 Fractal‑Holographic Structure**
 
-Narratives have a special kind of structure: **any small part reflects the whole**.
+Narratives have a special kind of structure: **any small part reflects the whole**. Narratives often exhibit fractal structure, where patterns repeat across scales [11]. Narratives also exhibit holographic structure, where local segments encode aspects of the global pattern [12].
 
 To make this intuitive, we use two ideas:
 
@@ -1423,7 +1421,7 @@ They are **structural failure modes**, not diagnoses.
 
 ## **11.7 Relation to Physical Geometry**
 
-The geometry described in this document is not geometric in the physical sense. It does not assume a fixed number of dimensions, a metric tensor, or a canonical coordinate system. The analogy to geometry is conceptual rather than mathematical.
+The geometry described in this document is not geometric in the physical sense; it aligns more closely with information‑geometric structure than with spatial manifolds [6]. It does not assume a fixed number of dimensions, a metric tensor, or a canonical coordinate system. The analogy to geometry is conceptual rather than mathematical.
 
 The relational manifold introduced here is defined by significance:  
 every identifiable information object participates in relations, and these relations give it structure. The geometry is therefore relational, not spatial.
