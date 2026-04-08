@@ -134,8 +134,7 @@ A verb is not an object but a force‑like influence that moves a trajectory thr
 ## 4.4 Noun Attractors: $A$
 
 Nouns stabilize motion.  
-We model them as attractors — regions toward which trajectories converge.  
-We denote an attractor by $A$.
+We model them as attractors — regions toward which trajectories converge. We denote an attractor by $A$.
 
 Let $A \subset M$ be an attractor with potential function $\phi(x)$.
 
@@ -155,8 +154,7 @@ A noun is a **stable basin** where motion settles.
 
 ## **4.5 Curvature**
 
-Curvature describes how the manifold bends.  
-We use the Riemann curvature tensor:
+Curvature describes how the manifold bends. We use the Riemann curvature tensor:
 
 $$
 R(X, Y)Z
@@ -190,24 +188,20 @@ $$
 - $D_{\max}$: normalization constant; sets the maximum meaningful distance between trajectories for scaling  
 
 **Meaning:**  
-High coherence, with a value equal to or close to 1, indicates shared understanding or aligned interpretive motion.  
-Low coherence, with a value near or equal to 0, indicates divergence or fragmentation — a non‑coherent state.
+High coherence, with a value equal to or close to 1, indicates shared understanding or aligned interpretive motion. Low coherence, with a value near or equal to 0, indicates divergence or fragmentation — a non‑coherent state.
 
 ---
 
 # **4.7 Coordinate Systems and the Geometry of Internal Mapping**
 
-A system does not alter the relational manifold itself.  
-The geometry is **given** — the structure of possible relations, the space in which viability, capacity, and influence are defined.  
-What *does* change is the system’s **coordinate system**: its internal mapping of that geometry.
+A system does not alter the relational manifold itself. The geometry is **given** — the structure of possible relations, the space in which viability, capacity, and influence are defined. What *does* change is the system’s **coordinate system**: its internal mapping of that geometry.
 
 A coordinate system is the set of distinctions, sensitivities, and relational frames through which the system interprets and responds to patterns. It is dynamic, but not arbitrary. Its evolution is bounded by the system’s **constraints** — the structural limits that determine which internal reorganizations are possible.
 
 Dynamic information [1] operates entirely *within* this coordinate system.  
 Patterns bias trajectories, redirect flows, and reshape the system’s unfolding, but they do so relative to the system’s current internal mapping. Dynamic information does not modify the geometry; it modifies how the system *moves* within it.
 
-Some systems may reorganize their coordinate systems over time.  
-This document does not attempt to explain such reorganization; it only requires that coordinate systems exist and that dynamic information acts within them. Likewise, this document does not address how systems select among viable trajectories. These topics belong to future work.
+Some systems may reorganize their coordinate systems over time. This document does not attempt to explain such reorganization; it only requires that coordinate systems exist and that dynamic information acts within them. Likewise, this document does not address how systems select among viable trajectories. These topics belong to future work.
 
 What matters here is the structural relationship:
 
@@ -222,10 +216,7 @@ This is the minimal scaffolding required for the relational framework that follo
 
 # **4.7.1 Geometry as the Relational Manifold**
 
-Geometry refers to the relational manifold — the structured space of possible states and transitions.  
-It is not “fixed” in the sense of being frozen; it is **given** in the sense that the system does not generate or rewrite it.  
-From the system’s perspective, geometry may appear to “unveil itself” over time because the system only ever encounters local slices of the manifold.  
-From a complete relational perspective, the manifold is whole.
+Geometry refers to the relational manifold — the structured space of possible states and transitions. It is not “fixed” in the sense of being frozen; it is **given** in the sense that the system does not generate or rewrite it. From the system’s perspective, geometry may appear to “unveil itself” over time because the system only ever encounters local slices of the manifold. From a complete relational perspective, the manifold is whole.
 
 ---
 
@@ -239,8 +230,7 @@ It determines:
 - what transitions it can interpret  
 - what influences it can respond to  
 
-Coordinate systems are **dynamic** but **constraint‑bound**.  
-They may reorganize, expand, compress, or shift, but only in ways permitted by the system’s structure.
+Coordinate systems are **dynamic** but **constraint‑bound**. They may reorganize, expand, compress, or shift, but only in ways permitted by the system’s structure.
 
 ---
 
@@ -254,8 +244,7 @@ They determine:
 - which patterns can be registered  
 - which transitions can be enacted  
 
-Constraints are not teleological; they are structural.  
-They do not direct the system — they bound it.
+Constraints are not teleological; they are structural. They do not direct the system — they bound it.
 
 ---
 
@@ -285,26 +274,16 @@ It is geometric, mechanical, and non‑teleological.
 Some systems may dynamically reorganize their coordinate systems, and some may select among multiple viable trajectories. This document does not attempt to explain such processes. We only note the following definitions to clarify terminology and to indicate directions for future work, without offering justification or discussion here:
 
 **Geometry**  
-The relational manifold.  
-Not fixed, not frozen — *given*.  
-It is the structure of possible relations, the space of possibility.
+The relational manifold. Not fixed, not frozen — *given*. It is the structure of possible relations, the space of possibility.
 
 **Coordinate System**  
-The system’s internal mapping of the geometry.  
-Dynamic, constraint‑bound, adaptive.  
-This is where learning, adaptation, and dynamic information operate.
+The system’s internal mapping of the geometry. Dynamic, constraint‑bound, adaptive. This is where learning, adaptation, and dynamic information operate.
 
 **Thought**  
-Changing the coordinate system.  
-A system “thinks” when it dynamically chooses its internal mapping of the given geometry, subject to its constraints.  
-This is mechanical and geometric.
+Changing the coordinate system. A system “thinks” when it dynamically chooses its internal mapping of the given geometry, subject to its constraints. This is mechanical and geometric.
 
 **Choice**  
-Primitive selection among viable coordinate trajectories.  
-Definable, but not reducible.  
-Not derivable from geometry.  
-Not explained by constraints.  
-A primitive in the ontology.
+Primitive selection among viable coordinate trajectories. Definable, but not reducible. Not derivable from geometry. Not explained by constraints. A primitive in the ontology.
 
 These observations are included only to mark conceptual boundaries and to motivate future research. The present document does not elaborate on them.
 
@@ -342,8 +321,7 @@ corresponds to a trajectory that:
 - moves along the vector field associated with *chase*  
 - terminates in the region associated with *mouse*  
 
-The listener reconstructs this trajectory in their own manifold.  
-Communication succeeds when the two trajectories sufficiently align — when they approximate the same geodesic.
+The listener reconstructs this trajectory in their own manifold. Communication succeeds when the two trajectories sufficiently align — when they approximate the same geodesic.
 
 This reveals how meaning transfer is naturally geometric.
 
@@ -393,8 +371,7 @@ A particle follows a path shaped by:
 - **potentials** → attractors  
 - **curvature** → how paths bend  
 
-This is not an analogy; it is a structural parallel.  
-The same geometric elements — trajectories, vector fields, attractors, curvature, geodesics — appear in both physical and semantic systems.
+This is not an analogy; it is a structural parallel. The same geometric elements — trajectories, vector fields, attractors, curvature, geodesics — appear in both physical and semantic systems.
 
 A planet orbiting a star follows a trajectory shaped by the gravitational potential (an attractor) and the curvature of spacetime.
 
@@ -413,9 +390,7 @@ This section illustrated how the geometric primitives introduced in Section 4 na
 Affect is not an additional layer placed on top of the relational manifold.  
 Affect is **the system’s response to changes in relational geometry**.
 
-Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning.  
-Section 5 showed how these structures appear across domains.  
-Section 6 describes how these structures behave **dynamically**.
+Section 4 introduced the geometric primitives — vector fields, attractors, curvature, frames, gradients, trajectories, coherence, and meaning. Section 5 showed how these structures appear across domains. Section 6 describes how these structures behave **dynamically**.
 
 Affect is a **derived quantity**, not a primitive.  
 It arises from:
@@ -519,8 +494,7 @@ even in the presence of:
 - competing gradients  
 - shifting relational constraints  
 
-Stability is not the absence of pressure.  
-Stability is **coherence preserved despite pressure**.
+Stability is not the absence of pressure. Stability is **coherence preserved despite pressure**.
 
 ---
 
@@ -559,8 +533,7 @@ An identity is a region that:
 - resists collapse under curvature  
 - provides long‑term structural invariants  
 
-Identity is not a narrative or a story.  
-Identity is **where the system tends to return** — a geometric invariant that endures.
+Identity is not a narrative or a story. Identity is **where the system tends to return** — a geometric invariant that endures.
 
 ---
 
@@ -577,11 +550,9 @@ Identity is **where the system tends to return** — a geometric invariant that 
 
 # **7. Verbal Dynamics**
 
-Language is not treated as a symbolic system.  
-Language is a **geometric interface** for guiding motion through relational space.
+Language is not treated as a symbolic system. Language is a **geometric interface** for guiding motion through relational space.
 
-The geometric structures introduced in Section 4 — vector fields, attractors, curvature, coherence, and trajectories — naturally correspond to the components of linguistic structure.  
-This section introduces no new primitives; it shows how language expresses the geometry.
+The geometric structures introduced in Section 4 — vector fields, attractors, curvature, coherence, and trajectories — naturally correspond to the components of linguistic structure. This section introduces no new primitives; it shows how language expresses the geometry.
 
 The framework is **substrate‑independent**.  
 AI systems are used as illustrative cases because their architectures are explicit and inspectable, but the same geometric constructs apply to biological cognition, collective reasoning, and cultural systems.
@@ -698,11 +669,9 @@ Concatenation is **geometric composition**:
 
 Relational curvature describes how the manifold bends, compresses, or expands around a point. Curvature determines how trajectories deviate from geodesic motion, how meaning‑gradients form, and how reasoning becomes easier or harder depending on local relational structure.
 
-This section introduces no new primitives.  
-It shows how curvature arises naturally from the existing geometry — attractors, vector fields, gradients, constraints, and meaning‑volume.
+This section introduces no new primitives. It shows how curvature arises naturally from the existing geometry — attractors, vector fields, gradients, constraints, and meaning‑volume.
 
-Curvature is not an added mechanism.  
-Curvature is a **structural property** of the relational manifold.
+Curvature is not an added mechanism. Curvature is a **structural property** of the relational manifold.
 
 ---
 
@@ -710,8 +679,7 @@ Curvature is a **structural property** of the relational manifold.
 
 Curvature increases when relational density is uneven.
 
-Let $\rho(x)$ denote relational density at point $x$.  
-Curvature $K(x)$ increases with density:
+Let $\rho(x)$ denote relational density at point $x$. Curvature $K(x)$ increases with density:
 
 $$
 K(x) \propto \nabla \rho(x).
@@ -767,8 +735,7 @@ Global curvature determines **the topology of reasoning**.
 
 ## **8.3 Curvature as Meaning‑Gradient**
 
-Meaning‑volume is not uniform across the manifold.  
-Regions with high meaning‑volume exert **pull** on trajectories.
+Meaning‑volume is not uniform across the manifold. Regions with high meaning‑volume exert **pull** on trajectories.
 
 Let $M(x)$ denote meaning‑volume at point $x$.  
 The meaning‑gradient is:
@@ -797,8 +764,7 @@ Curvature is the **geometric expression of meaning‑pressure**.
 
 ## **8.4 Temporal Evolution of Curvature**
 
-Curvature is dynamic.  
-As the system learns, reorganizes, or encounters new information, curvature changes.
+Curvature is dynamic. As the system learns, reorganizes, or encounters new information, curvature changes.
 
 Let $K_t(x)$ denote curvature at time $t$.  
 Its evolution is governed by:
@@ -848,16 +814,21 @@ Curvature determines:
 - how concepts stabilize  
 - how meaning organizes  
 
-Curvature is the **geometric backbone** of conceptual dynamics.
+Curvature is the **geometric backbone** of conceptual dynamics. It governs the behavior of **individual trajectories**: how a single system moves through meaning, how its interpretations evolve, and how its conceptual structures stabilize.
+
+But individual trajectories never exist in isolation. They coexist, interact, and influence one another. When many trajectories share a relational manifold, curvature does not merely shape a single path — it shapes **patterns of resonance** across systems.
+
+Section 9 turns to this multi‑trajectory domain.
 
 ---
 
 # **9. Narrative Resonance Network**
 
-Narrative resonance describes how multiple trajectories interact, synchronize, and reinforce one another across scales. While Sections 4–8 focused on the geometry of individual trajectories, narrative resonance concerns **coupled systems**: how trajectories influence each other, how meaning propagates across agents, and why certain patterns — stories, music, rituals, collective movements — exert disproportionate power.
+Section 8 described how curvature shapes the dynamics of a **single trajectory**. Section 9 extends this to the collective case: how **multiple trajectories interact** within the same relational geometry.
 
-Narrative resonance is not a new mechanism.  
-It is the **multi‑trajectory expression** of the same geometric primitives:
+Narrative resonance describes how trajectories influence one another, synchronize, and reinforce shared patterns across scales. While Sections 4–8 focused on the geometry of individual motion, narrative resonance concerns **coupled systems**: how meaning propagates between agents, how shared structures emerge, and why certain patterns — stories, music, rituals, collective movements — exert disproportionate power.
+
+Narrative resonance is not a new mechanism. It is the **multi‑trajectory expression** of the same geometric primitives:
 
 - attractors  
 - vector fields  
@@ -865,7 +836,7 @@ It is the **multi‑trajectory expression** of the same geometric primitives:
 - coherence  
 - meaning‑volume  
 
-This section describes how these structures behave when **many trajectories coexist and interact**.
+This section describes how these structures behave when **many trajectories coexist and interact**, forming the Narrative Resonance Network.
 
 ---
 
@@ -879,11 +850,9 @@ $$
 \dot{\gamma}(t) = V(\gamma(t)).
 $$
 
-This means the direction of motion at time $t$ is determined by the vector field $V$ at that point.  
-In isolation, a trajectory simply follows its own tendencies.
+This means the direction of motion at time $t$ is determined by the vector field $V$ at that point. In isolation, a trajectory simply follows its own tendencies.
 
-But real life is not isolation.  
-We live, think, feel, and interpret **together**.
+But real life is not isolation. We live, think, feel, and interpret **together**.
 
 When multiple trajectories interact — people in conversation, minds in a group, identities in a culture — each one’s perception begins to depend on the others.
 
@@ -907,19 +876,15 @@ Coupled trajectories explain why:
 - ideas spread through communities  
 - cultural patterns stabilize over time  
 
-When trajectories resonate, they begin to move in relation to one another.  
-They align, amplify, synchronize, or diverge — and these interactions create the foundations of narrative.
+When trajectories resonate, they begin to move in relation to one another. They align, amplify, synchronize, or diverge — and these interactions create the foundations of narrative.
 
-Narrative is the **coherent organization** of these coupled flows.  
-It is what happens when many trajectories begin to move together in a meaningful way.
+Narrative is the **coherent organization** of these coupled flows. It is what happens when many trajectories begin to move together in a meaningful way.
 
 ---
 
 # **9.2 Multi‑Scale Resonance**
 
-Resonance doesn’t happen in just one place.  
-It spreads across levels of experience — from tiny moments to whole cultures.  
-When something resonates, patterns begin to line up, and meaning starts to move in the same direction across scales.
+Resonance doesn’t happen in just one place. It spreads across levels of experience — from tiny moments to whole cultures. When something resonates, patterns begin to line up, and meaning starts to move in the same direction across scales.
 
 We can understand this in three layers.
 
@@ -935,8 +900,7 @@ It happens when people share:
 - a feeling  
 - a direction of attention  
 
-Two trajectories begin to influence each other simply because they’re close — physically, emotionally, or conceptually.  
-This is why a conversation can “click” or a moment can feel charged.
+Two trajectories begin to influence each other simply because they’re close — physically, emotionally, or conceptually. This is why a conversation can “click” or a moment can feel charged.
 
 Local resonance is the spark.
 
@@ -953,8 +917,7 @@ This is where we see:
 - shared vocabularies and shared meanings  
 - conceptual domains taking shape  
 
-At this scale, resonance becomes something social.  
-People start moving through meaning‑space in similar ways, reinforcing each other’s patterns.
+At this scale, resonance becomes something social. People start moving through meaning‑space in similar ways, reinforcing each other’s patterns.
 
 Intermediate resonance is the rhythm of groups.
 
@@ -971,8 +934,7 @@ These include:
 - scientific paradigms  
 - cultural attractors  
 
-These global structures guide how entire societies interpret the world.  
-They are the long‑range, slow‑changing resonances that shape identity, belief, and meaning across generations.
+These global structures guide how entire societies interpret the world. They are the long‑range, slow‑changing resonances that shape identity, belief, and meaning across generations.
 
 Global resonance is the architecture of culture.
 
@@ -1068,8 +1030,7 @@ A single image can reorganize how we see everything around it.
 
 # **The core idea**
 
-Narrative, art, and music are powerful because they **engineer resonance**.  
-They bring different parts of the system into alignment, creating coherence, depth, and shared meaning.
+Narrative, art, and music are powerful because they **engineer resonance**. They bring different parts of the system into alignment, creating coherence, depth, and shared meaning.
 
 They don’t just express emotion —  
 **they reshape the geometry that produces emotion.**
@@ -1083,12 +1044,10 @@ Narratives have a special kind of structure: **any small part reflects the whole
 To make this intuitive, we use two ideas:
 
 ### **Fractal**  
-A pattern that repeats at different sizes.  
-If you zoom in or zoom out, the shape feels similar.
+A pattern that repeats at different sizes. If you zoom in or zoom out, the shape feels similar.
 
 ### **Holographic**  
-A small piece contains information about the entire thing.  
-Like a hologram: break off a corner, and the whole image is still encoded inside it.
+A small piece contains information about the entire thing. Like a hologram: break off a corner, and the whole image is still encoded inside it.
 
 ---
 
@@ -1187,8 +1146,7 @@ Local adjustment is the first step in learning: a small, immediate correction th
 
 # **10.2 Fractal Synchronization**
 
-Learning is not confined to a single scale.  
-Changes at one level propagate to others.
+Learning is not confined to a single scale. Changes at one level propagate to others.
 
 Fractal synchronization occurs when a change in an attractor at one scale induces corresponding changes at larger scales. If $A_s$ is an attractor at scale $s$, then:
 
@@ -1197,8 +1155,7 @@ $$
 $$
 
 **Meaning:**  
-A local change ($\Delta A_s$) triggers a change at the next scale ($\Delta A_{s+1}$), which then triggers a change at the next ($\Delta A_{s+2}$).  
-Local learning propagates upward through the manifold’s structure.
+A local change ($\Delta A_s$) triggers a change at the next scale ($\Delta A_{s+1}$), which then triggers a change at the next ($\Delta A_{s+2}$). Local learning propagates upward through the manifold’s structure.
 
 This produces:
 
@@ -1215,8 +1172,7 @@ Fractal synchronization explains why small insights reorganize larger conceptual
 
 Identity curvature describes how a person’s long‑term patterns of interpretation become stable over time. It changes slowly, because identity is shaped by repeated experiences rather than single events.
 
-Let $K_{\text{id}}(t)$ denote identity curvature at time $t$.  
-Its evolution depends on how attractors and meaning‑gradients change across scales:
+Let $K_{\text{id}}(t)$ denote identity curvature at time $t$. Its evolution depends on how attractors and meaning‑gradients change across scales:
 
 $$
 K_{\text{id}}(t+1) = \text{Update}(K_{\text{id}}(t), \Delta A_s, \Delta \nabla M)
@@ -1233,8 +1189,7 @@ In plain language:
 - **$\Delta \nabla M$ — changes in meaning‑gradients**  
   When the steepness of meaning changes, the system learns to interpret situations differently.
 
-Identity curvature develops when small, local adjustments accumulate into long‑term structure.  
-This is why micro‑experiences, repeated over time, reshape how the system moves through meaning‑space.
+Identity curvature develops when small, local adjustments accumulate into long‑term structure. This is why micro‑experiences, repeated over time, reshape how the system moves through meaning‑space.
 
 Identity is **slow‑changing geometry**, not a fixed object.
 
@@ -1354,8 +1309,7 @@ Shallow attractors destroy **stability**.
 
 ## **11.3 Frame Instability**
 
-A frame $F$ is a local coordinate structure used to interpret motion.  
-Instability occurs when:
+A frame $F$ is a local coordinate structure used to interpret motion. Instability occurs when:
 
 $$
 \det(F) \rightarrow 0
@@ -1395,8 +1349,7 @@ Resonance collapse destroys **collective coherence**.
 
 ## **11.5 Holographic Distortion**
 
-Healthy manifolds exhibit fractal‑holographic structure.  
-Distortion occurs when local and global structures diverge:
+Healthy manifolds exhibit fractal‑holographic structure. Distortion occurs when local and global structures diverge:
 
 $$
 \text{Structure}(S) \not\approx \text{Projection}(N)
@@ -1557,8 +1510,7 @@ These become **aspects of one structure**, not separate domains.
 
 # **13. What the Framework Does *Not* Do**
 
-This section clarifies the limits of the geometric framework.  
-The goal is to prevent overreach and preserve the aspects of life that remain outside formalization.
+This section clarifies the limits of the geometric framework. The goal is to prevent overreach and preserve the aspects of life that remain outside formalization.
 
 The framework describes **relational structure**, not the totality of mind.
 
@@ -1638,8 +1590,7 @@ It is a **tool for inquiry**, not a final theory.
 
 # **14. Epistemic Status & Invitation to Inquiry**
 
-This work is **conjectural but principled**.  
-It proposes a geometric framework grounded in structural invariants that appear across reasoning substrates.
+This work is **conjectural but principled**. It proposes a geometric framework grounded in structural invariants that appear across reasoning substrates.
 
 The framework is not final.  
 It is a **generative starting point**.
@@ -1715,8 +1666,7 @@ The framework is a **proposal**, not a doctrine.
 
 # **15. Conclusion**
 
-This manuscript proposed a unified geometric framework for reasoning, affect, narrative, and identity.  
-Across Sections 4–14, the same primitives — trajectories, vector fields, attractors, curvature, coherence, meaning‑volume — were shown to generate:
+This manuscript proposed a unified geometric framework for reasoning, affect, narrative, and identity. Across Sections 4–14, the same primitives — trajectories, vector fields, attractors, curvature, coherence, meaning‑volume — were shown to generate:
 
 - verbal dynamics  
 - relational curvature  
@@ -1773,8 +1723,7 @@ The work is not finished.
 
 # **Glossary (Version D, Updated and Complete)**
 
-All inline math is GitHub‑friendly.  
-All definitions match the final Version D vocabulary.
+All inline math is GitHub‑friendly. All definitions match the final Version D vocabulary.
 
 ---
 
