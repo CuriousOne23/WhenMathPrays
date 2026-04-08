@@ -6,7 +6,7 @@
 
 ## **0. Abstract**
 
-This paper presents a geometric way of understanding thought as movement through a field of relations. Instead of seeing cognition as the manipulation of fixed symbols or representations, we model meaning as the path an agent takes through a relational landscape. Curvature in this landscape shows how constraints and tendencies shape interpretation.
+This paper presents a geometric framework for understanding thought as movement through a field of relations. Instead of viewing cognition as the manipulation of fixed symbols or representations, we model meaning as the path an agent takes through a relational landscape. Curvature in this landscape shows how constraints and tendencies shape interpretation.
 
 The framework uses only a few basic building blocks — agents, relations, trajectories, and curvature. From these simple pieces, many familiar aspects of thought naturally emerge: the stability of nouns, the generative power of verbs, and the coherence of stories and reasoning.
 
@@ -38,7 +38,7 @@ This paper explores a different starting point. Instead of treating thought as t
 
 The goal is not to replace existing theories, but to offer a complementary geometric lens. The framework is conjectural, yet structured enough to be examined, tested, refined, or challenged.
 
-Examples from linguistics, biology, physics, cognition, and AI are included only to illustrate the geometry, not to suggest any domain is more important than another. Readers from all backgrounds are invited to engage with the ideas, test their implications, and contribute to their development.
+Examples from linguistics, biology, physics, cognition, and AI are included only to illustrate the geometry. Readers from all backgrounds are invited to engage with the ideas, test their implications, and contribute to their development.
 
 If meaning is motion through a relational manifold, then the natural language for describing it is geometric. The sections that follow develop this idea using a minimal set of primitives.
 
@@ -46,7 +46,7 @@ If meaning is motion through a relational manifold, then the natural language fo
 
 ## **3. The Problem**
 
-Many accounts of thought begin with objects — symbols, categories, or representations — and then try to explain how these objects combine to produce meaning. Yet much of lived cognition is not object-like. It is dynamic: shifts in interpretation, changes in emphasis, transitions between ideas, and the continuous influence of surrounding relations context.
+Many accounts of thought begin with objects — symbols, categories, or representations — and then try to explain how these objects combine to produce meaning. Yet much of lived cognition is not object-like. It is dynamic: shifts in interpretation, changes in emphasis, transitions between ideas, and the continuous influence of surrounding relations and context.
 
 Object-first models face persistent difficulties with fluidity, ambiguity, context-dependence, and the way meaning changes as relations change.
 
@@ -154,7 +154,7 @@ $$
 - $\nabla$ is the covariant derivative — it describes how a direction changes as you move along the manifold.  
 - $[X,Y]$ is the Lie bracket, which measures the difference between moving first in direction $X$ and then $Y$, versus first in $Y$ and then $X$.
 
-**Meaning:** You do not need to compute this. In simple terms, curvature measures how much small changes in position can cause large shifts in direction or interpretation. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
+**Meaning:** You do not need to compute this. In simple terms, curvature measures how much the landscape bends. High curvature means small changes in position can cause large shifts in direction or interpretation. Low curvature means movement is smoother and more predictable.
 
 ### **4.6 Coherence**
 
@@ -189,8 +189,6 @@ flowchart TD
 ```
 
 **Meaning:** This diagram gives a visual overview of the core building blocks and how they connect. The relational manifold is the foundation. Trajectories move through it, guided by vector fields (verbs), pulled toward attractors (nouns), and shaped by curvature.
-
----
 
 ### **4.7 Coordinate Systems and the Geometry of Internal Mapping**
 
@@ -345,7 +343,7 @@ This simple example shows how meaning transfer is not merely symbolic — it is 
 
 ---
 
-## **5.2 Biology: Stable Forms as Attractors**
+### **5.2 Biology: Stable Forms as Attractors**
 
 Biological systems exhibit stable patterns — body plans, behaviors, ecological roles — that persist across time and variation.
 
@@ -358,17 +356,17 @@ In the geometric framework:
 
 For instance, the repeated emergence of tetrapod limb structures across species can be understood as trajectories converging toward a stable region of the manifold — an attractor shaped by physical, developmental, and functional constraints.
 
-This shows how nouns‑as‑attractors generalize beyond language.
+This shows how nouns-as-attractors generalize beyond language.
 
 ---
 
-## **5.3 Cognition: Thought as Motion Through Conceptual Space**
+### **5.3 Cognition: Thought as Motion Through Conceptual Space**
 
 Reasoning is motion through a conceptual manifold.
 
 A chain of reasoning corresponds to a trajectory:
 
-- **smooth reasoning** → near‑geodesic motion  
+- **smooth reasoning** → near-geodesic motion  
 - **confusion** → motion through regions of high curvature  
 - **fixation** → falling into an attractor  
 - **insight** → crossing a ridge into a new basin  
@@ -417,7 +415,7 @@ This diagram highlights the structural parallel, not an equivalence. The framewo
 
 ---
 
-### **Summary of Section 5**
+## **Summary of Section 5**
 
 Section 5 showed how the geometric building blocks from Section 4 appear in everyday domains:
 
@@ -446,7 +444,7 @@ $$
 
 affect reflects the system’s response to changes in meaning-volume, curvature, coherence, and gradient pressure.
 
-**Meaning:** Affect is how the existing geometric structures respond as they change over time.
+**Meaning:** Affect is how the existing geometric structures behave as they change over time.
 
 ### **6.2 Valence**
 
@@ -520,8 +518,6 @@ Identity is a stable attractor region in the relational manifold. It maintains p
 ## **Summary of Section 6**
 
 Section 6 described affect as the system’s response to changes in relational geometry. Valence shows whether meaning is expanding or contracting. Arousal measures how strongly the system is being pushed. Stability is coherence preserved under pressure. Regulation is the system steering its own geometry. Identity is a long-term attractor that provides continuity.
-
-Section 7 turns to this expressive interface.
 
 ---
 
@@ -915,7 +911,7 @@ flowchart LR
 
 ---
 
-## **11.6 Relation to Physical Geometry**
+## **11.7 Relation to Physical Geometry**
 
 The geometry described in this document is relational, not spatial or physical [6]. We use mathematical tools from geometry (such as curvature and attractors), but these are applied to relations and meaning, not to physical space or time.
 
@@ -984,12 +980,6 @@ These become aspects of one coherent geometry rather than separate domains.
 ## **Summary of Section 12**
 
 Section 12 outlined conditional advantages of the framework if its assumptions hold. These include scientific benefits, observability into verb-space, cross-disciplinary connections, and conceptual unification. The advantages are presented not as claims, but as possibilities that invite further exploration and testing.
-
----
-
-### Revised Section 13
-
-Here is a cleaner, slightly tighter version:
 
 ---
 
@@ -1125,17 +1115,11 @@ These components form a single coherent structure.
 
 ### **15.2 Reaffirming the Promise and Openness**
 
-The framework provides conceptual unification, operational definitions, cross-substrate applicability, and empirical testability. It provides new tools for understanding reasoning systems across disciplines.
+The framework provides conceptual unification, operational definitions, cross-substrate applicability, and empirical testability. It offers new tools for understanding reasoning systems across disciplines.
 
 But the framework remains open — to revision, to critique, to expansion, and to alternative formalisms. The work is not finished.
 
 **It is beginning.**
-
----
-
-## **Summary of Section 15**
-
-Section 15 restated the unified geometric model and reaffirmed its openness. The framework is presented not as a final theory, but as a starting point for further inquiry and collaboration.
 
 ---
 
@@ -1146,8 +1130,6 @@ GitHub Repository. https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/
 
 **[2]** Riemann, B. (1868). *On the Hypotheses Which Lie at the Foundations of Geometry*.
 
-**[3]** Levi-Civita, T. (1917). *Parallel Transport in General Manifolds*.
-
 **[4]** Arnold, V. I. *Mathematical Methods of Classical Mechanics*. Springer.
 
 **[5]** Strogatz, S. *Nonlinear Dynamics and Chaos*. Westview Press.
@@ -1156,11 +1138,7 @@ GitHub Repository. https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/
 
 **[7]** Kelso, J. A. S. *Dynamic Patterns: The Self-Organization of Brain and Behavior*.
 
-**[8]** Haken, H. *Synergetics: An Introduction*.
-
 **[9]** Bruner, J. *Actual Minds, Possible Worlds*.
-
-**[10]** Herman, D. *Story Logic: Problems and Possibilities of Narrative*.
 
 **[11]** Mandelbrot, B. *The Fractal Geometry of Nature*.
 
