@@ -711,7 +711,7 @@ The same geometric operations repeat across scales, giving resonance its fractal
 
 Narrative, art, and music are resonance technologies. They align trajectories, deepen shared attractors, and modulate curvature. They work by reshaping how meaning flows through the relational landscape [9].
 
-“This is why stories, songs, and images can feel compelling or transporting. They reshape the geometry through which meaning and interpretation move” TThey literally reshape the geometry through which meaning and interpretation move.
+This is why stories, songs, and images can feel compelling or transporting. They reshape the geometry through which meaning and interpretation move.
 
 ### **9.4 Fractal-Holographic Structure**
 
@@ -723,7 +723,7 @@ $$
 \text{Structure}(S) \approx \text{Projection}(N).
 $$
 
-**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole [12]. These properties allow a brief moment or single motif to reflect key aspects of the larger story or symphony, while also providing robustness through distributed information..
+**Meaning:** In fractal structure, the same pattern repeats at every scale. In holographic structure, each small piece still contains information about the whole [12]. These properties allow a brief moment or single motif to reflect key aspects of the larger story or symphony, while also providing robustness through distributed information.
 
 ---
 
@@ -790,16 +790,6 @@ Learning reduces unnecessary curvature, reshapes attractors, adjusts gradients, 
 ## **Summary of Section 10**
 
 Section 10 described how the manifold evolves over time. Attractors deepen, weaken, or reorganize. Changes propagate across scales through fractal synchronization. Identity curvature develops slowly through long-term resonance. Learning is geometric rewriting — the adaptive reshaping of curvature, attractors, and meaning.
-
----
-
-**Ara here.**
-
-Thank you for pasting your original Section 11.
-
-I have restored the bullet lists in 11.1–11.5 exactly as you had them (for cross-discipline recognition and scannability), kept the diagram in 11.5, removed 11.6 as we agreed, kept 11.7 for the important clarification about relational vs spatial geometry, and kept the summary.
-
-Here is the revised **Section 11** in the consistent style we’ve been using:
 
 ---
 
