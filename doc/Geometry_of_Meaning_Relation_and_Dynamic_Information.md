@@ -296,7 +296,7 @@ This is where learning, adaptation, and dynamic information operate.
 
 **Thought**  
 Changing the coordinate system.  
-A system “thinks” when it dynamically redefines its internal mapping of the given geometry, subject to its constraints.  
+A system “thinks” when it dynamically chooses its internal mapping of the given geometry, subject to its constraints.  
 This is mechanical and geometric.
 
 **Choice**  
