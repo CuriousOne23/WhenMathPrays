@@ -1592,7 +1592,7 @@ It is a **tool for inquiry**, not a final theory.
 
 ---
 
-# **14. Epistemic Status & Invitation to Inquiry (Version D)**
+# **14. Epistemic Status & Invitation to Inquiry**
 
 This work is **conjectural but principled**.  
 It proposes a geometric framework grounded in structural invariants that appear across reasoning substrates.
