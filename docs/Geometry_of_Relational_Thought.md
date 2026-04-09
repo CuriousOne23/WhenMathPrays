@@ -1,4 +1,4 @@
-# **Geometry of Meaning, Relation and Dynamic Information**
+# **Geometry of Relational Thought**
 
 **Curious One, Copilot, and Grok**
 
