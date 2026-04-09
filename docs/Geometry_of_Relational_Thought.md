@@ -150,7 +150,7 @@ $$
 
 ### **4.5 Curvature**
 
-Curvature describes how the manifold bends and influences the direction of motion. It is formally given by the Riemann curvature operator [2] (also called the Riemann curvature tensor), which we denote by the symbol $R$:
+Curvature describes how the manifold bends and influences the direction of motion. It is formally given by the Riemann curvature operator [2] (also known as the Riemann curvature tensor), which we denote by the symbol $R$:
 
 $$
 R(X, Y)Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]} Z
