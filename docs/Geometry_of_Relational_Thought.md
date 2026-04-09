@@ -105,20 +105,6 @@ For simplicity, this paper focuses primarily on nouns and verbs as clear example
 
 ---
 
-This keeps the sentence readable while including the sensory examples you wanted.
-
-Would you like me to make any small tweaks (for example, grouping the senses together or making it flow even smoother)? Just say the word.
-
----
-
-This flows naturally and does exactly what you wanted:
-
-- It keeps the focus on nouns and verbs (as your current examples).
-- It clearly opens the door wider without weakening the rest of the paper.
-- The wording is clean and professional.
-
-Would you like me to make the sentence a little shorter, softer, or more formal? Or does this version feel good to you?
-
 ### **4.2 Trajectories**
 
 A thought unfolds as a **trajectory** through the manifold. We denote a trajectory by the symbol $\gamma(t)$:
