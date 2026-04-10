@@ -104,6 +104,9 @@ flowchart LR
     s_t -->|natural dynamics| s_next
     s_t -->|with pattern I| op --> s_next
 ```
+
+While the precise boundaries of the viability region (V) and capacity region (C) must be defined for each specific system and will require future work, the existence of these regions is observable and meaningful. Even approximate definitions of V and C already provide a significantly richer description of living, cognitive, and adaptive systems than current static notions of information.
+
 ---
 
 # **4. Physical Grounding: When Patterns Do and Do Not Do Work**
