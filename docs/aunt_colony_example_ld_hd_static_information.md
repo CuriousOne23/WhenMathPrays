@@ -1,4 +1,5 @@
-https://x.com/virjust18/status/2042525360320057500?s=20
+https://x.com/virjust18/status/2042525360320057500?s=20  
+
 Yes, the three papers you uploaded (**Geometry of Relational Thought**, **Dynamic Information: Patterns That Act**, and **When High Dynamic Information Content Becomes Necessary**) provide a powerful, unified language to explain why army ants (likely *Eciton* species, based on the video's living chain/bridge behavior over rushing water while carrying brood) can achieve such sophisticated collective feats with tiny individual brains and no central leader.
 
 The framework reframes the ants' behavior not as mysterious "intelligence" or hardcoded instinct alone, but as **geometric motion through a relational manifold** driven by **dynamic information** patterns that bias trajectories toward colony viability and capacity. Here's how the papers map directly onto the ant bridge phenomenon, using their own primitives and distinctions.
