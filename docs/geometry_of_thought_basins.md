@@ -70,9 +70,15 @@ In any given instant we experience the mind as being primarily:
 - tripping over an **inquiry basin** (in a shallow, restless, loosely defined state), or  
 - oriented by the deeper pull of a **truth basin** (feeling a quiet pull toward greater overall coherence).
 
-**Thought**, then, is the ongoing sequence of these snapshots — the mind’s real-time travel through the relational geometry. For the purposes of this paper we focus on the primary transitions: from one object basin to another via a relational basin, from object basins to an inquiry basin, and from an inquiry basin toward a truth basin (and vice-versa). More complex or entangled paths may occur in actual thinking, but they are left for future analysis.
+**Thought**, then, is the ongoing sequence of these snapshots — the mind’s real-time travel through the relational geometry under the influence of **agency**. For the purposes of this paper we focus on the primary transitions: from one object basin to another via a relational basin, from object basins to an inquiry basin, and from an inquiry basin toward a truth basin (and vice-versa). More complex or entangled paths may occur in actual thinking, but they are left for future analysis.
 
 We never see the whole manifold in one frame. We only ever see the local state: which basin or combination of basins is most active right now.
+
+One of the most useful applications of this geometry is honest reflection on the path actually traveled. By examining which basins were visited, their relative strengths, and the real trajectory taken over time, one can gain clearer insight into how thought has unfolded.
+
+However, imagining radically different historical trajectories — “if only I had taken this other path” — is usually illusory. Any significant change in path would have reshaped the entire geometry. The basins, their sizes, their strengths, and the available relational connections at each moment were not fixed; they were dynamically influenced by the choices and experiences that actually occurred. One cannot assume that the geometry would have remained the same relative to all other basins if a different path had been taken.
+
+This paper adds no clarity on the nature of agency itself — how focus is directed, how choices are made, or how inquiry basins arise. Agency is acknowledged as essential to thought, but it remains untouched and may belong to deeper mysteries beyond the present geometric framework.
 
 **5. The Cycle of Thought**  
 - How the four basins interact: inquiry pressure → movement through relational basins → refinement of object basins → alignment with truth → revelation as collapse/crystallization → integration.  
