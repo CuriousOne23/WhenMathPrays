@@ -86,19 +86,17 @@ This paper adds no clarity on the nature of agency itself — how focus is direc
 
 ## The Cycle of Thought
 
-With the four basins and the nature of thought now described, a natural cycle emerges.
+An inquiry basin becomes active when something remains unresolved — a question, a tension, or an idea not yet clear. This fluid, fuzzy-boundary, restless region provides a sense of existence and questioning to the process of thought.
 
-An **inquiry basin** becomes active when something remains unresolved — a question, a tension, or an idea not yet clear. This shallow, restless region exerts a gentle but persistent pressure on the surrounding geometry. Under this pressure, the mind begins to move through **relational basins**, testing and refining connections between existing **object basins**.
+Under the influence of agency, the mind begins to move through relational basins, testing and refining connections between existing object basins. As this movement continues, object basins are reshaped or new ones are formed. The inquiry persists, guided by the deeper coherence of truth basins. Every change is quietly evaluated against whether the overall coherence grows clearer, more stable, and more sharply bounded.
 
-As the mind travels these relational pathways, object basins are reshaped or new ones are formed. The inquiry continues, guided by the deeper pull of one or more **truth basins**. Every change is quietly tested against whether the overall coherence grows clearer, more stable, and more sharply bounded.
+When the configuration finally aligns sufficiently with a truth basin, revelation occurs: the inquiry basin collapses and crystallizes into a new, stable object basin. The unresolved becomes settled — “this.”
 
-When the configuration finally aligns sufficiently with a truth basin, the inquiry basin reaches a threshold. At that moment, **revelation** occurs: the inquiry basin collapses and crystallizes into a new, stable **object basin**. The pressure releases. What was previously loose and uncertain becomes settled — “this.”
-
-**Musing** is the sustained, patient attention given to an active inquiry basin — the willingness to remain in the uncertainty, to keep moving through relational basins without forcing premature closure. Revelation is the moment when that sustained musing bears fruit and the inquiry basin collapses into clarity.
+**Musing** is the sustained, patient attention given to an active inquiry basin — the willingness to remain in the uncertainty and keep moving through relational basins without forcing premature closure. Revelation is the moment when that sustained musing bears fruit and the inquiry basin collapses into clarity.
 
 After crystallization, the newly formed object basin is quietly integrated into the larger geometry through further relational weaving. The cycle may then begin again as new inquiry basins arise.
 
-This cycle does not claim to explain every aspect of thought. It simply offers a geometric description of the basic movement we repeatedly observe: pressure, travel, refinement, collapse, and integration.
+This cycle offers a geometric description of the basic movement we repeatedly observe in thought: pressure, travel, refinement, collapse, and integration.
 
 **6. Illustrative Applications**  
 - Brief, suggestive examples (sudden insight, learning a new concept, holding a vague intuition, extended musing).  
