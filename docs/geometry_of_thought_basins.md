@@ -39,6 +39,8 @@ We begin by describing these four basins with as much clarity as we can. Only af
 
 The territory is large, and this remains only a clearer sketch than we had before. We offer it openly, inviting scrutiny, refinement, or replacement by sharper eyes.
 
+---
+
 ## The Four Primitive Basins
 
 Building on the relational manifold [3], we identify four primitive types of basins that together form the basic structures through which thought operates.
@@ -52,6 +54,8 @@ Building on the relational manifold [3], we identify four primitive types of bas
 **Truth Basins** are deep, stable regions that serve as fundamental anchors of coherence. When an inquiry basin is active, greater coherence is established between the inquiry basin, surrounding object basins, and the truth basin. Every reshaping driven by inquiry is ultimately tested against whether this coherence becomes clearer, more stable, and more sharply bounded.
 
 These four basins do not exist in isolation. Their interplay generates the living cycle of thought.
+
+---
 
 ## Thought
 
