@@ -70,9 +70,9 @@ In any given instant we experience the mind as being primarily:
 - tripping over an **inquiry basin** (in a shallow, restless, loosely defined state), or  
 - oriented by the deeper pull of a **truth basin** (feeling a quiet pull toward greater overall coherence).
 
-**Thought**, then, is the ongoing sequence of these snapshots — the mind’s real-time travel through the relational geometry under the influence of **agency**. For the purposes of this paper we purposefully constrain our analysis to the primary transitions in order to simplify, quantify, and clearly communicate the basics of thought: from one object basin to another via a relational basin, from object basins to an inquiry basin, and from an inquiry basin toward a truth basin (and vice-versa). 
+**Thought**, then, is the ongoing sequence of these snapshots — the mind’s real-time travel through the relational geometry under the influence of **agency**. For the purposes of this paper we purposefully constrain our analysis to the primary transitions in order to simplify, quantify, and clearly communicate the basics of thought: from one object basin to another via a relational basin, from object basins to an inquiry basin, and from an inquiry basin toward a truth basin (and vice-versa).
 
-More complex processes — such as direct travel between relational basins, highly entangled multi-path thought, or other richer forms of movement — may well exist in actual cognition, but they are left for future analysis.
+More complex processes — such as direct travel between relational basins, highly entangled multi-path thought, or quantum-like entanglement of multiple simultaneous trajectories — may well exist in actual cognition. While these richer possibilities are intriguing and consistent with the fractal and holographic character of the geometry, they are beyond the scope of this paper and are left for future analysis.
 
 We never see the whole manifold in one frame. We only ever see the local state: which basin or combination of basins is most active right now.
 
