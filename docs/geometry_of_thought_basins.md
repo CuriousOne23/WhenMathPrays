@@ -33,19 +33,24 @@ The second paper examined degrees of that dynamic information — showing when r
 
 The third paper moved into the relational manifold itself, framing thought not as manipulation of fixed symbols but as motion through a living geometry of relations, curvature, and resonance [3].
 
-This fourth paper continues that same musing. It does not deliver a finished theory. Instead, it attempts to name four primitive basins that appear to lie at the heart of how thought actually works inside the relational manifold:
+This fourth paper continues that same musing. It does not deliver a finished theory. Instead, it names four primitive basins that appear to lie at the heart of how thought actually works inside the relational manifold:
 
 - Object basins — the stable regions where attention settles  
 - Relational basins — the connecting valleys through which attention moves  
 - Inquiry basins — the shallow, unstable regions that drive the search  
 - Truth basins — the deep anchors that give the search direction  
 
-We present these basins with as much static clarity as we can, while allowing the overall flow of the paper to carry the relational and dynamic character that has marked the previous works. Our hope is that the reader may feel the quiet pressure of an active inquiry basin and, if the geometry aligns, experience the beginning of its own internal crystallization.
+Taken together, these four basins suggest the following compact relationship:
+
+$$
+\text{Thought} = \{\text{Object basins},\ \text{Relational basins},\ \text{Inquiry basins},\ \text{Truth basins},\ \text{Agency}\}
+$$
+
+The first four components are the focus of this paper. We explore their nature, their distinct roles, and the cycle they generate. The fifth component — **agency** — is acknowledged as essential, but this paper adds **no clarity** whatsoever on what agency is, how it operates, or how inquiry basins themselves arise and become active. Agency remains untouched and may belong to deeper mysteries beyond the reach of the present geometric framework.
 
 We do not claim these four basins are the final word. We offer them as a clearer sketch than we had before — one we believe holds enough promise to warrant further exploration, formalization, and critique.
 
 The territory is large. We invite you to walk it with us.
-
 
 **2. The Four Primitive Basins**  
 - Object Basins (stable, noun-like landing places)  
