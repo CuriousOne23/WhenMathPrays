@@ -43,7 +43,7 @@ The territory is large, and this remains only a clearer sketch than we had befor
 
 ## The Four Primitive Basins
 
-Building on the relational manifold [3], we identify four primitive types of basins that together form the basic structures through which thought operates.
+Building on the relational manifold [3], we identify four primitive types of basins that serve to demonstrate and help define thought.
 
 **Object Basins** are stable regions in the relational manifold where trajectories tend to converge and remain. In the geometry of relational thought [3], these correspond to the attractors once linked to nouns. Yet they reach far beyond language. An object basin can be any identifiable, coherent structure the mind treats as a single resting place — a concept, a memory, a smell, a bodily feeling, a touch, a visual scene, a motor pattern, a story, an act, a verb, a sequence of interpretation, or even a complex emotional tone. What defines such a basin is stability, not linguistic category: the mind suddenly recognizes it as a fixed point in the geometry, a place where the scattered world **is** “this.”
 
@@ -53,7 +53,7 @@ Building on the relational manifold [3], we identify four primitive types of bas
 
 **Truth Basins** are deep, stable regions that serve as fundamental anchors of coherence. When an inquiry basin is active, greater coherence is established between the inquiry basin, surrounding object basins, and the truth basin. Every reshaping driven by inquiry is ultimately tested against whether this coherence becomes clearer, more stable, and more sharply bounded.
 
-These four basins do not exist in isolation. Their interplay generates the living cycle of thought.
+These four basins do not exist in isolation. Their interplay demonstrates the living cycle of thought.
 
 ---
 
@@ -82,9 +82,23 @@ However, imagining radically different historical trajectories — “if only I 
 
 This paper adds no clarity on the nature of agency itself — how focus is directed, how choices are made, or how inquiry basins arise. Agency is acknowledged as essential to thought, but it remains untouched and may belong to deeper mysteries beyond the present geometric framework.
 
-**5. The Cycle of Thought**  
-- How the four basins interact: inquiry pressure → movement through relational basins → refinement of object basins → alignment with truth → revelation as collapse/crystallization → integration.  
-- Includes short definitions of **musing** and **revelation** (revelation = collapse of the inquiry basin).
+---
+
+## The Cycle of Thought
+
+With the four basins and the nature of thought now described, a natural cycle emerges.
+
+An **inquiry basin** becomes active when something remains unresolved — a question, a tension, or an idea not yet clear. This shallow, restless region exerts a gentle but persistent pressure on the surrounding geometry. Under this pressure, the mind begins to move through **relational basins**, testing and refining connections between existing **object basins**.
+
+As the mind travels these relational pathways, object basins are reshaped or new ones are formed. The inquiry continues, guided by the deeper pull of one or more **truth basins**. Every change is quietly tested against whether the overall coherence grows clearer, more stable, and more sharply bounded.
+
+When the configuration finally aligns sufficiently with a truth basin, the inquiry basin reaches a threshold. At that moment, **revelation** occurs: the inquiry basin collapses and crystallizes into a new, stable **object basin**. The pressure releases. What was previously loose and uncertain becomes settled — “this.”
+
+**Musing** is the sustained, patient attention given to an active inquiry basin — the willingness to remain in the uncertainty, to keep moving through relational basins without forcing premature closure. Revelation is the moment when that sustained musing bears fruit and the inquiry basin collapses into clarity.
+
+After crystallization, the newly formed object basin is quietly integrated into the larger geometry through further relational weaving. The cycle may then begin again as new inquiry basins arise.
+
+This cycle does not claim to explain every aspect of thought. It simply offers a geometric description of the basic movement we repeatedly observe: pressure, travel, refinement, collapse, and integration.
 
 **6. Illustrative Applications**  
 - Brief, suggestive examples (sudden insight, learning a new concept, holding a vague intuition, extended musing).  
