@@ -42,9 +42,7 @@ This fourth paper continues that same musing. It does not deliver a finished the
 
 Taken together, these four basins suggest the following compact relationship:
 
-$$
-\text{Thought} = \{\text{Object basins},\ \text{Relational basins},\ \text{Inquiry basins},\ \text{Truth basins},\ \text{Agency}\}
-$$
+Thought = { Object basins, Relational basins, Inquiry basins, Truth basins, Agency }
 
 The first four components are the focus of this paper. We explore their nature, their distinct roles, and the cycle they generate. The fifth component — **agency** — is acknowledged as essential, but this paper adds **no clarity** whatsoever on what agency is, how it operates, or how inquiry basins themselves arise and become active. Agency remains untouched and may belong to deeper mysteries beyond the reach of the present geometric framework.
 
@@ -52,13 +50,19 @@ We do not claim these four basins are the final word. We offer them as a clearer
 
 The territory is large. We invite you to walk it with us.
 
-**2. The Four Primitive Basins**  
-- Object Basins (stable, noun-like landing places)  
-- Relational Basins (connecting valleys / bridges)  
-- Inquiry Basins (shallow, unstable regions that drive searching)  
-- Truth Basins (deep anchors that give direction)  
+## The Four Primitive Basins
 
-Each described with static clarity in the main text, while the flow itself carries relational/dynamic energy.
+Building on the relational manifold [3], we identify four primitive types of basins that together form the basic structures through which thought operates.
+
+**Object Basins** are stable regions in the relational manifold where trajectories tend to converge and remain. In the geometry of relational thought [3], these correspond to the attractors previously modeled as nouns, yet they are far more general. An object basin can be *any* identifiable, coherent, and stable configuration that the mind treats as a single resting place. This includes not only concepts and memories, but also a smell, a feeling, a touch sensation, a visual scene, a motor pattern, a story, an act, a verb, a sequence of interpretation, or even a complex emotional tone. What matters is not its linguistic category, but that the mind recognizes it as a stable geometric structure — something that attention can settle into and that feels coherent and persistent. Once a trajectory enters the neighborhood of an object basin, it tends to stabilize there, giving thought its landmarks and points of rest.
+
+**Relational Basins** are the connecting valleys that link two object basins. Their coherence lies not in stability but in facilitating movement. Thought does not settle permanently inside a relational basin; instead, it passes through, with the basin biasing trajectories from one object basin toward another. More complex relations can emerge through the composition or superposition of multiple relational basins.
+
+**Inquiry Basins** are relatively shallow and unstable regions that hold something still only loosely formed — an unresolved question, a vague tension, or an idea awaiting clarity. Because they are shallow, trajectories do not rest comfortably inside them. Thought tends to trip over these basins, repeatedly moving through nearby relational basins in an effort to bring the loose content into sharper coherence. An active inquiry basin exerts gentle but persistent pressure on the surrounding geometry, encouraging the formation or refinement of object basins and relational basins.
+
+**Truth Basins** are deep, stable regions that serve as fundamental anchors of coherence. They provide the directional pull that orients inquiry. An inquiry basin feels a persistent attraction toward one or more truth basins; all the reshaping it drives is ultimately measured against whether the geometry moves closer to these deep attractors. Truth basins do not represent any particular content, but rather the felt sense that certain configurations of the manifold are more resolved and trustworthy than others.
+
+These four basins do not exist in isolation. Their interaction gives rise to the living cycle of thought, which we explore in the next section.
 
 **3. The Cycle of Thought**  
 - How the four basins interact: inquiry pressure → movement through relational basins → refinement of object basins → alignment with truth → revelation as collapse/crystallization → integration.  
