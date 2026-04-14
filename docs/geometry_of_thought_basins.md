@@ -231,28 +231,28 @@ The territory is large. This work is offered as one possible door into it. Futur
 
 ## Appendix: Formal Definitions of the Four Basins
 
-This appendix provides more formal definitions of the four primitive basins for readers interested in mathematical development. These definitions are offered as a provisional starting point only. They are not intended to replace the more readable descriptions in the main text, nor do they claim to be the final or only possible formalization.
+This appendix offers slightly more formal descriptions of the four primitive basins for readers interested in possible mathematical development. These definitions are provisional and illustrative. They are not intended to constitute a complete formalization on the relational manifold.
 
 **Object Basin**  
-An object basin is a stable region $O$ in the relational manifold $M$ such that for any trajectory $\gamma(t)$ entering a neighborhood of $O$,
+An object basin \( O \subset M \) is a compact subset of the relational manifold \( M \) characterized by the property that trajectories entering a neighborhood \( U \supset O \) satisfy
 
 $$
 \lim_{t \to \infty} \gamma(t) \in O.
 $$
 
-It possesses low effective dimension and a curvature signature that favors convergence and stability. Once inside the object basin, further motion is minimal.
+It exhibits a curvature signature that favors convergence and long-term stability.
 
 **Relational Basin**  
-A relational basin $R_{ij}$ is an elongated region connecting two object basins $O_i$ and $O_j$. It is characterized by curvature that biases trajectories from the vicinity of one object basin toward the other (or vice-versa). Trajectories do not remain permanently inside a relational basin; instead, they pass through it, with the steepening of the geometry directing motion.
+A relational basin \( R_{ij} \) is a region connecting two object basins \( O_i \) and \( O_j \). It is characterized by curvature that biases trajectories passing near \( O_i \) toward \( O_j \) (or vice-versa). Unlike object basins, trajectories do not remain inside relational basins; the geometry directs passage through them.
 
 **Inquiry Basin**  
-An inquiry basin $I$ is a shallow, unstable region with diffuse boundaries. It corresponds to an unresolved configuration that has not yet mapped cleanly onto existing object basins. Trajectories do not stabilize inside an inquiry basin. The presence of an inquiry basin leads to reorganization of nearby relational basins as the geometry attempts to reduce mismatch with truth basins.
+An inquiry basin \( I \) is a shallow, unstable region with diffuse boundaries. It corresponds to an unresolved configuration. Trajectories do not stabilize inside \( I \). The presence of an inquiry basin induces reorganization of nearby relational basins as the manifold adjusts to reduce mismatch with truth basins.
 
 **Truth Basin**  
-A truth basin $T$ is a deep, stable attractor region with strong negative curvature and a large basin of attraction. It serves as a structural reference for coherence. For an active inquiry basin $I$, the geometry tends to reconfigure connections in ways that reduce the mismatch $d(I, T)$. When this mismatch falls below a resolution threshold, collapse occurs and a new object basin is formed.
+A truth basin \( T \) is a deep, stable attractor region with strong negative curvature. It serves as a structural reference. For an active inquiry basin \( I \), the geometry tends to reconfigure connections so as to reduce a mismatch measure \( d(I, T) \). When this mismatch falls below a resolution threshold, collapse occurs and a new object basin forms.
 
-**Note on these definitions**  
-These formalizations are intended to support future mathematical work on the relational manifold, such as transfer functions, mappings between coordinate systems, and explicit models of collapse and reconfiguration. They remain provisional and open to refinement or replacement.
+**Note**  
+These descriptions are meant only to provide mathematical entry points for future work (for example, defining an explicit metric on \( M \), modeling the flow via vector fields, or studying the dynamics of mismatch and collapse). A full rigorous treatment on the relational manifold lies beyond the scope of this paper.
 
 ---
 
