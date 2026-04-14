@@ -265,28 +265,61 @@ A deep, stable attractor region that serves as a structural reference for cohere
 
 ## Appendix: Formal Definitions of the Four Basins
 
-This appendix offers slightly more formal descriptions of the four primitive basins for readers interested in possible mathematical development. These definitions are provisional and illustrative. They are not intended to constitute a complete formalization on the relational manifold.
+This appendix offers slightly more formal descriptions of the four primitive basins for readers interested in possible mathematical development. These definitions are provisional and illustrative. They are not intended to constitute a complete formalization on the relational manifold. Their purpose is to provide **mathematical entry points** — structures that may be made precise in future work without committing to any particular metric, flow, or analytic formulation.
 
-**Object Basin**  
+---
+
+### **Object Basin**
+
 An object basin $O \subset M$ is a compact subset of the relational manifold $M$ characterized by the property that trajectories $\gamma(t)$ entering a neighborhood $U \supset O$ satisfy
 
 $$
 \lim_{t \to \infty} \gamma(t) \in O.
 $$
 
-It exhibits a curvature signature that favors convergence and long-term stability. Once inside the object basin, further motion is minimal.
+It exhibits a qualitative curvature signature that favors convergence and long‑term stability. Once inside the object basin, further motion is minimal. No explicit metric or curvature tensor is assumed; only the **tendency toward convergence** is required.
 
-**Relational Basin**  
-A relational basin $R_{ij}$ is an elongated region connecting two object basins $O_i$ and $O_j$. It is characterized by curvature that biases trajectories passing near $O_i$ toward $O_j$ (or vice-versa). Unlike object basins, trajectories do not remain inside a relational basin; the geometry directs passage through them via relational steepening.
+---
 
-**Inquiry Basin**  
-An inquiry basin $I$ is a shallow, unstable region with diffuse boundaries. It corresponds to an unresolved configuration that has not yet mapped cleanly onto existing object basins. Trajectories do not stabilize inside $I$. The presence of an inquiry basin induces reorganization of nearby relational basins as the manifold adjusts to reduce mismatch with truth basins.
+### **Relational Basin**
 
-**Truth Basin**  
-A truth basin $T$ is a deep, stable attractor region with strong negative curvature and a large basin of attraction. It serves as a structural reference for coherence. For an active inquiry basin $I$, the geometry tends to reconfigure connections so as to reduce a mismatch measure $d(I, T)$. When this mismatch falls below a resolution threshold, collapse occurs and a new object basin is formed.
+A relational basin $R_{ij}$ is an elongated region connecting two object basins $O_i$ and $O_j$. It is characterized by curvature that biases trajectories passing near $O_i$ toward $O_j$ (or vice‑versa). This directional bias may be viewed abstractly as a **local steepening** of the geometry.
 
-**Note**  
-These descriptions are meant only to provide mathematical entry points for future work (for example, defining an explicit metric on $M$, modeling the flow via vector fields, or studying the dynamics of mismatch and collapse). A full rigorous treatment on the relational manifold lies beyond the scope of this paper.
+Trajectories do not remain inside a relational basin; the geometry directs passage through them. Future work may model such passage via **vector fields** on $M$, though no specific field is assumed here.
+
+---
+
+### **Inquiry Basin**
+
+An inquiry basin $I$ is a shallow, unstable region with diffuse boundaries. It corresponds to an unresolved configuration that has not yet mapped cleanly onto existing object basins. Trajectories do not stabilize inside $I$.
+
+The presence of an inquiry basin induces reorganization of nearby relational basins as the manifold adjusts to reduce mismatch with truth basins. This adjustment is described qualitatively; no explicit operator is specified.
+
+---
+
+### **Truth Basin**
+
+A truth basin $T$ is a deep, stable attractor region with strong negative curvature and a large basin of attraction. It serves as a structural reference for coherence.
+
+For an active inquiry basin $I$, the geometry tends to reconfigure connections so as to reduce a mismatch measure $d(I, T)$. We assume only the **existence** of such a mismatch functional $d(\cdot,\cdot)$ on $M$, without specifying its metric or analytic form.
+
+When the mismatch falls below a resolution threshold, collapse occurs and a new object basin is formed. This collapse may be viewed abstractly as a **threshold‑triggered transition between attractor regions**, analogous to bifurcation behavior in dynamical systems.
+
+---
+
+### **Note**
+
+These descriptions are intended only as **provisional mathematical scaffolding**. They provide:
+
+- compact attractor regions  
+- elongated passage regions  
+- shallow unstable regions  
+- deep structural reference regions  
+- qualitative curvature signatures  
+- an unspecified mismatch functional  
+- a threshold‑triggered collapse rule  
+
+These elements are sufficient to invite future formalization (for example, defining a metric on $M$, modeling flows via vector fields, or studying stability and collapse). No specific metric, flow equation, curvature tensor, or collapse operator is assumed or implied. A full rigorous treatment on the relational manifold lies beyond the scope of this paper.
 
 ---
 
