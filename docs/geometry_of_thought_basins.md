@@ -144,7 +144,7 @@ The following high-level example illustrates how this cycle operates in practice
 (At sunset the flow for Question B would differ mainly in steps 5–6.)
 
 **Value of this geometric model**  
-This high-level example demonstrates the positive value of utilizing the four-basin framework. It shows that thought can be described as mechanical movement through a relational geometry composed of object basins, relational basins, inquiry basins, and truth basins. Even a seemingly simple yes/no question requires the identification and coordination of multiple existing basins and relations before any resolution can occur. The model makes visible the distributed, relational nature of cognition in a way that is substrate-independent and non-teleological.
+This high-level example demonstrates the positive value of utilizing the four-basin framework. It shows that thought can be described as geometric dynamics through a relational geometry composed of object basins, relational basins, inquiry basins, and truth basins. Even a seemingly simple yes/no question requires the identification and coordination of multiple existing basins and relations before any resolution can occur. The model makes visible the distributed, relational nature of cognition in a way that is substrate-independent and non-teleological.
 
 **Specific new things this model provides that were not available before:**
 - A unified geometric vocabulary for describing the movement of thought.
