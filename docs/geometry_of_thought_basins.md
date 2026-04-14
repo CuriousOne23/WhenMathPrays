@@ -77,7 +77,7 @@ More complex processes — such as highly entangled multi-path thought — may e
 
 ### 5.1 The Cycle
 
-Section 4 described thought as the real-time travel of the mind through the relational manifold under the influence of the four primitive basins. This section examines the mechanical cycle that governs that movement.
+Section 4 described thought as the real-time travel of the mind through the relational manifold under the influence of the four primitive basins. This section examines the geometric cycle that governs that movement.
 
 The cycle assumes the presence of agency as a necessary condition for thought to occur. The precise nature and role of agency are not defined in this paper and remain open for future inquiry. The description below focuses on the geometric dynamics once an inquiry basin is active. All processes are described in terms of basins, relations, mismatch, and reconfiguration within the relational manifold.
 
@@ -85,10 +85,10 @@ The cycle assumes the presence of agency as a necessary condition for thought to
 An inquiry basin becomes active when a configuration remains unresolved — when a question or proposed link is not yet formed into clear object basins. Its boundaries are diffuse. Trajectories do not stabilize inside the inquiry basin.
 
 **Relational Basin**  
-Relational basins serve as the passages that connect object basins. Movement through relational basins is defined geometrically: the curvature of a relational basin steepens away from the inquiry basin, thereby directing trajectories toward associated object basins (or vice-versa). This relational steepening is a change in the local geometry that biases the direction of motion.
+Relational basins serve as the passages that connect object basins. Movement through relational basins is defined geometrically: the curvature of a relational basin steepens away from the inquiry basin, thereby directing trajectories toward associated object basins (or vice-versa). This **relational steepening** is a change in the local geometry that biases the direction of motion.
 
 **Act of Inquiring**  
-The act of inquiring consists of the transition of thought between the inquiry basin, object basins, and truth basins via relational basins. This transition occurs through dynamic changes in the steepness (curvature) of the relational geometry. As the inquiry configuration persists, the manifold reorganizes such that relational paths become more or less favorable depending on their alignment with truth basins.
+The act of inquiring consists of the transition between the inquiry basin, object basins, and truth basins via relational basins. This transition occurs through dynamic changes in the steepness (curvature) of the relational geometry. As the inquiry configuration persists, the manifold reorganizes such that relational paths become more or less favorable depending on their alignment with truth basins.
 
 **Revelation / Collapse**  
 When the mismatch between the inquiry configuration and a truth basin falls below a resolution threshold, the inquiry basin collapses. The unresolved configuration crystallizes into a new, stable object basin. This collapse is **revelation**. The process is **observer-dependent collapse**; it depends on the coordinate system from which the geometry is experienced.
@@ -97,7 +97,7 @@ When the mismatch between the inquiry configuration and a truth basin falls belo
 After revelation, **musing** is the necessary work of integrating the newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid. This integration shows that the identity of an object basin must include its major relational basins, not only the stable core.
 
 **Summary**  
-The cycle consists of the activation of an inquiry basin, traversal through relational basins (driven by **relational steepening**), reconfiguration relative to truth basins, collapse into a new object basin (revelation), and subsequent integration through musing. The geometry itself reacts and changes through strengthening, weakening, adding, or removing connections. The truth basin functions as a **structural arbiter** in this process: its effect is to reconfigure the geometry for or against a given configuration.
+The cycle consists of the activation of an inquiry basin, traversal through relational basins (driven by relational steepening), reconfiguration relative to truth basins, collapse into a new object basin (revelation), and subsequent integration through musing. The geometry itself reacts and changes through strengthening, weakening, adding, or removing connections. The truth basin functions as a **structural arbiter** in this process: its effect is to reconfigure the geometry for or against a given configuration.
 
 The four basins used here were chosen to simplify, show, and communicate the geometric flow of thought. They are illustrative primitives and are not presented as more important or more fundamental than other possible basins that may exist in the manifold.
 
@@ -135,7 +135,7 @@ The following high-level example illustrates how this cycle operates in practice
 2. The inquiry configuration orients toward the truth basin.  
 3. Existing relational connections (sky ↔ up, visual input) are strengthened or activated.  
 4. Sensory input updates the current scene basin (clear daylight, no dominant sunset lighting).  
-5. The sight-related basin does not connect strongly to the orange object basin.  
+5. The sight-related basin does **not** connect strongly to the orange object basin.  
 6. The truth basin reacts by weakening or removing the proposed sky → orange link and strengthening the connection to the Not-true / mismatch region.  
 7. Mismatch remains high or resolves to disagreement.  
 8. Inquiry basin collapses → revelation: stable object basin configuration “sky is not orange”.  
