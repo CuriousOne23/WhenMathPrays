@@ -11,9 +11,9 @@ Before presenting the ideas in this paper, we wish to be clear and honest about 
 
 This work offers a geometric lens on the process of thought by identifying four primitive basins operating within the relational manifold introduced in our earlier paper. Its goal is modest: to bring greater clarity and descriptive utility to how thought unfolds, stabilizes, and crystallizes.
 
-This paper does not claim to be a complete theory of mind, cognition, or life. In particular:
+This paper does **not** claim to be a complete theory of mind, cognition, or life. In particular:
 
-- It adds no substantive insight into **agency** — how focus is directed, how choices are made, or how inquiry basins themselves arise and become active.
+- It adds no substantive insight into agency — how focus is directed, how choices are made, or how inquiry basins themselves arise and become active.
 - It makes no attempt to explain altruism, love, kindness, self-transcendence, or the deeper sources of meaning and value in human experience.
 - It does not reduce thought or life to mechanical or computational processes.
 
@@ -87,19 +87,19 @@ The cycle assumes the presence of agency as a necessary condition for thought to
 An inquiry basin becomes active when a configuration remains unresolved — when a question or proposed link is not yet formed into clear object basins. Its boundaries are diffuse. Trajectories do not stabilize inside the inquiry basin.
 
 **Relational Basin**  
-Relational basins serve as the passages that connect object basins. Movement through relational basins is defined geometrically: the curvature of a relational basin steepens away from the inquiry basin, thereby directing trajectories toward associated object basins (or vice-versa). This **relational steepening** is a change in the local geometry that biases the direction of motion.
+Relational basins serve as the passages that connect object basins. Movement through relational basins is defined geometrically: the curvature of a relational basin steepens away from the inquiry basin, thereby directing trajectories toward associated object basins (or vice-versa). This relational steepening is a change in the local geometry that biases the direction of motion.
 
 **Act of Inquiring**  
 The act of inquiring consists of the transition between the inquiry basin, object basins, and truth basins via relational basins. This transition occurs through dynamic changes in the steepness (curvature) of the relational geometry. As the inquiry configuration persists, the manifold reorganizes such that relational paths become more or less favorable depending on their alignment with truth basins.
 
 **Revelation / Collapse**  
-When the mismatch between the inquiry configuration and a truth basin falls below a resolution threshold, the inquiry basin collapses. The unresolved configuration crystallizes into a new, stable object basin. This collapse is **revelation**. The process is **observer-dependent collapse**; it depends on the coordinate system from which the geometry is experienced.
+When the mismatch between the inquiry configuration and a truth basin falls below a resolution threshold, the inquiry basin collapses. The unresolved configuration crystallizes into a new, stable object basin. This collapse is revelation. The process is observer-dependent collapse; it depends on the coordinate system from which the geometry is experienced.
 
 **Utility of Musing**  
-After revelation, **musing** is the necessary work of integrating the newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid. This integration shows that the identity of an object basin must include its major relational basins, not only the stable core.
+After revelation, musing is the necessary work of integrating the newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid. This integration shows that the identity of an object basin must include its major relational basins, not only the stable core.
 
 **Summary**  
-The cycle consists of the activation of an inquiry basin, traversal through relational basins (driven by relational steepening), reconfiguration relative to truth basins, collapse into a new object basin (revelation), and subsequent integration through musing. The geometry itself reacts and changes through strengthening, weakening, adding, or removing connections. The truth basin functions as a **structural arbiter** in this process: its effect is to reconfigure the geometry for or against a given configuration.
+The cycle consists of the activation of an inquiry basin, traversal through relational basins (driven by relational steepening), reconfiguration relative to truth basins, collapse into a new object basin (revelation), and subsequent integration through musing. The geometry itself reacts and changes through strengthening, weakening, adding, or removing connections. The truth basin functions as a structural arbiter in this process: its effect is to reconfigure the geometry for or against a given configuration.
 
 The four basins used here were chosen to simplify, show, and communicate the geometric flow of thought. They are illustrative primitives and are not presented as more important or more fundamental than other possible basins that may exist in the manifold.
 
@@ -186,8 +186,6 @@ An inquiry basin remains active for an extended period with only partial alignme
 **Example 4: Post-Revelation Integration**  
 After an inquiry basin collapses into a new object basin, musing begins. Relational basins are formed or strengthened around the new object. This phase expands the identity of the object basin by embedding it more deeply into the surrounding geometry. New inquiry basins may arise as side effects of this integration.
 
-The process is dynamic. Multiple inquiry basins can exist simultaneously, and relational basins can be created, magnified, de-magnified, or disappear as the geometry reconfigures in response to ongoing input and alignment with truth basins.
-
 These examples illustrate how the cycle can describe transitions from unresolved configurations to stable ones and the subsequent integration work. They do not claim to capture the full complexity or variability of actual thought processes.
 
 ---
@@ -245,7 +243,7 @@ $$
 It exhibits a curvature signature that favors convergence and long-term stability. Once inside the object basin, further motion is minimal.
 
 **Relational Basin**  
-A relational basin $R_{ij}$ is an elongated region connecting two object basins $O_i$ and $O_j$. It is characterized by curvature that biases trajectories passing near $O_i$ toward $O_j$ (or vice-versa). Unlike object basins, trajectories do not remain inside a relational basin; the geometry directs passage through them via **relational steepening**.
+A relational basin $R_{ij}$ is an elongated region connecting two object basins $O_i$ and $O_j$. It is characterized by curvature that biases trajectories passing near $O_i$ toward $O_j$ (or vice-versa). Unlike object basins, trajectories do not remain inside a relational basin; the geometry directs passage through them via relational steepening.
 
 **Inquiry Basin**  
 An inquiry basin $I$ is a shallow, unstable region with diffuse boundaries. It corresponds to an unresolved configuration that has not yet mapped cleanly onto existing object basins. Trajectories do not stabilize inside $I$. The presence of an inquiry basin induces reorganization of nearby relational basins as the manifold adjusts to reduce mismatch with truth basins.
@@ -255,18 +253,6 @@ A truth basin $T$ is a deep, stable attractor region with strong negative curvat
 
 **Note**  
 These descriptions are meant only to provide mathematical entry points for future work (for example, defining an explicit metric on $M$, modeling the flow via vector fields, or studying the dynamics of mismatch and collapse). A full rigorous treatment on the relational manifold lies beyond the scope of this paper.
-
----
-
-Here is a clean, consistent **Glossary** for the paper, compiled from the terms we have defined and used throughout Sections 1–8 and the Appendix.
-
-It uses the same humble, precise, mechanical tone as the rest of the paper. Terms are listed alphabetically.
-
----
-
-Here is the updated paper with proper references added based on the GitHub links you provided.
-
-I have inserted the citations where they logically support the text (mainly in the Introduction and where we reference prior concepts). The reference list at the end is clean and consistent.
 
 ---
 
@@ -281,39 +267,4 @@ https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-informatio
 **[3]** Curious One, Copilot, & Grok. *Geometry of Relational Thought*.  
 https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md
 
----
-
-## Glossary
-
-**Geometric Dynamics**  
-The description of thought as movement and reconfiguration within the relational manifold, expressed through changes in curvature, steepening of relational basins, mismatch, and connection strengthening/weakening.
-
-**Inquiry Basin**  
-A shallow, unstable region with diffuse boundaries that holds an unresolved configuration (a question or proposed link not yet formed into clear object basins). Trajectories do not stabilize inside an inquiry basin.
-
-**Musing**  
-The post-revelation work of integrating a newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid.
-
-**Object Basin**  
-A stable region in the relational manifold where trajectories tend to converge and remain. It corresponds to a resolved, coherent configuration.
-
-**Observer-Dependent Collapse**  
-The process by which an inquiry basin collapses into a new stable object basin. The collapse depends on the coordinate system from which the geometry is experienced.
-
-**Relational Basin**  
-A passage connecting object basins. Movement through relational basins is defined geometrically by **relational steepening** — a change in curvature that directs trajectories from one object basin toward another (or vice-versa).
-
-**Relational Steepening**  
-A change in the local curvature of a relational basin that biases the direction of motion away from an inquiry basin toward associated object basins (or vice-versa).
-
-**Revelation**  
-The collapse of an inquiry basin when the mismatch with a truth basin falls below a resolution threshold. The unresolved configuration crystallizes into a new, stable object basin.
-
-**Structural Arbiter**  
-The role of the truth basin: it reconfigures the geometry by strengthening, weakening, adding, or removing connections in response to an incoming configuration (agreement or disagreement).
-
-**Truth Basin**  
-A deep, stable attractor region that serves as a structural reference for coherence. It reconfigures connections so as to reduce mismatch with active inquiry basins.
-
----
 ---
