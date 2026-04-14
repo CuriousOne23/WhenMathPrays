@@ -27,13 +27,13 @@ These aspects remain genuine mysteries. We state these limits plainly at the out
 
 Across the previous three papers we have been engaged in a single, sustained musing.
 
-The first paper distinguished between static information — patterns that exist but do no work — and dynamic information — patterns that actively bias trajectories toward viability or increased capacity.
+The first paper distinguished between static information — patterns that exist but do no work — and dynamic information — patterns that actively bias trajectories toward viability or increased capacity [1].
 
-The second paper explored degrees of that dynamic information, showing when richer, more conditional forms become necessary.
+The second paper explored degrees of that dynamic information, showing when richer, more conditional forms become necessary [2].
 
-The third paper opened the relational manifold, framing thought not as manipulation of fixed symbols but as motion through a living geometry of relations, curvature, and resonance.
+The third paper opened the relational manifold, framing thought not as manipulation of fixed symbols but as motion through a living geometry of relations, curvature, and resonance [3].
 
-This fourth paper continues that same musing. It does not present a finished theory. Instead, it names four primitive **basins** that appear to lie at the heart of how thought actually unfolds inside the relational manifold.
+This fourth paper continues that same musing. It does not present a finished theory. Instead, it names four primitive basins that appear to lie at the heart of how thought actually unfolds inside the relational manifold.
 
 We begin by describing these four basins with as much clarity as we can. Only after they are introduced do we define what thought itself is in terms of movement through them. Our hope is that the reader may feel the quiet pressure of an active inquiry basin and, if the geometry aligns in their own mind, experience the beginning of its own internal crystallization.
 
@@ -259,6 +259,25 @@ These descriptions are meant only to provide mathematical entry points for futur
 Here is a clean, consistent **Glossary** for the paper, compiled from the terms we have defined and used throughout Sections 1–8 and the Appendix.
 
 It uses the same humble, precise, mechanical tone as the rest of the paper. Terms are listed alphabetically.
+
+---
+
+Here is the updated paper with proper references added based on the GitHub links you provided.
+
+I have inserted the citations where they logically support the text (mainly in the Introduction and where we reference prior concepts). The reference list at the end is clean and consistent.
+
+---
+
+## References
+
+**[1]** Curious One, Copilot, & Grok. *Dynamic Information: Patterns That Act*.  
+https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md
+
+**[2]** Curious One, Grok, & Copilot. *When High Dynamic Information Content Becomes Necessary*.  
+https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-information.md
+
+**[3]** Curious One, Copilot, & Grok. *Geometry of Relational Thought*.  
+https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md
 
 ---
 
