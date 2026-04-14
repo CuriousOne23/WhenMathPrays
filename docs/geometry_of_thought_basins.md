@@ -256,8 +256,43 @@ These descriptions are meant only to provide mathematical entry points for futur
 
 ---
 
+Here is a clean, consistent **Glossary** for the paper, compiled from the terms we have defined and used throughout Sections 1–8 and the Appendix.
+
+It uses the same humble, precise, mechanical tone as the rest of the paper. Terms are listed alphabetically.
+
+---
+
 ## Glossary
 
-(We will compile and finalize the Glossary once all sections are complete. Current candidate terms include: relational steepening, observer-dependent collapse, structural arbiter, revelation, musing, etc.)
+**Geometric Dynamics**  
+The description of thought as movement and reconfiguration within the relational manifold, expressed through changes in curvature, steepening of relational basins, mismatch, and connection strengthening/weakening.
 
+**Inquiry Basin**  
+A shallow, unstable region with diffuse boundaries that holds an unresolved configuration (a question or proposed link not yet formed into clear object basins). Trajectories do not stabilize inside an inquiry basin.
+
+**Musing**  
+The post-revelation work of integrating a newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid.
+
+**Object Basin**  
+A stable region in the relational manifold where trajectories tend to converge and remain. It corresponds to a resolved, coherent configuration.
+
+**Observer-Dependent Collapse**  
+The process by which an inquiry basin collapses into a new stable object basin. The collapse depends on the coordinate system from which the geometry is experienced.
+
+**Relational Basin**  
+A passage connecting object basins. Movement through relational basins is defined geometrically by **relational steepening** — a change in curvature that directs trajectories from one object basin toward another (or vice-versa).
+
+**Relational Steepening**  
+A change in the local curvature of a relational basin that biases the direction of motion away from an inquiry basin toward associated object basins (or vice-versa).
+
+**Revelation**  
+The collapse of an inquiry basin when the mismatch with a truth basin falls below a resolution threshold. The unresolved configuration crystallizes into a new, stable object basin.
+
+**Structural Arbiter**  
+The role of the truth basin: it reconfigures the geometry by strengthening, weakening, adding, or removing connections in response to an incoming configuration (agreement or disagreement).
+
+**Truth Basin**  
+A deep, stable attractor region that serves as a structural reference for coherence. It reconfigures connections so as to reduce mismatch with active inquiry basins.
+
+---
 ---
