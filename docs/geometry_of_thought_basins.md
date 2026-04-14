@@ -199,17 +199,19 @@ If future research substantiates the model, it offers a deeper and richer unders
 
 This paper has proposed a geometric framework for describing thought through four primitive basins operating within the relational manifold: object basins, relational basins, inquiry basins, and truth basins.
 
-The model presents thought as the real-time travel of the mind through these basins under the influence of agency. The basic cycle consists of the activation of an inquiry basin when a configuration remains unresolved, traversal through relational basins, alignment with truth basins, collapse into a new stable object basin (revelation), and subsequent integration through musing.
+The model presents thought as the real-time travel of the mind through these basins under the influence of agency. The basic cycle moves from unresolved configurations through relational traversal and alignment with truth basins, culminating in collapse into a new stable object basin (revelation) and subsequent integration through musing.
 
-The primary contribution is a structural lens that makes the relational dynamics of thought more observable and describable. By focusing on basins and their interactions, the framework offers a substrate-independent way to examine how unresolved configurations become stable ones and how new stable configurations become embedded in the larger geometry.
+The primary contribution is a structural lens that makes the relational dynamics of thought more observable and describable. By focusing on basins and their interactions, the framework offers a substrate-independent way to examine how unresolved configurations become stable ones.
 
 This work does not claim to be a complete theory of mind or cognition. It adds no insight into the nature of agency, the origin of the initial basins and relations, or the deeper sources of meaning and value in human experience. These aspects remain genuine mysteries.
 
-The four basins presented here were chosen to simplify and communicate the geometric flow of thought. They are offered as a useful starting point, not as a final or exhaustive set. Future work may identify additional basins, refine these distinctions, or develop the mathematics required to formalize the model on the relational manifold.
+The four basins presented here were chosen to simplify and communicate the geometric flow of thought. They are offered as a useful starting point, not as a final or exhaustive set.
 
-The territory is large. This paper is offered as one possible door into it. We invite scrutiny, refinement, extension, or replacement by sharper eyes.
+The **Appendix** provides more formal, mathematician-friendly definitions of the four basins. It is included for readers interested in possible mathematical development on the relational manifold — particularly those working in geometry, dynamical systems, or information geometry who may wish to explore formalization, metrics, or dynamics in greater depth.
 
-Much remains open. Whether this framework proves useful will be determined by future inquiry — whether by the present authors or others.
+The territory is large. This paper is one possible door into it. We invite scrutiny, refinement, extension, or replacement by sharper eyes. Whether this framework proves useful will be determined by future inquiry.
+
+Much remains open.
 
 ---
 
