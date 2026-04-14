@@ -33,6 +33,8 @@ The second paper explored degrees of that dynamic information, showing when rich
 
 The third paper opened the relational manifold, framing thought not as manipulation of fixed symbols but as motion through a living geometry of relations, curvature, and resonance [3].
 
+Related geometric and dynamical ideas have been explored in cognitive science and neuroscience, but the specific four-basin partitioning and cycle proposed here is a novel synthesis.
+
 This fourth paper continues that same musing. It does not present a finished theory. Instead, it names four primitive basins that appear to lie at the heart of how thought actually unfolds inside the relational manifold.
 
 We begin by describing these four basins with as much clarity as we can. Only after they are introduced do we define what thought itself is in terms of movement through them. Our hope is that the reader may feel the quiet pressure of an active inquiry basin and, if the geometry aligns in their own mind, experience the beginning of its own internal crystallization.
