@@ -190,20 +190,6 @@ These examples illustrate how the cycle can describe transitions from unresolved
 
 ---
 
-## 7. On Agency and Limits
-
-The framework presented in this paper makes no attempt to explain the nature or origin of agency. Agency is acknowledged as a necessary condition for thought to occur, but its precise mechanisms — how it activates inquiry basins, selects among relational paths, or interacts with the geometry — lie beyond the scope of this work.
-
-This paper also does not address:
-- The origin of the initial a priori basins and relations.
-- The full details of observer-dependent collapse.
-- Any philosophical definition of truth.
-- Consciousness, qualia, or subjective experience.
-
-The geometry is offered as a structural lens for describing the movement of thought once the four primitive basins are active. It is not a complete theory of mind or cognition.
-
----
-
 ## 8. Conclusion
 
 This paper has proposed a geometric framework for understanding thought through four primitive basins operating within the relational manifold. The model describes thought as a mechanical cycle of inquiry, relational traversal, revelation through collapse, and integration through musing.
