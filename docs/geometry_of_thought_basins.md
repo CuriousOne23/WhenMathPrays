@@ -108,7 +108,7 @@ The four basins used here were chosen to simplify, show, and communicate the geo
 
 #### 5.2 An Illustrative Example
 
-Even a seemingly simple yes/no question requires the identification and coordination of multiple basins and relations. The following high-level example illustrates the process.
+The following high-level example illustrates how this cycle operates in practice.
 
 **Question A:** “Is the sky blue?” (clear daytime conditions)  
 **Question B:** “Is the sky orange?” (normal non-sunset conditions)
@@ -148,10 +148,8 @@ Even a seemingly simple yes/no question requires the identification and coordina
 
 (At sunset the flow for Question B would differ mainly in steps 5–6.)
 
-This example is deliberately high-level and illustrative. It assumes the necessary basins and relations already exist in the manifold. It is offered only to demonstrate the basic movement through the four primitive basins.
-
 **Value of this geometric model**  
-This high-level example demonstrates the positive value of utilizing the four-basin framework. It shows that thought can be described as mechanical movement through a relational geometry. Even a seemingly simple yes/no question requires the identification and coordination of multiple existing basins and relations before any resolution can occur. The model makes visible the distributed, relational nature of cognition in a way that is substrate-independent and non-teleological.
+This high-level example demonstrates the positive value of utilizing the four-basin framework. It shows that thought can be described as mechanical movement through a relational geometry composed of object basins, relational basins, inquiry basins, and truth basins. Even a seemingly simple yes/no question requires the identification and coordination of multiple existing basins and relations before any resolution can occur. The model makes visible the distributed, relational nature of cognition in a way that is substrate-independent and non-teleological.
 
 **Specific new things this model provides that were not available before:**
 - A unified geometric vocabulary for describing the movement of thought.
@@ -166,11 +164,12 @@ This high-level example demonstrates the positive value of utilizing the four-ba
 - How the inquiry basin initially forms or is triggered.
 - The exact partition of labor between the inquiry basin and the truth basin.
 - The nature or origin of agency.
-- How the initial a priori basins and relations were established.
+- How the initial a priori basins and relations were first established in any given system.
 - The full mechanism of the quantum-like, observer-dependent collapse.
 - Any philosophical account of truth itself.
 - Consciousness, qualia, subjective experience, or the lived texture of thought.
-- A complete or final theory of cognition.
+
+The example is deliberately high-level and illustrative. It assumes the necessary basins and relations already exist in the manifold. It is offered only to demonstrate the basic movement through the four primitive basins.
 
 ---
 
