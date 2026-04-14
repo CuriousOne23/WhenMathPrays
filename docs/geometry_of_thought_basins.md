@@ -170,21 +170,23 @@ The example is deliberately high-level and illustrative. It assumes the necessar
 
 ## 6. Illustrative Applications
 
-This section provides brief, suggestive examples of the cycle in action. The goal is not to prove the model, but to illustrate how the geometric framework can describe familiar aspects of thought with greater clarity.
+This section provides brief examples to illustrate how the four-basin cycle can map onto familiar patterns of thought. The examples are suggestive only and are not intended as empirical validation or exhaustive descriptions.
 
 **Example 1: Sudden Insight**  
-A person has been holding an unresolved configuration about a problem (active inquiry basin). After sustained movement through relational basins, a key piece of information arrives. The mismatch with a truth basin drops below the resolution threshold. The inquiry basin collapses rapidly into a new stable object basin (“that’s it!”). Revelation occurs. Musing then integrates the new object by forming relational links to existing knowledge.
+An unresolved mismatch persists in an inquiry basin. After sustained traversal through relational basins, new input reduces the mismatch with a truth basin. When the mismatch falls below the resolution threshold, the inquiry basin collapses into a new stable object basin. Revelation occurs. Subsequent musing integrates the new object basin by forming or strengthening its major relational basins.
 
 **Example 2: Learning a New Concept**  
-When first encountering a new idea, an inquiry basin forms because the configuration cannot yet be mapped cleanly to existing object basins. Repeated traversal through relational basins occurs as the learner tests connections. Over time, the truth basin strengthens certain links. Eventually the inquiry basin collapses into a new or expanded object basin. Musing follows, integrating the concept by building its major relational basins to prior knowledge.
+When encountering a previously unfamiliar idea, an inquiry basin forms because the configuration cannot yet be mapped cleanly onto existing object basins. Repeated movement through relational basins occurs as connections are tested. Over time, alignment with a truth basin increases. Eventually the inquiry basin collapses into a new or expanded object basin. Musing then integrates the result by building its major relational basins to prior knowledge.
 
-**Example 3: Holding a Vague Intuition**  
-A diffuse inquiry basin persists for an extended period without collapsing. The geometry shows low mismatch with truth basins but insufficient alignment for full resolution. Movement through relational basins continues slowly. This prolonged inquiry phase can feel like “something is there but not yet clear.” Revelation may occur later when new input reduces the mismatch sufficiently.
+**Example 3: Prolonged Unresolved Configuration**  
+An inquiry basin remains active for an extended period with only partial alignment to truth basins. Movement through relational basins continues slowly without reaching the resolution threshold. This state corresponds to a vague or persistent question that has not yet crystallized into a stable object basin.
 
-**Example 4: Extended Musing**  
-After a revelation creates a new object basin, a long period of musing begins. The individual deliberately forms and tests many relational basins around the new object. This phase strengthens the object basin’s identity by embedding it deeply into the larger geometry. New inquiry basins may emerge as side effects of this integration.
+**Example 4: Post-Revelation Integration**  
+After an inquiry basin collapses into a new object basin, musing begins. Relational basins are formed or strengthened around the new object. This phase expands the identity of the object basin by embedding it more deeply into the surrounding geometry. New inquiry basins may arise as side effects of this integration.
 
-These examples are illustrative only. They show how the four-basin geometry can map onto real patterns of thinking without claiming to capture the full lived experience.
+The process is dynamic. Multiple inquiry basins can exist simultaneously, and relational basins can be created, magnified, de-magnified, or disappear as the geometry reconfigures in response to ongoing input and alignment with truth basins.
+
+These examples illustrate how the cycle can describe transitions from unresolved configurations to stable ones and the subsequent integration work. They do not claim to capture the full complexity or variability of actual thought processes.
 
 ---
 
