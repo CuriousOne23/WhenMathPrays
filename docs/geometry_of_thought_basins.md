@@ -84,19 +84,95 @@ This paper adds no clarity on the nature of agency itself — how focus is direc
 
 ---
 
-## The Cycle of Thought
+### 5. The Cycle of Thought
 
-An inquiry basin becomes active when something remains unresolved — a question, a tension, or an idea not yet clear. This fluid, fuzzy-boundary, restless region provides a sense of existence and questioning to the process of thought.
+#### 5.1 The Cycle
 
-Under the influence of agency, the mind begins to move through relational basins, testing and refining connections between existing object basins. As this movement continues, object basins are reshaped or new ones are formed. The inquiry persists, guided by the deeper coherence of truth basins. Every change is quietly evaluated against whether the overall coherence grows clearer, more stable, and more sharply bounded.
+Once the four primitive basins are defined, the basic movement of thought can be described as a mechanical process within the relational manifold.
 
-When the configuration finally aligns sufficiently with a truth basin, revelation occurs: the inquiry basin collapses and crystallizes into a new, stable object basin. The unresolved becomes settled — “this.”
+An inquiry basin becomes active when a configuration remains unresolved — when a question or proposed link is not yet formed into clear object basins. Its boundaries are diffuse. Trajectories do not stabilize inside it.
 
-**Musing** is the sustained, patient attention given to an active inquiry basin — the willingness to remain in the uncertainty and keep moving through relational basins without forcing premature closure. Revelation is the moment when that sustained musing bears fruit and the inquiry basin collapses into clarity.
+Under the influence of agency, movement occurs through relational basins. These passages test connections between existing object basins and reshape the local geometry. Object basins may deepen, weaken, or shift. New distinctions may appear. The inquiry basin itself changes shape as new relational paths are explored. Throughout this movement, an orientation remains toward truth basins — stable regions that serve as structural anchors for coherence.
 
-After crystallization, the newly formed object basin is quietly integrated into the larger geometry through further relational weaving. The cycle may then begin again as new inquiry basins arise.
+This phase is inquiry: sustained movement through relational basins without demanding immediate resolution. The longer the process continues, the more the geometry reorganizes around the unresolved configuration. Each step is evaluated by whether it produces agreement or disagreement with a truth basin — that is, whether connections are strengthened, weakened, added, or removed.
 
-This cycle offers a geometric description of the basic movement we repeatedly observe in thought: pressure, travel, refinement, collapse, and integration.
+When the configuration aligns sufficiently — when the mismatch between the inquiry configuration and a truth basin falls below a resolution threshold — the basin collapses. The unresolved configuration crystallizes into a new, stable object basin. This is revelation. The collapse is observer-dependent; it depends on the coordinate system from which the geometry is experienced.
+
+Revelation is not the final step. What follows is musing: the necessary work of integrating the newly revealed object basin into the larger geometry. During musing, relational basins are formed or strengthened. Every stated observation about the revealed object is treated as a potential permanent relation, provided the collapsed object remains valid. This process shows that the identity of an object basin must include its major relational basins, not only the stable core as in traditional descriptions.
+
+Fresh inquiry basins may form soon after — either as extensions of the new object basin or as new unresolved configurations within it. The cycle repeats.
+
+The geometry itself does not judge. It reacts and changes. Any basin can reshape the geometry through agreement or disagreement by strengthening, weakening, adding, or removing connections. The truth basin functions as a structural arbiter in this process: its effect is to reconfigure the geometry for or against a given question or answer.
+
+The four basins used here were chosen to simplify, show, and communicate the geometric flow of thought. They are illustrative primitives and are not presented as more important or more fundamental than other possible basins that may exist in the manifold.
+
+#### 5.2 An Illustrative Example
+
+Even a seemingly simple yes/no question requires the identification and coordination of multiple basins and relations. The following high-level example illustrates the process.
+
+**Question A:** “Is the sky blue?” (clear daytime conditions)  
+**Question B:** “Is the sky orange?” (normal non-sunset conditions)
+
+**Shared geometry already present in the manifold (major basins and relations):**
+- Object basins: sky, blue, orange, up
+- Relational connections: sky ↔ up, visual input ↔ color interpretation
+- Sensory-related basins (visual scene)
+- Contextual basins (time-of-day, lighting, weather, location)
+- Interpretation basins: Yes, Not-true / mismatch region
+- Inquiry basin (when active)
+- Truth basin (structural arbiter)
+
+**Flow for Question A (“Is the sky blue?” – clear day)**
+
+1. Inquiry basin activates holding the unresolved configuration: proposed link sky → blue.  
+2. The inquiry configuration orients toward the truth basin.  
+3. Existing relational connections (sky ↔ up, visual input) are strengthened or activated.  
+4. Sensory input updates the current scene basin (clear daylight, no dominant clouds or sunset lighting).  
+5. The sight-related basin connects strongly to the blue object basin.  
+6. The truth basin reacts by strengthening the relational link sky → blue and the connection to the Yes interpretation basin.  
+7. Mismatch drops below resolution threshold.  
+8. Inquiry basin collapses → revelation: stable object basin configuration “sky is blue”.  
+9. Musing integrates the new object basin by forming or strengthening its major relational basins.
+
+**Flow for Question B (“Is the sky orange?” – normal non-sunset conditions)**
+
+1. Inquiry basin activates holding the unresolved configuration: proposed link sky → orange.  
+2. The inquiry configuration orients toward the truth basin.  
+3. Existing relational connections (sky ↔ up, visual input) are strengthened or activated.  
+4. Sensory input updates the current scene basin (clear daylight, no dominant sunset lighting).  
+5. The sight-related basin does **not** connect strongly to the orange object basin.  
+6. The truth basin reacts by weakening or removing the proposed sky → orange link and strengthening the connection to the Not-true / mismatch region.  
+7. Mismatch remains high or resolves to disagreement.  
+8. Inquiry basin collapses → revelation: stable object basin configuration “sky is not orange”.  
+9. Musing integrates the new object basin by forming or strengthening its major relational basins.
+
+(At sunset the flow for Question B would differ mainly in steps 5–6.)
+
+This example is deliberately high-level and illustrative. It assumes the necessary basins and relations already exist in the manifold. It is offered only to demonstrate the basic movement through the four primitive basins.
+
+**Value of this geometric model**  
+This high-level example demonstrates the positive value of utilizing the four-basin framework. It shows that thought can be described as mechanical movement through a relational geometry. Even a seemingly simple yes/no question requires the identification and coordination of multiple existing basins and relations before any resolution can occur. The model makes visible the distributed, relational nature of cognition in a way that is substrate-independent and non-teleological.
+
+**Specific new things this model provides that were not available before:**
+- A unified geometric vocabulary for describing the movement of thought.
+- An explicit mechanical cycle that separates inquiry, revelation, and musing.
+- A structural account of how a truth basin functions as an anchor for coherence by reconfiguring connections through agreement or disagreement.
+- The ability to see why even simple questions are cognitively “expensive”.
+- A more detailed potential explanation/view of the cognitive process.
+- A framework that naturally accommodates context-dependence and observer-dependent collapse.
+- A foundation that invites future mathematical development.
+
+**What the model does not answer or claim:**
+- How the inquiry basin initially forms or is triggered.
+- The exact partition of labor between the inquiry basin and the truth basin.
+- The nature or origin of agency.
+- How the initial a priori basins and relations were established.
+- The full mechanism of the quantum-like, observer-dependent collapse.
+- Any philosophical account of truth itself.
+- Consciousness, qualia, subjective experience, or the lived texture of thought.
+- A complete or final theory of cognition.
+
+---
 
 **6. Illustrative Applications**  
 - Brief, suggestive examples (sudden insight, learning a new concept, holding a vague intuition, extended musing).  
