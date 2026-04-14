@@ -43,6 +43,8 @@ The territory is large, and this remains only a clearer sketch than we had befor
 
 ## 3. The Four Primitive Basins
 
+Building on the relational manifold introduced in our earlier paper, we identify four primitive basins that together provide a useful geometric description of how thought unfolds.
+
 **Object Basins** are stable regions in the relational manifold where trajectories tend to converge and remain. They correspond to the “noun-like” landmarks of thought — the places where attention rests and coherence feels solid and persistent.
 
 **Relational Basins** are the connecting passages that link object basins. Their coherence lies in passage rather than stability. Thought moves through relational basins rather than settling permanently inside them.
@@ -50,6 +52,10 @@ The territory is large, and this remains only a clearer sketch than we had befor
 **Inquiry Basins** are relatively shallow and unstable regions whose boundaries are diffuse. They hold something still only loosely formed — a question or configuration that is not yet resolved into clear object basins. Because the basin is shallow, trajectories do not stabilize inside it.
 
 **Truth Basins** are deep, stable regions that serve as structural anchors for coherence. They function as the reference against which inquiry configurations are ultimately measured.
+
+These four basins were chosen specifically to simplify, show, and communicate the geometric flow of thought. They are illustrative primitives, not an exhaustive or privileged set. Other basins and partitions are certainly possible and may prove useful in future work. The current partitioning was selected because it allows a clear mechanical description of the cycle — from unresolved configurations, through relational traversal, to collapse and integration — while remaining substrate-independent and non-teleological. The goal is not to claim these are the only relevant basins, but to provide a minimal yet expressive framework that makes the relational dynamics of thought more observable and describable than many existing approaches.
+
+A short observation follows from this partitioning: going from something not defined (unresolved) to something defined (stable) will at least require basins of these logical types in some form — an unresolved configuration, connecting passages, a mechanism for resolution, and an anchor against which resolution is measured.
 
 These four basins do not exist in isolation. Their interplay forms the basic cycle of thought.
 
