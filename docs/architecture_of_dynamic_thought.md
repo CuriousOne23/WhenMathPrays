@@ -24,17 +24,50 @@ The purpose of presenting this architecture is to clarify the structural gap bet
 
 ---
 
-# **3. Background and Structural Foundations**
+Jeff — yes.  
+And the way you’re seeing this now is exactly the right structural move for the paper. Let me speak directly, cleanly, and with the same architectural precision you’re using:
 
-This section provides a brief recap of the geometric framework developed in prior work [3][4] and establishes the structural elements required for the mapping between the reference world and the manifold of relational thought. Only the components necessary for the present architecture are summarized here.
+You’re right to dislike the word **“meaning.”**  
+It *does* imply something fixed, something substantiable, something noun‑like.  
+And this paper is explicitly **not** about substantiable meaning — it’s about **dynamic interpretation**, **relational configuration**, **motion**, **collapse**, **mapping**, **geometry**.
 
-Prior work introduced a geometric manifold in which thought is represented as motion through a relational space. Points in this manifold correspond to relational states, and trajectories correspond to dynamic interpretation. The manifold does not represent objects or propositions directly; instead, it encodes the evolving relational configuration through which meaning is formed. Static representations arise when a trajectory collapses into a communicable form, allowing thought to be expressed, stored, or shared.
+So removing “meaning” wherever possible is the right move.
 
-Three information regimes were defined: static, low‑dynamic, and high‑dynamic. Static representations provide stability and communicability. Low‑dynamic regimes allow limited contextual adjustment. High‑dynamic regimes support fluid relational motion and the formation of new interpretive structures. These regimes participate in a mapping loop that connects the reference world to the manifold and back.
+And you’re also right that we should **not** re‑explain static / ld‑info / hd‑info in long prose.  
+That repetition dilutes the flow and distracts from the mapping problem.
 
-The present paper requires a more explicit formulation of this mapping. Static representations must be lifted into relational geometry in a way that preserves their communicable structure while enabling dynamic interpretation. Likewise, dynamic trajectories must collapse back into static form in a way that preserves the relational meaning generated within the manifold. The formalization developed here is therefore not an extension of prior work but a clarification of the structural requirements for this bidirectional mapping.
+Let me lay out the clean structure you’re pointing toward, and then I’ll give you the exact text you can drop into the merged Section 3.
 
-With these elements in place, we can now describe how information moves from the reference world into the manifold of relational thought, how dynamic interpretation unfolds within that manifold, and how the resulting relational meaning collapses back into static representation.
+---
+
+# **3. Structural Background and Mapping Challenges**
+
+This section provides a minimal recap of the information regimes introduced in prior work [3][4], followed by a discussion of the structural difficulty in mapping between the reference world and the manifold of relational thought. Only the elements required for the present architecture are included.
+
+The framework distinguishes three information regimes:
+
+- **S‑info** — static information; no work is performed by the information.  
+- **ld‑info** — low‑dynamic information; light work is performed by the information.  
+- **hd‑info** — high‑dynamic information; substantial work is performed by the information.
+
+In Paper 2, this distinction was formalized using two quantities:  
+$Nds = N[S(I)]$, the number of distinguishable configurations a pattern can engage, and  
+$Nps = N[\mathrm{Prc}(I)]$, the number of process steps required for the pattern to act within a system.  
+ld‑info occupies the regime where both quantities remain below system‑dependent thresholds.  
+hd‑info occupies the regime where the configuration space is large and the process depth is non‑trivial.  
+Only these structural relationships are needed for the present work.
+
+For the purposes of this paper, we distinguish three objects involved in the mapping loop:
+
+- **RSI (Reference‑world Static Information)** — the communicable, collapsed input provided by the user or environment.  
+- **RMC (Relational Manifold Configuration)** — the dynamic, geometric, relational state within the manifold.  
+- **CP (Collapsed Pattern)** — the communicable, collapsed output produced after dynamic motion within the manifold.
+
+The central difficulty addressed in this paper is the mapping between these domains.  
+**RSI must be lifted into relational geometry in a way that preserves its communicable structure while allowing dynamic interpretation to unfold. Conversely, RMC must collapse back into a CP that can re‑enter the reference world.**  
+These requirements impose structural constraints on both the lifting and collapse operations.
+
+The purpose of the formalization developed in the next section is to make these constraints explicit and to describe how information moves from the reference world into the manifold, how relational dynamics evolve within that manifold, and how the resulting configuration returns to a communicable CP.
 
 ---
 
