@@ -86,42 +86,43 @@ The purpose of the formalization developed in the next section is to make these 
 
 ---
 
-# **6. The Manifold of Understanding**
+# **4. The Manifold of Understanding**  
 
-The **manifold of understanding** is the relational space in which high‑dynamic information [2] operates. It provides the structural environment that supports contextual meaning formation, interpretive motion, and the interaction between representation, context, and interpretive state. Unlike the reference world, which treats information as static and object‑centric, the manifold encodes meaning as trajectories through a space of relational states.
+The **manifold of understanding** is the relational space in which high‑dynamic information [2] operates. It provides the structural environment that supports contextual interpretation, relational motion, and the interaction between representation, context, and interpretive configuration. Unlike the reference world, which expresses information as static patterns, the manifold encodes meaning as trajectories through a space of relational states.
 
-The manifold is defined by the set of possible interpretive configurations that can arise during meaning formation. Each configuration corresponds to a point in the manifold, and transitions between configurations correspond to motion within this space. Meaning is therefore not associated with a single point but with the path taken through the manifold during interpretation.
+The manifold is defined by the set of possible relational configurations that can arise during interpretation. Each configuration corresponds to a point in the manifold, and transitions between configurations correspond to motion within this space. Meaning is therefore not associated with a single configuration but with the path taken through the manifold during interpretation.
 
-A simple way to express this structure is to represent the interpretive process as a trajectory $\gamma(t)$ through a relational state space $\mathcal{M}$. Let $\gamma(t)$ denote the state of interpretation at time $t$. Meaning formation can then be expressed as:
+A simple way to express this structure is to represent the interpretive process as a trajectory  
+\(\gamma(t)\) through a relational state space \(\mathcal{M}\). Let \(\gamma(t)\) denote the relational configuration at time \(t\). Meaning formation can then be expressed as:
 
-$$
+\[
 m = F(\gamma(t))
-$$
+\]
 
-where $F$ is a functional that evaluates the trajectory rather than a static representation. This formulation captures the essential property of the manifold: meaning depends on the path taken through relational space, not on a fixed object or static evaluation.
+where \(F\) is a functional that evaluates the trajectory rather than a static representation. This formulation captures the essential property of the manifold: meaning depends on the path taken through relational space, not on a fixed pattern or isolated evaluation.
 
-The manifold structure also provides a natural way to represent the coupled dynamics of context and interpretive state introduced in the high‑dynamic regime. Let $(c_t, s_t)$ denote the combined relational state at step $t$. The interpretive trajectory can be written as:
+The manifold structure also provides a natural way to represent the coupled dynamics of context and interpretive configuration introduced in the high‑dynamic regime. Let \((c_t, s_t)\) denote the combined relational configuration at step \(t\). The interpretive trajectory can be written as:
 
-$$
+\[
 \gamma(t) = (c_t, s_t)
-$$
+\]
 
 with dynamics governed by the update rules:
 
-$$
+\[
 \begin{aligned}
-c_{t+1} &= g(c_t, s_t, x) \\\\
+c_{t+1} &= g(c_t, s_t, x) \\
 s_{t+1} &= h(s_t, c_t, x)
 \end{aligned}
-$$
+\]
 
-These coupled dynamics define a path through the manifold, and the resulting meaning depends on the structure of this path. Different trajectories can yield different meanings even when the initial representation is the same, reflecting the contextual and relational nature of high‑dynamic information.
+These coupled dynamics define a path through the manifold, and the resulting meaning depends on the structure of this path. Different trajectories can yield different interpretations even when the initial representation is the same, reflecting the contextual and relational nature of high‑dynamic information.
 
-The manifold of understanding aligns with the geometry of relational thought [3], which models meaning as motion through a relational space rather than as evaluation of static objects. It also aligns with the geometry of thought basins [4], where stable interpretive configurations correspond to regions of the manifold. Transitions between these regions represent shifts in interpretation, and the structure of the manifold determines the possible paths between them.
+The manifold aligns with the geometry of relational thought [3], which models interpretation as motion through a relational space rather than as evaluation of static patterns. It also aligns with the geometry of thought basins [4], where stable configurations correspond to basins within the manifold. Transitions between these basins represent shifts in interpretation, and the structure of the manifold determines the possible paths between them.
 
-The manifold provides the structural foundation for the **mapping loop** that connects the reference world to dynamic meaning formation. Static representations are lifted into the manifold, transformed through relational motion, and then collapsed back into static form for communication. This bidirectional mapping enables the integration of static and dynamic regimes within a unified architecture.
+The manifold provides the structural foundation for the **mapping loop** that connects the reference world to dynamic interpretation. Reference‑world patterns are lifted into the manifold, transformed through relational motion, and then returned to the reference world either through collapse (CP) or through dynamic activation (DO). This bidirectional mapping enables the integration of static and dynamic regimes within a unified architecture.
 
-The next section describes this mapping loop in detail and explains how the manifold interacts with the reference world to support understanding.
+The next section describes this mapping loop in detail and explains how the manifold interacts with the reference world to support interpretation and learning.
 
 ---
 
