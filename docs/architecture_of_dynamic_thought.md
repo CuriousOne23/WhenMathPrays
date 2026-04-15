@@ -267,8 +267,7 @@ You can paste this directly into your GitHub doc.
 
 # **4.3 Emergence of Basins from Relational Constraints**
 
-Basins are not assumed a priori in this architecture, but a complete mathematical derivation of how they arise is beyond the scope of this paper.  
-What follows is a **provisional architectural account**—a line of reasoning that motivates why basins should exist in a relational manifold, and which can be developed more fully in future work.
+Basins assumed a priori in this paper, a mathematical derivation of how they arise is beyond the scope of this paper. What follows is a **provisional architectural account**—a line of reasoning that motivates why basins should exist in a relational manifold, and which can be developed more fully in future work.
 
 The intuition is that **relations constrain motion** in the manifold $\mathcal{M}$.  
 A relation limits the allowable directions of change in its neighborhood; repeated relational constraints create **regions of reduced degrees of freedom**.  
@@ -288,13 +287,9 @@ RB_{R} : OB_{\text{src}(R)} \longrightarrow OB_{\text{tgt}(R)}.
 $$
 
 This reasoning suggests that basins arise because **relations carve them out**, not because they are declared.  
-A relational manifold naturally contains basins because relational constraints generate stable configurations of motion.  
-This also explains why basins do not appear in static representational embeddings: without motion, there are no constraints on flow, and without constrained flow, there are no attractors.
+A relational manifold naturally contains basins because relational constraints generate stable configurations of motion. This could explain why basins may not appear in static representational embeddings: without motion, there are no constraints on flow, and without constrained flow, there are no attractors.
 
-A full dynamical treatment—specifying the update rules, flow fields, and stability conditions under which basins formally emerge—is left for future work.  
-The present paper does not depend on that derivation.  
-The architectural value lies in describing the **geometric relational thought space**, the **mapping loop**, and the **basin‑and‑transition structure** that shapes dynamic thought.  
-These contributions stand independently of a complete account of how new basins are created.
+The present paper does not depend on deriving how the system creates a new OB. The value of this paper lies in describing the **geometric relational thought space**, the **mapping loop**, and the **basin‑and‑transition structure** that shapes dynamic thought.
 
 ---
 
