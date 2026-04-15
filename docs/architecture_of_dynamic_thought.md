@@ -331,55 +331,114 @@ The notation introduced here simply makes the geometry explicit and provides a c
 
 ---
 
-# **5. The Mapping Loop: Reference World → Manifold → Reference World**
+# **5. The Mapping Loop Illustrated Through a Boy Catching a Ball**
 
-Understanding requires a bidirectional process that connects the **reference world** of static representation with the manifold in which relational meaning forms. This process, which we refer to as the **mapping loop**, enables static concepts to be transformed through dynamic interpretation and then returned to static form for communication and analysis. The mapping loop integrates static, low‑dynamic, and high‑dynamic information regimes into a unified architecture.
-
-The mapping loop begins with a static representation in the reference world. Let $x$ denote such a representation. Static cognition treats $x$ as a complete and self‑contained unit of meaning. However, as shown in previous sections, static representations cannot capture the relational and contextual processes through which meaning emerges. To support understanding, the representation must be lifted into the manifold of relational states.
-
-This lifting process can be expressed as a mapping:
+Section 3.5 introduced the architectural loop:
 
 $$
-\Gamma_0 = L(x)
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$
 
-where $L$ is a **lifting function** that embeds the static representation into the manifold. The resulting state $\Gamma_0$ serves as the initial condition for dynamic interpretation. Once in the manifold, the interpretive process unfolds through the coupled dynamics of context and interpretive state introduced in the high‑dynamic regime [2].
+This section illustrates how that loop operates in a concrete scenario: **a boy catching a ball**.  
+The goal is not to redefine the loop, but to show how each component functions when applied to a real‑world behavior.
 
-Let $\gamma(t)$ denote the interpretive trajectory through the manifold. The trajectory evolves according to:
+---
 
-$$
-\gamma(t+1) = U(\gamma(t), x)
-$$
+## **5.1 World‑State to Manifold: $W(t) \xrightarrow{\Phi} M_t$**
 
-where $U$ is an **update function** that governs relational motion. Meaning is formed not from a single point in the manifold but from the structure of the trajectory itself. The meaning associated with $x$ is therefore given by:
+At time $t$, the **world‑state** $W(t)$ includes:
 
-$$
-m = F(\gamma(t))
-$$
+- the ball’s position and velocity,  
+- the boy’s arm and body configuration,  
+- environmental constraints such as gravity and ground plane.
 
-where $F$ evaluates the trajectory rather than the static representation.
-
-Once meaning has formed within the manifold, it must be returned to the reference world in a form that can be communicated, stored, or analyzed. This requires a **collapse function** that maps the dynamic trajectory back into a static representation:
+The mapping $\Phi$ lifts this world‑state into the manifold:
 
 $$
-y = C(\gamma(t))
+M_t = \Phi(W(t)).
 $$
 
-The resulting $y$ is a static expression of the meaning formed through dynamic interpretation. It is not identical to the original representation $x$, because the interpretive process may have introduced new relations, reorganized context, or shifted the interpretive state. The mapping loop therefore supports both preservation and transformation of meaning.
+In the manifold, these elements appear as **relational structure**:  
+the ball’s trajectory relative to the hand, reachable workspace, timing constraints, and the basins associated with “track,” “intercept,” and “catch.”
 
-The full mapping loop can be summarized as:
+---
+
+## **5.2 Relational Motion: $M_t \xrightarrow{F} M_{t+\Delta t}$**
+
+The manifold dynamics $F$ evolve the state forward:
 
 $$
-x \xrightarrow{L} \Gamma_0 \xrightarrow{U} \gamma(t) \xrightarrow{C} y
+M_{t+\Delta t} = F(M_t).
 $$
 
-This loop integrates the reference world with the manifold of understanding. Static representations are lifted into the manifold, transformed through relational motion, and collapsed back into static form. The loop provides a mechanism for understanding that is compatible with both static cognition and dynamic meaning formation.
+In the catching example, $F$ governs how the system:
 
-The mapping loop aligns with the geometry of relational thought [3], which models meaning as motion through a relational space, and with the geometry of thought basins [4], which describe stable interpretive configurations within that space. The lifting and collapse functions correspond to transitions between the reference world and the manifold, while the update function governs motion within the manifold.
+- updates its relational alignment with the ball,  
+- adjusts timing as the ball approaches,  
+- transitions between basins (e.g., from “track” to “intercept”),  
+- stabilizes in the basin corresponding to “catch.”
 
-The mapping loop also explains how static cognition can benefit from dynamic interpretation without abandoning its structural advantages. Static representations remain essential for communication and analysis, but they are enriched by the dynamic processes that occur within the manifold. The loop therefore provides a unified architecture for integrating static and dynamic modes of cognition.
+The resulting trajectory $\gamma(t)$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
 
-The next section introduces the **cognitive spacesuit**, a translation architecture that enables safe and coherent traversal of the mapping loop.
+---
+
+## **5.3 Manifold Back to Reference World: $M_t \xrightarrow{\Psi} RWD(t)$**
+
+The mapping $\Psi$ projects the manifold‑state back into the reference world:
+
+$$
+RWD(t) = \Psi(M_t).
+$$
+
+In this example, $RWD(t)$ corresponds to the **observable behavior**:
+
+- the arm moving toward the interception point,  
+- the hand adjusting orientation,  
+- the body shifting to maintain balance,  
+- the final closing of the hand around the ball.
+
+These actions are not stored in the manifold; they are **expressions** of the manifold‑state when mapped back into the reference world.
+
+---
+
+## **5.4 The Complete Loop in Action**
+
+The catching behavior emerges from the continuous cycling of:
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
+$$
+
+Each cycle:
+
+1. **Lifts** the updated world‑state into the manifold,  
+2. **Evolves** it through relational motion,  
+3. **Projects** it back into the world as coordinated behavior,  
+4. Produces a new world‑state $W(t+\Delta t)$ for the next cycle.
+
+The loop repeats until the ball is caught.
+
+---
+
+## **5.5 Why This Example Matters**
+
+This example shows how the architecture operates without invoking semantics or internal representations.  
+The mapping loop provides a geometric account of how a system:
+
+- perceives,  
+- stabilizes,  
+- transitions,  
+- and acts  
+
+through relational motion in the manifold.
+
+The value of this paper lies in describing:
+
+- the **geometric relational thought space**,  
+- the **mapping loop**,  
+- and the **basin‑and‑transition structure** that shapes dynamic behavior.
+
+These components form a coherent architecture for integrating reference‑world and manifold‑world regimes, independent of a full account of how new basins are created.
 
 ---
 
