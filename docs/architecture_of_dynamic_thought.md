@@ -4,23 +4,23 @@
 
 ---
 
-# 0. **🧩 ABSTRACT*
+# 0. Abstract
 
-Understanding is typically modeled through static, object‑centric representations that prioritize stability and definition. While effective for classification and analysis, static information cannot account for the dynamic, relational processes through which meaning is formed. This paper introduces an architecture of dynamic understanding that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified framework. Central to this architecture is a bidirectional mapping between the reference world of static cognition and a manifold in which relational meaning unfolds. We describe the structural requirements for this mapping, the translation mechanisms that support it, and the cognitive constraints that shape its operation. The resulting framework provides a scalable, fractal, and holographic account of how understanding emerges from dynamic information, offering a foundation for future work in information theory, cognition, and computational modeling.
+This paper proposes an architectural account of dynamic thought. It models thought as motion within a relational geometric space and describes how this geometry interacts with the static representations used in communication and reasoning. The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and connects them through a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify how dynamic thinking and static representation can be related within a single structure. The goal is to offer a coherent architectural proposal that invites inquiry, refinement, and further development.
 
 ---
 
 # **1. Introduction**
 
-This paper proposes an architectural account of how meaning forms through the interaction of static representation, relational context, and dynamic interpretation. The goal is to describe a coherent structure that connects the static representations used in communication with the dynamic processes through which understanding emerges. The framework developed here introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they interact through a mapping loop that links the reference world to the manifold of understanding.
+This paper proposes an architectural account of **dynamic thought**. The central idea is that thought can be modeled as motion within a relational geometric space, and that this geometry interacts with the static representations we use in communication. The goal is to describe how dynamic, relational processes give rise to the structures that appear in static cognition, and how these two regimes can be connected through a coherent mapping.
 
-The account presented in this paper is speculative. It offers a possible architecture for meaning formation rather than a definitive explanation. The framework is intended to clarify a conceptual gap: how static representations, which are essential for communication and analysis, relate to the dynamic interpretive processes that give rise to meaning. The descriptions that follow should be read as proposals for how such an architecture might be organized.
+The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they participate in a mapping loop that links the reference world to a manifold of relational thought. The account is **speculative** and intended to clarify a structural gap: how static representations, which are essential for communication and analysis, relate to the dynamic processes through which thought unfolds.
 
-This work also has clear limitations. It does not specify a metric for the manifold of understanding, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional and reflect the scope of the contribution.
+This work has clear limitations. It does not specify a metric for the manifold, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries define the scope of the contribution.
 
-The purpose of presenting this architecture is to invite inquiry, refinement, and critique. The framework is offered as a starting point for exploring how static and dynamic information regimes might be integrated into a unified account of meaning formation. Readers are encouraged to examine the assumptions, identify gaps, and propose alternatives or extensions.
+The purpose of presenting this architecture is to invite inquiry. The framework is offered as a starting point for examining how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. Readers are encouraged to refine, challenge, or extend the ideas presented here.
 
-The next section outlines the scope and epistemic posture of the paper, establishing the conceptual boundaries within which the framework operates.
+The next section outlines the scope and epistemic posture of the paper, establishing the conceptual boundaries within which the architecture operates.
 
 ---
 
