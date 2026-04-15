@@ -4,7 +4,7 @@
 
 ---
 
-# 0. Abstract
+# 2. Abstract
 
 This paper proposes an architectural account of dynamic thought. It models thought as motion within a relational geometric space and describes how this geometry interacts with the static representations used in communication and reasoning. The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and connects them through a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify how dynamic thinking and static representation can be related within a single structure. The goal is to offer a coherent architectural proposal that invites inquiry, refinement, and further development.
 
@@ -12,7 +12,7 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 # **Rewritten Introduction (crisp, explicit, mapping‑centered)**
 
-**1. Introduction**
+**2. Introduction**
 
 This paper develops an architectural account of dynamic thought by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution of this paper is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
 
@@ -23,20 +23,6 @@ The framework introduces three information regimes—static, low‑dynamic, and 
 The account is speculative and architectural. It does not specify a metric for the manifold, instantiate the update dynamics, or operationalize the collapse function. It does not attempt to explain consciousness or phenomenology. These boundaries define the scope of the contribution.
 
 The purpose of presenting this architecture is to clarify the structural gap between static cognition and dynamic meaning formation and to offer a coherent proposal for how these domains can be connected. Readers are invited to refine, challenge, or extend the ideas presented here. The next section outlines the epistemic posture and conceptual boundaries within which the architecture operates.
-
----
-
-# **2. Scope, Orientation, and Epistemic Posture**
-
-This paper proposes an architectural account of how meaning forms through the interaction of static representation, relational motion, and dynamic interpretation. The goal is to describe a coherent structure that connects static cognition with the manifold of understanding introduced in later sections. The framework is intended as a conceptual model rather than a formal theory, and it focuses on the structural relationships that enable meaning to emerge from information in motion.
-
-The account developed here is **speculative**. It offers a possible architecture for understanding rather than a definitive explanation. The framework is presented as a conjecture that aims to clarify a conceptual gap: how static representations used in communication and analysis relate to the dynamic processes through which meaning is formed. The descriptions that follow should be read as proposals for how such an architecture might be organized, not as claims of empirical fact.
-
-This work also has **clear limitations**. It does not specify a metric for the manifold of understanding, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional and reflect the scope of the contribution.
-
-The purpose of presenting this architecture is to invite inquiry, refinement, criticism, and extension. The framework is offered as a starting point for exploring how static and dynamic information regimes might be integrated into a unified account of meaning formation. Readers are encouraged to examine the assumptions, identify gaps, and propose alternatives or improvements.
-
-The next section begins with the limitations of static representation and the constraints of object‑centric cognition, establishing the motivation for introducing dynamic information regimes..
 
 ---
 
