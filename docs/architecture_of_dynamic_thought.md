@@ -86,35 +86,34 @@ The purpose of the formalization developed in the next section is to make these 
 
 ---
 
-# **4. The Manifold of Understanding**  
+# **4. The Manifold of Understanding**
 
-The **manifold of understanding** is the relational space in which high‑dynamic information [2] operates. It provides the structural environment that supports contextual interpretation, relational motion, and the interaction between representation, context, and interpretive configuration. Unlike the reference world, which expresses information as static patterns, the manifold encodes meaning as trajectories through a space of relational states.
+The **manifold of understanding** is the relational space in which high‑dynamic information [2] operates. It provides the structural environment that supports contextual interpretation, relational motion, and the interaction between reference‑world patterns and manifold configurations. Unlike the reference world, which expresses information as static patterns, the manifold encodes meaning as **trajectories** through a space of relational states.
 
-The manifold is defined by the set of possible relational configurations that can arise during interpretation. Each configuration corresponds to a point in the manifold, and transitions between configurations correspond to motion within this space. Meaning is therefore not associated with a single configuration but with the path taken through the manifold during interpretation.
+The manifold is defined by the set of possible relational configurations that can arise during interpretation. Each configuration corresponds to a point in the manifold, and transitions between configurations correspond to motion within this space. Meaning is therefore not associated with a single configuration but with the **path** taken through the manifold during interpretation.
 
-A simple way to express this structure is to represent the interpretive process as a trajectory  
-\(\gamma(t)\) through a relational state space \(\mathcal{M}\). Let \(\gamma(t)\) denote the relational configuration at time \(t\). Meaning formation can then be expressed as:
+A simple way to express this structure is to represent the interpretive process as a trajectory $\gamma(t)$ through a relational state space $\mathcal{M}$. Let $\gamma(t)$ denote the relational configuration at time $t$. Meaning formation can then be expressed as:
 
-\[
+$$
 m = F(\gamma(t))
-\]
+$$
 
-where \(F\) is a functional that evaluates the trajectory rather than a static representation. This formulation captures the essential property of the manifold: meaning depends on the path taken through relational space, not on a fixed pattern or isolated evaluation.
+where $F$ is a functional that evaluates the **trajectory** rather than a static representation. This captures the essential property of the manifold: meaning depends on the **path** taken through relational space, not on a fixed pattern or isolated evaluation.
 
-The manifold structure also provides a natural way to represent the coupled dynamics of context and interpretive configuration introduced in the high‑dynamic regime. Let \((c_t, s_t)\) denote the combined relational configuration at step \(t\). The interpretive trajectory can be written as:
+The manifold structure also provides a natural way to represent the coupled dynamics of context and interpretive configuration introduced in the high‑dynamic regime. Let $(c_t, s_t)$ denote the combined relational configuration at step $t$. The interpretive trajectory can be written as:
 
-\[
+$$
 \gamma(t) = (c_t, s_t)
-\]
+$$
 
 with dynamics governed by the update rules:
 
-\[
+$$
 \begin{aligned}
 c_{t+1} &= g(c_t, s_t, x) \\
 s_{t+1} &= h(s_t, c_t, x)
 \end{aligned}
-\]
+$$
 
 These coupled dynamics define a path through the manifold, and the resulting meaning depends on the structure of this path. Different trajectories can yield different interpretations even when the initial representation is the same, reflecting the contextual and relational nature of high‑dynamic information.
 
