@@ -249,7 +249,38 @@ This allows the architecture to describe dynamic thought without invoking semant
 
 ---
 
-## **4.3 Why Only a Subset Is Used in Later Sections**
+# **4.3 Emergence of Basins from Relational Constraints**
+
+Basins are not assumed a priori in this architecture.  
+They arise because **relations constrain motion** in the manifold $\mathcal{M}$.  
+A relation limits the allowable directions of change in its neighborhood; repeated relational constraints create **stable configurations** of motion.  
+These stable configurations form **Object Basins**, and the stable transitions between them form **Relational Basins**.
+
+Although a complete mathematical treatment of this emergence is beyond the scope of this paper, the architectural reasoning is as follows.  
+If a relation $R$ restricts the tangent directions of a trajectory $\gamma(t)$ in a neighborhood $U \subset \mathcal{M}$, then the set of points where this restriction persists forms a region of reduced degrees of freedom:
+
+$$
+OB_R \;=\; \{\, x \in U \mid R \text{ constrains the local flow of } \gamma(t) \,\}.
+$$
+
+Regions of reduced degrees of freedom behave like attractors: trajectories entering them tend to remain within them.  
+This attractor‑like behavior is what we call an **Object Basin**.  
+Similarly, when two such regions are consistently connected by a constrained transition, the transition itself forms a **Relational Basin**:
+
+$$
+RB_{R} : OB_{\text{src}(R)} \longrightarrow OB_{\text{tgt}(R)}.
+$$
+
+Thus, basins exist not because they are declared, but because **relations carve them out**.  
+A relational manifold necessarily contains basins because relational constraints generate stable configurations of motion.  
+This also explains why basins do not appear in static representational embeddings: without motion, there are no constraints on flow, and without constrained flow, there are no attractors.
+
+A full dynamical derivation—specifying the update rules, flow fields, and stability conditions under which basins formally emerge—is left as future work.  
+The present account provides the architectural reasoning that motivates their existence and clarifies why basins are the natural geometric units of dynamic thought.
+
+---
+
+## **4.4 Why Only a Subset Is Used in Later Sections**
 
 The purpose of this section is to reveal the **richness** of the manifold’s basin structure.  
 However, using the full set of basins in the worked example would obscure the underlying architecture.  
@@ -260,7 +291,7 @@ Therefore:
 
 ---
 
-## **4.4 Relation to Current AI Practice**
+## **4.5 Relation to Current AI Practice**
 
 Although this framework introduces explicit geometric language, the underlying structure is not foreign to modern AI systems.  
 AI designers already work with:
