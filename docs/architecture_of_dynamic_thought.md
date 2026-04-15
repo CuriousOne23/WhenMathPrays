@@ -24,25 +24,36 @@ The purpose of presenting this architecture is to clarify the structural gap bet
 
 ---
 
-Jeff — yes.  
-And the way you’re seeing this now is exactly the right structural move for the paper. Let me speak directly, cleanly, and with the same architectural precision you’re using:
-
-You’re right to dislike the word **“meaning.”**  
-It *does* imply something fixed, something substantiable, something noun‑like.  
-And this paper is explicitly **not** about substantiable meaning — it’s about **dynamic interpretation**, **relational configuration**, **motion**, **collapse**, **mapping**, **geometry**.
-
-So removing “meaning” wherever possible is the right move.
-
-And you’re also right that we should **not** re‑explain static / ld‑info / hd‑info in long prose.  
-That repetition dilutes the flow and distracts from the mapping problem.
-
-Let me lay out the clean structure you’re pointing toward, and then I’ll give you the exact text you can drop into the merged Section 3.
-
----
-
 # **3. Structural Background and Mapping Challenges**
 
 This section provides a minimal recap of the information regimes introduced in prior work [3][4], followed by a discussion of the structural difficulty in mapping between the reference world and the manifold of relational thought. Only the elements required for the present architecture are included.
+
+---
+
+## **3.1 World‑Location of Terms**
+
+The following terms refer to **patterns in the reference world**:
+
+- **RSI (Reference‑world Static Information)** — S‑info originating from the reference world.  
+- **CP (Collapsed Pattern)** — the stabilized outcome of an inquiry resolving into a new or updated attractor, expressed in the reference world.  
+- **DO (Dynamic Output)** — the expression of stable basins as real‑world action or perception.
+
+The following terms refer to **attractors inside the manifold geometry**:
+
+- **RMC (Relational Manifold Configuration)** — the dynamic relational configuration inside the manifold.  
+- **OB (Object Basin)** — a stable attractor in the manifold. OBs may be verbal, sensory (smell, touch), emotional, motoric, or abstract. “Object” refers to stability, not category.  
+- **RB (Relational Basin)** — a connective attractor linking OBs. RBs encode directional or functional relations (e.g., toward, modifies, enables).  
+- **IB (Inquiry Basin)** — an unstable, unresolved region where mismatch is detected. IBs drive exploration, reconfiguration, and learning.  
+- **TB (Truth Basin)** — a deep, high‑stability attractor anchoring coherence and guiding the resolution of IBs.
+
+The following terms refer to **cross‑boundary operations**:
+
+- **Lifting** — mapping RSI into the manifold.  
+- **Collapse** — mapping manifold dynamics back into CP.
+
+---
+
+## **3.2 Information Regimes**
 
 The framework distinguishes three information regimes:
 
@@ -51,23 +62,27 @@ The framework distinguishes three information regimes:
 - **hd‑info** — high‑dynamic information; substantial work is performed by the information.
 
 In Paper 2, this distinction was formalized using two quantities:  
-$Nds = N[S(I)]$, the number of distinguishable configurations a pattern can engage, and  
-$Nps = N[\mathrm{Prc}(I)]$, the number of process steps required for the pattern to act within a system.  
+\(Nds = N[S(I)]\), the number of distinguishable configurations a pattern can engage, and  
+\(Nps = N[\mathrm{Prc}(I)]\), the number of process steps required for the pattern to act within a system.  
 ld‑info occupies the regime where both quantities remain below system‑dependent thresholds.  
 hd‑info occupies the regime where the configuration space is large and the process depth is non‑trivial.  
 Only these structural relationships are needed for the present work.
 
-For the purposes of this paper, we distinguish three objects involved in the mapping loop:
+---
 
-- **RSI (Reference‑world Static Information)** — the communicable, collapsed input provided by the user or environment.  
-- **RMC (Relational Manifold Configuration)** — the dynamic, geometric, relational state within the manifold.  
-- **CP (Collapsed Pattern)** — the communicable, collapsed output produced after dynamic motion within the manifold.
+# **3.3 Mapping Between Worlds**  
 
-The central difficulty addressed in this paper is the mapping between these domains.  
-**RSI must be lifted into relational geometry in a way that preserves its communicable structure while allowing dynamic interpretation to unfold. Conversely, RMC must collapse back into a CP that can re‑enter the reference world.**  
-These requirements impose structural constraints on both the lifting and collapse operations.
+The central difficulty addressed in this paper is the mapping between the reference world and the manifold. **RSI must be lifted into relational geometry in a way that preserves its communicable structure while allowing dynamic interpretation to unfold.** RMC may then evolve toward two distinct forms of expression in the reference world.
 
-The purpose of the formalization developed in the next section is to make these constraints explicit and to describe how information moves from the reference world into the manifold, how relational dynamics evolve within that manifold, and how the resulting configuration returns to a communicable CP.
+Before describing these pathways, it is useful to clarify why the framework distinguishes between CP and DO. Both arise from the same underlying manifold dynamics, but they mark different kinds of events. DO refers to the continuous activation and flow of existing basins within the manifold, which may or may not cross into the reference world as action or perception. CP refers to the rare case in which this flow resolves an IB and stabilizes a new or updated attractor. The distinction is therefore argumentative rather than ontological: CP is identified because it corresponds to learning and structural change, whereas DO captures the ongoing dynamics that support thought, perception, and action. No additional output categories are required.
+
+### **1. Collapse Channel (CP)**  
+When an IB resolves, the resulting stabilization forms or updates an OB. This collapse produces a CP, which re‑enters the reference world as S‑info, ld‑info, or hd‑info depending on the structure generated during manifold dynamics. CP marks the moments in which the manifold changes shape—when new attractors form, existing ones deepen, or relational structure reorganizes.
+
+### **2. Dynamic Output (DO)**  
+When existing OBs and RBs are already stable, RMC may express directly as dynamic behavior or perception without collapse. DO includes sensorimotor coordination, attention, timing, reading, speaking, and other forms of real‑world action. DO also governs internal manifold dynamics that do not cross the boundary into the reference world, such as thought generating further thought. No CP is produced in this pathway.
+
+The purpose of the formalization developed in the next section is to make these constraints explicit and to describe how information moves from the reference world into the manifold, how relational dynamics evolve within that manifold, and how the resulting configuration returns either as CP (collapse) or as DO (dynamic activation of existing basins).
 
 ---
 
