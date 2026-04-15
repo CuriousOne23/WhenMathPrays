@@ -10,19 +10,19 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 ---
 
+# **Rewritten Introduction (crisp, explicit, mapping‑centered)**
+
 **1. Introduction**
 
-This paper proposes an architectural account of dynamic thought. The central idea is that thought can be modeled as motion within a relational geometric space, and that this geometry interacts with the static representations used in communication. The goal is to describe how dynamic, relational processes give rise to the structures that appear in static cognition, and how these two regimes can be connected through a coherent mapping.
+This paper develops an architectural account of dynamic thought by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution of this paper is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
 
-Before this architecture can begin, a boundary must be acknowledged. Agency is the mystery that a system capable of generating and updating its relational state exists at all. Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
+Before this architecture can begin, a boundary must be acknowledged. **Agency is the mystery that a system capable of generating and updating its relational state exists at all.** Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
 
-The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they participate in a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify a structural gap: how static representations, which are essential for communication and analysis, relate to the dynamic processes through which thought unfolds.
+The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and shows how they participate in a mapping loop that connects the reference world to the manifold of relational thought. Static representations provide stability and communicability; dynamic regimes provide relational motion, contextual sensitivity, and interpretive flexibility. The mapping loop integrates these regimes into a coherent structure that explains how meaning forms through motion and how that motion becomes communicable.
 
-This work has clear limitations. It does not specify a metric for the manifold, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries define the scope of the contribution.
+The account is speculative and architectural. It does not specify a metric for the manifold, instantiate the update dynamics, or operationalize the collapse function. It does not attempt to explain consciousness or phenomenology. These boundaries define the scope of the contribution.
 
-The purpose of presenting this architecture is to invite inquiry. The framework is offered as a starting point for examining how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. Readers are encouraged to refine, challenge, or extend the ideas presented here.
-
-The next section outlines the scope and epistemic posture of the paper, establishing the conceptual boundaries within which the architecture operates.
+The purpose of presenting this architecture is to clarify the structural gap between static cognition and dynamic meaning formation and to offer a coherent proposal for how these domains can be connected. Readers are invited to refine, challenge, or extend the ideas presented here. The next section outlines the epistemic posture and conceptual boundaries within which the architecture operates.
 
 ---
 
