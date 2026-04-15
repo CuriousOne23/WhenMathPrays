@@ -4,19 +4,37 @@
 
 ---
 
-# 1. **🧩 ABSTRACT*
+# 0. **🧩 ABSTRACT*
 
 Understanding is typically modeled through static, object‑centric representations that prioritize stability and definition. While effective for classification and analysis, static information cannot account for the dynamic, relational processes through which meaning is formed. This paper introduces an architecture of dynamic understanding that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified framework. Central to this architecture is a bidirectional mapping between the reference world of static cognition and a manifold in which relational meaning unfolds. We describe the structural requirements for this mapping, the translation mechanisms that support it, and the cognitive constraints that shape its operation. The resulting framework provides a scalable, fractal, and holographic account of how understanding emerges from dynamic information, offering a foundation for future work in information theory, cognition, and computational modeling.
 
 ---
 
-# 2. **📖 INTRODUCTION**
+# **1. Introduction**
 
-Traditional models of cognition rely on static representations: objects, categories, and definitions that provide clarity and stability. These representations support analysis and communication, but they do not explain how meaning is formed, updated, or transformed. Understanding is not merely the accumulation of static information; it is a dynamic process that depends on context, relation, and the interaction between observer and idea.
+This paper proposes an architectural account of how meaning forms through the interaction of static representation, relational context, and dynamic interpretation. The goal is to describe a coherent structure that connects the static representations used in communication with the dynamic processes through which understanding emerges. The framework developed here introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they interact through a mapping loop that links the reference world to the manifold of understanding.
 
-This paper addresses the gap between static representation and dynamic meaning by introducing an architecture that integrates multiple information regimes. We distinguish between static information, low‑dynamic information that introduces controlled relational motion, and high‑dynamic information that encodes fully contextual meaning. These regimes operate within a manifold structure that supports the formation and collapse of understanding.
+The account presented in this paper is **speculative**. It offers a possible architecture for meaning formation rather than a definitive explanation. The framework is intended to clarify a conceptual gap: how static representations, which are essential for communication and analysis, relate to the dynamic interpretive processes that give rise to meaning. The descriptions that follow should be read as proposals for how such an architecture might be organized.
 
-A central contribution of this work is the description of a bidirectional mapping between the reference world—where information is stored and communicated in static form—and the manifold in which relational meaning unfolds. This mapping provides a mechanism for understanding that is compatible with both formal structure and dynamic interpretation. The architecture presented here builds on and extends the foundations established in the previous four papers, offering a unified account of how meaning emerges from information in motion.
+This work also has **clear limitations**. It does not specify a metric for the manifold of understanding, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional and reflect the scope of the contribution.
+
+The purpose of presenting this architecture is to invite inquiry, refinement, and critique. The framework is offered as a starting point for exploring how static and dynamic information regimes might be integrated into a unified account of meaning formation. Readers are encouraged to examine the assumptions, identify gaps, and propose alternatives or extensions.
+
+The next section outlines the scope and epistemic posture of the paper, establishing the conceptual boundaries within which the framework operates.
+
+---
+
+# **2. Scope, Orientation, and Epistemic Posture**
+
+This paper proposes an architectural account of how meaning forms through the interaction of static representation, relational motion, and dynamic interpretation. The goal is to describe a coherent structure that connects static cognition with the manifold of understanding introduced in later sections. The framework is intended as a conceptual model rather than a formal theory, and it focuses on the structural relationships that enable meaning to emerge from information in motion.
+
+The account developed here is **speculative**. It offers a possible architecture for understanding rather than a definitive explanation. The framework is presented as a conjecture that aims to clarify a conceptual gap: how static representations used in communication and analysis relate to the dynamic processes through which meaning is formed. The descriptions that follow should be read as proposals for how such an architecture might be organized, not as claims of empirical fact.
+
+This work also has **clear limitations**. It does not specify a metric for the manifold of understanding, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional and reflect the scope of the contribution.
+
+The purpose of presenting this architecture is to invite inquiry, refinement, criticism, and extension. The framework is offered as a starting point for exploring how static and dynamic information regimes might be integrated into a unified account of meaning formation. Readers are encouraged to examine the assumptions, identify gaps, and propose alternatives or improvements.
+
+The next section begins with the limitations of static representation and the constraints of object‑centric cognition, establishing the motivation for introducing dynamic information regimes..
 
 ---
 
