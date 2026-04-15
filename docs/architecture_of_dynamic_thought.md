@@ -4,15 +4,13 @@
 
 ---
 
-# 2. Abstract
+# 1. Abstract
 
 This paper proposes an architectural account of dynamic thought. It models thought as motion within a relational geometric space and describes how this geometry interacts with the static representations used in communication and reasoning. The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and connects them through a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify how dynamic thinking and static representation can be related within a single structure. The goal is to offer a coherent architectural proposal that invites inquiry, refinement, and further development.
 
 ---
 
-# **Rewritten Introduction**
-
-**2. Introduction**
+# 2. **Introduction**
 
 This paper develops an architectural account of dynamic thought by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution of this paper is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
 
