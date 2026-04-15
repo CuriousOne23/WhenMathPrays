@@ -24,110 +24,17 @@ The purpose of presenting this architecture is to clarify the structural gap bet
 
 ---
 
-# **3. Static Information and the Limits of Object‑Centric Cognition**
+# **3. Background and Structural Foundations**
 
-Static representations form the foundation of most formal systems used in analysis, modeling, and communication. These representations treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
+This section provides a brief recap of the geometric framework developed in prior work [3][4] and establishes the structural elements required for the mapping between the reference world and the manifold of relational thought. Only the components necessary for the present architecture are summarized here.
 
-Static representations operate within what we refer to as the **reference world**, a domain in which information is stored, transmitted, and interpreted as stable objects. In this domain, relations are typically encoded as additional objects or as fixed links between objects. This approach is effective for classification and for tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
+Prior work introduced a geometric manifold in which thought is represented as motion through a relational space. Points in this manifold correspond to relational states, and trajectories correspond to dynamic interpretation. The manifold does not represent objects or propositions directly; instead, it encodes the evolving relational configuration through which meaning is formed. Static representations arise when a trajectory collapses into a communicable form, allowing thought to be expressed, stored, or shared.
 
-The limitations of static representation can be expressed in terms of information regimes. Prior work introduced *d‑information* [1] and *hd‑information* [2] as forms of information that encode relational motion and contextual unfolding. Static representations correspond to a regime in which information is treated as invariant under context, and where meaning is assumed to be recoverable from the object alone. This assumption fails in cases where meaning depends on interaction, sequence, or the interpretive state of the observer.
+Three information regimes were defined: static, low‑dynamic, and high‑dynamic. Static representations provide stability and communicability. Low‑dynamic regimes allow limited contextual adjustment. High‑dynamic regimes support fluid relational motion and the formation of new interpretive structures. These regimes participate in a mapping loop that connects the reference world to the manifold and back.
 
-A simple illustration of this limitation can be expressed using a static mapping function. Let $x$ denote a static representation and let $f$ denote a static interpretive function. In a purely static regime, meaning $m$ is assumed to satisfy:
+The present paper requires a more explicit formulation of this mapping. Static representations must be lifted into relational geometry in a way that preserves their communicable structure while enabling dynamic interpretation. Likewise, dynamic trajectories must collapse back into static form in a way that preserves the relational meaning generated within the manifold. The formalization developed here is therefore not an extension of prior work but a clarification of the structural requirements for this bidirectional mapping.
 
-$$
-m = f(x)
-$$
-
-This formulation presumes that meaning is a deterministic function of the object alone. However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient. A more accurate representation requires additional variables:
-
-$$
-m = f(x, c, s)
-$$
-
-Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than as dynamically evolving components of the interpretive process. Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
-
-These limitations become more apparent when considering the geometry of relational thought [3] and the geometry of thought basins [4]. Static representations cannot capture transitions between interpretive basins or the relational motion that occurs within them. They can describe the endpoints of interpretation but not the process by which those endpoints are reached.
-
-The constraints of static representation motivate the need for additional information regimes. Low‑dynamic [2] information introduces controlled relational motion while preserving enough structure to remain compatible with static cognition. High‑dynamic [2] information encodes fully contextual meaning and supports the formation of understanding within a manifold of relational states. These regimes provide the necessary structure for modeling how meaning emerges from information in motion.
-
-Static representations remain essential for communication and analysis, but they must be integrated with dynamic regimes to support a complete account of understanding. The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
-
----
-
-# **4. Low‑Dynamic Information: Transitional Structure**
-
-**Low‑dynamic information** occupies the transitional space between static representation and fully contextual meaning. It introduces controlled relational motion while preserving enough structural stability to remain compatible with static cognition. This regime enables concepts to participate in limited forms of interaction without requiring the full flexibility of high‑dynamic information [2].
-
-Low‑dynamic information modifies the assumptions of the static regime by allowing meaning to depend on relational changes that occur during interpretation. Instead of treating context as a fixed parameter, low‑dynamic information treats context as a variable that can evolve in response to the interpretive process. This introduces a form of structured motion that remains bounded and predictable.
-
-A simple way to express this transition is to extend the static mapping function. In the static regime, meaning is given by:
-
-$$
-m = f(x)
-$$
-
-In the low‑dynamic regime, the interpretive function becomes sensitive to changes in context. Let $c_t$ denote the context at interpretive step $t$. Meaning is then expressed as:
-
-$$
-m = f(x, c_t)
-$$
-
-Here, $c_t$ is not fixed but evolves according to a rule that depends on the interaction between the representation and the interpretive process. A simple update rule can be written as:
-
-$$
-c_{t+1} = g(c_t, x)
-$$
-
-This formulation captures the essential property of low‑dynamic information: context changes during interpretation, but the changes are governed by a stable update function. The interpretive process remains structured, and the resulting meaning is still compatible with static representation once the process concludes.
-
-Low‑dynamic information plays a critical role in bridging the gap between static and dynamic regimes. It allows the interpretive process to incorporate relational motion without requiring the full flexibility of high‑dynamic information. This makes it possible to introduce dynamic structure gradually, in a way that remains accessible to static cognition.
-
-The transitional nature of low‑dynamic information also makes it compatible with the geometry of relational thought [3]. It supports limited movement within interpretive basins while preserving the stability needed to avoid uncontrolled transitions. This controlled motion prepares the interpretive system for the more flexible and context‑dependent dynamics of high‑dynamic information.
-
-Low‑dynamic information therefore serves as the structural bridge between static representation and dynamic meaning. It introduces motion into the interpretive process while maintaining compatibility with the reference world. The next section examines high‑dynamic information and its role in supporting fully contextual meaning within a manifold of relational states.
-
----
-
-# **5. High‑Dynamic Information: Relational Meaning Formation**
-
-**High‑dynamic information** represents the regime in which meaning is fully contextual, relational, and dependent on the evolving interaction between representation, context, and the interpretive state of the observer. Unlike static or low‑dynamic regimes, high‑dynamic information does not assume that meaning can be recovered from fixed structures. Instead, meaning emerges from motion within a manifold of relational states.
-
-High‑dynamic information extends the interpretive process by allowing both context and interpretive state to evolve during meaning formation. In this regime, the interpretive process is not a sequence of evaluations applied to a fixed representation but a trajectory through a relational space. This trajectory depends on the interaction between the representation, the evolving context, and the observer’s interpretive dynamics.
-
-A simple way to express this is to extend the low‑dynamic formulation. In the low‑dynamic regime, meaning is given by:
-
-$$
-m = f(x, c_t)
-$$
-
-with context evolving according to:
-
-$$
-c_{t+1} = g(c_t, x)
-$$
-
-In the high‑dynamic regime, both context and interpretive state evolve. Let $s_t$ denote the interpretive state at step $t$. Meaning formation becomes:
-
-$$
-m = f(x, c_t, s_t)
-$$
-
-with coupled update rules:
-
-$$
-\begin{aligned}
-c_{t+1} &= g(c_t, s_t, x) \\\\
-s_{t+1} &= h(s_t, c_t, x)
-\end{aligned}
-$$
-
-These coupled dynamics capture the essential property of high‑dynamic information: meaning is not a function of static inputs but the result of an evolving interaction between representation, context, and interpretive state. The interpretive process is therefore path‑dependent, and different trajectories can yield different meanings even when the initial representation is the same.
-
-This regime aligns with the geometry of relational thought [3], in which meaning arises from motion through a relational space rather than from static structures. It also aligns with the geometry of thought basins [4], where interpretive states correspond to regions of stability within a larger manifold. High‑dynamic information describes the motion between these regions and the formation of meaning through that motion.
-
-High‑dynamic information is necessary for modeling understanding because it captures the full complexity of relational meaning formation. It allows the interpretive process to incorporate context, history, and the evolving state of the observer. This makes it possible to model phenomena that static and low‑dynamic regimes cannot express, such as shifts in interpretation, emergence of new meaning, and context‑dependent reasoning.
-
-The structure of high‑dynamic information also provides the foundation for the **manifold of understanding**, a relational space in which meaning forms through motion rather than through static evaluation. The next section introduces this manifold and describes its structural properties.
+With these elements in place, we can now describe how information moves from the reference world into the manifold of relational thought, how dynamic interpretation unfolds within that manifold, and how the resulting relational meaning collapses back into static representation.
 
 ---
 
