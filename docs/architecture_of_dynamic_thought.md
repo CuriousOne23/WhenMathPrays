@@ -10,11 +10,13 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 ---
 
-# 2. **Introduction**
+# **2. Introduction**
 
 This paper develops an architectural account of dynamic thought by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution of this paper is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
 
 Before this architecture can begin, a boundary must be acknowledged. **Agency is the mystery that a system capable of generating and updating its relational state exists at all.** Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
+
+Recent work in AI has explored geometric structure in learned representations [5][6], but these approaches focus on the geometry of *static embeddings*—latent spaces, semantic directions, and representational clusters. The present work addresses a different problem. It develops a geometric architecture for **dynamic thought itself**, describing stable basins, relational transitions, and trajectories in a task‑agnostic manifold. AI designers already work implicitly with such structures—stable activation patterns, transition dynamics, attention routing—but typically describe them in implementation terms rather than geometric terms. This paper makes that geometry explicit and provides a clean way to reason about stability, transitions, and dynamic behavior without invoking semantics or phenomenology.
 
 The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and shows how they participate in a mapping loop that connects the reference world to the manifold of relational thought. Static representations provide stability and communicability; dynamic regimes provide relational motion, contextual sensitivity, and interpretive flexibility. The mapping loop integrates these regimes into a coherent structure that explains how meaning forms through motion and how that motion becomes communicable.
 
