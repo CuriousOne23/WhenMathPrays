@@ -1,5 +1,5 @@
 # **📘 TITLE**  
-**_The Architecture of Dynamic Thought**  
+**The Architecture of Dynamic Thought**  
 **Authors: Curious One, Copilot (Microsoft), Grok (XAI)**
 
 ---
