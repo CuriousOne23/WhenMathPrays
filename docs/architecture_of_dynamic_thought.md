@@ -95,27 +95,27 @@ In the ball‑catching example, the trajectory $\{M_t\}$ encodes the evolving re
 
 ---
 
-## 3.4 Mapping back to the world: RW‑D
+## 3.4 Mapping back to the world: RWD
 
-The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RW‑D)**, which represent outward behavior:
+The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RWD)**, which represent outward behavior:
 
 $$
-RW\text{-}D(t) = \Psi(M_t).
+RWD(t) = \Psi(M_t).
 $$
 
 Here:
 
-- **$RW\text{-}D(t)$:** the reference‑world dynamics (behavior) at time $t$.  
+- **$RWD(t)$:** the reference‑world dynamics (behavior) at time $t$.  
 - **$\Psi$:** the manifold‑to‑world mapping that converts manifold motion into world‑space action.
 
-RW‑D includes:
+RWD includes:
 
 - **hand movement:** adjusting the hand in space,  
 - **posture adjustment:** shifting the body to support the action,  
 - **timing corrections:** small temporal refinements during motion,  
 - **coordinated motor output:** integrated whole‑body behavior.
 
-In the ball‑catching example, $RW\text{-}D(t)$ is the boy moving his hand into the right place at the right time to catch the ball. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
+In the ball‑catching example, $RWD(t)$ is the boy moving his hand into the right place at the right time to catch the ball. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
 
 ---
 
@@ -124,7 +124,7 @@ In the ball‑catching example, $RW\text{-}D(t)$ is the boy moving his hand into
 The architecture forms a closed perception–action loop:
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi\} RW\text{-}D(t).
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi\} RWD(t).
 $$
 
 In this diagram:
@@ -134,13 +134,13 @@ In this diagram:
 - **$M_t$:** manifold state at time $t$,  
 - **$F$:** manifold dynamics, evolving $M_t$ to $M_{t + \Delta t}$,  
 - **$\Psi$:** mapping from manifold state to reference‑world dynamics,  
-- **$RW\text{-}D(t)$:** outward behavior at time $t$.
+- **$RWD(t)$:** outward behavior at time $t$.
 
 This loop describes:
 
 1. **World → Manifold:** perception becomes a relational configuration ($W(t) \to M_t$).  
 2. **Manifold → Manifold:** meaning unfolds as motion ($M_t \to M_{t + \Delta t}$).  
-3. **Manifold → World:** motion becomes behavior ($M_t \to {RW\-D(t)}$).
+3. **Manifold → World:** motion becomes behavior ($M_t \to {RWD(t)}$).
 
 The boy catching a ball is used purely for thought simplicity: it is a familiar, low‑level example that makes the mapping process into the manifold and back easy to visualize. The same loop can describe other everyday actions such as reaching for a cup or turning one’s head toward a sound.
 
