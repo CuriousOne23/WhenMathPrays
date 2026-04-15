@@ -86,6 +86,16 @@ The purpose of the formalization developed in the next section is to make these 
 
 ---
 
+# **3.4 Reference‑World Patterns and Reference‑World Dynamics**
+
+The reference world contains two distinct forms of expression that must be separated to avoid confusion in later sections. **Reference‑world patterns (RW‑P)** are the static structures produced through collapse (CP). These include the stable representations used for communication, storage, and analysis. Once formed, RW‑P remain fixed; they do not evolve or move within the reference world.
+
+Alongside these static patterns, the reference world also contains **reference‑world dynamics (RW‑D)**. RW‑D arise from Dynamic Output (DO) and include action, perception, timing, attention, and other forms of real‑time behavior. RW‑D introduces motion into the reference world, but this motion does not alter the static nature of RW‑P. RW‑D is dynamic expression, not dynamic representation.
+
+This distinction is introduced for clarity. When the paper refers to “static patterns” in the reference world, it refers specifically to **RW‑P**, not to all reference‑world activity. RW‑D allows the manifold to express dynamic behavior outwardly, but RW‑P remains the representational substrate through which collapse returns stabilized structure. The CP/DO distinction therefore maps cleanly onto RW‑P and RW‑D: CP produces RW‑P, while DO produces RW‑D.
+
+---
+
 # **4. The Manifold of Understanding**
 
 The **manifold of understanding** is the relational space in which high‑dynamic information [2] operates. It provides the structural environment that supports contextual interpretation, relational motion, and the interaction between reference‑world patterns and manifold configurations. Unlike the reference world, which expresses information as static patterns, the manifold encodes meaning as **trajectories** through a space of relational states.
