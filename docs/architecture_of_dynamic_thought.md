@@ -10,7 +10,7 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 ---
 
-# **Rewritten Introduction (crisp, explicit, mapping‑centered)**
+# **Rewritten Introduction**
 
 **2. Introduction**
 
