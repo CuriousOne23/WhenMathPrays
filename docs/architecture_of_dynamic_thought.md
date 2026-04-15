@@ -10,11 +10,13 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 ---
 
-# **1. Introduction**
+**1. Introduction**
 
-This paper proposes an architectural account of **dynamic thought**. The central idea is that thought can be modeled as motion within a relational geometric space, and that this geometry interacts with the static representations we use in communication. The goal is to describe how dynamic, relational processes give rise to the structures that appear in static cognition, and how these two regimes can be connected through a coherent mapping.
+This paper proposes an architectural account of dynamic thought. The central idea is that thought can be modeled as motion within a relational geometric space, and that this geometry interacts with the static representations used in communication. The goal is to describe how dynamic, relational processes give rise to the structures that appear in static cognition, and how these two regimes can be connected through a coherent mapping.
 
-The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they participate in a mapping loop that links the reference world to a manifold of relational thought. The account is **speculative** and intended to clarify a structural gap: how static representations, which are essential for communication and analysis, relate to the dynamic processes through which thought unfolds.
+Before this architecture can begin, a boundary must be acknowledged. Agency is the mystery that a system capable of generating and updating its relational state exists at all. Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
+
+The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and describes how they participate in a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify a structural gap: how static representations, which are essential for communication and analysis, relate to the dynamic processes through which thought unfolds.
 
 This work has clear limitations. It does not specify a metric for the manifold, does not instantiate the update dynamics, and does not provide an operational definition of the collapse function. The framework is architectural rather than algorithmic, and it does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries define the scope of the contribution.
 
