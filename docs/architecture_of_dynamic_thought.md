@@ -24,75 +24,127 @@ The purpose of presenting this architecture is to clarify the structural gap bet
 
 ---
 
-# **3. Structural Background and Mapping Challenges**
+## 3. The mapping architecture
 
-This section provides a minimal recap of the information regimes introduced in prior work [3][4], followed by a discussion of the structural difficulty in mapping between the reference world and the manifold of relational thought. Only the elements required for the present architecture are included.
+This section introduces the core architectural loop that connects the ordinary world of experience with a manifold of relational meaning. The goal is to describe a simple, mechanical structure: how a configuration in the world is mapped into a relational space, how motion unfolds within that space, and how the result is expressed back into the world as dynamic behavior.
 
----
-
-## **3.1 World‑Location of Terms**
-
-The following terms refer to **patterns in the reference world**:
-
-- **RSI (Reference‑world Static Information)** — S‑info originating from the reference world.  
-- **CP (Collapsed Pattern)** — the stabilized outcome of an inquiry resolving into a new or updated attractor, expressed in the reference world.  
-- **DO (Dynamic Output)** — the expression of stable basins as real‑world action or perception.
-
-The following terms refer to **attractors inside the manifold geometry**:
-
-- **RMC (Relational Manifold Configuration)** — the dynamic relational configuration inside the manifold.  
-- **OB (Object Basin)** — a stable attractor in the manifold. OBs may be verbal, sensory (smell, touch), emotional, motoric, or abstract. “Object” refers to stability, not category.  
-- **RB (Relational Basin)** — a connective attractor linking OBs. RBs encode directional or functional relations (e.g., toward, modifies, enables).  
-- **IB (Inquiry Basin)** — an unstable, unresolved region where mismatch is detected. IBs drive exploration, reconfiguration, and learning.  
-- **TB (Truth Basin)** — a deep, high‑stability attractor anchoring coherence and guiding the resolution of IBs.
-
-The following terms refer to **cross‑boundary operations**:
-
-- **Lifting** — mapping RSI into the manifold.  
-- **Collapse** — mapping manifold dynamics back into CP.
+A boy catching a ball is used as a deliberately simple thought example to demonstrate the mapping process into the manifold and back. The architecture does not assume or explain learning, insight, or internal stabilization; it only describes the mapping loop itself.
 
 ---
 
-## **3.2 Information Regimes**
+## 3.1 The world as input
 
-The framework distinguishes three information regimes:
+We denote the state of the world at time $t$ by
 
-- **S‑info** — static information; no work is performed by the information.  
-- **ld‑info** — low‑dynamic information; light work is performed by the information.  
-- **hd‑info** — high‑dynamic information; substantial work is performed by the information.
+$$
+W(t).
+$$
 
-In Paper 2, this distinction was formalized using two quantities:  
-\(Nds = N[S(I)]\), the number of distinguishable configurations a pattern can engage, and  
-\(Nps = N[\mathrm{Prc}(I)]\), the number of process steps required for the pattern to act within a system.  
-ld‑info occupies the regime where both quantities remain below system‑dependent thresholds.  
-hd‑info occupies the regime where the configuration space is large and the process depth is non‑trivial.  
-Only these structural relationships are needed for the present work.
+Here:
 
----
+- **$W(t)$:** a structured world‑state at time $t$ (e.g., positions, velocities, and relations among objects such as a ball and a hand).  
+- **$t$:** time in the ordinary sense.
 
-# **3.3 Mapping Between Worlds**  
-
-The central difficulty addressed in this paper is the mapping between the reference world and the manifold. **RSI must be lifted into relational geometry in a way that preserves its communicable structure while allowing dynamic interpretation to unfold.** RMC may then evolve toward two distinct forms of expression in the reference world.
-
-Before describing these pathways, it is useful to clarify why the framework distinguishes between CP and DO. Both arise from the same underlying manifold dynamics, but they mark different kinds of events. DO refers to the continuous activation and flow of existing basins within the manifold, which may or may not cross into the reference world as action or perception. CP refers to the rare case in which this flow resolves an IB and stabilizes a new or updated attractor. The distinction is therefore argumentative rather than ontological: CP is identified because it corresponds to learning and structural change, whereas DO captures the ongoing dynamics that support thought, perception, and action. No additional output categories are required.
-
-### **1. Collapse Channel (CP)**  
-When an IB resolves, the resulting stabilization forms or updates an OB. This collapse produces a CP, which re‑enters the reference world as S‑info, ld‑info, or hd‑info depending on the structure generated during manifold dynamics. CP marks the moments in which the manifold changes shape—when new attractors form, existing ones deepen, or relational structure reorganizes.
-
-### **2. Dynamic Output (DO)**  
-When existing OBs and RBs are already stable, RMC may express directly as dynamic behavior or perception without collapse. DO includes sensorimotor coordination, attention, timing, reading, speaking, and other forms of real‑world action. DO also governs internal manifold dynamics that do not cross the boundary into the reference world, such as thought generating further thought. No CP is produced in this pathway.
-
-The purpose of the formalization developed in the next section is to make these constraints explicit and to describe how information moves from the reference world into the manifold, how relational dynamics evolve within that manifold, and how the resulting configuration returns either as CP (collapse) or as DO (dynamic activation of existing basins).
+In the ball‑catching example, $W(t)$ includes the ball’s position and velocity, the boy’s body configuration, and the surrounding context. The architecture does not commit to a particular encoding of $W(t)$; it only assumes that such a state can be mapped into the manifold.
 
 ---
 
-# **3.4 Reference‑World Patterns and Reference‑World Dynamics**
+## 3.2 Mapping into the manifold
 
-The reference world contains two distinct forms of expression that must be separated to avoid confusion in later sections. **Reference‑world patterns (RW‑P)** are the static structures produced through collapse (CP). These include the stable representations used for communication, storage, and analysis. Once formed, RW‑P remain fixed; they do not evolve or move within the reference world.
+The manifold is a relational state space in which meaning is expressed as motion. A world‑state $W(t)$ is mapped into an initial manifold configuration by a mapping
 
-Alongside these static patterns, the reference world also contains **reference‑world dynamics (RW‑D)**. RW‑D arise from Dynamic Output (DO) and include action, perception, timing, attention, and other forms of real‑time behavior. RW‑D introduces motion into the reference world, but this motion does not alter the static nature of RW‑P. RW‑D is dynamic expression, not dynamic representation.
+$$
+M_t = \Phi(W(t)).
+$$
 
-This distinction is introduced for clarity. When the paper refers to “static patterns” in the reference world, it refers specifically to **RW‑P**, not to all reference‑world activity. RW‑D allows the manifold to express dynamic behavior outwardly, but RW‑P remains the representational substrate through which collapse returns stabilized structure. The CP/DO distinction therefore maps cleanly onto RW‑P and RW‑D: CP produces RW‑P, while DO produces RW‑D.
+Here:
+
+- **$M_t$:** the manifold state at time $t$.  
+- **$\Phi$:** the world‑to‑manifold mapping.
+
+In the ball‑catching example, $M_t$ encodes relational information such as:
+
+- the relation between the ball’s trajectory and the hand’s position,  
+- timing relations between the ball’s arrival and possible hand motions,  
+- spatial constraints relevant to interception.
+
+The manifold does not store objects; it stores relations among features derived from $W(t)$.
+
+---
+
+## 3.3 Relational motion in the manifold
+
+Once initialized, the manifold evolves according to relational dynamics:
+
+$$
+M_{t + \Delta t} = F(M_t).
+$$
+
+Here:
+
+- **$F$:** the manifold update rule (the dynamics on the manifold).  
+- **$\Delta t$:** a small time step in the evolution of the manifold state.
+
+The architecture does not specify a particular form for $F$ or a specific metric on the manifold. It only assumes that:
+
+- motion within the manifold is continuous in time,  
+- trajectories $M_t$ encode the unfolding of interpretation,  
+- relational structure determines how the system evolves.
+
+In the ball‑catching example, the trajectory $\{M_t\}$ encodes the evolving relation between the ball and the hand, guiding the timing and motion required to intercept the ball.
+
+---
+
+## 3.4 Mapping back to the world: RW‑D
+
+The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RW‑D)**, which represent outward behavior:
+
+$$
+RW\text{-}D(t) = \Psi(M_t).
+$$
+
+Here:
+
+- **$RW\text{-}D(t)$:** the reference‑world dynamics (behavior) at time $t$.  
+- **$\Psi$:** the manifold‑to‑world mapping that converts manifold motion into world‑space action.
+
+RW‑D includes:
+
+- **hand movement:** adjusting the hand in space,  
+- **posture adjustment:** shifting the body to support the action,  
+- **timing corrections:** small temporal refinements during motion,  
+- **coordinated motor output:** integrated whole‑body behavior.
+
+In the ball‑catching example, $RW\text{-}D(t)$ is the boy moving his hand into the right place at the right time to catch the ball. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
+
+---
+
+## 3.5 The full mapping loop
+
+The architecture forms a closed perception–action loop:
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi\} RW\text{-}D(t).
+$$
+
+In this diagram:
+
+- **$W(t)$:** world‑state at time $t$,  
+- **$\Phi$:** mapping from world‑state to manifold state,  
+- **$M_t$:** manifold state at time $t$,  
+- **$F$:** manifold dynamics, evolving $M_t$ to $M_{t + \Delta t}$,  
+- **$\Psi$:** mapping from manifold state to reference‑world dynamics,  
+- **$RW\text{-}D(t)$:** outward behavior at time $t$.
+
+This loop describes:
+
+1. **World → Manifold:** perception becomes a relational configuration ($W(t) \to M_t$).  
+2. **Manifold → Manifold:** meaning unfolds as motion ($M_t \to M_{t + \Delta t}$).  
+3. **Manifold → World:** motion becomes behavior ($M_t \to {RW\-D(t)}$).
+
+The boy catching a ball is used purely for thought simplicity: it is a familiar, low‑level example that makes the mapping process into the manifold and back easy to visualize. The same loop can describe other everyday actions such as reaching for a cup or turning one’s head toward a sound.
+
+This architecture does not attempt to explain how new internal structures form, how learning occurs, or how internal stabilization works. Those questions are treated as outside the scope of this paper and are left for future research.
 
 ---
 
