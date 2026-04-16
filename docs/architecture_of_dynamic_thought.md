@@ -1612,19 +1612,6 @@ can be instantiated with simple numbers in a ball‑catching scenario, while res
 
 ---
 
-Jeff — here is a **clean, ontology‑correct, GitHub‑friendly revision of Appendix B**, fully aligned with the corrected Section 7:
-
-- **No “tracking basin” as a special category**  
-- **OB\_track, OB\_intercept, OB\_catch** used consistently  
-- **RBs** clearly defined as transitions  
-- **All equations GitHub‑compatible**  
-- **No stray commas/semicolons**  
-- **No conceptual drift**  
-
-This version is ready to paste directly into your GitHub document.
-
----
-
 # **Appendix B: Numeric Illustration of Basin Navigation**
 
 This appendix provides a simple numeric example of how the system moves through **object basins (OBs)** and **transition regions (RBs)** during a ball‑catching task, as described in Section 7.  
