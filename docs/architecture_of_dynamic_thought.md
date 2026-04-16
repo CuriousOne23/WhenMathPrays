@@ -11,13 +11,13 @@ This paper proposes an architectural account of dynamic thought. It models thoug
 
 # **1. Introduction**
 
-This paper develops an architectural account of **dynamic thought** by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
+This paper develops an architectural account of **dynamic thought** [1] by describing how information moves between two domains: the reference world of static representation and the geometric manifold of relational thought introduced in prior work [3][4]. The central contribution is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
 
 Before this architecture can begin, a boundary must be acknowledged. **Agency is the mystery that a system capable of generating and updating its relational state exists at all.** Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
 
 Recent work in AI has explored geometric structure in learned representations [5][6], but these approaches focus on the geometry of **static embeddings**—latent clusters, semantic directions, and representational neighborhoods. They present geometric views of LLM behavior to help visualize patterns, but they do not define the relational space in which **dynamic basins** can arise. Basins cannot be seen in a representational embedding because basins are not representational objects; they are **dynamic structures** that emerge only when the space is defined by **relations, transitions, and verbs** rather than nouns. In the architecture developed here, basins appear naturally because the manifold is defined by relational motion. The geometry is not a visualization tool but the underlying structure of dynamic thought itself.
 
-The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and shows how they participate in a mapping loop that connects the reference world to the manifold of relational thought. Static representations provide stability and communicability; dynamic regimes provide relational motion, contextual sensitivity, and interpretive flexibility. The mapping loop integrates these regimes into a coherent structure that explains how meaning forms through motion and how that motion becomes communicable.
+The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic [2] and shows how they participate in a mapping loop that connects the reference world to the manifold of relational thought. Static representations provide stability and communicability; dynamic regimes provide relational motion, contextual sensitivity, and interpretive flexibility. The mapping loop integrates these regimes into a coherent structure that explains how meaning forms through motion and how that motion becomes communicable.
 
 The account is **speculative and architectural**. It does not specify a metric for the manifold, instantiate the update dynamics, or operationalize the collapse function. It does not attempt to explain consciousness or phenomenology. These boundaries define the scope of the contribution.
 
@@ -1273,6 +1273,23 @@ Here is your **final, ready‑to‑paste References section** in the style you r
 
 # **References**
 
+Absolutely, Jeff — here is your **fully regenerated, clean, final Reference List**, with the corrected \[5\] and \[6\] that now properly match the Introduction’s discussion of *geometric structure in learned representations*.
+
+This list is:
+
+- minimal  
+- architectural  
+- reviewer‑friendly  
+- consistent with your manuscript  
+- aligned with the lineage of your prior work  
+- correctly mapped to the placeholders already in the Introduction  
+
+You can paste this directly into your document.
+
+---
+
+# **References**
+
 \[1\] Curious One, *d‑Information: A Framework for Dynamic Relational Motion*, Internal Technical Report, 2025.  
 URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md)
 
@@ -1285,17 +1302,34 @@ URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_R
 \[4\] Curious One, *Geometry of Thought Basins*, Internal Technical Report, 2025.  
 URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md)
 
-\[5\] S. H. Strogatz, *Nonlinear Dynamics and Chaos*, Westview Press, 2015.
+---
 
-\[6\] M. Hirsch, S. Smale, and R. Devaney, *Differential Equations, Dynamical Systems, and an Introduction to Chaos*, Academic Press, 2012.
+### **Representation‑Learning Geometry (for the Introduction)**
 
-\[7\] J. J. Gibson, *The Ecological Approach to Visual Perception*, Houghton Mifflin, 1979.
+\[5\] T. Mikolov, K. Chen, G. Corrado, and J. Dean,  
+*Efficient Estimation of Word Representations in Vector Space*, arXiv:1301.3781, 2013.  
+(Word2Vec; geometric latent structure.)
 
-\[8\] R. A. Brooks, “Intelligence Without Representation,” *Artificial Intelligence*, vol. 47, pp. 139–159, 1991.
+\[6\] J. Ethayarajh,  
+*How Contextual are Contextualized Word Representations?*, Proceedings of ACL, 2019.  
+(Shows geometric structure in transformer embeddings.)
 
-\[9\] K. Friston, “The Free‑Energy Principle: A Unified Brain Theory?,” *Nature Reviews Neuroscience*, vol. 11, pp. 127–138, 2010.
+---
 
-\[10\] H. K. Khalil, *Nonlinear Systems*, Prentice Hall, 2002.
+### **Foundational External Works (for the architecture)**
+
+\[7\] S. H. Strogatz, *Nonlinear Dynamics and Chaos*, Westview Press, 2015.  
+(Attractors, basins, stability.)
+
+\[8\] M. Hirsch, S. Smale, and R. Devaney,  
+*Differential Equations, Dynamical Systems, and an Introduction to Chaos*, Academic Press, 2012.  
+(Flows, manifolds, geometric dynamics.)
+
+\[9\] J. J. Gibson, *The Ecological Approach to Visual Perception*, Houghton Mifflin, 1979.  
+(Perception–action coupling.)
+
+\[10\] H. K. Khalil, *Nonlinear Systems*, Prentice Hall, 2002.  
+(Boundedness, stability, recoverability.)
 
 ---
 
