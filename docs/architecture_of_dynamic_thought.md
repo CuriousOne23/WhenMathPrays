@@ -927,19 +927,117 @@ This provides a natural form of robustness that does not rely on prediction, sym
 
 # **10. Comparison With Classical Control Architectures**
 
-**Purpose:**  
-Position the architecture relative to existing frameworks without invoking semantics.
+Classical control frameworks—PID control, model‑predictive control, and symbolic planning—stabilize behavior through explicit error terms, predictive models, or discrete state transitions.  
+The architecture presented here differs fundamentally: stability and coordination arise from **relational geometry**, **basin structure**, and the **mapping loop**, not from symbolic state machines or predictive optimization.
 
-**Content:**
+This section clarifies the distinction without invoking semantics or mentalistic interpretation.
 
-- Differences from PID control  
-- Differences from model‑predictive control  
-- Differences from symbolic planning  
-- Why relational geometry provides a unified alternative  
-- Why basins and RBs offer a natural stability structure
+---
 
-**Example:**  
-Classical control predicts trajectories; the manifold *is* the relational trajectory.
+## **10.1 Comparison With PID Control**
+
+PID control stabilizes behavior by regulating an error signal:
+
+- proportional term  
+- integral term  
+- derivative term  
+
+The architecture does not compute or regulate an explicit error.  
+Instead:
+
+- relational distance is encoded implicitly in $M_t$  
+- stability arises from basin geometry  
+- convergence emerges from the dynamics of $F$  
+- the cognitive spacesuit ensures boundedness and feasibility  
+
+Where PID adjusts behavior by manipulating an error term, the architecture adjusts behavior by **moving through relational basins**.
+
+---
+
+## **10.2 Comparison With Model‑Predictive Control (MPC)**
+
+MPC relies on:
+
+- explicit prediction of future trajectories  
+- optimization over a finite horizon  
+- repeated solution of a constrained optimization problem  
+
+The architecture does not:
+
+- predict future world‑states  
+- optimize trajectories  
+- compute cost functions  
+- solve constrained optimization problems  
+
+Instead:
+
+- $\Phi$ lifts the current world‑state into relational geometry  
+- $F$ evolves the manifold state according to relational gradients  
+- $\Psi$ projects the result into feasible outward behavior  
+
+Where MPC plans ahead, the architecture **flows** through relational structure.
+
+---
+
+## **10.3 Comparison With Symbolic Planning**
+
+Symbolic planning uses:
+
+- discrete states  
+- symbolic operators  
+- search over possible action sequences  
+
+The architecture does not contain:
+
+- symbolic states  
+- discrete transitions  
+- search procedures  
+- propositional operators  
+
+Instead:
+
+- basins provide stable regions of relational configuration  
+- transition regions provide continuous pathways  
+- the mapping loop drives motion without discrete choice  
+
+Where symbolic planning selects actions, the architecture **moves through geometry**.
+
+---
+
+## **10.4 Why Relational Geometry Provides a Unified Alternative**
+
+Across classical control frameworks, stability is achieved through:
+
+- error regulation  
+- prediction  
+- symbolic reasoning  
+- discrete state transitions  
+
+The architecture replaces these mechanisms with:
+
+- **basins** for stability  
+- **transition regions** for reconfiguration  
+- **bounded lift** for well‑posed mapping  
+- **bounded update** for stable manifold evolution  
+- **feasible projection** for physically realizable behavior  
+
+This provides a unified alternative because:
+
+- stability is geometric, not algorithmic  
+- coordination emerges from relational structure  
+- robustness arises from basin absorption and RB routing  
+- no symbolic or predictive machinery is required  
+
+The architecture is not a variant of classical control; it is a **different organizing principle**.
+
+---
+
+## **10.5 Summary**
+
+Classical control frameworks regulate behavior through error terms, prediction, or symbolic reasoning.  
+The architecture presented here regulates behavior through relational geometry, basin structure, and the mapping loop.  
+Basins provide stability, transition regions provide pathways, and the cognitive spacesuit ensures bounded, feasible, coherent motion.  
+This offers a geometric alternative to classical control without invoking semantics or symbolic state machines.
 
 ---
 
