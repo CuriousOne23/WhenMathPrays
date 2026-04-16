@@ -99,17 +99,12 @@ The aim is clarity, coherence, and operational simplicity.
 
 # **3. Static Information and the Limits of Object‑Centric Cognition**
 
-Static representations form the foundation of most formal systems used in analysis, modeling, and communication.  
-They treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form.  
-This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
+Static representations form the foundation of most formal systems used in analysis, modeling, and communication. They treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
 
-Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects.  
-Relations are typically encoded as additional objects or as fixed links between objects.  
+Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects. Relations are typically encoded as additional objects or as fixed links between objects.  
 This approach is effective for classification and tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
 
-The limitations of static representation can be expressed using a simple mapping function.  
-Let $x$ denote a static representation and let $f$ denote a static interpretive function.  
-In a purely static regime, meaning $m$ is assumed to satisfy:
+The limitations of static representation can be expressed using a simple mapping function. Let $x$ denote a static representation and let $f$ denote a static interpretive function. In a purely static regime, meaning $m$ is assumed to satisfy:
 
 ```
 $$
@@ -117,9 +112,7 @@ m = f(x)
 $$
 ```
 
-This formulation presumes that meaning is a deterministic function of the object alone.  
-However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient.  
-A more accurate representation requires additional variables:
+This formulation presumes that meaning is a deterministic function of the object alone. However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient. A more accurate representation requires additional variables:
 
 ```
 $$
@@ -127,14 +120,11 @@ m = f(x, c, s)
 $$
 ```
 
-Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than dynamically evolving components of interpretation.  
-Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
+Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than dynamically evolving components of interpretation. Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
 
-These limitations become more apparent when viewed through the lens of relational geometry \[1–4\].  
-Static representations can describe the endpoints of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape meaning.
+These limitations become more apparent when viewed through the lens of relational geometry \[1–4\]. Static representations can describe the endpoints of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape meaning.
 
-Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding.  
-The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
+Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding. The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
 
 ---
 
