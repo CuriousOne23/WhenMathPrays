@@ -1811,3 +1811,206 @@ The architecture remains stable because:
 This demonstrates the inherent robustness of the mapping loop under perturbations.
 
 ---
+
+Perfect — and yes, we absolutely need a glossary.  
+Since you’re in the GitHub editor right now, I’ll give you **two deliverables** in one pass:
+
+1. **A clean, reviewer‑friendly Glossary** (GRP‑style, architectural, non‑semantic, GitHub‑safe KaTeX).  
+2. **A Notation Reference** (symbols, operators, mappings, constraints).
+
+Both are written to drop directly into GRP_GLOSSARY.md or into the bottom of your main document.
+
+No drift, no new concepts, no metaphors — strictly architectural, relational, geometric.
+
+---
+
+# **📘 Glossary (Polished, Architectural, GitHub‑Safe)**
+
+Below is the **Version 1.2** glossary aligned with your manuscript’s final structure.
+
+---
+
+## **A. Core Spaces and Structures**
+
+### **Reference World (RW)**
+The world‑level space containing physical quantities such as positions, velocities, and forces.  
+Denoted $W(t)$.  
+RW is not a model; it is the domain from which relational structure is extracted.
+
+### **Relational Manifold (RM)**
+The geometric space containing relational quantities derived from $W(t)$.  
+Denoted $M_t$.  
+RM encodes only relations, not absolute coordinates or semantic content.
+
+### **Mapping Loop**
+The continuous cycle:
+
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
+
+
+This loop defines how world‑level structure becomes relational, evolves, and returns to feasible world‑level behavior.
+
+---
+
+## **B. Mappings**
+
+### **Lift (Φ)**
+A mapping from RW to RM:
+
+
+$$
+\Phi : W(t) \rightarrow M_t
+$$
+
+
+Extracts relational structure (e.g., displacement) while discarding absolute coordinates.  
+Must satisfy a bounded‑lift condition.
+
+### **Relational Update (F)**
+Dynamics on the manifold:
+
+
+$$
+F : M_t \rightarrow M_{t+\Delta t}
+$$
+
+
+Updates relational quantities without reintroducing world‑level structure.  
+Must satisfy a bounded‑update condition.
+
+### **Projection (Ψ)**
+A mapping from RM back to RW:
+
+
+$$
+\Psi : M_{t+\Delta t} \rightarrow \text{world‑level observables}
+$$
+
+
+Produces feasible, continuous world‑level quantities.  
+Does not generate motor commands; it provides observables used by downstream processes.
+
+### **Reference‑World Dynamics (RWD)**
+A world‑level update rule that *uses* the output of Ψ.  
+Not part of Ψ itself.  
+Example‑specific in Appendices.
+
+---
+
+## **C. Basins and Transition Regions**
+
+### **Object Basin (OB)**
+A stable region of the manifold where trajectories converge and remain unless perturbed.  
+Examples: tracking basin, intercept basin, catch basin.
+
+### **Transition Region (RB)**
+A geometric corridor connecting two basins.  
+RBs guide trajectories between OBs without discontinuity.
+
+### **Catch Basin**
+A basin centered on near‑zero relational displacement:
+
+
+$$
+B_{\text{catch}} = \\{ M_t \mid |M_t| \le \varepsilon \\}
+$$
+
+
+---
+
+## **D. Constraints (Cognitive Spacesuit)**
+
+### **Bounded Lift**
+The lift must satisfy:
+
+
+$$
+\|\Phi(W(t+\Delta t)) - \Phi(W(t))\|
+\le
+K_\Phi \|W(t+\Delta t) - W(t)\|
+$$
+
+
+Prevents discontinuities when entering the manifold.
+
+### **Bounded Update**
+The relational update must satisfy:
+
+
+$$
+\|F(M_t) - M_t\| \le K_F
+$$
+
+
+Prevents runaway motion inside the manifold.
+
+### **Feasible Projection**
+Projection must produce world‑level quantities within biomechanical or physical limits.
+
+### **Temporal Coherence**
+Relational motion must evolve smoothly:
+
+
+$$
+\frac{d}{dt} M_t \quad \text{is bounded}
+$$
+
+
+---
+
+## **E. Relational Quantities**
+
+### **Relational Displacement**
+A frame‑independent difference between two world‑level quantities.  
+Example in ball‑catching:
+
+
+$$
+M_t = x_b(t) - x_h(t)
+$$
+
+
+### **Time‑to‑Contact (τ)**
+A relational estimate:
+
+
+$$
+\tau = \frac{M_t}{|v_b - v_h|}
+$$
+
+
+Used only as an example; not part of the architecture.
+
+---
+
+# **📐 Notation Reference (Reviewer‑Friendly)**
+
+### **Symbols**
+
+| Symbol | Meaning |
+|--------|---------|
+| $W(t)$ | Reference‑world state at time t |
+| $M_t$ | Relational manifold state |
+| $\Phi$ | Lift from RW to RM |
+| $F$ | Relational update |
+| $\Psi$ | Projection from RM to RW |
+| RWD(t) | Example world‑level update rule |
+| OB | Object basin |
+| RB | Transition region |
+| $\Delta t$ | Time step |
+| $K_\Phi, K_F$ | Boundedness constants |
+| $\varepsilon$ | Basin threshold |
+
+### **Operators**
+
+| Operator | Meaning |
+|----------|---------|
+| \|·\| | Norm (magnitude) |
+| |·| | Absolute value |
+| \mid | “such that” in set notation |
+| \rightarrow | Mapping or transition |
+
+---
