@@ -1500,9 +1500,7 @@ $$
 RWD(t) = x_h(t) + k M_t
 $$
 
-This provides an example reference‑world update based on the relational displacement scaled by a constant k. It is included only to demonstrate how a world‑level quantity might be computed from the manifold state in this specific example. Ψ supplies the observable; RWD(t) shows one possible way the example world might use it.
-
-where $k$ is a gain controlling how strongly the manifold‑state influences hand motion.
+This provides an example reference‑world update based on the relational displacement scaled by a constant k, a gain controlling how strongly the manifold‑state influences hand motion.. It is included only to demonstrate how a world‑level quantity might be computed from the manifold state in this specific example. Ψ supplies the observable; RWD(t) shows one possible way the example world might use it.
 
 Let:
 
