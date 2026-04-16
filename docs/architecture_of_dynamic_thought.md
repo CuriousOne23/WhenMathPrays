@@ -837,20 +837,20 @@ Robustness emerges not from prediction or symbolic correction, but from the stru
 
 ---
 
-## **9.1 Perturbations in the Reference World \(W(t)\)**
+## **9.1 Perturbations in the Reference World $W(t)$**
 
-Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in \(W(t)\).  
-The lift \(\Phi\) maps these changes into the manifold as shifts in relational configuration:
+Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in $W(t)$.  
+The lift $\Phi$ maps these changes into the manifold as shifts in relational configuration:
 
-- small perturbations produce proportionally small changes in \(M_t\)  
+- small perturbations produce proportionally small changes in $M_t$  
 - larger perturbations may move the system toward a new transition region  
 - the cognitive spacesuit ensures the lift remains bounded and well‑posed  
 
-Because \(\Phi\) is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
+Because $\Phi$ is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
 
 ---
 
-## **9.2 Perturbations in the Manifold \(M_t\)**
+## **9.2 Perturbations in the Manifold $M_t$**
 
 Perturbations can also arise internally:
 
@@ -871,7 +871,7 @@ This provides a geometric form of error correction without requiring explicit pr
 
 ## **9.3 Basin Absorption of Small Disturbances**
 
-Within a basin \(OB_i\), the dynamics satisfy:
+Within a basin $OB_i$, the dynamics satisfy:
 
 $$
 M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
@@ -889,7 +889,7 @@ In the ball‑catching example, minor deviations in ball trajectory or hand moti
 
 ## **9.4 Transition Regions and Recovery From Larger Perturbations**
 
-When a perturbation is large enough to move the system out of a basin, it typically enters a transition region \(RB_{ij}\).  
+When a perturbation is large enough to move the system out of a basin, it typically enters a transition region $RB_{ij}$.  
 These regions act as structured pathways for recovery:
 
 - they guide the system toward a new stable configuration  
@@ -1379,5 +1379,170 @@ This appendix provides a simple numeric illustration of:
 - the basin sequence described in Section 7  
 
 The numbers are not physically precise; they are chosen to make the geometry of basin navigation clear and intuitive.
+
+---
+
+Here you go, Jeff — **Appendix C**, written to match the tone, structure, and GitHub‑friendly formatting of Appendices A and B.  
+It is intentionally *simple*, *minimal*, and *illustrative*, because Section 9 is about **robustness**, not about introducing new machinery.
+
+This appendix shows a tiny perturbation in \(W(t)\), how it lifts into \(M_t\), how the manifold dynamics redirect the system into a new basin, and how the projection \(\Psi\) produces a feasible correction.
+
+It’s the smallest possible “whole‑loop under perturbation” example.
+
+---
+
+# **Appendix C: Numeric Illustration of Robustness and Perturbations**
+
+This appendix provides a simple numeric example illustrating how the architecture handles perturbations, as described in Section 9.  
+The goal is to show how a disturbance in the reference world \(W(t)\) propagates through the mapping loop and is absorbed or redirected by the manifold’s basin structure.
+
+---
+
+## **C.1 Setup**
+
+Assume the system is in an **intercept basin**, with relational distance:
+
+$$
+M_t = 0.40\ \text{m}
+$$
+
+Let the ball’s horizontal velocity be:
+
+$$
+v_b = -6.0\ \text{m/s}
+$$
+
+and the hand’s horizontal velocity be:
+
+$$
+v_h = 3.0\ \text{m/s}
+$$
+
+Time step:
+
+$$
+\Delta t = 0.1\ \text{s}
+$$
+
+---
+
+## **C.2 Perturbation in the Reference World $W(t)$**
+
+A sudden gust of wind alters the ball’s velocity:
+
+- before gust: $v_b = -6.0$  
+- after gust: $v_b = -4.0$
+
+This is a perturbation in $W(t)$.
+
+---
+
+## **C.3 Lift Into the Manifold**
+
+The relational update is:
+
+$$
+M_{t+\Delta t} = M_t + \Delta t (v_b - v_h)
+$$
+
+Before the gust:
+
+$$
+M_{t+\Delta t}^{\text{before}} = 0.40 + 0.1(-6.0 - 3.0)
+$$
+
+$$
+M_{t+\Delta t}^{\text{before}} = 0.40 - 0.9 = -0.50\ \text{m}
+$$
+
+This would have placed the system deep in the **catch basin**.
+
+After the gust:
+
+$$
+M_{t+\Delta t}^{\text{after}} = 0.40 + 0.1(-4.0 - 3.0)
+$$
+
+$$
+M_{t+\Delta t}^{\text{after}} = 0.40 - 0.7 = -0.30\ \text{m}
+$$
+
+This is still moving toward the catch basin, but not as quickly.
+
+The perturbation in $W(t)$ appears as a **shift in relational motion**.
+
+---
+
+## **C.4 Basin Response**
+
+Let the basin thresholds be:
+
+- intercept basin: $0.15 < |M_t| \le 1.0$  
+- catch basin: $|M_t| \le 0.15$
+
+Before the gust:
+
+- next state would have been $-0.50$, already inside the catch basin
+
+After the gust:
+
+- next state is $-0.30$, still in the intercept basin
+
+The gust **delays** the transition into the catch basin.
+
+The basin structure absorbs the perturbation without destabilizing the system.
+
+---
+
+## **C.5 Projection Back to the Reference World**
+
+Let the projection be:
+
+$$
+RWD(t) = x_h(t) + k M_t
+$$
+
+with $k = 0.5$.
+
+Before the gust:
+
+$$
+RWD^{\text{before}} = x_h(t) + 0.5(-0.50)
+$$
+
+After the gust:
+
+$$
+RWD^{\text{after}} = x_h(t) + 0.5(-0.30)
+$$
+
+The gust produces a **smaller corrective movement**, but still a feasible one.
+
+The cognitive spacesuit ensures:
+
+- no discontinuity  
+- no impossible motor command  
+- no overshoot  
+
+---
+
+## **C.6 Summary**
+
+This simple example illustrates how:
+
+- a perturbation in $W(t)$ (wind gust)  
+- lifts into a shift in $M_t$  
+- alters the timing of basin transitions  
+- and produces a feasible correction in $RWD(t)$
+
+The architecture remains stable because:
+
+- the lift is bounded  
+- the manifold update is bounded  
+- basins absorb small disturbances  
+- transition regions guide recovery  
+- the projection remains feasible  
+
+This demonstrates the inherent robustness of the mapping loop under perturbations.
 
 ---
