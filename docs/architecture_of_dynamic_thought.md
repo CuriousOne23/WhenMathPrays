@@ -25,7 +25,7 @@ The purpose of presenting this architecture is to clarify the structural gap bet
 
 ---
 
-## 3. The mapping architecture
+# **3. The mapping architecture**
 
 This section introduces the core architectural loop that connects the ordinary world of experience with a manifold of relational meaning. The goal is to describe a simple, mechanical structure: how a configuration in the world is mapped into a relational space, how motion unfolds within that space, and how the result is expressed back into the world as dynamic behavior.
 
@@ -33,7 +33,7 @@ A boy catching a ball is used as a deliberately simple thought example to demons
 
 ---
 
-## 3.1 The world as input
+## **3.1 The world as input**
 
 We denote the state of the world at time $t$ by
 
@@ -50,9 +50,9 @@ In the ball‑catching example, $W(t)$ includes the ball’s position and veloci
 
 ---
 
-## 3.2 Mapping into the manifold
+## **3.2 Mapping into the manifold**
 
-The manifold is a relational state space in which meaning is expressed as motion. A world‑state $W(t)$ is mapped into an initial manifold configuration by a mapping
+The manifold is a relational state space in which meaning is expressed as motion. A world‑state $W(t)$ is mapped into an initial manifold configuration by
 
 $$
 M_t = \Phi(W(t)).
@@ -73,7 +73,7 @@ The manifold does not store objects; it stores relations among features derived 
 
 ---
 
-## 3.3 Relational motion in the manifold
+## **3.3 Relational motion in the manifold**
 
 Once initialized, the manifold evolves according to relational dynamics:
 
@@ -92,11 +92,13 @@ The architecture does not specify a particular form for $F$ or a specific metric
 - trajectories $M_t$ encode the unfolding of interpretation,  
 - relational structure determines how the system evolves.
 
+**Object basins (OBs)** arise wherever relational motion is stable. An OB is any definable, nameable, or stabilizable relational configuration in the manifold. OBs are not limited to physical or sensory relations: they include verbs, nouns, smells, sights, ideas, symbolic structures, abstract concepts, and narrative forms. Anything that can be held as a stable relational configuration forms an OB. These are the only basins in the architecture; all transitions between them occur through transition regions (RBs).
+
 In the ball‑catching example, the trajectory $\{M_t\}$ encodes the evolving relation between the ball and the hand, guiding the timing and motion required to intercept the ball.
 
 ---
 
-## 3.4 Mapping back to the world: RWD
+## **3.4 Mapping back to the world: RWD**
 
 The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RWD)**, which represent outward behavior:
 
@@ -120,12 +122,12 @@ In the ball‑catching example, $RWD(t)$ is the boy moving his hand into the rig
 
 ---
 
-## 3.5 The full mapping loop
+## **3.5 The full mapping loop**
 
 The architecture forms a closed perception–action loop:
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi\} RWD(t).
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi} RWD(t).
 $$
 
 In this diagram:
@@ -141,7 +143,7 @@ This loop describes:
 
 1. **World → Manifold:** perception becomes a relational configuration ($W(t) \to M_t$).  
 2. **Manifold → Manifold:** meaning unfolds as motion ($M_t \to M_{t + \Delta t}$).  
-3. **Manifold → World:** motion becomes behavior ($M_t \to {RWD(t)}$).
+3. **Manifold → World:** motion becomes behavior ($M_t \to RWD(t)$).
 
 The boy catching a ball is used purely for thought simplicity: it is a familiar, low‑level example that makes the mapping process into the manifold and back easy to visualize. The same loop can describe other everyday actions such as reaching for a cup or turning one’s head toward a sound.
 
