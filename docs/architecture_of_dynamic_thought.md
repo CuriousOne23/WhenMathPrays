@@ -381,7 +381,7 @@ Appendix A provides a numeric illustration of these constraints using simple par
 
 ---
 
-# **7. Basin Navigation in Real‑Time Behavior**
+# **7. Basin Navigation in Real‑Time Behavior (Rewritten)**
 
 The manifold introduced in Section 3 contains **object basins** (OBs: stable relational configurations) and **transition regions** (RBs: pathways between them) that guide how the system moves during action.  
 Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
@@ -394,7 +394,7 @@ OBs provide stability; RBs provide pathways; the mapping loop provides motion.
 
 ## **7.1 Basins as Stable Relational Configurations**
 
-An object basin $OB_i$ is a region of the manifold where relational motion is stable:
+An object basin `$OB_i$` is a region of the manifold where relational motion is stable:
 
 $$
 M_t \in OB_i \Rightarrow F(M_t) \in OB_i.
@@ -509,13 +509,13 @@ The cognitive spacesuit ensures that basin transitions remain stable:
 
 Together, these constraints ensure:
 
-$$
+$$  
 \text{stable OB}
 \rightarrow
 \text{stable RB}
 \rightarrow
 \text{stable OB}.
-$$
+$$  
 
 This is the architectural basis for smooth, coordinated behavior.
 
@@ -536,26 +536,23 @@ Appendix B provides a numeric illustration of basin navigation.
 
 ---
 
-# **8. Implications for Science**
+# **8. Implications for Science (Rewritten)**
 
-The mapping loop, basin geometry, and cognitive spacesuit together define an operational architecture for understanding how systems maintain coherence while moving between world‑state and manifold‑state.  
-This section outlines how the same structural principles appear across scientific domains without introducing new primitives or assumptions.  
-The goal is not to reinterpret these fields, but to show how relational geometry provides a common scaffold wherever internal dynamics must coordinate with outward behavior.
+The mapping loop, basin geometry, and cognitive spacesuit together define an operational architecture for understanding how systems maintain coherence while moving between world‑state and manifold‑state. This section outlines how the same structural principles appear across scientific domains without introducing new primitives or assumptions. The goal is not to reinterpret these fields, but to show how relational geometry provides a common scaffold wherever internal dynamics must coordinate with outward behavior.
 
 ---
 
 ## **8.1 Physics: Relational Stability and Constraint**
 
-Physical systems often exhibit stable regions and transition pathways that mirror basin geometry.  
-Examples include orbital capture, phase transitions, and mechanical equilibria.  
+Physical systems often exhibit stable regions and transition pathways that mirror basin geometry. Examples include orbital capture, phase transitions, and mechanical equilibria.  
+
 These phenomena involve:
 
 - stable regions of attraction,  
 - transition corridors shaped by constraints,  
 - bounded evolution under physical laws.
 
-The mapping loop provides a way to describe how a physical system moves between such regions while respecting feasibility constraints.  
-The cognitive spacesuit parallels the role of physical laws that prevent discontinuous or impossible transitions [8].
+The mapping loop provides a way to describe how a physical system moves between such regions while respecting feasibility constraints. The cognitive spacesuit parallels the role of physical laws that prevent discontinuous or impossible transitions \[8\].
 
 ---
 
@@ -575,14 +572,13 @@ These processes rely on:
 - transition pathways shaped by morphology and environment,  
 - regulatory layers that maintain feasibility and coherence.
 
-The architecture provides a geometric way to describe how biological systems maintain stability while adapting to changing conditions [9].
+The architecture provides a geometric way to describe how biological systems maintain stability while adapting to changing conditions \[9\].
 
 ---
 
 ## **8.3 Affect and Internal Regulation**
 
-Affective dynamics can be viewed as motion through relational basins that shape how an organism responds to internal and external conditions.  
-These basins are not symbolic states; they are structured regions of relational configuration that influence:
+Affective dynamics can be viewed as motion through relational basins that shape how an organism responds to internal and external conditions. These basins are not symbolic states; they are structured regions of relational configuration that influence:
 
 - readiness,  
 - sensitivity,  
@@ -602,7 +598,7 @@ The architecture provides:
 - a way to describe stability without discrete modes,  
 - a framework for coordinating internal dynamics with outward behavior.
 
-Basins and transition regions offer a natural way to structure internal relational configurations without requiring explicit symbolic encoding [10].
+Basins and transition regions offer a natural way to structure internal relational configurations without requiring explicit symbolic encoding \[10\].
 
 ---
 
@@ -622,7 +618,7 @@ These systems exhibit:
 - transition regions that enable reconfiguration,  
 - regulatory layers that maintain feasibility across agents.
 
-The mapping loop generalizes to multi‑agent settings by treating the joint world‑state as the input to $\Phi$ and the joint relational manifold as the space in which coordination unfolds.
+The mapping loop generalizes to multi‑agent settings by treating the joint world‑state as the input to `$\Phi$` and the joint relational manifold as the space in which coordination unfolds.
 
 ---
 
@@ -636,15 +632,13 @@ Across domains, the same structural elements recur:
 - regulatory layers that maintain coherence,  
 - continuous motion between internal and external regimes.
 
-The architecture does not claim that these domains are identical.  
-Instead, it highlights a shared geometric structure that appears whenever a system must coordinate internal relational dynamics with outward behavior.
+The architecture does not claim that these domains are identical. Instead, it highlights a shared geometric structure that appears whenever a system must coordinate internal relational dynamics with outward behavior.
 
 ---
 
 ## **8.7 Summary**
 
-The mapping loop, basin geometry, and cognitive spacesuit together provide a unifying framework for understanding stability, coordination, and adaptive behavior across scientific domains.  
-This framework does not replace existing theories; it offers a geometric lens through which diverse phenomena can be understood in a common structural language.
+The mapping loop, basin geometry, and cognitive spacesuit together provide a unifying framework for understanding stability, coordination, and adaptive behavior across scientific domains. This framework does not replace existing theories; it offers a geometric lens through which diverse phenomena can be understood in a common structural language.
 
 ---
 
