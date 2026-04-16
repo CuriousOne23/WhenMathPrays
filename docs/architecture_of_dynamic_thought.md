@@ -1577,22 +1577,22 @@ The goal is not physical accuracy, but to show how concrete numbers can illustra
 Define three basins in terms of relational distance $M_t$:
 
 - **Tracking basin:**
-- 
-  $$
-  M_t > 1.0\ \text{m}
-  $$
+
+$$
+M_t > 1.0\ \text{m}
+$$
 
 - **Intercept basin:**
-- 
-  $$
-  0.15\ \text{m} < M_t \le 1.0\ \text{m}
-  $$
+
+$$
+0.15\ \text{m} < M_t \le 1.0\ \text{m}
+$$
 
 - **Catch basin:**
-- 
-  $$
-  |M_t| \le 0.15\ \text{m}
-  $$
+
+$$
+|M_t| \le 0.15\ \text{m}
+$$
 
 These thresholds are illustrative and correspond to the relational geometry described in Section 7.
 
@@ -1603,16 +1603,16 @@ These thresholds are illustrative and correspond to the relational geometry desc
 Define two transition regions:
 
 - **Tracking → Intercept:**
-- 
-  $$
-  0.9\ \text{m} < M_t \le 1.0\ \text{m}
-  $$
+
+$$
+0.9\ \text{m} < M_t \le 1.0\ \text{m}
+$$
 
 - **Intercept → Catch:**
-- 
-  $$
-  0.15\ \text{m} < M_t \le 0.20\ \text{m}
-  $$
+
+$$
+0.15\ \text{m} < M_t \le 0.20\ \text{m}
+$$
 
 These RBs act as funnels guiding the system between basins.
 
