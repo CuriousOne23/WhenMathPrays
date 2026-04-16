@@ -465,6 +465,26 @@ $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$
 
+<br>
+<br>
+  
+```mermaid
+flowchart LR
+    W[World state Wt] -->|Lift Phi| M[Manifold Mt]
+    M -->|Update F| Mnext[Manifold Mt_next]
+    Mnext -->|Project Psi| R[World output RWD]
+
+    subgraph Basins_on_M[Basins on the manifold]
+        T[OB_track]
+        I[OB_intercept]
+        C[OB_catch]
+        RTI[RB_track_to_intercept]
+        RIC[RB_intercept_to_catch]
+    end
+
+    M -.trajectory.-> T --> RTI --> I --> RIC --> C
+```
+
 As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through OBs and RBs, and $\Psi$ projects the resulting relational motion into outward behavior.
 
 ---
