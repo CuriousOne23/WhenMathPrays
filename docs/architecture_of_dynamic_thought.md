@@ -1527,9 +1527,21 @@ is satisfied, since $1.5 \le 2.0$.
 
 ---
 
-### A.5 Basin threshold and time‑to‑contact
+### A.5 Example basin: “catch” region
 
-Define a simple “catch” basin in the manifold as:
+A basin in the manifold is recognized by its geometric properties: trajectories entering a neighborhood around the region converge toward it, the local curvature induces inward flow, and small perturbations do not push the state away. For the ball‑catching example, the relevant attractor corresponds to near‑zero relative displacement.
+
+Define a simple “catch” basin as the region where the relational displacement falls below a small threshold:
+
+$$
+B_{\text{catch}} = \{\, M_t : |M_t| \le \varepsilon \,\}
+$$
+
+with, for example, $\varepsilon = 0.1\ \text{m}$.
+
+This region behaves as a basin because trajectories with decreasing relative displacement tend to converge toward $M_t = 0$, and small perturbations still return toward this region. It provides a minimal illustration of how a stable configuration appears as a basin in the manifold.
+
+Given above then we can define a simple example “catch” basin in the manifold as:
 
 $$
 |M_t| < 0.15\ \text{m}
