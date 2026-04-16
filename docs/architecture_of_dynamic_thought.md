@@ -386,8 +386,7 @@ The manifold introduced in Section 3 contains **object basins** (OBs: stable rel
 Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
 This section describes how the system **navigates basins** during real‑time behavior, using the ball‑catching scenario as a concrete example.
 
-The key idea is that **behavior corresponds to motion through basins**, not to symbolic decisions or semantic states.  
-OBs provide stability; RBs provide pathways; the mapping loop provides motion.
+The key idea is that **behavior corresponds to motion through basins**, not to symbolic decisions or semantic states. OBs provide stability; RBs provide pathways; the mapping loop provides motion.
 
 ---
 
