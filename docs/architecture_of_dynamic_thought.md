@@ -1382,13 +1382,15 @@ $$
 
 ---
 
-### A.2 Lift into the manifold: $\Phi$
+### A.2 Lift into the manifold: Φ
 
-Define a simple relational lift as horizontal ball‑to‑hand distance:
+Define a simple relational lift as the horizontal ball‑to‑hand displacement:
 
 $$
-M_t = \Phi(W(t)) = x_b(t) - x_h(t)
+M_t = Φ(W(t)) = x_b(t) - x_h(t)
 $$
+
+We use the relative displacement because the manifold does not encode absolute positions. It only encodes relational structure. The quantity x_b(t) - x_h(t) is the minimal, frame‑independent primitive that determines the catching dynamics. Any absolute coordinate choice would introduce structure the manifold does not use.
 
 At $t = 0.4\ \text{s}$:
 
@@ -1475,13 +1477,25 @@ is satisfied, for example, with $K_F = 0.5$, since $0.2 \le 0.5$.
 
 ---
 
-### A.4 Projection back to the reference world: $\Psi$
+### A.4 Collapse back to the reference world: Ψ
 
-Define a simple projection rule:
+The collapse function Ψ maps the updated manifold state back into the reference‑world variables used in the example. Because Φ extracts only the relational displacement, Ψ must reconstruct the corresponding world‑level observable without adding new structure.
+
+A minimal and frame‑independent collapse is:
+
+$$
+\Psi(M_{t+\Delta t}) = x_h(t+\Delta t) + M_{t+\Delta t}
+$$
+
+This returns the predicted ball position in the reference world by adding the updated relational displacement to the updated hand position. Ψ is smooth, invertible with respect to Φ, and introduces no additional assumptions. It simply projects the manifold update back into the coordinates of the example world.
+
+In this appendix we also introduce a simple, example‑specific projection rule for reference‑world dynamics (RWD). This is not a second Ψ, nor an instantiation of Ψ. It is a separate illustrative rule used only for the ball‑catching example:
 
 $$
 RWD(t) = x_h(t) + k M_t
 $$
+
+RWD(t) provides a toy world‑level update based on the relational displacement scaled by a constant k. It is included only to demonstrate how a reference‑world quantity might be computed from the manifold state in this specific example.
 
 where $k$ is a gain controlling how strongly the manifold‑state influences hand motion.
 
