@@ -11,7 +11,7 @@ This paper presents an architectural framework that describes this process using
 A mapping loop
 
 $$
-W(t) \xrightarrow{\;\Phi\;} M_t \xrightarrow{\;F\;} M_{t+\Delta t} \xrightarrow{\;\Psi\;} RWD(t)
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
 $$
 
 links the reference world, a relational manifold, and the agent’s outward behavior.
@@ -37,7 +37,7 @@ This paper develops an architectural framework in which behavior emerges from re
 A mapping loop connects the reference world $W(t)$, a relational manifold $M_t$, and outward behavior $RWD(t)$:
 
 $$
-W(t) \xrightarrow{\;\Phi\;} M_t \xrightarrow{\;F\;} M_{t+\Delta t} \xrightarrow{\;\Psi\;} RWD(t)
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
 $$
 
 Within the manifold, basins provide stability \[4\], transition regions support reconfiguration, and the cognitive spacesuit ensures that all transitions remain bounded and feasible \[7\].
