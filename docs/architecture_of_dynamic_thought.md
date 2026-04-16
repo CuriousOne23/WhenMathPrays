@@ -157,9 +157,11 @@ This manifold contains **stable regions** and **transition‑shaping regions** t
 To describe this space without enumerating its full complexity, we introduce two indexed families:
 
 $$
-OB = \{\, OB_i \mid i \in I \,\}, \qquad
-RB = \{\, RB_j \mid j \in J \,\}.
+\mathcal{OB} = \\{\ OB_i \mid i \in I \\\}, \qquad
+\mathcal{RB} = \\{\ RB_j \mid j \in J \\\}.
 $$
+
+
 
 - Each **Object Basin** $OB_i$ is a **stable region** of $\mathcal{M}$ corresponding to a recurring relational configuration.
 - Each **Relational Basin** $RB_j$ is a **transition‑shaping region** that governs how trajectories move between object basins.
