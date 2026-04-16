@@ -581,20 +581,138 @@ Appendix A provides a numeric illustration of these constraints using simple par
 
 # **7. Basin Navigation in Real‑Time Behavior**
 
-**Purpose:**  
-Show how the system moves between basins during action.
+The manifold introduced in Section 3.5 contains **basins** (stable relational configurations) and **transition regions** (RBs) that guide how the system moves during action.  
+Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
+This section describes how the system **navigates basins** during real‑time behavior, using the ball‑catching scenario as a concrete example.
 
-**Content:**
+The key idea is that **behavior corresponds to motion through basins**, not to symbolic decisions or semantic states.  
+Basins provide stability; RBs provide pathways; the mapping loop provides motion.
 
-- Basins as stable relational configurations  
-- Transition regions (RBs) as pathways between basins  
-- How \(F\) moves the system across RBs  
-- How the architecture avoids “basin lock‑in”  
-- How the system stabilizes in the “catch” basin
+---
 
-**Example:**  
-Tracking → Intercept → Catch  
-Each is a basin; transitions are governed by relational motion.
+## **7.1 Basins as Stable Relational Configurations**
+
+A basin $OB_i$ is a region of the manifold where relational motion is stable:
+
+$$
+M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
+$$
+
+This expresses **self‑consistency**: once inside a basin, the system tends to remain there unless driven toward a transition region.
+
+In the ball‑catching example:
+
+- a **tracking basin** stabilizes relational motion while the ball is far away  
+- an **intercept basin** stabilizes motion as the hand moves toward the ball  
+- a **catch basin** stabilizes motion when the hand and ball are nearly aligned
+
+These basins are not symbolic states; they are **regions of relational geometry**.
+
+---
+
+## **7.2 Transition Regions (RBs)**
+
+Between basins lie **transition regions** $RB_{ij}$ that allow the system to move from one stable configuration to another:
+
+$$
+M_t \in RB_{ij} \;\Rightarrow\; F(M_t) \in OB_j
+$$
+
+Transition regions are **funnels**: they guide the system from one basin to the next without discontinuity.
+
+In the ball‑catching example:
+
+- the system leaves the tracking basin  
+- enters a transition region $RB_{\text{track}\rightarrow\text{intercept}}$  
+- and flows into the intercept basin
+
+The cognitive spacesuit (Section 6) ensures that these transitions remain bounded and feasible.
+
+---
+
+## **7.3 Real‑Time Navigation Through Basins**
+
+During behavior, the system moves through a sequence of basins:
+
+$$
+OB_{\text{track}} \;\rightarrow\; RB_{\text{track}\rightarrow\text{intercept}} \;\rightarrow\; OB_{\text{intercept}} \;\rightarrow\; RB_{\text{intercept}\rightarrow\text{catch}} \;\rightarrow\; OB_{\text{catch}}
+$$
+
+This sequence corresponds to:
+
+1. **Tracking** the ball  
+2. **Initiating interception**  
+3. **Closing the relational distance**  
+4. **Aligning hand and ball**  
+5. **Stabilizing the catch**
+
+The mapping loop drives this motion:
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
+
+As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through basins, and $\Psi$ projects the resulting relational motion into outward behavior.
+
+---
+
+## **7.4 Basin Geometry and Timing**
+
+Timing emerges from the geometry of the basins and the relational gradients within them.
+
+A simple temporal‑coherence condition:
+
+$$
+\frac{d}{dt} M_t < 0
+$$
+
+ensures that the relational distance decreases as the system moves toward the catch basin.
+
+The steepness of relational gradients determines:
+
+- how quickly the system leaves one basin  
+- how strongly it is pulled into the next  
+- how timing adjusts as the ball accelerates or decelerates
+
+In the ball‑catching example:
+
+- as the ball approaches, relational gradients steepen  
+- the intercept basin becomes more attractive  
+- the system transitions earlier or later depending on $M_t$ and $F$
+
+This produces **adaptive timing** without requiring prediction or semantic interpretation.
+
+---
+
+## **7.5 Stability Across Basin Transitions**
+
+The cognitive spacesuit ensures that basin transitions remain stable:
+
+- bounded lift (Section 6.2) prevents discontinuities entering the manifold  
+- bounded update (Section 6.3) prevents overshoot within the manifold  
+- feasible projection (Section 6.4) prevents impossible motor commands  
+- temporal coherence (Section 6.5) ensures relational convergence
+
+Together, these constraints ensure:
+
+$$
+\text{stable basin} \;\rightarrow\; \text{stable transition} \;\rightarrow\; \text{stable basin}
+$$
+
+This is the architectural basis for smooth, coordinated behavior.
+
+---
+
+## **7.6 Summary**
+
+Basin navigation provides the structural backbone of real‑time behavior:
+
+- basins stabilize relational motion  
+- transition regions guide movement between basins  
+- the mapping loop drives continuous motion  
+- the cognitive spacesuit ensures bounded, feasible, coherent traversal
+
+In the ball‑catching example, the system moves through a sequence of basins that correspond to tracking, intercepting, and catching — not as symbolic states, but as **regions of relational geometry** shaped by the manifold and regulated by the spacesuit.
 
 ---
 
