@@ -444,29 +444,138 @@ These components form a coherent architecture for integrating reference‑world 
 
 # **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop**
 
-**Purpose:**  
-Describe the translation layer that ensures stable movement between:
+The mapping loop introduced in Section 3.5,
 
-- world‑state \(W(t)\)  
-- manifold‑state \(M_t\)  
-- outward behavior \(RWD(t)\)
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
 
-**Key components:**
+enables a system to move between the reference world and the manifold.  
+However, transitions between these regimes can become unstable if not properly constrained.  
+The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
 
-- Why transitions between regimes can destabilize behavior  
-- How the “spacesuit” constrains transitions  
-- How it prevents runaway dynamics  
-- How it maintains coherence across basins  
-- How it ensures that \( \Phi \) and \( \Psi \) remain well‑posed  
-- How it prevents the manifold from injecting unbounded relational motion into the reference world
+The spacesuit does not introduce new dynamics.  
+Instead, it regulates how $\Phi$, $F$, and $\Psi$ interact so that the system can traverse the loop without runaway amplification, oscillation, or loss of coordination.  
+Appendix A provides simple numeric examples illustrating these constraints in a ball‑catching scenario.
 
-**Example:**  
-In the ball‑catching scenario, the spacesuit ensures:
+---
 
-- the hand doesn’t overshoot,  
-- the system doesn’t oscillate between basins,  
-- timing remains consistent,  
-- the projection \( \Psi(M_t) \) produces feasible motor output.
+## **6.1 Why Regulation Is Needed**
+
+The reference world and the manifold operate under different constraints:
+
+- the reference world requires physically feasible behavior  
+- the manifold contains relational gradients, basins, and transitions that may evolve more freely than the body can express
+
+Without a regulating layer, the mapping loop could:
+
+- push the system into unreachable configurations  
+- generate motor outputs that exceed physical limits  
+- oscillate between basins  
+- destabilize timing
+
+The spacesuit prevents these failure modes by ensuring that each step of the loop respects both worlds.
+
+---
+
+## **6.2 Regulating the Lift: Constraints on $\Phi$**
+
+The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold.  
+The spacesuit ensures that this lift is stable and well‑posed.
+
+### **Bounded Lift**
+
+$$
+\|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \|W(t+\Delta t) - W(t)\|
+$$
+
+This ensures that small changes in the world produce proportionally small changes in the manifold.  
+Appendix A shows a simple numeric example using ball and hand positions.
+
+---
+
+## **6.3 Regulating Manifold Motion: Constraints on $F$**
+
+The manifold dynamics $F$ evolve $M_t$ through relational motion.  
+The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
+
+Lipshitcz-bounded: $𝐾_\phi$ and $𝐾_𝐹$ are positive constants whose existence ensures that the lift and manifold update remain bounded. Their specific values are not required; only their existence matters for stability.
+
+### **Bounded Update**
+
+$$
+\|F(M_t) - M_t\| \le K_F
+$$
+
+This prevents runaway relational motion or abrupt transitions between distant regions of the manifold.
+
+### **Basin‑Safe Evolution**
+
+$$
+M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i \cup RB_{ij}
+$$
+
+This ensures that the system moves only within a basin or through a valid transition region.  
+Appendix A illustrates this with a simple “catch basin” threshold.
+
+---
+
+## **6.4 Regulating the Projection: Constraints on $\Psi$**
+
+The mapping $\Psi$ projects manifold‑state back into the reference world as $RWD(t)$.  
+The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
+
+### **Feasible Projection**
+
+$$
+\|\Psi(M_t)\| \le \text{(biomechanical limit)}
+$$
+
+This ensures that the manifold does not request actions the body cannot perform.  
+Appendix A provides a simple numeric example using a reachability limit.
+
+---
+
+## **6.5 Loop‑Level Coherence**
+
+The spacesuit also ensures coherence across the entire loop.
+
+### **Temporal Coherence**
+
+In tasks requiring convergence (e.g., catching a ball), relational distance must decrease:
+
+$$
+\frac{d}{dt} M_t < 0
+$$
+
+Appendix A includes a simple time‑to‑contact calculation illustrating this condition.
+
+### **Geometric Coherence**
+
+Relational gradients in the manifold must correspond to feasible adjustments in the reference world.
+
+### **Basin Coherence**
+
+Transitions between basins in the manifold must correspond to coordinated shifts in outward behavior.
+
+---
+
+## **6.6 Summary**
+
+The cognitive spacesuit ensures that:
+
+- $\Phi$ lifts world‑state into the manifold safely  
+- $F$ evolves manifold‑state within stable relational structure  
+- $\Psi$ projects manifold‑state back into feasible behavior  
+- the entire loop remains coherent across time
+
+In the ball‑catching example, the spacesuit prevents the system from:
+
+- overshooting the ball  
+- oscillating between basins  
+- producing physically impossible movements
+
+Appendix A provides a numeric illustration of these constraints using simple parabolic motion and relational updates.
 
 ---
 
