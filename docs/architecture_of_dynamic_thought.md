@@ -145,16 +145,16 @@ Low‑dynamic information therefore serves as the structural bridge between stat
 
 ---
 
-# **5. The Mapping Loop Illustrated Through a Boy Catching a Ball**
+# **5. The Mapping Loop Illustrated Through a Boy Catching a Ball (Rewritten)**
 
 Section 3.5 introduced the architectural loop:
-
-$$
+  
+$$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
-$$
+$$  
 
 This section illustrates how the loop operates in a concrete scenario: **a boy catching a ball**.  
-The goal is not to redefine the loop, but to show how each component functions when applied to an ordinary, mechanically simple behavior.
+The goal is not to redefine the loop, but to show how each component functions in an ordinary, mechanically simple behavior.
 
 ---
 
@@ -164,13 +164,13 @@ At time $t$, the **world‑state** $W(t)$ includes:
 
 - the ball’s position and velocity,  
 - the boy’s arm and body configuration,  
-- environmental constraints such as gravity and ground plane.
+- environmental constraints such as gravity and the ground plane.
 
 The mapping $\Phi$ lifts this world‑state into the manifold:
-
-$$
+  
+$$  
 M_t = \Phi(W(t)).
-$$
+$$  
 
 In the manifold, these elements appear as **relational structure**:  
 the ball’s trajectory relative to the hand, reachable workspace, timing constraints, and the basins associated with tracking, interception, and catching.
@@ -179,30 +179,30 @@ the ball’s trajectory relative to the hand, reachable workspace, timing constr
 
 ## **5.2 Relational Motion: $M_t \xrightarrow{F} M_{t+\Delta t}$**
 
-The manifold dynamics $F$ evolve the state forward:
+The manifold dynamics `$F$` evolve the state forward:
 
-$$
+$$  
 M_{t+\Delta t} = F(M_t).
-$$
+$$  
 
 In the catching example, $F$ governs how the system:
 
 - updates relational alignment with the ball,  
 - adjusts timing as the ball approaches,  
-- transitions between basins (e.g., from a tracking basin to an interception basin),  
+- transitions between basins (e.g., from tracking to interception),  
 - stabilizes in the basin corresponding to catching.
 
-The resulting trajectory $\\{ M_t \\}$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
+The resulting trajectory $\{M_t\}$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
 
 ---
 
 ## **5.3 Manifold Back to Reference World: $M_t \xrightarrow{\Psi} RWD(t)$**
 
-The mapping $\Psi$ projects the manifold‑state back into the reference world:
-
+The mapping `$\Psi$` projects the manifold‑state back into the reference world:
+  
 $$
 RWD(t) = \Psi(M_t).
-$$
+$$  
 
 In this example, $RWD(t)$ corresponds to the **observable behavior**:
 
@@ -218,10 +218,10 @@ These actions are not stored in the manifold; they are **expressions** of the ma
 ## **5.4 The Complete Loop in Action**
 
 The catching behavior emerges from the continuous cycling of:
-
-$$
+  
+$$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
-$$
+$$  
 
 Each cycle:
 
@@ -236,8 +236,7 @@ The loop repeats until the ball is caught.
 
 ## **5.5 Why This Example Matters**
 
-This example shows how the architecture operates without invoking semantics or internal representations.  
-The mapping loop provides a geometric account of how a system:
+This example shows how the architecture operates without invoking semantics or internal representations. The mapping loop provides a geometric account of how a system:
 
 - perceives,  
 - stabilizes,  
@@ -248,7 +247,7 @@ through relational motion in the manifold.
 
 The value of the architecture lies in describing:
 
-- the **geometric relational thought space**,  
+- the **relational manifold**,  
 - the **mapping loop**,  
 - and the **basin‑and‑transition structure** that shapes dynamic behavior.
 
