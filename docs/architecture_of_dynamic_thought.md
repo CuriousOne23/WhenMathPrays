@@ -669,22 +669,23 @@ Appendix B provides a numeric illustration of basin navigation.
 # **8. Implications for Science**
 
 The mapping loop, basin geometry, and cognitive spacesuit together define an operational architecture for understanding how systems maintain coherence while moving between world‑state and manifold‑state.  
-This section outlines how this architecture generalizes across scientific domains without introducing new primitives or assumptions.  
-The goal is not to reinterpret these fields, but to show how the same structural principles appear whenever a system must coordinate internal relational dynamics with outward behavior.
+This section outlines how the same structural principles appear across scientific domains without introducing new primitives or assumptions.  
+The goal is not to reinterpret these fields, but to show how relational geometry provides a common scaffold wherever internal dynamics must coordinate with outward behavior.
 
 ---
 
 ## **8.1 Physics: Relational Stability and Constraint**
 
 Physical systems often exhibit stable regions and transition pathways that mirror basin geometry.  
-For example, orbital capture, phase transitions, and mechanical equilibria all involve:
+Examples include orbital capture, phase transitions, and mechanical equilibria.  
+These phenomena involve:
 
-- stable regions of attraction  
-- transition corridors  
-- bounded evolution under constraints  
+- stable regions of attraction,  
+- transition corridors shaped by constraints,  
+- bounded evolution under physical laws.
 
-The mapping loop provides a way to describe how a physical system moves between these regions while respecting feasibility constraints.  
-The cognitive spacesuit parallels the role of physical laws that prevent discontinuous or impossible transitions.
+The mapping loop provides a way to describe how a physical system moves between such regions while respecting feasibility constraints.  
+The cognitive spacesuit parallels the role of physical laws that prevent discontinuous or impossible transitions [8].
 
 ---
 
@@ -693,18 +694,18 @@ The cognitive spacesuit parallels the role of physical laws that prevent discont
 Biological systems routinely navigate structured relational landscapes.  
 Examples include:
 
-- coordinated limb movement  
-- sensorimotor integration  
-- homeostatic regulation  
-- adaptive timing in pursuit or evasion  
+- coordinated limb movement,  
+- sensorimotor integration,  
+- homeostatic regulation,  
+- adaptive timing in pursuit or evasion.
 
 These processes rely on:
 
-- stable relational configurations (basins)  
-- transition pathways shaped by morphology and environment  
-- regulatory layers that maintain feasibility and coherence  
+- stable relational configurations (basins),  
+- transition pathways shaped by morphology and environment,  
+- regulatory layers that maintain feasibility and coherence.
 
-The architecture provides a geometric way to describe how biological systems maintain stability while adapting to changing conditions.
+The architecture provides a geometric way to describe how biological systems maintain stability while adapting to changing conditions [9].
 
 ---
 
@@ -713,10 +714,10 @@ The architecture provides a geometric way to describe how biological systems mai
 Affective dynamics can be viewed as motion through relational basins that shape how an organism responds to internal and external conditions.  
 These basins are not symbolic states; they are structured regions of relational configuration that influence:
 
-- readiness  
-- sensitivity  
-- thresholds for action  
-- patterns of coordination  
+- readiness,  
+- sensitivity,  
+- thresholds for action,  
+- patterns of coordination.
 
 The cognitive spacesuit parallels the regulatory mechanisms that prevent runaway escalation or collapse, ensuring that transitions between affective basins remain bounded and coherent.
 
@@ -727,11 +728,11 @@ The cognitive spacesuit parallels the regulatory mechanisms that prevent runaway
 Artificial systems that integrate perception, internal dynamics, and action face the same structural challenges as biological systems.  
 The architecture provides:
 
-- a geometric alternative to symbolic state machines  
-- a way to describe stability without discrete modes  
-- a framework for coordinating internal dynamics with outward behavior  
+- a geometric alternative to symbolic state machines,  
+- a way to describe stability without discrete modes,  
+- a framework for coordinating internal dynamics with outward behavior.
 
-Basins and transition regions offer a natural way to structure internal representations without requiring explicit symbolic encoding.
+Basins and transition regions offer a natural way to structure internal relational configurations without requiring explicit symbolic encoding [10].
 
 ---
 
@@ -740,16 +741,16 @@ Basins and transition regions offer a natural way to structure internal represen
 When multiple agents interact, their joint behavior often depends on shared relational structure.  
 Examples include:
 
-- coordinated pursuit  
-- flocking and swarming  
-- collaborative manipulation  
-- social alignment  
+- coordinated pursuit,  
+- flocking and swarming,  
+- collaborative manipulation,  
+- social alignment.
 
 These systems exhibit:
 
-- shared basins of coordination  
-- transition regions that enable reconfiguration  
-- regulatory layers that maintain feasibility across agents  
+- shared basins of coordination,  
+- transition regions that enable reconfiguration,  
+- regulatory layers that maintain feasibility across agents.
 
 The mapping loop generalizes to multi‑agent settings by treating the joint world‑state as the input to $\Phi$ and the joint relational manifold as the space in which coordination unfolds.
 
@@ -759,11 +760,11 @@ The mapping loop generalizes to multi‑agent settings by treating the joint wor
 
 Across domains, the same structural elements recur:
 
-- stable regions (basins)  
-- transition pathways (RBs)  
-- bounded evolution under constraints  
-- regulatory layers that maintain coherence  
-- continuous motion between internal and external regimes  
+- stable regions (basins),  
+- transition pathways (RBs),  
+- bounded evolution under constraints,  
+- regulatory layers that maintain coherence,  
+- continuous motion between internal and external regimes.
 
 The architecture does not claim that these domains are identical.  
 Instead, it highlights a shared geometric structure that appears whenever a system must coordinate internal relational dynamics with outward behavior.
@@ -790,9 +791,9 @@ Robustness emerges not from prediction or symbolic correction, but from the stru
 Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in $W(t)$.  
 The lift $\Phi$ maps these changes into the manifold as shifts in relational configuration:
 
-- small perturbations produce proportionally small changes in $M_t$  
-- larger perturbations may move the system toward a new transition region  
-- the cognitive spacesuit ensures the lift remains bounded and well‑posed  
+- small perturbations produce proportionally small changes in $M_t$,  
+- larger perturbations may move the system toward a new transition region,  
+- the cognitive spacesuit ensures the lift remains bounded and well‑posed.
 
 Because $\Phi$ is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
 
@@ -802,16 +803,16 @@ Because $\Phi$ is Lipschitz‑bounded, even noisy or irregular world‑state cha
 
 Perturbations can also arise internally:
 
-- unexpected relational shifts  
-- transient misalignment  
-- small timing errors  
-- drift in relational gradients  
+- unexpected relational shifts,  
+- transient misalignment,  
+- small timing errors,  
+- drift in relational gradients.
 
 The manifold’s basin structure absorbs these disturbances:
 
-- inside a basin, perturbations decay as the system is pulled back toward the basin center  
-- near a transition region, perturbations may redirect the system into a neighboring basin  
-- the cognitive spacesuit ensures that such redirections remain feasible and coherent  
+- inside a basin, perturbations decay as the system is pulled back toward the basin center,  
+- near a transition region, perturbations may redirect the system into a neighboring basin,  
+- the cognitive spacesuit ensures that such redirections remain feasible and coherent.
 
 This provides a geometric form of error correction without requiring explicit prediction or symbolic reasoning.
 
@@ -822,14 +823,14 @@ This provides a geometric form of error correction without requiring explicit pr
 Within a basin $OB_i$, the dynamics satisfy:
 
 $$
-M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
+M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i.
 $$
 
 This means:
 
-- small perturbations do not eject the system  
-- relational motion remains stable  
-- the system naturally returns to the basin’s attractor  
+- small perturbations do not eject the system,  
+- relational motion remains stable,  
+- the system naturally returns to the basin’s attractor.
 
 In the ball‑catching example, minor deviations in ball trajectory or hand motion are absorbed by the tracking or intercept basin without requiring a discrete correction.
 
@@ -840,9 +841,9 @@ In the ball‑catching example, minor deviations in ball trajectory or hand moti
 When a perturbation is large enough to move the system out of a basin, it typically enters a transition region $RB_{ij}$.  
 These regions act as structured pathways for recovery:
 
-- they guide the system toward a new stable configuration  
-- they prevent chaotic or discontinuous responses  
-- they ensure that outward behavior remains feasible  
+- they guide the system toward a new stable configuration,  
+- they prevent chaotic or discontinuous responses,  
+- they ensure that outward behavior remains feasible.
 
 For example, if a gust of wind shifts the ball’s path, the system may leave the current intercept basin and enter a neighboring one.  
 The transition region ensures that this shift is smooth and coordinated.
@@ -853,12 +854,12 @@ The transition region ensures that this shift is smooth and coordinated.
 
 The mapping loop maintains robustness through its structure:
 
-- **bounded lift** prevents discontinuities entering the manifold  
-- **bounded manifold updates** prevent runaway relational motion  
-- **feasible projection** prevents impossible motor outputs  
-- **basins** stabilize relational motion  
-- **transition regions** provide structured recovery pathways  
-- **temporal coherence** ensures convergence toward task‑relevant configurations  
+- **bounded lift** prevents discontinuities entering the manifold,  
+- **bounded manifold updates** prevent runaway relational motion,  
+- **feasible projection** prevents impossible motor outputs,  
+- **basins** stabilize relational motion,  
+- **transition regions** provide structured recovery pathways,  
+- **temporal coherence** ensures convergence toward task‑relevant configurations.
 
 Robustness is not an add‑on; it is a consequence of the geometry.
 
@@ -886,19 +887,13 @@ This section clarifies the distinction without invoking semantics or mentalistic
 
 ## **10.1 Comparison With PID Control**
 
-PID control stabilizes behavior by regulating an error signal:
+PID control stabilizes behavior by regulating an explicit error signal through proportional, integral, and derivative terms.  
+The architecture does not compute or regulate an error. Instead:
 
-- proportional term  
-- integral term  
-- derivative term  
-
-The architecture does not compute or regulate an explicit error.  
-Instead:
-
-- relational distance is encoded implicitly in $M_t$  
-- stability arises from basin geometry  
-- convergence emerges from the dynamics of $F$  
-- the cognitive spacesuit ensures boundedness and feasibility  
+- relational distance is encoded implicitly in $M_t$,  
+- stability arises from basin geometry,  
+- convergence emerges from the dynamics of $F$,  
+- the cognitive spacesuit ensures boundedness and feasibility.
 
 Where PID adjusts behavior by manipulating an error term, the architecture adjusts behavior by **moving through relational basins**.
 
@@ -908,22 +903,22 @@ Where PID adjusts behavior by manipulating an error term, the architecture adjus
 
 MPC relies on:
 
-- explicit prediction of future trajectories  
-- optimization over a finite horizon  
-- repeated solution of a constrained optimization problem  
+- explicit prediction of future trajectories,  
+- optimization over a finite horizon,  
+- repeated solution of a constrained optimization problem.
 
 The architecture does not:
 
-- predict future world‑states  
-- optimize trajectories  
-- compute cost functions  
-- solve constrained optimization problems  
+- predict future world‑states,  
+- optimize trajectories,  
+- compute cost functions,  
+- solve constrained optimization problems.
 
 Instead:
 
-- $\Phi$ lifts the current world‑state into relational geometry  
-- $F$ evolves the manifold state according to relational gradients  
-- $\Psi$ projects the result into feasible outward behavior  
+- $\Phi$ lifts the current world‑state into relational geometry,  
+- $F$ evolves the manifold state according to relational gradients,  
+- $\Psi$ projects the result into feasible outward behavior.
 
 Where MPC plans ahead, the architecture **flows** through relational structure.
 
@@ -933,22 +928,22 @@ Where MPC plans ahead, the architecture **flows** through relational structure.
 
 Symbolic planning uses:
 
-- discrete states  
-- symbolic operators  
-- search over possible action sequences  
+- discrete states,  
+- symbolic operators,  
+- search over possible action sequences.
 
 The architecture does not contain:
 
-- symbolic states  
-- discrete transitions  
-- search procedures  
-- propositional operators  
+- symbolic states,  
+- discrete transitions,  
+- search procedures,  
+- propositional operators.
 
 Instead:
 
-- basins provide stable regions of relational configuration  
-- transition regions provide continuous pathways  
-- the mapping loop drives motion without discrete choice  
+- basins provide stable regions of relational configuration,  
+- transition regions provide continuous pathways,  
+- the mapping loop drives motion without discrete choice.
 
 Where symbolic planning selects actions, the architecture **moves through geometry**.
 
@@ -958,25 +953,25 @@ Where symbolic planning selects actions, the architecture **moves through geomet
 
 Across classical control frameworks, stability is achieved through:
 
-- error regulation  
-- prediction  
-- symbolic reasoning  
-- discrete state transitions  
+- error regulation,  
+- prediction,  
+- symbolic reasoning,  
+- discrete state transitions.
 
 The architecture replaces these mechanisms with:
 
-- **basins** for stability  
-- **transition regions** for reconfiguration  
-- **bounded lift** for well‑posed mapping  
-- **bounded update** for stable manifold evolution  
-- **feasible projection** for physically realizable behavior  
+- **basins** for stability,  
+- **transition regions** for reconfiguration,  
+- **bounded lift** for well‑posed mapping,  
+- **bounded update** for stable manifold evolution,  
+- **feasible projection** for physically realizable behavior.
 
 This provides a unified alternative because:
 
-- stability is geometric, not algorithmic  
-- coordination emerges from relational structure  
-- robustness arises from basin absorption and RB routing  
-- no symbolic or predictive machinery is required  
+- stability is geometric, not algorithmic,  
+- coordination emerges from relational structure,  
+- robustness arises from basin absorption and RB routing,  
+- no symbolic or predictive machinery is required.
 
 The architecture is not a variant of classical control; it is a **different organizing principle**.
 
@@ -996,25 +991,25 @@ This offers a geometric alternative to classical control without invoking semant
 Artificial agents that integrate perception, internal dynamics, and outward behavior face the same structural challenges as biological systems: they must coordinate motion through a changing world while maintaining stability, feasibility, and coherence.  
 The architecture presented here offers a geometric framework for organizing this coordination without relying on symbolic state machines, predictive optimization, or handcrafted error terms.
 
-This section outlines how the components of the mapping loop— $\Phi$, $F$, and $\Psi$—can be instantiated in artificial systems, and how basins, transition regions, and the cognitive spacesuit provide a natural stability structure for embodied or embedded agents.
+This section outlines how the components of the mapping loop—$\Phi$, $F$, and $\Psi$—can be instantiated in artificial systems, and how basins, transition regions, and the cognitive spacesuit provide a natural stability structure for embodied or embedded agents.
 
 ---
 
 ## **11.1 Implementing the Lift $\Phi$**
 
 In artificial systems, the lift $\Phi$ maps the reference world $W(t)$ into a relational manifold.  
-This mapping can be implemented using:
+This mapping may be implemented using:
 
-- geometric encoders  
-- relational feature extractors  
-- learned embeddings  
-- structured perception modules  
+- geometric encoders,  
+- relational feature extractors,  
+- learned embeddings,  
+- structured perception modules.
 
-The key requirement is not the specific mechanism, but the **boundedness** of the lift:
+The essential requirement is **boundedness**:
 
-- small changes in $W(t)$ must produce small changes in $M_t$  
-- the mapping must avoid discontinuities  
-- the output must remain within the feasible region of the manifold  
+- small changes in $W(t)$ must produce small changes in $M_t$,  
+- the mapping must avoid discontinuities,  
+- the output must remain within the feasible region of the manifold.
 
 This ensures that the agent’s internal relational state evolves smoothly as the world changes.
 
@@ -1025,16 +1020,16 @@ This ensures that the agent’s internal relational state evolves smoothly as th
 The update function $F$ governs how relational configurations evolve over time.  
 In artificial agents, $F$ may be implemented through:
 
-- dynamical systems  
-- recurrent architectures  
-- continuous‑time neural models  
-- geometric update rules  
+- dynamical systems,  
+- recurrent architectures,  
+- continuous‑time neural models,  
+- geometric update rules.
 
 The essential requirement is that $F$ respects the basin structure:
 
-- inside a basin, $F$ should stabilize relational motion  
-- near a transition region, $F$ should guide the system toward a new basin  
-- updates must remain bounded to prevent runaway dynamics  
+- inside a basin, $F$ should stabilize relational motion,  
+- near a transition region, $F$ should guide the system toward a new basin,  
+- updates must remain bounded to prevent runaway dynamics.
 
 This provides a geometric alternative to explicit error correction or predictive control.
 
@@ -1045,16 +1040,16 @@ This provides a geometric alternative to explicit error correction or predictive
 The projection $\Psi$ maps the manifold state back into outward behavior.  
 In artificial agents, this may involve:
 
-- motor controllers  
-- actuation policies  
-- trajectory generators  
-- low‑level control modules  
+- motor controllers,  
+- actuation policies,  
+- trajectory generators,  
+- low‑level control modules.
 
 The projection must satisfy feasibility constraints:
 
-- outputs must lie within the agent’s physical or operational limits  
-- transitions must remain smooth  
-- no discontinuities or impossible commands may be produced  
+- outputs must lie within the agent’s physical or operational limits,  
+- transitions must remain smooth,  
+- no discontinuities or impossible commands may be produced.
 
 The cognitive spacesuit ensures that $\Psi$ remains well‑posed even when $M_t$ shifts rapidly.
 
@@ -1064,22 +1059,22 @@ The cognitive spacesuit ensures that $\Psi$ remains well‑posed even when $M_t$
 
 Basins and transition regions can be shaped in artificial systems through:
 
-- architectural design  
-- training objectives  
-- geometric regularization  
-- shaping of relational gradients  
+- architectural design,  
+- training objectives,  
+- geometric regularization,  
+- shaping of relational gradients.
 
 Basins provide:
 
-- stability  
-- robustness  
-- predictable relational motion  
+- stability,  
+- robustness,  
+- predictable relational motion.
 
 Transition regions provide:
 
-- structured reconfiguration  
-- smooth adaptation  
-- recovery from perturbations  
+- structured reconfiguration,  
+- smooth adaptation,  
+- recovery from perturbations.
 
 This offers a geometric alternative to discrete modes, symbolic states, or handcrafted controllers.
 
@@ -1089,17 +1084,17 @@ This offers a geometric alternative to discrete modes, symbolic states, or handc
 
 The cognitive spacesuit provides a regulatory layer that ensures:
 
-- bounded lift ($\Phi$)  
-- bounded update ($F$)  
-- feasible projection ($\Psi$)  
-- temporal coherence  
+- bounded lift ($\Phi$),  
+- bounded update ($F$),  
+- feasible projection ($\Psi$),  
+- temporal coherence.
 
 In artificial agents, this corresponds to:
 
-- safety envelopes  
-- constraint layers  
-- feasibility filters  
-- stability‑preserving transformations  
+- safety envelopes,  
+- constraint layers,  
+- feasibility filters,  
+- stability‑preserving transformations.
 
 These mechanisms ensure that the agent’s behavior remains coherent even under uncertainty or perturbation.
 
@@ -1109,17 +1104,17 @@ These mechanisms ensure that the agent’s behavior remains coherent even under 
 
 Symbolic models scale poorly in dynamic environments because they require:
 
-- discrete state enumeration  
-- explicit prediction  
-- handcrafted transitions  
-- brittle error handling  
+- discrete state enumeration,  
+- explicit prediction,  
+- handcrafted transitions,  
+- brittle error handling.
 
 Relational geometry scales naturally because:
 
-- basins provide continuous stability  
-- transition regions provide smooth reconfiguration  
-- the mapping loop adapts to changing conditions  
-- robustness emerges from structure, not prediction  
+- basins provide continuous stability,  
+- transition regions provide smooth reconfiguration,  
+- the mapping loop adapts to changing conditions,  
+- robustness emerges from structure, not prediction.
 
 This makes the architecture suitable for artificial agents operating in complex, uncertain, or rapidly changing environments.
 
@@ -1145,13 +1140,13 @@ This section outlines the boundaries of the current formulation and identifies d
 
 The architecture assumes the existence of basins and transition regions but does not derive:
 
-- how basins form  
-- how their geometry arises  
-- how their boundaries are shaped  
-- how relational gradients emerge  
+- how basins form,  
+- how their geometry arises,  
+- how their boundaries are shaped,  
+- how relational gradients emerge.
 
 These structures are treated as given.  
-A complete theory would require a principled account of basin formation, either through learning, evolution, or physical constraints.
+A complete theory would require a principled account of basin formation, whether through learning, evolution, or physical constraints.
 
 ---
 
@@ -1159,10 +1154,10 @@ A complete theory would require a principled account of basin formation, either 
 
 The architecture does not claim that:
 
-- basin geometry is optimal  
-- transitions minimize cost  
-- the mapping loop maximizes reward  
-- the system achieves globally best behavior  
+- basin geometry is optimal,  
+- transitions minimize cost,  
+- the mapping loop maximizes reward,  
+- the system achieves globally best behavior.
 
 The framework describes **how** coherent behavior unfolds, not whether it is optimal.  
 Optimality belongs to a different class of theories.
@@ -1173,10 +1168,10 @@ Optimality belongs to a different class of theories.
 
 The architecture does not interpret:
 
-- $M_t$ as a belief  
-- basins as concepts  
-- transition regions as decisions  
-- $\Phi$ or $\Psi$ as symbolic encoders  
+- $M_t$ as a belief,  
+- basins as concepts,  
+- transition regions as decisions,  
+- $\Phi$ or $\Psi$ as symbolic encoders.
 
 All structures are geometric and relational.  
 No semantic or representational commitments are made.
@@ -1187,11 +1182,11 @@ No semantic or representational commitments are made.
 
 The architecture does not address:
 
-- experience  
-- awareness  
-- qualia  
-- introspection  
-- consciousness  
+- experience,  
+- awareness,  
+- qualia,  
+- introspection,  
+- consciousness.
 
 These topics lie outside the scope of a geometric account of dynamic behavior.  
 The framework is architectural, not phenomenological.
@@ -1202,10 +1197,10 @@ The framework is architectural, not phenomenological.
 
 Although the architecture aligns with patterns observed in biological systems, it does not claim:
 
-- neural implementation  
-- specific circuitry  
-- biochemical mechanisms  
-- evolutionary origins  
+- neural implementation,  
+- specific circuitry,  
+- biochemical mechanisms,  
+- evolutionary origins.
 
 The framework is compatible with multiple biological realizations but does not specify any.
 
@@ -1215,11 +1210,11 @@ The framework is compatible with multiple biological realizations but does not s
 
 A major direction for future work is deriving basin geometry from:
 
-- learning processes  
-- environmental structure  
-- morphological constraints  
-- task demands  
-- relational regularities  
+- learning processes,  
+- environmental structure,  
+- morphological constraints,  
+- task demands,  
+- relational regularities.
 
 This would provide a generative account of how basins emerge and adapt.
 
@@ -1230,9 +1225,9 @@ This would provide a generative account of how basins emerge and adapt.
 The architecture assumes the existence of $\Phi$ and $\Psi$ but does not specify how they are learned.  
 Future work includes:
 
-- learning $\Phi$ from sensorimotor experience  
-- learning $\Psi$ from feasible action patterns  
-- shaping these mappings to maintain boundedness and feasibility  
+- learning $\Phi$ from sensorimotor experience,  
+- learning $\Psi$ from feasible action patterns,  
+- shaping these mappings to maintain boundedness and feasibility.
 
 This would allow artificial agents to acquire the mapping loop autonomously.
 
@@ -1243,10 +1238,10 @@ This would allow artificial agents to acquire the mapping loop autonomously.
 Transition regions determine how the system reconfigures under perturbation.  
 Future work includes:
 
-- engineering RB geometry  
-- learning RB structure from data  
-- shaping RBs to improve robustness  
-- analyzing how RBs influence timing and coordination  
+- engineering RB geometry,  
+- learning RB structure from data,  
+- shaping RBs to improve robustness,  
+- analyzing how RBs influence timing and coordination.
 
 This would deepen the connection between relational geometry and adaptive behavior.
 
@@ -1260,44 +1255,31 @@ These extensions would strengthen the framework while preserving its relational 
 
 ---
 
+Here is a **clean, architectural, GitHub‑safe rewrite of Section 13**, fully aligned with the tone and structure of the manuscript.  
+It closes the paper with clarity, confidence, and structural coherence — no overclaiming, no hedging, no drift.
+
+---
+
 # **13. Conclusion**
 
 This paper presented an architectural framework for understanding dynamic behavior through relational geometry.  
-The mapping loop— $W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)$ —provides a continuous pathway linking the reference world, the relational manifold, and outward behavior. Basins and transition regions structure how the system moves through this manifold, while the cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
+The mapping loop—$W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)$—provides a continuous pathway linking the reference world, the relational manifold, and outward behavior.  
+Basins and transition regions structure how the system moves through this manifold, while the cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
 
-The ball‑catching example served as a concrete illustration of how the architecture operates in real time.  
-It showed how relational geometry stabilizes behavior, how basins absorb perturbations, and how transition regions guide recovery when conditions change. These mechanisms do not rely on prediction, symbolic reasoning, or discrete state transitions; they arise from the geometry itself.
+The ball‑catching example illustrated how the architecture operates in real time.  
+It showed how relational geometry stabilizes behavior, how basins absorb perturbations, and how transition regions guide recovery when conditions change.  
+These mechanisms do not rely on prediction, symbolic reasoning, or discrete state transitions; they arise from the geometry itself.
 
-The framework is general and extensible. It applies to biological systems, artificial agents, and multi‑agent coordination without requiring new primitives or domain‑specific assumptions. By grounding behavior in relational structure rather than symbolic representation, the architecture offers a unified way to describe stability, coordination, and adaptive motion across diverse settings.
+The framework is general and extensible.  
+It applies to biological systems, artificial agents, and multi‑agent coordination without requiring new primitives or domain‑specific assumptions.  
+By grounding behavior in relational structure rather than symbolic representation, the architecture offers a unified way to describe stability, coordination, and adaptive motion across diverse settings.
 
 The work does not claim to explain the origin of basins, derive optimality, or address phenomenology.  
-Instead, it provides a geometric foundation on which such questions can be explored. Future work includes deriving basin geometry, learning the lift and projection, and shaping transition regions to improve robustness and adaptability.
+Instead, it provides a geometric foundation on which such questions can be explored.  
+Future work includes deriving basin geometry, learning the lift and projection, and shaping transition regions to improve robustness and adaptability.
 
-The central contribution is architectural: a coherent, relational, and geometric account of how systems maintain stability and coordination while moving through a changing world. The mapping loop, basin structure, and cognitive spacesuit together form a framework that is simple, expressive, and capable of supporting a wide range of dynamic behaviors.
-
----
-
-Absolutely — we can format the References section *exactly* like that.  
-Clean, numeric, minimal, architectural.
-
-Here is your **final, ready‑to‑paste References section** in the style you requested:
-
----
-
-# **References**
-
-Absolutely, Jeff — here is your **fully regenerated, clean, final Reference List**, with the corrected \[5\] and \[6\] that now properly match the Introduction’s discussion of *geometric structure in learned representations*.
-
-This list is:
-
-- minimal  
-- architectural  
-- reviewer‑friendly  
-- consistent with your manuscript  
-- aligned with the lineage of your prior work  
-- correctly mapped to the placeholders already in the Introduction  
-
-You can paste this directly into your document.
+The central contribution is architectural: a coherent, relational, and geometric account of how systems maintain stability and coordination while moving through a changing world.  
+The mapping loop, basin structure, and cognitive spacesuit together form a framework that is simple, expressive, and capable of supporting a wide range of dynamic behaviors.
 
 ---
 
