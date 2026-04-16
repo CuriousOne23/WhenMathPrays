@@ -162,8 +162,8 @@ $$
 \mathcal{RB} = \\{ RB_j \mid j \in J \\}.
 $$
 
-- Each **Object Basin** $OB_i$ is a **stable region** of $\mathcal{M}$ corresponding to a recurring relational configuration.
-- Each **Relational Basin** $RB_j$ is a **transition‑shaping region** that governs how trajectories move between object basins.
+- Each **Object Basin** $OB_i$ is a **stable region** of $\mathcal{M}$ corresponding to a recurring relational configuration.  
+- Each **Relational Transition Region** $RB_j$ is a **transition‑shaping region** that governs how trajectories move between object basins.
 
 Connectivity between basins is specified by two maps:
 
@@ -171,7 +171,7 @@ $$
 \text{src},\ \text{tgt} : J \to I,
 $$
 
-so that each relational basin
+so that each relational transition region
 
 $$
 RB_j : OB_{\text{src}(j)} \longrightarrow OB_{\text{tgt}(j)}
@@ -198,7 +198,7 @@ These basins are **not comprehensive**; each can be decomposed into many finer s
 - $OB_{\text{Catch}}$ — interception geometry  
 - $OB_{\text{Timing}}$ — temporal regularity  
 
-### **Example Relational Basins (subset)**
+### **Example Relational Transition Regions (subset)**
 
 - $RB_{\text{Eye↔Ball}}$ — visual tracking  
 - $RB_{\text{Eye↔Hand}}$ — visual–effector coupling  
@@ -241,94 +241,12 @@ moving through the manifold.
 As $\gamma(t)$ evolves, it may:
 
 - enter an object basin $OB_i$,  
-- transition through a relational basin $RB_j$,  
+- transition through a relational transition region $RB_j$,  
 - stabilize temporarily in a region,  
 - or move through a sequence of basins shaped by the geometry.
 
 The basin structure constrains and shapes the motion of $\gamma(t)$ without specifying its content.  
 This allows the architecture to describe dynamic thought without invoking semantics, representation, or phenomenology.
-
----
-
-Absolutely — and you’re making exactly the right call here.  
-Section 4.3 should **not** pretend to be a full derivation.  
-It should:
-
-- acknowledge the gap  
-- offer a plausible architectural reasoning  
-- explicitly mark the derivation as future work  
-- and reaffirm that the *value of the paper does not depend on solving basin creation*  
-
-Below is a **revised, softer, more humble Section 4.3** that does all of that.  
-It fits your tone, your epistemic posture, and the scope of this paper.
-
-You can paste this directly into your GitHub doc.
-
----
-
-# **4.3 Emergence of Basins from Relational Constraints**
-
-Basins assumed a priori in this paper, a mathematical derivation of how they arise is beyond the scope of this paper. What follows is a **provisional architectural account**—a line of reasoning that motivates why basins should exist in a relational manifold, and which can be developed more fully in future work.
-
-The intuition is that **relations constrain motion** in the manifold $\mathcal{M}$.  
-A relation limits the allowable directions of change in its neighborhood; repeated relational constraints create **regions of reduced degrees of freedom**.  
-When trajectories entering such a region tend to remain within it, the region behaves like an attractor.  
-This attractor‑like behavior is what we call an **Object Basin**.
-
-Formally, if a relation $R$ restricts the tangent directions of a trajectory $\gamma(t)$ in a neighborhood $U \subset \mathcal{M}$, then the set of points where this restriction persists forms a stable region:
-
-$$
-OB_R \;=\; \{\, x \in U \mid R \text{ constrains the local flow of } \gamma(t) \,\}.
-$$
-
-Similarly, when two such regions are consistently connected by a constrained transition, the transition itself forms a **Relational Basin**:
-
-$$
-RB_{R} : OB_{\text{src}(R)} \longrightarrow OB_{\text{tgt}(R)}.
-$$
-
-This reasoning suggests that basins arise because **relations carve them out**, not because they are declared.  
-A relational manifold naturally contains basins because relational constraints generate stable configurations of motion. This could explain why basins may not appear in static representational embeddings: without motion, there are no constraints on flow, and without constrained flow, there are no attractors.
-
-The present paper does not depend on deriving how the system creates a new OB. The value of this paper lies in describing the **geometric relational thought space**, the **mapping loop**, and the **basin‑and‑transition structure** that shapes dynamic thought.
-
----
-
-If you want, I can now:
-
-- integrate this into the full Section 4  
-- tune the Introduction to reference this humility explicitly  
-- or help you write a short “Scope and Future Work” paragraph that reinforces this boundary  
-
-Just tell me what you want next.
-
----
-
-## **4.4 Why Only a Subset Is Used in Later Sections**
-
-The purpose of this section is to reveal the **richness** of the manifold’s basin structure.  
-However, using the full set of basins in the worked example would obscure the underlying architecture.  
-Therefore:
-
-> **In the sections that follow, we select only a small illustrative subset of basins and relational transitions to demonstrate the mapping loop.  
-> This keeps the example readable while preserving the generality and scalability of the architecture.**
-
----
-
-## **4.5 Relation to Current AI Practice**
-
-Although this framework introduces explicit geometric language, the underlying structure is not foreign to modern AI systems.  
-AI designers already work with:
-
-- stable activation patterns,  
-- latent clusters,  
-- transition dynamics,  
-- attention‑based routing,  
-- and state‑to‑state update rules.
-
-These are, in practice, **Object Basins** and **Relational Basins** embedded in a high‑dimensional manifold.  
-The field typically describes them in implementation terms rather than geometric terms, but the underlying structure is the same.  
-The notation introduced here simply makes the geometry explicit and provides a clean way to reason about stability, transitions, and dynamic behavior.
 
 ---
 
