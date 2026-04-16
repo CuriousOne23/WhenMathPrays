@@ -839,12 +839,12 @@ Classical control frameworks regulate behavior through error terms, prediction, 
 
 ---
 
-# **11. Implications for Artificial Agents**
+# **11. Implications for Artificial Agents (Rewritten)**
 
 Artificial agents that integrate perception, internal dynamics, and outward behavior face the same structural challenges as biological systems: they must coordinate motion through a changing world while maintaining stability, feasibility, and coherence.  
 The architecture presented here offers a geometric framework for organizing this coordination without relying on symbolic state machines, predictive optimization, or handcrafted error terms.
 
-This section outlines how the components of the mapping loop—$\Phi$, $F$, and $\Psi$—can be instantiated in artificial systems, and how basins, transition regions, and the cognitive spacesuit provide a natural stability structure for embodied or embedded agents.
+This section outlines how the components of the mapping loop— $\Phi$, $F$, and $\Psi$—can be instantiated in artificial systems, and how basins, transition regions, and the cognitive spacesuit provide a natural stability structure for embodied or embedded agents.
 
 ---
 
@@ -981,11 +981,9 @@ This provides a geometric alternative to classical control, symbolic planning, a
 
 ---
 
-# **12. Limitations and Future Work**
+# **12. Limitations and Future Work (Rewritten)**
 
-The architecture presented here offers a geometric account of dynamic behavior through the mapping loop, basin structure, and the cognitive spacesuit.  
-While it provides a coherent framework for stability, coordination, and robustness, it does not attempt to explain everything.  
-This section outlines the boundaries of the current formulation and identifies directions for future development.
+The architecture presented here offers a geometric account of dynamic behavior through the mapping loop, basin structure, and the cognitive spacesuit. While it provides a coherent framework for stability, coordination, and robustness, it does not attempt to explain everything. This section outlines the boundaries of the current formulation and identifies directions for future development.
 
 ---
 
@@ -998,8 +996,7 @@ The architecture assumes the existence of basins and transition regions but does
 - how their boundaries are shaped,  
 - how relational gradients emerge.
 
-These structures are treated as given.  
-A complete theory would require a principled account of basin formation, whether through learning, evolution, or physical constraints.
+These structures are treated as given. A complete theory would require a principled account of basin formation, whether through learning, evolution, or physical constraints.
 
 ---
 
@@ -1012,8 +1009,7 @@ The architecture does not claim that:
 - the mapping loop maximizes reward,  
 - the system achieves globally best behavior.
 
-The framework describes **how** coherent behavior unfolds, not whether it is optimal.  
-Optimality belongs to a different class of theories.
+The framework describes **how** coherent behavior unfolds, not whether it is optimal. Optimality belongs to a different class of theories.
 
 ---
 
@@ -1026,8 +1022,7 @@ The architecture does not interpret:
 - transition regions as decisions,  
 - $\Phi$ or $\Psi$ as symbolic encoders.
 
-All structures are geometric and relational.  
-No semantic or representational commitments are made.
+All structures are geometric and relational. No semantic or representational commitments are made.
 
 ---
 
@@ -1041,8 +1036,7 @@ The architecture does not address:
 - introspection,  
 - consciousness.
 
-These topics lie outside the scope of a geometric account of dynamic behavior.  
-The framework is architectural, not phenomenological.
+These topics lie outside the scope of a geometric account of dynamic behavior. The framework is architectural, not phenomenological.
 
 ---
 
@@ -1102,21 +1096,14 @@ This would deepen the connection between relational geometry and adaptive behavi
 
 ## **12.9 Summary**
 
-The architecture provides a geometric account of dynamic behavior but does not derive basin geometry, claim optimality, interpret semantics, or address phenomenology.  
-Future work includes deriving basins, learning the lift and projection, and shaping transition regions.  
-These extensions would strengthen the framework while preserving its relational and geometric foundations.
-
----
-
-Here is a **clean, architectural, GitHub‑safe rewrite of Section 13**, fully aligned with the tone and structure of the manuscript.  
-It closes the paper with clarity, confidence, and structural coherence — no overclaiming, no hedging, no drift.
+The architecture provides a geometric account of dynamic behavior but does not derive basin geometry, claim optimality, interpret semantics, or address phenomenology. Future work includes deriving basins, learning the lift and projection, and shaping transition regions. These extensions would strengthen the framework while preserving its relational and geometric foundations.
 
 ---
 
 # **13. Conclusion**
 
 This paper presented an architectural framework for understanding dynamic behavior through relational geometry.  
-The mapping loop—$W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)$—provides a continuous pathway linking the reference world, the relational manifold, and outward behavior.  
+The mapping loop— $W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)$ —provides a continuous pathway linking the reference world, the relational manifold, and outward behavior.  
 Basins and transition regions structure how the system moves through this manifold, while the cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
 
 The ball‑catching example illustrated how the architecture operates in real time.  
@@ -1181,19 +1168,22 @@ URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_t
 
 ---
 
-### Appendix A: Numeric illustration of the mapping loop in a ball‑catching scenario
+# **Appendix A: Numeric Illustration of the Mapping Loop in a Ball‑Catching Scenario**
 
 This appendix provides a simple numeric example of the mapping loop
+
 
 $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
 $$
 
-using a boy catching a ball. The goal is not physical accuracy, but to show how concrete numbers can flow through $\Phi$, $F$, and $\Psi$ under the constraints described in Section 6.
+
+using a boy catching a ball.  
+The goal is not physical accuracy, but to show how concrete numbers can flow through $\Phi$, $F$, and $\Psi$ under the boundedness and coherence constraints described in Section 6.
 
 ---
 
-### A.1 World‑state and ball trajectory
+## **A.1 World‑State and Ball Trajectory**
 
 Assume a ball is thrown horizontally toward the boy.
 
@@ -1205,103 +1195,110 @@ Assume a ball is thrown horizontally toward the boy.
 
 A simple parabolic trajectory:
 
+
 $$
 x_b(t) = x_0 + v_{0x} t
 $$
 
 $$
-y_b(t) = y_0 + v_{0y} t - \frac{1}{2} g t^2
+y_b(t) = y_0 + v_{0y} t - \tfrac{1}{2} g t^2
 $$
 
-At time $t = 0.4\ \text{s}$:
+
+At t = 0.4 s:
+
 
 $$
-x_b(0.4) = 0 + 5 \cdot 0.4 = 2.0\ \text{m}
-$$
-
-$$
-y_b(0.4) = 2 + 8 \cdot 0.4 - 4.9 \cdot (0.4)^2
+x_b(0.4) = 2.0\ \text{m}
 $$
 
 $$
-y_b(0.4) = 2 + 3.2 - 4.9 \cdot 0.16 = 5.2 - 0.784 = 4.416\ \text{m}
+y_b(0.4) = 2 + 3.2 - 4.9(0.16) = 4.416\ \text{m}
 $$
 
-Let the boy’s hand at this moment be at horizontal position
+
+Let the boy’s hand at this moment be at:
+
 
 $$
 x_h(0.4) = 1.0\ \text{m}
 $$
 
+
 ---
 
-### A.2 Lift into the manifold: Φ
+## **A.2 Lift Into the Manifold: $\Phi$**
 
 Define a simple relational lift as the horizontal ball‑to‑hand displacement:
 
-$$
-M_t = Φ(W(t)) = x_b(t) - x_h(t)
-$$
-
-We use the relative displacement because the manifold does not encode absolute positions. It only encodes relational structure. The quantity x_b(t) - x_h(t) is the minimal, frame‑independent primitive that determines the catching dynamics. Any absolute coordinate choice would introduce structure the manifold does not use.
-
-At $t = 0.4\ \text{s}$:
 
 $$
-M_{0.4} = x_b(0.4) - x_h(0.4) = 2.0 - 1.0 = 1.0\ \text{m}
+M_t = \Phi(W(t)) = x_b(t) - x_h(t)
 $$
 
-At $t = 0.5\ \text{s}$:
+
+The manifold encodes **relational structure**, not absolute positions.  
+$x_b(t) - x_h(t)$ is the minimal frame‑independent primitive relevant to catching.
+
+At t = 0.4 s:
+
 
 $$
-x_b(0.5) = 0 + 5 \cdot 0.5 = 2.5\ \text{m}
+M_{0.4} = 2.0 - 1.0 = 1.0\ \text{m}
 $$
 
-Assume the hand has moved to
+
+At t = 0.5 s:
+
 
 $$
-x_h(0.5) = 1.4\ \text{m}
+x_b(0.5) = 2.5\ \text{m}, \qquad x_h(0.5) = 1.4\ \text{m}
 $$
-
-Then:
 
 $$
 M_{0.5} = 2.5 - 1.4 = 1.1\ \text{m}
 $$
 
-The change in manifold‑state:
+
+Change in manifold‑state:
+
 
 $$
-|M_{0.5} - M_{0.4}| = |1.1 - 1.0| = 0.1\ \text{m}
+|M_{0.5} - M_{0.4}| = 0.1\ \text{m}
 $$
 
-The change in world‑state (horizontal ball position):
+
+Change in world‑state:
+
 
 $$
-|x_b(0.5) - x_b(0.4)| = |2.5 - 2.0| = 0.5\ \text{m}
+|x_b(0.5) - x_b(0.4)| = 0.5\ \text{m}
 $$
 
-A bounded‑lift condition of the form
+
+A bounded‑lift condition
+
 
 $$
 \|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \|W(t+\Delta t) - W(t)\|
 $$
 
-is satisfied, for example, with $K_\Phi = 1$, since $0.1 \le 0.5$.
+
+is satisfied with K_\Phi = 1, since 0.1 ≤ 0.5.
 
 ---
 
-### A.3 Manifold dynamics: F
+## **A.3 Manifold Dynamics: $F$**
 
 Use a simple relational update:
 
+
 $$
-M_{t+\Delta t} = M_t + \Delta t \bigl(v_b - v_h\bigr)
+M_{t+\Delta t} = M_t + \Delta t (v_b - v_h)
 $$
 
-where $v_b$ and $v_h$ are horizontal velocities of ball and hand.
 
-F updates the relational displacement $M_t$ directly, not the absolute positions of the ball or the hand. This keeps the evolution entirely within the manifold and avoids reintroducing world‑level structure that Φ intentionally removed.
+$F$ updates **only** the relational displacement, keeping the evolution entirely within the manifold.
 
 Let:
 
@@ -1312,50 +1309,57 @@ Let:
 
 Then:
 
-$$
-M_{t+\Delta t} = 1.0 + 0.1(5.0 - 3.0) = 1.0 + 0.1 \cdot 2.0 = 1.2\ \text{m}
-$$
-
-The update magnitude:
 
 $$
-|M_{t+\Delta t} - M_t| = |1.2 - 1.0| = 0.2\ \text{m}
+M_{t+\Delta t} = 1.0 + 0.1(5 - 3) = 1.2\ \text{m}
 $$
+
+
+Update magnitude:
+
+
+$$
+|1.2 - 1.0| = 0.2\ \text{m}
+$$
+
 
 A bounded‑update condition
+
 
 $$
 \|F(M_t) - M_t\| \le K_F
 $$
 
-is satisfied, for example, with $K_F = 0.5$, since $0.2 \le 0.5$.
+
+is satisfied with K_F = 0.5.
 
 ---
 
-### A.4 Collapse back to the reference world: Ψ
+## **A.4 Projection Back to the Reference World: $\Psi$**
 
-The collapse function Ψ maps the updated manifold state back into the reference‑world variables used in the example. Because Φ extracts only the relational displacement, Ψ must reconstruct the corresponding world‑level observable without adding new structure.
+Because $\Phi$ extracts only relational displacement, $\Psi$ must reconstruct a world‑level observable without adding new structure.
 
-A minimal and frame‑independent collapse is:
+A minimal projection is:
+
 
 $$
-\Psi(M_{t+\Delta t}) = x_h(t+\Delta_t) + M_{t+\Delta t}
+\Psi(M_{t+\Delta t}) = x_h(t+\Delta t) + M_{t+\Delta t}
 $$
 
-This reconstructs the predicted ball position in the reference world by adding the updated relational displacement to the updated hand position. Ψ is smooth, invertible with respect to Φ, and introduces no additional assumptions. It simply returns a world‑level quantity derived from the manifold state.
 
-At this point, Ψ has completed its role in the mapping loop: it has produced a world‑level observable (the predicted ball position). What happens next is not part of Ψ itself. In this appendix, we introduce a simple, **example‑specific** rule that uses this observable to illustrate how a reference‑world update might be computed.
+This returns the predicted ball position by adding the updated relational displacement to the updated hand position.
 
-To make this explicit: **RWD(t) is not Ψ.**  
-RWD(t) is a downstream example rule that *uses* the world‑level quantity provided by Ψ in this particular illustration.
+**Important:**  
+Ψ produces a world‑level observable.  
+RWD(t) is **not** Ψ; it is an **example‑specific** rule showing how a world‑level update *might* use the observable.
 
-A simple example rule is:
+Example rule:
+
 
 $$
 RWD(t) = x_h(t) + k M_t
 $$
 
-This provides an example reference‑world update based on the relational displacement scaled by a constant k, a gain controlling how strongly the manifold‑state influences hand motion.. It is included only to demonstrate how a world‑level quantity might be computed from the manifold state in this specific example. Ψ supplies the observable; RWD(t) shows one possible way the example world might use it.
 
 Let:
 
@@ -1365,54 +1369,63 @@ Let:
 
 Then:
 
+
 $$
-RWD(t) = 1.0 + 0.5 \cdot 1.0 = 1.5\ \text{m}
+RWD(t) = 1.5\ \text{m}
 $$
 
-Interpret $RWD(t)$ here as the new target hand position.  
-If the boy’s arm can reach up to, say, $2.0\ \text{m}$ horizontally, then a feasibility constraint of the form
+
+If the arm’s reach limit is 2.0 m, a feasibility constraint
+
 
 $$
 \|\Psi(M_t)\| \le \text{(biomechanical limit)}
 $$
 
-is satisfied, since $1.5 \le 2.0$.
+
+is satisfied.
 
 ---
 
-### A.5 Example basin: “catch” region
+## **A.5 Example Basin: “Catch” Region**
 
-A basin in the manifold is recognized by its geometric properties: trajectories entering a neighborhood around the region converge toward it, the local curvature induces inward flow, and small perturbations do not push the state away. For the ball‑catching example, the relevant attractor corresponds to near‑zero relative displacement.
+A basin is a region where trajectories converge and small perturbations decay.  
+For catching, the relevant attractor corresponds to near‑zero relative displacement.
 
-Define a simple “catch” basin as the region where the relational displacement falls below a small threshold:
+Define a simple catch basin:
+
 
 $$
-B_{\text{catch}} = \{\, M_t : |M_t| \le \varepsilon \,\}
+B_{\text{catch}} = \\{ M_t : |M_t| \le \varepsilon \\}
 $$
 
-with, for example, $\varepsilon = 0.1\ \text{m}$.
+with $\varepsilon = 0.1\ \text{m}$.
 
-This region behaves as a basin because trajectories with decreasing relative displacement tend to converge toward $M_t = 0$, and small perturbations still return toward this region. It provides a minimal illustration of how a stable configuration appears as a basin in the manifold.
+Example threshold:
 
-Given above then we can define a simple example “catch” basin in the manifold as:
 
 $$
 |M_t| < 0.15\ \text{m}
 $$
 
-If at some time $t$:
+
+If:
+
 
 $$
 M_t = 0.12\ \text{m}
 $$
 
-then the system is inside the catch basin.
+
+the system is inside the catch basin.
 
 A simple time‑to‑contact estimate:
+
 
 $$
 \tau = \frac{M_t}{|v_b - v_h|}
 $$
+
 
 Let:
 
@@ -1422,30 +1435,34 @@ Let:
 
 Then:
 
+
 $$
-\tau = \frac{1.0}{|5.0 - 3.0|} = \frac{1.0}{2.0} = 0.5\ \text{s}
+\tau = 0.5\ \text{s}
 $$
 
-A temporal‑coherence condition such as
+
+A temporal‑coherence condition:
+
 
 $$
 \frac{d}{dt} M_t < 0
 $$
 
-in a catching task corresponds, in this simple numeric picture, to $M_t$ decreasing over successive time steps as the hand moves toward the ball.
+
+corresponds to relational distance decreasing over successive steps.
 
 ---
 
-### A.6 Summary
+## **A.6 Summary**
 
 This appendix shows one concrete way that:
 
 - $W(t)$ (ball and hand positions and velocities)  
 - $\Phi$ (relational lift)  
 - $F$ (relational update)  
-- $\Psi$ (projection to outward behavior)  
+- $\Psi$ (projection to world‑level observables)  
 
-can be instantiated with simple numbers in a ball‑catching scenario, while respecting the boundedness and coherence constraints described in Section 6.
+can be instantiated numerically in a ball‑catching scenario while respecting the boundedness and coherence constraints of Section 6.
 
 ---
 
