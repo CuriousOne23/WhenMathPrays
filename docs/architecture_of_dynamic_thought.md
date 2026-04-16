@@ -1178,8 +1178,7 @@ W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RW
 $$
 
 
-using a boy catching a ball.  
-The goal is not physical accuracy, but to show how concrete numbers can flow through $\Phi$, $F$, and $\Psi$ under the boundedness and coherence constraints described in Section 6.
+using a boy catching a ball. The goal is not physical accuracy, but to show how concrete numbers can flow through $\Phi$, $F$, and $\Psi$ under the boundedness and coherence constraints described in Section 6.
 
 ---
 
@@ -1350,8 +1349,7 @@ $$
 This returns the predicted ball position by adding the updated relational displacement to the updated hand position.
 
 **Important:**  
-Ψ produces a world‑level observable.  
-RWD(t) is **not** Ψ; it is an **example‑specific** rule showing how a world‑level update *might* use the observable.
+Ψ produces a world‑level observable. RWD(t) is **not** Ψ; it is an **example‑specific** rule showing how a world‑level update *might* use the observable.
 
 Example rule:
 
@@ -1389,8 +1387,7 @@ is satisfied.
 
 ## **A.5 Example Basin: “Catch” Region**
 
-A basin is a region where trajectories converge and small perturbations decay.  
-For catching, the relevant attractor corresponds to near‑zero relative displacement.
+A basin is a region where trajectories converge and small perturbations decay. For catching, the relevant attractor corresponds to near‑zero relative displacement.
 
 Define a simple catch basin:
 
@@ -1466,10 +1463,9 @@ can be instantiated numerically in a ball‑catching scenario while respecting t
 
 ---
 
-# **Appendix B: Numeric Illustration of Basin Navigation**
+# **Appendix B: Numeric Illustration of Basin Navigation (Rewritten)**
 
-This appendix provides a simple numeric example of how the system moves through **object basins (OBs)** and **transition regions (RBs)** during a ball‑catching task, as described in Section 7.  
-The goal is not physical accuracy, but to show how concrete numbers can illustrate basin navigation in the manifold.
+This appendix provides a simple numeric example of how the system moves through **object basins (OBs)** and **transition regions (RBs)** during a ball‑catching task, as described in Section 7. The goal is not physical accuracy, but to show how concrete numbers can illustrate basin navigation in the manifold.
 
 ---
 
@@ -1477,65 +1473,71 @@ The goal is not physical accuracy, but to show how concrete numbers can illustra
 
 Define three **object basins** in terms of relational distance $M_t$:
 
-- **OB\_track (tracking object basin):**
-
+- **OB\_track (tracking basin)**  
+  
 $$
 M_t > 1.0\ \text{m}
 $$
+  
 
-- **OB\_intercept (intercept object basin):**
-
+- **OB\_intercept (intercept basin)**  
+  
 $$
 0.15\ \text{m} < M_t \le 1.0\ \text{m}
 $$
+  
 
-- **OB\_catch (catch object basin):**
-
+- **OB\_catch (catch basin)**  
+  
 $$
 |M_t| \le 0.15\ \text{m}
 $$
+  
 
-These thresholds are illustrative and correspond to the relational geometry described in Section 7.  
+These thresholds are illustrative.  
 Each OB is a **stable relational configuration**: once inside an OB, the system tends to remain there unless driven toward a transition region.
 
 ---
 
 ## **B.2 Transition Regions (RBs)**
 
-Define two **transition regions** (RBs) that connect the OBs:
+Define two **transition regions** that connect the OBs:
 
-- **RB\_{track→intercept}:**
-
+- **RB\_{track→intercept}**  
+  
 $$
 0.9\ \text{m} < M_t \le 1.0\ \text{m}
 $$
+  
 
-- **RB\_{intercept→catch}:**
-
+- **RB\_{intercept→catch}**  
+  
 $$
 0.15\ \text{m} < M_t \le 0.20\ \text{m}
 $$
+  
 
-These RBs act as **funnels**, guiding the system between object basins without discontinuity.
+RBs act as **funnels**, guiding the system between basins without discontinuity.
 
 ---
 
 ## **B.3 Example Trajectory Through Basins**
 
-Assume the relational distance evolves over time as the ball approaches and the hand moves:
+Assume the relational distance evolves as the ball approaches and the hand moves:
 
 | Time (s) | $M_t$ (m) | Region |
-|---------|-----------|--------|
-| 0.0     | 1.80      | OB\_track |
-| 0.1     | 1.50      | OB\_track |
-| 0.2     | 1.10      | OB\_track |
-| 0.3     | 0.95      | **RB\_{track→intercept}** |
-| 0.4     | 0.70      | OB\_intercept |
-| 0.5     | 0.30      | OB\_intercept |
-| 0.6     | 0.18      | **RB\_{intercept→catch}** |
-| 0.7     | 0.12      | OB\_catch |
+|---------|-------------|--------|
+| 0.0     | 1.80        | OB\_track |
+| 0.1     | 1.50        | OB\_track |
+| 0.2     | 1.10        | OB\_track |
+| 0.3     | 0.95        | **RB\_{track→intercept}** |
+| 0.4     | 0.70        | OB\_intercept |
+| 0.5     | 0.30        | OB\_intercept |
+| 0.6     | 0.18        | **RB\_{intercept→catch}** |
+| 0.7     | 0.12        | OB\_catch |
 
-This table illustrates the basin sequence:
+This corresponds to the basin sequence:
+
 
 $$
 OB_{\text{track}}
@@ -1549,7 +1551,8 @@ RB_{\text{intercept}\rightarrow\text{catch}}
 OB_{\text{catch}}
 $$
 
-matching the structure in Section 7.
+
+matching Section 7.
 
 ---
 
@@ -1557,71 +1560,75 @@ matching the structure in Section 7.
 
 Use the relational update:
 
+
 $$
 M_{t+\Delta t} = M_t + \Delta t (v_b - v_h)
 $$
+
 
 Let:
 
 - $\Delta t = 0.1\ \text{s}$  
 - ball velocity: $v_b = -6.0\ \text{m/s}$  
 - hand velocity increases as the system enters deeper basins:  
-  - OB\_track: $v_h = 1.0$  
-  - OB\_intercept: $v_h = 3.0$  
-  - OB\_catch: $v_h = 5.0$
+  - OB\_track: 1.0  
+  - OB\_intercept: 3.0  
+  - OB\_catch: 5.0
 
-Example at $t = 0.3$:
+Example at t = 0.3:
 
 - $M_{0.3} = 0.95\ \text{m}$  
-- $v_b - v_h = -6.0 - 3.0 = -9.0$  
+- $v_b - v_h = -6.0 - 3.0 = -9.0$
 
 Then:
 
-$$
-M_{0.4} = 0.95 + 0.1(-9.0) = 0.95 - 0.9 = 0.05\ \text{m}
-$$
-
-This would place the system directly into OB\_catch.  
-To match the table above, we simply use a slightly smaller hand velocity (e.g., $v_h = 2.0$), giving:
 
 $$
-M_{0.4} = 0.95 + 0.1(-6.0 - 2.0) = 0.95 - 0.8 = 0.15\ \text{m}
+M_{0.4} = 0.95 + 0.1(-9.0) = 0.05\ \text{m}
 $$
+
+
+This would jump directly into OB\_catch.  
+To match the table, use a slightly smaller hand velocity (e.g., 2.0):
+
+
+$$
+M_{0.4} = 0.95 + 0.1(-6.0 - 2.0) = 0.15\ \text{m}
+$$
+
 
 which lands in **RB\_{intercept→catch}**.
 
-This illustrates how relational dynamics $F$ drive basin transitions.
+This illustrates how $F$ drives basin transitions.
 
 ---
 
 ## **B.5 Temporal Coherence Check**
 
-A simple temporal‑coherence condition from Section 7:
+A simple temporal‑coherence condition from Section 7:
 
-$$  
+
+$$
 \frac{d}{dt} M_t < 0
-$$  
+$$
+
 
 Using the table:
 
 - $M_{0.3} = 0.95$  
-- $M_{0.4} = 0.70$  
+- $M_{0.4} = 0.70$
 
-So  
-  
-$$
-\frac{M_{0.4} - M_{0.3}}{0.1} =
-$$
+Compute:
+
 
 $$
-\frac{0.70 - 0.95}{0.1} =
+\frac{M_{0.4} - M_{0.3}}{0.1}
+= \frac{0.70 - 0.95}{0.1}
+= -2.5\ \text{m/s}
 $$
 
-$$
--2.5\ \text{m/s}
-$$
- 
-Negative, as required.  
+
+Negative, as required.
 
 ---
 
@@ -1633,7 +1640,7 @@ This appendix provides a simple numeric illustration of:
 - transition regions  
 - relational updates  
 - timing coherence  
-- the basin sequence described in Section 7  
+- the basin sequence described in Section 7  
 
 The numbers are not physically precise; they are chosen to make the geometry of basin navigation clear and intuitive.
 
