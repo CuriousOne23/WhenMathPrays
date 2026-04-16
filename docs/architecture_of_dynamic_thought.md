@@ -179,7 +179,7 @@ the ball’s trajectory relative to the hand, reachable workspace, timing constr
 
 ## **5.2 Relational Motion: $M_t \xrightarrow{F} M_{t+\Delta t}$**
 
-The manifold dynamics `$F$` evolve the state forward:
+The manifold dynamics $F$ evolve the state forward:
 
 $$  
 M_{t+\Delta t} = F(M_t).
@@ -198,7 +198,7 @@ The resulting trajectory $\{M_t\}$ through the manifold reflects the unfolding r
 
 ## **5.3 Manifold Back to Reference World: $M_t \xrightarrow{\Psi} RWD(t)$**
 
-The mapping `$\Psi$` projects the manifold‑state back into the reference world:
+The mapping $\Psi$ projects the manifold‑state back into the reference world:
   
 $$
 RWD(t) = \Psi(M_t).
@@ -255,7 +255,7 @@ These components form a coherent framework for integrating reference‑world and
 
 ---
 
-# **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop (Rewritten)**
+# **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop**
 
 The mapping loop introduced in Section 3.5,
   
@@ -289,8 +289,7 @@ The spacesuit prevents these failure modes by ensuring that each step of the loo
 
 ## **6.2 Regulating the Lift: Constraints on $\Phi$**
 
-The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold.  
-The spacesuit ensures that this lift is stable and well‑posed.
+The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold. The spacesuit ensures that this lift is stable and well‑posed.
 
 ### **Bounded Lift**
   
@@ -326,7 +325,7 @@ This ensures that the system moves only within a basin or through a valid transi
 
 ## **6.4 Regulating the Projection: Constraints on $\Psi$**
 
-The mapping `$\Psi$` projects manifold‑state back into the reference world as $RWD(t)$. The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
+The mapping $\Psi$ projects manifold‑state back into the reference world as $RWD(t)$. The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
 
 ### **Feasible Projection**
   
@@ -366,9 +365,9 @@ Transitions between basins in the manifold must correspond to coordinated shifts
 
 The cognitive spacesuit ensures that:
 
-- `$\Phi$` lifts world‑state into the manifold safely,  
-- `$F$` evolves manifold‑state within stable relational structure,  
-- `$\Psi$` projects manifold‑state back into feasible behavior,  
+- $\Phi$ lifts world‑state into the manifold safely,  
+- $F$ evolves manifold‑state within stable relational structure,  
+- $\Psi$ projects manifold‑state back into feasible behavior,  
 - the entire loop remains coherent across time.
 
 In the ball‑catching example, the spacesuit prevents the system from:
@@ -381,7 +380,7 @@ Appendix A provides a numeric illustration of these constraints using simple par
 
 ---
 
-# **7. Basin Navigation in Real‑Time Behavior (Rewritten)**
+# **7. Basin Navigation in Real‑Time Behavior**
 
 The manifold introduced in Section 3 contains **object basins** (OBs: stable relational configurations) and **transition regions** (RBs: pathways between them) that guide how the system moves during action.  
 Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
@@ -394,7 +393,7 @@ OBs provide stability; RBs provide pathways; the mapping loop provides motion.
 
 ## **7.1 Basins as Stable Relational Configurations**
 
-An object basin `$OB_i$` is a region of the manifold where relational motion is stable:
+An object basin $OB_i$ is a region of the manifold where relational motion is stable:
 
 $$
 M_t \in OB_i \Rightarrow F(M_t) \in OB_i.
@@ -536,7 +535,7 @@ Appendix B provides a numeric illustration of basin navigation.
 
 ---
 
-# **8. Implications for Science (Rewritten)**
+# **8. Implications for Science**
 
 The mapping loop, basin geometry, and cognitive spacesuit together define an operational architecture for understanding how systems maintain coherence while moving between world‑state and manifold‑state. This section outlines how the same structural principles appear across scientific domains without introducing new primitives or assumptions. The goal is not to reinterpret these fields, but to show how relational geometry provides a common scaffold wherever internal dynamics must coordinate with outward behavior.
 
@@ -618,7 +617,7 @@ These systems exhibit:
 - transition regions that enable reconfiguration,  
 - regulatory layers that maintain feasibility across agents.
 
-The mapping loop generalizes to multi‑agent settings by treating the joint world‑state as the input to `$\Phi$` and the joint relational manifold as the space in which coordination unfolds.
+The mapping loop generalizes to multi‑agent settings by treating the joint world‑state as the input to $\Phi$ and the joint relational manifold as the space in which coordination unfolds.
 
 ---
 
@@ -652,8 +651,7 @@ Robustness emerges not from prediction or symbolic correction, but from the stru
 
 ## **9.1 Perturbations in the Reference World $W(t)$**
 
-Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in $W(t)$.  
-The lift $\Phi$ maps these changes into the manifold as shifts in relational configuration:
+Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in $W(t)$. The lift $\Phi$ maps these changes into the manifold as shifts in relational configuration:
 
 - small perturbations produce proportionally small changes in $M_t$,  
 - larger perturbations may move the system toward a new transition region,  
@@ -709,8 +707,7 @@ These regions act as structured pathways for recovery:
 - they prevent chaotic or discontinuous responses,  
 - they ensure that outward behavior remains feasible.
 
-For example, if a gust of wind shifts the ball’s path, the system may leave the current intercept basin and enter a neighboring one.  
-The transition region ensures that this shift is smooth and coordinated.
+For example, if a gust of wind shifts the ball’s path, the system may leave the current intercept basin and enter a neighboring one. The transition region ensures that this shift is smooth and coordinated.
 
 ---
 
@@ -731,10 +728,7 @@ Robustness is not an add‑on; it is a consequence of the geometry.
 
 ## **9.6 Summary**
 
-The architecture handles perturbations by shaping how the system moves through relational geometry.  
-Small disturbances are absorbed within basins; larger ones are redirected through transition regions.  
-The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.  
-This provides a natural form of robustness that does not rely on prediction, symbolic correction, or explicit error modeling.
+The architecture handles perturbations by shaping how the system moves through relational geometry. Small disturbances are absorbed within basins; larger ones are redirected through transition regions. The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent. This provides a natural form of robustness that does not rely on prediction, symbolic correction, or explicit error modeling.
 
 Appendix C provides a numeric illustration of basin navigation.
 
