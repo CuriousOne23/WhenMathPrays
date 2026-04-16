@@ -1264,6 +1264,41 @@ The central contribution is architectural: a coherent, relational, and geometric
 
 ---
 
+Absolutely — we can format the References section *exactly* like that.  
+Clean, numeric, minimal, architectural.
+
+Here is your **final, ready‑to‑paste References section** in the style you requested:
+
+---
+
+# **References**
+
+\[1\] Curious One, *d‑Information: A Framework for Dynamic Relational Motion*, Internal Technical Report, 2025.  
+URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md)
+
+\[2\] Curious One, *High d‑Information: Hierarchical Dynamic Information in Relational Systems*, Internal Technical Report, 2025.  
+URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-information.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-information.md)
+
+\[3\] Curious One, *Geometry of Relational Thought*, Internal Technical Report, 2025.  
+URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md)
+
+\[4\] Curious One, *Geometry of Thought Basins*, Internal Technical Report, 2025.  
+URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md)
+
+\[5\] S. H. Strogatz, *Nonlinear Dynamics and Chaos*, Westview Press, 2015.
+
+\[6\] M. Hirsch, S. Smale, and R. Devaney, *Differential Equations, Dynamical Systems, and an Introduction to Chaos*, Academic Press, 2012.
+
+\[7\] J. J. Gibson, *The Ecological Approach to Visual Perception*, Houghton Mifflin, 1979.
+
+\[8\] R. A. Brooks, “Intelligence Without Representation,” *Artificial Intelligence*, vol. 47, pp. 139–159, 1991.
+
+\[9\] K. Friston, “The Free‑Energy Principle: A Unified Brain Theory?,” *Nature Reviews Neuroscience*, vol. 11, pp. 127–138, 2010.
+
+\[10\] H. K. Khalil, *Nonlinear Systems*, Prentice Hall, 2002.
+
+---
+
 ### Appendix A: Numeric illustration of the mapping loop in a ball‑catching scenario
 
 This appendix provides a simple numeric example of the mapping loop
