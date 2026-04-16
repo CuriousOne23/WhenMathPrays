@@ -701,3 +701,240 @@ Close the paper cleanly.
 - The framework is general and extensible
 
 ---
+
+### Appendix A: Numeric illustration of the mapping loop in a ball‑catching scenario
+
+This appendix provides a simple numeric example of the mapping loop
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
+
+using a boy catching a ball. The goal is not physical accuracy, but to show how concrete numbers can flow through $\Phi$, $F$, and $\Psi$ under the constraints described in Section 6.
+
+---
+
+### A.1 World‑state and ball trajectory
+
+Assume a ball is thrown horizontally toward the boy.
+
+- initial horizontal position: $x_0 = 0\ \text{m}$  
+- initial vertical position: $y_0 = 2\ \text{m}$  
+- horizontal velocity: $v_{0x} = 5\ \text{m/s}$  
+- vertical velocity: $v_{0y} = 8\ \text{m/s}$  
+- gravitational acceleration: $g = 9.8\ \text{m/s}^2$
+
+A simple parabolic trajectory:
+
+$$
+x_b(t) = x_0 + v_{0x} t
+$$
+
+$$
+y_b(t) = y_0 + v_{0y} t - \frac{1}{2} g t^2
+$$
+
+At time $t = 0.4\ \text{s}$:
+
+$$
+x_b(0.4) = 0 + 5 \cdot 0.4 = 2.0\ \text{m}
+$$
+
+$$
+y_b(0.4) = 2 + 8 \cdot 0.4 - 4.9 \cdot (0.4)^2
+$$
+
+$$
+y_b(0.4) = 2 + 3.2 - 4.9 \cdot 0.16 = 5.2 - 0.784 = 4.416\ \text{m}
+$$
+
+Let the boy’s hand at this moment be at horizontal position
+
+$$
+x_h(0.4) = 1.0\ \text{m}
+$$
+
+---
+
+### A.2 Lift into the manifold: $\Phi$
+
+Define a simple relational lift as horizontal ball‑to‑hand distance:
+
+$$
+M_t = \Phi(W(t)) = x_b(t) - x_h(t)
+$$
+
+At $t = 0.4\ \text{s}$:
+
+$$
+M_{0.4} = x_b(0.4) - x_h(0.4) = 2.0 - 1.0 = 1.0\ \text{m}
+$$
+
+At $t = 0.5\ \text{s}$:
+
+$$
+x_b(0.5) = 0 + 5 \cdot 0.5 = 2.5\ \text{m}
+$$
+
+Assume the hand has moved to
+
+$$
+x_h(0.5) = 1.4\ \text{m}
+$$
+
+Then:
+
+$$
+M_{0.5} = 2.5 - 1.4 = 1.1\ \text{m}
+$$
+
+The change in manifold‑state:
+
+$$
+|M_{0.5} - M_{0.4}| = |1.1 - 1.0| = 0.1\ \text{m}
+$$
+
+The change in world‑state (horizontal ball position):
+
+$$
+|x_b(0.5) - x_b(0.4)| = |2.5 - 2.0| = 0.5\ \text{m}
+$$
+
+A bounded‑lift condition of the form
+
+$$
+\|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \|W(t+\Delta t) - W(t)\|
+$$
+
+is satisfied, for example, with $K_\Phi = 1$, since $0.1 \le 0.5$.
+
+---
+
+### A.3 Manifold dynamics: $F$
+
+Use a simple relational update:
+
+$$
+M_{t+\Delta t} = M_t + \Delta t \bigl(v_b - v_h\bigr)
+$$
+
+where $v_b$ and $v_h$ are horizontal velocities of ball and hand.
+
+Let:
+
+- $M_t = 1.0\ \text{m}$  
+- $\Delta t = 0.1\ \text{s}$  
+- $v_b = 5.0\ \text{m/s}$  
+- $v_h = 3.0\ \text{m/s}$
+
+Then:
+
+$$
+M_{t+\Delta t} = 1.0 + 0.1(5.0 - 3.0) = 1.0 + 0.1 \cdot 2.0 = 1.2\ \text{m}
+$$
+
+The update magnitude:
+
+$$
+|M_{t+\Delta t} - M_t| = |1.2 - 1.0| = 0.2\ \text{m}
+$$
+
+A bounded‑update condition
+
+$$
+\|F(M_t) - M_t\| \le K_F
+$$
+
+is satisfied, for example, with $K_F = 0.5$, since $0.2 \le 0.5$.
+
+---
+
+### A.4 Projection back to the reference world: $\Psi$
+
+Define a simple projection rule:
+
+$$
+RWD(t) = x_h(t) + k M_t
+$$
+
+where $k$ is a gain controlling how strongly the manifold‑state influences hand motion.
+
+Let:
+
+- $x_h(t) = 1.0\ \text{m}$  
+- $M_t = 1.0\ \text{m}$  
+- $k = 0.5$
+
+Then:
+
+$$
+RWD(t) = 1.0 + 0.5 \cdot 1.0 = 1.5\ \text{m}
+$$
+
+Interpret $RWD(t)$ here as the new target hand position.  
+If the boy’s arm can reach up to, say, $2.0\ \text{m}$ horizontally, then a feasibility constraint of the form
+
+$$
+\|\Psi(M_t)\| \le \text{(biomechanical limit)}
+$$
+
+is satisfied, since $1.5 \le 2.0$.
+
+---
+
+### A.5 Basin threshold and time‑to‑contact
+
+Define a simple “catch” basin in the manifold as:
+
+$$
+|M_t| < 0.15\ \text{m}
+$$
+
+If at some time $t$:
+
+$$
+M_t = 0.12\ \text{m}
+$$
+
+then the system is inside the catch basin.
+
+A simple time‑to‑contact estimate:
+
+$$
+\tau = \frac{M_t}{|v_b - v_h|}
+$$
+
+Let:
+
+- $M_t = 1.0\ \text{m}$  
+- $v_b = 5.0\ \text{m/s}$  
+- $v_h = 3.0\ \text{m/s}$
+
+Then:
+
+$$
+\tau = \frac{1.0}{|5.0 - 3.0|} = \frac{1.0}{2.0} = 0.5\ \text{s}
+$$
+
+A temporal‑coherence condition such as
+
+$$
+\frac{d}{dt} M_t < 0
+$$
+
+in a catching task corresponds, in this simple numeric picture, to $M_t$ decreasing over successive time steps as the hand moves toward the ball.
+
+---
+
+### A.6 Summary
+
+This appendix shows one concrete way that:
+
+- $W(t)$ (ball and hand positions and velocities)  
+- $\Phi$ (relational lift)  
+- $F$ (relational update)  
+- $\Psi$ (projection to outward behavior)  
+
+can be instantiated with simple numbers in a ball‑catching scenario, while respecting the boundedness and coherence constraints described in Section 6.
+
+---
