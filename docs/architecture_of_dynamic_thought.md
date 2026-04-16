@@ -110,102 +110,38 @@ The next section introduces the transitional role of low‑dynamic information a
 
 ---
 
-# **4. The Manifold of Dynamic Thought**
+# **4. Low‑Dynamic Information: Transitional Structure (Rewritten)**
 
-Dynamic thought is modeled as motion within a relational geometric space, denoted $\mathcal{M}$.  
-This manifold contains **stable regions** and **transition‑shaping regions** that structure how trajectories evolve.  
-To describe this space without enumerating its full complexity, we introduce two indexed families:
+Low‑dynamic information occupies the transitional space between static representation and fully contextual meaning. It introduces controlled relational motion while preserving enough structural stability to remain compatible with static cognition. This regime enables concepts to participate in limited forms of interaction without requiring the full flexibility of high‑dynamic information.
 
-$$
-\mathcal{OB} = \\{ OB_i \mid i \in I \\}, \qquad
-\mathcal{RB} = \\{ RB_j \mid j \in J \\}.
-$$
+Low‑dynamic information modifies the assumptions of the static regime by allowing meaning to depend on relational changes that occur during interpretation. Instead of treating context as a fixed parameter, low‑dynamic information treats context as a variable that can evolve in response to the interpretive process. This introduces a form of structured motion that remains bounded and predictable.
 
-- Each **Object Basin** $OB_i$ is a **stable region** of $\mathcal{M}$ corresponding to a recurring relational configuration.  
-- Each **Relational Transition Region** $RB_j$ is a **transition‑shaping region** that governs how trajectories move between object basins.
+A simple way to express this transition is to extend the static mapping function. In the static regime, meaning is given by:
 
-Connectivity between basins is specified by two maps:
+$$  
+m = f(x)
+$$  
 
-$$
-\text{src},\ \text{tgt} : J \to I,
-$$
+In the low‑dynamic regime, the interpretive function becomes sensitive to changes in context. Let $c_t$ denote the context at interpretive step $t$. Meaning becomes:
+  
+$$  
+m = f(x, c_t)
+$$  
 
-so that each relational transition region
+Here, $c_t$ is not fixed but evolves according to an update rule that depends on the interaction between the representation and the interpretive process:
 
-$$
-RB_j : OB_{\text{src}(j)} \longrightarrow OB_{\text{tgt}(j)}
-$$
+$$  
+c_{t+1} = g(c_t, x)
+$$  
 
-encodes a stable transition between two regions of the manifold.
+This formulation captures the essential property of low‑dynamic information: 
+context changes during interpretation, but the changes are governed by a stable update function. The interpretive process remains structured, and the resulting meaning is still compatible with static representation once the process concludes.
 
-This representation allows the basin structure to scale without requiring an exhaustive list.  
-The full index sets $I$ and $J$ are large and task‑dependent; only a small illustrative subset is shown below.
+Low‑dynamic information plays a critical role in bridging the gap between static and dynamic regimes. It allows the interpretive process to incorporate relational motion without requiring the full flexibility of high‑dynamic information. This makes it possible to introduce dynamic structure gradually, in a way that remains accessible to static cognition.
 
----
+The transitional nature of low‑dynamic information also aligns with relational geometry. It supports limited movement within interpretive basins while preserving the stability needed to avoid uncontrolled transitions. This controlled motion prepares the interpretive system for the more flexible and context‑dependent dynamics of high‑dynamic information.
 
-## **4.1 Example Basin Structure (Illustrative Subset Only)**
-
-To give the reader a sense of the manifold’s structure, we present a **small subset** of basins relevant to the ball‑catching example used later in the paper.  
-These basins are **not comprehensive**; each can be decomposed into many finer sub‑basins depending on modeling resolution.
-
-### **Example Object Basins (subset)**
-
-- $OB_{\text{Ball}}$ — moving‑entity configuration  
-- $OB_{\text{Eye}}$ — visual‑anchor configuration  
-- $OB_{\text{Hand}}$ — effector configuration  
-- $OB_{\text{Feet}}$ — support/locomotion configuration  
-- $OB_{\text{Catch}}$ — interception geometry  
-- $OB_{\text{Timing}}$ — temporal regularity  
-
-### **Example Relational Transition Regions (subset)**
-
-- $RB_{\text{Eye↔Ball}}$ — visual tracking  
-- $RB_{\text{Eye↔Hand}}$ — visual–effector coupling  
-- $RB_{\text{Feet↔Catch}}$ — locomotion–interception coupling  
-- $RB_{\text{Approach}}$ — ball approaching effector  
-- $RB_{\text{Align}}$ — alignment geometry  
-- $RB_{\text{Timing}}$ — temporal coordination  
-
-### **Example Connectivity (subset)**
-
-$$
-\text{src}(RB_{\text{Eye↔Ball}})=OB_{\text{Eye}}, \qquad
-\text{tgt}(RB_{\text{Eye↔Ball}})=OB_{\text{Ball}}
-$$
-
-$$
-\text{src}(RB_{\text{Feet↔Catch}})=OB_{\text{Feet}}, \qquad
-\text{tgt}(RB_{\text{Feet↔Catch}})=OB_{\text{Catch}}
-$$
-
-$$
-\text{src}(RB_{\text{Align}})=OB_{\text{Hand}}, \qquad
-\text{tgt}(RB_{\text{Align}})=OB_{\text{Catch}}
-$$
-
-These examples are provided only to give the reader an intuition for the manifold’s structure.  
-The full basin structure is significantly richer, and even a single basin (e.g., $OB_{\text{Catch}}$) contains many sub‑basins related to alignment, timing windows, and effector posture.
-
----
-
-## **4.2 Trajectories Through the Basin Structure**
-
-A dynamic thought process corresponds to a trajectory
-
-$$
-\gamma : \mathbb{R} \to \mathcal{M}
-$$
-
-moving through the manifold.  
-As $\gamma(t)$ evolves, it may:
-
-- enter an object basin $OB_i$,  
-- transition through a relational transition region $RB_j$,  
-- stabilize temporarily in a region,  
-- or move through a sequence of basins shaped by the geometry.
-
-The basin structure constrains and shapes the motion of $\gamma(t)$ without specifying its content.  
-This allows the architecture to describe dynamic thought without invoking semantics, representation, or phenomenology.
+Low‑dynamic information therefore serves as the structural bridge between static representation and dynamic meaning. It introduces motion into the interpretive process while maintaining compatibility with the reference world. The next section examines high‑dynamic information and its role in supporting fully contextual meaning within a relational manifold..
 
 ---
 
