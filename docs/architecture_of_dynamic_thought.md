@@ -110,7 +110,7 @@ The next section introduces the transitional role of low‑dynamic information a
 
 ---
 
-# **4. Low‑Dynamic Information: Transitional Structure (Rewritten)**
+# **4. Low‑Dynamic Information: Transitional Structure**
 
 Low‑dynamic information occupies the transitional space between static representation and fully contextual meaning. It introduces controlled relational motion while preserving enough structural stability to remain compatible with static cognition. This regime enables concepts to participate in limited forms of interaction without requiring the full flexibility of high‑dynamic information.
 
@@ -145,7 +145,7 @@ Low‑dynamic information therefore serves as the structural bridge between stat
 
 ---
 
-# **5. The Mapping Loop Illustrated Through a Boy Catching a Ball (Rewritten)**
+# **5. The Mapping Loop Illustrated Through a Boy Catching a Ball**
 
 Section 3.5 introduced the architectural loop:
   
@@ -255,21 +255,17 @@ These components form a coherent framework for integrating reference‑world and
 
 ---
 
-# **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop**
+# **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop (Rewritten)**
 
 The mapping loop introduced in Section 3.5,
-
-$$
+  
+$$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t),
-$$
+$$  
 
-allows a system to move between the reference world and the manifold.  
-These regimes operate under different constraints, and transitions between them can become unstable if not properly regulated.  
-The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
+allows a system to move between the reference world and the manifold. These regimes operate under different constraints, and transitions between them can become unstable if not properly regulated. The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
 
-The spacesuit does not introduce new dynamics.  
-Instead, it regulates how $\Phi$, $F$, and $\Psi$ interact so that the system can traverse the loop without runaway amplification, oscillation, or loss of coordination.  
-Appendix A provides simple numeric examples illustrating these constraints in a ball‑catching scenario.
+The spacesuit does not introduce new dynamics. Instead, it regulates how $\Phi$, $F$, and $\Psi$ interact so the system can traverse the loop without runaway amplification, oscillation, or loss of coordination. Appendix A provides simple numeric examples illustrating these constraints in a ball‑catching scenario.
 
 ---
 
@@ -297,53 +293,48 @@ The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold.
 The spacesuit ensures that this lift is stable and well‑posed.
 
 ### **Bounded Lift**
-
-$$
+  
+$$  
 \|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \, \|W(t+\Delta t) - W(t)\|.
-$$
+$$  
 
-This ensures that small changes in the world produce proportionally small changes in the manifold.  
-Appendix A includes a simple numeric example using ball and hand positions.
+This ensures that small changes in the world produce proportionally small changes in the manifold. Appendix A includes a simple numeric example using ball and hand positions.
 
 ---
 
 ## **6.3 Regulating Manifold Motion: Constraints on $F$**
 
-The manifold dynamics $F$ evolve $M_t$ through relational motion.  
-The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
+The manifold dynamics $F$ evolve $M_t$ through relational motion. The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
 
 ### **Bounded Update**
-
-$$
+  
+$$  
 \|F(M_t) - M_t\| \le K_F.
-$$
+$$  
 
 This prevents runaway relational motion or abrupt transitions between distant regions of the manifold.
 
 ### **Basin‑Safe Evolution**
-
-$$
+  
+$$  
 M_t \in OB_i \Rightarrow F(M_t) \in OB_i \cup RB_{ij}.
-$$
+$$  
 
-This ensures that the system moves only within a basin or through a valid transition region.  
-Appendix A illustrates this with a simple “catch basin” threshold.
+This ensures that the system moves only within a basin or through a valid transition region. Appendix A illustrates this with a simple “catch basin” threshold.
 
 ---
 
 ## **6.4 Regulating the Projection: Constraints on $\Psi$**
 
-The mapping $\Psi$ projects manifold‑state back into the reference world as $RWD(t)$.  
-The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
+The mapping `$\Psi$` projects manifold‑state back into the reference world as $RWD(t)$. The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
 
 ### **Feasible Projection**
-
-$$
+  
+$$  
 \|\Psi(M_t)\| \le \text{(biomechanical limit)}.
-$$
-
-This ensures that the manifold does not request actions the body cannot perform.  
-Appendix A provides a simple numeric example using a reachability limit.
+$$  
+  
+This ensures that the manifold does not request actions the body cannot perform. Appendix A provides a simple numeric example using a reachability limit.
 
 ---
 
@@ -354,11 +345,11 @@ The spacesuit also ensures coherence across the entire loop.
 ### **Temporal Coherence**
 
 In tasks requiring convergence (e.g., catching a ball), relational distance must decrease:
-
-$$
+  
+$$  
 \frac{d}{dt} M_t < 0.
-$$
-
+$$  
+  
 Appendix A includes a simple time‑to‑contact calculation illustrating this condition.
 
 ### **Geometric Coherence**
@@ -375,9 +366,9 @@ Transitions between basins in the manifold must correspond to coordinated shifts
 
 The cognitive spacesuit ensures that:
 
-- $\Phi$ lifts world‑state into the manifold safely,  
-- $F$ evolves manifold‑state within stable relational structure,  
-- $\Psi$ projects manifold‑state back into feasible behavior,  
+- `$\Phi$` lifts world‑state into the manifold safely,  
+- `$F$` evolves manifold‑state within stable relational structure,  
+- `$\Psi$` projects manifold‑state back into feasible behavior,  
 - the entire loop remains coherent across time.
 
 In the ball‑catching example, the spacesuit prevents the system from:
