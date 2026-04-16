@@ -1625,6 +1625,8 @@ $$
 |M_t| \le 0.15\ \text{m}
 $$
 
+The tracking basin corresponds to the region of large relational displacement where the system maintains a stable relational posture. It is recognized by the fact that trajectories entering this region tend to remain there: the local geometry is shallow, inward curvature is weak, and small perturbations do not immediately collapse the state toward smaller $M_t$. This matches the relational stability basins described in Section 7, where the system is far from the target and the relational configuration is stable rather than convergent.
+
 These thresholds are illustrative and correspond to the relational geometry described in Section 7.
 
 ---
