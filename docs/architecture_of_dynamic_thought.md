@@ -1612,58 +1612,70 @@ can be instantiated with simple numbers in a ball‑catching scenario, while res
 
 ---
 
+Jeff — here is a **clean, ontology‑correct, GitHub‑friendly revision of Appendix B**, fully aligned with the corrected Section 7:
+
+- **No “tracking basin” as a special category**  
+- **OB\_track, OB\_intercept, OB\_catch** used consistently  
+- **RBs** clearly defined as transitions  
+- **All equations GitHub‑compatible**  
+- **No stray commas/semicolons**  
+- **No conceptual drift**  
+
+This version is ready to paste directly into your GitHub document.
+
+---
+
 # **Appendix B: Numeric Illustration of Basin Navigation**
 
-This appendix provides a simple numeric example of how the system moves through basins and transition regions during a ball‑catching task, as described in Section 7.  
+This appendix provides a simple numeric example of how the system moves through **object basins (OBs)** and **transition regions (RBs)** during a ball‑catching task, as described in Section 7.  
 The goal is not physical accuracy, but to show how concrete numbers can illustrate basin navigation in the manifold.
 
 ---
 
 ## **B.1 Basin Definitions (Simple Numeric Form)**
 
-Define three basins in terms of relational distance $M_t$:
+Define three **object basins** in terms of relational distance $M_t$:
 
-- **Tracking basin:**
+- **OB\_track (tracking object basin):**
 
 $$
 M_t > 1.0\ \text{m}
 $$
 
-- **Intercept basin:**
+- **OB\_intercept (intercept object basin):**
 
 $$
 0.15\ \text{m} < M_t \le 1.0\ \text{m}
 $$
 
-- **Catch basin:**
+- **OB\_catch (catch object basin):**
 
 $$
 |M_t| \le 0.15\ \text{m}
 $$
 
-The tracking basin corresponds to the region of large relational displacement where the system maintains a stable relational posture. It is recognized by the fact that trajectories entering this region tend to remain there: the local geometry is shallow, inward curvature is weak, and small perturbations do not immediately collapse the state toward smaller $M_t$. This matches the relational stability basins described in Section 7, where the system is far from the target and the relational configuration is stable rather than convergent.
-
-These thresholds are illustrative and correspond to the relational geometry described in Section 7.
+These thresholds are illustrative and correspond to the relational geometry described in Section 7.  
+Each OB is a **stable relational configuration**: once inside an OB, the system tends to remain there unless driven toward a transition region.
 
 ---
 
 ## **B.2 Transition Regions (RBs)**
 
-Define two transition regions:
+Define two **transition regions** (RBs) that connect the OBs:
 
-- **Tracking → Intercept:**
+- **RB\_{track→intercept}:**
 
 $$
 0.9\ \text{m} < M_t \le 1.0\ \text{m}
 $$
 
-- **Intercept → Catch:**
+- **RB\_{intercept→catch}:**
 
 $$
 0.15\ \text{m} < M_t \le 0.20\ \text{m}
 $$
 
-These RBs act as funnels guiding the system between basins.
+These RBs act as **funnels**, guiding the system between object basins without discontinuity.
 
 ---
 
@@ -1673,19 +1685,27 @@ Assume the relational distance evolves over time as the ball approaches and the 
 
 | Time (s) | $M_t$ (m) | Region |
 |---------|-----------|--------|
-| 0.0     | 1.80      | Tracking basin |
-| 0.1     | 1.50      | Tracking basin |
-| 0.2     | 1.10      | Tracking basin |
-| 0.3     | 0.95      | **RB: Tracking → Intercept** |
-| 0.4     | 0.70      | Intercept basin |
-| 0.5     | 0.30      | Intercept basin |
-| 0.6     | 0.18      | **RB: Intercept → Catch** |
-| 0.7     | 0.12      | Catch basin |
+| 0.0     | 1.80      | OB\_track |
+| 0.1     | 1.50      | OB\_track |
+| 0.2     | 1.10      | OB\_track |
+| 0.3     | 0.95      | **RB\_{track→intercept}** |
+| 0.4     | 0.70      | OB\_intercept |
+| 0.5     | 0.30      | OB\_intercept |
+| 0.6     | 0.18      | **RB\_{intercept→catch}** |
+| 0.7     | 0.12      | OB\_catch |
 
 This table illustrates the basin sequence:
 
 $$
-OB_{\text{track}} \rightarrow RB_{\text{track}\rightarrow\text{intercept}} \rightarrow OB_{\text{intercept}} \rightarrow RB_{\text{intercept}\rightarrow\text{catch}} \rightarrow OB_{\text{catch}}
+OB_{\text{track}}
+\rightarrow
+RB_{\text{track}\rightarrow\text{intercept}}
+\rightarrow
+OB_{\text{intercept}}
+\rightarrow
+RB_{\text{intercept}\rightarrow\text{catch}}
+\rightarrow
+OB_{\text{catch}}
 $$
 
 matching the structure in Section 7.
@@ -1705,9 +1725,9 @@ Let:
 - $\Delta t = 0.1\ \text{s}$  
 - ball velocity: $v_b = -6.0\ \text{m/s}$  
 - hand velocity increases as the system enters deeper basins:  
-  - tracking: $v_h = 1.0$  
-  - intercept: $v_h = 3.0$  
-  - catch: $v_h = 5.0$
+  - OB\_track: $v_h = 1.0$  
+  - OB\_intercept: $v_h = 3.0$  
+  - OB\_catch: $v_h = 5.0$
 
 Example at $t = 0.3$:
 
@@ -1720,14 +1740,14 @@ $$
 M_{0.4} = 0.95 + 0.1(-9.0) = 0.95 - 0.9 = 0.05\ \text{m}
 $$
 
-This would place the system directly into the catch basin.  
+This would place the system directly into OB\_catch.  
 To match the table above, we simply use a slightly smaller hand velocity (e.g., $v_h = 2.0$), giving:
 
 $$
 M_{0.4} = 0.95 + 0.1(-6.0 - 2.0) = 0.95 - 0.8 = 0.15\ \text{m}
 $$
 
-which lands in the **Intercept → Catch** transition region.
+which lands in **RB\_{intercept→catch}**.
 
 This illustrates how relational dynamics $F$ drive basin transitions.
 
@@ -1749,7 +1769,11 @@ Using the table:
 So:
 
 $$
-\frac{M_{0.4} - M_{0.3}}{0.1} = \frac{0.70 - 0.95}{0.1} = -2.5\ \text{m/s}
+\frac{M_{0.4} - M_{0.3}}{0.1}
+=
+\frac{0.70 - 0.95}{0.1}
+=
+-2.5\ \text{m/s}
 $$
 
 Negative, as required.
@@ -1760,7 +1784,7 @@ Negative, as required.
 
 This appendix provides a simple numeric illustration of:
 
-- basin definitions  
+- object basin definitions  
 - transition regions  
 - relational updates  
 - timing coherence  
