@@ -1664,26 +1664,30 @@ This illustrates how relational dynamics $F$ drive basin transitions.
 
 A simple temporal‑coherence condition from Section 7:
 
-$$
+$$  
 \frac{d}{dt} M_t < 0
-$$
+$$  
 
 Using the table:
 
 - $M_{0.3} = 0.95$  
 - $M_{0.4} = 0.70$  
 
-So:
+So  
+  
+$$
+\frac{M_{0.4} - M_{0.3}}{0.1} =
+$$
 
 $$
-\frac{M_{0.4} - M_{0.3}}{0.1}
-=
-\frac{0.70 - 0.95}{0.1}
-=
+\frac{0.70 - 0.95}{0.1} =
+$$
+
+$$
 -2.5\ \text{m/s}
 $$
-
-Negative, as required.
+ 
+Negative, as required.  
 
 ---
 
