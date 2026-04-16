@@ -831,10 +831,7 @@ This framework does not replace existing theories; it offers a geometric lens th
 
 # **9. Robustness and Perturbations**
 
-Real‑world behavior unfolds under uncertainty.  
-Wind alters trajectories, surfaces introduce irregular bounces, timing shifts unexpectedly, and internal dynamics can drift.  
-The architecture is designed so that these perturbations do not destabilize the mapping loop.  
-Instead, they are absorbed, redirected, or re‑channeled through the relational geometry of the manifold.
+Real‑world behavior unfolds under uncertainty. Wind alters trajectories, surfaces introduce irregular bounces, timing shifts unexpectedly, and internal dynamics can drift. The architecture is designed so that these perturbations do not destabilize the mapping loop. Instead, they are absorbed, redirected, or re‑channeled through the relational geometry of the manifold.
 
 Robustness emerges not from prediction or symbolic correction, but from the structure of basins, transition regions, and the regulatory role of the cognitive spacesuit.
 
