@@ -1484,18 +1484,23 @@ The collapse function Ψ maps the updated manifold state back into the reference
 A minimal and frame‑independent collapse is:
 
 $$
-\Psi(M_{t+\Delta t}) = x_h(t+\Delta t) + M_{t+\Delta t}
+\Psi(M_{t+\Delta t}) = x_h(t+\Delta_t) + M_{t+\Delta t}
 $$
 
-This returns the predicted ball position in the reference world by adding the updated relational displacement to the updated hand position. Ψ is smooth, invertible with respect to Φ, and introduces no additional assumptions. It simply projects the manifold update back into the coordinates of the example world.
+This reconstructs the predicted ball position in the reference world by adding the updated relational displacement to the updated hand position. Ψ is smooth, invertible with respect to Φ, and introduces no additional assumptions. It simply returns a world‑level quantity derived from the manifold state.
 
-In this appendix we also introduce a simple, example‑specific projection rule for reference‑world dynamics (RWD). This is not a second Ψ, nor an instantiation of Ψ. It is a separate illustrative rule used only for the ball‑catching example:
+At this point, Ψ has completed its role in the mapping loop: it has produced a world‑level observable (the predicted ball position). What happens next is not part of Ψ itself. In this appendix, we introduce a simple, **example‑specific** rule that uses this observable to illustrate how a reference‑world update might be computed.
+
+To make this explicit: **RWD(t) is not Ψ.**  
+RWD(t) is a downstream example rule that *uses* the world‑level quantity provided by Ψ in this particular illustration.
+
+A simple example rule is:
 
 $$
 RWD(t) = x_h(t) + k M_t
 $$
 
-RWD(t) provides a toy world‑level update based on the relational displacement scaled by a constant k. It is included only to demonstrate how a reference‑world quantity might be computed from the manifold state in this specific example.
+This provides an example reference‑world update based on the relational displacement scaled by a constant k. It is included only to demonstrate how a world‑level quantity might be computed from the manifold state in this specific example. Ψ supplies the observable; RWD(t) shows one possible way the example world might use it.
 
 where $k$ is a gain controlling how strongly the manifold‑state influences hand motion.
 
