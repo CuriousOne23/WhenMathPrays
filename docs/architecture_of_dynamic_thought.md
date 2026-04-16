@@ -1576,17 +1576,20 @@ The goal is not physical accuracy, but to show how concrete numbers can illustra
 
 Define three basins in terms of relational distance $M_t$:
 
-- **Tracking basin:**  
+- **Tracking basin:**
+- 
   $$
   M_t > 1.0\ \text{m}
   $$
 
-- **Intercept basin:**  
+- **Intercept basin:**
+- 
   $$
   0.15\ \text{m} < M_t \le 1.0\ \text{m}
   $$
 
-- **Catch basin:**  
+- **Catch basin:**
+- 
   $$
   |M_t| \le 0.15\ \text{m}
   $$
@@ -1599,12 +1602,14 @@ These thresholds are illustrative and correspond to the relational geometry desc
 
 Define two transition regions:
 
-- **Tracking → Intercept:**  
+- **Tracking → Intercept:**
+- 
   $$
   0.9\ \text{m} < M_t \le 1.0\ \text{m}
   $$
 
-- **Intercept → Catch:**  
+- **Intercept → Catch:**
+- 
   $$
   0.15\ \text{m} < M_t \le 0.20\ \text{m}
   $$
@@ -1713,15 +1718,6 @@ This appendix provides a simple numeric illustration of:
 - the basin sequence described in Section 7  
 
 The numbers are not physically precise; they are chosen to make the geometry of basin navigation clear and intuitive.
-
----
-
-Here you go, Jeff — **Appendix C**, written to match the tone, structure, and GitHub‑friendly formatting of Appendices A and B.  
-It is intentionally *simple*, *minimal*, and *illustrative*, because Section 9 is about **robustness**, not about introducing new machinery.
-
-This appendix shows a tiny perturbation in \(W(t)\), how it lifts into \(M_t\), how the manifold dynamics redirect the system into a new basin, and how the projection \(\Psi\) produces a feasible correction.
-
-It’s the smallest possible “whole‑loop under perturbation” example.
 
 ---
 
