@@ -831,19 +831,100 @@ This framework does not replace existing theories; it offers a geometric lens th
 
 # **9. Robustness and Perturbations**
 
-**Purpose:**  
-Show how the architecture handles noise, uncertainty, and perturbations.
+Real‑world behavior unfolds under uncertainty.  
+Wind alters trajectories, surfaces introduce irregular bounces, timing shifts unexpectedly, and internal dynamics can drift.  
+The architecture is designed so that these perturbations do not destabilize the mapping loop.  
+Instead, they are absorbed, redirected, or re‑channeled through the relational geometry of the manifold.
 
-**Content:**
+Robustness emerges not from prediction or symbolic correction, but from the structure of basins, transition regions, and the regulatory role of the cognitive spacesuit.
 
-- Perturbations in \(W(t)\) (wind, spin, bounce)  
-- Perturbations in \(M_t\) (unexpected relational shifts)  
-- How basins absorb small disturbances  
-- How RBs allow recovery from larger ones  
-- Why the mapping loop is inherently robust
+---
 
-**Example:**  
-A sudden gust changes the ball’s trajectory; the manifold dynamics re‑route the system through a new intercept basin.
+## **9.1 Perturbations in the Reference World \(W(t)\)**
+
+Perturbations in the world—such as wind, spin, or an unexpected bounce—appear as changes in \(W(t)\).  
+The lift \(\Phi\) maps these changes into the manifold as shifts in relational configuration:
+
+- small perturbations produce proportionally small changes in \(M_t\)  
+- larger perturbations may move the system toward a new transition region  
+- the cognitive spacesuit ensures the lift remains bounded and well‑posed  
+
+Because \(\Phi\) is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
+
+---
+
+## **9.2 Perturbations in the Manifold \(M_t\)**
+
+Perturbations can also arise internally:
+
+- unexpected relational shifts  
+- transient misalignment  
+- small timing errors  
+- drift in relational gradients  
+
+The manifold’s basin structure absorbs these disturbances:
+
+- inside a basin, perturbations decay as the system is pulled back toward the basin center  
+- near a transition region, perturbations may redirect the system into a neighboring basin  
+- the cognitive spacesuit ensures that such redirections remain feasible and coherent  
+
+This provides a geometric form of error correction without requiring explicit prediction or symbolic reasoning.
+
+---
+
+## **9.3 Basin Absorption of Small Disturbances**
+
+Within a basin \(OB_i\), the dynamics satisfy:
+
+$$
+M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
+$$
+
+This means:
+
+- small perturbations do not eject the system  
+- relational motion remains stable  
+- the system naturally returns to the basin’s attractor  
+
+In the ball‑catching example, minor deviations in ball trajectory or hand motion are absorbed by the tracking or intercept basin without requiring a discrete correction.
+
+---
+
+## **9.4 Transition Regions and Recovery From Larger Perturbations**
+
+When a perturbation is large enough to move the system out of a basin, it typically enters a transition region \(RB_{ij}\).  
+These regions act as structured pathways for recovery:
+
+- they guide the system toward a new stable configuration  
+- they prevent chaotic or discontinuous responses  
+- they ensure that outward behavior remains feasible  
+
+For example, if a gust of wind shifts the ball’s path, the system may leave the current intercept basin and enter a neighboring one.  
+The transition region ensures that this shift is smooth and coordinated.
+
+---
+
+## **9.5 Why the Mapping Loop Is Inherently Robust**
+
+The mapping loop maintains robustness through its structure:
+
+- **bounded lift** prevents discontinuities entering the manifold  
+- **bounded manifold updates** prevent runaway relational motion  
+- **feasible projection** prevents impossible motor outputs  
+- **basins** stabilize relational motion  
+- **transition regions** provide structured recovery pathways  
+- **temporal coherence** ensures convergence toward task‑relevant configurations  
+
+Robustness is not an add‑on; it is a consequence of the geometry.
+
+---
+
+## **9.6 Summary**
+
+The architecture handles perturbations by shaping how the system moves through relational geometry.  
+Small disturbances are absorbed within basins; larger ones are redirected through transition regions.  
+The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.  
+This provides a natural form of robustness that does not rely on prediction, symbolic correction, or explicit error modeling.
 
 ---
 
