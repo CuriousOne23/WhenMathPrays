@@ -714,6 +714,8 @@ Basin navigation provides the structural backbone of real‑time behavior:
 
 In the ball‑catching example, the system moves through a sequence of basins that correspond to tracking, intercepting, and catching — not as symbolic states, but as **regions of relational geometry** shaped by the manifold and regulated by the spacesuit.
 
+Appendix B provides a numeric illustration of basin navigation.
+
 ---
 
 # **8. Timing, Constraints, and Relational Geometry**
