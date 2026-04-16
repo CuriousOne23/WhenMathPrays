@@ -3,37 +3,50 @@
 
 ---
 
-# 1. Abstract
+# 0. **🧩 ABSTRACT**
 
-This paper proposes an architectural account of dynamic thought. It models thought as motion within a relational geometric space and describes how this geometry interacts with the static representations used in communication and reasoning. The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic—and connects them through a mapping loop that links the reference world to a manifold of relational thought. The account is speculative and intended to clarify how dynamic thinking and static representation can be related within a single structure. The goal is to offer a coherent architectural proposal that invites inquiry, refinement, and further development.
+Understanding is often modeled through static, object‑centric representations that emphasize stability and definition. These representations support classification and communication, but they cannot account for the dynamic, relational processes through which meaning unfolds. This paper proposes an architectural account of dynamic thought that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified structure.
+
+The architecture centers on a bidirectional mapping between the reference world of static cognition and a relational manifold in which meaning develops through motion. Static representations are lifted into this manifold, transformed through dynamic interpretation, and collapsed back into communicable form. The paper outlines the structural requirements for this mapping, the constraints that shape it, and the translation mechanisms that allow static and dynamic regimes to interact coherently.
+
+The resulting framework offers a scalable and geometrically grounded account of how meaning emerges from information in motion. It is architectural rather than algorithmic, and it is presented as an invitation to inquiry: a proposal for how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. The aim is to provide a foundation for future work in information theory, cognition, and computational modeling.
 
 ---
 
 # **1. Introduction**
 
-This paper develops an architectural account of **dynamic thought** [1] by describing how information moves between two domains: the reference world of static representation and the geometric manifold [8] of relational thought introduced in prior work [3][4]. The central contribution is to make explicit the bidirectional mapping between these domains and to show how static concepts are lifted into relational geometry, transformed through dynamic interpretation, and collapsed back into static form for communication.
+Understanding is often described through static, object‑centric representations that emphasize stability, categorization, and definition. These representations support communication and analysis, but they do not capture the dynamic, relational processes through which meaning develops. This paper proposes an architectural account of **dynamic thought** that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified structure [1, 4, 7].
 
-Before this architecture can begin, a boundary must be acknowledged. **Agency is the mystery that a system capable of generating and updating its relational state exists at all.** Human cultures, religions, and scientific traditions have offered explanations for this origin for thousands of years, and this paper adds nothing to that discussion. The architecture developed here begins only after such a system is present and addresses how thought operates once it exists.
+The architecture centers on a bidirectional mapping between the **reference world** of static cognition and a **relational manifold** in which meaning unfolds through motion [2, 3]. Static representations are lifted into this manifold, transformed through dynamic interpretation, and collapsed back into communicable form. The goal is not to replace static cognition but to clarify how static and dynamic regimes interact, constrain one another, and jointly support understanding [5].
 
-Recent work in AI has explored geometric structure in learned representations [5][6], but these approaches focus on the geometry of **static embeddings**—latent clusters, semantic directions, and representational neighborhoods. They present geometric views of LLM behavior to help visualize patterns, but they do not define the relational space in which **dynamic basins** [7] can arise. Basins cannot be seen in a representational embedding because basins are not representational objects; they are **dynamic structures** that emerge only when the space is defined by **relations, transitions, and verbs** [9] rather than nouns. In the architecture developed here, basins appear naturally because the manifold is defined by relational motion. The geometry is not a visualization tool but the underlying structure of dynamic thought itself.
+This account is **architectural rather than algorithmic**. It does not specify a metric for the manifold, define update dynamics, or propose a computational implementation. It does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional: the aim is to articulate a structural scaffold that clarifies a conceptual gap, not to provide a complete theory of mind [6].
 
-The framework introduces three information regimes—static, low‑dynamic, and high‑dynamic [2] and shows how they participate in a mapping loop that connects the reference world to the manifold of relational thought. Static representations provide stability [10] and communicability; dynamic regimes provide relational motion, contextual sensitivity, and interpretive flexibility. The mapping loop integrates these regimes into a coherent structure that explains how meaning forms through motion and how that motion becomes communicable.
-
-The account is **speculative and architectural**. It does not specify a metric for the manifold, instantiate the update dynamics, or operationalize the collapse function. It does not attempt to explain consciousness or phenomenology. These boundaries define the scope of the contribution.
-
-The purpose of presenting this architecture is to clarify the structural gap between static cognition and dynamic meaning formation and to offer a coherent proposal for how these domains can be connected. Readers are invited to refine, challenge, or extend the ideas presented here. The next section outlines the epistemic posture and conceptual boundaries within which the architecture operates.
+The framework is offered as an invitation to inquiry. It outlines how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. Readers are encouraged to refine, challenge, or extend the ideas presented here. The next section establishes the scope and epistemic posture within which the architecture operates.
 
 ---
 
-# **3. The mapping architecture**
+# 2. Scope, Orientation, and Epistemic Posture
 
-This section introduces the core architectural loop that connects the ordinary world of experience with a manifold of relational meaning. The goal is to describe a simple, mechanical structure: how a configuration in the world is mapped into a relational space, how motion unfolds within that space, and how the result is expressed back into the world as dynamic behavior.
+This paper develops an architectural account of how meaning forms through the interaction of static representation, relational motion, and dynamic interpretation. The goal is to clarify the structural relationships that allow static cognition to interface with the manifold of understanding introduced later in the paper. The framework is conceptual rather than formal: it proposes a coherent structure, not a complete theory.
 
-A boy catching a ball is used as a deliberately simple thought example to demonstrate the mapping process into the manifold and back. The architecture does not assume or explain learning, insight, or internal stabilization; it only describes the mapping loop itself.
+The account presented here is exploratory. It offers one possible architecture for connecting static and dynamic information regimes, and it is intended to illuminate a conceptual gap rather than resolve it. The descriptions that follow should be read as proposals for how such an architecture might be organized, not as empirical claims about cognition or mind.
+
+Several boundaries define the scope of this work. The framework does not specify a metric for the manifold of understanding, does not instantiate update dynamics, and does not provide an operational collapse function. It does not attempt to explain consciousness, subjective experience, or phenomenology. These omissions are intentional: the aim is to articulate a structural scaffold that can support further inquiry, not to prescribe a full account of mental process.
+
+The purpose of this section is to establish the orientation of the paper. The architecture that follows is offered as an invitation to examine how static and dynamic regimes might be integrated into a unified account of meaning formation. Readers are encouraged to identify assumptions, refine the structure, and explore alternative formulations. The framework is a starting point, not a conclusion.
+
 
 ---
 
-## **3.1 The world as input**
+# 3. The Mapping Architecture
+
+This section introduces the core architectural loop that connects the ordinary world of experience with a manifold of relational meaning. The aim is to describe a simple, mechanical structure: how a configuration in the world is mapped into a relational space, how motion unfolds within that space, and how the result is expressed back into the world as dynamic behavior.
+
+A boy catching a ball serves as a deliberately simple thought example. It illustrates how a world‑state is lifted into the manifold, how relational motion evolves, and how the resulting configuration produces outward action. The architecture does not assume learning, insight, or internal stabilization; it describes only the mapping loop itself.
+
+---
+
+## 3.1 The World as Input
 
 We denote the state of the world at time $t$ by
 
@@ -44,13 +57,13 @@ $$
 Here:
 
 - **$W(t)$:** a structured world‑state at time $t$ (e.g., positions, velocities, and relations among objects such as a ball and a hand).  
-- **$t$:** time in the ordinary sense.
+- **$t$:** ordinary time.
 
-In the ball‑catching example, $W(t)$ includes the ball’s position and velocity, the boy’s body configuration, and the surrounding context. The architecture does not commit to a particular encoding of $W(t)$; it only assumes that such a state can be mapped into the manifold.
+In the ball‑catching example, $W(t)$ includes the ball’s trajectory, the boy’s body configuration, and the surrounding context. The architecture does not commit to a particular encoding of $W(t)$; it only assumes that such a state can be mapped into the manifold.
 
 ---
 
-## **3.2 Mapping into the manifold**
+## 3.2 Mapping into the Manifold
 
 The manifold is a relational state space in which meaning is expressed as motion. A world‑state $W(t)$ is mapped into an initial manifold configuration by
 
@@ -69,11 +82,11 @@ In the ball‑catching example, $M_t$ encodes relational information such as:
 - timing relations between the ball’s arrival and possible hand motions,  
 - spatial constraints relevant to interception.
 
-The manifold does not store objects; it stores relations among features derived from $W(t)$.
+The manifold does not store objects; it stores relations derived from $W(t)$.
 
 ---
 
-## **3.3 Relational motion in the manifold**
+## 3.3 Relational Motion in the Manifold
 
 Once initialized, the manifold evolves according to relational dynamics:
 
@@ -83,24 +96,26 @@ $$
 
 Here:
 
-- **$F$:** the manifold update rule (the dynamics on the manifold).  
-- **$\Delta t$:** a small time step in the evolution of the manifold state.
+- **$F$:** the manifold update rule,  
+- **$\Delta t$:** a small time step.
 
-The architecture does not specify a particular form for $F$ or a specific metric on the manifold. It only assumes that:
+The architecture does not specify a metric or a particular form for $F$. It assumes only that:
 
 - motion within the manifold is continuous in time,  
-- trajectories $M_t$ encode the unfolding of interpretation,  
+- trajectories $\\{M_t\\}$ encode the unfolding of interpretation,  
 - relational structure determines how the system evolves.
 
-**Object basins (OBs)** arise wherever relational motion is stable. An OB is any definable, nameable, or stabilizable relational configuration in the manifold. OBs are not limited to physical or sensory relations: they include verbs, nouns, smells, sights, ideas, symbolic structures, abstract concepts, and narrative forms. Anything that can be held as a stable relational configuration forms an OB. These are the only basins in the architecture; all transitions between them occur through transition regions (RBs).
+**Object basins (OBs)** arise wherever relational motion is stable. An OB is any definable, nameable, or stabilizable relational configuration in the manifold. OBs include physical relations, sensory relations, verbs, nouns, symbolic structures, abstract concepts, and narrative forms. Anything that can be held as a stable relational configuration forms an OB.
 
-In the ball‑catching example, the trajectory $\{M_t\}$ encodes the evolving relation between the ball and the hand, guiding the timing and motion required to intercept the ball.
+Transitions between OBs occur through **relation basins (RBs)**, which mediate motion between stable configurations.
+
+In the ball‑catching example, the trajectory $\\{M_t\\}$ encodes the evolving relation between the ball and the hand, guiding the timing and motion required for interception.
 
 ---
 
-## **3.4 Mapping back to the world: RWD**
+## 3.4 Mapping Back to the World: RWD
 
-The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RWD)**, which represent outward behavior:
+The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RWD)**:
 
 $$
 RWD(t) = \Psi(M_t).
@@ -108,21 +123,21 @@ $$
 
 Here:
 
-- **$RWD(t)$:** the reference‑world dynamics (behavior) at time $t$.  
-- **$\Psi$:** the manifold‑to‑world mapping that converts manifold motion into world‑space action.
+- **$RWD(t)$:** outward behavior at time $t$,  
+- **$\Psi$:** the manifold‑to‑world mapping.
 
 RWD includes:
 
-- **hand movement:** adjusting the hand in space,  
-- **posture adjustment:** shifting the body to support the action,  
-- **timing corrections:** small temporal refinements during motion,  
-- **coordinated motor output:** integrated whole‑body behavior.
+- hand movement,  
+- posture adjustment,  
+- timing corrections,  
+- coordinated motor output.
 
-In the ball‑catching example, $RWD(t)$ is the boy moving his hand into the right place at the right time to catch the ball. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
+In the ball‑catching example, $RWD(t)$ is the boy moving his hand into the right place at the right time. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
 
 ---
 
-## **3.5 The full mapping loop**
+## 3.5 The Full Mapping Loop
 
 The architecture forms a closed perception–action loop:
 
@@ -133,21 +148,21 @@ $$
 In this diagram:
 
 - **$W(t)$:** world‑state at time $t$,  
-- **$\Phi$:** mapping from world‑state to manifold state,  
-- **$M_t$:** manifold state at time $t$,  
-- **$F$:** manifold dynamics, evolving $M_t$ to $M_{t + \Delta t}$,  
-- **$\Psi$:** mapping from manifold state to reference‑world dynamics,  
-- **$RWD(t)$:** outward behavior at time $t$.
+- **$\Phi$:** world‑to‑manifold mapping,  
+- **$M_t$:** manifold state,  
+- **$F$:** manifold dynamics,  
+- **$\Psi$:** manifold‑to‑world mapping,  
+- **$RWD(t)$:** outward behavior.
 
 This loop describes:
 
-1. **World → Manifold:** perception becomes a relational configuration ($W(t) \to M_t$).  
-2. **Manifold → Manifold:** meaning unfolds as motion ($M_t \to M_{t + \Delta t}$).  
-3. **Manifold → World:** motion becomes behavior ($M_t \to RWD(t)$).
+1. **World → Manifold:** perception becomes a relational configuration.  
+2. **Manifold → Manifold:** meaning unfolds as motion.  
+3. **Manifold → World:** motion becomes behavior.
 
-The boy catching a ball is used purely for thought simplicity: it is a familiar, low‑level example that makes the mapping process into the manifold and back easy to visualize. The same loop can describe other everyday actions such as reaching for a cup or turning one’s head toward a sound.
+The ball‑catching example is used only for simplicity. The same loop applies to reaching for a cup, turning toward a sound, or any ordinary action.
 
-This architecture does not attempt to explain how new internal structures form, how learning occurs, or how internal stabilization works. Those questions are treated as outside the scope of this paper and are left for future research.
+The architecture does not attempt to explain how new internal structures form, how learning occurs, or how stabilization works. These questions lie outside the scope of this paper.
 
 ---
 
@@ -258,8 +273,8 @@ $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$
 
-This section illustrates how that loop operates in a concrete scenario: **a boy catching a ball**.  
-The goal is not to redefine the loop, but to show how each component functions when applied to a real‑world behavior.
+This section illustrates how the loop operates in a concrete scenario: **a boy catching a ball**.  
+The goal is not to redefine the loop, but to show how each component functions when applied to an ordinary, mechanically simple behavior.
 
 ---
 
@@ -278,7 +293,7 @@ M_t = \Phi(W(t)).
 $$
 
 In the manifold, these elements appear as **relational structure**:  
-the ball’s trajectory relative to the hand, reachable workspace, timing constraints, and the basins associated with “track,” “intercept,” and “catch.”
+the ball’s trajectory relative to the hand, reachable workspace, timing constraints, and the basins associated with tracking, interception, and catching.
 
 ---
 
@@ -292,12 +307,12 @@ $$
 
 In the catching example, $F$ governs how the system:
 
-- updates its relational alignment with the ball,  
+- updates relational alignment with the ball,  
 - adjusts timing as the ball approaches,  
-- transitions between basins (e.g., from “track” to “intercept”),  
-- stabilizes in the basin corresponding to “catch.”
+- transitions between basins (e.g., from a tracking basin to an interception basin),  
+- stabilizes in the basin corresponding to catching.
 
-The resulting trajectory $\gamma(t)$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
+The resulting trajectory $\\{ M_t \\}$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
 
 ---
 
@@ -351,13 +366,13 @@ The mapping loop provides a geometric account of how a system:
 
 through relational motion in the manifold.
 
-The value of this paper lies in describing:
+The value of the architecture lies in describing:
 
 - the **geometric relational thought space**,  
 - the **mapping loop**,  
 - and the **basin‑and‑transition structure** that shapes dynamic behavior.
 
-These components form a coherent architecture for integrating reference‑world and manifold‑world regimes, independent of a full account of how new basins are created.
+These components form a coherent framework for integrating reference‑world and manifold‑world regimes, independent of a full account of how new basins are created.
 
 ---
 
@@ -366,11 +381,11 @@ These components form a coherent architecture for integrating reference‑world 
 The mapping loop introduced in Section 3.5,
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t),
 $$
 
-enables a system to move between the reference world and the manifold.  
-However, transitions between these regimes can become unstable if not properly constrained.  
+allows a system to move between the reference world and the manifold.  
+These regimes operate under different constraints, and transitions between them can become unstable if not properly regulated.  
 The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
 
 The spacesuit does not introduce new dynamics.  
@@ -381,17 +396,17 @@ Appendix A provides simple numeric examples illustrating these constraints in a 
 
 ## **6.1 Why Regulation Is Needed**
 
-The reference world and the manifold operate under different constraints:
+The reference world and the manifold differ in structure:
 
-- the reference world requires physically feasible behavior  
-- the manifold contains relational gradients, basins, and transitions that may evolve more freely than the body can express
+- the reference world requires physically feasible behavior,  
+- the manifold contains relational gradients, basins, and transitions that may evolve more freely than the body can express.
 
 Without a regulating layer, the mapping loop could:
 
-- push the system into unreachable configurations  
-- generate motor outputs that exceed physical limits  
-- oscillate between basins  
-- destabilize timing
+- push the system into unreachable configurations,  
+- generate motor outputs that exceed physical limits,  
+- oscillate between basins,  
+- destabilize timing.
 
 The spacesuit prevents these failure modes by ensuring that each step of the loop respects both worlds.
 
@@ -405,11 +420,11 @@ The spacesuit ensures that this lift is stable and well‑posed.
 ### **Bounded Lift**
 
 $$
-\|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \|W(t+\Delta t) - W(t)\|
+\|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \, \|W(t+\Delta t) - W(t)\|.
 $$
 
 This ensures that small changes in the world produce proportionally small changes in the manifold.  
-Appendix A shows a simple numeric example using ball and hand positions.
+Appendix A includes a simple numeric example using ball and hand positions.
 
 ---
 
@@ -418,12 +433,10 @@ Appendix A shows a simple numeric example using ball and hand positions.
 The manifold dynamics $F$ evolve $M_t$ through relational motion.  
 The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
 
-Lipshitcz-bounded: $𝐾_\phi$ and $𝐾_𝐹$ are positive constants whose existence ensures that the lift and manifold update remain bounded. Their specific values are not required; only their existence matters for stability.
-
 ### **Bounded Update**
 
 $$
-\|F(M_t) - M_t\| \le K_F
+\|F(M_t) - M_t\| \le K_F.
 $$
 
 This prevents runaway relational motion or abrupt transitions between distant regions of the manifold.
@@ -431,7 +444,7 @@ This prevents runaway relational motion or abrupt transitions between distant re
 ### **Basin‑Safe Evolution**
 
 $$
-M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i \cup RB_{ij}
+M_t \in OB_i \Rightarrow F(M_t) \in OB_i \cup RB_{ij}.
 $$
 
 This ensures that the system moves only within a basin or through a valid transition region.  
@@ -447,7 +460,7 @@ The spacesuit ensures that this projection produces feasible, continuous, and ph
 ### **Feasible Projection**
 
 $$
-\|\Psi(M_t)\| \le \text{(biomechanical limit)}
+\|\Psi(M_t)\| \le \text{(biomechanical limit)}.
 $$
 
 This ensures that the manifold does not request actions the body cannot perform.  
@@ -464,7 +477,7 @@ The spacesuit also ensures coherence across the entire loop.
 In tasks requiring convergence (e.g., catching a ball), relational distance must decrease:
 
 $$
-\frac{d}{dt} M_t < 0
+\frac{d}{dt} M_t < 0.
 $$
 
 Appendix A includes a simple time‑to‑contact calculation illustrating this condition.
@@ -483,16 +496,16 @@ Transitions between basins in the manifold must correspond to coordinated shifts
 
 The cognitive spacesuit ensures that:
 
-- $\Phi$ lifts world‑state into the manifold safely  
-- $F$ evolves manifold‑state within stable relational structure  
-- $\Psi$ projects manifold‑state back into feasible behavior  
-- the entire loop remains coherent across time
+- $\Phi$ lifts world‑state into the manifold safely,  
+- $F$ evolves manifold‑state within stable relational structure,  
+- $\Psi$ projects manifold‑state back into feasible behavior,  
+- the entire loop remains coherent across time.
 
 In the ball‑catching example, the spacesuit prevents the system from:
 
-- overshooting the ball  
-- oscillating between basins  
-- producing physically impossible movements
+- overshooting the ball,  
+- oscillating between basins,  
+- producing physically impossible movements.
 
 Appendix A provides a numeric illustration of these constraints using simple parabolic motion and relational updates.
 
@@ -500,7 +513,7 @@ Appendix A provides a numeric illustration of these constraints using simple par
 
 # **7. Basin Navigation in Real‑Time Behavior**
 
-The manifold introduced in Section 3.5 contains **object basins** (OBs: stable relational configurations) and **transition regions** (RBs: pathways between them) that guide how the system moves during action.  
+The manifold introduced in Section 3 contains **object basins** (OBs: stable relational configurations) and **transition regions** (RBs: pathways between them) that guide how the system moves during action.  
 Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
 This section describes how the system **navigates basins** during real‑time behavior, using the ball‑catching scenario as a concrete example.
 
@@ -514,16 +527,16 @@ OBs provide stability; RBs provide pathways; the mapping loop provides motion.
 An object basin $OB_i$ is a region of the manifold where relational motion is stable:
 
 $$
-M_t \in OB_i \Rightarrow F(M_t) \in OB_i
+M_t \in OB_i \Rightarrow F(M_t) \in OB_i.
 $$
 
 This expresses **self‑consistency**: once inside an OB, the system tends to remain there unless driven toward a transition region.
 
-In the ball‑catching example, the relevant OBs are:
+In the ball‑catching example, relevant OBs include:
 
-- **$OB_\text{track}$** — relational configuration when the ball is far away  
-- **$OB_\text{intercept}$** — relational configuration during closing motion  
-- **$OB_\text{catch}$** — relational configuration when hand and ball are nearly aligned  
+- **$OB_{\text{track}}$** — relational configuration when the ball is far away,  
+- **$OB_{\text{intercept}}$** — relational configuration during closing motion,  
+- **$OB_{\text{catch}}$** — relational configuration when hand and ball are nearly aligned.
 
 These are not symbolic states; they are **regions of relational geometry**.
 
@@ -534,22 +547,22 @@ These are not symbolic states; they are **regions of relational geometry**.
 Between object basins lie **transition regions** $RB_{ij}$ that allow the system to move from one stable configuration to another:
 
 $$
-M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j
+M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j.
 $$
 
-RBs are **funnels**: they guide the system from one OB to the next without discontinuity.
+RBs act as **funnels**: they guide the system from one OB to the next without discontinuity.
 
 In the ball‑catching example:
 
-- the system leaves **$OB_\text{track}$**  
-- enters the transition region $RB_{\text{track}\rightarrow\text{intercept}}$  
-- and flows into **$OB_\text{intercept}$**
-
-The cognitive spacesuit (Section 6) ensures that these transitions remain bounded and feasible.
+- the system leaves **$OB_{\text{track}}$**,  
+- enters $RB_{\text{track}\rightarrow\text{intercept}}$,  
+- and flows into **$OB_{\text{intercept}}$**.
 
 A key structural point:  
 **RBs carry thought mechanically.**  
 They deform smoothly between OBs and require no agency or intention.
+
+The cognitive spacesuit (Section 6) ensures that these transitions remain bounded and feasible.
 
 ---
 
@@ -566,21 +579,21 @@ OB_{\text{intercept}}
 \rightarrow
 RB_{\text{intercept}\rightarrow\text{catch}}
 \rightarrow
-OB_{\text{catch}}
+OB_{\text{catch}}.
 $$
 
 This sequence corresponds to:
 
-1. **Tracking** the ball  
-2. **Initiating interception**  
-3. **Closing the relational distance**  
-4. **Aligning hand and ball**  
-5. **Stabilizing the catch**
+1. **Tracking** the ball,  
+2. **Initiating interception**,  
+3. **Closing relational distance**,  
+4. **Aligning hand and ball**,  
+5. **Stabilizing the catch**.
 
 The mapping loop drives this motion:
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$
 
 As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through OBs and RBs, and $\Psi$ projects the resulting relational motion into outward behavior.
@@ -597,19 +610,19 @@ $$
 \frac{d}{dt} M_t < 0
 $$
 
-ensures that the relational distance decreases as the system moves toward **$OB_\text{catch}$**.
+ensures that relational distance decreases as the system moves toward **$OB_{\text{catch}}$**.
 
 The steepness of relational gradients determines:
 
-- how quickly the system leaves one OB  
-- how strongly it is pulled into the next  
-- how timing adjusts as the ball accelerates or decelerates  
+- how quickly the system leaves one OB,  
+- how strongly it is pulled into the next,  
+- how timing adjusts as the ball accelerates or decelerates.
 
 In the ball‑catching example:
 
-- as the ball approaches, relational gradients steepen  
-- **$OB_\text{intercept}$** becomes more attractive  
-- transitions occur earlier or later depending on $M_t$ and $F$
+- as the ball approaches, relational gradients steepen,  
+- **$OB_{\text{intercept}}$** becomes more attractive,  
+- transitions occur earlier or later depending on $M_t$ and $F$.
 
 This produces **adaptive timing** without prediction or semantic interpretation.
 
@@ -619,10 +632,10 @@ This produces **adaptive timing** without prediction or semantic interpretation.
 
 The cognitive spacesuit ensures that basin transitions remain stable:
 
-- bounded lift (Section 6.2) prevents discontinuities entering the manifold  
-- bounded update (Section 6.3) prevents overshoot within the manifold  
-- feasible projection (Section 6.4) prevents impossible motor commands  
-- temporal coherence (Section 6.5) ensures relational convergence  
+- bounded lift (Section 6.2) prevents discontinuities entering the manifold,  
+- bounded update (Section 6.3) prevents overshoot within the manifold,  
+- feasible projection (Section 6.4) prevents impossible motor commands,  
+- temporal coherence (Section 6.5) ensures relational convergence.
 
 Together, these constraints ensure:
 
@@ -631,7 +644,7 @@ $$
 \rightarrow
 \text{stable RB}
 \rightarrow
-\text{stable OB}
+\text{stable OB}.
 $$
 
 This is the architectural basis for smooth, coordinated behavior.
@@ -642,10 +655,10 @@ This is the architectural basis for smooth, coordinated behavior.
 
 Basin navigation provides the structural backbone of real‑time behavior:
 
-- object basins stabilize relational motion  
-- transition regions carry motion mechanically  
-- the mapping loop drives continuous updates  
-- the cognitive spacesuit ensures bounded, feasible, coherent traversal  
+- object basins stabilize relational motion,  
+- transition regions carry motion mechanically,  
+- the mapping loop drives continuous updates,  
+- the cognitive spacesuit ensures bounded, feasible, coherent traversal.
 
 In the ball‑catching example, the system moves through a sequence of OBs corresponding to tracking, intercepting, and catching — not as symbolic states, but as **regions of relational geometry** shaped by the manifold and regulated by the spacesuit.
 
