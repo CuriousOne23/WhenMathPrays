@@ -736,8 +736,7 @@ Appendix C provides a numeric illustration of basin navigation.
 
 # **10. Comparison With Classical Control Architectures**
 
-Classical control frameworks—PID control, model‑predictive control, and symbolic planning—stabilize behavior through explicit error terms, predictive models, or discrete state transitions.  
-The architecture presented here differs fundamentally: stability and coordination arise from **relational geometry**, **basin structure**, and the **mapping loop**, not from symbolic state machines or predictive optimization.
+Classical control frameworks—PID control, model‑predictive control, and symbolic planning—stabilize behavior through explicit error terms, predictive models, or discrete state transitions. The architecture presented here differs fundamentally: stability and coordination arise from **relational geometry**, **basin structure**, and the **mapping loop**, not from symbolic state machines or predictive optimization.
 
 This section clarifies the distinction without invoking semantics or mentalistic interpretation.
 
@@ -745,8 +744,7 @@ This section clarifies the distinction without invoking semantics or mentalistic
 
 ## **10.1 Comparison With PID Control**
 
-PID control stabilizes behavior by regulating an explicit error signal through proportional, integral, and derivative terms.  
-The architecture does not compute or regulate an error. Instead:
+PID control stabilizes behavior by regulating an explicit error signal through proportional, integral, and derivative terms. The architecture does not compute or regulate an error. Instead:
 
 - relational distance is encoded implicitly in $M_t$,  
 - stability arises from basin geometry,  
@@ -837,10 +835,7 @@ The architecture is not a variant of classical control; it is a **different orga
 
 ## **10.5 Summary**
 
-Classical control frameworks regulate behavior through error terms, prediction, or symbolic reasoning.  
-The architecture presented here regulates behavior through relational geometry, basin structure, and the mapping loop.  
-Basins provide stability, transition regions provide pathways, and the cognitive spacesuit ensures bounded, feasible, coherent motion.  
-This offers a geometric alternative to classical control without invoking semantics or symbolic state machines.
+Classical control frameworks regulate behavior through error terms, prediction, or symbolic reasoning. The architecture presented here regulates behavior through relational geometry, basin structure, and the mapping loop. Basins provide stability, transition regions provide pathways, and the cognitive spacesuit ensures bounded, feasible, coherent motion. This offers a geometric alternative to classical control without invoking semantics or symbolic state machines.
 
 ---
 
