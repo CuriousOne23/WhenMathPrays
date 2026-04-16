@@ -5,8 +5,7 @@
 
 # **0. Abstract**
 
-Dynamic behavior unfolds through continuous interaction between a changing world, an evolving internal configuration, and outward motion.  
-This paper presents an architectural framework that describes this process using relational geometry.  
+Dynamic behavior unfolds through continuous interaction between a changing world, an evolving internal configuration, and outward motion. This paper presents an architectural framework that describes this process using relational geometry.  
 
 A mapping loop
 
@@ -16,25 +15,19 @@ $$
 
 links the reference world, a relational manifold, and the agent’s outward behavior.
 
-Within the manifold, basins provide stable regions of relational configuration, while transition regions guide reconfiguration when conditions change.  
-A regulatory layer—the cognitive spacesuit—ensures that all components of the mapping loop remain bounded, feasible, and coherent.
+Within the manifold, basins provide stable regions of relational configuration, while transition regions guide reconfiguration when conditions change. A regulatory layer—the cognitive spacesuit—ensures that all components of the mapping loop remain bounded, feasible, and coherent.
 
-A ball‑catching example illustrates how the architecture supports real‑time coordination without prediction, symbolic reasoning, or discrete state transitions.  
-The framework generalizes across biological systems, artificial agents, and multi‑agent coordination, offering a geometric alternative to classical control and representational models.
+A ball‑catching example illustrates how the architecture supports real‑time coordination without prediction, symbolic reasoning, or discrete state transitions. The framework generalizes across biological systems, artificial agents, and multi‑agent coordination, offering a geometric alternative to classical control and representational models.
 
-The architecture does not derive basin geometry, claim optimality, or address phenomenology.  
-Instead, it provides a geometric foundation for understanding stability, coordination, and adaptive behavior in dynamic environments.
+The architecture does not derive basin geometry, claim optimality, or address phenomenology. Instead, it provides a geometric foundation for understanding stability, coordination, and adaptive behavior in dynamic environments.
 
 ---
 
 # **1. Introduction**
 
-Dynamic behavior requires continuous coordination between perception, internal configuration, and outward action.  
-Biological and artificial systems alike must navigate changing conditions while maintaining stability, feasibility, and coherence.  
-Traditional accounts often rely on prediction, symbolic representation, or discrete state transitions, but these mechanisms do not capture the fluid, real‑time nature of embodied behavior \[5,6\].
+Dynamic behavior requires continuous coordination between perception, internal configuration, and outward action. Biological and artificial systems alike must navigate changing conditions while maintaining stability, feasibility, and coherence. Traditional accounts often rely on prediction, symbolic representation, or discrete state transitions, but these mechanisms do not capture the fluid, real‑time nature of embodied behavior \[5,6\].
 
-This paper develops an architectural framework in which behavior emerges from relational geometry \[1–4\].  
-A mapping loop connects the reference world $W(t)$, a relational manifold $M_t$, and outward behavior $RWD(t)$:
+This paper develops an architectural framework in which behavior emerges from relational geometry \[1–4\]. A mapping loop connects the reference world $W(t)$, a relational manifold $M_t$, and outward behavior $RWD(t)$:
 
 $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
@@ -42,9 +35,7 @@ $$
 
 Within the manifold, basins provide stability \[4\], transition regions support reconfiguration, and the cognitive spacesuit ensures that all transitions remain bounded and feasible \[7\].
 
-The goal is not to propose a biological mechanism or an optimal control strategy.  
-Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\].  
-The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
+The goal is not to propose a biological mechanism or an optimal control strategy. Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\]. The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
 
 **Roadmap.**  
 Section 2 clarifies the scope and epistemic posture.  
@@ -59,9 +50,7 @@ Sections 12 and 13 outline limitations, future work, and conclusions.
 
 # **2. Scope, Orientation, and Epistemic Posture**
 
-This paper presents an architectural account of dynamic behavior grounded in relational geometry.  
-The goal is to describe how systems maintain stability and coordination through continuous interaction with a changing world.  
-The framework is structural rather than semantic, geometric rather than representational.
+This paper presents an architectural account of dynamic behavior grounded in relational geometry. The goal is to describe how systems maintain stability and coordination through continuous interaction with a changing world. The framework is structural rather than semantic, geometric rather than representational.
 
 ### **Scope**
 
@@ -90,10 +79,7 @@ These topics lie outside the scope of a geometric account of dynamic behavior.
 
 ### **Epistemic posture**
 
-The framework is offered as an architectural description:  
-a way of organizing the components that support stable, adaptive motion in dynamic environments.  
-It does not attempt to explain the origin of these components, nor does it prescribe how they must be implemented.  
-The aim is clarity, coherence, and operational simplicity.
+The framework is offered as an architectural description: a way of organizing the components that support stable, adaptive motion in dynamic environments. It does not attempt to explain the origin of these components, nor does it prescribe how they must be implemented. The aim is clarity, coherence, and operational simplicity.
 
 ---
 
@@ -101,30 +87,26 @@ The aim is clarity, coherence, and operational simplicity.
 
 Static representations form the foundation of most formal systems used in analysis, modeling, and communication. They treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
 
-Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects. Relations are typically encoded as additional objects or as fixed links between objects.  
-This approach is effective for classification and tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
+Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects. Relations are typically encoded as additional objects or as fixed links between objects. This approach is effective for classification and tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
 
 The limitations of static representation can be expressed using a simple mapping function. Let $x$ denote a static representation and let $f$ denote a static interpretive function. In a purely static regime, meaning $m$ is assumed to satisfy:
 
-```
-$$
+$$  
 m = f(x)
-$$
-```
+$$  
 
 This formulation presumes that meaning is a deterministic function of the object alone. However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient. A more accurate representation requires additional variables:
 
-```
-$$
+
+$$  
 m = f(x, c, s)
-$$
-```
+$$  
 
 Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than dynamically evolving components of interpretation. Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
 
-These limitations become more apparent when viewed through the lens of relational geometry \[1–4\]. Static representations can describe the endpoints of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape meaning.
+Viewed through the lens of relational geometry, static representations can describe the **endpoints** of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape understanding. Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding.
 
-Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding. The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
+The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
 
 ---
 
