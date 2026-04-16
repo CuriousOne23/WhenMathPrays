@@ -3,38 +3,97 @@
 
 ---
 
-# 0. **🧩 ABSTRACT**
+# **0. Abstract**
 
-Understanding is often modeled through static, object‑centric representations that emphasize stability and definition. These representations support classification and communication, but they cannot account for the dynamic, relational processes through which meaning unfolds. This paper proposes an architectural account of dynamic thought that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified structure.
+Dynamic behavior unfolds through continuous interaction between a changing world, an evolving internal configuration, and outward motion.  
+This paper presents an architectural framework that describes this process using relational geometry.  
 
-The architecture centers on a bidirectional mapping between the reference world of static cognition and a relational manifold in which meaning develops through motion. Static representations are lifted into this manifold, transformed through dynamic interpretation, and collapsed back into communicable form. The paper outlines the structural requirements for this mapping, the constraints that shape it, and the translation mechanisms that allow static and dynamic regimes to interact coherently.
+A mapping loop
 
-The resulting framework offers a scalable and geometrically grounded account of how meaning emerges from information in motion. It is architectural rather than algorithmic, and it is presented as an invitation to inquiry: a proposal for how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. The aim is to provide a foundation for future work in information theory, cognition, and computational modeling.
+$$
+W(t) \xrightarrow{\;\Phi\;} M_t \xrightarrow{\;F\;} M_{t+\Delta t} \xrightarrow{\;\Psi\;} RWD(t)
+$$
+
+links the reference world, a relational manifold, and the agent’s outward behavior.
+
+Within the manifold, basins provide stable regions of relational configuration, while transition regions guide reconfiguration when conditions change.  
+A regulatory layer—the cognitive spacesuit—ensures that all components of the mapping loop remain bounded, feasible, and coherent.
+
+A ball‑catching example illustrates how the architecture supports real‑time coordination without prediction, symbolic reasoning, or discrete state transitions.  
+The framework generalizes across biological systems, artificial agents, and multi‑agent coordination, offering a geometric alternative to classical control and representational models.
+
+The architecture does not derive basin geometry, claim optimality, or address phenomenology.  
+Instead, it provides a geometric foundation for understanding stability, coordination, and adaptive behavior in dynamic environments.
 
 ---
 
 # **1. Introduction**
 
-Understanding is often described through static, object‑centric representations that emphasize stability, categorization, and definition. These representations support communication and analysis, but they do not capture the dynamic, relational processes through which meaning develops. This paper proposes an architectural account of **dynamic thought** that integrates three information regimes—static, low‑dynamic, and high‑dynamic—within a unified structure [1, 4, 7].
+Dynamic behavior requires continuous coordination between perception, internal configuration, and outward action.  
+Biological and artificial systems alike must navigate changing conditions while maintaining stability, feasibility, and coherence.  
+Traditional accounts often rely on prediction, symbolic representation, or discrete state transitions, but these mechanisms do not capture the fluid, real‑time nature of embodied behavior \[5,6\].
 
-The architecture centers on a bidirectional mapping between the **reference world** of static cognition and a **relational manifold** in which meaning unfolds through motion [2, 3]. Static representations are lifted into this manifold, transformed through dynamic interpretation, and collapsed back into communicable form. The goal is not to replace static cognition but to clarify how static and dynamic regimes interact, constrain one another, and jointly support understanding [5].
+This paper develops an architectural framework in which behavior emerges from relational geometry \[1–4\].  
+A mapping loop connects the reference world $W(t)$, a relational manifold $M_t$, and outward behavior $RWD(t)$:
 
-This account is **architectural rather than algorithmic**. It does not specify a metric for the manifold, define update dynamics, or propose a computational implementation. It does not attempt to explain consciousness, subjective experience, or phenomenology. These boundaries are intentional: the aim is to articulate a structural scaffold that clarifies a conceptual gap, not to provide a complete theory of mind [6].
+$$
+W(t) \xrightarrow{\;\Phi\;} M_t \xrightarrow{\;F\;} M_{t+\Delta t} \xrightarrow{\;\Psi\;} RWD(t)
+$$
 
-The framework is offered as an invitation to inquiry. It outlines how relational geometry might support thought, how dynamic trajectories stabilize, and how static representations interface with these processes. Readers are encouraged to refine, challenge, or extend the ideas presented here. The next section establishes the scope and epistemic posture within which the architecture operates.
+Within the manifold, basins provide stability \[4\], transition regions support reconfiguration, and the cognitive spacesuit ensures that all transitions remain bounded and feasible \[7\].
+
+The goal is not to propose a biological mechanism or an optimal control strategy.  
+Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\].  
+The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
+
+**Roadmap.**  
+Section 2 clarifies the scope and epistemic posture.  
+Section 3 introduces the mapping loop.  
+Section 4 defines the relational manifold.  
+Section 5 illustrates the architecture through ball‑catching.  
+Section 6 introduces the cognitive spacesuit.  
+Sections 7–11 develop basin navigation, robustness, comparisons with classical control, and implications for artificial agents.  
+Sections 12 and 13 outline limitations, future work, and conclusions.
 
 ---
 
-# 2. Scope, Orientation, and Epistemic Posture
+# **2. Scope, Orientation, and Epistemic Posture**
 
-This paper develops an architectural account of how meaning forms through the interaction of static representation, relational motion, and dynamic interpretation. The goal is to clarify the structural relationships that allow static cognition to interface with the manifold of understanding introduced later in the paper. The framework is conceptual rather than formal: it proposes a coherent structure, not a complete theory.
+This paper presents an architectural account of dynamic behavior grounded in relational geometry.  
+The goal is to describe how systems maintain stability and coordination through continuous interaction with a changing world.  
+The framework is structural rather than semantic, geometric rather than representational.
 
-The account presented here is exploratory. It offers one possible architecture for connecting static and dynamic information regimes, and it is intended to illuminate a conceptual gap rather than resolve it. The descriptions that follow should be read as proposals for how such an architecture might be organized, not as empirical claims about cognition or mind.
+### **Scope**
 
-Several boundaries define the scope of this work. The framework does not specify a metric for the manifold of understanding, does not instantiate update dynamics, and does not provide an operational collapse function. It does not attempt to explain consciousness, subjective experience, or phenomenology. These omissions are intentional: the aim is to articulate a structural scaffold that can support further inquiry, not to prescribe a full account of mental process.
+The architecture addresses:
 
-The purpose of this section is to establish the orientation of the paper. The architecture that follows is offered as an invitation to examine how static and dynamic regimes might be integrated into a unified account of meaning formation. Readers are encouraged to identify assumptions, refine the structure, and explore alternative formulations. The framework is a starting point, not a conclusion.
+- how world‑state is lifted into relational configuration,  
+- how relational configurations evolve over time,  
+- how outward behavior emerges from manifold motion,  
+- how stability arises from basin geometry,  
+- how reconfiguration occurs through transition regions,  
+- how boundedness and feasibility are maintained by the cognitive spacesuit.
 
+The framework applies to biological systems, artificial agents, and multi‑agent coordination without requiring domain‑specific assumptions.
+
+### **What the framework does *not* claim**
+
+The architecture does **not**:
+
+- derive basin geometry,  
+- specify biological mechanisms,  
+- claim optimality or cost minimization,  
+- interpret manifold states as beliefs or symbols,  
+- address phenomenology or subjective experience.
+
+These topics lie outside the scope of a geometric account of dynamic behavior.
+
+### **Epistemic posture**
+
+The framework is offered as an architectural description:  
+a way of organizing the components that support stable, adaptive motion in dynamic environments.  
+It does not attempt to explain the origin of these components, nor does it prescribe how they must be implemented.  
+The aim is clarity, coherence, and operational simplicity.
 
 ---
 
