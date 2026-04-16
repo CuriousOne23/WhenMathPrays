@@ -1463,7 +1463,7 @@ can be instantiated numerically in a ball‑catching scenario while respecting t
 
 ---
 
-# **Appendix B: Numeric Illustration of Basin Navigation (Rewritten)**
+# **Appendix B: Numeric Illustration of Basin Navigation**
 
 This appendix provides a simple numeric example of how the system moves through **object basins (OBs)** and **transition regions (RBs)** during a ball‑catching task, as described in Section 7. The goal is not physical accuracy, but to show how concrete numbers can illustrate basin navigation in the manifold.
 
@@ -1648,8 +1648,7 @@ The numbers are not physically precise; they are chosen to make the geometry of 
 
 # **Appendix C: Numeric Illustration of Robustness and Perturbations**
 
-This appendix provides a simple numeric example illustrating how the architecture handles perturbations, as described in Section 9.  
-The goal is to show how a disturbance in the reference world \(W(t)\) propagates through the mapping loop and is absorbed or redirected by the manifold’s basin structure.
+This appendix provides a simple numeric example illustrating how the architecture handles perturbations, as described in Section 9. The goal is to show how a disturbance in the reference world $W(t)$ propagates through the mapping loop and is absorbed or redirected by the manifold’s basin structure.
 
 ---
 
@@ -1657,27 +1656,35 @@ The goal is to show how a disturbance in the reference world \(W(t)\) propagates
 
 Assume the system is in an **intercept basin**, with relational distance:
 
+
 $$
 M_t = 0.40\ \text{m}
 $$
 
+
 Let the ball’s horizontal velocity be:
+
 
 $$
 v_b = -6.0\ \text{m/s}
 $$
 
-and the hand’s horizontal velocity be:
+
+and the hand’s horizontal velocity:
+
 
 $$
 v_h = 3.0\ \text{m/s}
 $$
 
+
 Time step:
+
 
 $$
 \Delta t = 0.1\ \text{s}
 $$
+
 
 ---
 
@@ -1685,8 +1692,8 @@ $$
 
 A sudden gust of wind alters the ball’s velocity:
 
-- before gust: $v_b = -6.0$  
-- after gust: $v_b = -4.0$
+- before gust: -6.0  
+- after gust: -4.0
 
 This is a perturbation in $W(t)$.
 
@@ -1694,37 +1701,39 @@ This is a perturbation in $W(t)$.
 
 ## **C.3 Lift Into the Manifold**
 
-The relational update is:
+Use the relational update:
+
 
 $$
 M_{t+\Delta t} = M_t + \Delta t (v_b - v_h)
 $$
 
-Before the gust:
+
+**Before the gust:**
+
 
 $$
-M_{t+\Delta t}^{\text{before}} = 0.40 + 0.1(-6.0 - 3.0)
+M_{t+\Delta t}^{\text{before}}
+= 0.40 + 0.1(-6.0 - 3.0)
+= 0.40 - 0.9
+= -0.50\ \text{m}
 $$
 
-$$
-M_{t+\Delta t}^{\text{before}} = 0.40 - 0.9 = -0.50\ \text{m}
-$$
 
-This would have placed the system deep in the **catch basin**.
+This would place the system deep in the **catch basin**.
 
-After the gust:
+**After the gust:**
+
 
 $$
-M_{t+\Delta t}^{\text{after}} = 0.40 + 0.1(-4.0 - 3.0)
+M_{t+\Delta t}^{\text{after}}
+= 0.40 + 0.1(-4.0 - 3.0)
+= 0.40 - 0.7
+= -0.30\ \text{m}
 $$
 
-$$
-M_{t+\Delta t}^{\text{after}} = 0.40 - 0.7 = -0.30\ \text{m}
-$$
 
-This is still moving toward the catch basin, but not as quickly.
-
-The perturbation in $W(t)$ appears as a **shift in relational motion**.
+The perturbation appears as a **shift in relational motion**: the system still moves toward the catch basin, but more slowly.
 
 ---
 
@@ -1735,68 +1744,69 @@ Let the basin thresholds be:
 - intercept basin: $0.15 < |M_t| \le 1.0$  
 - catch basin: $|M_t| \le 0.15$
 
-Before the gust:
+**Before the gust:**  
+-0.50 would already lie inside the catch basin.
 
-- next state would have been $-0.50$, already inside the catch basin
+**After the gust:**  
+-0.30 remains in the intercept basin.
 
-After the gust:
-
-- next state is $-0.30$, still in the intercept basin
-
-The gust **delays** the transition into the catch basin.
-
-The basin structure absorbs the perturbation without destabilizing the system.
+The gust **delays** the transition into the catch basin. The basin structure absorbs the perturbation without destabilizing the system.
 
 ---
 
 ## **C.5 Projection Back to the Reference World**
 
-Let the projection be:
+Use the example projection rule:
+
 
 $$
 RWD(t) = x_h(t) + k M_t
 $$
 
-with $k = 0.5$.
 
-Before the gust:
+with k = 0.5.
+
+**Before the gust:**
+
 
 $$
 RWD^{\text{before}} = x_h(t) + 0.5(-0.50)
 $$
 
-After the gust:
+
+**After the gust:**
+
 
 $$
 RWD^{\text{after}} = x_h(t) + 0.5(-0.30)
 $$
 
-The gust produces a **smaller corrective movement**, but still a feasible one.
 
+The gust produces a **smaller corrective movement**, but still a feasible one.  
 The cognitive spacesuit ensures:
 
-- no discontinuity  
-- no impossible motor command  
-- no overshoot  
+- no discontinuity,  
+- no impossible motor command,  
+- no overshoot.
 
 ---
 
 ## **C.6 Summary**
 
-This simple example illustrates how:
+This example illustrates how:
 
 - a perturbation in $W(t)$ (wind gust)  
 - lifts into a shift in $M_t$  
 - alters the timing of basin transitions  
-- and produces a feasible correction in $RWD(t)$
+- and produces a feasible correction in RWD(t)
 
 The architecture remains stable because:
 
-- the lift is bounded  
-- the manifold update is bounded  
-- basins absorb small disturbances  
-- transition regions guide recovery  
-- the projection remains feasible  
+- the lift is bounded,  
+- the manifold update is bounded,  
+- basins absorb small disturbances,  
+- transition regions guide recovery,  
+- the projection remains feasible.
 
 This demonstrates the inherent robustness of the mapping loop under perturbations.
 
