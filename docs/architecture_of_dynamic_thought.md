@@ -97,131 +97,44 @@ The aim is clarity, coherence, and operational simplicity.
 
 ---
 
-# 3. The Mapping Architecture
+# **3. Static Information and the Limits of Object‑Centric Cognition**
 
-This section introduces the core architectural loop that connects the ordinary world of experience with a manifold of relational meaning. The aim is to describe a simple, mechanical structure: how a configuration in the world is mapped into a relational space, how motion unfolds within that space, and how the result is expressed back into the world as dynamic behavior.
+Static representations form the foundation of most formal systems used in analysis, modeling, and communication.  
+They treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form.  
+This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
 
-A boy catching a ball serves as a deliberately simple thought example. It illustrates how a world‑state is lifted into the manifold, how relational motion evolves, and how the resulting configuration produces outward action. The architecture does not assume learning, insight, or internal stabilization; it describes only the mapping loop itself.
+Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects.  
+Relations are typically encoded as additional objects or as fixed links between objects.  
+This approach is effective for classification and tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
 
----
+The limitations of static representation can be expressed using a simple mapping function.  
+Let $x$ denote a static representation and let $f$ denote a static interpretive function.  
+In a purely static regime, meaning $m$ is assumed to satisfy:
 
-## 3.1 The World as Input
-
-We denote the state of the world at time $t$ by
-
+```
 $$
-W(t).
+m = f(x)
 $$
+```
 
-Here:
+This formulation presumes that meaning is a deterministic function of the object alone.  
+However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient.  
+A more accurate representation requires additional variables:
 
-- **$W(t)$:** a structured world‑state at time $t$ (e.g., positions, velocities, and relations among objects such as a ball and a hand).  
-- **$t$:** ordinary time.
-
-In the ball‑catching example, $W(t)$ includes the ball’s trajectory, the boy’s body configuration, and the surrounding context. The architecture does not commit to a particular encoding of $W(t)$; it only assumes that such a state can be mapped into the manifold.
-
----
-
-## 3.2 Mapping into the Manifold
-
-The manifold is a relational state space in which meaning is expressed as motion. A world‑state $W(t)$ is mapped into an initial manifold configuration by
-
+```
 $$
-M_t = \Phi(W(t)).
+m = f(x, c, s)
 $$
+```
 
-Here:
+Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than dynamically evolving components of interpretation.  
+Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
 
-- **$M_t$:** the manifold state at time $t$.  
-- **$\Phi$:** the world‑to‑manifold mapping.
+These limitations become more apparent when viewed through the lens of relational geometry \[1–4\].  
+Static representations can describe the endpoints of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape meaning.
 
-In the ball‑catching example, $M_t$ encodes relational information such as:
-
-- the relation between the ball’s trajectory and the hand’s position,  
-- timing relations between the ball’s arrival and possible hand motions,  
-- spatial constraints relevant to interception.
-
-The manifold does not store objects; it stores relations derived from $W(t)$.
-
----
-
-## 3.3 Relational Motion in the Manifold
-
-Once initialized, the manifold evolves according to relational dynamics:
-
-$$
-M_{t + \Delta t} = F(M_t).
-$$
-
-Here:
-
-- **$F$:** the manifold update rule,  
-- **$\Delta t$:** a small time step.
-
-The architecture does not specify a metric or a particular form for $F$. It assumes only that:
-
-- motion within the manifold is continuous in time,  
-- trajectories $\\{M_t\\}$ encode the unfolding of interpretation,  
-- relational structure determines how the system evolves.
-
-**Object basins (OBs)** arise wherever relational motion is stable. An OB is any definable, nameable, or stabilizable relational configuration in the manifold. OBs include physical relations, sensory relations, verbs, nouns, symbolic structures, abstract concepts, and narrative forms. Anything that can be held as a stable relational configuration forms an OB.
-
-Transitions between OBs occur through **relation basins (RBs)**, which mediate motion between stable configurations.
-
-In the ball‑catching example, the trajectory $\\{M_t\\}$ encodes the evolving relation between the ball and the hand, guiding the timing and motion required for interception.
-
----
-
-## 3.4 Mapping Back to the World: RWD
-
-The manifold produces **dynamic expression** in the world. This is captured by **reference‑world dynamics (RWD)**:
-
-$$
-RWD(t) = \Psi(M_t).
-$$
-
-Here:
-
-- **$RWD(t)$:** outward behavior at time $t$,  
-- **$\Psi$:** the manifold‑to‑world mapping.
-
-RWD includes:
-
-- hand movement,  
-- posture adjustment,  
-- timing corrections,  
-- coordinated motor output.
-
-In the ball‑catching example, $RWD(t)$ is the boy moving his hand into the right place at the right time. RW‑D is the only explicit reference‑world construct needed in this architecture; it represents the dynamic, observable expression of manifold trajectories.
-
----
-
-## 3.5 The Full Mapping Loop
-
-The architecture forms a closed perception–action loop:
-
-$$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t + \Delta t} \xrightarrow{\Psi} RWD(t).
-$$
-
-In this diagram:
-
-- **$W(t)$:** world‑state at time $t$,  
-- **$\Phi$:** world‑to‑manifold mapping,  
-- **$M_t$:** manifold state,  
-- **$F$:** manifold dynamics,  
-- **$\Psi$:** manifold‑to‑world mapping,  
-- **$RWD(t)$:** outward behavior.
-
-This loop describes:
-
-1. **World → Manifold:** perception becomes a relational configuration.  
-2. **Manifold → Manifold:** meaning unfolds as motion.  
-3. **Manifold → World:** motion becomes behavior.
-
-The ball‑catching example is used only for simplicity. The same loop applies to reaching for a cup, turning toward a sound, or any ordinary action.
-
-The architecture does not attempt to explain how new internal structures form, how learning occurs, or how stabilization works. These questions lie outside the scope of this paper.
+Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding.  
+The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
 
 ---
 
