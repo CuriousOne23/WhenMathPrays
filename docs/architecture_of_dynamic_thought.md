@@ -1438,7 +1438,7 @@ is satisfied, for example, with $K_\Phi = 1$, since $0.1 \le 0.5$.
 
 ---
 
-### A.3 Manifold dynamics: $F$
+### A.3 Manifold dynamics: F
 
 Use a simple relational update:
 
@@ -1447,6 +1447,8 @@ M_{t+\Delta t} = M_t + \Delta t \bigl(v_b - v_h\bigr)
 $$
 
 where $v_b$ and $v_h$ are horizontal velocities of ball and hand.
+
+F updates the relational displacement $M_t$ directly, not the absolute positions of the ball or the hand. This keeps the evolution entirely within the manifold and avoids reintroducing world‑level structure that Φ intentionally removed.
 
 Let:
 
