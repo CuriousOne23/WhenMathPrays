@@ -763,6 +763,8 @@ If this is correct, then the framework is new in the history of analysis, unders
 
 The sections below outline several well‑established cognitive attributes, explain why the classical frameworks cannot represent them, and show how the geometric structures introduced in this paper can.
 
+The central advantage of cognitive systems is their ability to remain stable and adaptive across a far broader range of dynamic and partially specified environmental conditions than any classical control or planning framework can accommodate.
+
 ---
 
 ## **10.1 PID Control**
@@ -772,13 +774,13 @@ PID regulates error in a fixed coordinate space. It is highly effective for engi
 Cognitive systems, however, exhibit attributes that PID cannot represent:
 
 ### **Context‑dependent behavior**  
-The same external condition can produce different actions depending on internal state. PID has no internal representational structure that changes the meaning of error.
+The same external condition can produce different actions depending on internal state. PID cannot change which deviations are relevant based on internal conditions; all discrepancies are processed identically.
 
 ### **Adaptive reorganization**  
-Cognitive systems reorganize internal structure when conditions change. PID cannot change its own geometry; it can only adjust gains.
+Cognitive systems reorganize internal structure based on internal conditions. PID cannot reorganize structure; it can only adjust predefined gain parameters.
 
 ### **Multi‑task coherence**  
-Cognitive systems maintain coherence across interacting tasks. PID has no mechanism for representing or coordinating multiple interacting objectives.
+Cognitive systems maintain coherence across multiple interacting tasks and can merge or separate them as internal and external conditions change. PID has no mechanism for relating or restructuring multiple objectives; each loop operates on a single fixed error.
 
 The geometric framework introduced here can represent these attributes through:
 
@@ -799,7 +801,7 @@ MPC stabilizes behavior by predicting future states, optimizing over a horizon, 
 Cognitive systems, however, routinely exhibit attributes that MPC cannot represent:
 
 ### **Non‑predictive real‑time action**  
-Cognitive systems act continuously without forecasting futures or optimizing over horizons. MPC requires prediction and optimization by definition.
+Cognitive systems adapt to changing and only partially specified environmental conditions. MPC operates only within a fixed, well‑defined model with predefined constraints and objectives.
 
 ### **Goal deformation**  
 Goals in cognitive systems shift, soften, or reorganize as new information arrives. MPC assumes fixed cost functions and fixed objectives over the horizon.
@@ -824,14 +826,11 @@ Symbolic planning organizes behavior through discrete states, operators, and goa
 
 Cognitive systems, however, exhibit attributes that symbolic planning cannot represent:
 
-### **Internal state‑dependent meaning**  
-The meaning of a situation depends on internal relational structure, not on symbolic labels. Planning assumes fixed symbolic interpretations.
-
-### **Adaptive restructuring of task space**  
-Cognitive systems reorganize task structure dynamically. Planning assumes a fixed operator set and fixed goal structure.
+### **Dynamic internal relational structure**  
+Cognitive systems reorganize how conditions and tasks relate to one another as internal and external conditions evolve. Symbolic planning fixes its symbolic labels, operators, and relational structure in advance and cannot reorganize them.
 
 ### **Perception‑action coupling**  
-Cognitive behavior unfolds through continuous interaction with the environment. Planning requires discrete symbolic transitions.
+Cognitive systems can maintain control in a vastly broader range of dynamic, shifting, partially specified environments. Planning cannot, because it requires a fixed representational pause between sensing and acting.
 
 The geometric framework introduced here can represent these attributes through:
 
