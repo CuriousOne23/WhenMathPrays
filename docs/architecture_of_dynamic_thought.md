@@ -807,7 +807,7 @@ Cognitive systems adapt to changing and only partially specified environmental c
 Goals in cognitive systems shift, soften, or reorganize as new information arrives. MPC assumes fixed cost functions and fixed objectives over the horizon.
 
 ### **Integrated perception‑action flow**  
-Cognitive systems do not separate perception from action. MPC requires a model, a horizon, and a discrete optimization cycle.
+Cognitive systems update behavior as conditions change, allowing them to maintain control across a wide range of dynamic and partially specified environments. MPC requires a model, a horizon, and a discrete optimization cycle, restricting it to environments that can be fully specified in advance.
 
 The geometric framework developed here can represent these attributes through:
 
@@ -830,7 +830,7 @@ Cognitive systems, however, exhibit attributes that symbolic planning cannot rep
 Cognitive systems reorganize how conditions and tasks relate to one another as internal and external conditions evolve. Symbolic planning fixes its symbolic labels, operators, and relational structure in advance and cannot reorganize them.
 
 ### **Perception‑action coupling**  
-Cognitive systems can maintain control in a vastly broader range of dynamic, shifting, partially specified environments. Planning cannot, because it requires a fixed representational pause between sensing and acting.
+Cognitive systems maintain control in dynamic, partially specified environments by updating behavior as perception unfolds. Symbolic planning requires a representational pause between sensing and acting, limiting it to environments that can be fully specified in advance.
 
 The geometric framework introduced here can represent these attributes through:
 
