@@ -74,6 +74,23 @@ This motivates the framework developed in the sections that follow.
 
 # **4. The Framework**
 
+**Core Relational Update Loop**
+
+At each moment $t$, the world $W(t)$ is mapped into an internal relational 
+geometry $M_t$ through $\Phi$, which extracts the system’s momentary 
+relational structure. The system then evolves this geometry forward via $F$, 
+producing $M_{t+\Delta t}$, a locally updated configuration that reflects 
+predicted or unfolding relational change. A decoding map $\Psi$ transforms 
+this updated geometry into a relationally‑weighted disposition $RWD(t)$, 
+which guides action or interpretation.
+
+$$
+W(t)\xrightarrow{\Phi}M_t\xrightarrow{F}M_{t+\Delta t}\xrightarrow{\Psi}RWD(t)
+$$
+
+This loop is the architectural skeleton: later sections apply it to different 
+contexts, but the structure itself remains unchanged.
+
 The framework developed in this paper begins from a minimal set of primitives. The aim is not to describe the full richness of human thought, but to identify a simple geometric structure capable of generating the dynamics we observe in verbal cognition. The primitives are intentionally sparse so that the explanatory weight falls on the geometry rather than on assumptions built into the model.
 
 ## **4.1 Primitives**
@@ -86,6 +103,8 @@ We begin with four elements:
 4. **Curvature** — the geometric property that shapes how trajectories bend, converge, diverge, or stabilize.
 
 These primitives are not linguistic or psychological constructs. They are geometric. The goal is to model thought as motion through a structured field, not as manipulation of symbols.
+
+The appendices provide simple numeric instantiations solely for illustration; they are not part of the architectural definition and do not constrain the forms of $\Phi$, $F$, or $\Psi$.
 
 ## **4.2 The Relational Manifold**
 
