@@ -147,7 +147,7 @@ Low‑dynamic information therefore serves as the structural bridge between stat
 
 # **5. The Mapping Loop Illustrated Through a Boy Catching a Ball**
 
-Section 3.5 introduced the architectural loop:
+The architectural loop is defined as:
   
 $$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
