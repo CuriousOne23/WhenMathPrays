@@ -757,7 +757,7 @@ Appendix C provides a numeric illustration of basin navigation.
 
 The framework developed in this paper is not a controller, planner, or machine. It is a **descriptive geometry** for analyzing systems whose behavior emerges through continuous relational structure. Because of this, it is natural to ask whether the framework is simply a reformulation of existing methods such as PID control, Model‑Predictive Control (MPC), or symbolic planning.
 
-These three frameworks represent the most powerful tools we have for engineered systems. They are foundational achievements. But cognitive systems exhibit attributes that none of these methods can measure, represent, or control. The geometric framework developed here appears able to express these attributes directly.
+These three frameworks represent the most powerful tools we have for engineered systems. They are foundational achievements. But cognitive systems exhibit attributes that none of these methods can measure, represent, or control. The geometric framework developed here, if proven, would express these attributes directly.
 
 If this is correct, then the framework is new in the history of analysis, understanding, control, robotics, and cognitive architecture.
 
