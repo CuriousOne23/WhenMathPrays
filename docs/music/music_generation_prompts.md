@@ -180,12 +180,3 @@ This is the clean, operational layer.
 > Minimalist concluding piece for felt piano, warm pad, and soft marimba. Tempo 72 BPM, 4/4, C major. Calm, stable, integrating, gentle resolution.
 
 ---
-
-# **If you want, I can also generate:**
-
-- a **single master prompt** for generating the *entire score as one continuous piece*  
-- a **Suno‑optimized version** (shorter, more directive)  
-- a **Udio‑optimized version** (more descriptive, more texture cues)  
-- or a **tracklist with timing estimates**  
-
-Just tell me what you want next.
