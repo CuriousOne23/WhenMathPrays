@@ -1933,8 +1933,7 @@ Produces feasible, continuous world‑level quantities.
 Does not generate motor commands; it provides observables used by downstream processes.
 
 ### **Reference‑World Dynamics (RWD)**
-A world‑level update rule that *uses* the output of Ψ.  
-Not part of Ψ itself.  
+A world‑level update rule that *uses* the output of Ψ. Not part of Ψ itself.  
 Example‑specific in Appendices.
 
 ---
@@ -1990,7 +1989,7 @@ Prevents runaway motion inside the manifold.
 Projection must produce world‑level quantities within biomechanical or physical limits.
 
 ### **Temporal Coherence**
-Relational motion must evolve smoothly:
+Relational distance to the task‑relevant configuration must decrease smoothly:
 
 
 $$
