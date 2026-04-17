@@ -81,11 +81,18 @@ music/
 
 Each file plays a distinct role:
 
-- **full_composition_diagram.md** → the *global map*  
+**Prompting for sections:**
+- **music_generation_prompts.md** → the *operational layer* 
+**Prompting for entire score**
+- **master_prompt.md** → the *one‑shot continuous score generator*
+
+**Reference**
+- full_composition_blueprint.md → the architectural plan that the prompts are based on (not used directly in Suno)
+- full_composition_diagram.md → the global dynamic map (visual reference)
 - **instrumentation_overlay.md** → the *timeline*  
 - **instrumentation_overview.md** → the *manual*  
-- **music_generation_prompts.md** → the *operational layer*  
-- **master_prompt.md** → the *one‑shot continuous score generator*
+ 
+
 - **sections/** → optional per‑section notes  
 
 Together, they form a **complete, reproducible music architecture**.
