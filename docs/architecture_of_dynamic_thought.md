@@ -751,7 +751,7 @@ Robustness is not an add‑on; it is a consequence of the geometry.
 
 The architecture handles perturbations by shaping how the system moves through relational geometry. Small disturbances are absorbed within basins; larger ones are redirected through transition regions. The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent. This provides a natural form of robustness that does not rely on prediction, symbolic correction, or explicit error modeling.
 
-Appendix C provides a numeric illustration of basin navigation.
+Appendix C provides a numeric illustration of perturbation handling.
 
 ---
 
@@ -1035,7 +1035,7 @@ The architecture assumes the existence of basins and transition regions but does
 - how their boundaries are shaped,  
 - how relational gradients emerge.
 
-These structures are treated as given. A complete theory would require a principled account of basin formation, whether through learning, evolution, or physical constraints.
+These structures are treated as given. This is consistent with the architectural posture of the framework. A complete theory would require a principled account of basin formation, whether through learning, evolution, or physical constraints.
 
 ---
 
