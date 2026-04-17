@@ -494,7 +494,7 @@ As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifo
 
 Timing emerges from the geometry of the OBs and the relational gradients within them.
 
-A simple temporal‑coherence condition:
+A simple temporal‑coherence condition requires that the relational distance to the task‑relevant configuration decreases:
 
 $$
 \frac{d}{dt} M_t < 0
