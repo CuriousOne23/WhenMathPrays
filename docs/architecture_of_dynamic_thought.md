@@ -141,7 +141,7 @@ Low‑dynamic information plays a critical role in bridging the gap between stat
 
 The transitional nature of low‑dynamic information also aligns with relational geometry. It supports limited movement within interpretive basins while preserving the stability needed to avoid uncontrolled transitions. This controlled motion prepares the interpretive system for the more flexible and context‑dependent dynamics of high‑dynamic information.
 
-Low‑dynamic information therefore serves as the structural bridge between static representation and dynamic meaning. It introduces motion into the interpretive process while maintaining compatibility with the reference world. The next section examines high‑dynamic information and its role in supporting fully contextual meaning within a relational manifold..
+Low‑dynamic information therefore serves as the structural bridge between static representation and dynamic meaning. It introduces motion into the interpretive process while maintaining compatibility with the reference world. The next section examines high‑dynamic information and its role in supporting fully contextual meaning within a relational manifold.
 
 ---
 
