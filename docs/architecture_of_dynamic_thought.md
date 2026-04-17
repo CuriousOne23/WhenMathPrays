@@ -153,6 +153,8 @@ $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$  
 
+The examples in this section and in the appendices are illustrative only; they do not define or constrain the general forms of $\Phi$, $F$, or $\Psi$.
+
 This section illustrates how the loop operates in a concrete scenario: **a boy catching a ball**.  
 The goal is not to redefine the loop, but to show how each component functions in an ordinary, mechanically simple behavior.
 
