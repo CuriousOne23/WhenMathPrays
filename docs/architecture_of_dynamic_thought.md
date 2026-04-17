@@ -345,7 +345,7 @@ The spacesuit also ensures coherence across the entire loop.
 
 ### **Temporal Coherence**
 
-In tasks requiring convergence (e.g., catching a ball), relational distance must decrease:
+In tasks requiring convergence (e.g., catching a ball), the relational distance between the system and the task‑relevant configuration must decrease:
   
 $$  
 \frac{d}{dt} M_t < 0.
