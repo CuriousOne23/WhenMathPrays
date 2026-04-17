@@ -678,7 +678,7 @@ Perturbations in the world—such as wind, spin, or an unexpected bounce—appea
 - larger perturbations may move the system toward a new transition region,  
 - the cognitive spacesuit ensures the lift remains bounded and well‑posed.
 
-Because $\Phi$ is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
+Because $\Phi$ is Lipschitz‑bounded (as required by the cognitive spacesuit), even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
 
 ---
 
@@ -874,7 +874,7 @@ The framework developed in this paper introduces:
 
 These structures allow the framework to analyze cognitive systems in ways that PID, MPC, and symbolic planning cannot.
 
-**If this is correct, then the framework is new in the history of analysis, understanding, control, robotics, and cognitive architecture.**
+**If this is correct, then the framework would represent a new contribution in the history of analysis, understanding, control, robotics, and cognitive architecture.**
 
 ---
 
