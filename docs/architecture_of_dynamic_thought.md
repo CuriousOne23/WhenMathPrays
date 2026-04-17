@@ -755,9 +755,14 @@ Appendix C provides a numeric illustration of basin navigation.
 
 # **10. Relation to Classical Control and Planning Frameworks**
 
-The framework developed in this paper is not a controller, planner, or machine. It is a **descriptive geometry** intended to analyze systems whose behavior emerges through continuous relational structure. Because of this, it is natural to ask whether the framework is simply a reformulation of existing methods such as PID control, Model‑Predictive Control (MPC), or symbolic planning.
+The framework developed in this paper is not a controller, planner, or machine.  
+It is a **descriptive geometry** for analyzing systems whose behavior emerges through continuous relational structure.  
+Because of this, it is natural to ask whether the framework is simply a reformulation of existing methods such as PID control, Model‑Predictive Control (MPC), or symbolic planning.
 
-These three frameworks represent the most powerful tools we have for engineered systems. They are foundational achievements. But cognitive systems exhibit attributes that none of these methods can measure, represent, or control. The geometric framework developed here appears able to express these attributes directly.
+These three frameworks represent the most powerful tools we have for engineered systems.  
+They are foundational achievements.  
+But cognitive systems exhibit attributes that none of these methods can measure, represent, or control.  
+The geometric framework developed here appears able to express these attributes directly.
 
 If this is correct, then the framework is new in the history of analysis, understanding, control, robotics, and cognitive architecture.
 
@@ -767,18 +772,22 @@ The sections below outline several well‑established cognitive attributes, expl
 
 ## **10.1 PID Control**
 
-PID regulates error in a fixed coordinate space. It is highly effective for engineered systems whose behavior can be stabilized through proportional, integral, and derivative terms.
+PID regulates error in a fixed coordinate space.  
+It is highly effective for engineered systems whose behavior can be stabilized through proportional, integral, and derivative terms.
 
 Cognitive systems, however, exhibit attributes that PID cannot represent:
 
 ### **Context‑dependent behavior**  
-The same external condition can produce different actions depending on internal state. PID has no internal representational structure that changes the meaning of error; the error signal is fixed by definition.
+The same external condition can produce different actions depending on internal state.  
+PID has no internal representational structure that changes the meaning of error.
 
 ### **Adaptive reorganization**  
-Cognitive systems reorganize internal structure when conditions change. PID cannot change its own geometry; it can only adjust gains.
+Cognitive systems reorganize internal structure when conditions change.  
+PID cannot change its own geometry; it can only adjust gains.
 
 ### **Multi‑task coherence**  
-Cognitive systems maintain coherence across interacting tasks. PID has no mechanism for representing or coordinating multiple interacting objectives.
+Cognitive systems maintain coherence across interacting tasks.  
+PID has no mechanism for representing or coordinating multiple interacting objectives.
 
 The geometric framework introduced here can represent these attributes through:
 
@@ -794,18 +803,22 @@ PID cannot express these structures.
 
 ## **10.2 Model‑Predictive Control (MPC)**
 
-MPC stabilizes behavior by predicting future states, optimizing over a horizon, and applying the first step of the optimal sequence. It is the most general and powerful control method for engineered systems.
+MPC stabilizes behavior by predicting future states, optimizing over a horizon, and applying the first step of the optimal sequence.  
+It is the most general and powerful control method for engineered systems.
 
 Cognitive systems, however, routinely exhibit attributes that MPC cannot represent:
 
 ### **Non‑predictive real‑time action**  
-Cognitive systems act continuously without forecasting futures or optimizing over horizons. MPC requires prediction and optimization by definition.
+Cognitive systems act continuously without forecasting futures or optimizing over horizons.  
+MPC requires prediction and optimization by definition.
 
 ### **Goal deformation**  
-Goals in cognitive systems shift, soften, or reorganize as new information arrives. MPC assumes fixed cost functions and fixed objectives over the horizon.
+Goals in cognitive systems shift, soften, or reorganize as new information arrives.  
+MPC assumes fixed cost functions and fixed objectives over the horizon.
 
-### **Continuous perception‑action coupling**  
-Cognitive systems integrate perception and action without discrete planning cycles. MPC operates in discrete optimization steps.
+### **Integrated perception‑action flow**  
+Cognitive systems do not separate perception from action.  
+MPC requires a model, a horizon, and a discrete optimization cycle.
 
 The geometric framework developed here can represent these attributes through:
 
@@ -820,18 +833,22 @@ MPC cannot express these structures.
 
 ## **10.3 Symbolic Planning**
 
-Symbolic planning organizes behavior through discrete states, operators, and goal structures. It is essential for engineered symbolic systems.
+Symbolic planning organizes behavior through discrete states, operators, and goal structures.  
+It is essential for engineered symbolic systems.
 
 Cognitive systems, however, exhibit attributes that symbolic planning cannot represent:
 
-### **Integrated perception‑action flow**  
-Cognitive behavior unfolds continuously, not through discrete symbolic transitions. Planning requires discrete states and operators.
-
 ### **Internal state‑dependent meaning**  
-The meaning of a situation depends on internal relational structure, not on symbolic labels. Planning assumes fixed symbolic interpretations.
+The meaning of a situation depends on internal relational structure, not on symbolic labels.  
+Planning assumes fixed symbolic interpretations.
 
 ### **Adaptive restructuring of task space**  
-Cognitive systems reorganize task structure dynamically. Planning assumes a fixed operator set and fixed goal structure.
+Cognitive systems reorganize task structure dynamically.  
+Planning assumes a fixed operator set and fixed goal structure.
+
+### **Perception‑action coupling**  
+Cognitive behavior unfolds through continuous interaction with the environment.  
+Planning requires discrete symbolic transitions.
 
 The geometric framework introduced here can represent these attributes through:
 
