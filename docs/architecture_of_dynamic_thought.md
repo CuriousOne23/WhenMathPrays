@@ -759,11 +759,7 @@ The framework developed in this paper is not a controller, planner, or machine. 
 
 These three frameworks represent the most powerful tools we have for engineered systems. They are foundational achievements. But cognitive systems exhibit attributes that none of these methods can measure, represent, or control. The geometric framework developed here, if proven, would express these attributes directly.
 
-If this is correct, then the framework is new in the history of analysis, understanding, control, robotics, and cognitive architecture.
-
 The sections below outline several well‑established cognitive attributes, explain why the classical frameworks cannot represent them, and show how the geometric structures introduced in this paper can.
-
-The central advantage of cognitive systems is their ability to remain stable and adaptive across a far broader range of dynamic and partially specified environmental conditions than any classical control or planning framework can accommodate.
 
 ---
 
