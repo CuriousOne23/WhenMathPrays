@@ -259,15 +259,15 @@ These components form a coherent framework for integrating reference‑world and
 
 # **6. The Cognitive Spacesuit: Safe Traversal of the Mapping Loop**
 
-The mapping loop introduced in Section 3.5,
-  
+The mapping loop,
+
 $$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t),
 $$  
 
-allows a system to move between the reference world and the manifold. These regimes operate under different constraints, and transitions between them can become unstable if not properly regulated. The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
+moves the system between the reference world and the manifold. These regimes obey different constraints, and transitions between them can become unstable if not properly regulated. The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
 
-The spacesuit does not introduce new dynamics. Instead, it regulates how $\Phi$, $F$, and $\Psi$ interact so the system can traverse the loop without runaway amplification, oscillation, or loss of coordination. Appendix A provides simple numeric examples illustrating these constraints in a ball‑catching scenario.
+The spacesuit does not introduce new dynamics. It regulates how $\Phi$, $F$, and $\Psi$ interact so the system can traverse the loop without runaway amplification, oscillation, or loss of coordination. Appendix A provides simple numeric illustrations of these regulatory constraints in the ball‑catching example.
 
 ---
 
@@ -278,14 +278,14 @@ The reference world and the manifold differ in structure:
 - the reference world requires physically feasible behavior,  
 - the manifold contains relational gradients, basins, and transitions that may evolve more freely than the body can express.
 
-Without a regulating layer, the mapping loop could:
+Without a regulating layer, the loop could:
 
 - push the system into unreachable configurations,  
 - generate motor outputs that exceed physical limits,  
 - oscillate between basins,  
 - destabilize timing.
 
-The spacesuit prevents these failure modes by ensuring that each step of the loop respects both worlds.
+The spacesuit prevents these failure modes by ensuring that each step of the loop respects the constraints of both worlds.
 
 ---
 
