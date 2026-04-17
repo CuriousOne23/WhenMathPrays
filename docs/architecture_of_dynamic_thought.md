@@ -753,18 +753,6 @@ Appendix C provides a numeric illustration of basin navigation.
 
 ---
 
-# **10. Why This Architecture Is New**
-
-A natural question is whether the architecture described in this paper is simply a reformulation of existing control or planning frameworks — PID, MPC, or symbolic planning. It is not. The relationship is **asymmetric**:
-
-- The architecture can **express** behaviors that resemble PID, MPC, and symbolic planning.  
-- But PID, MPC, and symbolic planning **cannot describe or model** the architecture.
-
-This asymmetry is the key to understanding why the architecture is **new**.  
-It introduces representational and dynamical structures that do not exist in any prior framework.
-
----
-
 # **10. Relation to Classical Control and Planning Frameworks**
 
 The framework developed in this paper is not a controller, planner, or machine. It is a **descriptive geometry** intended to analyze systems whose behavior emerges through continuous relational structure. Because of this, it is natural to ask whether the framework is simply a reformulation of existing methods such as PID control, Model‑Predictive Control (MPC), or symbolic planning.
