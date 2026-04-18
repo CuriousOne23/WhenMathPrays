@@ -147,7 +147,7 @@ A **composite OB** may be written as:
 
   
 $$
-OB = \{ OB_k; RB_\ell \}
+OB = \\{ OB_k,\ RB_\ell \\}
 $$
   
 
@@ -157,7 +157,7 @@ Similarly, a **composite RB** may be written as:
 
   
 $$
-RB = \\{ OB_k\; RB_\ell \\}
+RB = \\{ OB_k,\  RB_\ell \\}
 $$
   
 
@@ -252,38 +252,55 @@ The remaining sections of the paper elaborate, clarify, or apply this central id
 
 # **4. The Relational Manifold**
 
-Understanding dynamic behavior requires a geometric space in which relational configurations can be represented, stabilized, and transformed.
+The relational manifold $M_t$ is the geometric space in which dynamic relational configurations unfold. Section 3 established that the manifold lives in time and supports stable regions (OBs) and relational‑alignment regions (RBs). This section expands on the structural properties of these basins and clarifies how representational motion — what we call “thought” — propagates through the manifold.
 
-In this paper, this space is the **relational manifold** $M_t$:  
-a continuously evolving geometric structure that encodes how components of a system stand in relation to one another at time $t$.
+Although richer geometries may contain additional basin types, this framework requires only two primitives:
 
-The manifold is not a space of objects or meanings. It is a **relational configuration space**, defined entirely by the geometry of interaction. Only two structural primitives are required:
+- **Object Basins (OBs)** — regions of stability  
+- **Relational Basins (RBs)** — regions of structured relational alignment  
 
----
-
-### **Object Basins (OB)**
-
-Object Basins are **stable geometric regions** within the manifold.  
-They correspond to relational configurations that persist across time and perturbation. An OB is not an “object” in the world; it is a **region of geometric stability** that maintains a particular relational pattern.
-
-When a trajectory enters an OB, the configuration remains stable because the **geometry of that region** supports stability under the system’s natural evolution. No attraction or agency is involved.
+These two basin types form the minimal stability structure needed for dynamic cognition.
 
 ---
 
-### **Relational Basins (RB)**
+## **4.1 Structural Properties of OBs**
 
-Relational Basins are **stable relational‑alignment regions** within the manifold.  
-Where OBs stabilize configurations, RBs stabilize **relations** between configurations. An RB maintains a structured relational alignment — for example, “approaching,” “tracking,” or “co‑moving.”
+OBs are stable regions of the manifold, but they are not atomic. They may be **composite**, formed from nested or overlapping sets of OBs and RBs:
 
-RBs do not attract or move anything. They simply mark regions where certain relational structures remain stable under $F$.
+$$
+OB = \\{ OB_k,\ RB_\ell \\}
+$$
+
+This compositionality allows:
+
+- multi‑scale stability  
+- fractal and holographic structure  
+- local patterns encoding global relational signatures  
+
+An OB is therefore not a single “thing,” but a **coherent region** whose internal structure may be rich and distributed.
 
 ---
 
-Together, OBs and RBs define the **basin structure** of the manifold: the stable regions through which trajectories pass and the relational pathways that connect them.
+## **4.2 Structural Properties of RBs**
+
+RBs stabilize **relational alignment**, not objects.  
+Like OBs, RBs may also be composite:
+
+$$
+RB = \\{ OB_k,\ RB_\ell \\}
+$$
+
+This allows RBs to:
+
+- bundle multiple relational pathways  
+- support parallel relational motion  
+- encode structured transitions across scales  
+
+RBs are not edges between OBs; they are **regions** with internal geometry.
 
 ---
 
-### **Trajectories Through the Manifold**
+## **4.3 Representational Motion Through the Manifold**
 
 A system’s evolution is represented as a trajectory
 
@@ -291,25 +308,89 @@ $$
 \gamma(t) \subset M_t
 $$
 
-that moves through OBs and RBs over time. The basins themselves do not cause this motion. Stability arises from entering a stable region; flexibility arises from transitions between such regions. The geometry, evolving under $F$, determines how configurations change.
+that passes through OBs and RBs as the manifold evolves under $F$.
 
-In this model, the trajectory $\gamma(t)$ traces the representational motion of thought through OBs and RBs; nothing physically travels, no signal follows this path, and thought itself has no agency—only the geometry evolves.
+This trajectory is **representational**, not physical:
+
+- nothing travels  
+- no signal moves  
+- no object is carried  
+- thought has no agency  
+
+The geometry evolves, and $\gamma(t)$ is the **record** of that evolution.
 
 ---
 
-### **Mapping Loop**
+## **4.4 Geometry‑Driven Flow (No Forces, No Attraction)**
 
-The manifold participates in a closed mapping loop:
+In this proposal, the movement of thought — the apparent flow of energy from one region of the manifold to another — is not caused by force, attraction, or any agentic mechanism. Nothing pulls a configuration toward an OB, and nothing pushes it along an RB. Instead, **the geometry itself is changing**, and the system’s representational state moves because the manifold evolves under the update law:
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+M_{t+\Delta t} = F(M_t)
 $$
 
-- **Φ** lifts world‑state into relational configuration.  
-- **F** evolves the configuration through OBs and RBs.  
-- **Ψ** projects the updated configuration back into feasible world‑level behavior.
+The “flow” of thought is therefore a **geometric consequence**, not a dynamical force. As the manifold deforms, regions of stability (OBs) and relational alignment (RBs) shift, merge, split, or strengthen. The representational state $\gamma(t)$ simply remains coherent with the geometry as it changes.
 
-This loop defines how relational geometry governs dynamic behavior without relying on prediction, discrete states, or object‑centric representation.
+What looks like motion is the **continuous re‑shaping of the relational field**.
+
+---
+
+## **4.5 Distributed Flow of Thought**
+
+For conceptual clarity, one may describe a transition as energy moving from one OB to another through an RB:
+
+$$
+OB_i \ \xrightarrow{RB_{ij}}\ OB_j
+$$
+
+But this is only a **representational aid**.
+
+In reality, the process is:
+
+- **distributed**  
+- **simultaneous**  
+- **multi‑path**  
+- **wave‑like rather than corpuscular**  
+
+Thought does **not** propagate along a single OB→RB→OB chain. Instead, energy flows through **many OBs and many RBs at once**, producing a superposition of partial relational motions:
+
+$$
+\gamma(t) \in \\{\, OB_k,\ RB_\ell \,\\}_{\text{many, simultaneous}}
+$$
+
+This distributed flow allows the system to maintain multiple partial interpretations, parallel relational structures, and interacting possibilities before collapse.
+
+This is the key capability that current symbolic, object‑centric, or static‑embedding models cannot express.
+
+---
+
+## **4.6 Why This Matters**
+
+This distributed, geometry‑driven flow explains:
+
+- ambiguity  
+- parallel interpretations  
+- entanglement  
+- sudden collapse  
+- contextual dependence  
+- non‑commutativity  
+- insight and revelation  
+
+These are not emergent “behaviors.” They are **geometric consequences** of a manifold that lives in time and supports distributed relational motion.
+
+---
+
+## **4.7 Summary**
+
+Section 4 expands the basin ontology introduced in Section 3:
+
+- OBs and RBs are **composite, multi‑scale, and nested**  
+- representational motion is **distributed**, not corpuscular  
+- thought is **the evolving geometry itself**, not a moving entity  
+- the OB→RB→OB chain is a **conceptual simplification**, not a literal process  
+- movement is caused by **geometric deformation**, not force or attraction  
+
+This prepares the ground for Sections 5–9, which describe how meaning, perception, action, and narrative arise from this dynamic relational structure.
 
 ---
 
