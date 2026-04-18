@@ -950,7 +950,7 @@ Perturbations in the world—such as wind, spin, or an unexpected bounce—appea
 - larger perturbations may move the system toward a new transition region,  
 - the cognitive spacesuit ensures the lift remains bounded and well‑posed.
 
-Because $\Phi$ is Lipschitz‑bounded (as required by the cognitive spacesuit), even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
+Because $\Phi$ is Lipschitz‑bounded, even noisy or irregular world‑state changes do not produce discontinuities in the manifold.
 
 ---
 
@@ -965,7 +965,7 @@ Perturbations can also arise internally:
 
 The manifold’s basin structure absorbs these disturbances:
 
-- inside a basin, perturbations decay because the geometry of that region supports stability under the system’s natural evolution,  
+- inside a basin, perturbations decay because the geometry of that region supports stability under $F$,  
 - near a transition region, perturbations may redirect the system into a neighboring basin,  
 - the cognitive spacesuit ensures that such redirections remain feasible and coherent.
 
@@ -978,7 +978,7 @@ This provides a geometric form of error correction without requiring explicit pr
 Within a basin $OB_i$, the dynamics satisfy:
 
 $$
-M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i.
+M_t \in OB_i \ \Rightarrow\  F(M_t) \in OB_i.
 $$
 
 This means:
@@ -993,8 +993,7 @@ In the ball‑catching example, minor deviations in ball trajectory or hand moti
 
 ## **9.4 Transition Regions and Recovery From Larger Perturbations**
 
-When a perturbation is large enough to move the system out of a basin, it typically enters a transition region $RB_{ij}$.  
-These regions act as structured pathways for recovery:
+When a perturbation is large enough to move the system out of a basin, it typically enters a transition region $RB_{ij}$. These regions act as structured pathways for recovery:
 
 - they guide the system toward a new stable configuration,  
 - they prevent chaotic or discontinuous responses,  
@@ -1004,7 +1003,23 @@ For example, if a gust of wind shifts the ball’s path, the system may leave th
 
 ---
 
-## **9.5 Why the Mapping Loop Is Inherently Robust**
+## **9.5 Substrate‑Dependent RB Transfer**
+
+In the full architecture, **RB‑internal transfer is substrate‑dependent**.  
+The time spent inside an RB, the shape of the transition, and the degree of distributed flow depend on the physical or computational substrate implementing the manifold.
+
+Appendix C does **not** model RB‑internal transfer.  
+This is intentional:
+
+- the appendix focuses on OB‑level perturbation handling,  
+- RBs are treated as instantaneous transition markers,  
+- the internal geometry of RBs is left implicit.
+
+The architecture fully supports detailed RB‑internal modeling when needed, but such detail is unnecessary for illustrating the core robustness mechanisms.
+
+---
+
+## **9.6 Why the Mapping Loop Is Inherently Robust**
 
 The mapping loop maintains robustness through its structure:
 
@@ -1019,11 +1034,15 @@ Robustness is not an add‑on; it is a consequence of the geometry.
 
 ---
 
-## **9.6 Summary**
+## **9.7 Summary**
 
-The architecture handles perturbations by shaping how the system moves through relational geometry. Small disturbances are absorbed within basins; larger ones are redirected through transition regions. The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent. This provides a natural form of robustness that does not rely on prediction, symbolic correction, or explicit error modeling.
+The architecture handles perturbations by shaping how the system moves through relational geometry. Small disturbances are absorbed within basins; larger ones are redirected through transition regions. RB‑internal transfer is substrate‑dependent and omitted from the appendices for clarity, but the architecture supports it fully. The cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
 
-Appendix C provides a numeric illustration of perturbation handling.
+Appendix C provides a numeric illustration of perturbation handling.
+
+---
+
+If you want, I can now regenerate **Section 10** or move directly to the Conclusion (Section 13).
 
 ---
 
