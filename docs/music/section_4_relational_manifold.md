@@ -1,108 +1,153 @@
 # **Section 4 — The Relational Manifold (Minimalist Score Blueprint)**  
-*(Static Information)*
+*(Generated directly from the manuscript text)*
 
 ## **Musical Purpose of Section 4**
 
-This section corresponds to **static information** in the manuscript:
+Section 4 is the **frozen architecture** of the manifold:
 
-- object‑like stability  
-- fixed relations  
-- no internal motion  
-- no drift  
-- no reconfiguration  
+- OBs as stable regions  
+- RBs as relational‑alignment regions  
+- representational motion as geometry evolving  
+- no forces, no attraction  
+- distributed flow  
+- multi‑scale, nested, fractal structure  
 
-Musically, this must feel:
+Conceptually, this section is:
 
-- frozen  
-- architectural  
-- low‑entropy  
-- low‑dynamic  
-- precise  
-- unmoving  
+- **static → low‑dynamic**, but with *structure*  
+- more architectural than Section 3  
+- more “object‑like”  
+- more stable, but not frozen  
+- the first appearance of **distributed flow**  
+- the first appearance of **multi‑path motion**  
 
-This is the **most static** section of the entire composition.
+Musically, this must feel like:
+
+- a stable geometric space  
+- with internal structure  
+- with slow, deliberate relational motion  
+- with no emotional coloration  
+- with a sense of “architecture revealing itself”  
+
+This is the **structural backbone** of the score.
 
 ---
 
 ## **1. Motif Structure**
 
-A **two‑note alternating pattern**, extremely stable and binary.
+A **three‑voice, slow‑moving geometric pattern** that expresses:
 
-- Notes: **C – G**  
+- OB stability  
+- RB alignment  
+- distributed flow  
+- multi‑scale structure  
+
+### **Primary motif (OB‑like stability)**  
+- Notes: **C – G – C – G**  
 - Pattern:  
-  - C (half note)  
-  - G (half note)  
-- Repeat with **zero variation**  
-- No syncopation  
-- No rhythmic drift  
-- No ornamentation  
+  - C (half)  
+  - G (half)  
+  - C (half)  
+  - G (half)  
 
-This expresses the **object‑like, discrete, stable nature** of static information.
+This is the **stable backbone**.
+
+### **Secondary motif (RB‑like alignment)**  
+- Notes: **E – A – E**  
+- Pattern:  
+  - E (quarter)  
+  - A (quarter)  
+  - E (half)  
+
+This expresses **directed relational motion**.
+
+### **Tertiary motif (distributed flow)**  
+- Notes: **D – F – D**  
+- Pattern:  
+  - D (quarter)  
+  - F (quarter)  
+  - D (quarter)  
+  - quarter rest  
+
+This expresses **multi‑path, wave‑like drift**.
+
+All three motifs repeat with **no timing drift** — this section is about clarity and structure.
 
 ---
 
 ## **2. Tempo & Meter**
 
-- **Tempo:** 60 BPM  
-- **Meter:** 2/2 (cut time)  
-- **Feel:** slow, architectural, grid‑like  
+- **Tempo:** 66 BPM  
+- **Meter:** 4/4  
+- **Feel:** slow, architectural, deliberate  
 
-This creates a sense of **frozen structure** — the manifold as a stable container.
+This tempo reflects the **structural, non‑agentic** nature of the manifold.
 
 ---
 
 ## **3. Instrumentation**
 
-One instrument only:
+Three voices:
 
-- **Pure sine‑wave synth** *or* **very soft organ**
+1. **Primary:** soft electric piano (OB stability)  
+2. **Secondary:** marimba (RB alignment)  
+3. **Tertiary:** soft pizzicato strings (distributed flow)
 
-Why:
+Why this ensemble:
 
-- no attack transients  
-- no expressive decay  
-- no emotional coloration  
-- ideal for representing “static objects”  
+- piano = stable regions (OBs)  
+- marimba = relational alignment (RBs)  
+- pizzicato = multi‑path distributed flow  
+- all three = geometric, non‑emotive, architectural  
 
-Avoid piano — it has too much expressive character.
+Keep all instruments dry (minimal reverb).
 
 ---
 
 ## **4. Intensity Curve**
 
-Absolutely flat.
+Flat, but layered:
 
-- No crescendos  
-- No added layers  
-- No density changes  
-- No timbral shifts  
+- Bars 1–8: piano only (OB structure)  
+- Bars 9–16: marimba enters (RB alignment)  
+- Bars 17–24: pizzicato enters (distributed flow)  
+- Bars 25–32: all three voices  
+- Bars 33–40: pizzicato fades  
+- Bars 41–48: marimba fades  
+- Bars 49–56: piano alone, returning to stability  
 
-This is the **lowest‑entropy** moment in the entire score.
+This mirrors the conceptual arc:
+
+- OB → OB+RB → OB+RB+distributed flow → OB  
 
 ---
 
 ## **5. Texture**
 
-- Single monophonic voice  
-- No harmony  
-- No counterpoint  
-- No pedal  
-- No reverb (or extremely minimal)  
+- three‑voice counterpoint  
+- no chords  
+- no pedal  
+- no harmonic modulation  
+- slow, architectural spacing  
 
-The texture should feel **mathematical**, not musical.
+The texture expresses:
+
+- compositional OBs  
+- compositional RBs  
+- nested structure  
+- multi‑scale geometry  
 
 ---
 
 ## **6. Harmonic Language**
 
-Remain strictly in **C and G**.
+Remain in **C major**, but introduce:
 
-- No thirds  
-- No color tones  
-- No extensions  
-- No modulations  
+- **A‑minor color tones** (composite OBs)  
+- **D–F** intervals (distributed flow)  
+- emphasis on **perfect fifths** (OB stability)  
 
-This is the **purest harmonic reduction** in the composition.
+This creates a sense of **geometric structure** without emotional shading.
 
 ---
 
@@ -110,23 +155,25 @@ This is the **purest harmonic reduction** in the composition.
 
 At the end:
 
-- Hold **C** for a full measure  
-- Add a very soft **E** (quarter note) at the end of the measure  
-- This E is the **first sign of low‑dynamic information** emerging  
-- Immediately begin Section 5’s more active LD‑information motif  
+- Piano holds **C** for a full measure  
+- Marimba plays a soft **A** (quarter)  
+- Pizzicato plays **D → F** (eighth, eighth)  
+- All voices stop cleanly  
 
-This is the **static → LD transition**, mirroring the manuscript’s shift from static information to relational motion.
+This sets up the more active, example‑driven structure of **Section 5 (Mapping Loop)**.
+
+This is a **static → LD transition**.
 
 ---
 
 ## **8. Upload‑Ready Prompt (Suno / Udio / Stable Audio)**
 
-> **Minimalist static section. Pure sine‑wave synth or soft organ. Tempo 60 BPM, 2/2. Two‑note alternating pattern: C (half) → G (half), repeating with zero variation. No harmony, no reverb, no dynamics, no modulation. Extremely stable and architectural. End with a held C and a very soft E as a transition.**
+> **Minimalist trio for soft electric piano, marimba, and light pizzicato strings. Tempo 66 BPM, 4/4. Three motifs: OB motif (C–G–C–G, half notes), RB motif (E–A–E, quarter–quarter–half), distributed motif (D–F–D, quarter–quarter–quarter–rest). Slow, architectural, geometric, low‑dynamic. No chords, no pedal, no modulation. Layered entry of voices. Light room reverb only. End with held C in piano, soft A in marimba, D–F in pizzicato.**
 
 ---
 
 ## **9. Summary (for the top of the file)**
 
-> A frozen, low‑entropy minimalist section representing static information. Two‑note alternation (C–G) with no variation, no dynamics, and no harmonic motion. Pure stability before low‑dynamic information begins in Section 5.
+> A minimalist three‑voice architectural section representing the relational manifold. OB stability, RB alignment, and distributed flow appear as layered motifs. Slow, geometric, and structurally precise.
 
 ---
