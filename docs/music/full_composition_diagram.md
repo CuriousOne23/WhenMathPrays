@@ -1,117 +1,122 @@
-# **Full Composite Diagram (Intensity + Curvature + Vector Flow)**  
-### *The complete dynamic geometry of the score in one figure*
+# **full_composition_diagram.md**  
+### *Global Dynamic Map (Intensity + Curvature + Vector Flow)*  
+*(Reference‑only — not used directly in Suno/Udio)*
+
+This diagram visualizes the **entire 12‑section score** as a single geometric object.  
+It encodes:
+
+- **Intensity** = vertical height  
+- **Curvature** = convexity/concavity of conceptual regime  
+- **Vector Flow** = direction + magnitude of conceptual motion  
+
+This is the **phase‑portrait‑like representation** of the musical architecture.
+
+---
+
+# **FULL COMPOSITE DYNAMIC DIAGRAM**  
+### *(Intensity = height, Curvature = bend, Vectors = flow direction)*
 
 ```
-                    FULL COMPOSITE DYNAMIC DIAGRAM
-        (Intensity = height, Curvature = bend, Vectors = flow direction)
-
-Intensity
-  ^
-10 |                                   ▲
- 9 |                                  / \        ↑↑↑↑↑
- 8 |                         ▲       /   \      ↓↓↓
- 7 |                        / \     /     \    ↓↓
- 6 |               ▲       /   \   /       \   ↑→
- 5 |              / \     /     \ /         \  ↑↑↑
- 4 |      ▲      /   \   /       X           \ ↑↑↑↑↑
- 3 |     / \    /     \ /       / \           \↓↓↓↓↓
- 2 |    /   \  /       X       /   \           ↑→
- 1 |───X─────X─────────X──────X─────X──────────X──────────────→ Sections
-      0     1         2      3     4          5 6 7 8 9 10 11 12 13
-
-Legend:
-X = section anchor
-/ \ = positive curvature (convex up)
-\ / = negative curvature (convex down)
-↑, ↓, → = vector flow (direction + magnitude)
+Intensity ^
+10 |                     ▲
+ 9 |                   /   \        ↑↑↑↑
+ 8 |                 /       \      ↑↑↑
+ 7 |              ▲ /         \     ↑→
+ 6 |            /   \         / \   ↑↑↑
+ 5 |          /       \   X  /   \  ↑↑↑↑
+ 4 |        ▲ /         \ /       \ ↑↑↑↑↑
+ 3 |      /   \    X     X    X    \↓↓↓
+ 2 |    /       \  / \  / \  / \    ↑→
+ 1 |──X──────────X────X────X────X────────→
+      1   2      3    4    5    6    7   8   9   10  11  12
 ```
+
+**Legend**  
+- **X** = section anchor  
+- **/ \\** = positive curvature (convex up)  
+- **\\ /** = negative curvature (convex down)  
+- **↑, ↓, →** = vector flow (direction + magnitude)  
 
 ---
 
 # **Section‑by‑Section Composite Interpretation**
 
-### **0 — Abstract**
-- Intensity: minimal  
-- Curvature: near zero  
-- Vector: → (static)  
-
-### **1 — Introduction**
-- Intensity: rising  
-- Curvature: small positive  
-- Vector: ↑→  
-
-### **2 — Epistemic Posture**
-- Intensity: rising  
-- Curvature: near zero  
-- Vector: ↑→  
-
-### **3 — Static Information**
-- Intensity: collapses  
-- Curvature: strongly negative  
-- Vector: ↓↓↓↓↓  
-
-### **4 — Low‑Dynamic Information**
-- Intensity: rises sharply  
-- Curvature: strongly positive  
-- Vector: ↑↑↑↑↑  
-
-### **5 — Mapping Loop**
-- Intensity: rising  
-- Curvature: moderate  
-- Vector: ↑↑↑  
-
-### **6 — Cognitive Spacesuit**
-- Intensity: rising  
-- Curvature: soft  
-- Vector: ↑→  
-
-### **7 — Basin Navigation**
-- Intensity: peak  
-- Curvature: highest positive  
-- Vector: ↑↑↑↑↑  
-
-### **8 — Implications for Science**
-- Intensity: slight decline  
-- Curvature: negative  
-- Vector: ↓↓↓  
-
-### **9 — Robustness**
-- Intensity: declining  
-- Curvature: negative  
-- Vector: ↓↓  
-
-### **10 — Classical Control**
-- Intensity: slight rise  
-- Curvature: small positive  
-- Vector: ↑  
-
-### **11 — Artificial Agents**
-- Intensity: rising  
-- Curvature: small positive  
-- Vector: ↑→  
-
-### **12 — Nature of Meaning**
-- Intensity: sharp drop  
-- Curvature: strongly negative  
-- Vector: ↓↓↓↓↓  
-
-### **13 — Conclusion**
-- Intensity: minimal  
-- Curvature: soft negative  
-- Vector: ↓  
+Below is the **correct interpretation** for the new 12‑section architecture.
 
 ---
 
-# **What this composite buys you**
+## **1 — Abstract**
+- **Intensity:** minimal  
+- **Curvature:** near zero  
+- **Vector:** → (static, architectural field)  
 
-This is the **single most complete visualization** of the musical architecture:
+## **2 — Introduction**
+- **Intensity:** rising  
+- **Curvature:** small positive  
+- **Vector:** ↑→ (clarity + forward motion)  
 
-- **Intensity** shows the *height* of conceptual activity  
-- **Curvature** shows the *regime transitions*  
-- **Vectors** show the *direction and magnitude* of conceptual flow  
+## **3 — Scope / Orientation / Epistemic Posture**
+- **Intensity:** rising  
+- **Curvature:** near zero  
+- **Vector:** ↑→ (gentle orientation)  
 
-Together, they form a **phase‑portrait‑like representation** of the entire manuscript.
+## **4 — The Relational Manifold**
+- **Intensity:** mid‑high  
+- **Curvature:** strongly positive  
+- **Vector:** ↑↑↑↑ (OB/RB geometry emerges)  
 
-This is the diagram reviewers will understand immediately — it makes the architecture visible.
+## **5 — The Mapping Loop**
+- **Intensity:** rising  
+- **Curvature:** moderate positive  
+- **Vector:** ↑↑↑ (cyclic procedural flow)  
+
+## **6 — The Cognitive Spacesuit**
+- **Intensity:** rising  
+- **Curvature:** soft positive  
+- **Vector:** ↑→ (bounded regulation)  
+
+## **7 — Basin Navigation**
+- **Intensity:** peak  
+- **Curvature:** highest positive  
+- **Vector:** ↑↑↑↑↑ (OB→RB→OB traversal)  
+
+## **8 — Implications for Science**
+- **Intensity:** slight decline  
+- **Curvature:** mild negative  
+- **Vector:** ↓↓ (broad unification)  
+
+## **9 — Robustness and Perturbations**
+- **Intensity:** irregular mid  
+- **Curvature:** alternating  
+- **Vector:** ↑↓↑↓ (perturbation‑and‑settle)  
+
+## **10 — Implications for Artificial Agents**
+- **Intensity:** rising  
+- **Curvature:** small positive  
+- **Vector:** ↑→ (modular engineering clarity)  
+
+## **11 — Limitations and Future Work**
+- **Intensity:** declining  
+- **Curvature:** soft negative  
+- **Vector:** ↓ (reflective settling)  
+
+## **12 — Conclusion**
+- **Intensity:** minimal  
+- **Curvature:** soft negative  
+- **Vector:** ↓→ (final geometric closure)  
+
+---
+
+# **What This Composite Buys You**
+
+This diagram is the **single most complete visualization** of the musical architecture:
+
+- **Intensity** shows conceptual height  
+- **Curvature** shows regime transitions  
+- **Vector flow** shows direction + magnitude of conceptual motion  
+
+Together, they form a **global phase portrait** of the entire manuscript.
+
+This is the diagram reviewers will understand immediately — it makes the architecture **visible**.
 
 ---
