@@ -122,101 +122,116 @@ They are **temporal modes of geometric evolution**.
 
 ---
 
+Jeff — here is a **rigorously upgraded, GitHub‑friendly, fully integrated rewrite of Section 3.4**, tuned to exactly what Grok said was missing:
+
+- **OB and RB defined as geometric primitives**  
+- **Recognition rules expressed in geometric terms**  
+- **Fractal compositionality made explicit**  
+- **Threshold logic preserved but upgraded**  
+- **No over‑claiming of agency or basin birth**  
+- **GitHub‑safe math formatting**  
+
+This version drops directly into your file with zero friction.
+
+---
+
 # **3.4 OB and RB Recognition in a Dynamic Geometry**  
+*(Upgraded for rigor, geometric clarity, and fractal structure)*
 
-In a static framework, objects must be defined in advance. In a dynamic geometry, **objects are the stable patterns that persist through time**.
+In a static framework, objects must be defined in advance. In a dynamic geometry, **objects are the stable geometric regions that persist through time**.
 
-An **object basin (OB)** is defined by temporal stability:
+An **object basin (OB)** is a region whose **local deformation remains below a stability threshold**:
 
-  
 $$
-M_t \in OB_i \Rightarrow F(M_t) \in OB_i
+\lVert F(M_t) - M_t \rVert < \theta_{\text{OB}}
 $$
-  
 
-A **relational basin (RB)** is defined by directed relational motion:
+A **relational basin (RB)** is a region whose deformation is small *and directionally coherent*, meaning it points toward a specific OB:
 
-  
 $$
-M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j
+\lVert F(M_t) - M_t \rVert < \theta_{\text{RB}}
+\quad \text{and} \quad
+F(M_t) \in OB_j
 $$
-  
 
-### **Composite OBs and RBs**
+These definitions treat OBs and RBs as **geometric primitives**, not semantic categories.
 
-Because the geometry is fractal and holographic, OBs and RBs are not atomic. They can be **composed of sets of OBs and RBs** that jointly form a stable or directed region.
+> **Clarification.**  
+> This paper does not explain the origin of agency or the birth of a basin.  
+> Agency belongs to the creation of a system already capable of forming and updating OBs and RBs.  
+> How such a system comes into existence — and the moment a new basin is first created — is **future research**.  
+> Here we focus only on the geometry and recognition of basins *after* such a system already exists.
 
-A **composite OB** may be written as:
+---
 
-  
+## **Composite OBs and RBs (Fractal Structure)**
+
+Because the geometry is fractal and holographic, OBs and RBs are not atomic.  
+They may be **composed of nested OBs and RBs** whose joint coherence defines the region.
+
+A **composite OB** may be written:
+
 $$
-OB = \\{ OB_k,\ RB_\ell \\}
+OB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
-  
 
-meaning the stability of the region arises from the joint coherence of multiple sub‑OBs and sub‑RBs.
+meaning its stability arises from the coordinated coherence of multiple sub‑basins.
 
-Similarly, a **composite RB** may be written as:
+A **composite RB** may be written:
 
-  
 $$
-RB = \\{ OB_k,\  RB_\ell \\}
+RB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
-  
 
-meaning the relational channel is itself formed from a structured bundle of OBs and RBs.
+meaning the relational channel is itself a structured bundle of OBs and RBs.
 
-This compositionality reflects the fact that:
+This compositionality reflects that:
 
 - OBs can contain OBs and RBs  
 - RBs can contain OBs and RBs  
 - both are **multi‑scale**, **nested**, and **self‑similar**  
-- recognition is based on **temporal coherence**, not atomic primitives  
+- recognition is based on **geometric coherence**, not atomic primitives  
 
 ---
 
-### **Threshold‑Based Recognition**
+## **Threshold‑Based Recognition (Operational Rule)**
 
-OBs and RBs are proposed to be recognized when the manifold’s local dynamics fall **below a stability threshold**.
+Let $\theta$ denote the recognition threshold for local deformation.
 
-Let $\theta$ denote the recognition threshold.
+An **OB is recognized** when the manifold’s local temporal deformation satisfies:
 
-An **OB is recognized** when the local temporal deformation satisfies:
-
-  
 $$
 \lVert F(M_t) - M_t \rVert < \theta
 $$
-  
 
-An **RB is recognized** when the deformation is small but *directional*, meaning:
+An **RB is recognized** when deformation is small *and* directionally aligned:
 
-  
 $$
-\lVert F(M_t) - M_t \rVert < \theta \quad \text{and} \quad F(M_t) \in OB_j
+\lVert F(M_t) - M_t \rVert < \theta
+\quad \text{and} \quad
+F(M_t) \in OB_j
 $$
-  
 
 In words:
 
 - OBs are recognized when the geometry becomes sufficiently stable.  
 - RBs are recognized when the geometry is stable *and* points toward a specific OB.  
 
-This threshold rule is intentionally simple. It expresses the idea that recognition is not symbolic or semantic — it is **a geometric event** triggered when relational motion becomes sufficiently coherent.
+This rule is intentionally simple: recognition is **a geometric event**, not a symbolic or semantic one.
 
 ---
 
-### **Why This Matters**
+## **Why This Matters**
 
-This threshold‑based, compositional definition ensures that:
+This upgraded, geometric definition ensures that:
 
+- OBs and RBs are **rigorously defined** as geometric primitives  
 - OBs and RBs can form at any scale  
-- OBs and RBs can be nested  
-- OBs and RBs can be fractal and holographic  
-- recognition is dynamic, not static  
+- OBs and RBs can be nested and fractal  
+- recognition is **dynamic**, not static  
 - the same rule applies from sensory micro‑patterns to conceptual macro‑structures  
 
-This is the operational backbone of the architecture.
+This provides the operational backbone for the dynamic relational architecture developed in Sections 4–9.
 
 ---
 
@@ -264,6 +279,12 @@ Although richer geometries may contain additional basin types, this framework re
 
 These two basin types form the minimal stability structure needed for dynamic cognition.
 
+> **Clarification.**  
+> We do not claim to explain the origin of agency or the birth of a basin.  
+> Agency belongs to the creation of a system already capable of forming and updating OBs and RBs.  
+> How such a system comes into existence — and the moment a new basin is first created — is **future research**.  
+> Here we focus only on the geometry and dynamics *after* such a system already exists.
+
 ---
 
 ## **4.1 Structural Properties of OBs**
@@ -271,7 +292,7 @@ These two basin types form the minimal stability structure needed for dynamic co
 OBs are stable regions of the manifold, but they are not atomic. They may be **composite**, formed from nested or overlapping sets of OBs and RBs:
 
 $$
-OB = \\{ OB_k,\ RB_\ell \\}
+OB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 This compositionality allows:
@@ -290,7 +311,7 @@ RBs stabilize **relational alignment**, not objects.
 Like OBs, RBs may also be composite:
 
 $$
-RB = \\{ OB_k,\ RB_\ell \\}
+RB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 This allows RBs to:
@@ -343,7 +364,7 @@ What looks like motion is the **continuous re‑shaping of the relational field*
 For conceptual clarity, one may describe a transition as energy moving from one OB to another through an RB:
 
 $$
-OB_i \ \xrightarrow{RB_{ij}}\ OB_j
+OB_i \xrightarrow{RB_{ij}} OB_j
 $$
 
 But this is only a **representational aid**.
@@ -355,10 +376,10 @@ In reality, the process is:
 - **multi‑path**  
 - **wave‑like rather than corpuscular**  
 
-Thought does **not** propagate along a single OB→RB→OB chain. Instead, energy flows through **many OBs and many RBs at once**, producing a superposition of partial relational motions:
+Thought does **not** propagate along a single $OB \rightarrow RB \rightarrow OB$ chain. Instead, energy flows through **many OBs and many RBs at once**, producing a superposition of partial relational motions:
 
 $$
-\gamma(t) \in \\{\, OB_k,\ RB_\ell \,\\}_{\text{many, simultaneous}}
+\gamma(t) \in \\{\  OB_k,\ RB_\ell \ \\}_{\text{many, simultaneous}}
 $$
 
 This distributed flow allows the system to maintain multiple partial interpretations, parallel relational structures, and interacting possibilities before collapse.
@@ -390,7 +411,7 @@ Section 4 expands the basin ontology introduced in Section 3:
 - OBs and RBs are **composite, multi‑scale, and nested**  
 - representational motion is **distributed**, not corpuscular  
 - thought is **the evolving geometry itself**, not a moving entity  
-- the OB→RB→OB chain is a **conceptual simplification**, not a literal process  
+- the $OB \rightarrow RB \rightarrow OB$ chain is a **conceptual simplification**, not a literal process  
 - movement is caused by **geometric deformation**, not force or attraction  
 
 This prepares the ground for Sections 5–9, which develop how perception, action, timing, and robustness arise from this dynamic relational structure.
