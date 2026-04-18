@@ -128,7 +128,7 @@ An **object basin (OB)** is defined by temporal stability:
 
   
 $$
-M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
+M_t \in OB_i \Rightarrow F(M_t) \in OB_i
 $$
   
 
@@ -136,7 +136,7 @@ A **relational basin (RB)** is defined by directed relational motion:
 
   
 $$
-M_t \in RB_{ij} \;\Rightarrow\; F(M_t) \in OB_j
+M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j
 $$
   
 
@@ -149,7 +149,7 @@ A **composite OB** may be written as:
 
   
 $$
-OB = \{\, OB_k,\; RB_\ell \,\}
+OB = \{ OB_k; RB_\ell \}
 $$
   
 
@@ -159,7 +159,7 @@ Similarly, a **composite RB** may be written as:
 
   
 $$
-RB = \{\, OB_k,\; RB_\ell \,\}
+RB = \\{ OB_k\; RB_\ell \\}
 $$
   
 
@@ -184,7 +184,7 @@ An **OB is recognized** when the local temporal deformation satisfies:
 
   
 $$
-\| F(M_t) - M_t \| < \theta
+\lVert F(M_t) - M_t \rVert < \theta
 $$
   
 
@@ -192,7 +192,7 @@ An **RB is recognized** when the deformation is small but *directional*, meaning
 
   
 $$
-\| F(M_t) - M_t \| < \theta \quad \text{and} \quad F(M_t) \in OB_j
+\lVert F(M_t) - M_t \rVert < \theta \quad \text{and} \quad F(M_t) \in OB_j
 $$
   
 
