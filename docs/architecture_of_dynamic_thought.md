@@ -3,7 +3,7 @@
 
 ---
 
-# **0. Abstract**
+# **1. Abstract**
 
 Dynamic behavior unfolds through continuous interaction between a changing world, an evolving internal configuration, and outward motion. This paper presents an architectural framework that describes this process using relational geometry.  
 
@@ -23,7 +23,7 @@ The architecture does not derive basin geometry, claim optimality, or address ph
 
 ---
 
-# **1. Introduction**
+# **2. Introduction**
 
 Dynamic behavior requires continuous coordination between perception, internal configuration, and outward action. Biological and artificial systems alike must navigate changing conditions while maintaining stability, feasibility, and coherence. Traditional accounts often rely on prediction, symbolic representation, or discrete state transitions, but these mechanisms do not capture the fluid, real‑time nature of embodied behavior \[5,6\].
 
@@ -38,8 +38,7 @@ Within the manifold, basins provide stability \[4\], transition regions support
 The goal is not to propose a biological mechanism or an optimal control strategy. Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\]. The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
 
 **Roadmap.**  
-Section 2 clarifies the scope and epistemic posture.  
-Section 3 introduces the mapping loop.  
+Section 3 clarifies the scope and epistemic posture.  
 Section 4 defines the relational manifold.  
 Section 5 illustrates the architecture through ball‑catching.  
 Section 6 introduces the cognitive spacesuit.  
@@ -48,100 +47,114 @@ Sections 12 and 13 outline limitations, future work, and conclusions.
 
 ---
 
-# **2. Scope, Orientation, and Epistemic Posture**
+# **3. The Relational Manifold**
 
-This paper presents an architectural account of dynamic behavior grounded in relational geometry. The goal is to describe how systems maintain stability and coordination through continuous interaction with a changing world. The framework is structural rather than semantic, geometric rather than representational.
+Dynamic thought requires a space in which relational configurations can stabilize, persist, and transform. In this paper, that space is the **relational manifold** $M_t$: a geometric representation of the system’s relational state at time $t$. The manifold contains no objects in the conventional sense. It contains only **relational configurations** and the **geometric regions** in which those configurations remain stable or undergo structured change.
 
-### **Scope**
+For the purposes of this paper, **only two basin types are used**:
 
-The architecture addresses:
+- **Object Basins (OB)**
+- **Relational Basins (RB)**
 
-- how world‑state is lifted into relational configuration,  
-- how relational configurations evolve over time,  
-- how outward behavior emerges from manifold motion,  
-- how stability arises from basin geometry,  
-- how reconfiguration occurs through transition regions,  
-- how boundedness and feasibility are maintained by the cognitive spacesuit.
-
-The framework applies to biological systems, artificial agents, and multi‑agent coordination without requiring domain‑specific assumptions.
-
-### **What the framework does *not* claim**
-
-The architecture does **not**:
-
-- derive basin geometry,  
-- specify biological mechanisms,  
-- claim optimality or cost minimization,  
-- interpret manifold states as beliefs or symbols,  
-- address phenomenology or subjective experience.
-
-These topics lie outside the scope of a geometric account of dynamic behavior.
-
-### **Epistemic posture**
-
-The framework is offered as an architectural description: a way of organizing the components that support stable, adaptive motion in dynamic environments. It does not attempt to explain the origin of these components, nor does it prescribe how they must be implemented. The aim is clarity, coherence, and operational simplicity.
+Future research may reveal additional basin types, but they are outside the scope of this manuscript.
 
 ---
 
-# **3. Static Information and the Limits of Object‑Centric Cognition**
+### **3.1 Object Basins (OB)**
 
-Static representations form the foundation of most formal systems used in analysis, modeling, and communication. They treat concepts as discrete, well‑defined units whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation supports clarity and reproducibility, but it also imposes structural constraints that limit its ability to capture dynamic meaning.
+An **Object Basin** $OB_i$ is a **geometric region** in the manifold where a relational configuration remains **stable** under the system’s natural evolution. OBs do **not** attract, pull, or act on anything. They simply mark regions of stability in the geometry.
 
-Static representations operate within what we refer to as the **reference world**: a domain in which information is stored, transmitted, and interpreted as stable objects. Relations are typically encoded as additional objects or as fixed links between objects. This approach is effective for classification and tasks requiring stability, but it cannot account for the contextual and relational processes through which understanding emerges.
+In this model, “thought” is not an object entering an OB. Thought is the **geometric evolution** of relational configuration itself. Any reference to “motion” is a conceptual shorthand for how the manifold evolves under the update function $F$; it is not a literal transport of a thing.
 
-The limitations of static representation can be expressed using a simple mapping function. Let $x$ denote a static representation and let $f$ denote a static interpretive function. In a purely static regime, meaning $m$ is assumed to satisfy:
-
-$$  
-m = f(x)
-$$  
-
-This formulation presumes that meaning is a deterministic function of the object alone. However, when meaning depends on context $c$ or on the interpretive state $s$ of the observer, the static formulation becomes insufficient. A more accurate representation requires additional variables:
-
-
-$$  
-m = f(x, c, s)
-$$  
-
-Even this expanded form remains static, because it treats $c$ and $s$ as fixed parameters rather than dynamically evolving components of interpretation. Static representations cannot express how $c$ and $s$ change during interpretation, nor how meaning emerges from their interaction.
-
-Viewed through the lens of relational geometry, static representations can describe the **endpoints** of interpretation but not the **motion** between them — the relational transitions, basin structure, and dynamic reconfiguration that shape understanding. Static representations remain essential for communication and analysis, but they must be integrated with dynamic processes to support a complete account of understanding.
-
-The next section introduces the transitional role of low‑dynamic information and its function in bridging static and dynamic modes of cognition.
+OBs include any configuration that forms a stable relational structure—nouns, verbs, smells, feelings, abstract concepts, sensory patterns, narrative elements, and more. The category is defined by **stability**, not by semantic type.
 
 ---
 
-# **4. Low‑Dynamic Information: Transitional Structure**
+### **3.2 Relational Basins (RB)**
 
-Low‑dynamic information occupies the transitional space between static representation and fully contextual meaning. It introduces controlled relational motion while preserving enough structural stability to remain compatible with static cognition. This regime enables concepts to participate in limited forms of interaction without requiring the full flexibility of high‑dynamic information.
+A **Relational Basin** $RB_j$ is a **geometric region** where a **relation between configurations** remains stable. RBs stabilize relational alignments such as “approaching,” “tracking,” “co‑moving,” “supporting,” or “opposing.”
 
-Low‑dynamic information modifies the assumptions of the static regime by allowing meaning to depend on relational changes that occur during interpretation. Instead of treating context as a fixed parameter, low‑dynamic information treats context as a variable that can evolve in response to the interpretive process. This introduces a form of structured motion that remains bounded and predictable.
+RBs do **not** attract or move anything. They exert no agency. They simply represent regions where certain relational structures remain stable under $F$. As with OBs, “motion” refers to the evolution of the geometry, not the movement of an object.
 
-A simple way to express this transition is to extend the static mapping function. In the static regime, meaning is given by:
+---
 
-$$  
-m = f(x)
-$$  
+### **3.3 Physical Reality and Geometric Representation**
 
-In the low‑dynamic regime, the interpretive function becomes sensitive to changes in context. Let $c_t$ denote the context at interpretive step $t$. Meaning becomes:
+Although OBs and RBs are described as “basins,” they are **not** literal valleys, channels, or spatial depressions. They are **geometric constructs** in a representational manifold. In physical reality, whatever gives rise to a basin is almost certainly **distributed** across many micro‑level processes—multiple energy transfers unfolding along many routes. There is no single electrical pulse or identifiable trace that corresponds to an OB or RB.
+
+If one demanded to “see” thought directly, there would be nothing to observe as an object. The closest correlate would be overlapping patterns of energy flow, but even these do not map one‑to‑one onto geometric basins. The geometry is a **representation** of stability, not a picture of the physical substrate.
+
+This representational approach is powerful because it does **not** require knowing the physical form of a basin. The model only requires that **stable relational structure exists** in the underlying substrate.
+
+---
+
+### **3.4 Basins Arise from Physics, Not Agency**
+
+In this model, OBs and RBs arise naturally from the **laws of physics** acting on the substrate. No agency is involved beyond the origination of the system itself. The specific physical mechanism that produces a basin—whether distributed electrical activity, field dynamics, synaptic potentials, or other processes—is not known and is not required for the model to function.
+
+The manifold provides a **substrate‑agnostic** representation: if stability exists in physical reality, it can be represented geometrically as a basin with coordinates in relational space. This separation between physical reality and geometric representation is one of the reasons the model applies broadly across biological, artificial, and hybrid systems.
+
+---
+
+### **3.5 Trajectories Through the Manifold**
+
+A system’s evolution is represented as a trajectory $ \gamma(t) $ that moves through OBs and RBs over time.
+
   
-$$  
-m = f(x, c_t)
-$$  
+$$
+\gamma(t) \subset M_t
+$$
+  
 
-Here, $c_t$ is not fixed but evolves according to an update rule that depends on the interaction between the representation and the interpretive process:
+The basins themselves do not cause this motion. The geometry, evolving under $F$, determines how relational configurations change.
 
-$$  
-c_{t+1} = g(c_t, x)
-$$  
+- **Stability** arises from entering a stable region (OB or RB).  
+- **Flexibility** arises from transitions between such regions.  
 
-This formulation captures the essential property of low‑dynamic information: 
-context changes during interpretation, but the changes are governed by a stable update function. The interpretive process remains structured, and the resulting meaning is still compatible with static representation once the process concludes.
+Once such a system exists—once the laws of physics give rise to stable relational structure—the geometry alone is sufficient to support dynamic behavior. This is why, as later sections illustrate, **a boy can catch a ball**.
 
-Low‑dynamic information plays a critical role in bridging the gap between static and dynamic regimes. It allows the interpretive process to incorporate relational motion without requiring the full flexibility of high‑dynamic information. This makes it possible to introduce dynamic structure gradually, in a way that remains accessible to static cognition.
+---
 
-The transitional nature of low‑dynamic information also aligns with relational geometry. It supports limited movement within interpretive basins while preserving the stability needed to avoid uncontrolled transitions. This controlled motion prepares the interpretive system for the more flexible and context‑dependent dynamics of high‑dynamic information.
+# **4. The Relational Manifold**
 
-Low‑dynamic information therefore serves as the structural bridge between static representation and dynamic meaning. It introduces motion into the interpretive process while maintaining compatibility with the reference world. The next section examines high‑dynamic information and its role in supporting fully contextual meaning within a relational manifold.
+Understanding dynamic behavior requires a geometric space in which relational configurations can be represented, stabilized, and transformed. 
+
+In this paper, this space is the **relational manifold** $M_t$:  
+A continuously evolving geometric structure that encodes how components of a system stand in relation to one another at time $t$.
+
+The manifold is not a space of objects or meanings. It is a **relational configuration space**, defined entirely by the geometry of interaction. Only two structural primitives are required:
+
+### **Object Basins (OB)**  
+Object Basins are **stable attractor regions** within the manifold.  
+They correspond to relational configurations that persist across time and perturbation. An OB is not an “object” in the world; it is a **geometric attractor** that stabilizes a particular relational pattern. When a trajectory enters an OB, motion becomes constrained and predictable.
+
+### **Relational Basins (RB)**  
+Relational Basins are **stable relational linkages** between configurations.  
+Where OBs stabilize configurations, RBs stabilize **relations** between configurations. An RB is a geometric attractor that maintains a structured relational alignment — for example, “approaching,” “tracking,” or “co‑moving” relations. RBs shape how trajectories transition between OBs.
+
+Together, OBs and RBs define the **basin structure** of the manifold: the stable regions through which trajectories move and the relational pathways that connect them.
+
+### **Trajectories Through the Manifold**  
+A system’s evolution is represented as a trajectory  
+
+$$
+\gamma(t) \subset M_t
+$$
+
+that moves through OBs and RBs over time. Stability arises from the geometry of these basins; flexibility arises from the transitions between them.
+
+### **Mapping Loop**  
+The manifold participates in a closed mapping loop:
+
+$$
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
+
+- **Φ** lifts world‑state into relational configuration.  
+- **F** evolves the configuration through OBs and RBs.  
+- **Ψ** projects the updated configuration back into feasible world‑level behavior.
+
+This loop defines how relational geometry governs dynamic behavior without relying on prediction, discrete states, or object‑centric representation.
 
 ---
 
@@ -469,7 +482,7 @@ $$
 <br>
 <br>
   
-```mermaid
+mermaid
 flowchart LR
     W[World state Wt] -->|Lift Phi| M[Manifold Mt]
     M -->|Update F| Mnext[Manifold Mt_next]
@@ -484,7 +497,7 @@ flowchart LR
     end
 
     M -.trajectory.-> T --> RTI --> I --> RIC --> C
-```
+
 
 As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through OBs and RBs, and $\Psi$ projects the resulting relational motion into outward behavior.
 
