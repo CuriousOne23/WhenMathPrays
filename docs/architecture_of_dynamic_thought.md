@@ -38,13 +38,13 @@ Within the manifold, basins provide stability \[4\], transition regions support
 The goal is not to propose a biological mechanism or an optimal control strategy. Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\]. The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
 
 **Roadmap.**  
-Section 3 introduces dynamic relational geometry and the idea of a manifold that lives in time.
-Section 4 develops the basin ontology and the structure of OBs and RBs.
-Section 5 presents the mapping loop and a numeric ball‑catching example.
-Section 6 introduces the cognitive spacesuit.
-Sections 7–9 develop basin navigation, perturbation handling, and robustness.
-Section 10 describes implications for artificial agents.
-Section 11 outlines limitations and future work.
+Section 3 introduces dynamic relational geometry and the idea of a manifold that lives in time.  
+Section 4 develops the basin ontology and the recognition rules for OBs and RBs.  
+Section 5 presents the mapping loop and a simple ball‑catching illustration.  
+Section 6 introduces the cognitive spacesuit.  
+Sections 7–9 develop basin navigation, perturbation handling, and robustness.  
+Section 10 describes implications for artificial agents.  
+Section 11 outlines limitations and future work.  
 Section 12 concludes.
 
 ---
@@ -513,10 +513,36 @@ is a conceptual tool for understanding the loop, not a literal mechanism.
 
 ---
 
+Perfect — this is exactly the section we need next.  
+And the good news: **the substrate‑dependent RB transfer repetition is isolated almost entirely inside Section 5.6**, so this will be a clean, surgical polish.
+
+Here’s what Grok flagged:
+
+- You mention substrate‑dependent RB transfer **several times** across the paper.
+- Section 5.6 is the *right* place to say it strongly.
+- Later mentions should be lighter or removed.
+
+So our job now is:
+
+1. **Tighten Section 5.6** so it carries the full conceptual weight.  
+2. **Remove or soften** the repeated mentions elsewhere (I’ll tell you exactly where after we finalize 5.6).  
+3. Keep everything GitHub‑safe and structurally identical.
+
+Let’s start with **Step 1: Rewrite Section 5.6** so it is:
+
+- cleaner  
+- more geometric  
+- less defensive  
+- more authoritative  
+- the *single* canonical statement about substrate‑dependent RB transfer  
+
+Here is the polished version, ready to paste directly into your GitHub file.
+
+---
+
 ## **5.6 Why the Appendices Assume Instant RB Transfer**
 
-Appendices A, B, and C provide **numeric illustrations** of the mapping loop.  
-To keep these examples focused and readable, they:
+Appendices A, B, and C provide **numeric illustrations** of the mapping loop. To keep these examples focused and readable, they:
 
 - treat RB transitions as **instantaneous**,  
 - do not model the internal structure of RBs,  
@@ -524,8 +550,7 @@ To keep these examples focused and readable, they:
 
 This is intentional. The appendices are designed to show **how the loop behaves**, not to model the full internal geometry of RBs. A detailed RB‑internal model is possible — and the architecture supports it — but it is unnecessary for illustrating the core ideas.
 
-In the full architecture, **RB transfer is substrate‑dependent**:  
-the time spent inside an RB, the shape of the transition, and the degree of distributed flow all depend on the physical or computational substrate implementing the manifold. The appendices omit this detail to keep the examples tractable.
+In the full architecture, **RB transfer depends on the substrate implementing the manifold**. The time spent inside an RB, the shape of the transition, and the degree of distributed flow all vary with the physical or computational substrate. The appendices omit these details to keep the examples tractable.
 
 The simplification keeps the examples aligned with the pedagogical goal:  
 **to make the mapping loop intuitive without requiring the reader to understand the full complexity of distributed, substrate‑dependent RB dynamics.**
