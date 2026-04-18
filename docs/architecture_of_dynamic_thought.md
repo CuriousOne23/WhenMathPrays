@@ -538,13 +538,13 @@ This prepares the reader for the deeper architectural implications developed in 
 
 The mapping loop,
 
-$$  
+$$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t),
-$$  
+$$
 
 moves the system between the reference world and the manifold. These regimes obey different constraints, and transitions between them can become unstable if not properly regulated. The **cognitive spacesuit** is the architectural layer that ensures these transitions remain coherent, bounded, and behaviorally safe.
 
-The spacesuit does not introduce new dynamics. It regulates how $\Phi$, $F$, and $\Psi$ interact so the system can traverse the loop without runaway amplification, oscillation, or loss of coordination. Appendix A provides simple numeric illustrations of these regulatory constraints in the ball‑catching example.
+The spacesuit does not introduce new dynamics. It regulates how $\Phi$, $F$, and $\Psi$ interact so the system can traverse the loop without runaway amplification, oscillation, or loss of coordination. Appendix A provides simple numeric illustrations of these regulatory constraints in the ball‑catching example.
 
 ---
 
@@ -568,51 +568,54 @@ The spacesuit prevents these failure modes by ensuring that each step of the loo
 
 ## **6.2 Regulating the Lift: Constraints on $\Phi$**
 
-The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold. The spacesuit ensures that this lift is stable and well‑posed.
+The mapping $\Phi$ lifts world‑state $W(t)$ into the manifold.  
+The spacesuit ensures that this lift is stable and well‑posed.
 
 ### **Bounded Lift**
-  
-$$  
-\|\Phi(W(t+\Delta t)) - \Phi(W(t))\| \le K_\Phi \, \|W(t+\Delta t) - W(t)\|.
-$$  
 
-This ensures that small changes in the world produce proportionally small changes in the manifold. Appendix A includes a simple numeric example using ball and hand positions.
+$$
+\lVert \Phi(W(t+\Delta t)) - \Phi(W(t)) \rVert \le K_\Phi\ \lVert W(t+\Delta t) - W(t) \rVert
+$$
+
+This ensures that small changes in the world produce proportionally small changes in the manifold. Appendix A includes a simple numeric example using ball and hand positions.
 
 ---
 
 ## **6.3 Regulating Manifold Motion: Constraints on $F$**
 
-The manifold dynamics $F$ evolve $M_t$ through relational motion. The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
+The manifold dynamics $F$ evolve $M_t$ through relational motion.  
+The spacesuit ensures that this evolution remains bounded, stable, and compatible with feasible outward behavior.
 
 ### **Bounded Update**
-  
-$$  
-\|F(M_t) - M_t\| \le K_F.
-$$  
+
+$$
+\lVert F(M_t) - M_t \rVert \le K_F
+$$
 
 This prevents runaway relational motion or abrupt transitions between distant regions of the manifold.
 
 ### **Basin‑Safe Evolution**
-  
-$$  
-M_t \in OB_i \Rightarrow F(M_t) \in OB_i \cup RB_{ij}.
-$$  
 
-This ensures that the system moves only within a basin or through a valid transition region. Appendix A illustrates this with a simple “catch basin” threshold.
+$$
+M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i \cup RB_{ij}
+$$
+
+This ensures that the system moves only within a basin or through a valid transition region. Appendix A illustrates this with a simple “catch basin” threshold.
 
 ---
 
 ## **6.4 Regulating the Projection: Constraints on $\Psi$**
 
-The mapping $\Psi$ projects manifold‑state back into the reference world as $RWD(t)$. The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
+The mapping $\Psi$ projects manifold‑state back into the reference world as $RWD(t)$.  
+The spacesuit ensures that this projection produces feasible, continuous, and physically realizable behavior.
 
 ### **Feasible Projection**
-  
-$$  
-\|\Psi(M_t)\| \le \text{(biomechanical limit)}.
-$$  
-  
-This ensures that the manifold does not request actions the body cannot perform. Appendix A provides a simple numeric example using a reachability limit.
+
+$$
+\lVert \Psi(M_t) \rVert \le \text{(biomechanical limit)}
+$$
+
+This ensures that the manifold does not request actions the body cannot perform. Appendix A provides a simple numeric example using a reachability limit.
 
 ---
 
@@ -623,12 +626,12 @@ The spacesuit also ensures coherence across the entire loop.
 ### **Temporal Coherence**
 
 In tasks requiring convergence (e.g., catching a ball), the relational distance between the system and the task‑relevant configuration must decrease:
-  
-$$  
-\frac{d}{dt} M_t < 0.
-$$  
-  
-Appendix A includes a simple time‑to‑contact calculation illustrating this condition.
+
+$$
+\frac{d}{dt} M_t < 0
+$$
+
+Appendix A includes a simple time‑to‑contact calculation illustrating this condition.
 
 ### **Geometric Coherence**
 
@@ -655,7 +658,7 @@ In the ball‑catching example, the spacesuit prevents the system from:
 - oscillating between basins,  
 - producing physically impossible movements.
 
-Appendix A provides a numeric illustration of these constraints using simple parabolic motion and relational updates.
+Appendix A provides a numeric illustration of these constraints using simple parabolic motion and relational updates.
 
 ---
 
