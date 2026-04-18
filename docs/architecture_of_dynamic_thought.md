@@ -397,63 +397,66 @@ This prepares the ground for Sections 5–9, which describe how meaning, perce
 # **5. The Mapping Loop Illustrated Through a Boy Catching a Ball**
 
 The architectural loop is defined as:
-  
-$$  
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
-$$  
 
-The examples in this section and in the appendices are illustrative only; they do not define or constrain the general forms of $\Phi$, $F$, or $\Psi$.
+$$  
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
 
-This section illustrates how the loop operates in a concrete scenario: **a boy catching a ball**.  
-The goal is not to redefine the loop, but to show how each component functions in an ordinary, mechanically simple behavior.
+The examples in this section and in the appendices are **illustrative only**; they do not define or constrain the general forms of $\Phi$, $F$, or $\Psi$. They are designed to give the reader an intuitive feel for how the mapping loop operates in a simple, mechanically familiar scenario.
+
+To make the example tractable, we describe the process using **a small number of OBs and a single RB**. This is not a structural limitation of the architecture. Real thought is **distributed**, involving **many OBs and many RBs simultaneously**, as described in Section 4. The simplified OB→RB→OB progression is a **representational aid**, not a literal account of cognitive motion.
 
 ---
 
 ## **5.1 World‑State to Manifold: $W(t) \xrightarrow{\Phi} M_t$**
 
-At time $t$, the **world‑state** $W(t)$ includes:
+At time $t$, the world‑state $W(t)$ includes:
 
 - the ball’s position and velocity,  
 - the boy’s arm and body configuration,  
 - environmental constraints such as gravity and the ground plane.
 
 The mapping $\Phi$ lifts this world‑state into the manifold:
-  
+
 $$  
-M_t = \Phi(W(t)).
-$$  
+M_t = \Phi(W(t))
+$$
 
 In the manifold, these elements appear as **relational structure**:  
 the ball’s trajectory relative to the hand, reachable workspace, timing constraints, and the basins associated with tracking, interception, and catching.
+
+For illustration, we treat these as **two OBs** (tracking and catching) connected by **one RB** (interception alignment). This is a pedagogical simplification.
 
 ---
 
 ## **5.2 Relational Motion: $M_t \xrightarrow{F} M_{t+\Delta t}$**
 
-The manifold dynamics $F$ evolve the state forward:
+The manifold dynamics evolve the state forward:
 
 $$  
-M_{t+\Delta t} = F(M_t).
-$$  
+M_{t+\Delta t} = F(M_t)
+$$
 
 In the catching example, $F$ governs how the system:
 
 - updates relational alignment with the ball,  
 - adjusts timing as the ball approaches,  
-- transitions between basins (e.g., from tracking to interception),  
+- transitions between basins (tracking → interception → catching),  
 - stabilizes in the basin corresponding to catching.
 
-The resulting trajectory $\{M_t\}$ through the manifold reflects the unfolding relational motion that coordinates the boy’s behavior.
+The resulting trajectory $\{M_t\}$ reflects the unfolding relational motion that coordinates the boy’s behavior.
+
+Although we describe this as a single OB→RB→OB progression, the real process is **distributed and multi‑path**, with many OBs and RBs active simultaneously. The simplified description is used only to convey the structure of the mapping loop.
 
 ---
 
 ## **5.3 Manifold Back to Reference World: $M_t \xrightarrow{\Psi} RWD(t)$**
 
 The mapping $\Psi$ projects the manifold‑state back into the reference world:
-  
+
 $$
-RWD(t) = \Psi(M_t).
-$$  
+RWD(t) = \Psi(M_t)
+$$
 
 In this example, $RWD(t)$ corresponds to the **observable behavior**:
 
@@ -469,10 +472,10 @@ These actions are not stored in the manifold; they are **expressions** of the ma
 ## **5.4 The Complete Loop in Action**
 
 The catching behavior emerges from the continuous cycling of:
-  
+
 $$  
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
-$$  
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
+$$
 
 Each cycle:
 
@@ -485,24 +488,49 @@ The loop repeats until the ball is caught.
 
 ---
 
-## **5.5 Why This Example Matters**
+## **5.5 Why the Example Uses Simplified OBs and RBs**
 
-This example shows how the architecture operates without invoking semantics or internal representations. The mapping loop provides a geometric account of how a system:
+The catching example uses **two OBs and one RB** to illustrate the mapping loop.  
+This is not a claim about the true number of basins involved in real cognition.  
+It is a **didactic reduction** that makes the example:
 
-- perceives,  
-- stabilizes,  
-- transitions,  
-- and acts  
+- tractable,  
+- interpretable,  
+- and easy to visualize.
 
-through relational motion in the manifold.
+In reality, the manifold supports **many OBs and many RBs simultaneously**, and thought propagates through them in a **distributed, wave‑like** manner (Section 4). The simplified chain:
 
-The value of the architecture lies in describing:
+$$
+OB_i \xrightarrow{RB_{ij}} OB_j
+$$
 
-- the **relational manifold**,  
-- the **mapping loop**,  
-- and the **basin‑and‑transition structure** that shapes dynamic behavior.
+is a conceptual tool for understanding the loop, not a literal mechanism.
 
-These components form a coherent framework for integrating reference‑world and manifold‑world regimes, independent of a full account of how new basins are created.
+---
+
+## **5.6 Why the Appendices Assume Instant RB Transfer**
+
+Appendices A, B, and C provide **numeric illustrations** of the mapping loop.  
+To keep these examples focused and readable, they:
+
+- treat RB transitions as **instantaneous**,  
+- do not model the internal structure of RBs,  
+- and focus on OB‑specific dynamics.
+
+This is intentional.  
+The appendices are designed to show **how the loop behaves**, not to model the full internal geometry of RBs. A detailed RB‑internal model is possible — and the architecture supports it — but it is unnecessary for illustrating the core ideas.
+
+The simplification keeps the examples aligned with the pedagogical goal:  
+**to make the mapping loop intuitive without requiring the reader to understand the full complexity of distributed RB dynamics.**
+
+---
+
+## **5.7 Summary**
+
+This section demonstrates how the mapping loop operates in a simple, familiar scenario.  
+The example uses a minimal OB/RB structure for clarity, while the full architecture supports distributed, multi‑path relational motion. The appendices adopt similar simplifications to keep the numeric examples tractable.
+
+This prepares the reader for the deeper architectural implications developed in Sections 6–9.
 
 ---
 
