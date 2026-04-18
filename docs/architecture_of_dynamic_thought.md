@@ -141,8 +141,7 @@ $$
 
 ### **Composite OBs and RBs**
 
-Because the geometry is fractal and holographic, OBs and RBs are not atomic.  
-They can be **composed of sets of OBs and RBs** that jointly form a stable or directed region.
+Because the geometry is fractal and holographic, OBs and RBs are not atomic. They can be **composed of sets of OBs and RBs** that jointly form a stable or directed region.
 
 A **composite OB** may be written as:
 
