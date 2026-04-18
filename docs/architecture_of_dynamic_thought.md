@@ -119,12 +119,13 @@ They are **temporal modes of geometric evolution**.
 
 ---
 
-## **3.4 OB and RB Recognition in a Dynamic Geometry**
+# **3.4 OB and RB Recognition in a Dynamic Geometry**  
+*(Revised with compositional definitions + threshold rule)*
 
 In a static framework, objects must be defined in advance.  
 In a dynamic geometry, **objects are the stable patterns that persist through time**.
 
-An **object basin (OB)** is defined by:
+An **object basin (OB)** is defined by temporal stability:
 
   
 $$
@@ -132,7 +133,7 @@ M_t \in OB_i \;\Rightarrow\; F(M_t) \in OB_i
 $$
   
 
-A **relational basin (RB)** is defined by:
+A **relational basin (RB)** is defined by directed relational motion:
 
   
 $$
@@ -140,16 +141,83 @@ M_t \in RB_{ij} \;\Rightarrow\; F(M_t) \in OB_j
 $$
   
 
-OBs and RBs are not symbolic states.  
-They are **regions of temporal coherence** in the manifold.
+### **Composite OBs and RBs**
 
-Because the geometry is fractal and holographic, OBs and RBs exhibit:
+Because the geometry is fractal and holographic, OBs and RBs are not atomic.  
+They can be **composed of sets of OBs and RBs** that jointly form a stable or directed region.
 
-- nested structure across scales  
-- local patterns that encode global relational signatures  
-- self‑similarity in both micro and macro regimes  
+A **composite OB** may be written as:
 
-This allows the same recognition rules to apply from sensory primitives to conceptual structures.
+  
+$$
+OB = \{\, OB_k,\; RB_\ell \,\}
+$$
+  
+
+meaning the stability of the region arises from the joint coherence of multiple sub‑OBs and sub‑RBs.
+
+Similarly, a **composite RB** may be written as:
+
+  
+$$
+RB = \{\, OB_k,\; RB_\ell \,\}
+$$
+  
+
+meaning the relational channel is itself formed from a structured bundle of OBs and RBs.
+
+This compositionality reflects the fact that:
+
+- OBs can contain OBs and RBs  
+- RBs can contain OBs and RBs  
+- both are **multi‑scale**, **nested**, and **self‑similar**  
+- recognition is based on **temporal coherence**, not atomic primitives  
+
+---
+
+### **Threshold‑Based Recognition**
+
+OBs and RBs are proposed to be recognized when the manifold’s local dynamics fall **below a stability threshold**.
+
+Let $\theta$ denote the recognition threshold.
+
+An **OB is recognized** when the local temporal deformation satisfies:
+
+  
+$$
+\| F(M_t) - M_t \| < \theta
+$$
+  
+
+An **RB is recognized** when the deformation is small but *directional*, meaning:
+
+  
+$$
+\| F(M_t) - M_t \| < \theta \quad \text{and} \quad F(M_t) \in OB_j
+$$
+  
+
+In words:
+
+- OBs are recognized when the geometry becomes sufficiently stable.  
+- RBs are recognized when the geometry is stable *and* points toward a specific OB.  
+
+This threshold rule is intentionally simple.  
+It expresses the idea that recognition is not symbolic or semantic — it is **a geometric event** triggered when relational motion becomes sufficiently coherent.
+
+---
+
+### **Why This Matters**
+
+This threshold‑based, compositional definition ensures that:
+
+- OBs and RBs can form at any scale  
+- OBs and RBs can be nested  
+- OBs and RBs can be fractal and holographic  
+- recognition is dynamic, not static  
+- the same rule applies from sensory micro‑patterns to conceptual macro‑structures  
+
+This is the operational backbone of the architecture.
 
 ---
 
