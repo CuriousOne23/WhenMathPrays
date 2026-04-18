@@ -664,11 +664,9 @@ Appendix A provides a numeric illustration of these constraints using simple p
 
 # **7. Basin Navigation in Real‑Time Behavior**
 
-The manifold introduced in Section 3 contains **object basins** (OBs: stable relational configurations) and **transition regions** (RBs: pathways between them) that guide how the system moves during action.  
-Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop.  
-This section describes how the system **navigates basins** during real‑time behavior, using the ball‑catching scenario as a concrete example.
+The manifold introduced in Section 3 contains **object basins** (OBs: stable relational configurations) and **relational basins** (RBs: structured transition regions) that shape how the system moves during behavior. Section 6 described how the cognitive spacesuit ensures safe traversal of the mapping loop. This section explains how the system **navigates basins** in real time, using the ball‑catching scenario as a concrete illustration.
 
-The key idea is that **behavior corresponds to motion through basins**, not to symbolic decisions or semantic states. OBs provide stability; RBs provide pathways; the mapping loop provides motion.
+The key idea is that **behavior corresponds to motion through basins**, not to symbolic decisions or semantic states. OBs provide stability; RBs provide structured pathways; the mapping loop provides motion.
 
 ---
 
@@ -677,30 +675,32 @@ The key idea is that **behavior corresponds to motion through basins**, not to s
 An object basin $OB_i$ is a region of the manifold where relational motion is stable:
 
 $$
-M_t \in OB_i \Rightarrow F(M_t) \in OB_i.
+M_t \in OB_i \ \Rightarrow\  F(M_t) \in OB_i.
 $$
 
-This expresses **self‑consistency**: once inside an OB, the system tends to remain there unless driven toward a transition region.
+This expresses **temporal coherence**: once inside an OB, the system tends to remain there unless the geometry carries it toward a transition region.
 
-In the ball‑catching example, relevant OBs include:
+In the ball‑catching example, illustrative OBs include:
 
-- **$OB_{\text{track}}$** — relational configuration when the ball is far away,  
-- **$OB_{\text{intercept}}$** — relational configuration during closing motion,  
-- **$OB_{\text{catch}}$** — relational configuration when hand and ball are nearly aligned.
+- **$OB_{\text{track}}$** — relational configuration when the ball is far away  
+- **$OB_{\text{intercept}}$** — relational configuration during closing motion  
+- **$OB_{\text{catch}}$** — relational configuration when hand and ball are nearly aligned  
 
-These are not symbolic states; they are **regions of relational geometry**.
+These are not symbolic states. They are **regions of relational geometry** that remain stable under $F$.
 
 ---
 
 ## **7.2 Transition Regions (RBs)**
 
-Between object basins lie **transition regions** $RB_{ij}$ that allow the system to move from one stable configuration to another:
+Between object basins lie **relational basins** $RB_{ij}$ that allow the system to move from one stable configuration to another:
 
 $$
-M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j.
+M_t \in RB_{ij} \ \Rightarrow\  F(M_t) \in OB_j.
 $$
 
-RBs define the geometric transitions between OBs. The underlying physical evolution may involve lawful forces—conjecturally arising from d‑information in the physical substrate—but this is not attraction in the manifold space. In the manifold, these transitions appear as decreasing relational distance, not as pulling or agency.
+RBs define the geometric transitions between OBs.  
+They do **not** pull, push, or attract anything.  
+They simply mark regions where the geometry **deforms smoothly** from one OB to another.
 
 In the ball‑catching example:
 
@@ -708,17 +708,17 @@ In the ball‑catching example:
 - enters $RB_{\text{track}\rightarrow\text{intercept}}$,  
 - and flows into **$OB_{\text{intercept}}$**.
 
-A key structural point:  
-**RBs carry thought mechanically.**  
-They deform smoothly between OBs and require no agency or intention.
+A key structural point:
 
-The cognitive spacesuit (Section 6) ensures that these transitions remain bounded and feasible.
+> **RBs carry thought mechanically through geometric deformation, not through force or agency.**
+
+The cognitive spacesuit (Section 6) ensures that these transitions remain bounded and feasible.
 
 ---
 
 ## **7.3 Real‑Time Navigation Through Basins**
 
-During behavior, the system moves through a sequence of object basins and transition regions:
+For illustration, we describe navigation as a sequence:
 
 $$
 OB_{\text{track}}
@@ -732,39 +732,24 @@ RB_{\text{intercept}\rightarrow\text{catch}}
 OB_{\text{catch}}.
 $$
 
-This sequence corresponds to:
+This corresponds to:
 
-1. **Tracking** the ball,  
-2. **Initiating interception**,  
-3. **Closing relational distance**,  
-4. **Aligning hand and ball**,  
-5. **Stabilizing the catch**.
+1. **Tracking** the ball  
+2. **Initiating interception**  
+3. **Closing relational distance**  
+4. **Aligning hand and ball**  
+5. **Stabilizing the catch**
 
 The mapping loop drives this motion:
 
 $$
-W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
+W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
 $$
-  
-```mermaid
-flowchart LR
-    W[World state Wt] -->|Lift Phi| M[Manifold Mt]
-    M -->|Update F| Mnext[Manifold Mt_next]
-    Mnext -->|Project Psi| R[World output RWD]
 
-    subgraph Basins_on_M[Basins on the manifold]
-        T[OB_track]
-        I[OB_intercept]
-        C[OB_catch]
-        RTI[RB_track_to_intercept]
-        RIC[RB_intercept_to_catch]
-    end
+However, this OB→RB→OB chain is **only a conceptual simplification**.  
+Real navigation is **distributed**, involving **many OBs and many RBs simultaneously**, as described in Section 4.
 
-    M -.trajectory.-> T --> RTI --> I --> RIC --> C
-```
-
-
-As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through OBs and RBs, and $\Psi$ projects the resulting relational motion into outward behavior.
+The simplified chain is used here only to make the example tractable.
 
 ---
 
@@ -778,7 +763,7 @@ $$
 \frac{d}{dt} M_t < 0
 $$
 
-ensures that relational distance decreases as the system moves toward **$OB_{\text{catch}}$**.
+This ensures that relational distance decreases as the system moves toward **$OB_{\text{catch}}$**.
 
 The steepness of relational gradients determines:
 
@@ -786,10 +771,10 @@ The steepness of relational gradients determines:
 - how rapidly the geometry carries it into the next,  
 - how timing adjusts as the ball accelerates or decelerates.
 
-In the ball‑catching example:
+In the catching example:
 
 - as the ball approaches, relational gradients steepen,  
-- the relational gradients around **$OB_{\text{intercept}}$** steepen, making transitions into that region occur earlier,  
+- transitions into **$OB_{\text{intercept}}$** occur earlier,  
 - timing adjusts automatically based on $M_t$ and $F$.
 
 This produces **adaptive timing** without prediction or semantic interpretation.
@@ -800,20 +785,20 @@ This produces **adaptive timing** without prediction or semantic interpretation.
 
 The cognitive spacesuit ensures that basin transitions remain stable:
 
-- bounded lift (Section 6.2) prevents discontinuities entering the manifold,  
-- bounded update (Section 6.3) prevents overshoot within the manifold,  
-- feasible projection (Section 6.4) prevents impossible motor commands,  
-- temporal coherence (Section 6.5) ensures relational convergence.
+- **bounded lift** (Section 6.2) prevents discontinuities entering the manifold  
+- **bounded update** (Section 6.3) prevents overshoot within the manifold  
+- **feasible projection** (Section 6.4) prevents impossible motor commands  
+- **temporal coherence** (Section 6.5) ensures relational convergence  
 
 Together, these constraints ensure:
 
-$$  
+$$
 \text{stable OB}
 \rightarrow
 \text{stable RB}
 \rightarrow
-\text{stable OB}.
-$$  
+\text{stable OB}
+$$
 
 This is the architectural basis for smooth, coordinated behavior.
 
@@ -823,14 +808,14 @@ This is the architectural basis for smooth, coordinated behavior.
 
 Basin navigation provides the structural backbone of real‑time behavior:
 
-- object basins stabilize relational motion,  
-- transition regions carry motion mechanically,  
-- the mapping loop drives continuous updates,  
-- the cognitive spacesuit ensures bounded, feasible, coherent traversal.
+- OBs stabilize relational motion  
+- RBs carry motion mechanically through geometric deformation  
+- the mapping loop drives continuous updates  
+- the cognitive spacesuit ensures bounded, feasible, coherent traversal  
 
 In the ball‑catching example, the system moves through a sequence of OBs corresponding to tracking, intercepting, and catching — not as symbolic states, but as **regions of relational geometry** shaped by the manifold and regulated by the spacesuit.
 
-Appendix B provides a numeric illustration of basin navigation.
+Appendix B provides a numeric illustration of basin navigation. Appendix B uses a simplified OB→RB→OB progression in which RB‑internal transfer is treated as instantaneous. This is a pedagogical choice, not a structural limitation. The full architecture supports detailed modeling of RB‑internal geometry, including distributed, multi‑path relational flow, but such detail is unnecessary for illustrating the basin‑navigation structure used in the example.
 
 ---
 
