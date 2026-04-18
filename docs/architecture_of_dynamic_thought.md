@@ -98,7 +98,7 @@ The manifold provides a **substrate‑agnostic** representation: if stability ex
 
 ### **3.5 Trajectories Through the Manifold**
 
-A system’s evolution is represented as a trajectory $ \gamma(t) $ that moves through OBs and RBs over time.
+A system’s evolution is represented as a trajectory $\gamma(t)$ that moves through OBs and RBs over time.
 
   
 $$
@@ -111,39 +111,61 @@ The basins themselves do not cause this motion. The geometry, evolving under $F$
 - **Stability** arises from entering a stable region (OB or RB).  
 - **Flexibility** arises from transitions between such regions.  
 
-Once such a system exists—once the laws of physics give rise to stable relational structure—the geometry alone is sufficient to support dynamic behavior. This is why, as later sections illustrate, **a boy can catch a ball**.
+Once such a system exists—once the laws of physics give rise to stable relational structure—the geometry alone is sufficient to support dynamic behavior. This is why, as later sections illustrate, a boy can catch a ball: the system’s relational configuration evolves lawfully through the manifold.
+
+In this model, the position and travel of thought are geometric descriptions in the representational manifold. Nothing physically moves, no signal traces a path, and thought itself has no agency; the geometry simply evolves under its own dynamics.
 
 ---
 
 # **4. The Relational Manifold**
 
-Understanding dynamic behavior requires a geometric space in which relational configurations can be represented, stabilized, and transformed. 
+Understanding dynamic behavior requires a geometric space in which relational configurations can be represented, stabilized, and transformed.
 
 In this paper, this space is the **relational manifold** $M_t$:  
-A continuously evolving geometric structure that encodes how components of a system stand in relation to one another at time $t$.
+a continuously evolving geometric structure that encodes how components of a system stand in relation to one another at time $t$.
 
 The manifold is not a space of objects or meanings. It is a **relational configuration space**, defined entirely by the geometry of interaction. Only two structural primitives are required:
 
-### **Object Basins (OB)**  
-Object Basins are **stable attractor regions** within the manifold.  
-They correspond to relational configurations that persist across time and perturbation. An OB is not an “object” in the world; it is a **geometric attractor** that stabilizes a particular relational pattern. When a trajectory enters an OB, motion becomes constrained and predictable.
+---
 
-### **Relational Basins (RB)**  
-Relational Basins are **stable relational linkages** between configurations.  
-Where OBs stabilize configurations, RBs stabilize **relations** between configurations. An RB is a geometric attractor that maintains a structured relational alignment — for example, “approaching,” “tracking,” or “co‑moving” relations. RBs shape how trajectories transition between OBs.
+### **Object Basins (OB)**
 
-Together, OBs and RBs define the **basin structure** of the manifold: the stable regions through which trajectories move and the relational pathways that connect them.
+Object Basins are **stable geometric regions** within the manifold.  
+They correspond to relational configurations that persist across time and perturbation. An OB is not an “object” in the world; it is a **region of geometric stability** that maintains a particular relational pattern.
 
-### **Trajectories Through the Manifold**  
-A system’s evolution is represented as a trajectory  
+When a trajectory enters an OB, the configuration remains stable because the **geometry of that region** supports stability under the system’s natural evolution. No attraction or agency is involved.
+
+---
+
+### **Relational Basins (RB)**
+
+Relational Basins are **stable relational‑alignment regions** within the manifold.  
+Where OBs stabilize configurations, RBs stabilize **relations** between configurations. An RB maintains a structured relational alignment — for example, “approaching,” “tracking,” or “co‑moving.”
+
+RBs do not attract or move anything. They simply mark regions where certain relational structures remain stable under $F$.
+
+---
+
+Together, OBs and RBs define the **basin structure** of the manifold: the stable regions through which trajectories pass and the relational pathways that connect them.
+
+---
+
+### **Trajectories Through the Manifold**
+
+A system’s evolution is represented as a trajectory
 
 $$
 \gamma(t) \subset M_t
 $$
 
-that moves through OBs and RBs over time. Stability arises from the geometry of these basins; flexibility arises from the transitions between them.
+that moves through OBs and RBs over time. The basins themselves do not cause this motion. Stability arises from entering a stable region; flexibility arises from transitions between such regions. The geometry, evolving under $F$, determines how configurations change.
 
-### **Mapping Loop**  
+In this model, the trajectory $\gamma(t)$ traces the representational motion of thought through OBs and RBs; nothing physically travels, no signal follows this path, and thought itself has no agency—only the geometry evolves.
+
+---
+
+### **Mapping Loop**
+
 The manifold participates in a closed mapping loop:
 
 $$
