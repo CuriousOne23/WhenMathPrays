@@ -142,6 +142,8 @@ $$
 
 These are **recognition conditions**, not entities. OBs and RBs are **geometric signatures** detected through deformation thresholds—patterns the manifold presents when its motion becomes sufficiently stable or aligned.
 
+These recognition rules form the **primitive layer**. Their fractal and holographic nature—that any basin may contain smaller OBs and RBs—will become important in later work. Here we only establish the basic geometric criteria for recognizing stability and directional coherence.
+
 ---
 
 ## **Composite OBs and RBs (Fractal Structure)**
