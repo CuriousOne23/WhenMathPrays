@@ -122,39 +122,31 @@ They are **temporal signatures of geometric evolution**.
 
 ---
 
-## **3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold**
+## 3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold
 
-OBs and RBs are recognized not as entities but as **geometric conditions** that emerge when the manifold’s deformation crosses specific thresholds. An OB appears when deformation becomes locally stable; an RB appears when deformation becomes directionally coherent. These recognition rules define the primitive layer of the architecture.
+In a time‑evolving manifold, stability and alignment are not pre‑defined entities. They are **geometric recognition events** — patterns that appear when the manifold’s local deformation crosses specific thresholds.
 
-An **object basin (OB)** is recognized when local deformation becomes **sufficiently stable**:
+An **object basin (OB)** is recognized when local deformation becomes sufficiently stable:
 
-- gradients flatten,  
-- motion becomes self‑coherent,  
-- and the region resists perturbation over a finite temporal window.
+- gradients flatten,
+- motion becomes self‑coherent over a finite temporal window,
+- and the region resists small perturbations.
 
-Formally, an OB is any region where the update law $F$ produces **bounded, coherence‑preserving deformation**. The basin is not a “thing,” but a **stability signature** of the evolving geometry.
-
-A **relational basin (RB)** is recognized when deformation becomes **directionally aligned**:
-
-- relational gradients point coherently,  
-- motion is channeled rather than stabilized,  
-- and the region supports structured transition between configurations.
-
-An RB is therefore a **directional‑coherence signature**, not a connector or edge.
-
-Both OBs and RBs may be **composite**, containing nested or overlapping basins:
+Formally, an OB corresponds to any region where the update law $F$ produces **bounded, coherence‑preserving deformation**:
 
 $$
-OB = \\{\ OB_k,\ RB_\ell \ \\}  
+\lVert F(M_t) - M_t \rVert < \theta_{\text{OB}}
 $$
 
+A **relational basin (RB)** is recognized when deformation is small *and* directionally aligned toward a specific OB:
+
 $$
-RB = \\{\ OB_k,\ RB_\ell \ \\}
+\lVert F(M_t) - M_t \rVert < \theta_{\text{RB}}
+\quad \text{and} \quad
+F(M_t) \in OB_j
 $$
 
-This reflects the **fractal and holographic** nature of the manifold: stability and alignment recur across scales.
-
-These recognition rules form the **primitive layer**. Their fractal structure — that any basin may contain smaller OBs and RBs — becomes important later. Here we establish only the **geometric criteria** for recognizing stability and directional coherence in a manifold that lives in time.
+These are not “things” that exist independently. They are **stability signatures** and **directional‑coherence signatures** of the evolving geometry.
 
 ---
 
