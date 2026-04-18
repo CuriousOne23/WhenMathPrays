@@ -1,6 +1,6 @@
-# **Section 0 — Abstract (Minimalist Score Blueprint)**
+# **Section 1 — Abstract (Minimalist Score Blueprint)**
 
-## **Musical Purpose of Section 0**
+## **Musical Purpose of Section 1**
 The Abstract is not a full section.  
 It is a *signal* — a brief, stable, low‑dynamic motif that introduces the architecture without revealing any transitions.
 
