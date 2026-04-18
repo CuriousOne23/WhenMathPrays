@@ -199,8 +199,7 @@ In words:
 - OBs are recognized when the geometry becomes sufficiently stable.  
 - RBs are recognized when the geometry is stable *and* points toward a specific OB.  
 
-This threshold rule is intentionally simple.  
-It expresses the idea that recognition is not symbolic or semantic — it is **a geometric event** triggered when relational motion becomes sufficiently coherent.
+This threshold rule is intentionally simple. It expresses the idea that recognition is not symbolic or semantic — it is **a geometric event** triggered when relational motion becomes sufficiently coherent.
 
 ---
 
@@ -247,8 +246,7 @@ This section establishes the central architectural claim of the paper:
 > Because it collapses, cognition is quantum‑like.  
 > Because it is fractal and holographic, this behavior appears at every scale.
 
-The remaining sections of the paper elaborate, clarify, or apply this central idea.  
-Basins, transition regions, the mapping loop, the cognitive spacesuit, and the examples that follow all derive their meaning from this dynamic, time‑indexed geometry.
+The remaining sections of the paper elaborate, clarify, or apply this central idea. Basins, transition regions, the mapping loop, the cognitive spacesuit, and the examples that follow all derive their meaning from this dynamic, time‑indexed geometry.
 
 ---
 
