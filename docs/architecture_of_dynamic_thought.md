@@ -517,11 +517,13 @@ To keep these examples focused and readable, they:
 - do not model the internal structure of RBs,  
 - and focus on OB‑specific dynamics.
 
-This is intentional.  
-The appendices are designed to show **how the loop behaves**, not to model the full internal geometry of RBs. A detailed RB‑internal model is possible — and the architecture supports it — but it is unnecessary for illustrating the core ideas.
+This is intentional. The appendices are designed to show **how the loop behaves**, not to model the full internal geometry of RBs. A detailed RB‑internal model is possible — and the architecture supports it — but it is unnecessary for illustrating the core ideas.
+
+In the full architecture, **RB transfer is substrate‑dependent**:  
+the time spent inside an RB, the shape of the transition, and the degree of distributed flow all depend on the physical or computational substrate implementing the manifold. The appendices omit this detail to keep the examples tractable.
 
 The simplification keeps the examples aligned with the pedagogical goal:  
-**to make the mapping loop intuitive without requiring the reader to understand the full complexity of distributed RB dynamics.**
+**to make the mapping loop intuitive without requiring the reader to understand the full complexity of distributed, substrate‑dependent RB dynamics.**
 
 ---
 
@@ -698,9 +700,7 @@ $$
 M_t \in RB_{ij} \ \Rightarrow\  F(M_t) \in OB_j.
 $$
 
-RBs define the geometric transitions between OBs.  
-They do **not** pull, push, or attract anything.  
-They simply mark regions where the geometry **deforms smoothly** from one OB to another.
+RBs define the geometric transitions between OBs. They do **not** pull, push, or attract anything. They simply mark regions where the geometry **deforms smoothly** from one OB to another.
 
 In the ball‑catching example:
 
