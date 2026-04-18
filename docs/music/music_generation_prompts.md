@@ -1,182 +1,79 @@
 # **music_generation_prompts.md**  
-### *Upload‑Ready Prompts for All Sections of the Score*
+### *Operational Layer — Upload‑Ready Prompts for All 12 Sections*  
+*(Paste directly into Suno, Udio, or any AI music generator)*
 
-Each section below contains:
-
-- **Style**  
-- **Instrumentation**  
-- **Tempo / Meter / Key**  
-- **One‑sentence structural description**  
-- **Upload‑ready prompt** (copy/paste into Suno/Udio/etc.)
-
-This is the clean, operational layer.
+Each section contains a **single, self‑contained, upload‑ready prompt** derived from the manuscript‑aligned musical blueprints.
 
 ---
 
-# **Section 0 — Abstract**
+# **Section 1 — Abstract**
 
-**Style:** minimalist, static  
-**Instrumentation:** felt piano + soft pad  
-**Tempo/Meter/Key:** 60 BPM, 4/4, C major  
-**Structure:** pure stillness, no drift, no evolution  
-
-**Prompt:**  
-> Minimalist static piece for felt piano and soft pad. Tempo 60 BPM, 4/4, C major. Extremely simple, no variation, no harmonic motion, no rhythmic drift. Pure stillness and stability.
+> **Minimalist duet for felt piano and soft pad. Tempo 70 BPM, 4/4. Sparse, geometric, wave‑like. No chords, no pedal, no modulation. Long tones, open intervals. Represents the entire architecture in abstract form. End with C–G–C in piano and soft E in pad.**
 
 ---
 
-# **Section 1 — Introduction**
+# **Section 2 — Introduction**
 
-**Style:** minimalist, gentle awakening  
-**Instrumentation:** felt piano + pad  
-**Tempo/Meter/Key:** 72 BPM, 4/4, C major  
-**Structure:** first relational motion, small drift  
-
-**Prompt:**  
-> Minimalist introduction for felt piano and soft pad. Tempo 72 BPM, 4/4, C major. Gentle awakening, small rhythmic drift, simple two‑voice texture, calm and spacious.
+> **Minimalist solo felt piano. Tempo 72 BPM, 4/4. Motif: C–E–G–E (quarter notes). Calm, clear, architectural. No chords, no pedal, no modulation. Light room reverb. End with C–G–C.**
 
 ---
 
-# **Section 2 — Epistemic Posture**
+# **Section 3 — Scope, Orientation, Epistemic Posture**
 
-**Style:** minimalist, framing  
-**Instrumentation:** felt piano + pad  
-**Tempo/Meter/Key:** 70 BPM, 3/4, C major  
-**Structure:** boundary‑setting, clear phrasing  
-
-**Prompt:**  
-> Minimalist framing piece for felt piano and soft pad. Tempo 70 BPM, 3/4, C major. Clear structural phrasing, steady rhythm, calm and framing.
+> **Minimalist duet for felt piano and soft marimba. Tempo 68 BPM, 3/4. Motif: D–F–A–F (quarter notes). Gentle, orienting, low‑dynamic. No chords, no pedal, no modulation. End with D–A–D.**
 
 ---
 
-# **Section 3 — Static Information**
+# **Section 4 — The Relational Manifold**
 
-**Style:** ultra‑minimalist, frozen  
-**Instrumentation:** felt piano only  
-**Tempo/Meter/Key:** 60 BPM, 4/4, C major  
-**Structure:** no evolution, no harmony, no drift  
-
-**Prompt:**  
-> Ultra‑minimalist static piece for solo felt piano. Tempo 60 BPM, 4/4, C major. No variation, no harmonic motion, no development. Pure frozen stillness.
+> **Minimalist trio for soft electric piano, marimba, and light pizzicato strings. Tempo 66 BPM, 4/4. OB motif: C–G–C–G. RB motif: E–A–E. Distributed motif: D–F–D with rest. Slow, architectural, geometric. No chords, no pedal, no modulation. End with held C in piano, soft A in marimba, D–F in pizzicato.**
 
 ---
 
-# **Section 4 — Low‑Dynamic Information**
+# **Section 5 — The Mapping Loop**
 
-**Style:** minimalist, slow drift  
-**Instrumentation:** piano + pad  
-**Tempo/Meter/Key:** 76 BPM, 4/4, C major  
-**Structure:** gentle evolution, slow relational motion  
-
-**Prompt:**  
-> Minimalist slow‑drift piece for felt piano and warm pad. Tempo 76 BPM, 4/4, C major. Gentle evolution, small variations, soft layering, calm relational motion.
+> **Minimalist cyclic duet for soft electric piano and muted marimba. Tempo 78 BPM, 6/8. Loop motif: C–E–G–D–F–E. Four‑bar cycle: OB (piano), RB (piano+marimba), OB (piano), reset (low‑C accent). Smooth, geometric, procedural. No chords, no pedal, no modulation. End with C–E–G in piano and soft F in marimba.**
 
 ---
 
-# **Section 5 — Mapping Loop**
+# **Section 6 — The Cognitive Spacesuit**
 
-**Style:** Steve Reich‑like interlocking minimalism  
-**Instrumentation:** piano + marimba + pad  
-**Tempo/Meter/Key:** 90 BPM, 4/4, C major  
-**Structure:** interlocking cycles, phase shifts  
-
-**Prompt:**  
-> Interlocking minimalist piece for felt piano, soft marimba, and warm pad. Tempo 90 BPM, 4/4, C major. Repeating loops, phase shifts, layered cycles, emergent counterpoint.
+> **Minimalist trio for soft electric piano, muted marimba, and low pizzicato bass. Tempo 76 BPM, 5/4. Bounded oscillation motif: F–E–F–D–F with rest. Constraint pulses on C. Controlled, geometric, regulatory. No chords, no pedal, no modulation. End with F–E–D in piano, soft C in marimba, C–G in pizzicato.**
 
 ---
 
-# **Section 6 — Cognitive Spacesuit**
+# **Section 7 — Basin Navigation in Real‑Time Behavior**
 
-**Style:** spatial minimalist  
-**Instrumentation:** marimba + pad + sub‑bass  
-**Tempo/Meter/Key:** 80 BPM, 4/4, C major  
-**Structure:** environmental, spacious, embodied  
-
-**Prompt:**  
-> Spatial minimalist piece for marimba, warm pad, and subtle sub‑bass. Tempo 80 BPM, 4/4, C major. Wide ambience, circular motion, environmental and embodied.
-
----
-
-# **Section 7 — Basin Navigation**
-
-**Style:** geometric minimalism  
-**Instrumentation:** piano + marimba + pad + sub‑bass  
-**Tempo/Meter/Key:** 88 BPM, 4/4, C major  
-**Structure:** attractor‑driven, stable motifs, transitions  
-
-**Prompt:**  
-> Geometric minimalist piece for piano, marimba, warm pad, and sub‑bass. Tempo 88 BPM, 4/4, C major. Stable repeating motifs, attractor‑like transitions, layered structure.
+> **Minimalist trio for felt piano, soft marimba, and light pizzicato strings. Tempo 82 BPM, 4/4. OB motif: C–G–C–G. RB motif: D–F–A–F–D with rest. Catch OB motif: E–B–E–B. Smooth, continuous, geometric navigation. No chords, no pedal, no modulation. End with E–G–C in piano, soft A in marimba, D–F in pizzicato.**
 
 ---
 
 # **Section 8 — Implications for Science**
 
-**Style:** reflective minimalist  
-**Instrumentation:** piano + pad + airy synth  
-**Tempo/Meter/Key:** 78 BPM, 4/4, C Lydian  
-**Structure:** horizon‑expanding, reflective  
-
-**Prompt:**  
-> Reflective minimalist piece for felt piano, warm pad, and airy synth. Tempo 78 BPM, 4/4, C Lydian. Open, spacious, horizon‑expanding, gentle upward color.
+> **Minimalist duet for soft electric piano and warm pad. Tempo 60 BPM, 4/4. Unifying motif: C–G–E–G. Cross‑domain motif: A–D–A. Slow, spacious, architectural. No modulation, no rhythmic variation. Medium reverb. End with C–G–C in piano and soft A in pad.**
 
 ---
 
-# **Section 9 — Robustness**
+# **Section 9 — Robustness and Perturbations**
 
-**Style:** minimalist with perturbations  
-**Instrumentation:** piano + marimba + pad + woodblock  
-**Tempo/Meter/Key:** 84 BPM, 4/4, C major  
-**Structure:** stability, perturbation, recovery  
-
-**Prompt:**  
-> Minimalist piece for piano, marimba, warm pad, and light woodblock. Tempo 84 BPM, 4/4, C major. Stable motif with small perturbations and gentle recoveries.
+> **Minimalist trio for felt piano, soft marimba, and pizzicato strings. Tempo 72 BPM, 7/8. Stable motif: C–G–C–E♭. Small‑perturbation motif: D♯–F–D♯ with rest. Redirective motif: A–F–D–F. Irregular, geometric, perturbation‑and‑settle. No modulation, no chords, no pedal. End with C–E♭–C in piano, soft D♯ in marimba, F–D in pizzicato.**
 
 ---
 
-# **Section 10 — Classical Control**
+# **Section 10 — Implications for Artificial Agents**
 
-**Style:** contrast‑structured minimalism  
-**Instrumentation:** piano + marimba + pad  
-**Tempo/Meter/Key:** 84 BPM, 4/4, C major  
-**Structure:** rigid vs. fluid alternation  
-
-**Prompt:**  
-> Minimalist contrast piece for felt piano, soft marimba, and warm pad. Tempo 84 BPM, 4/4, C major. Alternating rigid and fluid motifs, analytical and structured.
+> **Minimalist duet for soft electric piano and muted marimba. Tempo 80 BPM, 4/4. Φ motif: C–D–F–D. F motif: E–G–E–A. Ψ motif: G–E–C. Clean, architectural, engineering‑precise. No modulation, no chords, no pedal. Minimal reverb. End with C–F–C in piano and soft E in marimba.**
 
 ---
 
-# **Section 11 — Artificial Agents**
+# **Section 11 — Limitations and Future Work**
 
-**Style:** teleological minimalism  
-**Instrumentation:** piano + marimba + pad + plucked synth  
-**Tempo/Meter/Key:** 90 BPM, 4/4, A minor  
-**Structure:** directional, agentic, forward‑leaning  
-
-**Prompt:**  
-> Minimalist teleological piece for felt piano, marimba, warm pad, and subtle plucked synth. Tempo 90 BPM, 4/4, A minor. Forward‑leaning, adaptive, goal‑oriented.
+> **Minimalist duet for felt piano and soft pad. Tempo 64 BPM, 3/4. Limitations motif: C–E♭–D–C. Future‑work motif: F–G–A–G. Slow, reflective, spacious. No modulation, no chords, no pedal. Medium reverb. End with C–D–C in piano and soft G in pad.**
 
 ---
 
-# **Section 12 — Nature of Meaning**
+# **Section 12 — Conclusion**
 
-**Style:** introspective minimalism  
-**Instrumentation:** piano + pad + airy synth  
-**Tempo/Meter/Key:** 60 BPM, 3/2, A minor  
-**Structure:** spacious, reflective, resonant  
-
-**Prompt:**  
-> Minimalist introspective piece for felt piano, warm pad, and airy synth. Tempo 60 BPM, 3/2, A minor. Slow, spacious, contemplative, resonant.
-
----
-
-# **Section 13 — Conclusion**
-
-**Style:** resolving minimalism  
-**Instrumentation:** piano + pad + marimba  
-**Tempo/Meter/Key:** 72 BPM, 4/4, C major  
-**Structure:** integration, return, closure  
-
-**Prompt:**  
-> Minimalist concluding piece for felt piano, warm pad, and soft marimba. Tempo 72 BPM, 4/4, C major. Calm, stable, integrating, gentle resolution.
+> **Minimalist duet for felt piano and warm pad. Tempo 68 BPM, 4/4. Closing motif: C–G–E–C. Contribution motif: F–A–G–F. Final cadence: C–C–G–C. Calm, stable, architectural. No modulation, no chords, no pedal. Medium reverb. End with C–G–C in piano and soft E in pad.**
 
 ---
