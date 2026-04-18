@@ -38,12 +38,14 @@ Within the manifold, basins provide stability \[4\], transition regions support
 The goal is not to propose a biological mechanism or an optimal control strategy. Instead, the aim is to provide a geometric account of how systems maintain coordinated motion through a changing world \[1–4\]. The framework is architectural: it describes the structure that makes dynamic behavior possible without invoking semantics, prediction, or symbolic reasoning.
 
 **Roadmap.**  
-Section 3 clarifies the scope and epistemic posture.  
-Section 4 defines the relational manifold.  
-Section 5 illustrates the architecture through ball‑catching.  
-Section 6 introduces the cognitive spacesuit.  
-Sections 7–11 develop basin navigation, robustness, comparisons with classical control, and implications for artificial agents.  
-Sections 12 and 13 outline limitations, future work, and conclusions.
+Section 3 introduces dynamic relational geometry and the idea of a manifold that lives in time.
+Section 4 develops the basin ontology and the structure of OBs and RBs.
+Section 5 presents the mapping loop and a numeric ball‑catching example.
+Section 6 introduces the cognitive spacesuit.
+Sections 7–9 develop basin navigation, perturbation handling, and robustness.
+Section 10 describes implications for artificial agents.
+Section 11 outlines limitations and future work.
+Section 12 concludes.
 
 ---
 
