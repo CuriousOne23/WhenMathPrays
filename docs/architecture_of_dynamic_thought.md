@@ -502,11 +502,8 @@ The mapping loop drives this motion:
 $$
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t).
 $$
-
-<br>
-<br>
   
-mermaid
+```mermaid
 flowchart LR
     W[World state Wt] -->|Lift Phi| M[Manifold Mt]
     M -->|Update F| Mnext[Manifold Mt_next]
@@ -521,6 +518,7 @@ flowchart LR
     end
 
     M -.trajectory.-> T --> RTI --> I --> RIC --> C
+```
 
 
 As $W(t)$ changes (ball approaching), $\Phi$ lifts these changes into the manifold, $F$ moves the system through OBs and RBs, and $\Psi$ projects the resulting relational motion into outward behavior.
