@@ -542,7 +542,7 @@ ensures that relational distance decreases as the system moves toward **$OB_{\te
 The steepness of relational gradients determines:
 
 - how quickly the system leaves one OB,  
-- how strongly it is pulled into the next,  
+- how rapidly the geometry carries it into the next,  
 - how timing adjusts as the ball accelerates or decelerates.
 
 In the ball‑catching example:
@@ -730,7 +730,7 @@ Perturbations can also arise internally:
 
 The manifold’s basin structure absorbs these disturbances:
 
-- inside a basin, perturbations decay as the system is pulled back toward the basin center,  
+- inside a basin, perturbations decay because the geometry of that region supports stability under the system’s natural evolution,  
 - near a transition region, perturbations may redirect the system into a neighboring basin,  
 - the cognitive spacesuit ensures that such redirections remain feasible and coherent.
 
