@@ -735,6 +735,15 @@ RB_{\text{intercept}\rightarrow\text{catch}}
 OB_{\text{catch}}.
 $$
 
+```mermaid
+flowchart LR
+    OB_track["OB_track\n(Tracking Basin)"]
+        --> RB_track_intercept["RB_track→intercept\n(Transition Region)"]
+        --> OB_intercept["OB_intercept\n(Interception Basin)"]
+        --> RB_intercept_catch["RB_intercept→catch\n(Transition Region)"]
+        --> OB_catch["OB_catch\n(Catching Basin)"]
+```
+
 This corresponds to:
 
 1. **Tracking** the ball  
