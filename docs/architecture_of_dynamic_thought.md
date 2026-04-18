@@ -124,8 +124,7 @@ They are **temporal signatures of geometric evolution**.
 
 ## **3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold**
 
-OBs and RBs are not entities.  
-They are **geometric conditions** that appear when the manifold’s deformation crosses specific thresholds.
+OBs and RBs are recognized not as entities but as **geometric conditions** that emerge when the manifold’s deformation crosses specific thresholds. An OB appears when deformation becomes locally stable; an RB appears when deformation becomes directionally coherent. These recognition rules define the primitive layer of the architecture.
 
 An **object basin (OB)** is recognized when local deformation becomes **sufficiently stable**:
 
