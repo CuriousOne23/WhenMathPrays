@@ -1,102 +1,140 @@
-# **Section 1 — Abstract (Minimalist Score Blueprint)**
+# **Section 1 — Abstract (Minimalist Score Blueprint)**  
+*(Generated directly from the manuscript text)*
 
-## **Musical Purpose of Section 1**
-The Abstract is not a full section.  
-It is a *signal* — a brief, stable, low‑dynamic motif that introduces the architecture without revealing any transitions.
+## **Musical Purpose of Section 1**
 
-This motif should feel:
+The Abstract introduces:
+
+- the mapping loop  
+- the existence of basins  
+- the cognitive spacesuit  
+- the idea of stability and coherence  
+- the absence of prediction, semantics, or symbolic reasoning  
+
+Conceptually, the Abstract is **static → low‑dynamic**:
+
+- It names the architecture but does not *move* through it.  
+- It establishes the ontology but does not *activate* it.  
+- It frames the system but does not *evolve* it.  
+
+Musically, this must feel:
 
 - stable  
 - sparse  
 - geometric  
 - anticipatory  
 - low‑dynamic  
-- structurally neutral  
+- architecturally neutral  
 
-It is the “initial basin” of the composition.
+This is the **initial basin** of the entire score.
 
 ---
 
 ## **1. Motif Structure**
-A **three‑note repeating pattern**, evenly spaced, with no syncopation.
 
-- Notes: **C – E – G** (a simple major triad arpeggio)  
-- Pattern: **C (quarter) → E (quarter) → G (half)**  
-- Repeats unchanged for the entire Abstract  
-- No harmonic movement  
-- No modulation  
+A **three‑note repeating pattern**, evenly spaced, with no variation.
 
-This expresses **static → low‑dynamic** information.
+- Notes: **C – E – G**  
+- Pattern:  
+  - C (quarter)  
+  - E (quarter)  
+  - G (half)  
+
+Characteristics:
+
+- no syncopation  
+- no rhythmic drift  
+- no ornamentation  
+- no modulation  
+
+This expresses the **static relational structure** of the Abstract.
 
 ---
 
 ## **2. Tempo & Meter**
-- **Tempo:** 72 BPM  
-- **Meter:** 4/4  
-- **Feel:** steady, unhurried, neutral  
 
-This gives the Abstract a sense of *structural grounding*.
+- **Tempo:** 72 BPM  
+- **Meter:** 4/4  
+- **Feel:** steady, neutral, unhurried  
+
+This creates a sense of **geometric grounding**.
 
 ---
 
 ## **3. Instrumentation**
-Use **one instrument only**:
 
-- **Soft electric piano** *or* **felted piano**
+One instrument only:
+
+- **Soft felt piano** *or* **soft electric piano**
 
 Why:
 
 - clean attack  
-- warm decay  
-- no emotional coloration  
-- ideal for minimalist clarity  
+- warm but neutral decay  
+- minimal emotional coloration  
+- ideal for architectural clarity  
 
-Avoid strings, pads, or anything with evolving texture — the Abstract must remain static.
+Avoid strings, pads, or evolving textures.
 
 ---
 
 ## **4. Intensity Curve**
+
 Flat.
 
 - No crescendo  
-- No density increase  
 - No added layers  
-- No rhythmic variation  
+- No density changes  
+- No dynamic shaping  
 
-The Abstract is a **stable basin**.
+The Abstract is a **stable basin** with no internal motion.
 
 ---
 
 ## **5. Texture**
-- Single voice  
-- No reverb beyond a light room ambience  
+
+- Single monophonic voice  
+- Light room reverb only  
 - No delay  
 - No stereo movement  
 
-This keeps the motif “close” and unembellished.
+The sound should feel **close, minimal, and unembellished**.
 
 ---
 
-## **6. Transition Out of Section 0**
-At the end of the Abstract:
+## **6. Harmonic Language**
+
+Remain strictly in **C major**.
+
+- No color tones  
+- No extensions  
+- No harmonic motion  
+
+This preserves the **non‑semantic, non‑emotive** posture of the Abstract.
+
+---
+
+## **7. Transition Out of Section 1**
+
+At the end:
 
 - Add a **single low C** (whole note)  
 - Let it decay naturally  
-- Then begin Section 1’s motif immediately after the decay  
+- Begin Section 2 immediately after the decay  
 
-This acts as the **Φ → F handoff** into the Introduction.
-
----
-
-## **7. Upload‑Ready Prompt (Suno/Udio/Stable Audio)**
-
-You can paste this directly into any music generator:
-
-> **Minimalist piano motif for an abstract. Soft felt piano. Tempo 72 BPM, 4/4. Three‑note repeating pattern: C–E–G (quarter, quarter, half). No variation, no added layers, no harmony changes. Very sparse, neutral, geometric. Light room reverb only. End with a single low C whole note that decays naturally.**
+This is the **Φ → F handoff**:  
+the moment the system moves from static framing into the first relational motion.
 
 ---
 
-## **8. Summary (for the top of the file)**
+## **8. Upload‑Ready Prompt (Suno / Udio / Stable Audio)**
 
-> A stable, minimalist three‑note piano motif representing the static/low‑dynamic nature of the Abstract. No variation, no modulation, no intensity change. Serves as the initial basin before Section 1 begins.
+> **Minimalist felt‑piano motif for an abstract. Tempo 72 BPM, 4/4. Three‑note repeating pattern: C–E–G (quarter, quarter, half). No variation, no added layers, no harmony changes. Very sparse, neutral, geometric. Light room reverb only. End with a single low C whole note that decays naturally.**
 
+---
+
+## **9. Summary (for the top of the file)**
+
+> A stable, minimalist three‑note piano motif representing the static/low‑dynamic nature of the Abstract. No variation, no modulation, no intensity change. Serves as the initial basin before Section 2 begins.
+
+---
