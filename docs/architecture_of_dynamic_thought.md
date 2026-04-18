@@ -122,31 +122,17 @@ They are **temporal modes of geometric evolution**.
 
 ---
 
-Jeff — here is a **rigorously upgraded, GitHub‑friendly, fully integrated rewrite of Section 3.4**, tuned to exactly what Grok said was missing:
-
-- **OB and RB defined as geometric primitives**  
-- **Recognition rules expressed in geometric terms**  
-- **Fractal compositionality made explicit**  
-- **Threshold logic preserved but upgraded**  
-- **No over‑claiming of agency or basin birth**  
-- **GitHub‑safe math formatting**  
-
-This version drops directly into your file with zero friction.
-
----
-
 # **3.4 OB and RB Recognition in a Dynamic Geometry**  
-*(Upgraded for rigor, geometric clarity, and fractal structure)*
 
-In a static framework, objects must be defined in advance. In a dynamic geometry, **objects are the stable geometric regions that persist through time**.
+In a static framework, objects must be defined in advance. In a dynamic geometry, **object‑like behavior is a recognition event**: a region of the manifold exhibits sufficient temporal stability to be treated as coherent.
 
-An **object basin (OB)** is a region whose **local deformation remains below a stability threshold**:
+An **object basin (OB)** is any region where **local deformation remains below a stability threshold**:
 
 $$
 \lVert F(M_t) - M_t \rVert < \theta_{\text{OB}}
 $$
 
-A **relational basin (RB)** is a region whose deformation is small *and directionally coherent*, meaning it points toward a specific OB:
+A **relational basin (RB)** is any region where deformation is small *and directionally coherent* toward a specific OB:
 
 $$
 \lVert F(M_t) - M_t \rVert < \theta_{\text{RB}}
@@ -154,30 +140,29 @@ $$
 F(M_t) \in OB_j
 $$
 
-These definitions treat OBs and RBs as **geometric primitives**, not semantic categories.
+These are **recognition conditions**, not entities. OBs and RBs are **geometric signatures** detected through deformation thresholds—patterns the manifold presents when its motion becomes sufficiently stable or aligned.
 
 ---
 
 ## **Composite OBs and RBs (Fractal Structure)**
 
-Because the geometry is fractal and holographic, OBs and RBs are not atomic.  
-They may be **composed of nested OBs and RBs** whose joint coherence defines the region.
+Because the geometry is fractal and holographic, OBs and RBs are not atomic. They may be **composed of nested OBs and RBs** whose joint coherence defines the region.
 
 A **composite OB** may be written:
 
 $$
-OB = \\{\  OB_k,\ RB_\ell \ \\}
+OB = \\{\, OB_k,\ RB_\ell \,\\}
 $$
 
-meaning its stability arises from the coordinated coherence of multiple sub‑basins.
+indicating that its stability arises from the coordinated coherence of multiple sub‑basins.
 
 A **composite RB** may be written:
 
 $$
-RB = \\{\  OB_k,\ RB_\ell \ \\}
+RB = \\{\, OB_k,\ RB_\ell \,\\}
 $$
 
-meaning the relational channel is itself a structured bundle of OBs and RBs.
+indicating that the relational channel is itself a structured bundle of OBs and RBs.
 
 This compositionality reflects that:
 
@@ -208,18 +193,18 @@ $$
 
 In words:
 
-- OBs are recognized when the geometry becomes sufficiently stable.  
-- RBs are recognized when the geometry is stable *and* points toward a specific OB.  
+- OBs correspond to regions where motion becomes sufficiently stable.  
+- RBs correspond to regions where motion is stable *and* points toward a specific OB.  
 
-This rule is intentionally simple: recognition is **a geometric event**, not a symbolic or semantic one.
+Recognition is **a geometric event**, not a semantic or symbolic classification.
 
 ---
 
 ## **Why This Matters**
 
-This upgraded, geometric definition ensures that:
+This geometric formulation ensures that:
 
-- OBs and RBs are **rigorously defined** as geometric primitives  
+- OBs and RBs are **rigorously defined** as deformation‑based primitives  
 - OBs and RBs can form at any scale  
 - OBs and RBs can be nested and fractal  
 - recognition is **dynamic**, not static  
