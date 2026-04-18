@@ -1,7 +1,7 @@
 # **README — Music Subsystem**  
-### *Dynamic Score for Architecture of Dynamic Thought*
+### *Dynamic Score for Geometry of Meaning, Relation, and Dynamic Information*
 
-This directory contains the **musical layer** of *Architecture of Dynamic Thought* — a structured, semantically grounded score that mirrors the manuscript’s dynamic geometry.
+This directory contains the **musical layer** of the manuscript — a structured, semantically grounded score that mirrors the architecture’s dynamic geometry.
 
 The goal is not to produce “songs,” but to create a **musical analogue** of the system’s:
 
@@ -9,9 +9,10 @@ The goal is not to produce “songs,” but to create a **musical analogue** of 
 - curvature  
 - flow  
 - regime transitions  
-- semantic operators  
+- relational operators  
+- geometric structure  
 
-The music is generated using AI tools (Suno, Udio, etc.) but is **fully deterministic** because the ontology, instrumentation, and prompts are all explicitly defined.
+The music is generated using AI tools (Suno, Udio, etc.) but is **fully deterministic** because the ontology, instrumentation, and prompts are explicitly defined.
 
 This README explains:
 
@@ -44,43 +45,68 @@ It expresses the same geometry as the manuscript, but in sound.
 ```
 music/
 │
-├── full_comp.md
-│     Global dynamic architecture (intensity + curvature + vectors)
+├── full_composition_blueprint.md
+│     Architectural plan for the entire score
+│
+├── full_composition_diagram.md
+│     Global dynamic map (intensity + curvature + vector flow)
 │
 ├── instrumentation_overlay.md
-│     Section‑by‑section instrumentation timeline + regime interpretation
+│     Section‑by‑section instrumentation timeline
 │
 ├── instrumentation_overview.md
 │     Semantic dictionary + usage rules + generator‑safe constraints
 │
 ├── music_generation_prompts.md
-│     Upload‑ready prompts for all 14 sections
+│     Upload‑ready prompts for all 12 sections
+│
+├── master_prompt.md
+│     One‑shot continuous score generator
 │
 └── sections/
-      section_0.md
       section_1.md
+      section_2.md
       ...
-      section_13.md
+      section_12.md
       (optional: individual notes or refinements)
 ```
 
-Each file plays a distinct role:
+Each file plays a distinct role.
 
-**Prompting for sections:**
-- **music_generation_prompts.md** → the *operational layer* 
-**Prompting for entire score**
-- **master_prompt.md** → the *one‑shot continuous score generator*
+---
 
-**Reference**
-- full_composition_blueprint.md → the architectural plan that the prompts are based on (not used directly in Suno)
-- full_composition_diagram.md → the global dynamic map (visual reference)
-- **instrumentation_overlay.md** → the *timeline*  
-- **instrumentation_overview.md** → the *manual*  
- 
+## **Prompting for sections**
+- **music_generation_prompts.md** → the *operational layer*  
+  Upload‑ready prompts for each of the 12 sections.  
+  These are the only prompts you paste into Suno/Udio when generating sections individually.
 
-- **sections/** → optional per‑section notes  
+## **Prompting for entire score**
+- **master_prompt.md** → the *one‑shot continuous score generator*  
+  A single prompt that generates the entire 12‑section score in one pass.
 
-Together, they form a **complete, reproducible music architecture**.
+---
+
+## **Reference**
+These files define the architecture but are **not** used directly in Suno/Udio:
+
+- **full_composition_blueprint.md**  
+  The architectural plan that all prompts are derived from.  
+  Defines global structure, motifs, transitions, and conceptual regimes.
+
+- **full_composition_diagram.md**  
+  The global dynamic map (intensity, curvature, vector flow).  
+  A visual/ASCII representation of the entire score as a single geometric object.
+
+- **instrumentation_overlay.md**  
+  The *timeline*: which instruments appear in which sections, and why.
+
+- **instrumentation_overview.md**  
+  The *manual*: semantic dictionary, usage rules, and generator‑safe constraints.
+
+- **sections/**  
+  Optional per‑section notes, refinements, or commentary.
+
+Together, these form a **complete, reproducible music architecture**.
 
 ---
 
@@ -92,23 +118,24 @@ Each section has a ready‑to‑paste prompt.
 ### **Step 2 — Paste a prompt into Suno/Udio/etc.**  
 No musical decisions required.
 
-### **Step 3 — Check the output against `instrumentation_overview.md`**  
-If the AI:
+### **Step 3 — Validate the output using `instrumentation_overview.md`**  
+Reject outputs that violate the ontology:
 
-- adds drums  
-- adds strings  
-- adds vocals  
-- adds rhythmic bass  
-- changes the instrumentation  
-- violates semantic roles  
-
-…regenerate.
+- added drums  
+- added vocals  
+- added chord progressions  
+- rhythmic pads  
+- melodic marimba  
+- rhythmic pizzicato  
+- emotional swells  
+- modulation  
+- cinematic builds  
 
 ### **Step 4 — Use `instrumentation_overlay.md` to maintain continuity**  
-This ensures the score stays aligned with the manuscript’s regimes.
+Ensures the score stays aligned with the manuscript’s conceptual regimes.
 
 ### **Step 5 — Use `full_composition_diagram.md` for global coherence**  
-This ensures the entire score follows the intensity/curvature/flow arc.
+Ensures the entire score follows the intensity/curvature/flow arc.
 
 ---
 
@@ -118,25 +145,24 @@ These rules ensure the music expresses the manuscript’s geometry.
 
 ### **Do not allow AI tools to:**
 
-- add drums  
+- add drums or percussion  
 - add vocals  
-- add strings  
+- add chord progressions  
 - add rhythmic bass  
-- add percussion (except woodblock in Section 9)  
-- introduce “build‑ups” or “drops”  
-- change the instrumentation set for a section  
-- add arpeggiation or rhythmic gating to pads  
+- add arpeggiation or rhythmic gating  
 - make marimba melodic  
-- make sub‑bass rhythmic  
+- make pizzicato rhythmic  
+- introduce emotional swells or cinematic gestures  
+- change the instrumentation set for a section  
+- modulate keys  
 
-### **Do enforce:**
+### **Do enforce the ontology:**
 
-- piano = agent  
-- marimba = relation  
-- pad = environment  
-- sub‑bass = embodiment  
-- airy synth = meaning  
-- woodblock = perturbation  
+- **piano = agent / articulation / intention**  
+- **marimba = relational structure / RB geometry**  
+- **pad = environment / conceptual field**  
+- **pizzicato strings = perturbation / RB boundary**  
+- **pizzicato bass = regulation / grounding**  
 
 These mappings are **non‑negotiable** — they are the ontology.
 
@@ -146,11 +172,10 @@ These mappings are **non‑negotiable** — they are the ontology.
 
 Each musical section corresponds to a conceptual regime:
 
-- **0–3:** static → framed stillness  
-- **4–6:** emergence → embodiment  
-- **7–9:** geometric peak  
-- **10–11:** contrast → agency  
-- **12–13:** reflection → resolution  
+- **1–3:** framing, orientation, conceptual ground  
+- **4–7:** geometric structure and navigation  
+- **8–10:** unification, perturbation, engineering  
+- **11–12:** reflection and closure  
 
 The score follows the same:
 
