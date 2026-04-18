@@ -122,97 +122,40 @@ They are **temporal signatures of geometric evolution**.
 
 ---
 
-# **3.4 OB and RB Recognition in a Dynamic Geometry**  
+## **3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold**
 
-In a static framework, objects must be defined in advance. In a dynamic geometry, **object‑like behavior is a recognition event**: a region of the manifold exhibits sufficient temporal stability to be treated as coherent.
+OBs and RBs are not entities.  
+They are **geometric conditions** that appear when the manifold’s deformation crosses specific thresholds.
 
-An **object basin (OB)** is any region where **local deformation remains below a stability threshold**:
+An **object basin (OB)** is recognized when local deformation becomes **sufficiently stable**:
 
-$$
-\lVert F(M_t) - M_t \rVert < \theta_{\text{OB}}
-$$
+- gradients flatten,  
+- motion becomes self‑coherent,  
+- and the region resists perturbation over a finite temporal window.
 
-A **relational basin (RB)** is any region where deformation is small *and directionally coherent* toward a specific OB:
+Formally, an OB is any region where the update law $F$ produces **bounded, coherence‑preserving deformation**. The basin is not a “thing,” but a **stability signature** of the evolving geometry.
 
-$$
-\lVert F(M_t) - M_t \rVert < \theta_{\text{RB}}
-\quad \text{and} \quad
-F(M_t) \in OB_j
-$$
+A **relational basin (RB)** is recognized when deformation becomes **directionally aligned**:
 
-These are **recognition conditions**, not entities. OBs and RBs are **geometric signatures** detected through deformation thresholds—patterns the manifold presents when its motion becomes sufficiently stable or aligned.
+- relational gradients point coherently,  
+- motion is channeled rather than stabilized,  
+- and the region supports structured transition between configurations.
 
-These recognition rules form the **primitive layer**. Their fractal and holographic nature—that any basin may contain smaller OBs and RBs—will become important in later work. Here we only establish the basic geometric criteria for recognizing stability and directional coherence.
+An RB is therefore a **directional‑coherence signature**, not a connector or edge.
 
----
-
-## **Composite OBs and RBs (Fractal Structure)**
-
-Because the geometry is fractal and holographic, OBs and RBs are not atomic. They may be **composed of nested OBs and RBs** whose joint coherence defines the region.
-
-A **composite OB** may be written:
+Both OBs and RBs may be **composite**, containing nested or overlapping basins:
 
 $$
-OB = \\{\  OB_k,\ RB_\ell \ \\}
+OB = \\{\ OB_k,\ RB_\ell \ \\}  
 $$
 
-indicating that its stability arises from the coordinated coherence of multiple sub‑basins.
-
-A **composite RB** may be written:
-
 $$
-RB = \\{\  OB_k,\ RB_\ell \ \\}
+RB = \\{\ OB_k,\ RB_\ell \ \\}
 $$
 
-indicating that the relational channel is itself a structured bundle of OBs and RBs.
+This reflects the **fractal and holographic** nature of the manifold: stability and alignment recur across scales.
 
-This compositionality reflects that:
-
-- OBs can contain OBs and RBs  
-- RBs can contain OBs and RBs  
-- both are **multi‑scale**, **nested**, and **self‑similar**  
-- recognition is based on **geometric coherence**, not atomic primitives  
-
----
-
-## **Threshold‑Based Recognition (Operational Rule)**
-
-Let $\theta$ denote the recognition threshold for local deformation.
-
-An **OB is recognized** when the manifold’s local temporal deformation satisfies:
-
-$$
-\lVert F(M_t) - M_t \rVert < \theta
-$$
-
-An **RB is recognized** when deformation is small *and* directionally aligned:
-
-$$
-\lVert F(M_t) - M_t \rVert < \theta
-\quad \text{and} \quad
-F(M_t) \in OB_j
-$$
-
-In words:
-
-- OBs correspond to regions where motion becomes sufficiently stable.  
-- RBs correspond to regions where motion is stable *and* points toward a specific OB.  
-
-Recognition is **a geometric event**, not a semantic or symbolic classification.
-
----
-
-## **Why This Matters**
-
-This geometric formulation ensures that:
-
-- OBs and RBs are **rigorously defined** as deformation‑based primitives  
-- OBs and RBs can form at any scale  
-- OBs and RBs can be nested and fractal  
-- recognition is **dynamic**, not static  
-- the same rule applies from sensory micro‑patterns to conceptual macro‑structures  
-
-This provides the operational backbone for the dynamic relational architecture developed in Sections 4–9.
+These recognition rules form the **primitive layer**. Their fractal structure — that any basin may contain smaller OBs and RBs — becomes important later. Here we establish only the **geometric criteria** for recognizing stability and directional coherence in a manifold that lives in time.
 
 ---
 
