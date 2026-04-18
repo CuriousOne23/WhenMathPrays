@@ -80,11 +80,13 @@ RBs do **not** attract or move anything. They exert no agency. They simply repre
 
 ### **3.3 Physical Reality and Geometric Representation**
 
-Although OBs and RBs are described as “basins,” they are **not** literal valleys, channels, or spatial depressions. They are **geometric constructs** in a representational manifold. In physical reality, whatever gives rise to a basin is almost certainly **distributed** across many micro‑level processes—multiple energy transfers unfolding along many routes. There is no single electrical pulse or identifiable trace that corresponds to an OB or RB.
+Although OBs and RBs are described as “basins,” they are not literal valleys, channels, or spatial depressions. They are geometric constructs in a representational manifold. In physical reality, whatever gives rise to a basin is almost certainly distributed across many micro‑level processes—multiple energy transfers unfolding along many routes. There is no single electrical pulse or identifiable trace that corresponds to an OB or RB.
 
-If one demanded to “see” thought directly, there would be nothing to observe as an object. The closest correlate would be overlapping patterns of energy flow, but even these do not map one‑to‑one onto geometric basins. The geometry is a **representation** of stability, not a picture of the physical substrate.
+If one demanded to “see” thought directly, there would be nothing to observe as an object. The closest correlate would be overlapping patterns of energy flow, but even these do not map one‑to‑one onto geometric basins. The geometry is a representation of stability, not a picture of the physical substrate.
 
-This representational approach is powerful because it does **not** require knowing the physical form of a basin. The model only requires that **stable relational structure exists** in the underlying substrate.
+This representational approach is powerful because it does not require knowing the physical form of a basin. The model only requires that stable relational structure exists in the underlying substrate.
+
+And although physical reality may involve lawful forces that produce such stable configurations, these forces do not exist in the manifold itself; the manifold represents the resulting stability geometrically, without importing physical attraction or pulling into the representational space.
 
 ---
 
@@ -603,7 +605,7 @@ Physical systems often exhibit stable regions and transition pathways that mirro
 
 These phenomena involve:
 
-- stable regions of attraction,  
+- stable regions shaped by physical forces,  
 - transition corridors shaped by constraints,  
 - bounded evolution under physical laws.
 
@@ -748,7 +750,7 @@ This means:
 
 - small perturbations do not eject the system,  
 - relational motion remains stable,  
-- the system naturally returns to the basin’s attractor.
+- the system naturally returns to the basin.
 
 In the ball‑catching example, minor deviations in ball trajectory or hand motion are absorbed by the tracking or intercept basin without requiring a discrete correction.
 
@@ -818,7 +820,7 @@ Cognitive systems maintain coherence across multiple interacting tasks and can m
 The geometric framework introduced here can represent these attributes through:
 
 - relational manifolds  
-- deformable basins of attraction  
+- deformable basins  
 - transition regions  
 - bounded lift and bounded update  
 - continuous relational flow  
@@ -1461,7 +1463,7 @@ is satisfied.
 
 ## **A.5 Example Basin: “Catch” Region**
 
-A basin is a region where trajectories converge and small perturbations decay. For catching, the relevant attractor corresponds to near‑zero relative displacement.
+A basin is a region where trajectories converge and small perturbations decay. For catching, the relevant basin corresponds to near‑zero relative displacement.
 
 Define a simple catch basin:
 
