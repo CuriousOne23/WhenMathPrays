@@ -88,15 +88,15 @@ A manifold that lives in time can.
 
 ## **3.2 Wave‑Like Relational Structure**
 
-Because the manifold evolves continuously, relational structure behaves like a **wave field** [11]:
+Because the manifold evolves continuously, relational structure does not update in discrete jumps. It propagates through the geometry in **wave‑like patterns** [11] that reflect how deformation spreads over time.
 
-This wave‑based interpretation aligns with the TDS‑WDAS formulation of time‑dependent relational dynamics.
+This wave‑based interpretation aligns with the TDS‑WDAS formulation of time‑dependent relational dynamics:
 
 - **Object basins (OBs)** appear as *standing‑wave* regions of stability.  
 - **Relational basins (RBs)** appear as *traveling‑wave* channels that carry relational motion.  
 - **High‑dynamic regions** correspond to *interference zones* where relational structure reorganizes.
 
-This wave‑like behavior is not metaphorical. It is a direct consequence of:
+This behavior is not metaphorical. It follows directly from:
 
 - continuous deformation under $F$  
 - relational gradients  
@@ -105,20 +105,20 @@ This wave‑like behavior is not metaphorical. It is a direct consequence of:
 - temporal coherence requirements  
 
 The manifold is not a static map.  
-It is a **dynamic, resonant medium**.
+It is a **dynamic, resonant medium** whose structure evolves through time.
 
 ---
 
 ## **3.3 Static, Low‑Dynamic, and High‑Dynamic Information as Temporal Regimes**
 
-The three information regimes introduced in earlier work appear naturally when the manifold is understood as a time‑evolving geometry:
+When the manifold is understood as a time‑evolving geometry, the three information regimes introduced in earlier work appear naturally as **temporal modes of motion**:
 
 - **Static information** corresponds to stable regions where relational motion is negligible (OBs).  
 - **Low‑dynamic information** corresponds to structured, bounded relational motion (RBs).  
 - **High‑dynamic information** corresponds to rapid reconfiguration, interference, and collapse.
 
 These regimes are not semantic categories.  
-They are **temporal modes of geometric evolution**.
+They are **temporal signatures of geometric evolution**.
 
 ---
 
