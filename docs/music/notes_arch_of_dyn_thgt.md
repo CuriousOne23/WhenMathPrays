@@ -4,14 +4,17 @@
 
 ---
 
-## **Preface: Three Global Notes on the Musical Architecture**
+# **Preface: Three Global Notes on the Musical Architecture**
 
-### **1. This score is a structural translation, not an aesthetic one**  
-Every musical choice in this project is driven by the **geometry and dynamics** of the manuscript — not by mood, genre, or emotional coloring.  
-The music is not “inspired by” the text; it is **mapped from** the text.  
+## **1. This score is a structural translation, not an aesthetic one**
+
+Every musical choice in this project is driven by the **geometry and dynamics** of the manuscript — not by mood, genre, or emotional coloring.
+
+The music is not “inspired by” the text; it is **mapped from** the text.
+
 Each section’s musical regime is derived from:
 
-- its dynamic signature (static, LD, HD, attractor‑driven, reflective, etc.)  
+- its dynamic signature (static, orienting, relational, cyclic, regulatory, perturbative, reflective)  
 - its role in the conceptual architecture  
 - its internal motion or lack thereof  
 - its epistemic posture  
@@ -20,7 +23,8 @@ The score is therefore a **geometric companion** to the manuscript, not a soundt
 
 ---
 
-### **2. Minimalism is used as a geometric language, not a stylistic preference**  
+## **2. Minimalism is used as a geometric language, not a stylistic preference**
+
 Minimalism is the only musical framework that naturally expresses:
 
 - iterative mapping  
@@ -50,380 +54,233 @@ Minimalism here is **mathematical**, not stylistic.
 
 ---
 
-### **3. Instrument roles are semantic, not ornamental**  
+## **3. Instrument roles are semantic, not ornamental**
+
 Each instrument in the score has a **fixed conceptual role** that remains consistent across sections:
 
-- **Felt piano** → agent, articulation, intention  
-- **Marimba** → relational articulation, correction, structure  
-- **Warm pad** → environment, semantic field, horizon  
-- **Sub‑bass** → embodiment, grounding  
-- **Airy synth** → meaning, reflection, implication  
-- **Woodblock/pizzicato** → perturbation, structure, boundary  
+- **Felt / Soft Electric Piano** → *agent, articulation, intention*  
+- **Soft Marimba** → *relational articulation, RB structure, geometric detail*  
+- **Soft / Warm Pad** → *environment, semantic field, horizon*  
+- **Pizzicato Strings** → *perturbation, RB boundary, discrete events*  
+- **Pizzicato Bass** → *regulation, grounding, boundedness*  
 
-This consistency allows the listener to track:
-
-- when the agent is acting  
-- when the environment is shaping  
-- when relations are forming  
-- when meaning is emerging  
-- when perturbations occur  
-- when the system resolves  
-
-The instrumentation is therefore a **semantic vocabulary**, not a palette.
+These roles never change.  
+They are part of the ontology.
 
 ---
 
-# **1. Global Musical Philosophy**
+# **Section‑by‑Section Commentary**
 
-The score is a **geometric translation** of the manuscript.  
-Each section of the paper has a **dynamic signature** — static, low‑dynamic, high‑dynamic, relational, attractor‑driven, reflective, etc.  
-The music expresses these signatures through:
-
-- **motif structure** (object‑like, relational, drifting, interlocking, etc.)  
-- **tempo** (static → slow; mapping loop → medium; robustness → medium‑high)  
-- **instrumentation** (piano = agent; marimba = relational articulation; pad = environment; sub‑bass = embodiment)  
-- **texture** (single‑voice → multi‑voice → spatial → reflective)  
-- **intensity curve** (layering, not volume)  
-- **harmonic language** (C major as home; A minor for introspection; Lydian color for possibility)  
-
-The score is **minimalist** because minimalism is the closest musical analogue to:
-
-- dynamic geometry  
-- relational structure  
-- attractor landscapes  
-- iterative mapping  
-- basin transitions  
-- epistemic framing  
-
-Minimalism is not an aesthetic choice — it is a **structural match**.
+Below is the **human‑readable explanation** of how each musical section was interpreted from the manuscript.
 
 ---
 
-# **2. Section‑by‑Section Commentary**
+## **Section 1 — Abstract**
 
-Below is the commentary for each section — the “why” behind the musical choices.
+The abstract is a **conceptual field**, not a narrative.  
+The music reflects this by using:
 
----
+- felt piano (agent)  
+- soft pad (environment)  
+- extremely sparse, open intervals  
 
-## **Section 0 — Abstract**  
-**Dynamic Signature:** static, foundational, pre‑motion  
-**Musical Logic:**  
-The abstract is a *static basin* — the conceptual ground before motion begins.  
-Music must be:
+The goal is to create a **geometric horizon** — a sense of space in which the rest of the architecture will unfold.
 
-- extremely simple  
-- low‑dynamic  
-- object‑like  
-- stable  
-
-This is why Section 0 uses:
-
-- a single motif  
-- no drift  
-- no layering  
-- no harmonic motion  
-
-It is the **origin point** of the entire score.
+No motion, no development, no argument.  
+Just the **field**.
 
 ---
 
-## **Section 1 — Introduction**  
-**Dynamic Signature:** first relational drift  
-**Musical Logic:**  
-The introduction begins to move — gently.  
-It establishes:
+## **Section 2 — Introduction**
 
-- the first relational structure  
-- the first sense of direction  
-- the first dynamic contrast  
+The introduction establishes **clarity and intention**.
 
-Musically:
+The music uses:
 
-- slightly more motion  
-- a simple two‑voice texture  
-- small rhythmic drift  
-- a sense of “awakening”  
+- solo felt piano  
+- a simple, stable motif (C–E–G–E)  
+- no pad, no marimba, no strings  
 
-This section is the **first breath** of the system.
+This section is about **orientation**, so the music is clean, articulate, and unadorned.
 
 ---
 
-## **Section 2 — Scope, Orientation, Epistemic Posture**  
-**Dynamic Signature:** framing, boundary‑setting  
-**Musical Logic:**  
-This section defines:
+## **Section 3 — Scope, Orientation, Epistemic Posture**
 
-- constraints  
-- orientation  
-- epistemic stance  
+This section defines the **frame** of the work.
 
-Musically, this becomes:
+The music introduces:
 
-- clearer rhythmic structure  
-- more defined motif  
-- a shift to 3/4 (framing)  
-- pizzicato strings as structural markers  
+- piano (agent)  
+- marimba (relational articulation)  
 
-This is the **architectural frame** of the score.
+The marimba’s entrance marks the moment when the manuscript begins to **structure** the conceptual space rather than merely describe it.
+
+The texture is still gentle — this is orientation, not argument.
 
 ---
 
-## **Section 3 — Static Information**  
-**Dynamic Signature:** frozen, object‑like, zero entropy  
-**Musical Logic:**  
-Static information is:
+## **Section 4 — The Relational Manifold**
 
-- unmoving  
-- unchanging  
-- definition‑like  
-- object‑like  
+This is the first **full geometric section**.
 
-Music must be:
+The music expands to a trio:
 
-- two‑note alternation  
-- no variation  
-- no dynamics  
-- no harmony  
-- no drift  
+- soft electric piano  
+- marimba  
+- pizzicato strings  
 
-This is the **most static** section of the entire score.
+This is where OB/RB structure becomes audible:
+
+- OB motif = stability  
+- RB motif = relational redirection  
+- pizzicato = boundary conditions  
+
+This is the first moment where the system feels **alive**.
 
 ---
 
-## **Section 4 — Low‑Dynamic Information**  
-**Dynamic Signature:** gentle evolution, slow relational motion  
-**Musical Logic:**  
-LD‑information introduces:
+## **Section 5 — The Mapping Loop**
 
-- small perturbations  
-- slow drift  
-- gentle relational structure  
+This section is procedural and cyclic.
 
-Musically:
+The music reflects this with:
 
-- six‑note motif with slight drift  
-- three‑voice layering  
-- warm pad entering slowly  
-- stepwise harmonic motion  
+- piano + marimba only  
+- a 6/8 looping motif  
+- a four‑bar OB → RB → OB → reset cycle  
 
-This is the **first true motion** after the static regime.
+This is the sound of **iterative mapping** — the system tracing its own structure.
 
 ---
 
-## **Section 5 — The Mapping Loop**  
-**Dynamic Signature:** iterative, interlocking, emergent  
-**Musical Logic:**  
-The mapping loop is:
+## **Section 6 — The Cognitive Spacesuit**
 
-- layered  
-- self‑referential  
-- dynamic  
-- emergent  
+This section introduces **regulation** and **boundedness**.
 
-Music must use:
+The music adds:
 
-- interlocking loops  
-- different cycle lengths  
-- phase shifts  
-- emergent counterpoint  
+- pizzicato bass (regulation)  
+- bounded oscillation motif (F–E–F–D–F)  
+- constraint pulses on C  
 
-This is the **Reich‑like heart** of the score.
+This is the sound of a system **keeping itself within limits**.
 
 ---
 
-## **Section 6 — Cognitive Spacesuit**  
-**Dynamic Signature:** embodied, environmental, spatial  
-**Musical Logic:**  
-The cognitive spacesuit is:
+## **Section 7 — Basin Navigation**
 
-- an environment  
-- a sensory scaffold  
-- an embodied interface  
+This is the **peak geometric section**.
 
-Musically:
+The music uses:
 
-- wide pads  
-- spatialization  
-- slow circular motifs  
-- sub‑bass grounding  
+- piano  
+- marimba  
+- pizzicato strings  
 
-This is the **most spatial** section of the score.
+The motifs enact:
 
----
+- OB → RB → OB traversal  
+- catch dynamics  
+- continuous navigation  
 
-## **Section 7 — Basin Navigation**  
-**Dynamic Signature:** attractors, stability regions, transitions  
-**Musical Logic:**  
-Basins are:
-
-- stable motifs  
-- gravitational centers  
-- dynamic landscapes  
-
-Music uses:
-
-- three motifs (C‑center, A‑center, F‑center)  
-- transitions via layering  
-- attractor‑driven phrasing  
-
-This is the **geometric core** of the score.
+This is the sound of **moving through a structured landscape**.
 
 ---
 
-## **Section 8 — Implications for Science**  
-**Dynamic Signature:** conceptual expansion, reflection  
-**Musical Logic:**  
-This section widens the frame:
+## **Section 8 — Implications for Science**
 
-- implications  
-- consequences  
-- broader scientific landscape  
+This section zooms out.
 
-Musically:
+The music simplifies to:
 
-- ascending motif  
-- wide harmonic fields  
-- airy synth for “opening”  
-- Lydian color for possibility  
+- soft electric piano  
+- warm pad  
 
-This is the **horizon‑expanding** section.
+The motifs are broad and unifying.  
+This is the sound of **conceptual integration** — the system stepping back to see the whole.
 
 ---
 
-## **Section 9 — Robustness and Perturbations**  
-**Dynamic Signature:** resilience, disturbance, recovery  
-**Musical Logic:**  
-Robustness is:
+## **Section 9 — Robustness and Perturbations**
 
-- stability under perturbation  
-- controlled deviation  
-- recovery cycles  
+This section introduces **irregularity**.
 
-Music uses:
+The music uses:
 
-- stable motif  
-- perturbation motif (F♯)  
-- resolution motif  
-- rhythmic nudges  
+- piano  
+- marimba  
+- pizzicato strings  
+- 7/8 meter  
 
-This is the **resilience engine** of the score.
+Motifs alternate between:
 
----
+- stability  
+- perturbation  
+- redirection  
 
-## **Section 10 — Relation to Classical Control**  
-**Dynamic Signature:** contrast, comparison, structural clarity  
-**Musical Logic:**  
-This section contrasts:
-
-- classical control (rigid)  
-- relational geometry (fluid)  
-
-Music alternates:
-
-- rigid piano motif  
-- fluid marimba motif  
-- then layers them  
-
-This is the **contrast‑structured** section.
+This is the sound of a system being **nudged, disturbed, and recovering**.
 
 ---
 
-## **Section 11 — Implications for Artificial Agents**  
-**Dynamic Signature:** agency, intention, teleology  
-**Musical Logic:**  
-Artificial agents introduce:
+## **Section 10 — Implications for Artificial Agents**
 
-- directionality  
-- adaptive correction  
-- goal horizons  
+This section is modular and engineering‑precise.
 
-Music uses:
+The music uses:
 
-- forward‑leaning motif  
-- correction motif  
-- horizon pad  
-- subtle action pulses  
+- piano  
+- marimba  
 
-This is the **agentic** section.
+The motifs represent:
 
----
+- Φ (C–D–F–D)  
+- F (E–G–E–A)  
+- Ψ (G–E–C)  
 
-## **Section 12 — The Nature of Meaning**  
-**Dynamic Signature:** introspective, resonant, reflective  
-**Musical Logic:**  
-Meaning is:
-
-- relational  
-- emergent  
-- resonant  
-- contemplative  
-
-Music becomes:
-
-- extremely sparse  
-- descending motif  
-- wide semantic field  
-- rare interpretive shimmer  
-
-This is the **most philosophical** section.
+This is the sound of **functional architecture** — clean, modular, exact.
 
 ---
 
-## **Section 13 — Conclusion**  
-**Dynamic Signature:** integration, return, closure  
-**Musical Logic:**  
-The conclusion:
+## **Section 11 — Limitations and Future Work**
 
-- returns to center  
-- integrates the arc  
-- resolves the system  
+This section is reflective.
 
-Music uses:
+The music uses:
 
-- simple returning motif  
-- stable pad  
-- gentle echoes  
-- final C resolution  
+- felt piano  
+- soft pad  
 
-This is the **homecoming** of the score.
+The motifs express:
+
+- limitation (C–E♭–D–C)  
+- forward possibility (F–G–A–G)  
+
+This is the sound of **humility and openness**.
 
 ---
 
-# **3. Global Intensity Curve**
+## **Section 12 — Conclusion**
 
-The score follows a precise intensity arc:
+The conclusion is architectural closure.
 
-- **0–3:** static → low  
-- **4–6:** rising motion → spatial embodiment  
-- **7–9:** geometric peak → robustness  
-- **10–11:** structured contrast → agency  
-- **12–13:** introspection → resolution  
+The music uses:
 
-Intensity is controlled through:
+- felt piano  
+- warm pad  
 
-- layering  
-- spatial width  
-- motif density  
-- cycle interaction  
+The motifs:
 
-Never through volume.
+- restate the core structure  
+- resolve the system  
+- return to stability  
+
+This is the sound of **completion**.
 
 ---
 
-# **4. Instrumentation Logic**
-
-- **Felt piano** = agent, articulation, intention  
-- **Marimba** = relational articulation, correction, structure  
-- **Warm pad** = environment, semantic field, horizon  
-- **Sub‑bass** = embodiment, grounding  
-- **Airy synth** = meaning, reflection, implication  
-- **Pizzicato/woodblock** = structural markers, perturbations  
-
-Each instrument has a **semantic role**.
-
----
-
-# **Visual Intensity Curve (Global Arc of the Score)**
+# **Visual Intensity Curve (Global Arc of the Score)**  
+### *Updated for the 12‑Section Architecture*
 
 This curve shows how the **dynamic intensity** of the music evolves across the entire manuscript.  
 Intensity here means:
@@ -439,98 +296,99 @@ Intensity here means:
 ```
 Intensity
   ^
-  |                                 ┌─────────────── Peak Geometry (7–9)
-  |                                 │
-  |                                 │
-  |                         ┌───────┘
-  |                         │
-  |                 ┌───────┘
-  |                 │
-  |         ┌───────┘
-  |         │
-  |   ┌─────┘
+  |                               ┌─────────────── Peak Geometry (7)
+  |                               │
+  |                         ┌─────┘
+  |                        │
+  |                 ┌──────┘
+  |                │
+  |         ┌──────┘
+  |        │
+  |   ┌────┘
   |   │
   |   │
   |   │
   |   │
   |   │
-  +───┴───────────────────────────────────────────────────────────────→  Sections
-      0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  +───┴────────────────────────────────────────────────────────────→  Sections
+      1   2   3   4   5   6   7   8   9   10  11  12
 
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   | ...   |   |
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   | ...   |   |
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   |   |   |   |   |   |   |
-      |   |   |   |   |   |   |   | ...   |   |
+      |   |   |   |   |   |   |   |   |    |   |   |
+      |   |   |   |   |   |   |   |   |    |   |   |
+      |   |   |   |   |   |   |   |   |    |   |   |
+      |   |   |   |   |   |   |   |   |    |   |   |
 
-      0  Abstract — static  
-      1  Introduction — first motion  
-      2  Epistemic posture — framing  
-      3  Static information — frozen  
-      4  Low‑dynamic information — gentle drift  
-      5  Mapping loop — interlocking cycles  
-      6  Cognitive spacesuit — spatial embodiment  
-      7  Basin navigation — geometric peak  
-      8  Implications for science — reflective expansion  
-      9  Robustness — perturbation & recovery  
-     10  Classical control — contrast structure  
-     11  Artificial agents — teleological rise  
-     12  Nature of meaning — introspective fall  
-     13  Conclusion — return to center
+      1   Abstract — conceptual field  
+      2   Introduction — first articulation  
+      3   Orientation — framing structure  
+      4   Relational manifold — geometric emergence  
+      5   Mapping loop — cyclic rise  
+      6   Cognitive spacesuit — regulatory expansion  
+      7   Basin navigation — geometric peak  
+      8   Implications for science — unifying descent  
+      9   Robustness — perturbation & settle  
+     10   Artificial agents — modular clarity  
+     11   Limitations — reflective fall  
+     12   Conclusion — final closure
 ```
 
 ---
 
-# **Interpretation of the Curve**
+# **Interpretation of the Curve (Updated)**
 
-### **0–3: Static → Framed Stillness**
-- Section 0 is pure stillness.  
-- Section 1 introduces the first relational motion.  
-- Section 2 frames the system.  
-- Section 3 is the most static point in the entire score.
+### **1–3: Framing, Orientation, Conceptual Ground**
+- **1 (Abstract):** almost no motion — pure conceptual field  
+- **2 (Introduction):** first intentional articulation  
+- **3 (Orientation):** gentle structural rise  
 
-### **4–6: Emergence → Embodiment**
-- Section 4 begins slow drift.  
-- Section 5 introduces interlocking cycles (first major rise).  
-- Section 6 expands into spatial embodiment.
-
-### **7–9: Geometric Peak**
-- Section 7 (basin navigation) is the **structural apex**.  
-- Section 8 widens the conceptual horizon.  
-- Section 9 introduces perturbation and resilience.
-
-### **10–11: Contrast → Agency**
-- Section 10 contrasts classical vs. geometric regimes.  
-- Section 11 introduces teleological structure (agent intention).
-
-### **12–13: Reflection → Resolution**
-- Section 12 is the most introspective section since the beginning.  
-- Section 13 returns the system to its center and resolves the arc.
+This is the “setup” region.
 
 ---
 
-Here we go — curvature version, not just height.
+### **4–6: Emergence, Cyclicity, Regulation**
+- **4 (Relational Manifold):** first major geometric expansion  
+- **5 (Mapping Loop):** cyclic interlocking rise  
+- **6 (Cognitive Spacesuit):** regulatory broadening  
 
-I’ll treat:
-
-- **Intensity** = vertical position (as before)  
-- **Curvature** = how sharply the intensity is *changing* (where the arc bends hardest)
-
-You can drop this into `notes_arch_of_dyn_thgt.md` under the previous curve.
+This is the **emergent geometric body** of the system.
 
 ---
 
-### Curvature‑based intensity arc
+### **7: Geometric Peak**
+- **7 (Basin Navigation):** the apex of structural complexity  
+  - OB → RB → OB traversal  
+  - maximum relational motion  
+  - highest motif density  
 
-```text
+This is the **center of gravity** of the entire score.
+
+---
+
+### **8–9: Unification, Perturbation, Recovery**
+- **8 (Implications for Science):** conceptual widening, intensity softens  
+- **9 (Robustness):** irregular perturbation‑and‑settle  
+
+This is the **bend over the top** of the arc.
+
+---
+
+### **10–12: Engineering, Reflection, Closure**
+- **10 (Artificial Agents):** modular clarity, small rise  
+- **11 (Limitations):** reflective descent  
+- **12 (Conclusion):** final structural closure  
+
+This is the **cool‑down** of the system.
+
+---
+
+# **Curvature‑Based Intensity Arc (Updated)**  
+### *Where the system “changes how it changes”*
+
+```
 Curvature Intensity
   ^
   |                               ▲
-  |                               |   (High curvature: 6→7, 7→8, 8→9)
+  |                               |   (High curvature: 3→4, 6→7, 7→8, 11→12)
   |                         ┌─────┴─────┐
   |                        /             \
   |                       /               \
@@ -542,68 +400,44 @@ Curvature Intensity
   |     /                                       \
   |    /                                         \
   +───┴────────────────────────────────────────────────────────→ Sections
-      0   1   2   3   4   5   6   7   8   9   10  11  12  13
+      1   2   3   4   5   6   7   8   9   10  11  12
 ```
 
-Now the **curvature points**:
+---
+
+# **Local Curvature Highlights (Updated)**
+
+### **1 → 3: Gentle framing curvature**
+- small positive curvature  
+- system is “coming online”  
+
+### **3 → 4: First major bend**
+- strong positive curvature  
+- relational manifold emerges  
+
+### **4 → 6: Convex upward rise**
+- geometric expansion  
+- cyclicity  
+- regulation  
+
+### **6 → 7: Strongest positive curvature**
+- steep ascent into basin navigation  
+- conceptual acceleration  
+
+### **7 → 8: Curvature flips sign**
+- bending over the peak  
+- unification, widening  
+
+### **8 → 9: Negative curvature with structure**
+- perturbation‑and‑settle  
+
+### **11 → 12: Final strong negative curvature**
+- reflective descent  
+- closure  
 
 ---
 
-### Local curvature highlights (where the arc really “bends”)
-
-**1. 0 → 3: Flat–then‑drop curvature**
-
-- **0 → 1:** small positive curvature (first lift from zero)  
-- **1 → 2:** almost linear (gentle slope, low curvature)  
-- **2 → 3:** *negative* curvature — intensity drops into the frozen basin  
-  - This is the **first strong bend**: the system *chooses stillness*.
-
----
-
-**2. 3 → 6: Emergence curvature**
-
-- **3 → 4:** positive curvature — first real “upturn” from static  
-- **4 → 5:** curvature increases — mapping loop is a sharper rise than LD drift  
-- **5 → 6:** curvature softens — still rising, but more like a shoulder than a spike  
-  - This region is **convex upward**: the system is accelerating into geometry.
-
----
-
-**3. 6 → 9: Peak geometric curvature**
-
-This is where curvature is strongest.
-
-- **6 → 7:** big positive curvature — basin navigation is the **steepest conceptual climb**  
-- **7 → 8:** curvature flips sign — still high, but now bending *over the top*  
-- **8 → 9:** negative curvature with structure — robustness adds tension but doesn’t raise the peak  
-  - This triplet (6–7–8–9) is the **main curvature engine** of the whole arc.
-
----
-
-**4. 9 → 11: Contrast + agency curvature**
-
-- **9 → 10:** small positive curvature — contrast clarifies but doesn’t spike intensity  
-- **10 → 11:** gentle convexity — agency adds direction, not chaos  
-  - Curvature here is **moderate**: the system is refining, not exploding.
-
----
-
-**5. 11 → 13: Reflective fall curvature**
-
-- **11 → 12:** strong *negative* curvature — sharp bend downward into introspection  
-- **12 → 13:** curvature softens — a smooth glide into resolution  
-  - This mirrors 3 → 4, but inverted: **from motion into rest**, not rest into motion.
-
----
-
-### One‑line summary
-
-- **Highest curvature:** 2→3, 3→4, 6→7, 7→8, 11→12  
-- These are the **architectural hinge points** of the score — where the system *changes how it changes*, not just how intense it is.
-
----
-
-# **Vector‑Style Flow Diagram (ASCII)**  
+# **Vector‑Style Flow Diagram (Updated)**  
 ### *Direction + Magnitude of Conceptual Motion Across Sections*
 
 ```
@@ -611,76 +445,68 @@ Flow Vectors (↑ rising intensity, ↓ falling intensity, → stable, length = 
 
 Section   Vector
 --------  -----------------------------------------
-0         →
-1         ↑→
+1         →
 2         ↑→
-3         ↓↓↓↓↓
-4         ↑↑↑↑↑
+3         ↑→
+4         ↑↑↑↑
 5         ↑↑↑
 6         ↑→
 7         ↑↑↑↑↑
 8         ↓↓↓
 9         ↓↓
 10        ↑
-11        ↑→
-12        ↓↓↓↓↓
-13        ↓
+11        ↓↓↓
+12        ↓
 ```
 
 ---
 
-# **How to read this**
+# **How to Read This (Updated)**
 
 ### **Arrow direction**
-- **↑** = intensity rising (system gaining structure, motion, complexity)  
-- **↓** = intensity falling (system simplifying, resolving, introspecting)  
-- **→** = stable or nearly stable (flat or low‑slope region)
+- **↑** = rising intensity  
+- **↓** = falling intensity  
+- **→** = stable  
 
 ### **Arrow length**
-- More arrows = **greater magnitude** of change  
-- Fewer arrows = **gentle change**  
-- Single arrow = **minimal change**
-
-This gives you a **flow field** rather than a height curve.
+- more arrows = stronger change  
+- fewer arrows = gentle change  
 
 ---
 
-# **Interpretation**
+# **Interpretation (Updated)**
 
-### **0 → 1 → 2**  
-Small upward drift — the system is waking up.
-
-### **2 → 3**  
-Sharp downward vector — collapse into static information.
+### **1 → 3**  
+System wakes up, frames itself.
 
 ### **3 → 4 → 5 → 6**  
-Strong upward flow — emergence, mapping, embodiment.
+Emergence, cyclicity, regulation — steady upward flow.
 
 ### **6 → 7**  
-Another strong upward push — geometric ascent into basin navigation.
+Strongest upward vector — geometric peak.
 
 ### **7 → 8 → 9**  
-Downward flow — bending over the peak, robustness, recovery.
+Downward flow — unification, perturbation, recovery.
 
 ### **9 → 10 → 11**  
-Small upward drift — contrast and agency.
+Small upward drift, then reflective descent.
 
-### **11 → 12 → 13**  
-Strong downward flow — introspection and resolution.
+### **11 → 12**  
+Final downward glide into closure.
 
 ---
 
-# **Why this diagram is useful**
+# **Why This Diagram Matters**
 
-It shows:
+It gives you a **non‑musical**, **geometric**, **intuitive** understanding of:
 
-- **direction** of conceptual motion  
-- **magnitude** of change  
-- **regime transitions**  
-- **flow reversals**  
-- **stability zones**  
-- **accelerations and decelerations**  
+- where the system rises  
+- where it falls  
+- where it bends  
+- where it accelerates  
+- where it stabilizes  
+- where it resolves  
 
-It’s the closest ASCII analogue to a **phase‑flow diagram** in dynamical systems.
+It’s the **shape** of the manuscript, expressed as motion.
 
 ---
