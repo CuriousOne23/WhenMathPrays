@@ -88,7 +88,9 @@ A manifold that lives in time can.
 
 ## **3.2 Wave‑Like Relational Structure**
 
-Because the manifold evolves continuously, relational structure behaves like a **wave field**:
+Because the manifold evolves continuously, relational structure behaves like a **wave field** [11]:
+
+This wave‑based interpretation aligns with the TDS‑WDAS formulation of time‑dependent relational dynamics.
 
 - **Object basins (OBs)** appear as *standing‑wave* regions of stability.  
 - **Relational basins (RBs)** appear as *traveling‑wave* channels that carry relational motion.  
@@ -1350,6 +1352,9 @@ URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_R
 
 \[4\] Curious One, *Geometry of Thought Basins*, Internal Technical Report, 2025.  
 URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md)
+
+\[11\] Curious One, *TDS‑WDAS: Time‑Dependent Structure and Wave‑Dynamic Action Systems*, Internal Technical Report, 2025.  
+URL: [https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/TDS-WDAS.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/TDS-WDAS.md)
 
 ---
 
