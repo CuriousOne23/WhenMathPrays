@@ -1,6 +1,6 @@
-# **Section 12 — The Nature of Meaning (Minimalist Score Blueprint)**
+# **Section 11 — The Nature of Meaning (Minimalist Score Blueprint)**
 
-## **Musical Purpose of Section 12**
+## **Musical Purpose of Section 11**
 This section explores:
 
 - what meaning *is*  
