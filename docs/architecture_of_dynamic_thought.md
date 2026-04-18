@@ -156,12 +156,6 @@ $$
 
 These definitions treat OBs and RBs as **geometric primitives**, not semantic categories.
 
-> **Clarification.**  
-> This paper does not explain the origin of agency or the birth of a basin.  
-> Agency belongs to the creation of a system already capable of forming and updating OBs and RBs.  
-> How such a system comes into existence — and the moment a new basin is first created — is **future research**.  
-> Here we focus only on the geometry and recognition of basins *after* such a system already exists.
-
 ---
 
 ## **Composite OBs and RBs (Fractal Structure)**
