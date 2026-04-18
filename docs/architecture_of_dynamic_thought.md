@@ -49,13 +49,12 @@ Sections 12 and 13 outline limitations, future work, and conclusions.
 
 # **3. Dynamic Relational Geometry: A Manifold That Lives in Time**
 
-Static representations treat the world as a collection of discrete, well‑defined objects whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation is essential for communication and analysis, but it cannot express the continuous, wave‑like, context‑dependent motion through which meaning, coordination, and behavior actually unfold. Static systems describe snapshots. Dynamic cognition requires a geometry that moves.
+Static representations treat the world as a collection of discrete, well‑defined objects whose properties can be enumerated and whose relations can be specified in fixed form. This mode of representation is essential for communication and analysis, but it cannot express the continuous, wave‑like, context‑dependent motion through which **coordination and behavior** actually unfold. Static systems describe snapshots. Dynamic cognition requires a geometry that moves.
 
 This section introduces the central architectural shift of the paper:  
-**the relational manifold is not a static container that includes time as a dimension; it is a geometric structure that lives in time.**  
-The manifold evolves as the world evolves, and cognition emerges from this temporal deformation.
+**the relational manifold is not a static container that includes time as a dimension; it is a geometric structure that lives in time.** The manifold evolves as the world evolves, and cognition emerges from this temporal deformation.
 
-This shift transforms the architecture. Instead of treating meaning, coordination, and behavior as functions of static objects, the framework treats them as **patterns of motion** within a time‑indexed relational geometry.
+This shift transforms the architecture. Instead of treating coordination and behavior as functions of static objects, the framework treats them as **patterns of motion** within a time‑indexed relational geometry.
 
 ---
 
@@ -222,7 +221,7 @@ This is the operational backbone of the architecture.
 A time‑evolving relational geometry naturally exhibits behaviors typically associated with quantum systems:
 
 - **superposition‑like coexistence** of partial relational patterns  
-- **contextuality** (meaning depends on surrounding structure)  
+- **contextuality** (local relational structure depends on surrounding configuration)  
 - **non‑commutativity** (order of relational updates matters)  
 - **entanglement** (co‑evolution of relationally coupled OBs)  
 - **collapse** (sudden stabilization into a new basin)
@@ -246,7 +245,7 @@ This section establishes the central architectural claim of the paper:
 > Because it collapses, cognition is quantum‑like.  
 > Because it is fractal and holographic, this behavior appears at every scale.
 
-The remaining sections of the paper elaborate, clarify, or apply this central idea. Basins, transition regions, the mapping loop, the cognitive spacesuit, and the examples that follow all derive their meaning from this dynamic, time‑indexed geometry.
+The remaining sections of the paper elaborate, clarify, or apply this central idea. Basins, transition regions, the mapping loop, the cognitive spacesuit, and the examples that follow all derive their **structure and function** from this dynamic, time‑indexed geometry.
 
 ---
 
@@ -390,7 +389,7 @@ Section 4 expands the basin ontology introduced in Section 3:
 - the OB→RB→OB chain is a **conceptual simplification**, not a literal process  
 - movement is caused by **geometric deformation**, not force or attraction  
 
-This prepares the ground for Sections 5–9, which describe how meaning, perception, action, and narrative arise from this dynamic relational structure.
+This prepares the ground for Sections 5–9, which develop how perception, action, timing, and robustness arise from this dynamic relational structure.
 
 ---
 
@@ -1180,13 +1179,13 @@ Artificial agents can implement the mapping loop by constructing a lift $\Phi$, 
 
 ---
 
-# **12. Limitations and Future Work (Rewritten)**
+# **11. Limitations and Future Work**
 
 The architecture presented here offers a geometric account of dynamic behavior through the mapping loop, basin structure, and the cognitive spacesuit. While it provides a coherent framework for stability, coordination, and robustness, it does not attempt to explain everything. This section outlines the boundaries of the current formulation and identifies directions for future development.
 
 ---
 
-## **12.1 No Derivation of Basin Geometry**
+## **11.1 No Derivation of Basin Geometry**
 
 The architecture assumes the existence of basins and transition regions but does not derive:
 
@@ -1199,7 +1198,7 @@ These structures are treated as given. This is consistent with the architectural
 
 ---
 
-## **12.2 No Claim About Optimality**
+## **11.2 No Claim About Optimality**
 
 The architecture does not claim that:
 
@@ -1212,7 +1211,7 @@ The framework describes **how** coherent behavior unfolds, not whether it is opt
 
 ---
 
-## **12.3 No Semantic Interpretation**
+## **11.3 No Semantic Interpretation**
 
 The architecture does not interpret:
 
@@ -1225,7 +1224,7 @@ All structures are geometric and relational. No semantic or representational com
 
 ---
 
-## **12.4 No Phenomenology or Subjective Claims**
+## **11.4 No Phenomenology or Subjective Claims**
 
 The architecture does not address:
 
@@ -1239,7 +1238,7 @@ These topics lie outside the scope of a geometric account of dynamic behavior. T
 
 ---
 
-## **12.5 No Claim About Biological Mechanism**
+## **11.5 No Claim About Biological Mechanism**
 
 Although the architecture aligns with patterns observed in biological systems, it does not claim:
 
@@ -1252,7 +1251,7 @@ The framework is compatible with multiple biological realizations but does not s
 
 ---
 
-## **12.6 Future Work: Deriving Basin Geometry**
+## **11.6 Future Work: Deriving Basin Geometry**
 
 A major direction for future work is deriving basin geometry from:
 
@@ -1266,7 +1265,7 @@ This would provide a generative account of how basins emerge and adapt.
 
 ---
 
-## **12.7 Future Work: Learning the Lift and Projection**
+## **11.7 Future Work: Learning the Lift and Projection**
 
 The architecture assumes the existence of $\Phi$ and $\Psi$ but does not specify how they are learned.  
 Future work includes:
@@ -1279,7 +1278,7 @@ This would allow artificial agents to acquire the mapping loop autonomously.
 
 ---
 
-## **12.8 Future Work: Shaping Transition Regions**
+## **11.8 Future Work: Shaping Transition Regions**
 
 Transition regions determine how the system reconfigures under perturbation.  
 Future work includes:
@@ -1289,35 +1288,49 @@ Future work includes:
 - shaping RBs to improve robustness,  
 - analyzing how RBs influence timing and coordination.
 
-This would deepen the connection between relational geometry and adaptive behavior.
+In the full architecture, **RB‑internal transfer is substrate‑dependent**. Future work may explore how different substrates shape RB‑internal geometry and distributed flow.
 
 ---
 
-## **12.9 Summary**
+## **11.9 Summary**
 
 The architecture provides a geometric account of dynamic behavior but does not derive basin geometry, claim optimality, interpret semantics, or address phenomenology. Future work includes deriving basins, learning the lift and projection, and shaping transition regions. These extensions would strengthen the framework while preserving its relational and geometric foundations.
 
 ---
 
-# **13. Conclusion**
+# **12. Conclusion**
 
 This paper presented an architectural framework for understanding dynamic behavior through relational geometry.  
-The mapping loop— $W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)$ —provides a continuous pathway linking the reference world, the relational manifold, and outward behavior.  
-Basins and transition regions structure how the system moves through this manifold, while the cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
+The mapping loop —  
 
-The ball‑catching example illustrated how the architecture operates in real time.  
-It showed how relational geometry stabilizes behavior, how basins absorb perturbations, and how transition regions guide recovery when conditions change.  
-These mechanisms do not rely on prediction, symbolic reasoning, or discrete state transitions; they arise from the geometry itself.
+$$
+W(t) \to M_t \to M_{t+\Delta t} \to RWD(t)
+$$
 
-The framework is general and extensible.  
-It applies to biological systems, artificial agents, and multi‑agent coordination without requiring new primitives or domain‑specific assumptions.  
-By grounding behavior in relational structure rather than symbolic representation, the architecture offers a unified way to describe stability, coordination, and adaptive motion across diverse settings.
+— provides a continuous pathway linking the reference world, the relational manifold, and outward behavior. Basins and transition regions structure how the system moves through this manifold, while the cognitive spacesuit ensures that all transitions remain bounded, feasible, and coherent.
 
-The work does not claim to explain the origin of basins, derive optimality, or address phenomenology.  
-Instead, it provides a geometric foundation on which such questions can be explored.  
-Future work includes deriving basin geometry, learning the lift and projection, and shaping transition regions to improve robustness and adaptability.
+The ball‑catching example illustrated how the architecture operates in real time. It showed how relational geometry stabilizes behavior, how basins absorb perturbations, and how transition regions guide recovery when conditions change. These mechanisms do not rely on prediction, symbolic reasoning, or discrete state transitions; they arise from the geometry itself.
 
-The central contribution is architectural: a coherent, relational, and geometric account of how systems maintain stability and coordination while moving through a changing world.  
+The framework is general and extensible. It applies to biological systems, artificial agents, and multi‑agent coordination without requiring new primitives or domain‑specific assumptions. By grounding behavior in relational structure rather than symbolic representation, the architecture offers a unified way to describe stability, coordination, and adaptive motion across diverse settings.
+
+The work does not claim to explain the origin of basins, derive optimality, or address phenomenology. Instead, it provides a geometric foundation on which such questions can be explored. Future work includes deriving basin geometry, learning the lift and projection, and shaping transition regions to improve robustness and adaptability.
+
+Beyond its architectural coherence, the framework offers several advantages:
+
+1. **A geometric account of thought and flow** —  
+   It models the structure and movement of thought within a single, continuous geometric space.
+
+2. **A minimal set of cognitive primitives** —  
+   Basins, transition regions, and the mapping loop provide a compact vocabulary for describing cognitive dynamics.
+
+3. **Visibility into internal process** —  
+   The manifold makes the evolution of relational structure explicit, offering a way to analyze how internal dynamics unfold.
+
+4. **A structured physical model of thinking** —  
+   Thought is described as motion in a deforming geometric space, not as symbolic manipulation or discrete computation.
+
+The central contribution is architectural:  
+a coherent, relational, and geometric account of how systems maintain stability and coordination while moving through a changing world.  
 The mapping loop, basin structure, and cognitive spacesuit together form a framework that is simple, expressive, and capable of supporting a wide range of dynamic behaviors.
 
 ---
