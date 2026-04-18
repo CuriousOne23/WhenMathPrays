@@ -120,7 +120,6 @@ They are **temporal modes of geometric evolution**.
 ---
 
 # **3.4 OB and RB Recognition in a Dynamic Geometry**  
-*(Revised with compositional definitions + threshold rule)*
 
 In a static framework, objects must be defined in advance.  
 In a dynamic geometry, **objects are the stable patterns that persist through time**.
