@@ -823,11 +823,18 @@ Appendix B provides a numeric illustration of basin navigation. Appendix B u
 
 The mapping loop, basin geometry, and cognitive spacesuit together define an operational architecture for understanding how systems maintain coherence while moving between world‑state and manifold‑state. This section outlines how the same structural principles appear across scientific domains without introducing new primitives or assumptions. The goal is not to reinterpret these fields, but to show how relational geometry provides a common scaffold wherever internal dynamics must coordinate with outward behavior.
 
+The architecture does not claim that these domains are identical.  
+It identifies a **shared geometric structure** that recurs whenever a system must:
+
+- stabilize internal relational configurations,  
+- transition between them coherently,  
+- and coordinate these transitions with feasible outward behavior.
+
 ---
 
 ## **8.1 Physics: Relational Stability and Constraint**
 
-Physical systems often exhibit stable regions and transition pathways that mirror basin geometry. Examples include orbital capture, phase transitions, and mechanical equilibria.  
+Physical systems often exhibit stable regions and transition pathways that mirror basin geometry. Examples include orbital capture, phase transitions, and mechanical equilibria.
 
 These phenomena involve:
 
@@ -883,6 +890,8 @@ The architecture provides:
 
 Basins and transition regions offer a natural way to structure internal relational configurations without requiring explicit symbolic encoding \[10\].
 
+Appendices A–C use simplified OB→RB→OB transitions to illustrate these ideas. RB‑internal transfer is not modeled there, but the architecture fully supports detailed RB‑internal geometry when needed.
+
 ---
 
 ## **8.5 Multi‑Agent Systems: Shared Relational Geometry**
@@ -915,13 +924,13 @@ Across domains, the same structural elements recur:
 - regulatory layers that maintain coherence,  
 - continuous motion between internal and external regimes.
 
-The architecture does not claim that these domains are identical. Instead, it highlights a shared geometric structure that appears whenever a system must coordinate internal relational dynamics with outward behavior.
+The architecture does not replace existing theories. It offers a **geometric lens** through which diverse phenomena can be understood in a common structural language.
 
 ---
 
 ## **8.7 Summary**
 
-The mapping loop, basin geometry, and cognitive spacesuit together provide a unifying framework for understanding stability, coordination, and adaptive behavior across scientific domains. This framework does not replace existing theories; it offers a geometric lens through which diverse phenomena can be understood in a common structural language.
+The mapping loop, basin geometry, and cognitive spacesuit together provide a unifying framework for understanding stability, coordination, and adaptive behavior across scientific domains. This framework does not reinterpret these fields; it highlights a shared geometric structure that appears whenever internal relational dynamics must coordinate with outward behavior.
 
 ---
 
