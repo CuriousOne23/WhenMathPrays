@@ -1,64 +1,146 @@
 # **master_prompt.md**  
-### *Single Prompt for Generating the Entire Score as One Continuous Piece*
-
-This is a **single, continuous prompt** designed to generate the full 14‑section score of *Architecture of Dynamic Thought* in one pass.
-
-It encodes:
-
-- the **semantic instrumentation system**  
-- the **global dynamic arc** (intensity, curvature, vector flow)  
-- the **regime transitions**  
-- the **key map**  
-- the **section purposes**  
-- the **constraints** that keep the generator from breaking the ontology  
-
-Paste this into Suno/Udio/etc. to generate a **10–14 minute continuous piece**.
+### *One‑Shot Continuous Score Generator*  
+*(Paste this entire prompt into Suno/Udio to generate the full 12‑section score in one pass.)*
 
 ---
 
-# **MASTER PROMPT (copy/paste)**
+# **MASTER PROMPT — 12‑SECTION CONTINUOUS SCORE**
 
-> Create a continuous 14‑section minimalist score expressing the dynamic geometry of a conceptual system. Use only the following instruments: felt piano (agent), soft marimba (relation), warm pad (environment), subtle sub‑bass (embodiment), airy synth (meaning), and light woodblock (perturbation). No drums, no vocals, no strings, no rhythmic bass, no arpeggiated pads, no melodic marimba, no EDM elements, no build‑ups or drops.  
->  
-> **Global arc:** Begin in pure stillness, rise gently, collapse, re‑rise, reach a geometric peak, decline, rise again, collapse into meaning, and resolve softly.  
->  
-> **Keys:** C major for object‑like and structural sections, C Lydian for horizon expansion, A minor for agency and meaning.  
->  
-> **Section 0–3 (C major):** Felt piano + warm pad only. Extremely minimalist. Stillness → awakening → framing → collapse. No evolution in Section 3.  
->  
-> **Section 4 (C major):** Piano + pad. Slow upward motion.  
->  
-> **Section 5 (C major):** Piano + soft marimba + pad. Interlocking minimalist loops, gentle phase shifts.  
->  
-> **Section 6 (C major):** Marimba + pad + subtle sub‑bass. Spacious, environmental, embodied.  
->  
-> **Section 7 (C major):** Piano + marimba + pad + sub‑bass. Peak geometry. Stable repeating motifs, attractor‑like transitions.  
->  
-> **Section 8 (C Lydian):** Piano + pad + airy synth. Reflective, horizon‑expanding.  
->  
-> **Section 9 (C major):** Piano + marimba + pad + light woodblock. Small perturbations and recoveries.  
->  
-> **Section 10 (C major):** Piano + marimba + pad. Alternating rigid and fluid motifs.  
->  
-> **Section 11 (A minor):** Piano + marimba + pad + airy synth. Forward‑leaning, agentic, teleological.  
->  
-> **Section 12 (A minor):** Piano + pad + airy synth. Slow, spacious, contemplative.  
->  
-> **Section 13 (C major):** Piano + pad + soft marimba. Gentle integration and resolution.  
->  
-> Maintain smooth transitions between sections. Keep the entire piece coherent, stable, and minimalist. The music should feel like a single evolving system moving through conceptual regimes.
+Generate a **continuous 12‑section minimalist composition** based on the following architectural and musical constraints.  
+The piece must play as **one uninterrupted score**, but each section must retain its **identity**, **motifs**, **tempo**, **instrumentation**, and **structural role**.
+
+The overall style is:
+
+- minimalist  
+- geometric  
+- architectural  
+- non‑emotive  
+- non‑narrative  
+- clean, sparse, and precise  
+- no chords, no pedal, no modulation  
+- long tones, open intervals, clear motifs  
+
+Use **felt piano**, **soft electric piano**, **soft pad**, **warm pad**, **soft marimba**, **light pizzicato strings**, and **pizzicato bass** as specified.
+
+Transitions must be:
+
+- smooth  
+- continuous  
+- geometric  
+- never abrupt  
+- never cinematic  
+- never dramatic  
+
+The entire score should feel like a **single geometric object** unfolding in time.
 
 ---
 
-# **Notes for Use**
+# **SECTION‑BY‑SECTION SPECIFICATION**
 
-- This prompt typically produces a **10–14 minute** piece depending on the model.  
-- If the generator adds drums, vocals, strings, or rhythmic bass → regenerate.  
-- If the pad becomes rhythmic → regenerate.  
-- If marimba becomes melodic → regenerate.  
-- If sub‑bass becomes punchy → regenerate.  
-- If airy synth becomes sharp → regenerate.  
+## **Section 1 — Abstract**
+- Tempo 70 BPM, 4/4  
+- Felt piano + soft pad  
+- Sparse, geometric, wave‑like  
+- Motif: C–G–C with open intervals  
+- No chords, no pedal, no modulation  
+- Long tones, architectural calm  
 
-This is the **one‑shot version** of the entire architecture.
+## **Section 2 — Introduction**
+- Tempo 72 BPM, 4/4  
+- Solo felt piano  
+- Motif: C–E–G–E  
+- Clear, calm, architectural  
+- Light room reverb  
+
+## **Section 3 — Scope, Orientation, Epistemic Posture**
+- Tempo 68 BPM, 3/4  
+- Felt piano + soft marimba  
+- Motif: D–F–A–F  
+- Gentle, orienting, low‑dynamic  
+
+## **Section 4 — The Relational Manifold**
+- Tempo 66 BPM, 4/4  
+- Soft electric piano + marimba + pizzicato strings  
+- OB motif: C–G–C–G  
+- RB motif: E–A–E  
+- Distributed motif: D–F–D with rest  
+- Slow, geometric, architectural  
+
+## **Section 5 — The Mapping Loop**
+- Tempo 78 BPM, 6/8  
+- Soft electric piano + muted marimba  
+- Loop motif: C–E–G–D–F–E  
+- Four‑bar cycle: OB → RB → OB → reset  
+- Smooth, procedural, geometric  
+
+## **Section 6 — The Cognitive Spacesuit**
+- Tempo 76 BPM, 5/4  
+- Soft electric piano + muted marimba + pizzicato bass  
+- Bounded oscillation motif: F–E–F–D–F  
+- Constraint pulses on C  
+- Controlled, regulatory, geometric  
+
+## **Section 7 — Basin Navigation**
+- Tempo 82 BPM, 4/4  
+- Felt piano + soft marimba + pizzicato strings  
+- OB motif: C–G–C–G  
+- RB motif: D–F–A–F–D  
+- Catch OB motif: E–B–E–B  
+- Smooth, continuous navigation  
+
+## **Section 8 — Implications for Science**
+- Tempo 60 BPM, 4/4  
+- Soft electric piano + warm pad  
+- Unifying motif: C–G–E–G  
+- Cross‑domain motif: A–D–A  
+- Slow, spacious, architectural  
+
+## **Section 9 — Robustness and Perturbations**
+- Tempo 72 BPM, 7/8  
+- Felt piano + soft marimba + pizzicato strings  
+- Stable motif: C–G–C–E♭  
+- Small‑perturbation motif: D♯–F–D♯  
+- Redirective motif: A–F–D–F  
+- Irregular, geometric, perturbation‑and‑settle  
+
+## **Section 10 — Implications for Artificial Agents**
+- Tempo 80 BPM, 4/4  
+- Soft electric piano + muted marimba  
+- Φ motif: C–D–F–D  
+- F motif: E–G–E–A  
+- Ψ motif: G–E–C  
+- Clean, modular, engineering‑precise  
+
+## **Section 11 — Limitations and Future Work**
+- Tempo 64 BPM, 3/4  
+- Felt piano + soft pad  
+- Limitations motif: C–E♭–D–C  
+- Future‑work motif: F–G–A–G  
+- Slow, reflective, spacious  
+
+## **Section 12 — Conclusion**
+- Tempo 68 BPM, 4/4  
+- Felt piano + warm pad  
+- Closing motif: C–G–E–C  
+- Contribution motif: F–A–G–F  
+- Final cadence: C–C–G–C  
+- Calm, stable, architectural  
 
 ---
+
+# **GLOBAL RULES**
+
+- No modulation  
+- No chords  
+- No pedal  
+- No percussion  
+- No crescendos or cinematic swells  
+- No emotional coloration  
+- Maintain geometric clarity  
+- Maintain architectural precision  
+- Maintain sparse, minimalist texture  
+- Maintain continuity across sections  
+
+Transitions must be **smooth and geometric**, never abrupt.
+
+The entire piece should feel like a **single continuous geometric flow** from Section 1 through Section 12.
