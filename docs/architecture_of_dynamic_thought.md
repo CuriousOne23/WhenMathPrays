@@ -124,7 +124,7 @@ They are **temporal signatures of geometric evolution**.
 
 ## 3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold
 
-In a time‑evolving manifold, stability and alignment are not pre‑defined entities. They are **geometric recognition events** — patterns that appear when the manifold’s local deformation crosses specific thresholds.
+In a time‑evolving manifold, stability and alignment are not pre‑defined entities. They emerge as **geometric recognition events** — patterns that appear when the manifold’s local deformation crosses specific thresholds.
 
 An **object basin (OB)** is recognized when local deformation becomes sufficiently stable:
 
@@ -146,7 +146,7 @@ $$
 F(M_t) \in OB_j
 $$
 
-These are not “things” that exist independently. They are **stability signatures** and **directional‑coherence signatures** of the evolving geometry.
+These are not independent “things.” They are **stability signatures** and **directional‑coherence signatures** of the evolving geometry.
 
 ---
 
