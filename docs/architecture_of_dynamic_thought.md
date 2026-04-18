@@ -153,7 +153,7 @@ Because the geometry is fractal and holographic, OBs and RBs are not atomic. The
 A **composite OB** may be written:
 
 $$
-OB = \\{\, OB_k,\ RB_\ell \,\\}
+OB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 indicating that its stability arises from the coordinated coherence of multiple sub‑basins.
@@ -161,7 +161,7 @@ indicating that its stability arises from the coordinated coherence of multiple 
 A **composite RB** may be written:
 
 $$
-RB = \\{\, OB_k,\ RB_\ell \,\\}
+RB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 indicating that the relational channel is itself a structured bundle of OBs and RBs.
