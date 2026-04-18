@@ -1,6 +1,6 @@
-# **Section 13 — Conclusion (Minimalist Score Blueprint)**
+# **Section 12 — Conclusion (Minimalist Score Blueprint)**
 
-## **Musical Purpose of Section 13**
+## **Musical Purpose of Section 12**
 The conclusion is about:
 
 - integration  
