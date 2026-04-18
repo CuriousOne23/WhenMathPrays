@@ -1,4 +1,4 @@
-# **Section 11 — Implications for Artificial Agents (Minimalist Score Blueprint)**
+# **Section 10 — Implications for Artificial Agents (Minimalist Score Blueprint)**
 
 ## **Musical Purpose of Section 11**
 This section is about:
