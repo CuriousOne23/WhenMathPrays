@@ -1042,146 +1042,17 @@ Appendix C provides a numeric illustration of perturbation handling.
 
 ---
 
-If you want, I can now regenerate **Section 10** or move directly to the Conclusion (Section 13).
+# **10. Implications for Artificial Agents**
 
----
-
-# **10. Relation to Classical Control and Planning Frameworks**
-
-The framework developed in this paper is not a controller, planner, or machine. It is a **descriptive geometry** for analyzing systems whose behavior emerges through continuous relational structure. Because of this, it is natural to ask whether the framework is simply a reformulation of existing methods such as PID control, Model‑Predictive Control (MPC), or symbolic planning.
-
-These three frameworks represent the most powerful tools we have for engineered systems. They are foundational achievements. But cognitive systems exhibit attributes that none of these methods can measure, represent, or control. The geometric framework developed here, if proven, would express these attributes directly.
-
-The sections below outline several well‑established cognitive attributes, explain why the classical frameworks cannot represent them, and show how the geometric structures introduced in this paper can.
-
----
-
-## **10.1 PID Control**
-
-PID regulates error in a fixed coordinate space. It is highly effective for engineered systems whose behavior can be stabilized through proportional, integral, and derivative terms.
-
-Cognitive systems, however, exhibit attributes that PID cannot represent:
-
-### **Context‑dependent behavior**  
-The same external condition can produce different actions depending on internal state. PID cannot change which deviations are relevant based on internal conditions; all discrepancies are processed identically.
-
-### **Adaptive reorganization**  
-Cognitive systems reorganize internal structure based on internal conditions. PID cannot reorganize structure; it can only adjust predefined gain parameters.
-
-### **Multi‑task coherence**  
-Cognitive systems maintain coherence across multiple interacting tasks and can merge or separate them as internal and external conditions change. PID has no mechanism for relating or restructuring multiple objectives; each loop operates on a single fixed error.
-
-The geometric framework introduced here can represent these attributes through:
-
-- relational manifolds  
-- deformable basins  
-- transition regions  
-- bounded lift and bounded update  
-- continuous relational flow  
-
-PID cannot express these structures.
-
----
-
-## **10.2 Model‑Predictive Control (MPC)**
-
-MPC stabilizes behavior by predicting future states, optimizing over a horizon, and applying the first step of the optimal sequence. It is the most general and powerful control method for engineered systems.
-
-Cognitive systems, however, routinely exhibit attributes that MPC cannot represent:
-
-### **Non‑predictive real‑time action**  
-Cognitive systems adapt to changing and only partially specified environmental conditions. MPC operates only within a fixed, well‑defined model with predefined constraints and objectives.
-
-### **Goal deformation**  
-Goals in cognitive systems shift, soften, or reorganize as new information arrives. MPC assumes fixed cost functions and fixed objectives over the horizon.
-
-### **Integrated perception‑action flow**  
-Cognitive systems update behavior as conditions change, allowing them to maintain control across a wide range of dynamic and partially specified environments. MPC requires a model, a horizon, and a discrete optimization cycle, restricting it to environments that can be fully specified in advance.
-
-The geometric framework developed here can represent these attributes through:
-
-- continuous relational flow  
-- deformable basin geometry  
-- feasible projection  
-- bounded continuous evolution  
-
-MPC cannot express these structures.
-
----
-
-## **10.3 Symbolic Planning**
-
-Symbolic planning organizes behavior through discrete states, operators, and goal structures. It is essential for engineered symbolic systems.
-
-Cognitive systems, however, exhibit attributes that symbolic planning cannot represent:
-
-### **Dynamic internal relational structure**  
-Cognitive systems reorganize how conditions and tasks relate to one another as internal and external conditions evolve. Symbolic planning fixes its symbolic labels, operators, and relational structure in advance and cannot reorganize them.
-
-### **Perception‑action coupling**  
-Cognitive systems maintain control in dynamic, partially specified environments by updating behavior as perception unfolds. Symbolic planning requires a representational pause between sensing and acting, limiting it to environments that can be fully specified in advance.
-
-The geometric framework introduced here can represent these attributes through:
-
-- relational manifolds  
-- transition regions  
-- deformable basins  
-- bounded lift and update  
-- continuous relational evolution  
-
-Symbolic planning cannot express these structures.
-
----
-
-## **10.4 Why This Framework Is New**
-
-PID, MPC, and symbolic planning each capture one narrow slice of behavior:
-
-- PID: local error correction  
-- MPC: predictive optimization  
-- Planning: discrete symbolic sequencing  
-
-Cognitive systems do all of these when needed, but they also:
-
-- reorganize internal geometry  
-- maintain coherence across interacting tasks  
-- adapt relational structure continuously  
-- generate behavior through geometric convergence  
-- evolve under bounded, continuous constraints  
-- integrate perception, action, and internal dynamics in real time  
-
-None of the classical frameworks can represent these attributes. They lack the geometric structures required to do so.
-
-The framework developed in this paper introduces:
-
-- relational manifolds  
-- basin geometry  
-- transition regions  
-- bounded lift  
-- bounded update  
-- feasible projection  
-- temporal coherence  
-- continuous relational flow  
-
-These structures allow the framework to analyze cognitive systems in ways that PID, MPC, and symbolic planning cannot.
-
-**If this is correct, then the framework would represent a new contribution in the history of analysis, understanding, control, robotics, and cognitive architecture.**
-
----
-
-# **11. Implications for Artificial Agents (Rewritten)**
-
-Artificial agents that integrate perception, internal dynamics, and outward behavior face the same structural challenges as biological systems: they must coordinate motion through a changing world while maintaining stability, feasibility, and coherence.  
-The architecture presented here offers a geometric framework for organizing this coordination without relying on symbolic state machines, predictive optimization, or handcrafted error terms.
+Artificial agents that integrate perception, internal dynamics, and outward behavior face the same structural challenges as biological systems: they must coordinate motion through a changing world while maintaining stability, feasibility, and coherence. The architecture presented here offers a geometric framework for organizing this coordination without relying on symbolic state machines, predictive optimization, or handcrafted error terms.
 
 This section outlines how the components of the mapping loop— $\Phi$, $F$, and $\Psi$—can be instantiated in artificial systems, and how basins, transition regions, and the cognitive spacesuit provide a natural stability structure for embodied or embedded agents.
 
 ---
 
-## **11.1 Implementing the Lift $\Phi$**
+## **10.1 Implementing the Lift $\Phi$**
 
-In artificial systems, the lift $\Phi$ maps the reference world $W(t)$ into a relational manifold.  
-This mapping may be implemented using:
+In artificial systems, the lift $\Phi$ maps the reference world $W(t)$ into a relational manifold. This mapping may be implemented using:
 
 - geometric encoders,  
 - relational feature extractors,  
@@ -1198,7 +1069,7 @@ This ensures that the agent’s internal relational state evolves smoothly as th
 
 ---
 
-## **11.2 Implementing the Manifold Dynamics $F$**
+## **10.2 Implementing the Manifold Dynamics $F$**
 
 The update function $F$ governs how relational configurations evolve over time.  
 In artificial agents, $F$ may be implemented through:
@@ -1218,7 +1089,7 @@ This provides a geometric alternative to explicit error correction or predictive
 
 ---
 
-## **11.3 Implementing the Projection $\Psi$**
+## **10.3 Implementing the Projection $\Psi$**
 
 The projection $\Psi$ maps the manifold state back into outward behavior.  
 In artificial agents, this may involve:
@@ -1238,7 +1109,7 @@ The cognitive spacesuit ensures that $\Psi$ remains well‑posed even when $M_t$
 
 ---
 
-## **11.4 Engineering Basins and Transition Regions**
+## **10.4 Engineering Basins and Transition Regions**
 
 Basins and transition regions can be shaped in artificial systems through:
 
@@ -1259,11 +1130,11 @@ Transition regions provide:
 - smooth adaptation,  
 - recovery from perturbations.
 
-This offers a geometric alternative to discrete modes, symbolic states, or handcrafted controllers.
+In the full architecture, **RB‑internal transfer is substrate‑dependent**. Artificial systems may choose to model RB‑internal geometry explicitly or treat RBs as transition markers, depending on the application.
 
 ---
 
-## **11.5 Ensuring Safe Behavior Through the Cognitive Spacesuit**
+## **10.5 Ensuring Safe Behavior Through the Cognitive Spacesuit**
 
 The cognitive spacesuit provides a regulatory layer that ensures:
 
@@ -1283,7 +1154,7 @@ These mechanisms ensure that the agent’s behavior remains coherent even under 
 
 ---
 
-## **11.6 Why Relational Geometry Scales Better Than Symbolic Models**
+## **10.6 Why Relational Geometry Scales Better Than Symbolic Models**
 
 Symbolic models scale poorly in dynamic environments because they require:
 
@@ -1303,11 +1174,9 @@ This makes the architecture suitable for artificial agents operating in complex,
 
 ---
 
-## **11.7 Summary**
+## **10.7 Summary**
 
-Artificial agents can implement the mapping loop by constructing a lift $\Phi$, a relational update $F$, and a projection $\Psi$ that respect the geometry of basins and transition regions.  
-The cognitive spacesuit ensures bounded, feasible, and coherent behavior.  
-This provides a geometric alternative to classical control, symbolic planning, and predictive optimization, offering a scalable framework for robust, adaptive artificial agents.
+Artificial agents can implement the mapping loop by constructing a lift $\Phi$, a relational update $F$, and a projection $\Psi$ that respect the geometry of basins and transition regions. The cognitive spacesuit ensures bounded, feasible, and coherent behavior. This provides a geometric alternative to classical control, symbolic planning, and predictive optimization, offering a scalable framework for robust, adaptive artificial agents.
 
 ---
 
