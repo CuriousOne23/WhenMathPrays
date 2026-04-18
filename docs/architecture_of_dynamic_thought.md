@@ -121,8 +121,7 @@ They are **temporal modes of geometric evolution**.
 
 # **3.4 OB and RB Recognition in a Dynamic Geometry**  
 
-In a static framework, objects must be defined in advance.  
-In a dynamic geometry, **objects are the stable patterns that persist through time**.
+In a static framework, objects must be defined in advance. In a dynamic geometry, **objects are the stable patterns that persist through time**.
 
 An **object basin (OB)** is defined by temporal stability:
 
