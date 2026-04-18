@@ -455,7 +455,7 @@ $$
 M_t \in RB_{ij} \Rightarrow F(M_t) \in OB_j.
 $$
 
-RBs act as **funnels**: they guide the system from one OB to the next without discontinuity.
+RBs define the geometric transitions between OBs. The underlying physical evolution may involve lawful forces—conjecturally arising from d‑information in the physical substrate—but this is not attraction in the manifold space. In the manifold, these transitions appear as decreasing relational distance, not as pulling or agency.
 
 In the ball‑catching example:
 
@@ -546,8 +546,8 @@ The steepness of relational gradients determines:
 In the ball‑catching example:
 
 - as the ball approaches, relational gradients steepen,  
-- **$OB_{\text{intercept}}$** becomes more attractive,  
-- transitions occur earlier or later depending on $M_t$ and $F$.
+- the relational gradients around **$OB_{\text{intercept}}$** steepen, making transitions into that region occur earlier,  
+- timing adjusts automatically based on $M_t$ and $F$.
 
 This produces **adaptive timing** without prediction or semantic interpretation.
 
