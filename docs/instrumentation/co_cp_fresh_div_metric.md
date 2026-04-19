@@ -103,43 +103,45 @@ is completed.
 *(Only these primitives were provided. No others were available.)*
 
 ## **OB — Object Basin**  
-An OB is a stable region of the manifold that can hold, organize, and maintain content of any type — including nouns, verbs, sensory patterns, affective states, motor programs, narratives, and abstractions.
-An OB may exist without being active; it does not require signal to be present. In this dormant state, it is simply a geometric structure of the manifold.
+An OB is a **stable region** of the manifold that can **hold and maintain** content of any type (nouns, verbs, sensory patterns, affective states, motor programs, narratives, abstractions).  
+An OB may exist **dormant** with no signal present.  
+When energized, an OB performs **mechanical routing work** by stabilizing and directing signal into the basins it is mechanically connected to.  
+Energized **noun OBs** route signal into descriptive associations; energized **verb OBs** route signal into relational or motor structures.  
+Motor‑linked verb OBs are **classical d‑information basins**, requiring high‑dynamic information content.  
+OBs have **no semantics or agency** — they are purely mechanical structures.
 
-When an OB is energized by signal, it performs mechanical work by stabilizing and routing connections to other basins:
-
-An energized noun OB performs descriptive mechanical work by routing signal into the OBs that encode its associative structure.
-
-An energized verb OB performs relational or motor mechanical work by routing signal into the OBs and RBs that encode the relational or motor structure associated with that verb.
-
-Motor‑linked verb OBs are classical d‑information basins, requiring high‑dynamic information content to coordinate motor pathways.
-
-OBs have no semantics, no meaning, and no agency.
-They are purely mechanical configurations whose activation supports mechanical work within the relational manifold.
+---
 
 ## **RB — Relational Basin**  
-An RB is a geometric transition corridor between OBs.
-RBs do not generate or store work; they only transport the signal/information along available paths in the manifold.
-RBs do not transform content; they simply carry it.
-RBs have no semantics, agency, or interpretation; they are purely mechanical routes.
+An RB is a **geometric transition corridor** between OBs.  
+RBs do **not** generate or store work; they **only transport** signal along available paths.  
+RBs do not transform content; they simply **carry** it.  
+RBs have **no semantics, agency, or interpretation** — they are purely mechanical routes.
+
+---
 
 ## **OB/RB Co‑Fundamentality**  
-OB and RB are equally fundamental.
-Neither is primary.
-All cognition in this model is described as the trajectory’s movement between OBs (stable regions) and RBs (transport corridors).
-This co‑fundamentality is a modeling choice that preserves tractability.
+OB and RB are **equally fundamental**.  
+Neither is primary.  
+Cognition in this model is the trajectory’s movement between OBs (stable regions) and RBs (transport corridors).  
+This co‑fundamentality is a **modeling choice** that preserves tractability.
 
-## **Rupture**   
-A rupture occurs when an OB disconnects from the RB that is transporting the signal.
-This means the OB is no longer accepting or receiving the signal being carried along the RB.
-The signal continues along the RB, but the OB is no longer part of the active connection.
-Rupture has no semantics, agency, or interpretation — it is a purely mechanical disconnection event.
+---
+
+## **Rupture**  
+A **rupture** occurs when an OB **disconnects** from the RB that is transporting the signal.  
+The OB stops accepting the signal; the signal continues along the RB, but the OB is no longer part of the active connection.  
+Rupture is a purely mechanical **disconnection event**, with no semantics or agency.
+
+---
 
 ## **Repair**  
-Repair occurs when, after a rupture, an OB re‑establishes connection to the OB on the other side of the RB through which the signal was being transported.
-This reconnection may occur through an existing RB or through a newly grown RB if the manifold geometry has changed.
-If no compatible OB can re‑connect, the signal may reflect or dissipate.
-Repair has no semantics or agency — it is a mechanical reconnection event.
+**Repair** occurs when, after a rupture, an OB **re‑establishes connection** to the OB on the other side of the RB through which the signal was being transported.  
+Reconnection may occur through an **existing RB** or a **newly grown RB** if the manifold geometry has changed.  
+If no compatible OB can reconnect, the signal may reflect or dissipate.  
+Repair is a purely mechanical **reconnection event**.
+
+---
 
 ## **Static / LD / HD Information**  
 Work levels:
@@ -150,19 +152,25 @@ Work levels:
 
 These describe **mechanical effort**, not meaning.
 
+---
+
 ## **Thinking**  
-Thinking is the dynamic of the geometric relational process — the system’s trajectory through OBs (stable basins) and RBs (transitional corridors).
-It involves no semantics, interpretation, or meaning; it is purely mechanical motion within the relational manifold.
+Thinking is the **mechanical trajectory** through relational geometry — movement between OBs (stable basins) and RBs (transport corridors).  
+It involves **no semantics, interpretation, or meaning**; it is purely mechanical motion within the manifold.
+
+---
 
 ## **Expression**  
-Expressive Mapping is the projection of internal relational dynamics onto an external medium.
-It reveals the system’s current trajectory through OBs and RBs without transforming or interpreting content.
-Expression is a geometric trace, not a cognitive act.
+Expression is the **projection** of internal relational dynamics onto an external medium.  
+It reveals the system’s trajectory through OBs and RBs without transforming or interpreting content.  
+Expression is a **geometric trace**, not a cognitive act.
+
+---
 
 ## **Relational Geometry**  
-Relational Geometry is the geometric structure defined by the interplay of stability (OBs) and motion (RBs).
-OBs and RBs are co‑fundamental regions of the manifold.
-Thought is the system’s trajectory through this geometry, alternating between rest and transition.
-No semantics, meaning, or agency is involved — only mechanical dynamics.
+Relational Geometry is the geometric structure defined by the interplay of **stability** (OBs) and **transport** (RBs).  
+OBs and RBs are co‑fundamental regions of the manifold.  
+Thought is the system’s trajectory through this geometry, alternating between stability and transition.  
+No semantics, meaning, or agency is involved — only **mechanical dynamics**.
 
 ---
