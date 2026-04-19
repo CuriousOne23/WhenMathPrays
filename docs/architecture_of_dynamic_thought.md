@@ -304,9 +304,12 @@ $$
 \gamma(t) \in \\{\  OB_k,\ RB_\ell \ \\}_{\text{many, simultaneous}}
 $$
 
-This distributed flow allows the system to maintain multiple partial interpretations, parallel relational structures, and interacting possibilities before collapse.
+This distributed flow allows the system to maintain multiple partial interpretations, parallel relational structures, and interacting possibilities before collapse.  
 
-This is the key capability that current symbolic, object‑centric, or static‑embedding models cannot express.
+> **Canonical Clarification (Consolidated).**  
+> Throughout this paper, simplified OB→RB→OB progressions are used as **pedagogical aids**. They do not represent the full distributed, multi‑path, wave‑like relational motion that occurs in the complete architecture. Real cognition involves **many OBs and many RBs active simultaneously**, with transitions unfolding through substrate‑dependent, geometry‑driven deformation rather than discrete steps.  
+>  
+> Later examples and appendices adopt similar simplifications for clarity. These reductions are **illustrative only** and do not constrain the general form of $\Phi$, $F$, or $\Psi$, nor the internal geometry of RBs. The full architecture supports detailed, distributed relational flow; the simplified forms are used solely to make the mapping loop intuitive.
 
 ---
 
@@ -347,10 +350,6 @@ The architectural loop is defined as:
 $$  
 W(t) \xrightarrow{\Phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)
 $$
-
-The examples in this section and in the appendices are **illustrative only**; they do not define or constrain the general forms of $\Phi$, $F$, or $\Psi$. They are designed to give the reader an intuitive feel for how the mapping loop operates in a simple, mechanically familiar scenario.
-
-To make the example tractable, we describe the process using **a small number of OBs and a single RB**. This is not a structural limitation of the architecture. Real thought is **distributed**, involving **many OBs and many RBs simultaneously**, as described in Section 4. The simplified OB→RB→OB progression is a **representational aid**, not a literal account of cognitive motion.
 
 ---
 
@@ -436,9 +435,7 @@ The loop repeats until the ball is caught.
 
 ## **5.5 Why the Example Uses Simplified OBs and RBs**
 
-The catching example uses **two OBs and one RB** to illustrate the mapping loop.  
-This is not a claim about the true number of basins involved in real cognition.  
-It is a **didactic reduction** that makes the example:
+The catching example uses **two OBs and one RB** to illustrate the mapping loop. This is not a claim about the true number of basins involved in real cognition. It is a **didactic reduction** that makes the example:
 
 - tractable,  
 - interpretable,  
@@ -728,8 +725,6 @@ $$
 
 However, this OB→RB→OB chain is **only a conceptual simplification**.  
 Real navigation is **distributed**, involving **many OBs and many RBs simultaneously**, as described in Section 4.
-
-The simplified chain is used here only to make the example tractable.
 
 ---
 
