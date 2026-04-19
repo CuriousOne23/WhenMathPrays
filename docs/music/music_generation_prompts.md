@@ -18,7 +18,7 @@ Each section contains a **single, self‑contained, upload‑ready prompt** deri
 
 ---
 
-# **Section 3 — Scope, Orientation, Epistemic Posture**
+# **Section 3 — Dynamic Relational Geometry: A Manifold That Lives in Time**
 
 > **Minimalist duet for felt piano and soft marimba. Tempo 68 BPM, 3/4. Motif: D–F–A–F (quarter notes). Gentle, orienting, low‑dynamic. No chords, no pedal, no modulation. End with D–A–D.**
 
