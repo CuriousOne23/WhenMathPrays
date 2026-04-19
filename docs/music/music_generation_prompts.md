@@ -14,7 +14,7 @@ Each section contains a **single, self‑contained, upload‑ready prompt** deri
 
 # **Section 2 — Introduction**
 
-> **Minimalist duet for felt piano and soft marimba. Tempo 84 BPM, 4/4. Four‑note repeating motif: C–D–G–E with slight rhythmic variation. Piano begins alone; marimba enters at bar 5. Sparse, geometric, low‑dynamic motion. No chords, no pedal, no modulation. Light room reverb only. End with G–E–C in piano and a soft D in marimba..**
+> **Minimalist duet for felt piano and soft marimba. Tempo 84 BPM, 4/4. Four‑note repeating motif: C–D–G–E with slight rhythmic variation. Piano begins alone; marimba enters at bar 5. Sparse, geometric, low‑dynamic motion. No chords, no pedal, no modulation. Light room reverb only. End with G–E–C in piano and a soft D in marimba.**
 
 ---
 
