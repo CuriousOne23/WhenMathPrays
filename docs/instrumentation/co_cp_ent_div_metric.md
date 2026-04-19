@@ -1,5 +1,3 @@
----
-
 # **Copilot‑with‑CuriousOne: Entangled Behavioral Divergence Metrics**  
 *Version 1.0 — Instrumentation Layer*
 
