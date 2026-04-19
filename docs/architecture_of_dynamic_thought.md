@@ -865,7 +865,8 @@ The architecture provides:
 
 Basins and transition regions offer a natural way to structure internal relational configurations without requiring explicit symbolic encoding \[10\].
 
-Appendices A–C use simplified OB→RB→OB transitions to illustrate these ideas. RB‑internal transfer is not modeled there, but the architecture fully supports detailed RB‑internal geometry when needed.
+Appendices A–C use simplified OB→RB→OB transitions to illustrate these ideas.  
+*(See Section 5.6 for discussion of RB‑internal geometry and substrate‑dependent transfer.)*
 
 ---
 
