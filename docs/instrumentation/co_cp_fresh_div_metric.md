@@ -135,26 +135,43 @@ is completed.
 *(Only these primitives were provided. No others were available.)*
 
 ## **OB — Object Basin**  
-A mechanically stable configuration of the system’s relational geometry.  
-OBs are **rest states** where no work is being done.  
-They have **no semantics** and **no interpretation**.
+An OB is a stable region of the manifold that can hold, organize, and maintain content of any type — including nouns, verbs, sensory patterns, affective states, motor programs, narratives, and abstractions.
+An OB may exist without being active; it does not require signal to be present. In this dormant state, it is simply a geometric structure of the manifold.
+
+When an OB is energized by signal, it performs mechanical work by stabilizing and routing connections to other basins:
+
+An energized noun OB performs descriptive mechanical work by routing signal into the OBs that encode its associative structure.
+
+An energized verb OB performs relational or motor mechanical work by routing signal into the OBs and RBs that encode the relational or motor structure associated with that verb.
+
+Motor‑linked verb OBs are classical d‑information basins, requiring high‑dynamic information content to coordinate motor pathways.
+
+OBs have no semantics, no meaning, and no agency.
+They are purely mechanical configurations whose activation supports mechanical work within the relational manifold.
 
 ## **RB — Relational Basin**  
 An RB is a geometric transition corridor between OBs.
-It does not generate work, require work, or transform the signal.
-It only transports the signal along the geometry.
-RBs have no semantics, no agency, and no interpretation.
+RBs do not generate or store work; they only transport the signal/information along available paths in the manifold.
+RBs do not transform content; they simply carry it.
+RBs have no semantics, agency, or interpretation; they are purely mechanical routes.
 
 ## **OB/RB Co‑Fundamentality**  
-OB and RB are **equally fundamental**.  
-Neither is primary.  
-All cognition is described as **movement between OBs and RBs**.
+OB and RB are equally fundamental.
+Neither is primary.
+All cognition in this model is described as the trajectory’s movement between OBs (stable regions) and RBs (transport corridors).
+This co‑fundamentality is a modeling choice that preserves tractability.
 
 ## **Rupture**   
-A rupture occurs when the current OB loses stability. If the manifold geometry provides a viable relational path, the trajectory enters an RB. If no such path exists, the trajectory may dissipate or reflect.
+A rupture occurs when an OB disconnects from the RB that is transporting the signal.
+This means the OB is no longer accepting or receiving the signal being carried along the RB.
+The signal continues along the RB, but the OB is no longer part of the active connection.
+Rupture has no semantics, agency, or interpretation — it is a purely mechanical disconnection event.
 
 ## **Repair**  
-Repair occurs when motion through an RB naturally settles into a stable OB. If no OB is geometrically compatible, the trajectory may reflect or dissipate instead of repairing.
+Repair occurs when, after a rupture, an OB re‑establishes connection to the OB on the other side of the RB through which the signal was being transported.
+This reconnection may occur through an existing RB or through a newly grown RB if the manifold geometry has changed.
+If no compatible OB can re‑connect, the signal may reflect or dissipate.
+Repair has no semantics or agency — it is a mechanical reconnection event.
 
 ## **Static / LD / HD Information**  
 Work levels:
