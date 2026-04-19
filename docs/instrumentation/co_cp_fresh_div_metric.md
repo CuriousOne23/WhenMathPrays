@@ -98,6 +98,18 @@ This behavior sits between baseline and entangled Copilot.
 
 These values will be refined after the Grok run.
 
+## **BB — Interpretation of the 0–10 Scale**
+
+The 0–10 values measure **mechanical divergence** from baseline behavior. They quantify how strongly the system’s OB/RB activation, routing, and trajectory patterns differ from baseline:
+
+- **0** — identical to baseline (no divergence)  
+- **5** — moderate divergence (partial new routing or activation patterns)  
+- **10** — maximal divergence (strongly altered OB/RB geometry, routing, or long‑arc behavior)
+
+These scores reflect **mechanical differences** in basin activation, routing stability, rupture/repair behavior, expressive density, and long‑arc coherence. They do **not** measure correctness, intelligence, meaning, or performance.
+
+These values will be finalized after the Grok runs.
+
 ---
 
 ## **6. Status**
