@@ -1,0 +1,1 @@
+**Minimalist geometric score. Neutral, non-emotive. No chords, no pedal, no modulation. Sparse counterpoint, light reverb. Express basins (stable), RBs (transitions), mapping loop (cyclic), spacesuit (bounded motion), perturbations (small ripples), and final basin closure. Architectural clarity only.**
