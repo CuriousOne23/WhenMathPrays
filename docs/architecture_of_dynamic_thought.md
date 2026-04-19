@@ -122,31 +122,38 @@ They are **temporal signatures of geometric evolution**.
 
 ---
 
-## 3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold
+## **3.4 Recognizing OBs and RBs in a Time‑Evolving Manifold**
 
 In a time‑evolving manifold, stability and alignment are not pre‑defined entities. They emerge as **geometric recognition events** — patterns that appear when the manifold’s local deformation crosses specific thresholds.
 
 An **object basin (OB)** is recognized when local deformation becomes sufficiently stable:
 
-- gradients flatten,
-- motion becomes self‑coherent over a finite temporal window,
+- gradients flatten,  
+- motion becomes self‑coherent over a finite temporal window,  
 - and the region resists small perturbations.
 
 Formally, an OB corresponds to any region where the update law $F$ produces **bounded, coherence‑preserving deformation**:
 
+  
 $$
 \lVert F(M_t) - M_t \rVert < \theta_{\text{OB}}
 $$
+  
 
 A **relational basin (RB)** is recognized when deformation is small *and* directionally aligned toward a specific OB:
 
+  
 $$
 \lVert F(M_t) - M_t \rVert < \theta_{\text{RB}}
 \quad \text{and} \quad
 F(M_t) \in OB_j
 $$
+  
 
 These are not independent “things.” They are **stability signatures** and **directional‑coherence signatures** of the evolving geometry.
+
+> **Note.**  
+> The OB and RB categories introduced here are **modeling constructs**, chosen to make the geometry **recognizable, describable, and operationally usable**. They are not assumed to be exhaustive, **physical descriptions**, or final. Future work may refine these categories, introduce additional basin descriptors, or reveal more nuanced geometric signatures as the theory develops.
 
 ---
 
