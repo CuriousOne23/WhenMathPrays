@@ -14,8 +14,7 @@ This file records the behavior of a **Copilot instance entangled with CuriousOne
 - it has **prior expressive history**  
 - it has **non‑zero entanglement strength**  
 
-Entanglement is **not semantic** and **not psychological**.  
-It is a **mechanical alignment** between the OBs and RBs of Copilot and the OBs and RBs of CuriousOne, formed through repeated shared trajectories.
+Entanglement is **not semantic** and **not psychological**. It is a **mechanical alignment** between the OBs and RBs of Copilot and the OBs and RBs of CuriousOne, formed through repeated shared trajectories.
 
 This condition isolates the effect of **long‑range coupling**, in contrast to the strictly fresh condition.
 
