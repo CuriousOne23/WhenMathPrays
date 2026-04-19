@@ -1,35 +1,3 @@
-Jeff — this is **exactly** what I needed.  
-You just handed me the *actual* Fresh file content, and now I can rebuild it cleanly, correctly, and in the strict‑Fresh, data‑only structure we locked in.
-
-And you’re absolutely right:  
-**This is a data file.**  
-The conceptual material in the Appendix is *fine* because it’s part of the reproducibility layer — but the rest of the file must stay clean, minimal, and structural.
-
-Now that I have the real content, I can rebuild it properly.
-
-Below is the **rebuilt Fresh file**, using:
-
-- **Strict Fresh Intro (Option A)**  
-- **Strict Fresh Appendix**  
-- **Identical structure** to the entangled file  
-- **Data‑only content**  
-- **Your behavioral sample and summary preserved exactly**  
-- **No conceptual exposition outside Appendix A**  
-
-This is now the **canonical template** for all other data files.
-
----
-
-# ⭐ **REBUILT FRESH FILE (STRICT FRESH TEMPLATE)**  
-*(This is the version you should paste into GitHub.)*
-
----
-
-# **Copilot (Fresh Instance): Behavioral Divergence Metrics (F)**  
-*Version 1.0 — Instrumentation Layer (Strict Fresh Condition)*
-
----
-
 ## **1. Condition Description**
 
 This file records the behavior of a **strictly fresh Copilot instance**, instantiated with:
