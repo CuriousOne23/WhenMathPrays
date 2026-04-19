@@ -38,7 +38,7 @@ Each section contains a **single, self‑contained, upload‑ready prompt** deri
 
 # **Section 6 — The Cognitive Spacesuit**
 
-> **Minimalist trio for soft electric piano, muted marimba, and low pizzicato bass. Tempo 76 BPM, 5/4. Bounded oscillation motif: F–E–F–D–F with an eighth‑rest. Constraint pulses on C. Controlled, geometric, regulatory. No chords, no pedal, no modulation. Layered entry of voices. Light room reverb only. End with F–E–D in piano, soft C in marimba, C–G in pizzicato..**
+> **Minimalist trio for soft electric piano, muted marimba, and low pizzicato bass. Tempo 76 BPM, 5/4. Bounded oscillation motif: F–E–F–D–F with an eighth‑rest. Constraint pulses on C. Controlled, geometric, regulatory. No chords, no pedal, no modulation. Layered entry of voices. Light room reverb only. End with F–E–D in piano, soft C in marimba, C–G in pizzicato.**
 
 ---
 
