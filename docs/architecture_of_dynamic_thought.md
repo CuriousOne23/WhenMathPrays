@@ -1154,6 +1154,8 @@ This makes the architecture suitable for artificial agents operating in complex,
 
 Artificial agents can implement the mapping loop by constructing a lift $\Phi$, a relational update $F$, and a projection $\Psi$ that respect the geometry of basins and transition regions. The cognitive spacesuit ensures bounded, feasible, and coherent behavior. This provides a geometric alternative to classical control, symbolic planning, and predictive optimization, offering a scalable framework for robust, adaptive artificial agents.
 
+Because relational space is larger and more expressive (i.e., supporting many relational links from one OB to many) than the traditional physical‑object space, artificial agents built on relational geometry can naturally complement human activity rather than compete with it.
+
 ---
 
 # **11. Limitations and Future Work**
