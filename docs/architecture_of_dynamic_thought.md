@@ -43,7 +43,7 @@ Section 4 develops the basin ontology and the recognition rules for OBs and RB
 Section 5 presents the mapping loop and a simple ball‑catching illustration.  
 Section 6 introduces the cognitive spacesuit.  
 Sections 7–9 develop basin navigation, perturbation handling, and robustness.  
-Section 10 describes implications for artificial agents.  
+Section 10 describes implications for artificial intelligence.  
 Section 11 outlines limitations and future work.  
 Section 12 concludes.
 
