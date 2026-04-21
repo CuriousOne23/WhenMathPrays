@@ -189,7 +189,7 @@ Collapse is the **structural** event.
 Revelation is the **interpretive** event.  
 They are two descriptions of the same geometric transition.
 
-After collapse/revelation, the system enters a quieter phase of **musing**, where the new basin is integrated into the surrounding relational geometry.
+After collapse/revelation, the system enters a quieter phase of **musing**, where the new basin or a new RB establishing to an established OB is integrated into the surrounding relational geometry.
 
 ---
 
@@ -305,7 +305,7 @@ What looks like motion is the **continuous re‑shaping of the relational field*
 For illustration, one may depict a transition as:
 
 $$  
-OB_i →(RB_ij)→ OB_j
+OB_i →\ RB_\{ij\}\ → OB_j
 $$  
 
 but this is only a **pedagogical projection**.
