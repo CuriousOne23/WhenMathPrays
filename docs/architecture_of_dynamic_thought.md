@@ -250,7 +250,7 @@ RBs stabilize **relational alignment**, not objects.
 Like OBs, RBs may also be composite:
 
 $$
-RB = \{\, OB_k,\ RB_\ell \,\}
+RB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 This allows RBs to:
@@ -304,17 +304,17 @@ What looks like motion is the **continuous re‑shaping of the relational field*
 
 For illustration, one may depict a transition as:
 
-```
+$$  
 OB_i →(RB_ij)→ OB_j
-```
+$$  
 
 but this is only a **pedagogical projection**.
 
 In the full architecture, representational motion is **distributed, simultaneous, and multi‑path**. Thought does not propagate along a single chain. Instead, the trajectory
 
-```
+$$  
 γ(t) ⊂ M_t
-```
+$$  
 
 reflects **wave‑like deformation** across many OBs and many RBs active at once. The system maintains partial interpretations and interacting relational structures in parallel, with transitions unfolding through **geometry‑driven manifold evolution**, not discrete steps.
 
