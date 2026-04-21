@@ -231,7 +231,7 @@ These two basin types form the minimal stability structure needed for dynamic co
 OBs are stable regions of the manifold, but they are not atomic. They may be **composite**, formed from nested or overlapping sets of OBs and RBs:
 
 $$
-OB = \{\, OB_k,\ RB_\ell \,\}
+OB = \\{\  OB_k,\ RB_\ell \ \\}
 $$
 
 This compositionality allows:
