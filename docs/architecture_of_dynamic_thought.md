@@ -157,7 +157,7 @@ These are not independent “things.” They are **stability signatures** and **
 
 ---
 
-# **3.5 Collapse, Revelation, and Quantum‑Like Behavior (Revised)**
+# **3.5 Collapse, Revelation, and Quantum‑Like Behavior**
 
 A time‑evolving relational geometry naturally exhibits behaviors typically associated with quantum systems:
 
