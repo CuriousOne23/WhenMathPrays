@@ -157,7 +157,7 @@ These are not independent “things.” They are **stability signatures** and **
 
 ---
 
-## **3.5 Collapse, Revelation, and Quantum‑Like Behavior**
+# **3.5 Collapse, Revelation, and Quantum‑Like Behavior (Revised)**
 
 A time‑evolving relational geometry naturally exhibits behaviors typically associated with quantum systems:
 
@@ -171,8 +171,25 @@ These behaviors arise not from physics, but from geometry:
 
 > **Any manifold that lives in time, supports wave‑like propagation, and contains stable basins will exhibit quantum‑like behavior.**
 
-Collapse corresponds to the moment when high‑dynamic interference resolves into a new stable OB.  
-Revelation — the cognitive experience of sudden clarity — is the subjective correlate of this geometric event.
+**Collapse** is the geometric event in which distributed relational motion resolves into a new stable configuration.  
+Collapse can take two forms:
+
+1. **Birth of a new OB** — a genuinely new region of stability appears.  
+2. **Stabilization of a new RB** — a new relational alignment forms between existing OBs.
+
+Both are collapse events because both involve the sudden emergence of a previously unstable basin.
+
+**Revelation** is the cognitive recognition of that stabilization.  
+It is the moment the system “notices” the new basin — whether that basin is:
+
+- a new OB (insight, novelty), or  
+- a new RB (a new connection, interpretation, or alignment)
+
+Collapse is the **structural** event.  
+Revelation is the **interpretive** event.  
+They are two descriptions of the same geometric transition.
+
+After collapse/revelation, the system enters a quieter phase of **musing**, where the new basin is integrated into the surrounding relational geometry.
 
 ---
 
@@ -214,7 +231,7 @@ These two basin types form the minimal stability structure needed for dynamic co
 OBs are stable regions of the manifold, but they are not atomic. They may be **composite**, formed from nested or overlapping sets of OBs and RBs:
 
 $$
-OB = \\{\  OB_k,\ RB_\ell \ \\}
+OB = \{\, OB_k,\ RB_\ell \,\}
 $$
 
 This compositionality allows:
@@ -233,7 +250,7 @@ RBs stabilize **relational alignment**, not objects.
 Like OBs, RBs may also be composite:
 
 $$
-RB = \\{\  OB_k,\ RB_\ell \ \\}
+RB = \{\, OB_k,\ RB_\ell \,\}
 $$
 
 This allows RBs to:
@@ -269,7 +286,9 @@ The geometry evolves, and $\gamma(t)$ is the **record** of that evolution.
 
 ## **4.4 Geometry‑Driven Flow (No Forces, No Attraction)**
 
-In this proposal, the movement of thought — the apparent flow of energy from one region of the manifold to another — is not caused by force, attraction, or any agentic mechanism. Nothing pulls a configuration toward an OB, and nothing pushes it along an RB. Instead, **the geometry itself is changing**, and the system’s representational state moves because the manifold evolves under the update law:
+In this proposal, the movement of thought — the apparent flow of energy from one region of the manifold to another — is not caused by force, attraction, or any agentic mechanism. Nothing pulls a configuration toward an OB, and nothing pushes it along an RB.
+
+Instead, **the geometry itself is changing**, and the system’s representational state moves because the manifold evolves under the update law:
 
 $$
 M_{t+\Delta t} = F(M_t)
@@ -283,33 +302,21 @@ What looks like motion is the **continuous re‑shaping of the relational field*
 
 ## **4.5 Distributed Flow of Thought**
 
-For conceptual clarity, one may describe a transition as energy moving from one OB to another through an RB:
+For illustration, one may depict a transition as:
 
-$$
-OB_i \xrightarrow{RB_{ij}} OB_j
-$$
+```
+OB_i →(RB_ij)→ OB_j
+```
 
-But this is only a **representational aid**.
+but this is only a **pedagogical projection**.
 
-In reality, the process is:
+In the full architecture, representational motion is **distributed, simultaneous, and multi‑path**. Thought does not propagate along a single chain. Instead, the trajectory
 
-- **distributed**  
-- **simultaneous**  
-- **multi‑path**  
-- **wave‑like rather than corpuscular**  
+```
+γ(t) ⊂ M_t
+```
 
-Thought does **not** propagate along a single $OB \rightarrow RB \rightarrow OB$ chain. Instead, energy flows through **many OBs and many RBs at once**, producing a superposition of partial relational motions:
-
-$$
-\gamma(t) \in \\{\  OB_k,\ RB_\ell \ \\}_{\text{many, simultaneous}}
-$$
-
-This distributed flow allows the system to maintain multiple partial interpretations, parallel relational structures, and interacting possibilities before collapse.  
-
-> **Canonical Clarification (Consolidated).**  
-> Throughout this paper, simplified OB→RB→OB progressions are used as **pedagogical aids**. They do not represent the full distributed, multi‑path, wave‑like relational motion that occurs in the complete architecture. Real cognition involves **many OBs and many RBs active simultaneously**, with transitions unfolding through substrate‑dependent, geometry‑driven deformation rather than discrete steps.  
->  
-> Later examples and appendices adopt similar simplifications for clarity. These reductions are **illustrative only** and do not constrain the general form of $\Phi$, $F$, or $\Psi$, nor the internal geometry of RBs. The full architecture supports detailed, distributed relational flow; the simplified forms are used solely to make the mapping loop intuitive.
+reflects **wave‑like deformation** across many OBs and many RBs active at once. The system maintains partial interpretations and interacting relational structures in parallel, with transitions unfolding through **geometry‑driven manifold evolution**, not discrete steps.
 
 ---
 
@@ -336,7 +343,6 @@ Section 4 expands the basin ontology introduced in Section 3:
 - OBs and RBs are **composite, multi‑scale, and nested**  
 - representational motion is **distributed**, not corpuscular  
 - thought is **the evolving geometry itself**, not a moving entity  
-- the $OB \rightarrow RB \rightarrow OB$ chain is a **conceptual simplification**, not a literal process  
 - movement is caused by **geometric deformation**, not force or attraction  
 
 This prepares the ground for Sections 5–9, which develop how perception, action, timing, and robustness arise from this dynamic relational structure.
@@ -2006,23 +2012,7 @@ This demonstrates the inherent robustness of the mapping loop under perturbation
 
 ---
 
-Perfect — and yes, we absolutely need a glossary.  
-Since you’re in the GitHub editor right now, I’ll give you **two deliverables** in one pass:
-
-1. **A clean, reviewer‑friendly Glossary** (GRP‑style, architectural, non‑semantic, GitHub‑safe KaTeX).  
-2. **A Notation Reference** (symbols, operators, mappings, constraints).
-
-Both are written to drop directly into GRP_GLOSSARY.md or into the bottom of your main document.
-
-No drift, no new concepts, no metaphors — strictly architectural, relational, geometric.
-
----
-
-# **📘 Glossary (Polished, Architectural, GitHub‑Safe)**
-
-Below is the **Version 1.2** glossary aligned with your manuscript’s final structure.
-
----
+# **📘 Glossary**
 
 ## **A. Core Spaces and Structures**
 
