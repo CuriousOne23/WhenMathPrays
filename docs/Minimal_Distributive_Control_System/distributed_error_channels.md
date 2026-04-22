@@ -241,4 +241,6 @@ into:
 - a **visible, routed, diagnosable geometric object**  
 - embedded in the manifold that carries cognition and control.
 
+Next paper → [Self-Oranizing Control Geometry](./self_organizing_control_geometry.md)
+
 ---
