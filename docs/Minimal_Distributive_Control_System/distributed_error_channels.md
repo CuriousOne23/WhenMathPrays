@@ -57,27 +57,28 @@ They are the **visible geometry** of correction.
 ## **3. Local Structure: Error at an OB**
 
 Each OB maintains a **stance vector** in its local coordinate frame.  
-Given a required behavior, the OB experiences:
+Given an incoming relational configuration, the OB computes the **stance it would need to hold** to fully stabilize that configuration.  
+This produces:
 
 - local mismatch  
 - local curvature  
 - local basin boundaries  
 
-Let:
+### **Let:**
 
-- $e_{\text{OB}}$ = local error direction  
+- $x$ = current stance  
+- $x^\*$ = required stance (the stance the OB would need to hold to fully stabilize the local relational configuration)  
+- $e_{\text{OB}} = x^\* - x$ = local error direction  
 - $F_{\text{OB}}(x)$ = local correction field  
 - $B_{\text{OB}}$ = local basin  
 
-A DEC segment at an OB is defined by:
-
 $$
-\Delta x_{\text{OB}} = F_{\text{OB}}(x) + e_{\text{OB}}
+\Delta x_{\text{OB}} = F_{\text{OB}}(x) + (x^\* - x)
 $$
 
 This expresses how mismatch pushes the OB within its basin.
 
-If $\Delta x_{\text{OB}}$ remains inside $B_{\text{OB}}$, the mismatch is resolved locally.
+If $\Delta x_\text{OB}$ remains inside $B_{\text{OB}}$, the mismatch is resolved locally.
 
 ---
 
