@@ -63,7 +63,7 @@ MDCS makes these geometric structures **explicit and inspectable**, giving engin
    →  [Local Stance and Direction](./local_stance_and_direction.md)
 
 4. **Distributed Error Channels**  
-   → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+   → [Distributed Error Channels](./distributed_error_channels.md)
 
 5. **Self‑Organizing Control Geometry**  
    → [Self-Oranizing Control Geometry](./self_organizing_control_geometry.md)
