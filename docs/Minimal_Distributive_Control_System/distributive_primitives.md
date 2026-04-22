@@ -821,6 +821,8 @@ With OBs, RBs, IBs, and GBs defined, the architecture now has:
 
 This completes the conceptual arc of **distributive primitives**.
 
+Next paper →  [Distributive Primitives](./distributive_primitives.md)
+
 ---
 
 
