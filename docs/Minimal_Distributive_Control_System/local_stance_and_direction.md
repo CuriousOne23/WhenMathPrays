@@ -648,6 +648,8 @@ With stance fully defined, the architecture is now ready for the next layer:
 
 > **distributed_error_channels.md — how mismatch flows, how error is shaped, and how the system detects instability.**
 
+Next paper  → [Distributed Error Channels](./distributed_error_channels.md)
+
 ---
 
 # **Appendix: Local stance (what it actually is)**
@@ -760,4 +762,4 @@ The file you have open — *local_stance_and_direction.md* — is where we defin
 
 This is the mathematical heart of the system.
 
-Next paper  → [Distributed Error Channels](./distributed_error_channels.md)
+
