@@ -107,6 +107,181 @@ This is the geometric equivalent of “control authority” in classical systems
 
 ---
 
+# **6. Stance Dimensionality and Cost**
+
+A stance vector has only as many dimensions as required to maintain stable correlation with the signals and neighbors the OB is responsible for.  
+Dimensionality is not expressive capacity — it is **stabilization capacity**.
+
+### **6.1 Minimum Viable Dimensionality**
+The stance vector must be large enough to:
+
+- represent the local variation the OB stabilizes  
+- maintain covariance with its neighbors  
+- support curvature and rigidity parameters  
+- avoid collapse under perturbation  
+
+But no larger.
+
+### **6.2 Cost of Dimensionality**
+Each additional stance dimension increases:
+
+- parameter cost  
+- routing bandwidth  
+- energy consumption  
+- update complexity  
+- covariance maintenance overhead  
+
+This is why stance dimensionality is a **hardware‑visible parameter**.
+
+### **6.3 Dimensionality Tiers**
+- **Low‑dimensional stances (3–10 dims)**  
+  IO‑proximal, high‑precision, tightly constrained.
+
+- **Mid‑dimensional stances (10–50 dims)**  
+  Coordination, relational coupling, multi‑OB tasks.
+
+- **High‑dimensional stances (50–200 dims)**  
+  Composite behavior, timing arcs, meta‑control.
+
+The system never exceeds the dimensionality required for stable operation.
+
+---
+
+# **7. Stance Curvature and Stability Envelopes**
+
+Curvature determines how the stance responds to deviation.  
+It is the geometric equivalent of “how stiff or flexible the OB is.”
+
+### **7.1 High Curvature (Rigid Stance)**
+- strong corrective forces  
+- narrow stability envelope  
+- high precision  
+- low adaptability  
+
+Used near IOs or safety‑critical regions.
+
+### **7.2 Low Curvature (Flexible Stance)**
+- gentle corrective forces  
+- wide stability envelope  
+- high adaptability  
+- lower precision  
+
+Used deeper in the manifold where generalization is required.
+
+### **7.3 Stability Envelope**
+The stability envelope is the region around the stance where:
+
+- deviations are corrected  
+- updates are safe  
+- residuals remain bounded  
+
+Outside this envelope, mismatch is routed instead of absorbed.
+
+This prevents runaway updates and identity collapse.
+
+---
+
+# **8. Stance Interaction With Governing Basins**
+
+Governing Basins (GBs) are composite attractors formed by multiple OBs.  
+Stance vectors must remain compatible with the GBs they participate in.
+
+### **8.1 Stance Alignment Within a GB**
+When OBs co‑stabilize:
+
+- their stance vectors partially align  
+- residual routing between them decreases  
+- covariance increases  
+- a composite attractor forms  
+
+This is how multi‑OB coordination emerges.
+
+### **8.2 Stance Constraints Imposed by GBs**
+GBs impose constraints on stance updates:
+
+- updates must not break composite stability  
+- updates must preserve covariance with neighbors  
+- updates must remain within the GB’s stability envelope  
+
+This prevents local updates from destabilizing global behavior.
+
+### **8.3 GB‑Mediated Stance Correction**
+GBs can “pull” stance vectors back into alignment when:
+
+- drift accumulates  
+- noise perturbs the OB  
+- local updates conflict with global structure  
+
+This is the system’s distributed equivalent of “global correction” without a central controller.
+
+---
+
+# **9. Stance Drift, Correction, and Maintenance Basins**
+
+Over time, stance vectors may drift due to:
+
+- noise  
+- inconsistent signals  
+- partial updates  
+- environmental change  
+- long‑term adaptation  
+
+Maintenance Basins (a class of GBs) ensure long‑term stability.
+
+### **9.1 Detecting Drift**
+Drift is detected when:
+
+- covariance with neighbors weakens  
+- residual routing increases  
+- stance updates become erratic  
+- GB participation becomes unstable  
+
+### **9.2 Correcting Drift**
+Maintenance Basins apply:
+
+- curvature‑aware correction  
+- covariance‑preserving adjustment  
+- routing normalization  
+- stance re‑centering  
+
+This restores the OB to its stable operating posture.
+
+### **9.3 Pruning and Reinforcement**
+Maintenance Basins also:
+
+- prune unused stance dimensions  
+- reinforce frequently used ones  
+- recalibrate rigidity/fluidity parameters  
+
+This keeps the system efficient and prevents stance bloat.
+
+---
+
+# **10. Summary of Local Stance Mechanics**
+
+Local stance is the OB’s geometric posture — the minimal internal structure required for stabilization.  
+It determines:
+
+- what the OB stabilizes  
+- how it corrects deviation  
+- when it updates  
+- how it routes mismatch  
+- how it participates in composite behavior  
+- how it maintains identity over time  
+
+Stance vectors are:
+
+- bounded  
+- local  
+- curvature‑aware  
+- covariance‑constrained  
+- hardware‑visible  
+- globally coherent through GB participation  
+
+This completes the stance layer of the architecture.
+
+---
+
 # **Appendix: Local stance (what it actually is)**
 
 A **local stance** is:
