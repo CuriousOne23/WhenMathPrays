@@ -1,3 +1,112 @@
+# **1. Local Stance: The OB’s Geometric Posture**
+
+A **local stance** is the minimal geometric posture an OB maintains so it can stabilize the class of signals it is responsible for.  
+It is not a belief, memory, interpretation, or semantic representation.  
+It is simply the OB’s **operating shape** in relational space.
+
+The stance allows the OB to:
+
+- measure correlation with incoming signals  
+- absorb the portion of the signal that fits  
+- extract the portion that does not  
+- update itself when appropriate  
+- maintain identity across time and variation  
+
+Without a stance vector, an OB would have no way to stabilize anything.
+
+---
+
+# **2. Components of a Stance Vector**
+
+A stance vector is a compact geometric object containing the minimum structure required for stable digestion.  
+It includes:
+
+- **Direction** — what kind of variation the OB is tuned to stabilize  
+- **Magnitude** — how strongly it stabilizes that variation  
+- **Curvature** — how the OB responds to deviations from its preferred direction  
+- **Rigidity / Fluidity** — how easily the stance updates under repeated mismatch  
+- **Local Covariance Signature** — which neighboring OBs it co‑varies with  
+- **Stability Thresholds** — when to update vs. when to hold  
+
+These components are not semantic.  
+They are purely geometric constraints that allow the OB to function as a local attractor.
+
+---
+
+# **3. How Local Stance Interacts With Incoming Signals**
+
+When a signal arrives at an OB, the stance determines the entire digestion cycle:
+
+1. **Projection**  
+   The OB projects the incoming signal onto its stance vector to measure correlation.
+
+2. **Stabilization**  
+   The correlated component is absorbed and folded into the OB’s internal state.
+
+3. **Mismatch Extraction**  
+   The uncorrelated component becomes a **residual**.
+
+4. **Routing**  
+   The residual is passed through RBs toward OBs with higher expected resonance.
+
+5. **Stance Update (Conditional)**  
+   If mismatch is small and consistent, the stance adjusts slightly.  
+   If mismatch is large, the stance does not update — the residual is routed.
+
+This cycle is the mechanical heart of the system.  
+It is how the architecture maintains stability without interpretation.
+
+---
+
+# **4. How Stance Updates Occur**
+
+Stance updates are **local, bounded, and conservative**.  
+An OB updates its stance only when:
+
+- the mismatch is small  
+- the mismatch is consistent across multiple exposures  
+- the update does not violate covariance with neighbors  
+- the update does not destabilize existing composite structures  
+
+This ensures:
+
+- no runaway drift  
+- no uncontrolled expansion  
+- no collapse of identity  
+- no destabilization of Governing Basins  
+
+Updates are incremental and curvature‑aware.  
+The stance moves only as far as the geometry allows.
+
+If mismatch is large or inconsistent, the stance does **not** update.  
+The residual is routed instead.
+
+This is how the system avoids hallucination, overreach, and premature convergence.
+
+---
+
+# **5. Directionality and Local Correction**
+
+Directionality is the stance’s ability to generate **local corrective forces**.
+
+When a signal deviates from the stance:
+
+- curvature determines how strongly the OB pushes back  
+- rigidity determines how much the stance resists updating  
+- magnitude determines how much of the signal is absorbed  
+- covariance determines how the correction interacts with neighbors  
+
+Directionality ensures that:
+
+- small deviations are corrected  
+- large deviations are routed  
+- updates occur only when safe  
+- the OB remains a stable attractor  
+
+This is the geometric equivalent of “control authority” in classical systems — but distributed, local, and content‑agnostic.
+
+---
+
 # **Appendix: Local stance (what it actually is)**
 
 A **local stance** is:
