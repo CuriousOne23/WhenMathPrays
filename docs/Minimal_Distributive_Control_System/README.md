@@ -84,7 +84,7 @@ MDCS makes these geometric structures **explicit and inspectable**, giving engin
     → [*Efficiency Metrics and Health](./efficiency_metrics_and_health.md)
 
 11. **Significance and Activation**  
-    → [Significance and Activation](./significance_and_activaton.md)
+    → [Significance and Activation](./significance_and_activation.md)  
 
 12. **Implications for Future AI and Robotics**  
     → [Implications for Future AI and Robotics](./implications_for_future_ai_and_robotics.md)
