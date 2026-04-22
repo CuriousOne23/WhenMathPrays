@@ -1,10 +1,10 @@
-## **Revised README Abstract (with the projection/visibility insight integrated)**
+## **README Abstract (Updated with Projection + OB/RB Blindness Insight)**
 
 The **Minimal Distributive Control System (MDCS)** is a geometric, non‑agentic architecture for stable, scalable, interpretable cognition and control.  
 It replaces monolithic latent spaces with **local stabilizers (OBs)**, **residual‑only routing (RBs)**, **diagnostic insufficiency detectors (IBs)**, and **composite attractors (GBs)**.
 
 Modern AI systems operate inside an opaque latent space: a high‑dimensional array of numbers with no explicit structure, no modularity, and no way to observe stability, routing, failure, or capability growth.  
-AI engineers today only see **projections** of this space — embeddings, logits, attention maps — shadows cast into our observable space. The manifold itself remains hidden.
+AI engineers today only see **projections** of this space — embeddings, logits, attention maps — shadows cast into observable space. The manifold itself remains hidden, which means the stabilizers, routing geometry, basins, and attractors governing internal behavior are completely invisible.
 
 **MDCS converts this invisible latent space into a visible, engineered manifold** with explicit basins, flow fields, stance vectors, curvature, covariance, and safety envelopes.  
 This provides the one thing current latent spaces lack: **observability** — the ability to see, describe, and bound the system’s internal dynamics rather than inferring them from projections.
@@ -22,6 +22,31 @@ MDCS provides a complete, hardware‑visible framework for:
 
 Each document in this series is a **standalone specification** describing one subsystem of the architecture.  
 Together, they form a complete, reviewer‑friendly description of MDCS.
+
+---
+
+## **Why Current AI Cannot See OBs, RBs, or the Manifold**
+
+From the perspective of today’s AI practice, **OBs and RBs do not exist** — not because the systems lack internal structure, but because the structure is **not observable**.
+
+Current models expose only:
+
+- embeddings  
+- logits  
+- gradients  
+- attention maps  
+- loss curves  
+
+These are **projections** of the latent manifold into our space, not the manifold itself.  
+As a result, engineers cannot see:
+
+- local stabilizers (OBs)  
+- residual routing channels (RBs)  
+- insufficiency detectors (IBs)  
+- composite attractors (GBs)  
+- basins, flow fields, stance, curvature, or failure surfaces  
+
+MDCS makes these geometric structures **explicit and inspectable**, giving engineers direct visibility into the internal dynamics that modern AI hides.
 
 ---
 
