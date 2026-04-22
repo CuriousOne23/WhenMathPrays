@@ -345,6 +345,8 @@ The system exposes:
 - how they are contained  
 - how they are repaired  
 
-MDCS is not only stable and observable — it is **serviceable**.
+**MDCS is not only structured for stability and observability — it is architected so that it can be made *serviceable* as well.**
+
+Next paper  → [*Efficiency Metrics and Health](./efficiency_metrics_and_health.md)
 
 ---
