@@ -42,22 +42,22 @@ Together, they form a complete, reviewer‑friendly description of MDCS.
    → [Modularity and Scaling](./modularity_and_scaling.md)
 
 7. **Safety and Shutdown Protocols**  
-   → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+   → [Safety and Shutdown Protocols](./safety_and_shutdown_protocols.md)
 
 8. **Observability and Engineering Visibility**  
-   → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+   → [Observability and Engineering Visibility](./observability_and_engineering_visibility.md)
 
 9. **Serviceability and Fault Localization**  
-   → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+   → [Serviceability and Fault Localization](./serviceability_and_fault_localization.md)
 
 10. **Efficiency Metrics and Health**  
-    → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+    → [*Efficiency Metrics and Health](./efficiency_metrics_and_health.md)
 
 11. **Significance and Activation**  
-    → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+    → [Significance and Activation](./significance_and_activaton.md)
 
 12. **Implications for Future AI and Robotics**  
-    → `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]`
+    → [Implications for Future AI and Robotics](./implications_for_future_ai_and_robotics.md)
 
 ---
 
