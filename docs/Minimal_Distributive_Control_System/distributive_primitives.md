@@ -1,2 +1,1 @@
-What is the minimal set of primitives (OB, OOB, GOB) without specifying their implementation.
-Pure geometry, no engineering.
+Before we can define any specific primitive, we must understand the space in which a primitive can exist. A distributive control system cannot rely on complex units, symbolic representations, or centralized logic. Whatever the primitives are, they must be minimal, relational, and dynamic — capable of participating in distributed stabilization without carrying internal models or semantic content. This paper explores the constraints that shape such primitives, without yet specifying their implementation.
