@@ -1,4 +1,4 @@
-# **Local stance (what it actually is)**
+# **Appendix: Local stance (what it actually is)**
 
 A **local stance** is:
 
@@ -109,11 +109,5 @@ The file you have open — *local_stance_and_direction.md* — is where we defin
 This is the mathematical heart of the system.
 
 ---
-
-If you want, I can now:
-
-- write the full **Section 1–5** of *local_stance_and_direction.md*  
-- outline the file first  
-- or give you a compact “stance in one paragraph” version for the top of the document  
 
 Just tell me which direction you want to go.
