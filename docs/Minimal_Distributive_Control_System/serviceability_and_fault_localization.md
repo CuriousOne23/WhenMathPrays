@@ -92,7 +92,7 @@ Let:
 A fault occurs when:
 
 $$
-\| e \| > \theta_{\text{fault}}
+\lVert e \rVert > \theta_{\text{fault}}
 $$
 
 and the mismatch **cannot** be resolved locally or routed safely.
@@ -115,7 +115,7 @@ Each OB exposes:
 An OB is flagged as faulty when:
 
 $$
-\| x - x^\* \| > \theta_{\text{OB}}
+\lVert x - x^\* \rVert > \theta_{\text{OB}}
 $$
 
 and:
@@ -149,7 +149,7 @@ An RB is faulty when:
 Formally, instability is detected when:
 
 $$
-\| e_{\text{out}} \| > \alpha \| e_{\text{in}} \|, \quad \alpha > 1
+\lVert e_{\text{out}} \rVert > \alpha\ \lVert e_{\text{in}} \rVert, \quad \alpha > 1
 $$
 
 RB faults indicate **routing instability**.
@@ -163,7 +163,7 @@ IBs detect **structural insufficiency**.
 An IB fires when:
 
 $$
-\| e_{\text{IB}} \| > \theta_{\text{IB}}
+\lVert e_{\text{IB}} \rVert > \theta_{\text{IB}}
 $$
 
 IB activation indicates:
