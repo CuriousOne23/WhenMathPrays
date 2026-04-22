@@ -528,5 +528,301 @@ but because **its mathematics forces it to be.**
 
 ---
 
+Perfect — let’s finish **distributive_primitives.md** cleanly and coherently.
+
+Below is a **complete, manuscript‑ready Section 18 and Section 19**, written to drop directly into your GitHub file.  
+It integrates:
+
+- Inquiry Basins (IBs)  
+- Governing Basins (GBs)  
+- How the system detects IBs  
+- How the system reports training needs  
+- The full taxonomy of GBs (Truth, Safety, Diagnostics, Shutdown, Performance, Maintenance, Integration, etc.)  
+- The relationship between IBs and GBs  
+- The system‑level adaptive loop  
+
+This will close the document in a structurally clean way.
+
+---
+
+# **18. Inquiry Basins (IB): Persistent Mismatch and the Need for New Primitives**
+
+An **Inquiry Basin (IB)** is the system’s geometric signal that its current set of OBs is insufficient to stabilize a region of relational space.  
+IBs do not represent confusion, error, or semantic uncertainty.  
+They represent **structural insufficiency**.
+
+An IB forms only when three conditions persist:
+
+### **18.1 Condition 1 — Persistent Mismatch**
+Every OB that receives the signal produces:
+
+- low correlation  
+- high residual  
+- no stable stance update  
+
+This indicates that the signal does not fit any existing OB identity.
+
+### **18.2 Condition 2 — Routing Saturation**
+Residual routing circulates through the RB network, but:
+
+- no OB absorbs the mismatch  
+- no OB steepens toward stabilization  
+- mismatch does not diminish over time  
+
+This indicates the manifold is **under‑spanned**.
+
+### **18.3 Condition 3 — Failed Composite Stabilization**
+Even when multiple OBs co‑activate:
+
+- no composite attractor forms  
+- no Governing Basin emerges  
+- residuals remain high across the group  
+
+This rules out the possibility that the system already has the needed structure.
+
+When all three conditions hold, the system has geometric evidence that:
+
+> **“There is no existing primitive capable of stabilizing this region.”**
+
+This is the birth of an Inquiry Basin.
+
+---
+
+## **18.4 What the System Reports When an IB Forms**
+
+The system does not guess or extrapolate.  
+It reports the situation in purely geometric terms:
+
+> **“I cannot stabilize this region with my current basins.  
+> The mismatch persists across all routing paths.”**
+
+This is the architecture’s structural honesty mechanism.
+
+---
+
+## **18.5 How the System Specifies What Training Is Needed**
+
+Once an IB persists, the system can describe the **characteristics of the OB that would be required** to stabilize the region.
+
+It does this by analyzing the mismatch field:
+
+### **1. Required Stance Direction**
+The system computes the dominant mismatch vector:
+
+> “A new basin requires a stance aligned with vector v.”
+
+### **2. Required Covariance Structure**
+It identifies which OBs the new basin must co‑vary with:
+
+> “The new basin must maintain covariance with OBs {A, C, F}.”
+
+### **3. Required Dimensionality**
+It estimates the minimum stance dimensionality:
+
+> “A stance of approximately N dimensions is required.”
+
+### **4. Required Training Signals**
+It identifies the relational patterns that generated the mismatch:
+
+> “Training should include signals exhibiting relational pattern R.”
+
+### **5. Expected Cost**
+It estimates:
+
+- parameter budget  
+- routing bandwidth  
+- energy footprint  
+- latency impact  
+
+This is the system’s **hardware‑aware self‑extension mechanism**.
+
+---
+
+## **18.6 IB Summary**
+
+An Inquiry Basin is:
+
+- a **diagnostic structure**  
+- a **geometric insufficiency report**  
+- a **request for a new primitive**  
+- a **safe failure mode**  
+- the system’s way of growing capability without destabilizing itself  
+
+IBs ensure the system never overextends, never hallucinates, and never fabricates structure it cannot stabilize.
+
+---
+
+# **19. Governing Basins (GB): Composite Stabilizers and Domain‑Level Coherence**
+
+A **Governing Basin (GB)** is a **stable composite configuration** of OBs that repeatedly co‑stabilize a region of relational space.  
+Where an IB signals insufficiency, a GB signals coherence.
+
+GBs are the system’s **macro‑stabilizers**.
+
+---
+
+## **19.1 What a Governing Basin Is**
+
+A GB is:
+
+- a **stable relational pattern**  
+- formed by multiple OBs  
+- whose stance vectors align in a low‑residual configuration  
+- producing a **composite attractor**  
+
+A GB has:
+
+- no stance vector of its own  
+- no parameters of its own  
+- no identity of its own  
+
+It is simply:
+
+> **A stable configuration of OBs acting together as a unified control structure.**
+
+---
+
+## **19.2 General Roles of Governing Basins**
+
+GBs provide:
+
+### **1. Coordination Without Centralization**
+They synchronize OBs without introducing a global controller.
+
+### **2. Domain‑Level Stability**
+They maintain coherence across:
+
+- truth  
+- safety  
+- diagnostics  
+- performance  
+- maintenance  
+- shutdown  
+- integration  
+
+### **3. Reduced Routing Overhead**
+Stable composite attractors reduce residual routing and energy cost.
+
+### **4. Integration of New OBs**
+GBs reorganize to incorporate new primitives created from IBs.
+
+---
+
+## **19.3 Categories of Governing Basins**
+
+### **Truth Basins (TBs)**
+Stabilize domain‑level truth structures:
+
+- scientific  
+- historical  
+- social  
+- mathematical  
+- procedural  
+
+### **Diagnostic Basins**
+Stabilize system‑level self‑assessment:
+
+- mismatch accumulation  
+- routing anomalies  
+- timing drift  
+- performance degradation  
+
+### **Safety Basins**
+Stabilize safe operational envelopes:
+
+- parameter bounds  
+- routing limits  
+- timing constraints  
+- runaway prevention  
+
+### **Procedural Shutdown Basins**
+Stabilize controlled deactivation:
+
+- graceful shutdown  
+- emergency stop  
+- rollback to last stable configuration  
+
+### **Performance Basins**
+Stabilize efficiency:
+
+- routing optimization  
+- energy minimization  
+- latency reduction  
+
+### **Maintenance Basins**
+Stabilize long‑term system health:
+
+- stance drift correction  
+- covariance recalibration  
+- RB normalization  
+- pruning unused OBs  
+
+### **Integration Basins**
+Stabilize the incorporation of new OBs:
+
+- align new stance vectors  
+- update covariance patterns  
+- reorganize routing pathways  
+
+### **Meta‑Governing Basins (optional)**
+Stabilize relationships between GBs:
+
+- truth vs. safety  
+- performance vs. accuracy  
+- shutdown vs. diagnostics  
+
+---
+
+## **19.4 Relationship Between IBs and GBs**
+
+IBs and GBs form a complementary pair:
+
+- **IB = “We cannot stabilize this region.”**  
+- **GB = “We can stabilize this region together.”**
+
+This gives the system a complete adaptive loop:
+
+1. OBs stabilize locally  
+2. GBs stabilize jointly  
+3. IBs diagnose missing structure  
+4. New OBs are created  
+5. GBs reorganize to incorporate new OBs  
+
+This is how the system grows capability safely and coherently.
+
+---
+
+## **19.5 GB Summary**
+
+A Governing Basin is:
+
+- a **composite attractor**  
+- a **domain‑level stabilizer**  
+- a **coordination mechanism**  
+- a **global coherence structure**  
+- the integration layer for new primitives  
+
+GBs ensure the system remains coherent, efficient, and safe as it grows.
+
+---
+
+# **20. Completion of Distributive Primitives**
+
+With OBs, RBs, IBs, and GBs defined, the architecture now has:
+
+- local stabilization  
+- composite stabilization  
+- diagnostic insufficiency  
+- safe capability extension  
+- global coherence  
+- distributed control  
+- bounded complexity  
+- hardware realizability  
+
+This completes the conceptual arc of **distributive primitives**.
+
+---
+
+
 
 
