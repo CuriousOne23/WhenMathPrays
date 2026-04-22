@@ -165,11 +165,225 @@ This is the system’s **honest architectural contract**.
 
 ---
 
-# **If you want, I can now:**
-- turn this into a polished section for the paper  
-- create diagrams (ASCII or conceptual)  
-- produce a glossary of terms (OB, RB, IB, resonance, steepness, etc.)  
-- write a reviewer‑friendly “Why this matters” subsection  
-- or help you integrate this into the existing doc structure  
+Absolutely, Jeff — here is a **clean, structured, manuscript‑ready summary** of everything we developed **from Section 11 onward**, focused on *distributive primitives, OB identity, digestion, covariance, stance vectors, and realizability*.  
+No fluff, no repetition — just the architectural spine you can drop directly into `distributive_primitives.md`.
 
-Just tell me which direction you want to take next.
+---
+
+# **📘 Summary of Section 11 Onward — Distributive Primitives, Digestion, Identity, and Realizability**
+
+---
+
+## **11. Degenerate Geometries, Pathologies, and the Need for New Primitives**
+
+### **11.1 Persistent Mismatch as Geometric Evidence**
+When an OB cannot stabilize incoming signals — even after routing, steepening, and repeated attempts — the system enters a **degenerate region**:
+
+- mismatch remains high  
+- steepness does not collapse  
+- routing loops  
+- no OB can absorb the signal  
+
+This persistent mismatch forms an **Inquiry Basin (IB)**.
+
+### **11.2 IB Collapse vs. IB Persistence**
+- **IB collapse** → existing OBs were sufficient; the system just needed more exposure.  
+- **IB persistence** → the system lacks a primitive capable of stabilizing this region.
+
+This is the system’s **geometric signal** that a new OB is required.
+
+### **11.3 Human‑Defined vs. Self‑Created OBs**
+If the system cannot resolve the IB:
+
+- It reports:  
+  **“I cannot stabilize this region with my current basins.”**
+- It proposes:  
+  - the stance needed  
+  - the covariance structure missing  
+  - the expected cost and hardware implications  
+- A new OB is created (either autonomously or by human definition).
+
+This keeps the architecture **self‑diagnosing** and **self‑extending**.
+
+---
+
+## **12. Digestion: What an OB Does With Incoming Information**
+
+### **12.1 Digestion = Local Stabilization**
+An OB does **not** interpret, label, or understand signals.  
+It performs one operation:
+
+> **It stabilizes the part of the incoming signal that correlates with its identity.**
+
+### **12.2 What the OB Retains**
+An OB retains only:
+
+- its **updated stabilized stance**  
+- its **local covariance fingerprint**  
+- its **RB routing weights**  
+- its **diffusibility profile**  
+- its **stability thresholds**
+
+It does **not** retain:
+
+- content  
+- meaning  
+- symbols  
+- history  
+
+Everything is **geometric**, not semantic.
+
+### **12.3 What the OB Passes On**
+The OB passes on:
+
+> **The residual mismatch — the part of the signal it cannot stabilize.**
+
+This residual is:
+
+- high‑definition  
+- non‑interpreted  
+- mechanically shaped  
+- routed via RBs toward higher‑resonance OBs  
+
+This is the **HD residual channel** that preserves information across the manifold.
+
+---
+
+## **13. Correlation, Covariance, and OB Identity**
+
+### **13.1 Correlation as the Core Measurement**
+The OB measures:
+
+> **How the incoming signal co‑varies with its stance.**
+
+High correlation → resonance → digestion.  
+Low correlation → mismatch → routing.
+
+### **13.2 Covariance Defines OB Identity**
+An OB’s identity is the **stable covariance structure** it maintains:
+
+- what it stabilizes  
+- what it rejects  
+- how it co‑varies with neighbors  
+- how it routes mismatch  
+- how it participates in composite OBs  
+
+Identity = **stable relational geometry**, not semantics.
+
+### **13.3 Why Covariance Determines Hardware Cost**
+Covariance determines:
+
+- stance dimensionality  
+- memory footprint  
+- compute cost  
+- routing bandwidth  
+- energy consumption  
+- timing stability  
+
+This is why OB identity is the **cost driver** of the entire architecture.
+
+---
+
+## **14. The Stance Vector: The OB’s Internal Geometric State**
+
+### **14.1 Definition**
+A **stance vector** is:
+
+> **The OB’s internal geometric posture — the stable configuration it returns to when digesting signals.**
+
+It contains:
+
+- direction  
+- magnitude  
+- curvature  
+- covariance signature  
+- rigidity/fluidity  
+- stability thresholds  
+
+This is the OB’s **identity** expressed as math.
+
+### **14.2 Why the Stance Vector Exists**
+Without a stance vector, an OB cannot:
+
+- measure correlation  
+- stabilize signals  
+- extract residuals  
+- route mismatch  
+- maintain identity  
+- participate in composite structures  
+
+It is the **minimum viable internal state**.
+
+---
+
+## **15. Dimensionality of the Stance Vector**
+
+### **15.1 The Dimensionality Rule**
+The stance vector has:
+
+> **The minimum number of dimensions required to maintain stable correlation with the signals and neighbors the OB is responsible for.**
+
+Not more.  
+Not less.
+
+### **15.2 Three Tiers of Dimensionality**
+1. **Minimal stance vectors (3–10 dims)**  
+   - low‑level motor/sensory OBs  
+   - tight precision, narrow covariance  
+
+2. **Extended stance vectors (10–50 dims)**  
+   - coordination OBs  
+   - richer covariance, multi‑neighbor coupling  
+
+3. **Composite stance vectors (50–200 dims)**  
+   - yaw–pitch–roll, timing, meta‑control  
+   - high‑order relational stabilization  
+
+### **15.3 Dimensionality is Determined By**
+- domain complexity  
+- neighbor count  
+- required precision  
+- safety envelope  
+- timing constraints  
+- hardware/energy budget  
+
+This is how the architecture stays **realizable**.
+
+---
+
+## **16. Efficiency Gradient: From IO‑Proximal to Deep OBs**
+
+### **16.1 Near IOs**
+OBs near IOs are:
+
+- more rigid  
+- more precisely defined  
+- higher precision  
+- tightly calibrated  
+- constrained by embodiment  
+
+These OBs must be **high‑fidelity** because mistakes are expensive.
+
+### **16.2 Deeper in the Manifold**
+OBs deeper inside are:
+
+- more general  
+- more relational  
+- more flexible  
+- more reusable  
+- less tied to any single IO  
+
+These OBs stabilize **patterns of co‑variation**, not raw IO variation.
+
+### **16.3 Why This Gradient Matters**
+It creates:
+
+- cost efficiency  
+- energy efficiency  
+- timing stability  
+- safety  
+- scalability  
+
+This is the architecture’s **efficiency backbone**.
+
+
