@@ -307,4 +307,6 @@ Activation determines **how the system responds**.
 
 Together, they form the **dynamic engine** of MDCS behavior.
 
+Next paper  → [Implications for Future AI and Robotics](./implications_for_future_ai_and_robotics.md)
+
 ---
