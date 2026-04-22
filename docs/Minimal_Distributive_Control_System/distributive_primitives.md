@@ -1,4 +1,5 @@
-#*Notes*
+# *Notes*  
+
 Before we can define any specific primitive, we must understand the space in which a primitive can exist. A distributive control system cannot rely on complex units, symbolic representations, or centralized logic. Whatever the primitives are, they must be minimal, relational, and dynamic — capable of participating in distributed stabilization without carrying internal models or semantic content. This paper explores the constraints that shape such primitives, without yet specifying their implementation.
 
 OBs do not begin as rigid or discrete. Their apparent form depends on where they sit relative to the system’s IO boundaries. IOs enter the relational manifold at specific geometric locations, compressing the surrounding geometry and forcing nearby OBs into more corpuscular, separable modes. Away from these boundaries, the same OBs become increasingly fluid, distributed, and abstract. Rigidness is not a property of the primitive but a mode induced by boundary constraints.
