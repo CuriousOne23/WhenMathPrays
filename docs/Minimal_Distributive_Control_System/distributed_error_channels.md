@@ -119,7 +119,7 @@ IBs determine whether mismatch is:
 An IB activates when mismatch exceeds its diagnostic threshold:
 
 $$
-\| e_{\text{IB}} \| > \theta_{\text{IB}}
+\lVert e_\text{IB} \rVert > \theta_\text{IB}
 $$
 
 Activation marks the DEC segment as **insufficiency**, not noise.
