@@ -760,6 +760,4 @@ The file you have open — *local_stance_and_direction.md* — is where we defin
 
 This is the mathematical heart of the system.
 
----
-
-Just tell me which direction you want to go.
+Next paper  → [Distributed Error Channels](./distributed_error_channels.md)
