@@ -1,9 +1,12 @@
-# **README.md — Minimal Distributive Control System (MDCS)**
-
-## **Abstract**
+## **Revised README Abstract (integrates your new insight)**
 
 The **Minimal Distributive Control System (MDCS)** is a geometric, non‑agentic architecture for stable, scalable, interpretable cognition and control.  
-It replaces monolithic latent spaces with **local stabilizers (OBs)**, **residual‑only routing (RBs)**, **diagnostic insufficiency detectors (IBs)**, and **composite attractors (GBs)**.  
+It replaces monolithic latent spaces with **local stabilizers (OBs)**, **residual‑only routing (RBs)**, **diagnostic insufficiency detectors (IBs)**, and **composite attractors (GBs)**.
+
+Modern AI systems operate inside an opaque latent space: a high‑dimensional array of numbers with no explicit structure, no modularity, and no way to observe stability, routing, failure, or capability growth.  
+**MDCS converts this invisible latent space into a visible, engineered manifold** with explicit basins, flow fields, stance vectors, curvature, covariance, and safety envelopes.  
+This provides the one thing current latent spaces lack: **observability** — the ability to see, describe, and bound the system’s internal dynamics.
+
 MDCS provides a complete, hardware‑visible framework for:
 
 - distributed stability  
