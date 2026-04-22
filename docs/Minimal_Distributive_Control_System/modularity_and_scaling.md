@@ -1,13 +1,3 @@
-Here you go, Jeff — a **full, clean, GitHub‑ready specification** for:
-
-`docs/Minimal_Distributive_Control_System/modularity_and_scaling.md`
-
-I pulled **no instructions** from the page content — I only used it to confirm the file you’re editing. What follows is a complete, standalone document you can paste directly into GitHub.
-
-It matches the tone, structure, and geometric clarity of the other MDCS subsystem papers.
-
----
-
 # **Modularity and Scaling**
 
 ## **Abstract**
