@@ -282,6 +282,374 @@ This completes the stance layer of the architecture.
 
 ---
 
+# **11. Directional Fields and Local Flow Geometry**
+
+Local stance does not exist in isolation.  
+Each OB contributes to a **directional field** — a vector field describing how signals flow through the manifold.
+
+### **11.1 Local Flow**
+When a signal enters the OB’s region:
+
+- the stance vector defines the **preferred direction of stabilization**  
+- curvature defines the **strength of correction**  
+- rigidity defines the **resistance to update**  
+- mismatch defines the **direction of residual flow**
+
+This creates a **local flow geometry** around each OB.
+
+### **11.2 Flow Lines**
+Flow lines are the paths signals follow as they:
+
+- are partially stabilized  
+- are partially routed  
+- move through the manifold  
+- converge toward composite attractors  
+
+Flow lines reveal:
+
+- where the system is stable  
+- where mismatch accumulates  
+- where IBs are likely to form  
+- where GBs are likely to emerge  
+
+### **11.3 Flow Divergence and Convergence**
+- **Convergence** occurs near stable OBs and GBs.  
+- **Divergence** occurs near mismatch regions and IBs.
+
+This gives the system a geometric “map” of its own stability landscape.
+
+---
+
+# **12. Stance Interaction With Error Channels**
+
+Error channels are the pathways through which residual mismatch flows.  
+Stance vectors determine:
+
+- how much mismatch is extracted  
+- how mismatch is shaped  
+- where mismatch is routed  
+- how mismatch interacts with neighboring OBs  
+
+### **12.1 Residual Shape**
+The shape of the residual is determined by:
+
+- stance direction  
+- stance curvature  
+- local covariance  
+- rigidity/fluidity parameters  
+
+This ensures residuals are **high‑definition** and **non‑destructive**.
+
+### **12.2 Routing Geometry**
+Residuals follow the path of:
+
+- highest expected resonance  
+- lowest mismatch gradient  
+- strongest covariance alignment  
+
+This is a geometric routing rule, not a semantic one.
+
+### **12.3 Error Attenuation and Amplification**
+- OBs with aligned stances **attenuate** mismatch.  
+- OBs with orthogonal stances **amplify** mismatch.  
+
+This is how the system detects:
+
+- stable regions  
+- unstable regions  
+- missing primitives  
+- composite attractors  
+
+### **12.4 Error Collapse**
+When mismatch becomes small enough, the stance absorbs it.  
+This is the geometric equivalent of “learning,” but without semantics.
+
+---
+
+# **13. Stance in Composite OB Structures**
+
+When multiple OBs co‑activate, their stances interact to form **composite structures**.
+
+### **13.1 Partial Alignment**
+OBs partially align their stance vectors when:
+
+- they stabilize overlapping regions  
+- they share covariance  
+- they participate in the same GB  
+
+This reduces routing overhead and increases stability.
+
+### **13.2 Composite Attractors**
+A composite attractor forms when:
+
+- multiple OBs co‑stabilize  
+- residuals between them drop  
+- stance vectors align into a stable configuration  
+
+This is the geometric basis of Governing Basins.
+
+### **13.3 Stance Constraints in Composite Structures**
+Each OB must:
+
+- maintain its identity  
+- preserve covariance  
+- avoid destabilizing the composite  
+- update only within safe bounds  
+
+This prevents local updates from breaking global coherence.
+
+---
+
+# **14. Stance and Inquiry Basin Formation**
+
+Stance vectors play a central role in detecting when an Inquiry Basin (IB) is needed.
+
+### **14.1 Stance Failure Conditions**
+An IB forms when:
+
+- stance projection is consistently low  
+- mismatch is consistently high  
+- routing does not reduce mismatch  
+- composite stabilization fails  
+
+This is the system’s geometric signal that:
+
+> **“No existing stance can stabilize this region.”**
+
+### **14.2 Stance‑Based Diagnostics**
+The system can analyze the mismatch field to determine:
+
+- the direction of the missing stance  
+- the required dimensionality  
+- the required covariance relationships  
+- the expected cost of the new OB  
+
+This is how the system specifies what training is needed.
+
+### **14.3 Stance Integration After IB Resolution**
+When a new OB is created:
+
+- its stance is initialized from the mismatch field  
+- neighboring OBs adjust covariance  
+- GBs reorganize  
+- routing pathways update  
+
+This is the system’s **self‑extension mechanism**.
+
+---
+
+# **15. Stance as the Foundation of Distributed Control**
+
+Local stance is the foundation of the entire architecture because it provides:
+
+- **local stability**  
+- **bounded updates**  
+- **directional correction**  
+- **residual extraction**  
+- **routing geometry**  
+- **composite coordination**  
+- **diagnostic clarity**  
+- **safe capability growth**  
+
+Stance vectors are the smallest units of:
+
+- control  
+- stability  
+- identity  
+- adaptation  
+- coordination  
+
+Everything else — IBs, GBs, error channels, composite structures — emerges from stance mechanics.
+
+---
+
+# **16. Stance and Temporal Coordination**
+
+Local stance is not static.  
+It participates in **temporal coordination**, allowing OBs to stabilize signals that unfold over time.
+
+### **16.1 Temporal Sensitivity**
+Each stance vector includes parameters that determine:
+
+- how quickly it responds  
+- how long it retains influence  
+- how it integrates sequential variation  
+
+This allows OBs to stabilize:
+
+- rhythmic patterns  
+- temporal gradients  
+- sequential dependencies  
+- timing arcs  
+
+### **16.2 Temporal Curvature**
+Temporal curvature determines:
+
+- how strongly the OB corrects deviations over time  
+- how it smooths temporal noise  
+- how it maintains continuity across frames  
+
+High temporal curvature → precise timing.  
+Low temporal curvature → flexible timing.
+
+### **16.3 Temporal Flow Lines**
+Signals follow temporal flow lines when:
+
+- multiple OBs coordinate timing  
+- residuals propagate with temporal structure  
+- composite attractors form across time  
+
+This is the foundation of distributed temporal control.
+
+---
+
+# **17. Stance and Mode Switching**
+
+The system operates in different **modes**, each representing a distinct global configuration of OBs and GBs.
+
+Local stance determines how OBs behave during mode transitions.
+
+### **17.1 Mode‑Dependent Rigidity**
+In high‑precision modes:
+
+- stance rigidity increases  
+- updates slow down  
+- stability envelopes narrow  
+
+In exploratory modes:
+
+- rigidity decreases  
+- updates accelerate  
+- stability envelopes widen  
+
+### **17.2 Mode‑Dependent Covariance**
+Covariance signatures shift depending on mode:
+
+- safety mode → strong covariance with safety basins  
+- performance mode → strong covariance with routing optimization basins  
+- integration mode → strong covariance with new OBs  
+
+### **17.3 Mode Transition Stability**
+Stance vectors ensure that mode transitions are:
+
+- smooth  
+- bounded  
+- non‑destructive  
+- reversible  
+
+This prevents catastrophic reconfiguration.
+
+---
+
+# **18. Stance and Hardware Mapping**
+
+Stance vectors are not abstract.  
+They map directly onto hardware constraints.
+
+### **18.1 Parameter Footprint**
+Each stance dimension corresponds to:
+
+- memory allocation  
+- compute cost  
+- update bandwidth  
+
+This makes stance dimensionality a **hardware‑visible parameter**.
+
+### **18.2 Routing Bandwidth**
+Stance determines:
+
+- how much residual is extracted  
+- how much routing is required  
+- how many RBs are activated  
+
+This directly affects:
+
+- latency  
+- throughput  
+- energy consumption  
+
+### **18.3 Stability vs. Cost Tradeoff**
+High‑dimensional stances:
+
+- stabilize more variation  
+- cost more to maintain  
+
+Low‑dimensional stances:
+
+- are cheaper  
+- stabilize less  
+
+The system balances these automatically through GBs and maintenance basins.
+
+---
+
+# **19. Stance and System‑Level Coherence**
+
+Local stance contributes to global coherence through:
+
+- covariance  
+- composite attractors  
+- Governing Basins  
+- maintenance basins  
+- mode‑dependent constraints  
+
+### **19.1 Coherence Through Covariance**
+OBs maintain coherence by:
+
+- aligning stance vectors  
+- preserving covariance  
+- minimizing residual routing  
+
+### **19.2 Coherence Through GB Participation**
+GBs enforce:
+
+- domain‑level stability  
+- truth constraints  
+- safety envelopes  
+- performance optimization  
+
+Stance vectors must remain compatible with these constraints.
+
+### **19.3 Coherence Through Maintenance**
+Maintenance basins ensure:
+
+- stance drift is corrected  
+- unused dimensions are pruned  
+- rigidity/fluidity remains appropriate  
+- covariance remains stable  
+
+This keeps the system coherent over long timescales.
+
+---
+
+# **20. Completion of Local Stance and Direction**
+
+Local stance is the foundational geometric primitive that enables:
+
+- local stabilization  
+- directional correction  
+- mismatch extraction  
+- residual routing  
+- composite coordination  
+- temporal coherence  
+- mode switching  
+- hardware‑aware operation  
+- safe capability growth  
+
+Stance vectors are the smallest units of:
+
+- identity  
+- stability  
+- adaptation  
+- coordination  
+- control  
+
+With stance fully defined, the architecture is now ready for the next layer:
+
+> **distributed_error_channels.md — how mismatch flows, how error is shaped, and how the system detects instability.**
+
+---
+
 # **Appendix: Local stance (what it actually is)**
 
 A **local stance** is:
