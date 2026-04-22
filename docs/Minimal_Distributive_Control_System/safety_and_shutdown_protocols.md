@@ -71,7 +71,7 @@ Let:
 When local mismatch exceeds the OB’s stability envelope:
 
 $$
-\| x - x^\* \| > \theta_{\text{OB}}
+\lVert x - x^\* \rVert > \theta_{\text{OB}}
 $$
 
 the OB transitions to fallback:
@@ -128,7 +128,7 @@ IBs detect **structural insufficiency**, not just noise.
 An IB activates when:
 
 $$
-\| e_{\text{IB}} \| > \theta_{\text{IB}}
+\lVert e_{\text{IB}} \rVert > \theta_{\text{IB}}
 $$
 
 Activation triggers:
