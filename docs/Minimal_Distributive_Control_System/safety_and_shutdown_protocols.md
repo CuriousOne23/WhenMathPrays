@@ -53,7 +53,7 @@ Together, they form a **multi‑scale safety envelope**.
 
 ---
 
-# **3. OB‑Level Safety: Fallback Stances**
+## **3. OB‑Level Safety: Fallback Stances**
 
 Each OB has:
 
@@ -64,10 +64,11 @@ Each OB has:
 Let:
 
 - $x$ = current stance  
+- $x^\*$ = required stance (the stance needed to fully stabilize the local signal)  
 - $x_f$ = fallback stance  
 - $x_s$ = shutdown stance  
 
-When mismatch exceeds local stability:
+When local mismatch exceeds the OB’s stability envelope:
 
 $$
 \| x - x^\* \| > \theta_{\text{OB}}
