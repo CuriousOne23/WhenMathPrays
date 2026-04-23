@@ -324,4 +324,6 @@ And it sets the stage for:
 
 This is the conceptual heart of the Stability Suite.
 
+Next paper -> [Stability Control Architecture](stability_control_architecture.md)  
+
 ---
