@@ -458,4 +458,6 @@ This architecture connects:
 
 to the **operational mechanisms** that maintain stability.
 
+Paper 4:  [Stability Control Metrics & Modulation](stability_control_metrics_and_modulation.md) 
+
 ---
