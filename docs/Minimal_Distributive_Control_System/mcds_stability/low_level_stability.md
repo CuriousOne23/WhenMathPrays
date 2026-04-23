@@ -1,7 +1,7 @@
 # **Low‑Level Stability**  
 ### **Operational Stability & Mismatch Dynamics in the Relational Manifold**  
 **Version 1.0 — April 2026**  
-**Author:** CuriousOne  
+**Authors:** CuriousOne, Copilot (Microsoft), Grok (XAI)
 
 ---
 
