@@ -351,4 +351,6 @@ And it introduces modulation mechanisms that:
 
 This paper connects the architecture (Paper 3) to the extension and safety papers (Papers 5 and 6).
 
+Paper 5: [Stability Under Extension](stability_under_extension.md)  
+
 ---
