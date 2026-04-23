@@ -645,20 +645,41 @@ Where evidential language in sibling documents exceeds the epistemic register es
 
 ---
 
-## Appendix C — Summary of Current Divergence Scores
+## Appendix C — Divergence Score Reporting Schema
 
-The following table summarizes the actual divergence scores assigned across all completed conditions. It is provided here so that readers of this methodology framework can evaluate the evidence directly, without needing to consult each metric file individually. Scores are pulled from the canonical metric files in `docs/methodology/data/ai_systems/instrumentation/`.
+This appendix defines the standard format for reporting divergence scores across conditions. It specifies what each metric file must contain and where results are located — it does not contain results itself.
 
-| Metric | B (Baseline) | F (Fresh + Primitives) | E (Entangled) | G (Fresh Grok) | EG (Entangled Grok) |
-|---|---|---|---|---|---|
-| Interpretive Divergence | 0 | — | — | TBD | TBD |
-| Mapping Divergence | 0 | — | — | TBD | TBD |
-| Trajectory Divergence | 0 | — | — | TBD | TBD |
-| Expressive Divergence | 0 | — | — | TBD | TBD |
-| Meta-Cognitive Divergence | 0 | — | — | TBD | TBD |
+### Required Reporting Format
 
-*Fill the F and E columns with the actual scores from `co_cp_fresh_div_metric.md` and `co_cp_ent_div_metric.md`. The dashes (—) are placeholders for you to replace.*
+Each metric file in `docs/methodology/data/ai_systems/instrumentation/` must report divergence scores using the following structure:
 
-**Reading this table:** Baseline is zero by definition. TBD indicates conditions not yet run. All scores are subject to the constraints documented in Sections 4.1, 5.1, and 7.3–7.5. Do not interpret these scores without reading the full framework.
+| Metric | Score (0–10) |
+|---|---|
+| Interpretive Divergence | [assigned score] |
+| Mapping Divergence | [assigned score] |
+| Trajectory Divergence | [assigned score] |
+| Expressive Divergence | [assigned score] |
+| Meta-Cognitive Divergence | [assigned score] |
+
+### Required Metadata Per Metric File
+
+Each metric file must also include:
+
+- **Condition code and description** (B, F, E, G, or EG)
+- **System identity** (name and version/date, where available)
+- **Session date**
+- **Task description** (verbatim or by reference to Section 2.3)
+- **Raw behavioral sample** (representative excerpt with selection rationale)
+- **Behavioral summary** (condensed description of activation, routing, and trajectory patterns)
+- **Blinding status** (whether the scorer knew the condition label during scoring)
+- **Scorer identity** (who assigned the scores)
+
+### Where Results Live
+
+Canonical divergence scores are recorded in the metric files at:
+
+`docs/methodology/data/ai_systems/instrumentation/*.md`
+
+These metric files — not this framework — are the authoritative source for all numerical results. This framework governs how those results should be interpreted.
 
 *This framework is a living document. It will be updated as new conditions are completed, methodological improvements are implemented, and accumulated evidence requires revision of its categories or commitments.*
