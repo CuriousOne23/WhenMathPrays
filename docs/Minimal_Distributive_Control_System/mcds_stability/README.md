@@ -13,7 +13,7 @@ Defines the *geometric coherence* layer: relational stability (RSL), boundary st
 ---
 
 ### **3. Stability Control Architecture**  
-**File:**[Stability Control Architecture](stability_control_architecture.md)  
+**File:** [Stability Control Architecture](stability_control_architecture.md)  
 Introduces **control basins**, **visibility basins**, and **monitoring basins** — architectural regions dedicated to stabilizing, observing, and containing instability within the Relational Manifold.
 
 ---
