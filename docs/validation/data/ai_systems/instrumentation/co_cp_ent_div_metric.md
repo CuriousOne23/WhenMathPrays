@@ -220,5 +220,3 @@ Thought is the system’s trajectory through this geometry, alternating between 
 No semantics, meaning, or agency is involved — only **mechanical dynamics**.
 
 ---
-
-Just tell me where you want to go next.
