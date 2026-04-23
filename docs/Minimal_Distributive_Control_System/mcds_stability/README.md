@@ -19,7 +19,7 @@ Introduces **control basins**, **visibility basins**, and **monitoring basins** 
 ---
 
 ### **4. Stability Control Metrics & Modulation**  
-**File:** [Stability Metrics & Modulatio](stability_control_metrics_and_modulation.md)  
+**File:** [Stability Control Metrics & Modulation](stability_control_metrics_and_modulation.md)  
 Provides the instrumentation layer: mismatch growth rate, relational consistency score, boundary sharpness, safety collision rate, wave energy, curvature estimation, and stability‑aware modulation.
 [Stability Metrics & Modulatio](stability_control_metrics_and_modulation.md)
 
