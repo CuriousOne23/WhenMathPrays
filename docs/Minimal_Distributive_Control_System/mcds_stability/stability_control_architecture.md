@@ -271,7 +271,7 @@ Stability‑aware routing avoids:
 Routing incorporates a stability cost:
 
 $$
-C = \alpha g + \beta \kappa + \gamma\,\text{FBIS} + \delta\,\text{ISL}
+C = \alpha g + \beta \kappa + \gamma\ \text{FBIS} + \delta\ \text{ISL}
 $$
 
 The system chooses paths that minimize $C$.
@@ -380,5 +380,3 @@ This architecture connects:
 to the **operational mechanisms** that maintain stability.
 
 ---
-
-If you want, I can now generate **Paper 4: Stability Control Metrics & Modulation** — or clean up any remaining formatting issues in Papers 1–3.
