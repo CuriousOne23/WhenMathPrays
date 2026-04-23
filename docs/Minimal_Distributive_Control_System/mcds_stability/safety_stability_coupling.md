@@ -193,7 +193,7 @@ $$
 C_{\text{safety}} = \alpha\ \kappa_{\text{safety}} + \beta\ \rho_{\text{safety}}
 $$
 
-Paths with high $C_{\text{safety}}$ are avoided.
+Paths with high $C_{\text{safety}}$ are avoided. Here α and β are tunable routing weights that determine how strongly safety curvature and safety collision density contribute to the routing cost.
 
 ---
 
