@@ -2,7 +2,7 @@
 
 **Project:** WhenMathPrays — General Relational Physics (GRP)  
 **Location:** `docs/methodology/instrumentation_methodology_and_interpretation_framework.md`  
-**Version:** 1.1  
+**Version:** 1.2  
 **Date:** 2026-04-23  
 **Authors:** CuriousOne, Copilot (Microsoft)  
 **Status:** Active — Grok conditions pending
@@ -451,7 +451,7 @@ The WhenMathPrays repository is the single source of truth for all experimental 
 | Priority | Source | Authority |
 |---|---|---|
 | 1 | `docs/methodology/data/ai_systems/instrumentation/*.md` | Canonical metric files. Divergence scores and behavioral profiles live here. |
-| 2 | `docs/methodology/*.md` | This framework and related methodlogy documents. Defines how to interpret the metric files. |
+| 2 | `docs/methodology/*.md` | This framework and related methodology documents. Defines how to interpret the metric files. |
 | 3 | `docs/Validation.md` | Simulation-level acceptance checks (duty cycles, boundary clipping, Love distribution). Governs the simulation layer, not the instrumentation layer. |
 | 4 | `README.md`, `STARTHERE.md` | Navigational and onboarding documents. These introduce the project but do not define methodology. |
 | 5 | Conversations, X posts, external references | Context and commentary only. Not authoritative for methodology or results. |
