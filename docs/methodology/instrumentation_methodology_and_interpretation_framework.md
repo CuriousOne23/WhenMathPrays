@@ -261,6 +261,8 @@ Divergence scores measure **mechanical divergence from baseline behavior**. They
 
 **Mechanical vs. interpretive tension:** The term "mechanical" throughout this framework describes the *category* of property being measured — observable activation, routing, and trajectory patterns. The current measurement *process*, however, operationalizes these properties through qualitative human judgment of natural-language output. This gap between what we aim to measure (mechanical properties) and how we currently measure it (interpretive scoring) is a known methodological tension. Automated scoring would close this gap. Until then, "mechanical divergence" refers to the construct being measured, not to the precision of the measurement process itself.
 
+**Known gap — scoring rubric and anchor exemplars:** The scale above describes divergence at the category level. It does not provide anchored exemplars — specific behavioral excerpts that define what a "3" or a "7" looks like in raw text for each metric. Without such anchors, a second researcher cannot independently reproduce the scores. Concrete anchor exemplars and interpretive rationale for what constitutes low, moderate, and high divergence in practice are the responsibility of `empirical_observations_of_thought_manifold.md`. This methodology framework defines the abstract scale; the empirical observations document instantiates it.
+
 ### 5.2 The Five Metrics
 
 | Metric | What It Measures |
@@ -378,7 +380,8 @@ These are not aspirational improvements. They are gaps that, if unaddressed, lim
 
 Blinding status should be stated in every metric file. The planned mitigation is to have a second rater score behavioral samples without condition labels. This is the single cheapest methodological improvement available — it requires no new data, only a willing second reader with sufficient background to apply the metric definitions.
 
-**Anchor exemplars.** As noted in Section 5.1, the 0–10 scale lacks anchored exemplars that would allow a second scorer to calibrate independently. Without exemplars, the scores are not reproducible by definition. This gap must be addressed before inter-rater reliability testing can be meaningful.
+**Anchor exemplars.** As noted in Section 5.1, the 0–10 scale lacks anchored exemplars that would allow a second scorer to calibrate independently. Without exemplars, the scores are not reproducible by definition. This gap must be addressed before inter-rater reliability testing can be meaningful. The empirical observations document (`empirical_observations_of_thought_manifold.md`) is the designated location for these exemplars — it should provide concrete behavioral excerpts at key scale points for each metric, along with interpretive rationale for scoring decisions.
+
 
 **Order effects.** It is not documented whether conditions were scored in a specific sequence. If the experimenter scored the entangled condition first (the most dramatic divergence), it could anchor expectations for baseline and fresh scoring. Sequential scoring introduces systematic bias. Future scoring protocols should randomize the order in which conditions are presented to each rater.
 
@@ -575,7 +578,7 @@ No interpretive weight should be placed on the Grok conditions until data is col
 
 | Improvement | Purpose | Feasibility |
 |---|---|---|
-| **Scoring rubric with anchor exemplars** | Enable independent score reproduction. Prerequisite for all other scoring improvements. | High — requires selecting representative excerpts from existing data and anchoring them to specific scale points. |
+| **Scoring rubric with anchor exemplars** | Enable independent score reproduction. Prerequisite for all other scoring improvements. To be developed in `empirical_observations_of_thought_manifold.md`. | High — requires selecting representative excerpts from existing data and anchoring them to specific scale points. |
 | **Multiple runs per condition** | Estimate within-condition variability. Move from pre-statistical to statistical regime. | High — requires repeated instantiation and task delivery. |
 | **Inter-rater reliability** | Validate that divergence scores are not experimenter-dependent. | Moderate — requires a second qualified scorer familiar with the primitives and a blinding protocol. |
 | **Blinded scoring protocol** | Remove condition-label bias. Second raters score samples without knowing which condition produced them. | High — requires only procedural change, no new data. |
@@ -621,7 +624,7 @@ This framework governs the **instrumentation layer** — the behavioral comparis
 | Document | Scope | Governs |
 |---|---|---|
 | `docs/methodology/instrumentation_methodology_and_interpretation_framework.md` (this file) | Instrumentation methodology | Divergence scoring, confidence model, evidence classification, cross-system comparison, epistemic commitments |
-| `docs/methodology/empirical_observations_of_thought_manifold.md` | Empirical observations | Behavioral correspondences, manifold evidence, cross-domain patterns — interpreted subject to this framework's constraints |
+| `docs/methodology/empirical_observations_of_thought_manifold.md` | Empirical observations | Behavioral correspondences, manifold evidence, cross-domain patterns, and anchor exemplars that define what divergence scores mean in practice — interpreted subject to this framework's constraints |
 
 Where evidential language in sibling documents exceeds the epistemic register established here, this framework governs interpretation.
 
