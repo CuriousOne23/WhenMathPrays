@@ -331,4 +331,6 @@ This paper provides the operational physics required to understand:
 
 It is the first step in the six‑paper Stability Suite.
 
+Next paper -> [High‑Level Stability](high_level_stability.md)  
+
 ---
