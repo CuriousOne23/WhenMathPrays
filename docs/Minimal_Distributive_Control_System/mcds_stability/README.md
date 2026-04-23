@@ -14,7 +14,7 @@ Defines the *geometric coherence* layer: relational stability (RSL), boundary st
 
 ### **3. Stability Control Architecture**  
 **File:** [Stability Control Architecture](stability_control_architecture.md)  
-Introduces **control basins**, **visibility basins**, and **monitoring basins** — architectural regions dedicated to stabilizing, observing, and containing instability within the Relational Manifold.
+Defines the architectural stabilizers of MDCS: **control basins**, **stability basins**, **visibility basins**, and **monitoring basins**, along with stability‑aware routing, stability‑aware safety, and local/global controllers.
 
 ---
 
@@ -26,7 +26,7 @@ Provides the instrumentation layer: mismatch growth rate, relational consistency
 
 ### **5. Stability Under Extension**  
 **File:** [Stability Under Extension](stability_under_extension.md)  
-Explains how MDCS maintains stability as new OBs, GBs, domains, or capabilities are added. Covers cross‑domain drift, composite reformation, and continual‑learning stability.
+Explains how MDCS maintains stability as new OBs, GBs, domains, or capabilities are added. Introduces **stability basins** as goal‑directed governors during extension, and covers cross‑domain drift, composite reformation, and continual‑learning stability.
 
 ---
 
