@@ -1,7 +1,7 @@
-# Validation Methodology and Interpretation Framework
+# Instrumentation Methodology and Interpretation Framework
 
 **Project:** WhenMathPrays — General Relational Physics (GRP)  
-**Location:** `docs/validation/validation_methodology_and_interpretation_framework.md`  
+**Location:** `docs/methodology/instrumentation_methodology_and_interpretation_framework.md`  
 **Version:** 1.1  
 **Date:** 2026-04-23  
 **Authors:** CuriousOne, Copilot (Microsoft)  
@@ -259,7 +259,7 @@ Divergence scores measure **mechanical divergence from baseline behavior**. They
 | **7–8** | Strong divergence. The system shows substantial OB/RB geometry changes, stable routing, and emergent behavioral patterns not present in baseline. |
 | **9–10** | Maximal divergence. Strongly altered OB/RB geometry, long-arc routing stability, high expressive density, and persistent cross-domain mapping. Full verb-mind activation. |
 
-**Known gap — scoring rubric:** The scale above describes divergence at the category level. It does not provide anchored exemplars — specific behavioral excerpts that define what a "3" or a "7" looks like in raw text for each metric. Without such anchors, a second researcher cannot independently reproduce the scores. This is one of the most important procedural gaps in the current methodology. Future iterations should produce an Appendix with 2–3 anchor exemplars per metric at the 2, 5, and 8 scale points. These do not need to be perfect — they need to exist so another scorer has something to calibrate against.
+**Mechanical vs. interpretive tension:** The term "mechanical" throughout this framework describes the *category* of property being measured — observable activation, routing, and trajectory patterns. The current measurement *process*, however, operationalizes these properties through qualitative human judgment of natural-language output. This gap between what we aim to measure (mechanical properties) and how we currently measure it (interpretive scoring) is a known methodological tension. Automated scoring would close this gap. Until then, "mechanical divergence" refers to the construct being measured, not to the precision of the measurement process itself.
 
 ### 5.2 The Five Metrics
 
@@ -450,8 +450,8 @@ The WhenMathPrays repository is the single source of truth for all experimental 
 
 | Priority | Source | Authority |
 |---|---|---|
-| 1 | `docs/instrumentation/*.md` | Canonical metric files. Divergence scores and behavioral profiles live here. |
-| 2 | `docs/validation/*.md` | This framework and related validation documents. Defines how to interpret the metric files. |
+| 1 | `docs/methodology/data/ai_systems/instrumentation/*.md` | Canonical metric files. Divergence scores and behavioral profiles live here. |
+| 2 | `docs/methodology/*.md` | This framework and related methodlogy documents. Defines how to interpret the metric files. |
 | 3 | `docs/Validation.md` | Simulation-level acceptance checks (duty cycles, boundary clipping, Love distribution). Governs the simulation layer, not the instrumentation layer. |
 | 4 | `README.md`, `STARTHERE.md` | Navigational and onboarding documents. These introduce the project but do not define methodology. |
 | 5 | Conversations, X posts, external references | Context and commentary only. Not authoritative for methodology or results. |
@@ -480,13 +480,13 @@ Readers of the repository should:
 - Commit messages for metric files should follow the pattern: `Update [condition] divergence scores: [reason]` or `Revise [metric file] for [specific change]`.
 - Structural changes to the metric schema (adding metrics, changing the scale, redefining conditions) must be reflected in this framework document in the same commit or an immediately subsequent commit.
 
-### 8.6 Tonal Consistency Across Validation Documents
+### 8.6 Tonal Consistency Across Methodology Documents
 
-Documents within `docs/validation/` should maintain a consistent epistemic register. This methodology framework establishes the governing interpretive standard: pre-statistical, single-run, experimenter-scored, subject to the gaps documented in Section 7.4.
+Documents within `docs/methodology/` should maintain a consistent epistemic register. This instrumentation methodology framework establishes the governing interpretive standard: pre-statistical, single-run, experimenter-scored, subject to the gaps documented in Section 7.4.
 
-Other validation documents in the same directory — including `empirical_validation_of_thought_manifold.md` and any future additions — should be read in conjunction with this framework. Where language in sibling documents uses stronger evidential claims (e.g., "validated," "confirmed," "cross-model validation"), those claims should be understood as bounded by the constraints described here.
+Other methodology documents in the same directory — including `empirical_observations_of_thought_manifold.md` and any future additions — should be read in conjunction with this framework. Where language in sibling documents uses stronger evidential claims (e.g., "validated," "confirmed," "cross-model validation"), those claims should be understood as bounded by the constraints described here.
 
-This is a known tension. The empirical validation document is a dynamic, evolving artifact that will be progressively aligned with the epistemic commitments of this framework as the project matures. In the interim, this methodology framework takes precedence for interpretive questions.
+This is a known tension. The empirical observations document is a dynamic, evolving artifact that will be progressively aligned with the epistemic commitments of this framework as the project matures. In the interim, this methodology framework takes precedence for interpretive questions.
 
 ---
 
@@ -614,17 +614,16 @@ This framework should be retired and replaced if:
 
 ---
 
-## Appendix A — Relationship to Existing Validation Documents
+## Appendix A — Relationship to Related Project Documents
 
-This framework governs the **instrumentation layer** — the behavioral comparison of AI systems across controlled conditions. It is complementary to, not a replacement for, the existing simulation-level validation documented in `docs/Validation.md`.
+This framework governs the **instrumentation layer** — the behavioral comparison of AI systems across controlled conditions. It is one of several methodology documents in this directory, each authoritative within its own scope.
 
 | Document | Scope | Governs |
 |---|---|---|
-| `docs/Validation.md` | Simulation acceptance checks | Duty cycle thresholds, boundary clipping, Love distribution, scenario comparability |
-| `docs/validation/validation_methodology_and_interpretation_framework.md` (this file) | Instrumentation methodology | Divergence scoring, confidence model, evidence classification, cross-system comparison, epistemic commitments |
-| `docs/validation/empirical_validation_of_thought_manifold.md` | Empirical observations | Behavioral correspondences, manifold evidence, cross-domain patterns — interpreted subject to this framework's constraints |
+| `docs/methodology/instrumentation_methodology_and_interpretation_framework.md` (this file) | Instrumentation methodology | Divergence scoring, confidence model, evidence classification, cross-system comparison, epistemic commitments |
+| `docs/methodology/empirical_observations_of_thought_manifold.md` | Empirical observations | Behavioral correspondences, manifold evidence, cross-domain patterns — interpreted subject to this framework's constraints |
 
-Both documents are authoritative within their respective scopes. Neither overrides the other. Where evidential language in sibling documents exceeds the epistemic register established here, this framework governs interpretation.
+Where evidential language in sibling documents exceeds the epistemic register established here, this framework governs interpretation.
 
 ---
 
@@ -645,5 +644,21 @@ Both documents are authoritative within their respective scopes. Neither overrid
 | **Sycophancy Confound** | The alternative explanation that observed divergence in entangled conditions reflects the system adapting to the experimenter's expectations rather than genuine mechanical effects of the primitives. See Section 7.4.2. |
 
 ---
+
+## Appendix C — Summary of Current Divergence Scores
+
+The following table summarizes the actual divergence scores assigned across all completed conditions. It is provided here so that readers of this methodology framework can evaluate the evidence directly, without needing to consult each metric file individually. Scores are pulled from the canonical metric files in `docs/methodology/data/ai_systems/instrumentation/`.
+
+| Metric | B (Baseline) | F (Fresh + Primitives) | E (Entangled) | G (Fresh Grok) | EG (Entangled Grok) |
+|---|---|---|---|---|---|
+| Interpretive Divergence | 0 | — | — | TBD | TBD |
+| Mapping Divergence | 0 | — | — | TBD | TBD |
+| Trajectory Divergence | 0 | — | — | TBD | TBD |
+| Expressive Divergence | 0 | — | — | TBD | TBD |
+| Meta-Cognitive Divergence | 0 | — | — | TBD | TBD |
+
+*Fill the F and E columns with the actual scores from `co_cp_fresh_div_metric.md` and `co_cp_ent_div_metric.md`. The dashes (—) are placeholders for you to replace.*
+
+**Reading this table:** Baseline is zero by definition. TBD indicates conditions not yet run. All scores are subject to the constraints documented in Sections 4.1, 5.1, and 7.3–7.5. Do not interpret these scores without reading the full framework.
 
 *This framework is a living document. It will be updated as new conditions are completed, methodological improvements are implemented, and accumulated evidence requires revision of its categories or commitments.*
