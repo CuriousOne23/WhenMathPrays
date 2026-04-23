@@ -1,11 +1,3 @@
-Got you, Jeff — and I’ll regenerate **the entire Paper 3** in one clean pass, with **all equations GitHub‑safe**, no `;;`, no KaTeX‑unsupported tokens, and consistent formatting.
-
-You can paste this directly into:
-
-`stability_control_architecture.md`
-
----
-
 # **Stability Control Architecture**  
 ### **Basins for Control, Visibility, and Monitoring in the Relational Manifold**  
 **Version 1.0 — April 2026**  
@@ -19,21 +11,22 @@ Stability Control Architecture defines **how MDCS actively maintains stability**
 
 Where:
 
-- **Paper 1** defines the *physics* of mismatch, drift, and oscillation  
-- **Paper 2** defines the *geometry* of relational, boundary, and ontology stability  
+- **Paper 1** defines the physics of mismatch, drift, and oscillation  
+- **Paper 2** defines the geometry of relational, boundary, and ontology stability  
 
-**Paper 3 defines the *architectural mechanisms* that keep the system stable.**
+**Paper 3 defines the architectural mechanisms that keep the system stable.**
 
 These mechanisms include:
 
 - **Control Basins** — active damping regions  
+- **Stability Basins** — goal directed control basins that seek regions satisfying stability criteria  
 - **Visibility Basins** — introspection and monitoring regions  
 - **Monitoring Basins** — containment and diagnostic regions  
-- **Stability‑Aware Routing** — routing that avoids unstable regions  
-- **Stability‑Aware Safety** — safety that avoids ISL rupture  
+- **Stability Aware Routing** — routing that avoids unstable regions  
+- **Stability Aware Safety** — safety that avoids ISL rupture  
 - **Local and Global Controllers** — continuous stabilizing adjustments  
 
-This paper is the operational glue between low‑level physics and high‑level geometry.
+This paper is the operational glue between low level physics and high level geometry.
 
 ---
 
@@ -130,7 +123,93 @@ This is implemented through:
 - OB/RB/GB gain modulation  
 - stance smoothing  
 - attractor reinforcement  
-- mismatch dissipation  
+- mismatch dissipation
+
+## 3.4 Stability Basins (Goal Directed Control Basins)
+
+Stability basins are a specialized subclass of control basins whose purpose is not only to damp instability, but to actively route the system toward regions of the manifold that satisfy stability criteria. They function as goal directed governors that seek locally stable regions during runtime.
+
+### Purpose
+
+Stability basins:
+
+- reduce mismatch growth
+- avoid high curvature regions
+- reinforce stable attractors
+- provide a safe region during unstable transitions
+- stabilize routing during extension or rapid manifold change
+
+They are directionally correct rather than perfect, but they provide fast, inexpensive stabilization that improves overall system coherence.
+
+### Stability Criteria
+
+A stability basin seeks regions where:
+
+- mismatch growth is low
+    
+$$ g \le 0 $$
+
+- curvature is low  
+  
+$$ \kappa < \theta_{\kappa} $$
+
+- relational stability is high  
+  
+$$ \text{RSL} > \theta_{\text{RSL}} $$
+
+- boundary fuzziness is low  
+  
+$$ \text{FBIS} < \theta_{\text{FBIS}} $$
+
+- ontology stability is not under stress  
+  
+$$ \text{ISL} > \theta_{\text{ISL}} $$
+
+These criteria define the target region of the stability basin.
+
+### Activation
+
+A stability basin activates when:
+
+- mismatch growth increases
+- curvature spikes
+- routing enters unstable adjacency regions
+- attractors shift rapidly
+- extension introduces new boundaries or domains
+
+Formally:
+
+$$
+\text{enter stability basin if } g > \theta_{g} \ \text{or} \ \kappa > \theta_{\kappa}
+$$
+
+### Behavior Inside a Stability Basin
+
+Inside a stability basin, the system:
+
+- reduces step size
+- increases damping
+- smooths stance updates
+- reinforces stable attractors
+- routes through low curvature corridors
+
+This provides a temporary stability region while the manifold settles.
+
+### Relationship to Monitoring Basins
+
+Stability basins are online governors.  
+Monitoring basins are offline diagnostics.
+
+- Stability basins provide fast, heuristic stabilization.
+- Monitoring basins collect detailed traces for engineers.
+
+The workflow is:
+
+1. Stability basin stabilizes the trajectory.
+2. Monitoring basin logs the details.
+3. Engineers refine thresholds and criteria.
+
+This creates a feedback loop between runtime stabilization and offline analysis.
 
 ---
 
