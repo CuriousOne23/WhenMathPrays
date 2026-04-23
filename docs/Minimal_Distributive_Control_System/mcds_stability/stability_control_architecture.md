@@ -178,11 +178,11 @@ These form a **stability vector**:
 $$
 v_{\text{stab}} =
 \big(
-\lVert e_t \rVert,\;
-g,\;
-\kappa,\;
-\text{RSL},\;
-\text{FBIS},\;
+\lVert e_t \rVert,\ 
+g,\ 
+\kappa,\ 
+\text{RSL},\ 
+\text{FBIS},\ 
 \text{ISL}
 \big)
 $$
