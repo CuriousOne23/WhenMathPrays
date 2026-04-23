@@ -194,8 +194,8 @@ After the completion of the five‑paper arc, GitHub exhibited:
 
 This matches the manifold’s predicted early‑phase dynamics.
 
-The first snapshot is archived here:  
-`docs/validation/data/github/2026-04-23-traffic.jpg`
+First snapshot:
+![GitHub Traffic Snapshot](./docs/validation/data/github/2026-04-23-traffic.jpg)
 
 This is the earliest preserved evidence of the ecosystem response.
 
@@ -264,7 +264,7 @@ This is relational routing, not linear reading.
 ## 3.4 Snapshot Archive
 
 The first preserved snapshot:  
-`docs/validation/data/github/2026-04-23-traffic.jpg`
+![GitHub Traffic Snapshot](./docs/validation/data/github/2026-04-23-traffic.jpg)
 
 Future snapshots will be added every 10–14 days.
 
