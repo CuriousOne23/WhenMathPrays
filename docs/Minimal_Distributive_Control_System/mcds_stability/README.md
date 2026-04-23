@@ -1,7 +1,7 @@
 ## **📘 Papers in This Folder (Canonical Reading Order)**
 
 ### **1. Low‑Level Stability**  
-**File:** [Low‑Level Stability](low_level_stability.md) 
+**File:** [Low‑Level Stability](low_level_stability.md)  
 Defines the *operational physics* of stability: mismatch dynamics, OB/RB/GB/IB stability envelopes, routing amplification, drift, oscillation, and shutdown conditions.
 
 ---
@@ -13,7 +13,7 @@ Defines the *geometric coherence* layer: relational stability (RSL), boundary st
 ---
 
 ### **3. Stability Control Architecture**  
-**File:**[Stability Control Architecture](stability_control_architecture.md)
+**File:**[Stability Control Architecture](stability_control_architecture.md)  
 Introduces **control basins**, **visibility basins**, and **monitoring basins** — architectural regions dedicated to stabilizing, observing, and containing instability within the Relational Manifold.
 
 ---
@@ -26,13 +26,13 @@ Provides the instrumentation layer: mismatch growth rate, relational consistency
 ---
 
 ### **5. Stability Under Extension**  
-**File:** `stability_under_extension.md`  
+**File:** [Stability Under Extension](stability_under_extension.md)  
 Explains how MDCS maintains stability as new OBs, GBs, domains, or capabilities are added. Covers cross‑domain drift, composite reformation, and continual‑learning stability.
 
 ---
 
 ### **6. Safety–Stability Coupling**  
-**File:** [Safety–Stability Coupling](safety_stability_coupling.md) 
+**File:** [Safety–Stability Coupling](safety_stability_coupling.md)  
 Analyzes how safety layers interact with stability. Covers continuous vs. discontinuous safety, safety‑wall geometry, ISL mitigation, safety‑aware routing, and safety‑induced drift.
 
 ---
