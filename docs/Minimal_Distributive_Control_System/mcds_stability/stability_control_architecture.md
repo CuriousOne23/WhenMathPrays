@@ -105,7 +105,7 @@ A control basin is triggered when:
 Formally:
 
 $$
-\text{enter\_control\_basin if } g > \theta_g \;\; \text{or} \;\; \kappa > \theta_\kappa
+\text{enter control basin if } g > \theta_g \ \  \text{or} \ \  \kappa > \theta_\kappa
 $$
 
 Where:
