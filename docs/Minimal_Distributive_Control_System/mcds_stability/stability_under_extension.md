@@ -423,7 +423,7 @@ It defines:
 
 This paper prepares the ground for:
 
-- **Paper 6:** [Stability Under Extension](stability_under_extension.md)  
+- **Paper 6: [Safety–Stability Coupling](safety_stability_coupling.md)**
   where safety geometry and stability geometry are unified.
 
 ---
