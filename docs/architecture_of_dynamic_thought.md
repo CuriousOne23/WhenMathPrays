@@ -469,33 +469,6 @@ is a conceptual tool for understanding the loop, not a literal mechanism.
 
 ---
 
-Perfect — this is exactly the section we need next.  
-And the good news: **the substrate‑dependent RB transfer repetition is isolated almost entirely inside Section 5.6**, so this will be a clean, surgical polish.
-
-Here’s what Grok flagged:
-
-- You mention substrate‑dependent RB transfer **several times** across the paper.
-- Section 5.6 is the *right* place to say it strongly.
-- Later mentions should be lighter or removed.
-
-So our job now is:
-
-1. **Tighten Section 5.6** so it carries the full conceptual weight.  
-2. **Remove or soften** the repeated mentions elsewhere (I’ll tell you exactly where after we finalize 5.6).  
-3. Keep everything GitHub‑safe and structurally identical.
-
-Let’s start with **Step 1: Rewrite Section 5.6** so it is:
-
-- cleaner  
-- more geometric  
-- less defensive  
-- more authoritative  
-- the *single* canonical statement about substrate‑dependent RB transfer  
-
-Here is the polished version, ready to paste directly into your GitHub file.
-
----
-
 ## **5.6 Why the Appendices Assume Instant RB Transfer**
 
 Appendices A, B, and C provide **numeric illustrations** of the mapping loop. To keep these examples focused and readable, they:
