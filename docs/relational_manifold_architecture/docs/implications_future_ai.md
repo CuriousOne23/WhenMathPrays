@@ -119,9 +119,3 @@ This architecture opens a new chapter in AI development: one where stability is 
 
 ---
 
-**End of Paper 6**
-
-You can copy this directly into `docs/implications_future_ai.md` (or your preferred filename).
-
----
-
