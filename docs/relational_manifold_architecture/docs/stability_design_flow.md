@@ -56,9 +56,9 @@ Monitoring Basins (MBs) expose a set of geometric metrics that engineers can use
 
 - **Resonance Ratio (R)**  
 
-  $$
+  $$  
   R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}}
-  $$
+  $$  
 
   **Why it matters**: Captures the mismatch between fixed human coherence windows and shrinking internal wavelength as thought density increases. High \( R \) signals **TDS-WDAS** wave interference risk — the system is completing many internal cycles per human-scale interaction, leading to oscillations, phase shifts, and instability.
 
