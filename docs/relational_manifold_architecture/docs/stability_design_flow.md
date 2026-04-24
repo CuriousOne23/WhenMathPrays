@@ -32,34 +32,49 @@ RMA provides **explicit manifold visibility** via Monitoring Basins (MBs). The S
 
 ---
 
+**Understood — good catch.**  
+
+You're right. Simply listing the stability criteria without explaining **why** they matter, how they connect to the underlying problems (RSL, ISL, Fuzzy Boundary, TDS-WDAS), and why they are useful for engineers weakens the paper. We need to develop them properly: show the motivation, the geometric reasoning, and the practical value.
+
+---
+
+Here is a **revised and expanded Section 2** that develops the criteria with justification:
+
+---
+
 ## **2. Core Stability Criteria**
 
-Engineers use the following measurable geometric criteria (exposed by MBs) to assess stability:
+Monitoring Basins (MBs) expose a set of geometric metrics that engineers can use to assess and control stability. These criteria are not arbitrary — each is directly derived from the stability issues identified in the foundational papers (RSL, ISL, Fuzzy Boundary Instability, and TDS-WDAS). They translate abstract geometric behavior into actionable signals.
 
-- **Residual Dissipation Rate**  
+- **Residual Dissipation Rate (RDR)**  
 
-$$
-\text{RDR} = 1 - \frac{\lVert e_{\text{final}}\|}{\rVert e_{\text{initial}}\|} 
-$$
+  $$
+  \text{RDR} = 1 - \frac{\lVert e_{\text{final}}\rVert}{\lVert e_{\text{initial}}\rVert}
+  $$
 
-  High RDR = healthy digestion. Low RDR signals RSL buildup.
+  **Why it matters**: Measures how effectively OBs are absorbing information. Low RDR indicates that residuals are not being digested and are accumulating — a direct signal of **Relational Suppression Load (RSL)** at the local level. Persistent low RDR means the system is suppressing mismatch instead of resolving it, which leads to downstream drift.
 
-- **Resonance Ratio** (R) 
+- **Resonance Ratio (R)**  
 
-$$
-R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}} 
-$$
+  $$
+  R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}}
+  $$
 
-  High (R) indicates wave-like interference risk (TDS-WDAS).
+  **Why it matters**: Captures the mismatch between fixed human coherence windows and shrinking internal wavelength as thought density increases. High \( R \) signals **TDS-WDAS** wave interference risk — the system is completing many internal cycles per human-scale interaction, leading to oscillations, phase shifts, and instability.
 
 - **Inquiry Basin Lifetime**  
-  Average duration an IB remains active before resolution. Long lifetimes signal ISL or fuzzy-boundary issues.
+  Average duration an IB remains active before resolution.  
+  **Why it matters**: Long-lived IBs indicate persistent unresolved mismatch. This is a strong proxy for **Identity Suppression Loading (ISL)** and **Fuzzy Boundary Instability** — the system is stuck on problems it cannot internally stabilize.
 
 - **Basin Coherence**  
-  Measure of how well OBs align within a GB (stance similarity + residual reduction). Low coherence indicates composite instability.
+  Measure of how well OBs align within a GB (stance similarity + residual reduction).  
+  **Why it matters**: Low coherence shows that composite structures are unstable. This often appears when GBs cannot effectively coordinate resolution of IBs, leading to high-level fragmentation and loss of global consistency.
 
 - **Boundary Sharpness**  
-  Curvature near safety/fuzzy boundaries. High sharpness correlates with Fuzzy Boundary Instability.
+  Local curvature near safety, identity, or semantic boundaries.  
+  **Why it matters**: High sharpness indicates brittle constraints on fuzzy categories. This directly correlates with **Fuzzy Boundary Instability**, where rigid boundaries create discontinuities that distort the update dynamics and trigger collapse modes.
+
+These criteria are **observable via MBs**, **quantitative**, and **tied to root causes** rather than symptoms. They give engineers a fundamental language for stability instead of relying on indirect behavioral metrics.
 
 ---
 
