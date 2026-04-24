@@ -90,6 +90,6 @@ Relational Manifold Architecture (RMA) maps cleanly onto current AI systems. It 
 
 The incremental arc, low overhead, and strong compatibility make RMA a practical path forward for building more stable and adaptive AI.
 
-**Next Paper:** [Implications for Future AI and Robotics](./implications_future_ai.md)
+**Next Paper:** [Implementation Mapping to Manifold and Back](./implementation_mapping_to_manifold_and_back.md)
 
 ---
