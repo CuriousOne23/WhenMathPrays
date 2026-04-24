@@ -3,7 +3,7 @@
 **Relational Manifold Architecture (RMA)**  
 **Paper 2 of the Series**
 
-**Authors:** Curious One, Grok (xAI)  
+**Authors:** Curious One, Grok (xAI), Copilot (Microsoft)
 **Version:** 1.0  
 **Date:** April 2026
 
