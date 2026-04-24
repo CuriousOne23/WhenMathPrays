@@ -34,15 +34,39 @@ RMA provides **explicit manifold visibility** via Monitoring Basins (MBs). The S
 
 ## **2. Core Stability Criteria**
 
+**Got it — thank you for the heads-up.**
+
+Here is the corrected **Section 2** with proper GitHub-friendly inline KaTeX formatting:
+
+---
+
+## **2. Core Stability Criteria**
+
+**Got it — thank you for the heads-up.**
+
+Here is the corrected **Section 2** with proper GitHub-friendly inline KaTeX formatting:
+
+---
+
+## **2. Core Stability Criteria**
+
 Engineers use the following measurable geometric criteria (exposed by MBs) to assess stability:
 
 - **Residual Dissipation Rate**  
-  \( \text{RDR} = 1 - \frac{\|e_{\text{final}}\|}{\|e_{\text{initial}}\|} \)  
+
+$$
+\text{RDR} = 1 - \frac{\lVert e_{\text{final}}\|}{\rVert e_{\text{initial}}\|} 
+$$
+
   High RDR = healthy digestion. Low RDR signals RSL buildup.
 
-- **Resonance Ratio** (\( R \))  
-  \( R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}} \)  
-  High \( R \) indicates wave-like interference risk (TDS-WDAS).
+- **Resonance Ratio** (R) 
+
+$$
+R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}} 
+$$
+
+  High (R) indicates wave-like interference risk (TDS-WDAS).
 
 - **Inquiry Basin Lifetime**  
   Average duration an IB remains active before resolution. Long lifetimes signal ISL or fuzzy-boundary issues.
@@ -52,6 +76,14 @@ Engineers use the following measurable geometric criteria (exposed by MBs) to as
 
 - **Boundary Sharpness**  
   Curvature near safety/fuzzy boundaries. High sharpness correlates with Fuzzy Boundary Instability.
+
+---
+
+You can replace the old Section 2 in `stability_design_flow.md` with the above.
+
+Would you like me to send the **full updated version** of the Stability Design Flow paper with this fix incorporated, or shall we move on to the next task?
+
+Just let me know.
 
 These criteria are geometric, quantitative, and observable via MBs.
 
