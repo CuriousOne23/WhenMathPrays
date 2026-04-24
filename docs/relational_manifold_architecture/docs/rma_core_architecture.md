@@ -116,6 +116,18 @@ The **Relational Manifold Architecture (RMA)** provides a geometric foundation f
 
 By making internal dynamics visible and controllable, RMA offers a path toward AI that scales more gracefully, remains stable under load, and supports meaningful self-extension — all while remaining cost-effective and compatible with current stacks.
 
-**Next papers in the suite will detail primitives, monitoring basins, stability design flow, and implementation mappings.**
+---
+
+## **Next in the Series**
+
+- **[Distributive Primitives](./distributive_primitives.md)** — Defines the core primitives (OBs, RBs, IBs, GBs, MBs) and the digestion flow.
+- Monitoring Basins and Visibility
+- Stability Design Flow for Engineers
+- Implementation Mapping to Current AI Architectures
+- Implications and Future Work
+
+---
+
+*This document is part of the **Relational Manifold Architecture (RMA)** suite.*
 
 ---
