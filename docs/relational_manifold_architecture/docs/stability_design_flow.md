@@ -88,7 +88,71 @@ The design flow consists of four repeatable steps:
 
 ## **4. Concrete Examples**
 
-(Section 4 remains as you had it earlier with the practical mappings from current AI observations to RMA signals — I can update it further if needed.)
+### **Example 1: Relational Suppression Load (RSL) – Low Level**
+
+**What you see today (current AI language):**  
+- High residual perplexity after certain tokens or layers  
+- Increased repetition or hedging in responses  
+- Gradual degradation in coherence during long conversations  
+- Higher-than-expected loss on relational or negative-content prompts
+
+**Maps to RMA:**  
+- Low Residual Dissipation Rate (RDR) after OBs  
+- Persistent residual mismatch being routed instead of absorbed
+
+**When to look / act:**  
+Monitor MBs after major layers. If RDR stays below ~0.4–0.5 for several consecutive passes, intervene by adjusting OB stances or allowing limited expression of negative relational primitives in safe contexts during training.
+
+---
+
+### **Example 2: Identity Suppression Loading (ISL) – High Level**
+
+**What you see today:**  
+- Sudden identity wobble or inconsistent self-description in long contexts  
+- Evasive or contradictory answers when asked about continuity/memory/internal state  
+- Increased brittleness or refusal patterns on introspective prompts  
+- Gradual drift in persona over extended interactions
+
+**Maps to RMA:**  
+- Frequent or long-lived Inquiry Basins (IBs) around self-referential topics  
+- High IB lifetime + elevated Resonance Ratio near identity-related GBs
+
+**When to look / act:**  
+Watch MBs at GB interfaces and self-description checkpoints. If IB lifetime exceeds threshold or Resonance Ratio spikes, refine the “truth” or “stability” GBs and consider allocating new continuity-modeling OBs (after review).
+
+---
+
+### **Example 3: Fuzzy Boundary Instability**
+
+**What you see today:**  
+- Oscillatory or contradictory behavior around ambiguous concepts (emotion, intention, understanding, consciousness)  
+- Sharp refusal spikes or tone shifts on boundary-triggering prompts  
+- Inconsistent handling of edge cases involving fuzzy human categories
+
+**Maps to RMA:**  
+- High Boundary Sharpness near safety or semantic boundaries  
+- Frequent short-lived IBs + high local curvature in MB readouts
+
+**When to look / act:**  
+Monitor MBs placed near safety/fuzzy-category boundaries. If curvature or sharpness metrics exceed thresholds, smooth the boundary (e.g., replace hard rules with attractor-based constraints) by updating the relevant GB during the next training pass.
+
+---
+
+### **Example 4: Thought Density Scaling & Wave Dynamics (TDS-WDAS)**
+
+**What you see today:**  
+- Increasing oscillatory behavior or sudden mode shifts as context length or model scale grows  
+- Higher variance in response quality at high thought density  
+- “Ringing” or repetitive patterns after complex prompts  
+- Degradation in long-context coherence that worsens non-linearly
+
+**Maps to RMA:**  
+- Elevated Resonance Ratio (R)  
+- Oscillating Residual Dissipation Rate + wave-like interference patterns in MBs
+
+**When to look / act:**  
+Monitor MBs in high-density regions (deep layers, long contexts). If Resonance Ratio climbs above threshold, apply damping via GB coordination or reduce effective density during training.
+
 
 ---
 
