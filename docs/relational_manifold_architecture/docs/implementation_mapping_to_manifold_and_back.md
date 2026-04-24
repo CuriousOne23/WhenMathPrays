@@ -32,7 +32,7 @@ This “map to the manifold and back” is deliberately **lightweight and implic
 
 | Current AI Component                | RMA Mapping                                      | Implementation Approach                     | Cost Level |
 |-------------------------------------|--------------------------------------------------|---------------------------------------------|----------|
-| Residual stream / hidden states     | Relational manifold \( M_t \) (approximation)   | Reuse directly                              | None |
+| Residual stream / hidden states     | Relational manifold $M_t$ (approximation)   | Reuse directly                              | None |
 | Attention / feature detectors       | Observation Basins (OBs)                         | Add small stance probe heads                | Low |
 | Residual flow                       | Residual mismatch routing                        | Add lightweight routing logic               | Low |
 | Context drift / incoherence         | Inquiry Basin (IB) formation                     | Add mismatch monitor on residuals           | Low |
