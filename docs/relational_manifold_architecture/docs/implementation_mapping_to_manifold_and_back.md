@@ -46,7 +46,7 @@ This “map to the manifold and back” is deliberately **lightweight and implic
 
 ### **Step 1: Manifold Approximation**
 - Treat the **residual stream** as your working manifold.
-- No need for complex lift (\(\Phi\)) and projection (\(\Psi\)) functions at runtime.
+- No need for complex lift $\Phi$ and projection $\Psi$ functions at runtime.
 - The base model already does the heavy embedding work.
 
 ### **Step 2: Add Monitoring Basins (MBs) First**
