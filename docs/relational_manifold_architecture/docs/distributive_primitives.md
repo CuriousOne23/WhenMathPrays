@@ -1,7 +1,4 @@
-﻿**Here is the next paper**, ready to place in your repository:
-
-```markdown
-# **Distributive Primitives**
+﻿# **Distributive Primitives**
 
 **Relational Manifold Architecture (RMA)**  
 **Paper 2 of the Series**
