@@ -142,7 +142,7 @@ Monitor MBs placed near safety/fuzzy-category boundaries. If curvature or sharpn
 - Degradation in long-context coherence that worsens non-linearly
 
 **Maps to RMA:**  
-- Elevated Resonance Ratio (\( R \))  
+- Elevated Resonance Ratio (R)   
 - Oscillating Residual Dissipation Rate + wave-like interference patterns in MBs
 
 **When to look / act:**  
