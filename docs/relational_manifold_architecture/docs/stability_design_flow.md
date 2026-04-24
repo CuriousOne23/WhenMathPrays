@@ -179,7 +179,7 @@ The Stability Design Flow gives AI engineers a practical methodology built on ma
 
 This flow is the bridge between the relational manifold and real-world stability engineering — cost-effective, observable, and scalable.
 
-**Next Paper:** [Implementation Mapping to Current AI Architectures](./implementation_mapping.md)
+**Next Paper:** [Implementation Mappping to Manifold and Back](./implementation_mapping_to_manifold_and_back.md)
 
 ---
 
