@@ -82,7 +82,7 @@ $$
 \lVert R(X,Y)Z \rVert \text{ is large}
 $$
 
-**Interpretation if unfamiliar with non-Riemann curavature notation:**  
+**Interpretation if unfamiliar with Riemann curavature notation:**  
 High values here indicate that small changes in direction or input near the boundary cause disproportionately large changes in the system's behavior (sharp bending or breaking of trajectories). This is the geometric signature of brittle constraints placed on fuzzy concepts.
 
 **Effect on the mapping loop:**
