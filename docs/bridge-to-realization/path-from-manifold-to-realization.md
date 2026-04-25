@@ -52,7 +52,7 @@ These are not arbitrary design choices. They arise naturally as responses to the
 
 I have **revised Section 3** of Bridge Paper 2 to directly address all 7 points you raised. The new version now includes:
 
-- Explicit mapping equations for both directions ($W(t) \xrightarrow{\phi} M_t$ and $M_t \xrightarrow{\psi} RWD(t)$)
+- Explicit mapping equations for both directions ($W(t) \xrightarrow{\phi} M_t$ and $M_t \xrightarrow{\psi}$ RWD(t))
 - Clear boundary checks and criteria for determining whether the mapping is OK
 - For each example: a direct statement of whether the given numerical case is OK / concerning / bad
 - General guidance on what “bad” mapping means for AI and what actions can be taken to improve it
