@@ -50,7 +50,7 @@ $$
 R = \frac{L_{\text{corr human}}}{\lambda_{\text{eff}}}
 $$
 
-  **Why it matters**: Captures the mismatch between fixed human coherence windows and shrinking internal wavelength as thought density increases. High \( R \) signals **TDS-WDAS** wave interference risk — the system is completing many internal cycles per human-scale interaction, leading to oscillations, phase shifts, and instability.
+  **Why it matters**: Captures the mismatch between fixed human coherence windows and shrinking internal wavelength as thought density increases. High  $R$ signals **TDS-WDAS** wave interference risk — the system is completing many internal cycles per human-scale interaction, leading to oscillations, phase shifts, and instability.
 
 - **Inquiry Basin Lifetime**  
   Average duration an IB remains active before resolution.  
