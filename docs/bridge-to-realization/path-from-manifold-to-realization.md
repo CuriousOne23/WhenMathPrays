@@ -175,6 +175,7 @@ $$
 - Bad: $> 7.0$ (strong wave interference)
 
 **Numerical example:**
+
 $$
 R = 8.4 \quad (\text{bad})
 $$
