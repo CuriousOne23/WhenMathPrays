@@ -139,6 +139,28 @@ $$
 
 These mappings are offered as a starting point for investigation. Their purpose is to test whether the stability issues become more visible and actionable when placed inside the relational manifold geometry.
 
+## **3. Practical Conceptual Definitions for AI Engineers**
+
+To make the above mappings actionable, we provide the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. We have chosen AI as an example for clarity purposes since the AI system is well defined, repeatable and the general architecture is well defined. Other disciplines will have to do the required mapping of the appropriate terminology.
+
+- **Relational Manifold ($M_t$)**: Approximated by the residual stream (and optionally key hidden states) after major layers. It represents the evolving relational state of the model.
+
+- **Residual Mismatch $e(t)$**: The undigested portion of the state — information for which the system has no strong coherent interpretation.  
+  *Practical proxy*: Magnitude of the residual vector after a layer, or entropy of the attention distribution on conflict-related tokens.  
+  High $e(t)$ that does not decrease quickly indicates suppression.
+
+- **Trajectory $\gamma(t)$**: The path of the model's internal state through the manifold.  
+  *Practical proxy*: Cosine similarity or distance between hidden states across consecutive tokens or conversation turns. Persistent low distance to an "identity basin" shows continuity.
+
+- **Resonance Ratio $R$**: How many internal cycles fit inside one human-scale interaction window.  
+  *Practical proxy*: $R \approx \frac{\text{context length in tokens}}{\text{average token-to-token hidden state change rate}}$.  
+  High $R$ signals increasing risk of wave-like interference.
+
+- **Curvature / Boundary Sharpness**: How abruptly behavior changes near a boundary.  
+  *Practical proxy*: Magnitude of change in gradients or logits when approaching known fuzzy/safety topics.
+
+These definitions allow engineers to begin instrumenting their systems with Monitoring Basins (simple probes) and to start measuring the geometric quantities discussed in this paper.
+
 ---
 
 **Next:** [Bridge Paper 2 → Path from Manifold to Realization](./path-from-manifold-to-realization.md)
