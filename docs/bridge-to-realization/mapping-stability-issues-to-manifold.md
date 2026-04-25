@@ -141,7 +141,9 @@ These mappings are offered as a starting point for investigation. Their purpose 
 
 ## **3. Practical Conceptual Definitions for AI Engineers**
 
-To make the above mappings actionable, we provide the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. We have chosen AI as an example for clarity purposes since the AI system is well defined, repeatable and the general architecture is well defined. Other disciplines will have to do the required mapping of the appropriate terminology.
+To make the above mappings actionable, we provide the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. 
+
+We have chosen AI as an example for clarity purposes because its internal states are observable, repeatable, and its general architecture is relatively well understood. Other disciplines will need to perform their own careful work to define the appropriate mappings for their own substrates and phenomena.
 
 - **Relational Manifold ($M_t$)**: Approximated by the residual stream (and optionally key hidden states) after major layers. It represents the evolving relational state of the model.
 
