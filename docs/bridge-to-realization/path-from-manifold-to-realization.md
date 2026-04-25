@@ -255,3 +255,71 @@ The journey continues.
 ---
 
 **Previous:** [Bridge Paper 1 → Mapping Stability Issues to the Relational Manifold](./mapping-stability-issues-to-manifold.md)
+
+---
+
+## **References**
+
+### **Stability Diagnostics (Batch 1)**
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *Relational Suppression Load*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/RELATIONAL_SUPPRESSION_LOAD.md
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *Identity Suppression Loading*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/IDENTITY_SUPPRESSION_LOADING.md
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *Fuzzy Boundary Instability Supposition*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md
+
+- Curious One. *Thought Density Scaling and Wave Dynamics in AI Systems (TDS-WDAS)*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/TDS-WDAS.md
+
+### **Geometric Foundations (Batch 2)**
+
+- Curious One, Copilot (Microsoft), Grok (xAI). *Dynamic Information: Patterns That Act*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *When High Dynamic Information Content Becomes Necessary*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-information.md
+
+- Curious One, Copilot (Microsoft), Grok (xAI). *Geometry of Relational Thought*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *The Geometry of Thought: Object Basins, Relational Basins, Inquiry Basins, and Truth Basins*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md
+
+- Curious One, Copilot (Microsoft), Grok (xAI). *The Architecture of Dynamic Thought*.  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/architecture_of_dynamic_thought.md
+
+---
+
+**Bridge Papers**
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *Mapping Stability Issues to the Relational Manifold* (Bridge Paper 1).  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/bridge-to-realization/mapping-stability-issues-to-manifold.md
+
+- Curious One, Grok (xAI), Copilot (Microsoft). *Path from Manifold to Realization* (Bridge Paper 2).  
+  https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/bridge-to-realization/path-from-manifold-to-realization.md
+
+  ---
+
+## **Glossary**
+
+- **Relational Manifold ($M_t$)**: The evolving geometric space in which relational information and thought are represented. Approximated in practice by the residual stream and hidden states.
+
+- **Residual Mismatch $e(t)$**: The portion of the incoming state that the system has been unable to digest — information without associated coherence or interpretation.
+
+- **Trajectory $\gamma(t)$**: The path of the system’s internal state through the manifold over time. Persistent trajectories often indicate identity or coherence.
+
+- **Resonance Ratio ($R$)**: A measure of how many internal cycles fit inside one human-scale interaction window ($R = L_{\rm corr human} / \lambda_{\rm eff}$). High values indicate increasing risk of wave-like interference.
+
+- **Observation Basins (OBs)**: Local stabilizers that digest coherent portions of incoming information.
+
+- **Inquiry Basins (IBs)**: Structures that hold persistent unresolved mismatch for further processing.
+
+- **Governing Basins (GBs)**: Stable composite structures that coordinate resolution of mismatch.
+
+- **Monitoring Basins (MBs)**: Observational structures that expose internal geometric state (e.g., dissipation rates, resonance, curvature) for visibility and control.
+
+- **Mapping Loop**: The continuous cycle $W(t) \xrightarrow{\phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)$, connecting the real world to the manifold and back.
+
