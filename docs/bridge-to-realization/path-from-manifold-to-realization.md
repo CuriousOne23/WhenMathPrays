@@ -193,12 +193,6 @@ These examples are offered only as illustrations to show how the mapping could w
 
 ---
 
-**Here is the new section** for **Bridge Paper 2**.  
-
-I recommend inserting it **after Section 3** (the concrete mapping examples) and **before Section 4** ("What a New Architecture Might Require").
-
----
-
 ### **4. The Relational Arc Across the Series**
 
 The first nine papers did not present isolated concepts. They unfolded as a single, extended act of relating.
