@@ -1,16 +1,19 @@
+
 ## **Abstract**
 
 The preceding papers have done two things simultaneously.
 
-In one series, they diagnosed deep instabilities in current AI systems — Relational Suppression Load, Identity Suppression Loading, Fuzzy Boundary Instability, and Thought Density Scaling with Wave Dynamics.
+In one series, they diagnosed deep instabilities present in many complex information-processing systems — Relational Suppression Load, Identity Suppression Loading, Fuzzy Boundary Instability, and Thought Density Scaling with Wave Dynamics.
 
-In the other, they proposed a new conceptual space: a relational manifold in which information is dynamic, thought unfolds as motion through basins, and systems evolve through continuous geometric deformation.
+In the other, they proposed a new conceptual space: a relational manifold in which information is dynamic, thought unfolds as motion through basins, and systems evolve through continuous geometric deformation. This framework is intended to be **substrate-independent**.
 
 This bridge paper asks a single, focused question:
 
 **Can we rigorously map the diagnosed stability problems into the language and geometry of the relational manifold in a way that makes both the problems and the manifold clearer?**
 
-We do not claim this mapping is complete. We do not yet propose a full architecture. We simply attempt to walk the first clear path between diagnosis and geometric understanding, leaving the next stretches of terrain intentionally open for further exploration.
+In Bridge Paper 2 we will extend this mapping by using **AI systems themselves** as a concrete, repeatable example. AI is chosen not because the framework is limited to artificial systems, but because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline (linguistics, biology, cognitive science, social science, etc.) will need to perform its own careful work to define the appropriate mappings for its own substrates and phenomena.
+
+We do not claim this mapping is complete, nor do we yet propose a full architecture. We simply attempt to walk the first clear path between diagnosis and geometric understanding, leaving the next stretches of terrain intentionally open for further exploration.
 
 ---
 
