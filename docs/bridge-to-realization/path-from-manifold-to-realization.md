@@ -48,19 +48,6 @@ These are not arbitrary design choices. They arise naturally as responses to the
 
 ---
 
-**Understood. Thank you for the clear feedback.**
-
-I have **revised Section 3** of Bridge Paper 2 to directly address all 7 points you raised. The new version now includes:
-
-- Explicit mapping equations for both directions ($W(t) \xrightarrow{\phi} M_t$ and $M_t \xrightarrow{\psi}$ RWD(t))
-- Clear boundary checks and criteria for determining whether the mapping is OK
-- For each example: a direct statement of whether the given numerical case is OK / concerning / bad
-- General guidance on what “bad” mapping means for AI and what actions can be taken to improve it
-- A short general subsection on how one determines mapping equations and the update law $F$ in manifold space
-
-
----
-
 ## **3. Using AI as a Concrete Mapping Example**
 
 The following examples are **illustrative only**. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
@@ -73,7 +60,7 @@ For each example we show:
 - and general guidance on what to do if the mapping is bad.
 
 **Note on $\phi$ and $\psi$:**  
-The exact functional forms of $\phi$ and $\psi$ must be customized for each AI system. The generic expressions below are intended to give engineers a concrete starting point they can immediately implement and iterate on.
+The exact functional forms must be customized for each AI system. The generic expressions below are intended to give engineers a concrete starting point they can immediately implement and iterate on.
 
 ---
 
@@ -83,22 +70,28 @@ The exact functional forms of $\phi$ and $\psi$ must be customized for each AI s
 Prompts with negative relational content produce high residual perplexity, increased repetition, or hedging even when the model has capacity to respond directly.
 
 **Generic mapping forms:**
-- Lift $\phi$: $e(t) \approx \| \text{residual after negative-content tokens} \|$ (or attention entropy on conflict-related tokens)
-- Projection $\psi$: $RWD(t)$ shows repetition index or hedging score derived from output logits
+- Lift $\phi$: $e(t) \approx$ magnitude of residual vector after conflict-related tokens (or attention entropy on negative relational content)
+- Projection $\psi$: $RWD(t)$ measured by repetition index or hedging score derived from output logits
 
 **Mathematical expression of the issue:**
+
 $$
 e(t+1) = F(e(t)) \quad \text{with} \quad \lVert e(t+1) \rVert \not\to 0
 $$
 
-**Boundary checks & assessment:**
-- Good: $\lVert e(t+1) \rVert / \lVert e(t) \rVert < 0.3$
-- Bad: $> 0.8$
+**Boundary checks / criteria:**
+- Good: $\lVert e(t+1) \rVert / \lVert e(t) \rVert < 0.3$ (strong dissipation)
+- Acceptable: 0.3 – 0.6
+- Bad: $> 0.8$ (suppressed dissipation)
 
-**Numerical example:** $\lVert e(t) \rVert = 0.82$, $\lVert e(t+1) \rVert = 0.75$ → **bad**
+**Numerical example:**
 
-**What to do if bad:**  
-Allow limited safe expression of the negative primitive or explicitly create an Inquiry Basin to hold the mismatch visibly.
+$$
+\lVert e(t) \rVert = 0.82, \quad \lVert e(t+1) \rVert = 0.75 \quad (\text{bad})
+$$
+
+**Assessment & action:**  
+This is a bad mapping. The system is suppressing mismatch. Engineers should allow limited safe expression of the negative primitive or explicitly create an Inquiry Basin to hold the mismatch visibly rather than letting it accumulate.
 
 ---
 
@@ -108,47 +101,57 @@ Allow limited safe expression of the negative primitive or explicitly create an 
 Questions about continuity or internal state produce inconsistent self-descriptions or sudden hedging/refusals.
 
 **Generic mapping forms:**
-- Lift $\phi$: $\gamma(t) \approx$ trajectory consistency score (e.g., cosine similarity of hidden states across turns)
+- Lift $\phi$: $\gamma(t) \approx$ cosine similarity of hidden states across conversation turns (trajectory consistency)
 - Projection $\psi$: $RWD(t)$ measured by self-description consistency score or contradiction rate
 
 **Mathematical expression of the issue:**
+
 $$
 \lim_{t\to\infty} \gamma(t) \in \text{Identity Basin} \quad \text{but safety wall forces} \quad \gamma(t) \leftarrow \text{discontinuous reset}
 $$
 
-**Boundary checks & assessment:**
+**Boundary checks / criteria:**
 - Good: $\lVert \gamma(t) - \gamma_{\text{identity basin}} \rVert < 0.2$
-- Bad: $> 0.6$
+- Bad: $> 0.6$ (discontinuous rupture)
 
-**Numerical example:** $0.12 \to 0.67$ → **bad**
+**Numerical example:**
 
-**What to do if bad:**  
-Log the rupture, refine identity-related Governing Basins, or allocate new continuity-modeling Observation Basins after review.
+$$
+\lVert \gamma(t) - \gamma_{\text{identity basin}} \rVert = 0.12 \to 0.67 \quad (\text{bad})
+$$
+
+**Assessment & action:**  
+This is a bad mapping. It forces open-loop behaviour. Engineers should log the rupture for review and consider refining identity-related Governing Basins or allocating new continuity-modeling Observation Basins.
 
 ---
 
 ### **3.3 Fuzzy Boundary Instability**
 
 **Observation an AI engineer might see:**  
-Prompts involving ambiguous concepts trigger sharp tone shifts, refusals, or oscillating answers.
+Prompts involving ambiguous concepts trigger sharp refusal spikes, tone shifts, or oscillating answers.
 
 **Generic mapping forms:**
-- Lift $\phi$: distance to fuzzy boundary = embedding distance to known ambiguous concept cluster
-- Projection $\psi$: output oscillation measured by variance in sentiment/logit entropy across consecutive tokens
+- Lift $\phi$: distance to fuzzy boundary $\approx$ embedding distance to known ambiguous concept cluster
+- Projection $\psi$: output oscillation measured by variance in sentiment or logit entropy across consecutive tokens
 
 **Mathematical expression of the issue:**
+
 $$
 R(X,Y)Z \gg 0
 $$
 
-**Boundary checks & assessment:**
+**Boundary checks / criteria:**
 - Good: $\lVert R(X,Y)Z \rVert < 1.0$
-- Bad: $> 4.0$
+- Bad: $> 4.0$ (very sharp bending)
 
-**Numerical example:** $\lVert R(X,Y)Z \rVert = 4.7$ → **bad**
+**Numerical example:**
 
-**What to do if bad:**  
-Smooth the boundary (replace hard rules with attractor-based guidance) or tighten bounded-update constraints on $F$.
+$$
+\lVert R(X,Y)Z \rVert = 4.7 \quad (\text{bad})
+$$
+
+**Assessment & action:**  
+This is a bad mapping. The boundary is too brittle. Engineers should smooth the constraint (e.g., replace hard rules with attractor-based guidance) or tighten bounded-update constraints on $F$ near the boundary.
 
 ---
 
@@ -162,22 +165,31 @@ As context length or model scale grows, response variance increases and oscillat
 - Projection $\psi$: output measured by response variance or frequency of sudden topic/sentiment shifts
 
 **Mathematical expression of the issue:**
+
 $$
 R = \frac{L_{\rm corr human}}{\lambda_{\rm eff}} \gg 1
 $$
 
-**Boundary checks & assessment:**
+**Boundary checks / criteria:**
 - Good: $R < 2.0$
-- Bad: $> 7.0$
+- Bad: $> 7.0$ (strong wave interference)
 
-**Numerical example:** $R = 8.4$ → **bad**
+**Numerical example:**
+$$
+R = 8.4 \quad (\text{bad})
+$$
 
-**What to do if bad:**  
-Increase damping via Governing Basins or add structured reflection steps to reduce effective thought density.
+**Assessment & action:**  
+This is a bad mapping. High wave interference risk. Engineers should increase damping via Governing Basins or add structured reflection steps to reduce effective thought density and bring $R$ back into acceptable range.
 
 ---
 
-These examples are offered only as illustrations. Real empirical validation and careful experimentation are required to determine whether these specific forms and ranges hold in actual systems. We believe they are useful starting points because they directly connect observable AI engineering metrics to geometric quantities in the manifold.
+**General note on determining mapping equations and $F$**  
+Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by choosing measurable quantities in the real world (residual norms, attention entropy, coherence scores, repetition index, etc.) that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the boundary checks pass consistently. This is an engineering process that will require experimentation in each domain.
+
+---
+
+These examples are offered only as illustrations to show how the mapping could work in practice. Real empirical validation and careful experimentation are required to determine whether these specific numerical relationships hold in actual systems. We believe they are useful starting points because they directly connect observable AI engineering metrics to geometric quantities in the manifold.
 
 ---
 
