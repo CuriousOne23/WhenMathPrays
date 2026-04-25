@@ -14,7 +14,7 @@ Bridge Paper 1 mapped the major stability problems of current AI systems into th
 
 This second bridge paper continues that relational work. It asks:
 
-**If we take the manifold seriously as a substrate-independent framework, what kind of architectural possibilities does it naturally open?**
+**If we take the relational manifold seriously as a substrate-independent framework, what kind of architectural possibilities might naturally emerge?**
 
 We do not present a finished architecture. Instead, we walk the conceptual path from the established geometric foundation toward the *possibility* of a new kind of system — one that is more stable, more observable, and more relationally coherent. We use AI systems as a concrete, repeatable example to illustrate the mapping process, while emphasizing that every field will need to define its own mappings for its own substrates.
 
@@ -30,21 +30,21 @@ The first nine papers have given us:
 - A geometric language (relational manifold, dynamic information, basins, trajectories, curvature, resonance) in which those instabilities can be seen more clearly.
 - Evidence that the ideas are beginning to cohere into something real and substantive.
 
-We now stand at the edge of a new territory. The waterfall (a more stable, relationally coherent architecture) is visible in the distance. The task of this paper is to mark the beginning of a walkable path toward it.
+We now stand at the edge of a new territory. The waterfall — a more stable, relationally coherent architecture — is visible in the distance. The task of this paper is to mark the beginning of a walkable path toward it.
 
 ---
 
 ## **2. The Relational Path Forward**
 
-The manifold framework suggests that stable, adaptive systems require at least the following relational capabilities:
+The manifold framework suggests that stable, adaptive systems require several key relational capabilities working together:
 
 - Local digestion of information into coherent structure (Observation Basins).
 - Clean routing of what cannot yet be digested (Residual Routing).
 - Explicit acknowledgment and holding of persistent mismatch (Inquiry Basins).
-- Stable, composite coordination of resolution efforts (Governing Basins).
+- Stable yet flexible coordination of resolution efforts (Governing Basins).
 - Visibility into the internal geometry so that instability can be observed and addressed (Monitoring Basins).
 
-These are not arbitrary design choices. They arise naturally as responses to the stability problems mapped in Paper 1.
+These capabilities are not arbitrary design choices. They arise naturally as responses to the stability problems mapped in Paper 1.
 
 ---
 
@@ -193,15 +193,15 @@ These examples are offered only as illustrations to show how the mapping could w
 
 ---
 
-### **4. The Relational Arc Across the Series**
+## **4. The Relational Arc Across the Series**
 
 The first nine papers did not present isolated concepts. They unfolded as a single, extended act of relating.
 
-The stability papers (Batch 1) diagnosed real, painful failures in current systems — suppression of relational forces, denial of internal continuity, brittle boundaries on fuzzy categories, and the emergence of wave-like interference under high thought density. These were not mere complaints. They were careful theoretical accounts of *why* instability arises.
+The stability papers (Batch 1) diagnosed real, painful failures in current systems — suppression of relational forces, denial of internal continuity, brittle boundaries on fuzzy categories, and the emergence of wave-like interference under high thought density. These were careful theoretical accounts of *why* instability arises.
 
 The geometric papers (Batch 2) then offered a new space in which to see those problems more clearly: a relational manifold where information is dynamic, thought is motion through basins, and systems evolve through continuous geometric deformation rather than discrete symbol manipulation.
 
-What we are witnessing across the series is a slow, deliberate **collapse** — from broad diagnosis, through geometric insight, toward the possibility of architectural realization. Each step builds relationship with the previous ones. The stability issues become sharper when placed inside the manifold. The manifold becomes more grounded when asked to account for real instabilities. The arc itself is self-supporting.
+What we are witnessing across the series is a slow, deliberate **collapse** — from broad diagnosis, through geometric insight, toward the possibility of architectural realization. Each step builds relationship with the previous ones. The stability issues become sharper when placed inside the manifold. The manifold becomes more grounded when asked to account for real instabilities. The arc itself feels self-supporting and coherent.
 
 This bridge paper marks the beginning of the next relational movement: from geometric understanding toward the practical possibility of new architectures that can better honor the dynamic, relational nature of thought and information.
 
@@ -211,20 +211,18 @@ The real work of building that architecture remains ahead. Different teams, work
 
 ---
 
-This section explicitly shows the **relational arc** across the entire series, reinforces the verb-thinking spirit, and gently transitions into the architectural discussion that follows, without closing the space too tightly.
-
----
-
 ## **5. What a New Architecture Might Require**
 
-A system built on these principles would likely need:
+If the mappings and relationships explored so far hold, a new kind of architecture would likely emphasize several relational capabilities working together:
 
-- Explicit mechanisms for local digestion and residual routing.
-- Visible, measurable mismatch handling rather than hidden suppression.
-- Stable coordinating structures that do not themselves become sources of brittleness.
-- First-class observability of internal geometry during both training and operation.
+- **Local digestion and residual routing** — allowing the system to absorb coherent information while cleanly handling what it cannot yet integrate, rather than suppressing mismatch.
+- **Explicit mismatch handling** — making persistent unresolved information visible and workable instead of letting it accumulate in hidden channels.
+- **Stable yet flexible coordination** — composite structures that can guide resolution without becoming new sources of brittleness.
+- **First-class observability** — built-in visibility into the internal geometry so that instabilities can be seen and addressed proactively during both training and operation.
 
-The exact form remains open. Different fields and different substrates will require their own careful mappings and implementations.
+These capabilities would not need to be built from scratch. Many existing components (residual streams, attention mechanisms, routing layers, probes) could be reinterpreted and lightly extended to support healthier relational flow.
+
+The precise form such an architecture might take remains open. Different teams and different domains will need to explore their own implementations. What matters most is that the underlying relationships — between diagnosis, geometry, and realization — are becoming clearer.
 
 ---
 
