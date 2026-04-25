@@ -84,8 +84,7 @@ where $\gamma(t)$ denotes the system's trajectory through the manifold.
 **In the manifold:**  
 This produces regions of extremely high local curvature and sharp discontinuities in the update dynamics.
 
-**Mathematical expression:**
-
+**Mathematical expression:**  
 The Riemann curvature operator $R(X,Y)$ applied to a vector field $Z$ becomes large:
 
 $$
@@ -137,8 +136,6 @@ $$
 
 ---
 
-These mappings are offered as a starting point for investigation. Their purpose is to test whether the stability issues become more visible and actionable when placed inside the relational manifold geometry.
-
 ## **3. Practical Conceptual Definitions for AI Engineers**
 
 To make the above mappings actionable, we provide the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. 
@@ -162,6 +159,10 @@ We have chosen AI as an example for clarity purposes because its internal states
   *Practical proxy*: Magnitude of change in gradients or logits when approaching known fuzzy/safety topics.
 
 These definitions allow engineers to begin instrumenting their systems with Monitoring Basins (simple probes) and to start measuring the geometric quantities discussed in this paper.
+
+---
+
+These mappings and definitions are offered as a starting point for investigation. Their purpose is to test whether the stability issues become more visible and actionable when placed inside the relational manifold geometry.
 
 ---
 
