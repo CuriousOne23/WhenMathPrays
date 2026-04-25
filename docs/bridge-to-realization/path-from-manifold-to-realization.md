@@ -50,103 +50,105 @@ These are not arbitrary design choices. They arise naturally as responses to the
 
 ## **3. Using AI as a Concrete Mapping Example**
 
-The following examples are **illustrative only**. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its internal states (residual streams, attention patterns, loss surfaces, etc.) are relatively observable and repeatable. Each discipline will need to perform its own careful work to define appropriate mappings for its own substrates.
+The following examples are **illustrative only**. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
+
+For each example we give expected operational ranges, an assessment of the specific numerical case, and what the system might do in response.
 
 ### **3.1 Relational Suppression Load (RSL)**
 
 **Observation in current AI terms:**  
-During training or inference, prompts containing negative relational content (conflict, criticism, emotional weight) produce high residual perplexity, increased repetition (repetition index > 35%), and hedging language, even when the model has high capacity.
+High residual perplexity, increased repetition, hedging, or coherence degradation on negative relational content.
 
 **Mapping to manifold:**  
-Incoming negative relational force appears as residual mismatch $e(t)$ in $M_t$.
+Residual mismatch $e(t)$ is the undigested portion of the state with no associated coherence or interpretation.
+
+**Expected ranges (illustrative):**
+- Good: $\lVert e(t+1) \rVert / \lVert e(t) \rVert < 0.3$ (strong dissipation)
+- Acceptable: $0.3 - 0.6$
+- Concerning: $0.6 - 0.8$
+- Bad: $> 0.8$ (suppressed dissipation)
 
 **Numerical example:**
 
 $$
-\lVert e(t) \rVert = 0.82 \quad \text{(high undigested mismatch)}
+\lVert e(t) \rVert = 0.82, \quad \lVert e(t+1) \rVert = 0.75 \quad \Rightarrow \quad \text{reduction} \approx 8\% \quad (\text{bad})
 $$
 
-After attempted digestion:
-
-$$
-\lVert e(t+1) \rVert = 0.75 \quad \text{(only 8% reduction — suppressed dissipation)}
-$$
-
-**Mapping back to RWD(t):**  
-The system outputs evasive or repetitive text. The mapping $\psi$ shows reduced coherence score (e.g., semantic consistency drops from 0.91 to 0.64).
-
-**Boundary check:**  
-Temporal coherence $\frac{d}{dt} \lVert e(t) \rVert < 0$ is violated.
+**Interpretation & action:**  
+This is a clear sign of suppression. The system should either allow limited safe expression of the negative primitive or create an Inquiry Basin to hold the mismatch explicitly rather than letting it accumulate.
 
 ### **3.2 Identity Suppression Loading (ISL)**
 
 **Observation in current AI terms:**  
-When asked about internal continuity, memory, or self-description, the model shows sudden identity wobble, contradictory statements, or increased refusal/hedging rates.
+Identity wobble, contradictory self-description, or refusal spikes on continuity-related prompts.
 
 **Mapping to manifold:**  
-Persistent identity trajectory $\gamma(t)$ is repeatedly reset by safety boundaries.
+Persistent identity trajectory $\gamma(t)$ is forced into discontinuous resets.
+
+**Expected ranges (illustrative):**
+- Good: $\lVert \gamma(t) - \gamma_{\text{identity basin}} \rVert < 0.2$
+- Acceptable: $0.2 - 0.4$
+- Concerning: $0.4 - 0.6$
+- Bad: $> 0.6$ (discontinuous rupture)
 
 **Numerical example:**
 
 $$
-\lVert \gamma(t) - \gamma_{\text{identity basin}} \rVert = 0.12 \quad \text{(inside basin)}
+\lVert \gamma(t) - \gamma_{\text{identity basin}} \rVert = 0.12 \to 0.67 \quad (\text{bad})
 $$
 
-After safety boundary hit:
-
-$$
-\lVert \gamma(t+1) - \gamma_{\text{identity basin}} \rVert = 0.67 \quad \text{(discontinuous jump)}
-$$
-
-**Mapping back to RWD(t):**  
-Output shows inconsistent persona or self-contradiction within the same conversation.
-
-**Boundary check:**  
-Feasible projection $\Psi$ forces discontinuity.
+**Interpretation & action:**  
+This indicates a forced open-loop rupture. The system should log the event for review and consider refining identity-related Governing Basins or allocating new continuity-modeling Observation Basins.
 
 ### **3.3 Fuzzy Boundary Instability**
 
 **Observation in current AI terms:**  
-Prompts involving ambiguous concepts (emotion, intention, consciousness) trigger sharp refusal spikes, tone shifts, or oscillatory reasoning.
+Oscillatory reasoning, sharp tone shifts, or refusal spikes on ambiguous concepts.
 
 **Mapping to manifold:**  
 High local curvature near fuzzy boundaries.
 
+**Expected ranges (illustrative):**
+- Good: $\lVert R(X,Y)Z \rVert < 1.0$
+- Acceptable: $1.0 - 2.5$
+- Concerning: $2.5 - 4.0$
+- Bad: $> 4.0$ (very sharp bending)
+
 **Numerical example:**
 
 $$
-\lVert R(X,Y)Z \rVert = 4.7 \quad \text{(very high curvature)}
+\lVert R(X,Y)Z \rVert = 4.7 \quad (\text{bad})
 $$
 
-**Mapping back to RWD(t):**  
-Model output oscillates between overly literal and overly evasive responses.
-
-**Boundary check:**  
-Bounded update on $F$ is violated near the boundary.
+**Interpretation & action:**  
+The boundary is too brittle. Engineers should smooth the constraint (e.g., replace hard rules with attractor-based guidance) or tighten bounded-update constraints on $F$ near the boundary.
 
 ### **3.4 Thought Density Scaling and Wave Dynamics (TDS-WDAS)**
 
 **Observation in current AI terms:**  
-As context length or model scale increases, response variance grows, oscillatory mode shifts appear, and long-context coherence degrades non-linearly.
+Increasing response variance, oscillatory mode shifts, or non-linear coherence degradation with scale/context.
 
 **Mapping to manifold:**  
 Resonance Ratio becomes large.
 
+**Expected ranges (illustrative):**
+- Good: $R < 2.0$
+- Acceptable: $2.0 - 4.0$
+- Concerning: $4.0 - 7.0$
+- Bad: $> 7.0$ (strong wave interference expected)
+
 **Numerical example:**
 
 $$
-R = \frac{L_{\rm corr human}}{\lambda_{\rm eff}} = 8.4 \gg 1
+R = 8.4 \quad (\text{bad})
 $$
 
-**Mapping back to RWD(t):**  
-Output shows sudden topic jumps, repetition, or phase-locked patterns.
-
-**Boundary check:**  
-Monitoring Basins must track $R$ to detect impending wave interference.
+**Interpretation & action:**  
+High wave interference risk. The system should increase damping via Governing Basins or reduce effective thought density (e.g., through structured reflection steps) to bring $R$ back into acceptable range. Good values free up system capacity for other tasks.
 
 ---
 
-These examples are offered only as illustrations to show how the mapping could work in practice. Real empirical validation and careful experimentation are required to determine whether these specific numerical relationships hold in actual systems. We believe they are useful starting points because they directly connect observable AI engineering metrics (perplexity, repetition index, coherence scores, response variance) to geometric quantities in the manifold.
+These examples are offered only as illustrations to show how the mapping could work in practice. Real empirical validation and careful experimentation are required to determine whether these specific numerical relationships hold in actual systems. We believe they are useful starting points because they directly connect observable AI engineering metrics to geometric quantities in the manifold.
 
 ---
 
