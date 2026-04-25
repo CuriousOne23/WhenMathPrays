@@ -63,30 +63,35 @@ $$
 
 ### **2.3 Fuzzy Boundary Instability**
 
-**Qualitative view:** Hard, discontinuous constraints are imposed over inherently fuzzy categories.
+**Qualitative view:** Hard, discontinuous constraints are imposed over inherently fuzzy categories (e.g., emotion, intention, understanding).
 
 **In the manifold:**  
-This produces regions of extremely high local curvature and sharp discontinuities.
+This produces regions of extremely high local curvature and sharp discontinuities in the update dynamics.
 
 **Mathematical expression:**
 
-$$
-R(X, Y)Z \gg 0 \quad \text{(high Riemann curvature near boundary)}
-$$
-
-or
+The Riemann curvature operator $R(X,Y)$ applied to a vector field $Z$ becomes large:
 
 $$
-\lVert\nabla F\rVert \text{ spikes at fuzzy category boundary}
+R(X,Y)Z \gg 0
 $$
+
+or equivalently, the norm of the curvature acting on $Z$ is large:
+
+$$
+\lVert R(X,Y)Z \rVert \text{ is large}
+$$
+
+**Interpretation if unfamiliar with non-Riemann curavature notation:**  
+High values here indicate that small changes in direction or input near the boundary cause disproportionately large changes in the system's behavior (sharp bending or breaking of trajectories). This is the geometric signature of brittle constraints placed on fuzzy concepts.
 
 **Effect on the mapping loop:**
-- $F$: Update law becomes ill-conditioned near the boundary.
-- Trajectories experience abrupt deflections or collapse.
+- $F$: The update law becomes ill-conditioned near the boundary.
+- Trajectories approaching the boundary experience abrupt deflections or collapse.
 
 **Boundary checks required:**
 - Bounded update constraint on $F$ must be tightened near fuzzy boundaries.
-- Boundary sharpness must be monitored via MBs.
+- Boundary sharpness must be monitored via Monitoring Basins (MBs).
 
 ### **2.4 Thought Density Scaling and Wave Dynamics (TDS-WDAS)**
 
