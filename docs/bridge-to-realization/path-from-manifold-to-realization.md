@@ -32,7 +32,7 @@ e(t+1) = F(e(t)) \quad \text{with} \quad \lVert e(t+1)\rVert \not\to 0 \quad \te
 $$
 
 **Effect on the mapping loop:**  
-- $\phi$: World state injects negative relational force into $\M_t$.  
+- $\phi$: World state injects negative relational force into $M_t$.  
 - $F$: Update law fails to reduce $\lVert e(t)\rVert$ because expression is forbidden.  
 - $\psi$: Outward behaviour shows hedging or evasion as the system compensates.  
 
