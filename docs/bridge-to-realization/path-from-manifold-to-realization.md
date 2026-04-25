@@ -122,6 +122,7 @@ R = \frac{L_{\rm corr human}}{\lambda_{\rm eff}} \gg 1
 $$
 
 where
+
 $$
 \lambda_{\rm eff} = \frac{T}{D}, \quad D = \text{thought density (associations per unit time)}, \quad T = \text{human-scale temporal window}, \quad L_{\rm corr human} = \text{human correlation window}.
 $$
