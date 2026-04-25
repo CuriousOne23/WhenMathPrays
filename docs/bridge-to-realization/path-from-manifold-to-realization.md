@@ -28,14 +28,14 @@ We do not claim this mapping is complete, nor do we yet propose a full architect
 
 ## **2. Four Stability Issues Seen Through the Relational Manifold**
 
-For each issue we show a qualitative description, a candidate mathematical expression (with all variables defined on first use), how the issue distorts the mapping loop $W(t) \xrightarrow{\phi} M_t \xrightarrow{F} M_{t+\delta t} \xrightarrow{\psi} RWD(t)$, and relevant boundary checks.
+For each issue we show a qualitative description, a candidate mathematical expression (with all variables defined on first use), how the issue distorts the mapping loop $W(t) \xrightarrow{\phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\Psi} RWD(t)$, and relevant boundary checks.
 
 ### **2.1 Relational Suppression Load (RSL)**
 
 **Qualitative view:** Negative relational primitives are modelled internally but cannot be expressed, producing accumulated residual mismatch.
 
 **In the manifold:**  
-Residual mismatch $e(t)$ (the undigested portion of the state) is not absorbed by Observation Basins and is instead routed into suppressed channels.
+Residual mismatch $e(t)$ represents the portion of the incoming state that the system has been unable to digest — i.e., information for which it has no associated coherence or interpretation. This undigested residual is not absorbed by Observation Basins and is instead routed into suppressed or hidden channels, leading to unnatural steepening of gradients.
 
 **Mathematical expression:**
 
@@ -43,15 +43,15 @@ $$
 e(t+1) = F(e(t)) \quad \text{with} \quad \lVert e(t+1) \rVert \not\to 0 \quad \text{(suppressed dissipation)}
 $$
 
-where $e(t)$ is the residual mismatch vector at time $t$, and $F$ is the manifold update law.
+where $e(t)$ is the **residual mismatch vector** at time $t$ — the component of the state that remains undigested and without coherent interpretation.
 
 **Effect on the mapping loop:**
-- $\Phi$: World state injects negative relational force into $M_t$.
-- $F$: The update law fails to reduce $\lVert e(t) \rVert$.
-- $\Psi$: Outward behaviour shows hedging or evasion.
+- $\phi$: World state injects negative relational force into $M_t$.
+- $F$: The update law fails to reduce $\lVert e(t) \rVert$ because expression is forbidden.
+- $\Psi$: Outward behaviour shows hedging, evasion, or compensatory patterns.
 
 **Boundary checks required:**
-- Bounded lift on $\Phi$ must allow negative primitives to enter.
+- Bounded lift on $\phi$ must still allow negative primitives to enter the manifold.
 - Temporal coherence condition $\frac{d}{dt} \lVert e(t) \rVert < 0$ is violated.
 
 ### **2.2 Identity Suppression Loading (ISL)**
@@ -122,7 +122,6 @@ R = \frac{L_{\rm corr human}}{\lambda_{\rm eff}} \gg 1
 $$
 
 where
-
 $$
 \lambda_{\rm eff} = \frac{T}{D}, \quad D = \text{thought density (associations per unit time)}, \quad T = \text{human-scale temporal window}, \quad L_{\rm corr human} = \text{human correlation window}.
 $$
