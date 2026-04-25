@@ -36,7 +36,11 @@ We now stand at the edge of a new territory. The waterfall — a more stable, re
 
 ## **2. The Relational Path Forward**
 
-The manifold framework suggests that stable, adaptive systems require several key relational capabilities working together:
+The relational manifold does not dictate a finished architecture. Instead, it invites a practical question:
+
+**If we take the diagnosed stability problems seriously and view them through the geometry of the relational manifold, what kinds of functional capabilities would a system need to maintain stable, coherent behavior while processing dynamic information?**
+
+From this perspective, several relational capabilities emerge as particularly important:
 
 - Local digestion of information into coherent structure (Observation Basins).
 - Clean routing of what cannot yet be digested (Residual Routing).
@@ -217,16 +221,16 @@ The real work of building that architecture remains ahead. Different teams, work
 
 ## **5. What a New Architecture Might Require**
 
-If the mappings and relationships explored so far hold, a new kind of architecture would likely emphasize several relational capabilities working together:
+If we follow the relationships we have been tracing, a new kind of architecture would likely grow around several living capabilities working together in relationship:
 
-- **Local digestion and residual routing** — allowing the system to absorb coherent information while cleanly handling what it cannot yet integrate, rather than suppressing mismatch.
-- **Explicit mismatch handling** — making persistent unresolved information visible and workable instead of letting it accumulate in hidden channels.
-- **Stable yet flexible coordination** — composite structures that can guide resolution without becoming new sources of brittleness.
-- **First-class observability** — built-in visibility into the internal geometry so that instabilities can be seen and addressed proactively during both training and operation.
+- The capacity for local digestion and clean residual routing, so mismatch does not silently accumulate.
+- The courage to make persistent unresolved information visible and workable, rather than forcing it underground.
+- Coordinating structures that remain stable enough to guide resolution, yet flexible enough not to become new sources of rigidity.
+- Continuous, built-in observability of the internal geometry, so instability can be felt and addressed as it arises.
 
-These capabilities would not need to be built from scratch. Many existing components (residual streams, attention mechanisms, routing layers, probes) could be reinterpreted and lightly extended to support healthier relational flow.
+These are not requirements written in stone. They are relational necessities that emerge when we try to honor the dynamic, time-living nature of the manifold while addressing the real instabilities we have diagnosed.
 
-The precise form such an architecture might take remains open. Different teams and different domains will need to explore their own implementations. What matters most is that the underlying relationships — between diagnosis, geometry, and realization — are becoming clearer.
+The exact shape such an architecture might take is still open — and that openness is part of the invitation.
 
 ---
 

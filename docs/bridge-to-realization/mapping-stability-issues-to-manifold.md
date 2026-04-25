@@ -148,7 +148,7 @@ flowchart LR
 
 ## **3. Practical Conceptual Definitions for AI Engineers**
 
-To make the above mappings actionable, we provide the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. 
+To make the above mappings actionable and to help the ideas continue relating to real engineering work, we offer the following practical interpretations and approximations that AI engineers can start experimenting with. These are not final definitions — they are starting points grounded in current transformer-style architectures. 
 
 We have chosen AI as an example for clarity purposes because its internal states are observable, repeatable, and its general architecture is relatively well understood. Other disciplines will need to perform their own careful work to define the appropriate mappings for their own substrates and phenomena.
 
