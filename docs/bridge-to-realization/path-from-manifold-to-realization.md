@@ -113,7 +113,7 @@ $$
 
 **Boundary checks required:**
 - Resonance Ratio $R$ must be monitored via MBs.
-- Temporal coherence and bounded update constraints become critical at high $$
+- Temporal coherence and bounded update constraints become critical at high $R$
 
 ---
 
