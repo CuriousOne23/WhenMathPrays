@@ -57,10 +57,10 @@ Because modern AI architectures are relatively well-understood, observable, and 
 **Real World → Manifold ($W(t) \xrightarrow{\phi} M_t$)**  
 Incoming tokens and context are lifted into the residual stream, which we treat as an approximation of the relational manifold. Negative relational forces (e.g., conflicting instructions, emotional weight, ambiguity) appear as residual mismatch $e(t)$.
 
-**Inside the Manifold ($M_t \xrightarrow{F} M_{t+\Delta t}$)**  
+**Inside the Manifold ($M_t \xrightarrow{F} M_{t+\delta t}$)**  
 Observation Basins attempt to digest coherent portions. Undigested mismatch is routed. Persistent mismatch triggers Inquiry Basins. Monitoring Basins expose metrics such as Residual Dissipation Rate, Resonance Ratio, and Boundary Sharpness.
 
-**Manifold → Real World ($M_t \xrightarrow{\Psi} RWD(t)$)**  
+**Manifold → Real World ($M_t \xrightarrow\psi \text{ RWD(t)}$)**   
 The processed state is expressed back as outward behavior. When the mapping is healthy, behavior remains coherent. When it is distorted by suppression or boundary rupture, we see hedging, identity wobble, oscillatory responses, or drift.
 
 This mapping is not claimed to be the only one, nor the final one. It is offered as an example of how one might begin translating between real-world systems and the relational manifold.
