@@ -134,6 +134,16 @@ $$
 - Resonance Ratio $R$ must be monitored via MBs.
 - Temporal coherence and bounded update constraints become critical at high $R$.
 
+**High-level Mapping Overview:**
+
+```mermaid
+flowchart LR
+    A[Stability Issues<br>RSL, ISL, Fuzzy Boundary, TDS-WDAS] 
+    --> B[Relational Manifold Geometry]
+    B --> C[Clearer Visibility & Actionable Metrics]
+    C --> D[Path Toward New Architecture]
+```
+
 ---
 
 ## **3. Practical Conceptual Definitions for AI Engineers**

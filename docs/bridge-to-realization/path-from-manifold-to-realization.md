@@ -46,6 +46,17 @@ The manifold framework suggests that stable, adaptive systems require several ke
 
 These capabilities are not arbitrary design choices. They arise naturally as responses to the stability problems mapped in Paper 1.
 
+**The Relational Path:**
+
+```mermaid
+flowchart TD
+    A[Diagnosis<br>Batch 1] 
+    --> B[Geometric Foundation<br>Batch 2]
+    B --> C[Bridge Papers]
+    C --> D[New Architecture Possibilities<br>RMA or other]
+    style C fill:#e3f2fd,stroke:#1976d2
+```
+
 ---
 
 ## **3. Using AI as a Concrete Mapping Example**
