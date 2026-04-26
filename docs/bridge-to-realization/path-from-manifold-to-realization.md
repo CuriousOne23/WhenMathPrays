@@ -193,54 +193,46 @@ This is a bad mapping. High wave interference risk. Engineers should increase da
 ---
 
 **General note on determining mapping equations and $F$**  
-Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by choosing measurable quantities in the real world (residual norms, attention entropy, coherence scores, repetition index, etc.) that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the boundary checks pass consistently. This is an engineering process that will require experimentation in each domain.
+Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by selecting measurable quantities in the real world (residual norms, attention entropy, coherence scores, repetition index, etc.) that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the geometric boundary checks pass consistently. This is inherently an experimental, system-specific engineering process.
 
 ---
 
-### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Guidance**
+### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
 
-To make the mapping loop more tangible, here is one highly simplified hypothetical example of what φ, ψ, and F could look like in a transformer-style model. These are **toy functions for illustration only**.
+To make the mapping loop more tangible, here is one extremely simplified hypothetical example of what φ, ψ, and F could look like in a transformer-style model. These are **toy functions for illustration only**.
 
-**Illustrative Functions**
+**Illustrative Toy Functions**
 
-- **Lift φ (World → Manifold)**:
+- **Lift φ (World → Manifold)**:  
 
 $$
 \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
 $$
 
-- **Update Law F (Manifold Evolution)**:
+- **Update Law F (Manifold Evolution)**:  
 
 $$
 M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
 $$
 
-- **Projection ψ (Manifold → Real World)**:
-   
+- **Projection ψ (Manifold → Real World)**: 
+
 $$
 \psi(M_t) \approx W_{\rm out} \cdot M_t
 $$
 
-**Practical Guidance: How an Engineer Might Begin**
+**Guidance for Determining φ, ψ, and F**
 
-If you wanted to start experimenting, here is a reasonable process:
+Every real system is unique and substantially more complex than these toy examples. The functions above are deliberately minimal and should be treated only as a conceptual starting point. In practice, effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case.
 
-1. **For φ (Lift)**:  
-   Start by projecting input embeddings + residual stream into your chosen manifold approximation (often the residual stream itself or concatenated hidden states).  
-   *What to look for*: Does the lifted state preserve meaningful structure from the input? Check cosine similarity or residual norm before/after φ.
+A typical process involves:
+- Selecting a suitable manifold approximation (often the residual stream or selected hidden states),
+- Defining an initial φ that preserves meaningful input structure,
+- Introducing a basic update rule F (commonly starting from existing attention/FFN layers) while adding mechanisms to encourage healthy residual dissipation,
+- Implementing a simple ψ that produces usable outputs,
+- Then systematically measuring geometric quantities (e(t), trajectory stability γ(t), Resonance Ratio, boundary curvature, etc.) during controlled experiments on known failure modes.
 
-2. **For F (Update Law)**:  
-   Begin with something close to a normal transformer layer update (attention + feed-forward), then add a small term that encourages residual mismatch dissipation (the `-α·e(t)` term above).  
-   *What to look for*: Monitor whether $\lVert e(t) \rVert$ tends to decrease over time (good dissipation) or persists/grows (suppression). Also watch trajectory stability using hidden-state similarity across tokens.
-
-3. **For ψ (Projection)**:  
-   Start with a simple linear readout from the final manifold state to logits or next-token prediction.  
-   *What to look for*: Does the output behavior remain coherent and useful? Measure perplexity, repetition rate, or hedging frequency.
-
-**Critical Caveat**  
-These are extremely simplified starting points. Real φ, ψ, and F would be significantly more sophisticated and would need to respect the cognitive spacesuit constraints (bounded lift on φ, bounded update on F, feasible projection on ψ). The best way to proceed is to instrument your model with simple Monitoring Basins (probes), run controlled experiments, measure the geometric quantities (e(t), γ(t), R, curvature), and iteratively tune the functions.
-
-This subsection is only meant to give you a concrete place to begin — not a finished solution.
+This iterative, measurement-driven tuning requires patience and careful instrumentation (e.g., lightweight Monitoring Basins). There is no universal solution — the appropriate forms emerge gradually through experimentation on the target system.
 
 ---
 
