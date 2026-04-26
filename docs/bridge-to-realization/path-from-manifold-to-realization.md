@@ -209,21 +209,25 @@ $$
 \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
 $$
 
+  where $W_{\rm embed}(t)$ is the initial embedding vector(s) of the input tokens at time $t$ (the very first numerical representation of the prompt after the model’s embedding layer).
+
 - **Update Law F (Manifold Evolution)**:  
 
 $$
 M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
 $$
 
-- **Projection ψ (Manifold → Real World)**: 
+- **Projection ψ (Manifold → Real World)**:  
 
 $$
 \psi(M_t) \approx W_{\rm out} \cdot M_t
 $$
 
+  where $W_{\rm out}$ is the final output projection matrix (the learned linear layer that converts the internal manifold state into logits for next-token prediction).
+
 **Guidance for Determining φ, ψ, and F**
 
-Every real system is unique and substantially more complex than these toy examples. The functions above are deliberately minimal and should be treated only as a conceptual starting point. In practice, effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case.
+Every real system is unique and substantially more complex than these toy examples. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case.
 
 A typical process involves:
 - Selecting a suitable manifold approximation (often the residual stream or selected hidden states),
@@ -232,7 +236,7 @@ A typical process involves:
 - Implementing a simple ψ that produces usable outputs,
 - Then systematically measuring geometric quantities (e(t), trajectory stability γ(t), Resonance Ratio, boundary curvature, etc.) during controlled experiments on known failure modes.
 
-This iterative, measurement-driven tuning requires patience and careful instrumentation (e.g., lightweight Monitoring Basins). There is no universal solution — the appropriate forms emerge gradually through experimentation on the target system.
+This iterative, measurement-driven tuning requires patience and careful instrumentation. There is no universal solution — the appropriate forms emerge gradually through experimentation on the target system.
 
 ---
 
