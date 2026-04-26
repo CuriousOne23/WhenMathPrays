@@ -195,55 +195,61 @@ This is a bad mapping. High wave interference risk. Engineers should increase da
 **General note on determining mapping equations and $F$**  
 Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by selecting measurable quantities in the real world (residual norms, attention entropy, coherence scores, repetition index, etc.) that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the geometric boundary checks pass consistently. This is inherently an experimental, system-specific engineering process.
 
+---
+
 ### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
 
-To make the mapping loop more tangible, here is one extremely simplified hypothetical example of what φ, ψ, and F could look like in a transformer-style model. These are **toy functions for illustration only**.
+The success of the entire mapping approach depends first and foremost on **choosing the right primitives** from the real world to lift into the manifold. The exact primitives will vary significantly from system to system and especially across different substrates (biological, linguistic, social, physical, etc.). 
 
-**Illustrative Toy Functions**
+In general, the most useful primitives are the fundamental entities, states, or relationships that most strongly drive the observable behavior and dynamics of the system under study.
 
-- **Lift φ (World → Manifold)**:  
+The success of the entire mapping approach depends first and foremost on **choosing the right primitives** from the real world to lift into the manifold. The exact primitives will vary significantly from system to system and especially across different substrates (biological, linguistic, social, physical, etc.). 
+
+The authors believe the primitives developed in the Batch 2 papers provide a strong general starting point for cognitive systems. These include:
+
+- Dynamic versus static information
+- Residual mismatch $e(t)$
+- Trajectories $\gamma(t)$
+- Object Basins (stable regions of coherent structure)
+- Relational Basins (regions of transition and movement)
+- The mapping loop $W(t) \xrightarrow{\phi} M_t \xrightarrow{F} M_{t+\Delta t} \xrightarrow{\psi} RWD(t)$
+- Cognitive spacesuit constraints (bounded lift on $\phi$, bounded update on $F$, feasible projection on $\psi$)
+
+Note that there may be additional or alternative primitives depending on the specific system or substrate.
+
+If the chosen primitives are incorrect or incomplete, the manifold model will be of little value no matter how sophisticated φ, ψ, and F become. Once the right primitives are identified, defining φ, ψ, and F becomes a matter of standard engineering iteration guided by the manifold’s geometric and dynamic properties.
+
+**Illustrative Toy Functions** (for a transformer-style model)
+
+- **Lift φ (World → Internal Representation)**: 
 
 $$
 \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
 $$
 
-  where $W_{\rm embed}(t)$ is the initial embedding vector(s) of the input tokens at time $t$.
+  where $W_{\rm embed}(t)$ is the initial embedding vector(s) of the input at time $t$.
 
-- **Update Law F (Manifold Evolution)**:  
+- **Update Law F (Internal Evolution)**:  
 
 $$
- M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
+M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm internal\ processing}(M_t) - 0.08 \cdot e(t)
 $$
 
-- **Projection ψ (Manifold → Real World)**:  
+- **Projection ψ (Internal Representation → Output)**:  
 
 $$
 \psi(M_t) \approx W_{\rm out} \cdot M_t
 $$
 
-  where $W_{\rm out}$ is the final output projection matrix that converts the internal state into logits.
+  where $W_{\rm out}$ is the final projection matrix.
 
-**Underlying Principle for Choosing φ, ψ, and F**
+**Underlying Principle**
 
-The guiding principle is that φ, ψ, and F should enable **stable, coherent, and adaptive internal dynamics** while gracefully handling both well-structured and noisy or conflicting information — without suppression, instability, or loss of continuity.
+If the primitives lifted by φ correctly represent the domain’s key structures and relationships, then φ, ψ, and F tend to emerge naturally through iterative engineering effort while satisfying the manifold’s requirements for stability, coherence, and healthy mismatch handling.
 
-In standard engineering terms, effective functions should satisfy the following:
+**Practical Guidance**
 
-- **φ (Lift)** should faithfully encode incoming information into the internal representation while preserving critical relational structure and avoiding unnecessary distortion or information loss.
-- **F (Update Law)** should support healthy information processing: enabling effective digestion of coherent input, clean routing or temporary holding of unresolved mismatch, and controlled evolution of internal state over time.
-- **ψ (Projection)** should produce externally observable behavior that is consistent with the internal state, without introducing artificial discontinuities, instability, or loss of behavioral coherence.
-
-**Translated into the language of the relational manifold:**
-
-- Good φ lifts information into the manifold while preserving existing Object Basins and trajectory continuity.
-- Good F promotes natural manifold evolution — supporting digestion in Object Basins, smooth transitions through Relational Basins, and proper dissipation or routing of residual mismatch $e(t)$.
-- Good ψ projects the manifold’s internal geometry back into behavior without rupturing continuity or creating sharp, unphysical discontinuities.
-
-Functions that improve geometric indicators (faster $e(t)$ dissipation, more stable trajectories $\gamma(t)$, well-controlled Resonance Ratio, smoother boundary behavior) are moving in the right direction. Those that degrade these signals are misaligned with the manifold’s relational dynamics.
-
-**Guidance for Determining φ, ψ, and F**
-
-Every real system is unique and substantially more complex than these toy examples. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case through careful measurement and experimentation.
+Engineers should focus first on carefully selecting and validating the primitives for their specific system and substrate. Only then define and tune φ, ψ, and F. Progress is measured by whether geometric indicators improve (better mismatch dissipation, more stable trajectories, controlled resonance, smoother boundaries) and real-world behavior becomes more coherent and predictable.
 
 ---
 
