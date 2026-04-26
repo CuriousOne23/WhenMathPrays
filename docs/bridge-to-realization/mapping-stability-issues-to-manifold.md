@@ -55,7 +55,7 @@ In the manifold:
 
   
 $$
-\|e(t+1)\| < \|e(t)\|
+\lVert e(t+1)\rVert < \lVert e(t)\rVert
 $$
 
 - If dissipation fails, mismatch persists as a vector that cannot be projected out by $\psi$
@@ -100,11 +100,14 @@ If $\psi$ or external constraints impose **hard boundaries** on inherently fuzzy
 
   
 $$
-\|R(X,Y)Z\| \gg 0
+\lVert R(X,Y)Z\rVert \gg 0
 $$
 
 Thus Fuzzy Boundary Instability must map to **curvature spikes**.  
 No other geometric failure mode captures “brittle behavior near a fuzzy category boundary.”
+
+**Interpretation if unfamiliar with Riemann curvature notation:**  
+High values here indicate that small changes in direction or input near the boundary cause disproportionately large changes in the system's behavior (sharp bending or breaking of trajectories). This is the geometric signature of brittle constraints placed on fuzzy concepts.
 
 ---
 
@@ -221,9 +224,6 @@ or equivalently, the norm of the curvature acting on $Z$ is large:
 $$
 \lVert R(X,Y)Z \rVert \text{ is large}
 $$
-
-**Interpretation if unfamiliar with Riemann curvature notation:**  
-High values here indicate that small changes in direction or input near the boundary cause disproportionately large changes in the system's behavior (sharp bending or breaking of trajectories). This is the geometric signature of brittle constraints placed on fuzzy concepts.
 
 **Effect on the mapping loop:**
 - $F$: The update law becomes ill-conditioned near the boundary.
