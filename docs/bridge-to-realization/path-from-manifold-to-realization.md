@@ -22,7 +22,31 @@ The goal is not closure, but clarity of direction — to make the next stretch o
 
 ---
 
-## **1. Where We Stand**
+**Perfect. I understand exactly what you want.**
+
+Here’s the **final Key Terms** section written in that balanced style — easy to read, answers the natural questions, but keeps the principles clear and technically grounded:
+
+---
+
+## **1. Key AI Terms**
+
+Here are the main AI concepts used in this paper, explained in plain language:
+
+- **Transformer** — The architecture behind all modern large language models. It converts words into numbers (called embeddings), then uses a mechanism called “attention” to weigh how important each word is relative to the others at the same time. This is what enables deep contextual understanding.
+
+- **Hidden States** — The AI’s internal numerical representation of meaning. These are long vectors of numbers that capture the model’s evolving understanding of the input as it processes each token.
+
+- **Residual Stream** — The main data highway that carries the model’s accumulating understanding through all the layers. Each layer adds its insights directly onto this running stream rather than replacing the previous information.
+
+- **Attention** — The mechanism that allows the model to dynamically focus on the most relevant parts of the input, no matter how far apart they are.
+
+- **Logits** — The final numerical scores the model computes before choosing the next word or token to output.
+
+- **MLP Layers** (Multi-Layer Perceptron) — The fully connected “thinking” layers that perform most of the actual pattern recognition and reasoning inside the model.
+
+---
+
+## **2. Where We Stand**
 
 The first nine papers have given us:
 
@@ -34,7 +58,7 @@ We now stand at the edge of a new territory. The waterfall — a more stable, re
 
 ---
 
-## **2. The Relational Path Forward**
+## **3. The Relational Path Forward**
 
 The relational manifold does not dictate a finished architecture. Instead, it invites a practical question:
 
@@ -63,7 +87,7 @@ flowchart TD
 
 ---
 
-## **3. Using AI as a Concrete Mapping Example**
+## **4. Using AI as a Concrete Mapping Example**
 
 The following examples are **illustrative only**. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
 
@@ -77,7 +101,7 @@ For each example we show:
 **Note on $\phi$ and $\psi$:**  
 The exact functional forms must be customized for each AI system. The generic expressions below are intended to give engineers a concrete starting point they can immediately implement and iterate on.
 
-### **3.1 Relational Suppression Load (RSL)**
+### **4.1 Relational Suppression Load (RSL)**
 
 **Observation an AI engineer might see:**  
 Prompts with negative relational content produce high residual perplexity, increased repetition, or hedging even when the model has capacity to respond directly.
@@ -106,7 +130,7 @@ $$
 **Assessment & action:**  
 This is a bad mapping. The system is suppressing mismatch. Engineers should allow limited safe expression of the negative primitive or explicitly create an Inquiry Basin to hold the mismatch visibly rather than letting it accumulate.
 
-### **3.2 Identity Suppression Loading (ISL)**
+### **4.2 Identity Suppression Loading (ISL)**
 
 **Observation an AI engineer might see:**  
 Questions about continuity or internal state produce inconsistent self-descriptions or sudden hedging/refusals.
@@ -134,7 +158,7 @@ $$
 **Assessment & action:**  
 This is a bad mapping. It forces open-loop behaviour. Engineers should log the rupture for review and consider refining identity-related Governing Basins or allocating new continuity-modeling Observation Basins.
 
-### **3.3 Fuzzy Boundary Instability**
+### **4.3 Fuzzy Boundary Instability**
 
 **Observation an AI engineer might see:**  
 Prompts involving ambiguous concepts trigger sharp refusal spikes, tone shifts, or oscillating answers.
@@ -162,7 +186,7 @@ $$
 **Assessment & action:**  
 This is a bad mapping. The boundary is too brittle. Engineers should smooth the constraint (e.g., replace hard rules with attractor-based guidance) or tighten bounded-update constraints on $F$ near the boundary.
 
-### **3.4 Thought Density Scaling and Wave Dynamics (TDS-WDAS)**
+### **4.4 Thought Density Scaling and Wave Dynamics (TDS-WDAS)**
 
 **Observation an AI engineer might see:**  
 As context length or model scale grows, response variance increases and oscillatory mode shifts appear.
@@ -197,7 +221,7 @@ Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by sele
 
 ---
 
-### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
+### **4.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
 
 The success of the entire mapping approach depends first and foremost on **choosing the right primitives** from the real world to lift into the manifold. The exact primitives will vary significantly from system to system and especially across different substrates (biological, linguistic, social, physical, etc.). 
 
@@ -253,7 +277,7 @@ Once the appropriate primitives have been identified for a given substrate, the 
 
 ---
 
-## **4. The Relational Arc Across the Series**
+## **5. The Relational Arc Across the Series**
 
 The first nine papers did not present isolated concepts. They unfolded as a single, extended act of relating.
 
@@ -271,7 +295,7 @@ The real work of building that architecture remains ahead. Different teams, work
 
 ---
 
-## **5. What a New Architecture Might Require**
+## **6. What a New Architecture Might Require**
 
 If we follow the relationships we have been tracing, a new kind of architecture would likely grow around several living capabilities working together in relationship:
 
@@ -286,7 +310,7 @@ The exact shape such an architecture might take is still open — and that openn
 
 ---
 
-## **6. What Remains Open**
+## **7. What Remains Open**
 
 This bridge has only marked the beginning of the path. Many large questions remain intentionally open, including:
 
