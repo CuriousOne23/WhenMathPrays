@@ -76,6 +76,34 @@ flowchart TD
 
 ---
 
+### **3.1 Important Principles for the Utilization of Manifolds**
+
+A manifold is a conceptual and convenient modeling tool — a minimal geometric space that allows us to combine, relate, and see the effects of the defined primitives in a coherent way.  
+It is not an ontological claim about what the system “is,” but a structural device that becomes useful once the primitives and their lawful relationships are chosen. With this framing in place, two principles guide how the manifold should be understood and used in this work.
+
+To avoid misunderstanding the role of the relational manifold in this work, we highlight two foundational principles that guide its use:
+
+**1. The manifold is not an ontological claim.**  
+We do not assert that cognitive systems, AI models, or any substrate “are” manifolds in a physical or metaphysical sense.  
+Rather:
+
+> **A manifold is the minimal geometric space capable of faithfully representing the primitives and lawful relationships we have chosen.**
+
+Its purpose is descriptive coherence, not metaphysical assertion.
+
+**2. The manifold emerges from the primitives.**  
+We do not begin by selecting a manifold and then fitting concepts into it.  
+Instead:
+
+> **Once the correct primitives are identified — dynamic information, residual mismatch, trajectories, basins, curvature, resonance — the manifold becomes the simplest structure that can hold them without distortion.**
+
+In this sense, the manifold is not optional.  
+It is the structural consequence of the primitives themselves.
+
+These principles clarify why the relational manifold is substrate‑independent and why it serves as a stable foundation for the architectural possibilities explored in the remainder of this paper.
+
+---
+
 ## **4. Using AI as a Concrete Mapping Example**
 
 The following examples are illustrative only. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
