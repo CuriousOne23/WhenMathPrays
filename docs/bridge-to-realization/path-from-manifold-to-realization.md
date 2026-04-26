@@ -104,6 +104,14 @@ These principles clarify why the relational manifold is substrate‑independent 
 
 ---
 
+### **3.2 Relation to the Geometry of Relational Thought**
+
+> **Object Basins (OBs) and Relational Basins (RBs) provide the representational structures that make the manifold practically useful.** Because OBs can stabilize nouns, verbs, feelings, abstractions, and narrative fragments, and RBs can hold transitions, tensions, and relational dynamics, the primitives defined in Batch 2 can be mapped into them. This mapping is not speculative — it is a matter of engineering effort. The manifold provides the minimal geometric space; OBs and RBs provide the representational home in which the primitives can be combined, related, and observed as dynamic processes. This makes thought geometrically visible and measurable in ways that were previously impossible.
+
+Taken together, these observations connect the conceptual framing of Section 3.1 to the concrete structures introduced in the Geometry of Relational Thought. They show that the primitives already have a natural geometric home, that the manifold becomes operational through OBs and RBs, and that engineers can begin defining these basins for their own systems. This is what turns the relational manifold from a conceptual tool into a practical foundation for new architectures.
+
+---
+
 ## **4. Using AI as a Concrete Mapping Example**
 
 The following examples are illustrative only. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
