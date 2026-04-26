@@ -197,34 +197,29 @@ Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by choo
 
 ---
 
-These examples are offered only as illustrations to show how the mapping could work in practice. Real empirical validation and careful experimentation are required to determine whether these specific numerical relationships hold in actual systems. We believe they are useful starting points because they directly connect observable AI engineering metrics to geometric quantities in the manifold.
-
-**Yes, that's a very good point.** Most AI engineers will indeed need more hand-holding here.
-
-Here's a stronger, more practical version of **Section 3.5** that includes guidance on how an engineer might actually begin determining φ, ψ, and F:
-
----
-
 ### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Guidance**
 
 To make the mapping loop more tangible, here is one highly simplified hypothetical example of what φ, ψ, and F could look like in a transformer-style model. These are **toy functions for illustration only**.
 
 **Illustrative Functions**
 
-- **Lift φ (World → Manifold)**:  
-  $$
-  \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
-  $$
+- **Lift φ (World → Manifold)**:
 
-- **Update Law F (Manifold Evolution)**:  
-  $$
-  M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
-  $$
+$$
+\phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
+$$
 
-- **Projection ψ (Manifold → Real World)**:  
-  $$
-  \psi(M_t) \approx W_{\rm out} \cdot M_t
-  $$
+- **Update Law F (Manifold Evolution)**:
+
+$$
+M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
+$$
+
+- **Projection ψ (Manifold → Real World)**:
+   
+$$
+\psi(M_t) \approx W_{\rm out} \cdot M_t
+$$
 
 **Practical Guidance: How an Engineer Might Begin**
 
