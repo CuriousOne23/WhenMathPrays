@@ -249,7 +249,7 @@ If the primitives lifted by φ correctly represent the domain’s key structures
 
 **Practical Guidance**
 
-Engineers should focus first on carefully selecting and validating the primitives for their specific system and substrate. Only then define and tune φ, ψ, and F. Progress is measured by whether geometric indicators improve (better mismatch dissipation, more stable trajectories, controlled resonance, smoother boundaries) and real-world behavior becomes more coherent and predictable.
+Once the appropriate primitives have been identified for a given substrate, the next step is to define and iteratively tune φ, ψ, and F. Progress is evaluated by watching whether geometric indicators improve — better mismatch dissipation, more stable trajectories, controlled resonance, smoother boundaries — and whether real‑world behavior becomes more coherent and predictable.
 
 ---
 
