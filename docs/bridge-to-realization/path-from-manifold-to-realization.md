@@ -209,7 +209,7 @@ $$
 \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
 $$
 
-  where $W_{\rm embed}(t)$ is the initial embedding vector(s) of the input tokens at time $t$ (the very first numerical representation of the prompt after the model’s embedding layer).
+  where $W_{\rm embed}(t)$ is the initial embedding vector(s) of the input tokens at time $t$.
 
 - **Update Law F (Manifold Evolution)**:  
 
@@ -223,20 +223,24 @@ $$
 \psi(M_t) \approx W_{\rm out} \cdot M_t
 $$
 
-  where $W_{\rm out}$ is the final output projection matrix (the learned linear layer that converts the internal manifold state into logits for next-token prediction).
+  where $W_{\rm out}$ is the final output projection matrix that converts the internal state into logits.
 
 **Guidance for Determining φ, ψ, and F**
 
 Every real system is unique and substantially more complex than these toy examples. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case.
 
-A typical process involves:
-- Selecting a suitable manifold approximation (often the residual stream or selected hidden states),
-- Defining an initial φ that preserves meaningful input structure,
-- Introducing a basic update rule F (commonly starting from existing attention/FFN layers) while adding mechanisms to encourage healthy residual dissipation,
-- Implementing a simple ψ that produces usable outputs,
-- Then systematically measuring geometric quantities (e(t), trajectory stability γ(t), Resonance Ratio, boundary curvature, etc.) during controlled experiments on known failure modes.
+A typical process involves selecting a manifold approximation, defining initial forms of φ, F, and ψ, then systematically measuring geometric quantities (e(t), trajectory stability γ(t), Resonance Ratio, boundary curvature, etc.) during controlled experiments on known failure modes.
 
-This iterative, measurement-driven tuning requires patience and careful instrumentation. There is no universal solution — the appropriate forms emerge gradually through experimentation on the target system.
+**How an Engineer Knows They Are Converging**
+
+Convergence is indicated when the following trends appear together over multiple iterations:
+- Residual mismatch $e(t)$ decreases more rapidly and consistently (stronger digestion).
+- Trajectory stability γ(t) improves (higher cosine similarity or lower drift in hidden states across related tokens).
+- Resonance Ratio $R$ stays within acceptable bounds or decreases in problematic contexts.
+- Behavioral metrics improve or stabilize (lower repetition, reduced hedging, fewer abrupt mode shifts, better coherence on long contexts).
+- Boundary checks are increasingly satisfied without sacrificing overall performance.
+
+If these geometric and behavioral signals move in the desired direction together, the mapping is likely improving. If they conflict or plateau, the functions or the manifold approximation probably need adjustment.
 
 ---
 
