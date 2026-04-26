@@ -224,19 +224,22 @@ If the chosen primitives are incorrect or incomplete, the manifold model will be
 **Illustrative Toy Functions** (for a transformer-style model)
 
 - **Lift φ (World → Internal Representation)**:  
-  $$
-  \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
-  $$
+  
+$$
+\phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
+$$
 
 - **Update Law F (Internal Evolution)**:  
-  $$
-  M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm internal\ processing}(M_t) - 0.08 \cdot e(t)
-  $$
+
+$$
+M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm internal\ processing}(M_t) - 0.08 \cdot e(t)
+$$
 
 - **Projection ψ (Internal Representation → Output)**:  
-  $$
-  \psi(M_t) \approx W_{\rm out} \cdot M_t
-  $$
+  
+$$
+\psi(M_t) \approx W_{\rm out} \cdot M_t
+$$
 
 **Underlying Principle**
 
