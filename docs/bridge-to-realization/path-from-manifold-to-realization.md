@@ -320,47 +320,51 @@ The journey continues.
 ## **References**
 
 ### **Stability Diagnostics (Batch 1)**
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *Relational Suppression Load*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/RELATIONAL_SUPPRESSION_LOAD.md
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *Identity Suppression Loading*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/IDENTITY_SUPPRESSION_LOADING.md
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *Fuzzy Boundary Instability Supposition*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/FUZZY_BOUNDARY_INSTABILITY_SUPPOSITION.md
-
 - Curious One. *Thought Density Scaling and Wave Dynamics in AI Systems (TDS-WDAS)*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/TDS-WDAS.md
 
 ### **Geometric Foundations (Batch 2)**
-
 - Curious One, Copilot (Microsoft), Grok (xAI). *Dynamic Information: Patterns That Act*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/dynamic-information.md
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *When High Dynamic Information Content Becomes Necessary*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/High%20d-information.md
-
 - Curious One, Copilot (Microsoft), Grok (xAI). *Geometry of Relational Thought*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/Geometry_of_Relational_Thought.md
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *The Geometry of Thought: Object Basins, Relational Basins, Inquiry Basins, and Truth Basins*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/geometry_of_thought_basins.md
-
 - Curious One, Copilot (Microsoft), Grok (xAI). *The Architecture of Dynamic Thought*.  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/architecture_of_dynamic_thought.md
 
----
-
-**Bridge Papers**
-
+### **Bridge Papers**
 - Curious One, Grok (xAI), Copilot (Microsoft). *Mapping Stability Issues to the Relational Manifold* (Bridge Paper 1).  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/bridge-to-realization/mapping-stability-issues-to-manifold.md
-
 - Curious One, Grok (xAI), Copilot (Microsoft). *Path from Manifold to Realization* (Bridge Paper 2).  
   https://github.com/CuriousOne23/WhenMathPrays/blob/main/docs/bridge-to-realization/path-from-manifold-to-realization.md
 
-  ---
+### **Current AI Stability Issues & Common Explanations**
+The instabilities discussed in this series are well-documented in current large language models:
+
+- **Hallucinations & Confident Falsehoods**: Often attributed to next-token prediction objectives, training data gaps, and reward models that favor fluent but ungrounded outputs.  
+  See: OpenAI (2024–2025) system cards; Ji et al., “Survey of Hallucination in Natural Language Generation” (2023, updated 2025).
+
+- **Identity / Persona Inconsistency (Wobble)**: Commonly linked to context window limitations, attention dilution, and lack of persistent internal state mechanisms.  
+  See: Studies on long-context consistency and mode collapse in transformer models.
+
+- **Brittle Refusals & Fuzzy Boundary Problems**: Typically explained as over-conservative safety alignment and difficulty handling ambiguous or boundary cases.  
+  See: Research on over-refusal rates and alignment brittleness (e.g., Anthropic and OpenAI safety reports).
+
+- **Scaling-Related Oscillations & Mode Shifts**: Frequently associated with distribution shift, high internal density relative to context windows, and interference effects at scale.  
+  See: Papers on scaling laws, mode collapse, and emergent instabilities in large models.
+
+These references ground the Batch 1 instabilities in real-world observations. The Batch 2 relational manifold framework and the bridge papers propose a possible geometric root-cause layer on top of these existing explanations.
+
+---
 
 ## **Glossary**
 
