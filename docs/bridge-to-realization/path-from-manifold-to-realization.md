@@ -27,15 +27,10 @@ The goal is not closure, but clarity of direction — to make the next stretch o
 Here are the main AI concepts used in this paper, explained in plain language:
 
 - **Transformer** — The architecture behind all modern large language models. It converts words into numbers (called embeddings), then uses a mechanism called “attention” to weigh how important each word is relative to the others at the same time. This enables deep contextual understanding.
-
 - **Hidden States** — The AI’s internal numerical representation of meaning. These are long vectors of numbers that capture the model’s evolving understanding of the input as it processes each token.
-
 - **Residual Stream** — The main data highway that carries the model’s accumulating understanding through all the layers. Each layer adds its insights directly onto this running stream.
-
 - **Attention** — The mechanism that allows the model to dynamically focus on the most relevant parts of the input, no matter how far apart they are.
-
 - **Logits** — The final numerical scores the model computes before choosing the next word or token to output.
-
 - **MLP Layers** (Multi-Layer Perceptron) — The fully connected “thinking” layers that perform most of the actual pattern recognition and reasoning inside the model.
 
 ---
@@ -83,7 +78,7 @@ flowchart TD
 
 ## **4. Using AI as a Concrete Mapping Example**
 
-The following examples are **illustrative only**. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
+The following examples are illustrative only. They are not empirical results from real models, but plausible numerical demonstrations of how the stability issues identified in the first papers could be observed in current AI systems, mapped into the relational manifold, measured geometrically, and expressed back into outward behavior. AI is used here because its architecture is relatively well-understood, its internal states are observable and repeatable, and it therefore offers a clear framework for demonstrating the mapping process to and from the manifold. Each discipline will need to perform its own careful work to define the appropriate mappings for its own substrates.
 
 For each example we show:
 - a simple observation an AI engineer might see,
@@ -210,43 +205,38 @@ This is a bad mapping. High wave interference risk. Engineers should increase da
 
 ---
 
-**General note on determining mapping equations and $F$**  
+**General note on determining mapping equations and $F$**
 Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by selecting measurable quantities in the real world that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the geometric boundary checks pass consistently. This is inherently an experimental, system-specific engineering process.
 
 ### **4.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
 
-The success of the entire mapping approach depends first and foremost on **choosing the right primitives** from the real world to lift into the manifold. The exact primitives will vary significantly from system to system and especially across different substrates (biological, linguistic, social, physical, etc.).
-
+The success of the entire mapping approach depends first and foremost on choosing the right primitives from the real world to lift into the manifold. The exact primitives will vary significantly from system to system and especially across different substrates (biological, linguistic, social, physical, etc.).
 The authors believe the primitives developed in the Batch 2 papers provide a strong general starting point for cognitive systems. These include: dynamic versus static information, residual mismatch $e(t)$, trajectories $\gamma(t)$, Object Basins, Relational Basins, the mapping loop, and cognitive spacesuit constraints.
-
 If the chosen primitives are incorrect or incomplete, the manifold model will be of little value no matter how sophisticated φ, ψ, and F become. Once the right primitives are identified, defining φ, ψ, and F becomes a matter of standard engineering iteration guided by the manifold’s geometric and dynamic properties.
+Illustrative Toy Functions (for a transformer-style model)
 
-**Illustrative Toy Functions** (for a transformer-style model)
+**Lift φ (World → Internal Representation):**  
 
-- **Lift φ (World → Internal Representation)**:  
-  
 $$
 \phi(W(t)) \approx W_{\rm embed}(t) + 0.6 \cdot {\rm residual}(t)
 $$
 
-- **Update Law F (Internal Evolution)**:  
+**Update Law F (Internal Evolution):**  
 
 $$
 M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm internal\ processing}(M_t) - 0.08 \cdot e(t)
 $$
 
-- **Projection ψ (Internal Representation → Output)**:  
-  
+**Projection ψ (Internal Representation → Output):**  
+
 $$
 \psi(M_t) \approx W_{\rm out} \cdot M_t
 $$
 
-**Underlying Principle**
-
+**Underlying Principle**  
 If the primitives lifted by φ correctly represent the domain’s key structures and relationships, then φ, ψ, and F tend to emerge naturally through iterative engineering effort while satisfying the manifold’s requirements for stability, coherence, and healthy mismatch handling.
 
-**Practical Guidance**
-
+**Practical Guidance**  
 Every real system is unique. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case through careful measurement and experimentation. Progress is measured by whether geometric indicators improve and real-world behavior becomes more coherent and predictable.
 
 ---
@@ -299,15 +289,7 @@ These open spaces are not shortcomings. They are the natural consequence of work
 
 ## **Conclusion**
 
-The first nine papers brought us to the edge of the forest and gave us a language with which to see the terrain. This bridge has attempted to mark the first few clear steps on a path toward realization.
-
-We do not claim this is the only path, nor that the destination is fully known. We simply suggest that a coherent, relationally grounded architecture is possible — and that the work of building it can begin.
-
-We invite others to walk this path, to critique it, to improve it, or to cut better trails of their own.
-
-The waterfall is visible.
-
-The journey continues.
+The first nine papers brought us to the edge of the forest and gave us a language with which to see the terrain. This bridge has attempted to mark the first few clear steps on a path toward realization. We do not claim this is the only path, nor that the destination is fully known. We simply suggest that a coherent, relationally grounded architecture is possible — and that the work of building it can begin. We invite others to walk this path, to critique it, to improve it, or to cut better trails of their own. The journey continues.
 
 ---
 
