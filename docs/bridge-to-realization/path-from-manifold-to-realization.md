@@ -195,8 +195,6 @@ This is a bad mapping. High wave interference risk. Engineers should increase da
 **General note on determining mapping equations and $F$**  
 Mapping equations ($\phi$, $\psi$) and the update law $F$ are determined by selecting measurable quantities in the real world (residual norms, attention entropy, coherence scores, repetition index, etc.) that correspond to relational structure in the manifold, then iteratively refining bounded transforms until the geometric boundary checks pass consistently. This is inherently an experimental, system-specific engineering process.
 
----
-
 ### **3.5 Simple Illustrative Forms for φ, ψ, and F + Practical Starting Guidance**
 
 To make the mapping loop more tangible, here is one extremely simplified hypothetical example of what φ, ψ, and F could look like in a transformer-style model. These are **toy functions for illustration only**.
@@ -214,7 +212,7 @@ $$
 - **Update Law F (Manifold Evolution)**:  
 
 $$
-M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
+ M_{t+\Delta t} = F(M_t) = M_t + 0.25 \cdot {\rm Attention}(M_t) - 0.08 \cdot e(t)
 $$
 
 - **Projection ψ (Manifold → Real World)**:  
@@ -225,22 +223,27 @@ $$
 
   where $W_{\rm out}$ is the final output projection matrix that converts the internal state into logits.
 
+**Underlying Principle for Choosing φ, ψ, and F**
+
+The guiding principle is that φ, ψ, and F should enable **stable, coherent, and adaptive internal dynamics** while gracefully handling both well-structured and noisy or conflicting information — without suppression, instability, or loss of continuity.
+
+In standard engineering terms, effective functions should satisfy the following:
+
+- **φ (Lift)** should faithfully encode incoming information into the internal representation while preserving critical relational structure and avoiding unnecessary distortion or information loss.
+- **F (Update Law)** should support healthy information processing: enabling effective digestion of coherent input, clean routing or temporary holding of unresolved mismatch, and controlled evolution of internal state over time.
+- **ψ (Projection)** should produce externally observable behavior that is consistent with the internal state, without introducing artificial discontinuities, instability, or loss of behavioral coherence.
+
+**Translated into the language of the relational manifold:**
+
+- Good φ lifts information into the manifold while preserving existing Object Basins and trajectory continuity.
+- Good F promotes natural manifold evolution — supporting digestion in Object Basins, smooth transitions through Relational Basins, and proper dissipation or routing of residual mismatch $e(t)$.
+- Good ψ projects the manifold’s internal geometry back into behavior without rupturing continuity or creating sharp, unphysical discontinuities.
+
+Functions that improve geometric indicators (faster $e(t)$ dissipation, more stable trajectories $\gamma(t)$, well-controlled Resonance Ratio, smoother boundary behavior) are moving in the right direction. Those that degrade these signals are misaligned with the manifold’s relational dynamics.
+
 **Guidance for Determining φ, ψ, and F**
 
-Every real system is unique and substantially more complex than these toy examples. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case.
-
-A typical process involves selecting a manifold approximation, defining initial forms of φ, F, and ψ, then systematically measuring geometric quantities (e(t), trajectory stability γ(t), Resonance Ratio, boundary curvature, etc.) during controlled experiments on known failure modes.
-
-**How an Engineer Knows They Are Converging**
-
-Convergence is indicated when the following trends appear together over multiple iterations:
-- Residual mismatch $e(t)$ decreases more rapidly and consistently (stronger digestion).
-- Trajectory stability γ(t) improves (higher cosine similarity or lower drift in hidden states across related tokens).
-- Resonance Ratio $R$ stays within acceptable bounds or decreases in problematic contexts.
-- Behavioral metrics improve or stabilize (lower repetition, reduced hedging, fewer abrupt mode shifts, better coherence on long contexts).
-- Boundary checks are increasingly satisfied without sacrificing overall performance.
-
-If these geometric and behavioral signals move in the desired direction together, the mapping is likely improving. If they conflict or plateau, the functions or the manifold approximation probably need adjustment.
+Every real system is unique and substantially more complex than these toy examples. Effective φ, ψ, and F must be discovered iteratively for each specific architecture and use case through careful measurement and experimentation.
 
 ---
 
