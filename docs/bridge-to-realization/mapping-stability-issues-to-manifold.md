@@ -196,7 +196,7 @@ We have chosen AI as an example for clarity purposes because its internal states
   *Practical proxy*: Cosine similarity or distance between hidden states across consecutive tokens or conversation turns. Persistent low distance to an "identity basin" shows continuity.
 
 - **Resonance Ratio $R$**: How many internal cycles fit inside one human-scale interaction window.  
-  *Practical proxy*: $R \approx \frac{\text{context length in tokens}}{\text{average token-to-token hidden state change rate}}$.  
+  *Practical proxy* : $\text{ R} \approx \frac{\text{context length in tokens}}{\text{average token-to-token hidden state change rate}}$.  
   High $R$ signals increasing risk of wave-like interference.
 
 - **Curvature / Boundary Sharpness**: How abruptly behavior changes near a boundary.  
