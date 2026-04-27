@@ -177,7 +177,6 @@ flowchart LR
     B --> C[Deeper Visibility & Possible Root Causes]
     C --> D[Path Toward New Architecture]
 ```
-
 ---
 
 ## **3. Practical Conceptual Definitions for AI Engineers**
