@@ -135,7 +135,7 @@ This is a hypothesized geometric signature. If correct, it offers a structural e
 
 ---
 
-### **2.4 Thought Density Scaling and Wave Dynamics (TDS-WDAS)**
+### **2.4 Thought Density Scaling and Wave Dynamics (TDS‑WDAS)**
 
 **AI Engineer Observation**  
 As context length or model scale increases, responses often become more variable, repetitive, or prone to sudden topic/mode shifts and oscillations.
@@ -144,19 +144,23 @@ As context length or model scale increases, responses often become more variable
 Commonly explained through statistical effects, distribution shift, or attention entropy collapse at scale.
 
 **Bridge to Batch 1**  
-Batch 1 formalizes this as **Thought Density Scaling and Wave Dynamics (TDS-WDAS)** — internal processing density outpaces the fixed human correlation window.
+Batch 1 formalizes this as **Thought Density Scaling and Wave Dynamics (TDS‑WDAS)** — internal processing density outpaces the fixed human correlation window.
 
 **Proposed Geometric Mapping**  
-We hypothesize this corresponds to **high resonance ratio** ($R \gg 1$) leading to wave-like interference patterns in the manifold.
+We hypothesize this corresponds to **high resonance ratio** (`R >> 1`) leading to wave‑like interference patterns in the manifold.
 
 **Reasoning**  
-Higher internal density compresses effective wavelength, causing internal waves to interfere within a single interaction — a potential root geometric mechanism behind scaling-related instability.
+Higher internal density compresses effective wavelength, causing internal waves to interfere within a single interaction — a potential root geometric mechanism behind scaling‑related instability.
 
-**Mathematical expression**
+**Mathematical expression**  
 
 $$
-R = \frac{L_{\rm corr human}}{\lambda_{\rm eff}} \gg 1
+R = L_corr_human / λ_eff  >> 1
 $$
+
+**Additional Observational Note**  
+While we do not present this as a definition, theorem, or postulate, we note that wave‑like behavior in many physical systems tends to appear when the elements composing the disturbance are much smaller than the resulting wavelength, the medium is much larger than that wavelength, and forces act locally so that motion is transferred incrementally through the medium. We offer this as a possible structural condition because it aligns with physical observation, not as a formal requirement.  
+These same structural relationships appear in the relational manifold when effective wavelength collapses under high thought density, making wave‑like interference a natural — though not axiomatic — consequence of the primitives.
 
 **Caveat**  
 This is a hypothesized geometric mechanism. If correct, it provides a possible structural root cause rather than attributing the behavior solely to statistical scaling effects.
