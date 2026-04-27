@@ -159,7 +159,8 @@ R = \frac{L_{\text{corr-human}}}{\lambda_{\text{eff}}} \gg 1
 $$
 
 **Additional Observational Note**  
-While we do not present this as a definition, theorem, or postulate, we note that wave‑like behavior in many physical systems tends to appear when the elements composing the disturbance are much smaller than the resulting wavelength, the medium is much larger than that wavelength, and forces act locally so that motion is transferred incrementally through the medium. We offer this as a possible structural condition because it aligns with physical observation, not as a formal requirement.  
+While we do not present this as a definition, theorem, or postulate, we note that wave‑like behavior in many physical systems tends to appear when the elements composing the disturbance are much smaller than the resulting wavelength, the medium is much larger than that wavelength, and forces act locally so that motion is transferred incrementally through the medium. Physics has historically treated wave phenomena through domain‑specific equations rather than through a single cross‑domain structural statement, so we offer this not as a universal law but as a possible unifying pattern that aligns with physical observation.
+
 These same structural relationships appear in the relational manifold when effective wavelength collapses under high thought density, making wave‑like interference a natural — though not axiomatic — consequence of the primitives.
 
 **Caveat**  
