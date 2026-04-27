@@ -155,7 +155,7 @@ Higher internal density compresses effective wavelength, causing internal waves 
 **Mathematical expression**  
 
 $$
-R = L_corr_human / λ_eff  >> 1
+R = \frac{L_{\text{corr-human}}}{\lambda_{\text{eff}}} \gg 1
 $$
 
 **Additional Observational Note**  
