@@ -5,15 +5,16 @@
 Every major technological age disrupts the previous economic and social order and fundamentally changes how humans view themselves and their purpose in the world. The AI age is poised to be even more disruptive than the Industrial Revolution or the Information Age.
 
 Throughout history, humanity has largely been defined by the struggle to fulfill basic needs:
+
 - **Agriculture Age**
 - **Industrial Age**
 - **Information Age**
 
 In the **AI Age**, this dynamic can theoretically shift dramatically. AI could perform most productive work, leading to a vision where humans do very little and live primarily in leisure. This has produced one prominent proposal: humans as dependent “babies sucking their thumbs,” passively cared for by AI (the Universal Basic Income, UBI-centric model).
 
-However, society faces a deeper choice: Will humans become passive recipients of technology, or **active participants** who remain involved — learning from, supervising, and collaborating with AI?
+However, society faces a deeper choice. Humans are not content with mere survival or leisure alone. People have a natural drive for purpose, achievement, recognition, and the ability to improve their lives — to work harder or smarter, earn more, and enjoy greater opportunities and experiences. 
 
-**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.**
+**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward. It supports both those who seek meaningful involvement and those who prefer less responsibility, rather than forcing a one-size-fits-all passive model.
 
 ## Core Principles of HSAI
 
