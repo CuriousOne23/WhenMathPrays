@@ -7,7 +7,7 @@ Every major technological age disrupts the previous economic and social order an
 In every transition, society faces a choice: Will humans become passive recipients of technology, or active participants who shape and coexist with it?  
 
 Two competing visions have emerged for the AI age:  
-- Humans as dependent “babies sucking their thumbs,” passively cared for by AI (the UBI-centric model).  
+- Humans as dependent “babies sucking their thumbs,” passively cared for by AI (the Universal Basic Income, UBI-centric model).  
 - Humans as capable participants who remain actively involved, learning from, supervising, and collaborating with AI.
 
 Without constructive frameworks, the AI transition risks becoming highly chaotic, leading to widespread societal dishevel, loss of purpose, and backlash.  
