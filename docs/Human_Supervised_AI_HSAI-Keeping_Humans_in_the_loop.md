@@ -12,9 +12,11 @@ Throughout history, humanity has largely been defined by the struggle to fulfill
 
 In the **AI Age**, this dynamic can theoretically shift dramatically. AI could perform most productive work, leading to a vision where humans do very little and live primarily in leisure. This has produced one prominent proposal: humans as dependent “babies sucking their thumbs,” passively cared for by AI (the Universal Basic Income, UBI-centric model).
 
-However, society faces a deeper choice. Humans are not content with mere survival or leisure alone. People have a natural drive for purpose, achievement, recognition, and the ability to improve their lives — to work harder or smarter, earn more, and enjoy greater opportunities and experiences. 
+However, society faces a deeper choice. Humans are not content with mere survival or leisure alone. People have a natural drive for purpose, achievement, recognition, and the ability to improve their lives — to work harder or smarter, earn more, and enjoy greater opportunities and experiences.
 
-**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward. It supports both those who seek meaningful involvement and those who prefer less responsibility, rather than forcing a one-size-fits-all passive model.
+**This is fundamentally an ethics issue.** How we structure the relationship between humans and AI will define what kind of society we become. Current AI ethics discussions should seriously engage with frameworks like Human Supervised AI (HSAI) — debating its merits, proposing variants, and helping shape practical solutions. Without such constructive engagement, the AI transition risks descending into widespread chaos, loss of purpose, and societal disruption.
+
+**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward. It supports both those who seek meaningful involvement and those who prefer less responsibility.
 
 ## Core Principles of HSAI
 
