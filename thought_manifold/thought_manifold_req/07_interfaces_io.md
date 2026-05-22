@@ -64,9 +64,9 @@ Define all user-facing and system interfaces, including configuration, command-l
 
 ## 8. Traceability
 Links to:
-- `03_system_architecture.md` (IO & Visualization Layer)
-- `05_non_functional_requirements.md` (Usability & Debuggability)
-- `08_visualization_exploration.md` (detailed visualization specs)
+- [03_system_architecture.md](./03_system_architecture.md) (IO & Visualization Layer)
+- [05_non_functional_requirements.md](./05_non_functional_requirements.md) (Usability & Debuggability)
+- [08_visualization_exploration.md](./08_visualization_exploration.md) (detailed visualization specs)
 
 ---
 
