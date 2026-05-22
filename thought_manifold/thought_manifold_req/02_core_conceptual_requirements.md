@@ -37,7 +37,7 @@ The simulator must faithfully implement the following core concepts:
   - Position $\mathbf{x}$
   - Fuzzy embedding vector $\mathbf{e}$
   - Kinetic + Potential energy $E = K + V(\mathbf{x})$
-  - Normalized entropy percentage $H_{\%}$
+  - Normalized entropy percentage $H_\\%$
   - Remaining time budget
 
 ### 2.5 Key Dynamics
@@ -48,7 +48,7 @@ The simulator must faithfully implement the following core concepts:
 - Sparse, gated regenerative amplifiers
 
 ### 2.6 Completion and Inquiry States
-- Clean completion when $H_{\%}$ drops below threshold → Done RB
+- Clean completion when $H_\\%$ drops below threshold → Done RB
 - Stressed completion under time pressure (optionally via Feeling OB)
 - Inquiry Basins: shallow, unstable regions for persistent medium-entropy states
 
