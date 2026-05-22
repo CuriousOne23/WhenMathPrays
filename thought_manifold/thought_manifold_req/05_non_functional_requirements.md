@@ -11,7 +11,7 @@ Define the quality attributes, constraints, and operational characteristics that
 - Must support detailed structured logging (JSONL format preferred) with configurable verbosity levels.
 
 **NF-02: Real-time Inspection**
-- Must allow querying of current state (energy, $H_{\%}$, fanin/fanout usage, basin membership, etc.) at any time.
+- Must allow querying of current state (energy, $H_\\%$, fanin/fanout usage, basin membership, etc.) at any time.
 - Must support probes and breakpoints for interactive debugging.
 
 ## 3. Reproducibility
