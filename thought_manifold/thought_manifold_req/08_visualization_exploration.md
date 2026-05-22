@@ -26,7 +26,7 @@ Define the requirements for the simulator as an **exploratory vehicle** for thou
 - **Micro Mode**: Zoom into local geometry (gradients, saddles, curvature).
 
 **VE-03: Real-time Overlays**
-- Current $H_{\%}$, energy, basin name, fanin/fanout usage, damping, etc.
+- Current $H_\\%$, energy, basin name, fanin/fanout usage, damping, etc.
 - Trajectory history with optional fade.
 - Highlighted saddles, highways, and potential building sites.
 
