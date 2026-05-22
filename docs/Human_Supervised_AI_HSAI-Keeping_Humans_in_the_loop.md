@@ -16,9 +16,17 @@ In every prior age, the efficiency or survival metric was largely self-evident a
 
 A healthy society distributes wealth and opportunity based on work, good ideas, meeting real needs, and giving power and resources to the individuals who have the vision, energy, and drive to execute. **This principle must be preserved.**
 
-**This is fundamentally an ethics issue.** ...
+**This is fundamentally an ethics issue.** How we structure the relationship between humans and AI will define what kind of society we become. Current AI ethics discussions should seriously engage with frameworks like Human Supervised AI (HSAI) — debating its merits, proposing variants, and helping shape practical solutions. Without such constructive engagement, the AI transition risks descending into widespread chaos, loss of purpose, and societal disruption.
 
 **This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward.
+
+### The AI Age Mindset Shift
+
+In every previous age, efficiency and survival were largely self-evident at the individual level. Humans worked because they had to, and markets, necessity, and personal initiative naturally allocated labor and reward. Government’s role was limited — it did not need to centrally answer “What should people do?”
+
+The AI Age breaks this ancient link. For the first time in history, AI can generate massive economic output with dramatically less human labor. This transforms “What is a healthy society?” from a personal question into a fundamental societal and governmental one. 
+
+We can no longer rely on Information Age thinking — where efficiency alone, combined with markets and basic safety nets, was sufficient. In the AI Age, we must deliberately choose what kind of society we want to become: one where humans remain active participants with purpose and agency, or one where most are gradually reduced to passive observers and dependents.
 
 ## Core Principles of HSAI
 
@@ -64,6 +72,10 @@ Mid-sized and large businesses will be subject to full compliance, including sup
 ## Why Embrace the Messiness?
 
 Life is messy. Government is messy. Politics is messy. Just as the U.S. democratic republic is imperfect yet remains the best system we have found for balancing competing interests, HSAI keeps humans actively engaged inside that mess.  
+
+A common objection to frameworks like HSAI is that requiring human supervision and accountability will slow innovation. However, history suggests the opposite can be true. Clear, predictable rules — such as aviation safety standards or pharmaceutical approval processes — have often accelerated safe, widespread adoption by building public trust and reducing backlash. 
+
+HSAI aims to provide similar clarity: companies know the rules upfront, innovation is channeled toward human-AI collaboration rather than pure displacement, and society gains confidence that technological progress serves people rather than rendering them obsolete. Well-designed guardrails can enable faster, more sustainable innovation instead of risking regulatory whiplash or public rejection later.
 
 The advantage of this proposal is that discourse is encouraged and open for all to see and comment on — meaning we can progress, learn, and adapt as the AI age matures. History has shown that active participation and shared understanding of the underlying principles of an age lead to healthier societies. This engagement prevents clean but unhealthy separation (AI doing everything while humans are passive) and helps build a healthier AI age instead of chaotic disruption.
 
