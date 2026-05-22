@@ -80,11 +80,11 @@ The following are **typical** benchmarks. Exceptional companies can still genera
 
 ## Conclusion
 
-## Conclusion
-
 HSAI is not perfect, but it is one of the best realistic frameworks available. In the AI age we must ask a fundamental question: *What is a healthy society?*  
 
 Some societies may choose to treat people as passive dependents — managed, cared for, and kept relatively ignorant of AI. Others will choose active participation. HSAI represents the latter path: one that preserves human purpose, dignity, and understanding by treating AI and humans as a collaborative team. This active partnership is healthier for individuals and society as a whole.
+
+**Crucially, the HSAI model allows economic opportunity to shift downward to the individual level.** People can choose virtually any market or business and actively participate — creating, customizing, and capturing value. This encourages an explosion of new businesses, restaurants, services, creative expressions, niche markets, and local innovations, rather than concentrating opportunity only at the top. This will maximize the variation in business, products, and markets in the AI age.
 
 States, industry groups, and policymakers should begin piloting HSAI principles as soon as possible. Like every previous age, the AI age is forcing us to view ourselves differently and ask new questions about the purpose of work, government, and human life.
 
