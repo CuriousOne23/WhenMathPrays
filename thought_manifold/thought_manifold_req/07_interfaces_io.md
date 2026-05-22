@@ -29,7 +29,7 @@ Define all user-facing and system interfaces, including configuration, command-l
 ## 4. Output Requirements
 
 **IO-03: Real-time Output**
-- Console summary during simulation (current basin, $H_{\%}$, energy, step count, etc.).
+- Console summary during simulation (current basin, $H_\\%$, energy, step count, etc.).
 - Progress bar when appropriate.
 
 **IO-04: Logging**
