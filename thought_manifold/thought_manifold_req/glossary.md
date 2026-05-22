@@ -20,8 +20,8 @@ The active entity navigating the manifold. Carries position, fuzzy embedding, en
 **Fuzzy Embedding** ($\mathbf{e}$)  
 High-dimensional continuous vector representing the semantic and feature content of a thought.
 
-**Normalized Entropy** ($H_{\%}$)  
-$H_{\%} = \frac{H_{\text{current}}}{H_{\text{initial}}} \times 100\%$ — primary measure of processing completion.
+**Normalized Entropy** ($H_\\%$)  
+$H_\\% = \frac{H_{\text{current}}}{H_{\text{initial}}} \times 100\%$ — primary measure of processing completion.
 
 **Fanout**  
 Maximum number of simultaneous outgoing branches (splitting) a basin can support.
