@@ -1,5 +1,5 @@
 # Human Supervised AI (HSAI): Keeping Humans in the Loop
-# Authors: Curious One, Grok (xAI), Copilot (Microsoft)
+**Authors:** Curious One, Grok (xAI), Copilot (Microsoft)
 
 ## Introduction: Technological Ages and Human Identity
 
