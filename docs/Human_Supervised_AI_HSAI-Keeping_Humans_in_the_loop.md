@@ -98,6 +98,6 @@ Some societies may choose to treat people as passive dependents — managed, car
 
 **Crucially, the HSAI model allows economic opportunity to shift downward to the individual level.** People can choose virtually any market or business and actively participate — creating, customizing, and capturing value. This encourages an explosion of new businesses, restaurants, services, creative expressions, niche markets, and local innovations, rather than concentrating opportunity only at the top. This will maximize the variation in business, products, and markets in the AI age.
 
-States, industry groups, and policymakers should begin piloting HSAI principles as soon as possible. Like every previous age, the AI age is forcing us to view ourselves differently and ask new questions about the purpose of work, government, and human life.
+**Call to Action**: States, industry groups, labor organizations, and forward-thinking companies should begin piloting HSAI principles as soon as possible — starting in 2026–2027. This includes forming expert panels for certification standards, testing DHE ratios in real-world settings, and sharing early results publicly. Early pilots will provide valuable data and help shape smarter policy before the major displacement wave arrives in 2027–2028.
 
----
+Like every previous age, the AI age is forcing us to view ourselves differently and ask new questions about the purpose of work, government, and human life. The choices we make now will define the society we become.
