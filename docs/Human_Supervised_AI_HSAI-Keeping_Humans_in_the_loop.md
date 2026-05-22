@@ -34,7 +34,7 @@ We can no longer rely on Information Age thinking — where efficiency alone, co
 - Every significant AI system must have designated, paid human beings who are legally responsible for its operation, safety, and outcomes.  
 - Technology should augment and elevate humans, not sideline them.  
 - AI and humans must remain actively *comingled* — no “them vs. us” or babysitter dynamic.  
-- Governance should encourage involvement because a society is healthier when people actively participate. In the AI age, involvement is a choice. Those who prefer not to participate can fall back on UBI. However, per the principle of the U.S. Constitution, government exists “to insure the happiness of the people” and therefore should serve the people by encouraging meaningful participation where possible.
+- Governance should encourage involvement because a society is healthier when people actively participate. In the AI age, involvement is a choice. Those who prefer not to participate can fall back on Universal Basic Income (UBI). However, per the principle of the U.S. Constitution, government exists “to insure the happiness of the people” and therefore should serve the people by encouraging meaningful participation where possible.
 
 ## Measurement: Displayed Human Equivalents (DHE)
 
