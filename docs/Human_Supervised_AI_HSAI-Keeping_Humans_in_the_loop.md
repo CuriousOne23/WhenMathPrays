@@ -10,13 +10,15 @@ Throughout history, humanity has largely been defined by the struggle to fulfill
 - **Industrial Age**
 - **Information Age**
 
-In the **AI Age**, this dynamic can theoretically shift dramatically. AI could perform most productive work, leading to a vision where humans do very little and live primarily in leisure. This has produced one prominent proposal: humans as dependent “babies sucking their thumbs,” passively cared for by AI (the Universal Basic Income, UBI-centric model).
+In every prior age, the efficiency or survival metric was largely self-evident at the individual level. Work, reward, and opportunity were driven by necessity and personal initiative, and were not primarily a central government issue. 
 
-However, society faces a deeper choice. Humans are not content with mere survival or leisure alone. People have a natural drive for purpose, achievement, recognition, and the ability to improve their lives — to work harder or smarter, earn more, and enjoy greater opportunities and experiences.
+**The AI Age is fundamentally different.** For the first time, efficiency no longer requires mass human labor. This shifts the question of “What is a healthy society?” from an individual concern into a common-bond societal and governmental issue. This is new and untreaded territory — which is why even leading voices struggle to answer the simple question: “What will people do?”
 
-**This is fundamentally an ethics issue.** How we structure the relationship between humans and AI will define what kind of society we become. Current AI ethics discussions should seriously engage with frameworks like Human Supervised AI (HSAI) — debating its merits, proposing variants, and helping shape practical solutions. Without such constructive engagement, the AI transition risks descending into widespread chaos, loss of purpose, and societal disruption.
+A healthy society distributes wealth and opportunity based on work, good ideas, meeting real needs, and giving power and resources to the individuals who have the vision, energy, and drive to execute. **This principle must be preserved.**
 
-**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward. It supports both those who seek meaningful involvement and those who prefer less responsibility.
+**This is fundamentally an ethics issue.** ...
+
+**This paper proposes Human Supervised AI (HSAI) as a practical, healthier path forward.** HSAI keeps humans as active participants — learning from, supervising, and collaborating with AI — while preserving space for individual ambition and differentiated reward.
 
 ## Core Principles of HSAI
 
