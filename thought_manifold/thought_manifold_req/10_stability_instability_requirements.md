@@ -8,7 +8,7 @@ Document the key risks, foundational assumptions, and external dependencies of t
 **A-01: Conceptual Assumptions**
 - The Relational Manifold model as described in *"The Architecture of Dynamic Thought"* is a valid and useful top-down framework for modeling thought.
 - Thought can be meaningfully represented as navigation on a geometric energy landscape with Object Basins and Relational Basins.
-- Normalized entropy $H_{\%}$ is a reasonable proxy for processing completion.
+- Normalized entropy $H_\\%$ is a reasonable proxy for processing completion.
 
 **A-02: Implementation Assumptions**
 - A 2D/3D projection of the manifold will be sufficient for meaningful exploration and insight generation.
