@@ -1,4 +1,4 @@
-# 04.03 Energy Dynamics
+# 12 Energy Dynamics
 
 ## 1. Purpose
 Define the energy, momentum, damping, splitting, merging, and amplification rules that govern movement and transformation of thoughts across the manifold.
@@ -17,7 +17,7 @@ Define the energy, momentum, damping, splitting, merging, and amplification rule
 
 **ED-03: Splitting (Fanout Interaction)**
 - When a ThoughtPoint splits, total energy and activation mass must be distributed across outgoing branches.
-- Splitting must respect the `max_fanout` and `preferred_fanout` limits defined in the source basin (see 04.02_basins.md).
+- Splitting must respect the `max_fanout` and `preferred_fanout` limits defined in the source basin (see 06_basins.md).
 - Each branch receives a proportional share of energy and a diluted fuzzy embedding.
 - Excess fanout must trigger pruning or attenuation of weakest branches.
 
@@ -47,9 +47,9 @@ Define the energy, momentum, damping, splitting, merging, and amplification rule
 
 ## 6. Traceability
 Links to:
-- `04.02_basins.md` (Section B-03: Fanin and Fanout Capabilities)
-- `04.04_embeddings.md`
-- `02_core_conceptual_requirements.md`
+- `06_basins.md` (Section B-03: Fanin and Fanout Capabilities)
+- `08_embedding_space.md`
+- `03_core_conceptual_requirements.md`
 
 ---
 

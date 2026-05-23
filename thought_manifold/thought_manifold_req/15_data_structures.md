@@ -1,4 +1,4 @@
-# 06 Data Structures
+# 15 Data Structures
 
 ## 1. Purpose
 Define the core data structures and state representations used throughout the Thought Manifold Simulator.
@@ -62,10 +62,10 @@ class Manifold:
 
 ## Traceability
 Links to:
-- 03_system_architecture.md
-- 04.01_manifold_core.md
-- 04.02_basins.md
-- 04.04_embeddings.md
+- 04_system_architecture.md
+- 05_manifold_core.md
+- 06_basins.md
+- 08_embedding_space.md
 
 Last Updated: [Insert Date]
 Version: 0.1 (Draft)

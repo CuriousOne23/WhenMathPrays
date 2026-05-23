@@ -1,4 +1,4 @@
-# 04.05 Entropy Tracking
+# 11 Entropy and Information
 
 ## 1. Purpose
 Define the requirements for normalized entropy tracking as the primary measure of thought completion and processing progress.
@@ -42,10 +42,10 @@ Define the requirements for normalized entropy tracking as the primary measure o
 
 ## 6. Traceability
 Links to:
-- `02_core_conceptual_requirements.md` (Section 2.6)
-- `04.02_basins.md`
-- `04.03_energy_dynamics.md`
-- `04.04_embeddings.md`
+- `03_core_conceptual_requirements.md` (Section 2.6)
+- `06_basins.md`
+- `12_energy_dynamics.md`
+- `08_embedding_space.md`
 
 ---
 

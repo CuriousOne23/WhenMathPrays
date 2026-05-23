@@ -1,4 +1,4 @@
-# 03 System Architecture Requirements
+# 04 System Architecture
 
 ## 1. Overview
 
@@ -68,7 +68,7 @@ This document defines the high-level technical architecture of the Thought Manif
 
 ## 6. Traceability
 
-This architecture must fully support all concepts defined in `02_core_conceptual_requirements.md`.
+This architecture must fully support all concepts defined in `03_core_conceptual_requirements.md`.
 
 ## Success Criteria
 

@@ -1,4 +1,4 @@
-# 04.07 Completion Logic
+# 13 Dynamics Engine
 
 ## 1. Purpose
 Define how the simulator determines when thought processing is complete (or as complete as possible under current constraints), including clean completion, stressed completion, and transitions to terminal states.
@@ -59,9 +59,9 @@ Then decide:
 
 ## 7. Traceability
 Links to:
-- `02_core_conceptual_requirements.md` (Section 2.6)
-- `04.05_entropy_tracking.md`
-- `04.02_basins.md` (Done RB, Feeling OB, Inquiry Basins)
+- `03_core_conceptual_requirements.md` (Section 2.6)
+- `11_entropy_and_information.md`
+- `06_basins.md` (Done RB, Feeling OB, Inquiry Basins)
 
 ---
 

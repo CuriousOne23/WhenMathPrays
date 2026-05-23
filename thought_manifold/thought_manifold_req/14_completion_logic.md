@@ -1,4 +1,4 @@
-# 04.07 Completion Logic
+# 14 Completion Logic
 
 ## 1. Purpose
 Define how the simulator determines when thought processing is complete (or as complete as currently possible), including clean completion, stressed/provisional completion, and transitions involving Inquiry Basins or terminal states.
@@ -60,9 +60,9 @@ Then decide one of:
 
 ## 7. Traceability
 Links to:
-- `02_core_conceptual_requirements.md` (Section 2.6)
-- `04.05_entropy_tracking.md`
-- `04.02_basins.md` (Done RB, Feeling OB, Inquiry Basins)
+- `03_core_conceptual_requirements.md` (Section 2.6)
+- `11_entropy_and_information.md`
+- `06_basins.md` (Done RB, Feeling OB, Inquiry Basins)
 
 ---
 

@@ -1,4 +1,4 @@
-# 04.01 Manifold Core
+# 05 Manifold Core
 
 ## 1. Purpose
 The Manifold Core is the central geometric and organizational container for the entire thought space.
@@ -45,8 +45,8 @@ The Manifold Core is the central geometric and organizational container for the 
 
 ## 6. Traceability
 Links to:
-- 02_core_conceptual_requirements.md (Section 2.1, 2.2, 2.3)
-- 03_system_architecture.md (Core Manifold Layer)
+- 03_core_conceptual_requirements.md (Section 2.1, 2.2, 2.3)
+- 04_system_architecture.md (Core Manifold Layer)
 
 ---
 
