@@ -24,7 +24,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 5. **[05_manifold_core.md](05_manifold_core.md)** — Manifold core functional requirements
 6. **[06_basins.md](06_basins.md)** — Basin behavior and constraints
 7. **[07_manifold_structure.md](07_manifold_structure.md)** — Manifold structure requirements
-7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Implementation architecture details
+7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Operational translation layer and software architecture
 8. **[08_embedding_space.md](08_embedding_space.md)** — Embedding-space requirements
 9. **[09_object_basins.md](09_object_basins.md)** — Object-basin requirements
 10. **[10_relational_basins.md](10_relational_basins.md)** — Relational-basin requirements
@@ -64,18 +64,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.1 (Draft)
+**Last Updated**: May 23, 2026 
+**Version**: 0.2 (Draft)
 
 ---
-
-This README sets a professional, clear, and structured tone for the entire requirements folder.
-
----
-
-Would you like me to:
-- Revise anything in this README?
-- Proceed to draft **`01_vision_and_objectives.md`** next?
-- Or adjust the overall folder structure before continuing?
-
-Let me know.
