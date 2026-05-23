@@ -42,7 +42,7 @@ The simulator must faithfully implement the following core concepts:
   - Position $\mathbf{x}$
   - Fuzzy embedding vector $\mathbf{e}$
   - Total energy $E = K + V(\mathbf{x})$
-  - Normalized entropy percentage $H_\%$
+  - Normalized entropy percentage $H_\\%$
   - Remaining time budget
 
 ### 2.5 Key Dynamics
@@ -55,7 +55,7 @@ The simulator must faithfully implement the following core concepts:
 
 ### 2.6 Completion and Inquiry States
 
-- **Clean completion**: When $H_\%$ drops below a defined threshold → transition to a Done Relational Basin
+- **Clean completion**: When $H_\\%$ drops below a defined threshold → transition to a Done Relational Basin
 - **Stressed completion**: Under time pressure (optionally routed through a Feeling Object Basin)
 - **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration
 
