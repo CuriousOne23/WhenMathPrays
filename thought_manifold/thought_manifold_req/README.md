@@ -24,6 +24,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 5. **[05_manifold_core.md](05_manifold_core.md)** — Manifold core functional requirements
 6. **[06_basins.md](06_basins.md)** — Basin behavior and constraints
 7. **[07_manifold_structure.md](07_manifold_structure.md)** — Manifold structure requirements
+7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Implementation architecture details
 8. **[08_embedding_space.md](08_embedding_space.md)** — Embedding-space requirements
 9. **[09_object_basins.md](09_object_basins.md)** — Object-basin requirements
 10. **[10_relational_basins.md](10_relational_basins.md)** — Relational-basin requirements
