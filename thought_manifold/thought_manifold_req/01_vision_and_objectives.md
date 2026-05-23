@@ -1,83 +1,67 @@
 # 01 Vision and Objectives
 
 ## 1. Purpose
-This document translates the theoretical framework from *"The Architecture of Dynamic Thought"* and the broader Relational Physics / WhenMathPrays body of work into precise, actionable conceptual requirements for the Thought Manifold Simulator.
 
-## 2. Foundational Concepts
+This document defines the guiding vision for the Thought Manifold Simulator. Its central purpose is to create a computational environment in which one can actively explore, navigate, and study the internal landscape of thought.
 
-The simulator must faithfully implement the following core concepts:
+The simulator is designed to let a researcher "drive around" within thought space — to move through valleys of coherence, across ridges of transition, and along rivers of relational flow. It should enable one to observe, record, and measure the architectural constructs of cognition in real time.
+
+**Important Scope Note**: This model is offered as a general, foundational simulator. It is not intended as a complete, ready-to-use representation for every cognitive domain. For each specific discipline (neuroscience, psychology, AI architecture, philosophy of mind, etc.), substantial additional work will be required to map their particular systems and phenomena onto this framework. The simulator is expected to provide useful coarse guidance and new perspectives, but not necessarily fine-grained, domain-specific detail without further development.
+
+## 2. Foundational Orientation
 
 ### 2.1 The Relational Manifold
-- A continuous, multi-dimensional geometric space representing thought dynamics.
-- Must support smooth transitions and locally Euclidean properties while allowing emergent global structure.
-- Position in the manifold represents the current thought state.
+A continuous geometric space in which thought takes position and finds its way. Within this space, areas of greater stability and areas of active transition arise naturally.
 
-### 2.2 Object Basins (OBs)
-- Deep, stable local minima in the manifold.
-- Represent coherent, discrete objects, concepts, or gestalts.
-- Requirements:
-  - Strong attraction (high positive curvature at the bottom)
-  - Feature binding and coherence sharpening upon settling
-  - Attachment of contextual tags, memory associations, and symbolic labels
-  - An OB is a local minimum: $\nabla \text V(x_{OB} )=0$,  and the Hessian is positive definite (stable).
-  - Tunable depth and capacity
-  - Significantly higher damping than in Relational Basins
+### 2.2 Object Basins
+Regions of relative stability that act as centers of coherence. When sufficient alignment occurs, they draw activation inward, reduce uncertainty, and allow scattered elements to settle into recognizable form.
 
-### 2.3 Relational Basins (RBs)
-- Higher-potential, flatter, or ridge-like regions connecting OBs.
-- Represent relational processing, exploration, analogy-making, and transformation.
-- Requirements:
-  - Support multi-layered networks (RB → RB routing and partitioning)
-  - Tunable damping (including near-lossless highways)
-  - Fuzzy filters at entry points
-  - Support splitting and merging of thought activation
+### 2.3 Relational Basins
+The dynamic pathways that connect and carry thought forward. These regions enable transformation, selective routing, splitting, merging, and modulation.
 
 ### 2.4 ThoughtPoint
-- The active entity moving through the manifold.
-- Must carry:
-  - Position $\mathbf{x}$
-  - Fuzzy embedding vector $\mathbf{e}$
-  - Total energy $E = K + V(\mathbf{x_{OB}})$
-  - Normalized entropy percentage $H_\\%$
-  - Remaining time budget
 
-### 2.5 Key Dynamics
-- Energy conservation with controlled dissipation
-- Splitting and merging with activation-weighted rules
-- Normalized entropy tracking (preserved across splits/merges, reduced primarily in OBs)
-- Perturbation mechanisms (internal noise, external input, volitional steering)
-- Sparse, heavily gated regenerative amplifiers
+The **ThoughtPoint** is introduced as a new modeling primitive — a mobile, persistent entity that represents a single instance of thought-in-process as it navigates the Relational Manifold.
 
-### 2.6 Completion and Inquiry States
-- Clean completion when $H_\\%$ drops below threshold → Done RB
-- Stressed / provisional completion under time pressure (optionally via Feeling OB)
-- Inquiry Basins: shallow, unstable regions for persistent medium-entropy states
+It is presented here primarily as a practical construct chosen for its utility. This construct provides several important capabilities:
 
-## 3. Mapping to "The Architecture of Dynamic Thought"
+- It enables clear, continuous tracking of thought flow, whether singular or distributive.
+- It supports detailed observation of what is added, transformed, or removed at every stage, along with measurable effects.
+- It establishes a rigorous basis for determining completion or incompleteness.
+- It creates a foundation for studying affective states as emergent properties.
+- It opens pathways for future metrics, such as when new basins might form or the effects of introducing new relational pathways.
 
-The simulator must explicitly support and demonstrate the major ideas from the paper, including but not limited to:
+In short, the ThoughtPoint serves as the primary mechanism for achieving visibility into thought processing.
 
-- The distinction between Object-like (stable) and Relational-like (fluid) thought
-- Dynamic navigation across the manifold as the core mechanism of thinking
-- Stability and instability as emergent geometric properties
-- The role of regulatory mechanisms ("spacesuit" for thought)
-- Inquiry as a distinct mode of thought
-- Thought as a geographic and exploratory process within a relational landscape
+## 3. Continuity with Prior Work
 
-## 4. Core Invariants (Non-Negotiable)
+The simulator is intended as a direct experimental extension of the framework developed from *Dynamic Information* onward. Its behavior should feel consistent with the movements previously described in the theoretical papers.
 
-- The manifold must remain continuous (no abrupt jumps except at well-defined saddle transitions)
-- Energy and normalized entropy rules must be respected at all times
-- All major state changes must be observable and logged
-- The system must be capable of both stable convergence and controlled instability for research purposes
+## 4. Core Invariants
 
-## 5. Success Criteria for Conceptual Fidelity
+- The manifold remains fundamentally continuous.
+- Thought expresses itself primarily through movement and interaction.
+- Significant state changes must be observable and traceable.
+- The system must support both convergence and sustained exploration.
 
-- A researcher familiar with *"The Architecture of Dynamic Thought"* should recognize the simulator’s behavior as a faithful computational embodiment.
-- The simulator must be able to reproduce and quantify the stability issues described in the theoretical work.
-- Exploration of the manifold must feel natural, insightful, and geographically intuitive.
+## 5. Measure of Success
+
+The simulator will have succeeded when:
+
+- A researcher can fluidly "drive" through thought space, observing in real time how ThoughtPoints navigate the manifold, settle into Object Basins, and travel through Relational Basins.
+- One can clearly record and measure architectural features — basin depths, pathway efficiencies, entropy reduction profiles, parallel exploration capacity, and other dynamics of interest to both cognitive scientists and AI engineers.
+- Key phenomena from the theoretical papers become directly observable and quantifiable.
+- The simulator provides a capability that does not currently exist in cognitive research or AI development: genuine, high-resolution visibility into the internal flow and architecture of thought itself.
+
+We expect that such a cognitive simulator will lead to:
+
+- New discoveries about the fundamental processes of cognition.
+- New efficiency metrics and improved cost/efficiency designs for future AI architectures.
+- New and more accurate language and descriptions for talking about thought and intelligence.
+
+Success is ultimately measured by whether the simulator becomes a powerful new instrument of discovery — a navigable landscape of thought rather than another black-box model.
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.2 (Draft)
+**Last Updated**: May 23, 2026  
+**Version**: 1.2
