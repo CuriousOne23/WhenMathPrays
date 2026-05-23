@@ -10,6 +10,7 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | Vision & Objectives            | `01_vision_and_objectives.md`                     | All documents                                             | Draft    |
 | Core Concepts                  | `03_core_conceptual_requirements.md`          | 04.xx series, 10_stability...                             | Draft    |
 | System Architecture            | `04_system_architecture.md`                   | All 04.xx, 05_non_functional                              | Draft    |
+| Implementation Architecture    | [07.5_implementation_architecture.md](07.5_implementation_architecture.md)         | 03_core_conceptual_requirements.md, 04_system_architecture.md, 07_manifold_structure.md, 13_dynamics_engine.md, 15_data_structures.md, 16_non_functional_requirements.md | Draft    |
 | Manifold Core                  | `05_manifold_core.md`                      | 06_data_structures, 08_visualization                      | Draft    |
 | Basins (incl. Fanin/Fanout)    | `06_basins.md`                             | 04.03, 04.04, 04.07, 10_stability                         | Draft    |
 | Energy Dynamics                | `12_energy_dynamics.md`                    | 04.02, 04.04, 04.05                                       | Draft    |
@@ -50,5 +51,5 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.1 (Draft)
+**Last Updated**: May 23, 2026  
+**Version**: 0.2 (Draft)
