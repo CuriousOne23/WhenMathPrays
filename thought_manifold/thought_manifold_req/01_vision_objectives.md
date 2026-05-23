@@ -19,6 +19,7 @@ The simulator must faithfully implement the following core concepts:
   - Strong attraction (high positive curvature at the bottom)
   - Feature binding and coherence sharpening upon settling
   - Attachment of contextual tags, memory associations, and symbolic labels
+  - An OB is a local minimum: $\nabla \text V(x_{OB} )=0$,  and the Hessian is positive definite (stable).
   - Tunable depth and capacity
   - Significantly higher damping than in Relational Basins
 
@@ -36,7 +37,7 @@ The simulator must faithfully implement the following core concepts:
 - Must carry:
   - Position $\mathbf{x}$
   - Fuzzy embedding vector $\mathbf{e}$
-  - Total energy $E = K + V(\mathbf{x})$
+  - Total energy $E = K + V(\mathbf{x_{OB}})$
   - Normalized entropy percentage $H_\\%$
   - Remaining time budget
 
