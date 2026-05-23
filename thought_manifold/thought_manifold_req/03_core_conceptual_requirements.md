@@ -14,6 +14,7 @@ The simulator must faithfully implement the following core concepts:
 - Must support smooth transitions with locally Euclidean properties while permitting emergent global topology.
 - Operational requirements:
   - Riemannian metric for distance and curvature computations (smooth, positive-definite, and consistent across local neighborhoods)
+  - Metric continuity across OB/RB boundaries and bounded curvature ($|K| < K_{\max}$) to ensure numerical stability
   - Differentiable potential function $V(\mathbf{x})$ governing the landscape
   - Support for both fixed and adaptive effective dimensionality
   - Position $\mathbf{x}$ corresponds directly to the current thought state
@@ -50,7 +51,10 @@ The simulator must faithfully implement the following core concepts:
   - Remaining time budget
 
 **Entropy Definition**:  
-$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (e.g., inverse of feature binding strength). It is conserved across splits/merges and decreases primarily through settling in Object Basins.
+$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (e.g., via variance or KL divergence from local prototypes). It is globally normalized and decreases primarily through settling in Object Basins.
+
+**Dynamics Update Rule** (placeholder):  
+$\dot{\mathbf{x}} = -\nabla V(\mathbf{x}) + \text{perturbation terms (noise + volitional steering)} + \text{damping}$
 
 ### 2.5 Key Dynamics
 
@@ -65,14 +69,14 @@ $H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from
 
 The simulator must include explicit regulatory subsystems to manage thought flow, consistent with the theory:
 
-- Anti-collapse stabilizers to prevent premature convergence
-- Flow modulators for damping and noise shaping
-- Volitional steering constraints with tunable strength
+- Anti-collapse stabilizers (triggered when curvature or convergence rate exceeds thresholds)
+- Flow modulators for damping and noise shaping (activated when velocity exceeds safe bounds)
+- Volitional steering constraints with tunable strength (engaged under external input or user override)
 - Stability monitors that detect and respond to critical transitions (e.g., saddle points)
 
 ### 2.7 Completion and Inquiry States
 
-- **Clean completion**: When $H_\\%$ drops below a configurable global or basin-specific threshold → transition to a Done Relational Basin
+- **Clean completion**: When $H_\\%$ drops below a configurable threshold (global default with OB/RB-specific overrides) → transition to a Done Relational Basin
 - **Stressed completion**: Under quantified time pressure (optionally routed through a Feeling Object Basin)
 - **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration. Geometric profile includes low-to-moderate curvature, moderate damping, and entropy bounds that prevent rapid convergence while allowing persistent exploration.
 
@@ -121,4 +125,4 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.5 (Draft)
+**Version**: 0.6 (Draft)
