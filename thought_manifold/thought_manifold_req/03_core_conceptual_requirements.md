@@ -15,9 +15,10 @@ The simulator must faithfully implement the following core concepts:
 - Operational requirements:
   - Riemannian metric for distance and curvature computations (smooth, positive-definite, and consistent across local neighborhoods)
   - Metric continuity across OB/RB boundaries and bounded curvature ($|K| < K_{\max}$) to ensure numerical stability
-  - Differentiable potential function $V(\mathbf{x})$ governing the landscape
+  - Differentiable potential function $V(\mathbf{x})$ governing the landscape (may be learned, hand-designed, or hybrid depending on simulator mode)
   - Support for both fixed and adaptive effective dimensionality
   - Position $\mathbf{x}$ corresponds directly to the current thought state
+- Manifold boundaries, when present, shall use reflective or absorbing conditions to preserve dynamical integrity.
 
 ### 2.2 Object Basins (OBs)
 
@@ -45,7 +46,7 @@ The simulator must faithfully implement the following core concepts:
 - The active entity navigating the manifold.
 - Must carry:
   - Position $\mathbf{x}$
-  - Fuzzy embedding vector $\mathbf{e}$
+  - Fuzzy embedding vector $\mathbf{e}$ (dimensionality fixed or adaptive, but consistent with local manifold structure)
   - Total energy $E = K + V(\mathbf{x})$
   - Normalized entropy percentage $H_\\%$
   - Remaining time budget
@@ -79,6 +80,10 @@ The simulator must include explicit regulatory subsystems to manage thought flow
 - **Clean completion**: When $H_\\%$ drops below a configurable threshold (global default with OB/RB-specific overrides) → transition to a Done Relational Basin
 - **Stressed completion**: Under quantified time pressure (optionally routed through a Feeling Object Basin)
 - **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration. Geometric profile includes low-to-moderate curvature, moderate damping, and entropy bounds that prevent rapid convergence while allowing persistent exploration.
+
+### 2.8 Numerical Integration Requirements
+
+- Integration of manifold dynamics must employ stable numerical methods (e.g., RK4 or symplectic integrators) to properly handle curvature, damping, and energy interactions.
 
 ## 3. OB vs RB Parameter Comparison
 
@@ -125,4 +130,4 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.6 (Draft)
+**Version**: 0.7 (Draft)
