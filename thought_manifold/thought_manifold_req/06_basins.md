@@ -1,4 +1,4 @@
-# 04.02 Basins
+# 06 Basins
 
 ## 1. Purpose
 Define the common and specific requirements for all basin types in the manifold (Object Basins, Relational Basins, Inquiry Basins, and special variants such as Feeling OB or Done RB).
@@ -72,9 +72,9 @@ Define the common and specific requirements for all basin types in the manifold 
 
 ## 6. Traceability
 Links to:
-- `02_core_conceptual_requirements.md` (Sections 2.2, 2.3, 2.6)
-- `03_system_architecture.md`
-- `04.03_energy_dynamics.md`
+- `03_core_conceptual_requirements.md` (Sections 2.2, 2.3, 2.6)
+- `04_system_architecture.md`
+- `12_energy_dynamics.md`
 
 ---
 

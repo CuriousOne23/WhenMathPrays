@@ -1,4 +1,4 @@
-# 13 Program Flow and IO Interface Requirements
+# 22 Program Flow
 
 ## 1. Purpose
 Define the top-level execution flow and the detailed IO / user interaction strategy, with strong emphasis on real-time control, responsiveness, and debuggability.
@@ -74,10 +74,10 @@ Define the top-level execution flow and the detailed IO / user interaction strat
 
 ## 6. Traceability
 Links to:
-- `07_interfaces_io.md`
-- `08_visualization_exploration.md`
+- `17_interfaces_and_io.md`
+- `18_visualization_exploration.md`
 - `14_configuration_state_management.md`
-- `05_non_functional_requirements.md`
+- `16_non_functional_requirements.md`
 
 ---
 

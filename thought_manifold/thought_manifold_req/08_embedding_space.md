@@ -1,4 +1,4 @@
-# 04.04 Fuzzy Embeddings
+# 08 Embedding Space
 
 ## 1. Purpose
 Define the requirements for fuzzy embeddings — the continuous, high-dimensional vector representation that carries the semantic, contextual, and feature content of a ThoughtPoint.
@@ -11,7 +11,7 @@ Define the requirements for fuzzy embeddings — the continuous, high-dimensiona
 - Must support superposition (multiple concepts active simultaneously with varying strengths).
 
 **EM-02: Coupling with Other Systems**
-- Embedding norm $\|\mathbf{e}\|$ must be coupled to the ThoughtPoint’s activation energy (see 04.03_energy_dynamics.md).
+- Embedding norm $\|\mathbf{e}\|$ must be coupled to the ThoughtPoint’s activation energy (see 12_energy_dynamics.md).
 - Changes in energy due to splitting, merging, or basin effects must appropriately scale the embedding.
 - Normalized entropy $H_{\%}$ must be computed primarily from the embedding distribution, but remain independent of raw norm changes.
 
@@ -47,9 +47,9 @@ Define the requirements for fuzzy embeddings — the continuous, high-dimensiona
 
 ## 6. Traceability
 Links to:
-- `04.02_basins.md` (Fanin/Fanout and basin-specific behavior)
-- `04.03_energy_dynamics.md`
-- `02_core_conceptual_requirements.md` (Section 2.4)
+- `06_basins.md` (Fanin/Fanout and basin-specific behavior)
+- `12_energy_dynamics.md`
+- `03_core_conceptual_requirements.md` (Section 2.4)
 
 ---
 

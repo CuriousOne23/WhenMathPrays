@@ -1,4 +1,4 @@
-# 08 Visualization and Exploration
+# 18 Visualization and Exploration
 
 ## 1. Purpose
 Define the requirements for the simulator as an **exploratory vehicle** for thought space — enabling navigation, discovery, mapping, and insight generation within the Relational Manifold.
@@ -55,9 +55,9 @@ Define the requirements for the simulator as an **exploratory vehicle** for thou
 
 ## 7. Traceability
 Links to:
-- `07_interfaces_io.md`
-- `05_non_functional_requirements.md` (Visualization & Exploration section)
-- `02_core_conceptual_requirements.md` (Exploratory nature of the manifold)
+- `17_interfaces_and_io.md`
+- `16_non_functional_requirements.md` (Visualization & Exploration section)
+- `03_core_conceptual_requirements.md` (Exploratory nature of the manifold)
 
 ---
 

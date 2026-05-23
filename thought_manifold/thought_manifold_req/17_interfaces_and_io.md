@@ -1,4 +1,4 @@
-# 07 Interfaces and IO
+# 17 Interfaces and IO
 
 ## 1. Purpose
 Define all user-facing and system interfaces, including configuration, command-line interface (CLI), logging, visualization triggers, and output formats.
@@ -64,9 +64,9 @@ Define all user-facing and system interfaces, including configuration, command-l
 
 ## 8. Traceability
 Links to:
-- [03_system_architecture.md](./03_system_architecture.md) (IO & Visualization Layer)
-- [05_non_functional_requirements.md](./05_non_functional_requirements.md) (Usability & Debuggability)
-- [08_visualization_exploration.md](./08_visualization_exploration.md) (detailed visualization specs)
+- [04_system_architecture.md](./04_system_architecture.md) (IO & Visualization Layer)
+- [16_non_functional_requirements.md](./16_non_functional_requirements.md) (Usability & Debuggability)
+- [18_visualization_exploration.md](./18_visualization_exploration.md) (detailed visualization specs)
 
 ---
 
