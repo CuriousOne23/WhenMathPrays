@@ -4,9 +4,9 @@
 
 This document defines the guiding vision for the Thought Manifold Simulator. Its central purpose is to create a computational environment in which one can actively explore, navigate, and study the internal landscape of thought.
 
-The simulator is designed to let a researcher "drive around" within thought space — to move through valleys of coherence, across ridges of transition, and along rivers of relational flow. It should enable one to observe, record, and measure the architectural constructs of cognition in real time.
+The simulator is designed to let a researcher "drive around" within thought space — to move through valleys of coherence, across ridges of transition, and along rivers of relational flow. It should enable one to observe, record, and measure the architectural constructs of cognition in real time: the depth and stability of Object Basins, the connectivity and efficiency of Relational Basins, the behavior of traveling ThoughtPoints, and various performance metrics such as entropy reduction rates, energy consumption, exploration efficiency, and parallel processing capacity.
 
-**Important Scope Note**: This model is offered as a general, foundational simulator. It is not intended as a complete, ready-to-use representation for every cognitive domain. For each specific discipline (neuroscience, psychology, AI architecture, philosophy of mind, etc.), substantial additional work will be required to map their particular systems and phenomena onto this framework. The simulator is expected to provide useful coarse guidance and new perspectives, but not necessarily fine-grained, domain-specific detail without further development.
+**Important Scope Note**: This model is offered as a general, foundational simulator. It is not intended as a complete, ready-to-use representation for every cognitive domain. For each specific discipline (neuroscience, psychology, AI architecture, philosophy of mind, etc.), substantial additional work will be required to map their particular systems onto this framework. The simulator is expected to provide useful coarse guidance and new perspectives, but not necessarily fine-grained, domain-specific detail without further development.
 
 ## 2. Foundational Orientation
 
@@ -64,4 +64,4 @@ Success is ultimately measured by whether the simulator becomes a powerful new i
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 1.2
+**Version**: 1.3 (Polished)
