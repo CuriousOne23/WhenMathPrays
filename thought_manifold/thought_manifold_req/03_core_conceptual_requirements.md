@@ -13,7 +13,7 @@ The simulator must faithfully implement the following core concepts:
 - A continuous, multi-dimensional geometric space representing thought dynamics.
 - Must support smooth transitions with locally Euclidean properties while permitting emergent global topology.
 - Operational requirements:
-  - Riemannian metric for distance and curvature computations
+  - Riemannian metric for distance and curvature computations (smooth, positive-definite, and consistent across local neighborhoods)
   - Differentiable potential function $V(\mathbf{x})$ governing the landscape
   - Support for both fixed and adaptive effective dimensionality
   - Position $\mathbf{x}$ corresponds directly to the current thought state
@@ -49,10 +49,14 @@ The simulator must faithfully implement the following core concepts:
   - Normalized entropy percentage $H_\\%$
   - Remaining time budget
 
+**Entropy Definition**:  
+$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (e.g., inverse of feature binding strength). It is conserved across splits/merges and decreases primarily through settling in Object Basins.
+
 ### 2.5 Key Dynamics
 
 - Energy conservation with controlled dissipation
-- Splitting and merging governed by activation-weighted rules (energy and entropy distributed proportionally)
+- Splitting and merging governed by activation-weighted rules:  
+  $E_i = w_i E_{\text{parent}}$, $H_i = w_i H_{\text{parent}}$ (where $w_i$ are normalized activation weights based on embedding similarity and local curvature)
 - Normalized entropy tracking (conserved across splits/merges; primarily reduced within Object Basins)
 - Perturbation mechanisms (internal noise, external input, volitional steering)
 - Sparse, gated regenerative amplifiers
@@ -70,7 +74,7 @@ The simulator must include explicit regulatory subsystems to manage thought flow
 
 - **Clean completion**: When $H_\\%$ drops below a configurable global or basin-specific threshold → transition to a Done Relational Basin
 - **Stressed completion**: Under quantified time pressure (optionally routed through a Feeling Object Basin)
-- **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration
+- **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration. Geometric profile includes low-to-moderate curvature, moderate damping, and entropy bounds that prevent rapid convergence while allowing persistent exploration.
 
 ## 3. OB vs RB Parameter Comparison
 
@@ -82,7 +86,15 @@ The simulator must include explicit regulatory subsystems to manage thought flow
 | Stability              | High (attractor)                    | Moderate (transitional)                  |
 | Primary Function       | Coherence & binding                 | Exploration & transformation             |
 
-## 4. Mapping to *"The Architecture of Dynamic Thought"*
+## 4. Logging and Observability
+
+All major state changes must be observable and logged with sufficient granularity for reproducibility and analysis. Required elements include:
+
+- Time-indexed or event-indexed records
+- Core fields: position $\mathbf{x}$, embedding $\mathbf{e}$, energy $E$, entropy $H_\\%$, local curvature, damping coefficient, and transition type
+- Logging of regulatory interventions, splits/merges, and completion events
+
+## 5. Mapping to *"The Architecture of Dynamic Thought"*
 
 The simulator must explicitly support and demonstrate the major ideas from the paper, including:
 
@@ -93,14 +105,14 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 - Inquiry as a distinct and vitally important mode of thought
 - Thought as a geographic and exploratory process within a relational landscape
 
-## 5. Core Invariants (Non-Negotiable)
+## 6. Core Invariants (Non-Negotiable)
 
 - The manifold must remain fundamentally continuous (no abrupt jumps except at well-defined saddle transitions)
 - Energy and normalized entropy rules must be respected at all times
 - All major state changes must be observable and logged with sufficient granularity
 - The system must be capable of both stable convergence and controlled instability for research purposes
 
-## 6. Success Criteria for Conceptual Fidelity
+## 7. Success Criteria for Conceptual Fidelity
 
 - A researcher familiar with *"The Architecture of Dynamic Thought"* should recognize the simulator’s behavior as a faithful computational embodiment of the theory.
 - The simulator must be able to reproduce and quantitatively analyze the stability issues described in the theoretical work.
@@ -109,4 +121,4 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.4 (Draft)
+**Version**: 0.5 (Draft)
