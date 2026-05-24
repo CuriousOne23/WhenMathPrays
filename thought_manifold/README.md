@@ -59,6 +59,14 @@ These documents live in `thought_manifold_design/` and describe how the system w
 - **[07_logging_and_observability_design.md](../thought_manifold_design/07_logging_and_observability_design.md)**
 - **[08_testing_strategy.md](../thought_manifold_design/08_testing_strategy.md)**
 
+### Contract Documents
+
+These define strict boundaries and invariants between system layers.
+
+- **[core_contract.md](../thought_manifold_design/core_contract.md)**
+- **[api_contract.md](../thought_manifold_design/api_contract.md)**
+- **[ui_contract.md](../thought_manifold_design/ui_contract.md)**
+
 ## How to Use These Documents
 
 1. Read documents in numbered order for a top-down understanding.
