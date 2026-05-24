@@ -32,7 +32,7 @@ Define the common and specific requirements for all basin types in the manifold 
 - Must attach contextual/symbolic information (labels, memory tags, confidence).
 - Must renormalize incoming energy and embedding norm.
 - Must have tunable capacity and depth.
-- Must reduce normalized entropy $H_{\%}$ significantly upon successful settling.
+- Must reduce normalized entropy $H_\\%$ significantly upon successful settling.
 - **Recommended Fanin/Fanout**: Moderate to high fanin (good convergence), moderate fanout (4–10).
 
 ### 3.2 Relational Basins (RBs)
@@ -41,7 +41,7 @@ Define the common and specific requirements for all basin types in the manifold 
 - Must implement fuzzy filters at entry points.
 - Must support splitting and merging of ThoughtPoints.
 - Tunable damping (including near-zero for highways).
-- Must preserve $H_{\%}$ across most operations (except minor losses).
+- Must preserve $H_\\%$ across most operations (except minor losses).
 - **Recommended Fanin/Fanout**: High fanout (8–25) for routing flexibility, moderate to high fanin for integration.
 
 ### 3.3 Inquiry Basins
