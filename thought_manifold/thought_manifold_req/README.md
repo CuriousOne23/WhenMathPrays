@@ -45,6 +45,11 @@ All engineering decisions, architecture choices, implementation details, and exp
 25. **[25_verb_mind.md](25_verb_mind.md)** — Placeholder
 26. **[26_humility_as_relation.md](26_humility_as_relation.md)** — Placeholder
 27. **[27_beauty_and_rigor.md](27_beauty_and_rigor.md)** — Placeholder
+28. **[28_interaction_model.md](28_interaction_model.md)** — Placeholder
+29. **[29_error_and_stability_requirements.md](29_error_and_stability_requirements.md)** — Placeholder
+30. **[30_performance_requirements.md](30_performance_requirements.md)** — Placeholder
+31. **[31_observability_requirements.md](31_observability_requirements.md)** — Placeholder
+32. **[32_testing_and_validation.md](32_testing_and_validation.md)** — Placeholder
 
 ## Key Principles
 
