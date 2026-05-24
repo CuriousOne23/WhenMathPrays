@@ -34,6 +34,7 @@ To build a navigable, visualizable **vehicle** that allows researchers to explor
 - **[07_interfaces_io.md](07_interfaces_io.md)**
 - **[08_visualization_exploration.md](08_visualization_exploration.md)**
 - **[09_experiment_requirements.md](09_experiment_requirements.md)**
+- **[09.5_thoughtpoint_metadata_encoding_pecification.md](thought_manifold_req/09.5_thoughtpoint_metadata_encoding_pecification.md)** — specifies TP information stream
 - **[10_stability_instability_requirements.md](10_stability_instability_requirements.md)**
 - **[11_risks_assumptions_dependencies.md](11_risks_assumptions_dependencies.md)**
 - **[23_glossary.md](23_glossary.md)**

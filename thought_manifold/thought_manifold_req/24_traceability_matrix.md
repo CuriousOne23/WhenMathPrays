@@ -16,6 +16,7 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | Implementation Architecture    | [07.5_implementation_architecture.md](07.5_implementation_architecture.md) | 03, 04, 07, 13, 15, 16                                    | Draft    |
 | Embedding Space                | [08_embedding_space.md](08_embedding_space.md) | 06, 09, 11, 12                                            | Draft    |
 | Object Basins                  | [09_object_basins.md](09_object_basins.md) | 06, 12, 14                                                | Draft    |
+| ThoughtPoint Metadata Encoding | [09.5_thoughtpoint_metadata_encoding_pecification.md](09.5_thoughtpoint_metadata_encoding_pecification.md) | 08, 09, 11, 15, 17                                        | Draft    |
 | Relational Basins              | [10_relational_basins.md](10_relational_basins.md) | 06, 08, 12                                                | Draft    |
 | Entropy & Information          | [11_entropy_and_information.md](11_entropy_and_information.md) | 03, 14, 20                                                | Draft    |
 | Energy Dynamics                | [12_energy_dynamics.md](12_energy_dynamics.md) | 06, 08, 11                                                | Draft    |
