@@ -22,12 +22,20 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 
 ### 3.2 Potential Landscape
 - The potential function $V(\mathbf{x})$ must be differentiable and continuous across the entire manifold.
-- It may be implemented in learned, hand-designed, or hybrid modes depending on simulation configuration.
+- It may be implemented in `learned`, `hand_designed`, or `hybrid` modes (behavioral differences defined in configuration).
 - Gradient $\nabla V(\mathbf{x})$ must be efficiently computable at any point.
 
-### 3.3 Basin Integration
-- Object Basins (OBs), Relational Basins (RBs), and Inquiry Basins must be embedded as natural geometric features within the manifold.
-- Transitions between basin types must occur smoothly through saddle points or ridge regions without violating manifold continuity.
+### 3.3 Basin Detection Criteria (New)
+Basin detection must be geometrically grounded with the following criteria:
+- **Object Basins**: Positive definite Hessian (all eigenvalues significantly positive) + gradient magnitude below threshold + high local curvature.
+- **Relational Basins**: Mixed or near-zero Hessian eigenvalues + ridge-like curvature patterns + moderate gradient alignment.
+- **Inquiry Basins**: Low positive or mixed curvature with shallow potential wells.
+- **Attraction Zone**: Defined as the region where the gradient points toward the basin minimum and curvature exceeds a configurable minimum threshold.
+
+### 3.4 Basin Entry & Transition Rules (New)
+- A ThoughtPoint enters a basin only after persisting in its attraction zone for a configurable number of consecutive ticks **and** satisfying energy/entropy compatibility conditions.
+- Hysteresis shall be applied at basin boundaries to prevent rapid jitter.
+- Transitions must occur smoothly through saddle points or ridge regions without violating manifold continuity.
 
 ## 4. Manifold Regions
 
@@ -35,11 +43,13 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 - Deep, high positive curvature minima.
 - Strong attractors with high damping.
 - Support feature binding and coherence sharpening.
+- Prototype embedding vectors shall be maintained at basin centers for coherence measurement.
 
 ### 4.2 Relational Basins (RBs)
 - Flatter or ridge-like regions connecting OBs.
 - Tunable damping, including near-lossless pathways.
 - Support layered routing and thought activation splitting/merging.
+- Splitting and merging must respect local geometric constraints (curvature and gradient alignment).
 
 ### 4.3 Inquiry Basins
 - Shallow, unstable regions with moderate curvature and damping.
@@ -55,12 +65,14 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 - The manifold must remain fundamentally continuous (no abrupt discontinuities except at explicitly defined saddle transitions).
 - Boundary conditions, when present, shall be reflective or absorbing.
 - Local coordinate charts must remain smoothly compatible to support consistent metric and gradient evaluation.
+- Ridge vs valley definitions and saddle point classification must be geometrically explicit.
 
 ## 6. Structural Invariants
 
 - All points in the manifold must have a well-defined position $\mathbf{x}$, local metric, and potential value $V(\mathbf{x})$.
 - Energy and normalized entropy $H_\\%$ must remain consistent with rules defined in `03_core_conceptual_requirements.md`.
 - The structure must support both stable convergence and controlled instability for research purposes.
+- All basin detection, entry, and transition logic must be geometrically grounded and deterministic.
 
 ## 7. Traceability to Conceptual Requirements
 
@@ -75,4 +87,4 @@ All structural decisions are traceable via `24_traceability_matrix.md`.
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.1 (Draft)
+**Version**: 0.2 (Draft)
