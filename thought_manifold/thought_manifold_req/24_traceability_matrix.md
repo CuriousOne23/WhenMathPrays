@@ -31,6 +31,11 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | Verb Mind                      | [25_verb_mind.md](25_verb_mind.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
 | Humility as Relation           | [26_humility_as_relation.md](26_humility_as_relation.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
 | Beauty and Rigor               | [27_beauty_and_rigor.md](27_beauty_and_rigor.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Interaction Model              | [28_interaction_model.md](28_interaction_model.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Error and Stability Requirements | [29_error_and_stability_requirements.md](29_error_and_stability_requirements.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Performance Requirements       | [30_performance_requirements.md](30_performance_requirements.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Observability Requirements     | [31_observability_requirements.md](31_observability_requirements.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Testing and Validation         | [32_testing_and_validation.md](32_testing_and_validation.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
 
 ## Key Concept Traceability Examples
 
