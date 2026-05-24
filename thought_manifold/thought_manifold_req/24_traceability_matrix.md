@@ -33,7 +33,7 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 - Energy Impact: [12_energy_dynamics.md](12_energy_dynamics.md) (ED-03, ED-04)
 - Experiments: [19_experiment_requirements.md](19_experiment_requirements.md)
 
-**Normalized Entropy $H_{\%}$**
+**Normalized Entropy $H_\\%$**
 - Conceptual: [03_core_conceptual_requirements.md](03_core_conceptual_requirements.md)
 - Tracking: [11_entropy_and_information.md](11_entropy_and_information.md)
 - Completion: [14_completion_logic.md](14_completion_logic.md)
