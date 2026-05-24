@@ -27,6 +27,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Operational translation layer and software architecture
 8. **[08_embedding_space.md](08_embedding_space.md)** — Embedding-space requirements
 9. **[09_object_basins.md](09_object_basins.md)** — Object-basin requirements
+9.5. **[09.5_thoughtpoint_metadata_encoding_pecification.md](09.5_thoughtpoint_metadata_encoding_pecification.md)** — specifies TP information stream
 10. **[10_relational_basins.md](10_relational_basins.md)** — Relational-basin requirements
 11. **[11_entropy_and_information.md](11_entropy_and_information.md)** — Entropy and information requirements
 12. **[12_energy_dynamics.md](12_energy_dynamics.md)** — Energy dynamics requirements
