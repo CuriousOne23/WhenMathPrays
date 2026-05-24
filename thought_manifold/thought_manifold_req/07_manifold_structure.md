@@ -13,7 +13,7 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 - Support for both fixed and adaptive effective dimensionality, with local coordinate charts that are smoothly compatible.
 - Metric continuity across all regions, including boundaries between Object Basins, Relational Basins, and Inquiry Basins.
 
-## 3. Geometric Properties
+## 3. Geometric Properties (Updated)
 
 ### 3.1 Metric and Curvature
 - The manifold shall use a smooth, positive-definite Riemannian metric for distance and curvature computations.
@@ -27,6 +27,7 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 
 ### 3.3 Basin Detection Criteria (New)
 Basin detection must be geometrically grounded with the following criteria:
+- All basin detection computations are evaluated at the ThoughtPoint coordinate only, consistent with the 0-dimensional ThoughtPoint rule.
 - **Object Basins**: Positive definite Hessian (all eigenvalues significantly positive) + gradient magnitude below threshold + high local curvature.
 - **Relational Basins**: Mixed or near-zero Hessian eigenvalues + ridge-like curvature patterns + moderate gradient alignment.
 - **Inquiry Basins**: Low positive or mixed curvature with shallow potential wells.
@@ -36,6 +37,14 @@ Basin detection must be geometrically grounded with the following criteria:
 - A ThoughtPoint enters a basin only after persisting in its attraction zone for a configurable number of consecutive ticks **and** satisfying energy/entropy compatibility conditions.
 - Hysteresis shall be applied at basin boundaries to prevent rapid jitter.
 - Transitions must occur smoothly through saddle points or ridge regions without violating manifold continuity.
+- Transition geometry and eligibility are evaluated relative to the ThoughtPoint coordinate only, with no spatial-extent assumptions.
+
+### 3.5 ThoughtPoint Geometry (New Section)
+
+- The ThoughtPoint is treated as a **pure 0-dimensional mathematical point** in the manifold.
+- It has no spatial extent, no volume, and no physical profile.
+- It interacts with the manifold exclusively through its coordinate $\mathbf{x}$ and the local value of the potential function $V(\mathbf{x})$.
+- All geometric operations (distance, curvature, gradient, basin detection) are performed relative to this point coordinate only.
 
 ## 4. Manifold Regions
 
