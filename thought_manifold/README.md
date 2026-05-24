@@ -22,24 +22,42 @@ To build a navigable, visualizable **vehicle** that allows researchers to explor
 ### Functional Requirements
 - **[04_functional_requirements/](04_functional_requirements/)** — Detailed breakdown by component
   - 04.01_manifold_core.md
-  - 04.02_basins.md (incl. fanin/fanout)
+  - 04.02_basins.md
   - 04.03_energy_dynamics.md
   - 04.04_embeddings.md
   - 04.05_entropy_tracking.md
   - 04.07_completion_logic.md
 
-### Supporting Documents
-- **[05_non_functional_requirements.md](05_non_functional_requirements.md)** — Debuggability, reproducibility, performance, etc.
-- **[06_data_structures.md](06_data_structures.md)** — Core classes and state definitions
-- **[07_interfaces_io.md](07_interfaces_io.md)** — CLI, config, logging, outputs
-- **[08_visualization_exploration.md](08_visualization_exploration.md)** — The "exploration vehicle" requirements
-- **[09_experiment_requirements.md](09_experiment_requirements.md)** — Experiment framework
-- **[10_stability_instability_requirements.md](10_stability_instability_requirements.md)** — Core research focus
-- **[11_risks_assumptions_dependencies.md](11_risks_assumptions_dependencies.md)** — Risks and realism
+### Supporting Requirements
+- **[05_non_functional_requirements.md](05_non_functional_requirements.md)**
+- **[06_data_structures.md](06_data_structures.md)**
+- **[07_interfaces_io.md](07_interfaces_io.md)**
+- **[08_visualization_exploration.md](08_visualization_exploration.md)**
+- **[09_experiment_requirements.md](09_experiment_requirements.md)**
+- **[10_stability_instability_requirements.md](10_stability_instability_requirements.md)**
+- **[11_risks_assumptions_dependencies.md](11_risks_assumptions_dependencies.md)**
+- **[23_glossary.md](23_glossary.md)**
+- **[24_traceability_matrix.md](24_traceability_matrix.md)**
 
-### Reference
-- **[glossary.md](glossary.md)** — Key terms and definitions
-- **[traceability_matrix.md](traceability_matrix.md)** — Mapping between concepts and requirements
+### New System Requirements
+- **[28_interaction_model.md](28_interaction_model.md)**
+- **[29_error_and_stability_requirements.md](29_error_and_stability_requirements.md)**
+- **[30_performance_requirements.md](30_performance_requirements.md)**
+- **[31_observability_requirements.md](31_observability_requirements.md)**
+- **[32_testing_and_validation.md](32_testing_and_validation.md)**
+
+## Software Design Documents
+
+These documents live in `thought_manifold_design/` and describe how the system will be built.
+
+- **[01_system_architecture.md](../thought_manifold_design/01_system_architecture.md)**
+- **[02_geometry_engine_design.md](../thought_manifold_design/02_geometry_engine_design.md)**
+- **[03_dynamics_engine_design.md](../thought_manifold_design/03_dynamics_engine_design.md)**
+- **[04_interaction_layer_design.md](../thought_manifold_design/04_interaction_layer_design.md)**
+- **[05_data_structures.md](../thought_manifold_design/05_data_structures.md)**
+- **[06_error_handling_design.md](../thought_manifold_design/06_error_handling_design.md)**
+- **[07_logging_and_observability_design.md](../thought_manifold_design/07_logging_and_observability_design.md)**
+- **[08_testing_strategy.md](../thought_manifold_design/08_testing_strategy.md)**
 
 ## How to Use These Documents
 
@@ -62,5 +80,5 @@ To build a navigable, visualizable **vehicle** that allows researchers to explor
 
 ---
 
-**Last Updated**: [Insert Date]  
+**Last Updated**: May 24, 2026  
 **Version**: 0.2 (Draft)
