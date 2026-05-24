@@ -28,6 +28,9 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | Experiments                    | [19_experiment_requirements.md](19_experiment_requirements.md) | 16, 20                                                    | Draft    |
 | Stability & Instability        | [20_stability_requirements.md](20_stability_requirements.md) | 06, 12, 19                                                | Draft    |
 | Risks & Assumptions            | [21_risks_assumptions.md](21_risks_assumptions.md) | All documents                                             | Draft    |
+| Verb Mind                      | [25_verb_mind.md](25_verb_mind.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Humility as Relation           | [26_humility_as_relation.md](26_humility_as_relation.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
+| Beauty and Rigor               | [27_beauty_and_rigor.md](27_beauty_and_rigor.md) | Design Mapping: [Placeholder]; Implementation Mapping: [Placeholder] | Draft    |
 
 ## Key Concept Traceability Examples
 

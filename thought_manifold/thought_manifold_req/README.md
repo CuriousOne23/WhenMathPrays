@@ -42,6 +42,9 @@ All engineering decisions, architecture choices, implementation details, and exp
 22. **[22_program_flow.md](22_program_flow.md)** — End-to-end program flow
 23. **[23_glossary.md](23_glossary.md)** — Definitions and terminology
 24. **[24_traceability_matrix.md](24_traceability_matrix.md)** — Requirement-to-design traceability
+25. **[25_verb_mind.md](25_verb_mind.md)** — Placeholder
+26. **[26_humility_as_relation.md](26_humility_as_relation.md)** — Placeholder
+27. **[27_beauty_and_rigor.md](27_beauty_and_rigor.md)** — Placeholder
 
 ## Key Principles
 
