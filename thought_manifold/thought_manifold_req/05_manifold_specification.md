@@ -76,8 +76,7 @@ Geometry (gradient-based landscapes) was chosen because:
 
 **C. Relational Basin (RB) Geometry**  
 - 2–4 px wide corridor.  
-- Sampling: ≥3 points.  
-- 3D: ridge-like structure.
+- Sampling: ≥3 points.
 
 **D. Layered Scene Composition**  
 Base surface → Basins → Trajectories → Annotations.
@@ -87,7 +86,7 @@ Color, line style, thickness, opacity with mandatory legend.
 
 ### 7.3 Height/Depth Governing Equations & Bounds
 
-All values normalized to visual range **[-1.0, +0.5]** for consistency.
+All values normalized to visual range **[-1.0, +0.5]**.
 
 - **OB Depth**: `-1.0 to -0.1`  
   $$
@@ -107,43 +106,53 @@ All values normalized to visual range **[-1.0, +0.5]** for consistency.
 ### 7.5 Rest and Ejection Visual Semantics
 
 **A. Rest State (Inside OB)**  
-- TP rendered at OB center pixel.  
-- Increased opacity (100%).  
-- No motion.  
-- Optional soft pulsing glow to indicate stability.  
-- OB center visually distinct (brighter or marked).
+- TP rendered at OB center pixel with increased opacity and optional soft pulsing glow.  
+- No motion.
 
-**B. Ejection Trigger**  
-- When TS signals completion:  
-  - TP enters ejection state.  
-  - OB exit point and RB entry point briefly highlighted (≈150 ms).
-
-**C. Ejection Animation**  
-- TP moves along short, smooth spline:  
-  - OB center → OB exit point → RB entry point.  
-- Spline is monotonic and visually distinct from normal RB flow.
-
-**D. Flow State (On RB)**  
-- TP returns to normal opacity.  
-- Follows RB centerline with appropriate motion.  
-- Active RB corridor highlighted.
-
-**E. OB–RB Attachment**  
-- Exit and entry points are spatially aligned and visually connected for clear continuity.
+**B. Ejection Trigger & Animation**  
+- On TS ejection signal: OB exit point and RB entry briefly highlighted.  
+- TP moves along short, smooth spline: OB center → exit point → RB centerline.  
+- Once on RB: normal opacity and flow motion.
 
 ### 7.6 TP Indexing and Diagnostic Highlighting
 
-- Every TP carries a **TS step index**.  
-- Support index-based highlighting, filtering, and jump navigation.  
+- Every ThoughtPoint carries a **TS step index** (when created).  
+- Supports index-based highlighting, filtering, and navigation.  
 - Index displayed in hover panels and optionally as small label next to glyph.
 
-### 7.7 Text/Token Highlighting Interface
+### 7.7 TP State Counter and Tagging Lifecycle
+
+Every ThoughtPoint must maintain a **tagged state counter** (separate from TS step index) that tracks its internal evolution.
+
+**A. State Counter Definition**  
+- Integer starting at 0 when the TP is created.  
+- Increments by +1 each time the TP is:  
+  - Tagged or modified by a basin (OB, RB, etc.)  
+  - Updated by a regulator  
+  - Split or merged  
+  - Re-evaluated or otherwise modified by the TS.
+
+**B. Purpose**  
+- Enables deterministic replay and debugging of tagging order.  
+- Supports detection of missing/repeated tags and basin loops.  
+- Facilitates reconstruction of TP lineage and lifecycle analysis.  
+- Ensures proper synchronization between TS state and manifold rendering.
+
+**C. Display Rules**  
+- The state counter must appear in TP hover panels and info panels.  
+- Optional: small numeric label next to the TP glyph (debug mode only).
+
+**D. Relationship to TS Step Index**  
+- **TS Step Index** = global simulation time when the TP was created.  
+- **TP State Counter** = number of times this specific TP has been updated/tagged.  
+Together they provide complete lifecycle traceability.
+
+### 7.8 Text/Token Highlighting Interface
 
 - Supports synchronized text ↔ geometry highlighting.  
-- Hovering over tokens highlights corresponding TPs, OBs, RBs, and trajectories (and vice versa).  
-- Enables aggregate and distributive pattern visualization.
+- Hovering over tokens highlights corresponding TPs, OBs, RBs, and trajectories (and vice versa).
 
-### 7.8 Interaction and Measurement Semantics
+### 7.9 Interaction and Measurement Semantics
 
 - Clicking, area selection, cursor hover, and viewport controls as previously defined.
 
@@ -169,6 +178,6 @@ All values normalized to visual range **[-1.0, +0.5]** for consistency.
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 1.0 (Final — Rest/Ejection semantics + all prior refinements)
+**Version**: 1.1 (TP State Counter + Tagging Lifecycle added)
 
 ---
