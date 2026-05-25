@@ -13,7 +13,7 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 - Support for both fixed and adaptive effective dimensionality, with local coordinate charts that are smoothly compatible.
 - Metric continuity across all regions, including boundaries between Object Basins, Relational Basins, and Inquiry Basins.
 
-## 3. Geometric Properties (Updated)
+## 3. Geometric Properties
 
 ### 3.1 Metric and Curvature
 - The manifold shall use a smooth, positive-definite Riemannian metric for distance and curvature computations.
@@ -25,26 +25,22 @@ The Relational Manifold must be implemented as a continuous, multi-dimensional g
 - It may be implemented in `learned`, `hand_designed`, or `hybrid` modes (behavioral differences defined in configuration).
 - Gradient $\nabla V(\mathbf{x})$ must be efficiently computable at any point.
 
-### 3.3 Basin Detection Criteria (New)
-Basin detection must be geometrically grounded with the following criteria:
-- All basin detection computations are evaluated at the ThoughtPoint coordinate only, consistent with the 0-dimensional ThoughtPoint rule.
-- **Object Basins**: Positive definite Hessian (all eigenvalues significantly positive) + gradient magnitude below threshold + high local curvature.
-- **Relational Basins**: Mixed or near-zero Hessian eigenvalues + ridge-like curvature patterns + moderate gradient alignment.
-- **Inquiry Basins**: Low positive or mixed curvature with shallow potential wells.
-- **Attraction Zone**: Defined as the region where the gradient points toward the basin minimum and curvature exceeds a configurable minimum threshold.
-
-### 3.4 Basin Entry & Transition Rules (New)
-- A ThoughtPoint enters a basin only after persisting in its attraction zone for a configurable number of consecutive ticks **and** satisfying energy/entropy compatibility conditions.
-- Hysteresis shall be applied at basin boundaries to prevent rapid jitter.
-- Transitions must occur smoothly through saddle points or ridge regions without violating manifold continuity.
-- Transition geometry and eligibility are evaluated relative to the ThoughtPoint coordinate only, with no spatial-extent assumptions.
-
-### 3.5 ThoughtPoint Geometry (New Section)
-
+### 3.3 ThoughtPoint Geometry
 - The ThoughtPoint is treated as a **pure 0-dimensional mathematical point** in the manifold.
 - It has no spatial extent, no volume, and no physical profile.
 - It interacts with the manifold exclusively through its coordinate $\mathbf{x}$ and the local value of the potential function $V(\mathbf{x})$.
-- All geometric operations (distance, curvature, gradient, basin detection) are performed relative to this point coordinate only.
+
+### 3.4 Basin Detection Criteria
+Basin detection must be geometrically grounded:
+- **Object Basins**: Positive definite Hessian + gradient magnitude below threshold + high local curvature.
+- **Relational Basins**: Mixed or near-zero Hessian eigenvalues + ridge-like curvature patterns.
+- **Inquiry Basins**: Low positive or mixed curvature with shallow potential wells.
+- **Attraction Zone**: Region where gradient points toward basin minimum and curvature exceeds minimum threshold.
+
+### 3.5 Basin Entry & Transition Rules
+- A ThoughtPoint enters a basin only after persisting in its attraction zone for a configurable number of consecutive ticks and satisfying energy/entropy compatibility.
+- Hysteresis shall be applied at basin boundaries to prevent rapid jitter.
+- Transitions must occur smoothly through saddle points or ridge regions.
 
 ## 4. Manifold Regions
 
@@ -52,18 +48,17 @@ Basin detection must be geometrically grounded with the following criteria:
 - Deep, high positive curvature minima.
 - Strong attractors with high damping.
 - Support feature binding and coherence sharpening.
-- Prototype embedding vectors shall be maintained at basin centers for coherence measurement.
+- Maintain prototype embedding vectors at basin centers.
 
 ### 4.2 Relational Basins (RBs)
 - Flatter or ridge-like regions connecting OBs.
 - Tunable damping, including near-lossless pathways.
 - Support layered routing and thought activation splitting/merging.
-- Splitting and merging must respect local geometric constraints (curvature and gradient alignment).
+- Splitting and merging must respect local geometric constraints.
 
 ### 4.3 Inquiry Basins
 - Shallow, unstable regions with moderate curvature and damping.
 - Designed to sustain medium-entropy states for open exploration.
-- Prevent rapid convergence while allowing persistent thought dynamics.
 
 ### 4.4 Done / Terminal Regions
 - Stable terminal Relational Basins indicating clean completion.
@@ -73,15 +68,16 @@ Basin detection must be geometrically grounded with the following criteria:
 
 - The manifold must remain fundamentally continuous (no abrupt discontinuities except at explicitly defined saddle transitions).
 - Boundary conditions, when present, shall be reflective or absorbing.
-- Local coordinate charts must remain smoothly compatible to support consistent metric and gradient evaluation.
+- Local coordinate charts must remain smoothly compatible.
 - Ridge vs valley definitions and saddle point classification must be geometrically explicit.
 
 ## 6. Structural Invariants
 
 - All points in the manifold must have a well-defined position $\mathbf{x}$, local metric, and potential value $V(\mathbf{x})$.
 - Energy and normalized entropy $H_\\%$ must remain consistent with rules defined in `03_core_conceptual_requirements.md`.
-- The structure must support both stable convergence and controlled instability for research purposes.
+- The structure must support both stable convergence and controlled instability.
 - All basin detection, entry, and transition logic must be geometrically grounded and deterministic.
+- The ThoughtPoint must remain strictly 0-dimensional at all times.
 
 ## 7. Traceability to Conceptual Requirements
 
@@ -96,4 +92,4 @@ All structural decisions are traceable via `24_traceability_matrix.md`.
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.2 (Draft)
+**Version**: 0.4 (Draft)
