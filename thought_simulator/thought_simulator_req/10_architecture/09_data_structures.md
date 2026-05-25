@@ -1,75 +1,121 @@
 # 09 Data Structures
 
 ## 1. Purpose
-Define the core data structures and state representations used throughout the Thought Manifold Simulator.
 
-## 2. Core Data Structures
+This document provides the detailed, implementation-ready data structures for the **Thought Simulator (TS)**.
 
-### 2.1 ThoughtPoint
-The primary entity that moves through the manifold.
+It builds upon the high-level data model defined in Document 08, specifying concrete structures, relationships, and usage patterns needed for a robust, deterministic, and observable implementation.
 
+## 2. Design Goals
+
+- High performance for multi-TP scenarios.
+- Full determinism and reproducibility.
+- Excellent observability and debuggability.
+- Clear separation between core TS data and optional visualization data.
+- Easy serialization (JSON, binary snapshots, etc.).
+
+## 3. Core Data Structures
+
+### 3.1 ThoughtPoint
+
+The fundamental unit of thought-in-process.
+
+```python
 class ThoughtPoint:
-    position: Vector          # Current location in manifold (2D/3D for viz, higher-D internally)
-    embedding: Vector         # Fuzzy embedding vector e
-    energy: float             # Total energy E = K + V
-    kinetic_energy: float     # K (momentum)
-    h_percent: float          # Normalized entropy H_%
-    time_remaining: float     # Remaining time budget
-    metadata: dict            # Tags, provenance, emotional valence, etc.
+    tp_id: str                          # Unique UUID
+    ts_step_index: int                  # Global simulation timestep
+    tagged_state_counter: int           # Increments on every change
+    current_basin_id: str | None
+    embedding: np.ndarray               # Current embedding vector
+    entropy: float                      # H_total
+    normalized_entropy: float           # H_% (0.0 - 100.0)
+    energy: float
+    tags: dict[str, Any]                # All metadata/tags
+    provenance: list[ProvenanceEntry]   # History chain
+    creation_step: int
+    last_updated_step: int
+    status: str                         # "ACTIVE", "COMPLETED", "STALLED", etc.
+```
 
-### 2.2 BasinBase class for all basin types.
+### 3.2 ProvenanceEntry
+
+```python
+class ProvenanceEntry:
+    step_index: int
+    state_counter: int
+    basin_id: str
+    action: str                         # "entered", "tagged", "ejected", "split", "merged", etc.
+    timestamp: datetime
+    details: dict[str, Any]
+```
+
+### 3.3 Basin
+
+```python
 class Basin:
-    id: str
-    type: BasinType           # Object, Relational, Inquiry, Feeling, Done, etc.
-    center: Vector
-    potential_fn: Callable    # V(x) function
-    damping: float            # γ
-    max_fanout: int
-    max_fanin: int
-    preferred_fanout: int
-    preferred_fanin: int
-    metadata: dict
+    basin_id: str
+    basin_type: str                     # "OB", "RB", "Inquiry", "Feeling", "Done"
+    lifecycle_state: str                # "NEW", "RUNNING", "DONE"
+    max_capacity: int
+    current_tps: list[str]              # List of TP IDs currently inside
+    parameters: dict[str, Any]          # Type-specific config
+    entry_conditions: list[dict]
+    exit_conditions: list[dict]
+    tags_applied: dict[str, int]        # Tag statistics
+    metadata: dict[str, Any]
+```
 
-### 2.3 Manifold
-class Manifold:
-    basins: dict[str, Basin]           # basin_id → Basin
-    connections: dict                  # Connectivity graph (saddles/highways)
-    active_thoughts: list[ThoughtPoint]
-    global_time: int
-    config: ManifoldConfig
+### 3.4 TS State Snapshot
 
-### 2.4 Other Important Structures
-- TransitionEvent: Records movement between basins (from_basin, to_basin, energy_delta, h_percent_delta, reason, timestamp)
-- SimulationStep: Snapshot of entire system state at one time step
-- SimulationResult: Final output after completion (final_thought, trajectory, metrics, completion_type)
-- FanEvent: Records fanin/fanout activity and any pruning/attenuation
+```python
+class TSSnapshot:
+    step_index: int
+    timestamp: datetime
+    thought_points: dict[str, ThoughtPoint]   # tp_id → TP
+    basins: dict[str, Basin]                  # basin_id → Basin
+    global_metrics: dict[str, float]          # entropy, active_tps, etc.
+    event_log: list[dict]                     # Recent events
+```
 
-## 3. Requirements
-**DS-01: Serialization**
-- All major data structures must support full serialization to JSON / Python dict for saving/loading.
+## 4. Supporting Data Structures
 
-**DS-02: Immutability and History**
-- Core state changes should produce new objects or clear audit trails (especially for reproducibility).
+- **TagRegistry** — Centralized catalog of valid tags and their schemas.
+- **RoutingTable** — Deterministic rules for moving TPs between basins.
+- **EventLog** — Chronological list of all system events with full context.
+- **SimulationConfig** — All runtime parameters (concurrency limits, scheduling policy, etc.).
+- **Condition** — Reusable rule definition for entry/exit conditions.
 
-**DS-03: Type Safety**
-- Strong use of type hints and dataclasses/enums where appropriate.
+## 5. Multi-TP Design Considerations
 
-**DS-04: Performance**
-- Structures must support fast lookup and updates (e.g., spatial indexing for basin membership if needed).
+- All structures must efficiently handle hundreds or thousands of concurrent ThoughtPoints.
+- Lookups by `tp_id`, `basin_id`, and `ts_step_index` must be fast (use dictionaries and indexes).
+- Memory management for long provenance chains must be considered.
+- Snapshots must be efficient enough for frequent saving during long runs.
 
-## Observability
-- Every major data structure must support a .summary() or .debug_info() method for logging and inspection.
+## 6. Observability & Debugging Features
 
-## Traceability
-Links to:
-- 04_system_architecture.md
-- 05_manifold_specification.md
-- 06_basins.md
-- 08_TS_data_model.md
+- Every major structure must support `to_dict()` and `from_dict()` for serialization.
+- Full snapshot comparison utilities should be available.
+- Debug-friendly string representations (`__repr__`) for TPs and Basins.
+- Support for filtering and querying the event log by step index or state counter.
 
-Last Updated: [Insert Date]
-Version: 0.1 (Draft)
+## 7. Invariants
 
+- No geometric data exists in any TS data structure.
+- All identifiers (`tp_id`, `basin_id`) are globally unique.
+- State changes are only allowed through defined TS state machine transitions.
+- Every modification to a ThoughtPoint increments its `tagged_state_counter`.
 
+## 8. Success Criteria
 
+- The data structures support efficient multi-TP simulation.
+- Full system state can be saved, loaded, and compared reproducibly.
+- Debugging and analysis tools can easily trace any TP’s complete lifecycle.
+- The model is clean enough for multiple developers or AI agents to implement consistently.
 
+---
+
+**Last Updated**: May 25, 2026  
+**Version**: 0.2 (Cleaned & Aligned with 08)
+
+---
