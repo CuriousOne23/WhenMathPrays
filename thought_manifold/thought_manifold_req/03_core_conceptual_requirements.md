@@ -14,7 +14,7 @@ The simulator must faithfully implement the following core concepts:
 - Must support smooth transitions with locally Euclidean properties while permitting emergent global topology.
 - Operational requirements:
   - Riemannian metric for distance and curvature computations (smooth, positive-definite, and consistent across local neighborhoods)
-  - Metric continuity across OB/RB boundaries and bounded curvature ($|K| < K_{\max}$) to ensure numerical stability
+  - Metric continuity across OB/RB boundaries and bounded curvature ($|K| < K_{\max}$)
   - Differentiable potential function $V(\mathbf{x})$ governing the landscape (may be learned, hand-designed, or hybrid)
   - Support for both fixed and adaptive effective dimensionality
   - Position $\mathbf{x}$ corresponds directly to the current thought state
@@ -52,7 +52,7 @@ The simulator must faithfully implement the following core concepts:
   - Remaining time budget
 
 **Entropy Definition**:  
-$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (e.g., via variance or KL divergence from local prototypes). It is globally normalized and decreases primarily through settling in Object Basins.
+$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (variance + KL divergence from local prototypes). It is globally normalized.
 
 **Dynamics Update Rule** (placeholder):  
 $\dot{\mathbf{x}} = -\nabla V(\mathbf{x}) + \text{perturbation terms (noise + volitional steering)} + \text{damping}$
@@ -63,23 +63,29 @@ $\dot{\mathbf{x}} = -\nabla V(\mathbf{x}) + \text{perturbation terms (noise + vo
 - Splitting and merging governed by activation-weighted rules:  
   $E_i = w_i E_{\text{parent}}$, $H_i = w_i H_{\text{parent}}$ (where $w_i$ are normalized activation weights based on embedding similarity and local curvature)
 - Normalized entropy tracking (conserved across splits/merges; primarily reduced within Object Basins)
+- There is a global entropy floor and optional per-basin entropy floors to prevent over-collapse.
 - Perturbation mechanisms (internal noise, external input, volitional steering)
 - Sparse, gated regenerative amplifiers
 
 ### 2.6 Regulatory Mechanisms
 
-The simulator must include explicit regulatory subsystems to manage thought flow, consistent with the theory:
-
 - Anti-collapse stabilizers (triggered when curvature or convergence rate exceeds thresholds)
 - Flow modulators for damping and noise shaping (activated when velocity exceeds safe bounds)
-- Volitional steering constraints with tunable strength (engaged under external input or user override)
+- Volitional steering constraints with tunable strength
 - Stability monitors that detect and respond to critical transitions (e.g., saddle points)
+- When multiple regulators activate, they are applied in fixed priority order.
 
 ### 2.7 Completion and Inquiry States
 
 - **Clean completion**: When $H_\\%$ drops below a configurable threshold (global default with OB/RB-specific overrides) → transition to a Done Relational Basin
 - **Stressed completion**: Under quantified time pressure (optionally routed through a Feeling Object Basin)
-- **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration. Geometric profile includes low-to-moderate curvature, moderate damping, and entropy bounds that prevent rapid convergence while allowing persistent exploration.
+- **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration.
+
+### 2.8 Canonicalization (New)
+
+- Canonicalization is the process by which a ThoughtPoint becomes fully bound to an Object Basin.
+- It is achieved when correlation score, embedding stability, and entropy stabilization conditions are simultaneously met.
+- The `canonicalization_achieved` flag is the primary completion signal for Object Basins.
 
 ## 3. OB vs RB Parameter Comparison
 
@@ -108,11 +114,11 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 
 ## 6. Core Invariants (Non-Negotiable)
 
-- The manifold must remain fundamentally continuous (no abrupt jumps except at well-defined saddle transitions)
-- Energy and normalized entropy rules must be respected at all times
-- All major state changes must be observable and logged with sufficient granularity
-- The system must be capable of both stable convergence and controlled instability for research purposes
-- The ThoughtPoint must remain strictly 0-dimensional at all times
+- The manifold must remain fundamentally continuous.
+- Energy and normalized entropy rules must be respected at all times.
+- The ThoughtPoint must remain strictly 0-dimensional at all times.
+- All splitting, merging, regulator, and basin transition logic must be deterministic.
+- Entropy reduction inside Object Basins must be strictly monotonic (no entropy increase allowed).
 
 ## 7. Success Criteria for Conceptual Fidelity
 
@@ -123,4 +129,4 @@ The simulator must explicitly support and demonstrate the major ideas from the p
 ---
 
 **Last Updated**: May 23, 2026  
-**Version**: 0.9 (Draft)
+**Version**: 0.10 (Draft)
