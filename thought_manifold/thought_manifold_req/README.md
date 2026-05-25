@@ -30,6 +30,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 9.5. **[09.5_thoughtpoint_metadata_encoding_pecification.md](09.5_thoughtpoint_metadata_encoding_pecification.md)** — specifies TP information stream
 10. **[10_relational_basins.md](10_relational_basins.md)** — Relational-basin requirements
 11. **[11_entropy_and_information.md](11_entropy_and_information.md)** — Entropy and information requirements
+11.5. **[11.5_thought_simulator.md](11.5_thought_simulator.md)** — Thought Simulator requirements
 12. **[12_energy_dynamics.md](12_energy_dynamics.md)** — Energy dynamics requirements
 13. **[13_dynamics_engine.md](13_dynamics_engine.md)** — Dynamics engine behavior
 14. **[14_completion_logic.md](14_completion_logic.md)** — Completion and convergence logic
@@ -73,7 +74,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 
 ---
 
-**Last Updated**: May 23, 2026 
-**Version**: 0.2 (Draft)
+**Last Updated**: May 24, 2026 
+**Version**: 0.3 (Draft)
 
 ---
