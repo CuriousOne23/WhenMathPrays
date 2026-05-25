@@ -2,131 +2,126 @@
 
 ## 1. Purpose
 
-This document translates the theoretical framework from *"The Architecture of Dynamic Thought"* and the broader Relational Physics / WhenMathPrays body of work into precise, actionable conceptual requirements for the Thought Manifold Simulator.
+This document translates the vision (Document 01) and philosophical commitments (Document 02) into precise, actionable conceptual requirements for the **Thought Manifold Simulator**.
+
+It defines what the system must conceptually support while maintaining strict consistency with the clarified architecture:
+- The **Thought Simulator (TS)** is the authoritative core: a fixed-time-step, deterministic entropy-reduction engine.
+- The **Relational Manifold** is an optional interpretive and visualization layer (the geometry of entropy).
 
 ## 2. Foundational Concepts
 
-The simulator must faithfully implement the following core concepts:
+The simulator must faithfully implement the following core concepts, grounded in the unified entropy definition of thought.
 
-### 2.1 The Relational Manifold
+### 2.1 The Thought Simulator (TS) – Core Engine
+- Fixed-time-step, deterministic state machine functioning as the **entropy-reduction engine**.
+- Responsible for all updates to ThoughtPoints, Object Basins (OBs), Relational Basins (RBs), energy, and unified entropy.
+- Guarantees reproducibility: identical initial conditions and inputs produce identical trajectories.
+- All core dynamics, state evolution, and thought mechanics occur exclusively within the TS, independent of any interpretive projection.
 
-- A continuous, multi-dimensional geometric space representing thought dynamics.
-- Must support smooth transitions with locally Euclidean properties while permitting emergent global topology.
-- Operational requirements:
-  - Riemannian metric for distance and curvature computations (smooth, positive-definite, and consistent across local neighborhoods)
-  - Metric continuity across OB/RB boundaries and bounded curvature ($|K| < K_{\max}$)
-  - Differentiable potential function $V(\mathbf{x})$ governing the landscape (may be learned, hand-designed, or hybrid)
-  - Support for both fixed and adaptive effective dimensionality
-  - Position $\mathbf{x}$ corresponds directly to the current thought state
+### 2.2 The Relational Manifold (Interpretive Layer)
+- Serves as the optional **geometry of entropy** — a continuous geometric projection of the discrete TS state.
+- Provides visualization of entropy gradients, coherence trajectories, identity stabilization, and relational topology.
+- Required only for visualization, exploration interfaces, or specific analytical queries. It is never the execution substrate.
 
-### 2.2 Object Basins (OBs)
-
-- Deep, stable local minima in the manifold.
-- Represent coherent, discrete objects, concepts, or gestalts.
+### 2.3 Object Basins (OBs)
+- Low-entropy identity structures and stable attractors within the TS.
+- Any identifiable object (abstract or physical) with well-defined characteristics.
+- Primary role: reduce representational entropy and serve as centers of coherence.
 - Requirements:
-  - Strong attraction with high positive curvature at the basin floor ($\nabla V(\mathbf{x}_{OB}) \approx 0$ and positive definite Hessian)
-  - Feature binding and progressive coherence sharpening upon settling
-  - Attachment of contextual tags, memory associations, and symbolic labels
-  - Tunable depth and capacity (parameterized by attractor volume and minimum energy)
-  - Significantly higher damping coefficient relative to Relational Basins
+  - Strong internal attraction and stability.
+  - Feature binding and progressive coherence sharpening upon settling.
+  - Attachment of contextual tags, memory associations, and symbolic labels.
+  - Tunable depth and capacity.
+  - Significantly higher damping relative to Relational Basins.
 
-### 2.3 Relational Basins (RBs)
-
-- Higher-potential, flatter, or ridge-like regions connecting Object Basins.
-- Represent relational processing, exploration, analogy-making, and transformation.
+### 2.4 Relational Basins (RBs)
+- Coherence-propagation channels that reduce structural and predictive entropy.
+- Enable transformation, routing, splitting, merging, and modulation between identities within the TS.
 - Requirements:
-  - Support layered networks and RB-to-RB routing/partitioning
-  - Tunable damping, including near-lossless highways for fluid thought flow
-  - Fuzzy filters at entry points (activation-thresholded blending)
-  - Support controlled splitting and merging of thought activation with conservation rules
+  - Support layered networks and RB-to-RB routing.
+  - Tunable damping (including near-lossless pathways).
+  - Fuzzy filters at entry points.
+  - Controlled splitting and merging with conservation rules.
 
-### 2.4 ThoughtPoint
-
-- The active entity navigating the manifold.
-- **Dimensionality Rule**: A ThoughtPoint is a **strictly 0-dimensional mathematical point** in the manifold. It has no spatial extent, no radius, no volume, no mass, no shape, and no physical profile. It is represented solely by its coordinate, embedding vector, and metadata.
+### 2.5 ThoughtPoint (TP)
+- The primary mobile, stateful primitive representing a single instance of thought-in-process within the TS.
 - Must carry:
-  - Position $\mathbf{x}$
-  - Fuzzy embedding vector $\mathbf{e}$
-  - Total energy $E = K + V(\mathbf{x})$
-  - Normalized entropy percentage $H_\\%$
-  - Remaining time budget
+  - Current TS state (including basin affiliation)
+  - Embedding vector / metadata
+  - Unified entropy contribution ($H_{\text{total}}$)
+  - **Normalized Entropy Percentage ($H_{\\%}$)** — a practical 0–100% projection of $H_{\text{total}}$
+  - Energy state
+  - Trajectory history (for observability)
+- In any manifold projection, a ThoughtPoint appears as a strictly 0-dimensional mathematical point.
 
-**Entropy Definition**:  
-$H_\\%$ represents the normalized uncertainty of the ThoughtPoint, computed from the spread and coherence of the embedding vector $\mathbf{e}$ relative to local manifold geometry (variance + KL divergence from local prototypes). It is globally normalized.
+### 2.6 Unified Entropy and Dynamics
+- All TS dynamics are driven by reduction of the unified entropy functional:
 
-**Dynamics Update Rule** (placeholder):  
-$\dot{\mathbf{x}} = -\nabla V(\mathbf{x}) + \text{perturbation terms (noise + volitional steering)} + \text{damping}$
+$$
+H_{\text{total}} = \alpha H_{\text{rep}} + \beta H_{\text{pred}} + \gamma H_{\text{struct}}
+$$
 
-### 2.5 Key Dynamics
+- **Normalized Entropy Percentage ($H_{\\%}$)** is a derived, bounded metric (0–100%) computed from $H_{\text{total}}$ for observability, threshold setting, and instrumentation. It is preserved (via weighted rules) across splitting and merging operations and is primarily reduced within Object Basins.
+- Support for:
+  - Deterministic splitting and merging of ThoughtPoints.
+  - Perturbation mechanisms (noise, external input, observer-initiated steering).
+  - Regulatory mechanisms to prevent premature collapse or instability.
+  - Completion logic based on entropy thresholds and observer evaluation.
 
-- Energy conservation with controlled dissipation
-- Splitting and merging governed by activation-weighted rules:  
-  $E_i = w_i E_{\text{parent}}$, $H_i = w_i H_{\text{parent}}$ (where $w_i$ are normalized activation weights based on embedding similarity and local curvature)
-- Normalized entropy tracking (conserved across splits/merges; primarily reduced within Object Basins)
-- There is a global entropy floor and optional per-basin entropy floors to prevent over-collapse.
-- Perturbation mechanisms (internal noise, external input, volitional steering)
-- Sparse, gated regenerative amplifiers
+### 2.7 The Observer
+- Selects initial OBs, evaluates coherence (by attaching meaning, beauty, poetry, harmony, composition, and value) upon arrival at subsequent OBs, and decides trajectory continuation or termination.
+- This role lies outside the mechanical TS model.
 
-### 2.6 Regulatory Mechanisms
-
-- Anti-collapse stabilizers (triggered when curvature or convergence rate exceeds thresholds)
-- Flow modulators for damping and noise shaping (activated when velocity exceeds safe bounds)
-- Volitional steering constraints with tunable strength
-- Stability monitors that detect and respond to critical transitions (e.g., saddle points)
-- When multiple regulators activate, they are applied in fixed priority order.
-
-### 2.7 Completion and Inquiry States
-
-- **Clean completion**: When $H_\\%$ drops below a configurable threshold (global default with OB/RB-specific overrides) → transition to a Done Relational Basin
-- **Stressed completion**: Under quantified time pressure (optionally routed through a Feeling Object Basin)
-- **Inquiry Basins**: Shallow, unstable regions designed to sustain medium-entropy states for open exploration.
-
-### 2.8 Canonicalization (New)
-
-- Canonicalization is the process by which a ThoughtPoint becomes fully bound to an Object Basin.
-- It is achieved when correlation score, embedding stability, and entropy stabilization conditions are simultaneously met.
-- The `canonicalization_achieved` flag is the primary completion signal for Object Basins.
+### 2.8 Regulatory and Completion Mechanisms
+- Anti-collapse stabilizers and flow modulators.
+- Inquiry states that sustain medium-entropy exploration.
+- Canonicalization: full binding to an Object Basin when correlation, embedding stability, and entropy stabilization conditions are met.
+- Completion types: clean (low entropy), stressed (time pressure), and inquiry-driven.
 
 ## 3. OB vs RB Parameter Comparison
 
-| Parameter              | Object Basins (OBs)                  | Relational Basins (RBs)                  |
-|------------------------|--------------------------------------|------------------------------------------|
-| Curvature              | High positive (deep minima)         | Low / near-flat or ridge-like            |
-| Damping                | High                                | Tunable (low to moderate)                |
-| Entropy Reduction      | Strong / rapid                      | Minimal / preservation-focused           |
-| Stability              | High (attractor)                    | Moderate (transitional)                  |
-| Primary Function       | Coherence & binding                 | Exploration & transformation             |
+| Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
+|----------------------------|----------------------------------------------|--------------------------------------------------|
+| Role in TS                 | Stability & representational entropy reduction | Transformation & structural/predictive entropy reduction |
+| Damping                    | High                                         | Tunable (low to moderate)                        |
+| Entropy Reduction          | Strong / rapid                               | Minimal / preservation-focused                   |
+| $H_{\\%}$ Behavior         | Primary reduction zone                       | Mostly preserved                                 |
+| Stability (TS-internal)    | High (attractor)                             | Moderate (transitional)                          |
+| Manifold Projection        | Deep minima (high positive curvature)        | Ridge-like or near-flat                          |
 
 ## 4. Logging and Observability
 
-All major state changes must be observable and logged with sufficient granularity for reproducibility and analysis.
+- The TS must expose complete internal state at every time step, including $H_{\text{total}}$ and $H_{\\%}$ for every ThoughtPoint.
+- All major state changes, basin interactions, and trajectories must be observable and logged with sufficient granularity for reproducibility and analysis.
 
-## 5. Mapping to *"The Architecture of Dynamic Thought"*
+## 5. Mapping to Prior Theoretical Work
 
-The simulator must explicitly support and demonstrate the major ideas from the paper, including:
-
-- The fundamental distinction between Object-like (stable, convergent) and Relational-like (fluid, exploratory) thought
-- Dynamic navigation across the manifold as the core mechanism of thinking
-- Stability and instability as emergent geometric properties of the landscape
-- The role of regulatory mechanisms in managing thought flow and preventing premature collapse
-- Inquiry as a distinct and vitally important mode of thought
-- Thought as a geographic and exploratory process within a relational landscape
+The simulator must explicitly support and demonstrate the major ideas from *"The Architecture of Dynamic Thought"* and related works, now grounded in the TS engine:
+- The fundamental distinction between Object-like (stable) and Relational-like (fluid) processing.
+- Thought as dynamic, entropy-reducing trajectories.
+- Stability and instability as emergent properties.
+- Regulatory mechanisms and inquiry modes.
+- Clear separation between mechanical thought (TS) and the observer.
 
 ## 6. Core Invariants (Non-Negotiable)
 
-- The manifold must remain fundamentally continuous.
-- Energy and normalized entropy rules must be respected at all times.
-- The ThoughtPoint must remain strictly 0-dimensional at all times.
-- All splitting, merging, regulator, and basin transition logic must be deterministic.
-- Entropy reduction inside Object Basins must be strictly monotonic (no entropy increase allowed).
+- The TS operates as a fixed-time-step deterministic entropy-reduction engine.
+- Thought requires at least one complete **OB₁ → RB → OB₂ + Observer** transition (minimal thought atom).
+- $H_{\\%}$ is preserved (via weighted rules) during splitting and merging.
+- All state changes must be observable, traceable, and reproducible.
+- The Relational Manifold is a derived interpretive view only.
+- Unified entropy ($H_{\text{total}}$) and its normalized form ($H_{\\%}$) serve as primary metrics.
+- Primitives (OB, RB, TP) must demonstrate utility and self-reinforcing coherence.
 
 ## 7. Success Criteria for Conceptual Fidelity
 
-- A researcher familiar with *"The Architecture of Dynamic Thought"* should recognize the simulator’s behavior as a faithful computational embodiment of the theory.
-- The simulator must be able to reproduce and quantitatively analyze the stability issues described in the theoretical work.
-- Exploration of the manifold must feel natural, insightful, and geographically intuitive to the user/researcher.
+- A researcher familiar with the theoretical framework should recognize the simulator’s behavior as a faithful computational embodiment.
+- Key phenomena (basin settling, coherence formation, parallel exploration, entropy reduction) must be reproducible and measurable within the TS.
+- The system must enable new insights while preserving the philosophical boundaries established in Documents 01 and 02.
 
 ---
 
-**Last Updated**: May 23, 2026  
-**Version**: 0.10 (Draft)
+**Last Updated**: May 25, 2026  
+**Version**: 0.6 (GitHub rendering fix applied)
+
+---
