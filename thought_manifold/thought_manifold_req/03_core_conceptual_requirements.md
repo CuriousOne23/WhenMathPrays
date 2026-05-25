@@ -84,10 +84,8 @@ $$
 | Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
 |----------------------------|----------------------------------------------|--------------------------------------------------|
 | Role in TS                 | Stability & representational entropy reduction | Transformation & structural/predictive entropy reduction |
-| Damping                    | High                                         | Tunable (low to moderate)                        |
 | Entropy Reduction          | Strong / rapid                               | Minimal / preservation-focused                   |
 | $H_{\\%}$ Behavior         | Primary reduction zone                       | Mostly preserved                                 |
-| Stability (TS-internal)    | High (attractor)                             | Moderate (transitional)                          |
 
 **Manifold Projection Parameters (Interpretive Only)**
 
@@ -105,7 +103,6 @@ $$
 The simulator must explicitly support and demonstrate the major ideas from *"The Architecture of Dynamic Thought"* and related works, now grounded in the TS engine:
 - The fundamental distinction between Object-like (stable) and Relational-like (fluid) processing.
 - Thought as dynamic, entropy-reducing trajectories.
-- Stability and instability as emergent properties.
 - Regulatory mechanisms and inquiry modes.
 - Clear separation between mechanical thought (TS) and the observer.
 
@@ -128,6 +125,6 @@ The simulator must explicitly support and demonstrate the major ideas from *"The
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 0.7 (Final geometry cleanup)
+**Version**: 0.8 (Damping/Stability cleanup)
 
 ---
