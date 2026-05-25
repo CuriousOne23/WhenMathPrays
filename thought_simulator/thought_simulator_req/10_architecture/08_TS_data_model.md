@@ -1,5 +1,3 @@
-**Here is the clean, GitHub-friendly version of `08_TS_data_model.md`:**
-
 # 08 TS Data Model
 
 ## 1. Purpose
