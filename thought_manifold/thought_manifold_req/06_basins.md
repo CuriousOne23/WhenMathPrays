@@ -1,82 +1,128 @@
 # 06 Basins
 
 ## 1. Purpose
-Define the common and specific requirements for all basin types in the manifold (Object Basins, Relational Basins, Inquiry Basins, and special variants such as Feeling OB or Done RB).
+
+This document defines the common and specific requirements for all basin types in the **Thought Simulator (TS)**.  
+
+Basins (Object Basins, Relational Basins, and variants such as Inquiry Basins or Feeling OBs) are core structural elements within the fixed-time-step, deterministic entropy-reduction engine. They are **not** geometric objects — they are stateful processing regions that manage tagging, coherence, transformation, and entropy reduction of one or more ThoughtPoints simultaneously.
 
 ## 2. Common Basin Requirements
 
 **B-01: General Properties**
-- Every basin must have a unique ID, type, position/center, and shape parameters.
-- Every basin must expose its local potential function $V(\mathbf{x})$.
-- Every basin must support membership testing for a ThoughtPoint.
-- Every basin must provide gradient information for dynamics.
+- Every basin must have a unique ID, type, and configurable parameters.
+- Every basin must support membership testing and state tracking for multiple ThoughtPoints.
+- Every basin must be capable of tagging ThoughtPoints with metadata.
+- Every basin must participate in unified entropy reduction according to its type.
+- Every basin must expose its current internal state for observability and debugging.
 
-**B-02: Visualization**
-- Every basin must provide rendering metadata (color, depth profile, label, visual style).
-- Must support different visual representations (deep valley, flat plain, misty region, etc.).
+**B-02: Tagging and State Management**
+- Basins are responsible for attaching tags/metadata to ThoughtPoints during processing.
+- Tags may include: symbolic labels, contextual associations, coherence scores, confidence values, observer evaluation markers (meaning, beauty, harmony, value), and provenance information.
+- Every ThoughtPoint must maintain:
+  - **TS Step Index**: Global simulation timestep when the TP was created or last majorly updated.
+  - **Tagged State Counter**: Increments each time the TP is modified, tagged, or processed by any basin or regulator.
+- These two values together provide full lifecycle traceability and support deterministic replay.
 
-**B-03: Fanin and Fanout Capabilities**
-- Every basin must declare its **fanin** and **fanout** limits.
-- **Fanout**: Maximum number of simultaneous outgoing branches (splitting) a basin can support from a single ThoughtPoint or thought complex.
-- **Fanin**: Maximum number of simultaneous incoming branches (merging) a basin can gracefully accept and integrate.
-- These values must be configurable per basin type and per individual basin instance.
-- Must include `max_fanout`, `preferred_fanout`, `max_fanin`, and `preferred_fanin`.
-- Behavior when limits are exceeded (pruning, attenuation, rerouting, or logging warnings) must be defined and observable.
+**B-03: Basin Lifecycle State (Required)**
+Every basin must maintain an internal lifecycle state:
+- **NEW** — Basin has been instantiated but has not yet processed a TP.
+- **RUNNING** — Basin is actively processing one or more TPs.
+- **DONE** — Basin has completed its processing obligations for the current TP(s).
+Lifecycle state must be observable and fully logged.
+
+**B-04: Entry and Exit Conditions (Required)**
+Each basin must define explicit, deterministic:
+- **Entry Conditions** — Rules determining when a TP is eligible to enter the basin.
+- **Exit Conditions** — Rules determining when a TP is eligible for ejection.
+These conditions must be fully observable, configurable, and logged.
+
+**B-05: Basin Capacity (Required)**
+Each basin must define:
+- `max_capacity` — Maximum number of ThoughtPoints that can be processed concurrently.
+- `overflow_behavior` — Defined policy (prune, queue, reroute, attenuate, or error).
+
+**B-06: Multi-TP Concurrency Semantics (Required)**
+Each basin must explicitly define its behavior when multiple ThoughtPoints are present:
+- Whether it processes TPs **sequentially** or **concurrently**.
+- Whether tagging is serialized (one-at-a-time) or parallel.
+- Whether merging of TPs is allowed inside the basin.
+- Whether splitting is allowed and under what deterministic rules.
+- How contention for shared resources (e.g., tagging slots) is resolved.
+- How ordering of entry, processing, and exit is determined and logged.
+
+**B-07: Deterministic Tagging Order (Required)**
+All tagging operations must be:
+- Deterministic
+- Reproducible for identical TS states
+- Ordered and logged
+Tagging order must be identical for identical initial conditions.
+
+**B-08: Fan-in and Fan-out Capabilities**
+- Every basin must declare configurable **fan-in** and **fan-out** limits.
+- Behavior when limits are exceeded must be defined and observable.
+
+**B-09: Observability and Logging**
+- Every basin must log all tagging events, state changes (including lifecycle), entropy modifications, entry/exit events, and TP transitions.
+- Must support full tracing of each TP’s lifecycle (step index + state counter).
 
 ## 3. Specific Basin Types
 
 ### 3.1 Object Basins (OBs)
-- Deep, stable local minima.
-- High damping coefficient.
-- Must perform feature binding and coherence sharpening on entry.
-- Must attach contextual/symbolic information (labels, memory tags, confidence).
-- Must renormalize incoming energy and embedding norm.
-- Must have tunable capacity and depth.
-- Must reduce normalized entropy $H_\\%$ significantly upon successful settling.
-- **Recommended Fanin/Fanout**: Moderate to high fanin (good convergence), moderate fanout (4–10).
+- Low-entropy identity structures and stable attractors.
+- Primary role: Reduce representational entropy and serve as centers of coherence.
+- Requirements:
+  - Perform feature binding and progressive coherence sharpening upon entry.
+  - Attach rich contextual/symbolic tags, memory associations, and observer-evaluated meaning.
+  - Renormalize incoming energy and embedding norms.
+  - Tunable depth and capacity.
+  - Significantly higher damping relative to Relational Basins.
+  - Must reduce normalized entropy $H_{\\%}$ substantially upon successful settling.
+- **Recommended Concurrency**: Moderate concurrency with preference for serialization of tagging to ensure coherent identity formation.
 
 ### 3.2 Relational Basins (RBs)
-- Flatter, higher-potential regions.
-- Support layered networks and RB-to-RB connections.
-- Must implement fuzzy filters at entry points.
-- Must support splitting and merging of ThoughtPoints.
-- Tunable damping (including near-zero for highways).
-- Must preserve $H_\\%$ across most operations (except minor losses).
-- **Recommended Fanin/Fanout**: High fanout (8–25) for routing flexibility, moderate to high fanin for integration.
+- Coherence-propagation channels that reduce structural and predictive entropy.
+- Primary role: Enable transformation, routing, splitting, merging, and modulation between identities.
+- Requirements:
+  - Support layered networks and RB-to-RB routing.
+  - Implement fuzzy filters at entry points.
+  - Support controlled splitting and merging with conservation rules.
+  - Tunable damping (including near-lossless pathways).
+  - Preserve most of the $H_{\\%}$ during traversal.
+- **Recommended Concurrency**: High concurrency to support parallel relational flows.
 
-### 3.3 Inquiry Basins
-- Shallow, unstable, diffuse regions.
-- Activated when medium entropy persists.
-- Must maintain unresolved tension (prevent easy collapse).
-- Should orient geometry toward nearby Truth Basins or resolution paths.
-- Must support exploratory behavior (higher noise, more branching).
-- **Recommended Fanin/Fanout**: High fanout (12–30) to encourage exploration, limited fanin to avoid premature resolution.
+### 3.3 Other Basin Variants
+- **Inquiry Basins**, **Feeling / Evaluation Basins**, and **Done / Terminal Basins** must follow all common rules above.
 
-### 3.4 Special Basins
-- **Feeling OB**: Attaches emotional valence and somatic markers, especially during stressed completion. Moderate fanout, high fanin.
-- **Done RB**: Terminal basin for completed thoughts. Very low fanout (1–3), moderate fanin.
-- Others (as needed): Truth Basins, Entry Buffer, etc.
+## 4. TP Lifecycle Interaction with Basins
 
-## 4. Transition Requirements
+- When a TP enters a basin, the basin may increment the TP’s **Tagged State Counter**.
+- The basin attaches appropriate tags before the TP is eligible for ejection.
+- All tagging, state changes, and transitions must be fully logged with both TS Step Index and TP State Counter for traceability.
 
-- Basins must define valid exit/entry conditions (saddles, filters, energy thresholds).
-- Transitions must be observable and logged with full before/after state.
-- Fanin/fanout limits must be enforced and logged during transitions.
+## 5. Core Invariants
 
-## 5. Testability Requirements
+- Basins operate entirely within the deterministic TS state machine.
+- All tagging, lifecycle, entry/exit, and state updates are observable and reproducible.
+- Geometry is not part of basin definition — any geometric projection belongs exclusively to the optional Relational Manifold layer.
+- Unified entropy reduction remains the primary success metric.
 
-- Must be able to create a manifold with multiple basin types and validate transitions.
-- Object Basins must demonstrably reduce entropy more than Relational Basins.
-- Inquiry Basins must delay convergence compared to normal paths.
-- Must test behavior when fanin and fanout limits are deliberately exceeded.
+## 6. Success Criteria
 
-## 6. Traceability
-Links to:
-- `03_core_conceptual_requirements.md` (Sections 2.2, 2.3, 2.6)
-- `04_system_architecture.md`
-- `12_energy_dynamics.md`
+- Basins enable clear, traceable tagging and state evolution of multiple simultaneous ThoughtPoints.
+- The system supports full lifecycle debugging using TS Step Index + Tagged State Counter.
+- Key phenomena (coherence formation, transformation, entropy reduction) are measurable and reproducible under multi-TP conditions.
+- The design remains extensible for new basin types while preserving determinism and observability.
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.2 (Draft)
+**Last Updated**: May 25, 2026  
+**Version**: 0.4 (Multi-TP Concurrency Semantics added)
+
+---
+
+**Revision Summary**:
+- Added **B-06: Multi-TP Concurrency Semantics** as requested by CoPilot.
+- Updated language throughout to explicitly support multiple simultaneous ThoughtPoints.
+- Strengthened capacity, lifecycle, and observability rules for multi-TP scenarios.
+
+---
