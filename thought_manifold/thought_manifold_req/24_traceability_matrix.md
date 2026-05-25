@@ -12,7 +12,7 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | System Architecture            | [04_system_architecture.md](04_system_architecture.md) | 05–14, 16                                                 | Draft    |
 | Manifold Core                  | [05_manifold_specification.md](05_manifold_specification.md) | 07, 07.5, 15, 18                                          | Draft    |
 | Basins                         | [06_basins.md](06_basins.md) | 08, 09, 10, 12, 14, 20                                    | Draft    |
-| Manifold Structure             | [07_manifold_structure.md](07_manifold_structure.md) | 07.5, 08, 13                                              | Draft    |
+| Manifold Structure             | [07_TS_state_machine.md](07_TS_state_machine.md) | 07.5, 08, 13                                              | Draft    |
 | Implementation Architecture    | [07.5_implementation_architecture.md](07.5_implementation_architecture.md) | 03, 04, 07, 13, 15, 16                                    | Draft    |
 | Embedding Space                | [08_embedding_space.md](08_embedding_space.md) | 06, 09, 11, 12                                            | Draft    |
 | Object Basins                  | [09_object_basins.md](09_object_basins.md) | 06, 12, 14                                                | Draft    |
