@@ -8,75 +8,80 @@ This document defines the high-level technical architecture of the **Thought Man
 
 - **Top-down design**: High-level orchestration drives lower-level components.
 - **Strong separation of concerns**: Clear distinction between the mechanical core (TS) and interpretive layers.
-- **High debuggability**: Every major component must expose rich internal state and tracing.
+- **High debuggability**: Every major component must expose rich internal state and tracing, including support for multiple simultaneous ThoughtPoints.
 - **Reproducibility**: All runs must be seedable and fully deterministic by default.
 - **Extensibility**: Easy to add new basin types, dynamics rules, or exploration tools.
-- **Exploration-first**: The architecture must support rich visualization and navigation without compromising the core engine.
+- **Multi-TP Native**: The architecture is designed from the ground up to support multiple concurrent ThoughtPoints with deterministic scheduling, routing, merging, and splitting.
 
 ## 3. High-Level Architecture (Layers)
 
 ### 3.1 Configuration Layer
-- Centralized configuration (YAML + Pydantic models)
-- Support multiple profiles (stability_test, exploration, stress_test, etc.)
+- Centralized configuration (YAML + Pydantic models).
+- Support multiple profiles and multi-TP scenarios (e.g., concurrency limits, splitting policies).
 
 ### 3.2 Thought Simulator (TS) Core Layer
 - The authoritative execution engine: fixed-time-step, deterministic entropy-reduction state machine.
-- Contains all core logic for ThoughtPoints, Object Basins (OBs), Relational Basins (RBs), energy, and unified entropy.
-- Responsible for all state evolution, splitting/merging, perturbations, regulatory mechanisms, and completion logic.
-- Guarantees complete reproducibility independent of any visualization.
+- Responsible for all state evolution, scheduling, and management of **multiple simultaneous ThoughtPoints**.
+- Handles tagging, basin interactions, splitting/merging, regulatory mechanisms, and completion logic.
+- Guarantees complete reproducibility independent of visualization.
 
 ### 3.3 Relational Manifold Layer (Interpretive / Visualization)
 - Optional geometric projection and interpretive layer.
-- Projects the discrete TS state into a continuous geometric space for visualization and analysis.
-- Provides rendering of entropy gradients, coherence trajectories, identity stabilization, and relational topology.
-- Must not influence or drive core simulation behavior — strictly read-only interpretive view.
+- Projects the discrete TS state (including multiple TPs) into a continuous geometric space for visualization and analysis.
+- Must support rendering of multiple TPs per basin or trajectory without influencing core simulation behavior.
 
 ### 3.4 State Management Layer
-- Snapshot / history system for the TS.
-- Trace recording with full internal state.
+- Snapshot / history system for the TS, including full multi-TP state.
+- Trace recording with per-TP step index and tagged state counter.
 - State validation and invariants checking.
 
 ### 3.5 IO & Visualization Layer
-- CLI interface
-- Real-time console reporting
-- 2D/3D visualization engine (terrain rendering, trajectory following) driven by the Relational Manifold layer
-- Data export (trajectories, metrics, logs)
+- CLI interface.
+- Real-time console reporting.
+- 2D/3D visualization engine driven by the Relational Manifold layer, capable of rendering multiple simultaneous ThoughtPoints.
+- Data export (trajectories, metrics, logs).
 
 ### 3.6 Experiment & Analysis Layer
-- Pre-defined experiment runners
-- Metrics collection (including unified entropy and $H_{\\%}$)
-- Analysis tools and comparison utilities
+- Pre-defined experiment runners supporting multi-TP scenarios.
+- Metrics collection (including unified entropy and $H_{\\%}$ per TP).
+- Analysis tools and comparison utilities.
 
 ## 4. Data Flow (Top-Down)
 
-1. User / Experiment → Config
-2. Config → TS initialization (basins, initial ThoughtPoints)
-3. TS runs deterministic simulation steps
-4. Optional: Relational Manifold projects current TS state for visualization
-5. State changes logged + visualized in real time (non-blocking)
-6. Observer evaluation and completion logic applied
-7. Results exported + analyzed
+1. User / Experiment → Config (including multi-TP parameters).
+2. Config → TS initialization (basins, initial set of ThoughtPoints).
+3. TS runs deterministic simulation steps, managing multiple concurrent ThoughtPoints.
+4. Optional: Relational Manifold projects current TS state (multiple TPs) for visualization.
+5. State changes logged + visualized in real time (non-blocking).
+6. Observer evaluation and completion logic applied.
+7. Results exported + analyzed.
 
 ## 5. Key Technical Constraints
 
-- The TS core must remain fully deterministic and substrate-independent.
-- Visualization (Manifold layer) must not block or alter the TS simulation (separate thread/process if needed).
+- The TS core must remain fully deterministic even with multiple simultaneous ThoughtPoints.
+- Visualization (Manifold layer) must not block or alter the TS simulation.
 - All floating-point operations in the TS should be reproducible.
-- Logging must be structured (JSONL preferred) and highly detailed.
+- Logging must be structured and highly detailed, including per-TP lifecycle data.
 
 ## 6. Traceability
 
-This architecture must fully support all concepts defined in Documents 01–03, with clear separation between the mechanical TS engine and the optional interpretive Relational Manifold.
+This architecture must fully support all concepts defined in Documents 01–03, with explicit support for multiple concurrent ThoughtPoints and clear separation between the mechanical TS engine and the optional interpretive Relational Manifold.
 
 ## Success Criteria
 
-- The architecture should feel natural when implementing any concept from the theoretical framework.
-- A new developer should be able to understand the full flow and the critical TS vs. Manifold distinction by reading the top documents.
+- The architecture should feel natural when implementing any concept from the theoretical framework, including multi-TP scenarios.
+- A new developer should be able to understand the full flow, multi-TP handling, and the critical TS vs. Manifold distinction by reading the top documents.
 - The system must allow easy insertion of debugging probes and measurement tools without affecting determinism.
 
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 0.2 (Aligned with revised architecture)
+**Version**: 0.3 (Multi-TP support added)
+
+---
+
+**Revision Summary**:
+- Explicitly added multi-TP as a core architectural capability.
+- Updated relevant sections (principles, layers, data flow, constraints, success criteria) to reflect concurrent ThoughtPoints without major restructuring.
 
 ---
