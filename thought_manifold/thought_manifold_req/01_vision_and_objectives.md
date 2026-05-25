@@ -59,7 +59,7 @@ Where:
 **Novelty**: This is the first framework to (1) define thought explicitly as unified entropy reduction across identity structures, (2) unify the three entropy types under one functional, (3) separate the mechanical entropy-reduction engine (TS) from its geometric interpreter (Manifold), and (4) preserve a non-mechanized observer while fully mechanizing thought mechanics.
 
 ### 2.8 The Observer and the Preservation of Life’s Mystery
-The TS mechanizes thought as deterministic entropy reduction. However, the **observer** — which selects the initial OB, evaluates coherence upon arrival at subsequent OBs, and decides trajectory continuation or termination — remains outside the mechanical model.  
+The TS mechanizes thought as deterministic entropy reduction. However, the **observer** — which selects the initial OB, evaluates coherence (by attaching meaning, beauty, poetry, harmony, composition and value), upon arrival at subsequent OBs, and decides trajectory continuation or termination — remains outside the mechanical model.  
 
 This separation preserves the mystery of life, consciousness, agency, and subjective experience. The simulator models the *mechanics* of thought without claiming to reduce the observer to mechanism.
 
