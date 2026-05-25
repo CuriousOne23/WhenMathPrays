@@ -1,6 +1,5 @@
 **Here is the clean, GitHub-friendly version of `08_TS_data_model.md`:**
 
-```markdown
 # 08 TS Data Model
 
 ## 1. Purpose
@@ -109,12 +108,5 @@ This ensures full lifecycle traceability.
 
 **Last Updated**: May 25, 2026  
 **Version**: 0.2 (Cleaned & Aligned with 04–07)
-
----
-
-**Revision Summary**:
-- Clean Markdown formatting optimized for GitHub.
-- Proper code block fencing for all Python classes.
-- Consistent section numbering and styling.
 
 ---
