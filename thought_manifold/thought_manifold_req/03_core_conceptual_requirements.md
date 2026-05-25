@@ -16,7 +16,7 @@ The simulator must faithfully implement the following core concepts, grounded in
 - Fixed-time-step, deterministic state machine functioning as the **entropy-reduction engine**.
 - Responsible for all updates to ThoughtPoints, Object Basins (OBs), Relational Basins (RBs), energy, and unified entropy.
 - Guarantees reproducibility: identical initial conditions and inputs produce identical trajectories.
-- All core dynamics, state evolution, and thought mechanics occur exclusively within the TS, independent of any interpretive projection.
+- All core dynamics, state evolution, and thought mechanics occur exclusively within the TS.
 
 ### 2.2 The Relational Manifold (Interpretive Layer)
 - Serves as the optional **geometry of entropy** — a continuous geometric projection of the discrete TS state.
@@ -52,7 +52,6 @@ The simulator must faithfully implement the following core concepts, grounded in
   - **Normalized Entropy Percentage ($H_{\\%}$)** — a practical 0–100% projection of $H_{\text{total}}$
   - Energy state
   - Trajectory history (for observability)
-- In any manifold projection, a ThoughtPoint appears as a strictly 0-dimensional mathematical point.
 
 ### 2.6 Unified Entropy and Dynamics
 - All TS dynamics are driven by reduction of the unified entropy functional:
@@ -80,6 +79,8 @@ $$
 
 ## 3. OB vs RB Parameter Comparison
 
+**TS-Internal Parameters**
+
 | Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
 |----------------------------|----------------------------------------------|--------------------------------------------------|
 | Role in TS                 | Stability & representational entropy reduction | Transformation & structural/predictive entropy reduction |
@@ -87,7 +88,12 @@ $$
 | Entropy Reduction          | Strong / rapid                               | Minimal / preservation-focused                   |
 | $H_{\\%}$ Behavior         | Primary reduction zone                       | Mostly preserved                                 |
 | Stability (TS-internal)    | High (attractor)                             | Moderate (transitional)                          |
-| Manifold Projection        | Deep minima (high positive curvature)        | Ridge-like or near-flat                          |
+
+**Manifold Projection Parameters (Interpretive Only)**
+
+| Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
+|----------------------------|----------------------------------------------|--------------------------------------------------|
+| Appearance                 | Deep minima (high positive curvature)        | Ridge-like or near-flat                          |
 
 ## 4. Logging and Observability
 
@@ -122,6 +128,6 @@ The simulator must explicitly support and demonstrate the major ideas from *"The
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 0.6 (GitHub rendering fix applied)
+**Version**: 0.7 (Final geometry cleanup)
 
 ---
