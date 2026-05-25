@@ -83,7 +83,7 @@ $$
 
 | Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
 |----------------------------|----------------------------------------------|--------------------------------------------------|
-| Role in TS                 | Stability & representational entropy reduction | Transformation & structural/predictive entropy reduction |
+| Role in TS                 | Representational entropy reduction | Transformation & structural/predictive entropy reduction |
 | Entropy Reduction          | Strong / rapid                               | Minimal / preservation-focused                   |
 | $H_{\\%}$ Behavior         | Primary reduction zone                       | Mostly preserved                                 |
 
