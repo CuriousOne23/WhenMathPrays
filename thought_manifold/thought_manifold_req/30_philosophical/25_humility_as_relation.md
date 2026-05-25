@@ -1,1 +1,1 @@
-# 26 Humility as Relation
+# 25 Humility as Relation

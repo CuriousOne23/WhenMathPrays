@@ -1,4 +1,4 @@
-# 23 Glossary
+# 22 Glossary
 
 ## Core Terms
 
