@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This document defines the detailed requirements, behavior, and geometric rules specific to Object Basins (OBs) within the Relational Manifold. It builds directly upon the foundational concepts in `03_core_conceptual_requirements.md`, the manifold geometry in `07_manifold_structure.md`, and the implementation architecture in `07.5_implementation_architecture.md`.
+This document defines the detailed requirements, behavior, and geometric rules specific to Object Basins (OBs) within the Relational Manifold. It builds directly upon the foundational concepts in `03_core_conceptual_requirements.md`, the manifold geometry in `07_TS_state_machine.md`, and the implementation architecture in `07.5_implementation_architecture.md`.
 
 ## 2. Object Basin Characteristics
 
@@ -86,7 +86,7 @@ Completion occurs when the `canonicalization_achieved` flag is set to true, base
 This specification directly implements and extends:
 
 - `03_core_conceptual_requirements.md`
-- `07_manifold_structure.md`
+- `07_TS_state_machine.md`
 - `07.5_implementation_architecture.md`
 
 ---
