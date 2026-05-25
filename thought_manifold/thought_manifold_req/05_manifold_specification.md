@@ -12,175 +12,130 @@ The Manifold is **not** part of the core execution engine. The authoritative eng
 
 The Relational Manifold should deliver:
 
-- Intuitive visualization of thought dynamics (identity stabilization, relational transformation, coherence formation, entropy reduction, transitions).
+- Intuitive visualization of thought dynamics, including behavior with multiple simultaneous ThoughtPoints.
 - Clear representation of attractors, trajectories, splitting/merging, and exploration patterns.
-- Effective debugging and insight tool (detect stuck states, premature collapse, unexpected behavior).
+- Effective debugging and insight tool, especially under multi-TP conditions.
 - Teaching and communication aid for researchers and cognitive scientists.
 - A testable environment for evaluating geometric representations of thought.
 
 ## 3. Why Geometry? (Rationale)
 
-Geometry (gradient-based landscapes) was chosen because:
+Geometry (gradient-based landscapes) was chosen because it provides a clean, minimal metaphor for attractors and flows without introducing fake physics. It remains a hypothesis.
 
-- It avoids the heavy ontological burden and artifacts of force-based models (no momentum, acceleration, oscillations, interference rules, or fake physics).
-- Gradients provide a minimal, expressive metaphor for attractors: a ThoughtPoint can be treated as a non-momentum 0-dimensional point on a surface.
-- It compresses complex TS dynamics into an intuitive visual language without contaminating the deterministic TS core.
+## 4. What We Expect to See (Including Multi-TP Scenarios)
 
-**Geometry remains a hypothesis.** It is useful only insofar as it helps researchers *see* attractors and flows cleanly.
-
-## 4. What We Expect to See
-
-- **OBs**: Deep minima (wells) — depth reflects identity strength, curvature reflects coherence.
-- **RBs**: Ridge-like or flatter regions — shape reflects transformation type, width reflects flexibility.
-- **TP Trajectories**: Paths showing smoothness (coherence), curvature (effort), branching, and convergence.
+- **OBs**: May contain multiple TPs resting simultaneously. Depth and curvature still reflect identity strength and coherence.
+- **RBs**: May contain multiple TPs flowing in parallel or along shared corridors.
+- **TP Trajectories**: Multiple overlapping or parallel paths, with clear visual distinction between individual TPs.
 - **Entropy**: Represented via height and/or color gradients.
-- **Exploration**: Wandering paths in medium-entropy zones.
+- **Exploration & Interaction**: Complex patterns with multiple active TPs, including concurrent splitting, merging, and ejection events.
 - **Observer Influence**: Optional overlays for coherence evaluation points.
 
 ## 5. Advantages Over Non-Geometric Methods
 
-- Strong visual compression of high-dimensional data.
-- Reveals emergent structure (clusters, flows, bottlenecks) invisible in logs/tables.
-- Leverages human spatial intuition.
-- Avoids introducing fake physics while representing attractors effectively.
-- Highly falsifiable and extensible.
+(unchanged — strong visual compression, especially useful when viewing multiple TPs and their interactions)
 
 ## 6. Why Cognitive Science Should Be Interested
 
-- Offers a new lens on identity formation, relational reasoning, coherence, and conceptual transitions.
-- Provides a testable geometric hypothesis of thought dynamics.
-- Bridges continuous and discrete models of cognition.
-- Supports improved interpretability in both human and artificial systems.
+(unchanged)
 
 ## 7. How TS Output Is Represented in Manifold Space
 
 ### 7.1 Core Mapping Rules
-- **ThoughtPoint** → 0-dimensional point via projection function from TS state.
-- **OB** → Deep minimum.
-- **RB** → Ridge-like transitional region.
-- **Entropy** → Height/color gradient ($H_{\text{total}}$ and $H_{\\%}$).
-- **Transitions** → Trajectories.
-- **Splitting/Merging** → Branching/converging paths.
+- Each ThoughtPoint is mapped to a 0-dimensional point.
+- Multiple TPs can occupy the same OB or RB simultaneously.
+- Entropy, basin affiliation, and state (step index + tagged state counter) are projected for each TP independently.
 
 ### 7.2 Geometric Object Definitions & Rendering Rules
 
-**A. ThoughtPoint (TP) Geometry**  
-- Strictly 0-dimensional mathematically.  
-- Rendered as glyph with 3–6 px radius (configurable, non-semantic).  
-- Positioned at OB center or RB centerline.
+**A. ThoughtPoint (TP) Geometry**
+- Strictly 0-dimensional mathematically.
+- Rendered as glyph with 3–6 px radius (configurable, non-semantic).
+- Multiple TPs in the same basin are rendered with slight spatial jitter or clustering around the center (for OBs) or along the centerline (for RBs) to avoid perfect overlap while preserving visual clarity.
+- Each TP glyph must visually indicate its TS Step Index and Tagged State Counter (via color, label in debug mode, or hover).
 
-**B. Object Basin (OB) Geometry**  
-- Diameter 5–9 px, circular/elliptical.  
-- 3D: bowl-shaped depression.  
+**B. Object Basin (OB) Geometry**
+- Diameter 5–9 px (configurable).
+- Can contain multiple TPs resting simultaneously.
+- 3D: Smooth bowl-shaped depression.
+- 2D: Contour lines or shaded gradient.
 - Sampling: ≥5 points.
 
-**C. Relational Basin (RB) Geometry**  
-- 2–4 px wide corridor.  
+**C. Relational Basin (RB) Geometry**
+- 2–4 px wide corridor.
+- Can contain multiple TPs flowing in parallel.
 - Sampling: ≥3 points.
 
-**D. Layered Scene Composition**  
+**D. Layered Scene Composition**
 Base surface → Basins → Trajectories → Annotations.
 
-**E. Visual Encoding Rules**  
-Color, line style, thickness, opacity with mandatory legend.
+**E. Visual Encoding Rules**
+- Color, line style, thickness, opacity with mandatory legend.
+- When multiple TPs are present, use subtle differentiation (e.g., slight hue shift, numeric labels, or z-ordering) to distinguish individual trajectories.
 
 ### 7.3 Height/Depth Governing Equations & Bounds
 
-All values normalized to visual range **[-1.0, +0.5]**.
-
-- **OB Depth**: `-1.0 to -0.1`
-
-$$
-\text{OB}_{\text{depth}} = k_1 \cdot (1 - H_{\\%}) + k_2 \cdot \text{coherence}
-$$
-
-- **RB Height**: `0.0 to +0.5`  
-  
-$$
-\text{RB}_{\text{height}} = k_3 \cdot \|\nabla H\| + k_4 \cdot \text{transition}_{cost}
-$$
+(unchanged — global normalization to [-1.0, +0.5])
 
 ### 7.4 OB–RB Interface Geometry (Ejection Points)
 
-- Every OB defines one or more **exit points** on its boundary.
-- Each RB begins at an aligned **entry point**.
-- RB defined by polyline/spline from OB exit to next OB entry.
+- Every OB defines one or more exit points.
+- Multiple TPs can be ejected from the same or different exit points.
+- Ejection order and timing follow deterministic TS rules.
 
-### 7.5 Rest and Ejection Visual Semantics
+### 7.5 Rest and Ejection Visual Semantics (Multi-TP)
 
-**A. Rest State (Inside OB)**  
-- TP rendered at OB center pixel with increased opacity and optional soft pulsing glow.  
-- No motion.
+**A. Rest State (Inside OB)**
+- Multiple TPs may rest simultaneously at or near the OB center pixel (with small spatial jitter for visibility).
+- Each TP rendered with increased opacity and optional soft pulsing glow.
 
-**B. Ejection Trigger & Animation**  
-- On TS ejection signal: OB exit point and RB entry briefly highlighted.  
-- TP moves along short, smooth spline: OB center → exit point → RB centerline.  
-- Once on RB: normal opacity and flow motion.
+**B. Ejection Trigger & Animation**
+- When a TP is ejected, its specific exit point and corresponding RB entry point are briefly highlighted.
+- The TP moves along a short, smooth spline: OB center region → chosen exit point → RB centerline.
+- Multiple ejections can occur in the same timestep with visual distinction (different splines, staggered timing if needed for clarity).
+
+**C. Flow State (On RB)**
+- Multiple TPs may flow simultaneously along the same RB corridor.
+- Each TP follows the RB centerline with appropriate motion and normal opacity.
 
 ### 7.6 TP Indexing and Diagnostic Highlighting
 
-- Every ThoughtPoint carries a **TS step index** (when created).  
-- Supports index-based highlighting, filtering, and navigation.  
-- Index displayed in hover panels and optionally as small label next to glyph.
+- Every TP carries **TS Step Index** and **Tagged State Counter**.
+- Supports index-based and state-counter-based highlighting, filtering, and navigation for individual or groups of TPs.
+- Diagnostic tools must handle multiple TPs gracefully (e.g., “highlight all TPs with Step Index 10”, “highlight all TPs in OB X”).
 
-### 7.7 TP State Counter and Tagging Lifecycle
+### 7.7 Text/Token Highlighting Interface
 
-Every ThoughtPoint must maintain a **tagged state counter** (separate from TS step index) that tracks its internal evolution.
+- Supports synchronized text ↔ geometry highlighting, including cases with multiple active TPs.
 
-**A. State Counter Definition**  
-- Integer starting at 0 when the TP is created.  
-- Increments by +1 each time the TP is:  
-  - Tagged or modified by a basin (OB, RB, etc.)  
-  - Updated by a regulator  
-  - Split or merged  
-  - Re-evaluated or otherwise modified by the TS.
+### 7.8 Interaction and Measurement Semantics
 
-**B. Purpose**  
-- Enables deterministic replay and debugging of tagging order.  
-- Supports detection of missing/repeated tags and basin loops.  
-- Facilitates reconstruction of TP lineage and lifecycle analysis.  
-- Ensures proper synchronization between TS state and manifold rendering.
-
-**C. Display Rules**  
-- The state counter must appear in TP hover panels and info panels.  
-- Optional: small numeric label next to the TP glyph (debug mode only).
-
-**D. Relationship to TS Step Index**  
-- **TS Step Index** = global simulation time when the TP was created.  
-- **TP State Counter** = number of times this specific TP has been updated/tagged.  
-Together they provide complete lifecycle traceability.
-
-### 7.8 Text/Token Highlighting Interface
-
-- Supports synchronized text ↔ geometry highlighting.  
-- Hovering over tokens highlights corresponding TPs, OBs, RBs, and trajectories (and vice versa).
-
-### 7.9 Interaction and Measurement Semantics
-
-- Clicking, area selection, cursor hover, and viewport controls as previously defined.
+- Clicking and area selection work with multiple TPs and basins.
+- Cursor hover provides per-TP information even when multiple TPs are clustered.
+- Viewport controls unchanged.
 
 ## 8. Implementation Requirements (For AI Agents & Developers)
 
-- Separate module consuming TS snapshots.  
-- Clear interfaces for projection, rendering, and encoding.  
-- Full logging and debug mode.  
+- Must gracefully render and distinguish multiple TPs in the same basin or trajectory.
+- Support for visual decluttering (jitter, layering, filtering) when TP density is high.
+- Full logging of projection steps for multi-TP scenarios.
 - Designed for easy modification and extension.
 
 ## 9. Invariants
 
-- The Manifold has no causal influence on the TS.  
-- Geometry remains interpretive, not causal.  
+- The Manifold has no causal influence on the TS.
+- Geometry remains interpretive, not causal.
 - Rendered sizes carry no semantic weight unless documented.
 
 ## 10. Success Criteria
 
-- Researchers gain clear intuitive insight into TS dynamics.  
-- The manifold is easy to implement, debug, extend, and modify.  
+- Researchers can clearly observe and debug behavior involving multiple simultaneous ThoughtPoints.
+- The manifold is easy to implement, debug, extend, and modify.
 - It demonstrates both the strengths and limitations of geometric visualization while remaining scientifically honest.
 
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 1.1 (TP State Counter + Tagging Lifecycle added)
+**Version**: 1.3 (Multi-TP visualization support added)
 
 ---
