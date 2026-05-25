@@ -63,7 +63,7 @@ class Manifold:
 ## Traceability
 Links to:
 - 04_system_architecture.md
-- 05_manifold_core.md
+- 05_manifold_specification.md
 - 06_basins.md
 - 08_embedding_space.md
 

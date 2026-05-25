@@ -21,7 +21,7 @@ All engineering decisions, architecture choices, implementation details, and exp
 2. **[02_core_philosophy_and_principles.md](02_core_philosophy_and_principles.md)** — Core principles and philosophical grounding
 3. **[03_core_conceptual_requirements.md](03_core_conceptual_requirements.md)** — Mapping to *The Architecture of Dynamic Thought*
 4. **[04_system_architecture.md](04_system_architecture.md)** — Overall system design
-5. **[05_manifold_core.md](05_manifold_core.md)** — Manifold core functional requirements
+5. **[05_manifold_specification.md](05_manifold_specification.md)** — Manifold core functional requirements
 6. **[06_basins.md](06_basins.md)** — Basin behavior and constraints
 7. **[07_manifold_structure.md](07_manifold_structure.md)** — Manifold structure requirements  
 7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Operational translation layer and software architecture
