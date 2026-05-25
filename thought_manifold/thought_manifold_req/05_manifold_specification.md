@@ -91,13 +91,13 @@ All values normalized to visual range **[-1.0, +0.5]**.
 - **OB Depth**: `-1.0 to -0.1`
 
 $$
-  \text{OB}_{\text{depth}} = k_1 \cdot (1 - H_{\\%}) + k_2 \cdot \text{coherence}
+\text{OB}_{\text{depth}} = k_1 \cdot (1 - H_{\\%}) + k_2 \cdot \text{coherence}
 $$
 
 - **RB Height**: `0.0 to +0.5`  
-
+  
 $$
-  \text{RB}_{\text{height}} = k_3 \cdot \|\nabla H\| + k_4 \cdot \text{transition\_cost}
+\text{RB}_{\text{height}} = k_3 \cdot \|\nabla H\| + k_4 \cdot \text{transition}_{cost}
 $$
 
 ### 7.4 OB–RB Interface Geometry (Ejection Points)
