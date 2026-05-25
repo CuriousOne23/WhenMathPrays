@@ -1,1 +1,0 @@
-# 10 Interaction Model
