@@ -19,6 +19,7 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 | ThoughtPoint Metadata Encoding | [09.5_thoughtpoint_metadata_encoding_pecification.md](09.5_thoughtpoint_metadata_encoding_pecification.md) | 08, 09, 11, 15, 17                                        | Draft    |
 | Relational Basins              | [10_relational_basins.md](10_relational_basins.md) | 06, 08, 12                                                | Draft    |
 | Entropy & Information          | [11_entropy_and_information.md](11_entropy_and_information.md) | 03, 14, 20                                                | Draft    |
+| Thought Simulator              | [11.5_thought_simulator.md](11.5_thought_simulator.md) | 07.5, 13, 14, 15, 17                                     | Draft    |
 | Energy Dynamics                | [12_energy_dynamics.md](12_energy_dynamics.md) | 06, 08, 11                                                | Draft    |
 | Dynamics Engine                | [13_dynamics_engine.md](13_dynamics_engine.md) | 07.5, 15, 16                                              | Draft    |
 | Completion Logic               | [14_completion_logic.md](14_completion_logic.md) | 06, 11, 18                                                | Draft    |
@@ -64,5 +65,5 @@ This matrix ensures that every high-level conceptual requirement from *"The Arch
 
 ---
 
-**Last Updated**: May 23, 2026  
-**Version**: 0.2 (Draft)
+**Last Updated**: May 24, 2026  
+**Version**: 0.3 (Draft)
