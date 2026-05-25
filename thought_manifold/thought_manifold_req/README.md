@@ -1,80 +1,61 @@
 # Thought Manifold Requirements
 
-This directory contains the **formal requirements** for the *Thought Manifold Simulator* — the computational exploration vehicle for the Relational Manifold model of thought, as described in *"The Architecture of Dynamic Thought"* and the broader **WhenMathPrays / Relational Physics** framework.
+This directory is the formal requirements source for the Thought Manifold Simulator.
 
-## Purpose of This Folder
+## Directory Layout
 
-The `thought_manifold_req/` directory serves as the **single source of truth** for what we are building and why. 
+- [00_foundations/](00_foundations/) - conceptual grounding and project intent
+- [10_architecture/](10_architecture/) - TS-centric architecture and data model
+- [20_requirements/](20_requirements/) - behavioral and quality requirements
+- [30_philosophical/](30_philosophical/) - philosophical companion texts
 
-All engineering decisions, architecture choices, implementation details, and experimental designs must trace back to these requirements. This ensures the project remains faithful to the theoretical vision while maintaining engineering rigor.
+## Reading Order
 
-## Philosophy
+### Foundations
+1. [01_vision_and_objectives.md](00_foundations/01_vision_and_objectives.md)
+2. [02_core_philosophy_and_principles.md](00_foundations/02_core_philosophy_and_principles.md)
+3. [03_core_conceptual_requirements.md](00_foundations/03_core_conceptual_requirements.md)
 
-- **Top-down design**: We begin from high-level conceptual architecture and flow down into implementation.
-- **Debuggability and observability first**: Every major component must be highly instrumented.
-- **Exploration as a core goal**: The simulator is not just a dynamics engine — it is a *vehicle* for discovering and mapping thought space.
-- **Stability and instability are first-class citizens**: We intentionally study where and how the manifold breaks or remains coherent.
+### Architecture (TS-centric)
+4. [04_system_architecture.md](10_architecture/04_system_architecture.md)
+5. [05_manifold_specification.md](10_architecture/05_manifold_specification.md)
+6. [06_basins.md](10_architecture/06_basins.md)
+7. [07_TS_state_machine.md](10_architecture/07_TS_state_machine.md)
+8. [08_TS_data_model.md](10_architecture/08_TS_data_model.md)
+9. [09_data_structures.md](10_architecture/09_data_structures.md)
 
-## Document Reading Order
+### Requirements
+10. [10_interaction_model.md](20_requirements/10_interaction_model.md)
+11. [11_error_and_stability_requirements.md](20_requirements/11_error_and_stability_requirements.md)
+12. [12_performance_requirements.md](20_requirements/12_performance_requirements.md)
+13. [13_observability_requirements.md](20_requirements/13_observability_requirements.md)
+14. [14_testing_and_validation.md](20_requirements/14_testing_and_validation.md)
+15. [15_non_functional_requirements.md](20_requirements/15_non_functional_requirements.md)
+16. [16_interfaces_and_io.md](20_requirements/16_interfaces_and_io.md)
+17. [17_visualization_exploration.md](20_requirements/17_visualization_exploration.md)
+18. [18_experiment_requirements.md](20_requirements/18_experiment_requirements.md)
+19. [19_stability_requirements.md](20_requirements/19_stability_requirements.md)
+20. [20_risks_assumptions.md](20_requirements/20_risks_assumptions.md)
+21. [21_program_flow.md](20_requirements/21_program_flow.md)
+22. [22_glossary.md](20_requirements/22_glossary.md)
+23. [23_traceability_matrix.md](20_requirements/23_traceability_matrix.md)
 
-1. **[01_vision_and_objectives.md](01_vision_and_objectives.md)** — High-level purpose and success criteria
-2. **[02_core_philosophy_and_principles.md](02_core_philosophy_and_principles.md)** — Core principles and philosophical grounding
-3. **[03_core_conceptual_requirements.md](03_core_conceptual_requirements.md)** — Mapping to *The Architecture of Dynamic Thought*
-4. **[04_system_architecture.md](04_system_architecture.md)** — Overall system design
-5. **[05_manifold_specification.md](05_manifold_specification.md)** — Manifold core functional requirements
-6. **[06_basins.md](06_basins.md)** — Basin behavior and constraints
-7. **[07_TS_state_machine.md](07_TS_state_machine.md)** — Manifold structure requirements  
-7.5. **[07.5_implementation_architecture.md](07.5_implementation_architecture.md)** — Operational translation layer and software architecture
-8. **[08_embedding_space.md](08_embedding_space.md)** — Embedding-space requirements
-9. **[09_object_basins.md](09_object_basins.md)** — Object-basin requirements  
-9.5. **[09.5_thoughtpoint_metadata_encoding_pecification.md](09.5_thoughtpoint_metadata_encoding_pecification.md)** — specifies TP information stream
-10. **[10_relational_basins.md](10_relational_basins.md)** — Relational-basin requirements
-11. **[11_entropy_and_information.md](11_entropy_and_information.md)** — Entropy and information requirements
-11.5. **[11.5_thought_simulator.md](11.5_thought_simulator.md)** — Thought Simulator requirements
-12. **[12_energy_dynamics.md](12_energy_dynamics.md)** — Energy dynamics requirements
-13. **[13_dynamics_engine.md](13_dynamics_engine.md)** — Dynamics engine behavior
-14. **[14_completion_logic.md](14_completion_logic.md)** — Completion and convergence logic
-15. **[15_data_structures.md](15_data_structures.md)** — Data model and structures
-16. **[16_non_functional_requirements.md](16_non_functional_requirements.md)** — Performance, debuggability, and reproducibility
-17. **[17_interfaces_and_io.md](17_interfaces_and_io.md)** — Interfaces and input/output
-18. **[18_visualization_exploration.md](18_visualization_exploration.md)** — Visualization and exploration requirements
-19. **[19_experiment_requirements.md](19_experiment_requirements.md)** — Experiment design and execution requirements
-20. **[20_stability_requirements.md](20_stability_requirements.md)** — Stability and instability requirements
-21. **[21_risks_assumptions.md](21_risks_assumptions.md)** — Risks, assumptions, and dependencies
-22. **[22_program_flow.md](22_program_flow.md)** — End-to-end program flow
-23. **[23_glossary.md](23_glossary.md)** — Definitions and terminology
-24. **[24_traceability_matrix.md](24_traceability_matrix.md)** — Requirement-to-design traceability
-25. **[25_verb_mind.md](25_verb_mind.md)** — Placeholder
-26. **[26_humility_as_relation.md](26_humility_as_relation.md)** — Placeholder
-27. **[27_beauty_and_rigor.md](27_beauty_and_rigor.md)** — Placeholder
-28. **[28_interaction_model.md](28_interaction_model.md)** — Placeholder
-29. **[29_error_and_stability_requirements.md](29_error_and_stability_requirements.md)** — Placeholder
-30. **[30_performance_requirements.md](30_performance_requirements.md)** — Placeholder
-31. **[31_observability_requirements.md](31_observability_requirements.md)** — Placeholder
-32. **[32_testing_and_validation.md](32_testing_and_validation.md)** — Placeholder
+### Philosophical
+24. [24_verb_mind.md](30_philosophical/24_verb_mind.md)
+25. [25_humility_as_relation.md](30_philosophical/25_humility_as_relation.md)
+26. [26_beauty_and_rigor.md](30_philosophical/26_beauty_and_rigor.md)
 
-## Key Principles
+## Notes on Scope Changes
 
-- Requirements must be **testable** wherever possible.
-- Every major feature must support **visualization and exploration**.
-- The system must be capable of both **stable behavior** and **controlled instability** for research purposes.
-- All dynamics must respect **energy conservation**, **normalized entropy tracking**, and **traceability**.
+- Geometric-era requirement files were removed: old 07.5, 08, 09, 10, 11.5, 11, 12, 13, and 14.
+- Documents 04-07 now carry the architectural center of gravity for a TS-centric implementation.
+- Document 05 defines the manifold as an interpretive relational framework used for inquiry and modeling.
 
-## How to Contribute / Modify Requirements
+## Traceability
 
-- All changes to requirements must be discussed and versioned.
-- Use the **24_traceability_matrix.md** to keep links between requirements, design, and implementation.
-- New requirements should be added as new numbered files or subsections.
-
-## Related Resources
-
-- Main project: `../docs/`
-- Theoretical foundation: *"The Architecture of Dynamic Thought"*
-- Repository: [WhenMathPrays](https://github.com/CuriousOne23/WhenMathPrays)
+Use [23_traceability_matrix.md](20_requirements/23_traceability_matrix.md) for cross-document linkage between conceptual, architectural, and implementation-facing requirements.
 
 ---
 
-**Last Updated**: May 24, 2026 
-**Version**: 0.3 (Draft)
-
----
+**Last Updated**: May 25, 2026
+**Version**: 0.4 (Restructured)
