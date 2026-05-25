@@ -1,96 +1,120 @@
+**Here is the clean, GitHub-friendly version of `08_TS_data_model.md`:**
+
+```markdown
 # 08 TS Data Model
 
 ## 1. Purpose
 
-This document defines the metadata structure, encoding formats, and event streaming rules for ThoughtPoints in the Thought Manifold Simulator. It ensures that every ThoughtPoint carries sufficient context for debugging, visualization, traceability, replay, and learning while maintaining determinism, compactness, and reversibility.
+This document defines the core data structures and object models used within the **Thought Simulator (TS)**.
 
-This specification bridges the conceptual requirements in `../00_foundations/03_core_conceptual_requirements.md` and the TS execution architecture in `07_TS_state_machine.md`.
+It specifies the internal representation of ThoughtPoints, Basins, tags, state, and supporting structures in a way that supports determinism, observability, multi-TP concurrency, and full lifecycle traceability.
 
-## 2. Core Metadata Fields
+## 2. Core Design Principles
 
-Every ThoughtPoint must maintain a rich metadata record containing:
+- All data structures must be fully serializable for snapshots and reproducibility.
+- Every ThoughtPoint must carry complete lifecycle metadata.
+- Structures must support efficient lookup, membership testing, and logging.
+- No geometric data is stored in the TS data model — geometry belongs exclusively to the optional Manifold layer.
 
-### 2.1 Identity & Provenance
-- `tp_id`: Unique immutable identifier (UUID v7 recommended)
-- `creation_timestamp`: Time of initial creation
-- `provenance`: Origin (user input, splitting, merging, external injection)
-- `lineage`: List of parent ThoughtPoint IDs (for splits/merges)
+## 3. Primary Data Structures
 
-### 2.2 State History
-- `basin_transition_log`: Ordered list of basin entries/exits (basin_id, timestamp, reason)
-- `regulator_history`: List of regulator interventions (regulator_type, strength, timestamp, delta applied)
-- `energy_entropy_snapshots`: Periodic samples of E and $H_\\%$ at key events
-- `embedding_stats`: Statistical summary of embedding vector (mean, variance, coherence score)
+### 3.1 ThoughtPoint (TP)
 
-### 2.3 Runtime Context
-- `current_basin_id`: ID of the basin the ThoughtPoint currently belongs to
-- `volitional_input_log`: Record of user steering actions
-- `perturbation_history`: Summary of noise and external inputs received
+The fundamental unit of thought-in-process.
 
-## 3. Tagged Representation (Human-Readable)
+```python
+class ThoughtPoint:
+    tp_id: str                          # Unique UUID
+    ts_step_index: int                  # Global simulation timestep when created/updated
+    tagged_state_counter: int           # Increments on every modification/tagging
+    current_basin_id: str | None
+    embedding: Vector                   # Current embedding vector
+    entropy: float                      # Unified entropy value (H_total)
+    normalized_entropy: float           # H_% (0–100)
+    energy: float
+    tags: dict[str, Any]                # All attached metadata/tags
+    provenance: list[ProvenanceEntry]   # History of modifications
+    creation_step: int
+    last_updated_step: int
+```
 
-- Must be JSON-based for easy inspection and debugging.
-- All fields must be clearly named and include units where applicable.
-- Should support pretty-printing and selective field inclusion for different debugging levels.
+### 3.2 Basin
 
-## 4. Encoded Representation (Compact & Deterministic)
+Base class for all basin types.
 
-- Must support a compact binary format (recommended: Protocol Buffers or custom binary schema).
-- Must be fully deterministic and reversible.
-- Must be versioned (schema version field).
-- Must support lossless round-tripping between tagged and encoded forms.
+```python
+class Basin:
+    basin_id: str
+    basin_type: str                     # "OB", "RB", "Inquiry", "Feeling", etc.
+    lifecycle_state: str                # NEW, RUNNING, DONE
+    max_capacity: int
+    current_tps: list[str]              # List of TP IDs currently inside
+    parameters: dict                    # Type-specific configuration
+    entry_conditions: list[Condition]
+    exit_conditions: list[Condition]
+    tags_applied: dict[str, int]        # Statistics of tags applied
+```
 
-## 5. Event Stream Specification
+### 3.3 ProvenanceEntry
 
-The ThoughtPoint shall produce a time-ordered event stream with the following characteristics:
+```python
+class ProvenanceEntry:
+    step_index: int
+    state_counter: int
+    basin_id: str
+    action: str                         # "tagged", "split", "merged", "ejected", etc.
+    timestamp: datetime
+    details: dict
+```
 
-- **Event Types**:
-  - `TP_CREATED`
-  - `BASIN_ENTERED` / `BASIN_EXITED`
-  - `REGULATOR_ACTIVATED`
-  - `SPLIT` / `MERGED`
-  - `ENERGY_UPDATED`
-  - `ENTROPY_UPDATED`
-  - `VOLITIONAL_STEER`
-  - `COMPLETION_REACHED`
+## 4. Supporting Structures
 
-- **Event Ordering**: Strictly chronological and deterministic.
-- **Invariants**: Every state-changing event must be logged before the state is updated.
-- **Replay Rules**: The full event stream must be sufficient to reconstruct any ThoughtPoint’s complete history.
+- **TS State Snapshot**: Full system state at a given timestep (all TPs, all basins, global counters).
+- **Tag Registry**: Centralized definition of allowed tags and their semantics.
+- **Routing Table**: Deterministic mapping rules for TP transitions between basins.
+- **Event Log**: Chronological record of all significant events (entry, exit, tagging, splitting, merging, etc.).
 
-## 6. Privacy & Encryption
+## 5. Multi-TP Considerations
 
-- Sensitive fields (e.g., user volitional inputs, provenance from private sources) must be marked.
-- Support selective disclosure and optional encryption of sensitive metadata.
-- Core geometric and dynamic fields (position, energy, entropy, basin) shall remain unencrypted for simulation integrity.
+- Multiple ThoughtPoints may reside in the same basin simultaneously.
+- Each TP maintains independent state (Step Index + Tagged State Counter).
+- Basins must handle concurrent access safely with deterministic ordering where required.
+- Data structures must support efficient lookup by TP ID, basin ID, and step index.
 
-## 7. Storage & Transport
+## 6. Observability Requirements
 
-- **In-Memory**: Rich object model with both tagged and encoded views.
-- **Persistence**: Support JSON (debug) and binary (production) formats.
-- **Transport**: Efficient serialization for inter-module and visualization communication.
-- **Compression**: Optional compression for long-running ThoughtPoint histories.
+- Every data structure must support full serialization to JSON.
+- Snapshots must be versioned and comparable.
+- All changes to ThoughtPoints and Basins must be logged with both:
+  - `ts_step_index`
+  - `tagged_state_counter`
 
-## 8. Traceability & Observability
+This ensures full lifecycle traceability.
 
-The metadata system must support:
-- Full debugging traces (why a ThoughtPoint entered a basin, which regulators acted, etc.)
-- Visualization of ThoughtPoint journeys through the manifold
-- Learning from ThoughtPoint histories (pattern extraction, training data generation)
-- Reproducibility of any simulation run given the initial state and event stream
+## 7. Invariants
 
-## 9. Traceability to Other Documents
+- The TS data model contains no geometric information.
+- All state is fully deterministic and reproducible.
+- Every ThoughtPoint’s lifecycle is completely traceable.
+- Data structures are designed for efficient debugging and analysis.
 
-This specification directly supports:
+## 8. Success Criteria
 
-- `../00_foundations/03_core_conceptual_requirements.md` (ThoughtPoint definition and dynamics)
-- `07_TS_state_machine.md` (execution-state and lifecycle context)
-- `../20_requirements/13_observability_requirements.md` (observability and logging requirements)
-
-All metadata decisions are traceable via `../20_requirements/23_traceability_matrix.md`.
+- The data model supports arbitrary numbers of concurrent ThoughtPoints without ambiguity.
+- Full lifecycle reconstruction is possible from logs and snapshots.
+- The model is clean, extensible, and implementable in multiple languages.
+- It enables efficient debugging, replay, and analysis.
 
 ---
 
-**Last Updated**: May 23, 2026  
-**Version**: 0.1 (Draft)
+**Last Updated**: May 25, 2026  
+**Version**: 0.2 (Cleaned & Aligned with 04–07)
 
+---
+
+**Revision Summary**:
+- Clean Markdown formatting optimized for GitHub.
+- Proper code block fencing for all Python classes.
+- Consistent section numbering and styling.
+
+---
