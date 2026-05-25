@@ -1,10 +1,10 @@
-# 09.5 ThoughtPoint Metadata & Encoding Specification
+# 08 TS Data Model
 
 ## 1. Purpose
 
 This document defines the metadata structure, encoding formats, and event streaming rules for ThoughtPoints in the Thought Manifold Simulator. It ensures that every ThoughtPoint carries sufficient context for debugging, visualization, traceability, replay, and learning while maintaining determinism, compactness, and reversibility.
 
-This specification bridges the conceptual requirements in `03_core_conceptual_requirements.md` and the implementation architecture in `07.5_implementation_architecture.md`.
+This specification bridges the conceptual requirements in `../00_foundations/03_core_conceptual_requirements.md` and the TS execution architecture in `07_TS_state_machine.md`.
 
 ## 2. Core Metadata Fields
 
@@ -83,11 +83,11 @@ The metadata system must support:
 
 This specification directly supports:
 
-- `03_core_conceptual_requirements.md` (ThoughtPoint definition and dynamics)
-- `07.5_implementation_architecture.md` (observability and logging requirements)
-- `07_TS_state_machine.md` (geometric context for metadata)
+- `../00_foundations/03_core_conceptual_requirements.md` (ThoughtPoint definition and dynamics)
+- `07_TS_state_machine.md` (execution-state and lifecycle context)
+- `../20_requirements/13_observability_requirements.md` (observability and logging requirements)
 
-All metadata decisions are traceable via `24_traceability_matrix.md`.
+All metadata decisions are traceable via `../20_requirements/23_traceability_matrix.md`.
 
 ---
 

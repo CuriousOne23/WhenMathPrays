@@ -1,4 +1,4 @@
-# 19 Experiment Requirements
+# 18 Experiment Requirements
 
 ## 1. Purpose
 Define the requirements for running, managing, and analyzing experiments within the Thought Manifold Simulator, with a strong emphasis on studying stability, instability, and exploration.
@@ -47,9 +47,9 @@ Define the requirements for running, managing, and analyzing experiments within 
 
 ## 7. Traceability
 Links to:
-- `16_non_functional_requirements.md` (Reproducibility section)
-- `20_stability_requirements.md`
-- `03_core_conceptual_requirements.md`
+- `15_non_functional_requirements.md` (Reproducibility section)
+- `19_stability_requirements.md`
+- `../00_foundations/03_core_conceptual_requirements.md`
 
 ---
 

@@ -1,1 +1,1 @@
-# 27 Beauty and Rigor
+# 26 Beauty and Rigor

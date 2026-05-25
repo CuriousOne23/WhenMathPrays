@@ -1,4 +1,4 @@
-# 21 Risks and Assumptions
+# 20 Risks and Assumptions
 
 ## 1. Purpose
 Document the key risks, foundational assumptions, and external dependencies of the Thought Manifold Simulator project to ensure transparency and realistic planning.

@@ -1,4 +1,4 @@
-# 16 Non-Functional Requirements
+# 15 Non-Functional Requirements
 
 ## 1. Purpose
 Define the quality attributes, constraints, and operational characteristics that the Thought Manifold Simulator must satisfy beyond its core functional behavior.

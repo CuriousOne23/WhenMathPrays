@@ -41,6 +41,16 @@ This matrix links conceptual intent, TS-centric architecture, and implementation
 | Philosophical context | [25_humility_as_relation.md](../30_philosophical/25_humility_as_relation.md) | 02, 05, 19, 20 | Active Draft |
 | Philosophical context | [26_beauty_and_rigor.md](../30_philosophical/26_beauty_and_rigor.md) | 01, 02, 14, 17, 18 | Active Draft |
 
+## Conceptual Requirements Mapping (03)
+
+The conceptual requirements in [03_core_conceptual_requirements.md](../00_foundations/03_core_conceptual_requirements.md) map directly to the architecture backbone as follows:
+
+- System architecture anchor: [04_system_architecture.md](../10_architecture/04_system_architecture.md)
+- Basin behavior model: [06_basins.md](../10_architecture/06_basins.md)
+- TS execution semantics: [07_TS_state_machine.md](../10_architecture/07_TS_state_machine.md)
+- Data representation and metadata: [08_TS_data_model.md](../10_architecture/08_TS_data_model.md)
+- Runtime structures and containers: [09_data_structures.md](../10_architecture/09_data_structures.md)
+
 ## Key Concept Traceability Examples
 
 ### Exploration Vehicle
