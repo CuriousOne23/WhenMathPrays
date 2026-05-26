@@ -18,7 +18,7 @@ It is intentionally separated from production-facing design and implementation p
 
 1. Define a focused prototype objective in a module's `software_description.md`.
 2. Draft minimal exploratory code in `prototype.py` (once implementation begins).
-3. Record observations in `insights.md`.
+3. Record execution evidence in the Run Record (Standard) table inside `insights.md` (command, date, result, exit code, artifacts, notes).
 4. Record dead ends and broken assumptions in `failures.md`.
 5. Capture requirement impacts in `updated_requirements.md`.
 6. Review whether the module is ready for promotion.
@@ -52,3 +52,4 @@ Promotion sequence:
 - `08_event_log_prototypes/` - event stream and replay experiments
 - `09_experiment_runner/` - experiment orchestration prototypes
 - `shared/` - shared helpers for prototype work
+

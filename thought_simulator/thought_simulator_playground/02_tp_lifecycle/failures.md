@@ -1,16 +1,20 @@
 # Failures
 
+## Run status
+
+| Timestamp | Command | Status | Detail |
+|---|---|---|---|
+| 2026-05-26 | `python prototype.py` | PASS | No runtime exceptions. Harness completed successfully. |
+
 ## Failed Attempts
 
-- Attempt 1: what was tried and why it failed
-- Attempt 2: what was tried and why it failed
+- None recorded yet in this module.
 
 ## Invalidated Assumptions
 
-- Assumption 1
-- Assumption 2
+- None yet.
 
 ## Lessons Learned
 
-- Lesson 1
-- Lesson 2
+- Capturing run status in-repo is necessary even when execution succeeds.
+- A PASS record should include command, date, and a one-line behavior summary.
