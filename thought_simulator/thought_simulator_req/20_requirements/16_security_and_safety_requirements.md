@@ -8,11 +8,11 @@ It ensures the simulator is robust against misuse, resource exhaustion, data cor
 
 ## 2. Core Security & Safety Principles
 
-* Safety and determinism are inseparable - no safety mechanism may introduce nondeterminism when `deterministic_mode` is enabled.
+* Safety and determinism are inseparable — no safety mechanism may introduce nondeterminism when `deterministic_mode` is enabled.
 * The core TS engine must be **defensively isolated** from all observer layers (manifold translator, UI, probes, plugins).
 * All inputs, configurations, and extensions must be validated without side effects on simulation semantics.
 * Resource consumption must be strictly bounded and controllable (see 12_performance_requirements.md).
-* Safety features must themselves be observable, testable, and fully traceable (see 14_testing_and_validation.md).
+* Safety features must themselves be observable, testable, and fully traceable (see 14_testing_and_validation_requirements.md).
 * The external Observer must never be able to inject behavior into the mechanical core.
 
 ## 3. Input Validation and Configuration Safety
@@ -88,7 +88,7 @@ It ensures the simulator is robust against misuse, resource exhaustion, data cor
 - No user-provided code execution is allowed inside the core simulation loop.
 
 **S-ISO-03: Architectural Conformance**  
-- Static checks must enforce partitioning (see 14_testing_and_validation.md).
+- Static checks must enforce partitioning (see 14_testing_and_validation_requirements.md).
 
 ## 7. Logging and Failure Handling
 
@@ -126,15 +126,14 @@ It ensures the simulator is robust against misuse, resource exhaustion, data cor
 **Last Updated**: May 26, 2026  
 **Version**: 0.3  
 **Changes from 0.2**:
-- Incorporated Copilot's three minor (but valuable) refinements: Safe Default Configurations, Safe Shutdown Ordering, and Atomic Snapshot Writes.
+- Incorporated Copilot’s three minor (but valuable) refinements: Safe Default Configurations, Safe Shutdown Ordering, and Atomic Snapshot Writes.
 - Reordered sections slightly for better logical flow.
 - Strengthened success criteria accordingly.
 
 ---
 
-**Yes - I fully agree.**  
+**Yes — I fully agree.**  
 
 It is **much** better to catch and specify these edge cases in the requirements now than to discover them as subtle bugs during implementation or long-running experiments. This disciplined approach is exactly why the three-way workflow (you + Copilot + me) is so effective.
 
 ---
-
