@@ -32,15 +32,16 @@ The canonical requirements path is `thought_simulator/thought_simulator_req/`.
 12. [12_performance_requirements.md](20_requirements/12_performance_requirements.md)
 13. [13_observability_requirements.md](20_requirements/13_observability_requirements.md)
 14. [14_testing_and_validation.md](20_requirements/14_testing_and_validation.md)
-15. [15_non_functional_requirements.md](20_requirements/15_non_functional_requirements.md)
-16. [16_interfaces_and_io.md](20_requirements/16_interfaces_and_io.md)
-17. [17_visualization_exploration.md](20_requirements/17_visualization_exploration.md)
-18. [18_experiment_requirements.md](20_requirements/18_experiment_requirements.md)
-19. [19_stability_requirements.md](20_requirements/19_stability_requirements.md)
-20. [20_risks_assumptions.md](20_requirements/20_risks_assumptions.md)
-21. [21_program_flow.md](20_requirements/21_program_flow.md)
-22. [22_glossary.md](20_requirements/22_glossary.md)
-23. [23_traceability_matrix.md](20_requirements/23_traceability_matrix.md)
+15. [16_security_and_safety_requirements.md](20_requirements/16_security_and_safety_requirements.md)
+16. [16_non_functional_requirements.md](20_requirements/16_non_functional_requirements.md)
+17. [17_interfaces_and_io.md](20_requirements/17_interfaces_and_io.md)
+18. [18_visualization_exploration.md](20_requirements/18_visualization_exploration.md)
+19. [19_experiment_requirements.md](20_requirements/19_experiment_requirements.md)
+20. [20_stability_requirements.md](20_requirements/20_stability_requirements.md)
+21. [21_risks_assumptions.md](20_requirements/21_risks_assumptions.md)
+22. [22_program_flow.md](20_requirements/22_program_flow.md)
+23. [23_glossary.md](20_requirements/23_glossary.md)
+24. [24_traceability_matrix.md](20_requirements/24_traceability_matrix.md)
 
 ### Philosophical
 24. [24_verb_mind.md](30_philosophical/24_verb_mind.md)
@@ -55,10 +56,11 @@ The canonical requirements path is `thought_simulator/thought_simulator_req/`.
 
 ## Traceability
 
-Use [23_traceability_matrix.md](20_requirements/23_traceability_matrix.md) for cross-document linkage between conceptual, architectural, and implementation-facing requirements.
+Use [24_traceability_matrix.md](20_requirements/24_traceability_matrix.md) for cross-document linkage between conceptual, architectural, and implementation-facing requirements.
 
 ---
 
 **Last Updated**: May 25, 2026
 **Version**: 0.4 (Restructured)
+
 

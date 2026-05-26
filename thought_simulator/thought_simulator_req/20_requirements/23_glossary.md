@@ -1,4 +1,4 @@
-# 22 Glossary
+# 23 Glossary
 
 ## Core Terms
 
@@ -55,4 +55,5 @@ Core research focus: how the geometry of the manifold produces coherent thought 
 
 **Last Updated**: [Insert Date]  
 **Version**: 0.1 (Draft)
+
 
