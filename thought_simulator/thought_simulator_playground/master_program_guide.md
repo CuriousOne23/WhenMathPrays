@@ -1,89 +1,122 @@
 # Master Program Guide
 
-## 1. Purpose
+## Purpose
 
-The Thought Simulator Playground is the controlled exploration layer for developing, testing, and refining ideas before they are promoted into the formal architecture, requirements, and implementation tracks.
+This document is the **governing constitution** of the `thought_simulator_playground/`.  
 
-This guide defines the common operating model for all playground modules.
+It defines the philosophy, rules, structure, and workflow we follow when exploring and building the Thought Simulator. It ensures every module is developed with scientific rigor, humility, and traceability.
 
-## 2. Playground Philosophy
+## Core Philosophy
 
-- Explore quickly, but document rigorously.
-- Keep modules small, focused, and testable.
-- Treat failures as high-value evidence.
-- Maintain deterministic thinking even during early experimentation.
-- Promote only verified designs.
+We are **explorers**, not experts pretending to know everything upfront.
 
-## 3. Verification Capsule Concept
+The Thought Simulator is a novel, conceptual, emergent system. We cannot design it perfectly on paper. Therefore we:
 
-Each module accumulates a Verification Capsule: a compact, auditable record of what was tested, what evidence exists, and whether the module is ready for promotion.
+- Stay humble about what we don’t know
+- Break the unknown into small, focused modules
+- Prototype quickly and safely
+- Observe, test, break, and learn
+- Refine requirements and design based on evidence
+- Document insights, failures, and changes as we go
+- Only promote stable, verified modules to the final `thought_simulator_design/` folder
 
-A module's Verification Capsule is distributed across:
+This is the scientific method applied to software engineering.
 
-- software_description.md
-- harness.py
-- verification_summary.md
-- insights.md
-- failures.md
-- requirements_traceability.md
+## Playground Structure
 
-The capsule must answer:
+Every module follows this exact layout:
 
-- What was attempted?
-- What passed, failed, or remains unknown?
-- Which invariants were validated?
-- Which requirements and design docs are affected?
+```
+<module_name>/
+├── software_description.md          # Tentative design sketch
+├── prototype.py                     # Macro-style exploratory implementation
+├── harness.py                       # Test / verification runner
+├── insights.md                      # Run Record + learnings
+├── failures.md                      # What broke and why
+├── updated_requirements.md          # Requirement evolution
+├── verification_summary.md          # Full Verification Capsule
+└── requirements_traceability.md     # HLR → LLR → Test → Evidence
+```
 
-## 4. State Control Rules
+## Prototype Rules (Macro-Style Module)
 
-All module exploration should follow these rules:
+`prototype.py` must be written as a **macro-style module**:
 
-1. Deterministic by default
-   - Prefer fixed seeds and repeatable execution paths.
-2. Explicit state transitions
-   - Record major state changes in logs or summaries.
-3. No hidden mutation assumptions
-   - Document where state changes occur and why.
-4. Evidence before conclusions
-   - Conclusions must reference run output or artifacts.
-5. Versioned iteration
-   - Update verification_summary.md and insights.md for each meaningful run.
+- Self-contained and importable
+- Exposes a clean public API
+- Contains internal helpers
+- Defines its own state variables
+- Uses only local variables inside functions
+- Has **no top-level execution** (no code outside functions/classes)
+- Has **no global mutable state**
 
-## 5. Exploration Workflow
+This ensures reusability, testability, determinism, and parallel safety.
 
-1. Define scope in software_description.md.
-2. Implement or refine prototype.py.
-3. Execute harness.py for repeatable verification.
-4. Record run evidence in insights.md.
-5. Record failures in failures.md.
-6. Update verification_summary.md with status and evidence links.
-7. Update requirements_traceability.md with impacted requirement/design docs.
-8. Decide: iterate, pause, or promote.
+## Variable Control Rules
 
-## 6. Promotion Criteria: Playground to Final Design
+**Global Variables**  
+**Forbidden** (except constants in `UPPER_CASE`).  
+No module-level mutable variables, shared caches, or hidden state.
 
-A module is eligible for promotion when:
+**State Variables**  
+Allowed **only inside classes** (e.g., inside `ThoughtPoint`).  
+Must be explicit, observable, and updated only through public methods.
 
-- core invariants are explicit and stable,
-- verification steps are repeatable,
-- results are supported by concrete evidence,
-- requirement and design impacts are clearly mapped,
-- unresolved risks are documented and bounded.
+**Local Variables**  
+Allowed and encouraged.  
+They must remain ephemeral and never escape function scope.
 
-Promotion path:
+**Rationale**: Global mutable state destroys determinism, reproducibility, parallelism, and verifiability.
 
-1. Consolidate verified findings.
-2. Propose requirement/design updates.
-3. Add implementation-grade tests.
-4. Integrate into final design and core project structure.
+## What Each File Must Answer
 
-## 7. Standard Module File Roles
+| File                          | Answers These Questions |
+|-------------------------------|-------------------------|
+| `software_description.md`     | What is this module for? Why does it exist? What are the requirements? What math/formatting/state does it use? What assumptions? |
+| `prototype.py`                | How is the module implemented? What is the public API? What state & local variables does it use? How is determinism preserved? |
+| `harness.py`                  | How do we test this module? What evidence do we collect? How do we verify invariants, determinism, and parallel safety? |
+| `insights.md`                 | What worked well? What surprised us? What did we learn? (Includes Run Record table) |
+| `failures.md`                 | What broke? Why? What did we learn from it? |
+| `updated_requirements.md`     | What requirements changed? Why? What new requirements emerged? |
+| `verification_summary.md`     | Full Verification Capsule: invariants, evidence, status, assumptions, efficiency, parallel safety |
+| `requirements_traceability.md`| Mapping from high-level requirements → low-level → tests → evidence |
 
-- software_description.md: current design intent and boundaries
-- prototype.py: exploratory implementation
-- harness.py: repeatable verification runner
-- verification_summary.md: authoritative verification capsule summary
-- insights.md: run-by-run observations and outcomes
-- failures.md: failed attempts and invalidated assumptions
-- updated_requirements.md: candidate requirement changes
-- requirements_traceability.md: links to requirement/design sources and impacts
+## Verification Capsule
+
+Every module must eventually produce a **Verification Capsule** (`verification_summary.md`) that scientifically answers:
+
+- What the module does and why it exists
+- Key invariants and responsibilities
+- How it was implemented and tested
+- Evidence of correctness and determinism
+- Performance and parallel-safety notes
+- Assumptions and open questions
+
+This capsule is the scientific record of the module.
+
+## Workflow
+
+1. **Design** — Write/update `software_description.md`
+2. **Prototype** — Implement in `prototype.py` (macro-style)
+3. **Test & Verify** — Run `harness.py` and collect evidence
+4. **Record** — Update `insights.md`, `failures.md`, Run Record table
+5. **Refine** — Update requirements and traceability if needed
+6. **Stabilize** — When coherent and verified, promote to `thought_simulator_design/`
+
+## When a Module Graduates
+
+A module leaves the playground when:
+- Requirements feel stable and coherent
+- Prototype behaves correctly and deterministically
+- Harness + tests exist with clear expected outcomes
+- Verification Capsule is substantially complete
+- Major insights and failures are documented
+
+Only then is the polished version moved to the final design folder.
+
+---
+
+**Last Updated**: May 26, 2026  
+**Version**: 0.1
+
+---
