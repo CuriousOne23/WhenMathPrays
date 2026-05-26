@@ -83,16 +83,15 @@ $$
 
 | Parameter              | Object Basins (OBs)                                      | Relational Basins (RBs)                                      |
 |------------------------|-----------------------------------------------------------|----------------------------------------------------------------|
-| Role in TS             | Representational entropy reduction                        | Transformation & structural/predictive entropy modulation      |
-| Entropy Reduction      | Strong / rapid                                            | Minimal / preservation‑focused                                 |
-| $H_\\%$ Behavior           | Primary reduction zone                                    | Mostly preserved                                               |
-| Stability Profile      | High stability; strong attractor behavior                 | Moderate stability; supports routing and coherence propagation |
+| $H_\\%$                | Actively reduced                                          | Preserved (no reduction)                                       |
+| Effect on $H_\\%$      | Strong / rapid reduction                                  | None (0); pure preservation and routing                        |
 | Convergence Behavior   | Fast convergence; TPs settle quickly once inside          | Graded convergence; TPs may pass through or transform          |
 | Entry Behavior         | Sharp entry threshold; strong settling                    | Fuzzy entry filters; graded transitions                        |
 | Capacity               | Tunable depth for identity coherence                      | Tunable channel width for relational flow                      |
 
 > **Note:** All geometric descriptions of OBs and RBs appear only in the Relational Manifold specification.  
-> The TS defines these structures purely in terms of stability, convergence, and entropy‑reduction behavior.  
+> The TS defines these structures purely in terms of convergence and entropy‑related behavior.
+
 
 ## 4. Logging and Observability
 
