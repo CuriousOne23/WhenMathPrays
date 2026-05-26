@@ -201,7 +201,6 @@ The AI Agent must reply using this template:
 **Suggested Next Steps**
 1. ...
 2. ...
-```
 
 ---
 
