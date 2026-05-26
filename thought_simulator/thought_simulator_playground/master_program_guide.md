@@ -81,6 +81,44 @@ They must remain ephemeral and never escape function scope.
 | `verification_summary.md`     | Full Verification Capsule: invariants, evidence, status, assumptions, efficiency, parallel safety |
 | `requirements_traceability.md`| Mapping from high-level requirements → low-level → tests → evidence |
 
+## AI Agent Execution & Reporting Standards
+
+### Test → Requirement Attachment Rules
+
+Every test run must explicitly attach itself to the requirement(s) it verifies. This ensures full end-to-end traceability:
+
+**High-Level Requirement (HLR)**  
+→ **Low-Level Requirement (LLR)**  
+→ **Test Case**  
+→ **Evidence / Artifacts**  
+→ **Verification Capsule**
+
+#### New Required Columns in Run Record Table
+
+| Column       | Meaning                                                                 |
+|--------------|-------------------------------------------------------------------------|
+| HLR Ref      | High-level requirement ID (e.g., `HLR-2`, `HLR-5.1`)                   |
+| LLR Ref      | Low-level requirement ID (e.g., `LLR-2.3`, `LLR-5.1.2`)                |
+| Req Doc      | Markdown file containing the requirement (e.g., `software_description.md`) |
+| Req Section  | Section number inside the MD file (e.g., `§3.2`, `§5.1.4`)             |
+
+#### Updated Run Record Table Format
+
+```markdown
+| Date       | Module         | Command                  | Inputs / Config       | Result | Exit Code | Artifacts      | HLR Ref | LLR Ref | Req Doc                  | Req Section | Notes                          |
+|------------|----------------|--------------------------|-----------------------|--------|-----------|----------------|---------|---------|--------------------------|-------------|--------------------------------|
+| 2026-05-26 | TP Lifecycle   | python harness.py        | deterministic_mode=True | PASS   | 0         | tp_state.json  | HLR-2   | LLR-2.3 | software_description.md  | §3.4.1      | State counter increments correctly |
+
+Rules for the AI AgentEvery test must attach to at least one HLR and one LLR.  
+If a test covers multiple requirements, list them comma-separated (e.g. HLR-2, HLR-3).  
+The AI Agent must resolve requirement locations by reading: software_description.md, updated_requirements.md, and requirements_traceability.md.  
+If a requirement is missing, unclear, or unmapped:  Use HLR-? / LLR-? in the table.  
+Document the gap in insights.md.  
+Propose the missing requirement in updated_requirements.md.
+
+Additional Requirementsharness.py should emit known requirement IDs during test execution.  
+verification_summary.md must reference these HLR/LLR IDs in the Verification Ledger.
+
 ## Verification Capsule
 
 Every module must eventually produce a **Verification Capsule** (`verification_summary.md`) that scientifically answers:
