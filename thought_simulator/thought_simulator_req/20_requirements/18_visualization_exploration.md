@@ -1,4 +1,4 @@
-# 17 Visualization and Exploration
+# 18 Visualization and Exploration
 
 ## 1. Purpose
 Define the requirements for the simulator as an **exploratory vehicle** for thought space — enabling navigation, discovery, mapping, and insight generation within the Relational Manifold.
@@ -63,4 +63,5 @@ Links to:
 
 **Last Updated**: [Insert Date]  
 **Version**: 0.1 (Draft)
+
 

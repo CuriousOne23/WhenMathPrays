@@ -1,4 +1,4 @@
-# 23 Traceability Matrix
+# 24 Traceability Matrix
 
 ## Purpose
 
@@ -15,9 +15,9 @@ This matrix links conceptual intent, TS-centric architecture, and implementation
 
 | Requirement Area | Primary Document | Key Linked Documents | Status |
 |---|---|---|---|
-| Vision and success criteria | [01_vision_and_objectives.md](../00_foundations/01_vision_and_objectives.md) | 02, 03, 04, 10-23 | Active Draft |
+| Vision and success criteria | [01_vision_and_objectives.md](../00_foundations/01_vision_and_objectives.md) | 02, 03, 04, 10-24 | Active Draft |
 | Core philosophy and principles | [02_core_philosophy_and_principles.md](../00_foundations/02_core_philosophy_and_principles.md) | 03, 05, 06, 19, 20, 24-26 | Active Draft |
-| Conceptual requirement base | [03_core_conceptual_requirements.md](../00_foundations/03_core_conceptual_requirements.md) | 04-09, 10-23 | Active Draft |
+| Conceptual requirement base | [03_core_conceptual_requirements.md](../00_foundations/03_core_conceptual_requirements.md) | 04-09, 10-24 | Active Draft |
 | System architecture | [04_system_architecture.md](../10_architecture/04_system_architecture.md) | 05, 06, 07, 09, 10, 13, 16, 21 | Active Draft |
 | Manifold specification (interpretive) | [05_manifold_specification.md](../10_architecture/05_manifold_specification.md) | 03, 04, 06, 07, 08, 10, 19 | Active Draft |
 | Basin behavior and constraints | [06_basins.md](../10_architecture/06_basins.md) | 05, 07, 10, 18, 19 | Active Draft |
@@ -26,17 +26,18 @@ This matrix links conceptual intent, TS-centric architecture, and implementation
 | Data structures | [09_data_structures.md](../10_architecture/09_data_structures.md) | 04, 07, 08, 12, 16 | Active Draft |
 | Interaction model | [10_interaction_model.md](10_interaction_model.md) | 04, 07, 16, 17, 21 | Active Draft |
 | Error and stability requirements | [11_error_and_stability_requirements.md](11_error_and_stability_requirements.md) | 06, 07, 13, 19, 20 | Active Draft |
-| Performance requirements | [12_performance_requirements.md](12_performance_requirements.md) | 09, 15, 18, 21 | Active Draft |
-| Observability requirements | [13_observability_requirements.md](13_observability_requirements.md) | 04, 07, 11, 15, 21, 23 | Active Draft |
+| Performance requirements | [12_performance_requirements.md](12_performance_requirements.md) | 09, 16, 18, 21 | Active Draft |
+| Observability requirements | [13_observability_requirements.md](13_observability_requirements.md) | 04, 07, 11, 16, 21, 23 | Active Draft |
 | Testing and validation | [14_testing_and_validation.md](14_testing_and_validation.md) | 10-13, 18, 19, 21, 23 | Active Draft |
-| Non-functional requirements | [15_non_functional_requirements.md](15_non_functional_requirements.md) | 04, 09, 12, 13, 14 | Active Draft |
-| Interfaces and IO | [16_interfaces_and_io.md](16_interfaces_and_io.md) | 08, 10, 13, 17, 21 | Active Draft |
-| Visualization and exploration | [17_visualization_exploration.md](17_visualization_exploration.md) | 10, 16, 18, 24, 26 | Active Draft |
-| Experiment requirements | [18_experiment_requirements.md](18_experiment_requirements.md) | 06, 12, 14, 17, 19 | Active Draft |
-| Stability requirements | [19_stability_requirements.md](19_stability_requirements.md) | 05, 06, 11, 14, 18 | Active Draft |
-| Risks and assumptions | [20_risks_assumptions.md](20_risks_assumptions.md) | 11, 12, 14, 19, 21 | Active Draft |
-| Program flow | [21_program_flow.md](21_program_flow.md) | 04, 07, 10, 13, 16 | Active Draft |
-| Glossary | [22_glossary.md](22_glossary.md) | 01-21, 24-26 | Active Draft |
+| Security and safety requirements | [16_security_and_safety_requirements.md](16_security_and_safety_requirements.md) | 12, 14, 16, 20, 24 | Active Draft |
+| Non-functional requirements | [16_non_functional_requirements.md](16_non_functional_requirements.md) | 04, 09, 12, 13, 14 | Active Draft |
+| Interfaces and IO | [17_interfaces_and_io.md](17_interfaces_and_io.md) | 08, 10, 13, 17, 21 | Active Draft |
+| Visualization and exploration | [18_visualization_exploration.md](18_visualization_exploration.md) | 10, 16, 18, 24, 26 | Active Draft |
+| Experiment requirements | [19_experiment_requirements.md](19_experiment_requirements.md) | 06, 12, 14, 17, 19 | Active Draft |
+| Stability requirements | [20_stability_requirements.md](20_stability_requirements.md) | 05, 06, 11, 14, 18 | Active Draft |
+| Risks and assumptions | [21_risks_assumptions.md](21_risks_assumptions.md) | 11, 12, 14, 19, 21 | Active Draft |
+| Program flow | [22_program_flow.md](22_program_flow.md) | 04, 07, 10, 13, 16 | Active Draft |
+| Glossary | [23_glossary.md](23_glossary.md) | 01-21, 24-26 | Active Draft |
 | Philosophical context | [24_verb_mind.md](../30_philosophical/24_verb_mind.md) | 02, 03, 05, 17 | Active Draft |
 | Philosophical context | [25_humility_as_relation.md](../30_philosophical/25_humility_as_relation.md) | 02, 05, 19, 20 | Active Draft |
 | Philosophical context | [26_beauty_and_rigor.md](../30_philosophical/26_beauty_and_rigor.md) | 01, 02, 14, 17, 18 | Active Draft |
@@ -57,7 +58,7 @@ The conceptual requirements in [03_core_conceptual_requirements.md](../00_founda
 
 - Vision anchor: [01_vision_and_objectives.md](../00_foundations/01_vision_and_objectives.md)
 - Architectural path: [04_system_architecture.md](../10_architecture/04_system_architecture.md), [07_TS_state_machine.md](../10_architecture/07_TS_state_machine.md)
-- Experience layer: [10_interaction_model.md](10_interaction_model.md), [17_visualization_exploration.md](17_visualization_exploration.md)
+- Experience layer: [10_interaction_model.md](10_interaction_model.md), [18_visualization_exploration.md](18_visualization_exploration.md)
 
 ### Interpretive Manifold
 
@@ -68,8 +69,8 @@ The conceptual requirements in [03_core_conceptual_requirements.md](../00_founda
 ### Stability Under Interaction
 
 - State constraints: [07_TS_state_machine.md](../10_architecture/07_TS_state_machine.md)
-- Runtime controls: [11_error_and_stability_requirements.md](11_error_and_stability_requirements.md), [19_stability_requirements.md](19_stability_requirements.md)
-- Verification path: [14_testing_and_validation.md](14_testing_and_validation.md), [18_experiment_requirements.md](18_experiment_requirements.md)
+- Runtime controls: [11_error_and_stability_requirements.md](11_error_and_stability_requirements.md), [20_stability_requirements.md](20_stability_requirements.md)
+- Verification path: [14_testing_and_validation.md](14_testing_and_validation.md), [19_experiment_requirements.md](19_experiment_requirements.md)
 
 ## Maintenance Rules
 
@@ -80,4 +81,5 @@ The conceptual requirements in [03_core_conceptual_requirements.md](../00_founda
 ---
 
 **Last Updated**: May 25, 2026  
-**Version**: 0.4 (Restructured)
+**Version**: 0.5 (Security insertion and renumbering)
+
