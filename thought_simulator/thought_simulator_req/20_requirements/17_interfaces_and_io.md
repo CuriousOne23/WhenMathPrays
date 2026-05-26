@@ -1,76 +1,147 @@
-# 17 Interfaces and IO
+# 17 Interfaces and I/O Requirements
 
 ## 1. Purpose
-Define all user-facing and system interfaces, including configuration, command-line interface (CLI), logging, visualization triggers, and output formats.
 
-## 2. Configuration Interface
+This document defines the **interfaces, API contracts, data exchange formats, and I/O requirements** for the **Thought Simulator (TS)**.
 
-**IO-01: Configuration**
-- All simulator parameters must be defined in YAML configuration files.
-- Must support multiple named profiles (e.g., `stability_test`, `exploration`, `stress_test`, `inquiry_focused`).
-- Must include validation on load (Pydantic or similar).
-- Key sections: manifold, basins, energy, entropy, completion, visualization, logging.
+It ensures clean, stable, versioned, and observable interaction between the core TS engine and external tools, scripts, observer layers, and human users — while preserving determinism, architectural isolation, and reproducibility.
 
-**IO-02: Command Line Interface (CLI)**
-- Must provide a clean, intuitive top-level CLI.
-- Example usage:
-  ```bash
-  python main.py run --config configs/exploration.yaml --steps 10000 --seed 42 --visualize --output outputs/run_001/
-  ```
-- Required flags: `--config`, `--mode`
-- Optional: `--steps`, `--seed`, `--visualize`, `--headless`, `--debug`
+## 2. Core Interface Principles
 
-## 3. Input Requirements
+* All interfaces are **read-only or command-based** from the core TS engine’s perspective.
+* The external Observer (human or tool) may never modify internal mechanical state during a run.
+* Interfaces must be **deterministic**, **versioned**, and fully traceable.
+* Geometry, visualization, and UI layers are **consumers only**.
+* All I/O must support bitwise reproducibility (same seed + config + snapshot → identical outputs).
 
-- **Initial Thought Input**: Support raw embedding, text prompt (to be embedded), or random initialization.
-- **Manifold Definition**: Allow loading pre-defined manifolds or generating them from config.
-- **Experiment Definitions**: Support loading experiment scripts or parameter sweeps.
+## 3. Configuration Interface
 
-## 4. Output Requirements
+**IO-CFG-01: Configuration Format**  
+- Primary format: YAML with JSON schema validation.
+- Single entry point: `config.yaml` (or `--config <path>` CLI flag).
+- Full parameter discoverability via schema (see 15_non_functional_requirements.md).
 
-**IO-03: Real-time Output**
-- Console summary during simulation (current basin, $H_\\%$, energy, step count, etc.).
-- Progress bar when appropriate.
+**IO-CFG-02: Validation & Immutability**  
+- Strict schema validation on startup.
+- Configuration becomes immutable after initialization (see 16_security_and_safety_requirements.md).
 
-**IO-04: Logging**
-- Structured JSONL logging (one event per line).
-- Must log every major event: basin transitions, splits, merges, entropy changes, completion decisions, fanin/fanout events, amplifier activations, etc.
-- Separate log levels: INFO, DEBUG, TRACE.
+**IO-CFG-03: Safe Defaults**  
+- Sensible, bounded, deterministic defaults when no config is provided.
 
-**IO-05: Final Output**
-- Structured result file (JSON) containing:
-  - Final ThoughtPoint state
-  - Completion type and metadata
-  - Full trajectory summary
-  - Key metrics (total energy used, entropy reduction, basins visited, etc.)
-  - Generated visualizations (if enabled)
+## 4. Command-Line Interface (CLI)
 
-## 5. Visualization Interface
+**IO-CLI-01: Core Commands**  
+- `ts run <experiment>`  
+- `ts resume <snapshot>`  
+- `ts inspect <snapshot>`  
+- `ts validate`  
+- `ts export <snapshot> --format <fmt>`
 
-**IO-06: Visualization Triggers**
-- Must support real-time and post-simulation visualization.
-- Must allow different viewing modes (follow thought, free camera, landscape overview).
-- Must not block the simulation engine (background rendering preferred).
+**IO-CLI-02: Common Flags**  
+- `--deterministic` / `--non-deterministic`  
+- `--log-level minimal|standard|debug-max`  
+- `--max-ticks <N>` / `--max-time <seconds>`  
+- `--seed <value>`  
+- `--headless` (default)  
+- `--json` (machine-readable output mode)
 
-## 6. Export Capabilities
-- Trajectory export (CSV or JSON)
-- Manifold snapshot export
-- Animation export (if visualization enabled)
-- Metrics export for analysis
+**IO-CLI-03: Output Behavior**  
+- Clear categorized errors with exit codes.  
+- Progress indicators in standard mode.  
+- Final summary with key metrics and snapshot location.
 
-## 7. Traceability & Debuggability
-- Every IO operation must be logged.
-- Must support "replay mode" from saved logs or snapshots.
+## 5. Programming / Scripting API
 
-## 8. Traceability
-Links to:
-- [04_system_architecture.md](../10_architecture/04_system_architecture.md) (IO & Visualization Layer)
-- [16_non_functional_requirements.md](./16_non_functional_requirements.md) (Usability & Debuggability)
-- [18_visualization_exploration.md](./18_visualization_exploration.md) (detailed visualization specs)
+**IO-API-01: Python API Contract**  
+- Stable `thoughtsimulator` package.  
+- Main entry point: `ThoughtSimulator` class with methods:  
+  - `run(config, seed=None)`  
+  - `resume(snapshot_path)`  
+  - `inspect(snapshot_path)`  
+  - `get_metrics()`  
+  - `export_data(format='json')`
+
+**IO-API-02: No Hidden Global State**  
+- The API must not rely on hidden global state; all state must be passed explicitly.
+
+**IO-API-03: API Stability**  
+- Public API remains stable across minor versions (see 15_non_functional_requirements.md).
+
+**IO-API-04: Observability Hooks**  
+- Callback/event system for structured events (read-only, no state modification).
+
+## 6. Data Exchange Formats
+
+**IO-DAT-01: Snapshot Format**  
+- Compressed JSON + schema version + integrity hash.  
+- Support incremental/differential snapshots.
+
+**IO-DAT-02: Export Formats**  
+- JSON (default, full fidelity)  
+- CSV (time-series)  
+- Parquet (large-scale analysis)  
+- GraphML (relationship graphs)  
+- Human-readable Markdown summary
+
+**IO-DAT-03: Round-Trippability**  
+- All exported data must be loadable back into analysis tools or the TS without loss of fidelity.
+
+**IO-DAT-04: Log Format**  
+- JSON Lines (structured).  
+- Support rotation and compression.
+
+**IO-DAT-05: Live Metrics Stream**  
+- Live metrics must be streamed in structured, versioned format (JSON Lines / NDJSON).
+
+## 7. Observer Layer Integration
+
+**IO-OBS-01: Manifold Translator Interface**  
+- Core exports raw data (trajectories, entropy fields, basin states).  
+- Manifold layer consumes in separate process/thread.  
+- Zero callbacks into core engine.
+
+**IO-OBS-02: Visualization & UI**  
+- Operate on exported snapshots or live metric streams.  
+- Must not influence simulation timing or state.
+
+## 8. Determinism and Reproducibility
+
+**IO-DET-01: Reproducible I/O**  
+- All outputs (logs, snapshots, exports) must be bitwise identical for identical inputs.
+
+**IO-DET-02: Versioning**  
+- Every interface, schema, and output format must carry explicit version information.
+
+**IO-DET-03: Interface Determinism Tests**  
+- All interfaces must be covered by determinism and reproducibility tests (see 14_testing_and_validation_requirements.md).
+
+## 9. Error Handling and Diagnostics
+
+- Errors categorized (config, runtime, regulator, snapshot, resource, architectural) with standardized formatting.  
+- Failed runs produce partial snapshot + diagnostic log when possible.
+
+## 10. Invariants (Non-Negotiable)
+
+* No external interface may modify core TS state or scheduling during a run.
+* All data exchange must preserve bitwise determinism when `deterministic_mode` is enabled.
+* Observer layers are strictly consumers.
+* Configuration is immutable after startup.
+* All interfaces are versioned and fully documented.
+
+## 11. Success Criteria
+
+* A researcher or external script can fully control, inspect, export, and reproduce simulations via CLI, Python API, and data files without touching core engine code.
+* External tools integrate cleanly using stable, versioned contracts.
+* All I/O is observable, reproducible, and round-trippable.
+* Machine-readable modes support automated pipelines.
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.1 (Draft)
+**Last Updated**: May 26, 2026  
+**Version**: 0.2  
+**Changes from 0.1**:
+- Incorporated all five of Copilot’s refinements (No Hidden Global State, Round-Trippability, Machine-Readable CLI Output, Live Metrics Stream Format, Interface Determinism Tests).
+- Added consistent requirement IDs and improved flow.
+- Strengthened invariants and success criteria.
 
-
+---
