@@ -2,102 +2,114 @@
 
 ## 1. Purpose
 
-This document defines the **performance, scalability, and efficiency requirements** for the **Thought Simulator (TS)**.
+This document defines the **performance, scalability, efficiency, and parallel execution requirements** for the **Thought Simulator (TS)**.
 
-It ensures the simulator can run long-duration, high-complexity thought experiments with many ThoughtPoints (TPs) while remaining practical for research, debugging, and iterative exploration — all without compromising determinism, observability, or stability.
+It ensures the simulator can run long-duration, high-complexity thought experiments with many ThoughtPoints (TPs) while remaining practical, deterministic, and future-proof for acceleration.
 
 ## 2. Core Performance Principles
 
-* Performance is **always subordinate** to determinism, observability, and stability (see 11_error_and_stability_requirements.md).
-* All performance optimizations must be **optional and configurable**.
-* The TS must expose clear, quantitative self-metrics (throughput, memory, regulator overhead, etc.).
-* Geometry / Manifold visualization and heavy logging are **decoupled** from the core simulation engine.
-* Target platforms: Standard consumer/research hardware (laptop → small server). Cloud-scale is a stretch goal.
+* Performance is **always subordinate** to determinism, observability, and stability.
+* All optimizations and parallel features must be **optional and configurable**.
+* The TS must expose clear, quantitative self-metrics.
+* Geometry / Manifold visualization must remain completely decoupled.
+* Core mathematical operations must be designed for high-performance execution from day one.
 
-## 3. Performance Targets (Baseline)
+## 3. Parallel-Friendly Math Structure
 
-**Important clarification**: All TPS and timing targets refer to the **core TS engine** running with standard observability (periodic lightweight snapshots and logging). They explicitly **exclude** full visualization rendering, debug-max logging, and post-processing.
+**PERF-PAR-01: Vectorized, Batch-Oriented Math**  
+All core mathematical operations (entropy calculations, gradients, basin updates, TP interactions, regulator computations) **must** be written in a **vectorized, batch-oriented, side-effect-free** style suitable for:
+- SIMD / vectorized CPU execution
+- Auto-parallelizing libraries
+- GPU kernels
+- JIT-compiled backends (Numba, JAX, PyTorch, Triton, etc.)
+
+**PERF-PAR-02: Deterministic Parallel Semantics**  
+- Parallel execution must produce **bitwise-identical results** to the serial reference implementation when `deterministic_mode` is enabled.
+- Parallelism must use deterministic scheduling and merge semantics.
+
+**PERF-PAR-03: Backend-Agnostic Design**  
+- Core math must avoid Python loops, hidden state, or control-flow patterns that prevent vectorization or JIT compilation.
+- All mathematical primitives must be expressible as **pure functions over arrays/tensors**.
+- The TS must support pluggable optimized math backends without changing simulation semantics.
+
+## 4. Performance Targets (Baseline)
+
+**Important**: All TPS and timing targets refer to the **core TS engine** with standard observability. They explicitly exclude full visualization and debug-max logging.
 
 | Metric                        | Target (Single Thread) | Target (Multi-Thread / Parallel) | Measurement Condition          | Notes |
 |-------------------------------|------------------------|----------------------------------|--------------------------------|-------|
-| Ticks per second (TPS)        | ≥ 10,000               | ≥ 100,000                        | 1,000 active TPs, moderate complexity | Core engine only |
+| Ticks per second (TPS)        | ≥ 10,000               | ≥ 100,000                        | 1,000 active TPs               | Core engine only |
 | Max active TPs (soft limit)   | 10,000                 | 100,000+                         | 32 GB RAM                      | Configurable |
-| Max active TPs (hard limit)   | 50,000                 | 500,000+                         | 64+ GB RAM                     | Enforced safety cap |
-| Memory per TP (average)       | ≤ 2 KB                 | ≤ 2 KB                           | Steady state                   | Including bounded history |
+| Max active TPs (hard limit)   | 50,000                 | 500,000+                         | 64+ GB RAM                     | Enforced |
+| Memory per TP (average)       | ≤ 2 KB                 | ≤ 2 KB                           | Steady state                   | - |
 | Snapshot time (full state)    | ≤ 500 ms               | ≤ 200 ms                         | 10,000 TPs                     | Incremental preferred |
 | Regulator overhead            | ≤ 5% of total cycles   | ≤ 5% of total cycles             | Any load                       | - |
-| Startup + initialization time | ≤ 2 seconds            | ≤ 1 second                       | Default config                 | - |
+| Startup time                  | ≤ 2 seconds            | ≤ 1 second                       | Default config                 | - |
 
-## 4. Determinism and Parallelism
+## 5. Determinism and Parallelism
 
 **P-DET-01: Deterministic Parallel Execution**  
-Parallel execution (when enabled) **must** use deterministic scheduling and merge semantics. Identical runs with the same seed and configuration must produce bitwise-identical results regardless of thread count or scheduling order.
+Parallel execution must use deterministic scheduling and merge semantics. Identical runs with the same seed must be bitwise identical regardless of thread count.
 
 **P-DET-02: Determinism Override**  
-A global `deterministic_mode` flag must disable all parallelism and non-deterministic optimizations.
+Global `deterministic_mode` flag disables all parallelism and non-deterministic optimizations.
 
-## 5. Scalability Requirements
+## 6. Scalability Requirements
 
 **P-SCL-01: Near-Linear Scaling**  
-Core tick loop (routing, entropy calculations, basin transitions) must scale near-linearly up to the soft TP limit.
+Core tick loop must scale near-linearly up to soft TP limit.
 
 **P-SCL-02: Efficient Scheduling**  
-Deterministic fair scheduler (round-robin with optional energy/coherence weighting). Support for parallel execution of independent TP cohorts with deterministic merge.
+Deterministic fair scheduler with support for parallel execution of independent TP cohorts.
 
 **P-SCL-03: Memory Predictability**  
-- Fixed-size structures wherever possible.
-- Configurable history depth per TP.
-- Memory allocation patterns **must avoid fragmentation** that would degrade long-duration runs.
+Fixed-size structures, configurable history depth, avoidance of fragmentation.
 
 **P-SCL-04: Incremental Observability**  
-Support differential/incremental snapshots to keep observability cost low.
+Differential snapshots for low-overhead observability.
 
-## 6. Timing Stability
+## 7. Timing Stability
 
 **P-TIM-01: Tick Duration Variance**  
-Under steady load, tick duration variance must remain within **±10%** of the mean. This prevents jitter that could affect regulator behavior or observer analysis.
+Under steady load, tick duration variance must remain within ±10% of the mean.
 
-## 7. Optimization Levers (All Configurable)
+## 8. Optimization Levers (Configurable)
 
 * Fast Math Mode (approximations + lookup tables, disabled in deterministic_mode)
-* Basin Cache (pre-computed deterministic fields)
-* Intelligent TP Culling (stabilized TPs → graceful early termination with observer notification)
+* Basin Cache
+* Intelligent TP Culling
 * Dynamic Regulator Throttling
-* Visualization / Geometry completely optional
+* Pluggable math backends (see PERF-PAR-01)
 
-## 8. Resource Monitoring & Throttling
+## 9. Resource Monitoring & Throttling
 
-* Real-time metrics: active TP count, memory usage, CPU per subsystem, regulator activation rate.
-* Soft throttling + graceful degradation when approaching limits.
-* Hard limits with clear, traceable termination.
+Real-time metrics and graceful degradation when approaching limits.
 
-## 9. Profiling & Self-Diagnostics
+## 10. Profiling & Self-Diagnostics
 
-* Lightweight built-in profiler with per-subsystem breakdowns.
-* Exportable traces (JSON + compatibility with `cProfile`/perf).
-* Performance regression tests integrated into the validation suite (see 14_testing_and_validation.md).
+Built-in profiler with exportable traces and regression testing.
 
-## 10. Invariants (Non-Negotiable)
+## 11. Invariants (Non-Negotiable)
 
-* No performance setting may alter the **semantic outcome** of a simulation.
-* All optimizations, throttling, and culling decisions must be fully logged with traceability.
+* No performance setting or parallel optimization may alter semantic outcomes.
+* All optimizations, throttling, and culling must be fully logged.
 * Determinism has priority over speed.
+* Core math must remain parallel-friendly and backend-agnostic (PERF-PAR-01).
 
-## 11. Success Criteria
+## 12. Success Criteria
 
 * A 10,000-TP simulation for 10,000 ticks completes in under 10 minutes on a mid-range laptop (single thread, standard observability, full determinism).
+* Parallel mode achieves significant speedup while preserving bitwise determinism.
+* Core math is vectorized and ready for GPU/JIT acceleration without refactoring.
 * Memory usage remains predictable and fragmentation-free over long runs.
-* Tick timing is stable.
-* Developers can reliably diagnose and resolve bottlenecks.
 
 ---
 
 **Last Updated**: May 26, 2026  
-**Version**: 0.2  
-**Changes from 0.1**:
-- Incorporated Copilot’s four architectural refinements (deterministic merge, TPS clarification, memory fragmentation, tick variance).
-- Strengthened language around subordination to determinism/observability.
-- Added dedicated sections for clarity and traceability.
-- Minor tightening of wording for consistency with other requirements documents.
+**Version**: 0.3  
+**Changes from 0.2**:
+- Added new top-level section **3. Parallel-Friendly Math Structure** (PERF-PAR-01/02/03) as the authoritative home for parallelism requirements.
+- Updated invariants and success criteria to reference the new section.
+- Minor tightening of wording for consistency.
 
 ---

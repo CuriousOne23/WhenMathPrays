@@ -121,7 +121,3 @@ It ensures researchers can systematically define, reproduce, compare, evolve, an
 - Improved section flow and clarity while keeping the document concise.
 
 ---
-
-**Ready for your and Copilot’s final review.** This version is now very complete.
-
----
