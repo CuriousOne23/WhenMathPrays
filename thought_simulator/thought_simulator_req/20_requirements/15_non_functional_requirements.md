@@ -1,65 +1,113 @@
-# 16 Non-Functional Requirements
+# 15 Non-Functional Requirements
 
 ## 1. Purpose
-Define the quality attributes, constraints, and operational characteristics that the Thought Manifold Simulator must satisfy beyond its core functional behavior.
 
-## 2. Debuggability & Observability
+This document defines the **non-functional requirements** (quality attributes, constraints, and operational characteristics) for the **Thought Simulator (TS)**.
 
-**NF-01: High Debuggability**
-- Every major component (Manifold, Basins, ThoughtPoint, Dynamics Engine, Completion Logic) must expose rich internal state.
-- All state changes, decisions, and transitions must be traceable.
-- Must support detailed structured logging (JSONL format preferred) with configurable verbosity levels.
+It captures cross-cutting concerns such as maintainability, usability, reliability, debuggability, and long-term evolvability that apply across the entire system — without duplicating the detailed functional, performance, observability, testing, or safety requirements covered elsewhere.
 
-**NF-02: Real-time Inspection**
-- Must allow querying of current state (energy, $H_\\%$, fanin/fanout usage, basin membership, etc.) at any time.
-- Must support probes and breakpoints for interactive debugging.
+## 2. Core Non-Functional Principles
 
-## 3. Reproducibility
+* All non-functional attributes must **support and never compromise** determinism, observability, and strict architectural isolation.
+* The TS is a **research instrument** first — scientific reproducibility, conceptual fidelity, and debuggability take precedence over commercial performance or broad user-friendliness.
+* Non-functional choices must be configurable where practical and fully traceable.
+* Geometry / Manifold visualization and UI layers remain **optional observer extensions**.
 
-**NF-03: Determinism**
-- Given the same configuration, seed, and input, the simulator must produce identical results (within floating-point tolerance).
-- All random processes (noise, perturbations) must be fully seedable.
+## 3. Debuggability & Introspection
 
-**NF-04: Experiment Reproducibility**
-- Must support saving and restoring full simulation states (snapshots).
-- Must support configuration versioning.
+**NF-DBG-01: High Debuggability**  
+- Every major component must expose rich, queryable internal state.
+- All state changes, decisions, transitions, and regulator actions must be traceable via logs, snapshots, and probes.
 
-## 4. Performance & Scalability
+**NF-DBG-02: Real-Time & Post-Mortem Inspection**  
+- Support non-intrusive probes for live or snapshotted state inspection.
+- Configurable pause/resume and breakpoints (only in debug-max or non-deterministic modes).
 
-**NF-05: Simulation Performance**
-- Must run reasonably fast for research experiments (target: thousands of steps per second on standard hardware for typical manifolds).
-- Must support manifolds with 50–200 basins without major slowdown.
+## 4. Reproducibility & Determinism
 
-**NF-06: Scalability**
-- Should support future increases in embedding dimensionality and number of basins.
-- Core engine must be modular enough to allow distributed or GPU-accelerated versions later.
+**NF-REP-01: Bitwise Determinism**  
+- Identical seed + config + starting snapshot must produce bitwise-identical results (logs, snapshots, state counter progression).
 
-## 5. Visualization & Exploration
+**NF-REP-02: Experiment Reproducibility**  
+- Full support for saving/restoring complete simulation states via versioned snapshots.
+- Configuration must be immutable after startup (see 16_security_and_safety_requirements.md).
 
-**NF-07: Exploration Vehicle**
-- Visualization must not significantly slow down the core simulation (separate rendering thread/process recommended).
-- Must support multiple viewing modes: trajectory following, free flight, landscape overview, microscopic inspection.
-- Must be capable of producing high-quality, publication-ready visuals and animations.
+## 5. Performance & Scalability
+
+**NF-PERF-01: Simulation Efficiency**  
+- Core engine target: ≥ 10,000 ticks/second (single thread) with 1,000 active TPs under standard observability (detailed targets in 12_performance_requirements.md).
+
+**NF-PERF-02: Scalability**  
+- Graceful support for 10,000+ active ThoughtPoints on standard research hardware.
+- Architecture must allow future modular extensions (parallelism, GPU, distributed) without breaking determinism.
 
 ## 6. Reliability & Stability
 
-**NF-08: Graceful Degradation**
-- Must handle edge cases (excessive fanout/fanin, energy blow-up, stalled entropy) without crashing.
-- Must log critical instabilities clearly and continue running where possible.
+**NF-REL-01: Graceful Degradation**  
+- Must handle edge cases predictably and always produce a usable final snapshot + diagnostic log on termination.
 
-**NF-09: Invariant Checking**
-- Core invariants (energy bounds, entropy normalization, continuity) must be optionally enforced and monitored.
+**NF-REL-02: Invariant Monitoring**  
+- Core invariants (entropy semantics, state counter monotonicity, layer boundaries) must be optionally enforceable.
 
 ## 7. Usability & Maintainability
 
-**NF-10: Code Quality**
-- Clean, well-documented, modular Python code with type hints.
-- Comprehensive docstrings and inline comments linking back to requirements.
+**NF-USB-01: Code Quality & Structure**  
+- Clean, modular Python code with type hints, comprehensive docstrings, and direct references to requirements.
 
-**NF-11: Configuration**
-- All major parameters must be configurable via YAML files with clear defaults and validation.
+**NF-USB-02: Configuration Discoverability**  
+- All configuration parameters must be discoverable via a single, validated schema file (or CLI command) with clear descriptions and safe defaults.
 
-## 8. Traceability
-Links to:
+**NF-USB-03: Error Taxonomy**  
+- Errors must be consistently categorized (config, runtime, regulator, snapshot, resource, architectural) with standardized formatting and traceable context.
 
+**NF-USB-04: Documentation & Onboarding**  
+- New contributors must be able to run the validation suite and basic experiments quickly.
 
+## 8. API Contract Stability & Extensibility
+
+**NF-API-01: API Contract Stability**  
+- Public APIs and contracts must remain stable across minor version increments and only break on major version releases.
+- Backward compatibility must be preserved where possible.
+
+**NF-API-02: Modularity & Evolvability**  
+- Core engine must remain stable while allowing evolution of basins, regulators, entropy functions, and observer tools.
+
+## 9. Visualization & Exploration Support
+
+**NF-VIS-01: Decoupled Exploration**  
+- Visualization and manifold projection must impose zero impact on core simulation performance or determinism.
+- Support rich export formats for external analysis and publication-quality visuals.
+
+## 10. Testability
+
+**NF-TST-01: High Testability**  
+- The system must be designed for high automated test coverage, including architectural conformance tests (see 14_testing_and_validation_requirements.md).
+
+## 11. Invariants (Non-Negotiable)
+
+* No non-functional feature may compromise determinism or observability.
+* Observer layers (visualization, UI) must remain strictly decoupled from the mechanical core.
+* All quality attributes must be measurable and verifiable through the testing suite.
+* Research reproducibility and conceptual fidelity take precedence.
+
+## 12. Success Criteria
+
+* A researcher can run, debug, inspect, snapshot, resume, and fully reproduce complex simulations with high confidence and minimal friction.
+* The codebase remains understandable, maintainable, and evolvable as the project grows.
+* New experiments and observer tools can be added without modifying core engine code.
+* All non-functional targets are achieved while satisfying the stricter requirements in documents 11–14 and 16+.
+
+---
+
+**Last Updated**: May 26, 2026  
+**Version**: 0.2  
+**Changes from 0.1**:
+- Incorporated Copilot’s three polish refinements (API Contract Stability, Configuration Discoverability, Error Taxonomy).
+- Added dedicated IDs and minor reorganization for clarity and flow.
+- Strengthened success criteria and invariants.
+
+---
+
+**Yes — I fully agree with Copilot.** This version is now polished and ready to commit.
+
+---
