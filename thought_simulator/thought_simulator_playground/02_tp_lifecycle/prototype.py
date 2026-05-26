@@ -1,15 +1,29 @@
-"""Initial ThoughtPoint lifecycle prototype.
+"""ThoughtPoint lifecycle macro module.
 
-This is exploratory and intentionally small, but runnable.
+Pure importable module used by harness.py for deterministic verification.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from hashlib import sha256
 from typing import Iterable
 import uuid
 
 import numpy as np
+
+
+DETERMINISTIC_NAMESPACE = uuid.UUID("d2d76ea9-3388-4b66-8a9f-0f66eb57fbb3")
+
+
+def _stable_float_tuple(values: Iterable[float]) -> tuple[str, ...]:
+	return tuple(f"{float(v):.12f}" for v in values)
+
+
+def _deterministic_tp_id(parts: Iterable[str]) -> str:
+	key = "|".join(parts)
+	digest = sha256(key.encode("utf-8")).hexdigest()
+	return str(uuid.uuid5(DETERMINISTIC_NAMESPACE, digest))
 
 
 @dataclass(slots=True)
@@ -23,12 +37,16 @@ class EntropyComponents:
 	beta: float = 1.0
 	gamma: float = 1.0
 
+	def __post_init__(self) -> None:
+		self.h_rep = max(0.0, float(self.h_rep))
+		self.h_pred = max(0.0, float(self.h_pred))
+		self.h_struct = max(0.0, float(self.h_struct))
+
 	@property
 	def total(self) -> float:
 		return self.alpha * self.h_rep + self.beta * self.h_pred + self.gamma * self.h_struct
 
 	def apply_delta(self, d_rep: float = 0.0, d_pred: float = 0.0, d_struct: float = 0.0) -> None:
-		# Keep entropy components non-negative to avoid invalid states.
 		self.h_rep = max(0.0, self.h_rep + d_rep)
 		self.h_pred = max(0.0, self.h_pred + d_pred)
 		self.h_struct = max(0.0, self.h_struct + d_struct)
@@ -43,6 +61,17 @@ class EntropyComponents:
 			gamma=self.gamma,
 		)
 
+	def as_dict(self) -> dict[str, float]:
+		return {
+			"h_rep": self.h_rep,
+			"h_pred": self.h_pred,
+			"h_struct": self.h_struct,
+			"alpha": self.alpha,
+			"beta": self.beta,
+			"gamma": self.gamma,
+			"total": self.total,
+		}
+
 
 @dataclass(slots=True)
 class HistoryEntry:
@@ -54,6 +83,17 @@ class HistoryEntry:
 	tags: tuple[str, ...]
 	note: str = ""
 
+	def as_dict(self) -> dict[str, object]:
+		return {
+			"tick": self.tick,
+			"action": self.action,
+			"basin_id": self.basin_id,
+			"entropy_total": self.entropy_total,
+			"state_counter": self.state_counter,
+			"tags": list(self.tags),
+			"note": self.note,
+		}
+
 
 @dataclass(slots=True)
 class ProvenanceTree:
@@ -61,6 +101,14 @@ class ProvenanceTree:
 	parent_ids: list[str] = field(default_factory=list)
 	split_children: list[str] = field(default_factory=list)
 	merge_sources: list[str] = field(default_factory=list)
+
+	def as_dict(self) -> dict[str, object]:
+		return {
+			"created_from": self.created_from,
+			"parent_ids": list(self.parent_ids),
+			"split_children": list(self.split_children),
+			"merge_sources": list(self.merge_sources),
+		}
 
 
 @dataclass(slots=True)
@@ -91,14 +139,42 @@ class ThoughtPoint:
 		embedding: Iterable[float],
 		created_at_tick: int,
 		energy: float = 1.0,
+		deterministic_mode: bool = True,
+		deterministic_nonce: int = 0,
+		tp_id: str | None = None,
 	) -> ThoughtPoint:
+		embedding_arr = np.asarray(list(embedding), dtype=float)
+		if tp_id is None:
+			if deterministic_mode:
+				tp_id = _deterministic_tp_id(
+					[
+						basin_id,
+						str(created_at_tick),
+						f"{energy:.12f}",
+						str(deterministic_nonce),
+						*_stable_float_tuple(embedding_arr.tolist()),
+						*_stable_float_tuple(
+							[
+								entropy.h_rep,
+								entropy.h_pred,
+								entropy.h_struct,
+								entropy.alpha,
+								entropy.beta,
+								entropy.gamma,
+							]
+						),
+					]
+				)
+			else:
+				tp_id = str(uuid.uuid4())
 		return cls(
-			tp_id=str(uuid.uuid4()),
+			tp_id=tp_id,
 			current_basin_id=basin_id,
-			entropy=entropy,
-			embedding=np.asarray(list(embedding), dtype=float),
+			entropy=entropy.copy(),
+			embedding=embedding_arr,
 			created_at_tick=created_at_tick,
 			energy=energy,
+			deterministic_mode=deterministic_mode,
 		)
 
 	def move_to_basin(self, basin_id: str, tick: int, note: str = "") -> None:
@@ -128,19 +204,25 @@ class ThoughtPoint:
 	def split(self, tick: int, child_count: int = 2) -> list[ThoughtPoint]:
 		if child_count < 2:
 			raise ValueError("child_count must be >= 2")
-
 		children: list[ThoughtPoint] = []
-		for i in range(child_count):
+		for idx in range(child_count):
+			child_id = (
+				_deterministic_tp_id(["split", self.tp_id, str(tick), str(idx), str(child_count)])
+				if self.deterministic_mode
+				else None
+			)
 			child = ThoughtPoint.new(
 				basin_id=self.current_basin_id,
-				entropy=self.entropy.copy(),
-				embedding=self.embedding.copy(),
+				entropy=self.entropy,
+				embedding=self.embedding,
 				created_at_tick=tick,
 				energy=self.energy / child_count,
+				deterministic_mode=self.deterministic_mode,
+				deterministic_nonce=idx,
+				tp_id=child_id,
 			)
-			child.provenance.created_from = "split"
-			child.provenance.parent_ids = [self.tp_id]
-			child.add_tag(f"split_child_{i}", tick=tick)
+			child.provenance = ProvenanceTree(created_from="split", parent_ids=[self.tp_id])
+			child.add_tag(f"split_child_{idx}", tick=tick)
 			children.append(child)
 
 		self.provenance.split_children.extend([c.tp_id for c in children])
@@ -148,9 +230,18 @@ class ThoughtPoint:
 		return children
 
 	@classmethod
-	def merge(cls, sources: list[ThoughtPoint], tick: int, basin_id: str | None = None) -> ThoughtPoint:
+	def merge(
+		cls,
+		sources: list[ThoughtPoint],
+		tick: int,
+		basin_id: str | None = None,
+		deterministic_mode: bool = True,
+	) -> ThoughtPoint:
 		if not sources:
 			raise ValueError("sources cannot be empty")
+		dim = sources[0].embedding.shape
+		if any(tp.embedding.shape != dim for tp in sources):
+			raise ValueError("all source embeddings must have the same shape")
 
 		merged_basin = basin_id or sources[0].current_basin_id
 		merged_entropy = EntropyComponents(
@@ -164,31 +255,56 @@ class ThoughtPoint:
 		merged_embedding = np.mean(np.stack([tp.embedding for tp in sources]), axis=0)
 		merged_energy = float(np.sum([tp.energy for tp in sources]))
 
+		source_ids = sorted(tp.tp_id for tp in sources)
+		merged_id = (
+			_deterministic_tp_id(["merge", str(tick), merged_basin, *source_ids])
+			if deterministic_mode
+			else None
+		)
+
 		merged = cls.new(
 			basin_id=merged_basin,
 			entropy=merged_entropy,
 			embedding=merged_embedding,
 			created_at_tick=tick,
 			energy=merged_energy,
+			deterministic_mode=deterministic_mode,
+			tp_id=merged_id,
 		)
-		merged.provenance.created_from = "merge"
-		merged.provenance.merge_sources = [tp.tp_id for tp in sources]
+		merged.provenance = ProvenanceTree(created_from="merge", merge_sources=source_ids)
 		merged.add_tag("merged", tick=tick)
 		return merged
 
 	def _bump_state(self, tick: int, action: str, note: str = "") -> None:
 		self.state_counter += 1
 		self.last_updated_tick = tick
-		entry = HistoryEntry(
-			tick=tick,
-			action=action,
-			basin_id=self.current_basin_id,
-			entropy_total=self.entropy.total,
-			state_counter=self.state_counter,
-			tags=tuple(sorted(self.tags)),
-			note=note,
+		self.history.append(
+			HistoryEntry(
+				tick=tick,
+				action=action,
+				basin_id=self.current_basin_id,
+				entropy_total=self.entropy.total,
+				state_counter=self.state_counter,
+				tags=tuple(sorted(self.tags)),
+				note=note,
+			)
 		)
-		self.history.append(entry)
+
+	def to_dict(self) -> dict[str, object]:
+		return {
+			"tp_id": self.tp_id,
+			"current_basin_id": self.current_basin_id,
+			"entropy": self.entropy.as_dict(),
+			"embedding": self.embedding.tolist(),
+			"created_at_tick": self.created_at_tick,
+			"energy": self.energy,
+			"deterministic_mode": self.deterministic_mode,
+			"state_counter": self.state_counter,
+			"last_updated_tick": self.last_updated_tick,
+			"tags": sorted(self.tags),
+			"provenance": self.provenance.as_dict(),
+			"history": [entry.as_dict() for entry in self.history],
+		}
 
 	def __repr__(self) -> str:
 		return (
@@ -203,51 +319,9 @@ class ThoughtPoint:
 		)
 
 
-def _print_tp_state(tp: ThoughtPoint) -> None:
-	print(tp)
-	print(
-		f"  tick={tp.last_updated_tick} "
-		f"H(rep,pred,struct)=({tp.entropy.h_rep:.3f}, {tp.entropy.h_pred:.3f}, {tp.entropy.h_struct:.3f})"
-	)
-	print(f"  history_entries={len(tp.history)}")
-
-
-if __name__ == "__main__":
-	print("== TP Lifecycle Prototype Harness ==")
-
-	tp_a = ThoughtPoint.new(
-		basin_id="OB_identity",
-		entropy=EntropyComponents(h_rep=1.2, h_pred=0.9, h_struct=0.8),
-		embedding=[0.10, 0.20, 0.40],
-		created_at_tick=0,
-		energy=1.0,
-	)
-	tp_b = ThoughtPoint.new(
-		basin_id="RB_relation",
-		entropy=EntropyComponents(h_rep=1.0, h_pred=1.1, h_struct=0.9),
-		embedding=[0.30, 0.10, 0.50],
-		created_at_tick=0,
-		energy=0.9,
-	)
-
-	tp_a.add_tag("candidate", tick=1)
-	tp_a.move_to_basin("RB_relation", tick=1, note="OB -> RB transition")
-	tp_a.update_entropy(tick=2, d_rep=-0.2, d_pred=-0.1, d_struct=-0.05)
-
-	tp_b.add_tag("inquiry", tick=1)
-	tp_b.move_to_basin("OB_resolution", tick=2, note="RB -> OB transition")
-	tp_b.update_entropy(tick=3, d_rep=-0.15, d_pred=-0.08, d_struct=-0.12)
-
-	tp_children = tp_a.split(tick=3, child_count=2)
-	tp_c = tp_children[0]
-	tp_c.add_tag("focused", tick=4)
-	tp_c.move_to_basin("OB_resolution", tick=4, note="child convergence")
-	tp_c.update_entropy(tick=5, d_rep=-0.25, d_pred=-0.20, d_struct=-0.10)
-
-	for tp in (tp_a, tp_b, tp_c):
-		_print_tp_state(tp)
-
-	merged = ThoughtPoint.merge([tp_b, tp_c], tick=6, basin_id="OB_summary")
-	_print_tp_state(merged)
-
-	print("\nHarness complete.")
+__all__ = [
+	"EntropyComponents",
+	"HistoryEntry",
+	"ProvenanceTree",
+	"ThoughtPoint",
+]
