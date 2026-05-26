@@ -1,63 +1,105 @@
 # 20 Stability Requirements
 
 ## 1. Purpose
-Document the key risks, foundational assumptions, and external dependencies of the Thought Manifold Simulator project.
 
-## 2. Key Assumptions
+This document defines the **long-term stability, numerical stability, behavioral boundedness, and anti-degeneration requirements** for the **Thought Simulator (TS)**.
 
-**A-01: Conceptual Assumptions**
-- The Relational Manifold model as described in *"The Architecture of Dynamic Thought"* is a valid and useful top-down framework for modeling thought.
-- Thought can be meaningfully represented as navigation on a geometric energy landscape with Object Basins and Relational Basins.
-- Normalized entropy $H_\\%$ is a reasonable proxy for processing completion.
+It ensures simulations remain well-behaved over extended durations and large scales without collapsing, exploding, stagnating, or drifting, while working in harmony with performance and determinism.
 
-**A-02: Implementation Assumptions**
-- A 2D/3D projection of the manifold will be sufficient for meaningful exploration and insight generation.
-- Python-based numerical simulation will be performant enough for research-scale experiments.
-- The chosen dynamics (energy, damping, splitting/merging) can be tuned to produce both stable and unstable behaviors as intended.
+## 2. Core Stability Principles
 
-## 3. Risks
+* Stability is a **first-class invariant** that complements determinism, observability, and safety (see 11_error_and_stability_requirements.md and 16_security_and_safety_requirements.md).
+* The TS must prevent both catastrophic failure and silent degeneration.
+* Stability mechanisms (primarily regulators) must be observable, testable, and fail-safe.
+* Long-term stability applies to both single long runs and large experiment batches (see 19_experiment_requirements.md).
 
-**R-01: High Priority Risks**
-- The dynamics may prove too chaotic or difficult to tune, making the manifold hard to explore meaningfully.
-- Instabilities may dominate to the point where stable, useful thought-like behavior is rare.
-- Visualization may not convey the intended "geography of thought" effectively.
-- Fanin/fanout + energy interactions may create unresolvable numerical instability.
+## 3. Behavioral Stability Requirements
 
-**R-02: Medium Priority Risks**
-- Performance may degrade with larger manifolds or higher embedding dimensions.
-- The top-down model may show limited explanatory power compared to bottom-up systems.
-- Reproducibility issues due to floating-point sensitivity.
+**STB-BEH-01: Entropy Boundedness**  
+- Total and per-TP entropy must remain bounded within configurable safe ranges.
+- Object Basins must exhibit non-increasing entropy except under explicitly allowed regulator actions.
 
-**R-03: Mitigation Strategies**
-- Start with minimal viable core engine and validate stability early.
-- Build strong logging and debugging tools from Day 1.
-- Include "safe mode" configurations with conservative parameters.
+**STB-BEH-02: Anti-Explosion**  
+- Prevent runaway growth in TP count, entropy, or activity.
 
-## 4. Dependencies
+**STB-BEH-03: Anti-Stagnation**  
+- Prevent permanent zero-activity states unless intentionally designed as terminal attractors.
 
-**D-01: Technical Dependencies**
-- Python 3.10+
-- NumPy / SciPy (numerical computation)
-- Matplotlib or Plotly (visualization)
-- PyYAML + Pydantic (configuration)
-- Optional: PyTorch (for future embedding tools or learned components)
+**STB-BEH-04: Anti-Fragmentation**  
+- Prevent excessive basin fragmentation or history bloat that would degrade performance or observability.
 
-**D-02: Knowledge Dependencies**
-- *"The Architecture of Dynamic Thought"* and related WhenMathPrays documents.
-- Basic dynamical systems and energy-based modeling concepts.
+**STB-BEH-05: Trajectory Coherence**  
+- ThoughtPoint trajectories must not exhibit unbounded chaotic divergence unless intentionally modeled.
 
-## 5. Success Criteria Despite Risks
-- Even if full exploration vehicle is challenging, a working, debuggable core engine that demonstrates key manifold behaviors will still be valuable.
-- Clear documentation of discovered instabilities and limitations will itself be a contribution to Relational Physics.
+## 4. Numerical Stability Requirements
 
-## 6. Traceability
-Links to:
-- All previous requirements documents
-- [16_non_functional_requirements.md](./16_non_functional_requirements.md)
+**STB-NUM-01: Floating-Point Discipline**  
+- All calculations must use consistent, reproducible floating-point semantics.
+
+**STB-NUM-02: Accumulation Error Control**  
+- Long-term accumulation of floating-point errors must be monitored and mitigated where semantically valid.
+
+**STB-NUM-03: Time-Step Stability**  
+- Fixed time-step integration must remain stable across the full parameter range.
+
+**STB-NUM-04: Parallel Math Compatibility**  
+- Numerical stability requirements apply equally to the parallel-friendly, vectorized math structure defined in [12_performance_requirements.md](../12_performance_requirements.md) (PERF-PAR-01/02/03). Deterministic parallel execution must preserve numerical stability.
+
+## 5. Regulator-Driven Stability (Cross-ref 11)
+
+**STB-REG-01: Active Regulation**  
+- Regulators must monitor key indicators and intervene proportionally.
+
+**STB-REG-02: Fail-Safe Regulation**  
+- Regulator internal failure → safe halt with final snapshot (see 16).
+
+**STB-REG-03: Tunable Thresholds**  
+- Thresholds configurable per experiment but immutable after startup.
+
+## 6. Long-Run Stability Requirements
+
+**STB-LONG-01: Extended Runs**  
+- 10,000+ TP simulations must remain stable for 8+ hours / 1,000,000+ ticks without degradation.
+
+**STB-LONG-02: Resource Stability**  
+- No unbounded memory growth, increasing tick variance, or progressive slowdown.
+
+**STB-LONG-03: State Counter Health**  
+- Global state counter must remain strictly monotonic with no practical overflow risk.
+
+## 7. Monitoring and Reporting
+
+**STB-MON-01: Stability Metrics**  
+- Real-time and snapshot-exposed metrics for entropy trends, regulator activity, fragmentation, tick variance, and system health.
+
+**STB-MON-02: Stability Reports**  
+- On-demand or end-of-run reports (Markdown + JSON).
+
+## 8. Testing and Validation (Cross-ref 14)
+
+Dedicated long-run stability tests, pathological injection tests, and regression benchmarks.
+
+## 9. Invariants (Non-Negotiable)
+
+* The simulation must never enter unbounded, divergent, or permanently stagnant states without explicit intervention.
+* Stability mechanisms must not compromise determinism in `deterministic_mode`.
+* All stability interventions must be fully logged and traceable.
+* Numerical and behavioral stability must hold under both serial and parallel execution (see 12_performance_requirements.md).
+
+## 10. Success Criteria
+
+* A 10,000-TP simulation running for 100,000+ ticks exhibits bounded entropy, controlled regulator activity, stable timing, and no resource degradation.
+* Pathological conditions are automatically mitigated or safely terminated with full diagnostics.
+* Researchers can run long-duration or large-scale experiments with confidence in well-behaved, reproducible results.
+* Stability metrics integrate naturally into experiment analysis and visualization workflows.
 
 ---
 
-**Last Updated**: [Insert Date]  
-**Version**: 0.1 (Draft)
+**Last Updated**: May 26, 2026  
+**Version**: 0.2  
+**Changes from 0.1**:
+- Added **STB-NUM-04: Parallel Math Compatibility** with direct link to 12.
+- Added reference in Invariants section.
+- Minor wording improvements for consistency across the 20_ series.
 
-
+---
