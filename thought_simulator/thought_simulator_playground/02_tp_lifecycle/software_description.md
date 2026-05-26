@@ -1,43 +1,44 @@
 # 02_tp_lifecycle / software_description.md
 
 ## 1. Purpose
+This module explores and prototypes the **ThoughtPoint (TP) lifecycle** — the atomic, mobile unit of thought in the Thought Manifold Simulator.
 
-This document is a **living, exploratory design sketch** for the ThoughtPoint (TP) lifecycle — the core mobile entity in the Thought Simulator.
+A ThoughtPoint carries identity, entropy, provenance, and relational state as it moves, splits, merges, and evolves.
 
-It captures our current best understanding of what a ThoughtPoint is, how it evolves, and what responsibilities it holds. This is **not** the final design — it will evolve through prototyping, testing, and insights.
+## 2. Scope & Alignment with Master Guide
+- `prototype.py` must be a **pure macro-style module** (self-contained, importable, no top-level execution, deterministic when `deterministic_mode=True`).
+- `harness.py` is the **sole execution entrypoint** — it imports the macro, runs verification scenarios, collects evidence, and attaches to requirements.
+- All work follows `master_program_guide.md` (philosophy, variable control, macro rules, reporting standards, Verification Capsule process).
 
-## 2. Core Responsibilities
+## 3. Core Responsibilities (from GRP)
+- Carry and metabolize unified entropy (H_rep, H_pred, H_struct)
+- Maintain strict identity, monotonic state_counter, and observable provenance/history
+- Support movement between basins
+- Enable safe split/merge with lineage tracking
+- Provide rich observability (history, metrics, state dumps)
+- Remain lightweight, deterministic, and parallel-safe
 
-A ThoughtPoint represents **one active thread of thought** moving through the relational landscape.
+## 4. Key Invariants
+- Unique `tp_id` + strictly monotonic `state_counter`
+- Entropy components stay non-negative
+- Provenance tree is immutable after creation events
+- No TP can be in two basins simultaneously
+- All public operations are deterministic when `deterministic_mode=True`
+- History is append-only (bounded in future iterations)
 
-It must:
-- Carry and update its own **unified entropy** state
-- Maintain **identity / provenance** history
-- Support **movement** between basins (entry/exit logic)
-- Enable **split / merge** operations with proper lineage
-- Provide rich observability (state counter, history, metrics)
-- Remain lightweight and parallel-friendly
+## 5. Formal Requirement Pointers
+High-level requirements live in:
+- `thought_simulator_req/10_architecture/` (Manifold, TP, Basins)
+- `thought_simulator_req/20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
-## 3. Key Invariants
+Traceability will be maintained in `requirements_traceability.md`.
 
-* Every ThoughtPoint must have a **unique TP ID** and a **strictly monotonic State Counter**.
-* Unified entropy can only decrease (or stay stable) inside Object Basins except under explicit regulator intervention.
-* Provenance (creation, splits, merges, basin history) must be preserved and observable.
-* A ThoughtPoint must never exist in an inconsistent state (e.g., in two basins at once).
-* All operations on a TP must be deterministic and reproducible when `deterministic_mode` is enabled.
-
-## 4. Tentative Data Structure (Current Thinking)
-
+## 6. Public Macro API (prototype.py)
 ```python
-class ThoughtPoint:
-    tp_id: str                    # Unique identifier
-    state_counter: int            # Strictly monotonic, increments on change
-    current_basin_id: str
-    entropy: EntropyComponents    # H_rep, H_pred, H_struct (and total)
-    embedding: np.ndarray         # Feature vector for similarity/routing
-    history: list[HistoryEntry]   # Bounded or configurable depth
-    provenance: ProvenanceTree    # Creation, splits, merges
-    tags: set[str]                # For routing, regulators, filtering
-    energy: float                 # Optional priority/coherence signal
-    created_at_tick: int
-    last_updated_tick: int
+ThoughtPoint.new(basin_id, entropy, embedding, created_at_tick, energy=1.0)
+tp.move_to_basin(basin_id, tick, note="")
+tp.update_entropy(tick, d_rep=0, d_pred=0, d_struct=0)
+tp.add_tag(tag, tick)
+tp.remove_tag(tag, tick)
+tp.split(tick, child_count=2) -> list[ThoughtPoint]
+ThoughtPoint.merge(sources: list[ThoughtPoint], tick, basin_id=None) -> ThoughtPoint
