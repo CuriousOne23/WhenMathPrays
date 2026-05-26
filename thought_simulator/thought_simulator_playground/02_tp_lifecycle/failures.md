@@ -4,17 +4,17 @@
 
 | Timestamp | Command | Status | Detail |
 |---|---|---|---|
-| 2026-05-26 | `python prototype.py` | PASS | No runtime exceptions. Harness completed successfully. |
+| 2026-05-26 | python harness.py | PASS | Deterministic verification suite completed. 3/3 scenarios passed. Artifact generated: tp_lifecycle_harness_artifact.json. |
 
 ## Failed Attempts
 
-- None recorded yet in this module.
+- No failed harness attempts in this iteration.
 
 ## Invalidated Assumptions
 
-- None yet.
+- None in this run.
 
 ## Lessons Learned
 
-- Capturing run status in-repo is necessary even when execution succeeds.
-- A PASS record should include command, date, and a one-line behavior summary.
+- Requirement IDs must be printed during harness execution to keep test-to-requirement attachment explicit.
+- Deterministic mode should include deterministic TP identity generation, not only deterministic state transitions.
