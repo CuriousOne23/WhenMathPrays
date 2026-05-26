@@ -1,16 +1,21 @@
 # Insights
 
-## Observations
+## Run Record (Standard)
 
-- Observation 1
-- Observation 2
+Use one row per execution attempt.
 
-## Patterns
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | Notes |
+|---|---|---|---|---|---|---|---|
+| 2026-05-26 | 02_tp_lifecycle | python prototype.py | default harness | PASS | 0 | terminal output only | Created 2-3 ThoughtPoints, moved basins, updated entropy, added tags, split/merge, printed state. |
 
-- Pattern 1
-- Pattern 2
+## What worked well
 
-## Candidate Decisions
+- 
 
-- Decision candidate 1
-- Decision candidate 2
+## What felt awkward or missing
+
+- 
+
+## Open questions for next iteration
+
+- 

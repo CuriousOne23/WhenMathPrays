@@ -1,16 +1,21 @@
 # Insights
 
-## Observations
+## Run Record (Standard)
 
-- Observation 1
-- Observation 2
+Use one row per execution attempt.
 
-## Patterns
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | Notes |
+|---|---|---|---|---|---|---|---|
+| YYYY-MM-DD | 08_event_log_prototypes | python prototype.py | seed/config notes | PASS/FAIL | n/a | file paths or none | short run summary |
 
-- Pattern 1
-- Pattern 2
+## What worked well
 
-## Candidate Decisions
+- 
 
-- Decision candidate 1
-- Decision candidate 2
+## What felt awkward or missing
+
+- 
+
+## Open questions for next iteration
+
+- 
