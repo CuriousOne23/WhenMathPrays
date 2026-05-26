@@ -66,7 +66,7 @@ It ensures that the relational manifold and all visualization tools serve purely
 - Pan, zoom, time scrubbing, filtering by TP/basin/entropy, highlighting of trajectories and events.
 
 **VIS-EXP-02: Real-Time Streaming**  
-- Support live visualization via structured metric streams (see 17).
+- Support live visualization via structured metric streams ([see 17](17_interfaces_and_io_requirements.md)).
 
 **VIS-EXP-03: Analysis Overlays**  
 - Entropy heatmaps, coherence overlays, trajectory history with fade, basin attraction strength.
