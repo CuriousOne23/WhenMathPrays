@@ -131,9 +131,3 @@ It ensures the simulator is robust against misuse, resource exhaustion, data cor
 - Strengthened success criteria accordingly.
 
 ---
-
-**Yes — I fully agree.**  
-
-It is **much** better to catch and specify these edge cases in the requirements now than to discover them as subtle bugs during implementation or long-running experiments. This disciplined approach is exactly why the three-way workflow (you + Copilot + me) is so effective.
-
----
