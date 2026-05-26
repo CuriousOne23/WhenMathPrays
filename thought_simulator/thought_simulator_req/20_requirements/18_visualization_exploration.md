@@ -35,7 +35,7 @@ It ensures that the relational manifold and all visualization tools serve purely
 
 **VIS-DAT-02: Required Data Streams**  
 - ThoughtPoint trajectories  
-- Entropy components (\( H_{rep} \), \( H_{pred} \), \( H_{struct} \))  
+- Entropy components ($H_{rep}$, $H_{pred}$,  $H_{struct}$)  
 - Basin membership and transitions  
 - Regulator activation events  
 - Global metrics and coherence signals
