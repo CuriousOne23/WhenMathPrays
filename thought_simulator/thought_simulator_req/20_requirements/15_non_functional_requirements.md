@@ -4,91 +4,89 @@
 
 This document defines the **non-functional requirements** (quality attributes, constraints, and operational characteristics) for the **Thought Simulator (TS)**.
 
-It captures cross-cutting concerns such as maintainability, usability, reliability, debuggability, and long-term evolvability that apply across the entire system — without duplicating the detailed functional, performance, observability, testing, or safety requirements covered elsewhere.
+It captures cross-cutting concerns such as maintainability, usability, reliability, debuggability, and long-term evolvability that apply across the entire system.
 
 ## 2. Core Non-Functional Principles
 
 * All non-functional attributes must **support and never compromise** determinism, observability, and strict architectural isolation.
-* The TS is a **research instrument** first — scientific reproducibility, conceptual fidelity, and debuggability take precedence over commercial performance or broad user-friendliness.
+* The TS is a **research instrument** first — scientific reproducibility, conceptual fidelity, and debuggability take precedence.
 * Non-functional choices must be configurable where practical and fully traceable.
 * Geometry / Manifold visualization and UI layers remain **optional observer extensions**.
 
 ## 3. Debuggability & Introspection
 
 **NF-DBG-01: High Debuggability**  
-- Every major component must expose rich, queryable internal state.
-- All state changes, decisions, transitions, and regulator actions must be traceable via logs, snapshots, and probes.
+- Every major component must expose rich, queryable internal state.  
+- All state changes, decisions, and regulator actions must be traceable.
 
 **NF-DBG-02: Real-Time & Post-Mortem Inspection**  
-- Support non-intrusive probes for live or snapshotted state inspection.
-- Configurable pause/resume and breakpoints (only in debug-max or non-deterministic modes).
+- Support non-intrusive probes and configurable pause/resume (debug-max mode only).
 
 ## 4. Reproducibility & Determinism
 
 **NF-REP-01: Bitwise Determinism**  
-- Identical seed + config + starting snapshot must produce bitwise-identical results (logs, snapshots, state counter progression).
+- Identical seed + config + starting snapshot must produce bitwise-identical results.
 
 **NF-REP-02: Experiment Reproducibility**  
-- Full support for saving/restoring complete simulation states via versioned snapshots.
-- Configuration must be immutable after startup (see 16_security_and_safety_requirements.md).
+- Full support for versioned snapshots and immutable configuration after startup.
 
 ## 5. Performance & Scalability
 
 **NF-PERF-01: Simulation Efficiency**  
-- Core engine target: ≥ 10,000 ticks/second (single thread) with 1,000 active TPs under standard observability (detailed targets in 12_performance_requirements.md).
+- Core engine target: ≥ 10,000 ticks/second (single thread) with 1,000 active TPs under standard observability (detailed targets in [12_performance_requirements.md](../12_performance_requirements.md)).
 
 **NF-PERF-02: Scalability**  
-- Graceful support for 10,000+ active ThoughtPoints on standard research hardware.
-- Architecture must allow future modular extensions (parallelism, GPU, distributed) without breaking determinism.
+- Graceful support for 10,000+ active ThoughtPoints on standard hardware.
+
+**NF-PERF-03: Parallel-Friendly Math**  
+- Core mathematical operations must follow the parallel-friendly, vectorized, and backend-agnostic requirements defined in [12_performance_requirements.md](../12_performance_requirements.md) (PERF-PAR-01/02/03). This ensures future CPU/SIMD/GPU acceleration without refactoring.
 
 ## 6. Reliability & Stability
 
 **NF-REL-01: Graceful Degradation**  
-- Must handle edge cases predictably and always produce a usable final snapshot + diagnostic log on termination.
+- Must handle edge cases predictably and always produce a usable final snapshot + diagnostic log.
 
 **NF-REL-02: Invariant Monitoring**  
-- Core invariants (entropy semantics, state counter monotonicity, layer boundaries) must be optionally enforceable.
+- Core invariants must be optionally enforceable.
 
 ## 7. Usability & Maintainability
 
 **NF-USB-01: Code Quality & Structure**  
-- Clean, modular Python code with type hints, comprehensive docstrings, and direct references to requirements.
+- Clean, modular Python code with type hints and direct references to requirements.
 
 **NF-USB-02: Configuration Discoverability**  
-- All configuration parameters must be discoverable via a single, validated schema file (or CLI command) with clear descriptions and safe defaults.
+- All parameters discoverable via a single validated schema with safe defaults.
 
 **NF-USB-03: Error Taxonomy**  
-- Errors must be consistently categorized (config, runtime, regulator, snapshot, resource, architectural) with standardized formatting and traceable context.
+- Errors consistently categorized with standardized formatting.
 
 **NF-USB-04: Documentation & Onboarding**  
-- New contributors must be able to run the validation suite and basic experiments quickly.
+- New contributors must be able to run the validation suite quickly.
 
 ## 8. API Contract Stability & Extensibility
 
 **NF-API-01: API Contract Stability**  
-- Public APIs and contracts must remain stable across minor version increments and only break on major version releases.
-- Backward compatibility must be preserved where possible.
+- Public APIs remain stable across minor versions.
 
 **NF-API-02: Modularity & Evolvability**  
-- Core engine must remain stable while allowing evolution of basins, regulators, entropy functions, and observer tools.
+- Core engine stable while allowing evolution of basins, regulators, and observer tools.
 
 ## 9. Visualization & Exploration Support
 
 **NF-VIS-01: Decoupled Exploration**  
-- Visualization and manifold projection must impose zero impact on core simulation performance or determinism.
-- Support rich export formats for external analysis and publication-quality visuals.
+- Visualization must impose zero impact on core simulation performance or determinism.
 
 ## 10. Testability
 
 **NF-TST-01: High Testability**  
-- The system must be designed for high automated test coverage, including architectural conformance tests (see 14_testing_and_validation_requirements.md).
+- Designed for high automated test coverage, including architectural conformance tests (see 14).
 
 ## 11. Invariants (Non-Negotiable)
 
 * No non-functional feature may compromise determinism or observability.
-* Observer layers (visualization, UI) must remain strictly decoupled from the mechanical core.
-* All quality attributes must be measurable and verifiable through the testing suite.
-* Research reproducibility and conceptual fidelity take precedence.
+* Observer layers must remain strictly decoupled from the mechanical core.
+* All quality attributes must be measurable and verifiable.
+* Core math must be parallel-friendly per 12_performance_requirements.md.
 
 ## 12. Success Criteria
 
@@ -100,14 +98,10 @@ It captures cross-cutting concerns such as maintainability, usability, reliabili
 ---
 
 **Last Updated**: May 26, 2026  
-**Version**: 0.2  
-**Changes from 0.1**:
-- Incorporated Copilot’s three polish refinements (API Contract Stability, Configuration Discoverability, Error Taxonomy).
-- Added dedicated IDs and minor reorganization for clarity and flow.
-- Strengthened success criteria and invariants.
-
----
-
-**Yes — I fully agree with Copilot.** This version is now polished and ready to commit.
+**Version**: 0.3  
+**Changes from 0.2**:
+- Added **NF-PERF-03: Parallel-Friendly Math** with direct link to the authoritative definition in 12.
+- Added one-sentence reference in Invariants section.
+- Minor tightening for consistency.
 
 ---
