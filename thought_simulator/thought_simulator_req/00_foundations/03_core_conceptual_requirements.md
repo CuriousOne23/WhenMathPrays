@@ -79,19 +79,20 @@ $$
 
 ## 3. OB vs RB Parameter Comparison
 
-**TS-Internal Parameters**
+**TS‑Internal Parameters (Non‑Geometric)**
 
-| Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
-|----------------------------|----------------------------------------------|--------------------------------------------------|
-| Role in TS                 | Representational entropy reduction | Transformation & structural/predictive entropy reduction |
-| Entropy Reduction          | Strong / rapid                               | Minimal / preservation-focused                   |
-| $H_{\\%}$ Behavior         | Primary reduction zone                       | Mostly preserved                                 |
+| Parameter              | Object Basins (OBs)                                      | Relational Basins (RBs)                                      |
+|------------------------|-----------------------------------------------------------|----------------------------------------------------------------|
+| Role in TS             | Representational entropy reduction                        | Transformation & structural/predictive entropy modulation      |
+| Entropy Reduction      | Strong / rapid                                            | Minimal / preservation‑focused                                 |
+| $H_\\%$ Behavior           | Primary reduction zone                                    | Mostly preserved                                               |
+| Stability Profile      | High stability; strong attractor behavior                 | Moderate stability; supports routing and coherence propagation |
+| Convergence Behavior   | Fast convergence; TPs settle quickly once inside          | Graded convergence; TPs may pass through or transform          |
+| Entry Behavior         | Sharp entry threshold; strong settling                    | Fuzzy entry filters; graded transitions                        |
+| Capacity               | Tunable depth for identity coherence                      | Tunable channel width for relational flow                      |
 
-**Manifold Projection Parameters (Interpretive Only)**
-
-| Parameter                  | Object Basins (OBs)                          | Relational Basins (RBs)                          |
-|----------------------------|----------------------------------------------|--------------------------------------------------|
-| Appearance                 | Deep minima (high positive curvature)        | Ridge-like or near-flat                          |
+> **Note:** All geometric descriptions of OBs and RBs appear only in the Relational Manifold specification.  
+> The TS defines these structures purely in terms of stability, convergence, and entropy‑reduction behavior.                        |
 
 ## 4. Logging and Observability
 
