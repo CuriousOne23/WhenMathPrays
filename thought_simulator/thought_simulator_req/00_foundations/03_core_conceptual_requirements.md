@@ -92,7 +92,7 @@ $$
 | Capacity               | Tunable depth for identity coherence                      | Tunable channel width for relational flow                      |
 
 > **Note:** All geometric descriptions of OBs and RBs appear only in the Relational Manifold specification.  
-> The TS defines these structures purely in terms of stability, convergence, and entropy‑reduction behavior.                        |
+> The TS defines these structures purely in terms of stability, convergence, and entropy‑reduction behavior.  
 
 ## 4. Logging and Observability
 
