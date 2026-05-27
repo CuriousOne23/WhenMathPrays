@@ -63,6 +63,38 @@ If cited playground evidence changes materially after promotion:
 - update traceability/evidence references
 - record the change in the appropriate delta/capsule files
 
+## Module Format Coherence and Exception Policy
+
+To keep the playground coherent and scalable, all numbered module folders under `30_thought_simulator_playground/` should follow a common verification-capsule structure and naming pattern.
+
+Coherence baseline for module folders:
+
+- `software_description.md`
+- `prototype.py`
+- `harness.py`
+- `verification_capsule.md`
+- `requirements_delta.md`
+- `artifacts/`
+
+Why this coherence is required:
+
+- consistent onboarding for contributors and external adopters
+- consistent verification evidence and traceability across modules
+- predictable promotion path from exploration to design release artifacts
+- reduced process drift between subsystem teams and module owners
+
+Exception policy for `30.10_math_prototypes/`:
+
+- math prototypes may use a lighter documentation burden while still keeping the same file/folder names where practical
+- early mathematical exploration may not immediately impact canonical requirements or design contracts
+- when there is no requirement/design impact yet, `requirements_delta.md` may remain concise but should still record that status explicitly
+
+Why the exception exists:
+
+- math research often starts as hypothesis exploration before subsystem contract implications are known
+- forcing full design-level delta detail too early increases noise and slows research iteration
+- preserving naming compatibility still allows smooth promotion when math findings mature into design-relevant evidence
+
 ## Directory Map
 
 - 30.10_math_prototypes/ - entropy, stability, and math experiments

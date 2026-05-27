@@ -1,28 +1,47 @@
-# Software Description
+# 30.30_basin_prototypes / software_description.md
 
-## Purpose
+## 1. Purpose
 
-Describe the specific objective for this prototype module.
+This module explores basin behavior prototypes for the Thought Simulator and establishes a verification-capsule-ready structure for future basin-specific implementation and validation.
 
-## Core Responsibilities
+## 2. Scope
 
-- Responsibility 1
-- Responsibility 2
-- Responsibility 3
+- prototype basin state and transition semantics
+- define expected basin invariants for later enforcement
+- prepare deterministic verification workflow through `harness.py`
+- align module artifacts with the canonical playground capsule structure
 
-## Key Invariants
+## 3. Core Responsibilities
 
-- Invariant 1
-- Invariant 2
-- Invariant 3
+- model candidate basin behavior contracts before design promotion
+- define basin entry/exit and processing assumptions for validation
+- identify requirement-impact deltas produced by basin behavior decisions
 
-## Data Structures / Interfaces (tentative)
+## 4. Key Invariants (Current Baseline)
 
-- Structure or interface 1
-- Structure or interface 2
+- basin behavior must be deterministic when deterministic mode is expected
+- basin state changes must be observable and loggable for replay/audit
+- basin prototype outputs must be compatible with canonical artifact storage under `artifacts/`
 
-## Open Questions
+## 5. Current Implementation Status
 
-- Question 1
-- Question 2
-- Question 3
+- `prototype.py` is currently a scaffold (no basin logic implemented yet)
+- `harness.py` is currently a template entrypoint (no validation scenarios implemented yet)
+- verification status remains `NOT_STARTED` until executable scenarios and evidence are added
+
+## 6. Verification Structure
+
+Canonical module files:
+
+- `software_description.md`
+- `prototype.py`
+- `harness.py`
+- `verification_capsule.md`
+- `requirements_delta.md`
+- `artifacts/`
+
+## 7. Open Questions
+
+- Which basin state machine primitives should be standardized first?
+- What minimum deterministic scenario set is required for first PASS verification?
+- Which requirement documents should receive the first basin-specific deltas?

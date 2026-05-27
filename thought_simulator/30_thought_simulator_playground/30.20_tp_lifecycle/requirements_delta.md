@@ -52,6 +52,7 @@ It replaces the legacy `updated_requirements.md` report while preserving its con
 
 - Content from the legacy `updated_requirements.md` has been preserved here.
 - Any future deltas should be appended here rather than reintroducing the deleted legacy file.
+- Legacy filename references are retained as historical migration markers only and are not active canonical files.
 
 ## Change Integration Log
 
