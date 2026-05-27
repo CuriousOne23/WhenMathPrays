@@ -15,21 +15,23 @@ Required capsule files per module:
 - software_description.md
 - prototype.py
 - harness.py
-- verification_summary.md
-- insights.md
-- failures.md
-- updated_requirements.md
-- requirements_traceability.md
+- verification_capsule.md
+- requirements_delta.md
+- artifacts/
+
+Shared playground vocabulary:
+
+- verification_glossary.md
 
 ## Workflow
 
 1. Define scope in software_description.md.
 2. Draft and evolve prototype.py.
 3. Run harness.py for repeatable verification.
-4. Record run evidence in insights.md (command, result, exit code, artifacts, notes).
-5. Record failures and invalidated assumptions in failures.md.
-6. Update verification_summary.md with current status and supporting evidence.
-7. Update requirements_traceability.md with requirement/design links.
+4. Record run evidence in verification_capsule.md (command, result, exit code, artifacts, notes).
+5. Record failures and invalidated assumptions in verification_capsule.md and requirements_delta.md.
+6. Update verification_capsule.md with current status, evidence, and IO fields exercised.
+7. Update requirements_delta.md with requirement/design links and change log entries.
 8. Decide whether the module is ready to move from exploration to final design.
 
 ## Promotion Path: Exploration -> Final Design
@@ -56,3 +58,4 @@ Promotion sequence:
 - 09_experiment_runner/ - experiment orchestration prototypes
 - shared/ - shared helpers for prototype work
 - master_program_guide.md - unified process guide and state-control policy
+- verification_glossary.md - shared verification vocabulary
