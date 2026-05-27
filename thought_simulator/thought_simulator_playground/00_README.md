@@ -21,7 +21,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- verification_glossary.md
+- thought_simulator_playground/verification_glossary.md
 
 ## Workflow
 
@@ -58,4 +58,4 @@ Promotion sequence:
 - 09_experiment_runner/ - experiment orchestration prototypes
 - shared/ - shared helpers for prototype work
 - master_program_guide.md - unified process guide and state-control policy
-- verification_glossary.md - shared verification vocabulary
+- thought_simulator_playground/verification_glossary.md - shared verification vocabulary
