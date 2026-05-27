@@ -1,6 +1,10 @@
 # 30.20_tp_lifecycle / software_description.md
 
 ## 1. Purpose
+The purpose of the TP is to record the thought processing it undergoes.
+
+The canonical system requirements for the TP are defined in `20.30_tp_requirements.md`.
+
 This module explores and prototypes the **ThoughtPoint (TP) lifecycle** — the atomic, mobile unit of thought in the Thought Manifold Simulator.
 
 A ThoughtPoint carries identity, entropy, provenance, and relational state as it moves, splits, merges, and evolves.
