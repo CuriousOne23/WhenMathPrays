@@ -31,7 +31,7 @@ High-level requirements live in:
 - `thought_simulator_req/10_architecture/` (Manifold, TP, Basins)
 - `thought_simulator_req/20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
-Traceability will be maintained in `requirements_traceability.md`.
+Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../verification_glossary.md`.
 
 ## 6. Public Macro API (prototype.py)
 ```python
@@ -41,6 +41,7 @@ ThoughtPoint.new(
 	embedding,
 	created_at_tick,
 	energy=1.0,
+	created_from="seed",
 	deterministic_mode=True,
 	deterministic_nonce=0,
 	tp_id=None,
@@ -140,3 +141,20 @@ Any non-Python consumer should ingest this payload as schema-validated JSON and 
 	- Keep prior schema support for at least one module iteration cycle after introducing a new version.
 - Inter-program expectation:
 	- External programs must preserve required fields exactly and ignore unknown optional fields.
+
+### 7.7 Verification Structure and Artifact Layout
+
+- Canonical verification report: `verification_capsule.md`
+- Requirement evolution log: `requirements_delta.md`
+- Canonical glossary: `../verification_glossary.md`
+- Artifact directory: `artifacts/`
+
+Required artifact expectations:
+
+- `artifacts/tp_state.json` for the current canonical deterministic run output
+- `artifacts/determinism_run2.json` and `artifacts/determinism_run3.json` for reproducibility comparisons
+- `artifacts/failure_artifacts.json` only when a run fails and a failure payload exists
+
+The verification capsule must migrate content from the legacy run-record, summary, and failure files without losing information.
+
+The requirements delta file must preserve the prior requirement-change log and add any migration-related corrections.

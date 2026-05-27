@@ -33,12 +33,12 @@ Every module follows this exact layout:
 ├── software_description.md          # Tentative design sketch
 ├── prototype.py                     # Macro-style exploratory implementation
 ├── harness.py                       # Test / verification runner
-├── insights.md                      # Run Record + learnings
-├── failures.md                      # What broke and why
-├── updated_requirements.md          # Requirement evolution
-├── verification_summary.md          # Full Verification Capsule
-└── requirements_traceability.md     # HLR → LLR → Test → Evidence
+├── verification_capsule.md          # Canonical verification report and migrated history
+├── requirements_delta.md            # Requirement evolution and implementer feedback
+└── artifacts/                       # Run artifacts, snapshots, and reproducibility evidence
 ```
+
+At the playground root, `verification_glossary.md` defines the canonical vocabulary shared by all modules.
 
 ---
 
@@ -193,11 +193,9 @@ Examples:
 | `software_description.md` | What is this module for? Why does it exist? What are the requirements? What math/formatting/state does it use? What assumptions? |
 | `prototype.py` | How is the module implemented? What is the public API? What state & local variables does it use? How is determinism preserved? |
 | `harness.py` | How do we test this module? What evidence do we collect? How do we verify invariants, determinism, and parallel safety? |
-| `insights.md` | What worked well? What surprised us? What did we learn? (Includes Run Record table) |
-| `failures.md` | What broke? Why? What did we learn from it? |
-| `updated_requirements.md` | What requirements changed? Why? What new requirements emerged? |
-| `verification_summary.md` | Full Verification Capsule: invariants, evidence, status, assumptions, efficiency, parallel safety |
-| `requirements_traceability.md` | Mapping from high-level requirements → low-level → tests → evidence |
+| `verification_capsule.md` | Full Verification Capsule: migrated run records, evidence, failures, traceability, and architectural evaluation |
+| `requirements_delta.md` | What requirements changed? Why? What new requirements emerged? |
+| `verification_glossary.md` | Canonical shared vocabulary for scenario, artifact, deterministic_mode, provenance, and verification terms |
 
 ---
 
@@ -211,8 +209,9 @@ The AI Agent must read:
 
 - `software_description.md`  
 - `master_program_guide.md`  
-- `insights.md`  
-- `updated_requirements.md`  
+- `verification_capsule.md`  
+- `requirements_delta.md`  
+- `verification_glossary.md`  
 
 This ensures context, history, and requirement evolution are understood.
 
@@ -241,9 +240,9 @@ The AI Agent must reply using this template:
 **Exit Code:** 0 / n  
 
 **Run Record Update:**
-| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |
-|------|--------|---------|------------------|--------|-----------|-----------|---------|---------|---------|-------------|-------|
-| YYYY-MM-DD | ... | ... | ... | ... | ... | ... | HLR-2 | LLR-2.3 | software_description.md | §3.4.1 | ... |
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
+|------|--------|---------|------------------|--------|-----------|-----------|---------|---------|---------|-------------|---------------------|------------------------|-------|
+| YYYY-MM-DD | ... | ... | ... | ... | ... | ... | HLR-2 | LLR-2.3 | software_description.md | §3.4.1 | ... | ... | ... |
 
 **Key Observations**
 - ...
@@ -287,16 +286,16 @@ This ensures full traceability:
 - If multiple requirements apply, list them comma-separated  
 - If requirement is missing or unclear:  
   - Use `HLR-?` / `LLR-?`  
-  - Document the gap in `insights.md`  
-  - Propose requirement in `updated_requirements.md`  
+  - Document the gap in `verification_capsule.md` and `requirements_delta.md`  
 - `harness.py` should emit requirement IDs during execution  
-- `verification_summary.md` must reference these IDs in the Verification Ledger  
+- `verification_capsule.md` must reference these IDs in the Verification Ledger  
+- `verification_capsule.md` must record IO fields exercised and negative-path coverage  
 
 ---
 
 # Verification Capsule
 
-Every module must eventually produce a **Verification Capsule** (`verification_summary.md`) that scientifically answers:
+Every module must eventually produce a **Verification Capsule** (`verification_capsule.md`) that scientifically answers:
 
 - What the module does and why it exists  
 - Key invariants and responsibilities  
@@ -305,6 +304,9 @@ Every module must eventually produce a **Verification Capsule** (`verification_s
 - Performance and parallel-safety notes  
 - Assumptions and open questions  
 - Requirement IDs referenced in the Verification Ledger  
+- IO fields exercised and negative-path coverage status  
+- Links to artifact files in `artifacts/`  
+- Architectural evaluation and structural recommendations  
 
 This capsule is the **scientific record** of the module.
 
@@ -315,9 +317,9 @@ This capsule is the **scientific record** of the module.
 1. **Design** — Write/update `software_description.md`  
 2. **Prototype** — Implement in `prototype.py` (macro-style)  
 3. **Test & Verify** — Run `harness.py` and collect evidence  
-4. **Attach Requirements** — Update Run Record with HLR/LLR references  
-5. **Record** — Update `insights.md`, `failures.md`, Run Record table  
-6. **Refine** — Update requirements and traceability if needed  
+4. **Attach Requirements** — Update run records with HLR/LLR references and IO fields exercised  
+5. **Record** — Update `verification_capsule.md` and `requirements_delta.md`  
+6. **Refine** — Update requirements, glossary usage, and traceability if needed  
 7. **Stabilize** — When coherent and verified, promote to `thought_simulator_design/`  
 
 ---
@@ -332,11 +334,11 @@ A module iteration is considered done only when all gates below are satisfied.
 - Harness is the sole execution entrypoint for verification evidence.
 - Deterministic rerun check completed (at least 2 consecutive reruns with matching key identities/counters when deterministic mode is enabled).
 - IO contract section in `software_description.md` is current and complete.
-- Run Record row is added/updated with HLR and LLR attachment fields.
-- Verification Ledger is updated with scenario-level evidence.
-- Requirements traceability is updated for changed behavior.
-- Failure review completed (`failures.md` updated with failures or explicit no-failure status).
-- Evidence artifacts produced and referenced by path.
+- Run Record row is added/updated with HLR, LLR, IO fields, and negative-path coverage fields.
+- Verification Capsule is updated with scenario-level evidence and migration history.
+- Requirements delta is updated for changed behavior.
+- Failure review is captured in `verification_capsule.md` and `requirements_delta.md`.
+- Evidence artifacts are produced in `artifacts/` and referenced by path.
 - Open questions and assumptions recorded (or explicitly marked none).
 
 ## Minimum Evidence Bundle
@@ -344,8 +346,9 @@ A module iteration is considered done only when all gates below are satisfied.
 - Terminal run output summary
 - Artifact file(s)
 - Updated run record row
-- Updated verification ledger row(s)
-- Updated traceability mapping
+- Updated verification capsule row(s)
+- Updated requirements delta row(s)
+- Updated glossary references if new terms are introduced
 
 ## Promotion Gate
 
@@ -361,14 +364,14 @@ A module leaves the playground when:
 - Prototype behaves correctly and deterministically  
 - Harness + tests exist with clear expected outcomes  
 - Verification Capsule is substantially complete  
-- Requirements Traceability Matrix is complete  
+- Requirements delta and glossary are complete  
 - Major insights and failures are documented  
 
 Only then is the polished version moved to the final design folder.
 
 ---
 
-**Last Updated**: May 26, 2026  
-**Version**: 0.4
+**Last Updated**: May 27, 2026  
+**Version**: 0.5
 
 ---

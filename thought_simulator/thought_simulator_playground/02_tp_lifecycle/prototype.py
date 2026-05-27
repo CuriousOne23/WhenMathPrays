@@ -139,6 +139,7 @@ class ThoughtPoint:
 		embedding: Iterable[float],
 		created_at_tick: int,
 		energy: float = 1.0,
+		created_from: str = "seed",
 		deterministic_mode: bool = True,
 		deterministic_nonce: int = 0,
 		tp_id: str | None = None,
@@ -175,6 +176,7 @@ class ThoughtPoint:
 			created_at_tick=created_at_tick,
 			energy=energy,
 			deterministic_mode=deterministic_mode,
+			provenance=ProvenanceTree(created_from=created_from),
 		)
 
 	def move_to_basin(self, basin_id: str, tick: int, note: str = "") -> None:
@@ -217,11 +219,12 @@ class ThoughtPoint:
 				embedding=self.embedding,
 				created_at_tick=tick,
 				energy=self.energy / child_count,
+				created_from="split",
 				deterministic_mode=self.deterministic_mode,
 				deterministic_nonce=idx,
 				tp_id=child_id,
 			)
-			child.provenance = ProvenanceTree(created_from="split", parent_ids=[self.tp_id])
+			child.provenance.parent_ids = [self.tp_id]
 			child.add_tag(f"split_child_{idx}", tick=tick)
 			children.append(child)
 
@@ -268,10 +271,11 @@ class ThoughtPoint:
 			embedding=merged_embedding,
 			created_at_tick=tick,
 			energy=merged_energy,
+			created_from="merge",
 			deterministic_mode=deterministic_mode,
 			tp_id=merged_id,
 		)
-		merged.provenance = ProvenanceTree(created_from="merge", merge_sources=source_ids)
+		merged.provenance.merge_sources = source_ids
 		merged.add_tag("merged", tick=tick)
 		return merged
 
