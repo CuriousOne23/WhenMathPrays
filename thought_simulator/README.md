@@ -13,15 +13,15 @@ Requirements are organized under [10_thought_simulator_req/](10_thought_simulato
 
 ## Core Reading Path
 
-1. [01_vision_and_objectives.md](10_thought_simulator_req/00_foundations/01_vision_and_objectives.md)
-2. [02_core_philosophy_and_principles.md](10_thought_simulator_req/00_foundations/02_core_philosophy_and_principles.md)
-3. [03_core_conceptual_requirements.md](10_thought_simulator_req/00_foundations/03_core_conceptual_requirements.md)
-4. [04_system_architecture.md](10_thought_simulator_req/10_architecture/04_system_architecture.md)
-5. [05_manifold_specification.md](10_thought_simulator_req/10_architecture/05_manifold_specification.md)
-6. [06_basins.md](10_thought_simulator_req/10_architecture/06_basins.md)
-7. [07_TS_state_machine.md](10_thought_simulator_req/10_architecture/07_TS_state_machine.md)
-8. [08_TS_data_model.md](10_thought_simulator_req/10_architecture/08_TS_data_model.md)
-9. [09_data_structures.md](10_thought_simulator_req/10_architecture/09_data_structures.md)
+1. [00.10_vision_and_objectives.md](10_thought_simulator_req/00_foundations/00.10_vision_and_objectives.md)
+2. [00.20_core_philosophy_and_principles.md](10_thought_simulator_req/00_foundations/00.20_core_philosophy_and_principles.md)
+3. [00.30_core_conceptual_requirements.md](10_thought_simulator_req/00_foundations/00.30_core_conceptual_requirements.md)
+4. [10.10_system_architecture.md](10_thought_simulator_req/10_architecture/10.10_system_architecture.md)
+5. [10.20_manifold_specification.md](10_thought_simulator_req/10_architecture/10.20_manifold_specification.md)
+6. [10.30_basins.md](10_thought_simulator_req/10_architecture/10.30_basins.md)
+7. [10.40_TS_state_machine.md](10_thought_simulator_req/10_architecture/10.40_TS_state_machine.md)
+8. [10.50_TS_data_model.md](10_thought_simulator_req/10_architecture/10.50_TS_data_model.md)
+9. [10.60_data_structures.md](10_thought_simulator_req/10_architecture/10.60_data_structures.md)
 
 ## Directional Notes
 
@@ -31,25 +31,25 @@ Requirements are organized under [10_thought_simulator_req/](10_thought_simulato
 
 ## Traceability
 
-Use [24_traceability_matrix.md](10_thought_simulator_req/20_requirements/24_traceability_matrix.md) as the mapping source across foundational concepts, architecture artifacts, and implementation-facing requirements.
+Use [20.160_traceability_matrix.md](10_thought_simulator_req/20_requirements/20.160_traceability_matrix.md) as the mapping source across foundational concepts, architecture artifacts, and implementation-facing requirements.
 
 ## Requirements (20_requirements)
 
-10. [10_interaction_model.md](10_thought_simulator_req/20_requirements/10_interaction_model.md)
-11. [11_error_and_stability_requirements.md](10_thought_simulator_req/20_requirements/11_error_and_stability_requirements.md)
-12. [12_performance_requirements.md](10_thought_simulator_req/20_requirements/12_performance_requirements.md)
-13. [13_observability_requirements.md](10_thought_simulator_req/20_requirements/13_observability_requirements.md)
-14. [14_testing_and_validation.md](10_thought_simulator_req/20_requirements/14_testing_and_validation.md)
-15. [15_non_functional_requirements.md](10_thought_simulator_req/20_requirements/15_non_functional_requirements.md)
-16. [16_security_and_safety_requirements.md](10_thought_simulator_req/20_requirements/16_security_and_safety_requirements.md)
-17. [17_interfaces_and_io.md](10_thought_simulator_req/20_requirements/17_interfaces_and_io.md)
-18. [18_visualization_exploration.md](10_thought_simulator_req/20_requirements/18_visualization_exploration.md)
-19. [19_experiment_requirements.md](10_thought_simulator_req/20_requirements/19_experiment_requirements.md)
-20. [20_stability_requirements.md](10_thought_simulator_req/20_requirements/20_stability_requirements.md)
-21. [21_risks_assumptions.md](10_thought_simulator_req/20_requirements/21_risks_assumptions.md)
-22. [22_program_flow.md](10_thought_simulator_req/20_requirements/22_program_flow.md)
-23. [23_glossary.md](10_thought_simulator_req/20_requirements/23_glossary.md)
-24. [24_traceability_matrix.md](10_thought_simulator_req/20_requirements/24_traceability_matrix.md)
+10. [20.10_interaction_model.md](10_thought_simulator_req/20_requirements/20.10_interaction_model.md)
+11. [20.20_error_and_stability_requirements.md](10_thought_simulator_req/20_requirements/20.20_error_and_stability_requirements.md)
+12. [20.40_performance_requirements.md](10_thought_simulator_req/20_requirements/20.40_performance_requirements.md)
+13. [20.50_observability_requirements.md](10_thought_simulator_req/20_requirements/20.50_observability_requirements.md)
+14. [20.60_testing_and_validation.md](10_thought_simulator_req/20_requirements/20.60_testing_and_validation.md)
+15. [20.70_non_functional_requirements.md](10_thought_simulator_req/20_requirements/20.70_non_functional_requirements.md)
+16. [20.80_security_and_safety_requirements.md](10_thought_simulator_req/20_requirements/20.80_security_and_safety_requirements.md)
+17. [20.90_interfaces_and_io.md](10_thought_simulator_req/20_requirements/20.90_interfaces_and_io.md)
+18. [20.100_visualization_exploration.md](10_thought_simulator_req/20_requirements/20.100_visualization_exploration.md)
+19. [20.110_experiment_requirements.md](10_thought_simulator_req/20_requirements/20.110_experiment_requirements.md)
+20. [20.120_stability_requirements.md](10_thought_simulator_req/20_requirements/20.120_stability_requirements.md)
+21. [20.130_risks_assumptions.md](10_thought_simulator_req/20_requirements/20.130_risks_assumptions.md)
+22. [20.140_program_flow.md](10_thought_simulator_req/20_requirements/20.140_program_flow.md)
+23. [20.150_glossary.md](10_thought_simulator_req/20_requirements/20.150_glossary.md)
+24. [20.160_traceability_matrix.md](10_thought_simulator_req/20_requirements/20.160_traceability_matrix.md)
 
 ## Design Documents
 
@@ -59,6 +59,7 @@ Implementation design specifications are maintained under [20_thought_simulator_
 
 **Last Updated**: May 25, 2026  
 **Version**: 0.4 (Restructured)
+
 
 
 
