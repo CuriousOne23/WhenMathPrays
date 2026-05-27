@@ -70,6 +70,62 @@ This ensures reusability, testability, determinism, and parallel safety.
 
 ---
 
+# IO Variable and Function Contract Standard
+
+Every module must define a formal IO contract in its `software_description.md` for `prototype.py`.
+
+## Required Coverage
+
+The IO contract must explicitly define:
+
+- inbound variables (inputs), including type, constraints, and purpose
+- outbound variables (outputs), including type, constraints, and consumer expectations
+- variable identity semantics (what each key state variable means)
+- formatting and serialization rules for cross-program interoperability
+- applicability to other programs (who can produce/consume the data)
+
+## Minimum Required Attributes per IO Variable
+
+Each IO variable entry must include:
+
+- variable name
+- direction (`input` or `output`)
+- type
+- required constraints (range, non-empty, shape, determinism expectations)
+- function role (what it does in the lifecycle)
+- interoperability notes (how external programs must treat it)
+
+## Function-Level IO Definition
+
+For each public API function in `prototype.py`, document:
+
+- function name
+- required input variables and optional input variables
+- output variables and side effects
+- deterministic behavior conditions
+- failure/validation behavior for invalid inputs
+
+## Formatting Rules for Inter-Program Exchange
+
+- Primary interchange format is JSON-compatible dictionary structures.
+- Numeric vectors must serialize as plain lists of numbers.
+- No consumer may depend on internal Python-only object identity.
+- Preserve canonical identity fields (`tp_id`, `state_counter`, provenance IDs) without transformation.
+- If schema evolves, add versioning or backward-compatible optional fields.
+
+## Inbound vs Outbound Function Semantics
+
+- Inbound variables control state transition intent (create, move, update, split, merge).
+- Outbound variables provide verifiable state evidence (object state, history, provenance, counters).
+- Harness and external tools must treat outbound data as read-only evidence.
+- Any adapter that transforms outbound data must be lossless for required identity fields.
+
+## Traceability Requirement
+
+The module Run Record and Verification Ledger must reference which IO contract fields were exercised by each test scenario when applicable.
+
+---
+
 # Variable Control Rules
 
 ## Global Variables
@@ -266,6 +322,37 @@ This capsule is the **scientific record** of the module.
 
 ---
 
+# Definition of Done (Structured Programming Gates)
+
+A module iteration is considered done only when all gates below are satisfied.
+
+## Required Gates
+
+- Prototype remains macro-style and importable (no top-level execution).
+- Harness is the sole execution entrypoint for verification evidence.
+- Deterministic rerun check completed (at least 2 consecutive reruns with matching key identities/counters when deterministic mode is enabled).
+- IO contract section in `software_description.md` is current and complete.
+- Run Record row is added/updated with HLR and LLR attachment fields.
+- Verification Ledger is updated with scenario-level evidence.
+- Requirements traceability is updated for changed behavior.
+- Failure review completed (`failures.md` updated with failures or explicit no-failure status).
+- Evidence artifacts produced and referenced by path.
+- Open questions and assumptions recorded (or explicitly marked none).
+
+## Minimum Evidence Bundle
+
+- Terminal run output summary
+- Artifact file(s)
+- Updated run record row
+- Updated verification ledger row(s)
+- Updated traceability mapping
+
+## Promotion Gate
+
+Promotion to final design is allowed only when all Required Gates pass and no blocking determinism, traceability, or architecture issues remain unresolved.
+
+---
+
 # When a Module Graduates
 
 A module leaves the playground when:
@@ -282,6 +369,6 @@ Only then is the polished version moved to the final design folder.
 ---
 
 **Last Updated**: May 26, 2026  
-**Version**: 0.2
+**Version**: 0.4
 
 ---

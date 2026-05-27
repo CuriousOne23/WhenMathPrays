@@ -44,7 +44,15 @@
 | tags_split_merge_provenance | HLR-ARCH-07 | LLR-T-LVL-02 | thought_simulator_req/10_architecture/07_TS_state_machine.md | §8 | harness output + tp_lifecycle_harness_artifact.json | verification_summary.md (Verification Ledger) |
 | determinism_and_monotonicity | HLR-REQ-14 | LLR-T-DET-01, T-DET-04 | thought_simulator_req/20_requirements/14_testing_and_validation.md | §4 | harness output + tp_lifecycle_harness_artifact.json | verification_summary.md (Verification Ledger) |
 
+## Scenario to IO Field Mapping
+
+| Scenario | Inbound Variables | Outbound Variables | Interoperability Notes |
+|---|---|---|---|
+| creation_movement_entropy | basin_id, entropy, embedding, created_at_tick, energy, deterministic_mode, deterministic_nonce, tick, d_rep, d_pred, d_struct | tp_id, current_basin_id, entropy, state_counter, history, last_updated_tick | Core lifecycle fields must serialize losslessly for external replay/checking tools. |
+| tags_split_merge_provenance | tag, tick, child_count, sources, basin_id | tags, provenance.parent_ids, provenance.split_children, provenance.merge_sources, history, state_counter | Provenance IDs are canonical lineage keys and must remain unchanged across adapters. |
+| determinism_and_monotonicity | deterministic_mode, deterministic_nonce, basin_id, entropy, embedding, created_at_tick | tp_id, state_counter, history | Determinism checks require byte-stable identity fields across reruns for identical inputs. |
+
 ## Open Traceability Questions
 
-- Should HLR identifiers be standardized project-wide in thought_simulator_req/20_requirements/24_traceability_matrix.md?
+- HLR/LLR naming policy is now standardized in thought_simulator_req/20_requirements/24_traceability_matrix.md (v0.7); confirm rollout schedule for all playground modules.
 - Should architecture documents introduce explicit machine-readable low-level IDs beyond section anchors?
