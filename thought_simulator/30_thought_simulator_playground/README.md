@@ -45,6 +45,24 @@ Promotion sequence:
 3. Add implementation-grade tests.
 4. Integrate into final architecture and codebase.
 
+## Revision Control and Design Release Coupling
+
+Playground artifacts are revision-controlled project assets.
+
+When a design specification in `20_thought_simulator_design/` cites playground files (for example, `software_description.md`, `verification_capsule.md`, `requirements_delta.md`, or artifact outputs), those cited files become part of the released design evidence for that design version.
+
+Coupling rules:
+
+- requirement documents in `10_thought_simulator_req/` remain normative source of truth
+- design documents in `20_thought_simulator_design/` remain subsystem architectural contracts
+- cited playground evidence in `30_thought_simulator_playground/` remains the auditable verification trail tied to the released design version
+
+If cited playground evidence changes materially after promotion:
+
+- update the affected design document version
+- update traceability/evidence references
+- record the change in the appropriate delta/capsule files
+
 ## Directory Map
 
 - 30.10_math_prototypes/ - entropy, stability, and math experiments
