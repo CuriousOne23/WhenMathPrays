@@ -55,6 +55,8 @@ Use [20.160_traceability_matrix.md](10_thought_simulator_req/20_requirements/20.
 
 Implementation design specifications are maintained under [20_thought_simulator_design/](20_thought_simulator_design/).
 
+- [20.05_software_spec_construction_guide.md](20_thought_simulator_design/20.05_software_spec_construction_guide.md) - generic methodology for constructing subsystem software specifications.
+
 ---
 
 **Last Updated**: May 25, 2026  
