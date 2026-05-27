@@ -35,10 +35,108 @@ Traceability will be maintained in `requirements_traceability.md`.
 
 ## 6. Public Macro API (prototype.py)
 ```python
-ThoughtPoint.new(basin_id, entropy, embedding, created_at_tick, energy=1.0)
+ThoughtPoint.new(
+	basin_id,
+	entropy,
+	embedding,
+	created_at_tick,
+	energy=1.0,
+	deterministic_mode=True,
+	deterministic_nonce=0,
+	tp_id=None,
+)
 tp.move_to_basin(basin_id, tick, note="")
 tp.update_entropy(tick, d_rep=0, d_pred=0, d_struct=0)
 tp.add_tag(tag, tick)
 tp.remove_tag(tag, tick)
 tp.split(tick, child_count=2) -> list[ThoughtPoint]
-ThoughtPoint.merge(sources: list[ThoughtPoint], tick, basin_id=None) -> ThoughtPoint
+ThoughtPoint.merge(
+	sources: list[ThoughtPoint],
+	tick,
+	basin_id=None,
+	deterministic_mode=True,
+) -> ThoughtPoint
+tp.to_dict() -> dict
+```
+
+## 7. Prototype IO, Formatting, and Variable Identity Contract
+
+This section is the module-level contract for how `prototype.py` accepts inputs, produces outputs, and names/interprets state variables for interoperability with other programs.
+
+### 7.1 Input Variables (Inbound IO)
+
+| Function | Input Variable | Type | Required Attributes | Function Role |
+|---|---|---|---|---|
+| `ThoughtPoint.new` | `basin_id` | `str` | non-empty, stable domain label | Initial basin assignment for lifecycle routing |
+| `ThoughtPoint.new` | `entropy` | `EntropyComponents` | each component non-negative | Initial TP entropy state |
+| `ThoughtPoint.new` | `embedding` | `Iterable[float]` | numeric, finite, consistent dimensionality | Vector state used by downstream basin/routing logic |
+| `ThoughtPoint.new` | `created_at_tick` | `int` | `>= 0` | Temporal identity anchor |
+| `ThoughtPoint.new` | `energy` | `float` | finite, expected `>= 0` | Relative TP activity/mass budget |
+| `ThoughtPoint.new` | `deterministic_mode` | `bool` | explicit True/False | Enables deterministic identity behavior |
+| `ThoughtPoint.new` | `deterministic_nonce` | `int` | stable value for reproducible creation variants | Deterministic tie-break for equivalent inputs |
+| `ThoughtPoint.new` | `tp_id` | `str | None` | UUID-like when provided | External ID override for integration/replay |
+| `move_to_basin` | `basin_id` | `str` | non-empty | Target basin transition |
+| `move_to_basin` | `tick` | `int` | monotonic in caller flow | Event timestamp |
+| `update_entropy` | `d_rep`, `d_pred`, `d_struct` | `float` | finite values | Entropy delta application |
+| `add_tag` / `remove_tag` | `tag` | `str` | non-empty, semantically stable label | Metadata identity and control |
+| `split` | `child_count` | `int` | `>= 2` | Deterministic branching cardinality |
+| `merge` | `sources` | `list[ThoughtPoint]` | non-empty, equal embedding dimensions | Deterministic TP convergence inputs |
+
+### 7.2 Output Variables (Outbound IO)
+
+| Function | Output | Type | Required Attributes | Consumer Use |
+|---|---|---|---|---|
+| `ThoughtPoint.new` | ThoughtPoint instance | `ThoughtPoint` | initialized `tp_id`, `state_counter=1`, creation history entry present | Harness scenario setup and other module orchestration |
+| `split` | children | `list[ThoughtPoint]` | length equals `child_count`, parent provenance recorded, energy partitioned | Branch simulation, regulator flow, batch experimenting |
+| `merge` | merged TP | `ThoughtPoint` | merge provenance includes all source ids, deterministic id when enabled | Convergence simulation and reduction workflows |
+| `to_dict` | serialized state | `dict[str, object]` | JSON-serializable primitives/lists/maps | Inter-program exchange, logging, artifact persistence |
+
+### 7.3 Variable Identity and Semantics
+
+- `tp_id`: persistent TP identity token across lifecycle events.
+- `state_counter`: strictly monotonic per TP; increments on each mutating operation.
+- `current_basin_id`: exclusive basin membership label at current state.
+- `entropy.h_rep`, `entropy.h_pred`, `entropy.h_struct`: non-negative entropy components.
+- `history`: append-only event chronology for audit and replay.
+- `provenance.parent_ids`, `provenance.merge_sources`, `provenance.split_children`: lineage identity channels.
+
+### 7.4 Formatting and Interoperability Rules
+
+- All public API inputs/outputs must use explicit named parameters in callers where practical.
+- Serialized outputs from `to_dict` must remain JSON-compatible for tooling outside Python.
+- Numeric arrays must be exported as plain numeric lists (no numpy-specific binary encoding).
+- Field names must remain stable across module revisions or be versioned if changed.
+- External programs should treat unknown future fields as optional (forward compatibility).
+
+### 7.5 Cross-Program Applicability
+
+The outbound `to_dict` payload is the canonical interchange format for:
+
+- `harness.py` verification artifacts
+- experiment runner inputs/outputs
+- observability/log processing tools
+- replay and snapshot comparison scripts
+
+Any non-Python consumer should ingest this payload as schema-validated JSON and preserve `tp_id`, `state_counter`, `current_basin_id`, entropy components, and provenance fields without lossy transforms.
+
+### 7.6 IO Schema Version and Compatibility Policy
+
+- Current IO schema version: `tp_lifecycle_io_schema_v1`.
+- Canonical producer: `ThoughtPoint.to_dict()` output consumed by harness artifacts.
+- Required fields for compatibility:
+	- `tp_id`
+	- `current_basin_id`
+	- `entropy.h_rep`, `entropy.h_pred`, `entropy.h_struct`, `entropy.total`
+	- `state_counter`
+	- `history`
+	- `provenance`
+- Backward compatibility rule:
+	- New fields may be added as optional fields without breaking v1 consumers.
+	- Existing required field names/types must not change within v1.
+- Breaking change rule:
+	- Renaming/removing required fields or changing semantic meaning requires schema version increment (v2+).
+	- Producer and consumer docs must include migration notes.
+- Deprecation window:
+	- Keep prior schema support for at least one module iteration cycle after introducing a new version.
+- Inter-program expectation:
+	- External programs must preserve required fields exactly and ignore unknown optional fields.

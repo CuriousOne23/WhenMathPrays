@@ -20,7 +20,24 @@ Use one row per execution attempt.
 - HLR naming is currently document-oriented (HLR-ARCH-07, HLR-REQ-14) rather than a centralized formal ID registry.
 - Provenance records currently log creation note as seed before split/merge provenance override; behavior is valid but could be made semantically cleaner.
 
+## Determinism Evidence Snapshot
+
+Two additional deterministic reruns were executed and archived:
+
+- tp_lifecycle_harness_artifact_run2.json
+- tp_lifecycle_harness_artifact_run3.json
+
+| Evidence Field | Run2 | Run3 | Match |
+|---|---|---|---|
+| result | PASS | PASS | YES |
+| seed_tp_id | 6c1062c3-e03b-5e24-98c0-9af169cda865 | 6c1062c3-e03b-5e24-98c0-9af169cda865 | YES |
+| seed_state_counter | 6 | 6 | YES |
+| merged_tp_id | 6c756eaf-a928-5fe4-9b25-c6a8e159e47b | 6c756eaf-a928-5fe4-9b25-c6a8e159e47b | YES |
+| merged_state_counter | 2 | 2 | YES |
+
+Conclusion: deterministic identity and key lifecycle counters remained stable across consecutive reruns.
+
 ## Open questions for next iteration
 
-- Should module-level requirement IDs be normalized globally in thought_simulator_req/20_requirements/24_traceability_matrix.md?
+- HLR/LLR naming normalization has now been defined globally in thought_simulator_req/20_requirements/24_traceability_matrix.md (Version 0.7). Next step is adoption across other modules.
 - Do we want a stricter invariant that merged TP creation history note is merge at initial creation event?

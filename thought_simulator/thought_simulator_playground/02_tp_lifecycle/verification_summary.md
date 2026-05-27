@@ -31,11 +31,20 @@ Provide the Verification Capsule for 02_tp_lifecycle after refactoring to macro-
 
 ## Verification Ledger
 
-| Scenario | Result | HLR Ref | LLR Ref | Req Doc | Req Section | Evidence |
-|---|---|---|---|---|---|---|
-| creation_movement_entropy | PASS | HLR-ARCH-07 | LLR-T-OBS-01 | thought_simulator_req/10_architecture/07_TS_state_machine.md | §3, §14 | terminal output + artifact scenario record |
-| tags_split_merge_provenance | PASS | HLR-ARCH-07 | LLR-T-LVL-02 | thought_simulator_req/10_architecture/07_TS_state_machine.md | §8 | terminal output + artifact scenario record |
-| determinism_and_monotonicity | PASS | HLR-REQ-14 | LLR-T-DET-01, T-DET-04 | thought_simulator_req/20_requirements/14_testing_and_validation.md | §4 | terminal output + artifact scenario record |
+| Scenario | Result | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Evidence |
+|---|---|---|---|---|---|---|---|---|
+| creation_movement_entropy | PASS | HLR-ARCH-07 | LLR-T-OBS-01 | thought_simulator_req/10_architecture/07_TS_state_machine.md | §3, §14 | in: basin_id, entropy, embedding, created_at_tick, tick, d_rep,d_pred,d_struct; out: tp_id,state_counter,current_basin_id,entropy,history | NOT_COVERED | terminal output + artifact scenario record |
+| tags_split_merge_provenance | PASS | HLR-ARCH-07 | LLR-T-LVL-02 | thought_simulator_req/10_architecture/07_TS_state_machine.md | §8 | in: tag,tick,child_count,sources,basin_id; out: provenance.parent_ids,provenance.split_children,provenance.merge_sources,tags,history | NOT_COVERED | terminal output + artifact scenario record |
+| determinism_and_monotonicity | PASS | HLR-REQ-14 | LLR-T-DET-01, T-DET-04 | thought_simulator_req/20_requirements/14_testing_and_validation.md | §4 | in: deterministic_mode,deterministic_nonce; out: tp_id,state_counter | PARTIAL (positive determinism path only) | terminal output + artifact scenario record |
+
+## Negative-Path Coverage Status
+
+- Current status: PARTIAL
+- Covered: deterministic positive path and invariant checks.
+- Not yet covered:
+	- split with invalid child_count
+	- merge with empty source list
+	- merge with embedding dimension mismatch
 
 ## Assumptions
 

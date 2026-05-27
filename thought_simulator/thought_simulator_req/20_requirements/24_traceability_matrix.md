@@ -58,9 +58,44 @@ This matrix provides **end-to-end traceability** from foundational concepts thro
 - All links must remain relative to the `20_requirements/` folder.
 - New requirements or major sections must be added with upstream (foundations/architecture) and downstream (testing/observability/risks) links.
 
+## HLR/LLR Naming Normalization Policy
+
+To keep requirement attachment consistent across modules, use the following naming policy.
+
+### High-Level Requirements (HLR)
+
+- Format: `HLR-<DOMAIN>-<DOCNUM>`
+- DOMAIN values:
+	- `ARCH` for architecture documents (`10_architecture`)
+	- `REQ` for requirements documents (`20_requirements`)
+	- `FND` for foundations documents (`00_foundations`) when needed
+- DOCNUM is the two-digit document prefix without leading directory context.
+
+Examples:
+
+- `HLR-ARCH-07` for `10_architecture/07_TS_state_machine.md`
+- `HLR-ARCH-08` for `10_architecture/08_TS_data_model.md`
+- `HLR-REQ-14` for `20_requirements/14_testing_and_validation.md`
+
+### Low-Level Requirements (LLR)
+
+- Prefer canonical IDs defined by the source requirement document.
+- Format when explicit IDs exist: `LLR-<SOURCE-ID>`
+	- Example: `LLR-T-DET-01`, `LLR-T-OBS-01`
+- If a source section lacks explicit low-level IDs:
+	- Use provisional section-anchored IDs: `LLR-SEC-<DOCNUM>-<SECTION>`
+	- Example: `LLR-SEC-07-8`
+	- Mark provisional status in module traceability docs and promote to canonical IDs when available.
+
+### Run Record and Ledger Usage Rules
+
+- Every test row must include at least one HLR and one LLR reference.
+- Multiple IDs must be comma-separated.
+- If mapping is unknown, use `HLR-?` / `LLR-?` and record remediation in module insights and updated requirements.
+
 ---
 
 **Last Updated**: May 26, 2026  
-**Version**: 0.6 (Full renumbering alignment with 11–23)
+**Version**: 0.7 (Added HLR/LLR naming normalization policy)
 
 ---
