@@ -1,4 +1,4 @@
-# Verification Summary
+﻿# Verification Capsule
 
 ## Purpose
 
@@ -25,3 +25,4 @@ Summarize verification status for this module.
 - Current status: NOT_STARTED
 - Confidence: LOW
 - Next action:
+
