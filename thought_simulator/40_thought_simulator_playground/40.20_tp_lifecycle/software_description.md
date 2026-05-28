@@ -1,5 +1,15 @@
 ﻿# 40.20_tp_lifecycle / software_description.md
 
+## Approval State
+
+Approved (legacy module migrated before global Two-Phase policy; retained as approved baseline).
+
+## Two-Phase Execution Model (Global 40.* Rule)
+
+- Phase A: generate and review `software_description.md` only.
+- Mandatory stop after Phase A until explicit human approval.
+- Phase B (only after approval): `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
+
 ## 1. Purpose
 The purpose of the TP is to record the thought processing it undergoes.
 
