@@ -2,18 +2,18 @@
 
 ## Purpose
 
-Canonical verification report for `30.30_basin_prototypes`.
+Canonical verification report for `40.30_basin_prototypes`.
 
 ## Glossary References
 
-- `../30.30_verification_glossary.md`
-- `../30.20_master_program_guide.md`
+- `../40.30_verification_glossary.md`
+- `../40.20_master_program_guide.md`
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 30.30_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.30_tp_requirements.md; 20.50_observability_requirements.md; 20.60_testing_and_validation.md; 20.90_interfaces_and_io.md; 20.120_stability_requirements.md; 20.140_program_flow.md; 20.150_glossary.md; 20.160_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
+| 2026-05-27 | 40.30_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.30_tp_requirements.md; 20.50_observability_requirements.md; 20.60_testing_and_validation.md; 20.90_interfaces_and_io.md; 20.120_stability_requirements.md; 20.140_program_flow.md; 20.150_glossary.md; 20.160_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
 
 ## Positive Scenario Ledger
 

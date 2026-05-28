@@ -10,9 +10,9 @@ Continue targeted frontmatter rollout in verification and design tiers.
 
 Added frontmatter to:
 
-- `30_verification/30.30_basin_prototypes/30.30_basin_prototypes_requirements_delta.md`
-- `30_verification/30.30_verification_glossary.md`
-- `50_thought_simulator_design/20.10_system_architecture.md`
+- `30_verification/40.30_basin_prototypes/40.30_basin_prototypes_requirements_delta.md`
+- `30_verification/40.30_verification_glossary.md`
+- `50_thought_simulator_design/50.10_system_architecture.md`
 
 ## Validation Outcome
 
@@ -25,7 +25,7 @@ Added frontmatter to:
 ## Next Recommended Batch
 
 - frontmatter-enable `20_requirements/README.md` and `30_verification/README.md`
-- frontmatter-enable `50_thought_simulator_design/20.20_geometry_engine_design.md`
+- frontmatter-enable `50_thought_simulator_design/50.20_geometry_engine_design.md`
 - begin canonical ID normalization in:
   - `20_requirements/20.160_traceability_matrix.md`
-  - `30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md`
+  - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`

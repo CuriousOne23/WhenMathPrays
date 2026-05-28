@@ -1,4 +1,4 @@
-"""Deterministic verification harness for 30.20_tp_lifecycle."""
+"""Deterministic verification harness for 40.20_tp_lifecycle."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import traceback
 from prototype import EntropyComponents, ThoughtPoint
 
 
-MODULE_NAME = "30.20_tp_lifecycle"
+MODULE_NAME = "40.20_tp_lifecycle"
 ARTIFACT_DIR = Path("artifacts")
 CAPSULE_PATH = Path("verification_capsule.md")
 
@@ -311,7 +311,7 @@ def _write_verification_capsule(results: list[ScenarioResult], tp: ThoughtPoint,
         "",
         "## Purpose",
         "",
-        "Canonical verification report for 30.20_tp_lifecycle after migration to the new unified verification structure.",
+        "Canonical verification report for 40.20_tp_lifecycle after migration to the new unified verification structure.",
         "",
         "## Glossary References",
         "",

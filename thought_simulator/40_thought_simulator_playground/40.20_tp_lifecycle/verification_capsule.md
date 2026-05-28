@@ -2,20 +2,20 @@
 
 ## Purpose
 
-Canonical verification report for `30.20_tp_lifecycle` after migration to the new unified verification structure.
+Canonical verification report for `40.20_tp_lifecycle` after migration to the new unified verification structure.
 
 Legacy filename mentions in this document are retained only as historical migration notes for audit traceability.
 
 ## Glossary References
 
-- 30.30_verification_glossary.md
-- 30.20_master_program_guide.md
+- 40.30_verification_glossary.md
+- 40.20_master_program_guide.md
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 30.20_tp_lifecycle | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | 10_program_governance/10_architecture/10.40_TS_state_machine.md; 10_program_governance/10_architecture/10.50_TS_data_model.md; 20_requirements/20.60_testing_and_validation.md | Â§3, Â§8, Â§13, Â§14; Â§3.1, Â§6; Â§4, Â§7, Â§12 | basin_id; entropy; embedding; created_at_tick; tick; d_rep; d_pred; d_struct; tp_id; state_counter; current_basin_id; history; tag; child_count; sources; provenance.parent_ids; provenance.split_children; provenance.merge_sources; deterministic_mode; deterministic_nonce | invalid_split_child_count; empty_merge_sources; embedding_mismatch_merge | Consolidated from pre-capsule records during migration; no evidence loss. |
+| 2026-05-27 | 40.20_tp_lifecycle | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | 10_program_governance/10_architecture/10.40_TS_state_machine.md; 10_program_governance/10_architecture/10.50_TS_data_model.md; 20_requirements/20.60_testing_and_validation.md | Â§3, Â§8, Â§13, Â§14; Â§3.1, Â§6; Â§4, Â§7, Â§12 | basin_id; entropy; embedding; created_at_tick; tick; d_rep; d_pred; d_struct; tp_id; state_counter; current_basin_id; history; tag; child_count; sources; provenance.parent_ids; provenance.split_children; provenance.merge_sources; deterministic_mode; deterministic_nonce | invalid_split_child_count; empty_merge_sources; embedding_mismatch_merge | Consolidated from pre-capsule records during migration; no evidence loss. |
 
 ## Positive Scenario Ledger
 

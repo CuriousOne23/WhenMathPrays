@@ -21,7 +21,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- 40_thought_simulator_playground/30.30_verification_glossary.md
+- 40_thought_simulator_playground/40.30_verification_glossary.md
 
 ## Workflow
 
@@ -83,7 +83,7 @@ Why this coherence is required:
 - predictable promotion path from exploration to design release artifacts
 - reduced process drift between subsystem teams and module owners
 
-Exception policy for `30.10_math_prototypes/`:
+Exception policy for `40.10_math_prototypes/`:
 
 - math prototypes may use a lighter documentation burden while still keeping the same file/folder names where practical
 - early mathematical exploration may not immediately impact canonical requirements or design contracts
@@ -97,18 +97,18 @@ Why the exception exists:
 
 ## Directory Map
 
-- 30.10_math_prototypes/ - entropy, stability, and math experiments
-- 30.20_tp_lifecycle/ - ThoughtPoint lifecycle exploration
-- 30.30_basin_prototypes/ - basin behavior prototypes
-- 30.40_scheduler_prototypes/ - scheduling and ordering experiments
-- 30.50_regulator_prototypes/ - regulator mechanisms and policies
-- 30.60_tick_cycle_skeleton/ - simulation tick-cycle skeletons
-- 30.70_snapshot_prototypes/ - snapshot and restoration patterns
-- 30.80_event_log_prototypes/ - event stream and replay experiments
-- 30.90_experiment_runner/ - experiment orchestration prototypes
+- 40.10_math_prototypes/ - entropy, stability, and math experiments
+- 40.20_tp_lifecycle/ - ThoughtPoint lifecycle exploration
+- 40.30_basin_prototypes/ - basin behavior prototypes
+- 40.40_scheduler_prototypes/ - scheduling and ordering experiments
+- 40.50_regulator_prototypes/ - regulator mechanisms and policies
+- 40.60_tick_cycle_skeleton/ - simulation tick-cycle skeletons
+- 40.70_snapshot_prototypes/ - snapshot and restoration patterns
+- 40.80_event_log_prototypes/ - event stream and replay experiments
+- 40.90_experiment_runner/ - experiment orchestration prototypes
 - shared/ - shared helpers for prototype work
-- 30.20_master_program_guide.md - unified process guide and state-control policy
-- 30.30_verification_glossary.md - shared verification vocabulary
+- 40.20_master_program_guide.md - unified process guide and state-control policy
+- 40.30_verification_glossary.md - shared verification vocabulary
 
 
 

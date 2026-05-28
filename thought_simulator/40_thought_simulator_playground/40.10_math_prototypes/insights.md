@@ -6,7 +6,7 @@ Use one row per execution attempt.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | Notes |
 |---|---|---|---|---|---|---|---|
-| YYYY-MM-DD | 30.10_math_prototypes | python prototype.py | seed/config notes | PASS/FAIL | n/a | file paths or none | short run summary |
+| YYYY-MM-DD | 40.10_math_prototypes | python prototype.py | seed/config notes | PASS/FAIL | n/a | file paths or none | short run summary |
 
 ## What worked well
 

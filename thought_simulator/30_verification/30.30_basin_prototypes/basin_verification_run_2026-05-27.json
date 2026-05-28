@@ -1,5 +1,5 @@
 {
-  "module": "30.30_basin_prototypes",
+  "module": "40.30_basin_prototypes",
   "requirements_anchors": [
     "20.30_tp_requirements.md",
     "20.50_observability_requirements.md",
@@ -109,7 +109,7 @@
         "metadata": {
           "source": "harness"
         },
-        "module": "30.30_basin_prototypes",
+        "module": "40.30_basin_prototypes",
         "provenance_ids": [
           "seed",
           "prov.alpha"

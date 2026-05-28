@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file records requirement-change proposals, implementer feedback, and migration notes for `30.30_basin_prototypes`.
+This file records requirement-change proposals, implementer feedback, and migration notes for `40.30_basin_prototypes`.
 
 ## Migrated Structural Changes
 

@@ -36,24 +36,24 @@ Generated: 2026-05-27
 ### Design Top Level
 | Old Path | New Path |
 |---|---|
-| thought_simulator/70_thought_simulator_design/70.10_system_architecture.md | thought_simulator/20_thought_simulator_design/20.10_system_architecture.md |
-| thought_simulator/70_thought_simulator_design/70.20_geometry_engine_design.md | thought_simulator/20_thought_simulator_design/20.20_geometry_engine_design.md |
-| thought_simulator/70_thought_simulator_design/70.30_dynamics_engine_design.md | thought_simulator/20_thought_simulator_design/20.30_dynamics_engine_design.md |
-| thought_simulator/70_thought_simulator_design/70.40_interaction_layer_design.md | thought_simulator/20_thought_simulator_design/20.40_interaction_layer_design.md |
-| thought_simulator/70_thought_simulator_design/70.50_data_structures.md | thought_simulator/20_thought_simulator_design/20.50_data_structures.md |
-| thought_simulator/70_thought_simulator_design/70.60_error_handling_design.md | thought_simulator/20_thought_simulator_design/20.60_error_handling_design.md |
-| thought_simulator/70_thought_simulator_design/70.70_logging_and_observability_design.md | thought_simulator/20_thought_simulator_design/20.70_logging_and_observability_design.md |
-| thought_simulator/70_thought_simulator_design/70.80_testing_strategy.md | thought_simulator/20_thought_simulator_design/20.80_testing_strategy.md |
-| thought_simulator/70_thought_simulator_design/70.90_api_contract.md | thought_simulator/20_thought_simulator_design/20.90_api_contract.md |
-| thought_simulator/70_thought_simulator_design/70.100_core_contract.md | thought_simulator/20_thought_simulator_design/20.100_core_contract.md |
-| thought_simulator/70_thought_simulator_design/70.110_ui_contract.md | thought_simulator/20_thought_simulator_design/20.110_ui_contract.md |
+| thought_simulator/70_thought_simulator_design/70.10_system_architecture.md | thought_simulator/20_thought_simulator_design/50.10_system_architecture.md |
+| thought_simulator/70_thought_simulator_design/70.20_geometry_engine_design.md | thought_simulator/20_thought_simulator_design/50.20_geometry_engine_design.md |
+| thought_simulator/70_thought_simulator_design/70.30_dynamics_engine_design.md | thought_simulator/20_thought_simulator_design/50.30_dynamics_engine_design.md |
+| thought_simulator/70_thought_simulator_design/70.40_interaction_layer_design.md | thought_simulator/20_thought_simulator_design/50.40_interaction_layer_design.md |
+| thought_simulator/70_thought_simulator_design/70.50_data_structures.md | thought_simulator/20_thought_simulator_design/50.50_data_structures.md |
+| thought_simulator/70_thought_simulator_design/70.60_error_handling_design.md | thought_simulator/20_thought_simulator_design/50.60_error_handling_design.md |
+| thought_simulator/70_thought_simulator_design/70.70_logging_and_observability_design.md | thought_simulator/20_thought_simulator_design/50.70_logging_and_observability_design.md |
+| thought_simulator/70_thought_simulator_design/70.80_testing_strategy.md | thought_simulator/20_thought_simulator_design/50.80_testing_strategy.md |
+| thought_simulator/70_thought_simulator_design/70.90_api_contract.md | thought_simulator/20_thought_simulator_design/50.90_api_contract.md |
+| thought_simulator/70_thought_simulator_design/70.100_core_contract.md | thought_simulator/20_thought_simulator_design/50.100_core_contract.md |
+| thought_simulator/70_thought_simulator_design/70.110_ui_contract.md | thought_simulator/20_thought_simulator_design/50.110_ui_contract.md |
 
 ### Playground Top Level
 | Old Path | New Path |
 |---|---|
 | thought_simulator/80_thought_simulator_playground/80.10_README.md | thought_simulator/30_thought_simulator_playground/30.10_README.md |
-| thought_simulator/80_thought_simulator_playground/80.20_master_program_guide.md | thought_simulator/30_thought_simulator_playground/30.20_master_program_guide.md |
-| thought_simulator/80_thought_simulator_playground/80.30_verification_glossary.md | thought_simulator/30_thought_simulator_playground/30.30_verification_glossary.md |
+| thought_simulator/80_thought_simulator_playground/80.20_master_program_guide.md | thought_simulator/30_thought_simulator_playground/40.20_master_program_guide.md |
+| thought_simulator/80_thought_simulator_playground/80.30_verification_glossary.md | thought_simulator/30_thought_simulator_playground/40.30_verification_glossary.md |
 
 ## Additive New File(s)
 | Path | Reason |

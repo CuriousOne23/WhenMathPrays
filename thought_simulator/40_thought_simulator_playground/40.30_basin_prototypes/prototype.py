@@ -13,7 +13,7 @@ import json
 import math
 
 
-MODULE_NAME = "30.30_basin_prototypes"
+MODULE_NAME = "40.30_basin_prototypes"
 CONTRACT_VERSION = "1.0"
 EVENT_CREATED = "created"
 EVENT_PROVENANCE_ADD = "provenance_add"

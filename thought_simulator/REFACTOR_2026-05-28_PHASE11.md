@@ -12,18 +12,18 @@ Added relation metadata to:
 
 - `20_requirements/20.30_tp_requirements.md`
   - `supersedes: [HLR-?]`
-- `50_thought_simulator_design/20.35_tp_design.md`
+- `50_thought_simulator_design/50.35_tp_design.md`
   - `satisfies: [HLR-20.30-001, HLR-20.30-002, HLR-20.30-003]`
-- `30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md`
+- `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`
   - `proves: [HLR-20.30-001, HLR-20.30-002, HLR-20.30-003]`
   - `derived-from: [LLR-30.20-101]`
-- `30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md`
+- `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_requirements_delta.md`
   - `proves: [HLR-20.30-001, HLR-20.30-002]`
   - `derived-from: [LLR-30.20-101]`
-- `30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md`
+- `30_verification/40.30_basin_prototypes/40.30_basin_prototypes_verification_capsule.md`
   - `proves: [HLR-?]`
   - `derived-from: [LLR-?]`
-- `30_verification/30.30_basin_prototypes/30.30_basin_prototypes_requirements_delta.md`
+- `30_verification/40.30_basin_prototypes/40.30_basin_prototypes_requirements_delta.md`
   - `proves: [HLR-?]`
   - `derived-from: [LLR-?]`
 
