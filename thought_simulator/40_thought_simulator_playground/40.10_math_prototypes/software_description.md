@@ -1,28 +1,44 @@
 # Software Description
 
+## Approval State
+
+Approved by human on 2026-05-28 (Phase A complete; eligible for 50.05 execution).
+
+Phase B execution completed; promotion remains governed by canonical 10/30/50 artifacts.
+
 ## Purpose
 
-Describe the specific objective for this prototype module.
+Define deterministic math contracts used by exploratory geometry and dynamics calculations, with replay-safe outputs and strict validation behavior.
+
+## Source Index
+
+- `20_requirements/20.70_non_functional_requirements.md`
+- `20_requirements/20.90_interfaces_and_io.md`
+- `20_requirements/20.60_testing_and_validation.md`
+- `20_requirements/20.50_observability_requirements.md`
+- `../40.20_master_program_guide.md`
 
 ## Core Responsibilities
 
-- Responsibility 1
-- Responsibility 2
-- Responsibility 3
+- Provide deterministic projection calculations for equivalent vector/matrix inputs.
+- Provide deterministic distance calculations for comparable vector pairs.
+- Emit verification digests so math outputs can be compared across reruns.
 
 ## Key Invariants
 
-- Invariant 1
-- Invariant 2
-- Invariant 3
+- Equivalent deterministic inputs produce equivalent projection and distance outputs.
+- Vector and matrix dimensionality must be validated before computation.
+- Numeric contracts must reject invalid values (non-finite numbers and mismatched dimensions).
 
-## Data Structures / Interfaces (tentative)
+## Data Structures / Interfaces
 
-- Structure or interface 1
-- Structure or interface 2
+- `projection_request` (json object): `vector`, `matrix`, `deterministic_mode`
+- `projection_result` (json object): `projected`, `norm`, `verification_digest`
+- `distance_request` (json object): `left`, `right`
+- `distance_result` (json object): `distance`, `verification_digest`
 
 ## Open Questions
 
-- Question 1
-- Question 2
-- Question 3
+- Should future projection contracts support sparse representations?
+- Which numeric tolerance policy should be canonical for floating-point comparisons?
+- Should normalization rules be mandatory for all projection inputs?

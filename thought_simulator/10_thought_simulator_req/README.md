@@ -4,9 +4,15 @@ This directory is the canonical requirement-governance root for promoted require
 
 ## Canonical Anchors
 
+- [10.10_math_requirements.md](10.10_math_requirements.md)
 - [10.20_tp_requirements.md](10.20_tp_requirements.md)
 - [10.30_basin_requirements.md](10.30_basin_requirements.md)
 - [10.40_scheduler_requirements.md](10.40_scheduler_requirements.md)
+- [10.50_regulator_requirements.md](10.50_regulator_requirements.md)
+- [10.60_tick_cycle_requirements.md](10.60_tick_cycle_requirements.md)
+- [10.70_snapshot_requirements.md](10.70_snapshot_requirements.md)
+- [10.80_event_log_requirements.md](10.80_event_log_requirements.md)
+- [10.90_experiment_runner_requirements.md](10.90_experiment_runner_requirements.md)
 
 ## Governance Artifacts
 

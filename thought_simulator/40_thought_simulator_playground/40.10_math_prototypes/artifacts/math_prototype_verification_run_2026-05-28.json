@@ -1,0 +1,45 @@
+{
+  "module": "40.10_math_prototypes",
+  "date": "2026-05-28",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "positive_projection_replay",
+      "result": "PASS",
+      "first": {
+        "projected": [
+          1.0,
+          5.0
+        ],
+        "norm": 5.0990195135927845,
+        "verification_digest": "213f5ef44ab66d25d24fd0e5b73e8e44cf3aeb5f9e44dd05ab2116d5aa0f7a0b"
+      },
+      "second": {
+        "projected": [
+          1.0,
+          5.0
+        ],
+        "norm": 5.0990195135927845,
+        "verification_digest": "213f5ef44ab66d25d24fd0e5b73e8e44cf3aeb5f9e44dd05ab2116d5aa0f7a0b"
+      }
+    },
+    {
+      "scenario": "positive_distance_contract",
+      "result": "PASS",
+      "distance": {
+        "distance": 5.0,
+        "verification_digest": "b782883d322d334a2637cbf7481758e300837a3929a512072b9d8e4b34f59afc"
+      }
+    },
+    {
+      "scenario": "negative_dimension_mismatch",
+      "result": "PASS",
+      "error": "matrix row width must match vector length"
+    },
+    {
+      "scenario": "negative_non_finite_input",
+      "result": "PASS",
+      "error": "left contains non-finite values"
+    }
+  ]
+}

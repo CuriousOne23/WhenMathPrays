@@ -1,0 +1,34 @@
+{
+  "module": "40.90_experiment_runner",
+  "date": "2026-05-28",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "positive_deterministic_replay",
+      "result": "PASS",
+      "run": {
+        "run_id": "876b2b7d0de88022",
+        "experiment_id": "exp-001",
+        "status": "PASS",
+        "max_ticks": 5,
+        "seed": 42,
+        "verification_digest": "5c3d9f0908cf4c53a6269f5b91c2eebbbbbafc1f7db288645ae0a63de7f1108f"
+      }
+    },
+    {
+      "scenario": "positive_batch_run",
+      "result": "PASS",
+      "batch_digest": "2a933231b418f450758a3382a84d7f383d7526be63fb017b0b5723e566fd0cce"
+    },
+    {
+      "scenario": "negative_invalid_max_ticks",
+      "result": "PASS",
+      "error": "max_ticks must be a positive integer"
+    },
+    {
+      "scenario": "negative_empty_request_list",
+      "result": "PASS",
+      "error": "requests must be a non-empty list"
+    }
+  ]
+}

@@ -29,9 +29,15 @@ Each promoted module should include:
 
 ## Current Seeded Modules
 
+- [30.10_math_prototypes/](30.10_math_prototypes/)
 - [30.20_tp_lifecycle/](30.20_tp_lifecycle/)
 - [30.30_basin_prototypes/](30.30_basin_prototypes/)
 - [30.40_scheduler_prototypes/](30.40_scheduler_prototypes/)
+- [30.50_regulator_prototypes/](30.50_regulator_prototypes/)
+- [30.60_tick_cycle_skeleton/](30.60_tick_cycle_skeleton/)
+- [30.70_snapshot_prototypes/](30.70_snapshot_prototypes/)
+- [30.80_event_log_prototypes/](30.80_event_log_prototypes/)
+- [30.90_experiment_runner/](30.90_experiment_runner/)
 - [30.30_verification_glossary.md](30.30_verification_glossary.md)
 - [glossary_term_registry.json](glossary_term_registry.json)
 
