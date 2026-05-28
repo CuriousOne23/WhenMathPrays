@@ -35,6 +35,7 @@ This directory contains the canonical high-level requirements (HLR) set for the 
 - [20.140_program_flow.md](20.140_program_flow.md)
 - [20.150_glossary.md](20.150_glossary.md)
 - [20.160_traceability_matrix.md](20.160_traceability_matrix.md)
+- [glossary_term_registry.json](glossary_term_registry.json)
 - [docs/](docs/)
 
 ## Notes

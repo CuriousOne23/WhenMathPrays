@@ -34,7 +34,7 @@ Existing requirement sources relevant to basin behavior:
 - `20.90_interfaces_and_io.md` â€” IO schema, serialization, and interoperability
 - `20.120_stability_requirements.md` â€” stability and transition constraints
 - `20.140_program_flow.md` â€” system flow and phase-boundary rules
-- `20.150_glossary.md` â€” canonical terminology
+- `../../30_verification/30.30_verification_glossary.md` â€” canonical verification terminology
 - `20.160_traceability_matrix.md` â€” requirement-to-test mapping obligations
 
 Missing requirement coverage:
