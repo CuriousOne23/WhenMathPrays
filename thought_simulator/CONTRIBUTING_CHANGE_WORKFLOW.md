@@ -42,6 +42,7 @@ This workflow applies to edits under:
 4. Update glossary or README surfaces when terminology or structure changes.
 - If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
+- Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
 
 5. Run the doc validation suite before opening a PR.
 
