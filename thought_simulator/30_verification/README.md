@@ -2,7 +2,7 @@
 status: verification
 source_of_truth: this
 contains:
-	- LLR: [LLR-30.000-001]
+  - LLR: [LLR-30.000-001]
 ---
 
 # 30_verification
