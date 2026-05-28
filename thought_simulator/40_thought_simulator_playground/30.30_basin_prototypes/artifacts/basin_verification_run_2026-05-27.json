@@ -1,0 +1,160 @@
+{
+  "module": "30.30_basin_prototypes",
+  "requirements_anchors": [
+    "20.30_tp_requirements.md",
+    "20.50_observability_requirements.md",
+    "20.60_testing_and_validation.md",
+    "20.90_interfaces_and_io.md",
+    "20.120_stability_requirements.md",
+    "20.140_program_flow.md",
+    "20.150_glossary.md",
+    "20.160_traceability_matrix.md"
+  ],
+  "run_command": "python harness.py",
+  "run_timestamp_utc": "2026-05-28T00:46:45.336328+00:00",
+  "scenarios": [
+    {
+      "evidence_digest": "fe7c98aed5f77be72706baa90c86a2cb72abdac4345f2c6c0edce75c780194ff",
+      "io_fields": [
+        "basin_id",
+        "tp_id",
+        "state_counter",
+        "deterministic_mode",
+        "entropy_vector",
+        "provenance_ids",
+        "history",
+        "verification_digest"
+      ],
+      "name": "positive_deterministic_replay",
+      "snapshot": {
+        "basin_id": "basin.beta",
+        "contract_version": "1.0",
+        "deterministic_mode": true,
+        "entropy_vector": [
+          0.25,
+          0.75
+        ],
+        "history": [
+          {
+            "basin_id": "basin.alpha",
+            "event_type": "created",
+            "note": "from_contract",
+            "payload": {
+              "source": "from_contract"
+            },
+            "provenance_id": "seed",
+            "state_counter": 0,
+            "tick": 0,
+            "tp_id": "tp.alpha"
+          },
+          {
+            "basin_id": "basin.alpha",
+            "event_type": "provenance_add",
+            "note": "first provenance",
+            "payload": {
+              "provenance_id": "prov.alpha"
+            },
+            "provenance_id": "prov.alpha",
+            "state_counter": 1,
+            "tick": 1,
+            "tp_id": "tp.alpha"
+          },
+          {
+            "basin_id": "basin.beta",
+            "event_type": "transition",
+            "note": "move basin",
+            "payload": {
+              "previous_basin_id": "basin.alpha",
+              "target_basin_id": "basin.beta"
+            },
+            "provenance_id": "prov.alpha",
+            "state_counter": 2,
+            "tick": 2,
+            "tp_id": "tp.alpha"
+          },
+          {
+            "basin_id": "basin.beta",
+            "event_type": "entropy_update",
+            "note": "rebalance entropy",
+            "payload": {
+              "entropy_vector": [
+                0.25,
+                0.75
+              ],
+              "previous_entropy_vector": [
+                0.4,
+                0.6
+              ]
+            },
+            "provenance_id": "prov.alpha",
+            "state_counter": 3,
+            "tick": 3,
+            "tp_id": "tp.alpha"
+          }
+        ],
+        "invariants": {
+          "basin_id_non_empty": true,
+          "deterministic_mode_is_bool": true,
+          "entropy_vector_is_finite": true,
+          "entropy_vector_non_empty": true,
+          "history_matches_state_counter": true,
+          "history_monotonic": true,
+          "provenance_ids_unique": true,
+          "state_counter_non_negative": true,
+          "tags_unique": true,
+          "tp_id_non_empty": true
+        },
+        "last_event": "entropy_update",
+        "last_tick": 3,
+        "metadata": {
+          "source": "harness"
+        },
+        "module": "30.30_basin_prototypes",
+        "provenance_ids": [
+          "seed",
+          "prov.alpha"
+        ],
+        "state_counter": 3,
+        "tags": [
+          "seeded"
+        ],
+        "tp_id": "tp.alpha",
+        "verification_digest": "fe7c98aed5f77be72706baa90c86a2cb72abdac4345f2c6c0edce75c780194ff"
+      },
+      "status": "PASS"
+    },
+    {
+      "error": "basin_id must be non-empty",
+      "io_fields": [
+        "basin_id"
+      ],
+      "name": "negative_empty_basin_id",
+      "status": "PASS"
+    },
+    {
+      "error": "provenance_id must be unique",
+      "io_fields": [
+        "provenance_ids",
+        "event_type",
+        "provenance_id"
+      ],
+      "name": "negative_duplicate_provenance",
+      "status": "PASS"
+    },
+    {
+      "error": "entropy_vector length must remain stable",
+      "io_fields": [
+        "entropy_vector",
+        "event_type"
+      ],
+      "name": "negative_entropy_length_mismatch",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "failed": 0,
+    "overall_status": "PASS",
+    "passed": 4,
+    "total_scenarios": 4
+  }
+}

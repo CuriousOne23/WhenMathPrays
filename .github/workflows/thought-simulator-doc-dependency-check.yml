@@ -1,0 +1,40 @@
+name: Thought Simulator Doc Dependency Check
+
+on:
+  pull_request:
+    paths:
+      - "thought_simulator/**/*.md"
+      - "thought_simulator/scripts/check_doc_dependencies.py"
+      - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
+      - "thought_simulator/scripts/validate_relation_semantics.py"
+      - ".github/workflows/thought-simulator-doc-dependency-check.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "thought_simulator/**/*.md"
+      - "thought_simulator/scripts/check_doc_dependencies.py"
+      - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
+      - "thought_simulator/scripts/validate_relation_semantics.py"
+      - ".github/workflows/thought-simulator-doc-dependency-check.yml"
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run dependency lint
+        run: python thought_simulator/scripts/check_doc_dependencies.py
+
+      - name: Run frontmatter and ID validation
+        run: python thought_simulator/scripts/validate_doc_frontmatter_and_ids.py --require-frontmatter --strict-ids
+
+      - name: Run relation semantics validation
+        run: python thought_simulator/scripts/validate_relation_semantics.py

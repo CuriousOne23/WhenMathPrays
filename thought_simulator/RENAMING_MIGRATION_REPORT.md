@@ -1,4 +1,4 @@
-# Renaming Migration Report
+﻿# Renaming Migration Report
 
 Generated: 2026-05-27
 
@@ -58,7 +58,7 @@ Generated: 2026-05-27
 ## Additive New File(s)
 | Path | Reason |
 |---|---|
-| thought_simulator/10_thought_simulator_req/20_requirements/10.30_tp_requirements.md | Additive TP requirements consolidation document |
+| thought_simulator/20_requirements/10.30_tp_requirements.md | Additive TP requirements consolidation document |
 | thought_simulator/RENAMING_MIGRATION_REPORT.md | Migration and audit report |
 | thought_simulator/_broken_links.csv | Final link-audit output artifact |
 
@@ -70,3 +70,4 @@ Generated: 2026-05-27
 ## Verification Note
 
 Final markdown link audit under thought_simulator/ excluding this report produced no remaining broken internal links.
+
