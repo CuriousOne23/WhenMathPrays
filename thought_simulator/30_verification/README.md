@@ -31,5 +31,6 @@ Each promoted module should include:
 
 - `40.20_tp_lifecycle/`
 - `40.30_basin_prototypes/`
+- `40.40_scheduler_prototypes/`
 
 These were copied from the playground as the first phase of the refactor and should be treated as initial promoted evidence snapshots.

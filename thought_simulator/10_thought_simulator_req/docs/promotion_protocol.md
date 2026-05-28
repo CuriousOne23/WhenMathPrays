@@ -39,6 +39,10 @@ A candidate may be promoted only when all criteria are met:
 4. The canonical target can absorb the change without structural reorganization.
 5. The promotion does not require formal trace edges from exploratory artifacts.
 
+For all new `40.*` playground modules, an additional gate applies:
+
+6. The module `software_description.md` must be explicitly human-approved before any verification artifacts, prototype code, harness code, requirement deltas, or promotion artifacts are generated.
+
 ## 4. Required Evidence Package
 
 Each promotion submission must include:
@@ -75,6 +79,7 @@ The following must not be promoted directly:
 3. Speculative notes lacking rationale and impact statement.
 4. Exploratory links presented as canonical trace dependencies.
 5. Changes that mutate canonical structure without explicit governance approval.
+6. Verification or promotion artifacts generated from a new `40.*` module before explicit approval of that module `software_description.md`.
 
 ## 7. Rationale Recording Requirements
 

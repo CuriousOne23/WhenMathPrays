@@ -6,6 +6,7 @@ This directory is the canonical requirement-governance root for promoted require
 
 - [10.20_tp_requirements.md](10.20_tp_requirements.md)
 - [10.30_basin_requirements.md](10.30_basin_requirements.md)
+- [10.40_scheduler_requirements.md](10.40_scheduler_requirements.md)
 
 ## Governance Artifacts
 

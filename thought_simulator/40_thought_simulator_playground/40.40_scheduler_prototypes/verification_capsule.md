@@ -2,27 +2,69 @@
 
 ## Purpose
 
-Summarize verification status for this module.
+Canonical verification report for `40.40_scheduler_prototypes`.
 
-## Invariants
+## Glossary References
 
-- Invariant 1
-- Invariant 2
+- `../40.30_verification_glossary.md`
+- `../40.20_master_program_guide.md`
 
-## Verification Steps
+## Run Record
 
-1. Step 1
-2. Step 2
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-05-28 | 40.40_scheduler_prototypes | python harness.py | deterministic replay plus fairness and negative-path validation | PASS | 0 | artifacts/scheduler_verification_run_2026-05-28.json | HLR-20.140-001 | LLR-40.40-001 | 20.140_program_flow.md; 20.40_performance_requirements.md; 20.20_error_and_stability_requirements.md; 20.60_testing_and_validation.md; 20.50_observability_requirements.md; 20.90_interfaces_and_io.md | source-index anchored | tick; policy; max_active; selected_tp_ids; thoughtpoints; wait_ticks; history; verification_digest | negative_empty_tp_id; negative_non_monotonic_tick; negative_invalid_policy | First executed scheduler prototype run for 40.40 with deterministic replay and fairness sequence evidence. |
 
-## Evidence
+## Positive Scenario Ledger
 
-- Run logs:
-- Artifacts:
-- Notes:
+- `positive_deterministic_replay`: PASS
+	- Exercises `tick`, `policy`, `max_active`, `selected_tp_ids`, `thoughtpoints`, `history`, and `verification_digest`
+	- Confirms identical final snapshots and digest across two identical event sequences
+- `positive_round_robin_fairness`: PASS
+	- Exercises `tick`, `policy`, `selected_tp_ids`, `wait_ticks`, and `total_selected`
+	- Confirms deterministic round-robin progression across repeated ticks
 
-## Status
+## Negative-Path Coverage Ledger
 
-- Current status: NOT_STARTED
-- Confidence: LOW
-- Next action:
+- `negative_empty_tp_id`: PASS
+	- Exercises `tp_id`
+	- Verifies scheduler contract rejects empty ThoughtPoint identifiers
+- `negative_non_monotonic_tick`: PASS
+	- Exercises `tick` and `event_type`
+	- Verifies scheduler rejects non-monotonic tick updates
+- `negative_invalid_policy`: PASS
+	- Exercises `policy`
+	- Verifies unsupported scheduling policy values are rejected
+
+## Determinism Evidence Snapshot
+
+- Deterministic replay produced identical final snapshots and identical `verification_digest` values.
+- Evidence artifact: `artifacts/scheduler_verification_run_2026-05-28.json`
+
+## Failure Record
+
+- No failures recorded in the first executed run.
+
+## Requirements Anchor Map
+
+- `20.140_program_flow.md`: scheduling phase semantics and immutable phase ordering
+- `20.40_performance_requirements.md`: deterministic scheduler behavior under performance constraints
+- `20.20_error_and_stability_requirements.md`: fairness and deterministic failure behavior expectations
+- `20.60_testing_and_validation.md`: deterministic/negative-path verification obligations
+- `20.50_observability_requirements.md`: replay-safe event evidence and diagnostics
+- `20.90_interfaces_and_io.md`: stable JSON contract shape and interface determinism
+
+## Requirements Delta Summary
+
+- Scheduler prototype now provides an executable JSON-first contract.
+- Deterministic replay evidence exists for scheduler state and event history.
+- Fairness sequence evidence exists for baseline round-robin behavior.
+- Negative-path checks now cover empty TP IDs, non-monotonic ticks, and invalid policies.
+
+## Architectural Evaluation
+
+- Structure coherence: aligned with canonical playground module layout.
+- Verification maturity: executable evidence artifact now exists.
+- Contract clarity: scheduler IO contract and policy boundaries are explicit.
+- Next required milestone: decide canonical default fairness policy and tie-break hierarchy for promotion readiness.
 
