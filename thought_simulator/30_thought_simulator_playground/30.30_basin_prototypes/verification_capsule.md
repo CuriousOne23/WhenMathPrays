@@ -1,4 +1,4 @@
-﻿# Verification Capsule
+# Verification Capsule
 
 ## Purpose
 
@@ -13,32 +13,56 @@ Canonical verification report for `30.30_basin_prototypes`.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 30.30_basin_prototypes | python harness.py | template harness; no scenarios implemented | NOT_STARTED | 0 | none | TBD | TBD | TBD | TBD | Module structure migrated to canonical capsule format; verification scenarios pending. |
+| 2026-05-27 | 30.30_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.30_tp_requirements.md; 20.50_observability_requirements.md; 20.60_testing_and_validation.md; 20.90_interfaces_and_io.md; 20.120_stability_requirements.md; 20.140_program_flow.md; 20.150_glossary.md; 20.160_traceability_matrix.md | source-index anchored | First executed basin prototype run; no basin-specific requirement document exists yet. |
 
 ## Positive Scenario Ledger
 
-No executable basin scenarios implemented yet.
+- `positive_deterministic_replay`: PASS
+  - Exercises `basin_id`, `tp_id`, `state_counter`, `deterministic_mode`, `entropy_vector`, `provenance_ids`, `history`, and `verification_digest`
+  - Confirms identical snapshots across two identical replay sequences
 
 ## Negative-Path Coverage Ledger
 
-No executable basin negative-path scenarios implemented yet.
+- `negative_empty_basin_id`: PASS
+  - Exercises `basin_id`
+  - Verifies empty basin identifiers are rejected
+- `negative_duplicate_provenance`: PASS
+  - Exercises `provenance_ids`, `event_type`, and `provenance_id`
+  - Verifies duplicate provenance identifiers are rejected
+- `negative_entropy_length_mismatch`: PASS
+  - Exercises `entropy_vector` and `event_type`
+  - Verifies entropy vector shape mismatches are rejected
 
 ## Determinism Evidence Snapshot
 
-Not available yet. Determinism evidence will be recorded after basin scenarios are implemented and rerun.
+- Deterministic replay produced identical final snapshots and identical `verification_digest` values.
+- Evidence artifact: `artifacts/basin_verification_run_2026-05-27.json`
 
 ## Failure Record
 
-- No executed attempts recorded yet.
+- No failures recorded in the first executed run.
+
+## Requirements Anchor Map
+
+- `20.30_tp_requirements.md`: TP identity and lifecycle preservation
+- `20.50_observability_requirements.md`: artifact evidence and replayability
+- `20.60_testing_and_validation.md`: deterministic and negative-path coverage
+- `20.90_interfaces_and_io.md`: JSON-compatible contract shape
+- `20.120_stability_requirements.md`: monotonic state transition discipline
+- `20.140_program_flow.md`: phase-boundary consistency for basin updates
+- `20.150_glossary.md`: canonical terms used in the module contract
+- `20.160_traceability_matrix.md`: requirement-to-test traceability
 
 ## Requirements Delta Summary
 
-- Canonical module filenames and artifact directory have been standardized.
-- Basin behavior requirement deltas are pending first implemented scenarios.
+- The basin prototype now has an executable JSON-first IO contract.
+- Deterministic replay evidence exists for the first time.
+- Negative-path rejection rules were observed for invalid basin IDs, duplicate provenance, and entropy shape mismatches.
+- Basin-specific requirement coverage remains missing, so the module continues to rely on placeholder `HLR-?` and `LLR-?` references.
 
 ## Architectural Evaluation
 
-- Structure coherence: aligned with canonical module layout.
-- Verification maturity: scaffold level; evidence generation not started.
-- Next required milestone: implement deterministic basin scenarios in `prototype.py` and execute through `harness.py`.
-
+- Structure coherence: aligned with canonical playground module layout.
+- Verification maturity: first executable evidence captured.
+- Contract clarity: the basin IO contract is now explicit and machine-checkable.
+- Next required milestone: convert the evidence-backed deltas into a basin-specific requirement document when approved.
