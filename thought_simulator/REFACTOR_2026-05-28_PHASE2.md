@@ -29,7 +29,7 @@ Continue migration from the mixed requirement root into explicit governance and 
 - Added `10_program_governance/README.md` and `20_requirements/README.md`.
 - Updated stale references in:
   - `40_thought_simulator_playground/README.md`
-  - `50_thought_simulator_design/20.05_software_spec_construction_guide.md`
+  - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`
 
 ### Dependency Lint Bootstrap
 

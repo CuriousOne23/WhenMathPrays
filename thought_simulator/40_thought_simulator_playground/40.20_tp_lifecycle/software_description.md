@@ -1,4 +1,4 @@
-﻿# 30.20_tp_lifecycle / software_description.md
+﻿# 40.20_tp_lifecycle / software_description.md
 
 ## 1. Purpose
 The purpose of the TP is to record the thought processing it undergoes.
@@ -12,7 +12,7 @@ A ThoughtPoint carries identity, entropy, provenance, and relational state as it
 ## 2. Scope & Alignment with Master Guide
 - `prototype.py` must be a **pure macro-style module** (self-contained, importable, no top-level execution, deterministic when `deterministic_mode=True`).
 - `harness.py` is the **sole execution entrypoint** â€” it imports the macro, runs verification scenarios, collects evidence, and attaches to requirements.
-- All work follows `30.20_master_program_guide.md` (philosophy, variable control, macro rules, reporting standards, Verification Capsule process).
+- All work follows `40.20_master_program_guide.md` (philosophy, variable control, macro rules, reporting standards, Verification Capsule process).
 
 ## 3. Core Responsibilities (from GRP)
 - Carry and metabolize unified entropy (H_rep, H_pred, H_struct)
@@ -35,7 +35,7 @@ High-level requirements live in:
 - `10_program_governance/10_architecture/` (Manifold, TP, Basins)
 - `20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
-Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../30.30_verification_glossary.md`.
+Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../40.30_verification_glossary.md`.
 
 ## 6. Public Macro API (prototype.py)
 ```python
@@ -150,7 +150,7 @@ Any non-Python consumer should ingest this payload as schema-validated JSON and 
 
 - Canonical verification report: `verification_capsule.md`
 - Requirement evolution log: `requirements_delta.md`
-- Canonical glossary: `../30.30_verification_glossary.md`
+- Canonical glossary: `../40.30_verification_glossary.md`
 - Artifact directory: `artifacts/`
 
 Required artifact expectations:

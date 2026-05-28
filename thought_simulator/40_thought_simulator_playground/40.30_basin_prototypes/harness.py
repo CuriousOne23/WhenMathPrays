@@ -1,4 +1,4 @@
-"""Verification harness for 30.30_basin_prototypes."""
+"""Verification harness for 40.30_basin_prototypes."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import json
 from prototype import BasinPrototype
 
 
-MODULE_NAME = "30.30_basin_prototypes"
+MODULE_NAME = "40.30_basin_prototypes"
 RUN_COMMAND = "python harness.py"
 ARTIFACT_DIR = Path(__file__).resolve().parent / "artifacts"
 ARTIFACT_PATH = ARTIFACT_DIR / "basin_verification_run_2026-05-27.json"

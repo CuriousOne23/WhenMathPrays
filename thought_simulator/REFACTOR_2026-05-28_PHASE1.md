@@ -35,12 +35,12 @@ Begin migration toward the epistemic tier model:
 
 Copied initial module evidence into `30_verification/`:
 
-- `30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md`
-- `30_verification/30.20_tp_lifecycle/tp_state.json`
-- `30_verification/30.20_tp_lifecycle/determinism_run2.json`
-- `30_verification/30.20_tp_lifecycle/determinism_run3.json`
-- `30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md`
-- `30_verification/30.30_basin_prototypes/basin_verification_run_2026-05-27.json`
+- `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`
+- `30_verification/40.20_tp_lifecycle/tp_state.json`
+- `30_verification/40.20_tp_lifecycle/determinism_run2.json`
+- `30_verification/40.20_tp_lifecycle/determinism_run3.json`
+- `30_verification/40.30_basin_prototypes/40.30_basin_prototypes_verification_capsule.md`
+- `30_verification/40.30_basin_prototypes/basin_verification_run_2026-05-27.json`
 
 ## Remaining Work (Phase 2+)
 
