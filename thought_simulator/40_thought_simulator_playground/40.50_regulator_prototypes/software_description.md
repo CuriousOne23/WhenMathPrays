@@ -2,27 +2,42 @@
 
 ## Purpose
 
-Describe the specific objective for this prototype module.
+Define exploratory regulator behaviors that can adjust ThoughtPoint trajectory pressure while preserving deterministic execution rules.
+
+## Approval State
+
+Phase A status: pending human approval.
+
+Phase B execution (prototype/harness/capsule evidence updates) must not be treated as promotable until this description is explicitly approved.
+
+## Source Index
+
+- `20_requirements/20.20_error_and_stability_requirements.md`
+- `20_requirements/20.120_stability_requirements.md`
+- `20_requirements/20.140_program_flow.md`
+- `20_requirements/20.60_testing_and_validation.md`
+- `20_requirements/20.90_interfaces_and_io.md`
+- `../40.20_master_program_guide.md`
 
 ## Core Responsibilities
 
-- Responsibility 1
-- Responsibility 2
-- Responsibility 3
+- Define deterministic regulator policy hooks for suppression, attenuation, and stabilization.
+- Preserve clear separation between regulator decisions and core basin state mutation.
+- Emit regulator decision evidence fields suitable for replay and audit.
 
 ## Key Invariants
 
-- Invariant 1
-- Invariant 2
-- Invariant 3
+- Regulator outputs are deterministic for equivalent inputs in deterministic mode.
+- Regulator actions are explicit and observable; no hidden side effects.
+- Regulator processing does not mutate unrelated module state.
 
 ## Data Structures / Interfaces (tentative)
 
-- Structure or interface 1
-- Structure or interface 2
+- `regulator_input` (json object): policy context, tick, TP snapshot, pressure indicators.
+- `regulator_decision` (json object): action, rationale code, applied limits, observability fields.
 
 ## Open Questions
 
-- Question 1
-- Question 2
-- Question 3
+- Which regulator actions must be hard-fail vs soft-fail under instability conditions?
+- Should regulator policies be ordered by fixed precedence or weighted tie-break?
+- What minimum evidence fields are required for promotion-grade regulator verification?
