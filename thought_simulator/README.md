@@ -22,27 +22,38 @@ Two `10_*` directories are intentional and do not require correction:
 
 This split preserves epistemic asymmetry: exploratory layers influence canonical artifacts through human review, while formal traceability remains canonical-to-canonical.
 
+## Operating Principle: Attached Exploration, Protected Canon
+
+This repository intentionally supports both expert play and formal rigor.
+
+- Attached exploration: `20_requirements/` and `40_thought_simulator_playground/` are where teams test ideas quickly, iterate, and discover better approaches.
+- Protected canon: `10_thought_simulator_req/`, `30_verification/`, and `50_thought_simulator_design/` are where approved, traceable, and review-stable artifacts live.
+- Controlled transfer: exploratory insights can be promoted into canonical layers only through explicit governance and verification steps.
+
+This model is deliberate because high-quality innovation needs space to experiment, while production-relevant decisions need stable process controls.
+
 ## First-Time Contributor Reading Order
 
 If you are new to this repository, use this order:
 
 1. [README.md](README.md) (this file)
-2. [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
-3. [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
-4. [30_verification/README.md](30_verification/README.md)
-5. [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
+2. [CONTRIBUTING_CHANGE_WORKFLOW.md](CONTRIBUTING_CHANGE_WORKFLOW.md)
+3. [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
+4. [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
+5. [30_verification/README.md](30_verification/README.md)
+6. [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
 
 Then review canonical requirement anchors:
 
-6. [10_thought_simulator_req/10.20_tp_requirements.md](10_thought_simulator_req/10.20_tp_requirements.md)
-7. [10_thought_simulator_req/10.30_basin_requirements.md](10_thought_simulator_req/10.30_basin_requirements.md)
-8. [10_thought_simulator_req/10.40_scheduler_requirements.md](10_thought_simulator_req/10.40_scheduler_requirements.md)
+7. [10_thought_simulator_req/10.20_tp_requirements.md](10_thought_simulator_req/10.20_tp_requirements.md)
+8. [10_thought_simulator_req/10.30_basin_requirements.md](10_thought_simulator_req/10.30_basin_requirements.md)
+9. [10_thought_simulator_req/10.40_scheduler_requirements.md](10_thought_simulator_req/10.40_scheduler_requirements.md)
 
 Then review canonical verification evidence snapshots:
 
-9. [30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md](30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md)
-10. [30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md](30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md)
-11. [30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md](30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md)
+10. [30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md](30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md)
+11. [30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md](30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md)
+12. [30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md](30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md)
 
 ## Process Flow (Current)
 
@@ -134,6 +145,7 @@ Top-level `thought_simulator/` direct children:
 - [scripts/](scripts/)
 - [utils/](utils/)
 - [main.py](main.py)
+- [CONTRIBUTING_CHANGE_WORKFLOW.md](CONTRIBUTING_CHANGE_WORKFLOW.md)
 - [REFACTOR_2026-05-28_PHASE1.md](REFACTOR_2026-05-28_PHASE1.md)
 - [REFACTOR_2026-05-28_PHASE2.md](REFACTOR_2026-05-28_PHASE2.md)
 - [REFACTOR_2026-05-28_PHASE3.md](REFACTOR_2026-05-28_PHASE3.md)
