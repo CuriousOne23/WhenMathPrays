@@ -1,0 +1,37 @@
+{
+  "protected_terms": [],
+  "required_by_module": {
+    "30.20_tp_lifecycle": [
+      "scenario",
+      "artifact",
+      "deterministic_mode",
+      "provenance",
+      "merge event",
+      "split event",
+      "io fields exercised",
+      "negative-path coverage",
+      "parallel execution suitability",
+      "requirement emission",
+      "harness entrypoint",
+      "verification capsule",
+      "requirements delta"
+    ],
+    "30.30_basin_prototypes": [
+      "scenario",
+      "artifact",
+      "deterministic_mode",
+      "provenance",
+      "io fields exercised",
+      "negative-path coverage",
+      "harness entrypoint",
+      "verification capsule",
+      "requirements delta"
+    ],
+    "30.40_scheduler_prototypes": [
+      "scheduler",
+      "fairness",
+      "tie-break",
+      "starvation prevention"
+    ]
+  }
+}

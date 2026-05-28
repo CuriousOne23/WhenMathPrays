@@ -9,6 +9,10 @@ on:
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - "thought_simulator/scripts/validate_glossary_alignment.py"
+      - "thought_simulator/30_verification/glossary_term_registry.json"
+      - "thought_simulator/scripts/validate_readme_links.py"
+      - "thought_simulator/scripts/validate_readme_coverage.py"
+      - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
   push:
     branches: ["main"]
@@ -19,6 +23,10 @@ on:
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - "thought_simulator/scripts/validate_glossary_alignment.py"
+      - "thought_simulator/30_verification/glossary_term_registry.json"
+      - "thought_simulator/scripts/validate_readme_links.py"
+      - "thought_simulator/scripts/validate_readme_coverage.py"
+      - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
 
 jobs:
@@ -48,3 +56,12 @@ jobs:
 
       - name: Run glossary alignment warning check (non-blocking)
         run: python thought_simulator/scripts/validate_glossary_alignment.py
+
+      - name: Run README link validation
+        run: python thought_simulator/scripts/validate_readme_links.py
+
+      - name: Run README coverage warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_readme_coverage.py
+
+      - name: Run document reference warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_doc_reference_targets.py

@@ -29,8 +29,10 @@ Each promoted module should include:
 
 ## Current Seeded Modules
 
-- `40.20_tp_lifecycle/`
-- `40.30_basin_prototypes/`
-- `40.40_scheduler_prototypes/`
+- [30.20_tp_lifecycle/](30.20_tp_lifecycle/)
+- [30.30_basin_prototypes/](30.30_basin_prototypes/)
+- [30.40_scheduler_prototypes/](30.40_scheduler_prototypes/)
+- [30.30_verification_glossary.md](30.30_verification_glossary.md)
+- [glossary_term_registry.json](glossary_term_registry.json)
 
 These were copied from the playground as the first phase of the refactor and should be treated as initial promoted evidence snapshots.

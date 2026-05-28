@@ -12,6 +12,7 @@ This directory is the canonical requirement-governance root for promoted require
 
 - [docs/promotion_protocol.md](docs/promotion_protocol.md)
 - [docs/adrs/ADR-template.md](docs/adrs/ADR-template.md)
+- [docs/](docs/)
 
 ## Boundary Note
 
