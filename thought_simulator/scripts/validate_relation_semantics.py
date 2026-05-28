@@ -58,6 +58,13 @@ def split_frontmatter(content: str) -> tuple[list[str] | None, int]:
     return None, -1
 
 
+def _unquote(token: str) -> str:
+    """Strip surrounding single or double quotes from a YAML scalar token."""
+    if len(token) >= 2 and token[0] in ('"', "'") and token[-1] == token[0]:
+        return token[1:-1]
+    return token
+
+
 def parse_relation_values(frontmatter_lines: list[str]) -> dict[str, list[str]]:
     relations: dict[str, list[str]] = {key: [] for key in RELATION_KEYS}
 
@@ -75,11 +82,11 @@ def parse_relation_values(frontmatter_lines: list[str]) -> dict[str, list[str]]:
                 if remainder.startswith("[") and remainder.endswith("]"):
                     inner = remainder[1:-1].strip()
                     if inner:
-                        relations[key].extend([token.strip() for token in inner.split(",")])
+                        relations[key].extend([_unquote(t.strip()) for t in inner.split(",")])
                 break
         else:
             if current_key and stripped.startswith("-"):
-                value = stripped[1:].strip()
+                value = _unquote(stripped[1:].strip())
                 if value:
                     relations[current_key].append(value)
             else:

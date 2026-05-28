@@ -2,7 +2,7 @@
 status: requirements
 source_of_truth: this
 contains:
-	- HLR: [HLR-20.000-001]
+  - HLR: [HLR-20.000-001]
 ---
 
 # 20 Requirements
