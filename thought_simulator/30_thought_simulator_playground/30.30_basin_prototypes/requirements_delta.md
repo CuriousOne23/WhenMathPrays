@@ -1,4 +1,4 @@
-﻿# Requirements Delta
+# Requirements Delta
 
 ## Purpose
 
@@ -6,36 +6,44 @@ This file records requirement-change proposals, implementer feedback, and migrat
 
 ## Migrated Structural Changes
 
-- Renamed legacy verification report to canonical `verification_capsule.md`.
-- Renamed legacy requirement report to canonical `requirements_delta.md`.
-- Added canonical `artifacts/` directory for future verification outputs.
-- Removed legacy split-note files after migration to canonical capsule structure.
+- Renamed the module report files to the canonical `verification_capsule.md` and `requirements_delta.md` structure.
+- Added a deterministic JSON artifact under `artifacts/` for the first executable verification run.
 
-## Proposed Requirement Changes
+## Evidence-Backed Requirement Deltas
 
-- Basin-specific behavioral requirements are pending implementation of executable scenarios.
-- Determinism and traceability requirement mappings will be added after first scenario run evidence is available.
+- `HLR-?`: Basin state objects shall expose a JSON-compatible IO contract that preserves `basin_id`, `tp_id`, and `state_counter` without transformation.
+  - Evidence: `positive_deterministic_replay`
+  - Traceability: `basin_id`, `tp_id`, `state_counter`, `history`, `verification_digest`
+- `HLR-?`: Basin replay of identical input contracts shall produce identical final snapshots and identical digests.
+  - Evidence: `positive_deterministic_replay`
+  - Traceability: `deterministic_mode`, `entropy_vector`, `history`, `verification_digest`
+- `HLR-?`: Basin validation shall reject empty basin identifiers, duplicate provenance identifiers, and entropy-vector shape mismatches.
+  - Evidence: `negative_empty_basin_id`, `negative_duplicate_provenance`, `negative_entropy_length_mismatch`
+  - Traceability: `basin_id`, `provenance_ids`, `provenance_id`, `event_type`, `entropy_vector`
+- `LLR-?`: The harness shall emit a JSON artifact under `artifacts/` containing scenario results, traceability fields, and a run summary.
+  - Evidence: `artifacts/basin_verification_run_2026-05-27.json`
+  - Traceability: execution reporting, artifact persistence, scenario ledger
 
 ## Rationale
 
-- Canonical naming and folder structure are prerequisites for consistent cross-module verification.
-- Requirement deltas should be evidence-backed; scenario execution is required before normative requirement additions.
+- The first executed basin scenarios showed that the module can now be verified through repeatable JSON evidence rather than only narrative notes.
+- Negative-path checks are needed early because basin behavior depends on contract validation as much as on successful transitions.
+- Requirement deltas remain provisional because no basin-specific requirement document currently exists.
 
 ## Impacted Documents
 
 - `software_description.md`
-- `verification_capsule.md`
 - `prototype.py`
 - `harness.py`
+- `verification_capsule.md`
 
 ## Open Validation Needed
 
-- Define first executable positive and negative basin scenarios.
-- Attach initial HLR/LLR mappings after scenario implementation.
-- Confirm target requirement documents/sections for basin requirement deltas.
+- Define whether the basin prototype should remain a standalone exploratory contract or be promoted into a formal basin design specification.
+- Decide whether future basin requirements should be materialized as a dedicated basin HLR document or remain embedded as deltas against the canonical requirement set.
+- Confirm whether additional negative-path coverage is needed for non-monotonic ticks and non-finite entropy values.
 
 ## Migration Notes
 
-- Legacy report filenames were replaced with canonical capsule filenames on May 27, 2026.
-- Future deltas should be appended here.
-
+- The basin prototype now has a stable contract shape and deterministic replay evidence.
+- Future deltas should extend the evidence-backed sections rather than replacing them.
