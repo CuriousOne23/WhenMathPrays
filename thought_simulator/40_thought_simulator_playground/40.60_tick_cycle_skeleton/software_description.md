@@ -6,9 +6,9 @@ Define a deterministic tick-cycle skeleton with explicit phase ordering and repl
 
 ## Approval State
 
-Phase A status: pending human approval.
+Approved by human on 2026-05-28 (Phase A complete; eligible for 50.05 execution).
 
-Phase B execution (prototype/harness/capsule evidence updates) must not be treated as promotable until this description is explicitly approved.
+Phase B execution completed; promotion remains governed by canonical 10/30/50 artifacts.
 
 ## Source Index
 

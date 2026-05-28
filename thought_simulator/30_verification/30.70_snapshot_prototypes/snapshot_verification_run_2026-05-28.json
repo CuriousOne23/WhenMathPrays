@@ -1,0 +1,36 @@
+{
+  "module": "40.70_snapshot_prototypes",
+  "date": "2026-05-28",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "positive_round_trip",
+      "result": "PASS",
+      "snapshot": {
+        "schema_version": "v1",
+        "state": {
+          "tp_id": "tp-001",
+          "state_counter": 3,
+          "entropy": {
+            "total": 0.2
+          }
+        },
+        "digest": "de19ffb8e6900d2d440b5985f73609ff6137bde80b0002f52a7af94b00f6eff8"
+      }
+    },
+    {
+      "scenario": "positive_deterministic_replay",
+      "result": "PASS"
+    },
+    {
+      "scenario": "negative_corrupt_digest",
+      "result": "PASS",
+      "error": "snapshot digest mismatch"
+    },
+    {
+      "scenario": "negative_schema_mismatch",
+      "result": "PASS",
+      "error": "schema version mismatch"
+    }
+  ]
+}
