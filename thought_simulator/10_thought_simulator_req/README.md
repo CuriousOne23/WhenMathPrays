@@ -1,13 +1,21 @@
-# Legacy Requirements Root (Compatibility)
+# Canonical Requirement Governance Root
 
-This directory is retained as a migration compatibility anchor.
+This directory is the canonical requirement-governance root for promoted requirement anchors.
 
-As of 2026-05-28, the canonical document roots are:
+## Canonical Anchors
 
-- [../10_program_governance/](../10_program_governance/)
-- [../20_requirements/](../20_requirements/)
+- [10.20_tp_requirements.md](10.20_tp_requirements.md)
+- [10.30_basin_requirements.md](10.30_basin_requirements.md)
 
-The previous mixed structure under `10_thought_simulator_req/` has been split into explicit governance and requirements tiers to align with the 10/20/30/40/50 model.
+## Governance Artifacts
+
+- [docs/promotion_protocol.md](docs/promotion_protocol.md)
+- [docs/adrs/ADR-template.md](docs/adrs/ADR-template.md)
+
+## Boundary Note
+
+- Exploratory requirement reasoning remains in [../20_requirements/](../20_requirements/).
+- Canonical requirement anchors in this directory are the authoritative requirement source for canonical design and verification flow.
 
 
 
