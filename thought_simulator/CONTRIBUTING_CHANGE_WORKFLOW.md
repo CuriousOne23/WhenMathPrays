@@ -41,6 +41,8 @@ This workflow applies to edits under:
 
 4. Update glossary or README surfaces when terminology or structure changes.
 - If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
+- If requirements-tier terminology changes, update `20_requirements/20.150_glossary.md` and `20_requirements/glossary_term_registry.json` in the same change.
+- `20.150_glossary.md` is scoped to `20_requirements/` documents.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
 - Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
 
