@@ -8,6 +8,7 @@ on:
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
+      - "thought_simulator/scripts/validate_glossary_alignment.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
   push:
     branches: ["main"]
@@ -17,6 +18,7 @@ on:
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
+      - "thought_simulator/scripts/validate_glossary_alignment.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
 
 jobs:
@@ -43,3 +45,6 @@ jobs:
 
       - name: Run naming prefix validation
         run: python thought_simulator/scripts/validate_doc_naming_prefixes.py
+
+      - name: Run glossary alignment warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_glossary_alignment.py
