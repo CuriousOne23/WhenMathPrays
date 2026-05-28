@@ -21,7 +21,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- 40_thought_simulator_playground/40.30_verification_glossary.md
+- [40.30_verification_glossary.md](40.30_verification_glossary.md)
 
 ## Workflow
 
@@ -97,18 +97,18 @@ Why the exception exists:
 
 ## Directory Map
 
-- 40.10_math_prototypes/ - entropy, stability, and math experiments
-- 40.20_tp_lifecycle/ - ThoughtPoint lifecycle exploration
-- 40.30_basin_prototypes/ - basin behavior prototypes
-- 40.40_scheduler_prototypes/ - scheduling and ordering experiments
-- 40.50_regulator_prototypes/ - regulator mechanisms and policies
-- 40.60_tick_cycle_skeleton/ - simulation tick-cycle skeletons
-- 40.70_snapshot_prototypes/ - snapshot and restoration patterns
-- 40.80_event_log_prototypes/ - event stream and replay experiments
-- 40.90_experiment_runner/ - experiment orchestration prototypes
-- shared/ - shared helpers for prototype work
-- 40.20_master_program_guide.md - unified process guide and state-control policy
-- 40.30_verification_glossary.md - shared verification vocabulary
+- [40.10_math_prototypes/](40.10_math_prototypes/) - entropy, stability, and math experiments
+- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) - ThoughtPoint lifecycle exploration
+- [40.30_basin_prototypes/](40.30_basin_prototypes/) - basin behavior prototypes
+- [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) - scheduling and ordering experiments
+- [40.50_regulator_prototypes/](40.50_regulator_prototypes/) - regulator mechanisms and policies
+- [40.60_tick_cycle_skeleton/](40.60_tick_cycle_skeleton/) - simulation tick-cycle skeletons
+- [40.70_snapshot_prototypes/](40.70_snapshot_prototypes/) - snapshot and restoration patterns
+- [40.80_event_log_prototypes/](40.80_event_log_prototypes/) - event stream and replay experiments
+- [40.90_experiment_runner/](40.90_experiment_runner/) - experiment orchestration prototypes
+- [shared/](shared/) - shared helpers for prototype work
+- [40.20_master_program_guide.md](40.20_master_program_guide.md) - unified process guide and state-control policy
+- [40.30_verification_glossary.md](40.30_verification_glossary.md) - shared verification vocabulary
 
 
 

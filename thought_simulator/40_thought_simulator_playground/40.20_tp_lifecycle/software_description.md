@@ -167,7 +167,7 @@ Required artifact expectations:
 
 - `artifacts/tp_state.json` for the current canonical deterministic run output
 - `artifacts/determinism_run2.json` and `artifacts/determinism_run3.json` for reproducibility comparisons
-- `artifacts/failure_artifacts.json` only when a run fails and a failure payload exists
+- a failure artifact JSON payload only when a run fails and a failure payload exists
 
 The verification capsule must migrate content from the legacy run-record, summary, and failure files without losing information.
 

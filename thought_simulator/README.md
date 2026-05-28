@@ -22,6 +22,48 @@ Two `10_*` directories are intentional and do not require correction:
 
 This split preserves epistemic asymmetry: exploratory layers influence canonical artifacts through human review, while formal traceability remains canonical-to-canonical.
 
+## First-Time Contributor Reading Order
+
+If you are new to this repository, use this order:
+
+1. [README.md](README.md) (this file)
+2. [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
+3. [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
+4. [30_verification/README.md](30_verification/README.md)
+5. [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
+
+Then review canonical requirement anchors:
+
+6. [10_thought_simulator_req/10.20_tp_requirements.md](10_thought_simulator_req/10.20_tp_requirements.md)
+7. [10_thought_simulator_req/10.30_basin_requirements.md](10_thought_simulator_req/10.30_basin_requirements.md)
+8. [10_thought_simulator_req/10.40_scheduler_requirements.md](10_thought_simulator_req/10.40_scheduler_requirements.md)
+
+Then review canonical verification evidence snapshots:
+
+9. [30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md](30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md)
+10. [30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md](30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md)
+11. [30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md](30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md)
+
+## Process Flow (Current)
+
+The process flow is intentionally two-speed:
+
+- exploratory ideation and implementation in [20_requirements/](20_requirements/) and [40_thought_simulator_playground/](40_thought_simulator_playground/)
+- canonical governance, verification, and design in [10_thought_simulator_req/](10_thought_simulator_req/), [30_verification/](30_verification/), and [50_thought_simulator_design/](50_thought_simulator_design/)
+
+Operational flow for new `40.*` modules:
+
+1. Phase A: author/review module `software_description.md` only (human approval required).
+2. Phase B: generate module prototype/harness/verification capsule/requirements delta and artifact evidence.
+3. Promotion prep: anchor requirement IDs in [10_thought_simulator_req/](10_thought_simulator_req/) and mirror canonical evidence in [30_verification/](30_verification/).
+4. Design integration: consume canonical requirement + verification sources through [50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md).
+
+Process control sources:
+
+- governance and promotion gates: [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
+- construction workflow rules: [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
+- shared verification vocabulary: [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
+
 ## Core Reading Path
 
 1. [00.10_vision_and_objectives.md](10_program_governance/00_foundations/00.10_vision_and_objectives.md)
@@ -72,6 +114,40 @@ Canonical trace purity rule:
 Implementation design specifications are maintained under [50_thought_simulator_design/](50_thought_simulator_design/).
 
 - [50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md) - generic methodology for constructing subsystem software specifications.
+
+## Root Directory Index
+
+Top-level `thought_simulator/` direct children:
+
+- [10_program_governance/](10_program_governance/)
+- [10_thought_simulator_req/](10_thought_simulator_req/)
+- [20_requirements/](20_requirements/)
+- [30_verification/](30_verification/)
+- [40_thought_simulator_playground/](40_thought_simulator_playground/)
+- [50_thought_simulator_design/](50_thought_simulator_design/)
+- [config/](config/)
+- [core/](core/)
+- [docs/](docs/)
+- [dynamics/](dynamics/)
+- [experiments/](experiments/)
+- [io/](io/)
+- [scripts/](scripts/)
+- [utils/](utils/)
+- [main.py](main.py)
+- [REFACTOR_2026-05-28_PHASE1.md](REFACTOR_2026-05-28_PHASE1.md)
+- [REFACTOR_2026-05-28_PHASE2.md](REFACTOR_2026-05-28_PHASE2.md)
+- [REFACTOR_2026-05-28_PHASE3.md](REFACTOR_2026-05-28_PHASE3.md)
+- [REFACTOR_2026-05-28_PHASE4.md](REFACTOR_2026-05-28_PHASE4.md)
+- [REFACTOR_2026-05-28_PHASE5.md](REFACTOR_2026-05-28_PHASE5.md)
+- [REFACTOR_2026-05-28_PHASE6.md](REFACTOR_2026-05-28_PHASE6.md)
+- [REFACTOR_2026-05-28_PHASE7.md](REFACTOR_2026-05-28_PHASE7.md)
+- [REFACTOR_2026-05-28_PHASE8.md](REFACTOR_2026-05-28_PHASE8.md)
+- [REFACTOR_2026-05-28_PHASE9.md](REFACTOR_2026-05-28_PHASE9.md)
+- [REFACTOR_2026-05-28_PHASE10.md](REFACTOR_2026-05-28_PHASE10.md)
+- [REFACTOR_2026-05-28_PHASE11.md](REFACTOR_2026-05-28_PHASE11.md)
+- [REFACTOR_2026-05-28_PHASE12.md](REFACTOR_2026-05-28_PHASE12.md)
+- [RENAMING_MIGRATION_REPORT.md](RENAMING_MIGRATION_REPORT.md)
+- [_broken_links.csv](_broken_links.csv)
 
 ---
 
