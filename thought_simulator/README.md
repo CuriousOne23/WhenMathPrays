@@ -7,10 +7,20 @@ This folder hosts the canonical document tiers for the Thought Simulator.
 Core document tiers:
 
 - [10_program_governance/](10_program_governance/) - project intent, architecture framing, and philosophical governance
-- [20_requirements/](20_requirements/) - high-level system requirements and traceability anchors
+- [10_thought_simulator_req/](10_thought_simulator_req/) - canonical HLR layer and promotion governance artifacts (ADR and protocol templates)
+- [20_requirements/](20_requirements/) - exploratory requirements playground (reasoning and concept evolution)
 - [30_verification/](30_verification/) - verification capsules and deterministic evidence artifacts
 - [40_thought_simulator_playground/](40_thought_simulator_playground/) - exploratory prototypes and experiments
 - [50_thought_simulator_design/](50_thought_simulator_design/) - formal design specifications
+
+## Tier Clarification
+
+Two `10_*` directories are intentional and do not require correction:
+
+- [10_program_governance/](10_program_governance/) governs program-level architecture context and policy.
+- [10_thought_simulator_req/](10_thought_simulator_req/) is the canonical requirement governance root for promotion protocol and ADR governance artifacts.
+
+This split preserves epistemic asymmetry: exploratory layers influence canonical artifacts through human review, while formal traceability remains canonical-to-canonical.
 
 ## Core Reading Path
 
@@ -32,7 +42,12 @@ Core document tiers:
 
 ## Traceability
 
-Use [20.160_traceability_matrix.md](20_requirements/20.160_traceability_matrix.md) as the mapping source across foundational concepts, architecture artifacts, and implementation-facing requirements.
+Use [20.160_traceability_matrix.md](20_requirements/20.160_traceability_matrix.md) as exploratory mapping context, while keeping formal trace edges in canonical layers only.
+
+Canonical trace purity rule:
+
+- canonical-to-canonical only: [10_thought_simulator_req/](10_thought_simulator_req/) -> [50_thought_simulator_design/](50_thought_simulator_design/) -> [30_verification/](30_verification/)
+- no formal trace edges from [20_requirements/](20_requirements/) or [40_thought_simulator_playground/](40_thought_simulator_playground/)
 
 ## Requirements (20_requirements)
 
@@ -60,8 +75,8 @@ Implementation design specifications are maintained under [50_thought_simulator_
 
 ---
 
-**Last Updated**: May 25, 2026  
-**Version**: 0.4 (Restructured)
+**Last Updated**: May 28, 2026  
+**Version**: 0.5 (Canonical/Exploratory Boundary Clarified)
 
 
 
