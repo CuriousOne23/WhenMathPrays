@@ -13,3 +13,17 @@ This directory contains governance-level documents that establish project intent
 - Governance documents provide program context.
 - They are not executable verification evidence.
 - They are not implementation design specifications.
+
+## Governance Boundary: Influence Without Trace Edges
+
+Policy statement:
+
+- Exploratory layers may influence canonical artifacts through human judgment, but they are never part of the formal traceability graph.
+- Formal traceability is canonical-only and is limited to canonical requirements, canonical design, and canonical verification artifacts.
+- Exploratory content may be speculative, contradictory, incomplete, wrong, or abandoned without creating governance debt.
+- Promotion rationale must be preserved in human-readable channels (for example: decision notes, promotion summaries, rationale documents, and commit history), not by adding formal dependency edges from exploratory layers.
+
+Boundary intent:
+
+- Preserve the why in exploration without elevating exploratory material into ground truth.
+- Preserve the what in canonical layers through strict validation and stable trace semantics.
