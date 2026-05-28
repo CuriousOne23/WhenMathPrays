@@ -7,6 +7,7 @@ on:
       - "thought_simulator/scripts/check_doc_dependencies.py"
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
+      - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
   push:
     branches: ["main"]
@@ -15,6 +16,7 @@ on:
       - "thought_simulator/scripts/check_doc_dependencies.py"
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
+      - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
 
 jobs:
@@ -38,3 +40,6 @@ jobs:
 
       - name: Run relation semantics validation
         run: python thought_simulator/scripts/validate_relation_semantics.py
+
+      - name: Run naming prefix validation
+        run: python thought_simulator/scripts/validate_doc_naming_prefixes.py
