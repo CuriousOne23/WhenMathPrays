@@ -45,7 +45,7 @@ High-level requirements live in:
 - `10_program_governance/10_architecture/` (Manifold, TP, Basins)
 - `20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
-Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../40.30_verification_glossary.md`.
+Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../../30_verification/30.30_verification_glossary.md`.
 
 ## 6. Public Macro API (prototype.py)
 ```python
@@ -160,7 +160,7 @@ Any non-Python consumer should ingest this payload as schema-validated JSON and 
 
 - Canonical verification report: `verification_capsule.md`
 - Requirement evolution log: `requirements_delta.md`
-- Canonical glossary: `../40.30_verification_glossary.md`
+- Canonical glossary: `../../30_verification/30.30_verification_glossary.md`
 - Artifact directory: `artifacts/`
 
 Required artifact expectations:

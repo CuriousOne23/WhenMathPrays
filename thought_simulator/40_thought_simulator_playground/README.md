@@ -21,7 +21,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- [40.30_verification_glossary.md](40.30_verification_glossary.md)
+- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md)
 
 ## Workflow
 
@@ -108,7 +108,7 @@ Why the exception exists:
 - [40.90_experiment_runner/](40.90_experiment_runner/) - experiment orchestration prototypes
 - [shared/](shared/) - shared helpers for prototype work
 - [40.20_master_program_guide.md](40.20_master_program_guide.md) - unified process guide and state-control policy
-- [40.30_verification_glossary.md](40.30_verification_glossary.md) - shared verification vocabulary
+- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md) - shared verification vocabulary
 
 
 

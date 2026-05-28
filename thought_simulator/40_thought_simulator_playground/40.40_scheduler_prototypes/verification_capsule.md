@@ -6,7 +6,7 @@ Canonical verification report for `40.40_scheduler_prototypes`.
 
 ## Glossary References
 
-- `../40.30_verification_glossary.md`
+- `../../30_verification/30.30_verification_glossary.md`
 - `../40.20_master_program_guide.md`
 
 ## Run Record

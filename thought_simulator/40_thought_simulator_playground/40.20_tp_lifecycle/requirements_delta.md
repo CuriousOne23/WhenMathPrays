@@ -16,7 +16,7 @@ It replaces the legacy `updated_requirements.md` report while preserving its con
 
 - Add requirement that `verification_capsule.md` is the canonical verification report for the module.
 - Add requirement that `requirements_delta.md` is the canonical implementer feedback and requirement-change report.
-- Add requirement that `40.30_verification_glossary.md` is the canonical shared vocabulary for verification terms.
+- Add requirement that `30.30_verification_glossary.md` is the canonical shared vocabulary for verification terms.
 - Add requirement that verification artifacts are written into `artifacts/` instead of the module root.
 - Add requirement that the module preserve all migrated history when legacy report files are removed.
 - Add requirement that negative-path coverage is reported alongside positive-path verification scenarios.
@@ -38,7 +38,7 @@ It replaces the legacy `updated_requirements.md` report while preserving its con
 - `prototype.py`
 - `harness.py`
 - `verification_capsule.md`
-- `40.30_verification_glossary.md`
+- `30.30_verification_glossary.md`
 - `40.20_master_program_guide.md`
 
 ## Open Validation Needed
@@ -86,7 +86,7 @@ It replaces the legacy `updated_requirements.md` report while preserving its con
 	- Version/date of modification: updated May 27, 2026
 	- Change: designated the TP lifecycle delta file as the canonical requirement-change log and preserved it as an audit artifact.
 	- Status: incorporated
-- Delta: `40.30_verification_glossary.md` is the canonical shared vocabulary for verification terms
+- Delta: `30.30_verification_glossary.md` is the canonical shared vocabulary for verification terms
 	- Document modified: `20_requirements/20.30_tp_requirements.md`; `20_requirements/20.60_testing_and_validation.md` v0.3 (May 27, 2026)
 	- Version/date of modification: updated May 27, 2026
 	- Change: required TP verification terminology and module verification records to align with the canonical verification glossary.
