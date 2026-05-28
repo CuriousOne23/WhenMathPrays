@@ -1,0 +1,22 @@
+{
+  "module": "40.80_event_log_prototypes",
+  "date": "2026-05-28",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "positive_deterministic_replay",
+      "result": "PASS",
+      "digest": "dacb4da3be9da68a4fab3528737168db832c9fad840579bf7c19d436b1434b1e"
+    },
+    {
+      "scenario": "negative_out_of_order_sequence",
+      "result": "PASS",
+      "error": "sequence must advance by exactly one"
+    },
+    {
+      "scenario": "negative_missing_field",
+      "result": "PASS",
+      "error": "missing required event field: payload"
+    }
+  ]
+}
