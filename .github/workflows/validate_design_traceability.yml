@@ -1,0 +1,124 @@
+name: Validate Design Traceability Index
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-design-traceability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate 50.00 design traceability index
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          design_dir = Path("thought_simulator/50_thought_simulator_design")
+          index_path = design_dir / "50.00_design_traceability_index.md"
+
+          if not index_path.exists():
+              print("ERROR: missing required index file thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md")
+              sys.exit(1)
+
+          expected_files = sorted(
+              p.name
+              for p in design_dir.glob("50.*.md")
+              if p.name != "50.00_design_traceability_index.md"
+          )
+
+          content = index_path.read_text(encoding="utf-8").splitlines()
+          table_lines = [line for line in content if line.strip().startswith("|")]
+
+          if len(table_lines) < 3:
+              print("ERROR: traceability table not found or malformed in 50.00_design_traceability_index.md")
+              sys.exit(1)
+
+          rows = []
+          for line in table_lines:
+              raw = line.strip()
+              if re.match(r"^\|\s*-+", raw):
+                  continue
+              cols = [c.strip() for c in raw.strip("|").split("|")]
+              if len(cols) < 5:
+                  continue
+              if cols[0].lower() == "macro / domain":
+                  continue
+              rows.append(cols[:5])
+
+          if not rows:
+              print("ERROR: no data rows parsed from traceability table")
+              sys.exit(1)
+
+          macro_names = [r[0] for r in rows]
+          sorted_macro_names = sorted(macro_names, key=lambda s: s.casefold())
+          if macro_names != sorted_macro_names:
+              print("ERROR: table rows are not alphabetically sorted by Macro / Domain")
+              print("Observed order:")
+              for name in macro_names:
+                  print(f"  - {name}")
+              print("Required order:")
+              for name in sorted_macro_names:
+                  print(f"  - {name}")
+              sys.exit(1)
+
+          referenced_files = set()
+          bad_reference_format = []
+          for row in rows:
+              design_ref = row[4].strip().strip("`")
+              if design_ref.startswith("50.") and design_ref.endswith(".md"):
+                  referenced_files.add(design_ref)
+              elif "placeholder" in design_ref.lower():
+                  continue
+              else:
+                  bad_reference_format.append((row[0], design_ref))
+
+          if bad_reference_format:
+              print("ERROR: table contains non-deterministic or malformed design-doc references:")
+              for macro, ref in bad_reference_format:
+                  print(f"  - {macro}: {ref}")
+              sys.exit(1)
+
+          expected_set = set(expected_files)
+          missing_from_table = sorted(expected_set - referenced_files)
+          missing_on_disk = sorted(referenced_files - expected_set)
+
+          errors = []
+
+          if missing_from_table:
+              errors.append("Any 50-series file is missing from the table")
+              errors.extend(f"  - missing row for file: {name}" for name in missing_from_table)
+
+          if missing_on_disk:
+              errors.append("Any table row references a non-existent file")
+              errors.extend(f"  - non-existent file reference: {name}" for name in missing_on_disk)
+              errors.append("Any file was renamed without updating the table")
+              errors.extend(f"  - possible renamed/deleted reference: {name}" for name in missing_on_disk)
+              errors.append("Any file was deleted without updating the table")
+              errors.extend(f"  - possible deleted reference: {name}" for name in missing_on_disk)
+
+          if errors:
+              print("ERROR: design traceability validation failed.")
+              for line in errors:
+                  print(line)
+              print("Deterministic comparison set:")
+              print("  Expected (from directory):")
+              for name in expected_files:
+                  print(f"    - {name}")
+              print("  Referenced (from table):")
+              for name in sorted(referenced_files):
+                  print(f"    - {name}")
+              sys.exit(1)
+
+          print("Design traceability validation passed.")
+          print("Validated files:")
+          for name in expected_files:
+              print(f"  - {name}")
+          PY
