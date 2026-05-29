@@ -47,11 +47,11 @@ jobs:
               if re.match(r"^\|\s*-+", raw):
                   continue
               cols = [c.strip() for c in raw.strip("|").split("|")]
-              if len(cols) < 5:
+              if len(cols) < 4:
                   continue
               if cols[0].lower() == "macro / domain":
                   continue
-              rows.append(cols[:5])
+              rows.append(cols[:4])
 
           if not rows:
               print("ERROR: no data rows parsed from traceability table")
@@ -72,7 +72,7 @@ jobs:
           referenced_files = set()
           bad_reference_format = []
           for row in rows:
-              design_ref = row[4].strip().strip("`")
+              design_ref = row[3].strip().strip("`")
               if design_ref.startswith("50.") and design_ref.endswith(".md"):
                   referenced_files.add(design_ref)
               elif "placeholder" in design_ref.lower():
