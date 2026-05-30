@@ -1,5 +1,7 @@
 # Thought Simulator Architectual Overview
 
+### *High‑Level Conceptual, Architectural, and Governance Framework*  
+
 ---
 
 ## **1. Purpose**
@@ -24,12 +26,12 @@ In short:
 
 > **TS makes cognition legible, governable, and reproducible.**
 
-This is not a predictive engine.  
+TS is not a predictive engine.  
 It is a **cognitive architecture**.
 
 ---
 
-## **3. High‑Level Architectural Philosophy**
+## **3. Architectural Philosophy**
 
 TS is built on three foundational principles:
 
@@ -57,14 +59,19 @@ TS is organized into layered document tiers that separate exploration from canon
 
 - **10_program_governance/**  
   Philosophy, architecture framing, program‑level intent  
+
 - **10_thought_simulator_req/**  
   Canonical requirements and promotion governance  
+
 - **20_requirements/**  
   Exploratory requirements and conceptual development  
+
 - **30_verification/**  
   Deterministic evidence, verification capsules, promoted results  
+
 - **40_thought_simulator_playground/**  
   Experiments, prototypes, exploratory modules  
+
 - **50_thought_simulator_design/**  
   Formal design specifications derived from canonical requirements and verification evidence  
 
@@ -288,7 +295,103 @@ This is essential for cognitive machines, not just predictive engines.
 
 ---
 
-## **14. Conclusion**
+## **14. Expected Power, Cost, and Size Advantages**
+
+TS is expected to offer **significant advantages** in power consumption, hardware cost, and memory footprint compared to transformer‑based AI systems.
+
+### **14.1 Why TS Is More Efficient**
+
+- No matrix multiplications  
+- No large embedding tables  
+- No deep stacking  
+- No GPU requirement  
+- Small OB libraries  
+- Cheap, modular training  
+
+TS is **bandwidth‑bound**, not **matrix‑bound**.
+
+### **14.2 Conditions for These Advantages**
+
+These advantages hold as long as TS:
+
+- keeps OBs small and deterministic  
+- keeps TP updates vector‑based  
+- avoids attention‑like learned routing  
+- avoids embedding‑like learned representations  
+- avoids deep stacking  
+
+---
+
+## **15. Scalability Advantages**
+
+TS exhibits superior scalability both internally and relative to transformers.
+
+### **15.1 Internal Scalability**
+
+- Horizontal growth (more OBs), not vertical depth  
+- No vanishing/exploding gradients  
+- Localized complexity  
+- Deterministic scheduling  
+- Persistent state reduces recompute  
+
+### **15.2 Relative to Transformers**
+
+- TS scales down (embedded devices)  
+- TS scales up (distributed OB execution)  
+- No parameter explosion  
+- No training explosion  
+
+### **15.3 Conditions for Scalability**
+
+Advantages hold if TS:
+
+- keeps OBs small  
+- keeps routing rule‑based  
+- avoids matrix multiplications  
+- preserves persistent state  
+
+---
+
+## **16. Memory Usage and HBM Requirements**
+
+TS requires **dramatically less memory** than transformers.
+
+### **16.1 Why Transformers Require Massive Memory**
+
+- Large embedding tables  
+- Attention matrices  
+- Deep layer stacking  
+- High‑bandwidth memory (HBM) dependence  
+
+### **16.2 Why TS Requires Far Less Memory**
+
+- No embeddings  
+- No attention matrices  
+- No deep layers  
+- Persistent state reduces recompute  
+- No HBM requirement  
+
+### **16.3 Expected Memory Footprint**
+
+| Architecture | Typical Memory Footprint |
+|-------------|---------------------------|
+| 7B LLM | 14–28 GB |
+| 70B LLM | 140–280 GB |
+| TS (small) | 5–50 MB |
+| TS (large) | 50–500 MB |
+
+### **16.4 Conditions for Memory Advantages**
+
+Advantages hold if TS:
+
+- keeps OBs small  
+- keeps TP dimensionality modest  
+- avoids embedding‑like learned vectors  
+- avoids deep stacking  
+
+---
+
+## **17. Conclusion**
 
 The Thought Simulator represents a fundamentally different approach to cognitive architecture. By replacing opaque learned matrices with explicit operators and persistent state, TS achieves:
 
@@ -299,6 +402,7 @@ The Thought Simulator represents a fundamentally different approach to cognitive
 - hardware independence  
 - low‑cost training  
 - scalable deployment  
+- dramatically lower memory and power requirements  
 
 This document provides the high‑level conceptual foundation for TS.  
 Future documents will detail:
