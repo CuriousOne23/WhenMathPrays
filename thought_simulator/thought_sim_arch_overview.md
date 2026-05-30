@@ -1,11 +1,12 @@
 # Thought Simulator Architectual Overview
 
-### *Thought Simulator — Architectural Overview*  
-### *High‑Level Conceptual, Architectural, and Governance Framework*
+# thought_sim_arch_overview.md  
+### Thought Simulator — Architectural Overview  
+### High‑level conceptual, architectural, and governance framework
 
 ---
 
-# **1. Introduction**
+## 1. Introduction
 
 The Thought Simulator (TS) is a platform‑independent cognitive architecture designed to model thought as a **structured, stateful, deterministic, and inspectable process**. Unlike today’s transformer‑based AI systems, TS is not a predictive engine. It is a **cognitive machine** built on explicit operators, persistent state, and transparent dynamics.
 
@@ -13,15 +14,15 @@ Transformers are used as the comparison baseline because they are the most rigor
 
 ---
 
-# **2. Purpose and Goals**
+## 2. Purpose and goals
 
 TS aims to model cognition with:
 
-- **Persistent identity** across change  
-- **Explicit state transitions**  
-- **Deterministic, replayable behavior**  
-- **Traceable requirements → verification → design**  
-- **Governed promotion** from exploration into canon  
+- **Persistent identity:** continuity across change  
+- **Explicit state transitions:** no hidden jumps  
+- **Deterministic, replayable behavior:** same inputs → same trajectory  
+- **Traceable requirements → verification → design:** full lifecycle discipline  
+- **Governed promotion:** exploration must not silently become canon  
 
 In short:
 
@@ -29,17 +30,28 @@ In short:
 
 ---
 
-# **3. Architectural Philosophy**
+## 3. Architectural philosophy
 
-TS is grounded in three foundational principles:
+TS is grounded in three foundational principles.
 
-### **3.1 Explicit Cognition**
+### 3.1 Explicit cognition
+
 Cognitive behavior is represented through **named, modular operators (OBs)** rather than opaque learned weights.
 
-### **3.2 Persistent State**
-TS maintains a **ThoughtPoint (TP)** — a continuous, evolving state vector representing the current cognitive context.
+### 3.2 Persistent state
 
-### **3.3 Transparent Dynamics**
+TS maintains a **ThoughtPoint (TP)**—a continuous, evolving state vector representing the current cognitive context.
+
+At tick ($t$):
+
+$$
+TP_t = TP_{t-1} + \sum_{i=1}^{k} \Delta_i
+$$
+
+Each $\Delta_i$ is the contribution of an operator that fired during tick ($t$).
+
+### 3.3 Transparent dynamics
+
 All updates are:
 
 - deterministic  
@@ -51,16 +63,27 @@ This enables full reasoning transparency.
 
 ---
 
-# **4. Repository Architecture & Governance**
+## 4. Repository architecture and governance
 
 The TS repository is structured into layered tiers that separate exploration from canonical governance:
 
-- **10_program_governance/** — Philosophy, framing, program‑level intent  
-- **10_thought_simulator_req/** — Canonical requirements and promotion governance  
-- **20_requirements/** — Exploratory requirements and conceptual development  
-- **30_verification/** — Deterministic evidence, verification capsules, promoted results  
-- **40_thought_simulator_playground/** — Experiments, prototypes, exploratory modules  
-- **50_thought_simulator_design/** — Formal design specifications derived from canonical requirements and verification evidence  
+- **10_program_governance/**  
+  Philosophy, framing, program‑level intent  
+
+- **10_thought_simulator_req/**  
+  Canonical requirements and promotion governance  
+
+- **20_requirements/**  
+  Exploratory requirements and conceptual development  
+
+- **30_verification/**  
+  Deterministic evidence, verification capsules, promoted results  
+
+- **40_thought_simulator_playground/**  
+  Experiments, prototypes, exploratory modules  
+
+- **50_thought_simulator_design/**  
+  Formal design specifications derived from canonical requirements and verification evidence  
 
 This structure ensures:
 
@@ -71,19 +94,20 @@ This structure ensures:
 
 ---
 
-# **5. Core Architectural Components**
+## 5. Core architectural components
 
-### **5.1 ThoughtPoint (TP)**  
-The TP is the persistent cognitive state.  
-At tick \(t\):
+### 5.1 ThoughtPoint (TP)
 
-\[
+The TP is the persistent cognitive state. It is updated at each tick according to:
+
+$$
 TP_t = TP_{t-1} + \sum_{i=1}^{k} \Delta_i
-\]
+$$
 
-Each \(\Delta_i\) is the contribution of an operator that fired during tick \(t\).
+where each $\Delta_i$ is the contribution of a specific OB that fired during tick ($t$).
 
-### **5.2 Operators (OBs)**  
+### 5.2 Operators (OBs)
+
 OBs are deterministic cognitive functions that:
 
 - detect patterns  
@@ -93,7 +117,8 @@ OBs are deterministic cognitive functions that:
 
 OBs can be grouped into **families** to represent subtle variations (e.g., strong vs. weak causality).
 
-### **5.3 Basins & Context**
+### 5.3 Basins and context
+
 TS uses basin‑like structures to represent:
 
 - context  
@@ -101,7 +126,8 @@ TS uses basin‑like structures to represent:
 - relational meaning  
 - movement semantics  
 
-### **5.4 Scheduler & Regulation**
+### 5.4 Scheduler and regulation
+
 A deterministic scheduler governs:
 
 - OB activation  
@@ -110,7 +136,8 @@ A deterministic scheduler governs:
 - decay  
 - stability  
 
-### **5.5 Evidence & Logging**
+### 5.5 Evidence and logging
+
 TS maintains:
 
 - snapshots  
@@ -122,7 +149,7 @@ All reasoning is replayable.
 
 ---
 
-# **6. Architectural Requirements**
+## 6. Architectural requirements
 
 TS is governed by a small set of non‑negotiable requirements:
 
@@ -138,101 +165,105 @@ These requirements enforce **coherence**, **traceability**, and **scientific dis
 
 ---
 
-# **7. Processing Pipeline Comparison: AI Today vs. TS**
+## 7. Processing pipeline comparison: AI today vs TS
 
 This section provides a **full architectural, mechanistic, and hardware comparison** between transformer‑based AI systems and the Thought Simulator.
 
-## **7.1 Full Processing Pipeline Table**
+### 7.1 Thought processing pipeline: transformers vs TS
 
-```markdown
 | Processing Step | AI Today — Primitive | AI Today — How It Works | AI Today — Hardware Required | TS — Primitive | TS — How It Works | TS — Machine Partitions | TS — Hardware Required |
 |-----------------|----------------------|--------------------------|------------------------------|----------------|--------------------|--------------------------|------------------------|
+| **1. Input representation** | Tokenizer (BPE, WordPiece) | Splits text into subword tokens | CPU + embedding table in GPU VRAM | Vector acceptance layer | Accepts pre‑embedded vectors from any front‑end | Input adapter → TP initializer | DDR4/DDR5/LPDDR (DRAM) |
+| **2. Represent meaning** | Embeddings | Lookup table → dense vector | GPU VRAM + **HBM** | OB families + TP | Meaning emerges from OB activations + TP dynamics | OB library → TP state vector | DDR4/DDR5/LPDDR (DRAM) |
+| **3. Determine relevance** | Attention (Q/K/V) | Matrix multiplications + softmax | Tensor cores + **HBM** + high‑bandwidth VRAM | Routing rules + emphasis | Deterministic rule‑based OB activation | RBs → scheduler → routing layer → emphasis regulator | DDR4/DDR5/LPDDR (DRAM) |
+| **4. Transform information** | Feedforward layers (MLPs) | Deep stacked matrix multiplications | GPU tensor cores + VRAM | OB transformations | Modular, isolated OB updates | OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
+| **5. Maintain context** | KV cache | Stores past tokens; grows with sequence length | **HBM** mandatory, large VRAM | Persistent TP | State evolves continuously; no cache | TP state vector → persistence layer | DDR4/DDR5/LPDDR (DRAM) |
+| **6. Stabilize activations** | LayerNorm | Normalizes each layer | GPU VRAM | TP regulation | Explicit stability rules | Entropy regulator → TP stabilizer | DDR4/DDR5/LPDDR (DRAM) |
+| **7. Preserve information** | Residual connections | Adds previous layer output | GPU VRAM | TP persistence | Built‑in state continuity | TP state vector | DDR4/DDR5/LPDDR (DRAM) |
+| **8. Scale capacity** | More layers + more parameters | Vertical depth scaling | GPU clusters + **HBM** | More OBs | Horizontal growth; no depth | OB library | DDR4/DDR5/LPDDR (DRAM) |
+| **9. Training** | Backpropagation | Gradient descent over huge matrices | GPU clusters + **HBM** | OB derivation | Modular, domain‑specific OB creation | OB design pipeline | DDR4/DDR5/LPDDR (DRAM) |
+| **10. Inference loop** | Token‑by‑token | Recompute state each step | **HBM** required for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
+| **11. Memory usage** | Embeddings + KV cache + activations | GBs of VRAM + **HBM** | **HBM** mandatory | OB library + TP | MBs; no HBM | TP state vector + OB library | DDR4/DDR5/LPDDR (DRAM) |
+| **12. Output generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → output adapter | Deterministic readout from TP | Output adapter | DDR4/DDR5/LPDDR (DRAM) |
 
-| **1. Input Representation** | Tokenizer (BPE, WordPiece) | Splits text into subword tokens | CPU + embedding table in GPU VRAM | Vector Acceptance Layer | Accepts pre‑embedded vectors from any front‑end | Input Adapter → TP Initializer | DDR4/DDR5/LPDDR |
-
-| **2. Represent Meaning** | Embeddings | Lookup table → dense vector | **GPU VRAM + HBM** | OB Families + TP | Meaning emerges from OB activations + TP dynamics | OB Library → TP State Vector | DDR4/DDR5/LPDDR |
-
-| **3. Determine Relevance** | Attention (Q/K/V) | Matrix multiplications + softmax | **Tensor Cores + HBM + High‑bandwidth VRAM** | Routing Rules + Emphasis | Deterministic rule‑based OB activation | **RBs → Scheduler → Routing Layer → Emphasis Regulator** | DDR4/DDR5/LPDDR |
-
-| **4. Transform Information** | Feedforward Layers (MLPs) | Deep stacked matrix multiplications | GPU Tensor Cores + VRAM | OB Transformations | Modular, isolated OB updates | OB Executor → TP Updater | DDR4/DDR5/LPDDR |
-
-| **5. Maintain Context** | KV Cache | Stores past tokens; grows with sequence length | **HBM mandatory**, large VRAM | Persistent TP | State evolves continuously; no cache | TP State Vector → Persistence Layer | DDR4/DDR5/LPDDR |
-
-| **6. Stabilize Activations** | LayerNorm | Normalizes each layer | GPU VRAM | TP Regulation | Explicit stability rules | Entropy Regulator → TP Stabilizer | DDR4/DDR5/LPDDR |
-
-| **7. Preserve Information** | Residual Connections | Adds previous layer output | GPU VRAM | TP Persistence | Built‑in state continuity | TP State Vector | DDR4/DDR5/LPDDR |
-
-| **8. Scale Capacity** | More Layers + More Parameters | Vertical depth scaling | GPU clusters + HBM | More OBs | Horizontal growth; no depth | OB Library | DDR4/DDR5/LPDDR |
-
-| **9. Training** | Backpropagation | Gradient descent over huge matrices | GPU clusters + HBM | OB Derivation | Modular, domain‑specific OB creation | OB Design Pipeline | DDR4/DDR5/LPDDR |
-
-| **10. Inference Loop** | Token‑by‑token | Recompute state each step | **HBM required** for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB Executor → TP Updater | DDR4/DDR5/LPDDR |
-
-| **11. Memory Usage** | Embeddings + KV Cache + Activations | GBs of VRAM + HBM | **HBM mandatory** | OB Library + TP | MBs; no HBM | TP State Vector + OB Library | DDR4/DDR5/LPDDR |
-
-| **12. Output Generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → Output Adapter | Deterministic readout from TP | Output Adapter | DDR4/DDR5/LPDDR |
-```
+This table makes explicit that transformers are **matrix‑bound and HBM‑dependent**, while TS is **state‑based and DRAM‑only**.
 
 ---
 
-# **8. Transformer → TS Mapping (Inference)**
+## 8. Transformer → TS mapping (inference)
 
 | Transformer Component | Purpose | TS Equivalent | TS Advantage |
-|----------------------|----------|----------------|--------------|
+|----------------------|---------|---------------|-------------|
 | Embeddings | Encode meaning | OB families + TP dynamics | Explicit, interpretable |
-| Attention Heads | Weight relationships | TP emphasis + OB routing | No matrix multiplications |
-| Feedforward Layers | Transform representations | OB transformations | Modular, domain‑extensible |
+| Attention heads | Weight relationships | TP emphasis + OB routing | No matrix multiplications |
+| Feedforward layers | Transform representations | OB transformations | Modular, domain‑extensible |
 | Softmax | Normalize relevance | Entropy + thresholds | Deterministic |
 | Residuals | Preserve information | TP persistence | Built‑in |
-| Layer Norm | Stabilize activations | TP regulation | Transparent |
-| Deep Stacking | Increase capacity | OB library size | No depth, no vanishing gradients |
+| Layer norm | Stabilize activations | TP regulation | Transparent |
+| Deep stacking | Increase capacity | OB library size | No depth, no vanishing gradients |
 
 ---
 
-# **9. Transformer → TS Mapping (Training)**
+## 9. Transformer → TS mapping (training)
 
 | Transformer Training Component | TS Equivalent | TS Benefit |
 |-------------------------------|---------------|------------|
 | Backpropagation | OB derivation | No GPU clusters |
-| Gradient Descent | OB refinement | Modular, reversible |
-| Massive Datasets | Domain OBs | Targeted, efficient |
+| Gradient descent | OB refinement | Modular, reversible |
+| Massive datasets | Domain OBs | Targeted, efficient |
 | Fine‑tuning | OB swapping | No catastrophic forgetting |
 | Billion‑parameter models | Small OB libraries | Orders of magnitude smaller |
 
 ---
 
-# **10. TS Advantages Over Today’s AI**
+## 10. TS advantages over today’s AI
 
-### **10.1 Determinism**  
+### 10.1 Determinism
+
 TS is deterministic unless randomness is explicitly introduced.
 
-### **10.2 Persistent Cognitive State**  
+### 10.2 Persistent cognitive state
+
 TS maintains a continuous internal state across ticks.
 
-### **10.3 Transparent Reasoning**  
+### 10.3 Transparent reasoning
+
 Every OB activation and TP update is logged and replayable.
 
-### **10.4 Modularity**  
+### 10.4 Modularity
+
 OBs can be added, removed, or replaced without retraining.
 
-### **10.5 Domain Extensibility**  
-Medical OBs, legal OBs, robotics OBs — all possible.
+### 10.5 Domain extensibility
 
-### **10.6 Hardware Independence**  
-TS runs on CPUs, microcontrollers, embedded systems, or cloud clusters.
+Domain‑specific OBs (e.g., medical, legal, robotics) can be added without retraining a monolithic model.
 
-### **10.7 Cheap Training**  
+### 10.6 Hardware independence
+
+TS runs on:
+
+- CPUs  
+- microcontrollers  
+- embedded systems  
+- cloud clusters  
+
+No GPU or HBM is required.
+
+### 10.7 Cheap training
+
 OBs can be developed offline, independently, and incrementally.
 
-### **10.8 Scalability**  
-TS scales down (embedded devices) and up (cloud clusters).
+### 10.8 Scalability
 
-### **10.9 Cognitive Clarity**  
+TS scales down (embedded devices) and up (distributed OB execution).
+
+### 10.9 Cognitive clarity
+
 TS is structured, explicit, and interpretable.
 
 ---
 
-# **11. Inference Model**
+## 11. Inference model
 
 TS inference proceeds in discrete ticks:
 
@@ -247,7 +278,7 @@ This creates a **continuous cognitive process**, not a token‑by‑token predic
 
 ---
 
-# **12. Training Model**
+## 12. Training model
 
 TS evolves through:
 
@@ -261,9 +292,9 @@ TS does not rely on gradient descent as its primary mechanism.
 
 ---
 
-# **13. Power, Cost, and Memory Advantages**
+## 13. Power, cost, and memory advantages
 
-### **13.1 Why TS Is More Efficient**
+### 13.1 Why TS is more efficient
 
 - No matrix multiplications  
 - No large embedding tables  
@@ -274,16 +305,16 @@ TS does not rely on gradient descent as its primary mechanism.
 
 TS is **bandwidth‑bound**, not **matrix‑bound**.
 
-### **13.2 Memory Footprint**
+### 13.2 Memory footprint
 
 | Architecture | Typical Memory Footprint |
-|-------------|---------------------------|
+|-------------|--------------------------|
 | 7B LLM | 14–28 GB |
 | 70B LLM | 140–280 GB |
 | TS (small) | 5–50 MB |
 | TS (large) | 50–500 MB |
 
-### **13.3 Why TS Requires Far Less Memory**
+### 13.3 Why TS requires far less memory
 
 - No embeddings  
 - No attention matrices  
@@ -293,9 +324,9 @@ TS is **bandwidth‑bound**, not **matrix‑bound**.
 
 ---
 
-# **14. Scalability**
+## 14. Scalability
 
-### **14.1 Internal Scalability**
+### 14.1 Internal scalability
 
 - Horizontal growth (more OBs), not vertical depth  
 - No vanishing/exploding gradients  
@@ -303,7 +334,7 @@ TS is **bandwidth‑bound**, not **matrix‑bound**.
 - Deterministic scheduling  
 - Persistent state reduces recompute  
 
-### **14.2 Relative to Transformers**
+### 14.2 Relative to transformers
 
 - TS scales down (embedded devices)  
 - TS scales up (distributed OB execution)  
@@ -312,7 +343,55 @@ TS is **bandwidth‑bound**, not **matrix‑bound**.
 
 ---
 
-# **15. Conclusion**
+## 15. Markets and application domains
+
+TS’s architecture is particularly well‑suited to several markets where **determinism, low power, transparency, and hardware independence** are critical.
+
+### 15.1 Edge and embedded devices
+
+- **Context:** IoT, industrial control, consumer devices, automotive ECUs, robotics controllers.  
+- **Why TS excels:**  
+  - Runs on CPUs and microcontrollers with only DRAM.  
+  - No GPU or HBM requirement.  
+  - Small memory footprint (MB‑scale).  
+  - Deterministic behavior is essential for control and safety.
+
+### 15.2 Regulated and safety‑critical domains
+
+- **Context:** Healthcare, finance, aviation, automotive safety, defense, critical infrastructure.  
+- **Why TS excels:**  
+  - Full replayability and logging of reasoning steps.  
+  - Deterministic, inspectable state transitions.  
+  - Clear separation between requirements, verification, and design.  
+  - Easier to audit and certify than opaque transformer models.
+
+### 15.3 On‑device and privacy‑sensitive applications
+
+- **Context:** Personal devices, medical wearables, local assistants, confidential enterprise workflows.  
+- **Why TS excels:**  
+  - Can run entirely on‑device with DRAM only.  
+  - No need to stream data to GPU clusters.  
+  - Transparent reasoning supports trust and compliance.
+
+### 15.4 Long‑lived agents and digital twins
+
+- **Context:** Persistent agents, operational digital twins, long‑running simulations.  
+- **Why TS excels:**  
+  - Persistent TP supports long‑term continuity of identity and state.  
+  - Deterministic evolution makes long‑horizon analysis and debugging feasible.  
+  - OB modularity allows incremental capability growth without retraining.
+
+### 15.5 Cost‑sensitive and power‑constrained deployments
+
+- **Context:** Developing regions, large fleets of devices, battery‑powered systems, cost‑optimized infrastructure.  
+- **Why TS excels:**  
+  - No HBM, no GPU, no tensor cores.  
+  - DRAM‑only deployments dramatically reduce hardware cost.  
+  - Lower power draw than matrix‑bound transformer inference.
+
+---
+
+## 16. Conclusion
 
 The Thought Simulator represents a fundamentally different approach to cognitive architecture. By replacing opaque learned matrices with explicit operators and persistent state, TS achieves:
 
@@ -325,8 +404,7 @@ The Thought Simulator represents a fundamentally different approach to cognitive
 - scalable deployment  
 - dramatically lower memory and power requirements  
 
-This document provides the high‑level conceptual foundation for TS.  
-Future documents will detail:
+This document provides the high‑level conceptual foundation for TS. Future documents will detail:
 
 - operator taxonomy  
 - TP vector specification  
@@ -337,5 +415,3 @@ Future documents will detail:
 
 TS is designed to evolve, but its core principles remain stable:  
 **explicit cognition, persistent state, and transparent dynamics.**
-
----
