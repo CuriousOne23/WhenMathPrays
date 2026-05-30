@@ -1,42 +1,40 @@
 # Thought Simulator Architectual Overview
 
-### *High‑Level Conceptual, Architectural, and Governance Framework*  
+### *Thought Simulator — Architectural Overview*  
+### *High‑Level Conceptual, Architectural, and Governance Framework*
 
 ---
 
-## **1. Purpose**
+# **1. Introduction**
 
-The Thought Simulator (TS) is a platform‑independent cognitive architecture designed to model thought as a **structured, stateful, deterministic, and inspectable process**. This document provides a high‑level overview of TS, its architectural principles, its governance model, and a direct comparison to today’s dominant AI architecture (transformers).
+The Thought Simulator (TS) is a platform‑independent cognitive architecture designed to model thought as a **structured, stateful, deterministic, and inspectable process**. Unlike today’s transformer‑based AI systems, TS is not a predictive engine. It is a **cognitive machine** built on explicit operators, persistent state, and transparent dynamics.
 
 Transformers are used as the comparison baseline because they are the most rigorous, widely deployed, and scientifically understood cognitive computation model available today. This makes them the fairest reference point for evaluating TS across power, cost, scalability, transparency, and implementation complexity.
 
 ---
 
-## **2. Project Goal**
+# **2. Purpose and Goals**
 
-TS aims to model cognition as:
+TS aims to model cognition with:
 
-- **persistent identity** across change  
-- **explicit state transitions**  
-- **deterministic, replayable behavior**  
-- **traceable requirements → verification → design**  
-- **governed promotion** from exploration into canon  
+- **Persistent identity** across change  
+- **Explicit state transitions**  
+- **Deterministic, replayable behavior**  
+- **Traceable requirements → verification → design**  
+- **Governed promotion** from exploration into canon  
 
 In short:
 
 > **TS makes cognition legible, governable, and reproducible.**
 
-TS is not a predictive engine.  
-It is a **cognitive architecture**.
-
 ---
 
-## **3. Architectural Philosophy**
+# **3. Architectural Philosophy**
 
-TS is built on three foundational principles:
+TS is grounded in three foundational principles:
 
 ### **3.1 Explicit Cognition**
-Cognitive behavior is represented through **named, modular operators (OBs)** rather than hidden weights.
+Cognitive behavior is represented through **named, modular operators (OBs)** rather than opaque learned weights.
 
 ### **3.2 Persistent State**
 TS maintains a **ThoughtPoint (TP)** — a continuous, evolving state vector representing the current cognitive context.
@@ -44,8 +42,8 @@ TS maintains a **ThoughtPoint (TP)** — a continuous, evolving state vector rep
 ### **3.3 Transparent Dynamics**
 All updates are:
 
-- logged  
 - deterministic  
+- logged  
 - replayable  
 - inspectable  
 
@@ -53,29 +51,18 @@ This enables full reasoning transparency.
 
 ---
 
-## **4. Repository Architecture & Governance**
+# **4. Repository Architecture & Governance**
 
-TS is organized into layered document tiers that separate exploration from canonical governance:
+The TS repository is structured into layered tiers that separate exploration from canonical governance:
 
-- **10_program_governance/**  
-  Philosophy, architecture framing, program‑level intent  
+- **10_program_governance/** — Philosophy, framing, program‑level intent  
+- **10_thought_simulator_req/** — Canonical requirements and promotion governance  
+- **20_requirements/** — Exploratory requirements and conceptual development  
+- **30_verification/** — Deterministic evidence, verification capsules, promoted results  
+- **40_thought_simulator_playground/** — Experiments, prototypes, exploratory modules  
+- **50_thought_simulator_design/** — Formal design specifications derived from canonical requirements and verification evidence  
 
-- **10_thought_simulator_req/**  
-  Canonical requirements and promotion governance  
-
-- **20_requirements/**  
-  Exploratory requirements and conceptual development  
-
-- **30_verification/**  
-  Deterministic evidence, verification capsules, promoted results  
-
-- **40_thought_simulator_playground/**  
-  Experiments, prototypes, exploratory modules  
-
-- **50_thought_simulator_design/**  
-  Formal design specifications derived from canonical requirements and verification evidence  
-
-This layered structure ensures:
+This structure ensures:
 
 - exploration remains fast  
 - canonical artifacts remain stable  
@@ -84,17 +71,17 @@ This layered structure ensures:
 
 ---
 
-## **5. Core Architectural Components**
+# **5. Core Architectural Components**
 
 ### **5.1 ThoughtPoint (TP)**  
 The TP is the persistent cognitive state.  
-At tick $t$:
+At tick \(t\):
 
-$$
+\[
 TP_t = TP_{t-1} + \sum_{i=1}^{k} \Delta_i
-$$
+\]
 
-Each $\Delta_i$ is the contribution of an operator that fired during tick $t$.
+Each \(\Delta_i\) is the contribution of an operator that fired during tick \(t\).
 
 ### **5.2 Operators (OBs)**  
 OBs are deterministic cognitive functions that:
@@ -104,7 +91,7 @@ OBs are deterministic cognitive functions that:
 - update the TP  
 - log their actions  
 
-OBs can be grouped into **families** to represent subtle variations (e.g., strong vs weak causality).
+OBs can be grouped into **families** to represent subtle variations (e.g., strong vs. weak causality).
 
 ### **5.3 Basins & Context**
 TS uses basin‑like structures to represent:
@@ -135,7 +122,7 @@ All reasoning is replayable.
 
 ---
 
-## **6. Architectural Requirements**
+# **6. Architectural Requirements**
 
 TS is governed by a small set of non‑negotiable requirements:
 
@@ -147,47 +134,48 @@ TS is governed by a small set of non‑negotiable requirements:
 - canonical artifacts must remain human‑reviewable  
 - each subsystem must have a clear boundary and contract  
 
-These requirements prevent TS from becoming a loose collection of experiments.  
-They enforce **coherence**, **traceability**, and **scientific discipline**.
+These requirements enforce **coherence**, **traceability**, and **scientific discipline**.
 
 ---
 
-## **7. Comparison to Today’s AI Architecture**
+# **7. Processing Pipeline Comparison: AI Today vs. TS**
 
-### **7.1 Today’s AI (Transformers)**  
-Transformers rely on:
+This section provides a **full architectural, mechanistic, and hardware comparison** between transformer‑based AI systems and the Thought Simulator.
 
-- learned embeddings  
-- attention matrices  
-- deep layers  
-- stochastic sampling  
-- opaque internal activations  
+## **7.1 Full Processing Pipeline Table**
 
-They excel at prediction and generation but lack:
+```markdown
+| Processing Step | AI Today — Primitive | AI Today — How It Works | AI Today — Hardware Required | TS — Primitive | TS — How It Works | TS — Machine Partitions | TS — Hardware Required |
+|-----------------|----------------------|--------------------------|------------------------------|----------------|--------------------|--------------------------|------------------------|
 
-- explicit state  
-- determinism  
-- modularity  
-- transparency  
-- governance  
-- replayability  
+| **1. Input Representation** | Tokenizer (BPE, WordPiece) | Splits text into subword tokens | CPU + embedding table in GPU VRAM | Vector Acceptance Layer | Accepts pre‑embedded vectors from any front‑end | Input Adapter → TP Initializer | DDR4/DDR5/LPDDR |
 
-### **7.2 Thought Simulator**  
-TS replaces these with:
+| **2. Represent Meaning** | Embeddings | Lookup table → dense vector | **GPU VRAM + HBM** | OB Families + TP | Meaning emerges from OB activations + TP dynamics | OB Library → TP State Vector | DDR4/DDR5/LPDDR |
 
-- explicit operators  
-- persistent state  
-- deterministic routing  
-- transparent updates  
-- modular cognitive functions  
-- governed evolution  
+| **3. Determine Relevance** | Attention (Q/K/V) | Matrix multiplications + softmax | **Tensor Cores + HBM + High‑bandwidth VRAM** | Routing Rules + Emphasis | Deterministic rule‑based OB activation | **RBs → Scheduler → Routing Layer → Emphasis Regulator** | DDR4/DDR5/LPDDR |
 
-TS is not “a better language model.”  
-It is a **different category of cognitive system**.
+| **4. Transform Information** | Feedforward Layers (MLPs) | Deep stacked matrix multiplications | GPU Tensor Cores + VRAM | OB Transformations | Modular, isolated OB updates | OB Executor → TP Updater | DDR4/DDR5/LPDDR |
+
+| **5. Maintain Context** | KV Cache | Stores past tokens; grows with sequence length | **HBM mandatory**, large VRAM | Persistent TP | State evolves continuously; no cache | TP State Vector → Persistence Layer | DDR4/DDR5/LPDDR |
+
+| **6. Stabilize Activations** | LayerNorm | Normalizes each layer | GPU VRAM | TP Regulation | Explicit stability rules | Entropy Regulator → TP Stabilizer | DDR4/DDR5/LPDDR |
+
+| **7. Preserve Information** | Residual Connections | Adds previous layer output | GPU VRAM | TP Persistence | Built‑in state continuity | TP State Vector | DDR4/DDR5/LPDDR |
+
+| **8. Scale Capacity** | More Layers + More Parameters | Vertical depth scaling | GPU clusters + HBM | More OBs | Horizontal growth; no depth | OB Library | DDR4/DDR5/LPDDR |
+
+| **9. Training** | Backpropagation | Gradient descent over huge matrices | GPU clusters + HBM | OB Derivation | Modular, domain‑specific OB creation | OB Design Pipeline | DDR4/DDR5/LPDDR |
+
+| **10. Inference Loop** | Token‑by‑token | Recompute state each step | **HBM required** for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB Executor → TP Updater | DDR4/DDR5/LPDDR |
+
+| **11. Memory Usage** | Embeddings + KV Cache + Activations | GBs of VRAM + HBM | **HBM mandatory** | OB Library + TP | MBs; no HBM | TP State Vector + OB Library | DDR4/DDR5/LPDDR |
+
+| **12. Output Generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → Output Adapter | Deterministic readout from TP | Output Adapter | DDR4/DDR5/LPDDR |
+```
 
 ---
 
-## **8. Mapping: Transformer → TS (Inference)**
+# **8. Transformer → TS Mapping (Inference)**
 
 | Transformer Component | Purpose | TS Equivalent | TS Advantage |
 |----------------------|----------|----------------|--------------|
@@ -201,7 +189,7 @@ It is a **different category of cognitive system**.
 
 ---
 
-## **9. Mapping: Transformer → TS (Training)**
+# **9. Transformer → TS Mapping (Training)**
 
 | Transformer Training Component | TS Equivalent | TS Benefit |
 |-------------------------------|---------------|------------|
@@ -213,7 +201,7 @@ It is a **different category of cognitive system**.
 
 ---
 
-## **10. What TS Brings That Today’s AI Cannot**
+# **10. TS Advantages Over Today’s AI**
 
 ### **10.1 Determinism**  
 TS is deterministic unless randomness is explicitly introduced.
@@ -244,7 +232,7 @@ TS is structured, explicit, and interpretable.
 
 ---
 
-## **11. Inference Model**
+# **11. Inference Model**
 
 TS inference proceeds in discrete ticks:
 
@@ -259,7 +247,7 @@ This creates a **continuous cognitive process**, not a token‑by‑token predic
 
 ---
 
-## **12. Training Model**
+# **12. Training Model**
 
 TS evolves through:
 
@@ -273,33 +261,9 @@ TS does not rely on gradient descent as its primary mechanism.
 
 ---
 
-## **13. Why This Architecture Matters**
+# **13. Power, Cost, and Memory Advantages**
 
-TS enables:
-
-- reproducibility  
-- explainability  
-- testability  
-- maintainability  
-- portability  
-- safety  
-
-It treats cognition as:
-
-- structured  
-- inspectable  
-- governable  
-- replayable  
-
-This is essential for cognitive machines, not just predictive engines.
-
----
-
-## **14. Expected Power, Cost, and Size Advantages**
-
-TS is expected to offer **significant advantages** in power consumption, hardware cost, and memory footprint compared to transformer‑based AI systems.
-
-### **14.1 Why TS Is More Efficient**
+### **13.1 Why TS Is More Efficient**
 
 - No matrix multiplications  
 - No large embedding tables  
@@ -310,68 +274,7 @@ TS is expected to offer **significant advantages** in power consumption, hardwar
 
 TS is **bandwidth‑bound**, not **matrix‑bound**.
 
-### **14.2 Conditions for These Advantages**
-
-These advantages hold as long as TS:
-
-- keeps OBs small and deterministic  
-- keeps TP updates vector‑based  
-- avoids attention‑like learned routing  
-- avoids embedding‑like learned representations  
-- avoids deep stacking  
-
----
-
-## **15. Scalability Advantages**
-
-TS exhibits superior scalability both internally and relative to transformers.
-
-### **15.1 Internal Scalability**
-
-- Horizontal growth (more OBs), not vertical depth  
-- No vanishing/exploding gradients  
-- Localized complexity  
-- Deterministic scheduling  
-- Persistent state reduces recompute  
-
-### **15.2 Relative to Transformers**
-
-- TS scales down (embedded devices)  
-- TS scales up (distributed OB execution)  
-- No parameter explosion  
-- No training explosion  
-
-### **15.3 Conditions for Scalability**
-
-Advantages hold if TS:
-
-- keeps OBs small  
-- keeps routing rule‑based  
-- avoids matrix multiplications  
-- preserves persistent state  
-
----
-
-## **16. Memory Usage and HBM Requirements**
-
-TS requires **dramatically less memory** than transformers.
-
-### **16.1 Why Transformers Require Massive Memory**
-
-- Large embedding tables  
-- Attention matrices  
-- Deep layer stacking  
-- High‑bandwidth memory (HBM) dependence  
-
-### **16.2 Why TS Requires Far Less Memory**
-
-- No embeddings  
-- No attention matrices  
-- No deep layers  
-- Persistent state reduces recompute  
-- No HBM requirement  
-
-### **16.3 Expected Memory Footprint**
+### **13.2 Memory Footprint**
 
 | Architecture | Typical Memory Footprint |
 |-------------|---------------------------|
@@ -380,18 +283,36 @@ TS requires **dramatically less memory** than transformers.
 | TS (small) | 5–50 MB |
 | TS (large) | 50–500 MB |
 
-### **16.4 Conditions for Memory Advantages**
+### **13.3 Why TS Requires Far Less Memory**
 
-Advantages hold if TS:
-
-- keeps OBs small  
-- keeps TP dimensionality modest  
-- avoids embedding‑like learned vectors  
-- avoids deep stacking  
+- No embeddings  
+- No attention matrices  
+- No deep layers  
+- Persistent state reduces recompute  
+- No HBM requirement  
 
 ---
 
-## **17. Conclusion**
+# **14. Scalability**
+
+### **14.1 Internal Scalability**
+
+- Horizontal growth (more OBs), not vertical depth  
+- No vanishing/exploding gradients  
+- Localized complexity  
+- Deterministic scheduling  
+- Persistent state reduces recompute  
+
+### **14.2 Relative to Transformers**
+
+- TS scales down (embedded devices)  
+- TS scales up (distributed OB execution)  
+- No parameter explosion  
+- No training explosion  
+
+---
+
+# **15. Conclusion**
 
 The Thought Simulator represents a fundamentally different approach to cognitive architecture. By replacing opaque learned matrices with explicit operators and persistent state, TS achieves:
 
