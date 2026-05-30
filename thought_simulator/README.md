@@ -125,6 +125,7 @@ Canonical trace purity rule:
 Implementation design specifications are maintained under [50_thought_simulator_design/](50_thought_simulator_design/).
 
 - [50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md) - generic methodology for constructing subsystem software specifications.
+- [thought_sim_arch_overview.md](thought_sim_arch_overview.md) - high-level overview of the Thought Simulator project, its goals, architecture, and comparison to today's AI systems.
 
 ## Root Directory Index
 
