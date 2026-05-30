@@ -430,7 +430,7 @@ This is why TS is faster.
 
 ## **9.5 Summary: TS Speed Advantages**
 
-TS is fast because TS is **architecturally simple**, not because it is "optimized."
+TS is fast because its inference cycle uses only additive updates and combinatorial routing, avoiding the multiply‑and‑carry operations (matrix multiplications, dot‑products, softmax) that dominate transformer cost. Its performance comes from architectural structure, not optimization tricks.
 
 ---
 
