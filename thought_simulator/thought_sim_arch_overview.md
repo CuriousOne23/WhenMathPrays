@@ -3,6 +3,8 @@
 ### Thought Simulator - Architectural Overview  
 ### High-level conceptual, architectural, and governance framework
 
+Performance target framing: Based on current architecture analysis, the quantified ranges in this document are reasonable and informed target bands, not established performance facts. They indicate the TS architecture is promising enough to justify continued development at this stage, with the understanding that targets will be revised if future benchmark evidence contradicts current assumptions.
+
 ---
 
 # **1. Introduction**
@@ -10,6 +12,32 @@
 The Thought Simulator (TS) is a platform-independent cognitive architecture designed to model thought as a **structured, stateful, deterministic, and inspectable process**. Unlike today's transformer-based AI systems, TS is not a predictive engine. It is a **cognitive machine** built on explicit operators, persistent state, and transparent dynamics.
 
 Transformers are used as the comparison baseline because they are the most widely deployed and well-studied cognitive computation model available today. This makes them a practical reference point for evaluating TS across power, cost, scalability, transparency, and implementation complexity.
+
+## **1.1 Scope and Non-Goals**
+
+This document defines architectural intent, operating model, and expected performance target bands for TS.
+
+This document does not provide:
+
+- benchmark-certified performance results  
+- final implementation guarantees across all hardware profiles  
+- a replacement for canonical requirement, verification, or design artifacts  
+
+Performance ranges in later sections are architecture-informed targets under assumed typical workloads and are expected to be revised as benchmark evidence matures.
+
+## **1.2 Terminology Quick Reference**
+
+- **ThoughtPoint (TP):** Persistent cognitive state carried across ticks  
+- **Operator (OB):** Deterministic transformation that contributes a state delta  
+- **Delta ($\Delta$):** Additive TP update emitted by an OB at a tick  
+- **Tick:** One deterministic state-evolution step  
+- **Basin:** Context and attractor structure that shapes routing and interpretation  
+
+## **1.3 Claim States Used in This Document**
+
+- **Architectural hypothesis:** expected from design reasoning but not yet prototyped  
+- **Prototype-supported:** observed in deterministic prototype behavior  
+- **Benchmark-validated:** measured under declared benchmark protocol and reproducible constraints  
 
 ---
 
@@ -80,6 +108,12 @@ This structure ensures:
 - traceability is preserved  
 - governance is built into the architecture  
 
+Canonical entry points for governed artifacts:
+
+- Requirements: [10_thought_simulator_req/10.10_math_requirements.md](10_thought_simulator_req/10.10_math_requirements.md), [10_thought_simulator_req/10.20_tp_requirements.md](10_thought_simulator_req/10.20_tp_requirements.md), [10_thought_simulator_req/10.30_basin_requirements.md](10_thought_simulator_req/10.30_basin_requirements.md), [10_thought_simulator_req/10.40_scheduler_requirements.md](10_thought_simulator_req/10.40_scheduler_requirements.md)  
+- Verification: [30_verification/30.10_math_prototypes/30.10_math_prototypes_verification_capsule.md](30_verification/30.10_math_prototypes/30.10_math_prototypes_verification_capsule.md), [30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md](30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md), [30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md](30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md), [30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md](30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md)  
+- Design: [50_thought_simulator_design/50.00_design_traceability_index.md](50_thought_simulator_design/50.00_design_traceability_index.md), [50_thought_simulator_design/50.10_system_architecture.md](50_thought_simulator_design/50.10_system_architecture.md), [50_thought_simulator_design/50.20_geometry_engine_design.md](50_thought_simulator_design/50.20_geometry_engine_design.md), [50_thought_simulator_design/50.30_dynamics_engine_design.md](50_thought_simulator_design/50.30_dynamics_engine_design.md)
+
 ---
 
 # **5. Core Architectural Components**
@@ -149,6 +183,72 @@ TS is governed by a small set of non-negotiable requirements:
 
 These requirements enforce **coherence**, **traceability**, and **scientific discipline**.
 
+## **6.1 Architecture Invariants**
+
+The following are treated as invariants and should be considered architecture violations if broken:
+
+- deterministic state evolution for identical inputs and initial conditions  
+- full replayability of TP transitions and operator firings  
+- explicit, inspectable transition mechanics (no opaque hidden jumps)  
+- maintained traceability from requirements -> verification -> design  
+- explicit governance boundary between exploratory and canonical artifacts  
+
+## **6.2 Assumptions and Constraints**
+
+Current target bands and comparisons assume:
+
+- sparse OB activation per tick relative to total OB library size  
+- bounded TP dimensionality for the active domain profile  
+- scheduler overhead lower than dense-matrix inference overhead for comparable tasks  
+- high locality access patterns for TP and OB metadata in DRAM-backed execution  
+- logging and verification instrumentation can be tuned without changing semantic behavior  
+
+## **6.3 Risks and Failure Modes**
+
+The most relevant architecture risks are:
+
+- OB library growth outpaces routing simplicity and increases maintenance burden  
+- routing heuristics become unstable across domain shifts  
+- TP drift or saturation reduces long-horizon semantic stability  
+- observability overhead erodes expected latency and throughput advantages  
+- distributed execution introduces synchronization and ordering costs  
+- promotion governance latency slows safe capability scaling  
+
+## **6.4 Current Maturity Snapshot**
+
+| Area | Maturity State | Notes |
+|------|----------------|-------|
+| TP lifecycle, basin, scheduler foundations | Prototype-supported | Deterministic prototype and verification capsules exist |
+| Regulator, tick cycle, snapshot, event log, experiment runner | Prototype-supported | Phase B prototype+harness artifacts available |
+| Canonical design traceability and governance | Operational | 10/30/50 trace and CI checks are active |
+| End-to-end benchmark certification of target bands | In progress | Target ranges remain architecture-informed pending benchmark campaigns |
+
+## **6.5 Evidence Status Matrix**
+
+| Claim Area | Current Status | Current Evidence Source | Next Promotion Step |
+|------------|----------------|-------------------------|---------------------|
+| Speed and throughput target bands | Architectural hypothesis + prototype-supported behavior | Deterministic module harnesses and architecture analysis | Controlled benchmark suite with fixed hardware classes |
+| Scalability target bands | Architectural hypothesis | Design-level complexity and partition assumptions | Multi-scale workload benchmarks and sensitivity study |
+| Inference efficiency target bands | Architectural hypothesis + prototype-supported behavior | Tick-cycle and scheduler prototypes | Reproducible inference benchmark protocol |
+| Training efficiency target bands | Architectural hypothesis | OB promotion model and governance flow | Comparative lifecycle-cost benchmark campaign |
+
+## **6.6 Benchmark Promotion Criteria**
+
+A target band should move from architecture-informed to benchmark-validated only when all criteria below are met:
+
+- declared hardware profile and software build configuration  
+- declared baseline system class and workload family  
+- fixed dataset/workload definitions and run cardinality  
+- reproducibility across repeated runs with published variance  
+- explicit pass/fail thresholds for latency, throughput, power, and memory  
+- artifact publication under canonical verification paths
+
+## **6.7 Canonical Traceability References**
+
+- Requirements anchor set: [10_thought_simulator_req/README.md](10_thought_simulator_req/README.md)  
+- Verification anchor set: [30_verification/README.md](30_verification/README.md)  
+- Design anchor set: [50_thought_simulator_design/50.00_design_traceability_index.md](50_thought_simulator_design/50.00_design_traceability_index.md)
+
 ---
 
 # **7. Comparison to Today's AI (Transformers)**
@@ -188,7 +288,7 @@ Transformers rely on:
 
 These operations are **bandwidth-bound** and require **HBM + GPUs**.
 
-TS eliminates all of these.
+TS is designed to avoid these mechanisms in its core inference model.
 
 TS uses:
 
@@ -237,7 +337,7 @@ TS expresses cognition explicitly in:
 - basins  
 - deterministic transitions  
 
-TS is a **universal state transition system** - expressive without requiring matrices.
+TS is a **general state-transition architecture** intended to preserve expressive modeling without requiring dense matrix stacks.
 
 ---
 
@@ -259,7 +359,7 @@ TS achieves capability through **structure**, not scale.
 
 ## **8.5 Summary: Capability Without Compromise**
 
-TS retains full cognitive capability while eliminating:
+TS is intended to retain broad cognitive capability while eliminating:
 
 - attention  
 - embeddings  
@@ -268,7 +368,7 @@ TS retains full cognitive capability while eliminating:
 - GPU requirements  
 - KV cache  
 
-TS is **equally expressive**, but **architecturally simpler and more efficient**.
+TS is positioned to remain highly expressive while being **architecturally simpler and potentially more efficient**.
 
 ---
 
@@ -312,8 +412,6 @@ TS has:
 - **100x-10,000x higher throughput**  
 - **50x-500x lower bandwidth**  
 - **50x-1,000x lower power**  
-
-These ranges are architecture-informed estimates under assumed typical workloads. They are not yet benchmark-certified for this repository, and actual outcomes depend on implementation maturity, hardware configuration, and operating constraints.
 
 ---
 
@@ -390,8 +488,8 @@ OBs can run on:
 
 ## **10.7 Summary: TS Parallelism**
 
-TS is massively parallelizable.  
-Transformers are not.
+TS is designed to be massively parallelizable through independent OB execution.  
+Transformers can parallelize some workloads, but their attention and layered dependencies impose tighter scaling constraints.
 
 ---
 
@@ -424,13 +522,11 @@ Transformers are not.
 - **linear training cost**  
 - **constant inference cost**  
 
-These ranges are architecture-informed estimates under assumed typical workloads. They are not yet benchmark-certified for this repository, and actual outcomes depend on implementation maturity, hardware configuration, and operating constraints.
-
 ---
 
 ## **11.4 Summary: TS Scalability**
 
-TS is architecturally scalable in ways transformers fundamentally cannot be.
+TS is architecturally structured for scalability patterns that are difficult to realize in standard transformer inference stacks.
 
 ---
 
@@ -496,8 +592,6 @@ TS: OB library + TP
 Transformers: GPU power draw  
 TS: CPU or microcontroller
 
-These ranges are architecture-informed estimates under assumed typical workloads. They are not yet benchmark-certified for this repository, and actual outcomes depend on implementation maturity, hardware configuration, and operating constraints.
-
 ---
 
 ## **12.3 Summary of TS Inference Advantages**
@@ -550,8 +644,6 @@ There is **no backpropagation**, **no gradient descent**, and **no GPU requireme
 - **days -> minutes** training time  
 - **zero catastrophic forgetting**  
 - **100% reproducibility**  
-
-These ranges are architecture-informed estimates under assumed typical workloads. They are not yet benchmark-certified for this repository, and actual outcomes depend on implementation maturity, hardware configuration, and operating constraints.
 
 ---
 
@@ -692,7 +784,7 @@ The Thought Simulator represents a fundamentally different approach to cognitive
 - scalable deployment  
 - dramatically lower memory and power requirements  
 
-TS is designed to model cognition as a **structured, stateful, and inspectable process**, rather than as a statistical prediction engine. Its reliance on explicit operators, persistent state, and deterministic transitions enables a level of clarity, reproducibility, and governance that transformer-based systems cannot provide.
+TS is designed to model cognition as a **structured, stateful, and inspectable process**, rather than as a statistical prediction engine. Its reliance on explicit operators, persistent state, and deterministic transitions is intended to provide stronger clarity, reproducibility, and governance than conventional transformer-centric implementations.
 
 The architectural advantages of TS - including O(1) inference cost, natural parallelism, horizontal scalability, and DRAM-only operation - position it as a practical foundation for:
 
