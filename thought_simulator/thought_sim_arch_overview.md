@@ -144,7 +144,6 @@ This section provides a **full architectural, mechanistic, and hardware comparis
 
 ## **7.1 Full Processing Pipeline Table**
 
-```markdown
 | Processing Step | AI Today — Primitive | AI Today — How It Works | AI Today — Hardware Required | TS — Primitive | TS — How It Works | TS — Machine Partitions | TS — Hardware Required |
 |-----------------|----------------------|--------------------------|------------------------------|----------------|--------------------|--------------------------|------------------------|
 
@@ -171,7 +170,6 @@ This section provides a **full architectural, mechanistic, and hardware comparis
 | **11. Memory Usage** | Embeddings + KV Cache + Activations | GBs of VRAM + HBM | **HBM mandatory** | OB Library + TP | MBs; no HBM | TP State Vector + OB Library | DDR4/DDR5/LPDDR |
 
 | **12. Output Generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → Output Adapter | Deterministic readout from TP | Output Adapter | DDR4/DDR5/LPDDR |
-```
 
 ---
 
