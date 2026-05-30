@@ -185,10 +185,10 @@ This section provides a **full architectural, mechanistic, and hardware comparis
 | **10. Inference loop** | Token‑by‑token | Recompute state each step | **HBM required** for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
 | **11. Memory usage** | Embeddings + KV cache + activations | GBs of VRAM + **HBM** | **HBM mandatory** | OB library + TP | MBs; no HBM | TP state vector + OB library | DDR4/DDR5/LPDDR (DRAM) |
 | **12. Output generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → output adapter | Deterministic readout from TP | Output adapter | DDR4/DDR5/LPDDR (DRAM) |
-
+  
 **This table makes explicit that transformers are matrix‑bound and HBM‑dependent, while TS is state‑based and DRAM‑only.**
-
----
+  
+---  
 
 ## 8. Transformer → TS mapping (inference)
 
