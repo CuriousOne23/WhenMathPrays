@@ -177,42 +177,16 @@ This section provides a **full architectural, mechanistic, and hardware comparis
 | **2. Represent meaning** | Embeddings | Lookup table → dense vector | GPU VRAM + **HBM** | OB families + TP | Meaning emerges from OB activations + TP dynamics | OB library → TP state vector | DDR4/DDR5/LPDDR (DRAM) |
 | **3. Determine relevance** | Attention (Q/K/V) | Matrix multiplications + softmax | Tensor cores + **HBM** + high‑bandwidth VRAM | Routing rules + emphasis | Deterministic rule‑based OB activation | RBs → scheduler → routing layer → emphasis regulator | DDR4/DDR5/LPDDR (DRAM) |
 | **4. Transform information** | Feedforward layers (MLPs) | Deep stacked matrix multiplications | GPU tensor cores + VRAM | OB transformations | Modular, isolated OB updates | OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
-| **5. Maintain context** | KV cache | Stores past tokens; grows with sequence length | **HBM** mandatory, large VRAM | Persistent TP | State evolves continuously; no cache | TP state vector → persistence layer | DDR4/DDR5/LPDDR (DRAM) |
+| **5. Maintain context** | KV cache | Stores past tokens; grows with sequence length | **HBM mandatory**, large VRAM | Persistent TP | State evolves continuously; no cache | TP state vector → persistence layer | DDR4/DDR5/LPDDR (DRAM) |
 | **6. Stabilize activations** | LayerNorm | Normalizes each layer | GPU VRAM | TP regulation | Explicit stability rules | Entropy regulator → TP stabilizer | DDR4/DDR5/LPDDR (DRAM) |
 | **7. Preserve information** | Residual connections | Adds previous layer output | GPU VRAM | TP persistence | Built‑in state continuity | TP state vector | DDR4/DDR5/LPDDR (DRAM) |
 | **8. Scale capacity** | More layers + more parameters | Vertical depth scaling | GPU clusters + **HBM** | More OBs | Horizontal growth; no depth | OB library | DDR4/DDR5/LPDDR (DRAM) |
 | **9. Training** | Backpropagation | Gradient descent over huge matrices | GPU clusters + **HBM** | OB derivation | Modular, domain‑specific OB creation | OB design pipeline | DDR4/DDR5/LPDDR (DRAM) |
-| **10. Inference loop** | Token‑by‑token | Recompute state each step | **HBM** required for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
-| **11. Memory usage** | Embeddings + KV cache + activations | GBs of VRAM + **HBM** | **HBM** mandatory | OB library + TP | MBs; no HBM | TP state vector + OB library | DDR4/DDR5/LPDDR (DRAM) |
+| **10. Inference loop** | Token‑by‑token | Recompute state each step | **HBM required** for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB executor → TP updater | DDR4/DDR5/LPDDR (DRAM) |
+| **11. Memory usage** | Embeddings + KV cache + activations | GBs of VRAM + **HBM** | **HBM mandatory** | OB library + TP | MBs; no HBM | TP state vector + OB library | DDR4/DDR5/LPDDR (DRAM) |
 | **12. Output generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → output adapter | Deterministic readout from TP | Output adapter | DDR4/DDR5/LPDDR (DRAM) |
 
-<<<<<<< HEAD
-This table makes explicit that transformers are **matrix‑bound and HBM‑dependent**, while TS is **state‑based and DRAM‑only**.
-=======
-| **1. Input Representation** | Tokenizer (BPE, WordPiece) | Splits text into subword tokens | CPU + embedding table in GPU VRAM | Vector Acceptance Layer | Accepts pre‑embedded vectors from any front‑end | Input Adapter → TP Initializer | DDR4/DDR5/LPDDR |
-
-| **2. Represent Meaning** | Embeddings | Lookup table → dense vector | **GPU VRAM + HBM** | OB Families + TP | Meaning emerges from OB activations + TP dynamics | OB Library → TP State Vector | DDR4/DDR5/LPDDR |
-
-| **3. Determine Relevance** | Attention (Q/K/V) | Matrix multiplications + softmax | **Tensor Cores + HBM + High‑bandwidth VRAM** | Routing Rules + Emphasis | Deterministic rule‑based OB activation | **RBs → Scheduler → Routing Layer → Emphasis Regulator** | DDR4/DDR5/LPDDR |
-
-| **4. Transform Information** | Feedforward Layers (MLPs) | Deep stacked matrix multiplications | GPU Tensor Cores + VRAM | OB Transformations | Modular, isolated OB updates | OB Executor → TP Updater | DDR4/DDR5/LPDDR |
-
-| **5. Maintain Context** | KV Cache | Stores past tokens; grows with sequence length | **HBM mandatory**, large VRAM | Persistent TP | State evolves continuously; no cache | TP State Vector → Persistence Layer | DDR4/DDR5/LPDDR |
-
-| **6. Stabilize Activations** | LayerNorm | Normalizes each layer | GPU VRAM | TP Regulation | Explicit stability rules | Entropy Regulator → TP Stabilizer | DDR4/DDR5/LPDDR |
-
-| **7. Preserve Information** | Residual Connections | Adds previous layer output | GPU VRAM | TP Persistence | Built‑in state continuity | TP State Vector | DDR4/DDR5/LPDDR |
-
-| **8. Scale Capacity** | More Layers + More Parameters | Vertical depth scaling | GPU clusters + HBM | More OBs | Horizontal growth; no depth | OB Library | DDR4/DDR5/LPDDR |
-
-| **9. Training** | Backpropagation | Gradient descent over huge matrices | GPU clusters + HBM | OB Derivation | Modular, domain‑specific OB creation | OB Design Pipeline | DDR4/DDR5/LPDDR |
-
-| **10. Inference Loop** | Token‑by‑token | Recompute state each step | **HBM required** for long context; GPU cluster | Tick‑based | Incremental state updates | Scheduler → OB Executor → TP Updater | DDR4/DDR5/LPDDR |
-
-| **11. Memory Usage** | Embeddings + KV Cache + Activations | GBs of VRAM + HBM | **HBM mandatory** | OB Library + TP | MBs; no HBM | TP State Vector + OB Library | DDR4/DDR5/LPDDR |
-
-| **12. Output Generation** | Softmax over vocabulary | Large matrix multiply | GPU VRAM | OB → Output Adapter | Deterministic readout from TP | Output Adapter | DDR4/DDR5/LPDDR |
->>>>>>> cfc8f9403647f29b41df7296e6569d9ded750114
+**This table makes explicit that transformers are matrix‑bound and HBM‑dependent, while TS is state‑based and DRAM‑only.**
 
 ---
 
