@@ -22,6 +22,7 @@ This document does not provide:
 - benchmark-certified performance results  
 - final implementation guarantees across all hardware profiles  
 - a replacement for canonical requirement, verification, or design artifacts  
+- the full OB taxonomy or full TP geometry specification  
 
 Performance ranges in later sections are architecture-informed targets under assumed typical workloads and are expected to be revised as benchmark evidence matures.
 
@@ -220,6 +221,7 @@ The most relevant architecture risks are:
 |------|----------------|-------|
 | TP lifecycle, basin, scheduler foundations | Prototype-supported | Deterministic prototype and verification capsules exist |
 | Regulator, tick cycle, snapshot, event log, experiment runner | Prototype-supported | Phase B prototype+harness artifacts available |
+| OB library growth and routing heuristics | Designed | Requires future scaling validation |
 | Canonical design traceability and governance | Operational | 10/30/50 trace and CI checks are active |
 | End-to-end benchmark certification of target bands | In progress | Target ranges remain architecture-informed pending benchmark campaigns |
 
@@ -257,8 +259,8 @@ This section provides a **full architectural, mechanistic, and hardware comparis
 
 ## **7.1 Thought Processing Pipeline: Transformers vs TS**
 
-| Processing Step | AI Today - Primitive | AI Today - How It Works | AI Today - Hardware Required | TS - Primitive | TS - How It Works | TS - Machine Partitions | TS - Hardware Required |
-|-----------------|----------------------|--------------------------|------------------------------|----------------|--------------------|--------------------------|------------------------|
+| Processing Step | AI Today Primitive | AI Today Mechanism | AI Today Hardware | TS Primitive | TS Mechanism | TS Partitions | TS Hardware |
+|-----------------|--------------------|--------------------|-------------------|--------------|--------------|---------------|-------------|
 | **1. Input representation** | Tokenizer | Splits text into subword tokens | CPU + GPU VRAM | Vector acceptance layer | Accepts pre-embedded vectors | Input adapter -> TP initializer | DRAM |
 | **2. Represent meaning** | Embeddings | Lookup table -> dense vector | GPU VRAM + HBM | OB families + TP | Meaning emerges from OB activations | OB library -> TP | DRAM |
 | **3. Determine relevance** | Attention | Matrix multiplications + softmax | Tensor cores + HBM | Routing rules + emphasis | Deterministic OB activation | Routing layer | DRAM |
@@ -368,7 +370,7 @@ TS is intended to retain broad cognitive capability while eliminating:
 - GPU requirements  
 - KV cache  
 
-TS is positioned to remain highly expressive while being **architecturally simpler and potentially more efficient**.
+TS is intended to preserve broad expressive capacity while remaining **architecturally simpler and more efficient**.
 
 ---
 
@@ -412,6 +414,8 @@ TS has:
 - **100x-10,000x higher throughput**  
 - **50x-500x lower bandwidth**  
 - **50x-1,000x lower power**  
+
+These ranges are not guarantees and will be revised as benchmark evidence matures.
 
 ---
 
@@ -522,6 +526,8 @@ Transformers can parallelize some workloads, but their attention and layered dep
 - **linear training cost**  
 - **constant inference cost**  
 
+These ranges are not guarantees and will be revised as benchmark evidence matures.
+
 ---
 
 ## **11.4 Summary: TS Scalability**
@@ -591,6 +597,8 @@ TS: OB library + TP
 
 Transformers: GPU power draw  
 TS: CPU or microcontroller
+
+These ranges are not guarantees and will be revised as benchmark evidence matures.
 
 ---
 
