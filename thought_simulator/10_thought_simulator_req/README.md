@@ -24,6 +24,7 @@ This directory is the canonical requirement-governance root for promoted require
 
 - Exploratory requirement reasoning remains in [../20_requirements/](../20_requirements/).
 - Canonical requirement anchors in this directory are the authoritative requirement source for canonical design and verification flow.
+- Terminology alignment baseline is [../20_requirements/20.05_design_constraints.md](../20_requirements/20.05_design_constraints.md), including the current use of Routing Basin (RB) naming.
 
 
 
