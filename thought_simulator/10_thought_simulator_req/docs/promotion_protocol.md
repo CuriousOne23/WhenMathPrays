@@ -151,6 +151,12 @@ Interpretation rule:
 
 This section governs canonical-backward synchronization after canonical anchors in `10_thought_simulator_req/` are updated from architectural guidance in `20_requirements/`.
 
+No-auto-propagation rule:
+
+- edits in `20_requirements/` alone must not trigger automatic cross-layer updates
+- cross-layer execution begins only after explicit user request for forward flow or backward flow
+- prior to explicit request, the AI Agent may report impact scope and provide prompt templates only
+
 Normative authority rule:
 
 - `20_requirements/` provides architectural rationale and terminology lineage.
@@ -165,7 +171,7 @@ Required backward-flow packet:
 4. required glossary/traceability updates
 5. confirmation and approver record
 
-Automatic execution obligations (mandatory):
+Automatic execution obligations (mandatory, after explicit flow request):
 
 When backward flow is requested after a canonical-anchor update in `10_thought_simulator_req/` that originated from `20_requirements/`, the AI Agent must automatically execute both controls below without requiring a second user prompt:
 

@@ -38,6 +38,27 @@ Only reference `10_program_governance/` when you explicitly name it.
 
 ## Where The User Should Edit
 
+## No Automatic Propagation From 20 (Mandatory)
+
+Edits in `20_requirements/` must not automatically trigger updates in `10_thought_simulator_req/`, `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`.
+
+Allowed AI-agent behavior after a 20-layer edit:
+
+- report impacted downstream directories/files
+- ask whether the user wants to run forward flow or backward flow
+- provide a ready-to-run prompt template
+
+Disallowed behavior:
+
+- automatic cross-layer edits initiated only because `20_requirements/` changed
+
+Allowed automatic maintenance inside `30_verification/`, `40_thought_simulator_playground/`, and `50_thought_simulator_design/` after explicit forward/backward flow start:
+
+- glossary and terminology synchronization updates
+- README path and reference repairs
+- intra-layer markdown link/path repairs after file rename or section-name changes
+- `50.00_design_traceability_index.md` synchronization when any 50-series file is added, renamed, deleted, or remapped
+
 ### Forward Flow
 
 User edits usually begin in one of:
@@ -87,6 +108,8 @@ The AI agent should:
 6. Create/update execution log under `10_thought_simulator_req/docs/`.
 7. Run integrity check and report pass/fail summary.
 
+Forward flow must start only after explicit user request; a 20-layer edit alone is not sufficient to execute propagation.
+
 ## Backward Flow Runbook
 
 ### User Prompt Template
@@ -123,6 +146,8 @@ The AI agent should:
 6. Run integrity checks and record results.
 7. Record final completion assertion:
    - `Forward-Equivalence State: YES`
+
+Backward flow must start only after explicit user request; a 20-layer edit alone is not sufficient to execute propagation.
 
 ## Ambiguity Rule
 
@@ -177,6 +202,12 @@ CI should enforce the following:
    - the log contains `Forward-Equivalence State: YES`
    - integrity check summary is present
 5. If a PR changes any file under `50_thought_simulator_design/`, CI must run the existing traceability-index consistency rule from `50.00_design_traceability_index.md`.
+6. If a PR renames any markdown file under `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`, CI must fail unless the same change set includes:
+  - `30_verification/30.30_verification_glossary.md`
+  - `30_verification/glossary_term_registry.json`
+  - `50_thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `50_thought_simulator_design/`)
+7. If a PR introduces broken markdown file references or broken markdown heading anchors in governed docs, CI must fail.
+  - Governance policy note: this failing check is a red warning signal by default and is merge-blocking only when configured as a required status check in repository branch-protection/ruleset settings.
 
 ## Done Criteria
 

@@ -4,7 +4,7 @@
 Record canonical-anchor refactor changes made in 10_thought_simulator_req to align with 20-series terminology and architectural boundaries, and capture required follow-on impacts for 40/50 refactors.
 
 ## Alignment Baseline
-- 20-series architectural baseline: ../20_requirements/20.05_design_constraints.md
+- 20-series architectural baseline: ../../20_requirements/20.05_design_constraints.md
 - Key alignment targets:
   - Routing Basin (RB) terminology
   - Basin family coverage (OB, RB, GB, IB, TB, InB, OuB, MB)
