@@ -42,6 +42,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -50,6 +52,147 @@ jobs:
 
       - name: Run dependency lint
         run: python thought_simulator/scripts/check_doc_dependencies.py
+
+      - name: Run governance marker validation (blocking)
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+
+          required_markers = {
+              "thought_simulator/USER_GUIDE.md": [
+                  "No Automatic Propagation From 20 (Mandatory)",
+                  "selected direction (`forward` or `backward`)",
+              ],
+              "thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md": [
+                  "No-auto-propagation rule:",
+                  "selected direction (`forward` or `backward`)",
+              ],
+              "thought_simulator/30_verification/README.md": [
+                  "No-auto-propagation from 20-layer edits:",
+                  "selected direction (`forward` or `backward`)",
+              ],
+              "thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md": [
+                  "No-auto-propagation from 20-layer edits:",
+                  "selected flow direction: `forward` or `backward`",
+              ],
+              "thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md": [
+                  "No-auto-propagation from 20-layer edits:",
+                  "chosen direction (`forward` or `backward`)",
+              ],
+          }
+
+          failures = []
+          for rel_path, markers in required_markers.items():
+              path = Path(rel_path)
+              if not path.exists():
+                  failures.append(f"missing required file: {rel_path}")
+                  continue
+              content = path.read_text(encoding="utf-8")
+              for marker in markers:
+                  if marker not in content:
+                      failures.append(f"missing marker in {rel_path}: {marker}")
+
+          if failures:
+              print("ERROR: governance marker validation failed.")
+              for failure in failures:
+                  print(f"- {failure}")
+              sys.exit(1)
+
+          print("Governance marker validation passed.")
+          PY
+
+      - name: Run rename-triggered maintenance guard (blocking)
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          import sys
+
+          AUTO_GLOSSARY = "thought_simulator/30_verification/30.30_verification_glossary.md"
+          AUTO_REGISTRY = "thought_simulator/30_verification/glossary_term_registry.json"
+          AUTO_50_INDEX = "thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md"
+
+          SCOPE_PREFIXES = (
+              "thought_simulator/30_verification/",
+              "thought_simulator/40_thought_simulator_playground/",
+              "thought_simulator/50_thought_simulator_design/",
+          )
+
+          def run_git(args):
+              return subprocess.check_output(["git", *args], text=True).splitlines()
+
+          event_name = os.getenv("GITHUB_EVENT_NAME", "")
+          if event_name == "pull_request":
+              base_ref = os.getenv("GITHUB_BASE_REF", "")
+              if not base_ref:
+                  print("ERROR: pull_request event missing GITHUB_BASE_REF")
+                  sys.exit(1)
+              subprocess.check_call(["git", "fetch", "--no-tags", "origin", base_ref])
+              diff_range = f"origin/{base_ref}...HEAD"
+          else:
+              try:
+                  run_git(["rev-parse", "HEAD~1"])
+              except subprocess.CalledProcessError:
+                  print("No previous commit available; skipping rename-triggered maintenance guard.")
+                  sys.exit(0)
+              diff_range = "HEAD~1..HEAD"
+
+          status_lines = run_git(["diff", "--name-status", diff_range])
+          changed_paths = set()
+          renamed_md = []
+
+          for line in status_lines:
+              parts = line.split("\t")
+              if not parts:
+                  continue
+              status = parts[0]
+              paths = parts[1:]
+              for p in paths:
+                  changed_paths.add(p)
+
+              if status.startswith("R") and len(paths) >= 2:
+                  old_path, new_path = paths[0], paths[1]
+                  in_scope = (
+                      old_path.startswith(SCOPE_PREFIXES)
+                      or new_path.startswith(SCOPE_PREFIXES)
+                  )
+                  is_md = old_path.endswith(".md") or new_path.endswith(".md")
+                  if in_scope and is_md:
+                      renamed_md.append((old_path, new_path))
+
+          if not renamed_md:
+              print("No markdown renames detected in 30/40/50; rename-triggered maintenance guard passed.")
+              sys.exit(0)
+
+          required_paths = {AUTO_GLOSSARY, AUTO_REGISTRY}
+          rename_touches_50 = any(
+              old.startswith("thought_simulator/50_thought_simulator_design/")
+              or new.startswith("thought_simulator/50_thought_simulator_design/")
+              for old, new in renamed_md
+          )
+          if rename_touches_50:
+              required_paths.add(AUTO_50_INDEX)
+
+          missing = sorted(p for p in required_paths if p not in changed_paths)
+          if missing:
+              print("ERROR: rename-triggered maintenance guard failed.")
+              print("Detected markdown renames in governed scope:")
+              for old, new in renamed_md:
+                  print(f"- {old} -> {new}")
+              print("Required auto-maintenance updates missing from this change set:")
+              for path in missing:
+                  print(f"- {path}")
+              sys.exit(1)
+
+          print("Rename-triggered maintenance guard passed.")
+          print("Detected markdown renames:")
+          for old, new in renamed_md:
+              print(f"- {old} -> {new}")
+          print("Required auto-maintenance paths were updated.")
+          PY
 
       - name: Run frontmatter and ID validation
         run: python thought_simulator/scripts/validate_doc_frontmatter_and_ids.py --require-frontmatter --strict-ids
@@ -75,5 +218,5 @@ jobs:
       - name: Run README coverage warning check (non-blocking)
         run: python thought_simulator/scripts/validate_readme_coverage.py
 
-      - name: Run document reference warning check (non-blocking)
-        run: python thought_simulator/scripts/validate_doc_reference_targets.py
+      - name: Run document reference validation (blocking)
+        run: python thought_simulator/scripts/validate_doc_reference_targets.py --strict --check-headings

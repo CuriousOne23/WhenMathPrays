@@ -42,6 +42,18 @@ When this guide states "10-layer update" or "update 10", it means `10_thought_si
 
 When those canonical anchors were updated from `20_requirements/`, intake into this tier must still treat the 10-layer anchor as the normative source and `20_requirements/` as rationale lineage only.
 
+No-auto-propagation from 20-layer edits:
+
+- changes in `20_requirements/` alone must not trigger automatic verification updates
+- the AI Agent may provide impact analysis and prompt suggestions only
+- verification edits begin only after explicit user direction for forward or backward flow
+
+Allowed automatic maintenance (30/40/50 scope, after explicit flow start):
+
+- update `30.30_verification_glossary.md` when terminology in 30/40/50 docs is renamed, added, or deprecated
+- update `glossary_term_registry.json` in the same change set as glossary term changes
+- repair README and markdown references/paths affected by file rename or section-name changes
+
 Required backward-intake controls:
 
 - explicit flow direction confirmation (`backward`) before edits

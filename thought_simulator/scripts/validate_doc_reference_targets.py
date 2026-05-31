@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Warn on broken document/file references across Thought Simulator doc tiers.
+"""Validate document and heading references across Thought Simulator doc tiers.
 
-This check is non-blocking and is intended to surface cases where files were
-moved, renamed, or deleted but are still referenced by other markdown files.
-It reports the referring file and line number.
+By default this script is non-blocking and reports warnings for unresolved
+file references. Use --strict to return a non-zero exit code when warnings are
+found. Use --check-headings to also validate markdown heading anchors.
 """
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 from urllib.parse import unquote
 import re
+import unicodedata
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,8 +51,18 @@ def _normalize_target(raw_target: str) -> str:
     target = raw_target.strip()
     if not target:
         return ""
-    target = target.split("#", 1)[0].split("?", 1)[0].strip()
+    target = target.split("?", 1)[0].strip()
     return unquote(target)
+
+
+def _split_target(raw_target: str) -> tuple[str, str]:
+    target = _normalize_target(raw_target)
+    if not target:
+        return "", ""
+    if "#" not in target:
+        return target, ""
+    path_part, anchor = target.split("#", 1)
+    return path_part.strip(), anchor.strip()
 
 
 def _has_allowed_extension(target: str) -> bool:
@@ -77,7 +89,7 @@ def _build_basename_index() -> dict[str, list[Path]]:
 
 
 def _candidate_to_path(referrer: Path, token: str, basename_index: dict[str, list[Path]]) -> Path | None:
-    normalized = _normalize_target(token)
+    normalized = token.strip()
     if not normalized or _is_external(normalized):
         return None
     if not _has_allowed_extension(normalized):
@@ -117,37 +129,102 @@ def _extract_candidates(line: str) -> list[str]:
     return candidates
 
 
+def _looks_like_glob(target: str) -> bool:
+    return any(ch in target for ch in ("*", "?", "[", "]"))
+
+
+def _slugify_heading(text: str) -> str:
+    value = text.strip().lower()
+    value = unicodedata.normalize("NFKD", value)
+    value = "".join(ch for ch in value if not unicodedata.combining(ch))
+    value = re.sub(r"[\s_]+", "-", value)
+    value = re.sub(r"[^a-z0-9\-]", "", value)
+    value = re.sub(r"-+", "-", value).strip("-")
+    return value
+
+
+def _collect_heading_anchors(path: Path) -> set[str]:
+    anchors: set[str] = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*$", line)
+        if not match:
+            continue
+        heading = re.sub(r"\s+#+\s*$", "", match.group(1)).strip()
+        anchor = _slugify_heading(heading)
+        if anchor:
+            anchors.add(anchor)
+    return anchors
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Validate markdown file and heading references.")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Return non-zero exit code when unresolved references are found.",
+    )
+    parser.add_argument(
+        "--check-headings",
+        action="store_true",
+        help="Validate markdown heading anchors for links that include #anchor.",
+    )
+    return parser.parse_args()
+
+
 def main() -> int:
+    args = _parse_args()
     basename_index = _build_basename_index()
+    heading_index = {path.resolve(): _collect_heading_anchors(path) for path in _iter_markdown_files()}
     warnings: list[str] = []
 
     for path in _iter_markdown_files():
         rel_path = path.relative_to(ROOT).as_posix()
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             for token in _extract_candidates(line):
-                target = _candidate_to_path(path, token, basename_index)
-                normalized = _normalize_target(token)
-                if not normalized or _is_external(normalized):
+                normalized, anchor = _split_target(token)
+                if not normalized and anchor:
+                    target = path
+                    normalized_for_msg = f"#{anchor}"
+                else:
+                    target = _candidate_to_path(path, normalized, basename_index)
+                    normalized_for_msg = normalized
+
+                if not normalized and not anchor:
                     continue
-                if not _has_allowed_extension(normalized):
+                if normalized and _is_external(normalized):
+                    continue
+                if normalized and _looks_like_glob(normalized):
+                    continue
+                if normalized and not _has_allowed_extension(normalized):
                     continue
                 if target is None:
                     # Only warn when the token looks like a specific path/file, not a generic ambiguous filename.
-                    if "/" in normalized or normalized.startswith("../") or normalized not in basename_index:
+                    if "/" in normalized_for_msg or normalized_for_msg.startswith("../") or normalized_for_msg not in basename_index:
                         warnings.append(
-                            f"{rel_path}:{line_number}: reference '{normalized}' does not resolve to an existing file"
+                            f"{rel_path}:{line_number}: reference '{normalized_for_msg}' does not resolve to an existing file"
                         )
                     continue
                 if not target.exists():
                     warnings.append(
-                        f"{rel_path}:{line_number}: reference '{normalized}' points to missing file '{target}'"
+                        f"{rel_path}:{line_number}: reference '{normalized_for_msg}' points to missing file '{target}'"
                     )
+                    continue
+
+                if args.check_headings and anchor and target.suffix.lower() == ".md":
+                    target_anchors = heading_index.get(target.resolve(), set())
+                    if _slugify_heading(anchor) not in target_anchors:
+                        warnings.append(
+                            f"{rel_path}:{line_number}: heading anchor '#{anchor}' not found in '{target.relative_to(ROOT.parent)}'"
+                        )
 
     if warnings:
-        print("Document reference warnings:")
+        print("Document reference issues:")
         for warning in warnings:
             print(f"- {warning}")
-        print("Document reference check completed with warnings (non-blocking).")
+        if args.strict:
+            print("Document reference check failed (blocking strict mode).")
+            return 1
+        print("Document reference check completed with warnings (non-blocking mode).")
         return 0
 
     print("Document reference check passed: no broken file references detected.")
