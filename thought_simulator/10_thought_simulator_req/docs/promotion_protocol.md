@@ -134,6 +134,17 @@ Governance maintainers:
 - Revisions require explicit version increment and short revision summary.
 - Any revision that changes epistemic boundary rules requires governance-level review.
 
+## 11.1 10-Layer Directory Disambiguation (Normative)
+
+The 10-layer naming collision is resolved by explicit role assignment:
+
+- `10_thought_simulator_req/` is the canonical requirement authority and flow trigger source for promotion/backward-flow transactions.
+- `10_program_governance/` is the program governance and architecture-reference source.
+
+Interpretation rule:
+
+- In this protocol, references to "10-layer canonical update" or "update 10" mean `10_thought_simulator_req/` unless explicitly qualified as `10_program_governance/`.
+
 ## 12. Controlled Backward-Flow Transaction (20 -> 10 -> 30/40/50)
 
 This section governs canonical-backward synchronization after canonical anchors in `10_thought_simulator_req/` are updated from architectural guidance in `20_requirements/`.
