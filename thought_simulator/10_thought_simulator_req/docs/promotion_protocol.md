@@ -1,9 +1,9 @@
 # Promotion Protocol
 
-Version: 1.0
+Version: 1.3
 Status: Active
 Owner: Thought Simulator Governance
-Last Updated: 2026-05-28
+Last Updated: 2026-06-01
 
 ## 1. Purpose and Scope
 
@@ -133,3 +133,79 @@ Governance maintainers:
 - This protocol is versioned governance policy.
 - Revisions require explicit version increment and short revision summary.
 - Any revision that changes epistemic boundary rules requires governance-level review.
+
+## 12. Controlled Backward-Flow Transaction (20 -> 10 -> 30/40/50)
+
+This section governs canonical-backward synchronization after canonical anchors in `10_thought_simulator_req/` are updated from architectural guidance in `20_requirements/`.
+
+Normative authority rule:
+
+- `20_requirements/` provides architectural rationale and terminology lineage.
+- `10_thought_simulator_req/` is the canonical trigger source for downstream updates.
+- backward propagation executes from 10 into `30_verification/`, `40_thought_simulator_playground/`, and `50_thought_simulator_design/`.
+
+Required backward-flow packet:
+
+1. changed canonical anchor paths in `10_thought_simulator_req/`
+2. rationale and risk statement
+3. impacted 30/40/50 targets
+4. required glossary/traceability updates
+5. confirmation and approver record
+
+Automatic execution obligations (mandatory):
+
+When backward flow is requested after a canonical-anchor update in `10_thought_simulator_req/` that originated from `20_requirements/`, the AI Agent must automatically execute both controls below without requiring a second user prompt:
+
+1. create/update a backward-flow execution log in `10_thought_simulator_req/docs/`
+2. run a post-update integrity check across impacted 30/40/50 targets and record the result
+
+Backward-flow full design synchronization requirement (mandatory):
+
+When backward flow is requested for a 20 -> 10 initiated change, completion requires a full synchronization pass across all design files in `50_thought_simulator_design/`.
+
+Required completion checks for this pass:
+
+1. all impacted and non-impacted 50-series design docs are reviewed for canonical consistency against updated 10 anchors
+2. `50.00_design_traceability_index.md` is synchronized with any resulting design updates
+3. no unresolved design-layer reference drift remains after propagation
+4. execution log records a final assertion: `Forward-Equivalence State: YES`
+
+Minimum integrity-check scope:
+
+1. stale or unresolved requirement references
+2. glossary/terminology mismatches against canonical glossary controls
+3. unmapped HLR/LLR references introduced by the change
+4. missing backward-flow governance section in impacted 30 module docs (when module docs are in scope)
+
+Mandatory ambiguity control:
+
+If a request can be interpreted as either forward or backward flow, execution must pause until explicit human direction is recorded.
+
+Minimum confirmation record:
+
+1. selected direction (`forward` or `backward`)
+2. initiating source document(s)
+3. impacted target set
+
+Without this record, only planning output is allowed.
+
+Release block rule:
+
+Backward-flow transactions are incomplete until impacted canonical references, glossary terms, and verification/design trace mappings are synchronized.
+
+Backward-flow transactions are also incomplete until the full design synchronization requirement above passes and `Forward-Equivalence State: YES` is recorded.
+
+## 13. Revision Summary (v1.3)
+
+- Added mandatory full-design synchronization gate for backward flow.
+- Added required final execution-log assertion: `Forward-Equivalence State: YES`.
+
+## 14. Prior Revision Summary (v1.2)
+
+- Added automatic backward-flow execution obligations: mandatory log creation and integrity check run.
+
+## 15. Prior Revision Summary (v1.1)
+
+- Added controlled backward-flow governance for 20 -> 10 -> 30/40/50 process.
+- Added explicit ambiguity confirmation requirement for forward vs backward direction.
+- Added release-block criteria for cross-layer synchronization completeness.
