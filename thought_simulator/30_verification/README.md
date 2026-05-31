@@ -15,6 +15,8 @@ This folder is the authoritative verification tier for Thought Simulator modules
 - store deterministic evidence artifacts
 - separate verification evidence from exploratory playground work
 
+For user-facing forward/backward flow runbooks and prompt templates, see `../USER_GUIDE.md`.
+
 ## Promotion Policy
 
 Promotion into this folder is intentional and manual.
