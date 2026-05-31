@@ -9,6 +9,8 @@ Last Updated: 2026-06-01
 
 This protocol governs promotion of exploratory ideas into canonical artifacts.
 
+Operational runbook for users and AI prompts: `../../USER_GUIDE.md`.
+
 It applies to transitions from:
 
 - `20_requirements` (exploratory reasoning)
