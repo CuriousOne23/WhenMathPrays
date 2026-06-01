@@ -1,4 +1,4 @@
-﻿# Thought Simulator Architectural Overview
+# Thought Simulator Architectural Overview
 
 ### Thought Simulator - Architectural Overview  
 ### High-level conceptual, architectural, and governance framework
@@ -95,7 +95,7 @@ This enables full reasoning transparency.
 
 The TS repository is structured into layered tiers that separate exploration from canonical governance:
 
-- **10_program_governance/** - Philosophy, framing, program-level intent  
+- **00_program_governance/** - Philosophy, framing, program-level intent  
 - **10_thought_simulator_req/** - Canonical requirements and promotion governance  
 - **20_requirements/** - Exploratory requirements and conceptual development  
 - **30_verification/** - Deterministic evidence, verification capsules, promoted results  

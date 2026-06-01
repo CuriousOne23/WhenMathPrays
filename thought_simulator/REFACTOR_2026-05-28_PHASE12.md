@@ -10,7 +10,7 @@ Close the structural migration by declaring the new documentation model authorit
 
 The `thought_simulator/` conceptual-document structure is now authoritatively organized as:
 
-- `10_program_governance/`
+- `00_program_governance/`
 - `20_requirements/`
 - `30_verification/`
 - `40_thought_simulator_playground/`

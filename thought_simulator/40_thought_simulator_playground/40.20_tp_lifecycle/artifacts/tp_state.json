@@ -30,7 +30,7 @@
       "detail": "Deterministic IDs and strictly monotonic state_counter validated.",
       "hlr_ref": "HLR-REQ-14",
       "llr_ref": "LLR-T-DET-01,T-DET-04",
-      "req_doc": "thought_simulator_req/20_requirements/20.60_testing_and_validation.md",
+      "req_doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
       "req_section": "\u00a74",
       "io_fields": "deterministic_mode, deterministic_nonce, basin_id, entropy, embedding, created_at_tick -> tp_id, state_counter, history",
       "negative_path": "NO"
@@ -41,7 +41,7 @@
       "detail": "Invalid split child_count correctly raised ValueError.",
       "hlr_ref": "HLR-REQ-14",
       "llr_ref": "LLR-SEC-14-12",
-      "req_doc": "thought_simulator_req/20_requirements/20.60_testing_and_validation.md",
+      "req_doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
       "req_section": "\u00a712",
       "io_fields": "child_count -> error path",
       "negative_path": "YES"
@@ -52,7 +52,7 @@
       "detail": "Empty merge source list correctly raised ValueError.",
       "hlr_ref": "HLR-REQ-14",
       "llr_ref": "LLR-SEC-14-12",
-      "req_doc": "thought_simulator_req/20_requirements/20.60_testing_and_validation.md",
+      "req_doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
       "req_section": "\u00a712",
       "io_fields": "sources -> error path",
       "negative_path": "YES"
@@ -63,7 +63,7 @@
       "detail": "Embedding dimension mismatch correctly raised ValueError.",
       "hlr_ref": "HLR-REQ-14",
       "llr_ref": "LLR-SEC-14-12",
-      "req_doc": "thought_simulator_req/20_requirements/20.60_testing_and_validation.md",
+      "req_doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
       "req_section": "\u00a712",
       "io_fields": "sources -> error path",
       "negative_path": "YES"

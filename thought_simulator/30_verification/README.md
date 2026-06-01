@@ -36,7 +36,7 @@ Verification updates may be initiated by canonical-anchor changes in `10_thought
 10-layer disambiguation for this guide:
 
 - `10_thought_simulator_req/` = canonical requirement trigger source.
-- `10_program_governance/` = architecture/program reference context.
+- `00_program_governance/` = architecture/program reference context.
 
 When this guide states "10-layer update" or "update 10", it means `10_thought_simulator_req/` unless explicitly qualified.
 

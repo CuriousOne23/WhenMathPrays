@@ -25,7 +25,7 @@ Use these roles consistently:
   exploratory module workspace and master execution guide
 - `thought_simulator/50_thought_simulator_design/`:
   canonical design specifications and traceability index
-- `thought_simulator/10_program_governance/`:
+- `thought_simulator/00_program_governance/`:
   architecture/program governance references (not the canonical requirement trigger source)
 
 ## 10-Layer Disambiguation Rule
@@ -34,7 +34,7 @@ When you request "update 10" in flow execution, this means:
 
 - `10_thought_simulator_req/` by default
 
-Only reference `10_program_governance/` when you explicitly name it.
+Only reference `00_program_governance/` when you explicitly name it.
 
 ## Where The User Should Edit
 
@@ -148,6 +148,200 @@ The AI agent should:
    - `Forward-Equivalence State: YES`
 
 Backward flow must start only after explicit user request; a 20-layer edit alone is not sufficient to execute propagation.
+
+## 20-Series Refactor Prompt Template
+
+Use this prompt when you want the AI Agent to refactor the entire `20_requirements/` directory into a new 20-series structure while keeping all downstream layers unchanged unless explicitly approved.
+
+```text
+You are refactoring the entire `20_requirements/` directory of the Thought Simulator (TS) repository.
+
+This refactor must be deterministic, safe, complete, and fully aligned with the TS architecture.
+
+You must follow every instruction below exactly.
+
+1. Create the new 20-series directory structure
+
+Create the following files, in this exact order:
+
+20.10   ts_architectural_principles.md
+20.20   ts_primitives.md
+20.30   ts_functional_model.md
+
+20.40   ob_requirements.md
+20.50   rb_requirements.md
+20.60   tb_requirements.md
+
+20.70   mb_requirements.md
+20.80   gb_requirements.md
+20.90   ib_requirements.md
+20.100  inb_requirements.md
+20.110  oub_requirements.md
+
+20.120  mtp_schema_requirements.md
+20.130  splitting_and_merging_requirements.md
+20.140  truth_evaluation_requirements.md
+20.150  tcu_budgeting_requirements.md
+20.160  randomness_requirements.md
+20.170  safety_requirements.md
+
+20.180  conversational_relevance_requirements.md
+20.190  glossary.md
+20.200  traceability_matrix.md
+
+These are the only authoritative requirement documents for the 20-series.
+
+2. All rewritten documents must be fully consistent with the current 20.03 document
+
+This is mandatory.
+
+- 20.03 is the authoritative pre-refactor specification.
+- All rewritten documents must reflect the architecture, semantics, definitions, invariants, and functional model described in 20.03.
+- No rewritten document may contradict or reinterpret 20.03.
+- All new requirement documents must extend, formalize, or modularize the content of 20.03 - never replace or alter its meaning.
+
+This includes:
+
+- OB/RB/TB semantics
+- ΔH%
+- H%
+- MTP structure
+- deterministic meaning construction
+- seed isolation
+- splitting and merging
+- truth evaluation
+- TCU budgeting
+- randomness boundary
+- safety invariants
+
+20.03 is the source of truth for the refactor.
+
+3. Migrate content from old 20-series files
+
+Only three existing files contain content that must be preserved:
+
+Preserve (rewrite plus migrate):
+
+- `20.150_glossary.md` -> merge into `20.190_glossary.md`
+- `20.160_traceability_matrix.md` -> rewrite into `20.200_traceability_matrix.md`
+- `20.140_program_flow.md` -> integrate content into:
+  - `20.10 ts_architectural_principles.md`
+  - `20.30 ts_functional_model.md`
+
+All other existing 20-series files must be archived.
+
+Archive them into:
+
+20_archive/
+
+Do not delete their content - move them intact.
+
+4. Rewrite all content to match the TS architecture (as defined in 20.03)
+
+All new 20-series documents must be rewritten using the current TS architecture, including:
+
+- OB / RB / TB
+- MB / GB / IB / InB / OuB
+- TP / MTP
+- ΔH%
+- H%
+- deterministic meaning construction
+- seed isolation
+- splitting and merging
+- truth evaluation
+- TCU budgeting
+- randomness boundary
+- safety invariants
+- conversational relevance subsystem
+
+No legacy terminology may remain.
+
+No references to the old architecture may remain.
+
+5. Requirements must be explicit, testable, and traceable
+
+Each requirement must:
+
+- have a unique requirement ID
+- be written in normative language (must, shall, may not)
+- be testable
+- be traceable to 40-series design documents
+- be traceable to 30-series verification documents
+
+Update the `20.200 traceability matrix` accordingly.
+
+6. Respect the 20 -> 40 -> 10/30 -> 50 CI-checked flow
+
+- Do not update 40-series, 30-series, or 10-series automatically.
+- Provide impact analysis only.
+- Wait for explicit user approval before generating any downstream changes.
+
+7. Safety and determinism rules
+
+All rewritten documents must enforce:
+
+- deterministic execution
+- no nondeterministic code paths
+- no floating-point chaos
+- no GPU nondeterminism
+- seed isolation
+- reproducibility
+- auditability
+- no emergent memory
+- no probabilistic embeddings
+- no hallucinated continuity
+
+8. Conversational relevance subsystem
+
+Implement `20.180 conversational_relevance_requirements.md` with:
+
+- cross-turn MTP persistence rules
+- conversation anchors
+- relevance scoring
+- thread continuity
+- drift detection
+- IB triggers
+- deterministic update rules
+- safety constraints
+
+This subsystem is essential for TS multi-turn coherence.
+
+9. Deliverables
+
+When complete, you must produce:
+
+A. The full rewritten 20-series directory
+
+with all new files populated and all content rewritten.
+
+B. The 20_archive directory
+
+containing all old files except the three preserved ones.
+
+C. A summary of changes
+
+including:
+
+- migrated content
+- rewritten sections
+- new requirement IDs
+- traceability updates
+- any detected inconsistencies
+- any recommended follow-up actions
+
+10. Do not proceed beyond the 20-series
+
+Do not modify:
+
+- 40_design
+- 30_verification
+- 10_program
+- 50_playground
+
+until explicitly instructed.
+
+Provide impact analysis only.
+```
 
 ## Ambiguity Rule
 

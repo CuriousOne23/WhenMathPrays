@@ -17,7 +17,7 @@ import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 SCOPES = (
-    "10_program_governance",
+    "00_program_governance",
     "10_thought_simulator_req",
     "20_requirements",
     "30_verification",

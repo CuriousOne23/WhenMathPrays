@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Warn when 20.150 glossary and its term registry are out of alignment.
+"""Warn when 20.190 glossary and its term registry are out of alignment.
 
 This check is intentionally non-blocking (warning-only). It warns on both:
-1. terms required by 20_requirements registry groups but missing from 20.150_glossary.md
-2. terms present in 20.150_glossary.md but not required by the registry
+1. terms required by 20_requirements registry groups but missing from 20.190_glossary.md
+2. terms present in 20.190_glossary.md but not required by the registry
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GLOSSARY_PATH = ROOT / "20_requirements" / "20.150_glossary.md"
+GLOSSARY_PATH = ROOT / "20_requirements" / "20.190_glossary.md"
 REGISTRY_PATH = ROOT / "20_requirements" / "glossary_term_registry.json"
 IGNORED_TERMS = {
     "last updated",
@@ -89,7 +89,7 @@ def main() -> int:
         for term in required_terms:
             if term not in glossary_terms:
                 warnings.append(
-                    f"20_requirements/{group_name}: glossary term '{term}' missing in 20.150_glossary.md"
+                    f"20_requirements/{group_name}: glossary term '{term}' missing in 20.190_glossary.md"
                 )
 
     expected = _expected_terms(required_by_module, protected_terms)
@@ -97,13 +97,13 @@ def main() -> int:
     missing_global = sorted(expected - glossary_terms)
     for term in missing_global:
         warnings.append(
-            f"20_requirements/20.150_glossary.md: required term '{term}' is missing"
+            f"20_requirements/20.190_glossary.md: required term '{term}' is missing"
         )
 
     extra_global = sorted(glossary_terms - expected)
     for term in extra_global:
         warnings.append(
-            f"20_requirements/20.150_glossary.md: term '{term}' is not required by glossary_term_registry.json"
+            f"20_requirements/20.190_glossary.md: term '{term}' is not required by glossary_term_registry.json"
         )
 
     if warnings:

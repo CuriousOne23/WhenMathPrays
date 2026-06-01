@@ -10,12 +10,12 @@ Continue migration from the mixed requirement root into explicit governance and 
 
 ### Tier Split
 
-- Created `10_program_governance/`
+- Created `00_program_governance/`
 - Created `20_requirements/`
 - Moved governance content:
-  - `10_thought_simulator_req/00_foundations/` -> `10_program_governance/00_foundations/`
-  - `10_thought_simulator_req/10_architecture/` -> `10_program_governance/10_architecture/`
-  - `10_thought_simulator_req/30_philosophical/` -> `10_program_governance/30_philosophical/`
+  - `10_thought_simulator_req/00_foundations/` -> `00_program_governance/00_foundations/`
+  - `10_thought_simulator_req/10_architecture/` -> `00_program_governance/10_architecture/`
+  - `10_thought_simulator_req/30_philosophical/` -> `00_program_governance/30_philosophical/`
 - Moved requirements content:
   - `10_thought_simulator_req/20_requirements/*` -> `20_requirements/*`
 
@@ -26,7 +26,7 @@ Continue migration from the mixed requirement root into explicit governance and 
 ### Index and Guidance Updates
 
 - Updated `thought_simulator/README.md` to reference the 10/20/30/40/50 tier model.
-- Added `10_program_governance/README.md` and `20_requirements/README.md`.
+- Added `00_program_governance/README.md` and `20_requirements/README.md`.
 - Updated stale references in:
   - `40_thought_simulator_playground/README.md`
   - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`

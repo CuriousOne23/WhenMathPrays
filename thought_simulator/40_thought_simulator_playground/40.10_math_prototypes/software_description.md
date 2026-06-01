@@ -12,10 +12,10 @@ Define deterministic math contracts used by exploratory geometry and dynamics ca
 
 ## Source Index
 
-- `20_requirements/20.70_non_functional_requirements.md`
-- `20_requirements/20.90_interfaces_and_io.md`
-- `20_requirements/20.60_testing_and_validation.md`
-- `20_requirements/20.50_observability_requirements.md`
+- `20_requirements/archive/20.70_non_functional_requirements.md`
+- `20_requirements/archive/20.90_interfaces_and_io.md`
+- `20_requirements/archive/20.60_testing_and_validation.md`
+- `20_requirements/archive/20.50_observability_requirements.md`
 - `../40.20_master_program_guide.md`
 
 ## Core Responsibilities

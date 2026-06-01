@@ -10,7 +10,7 @@ Continue frontmatter rollout on high-impact canonical docs to reduce migration w
 
 Added frontmatter to:
 
-- `20_requirements/20.160_traceability_matrix.md`
+- `20_requirements/archive/20.160_traceability_matrix.md`
 - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_requirements_delta.md`
 - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`
 
@@ -28,5 +28,5 @@ Added frontmatter to:
 - Add frontmatter to `30_verification/40.30_verification_glossary.md`
 - Add frontmatter to `50_thought_simulator_design/50.10_system_architecture.md`
 - Begin canonical ID migration in:
-  - `20_requirements/20.160_traceability_matrix.md`
+  - `20_requirements/archive/20.160_traceability_matrix.md`
   - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`
