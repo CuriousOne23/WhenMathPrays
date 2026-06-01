@@ -1,7 +1,7 @@
 # 10-to-20 Alignment Log (2026-05-31)
 
 ## Purpose
-Record terminology and concept alignment updates made in 10-program-governance to match the current 20-series baseline, especially `20.05_design_constraints.md`.
+Record terminology and concept alignment updates made in 10-program-governance to match the current 20-series baseline, especially `20.02_design_constraints.md`.
 
 ## Summary
 - Primary migration: RB naming aligned to **Routing Basin (RB)**.
