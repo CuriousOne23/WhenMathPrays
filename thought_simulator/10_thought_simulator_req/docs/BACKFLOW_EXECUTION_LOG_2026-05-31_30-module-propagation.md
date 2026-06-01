@@ -6,14 +6,14 @@ Status: completed
 
 ## Initiating Source Lineage
 
-- rationale source: thought_simulator/20_requirements/20.05_design_constraints.md
+- rationale source: thought_simulator/20_requirements/20.02_design_constraints.md
 - canonical trigger source: thought_simulator/10_thought_simulator_req/
 
 ## Confirmation Record
 
 - chosen direction: backward
 - initiating source documents:
-  - thought_simulator/20_requirements/20.05_design_constraints.md (rationale lineage)
+  - thought_simulator/20_requirements/20.02_design_constraints.md (rationale lineage)
   - thought_simulator/10_thought_simulator_req/ canonical anchors (normative trigger)
 - impacted targets:
   - all module-level verification capsules in thought_simulator/30_verification/

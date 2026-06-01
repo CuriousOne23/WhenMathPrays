@@ -19,6 +19,12 @@ This directory contains the canonical high-level requirements (HLR) set for the 
 
 ## Direct Child Index
 
+- [20.02_design_constraints.md](20.02_design_constraints.md)
+- [20.03_ts_functional_model.md](20.03_ts_functional_model.md)
+- [20.04_ts_data_structures.md](20.04_ts_data_structures.md)
+- [20.05_ts_split_merge.md](20.05_ts_split_merge.md)
+- [20.06_ts_update_cycle.md](20.06_ts_update_cycle.md)
+- [20.07_ts_operational_semantics.md](20.07_ts_operational_semantics.md)
 - [20.10_interaction_model.md](20.10_interaction_model.md)
 - [20.20_error_and_stability_requirements.md](20.20_error_and_stability_requirements.md)
 - [20.30_tp_requirements.md](20.30_tp_requirements.md)
