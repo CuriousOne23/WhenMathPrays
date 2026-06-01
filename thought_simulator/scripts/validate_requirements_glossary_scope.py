@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Warn when 20.150 glossary is referenced outside 20_requirements tier.
+"""Warn when 20-tier glossary files are referenced outside 20_requirements tier.
 
 This check is intentionally non-blocking (warning-only).
 """
@@ -12,7 +12,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 SCOPES = (
-    "10_program_governance",
+    "00_program_governance",
     "10_thought_simulator_req",
     "30_verification",
     "40_thought_simulator_playground",
@@ -20,6 +20,8 @@ SCOPES = (
 )
 
 PATTERNS = (
+    re.compile(r"\b20\.190_glossary\.md\b", re.IGNORECASE),
+    re.compile(r"\b20_requirements/20\.190_glossary\.md\b", re.IGNORECASE),
     re.compile(r"\b20\.150_glossary\.md\b", re.IGNORECASE),
     re.compile(r"\b20_requirements/20\.150_glossary\.md\b", re.IGNORECASE),
 )

@@ -7,7 +7,7 @@ Status: completed
 ## Initiating Canonical Source
 
 - thought_simulator/10_thought_simulator_req/README.md
-- Canonical anchors in thought_simulator/10_thought_simulator_req/ (previously aligned from thought_simulator/20_requirements/20.02_design_constraints.md)
+- Canonical anchors in thought_simulator/10_thought_simulator_req/ (previously aligned from thought_simulator/20_requirements/archive/20.02_design_constraints.md)
 
 ## Confirmation Record
 
@@ -19,7 +19,7 @@ Status: completed
 
 ## Source Lineage
 
-- rationale lineage: thought_simulator/20_requirements/20.02_design_constraints.md -> thought_simulator/10_thought_simulator_req/ canonical anchors
+- rationale lineage: thought_simulator/20_requirements/archive/20.02_design_constraints.md -> thought_simulator/10_thought_simulator_req/ canonical anchors
 - normative propagation source for this transaction: thought_simulator/10_thought_simulator_req/
 
 ## Changed Files

@@ -27,5 +27,5 @@ Added frontmatter to:
 - frontmatter-enable `20_requirements/README.md` and `30_verification/README.md`
 - frontmatter-enable `50_thought_simulator_design/50.20_geometry_engine_design.md`
 - begin canonical ID normalization in:
-  - `20_requirements/20.160_traceability_matrix.md`
+  - `20_requirements/archive/20.160_traceability_matrix.md`
   - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`

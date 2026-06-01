@@ -1,4 +1,4 @@
-﻿# 40.20_tp_lifecycle / software_description.md
+# 40.20_tp_lifecycle / software_description.md
 
 ## Approval State
 
@@ -42,7 +42,7 @@ A ThoughtPoint carries identity, entropy, provenance, and relational state as it
 
 ## 5. Formal Requirement Pointers
 High-level requirements live in:
-- `10_program_governance/10_architecture/` (Manifold, TP, Basins)
+- `00_program_governance/10_architecture/` (Manifold, TP, Basins)
 - `20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
 Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../../30_verification/30.30_verification_glossary.md`.

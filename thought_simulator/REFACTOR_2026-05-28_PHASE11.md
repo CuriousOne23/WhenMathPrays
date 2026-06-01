@@ -10,7 +10,7 @@ Begin populating actual relation semantics in canonical frontmatter.
 
 Added relation metadata to:
 
-- `20_requirements/20.30_tp_requirements.md`
+- `20_requirements/archive/20.30_tp_requirements.md`
   - `supersedes: [HLR-?]`
 - `50_thought_simulator_design/50.35_tp_design.md`
   - `satisfies: [HLR-20.30-001, HLR-20.30-002, HLR-20.30-003]`

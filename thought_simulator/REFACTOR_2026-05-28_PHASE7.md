@@ -12,7 +12,7 @@ Begin canonical ID normalization in remaining hotspot documents.
 
 Updated legacy IDs in:
 
-- `20_requirements/20.160_traceability_matrix.md`
+- `20_requirements/archive/20.160_traceability_matrix.md`
 - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`
 
 Changes applied:
@@ -33,7 +33,7 @@ Changes applied:
 
 ## Next Recommended Batch
 
-- frontmatter-enable `20_requirements/20.10_interaction_model.md`
-- frontmatter-enable `20_requirements/20.60_testing_and_validation.md`
+- frontmatter-enable `20_requirements/archive/20.10_interaction_model.md`
+- frontmatter-enable `20_requirements/archive/20.60_testing_and_validation.md`
 - frontmatter-enable `50_thought_simulator_design/50.20_geometry_engine_design.md`
 - frontmatter-enable `30_verification/README.md` and `20_requirements/README.md`

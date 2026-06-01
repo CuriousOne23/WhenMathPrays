@@ -24,14 +24,14 @@ This directory is the canonical requirement-governance root for promoted require
 
 - Exploratory requirement reasoning remains in [../20_requirements/](../20_requirements/).
 - Canonical requirement anchors in this directory are the authoritative requirement source for canonical design and verification flow.
-- Terminology alignment baseline is [../20_requirements/20.02_design_constraints.md](../20_requirements/20.02_design_constraints.md), including the current use of Routing Basin (RB) naming.
+- Terminology alignment baseline is [../20_requirements/archive/20.02_design_constraints.md](../20_requirements/archive/20.02_design_constraints.md), including the current use of Routing Basin (RB) naming.
 
 ## 10-Layer Disambiguation (Required)
 
 To prevent namespace confusion between 10-layer directories:
 
 - `10_thought_simulator_req/` = canonical requirement anchors and promotion/backward-flow control source.
-- `10_program_governance/` = program/foundation/architecture guidance references.
+- `00_program_governance/` = program/foundation/architecture guidance references.
 
 Flow-control rule:
 

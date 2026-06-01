@@ -12,7 +12,7 @@ Start reducing frontmatter migration backlog with a first canonical document bat
 
 Added frontmatter to:
 
-- `20_requirements/20.30_tp_requirements.md`
+- `20_requirements/archive/20.30_tp_requirements.md`
 - `50_thought_simulator_design/50.35_tp_design.md`
 - `30_verification/40.20_tp_lifecycle/40.20_tp_lifecycle_verification_capsule.md`
 - `30_verification/40.30_basin_prototypes/40.30_basin_prototypes_verification_capsule.md`

@@ -4,7 +4,7 @@
 Record canonical-anchor refactor changes made in 10_thought_simulator_req to align with 20-series terminology and architectural boundaries, and capture required follow-on impacts for 40/50 refactors.
 
 ## Alignment Baseline
-- 20-series architectural baseline: ../../20_requirements/20.02_design_constraints.md
+- 20-series architectural baseline: ../../20_requirements/archive/20.02_design_constraints.md
 - Key alignment targets:
   - Routing Basin (RB) terminology
   - Basin family coverage (OB, RB, GB, IB, TB, InB, OuB, MB)
@@ -35,7 +35,7 @@ Record canonical-anchor refactor changes made in 10_thought_simulator_req to ali
 - No HLR IDs changed.
 - No verification capsule paths changed.
 - No canonical requirement numbering changed.
-- No changes to 10_program_governance in this pass (that alignment was completed separately).
+- No changes to 00_program_governance in this pass (that alignment was completed separately).
 
 ## Required Follow-On Changes for 40 and 50 Refactors
 

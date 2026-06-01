@@ -7,44 +7,37 @@ contains:
 
 # 20 Requirements
 
-This directory contains the canonical high-level requirements (HLR) set for the Thought Simulator.
+## Purpose
+Canonical requirement set for TS behavior, determinism, safety, and traceability.
 
-## Scope
+## Authoritative Requirement Files
+- [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md)
+- [20.20_ts_primitives.md](20.20_ts_primitives.md)
+- [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
+- [20.40_ob_requirements.md](20.40_ob_requirements.md)
+- [20.50_rb_requirements.md](20.50_rb_requirements.md)
+- [20.60_tb_requirements.md](20.60_tb_requirements.md)
+- [20.70_mb_requirements.md](20.70_mb_requirements.md)
+- [20.80_gb_requirements.md](20.80_gb_requirements.md)
+- [20.90_ib_requirements.md](20.90_ib_requirements.md)
+- [20.100_inb_requirements.md](20.100_inb_requirements.md)
+- [20.110_oub_requirements.md](20.110_oub_requirements.md)
+- [20.120_mtp_schema_requirements.md](20.120_mtp_schema_requirements.md)
+- [20.130_splitting_and_merging_requirements.md](20.130_splitting_and_merging_requirements.md)
+- [20.140_truth_evaluation_requirements.md](20.140_truth_evaluation_requirements.md)
+- [20.150_tcu_budgeting_requirements.md](20.150_tcu_budgeting_requirements.md)
+- [20.160_randomness_requirements.md](20.160_randomness_requirements.md)
+- [20.170_safety_requirements.md](20.170_safety_requirements.md)
+- [20.180_conversational_relevance_requirements.md](20.180_conversational_relevance_requirements.md)
+- [20.190_glossary.md](20.190_glossary.md)
+- [20.200_traceability_matrix.md](20.200_traceability_matrix.md)
 
-- behavioral requirements
-- quality and safety requirements
-- IO and interoperability requirements
-- testing and validation requirements
-- glossary and traceability anchors
-
-## Direct Child Index
-
-- [20.02_design_constraints.md](20.02_design_constraints.md)
-- [20.03_ts_functional_model.md](20.03_ts_functional_model.md)
-- [20.04_ts_data_structures.md](20.04_ts_data_structures.md)
-- [20.05_ts_split_merge.md](20.05_ts_split_merge.md)
-- [20.06_ts_update_cycle.md](20.06_ts_update_cycle.md)
-- [20.07_ts_operational_semantics.md](20.07_ts_operational_semantics.md)
-- [20.10_interaction_model.md](20.10_interaction_model.md)
-- [20.20_error_and_stability_requirements.md](20.20_error_and_stability_requirements.md)
-- [20.30_tp_requirements.md](20.30_tp_requirements.md)
-- [20.40_performance_requirements.md](20.40_performance_requirements.md)
-- [20.50_observability_requirements.md](20.50_observability_requirements.md)
-- [20.60_testing_and_validation.md](20.60_testing_and_validation.md)
-- [20.70_non_functional_requirements.md](20.70_non_functional_requirements.md)
-- [20.80_security_and_safety_requirements.md](20.80_security_and_safety_requirements.md)
-- [20.90_interfaces_and_io.md](20.90_interfaces_and_io.md)
-- [20.100_visualization_exploration.md](20.100_visualization_exploration.md)
-- [20.110_experiment_requirements.md](20.110_experiment_requirements.md)
-- [20.120_stability_requirements.md](20.120_stability_requirements.md)
-- [20.130_risks_assumptions.md](20.130_risks_assumptions.md)
-- [20.140_program_flow.md](20.140_program_flow.md)
-- [20.150_glossary.md](20.150_glossary.md)
-- [20.160_traceability_matrix.md](20.160_traceability_matrix.md)
+## Non-Authoritative Supporting Artifacts
+- [archive/](archive/)
 - [glossary_term_registry.json](glossary_term_registry.json)
 - [docs/](docs/)
 
-## Notes
-
-- Requirement IDs should remain stable even if files are reorganized.
-- Design and verification layers must trace to this requirement set.
+## Rules
+- The files listed in Authoritative Requirement Files are the only authoritative 20-series requirement docs.
+- Legacy 20-series files are archived intact under archive/.
+- Downstream edits to 30/40/50 are impact-analysis only until explicit user approval.
