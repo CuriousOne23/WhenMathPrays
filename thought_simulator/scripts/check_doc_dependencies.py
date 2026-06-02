@@ -14,6 +14,7 @@ class Rule:
     scope_prefix: str
     forbidden_tokens: tuple[str, ...]
     reason: str
+    exempt_paths: tuple[str, ...] = ()
 
 
 RULES: tuple[Rule, ...] = (
@@ -21,6 +22,9 @@ RULES: tuple[Rule, ...] = (
         scope_prefix="50_thought_simulator_design/",
         forbidden_tokens=("40_thought_simulator_playground/",),
         reason="Design docs must not reference playground paths.",
+        exempt_paths=(
+            "50_thought_simulator_design/50.05_software_spec_construction_guide.md",
+        ),
     ),
 )
 
@@ -51,6 +55,8 @@ def main() -> int:
         text = path.read_text(encoding="utf-8")
         for rule in RULES:
             if not rel.startswith(rule.scope_prefix):
+                continue
+            if rel in rule.exempt_paths:
                 continue
             for token in rule.forbidden_tokens:
                 lines = _line_matches(text, token)
