@@ -17,6 +17,7 @@ This directory is the main authoring workspace for requirement intent, with down
 - [20.20_ts_primitives.md](20.20_ts_primitives.md)
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
 - [20.31_semantic_specification.md](20.31_semantic_specification.md)
+- [20.35_reference_algorithms.md](20.35_reference_algorithms.md)
 - [20.32_cob_requirements.md](20.32_cob_requirements.md)
 - [20.33_cil_requirements.md](20.33_cil_requirements.md)
 - [20.34_cop_requirements.md](20.34_cop_requirements.md)
