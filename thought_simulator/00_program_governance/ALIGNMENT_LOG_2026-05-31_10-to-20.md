@@ -1,4 +1,4 @@
-# 10-to-20 Alignment Log (2026-05-31)
+﻿# 10-to-20 Alignment Log (2026-05-31)
 
 ## Purpose
 Record terminology and concept alignment updates made in 10-program-governance to match the current 20-series baseline, especially `20.02_design_constraints.md`.
@@ -11,35 +11,35 @@ Record terminology and concept alignment updates made in 10-program-governance t
 
 ## Files Updated
 
-1. `00_program_governance/00_foundations/00.10_vision_and_objectives.md`
+1. `00_program_governance/00_foundations/00.00.10_vision_and_objectives.md`
 - Updated definition language from Relational Basins to Routing Basins.
 - Updated TS core bullet to use Routing Basins.
 - Renamed section heading to `Routing Basins (RBs)`.
 - Added historical alias note.
 
-2. `00_program_governance/00_foundations/00.20_core_philosophy_and_principles.md`
+2. `00_program_governance/00_foundations/00.00.20_core_philosophy_and_principles.md`
 - Updated TS primacy statement to use Routing Basins.
 - Renamed section heading to `Object Basins and Routing Basins`.
 - Updated RB definition bullet to Routing Basins.
 - Added historical alias note.
 
-3. `00_program_governance/00_foundations/00.30_core_conceptual_requirements.md`
+3. `00_program_governance/00_foundations/00.00.30_core_conceptual_requirements.md`
 - Updated TS core update responsibilities to Routing Basins.
 - Updated damping comparison phrase to Routing Basins.
 - Renamed section heading to `Routing Basins (RBs)`.
 - Added historical alias note.
 - Updated OB vs RB table column title to Routing Basins.
 
-4. `00_program_governance/10_architecture/10.10_system_architecture.md`
+4. `00_program_governance/10_architecture/00.10.10_system_architecture.md`
 - Expanded TS Core layer description to explicitly include control components terminology:
   - `Flow Modulators`
   - `Watchdog behaviors`
 
-5. `00_program_governance/10_architecture/10.20_manifold_specification.md`
+5. `00_program_governance/10_architecture/00.10.20_manifold_specification.md`
 - Renamed manifold geometry subheading:
   - `Relational Basin (RB) Geometry` -> `Routing Basin (RB) Geometry`
 
-6. `00_program_governance/10_architecture/10.30_basins.md`
+6. `00_program_governance/10_architecture/00.10.30_basins.md`
 - Updated opening basin taxonomy to Routing Basins.
 - Added historical alias note.
 - Updated damping comparison phrase to Routing Basins.
@@ -52,7 +52,7 @@ Record terminology and concept alignment updates made in 10-program-governance t
   - `Output Basins (OuB)`
   - `Monitoring Basins (MB)`
 
-7. `00_program_governance/10_architecture/10.40_TS_state_machine.md`
+7. `00_program_governance/10_architecture/00.10.40_TS_state_machine.md`
 - Updated entropy update line to Routing Basins.
 - Updated regulator line to explicitly include:
   - `Flow Modulators`
@@ -66,3 +66,6 @@ Record terminology and concept alignment updates made in 10-program-governance t
 This log is intended to be used as direct input for subsequent terminology/concept refactors in:
 - `40_thought_simulator_playground`
 - `50_thought_simulator_design`
+
+
+

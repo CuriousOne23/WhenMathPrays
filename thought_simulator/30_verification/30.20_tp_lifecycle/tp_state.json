@@ -1,4 +1,4 @@
-{
+﻿{
   "module": "40.20_tp_lifecycle",
   "result": "PASS",
   "scenarios": [
@@ -8,7 +8,7 @@
       "detail": "Creation, basin movement, and bounded entropy update succeeded.",
       "hlr_ref": "HLR-ARCH-07",
       "llr_ref": "LLR-T-OBS-01",
-      "req_doc": "thought_simulator_req/10_architecture/10.40_TS_state_machine.md",
+      "req_doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
       "req_section": "\u00a73, \u00a714",
       "io_fields": "basin_id, entropy, embedding, created_at_tick, tick, d_rep, d_pred, d_struct -> tp_id, state_counter, current_basin_id, entropy, history",
       "negative_path": "NO"
@@ -19,7 +19,7 @@
       "detail": "Tagging, split, merge, and provenance checks succeeded.",
       "hlr_ref": "HLR-ARCH-07",
       "llr_ref": "LLR-T-LVL-02",
-      "req_doc": "thought_simulator_req/10_architecture/10.40_TS_state_machine.md",
+      "req_doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
       "req_section": "\u00a78",
       "io_fields": "tag, tick, child_count, sources, basin_id -> tags, provenance.parent_ids, provenance.split_children, provenance.merge_sources, history, state_counter",
       "negative_path": "NO"
@@ -334,3 +334,4 @@
     ]
   }
 }
+

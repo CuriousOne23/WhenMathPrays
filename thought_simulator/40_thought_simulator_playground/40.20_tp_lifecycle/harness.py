@@ -1,4 +1,4 @@
-"""Deterministic verification harness for 40.20_tp_lifecycle."""
+﻿"""Deterministic verification harness for 40.20_tp_lifecycle."""
 
 from __future__ import annotations
 
@@ -21,50 +21,50 @@ REQ = {
     "creation_identity": {
         "hlr": "HLR-ARCH-08",
         "llr": "LLR-T-DET-01",
-        "doc": "thought_simulator_req/10_architecture/10.50_TS_data_model.md",
-        "section": "§3.1",
+        "doc": "thought_simulator_req/10_architecture/00.10.50_TS_data_model.md",
+        "section": "Â§3.1",
     },
     "movement_state": {
         "hlr": "HLR-ARCH-07",
         "llr": "LLR-T-OBS-01",
-        "doc": "thought_simulator_req/10_architecture/10.40_TS_state_machine.md",
-        "section": "§3, §14",
+        "doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
+        "section": "Â§3, Â§14",
     },
     "entropy_bounds": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-T-CON-02",
         "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "§8",
+        "section": "Â§8",
     },
     "split_merge_provenance": {
         "hlr": "HLR-ARCH-07",
         "llr": "LLR-T-LVL-02",
-        "doc": "thought_simulator_req/10_architecture/10.40_TS_state_machine.md",
-        "section": "§8",
+        "doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
+        "section": "Â§8",
     },
     "determinism": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-T-DET-01,T-DET-04",
         "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "§4",
+        "section": "Â§4",
     },
     "invalid_split_child_count": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
         "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "§12",
+        "section": "Â§12",
     },
     "empty_merge_sources": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
         "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "§12",
+        "section": "Â§12",
     },
     "embedding_mismatch_merge": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
         "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "§12",
+        "section": "Â§12",
     },
 }
 
@@ -322,7 +322,7 @@ def _write_verification_capsule(results: list[ScenarioResult], tp: ThoughtPoint,
         "",
         "| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |",
         "|---|---|---|---|---|---|---|---|---|---|---|---|",
-        f"| {timestamp} | {MODULE_NAME} | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | thought_simulator_req/10_architecture/10.40_TS_state_machine.md; thought_simulator_req/10_architecture/10.50_TS_data_model.md; thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md | §3, §8, §13, §14; §3.1, §6; §4, §7, §12 | Migrated from legacy capsule fragments (insights/failures/requirements records) into verification_capsule.md; no content loss. |",
+        f"| {timestamp} | {MODULE_NAME} | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md; thought_simulator_req/10_architecture/00.10.50_TS_data_model.md; thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md | Â§3, Â§8, Â§13, Â§14; Â§3.1, Â§6; Â§4, Â§7, Â§12 | Migrated from legacy capsule fragments (insights/failures/requirements records) into verification_capsule.md; no content loss. |",
         "",
         "## Positive Scenario Ledger",
         "",
@@ -457,4 +457,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 

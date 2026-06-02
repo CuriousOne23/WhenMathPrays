@@ -24,9 +24,9 @@ TIER_DIR_RE = re.compile(r"^(\d+)_")
 SUBSYSTEM_DIR_RE = re.compile(r"^(\d+\.\d+)_")
 FILE_PREFIX_RE = re.compile(r"^(\d+\.\d+)")
 
-# Governance intentionally mixes 00.* and 30.* documents under 00_program_governance,
-# so prefix consistency is enforced only for tiers that follow strict numeric alignment.
-ENFORCED_TIER_PREFIXES = {"20", "30", "40", "50"}
+# Enforce strict tier-prefix alignment for canonical numbered tiers, including
+# governance tier 00 now that governance documents are normalized to 00.* prefixes.
+ENFORCED_TIER_PREFIXES = {"00", "20", "30", "40", "50"}
 
 
 @dataclass
