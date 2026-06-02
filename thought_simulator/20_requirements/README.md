@@ -8,7 +8,9 @@ contains:
 # 20 Requirements
 
 ## Purpose
-Canonical requirement set for TS behavior, determinism, safety, and traceability.
+Primary User/Copilot collaborative requirement layer for TS behavior, determinism, safety, and traceability.
+
+This directory is the main authoring workspace for requirement intent, with downstream formalization and realization controlled by user-selected flow direction.
 
 ## Authoritative Requirement Files
 - [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md)
@@ -44,3 +46,8 @@ Canonical requirement set for TS behavior, determinism, safety, and traceability
 - The files listed in Authoritative Requirement Files are the only authoritative 20-series requirement docs.
 - Legacy 20-series files are archived intact under archive/.
 - Downstream edits to 30/40/50 are impact-analysis only until explicit user approval.
+
+## Direction-Controlled Flow
+- forward flow (typical): 20 -> 40 -> 10
+- backward flow (when selected): 20 -> 10 -> 40
+- direction MUST be explicitly user-selected before propagation.

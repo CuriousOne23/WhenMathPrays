@@ -16,6 +16,7 @@ on:
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
+      - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
   push:
     branches: ["main"]
@@ -33,6 +34,7 @@ on:
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
+      - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
 
 jobs:
@@ -220,3 +222,6 @@ jobs:
 
       - name: Run document reference validation (blocking)
         run: python thought_simulator/scripts/validate_doc_reference_targets.py --strict --check-headings
+
+      - name: Run 20 traceability matrix validation (blocking)
+        run: python thought_simulator/scripts/validate_20_traceability_matrix.py
