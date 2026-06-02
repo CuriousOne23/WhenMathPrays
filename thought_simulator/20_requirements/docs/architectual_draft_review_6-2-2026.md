@@ -11,23 +11,23 @@
 - Research framing: This review evaluates a research architecture, not a finished product design; the standard is whether the architecture is promising, coherent, and worth further investigation, not whether it is already product-ready
 
 ## Executive Assessment
-- Current status vs target architecture: Pending
-- Recommendation on continuing investment: Pending
-- Overall step in cognitive capability space (negative/tiny/medium/large): Pending
-- Is the architecture plausibly revolutionary if core claims hold? Pending
-- Basis for that judgment (evidence vs conjecture): Pending
-- Is the architecture logically promising enough to pursue before proof is complete? Pending
-- Does its current lack of proof reflect normal radical-architecture uncertainty rather than a fundamental flaw? Pending
-- Current confidence that continued work is justified: Pending
-- What is driving confidence upward: Pending
-- What is keeping confidence limited: Pending
+- Current status vs target architecture: Architecturally well-specified at the principle-and-contract level, but still pre-implementation and pre-benchmark for several core mechanisms.
+- Recommendation on continuing investment: Continue. The architecture is strong enough logically to justify further work, but the next phase must shift from requirement expansion toward formalization, executable prototypes, and benchmark design.
+- Overall step in cognitive capability space (negative/tiny/medium/large): Medium step today, with possible large-step upside if the determinism, auditability, and explicit meaning-construction claims survive implementation.
+- Is the architecture plausibly revolutionary if core claims hold? Yes. If explicit TP/MTP semantics, deterministic basin processing, safe-boundary supervision, and output-only randomness all work together at usable scale, the design would differ materially from current LLM-centered systems.
+- Basis for that judgment (evidence vs conjecture): Evidence supports that the architecture is explicit, modular, deterministic in intent, and architecturally distinct. The revolutionary upside remains a logical conjecture until the core mechanisms are formalized and validated.
+- Is the architecture logically promising enough to pursue before proof is complete? Yes. The architecture has enough internal structure and enough nontrivial design discipline to justify continued research.
+- Does its current lack of empirical proof reflect normal radical-architecture uncertainty rather than a fundamental flaw? Mostly yes. The current weakness is not obvious incoherence; it is the gap between formal requirements and demonstrated mechanism.
+- Current confidence that continued work is justified: Medium.
+- What is driving confidence upward: Clear determinism doctrine, explicit packet/state abstractions, strong audit and supervisory boundaries, platform-independent intent, and disciplined separation of randomness from meaning construction.
+- What is keeping confidence limited: Missing formal semantics for key primitives, thin empirical validation, immature verification coverage, and lack of benchmark definitions against meaningful external baselines.
 
 ## Key Architectural Claims
-- Claim 1: Pending
-- Claim 2: Pending
-- Claim 3: Pending
-- Claim 4: Pending
-- Claim 5: Pending
+- Claim 1: TS can construct meaning through explicit TP/MTP state rather than latent embeddings while preserving usable cross-turn continuity.
+- Claim 2: Deterministic basin decomposition can provide stronger auditability, replayability, and control than mainstream LLM-centered systems.
+- Claim 3: GB-style supervisory separation can improve safety and global stability without directly mutating core meaning state.
+- Claim 4: Randomness can be isolated to output realization without corrupting upstream meaning construction, truth evaluation, or conversation state.
+- Claim 5: The CIL/COB/COP split can support scalable conversation continuity, lifecycle governance, and optional asynchronous proposal handling while preserving deterministic authority.
 
 ## Evidence Status Scale
 - Specified: The idea is stated clearly in the current requirements/docs
@@ -39,105 +39,110 @@
 ## Findings
 
 ### 1) Architecture Position and Direction
-- Are we where we want to be right now? Pending
-- Strengths in current architecture: Pending
-- Weaknesses in current architecture: Pending
-- Are we marching in a direction that plausibly leads somewhere materially better, or only into additional complexity? Pending
+- Are we where we want to be right now? Partially. The project has reached a serious architecture-spec phase, but not yet the phase where the strongest claims have been made operational enough to test.
+- Strengths in current architecture: High explicitness, consistent determinism requirements, strong audit/replay posture, careful supervisory boundaries, and unusually strong platform-independence intent for a cognition-oriented design.
+- Weaknesses in current architecture: Key semantics are still verbal where they need to be formal, several modules state invariants more clearly than they state algorithms, and the verification tier is not yet broad enough to support strong confidence claims.
+- Are we marching in a direction that plausibly leads somewhere materially better, or only into additional complexity? The direction looks materially promising, not merely complex. The complexity is at least partly in service of determinism, auditability, and governance rather than ornamentation. The risk is that some of that complexity may later prove unnecessary if the central mechanisms cannot be made concrete.
 
 ### 2) Performance Outlook vs Current AI Architectures
-- Expected better/worse outcomes compared to current mainstream AI architectures: Pending
-- Why we believe these outcomes are likely (assumptions and mechanism): Pending
-- Reasonable near-term performance goals vs current AI baselines: Pending
-- Architectural conjectures about unproven upside: Pending
-- Evidence status for each major performance claim: Pending
-- Benchmarks or evaluation harnesses needed to test performance claims: Pending
+- Expected better/worse outcomes compared to current mainstream AI architectures: Likely better in determinism, auditability, replay, policy-governed control, and explainability. Likely worse in early-stage fluency, breadth of world knowledge, zero-shot versatility, and possibly raw task throughput until the mechanisms are heavily optimized.
+- Why we believe these outcomes are likely (assumptions and mechanism): The requirements repeatedly constrain ordering, mutation, logging, safe boundaries, and seed use in ways that should improve control and reproducibility. Those same constraints also reduce the free-form expressive flexibility and compressed prior knowledge that make current LLM systems strong in broad open-domain tasks.
+- Reasonable near-term performance goals vs current AI baselines: Do not aim first at general capability parity with frontier LLMs. Aim first at repeatability, traceability, deterministic cross-turn continuity, bounded degradation, and stable execution under policy constraints.
+- Architectural conjectures about unproven upside: If explicit semantics plus deterministic supervision can scale without collapsing into brittle hand-engineering, TS may eventually outperform LLM-style systems in domains where auditability, strict policy adherence, replay, and high-assurance conversational state matter more than unconstrained fluency.
+- Evidence status for each major performance claim: Better control/auditability is mostly Specified; better overall cognitive performance is still Unverified conjecture; better boundedness and safer failure modes are Specified but not yet broadly validated; TCU-based efficiency claims are Partially specified and unbenchmarked.
+- Benchmarks or evaluation harnesses needed to test performance claims: Deterministic replay suite, TP/MTP lineage consistency suite, cross-turn relevance benchmark, drift-detection benchmark, OB/TB interpretation benchmark, TCU accounting benchmark, safe-boundary enforcement test harness, and comparative control-vs-LLM study on policy-sensitive tasks.
 
 ### 3) Specification Quality and Gaps
-- Missing or underspecified areas in current spec: Pending
-- What must be added: Pending
-- What must be changed: Pending
-- What should be removed or simplified: Pending
+- Missing or underspecified areas in current spec: Formal Delta-H semantics, concrete OB detection semantics, concrete TB interpretation semantics, clearer IB triggering/proposal mechanics, more explicit examples of split/merge behavior, and benchmark definitions.
+- What must be added: Worked end-to-end examples, mathematical or algorithmic definitions for the core accounting primitives, module-level pseudocode or reference algorithms, and explicit benchmark specs tied to the strongest claims.
+- What must be changed: Some modules should move from invariant-heavy wording to mechanism-heavy wording. The review should especially push 20.40, 20.50, 20.60, 20.90, and 20.130 toward more operational specificity.
+- What should be removed or simplified: Any future requirement growth that expands surface area without clarifying the core packet, routing, interpretation, and merge semantics should be resisted. The architecture does not need more breadth until its central mechanics are firmer.
 
 ### 4) Risk and Failure Modes
-- Likely issue zones (what to watch out for): Pending
-- Design risks that require immediate specification support: Pending
-- Validation risks (what could make us misread progress): Pending
-- Risks created by overly optimistic architectural conjectures: Pending
+- Likely issue zones (what to watch out for): Delta-H formalization, split/merge correctness, OB/TB semantic quality, deterministic handling of ambiguity at useful quality levels, TCU realism, and supervisory overhead.
+- Design risks that require immediate specification support: The architecture needs immediate strengthening around algorithmic definitions, conflict-resolution semantics, benchmark methodology, and the exact interfaces between basin outputs and supervisory decisions.
+- Validation risks (what could make us misread progress): Passing narrow deterministic fixtures without proving semantic usefulness; mistaking consistent logging for cognitive adequacy; mistaking clean requirements structure for executable sufficiency; and comparing only against weak baselines.
+- Risks created by overly optimistic architectural conjectures: The project could overinvest in governance and audit scaffolding before proving that the semantic core is strong enough to justify the machinery around it.
 
 ### 5) Platform Independence and Portability
-- Is the architecture genuinely platform independent in practice? Pending
-- Portability assessment (effort/risk to move across platforms): Pending
-- Portability blockers and mitigations: Pending
+- Is the architecture genuinely platform independent in practice? At the design level, mostly yes. The requirements repeatedly bind determinism to sequence tokens, canonical serialization, frozen versions, and signature-bound policy rather than to a specific runtime.
+- Portability assessment (effort/risk to move across platforms): Moderate risk, moderate effort. The design intent is portable, but portability will depend on whether canonical parsing, ordering, PRNG behavior, and TCU calibration can be implemented consistently across runtimes.
+- Portability blockers and mitigations: Main blockers are cross-runtime canonicalization, deterministic parser behavior, numeric/serialization consistency, and TCU calibration equivalence. Mitigate with reference test vectors, canonical artifact fixtures, and signature-bound conformance suites.
 
 ### 6) Documentation Health
-- Documentation strengths: Pending
-- Documentation gaps or ambiguity: Pending
-- Priority documentation improvements: Pending
+- Documentation strengths: The authoritative 20-series layer is well organized, modular, traceable, and explicit about invariants. The project is unusually serious about documenting determinism, lifecycle, auditability, and governance.
+- Documentation gaps or ambiguity: The repo-level architecture docs are mixed in purpose, some supporting docs under 20_requirements/docs are thin, and the core semantic machinery is described more in principles than in executable examples. There is still no compact end-to-end narrative that shows one packet through the whole system.
+- Priority documentation improvements: Add one canonical end-to-end worked example, one basin interaction diagram, one Delta-H formal note, one benchmark plan document, and one implementation-guidance note that maps requirements to likely executable structures.
 
 ### 7) Revolutionary Potential Assessment
-- If the architecture works as intended, what would make it revolutionary? Pending
-- Which parts of that case are evidence-backed today? Pending
-- Which parts are still logic-driven conjecture? Pending
-- What would falsify the revolutionary thesis? Pending
-- What near-term results would justify stronger confidence? Pending
+- If the architecture works as intended, what would make it revolutionary? It would offer a meaning-construction architecture that is explicit, auditable, replayable, policy-bound, and deterministic by design rather than opaque and primarily statistical.
+- Which parts of that case are evidence-backed today? The documentation supports that this is an explicit and architecturally distinct design direction with serious attention to determinism, auditability, and supervisory control.
+- Which parts are still logic-driven conjecture? That these properties will scale into strong cognitive performance, competitive conversational quality, and practical superiority over current AI architectures remains conjectural.
+- What would falsify the revolutionary thesis? If the semantic core cannot be made concrete without hidden probabilistic shortcuts, if deterministic constraints make useful reasoning too brittle or too expensive, or if the architecture cannot outperform simpler alternatives on the dimensions it claims to prioritize.
+- What near-term results would justify stronger confidence? A deterministic end-to-end prototype with stable TP/MTP evolution, demonstrable cross-turn continuity, credible OB/TB behavior, bounded supervisory overhead, and repeatable benchmark wins on control-oriented tasks.
 
 ### 8) Logical Promise and Research Justification
-- Which architectural directions appear logically strong even if unproven? Pending
-- Why they appear logically promising: Pending
-- What assumptions they depend on: Pending
-- What makes them worth pursuing now instead of waiting for stronger proof: Pending
-- What is the cheapest serious test for each such direction: Pending
-- Which unproven elements are normal consequences of the architecture being early and radical, rather than signs of incoherence: Pending
+- Which architectural directions appear logically strong even if unproven? Explicit TP/MTP semantics, GB supervisory separation, output-only randomness, deterministic CIL/COB layering, and append-only audit/replay design.
+- Why they appear logically promising: They directly target real weaknesses in current AI systems: opacity, nondeterminism, poor replayability, weak policy traceability, and unstable long-horizon conversational state.
+- What assumptions they depend on: That meaningful semantic structure can be represented explicitly enough to be useful, that the OB/TB pipeline can remain strong without latent high-dimensional inference doing most of the work, and that the resulting cost is still practical.
+- What makes them worth pursuing now instead of waiting for stronger proof: They are core architectural bets. Delaying them would not reduce uncertainty; it would only postpone the moment when the architecture proves whether its foundations cash out.
+- What is the cheapest serious test for each such direction: Build a narrow deterministic vertical slice with packet creation, routing, interpretation, merge, truth evaluation, cross-turn continuity, and controlled output realization; then run repeatability, audit, relevance, and bounded-failure tests on it.
+- Which unproven elements are normal consequences of the architecture being early and radical, rather than signs of incoherence: Limited benchmarking, lack of performance proof, and unresolved scaling questions are normal. The bigger concern would be inability to formalize Delta-H, OB semantics, or TB semantics without abandoning the explicit deterministic design.
 
 ## Comparison Baselines
-- Current LLM-centric architectures: Pending
-- Agentic/tool-using architectures: Pending
-- Cognitive architecture baselines: Pending
-- Which baseline dimensions matter most for this review: Pending
+- Current LLM-centric architectures: Compare against mainstream transformer-based chat systems on determinism, replayability, policy adherence, cross-turn state stability, and auditability rather than only on fluency.
+- Agentic/tool-using architectures: Compare against planner or tool-orchestrated LLM systems on controllability, action trace clarity, failure containment, and ability to maintain canonical conversation state.
+- Cognitive architecture baselines: Compare conceptually against symbolic and hybrid cognitive architectures on explicitness, modularity, supervision, and lifecycle governance.
+- Which baseline dimensions matter most for this review: Determinism, auditability, cross-turn continuity, bounded degradation, policy enforcement, semantic traceability, and practical cost of obtaining those properties.
 
 ## Maturity Model
-- Conceptually interesting: Pending
-- Architecturally coherent: Pending
-- Sufficiently specified to implement faithfully: Pending
-- Capable of fair benchmark comparison: Pending
-- Strong enough to justify continued major investment: Pending
+- Conceptually interesting: Yes.
+- Architecturally coherent: Yes, with caveats around underspecified semantic mechanisms.
+- Sufficiently specified to implement faithfully: Partially. Enough exists to prototype, but not enough to eliminate major interpretation choices in several core modules.
+- Capable of fair benchmark comparison: Not yet. Benchmark definitions and prototype coverage are still too thin.
+- Strong enough to justify continued major investment: Yes, but the investment should prioritize de-risking the semantic core rather than expanding requirement breadth.
 
 ## Research vs Product Lens
-- Research question: Is this architecture worth continued exploration and de-risking? Pending
-- Product question: Is this architecture currently ready for production use? Pending
-- Which shortcomings are acceptable at the research stage but not at the product stage? Pending
-- Which current weaknesses are fatal even for a research architecture? Pending
-- What would need to change before product-style evaluation becomes appropriate? Pending
+- Research question: Is this architecture worth continued exploration and de-risking? Yes.
+- Product question: Is this architecture currently ready for production use? No.
+- Which shortcomings are acceptable at the research stage but not at the product stage? Missing optimization, incomplete benchmark coverage, incomplete implementation guidance, and unresolved scale behavior are acceptable at this stage.
+- Which current weaknesses are fatal even for a research architecture? Failure to formalize the central semantic machinery, inability to define useful evaluation criteria, or discovery that determinism requires hidden ad hoc heuristics that undercut the architecture's stated principles.
+- What would need to change before product-style evaluation becomes appropriate? A stable vertical slice, benchmark suite, verified deterministic artifacts, clearer algorithmic semantics, and an implementation layer that demonstrates the architecture outside purely declarative requirements.
 
 ## Confidence Assessment
-- Confidence that the architecture is coherent enough to continue: Pending
-- Confidence that the architecture could outperform important current baselines in at least some dimensions: Pending
-- Confidence that the missing pieces are fillable rather than signs of structural failure: Pending
-- Confidence that the next milestone will produce decision-relevant evidence: Pending
-- Overall confidence level and why: Pending
+- Confidence that the architecture is coherent enough to continue: Medium-high.
+- Confidence that the architecture could outperform important current baselines in at least some dimensions: Medium.
+- Confidence that the missing pieces are fillable rather than signs of structural failure: Medium.
+- Confidence that the next milestone will produce decision-relevant evidence: High, if the next milestone is a deliberately narrow vertical slice rather than more abstract requirement writing.
+- Overall confidence level and why: Medium. The architecture has earned real research confidence, but not high confidence, because its strongest claims still depend on mechanisms that are only partly formalized and scarcely benchmarked.
 
 ## Open Questions
-- What baseline systems should be used for fair comparison?
-- Which performance axes are primary (quality, controllability, efficiency, robustness)?
-- Which architectural claims need immediate empirical validation?
-- Which conjectures are worth preserving even before proof because they create clear research leverage?
+- What baseline systems should be used for fair comparison? A strong mainstream chat LLM, a tool-augmented agentic system, and at least one explicit-state or symbolic baseline.
+- Which performance axes are primary (quality, controllability, efficiency, robustness)? Controllability, auditability, cross-turn stability, bounded failure behavior, and deterministic replay should come before broad fluency.
+- Which architectural claims need immediate empirical validation? Delta-H accounting, OB/TB semantic quality, cross-turn relevance stability, TCU realism, and supervisory overhead.
+- Which conjectures are worth preserving even before proof because they create clear research leverage? Explicit packet/state semantics, output-only randomness, and GB-mediated supervisory separation.
 
 ## Recommended Changes
-- Pending
+- Freeze major architectural expansion for a short interval and focus on semantic formalization.
+- Add a formal note for Delta-H, missing-mass accounting, and merge reconciliation.
+- Produce one end-to-end worked example spanning InB to OuB with TP/MTP snapshots.
+- Define benchmark specs before adding more subsystem breadth.
+- Grow verification from seeded capsules into requirement-linked executable suites for the highest-risk modules.
+- Clarify COP's concrete research value relative to the rest of the deterministic architecture.
 
 ## Required Benchmarks and Validation Work
-- Benchmark suite needed now: Pending
-- Missing instrumentation or observability: Pending
-- Fastest experiments to reduce uncertainty: Pending
-- Minimum evidence needed before stronger claims are justified: Pending
+- Benchmark suite needed now: Deterministic replay, cross-turn continuity, drift detection, OB/TB interpretation quality, split/merge correctness, TCU accounting, and safe-boundary policy enforcement.
+- Missing instrumentation or observability: Canonical TP/MTP trace dumps, basin-by-basin reason-code timelines, profile-signature test fixtures, and benchmark artifact schemas suitable for comparison across runs and platforms.
+- Fastest experiments to reduce uncertainty: Implement a narrow deterministic conversation slice, run repeated identical-input trials, verify stable artifacts, and test controlled ambiguity, drift, and rollback cases.
+- Minimum evidence needed before stronger claims are justified: A prototype that demonstrates deterministic end-to-end behavior, nontrivial semantic usefulness, and at least a few benchmark wins on the dimensions this architecture explicitly values.
 
 ## Decision
-- Continue/pause/pivot: Pending
-- Confidence level in decision (low/medium/high): Pending
-- Immediate next milestone to de-risk architecture: Pending
-- Which unproven but logically promising directions should still be actively pursued: Pending
-- What outcome in the next phase would most increase confidence: Pending
-- What outcome in the next phase would most justify stopping or pivoting: Pending
+- Continue/pause/pivot: Continue.
+- Confidence level in decision (low/medium/high): Medium.
+- Immediate next milestone to de-risk architecture: Build and verify a minimal deterministic vertical slice covering TP creation, routing, OB/TB interpretation, MTP update, truth/done evaluation, conversational relevance update, and output realization with isolated seed control.
+- Which unproven but logically promising directions should still be actively pursued: Explicit TP/MTP semantics, GB supervisory separation, deterministic conversation-state handling through CIL/COB, and output-only randomness isolation.
+- What outcome in the next phase would most increase confidence: Successful end-to-end deterministic execution with interpretable artifacts and credible benchmark performance on control-oriented tasks.
+- What outcome in the next phase would most justify stopping or pivoting: Inability to formalize or implement the central semantic machinery without collapsing into brittle heuristics, hidden nondeterminism, or impractical cost.
 
 ## Review Method
 - For each major judgment, state:
@@ -147,6 +152,6 @@
 	- baseline or comparator
 	- what would confirm or falsify the claim
 - Do not reject a direction solely because it is unproven if the architectural logic is strong; instead, mark it as a conjectural but actionable research direction and define the next de-risking step
-- Treat lack of proof differently from signs of incoherence: early radical architecture will often be unproven, but it should still be rejected if the underlying logic is weak, contradictory, or non-operationalizable
+- Treat absence of proof differently from signs of incoherence: early radical architecture will often be unproven, but it should still be rejected if the underlying logic is weak, contradictory, or non-operationalizable
 - The review is not required to prove success; it is required to judge whether continued work is rational, what confidence level is warranted, and what evidence would most efficiently change that confidence
 - Avoid product-design standards where they would distort research judgment: missing polish, incomplete implementation, and absent deployment detail are not decisive negatives unless they block architectural evaluation itself
