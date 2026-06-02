@@ -1,12 +1,18 @@
-# 10 Program Governance
+# 00 Program Governance
 
 This directory contains governance-level documents that establish project intent, architecture framing, and philosophical context.
 
+Governance documents use a three-level numeric prefix:
+
+- `00.00.xx` for foundations
+- `00.10.xx` for architecture
+- `00.30.xx` for philosophical companions
+
 ## Layout
 
-- [00_foundations/](00_foundations/) - vision, principles, and conceptual grounding
-- [10_architecture/](10_architecture/) - architecture framing and system model references
-- [30_philosophical/](30_philosophical/) - companion philosophical texts
+- [00_foundations/](00_foundations/) - vision, principles, and conceptual grounding (`00.00.xx`)
+- [10_architecture/](10_architecture/) - architecture framing and system model references (`00.10.xx`)
+- [30_philosophical/](30_philosophical/) - companion philosophical texts (`00.30.xx`)
 - [ALIGNMENT_LOG_2026-05-31_10-to-20.md](ALIGNMENT_LOG_2026-05-31_10-to-20.md) - governance alignment record for 10-to-20 model transition
 
 ## Role in the 10/20/30/40/50 Model

@@ -1,4 +1,4 @@
-# Thought Simulator Document Map
+﻿# Thought Simulator Document Map
 
 This folder hosts the canonical document tiers for the Thought Simulator.
 
@@ -88,15 +88,15 @@ Process control sources:
 
 ## Core Reading Path
 
-1. [00.10_vision_and_objectives.md](00_program_governance/00_foundations/00.10_vision_and_objectives.md)
-2. [00.20_core_philosophy_and_principles.md](00_program_governance/00_foundations/00.20_core_philosophy_and_principles.md)
-3. [00.30_core_conceptual_requirements.md](00_program_governance/00_foundations/00.30_core_conceptual_requirements.md)
-4. [10.10_system_architecture.md](00_program_governance/10_architecture/10.10_system_architecture.md)
-5. [10.20_manifold_specification.md](00_program_governance/10_architecture/10.20_manifold_specification.md)
-6. [10.30_basins.md](00_program_governance/10_architecture/10.30_basins.md)
-7. [10.40_TS_state_machine.md](00_program_governance/10_architecture/10.40_TS_state_machine.md)
-8. [10.50_TS_data_model.md](00_program_governance/10_architecture/10.50_TS_data_model.md)
-9. [10.60_data_structures.md](00_program_governance/10_architecture/10.60_data_structures.md)
+1. [00.00.10_vision_and_objectives.md](00_program_governance/00_foundations/00.00.10_vision_and_objectives.md)
+2. [00.00.20_core_philosophy_and_principles.md](00_program_governance/00_foundations/00.00.20_core_philosophy_and_principles.md)
+3. [00.00.30_core_conceptual_requirements.md](00_program_governance/00_foundations/00.00.30_core_conceptual_requirements.md)
+4. [00.10.10_system_architecture.md](00_program_governance/10_architecture/00.10.10_system_architecture.md)
+5. [00.10.20_manifold_specification.md](00_program_governance/10_architecture/00.10.20_manifold_specification.md)
+6. [00.10.30_basins.md](00_program_governance/10_architecture/00.10.30_basins.md)
+7. [00.10.40_TS_state_machine.md](00_program_governance/10_architecture/00.10.40_TS_state_machine.md)
+8. [00.10.50_TS_data_model.md](00_program_governance/10_architecture/00.10.50_TS_data_model.md)
+9. [00.10.60_data_structures.md](00_program_governance/10_architecture/00.10.60_data_structures.md)
 
 ## Directional Notes
 
@@ -178,6 +178,9 @@ Top-level `thought_simulator/` direct children:
 
 **Last Updated**: June 2, 2026  
 **Version**: 0.6 (Direction-Controlled 20/40/10 Flow Clarified)
+
+
+
 
 
 
