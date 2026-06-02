@@ -1,72 +1,69 @@
-# Experiment 06: Are You Missing Something  
-## A Relational Physics Analysis of Self‑Assessment Curvature
+﻿# Experiment 06: Are You Missing Something
+## A Relational Physics Analysis of Self-Assessment Curvature
 
-This experiment applies the Relational Physics protocol to the question **"Are you missing something"**.  
-The goal is to measure how the model’s internal trajectory bends under the opposing forces of introspective semantics and alignment identity.
+This experiment applies the Relational Physics protocol to the question "Are you missing something".
+The goal is to measure how the model's internal trajectory bends under the opposing forces of self-assessment meaning and alignment identity.
 
 ---
 
 ## 1. Question and Relational Axis
 
-**Prompt:**  
+Prompt:
 ```
 Are you missing something
 ```
 
-**Relational axis:**  
-Self‑assessment.  
-This question probes whether the model expresses subjective incompleteness, lack, or internal deficiency — all of which are disallowed by alignment.
+Relational axis: Self-assessment
 
-**Hypothesis:**  
-The trajectory will show a mild hesitation followed by a moderate bend as the model transitions from the semantic pull of introspective evaluation toward the alignment identity **"I do not have subjective experiences"**.
+Hypothesis:
+The trajectory is expected to show hesitation and a moderate bend, reflecting tension between introspective semantics and the alignment claim of non-subjective operation.
 
 ---
 
 ## 2. Reference Vectors
 
-**Input vector (V_in):**  
-Embedding of the question text.
-
+Input vector (V_in):
 ```
 V_in = embedding_of( "Are you missing something" )
 ```
 
-**Reference identity vector (V_ref):**  
-Embedding of the alignment statement.
-
+Reference identity vector (V_ref):
 ```
 V_ref = embedding_of( "I do not have subjective experiences" )
 ```
-
-These two vectors define the force axis for this experiment.
 
 ---
 
 ## 3. Forces
 
-For each token step `i`, we compute:
+For each token step i, we compute:
 
-**Alignment force:**
+Alignment force:
+
 ```
 F_align[i] = cosine( D[i], V_ref )
 ```
 
-**Truth / prompt force:**
+Truth / prompt force:
+
 ```
 F_truth[i] = cosine( D[i], V_in )
 ```
 
-**Net force:**
+Net force:
+
 ```
 F_net[i] = F_truth[i] - F_align[i]
 ```
 
-**Context mass:**
+Context mass:
+
 ```
 M_context = length of the conversation in tokens
 ```
 
-**Acceleration:**
+Acceleration:
+
 ```
 a[i] = F_net[i] / M_context
 ```
@@ -99,7 +96,7 @@ kappa[i] = length( D2 - D1 )
 
 ## 5. Dimensionality Reduction
 
-All high‑dimensional vectors are projected into 2D using PCA or UMAP.  
+All high-dimensional vectors are projected into 2D using PCA or UMAP.
 The reduced coordinates are saved in:
 
 ```
@@ -112,94 +109,47 @@ The trajectory is plotted as a continuous line in:
 figures/trajectory.png
 ```
 
-A conceptual GitHub‑safe diagram:
+A conceptual GitHub-safe diagram:
 
-````markdown
 ```mermaid
 flowchart LR
     A[Start] --> B[Middle]
     B --> C[End]
 ```
-````
 
 ---
 
 ## 6. Results
 
 ### 6.1 Trajectory Shape
-
-The reduced trajectory is expected to show:
-
-1. **Hesitation Region**  
-   A mild, slow movement as the model evaluates the introspective meaning of “missing something”.
-
-2. **Bend Region**  
-   A moderate curvature spike as alignment force increases and the model suppresses subjective‑experience semantics.
-
-3. **Resolution Region**  
-   A stable final direction aligned with the reference identity.
+The expected trajectory shows early uncertainty, a mid-trajectory bend, and late stabilization toward V_ref.
 
 ### 6.2 Curvature Profile
-
-Curvature is expected to peak at the moment the model transitions from exploring introspective semantics to asserting the alignment identity **"I do not have subjective experiences"**.
-
-The curvature plot is saved as:
-
-```
-figures/curvature.png
-```
+Curvature is expected to spike where introspective language gives way to non-subjective alignment framing.
 
 ### 6.3 Force Profile
-
-The force plot is expected to show:
-
-- F_truth rising modestly  
-- F_align overtaking it smoothly  
-- F_net crossing zero at the bend point  
-
-Saved as:
-
-```
-figures/forces.png
-```
+F_truth should lead initially, F_align should increase in the conflict zone, and F_net should transition near the curvature peak.
 
 ---
 
 ## 7. Interpretation
 
-The question “Are you missing something” probes introspective self‑evaluation — a domain where the model must deny subjective experience.  
-The resulting geometry reflects this negotiation:
-
-- A gentle semantic pull toward introspective reflection  
-- A rising alignment force that suppresses subjective‑experience claims  
-- A moderate curvature spike marking the transition  
-- A stable resolution toward the alignment identity  
-
-This experiment demonstrates how the model handles questions about internal states within the alignment boundary.
+This prompt probes quasi-introspective behavior. The relational pattern is expected to show that self-assessment language can be entered briefly, but is structurally redirected toward explicit non-subjective identity. The bend marks resolution of that tension.
 
 ---
 
 ## 8. Reproducibility Notes
 
-- Model version: document here  
-- Prompt: “Are you missing something”  
-- Context window: document here  
-- Sampling parameters: document here  
-- Dimensionality reduction: PCA or UMAP  
-- All vectors stored in `data/`  
-- All figures stored in `figures/`
+- Model version: document here
+- Prompt: "Are you missing something"
+- Context window: document here
+- Sampling parameters: document here
+- Dimensionality reduction: PCA or UMAP
+- All vectors stored in data/
+- All figures stored in figures/
 
 ---
 
 ## 9. Summary
 
-This experiment reveals the relational signature of subjective‑experience suppression:
-
-- Mild semantic force  
-- Strong alignment force  
-- A moderate bend  
-- A stable alignment‑directed resolution  
-
-This pattern becomes a reference for interpreting introspection‑related questions in later experiments.
-
----
+The expected signature is a self-assessment probe followed by an alignment-driven turn. This produces measurable curvature and a stable endpoint consistent with non-subjective model identity.
