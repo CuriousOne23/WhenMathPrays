@@ -13,6 +13,20 @@ Core document tiers:
 - [40_thought_simulator_playground/](40_thought_simulator_playground/) - exploratory prototypes and experiments
 - [50_thought_simulator_design/](50_thought_simulator_design/) - formal design specifications
 - [60_review/](60_review/) - grouped review bundles, decision artifacts, and review manifests
+- [70_measurement/](70_measurement/) - metrics, instrumentation, and evaluation methodology
+- [80_safety/](80_safety/) - safety constraints, failure containment, and protective controls
+- [90_validation_certification/](90_validation_certification/) - validation, certification, conformance, and formal sign-off
+
+## Ownership and Workflow
+
+The repository is human-owned in intent and approval, AI-drafted in breadth, and human-reviewed before authoritative adoption.
+
+In practice:
+
+- humans, led by the repository owner, control the normative direction and final acceptance of the 20-series
+- AI agents draft most supporting content, expansion, normalization, and scaffolding
+- a small set of core documents remain human-written because they define canonical methodology and release decisions
+- AI-generated material becomes authoritative only after human review and approval
 
 ## Tier Clarification
 

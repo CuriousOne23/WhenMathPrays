@@ -11,22 +11,43 @@ It defines:
 - what the AI agent will execute
 - what CI checks should enforce
 
+## Repository Authorship and Workflow
+
+This repository is currently run as a human-owned, AI-drafted, human-reviewed workflow.
+
+Use these rules consistently:
+
+- humans, led by the repository owner, control 20-series intent, scope, and final approval
+- AI agents draft most 20-series content, expansion, normalization, and scaffolding
+- a small set of core 20-series documents remain human-written because they define the canonical methodology
+- AI-drafted content becomes authoritative only after human review and approval
+
+In practice, this is both the current repository method and the recommended workflow going forward.
+
 ## Directory Roles
 
 Use these roles consistently:
 
-- `thought_simulator/20_requirements/`:
-  exploratory and architectural rationale
-- `thought_simulator/10_thought_simulator_req/`:
-  canonical requirement authority and flow trigger source
-- `thought_simulator/30_verification/`:
-  canonical verification capsules and requirement deltas
-- `thought_simulator/40_thought_simulator_playground/`:
-  exploratory module workspace and master execution guide
-- `thought_simulator/50_thought_simulator_design/`:
-  canonical design specifications and traceability index
 - `thought_simulator/00_program_governance/`:
-  architecture/program governance references (not the canonical requirement trigger source)
+  governance, repo-wide control, direction, and policy
+- `thought_simulator/10_thought_simulator_req/`:
+  architecture, top-level system shape, invariants, and decomposition
+- `thought_simulator/20_requirements/`:
+  requirements, normative "what TS must be", and traceable HLRs
+- `thought_simulator/30_verification/`:
+  verification of the design, review, and evidence that the design is sound
+- `thought_simulator/40_thought_simulator_playground/`:
+  playground, experiments, exploratory work, and interactive prototyping
+- `thought_simulator/50_thought_simulator_design/`:
+  design, implementation design, realization details, and concrete spec-to-code mapping
+- `thought_simulator/60_review/`:
+  review, critique, architectural draft review, and decision analysis
+- `thought_simulator/70_measurement/`:
+  measurement, metrics, instrumentation, and evaluation methodology
+- `thought_simulator/80_safety/`:
+  safety, constraints, failure containment, and protective controls
+- `thought_simulator/90_validation_certification/`:
+  validation and certification, conformance, acceptance, and formal sign-off
 
 ## 10-Layer Disambiguation Rule
 
