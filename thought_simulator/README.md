@@ -7,8 +7,8 @@ This folder hosts the canonical document tiers for the Thought Simulator.
 Core document tiers:
 
 - [00_program_governance/](00_program_governance/) - project intent, architecture framing, and philosophical governance
-- [10_thought_simulator_req/](10_thought_simulator_req/) - canonical HLR layer and promotion governance artifacts (ADR and protocol templates)
-- [20_requirements/](20_requirements/) - exploratory requirements playground (reasoning and concept evolution)
+- [10_thought_simulator_req/](10_thought_simulator_req/) - formalized requirement anchor layer used for coding and architecture realization
+- [20_requirements/](20_requirements/) - primary User/Copilot collaborative requirement layer and traceability source
 - [30_verification/](30_verification/) - verification capsules and deterministic evidence artifacts
 - [40_thought_simulator_playground/](40_thought_simulator_playground/) - exploratory prototypes and experiments
 - [50_thought_simulator_design/](50_thought_simulator_design/) - formal design specifications
@@ -16,7 +16,13 @@ Core document tiers:
 ## Tier Clarification
 
 - [00_program_governance/](00_program_governance/) governs program-level architecture context and policy.
-- [10_thought_simulator_req/](10_thought_simulator_req/) is the canonical requirement governance root for promotion protocol and ADR governance artifacts.
+- [20_requirements/](20_requirements/) is the primary requirement authoring layer where User and Copilot collaborate.
+- [10_thought_simulator_req/](10_thought_simulator_req/) is the formalization layer for realization-ready requirement anchors.
+
+Direction control is user-selected per [USER_GUIDE.md](USER_GUIDE.md):
+
+- forward flow (typical): 20 -> 40 -> 10
+- backward flow (when selected): 20 -> 10 -> 40
 
 This split preserves epistemic asymmetry: exploratory layers influence canonical artifacts through human review, while formal traceability remains canonical-to-canonical.
 
@@ -24,9 +30,10 @@ This split preserves epistemic asymmetry: exploratory layers influence canonical
 
 This repository intentionally supports both expert play and formal rigor.
 
-- Attached exploration: `20_requirements/` and `40_thought_simulator_playground/` are where teams test ideas quickly, iterate, and discover better approaches.
-- Protected canon: `10_thought_simulator_req/`, `30_verification/`, and `50_thought_simulator_design/` are where approved, traceable, and review-stable artifacts live.
-- Controlled transfer: exploratory insights can be promoted into canonical layers only through explicit governance and verification steps.
+- Collaborative requirements: `20_requirements/` is where User and Copilot iteratively author and refine requirement intent.
+- Evidence development: `40_thought_simulator_playground/` is where prototype behavior and verification evidence are produced.
+- Formal realization: `10_thought_simulator_req/` captures realization-ready anchors for coding and architecture.
+- Controlled transfer: flow direction is explicit (`forward` or `backward`) and must be user-selected before propagation.
 
 This model is deliberate because high-quality innovation needs space to experiment, while production-relevant decisions need stable process controls.
 
@@ -55,10 +62,16 @@ Then review canonical verification evidence snapshots:
 
 ## Process Flow (Current)
 
-The process flow is intentionally two-speed:
+The process flow is direction-controlled and intentionally two-speed:
 
-- exploratory ideation and implementation in [20_requirements/](20_requirements/) and [40_thought_simulator_playground/](40_thought_simulator_playground/)
-- canonical governance, verification, and design in [10_thought_simulator_req/](10_thought_simulator_req/), [30_verification/](30_verification/), and [50_thought_simulator_design/](50_thought_simulator_design/)
+- requirements collaboration and intent shaping in [20_requirements/](20_requirements/)
+- evidence/prototype development in [40_thought_simulator_playground/](40_thought_simulator_playground/)
+- formal realization anchors and downstream canonical synchronization in [10_thought_simulator_req/](10_thought_simulator_req/), [30_verification/](30_verification/), and [50_thought_simulator_design/](50_thought_simulator_design/)
+
+Direction examples:
+
+1. Forward (typical): 20 -> 40 -> 10 -> 30/50
+2. Backward (when selected): 20 -> 10 -> 40 -> 30/50
 
 Operational flow for new `40.*` modules:
 
@@ -93,14 +106,14 @@ Process control sources:
 
 ## Traceability
 
-Use [20.160_traceability_matrix.md](20_requirements/archive/20.160_traceability_matrix.md) as exploratory mapping context, while keeping formal trace edges in canonical layers only.
+Use [20.200_traceability_matrix.md](20_requirements/20.200_traceability_matrix.md) as the active 20-series traceability matrix.
 
 Canonical trace purity rule:
 
-- canonical-to-canonical only: [10_thought_simulator_req/](10_thought_simulator_req/) -> [50_thought_simulator_design/](50_thought_simulator_design/) -> [30_verification/](30_verification/)
+- canonical-to-canonical only after direction-confirmed formalization in [10_thought_simulator_req/](10_thought_simulator_req/): [10_thought_simulator_req/](10_thought_simulator_req/) -> [50_thought_simulator_design/](50_thought_simulator_design/) -> [30_verification/](30_verification/)
 - no formal trace edges from [20_requirements/](20_requirements/) or [40_thought_simulator_playground/](40_thought_simulator_playground/)
 
-## Requirements (20_requirements)
+## Historical Requirements (Archive)
 
 10. [20.10_interaction_model.md](20_requirements/archive/20.10_interaction_model.md)
 11. [20.20_error_and_stability_requirements.md](20_requirements/archive/20.20_error_and_stability_requirements.md)
@@ -163,8 +176,8 @@ Top-level `thought_simulator/` direct children:
 
 ---
 
-**Last Updated**: May 28, 2026  
-**Version**: 0.5 (Canonical/Exploratory Boundary Clarified)
+**Last Updated**: June 2, 2026  
+**Version**: 0.6 (Direction-Controlled 20/40/10 Flow Clarified)
 
 
 

@@ -1,6 +1,6 @@
-# Canonical Requirement Governance Root
+# Formal Requirement Anchor Layer
 
-This directory is the canonical requirement-governance root for promoted requirement anchors.
+This directory is the formal requirement-anchor layer used to realize architecture and coding contracts after direction-controlled flow from 20/40.
 
 ## Canonical Anchors
 
@@ -22,9 +22,14 @@ This directory is the canonical requirement-governance root for promoted require
 
 ## Boundary Note
 
-- Exploratory requirement reasoning remains in [../20_requirements/](../20_requirements/).
-- Canonical requirement anchors in this directory are the authoritative requirement source for canonical design and verification flow.
+- Primary requirement collaboration remains in [../20_requirements/](../20_requirements/).
+- This 10-layer stores formalized realization anchors used by canonical design and verification flow.
 - Terminology alignment baseline is [../20_requirements/archive/20.02_design_constraints.md](../20_requirements/archive/20.02_design_constraints.md), including the current use of Routing Basin (RB) naming.
+
+Direction control (from USER_GUIDE policy):
+
+- forward flow (typical): 20 -> 40 -> 10
+- backward flow (when selected): 20 -> 10 -> 40
 
 ## 10-Layer Disambiguation (Required)
 

@@ -53,9 +53,16 @@ When a design specification in `50_thought_simulator_design/` cites playground f
 
 Coupling rules:
 
-- requirement documents in `20_requirements/` remain normative source of truth
+- requirement intent is authored primarily in `20_requirements/`
+- realization-ready requirement anchors are formalized in `10_thought_simulator_req/` based on selected flow direction
 - design documents in `50_thought_simulator_design/` remain subsystem architectural contracts
 - cited playground evidence in `40_thought_simulator_playground/` remains the auditable verification trail tied to the released design version
+
+Direction control:
+
+- forward flow (typical): 20 -> 40 -> 10
+- backward flow (when selected): 20 -> 10 -> 40
+- no propagation occurs without explicit user direction.
 
 If cited playground evidence changes materially after promotion:
 
