@@ -88,9 +88,12 @@ Without confirmation, execution is limited to planning/clarification output only
 ## Current Seeded Modules
 
 - [30.10_math_prototypes/](30.10_math_prototypes/)
+- [30.20_verification_of_semantic_specification.md](30.20_verification_of_semantic_specification.md)
 - [30.20_tp_lifecycle/](30.20_tp_lifecycle/)
+- [30.30_verification_of_reference_algorithms.md](30.30_verification_of_reference_algorithms.md)
 - [30.30_basin_prototypes/](30.30_basin_prototypes/)
 - [30.40_scheduler_prototypes/](30.40_scheduler_prototypes/)
+- [30.40_evidence_trace_exemplars_non_normative.md](30.40_evidence_trace_exemplars_non_normative.md)
 - [30.50_regulator_prototypes/](30.50_regulator_prototypes/)
 - [30.60_tick_cycle_skeleton/](30.60_tick_cycle_skeleton/)
 - [30.70_snapshot_prototypes/](30.70_snapshot_prototypes/)
