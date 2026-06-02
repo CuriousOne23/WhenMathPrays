@@ -12,6 +12,7 @@ Core document tiers:
 - [30_verification/](30_verification/) - verification capsules and deterministic evidence artifacts
 - [40_thought_simulator_playground/](40_thought_simulator_playground/) - exploratory prototypes and experiments
 - [50_thought_simulator_design/](50_thought_simulator_design/) - formal design specifications
+- [60_review/](60_review/) - grouped review bundles, decision artifacts, and review manifests
 
 ## Tier Clarification
 
@@ -148,6 +149,7 @@ Top-level `thought_simulator/` direct children:
 - [30_verification/](30_verification/)
 - [40_thought_simulator_playground/](40_thought_simulator_playground/)
 - [50_thought_simulator_design/](50_thought_simulator_design/)
+- [60_review/](60_review/)
 - [config/](config/)
 - [core/](core/)
 - [docs/](docs/)
