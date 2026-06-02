@@ -15,8 +15,6 @@ Core document tiers:
 
 ## Tier Clarification
 
-Two `10_*` directories are intentional and do not require correction:
-
 - [00_program_governance/](00_program_governance/) governs program-level architecture context and policy.
 - [10_thought_simulator_req/](10_thought_simulator_req/) is the canonical requirement governance root for promotion protocol and ADR governance artifacts.
 
