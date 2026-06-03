@@ -107,6 +107,9 @@ Why the exception exists:
 - [40.10_math_prototypes/](40.10_math_prototypes/) - entropy, stability, and math experiments
 - [40.20_tp_lifecycle/](40.20_tp_lifecycle/) - ThoughtPoint lifecycle exploration
 - [40.30_basin_prototypes/](40.30_basin_prototypes/) - basin behavior prototypes
+- [40.35_ib_prototypes/](40.35_ib_prototypes/) - inquiry basin exploratory scaffolds
+- [40.36_gb_prototypes/](40.36_gb_prototypes/) - global basin supervisory scaffolds
+- [40.39_mb_prototypes/](40.39_mb_prototypes/) - monitoring basin diagnostics scaffolds
 - [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) - scheduling and ordering experiments
 - [40.50_regulator_prototypes/](40.50_regulator_prototypes/) - regulator mechanisms and policies
 - [40.60_tick_cycle_skeleton/](40.60_tick_cycle_skeleton/) - simulation tick-cycle skeletons
