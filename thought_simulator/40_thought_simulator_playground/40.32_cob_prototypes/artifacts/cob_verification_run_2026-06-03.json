@@ -1,0 +1,282 @@
+{
+  "determinism_evidence": {
+    "match": true,
+    "snapshot_a_digest": "67febea2fabd4b6f843fe9e72cfa65019ce145a9c292214b29038eb32255ef74",
+    "snapshot_b_digest": "67febea2fabd4b6f843fe9e72cfa65019ce145a9c292214b29038eb32255ef74"
+  },
+  "module": "40.32_cob_prototypes",
+  "requirements_anchors": [
+    "thought_simulator/20_requirements/20.32_cob_requirements.md",
+    "thought_simulator/20_requirements/20.10_ts_architectural_principles.md",
+    "thought_simulator/20_requirements/20.30_ts_functional_model.md",
+    "thought_simulator/20_requirements/20.150_tcu_budgeting_requirements.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md"
+  ],
+  "run_command": "python harness.py",
+  "run_timestamp_utc": "2026-06-03T14:38:50.820967+00:00",
+  "scenarios": [
+    {
+      "detail": "Lifecycle transitions, lineage fields, and append-only audit behavior validated.",
+      "hlr_ref": "HLR-20.031-003",
+      "io_fields": "event_type, sequence, safe_boundary, winner_lineage, split_children, merge_sources -> lifecycle_state, lineage, audit_log",
+      "llr_ref": "LLR-COB-LC-001",
+      "name": "lifecycle_lineage_and_audit",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 3, 4, 5, 20",
+      "status": "PASS"
+    },
+    {
+      "detail": "Deterministic replay, empty-artifact export behavior, and canonical digest stability validated.",
+      "hlr_ref": "HLR-20.031-010",
+      "io_fields": "replay_mode, profile_signature, window_events, env_default_profile -> exports, summary_proof, verification_digest",
+      "llr_ref": "LLR-COB-EXP-001",
+      "name": "deterministic_replay_and_export",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 10, 11, 12, 13, 15",
+      "status": "PASS"
+    },
+    {
+      "detail": "Export manifest selected active signature-bound profile over environment default.",
+      "hlr_ref": "HLR-20.031-016",
+      "io_fields": "profile_signature, env_default_profile, window_events -> export_manifest.profile_signature",
+      "llr_ref": "LLR-COB-PROF-001",
+      "name": "profile_precedence_signature_over_env_default",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 16, 17",
+      "status": "PASS"
+    },
+    {
+      "detail": "Out-of-order sequence was rejected with deterministic reason code.",
+      "hlr_ref": "HLR-20.031-014",
+      "io_fields": "sequence -> reject reason_code",
+      "llr_ref": "LLR-COB-SEQ-001",
+      "name": "negative_sequence_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 14, 26",
+      "status": "PASS"
+    },
+    {
+      "detail": "Unsupported replay mode rejected with fixed deterministic reason code.",
+      "hlr_ref": "HLR-20.031-018",
+      "io_fields": "replay_mode -> reject reason_code",
+      "llr_ref": "LLR-COB-REJ-001",
+      "name": "negative_unsupported_replay_mode",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 18, 25",
+      "status": "PASS"
+    },
+    {
+      "detail": "Lifecycle transition outside deterministic safe boundary was rejected.",
+      "hlr_ref": "HLR-20.031-024",
+      "io_fields": "safe_boundary, event_type -> reject reason_code",
+      "llr_ref": "LLR-COB-SAFE-001",
+      "name": "negative_safe_boundary_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirement 24",
+      "status": "PASS"
+    },
+    {
+      "detail": "Unsupported event type rejected with fixed deterministic reason code.",
+      "hlr_ref": "HLR-20.031-018",
+      "io_fields": "event_type -> reject reason_code",
+      "llr_ref": "LLR-COB-REJ-002",
+      "name": "negative_unsupported_event_type",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.32_cob_requirements.md",
+      "req_section": "Normative Requirements 18, 25",
+      "status": "PASS"
+    }
+  ],
+  "state_snapshots": {
+    "lifecycle_snapshot": {
+      "audit_log": [
+        {
+          "details": {
+            "contract_version": "1.0"
+          },
+          "event_type": "create",
+          "lifecycle_state": "provisional",
+          "reason_code": "COB_OK_000_CREATED",
+          "replay_mode": "full",
+          "sequence": 0,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "winner_lineage": "wl-001"
+          },
+          "event_type": "promote",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_101_PROMOTED",
+          "replay_mode": "full",
+          "sequence": 1,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "split_children": [
+              "cob.alpha.1",
+              "cob.alpha.2"
+            ]
+          },
+          "event_type": "split",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_104_SPLIT",
+          "replay_mode": "full",
+          "sequence": 2,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "merge_sources": [
+              "cob.prev.1",
+              "cob.prev.2"
+            ]
+          },
+          "event_type": "merge",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_103_MERGED",
+          "replay_mode": "full",
+          "sequence": 3,
+          "status": "ACCEPT"
+        }
+      ],
+      "cob_id": "cob.alpha",
+      "contract_version": "1.0",
+      "exports": [],
+      "lifecycle_state": "active",
+      "lineage": {
+        "merge_sources": [
+          "cob.prev.1",
+          "cob.prev.2"
+        ],
+        "parent_ids": [],
+        "split_children": [
+          "cob.alpha.1",
+          "cob.alpha.2"
+        ],
+        "stable_id": "cob.alpha",
+        "winner_lineage": "wl-001"
+      },
+      "module": "40.32_cob_prototypes",
+      "profile_signature": "P1",
+      "replay_mode": "full",
+      "sequence": 3,
+      "summary_proof": "",
+      "verification_digest": "55c011820503836e4163591057b5251f2a654b61f770ae30e8d65c7be76c3ec5"
+    },
+    "replay_snapshot": {
+      "audit_log": [
+        {
+          "details": {
+            "contract_version": "1.0"
+          },
+          "event_type": "create",
+          "lifecycle_state": "provisional",
+          "reason_code": "COB_OK_000_CREATED",
+          "replay_mode": "full",
+          "sequence": 0,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "winner_lineage": "wl-100"
+          },
+          "event_type": "promote",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_101_PROMOTED",
+          "replay_mode": "full",
+          "sequence": 1,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "replay_mode": "summary_proof"
+          },
+          "event_type": "replay_mode_change",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_106_REPLAY_MODE",
+          "replay_mode": "summary_proof",
+          "sequence": 2,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "cob_id": "cob.alpha",
+            "compression": "none",
+            "container": "json",
+            "empty_artifact": true,
+            "env_default_profile": "P2",
+            "manifest_digest": "648957ad409c826dce343aa1c898d87342904bb088737746fe12cc6245e24464",
+            "manifest_version": "1.0",
+            "profile_signature": "P1",
+            "replay_mode": "summary_proof",
+            "sequence": 3,
+            "window_events": 0
+          },
+          "event_type": "export",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_107_EXPORTED",
+          "replay_mode": "summary_proof",
+          "sequence": 3,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "summary_proof": "proof:39226c9fda58335e3fb80dd6917a0738d7461467f5dea5355af74b914cf69d71"
+          },
+          "event_type": "compact",
+          "lifecycle_state": "active",
+          "reason_code": "COB_OK_105_COMPACTED",
+          "replay_mode": "summary_proof",
+          "sequence": 4,
+          "status": "ACCEPT"
+        }
+      ],
+      "cob_id": "cob.alpha",
+      "contract_version": "1.0",
+      "exports": [
+        {
+          "cob_id": "cob.alpha",
+          "compression": "none",
+          "container": "json",
+          "empty_artifact": true,
+          "env_default_profile": "P2",
+          "manifest_digest": "648957ad409c826dce343aa1c898d87342904bb088737746fe12cc6245e24464",
+          "manifest_version": "1.0",
+          "profile_signature": "P1",
+          "replay_mode": "summary_proof",
+          "sequence": 3,
+          "window_events": 0
+        }
+      ],
+      "lifecycle_state": "active",
+      "lineage": {
+        "merge_sources": [],
+        "parent_ids": [],
+        "split_children": [],
+        "stable_id": "cob.alpha",
+        "winner_lineage": "wl-100"
+      },
+      "module": "40.32_cob_prototypes",
+      "profile_signature": "P1",
+      "replay_mode": "summary_proof",
+      "sequence": 4,
+      "summary_proof": "proof:39226c9fda58335e3fb80dd6917a0738d7461467f5dea5355af74b914cf69d71",
+      "verification_digest": "67febea2fabd4b6f843fe9e72cfa65019ce145a9c292214b29038eb32255ef74"
+    }
+  },
+  "summary": {
+    "failed": 0,
+    "overall_status": "PASS",
+    "passed": 7,
+    "total_scenarios": 7
+  }
+}
