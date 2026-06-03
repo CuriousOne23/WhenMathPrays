@@ -28,12 +28,12 @@ This Phase A document does not define implementation code or verification artifa
 
 Primary conceptual sources in `20_requirements/`:
 
-- `20.140_program_flow.md` (scheduling phase and phase ordering)
-- `20.40_performance_requirements.md` (deterministic parallel semantics and scheduler efficiency)
-- `20.20_error_and_stability_requirements.md` (fair progress and deterministic failure behavior)
-- `20.60_testing_and_validation.md` (scheduler fairness and determinism test obligations)
-- `20.50_observability_requirements.md` (tick-level observability and replayability)
-- `20.90_interfaces_and_io.md` (deterministic interface and runtime control constraints)
+- `20.30_ts_functional_model.md` (scheduling phase and phase ordering)
+- `20.150_tcu_budgeting_requirements.md` (deterministic parallel semantics and scheduler efficiency)
+- `20.170_safety_requirements.md` (fair progress and deterministic failure behavior)
+- `20.200_traceability_matrix.md` (scheduler fairness and determinism test obligations)
+- `20.40_ob_requirements.md` (tick-level observability and replayability)
+- `20.90_ib_requirements.md` (deterministic interface and runtime control constraints)
 
 ## 4. Core Responsibilities
 

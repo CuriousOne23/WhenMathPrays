@@ -1,20 +1,20 @@
 {
   "module": "40.30_basin_prototypes",
   "requirements_anchors": [
-    "20.30_tp_requirements.md",
-    "20.50_observability_requirements.md",
-    "20.60_testing_and_validation.md",
-    "20.90_interfaces_and_io.md",
-    "20.120_stability_requirements.md",
-    "20.140_program_flow.md",
-    "20.150_glossary.md",
-    "20.160_traceability_matrix.md"
+    "20.105_tp_requirements.md",
+    "20.40_ob_requirements.md",
+    "20.200_traceability_matrix.md",
+    "20.90_ib_requirements.md",
+    "20.170_safety_requirements.md",
+    "20.30_ts_functional_model.md",
+    "20.190_glossary.md",
+    "20.200_traceability_matrix.md"
   ],
   "run_command": "python harness.py",
-  "run_timestamp_utc": "2026-05-28T00:46:45.336328+00:00",
+  "run_timestamp_utc": "2026-06-03T14:01:44.820680+00:00",
   "scenarios": [
     {
-      "evidence_digest": "fe7c98aed5f77be72706baa90c86a2cb72abdac4345f2c6c0edce75c780194ff",
+      "evidence_digest": "d656d7a1d32d2a69ba3aa50c6e7a0cd017b1b7a7df0e8155dd7f0377fb26f80c",
       "io_fields": [
         "basin_id",
         "tp_id",
@@ -119,7 +119,7 @@
           "seeded"
         ],
         "tp_id": "tp.alpha",
-        "verification_digest": "fe7c98aed5f77be72706baa90c86a2cb72abdac4345f2c6c0edce75c780194ff"
+        "verification_digest": "d656d7a1d32d2a69ba3aa50c6e7a0cd017b1b7a7df0e8155dd7f0377fb26f80c"
       },
       "status": "PASS"
     },

@@ -21,50 +21,74 @@ REQ = {
     "creation_identity": {
         "hlr": "HLR-ARCH-08",
         "llr": "LLR-T-DET-01",
-        "doc": "thought_simulator_req/10_architecture/00.10.50_TS_data_model.md",
-        "section": "Â§3.1",
+        "doc": "thought_simulator/00_program_governance/10_architecture/00.10.50_TS_data_model.md",
+        "section": "§3.1",
     },
     "movement_state": {
         "hlr": "HLR-ARCH-07",
         "llr": "LLR-T-OBS-01",
-        "doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
-        "section": "Â§3, Â§14",
+        "doc": "thought_simulator/00_program_governance/10_architecture/00.10.40_TS_state_machine.md",
+        "section": "§3, §14",
     },
     "entropy_bounds": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-T-CON-02",
-        "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "Â§8",
+        "doc": "thought_simulator/20_requirements/20.30_ts_functional_model.md",
+        "section": "HLR-20.030-013",
     },
     "split_merge_provenance": {
         "hlr": "HLR-ARCH-07",
         "llr": "LLR-T-LVL-02",
-        "doc": "thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md",
-        "section": "Â§8",
+        "doc": "thought_simulator/00_program_governance/10_architecture/00.10.40_TS_state_machine.md",
+        "section": "§8",
     },
     "determinism": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-T-DET-01,T-DET-04",
-        "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "Â§4",
+        "doc": "thought_simulator/20_requirements/20.10_ts_architectural_principles.md",
+        "section": "HLR-20.010-001, HLR-20.010-017",
     },
     "invalid_split_child_count": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
-        "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "Â§12",
+        "doc": "thought_simulator/20_requirements/20.130_splitting_and_merging_requirements.md",
+        "section": "HLR-20.130-001, HLR-20.130-025",
     },
     "empty_merge_sources": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
-        "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "Â§12",
+        "doc": "thought_simulator/20_requirements/20.130_splitting_and_merging_requirements.md",
+        "section": "HLR-20.130-002, HLR-20.130-025",
     },
     "embedding_mismatch_merge": {
         "hlr": "HLR-REQ-14",
         "llr": "LLR-SEC-14-12",
-        "doc": "thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md",
-        "section": "Â§12",
+        "doc": "thought_simulator/20_requirements/20.130_splitting_and_merging_requirements.md",
+        "section": "HLR-20.130-002, HLR-20.130-025",
+    },
+    "tr_dirty_flag_initialization": {
+        "hlr": "HLR-20.037-003",
+        "llr": "LLR-TR-INIT-001",
+        "doc": "thought_simulator/20_requirements/20.37_thought_router_tr_specification.md",
+        "section": "§2.1",
+    },
+    "rb_tr_gate_iff": {
+        "hlr": "HLR-20.037-030",
+        "llr": "LLR-TR-GATE-001",
+        "doc": "thought_simulator/20_requirements/20.37_thought_router_tr_specification.md",
+        "section": "§5.3",
+    },
+    "tr_success_clears_dirty_flag": {
+        "hlr": "HLR-20.037-004",
+        "llr": "LLR-TR-LC-001",
+        "doc": "thought_simulator/20_requirements/20.37_thought_router_tr_specification.md",
+        "section": "§3.3, §7",
+    },
+    "tr_failure_preserves_dirty_flag": {
+        "hlr": "HLR-20.037-005",
+        "llr": "LLR-TR-LC-002",
+        "doc": "thought_simulator/20_requirements/20.37_thought_router_tr_specification.md",
+        "section": "§3.3, §7",
     },
 }
 
@@ -287,6 +311,109 @@ def scenario_embedding_mismatch_merge() -> ScenarioResult:
     raise AssertionError("merge with mismatched embeddings must raise ValueError")
 
 
+def scenario_tr_dirty_flag_initialization() -> ScenarioResult:
+    _emit_requirement("tr_dirty_flag_initialization")
+    tp = ThoughtPoint.new(
+        basin_id="OB_identity",
+        entropy=EntropyComponents(h_rep=1.0, h_pred=1.0, h_struct=1.0),
+        embedding=[0.25, 0.5, 0.75],
+        created_at_tick=30,
+        deterministic_mode=True,
+        deterministic_nonce=30,
+    )
+    _assert(tp.tr_needs_update is True, "new TP must initialize tr_needs_update=true")
+    _assert(tp.rb_should_route_to_tr() is True, "RB gate must route to TR when dirty flag is true")
+    return ScenarioResult(
+        name="tr_dirty_flag_initialization",
+        status="PASS",
+        requirement_key="tr_dirty_flag_initialization",
+        detail="New TP initializes with tr_needs_update=true and RB gate requests TR execution.",
+        io_fields="created_at_tick, deterministic_mode, deterministic_nonce -> tr_needs_update, RB gate decision",
+    )
+
+
+def scenario_rb_tr_gate_iff() -> ScenarioResult:
+    _emit_requirement("rb_tr_gate_iff")
+    tp = ThoughtPoint.new(
+        basin_id="OB_identity",
+        entropy=EntropyComponents(h_rep=0.9, h_pred=0.8, h_struct=0.7),
+        embedding=[0.1, 0.2, 0.3],
+        created_at_tick=31,
+        deterministic_mode=True,
+        deterministic_nonce=31,
+    )
+    _assert(tp.rb_should_route_to_tr() is True, "RB must route to TR when dirty")
+    executed = tp.run_tr_routine(tick=32, success=True, tr_payload={"intent": "inquire"})
+    _assert(executed is True, "TR should execute while dirty")
+    _assert(tp.tr_needs_update is False, "TR success should clear dirty flag")
+    _assert(tp.rb_should_route_to_tr() is False, "RB must not route to TR when dirty flag is false")
+    executed_again = tp.run_tr_routine(tick=33, success=True, tr_payload={"intent": "assert"})
+    _assert(executed_again is False, "TR must not execute when RB gate is false")
+    return ScenarioResult(
+        name="rb_tr_gate_iff",
+        status="PASS",
+        requirement_key="rb_tr_gate_iff",
+        detail="RB routes to TR iff tr_needs_update=true and blocks TR when false.",
+        io_fields="tr_needs_update, RB gate -> TR execution decision",
+    )
+
+
+def scenario_tr_success_clears_dirty_flag() -> ScenarioResult:
+    _emit_requirement("tr_success_clears_dirty_flag")
+    tp = ThoughtPoint.new(
+        basin_id="RB_relation",
+        entropy=EntropyComponents(h_rep=1.1, h_pred=0.7, h_struct=0.5),
+        embedding=[0.9, 0.1, 0.0],
+        created_at_tick=34,
+        deterministic_mode=True,
+        deterministic_nonce=34,
+    )
+    tp.run_tr_routine(tick=35, success=True, tr_payload={"intent": "refine", "routing_semantics": "baseline"})
+    _assert(tp.tr_needs_update is False, "TR success must clear dirty flag")
+
+    tp.update_entropy(tick=36, d_rep=0.1)
+    _assert(tp.tr_needs_update is True, "semantic writer update must set dirty flag true")
+
+    tp.run_tr_routine(tick=37, success=True, tr_payload={"intent": "refine", "routing_semantics": "updated"})
+    _assert(tp.tr_needs_update is False, "TR success must clear dirty flag after semantic updates")
+    _assert(tp.tr.get("routing_semantics") == "updated", "TR payload should be committed on successful execution")
+    return ScenarioResult(
+        name="tr_success_clears_dirty_flag",
+        status="PASS",
+        requirement_key="tr_success_clears_dirty_flag",
+        detail="TR success clears dirty flag and commits TP.TR payload after semantic writes.",
+        io_fields="semantic write update, tr_needs_update, TR payload -> tr_needs_update=false, TP.TR committed",
+    )
+
+
+def scenario_tr_failure_preserves_dirty_flag() -> ScenarioResult:
+    _emit_requirement("tr_failure_preserves_dirty_flag")
+    tp = ThoughtPoint.new(
+        basin_id="RB_relation",
+        entropy=EntropyComponents(h_rep=1.4, h_pred=0.6, h_struct=0.5),
+        embedding=[0.6, 0.3, 0.2],
+        created_at_tick=38,
+        deterministic_mode=True,
+        deterministic_nonce=38,
+    )
+    tp.run_tr_routine(tick=39, success=True, tr_payload={"intent": "confirm"})
+    _assert(tp.tr_needs_update is False, "sanity check: initial TR success should clear dirty flag")
+
+    tp.move_to_basin("IB_refine", tick=40, note="semantic change")
+    _assert(tp.tr_needs_update is True, "semantic writer move should set dirty flag true")
+
+    executed = tp.run_tr_routine(tick=41, success=False, error_note="deterministic_test_failure")
+    _assert(executed is False, "failed TR execution should return False")
+    _assert(tp.tr_needs_update is True, "TR failure must preserve dirty flag true")
+    return ScenarioResult(
+        name="tr_failure_preserves_dirty_flag",
+        status="PASS",
+        requirement_key="tr_failure_preserves_dirty_flag",
+        detail="TR failure preserves tr_needs_update=true for retry-safe routing.",
+        io_fields="semantic write, TR failure path -> tr_needs_update remains true",
+    )
+
+
 def _write_artifacts(results: list[ScenarioResult], tp: ThoughtPoint, merged: ThoughtPoint, children: list[ThoughtPoint], run_label: str = "") -> None:
     ARTIFACT_DIR.mkdir(exist_ok=True)
     artifact_name = "tp_state.json" if not run_label else f"{run_label}.json"
@@ -322,7 +449,7 @@ def _write_verification_capsule(results: list[ScenarioResult], tp: ThoughtPoint,
         "",
         "| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |",
         "|---|---|---|---|---|---|---|---|---|---|---|---|",
-        f"| {timestamp} | {MODULE_NAME} | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | thought_simulator_req/10_architecture/00.10.40_TS_state_machine.md; thought_simulator_req/10_architecture/00.10.50_TS_data_model.md; thought_simulator_req/20_requirements/archive/20.60_testing_and_validation.md | Â§3, Â§8, Â§13, Â§14; Â§3.1, Â§6; Â§4, Â§7, Â§12 | Migrated from legacy capsule fragments (insights/failures/requirements records) into verification_capsule.md; no content loss. |",
+        f"| {timestamp} | {MODULE_NAME} | python harness.py | deterministic_mode=True; scenario_set=positive+negative+tr_dirty_flag | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14, HLR-20.037-003, HLR-20.037-030, HLR-20.037-004, HLR-20.037-005 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12, LLR-TR-INIT-001, LLR-TR-GATE-001, LLR-TR-LC-001, LLR-TR-LC-002 | thought_simulator/00_program_governance/10_architecture/00.10.40_TS_state_machine.md; thought_simulator/00_program_governance/10_architecture/00.10.50_TS_data_model.md; thought_simulator/20_requirements/20.10_ts_architectural_principles.md; thought_simulator/20_requirements/20.30_ts_functional_model.md; thought_simulator/20_requirements/20.130_splitting_and_merging_requirements.md; thought_simulator/20_requirements/20.37_thought_router_tr_specification.md | §3, §8, §13, §14; §3.1, §6; HLR-20.010-001/017; HLR-20.030-013; HLR-20.130-001/002/025; §2.1/§3.3/§5.3/§7 | Migrated from legacy capsule fragments and extended with TR dirty-flag scenario evidence. |",
         "",
         "## Positive Scenario Ledger",
         "",
@@ -439,6 +566,18 @@ def main() -> int:
 
         scenario_six_result = scenario_embedding_mismatch_merge()
         results.append(scenario_six_result)
+
+        scenario_seven_result = scenario_tr_dirty_flag_initialization()
+        results.append(scenario_seven_result)
+
+        scenario_eight_result = scenario_rb_tr_gate_iff()
+        results.append(scenario_eight_result)
+
+        scenario_nine_result = scenario_tr_success_clears_dirty_flag()
+        results.append(scenario_nine_result)
+
+        scenario_ten_result = scenario_tr_failure_preserves_dirty_flag()
+        results.append(scenario_ten_result)
 
         run_label = os.environ.get("TP_ARTIFACT_LABEL", "")
         _write_artifacts(results, seed_tp, merged_tp, children, run_label=run_label)

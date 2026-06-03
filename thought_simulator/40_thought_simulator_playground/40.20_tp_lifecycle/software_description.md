@@ -13,15 +13,15 @@ Approved (legacy module migrated before global Two-Phase policy; retained as app
 ## 1. Purpose
 The purpose of the TP is to record the thought processing it undergoes.
 
-The canonical system requirements for the TP are defined in `20.30_tp_requirements.md`.
+The canonical system requirements for the TP are defined in `thought_simulator/20_requirements/20.105_tp_requirements.md`.
 
-This module explores and prototypes the **ThoughtPoint (TP) lifecycle** â€” the atomic, mobile unit of thought in the Thought Manifold Simulator.
+This module explores and prototypes the **ThoughtPoint (TP) lifecycle** - the atomic, mobile unit of thought in the Thought Manifold Simulator.
 
 A ThoughtPoint carries identity, entropy, provenance, and relational state as it moves, splits, merges, and evolves.
 
 ## 2. Scope & Alignment with Master Guide
 - `prototype.py` must be a **pure macro-style module** (self-contained, importable, no top-level execution, deterministic when `deterministic_mode=True`).
-- `harness.py` is the **sole execution entrypoint** â€” it imports the macro, runs verification scenarios, collects evidence, and attaches to requirements.
+- `harness.py` is the **sole execution entrypoint** - it imports the macro, runs verification scenarios, collects evidence, and attaches to requirements.
 - All work follows `40.20_master_program_guide.md` (philosophy, variable control, macro rules, reporting standards, Verification Capsule process).
 
 ## 3. Core Responsibilities (from GRP)
@@ -65,6 +65,8 @@ tp.update_entropy(tick, d_rep=0, d_pred=0, d_struct=0)
 tp.add_tag(tag, tick)
 tp.remove_tag(tag, tick)
 tp.split(tick, child_count=2) -> list[ThoughtPoint]
+tp.rb_should_route_to_tr() -> bool
+tp.run_tr_routine(tick, success=True, tr_payload=None, error_note="") -> bool
 ThoughtPoint.merge(
 	sources: list[ThoughtPoint],
 	tick,
@@ -111,6 +113,8 @@ This section is the module-level contract for how `prototype.py` accepts inputs,
 - `tp_id`: persistent TP identity token across lifecycle events.
 - `state_counter`: strictly monotonic per TP; increments on each mutating operation.
 - `current_basin_id`: exclusive basin membership label at current state.
+- `tr_needs_update`: boolean dirty flag controlling RB -> TR invocation eligibility.
+- `TR`: semantic routing block committed by successful TR routine execution.
 - `entropy.h_rep`, `entropy.h_pred`, `entropy.h_struct`: non-negative entropy components.
 - `history`: append-only event chronology for audit and replay.
 - `provenance.parent_ids`, `provenance.merge_sources`, `provenance.split_children`: lineage identity channels.

@@ -13,7 +13,7 @@ Canonical verification report for `40.40_scheduler_prototypes`.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-28 | 40.40_scheduler_prototypes | python harness.py | deterministic replay plus fairness and negative-path validation | PASS | 0 | artifacts/scheduler_verification_run_2026-05-28.json | HLR-20.440-001, HLR-20.440-002, HLR-20.440-003 | LLR-30.40-001 | 10_thought_simulator_req/50_design/10.50.40_scheduler_requirements.md; 20.140_program_flow.md; 20.40_performance_requirements.md; 20.20_error_and_stability_requirements.md; 20.60_testing_and_validation.md; 20.50_observability_requirements.md; 20.90_interfaces_and_io.md | source-index anchored | tick; policy; max_active; selected_tp_ids; thoughtpoints; wait_ticks; history; verification_digest | negative_empty_tp_id; negative_non_monotonic_tick; negative_invalid_policy | First executed scheduler prototype run for 40.40 with deterministic replay and fairness sequence evidence. |
+| 2026-05-28 | 40.40_scheduler_prototypes | python harness.py | deterministic replay plus fairness and negative-path validation | PASS | 0 | artifacts/scheduler_verification_run_2026-05-28.json | HLR-20.440-001, HLR-20.440-002, HLR-20.440-003 | LLR-30.40-001 | 10_thought_simulator_req/50_design/10.50.40_scheduler_requirements.md; 20.30_ts_functional_model.md; 20.150_tcu_budgeting_requirements.md; 20.170_safety_requirements.md; 20.200_traceability_matrix.md; 20.40_ob_requirements.md; 20.90_ib_requirements.md | source-index anchored | tick; policy; max_active; selected_tp_ids; thoughtpoints; wait_ticks; history; verification_digest | negative_empty_tp_id; negative_non_monotonic_tick; negative_invalid_policy | First executed scheduler prototype run for 40.40 with deterministic replay and fairness sequence evidence. |
 
 ## Positive Scenario Ledger
 
@@ -48,12 +48,12 @@ Canonical verification report for `40.40_scheduler_prototypes`.
 ## Requirements Anchor Map
 
 - `10_thought_simulator_req/50_design/10.50.40_scheduler_requirements.md`: canonical scheduler requirement anchor
-- `20.140_program_flow.md`: scheduling phase semantics and immutable phase ordering
-- `20.40_performance_requirements.md`: deterministic scheduler behavior under performance constraints
-- `20.20_error_and_stability_requirements.md`: fairness and deterministic failure behavior expectations
-- `20.60_testing_and_validation.md`: deterministic/negative-path verification obligations
-- `20.50_observability_requirements.md`: replay-safe event evidence and diagnostics
-- `20.90_interfaces_and_io.md`: stable JSON contract shape and interface determinism
+- `20.30_ts_functional_model.md`: scheduling phase semantics and immutable phase ordering
+- `20.150_tcu_budgeting_requirements.md`: deterministic scheduler behavior under performance constraints
+- `20.170_safety_requirements.md`: fairness and deterministic failure behavior expectations
+- `20.200_traceability_matrix.md`: deterministic/negative-path verification obligations
+- `20.40_ob_requirements.md`: replay-safe event evidence and diagnostics
+- `20.90_ib_requirements.md`: stable JSON contract shape and interface determinism
 
 ## Requirements Delta Summary
 
