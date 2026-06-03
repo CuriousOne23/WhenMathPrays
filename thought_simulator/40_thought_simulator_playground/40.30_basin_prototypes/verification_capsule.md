@@ -13,7 +13,7 @@ Canonical verification report for `40.30_basin_prototypes`.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 40.30_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.30_tp_requirements.md; 20.50_observability_requirements.md; 20.60_testing_and_validation.md; 20.90_interfaces_and_io.md; 20.120_stability_requirements.md; 20.140_program_flow.md; ../../30_verification/30.30_verification_glossary.md; 20.160_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
+| 2026-05-27 | 40.30_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.105_tp_requirements.md; 20.40_ob_requirements.md; 20.200_traceability_matrix.md; 20.90_ib_requirements.md; 20.170_safety_requirements.md; 20.30_ts_functional_model.md; ../../30_verification/30.30_verification_glossary.md; 20.200_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
 
 ## Positive Scenario Ledger
 
@@ -44,14 +44,14 @@ Canonical verification report for `40.30_basin_prototypes`.
 
 ## Requirements Anchor Map
 
-- `20.30_tp_requirements.md`: TP identity and lifecycle preservation
-- `20.50_observability_requirements.md`: artifact evidence and replayability
-- `20.60_testing_and_validation.md`: deterministic and negative-path coverage
-- `20.90_interfaces_and_io.md`: JSON-compatible contract shape
-- `20.120_stability_requirements.md`: monotonic state transition discipline
-- `20.140_program_flow.md`: phase-boundary consistency for basin updates
+- `20.105_tp_requirements.md`: TP identity and lifecycle preservation
+- `20.40_ob_requirements.md`: artifact evidence and replayability
+- `20.200_traceability_matrix.md`: deterministic and negative-path coverage
+- `20.90_ib_requirements.md`: JSON-compatible contract shape
+- `20.170_safety_requirements.md`: monotonic state transition discipline
+- `20.30_ts_functional_model.md`: phase-boundary consistency for basin updates
 - `../../30_verification/30.30_verification_glossary.md`: canonical verification terms used in the module contract
-- `20.160_traceability_matrix.md`: requirement-to-test traceability
+- `20.200_traceability_matrix.md`: requirement-to-test traceability
 
 ## Requirements Delta Summary
 

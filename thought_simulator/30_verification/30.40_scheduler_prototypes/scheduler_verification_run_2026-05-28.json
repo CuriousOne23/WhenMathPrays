@@ -1,15 +1,15 @@
 {
   "module": "40.40_scheduler_prototypes",
   "requirements_anchors": [
-    "20.140_program_flow.md",
-    "20.40_performance_requirements.md",
-    "20.20_error_and_stability_requirements.md",
-    "20.60_testing_and_validation.md",
-    "20.50_observability_requirements.md",
-    "20.90_interfaces_and_io.md"
+    "20.30_ts_functional_model.md",
+    "20.150_tcu_budgeting_requirements.md",
+    "20.170_safety_requirements.md",
+    "20.200_traceability_matrix.md",
+    "20.40_ob_requirements.md",
+    "20.90_ib_requirements.md"
   ],
   "run_command": "python harness.py",
-  "run_timestamp_utc": "2026-05-28T20:47:39.859100+00:00",
+  "run_timestamp_utc": "2026-06-03T14:01:44.951374+00:00",
   "scenarios": [
     {
       "evidence_digest": "3ac95e1fd19946fe8b06354a5a6e5dd0220c89717f2075ed0bd05cba866c8af8",

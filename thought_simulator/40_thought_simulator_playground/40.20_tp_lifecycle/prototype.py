@@ -120,6 +120,8 @@ class ThoughtPoint:
 	created_at_tick: int
 	energy: float = 1.0
 	deterministic_mode: bool = True
+	tr_needs_update: bool = True
+	tr: dict[str, object] = field(default_factory=dict)
 	state_counter: int = 0
 	last_updated_tick: int = 0
 	tags: set[str] = field(default_factory=set)
@@ -183,25 +185,58 @@ class ThoughtPoint:
 		if basin_id == self.current_basin_id:
 			return
 		self.current_basin_id = basin_id
+		self._mark_tr_dirty()
 		self._bump_state(tick=tick, action="move", note=note)
 
 	def update_entropy(self, tick: int, d_rep: float = 0.0, d_pred: float = 0.0, d_struct: float = 0.0) -> None:
 		if d_rep == 0.0 and d_pred == 0.0 and d_struct == 0.0:
 			return
 		self.entropy.apply_delta(d_rep=d_rep, d_pred=d_pred, d_struct=d_struct)
+		self._mark_tr_dirty()
 		self._bump_state(tick=tick, action="entropy_update")
 
 	def add_tag(self, tag: str, tick: int) -> None:
 		if tag in self.tags:
 			return
 		self.tags.add(tag)
+		self._mark_tr_dirty()
 		self._bump_state(tick=tick, action="tag_add", note=tag)
 
 	def remove_tag(self, tag: str, tick: int) -> None:
 		if tag not in self.tags:
 			return
 		self.tags.remove(tag)
+		self._mark_tr_dirty()
 		self._bump_state(tick=tick, action="tag_remove", note=tag)
+
+	def rb_should_route_to_tr(self) -> bool:
+		"""RB gate: TR routine is invoked iff tr_needs_update is true."""
+		return self.tr_needs_update
+
+	def run_tr_routine(
+		self,
+		tick: int,
+		*,
+		success: bool = True,
+		tr_payload: dict[str, object] | None = None,
+		error_note: str = "",
+	) -> bool:
+		"""Apply TR recompute with success/failure dirty-flag semantics.
+
+		Returns True when TR executed and committed, False otherwise.
+		"""
+		if not self.rb_should_route_to_tr():
+			return False
+
+		if success:
+			self.tr = dict(tr_payload or {"routing_semantics": "default"})
+			self.tr_needs_update = False
+			self._bump_state(tick=tick, action="tr_recompute_success")
+			return True
+
+		self.tr_needs_update = True
+		self._bump_state(tick=tick, action="tr_recompute_failure", note=error_note or "tr_failure")
+		return False
 
 	def split(self, tick: int, child_count: int = 2) -> list[ThoughtPoint]:
 		if child_count < 2:
@@ -294,10 +329,15 @@ class ThoughtPoint:
 			)
 		)
 
+	def _mark_tr_dirty(self) -> None:
+		self.tr_needs_update = True
+
 	def to_dict(self) -> dict[str, object]:
 		return {
 			"tp_id": self.tp_id,
 			"current_basin_id": self.current_basin_id,
+			"tr_needs_update": self.tr_needs_update,
+			"TR": dict(self.tr),
 			"entropy": self.entropy.as_dict(),
 			"embedding": self.embedding.tolist(),
 			"created_at_tick": self.created_at_tick,

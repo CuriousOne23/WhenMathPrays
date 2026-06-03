@@ -28,14 +28,14 @@ This module derives its constraints from the existing canonical requirement set 
 
 Existing requirement sources relevant to basin behavior:
 
-- `20.30_tp_requirements.md` â€” TP identity, lifecycle, and state rules
-- `20.50_observability_requirements.md` â€” logging, evidence, and replayability
-- `20.60_testing_and_validation.md` â€” deterministic-mode, negative-path, and verification rules
-- `20.90_interfaces_and_io.md` â€” IO schema, serialization, and interoperability
-- `20.120_stability_requirements.md` â€” stability and transition constraints
-- `20.140_program_flow.md` â€” system flow and phase-boundary rules
-- `../../30_verification/30.30_verification_glossary.md` â€” canonical verification terminology
-- `20.160_traceability_matrix.md` â€” requirement-to-test mapping obligations
+- `20.105_tp_requirements.md` - TP identity, lifecycle, and state rules
+- `20.40_ob_requirements.md` - logging, evidence, and replayability
+- `20.200_traceability_matrix.md` - deterministic-mode, negative-path, and verification rules
+- `20.90_ib_requirements.md` - IO schema, serialization, and interoperability
+- `20.170_safety_requirements.md` - stability and transition constraints
+- `20.30_ts_functional_model.md` - system flow and phase-boundary rules
+- `../../30_verification/30.30_verification_glossary.md` - canonical verification terminology
+- `20.200_traceability_matrix.md` - requirement-to-test mapping obligations
 
 Missing requirement coverage:
 - No basin-specific requirement document currently exists.

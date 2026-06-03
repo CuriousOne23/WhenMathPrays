@@ -1,21 +1,19 @@
-﻿# Verification Capsule
+# Verification Capsule
 
 ## Purpose
 
-Canonical verification report for `40.20_tp_lifecycle` after migration to the new unified verification structure.
-
-Legacy filename mentions in this document are retained only as historical migration notes for audit traceability.
+Canonical verification report for 40.20_tp_lifecycle after migration to the new unified verification structure.
 
 ## Glossary References
 
-- ../../30_verification/30.30_verification_glossary.md
-- 40.20_master_program_guide.md
+- verification_glossary.md
+- master_program_guide.md
 
 ## Run Record
 
-| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 40.20_tp_lifecycle | python harness.py | deterministic_mode=True; scenario_set=positive+negative | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12 | 00_program_governance/10_architecture/00.10.40_TS_state_machine.md; 00_program_governance/10_architecture/00.10.50_TS_data_model.md; 20_requirements/archive/20.60_testing_and_validation.md | Ã‚Â§3, Ã‚Â§8, Ã‚Â§13, Ã‚Â§14; Ã‚Â§3.1, Ã‚Â§6; Ã‚Â§4, Ã‚Â§7, Ã‚Â§12 | basin_id; entropy; embedding; created_at_tick; tick; d_rep; d_pred; d_struct; tp_id; state_counter; current_basin_id; history; tag; child_count; sources; provenance.parent_ids; provenance.split_children; provenance.merge_sources; deterministic_mode; deterministic_nonce | invalid_split_child_count; empty_merge_sources; embedding_mismatch_merge | Consolidated from pre-capsule records during migration; no evidence loss. |
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-06-03 | 40.20_tp_lifecycle | python harness.py | deterministic_mode=True; scenario_set=positive+negative+tr_dirty_flag | PASS | 0 | artifacts/tp_state.json; artifacts/determinism_run2.json; artifacts/determinism_run3.json | HLR-ARCH-07, HLR-ARCH-08, HLR-REQ-14, HLR-20.037-003, HLR-20.037-030, HLR-20.037-004, HLR-20.037-005 | LLR-T-OBS-01, LLR-T-LVL-02, LLR-T-DET-01, LLR-T-DET-04, LLR-SEC-14-12, LLR-TR-INIT-001, LLR-TR-GATE-001, LLR-TR-LC-001, LLR-TR-LC-002 | thought_simulator/00_program_governance/10_architecture/00.10.40_TS_state_machine.md; thought_simulator/00_program_governance/10_architecture/00.10.50_TS_data_model.md; thought_simulator/20_requirements/20.10_ts_architectural_principles.md; thought_simulator/20_requirements/20.30_ts_functional_model.md; thought_simulator/20_requirements/20.130_splitting_and_merging_requirements.md; thought_simulator/20_requirements/20.37_thought_router_tr_specification.md | §3, §8, §13, §14; §3.1, §6; HLR-20.010-001/017; HLR-20.030-013; HLR-20.130-001/002/025; §2.1/§3.3/§5.3/§7 | Migrated from legacy capsule fragments and extended with TR dirty-flag scenario evidence. |
 
 ## Positive Scenario Ledger
 
@@ -24,6 +22,10 @@ Legacy filename mentions in this document are retained only as historical migrat
 | creation_movement_entropy | PASS | HLR-ARCH-07 | LLR-T-OBS-01 | basin_id, entropy, embedding, created_at_tick, tick, d_rep, d_pred, d_struct -> tp_id, state_counter, current_basin_id, entropy, history | harness output + artifact |
 | tags_split_merge_provenance | PASS | HLR-ARCH-07 | LLR-T-LVL-02 | tag, tick, child_count, sources, basin_id -> tags, provenance.parent_ids, provenance.split_children, provenance.merge_sources, history, state_counter | harness output + artifact |
 | determinism_and_monotonicity | PASS | HLR-REQ-14 | LLR-T-DET-01,T-DET-04 | deterministic_mode, deterministic_nonce, basin_id, entropy, embedding, created_at_tick -> tp_id, state_counter, history | harness output + artifact |
+| tr_dirty_flag_initialization | PASS | HLR-20.037-003 | LLR-TR-INIT-001 | created_at_tick, deterministic_mode, deterministic_nonce -> tr_needs_update, RB gate decision | harness output + artifact |
+| rb_tr_gate_iff | PASS | HLR-20.037-030 | LLR-TR-GATE-001 | tr_needs_update, RB gate -> TR execution decision | harness output + artifact |
+| tr_success_clears_dirty_flag | PASS | HLR-20.037-004 | LLR-TR-LC-001 | semantic write update, tr_needs_update, TR payload -> tr_needs_update=false, TP.TR committed | harness output + artifact |
+| tr_failure_preserves_dirty_flag | PASS | HLR-20.037-005 | LLR-TR-LC-002 | semantic write, TR failure path -> tr_needs_update remains true | harness output + artifact |
 
 ## Negative-Path Coverage Ledger
 
@@ -73,11 +75,4 @@ Conclusion: deterministic identity and key lifecycle counters remained stable ac
 - seed_tp: persisted in artifacts/tp_state.json
 - merged_tp: persisted in artifacts/tp_state.json
 - children: persisted in artifacts/tp_state.json
-
-
-
-
-
-
-
 
