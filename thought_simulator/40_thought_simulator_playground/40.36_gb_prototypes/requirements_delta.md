@@ -22,6 +22,10 @@ to be promoted into canonical 30-layer verification artifacts after stabilizatio
 - `HLR-20.080-017`..`HLR-20.080-024`: supervisory modes, fallback behavior, and user-visible rationale.
 - `HLR-20.080-025`..`HLR-20.080-032`: auditability, replayability, and asynchronous evaluation.
 - `HLR-20.080-033`..`HLR-20.080-038`: IB governance, IB population supervision, IB promotion/OB decomposition, and append-only supervisory logs.
+- `HLR-20.080-023` / `HLR-20.080-024`: TCU fallback deterministically overrides event-type supervisory actions.
+  - Evidence: `tcu_fallback_safemode`, `ob_decomposition_reshape`, `cop_proposal_gating`
+  - Traceability: `tcu_usage`, `tcu_fallback`, `supervisory_action="SafeMode"`
+
 
 Concrete evidence references (e.g., `gb_verification_run_YYYY-MM-DD.json`) will be added after harness execution.
 
