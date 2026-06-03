@@ -46,6 +46,6 @@ This file records requirement-change proposals, implementer feedback, and migrat
 ## Migration Notes
 
 - Scheduler prototype now has a stable JSON contract shape and deterministic evidence artifact.
-- Scheduler exploratory verification IDs are aligned to canonical scheduler anchor IDs in `10_thought_simulator_req/10.40_scheduler_requirements.md`.
+- Scheduler exploratory verification IDs are aligned to canonical scheduler anchor IDs in `10_thought_simulator_req/50_design/10.50.40_scheduler_requirements.md`.
 - Future deltas should append evidence-backed updates rather than replacing this baseline record.
 
