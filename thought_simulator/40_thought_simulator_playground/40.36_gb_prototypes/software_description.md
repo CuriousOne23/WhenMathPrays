@@ -52,11 +52,13 @@ This prototype covers:
 This prototype does **not**:
 
 - mutate TP/MTP meaning‑construction state  
-- read OB/RB/TB/IB internal state  
-- perform semantic inference  
-- perform unbounded search  
-- use wall‑clock precedence  
+- read OB, RB, TB, IB, InB, or OuB internal state  
+- read MTP internal state (only lane‑local TP snapshots + MPs allowed)  
+- block TS execution  
+- perform unbounded or data‑dependent work  
+- use wall‑clock precedence for ordering  
 - bypass TS arbitration or safe‑boundary rules  
+- perform semantic inference or latent‑state reasoning  
 
 ---
 
@@ -64,14 +66,10 @@ This prototype does **not**:
 
 Primary normative sources:
 
-- `thought_simulator/20_requirements/20.10_ts_architectural_principles.md`  
-  - “GB SHALL perform global supervisory decisions, including inquiry gating, branching control, stability evaluation, drift/oscillation detection, and safety‑mode transitions.”  
-- `thought_simulator/20_requirements/20.20_ts_primitives.md`  
-  - “GB SHALL apply global constraints/policies deterministically and SHALL NOT bypass primitive interface contracts.”  
-- `thought_simulator/20_requirements/20.30_ts_functional_model.md`  
-  - TS→GB→TS supervisory flow, IB creation gating, IB evolution supervision, IB promotion, OB decomposition, safe‑boundary rules.  
-- `thought_simulator/20_requirements/20.80_gb_requirements.md`  
-  - Canonical GB requirement anchor: drift detection, supervisory actions, TCU envelope, fallback behavior, logging, inquiry governance.  
+- `thought_simulator/20_requirements/20.10_ts_architectural_principles.md` (esp. sections 1.8, 1.9, 1.10)
+- `thought_simulator/20_requirements/20.20_ts_primitives.md` (HLR‑20.020‑009)
+- `thought_simulator/20_requirements/20.30_ts_functional_model.md` (esp. sections 8.4–8.6)
+- `thought_simulator/20_requirements/20.80_gb_requirements.md` (full set)
 
 Secondary architectural sources:
 
@@ -104,14 +102,14 @@ Secondary architectural sources:
 
 ## GB does **not**:
 
+- read OB, RB, TB, IB, InB, or OuB **internal** state  
+- read MTP **internal** state (only lane‑local TP snapshots + MPs allowed)  
 - mutate TP/MTP meaning‑construction state  
-- read OB/RB/TB/IB internal state  
-- read MTP internal state  
 - block TS execution  
 - perform unbounded or data‑dependent work  
-- use wall‑clock precedence for ordering  
+- use wall‑clock precedence  
 - bypass TS arbitration or safe‑boundary rules  
-- perform semantic inference or latent‑state reasoning  
+- perform semantic inference  
 
 ---
 
@@ -147,7 +145,7 @@ Secondary architectural sources:
 # 6. Deterministic Invariants
 
 - identical effective input → identical supervisory outcome  
-- GB never mutates TP/MTP meaning‑construction state  
+- GB never mutates TP/MTP meaning‑construction state (supervisory actions only affect flow/control at safe boundaries)  
 - GB reads only lane‑local TP state and MPs  
 - GB operates asynchronously; TS never blocks waiting  
 - supervisory actions apply only at deterministic safe boundaries  
@@ -218,4 +216,3 @@ Before promotion from 40 to 30:
 - TCU envelope evidence  
 - completed `verification_capsule.md` and `requirements_delta.md`  
 - explicit HLR/LLR mapping to 20.80 and parent anchors  
-
