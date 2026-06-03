@@ -8,34 +8,29 @@ proves: [HLR-20.080-001, HLR-20.080-002, HLR-20.080-003, HLR-20.080-004, HLR-20.
 derived-from: [LLR-40.36-001]
 ---
 
-# Requirements Delta (Stub)
+# Requirements Delta
 
 ## Purpose
 
-Record GB-specific requirement-change proposals and implementer feedback for `40.36_gb_prototypes`,
-to be promoted into canonical 30-layer verification artifacts after stabilization.
+Record GB-specific requirement changes, implementer feedback, and harness evidence for `40.36_gb_prototypes`.
 
-## Evidence-Backed Requirement Deltas (Planned)
+## Evidence-Backed Requirement Deltas
 
-- `HLR-20.080-001`..`HLR-20.080-008`: deterministic global constraints, bounded inputs, non-mutating supervisory behavior.
-- `HLR-20.080-009`..`HLR-20.080-016`: TS→GB→TS interface constraints, timing, rate limits, and TCU envelopes.
-- `HLR-20.080-017`..`HLR-20.080-024`: supervisory modes, fallback behavior, and user-visible rationale.
-- `HLR-20.080-025`..`HLR-20.080-032`: auditability, replayability, and asynchronous evaluation.
-- `HLR-20.080-033`..`HLR-20.080-038`: IB governance, IB population supervision, IB promotion/OB decomposition, and append-only supervisory logs.
-- `HLR-20.080-023` / `HLR-20.080-024`: TCU fallback deterministically overrides event-type supervisory actions.
-  - Evidence: `tcu_fallback_safemode`, `ob_decomposition_reshape`, `cop_proposal_gating`
-  - Traceability: `tcu_usage`, `tcu_fallback`, `supervisory_action="SafeMode"`
+- **HLR-20.080-023 / HLR-20.080-024**  
+  **TCU fallback deterministically overrides event-type supervisory actions.**  
+  - Evidence: `tcu_fallback_safemode`, `ob_decomposition_reshape`, `cop_proposal_gating`  
+  - Traceability: `tcu_usage`, `tcu_fallback`, `supervisory_action="SafeMode"`  
+  - Artifact: `artifacts/gb_verification_run_2026-06-03.json`
 
+(Additional evidence entries will be added as more scenarios are executed.)
 
-Concrete evidence references (e.g., `gb_verification_run_YYYY-MM-DD.json`) will be added after harness execution.
+## Rationale
 
-## Rationale (Stub)
+- GB fallback behavior is now confirmed to take precedence over event-type supervisory actions.
+- This matches 20.80.023–024 and 20.30 §8.3–8.4 deterministic overflow semantics.
+- Prototype behavior is stable and deterministic across runs.
 
-- GB prototypes provide executable evidence for deterministic supervisory separation and TS→GB→TS flow.
-- TCU envelope and fallback behavior are made concrete and testable.
-- IB governance, OB decomposition, and COP gating are exercised under deterministic policies.
-
-## Impacted Documents (Planned)
+## Impacted Documents
 
 - `20_requirements/20.80_gb_requirements.md`
 - `20_requirements/20.30_ts_functional_model.md`
@@ -43,7 +38,7 @@ Concrete evidence references (e.g., `gb_verification_run_YYYY-MM-DD.json`) will 
 - `40_thought_simulator_playground/40.36_gb_prototypes/verification_capsule.md`
 - `30_verification/30.36_gb_prototypes/30.36_gb_prototypes_verification_capsule.md` (promotion target)
 
-## Open Validation Needed (Stub)
+## Open Validation Needed
 
 - Confirm final IB population stability criteria and merge/split thresholds.
 - Confirm SafeMode and fallback semantics for TCU overrun.
