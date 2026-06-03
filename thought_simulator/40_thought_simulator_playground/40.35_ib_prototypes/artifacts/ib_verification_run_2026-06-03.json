@@ -1,0 +1,192 @@
+{
+  "determinism_evidence": {
+    "active_ids_after_creation": [
+      "ib-001"
+    ],
+    "creation_digest": "4ae3fad6d20bf1be3629f9c7530063dffecd5c0e6a4ad053b2ac8d45639e0374",
+    "pending_requests_after_creation": 0
+  },
+  "module": "40.35_ib_prototypes",
+  "requirements_anchors": [
+    "thought_simulator/20_requirements/20.90_ib_requirements.md",
+    "thought_simulator/20_requirements/20.30_ts_functional_model.md",
+    "thought_simulator/20_requirements/20.80_gb_requirements.md",
+    "thought_simulator/20_requirements/20.150_tcu_budgeting_requirements.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md"
+  ],
+  "run_command": "python harness.py",
+  "run_timestamp_utc": "2026-06-03T15:55:35.465465+00:00",
+  "scenarios": [
+    {
+      "detail": "Asynchronous GB approval creates IB state only from approved pending inquiry snapshots.",
+      "hlr_ref": "HLR-20.090-006",
+      "io_fields": "snapshot_id, request_id, decision, gb_reference -> pending_requests, active_ibs",
+      "llr_ref": "LLR-IB-CREATE-001",
+      "name": "async_creation_approval",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 6, 32, 33",
+      "status": "PASS"
+    },
+    {
+      "detail": "Deterministic inquiry evolution updates bounded state and appends TP-visible lifecycle tags at safe boundary.",
+      "hlr_ref": "HLR-20.090-008",
+      "io_fields": "ib_id, hypothesis_delta, evidence_request_delta, depth_increment -> hypotheses, pending_evidence_requests, tp_log",
+      "llr_ref": "LLR-IB-EVOLVE-001",
+      "name": "deterministic_evolution_tp_tagging",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 8, 14, 35, 36, 37, 38",
+      "status": "PASS"
+    },
+    {
+      "detail": "Deterministic split and merge lifecycle transitions preserve auditable lineage under GB control.",
+      "hlr_ref": "HLR-20.090-021",
+      "io_fields": "ib_id, child_suffixes, source_ib_ids, merged_ib_id -> active_ibs, retired_ibs, branch_state",
+      "llr_ref": "LLR-IB-LC-001",
+      "name": "split_merge_lifecycle",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 19, 21, 22",
+      "status": "PASS"
+    },
+    {
+      "detail": "Promotion and retirement remain GB-mediated, safe-boundary applied, and audit-visible without direct OB mutation.",
+      "hlr_ref": "HLR-20.090-023",
+      "io_fields": "ib_id, oub_output_id, gb_reference -> promoted_outputs, retired_ibs",
+      "llr_ref": "LLR-IB-PROM-001",
+      "name": "promote_and_retire",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 23, 24, 25, 26",
+      "status": "PASS"
+    },
+    {
+      "detail": "Direct OuB routing bypass is deterministically rejected.",
+      "hlr_ref": "HLR-20.090-007",
+      "io_fields": "source_channel -> reject reason_code",
+      "llr_ref": "LLR-IB-REJ-001",
+      "name": "negative_direct_oub_bypass",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirement 7",
+      "status": "PASS"
+    },
+    {
+      "detail": "IB evolution outside a deterministic safe boundary was rejected.",
+      "hlr_ref": "HLR-20.090-020",
+      "io_fields": "safe_boundary, event_type -> reject reason_code",
+      "llr_ref": "LLR-IB-SAFE-001",
+      "name": "negative_safe_boundary_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 20, 38",
+      "status": "PASS"
+    },
+    {
+      "detail": "Out-of-order IB lifecycle transition was rejected with deterministic reason code.",
+      "hlr_ref": "HLR-20.090-019",
+      "io_fields": "sequence -> reject reason_code",
+      "llr_ref": "LLR-IB-SEQ-001",
+      "name": "negative_sequence_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
+      "req_section": "Normative Requirements 19, 34, 38",
+      "status": "PASS"
+    }
+  ],
+  "state_snapshots": {
+    "creation_snapshot": {
+      "active_ibs": [
+        {
+          "branch_state": [],
+          "depth_state": 0,
+          "gb_approval_reference": "gb-ref-ib-001",
+          "hypotheses": [
+            "h1"
+          ],
+          "ib_id": "ib-001",
+          "lineage": [
+            "ibr:deecfe046b17"
+          ],
+          "origin_snapshot": "snap-a",
+          "partial_interpretations": [],
+          "pending_evidence_requests": [
+            "ask_user"
+          ],
+          "status": "active",
+          "tp_log": [
+            {
+              "details": {
+                "request_id": "ibr:deecfe046b17"
+              },
+              "event_type": "IB_CREATED",
+              "gb_reference": "gb-ref-ib-001",
+              "ib_id": "ib-001",
+              "profile_signature": "P1",
+              "reason_code": "IB_OK_102_REQUEST_APPROVED",
+              "safe_boundary": true,
+              "tp_seq": 2
+            }
+          ],
+          "triggering_ob_ids": [
+            "ob-1",
+            "ob-2"
+          ]
+        }
+      ],
+      "audit_log": [
+        {
+          "details": {
+            "contract_version": "1.0",
+            "profile_signature": "P1"
+          },
+          "event_type": "create",
+          "reason_code": "IB_OK_000_CREATED",
+          "sequence": 0,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "request_id": "ibr:deecfe046b17",
+            "snapshot_id": "snap-a",
+            "triggering_ob_ids": [
+              "ob-1",
+              "ob-2"
+            ]
+          },
+          "event_type": "request_create",
+          "reason_code": "IB_OK_101_REQUEST_CREATED",
+          "sequence": 1,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "gb_reference": "gb-ref-ib-001",
+            "ib_id": "ib-001",
+            "request_id": "ibr:deecfe046b17"
+          },
+          "event_type": "gb_decision",
+          "reason_code": "IB_OK_102_REQUEST_APPROVED",
+          "sequence": 2,
+          "status": "ACCEPT"
+        }
+      ],
+      "contract_version": "1.0",
+      "module": "40.35_ib_prototypes",
+      "pending_requests": [],
+      "profile_signature": "P1",
+      "promoted_outputs": [],
+      "retired_ibs": [],
+      "sequence": 2,
+      "verification_digest": "4ae3fad6d20bf1be3629f9c7530063dffecd5c0e6a4ad053b2ac8d45639e0374"
+    }
+  },
+  "summary": {
+    "failed": 0,
+    "overall_status": "PASS",
+    "passed": 7,
+    "total_scenarios": 7
+  }
+}
