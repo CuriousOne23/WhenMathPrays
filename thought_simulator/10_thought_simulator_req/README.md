@@ -2,17 +2,33 @@
 
 This directory is the formal requirement-anchor layer used to realize architecture and coding contracts after direction-controlled flow from 20/40.
 
+## Internal Series Directories
+
+All numbered series directories in this layer are subdirectories under `10_thought_simulator_req/`:
+
+- `10_system_architecture/` = system architecture
+- `20_requirements/` = requirements
+- `30_verification/` = verification
+- `40_playground/` = playground
+- `50_design/` = design
+- `60_review/` = review
+- `70_measurement/` = measurement
+- `80_safety/` = safety
+- `90_validation/` = validation
+
+The `10.50.xx` files are stored in `50_design/`.
+
 ## Canonical Anchors
 
-- [10.10_math_requirements.md](10.10_math_requirements.md)
-- [10.20_tp_requirements.md](10.20_tp_requirements.md)
-- [10.30_basin_requirements.md](10.30_basin_requirements.md)
-- [10.40_scheduler_requirements.md](10.40_scheduler_requirements.md)
-- [10.50_regulator_requirements.md](10.50_regulator_requirements.md)
-- [10.60_tick_cycle_requirements.md](10.60_tick_cycle_requirements.md)
-- [10.70_snapshot_requirements.md](10.70_snapshot_requirements.md)
-- [10.80_event_log_requirements.md](10.80_event_log_requirements.md)
-- [10.90_experiment_runner_requirements.md](10.90_experiment_runner_requirements.md)
+- [50_design/10.50.10_math_requirements.md](50_design/10.50.10_math_requirements.md)
+- [50_design/10.50.20_tp_requirements.md](50_design/10.50.20_tp_requirements.md)
+- [50_design/10.50.30_basin_requirements.md](50_design/10.50.30_basin_requirements.md)
+- [50_design/10.50.40_scheduler_requirements.md](50_design/10.50.40_scheduler_requirements.md)
+- [50_design/10.50.50_regulator_requirements.md](50_design/10.50.50_regulator_requirements.md)
+- [50_design/10.50.60_tick_cycle_requirements.md](50_design/10.50.60_tick_cycle_requirements.md)
+- [50_design/10.50.70_snapshot_requirements.md](50_design/10.50.70_snapshot_requirements.md)
+- [50_design/10.50.80_event_log_requirements.md](50_design/10.50.80_event_log_requirements.md)
+- [50_design/10.50.90_experiment_runner_requirements.md](50_design/10.50.90_experiment_runner_requirements.md)
 
 ## Governance Artifacts
 
