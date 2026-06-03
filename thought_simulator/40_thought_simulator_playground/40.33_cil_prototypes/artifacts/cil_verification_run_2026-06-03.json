@@ -1,0 +1,184 @@
+{
+  "determinism_evidence": {
+    "fifo_snapshot_digest": "6feb3d58a865e67256974d6cd285629fd208677407f75014e26856bb67e6a1af",
+    "integrated_order": [
+      "pkt-001",
+      "pkt-002"
+    ],
+    "queue_empty_after_fifo": true
+  },
+  "module": "40.33_cil_prototypes",
+  "requirements_anchors": [
+    "thought_simulator/20_requirements/20.33_cil_requirements.md",
+    "thought_simulator/20_requirements/20.30_ts_functional_model.md",
+    "thought_simulator/20_requirements/20.10_ts_architectural_principles.md",
+    "thought_simulator/20_requirements/20.80_gb_requirements.md",
+    "thought_simulator/20_requirements/20.150_tcu_budgeting_requirements.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md",
+    "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md"
+  ],
+  "run_command": "python harness.py",
+  "run_timestamp_utc": "2026-06-03T15:05:58.685691+00:00",
+  "scenarios": [
+    {
+      "detail": "FIFO-preserving intake and snapshot coherence validated.",
+      "hlr_ref": "HLR-20.032-001",
+      "io_fields": "packet_id, snapshot_id, sequence, safe_boundary -> integrated_packets ordering",
+      "llr_ref": "LLR-CIL-FIFO-001",
+      "name": "fifo_snapshot_coherence",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 1, 2, 22",
+      "status": "PASS"
+    },
+    {
+      "detail": "Deterministic escalation, timeout default, and late-approval re-entry behavior validated.",
+      "hlr_ref": "HLR-20.032-006",
+      "io_fields": "confidence, request_id, decision, safe_boundary -> escalation_requests status, integrated_packets",
+      "llr_ref": "LLR-CIL-GB-001",
+      "name": "classification_escalation_gb_flow",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 6, 7, 23",
+      "status": "PASS"
+    },
+    {
+      "detail": "Execution-signature profile controls behavior; environment defaults remain non-authoritative.",
+      "hlr_ref": "HLR-20.032-012",
+      "io_fields": "active_profile, env_default_profile, confidence -> escalation behavior and profile state",
+      "llr_ref": "LLR-CIL-PROF-001",
+      "name": "profile_precedence_signature_over_env_default",
+      "negative_path": "NO",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 12, 13",
+      "status": "PASS"
+    },
+    {
+      "detail": "Out-of-order sequence rejected with deterministic reason code.",
+      "hlr_ref": "HLR-20.032-014",
+      "io_fields": "sequence -> reject reason_code",
+      "llr_ref": "LLR-CIL-SEQ-001",
+      "name": "negative_sequence_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 14, 22",
+      "status": "PASS"
+    },
+    {
+      "detail": "Routing/escalation-affecting transition outside safe boundary was rejected.",
+      "hlr_ref": "HLR-20.032-015",
+      "io_fields": "safe_boundary, event_type -> reject reason_code",
+      "llr_ref": "LLR-CIL-SAFE-001",
+      "name": "negative_safe_boundary_violation",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirement 15",
+      "status": "PASS"
+    },
+    {
+      "detail": "Direct inquiry channel bypass rejected without GB approval.",
+      "hlr_ref": "HLR-20.032-005",
+      "io_fields": "request_channel -> reject reason_code",
+      "llr_ref": "LLR-CIL-GB-002",
+      "name": "negative_direct_inquiry_bypass",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 5, 18",
+      "status": "PASS"
+    },
+    {
+      "detail": "Unsupported profile rejected with fixed deterministic reason code.",
+      "hlr_ref": "HLR-20.032-011",
+      "io_fields": "profile -> reject reason_code",
+      "llr_ref": "LLR-CIL-REJ-001",
+      "name": "negative_unsupported_profile",
+      "negative_path": "YES",
+      "req_doc": "thought_simulator/20_requirements/20.33_cil_requirements.md",
+      "req_section": "Normative Requirements 11, 20, 21",
+      "status": "PASS"
+    }
+  ],
+  "state_snapshots": {
+    "fifo_snapshot": {
+      "active_profile": "P1",
+      "audit_log": [
+        {
+          "details": {
+            "contract_version": "1.0"
+          },
+          "event_type": "create",
+          "reason_code": "CIL_OK_000_CREATED",
+          "sequence": 0,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "packet_id": "pkt-001",
+            "snapshot_id": "snap-a"
+          },
+          "event_type": "ingest",
+          "reason_code": "CIL_OK_101_INGESTED",
+          "sequence": 1,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "packet_id": "pkt-002",
+            "snapshot_id": "snap-a"
+          },
+          "event_type": "ingest",
+          "reason_code": "CIL_OK_101_INGESTED",
+          "sequence": 2,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "classification": "integrate",
+            "packet_id": "pkt-001"
+          },
+          "event_type": "process_next",
+          "reason_code": "CIL_OK_103_INTEGRATED",
+          "sequence": 3,
+          "status": "ACCEPT"
+        },
+        {
+          "details": {
+            "classification": "integrate",
+            "packet_id": "pkt-002"
+          },
+          "event_type": "process_next",
+          "reason_code": "CIL_OK_103_INTEGRATED",
+          "sequence": 4,
+          "status": "ACCEPT"
+        }
+      ],
+      "contract_version": "1.0",
+      "env_default_profile": "P2",
+      "escalation_requests": [],
+      "integrated_packets": [
+        {
+          "classification": "integrate",
+          "packet_id": "pkt-001",
+          "profile": "P1",
+          "snapshot_id": "snap-a"
+        },
+        {
+          "classification": "integrate",
+          "packet_id": "pkt-002",
+          "profile": "P1",
+          "snapshot_id": "snap-a"
+        }
+      ],
+      "module": "40.33_cil_prototypes",
+      "pending_queue": [],
+      "sequence": 4,
+      "verification_digest": "6feb3d58a865e67256974d6cd285629fd208677407f75014e26856bb67e6a1af"
+    }
+  },
+  "summary": {
+    "failed": 0,
+    "overall_status": "PASS",
+    "passed": 7,
+    "total_scenarios": 7
+  }
+}
