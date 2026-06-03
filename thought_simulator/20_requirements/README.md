@@ -28,6 +28,8 @@ This directory is the main authoring workspace for requirement intent, with down
 - [20.70_mb_requirements.md](20.70_mb_requirements.md)
 - [20.80_gb_requirements.md](20.80_gb_requirements.md)
 - [20.90_ib_requirements.md](20.90_ib_requirements.md)
+- [20.90_ts_parameter_table.md](20.90_ts_parameter_table.md)
+- [20.95_ts_numeric_policy.md](20.95_ts_numeric_policy.md)
 - [20.100_inb_requirements.md](20.100_inb_requirements.md)
 - [20.105_tp_requirements.md](20.105_tp_requirements.md)
 - [20.110_oub_requirements.md](20.110_oub_requirements.md)
