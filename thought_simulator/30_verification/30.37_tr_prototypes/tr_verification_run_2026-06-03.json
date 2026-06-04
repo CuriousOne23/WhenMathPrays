@@ -1,0 +1,50 @@
+{
+  "run_id": "tr_verification_run_2026-06-03",
+  "timestamp": "2026-06-03T18:00:00Z",
+  "prototype_version": "0.1",
+  "layer": "30.37_promoted",
+  "total_tests": 4,
+  "passed_tests": 4,
+  "results": [
+    {
+      "test_id": "TC001",
+      "input": {"content": "Calculate the integral of x^2"},
+      "output": {"route": "math_basin", "priority": "high", "delta_h": 0.15},
+      "expected_route": "math_basin",
+      "expected_delta_h": 0.15,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "overall_passed": true
+    },
+    {
+      "test_id": "TC002",
+      "input": {"content": "Think about the meaning of existence"},
+      "output": {"route": "thought_basin", "priority": "medium", "delta_h": 0.08},
+      "expected_route": "thought_basin",
+      "expected_delta_h": 0.08,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "overall_passed": true
+    },
+    {
+      "test_id": "TC003",
+      "input": {"content": "What is the weather like?"},
+      "output": {"route": "general_basin", "priority": "low", "delta_h": 0.05},
+      "expected_route": "general_basin",
+      "expected_delta_h": 0.05,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "overall_passed": true
+    },
+    {
+      "test_id": "TC004",
+      "input": {"content": "Explain quantum entanglement mathematically"},
+      "output": {"route": "math_basin", "priority": "high", "delta_h": 0.15},
+      "expected_route": "math_basin",
+      "expected_delta_h": 0.15,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "overall_passed": true
+    }
+  ]
+}
