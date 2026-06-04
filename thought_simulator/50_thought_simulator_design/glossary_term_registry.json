@@ -1,0 +1,26 @@
+{
+  "protected_terms": [
+    "governing basin (gb)",
+    "signal monitor",
+    "signal packet",
+    "supervisory integrator",
+    "boundary enforcer",
+    "safe boundary",
+    "supervisory action",
+    "intervention frequency",
+    "supervisory decision"
+  ],
+  "required_by_module": {
+    "50.36_gb_design_spec.md": [
+      "governing basin (gb)",
+      "signal monitor",
+      "signal packet",
+      "supervisory integrator",
+      "boundary enforcer",
+      "safe boundary",
+      "supervisory action",
+      "intervention frequency",
+      "supervisory decision"
+    ]
+  }
+}
