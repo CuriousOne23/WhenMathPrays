@@ -8,30 +8,36 @@
 ## Execution Summary
 
 - **Prototype:** `prototype.py` (deterministic router)
-- **Harness:** `harness.py` (4 test cases)
+- **Harness:** `harness.py` (4 test cases with route + ΔH% validation)
 - **Artifact Generated:** `tr_verification_run_2026-06-03.json`
-- **Tests Passed:** 4/4
+- **Tests Passed:** 4/4 (both route and ΔH%)
 
 ## Key Evidence
 
-The harness executed successfully and produced the verification artifact. All routing decisions were deterministic and matched expected behavior per the current 20.37 specification.
+The harness executed successfully with strengthened validation. Both routing decisions and ΔH% assignments were verified as deterministic and correct.
 
 ### Test Results Summary
-- TC001 (Math input) → Routed to `math_basin` ✓
-- TC002 (Thought input) → Routed to `thought_basin` ✓
-- TC003 (General input) → Routed to `general_basin` ✓
-- TC004 (Mixed math input) → Routed to `math_basin` ✓
+
+- **TC001** → `math_basin` + ΔH% = 0.15 ✓
+- **TC002** → `thought_basin` + ΔH% = 0.08 ✓
+- **TC003** → `general_basin` + ΔH% = 0.05 ✓
+- **TC004** → `math_basin` + ΔH% = 0.15 ✓
 
 ## Observations
 
-- Routing logic is simple rule-based and fully deterministic.
+- Routing logic remains simple, rule-based, and fully deterministic.
+- ΔH% values are now explicitly validated in every test case.
 - No randomness or non-deterministic behavior present.
-- ΔH% values are assigned consistently.
-- Module respects separation of concerns (routing only, no meaning construction).
+- Module strictly respects separation of concerns (routing only).
 
-## Next Steps (per CP guidance)
+## Improvements from Previous Version
 
-- Await architectural review.
-- If approved, this capsule will serve as baseline evidence for future iterations.
+- Added ΔH% validation in harness as recommended by CP.
+- Verification now checks both route correctness and energy delta consistency.
+
+## Next Steps
+
+- Ready for CP architectural review.
+- Eligible for promotion to 30-layer integration if approved.
 
 ---
