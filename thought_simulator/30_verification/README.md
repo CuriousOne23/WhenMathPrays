@@ -9,6 +9,8 @@ contains:
 
 This folder is the authoritative verification tier for Thought Simulator modules.
 
+The detailed process, naming conventions, required artifacts (verification capsules, requirements deltas, JSON run artifacts), three-flow requirements, and promotion standards are defined in `30.00_verification_user_guide.md`.
+
 ## Purpose
 
 - store promoted verification capsules

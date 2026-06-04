@@ -20,7 +20,7 @@ into canonical layers:
 
 - `10_thought_simulator_req` (canonical requirements)
 - `50_thought_simulator_design` (canonical design)
-- `30_verification` (canonical evidence)
+- `30_verification` (canonical evidence; see `../../30_verification/30.00_verification_user_guide.md` for the detailed process, required artifacts, and three-flow rules)
 
 This protocol is governance policy. It is not a requirement specification.
 

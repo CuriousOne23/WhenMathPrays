@@ -42,11 +42,18 @@ This workflow applies to edits under:
 4. Update glossary or README surfaces when terminology or structure changes.
 - If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
 - If requirements-tier terminology changes, update `20_requirements/archive/20.150_glossary.md` and `20_requirements/glossary_term_registry.json` in the same change.
+- For 50-series design terminology (especially new concepts introduced in design specs), update `50_thought_simulator_design/50.01_50_series_glossary.md` and `50_thought_simulator_design/glossary_term_registry.json`.
 - `20.150_glossary.md` is scoped to `20_requirements/` documents.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
 - Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
 
+**50-series glossary helper scripts** (in `thought_simulator/scripts/`):
+- `validate_50_glossary_alignment.py`: Non-blocking CI check that runs on changes to 50 design `.md` files (and the glossary/registry itself). It warns when the glossary and registry are out of alignment or when new candidate terms are observed in design documents. This provides visibility ("we should know") without blocking merges.
+- `update_50_glossary.py`: Local helper tool to analyze current 50 design documents against the glossary and registry. It produces a report of drift and concrete proposals (terms to add, suggested registry entries). By default it only prints; use `--write-proposals` to generate reviewable `PROPOSED_*` files. **It never auto-edits** the real glossary or registry. The goal is to reduce token usage by doing mechanical scanning and proposal generation locally or via terminal, while keeping full human control over what gets updated. Run it when working in 50-series design to stay efficient.
+
 5. Run the doc validation suite before opening a PR.
+
+   The detailed rules for what must be produced in `30_verification/` (verification capsules, requirements deltas, run artifacts, three-flow statements) are in `30_verification/30.00_verification_user_guide.md`.
 
 ## Pre-PR Validation Command
 
@@ -58,6 +65,9 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_readme_coverage.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_readme_links.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_glossary_alignment.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_requirements_glossary_alignment.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_50_glossary_alignment.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/update_50_glossary.py ; \   # optional but recommended when actively editing 50 design docs (generates proposals only)
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/check_doc_dependencies.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_doc_frontmatter_and_ids.py --require-frontmatter --strict-ids ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_relation_semantics.py ; \
@@ -68,6 +78,7 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 
 - `10_thought_simulator_req/docs/promotion_protocol.md`
 - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`
+- `30_verification/30.00_verification_user_guide.md` (verification process, artifact standards, and three-flow rules)
 - `30_verification/30.30_verification_glossary.md`
 
 ## Pull Request Checklist

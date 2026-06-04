@@ -13,6 +13,9 @@ on:
       - "thought_simulator/scripts/validate_requirements_glossary_alignment.py"
       - "thought_simulator/scripts/validate_requirements_glossary_scope.py"
       - "thought_simulator/20_requirements/glossary_term_registry.json"
+      - "thought_simulator/50_thought_simulator_design/50.01_50_series_glossary.md"
+      - "thought_simulator/50_thought_simulator_design/glossary_term_registry.json"
+      - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
@@ -31,6 +34,9 @@ on:
       - "thought_simulator/scripts/validate_requirements_glossary_alignment.py"
       - "thought_simulator/scripts/validate_requirements_glossary_scope.py"
       - "thought_simulator/20_requirements/glossary_term_registry.json"
+      - "thought_simulator/50_thought_simulator_design/50.01_50_series_glossary.md"
+      - "thought_simulator/50_thought_simulator_design/glossary_term_registry.json"
+      - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
@@ -213,6 +219,9 @@ jobs:
 
       - name: Run 20 glossary scope warning check (non-blocking)
         run: python thought_simulator/scripts/validate_requirements_glossary_scope.py
+
+      - name: Run 50 glossary alignment warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_50_glossary_alignment.py
 
       - name: Run README link validation
         run: python thought_simulator/scripts/validate_readme_links.py

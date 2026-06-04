@@ -35,7 +35,7 @@ Use these roles consistently:
 - `thought_simulator/20_requirements/`:
   requirements, normative "what TS must be", and traceable HLRs
 - `thought_simulator/30_verification/`:
-  verification of the design, review, and evidence that the design is sound
+  verification of the design, review, and evidence that the design is sound (see `30.00_verification_user_guide.md` for the standard process, artifact templates, and three-flow requirements)
 - `thought_simulator/40_thought_simulator_playground/`:
   playground, experiments, exploratory work, and interactive prototyping
 - `thought_simulator/50_thought_simulator_design/`:
@@ -117,7 +117,7 @@ Source edits:
 - <list files under 20_requirements and/or 40_thought_simulator_playground>
 Targets:
 - 10_thought_simulator_req
-- 30_verification
+- 30_verification (see `30.00_verification_user_guide.md` for the full verification process, artifact requirements, and three-flow rules)
 - 50_thought_simulator_design
 Requirements:
 - preserve IDs unless explicitly approved for change
@@ -419,6 +419,7 @@ CI should enforce the following:
 3. All required governance files referenced by this guide exist:
    - `thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md`
    - `thought_simulator/30_verification/README.md`
+   - `thought_simulator/30_verification/30.00_verification_user_guide.md`
    - `thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md`
@@ -431,6 +432,7 @@ CI should enforce the following:
   - `30_verification/30.30_verification_glossary.md`
   - `30_verification/glossary_term_registry.json`
   - `50_thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `50_thought_simulator_design/`)
+  Note: The 50-series glossary (`50.01_50_series_glossary.md` + registry) is under CI warning checks (non-blocking) so the team is notified of potential freshness issues, but updates are decided by humans rather than enforced.
 7. If a PR introduces broken markdown file references or broken markdown heading anchors in governed docs, CI must fail.
   - Governance policy note: this failing check is a red warning signal by default and is merge-blocking only when configured as a required status check in repository branch-protection/ruleset settings.
 
