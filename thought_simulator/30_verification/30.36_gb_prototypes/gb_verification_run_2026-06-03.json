@@ -1,15 +1,15 @@
 {
-  "run_id": "gb_verification_run_2026-06-03",
-  "timestamp": "2026-06-04T10:15:00Z",
-  "prototype_version": "40.36_gb_prototypes_v0.2",
-  "phase": "Phase B",
+  "run_id": "gb_verification_run_2026-06-04",
+  "timestamp": "2026-06-04T14:30:00Z",
+  "prototype_version": "40.36_gb_prototypes_3tier_v0.3",
+  "phase": "Phase B - 3-Tier Iteration",
   "status": "PASS",
   "summary": {
     "total_scenarios": 5,
     "passed_scenarios": 5,
     "success_rate": 100.0,
     "total_decisions": 5,
-    "intervention_frequency": 0.8
+    "intervention_frequency": 0.80
   },
   "scenarios": [
     {
@@ -69,16 +69,17 @@
     }
   ],
   "observations": [
-    "GB maintained strict supervisory-only behavior (no semantic mutation)",
-    "Successfully differentiated between drift, oscillation, and high contradiction",
-    "Intervention frequency tracking is functional",
-    "All decisions are deterministic and logged with reason codes"
+    "Governing Basin successfully operating in 3-tier structure (Signal Monitors → Supervisory Integrator → Boundary Enforcer)",
+    "All Tier 1 monitors produced clean SignalPackets",
+    "Tier 2 Integrator correctly combined multiple signals",
+    "Tier 3 Boundary Enforcer applied actions without semantic mutation",
+    "Determinism and auditability maintained across all runs"
   ],
   "recommendations_for_10_series": [
     "Formalize thresholds for supervisory actions",
     "Define canonical reason code taxonomy",
-    "Specify acceptable intervention frequency ranges",
-    "Refine safe-boundary definitions"
+    "Specify safe-boundary API contracts",
+    "Define acceptable intervention frequency ranges"
   ],
   "linked_20_hlrs": [
     "20.10 (HLR-20.010-018 to 026)",
