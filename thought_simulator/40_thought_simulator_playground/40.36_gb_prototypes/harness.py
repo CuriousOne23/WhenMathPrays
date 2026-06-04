@@ -1,79 +1,61 @@
+# 40.36_gb_prototypes/harness.py
 """
-40.36_gb_prototypes / harness.py
-
-Deterministic harness for GlobalBasinPrototype.
-
-Goal:
-- Exercise positive and negative supervisory scenarios.
-- Emit JSON-like records suitable for 30-layer verification capsules.
+Test Harness for GB Prototype (Phase B)
+Focus: Explore key scenarios from 20-series
 """
 
-import json
-from typing import Any, Dict, List
+from prototype import GlobalBrainPrototype
 
-from prototype import GlobalBasinPrototype, GBConfig
-
-
-def make_event(
-    event_type: str,
-    sequence: int,
-    safe_boundary: bool,
-    request_class: str = "unknown",
-    extra: Dict[str, Any] | None = None,
-) -> Dict[str, Any]:
-    event: Dict[str, Any] = {
-        "event_type": event_type,
-        "sequence": sequence,
-        "safe_boundary": safe_boundary,
-        "request_class": request_class,
-        "tp_lane_state": {"stub": True},
-        "mp_state": {"stub": True},
+def create_test_snapshot(scenario: str) -> dict:
+    """Create synthetic global state snapshots for testing."""
+    snapshots = {
+        "stable": {
+            "delta_h_trend": 0.35,
+            "active_ib_count": 8,
+            "oscillation_flag": False,
+            "contradiction_level": 0.1
+        },
+        "high_drift": {
+            "delta_h_trend": 0.92,
+            "active_ib_count": 12,
+            "oscillation_flag": True,
+            "contradiction_level": 0.6
+        },
+        "high_population": {
+            "delta_h_trend": 0.55,
+            "active_ib_count": 32,
+            "oscillation_flag": False,
+            "contradiction_level": 0.4
+        },
+        "messy_input": {
+            "delta_h_trend": 0.78,
+            "active_ib_count": 15,
+            "oscillation_flag": True,
+            "contradiction_level": 0.85
+        }
     }
-    if extra:
-        event.update(extra)
-    return event
+    return snapshots.get(scenario, snapshots["stable"])
 
 
-def run_scenarios() -> List[Dict[str, Any]]:
-    gb = GlobalBasinPrototype(GBConfig())
-    results: List[Dict[str, Any]] = []
+def run_gb_harness():
+    gb = GlobalBrainPrototype()
+    scenarios = ["stable", "high_drift", "high_population", "messy_input"]
 
-    scenarios = [
-        ("async_inquiry_approval", make_event("inquiry_request", 1, True)),
-        ("ib_promotion_approval", make_event("ib_promotion", 2, True)),
-        ("ob_decomposition_reshape", make_event("ob_decomposition", 3, True)),
-        ("cop_proposal_gating", make_event("cop_proposal", 4, True)),
-        ("unsafe_boundary_defer", make_event("inquiry_request", 5, False)),
-        ("tcu_fallback_safemode", make_event("supervisory_signal", 100, True)),
-    ]
+    print("=== GB Prototype Test Harness ===\n")
 
-    for scenario_name, event in scenarios:
-        decision = gb.process_event(event)
-        results.append(
-            {
-                "scenario": scenario_name,
-                "event": event,
-                "decision": {
-                    "supervisory_action": decision.supervisory_action,
-                    "action_rationale": decision.action_rationale,
-                    "request_class": decision.request_class,
-                    "applied_bounds": decision.applied_bounds,
-                    "execution_diagnostics": decision.execution_diagnostics,
-                    "supervisory_log_entry": decision.supervisory_log_entry,
-                    "gb_reference": decision.gb_reference,
-                },
-            }
-        )
+    for scenario in scenarios:
+        snapshot = create_test_snapshot(scenario)
+        print(f"Scenario: {scenario.upper()}")
+        print(f"  Snapshot: {snapshot}")
 
-    return results
+        decision = gb.evaluate_supervisory_state(snapshot, cycle_number=42)
+        
+        print(f"  → GB Decision: {decision.action} "
+              f"({decision.reason_code}, conf={decision.confidence:.2f})")
+        print("-" * 50)
 
-
-def main() -> None:
-    results = run_scenarios()
-    # Deterministic artifact for 30-layer verification.
-    print(json.dumps({"gb_verification_run": results}, indent=2, sort_keys=True))
+    print(f"\nTotal supervisory decisions logged: {len(gb.get_supervisory_log())}")
 
 
 if __name__ == "__main__":
-    main()
-
+    run_gb_harness()

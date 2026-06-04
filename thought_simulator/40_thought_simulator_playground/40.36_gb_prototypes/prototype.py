@@ -1,226 +1,86 @@
+# 40.36_gb_prototypes/prototype.py  
 """
-40.36_gb_prototypes / prototype.py
-
-Deterministic Global Basin (GB) prototype.
-
-Constraints (from software_description.md):
-- Non-mutating: does NOT change TP/MTP meaning-construction state.
-- Reads only lane-local TP snapshots + MPs (no OB/RB/TB/IB/InB/OuB internal state).
-- Applies supervisory actions only at deterministic safe boundaries.
-- Operates within a bounded TCU envelope with deterministic fallback.
+Global Brain (GB) Prototype - Phase B
+Non-mutating supervisory subsystem only.
 """
 
+from typing import Dict, List, Any, Tuple
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Tuple
 
-
-@dataclass(frozen=True)
-class GBConfig:
-    """Deterministic configuration for GB behavior."""
-    tcu_min: int = 1
-    tcu_typ: int = 3
-    tcu_max: int = 5
-    # Future: drift thresholds, oscillation windows, IB population limits, etc.
+# TODO: Import from shared modules once defined in 40-series core
+# from core.structures import MTP, IB, SupervisoryAction
 
 
 @dataclass
-class GBDecision:
-    """Deterministic supervisory decision object."""
-    supervisory_action: str
-    action_rationale: str
-    request_class: str
-    applied_bounds: Dict[str, Any]
-    execution_diagnostics: Dict[str, Any]
-    supervisory_log_entry: Dict[str, Any]
-    gb_reference: str
+class SupervisoryDecision:
+    action: str                  # e.g., "Stop", "Slow", "Dampen", etc.
+    reason_code: str
+    confidence: float
+    affected_components: List[str]
+    timestamp: int               # cycle number
 
 
-class GlobalBasinPrototype:
+class GlobalBrainPrototype:
     """
-    Deterministic GB prototype.
-
-    Public contract:
-    - process_event(event: dict) -> GBDecision
-    - No mutation of TP/MTP meaning-construction state.
-    - Deterministic for identical (event, config) tuples.
+    Global Brain (GB) - Supervisory Layer Only
+    MUST NOT mutate TP/MTP meaning state directly.
     """
 
-    def __init__(self, config: Optional[GBConfig] = None) -> None:
-        self.config = config or GBConfig()
+    def __init__(self):
+        self.supervisory_history: List[SupervisoryDecision] = []
+        self.current_population_stats: Dict[str, int] = {}
+        self.coherence_metrics: Dict[str, float] = {}
 
-    # ---------- Public API ----------
-
-    def process_event(self, event: Dict[str, Any]) -> GBDecision:
+    def evaluate_supervisory_state(self, 
+                                   global_state_snapshot: Dict[str, Any],
+                                   cycle_number: int) -> SupervisoryDecision:
         """
-        Deterministically process a supervisory event.
-
-        Expected event fields (JSON-compatible, see software_description.md):
-        - event_type
-        - sequence
-        - safe_boundary
-        - tp_lane_state
-        - mp_state
-        - request_class
-        - ib_metadata / ob_metadata / cop_metadata / external_command (optional)
-
-        This method:
-        - classifies the request
-        - enforces TCU envelope (stubbed)
-        - selects a deterministic supervisory action
-        - emits a deterministic GBDecision object
+        Main supervisory evaluation loop.
+        Takes a read-only snapshot and returns a decision.
         """
-        event_type = event.get("event_type", "unknown")
-        sequence = event.get("sequence", 0)
-        safe_boundary = bool(event.get("safe_boundary", False))
-        request_class = event.get("request_class", "unknown")
+        # TODO: Implement logic based on 20.16 Responsibility Matrix
 
-        # Deterministic classification (stubbed but structured)
-        classified_request_class = self._classify_request(event_type, request_class)
+        # Example checks (to be expanded):
+        delta_h_trend = global_state_snapshot.get("delta_h_trend", 0.0)
+        ib_count = global_state_snapshot.get("active_ib_count", 0)
+        oscillation_detected = global_state_snapshot.get("oscillation_flag", False)
 
-        # TCU envelope enforcement (stubbed)
-        tcu_usage, tcu_fallback = self._enforce_tcu_envelope(event)
+        if oscillation_detected or delta_h_trend > 0.85:
+            decision = SupervisoryDecision(
+                action="Dampen",
+                reason_code="HIGH_DELTA_H_DRIFT",
+                confidence=0.85,
+                affected_components=["ib_population", "trace_depth"],
+                timestamp=cycle_number
+            )
+        elif ib_count > 25:
+            decision = SupervisoryDecision(
+                action="Slow",
+                reason_code="HIGH_IB_POPULATION",
+                confidence=0.75,
+                affected_components=["ib_creation"],
+                timestamp=cycle_number
+            )
+        else:
+            decision = SupervisoryDecision(
+                action="Continue",
+                reason_code="NORMAL_OPERATION",
+                confidence=0.95,
+                affected_components=[],
+                timestamp=cycle_number
+            )
 
-        # Deterministic action selection (stubbed)
-        supervisory_action, rationale = self._decide_action(
-            event_type=event_type,
-            safe_boundary=safe_boundary,
-            request_class=classified_request_class,
-            tcu_fallback=tcu_fallback,
-        )
+        self.supervisory_history.append(decision)
+        return decision
 
-        gb_ref = self._make_gb_reference(event_type, sequence)
+    def get_supervisory_log(self) -> List[SupervisoryDecision]:
+        """Return immutable copy of history for auditability."""
+        return list(self.supervisory_history)
 
-        log_entry = self._build_log_entry(
-            event=event,
-            supervisory_action=supervisory_action,
-            rationale=rationale,
-            gb_reference=gb_ref,
-            tcu_usage=tcu_usage,
-            tcu_fallback=tcu_fallback,
-        )
 
-        applied_bounds = {
-            "tcu_min": self.config.tcu_min,
-            "tcu_typ": self.config.tcu_typ,
-            "tcu_max": self.config.tcu_max,
-        }
-
-        execution_diagnostics = {
-            "tcu_usage": tcu_usage,
-            "tcu_fallback": tcu_fallback,
-        }
-
-        return GBDecision(
-            supervisory_action=supervisory_action,
-            action_rationale=rationale,
-            request_class=classified_request_class,
-            applied_bounds=applied_bounds,
-            execution_diagnostics=execution_diagnostics,
-            supervisory_log_entry=log_entry,
-            gb_reference=gb_ref,
-        )
-
-    # ---------- Internal deterministic helpers ----------
-
-    def _classify_request(self, event_type: str, request_class: str) -> str:
-        """
-        Deterministic mapping from (event_type, request_class) -> canonical request_class.
-        No side effects.
-        """
-        # Simple deterministic mapping stub; extend as needed.
-        if request_class != "unknown":
-            return request_class
-
-        mapping = {
-            "inquiry_request": "global_inquiry",
-            "ib_update": "ib_evolution",
-            "ib_merge": "ib_population",
-            "ib_split": "ib_population",
-            "ib_promotion": "ib_promotion",
-            "ob_decomposition": "ob_lifecycle",
-            "cop_proposal": "cop_gating",
-            "external_command": "external_supervisory",
-        }
-        return mapping.get(event_type, "unspecified")
-
-    def _enforce_tcu_envelope(self, event: Dict[str, Any]) -> Tuple[int, bool]:
-        """
-        Deterministic TCU envelope enforcement.
-
-        Returns:
-        - tcu_usage: deterministic integer
-        - tcu_fallback: bool indicating whether fallback/degradation was triggered
-        """
-        # For now, use a deterministic, trivial function of sequence.
-        seq = int(event.get("sequence", 0))
-        # Keep usage within [tcu_min, tcu_max] deterministically.
-        span = max(1, self.config.tcu_max - self.config.tcu_min)
-        tcu_usage = self.config.tcu_min + (seq % (span + 1))
-
-        tcu_fallback = tcu_usage > self.config.tcu_typ
-        return tcu_usage, tcu_fallback
-
-    def _decide_action(
-        self,
-        event_type: str,
-        safe_boundary: bool,
-        request_class: str,
-        tcu_fallback: bool,
-    ) -> Tuple[str, str]:
-        """
-        Deterministic supervisory action selection.
-
-        - Never mutates TP/MTP.
-        - Applies actions only if safe_boundary is True.
-        """
-        if not safe_boundary:
-            return "None", "Unsafe boundary: supervisory action deferred."
-
-        # Simple deterministic policy stub.
-        if tcu_fallback:
-            return "SafeMode", "TCU envelope exceeded; entering SafeMode under deterministic fallback policy."
-
-        if event_type == "inquiry_request":
-            return "Approve", "IB-Creation-Request approved under deterministic inquiry policy."
-        if event_type == "ib_promotion":
-            return "Approve", "IB promotion approved under deterministic stability criteria."
-        if event_type == "ob_decomposition":
-            return "Reshape", "OB decomposition request reshapes conversation topology under policy."
-        if event_type == "cop_proposal":
-            return "Approve", "COP proposal accepted as advisory; no direct state mutation."
-
-        # Default conservative behavior.
-        return "None", f"No supervisory action required for request_class={request_class}."
-
-    def _make_gb_reference(self, event_type: str, sequence: int) -> str:
-        """
-        Deterministic GB reference ID.
-        """
-        return f"GBREF-{event_type}-{sequence:08d}"
-
-    def _build_log_entry(
-        self,
-        event: Dict[str, Any],
-        supervisory_action: str,
-        rationale: str,
-        gb_reference: str,
-        tcu_usage: int,
-        tcu_fallback: bool,
-    ) -> Dict[str, Any]:
-        """
-        Deterministic append-only log entry structure.
-        """
-        return {
-            "gb_reference": gb_reference,
-            "event_type": event.get("event_type", "unknown"),
-            "sequence": event.get("sequence", 0),
-            "request_class": event.get("request_class", "unknown"),
-            "supervisory_action": supervisory_action,
-            "action_rationale": rationale,
-            "safe_boundary": bool(event.get("safe_boundary", False)),
-            "tcu_usage": tcu_usage,
-            "tcu_fallback": tcu_fallback,
-            # Overflow/degradation fields can be wired to 20.30 §8.3 later.
-            "overflow_flag": tcu_fallback,
-            "overflow_type": "tcu_overrun" if tcu_fallback else "none",
-        }
+# =============================================================================
+# Simple test / self-check
+if __name__ == "__main__":
+    gb = GlobalBrainPrototype()
+    print("GB Prototype initialized.")
+    print("Ready for harness testing.")
