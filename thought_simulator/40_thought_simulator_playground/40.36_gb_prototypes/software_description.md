@@ -1,17 +1,35 @@
 # 40.36_gb_prototypes / software_description.md
 
 ## Approval State
-**Phase A draft complete.** Pending explicit human approval before Phase B execution.
+**Phase A draft complete.** Pending explicit human approval before proceeding to Phase B.
 
 ## Two-Phase Execution Model
-- **Phase A:** Define and review `software_description.md` only.
-- **Mandatory stop** after Phase A until explicit human approval.
+- **Phase A:** Define and review this `software_description.md` only.
+- **Mandatory stop** after Phase A until explicit human approval is given.
 - **Phase B (after approval):** Implement `prototype.py`, `harness.py`, verification artifacts, etc.
 
 ---
 
 ## Role in the Development Flow
-This document defines the **desired behavior** for the Global Brain (GB) prototype in the 40-series. It is guided by the updated 20-series documents (especially 20.10, 20.16, 20.17, 20.18, and 20.80). Insights and challenges discovered during implementation will inform refinements to the 10-series.
+This document defines the **desired behavior** for the Global Brain (GB) prototype in the 40-series. It is guided by the updated 20-series documents (especially 20.10, 20.16, 20.17, 20.18, and 20.80). Insights, challenges, and evidence generated here will inform refinements to the 10-series.
+
+---
+
+## Phase A Deliverables
+- High-level supervisory behavior description
+- Mapping of 20-series intent to prototype responsibilities
+- Identification of unknowns, ambiguities, and missing definitions
+- Definition of what Phase B must explore
+- No algorithms, no data structures, no thresholds
+
+---
+
+## Phase B Deliverables
+- Deterministic supervisory loop prototype
+- Logging + reason-code scaffolding
+- Harness for testing messy input, contradictions, and ΔH% volatility
+- Evidence for 50-series design decisions
+- Feedback for 10-series refinement
 
 ---
 
@@ -19,13 +37,12 @@ This document defines the **desired behavior** for the Global Brain (GB) prototy
 
 Define a deterministic Global Brain (GB) prototype that acts as a **non-mutating supervisory subsystem**.
 
-The GB SHALL:
+The GB **SHALL**:
 - Monitor global semantic stability and coherence
 - Detect drift, oscillation, and instability
 - Enforce cross-cycle and cross-basin coherence
 - Govern IB lifecycle (creation, evolution, merge/split, promotion, retirement)
 - Supervise OB decomposition
-- Gate COP proposals
 - Apply safe-boundary supervisory actions
 - Maintain deterministic supervisory logging
 - Operate within bounded TCU envelopes
@@ -35,42 +52,79 @@ The GB **MUST NOT** perform direct meaning construction or mutate TP/MTP semanti
 
 ---
 
-## 2. Scope
+## 2. Guidance from 20-series
 
-### In Scope
-- Deterministic TS → GB → TS supervisory evaluation loop
-- Implementation of responsibilities defined in **20.16 GB Responsibility Matrix**
-- Handling of messy / contradictory input per **20.17**
-- Failure detection and graceful degradation per **20.18**
-- Deterministic supervisory action selection and application
-- Bounded resource usage and overflow handling
+The 20-series provides development guidance, not final rules. This prototype **SHALL** explore, validate, and stress-test the mechanisms implied by:
 
-### Out of Scope
-- Direct mutation of TP/MTP meaning state
-- Internal implementation details of basins, TP execution, or learned modules
-- Full production-grade performance optimizations
-- User interface or external integration
-
----
-
-## 3. Key Requirements from 20-series
-
-**HLR Alignment:**
-- **20.10** – Architectural principles, supervisory separation, determinism
-- **20.16** – GB Responsibility Matrix (core reference)
+- **20.10** – Architectural principles and supervisory separation
+- **20.16** – GB Responsibility Matrix
 - **20.17** – Messy real-world input handling
 - **20.18** – Failure modes and success criteria
 - **20.80** – GB component requirements
 
-The prototype SHALL demonstrate clear adherence to the **supervisory-only** role of the GB.
+---
+
+## 3. What Phase B Must Explore
+
+Phase B **SHALL** explore and produce concrete evidence for:
+
+- ΔH% drift and oscillation detection
+- IB population stability under contradictory and messy input
+- Supervisory load under parallel traces
+- Safe-boundary enforcement correctness
+- Overflow and bounded-resource behavior
+- GB intervention frequency and thresholds
+- Failure mode detection and graceful degradation (per 20.18)
+- Deterministic fallback behavior
+- Supervisory logging completeness and auditability
+
+**Note:** Phase B prototypes **SHALL** explore feasibility and surface limitations; they do not define final system behavior.
 
 ---
 
-## 4. Success Criteria (Phase B)
+## 4. What the 10-series Must Eventually Define
 
-- GB correctly identifies and logs supervisory concerns without mutating core state.
-- All actions are deterministic and replayable.
-- Clear evidence of safe-boundary enforcement.
-- Graceful handling of edge cases (high volatility, contradictory input, overflow).
+The prototype **SHALL** surface ambiguities and missing definitions. The 10-series **SHALL** eventually codify:
+
+- Final GB supervisory boundaries
+- Deterministic thresholds for ΔH% drift, oscillation, and stability
+- Final IB lifecycle rules (creation, merge/split, retirement)
+- Final supervisory reason-code taxonomy
+- Final safe-boundary definitions
+- Final overflow/degradation rules
+
+All Phase B findings **SHALL** be fed into the 50-series for design decisions and into the 10-series for specification refinement.
+
+---
+
+## 5. Non-Goals (Phase A)
+
+Phase A **SHALL NOT** define:
+
+- Algorithms
+- Data structures
+- Thresholds or formulas (including ΔH%)
+- Commitment decay rules
+- Basin-transition logic
+- GB internal state layout
+
+---
+
+## 6. Risks & Unknowns to Investigate
+
+Phase B **SHALL** investigate the following risks (aligned with 20.10 Section 1.14):
+
+- GB overload risk
+- Supervisory bottlenecks
+- ΔH% instability under messy input
+- Trace explosion and IB population overflow
+- Contradiction preservation correctness
+- Emotional-content routing correctness
+- Deterministic fallback behavior effectiveness
+
+---
+
+## Traceability
+All Phase B evidence **SHALL** be traceable to the relevant 20-series guidance items.
 
 ---
