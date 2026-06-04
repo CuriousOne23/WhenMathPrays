@@ -1,7 +1,7 @@
 # 40.36_gb_prototypes/prototype.py
 """
-Governing Basin (GB) Prototype - Phase B (Expanded)
-Non-mutating supervisory subsystem only.
+Governing Basin (GB) Prototype - Phase B (3-Tier Iteration)
+Aligned with 50.36_gb_design_decisions.md
 """
 
 from typing import Dict, List, Any
@@ -9,106 +9,162 @@ from dataclasses import dataclass
 
 
 @dataclass
+class SignalPacket:
+    monitor_id: str
+    signal_type: str
+    value: float
+    severity: float
+    timestamp: int
+    metadata: Dict[str, Any]
+
+
+@dataclass
 class SupervisoryDecision:
-    action: str                    # "Continue", "Dampen", "Slow", "Stop", etc.
+    action: str
     reason_code: str
     confidence: float
     affected_components: List[str]
     timestamp: int
 
 
-class GoverningBasinPrototype:
-    """
-    Governing Basin (GB) - Supervisory Layer Only
-    MUST NOT mutate TP/MTP semantic state directly.
-    """
+class SignalMonitor:
+    """Tier 1: Stateless Signal Detectors"""
+    def __init__(self, monitor_id: str):
+        self.monitor_id = monitor_id
 
+    def detect(self, snapshot: Dict[str, Any], cycle: int) -> SignalPacket:
+        raise NotImplementedError("Subclasses must implement detect()")
+
+
+class DriftMonitor(SignalMonitor):
+    def detect(self, snapshot: Dict[str, Any], cycle: int) -> SignalPacket:
+        value = snapshot.get("delta_h_trend", 0.0)
+        return SignalPacket(
+            monitor_id=self.monitor_id,
+            signal_type="drift",
+            value=value,
+            severity=value,
+            timestamp=cycle,
+            metadata={}
+        )
+
+
+class OscillationMonitor(SignalMonitor):
+    def detect(self, snapshot: Dict[str, Any], cycle: int) -> SignalPacket:
+        value = 1.0 if snapshot.get("oscillation_flag", False) else 0.0
+        return SignalPacket(
+            monitor_id=self.monitor_id,
+            signal_type="oscillation",
+            value=value,
+            severity=value,
+            timestamp=cycle,
+            metadata={}
+        )
+
+
+class ContradictionMonitor(SignalMonitor):
+    def detect(self, snapshot: Dict[str, Any], cycle: int) -> SignalPacket:
+        value = snapshot.get("contradiction_level", 0.0)
+        return SignalPacket(
+            monitor_id=self.monitor_id,
+            signal_type="contradiction",
+            value=value,
+            severity=value,
+            timestamp=cycle,
+            metadata={}
+        )
+
+
+class PopulationMonitor(SignalMonitor):
+    def detect(self, snapshot: Dict[str, Any], cycle: int) -> SignalPacket:
+        count = snapshot.get("active_ib_count", 0)
+        value = min(count / 40.0, 1.0)  # normalized
+        return SignalPacket(
+            monitor_id=self.monitor_id,
+            signal_type="population",
+            value=value,
+            severity=value,
+            timestamp=cycle,
+            metadata={"raw_count": count}
+        )
+
+
+class SupervisoryIntegrator:
+    """Tier 2: Core Decision Maker of the Governing Basin"""
     def __init__(self):
-        self.supervisory_history: List[SupervisoryDecision] = []
-        self.intervention_count: int = 0
-        self.recent_actions: List[str] = []   # For oscillation detection
+        self.history: List[SupervisoryDecision] = []
+        self.intervention_count = 0
 
-    def evaluate_supervisory_state(self, 
-                                   global_state_snapshot: Dict[str, Any],
-                                   cycle_number: int) -> SupervisoryDecision:
-        """
-        Main supervisory evaluation.
-        Takes a read-only snapshot and returns a supervisory decision.
-        """
-        delta_h_trend = global_state_snapshot.get("delta_h_trend", 0.0)
-        ib_count = global_state_snapshot.get("active_ib_count", 0)
-        oscillation_flag = global_state_snapshot.get("oscillation_flag", False)
-        contradiction_level = global_state_snapshot.get("contradiction_level", 0.0)
+    def integrate_and_decide(self, signals: List[SignalPacket], cycle: int) -> SupervisoryDecision:
+        # Simple rule-based integration for Phase B
+        drift = next((s for s in signals if s.signal_type == "drift"), None)
+        osc = next((s for s in signals if s.signal_type == "oscillation"), None)
+        contra = next((s for s in signals if s.signal_type == "contradiction"), None)
+        pop = next((s for s in signals if s.signal_type == "population"), None)
 
-        # Track recent actions for oscillation detection
-        self.recent_actions.append("evaluate")
-        if len(self.recent_actions) > 10:
-            self.recent_actions.pop(0)
-
-        # Decision Logic
-        if oscillation_flag:
-            decision = SupervisoryDecision(
-                action="Dampen",
-                reason_code="OSCILLATION_DETECTED",
-                confidence=0.88,
-                affected_components=["trace_depth", "ib_population"],
-                timestamp=cycle_number
-            )
-        elif delta_h_trend > 0.85:
-            decision = SupervisoryDecision(
-                action="Dampen",
-                reason_code="HIGH_DELTA_H_DRIFT",
-                confidence=0.82,
-                affected_components=["trace_depth"],
-                timestamp=cycle_number
-            )
-        elif ib_count > 28:
-            decision = SupervisoryDecision(
-                action="Slow",
-                reason_code="HIGH_IB_POPULATION",
-                confidence=0.78,
-                affected_components=["ib_creation"],
-                timestamp=cycle_number
-            )
-        elif contradiction_level > 0.75:
-            decision = SupervisoryDecision(
-                action="Dampen",
-                reason_code="HIGH_CONTRADICTION_LEVEL",
-                confidence=0.75,
-                affected_components=["semantic_stability"],
-                timestamp=cycle_number
-            )
+        if osc and osc.value > 0.7:
+            action = "Dampen"
+            reason = "OSCILLATION_DETECTED"
+            conf = 0.88
+        elif drift and drift.value > 0.85:
+            action = "Dampen"
+            reason = "HIGH_DELTA_H_DRIFT"
+            conf = 0.82
+        elif contra and contra.value > 0.75:
+            action = "Dampen"
+            reason = "HIGH_CONTRADICTION_LEVEL"
+            conf = 0.75
+        elif pop and pop.value > 0.7:
+            action = "Slow"
+            reason = "HIGH_IB_POPULATION"
+            conf = 0.78
         else:
-            decision = SupervisoryDecision(
-                action="Continue",
-                reason_code="NORMAL_OPERATION",
-                confidence=0.92,
-                affected_components=[],
-                timestamp=cycle_number
-            )
+            action = "Continue"
+            reason = "NORMAL_OPERATION"
+            conf = 0.92
 
-        # Record intervention frequency
-        if decision.action != "Continue":
+        decision = SupervisoryDecision(
+            action=action,
+            reason_code=reason,
+            confidence=conf,
+            affected_components=["trace_depth", "ib_population"] if action != "Continue" else [],
+            timestamp=cycle
+        )
+
+        if action != "Continue":
             self.intervention_count += 1
 
-        self.supervisory_history.append(decision)
+        self.history.append(decision)
         return decision
 
-    def get_supervisory_log(self) -> List[SupervisoryDecision]:
-        """Return immutable copy of history for auditability."""
-        return list(self.supervisory_history)
 
-    def get_intervention_frequency(self) -> float:
-        """Return intervention rate over logged history."""
-        if not self.supervisory_history:
-            return 0.0
-        return self.intervention_count / len(self.supervisory_history)
+class BoundaryEnforcer:
+    """Tier 3: Ultra-thin adapter - Applies actions through safe boundaries only"""
+    def apply_action(self, decision: SupervisoryDecision):
+        """In real implementation, this would call safe-boundary APIs in core TS."""
+        print(f"[BoundaryEnforcer] Applying: {decision.action} | Reason: {decision.reason_code}")
+
+
+class GoverningBasin:
+    """Main Governing Basin - Orchestrates the 3-Tier Hierarchy"""
+    def __init__(self):
+        self.monitors = [
+            DriftMonitor("DriftMonitor"),
+            OscillationMonitor("OscillationMonitor"),
+            ContradictionMonitor("ContradictionMonitor"),
+            PopulationMonitor("PopulationMonitor")
+        ]
+        self.integrator = SupervisoryIntegrator()
+        self.enforcer = BoundaryEnforcer()
+
+    def evaluate(self, snapshot: Dict[str, Any], cycle: int):
+        """Full 3-Tier Evaluation"""
+        signals = [monitor.detect(snapshot, cycle) for monitor in self.monitors]
+        decision = self.integrator.integrate_and_decide(signals, cycle)
+        self.enforcer.apply_action(decision)
+        return decision
 
 
 # =============================================================================
 if __name__ == "__main__":
-    gb = GoverningBasinPrototype()
-    print("✅ Governing Basin (GB) Prototype initialized successfully.")
-    print("   - Supports drift, oscillation, population, and contradiction detection")
-    print("   - Maintains deterministic supervisory logging")
-    print("   - Respects non-mutation rule")
+    print("✅ Governing Basin (3-Tier) Prototype initialized.")
