@@ -1,6 +1,6 @@
 # 40.36_gb_prototypes/prototype.py
 """
-Global Brain (GB) Prototype - Phase B (Expanded)
+Governing Basin (GB) Prototype - Phase B (Expanded)
 Non-mutating supervisory subsystem only.
 """
 
@@ -17,9 +17,9 @@ class SupervisoryDecision:
     timestamp: int
 
 
-class GlobalBrainPrototype:
+class GoverningBasinPrototype:
     """
-    Global Brain (GB) - Supervisory Layer Only
+    Governing Basin (GB) - Supervisory Layer Only
     MUST NOT mutate TP/MTP semantic state directly.
     """
 
@@ -106,10 +106,9 @@ class GlobalBrainPrototype:
 
 
 # =============================================================================
-# Simple self-check
 if __name__ == "__main__":
-    gb = GlobalBrainPrototype()
-    print("✅ GB Prototype (Expanded) initialized successfully.")
+    gb = GoverningBasinPrototype()
+    print("✅ Governing Basin (GB) Prototype initialized successfully.")
     print("   - Supports drift, oscillation, population, and contradiction detection")
     print("   - Maintains deterministic supervisory logging")
     print("   - Respects non-mutation rule")

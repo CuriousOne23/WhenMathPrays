@@ -1,10 +1,9 @@
 # 40.36_gb_prototypes/harness.py
 """
-Test Harness for GB Prototype (Phase B - Expanded)
-Tests core supervisory scenarios from 20-series guidance.
+Test Harness for Governing Basin (GB) Prototype (Phase B - Expanded)
 """
 
-from prototype import GlobalBrainPrototype
+from prototype import GoverningBasinPrototype
 
 
 def create_test_snapshot(scenario: str) -> dict:
@@ -45,11 +44,11 @@ def create_test_snapshot(scenario: str) -> dict:
 
 
 def run_gb_harness():
-    """Run expanded test scenarios for the GB prototype."""
-    gb = GlobalBrainPrototype()
+    """Run expanded test scenarios for the Governing Basin prototype."""
+    gb = GoverningBasinPrototype()
     scenarios = ["stable", "high_drift", "oscillation", "high_population", "messy_input"]
 
-    print("=== GB Prototype Test Harness (Expanded) ===\n")
+    print("=== Governing Basin (GB) Prototype Test Harness (Expanded) ===\n")
 
     for scenario in scenarios:
         snapshot = create_test_snapshot(scenario)
@@ -65,14 +64,12 @@ def run_gb_harness():
               f"({decision.reason_code}, conf={decision.confidence:.2f})")
         print("-" * 70)
 
-    # Final statistics
     freq = gb.get_intervention_frequency()
     total_decisions = len(gb.get_supervisory_log())
 
     print(f"\n=== Harness Summary ===")
     print(f"Total decisions made   : {total_decisions}")
     print(f"Intervention frequency : {freq:.1%}")
-    print(f"Supervisory log size   : {total_decisions}")
     print("✅ Harness execution completed.")
 
 

@@ -11,7 +11,7 @@
 ---
 
 ## Role in the Development Flow
-This document defines the **desired behavior** for the Global Brain (GB) prototype in the 40-series. It is guided by the updated 20-series documents (especially 20.10, 20.16, 20.17, 20.18, and 20.80). Insights, challenges, and evidence generated here will inform refinements to the 10-series.
+This document defines the **desired behavior** for the Governing Basin (GB) prototype in the 40-series. It is guided by the updated 20-series documents (especially 20.10, 20.16, 20.17, 20.18, and 20.80). Insights, challenges, and evidence generated here will inform refinements to the 10-series.
 
 ---
 
@@ -35,7 +35,7 @@ This document defines the **desired behavior** for the Global Brain (GB) prototy
 
 ## 1. Purpose
 
-Define a deterministic Global Brain (GB) prototype that acts as a **non-mutating supervisory subsystem**.
+Define a deterministic Governing Basin (GB) prototype that acts as a **non-mutating supervisory subsystem**.
 
 The GB **SHALL**:
 - Monitor global semantic stability and coherence
