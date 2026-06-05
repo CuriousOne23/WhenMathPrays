@@ -94,7 +94,7 @@ Canonical verification report for `40.40_scheduler_prototypes`.
 ## Requirements Anchor Map
 
 - `10.10.40_scheduler_and_regulator_architecture.md`: primary (roles, ordering, cycle model, timing, interrupt windows pre-OB/post-TB/post-TR/pre-merge/etc., preemption, message handling, safety, logging/replay, separation of scheduler vs regulator vs GB)
-- `10.50.40_scheduler_requirements.md`: canonical HLR anchor (HLR-20.440-001..003 + TCU scheduler sections)
+- `10.50.40_scheduler_requirements.md`: canonical HLR anchor (HLR-20.440-001..008 + TCU scheduler sections + contract elements)
 - `20.30_ts_functional_model.md`, `20.40_ob_requirements.md`, `20.90_*`, `20.150_tcu_budgeting_requirements.md`, `20.170_safety_requirements.md`, `20.200_traceability_matrix.md` (as listed in software_description Traceability)
 - 10.10.10/20/30/50/60 supporting architecture contracts
 
