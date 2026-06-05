@@ -12,7 +12,7 @@
     "20.200_traceability_matrix.md"
   ],
   "run_command": "python harness.py",
-  "run_timestamp_utc": "2026-06-05T20:27:24.962721+00:00",
+  "run_timestamp_utc": "2026-06-05T21:01:42.714860+00:00",
   "scenarios": [
     {
       "evidence_digest": "7b7e40c287df12d808f7ec34134efe7cf63288bb18ff8c7db378bf7357c2ece6",
