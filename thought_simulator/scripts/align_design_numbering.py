@@ -100,6 +100,13 @@ DESIGN_50 = ROOT / "50_thought_simulator_design"
 RENAME_MAP: Dict[str, str] = {
     "50.09_geometry_engine_design.md": "50.10_geometry_engine_design.md",
     "50.50_data_structures.md": "50.55_data_structures.md",
+    # 10_ tier placement fixes (use full path from thought_simulator root so the
+    # generalized resolver above can handle them). Example of the reported issue:
+    # when correcting a GB reqs file that was placed in 10.10 architecture docs
+    # but named 10.50.36 (colliding with 10.50.36_gb_design... ), it must become
+    # 10.10.36_gb_requirements.md -- the script must NEVER auto-pick e.g. 10.10.60.
+    # "10_thought_simulator_req/10_system_architecture/10.50.36_gb_requirements.md":
+    #     "10_thought_simulator_req/10_system_architecture/10.10.36_gb_requirements.md",
 }
 
 # Additional files whose *content* must be updated even if not renamed
@@ -117,6 +124,8 @@ REPLACEMENT_PAIRS: List[Tuple[str, str]] = [
     ("50.50_data_structures.md", "50.55_data_structures.md"),
     # LLRs that embed the old number (in the geometry file itself)
     ("LLR-50.09-001", "LLR-50.10-001"),
+    # 10_ tier example (commented; add basename or full as needed when activating a 10 rename):
+    # ("10.50.36_gb_requirements.md", "10.10.36_gb_requirements.md"),
 ]
 
 # Directories to scan for references (relative to ROOT)
@@ -208,13 +217,25 @@ def main():
     print("design layers (40, 30, 10.50, 50). 50.00-50.09 remain reserved for")
     print("50-series governance documents per 50.05.")
     print()
+    print("POLICY: Nothing happens automatically. This script gives warnings/plans only")
+    print("by default. File changes occur ONLY with explicit --apply --yes after you have")
+    print("reviewed the plan. 10_ tier renames (e.g. fixing 10.50.36 -> 10.10.36 for a file")
+    print("that belongs under 10_system_architecture/ instead of 10.50 design) are supported")
+    print("via updates to this script's configuration when needed.")
+    print()
 
     # 1. Report the intended renames
     print("Planned file renames:")
     renames: List[Tuple[Path, Path]] = []
     for old_rel, new_rel in RENAME_MAP.items():
-        old = DESIGN_50 / old_rel
-        new = DESIGN_50 / new_rel
+        # Support both 50-only relative (legacy) and full paths relative to thought_simulator root
+        # (for 10_ tier corrections like 10.50.36_gb... in architecture dir -> 10.10.36_... )
+        if "/" in old_rel or "\\" in old_rel:
+            old = ROOT / old_rel
+            new = ROOT / new_rel
+        else:
+            old = DESIGN_50 / old_rel
+            new = DESIGN_50 / new_rel
         if not old.exists():
             print(f"  SKIP (missing): {old_rel}")
             continue
