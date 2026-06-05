@@ -49,6 +49,18 @@ Use these roles consistently:
 - `thought_simulator/90_validation_certification/`:
   validation and certification, conformance, acceptance, and formal sign-off
 
+## Test Benches (High-Level Overview)
+
+Test benches are high-fidelity, external verification infrastructure (not exploratory prototypes). They live in the top-level `testbenches/` directory.
+
+They generate evidence that can validate, challenge, or extend requirements and design contracts. All test bench evidence is normalized and promoted through the 30-series via the `30_verification/30.tb/` structure (see `30.tb/README.md`).
+
+Test bench results can drive backward flow updates into 10.50-series design requirements and 50-series design specs (and, when sufficiently strong, even into 20-series requirements). The path is always: test bench → 30-series delta/capsule → higher layers.
+
+The authoritative contract for test benches (required outputs, HLR referencing, reproducibility, artifact formats, etc.) is in `testbenches/00_testbench_requirements.md`.
+
+Future high-fidelity test benches will also feed 30-series verification evidence via the 30.tb/ structure.
+
 ## 10-Layer Disambiguation Rule
 
 When you request "update 10" in flow execution, this means:
