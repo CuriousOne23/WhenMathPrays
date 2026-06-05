@@ -28,13 +28,13 @@ This file records requirement-change proposals, implementer feedback, and migrat
 | HLR-20.440-001 (determinism / replay) | Strongly demonstrated | positive_deterministic_replay, positive_rich_observability, positive_bounded_history | tick, policy, max_active, selected_tp_ids, history, verification_digest, last_*_rationale, digest match on replay | Identical event seq → identical snapshot + digest; all under deterministic_mode |
 | HLR-20.440-002 (fairness / bounded progress / no starvation) | Strongly demonstrated | positive_round_robin_fairness, positive_fairness_starvation_prevent, positive_cohort_selection_merge | selected_tp_ids, wait_ticks, total_selected, last_scheduled_tick, max_wait_observed | RR cycles fairly; 20-tick run shows max_wait bounded (~2 for 3 TPs); cohort of 2 ok |
 | HLR-20.440-003 (input validation / negative paths) | Strongly demonstrated | negative_empty_tp_id, negative_non_monotonic_tick, negative_invalid_policy | tp_id, tick, event_type, policy | Construction rejects empty set (empty active); apply rejects non-mono tick and unknown policy |
-| 10.10.40 interrupt windows + preemption | Strongly demonstrated | positive_interrupt_window_preemption | window, preempt, history, payload | Events carry "pre_ob", "post_tb", preempt=True; logged for replay/audit |
-| 10.10.40 timing budgets + cycle boundaries | Strongly demonstrated | positive_timing_budget_and_cycle, positive_bounded_history | budget_tcu, budget_status, tick (monotonic), history_max | sim_tcu + within_budget modeled; strict increasing tick enforced; history bounded+trimmed |
-| 10.10.40 / PhaseB cohort + merge semantics | Strongly demonstrated | positive_cohort_selection_merge, positive_rich_observability | cohort_metadata (is_cohort, cohort_size, merge_semantics), max_active, selected | When max_active>1 emits deterministic merge meta; stable order |
-| 10.10.40 / PhaseB rich replay-safe observability | Strongly demonstrated | positive_rich_observability, positive_tie_break_provenance, all positives | last_selection_rationale, last_cohort_metadata, last_window, last_budget_status, history, thoughtpoints.* (wait/total) | Rationale includes cursor/score/tie logic; fairness counters on TP view; full event log |
-| 10.10.40 / PhaseB tie-break provenance | Strongly demonstrated | positive_tie_break_provenance | tie_break_rationale (incl. "stable tp_id asc"), selected | Explicit rationale + secondary key sort for equal scores |
-| 10.10.40 / PhaseB bounded internal state | Strongly demonstrated | positive_bounded_history | history_max, history (len <= max after trim), assert_invariants | history_max=4 exercised; trim on _record_event + init; invariants check bound |
-| 10.10.40 / PhaseB negative empty active | Strongly demonstrated | negative_empty_tp_id (and construction contract) | tp_id (empty) | Empty active set at init rejected deterministically (per "empty active set" example in software_description) |
+| HLR-20.440-006 (interrupt windows + preemption) | Strongly demonstrated | positive_interrupt_window_preemption | window, preempt, history, payload | Events carry "pre_ob", "post_tb", preempt=True; logged for replay/audit |
+| HLR-20.440-005 (bounded internal state / timing budgets + cycle) | Strongly demonstrated | positive_timing_budget_and_cycle, positive_bounded_history | budget_tcu, budget_status, tick (monotonic), history_max | sim_tcu + within_budget modeled; strict increasing tick enforced; history bounded+trimmed |
+| HLR-20.440-007 (cohort + merge semantics) | Strongly demonstrated | positive_cohort_selection_merge, positive_rich_observability | cohort_metadata (is_cohort, cohort_size, merge_semantics), max_active, selected | When max_active>1 emits deterministic merge meta; stable order |
+| HLR-20.440-004 (rich replay-safe observability) | Strongly demonstrated | positive_rich_observability, positive_tie_break_provenance, all positives | last_selection_rationale, last_cohort_metadata, last_window, last_budget_status, history, thoughtpoints.* (wait/total) | Rationale includes cursor/score/tie logic; fairness counters on TP view; full event log |
+| HLR-20.440-008 (tie-break provenance) | Strongly demonstrated | positive_tie_break_provenance | tie_break_rationale (incl. "stable tp_id asc"), selected | Explicit rationale + secondary key sort for equal scores |
+| HLR-20.440-005 (bounded internal state) | Strongly demonstrated | positive_bounded_history | history_max, history (len <= max after trim), assert_invariants | history_max=4 exercised; trim on _record_event + init; invariants check bound |
+| HLR-20.440-003 (negative empty active) | Strongly demonstrated | negative_empty_tp_id (and construction contract) | tp_id (empty) | Empty active set at init rejected deterministically (per "empty active set" example in software_description) |
 | LLR-30.40-001 (artifact emission) | Strongly demonstrated | (all) + harness main | full report with summary 12/12, per-scenario io_fields + status, run_timestamp | artifacts/scheduler_verification_run_2026-06-06.json (sorted JSON) |
 
 ## Rationale
@@ -51,7 +51,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 - `harness.py` (12 scenarios covering 10 items + repro; refreshed anchors + artifact 2026-06-06)
 - `verification_capsule.md` (expanded ledger, invariants, flows/agreement)
 - `artifacts/scheduler_verification_run_2026-06-06.json`
-- Downstream (future): 30.40_* (promotion), 10.50.40, 50.xx scheduler spec
+- Downstream (future): 30.40_* (promotion), 10.50.40 (updated with HLR-004..008), 50.40 scheduler design spec
 
 ## Open Validation Needed (unchanged from prior; now with data)
 
