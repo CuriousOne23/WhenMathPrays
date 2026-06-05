@@ -59,7 +59,10 @@
     "traceability matrix",
     "ts step index",
     "unified entropy functional",
-    "watchdog"
+    "watchdog",
+    "directional conversation basin (dcb)",
+    "directional-change event",
+    "geometric meta-basin"
   ],
   "required_by_module": {}
 }
