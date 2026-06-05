@@ -1,7 +1,25 @@
 # 40.40_scheduler_prototypes / software_description.md
 
 ## Approval State
-Scaffold only (not implementation-complete).
+- Phase A (software_description): approved (per user "CP approved" on the Phase A content in this file)
+- Phase B (prototype + harness + evidence): executed 2026-06-06
+
+## Phase B Deliverables (Executed)
+- Harness scenarios executed: 12/12 PASS
+- Artifact: `artifacts/scheduler_verification_run_2026-06-06.json` (generated 2026-06-06, contains full scenario ledger, deterministic digests, input/output for replay)
+- Coverage of all 10 "What Phase B Must Explore" items (via dedicated positive/negative scenarios + supporting):
+  - Deterministic per-tick selection (RR baseline + WRR exploratory) — positive_deterministic_replay, positive_round_robin_fairness, etc.
+  - Explicit deterministic tie-breaking + provenance — positive_tie_break_provenance (rationale + stable tp_id tie-break)
+  - Fairness + bounded progress / starvation prevention — positive_fairness_starvation_prevent, positive_round_robin_fairness (wait_ticks / total_selected bounded)
+  - Interrupt windows (pre_ob, post_tb, ...) + preemption — positive_interrupt_window_preemption (window + preempt flags in events/payloads)
+  - Per-module/per-cycle timing budgets + cycle boundaries — positive_timing_budget_and_cycle (budget_tcu, budget_status, monotonic tick enforcement)
+  - Deterministic parallel-safe cohort selection + merge semantics — positive_cohort_selection_merge (cohort_metadata with is_cohort, merge_semantics)
+  - Rich replay-safe observability (selection order, tie-break rationale, fairness counters, cohort metadata, event logs) — positive_rich_observability (last_* fields in snapshot, history, TP wait/total)
+  - Negative-path / deterministic rejection for malformed (empty active set at construction, non-monotonic tick, unsupported policy) — the three negative_* scenarios
+  - Bounded internal state / resource usage (history_max enforced) — positive_bounded_history (trim on record, assert_invariants, snapshot)
+  - Full deterministic mode (no nondet opts) — positive_deterministic_replay (identical replay + digest match), all scenarios under deterministic_mode=True
+- Additional invariants demonstrated: non-cognitive (no TP/MTP semantic mutation or interpretation), read-only on caller contracts, replay via digest + sorted JSON, safety envelopes (history bound, positive int checks), contract_version 1.0 + deterministic payloads.
+- Note: policies/weights/budgets in prototype are exploratory only for evidence generation; no final numeric or algorithm claims (per Non-Goals).
 
 ## Scaffold Metadata
 - scaffold_status: planned
@@ -43,11 +61,17 @@ All exploration **SHALL** remain strictly deterministic, non-cognitive, and non-
   - 20.170_safety_requirements.md (fair progress, starvation prevention, and deterministic failure behavior)
   - 20.200_traceability_matrix.md (test obligations for fairness and determinism)
 
-- **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold. (Note: prior exploration produced HLR-20.440-* in 10.50.40, but this scaffold supports additional or refreshed exploration.)
+- **Backward Flow (40-series evidence)**: Phase B execution (this module) produced concrete deterministic evidence against the 10.10.40 architecture and 20-series HLRs/guidance. Evidence is captured in the 12-scenario artifact + verification_capsule.md + requirements_delta.md. This provides backward input for refinement of 10.50.40 and 50-series scheduler specs (e.g., confirming bounded history, rich obs emission, interrupt window logging, cohort metadata as useful for audit).
 
 - **Iterative Design Flow (50-series influence)**: The downstream 10.50.40_scheduler_requirements.md exists with HLR-20.440-001 to 003 (determinism/replayability, fairness/starvation prevention, input validation). This scaffold can explore and provide evidence to refine or validate those.
 
-**Agreement Statement**: Scaffold stage only. The three flows are provisionally aligned on the scheduler as the non-cognitive, deterministic control-plane layer for execution ordering, resource enforcement, and replayable observability. Full alignment (including explicit three-flow statements in all core docs) will be recorded after Phase A approval of this software_description and after Phase B execution produces traceable evidence against the 10.10.40 and 20-series sources.
+**Agreement Statement**: With Phase A approved and Phase B executed (12/12 PASS artifact covering all 10 required exploration items + core invariants from 10.10.40), the three flows are aligned:
+
+- Forward: implementation and evidence directly traceable to 10.10.40 (roles, ordering, interrupts, timing, safety, replay) + listed 20 anchors (determinism, fairness, TCU, safety, OB replay, params).
+- Backward: the generated artifact, capsule, and delta now supply concrete evidence (selection determinism, tie-break provenance, window/preempt handling, budget modeling, cohort/merge meta, bounded history, rich logs, negative-path rejection, starvation prevention) that can legitimately drive targeted updates to 10.50.40 HLRs or 50-series specs via the 30 promotion path (no bypass).
+- Iterative: downstream 10.50.40 (HLR-20.440-001..003 + TCU scheduler budgets) influenced the scope; Phase B evidence can now feed iterative refinement (e.g. explicit rationale logging, history bound as measurable).
+
+All work preserved non-cognitive / deterministic / bounded / replayable / safety-first nature (no cognitive interpretation, no core state mutation, sorted JSON + digest for replay, history_max enforced, contract validation, monotonic ticks).
 
 ## Phase A Deliverables (this document)
 - High-level description of scheduler behavior for exploratory prototyping
@@ -87,11 +111,11 @@ This module **SHALL NOT**:
 - Ensuring strict separation and no leakage of cognitive state or nondeterminism into scheduler decisions
 
 ## Required Next Step
-After explicit human approval of this Phase A `software_description.md`, implement `prototype.py` + `harness.py` (a minimal deterministic scheduler that accepts tick context and policy configuration and emits selection decisions + observability while preserving all invariants from 10.10.40 and 20-series), then populate `verification_capsule.md` and `requirements_delta.md` with executed evidence.
+Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Both of those documents **SHALL** also contain Flows Alignment Statements + Agreement Statements per 40.20_master_program_guide.md.
+Next (per 40.20 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.40 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.40 refinements or 50-series scheduler design spec construction (via 50.05 patterns), always through 30.
 
-All work must preserve the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the scheduler.
+All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the scheduler (see invariants in capsule).
 
 ## Traceability
 - 10.10.40_scheduler_and_regulator_architecture.md (primary detailed architecture source for roles, ordering, cycle/timing model, interrupts, safety, logging)

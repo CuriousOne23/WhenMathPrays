@@ -1,0 +1,322 @@
+{
+  "module": "40.40_scheduler_prototypes",
+  "requirements_anchors": [
+    "10.10.40_scheduler_and_regulator_architecture.md",
+    "10.50.40_scheduler_requirements.md",
+    "20.30_ts_functional_model.md",
+    "20.40_ob_requirements.md",
+    "20.90_ib_requirements.md",
+    "20.90_ts_parameter_table.md",
+    "20.150_tcu_budgeting_requirements.md",
+    "20.170_safety_requirements.md",
+    "20.200_traceability_matrix.md"
+  ],
+  "run_command": "python harness.py",
+  "run_timestamp_utc": "2026-06-05T20:17:07.800502+00:00",
+  "scenarios": [
+    {
+      "evidence_digest": "7b7e40c287df12d808f7ec34134efe7cf63288bb18ff8c7db378bf7357c2ece6",
+      "io_fields": [
+        "tick",
+        "policy",
+        "max_active",
+        "selected_tp_ids",
+        "thoughtpoints",
+        "history",
+        "verification_digest",
+        "last_selection_rationale",
+        "last_cohort_metadata",
+        "history_max"
+      ],
+      "name": "positive_deterministic_replay",
+      "snapshot": {
+        "contract_version": "1.0",
+        "deterministic_mode": true,
+        "history": [
+          {
+            "event_type": "created",
+            "payload": {
+              "source": "from_contract"
+            },
+            "policy": "round_robin",
+            "selected_tp_ids": [],
+            "state_counter": 0,
+            "tick": 0
+          },
+          {
+            "event_type": "schedule_tick",
+            "payload": {
+              "budget_status": {
+                "note": "exploratory model only; enforcement via regulator per 10.10.40",
+                "sim_tcu": 0,
+                "within_budget": true
+              },
+              "cohort_metadata": {
+                "cohort_size": 1,
+                "is_cohort": false,
+                "merge_semantics": "deterministic_stable_order"
+              },
+              "max_active": 1,
+              "policy": "round_robin",
+              "preempt": false,
+              "sim_tcu": 0,
+              "thoughtpoint_count": 3,
+              "tie_break_rationale": "round_robin_cursor=0; rotated; took first 1 (stable id order for ties)",
+              "window": "none"
+            },
+            "policy": "round_robin",
+            "selected_tp_ids": [
+              "tp.alpha"
+            ],
+            "state_counter": 1,
+            "tick": 1
+          },
+          {
+            "event_type": "schedule_tick",
+            "payload": {
+              "budget_status": {
+                "note": "exploratory model only; enforcement via regulator per 10.10.40",
+                "sim_tcu": 0,
+                "within_budget": true
+              },
+              "cohort_metadata": {
+                "cohort_size": 1,
+                "is_cohort": false,
+                "merge_semantics": "deterministic_stable_order"
+              },
+              "max_active": 1,
+              "policy": "round_robin",
+              "preempt": false,
+              "sim_tcu": 0,
+              "thoughtpoint_count": 3,
+              "tie_break_rationale": "round_robin_cursor=1; rotated; took first 1 (stable id order for ties)",
+              "window": "none"
+            },
+            "policy": "round_robin",
+            "selected_tp_ids": [
+              "tp.beta"
+            ],
+            "state_counter": 2,
+            "tick": 2
+          },
+          {
+            "event_type": "schedule_tick",
+            "payload": {
+              "budget_status": {
+                "note": "exploratory model only; enforcement via regulator per 10.10.40",
+                "sim_tcu": 0,
+                "within_budget": true
+              },
+              "cohort_metadata": {
+                "cohort_size": 2,
+                "is_cohort": true,
+                "merge_semantics": "deterministic_stable_order"
+              },
+              "max_active": 2,
+              "policy": "weighted_round_robin",
+              "preempt": false,
+              "sim_tcu": 0,
+              "thoughtpoint_count": 3,
+              "tie_break_rationale": "weighted: -1.0*wait +0.1*energy +0.1*coherence; top 2 (tie-break by stable tp_id asc)",
+              "window": "none"
+            },
+            "policy": "weighted_round_robin",
+            "selected_tp_ids": [
+              "tp.gamma",
+              "tp.alpha"
+            ],
+            "state_counter": 3,
+            "tick": 3
+          }
+        ],
+        "history_max": 16,
+        "last_budget_status": {
+          "note": "exploratory model only; enforcement via regulator per 10.10.40",
+          "sim_tcu": 0,
+          "within_budget": true
+        },
+        "last_cohort_metadata": {
+          "cohort_size": 2,
+          "is_cohort": true,
+          "merge_semantics": "deterministic_stable_order"
+        },
+        "last_selection_rationale": "weighted: -1.0*wait +0.1*energy +0.1*coherence; top 2 (tie-break by stable tp_id asc)",
+        "last_window": "none",
+        "max_active": 2,
+        "module": "40.40_scheduler_prototypes",
+        "policy": "weighted_round_robin",
+        "round_robin_cursor": 2,
+        "state_counter": 3,
+        "thoughtpoints": [
+          {
+            "coherence": 0.7,
+            "energy": 0.9,
+            "last_scheduled_tick": 3,
+            "total_selected": 2,
+            "tp_id": "tp.alpha",
+            "wait_ticks": 0
+          },
+          {
+            "coherence": 0.9,
+            "energy": 0.6,
+            "last_scheduled_tick": 2,
+            "total_selected": 1,
+            "tp_id": "tp.beta",
+            "wait_ticks": 1
+          },
+          {
+            "coherence": 0.5,
+            "energy": 0.4,
+            "last_scheduled_tick": 3,
+            "total_selected": 1,
+            "tp_id": "tp.gamma",
+            "wait_ticks": 0
+          }
+        ],
+        "tick": 3,
+        "verification_digest": "7b7e40c287df12d808f7ec34134efe7cf63288bb18ff8c7db378bf7357c2ece6"
+      },
+      "status": "PASS"
+    },
+    {
+      "io_fields": [
+        "tick",
+        "policy",
+        "max_active",
+        "selected_tp_ids",
+        "wait_ticks",
+        "total_selected"
+      ],
+      "name": "positive_round_robin_fairness",
+      "observed": [
+        "tp.alpha",
+        "tp.beta",
+        "tp.gamma",
+        "tp.alpha"
+      ],
+      "status": "PASS"
+    },
+    {
+      "io_fields": [
+        "tie_break_rationale",
+        "selected_tp_ids",
+        "policy"
+      ],
+      "name": "positive_tie_break_provenance",
+      "rationale_snippet": "weighted: -1.0*wait +0.1*energy +0.1*coherence; top 1 (tie-break by stable tp_id",
+      "selected": [
+        "tp.aa"
+      ],
+      "status": "PASS"
+    },
+    {
+      "had_preempt": true,
+      "io_fields": [
+        "window",
+        "preempt",
+        "history"
+      ],
+      "name": "positive_interrupt_window_preemption",
+      "observed_windows": [
+        "pre_ob",
+        "post_tb"
+      ],
+      "status": "PASS"
+    },
+    {
+      "budget_status": {
+        "note": "exploratory model only; enforcement via regulator per 10.10.40",
+        "sim_tcu": 12,
+        "within_budget": true
+      },
+      "io_fields": [
+        "budget_tcu",
+        "budget_status",
+        "tick"
+      ],
+      "name": "positive_timing_budget_and_cycle",
+      "status": "PASS"
+    },
+    {
+      "cohort": {
+        "cohort_size": 2,
+        "is_cohort": true,
+        "merge_semantics": "deterministic_stable_order"
+      },
+      "io_fields": [
+        "max_active",
+        "cohort_metadata",
+        "selected_tp_ids"
+      ],
+      "name": "positive_cohort_selection_merge",
+      "selected": [
+        "tp.alpha",
+        "tp.beta"
+      ],
+      "status": "PASS"
+    },
+    {
+      "io_fields": [
+        "last_selection_rationale",
+        "last_cohort_metadata",
+        "last_window",
+        "last_budget_status",
+        "thoughtpoints",
+        "history"
+      ],
+      "name": "positive_rich_observability",
+      "rationale_present": true,
+      "status": "PASS"
+    },
+    {
+      "history_len": 4,
+      "io_fields": [
+        "history_max",
+        "history"
+      ],
+      "max": 4,
+      "name": "positive_bounded_history",
+      "status": "PASS"
+    },
+    {
+      "io_fields": [
+        "wait_ticks",
+        "total_selected"
+      ],
+      "max_wait_observed": 2,
+      "name": "positive_fairness_starvation_prevent",
+      "status": "PASS"
+    },
+    {
+      "error": "tp_id must be non-empty",
+      "io_fields": [
+        "tp_id"
+      ],
+      "name": "negative_empty_tp_id",
+      "status": "PASS"
+    },
+    {
+      "error": "tick must be strictly increasing",
+      "io_fields": [
+        "tick",
+        "event_type"
+      ],
+      "name": "negative_non_monotonic_tick",
+      "status": "PASS"
+    },
+    {
+      "error": "Unsupported policy: lottery",
+      "io_fields": [
+        "policy"
+      ],
+      "name": "negative_invalid_policy",
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "failed": 0,
+    "overall_status": "PASS",
+    "passed": 12,
+    "total_scenarios": 12
+  }
+}

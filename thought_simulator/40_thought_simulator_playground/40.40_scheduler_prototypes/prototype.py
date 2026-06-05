@@ -20,6 +20,8 @@ EVENT_SCHEDULE_TICK = "schedule_tick"
 POLICY_ROUND_ROBIN = "round_robin"
 POLICY_WEIGHTED_ROUND_ROBIN = "weighted_round_robin"
 
+MAX_HISTORY = 16  # bounded per 10.10.40 safety envelopes + 20.150 TCU / 20.170
+
 
 def _require_non_empty_str(field_name: str, value: Any) -> str:
 	if not isinstance(value, str):
@@ -164,6 +166,7 @@ class SchedulerPrototype:
 	round_robin_cursor: int = 0
 	state_counter: int = 0
 	history: list[SchedulerEvent] = field(default_factory=list)
+	history_max: int = MAX_HISTORY
 	verification_digest: str = ""
 
 	def __post_init__(self) -> None:
@@ -177,6 +180,10 @@ class SchedulerPrototype:
 			raise ValueError("thoughtpoints must have unique tp_id keys")
 		self.round_robin_cursor = _require_non_negative_int("round_robin_cursor", self.round_robin_cursor)
 		self.state_counter = _require_non_negative_int("state_counter", self.state_counter)
+		self.history_max = _require_positive_int("history_max", self.history_max)
+		# trim any incoming history to bound
+		if len(self.history) > self.history_max:
+			self.history = self.history[-self.history_max:]
 		self._refresh_digest()
 
 	@classmethod
@@ -198,6 +205,7 @@ class SchedulerPrototype:
 			thoughtpoints=tp_map,
 			round_robin_cursor=_require_non_negative_int("round_robin_cursor", contract.get("round_robin_cursor", 0)),
 			state_counter=_require_non_negative_int("state_counter", contract.get("state_counter", 0)),
+			history_max=_require_positive_int("history_max", contract.get("history_max", MAX_HISTORY)),
 		)
 		instance._record_event(
 			event_type=EVENT_CREATED,
@@ -225,7 +233,7 @@ class SchedulerPrototype:
 		if "max_active" in event:
 			self.max_active = _require_positive_int("max_active", event["max_active"])
 
-		selected = self._select_for_tick()
+		selected, rationale, cohort_meta = self._select_for_tick()
 		selected_set = set(selected)
 
 		for tp in self.thoughtpoints.values():
@@ -237,15 +245,36 @@ class SchedulerPrototype:
 				tp.wait_ticks += 1
 
 		self.tick = next_tick
+
+		# Extract optional control-plane context from event (non-cognitive)
+		window = event.get("window", "none")  # e.g. pre_ob, post_tb, post_tr, pre_merge, etc. per 10.10.40
+		if "budget_tcu" in event:
+			sim_tcu = _require_non_negative_int("budget_tcu", event["budget_tcu"])
+		else:
+			sim_tcu = 0
+		preempt = bool(event.get("preempt", False))
+
+		payload = {
+			"max_active": self.max_active,
+			"policy": self.policy,
+			"thoughtpoint_count": len(self.thoughtpoints),
+			"tie_break_rationale": rationale,
+			"cohort_metadata": cohort_meta,
+			"window": window,
+			"preempt": preempt,
+			"sim_tcu": sim_tcu,
+			"budget_status": {
+				"within_budget": True,  # placeholder; real regulator would compute vs 20.150/10.10.40 envelopes
+				"sim_tcu": sim_tcu,
+				"note": "exploratory model only; enforcement via regulator per 10.10.40",
+			},
+		}
+
 		self._record_event(
 			event_type=EVENT_SCHEDULE_TICK,
 			tick=self.tick,
 			selected_tp_ids=selected,
-			payload={
-				"max_active": self.max_active,
-				"policy": self.policy,
-				"thoughtpoint_count": len(self.thoughtpoints),
-			},
+			payload=payload,
 		)
 		return self.snapshot()
 
@@ -261,24 +290,39 @@ class SchedulerPrototype:
 			raise ValueError("Scheduler invariant violation: duplicate thoughtpoint IDs")
 		if self.max_active <= 0:
 			raise ValueError("Scheduler invariant violation: max_active must be positive")
+		if len(self.history) > self.history_max:
+			raise ValueError("Scheduler invariant violation: history exceeded bounded max")
 		expected = _digest_from_payload(self._snapshot_body())
 		if self.verification_digest != expected:
 			raise ValueError("verification_digest is out of sync with scheduler state")
 
-	def _select_for_tick(self) -> list[str]:
+	def _select_for_tick(self) -> tuple[list[str], str, dict[str, Any]]:
+		"""Return (selected_ids, tie_break_rationale, cohort_metadata).
+		Exploratory only; policies and weights are not canonical (see Non-Goals and 10.50.40).
+		"""
 		ordered_ids = sorted(self.thoughtpoints)
 		selection_count = min(self.max_active, len(ordered_ids))
 		if selection_count <= 0:
-			return []
+			return [], "no_active_thoughtpoints", {"cohort_size": 0, "is_cohort": False}
+
+		rationale = ""
+		cohort_meta: dict[str, Any] = {
+			"cohort_size": selection_count,
+			"is_cohort": selection_count > 1,
+			"merge_semantics": "deterministic_stable_order",
+		}
 
 		if self.policy == POLICY_ROUND_ROBIN:
 			cursor = self.round_robin_cursor % len(ordered_ids)
 			rotated = ordered_ids[cursor:] + ordered_ids[:cursor]
 			selected = rotated[:selection_count]
 			self.round_robin_cursor = (cursor + selection_count) % len(ordered_ids)
-			return selected
+			rationale = f"round_robin_cursor={cursor}; rotated; took first {selection_count} (stable id order for ties)"
+			return selected, rationale, cohort_meta
 
 		def weighted_score(tp: ThoughtPoint) -> float:
+			# Exploratory weights for Phase B evidence generation only.
+			# Not proposed as final policy (governed by 50-series / 10.50.40).
 			age_weight = 1.0
 			energy_weight = 0.1
 			coherence_weight = 0.1
@@ -292,7 +336,12 @@ class SchedulerPrototype:
 			ordered_ids,
 			key=lambda tp_id: (-weighted_score(self.thoughtpoints[tp_id]), tp_id),
 		)
-		return weighted[:selection_count]
+		selected = weighted[:selection_count]
+		rationale = (
+			"weighted: -1.0*wait +0.1*energy +0.1*coherence; "
+			f"top {selection_count} (tie-break by stable tp_id asc)"
+		)
+		return selected, rationale, cohort_meta
 
 	def _record_event(
 		self,
@@ -315,9 +364,24 @@ class SchedulerPrototype:
 				payload=_normalize_json_object("event_payload", payload),
 			)
 		)
+		# enforce bounded history (safety envelope)
+		if len(self.history) > self.history_max:
+			self.history = self.history[-self.history_max:]
 		self._refresh_digest()
 
 	def _snapshot_body(self) -> dict[str, Any]:
+		# latest rationale / fairness / cohort for quick audit (rich replay-safe obs)
+		last_rationale = ""
+		last_cohort = {}
+		last_budget = {}
+		last_window = "none"
+		if self.history:
+			last_evt = self.history[-1]
+			last_rationale = last_evt.payload.get("tie_break_rationale", "")
+			last_cohort = last_evt.payload.get("cohort_metadata", {})
+			last_budget = last_evt.payload.get("budget_status", {})
+			last_window = last_evt.payload.get("window", "none")
+
 		return {
 			"module": MODULE_NAME,
 			"contract_version": CONTRACT_VERSION,
@@ -327,6 +391,11 @@ class SchedulerPrototype:
 			"max_active": self.max_active,
 			"round_robin_cursor": self.round_robin_cursor,
 			"state_counter": self.state_counter,
+			"history_max": self.history_max,
+			"last_selection_rationale": last_rationale,
+			"last_cohort_metadata": last_cohort,
+			"last_budget_status": last_budget,
+			"last_window": last_window,
 			"thoughtpoints": [
 				self.thoughtpoints[tp_id].as_dict() for tp_id in sorted(self.thoughtpoints)
 			],
