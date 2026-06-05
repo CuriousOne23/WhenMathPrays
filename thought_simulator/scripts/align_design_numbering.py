@@ -217,11 +217,12 @@ def main():
     print("design layers (40, 30, 10.50, 50). 50.00-50.09 remain reserved for")
     print("50-series governance documents per 50.05.")
     print()
-    print("POLICY: Nothing happens automatically. This script gives warnings/plans only")
-    print("by default. File changes occur ONLY with explicit --apply --yes after you have")
-    print("reviewed the plan. 10_ tier renames (e.g. fixing 10.50.36 -> 10.10.36 for a file")
-    print("that belongs under 10_system_architecture/ instead of 10.50 design) are supported")
-    print("via updates to this script's configuration when needed.")
+    print("POLICY: Nothing happens automatically. You may manually rename files or change")
+    print("any internal names (module:, titles, references, etc.) to *anything* you want.")
+    print("This script gives warnings/plans only by default and never auto-corrects or")
+    print("auto-renames based on what it finds on disk. It only processes the explicit")
+    print("entries you have added to RENAME_MAP in the CONFIG section at the top of this file.")
+    print("File changes occur ONLY with explicit --apply --yes after you have reviewed the plan.")
     print()
 
     # 1. Report the intended renames
