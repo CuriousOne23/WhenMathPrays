@@ -20,8 +20,16 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 - no executable behavior, no numeric thresholds, no algorithms asserted yet
 - will explore qualitative stability arguments via deterministic observation of directional-change event rates and trajectory geometry
 
+## Flows Alignment Statement
+
+- **Forward Flow (20-series)**: Driven by 20.165 (DCB stability requirements — HLR-20.165-001 to -008), parent 20.106_dcb_requirements.md, 20.10 architectural principles, and 20.30 functional model contraction/boundedness semantics.
+- **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
+- **Iterative Design Flow (50-series influence)**: 50.165_dcb_stability_design.md scaffold now exists (qualitative focus only). Further design elaboration will be driven by evidence from this 40.165 module.
+
+**Agreement Statement**: Scaffold stage only. Alignment will be asserted after Phase A software_description approval and Phase B execution. The three flows are provisionally consistent on keeping DCB stability exploration strictly qualitative and non-expansive.
+
 ## Required Next Step
-Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series).
+Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series). The delta and capsule documents **SHALL** also carry explicit Flows Alignment + Agreement Statements per 40.20.
 
 ## Traceability
 - 20.165_dcb_stability_requirements.md (source)
@@ -29,3 +37,6 @@ Implement prototype and harness behavior (when approved), then populate verifica
 - 20.10_ts_architectural_principles.md
 - 20.30_ts_functional_model.md
 - 40.20_master_program_guide.md
+- 50.165_dcb_stability_design.md
+- 30_verification/30.165_dcb_stability_prototypes/
+- 10.50.165_dcb_stability_requirements.md
