@@ -1,86 +1,92 @@
-﻿# Verification Capsule - 40.37 Thought Router (TR)
+# Verification Capsule - 40.37 Thought Router (TR)
 
 **Module ID:** 40.37  
-**Version:** 0.2  
-**Verification Date:** 2026-06-04  
-**Status:** Phase B executed. Software description approved (Copilot). Awaiting human/CP review for promotion.
+**Version:** 0.3  
+**Verification Date:** 2026-06-05 (40.20 pass)  
+**Status:** Phase B executed (proxy). Phase C not started. `software_description.md` aligned with 20.37 Semantic Interpretation Flow Contract.
 
 ## Purpose
 
-Canonical verification report for 40.37_tr_router_prototypes, aligned with the structure and standards established by 40.20_tp_lifecycle (master program guide, detailed ledgers, three-flow statements, determinism evidence across multiple runs, artifact organization).
+Canonical verification report for `40.37_tr_router_prototypes`, per `40.20_master_program_guide.md` (standard structure, ledgers, three-flow statements, multi-run determinism, `artifacts/` layout).
+
+**Evidence scope:** Proxy routing only (`HLR-20.437-*`). Does **not** prove 20.37 integration HLRs (`HLR-20.037-049`, `-050`, `-051`) or Phase C flow-contract behavior.
 
 ## Glossary References
-- 30.30_verification_glossary.md
-- 40.20_master_program_guide.md (standard file structure and three-flow requirements)
+
+- `../../30_verification/30.30_verification_glossary.md`
+- `../40.20_master_program_guide.md`
 
 ## Run Record
 
-| Date       | Module | Command          | Inputs / Config                  | Result | Exit Code | Artifacts                                      | HLR Ref                          | LLR Ref (example) | Req Doc (primary)                          | Notes |
-|------------|--------|------------------|----------------------------------|--------|-----------|------------------------------------------------|----------------------------------|-------------------|--------------------------------------------|-------|
-| 2026-06-03 | 40.37  | python harness.py | 4 test cases (math/thought/general + mixed); deterministic by construction | PASS   | 0         | artifacts/tr_verification_run1_2026-06-03.json<br>artifacts/tr_verification_run2_2026-06-03.json<br>artifacts/tr_verification_run3_2026-06-03.json | 20.10-001, 20.30-311..315, 20.37-001..041, 10.10.10 TR contract, 10.10.50 TR routine, 10.10.36 GB read-only | LLR-DET-01, LLR-ROUTE-01 | 20.37_thought_router_tr_specification.md; 10.50.37 TR requirements (seeded) | Minimal proxy scope. 3 runs for determinism evidence (modeled on 40.20). |
+| Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref (proven) | Req Doc | Notes |
+|------|--------|---------|-----------------|--------|-----------|-----------|------------------|---------|-------|
+| 2026-06-03 | 40.37 | python harness.py | 4 TCs; keyword proxy | PASS | 0 | run1/2/3_2026-06-03.json | HLR-20.437-* (partial) | 20.37; 10.50.37 | Initial proxy; 4 tests |
+| 2026-06-05 | 40.37 | python harness.py | 6 TCs (+ TC005/TC006 error); 3 runs; proxy_only scope | PASS | 0 | `artifacts/tr_verification_run{1,2,3}_2026-06-03.json` | HLR-20.437-001, -002, -003 | 20.37; 10.50.37.TR | **40.20 pass** after 20.37 contract sync |
 
 ## Positive Scenario Ledger
 
-| Scenario | Result | HLR Ref (key) | LLR Ref (example) | IO Fields Exercised | Evidence |
-|----------|--------|---------------|-------------------|---------------------|----------|
-| math_content_routing | PASS | HLR-20.37-004, HLR-20.30-313 | LLR-ROUTE-BASIN-01 | content (with "math/calculate/number") → route="math_basin", delta_h=0.15 | harness output + run1/2/3 artifacts |
-| thought_content_routing | PASS | HLR-20.37-004, HLR-20.30-313 | LLR-ROUTE-BASIN-02 | content (with "think/reason/understand") → route="thought_basin", delta_h=0.08 | harness + artifacts |
-| general_content_routing | PASS | HLR-20.37-004, HLR-20.30-313 | LLR-ROUTE-BASIN-03 | generic content → route="general_basin", delta_h=0.05 | harness + artifacts |
-| mixed_math_priority | PASS | HLR-20.37-004 | LLR-ROUTE-BASIN-01 | "Explain quantum entanglement mathematically" → still math_basin + 0.15 | harness + artifacts |
-| invalid_input_error_path | PASS | HLR-20.37-009 (reject behavior) | LLR-ERR-01 | empty / missing content → {"route": "error", "reason": "invalid_input"} | harness + artifacts (no side effects) |
+| Scenario | Result | HLR Ref | IO Fields Exercised | Evidence |
+|----------|--------|---------|---------------------|----------|
+| math_content_routing | PASS | HLR-20.437-001, -002 | content → `math_basin`, delta_h=0.15 | harness + run1/2/3 |
+| thought_content_routing | PASS | HLR-20.437-001, -002 | content → `thought_basin`, delta_h=0.08 | same |
+| general_content_routing | PASS | HLR-20.437-001, -002 | content → `general_basin`, delta_h=0.05 | same |
+| mixed_math_priority | PASS | HLR-20.437-001 | mixed math phrasing → `math_basin`, 0.15 | same |
 
 ## Negative-Path Coverage Ledger
 
-| Scenario | Result | HLR Ref | LLR Ref | IO Fields Exercised | Evidence |
-|----------|--------|---------|---------|---------------------|----------|
-| malformed_input | PASS | 20.37-009 | LLR-ERR-01 | None or bad dict → explicit error, no crash | harness output + expected structure |
+| Scenario | Result | HLR Ref | IO Fields Exercised | Evidence |
+|----------|--------|---------|---------------------|----------|
+| empty_dict_input (TC005) | PASS | HLR-20.437-003 | `{}` → error + invalid_input; no delta_h | harness + artifacts |
+| none_input (TC006) | PASS | HLR-20.437-003 | null routed as `{}` → error; no side effects | harness + artifacts |
 
-## Determinism Evidence Snapshot (Multiple Runs)
+## Integration Contract Coverage Ledger (Phase C — Not Run)
+
+| Scenario | Result | HLR Ref | Notes |
+|----------|--------|---------|-------|
+| semantic_flow_contract | NOT RUN | HLR-20.037-049 | Phase C / 20.37 steps 1–9 |
+| ob_tr_input_and_stale_flag | NOT RUN | HLR-20.037-038, -050 | Deferred |
+| rb_tr_iff_gate | NOT RUN | HLR-20.037-039, -051 | Deferred |
+| tr_success_clear_stale | NOT RUN | HLR-20.037-040 | Deferred |
+| tr_failure_preserve_stale | NOT RUN | HLR-20.037-040 | Deferred |
+| dcb_ephemeral_under_gate | NOT RUN | HLR-20.037-046, -047 | Deferred; 20.106 |
+
+## Determinism Evidence Snapshot
 
 | Evidence Field | run1 | run2 | run3 | Match |
 |----------------|------|------|------|-------|
-| all route decisions | math/thought/general/math | identical | identical | YES |
-| all delta_h values | 0.15 / 0.08 / 0.05 / 0.15 | identical | identical | YES |
-| error case output | {"route": "error", "reason": "invalid_input"} | identical | identical | YES |
-| passed_tests | 4/4 | 4/4 | 4/4 | YES |
+| route + delta_h (TC001–TC004) | identical | identical | identical | YES |
+| error outputs (TC005–TC006) | identical | identical | identical | YES |
+| passed_tests | 6/6 | 6/6 | 6/6 | YES |
 
-Conclusion: 100% deterministic across consecutive reruns. No dependence on wall-clock, random, or mutable state. Matches the invariants documented in software_description.md §7.
+Conclusion: 100% deterministic across three consecutive harness runs for **proxy scope**. Timestamps in JSON may differ; routing outcomes do not.
 
-## Three-Flow Alignment (per 40.20 master guide)
+## Three-Flow Alignment (per 40.20)
 
-**Forward Flow (20/10-series)**: 
-- Determinism (20.10-001), TR gate + dirty flag protocol (20.30-311..315, 20.37-003/004/005/039/040), exclusive writer rule, GB read-only (10.10.36 / 20.16), module contract (10.10.10 + 10.10.50), implementation guidelines (20.38).
+**Forward Flow (20/10-series):**  
+Authoritative full TR model: `20.37` Semantic Interpretation Flow Contract, `20.31` §10, `20.106` DCB, `20.30` pipeline HLRs, `10.10.*`. This capsule documents proxy evidence only.
 
-**Backward Flow (40-series evidence)**:
-- Executed minimal router + 3-run harness produced clean pass on routing + ΔH% + error paths.
-- Confirmed proxy nature: validates basin selection + energy tagging but defers full semantic TR (12 fields, MTP read, dirty-flag integration with OB/Merge/IB, safe-boundary GB signals).
+**Backward Flow (40-series evidence):**  
+Harness proves deterministic basin routing, fixed ΔH% per route, and explicit error path (`HLR-20.437-*`). Does not implement or verify OB→TR→`TP.TR` integration.
 
-**Iterative Design Flow**:
-- Directly seeded the simple 10.50.37 canonical requirements.
-- Detailed software_description.md (Phase A approved) now serves as the narrative baseline.
-- 50.37 design work is expected to drive the next iteration of this module toward full TR semantics.
+**Iterative Design Flow:**  
+Feeds `10.50.37.TR.*` and `30.37` (proxy promotion). Phase C and `50.37` await integration scenarios.
 
-**Agreement Statement**: Flows are in agreement for the documented minimal proxy scope. No tension. Full TR integration is explicitly deferred (see software_description §5 Non-Goals).
+**Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 integration is canonical in `software_description.md` but **verification-open** until Phase C.
 
-## Observations
+## Structural Compliance (40.20 Checklist)
 
-- Routing logic is simple, rule-based, and fully deterministic.
-- ΔH% assignment is a pure function of the chosen route (monotonic and auditable).
-- Strict separation of concerns (routing decision only; no meaning construction).
-- Artifacts now stored in `artifacts/` subdirectory (aligned with 40.20 convention).
-- Multiple run artifacts (run1/run2/run3) enable direct determinism comparison.
-
-## Improvements from Previous Version
-
-- Harness now generates 3 run artifacts for determinism evidence (40.20 alignment).
-- Artifacts moved to `artifacts/` subdir.
-- verification_capsule expanded with full ledgers, tables, and three-flow statement (matching 40.20 standard).
-- requirements_delta.md will be expanded in parallel pass.
+| Requirement | Status |
+|-------------|--------|
+| `software_description.md` with Flows + Phase A/B/C | ✅ |
+| `prototype.py`, `harness.py` | ✅ |
+| `verification_capsule.md` (this file) | ✅ |
+| `requirements_delta.md` | ✅ |
+| `artifacts/` subdirectory + multi-run JSON | ✅ |
+| `docs/` supporting narrative | ✅ |
+| Proxy-only scope explicit in artifacts (`evidence_scope`) | ✅ |
 
 ## Next Steps
 
-- Human / CP review of this capsule + updated requirements_delta.md + software_description.md (approved).
-- If approved, promote evidence to 30.37 and consider 10.50.37 updates.
-- Future iteration (driven by 50.37): prototype full TP.TR field population + dirty-flag lifecycle.
-
----
+- Human / CP review of 40.20 pass package.
+- Re-promote or refresh `30.37` if artifact test count change (6/6) must be reflected.
+- Phase C: integration harness per `software_description.md` Phase C section.
