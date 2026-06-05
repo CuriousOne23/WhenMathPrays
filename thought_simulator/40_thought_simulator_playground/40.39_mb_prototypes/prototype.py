@@ -10,6 +10,7 @@ All operations are read-only on inputs. No mutation of core cognitive state.
 Outputs are fully deterministic for identical inputs + internal bounded state.
 
 Phase B implementation per 40.20 after software_description approval.
+Now fully implements 10.50.39 Canonical Schemas (schema_version, full overflow, etc.).
 """
 
 from __future__ import annotations
@@ -20,8 +21,9 @@ from typing import Any, Dict, List
 
 @dataclass
 class MBInput:
-    """Canonical MB input object (per HLR-20.070-021)."""
+    """Canonical MB input object (per HLR-20.070-021 and 10.50.39 Canonical Schema)."""
     cycle: int
+    schema_version: str = "1.0"
     visibility_mode: str = "medium"  # low | medium | high | full
     basin_telemetry: Dict[str, Any] = field(default_factory=dict)
     lane_identifiers: List[str] = field(default_factory=list)
@@ -32,7 +34,8 @@ class MBInput:
 
 @dataclass
 class MBOutput:
-    """Canonical MB output object (per HLR-20.070-022)."""
+    """Canonical MB output object (per HLR-20.070-022 and 10.50.39 Canonical Schema)."""
+    schema_version: str
     diagnostics_summary: Dict[str, Any]
     drift_indicators: List[Dict[str, Any]]
     advisory_recommendations: List[Dict[str, Any]]
@@ -63,6 +66,7 @@ class MonitoringBasin:
         if isinstance(mb_input, dict):
             # Accept loose dicts for harness flexibility, coerce safely
             mb_input = MBInput(
+                schema_version=str(mb_input.get("schema_version", "1.0")),
                 cycle=int(mb_input.get("cycle", 0)),
                 visibility_mode=str(mb_input.get("visibility_mode", "medium")),
                 basin_telemetry=dict(mb_input.get("basin_telemetry", {})),
@@ -145,18 +149,28 @@ class MonitoringBasin:
                 self._intervention_count += 1
 
         # Overflow / degradation using exact canonical schema (HLR-20.070-024/025)
+        # Per 10.50.39-014: always emit FULL canonical schema (no collapse when flag=false)
         is_overflow = (active_ib > 32) or (delta_h > 0.92)
-        overflow: Dict[str, Any] = {
-            "overflow_flag": is_overflow,
-            "overflow_type": ("high_population" if active_ib > 32 else "high_drift") if is_overflow else "none",
-            "overflow_source_basin": "MB",
-            "overflow_cycle": cycle,
-            "truncated_fields": ["detailed_basin_telemetry"] if is_overflow and vm == "full" else [],
-            "ΔH%_normalization_applied": 0.0,
-            "tcu_overrun_amount": round(max(0.0, (active_ib - 18) * 0.04 + (delta_h - 0.4) * 1.5), 3),
-        }
-        if not is_overflow:
-            overflow = {"overflow_flag": False}
+        if is_overflow:
+            overflow: Dict[str, Any] = {
+                "overflow_flag": True,
+                "overflow_type": "high_population" if active_ib > 32 else "high_drift",
+                "overflow_source_basin": "MB",
+                "overflow_cycle": cycle,
+                "truncated_fields": ["detailed_basin_telemetry"] if vm == "full" else [],
+                "ΔH%_normalization_applied": 0.0,
+                "tcu_overrun_amount": round(max(0.0, (active_ib - 18) * 0.04 + (delta_h - 0.4) * 1.5), 3),
+            }
+        else:
+            overflow = {
+                "overflow_flag": False,
+                "overflow_type": "none",
+                "overflow_source_basin": "MB",
+                "overflow_cycle": cycle,
+                "truncated_fields": [],
+                "ΔH%_normalization_applied": 0.0,
+                "tcu_overrun_amount": 0.0,
+            }
 
         # Execution diagnostics + lifecycle (HLR-20.070-014)
         exec_diag = {
@@ -181,6 +195,7 @@ class MonitoringBasin:
         }
 
         return MBOutput(
+            schema_version="1.0",
             diagnostics_summary=diagnostics,
             drift_indicators=list(self._drift_history[-3:]),
             advisory_recommendations=advisories,
@@ -207,6 +222,7 @@ def mb_input_from_snapshot(
 ) -> MBInput:
     """Convenience constructor for harness / tests."""
     return MBInput(
+        schema_version="1.0",
         cycle=cycle,
         visibility_mode=visibility,
         basin_telemetry={"observed": snapshot.get("observed_basins", ["general"])},

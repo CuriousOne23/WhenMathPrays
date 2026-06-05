@@ -101,6 +101,7 @@ Without confirmation, execution is limited to planning/clarification output only
 - [30.70_snapshot_prototypes/](30.70_snapshot_prototypes/)
 - [30.80_event_log_prototypes/](30.80_event_log_prototypes/)
 - [30.90_experiment_runner/](30.90_experiment_runner/)
+- [30.39_mb_prototypes/](30.39_mb_prototypes/)
 - [30.30_verification_glossary.md](30.30_verification_glossary.md)
 - [glossary_term_registry.json](glossary_term_registry.json)
 

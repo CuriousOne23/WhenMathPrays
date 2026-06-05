@@ -59,4 +59,4 @@ This file will track how the MB prototype aligns with and explores the 20.70 gui
 - thought_simulator/20_requirements/20.30_ts_functional_model.md
 - ../40.20_master_program_guide.md
 - 50.05_software_spec_construction_guide.md
-- 30_verification/README.md (future 30.39 target)
+- 30_verification/30.39_mb_prototypes/ (promoted verification per 30.00)
