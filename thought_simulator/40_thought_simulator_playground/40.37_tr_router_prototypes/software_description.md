@@ -6,13 +6,19 @@
 
 **2026-06-05 alignment pass:** This document synchronized with `20.37` Semantic Interpretation Flow Contract (HLR-20.037-049/050/051) and related 10.50.37 / 30.37 forward-flow artifacts. No change to executed proxy code scope.
 
-Awaiting explicit human / CP review before further promotion or integration-harness work.
+**Alignment Summary (2026-06-05):** This software description is aligned with the updated `20.37` Semantic Interpretation Flow Contract. The current prototype implements only the proxy routing subset (`HLR-20.437-*`). Integration HLRs (`HLR-20.037-049`, `-050`, `-051`) are acknowledged but not implemented. **40.20 execution will generate proxy-only artifacts** until Phase C integration scenarios are added.
 
-## Two-Phase Execution Model (Global 40.* Rule)
+Awaiting explicit human / CP review before Phase C or further promotion steps.
 
-- **Phase A:** Define and review this `software_description.md` only.
-- **Mandatory stop** after Phase A until explicit human approval is given.
-- **Phase B (after approval):** Implement `prototype.py`, `harness.py`, verification artifacts, `requirements_delta.md`, etc.
+## Execution Phases (40.* Model)
+
+| Phase | Status | Scope |
+|-------|--------|--------|
+| **A** | Complete (approved) | This `software_description.md` only |
+| **B** | Complete (executed) | Proxy: `prototype.py`, `harness.py`, verification artifacts, proxy-only evidence |
+| **C** | Not started | Full 20.37 integration on TP structures (see Phase C section below) |
+
+**Global 40.* rule:** Mandatory stop after Phase A until human approval. Phase B followed approval. Phase C requires separate approval before implementation.
 
 ---
 
@@ -66,6 +72,24 @@ The following is the normative cycle this prototype **defers**; it is summarized
 - `docs/` with experiments.md, prototype_notes.md, reasoning_trail.md
 - Expanded verification_capsule.md and requirements_delta.md
 - Forward-flow sync to 10.50.37 and 30.37 (2026-06-05)
+
+---
+
+## Phase C (Future Integration Prototype — Not Implemented)
+
+**Status:** Not started. Out of scope for the current proxy package and for the next **40.20** run.
+
+Phase C will implement the full `20.37` Semantic Interpretation Flow Contract on real TP structures, including:
+
+- OB TR-input field writes and `tr_needs_update = true` when semantic-relevant inputs change
+- RB route to TR routine iff `tr_needs_update`
+- TR routine atomic `TP.TR` commit and clear-on-success / preserve-on-failure dirty-flag semantics
+- RB downstream routing from committed `TP.TR`
+- Full `TP.TR` semantic field population per 20.37 §6
+- DCB post-OB / pre-TR ephemeral event consumption under TR gate (20.106, 20.37 §4.4)
+- Conformance evidence for `HLR-20.037-049`, `-050`, `-051`
+
+Until Phase C exists, **40.37 Phase B artifacts remain the authoritative evidence** for basin-selection proxy only (`HLR-20.437-*`). 40.20 must not treat proxy harness output as proof of integration HLRs.
 
 ---
 

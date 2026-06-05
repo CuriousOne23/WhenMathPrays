@@ -1,9 +1,21 @@
 {
   "run_id": "tr_verification_run1_2026-06-03",
-  "timestamp": "2026-06-05T02:13:33.550946+00:00",
+  "timestamp": "2026-06-05T15:31:51.272629+00:00",
   "prototype_version": "0.1",
-  "total_tests": 4,
-  "passed_tests": 4,
+  "evidence_scope": "proxy_only",
+  "hlr_proven": [
+    "HLR-20.437-001",
+    "HLR-20.437-002",
+    "HLR-20.437-003"
+  ],
+  "hlr_deferred": [
+    "HLR-20.037-049",
+    "HLR-20.037-050",
+    "HLR-20.037-051"
+  ],
+  "phase": "B",
+  "total_tests": 6,
+  "passed_tests": 6,
   "results": [
     {
       "test_id": "TC001",
@@ -19,6 +31,7 @@
       "expected_delta_h": 0.15,
       "route_passed": true,
       "delta_h_passed": true,
+      "reason_passed": true,
       "overall_passed": true
     },
     {
@@ -35,6 +48,7 @@
       "expected_delta_h": 0.08,
       "route_passed": true,
       "delta_h_passed": true,
+      "reason_passed": true,
       "overall_passed": true
     },
     {
@@ -51,6 +65,7 @@
       "expected_delta_h": 0.05,
       "route_passed": true,
       "delta_h_passed": true,
+      "reason_passed": true,
       "overall_passed": true
     },
     {
@@ -67,6 +82,35 @@
       "expected_delta_h": 0.15,
       "route_passed": true,
       "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true
+    },
+    {
+      "test_id": "TC005",
+      "input": {},
+      "output": {
+        "route": "error",
+        "reason": "invalid_input"
+      },
+      "expected_route": "error",
+      "expected_delta_h": null,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true
+    },
+    {
+      "test_id": "TC006",
+      "input": null,
+      "output": {
+        "route": "error",
+        "reason": "invalid_input"
+      },
+      "expected_route": "error",
+      "expected_delta_h": null,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
       "overall_passed": true
     }
   ]
