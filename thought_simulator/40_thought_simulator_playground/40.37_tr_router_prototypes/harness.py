@@ -1,16 +1,19 @@
-﻿"""
+"""
 40.37 Thought Router Harness
 Deterministic test harness for the TR prototype.
 Now includes ΔH% validation.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from prototype import create_router
 
 
-def run_harness() -> dict:
-    """Run verification scenarios and return results."""
+def run_harness(run_id: str = "tr_verification_run_2026-06-03") -> dict:
+    """Run verification scenarios and return results.
+    
+    Supports multiple runs for determinism evidence (modeled after 40.20).
+    """
     
     router = create_router()
     
@@ -60,8 +63,8 @@ def run_harness() -> dict:
         })
     
     return {
-        "run_id": "tr_verification_run_2026-06-03",
-        "timestamp": datetime.utcnow().isoformat(),
+        "run_id": run_id,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "prototype_version": "0.1",
         "total_tests": len(test_cases),
         "passed_tests": sum(1 for r in results if r["overall_passed"]),
@@ -70,11 +73,19 @@ def run_harness() -> dict:
 
 
 if __name__ == "__main__":
-    artifact = run_harness()
+    import os
+    os.makedirs("artifacts", exist_ok=True)
     
-    # Save JSON artifact
-    with open("tr_verification_run_2026-06-03.json", "w") as f:
-        json.dump(artifact, f, indent=2)
+    # Run multiple times for determinism evidence (aligned with 40.20 style)
+    for run_label in ["run1", "run2", "run3"]:
+        run_id = f"tr_verification_{run_label}_2026-06-03"
+        artifact = run_harness(run_id=run_id)
+        
+        artifact_path = os.path.join("artifacts", f"tr_verification_{run_label}_2026-06-03.json")
+        with open(artifact_path, "w") as f:
+            json.dump(artifact, f, indent=2)
+        
+        print(f"Run {run_label} completed. Artifact: {artifact_path}")
+        print(f"  Tests passed: {artifact['passed_tests']}/{artifact['total_tests']}")
     
-    print("Harness completed. Artifact generated: tr_verification_run_2026-06-03.json")
-    print(f"Tests passed: {artifact['passed_tests']}/{artifact['total_tests']}")
+    print("\nAll runs complete. Artifacts in artifacts/")

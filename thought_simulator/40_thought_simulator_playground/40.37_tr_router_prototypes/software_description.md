@@ -1,7 +1,7 @@
 ﻿# 40.37_tr_router_prototypes / software_description.md
 
 ## Approval State
-**Phase A draft complete.** Phase B implementation executed on 2026-06-03 (prototype + harness + verification artifacts). Awaiting explicit human / CP review before further promotion steps.
+**Phase A approved (Copilot).** Phase B implementation executed and supporting documentation (docs/, multi-run artifacts, expanded verification_capsule + requirements_delta) aligned with 40.20_tp_lifecycle standards. Awaiting explicit human / CP review before further promotion steps.
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 - **Phase A:** Define and review this `software_description.md` only.
@@ -26,12 +26,14 @@ This module was executed as a minimal deterministic router to validate core rout
 
 ---
 
-## Phase B Deliverables (Executed)
+## Phase B Deliverables (Executed + 40.20-aligned)
 - Minimal deterministic content-based router (keyword proxy for semantic cues)
 - Consistent ΔH% assignment per route decision
 - Explicit error route for invalid input, no side effects
-- Harness with deterministic pass/fail + ΔH% validation
-- JSON artifact for replay evidence
+- Harness with deterministic pass/fail + ΔH% validation + multi-run support (run1/run2/run3 for determinism evidence)
+- JSON artifacts stored in `artifacts/` (3 runs)
+- docs/ folder with experiments.md, prototype_notes.md, reasoning_trail.md (three-flow + design notes)
+- Expanded verification_capsule.md and requirements_delta.md (detailed ledgers, tables, three-flow statements, 40.20 structural alignment)
 - Feedback for 10.50.37 canonical requirements and 30-layer promotion
 
 ---
@@ -200,3 +202,4 @@ All Phase B evidence and this description **SHALL** be traceable to:
 - intended_10_10_anchor: thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md
 - executed_as: minimal basin-selection router (proxy); full TP.TR deferred
 - disposition_target: promote (achieved partial promotion to 10.50.37 + 30.37)
+- 40.20 alignment: docs/ added, harness multi-run + artifacts/ subdir, capsule + delta expanded to 40.20 ledger/table/three-flow standard (post software_description approval)
