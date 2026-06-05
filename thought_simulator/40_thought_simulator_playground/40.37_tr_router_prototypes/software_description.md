@@ -1,9 +1,15 @@
-﻿# 40.37_tr_router_prototypes / software_description.md
+# 40.37_tr_router_prototypes / software_description.md
 
 ## Approval State
-**Phase A approved (Copilot).** Phase B implementation executed and supporting documentation (docs/, multi-run artifacts, expanded verification_capsule + requirements_delta) aligned with 40.20_tp_lifecycle standards. Awaiting explicit human / CP review before further promotion steps.
+
+**Phase A approved (Copilot).** Phase B implementation executed and supporting documentation aligned with 40.20_tp_lifecycle standards.
+
+**2026-06-05 alignment pass:** This document synchronized with `20.37` Semantic Interpretation Flow Contract (HLR-20.037-049/050/051) and related 10.50.37 / 30.37 forward-flow artifacts. No change to executed proxy code scope.
+
+Awaiting explicit human / CP review before further promotion or integration-harness work.
 
 ## Two-Phase Execution Model (Global 40.* Rule)
+
 - **Phase A:** Define and review this `software_description.md` only.
 - **Mandatory stop** after Phase A until explicit human approval is given.
 - **Phase B (after approval):** Implement `prototype.py`, `harness.py`, verification artifacts, `requirements_delta.md`, etc.
@@ -11,46 +17,72 @@
 ---
 
 ## Role in the Development Flow
-This document defines the **desired / explored behavior** for the Thought Router (TR) prototype in the 40-series. It is guided by the 20-series and 10-series documents listed below. Insights, challenges, and evidence generated here (including the executed minimal basin router) inform refinements to the 10-series and alignment with full TR semantics in 20.37.
 
-This module was executed as a minimal deterministic router to validate core routing + ΔH% assignment principles before full TP.TR / tr_needs_update lifecycle integration.
+This document defines the **desired / explored behavior** for the Thought Router (TR) prototype in the 40-series. It is guided by the 20-series and 10-series documents listed below.
+
+The **authoritative full TR integration model** is the Semantic Interpretation Flow Contract in `20.37_thought_router_tr_specification.md` (OB → TR-input → `tr_needs_update` → TR routine → `TP.TR` → RB, with optional DCB geometric overlay). This 40.37 module executed only a **minimal basin-selection proxy**; it does not implement that contract.
+
+Insights and evidence from the proxy inform `10.50.37` (promoted routing) and document open work toward full 20.37 conformance.
+
+---
+
+## Semantic Interpretation Flow Contract (20.37 — Target Architecture)
+
+The following is the normative cycle this prototype **defers**; it is summarized here for alignment only (detail in 20.37).
+
+| Step | Actor | Action |
+|------|--------|--------|
+| 1 | RB | Route TP to OB |
+| 2 | OB | Write pre-semantic TR-input fields to `TP.input_fields`; set `tr_needs_update = true` when semantic-relevant inputs change |
+| 3 | DCB | (When enabled) Observe TP trajectory; emit ephemeral directional-change events; no TP writes; does not set `tr_needs_update` |
+| 4 | RB | Evaluate `tr_needs_update` |
+| 5 | TR routine | Run **iff** `tr_needs_update = true`; read TR-input, TP/MTP snapshots, permitted DCB events |
+| 6 | TR routine | Write `TP.TR` atomically; clear `tr_needs_update` on success only |
+| 7 | RB | Route downstream using committed `TP.TR` and explicit routing inputs |
+
+**Precedence:** `tr_needs_update` semantics — `20.31` §10; integration HLRs — `HLR-20.037-049`, `-050`, `-051`; DCB — `20.106` and 20.37 §4.4.
+
+**Proxy mapping (this module):** Standalone `route({"content": ...})` approximates an early **basin-selection + ΔH%** decision only. It does not perform steps 2–7 on real TP structures.
 
 ---
 
 ## Phase A Deliverables
+
 - High-level routing behavior description
 - Mapping of 20/10-series intent to prototype responsibilities (simplified basin selection as proxy)
-- Identification of unknowns, ambiguities, and missing definitions (e.g., full semantic fields vs. early routing proxy)
+- Identification of unknowns relative to full 20.37 flow contract
 - Definition of what Phase B must / did explore
-- No final algorithms or thresholds for production TR (those remain in 20.37 / 10.10.50)
+- No final algorithms or numeric policy for production TR (20.95 / 50-series)
 
 ---
 
 ## Phase B Deliverables (Executed + 40.20-aligned)
+
 - Minimal deterministic content-based router (keyword proxy for semantic cues)
 - Consistent ΔH% assignment per route decision
 - Explicit error route for invalid input, no side effects
-- Harness with deterministic pass/fail + ΔH% validation + multi-run support (run1/run2/run3 for determinism evidence)
-- JSON artifacts stored in `artifacts/` (3 runs)
-- docs/ folder with experiments.md, prototype_notes.md, reasoning_trail.md (three-flow + design notes)
-- Expanded verification_capsule.md and requirements_delta.md (detailed ledgers, tables, three-flow statements, 40.20 structural alignment)
-- Feedback for 10.50.37 canonical requirements and 30-layer promotion
+- Harness with deterministic pass/fail + ΔH% validation + multi-run support (run1/run2/run3)
+- JSON artifacts in `artifacts/`
+- `docs/` with experiments.md, prototype_notes.md, reasoning_trail.md
+- Expanded verification_capsule.md and requirements_delta.md
+- Forward-flow sync to 10.50.37 and 30.37 (2026-06-05)
 
 ---
 
 ## 1. Purpose
 
-Define a deterministic Thought Router (TR) prototype that performs **initial basin selection** and **ΔH% tagging** as an exploratory validation of routing concepts.
+Define a deterministic Thought Router (TR) **proxy** that performs **initial basin selection** and **ΔH% tagging** as exploratory validation—**not** full semantic interpretation per 20.37.
 
-The TR prototype **SHALL**:
+The TR proxy **SHALL**:
+
 - deterministically map input characteristics to a basin route (`math_basin`, `thought_basin`, `general_basin`)
 - assign fixed, consistent ΔH% values based on the chosen route
 - return explicit `{"route": "error", "reason": "invalid_input"}` for malformed/empty input with no side effects
 - remain strictly deterministic: identical input always yields identical route + delta_h
-- respect separation of concerns (routing decision only; no meaning construction, no TP/MTP mutation in this proxy)
+- respect separation of concerns (routing decision only; no meaning construction, no TP/MTP mutation)
 
-**Core Principle (from 20.10, 20.30, 10.10):**  
-Routing decisions in the TS core **MUST** be deterministic. The (full) TR routine is the *exclusive writer* of TP.TR and may only execute when RB detects `tr_needs_update = true`. GB supervises read-only and may never perform or bypass routing.
+**Core principle (full TR, from 20.37 + 10.10):**  
+In production TS, the TR routine is the **exclusive writer** of `TP.TR`, executes only when RB routes because `tr_needs_update = true`, and clears the dirty flag only on successful commit. OB writes TR-input fields and may set stale; RB consumes committed `TP.TR` for downstream routing. GB supervises read-only.
 
 ---
 
@@ -58,148 +90,173 @@ Routing decisions in the TS core **MUST** be deterministic. The (full) TR routin
 
 This prototype was developed under guidance from (and must be traceable to):
 
-- **20.10_ts_architectural_principles.md** — Core determinism (HLR-20.010-001), meaning construction explicit/auditable, variability isolated to output layer, basin locality, GB as supervisor only (HLR-20.010-018..026), no unbounded work, all state transitions replayable. Risks around trace explosion and need for explicit boundaries (1.14).
+- **20.10_ts_architectural_principles.md** — Determinism, explicit meaning construction, GB as supervisor only, bounded feedback elements (§1.14 Geometric Feedback Elements / DCB at architecture level).
 
-- **20.16_gb_responsibility_matrix.md** — GB responsibility matrix: GB **must** do supervisory flow control, coherence/stability, arbitration, population control; **must not** perform meaning construction or mutate core state. Routing logic must remain in the deterministic core (pushed downward per HLR-20.016-015); GB reads TR/metadata for gating only (read-only per 10.10.36).
+- **20.16_gb_responsibility_matrix.md** — GB must not perform meaning construction; routing remains in deterministic core; GB reads TR for gating only.
 
-- **20.30_ts_functional_model.md** — Pipeline: RB routing → OB extraction (may set `tr_needs_update`) → TR gate (RB routes to TR *iff* `tr_needs_update = true`) → ... → merge (may set dirty) → GB review at safe boundary. Explicit HLRs: 20.030-311 (tr_needs_update boolean), 20.030-313 (RB routes iff true), 20.030-314 (TR clears *only* on success), 20.030-315 (TR SHALL NOT execute when false). RB determines OB firing and lane projections. All end-to-end stages deterministic.
+- **20.30_ts_functional_model.md** — Pipeline including OB → DCB (§3.4.1) → TR gate; HLR-20.030-311..315 (`tr_needs_update`); HLR-20.030-316..321 (DCB placement). Proxy does not execute this pipeline.
 
-- **20.38_ts_implementation_guidelines.md** — Prototypes SHOULD demonstrate modularity, clear deterministic-core vs. non-det separation, explicit typed contracts, strong typing, structured logging with reason codes, deterministic replay capability early, auditability/debuggability. Surface conflicts between guidance and implementation for 10-series resolution. Prioritize clarity over premature optimization.
+- **20.31_semantic_specification.md** §10 — Authoritative `tr_needs_update` stale/fresh/writer/clear/routing semantics (deferred in proxy).
 
-- **10.10 (10.10.10_system_architecture.md + 10.10.50_module_contracts_and_visibility_rules.md)** — TR (Thought Router routine) in decomposition: "Computes and refreshes the TP semantic routing block (TP.TR) when TP.tr_needs_update = true." Execution model explicitly gates TR after semantic-write phase. TR contract: Does = compute/refresh TP.TR on RB route when dirty + produce auditable status/provenance; Does Not = execute when false, clear dirty on failure, bypass RB gating. Visibility limited to routing-relevant fields. TR forbidden from coprocessor offload (any semantic interpretation). Architectural invariants include the RB→TR iff dirty rule. Strict module contracts and no cross-module mutation.
+- **20.37_thought_router_tr_specification.md** — **Primary anchor.** Semantic Interpretation Flow Contract; `TP.TR` field set (§6); OB→TR (§4); TR geometric inputs / DCB (§4.4); TR→RB (§5); lifecycle (§7); HLR-20.037-001..051. This prototype explores **only** a routing+ΔH% subset; HLR-20.037-049/050/051 are canonical targets for future 40.x iterations, not proven here.
 
-- **10.10.36_gb_requirements.md (and 20.80)** — GB is non-mutating, asynchronous, deterministic supervisory subsystem. GB SHALL read only lane-local TP snapshots and MPs; SHALL NOT access internal basin state or mutate TP/MTP meaning-construction state (HLR-36-001..003). GB actions only at deterministic safe boundaries (HLR-36-010). GB supervises COP/IB/OB but TR routine (as core semantic writer) must remain inside TS arbitration rules; GB may read TR for supervisory gating without mutation (HLR-36-061). TCU envelope and deterministic fallback apply to all supervised work.
+- **20.106_dcb_requirements.md** — DCB geometric meta-basin, ephemeral TR inputs, no `tr_needs_update` from DCB (out of proxy scope).
 
-Additional primary anchor:
-- `20.37_thought_router_tr_specification.md` — Full TP.TR field set, lifecycle, producer/consumer authority (TR routine exclusive writer), dirty-flag protocol, OB→TR input fields, RB consumption, safety/determinism constraints, and 41 HLR-20.037-* items. (This 40.37 prototype explores *only* a minimal routing+ΔH% proxy; full field population and dirty-flag integration are out of scope for this iteration.)
+- **20.38_ts_implementation_guidelines.md** — Modularity, deterministic core separation, replay, auditability (process guidance for prototypes).
+
+- **10.10.10, 10.10.20, 10.10.40, 10.10.50** — TR execution gating, `TP.TR` / `tr_needs_update` contracts, RB→TR iff dirty, TR clear-on-success-only.
+
+- **10.10.36 / 20.80** — GB read-only, safe-boundary supervision; no TR mutation by GB.
+
+- **10.50.37_tr_requirements.md** — Canonical anchor: promoted proxy (`HLR-20.437-*`, `10.50.37.TR.*`) plus integration flow (`10.50.37.FLOW.*` → 20.37).
+
+- **30.37** — Verification capsule/delta; proves proxy only; integration contract marked open (2026-06-05).
 
 ---
 
-## 3. What Phase B Explored (and Must Explore in Future Iterations)
+## 3. What Phase B Explored (and Future Iterations)
 
-Phase B produced concrete evidence for:
-- Deterministic routing decisions from input content (keyword proxy for semantic cues from OB input_fields)
-- Monotonic / consistent ΔH% assignment as direct function of route (math=0.15, thought=0.08, general=0.05)
-- Strict input validation and error-path handling without state mutation or nondeterminism
-- 100% same-input → same-output behavior across repeated harness runs
-- Separation of concerns: this router performs *routing selection only*
+### Phase B evidence (executed)
 
-Future iterations of 40.37 (or sibling modules) **SHALL** explore:
-- Full TP.TR block population (stance, intent, affect, epistemic_shading, tension, politeness, commitment, reservation, logical_structure, semantic_deltaH, lineage_additions, routing_semantics) per 20.37 §6
-- Correct `tr_needs_update` dirty-flag lifecycle integrated with RB, OB, Merge, IB, Delta-H% writers
-- MTP snapshot (read-only) consumption by TR routine
-- Atomic write of TP.TR + clear of dirty flag only on success
-- Read-only consumption by IB/Merge/Truth/Done/GB (per 20.37 and 10.10.50)
-- Integration with safe-boundary GB supervisory signals
-- Handling of split/merge lineage additions in TR
+- Deterministic routing from input content (keyword proxy standing in for OB TR-input cues)
+- Fixed ΔH% per route class (math=0.15, thought=0.08, general=0.05)
+- Input validation and error path without side effects
+- Multi-run determinism (run1/2/3 identical)
+- Routing-only separation of concerns
 
-**Note:** Phase B prototypes explore feasibility and surface limitations; they do not define final system behavior.
+### Future iterations **SHALL** explore (20.37 alignment)
+
+- **Semantic Interpretation Flow Contract** end-to-end on TP structures (20.37 contract steps 1–9)
+- OB TR-input field writes + `tr_needs_update = true` on semantic-relevant change
+- RB route to TR routine iff `tr_needs_update`
+- TR routine: read TR-input + MTP (read-only); atomic `TP.TR` write; clear dirty on success; preserve on failure
+- Full `TP.TR` block per 20.37 §6 (12 semantic fields + `routing_semantics`)
+- RB downstream routing from committed `TP.TR` (not proxy dict alone)
+- DCB post-OB / pre-TR ephemeral events consumed only when TR runs (20.106, 20.37 §4.4)
+- Split/merge lineage in TR; safe-boundary GB read paths
+
+**Note:** Phase B prototypes explore feasibility; they do not define final system behavior.
 
 ---
 
 ## 4. What the 10-series Must Eventually Define
 
-The prototype surfaced (and the 10-series **SHALL** codify):
-- Final TR routine contract and exact field computation rules (full 20.37)
-- Canonical dirty-flag protocol enforcement points (RB, semantic writers, TR success/failure paths) — see 10.10.50 and 20.30 HLR-20.030-311..315
-- How TR semantics interact with GB read-only supervisory paths and COP proposals at safe boundaries (cross-ref 10.10.36, 20.16)
-- Versioning / serialization rules for TP.TR block and deterministic ordering
-- Compatibility with 20.95 numeric policy and 20.39 core data structures
-- Full module visibility and IPC channel contracts for TR (10.10.20 + 10.10.50)
-- Promotion path from this minimal router evidence into the normative 10.50.37 (already partially populated from this prototype) and eventual full TR design in 50.37
+The prototype surfaced requirements the 10-series **SHALL** maintain (partially in 10.50.37 today):
 
-All Phase B findings **SHALL** be fed into the 50-series for design decisions and into the 10-series for specification refinement.
+- Full TR routine contract per 20.37 (field rules, rejection, versioning)
+- Dirty-flag enforcement aligned with 20.31 §10 and 10.10.50
+- TR ↔ GB read-only supervisory interaction at safe boundaries
+- DCB geometric overlay boundaries (no semantic extraction by DCB)
+- Serialization / numeric policy (20.95, 20.39) for TR subfields
+- IPC and module visibility for TR (10.10.20, 10.10.50)
+
+Promotion path: proxy evidence → `10.50.37.TR.*` + `30.37` (done); integration scenarios → extend `30.37` or sibling harness → `50.37` design spec.
 
 ---
 
 ## 5. Non-Goals (This Iteration)
 
-This 40.37 prototype and its software_description deliberately **do not** define or implement:
-- The complete 12-field TP.TR semantic block or its derivation logic
-- tr_needs_update flag management or RB gating inside the prototype (standalone for isolation)
-- MTP snapshot reading or full pipeline integration
-- GB/COP interaction or safe-boundary signaling (GB reads TR; this proto does not emit supervisory events)
-- Any stochastic elements or wall-clock behavior
-- Performance / TCU budgeting for full TR (minimal here)
-- Full IB/OB/Merge/Truth consumer contracts
+This prototype **does not** define or implement:
 
-These are reserved for subsequent iterations or the 50.37 design layer once 20.37 + 10.10.50 anchors stabilize.
+- Semantic Interpretation Flow Contract on real TP/MTP (20.37 steps 1–9)
+- `TP.TR` population or TR routine commit semantics
+- `tr_needs_update` lifecycle or RB iff gating inside the prototype
+- DCB trajectory observation or directional-change events (20.106)
+- MTP snapshot consumption or pipeline integration
+- GB/COP safe-boundary signaling from TR outputs
+- Stochastic behavior, wall-clock dependence, or TCU budgeting for full TR
+- Full IB/Merge/Truth/OB consumer contracts
+
+Reserved for subsequent 40.x iterations or 50.37 after integration harness evidence.
 
 ---
 
-## 6. Risks & Unknowns to Investigate (Aligned with 20.10 §1.14)
+## 6. Risks & Unknowns (Aligned with 20.10 §1.14)
 
-- Scaling of simple routing rules to full semantic TR field derivation under messy/contradictory input (20.17)
-- Correct interaction of TR dirty-flag with parallel traces, split/merge, and GB arbitration
-- Whether early ΔH% assignment in router remains stable once full semantic_deltaH and lineage rules are added
-- GB overload if TR-related supervisory events become too frequent (mitigation: push as much as possible to RB + basin-local rules per 20.16)
-- Traceability of TR provenance through to commitments and human-oversight gates
+- Scaling keyword/proxy rules to full TR field derivation under messy input (20.17)
+- Dirty-flag interaction with parallel traces, split/merge, and GB arbitration
+- Stability of proxy ΔH% once `semantic_deltaH` and lineage rules apply in TR
+- DCB geometric feedback boundedness under full cycle (20.165) when integrated with TR
+- GB supervisory load if TR refresh frequency grows (20.16 mitigation: RB + basin-local rules)
 
 ---
 
 ## 7. Deterministic Invariants (Observed in Executed Prototype)
 
-- Identical input → identical `{"route", "priority", "delta_h"}` (and error form)
+- Identical input → identical `{"route", "priority", "delta_h"}` (or error form)
 - No randomness, no global mutable state, no wall-clock dependence
-- Error paths produce no side effects on successful-path state
-- ΔH% values are fixed per route class (monotonic, auditable)
-- Harness results are fully replayable from the JSON artifact
+- Error paths produce no side effects
+- ΔH% fixed per route class
+- Harness JSON artifacts fully replayable
 
 ---
 
 ## 8. IO Contract (Current Prototype)
 
-Inbound (harness → router):
-- `{"content": string}` (free text; lowercased + keyword scan for routing)
+**Inbound (harness → router):**
 
-Outbound (router → caller):
+- `{"content": string}` — free text; keyword scan as TR-input proxy
+
+**Outbound (router → caller):**
+
 - Success: `{"route": "math_basin"|"thought_basin"|"general_basin", "priority": "high"|"medium"|"low", "delta_h": float}`
 - Error: `{"route": "error", "reason": "invalid_input"}`
 
-Future full TR will expand this to structured TP.TR + tr_needs_update write under RB dispatch contract.
+**Full TR (20.37 target, not implemented here):**
+
+- OB writes `TP.input_fields`; TR routine writes `TP.TR`; `tr_needs_update` governs execution; RB consumes `TP.TR` for routing; optional ephemeral DCB events at TR input boundary.
 
 ---
 
 ## 9. Promotion Readiness Conditions
 
-Before promotion / release coupling:
-- Executed harness with deterministic pass/fail (achieved: 4/4)
-- Artifact evidence covering routing + ΔH% + error paths
-- Explicit mapping in `requirements_delta.md` to 20.10 / 20.30 / 20.37 / 10.10 anchors
-- Completed `verification_capsule.md` with three-flow statements
-- This `software_description.md` human-approved
-- Alignment check against 10.50.37 canonical (already seeded from this prototype)
+**Achieved (proxy scope):**
+
+- Harness 4/4 pass; multi-run determinism artifacts
+- `requirements_delta.md` and `verification_capsule.md` with three-flow statements
+- Phase A software_description approved; 40.20 structural alignment
+- Partial promotion to 10.50.37 (`HLR-20.437-*`) and 30.37
+
+**Open before integration promotion:**
+
+- Harness scenarios for 20.37 flow contract (dirty flag, TR commit/clear, RB gate)
+- 30.37 `proves:` extension to HLR-20.037-049/050/051
+- 50.37 design spec update per 50.05 after integration evidence
 
 ---
 
-## Flows Alignment Note
-- **Forward Flow (20/10-series)**: Routing determinism, tr_needs_update protocol, RB gating, GB read-only supervision, and module contracts drawn directly from 20.10, 20.16, 20.30, 20.38, 10.10.10, 10.10.50, 10.10.36.
-- **Backward Flow (40-series evidence)**: Executed prototype demonstrated minimal viable deterministic routing + ΔH% tagging; surfaced that full TP.TR semantics (20.37) require additional iteration beyond this basin-proxy.
-- **Iterative Design Flow**: 10.50.37 was created/populated from this 40.37 evidence; further 50.37 design will drive additional 40.x exploration.
+## Flows Alignment Statement
 
-**Agreement Statement**: The three flows are in agreement for the *minimal routing proxy* scope. Full semantic TR integration remains an open forward-flow item to be addressed in subsequent cycles.
+- **Forward Flow (20/10-series):** Authoritative integration model is 20.37 Semantic Interpretation Flow Contract + 20.31 §10 + 20.106 DCB overlay + 20.30 pipeline HLRs + 10.10.* module contracts. This document defers to those sources for full TR behavior.
+
+- **Backward Flow (40-series evidence):** Executed proxy proves deterministic basin routing + ΔH% + error path (`HLR-20.437-*`). Evidence does **not** prove HLR-20.037-049/050/051 or full OB→TR→`TP.TR` cycle.
+
+- **Iterative Design Flow:** 10.50.37 and 30.37 synchronized 2026-06-05 to split proxy vs integration scope; 50.37 remains proxy-based until integration scenarios exist.
+
+**Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 semantic interpretation flow is canonical and documented here as the target; verification and prototype code for that flow remain **open**.
 
 ---
 
 ## Traceability
 
-All Phase B evidence and this description **SHALL** be traceable to:
-- 20.10 (architectural principles + GB separation)
-- 20.16 (GB responsibility matrix)
-- 20.30 (functional model + TR dirty-flag HLRs 20.030-311..315)
-- 20.37 (TR specification)
-- 20.38 (implementation guidelines)
-- 10.10.10 (system architecture)
-- 10.10.50 (module contracts for TR routine)
-- 10.10.36 (GB requirements, read-only, safe boundaries)
-- 10.50.37 (canonical TR requirements seeded by this prototype)
-- 30.37 / 40.37 verification artifacts
+Phase B evidence and this description **SHALL** trace to:
+
+- 20.37 (Semantic Interpretation Flow Contract, module rules, HLR-20.037-*)
+- 20.31 §10 (`tr_needs_update`)
+- 20.106 (DCB)
+- 20.10, 20.16, 20.30, 20.38
+- 10.10.10, 10.10.20, 10.10.40, 10.10.50, 10.10.36
+- 10.50.37 (proxy + FLOW sections)
+- 30.37 verification package
+- 40.37 local artifacts (`artifacts/`, harness, capsule, delta)
 
 ---
 
-## Scaffold / Execution Metadata (Retained for History)
+## Scaffold / Execution Metadata
+
 - intended_20_anchor: thought_simulator/20_requirements/20.37_thought_router_tr_specification.md
+- intended_20_flow_contract: Semantic Interpretation Flow Contract (20.37); tr_needs_update: 20.31 §10; DCB: 20.106
 - intended_10_10_anchor: thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md
-- executed_as: minimal basin-selection router (proxy); full TP.TR deferred
-- disposition_target: promote (achieved partial promotion to 10.50.37 + 30.37)
-- 40.20 alignment: docs/ added, harness multi-run + artifacts/ subdir, capsule + delta expanded to 40.20 ledger/table/three-flow standard (post software_description approval)
+- executed_as: minimal basin-selection router (proxy); full TP.TR + flow contract deferred
+- disposition_target: promote proxy (10.50.37.TR + 30.37); integration verification open
+- last_20_37_sync: 2026-06-05
