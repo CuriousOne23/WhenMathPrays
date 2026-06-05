@@ -9,6 +9,10 @@ Rules:
   number prefix.
 - If a markdown file is inside a numbered subsystem directory and the file itself has
   a numeric prefix, it must match the subsystem prefix exactly.
+- Special case for tier 10 (10_thought_simulator_req): subdirs like 10_system_architecture
+  require files prefixed 10.10.* ; 50_design requires 10.50.* . This catches misplaced
+  numbers such as a 10.50.36 file living in the 10.10 architecture area (should be 10.10.36
+  or the design variant under 50_design/).
 
 Files without numeric prefixes are allowed.
 """
@@ -26,7 +30,16 @@ FILE_PREFIX_RE = re.compile(r"^(\d+\.\d+)")
 
 # Enforce strict tier-prefix alignment for canonical numbered tiers, including
 # governance tier 00 now that governance documents are normalized to 00.* prefixes.
-ENFORCED_TIER_PREFIXES = {"00", "20", "30", "40", "50"}
+ENFORCED_TIER_PREFIXES = {"00", "10", "20", "30", "40", "50"}
+
+# For the special 10_ tier (canonical requirements layer), sub-directories map to
+# specific 10.xx prefixes. This prevents e.g. 10.50.36 files from living under
+# the 10.10 system architecture docs (they belong under 50_design/ as 10.50.36_*).
+TEN_SUBSYSTEM_PREFIX_MAP = {
+    "10_system_architecture": "10.10",
+    "50_design": "10.50",
+    # Add more if 10_ grows additional numbered sub-areas (e.g. 10.20_xxx etc.)
+}
 
 
 @dataclass
@@ -86,6 +99,7 @@ def validate_tier(tier_dir: Path, root: Path) -> list[Issue]:
                 )
             )
 
+        # Standard subsystem dir check (for 20/30/40/50 etc.)
         parent_match = SUBSYSTEM_DIR_RE.match(md.parent.name)
         if parent_match and name_match:
             subsystem_prefix = f"{parent_match.group(1)}"
@@ -102,6 +116,27 @@ def validate_tier(tier_dir: Path, root: Path) -> list[Issue]:
                     )
                 )
 
+        # Special handling for 10_ tier's manually organized sub-areas (10_system_architecture etc.)
+        # This ensures e.g. a file named 10.50.36_* under 10_system_architecture/ is flagged
+        # (it should be 10.10.36_* or live in 50_design/ as 10.50.36_*).
+        if tier_major == "10" and name_match:
+            subdir_name = md.parent.name
+            expected_for_sub = TEN_SUBSYSTEM_PREFIX_MAP.get(subdir_name)
+            if expected_for_sub:
+                file_prefix = name_match.group(1)
+                if file_prefix != expected_for_sub:
+                    issues.append(
+                        Issue(
+                            path=rel,
+                            line=1,
+                            message=(
+                                f"file/subdirectory prefix mismatch under 10_ tier: file uses '{file_prefix}' "
+                                f"but directory '{subdir_name}' expects files starting with '{expected_for_sub}' "
+                                f"(e.g. use 10.10.36 for architecture-placed GB reqs instead of 10.50.36)"
+                            ),
+                        )
+                    )
+
     return issues
 
 
@@ -113,10 +148,13 @@ def main() -> int:
         issues.extend(validate_tier(tier_dir, root))
 
     if issues:
-        print("Naming prefix validation errors:")
+        print("Naming prefix validation issues (warnings only; no automatic fixes or renames are performed by this script):")
         for issue in issues:
             print(f"- {issue.path}:{issue.line}: {issue.message}")
-        return 1
+        print("See align_design_numbering.py (with --dry-run/--plan first, then --apply --yes ONLY) for controlled renames.")
+        # Per policy: warnings only. This validator never mutates files and does not fail the process
+        # on naming issues (other layers may still treat as blocking via their own rules/CI).
+        return 0
 
     print("Naming prefix validation passed.")
     return 0

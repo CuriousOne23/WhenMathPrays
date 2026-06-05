@@ -58,7 +58,7 @@ This prototype was developed under guidance from (and must be traceable to):
 
 - **20.10_ts_architectural_principles.md** — Core determinism (HLR-20.010-001), meaning construction explicit/auditable, variability isolated to output layer, basin locality, GB as supervisor only (HLR-20.010-018..026), no unbounded work, all state transitions replayable. Risks around trace explosion and need for explicit boundaries (1.14).
 
-- **20.16_gb_responsibility_matrix.md** — GB responsibility matrix: GB **must** do supervisory flow control, coherence/stability, arbitration, population control; **must not** perform meaning construction or mutate core state. Routing logic must remain in the deterministic core (pushed downward per HLR-20.016-015); GB reads TR/metadata for gating only (read-only per 10.50.36).
+- **20.16_gb_responsibility_matrix.md** — GB responsibility matrix: GB **must** do supervisory flow control, coherence/stability, arbitration, population control; **must not** perform meaning construction or mutate core state. Routing logic must remain in the deterministic core (pushed downward per HLR-20.016-015); GB reads TR/metadata for gating only (read-only per 10.10.36).
 
 - **20.30_ts_functional_model.md** — Pipeline: RB routing → OB extraction (may set `tr_needs_update`) → TR gate (RB routes to TR *iff* `tr_needs_update = true`) → ... → merge (may set dirty) → GB review at safe boundary. Explicit HLRs: 20.030-311 (tr_needs_update boolean), 20.030-313 (RB routes iff true), 20.030-314 (TR clears *only* on success), 20.030-315 (TR SHALL NOT execute when false). RB determines OB firing and lane projections. All end-to-end stages deterministic.
 
@@ -66,7 +66,7 @@ This prototype was developed under guidance from (and must be traceable to):
 
 - **10.10 (10.10.10_system_architecture.md + 10.10.50_module_contracts_and_visibility_rules.md)** — TR (Thought Router routine) in decomposition: "Computes and refreshes the TP semantic routing block (TP.TR) when TP.tr_needs_update = true." Execution model explicitly gates TR after semantic-write phase. TR contract: Does = compute/refresh TP.TR on RB route when dirty + produce auditable status/provenance; Does Not = execute when false, clear dirty on failure, bypass RB gating. Visibility limited to routing-relevant fields. TR forbidden from coprocessor offload (any semantic interpretation). Architectural invariants include the RB→TR iff dirty rule. Strict module contracts and no cross-module mutation.
 
-- **10.50.36_gb_requirements.md (and 20.80)** — GB is non-mutating, asynchronous, deterministic supervisory subsystem. GB SHALL read only lane-local TP snapshots and MPs; SHALL NOT access internal basin state or mutate TP/MTP meaning-construction state (HLR-36-001..003). GB actions only at deterministic safe boundaries (HLR-36-010). GB supervises COP/IB/OB but TR routine (as core semantic writer) must remain inside TS arbitration rules; GB may read TR for supervisory gating without mutation (HLR-36-061). TCU envelope and deterministic fallback apply to all supervised work.
+- **10.10.36_gb_requirements.md (and 20.80)** — GB is non-mutating, asynchronous, deterministic supervisory subsystem. GB SHALL read only lane-local TP snapshots and MPs; SHALL NOT access internal basin state or mutate TP/MTP meaning-construction state (HLR-36-001..003). GB actions only at deterministic safe boundaries (HLR-36-010). GB supervises COP/IB/OB but TR routine (as core semantic writer) must remain inside TS arbitration rules; GB may read TR for supervisory gating without mutation (HLR-36-061). TCU envelope and deterministic fallback apply to all supervised work.
 
 Additional primary anchor:
 - `20.37_thought_router_tr_specification.md` — Full TP.TR field set, lifecycle, producer/consumer authority (TR routine exclusive writer), dirty-flag protocol, OB→TR input fields, RB consumption, safety/determinism constraints, and 41 HLR-20.037-* items. (This 40.37 prototype explores *only* a minimal routing+ΔH% proxy; full field population and dirty-flag integration are out of scope for this iteration.)
@@ -100,7 +100,7 @@ Future iterations of 40.37 (or sibling modules) **SHALL** explore:
 The prototype surfaced (and the 10-series **SHALL** codify):
 - Final TR routine contract and exact field computation rules (full 20.37)
 - Canonical dirty-flag protocol enforcement points (RB, semantic writers, TR success/failure paths) — see 10.10.50 and 20.30 HLR-20.030-311..315
-- How TR semantics interact with GB read-only supervisory paths and COP proposals at safe boundaries (cross-ref 10.50.36, 20.16)
+- How TR semantics interact with GB read-only supervisory paths and COP proposals at safe boundaries (cross-ref 10.10.36, 20.16)
 - Versioning / serialization rules for TP.TR block and deterministic ordering
 - Compatibility with 20.95 numeric policy and 20.39 core data structures
 - Full module visibility and IPC channel contracts for TR (10.10.20 + 10.10.50)
@@ -171,7 +171,7 @@ Before promotion / release coupling:
 ---
 
 ## Flows Alignment Note
-- **Forward Flow (20/10-series)**: Routing determinism, tr_needs_update protocol, RB gating, GB read-only supervision, and module contracts drawn directly from 20.10, 20.16, 20.30, 20.38, 10.10.10, 10.10.50, 10.50.36.
+- **Forward Flow (20/10-series)**: Routing determinism, tr_needs_update protocol, RB gating, GB read-only supervision, and module contracts drawn directly from 20.10, 20.16, 20.30, 20.38, 10.10.10, 10.10.50, 10.10.36.
 - **Backward Flow (40-series evidence)**: Executed prototype demonstrated minimal viable deterministic routing + ΔH% tagging; surfaced that full TP.TR semantics (20.37) require additional iteration beyond this basin-proxy.
 - **Iterative Design Flow**: 10.50.37 was created/populated from this 40.37 evidence; further 50.37 design will drive additional 40.x exploration.
 
@@ -189,7 +189,7 @@ All Phase B evidence and this description **SHALL** be traceable to:
 - 20.38 (implementation guidelines)
 - 10.10.10 (system architecture)
 - 10.10.50 (module contracts for TR routine)
-- 10.50.36 (GB requirements, read-only, safe boundaries)
+- 10.10.36 (GB requirements, read-only, safe boundaries)
 - 10.50.37 (canonical TR requirements seeded by this prototype)
 - 30.37 / 40.37 verification artifacts
 
