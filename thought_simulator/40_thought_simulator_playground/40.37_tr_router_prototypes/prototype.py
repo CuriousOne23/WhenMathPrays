@@ -1,6 +1,5 @@
-﻿\"\"\"Scaffold prototype for 40.37_tr_router_prototypes.\"\"\"
+"""Scaffold prototype for 40.37_tr_router_prototypes.
 
-"""
 40.37 Thought Router (TR) Prototype
 Minimal deterministic routing prototype consistent with 20.37 specification.
 """
