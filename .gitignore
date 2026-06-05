@@ -51,3 +51,22 @@ logs/*.log
 .vs/
 
 /logs
+
+# Test benches: only programs and documentation in repo.
+# All generated outputs, logs, artifacts, plots, traces, etc. are excluded.
+testbenches/**/logs/
+testbenches/**/artifacts/
+testbenches/**/plots/
+testbenches/**/traces/
+testbenches/**/*.json
+testbenches/**/*.log
+testbenches/**/*.png
+testbenches/**/*.csv
+testbenches/**/results/
+
+# 30.tb/ normalized evidence: only .md records (capsules, deltas) are committed.
+# Raw artifacts from test benches are not stored here either.
+thought_simulator/30_verification/30.tb/**/*.json
+thought_simulator/30_verification/30.tb/**/*.log
+thought_simulator/30_verification/30.tb/**/*.png
+thought_simulator/30_verification/30.tb/**/artifacts/

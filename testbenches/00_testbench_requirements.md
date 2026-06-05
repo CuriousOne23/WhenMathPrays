@@ -27,6 +27,16 @@ This document governs:
 - Integration with the 30-series verification layer.
 - Naming and directory conventions.
 
+## Repository Policy (Repo Space Control)
+
+To keep the repository lean:
+
+- **Only test bench programs, scripts, documentation, and configuration** are stored in the repo (under `testbenches/`).
+- **No generated outputs, logs, artifacts, plots, traces, CSV results, or large data files** are committed.
+- All such outputs **MUST** be excluded via `.gitignore` (rules cover `testbenches/**/logs/`, `**/artifacts/`, `**/plots/`, `**/traces/`, `**/*.json`, `**/*.log`, `**/*.png`, `**/*.csv`, `**/results/`, etc.).
+- Test benches may store their raw execution results locally (e.g., in a `.gitignore`'d `artifacts/`, `logs/`, `plots/`, or `results/` subdir inside their `tb_XX_name/`) or externally (CI artifacts, shared storage, etc.).
+- When evidence from a test bench is needed for the 30-series, only **normalized text records** (capsule.md + delta.md with textual summaries, HLR mappings, and "Testbench-Driven Changes" notes) are stored in `30_verification/30.tb/`. Raw artifacts are referenced by name/timestamp or external link — the actual data payloads are never copied into the repository.
+
 ## Test Bench Output Contract
 
 Every test bench **SHALL** produce the following minimum artifacts:
@@ -69,10 +79,11 @@ Every test bench **SHALL** produce the following minimum artifacts:
 
 Test bench results are promoted into the 30-series for traceability and impact analysis:
 
-- Create or update `30_verification/30.tb/tb_XX_name/` containing:
+- Create or update `30_verification/30.tb/tb_XX_name/` containing **only**:
   - `tb_XX_name_capsule.md` (human summary + three-flow)
   - `tb_XX_name_delta.md` (mapping to HLRs + "Testbench-Driven Changes" section)
-  - Copy or reference of the primary JSON artifact.
+  
+  The 30.tb/ side stores **normalized text records only**. The full raw JSON artifact, logs, plots, etc. are **never committed** to the repository (they remain local or external). The delta/capsule may contain textual summaries or links (e.g., to external artifact storage or CI job), but not the large output payloads themselves.
 
 - Any required changes to 10.50 or 50 **MUST** be recorded in the 30.tb delta under:
 
