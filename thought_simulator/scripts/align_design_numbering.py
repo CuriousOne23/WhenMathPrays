@@ -43,7 +43,7 @@ Current known drift (as of 2026-06):
       40.10_math_prototypes/
       30.10_math_prototypes/
   - 50.50_data_structures.md and 50.50_regulator_design_support.md conflict on .50.
-    Regulator aligns with 10.50.50 / 40.50 / 30.50, so data structures moves to 50.55.
+    Regulator aligns with 10.50.50 / 40.50 / 30.50. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.45 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.
 
 Component numbering convention (to be documented in 50.05 and 50.00 index):
   .10  Math/Geometry
@@ -99,7 +99,9 @@ DESIGN_50 = ROOT / "50_thought_simulator_design"
 # Only list files that actually need to change for uniformity.
 RENAME_MAP: Dict[str, str] = {
     "50.09_geometry_engine_design.md": "50.10_geometry_engine_design.md",
-    "50.50_data_structures.md": "50.55_data_structures.md",
+    # Data Structures moved manually to 50.45 (see discussion: no 40/30 peer equivalent;
+    # placed between .40 and .50 for Regulator alignment). Previous plan was 50.55.
+    # "50.50_data_structures.md": "50.45_data_structures.md",
     # 10_ tier placement fixes (use full path from thought_simulator root so the
     # generalized resolver above can handle them). Example of the reported issue:
     # when correcting a GB reqs file that was placed in 10.10 architecture docs
@@ -121,7 +123,7 @@ CONTENT_UPDATE_TARGETS = [
 REPLACEMENT_PAIRS: List[Tuple[str, str]] = [
     # (old, new)
     ("50.09_geometry_engine_design.md", "50.10_geometry_engine_design.md"),
-    ("50.50_data_structures.md", "50.55_data_structures.md"),
+    # ("50.50_data_structures.md", "50.45_data_structures.md"),  # performed manually; see 50.45 choice rationale above and in 50.05/50.00
     # LLRs that embed the old number (in the geometry file itself)
     ("LLR-50.09-001", "LLR-50.10-001"),
     # 10_ tier example (commented; add basename or full as needed when activating a 10 rename):
@@ -294,7 +296,7 @@ def main():
     print("    it will be caught by the string replacement (e.g. in links or explicit mentions).")
     print("  - After applying, run the full validation suite (see CONTRIBUTING_CHANGE_WORKFLOW.md).")
     print("  - Consider updating any external notes, old branches, or the 20-series if they")
-    print("    hard-code the old 50.09 / 50.50_data names.")
+    print("    hard-code the old 50.09 / 50.50_data names (Data Structures is now at 50.45).")
     print("  - User guides, READMEs, and cross-layer references are included in the broad scan.")
     print()
 

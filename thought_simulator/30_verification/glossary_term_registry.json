@@ -37,5 +37,6 @@
       "tie-break",
       "starvation prevention"
     ]
-  }
+  },
+  "numbering_maintenance_note": "Data Structures design file prefix updated 50.50_data_structures.md -> 50.45_data_structures.md (see 50.00 index, 50.05 convention, and 40/30 searches confirming no dedicated data_structures peer in 40 or 30 layers). No glossary term changes required."
 }
