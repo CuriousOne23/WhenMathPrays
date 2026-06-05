@@ -51,7 +51,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 - `harness.py` (12 scenarios covering 10 items + repro; refreshed anchors + artifact 2026-06-06)
 - `verification_capsule.md` (expanded ledger, invariants, flows/agreement)
 - `artifacts/scheduler_verification_run_2026-06-06.json`
-- Downstream (future): 30.40_* (promotion), 10.50.40 (updated with HLR-004..008), 50.40 scheduler design spec
+- Downstream (future): 30.40_* (promotion), 10.50.40 (updated with HLR-004..008), 50.40_scheduler_design_spec.md
 
 ## Open Validation Needed (unchanged from prior; now with data)
 
