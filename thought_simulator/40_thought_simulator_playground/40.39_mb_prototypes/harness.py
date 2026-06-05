@@ -109,6 +109,7 @@ def _run_scenario(mb: MonitoringBasin, name: str, req_key: str, input_dict: Dict
         "detail": detail,
         "io_fields": io_fields,
         "output_summary": {
+            "schema_version": getattr(output, "schema_version", "1.0"),
             "stability_signal": output.diagnostics_summary.get("stability_signal"),
             "drift_indicators_count": len(output.drift_indicators),
             "advisories": len(output.advisory_recommendations),
@@ -170,7 +171,7 @@ def _build_report() -> Dict[str, Any]:
         "requirement_key": "reproducibility",
         "detail": "Fresh MB instance + identical input produced identical output (full JSON equality).",
         "io_fields": "MBInput -> MBOutput (exact match on two runs)",
-        "output_summary": {"repro_equal": repro_ok},
+        "output_summary": {"schema_version": "1.0", "repro_equal": repro_ok},
     })
 
     # 7. Noisy / high contradiction

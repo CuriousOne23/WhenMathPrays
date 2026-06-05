@@ -74,7 +74,7 @@ This module **SHALL NOT**:
 - Memory growth and eviction policy correctness for drift history under continuous operation
 
 ## Phase B Deliverables (Executed - 2026-06-05)
-- `prototype.py`: `MonitoringBasin` class implementing deterministic `evaluate(MBInput) -> MBOutput`.
+- `prototype.py`: `MonitoringBasin` class implementing deterministic `evaluate(MBInput) -> MBOutput`; **now fully implements 10.50.39 Canonical Schemas** (schema_version, full overflow always, etc.) after final alignment.
 - `harness.py`: 8 scenarios covering all items listed under "What Phase B Must Explore".
 - `artifacts/mb_verification_run_2026-06-05.json`: full structured report with per-scenario status, output summaries, and three-flow note.
 - `requirements_delta.md` and `verification_capsule.md` refreshed with evidence, HLR mapping, and explicit three-flow statements.
@@ -82,7 +82,7 @@ This module **SHALL NOT**:
 All outputs are read-only / non-mutating and 100% deterministic.
 
 ## Required Next Step (post Phase B)
-Populate / promote evidence to matching 30.39 (if desired) and feed findings into 50.05 / future 50.39 or 50.80. Update 10.50.39 when the design requirements layer is ready.
+Populate / promote evidence to matching 30.39 (if desired) and feed findings into 50.05 / future 50.39 or 50.80. 10.50.39 has been updated (v0.2) with canonical schemas + HLR-011..017 per design review.
 
 Continue to respect non-intrusion (HLR-20.070-003) and determinism invariants in any follow-on work.
 
@@ -91,5 +91,5 @@ Continue to respect non-intrusion (HLR-20.070-003) and determinism invariants in
 - thought_simulator/20_requirements/20.30_ts_functional_model.md (overflow schema, pipeline placement)
 - ../40.20_master_program_guide.md (standard structure + three-flow requirement)
 - 50.05_software_spec_construction_guide.md (MB listed as component .39)
-- 30_verification/README.md (future promotion target for 30.39_mb_prototypes/)
+- 30_verification/30.39_mb_prototypes/ (promoted per 30.00)
 - 20.10_ts_architectural_principles.md (non-intrusion, supervision boundaries)
