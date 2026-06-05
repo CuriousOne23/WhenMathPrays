@@ -1,7 +1,27 @@
 # 40.50_regulator_prototypes / software_description.md
 
 ## Approval State
-Scaffold only (not implementation-complete).
+- Phase A (software_description): approved (per CP review confirming the 20-series anchors)
+- Phase B (prototype + harness + evidence): executed 2026-06-06
+
+## Phase B Deliverables (Executed)
+- Harness scenarios executed: 15/15 PASS
+- Artifact: `artifacts/regulator_verification_run_2026-06-06.json` (generated 2026-06-06, contains full scenario ledger, deterministic digests, input/output for replay)
+- Coverage of all 12 "What Phase B Must Explore" items (via dedicated scenarios + supporting):
+  - Deterministic ΔH% enforcement + L-interrupts — delta_h_enforcement, interrupt_generation
+  - Deterministic routing fan-out enforcement — fan_out_enforcement
+  - Deterministic operator cost enforcement — operator_cost_enforcement
+  - Overflow detection + deterministic degradation — overflow_enforcement
+  - Memory/resource bounds enforcement — memory_bound_enforcement
+  - Cycle time bounds monitoring + L2 — cycle_time_enforcement
+  - Generation of regulatory interrupts (L0/L1/L2) — interrupt_generation, various high-pressure scenarios
+  - Explicit auditable decision outputs with separation — explicit_auditable_decision, rich_observability
+  - Input validation + deterministic rejection — negative_invalid_policy, negative_negative_pressure
+  - Rich replay-safe observability and logs — rich_observability, all scenarios (enforcements, interrupt_level, obs fields)
+  - Bounded internal state for regulator — bounded_internal_state
+  - Full support for deterministic mode — full_deterministic_mode, positive_deterministic_replay
+- Additional invariants demonstrated: non-cognitive (no core state mutation), read-only decisions, replay via digest + sorted JSON, safety envelopes (interrupt levels, degradation), bounded history in stateful Regulator, contract validation, exploratory policies (non-final per Non-Goals).
+- Note: policies (clamp/attenuate/stabilize) and thresholds in prototype are exploratory only for evidence generation; no final numeric or algorithm claims (governed by 20.95/50-series and 10.50.50).
 
 ## Scaffold Metadata
 - scaffold_status: planned
@@ -103,11 +123,11 @@ This module **SHALL NOT**:
 - Calibration, versioned policy binding, and profile-specific enforcement for TCU/safety without introducing replay divergence or silent truncation.
 
 ## Required Next Step
-After explicit human approval of this Phase A `software_description.md`, implement `prototype.py` + `harness.py` (a minimal deterministic regulator that accepts policy context, pressure indicators, relevant state snapshots, and emits explicit decisions + rich observability while preserving all invariants from 10.10.40 and 20-series), then populate `verification_capsule.md` and `requirements_delta.md` with executed evidence.
+Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Both of those documents **SHALL** also contain Flows Alignment Statements + Agreement Statements per 40.20_master_program_guide.md.
+Next (per 40.20 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.50 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.50 refinements or 50.50_regulator_design_support.md (and any 50.50 main spec) via 50.05 patterns, always through 30.
 
-All work must preserve the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the regulator (strict separation from scheduler/GB, no core state mutation, explicit audit logs with lineage).
+All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the regulator (see invariants in capsule).
 
 ## Traceability
 - 10.10.40_scheduler_and_regulator_architecture.md (primary detailed architecture source for regulator roles, ΔH% / fan-out / cost / overflow / memory / cycle time enforcement, interrupt generation L0/L1/L2, scheduler–regulator interaction, separation of concerns, safety envelopes, logging/replayability, conformance)
