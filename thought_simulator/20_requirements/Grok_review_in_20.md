@@ -1,279 +1,238 @@
-Reviewing the existing 20-series architecture so the critique is grounded in your current documents.
-# TS 20-Series Architectural Review: OB / OBG / TR / SRP Proposal
+Checking for new dual-pipeline, IMR, and TrigRB definitions in the repo before recommending refactor vs dual pipeline.
+# Architectural Review: Refactor vs Dual Pipeline
 
-**Reviewer:** Grok  
-**Scope:** Correctness, completeness, architectural coherence against current 20-series canon  
-**Status:** Advisory — blocking namespace conflicts must be resolved before normative inclusion
-
----
-
-## Executive Summary
-
-The **conceptual decomposition** (structure → identity → translation → offline planning) is sound and aligns well with TS principles: determinism, auditability, hot/cold path separation, and sparse compositional growth.
-
-The proposal is **not yet safe for 20-series inclusion** because it reuses three established primitive names — **OB**, **TR**, and **RB** — with incompatible meanings. In current canon:
-
-| Symbol | Established meaning (20.20, 20.30, 20.37, 20.40, 20.50) | Proposed meaning |
-|--------|----------------------------------------------------------|------------------|
-| **OB** | Object/Observation Basin — lane-local evidence extraction, ΔH% | Operational Behavior — explain/compare/classify |
-| **TR** | Thought Router — `TP.TR` semantic routing vector; TR routine lifecycle | Translation Routine — semantic mapping into OBG |
-| **RB** | Relational Basin — topology, split/merge, OB firing order | Semantic trigger detector → `TP.rb_trigger_id` |
-
-Until naming and layer placement are resolved, traceability, glossary, and verification will fracture. The ideas are worth keeping; the integration strategy needs redesign, not just new documents.
-
-**Recommendation:** Treat this as a new **Execution Manifold** (or **Realization Layer**) sitting above meaning construction, with renamed symbols. Do not redefine basin primitives.
+**Decision context:** Pipeline 1 = meaning construction (today's basin/MTP path); Pipeline 2 = execution/realization (SRP cold + TrigRB / OpBeh / OBG / XlateR / IMR hot).  
+**Recommendation upfront:** **Yes — proceed with dual pipeline as the PoC vehicle.** Refactor can wait until the concept is validated and you have trace evidence.
 
 ---
 
-## 1. New Primitives — Definitions, Purpose, Boundaries
+## 1. Dual-Pipeline Runtime Penalty — Negligible?
 
-### What works
+**Mostly agree, with PoC-scoped conditions.**
 
-The four-way split is internally coherent:
+Your cost model is sound:
 
-```
-SRP (offline)  →  routing tables + epoch
-RB (hot)       →  trigger detection
-TR (hot)       →  semantic mapping into register
-OBG (overlay)  →  discourse/register identity
-OB (hot)       →  structural behavior execution
-```
+| Component | Path | Expected cost |
+|-----------|------|----------------|
+| Pipeline 1 | Hot, per meaning-construction cycle | Dominant (same as today) |
+| SRP | Cold, epoch compile | Amortized; not per turn |
+| TrigRB | Hot, trigger detection | Small — pattern/table scan over bounded triggers |
+| SRP table lookup | Hot | O(1)–O(log n) |
+| OpBeh + OBG + XlateR | Hot | Depends on realization depth |
 
-Each axis has a clear "does / does not" boundary. OBG evolvability (split/merge/deprecate) matches how COB and IB registries already behave. SRP as a non-hot-path compiler respects HLR-20.010-004 (fixed phase ordering) and the inference-off-hot-path goal.
+For PoC, Pipeline 2 is **not a second LLM pass** and should sit in the **microseconds–low-milliseconds** range if XlateR is deterministic template/map application, not open-ended generation. That matches existing TS budgeting intuition (RB ≈ 5% of cycle; OuB isolated at output boundary per 20.30).
 
-### Critical issues
+**Conditions where penalty is not negligible:**
 
-**A. OB (Operational Behavior) vs Object Basin**
+- XlateR performs unbounded transform work (generation, search, inference).
+- Pipeline 2 runs per-token instead of per-expression-boundary.
+- TrigRB scans large unstructured trigger sets without bounds.
+- SRP tables are not pre-indexed and lookups degrade to linear search.
 
-Current OB is a **basin primitive** — pattern detection, evidence extraction, TR-input emission. It does not "explain" or "classify" in the discourse sense; TB and OuB own interpretation and expression.
+**PoC viability:** **Not threatened**, provided you cap XlateR to table-driven realization and bound TrigRB trigger cardinality. Document those as explicit PoC constraints, not assumptions.
 
-Your proposed OB reads like **expression-structure templates** or **OuB realization modes**, not basin correlators. Putting it in 20.40 would corrupt an existing normative module.
-
-**B. TR (Translation Routine) vs Thought Router**
-
-20.37 defines TR as the **exclusive writer of `TP.TR`**, consumed by RB for deterministic routing. Your TR writes `TP.tr_id` and `TP.ob_id` — a different contract entirely. Two "TR" modules cannot coexist without qualified naming (`TP.TR` vs `TP.exec_tr_id` or similar).
-
-**C. OBG — strong and needed, but overlaps COB/COP**
-
-OBG (scientific, casual, family, etc.) fills a real gap: **register/voice identity** as a first-class axis. COB owns conversation-object lifecycle; OuB owns expression realization. Neither currently owns "who is speaking as whom." OBG is the right concept; its boundary vs COB and CIL must be explicit.
-
-**D. SRP — well-scoped**
-
-SRP as "compiles routing tables from MTP semantic structure, never hot path" is architecturally clean and matches the routing-table concept in `00.10.50_TS_data_model.md`. Strong candidate for normative inclusion once boundaries are pinned.
-
-### Verdict (Area 1)
-
-| Primitive | Internal definition | 20-series ready? |
-|-----------|--------------------|--------------------|
-| OB (proposed) | Good internally | **No** — rename; not a basin |
-| OBG | Good; fills gap | **Yes, with COB/CIL boundary doc** |
-| TR (proposed) | Good internally | **No** — rename; conflicts with Thought Router |
-| SRP | Good | **Yes** |
-
-**Suggested renames (minimum):** `OpBeh` / `OpB`, `OBG` (keep), `XlateR` or `TRmap`, `SRP` (keep). If you keep `OB`, require qualified namespaces everywhere: `basin.OB` vs `exec.OpBeh`.
+**Verdict:** **Agree** — negligible for PoC if Pipeline 2 stays lookup + bounded realization.
 
 ---
 
-## 2. Process Flow Integration
+## 2. PoC Sufficiency — Does Dual Pipeline Prove TS?
 
-### Proposed flow (restated)
+**Agree on the core thesis; disagree that it proves the full TS architecture.**
 
-```
-OB = structural behavior
-OBG = identity/register overlay
-TR = semantic mapping into identity
-SRP = compiles routing tables from MTP (offline)
-RB = detects semantic triggers
-TS core = executes composite address (OB, OBG, TR)
-```
+A clean dual-pipeline PoC **would validate**:
 
-### Coherence assessment
+- Meaning and expression can be separated.
+- Realization can route over a large sparse compositional manifold.
+- SRP can compile routing tables deterministically (cold path).
+- Expression does not corrupt meaning (with metadata-only writes + boundary enforcement).
+- Feedback can be explicit, gated, and auditable (IMR → trigger, not mutation).
 
-The layering is **minimal and logically ordered** within the proposal. Cold compile → hot trigger → hot address resolution → hot execution is a standard, defensible pattern.
+That is the **central architectural claim** this expansion is making. If it works, the remaining work is largely **engineering and normative documentation**, not re-deriving the separation principle.
 
-### Integration conflict with current canon
+**What it does not fully validate** (conceptual blockers elsewhere):
 
-Existing normative cycle (20.30, 20.37):
+| TS claim | Dual-pipeline PoC coverage |
+|----------|---------------------------|
+| Basin meaning construction (OB/RB/TB/ΔH%) at scale | Only as Pipeline 1 exists today — may be thin in PoC |
+| Geometric substrate (DCB, trajectory invariants) | Peripheral unless P1 exercises it |
+| GB supervisory under load | Not exercised by P2 alone |
+| Messy-input stability (20.17) | P1 concern |
+| Full conversation lifecycle (CIL/COB/COP) | Partial |
+| TCU/cost superiority claims | Needs measured P1+P2 envelope |
+
+**Verdict:** **Agree** that dual pipeline is **sufficient to validate the meaning/expression separation + table-driven realization thesis**. **Do not claim** it validates the entire geometric + semantic TS program end-to-end. State PoC scope explicitly: *"validates Execution Manifold; Pipeline 1 assumed or stubbed at agreed depth."*
+
+---
+
+## 3. Stability — Pipeline 2 Feedback Delay via IMR
+
+**Agree, conditional on explicit bounds.**
+
+The path:
 
 ```text
-RB → OB(basin) → DCB observes → RB checks tr_needs_update
-  → (if true) TR routine(Thought Router) → RB
+OuB → IMR → semantic correction trigger → Pipeline 1 TR (Thought Router)
 ```
 
-Your flow uses the same symbols for different actors. These are **two pipelines**, not one:
+is **logically delayed feedback**, not uncontrolled coupling — **if** IMR is strictly:
 
-| Layer | Current 20-series | Proposed addition |
-|-------|-------------------|-------------------|
-| Meaning construction | InB → RB → OB(basin) → TR(router) → TB → Merge → MTP | (unchanged) |
-| Execution/realization | OuB (expression from MTP) | SRP → tables; RB(triggers) → composite(OpBeh, OBG, XlateR) |
+- Read-only on MTP semantic content.
+- Trigger-only output (no meaning writes).
+- Bounded in frequency and depth per cycle/conversation.
 
-**Recommendation:** Frame explicitly as a **second phase** or **OuB sub-pipeline**, not a replacement for the meaning-construction loop:
+This aligns with 20.10 invariants: no unbounded recursion (HLR-20.010-012), GB bounded intervention, deterministic safe boundaries.
 
-```text
-[MTP finalized] → SRP(epoch N) compiles tables
-[Per expression tick] → TriggerRB → resolve (OpBeh, OBG, XlateR) → TS-exec/OuB realize
-```
+**Stability risks to gate in PoC design:**
 
-Without this framing, 20.30 section 3 and 20.37's Semantic Interpretation Flow Contract become inconsistent.
+1. **Oscillation:** IMR trigger → P1 TR recompute → new OuB output → IMR trigger again.  
+   **Mitigation:** `max_correction_depth_per_cycle`, cooldown epochs, trigger deduplication on `(exec_trigger_id, routing_epoch_id)`.
 
-### Verdict (Area 2)
+2. **TR cascade:** IMR triggers Thought Router, which may route to basin-OB processing — that is intentional but costly.  
+   **Mitigation:** IMR emits typed triggers (`correction_class`, `severity`); P1 TR ignores low-severity triggers unless GB/policy permits.
 
-Conceptually coherent **as a separate realization layer**. Not coherent **as a rewrite of existing OB/TR/RB flow**. Needs explicit dual-pipeline architecture in 20.10 and 20.30.
+3. **Epoch skew:** P2 realizes against epoch N while IMR triggers P1 against stale tables.  
+   **Mitigation:** IMR tags triggers with `routing_epoch_id`; P1 rejects mismatched epochs.
 
----
-
-## 3. Communication Boundaries
-
-### Proposed boundaries (evaluated)
-
-| Actor | Reads | Writes | Assessment |
-|-------|-------|--------|------------|
-| SRP | MTP, GB policy, OpBeh/OBG/XlateR defs | routing tables, routing_epoch_id | **Clean** — classic offline compiler |
-| SRP | Must not touch TP, basin-OB, basin-RB, XlateR execution | — | **Correct** |
-| RB (proposed) | routing tables, semantic triggers | `TP.rb_trigger_id` | **Clean IF renamed** — not Relational Basin |
-| XlateR | routing tables, OBG identity | `TP.tr_id`, `TP.ob_id` | **Needs field rename** — `TP.ob_id` collides with basin OB registry |
-| Discourse/goal manager | — | `TP.obg_id` | **Underspecified** — no 20-series home yet |
-
-### Gaps to close
-
-1. **Who is "discourse/goal manager"?** Candidates: CIL (conversation integration), COP (propose-only), GB-supervised sub-module, or new `20.4x` Discourse Manager. Without placement, `TP.obg_id` writer authority is unenforceable (violates HLR-20.010-070).
-
-2. **Epoch coherence.** When SRP publishes `routing_epoch_id`, hot-path readers must reject stale tables. Specify atomic swap, version pinning per TP/tick, and replay binding.
-
-3. **Thought Router interaction.** If `TP.TR` (stance, intent, routing_semantics) influences trigger detection, define read-only consumption rules. Current RB already routes on `TP.TR` (HLR-20.050-021).
-
-4. **GB policy input to SRP.** Align with HLR-20.010-018–025: SRP reads policy; GB does not compile tables at runtime.
-
-### Verdict (Area 3)
-
-Boundaries are **clean in the abstract** and **enforceable with renamed modules and explicit TP field schema**. Not enforceable while sharing OB/TR/RB names and `TP.ob_id` with basin semantics.
+**Verdict:** **Agree** — Pipeline 2 does not inherently introduce uncontrolled feedback loops. IMR-mediated feedback is **safe if bounded and trigger-only**. Add 3–5 explicit stability HLRs before PoC commit.
 
 ---
 
-## 4. Address Space — Expandability, Size, Overlap
+## 4. TP/MTP Visibility — Metadata-Only Correct?
 
-### Design: `ADDR = (OB_ID, OBG_ID, TR_ID)`
+**Strong agree. Required, not optional.**
 
-**Scalability:** Sound. Sparse realized subsets over a large ID space is the right model. Trillions of combinations cost nothing if storage is table-driven and hot path is O(1) lookup.
+Pipeline 2 writing only:
 
-**Semantic cleanliness:** Allowing OB×OBG overlap is fine **if** axes are orthogonal:
-- OpBeh = *what structural operation*
-- OBG = *in which register/voice*
-- XlateR = *which mapping routine*
+- `opbeh_id`, `obg_id`, `xlater_id`, `routing_epoch_id`, `exec_trigger_id`
 
-Overlap across axes is composition, not duplication.
+…and **not** stance, goals, semantic fields, or MTP content is the correct enforcement of meaning/expression separation. It matches:
 
-### Requirements to add
+- HLR-20.010-006 (deterministic core vs output variability).
+- HLR-20.110-004 (OuB does not alter upstream meaning construction).
+- HLR-20.020-012 (non-overlapping primitive authority).
 
-1. **Invalid triple registry** — some (OpBeh, OBG, XlateR) combinations must be explicitly illegal (safety, policy).
-2. **Deprecation aliasing** — when OBG splits/merges, routing tables carry `alias_of` / `deprecated_by` for audit replay.
-3. **Hierarchical IDs** — flat numeric IDs scale; structured IDs (tier + family + variant) aid traceability and SRP compilation.
-4. **Collision with basin OB IDs** — if both manifolds use `OB_ID`, namespace separation is mandatory.
+**One refinement:** place these fields in a dedicated **`TP.exec_meta`** (or `TP.realization_meta`) envelope, not scattered in core semantic slots. That makes audit queries and replay diffs trivial and prevents accidental consumption by P1 RB/TR routing.
 
-### Verdict (Area 4)
+**Caveat:** P1 may **read** `exec_trigger_id` as a routing *signal* (like `tr_needs_update`), but must not treat it as semantic evidence. Document read-only trigger consumption separately from semantic field mutation.
 
-**Scalable and future-proof** with sparse tables and epoch versioning. Formalize in TP/schema docs, not in 20.10 principles alone. Require invalid-combination matrix and deprecation map in SRP output.
+**Verdict:** **Agree** — metadata-only visibility is required for determinism and auditability.
 
 ---
 
-## 5. System-Level Advantages
+## 5. Decision Guidance — Refactor vs Dual Pipeline
 
-| Claim | Justified? | Notes |
-|-------|------------|-------|
-| High-resolution interpretation | **Partially** | Resolution = table granularity + trigger specificity, not the address tuple alone |
-| Flexibility / evolvability | **Yes** | New OBG/XlateR rows without TS core rewire — core claim holds |
-| Fast hot-path (lookups only) | **Yes** | If SRP, inference, and MTP walks stay off hot path — enforce strictly |
-| Low cost/area/power | **Yes** | Consistent with TS vs GPU table in 20.30 §11; conditional on no hidden inference in TR |
-| No re-architect as OBGs/TRs emerge | **Mostly** | Table extension yes; SRP recompilation and epoch migration still required |
-| Separation of identity, structure, translation | **Yes** | Best part of the proposal |
-| Semantic manifold growth | **Yes** | Sparse compositional space is the right mental model |
+**Explicit recommendation: Dual pipeline now; refactor later only if validated and justified.**
 
-### Overclaim risk
+| Criterion | Refactor (single pipeline) | Dual pipeline (PoC) |
+|-----------|---------------------------|----------------------|
+| Architectural honesty | Merges two concerns under shared symbols | Keeps meaning and realization inspectably separate |
+| Falsifiability | Hard to tell whether bugs are P1 or P2 | Clear per-pipeline traces |
+| Namespace risk | High — OB/TR/RB already normative | Low — OpBeh/TrigRB/XlateR/SRP are distinct |
+| 20-series disruption | Requires rewriting 20.30, 20.37, 20.40, 20.50 | Additive 20.4x/20.55 cluster |
+| Premature optimization | High — entanglement before proof | Low — prove separation first |
+| Playground fit (40.xx) | Blurs playground vs canon boundaries | Natural 40.1xx execution playground |
 
-"High-resolution interpretation" must not imply **finer meaning construction** — that remains MTP/basin work. This layer provides **finer realization/routing resolution**. Attribute correctly.
+Refactoring today would force you to **re-host realization inside a pipeline already dense with basin semantics**, before you have trace proof that the Execution Manifold works. That inverts the project's usual flow (20 → 40 prototype → validate → promote).
 
-### Verdict (Area 5)
+**Verdict:** **Agree** — dual pipeline is the correct next step. Refactor only after:
 
-Advantages are **real and correctly attributed to the cold-compile / hot-lookup pattern**, not to 50-series implementation detail. Tighten wording on resolution vs construction.
-
----
-
-## 6. Problems Solved / System Issues Addressed
-
-| Problem | Legitimate? | Addressed by proposal? |
-|---------|-------------|------------------------|
-| Stable TS core despite evolving discourse modes | **Yes** | **Yes** — via table indirection |
-| High-resolution semantic routing | **Yes** | **Partially** — 20.37 TR already routes; this adds register-aware realization routing |
-| Large sparse compositional space | **Yes** | **Yes** |
-| Evolve OBGs without breaking TS | **Yes** | **Yes** — with epoch/alias rules |
-| Add TRs without re-wiring | **Yes** | **Yes** — if XlateR is table-driven |
-| Deterministic auditable routing | **Yes** | **Yes** — SRP compile logs + epoch + immutable tables |
-| Inference off hot path | **Yes** | **Yes** — if SRP boundary holds |
-
-### What already exists (don't duplicate)
-
-- **Thought Router (20.37):** semantic routing vector on TP
-- **Relational Basin (20.50):** OB topology and lane arbitration
-- **COB (20.32):** conversation-scoped discourse state
-- **OuB (20.110):** expression realization from MTP
-
-### Novel contribution
-
-**Register identity (OBG) as a compositional axis** + **offline routing-table compilation (SRP)**. That is the genuine architectural addition — not a replacement for basin/TR/RB meaning construction.
-
-### Verdict (Area 6)
-
-All listed concerns are legitimate. The proposal **meaningfully addresses** them **as a realization-layer extension**. It **does not need to subsume** existing basin primitives to do so.
+1. PoC demonstrates stable separation across N scripted scenarios.
+2. Trace logs show zero semantic-field writes from P2.
+3. Integration cost of two pipelines exceeds maintainability threshold (unlikely in PoC phase).
 
 ---
 
-## 7. Placement in the 20 Directory
+## 6. Additional Concerns Before Commit
 
-### Recommended document map
+### Must resolve before PoC kickoff
 
-| Topic | Recommended location | Rationale |
-|-------|---------------------|-----------|
-| Cold/hot path + dual-pipeline principle | **20.10** (new §1.16) | Foundational; constrains all modules |
-| Execution-manifold primitives (renamed) | **20.20** (new § tier B) OR **20.21_execution_primitives.md** | Keep 20.20 basin primitives intact; add second tier explicitly |
-| OpBeh definitions + catalog rules | **20.41_operational_behavior_requirements.md** | 20.40 is Object Basin — do not overload |
-| OBG definitions + lifecycle (split/merge/deprecate) | **20.42_obg_requirements.md** | Parallel to COB but register-focused |
-| XlateR definitions + mapping contracts | **20.43_translation_routine_requirements.md** | Keep 20.37 as Thought Router |
-| SRP compiler block | **20.55_srp_requirements.md** | **Yes — own 20.5x cluster** (between RB 20.50 and TB 20.60) |
-| Routing table schema + epoch semantics | **20.56_routing_table_schema.md** | SRP output contract |
-| Trigger detector (proposed RB) | **20.57_semantic_trigger_requirements.md** | Do not redefine 20.50 Relational Basin |
-| Composite address + TP fields | **20.105** (extend) + **20.39** (guidance) | Normative TP ownership |
-| Discourse/goal manager | **20.43** or **20.33** (CIL extension) | Depends on whether OBG selection is conversational intake vs goal policy |
-| Glossary + registry | **20.190** + `glossary_term_registry.json` | Mandatory before any merge |
-| Traceability | **20.200** | New HLR rows for all of the above |
-| End-to-end trace | **20.36** | Add realization-phase trace after MTP finalize |
+**A. Namespace (blocking for 20-series hygiene)**
 
-### Direct answers to your placement questions
+| Proposed | Canonical PoC name | Never reuse |
+|----------|---------------------|-------------|
+| OB | `OpBeh` | Object Basin (20.40) |
+| TR | `XlateR` | Thought Router (20.37) |
+| RB | `TrigRB` | Relational Basin (20.50) |
 
-- **SRP own 20.6x cluster?** → **No. Use 20.55/20.56** (SRP sits between routing and interpretation, not after TB).
-- **OB/OBG/TR defs in 20.30 or 20.40?** → **Neither.** 20.30 stays functional model; 20.40 stays Object Basin. Use **20.41–20.43**.
-- **Composite address in 20.10 or 20.20?** → **Split:** invariant statement in **20.10**; formal tuple + ID policy in **20.105** (or **20.56** if table-keyed).
+Freeze a one-page **symbol table** in 40.1xx disclaimers and 20.190 draft entries.
 
-### Additional documents needed
+**B. IMR primitive — currently underspecified**
 
-1. **20.10.xx** — Namespace/disambiguation policy (basin vs execution symbols)
-2. **20.56** — Routing table schema + epoch + invalid-triple matrix
-3. **20.58** — OuB ↔ execution manifold integration (how composite address reaches expression)
-4. **20.200** delta — HLR IDs before 30-series verification
+Define before build:
+
+- Full name and type (monitor vs basin vs routine).
+- Inputs: OuB output artifact only, or also `TP.exec_meta`?
+- Outputs: trigger schema (`trigger_type`, `severity`, `routing_epoch_id`, `correction_target`).
+- Authority: may it set `tr_needs_update` in P1, or only emit a separate `correction_pending` flag?
+- GB gate: which trigger classes require GB approval?
+
+Without IMR HLRs, the feedback path is the highest stability risk in the design.
+
+**C. Epoch lifecycle**
+
+Specify:
+
+- SRP compile trigger (manual, MTP delta threshold, scheduled).
+- Atomic table swap semantics.
+- In-flight TP behavior during epoch rollover.
+- Replay binding: `(routing_epoch_id, table_hash)` in trace.
+
+**D. OuB role split**
+
+Clarify whether OuB is:
+
+- Terminal renderer of P2's resolved `(OpBeh, OBG, XlateR)` address, or
+- Upstream of P2 (emitting content IMR monitors).
+
+Your feedback path implies **OuB → IMR**, so OuB likely sits at P2 output. Document that OuB consumes exec address + MTP read-only, consistent with 20.110.
+
+**E. Invalid combination matrix**
+
+SRP must emit or reference a policy of illegal `(opbeh_id, obg_id, xlater_id)` triples (safety, incoherent register/behavior pairings). Without it, sparse manifold claims are incomplete.
+
+**F. PoC scope statement (falsifiability)**
+
+Write a short **in-scope / out-of-scope** block:
+
+- **In:** separation, routing, epoch determinism, IMR bounded feedback, metadata-only writes.
+- **Out:** full GB load, production TCU proof, complete basin catalog, 50-series implementation.
+
+**G. Canonical trace extension**
+
+20.36 stage order needs P2 stages appended after `output_realization` (or as sub-stages): `trigrb_detect → exec_lookup → xlate_realize → oub_emit → imr_evaluate → [optional p1_correction_trigger]`.
+
+**H. Thought Router coexistence**
+
+IMR → "Pipeline 1 TR" must mean **Thought Router routine** (20.37), not XlateR. PoC docs should always say `ThoughtRouter` or `TP.TR recompute`, never bare `TR`.
+
+### Lower priority (can run parallel to PoC)
+
+- Discourse/goal manager ownership of `obg_id` selection (CIL vs COP vs policy table).
+- GB policy injection into SRP compile inputs.
+- COB/OBG boundary (conversation object vs register identity).
 
 ---
 
-## Bottom Line
+## Summary Decision Table
 
-| Dimension | Rating |
-|-----------|--------|
-| Internal conceptual coherence | **Strong** |
-| Alignment with TS principles (determinism, auditability, bounded hot path) | **Strong** |
-| Fit with existing 20-series without rename | **Blocked** |
-| Completeness | **~75%** — missing discourse-manager placement, epoch coherence, OuB handoff, Thought Router coexistence |
-| Recommended path forward | **Adopt as Execution Manifold; rename colliding symbols; add 20.41–20.43, 20.55–20.58** |
-
-The equilibrium CP and you aligned on for 40.100 (playground vs source of truth) applies here too: prototype the execution manifold in **40.1xx** with full disclaimers while 20.4x/20.55 normative docs are drafted and namespace collisions are resolved in **20.10/20.190** first.
+| Question | Answer |
+|----------|--------|
+| 1. Runtime penalty negligible? | **Yes**, with bounded XlateR and TrigRB |
+| 2. Dual pipeline proves TS thesis? | **Yes** for separation + realization; **no** for full TS program |
+| 3. IMR feedback safe? | **Yes**, with depth/epoch/cooldown bounds |
+| 4. Metadata-only TP/MTP correct? | **Yes** — use `TP.exec_meta` envelope |
+| 5. Dual pipeline correct next step? | **Yes** — refactor later if needed |
+| 6. Ready to commit? | **Yes, after** namespace table, IMR spec, epoch rules, PoC scope doc |
 
 ---
 
-I can next draft a concrete **namespace resolution table** (every colliding symbol → canonical name → TP field → owning document) or a **minimal 20.10 §1.16 patch outline** for CP review — whichever you want to tackle first.
+## Commit Checklist (minimal gate)
+
+1. Symbol table frozen (`OpBeh`, `OBG`, `XlateR`, `TrigRB`, `SRP`, `IMR`).
+2. IMR trigger schema + bounded feedback HLRs drafted.
+3. `TP.exec_meta` field envelope defined (5 metadata fields).
+4. Epoch swap + replay binding specified.
+5. PoC in/out scope paragraph written.
+6. 40.1xx playground disclaimer: *non-authoritative execution-manifold prototype*.
+
+I agree with your direction. Dual pipeline is the architecturally honest, inspectable, falsifiable vehicle. Commit once the six checklist items above are pinned — not after a monolithic refactor of today's single pipeline.
