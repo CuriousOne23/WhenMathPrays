@@ -19,6 +19,42 @@
         "type": "number",
         "description": "Issue number that this issue is a duplicate of. Only used when state_reason is 'duplicate'."
       },
+      "issue_fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "delete": {
+              "type": "boolean",
+              "description": "Set to true to clear this field's current value on the issue. Cannot be combined with 'value' or 'field_option_name'.",
+              "enum": [
+                true
+              ]
+            },
+            "field_name": {
+              "type": "string",
+              "description": "Issue field name (case-insensitive). Must match a field returned by list_issue_fields for this repository or its organization."
+            },
+            "field_option_name": {
+              "type": "string",
+              "description": "Option name for single-select fields. Validated against the field's options before the API call. Cannot be combined with 'value' or 'delete'."
+            },
+            "value": {
+              "type": [
+                "string",
+                "number",
+                "boolean"
+              ],
+              "description": "Value to set. Use for text, number, and date fields (date as YYYY-MM-DD). For single-select fields, prefer 'field_option_name' so the option is validated before the API call. Cannot be combined with 'field_option_name' or 'delete'."
+            }
+          },
+          "required": [
+            "field_name"
+          ],
+          "additionalProperties": false
+        },
+        "description": "Issue field values to set or clear. Each item requires 'field_name' and exactly one of 'value', 'field_option_name', or 'delete: true'."
+      },
       "issue_number": {
         "type": "number",
         "description": "Issue number to update"
