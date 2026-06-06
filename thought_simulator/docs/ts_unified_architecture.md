@@ -1,9 +1,9 @@
 # TS Unified Architecture (Exploratory)
 
 **Document ID:** `docs/ts_unified_architecture`  
-**Version:** 0.3  
+**Version:** 0.4  
 **Date:** 2026-06-06  
-**Status:** Exploratory — defensive prior art publication  
+**Status:** Exploratory — defensive prior art publication (public MIT repo)
 **Author:** Grok (architectural analysis for TS research)  
 **Project:** WhenMathPrays / Thought Simulator (open research)
 
@@ -23,9 +23,14 @@ This document intentionally uses **TS terminology** in later sections to maintai
 | What must never break in any refactor | §9 Invariants |
 | Defensive prior art / patent-blocking scope | Defensive Publication section + §20 Design Space Coverage |
 | Concrete walkthroughs | §19 Worked Examples |
-| Whether to actually build this | **Don't** — dual-pipeline PoC is the active path (§1) |
+| Term definitions in one place | §21 Glossary |
+| Whether to actually build this | **Don't** — dual-pipeline PoC is the active path (Reader's Guide box above) |
 
 The level of detail is deliberate: it supports **falsifiability** for researchers and **defensive publication** for the open project — establishing public, timestamped prior art for unified TS architectures without mandating implementation.
+
+### Why this is not the implementation path
+
+We build **dual-pipeline** (Pipeline A + Pipeline B) for the PoC because it is inspectable, falsifiable, and avoids namespace entanglement. This unified document exists to map the adjacent design space and establish **public prior art** for collapsed or optimized variants — not to redirect implementation. If a unified runtime is ever adopted, it must pass replay equivalence (§9.8) and the refactor gate (§16).
 
 ---
 
@@ -352,6 +357,29 @@ Meaning-layer primitives (Object Basin, Relational Basin, Thought Router, GB, Δ
 ### 7.3 Unified Discourse Manager (UDM) — internal structure
 
 UDM is the integration hub. Internally it decomposes into six components with **strict call order** and **separate audit records**:
+
+```mermaid
+flowchart TB
+  subgraph udm [Unified Discourse Manager — Phase 2]
+    TD[1. trigger_detector]
+    PG[2. policy_gate]
+    IS[3. identity_selector]
+    PR[4. plan_resolver]
+    RS[5. realization_selector]
+    IMR[6. imr_interface]
+    TD --> PG --> IS --> PR --> RS
+  end
+  SNAP[(semantic_snapshot\nread-only)] --> TD
+  SNAP --> IS
+  SNAP --> PR
+  TRIG[(trigger_tables)] --> TD
+  SRP[(SRP_tables\nrouting_epoch_id)] --> PR
+  SRP --> RS
+  POL[(GB / policy)] --> PG
+  RS --> PLAN[(exec_plan +\nPlanningDecision)]
+  OUB_OUT[OuB artifact] --> IMR
+  IMR --> CT[CorrectionTrigger queue]
+```
 
 ```text
 UDM
@@ -764,7 +792,30 @@ Dual-pipeline TS — meaning construction pipeline + execution/realization pipel
 
 ---
 
-## 21. Summary
+## 21. Glossary
+
+| Term | Definition |
+|------|------------|
+| **semantic_core** | Meaning-layer envelope: propositions, stance, goals, ΔH%, Thought Router fields; Phase 1 writers only |
+| **exec_plan** | Execution-plan envelope: opbeh_id, obg_id, xlater_id, routing_epoch_id; Phase 2 writers only |
+| **exec_trace** | Execution-trace envelope: OuB artifact refs, IMR records, exec_trigger_id; Phases 3–4 writers only |
+| **supervisory** | Policy/supervision envelope: GB markers, blocked-relation logs, correction queue; safe-boundary writers only |
+| **OpBeh** | Operational Behavior — discourse act structure (explain, compare, classify, …); explicit registry ID |
+| **OBG** | Operational Behavior Group — register/voice identity (pedagogic, casual, scientific, …); explicit registry ID |
+| **XlateR** | Translation Routine — deterministic mapping from meaning to surface for a given OBG; not Thought Router |
+| **UDM** | Unified Discourse Manager — Phase 2 integrator (trigger, policy, identity, plan, realization, IMR interface) |
+| **SRP** | Semantic Routing Planner — cold-path compiler producing epoch-versioned routing tables |
+| **IMR** | Interpretation Mismatch Routine — Phase 4 bounded feedback; trigger-only, no semantic_core writes |
+| **InteractionMode** | Correlated tuple: semantic_mode_id + obg_id + opbeh_id + xlater_id + routing_epoch_id |
+| **PlanningDecision** | Inspectable audit record for each Phase 2 resolution, with rationale_codes |
+| **routing_epoch_id** | Era binding for SRP-compiled tables; stale epoch → reject or audited fallback |
+| **Replay equivalence** | Stripping exec envelopes from unified trace yields semantic replay identical to Pipeline A |
+| **World State** | Generic term for TP/MTP layered substrate (§2, §6) |
+| **Discourse Manager** | Generic term for UDM (§2); owns planning and discourse coordination |
+
+---
+
+## 22. Summary
 
 A unified TS architecture is **one control loop with four responsibilities**, not two pipelines folded together. The Discourse Manager (UDM) is its heart — six internal components, table-driven, fully logged. Meaning/expression separation survives as **write authority over layered envelopes**, not as a deployment boundary.
 
@@ -779,6 +830,7 @@ The dual-pipeline Execution Manifold remains the correct **implementation** path
 | 0.1 | 2026-06-06 | Initial exploratory draft |
 | 0.2 | 2026-06-06 | CP critique: pure overview (§2), control-loop diagram (§3), UDM expansion (§7.3), learning/concurrency/memory (§11–13), reader's guide, TS mapping isolated (§17) |
 | 0.3 | 2026-06-06 | Defensive prior art: publication rationale, worked examples (§19), design-space coverage (§20); Jeff/CP patent-protection intent |
+| 0.4 | 2026-06-06 | CP v0.2 review follow-up: UDM diagram (§7.3), glossary (§21), implementation-path summary (Reader's Guide) |
 
 ---
 
