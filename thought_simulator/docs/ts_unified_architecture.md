@@ -1,16 +1,34 @@
 # TS Unified Architecture (Exploratory)
 
 **Document ID:** `docs/ts_unified_architecture`  
-**Version:** 0.1  
+**Version:** 0.2  
 **Date:** 2026-06-06  
 **Status:** Exploratory — not prescriptive  
 **Author:** Grok (architectural analysis for TS research)
 
 ---
 
+## Reader's Guide
+
+This document intentionally uses **TS terminology** in later sections to maintain continuity with the existing 20-series and dual-pipeline PoC. **It is not a normative specification.** No HLRs are defined here; nothing in this file overrides 20-series requirements.
+
+**How to read it:**
+
+| If you want… | Read |
+|--------------|------|
+| A from-scratch mental model (no basin jargon) | §2 Pure Conceptual Overview |
+| The unified architecture as one control loop | §3 Single Control Loop |
+| How this maps onto today's TS modules | §17 TS Continuity Mapping |
+| What must never break in any refactor | §9 Invariants |
+| Whether to actually build this | **Don't** — dual-pipeline PoC is the active path (§1) |
+
+The level of detail is deliberate: exploratory documents that under-specify invariants tend to be misread as permission to entangle meaning and expression. Detail here supports **falsifiability**, not implementation mandate.
+
+---
+
 ## Disclaimer
 
-This document describes a **hypothetical unified Thought Simulator (TS) architecture** — a single-pipeline design with internal phases, not two physically separated pipelines.
+This document describes a **hypothetical unified Thought Simulator (TS) architecture** — a single control loop over one layered state object, not two physically separated pipelines.
 
 It is an **intellectual exercise** to:
 
@@ -23,10 +41,10 @@ It is an **intellectual exercise** to:
 
 The active implementation path is the **dual-pipeline Execution Manifold**:
 
-- **Pipeline A** — meaning construction (basin/MTP path; today's core)
+- **Pipeline A** — meaning construction
 - **Pipeline B** — execution/realization (OpBeh × OBG × XlateR + SRP + TrigRB + IMR)
 
-Readers should treat this unified sketch as a **counterfactual reference model**, comparable to a textbook "alternative design" chapter — useful for reasoning, not for implementation without explicit human approval and PoC validation.
+Readers should treat this unified sketch as a **counterfactual reference model** — useful for reasoning, not for implementation without explicit human approval and PoC validation.
 
 ---
 
@@ -34,476 +52,546 @@ Readers should treat this unified sketch as a **counterfactual reference model**
 
 ### 1.1 What this document is
 
-A clean description of what TS **might** look like if meaning construction and execution/realization were integrated into **one orchestrated control loop** over **one layered state object**, rather than two inspectable pipelines.
+A description of what TS **might** look like if meaning construction and execution/realization were integrated into **one orchestrated control loop**, rather than two inspectable pipelines.
 
 ### 1.2 What this document is not
 
 - Not a proposal to implement unified architecture now
 - Not a replacement for 20-series normative requirements
-- Not a 40-series playground artifact (see §8 for placement)
+- Not a 40-series playground artifact
 - Not an endorsement of end-to-end latent/ML training through meaning fields
-- Not permission to collapse namespace distinctions (`basin.OB` vs `exec.OpBeh`, `ThoughtRouter` vs `XlateR`, `RelationalBasin` vs `TrigRB`)
+- Not a collapsed dual pipeline wearing a unified label — see §3
 
 ### 1.3 Relationship to the Execution Manifold PoC
 
-The dual-pipeline PoC is the **contract discovery phase**. It proves:
-
-- meaning and expression can be separated in practice,
-- SRP can compile routing tables deterministically off the hot path,
-- realization can traverse a sparse compositional manifold,
-- IMR-mediated feedback can remain bounded and auditable.
-
-A future unified refactor — if ever undertaken — would **package proven boundaries** into one runtime. It would not eliminate those boundaries.
+The dual-pipeline PoC is the **contract discovery phase**. A future unified refactor — if ever undertaken — would **package proven boundaries** into one runtime. It would not eliminate those boundaries.
 
 ---
 
-## 2. Design Premise: Unified but Not Entangled
+## 2. Pure Conceptual Overview (From Scratch)
 
-A credible unified TS architecture is:
+*This section describes the unified architecture without reference to basins, Thought Packets, or existing TS module names.*
 
-```text
-One runtime  +  One state object  +  Hard internal phases  +  Partitioned write authority
-```
+### 2.1 Core idea
 
-It is **not**:
+A **Cognitive Engine** maintains one **World State** and runs one **Control Loop** per interaction cycle. The World State has two logical layers that share one storage substrate:
 
-```text
-One flat state blob  +  Interleaved meaning/realization writes  +  Implicit feedback
-```
+- **Meaning Layer** — what is true, intended, uncertain, and structurally relevant
+- **Expression Layer** — how that meaning is voiced, formatted, and surfaced
 
-TS principles from 20.10 and 20.30 that constrain any unified design:
+The engine never confuses the two layers, even though they live in one object.
 
-| Principle | Unified interpretation |
-|-----------|------------------------|
-| Determinism (HLR-20.010-001) | Identical inputs, MTP state, seed, and epoch → identical outputs |
-| Fixed phase ordering (HLR-20.010-004, -066) | Phases are sequential within a cycle; "unified" ≠ "unordered" |
-| Meaning/expression separation (HLR-20.010-006) | Logical separation via envelopes; not architectural pipeline split |
-| No latent entanglement (20.30 §1.2) | OpBeh/OBG/XlateR are explicit registry IDs, not learned latent heads |
-| GB bounded supervision (HLR-20.010-018–025) | Unified planner must not become a monolithic god module |
-| Seed boundary (20.30 §1.7) | Variability confined to expression phase only |
+### 2.2 Native control dimensions
+
+Three explicit control axes govern expression (not meaning):
+
+| Dimension | Question it answers |
+|-----------|---------------------|
+| **Behavior** | What discourse act? (explain, compare, classify, refuse, …) |
+| **Identity** | In what register/voice? (scientific, casual, pedagogical, …) |
+| **Mapping** | Which deterministic translation routine maps meaning → surface? |
+
+A fourth meta-dimension binds them:
+
+| Dimension | Question it answers |
+|-----------|---------------------|
+| **Epoch** | Which compiled routing-table era is authoritative? |
+
+These are **registry IDs and table keys**, not latent embeddings.
+
+### 2.3 One control loop, four responsibilities
+
+Each cycle, the engine performs four responsibilities in order:
+
+1. **Interpret** — update the Meaning Layer from input and prior state
+2. **Plan** — select (Behavior, Identity, Mapping) from compiled tables + triggers
+3. **Realize** — produce surface output from Meaning Layer (read-only) + plan + optional seed
+4. **Evaluate** — detect mismatch; emit bounded correction signals; never silently rewrite meaning
+
+A **Table Compiler** (offline) maintains routing tables from World State structure and policy. It does not run per cycle.
+
+### 2.4 Central integrator: Discourse Manager
+
+One module — the **Discourse Manager** — owns planning and discourse coordination:
+
+- detects when expression should change or proceed,
+- selects Behavior × Identity × Mapping,
+- validates against policy and invalid-combination rules,
+- hands off to the Realizer,
+- receives evaluation feedback.
+
+This is the conceptual heart of unification: **one planner, many facets**, table-driven, fully logged.
+
+### 2.5 What "unified" means here
+
+Unified means:
+
+- one runtime,
+- one World State object with layered write authority,
+- one Discourse Manager coordinating expression decisions.
+
+Unified does **not** mean:
+
+- one undifferentiated state blob,
+- free interleaving of meaning and expression writes,
+- implicit feedback or silent drift.
 
 ---
 
-## 3. Unified Architecture Overview
+## 3. Single Control Loop (Not a Collapsed Dual Pipeline)
 
-### 3.1 Single integrated control loop
+A unified architecture is **not** "Pipeline A stacked on Pipeline B in one document." It is a **single cyclic controller** where interpretation, planning, realization, and feedback are **responsibilities of one loop**, not ownership of separate runtimes.
 
-One **TS Cycle Orchestrator** drives four internal phases per cycle:
+```mermaid
+flowchart LR
+  subgraph loop [Unified Control Loop — one runtime]
+    direction TB
+    WS[(World State\nlayered envelopes)]
+    INT[Interpret]
+    PLAN[Plan]
+    REAL[Realize]
+    EVAL[Evaluate]
+    INT --> PLAN --> REAL --> EVAL
+    EVAL -.->|bounded correction signal| INT
+    INT <--> WS
+    PLAN <--> WS
+    REAL <--> WS
+    EVAL <--> WS
+  end
+  TC[[Table Compiler\ncold path]] -.->|epoch tables| PLAN
+  IN([Input]) --> INT
+  REAL --> OUT([Surface Output])
+```
+
+**Conceptual difference from dual pipeline:**
+
+| Dual pipeline | Unified loop |
+|---------------|--------------|
+| Two orchestrators, two trace namespaces | One orchestrator, phase-tagged trace |
+| Separation is **architectural** (visible in deployment) | Separation is **logical** (visible in envelopes + write guards) |
+| Inspectability via pipeline boundary | Inspectability via replay equivalence (§9.8) |
+
+The four phases (Interpret → Plan → Realize → Evaluate) are **responsibilities within the loop**, analogous to lexer → parser → codegen in a compiler. Compiler phases are not "dual pipelines collapsed" — they are one pass with hard internal order.
+
+---
+
+## 4. Design Premise: Unified but Not Entangled
+
+```text
+One runtime  +  One state object  +  Hard phase order  +  Partitioned write authority
+```
+
+Constraints (stated generically; TS-specific mapping in §17):
+
+| Constraint | Unified interpretation |
+|------------|------------------------|
+| Determinism | Identical inputs, state, seed, epoch → identical outputs |
+| Phase order | Phases are sequential within a cycle; unified ≠ unordered |
+| Meaning/expression separation | Logical envelopes; not architectural pipeline split |
+| No latent entanglement | Control dimensions are explicit IDs, not learned latent heads |
+| Bounded supervision | Discourse Manager must not absorb all policy authority |
+| Seed boundary | Variability confined to realization only |
+
+---
+
+## 5. Unified Architecture Overview (TS-Oriented)
+
+### 5.1 Four phases per cycle
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         UNIFIED TS CYCLE N                              │
+│                    UNIFIED TS CYCLE N (one orchestrator)                │
 ├─────────────────────────────────────────────────────────────────────────┤
-│  Phase 1 — INTERPRETATION (semantic construction)                       │
-│    InB → RelationalBasin → ObjectBasin → DCB → ThoughtRouter → TB      │
-│    → Merge → MTP semantic_core update                                     │
-├─────────────────────────────────────────────────────────────────────────┤
-│  Phase 2 — PLANNING (realization planning)                              │
-│    Unified Discourse Manager (UDM):                                     │
-│      trigger detection + SRP table lookup + PlanningDecision commit     │
-├─────────────────────────────────────────────────────────────────────────┤
-│  Phase 3 — REALIZATION (expression)                                     │
-│    OuB: MTP (read-only) + exec_plan + seed → surface artifact           │
-├─────────────────────────────────────────────────────────────────────────┤
-│  Phase 4 — FEEDBACK (mediated correction)                               │
-│    IMR: evaluate mismatch → CorrectionTrigger (bounded, auditable)      │
-│    → schedule gated re-entry to Phase 1 (next cycle or partial pass)    │
+│  Phase 1 — INTERPRETATION                                               │
+│  Phase 2 — PLANNING (UDM)                                               │
+│  Phase 3 — REALIZATION (OuB)                                            │
+│  Phase 4 — FEEDBACK (IMR)                                               │
 └─────────────────────────────────────────────────────────────────────────┘
          ▲
-         │  cold path (not per turn)
-         │
+         │  cold path
     SRP Compiler ──► routing tables + routing_epoch_id
 ```
 
-### 3.2 Cold vs hot path (unchanged role)
+Phase-by-phase module detail appears in §8. TS module names appear in §17.
 
-Even in a unified design, **SRP does not run per turn on the hot path**.
+### 5.2 Cold vs hot path
 
 | Component | Path | Role |
 |-----------|------|------|
-| SRP Compiler | Cold | Compile routing tables from MTP structure, GB policy, OpBeh/OBG/XlateR registries |
-| UDM Plan Resolver | Hot | O(1) table lookup + deterministic trigger match |
-| ObjectBasin / ThoughtRouter | Hot | Semantic construction (Phase 1) |
-| OuB | Hot | Expression only (Phase 3) |
+| SRP Compiler | Cold | Compile routing tables from semantic structure + policy + registries |
+| UDM Plan Resolver | Hot | O(1) lookup + deterministic trigger match |
+| Interpretation phase | Hot | Meaning construction |
+| OuB | Hot | Expression only |
 
-"SRP integrated into the planner" means the **hot planner reads SRP products** — not that compilation merges into per-turn inference.
+"SRP integrated into the planner" means the hot planner **reads SRP products** — not that compilation runs per turn.
 
 ---
 
-## 4. Single Shared State Representation
+## 6. Single Shared State Representation
 
-### 4.1 Layered state, one substrate
-
-Unified TS uses one `TP` / `MTP` pair, partitioned into **logical envelopes** with **distinct write authorities**:
+### 6.1 Layered state, one substrate
 
 ```text
-TP / MTP
+World State (TP / MTP)
 ├── semantic_core          # Phase 1 writers only
-│   ├── propositions, stance, affect, intent
-│   ├── ΔH%, lineage, semantic tags
-│   └── TP.TR (Thought Router semantic routing vector)
-│
 ├── exec_plan              # Phase 2 writers only
-│   ├── opbeh_id
-│   ├── obg_id
-│   ├── xlater_id
-│   ├── routing_epoch_id
-│   └── planning_decision_ref
-│
 ├── exec_trace             # Phase 3–4 writers only
-│   ├── exec_trigger_id
-│   ├── oub_artifact_ref
-│   └── imr_evaluation_record
-│
-└── supervisory            # GB at safe boundaries only
-    ├── policy markers
-    ├── blocked_relation_logs
-    └── correction_trigger_queue
+└── supervisory            # Policy supervisor at safe boundaries only
 ```
 
-### 4.2 InteractionMode (unified mode concept)
+See §17 for field-level mapping to TS schemas.
 
-A single struct correlates facets that are separate axes in the dual-pipeline PoC:
+### 6.2 InteractionMode
 
 ```text
 InteractionMode {
-  semantic_mode_id,     # task/epistemic context (from MTP / COB / CIL)
-  obg_id,               # register / voice identity
-  opbeh_id,             # discourse act structure
+  semantic_mode_id,     # task/epistemic context
+  obg_id,               # register / voice
+  opbeh_id,             # discourse act
   xlater_id,            # mapping routine
-  routing_epoch_id      # table era binding
+  routing_epoch_id
 }
 ```
 
-`semantic_mode_id` and `obg_id` may correlate but are **not identical**:
+`semantic_mode_id` and `obg_id` correlate but are not identical.
 
-- semantic mode = what kind of reasoning or task context applies,
-- OBG = who/what voice the surface realization uses.
+### 6.3 PlanningDecision
 
-### 4.3 PlanningDecision (inspectable unified routing artifact)
-
-Every Phase 2 resolution produces an explicit record:
+Every planning resolution produces an explicit, inspectable record:
 
 ```text
 PlanningDecision {
   cycle_id,
-  semantic_snapshot_ref,    # read-only hash of semantic_core at plan time
-  opbeh_id,
-  obg_id,
-  xlater_id,
+  semantic_snapshot_ref,
+  opbeh_id, obg_id, xlater_id,
   routing_epoch_id,
-  trigger_id,               # from internalized TrigRB
-  rationale_codes[],        # deterministic reason codes
-  invalid_triple_rejected   # boolean + reject_code if applicable
+  trigger_id,
+  rationale_codes[],
+  invalid_triple_rejected
 }
 ```
 
-This preserves the dual-pipeline guarantee: routing remains **explicit and inspectable**, not implicit drift.
-
 ---
 
-## 5. Module Integration: What Collapses, What Stays Separate
+## 7. Module Integration and UDM
 
-### 5.1 Collapse / merge map
+### 7.1 Collapse / merge map
 
 | Dual-pipeline PoC module | Unified architecture home |
 |--------------------------|---------------------------|
-| Pipeline A orchestrator | Phase 1 (Interpretation) — largely unchanged |
+| Pipeline A orchestrator | Phase 1 (Interpretation) |
 | TrigRB | UDM.trigger_detector |
-| OpBeh/OBG/XlateR resolver | UDM.plan_resolver |
-| Pipeline B orchestrator | Cycle Orchestrator phases 2–4 |
-| IMR | Phase 4 (Feedback) — logic preserved, deployment internalized |
-| SRP | Cold SRP Compiler — **does not merge into hot path** |
-| Separate exec metadata store | `TP.exec_plan` + `TP.exec_trace` envelopes |
+| OpBeh/OBG/XlateR resolver | UDM.plan_resolver + identity_selector + realization_selector |
+| Pipeline B orchestrator | Cycle orchestrator phases 2–4 |
+| IMR | Phase 4 — via UDM.imr_interface |
+| SRP | Cold compiler — **not** hot path |
+| Separate exec metadata store | exec_plan + exec_trace envelopes |
 
-### 5.2 What must not collapse
+### 7.2 What must not collapse
 
-| Module | Reason to keep distinct |
-|--------|-------------------------|
-| Object Basin (20.40) | Basin evidence extraction; not OpBeh |
-| Relational Basin (20.50) | Topology, split/merge; not TrigRB |
-| Thought Router (20.37) | `TP.TR` semantic routing; not XlateR |
-| GB (20.80) | Supervisory isolation; planner must not absorb GB |
-| OuB (20.110) | Seed-bound expression; sole variability entry |
-| ΔH% / TB / Merge | Meaning construction authority |
+Meaning-layer primitives (Object Basin, Relational Basin, Thought Router, GB, ΔH%, TB, Merge) retain distinct authority. Unification merges **orchestration**, not **semantic roles**. See §17.
 
-Namespace discipline remains permanent. Unification merges **orchestration**, not **semantic roles**.
+### 7.3 Unified Discourse Manager (UDM) — internal structure
 
-### 5.3 Unified Discourse Manager (UDM)
-
-The primary integration hub in a unified design. UDM subsumes:
-
-1. **Trigger detection** (former TrigRB) — match semantic events against trigger tables
-2. **Plan resolution** — map `(semantic_snapshot, trigger, policy)` → `(OpBeh, OBG, XlateR)` via SRP tables
-3. **OBG authority** — validate or select register identity (may read CIL/COB context)
-4. **IMR interface** — accept OuB artifacts for mismatch evaluation; emit `CorrectionTrigger` events
-
-UDM is **table-driven and deterministic**. It does not perform open-ended inference.
-
-### 5.4 Thought Router extension (optional deep integration)
-
-A further refactor step extends `TP.TR` with realization hints:
+UDM is the integration hub. Internally it decomposes into six components with **strict call order** and **separate audit records**:
 
 ```text
-TP.TR = {
-  // existing semantic routing fields (20.37)
-  stance, intent, affect, routing_semantics, ...
-
-  // optional realization hints (resolved by UDM in Phase 2)
-  realization_hints: {
-    preferred_obg_id?,
-    opbeh_family?,
-    xlater_class?
-  }
-}
+UDM
+├── 1. trigger_detector      # Match semantic events → TriggerSet (deterministic order)
+├── 2. policy_gate             # Filter triggers against GB/policy; emit reject codes
+├── 3. identity_selector       # Resolve or validate obg_id (register/voice)
+├── 4. plan_resolver           # Map (snapshot, trigger, epoch) → candidate triple
+├── 5. realization_selector    # Materialize xlater_id + opbeh_id; validate triple matrix
+└── 6. imr_interface           # Accept OuB artifact; emit CorrectionTrigger; no meaning writes
 ```
 
-UDM **materializes** hints into concrete registry IDs. Semantic routing and realization planning become **facets of one planning story** while remaining **separate fields with separate writers**.
-
----
-
-## 6. Phase-by-Phase Behavior
-
-### 6.1 Phase 1 — Interpretation
-
-Equivalent to today's meaning construction pipeline. Authority unchanged:
-
-- Relational Basin routes lane topology
-- Object Basin extracts evidence; sets `tr_needs_update` when needed
-- DCB observes trajectory geometry (ephemeral, no TP writes)
-- Thought Router recomputes `TP.TR` when stale
-- TB interprets; Merge updates MTP `semantic_core`
-
-**Invariant:** Phase 1 completes before Phase 2 begins. Phase 2 reads `semantic_core` through a **read-only snapshot** (copy-on-write view or snapshot hash).
-
-### 6.2 Phase 2 — Planning
-
-UDM executes:
+**Decision model (Phase 2):**
 
 ```text
-1. trigger_set = trigger_detector(semantic_snapshot, exec_trigger_tables[epoch])
-2. for each trigger in trigger_set (deterministic order):
-     decision = plan_resolver(semantic_snapshot, trigger, SRP_tables[epoch], policy)
-3. commit exec_plan envelope + PlanningDecision record
+1. triggers = trigger_detector(semantic_snapshot, trigger_tables[epoch])
+2. triggers = policy_gate(triggers, policy)           # may drop triggers with audit
+3. for t in triggers (deterministic order):
+     obg_id  = identity_selector(snapshot, t, context)
+     triple  = plan_resolver(snapshot, t, obg_id, SRP_tables[epoch])
+     triple  = realization_selector(triple, invalid_matrix)
+     commit PlanningDecision + exec_plan envelope
 4. pin routing_epoch_id for remainder of cycle
 ```
 
-Invalid `(OpBeh, OBG, XlateR)` triples are rejected with fixed audit codes — same invalid-combination matrix as dual-pipeline PoC.
+**Relationship to semantic mode:**
 
-### 6.3 Phase 3 — Realization
+- `semantic_mode_id` lives in `semantic_core` (Phase 1 product).
+- `identity_selector` **reads** semantic mode; it does not write it.
+- Semantic mode constrains **which OBG IDs are legal**, not which one is automatically selected.
+- Selection is table-driven: `(semantic_mode, trigger, policy) → obg_id` via SRP-compiled index.
 
-OuB consumes:
+**Relationship to SRP tables:**
 
-- `MTP.semantic_core` (read-only)
-- `TP.exec_plan` (opbeh_id, obg_id, xlater_id)
-- seed (expression variability only)
+| Table | Produced by SRP | Consumed by |
+|-------|-----------------|-------------|
+| `trigger_index` | semantic structure patterns | trigger_detector |
+| `plan_index` | (semantic_mode, trigger) → triple candidates | plan_resolver |
+| `invalid_triple_matrix` | policy + registry | realization_selector |
+| `obg_legality_index` | semantic_mode → allowed obg_ids | identity_selector |
 
-OuB does **not** write semantic fields. Output goes to `exec_trace.oub_artifact_ref`.
+SRP publishes all tables under one `routing_epoch_id`. UDM pins epoch at cycle start.
 
-### 6.4 Phase 4 — Feedback
+**UDM invariants:**
 
-IMR evaluates OuB artifact against semantic snapshot and exec plan:
+- Table-driven only; no open-ended inference on hot path
+- TCU-bounded; degrades deterministically on overload
+- Does not write `semantic_core`
+- Does not absorb GB policy authority — `policy_gate` reads GB product, does not replace GB
+- Every selection produces `PlanningDecision` with `rationale_codes`
 
-```text
-CorrectionTrigger {
-  trigger_type,
-  severity,
-  routing_epoch_id,
-  semantic_snapshot_ref,
-  exec_plan_ref,
-  cause_codes[],
-  max_depth_remaining
-}
-```
+### 7.4 Optional Thought Router extension
 
-Triggers queue for **bounded** re-entry to Phase 1 (typically Thought Router recompute or targeted basin pass — not full unbounded cascade).
-
-IMR may be **represented** as a discourse event type, but its **mediation rules** remain distinguishable: no direct `semantic_core` writes.
+`TP.TR` may carry realization **hints** (not IDs) that UDM materializes in Phase 2. Hints are written in Phase 1; concrete IDs are written in Phase 2. Separate writers, one planning story.
 
 ---
 
-## 7. Invariants That Must Survive Any Unified Refactor
+## 8. Phase-by-Phase Behavior
 
-These are the non-negotiable correctness conditions. Violating any one means the design is entangled, not unified.
+### 8.1 Phase 1 — Interpretation
 
-### 7.1 Write authority partition
+Updates `semantic_core` only. Phase 2 reads via read-only snapshot. Phase 1 completes before Phase 2 begins.
 
-```text
-semantic_core writers ∩ exec_plan writers = ∅
-exec_plan writers ∩ OuB variability logic = ∅
-IMR writers ∩ semantic_core writers = ∅
-```
+### 8.2 Phase 2 — Planning
 
-### 7.2 Phase immutability within a cycle
+UDM executes decision model (§7.3). Invalid triples rejected with fixed audit codes.
 
-Realization and expression phases cannot mutate `semantic_core` committed in the same cycle's interpretation phase.
+### 8.3 Phase 3 — Realization
 
-### 7.3 Explicit routing artifacts
+OuB: `semantic_core` (read-only) + `exec_plan` + seed → surface artifact in `exec_trace`.
 
-Every realization resolution produces a `PlanningDecision` with `rationale_codes`. No silent defaults.
+### 8.4 Phase 4 — Feedback
 
-### 7.4 SRP off hot path
-
-Table compilation never blocks per-turn execution. Epoch publish is atomic.
-
-### 7.5 Epoch coherence
-
-All exec fields carry `routing_epoch_id`. Stale epoch → reject or deterministic fallback with audit code.
-
-### 7.6 IMR bounded feedback
-
-- `max_correction_depth_per_cycle`
-- trigger deduplication on `(exec_trigger_id, routing_epoch_id)`
-- cooldown epochs for repeated mismatch classes
-- no unbounded Phase 1 re-entry (HLR-20.010-012)
-
-### 7.7 Seed boundary
-
-Seed influences Phase 3 only. No seed-dependent branches in Phase 1 or Phase 2.
-
-### 7.8 Replay equivalence
-
-**Acceptance criterion for any unified refactor:**
-
-```text
-replay(unified_trace).semantic_core
-  ==
-replay(dual_pipeline_trace).pipeline_a_semantic_core
-```
-
-Stripping `exec_plan` and `exec_trace` from a unified trace must yield a Pipeline A replay identical to the dual-pipeline PoC.
-
-### 7.9 Namespace discipline
-
-Permanent qualified symbols:
-
-| Basin / meaning layer | Execution layer |
-|-----------------------|-----------------|
-| Object Basin (`OB`) | OpBeh |
-| Thought Router (`TP.TR`) | XlateR |
-| Relational Basin (`RB`) | TrigRB (absorbed into UDM in unified form) |
+IMR via `UDM.imr_interface`: mismatch → `CorrectionTrigger` → bounded re-entry to Phase 1 next cycle. No direct `semantic_core` writes.
 
 ---
 
-## 8. Risks and Failure Modes
+## 9. Invariants That Must Survive Any Unified Refactor
 
-| Risk | Failure mode | Detection |
-|------|--------------|-----------|
-| **Planner monolith** | UDM absorbs GB, basin routing, and policy — single point of failure | TCU overrun; unclear audit trail |
-| **Silent semantic drift** | Phase 2/3 writes stance or goals "for convenience" | Replay diff shows semantic_core changed without Phase 1 |
-| **False simplicity** | Team treats one diagram as one writer | Invariant violations in 30-series replay tests |
-| **Implicit feedback** | Mode changes without `CorrectionTrigger` | Missing IMR audit records |
-| **Epoch races** | Mixed-era table lookups in one cycle | `routing_epoch_id` mismatch in trace |
-| **OuB seed leak** | Seed influences Thought Router | Nondeterministic semantic replay |
-| **Verification collapse** | Cannot isolate interpretation vs planning bugs | Failed replay equivalence suite |
-| **Namespace regression** | `OB`/`TR`/`RB` reused for execution primitives | Glossary collision; 20.200 traceability breaks |
-
-The largest risk is **authority blur** — one state object inviting one writer too many.
+1. **Write authority partition** — semantic / exec_plan / exec_trace / supervisory writers are disjoint
+2. **Phase immutability** — later phases cannot mutate same-cycle semantic_core
+3. **Explicit routing artifacts** — every resolution produces PlanningDecision + rationale_codes
+4. **SRP off hot path** — compilation never blocks per-turn execution
+5. **Epoch coherence** — all exec fields carry routing_epoch_id; stale epoch → reject or audited fallback
+6. **IMR bounded feedback** — depth limits, dedup, cooldown; no unbounded re-entry
+7. **Seed boundary** — seed affects realization only
+8. **Replay equivalence** — stripping exec envelopes from unified trace ≡ Pipeline A replay (dual-pipeline PoC)
+9. **Namespace discipline** — meaning-layer and execution-layer symbols never alias
 
 ---
 
-## 9. Comparison: Dual Pipeline vs Unified Architecture
+## 10. Risks and Failure Modes
 
-| Dimension | Dual pipeline (PoC path) | Unified architecture (this document) |
-|-----------|--------------------------|--------------------------------------|
-| **Primary goal** | Validate contracts; maximize inspectability | Packaging convenience; reader simplicity |
-| **Failure isolation** | High — per-pipeline traces | Lower — requires envelope/phase tags |
-| **Implementation complexity** | Two orchestrators | One orchestrator, stricter phase guards |
-| **Conceptual clarity for new readers** | Two diagrams | One diagram (invariants harder) |
-| **Normative 20-series impact** | Additive (20.4x, 20.55) | Consolidation + rewrite risk |
-| **Long-term correctness** | Logical separation explicit | Logical separation via envelopes |
-| **Recommended timing** | Now | Post-PoC + verification + equivalence proof |
+| Risk | Failure mode |
+|------|--------------|
+| Planner monolith | UDM absorbs GB + basin routing |
+| Silent semantic drift | Phase 2/3 writes meaning fields |
+| False simplicity | One diagram → one writer mentally |
+| Implicit feedback | Mode changes without CorrectionTrigger |
+| Epoch races | Mixed-era lookups in one cycle |
+| Seed leak | Seed influences interpretation or planning |
+| Verification collapse | Cannot isolate phase bugs |
+| Namespace regression | OB/TR/RB reused for execution primitives |
 
----
-
-## 10. Long-Term Evolution: Plausible but Not Inevitable
-
-### 10.1 Is unified architecture a plausible evolution?
-
-**Yes**, after dual-pipeline PoC succeeds and 30-series verification proves:
-
-1. metadata-only writes from execution layer,
-2. SRP epoch coherence,
-3. IMR bounded feedback stability,
-4. replay equivalence between representations.
-
-### 10.2 Is unified architecture inevitable?
-
-**No.** For a deterministic, auditable system, **logical separation is a feature**, not technical debt.
-
-A mature TS may deploy as:
-
-- **one physical runtime** (unified orchestrator), with
-- **permanent logical decomposition** in traces, tests, and docs (dual-pipeline audit lens).
-
-This is analogous to compiler phases or database transaction stages: one process, hard internal boundaries.
-
-### 10.3 Recommended evolution path
-
-```text
-Now        → Dual-pipeline Execution Manifold PoC (40.1xx)
-PoC pass   → Normative 20.4x / 20.55 contract docs
-Verify     → 30-series replay + equivalence criteria defined
-Optional   → Unified orchestrator refactor (if economics justify)
-Permanent  → Logical meaning/realization separation in verification
-```
-
-Refactor only if:
-
-- dual orchestration cost is measurably painful, **and**
-- replay equivalence is proven, **and**
-- team maintains phase/envelope discipline under unified codebase.
-
-Do **not** refactor for diagram simplicity alone.
+The largest risk is **authority blur**.
 
 ---
 
-## 11. Refactor Gate Checklist (Future Reference)
+## 11. Learning and Training Implications
 
-Before any unified refactor is approved:
+*Exploratory — describes design space, not TS commitment.*
 
-- [ ] Dual-pipeline PoC passes scripted scenario classes (stable meaning, flexible expression, bounded IMR correction)
-- [ ] Zero semantic_core writes from Pipeline B demonstrated in traces
-- [ ] `PlanningDecision` / `exec_plan` schema frozen
-- [ ] Invalid triple matrix defined and tested
-- [ ] Epoch swap semantics specified and replay-tested
-- [ ] IMR trigger taxonomy and depth bounds verified
-- [ ] Replay equivalence test: unified trace semantic_core == dual Pipeline A trace
-- [ ] Namespace table in 20.190 updated
-- [ ] 20.36 canonical trace extended with unified phase tags
-- [ ] Explicit human approval for direction change from dual-pipeline to unified
+A unified architecture changes **where** learning hooks attach, not whether TS permits end-to-end latent training through meaning fields.
+
+### 11.1 TS-native learning (determinism-preserving)
+
+| Target | Mechanism | Path |
+|--------|-----------|------|
+| Routing tables | SRP recompile from annotated MTP structure | Cold |
+| OpBeh/OBG/XlateR registries | Split/merge/deprecate with alias maps | Cold |
+| Invalid triple matrix | Policy update + verification | Cold |
+| Trigger definitions | Registry evolution + golden replay | Cold |
+| IMR thresholds | Supervised threshold tuning against logged triggers | Cold / offline |
+
+TS-native learning **updates compiled artifacts and registries**, then verifies via replay. Meaning-layer determinism is preserved.
+
+### 11.2 ML-hybrid learning (fork, not default TS)
+
+A unified loop is *architecturally* more tempting for end-to-end training because one state object exists. That path implies:
+
+- differentiable or RL-updated planner weights,
+- joint loss over semantic correctness + voice consistency + realization quality,
+- risk of violating seed boundary and write-authority partition.
+
+**This is a different system** — call it TS-ML fork, not TS refactor. The unified document assumes **table-driven UDM**, not learned latent control heads.
+
+### 11.3 Implication summary
+
+| Approach | Compatible with TS invariants? |
+|----------|-------------------------------|
+| SRP table updates from logged traces | Yes |
+| Registry evolution (OBG split/merge) | Yes |
+| Behavior cloning on PlanningDecision logs | Yes, if hot path stays table lookup |
+| End-to-end RL through semantic_core | No (without abandoning TS determinism claims) |
 
 ---
 
-## 12. Document Placement in TS Hierarchy
+## 12. Concurrency and Parallelism
 
-| Tier | Status of this document |
-|------|-------------------------|
-| 20_requirements | **Not authoritative** — exploratory only |
-| 40_playground | PoC implements dual pipeline, not this document |
-| 50_design | May inform future 50.xx orchestrator design after PoC |
-| docs/ | Correct home for non-normative architectural exploration |
+Unified architecture does not require serial **implementation**, only serial **phase authority** within a cycle.
 
-Related authoritative references:
+### 12.1 Safe parallelism
 
-- [20.10_ts_architectural_principles.md](../20_requirements/20.10_ts_architectural_principles.md)
-- [20.30_ts_functional_model.md](../20_requirements/20.30_ts_functional_model.md)
-- [20.37_thought_router_tr_specification.md](../20_requirements/20.37_thought_router_tr_specification.md)
-- [Grok_review_in_20.md](../20_requirements/Grok_review_in_20.md) — Execution Manifold review
+| Parallelism | Constraint |
+|-------------|------------|
+| Lane-parallel interpretation (Phase 1) | Merge serializes; semantic_core commit at phase end |
+| Prefetch SRP tables for epoch N+1 | While cycle runs on epoch N |
+| OuB realization pipelining | Phase 3 may stream output; exec_trace append-only |
+| Batch IMR evaluation | Phase 4 may evaluate multiple artifacts; triggers queued deterministically |
+
+### 12.2 Unsafe parallelism
+
+| Parallelism | Why unsafe |
+|-------------|------------|
+| Plan while interpreting same cycle | Violates phase immutability |
+| Realize while planning same cycle | exec_plan not yet committed |
+| IMR writes semantic_core concurrently | Violates write authority |
+| Parallel UDM selections without ordering | Nondeterministic tie-break |
+
+### 12.3 Deterministic ordering rule
+
+Any parallel work must **reduce to a canonical serial order** in the trace. Replay must reconstruct that order from `(cycle_id, phase, seq)`.
 
 ---
 
-## 13. Summary
+## 13. Memory and Long-Term State
 
-A unified TS architecture is **feasible in principle** and **desirable only under strict conditions**. It looks like:
+Unified architecture does not collapse memory tiers — it **tags** them in one World State.
 
-- **one runtime, one layered state, four hard phases**;
-- **UDM** absorbing TrigRB and plan resolution;
-- **SRP** remaining cold;
-- **IMR** remaining mediated;
-- **meaning/expression separation** preserved logically via envelopes, not via pipeline split.
+### 13.1 Memory classes
 
-The dual-pipeline Execution Manifold remains the correct implementation path. This document maps the adjacent architectural territory so future decisions are informed, not improvised.
+| Class | Content | Writer | Persistence |
+|-------|---------|--------|-------------|
+| **Working semantic** | Current cycle semantic_core | Phase 1 | Per conversation session |
+| **Working exec** | exec_plan, exec_trace | Phases 2–4 | Per cycle / per expression tick |
+| **Episodic** | PlanningDecision log, CorrectionTrigger log | Append-only | Replay horizon |
+| **Semantic memory** | Stable facts, commitments in MTP | Phase 1 via Merge | Long-term |
+| **Identity persistence** | OBG registry + conversation-scoped obg_id history | Cold registry + COB/CIL context | Long-term |
+| **Routing memory** | SRP tables per epoch | SRP Compiler | Versioned; epoch-addressable |
+
+### 13.2 Unified vs dual-pipeline memory difference
+
+In dual pipeline, exec metadata is physically separable (Pipeline B store). In unified design, exec envelopes sit beside semantic envelopes in one object — but **write authority and retention policy** remain distinct.
+
+Compaction and replay-horizon rules apply per envelope, not per object.
+
+### 13.3 Identity persistence
+
+`obg_id` may persist across cycles as a **conversation preference** without becoming semantic truth. Distinction:
+
+- "User prefers casual register" → identity persistence (exec/COB layer)
+- "User believes X" → semantic memory (semantic_core)
+
+Collapsing these is a primary long-term failure mode.
+
+---
+
+## 14. Comparison: Dual Pipeline vs Unified Architecture
+
+| Dimension | Dual pipeline (PoC path) | Unified architecture |
+|-----------|--------------------------|----------------------|
+| Primary goal | Validate contracts; maximize inspectability | Packaging; single-loop mental model |
+| Separation mechanism | Architectural (two pipelines) | Logical (envelopes + phases) |
+| Failure isolation | High | Medium — needs phase tags |
+| "Feels like" | Two systems cooperating | One engine, four responsibilities |
+| Normative 20-series impact | Additive | Consolidation risk |
+| Replay audit lens | Per-pipeline traces | Replay equivalence to Pipeline A |
+| Recommended timing | **Now** | Post-PoC + verification |
+
+---
+
+## 15. Long-Term Evolution
+
+**Plausible after PoC — not inevitable.** A mature TS may run one physical orchestrator while retaining dual-pipeline decomposition in verification traces permanently.
+
+Refactor only if dual orchestration cost is painful **and** replay equivalence is proven **and** envelope discipline holds in code.
+
+---
+
+## 16. Refactor Gate Checklist
+
+- [ ] Dual-pipeline PoC passes scenario classes
+- [ ] Zero semantic_core writes from Pipeline B in traces
+- [ ] PlanningDecision / exec_plan schema frozen
+- [ ] Invalid triple matrix tested
+- [ ] Epoch swap replay-tested
+- [ ] IMR bounds verified
+- [ ] Replay equivalence: unified semantic_core == Pipeline A
+- [ ] Namespace table updated
+- [ ] Explicit human approval for direction change
+
+---
+
+## 17. TS Continuity Mapping
+
+*This section bridges the pure model (§2) to existing TS terminology. It is a Rosetta stone, not the architecture itself.*
+
+| Pure concept (§2) | TS module / artifact |
+|-------------------|----------------------|
+| World State | TP / MTP with layered envelopes |
+| Meaning Layer | semantic_core |
+| Expression Layer | exec_plan + exec_trace + OuB output |
+| Interpret | InB → Relational Basin → Object Basin → DCB → Thought Router → TB → Merge |
+| Plan | UDM (Phase 2) |
+| Realize | OuB (Phase 3) |
+| Evaluate | IMR (Phase 4) |
+| Table Compiler | SRP |
+| Behavior | OpBeh |
+| Identity | OBG |
+| Mapping | XlateR |
+| Policy supervisor | GB (safe boundaries) |
+
+| Principle source | Reference |
+|------------------|-----------|
+| Architectural principles | 20.10 |
+| Functional model | 20.30 |
+| Thought Router | 20.37 |
+| Object Basin | 20.40 |
+| Relational Basin | 20.50 |
+| OuB | 20.110 |
+| Execution Manifold review | [Grok_review_in_20.md](../20_requirements/Grok_review_in_20.md) |
+
+---
+
+## 18. Document Placement
+
+| Tier | Status |
+|------|--------|
+| 20_requirements | Not authoritative |
+| 40_playground | Dual-pipeline PoC, not this document |
+| 50_design | May inform post-PoC orchestrator design |
+| docs/ | Correct home for exploratory architecture |
+
+---
+
+## 19. Summary
+
+A unified TS architecture is **one control loop with four responsibilities**, not two pipelines folded together. The Discourse Manager (UDM) is its heart — six internal components, table-driven, fully logged. Meaning/expression separation survives as **write authority over layered envelopes**, not as a deployment boundary.
+
+The dual-pipeline Execution Manifold remains the correct implementation path. This document maps adjacent territory: pure conceptual model (§2), integrated loop (§3), UDM detail (§7.3), and open design space for learning (§11), concurrency (§12), and memory (§13).
+
+---
+
+## Revision History
+
+| Version | Date | Change |
+|---------|------|--------|
+| 0.1 | 2026-06-06 | Initial exploratory draft |
+| 0.2 | 2026-06-06 | CP critique: pure overview (§2), control-loop diagram (§3), UDM expansion (§7.3), learning/concurrency/memory (§11–13), reader's guide, TS mapping isolated (§17) |
 
 ---
 
