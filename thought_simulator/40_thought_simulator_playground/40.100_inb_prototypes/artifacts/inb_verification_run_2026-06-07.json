@@ -1,0 +1,258 @@
+{
+  "date": "2026-06-06",
+  "module": "40.100_inb_prototypes",
+  "profile": "v1.0",
+  "scenarios": [
+    {
+      "input": {
+        "content": "Hello   World!!!  This is a test.",
+        "intake_order": 0,
+        "source": "user:alice"
+      },
+      "output": {
+        "canonical_content": "hello world! this is a test.",
+        "metadata": {
+          "intake_order": 0,
+          "original_length": 33,
+          "token_count": 6
+        },
+        "provenance": {
+          "intake_order": 0,
+          "outcome": "accepted",
+          "profile": "v1.0",
+          "reason_code": null,
+          "source": "user:alice"
+        },
+        "state_digest": "db1ee9b5c4e3fe08db6a5cf4150dce230bd93432fe29957c83097318fc320270"
+      },
+      "result": "PASS",
+      "scenario": "positive_clean_canonicalization"
+    },
+    {
+      "inputs": [
+        {
+          "content": "Hello   World!!!",
+          "intake_order": 0,
+          "source": "test"
+        },
+        {
+          "content": "hello world!!",
+          "intake_order": 1,
+          "source": "test"
+        }
+      ],
+      "note": "Equivalent noisy forms produce identical canonical output (non-semantic normalization)",
+      "outputs": [
+        {
+          "canonical_content": "hello world!",
+          "metadata": {
+            "intake_order": 0,
+            "original_length": 16,
+            "token_count": 2
+          },
+          "provenance": {
+            "intake_order": 0,
+            "outcome": "accepted",
+            "profile": "v1.0",
+            "reason_code": null,
+            "source": "test"
+          },
+          "state_digest": "5f1ee649993e3c9c45c16aa9058d752a0cf21475aefb79e8c75e375007473ac6"
+        },
+        {
+          "canonical_content": "hello world!",
+          "metadata": {
+            "intake_order": 1,
+            "original_length": 13,
+            "token_count": 2
+          },
+          "provenance": {
+            "intake_order": 1,
+            "outcome": "accepted",
+            "profile": "v1.0",
+            "reason_code": null,
+            "source": "test"
+          },
+          "state_digest": "ceb28c0da2d3ebb0dd213c39f5e7ef3106e3270e1bc4dee70c7273d1ead89dd2"
+        }
+      ],
+      "result": "PASS",
+      "scenario": "positive_equivalent_surface_forms"
+    },
+    {
+      "input": {
+        "content": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "intake_order": 0,
+        "source": "test"
+      },
+      "output": {
+        "canonical_content": null,
+        "metadata": {
+          "intake_order": 0,
+          "rejected": true
+        },
+        "provenance": {
+          "detail": "exceeded_limit",
+          "intake_order": 0,
+          "outcome": "rejected",
+          "profile": "v1.0",
+          "reason_code": "OVERSIZE_PAYLOAD",
+          "source": "test"
+        },
+        "state_digest": "04320b25d5cdcc9108273e5df8d0a735ad2b19890e1953097c1ff0b0e1277d73"
+      },
+      "result": "PASS",
+      "scenario": "negative_oversize_payload"
+    },
+    {
+      "input": "not a dict",
+      "output": {
+        "canonical_content": null,
+        "metadata": {
+          "intake_order": 0,
+          "rejected": true
+        },
+        "provenance": {
+          "detail": "input_must_be_dict",
+          "intake_order": 0,
+          "outcome": "rejected",
+          "profile": "v1.0",
+          "reason_code": "MALFORMED_INPUT",
+          "source": "unknown"
+        },
+        "state_digest": "50dafb67cd20492597355007c10380c781bd796157b41c154193863986779b04"
+      },
+      "result": "PASS",
+      "scenario": "negative_malformed_input"
+    },
+    {
+      "input": {
+        "content": "test",
+        "profile": "v9.9",
+        "source": "test"
+      },
+      "output": {
+        "canonical_content": null,
+        "metadata": {
+          "intake_order": 0,
+          "rejected": true
+        },
+        "provenance": {
+          "detail": "expected_v1.0",
+          "intake_order": 0,
+          "outcome": "rejected",
+          "profile": "v1.0",
+          "reason_code": "UNSUPPORTED_PROFILE",
+          "source": "test"
+        },
+        "state_digest": "6bc1033c9185646d8952afbcddb2c56ce82636e08c96515e1168935bedd2d9f7"
+      },
+      "result": "PASS",
+      "scenario": "negative_unsupported_profile"
+    },
+    {
+      "inputs": [
+        {
+          "content": "First message",
+          "intake_order": 0,
+          "source": "batch"
+        },
+        {
+          "content": "Second   message!!!",
+          "intake_order": 1,
+          "source": "batch"
+        }
+      ],
+      "outputs": [
+        {
+          "canonical_content": "first message",
+          "metadata": {
+            "intake_order": 0,
+            "original_length": 13,
+            "token_count": 2
+          },
+          "provenance": {
+            "intake_order": 0,
+            "outcome": "accepted",
+            "profile": "v1.0",
+            "reason_code": null,
+            "source": "batch"
+          },
+          "state_digest": "8ca9b4023c0890924be5742e6267dfe6b14aefa0f1dfecf221d449b3184dceee"
+        },
+        {
+          "canonical_content": "second message!",
+          "metadata": {
+            "intake_order": 1,
+            "original_length": 19,
+            "token_count": 2
+          },
+          "provenance": {
+            "intake_order": 1,
+            "outcome": "accepted",
+            "profile": "v1.0",
+            "reason_code": null,
+            "source": "batch"
+          },
+          "state_digest": "2d4342fe8eb6c7cc25a019c5596ce51d9ff80e57e205a2915c42ca535e1a8705"
+        }
+      ],
+      "result": "PASS",
+      "scenario": "positive_fifo_batch_order"
+    },
+    {
+      "input": {
+        "content": "Replay test   content!!!",
+        "intake_order": 42,
+        "source": "replay"
+      },
+      "output_a": {
+        "canonical_content": "replay test content!",
+        "metadata": {
+          "intake_order": 42,
+          "original_length": 24,
+          "token_count": 3
+        },
+        "provenance": {
+          "intake_order": 42,
+          "outcome": "accepted",
+          "profile": "v1.0",
+          "reason_code": null,
+          "source": "replay"
+        },
+        "state_digest": "9200469f1363d6522f8a740bb9540e33d9347037cc1a9bafa002719b3e6cafd5"
+      },
+      "output_b": {
+        "canonical_content": "replay test content!",
+        "metadata": {
+          "intake_order": 42,
+          "original_length": 24,
+          "token_count": 3
+        },
+        "provenance": {
+          "intake_order": 42,
+          "outcome": "accepted",
+          "profile": "v1.0",
+          "reason_code": null,
+          "source": "replay"
+        },
+        "state_digest": "9200469f1363d6522f8a740bb9540e33d9347037cc1a9bafa002719b3e6cafd5"
+      },
+      "result": "PASS",
+      "scenario": "positive_deterministic_replay",
+      "state_digest": "9200469f1363d6522f8a740bb9540e33d9347037cc1a9bafa002719b3e6cafd5"
+    }
+  ],
+  "status": "PASS",
+  "summary": {
+    "core_invariants_demonstrated": [
+      "non_semantic_canonicalization",
+      "bounded_reject_with_audit",
+      "deterministic_replay",
+      "fifo_order_preservation",
+      "provenance_emission"
+    ],
+    "passed": 7,
+    "total_scenarios": 7
+  }
+}
