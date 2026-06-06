@@ -52,6 +52,25 @@ The skeleton **does not**:
 
 All exploration **SHALL** remain strictly deterministic, non-cognitive, and replayable.
 
+## Enforcement Scope
+
+| Aspect                  | Skeleton Enforces                                      | Does Not Define or Enforce                          | Delegated To (10-series / Upstream) |
+|-------------------------|--------------------------------------------------------|-----------------------------------------------------|-------------------------------------|
+| Tick indexing           | Strictly monotonic, non-negative integer, advances by exactly +1 | Semantic meaning or origin of tick numbers          | Full cycle model in 10.10.40       |
+| Phase sequencing        | Exact match to fixed canonical list; no re-entry, omission, or reordering within a tick | Responsibilities, side-effects, or contracts of individual phases ("schedule", "process", etc.) | 10.10.40 module execution sequence and pipeline stages |
+| Evidence emission       | tick + executed_phases list + state_digest (sha256 of sorted JSON) for replay verification | Rich per-phase telemetry, MB/GB integration, or higher-level logging | 20.40 observability and 10.10.40 transparency requirements |
+| Violation handling      | Deterministic rejection with specific, auditable error messages | Error classification (terminal vs. recoverable), escalation, or recovery semantics | 20.170 safety and regulator        |
+
+## Evidence Schema
+
+The skeleton produces the following normative evidence for every executed tick (JSON-compatible, replay-verifiable):
+
+- `tick`: integer (monotonic, non-negative)
+- `executed_phases`: ordered list of strings, exactly matching the canonical sequence used for that tick
+- `state_digest`: string — SHA-256 hex digest of the canonical JSON serialization (`json.dumps({"tick": tick, "phases": phases}, sort_keys=True, separators=(",", ":"))`)
+
+This schema is sufficient for cross-run deterministic replay verification and for detecting any deviation in ordering or tick advancement. Richer per-phase diagnostics, MB telemetry, or provenance are explicitly out of scope for this skeleton (delegated to 20.40 and 10.10.40 observability layers).
+
 ## Flows Alignment Statement
 
 - **Forward Flow (10/20-series)**: Driven by the detailed cycle model in 10.10.40_scheduler_and_regulator_architecture.md (A TS cycle consists of pre-cycle checks, module execution sequence, TR dirty-flag gate, interrupt window, supervisory review, regulation, commit, cycle boundary enforcement; guarantees no cross-cycle state leakage, deterministic cycle start and end, monotonic timestamps, strict ordering of events) and 10.10.10_system_architecture.md (deterministic cycles, architectural principles of determinism, replayability, boundedness, transparency), plus supporting 20-series guidance:
@@ -112,16 +131,19 @@ Next (per 40.20): human may request further iteration on the skeleton, addition 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the tick cycle enforcement.
 
 ## Traceability
-- 10.10.10_system_architecture.md (top-level deterministic cycles, architectural principles of determinism, replayability, boundedness, transparency, modularity)
-- 10.10.40_scheduler_and_regulator_architecture.md (primary detailed source for cycle model, pre-cycle checks, module execution sequence, interrupt windows, supervisory review, regulation, commit, cycle boundary enforcement, monotonic timestamps, strict ordering, no cross-cycle leakage, timing model, guarantees on deterministic cycle start/end)
-- 20.30_ts_functional_model.md (core determinism, end-to-end pipeline determinism, per-tick cost reporting and bounded behavior, interpretability and diagnostic visibility across lifecycle stages)
-- 20.40_ob_requirements.md (observability of execution behavior, lifecycle transitions, telemetry for diagnostic consumption)
-- 20.170_safety_requirements.md (deterministic fail-safe termination sequencing, safety-relevant transitions fully logged, prohibition of unsafe nondeterministic pathways)
-- 20.90_ib_requirements.md and 20.200_traceability_matrix.md (interface obligations and traceability)
-- ../40.20_master_program_guide.md (playground process, standard file structure, requirement for three-flow alignment statement in software_description.md)
-- 40.60_tick_cycle_skeleton/prototype.py (executable skeleton with CANONICAL_PHASES, TickCycle.execute_tick, monotonic + phase-order enforcement, digest emission)
-- 40.60_tick_cycle_skeleton/harness.py (test scenarios exercising the invariants)
-- 40.60_tick_cycle_skeleton/artifacts/tick_cycle_verification_run_2026-05-28.json (raw evidence)
-- 40.60_tick_cycle_skeleton/requirements_delta.md (proposed requirement deltas for phase-order and monotonicity)
+
+| Upstream Source | Key Principle / Obligation | Implementation in 40.60 | Phase B Evidence |
+|-----------------|----------------------------|-------------------------|------------------|
+| 10.10.10_system_architecture.md | Deterministic cycles, replayability, boundedness, transparency | TickCycle class + digest emission | positive_deterministic_replay (identical outputs + digests) |
+| 10.10.40_scheduler_and_regulator_architecture.md | Cycle model, monotonic timestamps, strict ordering, cycle boundary enforcement, no cross-cycle leakage | `execute_tick` monotonic + exact phase list checks | All 3 scenarios + error messages for violations |
+| 20.30_ts_functional_model.md | Core determinism, per-tick behavior, pipeline determinism, interpretability | Fixed CANONICAL_PHASES ordering + state_digest | positive_deterministic_replay + harness replay comparison |
+| 20.40_ob_requirements.md | Observability of execution behavior and lifecycle | `executed_phases` list + state_digest per tick | Artifact JSON with full outputs for every scenario |
+| 20.170_safety_requirements.md | Deterministic fail-safe termination, logged safety transitions | Explicit ValueError on violation with precise messages | negative_non_monotonic_tick and negative_invalid_phase_order (PASS with error capture) |
+| 20.90_ib_requirements.md + 20.200_traceability_matrix.md | Interface contracts and traceability | Contract dict (`tick` + `phases`) → output dict | requirements_delta.md + this document's mapping |
+| ../40.20_master_program_guide.md | Playground process, self-documenting modules, three-flow alignment in software_description | This document (Flows Alignment Statement + Agreement Statement) | N/A (process compliance) |
+| 40.60_tick_cycle_skeleton/prototype.py | Executable skeleton (CANONICAL_PHASES, monotonic enforcement, digest) | Core logic | All scenarios execute against this module |
+| 40.60_tick_cycle_skeleton/harness.py | Test scenarios for invariants | positive_deterministic_replay + two negative cases | 3/3 PASS in artifact |
+| 40.60_tick_cycle_skeleton/artifacts/tick_cycle_verification_run_2026-05-28.json | Raw deterministic evidence | Full ledger with outputs and digests | Direct artifact used for replay verification |
+| 40.60_tick_cycle_skeleton/requirements_delta.md | Proposed deltas for phase-order and monotonicity requirements | Explicit calls for new HLRs | Rationale section + evidence snapshot |
 
 All Phase B evidence **SHALL** be traceable to the relevant sources above.
