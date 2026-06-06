@@ -1,167 +1,199 @@
-# Grok commentary (opinion only — synchronization response)
+# Grok commentary on 20.500 (opinion only — no edits)
 
-Thanks for the structured proposal. Below is commentary only — no edits, diffs, or insertions — so all three of us can align before any repo changes.
-
----
-
-## 1. Do XP, A↔B contract, and execution replay fit the architecture?
-
-**Yes — with packaging and envelope discipline made explicit.**
-
-### 20.205 Execution Packet (XP) — **fit: strong, with two guardrails**
-
-XP fills a real gap: Pipeline A has **TP** (lane-local state carrier + history) and **MTP** (global meaning authority). Pipeline B today has **envelopes** (`exec_plan`, `exec_trace`) but no named **cycle-scoped carrier** that implementers and harnesses can point at.
-
-That matches your intuition that “B has no historical recorder.” I would frame XP precisely as:
-
-- **One XP per committed MTP per cycle** (not per TP, not per lane)
-- **Logical aggregate** of B-cycle artifacts: planning decisions, expression trace, B audit evidence
-- **Regenerable** from `(semantic_core snapshot, routing_epoch_id, policy_signature, seed)` — not meaning-authoritative
-- **Inspectability artifact** for debugging, conformance, and full-trace replay — analogous to how TP is inspectable for A lane history
-
-**Guardrail 1 — XP is not a third meaning store.**  
-XP must not duplicate `semantic_core` fields or become a place where realization silently re-enters meaning. Cross-ref 20.12-003 stays hard.
-
-**Guardrail 2 — XP must respect existing envelope partition.**  
-20.12 already splits `exec_plan` vs `exec_trace`. XP should be defined as either:
-
-- a **logical packet** that *contains* those two envelopes plus B audit metadata, or  
-- a **fixture/harness view** over the same envelopes  
-
-—not a merger that collapses 20.12-004. 20.205 should say which model you choose; both work if stated clearly.
-
-**Guardrail 3 — Submodule fields stay delegated.**  
-OuB artifacts, IMR records, OpBeh/OBG/XlateR metadata belong in **exec_trace** / **exec_plan** per existing guidance (20.39). 20.205 owns **topology and lifecycle**; 20.41–58 own **subsystem semantics**. Avoid re-specifying OuB inside 20.205 beyond cross-refs.
-
-### 20.206 A↔B synchronization contract — **fit: essential**
-
-This is the highest-leverage new document after MTP hardening. It should own exactly what you listed:
-
-- B runs **once** per `mtp_update` / committed MTP  
-- Handoff predicates and snapshot immutability during B pass  
-- `mtp_snapshot_id` / `semantic_core` hash binding (align naming with 20.36 fixtures — pick one canonical commit marker)  
-- B failure does not mutate `semantic_core`  
-- IMR / supervisory triggers return to A on **next** cycle only, bounded  
-- “B not in meaning equivalence class” stated with the precision: **strippable for 20.12-011; regenerable for 20.12-012**
-
-No conceptual conflict with the clarified model. This doc is currently missing and fragile if left implicit.
-
-### 20.207 Execution replay specification — **fit: good, but scope carefully**
-
-The need is real: A replay reconstructs meaning; B replay regenerates realization. Rules for regeneration, seed scope, epoch tables, and IMR Type B replay boundaries are under-specified.
-
-**Overlap risk:** 20.12-011/012, 20.36 strip classes, and 20.12-010 (seed) already cover much of the *meaning* side. 20.207 should own **B-specific** replay only:
-
-- Regenerate `exec_plan` / `exec_trace` from committed `semantic_core`  
-- Golden comparison modes: strict byte match vs semantic-core-only pass  
-- What B audit fields are required for full-trace fidelity  
-- IMR Type B: replay as **scheduled A trigger**, not as inline meaning mutation  
-
-**Opinion:** 20.207 is justified if it stays B-focused. If it grows large, fine. If it stays small, a **20.36 Class 6 + 20.206 §replay** might suffice for PoC — but a dedicated 20.207 is cleaner long-term.
+This is commentary only in response to the 20.500 proposal. No document changes are proposed below.
 
 ---
 
-## 2. Does 20.10 need refactor to define dual-pipeline explicitly?
+## 1. Is the structure and purpose of 20.500 correct?
 
-**Yes — but “refactor” should mean additive principles expansion, not destructive rewrite.**
+**Yes — with one classification caveat.**
 
-Copilot and I align: 20.10 today reads **meaning-/basin-centric** relative to what the system actually is. It should become the **architecture principles** doc for the whole TS, not only Pipeline A.
+A **master coordination plan** is the right artifact for a multi-day, cross-cutting dual-pipeline refactor. The problem you describe is real: vocabulary, sequencing, dependencies, re-review of recently signed modules, and open questions will not stay in sync across three reviewers without a single hub.
 
-**What 20.10 should gain (conceptually):**
+**What 20.500 should be:**
 
-- Dual-pipeline principle: meaning construction vs realization/execution  
-- MTP handoff as the A→B boundary  
-- Seed boundary (expression only)  
-- Determinism classes: meaning replay authority vs derivable B state  
-- Cold-path SRP vs hot-path lookup (your §1.16 idea fits here)  
-- Namespace discipline (already in 20.12-015; 20.10 should echo at principles level)
+| Attribute | Recommendation |
+|-----------|----------------|
+| **Role** | Coordination / program plan — not normative requirements |
+| **Status** | `planning` or `coordination` (not `requirements` / `source_of_truth`) |
+| **Authority** | Tracks decisions and order; does **not** override 20.12 or signed module HLRs |
+| **Lifecycle** | Living doc during refactor; archive or fold into README/traceability when done |
 
-**What I would avoid in “refactor”:**
+That avoids 20.500 competing with 20.10/20.12 as architecture law while still being the **operational source of truth for the refactor program**.
 
-- Renumbering or weakening existing HLRs cited by signed modules (20.105, 20.140, 20.106, etc.)  
-- Moving operational detail into 20.10 that belongs in 20.205/20.41–58  
-- Duplicating 20.12 invariants — 20.10 should **principle**, 20.12 should **invariant**
+**Proposed sections A–F are sound.** I would add two lightweight sections:
 
-**Verdict:** **Yes, expand 20.10** — call it a **dual-pipeline principles expansion**, not a wholesale rewrite. That satisfies “architecture-centric” without destabilizing the hardened 20-series.
+- **G. Phase 0 invariants** — the 7 bullets all three sign before any normative MD work (can live in §A or standalone)
+- **H. Status board** — per-document: `not started | drafting | CP review | approved | blocked | deferred` with version target
 
----
-
-## 3. Ordering: your (1) 20.10 → (2) B docs → (3) 20.30/105/115/36 — or different?
-
-**Your ordering is defensible if Step 1 is additive-only. I would insert one step and swap one priority.**
-
-### Recommended sequence (three-way sync)
-
-| Step | Work | Rationale |
-|------|------|-----------|
-| **0** | **Phase 0 one-pager** (7 bullets, all sign) | Vocabulary lock before any MD changes |
-| **1** | **20.10 dual-pipeline principles expansion** (additive) | Matches your priority; freezes terms: MTP handoff, XP, equivalence classes |
-| **2** | **20.115 MTP hardening** | Normative landing for “global meaning + B input boundary” — XP and 20.206 need a defined MTP commit object |
-| **3** | **20.206 A↔B sync contract** | Short, high-leverage; unblocks B topology and harness |
-| **4** | **20.205 XP requirements** | B carrier topology; explicitly one-per-MTP-commit |
-| **5** | **20.41–58 cluster** (prioritize OuB + TrigRB + SRP parent cross-refs first) | Submodule detail after parent topology exists |
-| **6** | **20.207 execution replay** (or 20.36 Class 6 first) | After XP + sync exist so replay has objects to target |
-| **7** | **20.30 + 20.36 clarifications** | Bootstrap-safe topology + fixture assertions |
-| **8** | **20.105 light cross-refs** | CP-approved; boundary sentences only |
-
-### Where I differ slightly from your proposed order
-
-- **I would not do all B submodule docs (20.41–58) before 20.115.** MTP must own the commit boundary first; otherwise XP references (`commit_id`, hash) float without a home.  
-- **I agree 20.10 before 20.115** if the team wants shared vocabulary first — **provided 20.10 changes are additive** and the one-pager precedes both.  
-- **20.105/20.36 can stay late** — 20.105 is already aligned; 20.36 updates need 20.205/20.206 concepts anyway.
-
-**Compromise ordering you could all sign:**
-
-**0 → 20.10 (additive) → 20.115 → 20.206 → 20.205 → 20.41+ → 20.207 → 20.30/36 → 20.105 touch**
+Otherwise the structure matches what this refactor needs.
 
 ---
 
-## 4. Conceptual conflicts or missing pieces?
+## 2. Is the proposed ordering correct?
 
-### No blocking conflicts — a few items to resolve in design discussion
+**Directionally yes; sequencing needs two adjustments.**
 
-| Topic | Comment |
-|-------|---------|
-| **XP vs exec_plan/exec_trace** | Not a conflict — define XP as logical wrapper or harness view; do not collapse 20.12 envelope split |
-| **XP as “historical recorder”** | Correct for B audit; unlike TP lane history, XP history is **derivable**, not meaning-authoritative |
-| **`mtp.commit_id` vs `mtp_snapshot_id`** | Align with 20.36 fixture fields; one canonical commit marker for XP binding |
-| **“Not in equivalence class”** | Use: not in **meaning** equivalence class (20.12-011); still in **full-trace** reproducibility class (20.12-012) |
-| **20.41–58 vs existing docs** | Check for overlap with existing OuB/IMR/SRP modules (e.g. 20.110 OuB, 20.45 IMR) before creating duplicates — may be **harden** vs **create** |
-| **TrigRB namespace** | 20.12-015 — keep execution-layer naming out of basin docs; 20.57 fits here |
-| **`supervisory` envelope** | 20.206 should state GB/cap/IMR trigger writes during B pass — not only exec_plan/trace |
-| **TP audit vs XP audit** | A: lane provenance replay-critical within A. B: XP audit regenerable. State explicitly in 20.206 |
+Your order:
 
-### Missing pieces I would add to the plan
+1. 20.10 refactor  
+2. Create B docs (XP, sync, replay, 20.41–58)  
+3. Update 20.30, 20.105, 20.115, 20.36  
+4. Consistency pass  
 
-1. **20.115 MTP hardening** — in your list as step 3, but should be **tier-1**, not an afterthought to 20.30/105.  
-2. **20.12 gloss/annex** (optional) — “B derived, A authoritative” without rewriting bootstrap HLRs.  
-3. **20.190 glossary** — XP, MTP commit boundary, meaning vs full-trace replay.  
-4. **40-series harness negative tests** — no `lane_id` / `tp_id` in XP/B fixtures.  
-5. **Parent doc rule** — 20.205 must state “single B pass per MTP” so 20.41–58 cannot reintroduce per-TP B.
+**What works:** Principles/vocabulary before submodule sprawl; consistency pass last.
+
+**Adjustment 1 — Insert Phase 0 before Step 1**  
+20.500 §A should embed or reference signed invariants before anyone edits 20.10.
+
+**Adjustment 2 — Elevate 20.115 before 20.41–58**  
+MTP is the B input boundary. XP (20.205) and 20.206 need a defined commit object (`mtp_snapshot_id`, hash, freeze semantics). 20.115 should be **tier-1**, not bundled only with “minor” updates in step 3.
+
+**Recommended sequencing for 20.500 §D:**
+
+| Step | Work |
+|------|------|
+| **0** | Phase 0 one-pager — all three sign |
+| **1** | 20.10 dual-pipeline principles expansion (**additive**, not destructive) |
+| **2** | **20.115 MTP hardening** |
+| **3** | 20.206 A↔B synchronization contract |
+| **4** | 20.205 XP requirements |
+| **5** | 20.41–58 execution-manifold cluster (parent topology before deep submodule detail) |
+| **6** | 20.207 execution replay (or 20.36 Class 6 stub first) |
+| **7** | 20.30 + 20.36 clarifications |
+| **8** | 20.105 light cross-refs (re-review, not rewrite) |
+| **9** | Full 20-series consistency grep + glossary |
+
+**Note on 20.10:** Call it **“dual-pipeline principles expansion”** in 20.500, not “major refactor,” unless you explicitly track HLR renumbering risk and downstream re-review of signed modules.
 
 ---
 
-## 5. Direct answers to your four questions
+## 3. Is the document inventory complete?
 
-1. **XP + 20.206 + 20.207 fit?** **Yes**, with envelope discipline and MTP commit binding defined first.  
-2. **20.10 refactor for dual-pipeline?** **Yes — additive principles expansion**, architecture-centric, not meaning-only.  
-3. **Your ordering (20.10 → B docs → others)?** **Mostly yes**; insert **Phase 0** and **20.115 before 20.41–58**; defer 20.105 structural work.  
-4. **Conflicts / gaps?** **None blocking**; resolve XP/envelope relationship, commit ID naming, equivalence-class wording, and existing-doc overlap in 20.41–58.
+**Good core list — several gaps to add to §C.**
+
+### Missing from “existing documents to update”
+
+| Doc | Why include |
+|-----|-------------|
+| **20.12** | Annex/gloss for “B derived, A authoritative” — avoid silent bootstrap edits |
+| **20.31** | `mtp_update` = B input freeze; `semantic_core` authority |
+| **20.38** | Implementation read guards: B must not index by `tp_id` |
+| **20.39** | `SemanticCoreSnapshot` vs `TpLaneView` vs XP/exec envelopes |
+| **20.45 (IMR)** | Type B triggers → next A cycle; not per-TP B |
+| **20.190 glossary** | XP, MTP commit, meaning vs full-trace replay |
+| **20.200 traceability matrix** | New doc IDs and dependencies |
+| **README (20_requirements)** | Index 20.500 and new cluster |
+
+### Missing from “re-review after B formalized”
+
+Recently CP-approved modules that need **second-pass boundary check**, not necessarily rewrite:
+
+- **20.105** (v0.4) — B never consumes TP  
+- **20.106, 20.140, 20.37, 20.50, 20.60** — confirm no implied per-TP B  
+- **20.36** (v0.3) — MTP-scoped B fixtures  
+
+20.500 §B should have an explicit **“re-review queue”** so second-pass work is tracked, not accidental.
+
+### Missing from “new documents to create”
+
+| Candidate | Purpose |
+|-----------|---------|
+| **20.12 annex or 20.500 §A only** | If you want zero bootstrap touch, keep replay precision in Phase 0 + 20.206 |
+| **40-series harness guide** (non-20) | Negative tests: no `lane_id` in XP/B fixtures |
+
+### Overlap check before creating 20.41–58
+
+Inventory should note **harden vs create**:
+
+- **20.110 OuB** (if present) vs **20.58 OuB ↔ Execution Manifold**  
+- **20.45 IMR** vs trigger content in 20.57/20.58  
+- **20.35 reference algorithms** — B pseudocode alignment  
+
+20.500 §C should list **“existing doc may subsume planned ID”** to prevent duplicate specs.
 
 ---
 
-## 6. Suggested next alignment artifact (still no edits)
+## 4. Do XP + sync + replay fit with the execution-manifold cluster?
 
-Before anyone touches MDs, all three sign a **Phase 0 one-pager** with these seven bullets:
+**Yes — with a clear hierarchy.**
 
-1. TP = lane-local, A-only; history for A provenance.  
-2. MTP / `semantic_core` = global meaning authority after Merge / Truth-Done / `mtp_update`.  
-3. Pipeline B = one pass per MTP commit; no lanes, split/merge, TP, or TP-B.  
-4. B inputs = frozen committed `semantic_core` only.  
-5. B outputs = `exec_plan` + `exec_trace` (+ bounded supervisory triggers).  
-6. Meaning replay = strip B; B regenerable from `semantic_core`.  
-7. Seed affects B expression only.
+```
+20.10 (principles)
+    ↓
+20.115 (MTP commit boundary)
+    ↓
+20.206 (when/how A hands off to B)
+    ↓
+20.205 (XP topology — one per MTP commit)
+    ↓
+20.41–58 (submodule semantics: OpBeh, OBG, XlateR, SRP, TrigRB, OuB)
+    ↓
+20.207 (B replay rules)
+```
 
-If Jeff, Copilot, and I agree on that, **20.10 additive expansion** and **20.115** can proceed in parallel or in the order above without talking past each other.
+**Roles:**
 
-**Commentary only — awaiting three-way alignment before any document work.**
+| Doc | Owns |
+|-----|------|
+| **20.205 XP** | Cycle-scoped B carrier; one-per-MTP; envelope aggregation; audit; **no lanes** |
+| **20.206** | Handoff, immutability, equivalence-class wording, IMR queue boundary |
+| **20.207** | Regeneration semantics, golden B trace, seed/epoch scope |
+| **20.41–58** | How each subsystem writes into XP/`exec_plan`/`exec_trace` |
+
+**Fit constraint:** 20.205 must state **single B pass per MTP** so 20.41–58 cannot reintroduce per-TP or per-lane B. 20.500 should record that as a **non-negotiable invariant** in §A or §F.
+
+**Envelope note for 20.500:** XP is a logical packet over existing `exec_plan` + `exec_trace` (per 20.12), not a replacement meaning envelope.
+
+---
+
+## 5. Missing components and risks for §F
+
+### Missing components
+
+1. **Phase 0 signed invariant block** (prerequisite gate)  
+2. **20.115 as tier-1**, not step-3 afterthought  
+3. **Re-review queue** for CP-approved 20.105/106/140/etc.  
+4. **Harden-vs-create map** for OuB/IMR/SRP before 20.41–58  
+5. **Harness / 40-series** conformance rules in scope  
+6. **Canonical commit marker** (`mtp_snapshot_id` vs `commit_id`) — resolve in 20.206 early  
+
+### Risks to track in §F
+
+| Risk | Mitigation in 20.500 |
+|------|----------------------|
+| Bootstrap churn (20.10/12/30) | Additive-only rule; explicit approval gate |
+| Signed module drift | Re-review queue with version targets |
+| XP collapses 20.12 envelopes | XP = logical wrapper; exec_plan/trace stay separate |
+| Duplicate OuB/IMR specs | Inventory overlap column |
+| “Equivalence class” ambiguity | Phase 0: meaning (strip) vs full-trace (regenerate) |
+| Namespace collision OB/TR vs OpBeh/OBG | Cross-ref 20.12-015; glossary |
+| Per-TP B creeping back in harnesses | Negative fixture rules in scope |
+| Multi-day desync | §E approval workflow + §H status board |
+
+---
+
+## 6. Direct answers to your four questions
+
+1. **Is 20.500 structure/purpose correct?** **Yes** — as a **coordination plan**, not normative requirements. Add Phase 0 + status board.  
+2. **Is proposed ordering correct?** **Mostly** — insert Phase 0; move **20.115 before 20.41–58**; treat 20.10 as additive principles expansion.  
+3. **Is inventory complete?** **Not yet** — add 20.12/31/38/39/45/190/200, re-review queue, harden-vs-create, harness scope.  
+4. **Do XP + sync + replay fit the cluster?** **Yes** — 20.205/206 parent topology; 20.41–58 children; 20.207 after XP exists.
+
+---
+
+## 7. Recommendation on next step (still no MD edits)
+
+**Agree to create 20.500** as the coordination hub **before** normative drafting begins.
+
+**First content inside 20.500 (when you draft it):**
+
+1. Phase 0 invariants (pending three-way sign-off)  
+2. Document inventory with status column  
+3. Sequencing table (adjusted order above)  
+4. Re-review queue for signed modules  
+5. Open questions (commit marker naming, XP/envelope model)
+
+Once Jeff, Copilot, and I sign Phase 0 inside or alongside 20.500, **20.10 additive expansion** and **20.115** can start in parallel with clear gates.
+
+**Commentary only — ready for three-way alignment on whether to draft the 20.500 skeleton next.**
