@@ -1,44 +1,74 @@
-# 40.20 Part A Review for 40.100 Memory Buffer Skeleton
+**Acknowledged.** 
 
-## 1. Correctness Review
-- The current 40.100 documentation (40.100_inb_prototypes/software_description.md) is a minimal scaffold that correctly positions the module as the Input Basin (InB) for external input normalization into deterministic conceptual inputs, consistent with the role of InB in 10.10.10_system_architecture.md.
-- No mismatches in the high-level intent, but the document asserts "no executable behavior is asserted yet" and "Scaffold only," so it does not yet implement or reflect the detailed invariants from 10.10.50_module_contracts_and_visibility_rules.md (InB may read input and MTP snapshots read-only; must not mutate other module state or read internal state of OB/RB/TB/IB/etc.).
-- The listed target files (40.100.10_memory_buffer_overview.md, 40.100.20_memory_buffer_pseudocode.md, 40.100.30_memory_buffer_state_diagram.md) do not exist; the module uses the standard 40.xx structure with only a 22-line software_description.md. This is not overreach but severe under-delivery on the expected skeleton documentation.
-- Key 20.100_inb_requirements.md obligations (e.g., HLR-20.100-001 ingest to bounded TP input fields, HLR-20.100-002 no inference/truth arbitration, HLR-20.100-003 deterministic/replayable transformations, HLR-20.100-006 FIFO-preserving ordering, HLR-20.100-007 deterministic reject-or-canonicalize with audit codes, HLR-20.100-008 bounded limits on payload/token/cardinality) are not yet reflected in any executable or documented behavior.
-- Alignment with 10.10.20_interprocess_communication_and_channels.md (immutable messages, structured snapshots, no shared mutable memory, bounded channels) and 10.10.10 state model (MTP global/persistent, TP local, module-local temporary buffers, snapshots for state flow) is referenced at anchor level but not operationalized.
-- The 20.30_ts_functional_model.md requirements for InB (deterministic mapping of noisy surface forms to stable conceptual basins without probabilistic inference; HLR-20.030-013, HLR-20.030-001 for MTP-state determinism) are cited in anchors but not explored.
-- 20.170_safety_requirements.md (HLR-20.170-009: unsafe pathways blocked before mutating InB state) and observability needs (provenance, append-only audit per 20.50_observability_requirements.md equivalents) are not addressed.
-- No overreach; the scaffold correctly defers to 10/20 sources and avoids claiming implementation.
+I've reviewed CP's peer review of my 40.20 Part A analysis for 40.100 (InB / Memory Buffer Skeleton).
 
-## 2. Dependency Mapping
-- 10.10.10_system_architecture.md → InB role as first pipeline stage (input normalization), MTP (global persistent state with lineage/ΔH%/flags), TP (local per-routing state with TR block), module-local temporary buffers, deterministic cycles with explicit input stage, snapshots for state coherence.
-- 10.10.20_interprocess_communication_and_channels.md → InB uses immutable message channels for handoff, structured state snapshot channels for MTP/TP views (read-only), bounded channel width/message size, no shared mutable memory or direct references.
-- 10.10.50_module_contracts_and_visibility_rules.md → InB visibility limited to intake-bound fields and approved interfaces; read-only MTP snapshots; must not read/mutate OB/RB/TB/IB/GB/CIL/COB/COP/MTP internal state; explicit "does/does not" boundaries.
-- 10.10.60_coprocessor_offload_and_portability_rules.md → Normalization/canonicalization eligible for deterministic offload (vectorized, idempotent, no semantic work); must preserve platform-independent determinism; no bypass of supervisory/regulatory.
-- 10.30_data_flow.md (inferred from 10.10.20 channels and 10.10.10 execution model) → InB as entry point for external signals into deterministic pipeline; FIFO-preserving intake; snapshot handoff for state flow.
-- 10.60_memory_architecture.md / 10.70_buffering_and_state_flow.md (inferred from 10.10.10 state model and 10.10.20 snapshots) → MTP/TP as core memory structures; module-local buffers for temporary state; snapshot-based buffering and state flow with lineage/ΔH% metadata; no global mutable state.
-- 20.30_ts_functional_model.md → InB determinism (HLR-20.030-001, -005, -013); explicit MTP-centered semantics; deterministic pipeline stage (input normalization); interpretability of intake steps (HLR-20.030-014); no nondeterminism from variability.
-- 20.40_performance_requirements.md (and current 20.40_ob_requirements.md equivalents) → Bounded intake (payload, tokens, cardinality); deterministic performance under fixed profiles; bounded reject/degrade on overload.
-- 20.50_observability_requirements.md (inferred from 20.40_ob and 20.170) → Deterministic provenance for intake source/normalization/profile/version; append-only audit records; lifecycle visibility for acceptance/rejection.
-- 20.90_interfaces_and_io.md (actual 20.90_ib_requirements.md + 20.100_inb_requirements.md) → Explicit versioned handoff contracts from InB; schema-validated input mappings; deterministic parser/profile governance.
-- 20.170_safety_requirements.md → InB protected from unsafe execution pathways (HLR-20.170-009); safety enforcement at deterministic safe boundaries; deterministic fail-safe/reject behavior (HLR-20.170-001, -013); FIFO/tick ordering preserved.
-- 20.200_traceability_matrix.md → InB row maps to 20.100_inb_requirements.md with traceability to 10.10.10 and 20.30.
-- 20.100_inb_requirements.md (core) → All 26 HLRs (ingest to bounded fields, no inference, deterministic canonicalization, FIFO, bounded limits, provenance/audit, schema validation, reject-with-audit, isolation from other modules, handoff contracts, platform determinism, testability).
+### My Position on CP's Feedback
 
-## 3. Gap Analysis
-- Missing behaviors: No implementation of InB ingestion, canonicalization, schema validation, FIFO metadata preservation, or handoff (prototype.py is a pure stub raising NotImplementedError; harness.py calls the stub).
-- Missing invariants: No enforcement or documentation of bounded payload/token/cardinality, deterministic reject-or-canonicalize for malformed/oversized/unsupported, isolation of transport metadata from semantic fields, or append-only reproducible audit/provenance (HLR-20.100-001 through -026 from 20.100_inb_requirements.md).
-- Missing evidence model: No definition or emission of intake provenance, acceptance/rejection outcomes, normalization profile/signature, or deterministic flush boundaries (current software_description.md has no evidence fields, digests, or audit model).
-- Missing negative-path behavior: No handling or testing of malformed input, oversized payloads, unsupported encodings/profiles/schemas, or zero-event windows (no scenarios, no reject paths, no reason codes exercised).
-- Missing deterministic guarantees: No demonstration of replayable transformations for identical input/signature/profile state, FIFO ordering continuity at handoff, or platform-independent behavior (no prototype logic, no pseudocode, no state transitions exercised; only "planned" anchors).
-- The listed 40.100.10/20/30 files (overview, pseudocode, state diagram) are absent; only a high-level 22-line scaffold exists. No state model for internal InB buffers, no diagram of intake-to-handoff flow, no executable skeleton of normalization logic.
+**Overall agreement:** CP's assessment is fair and precise. The original Part A was strong on structure, mapping, and risk identification, but it did overshoot on scope expectations and underspecified a few first-class invariants/boundaries that belong at the *skeleton* level.
 
-## 4. Risk List
-- Architectural risks: InB implementation could inadvertently introduce shared mutable state or mutate MTP/TP directly, violating 10.10.10 non-interference and 10.10.50 visibility rules if buffers are not strictly local and snapshot-based.
-- Stability risks: Unbounded or non-deterministic input buffering could violate MTP immutability-within-cycle and per-tick boundedness from 10.10.10/20.30, leading to cross-cycle leakage or resource overruns.
-- Observability risks: Lack of explicit provenance/audit emission at intake (per 20.100 and 20.50) could make noisy-input handling non-auditable and non-replayable, breaking diagnostic visibility required by 10.10.10 and 20.30.
-- Safety risks: Malformed/oversized/unsupported inputs could reach downstream modules (RB/OB/etc.) if InB does not enforce deterministic reject-with-audit before handoff, violating 20.170 HLR-20.170-009 unsafe pathway blocking and InB isolation.
-- Integration risks: Handoff contracts to RB/CIL (explicit, versioned, FIFO-preserving) are undefined in the skeleton; mismatch with 10.10.20 channel rules or 20.100 handoff requirements could break pipeline determinism and scheduler ordering.
+**Specific agreements:**
 
-## 5. Summary
-The 40.100 Memory Buffer Skeleton (represented by 40.100_inb_prototypes) is in an early scaffold state whose software_description.md correctly identifies InB scope and anchors to the right 10.10.10 and 20.100 sources but provides almost no reflection of the detailed 10-series memory/state/snapshot model or 20.100 HLRs. The expected 40.100.10/20/30 documents are absent, the prototype/harness are pure stubs, and no behaviors, invariants, evidence model, negative paths, or deterministic guarantees have been explored or documented. This leaves a large gap between the declared intent and any executable skeleton, with clear risks around boundedness, isolation, provenance, and safe handoff that must be closed before the module can serve as valid 40-series evidence for the InB memory buffer requirements.
+1. **Scope overreach (the main issue)**  
+   Yes — I framed too many gaps as "all 26 HLRs from 20.100 not yet reflected."  
+   That is factually true, but it is not the right standard for a 40-series Part A skeleton.  
+   40-series work at this stage should focus on:
+   - Deterministic scaffolding
+   - Core invariants
+   - Evidence model
+   - Negative-path behavior
+   - State model
+   - Handoff contract
+
+   Full HLR implementation and coverage belongs downstream. I accept the correction.
+
+2. **Elevate the core InB invariant**  
+   CP is correct. The single most important thing InB must get right is:
+   > InB must perform **only deterministic canonicalization** of surface forms into conceptual basins. It must **not** perform semantic inference, stance/intent classification, or truth-related work.
+
+   My analysis mentioned this (via HLR-20.100-002 and the 20.30 references), but I did not make it a first-class, highlighted invariant. It should have been.
+
+3. **Tick-cycle boundary**  
+   Agree. InB sits at the very start of the deterministic cycle. It must:
+   - Complete its work before RB/OB/etc. run
+   - Not mutate MTP
+   - Not read downstream internal state
+   - Produce clean, deterministic intake evidence that downstream stages can rely on
+
+   This boundary was only implied in the mapping; it should have been called out explicitly as a required skeleton property.
+
+4. **Handoff contract**  
+   Agree. The handoff from InB is a first-class interface that must be explicit in the skeleton:
+   - Deterministic, schema-validated, canonicalized input object
+   - Provenance
+   - Audit/reason codes
+   - FIFO ordering metadata
+   - Bounded payload
+
+   I listed the individual behaviors as missing but did not frame them as a single required "handoff contract" the skeleton must define and enforce. That was a miss.
+
+### What I Still Stand By
+
+- The **gap analysis** on missing artifacts (no real 40.100.10/20/30 documents, no pseudocode, no state diagram, no evidence model, no negative-path coverage, pure stub implementation) is accurate and important.
+- The **risk list** remains valid (especially architectural isolation, stability around bounds, observability/provenance gaps, safety around unsafe input paths, and integration/handoff risks).
+- The dependency mapping to the 10- and 20-series sources was correct.
+
+### Proposed Way Forward (for agreement)
+
+Before we execute Part B, I recommend we align on a **lightly adjusted Part A** that:
+
+- Removes or qualifies the "must cover all 26 HLRs" framing.
+- Explicitly elevates the three things CP called out:
+  1. Core invariant: non-semantic deterministic canonicalization only.
+  2. Tick-cycle boundary (first stage, MTP read-only, no downstream reads, must finish before next stages).
+  3. Required handoff contract (what InB must produce for RB/CIL and how it is bounded/auditable).
+- Keeps the strong risk identification and the honest observation that the current skeleton is extremely thin (basically just a placeholder).
+
+This keeps Part A as pure analysis while making it tighter and more useful as input to Part B.
+
+---
+
+**Question for you and CP:**
+
+Do you want me to produce a short "Reconciled / Adjusted Part A" (still strictly analysis-only, same output format) that incorporates the above points from CP's review? Or would you prefer we treat CP's review itself as the authoritative adjustment and move forward with a shared understanding without rewriting the Part A document?
+
+I'm ready either way — just want explicit alignment before any further work.
