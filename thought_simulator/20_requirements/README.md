@@ -24,6 +24,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 ## Authoritative Requirement Files
 - [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md)
 - [20.12_ts_invariants.md](20.12_ts_invariants.md)
+- [20.17_messy_input_handling.md](20.17_messy_input_handling.md)
 - [20.20_ts_primitives.md](20.20_ts_primitives.md)
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
 - [20.31_semantic_specification.md](20.31_semantic_specification.md)
