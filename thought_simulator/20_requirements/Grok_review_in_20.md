@@ -1,221 +1,209 @@
-Checking how the current specs describe Pipeline A vs B and MTP integration so the opinion is grounded in the repo.
-## 1. Is the clarified model correct and internally consistent?
+# Grok commentary (opinion only — no edits)
 
-**Yes — with one precision worth locking in.**
-
-The model you described is the natural conclusion of what the repo already implies but has not stated plainly:
-
-| Claim | Already supported by |
-|-------|----------------------|
-| TP is lane-local, Pipeline A only | 20.105 (v0.4), 20.31-012/013, 20.39 `TpLaneView` |
-| MTP / `semantic_core` is global, integrates lanes | 20.30 §3.6 Merge, 20.31, strip-replay invariants |
-| Pipeline B runs after meaning commit | 20.36 §2.1–2.2 (`mtp_update` then B stages), 20.12-005 |
-| Pipeline B does not write meaning | 20.12-003, 20.12-014 |
-| B is not required for meaning replay | 20.12-011 (strip `exec_plan` + `exec_trace` → identical `semantic_core`) |
-
-What was **implicit** and is now **explicit** — and I agree with it:
-
-- **One B pass per committed `semantic_core` / MTP per cycle**, not per TP.
-- **B has no lane topology** (no split/merge, no `tp_seq`, no TP-B).
-- **B state is derived/regenerable**, not co-authoritative with meaning for replay equivalence.
-
-That is internally consistent with the dual-pipeline contract: Pipeline A is the **meaning construction graph** (lane-parallel); Pipeline B is the **realization compiler** (MTP-scoped, sequential).
-
-### The one precision to nail down
-
-**“Pipeline B has no replay-critical state”** is correct **for meaning replay** (HLR-20.012-011), but not for **full-trace replay** (HLR-20.012-012).
-
-I would phrase it this way:
-
-- **Meaning replay authority:** `semantic_core` (+ supervisory triggers that affect A, bounded).
-- **B envelopes (`exec_plan`, `exec_trace`):** reproducible from `(committed semantic_core, routing_epoch_id, policy_signature, seed)` but **strippable** without changing meaning bytes.
-
-That matches your “regenerated from `semantic_core` during replay” without contradicting 20.12-012’s full-trace reproducibility claim.
-
-### Minor tensions to resolve in docs (not in the model)
-
-1. **20.30** still describes the system heavily in lane/TP terms; B is named but not scoped as MTP-single-pass.
-2. **20.115** is still a thin v0.1 and does not yet own “MTP = global integrator + B input boundary.”
-3. **GB reads TP lane-local state** (20.30) — fine for supervision; must not be read as “B also runs per lane.”
-4. **IMR Type B** schedules A-cycle TR recompute — that’s a **bounded A trigger**, not per-TP B execution.
-
-None of these break your model; they just need clearer boundary language.
+This responds to the proposal summary for synchronization between Jeff, Copilot, and Grok. No document changes are proposed below.
 
 ---
 
-## 2. What existing documents need updates?
+## 1. The complete picture — do I agree?
 
-### 20.105 (TP) — **light touch**
+**Yes.** The clarified model is internally consistent and matches what the repo already implies once you state it plainly.
 
-**Current fit:** Strong. Already says Pipeline A only, lane-local projection, forbidden exec fields, Merge → `mtp_update`, B forbidden on TP.
+The core invariant chain is sound:
 
-**Likely gaps relative to your clarification:**
+**Many lane-local TPs (A) → Merge / Truth-Done → one committed MTP / `semantic_core` → one Pipeline B pass → `exec_plan` + `exec_trace`**
 
-- Does not yet say plainly: **“Pipeline B never consumes TP instances; it consumes only post-commit `semantic_core`.”**
-- History/audit role (your point about TP recording lane history) could be contrasted with **“B does not depend on TP audit logs.”**
-- Worked example ends at Merge/`mtp_update` — good; could conceptually note B starts **after** that boundary (not a rewrite of 20.105 structure).
+That is simpler and cleaner than any per-TP B model. It aligns with:
 
-**Update type:** Boundary statements and cross-pipeline consumption notes — not structural overhaul. 20.105 is mostly already correct.
+- **20.12** — envelope partition, phase ordering, meaning immutability under B
+- **20.36** — B stages after `mtp_update`
+- **20.105 (v0.4)** — TP is A-only, lane-local, not B input
+- **20.12-011** — strip B → identical `semantic_core`
 
----
+### One precision (worth putting in the Phase 0 one-pager)
 
-### 20.115 (MTP) — **major hardening (highest priority)**
+**“Pipeline B is not part of the equivalence class”** is correct for **meaning replay**. It is not quite the same as “B has no replay semantics at all.”
 
-**Current fit:** Weak relative to the clarified model. Still generic v0.1; no dual-pipeline section, no explicit role as:
+| Replay mode | Authority | B’s role |
+|-------------|-----------|----------|
+| **Meaning equivalence** (HLR-20.012-011) | `semantic_core` | Strippable; not required |
+| **Full trace fidelity** (HLR-20.012-012) | `semantic_core` + derived B envelopes | Regenerable from committed meaning + epoch + policy + seed |
 
-- global aggregator of lane TPs
-- authoritative `semantic_core` container post-`mtp_update`
-- **sole stable input snapshot for Pipeline B**
+So: **B is not meaning-authoritative; it is derivable/regenerable.** That matches “regenerated from `semantic_core` during replay” without weakening full-trace reproducibility.
 
-**Likely gaps:**
+### Other consistency checks
 
-- No statement that MTP is **global** (not lane-scoped).
-- No **A→B handoff contract** at `mtp_update`.
-- No replay note: MTP/`semantic_core` is strip-stable; B output is derived.
-- No “forbidden on MTP” mirror of TP (e.g., B should not leave lane artifacts on MTP).
+- **No TP-B, no lanes in B** — consistent; B should never index by `tp_id` or `lane_id`.
+- **IMR Type B** — bounded trigger into **next A cycle**, not parallel B per lane. Consistent.
+- **GB reads lane-local TP** — supervisory observation only; does not imply B parallelism. Needs clearer wording in 20.30, not a model change.
+- **TP history vs B** — TP audit/lineage is A replay/provenance evidence; B does not consume it. Consistent with your “TP records history” point.
 
-**Update type:** Full hardening pass (same pattern as 20.105/20.140): dual-pipeline discipline table, field model, writer authority, replay section, conformance harness notes. This is where your architectural clarification **lands normatively**.
-
----
-
-### 20.30 (Functional model) — **conceptual realignment**
-
-**Current fit:** Good on Pipeline A basin chain; HLR-20.030-322–324 exist but B is under-specified as MTP-scoped.
-
-**Likely gaps:**
-
-- §2–3 read as **lane-parallel meaning construction** (correct) but do not state **B is singular per cycle**.
-- Cycle allocation table (% of cycle) may imply B is peer to per-lane work — may need reframing as **one B slice per committed MTP**.
-- GB/TP lane-local reads could use a footnote: supervisory observation ≠ B parallelism.
-
-**Update type:**
-
-- New subsection: **“Pipeline B: MTP-scoped realization pass”** (conceptual, not algorithmic).
-- Clarify stage graph: A (fan-out lanes) → Merge → `mtp_update` → B (single fan-in from `semantic_core`).
-- Replay note tying to 20.12-011.
-
-**Caution:** 20.30 is bootstrap — per your hardening rules, additions should be **clarifying**, not a rewrite of HLR semantics other modules depend on.
+**Verdict:** The model is architecturally correct. The remaining work is **documentation ownership and ordering**, not a rethink of the topology.
 
 ---
 
-### 20.36 (Replay / trace fixtures) — **fixture taxonomy and assertions**
+## 2. What needs updating — and what kind of updates?
 
-**Current fit:** Stage order is already correct (B after `mtp_update`). Strip tests are aligned.
+### Tier 1 — Must harden (normative gap)
 
-**Likely gaps:**
+| Document | Why | Kind of update |
+|----------|-----|----------------|
+| **20.115 (MTP)** | Biggest gap. MTP is the global integrator and B input boundary, but the spec is still thin v0.1. | Full hardening: dual-pipeline table, global vs lane, `mtp_update` commit, frozen snapshot for B, writer authority, replay/strip notes, conformance |
+| **New B + sync docs** (see §3) | B topology is implied across OuB/IMR/20.36 but not owned in one place. | New normative modules |
 
-- Fixtures may still **look** TP-centric in places; B stages should be **MTP-scoped** in fixture shape (one B segment per cycle, not per lane).
-- Assertions could explicitly state: **no `lane_id` in Pipeline B stage records**; no TP references in B envelopes.
-- “Regenerate B from stripped `semantic_core`” could be a named replay class or sub-assertion (complements strip equivalence).
+### Tier 2 — Bootstrap / topology clarifications
 
-**Update type:** Replay notes, fixture preconditions, assertion checklist — conceptual + taxonomy, not new algorithms.
+| Document | Why | Kind of update |
+|----------|-----|----------------|
+| **20.10** | Copilot is right: it reads largely as Pipeline A / basin principles today. It does not yet function as the **whole-system** principles doc for dual-pipeline. | **Targeted expansion** of dual-pipeline principles (meaning vs realization, MTP handoff, seed boundary, determinism classes) — see §4 on whether this is “major refactor” |
+| **20.30** | Strong on A basin chain; B is named (HLR-322–324) but not scoped as **one MTP pass per cycle**. | Conceptual subsection + stage graph (fan-out A → fan-in MTP → single B); bootstrap-safe clarifications only |
+| **20.36** | Stage order is correct; fixture shape may still look TP-centric for B. | MTP-scoped B segments, negative assertions (no `lane_id`/TP refs in B records), optional “B regeneration equivalence” assertion |
 
----
+### Tier 3 — Light cross-refs (signed modules)
 
-### Documents you didn’t list but I’d include in the pass
+| Document | Why | Kind of update |
+|----------|-----|----------------|
+| **20.105** | Already CP-approved and A-correct. | Boundary notes only: B never consumes TP; B does not depend on TP audit logs |
+| **20.39** | Already has envelope separation. | Clarify B reads `SemanticCoreSnapshot` only; no `TpLaneView` |
+| **20.38** | Implementation guards. | Read-boundary rules: B must not index by `tp_id` |
+| **20.31** | Semantic authority. | `mtp_update` = B input freeze |
+| **20.45 (IMR)** | May imply per-artifact flows. | Clarify triggers are cycle-scoped, next-A-boundary |
+| **20.190 / README / 20.200** | Terminology index. | MTP-scoped B, no TP-B, XP (if adopted) |
 
-| Doc | Why |
-|-----|-----|
-| **20.12** | Canonical home for “B is derived, A is authoritative” — may need a **clarifying annex or HLR gloss** without changing bootstrap semantics |
-| **20.39** | `SemanticCoreSnapshot` vs `TpLaneView` vs `ExecPlanRecord` — ideal place for “B reads snapshot only” |
-| **20.38** | Implementation read-boundary guard: A modules must not import B; B must not index by `tp_id` |
-| **20.31** | `semantic_core` commit boundary = B input freeze |
-| **20.45 (IMR)** | Triggers affect **next A cycle**, not per-TP B |
-| **20.190 glossary** | Dual-pipeline terms: MTP-scoped B, no TP-B |
-| **README / 20.200 traceability** | Index new B contract doc |
+### Tier 4 — Touch carefully
 
----
+| Document | Why | Kind of update |
+|----------|-----|----------------|
+| **20.12** | Already canonical for envelopes and strip replay. | **Gloss / annex** preferred over rewriting HLR semantics that 20.105/20.140 already cite |
 
-## 3. What kind of updates (by category)?
-
-| Category | Where | Purpose |
-|----------|-------|---------|
-| **Boundary statements** | 20.105, 20.115, 20.39, 20.38 | “B never sees TP”; “MTP is B input” |
-| **Topology / lifecycle diagrams** | 20.30, 20.36 | Fan-out A → fan-in MTP → single B pass |
-| **Replay semantics** | 20.36, 20.115, new B spec | Strip vs regenerate vs full-trace fidelity |
-| **Writer authority matrices** | 20.115, new B spec | Who writes what envelope, when |
-| **Negative conformance rules** | 20.36, 40-series harness | Reject `lane_id` on B records, TP refs in `exec_plan` |
-| **Conceptual only (no new HLR IDs in bootstrap)** | 20.30, possibly 20.12 | Clarify without destabilizing signed modules |
-
-I would **not** start by rewriting 20.105 again — it’s CP-approved and already encodes the A-side correctly. The gap is mostly **MTP + B scope + replay taxonomy**.
+**What I would not do first:** Another structural rewrite of **20.105**. It is aligned; only boundary cross-refs later.
 
 ---
 
-## 4. What new documents should exist?
+## 3. What new documents are required — and what shape?
 
-I’d recommend **two** normative modules (numbers tentative):
+You need **three conceptual layers** of new (or heavily new) documentation. Whether that is three files or two files plus a 20.36 section is a packaging choice.
 
-### A. **Pipeline B / Execution Manifold requirements** (e.g. 20.1xx)
+### Layer A — Execution topology (what B *is*)
 
-**Owns:**
+**Purpose:** Single owner for “Pipeline B runs once per committed MTP.”
 
-- Single-pass-per-`mtp_update` lifecycle
-- Inputs: frozen `semantic_core` snapshot + `routing_epoch_id` + policy
-- Outputs: `exec_plan`, `exec_trace` only
-- Explicit non-goals: no lanes, no split/merge, no TP, no `semantic_core` writes
-- Seed scope (expression only)
-- Determinism: `(semantic_core, epoch, policy, seed)` → B envelopes
-- Submodule delegation: OuB, TrigRB, IMR, SRP lookup (cross-refs, not re-spec)
+**Should own:**
 
-This becomes the **definitive B spec** so OuB/IMR docs don’t each imply their own topology.
+- Lifecycle: post-`mtp_update` only
+- Inputs: frozen `semantic_core` + `routing_epoch_id` + `policy_signature` (+ seed for expression)
+- Outputs: `exec_plan`, `exec_trace`, bounded supervisory triggers
+- Non-goals: no lanes, split/merge, TP, `semantic_core` writes, replay-critical meaning state
+- Submodule delegation: OuB, TrigRB, SRP lookup, IMR (cross-ref only)
 
-### B. **A↔B synchronization contract** (e.g. 20.1yy or § in 20.115)
+**Naming opinion:**
 
-**Owns:**
+| Option | Pros | Cons |
+|--------|------|------|
+| **20.205 “Execution Packet (XP) Requirements”** | Good metaphor: XP = B-side analogue of TP, but **one per MTP commit** | “XP” is new vocabulary — needs glossary + clear “not per-lane” |
+| **20.41–20.58 cluster** | Room for OuB, OpBeh, OBG, XlateR submodules | Risk of fragmenting topology unless one parent owns “single B pass” |
+| **Single parent + children** (my preference) | **20.205** (or 20.210) = B/XP topology parent; 20.41+ = submodule reqs | Cleanest for implementers |
+
+**Recommendation:** Adopt **XP** as the **MTP-scoped execution carrier** (one XP per cycle per committed MTP), with **20.205** as the parent topology spec. Submodule docs (OuB, etc.) stay delegated and must not reintroduce lanes.
+
+### Layer B — Handoff contract (when A *gives* B the snapshot)
+
+**Purpose:** Synchronization, not structure.
+
+**20.206 Pipeline A ↔ Pipeline B Synchronization Contract** is the right idea as a **standalone** doc (slightly prefer standalone over burying in 20.115 so MTP stays about MTP shape and 20.206 stays about timing/immutability).
+
+**Should own:**
 
 - Handoff predicate: `mtp_update` complete → B may start
-- Snapshot immutability during B pass (B reads frozen commit)
-- IMR / supervisory trigger queue back to A (bounded, next-cycle)
-- Epoch coherence: B consumes published `routing_epoch_id` only
-- Failure modes: B reject does not mutate `semantic_core`
+- Snapshot immutability during B pass
+- Failure: B reject does not mutate `semantic_core`
+- IMR / supervisory queue → next A cycle only
+- Epoch coherence (`routing_epoch_id` read-only on B hot path)
 
-Could be a standalone doc or a **major section of hardened 20.115** (“§ MTP as Pipeline B input boundary”). I slightly prefer **standalone contract + 20.115 cross-ref** so 20.115 stays about MTP structure and the contract stays about timing/handoff.
+### Layer C — Replay semantics for B
 
-### Optional third (later)
+**Purpose:** Distinguish strip, regenerate, and full-trace.
 
-- **20.36 Class 6** or harness guide: “B regeneration equivalence” (regenerate B after strip, compare to golden `exec_*` OR assert only `semantic_core` if strip-focused)
+| Option | Opinion |
+|--------|---------|
+| **20.207 Execution Replay Specification** (standalone) | Worth it if B replay rules grow (regeneration golden tests, seed scope, epoch tables) |
+| **Fold into 20.206 + 20.36** | Sufficient for PoC if regeneration is one assertion class |
 
----
+**Recommendation:** Start with **20.36 Class 6 (or sub-assertion)** for “B regeneration equivalence”; promote to **20.207** only if harness rules become large. Avoid duplicating 20.12-011.
 
-## 5. How I would approach the update process (once aligned)
+### Documents I would *not* create yet
 
-**Phase 0 — Canonical one-pager (no repo edits)**  
-Agree on 5–7 bullet invariants everyone signs:
-
-1. TP = lane-local, A-only, replay-critical for **lane history**, not for B.  
-2. MTP/`semantic_core` = global meaning authority after Merge.  
-3. B runs **once per cycle** after `mtp_update`.  
-4. B inputs = committed `semantic_core` only (no TP, no lanes).  
-5. B outputs = `exec_plan` + `exec_trace` (+ bounded supervisory triggers).  
-6. Meaning replay = strip B; B may be regenerated.  
-7. Seed affects B expression only.
-
-**Phase 1 — MTP hardening (20.115)**  
-Biggest normative gap. Dual-pipeline table, global vs lane, `mtp_update` commit, B input freeze, replay. CP review pattern you’ve been using.
-
-**Phase 2 — New Pipeline B spec + A↔B contract**  
-Draft in parallel: B spec defines *what B is*; contract defines *when and how A hands off*. Cross-check against 20.12, 20.45, OuB/IMR modules.
-
-**Phase 3 — 20.30 + 20.36 clarifications**  
-Bootstrap-safe additions: topology subsection, fixture assertions, no new contradictions with signed 20.105/20.140.
-
-**Phase 4 — Light cross-refs (20.105, 20.39, 20.38, glossary)**  
-One boundary paragraph each; avoid version bumps unless CP wants them.
-
-**Phase 5 — Verification alignment**  
-40-series harness rules: MTP-scoped B fixtures, negative tests for TP-in-B, regenerate-B test optional for full trace.
-
-**Phase 6 — Consistency grep**  
-Repo-wide search for “per TP” near Pipeline B, `lane` in exec modules, TP-B — fix conceptual drift in non-bootstrap docs only.
-
-**Ordering rationale:** Harden **MTP first**, because your clarification’s center of gravity is **“B runs on committed MTP, not TP.”** 20.105 is already aligned; 20.115 is not. B spec and contract follow MTP so handoff has a well-defined input object.
+- **TP-B** — explicitly ruled out by the model
+- **Per-lane exec envelopes** — contradicts the clarification
+- **Second MTP** for B — B consumes committed `semantic_core`; no parallel meaning store
 
 ---
 
-## Bottom line
+## 4. What first, second, third — recommended ordering
 
-Your clarified model is **correct, simpler than a per-TP B would be, and consistent with 20.12/20.36** if we sharpen “replay-critical” to mean **meaning-authoritative vs derivable**.
+Copilot’s proposal puts **20.10 refactor first**. I agree 20.10 needs dual-pipeline **principles**, but I would **not** call the first step a “major refactor” of 20.10 before normative landing exists. Refactoring bootstrap IDs early creates churn across signed 20.105/20.140/20.106 modules.
 
-The work is less “fix 20.105” and more **elevate 20.115, add a Pipeline B spec + A↔B contract, and tighten 20.30/20.36 replay language**. 20.105 needs only boundary cross-references, not a structural rewrite.
+### Recommended sequence (all three aligned)
 
-When you’re ready to proceed, I’d start with the Phase 0 invariant one-pager for CP sign-off, then **20.115**.
+**Step 0 — Phase 0 one-pager (no repo edits)**  
+7 bullets everyone signs (your list + the meaning-vs-full-trace precision).  
+This is the synchronization artifact for Jeff, Copilot, and Grok.
+
+**Step 1 — 20.115 MTP hardening**  
+*Why first:* Your clarification’s center of gravity is **“B runs on committed MTP, not TP.”** Until 20.115 owns global MTP + `mtp_update` + B input freeze, B docs have nothing stable to attach to.
+
+**Step 2 — 20.206 A↔B synchronization contract**  
+*Why second:* Short, high-leverage, unblocks B spec and harness design. Defines handoff without waiting for every OuB detail.
+
+**Step 3 — 20.205 (XP / Pipeline B topology parent)**  
+*Why third:* Defines what B is, explicitly no lanes/TP, XP lifecycle, envelope outputs. Submodule docs cross-ref here.
+
+**Step 4 — 20.10 dual-pipeline principles expansion**  
+*Why fourth:* Now you have concrete modules to point at. **Expand** 20.10 with a dual-pipeline section (meaning vs realization, MTP handoff, determinism classes, seed boundary). Prefer **additive HLRs + cross-refs** over rewriting existing principle HLRs. That is “major” in *scope*, not in *destructive refactor*.
+
+**Step 5 — 20.30 + 20.36 clarifications**  
+Topology subsection in 20.30; MTP-scoped B fixtures and negative assertions in 20.36; optional B regeneration assertion.
+
+**Step 6 — Light touch: 20.105, 20.39, 20.38, 20.31, 20.45, glossary**  
+Boundary paragraphs only; avoid version bumps unless CP wants them.
+
+**Step 7 — 20.207 (only if needed)** + 40-series harness alignment  
+After 20.36 assertions prove insufficient.
+
+### Alternative order (if Jeff prioritizes “principles first”)
+
+If the team wants vocabulary frozen before MTP hardening:
+
+1. Phase 0 one-pager  
+2. **20.10 dual-pipeline principles section** (additive only)  
+3. 20.115 → 20.206 → 20.205 → 20.30/20.36 → light cross-refs  
+
+That works if 20.10 changes are **strictly additive** and do not renumber or weaken existing HLRs cited by signed modules.
+
+### What I would explicitly defer
+
+- **20.12 rewrite** — annex/gloss only until bootstrap governance says otherwise  
+- **20.105 v0.5** — unless CP wants explicit “B never reads TP” bullets  
+- **Submodule B cluster (20.41–58)** before **20.205 parent** exists — otherwise topology drifts per module  
+
+---
+
+## 5. Direct answers to the four task bullets
+
+| # | Question | Short answer |
+|---|----------|--------------|
+| **1** | Is the model correct? | **Yes**, internally consistent with 20.12/20.36/20.105; sharpen “not equivalence class” → “not meaning-authoritative; derivable on replay.” |
+| **2** | What to update? | **20.115 (major)**, **20.30/20.36 (clarify)**, **20.10 (principles expand)**, **20.105 (light)**; plus 20.39/38/31/45/glossary |
+| **3** | New docs? | **20.206 (sync)** + **20.205 (XP/B topology parent)** required; **20.207 (exec replay)** optional/later; submodule 20.41+ after parent |
+| **4** | Order? | **0 one-pager → 20.115 → 20.206 → 20.205 → 20.10 expand → 20.30/36 → light cross-refs → harness** |
+
+---
+
+## 6. Bottom line for three-way sync
+
+The clarified architecture is **the right simplification**. Pipeline B should be documented as an **MTP-scoped realization compiler**, not a parallel lane graph.
+
+The highest-risk gap is not TP (20.105 is in good shape) but **MTP as global meaning authority + B input boundary** (20.115) and **missing B topology ownership** (20.205 + 20.206).
+
+**20.10 should grow into the system principles doc**, but I would treat that as **additive dual-pipeline principles after MTP + sync contract are drafted**, not a blocking wholesale refactor on day one.
+
+Once all three agree on Step 0, I would start with **20.115**, not 20.10 — unless you explicitly want vocabulary in 20.10 frozen first under an additive-only rule.
