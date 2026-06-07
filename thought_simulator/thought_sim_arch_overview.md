@@ -344,7 +344,7 @@ This section provides a technical explanation for why the Thought Simulator (TS)
 
 TS does not rely on large‑scale GPU computation or high‑bandwidth tensor operations. Instead, it is built on **explicit, identifiable primitives of thought**—deterministic semantic structures, modular co‑processors, and bounded neural intuition. These components interact through engineered pipelines rather than emergent statistical behavior. Because of this, TS avoids many of the computational bottlenecks inherent to transformer architectures.
 
-The claims in this paper rest on a key assumption: **that the primitives of thought have been correctly identified and formalized.** Demonstrating this is an active and ongoing process, and the Thought Simulator is being developed specifically to validate these primitives through implementation rather than assertion.
+The TS architecture was developed by asking a foundational question: what are the primitives and mechanics of thought? Traditional AI systems achieve strong performance, but their implementations hide the structure of cognition inside large neural networks. TS takes the opposite approach—its design begins with what are believed to be explicit, identifiable primitives of thought and builds the cognitive system around them. If these primitives are correct, the mechanics of cognition become transparent, deterministic, and directly inspectable.
 
 ---
 
