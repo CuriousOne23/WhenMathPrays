@@ -59,10 +59,15 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.190_glossary.md](20.190_glossary.md)
 - [20.200_traceability_matrix.md](20.200_traceability_matrix.md)
 
+## Coordination Programs (Non-Normative)
+- [20.500_refactoring_for_dual_TS_pipeline.md](20.500_refactoring_for_dual_TS_pipeline.md) — dual-pipeline refactor (**complete** 2026-06-07)
+- [20.510_refactoring_for_input_correction_track_h.md](20.510_refactoring_for_input_correction_track_h.md) — Track H input correction (IIInB / USP / UPI) — **active**
+
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
 - [glossary_term_registry.json](glossary_term_registry.json)
 - [docs/](docs/)
+- [Grok_review_in_20.md](Grok_review_in_20.md)
 
 ## Rules
 - The files listed in Authoritative Requirement Files are the only authoritative 20-series requirement docs.
