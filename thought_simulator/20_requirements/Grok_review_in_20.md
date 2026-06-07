@@ -1,92 +1,90 @@
-Checking how InB, IB, and input repair are scoped in the requirements so the comment stays grounded.
-CP’s second note is sharper than the first: it separates **three different problems** that were getting conflated. Here’s how that lands against your actual `20_requirements` stack and the earlier Grok review.
+Checking how deeply Type B and the A→B→A loop are embedded in approved requirements before commenting.
+CP’s proposal is **architecturally coherent** and matches the stance you described (“monitor / one-shot flag, not a baked-in A→B→A controller”). But it is **not** a small non-goal tweak. It would **reverse a chunk of normative work you already approved** in the dual-pipeline program.
 
-## CP is right about the tangle
+## Where CP is right
 
-The three tensions are real and should stay separate:
+The control-loop concern is real. A mandated IMR Type B path implies:
 
-| Tension | What it is |
-|--------|------------|
-| **A** | Promised *input* error correction vs what InB normatively does |
-| **B** | IB’s charter (information / inquiry) vs “janitorial” input repair |
-| **C** | Semantic inference under **no-GPU / deterministic** constraints |
+- `CorrectionTrigger` schema and supervisory queue semantics  
+- Bounded partial A-cycles and `target_field_ids[]` routing  
+- Caps, cooldowns, dedup, `max_correction_depth_per_cycle`  
+- E3 replay (20.207) and Class 3b/5 fixtures (20.36)  
+- TR `tr_needs_update` scheduling (20.37)
 
-Your prior Grok review mostly answered **output-side** correction (IMR Type B, `CorrectionTrigger`, E3 replay). CP is now asking about **input-side** semantic repair (“user wrote X, probably meant Y”). That’s a different lifecycle point and a different module boundary.
+That *is* a feedback controller, even if bounded. If your product intent is **mostly single-pass A→B with observability**, CP’s framing — **IMR as monitor + optional flag, not closed loop** — is the sane way to say that.
 
-## What the docs actually say today (important)
+Type A-only v0 also fits the deterministic/no-latent-inference posture better: expression retry on the **same** `semantic_snapshot_ref` is a B-side retry, not meaning recompute.
 
-On **A**, the normative picture is already fairly strict — not fuzzy delegation to IB:
+## Where CP understates the conflict
 
-- **20.100 InB:** SHALL NOT perform inference or truth arbitration (HLR-20.100-002); canonicalization + bounded reject/degrade only.
-- **20.30 §10:** InB maps noisy surface forms **without probabilistic inference**; RB shall not hallucinate corrections.
-- **20.17:** messy-input is **tag and preserve** (`MI_*` classes), not gap-fill; vague/incomplete paths route to **IB-Creation-Request via GB**, not silent repair.
+Today’s specs **do** define systematic correction as normative, not implementation-specific:
 
-So if someone “originally scoped InB as semantic input error correction,” that promise is **not reflected in the current HLR set**. That’s either stakeholder/architecture drift or informal language (“error correction” = normalization) that never got claim-classified. CP’s smell is valid as a **traceability / honest-claims** issue, not necessarily as “we already moved it to IB in the specs.” IB isn’t doing input repair in 20.90 either (no probabilistic inference, inquiry over bounded explicit inputs).
+| Doc | What’s already in scope |
+|-----|-------------------------|
+| **20.45** | ~33 Type B / `CorrectionTrigger` touchpoints; Type B is first-class, not optional |
+| **20.206** | Equivalence class **E3** (post-correction meaning) |
+| **20.207** | E3 replay rules; Type B regen constraints |
+| **20.36** | **Class 3b** (Type B + partial A-cycle); Class 5 includes Type B IMR |
+| **20.37** | IMR Type B schedules bounded TR recompute |
+| **20.500** | IMR Type B agreed in §5 registry; program closed with this model |
 
-**Bottom line on A:** Don’t silently assign semantic input repair to IB. But also: **the written requirements already say InB doesn’t do it** — the fix is explicit **out-of-scope / profile** language, not a stealth IB rewrite.
+So CP’s suggested line:
 
-## CP vs the earlier Grok review
+> “Any use of IMR to trigger recompute is implementation-specific and out of normative scope”
 
-| Topic | Grok review (prior) | CP (this note) |
-|-------|---------------------|----------------|
-| Primary correction loop | IMR / Type B / post-expression | Input-time semantic repair |
-| Right doc to tighten | 20.45 (`evaluator_signal`, `target_field_ids`) | 20.100 boundary + optional new capability |
-| InB role | Correctly excluded from inference | Same, plus narrow “non-inferential correction” wording |
+would **contradict** existing HLRs unless you run a deliberate **scope rollback** (version bumps + CP Edit List), not a paragraph in non-goals.
 
-Both can be true. TS currently sketches **two** correction stories:
+## “Type A only in v0” — what it would actually mean
 
-1. **Ingress:** InB + 20.17 — deterministic normalization + messy-input taxonomy (no semantic guessing).
-2. **Egress / feedback:** IMR Type B — bounded Pipeline A recompute after expression mismatch.
+If you adopt CP’s v0 shape honestly:
 
-What’s **missing** is an explicit normative slot for **ingress semantic repair** if you still want that product capability.
+**Keep (minimal IMR):**
+- Taxonomy reduced to **Type A + Type C** (safety still needs GB), or Type A monitoring only if you also defer Type C  
+- `evaluator_signal` ingestion, `imr_record` append to `exec_trace`  
+- Logging, caps as **observability**, not mandatory recompute scheduling  
+- Optional status flags (`imr_recommend_recompute`) — **non-normative consumer** may act once; TS core does not close the loop  
 
-## On IB vs IIInB — CP’s fork
+**Demote to extension profile (not PoC conformance):**
+- Type B and `CorrectionTrigger`  
+- E3 replay as required equivalence class (keep E1/E2)  
+- 20.36 Class 3b (and Type B portions of Class 5)  
+- 20.37 §3.4 TR recompute-on-trigger  
 
-CP’s framing matches your architecture style (rigid module contracts, profiled optional capability).
+**Align with your IIInB / input-repair thread:** input semantic repair stays **out of v0** either way; that’s orthogonal but consistent with “no systematic feedback.”
 
-**Keep IB pure** — strongly aligned with 20.90 today. IB is for ambiguity / inquiry evolution under GB, not fixing typos or guessing intent at the wire.
+## On CP’s “tiny non-goals” draft
 
-**IIInB (Input Inference/Repair Basin)** — architecturally clean *if* you want semantic input repair as a first-class, optional feature:
+Good **intent**, wrong **weight class**. A single non-goal in 20.45 without editing cross-refs creates a **normative contradiction**. Minimum honest change set:
 
-- Slots naturally **after InB, before heavy meaning construction** (or as a profile-gated branch off InB handoff).
-- Mirrors patterns you already use: **optional subsystem** (like COP), **execution_signature / profile** gating, **TCU bounds** (20.90, 20.150).
-- Avoids polluting IB and keeps 20.100 honest.
+1. **20.45** — v0 scope: Type A required; Type B/C → extension or safety-only per your call  
+2. **20.206** — E3 optional / extension-only  
+3. **20.207** — E3 demoted; E2 (regeneration) can stay as PoC minimum  
+4. **20.36** — Class 3b optional; Class 3a (Type A retry) remains  
+5. **20.37** — IMR Type B TR scheduling → extension  
+6. **20.500** — new **follow-on program slice** (don’t silently edit a `complete` hub without changelog + approval)
 
-**Cost:** New basin = real program weight: 20.30 topology, routing, 20.200 row, Stage-4-style review, fixtures. Per 20.500, that’s not a casual polish pass — it’s a bounded follow-on program slice.
+That’s a **Track D-style scope decision**, not a freshness polish.
 
-## No-GPU constraint — CP is pragmatic
+## Recommendation
 
-CP’s three CPU options match how TS is already written to think:
+**Agree with CP’s product stance; treat it as a new GATE, not a footnote.**
 
-- **Heuristic / lexicon / edit-distance repair** → fits deterministic InB-adjacent or IIInB **light profile**.
-- **Tiny model under strict TCU** → optional **rich profile**, not minimal conformance.
-- **Defer semantic repair** → aligns with v1 posture already implied by 20.17 (tag + IB request, don’t invent).
+| If you want… | Do this |
+|--------------|---------|
+| Lock “no mandated feedback loop” now | CP Edit List for v0 IMR scope rollback across 20.45 / 20.206 / 20.207 / 20.36 / 20.37 + 20.500 follow-on note |
+| Avoid reopening closed docs immediately | Record **architecture decision ADR**: “v0 = Type A IMR monitor; Type B/E3/Class 3b = extension profile” and **don’t implement** Type B in 40-series until specs catch up |
+| Worst path | Add non-goals only → harnesses and HLRs disagree; Stage 5 consistency wins on paper, product intent loses |
 
-Full LM-style repair as a **hard** PoC requirement would fight 20.12/20.17/20.100. CP is right to make it **profile-dependent**.
+**Practical v0 story (single-pass, honest):**
 
-## Recommendation (if picking a direction today)
+> Pipeline A → `mtp_update` → Pipeline B → IMR evaluates → append `imr_record` + optional flags. **No normative requirement** that cycle N+1 re-runs A because of cycle N’s IMR. External operator or future **IMR-B profile** may do one-shot recompute; not TS core conformance.
 
-**First choice (matches CP’s preference and your docs):**
+That preserves IMR, kills the convergent controller, and matches what you said you’re okay with.
 
-1. **Keep IB unchanged** — reaffirm no input-level repair.
-2. **Tighten InB** — rename/clarify “error correction” → **non-inferential correction only** (normalization, canonical token repair, `MI_NOISE` handling); explicit delegation line: semantic repair is **out of scope for minimal profile**.
-3. **Do not use IMR for input repair** — IMR is post-`oub_expression` feedback; wrong layer for “user meant Y at intake.”
-4. **Either:**
-   - **v1:** Document semantic input repair as **explicitly deferred** (20.100 + 20.17 non-goals + 20.500 §7.6-style open item), **or**
-   - **v1.1:** Add **optional IIInB** as a profiled extension doc (not folded into IB).
+## Bottom line
 
-**Second-best (CP’s fallback)** — also defensible for PoC momentum:
+- **Yes** to CP: IMR as monitor / one-shot signal, not mandated A→B→A loop.  
+- **No** to treating it as three lines in 20.45 — the loop is already woven through six docs.  
+- **Yes** to drafting the non-goals **as part of a bounded v0 scope package** if you want it locked while it’s fresh.
 
-- No new basin now.
-- Semantic input repair = **documented future extension**.
-- InB + 20.17 + IB-Creation-Request = complete **honest** minimal story: surface cleanup, explicit flags, supervised inquiry — no guessing.
-
-**What I would not do:** Let IB absorb input repair without a Purpose/Scope rewrite and GB routing overhaul. That blurs the clean Pipeline A story you just closed in Stage 5.
-
-## Direct answer to CP’s closing question
-
-> Keep IB pure or let it absorb repair?
-
-**Keep IB pure.** If semantic input repair stays a requirement, **IIInB (optional/profiled)** or **explicit v1 deferral** — not IB, not InB, and not IMR.
-
-If you want a single next doc action without a new basin: add a short **“Input repair scope”** subsection to **20.100** and **20.17** (non-inferential vs semantic; minimal vs rich profile). That closes the honest-claims gap CP flagged without reopening the dual-pipeline program. IIInB can be a separate design ticket when you’re ready to pay the topology cost.
+If you want to proceed, the next step is a short **CP Edit List** (“IMR v0 = Type A only; demote B/C/E3/Class 3b to extension”) rather than prose-only agreement. I can draft that list against the current HLR IDs when you’re ready.
