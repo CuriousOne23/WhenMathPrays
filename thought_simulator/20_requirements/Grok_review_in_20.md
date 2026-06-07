@@ -1,91 +1,198 @@
-**Verdict: CP’s corrected summary is aligned.** It can serve as the shared conceptual map for Track H review. I would sign it as a mental model with a few small clarifications to lock before normative text.
+Reviewing Track H definitions and related constraints to ground the assessment.
+Overall: the **IIInB / USP / UPI** design is sound, lean, and fits the TS model. It is implementable as a **rule-table + audit-log** subsystem, not an inference engine. The main gaps are **spec detail**, not architectural holes.
 
 ---
 
-## What CP fixed (material)
+## Executive scorecard
 
-The first draft’s three failures are gone:
-
-1. **IIInB** is semantic repair via USP rules, not InB-style canonicalization.
-2. **USP** is a COB-governed rule store, not an OB/TR intent writer.
-3. **UPI** is a post-clarification USP writer, not SRP/`exec_plan` routing.
-
-Also corrected: CIL/COB expansions, the dual-pipeline placement diagram, TP/MTP write table (none write meaning semantics), and IMR as indirect-only supervisor. That matches `20.190`, `20.100` closure, and `20.500` §7.7.
+| Dimension | Assessment | Confidence |
+|-----------|------------|------------|
+| **Completeness (concept)** | ~85% — roles and boundaries are right; wire-level detail missing | High |
+| **Implementable** | Yes — v0 is straightforward deterministic code | High |
+| **Compute / power cost** | Very low when profile-enabled; **zero** when disabled | High |
+| **Robustness** | Strong if bounded; weak if rules/clarifications are unbounded | Medium (needs caps) |
+| **Tractable** | High — three roles, narrow writes, no `semantic_core` touch | High |
+| **Expandable** | Yes — versioned rules/profiles; watch scope creep | Medium |
+| **Visible / debuggable** | Good fit with existing audit/MB model; schemas not written yet | Medium |
 
 ---
 
-## Remaining nits (spec-level, not blockers)
+## Are we missing anything?
 
-### 1. “Not a basin” vs “Repair Basin”
+**Not missing at the architecture level.** CP v2 + `20.190` / `20.500` §7.7 cover placement, authority, and IMR separation.
 
-CP says IIInB is **not a basin** but also uses **Input Inference/Repair Basin**. Both can be true if you mean:
+**Missing for implementation** (Track H spec work):
 
-- **Not** a Pipeline A basin in the RB → OB → TR → TB chain  
-- **Possibly** still a named Track H primitive (basin-class or profiled `input_semantic_repair` stage)
+| Gap | Why it matters |
+|-----|----------------|
+| **Wire schemas** | `usp_rule`, `iiinb_repair_record`, `upi_commit_event`, `clarification_event` (CIL) |
+| **InB → IIInB ordering** | Sign `InB (surface) → IIInB (semantic repair) → RB` |
+| **Rule matching model** | How segments are bounded, longest-match vs priority, conflict resolution |
+| **Rule scope & precedence** | User vs conversation vs channel; newer rule vs older; GB override |
+| **Caps** | Max rules per profile, max repairs per turn, max clarification loops per conversation |
+| **TCU budget** | IIInB min/typ/max per `20.150`; UPI amortized on rare clarification events |
+| **Profile gate** | `profile_enabled` binding to execution signature; disabled = skip IIInB entirely |
+| **Escalation vs IB path** | Unknown shorthand → CIL/UPI; `MI_INCOMP` → IB-Creation-Request (two wires, one program) |
+| **GB veto criteria** | Unsafe rule classes (e.g. rules that rewrite factual claims, policy bypass) |
+| **USP lifecycle** | Revoke, expire, supersede, export/redaction under COB |
+| **Replay fixtures** | Track H test class: rule apply, unknown escalate, UPI commit, re-read next turn |
+| **MB hooks** | Which fields MB exports for repair/clarification debugging |
 
-Track H should pick one wire form. The behavior is settled; the naming bucket is not.
+None of these challenge the three-role model. They are the normal next layer of a bounded subsystem spec.
 
-### 2. InB → IIInB ordering (open decision)
+---
 
-CP places **InB before IIInB** (IIInB expects canonicalized input). That is the better default: surface norm first, semantic repair second.
+## Is it implementable?
 
-`20.190` still says “before Pipeline A `input` stage,” which is ambiguous because InB *is* the input stage. Track H should explicitly adopt:
+**Yes.** v0 is a small, deterministic pipeline:
 
 ```
-CIL → InB (surface) → [optional IIInB reads USP] → RB → …
+InB output → IIInB:
+  load USP snapshot (read-only)
+  scan bounded segments
+  for each segment: lookup rule table
+    match → emit repair tag + resolved ref
+    no match → emit escalation ref (no guess)
+  append iiinb_repair_record
+
+Clarification (async, human-paced):
+  CIL clarification_event → UPI:
+    validate + GB gate
+    append USP rule version (COB pins version)
+    append upi_commit_record
 ```
 
-and bump the glossary line when that is signed.
+No ML, no embeddings, no latent state. That matches TS determinism and replay requirements.
 
-### 3. IMR §6 — one overreach
-
-> “UPI may be invoked if clarification is needed”
-
-Too loose. IMR does not invoke UPI. The chain is:
-
-- **IIInB** escalates unknown segments → **CIL** clarification → **UPI** writes USP  
-- **IMR** may schedule bounded A re-runs (including re-application of IIInB rules on already-known USP entries) via `CorrectionTrigger` — not clarification initiation
-
-Keep IMR out of the clarification write path.
-
-### 4. IIInB escalation vs IB-Creation-Request
-
-CP does not conflate them (good). Track H spec should still document both paths:
-
-| Trigger | Path |
-|---------|------|
-| Unknown shorthand (no USP rule) | CIL clarification → UPI → USP |
-| `MI_INCOMP` / commitment blocked | IB-Creation-Request → GB → IB |
-
-Same program, different wires. Worth one row in the Track H outline.
-
-### 5. “USP is not re-run per turn”
-
-Fine as intuition. Precise wording: USP is **read** when IIInB runs; it is not a per-cycle Pipeline A stage.
+**Implementation risk is low** if you keep IIInB to **explicit pattern → replacement/expansion** rules, not open-ended “interpret this.” The moment rules become fuzzy matchers, cost and debuggability rise fast — that would be scope creep.
 
 ---
 
-## Alignment check against your review criteria
+## Cost: power, hardware, execution speed
 
-| Criterion | CP v2 |
-|-----------|-------|
-| Primitives needed? | Yes — three roles, one program |
-| Rigid purpose? | Yes — “is / does / is not” blocks are crisp |
-| Correct placement? | Yes — matches §8 diagram |
-| Coordinates with TS primitives? | Yes — no duplicate OB/TR/routing stack |
-| IMR boundary? | Yes (minor §6 wording fix) |
-| InB closure respected? | Yes |
+**This is one of the cheapest subsystems you could add.**
+
+| Component | When it runs | Typical cost |
+|-----------|--------------|--------------|
+| **IIInB** | Every turn (if profile on) | Small table scans over bounded segments × bounded rules — microseconds to low milliseconds on CPU |
+| **USP read** | When IIInB runs | One snapshot load per cycle — negligible vs OB/TB |
+| **UPI** | Only after clarification | Human-timescale; amortized cost ≈ 0 per turn |
+| **Disabled profile** | Never | **Zero** — skip IIInB entirely |
+
+Why it stays cheap:
+
+1. **Optional** — not on the hot path for deployments that don't enable it.
+2. **No GPU / no model inference** — pure deterministic logic.
+3. **No `semantic_core` writes** — no extra Merge/Truth/Done work from Track H itself.
+4. **No Pipeline B coupling** — no OpBeh/OuB/IMR overhead from input repair.
+5. **Clarification is rare** in steady state — users train the profile once, then IIInB hits cache-like rule lookups.
+
+Compared to OB → TR → TB → Merge, IIInB should be **noise in the TCU budget** if capped (e.g. max 128–512 rules, max 32 segment spans per turn). Add explicit TCU rows in Track H per `20.150`.
+
+**Hardware:** runs on the same CPU footprint as InB. No special accelerators. Edge/mobile viable if rule store stays small.
 
 ---
 
-## Recommendation
+## Robustness
 
-**Accept** CP v2 as the shared mental model. Suggested next moves:
+**Strong properties (by design):**
 
-1. **Append to `Grok_review_in_20.md`** — CP reconciliation (v2) + my three nits above as “Track H open items”
-2. **`20.190` Phase 4** — split the combined IIInB/UPI/USP entry into three catalog entries using CP’s “is / is not” blocks
-3. **Track H `20.xxx` skeleton** — wire schemas only: USP rule record, IIInB repair tag, UPI commit event, InB→IIInB ordering, escalation vs IB path
+- **No guessing** — unknown → clarify, not silent repair.
+- **Single writer** — UPI alone commits USP; GB can veto.
+- **Read-only USP at intake** — IIInB cannot corrupt the profile mid-read.
+- **Deterministic replay** — same InB output + same USP version → same repair tags.
+- **IMR separation** — output errors don't redefine input repair.
 
-I would **not** wait on a diagram; the ASCII in §8 is enough for sign-off. The glossary split is the highest-value next edit because it prevents the drift that motivated `20.190` in the first place.
+**Risks to bound in spec:**
 
-If you want me to execute, I can append the reconciliation to `Grok_review_in_20.md` and do the Phase 4 glossary split in one pass.
+| Risk | Mitigation |
+|------|------------|
+| Rule conflicts (two rules match one span) | Deterministic precedence: specificity > scope > version > rule_id sort |
+| Rule explosion over long conversations | Cap + COB compaction/archival policy |
+| Clarification storms (user never confirms) | Max pending clarifications; degrade to tagged unknown + IB path |
+| Bad rule poisons future turns | GB veto + rule revocation + replay tests per rule version |
+| Cross-turn stale rules | USP version pin on `iiinb_repair_record`; replay uses pinned version |
+| Adversarial shorthand | Treat like `MI_NOISE`/bounds — segment length caps, reject malformed rules at UPI |
+
+With caps and audit, robustness is **high**. Without caps, clarification loops and rule tables can grow without bound — that's an ops problem, not a design flaw.
+
+---
+
+## Tractability
+
+**High.** The program decomposes cleanly:
+
+| Role | Inputs | Outputs | Complexity |
+|------|--------|---------|------------|
+| IIInB | InB text, USP snapshot | Repair tags | O(rules × segments) |
+| USP | UPI commits | Rule set | Storage + versioning |
+| UPI | Clarification payload | USP append | O(1) per event |
+
+No feedback loop inside Track H (IIInB doesn't call UPI; UPI doesn't call IIInB same-turn). Cross-turn loop is intentional and human-gated:
+
+```
+turn N: unknown → clarify
+turn N+1: UPI wrote rule → IIInB applies
+```
+
+That is **easy to reason about, test, and replay** — much more tractable than IMR Type B partial A-cycles.
+
+---
+
+## Expandability
+
+**Expandable along safe axes:**
+
+- New **rule types** (versioned schema): expansion, alias, disambiguation pick-list (post-clarification only).
+- New **scopes**: user, household, project, conversation.
+- New **profiles**: strict (escalate always) vs permissive (apply only exact rules).
+- **COB export** of USP for portability / backup.
+
+**Do not expand into:**
+
+- Live intent structuring (that's TR/OB/TB).
+- Routing contracts (RB/SRP/`exec_plan`).
+- Learning from implicit behavior without clarification (breaks CIL/GB governance).
+
+The catalog's "is not" lines are the guardrails. Expandability is good **if USP stays a rule store**, not a second meaning pipeline.
+
+---
+
+## Visibility and debuggability
+
+**Good fit** with TS audit culture. Track H should emit append-only records analogous to `messy_input_record` and `imr_record`:
+
+| Record | Carries |
+|--------|---------|
+| `iiinb_repair_record` | `usp_version_ref`, matched `rule_id[]`, segment spans, repair outcome, escalation refs |
+| `upi_commit_record` | clarification ref, new rule id, GB approval, superseded rules |
+| `usp_version_record` | COB pin, rule count, content hash |
+
+**MB** can surface: rules applied, escalations, cap hits, GB denials — same pattern as suppressed IMR triggers.
+
+**Replay/debug:** golden fixtures are simple:
+
+1. No USP → escalation only  
+2. USP with rule → deterministic repair tag  
+3. UPI commit → next-turn IIInB applies new rule  
+4. Conflicting rules → deterministic winner  
+
+**Visibility gap today:** schemas aren't normative yet, so debug story is designed but not wired. Low effort to close.
+
+---
+
+## Bottom line
+
+| Question | Answer |
+|----------|--------|
+| Missing anything fundamental? | **No** — missing spec artifacts, not missing primitives |
+| Implementable? | **Yes** — rule table + audit log; no exotic tech |
+| Low cost? | **Yes** — optional, CPU-trivial, zero when disabled; UPI is rare |
+| Robust? | **Yes with caps** — no-guess + GB gate is the right robustness model |
+| Tractable? | **Yes** — narrow writes, clear turn boundaries, no IMR coupling |
+| Expandable? | **Yes** — versioned rules/scopes; guard against meaning-pipeline creep |
+| Visible/debuggable? | **Yes** — fits append-only audit + MB; needs Track H schemas |
+
+**Recommendation:** Proceed with Track H. Treat v0 as a **bounded rule engine**, not an inference basin. The highest-leverage spec items are: caps, rule precedence, three audit record schemas, and one replay test class. Those turn a good conceptual design into a provably cheap, robust, debuggable subsystem.
+
+If you want execution next, I'd open Track H with a minimal `20.xxx` skeleton covering those five items before any implementation in 40-series.
