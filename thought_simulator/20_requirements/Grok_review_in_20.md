@@ -1,90 +1,73 @@
-Checking how deeply Type B and the A→B→A loop are embedded in approved requirements before commenting.
-CP’s proposal is **architecturally coherent** and matches the stance you described (“monitor / one-shot flag, not a baked-in A→B→A controller”). But it is **not** a small non-goal tweak. It would **reverse a chunk of normative work you already approved** in the dual-pipeline program.
+The summary is **mostly well-argued** and fair to attribute back to the review thread — but it over-tightens a few steps. IIInB is the **cleanest** place for pre-A semantic repair if that capability stays a **hard requirement**. It is not literally the **only** architecture that satisfies the constraints.
 
-## Where CP is right
+## What the summary gets right
 
-The control-loop concern is real. A mandated IMR Type B path implies:
+**1–3 (IMR / InB / IB)** — Solid. Grounded in actual HLRs:
 
-- `CorrectionTrigger` schema and supervisory queue semantics  
-- Bounded partial A-cycles and `target_field_ids[]` routing  
-- Caps, cooldowns, dedup, `max_correction_depth_per_cycle`  
-- E3 replay (20.207) and Class 3b/5 fixtures (20.36)  
-- TR `tr_needs_update` scheduling (20.37)
+- IMR is post-`mtp_update` / post-expression; it reads `semantic_snapshot_ref`, not raw intake.
+- InB is explicitly non-inferential (HLR-20.100-002).
+- IB is inquiry/ambiguity under GB, not input janitorial repair (20.90).
 
-That *is* a feedback controller, even if bounded. If your product intent is **mostly single-pass A→B with observability**, CP’s framing — **IMR as monitor + optional flag, not closed loop** — is the sane way to say that.
+So the requirement *“correct semantic input before A goes down the wrong path”* cannot land in those three modules without violating their charters.
 
-Type A-only v0 also fits the deterministic/no-latent-inference posture better: expression retry on the **same** `semantic_snapshot_ref` is a B-side retry, not meaning recompute.
+**4 (no systematic A→B→A)** — That’s a **product/architecture decision** (Jeff’s stance + CP’s v0 proposal), not something the earlier review **proved** impossible. Type B was specified as **bounded, deterministic, next-cycle** recompute — a control loop, yes, but not “uncontrolled” in the sense 20.45 caps/cooldowns were written to prevent. The summary is right to **reject** it for v0 if that’s the chosen posture; weaker to say it “violates determinism posture” as a blanket fact.
 
-## Where CP understates the conflict
+**5 (IIInB placement)** — Topologically sound: **after InB, before OB/RB-heavy meaning work**, profile-gated, correction trace emitted, doesn’t steal IB or IMR roles. Matches the module-contract style you’ve been using.
 
-Today’s specs **do** define systematic correction as normative, not implementation-specific:
+## Where the logic overreaches
 
-| Doc | What’s already in scope |
-|-----|-------------------------|
-| **20.45** | ~33 Type B / `CorrectionTrigger` touchpoints; Type B is first-class, not optional |
-| **20.206** | Equivalence class **E3** (post-correction meaning) |
-| **20.207** | E3 replay rules; Type B regen constraints |
-| **20.36** | **Class 3b** (Type B + partial A-cycle); Class 5 includes Type B IMR |
-| **20.37** | IMR Type B schedules bounded TR recompute |
-| **20.500** | IMR Type B agreed in §5 registry; program closed with this model |
+### “Only one architecture remains viable”
 
-So CP’s suggested line:
+Several other designs meet the same constraints without a new basin:
 
-> “Any use of IMR to trigger recompute is implementation-specific and out of normative scope”
+| Alternative | How it satisfies “pre-A” without breaking InB/IB/IMR |
+|-------------|------------------------------------------------------|
+| **v0 deferral (honest non-repair)** | 20.17 tags (`MI_VAGUE`, `MI_INCOMP`); IB-Creation-Request / user clarification **before** full A commitment. No semantic guessing; requirement softened to “surface ambiguity early.” |
+| **External / CIL pre-pass** | Inference runs **outside** TS core (human, host app, optional service); InB ingests **already-canonicalized** corrected text. TS stays deterministic; repair isn’t a basin. |
+| **COP propose-only (extension profile)** | COP proposes corrected reading; GB approves at safe boundary; Pipeline A sees approved snapshot only. Reuses optional-async pattern (20.34), no IIInB topology. |
+| **Pipeline A stage, not new primitive** | A profiled `input_repair` **stage** in 20.30 (between InB and RB) without full “basin” ontology — lighter spec surface than 20.xx IIInB. |
 
-would **contradict** existing HLRs unless you run a deliberate **scope rollback** (version bumps + CP Edit List), not a paragraph in non-goals.
+So the honest conclusion is:
 
-## “Type A only in v0” — what it would actually mean
+> Given **pre-A semantic repair as a mandatory, in-core capability**, IIInB (or equivalent dedicated stage) is the **best fit**.  
+> Given **minimal v0 / no in-core semantic guessing**, you can satisfy the *spirit* of the constraints **without** IIInB by deferring repair.
 
-If you adopt CP’s v0 shape honestly:
+The summary collapses those into one fork too aggressively.
 
-**Keep (minimal IMR):**
-- Taxonomy reduced to **Type A + Type C** (safety still needs GB), or Type A monitoring only if you also defer Type C  
-- `evaluator_signal` ingestion, `imr_record` append to `exec_trace`  
-- Logging, caps as **observability**, not mandatory recompute scheduling  
-- Optional status flags (`imr_recommend_recompute`) — **non-normative consumer** may act once; TS core does not close the loop  
+### “Does not require a GPU”
 
-**Demote to extension profile (not PoC conformance):**
-- Type B and `CorrectionTrigger`  
-- E3 replay as required equivalence class (keep E1/E2)  
-- 20.36 Class 3b (and Type B portions of Class 5)  
-- 20.37 §3.4 TR recompute-on-trigger  
+True for **heuristic / lexicon / edit-distance** IIInB. If IIInB allows a **small model**, you still need the same profile/TCU/replay story CP described — and strict determinism gets harder unless the model is frozen, versioned, and replay-bound. IIInB doesn’t magically remove that; it **relocates** it to pre-A.
 
-**Align with your IIInB / input-repair thread:** input semantic repair stays **out of v0** either way; that’s orthogonal but consistent with “no systematic feedback.”
+### “IMR is non-inferential”
 
-## On CP’s “tiny non-goals” draft
+IMR classification is **deterministic rule application** over `evaluator_signal` — not latent inference, but still **discrepancy → class → action**. The review’s point was **wrong layer** (output vs input), not “IMR doesn’t infer anything.”
 
-Good **intent**, wrong **weight class**. A single non-goal in 20.45 without editing cross-refs creates a **normative contradiction**. Minimum honest change set:
+## Comment on sending this to Grok
 
-1. **20.45** — v0 scope: Type A required; Type B/C → extension or safety-only per your call  
-2. **20.206** — E3 optional / extension-only  
-3. **20.207** — E3 demoted; E2 (regeneration) can stay as PoC minimum  
-4. **20.36** — Class 3b optional; Class 3a (Type A retry) remains  
-5. **20.37** — IMR Type B TR scheduling → extension  
-6. **20.500** — new **follow-on program slice** (don’t silently edit a `complete` hub without changelog + approval)
+As a message **to me (Grok)**, the summary is **90% fair** if you soften two lines:
 
-That’s a **Track D-style scope decision**, not a freshness polish.
+1. Replace *“only one architecture remains”* with *“only one **in-core basin** remains if pre-A semantic repair is a **normative v0 requirement**.”*
+2. Replace *“violates determinism posture”* (re A→B→A) with *“Jeff does not want a **mandated** feedback controller in v0; Type B remains an **extension profile**.”*
+
+That keeps the letter aligned with what the review actually said and avoids boxing you in if you later choose deferral or external repair.
 
 ## Recommendation
 
-**Agree with CP’s product stance; treat it as a new GATE, not a footnote.**
+| If Jeff’s must-have is… | Direction |
+|-------------------------|-----------|
+| **“Fix wrong input before A runs”** (in-core, semantic) | **Yes → IIInB** (or profiled `input_repair` stage with same semantics). Draft skeleton is reasonable next step. |
+| **“Don’t go wrong silently”** (PoC / v0) | **No IIInB yet** — tighten 20.100 + 20.17 non-goals; IB/CIL clarification path; IMR Type A monitor only. |
+| **“Fix input but TS stays pure deterministic core”** | **External pre-pass or COP+GB** — repair outside or propose-only, not inside InB. |
 
-| If you want… | Do this |
-|--------------|---------|
-| Lock “no mandated feedback loop” now | CP Edit List for v0 IMR scope rollback across 20.45 / 20.206 / 20.207 / 20.36 / 20.37 + 20.500 follow-on note |
-| Avoid reopening closed docs immediately | Record **architecture decision ADR**: “v0 = Type A IMR monitor; Type B/E3/Class 3b = extension profile” and **don’t implement** Type B in 40-series until specs catch up |
-| Worst path | Add non-goals only → harnesses and HLRs disagree; Stage 5 consistency wins on paper, product intent loses |
+**On the skeleton offer:** A minimal `20.xx_iiinb_requirements.md` is useful **if** you’ve picked the first row. It should state upfront:
 
-**Practical v0 story (single-pass, honest):**
+- Optional / profile-gated (`execution_signature`)
+- Sits after InB handoff
+- One-shot, bounded, append-only `input_correction_record`
+- SHALL NOT write `semantic_core` or trigger IMR Type B
+- Deterministic replay over correction trace (even for heuristic path)
+- Explicit non-goals: IB, InB, IMR, systematic A→B→A
 
-> Pipeline A → `mtp_update` → Pipeline B → IMR evaluates → append `imr_record` + optional flags. **No normative requirement** that cycle N+1 re-runs A because of cycle N’s IMR. External operator or future **IMR-B profile** may do one-shot recompute; not TS core conformance.
+That slots cleanly as a **post–20.500 follow-on slice**, not a silent edit to closed docs.
 
-That preserves IMR, kills the convergent controller, and matches what you said you’re okay with.
-
-## Bottom line
-
-- **Yes** to CP: IMR as monitor / one-shot signal, not mandated A→B→A loop.  
-- **No** to treating it as three lines in 20.45 — the loop is already woven through six docs.  
-- **Yes** to drafting the non-goals **as part of a bounded v0 scope package** if you want it locked while it’s fresh.
-
-If you want to proceed, the next step is a short **CP Edit List** (“IMR v0 = Type A only; demote B/C/E3/Class 3b to extension”) rather than prose-only agreement. I can draft that list against the current HLR IDs when you’re ready.
+**Bottom line for the summary:** Send it with the two softenings above. The constraint chain is sound; the conclusion should be **“IIInB is the preferred in-core solution if we insist on pre-A semantic repair”**, not **“the constraints force IIInB with no alternatives.”**
