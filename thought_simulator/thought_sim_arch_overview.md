@@ -115,14 +115,6 @@ Because TS does 97–99% of cognition:
 - **5–40 watts** during intuition bursts  
 - TS core itself: **<1 watt**
 
-### **Hardware Requirements**
-- **0–1 GPUs**  
-- No H100s  
-- No datacenter hardware  
-- No multi‑GPU clusters  
-
-This is a collapse of the cost curve.
-
 ---
 
 ## **5. Memory Requirements**
@@ -203,17 +195,66 @@ Even at the high end, TS avoids the HBM requirement entirely.
 
 ---
 
-### **Summary**
-- **TS uses DRAM.**  
-- **TS does not use HBM.**  
-- **TS does not need HBM.**  
-- **TS is architecturally incompatible with the need for HBM.**  
+## **6. TS + Intuition Module Hardware Profile**
+The TS architecture requires **0–1 GPUs**, depending on the size of the Intuition Module (COP2).  
+This is a dramatic departure from modern AI systems, which require multi‑GPU clusters and HBM‑based accelerators.
 
-This is one of the reasons TS is dramatically cheaper, smaller, and more power‑efficient than modern AI systems.
+### **How Many GPUs TS Needs**
+- **0 GPUs**  
+  When using a **1B–3B parameter** Intuition Module.  
+  Runs entirely on CPU or integrated GPU.
+
+- **1 GPU**  
+  When using a **7B parameter** Intuition Module.  
+  A single mid‑range consumer GPU is sufficient.
+
+- **Never more than 1 GPU**  
+  TS does not scale with GPU count because the Intuition Module is not the hot path.
 
 ---
 
-## **6. Cost, Power, and Size Advantages**
+### **GPU Performance Requirements**
+The Intuition Module requires only modest GPU capabilities:
+
+#### **Minimum GPU Class (for 7B Intuition Module)**
+- NVIDIA **RTX 3060 / 4060 / 4070**  
+- AMD **RX 6700 XT / 7600 / 7800M**  
+- Apple **M2/M3/M4 integrated GPU**  
+- Intel **Arc A770 / A750**
+
+#### **Required GPU Capabilities**
+- **8–16 GB VRAM**  
+- **~200–300 GB/s memory bandwidth** (standard GDDR6)  
+- **~10–20 TFLOPs FP16/BF16**  
+- **No tensor cores required**  
+- **No HBM required**  
+- **No multi‑GPU interconnects** (no NVLink, no PCIe peer‑to‑peer)
+
+#### **Power Requirements**
+- **20–40 watts sustained** during intuition bursts  
+- **<1 watt** for TS core  
+- **0 watts** for GPU when using a CPU‑only 1B–3B module
+
+This is laptop‑class power consumption.
+
+---
+
+### **What TS Does *Not* Require**
+TS avoids every hardware requirement that makes modern AI expensive:
+
+- ❌ **No HBM**  
+- ❌ **No tensor cores**  
+- ❌ **No multi‑GPU setups**  
+- ❌ **No datacenter GPUs**  
+- ❌ **No 300–600W accelerators**  
+- ❌ **No trillion‑parameter models**  
+- ❌ **No GPU clusters or racks**
+
+TS is architecturally incompatible with the need for HBM or multi‑GPU scaling.
+
+---
+
+## **7. Cost, Power, and Size Advantages**
 ### **Modern AI (GPT‑4 class)**
 - 70B–1T parameters  
 - 8–16 GPUs  
@@ -242,7 +283,7 @@ TS reduces model size by **10×–100×**.
 
 ---
 
-## **7. Performance Expectations**
+## **8. Performance Expectations**
 TS matches or exceeds modern AI in:
 
 - conversational ability  
@@ -270,7 +311,7 @@ This is architectural superiority.
 
 ---
 
-## **8. Comparison Table: TS vs. Modern AI**
+## **9. Comparison Table: TS vs. Modern AI**
 
 ### **Function Coverage Comparison**
 
@@ -297,7 +338,7 @@ This is architectural superiority.
 
 ---
 
-## **9. Industry Impact**
+## **10. Industry Impact**
 If TS is realized structurally, it will hit the AI industry like a brick in the face.
 
 Because TS proves:
@@ -320,7 +361,7 @@ This is the kind of architectural shift that forces the entire industry to rethi
 
 ---
 
-## **10. Conclusion**
+## **11. Conclusion**
 TS is not a variant of modern AI.  
 It is a **replacement architecture**.
 
