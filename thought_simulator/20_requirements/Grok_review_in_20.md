@@ -1,88 +1,149 @@
-## Comment on the proposed 20.45 Purpose rewrite
+You're right to treat **20.190 as the intent enforcement layer**. Today it’s doing three jobs at once and doing none of them fully:
 
-The rewrite is **directionally good** for primitive focus: it says what IMR is for, where it sits (post–Pipeline B), and that it **does not** perform semantic correction itself. That helps amid IIInB, UPI, InB, IB, etc.
+1. **Thin one-liners** (Core Terms) — easy to drift  
+2. **Better dual-pipeline block** — still incomplete  
+3. **Registry-Aligned dump** — duplicates Core Terms with **different wording** (e.g. OB, RB, InB, OuB appear twice)
 
-A few issues to fix before paste, plus a merged version below.
-
----
-
-### What works
-
-| Element | Why it helps |
-|--------|----------------|
-| **Detect and classify mismatches** | Matches taxonomy (HLR-001–003) |
-| **Pipeline B realization context** | Correct layer — not input repair |
-| **Type B → bounded `CorrectionTrigger`** | Aligns with HLR-007–010, 029–030 |
-| **No direct `semantic_core` writes** | Matches HLR-008 and 20.12 |
-| **“Supervisory governor”** | Signals IMR schedules/audits; Pipeline A executes |
-
-This is stronger than the current Purpose, which only says “Pipeline B feedback into Pipeline A” and “first pre-PoC hardening module” — weak for onboarding.
+That duplication is already a drift vector. **One-stop shopping** needs a deliberate **Primitive Intent Catalog** format, not more bullet sprawl.
 
 ---
 
-### What to adjust
+## Recommended glossary shape (before expanding IMR)
 
-**1. Type A and Type C are missing from Purpose**  
-The draft is almost entirely Type B. IMR is a **three-type** classifier; Purpose should mention all three in one sentence each, or readers assume IMR = semantic re-interpretation only.
+Replace “expand everything” with **four sections**, each entry using the same template:
 
-**2. “User intent” is slightly loose**  
-Normatively IMR works on **`evaluator_signal` + `semantic_snapshot_ref` + `oub_artifact_ref`** (HLR-002), not inferred intent. Prefer **“evaluator-indicated mismatch”** or **“committed meaning vs realized output.”**
+| Field | Purpose |
+|--------|---------|
+| **Focus** | One sentence: what it owns |
+| **When** | Pipeline A / B / conversation layer / optional |
+| **Why it exists** | Problem it solves |
+| **Is not** | 1–3 common confusions |
+| **Example** | One concrete scenario (for fuzzy terms) |
+| **Normative home** | Link to 20.xx |
 
-**3. “Cognitive interpretation errors, projection errors”**  
-Fine as prose, but tie to taxonomy: Type A = expression/register; Type B = semantic/factual; Type C = safety/policy.
-
-**4. Tension with your v0 posture (if still active)**  
-If Jeff still wants **no mandated A→B→A feedback loop** in minimal conformance, this Purpose **foregrounds Type B** as core mission (“supervisory governor for interpretation **correction**”). That’s accurate for **current 20.45 HLRs**, but it fights a **product** decision to demote Type B to an extension profile.
-
-**Pick one:**
-
-- **Keep Type B in Purpose** (matches existing HLRs) — document v0/minimal as a **profile** elsewhere.  
-- **v0 monitor-only** — Purpose should lead with **detect/classify/log**; Type B as **optional extension** (would need HLR/profile edits later, not Purpose alone).
-
-**5. Add explicit “what IMR is not”** (one line)  
-With Track H open, Purpose should point away from input correction:
-
-> IMR does **not** perform pre–Pipeline A input error correction (see 20.500 §7.7, IIInB/UPI).
-
-**6. Keep the 20.12 / HLR-20.012-009 hook**  
-The current Purpose cites parent invariant satisfaction — worth retaining in one line.
+Keep **Registry-Aligned** as legacy/reference or merge duplicates into the catalog and mark registry entries as aliases.
 
 ---
 
-### “Supervisory governor” — acceptable with nuance
+## Tier 1 — Expand first (highest drift risk)
 
-The phrase fits if you mean: **classify, cap, dedupe, queue triggers, audit** — not **run** Pipeline A or **fix** meaning.  
+These are the primitives people keep assigning the wrong work to (your IIInB/IMR/InB thread is the pattern).
 
-Avoid implying IMR is GB or a closed feedback controller. **“Mismatch evaluator and trigger scheduler”** is more precise; “governor” is OK if paired with “does not mutate `semantic_core`.”
+| Primitive | Why expand | Example worth including |
+|-----------|------------|-------------------------|
+| **InB** | vs IIInB, vs “error correction” | `"teh"` → canonical token; `"Yeah Baby!"` → hand off tagged, not guessed |
+| **IIInB / UPI / USP** | New, easy to overload | User shorthand `"easier/quicker-ish"` → clarify → USP rule → next turn applied |
+| **IB** | vs InB, vs input repair, vs IMR | `MI_VAGUE` → IB-Creation-Request → GB-approved inquiry, not gap-fill |
+| **IMR** | vs input repair, vs IB, vs GB | “Output wrong factually” → Type B record; “too formal” → Type A |
+| **OuB** | vs OpBeh/OBG, vs meaning writer | Same `semantic_core`, different seed → different surface text only |
+| **GB** | vs rule store, vs COP, vs UPI | Veto unsafe USP rule; not store user lexicon |
+| **CIL** | vs InB, vs clarification “Path B” | FIFO intake + escalate ambiguity; clarification event to UPI |
+| **COB** | vs MTP, vs USP dump | Conversation continuity + where USP snapshots live |
+| **COP** | vs GB executor, vs meaning | Proposes IB lifecycle action; GB commits at safe boundary |
+| **TR** (Thought Router) | **Missing from glossary**; vs TrigRB, vs RB, vs XlateR | Stance/intent channels on TP; `tr_needs_update` after bounded correction |
+| **TrigRB** | Namespace collision with TR/RB | Reads frozen `semantic_core` triggers; not lane routing |
+| **OpBeh / OBG / XlateR** | vs OB/TR/RB basins | Planning triple on `exec_plan`; seed doesn’t pick OpBeh |
+| **SRP** | vs RB (Pipeline A) | Cold compile tables; hot path lookup by `routing_epoch_id` |
+| **TP vs MTP vs `semantic_core`** | Lane vs global vs committed envelope | TP on lane → merge → MTP → `mtp_update` → frozen `semantic_core` |
+| **XP / `exec_plan` / `exec_trace`** | vs TP, vs MTP | One XP per `commit_id`; B audit separate from meaning |
+
+**IMR belongs in Tier 1** — expand as we discussed, with Types A/B/C, `CorrectionTrigger`, `evaluator_signal`, and explicit “is not.”
 
 ---
 
-### Recommended Purpose (merge CP draft + fixes)
+## Tier 2 — Expand second (boundary / namespace drift)
 
-Use this instead of paste-as-is — same style, fuller primitive boundary:
+| Primitive | Why | Example |
+|-----------|-----|---------|
+| **OB** | vs OpBeh, vs semantic interpreter | Pattern evidence on lane TP; no stance assignment |
+| **RB** | vs SRP, vs TrigRB | Deterministic fan-out to OB/TB; not B routing tables |
+| **TB** | vs Truth/Done (20.140), vs OuB | Interpretation into truth hypotheses; not final user text |
+| **DCB** | “meta-basin” is fuzzy | Curvature spike → ephemeral event to TR; no OB semantics |
+| **MB** | vs IMR, vs GB | Read-only diagnostics; no corrective authority |
+| **Merge / splitting** | Easy to conflate with B | Lane TPs → MTP; not Pipeline B |
+| **Pipeline A vs B** | Foundational | A writes meaning once per cycle; B realizes one pass per `commit_id` |
+| **`commit_id` / `semantic_snapshot_ref`** | Replay vocabulary | Post-`mtp_update` freeze id; hash of committed meaning |
+| **`routing_epoch_id`** | A vs B confusion | On B envelopes only; published SRP tables |
+
+---
+
+## Tier 3 — Metrics & cross-cutting (need examples, lighter “is not”)
+
+Fuzzy without scenarios:
+
+| Term | Example to add |
+|------|----------------|
+| **ΔH% (DeltaHPercent)** | Lane contribution to merged hypothesis mass; missing mass logged on truncate |
+| **HPercent / truth_hypotheses** | TB output band; not same as “done” |
+| **TCU** | Budget unit; OpBeh plan costs vs OuB expression costs |
+| **Random Seed Boundary** | Same `semantic_core`, seed A vs B → different OuB pick only |
+| **messy-input (`MI_*`)** | Not a primitive — glossary **taxonomy** entry: `MI_CONTRA` vs `MI_VAGUE` with one line each + mini example |
+| **done_state / Truth-Done** | 20.140 evaluation; not “user satisfied” |
+
+---
+
+## Terms that should **not** be expanded in 20.190
+
+Keep one line + pointer; detail lives in 20.35 / 20.90 / 40-series:
+
+- Highway, Flow Modulator, Interpretive Manifold, Anti-Collapse Stabilizer, etc. (registry fluff)
+- Generic: Canonicalization, Replayability, Watchdog (unless tied to a specific primitive)
+
+**Action:** Collapse **Registry-Aligned** duplicates into the catalog or mark `*(registry alias)*` so OB isn’t defined two different ways.
+
+---
+
+## Primitives **missing** from the glossary today
+
+Add intent entries (not just IMR):
+
+- **TR** (Thought Router) — biggest omission  
+- **Merge** (and **splitting** if lane primitive)  
+- **InB** is there; **Input Basin** registry duplicate should defer to catalog entry  
+- **`CorrectionTrigger`**, **`evaluator_signal`**  
+- **Truth/Done** (or pointer to 20.140)  
+- **IB-Creation-Request** (wire between 20.17 and IB)  
+- **Envelopes**: `semantic_core`, `supervisory` (four-envelope model from 20.36)
+
+---
+
+## Example format (template for rigor)
+
+For each Tier 1 entry, something like:
 
 ```markdown
-## Purpose
+### IMR (Interpretation Mismatch Routine) — [20.45](20.45_imr_requirements.md)
 
-The **Interpretation Mismatch Routine (IMR)** detects and classifies mismatches between **committed `semantic_core`**, **Pipeline B realization** (`exec_plan`, `oub_artifact_ref`), and **evaluator signals** after expression. IMR is a Pipeline B post-realization evaluator: it SHALL NOT perform semantic or input correction itself.
-
-IMR classifies every evaluated mismatch into **Type A** (expression/register), **Type B** (semantic/factual/logical), or **Type C** (safety/policy) per the taxonomy below. Type A MAY schedule realization-only retry on the same `semantic_snapshot_ref`. Type C SHALL route through GB per safety policy. When a mismatch is semantic (Type B), IMR MAY emit a bounded `CorrectionTrigger` that schedules a **limited** Pipeline A re-interpretation of explicitly listed TP/MTP fields in a **subsequent** cycle; all semantic updates occur only through approved Pipeline A pathways (HLR-20.045-008).
-
-IMR therefore serves as the **mismatch evaluator and trigger scheduler** for post-output feedback: it records when realization diverges from committed meaning or evaluator expectations, enforces caps and cooldowns, and queues safe correction pathways without violating [20.12](20.12_ts_invariants.md) (HLR-20.012-009).
-
-**Out of scope:** pre–Pipeline A input error correction ([20.100](20.100_inb_requirements.md), [20.500](20.500_refactoring_for_dual_TS_pipeline.md) §7.7 IIInB/UPI); inquiry or ambiguity handling ([20.90](20.90_ib_requirements.md) IB).
+- **Focus:** Post-realization mismatch detection and trigger scheduling on Pipeline B.
+- **When:** After `oub_expression` / `imr_evaluation`; reads frozen `semantic_snapshot_ref`.
+- **Why:** Separate “output doesn’t match committed meaning or evaluator feedback” from input repair and from meaning construction.
+- **Is not:** InB/IIInB (input), IB (inquiry), direct `semantic_core` writer, GB rule store.
+- **Example:** User says “that’s factually wrong” → Type B `imr_record` + optional `CorrectionTrigger` for listed fields next cycle; “too casual” → Type A realization retry same snapshot.
 ```
+
+Fuzzy terms get **one italicized example**; crisp wire terms (`commit_id`) can skip example.
 
 ---
 
-### Verdict
+## Suggested rollout (so this doesn’t become a 3-week rewrite)
 
-| Question | Answer |
-|----------|--------|
-| Paste CP’s rewrite as-is? | **Almost** — add Types A/C, tighten “user intent,” add out-of-scope line, keep 20.12 ref |
-| Good for primitive focus? | **Yes** — especially with IIInB/UPI/InB boundaries explicit |
-| Enough alone if v0 = IMR monitor-only? | **No** — Purpose must match profile decision; may need a **Conformance profiles** note under Purpose |
+| Phase | Scope |
+|-------|--------|
+| **Phase 1** (now) | Restructure Purpose of 20.190; add **Primitive Intent Catalog** skeleton; Tier 1: InB, IB, IMR, OuB, GB, CIL/COB/COP, TR, Pipeline A/B, TP/MTP/`semantic_core` |
+| **Phase 2** | Tier 2 basins + B manifold (OpBeh, OBG, XlateR, TrigRB, SRP, XP envelopes) |
+| **Phase 3** | Metrics + `MI_*` taxonomy + dedupe Registry-Aligned |
+| **Phase 4** | IIInB/UPI/USP when Track H spec lands |
 
-**Process:** Purpose-only change is **low risk** if it doesn’t weaken HLRs. Bump 20.45 to v0.3 with changelog: “Purpose clarify — primitive boundary vs input correction (Track H align).”
+Each phase = one changelog bump; normative HLRs stay in 20.xx modules.
 
-I can apply the merged Purpose to `20.45_imr_requirements.md` if you and CP approve the wording above (and confirm whether Type B stays **normative** or moves to **extension** in the same edit).
+---
+
+## Bottom line
+
+**Yes — expand the glossary**, but as a **Primitive Intent Catalog** with a fixed template (Focus / When / Why / Is not / Example / Link), not longer ad hoc bullets.
+
+**Highest priority expansions:** IMR, InB, IB, OuB, GB, CIL, COB, COP, TR, Pipeline A/B, TP/MTP/`semantic_core`, plus **dedupe** the Registry-Aligned basin definitions.
+
+**Fuzzy terms that most need examples:** IB, DCB, ΔH%, messy-input classes, Random Seed Boundary, GB vs COP, semantic vs expression correction, IIInB unknown-segment path.
+
+When you’re ready to execute, I’d do **Phase 1 + IMR block** in one edit to `20.190`, add a short **“How to read this catalog”** at the top, and fold duplicate OB/RB/InB/OuB registry lines to point at the catalog entry. Say the word and I’ll implement Phase 1.
