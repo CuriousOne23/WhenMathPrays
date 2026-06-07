@@ -1,73 +1,136 @@
-The summary is **mostly well-argued** and fair to attribute back to the review thread — but it over-tightens a few steps. IIInB is the **cleanest** place for pre-A semantic repair if that capability stays a **hard requirement**. It is not literally the **only** architecture that satisfies the constraints.
+## Grok review — UPI / USP / IIInB (RFC commentary)
 
-## What the summary gets right
+This draft is in good shape to send. The problem statement is clear, boundaries are mostly honest, and the open questions are the right ones. Below is commentary you can use as my response without locking implementation yet.
 
-**1–3 (IMR / InB / IB)** — Solid. Grounded in actual HLRs:
+---
 
-- IMR is post-`mtp_update` / post-expression; it reads `semantic_snapshot_ref`, not raw intake.
-- InB is explicitly non-inferential (HLR-20.100-002).
-- IB is inquiry/ambiguity under GB, not input janitorial repair (20.90).
+### What works well
 
-So the requirement *“correct semantic input before A goes down the wrong path”* cannot land in those three modules without violating their charters.
+**The IIInB split (correct vs clarify)** is the right decomposition:
 
-**4 (no systematic A→B→A)** — That’s a **product/architecture decision** (Jeff’s stance + CP’s v0 proposal), not something the earlier review **proved** impossible. Type B was specified as **bounded, deterministic, next-cycle** recompute — a control loop, yes, but not “uncontrolled” in the sense 20.45 caps/cooldowns were written to prevent. The summary is right to **reject** it for v0 if that’s the chosen posture; weaker to say it “violates determinism posture” as a blanket fact.
+- IIInB applies **only** when a rule or deterministic transform applies.
+- Unknown / ambiguous segments → **no guess** → clarification path.
+- Learned meaning → **external store**, not self-modifying IIInB.
 
-**5 (IIInB placement)** — Topologically sound: **after InB, before OB/RB-heavy meaning work**, profile-gated, correction trace emitted, doesn’t steal IB or IMR roles. Matches the module-contract style you’ve been using.
+That preserves everything the 20-series already insists on: no latent inference in InB (HLR-20.100-002), messy-input tagging in 20.17, IB for inquiry not janitorial repair, IMR on the wrong side of A for input repair.
 
-## Where the logic overreaches
+**UPI as “profile writer, not meaning constructor”** is a credible pattern. It mirrors how TS already treats `execution_signature` / `policy_signature`: versioned, auditable, bound at safe boundaries — not live mutation inside a basin.
 
-### “Only one architecture remains viable”
+**GB as oversight, not dictionary** aligns with 20.80 / 20.16. GB should veto unsafe or globally incoherent rules, not own user lexicon storage.
 
-Several other designs meet the same constraints without a new basin:
+---
 
-| Alternative | How it satisfies “pre-A” without breaking InB/IB/IMR |
-|-------------|------------------------------------------------------|
-| **v0 deferral (honest non-repair)** | 20.17 tags (`MI_VAGUE`, `MI_INCOMP`); IB-Creation-Request / user clarification **before** full A commitment. No semantic guessing; requirement softened to “surface ambiguity early.” |
-| **External / CIL pre-pass** | Inference runs **outside** TS core (human, host app, optional service); InB ingests **already-canonicalized** corrected text. TS stays deterministic; repair isn’t a basin. |
-| **COP propose-only (extension profile)** | COP proposes corrected reading; GB approves at safe boundary; Pipeline A sees approved snapshot only. Reuses optional-async pattern (20.34), no IIInB topology. |
-| **Pipeline A stage, not new primitive** | A profiled `input_repair` **stage** in 20.30 (between InB and RB) without full “basin” ontology — lighter spec surface than 20.xx IIInB. |
+### Critical naming fix before this hits 20-series
 
-So the honest conclusion is:
+**Do not call the clarification path “Path B.”**
 
-> Given **pre-A semantic repair as a mandatory, in-core capability**, IIInB (or equivalent dedicated stage) is the **best fit**.  
-> Given **minimal v0 / no in-core semantic guessing**, you can satisfy the *spirit* of the constraints **without** IIInB by deferring repair.
+In your stack, **Pipeline B** already means the execution manifold (OpBeh/OBG/XlateR → OuB → IMR). “Path B = ask the user” will collide in every review, fixture, and grep.
 
-The summary collapses those into one fork too aggressively.
+Rename now, e.g.:
 
-### “Does not require a GPU”
+| Avoid | Prefer |
+|-------|--------|
+| Path A | **Pipeline A** (existing) |
+| Path B | **Clarification path**, **CIL clarify lane**, or **UCR** (user clarification request) |
 
-True for **heuristic / lexicon / edit-distance** IIInB. If IIInB allows a **small model**, you still need the same profile/TCU/replay story CP described — and strict determinism gets harder unless the model is frozen, versioned, and replay-bound. IIInB doesn’t magically remove that; it **relocates** it to pre-A.
+Same for “Path B triggers UPI” — use **clarification completion event** or similar.
 
-### “IMR is non-inferential”
+---
 
-IMR classification is **deterministic rule application** over `evaluator_signal` — not latent inference, but still **discrepancy → class → action**. The review’s point was **wrong layer** (output vs input), not “IMR doesn’t infer anything.”
+### Is UPI the right location?
 
-## Comment on sending this to Grok
+**Mostly yes**, with one refinement: UPI is probably not a new *basin* but a **deterministic integrator** sitting in the **conversation / identity layer**, not Pipeline A or B.
 
-As a message **to me (Grok)**, the summary is **90% fair** if you soften two lines:
+Strongest existing anchors:
 
-1. Replace *“only one architecture remains”* with *“only one **in-core basin** remains if pre-A semantic repair is a **normative v0 requirement**.”*
-2. Replace *“violates determinism posture”* (re A→B→A) with *“Jeff does not want a **mandated** feedback controller in v0; Type B remains an **extension profile**.”*
+| Candidate home | Fit |
+|----------------|-----|
+| **New 20.xx `upi_requirements.md`** | Cleanest if UPI is a first-class subsystem |
+| **20.33 CIL** (extension) | Natural if clarification is conversation-intake UX |
+| **20.32 COB** (extension) | Natural if USP is **per-conversation-object / per-user continuity** state |
+| **COP + GB approve** (20.34) | If rule writes are **proposals** until GB commits |
 
-That keeps the letter aligned with what the review actually said and avoids boxing you in if you later choose deferral or external repair.
+**Recommendation:** UPI as its own thin spec (20.xx), with USP stored under **COB-scoped user/conversation identity** (20.32 cross-ref). CIL owns *delivery* of clarification; UPI owns *rule integration*; COB owns *persistence scope*; GB owns *veto/safety*.
 
-## Recommendation
+That avoids inventing a second “basin” when you already have conversation-layer primitives.
 
-| If Jeff’s must-have is… | Direction |
-|-------------------------|-----------|
-| **“Fix wrong input before A runs”** (in-core, semantic) | **Yes → IIInB** (or profiled `input_repair` stage with same semantics). Draft skeleton is reasonable next step. |
-| **“Don’t go wrong silently”** (PoC / v0) | **No IIInB yet** — tighten 20.100 + 20.17 non-goals; IB/CIL clarification path; IMR Type A monitor only. |
-| **“Fix input but TS stays pure deterministic core”** | **External pre-pass or COP+GB** — repair outside or propose-only, not inside InB. |
+---
 
-**On the skeleton offer:** A minimal `20.xx_iiinb_requirements.md` is useful **if** you’ve picked the first row. It should state upfront:
+### Answers to your open questions (provisional)
 
-- Optional / profile-gated (`execution_signature`)
-- Sits after InB handoff
-- One-shot, bounded, append-only `input_correction_record`
-- SHALL NOT write `semantic_core` or trigger IMR Type B
-- Deterministic replay over correction trace (even for heuristic path)
-- Explicit non-goals: IB, InB, IMR, systematic A→B→A
+**(1) Right architectural location?**  
+Yes — **UPI integrator + USP store**, not inside IIInB/IB/IMR/GB. Persist via COB (or CIL handoff), expose read-only to IIInB via `user_semantic_profile_ref` on the intake tuple.
 
-That slots cleanly as a **post–20.500 follow-on slice**, not a silent edit to closed docs.
+**(2) Rule acceptance constraints?**  
+Minimum normative set:
 
-**Bottom line for the summary:** Send it with the two softenings above. The constraint chain is sound; the conclusion should be **“IIInB is the preferred in-core solution if we insist on pre-A semantic repair”**, not **“the constraints force IIInB with no alternatives.”**
+- **Safety:** no policy bypass, no suppressed `MI_CONTRA`, no auto-resolution of conflicts (20.17).
+- **Determinism:** rules are **ordered, versioned, content-hashed**; IIInB consult is `f(raw_segment, USP_snapshot, policy_signature)` — replayable.
+- **Scope:** rule must declare `match_kind` (exact, prefix, regex-bounded), `max_span`, `priority`, `expiry` or `confirm_by`.
+- **Conflict:** same pattern → two meanings → **reject new rule** or **GB arbitration**, never silent overwrite.
+- **Global coherence:** GB may veto rules that contradict published policy tables or safety invariants (20.170).
+
+**(3) Per-user vs per-session vs per-context?**  
+**Layered scopes**, default order for IIInB lookup:
+
+1. `session` (ephemeral, clarification this thread)  
+2. `conversation_id` / COB object  
+3. `user_id`  
+4. `domain_profile` (optional, policy-published)
+
+PoC minimum: **conversation + user**. Session-only without promotion to user is fine for v0.
+
+**(4) GB veto vs advisory?**  
+**Veto on commit**, advisory on read. Pattern:
+
+- UPI **proposes** rule → GB **approve / deny / safe-boundary defer** (same as COP/IB flows).
+- IIInB **reads only committed** USP snapshots; never draft rules.
+- Type C / safety rules: GB **mandatory** gate, not optional.
+
+**(5) Aging / decay / confirmation?**  
+Yes for v1 credibility:
+
+- `created_at`, `last_used`, `use_count`, optional `expires_at`
+- **Explicit user confirm** for promotion session → user scope
+- Deterministic **decay** = rule inactive after expiry, not deleted silently (audit retains history)
+
+**(6) Risks of IIInB consulting USP?**
+
+| Risk | Mitigation |
+|------|------------|
+| IIInB becomes hidden learner | IIInB **read-only** USP; writes only via UPI |
+| Nondeterminism | Frozen `usp_snapshot_ref` per cycle; bind in `execution_signature` |
+| Rule explosion | Cap rules per user/conversation (20.90-style parameter) |
+| Cross-user bleed | USP keyed by `user_id` + COB; IIInB forbidden from global merge |
+| Routing contamination | USP affects **segment normalization only**, not RB/TR routing tables |
+| Feedback loop | Clarification → UPI → IIInB is **open-loop per input**, not A→B→A IMR loop |
+| GB bloat | GB stores **decisions**, not rules; UPI/COB store rules |
+
+---
+
+### Gaps to add to the draft (small, high value)
+
+1. **IIInB read contract** — one paragraph: when USP matches vs when to emit `UNKNOWN_SEGMENT` and escalate to clarification.
+2. **`usp_snapshot_ref`** — same pattern as `semantic_snapshot_ref` / `commit_id` for replay.
+3. **Relationship to 20.17** — USP resolution must not clear `MI_VAGUE` / `MI_CONTRA` without explicit taxonomy update; shorthand ≠ contradiction resolution.
+4. **Program placement** — post–20.500 **follow-on slice** (IIInB + UPI + COB/CIL touch), not amendment smuggled into closed 20.45/20.100 without version bumps.
+5. **v0 vs extension** — state explicitly: minimal conformance may omit IIInB+UPI; honest path = 20.17 tag + clarification only.
+
+---
+
+### Summary verdict
+
+| Element | Verdict |
+|---------|---------|
+| Problem statement | **Accept** — real gap, correctly identified |
+| IIInB non-learning + clarify fork | **Accept** |
+| UPI / USP direction | **Accept with refinement** — integrator + COB-backed store, not ninth basin unless you need basin lifecycle |
+| GB role | **Accept** — veto on commit, not rule DB |
+| “Path B” naming | **Reject** — rename before 20-series |
+| Request for comment | **Appropriate** — no premature HLR commitment |
+
+**I would not finalize UPI spec until:** (a) Path naming fixed, (b) persistence owner chosen (COB vs standalone), (c) IIInB read API sketched in one page, (d) v0 optional vs required profile declared.
+
+---
+
+If you want a next artifact, the highest-value one is a **one-page interface box diagram** (InB → IIInB ↔ USP read → UPI write ← clarification ← CIL; GB veto on UPI commit) plus a **minimal `20.xxx_upi_requirements.md` skeleton** with Purpose, Non-Goals, and HLR placeholders only — no full taxonomy yet. That gives CP something concrete without reopening the closed dual-pipeline stack.
