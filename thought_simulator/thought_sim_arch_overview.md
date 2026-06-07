@@ -1,9 +1,13 @@
 # **Thought Simulator Architecture Overview**  
 ### *A Structural Alternative to Modern AI Systems*
 
+---
+
 ## **1. Introduction**
-Modern AI systems—especially large language models (LLMs)—are built on a single architectural assumption:  
-**scale is intelligence.**  
+Modern AI systems—especially large language models (LLMs)—are built on a single architectural assumption:
+
+> **Scale is intelligence.**
+
 More parameters, more GPUs, more power, more cost.
 
 The Thought Simulator (TS) architecture rejects this premise.
@@ -121,7 +125,95 @@ This is a collapse of the cost curve.
 
 ---
 
-## **5. Cost, Power, and Size Advantages**
+## **5. Memory Requirements**
+The Thought Simulator (TS) architecture is designed to operate entirely on **commodity system memory**, not specialized high‑bandwidth memory technologies. This dramatically reduces cost, power consumption, and hardware complexity.
+
+### **Standard Memory Only**
+TS runs on:
+
+- **DDR4**
+- **DDR5**
+- **LPDDR4x**
+- **LPDDR5 / LPDDR5X**
+- **Unified memory architectures** (Apple M‑series, AMD APUs, integrated GPUs)
+
+These are the same memory types used in:
+
+- laptops  
+- desktops  
+- consumer GPUs  
+- mobile SoCs  
+- embedded systems  
+
+### **TS does *not* require HBM**
+TS has **zero dependence** on:
+
+- **HBM (High Bandwidth Memory)**  
+- **HBM2 / HBM2e / HBM3 / HBM3e**  
+- **GPU VRAM with extreme bandwidth**  
+- **multi‑stack memory channels**  
+
+This is a major architectural break from modern transformer‑based AI systems, which rely heavily on HBM bandwidth (1–3 TB/s) to feed massive matrix multiplications.
+
+TS simply does not perform the operations that force transformers to require HBM.
+
+---
+
+### **Why TS Does Not Need HBM**
+Transformers require HBM because they rely on:
+
+- massive matrix multiplications  
+- quadratic attention  
+- large activation maps  
+- multi‑head attention layers  
+- GPU‑bound tensor flows  
+
+TS eliminates all of these.
+
+TS uses:
+
+- **O(1) deterministic pipelines**  
+- **small, bounded state**  
+- **vector‑based operators**  
+- **incremental updates**  
+- **no large tensor flows**  
+- **no attention layers**  
+
+This makes TS compatible with **ordinary DRAM bandwidth**.
+
+---
+
+### **Intuition Module Memory Profile**
+The Intuition Module (COP2) is the only neural component in TS.
+
+Its memory requirements are:
+
+#### **1B–3B parameters**
+- Fits in **system RAM**  
+- Runs on **CPU** or **integrated GPU**  
+- No VRAM required  
+- No HBM required  
+
+#### **7B parameters**
+- Fits in **consumer GPU VRAM** (8–16 GB)  
+- Runs on mid‑range GPUs (RTX 3060–4070, AMD 7800M, Apple M3/M4)  
+- Still **no HBM** required  
+
+Even at the high end, TS avoids the HBM requirement entirely.
+
+---
+
+### **Summary**
+- **TS uses DRAM.**  
+- **TS does not use HBM.**  
+- **TS does not need HBM.**  
+- **TS is architecturally incompatible with the need for HBM.**  
+
+This is one of the reasons TS is dramatically cheaper, smaller, and more power‑efficient than modern AI systems.
+
+---
+
+## **6. Cost, Power, and Size Advantages**
 ### **Modern AI (GPT‑4 class)**
 - 70B–1T parameters  
 - 8–16 GPUs  
@@ -150,7 +242,7 @@ TS reduces model size by **10×–100×**.
 
 ---
 
-## **6. Performance Expectations**
+## **7. Performance Expectations**
 TS matches or exceeds modern AI in:
 
 - conversational ability  
@@ -178,7 +270,7 @@ This is architectural superiority.
 
 ---
 
-## **7. Comparison Table: TS vs. Modern AI**
+## **8. Comparison Table: TS vs. Modern AI**
 
 ### **Function Coverage Comparison**
 
@@ -205,7 +297,7 @@ This is architectural superiority.
 
 ---
 
-## **8. Industry Impact**
+## **9. Industry Impact**
 If TS is realized structurally, it will hit the AI industry like a brick in the face.
 
 Because TS proves:
@@ -228,7 +320,7 @@ This is the kind of architectural shift that forces the entire industry to rethi
 
 ---
 
-## **9. Conclusion**
+## **10. Conclusion**
 TS is not a variant of modern AI.  
 It is a **replacement architecture**.
 
