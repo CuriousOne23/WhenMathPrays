@@ -62,6 +62,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 ## Coordination Programs (Non-Normative)
 - [20.500_refactoring_for_dual_TS_pipeline.md](20.500_refactoring_for_dual_TS_pipeline.md) — dual-pipeline refactor (**complete** 2026-06-07)
 - [20.510_refactoring_for_input_correction_track_h.md](20.510_refactoring_for_input_correction_track_h.md) — Track H input correction (IIInB / USP / UPI) — **active**
+- Track H drafts (unapproved): [20.101](20.101_iiinb_requirements.md), [20.102](20.102_usp_requirements.md), [20.103](20.103_upi_requirements.md) v0.1
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
