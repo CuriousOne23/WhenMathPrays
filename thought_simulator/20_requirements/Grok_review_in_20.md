@@ -1,130 +1,88 @@
-## Comment on CP’s IIInB / UPI / USP proposal
+## Comment on the proposed 20.45 Purpose rewrite
 
-With InB closed (20.100 v0.2, 20.500 §7.7), this proposal is the right next object for **Track H**. Overall: **accept the architecture** with refinements below — not a new debate about InB.
+The rewrite is **directionally good** for primitive focus: it says what IMR is for, where it sits (post–Pipeline B), and that it **does not** perform semantic correction itself. That helps amid IIInB, UPI, InB, IB, etc.
+
+A few issues to fix before paste, plus a merged version below.
+
+---
+
+### What works
+
+| Element | Why it helps |
+|--------|----------------|
+| **Detect and classify mismatches** | Matches taxonomy (HLR-001–003) |
+| **Pipeline B realization context** | Correct layer — not input repair |
+| **Type B → bounded `CorrectionTrigger`** | Aligns with HLR-007–010, 029–030 |
+| **No direct `semantic_core` writes** | Matches HLR-008 and 20.12 |
+| **“Supervisory governor”** | Signals IMR schedules/audits; Pipeline A executes |
+
+This is stronger than the current Purpose, which only says “Pipeline B feedback into Pipeline A” and “first pre-PoC hardening module” — weak for onboarding.
+
+---
+
+### What to adjust
+
+**1. Type A and Type C are missing from Purpose**  
+The draft is almost entirely Type B. IMR is a **three-type** classifier; Purpose should mention all three in one sentence each, or readers assume IMR = semantic re-interpretation only.
+
+**2. “User intent” is slightly loose**  
+Normatively IMR works on **`evaluator_signal` + `semantic_snapshot_ref` + `oub_artifact_ref`** (HLR-002), not inferred intent. Prefer **“evaluator-indicated mismatch”** or **“committed meaning vs realized output.”**
+
+**3. “Cognitive interpretation errors, projection errors”**  
+Fine as prose, but tie to taxonomy: Type A = expression/register; Type B = semantic/factual; Type C = safety/policy.
+
+**4. Tension with your v0 posture (if still active)**  
+If Jeff still wants **no mandated A→B→A feedback loop** in minimal conformance, this Purpose **foregrounds Type B** as core mission (“supervisory governor for interpretation **correction**”). That’s accurate for **current 20.45 HLRs**, but it fights a **product** decision to demote Type B to an extension profile.
+
+**Pick one:**
+
+- **Keep Type B in Purpose** (matches existing HLRs) — document v0/minimal as a **profile** elsewhere.  
+- **v0 monitor-only** — Purpose should lead with **detect/classify/log**; Type B as **optional extension** (would need HLR/profile edits later, not Purpose alone).
+
+**5. Add explicit “what IMR is not”** (one line)  
+With Track H open, Purpose should point away from input correction:
+
+> IMR does **not** perform pre–Pipeline A input error correction (see 20.500 §7.7, IIInB/UPI).
+
+**6. Keep the 20.12 / HLR-20.012-009 hook**  
+The current Purpose cites parent invariant satisfaction — worth retaining in one line.
+
+---
+
+### “Supervisory governor” — acceptable with nuance
+
+The phrase fits if you mean: **classify, cap, dedupe, queue triggers, audit** — not **run** Pipeline A or **fix** meaning.  
+
+Avoid implying IMR is GB or a closed feedback controller. **“Mismatch evaluator and trigger scheduler”** is more precise; “governor” is OK if paired with “does not mutate `semantic_core`.”
+
+---
+
+### Recommended Purpose (merge CP draft + fixes)
+
+Use this instead of paste-as-is — same style, fuller primitive boundary:
+
+```markdown
+## Purpose
+
+The **Interpretation Mismatch Routine (IMR)** detects and classifies mismatches between **committed `semantic_core`**, **Pipeline B realization** (`exec_plan`, `oub_artifact_ref`), and **evaluator signals** after expression. IMR is a Pipeline B post-realization evaluator: it SHALL NOT perform semantic or input correction itself.
+
+IMR classifies every evaluated mismatch into **Type A** (expression/register), **Type B** (semantic/factual/logical), or **Type C** (safety/policy) per the taxonomy below. Type A MAY schedule realization-only retry on the same `semantic_snapshot_ref`. Type C SHALL route through GB per safety policy. When a mismatch is semantic (Type B), IMR MAY emit a bounded `CorrectionTrigger` that schedules a **limited** Pipeline A re-interpretation of explicitly listed TP/MTP fields in a **subsequent** cycle; all semantic updates occur only through approved Pipeline A pathways (HLR-20.045-008).
+
+IMR therefore serves as the **mismatch evaluator and trigger scheduler** for post-output feedback: it records when realization diverges from committed meaning or evaluator expectations, enforces caps and cooldowns, and queues safe correction pathways without violating [20.12](20.12_ts_invariants.md) (HLR-20.012-009).
+
+**Out of scope:** pre–Pipeline A input error correction ([20.100](20.100_inb_requirements.md), [20.500](20.500_refactoring_for_dual_TS_pipeline.md) §7.7 IIInB/UPI); inquiry or ambiguity handling ([20.90](20.90_ib_requirements.md) IB).
+```
 
 ---
 
 ### Verdict
 
-CP’s three-way split is sound:
+| Question | Answer |
+|----------|--------|
+| Paste CP’s rewrite as-is? | **Almost** — add Types A/C, tighten “user intent,” add out-of-scope line, keep 20.12 ref |
+| Good for primitive focus? | **Yes** — especially with IIInB/UPI/InB boundaries explicit |
+| Enough alone if v0 = IMR monitor-only? | **No** — Purpose must match profile decision; may need a **Conformance profiles** note under Purpose |
 
-| Piece | Role | Assessment |
-|-------|------|------------|
-| **IIInB** | Bounded pre–Pipeline A correction; read-only USP; no learning | **Accept** — correct layer |
-| **Clarification** (via CIL) | Ask user when IIInB cannot apply a rule | **Accept** — already aligned with CIL/GB escalation (20.33) |
-| **UPI + USP** | Write rules after clarification; IIInB reads snapshots | **Accept** — correct separation of integrate vs store vs apply |
-| **GB** | Oversight / veto, not dictionary | **Accept** — matches 20.80 posture |
+**Process:** Purpose-only change is **low risk** if it doesn’t weaken HLRs. Bump 20.45 to v0.3 with changelog: “Purpose clarify — primitive boundary vs input correction (Track H align).”
 
-This fills the gap you identified: **remember clarified meaning and apply it deterministically next time**, without making InB, IB, or IMR do the wrong job.
-
----
-
-### What CP got especially right
-
-**1. IIInB “correct vs clarify” fork**  
-When shorthand/domain rules apply → deterministic transform. When unknown/ambiguous → tag, no guess, escalate to clarification. That preserves 20.17 (`MI_*` tagging) and InB non-inference.
-
-**2. UPI as integrator, not basin**  
-Calling UPI a **profile writer** avoids basin sprawl. Good fit with existing `execution_signature` / `policy_signature` binding.
-
-**3. USP as versioned snapshot**  
-IIInB should read `usp_snapshot_ref`, not a live mutable store — same replay pattern as `semantic_snapshot_ref` / `commit_id`.
-
-**4. GB not owning USP**  
-GB approves/vetoes **commits**; UPI/COB own storage. Prevents GB becoming a rule engine.
-
----
-
-### Refinements before you spec
-
-**1. Rename “Path B” everywhere**  
-Use **clarification path** or **CIL clarification lane**. “Path B” will collide with **Pipeline B** (execution manifold) in every review and fixture.
-
-**2. IIInB: stage vs basin**  
-You can get the same behavior with less ontology cost:
-
-- **Option A (CP):** full **IIInB** basin primitive  
-- **Option B (lighter):** profiled Pipeline A stage `input_semantic_repair` between InB and RB, documented in 20.30 + one `20.xxx` spec  
-
-Recommend starting **Option B in the spec title** (“Input Semantic Repair stage, alias IIInB”) unless you need basin lifecycle (GB supervisory verbs, TCU basin caps, etc.).
-
-**3. Where USP lives**  
-Don’t invent a orphan datastore. Strongest anchor:
-
-- **USP persisted under COB** (20.32) — conversation/user continuity  
-- **UPI** = thin writer integrator (new 20.xxx)  
-- **CIL** (20.33) = delivers clarification UX/events  
-- **GB** = commit gate on new rules  
-
-**4. Topology (proposed)**
-
-```text
-External input
-  → InB (surface normalize)
-  → IIInB (read USP snapshot; apply rules OR emit UNKNOWN_SEGMENT)
-  → [if UNKNOWN] CIL clarification → user
-  → [on answer] UPI proposes rule → GB approve → USP commit
-  → RB → OB → … → Pipeline A
-```
-
-IIInB is **optional per profile**; minimal TS skips it and relies on 20.17 tagging + IB-Creation-Request.
-
-**5. Determinism contract (must be normative)**  
-For heuristic IIInB (no GPU / no LM):
-
-- Frozen `usp_snapshot_ref` + `policy_signature` + input segment → deterministic output or `UNKNOWN_SEGMENT`
-- Append-only `input_correction_record` on every IIInB pass (applied rule id, or escalation reason)
-- No same-cycle USP write from IIInB
-
-If you later allow a small model, it’s a **rich profile** with frozen model id + version in `execution_signature` — not minimal conformance.
-
----
-
-### Answers to CP’s six open questions
-
-| # | Question | Recommendation |
-|---|----------|----------------|
-| **1** | UPI the right place? | **Yes** as integrator; **USP under COB** for persistence; IIInB read-only |
-| **2** | Rule acceptance constraints? | Safety (no `MI_CONTRA` auto-clear), deterministic ordering/priority, max rules per scope, conflict → reject or GB arbitrate, schema-versioned `pattern` + `meaning` |
-| **3** | User vs session vs context scope? | **Layered:** session → conversation (COB) → user; lookup order fixed and documented |
-| **4** | GB veto vs advisory? | **Veto on commit**; IIInB reads **committed** USP only |
-| **5** | Aging / decay / confirm? | **Yes:** `created_at`, `last_used`, optional `expires_at`; session→user promotion requires explicit confirm |
-| **6** | IIInB + USP risks? | Rule explosion (cap), cross-user bleed (strict keys), routing contamination (USP affects segments only, not RB/TR tables), false confidence (UNKNOWN must win over weak match) |
-
----
-
-### Gaps to add in the first spec draft
-
-1. **`UNKNOWN_SEGMENT` schema** — what IIInB emits when it won’t guess (feeds CIL).  
-2. **Clarification completion event** — what UPI receives (user_id, conversation_id, pattern, clarified_meaning, scope).  
-3. **Interaction with 20.17** — USP resolution must not silently clear `MI_VAGUE` / `MI_CONTRA`; update `messy_input_record` explicitly or leave flags.  
-4. **Minimal vs rich profile** — 20.500 §7.7 should state: **minimal conformance omits IIInB+UPI**; honest path = tag + clarify only.  
-5. **One-page interface box** before full HLRs — InB, IIInB, CIL, UPI, COB/USP, GB.
-
----
-
-### What I’d push back on lightly
-
-- **“IIInB performs semantic correction”** — say **“applies committed USP rules and published transforms”**; true open-ended semantic inference stays profile-optional.  
-- **Treating clarification as its own subsystem** — it should remain **CIL + GB**, not a parallel “Path B” module.  
-- **Requiring IIInB for PoC** — defer; Track H can draft without blocking 40-series dual-pipeline work.
-
----
-
-### Recommended Track H sequencing
-
-1. **RFC one-pager** — topology + profiles + naming (no HLRs yet)  
-2. **`20.xxx` UPI requirements** (thin) + **IIInB / input repair** section (can be one doc initially)  
-3. **COB extension note** — USP field schema + `usp_snapshot_ref`  
-4. **CIL extension note** — clarification request/response wire format  
-5. **20.36 Class 0 fixture** (optional) — IIInB apply rule → same input twice → identical normalized segment  
-
----
-
-### Bottom line
-
-**Endorse CP’s proposal** as the Track H design direction: IIInB (apply, don’t learn) + CIL clarification + UPI (write) + USP/COB (store) + GB (veto).  
-
-Refine: fix naming, prefer stage-or-thin-basin, anchor USP in COB, nail determinism/replay, declare minimal profile = off.  
-
-If you want the next executable step, I can draft a **one-page Track H RFC** or a **minimal `20.xxx` skeleton** (Purpose, Non-Goals, interface box, HLR placeholders only) for CP review.
+I can apply the merged Purpose to `20.45_imr_requirements.md` if you and CP approve the wording above (and confirm whether Type B stays **normative** or moves to **extension** in the same edit).
