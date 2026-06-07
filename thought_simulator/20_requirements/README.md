@@ -44,6 +44,9 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.90_ts_parameter_table.md](20.90_ts_parameter_table.md)
 - [20.95_ts_numeric_policy.md](20.95_ts_numeric_policy.md)
 - [20.100_inb_requirements.md](20.100_inb_requirements.md)
+- [20.101_iiinb_requirements.md](20.101_iiinb_requirements.md)
+- [20.102_usp_requirements.md](20.102_usp_requirements.md)
+- [20.103_upi_requirements.md](20.103_upi_requirements.md)
 - [20.105_tp_requirements.md](20.105_tp_requirements.md)
 - [20.106_dcb_requirements.md](20.106_dcb_requirements.md)
 - [20.110_oub_requirements.md](20.110_oub_requirements.md)
@@ -62,7 +65,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 ## Coordination Programs (Non-Normative)
 - [20.500_refactoring_for_dual_TS_pipeline.md](20.500_refactoring_for_dual_TS_pipeline.md) — dual-pipeline refactor (**complete** 2026-06-07)
 - [20.510_refactoring_for_input_correction_track_h.md](20.510_refactoring_for_input_correction_track_h.md) — Track H input correction (IIInB / USP / UPI) — **active**
-- Track H drafts (unapproved): [20.101](20.101_iiinb_requirements.md), [20.102](20.102_usp_requirements.md), [20.103](20.103_upi_requirements.md) v0.1
+
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)

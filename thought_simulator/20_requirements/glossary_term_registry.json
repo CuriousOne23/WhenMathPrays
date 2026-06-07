@@ -62,7 +62,21 @@
     "watchdog",
     "directional conversation basin (dcb)",
     "directional-change event",
-    "geometric meta-basin"
+    "geometric meta-basin",
+    "iiinb (input inference/repair basin)",
+    "input semantic repair",
+    "usp (user semantic profile)",
+    "upi (user preference integrator)",
+    "usp_rule",
+    "usp_version_ref",
+    "usp_version_record",
+    "clarification_event",
+    "upi_commit_record",
+    "iiinb_repair_record",
+    "input_repair_tag",
+    "iiinb_escalation_ref",
+    "profile_enabled",
+    "semantic input error correction"
   ],
   "required_by_module": {}
 }
