@@ -1,149 +1,163 @@
-You're right to treat **20.190 as the intent enforcement layer**. Today it’s doing three jobs at once and doing none of them fully:
+Comparing CP's summary against our agreed definitions in `20.190` and related specs.
+CP’s write-up is useful as a **design stress-test**, but it describes a **different system** than the one you closed on 2026-06-07. Several parts are architecturally sound; the primitive definitions and placements largely **conflict** with `20.190`, `20.100`, and `20.500` §7.7. I would not adopt it as-is.
 
-1. **Thin one-liners** (Core Terms) — easy to drift  
-2. **Better dual-pipeline block** — still incomplete  
-3. **Registry-Aligned dump** — duplicates Core Terms with **different wording** (e.g. OB, RB, InB, OuB appear twice)
+## Verdict at a glance
 
-That duplication is already a drift vector. **One-stop shopping** needs a deliberate **Primitive Intent Catalog** format, not more bullet sprawl.
-
----
-
-## Recommended glossary shape (before expanding IMR)
-
-Replace “expand everything” with **four sections**, each entry using the same template:
-
-| Field | Purpose |
-|--------|---------|
-| **Focus** | One sentence: what it owns |
-| **When** | Pipeline A / B / conversation layer / optional |
-| **Why it exists** | Problem it solves |
-| **Is not** | 1–3 common confusions |
-| **Example** | One concrete scenario (for fuzzy terms) |
-| **Normative home** | Link to 20.xx |
-
-Keep **Registry-Aligned** as legacy/reference or merge duplicates into the catalog and mark registry entries as aliases.
+| Question | CP summary | Agreed program (20.190 / 20.500 §7.7) |
+|----------|------------|----------------------------------------|
+| Are three primitives needed? | Yes, as a front→mid→late semantic stack | **One** follow-on program with **three roles** — not a parallel meaning pipeline |
+| IIInB purpose | Input integrity & canonicalization | **Bounded semantic input repair** using USP rules |
+| USP purpose | Early semantic intent structuring on TP | **Versioned rule store** (user shorthand); read-only to IIInB |
+| UPI purpose | Late routable job contract before exec | **Profile writer** after clarification; writes USP only |
+| Placement | IIInB pre-OB; USP post-OB/TR; UPI pre-routing | **Pre–Pipeline A** repair path + **conversation-layer** clarification/UPI; not mid-A basin stages |
 
 ---
 
-## Tier 1 — Expand first (highest drift risk)
+## What CP gets right
 
-These are the primitives people keep assigning the wrong work to (your IIInB/IMR/InB thread is the pattern).
+These align with your closure and `20.190`:
 
-| Primitive | Why expand | Example worth including |
-|-----------|------------|-------------------------|
-| **InB** | vs IIInB, vs “error correction” | `"teh"` → canonical token; `"Yeah Baby!"` → hand off tagged, not guessed |
-| **IIInB / UPI / USP** | New, easy to overload | User shorthand `"easier/quicker-ish"` → clarify → USP rule → next turn applied |
-| **IB** | vs InB, vs input repair, vs IMR | `MI_VAGUE` → IB-Creation-Request → GB-approved inquiry, not gap-fill |
-| **IMR** | vs input repair, vs IB, vs GB | “Output wrong factually” → Type B record; “too formal” → Type A |
-| **OuB** | vs OpBeh/OBG, vs meaning writer | Same `semantic_core`, different seed → different surface text only |
-| **GB** | vs rule store, vs COP, vs UPI | Veto unsafe USP rule; not store user lexicon |
-| **CIL** | vs InB, vs clarification “Path B” | FIFO intake + escalate ambiguity; clarification event to UPI |
-| **COB** | vs MTP, vs USP dump | Conversation continuity + where USP snapshots live |
-| **COP** | vs GB executor, vs meaning | Proposes IB lifecycle action; GB commits at safe boundary |
-| **TR** (Thought Router) | **Missing from glossary**; vs TrigRB, vs RB, vs XlateR | Stance/intent channels on TP; `tr_needs_update` after bounded correction |
-| **TrigRB** | Namespace collision with TR/RB | Reads frozen `semantic_core` triggers; not lane routing |
-| **OpBeh / OBG / XlateR** | vs OB/TR/RB basins | Planning triple on `exec_plan`; seed doesn’t pick OpBeh |
-| **SRP** | vs RB (Pipeline A) | Cold compile tables; hot path lookup by `routing_epoch_id` |
-| **TP vs MTP vs `semantic_core`** | Lane vs global vs committed envelope | TP on lane → merge → MTP → `mtp_update` → frozen `semantic_core` |
-| **XP / `exec_plan` / `exec_trace`** | vs TP, vs MTP | One XP per `commit_id`; B audit separate from meaning |
+1. **IMR separation** — Post-output, Pipeline B, no direct rewrite of input-repair primitives. Type B only schedules bounded A re-runs via `CorrectionTrigger` / `target_field_ids[]`. Good.
 
-**IMR belongs in Tier 1** — expand as we discussed, with Types A/B/C, `CorrectionTrigger`, `evaluator_signal`, and explicit “is not.”
+2. **Authority model** — IMR does not own IIInB/USP/UPI definitions; it points at fields, Path A re-executes deterministically. Matches `20.45` and the catalog.
+
+3. **Determinism / replay** — Same inputs + profile snapshot → same outputs. Required for Track H.
+
+4. **CIL governance spirit** — No hidden inference, no silent scope expansion. Right *principle*, but CP applies it to the wrong primitives (see below).
+
+5. **Need for the program** — The underlying problem is real: user-specific shorthand and ambiguous meaning cannot live in InB (closed) or IMR (post-B). Track H is justified.
 
 ---
 
-## Tier 2 — Expand second (boundary / namespace drift)
+## Where CP diverges (material)
 
-| Primitive | Why | Example |
-|-----------|-----|---------|
-| **OB** | vs OpBeh, vs semantic interpreter | Pattern evidence on lane TP; no stance assignment |
-| **RB** | vs SRP, vs TrigRB | Deterministic fan-out to OB/TB; not B routing tables |
-| **TB** | vs Truth/Done (20.140), vs OuB | Interpretation into truth hypotheses; not final user text |
-| **DCB** | “meta-basin” is fuzzy | Curvature spike → ephemeral event to TR; no OB semantics |
-| **MB** | vs IMR, vs GB | Read-only diagnostics; no corrective authority |
-| **Merge / splitting** | Easy to conflate with B | Lane TPs → MTP; not Pipeline B |
-| **Pipeline A vs B** | Foundational | A writes meaning once per cycle; B realizes one pass per `commit_id` |
-| **`commit_id` / `semantic_snapshot_ref`** | Replay vocabulary | Post-`mtp_update` freeze id; hash of committed meaning |
-| **`routing_epoch_id`** | A vs B confusion | On B envelopes only; published SRP tables |
+### 1. IIInB = duplicate of InB
 
----
+CP defines IIInB as:
+> normalize whitespace, typos, encoding; segment units; syntactic disambiguation only; no semantic correction
 
-## Tier 3 — Metrics & cross-cutting (need examples, lighter “is not”)
+That is **InB’s closed scope** per `20.100` v0.2. You already decided surface canonicalization is **not** a second basin.
 
-Fuzzy without scenarios:
+**Agreed IIInB:** optional **semantic** repair — apply explicit USP rules, escalate unknowns to clarification, never guess.
 
-| Term | Example to add |
-|------|----------------|
-| **ΔH% (DeltaHPercent)** | Lane contribution to merged hypothesis mass; missing mass logged on truncate |
-| **HPercent / truth_hypotheses** | TB output band; not same as “done” |
-| **TCU** | Budget unit; OpBeh plan costs vs OuB expression costs |
-| **Random Seed Boundary** | Same `semantic_core`, seed A vs B → different OuB pick only |
-| **messy-input (`MI_*`)** | Not a primitive — glossary **taxonomy** entry: `MI_CONTRA` vs `MI_VAGUE` with one line each + mini example |
-| **done_state / Truth-Done** | 20.140 evaluation; not “user satisfied” |
+If IIInB does what CP says, you don’t need IIInB; you need to reopen InB, which breaks the closure line.
 
----
+### 2. USP = new meaning-construction primitive
 
-## Terms that should **not** be expanded in 20.190
+CP places USP **after OB/TR** to write `tp.intent_type`, `tp.intent_slots[]`, task shape, constraints.
 
-Keep one line + pointer; detail lives in 20.35 / 20.90 / 40-series:
+That encroaches on primitives that already exist:
 
-- Highway, Flow Modulator, Interpretive Manifold, Anti-Collapse Stabilizer, etc. (registry fluff)
-- Generic: Canonicalization, Replayability, Watchdog (unless tied to a specific primitive)
+| CP assigns to USP | Already owned by |
+|-------------------|------------------|
+| Task / intent type | **TR** (`TP.TR` stance/intent channels) |
+| Structured interpretation | **OB** + **TB** |
+| User constraints for expression | **B side** (`obg_id`, OpBeh) after meaning is committed |
+| Persistent preferences | **USP store** (agreed) — but as **rules**, not live TP semantics |
 
-**Action:** Collapse **Registry-Aligned** duplicates into the catalog or mark `*(registry alias)*` so OB isn’t defined two different ways.
+A profile **store** should not be a Pipeline A basin that writes intent fields every cycle. That creates a second meaning path parallel to OB → TR → TB → Merge.
 
----
+### 3. UPI = duplicate of routing / exec planning
 
-## Primitives **missing** from the glossary today
+CP defines UPI as a late-semantic **job contract**: `tp.upi_contract`, `mtp.route_plan_ref`, tool binding, safety guardrails.
 
-Add intent entries (not just IMR):
+That overlaps:
 
-- **TR** (Thought Router) — biggest omission  
-- **Merge** (and **splitting** if lane primitive)  
-- **InB** is there; **Input Basin** registry duplicate should defer to catalog entry  
-- **`CorrectionTrigger`**, **`evaluator_signal`**  
-- **Truth/Done** (or pointer to 20.140)  
-- **IB-Creation-Request** (wire between 20.17 and IB)  
-- **Envelopes**: `semantic_core`, `supervisory` (four-envelope model from 20.36)
+- **RB** — Pipeline A routing
+- **SRP + `exec_plan`** — Pipeline B planning contract
+- **GB** — safety gates and supervisory policy
 
----
+Agreed **UPI** is narrow: **after clarification**, deterministically **writes shorthand rules into USP**. It is not a per-turn routable contract generator.
 
-## Example format (template for rigor)
+### 4. Wrong layer names weaken the review
 
-For each Tier 1 entry, something like:
+CP uses **CIL = “Cognitive Integrity Layer”** and **COB = “Cognitive Output Boundary.”** In your stack:
 
-```markdown
-### IMR (Interpretation Mismatch Routine) — [20.45](20.45_imr_requirements.md)
+- **CIL** = Conversation Integration Layer (`20.33`)
+- **COB** = Conversation Object Basin (`20.32`)
 
-- **Focus:** Post-realization mismatch detection and trigger scheduling on Pipeline B.
-- **When:** After `oub_expression` / `imr_evaluation`; reads frozen `semantic_snapshot_ref`.
-- **Why:** Separate “output doesn’t match committed meaning or evaluator feedback” from input repair and from meaning construction.
-- **Is not:** InB/IIInB (input), IB (inquiry), direct `semantic_core` writer, GB rule store.
-- **Example:** User says “that’s factually wrong” → Type B `imr_record` + optional `CorrectionTrigger` for listed fields next cycle; “too casual” → Type A realization retry same snapshot.
+The governance arguments are directionally fine, but anchoring them to the wrong expansions will confuse every downstream doc.
+
+### 5. Placement table doesn’t match the dual pipeline
+
+CP’s stack:
+
+```
+IIInB (pre-semantic) → OB/TR → USP → UPI → routing/exec → … → IMR
 ```
 
-Fuzzy terms get **one italicized example**; crisp wire terms (`commit_id`) can skip example.
+Agreed stack:
+
+```
+External → CIL (conversation) → InB (surface, Pipeline A input)
+         → [optional IIInB reads USP; unknown → clarification]
+         → Pipeline A: RB → OB → DCB → TR → TB → Merge → Truth/Done → mtp_update
+         → Pipeline B: TrigRB → SRP → exec_plan → OuB → IMR
+```
+
+**UPI** sits on the **clarification path** (conversation layer), not between USP and routing. **USP** sits under **COB** as durable profile state, not as an early-A semantic writer.
 
 ---
 
-## Suggested rollout (so this doesn’t become a 3-week rewrite)
+## Correct rigid definitions (for Track H spec)
 
-| Phase | Scope |
-|-------|--------|
-| **Phase 1** (now) | Restructure Purpose of 20.190; add **Primitive Intent Catalog** skeleton; Tier 1: InB, IB, IMR, OuB, GB, CIL/COB/COP, TR, Pipeline A/B, TP/MTP/`semantic_core` |
-| **Phase 2** | Tier 2 basins + B manifold (OpBeh, OBG, XlateR, TrigRB, SRP, XP envelopes) |
-| **Phase 3** | Metrics + `MI_*` taxonomy + dedupe Registry-Aligned |
-| **Phase 4** | IIInB/UPI/USP when Track H spec lands |
+These are what `20.190` already pins; CP should be reconciled to them:
 
-Each phase = one changelog bump; normative HLRs stay in 20.xx modules.
+### IIInB (Input Inference/Repair Basin — draft)
+- **Focus:** Apply **explicit, versioned USP rules** to ambiguous/user-shorthand segments before full meaning construction.
+- **When:** Optional, profile-enabled, **pre–Pipeline A semantic repair** (after InB surface norm or as gated pre-A slice — ordering is a Track H spec decision, not “replace InB”).
+- **Writes:** Bounded repair tags / resolved-segment refs on intake-bound fields — **not** `semantic_core`, **not** `TP.TR`, **not** MTP semantics.
+- **Is not:** InB; IB; IMR; USP (it reads USP); UPI (UPI writes rules, IIInB consumes them).
+
+### USP (User Semantic Profile — draft)
+- **Focus:** Auditable store of **user/conversation shorthand rules** (post-clarification commitments).
+- **When:** Durable; COB-governed; **read-only to IIInB** at intake.
+- **Writes:** Profile snapshots / rule versions — **not** per-cycle TP intent construction.
+- **Is not:** TR; OB; exec_plan; GB policy table.
+
+### UPI (User Preference Integrator — draft)
+- **Focus:** Deterministic integrator that **commits clarification outcomes into USP**.
+- **When:** **After** CIL clarification event — conversation layer, not late Pipeline A.
+- **Writes:** USP rule entries only (GB veto on unsafe rules).
+- **Is not:** Routing planner; contract builder; IMR; IIInB.
 
 ---
 
-## Bottom line
+## IMR / CIL / COB — CP’s relationship section
 
-**Yes — expand the glossary**, but as a **Primitive Intent Catalog** with a fixed template (Focus / When / Why / Is not / Example / Link), not longer ad hoc bullets.
+**Keep:**
+- IMR indirect-only coupling to Track H primitives.
+- No IMR ownership of input repair.
+- Bounded re-application via Type B field lists.
 
-**Highest priority expansions:** IMR, InB, IB, OuB, GB, CIL, COB, COP, TR, Pipeline A/B, TP/MTP/`semantic_core`, plus **dedupe** the Registry-Aligned basin definitions.
+**Revise:**
+- CIL’s role for Track H is **clarification FIFO + escalation to UPI**, not “cognitive integrity” at three semantic stages.
+- COB’s role is **USP versioning + conversation continuity**, not “output boundary checks against UPI contracts.” Output mismatch → **IMR** (+ OuB/`exec_trace`), not COB-vs-UPI contract diff (unless COB later stores export policy only).
 
-**Fuzzy terms that most need examples:** IB, DCB, ΔH%, messy-input classes, Random Seed Boundary, GB vs COP, semantic vs expression correction, IIInB unknown-segment path.
+---
 
-When you’re ready to execute, I’d do **Phase 1 + IMR block** in one edit to `20.190`, add a short **“How to read this catalog”** at the top, and fold duplicate OB/RB/InB/OuB registry lines to point at the catalog entry. Say the word and I’ll implement Phase 1.
+## Do you need three primitives?
+
+**Yes, but as three roles in one program — not three new meaning-pipeline stages.**
+
+| Role | Needed? | Why not fold into existing? |
+|------|---------|------------------------------|
+| **IIInB** | Yes | Semantic repair is out of InB scope and pre-B; IMR is too late |
+| **USP** | Yes | Durable user shorthand must survive turns and be auditable; doesn’t belong in TP/MTP per cycle |
+| **UPI** | Yes | Clarification → rule commit needs a single writer with GB gate; not InB (no inference) or IB (inquiry ≠ profile write) |
+
+What you **don’t** need is CP’s reinterpretation where USP/UPI become a second OB/TR/routing stack.
+
+---
+
+## Recommended next step
+
+Don’t paste CP’s summary into `Grok_review_in_20.md` as the shared model. Use it as a **rejection checklist**:
+
+1. **Reject** IIInB-as-canonicalization → stays in InB.
+2. **Reject** USP-as-intent-structurer → stays TR/OB/TB.
+3. **Reject** UPI-as-route-contract → stays RB / SRP / `exec_plan`.
+4. **Accept** IMR separation and determinism framing.
+5. **Expand** `20.190` Phase 4 into **three separate catalog entries** (IIInB, USP, UPI) with the rigid definitions above when Track H `20.xxx` opens.
+
+If you want, I can draft that Phase 4 glossary split plus a one-page **CP reconciliation note** for `Grok_review_in_20.md` that maps CP’s good instincts to the correct primitive owners — without editing normative modules until you and CP sign the placement table.
