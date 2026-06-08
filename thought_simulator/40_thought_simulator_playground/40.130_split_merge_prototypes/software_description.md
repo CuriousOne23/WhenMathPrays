@@ -1,8 +1,8 @@
 # 40.130_split_merge_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-403)
-- Phase B: **pending**
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B: **cleared to start** — pending implementation
 - Program row: **40.510-403** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -51,7 +51,18 @@ Split follows routing; merge precedes truth/done.
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Provisionally aligned — Phase A locks split/merge before truth/done and ΔH% ledger obligations. Phase B must evidence RB arbitration handoff (40.501) without repair logic bleed.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms split/merge before truth/done, `lineage_delta` audit, and ΔH% ledger per 20.130. Phase B must evidence RB arbitration handoff (40.501) and MTP-bound merge (40.115) without repair logic bleed.
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-403 | Pass |
+| 20.130 split/merge + `lineage_delta` | Pass |
+| ΔH% ledger obligations | Pass |
+| A-chain placement (split before OB; merge before truth) | Pass |
+| Handoffs to 40.20_tp / 40.501 / 40.115 | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)
 
