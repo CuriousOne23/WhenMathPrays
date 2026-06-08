@@ -1,10 +1,10 @@
 # 40.207_replay_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **complete and promotion-ready** (2026-06-08)
-- Phase B (prototype + harness + evidence): **initial execution complete** (C7 5/5 + strip demo PASS, 2026-06-08); formal approval pending (40.510-102, GATE-A)
+- Phase A (software_description): **approved** (CP review, 2026-06-08)
+- Phase B (prototype + harness + evidence): **v0.1 complete** (C7 5/5 + strip demo PASS, 2026-06-08); formal approval pending (40.510-102, GATE-A)
 
-## Phase B Deliverables (Executed — initial pass)
+## Phase B Deliverables (Executed — v0.1)
 - Harness executed REPLAY_CLASS_7 sub-scenarios C7-A..E plus `strip_replay_invariant`; artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
 - Evidence types (per 40.20): behavioral, structural (intake path / fixture shape), replay, golden diff (canonical JSON digest on stripped trace)
 - Core invariants demonstrated: profile-disabled zero Track H stages, USP rule apply replay equivalence, escalate-without-guess, cross-turn USP visibility (simulated), GB veto snapshot pinning, E1 strip scope (`exec_plan`, `exec_trace` removed; `semantic_core` retained)
@@ -13,7 +13,7 @@
 - Note: The full HLR list from 20.207_execution_replay_specification.md is included below for exploratory visibility. 20.xx remains the sole source of truth; 30.xx remains the authoritative coverage audit layer. 40.207 is a playground and not authoritative.
 
 ## Scaffold Metadata
-- scaffold_status: implemented (initial Phase B pass — Class 7 runnable)
+- scaffold_status: implemented (Phase B v0.1 — Class 7 + E1 strip runnable)
 - intended_20_anchor: thought_simulator/20_requirements/20.36_canonical_end_to_end_trace.md §9 (primary — REPLAY_CLASS_7)
 - intended_20_secondary: thought_simulator/20_requirements/20.207_execution_replay_specification.md (E1/E2/E3 replay modes; Class 1 `b_regeneration_equivalent`)
 - intended_10_10_anchors:
@@ -34,6 +34,8 @@ It provides runnable golden-minimum fixtures **C7-A..E** that exercise the intak
 The harness also demonstrates **E1 strip replay** (remove `exec_plan` + `exec_trace`; retain `semantic_core`) per [20.207](../../20_requirements/20.207_execution_replay_specification.md) HLR-20.207-001 and 20.207-019 — full dual-pipeline Classes 1–6 and E2 regeneration are **out of W1 scope** and deferred to Phase 5 / W5.
 
 **W1 ordering context:** Class 7 verifies Track H replay **before** full conversation-layer wiring; C7-D/E use **simulated** UPI/GB commit outcomes at playground depth.
+
+**GATE-A W1 scope:** [40.510](../40.510_refactor.md) row 40.510-102 requires **REPLAY_CLASS_7 only** for Wave 1 closure — not Classes 1–6. Per [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) HLR-20.036-063, Class 7 is required for Track H sign-off; Classes 1–5 remain dual-pipeline PoC scope (HLR-20.036-016) and are deferred to W5.
 
 The replay harness is responsible for:
 - Loading and executing C7-A..E fixture runners with falsifiable assertions per 20.36 §9
@@ -66,7 +68,7 @@ All exploration **SHALL** remain deterministic, falsifiable, and artifact-backed
 
 - **Iterative Design Flow (50-series influence)**: None yet; full orchestration and E2 regen deferred to W5 per 40.510.
 
-**Agreement Statement**: Provisionally aligned — core REPLAY_CLASS_7 path is runnable at playground depth. Phase B formal approval and GATE-A closure pending. Classes 1–6, E2 regeneration, and live conversation-layer wiring are named open items.
+**Agreement Statement**: Provisionally aligned — Phase A approved (CP, 2026-06-08). REPLAY_CLASS_7 path runnable at playground depth (Phase B v0.1). Phase B formal approval and GATE-A reviewer sign-off pending. Classes 1–6, E2 regeneration, and live UPI/GB/CIL wiring are named open items.
 
 ## Phase A Deliverables (this document)
 - High-level description of 40.207 as Class 7 replay harness (W1) with W5 feeder role
@@ -79,13 +81,13 @@ All exploration **SHALL** remain deterministic, falsifiable, and artifact-backed
 
 Per 20.36 §9 golden minimums. Playground runners map 1:1 to sub-IDs:
 
-| Sub-ID | `fixture_id` | Runner | Primary assertion |
-|--------|--------------|--------|-------------------|
-| C7-A | `REPLAY_C7_PROFILE_DISABLED` | `run_c7_a` | Zero Track H stages; no USP load |
-| C7-B | `REPLAY_C7_USP_RULE_APPLY` | `run_c7_b` | `repair_outcome = APPLIED`; replay equivalent |
-| C7-C | `REPLAY_C7_ESCALATE_NO_GUESS` | `run_c7_c` | Escalation refs; no guess |
-| C7-D | `REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN` | `run_c7_d` | Cross-turn `usp_version_ref` visibility (simulated) |
-| C7-E | `REPLAY_C7_GB_VETO_COMMIT` | `run_c7_e` | Veto — no ACTIVE rule; snapshot unchanged |
+| Sub-ID | `fixture_id` | Runner | Mode | Primary assertion |
+|--------|--------------|--------|------|-------------------|
+| C7-A | `REPLAY_C7_PROFILE_DISABLED` | `run_c7_a` | live (40.100/40.101) | Zero Track H stages; no USP load |
+| C7-B | `REPLAY_C7_USP_RULE_APPLY` | `run_c7_b` | live | `repair_outcome = APPLIED`; replay equivalent |
+| C7-C | `REPLAY_C7_ESCALATE_NO_GUESS` | `run_c7_c` | live | Escalation refs; no guess |
+| C7-D | `REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN` | `run_c7_d` | **simulated UPI/GB** | Cross-turn `usp_version_ref` visibility |
+| C7-E | `REPLAY_C7_GB_VETO_COMMIT` | `run_c7_e` | **simulated UPI/GB/CIL** | Veto — no ACTIVE rule; snapshot unchanged |
 
 Common fixture fields:
 
@@ -112,6 +114,8 @@ stripped_trace = strip_b_envelopes(full_trace)
 # semantic_core, input_repair_tags, intake-bound fields retained
 # B envelopes removed for A-only replay diff
 ```
+
+E1 strip assumes intake-bound fields and `semantic_core` are unchanged by Track H repair — enforced upstream by [40.101](../40.101_iiinb_prototypes/software_description.md) envelope guard (`envelope_guard.semantic_core_unchanged`, `tp_tr_unchanged`; see C7-B/C assertions).
 
 **Playground W1 scope:** `strip_replay_invariant` harness scenario verifies removal only. Full `semantic_core_replay_equivalent` across A-only replay deferred to Classes 1–5 (W5).
 
@@ -164,14 +168,14 @@ Extends 20.36 / 20.207 §8 for harness reporting:
 
 **Persistence:** each harness invocation writes a fresh artifact JSON; no in-repo mutation of golden fixtures.
 
-## Test Matrix (Draft)
-| Category | Scenario (harness) | HLR anchors | Status |
-|----------|-------------------|-------------|--------|
-| Profile disabled (C7-A) | `run_c7_a` | 20.36-059 | PASS |
-| USP rule apply (C7-B) | `run_c7_b` | 20.36-058, 060 | PASS |
-| Escalate no guess (C7-C) | `run_c7_c` | 20.36-058, 060 | PASS |
-| Cross-turn USP visibility (C7-D) | `run_c7_d` | 20.36-061 | PASS (simulated) |
-| GB veto (C7-E) | `run_c7_e` | 20.36-062 | PASS (simulated) |
+## Test Matrix
+| Category | Scenario (harness) | Mode | HLR anchors | Status |
+|----------|-------------------|------|-------------|--------|
+| Profile disabled (C7-A) | `run_c7_a` | live | 20.36-059 | PASS |
+| USP rule apply (C7-B) | `run_c7_b` | live | 20.36-058, 060 | PASS |
+| Escalate no guess (C7-C) | `run_c7_c` | live | 20.36-058, 060 | PASS |
+| Cross-turn USP visibility (C7-D) | `run_c7_d` | simulated UPI/GB | 20.36-061 | PASS |
+| GB veto (C7-E) | `run_c7_e` | simulated UPI/GB/CIL | 20.36-062 | PASS |
 | E1 strip invariant | `strip_replay_invariant` | 20.207-001, 019 | PASS |
 | Class 1 happy path | *(planned)* | 20.36-019..022, 051; 20.207-017, 020 | todo (W5) |
 | Class 2 overflow | *(planned)* | 20.36-023+ | todo (W5) |
