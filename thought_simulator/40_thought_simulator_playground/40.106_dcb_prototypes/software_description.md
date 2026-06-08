@@ -1,8 +1,8 @@
 # 40.106_dcb_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-407)
-- Phase B: **pending**
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B: **cleared to start** — pending implementation
 - Program row: **40.510-407** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -51,7 +51,19 @@ Within `ob_processing` cycle window: **OB → DCB → TR** per 20.37 §7 and 20.
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** [50.165](../../50_thought_simulator_design/50.165_dcb_stability_design.md) qualitative only.
 
-**Agreement Statement**: Provisionally aligned — DCB is geometric-only overlay. Phase B must prove no `tr_needs_update` writes and TR-only consumption path.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms DCB as geometric-only meta-basin per 20.106; ephemeral TR inputs with no `tr_needs_update` writes and no OB semantic overlap. Phase B must prove TR-only consumption (40.37) and qualitative stability cross-check (40.165).
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-407 | Pass |
+| 20.106 geometric meta-basin boundaries | Pass |
+| Ephemeral events (not persisted on TP) | Pass |
+| No `tr_needs_update` write | Pass |
+| OB → DCB → TR cycle placement | Pass |
+| Handoffs to 40.401 / 40.37 / 40.165 | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)
 
