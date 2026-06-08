@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08)
-- Phase B (prototype + harness + evidence): **approved** (18/18 PASS, 2026-06-08; 40.510-102 GATE-A reviewer ☑ pending)
+- Phase B (prototype + harness + evidence): **approved** (18/18 PASS; CP review, 2026-06-08; 40.510-102)
 
 ## Phase B Deliverables (Executed)
 - Harness executed 18 scenarios; artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
@@ -68,7 +68,7 @@ All exploration **SHALL** remain deterministic, falsifiable, and artifact-backed
 
 - **Iterative Design Flow (50-series influence)**: None yet; full orchestration and E2 regen deferred to W5 per 40.510.
 
-**Agreement Statement**: Aligned — Phase B approved (18/18 PASS). GATE-A replay scope closed for REPLAY_CLASS_7 + E1 strip + regen scaffold. Residual gaps (Classes 2–6, live E2, live C7-D/E wire, YAML import) named in `requirements_delta.md`. 40.510-102 reviewer ☑ pending.
+**Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08; 18/18 PASS). GATE-A replay scope closed for REPLAY_CLASS_7 + E1 strip + regen scaffold. Residual gaps (Classes 2–6, live E2, live C7-D/E wire, YAML import) named in `requirements_delta.md`.
 
 ## Phase A Deliverables (this document)
 - High-level description of 40.207 as Class 7 replay harness (W1) with W5 feeder role
