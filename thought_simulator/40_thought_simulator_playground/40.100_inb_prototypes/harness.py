@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from prototype import InB, CANONICAL_PROFILE
 
 
-ARTIFACT_NAME = "inb_verification_run_2026-06-07.json"
+ARTIFACT_NAME = "inb_verification_run_2026-06-08.json"
 
 
 def _run_positive_clean() -> dict:
@@ -104,6 +104,26 @@ def _run_positive_fifo_batch() -> dict:
     }
 
 
+def _run_positive_iiinb_handoff() -> dict:
+    inb = InB()
+    raw = {"content": "Handoff test", "source": "test", "intake_order": 0}
+    out = inb.normalize(raw)
+    handoff = out.get("handoff", {})
+    ok = (
+        handoff.get("next_stage") == "input_semantic_repair"
+        and handoff.get("downstream_after_repair") == "routing"
+        and handoff.get("contract_version") == "inb_to_iiinb_v1"
+        and out["provenance"]["outcome"] == "accepted"
+    )
+    return {
+        "scenario": "positive_iiinb_handoff_contract",
+        "result": "PASS" if ok else "FAIL",
+        "input": raw,
+        "handoff": handoff,
+        "hlr": ["HLR-20.100-020", "HLR-20.101-003"],
+    }
+
+
 def _run_positive_deterministic_replay() -> dict:
     run_a = InB()
     run_b = InB()
@@ -140,6 +160,7 @@ def main() -> None:
         _run_negative_malformed(),
         _run_negative_unsupported_profile(),
         _run_positive_fifo_batch(),
+        _run_positive_iiinb_handoff(),
         _run_positive_deterministic_replay(),
     ]
 

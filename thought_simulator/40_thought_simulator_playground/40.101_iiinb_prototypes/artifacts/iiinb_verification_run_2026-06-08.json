@@ -1,0 +1,650 @@
+{
+  "date": "2026-06-08",
+  "module": "40.101_iiinb_prototypes",
+  "scenarios": [
+    {
+      "hlr": [
+        "HLR-20.101-001",
+        "HLR-20.101-002"
+      ],
+      "path": {
+        "intake_path": [
+          {
+            "outcome": {
+              "outcome": "accepted",
+              "source": "harness"
+            },
+            "pipeline_id": "A",
+            "stage_name": "inb_surface_norm"
+          },
+          {
+            "handoff": "rb",
+            "pipeline_id": "A",
+            "stage_name": "routing"
+          }
+        ],
+        "profile_enabled": false,
+        "repair_result": {
+          "envelope_guard": {
+            "semantic_core_unchanged": true,
+            "tp_tr_unchanged": true
+          },
+          "handoff_next_stage": "routing",
+          "iiinb_repair_record": null,
+          "reason_codes": [
+            "PROFILE_DISABLED"
+          ],
+          "skipped": true,
+          "stage": null,
+          "tp_intake_fields": {},
+          "usp_loaded": false
+        },
+        "usp_loaded": false
+      },
+      "result": "PASS",
+      "scenario": "profile_disabled_skip"
+    },
+    {
+      "hlr": [
+        "HLR-20.101-011",
+        "HLR-20.101-015"
+      ],
+      "output": {
+        "audit_records": [
+          {
+            "applied_rule_count": 1,
+            "cap_status": "OK",
+            "cycle_id": "cycle-001",
+            "escalation_refs": [],
+            "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+            "input_packet_id": "pkt-001",
+            "profile_enabled": true,
+            "rationale_codes": [],
+            "reason_codes": [],
+            "repair_outcomes": [
+              "APPLIED"
+            ],
+            "rule_ids": [
+              "rule-abc"
+            ],
+            "segment_count": 1,
+            "tcu_cost": 2,
+            "usp_version_ref": "35e7dc8dbf739ef532b9dd9fc5ff33f251608bf4b6d1e9bdc795f913666c089b"
+          }
+        ],
+        "envelope_guard": {
+          "semantic_core_unchanged": true,
+          "tp_tr_unchanged": true
+        },
+        "handoff_next_stage": "routing",
+        "iiinb_repair_record": {
+          "applied_rule_count": 1,
+          "cap_status": "OK",
+          "cycle_id": "cycle-001",
+          "escalation_refs": [],
+          "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+          "input_packet_id": "pkt-001",
+          "profile_enabled": true,
+          "rationale_codes": [],
+          "reason_codes": [],
+          "repair_outcomes": [
+            "APPLIED"
+          ],
+          "rule_ids": [
+            "rule-abc"
+          ],
+          "segment_count": 1,
+          "tcu_cost": 2,
+          "usp_version_ref": "35e7dc8dbf739ef532b9dd9fc5ff33f251608bf4b6d1e9bdc795f913666c089b"
+        },
+        "reason_codes": [],
+        "skipped": false,
+        "stage": "input_semantic_repair",
+        "state_digest": "5766de2fdf0a1712954309f64df3c7f9063da964cde7e34d2d2654fd514bb52e",
+        "tp_intake_fields": {
+          "iiinb_escalation_refs": [],
+          "input_repair_tags": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-001",
+              "rule_id": "rule-abc",
+              "segment_ref": "seg-001",
+              "usp_version_ref": "35e7dc8dbf739ef532b9dd9fc5ff33f251608bf4b6d1e9bdc795f913666c089b"
+            }
+          ],
+          "input_segments": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-001",
+              "segment_text": "tmrw"
+            }
+          ]
+        },
+        "usp_loaded": true,
+        "usp_version_ref": "35e7dc8dbf739ef532b9dd9fc5ff33f251608bf4b6d1e9bdc795f913666c089b"
+      },
+      "result": "PASS",
+      "scenario": "positive_usp_rule_apply"
+    },
+    {
+      "hlr": [
+        "HLR-20.101-012",
+        "HLR-20.101-017"
+      ],
+      "output": {
+        "audit_records": [
+          {
+            "applied_rule_count": 0,
+            "cap_status": "OK",
+            "cycle_id": "cycle-001",
+            "escalation_refs": [
+              "esc-seg-001"
+            ],
+            "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+            "input_packet_id": "pkt-001",
+            "profile_enabled": true,
+            "rationale_codes": [],
+            "reason_codes": [],
+            "repair_outcomes": [
+              "ESCALATED"
+            ],
+            "rule_ids": [],
+            "segment_count": 1,
+            "tcu_cost": 1,
+            "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+          }
+        ],
+        "envelope_guard": {
+          "semantic_core_unchanged": true,
+          "tp_tr_unchanged": true
+        },
+        "handoff_next_stage": "routing",
+        "iiinb_repair_record": {
+          "applied_rule_count": 0,
+          "cap_status": "OK",
+          "cycle_id": "cycle-001",
+          "escalation_refs": [
+            "esc-seg-001"
+          ],
+          "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+          "input_packet_id": "pkt-001",
+          "profile_enabled": true,
+          "rationale_codes": [],
+          "reason_codes": [],
+          "repair_outcomes": [
+            "ESCALATED"
+          ],
+          "rule_ids": [],
+          "segment_count": 1,
+          "tcu_cost": 1,
+          "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+        },
+        "reason_codes": [],
+        "skipped": false,
+        "stage": "input_semantic_repair",
+        "state_digest": "c46f68a0f01455402e9bc2ae4f00f6b02e53388e402e6273bd6e11ab87292e1d",
+        "tp_intake_fields": {
+          "iiinb_escalation_refs": [
+            {
+              "escalation_id": "esc-seg-001",
+              "escalation_reason_code": "NO_MATCHING_RULE",
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "segment_ref": "seg-001"
+            }
+          ],
+          "input_repair_tags": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "ESCALATED",
+              "segment_ref": "seg-001",
+              "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+            }
+          ],
+          "input_segments": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "ESCALATED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-001",
+              "segment_text": "unknownshorthand"
+            }
+          ]
+        },
+        "usp_loaded": true,
+        "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+      },
+      "result": "PASS",
+      "scenario": "negative_escalate_no_guess"
+    },
+    {
+      "hlr": [
+        "HLR-20.101-021"
+      ],
+      "result": "PASS",
+      "scenario": "positive_deterministic_replay"
+    },
+    {
+      "hlr": [
+        "HLR-20.101-003"
+      ],
+      "result": "PASS",
+      "scenario": "positive_inb_iiinb_rb_order",
+      "stage_names": [
+        "inb_surface_norm",
+        "input_semantic_repair",
+        "routing"
+      ]
+    },
+    {
+      "hlr": [
+        "HLR-20.101-019"
+      ],
+      "output": {
+        "audit_records": [
+          {
+            "applied_rule_count": 16,
+            "cap_status": "APPLY_CAP",
+            "cycle_id": "cycle-001",
+            "escalation_refs": [],
+            "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+            "input_packet_id": "pkt-001",
+            "profile_enabled": true,
+            "rationale_codes": [],
+            "reason_codes": [
+              "APPLY_CAP"
+            ],
+            "repair_outcomes": [
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "APPLIED",
+              "TRUNCATED",
+              "TRUNCATED",
+              "TRUNCATED",
+              "TRUNCATED"
+            ],
+            "rule_ids": [
+              "r0",
+              "r1",
+              "r10",
+              "r11",
+              "r12",
+              "r13",
+              "r14",
+              "r15",
+              "r2",
+              "r3",
+              "r4",
+              "r5",
+              "r6",
+              "r7",
+              "r8",
+              "r9"
+            ],
+            "segment_count": 20,
+            "tcu_cost": 36,
+            "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+          }
+        ],
+        "envelope_guard": {
+          "semantic_core_unchanged": true,
+          "tp_tr_unchanged": true
+        },
+        "handoff_next_stage": "routing",
+        "iiinb_repair_record": {
+          "applied_rule_count": 16,
+          "cap_status": "APPLY_CAP",
+          "cycle_id": "cycle-001",
+          "escalation_refs": [],
+          "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+          "input_packet_id": "pkt-001",
+          "profile_enabled": true,
+          "rationale_codes": [],
+          "reason_codes": [
+            "APPLY_CAP"
+          ],
+          "repair_outcomes": [
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "APPLIED",
+            "TRUNCATED",
+            "TRUNCATED",
+            "TRUNCATED",
+            "TRUNCATED"
+          ],
+          "rule_ids": [
+            "r0",
+            "r1",
+            "r10",
+            "r11",
+            "r12",
+            "r13",
+            "r14",
+            "r15",
+            "r2",
+            "r3",
+            "r4",
+            "r5",
+            "r6",
+            "r7",
+            "r8",
+            "r9"
+          ],
+          "segment_count": 20,
+          "tcu_cost": 36,
+          "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+        },
+        "reason_codes": [
+          "APPLY_CAP"
+        ],
+        "skipped": false,
+        "stage": "input_semantic_repair",
+        "state_digest": "3b9e9ad9710c74b39e332e9bcd638d3c6c40030f4e2beef6d961ad39f35b3eab",
+        "tp_intake_fields": {
+          "iiinb_escalation_refs": [],
+          "input_repair_tags": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-001",
+              "rule_id": "r0",
+              "segment_ref": "seg-001",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-002",
+              "rule_id": "r1",
+              "segment_ref": "seg-002",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-003",
+              "rule_id": "r2",
+              "segment_ref": "seg-003",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-004",
+              "rule_id": "r3",
+              "segment_ref": "seg-004",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-005",
+              "rule_id": "r4",
+              "segment_ref": "seg-005",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-006",
+              "rule_id": "r5",
+              "segment_ref": "seg-006",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-007",
+              "rule_id": "r6",
+              "segment_ref": "seg-007",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-008",
+              "rule_id": "r7",
+              "segment_ref": "seg-008",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-009",
+              "rule_id": "r8",
+              "segment_ref": "seg-009",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-010",
+              "rule_id": "r9",
+              "segment_ref": "seg-010",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-011",
+              "rule_id": "r10",
+              "segment_ref": "seg-011",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-012",
+              "rule_id": "r11",
+              "segment_ref": "seg-012",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-013",
+              "rule_id": "r12",
+              "segment_ref": "seg-013",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-014",
+              "rule_id": "r13",
+              "segment_ref": "seg-014",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-015",
+              "rule_id": "r14",
+              "segment_ref": "seg-015",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "resolved_segment_ref": "res-seg-016",
+              "rule_id": "r15",
+              "segment_ref": "seg-016",
+              "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+            }
+          ],
+          "input_segments": [
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-001",
+              "segment_text": "w0"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-002",
+              "segment_text": "w1"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-003",
+              "segment_text": "w2"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-004",
+              "segment_text": "w3"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-005",
+              "segment_text": "w4"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-006",
+              "segment_text": "w5"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-007",
+              "segment_text": "w6"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-008",
+              "segment_text": "w7"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-009",
+              "segment_text": "w8"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-010",
+              "segment_text": "w9"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-011",
+              "segment_text": "w10"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-012",
+              "segment_text": "w11"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-013",
+              "segment_text": "w12"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-014",
+              "segment_text": "w13"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-015",
+              "segment_text": "w14"
+            },
+            {
+              "iiinb_event_id": "iiinb-evt-cycle-001-0001",
+              "repair_outcome": "APPLIED",
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-016",
+              "segment_text": "w15"
+            },
+            {
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-017",
+              "segment_text": "w16"
+            },
+            {
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-018",
+              "segment_text": "w17"
+            },
+            {
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-019",
+              "segment_text": "w18"
+            },
+            {
+              "segment_class": "SHORTHAND_ELIGIBLE",
+              "segment_ref": "seg-020",
+              "segment_text": "w19"
+            }
+          ]
+        },
+        "usp_loaded": true,
+        "usp_version_ref": "511d29c131c654d594684764a14494bb7b6d4948790fb59a5f9dd409bd5a1ee0"
+      },
+      "result": "PASS",
+      "scenario": "negative_apply_cap"
+    }
+  ],
+  "status": "PASS",
+  "summary": {
+    "passed": 6,
+    "total": 6
+  }
+}
