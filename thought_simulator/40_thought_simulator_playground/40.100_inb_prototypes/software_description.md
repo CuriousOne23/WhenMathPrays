@@ -1,7 +1,7 @@
 # 40.100_inb_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **complete and promotion-ready** (CP review, 2026-06-08)
+- Phase A (software_description): **approved** (CP final review, 2026-06-08)
 - Phase B (prototype + harness + evidence): **initial execution complete** (8/8 PASS, 2026-06-08); iterative expansion continues
 
 ## Phase B Deliverables (Executed — initial pass)
@@ -73,7 +73,7 @@ All exploration **SHALL** remain strictly deterministic, non-inferential, bounde
 - Full reproduction of the 20.100 HLR set for exploratory visibility (see "What Phase B Must Explore")
 - Identification of core invariants, boundaries, and handoff contract
 - Clear definition of what Phase B must explore (initial pass executed; expansion ongoing)
-- Draft handoff contract skeleton, state digest definition, schema validation, unicode normalization, profile activation target semantics, reject/degrade policy, minimal internal state, and test matrix (below)
+- Draft handoff contract skeleton, state digest definition, schema validation, unicode normalization, profile activation target semantics, transport/session isolation, tick-cycle boundary test placeholder, reject/degrade policy, minimal internal state, and test matrix (below)
 - Prototype thresholds (e.g. `MAX_PAYLOAD_CHARS`, `MAX_TOKENS`) are playground fixtures only; governed by 20-series for authoritative values
 
 ## Handoff Contract (Draft Skeleton)
@@ -152,6 +152,24 @@ incoming requests profile v1.1 at mid-tick
 
 On validation failure at a safe boundary: retain prior valid signature/profile state; emit fixed audit reason code (e.g. `PROFILE_ACTIVATION_FAILED`). Harness scenario `profile_activation_boundary` is planned.
 
+## Transport and Session Metadata Isolation (Draft)
+Transport and session attributes must not alter semantic payload fields or `canonical_content` (HLR-20.100-009).
+
+- **Semantic payload:** `content` — sole field driving canonicalization
+- **Transport/session metadata (playground):** `source`, `intake_order` — recorded in provenance/metadata only; variations do not change normalized text for identical `content`
+- **Profile:** execution-signature-bound configuration, not transport — mismatches handled per profile policy
+- **Invariant:** identical `content` under same active profile → identical `canonical_content`, regardless of `source` or transport envelope variations
+- **Planned scenario:** `positive_transport_metadata_isolation` — not yet harness-tested
+
+## Tick-Cycle Boundary (Test Placeholder)
+Per 40.510-103 and 10.10.10 (InB as first deterministic-cycle stage). Orchestration detail deferred to 20.36 / 40.60; this is playground-level test design.
+
+- InB completes surface normalization and emits handoff before IIInB or RB stages run
+- No mutation of MTP or downstream module internal state during InB processing
+- No reads of OB, RB, TB, IB, GB, CIL, COB, COP internal state (HLR-019)
+- Handoff is the sole outbound contract; downstream stages consume it at the next tick boundary
+- **Planned scenario:** `positive_tick_boundary_first_stage` — not yet harness-tested
+
 ## Deterministic Reject/Degrade Policy (Draft)
 - **Reject path**: malformed input, unsupported profile, oversize payload, too many tokens, unsupported enum/schema/wire-map states → `outcome: "rejected"`, `canonical_content: null`, fixed immutable `reason_code` (e.g. `MALFORMED_INPUT`, `UNSUPPORTED_PROFILE`, `OVERSIZE_PAYLOAD`, `TOO_MANY_TOKENS`)
 - **Degrade path**: reserved for bounded-limit scenarios where partial retention is permitted under 20.100; current prototype uses reject-only for oversize/token limits
@@ -187,7 +205,8 @@ On validation failure at a safe boundary: retain prior valid signature/profile s
 | Zero-event window | *(planned)* | 023 | todo |
 | Diagnostic export ordering | *(planned)* | 022 | todo |
 | Profile activation boundary | `profile_activation_boundary` *(planned)* | 014, 015 | todo |
-| Transport/session isolation | *(planned)* | 009 | todo |
+| Transport/session isolation | `positive_transport_metadata_isolation` *(planned)* | 009 | todo |
+| Tick-cycle boundary (first stage) | `positive_tick_boundary_first_stage` *(planned)* | 019, 10.10.10 | todo |
 | Schema validation | `negative_unsupported_schema` *(planned)* | 004 | todo |
 | Timestamp-as-metadata only | *(planned)* | 021 | todo |
 
