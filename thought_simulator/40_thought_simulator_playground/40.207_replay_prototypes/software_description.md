@@ -276,7 +276,7 @@ This module **SHALL NOT** (in W1):
 - **Strip + A-only equivalence:** `strip_replay_invariant` proves removal only; full byte-identical `semantic_core` diff deferred
 
 ## Required Next Step
-GATE-A closure: obtain 40.510-102 reviewer ☑ in [40.510](../40.510_refactor.md). W5: Classes 1–6 runners, live E2 `b_regeneration_equivalent`, YAML golden import. W2: wire live UPI/GB for C7-D/E when 40.103/40.36 exist.
+GATE-A closed 2026-06-08 (40.510-102). Next: W1 30-series normalize + 50 insight per [40.510](../40.510_refactor.md) §4.2.2. W5: Classes 1–6 runners, live E2 `b_regeneration_equivalent`, YAML golden import. W2: wire live UPI/GB for C7-D/E when 40.103/40.36 exist.
 
 ## Traceability
 - 20.36_canonical_end_to_end_trace.md §9 (REPLAY_CLASS_7)

@@ -75,6 +75,6 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (19/19 PASS; 
 **Agreement Statement**: Aligned — Phase B scope closed per test matrix. Extend only via 30-series promotion, 40.510-207 `FAIL_ENVELOPE` negatives, or integrated intake-path runs with 40.207; do not add surface canonicalization to IIInB.
 
 ## Next (30-series promotion path)
-- Normalize capsule per [30.00](../../30_verification/30.00_verification_user_guide.md) after GATE-A closure.
+- Normalize capsule per [30.00](../../30_verification/30.00_verification_user_guide.md) — GATE-A closed 2026-06-08; W1 step 2 (30 normalize) next per [40.510](../40.510_refactor.md) §4.2.2.
 - Close HLR-013, 023, 025 residuals; `FAIL_ENVELOPE` via 40.510-207.
 - Integrated `InB → IIInB` strip replay with 40.207 Class 7 fixtures when scheduled.

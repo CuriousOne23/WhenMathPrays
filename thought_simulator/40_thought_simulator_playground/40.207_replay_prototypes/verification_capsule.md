@@ -84,6 +84,6 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS; 
 **Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08). Scope closed per test matrix. Extend only via 30-series promotion, W5 Classes 1–6 runners, live E2 `b_regeneration_equivalent`, or Wave 2 UPI/GB wire for C7-D/E; do not claim dual-pipeline PoC closure from Class 7 alone.
 
 ## Next (30-series promotion path)
-- Normalize capsule per [30.00](../../30_verification/30.00_verification_user_guide.md) after GATE-A closure (40.510-102 reviewer ☑).
+- Normalize capsule per [30.00](../../30_verification/30.00_verification_user_guide.md) — GATE-A closed 2026-06-08; W1 step 2 (30 normalize) next per [40.510](../40.510_refactor.md) §4.2.2.
 - Close Classes 2–6, live E2, `REGEN_STALE_EPOCH`, and YAML import residuals via W5 rows 505–506.
 - Wire live UPI/GB for C7-D/E when 40.103/40.36 prototypes exist (Wave 2).

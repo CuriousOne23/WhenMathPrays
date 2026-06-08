@@ -74,7 +74,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 - **Backward Flow (40-series evidence)**: 18/18 PASS artifact proves GATE-A REPLAY_CLASS_7 + E1 strip + regen scaffold scope; residuals named above.
 - **Iterative Design Flow (50-series influence)**: None yet; W5 orchestration deferred per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08). Promotion to 30-series requires GATE-A reviewer ☑ on 40.510-102; dual-pipeline PoC still needs W5 Classes 1–6 and live E2.
+**Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08); GATE-A closed 2026-06-08 (40.510-102). Promotion to 30-series per W1 wave protocol; dual-pipeline PoC still needs W5 Classes 1–6 and live E2.
 
 ## Open gaps (W5 / Wave 2)
 - Classes 1–6 unified runner (40.90, 40.80)
