@@ -169,6 +169,8 @@ HLR-20.101-005–008, 007.
 - `usp_snapshot = null` when profile enabled → `USP_LOAD_FAILED` (no guess)
 - No USP mutation
 
+**Cross-turn USP version pinning:** Each repair pass loads the conversation-scoped `usp_version_ref` pinned by COB ([40.32](../40.32_cob_prototypes/software_description.md) W2 extension per 20.102-010). UPI commits on later turns advance the pin via [40.102](../40.102_usp_prototypes/software_description.md) / [40.103](../40.103_upi_prototypes/software_description.md); cross-turn replay equivalence is evidenced jointly in 40.510-204/207 Phase B (`positive_live_usp_from_40.102`).
+
 ## Escalation Policy (Draft)
 HLR-20.101-012, 017, 018.
 
@@ -177,6 +179,8 @@ HLR-20.101-012, 017, 018.
 - Queue for CIL handoff (wire deferred to Wave 2); playground records refs only
 - Pipeline A does not block waiting for clarification
 - No UPI or IMR direct invocation
+
+**40.33 integration boundary:** `iiinb_escalation_ref` records are consumed by [40.33](../40.33_cil_prototypes/software_description.md) in deterministic FIFO per 20.032-027 after GATE-B wire (40.510-205 Phase B). W1 harness emits refs only — no live CIL callback until clarification-event wire lands.
 
 ## Bounds and Caps (Draft)
 HLR-20.101-019, 020.
@@ -242,6 +246,27 @@ HLR-20.101-022. Playground registry (`REASON_CODES` in `prototype.py`):
 | MI_VAGUE/MI_INCOMP non-resolve | *(deferred)* | 013 | todo (30-series) |
 | IMR same-cycle isolation | *(deferred)* | 023 | todo (30-series) |
 | Parent invariant cross-check | *(deferred)* | 025 | todo (30-series) |
+
+### HLR family → test matrix mapping
+
+| HLR family | Topic | Primary harness scenario(s) |
+|------------|-------|----------------------------|
+| 001–002 | Profile gate | `profile_disabled_skip` |
+| 003–004 | Intake ordering / basin exclusion | `positive_inb_iiinb_rb_order`, `negative_rejected_inb_handoff`, `positive_not_in_rb_ob_chain` |
+| 005–008 | USP load / apply / immutability | `positive_usp_rule_apply`, `positive_usp_version_ref_pinned`, `positive_multi_rule_precedence`, `positive_usp_snapshot_immutable`, `negative_usp_load_failure` |
+| 009–012 | Repair / escalate without guess | `negative_escalate_no_guess`, `positive_usp_rule_apply` |
+| 013 | MI_VAGUE/MI_INCOMP non-resolution | *(deferred — 30-series)* |
+| 014–015 | Intake-bound TP writes only | `positive_usp_rule_apply`, `positive_pipeline_b_envelope_unchanged` |
+| 016 | Audit record per pass | `positive_audit_record_per_pass` |
+| 017–018 | CIL escalation non-blocking | `positive_cil_escalation_nonblocking` |
+| 019–020 | Caps / TCU | `negative_apply_cap`, `negative_segment_cap`, `positive_tcu_cost_reported` |
+| 021 | Deterministic replay | `positive_deterministic_replay` |
+| 022 | Fixed reason codes | `negative_usp_load_failure`, cap/escalation scenarios |
+| 023 | IMR same-cycle isolation | *(deferred — 30-series)* |
+| 024a | Envelope guard (positive) | `positive_pipeline_b_envelope_unchanged` |
+| 024b | `FAIL_ENVELOPE` negatives | W2 extension (40.510-207) |
+| 025 | Parent invariant cross-check | *(deferred — 30-series)* |
+| 026–028 | Diagnostic / MB consume | `positive_diagnostic_export_ordering` |
 
 ## HLR Reference (Exploratory Visibility)
 Phase-A evidence for these HLRs is provided in the Test Matrix; Phase B harness evidence (19/19 PASS) is summarized in `verification_capsule.md`. This list is retained as a reference. Source: 20.101_iiinb_requirements.md.
@@ -321,7 +346,7 @@ GATE-A closed 2026-06-08 (40.510-101). Next: W1 30-series normalize + 50 insight
 
 ## W2 Phase A Extension (40.510-207)
 
-**Approval State:** Phase A extension **draft — pending review** (W1 Phase B 19/19 PASS remains baseline).
+**Approval State:** Phase A extension **approved** (CP review, 2026-06-08; W1 Phase B 19/19 PASS remains baseline).
 
 **Program row:** [40.510-207](../40.510_refactor.md) — envelope write-guard **negative** tests and `FAIL_ENVELOPE` replay verdicts (HLR-20.101-024b).
 
@@ -354,4 +379,13 @@ Positive guard (024a) is W1-closed (`positive_pipeline_b_envelope_unchanged`). W
 - **Backward Flow:** W1 30.101 / 30.207 positive evidence — extend only
 - **Iterative Design Flow:** 50.101 documents 024b in 30.207 scope
 
-**Agreement Statement:** Provisionally aligned — W2 extension must not weaken 024a; negative scenarios are additive harness rows in the same module.
+### HLR family → Phase-B scenario mapping (W2 extension)
+
+| HLR family | Topic | Primary scenario IDs |
+|------------|-------|----------------------|
+| 024b | Forbidden write detection | `negative_forbidden_semantic_core_write`, `negative_forbidden_tp_tr_write`, `negative_forbidden_exec_plan_write` |
+| 024a | Regression guard | `positive_envelope_guard_regression` |
+| 005–008 | Live USP snapshot path | `positive_live_usp_from_40.102` |
+| 20.38 §8 | `FAIL_ENVELOPE` replay verdict | compose with [40.207](../40.207_replay_prototypes/software_description.md) strip/regen |
+
+**Agreement Statement:** Aligned — W2 extension Phase A approved (CP, 2026-06-08). Negative scenarios are additive harness rows; must not weaken W1 024a positive evidence (19/19 PASS baseline).
