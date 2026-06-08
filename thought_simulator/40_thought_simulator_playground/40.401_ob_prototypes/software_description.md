@@ -1,8 +1,8 @@
 # 40.401_ob_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-406)
-- Phase B: **pending**
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B: **cleared to start** — pending implementation
 - Program row: **40.510-406** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -53,7 +53,19 @@ OB executes after routing/splitting; before TB and DCB→TR overlay in same cycl
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Provisionally aligned — OB is A-only evidence basin distinct from B-side OpBeh (W4). Phase B must wire TR-input handoff for 40.37 extension.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms OB as A-only lane-local evidence basin per 20.40, distinct from B-side OpBeh (W4) and DCB (40.106). Phase B must wire TR-input + `tr_needs_update` handoff for 40.37 and evidence path to 40.601 (TB).
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-406 | Pass |
+| 20.40 OB lane-local evidence extraction | Pass |
+| TR-input + `tr_needs_update` emission | Pass |
+| Not geometric meta-basin (DCB separate) | Pass |
+| Approved MTP read-set boundaries | Pass |
+| Handoffs to 40.501 / 40.37 / 40.106 / 40.601 | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)
 
