@@ -2,8 +2,8 @@
 
 ## Approval State
 - Legacy scaffold: not implementation-complete
-- **W3 Phase A** (40.510-408): **approved** (CP review, 2026-06-08)
-- W3 Phase B (qualitative stability per 20.165; joint with 40.106): **pending**
+- **W3 Phase A** (40.510-408): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- W3 Phase B (qualitative stability per 20.165; joint with 40.106): **cleared to start** — pending implementation
 - Program row: **40.510-408** (W3)
 
 ## W3 Extension Scope (40.510-408)
@@ -34,7 +34,18 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
 - **Iterative Design Flow (50-series influence)**: 50.165_dcb_stability_design.md scaffold now exists (qualitative focus only). Further design elaboration will be driven by evidence from this 40.165 module.
 
-**Agreement Statement**: Scaffold stage only. Alignment will be asserted after Phase A software_description approval and Phase B execution. The three flows are provisionally consistent on keeping DCB stability exploration strictly qualitative and non-expansive.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms W3 extension scope: read-only qualitative stability observer over 40.106 event rates and trajectory geometry; no numeric thresholds, no TP writes, no algorithms in 20.165 playground layer. Phase B joint evidence with 40.106 required before promotion.
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 extension scope vs 40.510-408 | Pass |
+| 20.165 qualitative-only boundary | Pass |
+| Parent 20.106 / 40.106 handoff | Pass |
+| No numeric thresholds in 40-layer | Pass |
+| Two-phase model (stop after Phase A) | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Required Next Step
 Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series). The delta and capsule documents **SHALL** also carry explicit Flows Alignment + Agreement Statements per 40.20.
