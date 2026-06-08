@@ -28,6 +28,7 @@
               "outcome": "accepted",
               "profile": "v1.0",
               "reason_code": null,
+              "schema_version": "inb_intake_v1",
               "source": "c7a"
             },
             "pipeline_id": "A",
