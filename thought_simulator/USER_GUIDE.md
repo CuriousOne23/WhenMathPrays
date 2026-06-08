@@ -418,6 +418,7 @@ At minimum, integrity checks must validate:
 - unmapped HLR/LLR references introduced by updates
 - required backward-flow governance sections in impacted 30 module docs (when in scope)
 - 50-series traceability index synchronization when design mappings changed
+- 30-series inventory index synchronization when verification module structure changed
 
 ## CI Checks Associated With This Guide
 
@@ -437,17 +438,21 @@ CI should enforce the following:
    - `thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md`
+   - `thought_simulator/30_verification/30.01_verification_inventory_index.md`
 4. If a PR includes backward-flow changes to 30/40/50, CI must fail unless:
    - at least one matching backward-flow execution log exists in `10_thought_simulator_req/docs/`
    - the log contains `Forward-Equivalence State: YES`
    - integrity check summary is present
-5. If a PR changes any file under `50_thought_simulator_design/`, CI must run the existing traceability-index consistency rule from `50.00_design_traceability_index.md`.
-6. If a PR renames any markdown file under `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`, CI must fail unless the same change set includes:
+5. If a PR changes any file under `50_thought_simulator_design/`, CI must run the traceability-index consistency rule from `50.00_design_traceability_index.md` (blocking workflow).
+6. Structural drift between `30.01_verification_inventory_index.md` and on-disk `30.*` module directories is reported by `validate_30_inventory_index.py` (non-blocking warning).
+7. Incomplete forward-flow promotion (`30.01` rows with status `promoted` or `approved` but no matching `10.50.{band}_*.md` in `10_thought_simulator_req/50_design/`) is reported by `validate_30_10_50_pairing.py` (non-blocking warning; one-way 30 → 10.50 only).
+8. Local pre-PR runs may use `validate_50_traceability_index.py` (non-blocking warning) as a mirror of the blocking 50.00 workflow check.
+9. If a PR renames any markdown file under `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`, CI must fail unless the same change set includes:
   - `30_verification/30.30_verification_glossary.md`
   - `30_verification/glossary_term_registry.json`
   - `50_thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `50_thought_simulator_design/`)
   Note: The 50-series glossary (`50.01_50_series_glossary.md` + registry) is under CI warning checks (non-blocking) so the team is notified of potential freshness issues, but updates are decided by humans rather than enforced.
-7. If a PR introduces broken markdown file references or broken markdown heading anchors in governed docs, CI must fail.
+10. If a PR introduces broken markdown file references or broken markdown heading anchors in governed docs, CI must fail.
   - Governance policy note: this failing check is a red warning signal by default and is merge-blocking only when configured as a required status check in repository branch-protection/ruleset settings.
 
 ## Done Criteria

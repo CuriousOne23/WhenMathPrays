@@ -39,13 +39,17 @@ This workflow applies to edits under:
 - Formal trace links stay canonical-to-canonical.
 - Exploratory documents may inform decisions but do not become formal trace edges.
 
-4. Update glossary or README surfaces when terminology or structure changes.
+4. Update glossary, README, or tier inventory when terminology or **structure** changes.
 - If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
 - If requirements-tier terminology changes, update `20_requirements/archive/20.150_glossary.md` and `20_requirements/glossary_term_registry.json` in the same change.
 - For 50-series design terminology (especially new concepts introduced in design specs), update `50_thought_simulator_design/50.01_50_series_glossary.md` and `50_thought_simulator_design/glossary_term_registry.json`.
 - `20.150_glossary.md` is scoped to `20_requirements/` documents.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
+- If a **30 verification module** is added, renamed, or removed, update `30_verification/30.01_verification_inventory_index.md` in the same change set.
+- If a **level-1 50 design file** is added, renamed, or removed, update `50_thought_simulator_design/50.00_design_traceability_index.md` in the same change set.
 - Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
+
+**Do not** update tier inventory indexes (`30.01`, `50.00`) for content-only edits to capsules, deltas, or design specs.
 
 **50-series glossary helper scripts** (in `thought_simulator/scripts/`):
 - `validate_50_glossary_alignment.py`: Non-blocking CI check that runs on changes to 50 design `.md` files (and the glossary/registry itself). It warns when the glossary and registry are out of alignment or when new candidate terms are observed in design documents. This provides visibility ("we should know") without blocking merges.
@@ -54,6 +58,42 @@ This workflow applies to edits under:
 5. Run the doc validation suite before opening a PR.
 
    The detailed rules for what must be produced in `30_verification/` (verification capsules, requirements deltas, run artifacts, three-flow statements) are in `30_verification/30.00_verification_user_guide.md`.
+
+## Document tier inventories
+
+| Tier | Inventory / traceability doc | Process guide |
+|------|------------------------------|---------------|
+| 30 verification | [30.01_verification_inventory_index.md](30_verification/30.01_verification_inventory_index.md) | [30.00_verification_user_guide.md](30_verification/30.00_verification_user_guide.md) |
+| 50 design | [50.00_design_traceability_index.md](50_thought_simulator_design/50.00_design_traceability_index.md) | [50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md) |
+
+Repo tier map: [README.md](README.md).
+
+## CI check matrix
+
+Scripts live under `thought_simulator/scripts/`. **Blocking** checks fail the GitHub Actions job. **Warning** checks print drift and exit 0.
+
+| Script / workflow | Mode | Scope |
+|-------------------|------|--------|
+| `check_doc_dependencies.py` | Blocking | Doc dependency graph |
+| Governance marker validation (workflow inline) | Blocking | Required phrases in USER_GUIDE, promotion_protocol, 30 README, 40.20, 50.05 |
+| Rename maintenance guard (workflow inline) | Blocking | Renames in 30/40/50 require glossary and/or 50.00 updates |
+| `validate_doc_frontmatter_and_ids.py` | Blocking | Frontmatter and document IDs |
+| `validate_relation_semantics.py` | Blocking | Relation semantics in governed docs |
+| `validate_doc_naming_prefixes.py` | Blocking | Document naming prefixes |
+| `validate_doc_reference_targets.py` | Blocking | Broken file refs and heading anchors |
+| `validate_20_traceability_matrix.py` | Blocking | 20-series traceability matrix |
+| `validate_design_traceability.yml` (workflow) | Blocking | Level-1 `50.*.md` ↔ `50.00` table |
+| `validate_readme_links.py` | Blocking | README link targets exist |
+| `validate_glossary_alignment.py` | Warning | 30.30 glossary ↔ registry |
+| `validate_requirements_glossary_alignment.py` | Warning | 20 glossary ↔ registry |
+| `validate_requirements_glossary_scope.py` | Warning | 20 glossary scope |
+| `validate_50_glossary_alignment.py` | Warning | 50.01 glossary ↔ registry |
+| `validate_readme_coverage.py` | Warning | README child links ↔ directory |
+| `validate_30_inventory_index.py` | Warning | `30.01` module table ↔ `30.*` dirs |
+| `validate_30_10_50_pairing.py` | Warning | `30.01` `promoted`/`approved` rows ↔ `10.50.{band}_*.md` (one-way; no orphan 10.50 check) |
+| `validate_50_traceability_index.py` | Warning | `50.00` table ↔ level-1 design files (local mirror of blocking workflow) |
+
+Workflow file: [.github/workflows/thought-simulator-doc-dependency-check.yml](../.github/workflows/thought-simulator-doc-dependency-check.yml), [.github/workflows/validate_design_traceability.yml](../.github/workflows/validate_design_traceability.yml).
 
 ## Pre-PR Validation Command
 
@@ -67,7 +107,10 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_glossary_alignment.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_requirements_glossary_alignment.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_50_glossary_alignment.py ; \
-  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/update_50_glossary.py ; \   # optional but recommended when actively editing 50 design docs (generates proposals only)
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_30_inventory_index.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_30_10_50_pairing.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_50_traceability_index.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/update_50_glossary.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/check_doc_dependencies.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_doc_frontmatter_and_ids.py --require-frontmatter --strict-ids ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_relation_semantics.py ; \
@@ -76,9 +119,12 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 
 ## Authoritative Process Sources
 
+- `00_program_governance/00_foundations/00.00.41_documentation_tier_map_and_ci_policy.md` (tier map, inventory vs process, CI policy)
 - `10_thought_simulator_req/docs/promotion_protocol.md`
 - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`
 - `30_verification/30.00_verification_user_guide.md` (verification process, artifact standards, and three-flow rules)
+- `30_verification/30.01_verification_inventory_index.md` (30-tier module inventory)
+- `50_thought_simulator_design/50.00_design_traceability_index.md` (cross-layer design traceability)
 - `30_verification/30.30_verification_glossary.md`
 
 ## Pull Request Checklist
@@ -87,4 +133,6 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 - [ ] Any moved/renamed/deleted references were corrected.
 - [ ] README links and direct-child indexes remain aligned.
 - [ ] Glossary and glossary registry were updated together when terminology changed.
-- [ ] Validation suite passes locally.
+- [ ] `30.01` / `50.00` updated when module or level-1 design **structure** changed.
+- [ ] `10.50.xx` peer exists for every `30.01` row marked `promoted` or `approved` (or Notes record `30-only pending 10.50` while debt is open).
+- [ ] Validation suite passes locally (includes `validate_30_10_50_pairing.py` warning check).

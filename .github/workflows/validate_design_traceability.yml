@@ -28,10 +28,12 @@ jobs:
               print("ERROR: missing required index file thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md")
               sys.exit(1)
 
+          level2 = re.compile(r"^50\.\d+\.\d+_.*\.md$")
           expected_files = sorted(
               p.name
               for p in design_dir.glob("50.*.md")
               if p.name != "50.00_design_traceability_index.md"
+              and not level2.match(p.name)
           )
 
           content = index_path.read_text(encoding="utf-8").splitlines()
