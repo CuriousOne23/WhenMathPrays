@@ -14,7 +14,7 @@
 | [30.32_cob_prototypes/](30.32_cob_prototypes/) | 40.32 W2 | 4/4 PASS | USP snapshot pin (20.102-010 / COB W2) |
 | [30.33_cil_prototypes/](30.33_cil_prototypes/) | 40.33 W2 | 4/4 PASS | `clarification_event_v1` wire to UPI FIFO |
 | [30.36_gb_prototypes/](30.36_gb_prototypes/) | 40.36 W2 | 4/4 PASS | `evaluate_upi_commit` approve/veto path |
-| [30.101_iiinb_prototypes/](30.101_iiinb_prototypes/) | 40.101 W2 | 24/24 PASS | HLR-024b `FAIL_ENVELOPE` negatives added |
+| [30.101_iiinb_prototypes/](30.101_iiinb_prototypes/) | 40.101 W2 | 24/24 PASS | HLR-024b module negatives; [50.101](../50_thought_simulator_design/50.101_iiinb_design_spec.md) **CP W1+W2 insight** (not GATE-B anchor) |
 
 ## Contract check (W2 insight targets)
 
