@@ -1,8 +1,8 @@
 # 40.115_mtp_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-401)
-- Phase B (prototype + harness + evidence): **pending** — mandatory stop until explicit approval
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B (prototype + harness + evidence): **cleared to start** — pending implementation
 - Program row: **40.510-401** (W3) — **A-chain anchor** (`commit_id` / `mtp_update`)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -69,7 +69,18 @@ Optional Track H prefix: `InB → IIInB → RB → …` (W1 modules).
 
 - **Iterative Design Flow (50-series influence):** No 50.115 design spec yet; 20.115 remains authoritative until W3 Phase B evidence.
 
-**Agreement Statement**: Provisionally aligned — Phase A scope locks MTP as `commit_id` owner and A-terminal stage. Phase B must prove merge→truth→commit ordering and B-envelope rejection before W4 entry (40.510 A.1 hard dep on 401).
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms MTP as sole `commit_id` / `mtp_update` owner and A-chain terminal stage per 20.115/20.206. Phase B must prove merge→truth→commit ordering and B-envelope rejection before W4 entry (40.510 A.1 hard dep on 401).
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-401 | Pass |
+| `commit_id` / `semantic_snapshot_ref` contract | Pass |
+| A-terminal `mtp_update` placement (20.36 §2.1) | Pass |
+| B-envelope rejection on MTP core | Pass |
+| Hard dep for W4/W5 (501, 307) acknowledged | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase A Deliverables (this document)
 - MTP role, boundaries, and A-chain terminal placement
