@@ -2,18 +2,18 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP final review, 2026-06-08)
-- Phase B (prototype + harness + evidence): **initial execution complete** (8/8 PASS, 2026-06-08); iterative expansion continues
+- Phase B (prototype + harness + evidence): **complete** (16/16 PASS, 2026-06-08)
 
-## Phase B Deliverables (Executed — initial pass)
-- Harness executed 8 scenarios; artifact: `artifacts/inb_verification_run_2026-06-08.json`
-- Core invariants demonstrated: non-semantic canonicalization, bounded reject-with-audit, FIFO preservation, deterministic replay, provenance emission, isolation, explicit handoff contract (`InB → IIInB → RB`)
-- HLR coverage (exploratory subset): 002, 003, 005, 006, 007, 008, 011, 012, 016, 018, 019, 020
-- Remaining HLR exploration: 001, 004, 009–010, 013–015, 017, 021–026 (see Test Matrix below)
-- Additional invariants still to demonstrate: tick-cycle boundary compliance, zero-event windows, diagnostic exports, profile activation boundaries
+## Phase B Deliverables (Executed)
+- Harness executed 16 scenarios; artifact: `artifacts/inb_verification_run_2026-06-08.json`
+- Evidence types (per 40.20): behavioral, structural (handoff/schema), negative, replay, golden diff (diagnostic export)
+- Core invariants demonstrated: non-semantic canonicalization, bounded reject-with-audit, FIFO preservation, deterministic replay, provenance emission, isolation, explicit handoff contract (`InB → IIInB → RB`), schema validation, transport isolation, tick-boundary first stage, zero-event window, profile activation deferral, diagnostic export ordering, timestamp-as-metadata
+- HLR coverage (exploratory, with harness evidence): 001–008, 009–012, 014–016, 018–023, 025–026
+- Remaining HLR exploration: 013 (per-input profile reject demonstrated; signature-bound precedence not fully modeled), 017 (reason-code registry partial), 024 (parent invariant cross-check deferred to 30-series)
 - Note: The full HLR list from 20.100_inb_requirements.md is included in this document for exploratory clarity and to make the complete requirement space visible during playground exploration. 20.xx remains the sole source of truth; 30.xx remains the authoritative coverage audit layer. 40.100 is a playground and not authoritative.
 
 ## Scaffold Metadata
-- scaffold_status: implemented (initial Phase B pass)
+- scaffold_status: implemented (Phase B complete, 16/16 PASS)
 - intended_20_anchor: thought_simulator/20_requirements/20.100_inb_requirements.md (primary)
 - intended_10_10_anchors:
   - thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md (InB role, input normalization stage, MTP/TP state model, module-local buffers, deterministic cycles)
@@ -61,19 +61,19 @@ All exploration **SHALL** remain strictly deterministic, non-inferential, bounde
 
 - **Forward Flow (10/20-series)**: Driven by the input normalization role and cycle position in 10.10.10_system_architecture.md (InB as first stage), channel and snapshot rules in 10.10.20, visibility and non-mutation contracts in 10.10.50, offload/portability constraints in 10.10.60, and the complete normative requirements in 20.100_inb_requirements.md (all 26 HLRs). Also informed by 20.30_ts_functional_model.md (determinism for input handling, no nondeterminism from variability, explicit contracts), 20.170_safety_requirements.md (InB protected from unsafe pathways), and 20.90_interfaces_and_io.md (handoff contracts).
 
-- **Backward Flow (40-series evidence)**: Initial evidence generated (2026-06-08): 8/8 harness PASS covering canonicalization, bounded reject, FIFO, replay, provenance, isolation, and `InB → IIInB` handoff contract. Artifact: `artifacts/inb_verification_run_2026-06-08.json`. Remaining HLRs tracked in Test Matrix and `requirements_delta.md`.
+- **Backward Flow (40-series evidence)**: Phase B complete (2026-06-08): 16/16 harness PASS — full test matrix executed. Artifact: `artifacts/inb_verification_run_2026-06-08.json`. Capsule: `verification_capsule.md`; delta: `requirements_delta.md`.
 
 - **Iterative Design Flow (playground exploration)**: This document includes the full HLR list from 20.100 for exploratory clarity so the complete requirement space can be felt against the skeleton's invariants, boundaries, and handoff. This helps surface practical questions about bounded buffers, provenance richness, non-inference enforcement, and FIFO preservation before upstream refinement. 40.20_master_program_guide.md provides the workflow guidance for this exploration (not treated as requirements).
 
-**Agreement Statement**: The three flows are provisionally aligned on InB as the deterministic, non-inferential memory buffer for external input normalization. The full 20.100 HLR set is made visible here in the 40.xx playground for insight purposes only. Authoritative requirements remain in 20.xx; coverage audit remains in 30.xx. Full alignment statements will be refreshed as the skeleton evolves through future phases.
+**Agreement Statement**: Aligned — Phase B evidence (16/16 PASS) supports forward intent for InB surface normalization and `InB → IIInB` handoff. Backward findings are recorded in the verification capsule. No 50-series iterative inputs yet. Residual gaps (HLR-013 signature precedence, HLR-017 full registry, HLR-024 parent cross-check) are named in `requirements_delta.md` and deferred to 30-series promotion.
 
 ## Phase A Deliverables (this document)
 - High-level description of InB as memory buffer for exploratory prototyping
 - Mapping of 10/20-series intent to skeleton responsibilities
-- Full reproduction of the 20.100 HLR set for exploratory visibility (see "What Phase B Must Explore")
+- Full reproduction of the 20.100 HLR set for exploratory visibility (see "HLR Reference (Exploratory Visibility)")
 - Identification of core invariants, boundaries, and handoff contract
 - Clear definition of what Phase B must explore (initial pass executed; expansion ongoing)
-- Draft handoff contract skeleton, state digest definition, schema validation, unicode normalization, profile activation target semantics, transport/session isolation, tick-cycle boundary test placeholder, reject/degrade policy, minimal internal state, and test matrix (below)
+- Draft handoff contract skeleton, state digest definition, schema validation, unicode normalization, profile activation semantics, transport/session isolation, tick-cycle boundary first-stage test, reject/degrade policy, minimal internal state, and test matrix (below)
 - Prototype thresholds (e.g. `MAX_PAYLOAD_CHARS`, `MAX_TOKENS`) are playground fixtures only; governed by 20-series for authoritative values
 
 ## Handoff Contract (Draft Skeleton)
@@ -124,7 +124,7 @@ Playground wire schema for intake mapping validation (HLR-20.100-004). Authorita
 - **Required fields:** `content` (str) — primary payload
 - **Optional fields:** `source` (str, default `"unknown"`), `intake_order` (int, default `0`), `profile` (str, must match active profile if present)
 - **Validation today:** input must be a `dict`; non-dict → `MALFORMED_INPUT`
-- **Unsupported mapping (planned):** unknown required keys, wrong types, or unsupported wire-map version → fixed `reason_code` (e.g. `UNSUPPORTED_SCHEMA`, `INVALID_FIELD_TYPE`) — not yet harness-tested
+- **Unsupported mapping:** exercised via `negative_unsupported_schema` (`UNSUPPORTED_SCHEMA`, `UNSUPPORTED_WIRE_MAP`, `INVALID_FIELD_TYPE`)
 
 ## Unicode and Escape Normalization (Draft)
 Surface-form canonicalization policy implemented in `prototype.py` (HLR-20.100-005, 010). Playground profile `v1.0` applies:
@@ -133,12 +133,11 @@ Surface-form canonicalization policy implemented in `prototype.py` (HLR-20.100-0
 - **Case:** lowercase
 - **Whitespace:** strip leading/trailing; collapse internal runs to single space
 - **Punctuation:** collapse repeated `!`, `?`, `.` deterministically (non-semantic)
-- **Escape normalization:** not yet implemented (e.g. `\n`, `\t`, `\uXXXX` unescaping) — planned harness scenario `positive_unicode_normalization`
+- **Escape normalization:** not yet implemented (e.g. `\n`, `\t`, `\uXXXX` unescaping)
+- **Harness scenario:** `positive_unicode_normalization` — PASS (NFKC, composed/decomposed, fullwidth)
 
-Current harness coverage for HLR-010 is **partial** via `positive_equivalent_surface_forms` (case/whitespace/punctuation only).
-
-## Profile Activation Boundary (Target Semantics — Not Yet Implemented)
-Target behavior for HLR-20.100-014 and 015. **Current prototype** rejects per-input profile mismatch immediately (`UNSUPPORTED_PROFILE` in `negative_unsupported_profile`); deferred activation is not implemented.
+## Profile Activation Boundary
+HLR-20.100-014 and 015. Per-input profile mismatch still rejects immediately (`UNSUPPORTED_PROFILE`). Instance-level profile changes defer via `request_profile_activation()` until `apply_safe_boundary()`.
 
 Target semantics at deterministic safe boundaries:
 
@@ -150,7 +149,7 @@ incoming requests profile v1.1 at mid-tick
 → audit: reason_code PROFILE_ACTIVATION_DEFERRED
 ```
 
-On validation failure at a safe boundary: retain prior valid signature/profile state; emit fixed audit reason code (e.g. `PROFILE_ACTIVATION_FAILED`). Harness scenario `profile_activation_boundary` is planned.
+On validation failure at a safe boundary: retain prior valid signature/profile state; emit fixed audit reason code (e.g. `PROFILE_ACTIVATION_FAILED`). Harness scenario `profile_activation_boundary` — PASS.
 
 ## Transport and Session Metadata Isolation (Draft)
 Transport and session attributes must not alter semantic payload fields or `canonical_content` (HLR-20.100-009).
@@ -159,22 +158,22 @@ Transport and session attributes must not alter semantic payload fields or `cano
 - **Transport/session metadata (playground):** `source`, `intake_order` — recorded in provenance/metadata only; variations do not change normalized text for identical `content`
 - **Profile:** execution-signature-bound configuration, not transport — mismatches handled per profile policy
 - **Invariant:** identical `content` under same active profile → identical `canonical_content`, regardless of `source` or transport envelope variations
-- **Planned scenario:** `positive_transport_metadata_isolation` — not yet harness-tested
+- **Harness scenario:** `positive_transport_metadata_isolation` — PASS
 
-## Tick-Cycle Boundary (Test Placeholder)
-Per 40.510-103 and 10.10.10 (InB as first deterministic-cycle stage). Orchestration detail deferred to 20.36 / 40.60; this is playground-level test design.
+## Tick-Cycle Boundary (First Stage Test)
+Per 40.510-103 and 10.10.10 (InB as first deterministic-cycle stage). Orchestration detail deferred to 20.36 / 40.60.
 
 - InB completes surface normalization and emits handoff before IIInB or RB stages run
 - No mutation of MTP or downstream module internal state during InB processing
 - No reads of OB, RB, TB, IB, GB, CIL, COB, COP internal state (HLR-019)
 - Handoff is the sole outbound contract; downstream stages consume it at the next tick boundary
-- **Planned scenario:** `positive_tick_boundary_first_stage` — not yet harness-tested
+- **Harness scenario:** `positive_tick_boundary_first_stage` — PASS
 
 ## Deterministic Reject/Degrade Policy (Draft)
 - **Reject path**: malformed input, unsupported profile, oversize payload, too many tokens, unsupported enum/schema/wire-map states → `outcome: "rejected"`, `canonical_content: null`, fixed immutable `reason_code` (e.g. `MALFORMED_INPUT`, `UNSUPPORTED_PROFILE`, `OVERSIZE_PAYLOAD`, `TOO_MANY_TOKENS`)
 - **Degrade path**: reserved for bounded-limit scenarios where partial retention is permitted under 20.100; current prototype uses reject-only for oversize/token limits
 - **Reason codes**: immutable identifiers with versioned deterministic mapping (HLR-017); no free-text inference
-- **Empty-artifact semantics** (HLR-023): zero-event windows emit canonical empty artifact or no artifact with fixed reason code — not yet exercised in harness
+- **Empty-artifact semantics** (HLR-023): zero-event windows emit no events with fixed `ZERO_EVENT_WINDOW` reason code — exercised in `positive_zero_event_window`
 
 ## Minimal Internal State
 **May hold (per tick / per invocation):**
@@ -188,30 +187,30 @@ Per 40.510-103 and 10.10.10 (InB as first deterministic-cycle stage). Orchestrat
 
 **Persistence and reset:**
 - No state persists across harness scenarios; each `InB()` instance starts clean
-- Per-tick reset: profile-bound; profile activation changes only at deterministic safe boundaries (HLR-014 — not yet harness-tested)
+- Per-tick reset: profile-bound; profile activation changes only at deterministic safe boundaries (HLR-014 — `profile_activation_boundary` PASS)
 
 ## Test Matrix (Draft)
 | Category | Scenario (harness) | HLR anchors | Status |
 |----------|-------------------|-------------|--------|
 | Valid canonicalizable input | `positive_clean_canonicalization` | 001, 003, 005 | PASS |
 | Equivalent surface forms | `positive_equivalent_surface_forms` | 003, 005 | PASS |
-| Unicode / escape normalization | `positive_unicode_normalization` *(planned)* | 010 | partial (impl only) |
+| Unicode / escape normalization | `positive_unicode_normalization` | 010 | PASS |
 | Malformed input | `negative_malformed_input` | 007, 016 | PASS |
 | Oversized input | `negative_oversize_payload` | 008 | PASS |
 | Unsupported profile | `negative_unsupported_profile` | 013, 016 | PASS |
 | FIFO batch order | `positive_fifo_batch_order` | 006 | PASS |
 | Deterministic replay | `positive_deterministic_replay` | 003, 018 | PASS |
 | IIInB handoff contract | `positive_iiinb_handoff_contract` | 020, 026 | PASS |
-| Zero-event window | *(planned)* | 023 | todo |
-| Diagnostic export ordering | *(planned)* | 022 | todo |
-| Profile activation boundary | `profile_activation_boundary` *(planned)* | 014, 015 | todo |
-| Transport/session isolation | `positive_transport_metadata_isolation` *(planned)* | 009 | todo |
-| Tick-cycle boundary (first stage) | `positive_tick_boundary_first_stage` *(planned)* | 019, 10.10.10 | todo |
-| Schema validation | `negative_unsupported_schema` *(planned)* | 004 | todo |
-| Timestamp-as-metadata only | *(planned)* | 021 | todo |
+| Zero-event window | `positive_zero_event_window` | 023 | PASS |
+| Diagnostic export ordering | `positive_diagnostic_export_ordering` | 022 | PASS |
+| Profile activation boundary | `profile_activation_boundary` | 014, 015 | PASS |
+| Transport/session isolation | `positive_transport_metadata_isolation` | 009 | PASS |
+| Tick-cycle boundary (first stage) | `positive_tick_boundary_first_stage` | 019, 10.10.10 | PASS |
+| Schema validation | `negative_unsupported_schema` | 004, 016 | PASS |
+| Timestamp-as-metadata only | `positive_timestamp_metadata_only` | 021 | PASS |
 
-## What Phase B Must Explore
-Phase B **SHALL** explore and produce concrete (deterministic, replayable) evidence against the complete set of obligations. The full list from 20.100_inb_requirements.md is reproduced here for exploratory clarity in the playground:
+## HLR Reference (Exploratory Visibility)
+Phase B evidence for these HLRs is summarized in the Test Matrix and `verification_capsule.md` above; this list is retained as a reference. The full list from 20.100_inb_requirements.md is reproduced here for exploratory clarity in the playground:
 
 1. HLR-20.100-001: InB SHALL ingest external signals into bounded TP input fields.
 2. HLR-20.100-002: InB SHALL NOT perform inference or truth arbitration.
@@ -265,7 +264,7 @@ This module **SHALL NOT**:
 - Ensuring the skeleton remains strictly non-semantic even when exploring full HLR load.
 
 ## Required Next Step
-Expand harness coverage for remaining HLRs (see Test Matrix), add tick-cycle boundary tests, and enrich evidence for 30-series audit. `verification_capsule.md` and `requirements_delta.md` record the initial 8/8 PASS run. The full HLR visibility in this document supports exploratory thinking in the playground; authoritative requirements remain in 20.100_inb_requirements.md and related 20.xx documents.
+Phase B complete per 40.20. Next: 30-series normalization when promotion is scheduled (HLR-013 signature precedence, HLR-017 registry, HLR-024 parent cross-check). Cross-validate handoff with 40.101 IIInB harness on integrated intake path runs.
 
 ## Traceability
 - 10.10.10_system_architecture.md (InB as input normalization stage, MTP/TP state model, module-local temporary buffers, deterministic cycles)
@@ -278,7 +277,7 @@ Expand harness coverage for remaining HLRs (see Test Matrix), add tick-cycle bou
 - 20.90_ib_requirements.md and 20.200_traceability_matrix.md (interfaces and traceability)
 - 40.20_master_program_guide.md (workflow guidance for playground exploration — not treated as requirements)
 - 40.100_inb_prototypes/prototype.py (implemented skeleton)
-- 40.100_inb_prototypes/harness.py (8-scenario harness)
+- 40.100_inb_prototypes/harness.py (16-scenario harness)
 - 40.100_inb_prototypes/verification_capsule.md (Part B evidence summary)
 - 40.100_inb_prototypes/requirements_delta.md (executed delta + open work)
 - 40.100_inb_prototypes/artifacts/inb_verification_run_2026-06-08.json
