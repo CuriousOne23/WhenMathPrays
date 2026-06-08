@@ -1,7 +1,10 @@
 ﻿# 40.33_cil_prototypes / software_description.md
 
 ## Approval State
-Phase A draft complete and approved for execution. Phase B implementation executed on 2026-06-03.
+- Phase A (base FIFO/classification): **approved**; Phase B executed **2026-06-03**
+- Phase A (W2 clarification-event wire): **approved** (CP review, 2026-06-08; 40.510-205)
+- Phase B (W2 extension): not started — clarification wire harness blocked until explicit Phase B go-ahead
+- Program row: **40.510-205** (W2)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
@@ -84,6 +87,14 @@ Outbound contract (JSON-compatible):
 - routing/escalation-affecting transitions occur only at deterministic safe boundaries
 - profile precedence uses active signature-bound profile over environment defaults
 
+### GB timeout/default semantics
+
+On GB non-response within policy-bound tick budget (HLR-006): CIL applies a **deterministic default** by safety/operation class — `deny` for high-risk escalation classes, `timeout` audit record for bounded-wait classes — never wall-clock race. Late `late_approve` re-entry (HLR-007, -023) follows fixed policy: `ignore` (stale), `queue` (re-process at next safe boundary), or `compensate` (append corrective audit only); outcome is profile-bound and replay-stable.
+
+### Replay determinism (W3 pointer)
+
+Identical intake sequence + profile signature + GB response fixtures SHALL yield identical `integrated_packets`, `escalation_requests`, and `verification_digest` (HLR-013, -026). CIL replay invariants feed W3 orchestration glue (40.510-501–506); Phase B harness MUST prove byte-stable audit export for fixed seeds before W3 integration bundles consume CIL evidence.
+
 ## 7. TCU and Tick-Budget Expectations
 
 - CIL prototype execution must remain bounded per tick phase under constraints in `20.150_tcu_budgeting_requirements.md`
@@ -106,6 +117,21 @@ Planned negative-path checks:
 - safe-boundary violation rejection
 - direct-inquiry bypass rejection without GB approval
 
+### Invariant → 20.33 HLR mapping (base)
+
+| Invariant / topic | HLR anchors (20.032) | Phase-B scenario focus |
+|-------------------|----------------------|------------------------|
+| FIFO intake / ordering | 001, 014, 022 | deterministic FIFO intake; out-of-order rejection |
+| snapshot coherence | 002 | snapshot pin coherence |
+| classification / tie-break | 003, 008, 009 | deterministic classification |
+| GB escalation | 004, 005, 018 | ambiguity escalation; bypass rejection |
+| timeout / default / late-approve | 006, 007, 023 | GB timeout/default; re-entry semantics |
+| profile precedence | 012, 019 | profile precedence over defaults |
+| safe boundaries | 015 | safe-boundary violation rejection |
+| audit / reason codes | 010, 011, 020–021, 024 | reject-with-audit paths |
+| boundaries / isolation | 016–017 | no A/B basin mutation |
+| parent compliance / testability | 025–026 | fixture oracle; replay determinism (§6) |
+
 ## 9. Promotion Readiness Conditions
 
 Before promotion from 40 to 30:
@@ -119,7 +145,7 @@ Before promotion from 40 to 30:
 
 ## W2 Phase A Extension (40.510-205)
 
-**Approval State:** Phase A extension **draft — pending review** (base Phase B from 2026-06-03 remains valid).
+**Approval State:** Phase A extension **approved** (CP review, 2026-06-08; base Phase B from 2026-06-03 remains valid).
 
 **Program row:** [40.510-205](../40.510_refactor.md) — targeted redo for **`clarification_event` wire to UPI**.
 
@@ -145,4 +171,13 @@ Extend CIL to emit deterministic `clarification_event` records (FIFO per convers
 - **Backward Flow:** Prior CIL Phase B (2026-06-03) — extend FIFO wire scenarios
 - **Iterative Design Flow:** None yet
 
-**Agreement Statement:** Provisionally aligned — W2 extension adds conversation-layer wire only; prior classification/FIFO evidence must remain green on regression.
+### HLR family → Phase-B scenario mapping (W2 extension)
+
+| HLR family | Topic | Primary scenario IDs |
+|------------|-------|----------------------|
+| 027–028 | IIInB escalation intake | `positive_escalation_to_clarification_event` |
+| 029–030 | `clarification_event` emit + FIFO | `positive_fifo_clarification_ordering`, `positive_integration_seq_monotonic` |
+| 031–033 | Wire-only handoff (no USP write) | structural negatives in harness setup |
+| 20.103-008 | Incomplete payload guard | `negative_incomplete_clarification_payload` |
+
+**Agreement Statement:** Aligned — W2 extension Phase A approved (CP, 2026-06-08). Clarification wire scoped per 20.032-027–033 and 20.103-003/005; prior classification/FIFO evidence must remain green on regression.
