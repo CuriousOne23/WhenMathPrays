@@ -3,8 +3,8 @@
 ## Approval State
 
 - Legacy baseline: **approved** (pre–Two-Phase policy migration)
-- **W3 Phase A** (40.510-402 targeted redo): **approved** (CP review, 2026-06-08)
-- W3 Phase B (intake repair fields; `commit_id` boundary alignment): **pending**
+- **W3 Phase A** (40.510-402 targeted redo): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- W3 Phase B (intake repair fields; `commit_id` boundary alignment): **cleared to start** — pending implementation
 - Program row: **40.510-402** (W3)
 
 ## W3 Targeted Redo Scope (40.510-402)
@@ -16,7 +16,19 @@ Per [40.510](../40.510_refactor.md) and [20.105](../../20_requirements/20.105_tp
 - `commit_id` boundary awareness — TP drafts post-`mtp_update` MUST NOT alter committed snapshot for same cycle
 - Handoff shapes for [40.130](../40.130_split_merge_prototypes/software_description.md) split/merge and [40.501](../40.501_rb_prototypes/software_description.md) routing
 
-**Agreement Statement (W3 Phase A)**: Provisionally aligned — existing Phase B TP evidence remains valid baseline; W3 extension adds intake-bound fields without restructuring macro API. Phase B delta scoped to 20.105 §3.4 + 20.101 handoff only.
+**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 targeted redo scope (intake-bound repair fields, `commit_id` boundary, lane-local A-chain semantics, 40.130/40.501 handoffs) with no structural defects. Legacy macro API and `tp_lifecycle_io_schema_v1` remain valid; Phase B delta scoped to 20.105 §3.4 + 20.101 handoff only.
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 redo scope vs 40.510-402 | Pass |
+| Two-phase model (stop after Phase A) | Pass |
+| 20.105 / 20.101 / 20.38 §6 intake-bound writes | Pass |
+| `commit_id` boundary (no post-commit draft mutation) | Pass |
+| Macro purity + harness entrypoint preserved | Pass |
+| Schema bump required | No — `tp_lifecycle_io_schema_v1` stands |
+| Blockers | **None** — Phase B authorized |
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
