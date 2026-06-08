@@ -1,6 +1,8 @@
 # **Thought Simulator Architecture Overview**  
 ### *A Structural Alternative to Modern AI Systems*
 
+> **Scope:** Conceptual overview for readers and stakeholders. **Normative runtime requirements** live in [`20_requirements/`](20_requirements/README.md). For pipeline blocks and primitive boundaries, see [20.01 Architecture Map](20_requirements/20.01_architecture_map.md) and [20.190 Glossary](20_requirements/20.190_glossary.md).
+
 ---
 
 ## **1. Introduction**
@@ -20,7 +22,7 @@ It separates *meaning* from *realization*, introduces deterministic pipelines, a
 - runs at a fraction of the cost, power, and hardware footprint  
 - enables capabilities modern AI fundamentally cannot achieve  
 
-This document provides a complete overview of the TS architecture, its advantages, its hardware profile, and a detailed comparison with modern AI systems.
+This document provides a conceptual overview of the TS architecture, its advantages, its hardware profile, and a detailed comparison with modern AI systems. Normative detail is indexed in §10.
 
 ---
 
@@ -33,17 +35,35 @@ Modern AI entangles them inside a single neural network.
 TS splits them into two deterministic pipelines:
 
 ### **Pipeline A — Meaning Construction**
-- Builds semantic structures  
-- Tracks commitments  
+- Builds semantic structures in **`semantic_core`** (the committed meaning envelope)  
+- Tracks commitments through **`commit_id`** freeze at `mtp_update`  
 - Maintains stable meaning  
 - Ensures deterministic replay  
-- Provides correction and self‑consistency  
+- Handles messy-input tagging, inquiry, and meaning-side consistency  
 
 ### **Pipeline B — Realization**
-- Converts meaning into natural language  
+- Converts frozen meaning into natural language — **one pass per `commit_id` per cycle**  
 - Handles style, tone, and expression  
 - Uses the Intuition Module (COP2) for fuzzy pattern generation  
-- Is fully bounded and correctable  
+- Is fully bounded; post-output mismatch handled by **IMR** (Interpretation Mismatch Routine)  
+
+### **Runtime sketch (conceptual)**
+
+TS separates *meaning construction* from *realization*, but also separates **intake repair**, **conversation state**, and **output correction** into distinct wires:
+
+```text
+External → CIL (conversation) → InB (surface intake)
+         → [IIInB when profile_enabled] → Pipeline A → mtp_update / commit_id
+         → Pipeline B (singular per commit_id) → OuB → IMR
+
+Conversation layer (durable, not per-cycle meaning):
+  unknown shorthand → CIL clarification → UPI → USP (versioned rule store)
+```
+
+- **InB** — deterministic surface normalization only; not semantic guessing.  
+- **IIInB** — optional, profile-gated semantic shorthand repair via explicit **USP** rules; unknowns escalate to clarification, not latent gap-fill.  
+- **CIL / COB / USP / UPI** — multi-turn conversation integration and durable user lexicon (distinct from Pipeline B realization).  
+- **`profile_enabled = false`** — skip IIInB entirely; zero Track H cost on the hot path.
 
 This separation solves the three structural failures of modern AI:
 
@@ -71,6 +91,17 @@ It exposes a **Co‑Processor Port (COP Port)** that allows external modules to 
 
 - **COP4 — Math Engine**  
   Deterministic algebra, calculus, symbolic manipulation.
+
+### **Conversation integration (modular, not fused)**
+
+Multi-turn chat in TS is not a single opaque context window. Dedicated conversation primitives plug alongside basins and COP modules:
+
+- **CIL** — Conversation Integration Layer; FIFO clarification flow  
+- **COB** — Conversation Object layer; durable object and USP snapshot pins  
+- **USP** — versioned shorthand rule store (read-only to IIInB)  
+- **UPI** — sole writer of USP rules after GB-gated clarification  
+
+Normative detail: [20.33](20_requirements/20.33_cil_requirements.md), [20.32](20_requirements/20.32_cob_requirements.md), [20.102](20_requirements/20.102_usp_requirements.md)–[20.103](20_requirements/20.103_upi_requirements.md).
 
 Each co‑processor is:
 
@@ -295,13 +326,15 @@ TS matches or exceeds modern AI in:
 - correctness  
 - replayability  
 - transparency  
+- **robustness to typos, shorthand, and user-specific jargon** — via explicit IIInB repair and clarification (not implicit weight-level gap-fill)  
+- **explicit handling of contradictory, vague, or incomplete input** — tagged in meaning, not smoothed away in generation  
 
 And TS adds capabilities modern AI cannot achieve:
 
 - deterministic replay  
-- structural correction  
+- structural correction (four distinct wires: intake repair, inquiry, output IMR, governance caps)  
 - stable meaning  
-- bounded intuition  
+- bounded intuition
 - modular cognition  
 - local privacy  
 - predictable behavior  
@@ -317,15 +350,22 @@ This is architectural superiority.
 
 | **Function** | **Today’s AI (LLMs)** | **TS** | **Notes** |
 |--------------|------------------------|--------|-----------|
-| Meaning Construction | Emergent, unstable | Deterministic, explicit | TS uses semantic_core |
+| Meaning Construction | Emergent, unstable | Deterministic, explicit | Committed in `semantic_core` after Pipeline A |
+| Input / Semantic Error Correction | Implicit in weights; no durable user lexicon; clarification is generative | Profile-gated **IIInB** + **USP/UPI** + **CIL** clarification | `profile_enabled=false` → skip IIInB; rules replay-pinned via `usp_version_ref` |
+| Messy-Input Handling | Often smoothed in generation | Explicit `MI_*` taxonomy; tags preserved in `semantic_core` | Contradiction, vagueness, affect, incompleteness — not guessed away |
+| Multi-Turn Conversation State | Context window only | **CIL / COB** conversation layer separate from per-cycle meaning | Durable integration_seq and object lineage |
+| User-Specific Lexicon | Session-fuzzy; no auditable rule store | **USP** under **COB**; **UPI** sole writer after clarification | Learned shorthand survives turns with version pins |
 | Reasoning | Approximate, stochastic | Deterministic | COP1 + TS kernel |
 | Planning | Weak, emergent | Deterministic XP pipeline | TS has explicit planning |
-| Memory | Context window only | Structured, persistent | Replayable |
-| Correction | No structural correction | IMR correction pipeline | TS can fix itself |
-| Semantic Stability | Drifts over time | Stable meaning | Commit IDs prevent drift |
+| Memory | Context window only | Structured, persistent | Replayable MTP and conversation objects |
+| Input Correction (surface) | Mixed with semantic repair | **InB** only — deterministic surface norm | Semantic repair is IIInB, not InB |
+| Output Correction | No structural correction | **IMR** (Interpretation Mismatch Routine) | Type A/B/C; bounded triggers to A or B |
+| Inquiry / Ambiguity | Generative follow-up | **IB** (GB-gated) on blocked commitment | `MI_INCOMP` path — distinct from shorthand repair |
+| Semantic Stability | Drifts over time | Stable meaning | `commit_id` freeze prevents drift |
 | Replayability | Impossible | Perfect replay | Deterministic pipelines |
 | Explainability | Hidden internal state | Transparent steps | Every stage visible |
-| Modularity | None | COP Port | Plug‑in co‑processors |
+| Modularity | None | COP Port + conversation primitives | Plug‑in co‑processors and basins |
+| Governance / Caps | Implicit safety layers | **GB** gates IB, UPI, IMR Type C | Bounded, auditable supervisory policy |
 | Intuition | Entire model | COP2 only | Bounded intuition |
 | Creativity | Neural generation | Neural generation | TS uses COP2 |
 | Style Control | Approximate | Deterministic + COP2 | TS separates meaning/style |
@@ -335,6 +375,35 @@ This is architectural superiority.
 | Privacy | Cloud‑based | Local | TS runs offline |
 | Determinism | None | Full | TS is predictable |
 | Safety | Emergent | Structural | TS is bounded |
+
+**Correction in TS is four wires, not one:** (1) **InB** surface norm, (2) **IIInB** semantic shorthand repair, (3) **IB** inquiry when commitment is blocked, (4) **IMR** post-output mismatch. Normative homes: [20.100](20_requirements/20.100_inb_requirements.md), [20.101](20_requirements/20.101_iiinb_requirements.md)–[20.103](20_requirements/20.103_upi_requirements.md), [20.90](20_requirements/20.90_ib_requirements.md), [20.45](20_requirements/20.45_imr_requirements.md).
+
+---
+
+## **10. Runtime Primitives & Normative References**
+
+This overview names capabilities at the architectural level. Implementation law, HLRs, replay fixtures, and cap tables live in the 20-series.
+
+| Reader need | Start here |
+|-------------|------------|
+| Pipeline blocks B0–B8 in runtime order | [20.01 Architecture Map](20_requirements/20.01_architecture_map.md) |
+| “What it is / is not” per primitive | [20.190 Glossary — Primitive Intent Catalog](20_requirements/20.190_glossary.md) |
+| End-to-end functional topology | [20.30 TS Functional Model](20_requirements/20.30_ts_functional_model.md) |
+| Input error correction (Track H) | [20.101](20_requirements/20.101_iiinb_requirements.md)–[20.103](20_requirements/20.103_upi_requirements.md) |
+| Dual-pipeline handoff | [20.500](20_requirements/20.500_refactoring_for_dual_TS_pipeline.md) (closed program archive) |
+
+### **10.1 Architectural evolution (non-normative)**
+
+The 20-series refined TS through four cumulative refactors — each narrowing the authoritative core and pushing specialization to the periphery:
+
+| # | Refactor | What it established |
+|---|----------|---------------------|
+| 1 | Manifold not integral to TS | Realization (`exec_plan`, `exec_trace`, OuB) separable and strip-replayable from meaning |
+| 2 | Specialized primitives | InB, IB, basins, CIL, COB, IMR, GB — single-duty writers; [20.190](20_requirements/20.190_glossary.md) catalog |
+| 3 | Dual pipelines | Pipeline A (lane-parallel meaning) → freeze at `commit_id` → Pipeline B (singular realization) |
+| 4 | Input error correction | Semantic repair out of InB → **IIInB + clarification + UPI/USP** |
+
+Track H (refactor 4) did not reopen 1–3; it composed on top of them. Program history: [20.510 §15](20_requirements/20.510_refactoring_for_input_correction_track_h.md).
 
 ---
 
@@ -424,8 +493,10 @@ This allows TS to operate efficiently on commodity hardware.
 In transformer systems, meaning and realization are entangled inside the same neural model.  
 TS separates them into two pipelines:
 
-- **Pipeline A: Meaning Construction**  
-- **Pipeline B: Realization**  
+- **Pipeline A: Meaning Construction** — including optional pre-A intake repair (IIInB) and messy-input tagging before `commit_id` freeze  
+- **Pipeline B: Realization** — singular expression per frozen snapshot; IMR handles post-output correction only  
+
+See §2 runtime sketch for the full intake → A → B path and conversation-layer sidebar (CIL/USP/UPI).
 
 This separation provides:
 
@@ -433,9 +504,9 @@ This separation provides:
 - predictable behavior  
 - deterministic replay  
 - bounded intuition  
-- correctable output  
+- correctable intake **and** correctable output (distinct wires)  
 
-Transformers cannot achieve these properties without architectural changes because their semantics are encoded implicitly in weights.
+Transformers cannot achieve these properties without architectural changes because their semantics are encoded implicitly in weights — including typo tolerance and user shorthand, which TS makes explicit and auditable.
 
 ---
 
