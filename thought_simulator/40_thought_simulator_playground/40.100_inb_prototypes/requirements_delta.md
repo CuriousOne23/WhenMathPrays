@@ -1,8 +1,8 @@
 ﻿# Requirements Delta
 
 ## Scaffold Status
-- scaffold_status: planned (with full HLR exploratory visibility per alignment)
-- no implementation delta recorded yet
+- scaffold_status: implemented (initial Phase B pass, 2026-06-08)
+- Phase A: promotion-ready per CP review (2026-06-08)
 
 ## Anchors
 - 20-anchor: thought_simulator/20_requirements/20.100_inb_requirements.md (full 26 HLRs reproduced in software_description.md for exploratory clarity in the playground)
