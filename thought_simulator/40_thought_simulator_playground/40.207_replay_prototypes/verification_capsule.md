@@ -1,7 +1,7 @@
 # Verification Capsule
 
 ## Status
-Phase A **complete and promotion-ready** (2026-06-08). Initial Phase B: C7 **5/5 PASS** + `strip_replay_invariant` PASS (GATE-A approval pending — 40.510-102).
+Phase A **approved** (CP review, 2026-06-08). Phase B v0.1: C7 **5/5 PASS** + `strip_replay_invariant` PASS (formal Phase B / GATE-A approval pending — 40.510-102).
 
 ## Evidence Summary
 - Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
@@ -25,8 +25,8 @@ Additional: `strip_replay_invariant` PASS
 | 20.36-058 | C7-B, C7-C |
 | 20.36-059 | C7-A |
 | 20.36-060 | C7-B, C7-C |
-| 20.36-061 | C7-D (simulated) |
-| 20.36-062 | C7-E (simulated) |
+| 20.36-061 | C7-D (simulated UPI/GB) |
+| 20.36-062 | C7-E (simulated UPI/GB/CIL) |
 | 20.207-001, 019 | `strip_replay_invariant` |
 
 **Open:** Classes 1–6, E2 regen, 20.207-028..030 negatives, live UPI/GB — see `requirements_delta.md` Open / partial table.
@@ -48,7 +48,7 @@ Additional: `strip_replay_invariant` PASS
 - **Backward Flow (40-series evidence)**: C7 5/5 + strip demo PASS (`artifacts/replay_class7_verification_run_2026-06-08.json`).
 - **Iterative Design Flow (50-series influence)**: None yet; W5 orchestration per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Provisionally aligned — Phase A software description complete; initial Class 7 evidence supports GATE-A replay scope. Formal approval requires Phase B expansion and reviewer sign-off on 40.510-102.
+**Agreement Statement**: Provisionally aligned — Phase A approved (CP, 2026-06-08); Class 7 v0.1 evidence supports GATE-A replay scope. Formal Phase B approval requires matrix expansion and reviewer sign-off on 40.510-102.
 
 ## Phase B Obligations (next)
 - Expand test matrix (Classes 1–6 stubs or W5 schedule)

@@ -1,9 +1,9 @@
 # Requirements Delta
 
 ## Scaffold Status
-- scaffold_status: implemented (initial Phase B pass — Class 7 runnable, 2026-06-08)
-- Phase A: **complete and promotion-ready** (2026-06-08)
-- Phase B: initial execution complete (C7 5/5 + strip demo PASS); formal approval pending (40.510-102, GATE-A)
+- scaffold_status: implemented (Phase B v0.1 — Class 7 + E1 strip runnable, 2026-06-08)
+- Phase A: **approved** (CP review, 2026-06-08)
+- Phase B: v0.1 complete (C7 5/5 + strip demo PASS); formal approval pending (40.510-102, GATE-A)
 
 ## Anchors
 - 20-anchor: thought_simulator/20_requirements/20.36_canonical_end_to_end_trace.md §9 (REPLAY_CLASS_7)
@@ -47,7 +47,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 
 ## Phase 1 delta (40.510-102)
 - Created Class 7 harness: C7-A..E per 20.36 §9; composes 40.100 + 40.101
-- Initial C7 5/5 PASS; Phase A software description complete 2026-06-08
+- Initial C7 5/5 PASS; Phase A approved (CP review, 2026-06-08)
 
 ## Flows Alignment Statement
 
@@ -55,7 +55,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 - **Backward Flow (40-series evidence)**: C7 5/5 + strip demo PASS; open classes named above.
 - **Iterative Design Flow (50-series influence)**: None yet; W5 orchestration deferred per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Provisionally aligned for Phase A closure. Phase B formal approval requires expanded matrix and GATE-A sign-off on 40.510-102.
+**Agreement Statement**: Provisionally aligned — Phase A approved (CP, 2026-06-08). Phase B formal approval requires expanded matrix and GATE-A sign-off on 40.510-102.
 
 ## Open gaps (W5 / Wave 2)
 - Classes 1–6 unified runner (40.90, 40.80)
