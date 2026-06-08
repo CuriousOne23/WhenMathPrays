@@ -1,0 +1,72 @@
+{
+  "date": "2026-06-08",
+  "module": "40.103_upi_prototypes",
+  "phase": "B",
+  "scenarios": [
+    {
+      "hlr": [
+        "HLR-20.103-005",
+        "HLR-20.103-006"
+      ],
+      "result": "PASS",
+      "scenario": "positive_single_commit"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-005",
+        "HLR-20.103-012"
+      ],
+      "result": "PASS",
+      "scenario": "positive_fifo_two_events"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-009",
+        "HLR-20.103-011"
+      ],
+      "result": "PASS",
+      "scenario": "positive_gb_approve"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-010"
+      ],
+      "result": "PASS",
+      "scenario": "positive_gb_veto"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-008"
+      ],
+      "result": "PASS",
+      "scenario": "negative_incomplete_event"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-015"
+      ],
+      "result": "PASS",
+      "scenario": "negative_usp_cap_overflow"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-016"
+      ],
+      "result": "PASS",
+      "scenario": "negative_pending_commit_cap"
+    },
+    {
+      "hlr": [
+        "HLR-20.103-012"
+      ],
+      "result": "PASS",
+      "scenario": "positive_replay_identical_ref"
+    }
+  ],
+  "status": "PASS",
+  "summary": {
+    "failed_scenarios": [],
+    "passed": 8,
+    "total_scenarios": 8
+  }
+}
