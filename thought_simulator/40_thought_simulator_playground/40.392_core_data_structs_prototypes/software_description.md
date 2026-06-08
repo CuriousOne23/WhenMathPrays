@@ -1,8 +1,8 @@
 # 40.392_core_data_structs_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **draft — pending review**
-- Phase B (prototype + harness + evidence): not started
+- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-203)
+- Phase B (prototype + harness + evidence): not started — blocked until explicit Phase B go-ahead
 - Program row: **40.510-203** (W2)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -11,7 +11,7 @@
 - Phase B (only after approval): implement `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
 
 ## Scaffold Metadata
-- scaffold_status: Phase A draft
+- scaffold_status: Phase A approved (CP 2026-06-08); Phase B not started
 - intended_20_anchor: [20.39_ts_core_data_structures.md](../../20_requirements/20.39_ts_core_data_structures.md) §3.1–3.2
 - intended_20_secondary: [20.102](../../20_requirements/20.102_usp_requirements.md), [20.101](../../20_requirements/20.101_iiinb_requirements.md), [20.103](../../20_requirements/20.103_upi_requirements.md)
 - upstream_playground_modules: [40.101](../40.101_iiinb_prototypes/software_description.md) (inline `UspSnapshot` today), [40.100](../40.100_inb_prototypes/software_description.md)
@@ -39,6 +39,7 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 - Envelope separation: conversation-layer structs MUST NOT embed `semantic_core`, `exec_plan`, `exec_trace`
 - `UspSnapshot` immutability contract for one IIInB pass (pin `usp_version_ref`)
 - Golden JSON fixtures for struct compliance
+- Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note)
 
 **Out of scope:**
 - USP rule store mutation (40.102)
@@ -53,7 +54,7 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 
 - **Iterative Design Flow (50-series influence):** [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) and [50.45](../../50_thought_simulator_design/50.45_data_structures.md) inform struct naming; no normative override of 20.39.
 
-**Agreement Statement**: Provisionally aligned — Phase A scaffold only. Struct shapes must align with 20.39 and W1 IIInB evidence; Phase B golden diffs required before downstream GATE-B modules treat this as stable.
+**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Struct shapes align with 20.39 §3.1–3.2 and W1 [40.101](../40.101_iiinb_prototypes/software_description.md) inline evidence. Phase B golden diffs required before downstream GATE-B modules treat exports as stable wire authority.
 
 ## Phase A Deliverables (this document)
 - Struct responsibility map (`UspSnapshot`, `InputRepairTag`, `ConversationLayerState`, audit records)
@@ -62,7 +63,20 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 - What Phase B must explore (test matrix)
 - Cross-links to W2 dependents (201, 202, 101, 207)
 
+## Struct-to-20.39 Mapping
+
+| Struct | Primary 20.39 anchor | Notes |
+|--------|---------------------|-------|
+| `UspSnapshot` | HLR-20.039-022 | Immutable for one IIInB pass; `usp_version_ref` pin |
+| `UspSnapshot` (layer) | HLR-20.039-021 | Conversation-scoped; not in runtime envelopes |
+| `InputRepairTag` | HLR-20.039-023, -024 | Intake-bound TP field; audit export ordering |
+| `ConversationLayerState` | HLR-20.039-021, -025 | Durable conversation scope; no USP/repair inside B envelopes |
+| Audit structs | HLR-20.039-024 | `ClarificationEvent`, `UpiCommitRecord`, `UspVersionRecord`, `CobUspSnapshotPin` |
+
 ## Struct Contract Sketches (Draft)
+
+### UspRule (shared leaf type)
+`UspRule` is **canonicalized here for W2 export** — field-compatible with [40.101 `UspRule`](../40.101_iiinb_prototypes/prototype.py) (`rule_id`, `pattern`, `expansion`, `state`, `scope`, `version`, `precedence`). Phase B SHALL prove digest equivalence with 40.101 inline rules before 40.101 migrates imports; no semantic drift vs W1 harness.
 
 ### UspSnapshot
 ```
