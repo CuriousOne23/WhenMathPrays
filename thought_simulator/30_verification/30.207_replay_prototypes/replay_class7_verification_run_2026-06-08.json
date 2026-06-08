@@ -1,0 +1,356 @@
+{
+  "class_7_suite": {
+    "replay_class": "REPLAY_CLASS_7",
+    "status": "PASS",
+    "strip_scope": [
+      "exec_plan",
+      "exec_trace"
+    ],
+    "sub_scenarios": {
+      "C7-A": {
+        "assertions": {
+          "no_usp_load_side_effects": true,
+          "routing_follows_inb": true,
+          "zero_track_h_stage_records": true
+        },
+        "fixture_id": "REPLAY_C7_PROFILE_DISABLED",
+        "intake_path": [
+          {
+            "outcome": {
+              "intake_order": 0,
+              "outcome": "accepted",
+              "profile": "v1.0",
+              "reason_code": null,
+              "schema_version": "inb_intake_v1",
+              "source": "c7a"
+            },
+            "pipeline_id": "A",
+            "stage_name": "inb_surface_norm"
+          },
+          {
+            "handoff": "rb",
+            "pipeline_id": "A",
+            "stage_name": "routing"
+          }
+        ],
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-A"
+      },
+      "C7-B": {
+        "assertions": {
+          "no_semantic_core_diff": true,
+          "no_tp_tr_diff": true,
+          "repair_applied": true,
+          "track_h_replay_equivalent": true,
+          "usp_version_ref_pinned": true
+        },
+        "fixture_id": "REPLAY_C7_USP_RULE_APPLY",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-B",
+        "usp_version_ref": "126dd15977fad1f18bbe5e6e4512af74a1fbee2653732eabe77e7b5d34870a5d"
+      },
+      "C7-C": {
+        "assertions": {
+          "escalation_reason_code": true,
+          "iiinb_escalation_ref_present": true,
+          "no_guess_resolution": true,
+          "no_semantic_core_diff": true,
+          "repair_outcome_escalated_not_applied": true
+        },
+        "fixture_id": "REPLAY_C7_ESCALATE_NO_GUESS",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-C"
+      },
+      "C7-D": {
+        "assertions": {
+          "clarification_fifo_ordered": true,
+          "cross_turn_usp_visibility": true,
+          "turn1_escalated": true,
+          "turn2_rule_applied": true
+        },
+        "fixture_id": "REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-D",
+        "turn1_usp_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9",
+        "turn2_usp_ref": "2ee3b36f059ca0084fc05a3a798d032ef3a93b6b2b5e2f2f90c82502e7639cfc"
+      },
+      "C7-E": {
+        "assertions": {
+          "gb_veto_no_active_rule": true,
+          "iiinb_identical_after_veto": true,
+          "still_escalates_without_rule": true,
+          "usp_version_ref_unchanged": true
+        },
+        "fixture_id": "REPLAY_C7_GB_VETO_COMMIT",
+        "gb_veto": {
+          "commit_status": "VETOED",
+          "gb_reason_code": "UNSAFE_RULE_PATTERN"
+        },
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-E",
+        "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+      }
+    }
+  },
+  "date": "2026-06-08",
+  "module": "40.207_replay_prototypes",
+  "phase": "B",
+  "scenarios": [
+    {
+      "assertions": {
+        "no_usp_load_side_effects": true,
+        "routing_follows_inb": true,
+        "zero_track_h_stage_records": true
+      },
+      "fixture_id": "REPLAY_C7_PROFILE_DISABLED",
+      "hlr": [
+        "HLR-20.36-059"
+      ],
+      "result": "PASS",
+      "scenario": "replay_c7_a_profile_disabled",
+      "sub_id": "C7-A"
+    },
+    {
+      "assertions": {
+        "no_semantic_core_diff": true,
+        "no_tp_tr_diff": true,
+        "repair_applied": true,
+        "track_h_replay_equivalent": true,
+        "usp_version_ref_pinned": true
+      },
+      "fixture_id": "REPLAY_C7_USP_RULE_APPLY",
+      "hlr": [
+        "HLR-20.36-058",
+        "HLR-20.36-060"
+      ],
+      "result": "PASS",
+      "scenario": "replay_c7_b_usp_rule_apply",
+      "sub_id": "C7-B"
+    },
+    {
+      "assertions": {
+        "escalation_reason_code": true,
+        "iiinb_escalation_ref_present": true,
+        "no_guess_resolution": true,
+        "no_semantic_core_diff": true,
+        "repair_outcome_escalated_not_applied": true
+      },
+      "fixture_id": "REPLAY_C7_ESCALATE_NO_GUESS",
+      "hlr": [
+        "HLR-20.36-058",
+        "HLR-20.36-060"
+      ],
+      "result": "PASS",
+      "scenario": "replay_c7_c_escalate_no_guess",
+      "sub_id": "C7-C"
+    },
+    {
+      "assertions": {
+        "clarification_fifo_ordered": true,
+        "cross_turn_usp_visibility": true,
+        "turn1_escalated": true,
+        "turn2_rule_applied": true
+      },
+      "fixture_id": "REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN",
+      "hlr": [
+        "HLR-20.36-061"
+      ],
+      "result": "PASS",
+      "scenario": "replay_c7_d_cross_turn_usp",
+      "sub_id": "C7-D"
+    },
+    {
+      "assertions": {
+        "gb_veto_no_active_rule": true,
+        "iiinb_identical_after_veto": true,
+        "still_escalates_without_rule": true,
+        "usp_version_ref_unchanged": true
+      },
+      "fixture_id": "REPLAY_C7_GB_VETO_COMMIT",
+      "hlr": [
+        "HLR-20.36-062"
+      ],
+      "result": "PASS",
+      "scenario": "replay_c7_e_gb_veto",
+      "sub_id": "C7-E"
+    },
+    {
+      "hlr": [
+        "HLR-20.207-001",
+        "HLR-20.207-019"
+      ],
+      "result": "PASS",
+      "scenario": "positive_strip_replay_invariant",
+      "stripped_digest": "cd9634e4ec503f09d17f59bb815f6b21915c62752e41a2efd17510c1be3c8d30"
+    },
+    {
+      "hlr": [
+        "HLR-20.207-001",
+        "HLR-20.36-060"
+      ],
+      "result": "PASS",
+      "scenario": "positive_strip_semantic_core_retained"
+    },
+    {
+      "digest": "8ebf8870dd42ef8606e6249e5717488d998e9bac95f2fef874e23fab50ee6714",
+      "hlr": [
+        "HLR-20.36-018"
+      ],
+      "result": "PASS",
+      "scenario": "positive_strip_digest_deterministic"
+    },
+    {
+      "hlr": [
+        "HLR-20.36-058"
+      ],
+      "result": "PASS",
+      "scenario": "positive_class7_suite_deterministic"
+    },
+    {
+      "hlr": [
+        "HLR-20.36-058",
+        "HLR-20.101-003"
+      ],
+      "result": "PASS",
+      "scenario": "positive_c7_b_intake_path_order",
+      "stage_names": [
+        "inb_surface_norm",
+        "input_semantic_repair",
+        "routing"
+      ]
+    },
+    {
+      "hlr": [
+        "HLR-20.36-021",
+        "HLR-20.207-001"
+      ],
+      "result": "PASS",
+      "scenario": "positive_class1_strip_semantic_core_stable"
+    },
+    {
+      "hlr": [
+        "HLR-20.207-004",
+        "HLR-20.207-028"
+      ],
+      "result": "PASS",
+      "scenario": "negative_regen_input_incomplete",
+      "validation": {
+        "missing_field": "commit_id",
+        "reason_code": "REGEN_INPUT_INCOMPLETE",
+        "verdict": "FAIL_REGEN_INPUT"
+      }
+    },
+    {
+      "hlr": [
+        "HLR-20.207-007",
+        "HLR-20.207-029",
+        "HLR-20.36-053"
+      ],
+      "result": "PASS",
+      "scenario": "negative_regen_forbidden_lane_tp",
+      "validation": {
+        "forbidden_field": "lane_id",
+        "reason_code": "REGEN_TP_READ",
+        "verdict": "FAIL_REGEN_FORBIDDEN_READ"
+      }
+    },
+    {
+      "hlr": [
+        "HLR-20.207-017",
+        "HLR-20.207-020"
+      ],
+      "result": "PASS",
+      "scaffold": {
+        "merged_input": {
+          "commit_id": "cmt-1",
+          "cycle_id": "cycle-001",
+          "execution_signature": "exec-1",
+          "policy_signature": "pol-1",
+          "published_routing_tables": {
+            "epoch": 1
+          },
+          "routing_epoch_id": "epoch-1",
+          "seed_scope_ref": "seed-1",
+          "semantic_snapshot_ref": "snap-hash-1"
+        },
+        "note": "E2 execution deferred to W5; input validation passed",
+        "pass": true,
+        "replay_verdict": "SCAFFOLD_DEFERRED",
+        "scaffold": true,
+        "steps": [
+          "capture_baseline_b_envelopes",
+          "strip_e1",
+          "regenerate_from_input",
+          "compare_per_20_207_3_1"
+        ]
+      },
+      "scenario": "scaffold_b_regeneration_equivalent"
+    },
+    {
+      "hlr": [
+        "HLR-20.207-004"
+      ],
+      "result": "PASS",
+      "scenario": "positive_regen_merge_from_fixture_root"
+    },
+    {
+      "hlr": [
+        "HLR-20.36-053",
+        "HLR-20.207-007"
+      ],
+      "result": "PASS",
+      "scenario": "positive_b_envelope_no_lane_tp"
+    },
+    {
+      "hlr": [
+        "HLR-20.36-017"
+      ],
+      "result": "PASS",
+      "scenario": "positive_class7_fixture_ids"
+    },
+    {
+      "export": "[{\"fixture_id\":\"REPLAY_C7_PROFILE_DISABLED\",\"replay_class\":\"REPLAY_CLASS_7\"},{\"fixture_id\":\"REPLAY_C7_USP_RULE_APPLY\",\"replay_class\":\"REPLAY_CLASS_7\"}]",
+      "hlr": [
+        "HLR-20.36-018"
+      ],
+      "result": "PASS",
+      "scenario": "positive_replay_diagnostic_export"
+    }
+  ],
+  "status": "PASS",
+  "summary": {
+    "c7_sub_scenarios": 5,
+    "core_invariants_demonstrated": [
+      "replay_class_7_c7_a_through_e",
+      "e1_strip_scope",
+      "semantic_core_retained_on_strip",
+      "class7_deterministic_replay",
+      "intake_path_ordering",
+      "regen_input_validation",
+      "b_regeneration_scaffold",
+      "b_envelope_no_lane_tp",
+      "replay_diagnostic_export"
+    ],
+    "failed_scenarios": [],
+    "passed": 18,
+    "replay_verdicts_registry": [
+      "FAIL_ASSERTION",
+      "FAIL_REGEN_DIFF",
+      "FAIL_REGEN_EPOCH",
+      "FAIL_REGEN_FORBIDDEN_READ",
+      "FAIL_REGEN_INPUT",
+      "PASS",
+      "SCAFFOLD_DEFERRED"
+    ],
+    "strip_scope": [
+      "exec_plan",
+      "exec_trace"
+    ],
+    "total_scenarios": 18
+  }
+}

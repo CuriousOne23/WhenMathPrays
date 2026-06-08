@@ -11,6 +11,8 @@ This folder is the authoritative verification tier for Thought Simulator modules
 
 The detailed process, naming conventions, required artifacts (verification capsules, requirements deltas, JSON run artifacts), three-flow requirements, and promotion standards are defined in `30.00_verification_user_guide.md`.
 
+**Authoritative module inventory:** [`30.01_verification_inventory_index.md`](30.01_verification_inventory_index.md).
+
 ## Purpose
 
 - store promoted verification capsules
@@ -87,23 +89,8 @@ Minimum confirmation record:
 
 Without confirmation, execution is limited to planning/clarification output only.
 
-## Current Seeded Modules
+## Module inventory
 
-- [30.10_math_prototypes/](30.10_math_prototypes/)
-- [30.20_verification_of_semantic_specification.md](30.20_verification_of_semantic_specification.md)
-- [30.20_tp_lifecycle/](30.20_tp_lifecycle/)
-- [30.30_verification_of_reference_algorithms.md](30.30_verification_of_reference_algorithms.md)
-- [30.30_basin_prototypes/](30.30_basin_prototypes/)
-- [30.40_scheduler_prototypes/](30.40_scheduler_prototypes/)
-- [30.40_evidence_trace_exemplars_non_normative.md](30.40_evidence_trace_exemplars_non_normative.md)
-- [30.50_regulator_prototypes/](30.50_regulator_prototypes/)
-- [30.60_tick_cycle_skeleton/](30.60_tick_cycle_skeleton/)
-- [30.70_snapshot_prototypes/](30.70_snapshot_prototypes/)
-- [30.80_event_log_prototypes/](30.80_event_log_prototypes/)
-- [30.90_experiment_runner/](30.90_experiment_runner/)
-- [30.39_mb_prototypes/](30.39_mb_prototypes/)
-- [30.tb/](30.tb/) (test bench evidence normalization - see 30.tb/README.md)
-- [30.30_verification_glossary.md](30.30_verification_glossary.md)
-- [glossary_term_registry.json](glossary_term_registry.json)
+See [`30.01_verification_inventory_index.md`](30.01_verification_inventory_index.md) for the authoritative list of promoted verification modules, governance docs, and promotion status. W1 Track H wave coverage: [`W1_track_h_wave_coverage_note.md`](W1_track_h_wave_coverage_note.md).
 
-These were copied from the playground as the first phase of the refactor and should be treated as initial promoted evidence snapshots.
+CI runs non-blocking warning checks: `validate_30_inventory_index.py` (`30.01` ↔ on-disk `30.*` dirs) and `validate_30_10_50_pairing.py` (`promoted`/`approved` rows ↔ `10.50.{band}_*.md`; one-way only). See [30.00](30.00_verification_user_guide.md) § CI enforcement.

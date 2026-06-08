@@ -18,6 +18,11 @@ on:
       - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
+      - "thought_simulator/scripts/validate_30_inventory_index.py"
+      - "thought_simulator/scripts/validate_30_10_50_pairing.py"
+      - "thought_simulator/scripts/validate_50_traceability_index.py"
+      - "thought_simulator/30_verification/30.01_verification_inventory_index.md"
+      - "thought_simulator/10_thought_simulator_req/50_design/**"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
@@ -39,6 +44,11 @@ on:
       - "thought_simulator/scripts/validate_50_glossary_alignment.py"
       - "thought_simulator/scripts/validate_readme_links.py"
       - "thought_simulator/scripts/validate_readme_coverage.py"
+      - "thought_simulator/scripts/validate_30_inventory_index.py"
+      - "thought_simulator/scripts/validate_30_10_50_pairing.py"
+      - "thought_simulator/scripts/validate_50_traceability_index.py"
+      - "thought_simulator/30_verification/30.01_verification_inventory_index.md"
+      - "thought_simulator/10_thought_simulator_req/50_design/**"
       - "thought_simulator/scripts/validate_doc_reference_targets.py"
       - "thought_simulator/scripts/validate_20_traceability_matrix.py"
       - ".github/workflows/thought-simulator-doc-dependency-check.yml"
@@ -228,6 +238,15 @@ jobs:
 
       - name: Run README coverage warning check (non-blocking)
         run: python thought_simulator/scripts/validate_readme_coverage.py
+
+      - name: Run 30 inventory index warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_30_inventory_index.py
+
+      - name: Run 30/10.50 pairing warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_30_10_50_pairing.py
+
+      - name: Run 50 traceability index warning check (non-blocking)
+        run: python thought_simulator/scripts/validate_50_traceability_index.py
 
       - name: Run document reference validation (blocking)
         run: python thought_simulator/scripts/validate_doc_reference_targets.py --strict --check-headings
