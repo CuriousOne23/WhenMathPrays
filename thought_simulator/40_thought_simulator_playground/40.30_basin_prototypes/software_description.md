@@ -3,8 +3,8 @@
 ## Approval State
 
 - Legacy baseline: **approved** (pre–Two-Phase policy)
-- **W3 Phase A** (40.510-412 full redo): **approved** (CP review, 2026-06-08)
-- W3 Phase B (decompose/realign to normative A basins per 20.01 B2): **pending**
+- **W3 Phase A** (40.510-412 full redo): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- W3 Phase B (decompose/realign to normative A basins per 20.01 B2): **cleared to start** — pending implementation
 - Program row: **40.510-412** (W3)
 
 ## W3 Full Redo Scope (40.510-412)
@@ -15,7 +15,18 @@ The generic pre-partition basin model SHALL be decomposed or realigned to normat
 - Phase B may retain shared harness utilities but MUST split basin contracts to match 40.501, 40.401, 40.106, 40.601, 40.35 boundaries
 - Strip-replay fixtures SHALL not depend on legacy generic basin IDs after W3 closure
 
-**Agreement Statement (W3 Phase A)**: Provisionally aligned — redo scope is structural decomposition, not deletion of prior verification artifacts until W3 Phase B supersedes with mapped regression.
+**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 full redo scope: decompose generic basin model to normative A-basin boundaries per 20.01 B2; legacy verification artifacts retained until Phase B maps regression to 40.501/40.401/40.106/40.601/40.35 contracts.
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 full redo scope vs 40.510-412 | Pass |
+| 20.01 B2 normative A-basin decomposition | Pass |
+| No collapse of RB/OB/DCB/TB/IB roles | Pass |
+| Handoff to 40.501/401/106/601/35 boundaries | Pass |
+| Legacy artifacts retained until Phase B regression map | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
