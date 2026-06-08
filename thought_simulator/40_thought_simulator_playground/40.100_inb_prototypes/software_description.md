@@ -73,7 +73,7 @@ All exploration **SHALL** remain strictly deterministic, non-inferential, bounde
 - Full reproduction of the 20.100 HLR set for exploratory visibility (see "What Phase B Must Explore")
 - Identification of core invariants, boundaries, and handoff contract
 - Clear definition of what Phase B must explore (initial pass executed; expansion ongoing)
-- Draft handoff contract skeleton, reject/degrade policy, minimal internal state, and test matrix (below)
+- Draft handoff contract skeleton, state digest definition, schema validation, unicode normalization, profile activation target semantics, reject/degrade policy, minimal internal state, and test matrix (below)
 - Prototype thresholds (e.g. `MAX_PAYLOAD_CHARS`, `MAX_TOKENS`) are playground fixtures only; governed by 20-series for authoritative values
 
 ## Handoff Contract (Draft Skeleton)
@@ -108,6 +108,50 @@ output = {
 
 Rejected outputs omit `handoff`; provenance carries fixed `reason_code` and `outcome: "rejected"`.
 
+## State Digest (Definition)
+`state_digest` is the deterministic replay fingerprint for harness verification (HLR-20.100-003, 018). It is computed **before** `handoff` is attached on the accepted path, so `handoff` is outside the current replay contract.
+
+- **Accepted path input:** `{content, provenance, metadata}` — canonical normalized text plus intake provenance and metadata only
+- **Rejected path input:** `{outcome: "rejected", reason_code, provenance}`
+- **Algorithm:** SHA-256 over canonical JSON (`sort_keys=True`, `separators=(",", ":")`), UTF-8 encoded
+- **Stability:** platform-independent for equivalent input/profile state when the same serialization rules are used; harness asserts identical raw input → identical `state_digest`
+- **Replay contract:** `state_digest` is the primary equivalence check in `positive_deterministic_replay`; downstream consumers should not treat it as a semantic hash
+
+## Schema Validation (Draft)
+Playground wire schema for intake mapping validation (HLR-20.100-004). Authoritative schemas remain in 20-series; this is a fixture for Phase B expansion.
+
+- **Assumed schema version:** `inb_intake_v1` (playground fixture, not canonical)
+- **Required fields:** `content` (str) — primary payload
+- **Optional fields:** `source` (str, default `"unknown"`), `intake_order` (int, default `0`), `profile` (str, must match active profile if present)
+- **Validation today:** input must be a `dict`; non-dict → `MALFORMED_INPUT`
+- **Unsupported mapping (planned):** unknown required keys, wrong types, or unsupported wire-map version → fixed `reason_code` (e.g. `UNSUPPORTED_SCHEMA`, `INVALID_FIELD_TYPE`) — not yet harness-tested
+
+## Unicode and Escape Normalization (Draft)
+Surface-form canonicalization policy implemented in `prototype.py` (HLR-20.100-005, 010). Playground profile `v1.0` applies:
+
+- **Unicode:** NFKC normalization (compatibility decomposition + canonical composition)
+- **Case:** lowercase
+- **Whitespace:** strip leading/trailing; collapse internal runs to single space
+- **Punctuation:** collapse repeated `!`, `?`, `.` deterministically (non-semantic)
+- **Escape normalization:** not yet implemented (e.g. `\n`, `\t`, `\uXXXX` unescaping) — planned harness scenario `positive_unicode_normalization`
+
+Current harness coverage for HLR-010 is **partial** via `positive_equivalent_surface_forms` (case/whitespace/punctuation only).
+
+## Profile Activation Boundary (Target Semantics — Not Yet Implemented)
+Target behavior for HLR-20.100-014 and 015. **Current prototype** rejects per-input profile mismatch immediately (`UNSUPPORTED_PROFILE` in `negative_unsupported_profile`); deferred activation is not implemented.
+
+Target semantics at deterministic safe boundaries:
+
+```
+active_profile = v1.0
+incoming requests profile v1.1 at mid-tick
+→ activation deferred until next safe boundary
+→ prior profile (v1.0) retained for current tick
+→ audit: reason_code PROFILE_ACTIVATION_DEFERRED
+```
+
+On validation failure at a safe boundary: retain prior valid signature/profile state; emit fixed audit reason code (e.g. `PROFILE_ACTIVATION_FAILED`). Harness scenario `profile_activation_boundary` is planned.
+
 ## Deterministic Reject/Degrade Policy (Draft)
 - **Reject path**: malformed input, unsupported profile, oversize payload, too many tokens, unsupported enum/schema/wire-map states → `outcome: "rejected"`, `canonical_content: null`, fixed immutable `reason_code` (e.g. `MALFORMED_INPUT`, `UNSUPPORTED_PROFILE`, `OVERSIZE_PAYLOAD`, `TOO_MANY_TOKENS`)
 - **Degrade path**: reserved for bounded-limit scenarios where partial retention is permitted under 20.100; current prototype uses reject-only for oversize/token limits
@@ -132,7 +176,8 @@ Rejected outputs omit `handoff`; provenance carries fixed `reason_code` and `out
 | Category | Scenario (harness) | HLR anchors | Status |
 |----------|-------------------|-------------|--------|
 | Valid canonicalizable input | `positive_clean_canonicalization` | 001, 003, 005 | PASS |
-| Equivalent surface forms | `positive_equivalent_surface_forms` | 003, 005, 010 | PASS |
+| Equivalent surface forms | `positive_equivalent_surface_forms` | 003, 005 | PASS |
+| Unicode / escape normalization | `positive_unicode_normalization` *(planned)* | 010 | partial (impl only) |
 | Malformed input | `negative_malformed_input` | 007, 016 | PASS |
 | Oversized input | `negative_oversize_payload` | 008 | PASS |
 | Unsupported profile | `negative_unsupported_profile` | 013, 016 | PASS |
@@ -141,9 +186,9 @@ Rejected outputs omit `handoff`; provenance carries fixed `reason_code` and `out
 | IIInB handoff contract | `positive_iiinb_handoff_contract` | 020, 026 | PASS |
 | Zero-event window | *(planned)* | 023 | todo |
 | Diagnostic export ordering | *(planned)* | 022 | todo |
-| Profile activation boundary | *(planned)* | 014, 015 | todo |
+| Profile activation boundary | `profile_activation_boundary` *(planned)* | 014, 015 | todo |
 | Transport/session isolation | *(planned)* | 009 | todo |
-| Schema validation | *(planned)* | 004 | todo |
+| Schema validation | `negative_unsupported_schema` *(planned)* | 004 | todo |
 | Timestamp-as-metadata only | *(planned)* | 021 | todo |
 
 ## What Phase B Must Explore
