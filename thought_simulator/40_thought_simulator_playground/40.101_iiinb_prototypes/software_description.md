@@ -295,7 +295,7 @@ This module **SHALL NOT**:
 - Cross-turn USP version pinning when UPI commits new rules (Wave 2)
 
 ## Required Next Step
-Close GATE-A on 40.510-101 (reviewer ☑ with 40.207). Deferred items: HLR-024b `FAIL_ENVELOPE` negatives (40.510-207), integrated `InB → IIInB` strip replay with 40.207, 30-series promotion for HLR-013/023/025 residuals.
+GATE-A closed 2026-06-08 (40.510-101). Next: W1 30-series normalize + 50 insight per [40.510](../40.510_refactor.md) §4.2.2. Deferred: HLR-024b `FAIL_ENVELOPE` negatives (40.510-207), integrated strip replay with 40.207, 30-series promotion for HLR-013/023/025 residuals.
 
 ## Traceability
 - 20.101_iiinb_requirements.md (complete source of the 28 HLRs reproduced above)
