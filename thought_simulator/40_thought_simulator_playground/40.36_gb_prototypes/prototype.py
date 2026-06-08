@@ -165,6 +165,23 @@ class GoverningBasin:
         return decision
 
 
+def evaluate_upi_commit(proposal: dict[str, Any]) -> dict[str, Any]:
+    """W2: GB gate for UPI rule commits per 20.80 §10 — audit/flow only, no USP write."""
+    pattern = proposal.get("pattern", "")
+    expansion = proposal.get("expansion", "")
+    if not pattern or not expansion:
+        return {"granted": False, "gb_reason_code": "GB_INCOMPLETE_PROPOSAL", "gb_approval_granted": False}
+    if proposal.get("unsafe") or pattern.startswith("__unsafe"):
+        return {"granted": False, "gb_reason_code": "GB_VETO_UNSAFE_RULE", "gb_approval_granted": False}
+    ref = f"gb-approval-{pattern}-{expansion}"
+    return {
+        "granted": True,
+        "gb_reason_code": "GB_APPROVED",
+        "gb_approval_granted": True,
+        "gb_approval_ref": ref,
+    }
+
+
 # =============================================================================
 if __name__ == "__main__":
     print("✅ Governing Basin (3-Tier) Prototype initialized.")

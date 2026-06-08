@@ -125,6 +125,8 @@ class COBState:
     exports: list[dict[str, Any]] = field(default_factory=list)
     audit_log: list[AuditRecord] = field(default_factory=list)
     summary_proof: str = ""
+    cob_snapshot_pin: dict[str, Any] | None = None
+    usp_pin_lineage: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.cob_id = _require_non_empty_str("cob_id", self.cob_id)
@@ -188,6 +190,34 @@ class COBState:
         self.sequence = requested_sequence
         return self.snapshot()
 
+    def pin_usp_snapshot(
+        self,
+        *,
+        sequence: int,
+        usp_version_id: int,
+        usp_version_ref: str,
+        safe_boundary: bool = True,
+    ) -> dict[str, Any]:
+        """W2: record active usp_version_ref pin per 20.102-010 / 20.031-027."""
+        if not safe_boundary:
+            self._reject(sequence, "usp_pin", REASON_SAFE_BOUNDARY_REQUIRED, "safe boundary required for usp pin")
+        ref = _require_non_empty_str("usp_version_ref", usp_version_ref)
+        vid = _require_int("usp_version_id", usp_version_id, minimum=1)
+        if sequence != self.sequence + 1:
+            self._reject(sequence, "usp_pin", REASON_SEQUENCE_VIOLATION, "sequence must increment by one")
+        pin = {"usp_version_id": vid, "usp_version_ref": ref, "cob_id": self.cob_id}
+        self.cob_snapshot_pin = pin
+        self.usp_pin_lineage.append({**pin, "sequence": sequence})
+        self.sequence = sequence
+        self._append_audit(
+            sequence=sequence,
+            event_type="usp_pin",
+            status="ACCEPT",
+            reason_code="COB_OK_108_USP_PIN",
+            details=pin,
+        )
+        return self.snapshot()
+
     def snapshot(self) -> dict[str, Any]:
         body = {
             "module": MODULE_NAME,
@@ -206,6 +236,8 @@ class COBState:
             },
             "summary_proof": self.summary_proof,
             "exports": list(self.exports),
+            "cob_snapshot_pin": self.cob_snapshot_pin,
+            "usp_pin_lineage": list(self.usp_pin_lineage),
             "audit_log": [record.as_dict() for record in self.audit_log],
         }
         body["verification_digest"] = _digest(body)
