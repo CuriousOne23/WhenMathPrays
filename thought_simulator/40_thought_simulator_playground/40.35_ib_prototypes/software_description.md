@@ -2,8 +2,8 @@
 
 ## Approval State
 - Legacy Phase A/B: **approved** (executed 2026-06-03)
-- **W3 Phase A** (40.510-411 extension): **approved** (CP review, 2026-06-08)
-- W3 Phase B (IIInB vs IB vs IMR escalation routing per 20.90/20.17): **pending**
+- **W3 Phase A** (40.510-411 extension): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- W3 Phase B (IIInB vs IB vs IMR escalation routing per 20.90/20.17): **cleared to start** — pending implementation
 - Program row: **40.510-411** (W3)
 
 ## W3 Extension Scope (40.510-411)
@@ -13,6 +13,19 @@ Phase B SHALL add deterministic escalation routing seams per [20.510](../../20_r
 - Distinguish inquiry creation path (existing IB) from IIInB repair escalation (no OuB bypass)
 - IMR Type A/B correction triggers into Pipeline A only — no direct B mutation
 - Cross-evidence with [40.101](../40.101_iiinb_prototypes/software_description.md) unknown-token → CIL path
+
+**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 extension scope: IB inquiry path remains distinct from IIInB repair escalation; IMR corrections route into Pipeline A only; legacy Phase B IB lifecycle evidence retained as baseline.
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 extension scope vs 40.510-411 | Pass |
+| IIInB vs IB seam (20.510 §15.3) | Pass |
+| IMR Type A/B → Pipeline A only | Pass |
+| 40.101 CIL escalation cross-evidence | Pass |
+| Legacy IB Phase B baseline retained | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
