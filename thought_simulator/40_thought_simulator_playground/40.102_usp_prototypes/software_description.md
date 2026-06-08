@@ -1,8 +1,8 @@
 # 40.102_usp_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **draft — pending review**
-- Phase B (prototype + harness + evidence): not started
+- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-201)
+- Phase B (prototype + harness + evidence): not started — blocked until explicit Phase B go-ahead
 - Program row: **40.510-201** (W2) — **GATE-B**
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -11,10 +11,10 @@
 - Phase B (only after approval): implement `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
 
 ## Scaffold Metadata
-- scaffold_status: Phase A draft
+- scaffold_status: Phase A approved (CP 2026-06-08); Phase B not started
 - intended_20_anchor: [20.102_usp_requirements.md](../../20_requirements/20.102_usp_requirements.md)
 - intended_20_secondary: [20.103](../../20_requirements/20.103_upi_requirements.md) (write path), [20.101](../../20_requirements/20.101_iiinb_requirements.md) (read path)
-- upstream_playground_modules: [40.392](../40.392_core_data_structs_prototypes/software_description.md) (struct shapes), [40.101](../40.101_iiinb_prototypes/software_description.md) (consumer)
+- upstream_playground_modules: [40.392](../40.392_core_data_structs_prototypes/software_description.md) (`UspRule` / `UspSnapshot` shapes), [40.101](../40.101_iiinb_prototypes/software_description.md) (consumer)
 - applicability: versioned **User Shorthand Profile (USP)** rule store — read-only to IIInB; writes only via UPI commit
 - disposition_target: promote
 - program_wave: **W2** — **GATE-B prerequisite** per [40.510](../40.510_refactor.md)
@@ -42,6 +42,12 @@ USP **does not**:
 
 W2 Phase B explores the **store + snapshot + version transition** core. Full multi-turn CIL→UPI→GB wire is evidenced jointly with 40.103/40.33/40.36; USP module isolates store semantics.
 
+Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note).
+
+### UspRule struct authority
+
+`UspRule` is **not redefined here** — canonical leaf shape is owned by [40.392](../40.392_core_data_structs_prototypes/software_description.md) (W2 export authority; field-compatible with [40.101 `UspRule`](../40.101_iiinb_prototypes/prototype.py)). This module implements store semantics, version transitions, and snapshot assembly over imported struct shapes.
+
 ## Flows Alignment Statement
 
 - **Forward Flow (20-series):** [20.102](../../20_requirements/20.102_usp_requirements.md) (HLR-001–024), [20.101](../../20_requirements/20.101_iiinb_requirements.md) read-only consume (006–008), [20.32](../../20_requirements/20.32_cob_requirements.md) snapshot pins (010), [20.80](../../20_requirements/20.80_gb_requirements.md) §10 veto (014).
@@ -50,7 +56,7 @@ W2 Phase B explores the **store + snapshot + version transition** core. Full mul
 
 - **Iterative Design Flow (50-series influence):** [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) `usp_version_ref` pinning contract; USP store design remains 20.102-authoritative.
 
-**Agreement Statement**: Provisionally aligned — Phase A only. GATE-B requires Phase B evidence for snapshot immutability, version monotonicity, cap overflow, GB veto non-activation, and deterministic replay of active rule sets.
+**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Store boundaries and snapshot contract align with [20.102](../../20_requirements/20.102_usp_requirements.md) HLR-001–024 and W1 [40.101](../40.101_iiinb_prototypes/software_description.md) inline evidence. GATE-B requires Phase B evidence for snapshot immutability, version monotonicity, cap overflow, GB veto non-activation, and deterministic replay of active rule sets.
 
 ## Phase A Deliverables (this document)
 - USP role and boundaries on conversation layer
@@ -101,6 +107,21 @@ IIInB loads snapshot once per repair pass; snapshot immutable until pass complet
 ## HLR Reference (Exploratory Visibility — 20.102)
 
 Normative set: HLR-20.102-001 through -024 (store boundary, read path, version model, caps, audit, parent cross-check). Full text: [20.102_usp_requirements.md](../../20_requirements/20.102_usp_requirements.md).
+
+### HLR family → Phase-B scenario mapping
+
+| HLR family | Topic (20.102) | Phase-B topic # | Primary scenario IDs |
+|------------|----------------|-----------------|----------------------|
+| 001–005 | Store semantics and authority | — (boundary guard) | structural negatives in harness setup |
+| 006–008 | Read model (IIInB) | 1 | `positive_iiinb_readonly_load`, `positive_empty_profile_snapshot` |
+| 009–012 | Versioning + COB integration | 2, 6 | `positive_single_rule_commit`, `positive_supersede_chain`, `positive_replay_identical_ref` |
+| 013–015 | Rule lifecycle | 3 | `positive_supersede_chain`, `positive_revoke_rule` |
+| 014 | GB veto (lifecycle) | 4 | `negative_gb_veto_no_active` |
+| 016–017 | Bounds and determinism | 5 | `negative_cap_overflow` |
+| 018–019 | Replay + canonical serialization | 2, 8 | `positive_replay_identical_ref`, golden diff suite |
+| 020–022 | Audit and observability | 7 | reason-code asserts on all negative paths |
+| 023 | Parent compliance | — | cross-check vs 20.10/20.30 invariants (review gate) |
+| 024 | Deterministic fixture testability | all | full test matrix (empty, single, supersede, revoke, cap, veto) |
 
 ## Risks & Unknowns
 - Simulated UPI commit API in Phase B before 40.103 lands vs minimal internal commit driver
