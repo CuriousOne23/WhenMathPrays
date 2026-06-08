@@ -3,7 +3,7 @@
 ## Scaffold Status
 - scaffold_status: implemented (Phase B complete, 2026-06-08)
 - Phase A: **approved** (CP review, 2026-06-08)
-- Phase B: **approved** (18/18 PASS, 2026-06-08; 40.510-102 GATE-A reviewer ☑ pending)
+- Phase B: **approved** (18/18 PASS; CP review, 2026-06-08; 40.510-102)
 
 ## Anchors
 - 20-anchor: thought_simulator/20_requirements/20.36_canonical_end_to_end_trace.md §9 (REPLAY_CLASS_7)
@@ -23,7 +23,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 - Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
 - Status: PASS (18/18 scenarios)
 - Evidence types: behavioral, structural, negative, replay, golden diff
-- Coverage note: 18 scenarios exercise **17 distinct HLR anchors** — several HLRs are covered by multiple scenarios; Classes 2–6, live E2, and YAML import remain deferred.
+- Coverage note: 18 scenarios map to **17 distinct HLR anchors** — the scenario count exceeds the anchor count because one HLR is often exercised by multiple scenarios (e.g. 20.36-058 across C7-B, C7-C, and determinism checks). Classes 2–6, live E2, and YAML import remain deferred.
 
 ### Implemented / demonstrated
 | HLR | Implementation | Scenario |
@@ -35,8 +35,8 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 | 20.36-058 | Replay equivalence C7-B/C; suite determinism | C7-B, C7-C, `positive_class7_suite_deterministic` |
 | 20.36-059 | Zero Track H stages when profile disabled | `run_c7_a` |
 | 20.36-060 | `envelope_guard` on repair paths; strip retains core | C7-B, C7-C, `positive_strip_semantic_core_retained` |
-| 20.36-061 | Cross-turn `usp_version_ref` change (simulated) | `run_c7_d` |
-| 20.36-062 | GB veto — prior snapshot unchanged (simulated) | `run_c7_e` |
+| 20.36-061 | Cross-turn `usp_version_ref` change (simulated)† | `run_c7_d` |
+| 20.36-062 | GB veto — prior snapshot unchanged (simulated)† | `run_c7_e` |
 | 20.207-001 | `strip_b_envelopes` removes B envelopes | strip scenarios |
 | 20.207-004 | `validate_regeneration_input`; `merge_regeneration_input` | `negative_regen_input_incomplete`, `positive_regen_merge_from_fixture_root` |
 | 20.207-007 | Forbidden `lane_id`/`tp_id` in regen path | `negative_regen_forbidden_lane_tp` |
@@ -45,6 +45,8 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 | 20.207-028 | `REGEN_INPUT_INCOMPLETE` → `FAIL_REGEN_INPUT` | `negative_regen_input_incomplete` |
 | 20.207-029 | `REGEN_TP_READ` → `FAIL_REGEN_FORBIDDEN_READ` | `negative_regen_forbidden_lane_tp` |
 | 20.101-003 | Intake path stage ordering via live compose | `positive_c7_b_intake_path_order` |
+
+† C7-D/E use **simulated** UPI/GB commit outcomes (snapshot injection), not live 40.103/40.36 wire — Wave 2.
 
 ### Open / partial
 | HLR / area | Gap | Notes |
@@ -72,7 +74,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 - **Backward Flow (40-series evidence)**: 18/18 PASS artifact proves GATE-A REPLAY_CLASS_7 + E1 strip + regen scaffold scope; residuals named above.
 - **Iterative Design Flow (50-series influence)**: None yet; W5 orchestration deferred per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Aligned for Phase B closure. Promotion to 30-series and GATE-A sign-off require reviewer ☑ on 40.510-102; dual-pipeline PoC still needs W5 Classes 1–6 and live E2.
+**Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08). Promotion to 30-series requires GATE-A reviewer ☑ on 40.510-102; dual-pipeline PoC still needs W5 Classes 1–6 and live E2.
 
 ## Open gaps (W5 / Wave 2)
 - Classes 1–6 unified runner (40.90, 40.80)

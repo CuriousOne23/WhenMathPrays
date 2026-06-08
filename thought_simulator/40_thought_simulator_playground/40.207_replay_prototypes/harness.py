@@ -132,15 +132,13 @@ def scenario_class7_suite_deterministic() -> dict:
 
 def scenario_c7_b_intake_path_order() -> dict:
     result = run_c7_b()
-    path = run_class_7_suite()  # ensure suite still passes
-    # re-run c7_b for path — run_c7_b uses run_intake_path internally; check via run_c7_a pattern
     from prototype import run_intake_path, InB, UspSnapshot, UspRule
 
     inb_out = InB().normalize({"content": "see tmrw", "source": "c7b", "intake_order": 0})
     snap = UspSnapshot(usp_version_id=1, rules=[UspRule(rule_id="rule-abc", pattern="tmrw", expansion="tomorrow")])
     intake = run_intake_path(inb_out, profile_enabled=True, usp_snapshot=snap)
     names = [s["stage_name"] for s in intake["intake_path"]]
-    ok = names == ["inb_surface_norm", "input_semantic_repair", "routing"] and result["pass"] and path["status"] == "PASS"
+    ok = names == ["inb_surface_norm", "input_semantic_repair", "routing"] and result["pass"]
     return {
         "scenario": "positive_c7_b_intake_path_order",
         "hlr": ["HLR-20.36-058", "HLR-20.101-003"],

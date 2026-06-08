@@ -120,7 +120,10 @@ def b_regeneration_equivalent_scaffold(
     fixture_root: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """
-    E2 scaffold: validate inputs and document steps; does not execute Pipeline B (W5).
+    E2 scaffold: validate inputs and document steps only.
+
+    Full Pipeline B regeneration (capture → strip → regen → compare) is deferred
+    to W5 per 20.207-017/020 — see 40.90 / 40.510-505–506.
     """
     merged = merge_regeneration_input(fixture_root or {}, regeneration_input)
     validation = validate_regeneration_input(merged)

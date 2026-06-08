@@ -1,7 +1,7 @@
 # Verification Capsule
 
 ## Status
-Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS, 2026-06-08; 40.510-102 GATE-A reviewer ☑ pending).
+Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS; CP review, 2026-06-08; 40.510-102).
 
 ## Evidence Summary
 - Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
@@ -40,7 +40,7 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS, 
 | 20.207-029 | `negative_regen_forbidden_lane_tp` |
 | 20.101-003 | `positive_c7_b_intake_path_order` |
 
-**Coverage note:** 18 scenarios exercise **17 distinct HLR anchors** (20.36 + 20.207 + cross-ref 20.101-003); several HLRs are covered by multiple scenarios. Residuals: Classes 2–6 full runners, live E2 regen, `REGEN_STALE_EPOCH`, live UPI/GB wire, YAML golden import — see `requirements_delta.md` Open / partial table.
+**Coverage note:** 18 scenarios map to **17 distinct HLR anchors** — the scenario count exceeds the anchor count because one HLR is often exercised by multiple scenarios. Residuals: Classes 2–6 full runners, live E2 regen, `REGEN_STALE_EPOCH`, live UPI/GB wire, YAML golden import — see [`requirements_delta.md`](requirements_delta.md) Open / partial table.
 
 ## Scenarios Executed
 | Scenario | Result |
@@ -81,7 +81,7 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS, 
 - **Backward Flow (40-series evidence)**: Harness 18/18 PASS (`artifacts/replay_class7_verification_run_2026-06-08.json`) — behavioral, structural, negative, replay, and golden-diff evidence for GATE-A REPLAY_CLASS_7 scope with named W5/W2 residuals.
 - **Iterative Design Flow (50-series influence)**: None yet; W5 orchestration and live E2 per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Aligned — Phase B scope closed per test matrix. Extend only via 30-series promotion, W5 Classes 1–6 runners, live E2 `b_regeneration_equivalent`, or Wave 2 UPI/GB wire for C7-D/E; do not claim dual-pipeline PoC closure from Class 7 alone.
+**Agreement Statement**: Aligned — Phase B approved (CP review, 2026-06-08). Scope closed per test matrix. Extend only via 30-series promotion, W5 Classes 1–6 runners, live E2 `b_regeneration_equivalent`, or Wave 2 UPI/GB wire for C7-D/E; do not claim dual-pipeline PoC closure from Class 7 alone.
 
 ## Next (30-series promotion path)
 - Normalize capsule per [30.00](../../30_verification/30.00_verification_user_guide.md) after GATE-A closure (40.510-102 reviewer ☑).
