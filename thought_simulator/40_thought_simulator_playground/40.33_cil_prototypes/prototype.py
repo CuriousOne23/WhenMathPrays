@@ -108,6 +108,8 @@ class CILState:
     escalation_requests: list[dict[str, Any]] = field(default_factory=list)
     integrated_packets: list[dict[str, Any]] = field(default_factory=list)
     audit_log: list[AuditRecord] = field(default_factory=list)
+    clarification_events: list[dict[str, Any]] = field(default_factory=list)
+    _integration_seq: int = 0
 
     def __post_init__(self) -> None:
         self.active_profile = _require_non_empty_str("active_profile", self.active_profile)
@@ -168,8 +170,42 @@ class CILState:
             "integrated_packets": list(self.integrated_packets),
             "audit_log": [record.as_dict() for record in self.audit_log],
         }
+        body["clarification_events"] = list(self.clarification_events)
         body["verification_digest"] = _digest(body)
         return body
+
+    def emit_clarification_event(
+        self,
+        *,
+        sequence: int,
+        escalation_ref: str,
+        pattern: str,
+        expansion: str,
+        scope: str = "conversation",
+    ) -> dict[str, Any]:
+        """W2: emit clarification_event for UPI FIFO consume (20.032-027–030)."""
+        if not pattern or not expansion or not scope:
+            self._reject(sequence, "clarification_emit", REASON_INVALID_PACKET, "incomplete clarification payload")
+        self._integration_seq += 1
+        event = {
+            "schema_version": "clarification_event_v1",
+            "event_id": f"clar-{escalation_ref}",
+            "integration_seq": self._integration_seq,
+            "pattern": pattern,
+            "expansion": expansion,
+            "scope": scope,
+            "source": "CIL",
+            "escalation_ref": escalation_ref,
+        }
+        self.clarification_events.append(event)
+        self._append_audit(
+            sequence=sequence,
+            event_type="clarification_emit",
+            status="ACCEPT",
+            reason_code="CIL_OK_110_CLARIFICATION_EVENT",
+            details={"event_id": event["event_id"], "integration_seq": event["integration_seq"]},
+        )
+        return event
 
     def _apply_ingest(self, sequence: int, payload: dict[str, Any]) -> None:
         packet_id = _require_non_empty_str("packet_id", payload.get("packet_id"))

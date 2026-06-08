@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-203)
-- Phase B (prototype + harness + evidence): not started — blocked until explicit Phase B go-ahead
+- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; 2026-06-08)
 - Program row: **40.510-203** (W2)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -11,7 +11,7 @@
 - Phase B (only after approval): implement `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
 
 ## Scaffold Metadata
-- scaffold_status: Phase A approved (CP 2026-06-08); Phase B not started
+- scaffold_status: Phase B complete (8/8 PASS; 2026-06-08)
 - intended_20_anchor: [20.39_ts_core_data_structures.md](../../20_requirements/20.39_ts_core_data_structures.md) §3.1–3.2
 - intended_20_secondary: [20.102](../../20_requirements/20.102_usp_requirements.md), [20.101](../../20_requirements/20.101_iiinb_requirements.md), [20.103](../../20_requirements/20.103_upi_requirements.md)
 - upstream_playground_modules: [40.101](../40.101_iiinb_prototypes/software_description.md) (inline `UspSnapshot` today), [40.100](../40.100_inb_prototypes/software_description.md)

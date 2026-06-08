@@ -11,8 +11,11 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import importlib.util
+
 from prototype import (
     BASIN_CHAIN_STAGES,
+    FAIL_ENVELOPE,
     INTAKE_PATH_STAGES,
     IIInB,
     REASON_CODES,
@@ -21,7 +24,16 @@ from prototype import (
     run_intake_path,
 )
 
-ARTIFACT_NAME = "iiinb_verification_run_2026-06-08.json"
+_ROOT = Path(__file__).resolve().parent.parent
+_usp_spec = importlib.util.spec_from_file_location("usp_prototype", _ROOT / "40.102_usp_prototypes" / "prototype.py")
+_usp_mod = importlib.util.module_from_spec(_usp_spec)
+import sys as _sys
+
+_sys.modules["usp_prototype"] = _usp_mod
+assert _usp_spec.loader is not None
+_usp_spec.loader.exec_module(_usp_mod)
+
+ARTIFACT_NAME = "iiinb_verification_run_2026-06-08_w2.json"
 
 
 def _accepted_inb(content: str = "yeah baby meet tmrw") -> dict:
@@ -278,6 +290,52 @@ def scenario_usp_snapshot_immutable() -> dict:
     return {"scenario": "positive_usp_snapshot_immutable", "hlr": ["HLR-20.101-008"], "result": "PASS" if ok else "FAIL"}
 
 
+def scenario_fail_envelope_semantic_core() -> dict:
+    iiinb = IIInB()
+    before = {"semantic_core": "{}", "tp_tr": "{}", "exec_plan": "{}", "exec_trace": "{}"}
+    after = {"semantic_core": '{"mutated":true}', "tp_tr": "{}", "exec_plan": "{}", "exec_trace": "{}"}
+    verdict = iiinb.evaluate_envelope_verdict(before, after)
+    ok = verdict["verdict"] == FAIL_ENVELOPE and "semantic_core" in verdict["violations"]
+    return {"scenario": "negative_forbidden_semantic_core_write", "hlr": ["HLR-20.101-024b"], "result": "PASS" if ok else "FAIL"}
+
+
+def scenario_fail_envelope_tp_tr() -> dict:
+    iiinb = IIInB()
+    before = {"semantic_core": "{}", "tp_tr": "{}", "exec_plan": "{}", "exec_trace": "{}"}
+    after = {"semantic_core": "{}", "tp_tr": '{"mutated":true}', "exec_plan": "{}", "exec_trace": "{}"}
+    verdict = iiinb.evaluate_envelope_verdict(before, after)
+    ok = verdict["verdict"] == FAIL_ENVELOPE and "tp_tr" in verdict["violations"]
+    return {"scenario": "negative_forbidden_tp_tr_write", "hlr": ["HLR-20.101-024b"], "result": "PASS" if ok else "FAIL"}
+
+
+def scenario_fail_envelope_exec_plan() -> dict:
+    iiinb = IIInB()
+    before = {"semantic_core": "{}", "tp_tr": "{}", "exec_plan": "{}", "exec_trace": "{}"}
+    after = {"semantic_core": "{}", "tp_tr": "{}", "exec_plan": '{"mutated":true}', "exec_trace": "{}"}
+    verdict = iiinb.evaluate_envelope_verdict(before, after)
+    ok = verdict["verdict"] == FAIL_ENVELOPE and "exec_plan" in verdict["violations"]
+    return {"scenario": "negative_forbidden_exec_plan_write", "hlr": ["HLR-20.101-024b"], "result": "PASS" if ok else "FAIL"}
+
+
+def scenario_envelope_guard_regression() -> dict:
+    result = scenario_pipeline_b_envelope_unchanged()
+    result["scenario"] = "positive_envelope_guard_regression"
+    return result
+
+
+def scenario_live_usp_from_40_102() -> dict:
+    store = _usp_mod.USPStore()
+    store.apply_commit(pattern="tmrw", expansion="tomorrow", rule_id="live-r1")
+    live_snap = store.export_snapshot()
+    snap = UspSnapshot(
+        usp_version_id=live_snap["usp_version_id"],
+        rules=[UspRule(**r) for r in live_snap["rules"]],
+    )
+    out = IIInB().repair_pass(_accepted_inb("tmrw"), profile_enabled=True, usp_snapshot=snap)
+    ok = out["usp_loaded"] and out["iiinb_repair_record"]["applied_rule_count"] == 1
+    return {"scenario": "positive_live_usp_from_40.102", "hlr": ["HLR-20.101-005", "HLR-20.101-008"], "result": "PASS" if ok else "FAIL"}
+
+
 def scenario_segmentation_deterministic() -> dict:
     raw = _accepted_inb("alpha beta gamma")
     snap = UspSnapshot(usp_version_id=1, rules=[])
@@ -316,6 +374,11 @@ def main() -> int:
         scenario_diagnostic_export_ordering(),
         scenario_usp_snapshot_immutable(),
         scenario_segmentation_deterministic(),
+        scenario_fail_envelope_semantic_core(),
+        scenario_fail_envelope_tp_tr(),
+        scenario_fail_envelope_exec_plan(),
+        scenario_envelope_guard_regression(),
+        scenario_live_usp_from_40_102(),
     ]
     status = "PASS" if all(s["result"] == "PASS" for s in scenarios) else "FAIL"
     failed = [s["scenario"] for s in scenarios if s["result"] != "PASS"]

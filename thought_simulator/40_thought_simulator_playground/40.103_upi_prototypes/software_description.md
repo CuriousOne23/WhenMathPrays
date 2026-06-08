@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-202)
-- Phase B (prototype + harness + evidence): not started — blocked until explicit Phase B go-ahead
+- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; 2026-06-08; GATE-B)
 - Program row: **40.510-202** (W2) — **GATE-B**
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -11,7 +11,7 @@
 - Phase B (only after approval): implement `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
 
 ## Scaffold Metadata
-- scaffold_status: Phase A approved (CP 2026-06-08); Phase B not started
+- scaffold_status: Phase B complete (8/8 PASS; 2026-06-08)
 - intended_20_anchor: [20.103_upi_requirements.md](../../20_requirements/20.103_upi_requirements.md)
 - intended_20_secondary: [20.102](../../20_requirements/20.102_usp_requirements.md), [20.33](../../20_requirements/20.33_cil_requirements.md), [20.80](../../20_requirements/20.80_gb_requirements.md) §10
 - prerequisite_row: **40.510-201** (USP) must be `approved` before GATE-B close on this row

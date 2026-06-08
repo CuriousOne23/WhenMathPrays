@@ -30,6 +30,8 @@ REASON_CODES = frozenset({
 
 BASIN_CHAIN_STAGES = frozenset({"routing_basin", "output_basin", "truth_basin", "termination_basin"})
 INTAKE_PATH_STAGES = frozenset({"inb_surface_norm", "input_semantic_repair", "routing"})
+FAIL_ENVELOPE = "FAIL_ENVELOPE"
+FORBIDDEN_WRITE_FIELDS = frozenset({"semantic_core", "tp_tr", "exec_plan", "exec_trace"})
 
 
 def _assert_reason_code(code: str) -> None:
@@ -131,6 +133,14 @@ class IIInB:
         guard["exec_plan_unchanged"] = guard["exec_plan"]
         guard["exec_trace_unchanged"] = guard["exec_trace"]
         return guard
+
+    def evaluate_envelope_verdict(self, before: dict[str, str], after: dict[str, str]) -> dict[str, Any]:
+        """W2 (024b): replay verdict when forbidden envelope fields change."""
+        guard = self._envelope_guard(before, after)
+        violations = [field for field in FORBIDDEN_WRITE_FIELDS if not guard.get(field, True)]
+        if violations:
+            return {"verdict": FAIL_ENVELOPE, "violations": violations, "envelope_guard": guard}
+        return {"verdict": "PASS", "violations": [], "envelope_guard": guard}
 
     def export_repair_diagnostics(self, records: list[dict[str, Any]]) -> str:
         """Deterministic diagnostic export for MB consumption (HLR-20.101-027, 028)."""
