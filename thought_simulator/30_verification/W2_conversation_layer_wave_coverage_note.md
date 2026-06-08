@@ -8,7 +8,7 @@
 
 | 30 module | 40 source | Harness | HLR / contract coverage |
 |-----------|-----------|---------|-------------------------|
-| [30.392_core_data_structs_prototypes/](30.392_core_data_structs_prototypes/) | 40.392 | 8/8 PASS | 20.39 §3.1–3.2 families 019, 021–025 |
+| [30.392_core_data_structs_prototypes/](30.392_core_data_structs_prototypes/) | 40.392 | 8/8 PASS | 20.39 §3.1–3.2 families 019, 021–025; **CP 30.00 approved** |
 | [30.102_usp_prototypes/](30.102_usp_prototypes/) | 40.102 | 8/8 PASS | 20.102 exploratory matrix (GATE-B) |
 | [30.103_upi_prototypes/](30.103_upi_prototypes/) | 40.103 | 8/8 PASS | 20.103 exploratory matrix (GATE-B) |
 | [30.32_cob_prototypes/](30.32_cob_prototypes/) | 40.32 W2 | 4/4 PASS | USP snapshot pin (20.102-010 / COB W2) |
