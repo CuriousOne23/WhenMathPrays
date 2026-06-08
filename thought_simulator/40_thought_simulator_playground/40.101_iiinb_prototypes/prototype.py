@@ -2,6 +2,9 @@
 
 Stage wire: input_semantic_repair — profile-gated, read-only USP apply,
 intake-bound TP writes only. Ordering: InB -> IIInB -> RB.
+
+Envelope guard checks (semantic_core, TP.TR, exec_plan, exec_trace) are positive-only
+in this module; FAIL_ENVELOPE negative replay verdicts deferred to 40.510-207.
 """
 
 from __future__ import annotations
@@ -16,13 +19,21 @@ from typing import Any, Optional
 MAX_SEGMENTS = 32
 MAX_RULE_APPLICATIONS = 16
 
-REASON_CODES = {
-    "PROFILE_DISABLED": "PROFILE_DISABLED",
-    "USP_LOAD_FAILED": "USP_LOAD_FAILED",
-    "SEGMENT_CAP": "SEGMENT_CAP",
-    "APPLY_CAP": "APPLY_CAP",
-    "NO_MATCHING_RULE": "NO_MATCHING_RULE",
-}
+REASON_CODES = frozenset({
+    "PROFILE_DISABLED",
+    "USP_LOAD_FAILED",
+    "SEGMENT_CAP",
+    "APPLY_CAP",
+    "NO_MATCHING_RULE",
+    "INB_HANDOFF_REJECTED",
+})
+
+BASIN_CHAIN_STAGES = frozenset({"routing_basin", "output_basin", "truth_basin", "termination_basin"})
+INTAKE_PATH_STAGES = frozenset({"inb_surface_norm", "input_semantic_repair", "routing"})
+
+
+def _assert_reason_code(code: str) -> None:
+    assert code in REASON_CODES, f"unknown_reason_code: {code}"
 
 
 def _canonical_digest(payload: dict[str, Any]) -> str:
@@ -105,6 +116,30 @@ class IIInB:
         active = [r for r in snapshot.rules if r.state == "ACTIVE"]
         return sorted(active, key=lambda r: (-r.precedence, -r.version, r.rule_id))
 
+    def _envelope_snapshot(self, tp_state: dict[str, Any]) -> dict[str, str]:
+        return {
+            "semantic_core": json.dumps(tp_state.get("semantic_core", {}), sort_keys=True),
+            "tp_tr": json.dumps(tp_state.get("tp_tr", {}), sort_keys=True),
+            "exec_plan": json.dumps(tp_state.get("exec_plan", {}), sort_keys=True),
+            "exec_trace": json.dumps(tp_state.get("exec_trace", {}), sort_keys=True),
+        }
+
+    def _envelope_guard(self, before: dict[str, str], after: dict[str, str]) -> dict[str, bool]:
+        guard = {key: before[key] == after[key] for key in before}
+        guard["semantic_core_unchanged"] = guard["semantic_core"]
+        guard["tp_tr_unchanged"] = guard["tp_tr"]
+        guard["exec_plan_unchanged"] = guard["exec_plan"]
+        guard["exec_trace_unchanged"] = guard["exec_trace"]
+        return guard
+
+    def export_repair_diagnostics(self, records: list[dict[str, Any]]) -> str:
+        """Deterministic diagnostic export for MB consumption (HLR-20.101-027, 028)."""
+        ordered = sorted(
+            records,
+            key=lambda r: (r.get("cycle_id", ""), r.get("iiinb_event_id", "")),
+        )
+        return json.dumps(ordered, sort_keys=True, separators=(",", ":"))
+
     def repair_pass(
         self,
         inb_output: dict[str, Any],
@@ -123,18 +158,17 @@ class IIInB:
         tp_state = tp_state or {
             "semantic_core": {},
             "tp_tr": {},
+            "exec_plan": {},
+            "exec_trace": {},
             "input_repair_tags": [],
             "input_segments": [],
             "iiinb_escalation_refs": [],
         }
 
-        # Guard: forbidden envelope writes
-        forbidden_before = {
-            "semantic_core": json.dumps(tp_state.get("semantic_core", {}), sort_keys=True),
-            "tp_tr": json.dumps(tp_state.get("tp_tr", {}), sort_keys=True),
-        }
+        envelope_before = self._envelope_snapshot(tp_state)
 
         if not profile_enabled:
+            _assert_reason_code("PROFILE_DISABLED")
             return {
                 "skipped": True,
                 "stage": None,
@@ -142,31 +176,36 @@ class IIInB:
                 "handoff_next_stage": "routing",
                 "tp_intake_fields": {},
                 "iiinb_repair_record": None,
-                "envelope_guard": {
-                    "semantic_core_unchanged": True,
-                    "tp_tr_unchanged": True,
-                },
-                "reason_codes": [REASON_CODES["PROFILE_DISABLED"]],
+                "envelope_guard": self._envelope_guard(envelope_before, envelope_before),
+                "reason_codes": ["PROFILE_DISABLED"],
             }
 
         if inb_output.get("provenance", {}).get("outcome") != "accepted":
+            _assert_reason_code("INB_HANDOFF_REJECTED")
             return {
                 "skipped": True,
                 "stage": "input_semantic_repair",
                 "usp_loaded": False,
                 "handoff_next_stage": "routing",
+                "tp_intake_fields": {},
+                "iiinb_repair_record": None,
                 "error": "inb_not_accepted",
+                "envelope_guard": self._envelope_guard(envelope_before, envelope_before),
                 "reason_codes": ["INB_HANDOFF_REJECTED"],
             }
 
         if usp_snapshot is None:
+            _assert_reason_code("USP_LOAD_FAILED")
             return {
                 "skipped": False,
                 "stage": "input_semantic_repair",
                 "usp_loaded": False,
                 "handoff_next_stage": "routing",
+                "tp_intake_fields": {},
+                "iiinb_repair_record": None,
                 "error": "usp_load_failed",
-                "reason_codes": [REASON_CODES["USP_LOAD_FAILED"]],
+                "envelope_guard": self._envelope_guard(envelope_before, envelope_before),
+                "reason_codes": ["USP_LOAD_FAILED"],
             }
 
         usp_ref = usp_snapshot.version_ref
@@ -178,7 +217,8 @@ class IIInB:
 
         if len(canonical.split()) > MAX_SEGMENTS:
             cap_status = "SEGMENT_CAP"
-            reason_codes.append(REASON_CODES["SEGMENT_CAP"])
+            _assert_reason_code("SEGMENT_CAP")
+            reason_codes.append("SEGMENT_CAP")
 
         rules = self._active_rules(usp_snapshot)
         repair_tags: list[dict[str, Any]] = []
@@ -212,9 +252,11 @@ class IIInB:
             else:
                 if matched and applied_count >= MAX_RULE_APPLICATIONS:
                     cap_status = "APPLY_CAP"
-                    reason_codes.append(REASON_CODES["APPLY_CAP"])
+                    _assert_reason_code("APPLY_CAP")
+                    reason_codes.append("APPLY_CAP")
                     outcomes.append("TRUNCATED")
                 else:
+                    _assert_reason_code("NO_MATCHING_RULE")
                     repair_tags.append(
                         {
                             "segment_ref": seg["segment_ref"],
@@ -228,7 +270,7 @@ class IIInB:
                             "escalation_id": f"esc-{seg['segment_ref']}",
                             "segment_ref": seg["segment_ref"],
                             "iiinb_event_id": event_id,
-                            "escalation_reason_code": REASON_CODES["NO_MATCHING_RULE"],
+                            "escalation_reason_code": "NO_MATCHING_RULE",
                         }
                     )
                     seg["repair_outcome"] = "ESCALATED"
@@ -265,10 +307,8 @@ class IIInB:
         tp_state["input_repair_tags"] = repair_tags
         tp_state["iiinb_escalation_refs"] = escalation_refs
 
-        forbidden_after = {
-            "semantic_core": json.dumps(tp_state.get("semantic_core", {}), sort_keys=True),
-            "tp_tr": json.dumps(tp_state.get("tp_tr", {}), sort_keys=True),
-        }
+        envelope_after = self._envelope_snapshot(tp_state)
+        guard = self._envelope_guard(envelope_before, envelope_after)
 
         return {
             "skipped": False,
@@ -279,11 +319,7 @@ class IIInB:
             "tp_intake_fields": tp_intake,
             "iiinb_repair_record": record,
             "audit_records": [record],
-            "envelope_guard": {
-                "semantic_core_unchanged": forbidden_before["semantic_core"]
-                == forbidden_after["semantic_core"],
-                "tp_tr_unchanged": forbidden_before["tp_tr"] == forbidden_after["tp_tr"],
-            },
+            "envelope_guard": guard,
             "reason_codes": sorted(set(reason_codes)),
             "state_digest": _canonical_digest(
                 {"record": record, "tp_intake_fields": tp_intake}

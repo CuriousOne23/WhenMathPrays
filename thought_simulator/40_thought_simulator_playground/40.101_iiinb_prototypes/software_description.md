@@ -2,18 +2,18 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08)
-- Phase B (prototype + harness + evidence): **v0.1 complete** (6/6 PASS, 2026-06-08); formal approval pending (40.510-101, GATE-A)
+- Phase B (prototype + harness + evidence): **approved** (19/19 PASS; CP review, 2026-06-08; 40.510-101)
 
-## Phase B Deliverables (Executed — v0.1)
-- Harness executed 6 scenarios; artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
-- Evidence types (per 40.20): behavioral, structural (intake path ordering), negative (escalate, cap), replay
-- Core invariants demonstrated: `profile_enabled` skip, USP rule apply, escalate-without-guess, `InB → IIInB → RB` ordering, apply cap, envelope guard, deterministic replay
-- HLR coverage (exploratory subset): 001, 002, 003, 011, 012, 015, 017, 019, 021
-- Remaining HLR exploration: 004–010, 013–014, 016, 018, 020, 022–028 (see Test Matrix)
+## Phase B Deliverables (Executed)
+- Harness executed 19 scenarios; artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
+- Evidence types (per 40.20): behavioral, structural (intake path ordering, basin-chain exclusion), negative (escalate, caps, rejected handoff, USP load failure), replay, golden diff (diagnostic export)
+- Core invariants demonstrated: `profile_enabled` gate, read-only USP apply/immutability, escalate-without-guess, `InB → IIInB → RB` ordering, apply/segment caps, envelope guard (semantic_core, TP.TR, Pipeline B), deterministic replay/segmentation, multi-rule precedence, USP version pinning, TCU reporting, audit record per pass, diagnostic export ordering, non-blocking escalation handoff
+- HLR coverage (exploratory, with harness evidence): 001–012, 014–022, 024, 026–028
+- Remaining HLR exploration: 013 (MI_VAGUE/MI_INCOMP non-resolution), 023 (IMR same-cycle isolation), 025 (parent invariant cross-check), `FAIL_ENVELOPE` negatives (40.510-207)
 - Note: The full HLR list from 20.101_iiinb_requirements.md is included below for exploratory visibility. 20.xx remains the sole source of truth; 30.xx remains the authoritative coverage audit layer. 40.101 is a playground and not authoritative.
 
 ## Scaffold Metadata
-- scaffold_status: implemented (Phase B v0.1 complete)
+- scaffold_status: implemented (Phase B complete, 19/19 PASS)
 - intended_20_anchor: thought_simulator/20_requirements/20.101_iiinb_requirements.md (primary)
 - intended_10_10_anchors:
   - thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md (deterministic cycle; IIInB as optional pre–Pipeline A repair slice)
@@ -65,11 +65,11 @@ All exploration **SHALL** remain strictly deterministic, bounded, audit-rich, an
 
 - **Forward Flow (10/20-series)**: Driven by [20.101](../../20_requirements/20.101_iiinb_requirements.md) (activation, USP consumption, repair semantics, TP write authority, escalation, bounds, determinism), [20.102](../../20_requirements/20.102_usp_requirements.md) (read-only USP snapshot), [20.105](../../20_requirements/20.105_tp_requirements.md) §3.4 (intake-bound TP fields), [20.38](../../20_requirements/20.38_ts_implementation_guidelines.md) §6 (intake path), and upstream [20.100](../../20_requirements/20.100_inb_requirements.md) InB handoff ([40.100](../40.100_inb_prototypes/software_description.md)). Ordering: `InB → IIInB → RB`.
 
-- **Backward Flow (40-series evidence)**: Initial evidence generated (2026-06-08): 6/6 harness PASS covering profile skip, rule apply, escalate, ordering, apply cap, replay. Artifact: `artifacts/iiinb_verification_run_2026-06-08.json`. Remaining HLRs tracked in Test Matrix and `requirements_delta.md`.
+- **Backward Flow (40-series evidence)**: Phase B complete (2026-06-08): 19/19 harness PASS — full test matrix executed. Artifact: `artifacts/iiinb_verification_run_2026-06-08.json`. Capsule: `verification_capsule.md`; delta: `requirements_delta.md`.
 
 - **Iterative Design Flow (50-series influence)**: None yet; USP/UPI/CIL cross-turn paths deferred to Wave 2 per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Provisionally aligned — Phase A approved; core Track H `input_semantic_repair` path demonstrated at playground depth (Phase B v0.1, 6/6 PASS). Phase B formal approval and Wave 1 GATE-A closure pending. Cross-turn conversation layer, full CIL FIFO wire, and TCU fidelity are named open items (see Risks & Unknowns).
+**Agreement Statement**: Aligned — Phase B approved (CP, 2026-06-08). Evidence (19/19 PASS) supports forward intent for profile-gated `input_semantic_repair` on Track H intake. Residual gaps (HLR-013, 023, 025, 024b) are named in `requirements_delta.md` and Risks & Unknowns.
 
 ## Phase A Deliverables (this document)
 - High-level description of IIInB as `input_semantic_repair` stage for exploratory prototyping
@@ -152,7 +152,7 @@ HLR-20.101-015, 024. IIInB **may write** only intake-bound TP fields. **Must not
 - MTP semantics, OB evidence, truth fields
 - Pipeline B envelopes (`exec_plan`, `exec_trace`)
 
-Harness verifies `envelope_guard.semantic_core_unchanged` and `tp_tr_unchanged` after every repair pass (positive guard only in Phase B v0.1; negative `FAIL_ENVELOPE` replay verdicts — see Risks & Unknowns).
+Harness verifies `envelope_guard.semantic_core_unchanged` and `tp_tr_unchanged` after every repair pass (positive guard only; HLR-024b `FAIL_ENVELOPE` negatives — see Risks & Unknowns).
 
 ## profile_enabled Gate (Draft)
 HLR-20.101-001, 002.
@@ -216,26 +216,35 @@ HLR-20.101-022. Playground registry (`REASON_CODES` in `prototype.py`):
 
 **Persistence and reset:** each harness scenario uses a fresh `IIInB()` unless testing replay with identical inputs.
 
-## Test Matrix (Draft)
+## Test Matrix
 | Category | Scenario (harness) | HLR anchors | Status |
 |----------|-------------------|-------------|--------|
 | Profile disabled skip | `profile_disabled_skip` | 001, 002 | PASS |
 | InB→IIInB→RB order | `positive_inb_iiinb_rb_order` | 003 | PASS |
-| USP rule apply | `positive_usp_rule_apply` | 005–008, 011, 014, 015 | PASS |
-| Escalate no guess | `negative_escalate_no_guess` | 009, 012, 017 | PASS |
+| Rejected InB handoff | `negative_rejected_inb_handoff` | 003 | PASS |
+| Not in RB→OB chain | `positive_not_in_rb_ob_chain` | HLR-20.101-004 | PASS |
+| USP rule apply | `positive_usp_rule_apply` | 005, 008, 011, 014, 015 | PASS |
+| USP version ref pinned | `positive_usp_version_ref_pinned` | 006 | PASS |
+| Multi-rule precedence | `positive_multi_rule_precedence` | 007 | PASS |
+| USP snapshot immutable | `positive_usp_snapshot_immutable` | 008 | PASS |
+| Escalate no guess | `negative_escalate_no_guess` | 009, 012 | PASS |
+| Segmentation deterministic | `positive_segmentation_deterministic` | 010 | PASS |
+| CIL escalation non-blocking | `positive_cil_escalation_nonblocking` | 017, 018 | PASS |
 | Apply cap | `negative_apply_cap` | 019 | PASS |
+| Segment cap | `negative_segment_cap` | 010, 019 | PASS |
+| TCU cost reported | `positive_tcu_cost_reported` | 020 | PASS |
 | Deterministic replay | `positive_deterministic_replay` | 021 | PASS |
-| Not in RB→OB chain | *(planned)* | HLR-20.101-004 | todo |
-| Multi-rule precedence | *(planned)* | 007 | todo |
-| Rejected InB handoff | *(planned)* | 003 | todo |
-| USP load failure | *(planned)* | 005, 022 | todo |
-| CIL escalation wire | *(planned)* | 017, 018 | todo |
-| TCU budget alignment | *(planned)* | 020 | todo |
-| FAIL_ENVELOPE guard | *(planned)* | 015, 024 | todo (40.510-207) |
-| Canonical audit export | *(planned)* | 027, 028 | todo |
+| USP load failure | `negative_usp_load_failure` | 005, 022 | PASS |
+| Pipeline B envelope guard | `positive_pipeline_b_envelope_unchanged` | 024 | PASS |
+| Audit record per pass | `positive_audit_record_per_pass` | 016 | PASS |
+| Diagnostic export ordering | `positive_diagnostic_export_ordering` | 027, 028 | PASS |
+| FAIL_ENVELOPE negatives (024b) | *(deferred)* | 015, 024b | todo (40.510-207) |
+| MI_VAGUE/MI_INCOMP non-resolve | *(deferred)* | 013 | todo (30-series) |
+| IMR same-cycle isolation | *(deferred)* | 023 | todo (30-series) |
+| Parent invariant cross-check | *(deferred)* | 025 | todo (30-series) |
 
 ## HLR Reference (Exploratory Visibility)
-Phase-A evidence for these HLRs is provided in the Test Matrix; Phase B v0.1 harness evidence is summarized in `verification_capsule.md`. This list is retained as a reference. Source: 20.101_iiinb_requirements.md.
+Phase-A evidence for these HLRs is provided in the Test Matrix; Phase B harness evidence (19/19 PASS) is summarized in `verification_capsule.md`. This list is retained as a reference. Source: 20.101_iiinb_requirements.md.
 
 1. HLR-20.101-001: IIInB SHALL execute as stage wire `input_semantic_repair` only when `profile_enabled = true` for the active execution signature.
 2. HLR-20.101-002: When `profile_enabled = false`, TS SHALL skip `input_semantic_repair` with zero semantic effect and SHALL NOT load USP.
@@ -266,7 +275,7 @@ Phase-A evidence for these HLRs is provided in the Test Matrix; Phase B v0.1 har
 27. HLR-20.101-027: IIInB audit exports SHALL use canonical field ordering per 20.95.
 28. HLR-20.101-028: IIInB diagnostic records SHALL be consumable by MB without mutating repair state.
 
-## Non-Goals (Scaffold and Phase B v0.1)
+## Non-Goals (Scaffold and Phase B)
 This module **SHALL NOT**:
 - Own surface canonicalization (InB / 40.100)
 - Write or commit USP rules (UPI / 40.103)
@@ -286,7 +295,7 @@ This module **SHALL NOT**:
 - Cross-turn USP version pinning when UPI commits new rules (Wave 2)
 
 ## Required Next Step
-Advance Phase B toward formal approval: expand test matrix for remaining HLRs, add `FAIL_ENVELOPE` scenarios (40.510-207), cross-validate with 40.100 handoff artifact, update `verification_capsule.md` and `requirements_delta.md` for GATE-A closure on 40.510-101.
+Close GATE-A on 40.510-101 (reviewer ☑ with 40.207). Deferred items: HLR-024b `FAIL_ENVELOPE` negatives (40.510-207), integrated `InB → IIInB` strip replay with 40.207, 30-series promotion for HLR-013/023/025 residuals.
 
 ## Traceability
 - 20.101_iiinb_requirements.md (complete source of the 28 HLRs reproduced above)
@@ -301,7 +310,7 @@ Advance Phase B toward formal approval: expand test matrix for remaining HLRs, a
 - 40.20_master_program_guide.md (workflow guidance — not treated as requirements)
 - 40.510_refactor.md (W1 row 40.510-101)
 - 40.101_iiinb_prototypes/prototype.py (implemented skeleton)
-- 40.101_iiinb_prototypes/harness.py (6-scenario harness)
+- 40.101_iiinb_prototypes/harness.py (19-scenario harness)
 - 40.101_iiinb_prototypes/verification_capsule.md
 - 40.101_iiinb_prototypes/requirements_delta.md
 - 40.101_iiinb_prototypes/artifacts/iiinb_verification_run_2026-06-08.json
