@@ -2,18 +2,18 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08)
-- Phase B (prototype + harness + evidence): **v0.1 complete** (C7 5/5 + strip demo PASS, 2026-06-08); formal approval pending (40.510-102, GATE-A)
+- Phase B (prototype + harness + evidence): **approved** (18/18 PASS, 2026-06-08; 40.510-102 GATE-A reviewer ☑ pending)
 
-## Phase B Deliverables (Executed — v0.1)
-- Harness executed REPLAY_CLASS_7 sub-scenarios C7-A..E plus `strip_replay_invariant`; artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
-- Evidence types (per 40.20): behavioral, structural (intake path / fixture shape), replay, golden diff (canonical JSON digest on stripped trace)
-- Core invariants demonstrated: profile-disabled zero Track H stages, USP rule apply replay equivalence, escalate-without-guess, cross-turn USP visibility (simulated), GB veto snapshot pinning, E1 strip scope (`exec_plan`, `exec_trace` removed; `semantic_core` retained)
-- HLR coverage (exploratory subset): 20.36-058..062 (Class 7); partial E1 strip (20.207-001, 20.207-019 via demo)
-- Remaining exploration: Classes 1–6, full E2 regeneration (`b_regeneration_equivalent`), live UPI/GB/CIL wiring for C7-D/E, 20.207 negative fixtures — see Test Matrix
+## Phase B Deliverables (Executed)
+- Harness executed 18 scenarios; artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
+- Evidence types (per 40.20): behavioral, structural (intake path, fixture IDs, B envelope guards), negative (regen input / forbidden lane_id), replay, golden diff (strip + diagnostic export digests)
+- Core invariants demonstrated: C7-A..E (live + simulated), E1 strip scope and `semantic_core` retention, Class 7 suite determinism, intake path ordering, Class 1 strip demo, regen input validation + fixture-root merge, `b_regeneration_equivalent` scaffold, B envelope `lane_id`/`tp_id` guard, replay diagnostic export ordering
+- HLR coverage (exploratory, with harness evidence): 20.36-017, 018, 021, 053, 058–062; 20.207-001, 004, 007, 017, 019, 020, 028, 029
+- Remaining exploration: Classes 2–6 full runners, live E2 regeneration execution, live UPI/GB/CIL for C7-D/E, YAML golden import — see Test Matrix
 - Note: The full HLR list from 20.207_execution_replay_specification.md is included below for exploratory visibility. 20.xx remains the sole source of truth; 30.xx remains the authoritative coverage audit layer. 40.207 is a playground and not authoritative.
 
 ## Scaffold Metadata
-- scaffold_status: implemented (Phase B v0.1 — Class 7 + E1 strip runnable)
+- scaffold_status: implemented (Phase B complete, 18/18 PASS)
 - intended_20_anchor: thought_simulator/20_requirements/20.36_canonical_end_to_end_trace.md §9 (primary — REPLAY_CLASS_7)
 - intended_20_secondary: thought_simulator/20_requirements/20.207_execution_replay_specification.md (E1/E2/E3 replay modes; Class 1 `b_regeneration_equivalent`)
 - intended_10_10_anchors:
@@ -64,11 +64,11 @@ All exploration **SHALL** remain deterministic, falsifiable, and artifact-backed
 
 - **Forward Flow (10/20-series)**: Driven by [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §9 (REPLAY_CLASS_7 golden minimums, C7-A..E assertions, strip_scope), [20.207](../../20_requirements/20.207_execution_replay_specification.md) (E1/E2/E3 equivalence classes, regeneration inputs, verdict taxonomy), [20.101](../../20_requirements/20.101_iiinb_requirements.md) (Track H repair replay pinning), [20.100](../../20_requirements/20.100_inb_requirements.md) (InB surface norm), and [20.38](../../20_requirements/20.38_ts_implementation_guidelines.md) §6 (intake path). Upstream playground: 40.100, 40.101.
 
-- **Backward Flow (40-series evidence)**: Initial evidence (2026-06-08): C7 5/5 PASS + `strip_replay_invariant` PASS. Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`. Remaining classes tracked in Test Matrix and `requirements_delta.md`.
+- **Backward Flow (40-series evidence)**: Phase B complete (2026-06-08): 18/18 harness PASS. Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`. Capsule: `verification_capsule.md`; delta: `requirements_delta.md`.
 
 - **Iterative Design Flow (50-series influence)**: None yet; full orchestration and E2 regen deferred to W5 per 40.510.
 
-**Agreement Statement**: Provisionally aligned — Phase A approved (CP, 2026-06-08). REPLAY_CLASS_7 path runnable at playground depth (Phase B v0.1). Phase B formal approval and GATE-A reviewer sign-off pending. Classes 1–6, E2 regeneration, and live UPI/GB/CIL wiring are named open items.
+**Agreement Statement**: Aligned — Phase B approved (18/18 PASS). GATE-A replay scope closed for REPLAY_CLASS_7 + E1 strip + regen scaffold. Residual gaps (Classes 2–6, live E2, live C7-D/E wire, YAML import) named in `requirements_delta.md`. 40.510-102 reviewer ☑ pending.
 
 ## Phase A Deliverables (this document)
 - High-level description of 40.207 as Class 7 replay harness (W1) with W5 feeder role
@@ -153,8 +153,9 @@ Extends 20.36 / 20.207 §8 for harness reporting:
 | `PASS` | All assertions in sub-scenario satisfied | C7-A..E, strip demo |
 | `FAIL_ASSERTION` | One or more Class 7 assertions false | harness exit 1 |
 | `FAIL_REGEN_DIFF` | E2 equivalence failure | deferred (20.207-013) |
-| `FAIL_REGEN_INPUT` | Incomplete `regeneration_input` | deferred (20.207-004) |
-| `FAIL_REGEN_FORBIDDEN_READ` | TP / `lane_id` in regen path | deferred (20.207-029) |
+| `FAIL_REGEN_INPUT` | Incomplete `regeneration_input` | `negative_regen_input_incomplete` |
+| `FAIL_REGEN_FORBIDDEN_READ` | TP / `lane_id` in regen path | `negative_regen_forbidden_lane_tp` |
+| `SCAFFOLD_DEFERRED` | E2 scaffold passed; execution W5 | `scaffold_b_regeneration_equivalent` |
 
 ## Minimal Internal State
 
@@ -171,21 +172,29 @@ Extends 20.36 / 20.207 §8 for harness reporting:
 ## Test Matrix
 | Category | Scenario (harness) | Mode | HLR anchors | Status |
 |----------|-------------------|------|-------------|--------|
-| Profile disabled (C7-A) | `run_c7_a` | live | 20.36-059 | PASS |
-| USP rule apply (C7-B) | `run_c7_b` | live | 20.36-058, 060 | PASS |
-| Escalate no guess (C7-C) | `run_c7_c` | live | 20.36-058, 060 | PASS |
-| Cross-turn USP visibility (C7-D) | `run_c7_d` | simulated UPI/GB | 20.36-061 | PASS |
-| GB veto (C7-E) | `run_c7_e` | simulated UPI/GB/CIL | 20.36-062 | PASS |
-| E1 strip invariant | `strip_replay_invariant` | 20.207-001, 019 | PASS |
-| Class 1 happy path | *(planned)* | 20.36-019..022, 051; 20.207-017, 020 | todo (W5) |
-| Class 2 overflow | *(planned)* | 20.36-023+ | todo (W5) |
-| Class 3 IMR strip | *(planned)* | 20.36 Class 3 | todo (W5) |
-| Class 4 GB caps | *(planned)* | 20.36 Class 4 | todo (W5) |
-| Class 5 governance stress | *(planned)* | 20.36 Class 5 | todo (W5) |
-| E2 `b_regeneration_equivalent` | *(planned)* | 20.207-002..016 | todo (W5) |
-| REGEN negative fixtures | *(planned)* | 20.207-028..030 | todo (W5) |
-| Live UPI/GB C7-D/E wire | *(planned)* | 20.36-061, 062 | todo (W2) |
-| YAML golden import | *(planned)* | 20.36-017, 018 | todo (W5) |
+| Profile disabled (C7-A) | `replay_c7_a_profile_disabled` | live | 20.36-059 | PASS |
+| USP rule apply (C7-B) | `replay_c7_b_usp_rule_apply` | live | 20.36-058, 060 | PASS |
+| Escalate no guess (C7-C) | `replay_c7_c_escalate_no_guess` | live | 20.36-058, 060 | PASS |
+| Cross-turn USP (C7-D) | `replay_c7_d_cross_turn_usp` | simulated UPI/GB | 20.36-061 | PASS |
+| GB veto (C7-E) | `replay_c7_e_gb_veto` | simulated UPI/GB/CIL | 20.36-062 | PASS |
+| E1 strip invariant | `positive_strip_replay_invariant` | — | 20.207-001, 019 | PASS |
+| Strip semantic_core retained | `positive_strip_semantic_core_retained` | — | 20.207-001, 20.36-060 | PASS |
+| Strip digest deterministic | `positive_strip_digest_deterministic` | — | 20.36-018 | PASS |
+| Class 7 suite deterministic | `positive_class7_suite_deterministic` | — | 20.36-058 | PASS |
+| C7-B intake path order | `positive_c7_b_intake_path_order` | live | 20.36-058, 20.101-003 | PASS |
+| Class 1 strip demo | `positive_class1_strip_semantic_core_stable` | — | 20.36-021, 20.207-001 | PASS |
+| Regen input incomplete | `negative_regen_input_incomplete` | — | 20.207-004, 028 | PASS |
+| Regen forbidden lane/tp | `negative_regen_forbidden_lane_tp` | — | 20.207-007, 029, 20.36-053 | PASS |
+| E2 regen scaffold | `scaffold_b_regeneration_equivalent` | scaffold | 20.207-017, 020 | PASS |
+| Regen fixture-root merge | `positive_regen_merge_from_fixture_root` | — | 20.207-004 | PASS |
+| B envelope no lane/tp | `positive_b_envelope_no_lane_tp` | — | 20.36-053, 20.207-007 | PASS |
+| Class 7 fixture IDs | `positive_class7_fixture_ids` | — | 20.36-017 | PASS |
+| Replay diagnostic export | `positive_replay_diagnostic_export` | — | 20.36-018 | PASS |
+| Class 2–5 full runners | *(deferred)* | — | 20.36 Classes 2–5 | todo (W5) |
+| Live E2 regeneration | *(deferred)* | — | 20.207-002..016 | todo (W5) |
+| REGEN_STALE_EPOCH negative | *(deferred)* | — | 20.207-030 | todo (W5) |
+| Live UPI/GB C7-D/E wire | *(deferred)* | simulated | 20.36-061, 062 | todo (W2) |
+| YAML golden import | *(deferred)* | — | 20.36-017, 018 | todo (W5) |
 
 ## HLR Reference (Exploratory Visibility) — 20.207
 
@@ -267,7 +276,7 @@ This module **SHALL NOT** (in W1):
 - **Strip + A-only equivalence:** `strip_replay_invariant` proves removal only; full byte-identical `semantic_core` diff deferred
 
 ## Required Next Step
-Advance Phase B toward formal approval: expand test matrix (Classes 1–6 stub runners or W5 scheduling), strengthen C7-D/E assertions when Wave 2 modules exist, add `b_regeneration_equivalent` scaffold, update `verification_capsule.md` and `requirements_delta.md` for GATE-A closure on 40.510-102.
+GATE-A closure: obtain 40.510-102 reviewer ☑ in [40.510](../40.510_refactor.md). W5: Classes 1–6 runners, live E2 `b_regeneration_equivalent`, YAML golden import. W2: wire live UPI/GB for C7-D/E when 40.103/40.36 exist.
 
 ## Traceability
 - 20.36_canonical_end_to_end_trace.md §9 (REPLAY_CLASS_7)

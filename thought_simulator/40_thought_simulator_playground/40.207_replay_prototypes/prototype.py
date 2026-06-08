@@ -1,4 +1,8 @@
-"""Class 7 (REPLAY_CLASS_7) Track H replay fixture runner — exploratory."""
+"""Class 7 (REPLAY_CLASS_7) Track H replay fixture runner — exploratory.
+
+E1 strip is positive-only in W1; E2 regeneration scaffold validates inputs only —
+full `b_regeneration_equivalent` execution deferred to W5 (40.90).
+"""
 
 from __future__ import annotations
 
@@ -8,6 +12,34 @@ import json
 import sys
 from pathlib import Path
 from typing import Any, Callable
+
+STRIP_SCOPE = ("exec_plan", "exec_trace")
+
+REPLAY_VERDICTS = frozenset({
+    "PASS",
+    "FAIL_ASSERTION",
+    "FAIL_REGEN_DIFF",
+    "FAIL_REGEN_INPUT",
+    "FAIL_REGEN_EPOCH",
+    "FAIL_REGEN_FORBIDDEN_READ",
+    "SCAFFOLD_DEFERRED",
+})
+
+REGEN_REQUIRED_MIN = (
+    "commit_id",
+    "semantic_snapshot_ref",
+    "routing_epoch_id",
+    "seed_scope_ref",
+)
+
+REGEN_MERGE_FIELDS = (
+    "cycle_id",
+    "policy_signature",
+    "execution_signature",
+    "published_routing_tables",
+)
+
+FORBIDDEN_B_FIELDS = ("lane_id", "tp_id")
 
 _ROOT = Path(__file__).resolve().parent.parent
 
@@ -38,11 +70,87 @@ def canonical_json_digest(payload: dict[str, Any]) -> str:
 
 
 def strip_b_envelopes(trace: dict[str, Any]) -> dict[str, Any]:
-    """Strip exec_plan + exec_trace for A-only replay diff."""
+    """Strip exec_plan + exec_trace for A-only replay diff (HLR-20.207-001, 019)."""
     stripped = json.loads(json.dumps(trace))
-    stripped.pop("exec_plan", None)
-    stripped.pop("exec_trace", None)
+    for key in STRIP_SCOPE:
+        stripped.pop(key, None)
     return stripped
+
+
+def merge_regeneration_input(
+    fixture_root: dict[str, Any],
+    regeneration_input: dict[str, Any],
+) -> dict[str, Any]:
+    """Merge omitted regen fields from fixture root per 20.207 §2.1."""
+    merged = dict(regeneration_input)
+    for field in REGEN_MERGE_FIELDS:
+        if not merged.get(field) and field in fixture_root:
+            merged[field] = fixture_root[field]
+    return merged
+
+
+def validate_regeneration_input(regeneration_input: dict[str, Any]) -> dict[str, Any]:
+    """Validate E2 regeneration_input tuple (playground subset of 20.207 §2)."""
+    for field in REGEN_REQUIRED_MIN:
+        if not regeneration_input.get(field):
+            return {
+                "verdict": "FAIL_REGEN_INPUT",
+                "reason_code": "REGEN_INPUT_INCOMPLETE",
+                "missing_field": field,
+            }
+    for forbidden in FORBIDDEN_B_FIELDS:
+        if forbidden in regeneration_input:
+            return {
+                "verdict": "FAIL_REGEN_FORBIDDEN_READ",
+                "reason_code": "REGEN_TP_READ",
+                "forbidden_field": forbidden,
+            }
+    return {"verdict": "PASS", "reason_code": None}
+
+
+def assert_no_forbidden_lane_tp_fields(envelope: dict[str, Any]) -> bool:
+    """20.36-053 / 20.207-007 — B envelopes must not carry lane_id or tp_id."""
+    text = json.dumps(envelope, sort_keys=True)
+    return all(f'"{field}"' not in text for field in FORBIDDEN_B_FIELDS)
+
+
+def b_regeneration_equivalent_scaffold(
+    regeneration_input: dict[str, Any],
+    *,
+    fixture_root: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """
+    E2 scaffold: validate inputs and document steps; does not execute Pipeline B (W5).
+    """
+    merged = merge_regeneration_input(fixture_root or {}, regeneration_input)
+    validation = validate_regeneration_input(merged)
+    if validation["verdict"] != "PASS":
+        return {
+            "scaffold": True,
+            "pass": False,
+            "replay_verdict": validation["verdict"],
+            "reason_code": validation["reason_code"],
+            "merged_input": merged,
+        }
+    return {
+        "scaffold": True,
+        "pass": True,
+        "replay_verdict": "SCAFFOLD_DEFERRED",
+        "merged_input": merged,
+        "steps": [
+            "capture_baseline_b_envelopes",
+            "strip_e1",
+            "regenerate_from_input",
+            "compare_per_20_207_3_1",
+        ],
+        "note": "E2 execution deferred to W5; input validation passed",
+    }
+
+
+def export_replay_diagnostics(records: list[dict[str, Any]]) -> str:
+    """Deterministic replay artifact export (MB-consumable ordering)."""
+    ordered = sorted(records, key=lambda r: (r.get("replay_class", ""), r.get("fixture_id", "")))
+    return json.dumps(ordered, sort_keys=True, separators=(",", ":"))
 
 
 def run_c7_a() -> dict[str, Any]:
@@ -109,6 +217,7 @@ def run_c7_c() -> dict[str, Any]:
         ),
         "no_guess_resolution": repair["iiinb_repair_record"]["applied_rule_count"] == 0,
         "iiinb_escalation_ref_present": len(esc) > 0,
+        "escalation_reason_code": esc[0]["escalation_reason_code"] == "NO_MATCHING_RULE" if esc else False,
         "no_semantic_core_diff": repair["envelope_guard"]["semantic_core_unchanged"],
     }
     return {
@@ -194,5 +303,14 @@ def run_class_7_suite() -> dict[str, Any]:
         "replay_class": "REPLAY_CLASS_7",
         "status": "PASS" if all_pass else "FAIL",
         "sub_scenarios": results,
-        "strip_scope": ["exec_plan", "exec_trace"],
+        "strip_scope": list(STRIP_SCOPE),
     }
+
+
+CLASS_7_FIXTURE_IDS = {
+    "C7-A": "REPLAY_C7_PROFILE_DISABLED",
+    "C7-B": "REPLAY_C7_USP_RULE_APPLY",
+    "C7-C": "REPLAY_C7_ESCALATE_NO_GUESS",
+    "C7-D": "REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN",
+    "C7-E": "REPLAY_C7_GB_VETO_COMMIT",
+}
