@@ -114,3 +114,35 @@ Before promotion from 40 to 30:
 - artifact evidence covering FIFO/classification/escalation invariants
 - explicit HLR/LLR mapping to 20.33 and parent anchors
 - completed `verification_capsule.md` and `requirements_delta.md` with traceable scenario records
+
+---
+
+## W2 Phase A Extension (40.510-205)
+
+**Approval State:** Phase A extension **draft — pending review** (base Phase B from 2026-06-03 remains valid).
+
+**Program row:** [40.510-205](../40.510_refactor.md) — targeted redo for **`clarification_event` wire to UPI**.
+
+### Purpose (W2 delta)
+
+Extend CIL to emit deterministic `clarification_event` records (FIFO per conversation) consumed by [40.103](../40.103_upi_prototypes/software_description.md) UPI per [20.33](../../20_requirements/20.33_cil_requirements.md) and [20.103](../../20_requirements/20.103_upi_requirements.md) HLR-20.103-003/005/018. Closes IIInB escalation → CIL → UPI path deferred from W1.
+
+### What Phase B Must Explore (W2)
+
+| Scenario | HLR anchor | Expected |
+|----------|------------|----------|
+| `positive_escalation_to_clarification_event` | 20.101 → 20.33 | IIInB escalation ref → CIL emits event |
+| `positive_fifo_clarification_ordering` | 20.103-005 | Events consumed by UPI in FIFO order |
+| `positive_integration_seq_monotonic` | 20.103-013 | Deterministic sequence tokens |
+| `negative_incomplete_clarification_payload` | 20.103-008 | Event rejected before UPI handoff |
+
+### Dependencies
+- GATE-B closed on 40.510-201, 40.510-202
+- [40.101_iiinb_prototypes](../40.101_iiinb_prototypes/software_description.md) (escalation source)
+
+### Flows Alignment (W2 extension)
+- **Forward Flow:** 20.33 + 20.103 clarification wire
+- **Backward Flow:** Prior CIL Phase B (2026-06-03) — extend FIFO wire scenarios
+- **Iterative Design Flow:** None yet
+
+**Agreement Statement:** Provisionally aligned — W2 extension adds conversation-layer wire only; prior classification/FIFO evidence must remain green on regression.

@@ -316,3 +316,42 @@ GATE-A closed 2026-06-08 (40.510-101). Next: W1 30-series normalize + 50 insight
 - 40.101_iiinb_prototypes/artifacts/iiinb_verification_run_2026-06-08.json
 
 **Note on authority**: The full HLR list from 20.101 is included in this 40.xx playground document solely for exploratory clarity. 20.xx documents remain the authoritative source of truth. 30.xx provides the coverage audit. This document makes no claim to canonical status.
+
+---
+
+## W2 Phase A Extension (40.510-207)
+
+**Approval State:** Phase A extension **draft — pending review** (W1 Phase B 19/19 PASS remains baseline).
+
+**Program row:** [40.510-207](../40.510_refactor.md) — envelope write-guard **negative** tests and `FAIL_ENVELOPE` replay verdicts (HLR-20.101-024b).
+
+### Purpose (W2 delta)
+
+Extend IIInB harness with falsifiable **negative** scenarios proving no writes to forbidden fields under violation attempts:
+
+- `semantic_core`
+- `TP.TR`
+- `exec_plan` / `exec_trace`
+
+Positive guard (024a) is W1-closed (`positive_pipeline_b_envelope_unchanged`). W2 adds negative paths producing `FAIL_ENVELOPE` replay verdicts per [20.38](../../20_requirements/20.38_ts_implementation_guidelines.md) §8, exercised in [40.207](../40.207_replay_prototypes/software_description.md) strip/regen compose.
+
+### What Phase B Must Explore (W2)
+
+| Scenario | HLR anchor | Expected |
+|----------|------------|----------|
+| `negative_forbidden_semantic_core_write` | 024b, 20.38 §8 | Detect + `FAIL_ENVELOPE` |
+| `negative_forbidden_tp_tr_write` | 024b | Detect + `FAIL_ENVELOPE` |
+| `negative_forbidden_exec_plan_write` | 024b | Detect + `FAIL_ENVELOPE` |
+| `positive_envelope_guard_regression` | 024a | W1 positive scenarios still PASS |
+| `positive_live_usp_from_40.102` | 005–008 | Read-only snapshot from USP module |
+
+### Dependencies
+- [40.102_usp_prototypes](../40.102_usp_prototypes/software_description.md) (live USP snapshot path)
+- [40.392_core_data_structs_prototypes](../40.392_core_data_structs_prototypes/software_description.md) (shared struct alignment)
+
+### Flows Alignment (W2 extension)
+- **Forward Flow:** 20.101-024b, 20.38 §8, [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) 024a/024b split
+- **Backward Flow:** W1 30.101 / 30.207 positive evidence — extend only
+- **Iterative Design Flow:** 50.101 documents 024b in 30.207 scope
+
+**Agreement Statement:** Provisionally aligned — W2 extension must not weaken 024a; negative scenarios are additive harness rows in the same module.
