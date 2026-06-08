@@ -12,6 +12,10 @@ Primary User/Copilot collaborative requirement layer for TS behavior, determinis
 
 This directory is the main authoring workspace for requirement intent, with downstream formalization and realization controlled by user-selected flow direction.
 
+## Start here — architecture map
+
+**New to the 20-series?** Read [20.01_architecture_map.md](20.01_architecture_map.md) first — runtime-pipeline concept blocks (B0–B8), mermaid diagrams, and suggested read paths. Flat file list remains below; normative HLRs stay in individual modules.
+
 ## Bootstrap Reload Set
 
 These four documents are sufficient to bootstrap TS reasoning in a new conversation:
@@ -22,6 +26,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md) — Pipeline A/B functional partition and basin pipeline
 
 ## Authoritative Requirement Files
+- [20.01_architecture_map.md](20.01_architecture_map.md)
 - [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md)
 - [20.12_ts_invariants.md](20.12_ts_invariants.md)
 - [20.17_messy_input_handling.md](20.17_messy_input_handling.md)
