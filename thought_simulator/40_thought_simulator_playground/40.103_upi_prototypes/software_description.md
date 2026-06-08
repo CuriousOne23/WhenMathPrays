@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-202)
-- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; 2026-06-08; GATE-B)
+- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; CP review, 2026-06-08; GATE-B)
 - Program row: **40.510-202** (W2) — **GATE-B**
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -46,6 +46,10 @@ W2 Phase B explores commit orchestration with **simulated or stubbed CIL FIFO in
 
 Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note).
 
+**GB veto reason-code propagation:** On veto, `UpiCommitRecord.commit_status = GB_VETOED`; `gb_reason_code` and `reason_codes[]` both carry the evaluator code (stub: `GB_TEST_VETO`; live: [40.36](../40.36_gb_prototypes/prototype.py) `evaluate_upi_commit` → e.g. `GB_VETO_UNSAFE_RULE`). No `usp_version_id` advance; USP remains unchanged (20.103-010, 20.102-014).
+
+**`integration_seq` bounds:** CIL emits monotonic `integration_seq` per conversation (20.032-030); UPI sorts FIFO by this field. Playground does not cap `integration_seq` magnitude — ordering is by value, not wall-clock. Pending-commit cap (default 8, HLR-016) is the primary queue bound; overflow rejects with `UPI_RSN_002_PENDING_CAP`.
+
 ### USP store API boundary (40.102 dependency)
 
 UPI owns **orchestration only** — validation, GB gate, audit emission, FIFO ordering. [40.102](../40.102_usp_prototypes/software_description.md) owns **store semantics** (version transitions, cap enforcement, `usp_version_record` append, `usp_version_ref` digest).
@@ -63,7 +67,7 @@ Phase B write surface (UPI → USP):
 
 - **Iterative Design Flow (50-series influence):** None yet for UPI-specific 50.xx; conversation layer specs deferred until 30 promotion.
 
-**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Commit pipeline and GB gate semantics align with [20.103](../../20_requirements/20.103_upi_requirements.md) HLR-001–022 and W1 [40.207](../40.207_replay_prototypes/software_description.md) C7-D/E simulated evidence. GATE-B requires Phase B evidence for FIFO commit ordering, GB veto path, incomplete-event reject, cap overflow, and deterministic `usp_version_ref` replay.
+**Agreement Statement**: Aligned — Phase A + Phase B approved (CP, 2026-06-08). 8/8 harness evidence; commit pipeline aligns with [20.103](../../20_requirements/20.103_upi_requirements.md) HLR-001–022. Live GB path evidenced via [40.36](../40.36_gb_prototypes/software_description.md) `harness_w2.py`. GATE-B row 202 closed.
 
 ## Phase A Deliverables (this document)
 - UPI role on conversation layer (not a basin stage)
