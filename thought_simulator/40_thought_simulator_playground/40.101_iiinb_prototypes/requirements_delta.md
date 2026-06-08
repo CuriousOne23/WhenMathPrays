@@ -1,9 +1,9 @@
 # Requirements Delta
 
 ## Scaffold Status
-- scaffold_status: implemented (initial Phase B pass, 2026-06-08)
-- Phase A: **complete and promotion-ready** (2026-06-08)
-- Phase B: initial execution complete (6/6 PASS); formal approval pending (40.510-101, GATE-A)
+- scaffold_status: implemented (Phase B v0.1 complete, 2026-06-08)
+- Phase A: **approved** (CP review, 2026-06-08)
+- Phase B: v0.1 complete (6/6 PASS); formal approval pending (40.510-101, GATE-A)
 
 ## Anchors
 - 20-anchor: thought_simulator/20_requirements/20.101_iiinb_requirements.md (full 28 HLRs in software_description.md)
@@ -18,7 +18,7 @@ The complete set of HLR-20.101-001 through HLR-20.101-028 is made visible in `so
 - `verification_capsule.md`: Phase A checklist + initial evidence baseline
 - `prototype.py` / `harness.py`: exploratory skeleton (pre-dated Phase A doc; 6/6 initial pass retained as baseline)
 
-## Part B Evidence (Initial pass — 2026-06-08)
+## Part B Evidence (v0.1 — 2026-06-08)
 - Harness run: 2026-06-08
 - Artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
 - Status: PASS (6/6 scenarios)
@@ -58,7 +58,7 @@ The complete set of HLR-20.101-001 through HLR-20.101-028 is made visible in `so
 
 ## Phase 1 delta (40.510-101)
 - Created IIInB module: `profile_enabled` gate, read-only USP apply, intake-bound TP writes, `run_intake_path` ordering
-- Initial harness 6/6 PASS; Phase A software description complete 2026-06-08
+- Initial harness 6/6 PASS; Phase A approved (CP review, 2026-06-08)
 
 ## Flows Alignment Statement
 
@@ -66,9 +66,9 @@ The complete set of HLR-20.101-001 through HLR-20.101-028 is made visible in `so
 - **Backward Flow (40-series evidence)**: 6/6 PASS initial artifact proves core repair-path skeleton; open HLRs named above.
 - **Iterative Design Flow (50-series influence)**: None yet; Wave 2 conversation layer deferred per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Provisionally aligned for Phase A closure. Phase B formal approval requires expanded test matrix and GATE-A reviewer sign-off on 40.510-101.
+**Agreement Statement**: Provisionally aligned — Phase A approved (CP, 2026-06-08). Phase B formal approval requires expanded test matrix and GATE-A reviewer sign-off on 40.510-101.
 
 ## Open gaps (Phase 2+)
 - Full CIL FIFO wire (40.33 redo)
 - TCU reporting fidelity (20.150)
-- `FAIL_ENVELOPE` replay verdict fixtures (40.510-207)
+- `FAIL_ENVELOPE` replay verdict fixtures — consolidated deferral in `software_description.md` Risks & Unknowns (40.510-207)

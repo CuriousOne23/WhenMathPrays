@@ -1,10 +1,10 @@
 # 40.101_iiinb_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **complete and promotion-ready** (2026-06-08)
-- Phase B (prototype + harness + evidence): **initial execution complete** (6/6 PASS, 2026-06-08); formal approval pending (40.510-101, GATE-A)
+- Phase A (software_description): **approved** (CP review, 2026-06-08)
+- Phase B (prototype + harness + evidence): **v0.1 complete** (6/6 PASS, 2026-06-08); formal approval pending (40.510-101, GATE-A)
 
-## Phase B Deliverables (Executed — initial pass)
+## Phase B Deliverables (Executed — v0.1)
 - Harness executed 6 scenarios; artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
 - Evidence types (per 40.20): behavioral, structural (intake path ordering), negative (escalate, cap), replay
 - Core invariants demonstrated: `profile_enabled` skip, USP rule apply, escalate-without-guess, `InB → IIInB → RB` ordering, apply cap, envelope guard, deterministic replay
@@ -13,7 +13,7 @@
 - Note: The full HLR list from 20.101_iiinb_requirements.md is included below for exploratory visibility. 20.xx remains the sole source of truth; 30.xx remains the authoritative coverage audit layer. 40.101 is a playground and not authoritative.
 
 ## Scaffold Metadata
-- scaffold_status: implemented (initial Phase B pass)
+- scaffold_status: implemented (Phase B v0.1 complete)
 - intended_20_anchor: thought_simulator/20_requirements/20.101_iiinb_requirements.md (primary)
 - intended_10_10_anchors:
   - thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md (deterministic cycle; IIInB as optional pre–Pipeline A repair slice)
@@ -28,6 +28,8 @@
 This scaffold reserves the module slot for exploratory implementation of the Input Inference/Repair Basin (IIInB) as the optional **`input_semantic_repair`** stage on the Track H intake path.
 
 It corresponds to the profile-gated repair slice defined in 20.101_iiinb_requirements.md, positioned **after** [20.100](20.100_inb_requirements.md) InB and **before** RB routing.
+
+IIInB executes only when `profile_enabled = true`; otherwise it skips with zero semantic effect.
 
 **Intake ordering (HQ-001):** `InB → IIInB → RB`
 
@@ -56,7 +58,6 @@ IIInB **does not**:
 - initial prototype + harness implemented (`prototype.py`, `harness.py`); evidence in `verification_capsule.md` and `requirements_delta.md`
 - continues to explore all behaviors and invariants defined in the 20.101 HLRs below, plus supporting 10-series contracts and boundaries
 - cross-turn UPI/GB/CIL wiring deferred to Wave 2 (40.102, 40.103, 40.33 redos)
-- `FAIL_ENVELOPE` negative fixtures deferred to 40.510-207 (Wave 2 extension of this module)
 
 All exploration **SHALL** remain strictly deterministic, bounded, audit-rich, and replayable. The full HLR list is reproduced here for exploratory visibility in the playground.
 
@@ -68,7 +69,7 @@ All exploration **SHALL** remain strictly deterministic, bounded, audit-rich, an
 
 - **Iterative Design Flow (50-series influence)**: None yet; USP/UPI/CIL cross-turn paths deferred to Wave 2 per [40.510](../40.510_refactor.md).
 
-**Agreement Statement**: Provisionally aligned — core Track H `input_semantic_repair` path is demonstrated at playground depth. Phase B formal approval and Wave 1 closure pending GATE-A. Cross-turn conversation layer, full CIL FIFO wire, TCU fidelity, and `FAIL_ENVELOPE` fixtures are named open items.
+**Agreement Statement**: Provisionally aligned — Phase A approved; core Track H `input_semantic_repair` path demonstrated at playground depth (Phase B v0.1, 6/6 PASS). Phase B formal approval and Wave 1 GATE-A closure pending. Cross-turn conversation layer, full CIL FIFO wire, and TCU fidelity are named open items (see Risks & Unknowns).
 
 ## Phase A Deliverables (this document)
 - High-level description of IIInB as `input_semantic_repair` stage for exploratory prototyping
@@ -151,7 +152,7 @@ HLR-20.101-015, 024. IIInB **may write** only intake-bound TP fields. **Must not
 - MTP semantics, OB evidence, truth fields
 - Pipeline B envelopes (`exec_plan`, `exec_trace`)
 
-Harness verifies `envelope_guard.semantic_core_unchanged` and `tp_tr_unchanged` after every repair pass. Full `FAIL_ENVELOPE` replay verdict fixtures planned (40.510-207).
+Harness verifies `envelope_guard.semantic_core_unchanged` and `tp_tr_unchanged` after every repair pass (positive guard only in Phase B v0.1; negative `FAIL_ENVELOPE` replay verdicts — see Risks & Unknowns).
 
 ## profile_enabled Gate (Draft)
 HLR-20.101-001, 002.
@@ -224,7 +225,7 @@ HLR-20.101-022. Playground registry (`REASON_CODES` in `prototype.py`):
 | Escalate no guess | `negative_escalate_no_guess` | 009, 012, 017 | PASS |
 | Apply cap | `negative_apply_cap` | 019 | PASS |
 | Deterministic replay | `positive_deterministic_replay` | 021 | PASS |
-| Not in RB→OB chain | *(planned)* | 004 | todo |
+| Not in RB→OB chain | *(planned)* | HLR-20.101-004 | todo |
 | Multi-rule precedence | *(planned)* | 007 | todo |
 | Rejected InB handoff | *(planned)* | 003 | todo |
 | USP load failure | *(planned)* | 005, 022 | todo |
@@ -234,7 +235,7 @@ HLR-20.101-022. Playground registry (`REASON_CODES` in `prototype.py`):
 | Canonical audit export | *(planned)* | 027, 028 | todo |
 
 ## HLR Reference (Exploratory Visibility)
-Phase B evidence for these HLRs is summarized in the Test Matrix and `verification_capsule.md`; this list is retained as a reference. Source: 20.101_iiinb_requirements.md.
+Phase-A evidence for these HLRs is provided in the Test Matrix; Phase B v0.1 harness evidence is summarized in `verification_capsule.md`. This list is retained as a reference. Source: 20.101_iiinb_requirements.md.
 
 1. HLR-20.101-001: IIInB SHALL execute as stage wire `input_semantic_repair` only when `profile_enabled = true` for the active execution signature.
 2. HLR-20.101-002: When `profile_enabled = false`, TS SHALL skip `input_semantic_repair` with zero semantic effect and SHALL NOT load USP.
@@ -265,7 +266,7 @@ Phase B evidence for these HLRs is summarized in the Test Matrix and `verificati
 27. HLR-20.101-027: IIInB audit exports SHALL use canonical field ordering per 20.95.
 28. HLR-20.101-028: IIInB diagnostic records SHALL be consumable by MB without mutating repair state.
 
-## Non-Goals (Scaffold and Initial Phase B)
+## Non-Goals (Scaffold and Phase B v0.1)
 This module **SHALL NOT**:
 - Own surface canonicalization (InB / 40.100)
 - Write or commit USP rules (UPI / 40.103)
@@ -276,10 +277,10 @@ This module **SHALL NOT**:
 - Bypass GB supervisory gates for global behavior
 
 ## Risks & Unknowns to Investigate
+- **`FAIL_ENVELOPE` negative fixtures (deferred):** Replay-verdict tests for forbidden writes to `semantic_core`, `TP.TR`, MTP, and Pipeline B envelopes (`exec_plan`, `exec_trace`) are deferred to [40.510-207](../40.510_refactor.md) (Wave 2 extension of this module). Phase B v0.1 covers positive `envelope_guard` checks only; Test Matrix row `FAIL_ENVELOPE guard` tracks closure.
 - Full CIL escalation wire shape and FIFO ordering at IIInB boundary
 - Multi-rule precedence edge cases under overlapping patterns
 - TCU reporting fidelity vs 20.150 Stage 3 row
-- `FAIL_ENVELOPE` negative replay verdicts for forbidden writes
 - Integration with live InB handoff object from 40.100 (beyond harness fixtures)
 - Conversation-scoped audit storage vs in-memory playground records (HLR-016)
 - Cross-turn USP version pinning when UPI commits new rules (Wave 2)
