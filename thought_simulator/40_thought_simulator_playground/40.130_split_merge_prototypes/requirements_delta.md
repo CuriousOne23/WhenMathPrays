@@ -1,0 +1,1 @@
+# requirements_delta — Phase A; maps to 20.130 HLR-001–026. Phase B traceability pending.

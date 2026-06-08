@@ -2,7 +2,21 @@
 
 ## Approval State
 
-Approved (legacy module migrated before global Two-Phase policy; retained as approved baseline).
+- Legacy baseline: **approved** (pre–Two-Phase policy migration)
+- **W3 Phase A** (40.510-402 targeted redo): **approved** (CP review, 2026-06-08)
+- W3 Phase B (intake repair fields; `commit_id` boundary alignment): **pending**
+- Program row: **40.510-402** (W3)
+
+## W3 Targeted Redo Scope (40.510-402)
+
+Per [40.510](../40.510_refactor.md) and [20.105](../../20_requirements/20.105_tp_requirements.md), Phase B SHALL extend the existing TP macro to support:
+
+- Track H **intake-bound** repair fields (IIInB write set per 20.38 §6; no `semantic_core` / `TP.TR`)
+- Lane-local carrier semantics aligned with normative A-chain ([20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1)
+- `commit_id` boundary awareness — TP drafts post-`mtp_update` MUST NOT alter committed snapshot for same cycle
+- Handoff shapes for [40.130](../40.130_split_merge_prototypes/software_description.md) split/merge and [40.501](../40.501_rb_prototypes/software_description.md) routing
+
+**Agreement Statement (W3 Phase A)**: Provisionally aligned — existing Phase B TP evidence remains valid baseline; W3 extension adds intake-bound fields without restructuring macro API. Phase B delta scoped to 20.105 §3.4 + 20.101 handoff only.
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
