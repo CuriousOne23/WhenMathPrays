@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-203)
-- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; 2026-06-08)
+- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; CP review, 2026-06-08)
 - Program row: **40.510-203** (W2)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -40,6 +40,7 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 - `UspSnapshot` immutability contract for one IIInB pass (pin `usp_version_ref`)
 - Golden JSON fixtures for struct compliance
 - Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note)
+- Future W3 may introduce `usp_snapshot_v2` (or successor schemas); version negotiation and explicit migration notes will be required before digest authority transfers
 
 **Out of scope:**
 - USP rule store mutation (40.102)
@@ -54,7 +55,7 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 
 - **Iterative Design Flow (50-series influence):** [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) and [50.45](../../50_thought_simulator_design/50.45_data_structures.md) inform struct naming; no normative override of 20.39.
 
-**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Struct shapes align with 20.39 §3.1–3.2 and W1 [40.101](../40.101_iiinb_prototypes/software_description.md) inline evidence. Phase B golden diffs required before downstream GATE-B modules treat exports as stable wire authority.
+**Agreement Statement**: Aligned — Phase B approved (CP, 2026-06-08). Struct shapes and 8/8 harness evidence align with 20.39 §3.1–3.2; digest compatibility with [40.101](../40.101_iiinb_prototypes/prototype.py) proven. Downstream W2 modules (102, 103, 33, 32) may treat exports as stable wire authority.
 
 ## Phase A Deliverables (this document)
 - Struct responsibility map (`UspSnapshot`, `InputRepairTag`, `ConversationLayerState`, audit records)
@@ -76,7 +77,7 @@ The module **does not** implement USP/UPI business logic (40.102/40.103). It def
 ## Struct Contract Sketches (Draft)
 
 ### UspRule (shared leaf type)
-`UspRule` is **canonicalized here for W2 export** — field-compatible with [40.101 `UspRule`](../40.101_iiinb_prototypes/prototype.py) (`rule_id`, `pattern`, `expansion`, `state`, `scope`, `version`, `precedence`). Phase B SHALL prove digest equivalence with 40.101 inline rules before 40.101 migrates imports; no semantic drift vs W1 harness.
+`UspRule` is **canonicalized here for W2 export** — field-compatible with [40.101 `UspRule`](../40.101_iiinb_prototypes/prototype.py) (`rule_id`, `pattern`, `expansion`, `state`, `scope`, `version`, `precedence`). Phase B proved digest equivalence with 40.101 inline rules (`positive_iiinb_digest_compat`). **Digest note:** `compute_usp_version_ref` sorts rules by `(scope, version, rule_id)` only — `precedence` is an IIInB apply-time ordering key (20.102-012), not part of the content-addressed snapshot digest, so cross-module replay pins remain stable when precedence metadata differs but rule identity fields match.
 
 ### UspSnapshot
 ```
