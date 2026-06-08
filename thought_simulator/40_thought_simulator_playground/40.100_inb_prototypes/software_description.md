@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP final review, 2026-06-08)
-- Phase B (prototype + harness + evidence): **complete** (16/16 PASS, 2026-06-08)
+- Phase B (prototype + harness + evidence): **approved** (16/16 PASS, 2026-06-08; 40.510-103)
 
 ## Phase B Deliverables (Executed)
 - Harness executed 16 scenarios; artifact: `artifacts/inb_verification_run_2026-06-08.json`

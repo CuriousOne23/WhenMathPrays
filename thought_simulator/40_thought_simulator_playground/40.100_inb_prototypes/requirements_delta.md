@@ -3,7 +3,7 @@
 ## Scaffold Status
 - scaffold_status: implemented (Phase B complete, 2026-06-08)
 - Phase A: **approved** (CP final review, 2026-06-08)
-- Phase B: **complete** (16/16 PASS)
+- Phase B: **approved** (16/16 PASS; CP review, 2026-06-08; 40.510-103)
 
 ## Anchors
 - 20-anchor: thought_simulator/20_requirements/20.100_inb_requirements.md (full 26 HLRs reproduced in software_description.md for exploratory clarity in the playground)
