@@ -78,12 +78,14 @@ class UPI:
             gb_out = {"granted": gb_decision == "approve", "gb_reason_code": "GB_TEST_OK" if gb_decision == "approve" else "GB_TEST_VETO"}
 
         if not gb_out.get("granted", False):
+            # gb_reason_code surfaced on record + reason_codes for MB/audit (20.103-010/011)
+            veto_code = gb_out.get("gb_reason_code", "GB_VETO")
             record = UpiCommitRecord(
                 "GB_VETOED",
                 None,
                 None,
-                gb_out.get("gb_reason_code", "GB_VETO"),
-                [gb_out.get("gb_reason_code", "GB_VETO")],
+                veto_code,
+                [veto_code],
             )
             self.audit_log.append(record)
             return record
