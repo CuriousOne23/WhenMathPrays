@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-201)
-- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; 2026-06-08; GATE-B)
+- Phase B (prototype + harness + evidence): **approved** (8/8 PASS; CP review, 2026-06-08; GATE-B)
 - Program row: **40.510-201** (W2) — **GATE-B**
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -42,7 +42,7 @@ USP **does not**:
 
 W2 Phase B explores the **store + snapshot + version transition** core. Full multi-turn CIL→UPI→GB wire is evidenced jointly with 40.103/40.33/40.36; USP module isolates store semantics.
 
-Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note).
+Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note). Future `usp_snapshot_v2` (or successor) requires explicit version negotiation before COB/IIInB pin authority transfers off `usp_snapshot_v1`.
 
 ### UspRule struct authority
 
@@ -56,7 +56,7 @@ Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increm
 
 - **Iterative Design Flow (50-series influence):** [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) `usp_version_ref` pinning contract; USP store design remains 20.102-authoritative.
 
-**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Store boundaries and snapshot contract align with [20.102](../../20_requirements/20.102_usp_requirements.md) HLR-001–024 and W1 [40.101](../40.101_iiinb_prototypes/software_description.md) inline evidence. GATE-B requires Phase B evidence for snapshot immutability, version monotonicity, cap overflow, GB veto non-activation, and deterministic replay of active rule sets.
+**Agreement Statement**: Aligned — Phase A + Phase B approved (CP, 2026-06-08). Store boundaries, 8/8 harness evidence, and snapshot contract align with [20.102](../../20_requirements/20.102_usp_requirements.md) HLR-001–024; digest authority via [40.392](../40.392_core_data_structs_prototypes/software_description.md). GATE-B row 201 closed.
 
 ## Phase A Deliverables (this document)
 - USP role and boundaries on conversation layer

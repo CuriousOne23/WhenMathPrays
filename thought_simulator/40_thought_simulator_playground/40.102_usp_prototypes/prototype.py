@@ -57,6 +57,11 @@ class USPStore:
         return self._version_id
 
     def _active_rules(self) -> list[UspRule]:
+        """ACTIVE rules sorted for store introspection.
+
+        ``precedence`` affects IIInB apply ordering (20.102-012) but is excluded
+        from ``usp_version_ref`` digest (40.392 ``compute_usp_version_ref``).
+        """
         active = [r for r in self._rules if r.state == "ACTIVE"]
         return sorted(active, key=lambda r: (-r.precedence, -r.version, r.rule_id))
 
