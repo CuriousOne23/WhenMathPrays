@@ -1,0 +1,112 @@
+{
+  "additional_scenarios": [
+    {
+      "result": "PASS",
+      "scenario": "strip_replay_invariant",
+      "stripped_digest": "cd9634e4ec503f09d17f59bb815f6b21915c62752e41a2efd17510c1be3c8d30"
+    }
+  ],
+  "class_7": {
+    "replay_class": "REPLAY_CLASS_7",
+    "status": "PASS",
+    "strip_scope": [
+      "exec_plan",
+      "exec_trace"
+    ],
+    "sub_scenarios": {
+      "C7-A": {
+        "assertions": {
+          "no_usp_load_side_effects": true,
+          "routing_follows_inb": true,
+          "zero_track_h_stage_records": true
+        },
+        "fixture_id": "REPLAY_C7_PROFILE_DISABLED",
+        "intake_path": [
+          {
+            "outcome": {
+              "intake_order": 0,
+              "outcome": "accepted",
+              "profile": "v1.0",
+              "reason_code": null,
+              "source": "c7a"
+            },
+            "pipeline_id": "A",
+            "stage_name": "inb_surface_norm"
+          },
+          {
+            "handoff": "rb",
+            "pipeline_id": "A",
+            "stage_name": "routing"
+          }
+        ],
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-A"
+      },
+      "C7-B": {
+        "assertions": {
+          "no_semantic_core_diff": true,
+          "no_tp_tr_diff": true,
+          "repair_applied": true,
+          "track_h_replay_equivalent": true,
+          "usp_version_ref_pinned": true
+        },
+        "fixture_id": "REPLAY_C7_USP_RULE_APPLY",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-B",
+        "usp_version_ref": "126dd15977fad1f18bbe5e6e4512af74a1fbee2653732eabe77e7b5d34870a5d"
+      },
+      "C7-C": {
+        "assertions": {
+          "iiinb_escalation_ref_present": true,
+          "no_guess_resolution": true,
+          "no_semantic_core_diff": true,
+          "repair_outcome_escalated_not_applied": true
+        },
+        "fixture_id": "REPLAY_C7_ESCALATE_NO_GUESS",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-C"
+      },
+      "C7-D": {
+        "assertions": {
+          "clarification_fifo_ordered": true,
+          "cross_turn_usp_visibility": true,
+          "turn1_escalated": true,
+          "turn2_rule_applied": true
+        },
+        "fixture_id": "REPLAY_C7_CLARIFY_COMMIT_CROSS_TURN",
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-D",
+        "turn1_usp_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9",
+        "turn2_usp_ref": "2ee3b36f059ca0084fc05a3a798d032ef3a93b6b2b5e2f2f90c82502e7639cfc"
+      },
+      "C7-E": {
+        "assertions": {
+          "gb_veto_no_active_rule": true,
+          "iiinb_identical_after_veto": true,
+          "still_escalates_without_rule": true,
+          "usp_version_ref_unchanged": true
+        },
+        "fixture_id": "REPLAY_C7_GB_VETO_COMMIT",
+        "gb_veto": {
+          "commit_status": "VETOED",
+          "gb_reason_code": "UNSAFE_RULE_PATTERN"
+        },
+        "pass": true,
+        "replay_class": "REPLAY_CLASS_7",
+        "sub_id": "C7-E",
+        "usp_version_ref": "07cfecd421434cd16dd598915b4a5c4f156722d894237f1f2f4c93de6fe1abb9"
+      }
+    }
+  },
+  "date": "2026-06-08",
+  "module": "40.207_replay_prototypes",
+  "status": "PASS",
+  "summary": {
+    "c7_passed": 5,
+    "c7_total": 5
+  }
+}

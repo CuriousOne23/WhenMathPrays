@@ -120,6 +120,13 @@ class InB:
                 "metadata": result["metadata"],
             }
         )
+        # Handoff contract: InB -> IIInB -> RB (HLR-20.100-020, 20.101-003)
+        result["handoff"] = {
+            "contract_version": "inb_to_iiinb_v1",
+            "next_stage": "input_semantic_repair",
+            "downstream_after_repair": "routing",
+            "ordering": ["inb_surface_norm", "input_semantic_repair", "routing"],
+        }
         return result
 
     def _make_reject(

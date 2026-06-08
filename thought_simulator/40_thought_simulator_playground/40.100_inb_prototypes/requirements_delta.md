@@ -16,9 +16,9 @@
 The complete set of HLR-20.100-001 through HLR-20.100-026 (plus supporting 10-series contracts) is made visible in the accompanying software_description.md for playground exploration and insight. 20.xx remains the authoritative source of truth. 30.xx remains the coverage audit layer. 40.100 is non-canonical.
 
 ## Part B Evidence (Executed)
-- Harness run: 2026-06-07
-- Artifact: artifacts/inb_verification_run_2026-06-07.json
-- Status: PASS (7/7 scenarios)
+- Harness run: 2026-06-08 (Phase 1 handoff extension)
+- Artifact: artifacts/inb_verification_run_2026-06-08.json
+- Status: PASS (8/8 scenarios)
 - Core invariants demonstrated via scenarios:
   - non_semantic_canonicalization (HLR-20.100-002, 003, 005)
   - bounded_reject_with_audit (HLR-20.100-007, 008, 016)
@@ -35,6 +35,10 @@ The complete set of HLR-20.100-001 through HLR-20.100-026 (plus supporting 10-se
   - negative_unsupported_profile
   - positive_fifo_batch_order
   - positive_deterministic_replay
+
+## Phase 1 delta (40.510-103)
+- Added `handoff` contract on accepted output: `next_stage=input_semantic_repair`, ordering InB→IIInB→RB (HLR-20.100-020, 20.101-003)
+- Scenario: `positive_iiinb_handoff_contract` — PASS
 
 ## Open Work (next iteration)
 - Expand negative-path coverage for more HLRs (e.g. zero-event windows HLR-023, diagnostic exports HLR-022)
