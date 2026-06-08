@@ -1,8 +1,8 @@
 # 40.103_upi_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **draft — pending review**
-- Phase B (prototype + harness + evidence): not started
+- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-202)
+- Phase B (prototype + harness + evidence): not started — blocked until explicit Phase B go-ahead
 - Program row: **40.510-202** (W2) — **GATE-B**
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -11,11 +11,11 @@
 - Phase B (only after approval): implement `prototype.py`, `harness.py`, `verification_capsule.md`, `requirements_delta.md`, and artifacts.
 
 ## Scaffold Metadata
-- scaffold_status: Phase A draft
+- scaffold_status: Phase A approved (CP 2026-06-08); Phase B not started
 - intended_20_anchor: [20.103_upi_requirements.md](../../20_requirements/20.103_upi_requirements.md)
 - intended_20_secondary: [20.102](../../20_requirements/20.102_usp_requirements.md), [20.33](../../20_requirements/20.33_cil_requirements.md), [20.80](../../20_requirements/20.80_gb_requirements.md) §10
 - prerequisite_row: **40.510-201** (USP) must be `approved` before GATE-B close on this row
-- upstream_playground_modules: [40.102](../40.102_usp_prototypes/software_description.md), [40.33](../40.33_cil_prototypes/software_description.md) (W2 wire)
+- upstream_playground_modules: [40.102](../40.102_usp_prototypes/software_description.md) (USP write surface), [40.392](../40.392_core_data_structs_prototypes/software_description.md) (`UpiCommitRecord` / event shapes), [40.33](../40.33_cil_prototypes/software_description.md) (W2 wire)
 - applicability: **User Preference Integrator (UPI)** — sole authorized writer of `usp_rule` entries; clarification → GB gate → USP commit
 - disposition_target: promote
 - program_wave: **W2** — **GATE-B** per [40.510](../40.510_refactor.md)
@@ -44,6 +44,17 @@ UPI **does not**:
 
 W2 Phase B explores commit orchestration with **simulated or stubbed CIL FIFO input** and **GB gate callback**. Live CIL wire extension is row 40.510-205; joint integration bundle "Track H turn-1→2" after GATE-B.
 
+Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increments (breaking change requires explicit migration note).
+
+### USP store API boundary (40.102 dependency)
+
+UPI owns **orchestration only** — validation, GB gate, audit emission, FIFO ordering. [40.102](../40.102_usp_prototypes/software_description.md) owns **store semantics** (version transitions, cap enforcement, `usp_version_record` append, `usp_version_ref` digest).
+
+Phase B write surface (UPI → USP):
+- `usp_apply_commit(commit_payload)` — sole authorized write entry; accepts bounded rule fields + transition intent (`create` / `supersede` / `revoke`); returns `{ usp_version_id, usp_version_ref, active_rule_count }` or deterministic reject with fixed reason code
+- UPI does **not** call USP snapshot export (`export_snapshot` is IIInB read-only path on 40.102)
+- Wire structs (`clarification_event`, `upi_commit_record`, `UspRule`) imported from [40.392](../40.392_core_data_structs_prototypes/software_description.md); neither module redefines leaf shapes
+
 ## Flows Alignment Statement
 
 - **Forward Flow (20-series):** [20.103](../../20_requirements/20.103_upi_requirements.md) (HLR-001–022), [20.102](../../20_requirements/20.102_usp_requirements.md) (commit effects), [20.33](../../20_requirements/20.33_cil_requirements.md) (`clarification_event` source), [20.80](../../20_requirements/20.80_gb_requirements.md) §10 (GB gate/veto).
@@ -52,7 +63,7 @@ W2 Phase B explores commit orchestration with **simulated or stubbed CIL FIFO in
 
 - **Iterative Design Flow (50-series influence):** None yet for UPI-specific 50.xx; conversation layer specs deferred until 30 promotion.
 
-**Agreement Statement**: Provisionally aligned — Phase A only. GATE-B requires Phase B evidence for FIFO commit ordering, GB veto path, incomplete-event reject, cap overflow, and deterministic `usp_version_ref` replay.
+**Agreement Statement**: Aligned — Phase A approved (CP, 2026-06-08). Commit pipeline and GB gate semantics align with [20.103](../../20_requirements/20.103_upi_requirements.md) HLR-001–022 and W1 [40.207](../40.207_replay_prototypes/software_description.md) C7-D/E simulated evidence. GATE-B requires Phase B evidence for FIFO commit ordering, GB veto path, incomplete-event reject, cap overflow, and deterministic `usp_version_ref` replay.
 
 ## Phase A Deliverables (this document)
 - UPI role on conversation layer (not a basin stage)
@@ -115,6 +126,20 @@ upi_commit_record = {
 ## HLR Reference (Exploratory Visibility — 20.103)
 
 Normative set: HLR-20.103-001 through -022. Full text: [20.103_upi_requirements.md](../../20_requirements/20.103_upi_requirements.md).
+
+### HLR family → Phase-B scenario mapping
+
+| HLR family | Topic (20.103) | Phase-B topic # | Primary scenario IDs |
+|------------|----------------|-----------------|----------------------|
+| 001–004 | Authority and placement | 1, 6 | structural negatives in harness setup |
+| 005–008 | Clarification → commit flow | 2 | `positive_single_commit`, `positive_fifo_two_events`, `negative_incomplete_event` |
+| 009–011 | GB governance | 3 | `positive_gb_approve`, `positive_gb_veto` |
+| 012–014 | Determinism and replay | 4 | `positive_fifo_two_events`, `positive_replay_identical_ref` |
+| 015–016 | Bounds | 5 | `negative_usp_cap_overflow`, `negative_pending_commit_cap` |
+| 017–019 | Cross-program separation | 6 | structural negatives (no A/B / CIL-init bypass) |
+| 020 | Parent compliance | — | cross-check vs 20.10/20.30 invariants (review gate) |
+| 021 | Deterministic fixture testability | all | full test matrix |
+| 022 | Append-only audit | 7 | audit asserts on every commit attempt path |
 
 ## Risks & Unknowns
 - GB gate simulated vs live [40.36](../40.36_gb_prototypes/software_description.md) callback in Phase B
