@@ -31,7 +31,7 @@
 
 | 30 module | 10.50 peer |
 |-----------|------------|
-| 30.392 | `10.50.392_core_data_structs_design_requirements.md` |
+| 30.392 | `10.50.392_core_data_structs_design_requirements.md` → [50.392](../50_thought_simulator_design/50.392_core_data_structs_design_spec.md) **CP design-clean** |
 | 30.102 | `10.50.102_usp_design_requirements.md` |
 | 30.103 | `10.50.103_upi_design_requirements.md` |
 | 30.32 / 33 / 36 | Existing `10.50.32` / `33` / `36` — W2 delta in 30 capsules |
