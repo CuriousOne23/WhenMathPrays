@@ -2,9 +2,21 @@
 
 ## Approval State
 
-**Phase A approved (Copilot).** Phase B implementation executed and supporting documentation aligned with 40.20_tp_lifecycle standards.
+- Legacy Phase A/B (proxy routing): **approved** (Copilot; proxy subset only)
+- **W3 Phase A** (40.510-410 extension): **approved** (CP review, 2026-06-08)
+- W3 Phase B (DCB ephemeral TR events; `tr_needs_update` gating per 20.37): **pending**
+- Program row: **40.510-410** (W3)
 
-**2026-06-05 alignment pass:** This document synchronized with `20.37` Semantic Interpretation Flow Contract (HLR-20.037-049/050/051) and related 10.50.37 / 30.37 forward-flow artifacts. No change to executed proxy code scope.
+## W3 Extension Scope (40.510-410)
+
+Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to implement on-TP semantics:
+
+- Consume OB TR-input + optional [40.106](../40.106_dcb_prototypes/software_description.md) ephemeral events when `tr_needs_update = true`
+- Atomic `TP.TR` write; clear `tr_needs_update` on success only (20.37 steps 5–6)
+- Negative: reject TR run when flag false; reject DCB-direct RB consumption
+- Preserve existing proxy scenarios as regression subset until full integration supersedes
+
+**2026-06-05 alignment pass:** This document synchronized with `20.37` Semantic Interpretation Flow Contract (HLR-20.037-049/050/051) and related 10.50.37 / 30.37 forward-flow artifacts. W3 extension adds integration scope; proxy code remains until Phase B lands.
 
 **Alignment Summary (2026-06-05):** This software description is aligned with the updated `20.37` Semantic Interpretation Flow Contract. The current prototype implements only the proxy routing subset (`HLR-20.437-*`). Integration HLRs (`HLR-20.037-049`, `-050`, `-051`) are acknowledged but not implemented. **40.20 execution will generate proxy-only artifacts** until Phase C integration scenarios are added.
 

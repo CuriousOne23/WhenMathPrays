@@ -2,7 +2,20 @@
 
 ## Approval State
 
-Approved (legacy module migrated before global Two-Phase policy; retained as approved baseline).
+- Legacy baseline: **approved** (pre–Two-Phase policy)
+- **W3 Phase A** (40.510-412 full redo): **approved** (CP review, 2026-06-08)
+- W3 Phase B (decompose/realign to normative A basins per 20.01 B2): **pending**
+- Program row: **40.510-412** (W3)
+
+## W3 Full Redo Scope (40.510-412)
+
+The generic pre-partition basin model SHALL be decomposed or realigned to normative Pipeline A basins per [20.01](../../20_requirements/20.01_architecture_map.md) B2 and [40.510](../40.510_refactor.md) A-chain bundle (405–411):
+
+- RB / OB / DCB / TB / IB roles MUST NOT collapse into a single generic basin type
+- Phase B may retain shared harness utilities but MUST split basin contracts to match 40.501, 40.401, 40.106, 40.601, 40.35 boundaries
+- Strip-replay fixtures SHALL not depend on legacy generic basin IDs after W3 closure
+
+**Agreement Statement (W3 Phase A)**: Provisionally aligned — redo scope is structural decomposition, not deletion of prior verification artifacts until W3 Phase B supersedes with mapped regression.
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 

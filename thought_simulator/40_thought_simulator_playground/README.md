@@ -132,13 +132,20 @@ Why the exception exists:
 - [40.33_cil_prototypes/](40.33_cil_prototypes/) — CIL clarification FIFO
 - [40.34_cop_prototypes/](40.34_cop_prototypes/) — COP async coprocessor
 
-### Meaning carriers & Pipeline A basins
+### Meaning carriers & Pipeline A basins (Wave 3 — W3)
 
-- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) — ThoughtPoint lifecycle (note: `40.20` also names the master guide *file*)
-- [40.30_basin_prototypes/](40.30_basin_prototypes/) — generic basin prototypes (pre-partition)
-- [40.35_ib_prototypes/](40.35_ib_prototypes/) — inquiry basin (IB)
-- [40.37_tr_router_prototypes/](40.37_tr_router_prototypes/) — Thought Router (TR)
-- [40.165_dcb_stability_prototypes/](40.165_dcb_stability_prototypes/) — DCB stability (qualitative)
+- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) — ThoughtPoint lifecycle (W3 redo: intake-bound fields)
+- [40.115_mtp_prototypes/](40.115_mtp_prototypes/) — MTP lifecycle; `commit_id` / `mtp_update` *(new W3)*
+- [40.130_split_merge_prototypes/](40.130_split_merge_prototypes/) — split/merge; `lineage_delta`; ΔH% *(new W3)*
+- [40.140_truth_done_prototypes/](40.140_truth_done_prototypes/) — Truth/Done terminal gate *(new W3)*
+- [40.501_rb_prototypes/](40.501_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
+- [40.401_ob_prototypes/](40.401_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.40 scheduler)*
+- [40.106_dcb_prototypes/](40.106_dcb_prototypes/) — DCB geometric meta-basin *(new W3)*
+- [40.601_tb_prototypes/](40.601_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
+- [40.30_basin_prototypes/](40.30_basin_prototypes/) — generic basin (W3 full redo → normative A basins)
+- [40.35_ib_prototypes/](40.35_ib_prototypes/) — inquiry basin (W3 extension: escalation routing)
+- [40.37_tr_router_prototypes/](40.37_tr_router_prototypes/) — Thought Router (W3 extension: DCB/TR gating)
+- [40.165_dcb_stability_prototypes/](40.165_dcb_stability_prototypes/) — DCB stability qualitative (W3 implement)
 
 ### Governance & diagnostics (B6)
 

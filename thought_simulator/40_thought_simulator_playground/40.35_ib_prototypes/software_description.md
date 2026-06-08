@@ -1,7 +1,18 @@
 # 40.35_ib_prototypes / software_description.md
 
 ## Approval State
-Phase A draft complete and approved for execution. Phase B implementation executed on 2026-06-03.
+- Legacy Phase A/B: **approved** (executed 2026-06-03)
+- **W3 Phase A** (40.510-411 extension): **approved** (CP review, 2026-06-08)
+- W3 Phase B (IIInB vs IB vs IMR escalation routing per 20.90/20.17): **pending**
+- Program row: **40.510-411** (W3)
+
+## W3 Extension Scope (40.510-411)
+
+Phase B SHALL add deterministic escalation routing seams per [20.510](../../20_requirements/20.510_refactoring_for_input_correction_track_h.md) §15.3 and [20.17](../../20_requirements/20.17_messy_input_handling.md):
+
+- Distinguish inquiry creation path (existing IB) from IIInB repair escalation (no OuB bypass)
+- IMR Type A/B correction triggers into Pipeline A only — no direct B mutation
+- Cross-evidence with [40.101](../40.101_iiinb_prototypes/software_description.md) unknown-token → CIL path
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 

@@ -1,10 +1,18 @@
 # 40.165_dcb_stability_prototypes / software_description.md
 
 ## Approval State
-Scaffold only (not implementation-complete).
+- Legacy scaffold: not implementation-complete
+- **W3 Phase A** (40.510-408): **approved** (CP review, 2026-06-08)
+- W3 Phase B (qualitative stability per 20.165; joint with 40.106): **pending**
+- Program row: **40.510-408** (W3)
+
+## W3 Extension Scope (40.510-408)
+
+Phase B SHALL implement qualitative stability invariants per [20.165](../../20_requirements/20.165_dcb_stability_requirements.md) as a **read-only observer** of [40.106](../40.106_dcb_prototypes/software_description.md) event rates and trajectory geometry — no numeric thresholds, no TP writes.
 
 ## Scaffold Metadata
-- scaffold_status: planned
+- scaffold_status: Phase A complete — stub only; W3 Phase B pending
+- program_wave: **W3**
 - intended_20_anchor: thought_simulator/20_requirements/20.165_dcb_stability_requirements.md
 - intended_10_10-anchor: (to be determined via 10.50.165)
 - applicability: planned exploratory module for DCB stability qualitative invariants

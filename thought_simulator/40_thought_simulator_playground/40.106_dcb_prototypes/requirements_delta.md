@@ -1,0 +1,1 @@
+# requirements_delta — Phase A; 20.106 HLR mapping pending Phase B.
