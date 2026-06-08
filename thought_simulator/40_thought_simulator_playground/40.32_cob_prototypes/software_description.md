@@ -1,7 +1,10 @@
 ﻿# 40.32_cob_prototypes / software_description.md
 
 ## Approval State
-Phase A draft complete and approved for execution. Phase B implementation executed on 2026-06-03.
+- Phase A (base lifecycle): **approved**; Phase B executed **2026-06-03**
+- Phase A (W2 USP-pin extension): **approved** (CP review, 2026-06-08; 40.510-204)
+- Phase B (W2 extension): not started — USP pin harness blocked until explicit Phase B go-ahead
+- Program row: **40.510-204** (W2)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
 
@@ -61,7 +64,7 @@ Inbound contract (JSON-compatible):
 - `sequence` (integer): deterministic ordering token
 - `lineage` (object): parent/child/merge-sources metadata
 - `profile_signature` (string): versioned profile precedence selector
-- `replay_mode` (enum): `full|windowed|summary_proof`
+- `replay_mode` (enum): `full|windowed|summary_proof` — see **Replay horizon semantics** below
 
 Outbound contract (JSON-compatible):
 
@@ -80,6 +83,22 @@ Outbound contract (JSON-compatible):
 - replay/export manifests use canonical deterministic key ordering
 - unsupported enums/profiles follow deterministic reject-with-audit behavior
 - lifecycle transitions occur only at deterministic safe boundaries
+
+### Replay horizon semantics
+
+| Mode | Meaning (20.32 HLR-008) |
+|------|-------------------------|
+| `full` | Export the complete deterministic event horizon for the conversation scope |
+| `windowed` | Export a bounded recent sequence window per profile cap — raw events within window only |
+| `summary_proof` | Export compaction-anchored summary digest and proof anchors only — no full raw replay beyond anchors (HLR-006) |
+
+Mode changes activate only at deterministic safe boundaries (HLR-009, -017).
+
+### Merge/split lineage invariants
+
+- **merge (allowed):** two or more `ACTIVE` `cob_id` sources with acyclic lineage → single successor `cob_id`; sources become `DEPRECATED`; winner-proof edges remain immutable (HLR-003, -005, -020)
+- **split (allowed):** one `ACTIVE` parent → two or more child `cob_id`s with explicit parent edge; parent becomes `DEPRECATED`; children remain independent until a subsequent merge event
+- **forbidden:** merge into `DEPRECATED` cob; split of non-`ACTIVE` cob; orphan lineage edges; cycle introduction; cross-child merge without explicit merge event
 
 ## 7. TCU and Tick-Budget Expectations
 
@@ -102,6 +121,21 @@ Planned negative-path checks:
 - invalid lineage transition rejection
 - out-of-order sequence rejection
 
+### Lifecycle operation → 20.32 HLR mapping (base)
+
+| Operation / topic | HLR anchors (20.031) | Phase-B scenario focus |
+|-------------------|----------------------|------------------------|
+| `create` | 001, 003, 020, 024 | identity + safe-boundary create |
+| `promote` | 002, 004, 005, 024 | deterministic winner promotion |
+| `deprecate` | 003, 020, 024 | lifecycle transition audit |
+| `merge` / `split` | 003, 005, 020, 024 | lineage invariants (§6) |
+| `compact` | 006, 007, 020 | anchored summary proofs |
+| `replay_mode_change` | 008, 009, 017, 024 | horizon mode switch |
+| `export` | 010–013, 015, 030 | manifest + redaction |
+| ordering / FIFO | 014, 026 | out-of-order sequence rejection |
+| boundaries / isolation | 021–025 | safe-boundary activation; no A/B mutation |
+| parent compliance | 022–023 | cross-check vs 20.10/20.30 |
+
 ## 9. Promotion Readiness Conditions
 
 Before promotion from 40 to 30:
@@ -115,7 +149,7 @@ Before promotion from 40 to 30:
 
 ## W2 Phase A Extension (40.510-204)
 
-**Approval State:** Phase A extension **draft — pending review** (base Phase B from 2026-06-03 remains valid).
+**Approval State:** Phase A extension **approved** (CP review, 2026-06-08; base Phase B from 2026-06-03 remains valid).
 
 **Program row:** [40.510-204](../40.510_refactor.md) — targeted redo for **USP snapshot version pins** on conversation objects.
 
@@ -142,4 +176,14 @@ Extend COB to pin active `usp_version_ref` on conversation scope per [20.102](..
 - **Backward Flow:** Prior COB Phase B (2026-06-03) — extend harness only
 - **Iterative Design Flow:** None yet
 
-**Agreement Statement:** Provisionally aligned — W2 extension scoped to USP pin fields; does not alter prior COB lifecycle evidence without explicit regression scenarios.
+### HLR family → Phase-B scenario mapping (W2 extension)
+
+| HLR family | Topic | Primary scenario IDs |
+|------------|-------|----------------------|
+| 027 | USP snapshot pin on commit | `positive_cob_usp_pin_on_commit` |
+| 028–029 | Pin lineage + safe boundaries | `positive_pin_survives_lifecycle_transition` |
+| 030 | Replay/export pin evidence | `positive_replay_pin_equivalent` |
+| 031–032 | Pin-only governance (no USP rule mutation) | structural negatives in harness setup |
+| structural | Invalid pin reference | `negative_pin_without_usp_version` |
+
+**Agreement Statement:** Aligned — W2 extension Phase A approved (CP, 2026-06-08). USP pin fields scoped per 20.102-010 and 20.031-027–032; does not alter prior COB lifecycle evidence without explicit regression scenarios.
