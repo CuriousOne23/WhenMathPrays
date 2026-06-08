@@ -1,7 +1,11 @@
 # 40.36_gb_prototypes / software_description.md
 
 ## Approval State
-**Phase A draft complete.** Pending explicit human approval before proceeding to Phase B.
+- Phase A (base supervisory): **approved** (CP review, 2026-06-08)
+- Phase B (base): not started — blocked until explicit Phase B go-ahead
+- Phase A (W2 UPI commit governance): **approved** (CP review, 2026-06-08; 40.510-206)
+- Phase B (W2 extension): not started — UPI gate harness blocked until explicit Phase B go-ahead
+- Program row: **40.510-206** (W2)
 
 ## Two-Phase Execution Model
 - **Phase A:** Define and review this `software_description.md` only.
@@ -61,6 +65,29 @@ The 20-series provides development guidance, not final rules. This prototype **S
 - **20.17** – Messy real-world input handling
 - **20.18** – Failure modes and success criteria
 - **20.80** – GB component requirements
+
+### GB responsibility → 20.16 matrix mapping
+
+| GB prototype responsibility | 20.16 HLR | Phase-B exploration focus |
+|-----------------------------|-----------|---------------------------|
+| Supervisory flow control | 001 | safe-boundary enforcement |
+| Coherence & stability (ΔH%) | 002 | drift/oscillation detection |
+| Arbitration | 003 | parallel trace / supervisory load |
+| Commitment management | 004 | bounded commitment depth |
+| Learned component oversight | 005 | validation scaffolding |
+| Cross-basin coordination | 006 | overflow / degrade behavior |
+| Population control | 007 | IB population stability |
+| Safety & policy | 008 | messy input / contradiction handling |
+| Human oversight | 009 | escalation audit paths |
+| Non-mutation / audit invariants | 010–015 | logging completeness; no TP/MTP mutation |
+
+### ΔH% placeholder semantics
+
+`ΔH%` is a **Phase-B exploratory stability metric placeholder** only — Phase A defers formulas and thresholds (§5). Phase B SHALL prototype feasibility and surface limitations; it does **not** codify final 10-series ΔH% definitions.
+
+### Supervisory frequency caps (20.16 / 20.18)
+
+Phase B harness SHALL treat [20.16](../../20_requirements/20.16_gb_responsibility_matrix.md) per-cycle caps as hard ceilings (e.g. `max_supervisory_actions_per_cycle` = 8, `max_oscillation_checks_per_cycle` = 2) and conversation-level caps (`max_supervisory_actions_per_conversation` = 64). Cap overflow uses deterministic queue-or-defer per HLR-016-022/026 — never silent drop. [20.18](../../20_requirements/20.18_failure_modes_and_success_criteria.md) success criteria require GB intervention rate within bounded thresholds (no thrashing, no unbounded drift).
 
 ---
 
@@ -131,7 +158,7 @@ All Phase B evidence **SHALL** be traceable to the relevant 20-series guidance i
 
 ## W2 Phase A Extension (40.510-206)
 
-**Approval State:** Phase A extension **draft — pending review**.
+**Approval State:** Phase A extension **approved** (CP review, 2026-06-08).
 
 **Program row:** [40.510-206](../40.510_refactor.md) — targeted redo for **UPI commit governance and GB veto path**.
 
@@ -157,6 +184,16 @@ Extend GB prototype to evaluate UPI rule commits per [20.80](../../20_requiremen
 - **Backward Flow:** Prior GB 3-tier iteration (2026-06-04) — add UPI gate scenarios
 - **Iterative Design Flow:** [50.36](../../50_thought_simulator_design/50.36_gb_design_spec.md) supervisory boundaries
 
-**Agreement Statement:** Provisionally aligned — W2 extension is additive UPI gate evidence; does not claim full GB Phase B closure from prior tranche.
+### HLR family → Phase-B scenario mapping (W2 extension)
+
+| HLR family | Topic | Primary scenario IDs |
+|------------|-------|----------------------|
+| 20.080-063–065 | UPI commit evaluate / approve / veto | `positive_gb_approve_upi_commit`, `positive_gb_veto_upi_commit` |
+| 20.103-009–011 | GB gate logging on commit attempt | approve + veto reason-code asserts |
+| 20.102-014 | Veto → no ACTIVE rule | `positive_gb_veto_upi_commit` |
+| 20.103-022 | Append-only audit | `positive_veto_audit_append_only` |
+| 20.080-066–067 | No direct USP write; pending cap visibility | `negative_gb_mutate_usp_directly` |
+
+**Agreement Statement:** Aligned — W2 extension Phase A approved (CP, 2026-06-08). UPI gate evidence scoped per 20.80 §10 and 20.103-009–011; additive to prior GB tranche — does not claim full GB Phase B closure from prior iteration.
 
 ---
