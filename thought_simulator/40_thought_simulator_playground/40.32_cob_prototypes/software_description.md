@@ -110,3 +110,36 @@ Before promotion from 40 to 30:
 - artifact evidence covering lifecycle and replay/export invariants
 - explicit HLR/LLR mapping to 20.32 and parent anchors
 - completed `verification_capsule.md` and `requirements_delta.md` with traceable scenario records
+
+---
+
+## W2 Phase A Extension (40.510-204)
+
+**Approval State:** Phase A extension **draft — pending review** (base Phase B from 2026-06-03 remains valid).
+
+**Program row:** [40.510-204](../40.510_refactor.md) — targeted redo for **USP snapshot version pins** on conversation objects.
+
+### Purpose (W2 delta)
+
+Extend COB to pin active `usp_version_ref` on conversation scope per [20.102](../../20_requirements/20.102_usp_requirements.md) HLR-20.102-010 and [20.32](../../20_requirements/20.32_cob_requirements.md) lifecycle policy — enabling cross-turn shorthand visibility for IIInB and replay (C7-D).
+
+### What Phase B Must Explore (W2)
+
+| Scenario | HLR anchor | Expected |
+|----------|------------|----------|
+| `positive_cob_usp_pin_on_commit` | 20.102-010 | COB records `usp_version_ref` after UPI commit |
+| `positive_pin_survives_lifecycle_transition` | 20.032-027–032 | Pin stable across allowed COB transitions |
+| `positive_replay_pin_equivalent` | 20.102-018 | Identical pin on deterministic replay |
+| `negative_pin_without_usp_version` | structural | Reject invalid pin reference |
+
+### Dependencies
+- [40.102_usp_prototypes](../40.102_usp_prototypes/software_description.md) (GATE-B)
+- [40.103_upi_prototypes](../40.103_upi_prototypes/software_description.md) (GATE-B)
+- [40.392_core_data_structs_prototypes](../40.392_core_data_structs_prototypes/software_description.md) (`CobUspSnapshotPin` shape)
+
+### Flows Alignment (W2 extension)
+- **Forward Flow:** 20.32 + 20.102-010/020
+- **Backward Flow:** Prior COB Phase B (2026-06-03) — extend harness only
+- **Iterative Design Flow:** None yet
+
+**Agreement Statement:** Provisionally aligned — W2 extension scoped to USP pin fields; does not alter prior COB lifecycle evidence without explicit regression scenarios.

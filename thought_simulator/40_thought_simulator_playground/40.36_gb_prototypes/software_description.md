@@ -128,3 +128,35 @@ Phase B **SHALL** investigate the following risks (aligned with 20.10 Section 1.
 All Phase B evidence **SHALL** be traceable to the relevant 20-series guidance items.
 
 ---
+
+## W2 Phase A Extension (40.510-206)
+
+**Approval State:** Phase A extension **draft — pending review**.
+
+**Program row:** [40.510-206](../40.510_refactor.md) — targeted redo for **UPI commit governance and GB veto path**.
+
+### Purpose (W2 delta)
+
+Extend GB prototype to evaluate UPI rule commits per [20.80](../../20_requirements/20.80_gb_requirements.md) §10 and [20.103](../../20_requirements/20.103_upi_requirements.md) HLR-20.103-009–011: approve → ACTIVE rule; veto → `GB_VETOED` with audit only (HLR-20.102-014). Replaces simulated UPI/GB outcomes in [40.207](../40.207_replay_prototypes/software_description.md) C7-D/E for W2 integration.
+
+### What Phase B Must Explore (W2)
+
+| Scenario | HLR anchor | Expected |
+|----------|------------|----------|
+| `positive_gb_approve_upi_commit` | 20.103-009, 011 | Grant + reason codes logged |
+| `positive_gb_veto_upi_commit` | 20.103-010, 20.102-014 | Veto; no ACTIVE USP rule |
+| `positive_veto_audit_append_only` | 20.103-022 | Audit record without state mutation |
+| `negative_gb_mutate_usp_directly` | boundary | GB does not write USP |
+
+### Dependencies
+- GATE-B on 40.510-202 (UPI commit attempts)
+- [40.102_usp_prototypes](../40.102_usp_prototypes/software_description.md)
+
+### Flows Alignment (W2 extension)
+- **Forward Flow:** 20.80 §10, 20.103 GB gate, 20.102 veto semantics
+- **Backward Flow:** Prior GB 3-tier iteration (2026-06-04) — add UPI gate scenarios
+- **Iterative Design Flow:** [50.36](../../50_thought_simulator_design/50.36_gb_design_spec.md) supervisory boundaries
+
+**Agreement Statement:** Provisionally aligned — W2 extension is additive UPI gate evidence; does not claim full GB Phase B closure from prior tranche.
+
+---
