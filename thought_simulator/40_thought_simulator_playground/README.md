@@ -6,6 +6,15 @@ The playground is a structured exploration space for rapidly testing ideas befor
 
 It is intentionally separate from production-facing paths so we can iterate quickly, preserve evidence, and make promotion decisions with confidence.
 
+## Governance (process + program)
+
+| Document | Role |
+|----------|------|
+| [40.20_master_program_guide.md](40.20_master_program_guide.md) | **Process** — how to build modules (capsules, evidence, flows) — Approved v0.12 |
+| [40.510_refactor.md](40.510_refactor.md) | **Program** — what to build/redo, phase order, §5 tracking table — Active v0.5 |
+
+Module scheduling and status: **[40.510 §5](40.510_refactor.md)**. Legacy `40.xx` numbering collisions: **[40.510 §3](40.510_refactor.md)** — renumbering prohibited unless a GATE row authorizes it.
+
 ## Verification Capsule (Core Process)
 
 Each module maintains a Verification Capsule: a compact, auditable package of design intent, test evidence, failures, and requirement traceability.
@@ -104,21 +113,60 @@ Why the exception exists:
 
 ## Directory Map
 
-- [40.10_math_prototypes/](40.10_math_prototypes/) - entropy, stability, and math experiments
-- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) - ThoughtPoint lifecycle exploration
-- [40.30_basin_prototypes/](40.30_basin_prototypes/) - basin behavior prototypes
-- [40.35_ib_prototypes/](40.35_ib_prototypes/) - inquiry basin exploratory scaffolds
-- [40.36_gb_prototypes/](40.36_gb_prototypes/) - global basin supervisory scaffolds
-- [40.39_mb_prototypes/](40.39_mb_prototypes/) - monitoring basin diagnostics scaffolds
-- [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) - scheduling and ordering experiments
-- [40.50_regulator_prototypes/](40.50_regulator_prototypes/) - regulator mechanisms and policies
-- [40.60_tick_cycle_skeleton/](40.60_tick_cycle_skeleton/) - simulation tick-cycle skeletons
-- [40.70_snapshot_prototypes/](40.70_snapshot_prototypes/) - snapshot and restoration patterns
-- [40.80_event_log_prototypes/](40.80_event_log_prototypes/) - event stream and replay experiments
-- [40.90_experiment_runner/](40.90_experiment_runner/) - experiment orchestration prototypes
-- [shared/](shared/) - shared helpers for prototype work
-- [40.20_master_program_guide.md](40.20_master_program_guide.md) - unified process guide and state-control policy
-- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md) - shared verification vocabulary
+*Authoritative inventory and phase assignment: [40.510 §5](40.510_refactor.md). Below is an onboarding index.*
+
+### Program & process docs
+
+- [40.20_master_program_guide.md](40.20_master_program_guide.md) — process owner (how)
+- [40.510_refactor.md](40.510_refactor.md) — refactor program inventory (what/when)
+
+### Track H / intake (Pipeline A entry)
+
+- [40.100_inb_prototypes/](40.100_inb_prototypes/) — InB surface normalization (`done` Phase 1)
+- [40.101_iiinb_prototypes/](40.101_iiinb_prototypes/) — IIInB `input_semantic_repair` (`done` Phase 1)
+- [40.207_replay_prototypes/](40.207_replay_prototypes/) — REPLAY_CLASS_7 C7-A..E harness (`done` Phase 1)
+
+### Conversation layer (B3)
+
+- [40.32_cob_prototypes/](40.32_cob_prototypes/) — COB object promotion
+- [40.33_cil_prototypes/](40.33_cil_prototypes/) — CIL clarification FIFO
+- [40.34_cop_prototypes/](40.34_cop_prototypes/) — COP async coprocessor
+
+### Meaning carriers & Pipeline A basins
+
+- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) — ThoughtPoint lifecycle (note: `40.20` also names the master guide *file*)
+- [40.30_basin_prototypes/](40.30_basin_prototypes/) — generic basin prototypes (pre-partition)
+- [40.35_ib_prototypes/](40.35_ib_prototypes/) — inquiry basin (IB)
+- [40.37_tr_router_prototypes/](40.37_tr_router_prototypes/) — Thought Router (TR)
+- [40.165_dcb_stability_prototypes/](40.165_dcb_stability_prototypes/) — DCB stability (qualitative)
+
+### Governance & diagnostics (B6)
+
+- [40.36_gb_prototypes/](40.36_gb_prototypes/) — Governing Basin supervisory
+- [40.39_mb_prototypes/](40.39_mb_prototypes/) — Monitoring Basin diagnostics
+
+### Pipeline B & expression (B4)
+
+- [40.110_oub_prototypes/](40.110_oub_prototypes/) — OuB output realization (scaffold)
+
+### Orchestration, replay glue & cross-cutting (B5/B7)
+
+- [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.401_*` when created)
+- [40.50_regulator_prototypes/](40.50_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
+- [40.60_tick_cycle_skeleton/](40.60_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
+- [40.70_snapshot_prototypes/](40.70_snapshot_prototypes/) — snapshot patterns
+- [40.80_event_log_prototypes/](40.80_event_log_prototypes/) — event log / replay
+- [40.90_experiment_runner/](40.90_experiment_runner/) — experiment orchestration
+- [40.10_math_prototypes/](40.10_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
+
+### Shared
+
+- [shared/](shared/) — shared helpers for prototype work
+
+### External vocabulary
+
+- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md) — verification terms
+- [../20_requirements/20.190_glossary.md](../20_requirements/20.190_glossary.md) — primitive intent catalog
 
 
 
