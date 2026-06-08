@@ -43,7 +43,7 @@
 |------|------------|-------|
 | 20.102-023 / 20.103 parent cross-check | 30 audit | Wave-level parent invariant audit |
 | 30.207 C7-D/E live compose refresh | 50 insight | Replace W1 simulated UPI/GB with 30.103/36 refs |
-| Dedicated 50.102/103/392 design specs | W2 50 step | Per 50.05 after this 30 normalize |
+| Dedicated 50.102/103/392 design specs | **Closed 2026-06-08** | [50.392](../50_thought_simulator_design/50.392_core_data_structs_design_spec.md), [50.102](../50_thought_simulator_design/50.102_usp_design_spec.md), [50.103](../50_thought_simulator_design/50.103_upi_design_spec.md); extension notes in 50.32/33/36 + 50.101 |
 | 40.510-204–207 row `approved` | Program | Harness PASS; base module approval separate from GATE-B |
 
 ## Inventory updates
