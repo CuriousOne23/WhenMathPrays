@@ -1,8 +1,8 @@
 # 40.501_rb_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-405)
-- Phase B: **pending**
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B: **cleared to start** — pending implementation
 - Program row: **40.510-405** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -55,7 +55,19 @@ RB follows intake repair; precedes split and OB stages.
 - **Backward Flow (40-series evidence):** W1 40.100/101 demonstrate intake; RB module isolates post-repair fan-out.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Provisionally aligned — RB is routing-only post-intake. Phase B must prove IIInB handoff without repair bleed and TR gating per 20.37 integration with 40.37 extension.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms RB as routing-only post-intake per 20.50; `InB → IIInB → RB` handoff with no repair logic in RB. Phase B must prove TR gating (40.37) and split/merge arbitration handoff (40.130).
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-405 | Pass |
+| 20.50 RB routing + routing filter | Pass |
+| `InB → IIInB → RB` handoff (20.36 §2.1.1) | Pass |
+| No repair logic in RB | Pass |
+| TR gating / split-merge arbitration scope | Pass |
+| Handoffs to 40.100/101/37/130 | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)
 
