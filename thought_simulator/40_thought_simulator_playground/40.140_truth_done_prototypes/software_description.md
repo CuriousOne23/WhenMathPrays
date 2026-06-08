@@ -1,8 +1,8 @@
 # 40.140_truth_done_prototypes / software_description.md
 
 ## Approval State
-- Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-404)
-- Phase B: **pending**
+- Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- Phase B: **cleared to start** — pending implementation
 - Program row: **40.510-404** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -45,7 +45,18 @@ Does **not**:
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Provisionally aligned — Truth/Done is the explicit A-chain completion gate before meaning freeze. Phase B must prove TB-input-only consumption and ordering relative to 40.115.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms Truth/Done as explicit A-chain completion gate before `mtp_update`; TB-input-only consumption per 20.140. Phase B must prove ordering relative to 40.601 (TB) and 40.115 (commit gate).
+
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 create scope vs 40.510-404 | Pass |
+| 20.140 truth/done terminal evaluation | Pass |
+| TB-input-only (no OB re-interpretation) | Pass |
+| A-chain placement (after merge; before `mtp_update`) | Pass |
+| Handoffs to 40.601 / 40.130 / 40.115 | Pass |
+| Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)
 
