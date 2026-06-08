@@ -3,8 +3,8 @@
 ## Approval State
 
 - Legacy Phase A/B (proxy routing): **approved** (Copilot; proxy subset only)
-- **W3 Phase A** (40.510-410 extension): **approved** (CP review, 2026-06-08)
-- W3 Phase B (DCB ephemeral TR events; `tr_needs_update` gating per 20.37): **pending**
+- **W3 Phase A** (40.510-410 extension): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
+- W3 Phase B (DCB ephemeral TR events; `tr_needs_update` gating per 20.37): **cleared to start** — pending implementation
 - Program row: **40.510-410** (W3)
 
 ## W3 Extension Scope (40.510-410)
@@ -16,11 +16,22 @@ Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to im
 - Negative: reject TR run when flag false; reject DCB-direct RB consumption
 - Preserve existing proxy scenarios as regression subset until full integration supersedes
 
-**2026-06-05 alignment pass:** This document synchronized with `20.37` Semantic Interpretation Flow Contract (HLR-20.037-049/050/051) and related 10.50.37 / 30.37 forward-flow artifacts. W3 extension adds integration scope; proxy code remains until Phase B lands.
+**W3 Phase B maps to legacy Phase C (on-TP integration)** below — scoped to 40.510-410 handoffs with 40.401/40.106/40.501.
 
-**Alignment Summary (2026-06-05):** This software description is aligned with the updated `20.37` Semantic Interpretation Flow Contract. The current prototype implements only the proxy routing subset (`HLR-20.437-*`). Integration HLRs (`HLR-20.037-049`, `-050`, `-051`) are acknowledged but not implemented. **40.20 execution will generate proxy-only artifacts** until Phase C integration scenarios are added.
+**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 extension scope against 20.37 Semantic Interpretation Flow Contract (HLR-20.037-049/050/051). Legacy proxy Phase B evidence retained as regression baseline; integration HLRs deferred to W3 Phase B.
 
-Awaiting explicit human / CP review before Phase C or further promotion steps.
+## CP W3 Phase A Review Record (2026-06-08)
+
+| Check | Result |
+|-------|--------|
+| W3 extension scope vs 40.510-410 | Pass |
+| `tr_needs_update` gating + atomic `TP.TR` write | Pass |
+| DCB ephemeral events via 40.106 (not RB-direct) | Pass |
+| Proxy regression subset preserved | Pass |
+| Two-phase model (stop after Phase A) | Pass |
+| Blockers | **None** — Phase B authorized |
+
+**2026-06-05 alignment pass:** Synchronized with `20.37` flow contract and 10.50.37 / 30.37 artifacts. W3 Phase A CP-approved 2026-06-08; proxy-only code remains until W3 Phase B lands.
 
 ## Execution Phases (40.* Model)
 
