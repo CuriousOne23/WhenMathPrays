@@ -44,7 +44,11 @@ def canonical_digest(payload: dict[str, Any]) -> str:
 
 
 def compute_usp_version_ref(snapshot: dict[str, Any]) -> str:
-    """Content-addressed ref — matches 40.101 digest inputs."""
+    """Content-addressed ref — matches 40.101 digest inputs.
+
+    Sort key is (scope, version, rule_id) only. ``precedence`` is excluded —
+    it governs IIInB apply ordering (20.102-012), not snapshot identity.
+    """
     canonical = {
         "rules": sorted(
             snapshot.get("rules", []),
