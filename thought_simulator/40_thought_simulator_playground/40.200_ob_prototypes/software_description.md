@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- Phase B: **cleared to start** — pending implementation
+- Phase B: **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-406** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -49,11 +49,11 @@ OB executes after routing/splitting; before TB and DCB→TR overlay in same cycl
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series):** [20.40](../../20_requirements/20.40_ob_requirements.md) HLR-001–043; [20.37](../../20_requirements/20.37_thought_router_tr_specification.md) TR-input contract.
-- **Backward Flow (40-series evidence):** None — Phase A.
-- **Iterative Design Flow (50-series influence):** None yet.
+- **Forward Flow (20-series):** [20.40](../../20_requirements/20.40_ob_requirements.md) HLR-001–043; [20.37](../../20_requirements/20.37_thought_router_tr_specification.md) TR-input + tr_needs_update contract; [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1.
+- **Backward Flow (40-series evidence):** Phase B harness (5/5 PASS, artifact ob_verification_run_2026-06-09.json) confirms lane-local evidence emission, tr_needs_update on semantic change, forbidden truth_hypotheses read (audit + degrade), overflow degrade with telemetry, and seed-independent replay. Joint with 40.190/40.240/40.230.
+- **Iterative Design Flow (50-series influence):** Evidence package (capsule + delta + artifact) ready for 50 insight on OB pattern detection vs. B-side and DCB.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms OB as A-only lane-local evidence basin per 20.40, distinct from B-side OpBeh (W4) and DCB (40.210). Phase B must wire TR-input + `tr_needs_update` handoff for 40.240 and evidence path to 40.230 (TB).
+**Agreement Statement**: Phase B complete 2026-06-09 per 40.05/40.510 W3. CP Phase A (2026-06-08) confirmed lane-local + TR handoff boundaries; Phase B proved the matrix (emit 001/022, tr flag per 20.37, forbidden 043, overflow 025/026, replay 009) with deterministic canonical outputs and strict read-set enforcement. Handoffs to 40.190 (upstream), 40.240 (TR), 40.230 (TB) verified. 40.180 review passed; 40.190 under review.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
