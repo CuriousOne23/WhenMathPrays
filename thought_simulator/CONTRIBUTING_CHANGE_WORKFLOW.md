@@ -51,6 +51,22 @@ This workflow applies to edits under:
 
 **Do not** update tier inventory indexes (`30.01`, `50.00`) for content-only edits to capsules, deltas, or design specs.
 
+### Controlled identity renames (40, 30, 10.50, 50)
+
+Address-only renames (filename, folder, band, slug) are **identity maintenance** — not content review. Use the controlled rename pipeline:
+
+1. Author an approved request JSON from [00_identity/rename_request.template.json](00_program_governance/00_identity/rename_request.template.json)
+2. Run `scripts/rename_identity.py --request <file> --plan` and review the plan
+3. Run `scripts/rename_identity.py --request <file> --apply --yes` in one atomic PR
+4. Update human-readable inventories (`30.01`, `50.00`, `40.510`) in the same change set
+5. Run `validate_name_tables.py`, `validate_shorthand_usage.py`, and the full pre-PR validation suite below
+
+Band-only shorthand (e.g. `40.392`, `50.50`) is legal only in locations declared in [shorthand_registry.json](00_program_governance/00_identity/shorthand_registry.json). Never use bare band shorthand in Python files or outside governed contexts.
+
+**30 ↔ 10.50** renames are always **atomic** (both peers in one PR). **40** and **50** renames are tier-standalone but must propagate live cross-tier references.
+
+Full policy: [00.00.43_controlled_identity_rename_policy.md](00_program_governance/00_foundations/00.00.43_controlled_identity_rename_policy.md). Identity SSOT: [00_identity/](00_program_governance/00_identity/).
+
 **50-series glossary helper scripts** (in `thought_simulator/scripts/`):
 - `validate_50_glossary_alignment.py`: Non-blocking CI check that runs on changes to 50 design `.md` files (and the glossary/registry itself). It warns when the glossary and registry are out of alignment or when new candidate terms are observed in design documents. This provides visibility ("we should know") without blocking merges.
 - `update_50_glossary.py`: Local helper tool to analyze current 50 design documents against the glossary and registry. It produces a report of drift and concrete proposals (terms to add, suggested registry entries). By default it only prints; use `--write-proposals` to generate reviewable `PROPOSED_*` files. **It never auto-edits** the real glossary or registry. The goal is to reduce token usage by doing mechanical scanning and proposal generation locally or via terminal, while keeping full human control over what gets updated. Run it when working in 50-series design to stay efficient.
@@ -92,6 +108,10 @@ Scripts live under `thought_simulator/scripts/`. **Blocking** checks fail the Gi
 | `validate_30_inventory_index.py` | Warning | `30.01` module table ↔ `30.*` dirs |
 | `validate_30_10_50_pairing.py` | Warning | `30.01` `promoted`/`approved` rows ↔ `10.50.{band}_*.md` (one-way; no orphan 10.50 check) |
 | `validate_50_traceability_index.py` | Warning | `50.00` table ↔ level-1 design files (local mirror of blocking workflow) |
+| `validate_name_tables.py` | Warning | Identity name tables ↔ filesystem; 30 ↔ 10.50 band pairing |
+| `rename_identity.py` | Tool | Controlled identity rename pipeline (dry-run / apply) |
+| `bootstrap_name_tables.py` | Tool | Bootstrap or refresh name tables from disk |
+| `validate_shorthand_usage.py` | Warning | Band-prefix shorthand only in governed contexts |
 
 Workflow file: [.github/workflows/thought-simulator-doc-dependency-check.yml](../.github/workflows/thought-simulator-doc-dependency-check.yml), [.github/workflows/validate_design_traceability.yml](../.github/workflows/validate_design_traceability.yml).
 
@@ -110,6 +130,8 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_30_inventory_index.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_30_10_50_pairing.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_50_traceability_index.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_name_tables.py ; \
+  c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_shorthand_usage.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/update_50_glossary.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/check_doc_dependencies.py ; \
   c:/Users/jeffg/Documents/GitHub/WhenMathPrays/.venv/Scripts/python.exe thought_simulator/scripts/validate_doc_frontmatter_and_ids.py --require-frontmatter --strict-ids ; \
@@ -120,6 +142,8 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 ## Authoritative Process Sources
 
 - `00_program_governance/00_foundations/00.00.41_documentation_tier_map_and_ci_policy.md` (tier map, inventory vs process, CI policy)
+- `00_program_governance/00_foundations/00.00.43_controlled_identity_rename_policy.md` (controlled identity rename process)
+- `00_program_governance/00_identity/` (identity name tables)
 - `10_thought_simulator_req/docs/promotion_protocol.md`
 - `50_thought_simulator_design/50.05_software_spec_construction_guide.md`
 - `30_verification/30.00_verification_user_guide.md` (verification process, artifact standards, and three-flow rules)

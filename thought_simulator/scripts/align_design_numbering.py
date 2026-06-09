@@ -2,6 +2,9 @@
 """
 align_design_numbering.py
 
+DEPRECATED: Use rename_identity.py and the identity name tables
+(00_program_governance/00_identity/) per 00.00.43_controlled_identity_rename_policy.md.
+
 Purpose:
   Safely align the document numbering scheme across the design-related layers
   (40, 30, 10.50, and 50) so that the same component/macro uses the same numeric

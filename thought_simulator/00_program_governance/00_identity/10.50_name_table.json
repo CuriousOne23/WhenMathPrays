@@ -1,0 +1,260 @@
+{
+  "description": "Canonical identity registry for 10.50 design-requirements files; paired_entry_id links to 30.",
+  "entries": [
+    {
+      "aliases": [],
+      "band": "100",
+      "canonical_name": "10.50.100_inb_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.100_inb_design_requirements.md",
+      "entry_id": "10.50.100_inb_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.100_inb_prototypes",
+      "shorthand_eligible": true,
+      "slug": "inb_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "101",
+      "canonical_name": "10.50.101_iiinb_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.101_iiinb_design_requirements.md",
+      "entry_id": "10.50.101_iiinb_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.101_iiinb_prototypes",
+      "shorthand_eligible": true,
+      "slug": "iiinb_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "102",
+      "canonical_name": "10.50.102_usp_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.102_usp_design_requirements.md",
+      "entry_id": "10.50.102_usp_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.102_usp_prototypes",
+      "shorthand_eligible": true,
+      "slug": "usp_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "103",
+      "canonical_name": "10.50.103_upi_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.103_upi_design_requirements.md",
+      "entry_id": "10.50.103_upi_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.103_upi_prototypes",
+      "shorthand_eligible": true,
+      "slug": "upi_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "10",
+      "canonical_name": "10.50.10_math_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.10_math_requirements.md",
+      "entry_id": "10.50.10_math_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.10_math_prototypes",
+      "shorthand_eligible": true,
+      "slug": "math_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "165",
+      "canonical_name": "10.50.165_dcb_stability_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.165_dcb_stability_requirements.md",
+      "entry_id": "10.50.165_dcb_stability_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.165_dcb_stability_prototypes",
+      "shorthand_eligible": true,
+      "slug": "dcb_stability_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "207",
+      "canonical_name": "10.50.207_replay_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.207_replay_design_requirements.md",
+      "entry_id": "10.50.207_replay_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.207_replay_prototypes",
+      "shorthand_eligible": true,
+      "slug": "replay_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "20",
+      "canonical_name": "10.50.20_tp_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.20_tp_requirements.md",
+      "entry_id": "10.50.20_tp_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.20_tp_lifecycle",
+      "shorthand_eligible": true,
+      "slug": "tp_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "30",
+      "canonical_name": "10.50.30_basin_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.30_basin_requirements.md",
+      "entry_id": "10.50.30_basin_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.30_basin_prototypes",
+      "shorthand_eligible": true,
+      "slug": "basin_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "32",
+      "canonical_name": "10.50.32_cob_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.32_cob_requirements.md",
+      "entry_id": "10.50.32_cob_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.32_cob_prototypes",
+      "shorthand_eligible": true,
+      "slug": "cob_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "33",
+      "canonical_name": "10.50.33_cil_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.33_cil_requirements.md",
+      "entry_id": "10.50.33_cil_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.33_cil_prototypes",
+      "shorthand_eligible": true,
+      "slug": "cil_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "34",
+      "canonical_name": "10.50.34_cop_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.34_cop_requirements.md",
+      "entry_id": "10.50.34_cop_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.34_cop_prototypes",
+      "shorthand_eligible": true,
+      "slug": "cop_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "35",
+      "canonical_name": "10.50.35_ib_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.35_ib_requirements.md",
+      "entry_id": "10.50.35_ib_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.35_ib_prototypes",
+      "shorthand_eligible": true,
+      "slug": "ib_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "36",
+      "canonical_name": "10.50.36_gb_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.36_gb_design_requirements.md",
+      "entry_id": "10.50.36_gb_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.36_gb_prototypes",
+      "shorthand_eligible": true,
+      "slug": "gb_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "37",
+      "canonical_name": "10.50.37_tr_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.37_tr_requirements.md",
+      "entry_id": "10.50.37_tr_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.37_tr_prototypes",
+      "shorthand_eligible": true,
+      "slug": "tr_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "392",
+      "canonical_name": "10.50.392_core_data_structs_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.392_core_data_structs_design_requirements.md",
+      "entry_id": "10.50.392_core_data_structs_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.392_core_data_structs_prototypes",
+      "shorthand_eligible": true,
+      "slug": "core_data_structs_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "39",
+      "canonical_name": "10.50.39_mb_design_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.39_mb_design_requirements.md",
+      "entry_id": "10.50.39_mb_design_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.39_mb_prototypes",
+      "shorthand_eligible": true,
+      "slug": "mb_design_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "40",
+      "canonical_name": "10.50.40_scheduler_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.40_scheduler_requirements.md",
+      "entry_id": "10.50.40_scheduler_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.40_scheduler_prototypes",
+      "shorthand_eligible": true,
+      "slug": "scheduler_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "50",
+      "canonical_name": "10.50.50_regulator_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.50_regulator_requirements.md",
+      "entry_id": "10.50.50_regulator_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.50_regulator_prototypes",
+      "shorthand_eligible": true,
+      "slug": "regulator_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "60",
+      "canonical_name": "10.50.60_tick_cycle_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.60_tick_cycle_requirements.md",
+      "entry_id": "10.50.60_tick_cycle_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.60_tick_cycle_skeleton",
+      "shorthand_eligible": true,
+      "slug": "tick_cycle_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "70",
+      "canonical_name": "10.50.70_snapshot_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.70_snapshot_requirements.md",
+      "entry_id": "10.50.70_snapshot_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.70_snapshot_prototypes",
+      "shorthand_eligible": true,
+      "slug": "snapshot_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "80",
+      "canonical_name": "10.50.80_event_log_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.80_event_log_requirements.md",
+      "entry_id": "10.50.80_event_log_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.80_event_log_prototypes",
+      "shorthand_eligible": true,
+      "slug": "event_log_requirements"
+    },
+    {
+      "aliases": [],
+      "band": "90",
+      "canonical_name": "10.50.90_experiment_runner_requirements.md",
+      "canonical_path": "10_thought_simulator_req/50_design/10.50.90_experiment_runner_requirements.md",
+      "entry_id": "10.50.90_experiment_runner_requirements",
+      "kind": "design_requirements_file",
+      "paired_entry_id": "30.90_experiment_runner",
+      "shorthand_eligible": true,
+      "slug": "experiment_runner_requirements"
+    }
+  ],
+  "schema_version": "identity_name_table_v1",
+  "tier": "10.50"
+}

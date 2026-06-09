@@ -1,0 +1,330 @@
+{
+  "schema_version": "shorthand_registry_v1",
+  "description": "Governed locations where band-only prefix shorthand is legal. Rename scripts may update prefixes ONLY in these contexts.",
+  "tier_prefixes": {
+    "40": "40.",
+    "30": "30.",
+    "10.50": "10.50.",
+    "50": "50."
+  },
+  "file_rules": [
+    {
+      "id": "inventory_30_01",
+      "paths": [
+        "30_verification/30.01_verification_inventory_index.md"
+      ],
+      "contexts": [
+        {
+          "id": "peer_ref",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "module_dir",
+          "template": "30.{band}_",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "forty_source_note",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        }
+      ]
+    },
+    {
+      "id": "traceability_50_00",
+      "paths": [
+        "50_thought_simulator_design/50.00_design_traceability_index.md"
+      ],
+      "contexts": [
+        {
+          "id": "anchor_cell",
+          "template": "10.50.{band}_",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
+          "id": "capsule_cell",
+          "template": "30.{band}_",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "design_cell",
+          "template": "50.{band}_",
+          "tier": "50",
+          "boundary": "after"
+        }
+      ]
+    },
+    {
+      "id": "program_40_510",
+      "paths": [
+        "40_thought_simulator_playground/40.510_refactor.md"
+      ],
+      "contexts": [
+        {
+          "id": "module_band",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "design_band",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "ten_fifty_band",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "thirty_band",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        }
+      ]
+    },
+    {
+      "id": "wave_coverage_notes",
+      "path_glob": "30_verification/W*_*.md",
+      "contexts": [
+        {
+          "id": "source_col",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "module_dir",
+          "template": "30.{band}_",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "prose_thirty",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        }
+      ]
+    },
+    {
+      "id": "design_spec",
+      "path_glob": "50_thought_simulator_design/50.*.md",
+      "contexts": [
+        {
+          "id": "cross_layer_tuple",
+          "template": "40.{band} / 30.{band} / 10.50.{band} / 50.{band}",
+          "tier": "multi",
+          "boundary": "exact"
+        },
+        {
+          "id": "backward_thirty_link",
+          "template": "[30.{band}]",
+          "tier": "30",
+          "boundary": "exact"
+        },
+        {
+          "id": "hlr_inline",
+          "template": "HLR-10.50.{band}-",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
+          "id": "llr_inline",
+          "template": "LLR-50.{band}-",
+          "tier": "50",
+          "boundary": "after"
+        },
+        {
+          "id": "cp_band",
+          "template": "CP 50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "approved_band",
+          "template": "50.{band} review",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "link_label_thirty",
+          "template": "[30.{band}]",
+          "tier": "30",
+          "boundary": "exact"
+        },
+        {
+          "id": "llr_frontmatter",
+          "template": "LLR-50.{band}-",
+          "tier": "50",
+          "boundary": "after"
+        },
+        {
+          "id": "hlr_frontmatter",
+          "template": "HLR-10.50.{band}-",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
+          "id": "ten_fifty_prose",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "forty_prose",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "thirty_prose",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        },
+        {
+          "id": "fifty_prose",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "document_id_fifty",
+          "template": "Document ID:** 50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "title_fifty",
+          "template": "# 50.{band} ",
+          "tier": "50",
+          "boundary": "exact"
+        },
+        {
+          "id": "link_label_fifty",
+          "template": "[50.{band}]",
+          "tier": "50",
+          "boundary": "exact"
+        },
+        {
+          "id": "link_label_ten_fifty",
+          "template": "[10.50.{band}]",
+          "tier": "10.50",
+          "boundary": "exact"
+        },
+        {
+          "id": "slash_tuple",
+          "template": "50.{band}/",
+          "tier": "50",
+          "boundary": "exact"
+        },
+        {
+          "id": "evidence_thirty",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        },
+        {
+          "id": "evidence_forty",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        }
+      ]
+    },
+    {
+      "id": "verification_capsule",
+      "path_glob": "30_verification/30.*/*_verification_capsule.md",
+      "contexts": [
+        {
+          "id": "forty_source",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "hlr_ref",
+          "template": "HLR-10.50.{band}-",
+          "tier": "10.50",
+          "boundary": "after"
+        }
+      ]
+    },
+    {
+      "id": "ten_fifty_requirements",
+      "path_glob": "10_thought_simulator_req/50_design/10.50.*.md",
+      "contexts": [
+        {
+          "id": "hlr_id",
+          "template": "HLR-10.50.{band}-",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
+          "id": "document_id",
+          "template": "Document ID:** 10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        }
+      ]
+    },
+    {
+      "id": "governance_examples",
+      "paths": [
+        "40_thought_simulator_playground/40.20_master_program_guide.md",
+        "30_verification/30.00_verification_user_guide.md",
+        "00_program_governance/00_foundations/00.00.42_document_addressing_and_insertion_policy.md"
+      ],
+      "contexts": [
+        {
+          "id": "alignment_example",
+          "template": "40.{band} alongside 30.{band} / 10.50.{band} / 50.{band}",
+          "tier": "multi",
+          "boundary": "exact"
+        },
+        {
+          "id": "forty_example",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "thirty_example",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        },
+        {
+          "id": "ten_fifty_example",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        }
+      ]
+    }
+  ],
+  "forbidden_zones": [
+    {
+      "path_glob": "40_thought_simulator_playground/**/*.py",
+      "rule": "Use full canonical MODULE_NAME / module field only — no bare band shorthand."
+    },
+    {
+      "path_glob": "archive/**",
+      "rule": "Historical — exempt from shorthand enforcement."
+    },
+    {
+      "path_glob": "**/artifacts/**",
+      "rule": "Run artifacts — use dated names; band shorthand not allowed."
+    }
+  ]
+}

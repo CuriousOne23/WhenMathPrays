@@ -1,0 +1,487 @@
+{
+  "description": "Canonical identity registry for 40-series playground module folders.",
+  "entries": [
+    {
+      "aliases": [],
+      "band": "100",
+      "canonical_name": "40.100_inb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.100_inb_prototypes",
+      "entry_id": "40.100_inb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "inb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "101",
+      "canonical_name": "40.101_iiinb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.101_iiinb_prototypes",
+      "entry_id": "40.101_iiinb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "iiinb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "102",
+      "canonical_name": "40.102_usp_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.102_usp_prototypes",
+      "entry_id": "40.102_usp_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "usp_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "103",
+      "canonical_name": "40.103_upi_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.103_upi_prototypes",
+      "entry_id": "40.103_upi_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "upi_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "106",
+      "canonical_name": "40.106_dcb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.106_dcb_prototypes",
+      "entry_id": "40.106_dcb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "dcb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "10",
+      "canonical_name": "40.10_math_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.10_math_prototypes",
+      "entry_id": "40.10_math_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "math_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "110",
+      "canonical_name": "40.110_iiinb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.110_iiinb_prototypes",
+      "entry_id": "40.110_iiinb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "iiinb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "110",
+      "canonical_name": "40.110_oub_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.110_oub_prototypes",
+      "entry_id": "40.110_oub_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "oub_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "115",
+      "canonical_name": "40.115_mtp_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.115_mtp_prototypes",
+      "entry_id": "40.115_mtp_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "mtp_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "120",
+      "canonical_name": "40.120_usp_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.120_usp_prototypes",
+      "entry_id": "40.120_usp_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "usp_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "130",
+      "canonical_name": "40.130_split_merge_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.130_split_merge_prototypes",
+      "entry_id": "40.130_split_merge_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "split_merge_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "130",
+      "canonical_name": "40.130_upi_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.130_upi_prototypes",
+      "entry_id": "40.130_upi_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "upi_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "140",
+      "canonical_name": "40.140_truth_done_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.140_truth_done_prototypes",
+      "entry_id": "40.140_truth_done_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "truth_done_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "165",
+      "canonical_name": "40.165_dcb_stability_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.165_dcb_stability_prototypes",
+      "entry_id": "40.165_dcb_stability_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "dcb_stability_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "200",
+      "canonical_name": "40.200_replay_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.200_replay_prototypes",
+      "entry_id": "40.200_replay_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "replay_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "207",
+      "canonical_name": "40.207_replay_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.207_replay_prototypes",
+      "entry_id": "40.207_replay_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "replay_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "20",
+      "canonical_name": "40.20_tp_lifecycle",
+      "canonical_path": "40_thought_simulator_playground/40.20_tp_lifecycle",
+      "entry_id": "40.20_tp_lifecycle",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "tp_lifecycle"
+    },
+    {
+      "aliases": [],
+      "band": "30",
+      "canonical_name": "40.30_basin_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.30_basin_prototypes",
+      "entry_id": "40.30_basin_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "basin_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "320",
+      "canonical_name": "40.320_cob_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.320_cob_prototypes",
+      "entry_id": "40.320_cob_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cob_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "32",
+      "canonical_name": "40.32_cob_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.32_cob_prototypes",
+      "entry_id": "40.32_cob_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cob_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "330",
+      "canonical_name": "40.330_cil_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.330_cil_prototypes",
+      "entry_id": "40.330_cil_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cil_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "33",
+      "canonical_name": "40.33_cil_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.33_cil_prototypes",
+      "entry_id": "40.33_cil_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cil_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "340",
+      "canonical_name": "40.340_cop_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.340_cop_prototypes",
+      "entry_id": "40.340_cop_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cop_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "34",
+      "canonical_name": "40.34_cop_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.34_cop_prototypes",
+      "entry_id": "40.34_cop_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "cop_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "35",
+      "canonical_name": "40.35_ib_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.35_ib_prototypes",
+      "entry_id": "40.35_ib_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "ib_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "360",
+      "canonical_name": "40.360_gb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.360_gb_prototypes",
+      "entry_id": "40.360_gb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "gb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "36",
+      "canonical_name": "40.36_gb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.36_gb_prototypes",
+      "entry_id": "40.36_gb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "gb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "370",
+      "canonical_name": "40.370_oub_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.370_oub_prototypes",
+      "entry_id": "40.370_oub_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "oub_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "37",
+      "canonical_name": "40.37_tr_router_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.37_tr_router_prototypes",
+      "entry_id": "40.37_tr_router_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "tr_router_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "390",
+      "canonical_name": "40.390_core_data_structs_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.390_core_data_structs_prototypes",
+      "entry_id": "40.390_core_data_structs_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "core_data_structs_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "392",
+      "canonical_name": "40.392_core_data_structs_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.392_core_data_structs_prototypes",
+      "entry_id": "40.392_core_data_structs_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "core_data_structs_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "39",
+      "canonical_name": "40.39_mb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.39_mb_prototypes",
+      "entry_id": "40.39_mb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "mb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "400",
+      "canonical_name": "40.400_basin_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.400_basin_prototypes",
+      "entry_id": "40.400_basin_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "basin_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "401",
+      "canonical_name": "40.401_ob_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.401_ob_prototypes",
+      "entry_id": "40.401_ob_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "ob_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "40",
+      "canonical_name": "40.40_scheduler_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.40_scheduler_prototypes",
+      "entry_id": "40.40_scheduler_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "scheduler_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "410",
+      "canonical_name": "40.410_tp_lifecycle",
+      "canonical_path": "40_thought_simulator_playground/40.410_tp_lifecycle",
+      "entry_id": "40.410_tp_lifecycle",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "tp_lifecycle"
+    },
+    {
+      "aliases": [],
+      "band": "420",
+      "canonical_name": "40.420_tr_router_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.420_tr_router_prototypes",
+      "entry_id": "40.420_tr_router_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "tr_router_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "430",
+      "canonical_name": "40.430_ib_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.430_ib_prototypes",
+      "entry_id": "40.430_ib_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "ib_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "440",
+      "canonical_name": "40.440_regulator_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.440_regulator_prototypes",
+      "entry_id": "40.440_regulator_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "regulator_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "460",
+      "canonical_name": "40.460_rb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.460_rb_prototypes",
+      "entry_id": "40.460_rb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "rb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "470",
+      "canonical_name": "40.470_regulator_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.470_regulator_prototypes",
+      "entry_id": "40.470_regulator_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "regulator_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "480",
+      "canonical_name": "40.480_tick_cycle_skeleton",
+      "canonical_path": "40_thought_simulator_playground/40.480_tick_cycle_skeleton",
+      "entry_id": "40.480_tick_cycle_skeleton",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "tick_cycle_skeleton"
+    },
+    {
+      "aliases": [],
+      "band": "490",
+      "canonical_name": "40.490_mb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.490_mb_prototypes",
+      "entry_id": "40.490_mb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "mb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "500",
+      "canonical_name": "40.500_scheduler_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.500_scheduler_prototypes",
+      "entry_id": "40.500_scheduler_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "scheduler_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "500",
+      "canonical_name": "40.500_tb_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.500_tb_prototypes",
+      "entry_id": "40.500_tb_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": false,
+      "slug": "tb_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "520",
+      "canonical_name": "40.520_snapshot_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.520_snapshot_prototypes",
+      "entry_id": "40.520_snapshot_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "snapshot_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "530",
+      "canonical_name": "40.530_event_log_prototypes",
+      "canonical_path": "40_thought_simulator_playground/40.530_event_log_prototypes",
+      "entry_id": "40.530_event_log_prototypes",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "event_log_prototypes"
+    },
+    {
+      "aliases": [],
+      "band": "540",
+      "canonical_name": "40.540_experiment_runner",
+      "canonical_path": "40_thought_simulator_playground/40.540_experiment_runner",
+      "entry_id": "40.540_experiment_runner",
+      "kind": "module_folder",
+      "shorthand_eligible": true,
+      "slug": "experiment_runner"
+    }
+  ],
+  "schema_version": "identity_name_table_v1",
+  "tier": "40"
+}

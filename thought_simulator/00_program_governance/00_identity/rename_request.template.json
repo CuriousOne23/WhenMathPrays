@@ -1,0 +1,9 @@
+{
+  "rename_class": "A",
+  "tier": "50",
+  "entry_id": "50.50_regulator_design_support",
+  "new_band": null,
+  "new_slug": "regulator_design_spec",
+  "approved_by": "reviewer-name",
+  "notes": "Class A slug-only rename. No content re-review required."
+}

@@ -15,6 +15,8 @@ Governance documents use a three-level numeric prefix:
 - [30_philosophical/](30_philosophical/) - companion philosophical texts (`00.30.xx`)
 - [00_foundations/00.00.40_normative_evidence_and_conformance_rules.md](00_foundations/00.00.40_normative_evidence_and_conformance_rules.md) - canonical boundary and conformance precedence rules
 - [00_foundations/00.00.41_documentation_tier_map_and_ci_policy.md](00_foundations/00.00.41_documentation_tier_map_and_ci_policy.md) - tier map, inventory vs process docs, structural index updates, CI blocking vs warning policy
+- [00_foundations/00.00.43_controlled_identity_rename_policy.md](00_foundations/00.00.43_controlled_identity_rename_policy.md) - controlled identity rename process and name-table SSOT
+- [00_identity/](00_identity/) - machine-readable identity name tables (`40`, `10.50`, `30`, `50`)
 - [ALIGNMENT_LOG_2026-05-31_10-to-20.md](ALIGNMENT_LOG_2026-05-31_10-to-20.md) - governance alignment record for 10-to-20 model transition
 
 ## Role in the 10/20/30/40/50 Model

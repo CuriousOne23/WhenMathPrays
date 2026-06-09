@@ -163,7 +163,7 @@ def main() -> int:
         print("Naming prefix validation issues (warnings only; no automatic fixes or renames are performed by this script):")
         for issue in issues:
             print(f"- {issue.path}:{issue.line}: {issue.message}")
-        print("See align_design_numbering.py (with --dry-run/--plan first, then --apply --yes ONLY) for controlled renames.")
+        print("See rename_identity.py (00.00.43 policy) for controlled identity renames.")
         # Per policy: warnings only. This validator never mutates files and does not fail the process
         # on naming issues (other layers may still treat as blocking via their own rules/CI).
         return 0
