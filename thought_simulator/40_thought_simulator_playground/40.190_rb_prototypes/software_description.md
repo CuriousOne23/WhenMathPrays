@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- Phase B: **cleared to start** — pending implementation
+- Phase B: **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-405** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -51,11 +51,11 @@ RB follows intake repair; precedes split and OB stages.
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series):** [20.50](../../20_requirements/20.50_rb_requirements.md) HLR-001–045; [20.101](../../20_requirements/20.101_iiinb_requirements.md) handoff; [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1.1.
-- **Backward Flow (40-series evidence):** W1 40.50/60 demonstrate intake; RB module isolates post-repair fan-out.
-- **Iterative Design Flow (50-series influence):** None yet.
+- **Forward Flow (20-series):** [20.50](../../20_requirements/20.50_rb_requirements.md) HLR-001–045; [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1.1 `InB → IIInB → RB`.
+- **Backward Flow (40-series evidence):** Phase B harness (5/5 PASS, artifact rb_verification_run_2026-06-09.json) confirms deterministic routing_filter, strict TR gate on tr_needs_update (no writes), messy preservation, overflow audit, replay identity, and split/merge arb signals. Joint with 40.170/40.240.
+- **Iterative Design Flow (50-series influence):** Evidence package (capsule + delta + artifact) ready for 50 insight on routing filter schema and arbitration policy.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms RB as routing-only post-intake per 20.50; `InB → IIInB → RB` handoff with no repair logic in RB. Phase B must prove TR gating (40.240) and split/merge arbitration handoff (40.170).
+**Agreement Statement**: Phase B complete 2026-06-09 per 40.05/40.510 W3. CP Phase A (2026-06-08) confirmed routing-only post-intake + handoff; Phase B proved the matrix (fan-out 001/027, TR gate 027/028, messy 009/010, overflow 024/029, replay 004/036) with deterministic filter and clean boundaries. Handoffs to 40.170 (arb), 40.240 (TR), and upstream intake verified via contract.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
