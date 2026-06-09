@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-409)
-- Phase B: **pending**
+- Phase B: **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-409** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -46,11 +46,11 @@ Does **not**:
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series):** [20.60](../../20_requirements/20.60_tb_requirements.md) HLR-001–045; downstream [20.140](../../20_requirements/20.140_truth_evaluation_requirements.md).
-- **Backward Flow (40-series evidence):** None — Phase A.
-- **Iterative Design Flow (50-series influence):** None yet.
+- **Forward Flow (20-series):** [20.60](../../20_requirements/20.60_tb_requirements.md) HLR-001–045; supplies 5-channel + traceable hypotheses to [20.140](../../20_requirements/20.140_truth_evaluation_requirements.md) (40.180).
+- **Backward Flow (40-series evidence):** Phase B harness (5/5 PASS, artifact tb_verification_run_2026-06-09.json) confirms 5-channel emission, explicit evidence_refs, canonical hypothesis ordering, forbidden TR handling, overflow audit+partial, and replay identity. Clean handoff to 40.180.
+- **Iterative Design Flow (50-series influence):** Evidence package ready for 50 insight on 5-channel interpretation and pre-truth hypotheses.
 
-**Agreement Statement**: Provisionally aligned — TB stops at interpretation inputs; Truth/Done remains separate module. Phase B must prove channel ordering and OB-only evidence refs.
+**Agreement Statement**: Phase B complete 2026-06-09 per 40.05/40.510 W3. CP Phase A (2026-06-08) confirmed interpretation scope before Truth/Done; Phase B proved the matrix (happy 005/022, forbidden 043, overflow 025/026, order 044, replay 009/036). Handoffs to 40.200 (OB) and 40.180 (Truth/Done) verified. 40.210 review passed; 40.220 under review.
 
 ## Phase B Test Matrix (draft)
 

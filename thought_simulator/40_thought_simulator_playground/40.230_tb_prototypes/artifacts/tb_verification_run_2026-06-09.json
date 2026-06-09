@@ -1,0 +1,51 @@
+{
+  "module": "40.230_tb_prototypes",
+  "date": "2026-06-09",
+  "phase": "B",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "five_channel_happy_path",
+      "hlr": [
+        "HLR-20.060-005",
+        "HLR-20.060-022"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "forbidden_tr_field_read",
+      "hlr": [
+        "HLR-20.060-043"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "overflow_no_silent_drop",
+      "hlr": [
+        "HLR-20.060-025",
+        "HLR-20.060-026"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "channel_map_canonical_order",
+      "hlr": [
+        "HLR-20.060-044"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "replay_seed_independent",
+      "hlr": [
+        "HLR-20.060-009",
+        "HLR-20.060-036"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "total_scenarios": 5,
+    "passed": 5,
+    "failed_scenarios": []
+  }
+}
