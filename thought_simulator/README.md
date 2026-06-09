@@ -189,7 +189,7 @@ Top-level `thought_simulator/` direct children:
 - [REFACTOR_2026-05-28_PHASE11.md](archive/refactors/REFACTOR_2026-05-28_PHASE11.md)
 - [REFACTOR_2026-05-28_PHASE12.md](archive/refactors/REFACTOR_2026-05-28_PHASE12.md)
 - [RENAMING_MIGRATION_REPORT.md](archive/refactors/RENAMING_MIGRATION_REPORT.md)
-- [_broken_links.csv](_broken_links.csv)
+
 
 ---
 
