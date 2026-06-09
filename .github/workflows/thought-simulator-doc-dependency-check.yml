@@ -138,6 +138,12 @@ jobs:
               "thought_simulator/40_thought_simulator_playground/",
               "thought_simulator/50_thought_simulator_design/",
           )
+          # Note: 40, 20, and 50 now have standalone component numbering (independent .xx).
+          # 30 numbering is coupled only to 10.50 (see validate_30_10_50_pairing.py).
+          # The rename guard still triggers maintenance requirements if you *do* rename
+          # files inside these scopes (to keep glossaries/indexes in sync for the layers
+          # that do have intra- or 30/10.50 coupling). Renames purely inside 40 no longer
+          # imply 30/50 renames.
 
           def run_git(args):
               return subprocess.check_output(["git", *args], text=True).splitlines()
