@@ -1,3 +1,0 @@
-Naming prefix validation issues (warnings only; organizational dirs and 40 intra-module files are exempt per 00.00.42):
-- 40_thought_simulator_playground/shared:1: 40 module subdirectory expected form '40.{band}_{slug}/', got 'shared'
-See rename_identity.py (00.00.43 policy) for controlled identity renames.

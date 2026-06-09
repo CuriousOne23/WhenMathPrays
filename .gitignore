@@ -12,6 +12,26 @@ eggs/
 # VS Code workspace settings (tracked to share interpreter/profile)
 # (Do not ignore .vscode so settings.json is shared)
 
+# Large / generated binaries (see docs/OFFLINE_MEDIA.md)
+docs/music/audio/
+docs/videos/
+docs/Other_papers/
+core/revenge_pdf.npz
+core/*.backup
+results/*.png
+tests/revenge/*.png
+
+# Temp / debug scratch
+_tmp_*
+*_out.txt
+output*.txt
+debug_output.txt
+test_output.txt
+*.lnk
+file_list.md
+thought_simulator/scripts/_*out.txt
+thought_simulator/_broken_links.csv
+
 # Test outputs and images
 tests/*.png
 

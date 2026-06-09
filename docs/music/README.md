@@ -22,6 +22,8 @@ This README explains:
 4. How to maintain semantic consistency  
 5. How to use the system with no musical background  
 
+**Note:** Rendered MP3 files are not stored in git (clone-size policy). Score markdown and prompts in this directory are canonical; see [OFFLINE_MEDIA.md](../OFFLINE_MEDIA.md) for restore guidance.
+
 ---
 
 # **1. Purpose of the Music Subsystem**
