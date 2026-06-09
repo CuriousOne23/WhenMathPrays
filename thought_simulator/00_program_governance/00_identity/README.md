@@ -17,6 +17,7 @@ Machine-readable canonical identity registry for controlled renames across tiers
 
 - **Controlled renames (normative):** [00.00.43_controlled_identity_rename_policy.md](../00_foundations/00.00.43_controlled_identity_rename_policy.md)
 - **Naming layout target (guidance only):** [naming_strategy_target.md](naming_strategy_target.md)
+- **40 renumber manifest (executed 2026-06-09):** [40_renumber_manifest.json](40_renumber_manifest.json)
 
 ## Commands
 

@@ -124,7 +124,7 @@ When a test bench reveals the need for structural changes to the test bench cont
 ## Related Documents
 
 - `thought_simulator/30_verification/30.00_verification_user_guide.md`
-- `thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md`
+- `thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md`
 - `thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md`
 - Component-specific 10.50 and 50 docs (e.g., 10.50.39, 50.39)
 - `thought_simulator/20_requirements/20.200_traceability_matrix.md` (will reference test bench evidence via 30)

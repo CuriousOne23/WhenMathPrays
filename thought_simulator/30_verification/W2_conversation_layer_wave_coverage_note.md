@@ -1,20 +1,20 @@
 # W2 Conversation Layer Wave Coverage Note
 
 **Date:** 2026-06-08  
-**Wave:** W2 (40.392, 40.102, 40.103, 40.32/33/36 extensions, 40.101 W2)  
+**Wave:** W2 (40.100, 40.80, 40.90, 40.110/33/36 extensions, 40.60 W2)  
 **Deliverable:** 40.510 §4.2.2 step 2 — HLR mapping, 10.50 peers, open gaps
 
 ## Promoted modules
 
 | 30 module | 40 source | Harness | HLR / contract coverage |
 |-----------|-----------|---------|-------------------------|
-| [30.392_core_data_structs_prototypes/](30.392_core_data_structs_prototypes/) | 40.392 | 8/8 PASS | 20.39 §3.1–3.2 families 019, 021–025; **CP 30.00 approved** |
-| [30.102_usp_prototypes/](30.102_usp_prototypes/) | 40.102 | 8/8 PASS | 20.102 exploratory matrix (GATE-B); **CP 30.00 approved** |
-| [30.103_upi_prototypes/](30.103_upi_prototypes/) | 40.103 | 8/8 PASS | 20.103 exploratory matrix (GATE-B); **CP 30.00 approved** |
-| [30.32_cob_prototypes/](30.32_cob_prototypes/) | 40.32 W2 | 4/4 PASS | USP snapshot pin (20.102-010 / COB W2) |
-| [30.33_cil_prototypes/](30.33_cil_prototypes/) | 40.33 W2 | 4/4 PASS | `clarification_event_v1` wire to UPI FIFO |
-| [30.36_gb_prototypes/](30.36_gb_prototypes/) | 40.36 W2 | 4/4 PASS | `evaluate_upi_commit` approve/veto path |
-| [30.101_iiinb_prototypes/](30.101_iiinb_prototypes/) | 40.101 W2 | 24/24 PASS | 024b module W2; [50.101](../50_thought_simulator_design/50.101_iiinb_design_spec.md) **CP final confirmed** — W1+W2 insight, not GATE-B anchor |
+| [30.392_core_data_structs_prototypes/](30.392_core_data_structs_prototypes/) | 40.100 | 8/8 PASS | 20.39 §3.1–3.2 families 019, 021–025; **CP 30.00 approved** |
+| [30.102_usp_prototypes/](30.102_usp_prototypes/) | 40.80 | 8/8 PASS | 20.102 exploratory matrix (GATE-B); **CP 30.00 approved** |
+| [30.103_upi_prototypes/](30.103_upi_prototypes/) | 40.90 | 8/8 PASS | 20.103 exploratory matrix (GATE-B); **CP 30.00 approved** |
+| [30.32_cob_prototypes/](30.32_cob_prototypes/) | 40.110 W2 | 4/4 PASS | USP snapshot pin (20.102-010 / COB W2) |
+| [30.33_cil_prototypes/](30.33_cil_prototypes/) | 40.120 W2 | 4/4 PASS | `clarification_event_v1` wire to UPI FIFO |
+| [30.36_gb_prototypes/](30.36_gb_prototypes/) | 40.130 W2 | 4/4 PASS | `evaluate_upi_commit` approve/veto path |
+| [30.101_iiinb_prototypes/](30.101_iiinb_prototypes/) | 40.60 W2 | 24/24 PASS | 024b module W2; [50.101](../50_thought_simulator_design/50.101_iiinb_design_spec.md) **CP final confirmed** — W1+W2 insight, not GATE-B anchor |
 
 ## Contract check (W2 insight targets)
 

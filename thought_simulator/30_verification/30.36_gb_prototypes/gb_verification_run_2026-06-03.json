@@ -1,7 +1,7 @@
 {
   "run_id": "gb_verification_run_2026-06-04",
   "timestamp": "2026-06-04T14:30:00Z",
-  "prototype_version": "40.36_gb_prototypes_3tier_v0.3",
+  "prototype_version": "40.130_gb_prototypes_3tier_v0.3",
   "phase": "Phase B - 3-Tier Iteration",
   "status": "PASS",
   "summary": {

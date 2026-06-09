@@ -32,7 +32,7 @@ special = {
 }
 
 default_v = "../30_verification/README.md"
-default_d = "../40_thought_simulator_playground/40.20_master_program_guide.md"
+default_d = "../40_thought_simulator_playground/40.05_master_program_guide.md"
 
 docs = sorted(
     [p.name for p in REQ.glob("20.*.md") if re.match(r"^20\.(\d+)_.*\.md$", p.name)],

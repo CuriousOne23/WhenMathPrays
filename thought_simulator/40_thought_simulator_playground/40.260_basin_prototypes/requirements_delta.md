@@ -1,0 +1,49 @@
+# Requirements Delta
+
+## Purpose
+
+This file records requirement-change proposals, implementer feedback, and migration notes for `40.260_basin_prototypes`.
+
+## Migrated Structural Changes
+
+- Renamed the module report files to the canonical `verification_capsule.md` and `requirements_delta.md` structure.
+- Added a deterministic JSON artifact under `artifacts/` for the first executable verification run.
+
+## Evidence-Backed Requirement Deltas
+
+- `HLR-?`: Basin state objects shall expose a JSON-compatible IO contract that preserves `basin_id`, `tp_id`, and `state_counter` without transformation.
+  - Evidence: `positive_deterministic_replay`
+  - Traceability: `basin_id`, `tp_id`, `state_counter`, `history`, `verification_digest`
+- `HLR-?`: Basin replay of identical input contracts shall produce identical final snapshots and identical digests.
+  - Evidence: `positive_deterministic_replay`
+  - Traceability: `deterministic_mode`, `entropy_vector`, `history`, `verification_digest`
+- `HLR-?`: Basin validation shall reject empty basin identifiers, duplicate provenance identifiers, and entropy-vector shape mismatches.
+  - Evidence: `negative_empty_basin_id`, `negative_duplicate_provenance`, `negative_entropy_length_mismatch`
+  - Traceability: `basin_id`, `provenance_ids`, `provenance_id`, `event_type`, `entropy_vector`
+- `LLR-?`: The harness shall emit a JSON artifact under `artifacts/` containing scenario results, traceability fields, and a run summary.
+  - Evidence: `artifacts/basin_verification_run_2026-05-27.json`
+  - Traceability: execution reporting, artifact persistence, scenario ledger
+
+## Rationale
+
+- The first executed basin scenarios showed that the module can now be verified through repeatable JSON evidence rather than only narrative notes.
+- Negative-path checks are needed early because basin behavior depends on contract validation as much as on successful transitions.
+- Requirement deltas remain provisional because no basin-specific requirement document currently exists.
+
+## Impacted Documents
+
+- `software_description.md`
+- `prototype.py`
+- `harness.py`
+- `verification_capsule.md`
+
+## Open Validation Needed
+
+- Define whether the basin prototype should remain a standalone exploratory contract or be promoted into a formal basin design specification.
+- Decide whether future basin requirements should be materialized as a dedicated basin HLR document or remain embedded as deltas against the canonical requirement set.
+- Confirm whether additional negative-path coverage is needed for non-monotonic ticks and non-finite entropy values.
+
+## Migration Notes
+
+- The basin prototype now has a stable contract shape and deterministic replay evidence.
+- Future deltas should extend the evidence-backed sections rather than replacing them.

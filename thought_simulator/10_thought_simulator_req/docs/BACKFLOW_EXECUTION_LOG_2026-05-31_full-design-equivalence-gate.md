@@ -13,7 +13,7 @@ Status: completed
 
 1. thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md
 2. thought_simulator/30_verification/README.md
-3. thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+3. thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 4. thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
 5. thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md
 
@@ -29,7 +29,7 @@ Detailed results:
 - PASS thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md:162
 - PASS thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md:171
 - PASS thought_simulator/30_verification/README.md:52
-- PASS thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md:166
+- PASS thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md:166
 - PASS thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md:99
 - PASS thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md:251
 - PASS thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md:52

@@ -61,7 +61,7 @@ Address-only renames (filename, folder, band, slug) are **identity maintenance**
 4. Update human-readable inventories (`30.01`, `50.00`, `40.510`) in the same change set
 5. Run `validate_name_tables.py`, `validate_shorthand_usage.py`, and the full pre-PR validation suite below
 
-Band-only shorthand (e.g. `40.392`, `50.50`) is legal only in locations declared in [shorthand_registry.json](00_program_governance/00_identity/shorthand_registry.json). Never use bare band shorthand in Python files or outside governed contexts.
+Band-only shorthand (e.g. `40.100`, `50.50`) is legal only in locations declared in [shorthand_registry.json](00_program_governance/00_identity/shorthand_registry.json). Never use bare band shorthand in Python files or outside governed contexts.
 
 **30 ↔ 10.50** renames are always **atomic** (both peers in one PR). **40** and **50** renames are tier-standalone but must propagate live cross-tier references.
 
@@ -91,7 +91,7 @@ Scripts live under `thought_simulator/scripts/`. **Blocking** checks fail the Gi
 | Script / workflow | Mode | Scope |
 |-------------------|------|--------|
 | `check_doc_dependencies.py` | Blocking | Doc dependency graph |
-| Governance marker validation (workflow inline) | Blocking | Required phrases in USER_GUIDE, promotion_protocol, 30 README, 40.20, 50.05 |
+| Governance marker validation (workflow inline) | Blocking | Required phrases in USER_GUIDE, promotion_protocol, 30 README, 40.160, 50.05 |
 | Rename maintenance guard (workflow inline) | Blocking | Renames in 30/40/50 require glossary and/or 50.00 updates |
 | `validate_doc_frontmatter_and_ids.py` | Blocking | Frontmatter and document IDs |
 | `validate_relation_semantics.py` | Blocking | Relation semantics in governed docs |

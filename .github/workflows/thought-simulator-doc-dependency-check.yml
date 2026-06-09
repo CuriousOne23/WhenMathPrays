@@ -105,7 +105,7 @@ jobs:
                   "No-auto-propagation from 20-layer edits:",
                   "selected direction (`forward` or `backward`)",
               ],
-              "thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md": [
+              "thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md": [
                   "No-auto-propagation from 20-layer edits:",
                   "selected flow direction: `forward` or `backward`",
               ],

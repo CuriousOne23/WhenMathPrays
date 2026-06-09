@@ -28,7 +28,7 @@ SKIP_DIRS = frozenset({"archive", "__pycache__", ".git", "node_modules"})
 # Tier governance doc IDs — never treat as module band shorthand in validation
 GOVERNANCE_DOC_TOKENS = frozenset(
     {
-        "40.20",
+        "40.05",
         "40.510",
         "30.00",
         "30.01",

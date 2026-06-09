@@ -88,9 +88,9 @@ Across tiers that use numeric bands, we **prefer** the same mental model:
 | Low zone `40.00`–`40.49` | Governance, support, and insertion headroom — not crowded module names |
 | Bands ≥ `500` | **Should not** blindly stride into `40.510` (inventory doc collision). Cap or jump (e.g. `40.550+`) with explicit rows in 40.510 |
 
-**Operational SSOT:** [40.510_refactor.md](../../40_thought_simulator_playground/40.510_refactor.md), [40_name_table.json](40_name_table.json). Process: [40.20_master_program_guide.md](../../40_thought_simulator_playground/40.20_master_program_guide.md).
+**Operational SSOT:** [40.510_refactor.md](../../40_thought_simulator_playground/40.510_refactor.md), [40_name_table.json](40_name_table.json). Process: [40.05_master_program_guide.md](../../40_thought_simulator_playground/40.05_master_program_guide.md).
 
-**Independence reminder:** `40.392_*` evidence may promote to `30.205` / `10.50.205` without any `40.205` folder.
+**Independence reminder:** `40.100_*` (core structs) evidence may promote to `30.392` / `10.50.392` without matching 40 band numbers to 30/10.50.
 
 ### 5.2 Tier 10.50 (design requirements anchors)
 
@@ -160,8 +160,8 @@ Document intentional deviation here when the target cannot be met yet. Update wh
 | Dual `50.40_*` (scheduler + interaction layer) | Two Level-1 primaries at one band | One `50.40_*` + `50.40.010_*` (or `.10`) for the second |
 | `50.07`–`50.08` platform docs | No 10.50/30 peers | Keep in 50 governance/headroom zone — **expected** exception |
 | `40.510_refactor.md` | Fixed inventory filename | Never assign as a module folder band |
-| 40 duplicate bands (`40.110_*`×2, `40.500_*`×2, etc.) | Pre-cleanup drift | Dedupe before applying stride-10 map |
-| Historical 40 compression | See 00.00.42 §10 | Stepping stone toward `40.50+` target; not the final layout |
+| 40 duplicate bands (`40.110_*`×2, `40.500_*`×2, etc.) | ~~Pre-cleanup drift~~ | **Resolved 2026-06-09** — 17 duplicates removed in Phase-1 renumber |
+| Historical 40 compression | See 00.00.42 §10 | Superseded by Phase-1 `40.50+` layout; retained for traceability only |
 
 For a live list of disk-vs-target gaps, see [30.01](../../30_verification/30.01_verification_inventory_index.md), [50.00](../../50_thought_simulator_design/50.00_design_traceability_index.md), and [40.510](../../40_thought_simulator_playground/40.510_refactor.md).
 
@@ -173,12 +173,13 @@ For a live list of disk-vs-target gaps, see [30.01](../../30_verification/30.01_
 |------|------|-----------------|
 | pre-renumber branch | 40 folder compression to stride-10 subdirectories while preserving `40.510` | Recorded in [00.00.42 §10](../00_foundations/00.00.42_document_addressing_and_insertion_policy.md); interim layout (`40.420`–`40.540` range) |
 | 2026-06 | Identity rename infrastructure (name tables, `rename_identity.py`, 00.00.43) | Enables phased migration without content re-review |
-| *Planned* | Full 40 → 10.50+30 → 50 alignment per §6 | **Not yet applied** — disk may still diverge from §3–§5 |
+| 2026-06-09 | Phase-1 40 renumber (`40_renumber_manifest.json`, `apply_40_renumber_migration.py`) | 31 survivors at `40.50`–`40.350` stride 10; 17 duplicates removed; guide at `40.05` |
+| *Planned* | Phase 2 — 10.50+30; Phase 3 — 50 alignment per §6 | Not yet applied |
 
 **Alignment checkpoint (update after migrations):**
 
 - **As of:** 2026-06-09
-- **40 vs target:** partial — compression applied; `40.50+` stride-10 map not yet executed
+- **40 vs target:** **aligned** — modules `40.50`–`40.350` stride 10; governance `40.05` + fixed `40.510`; see [40_renumber_manifest.json](40_renumber_manifest.json)
 - **10.50+30 vs target:** partial — bands exist but not normalized to stride-10 from `.50`
 - **50 vs target:** partial — several known exceptions in §7
 
@@ -205,7 +206,7 @@ Use these as soft review prompts — not CI gates:
 | [00.00.42](../00_foundations/00.00.42_document_addressing_and_insertion_policy.md) | Normative insertion and subfields |
 | [00.00.43](../00_foundations/00.00.43_controlled_identity_rename_policy.md) | Normative controlled renames |
 | [README.md](README.md) | Identity name tables and rename commands |
-| [40.20](../../40_thought_simulator_playground/40.20_master_program_guide.md) | 40 process (how to work) |
+| [40.160](../../40_thought_simulator_playground/40.05_master_program_guide.md) | 40 process (how to work) |
 | [30.00](../../30_verification/30.00_verification_user_guide.md) | 30 process |
 | [50.05](../../50_thought_simulator_design/50.05_software_spec_construction_guide.md) | 50 construction and Level-2 rules |
 
@@ -216,3 +217,4 @@ Use these as soft review prompts — not CI gates:
 | Version | Date | Summary |
 |---------|------|---------|
 | 0.1 | 2026-06-09 | Initial target strategy — 40 / 10.50 / 30 / 50 layout, migration order, exceptions |
+| 0.2 | 2026-06-09 | Phase-1 40 renumber complete — checkpoint and exception ledger updated |

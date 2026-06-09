@@ -14,7 +14,7 @@ Status: completed
 - chosen direction: backward
 - initiating source: thought_simulator/10_thought_simulator_req/
 - impacted targets:
-  - thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+  - thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
   - thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
 
 ## Source Lineage
@@ -24,7 +24,7 @@ Status: completed
 
 ## Changed Files
 
-1. thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+1. thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - Added Source-Lineage Clarification section for 20 -> 10 -> 30/40/50.
 - Required explicit lineage note in backward-flow record artifacts.
 - Retains mandatory ambiguity confirmation and controlled backward-flow gate.

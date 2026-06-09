@@ -43,7 +43,7 @@ Current known drift (as of 2026-06):
   - 50 has extra governance docs at 50.00-50.09 (intended and documented in 50.05).
   - 50.09_geometry_engine_design.md should be 50.10 to align with:
       10.50.10_math_requirements.md
-      40.10_math_prototypes/
+      40.1200_math_prototypes/
       30.10_math_prototypes/
   - 50.50_data_structures.md and 50.50_regulator_design_support.md conflict on .50.
     Regulator aligns with 10.50.50 / 40.50 / 30.50. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.45 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.

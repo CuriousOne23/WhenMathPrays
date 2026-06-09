@@ -103,7 +103,7 @@ User edits usually begin in one of:
 
 The AI agent then promotes and synchronizes into canonical layers.
 
-For `40.20`-governed exploratory module work, the forward-flow sequence after the module is executed and human-approved is explicit:
+For `40.160`-governed exploratory module work, the forward-flow sequence after the module is executed and human-approved is explicit:
 
 1. create or update the corresponding `10.50.*` canonical anchor in `10_thought_simulator_req/50_design/`
 2. create the matching `30.*` verification subdirectory and canonical verification artifacts in `30_verification/`
@@ -144,7 +144,7 @@ Requirements:
 The AI agent should:
 
 1. Confirm direction as `forward` (or request clarification if ambiguous).
-2. If the initiating source is approved `40.20` exploratory module work, create or update the corresponding `10.50.*` canonical anchor first.
+2. If the initiating source is approved `40.160` exploratory module work, create or update the corresponding `10.50.*` canonical anchor first.
 3. Create the matching `30.*` verification package for that approved `40.*` module.
 4. Update impacted `50_thought_simulator_design/` files only after the `10.50.*` and `30.*` artifacts exist.
 5. Synchronize `50.00_design_traceability_index.md` if any design mapping changed.
@@ -153,7 +153,7 @@ The AI agent should:
 
 Forward flow must start only after explicit user request; a 20-layer edit alone is not sufficient to execute propagation.
 
-`40.20` itself is not limited to forward flow. It can also be an impacted layer during backward flow when updated `10_thought_simulator_req/` anchors need to propagate into `40_thought_simulator_playground/`.
+`40.160` itself is not limited to forward flow. It can also be an impacted layer during backward flow when updated `10_thought_simulator_req/` anchors need to propagate into `40_thought_simulator_playground/`.
 
 ## Backward Flow Runbook
 
@@ -435,7 +435,7 @@ CI should enforce the following:
    - `thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md`
    - `thought_simulator/30_verification/README.md`
    - `thought_simulator/30_verification/30.00_verification_user_guide.md`
-   - `thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md`
+   - `thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md`
    - `thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md`
    - `thought_simulator/30_verification/30.01_verification_inventory_index.md`

@@ -13,13 +13,13 @@ When adding evidence for a specific test bench, create `30.tb/tb_XX_name/` conta
 See:
 - `testbenches/00_testbench_requirements.md` for the contract (including repo policy).
 - 30.00_verification_user_guide.md for integration rules.
-- 40.20_master_program_guide.md and 50.05_software_spec_construction_guide.md for overall flow.
+- 40.05_master_program_guide.md and 50.05_software_spec_construction_guide.md for overall flow.
 
 Future high-fidelity test benches will also feed 30-series verification evidence via the 30.tb/ structure.
 
 See:
 - `testbenches/00_testbench_requirements.md` for the contract.
 - 30.00_verification_user_guide.md for integration rules.
-- 40.20_master_program_guide.md and 50.05_software_spec_construction_guide.md for overall flow.
+- 40.05_master_program_guide.md and 50.05_software_spec_construction_guide.md for overall flow.
 
 Future high-fidelity test benches will also feed 30-series verification evidence via the 30.tb/ structure.

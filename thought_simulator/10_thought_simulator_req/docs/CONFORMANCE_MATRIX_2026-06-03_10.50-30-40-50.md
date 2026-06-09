@@ -45,49 +45,49 @@ COMPLIANT (updated in current transaction):
 NEEDS_EDIT:
 - none (legacy-pattern sweep: clear)
 
-Note: 30.20 evidence JSON artifacts were refreshed from the current 40.20 harness output in this pass and are treated as active evidence.
+Note: 30.20 evidence JSON artifacts were refreshed from the current 40.160 harness output in this pass and are treated as active evidence.
 
 ## 3. 40 Layer
 
 COMPLIANT (updated in current transaction):
-- 40.20_master_program_guide.md
-- 40.20_tp_lifecycle/prototype.py
-- 40.20_tp_lifecycle/harness.py
-- 40.20_tp_lifecycle/software_description.md
-- 40.20_tp_lifecycle/verification_capsule.md
-- 40.20_tp_lifecycle/requirements_delta.md
-- 40.20_tp_lifecycle/artifacts/tp_state.json
-- 40.20_tp_lifecycle/artifacts/determinism_run2.json
-- 40.20_tp_lifecycle/artifacts/determinism_run3.json
-- 40.30_basin_prototypes/software_description.md
-- 40.30_basin_prototypes/verification_capsule.md
-- 40.30_basin_prototypes/harness.py
-- 40.30_basin_prototypes/artifacts/basin_verification_run_2026-05-27.json
-- 40.40_scheduler_prototypes/software_description.md
-- 40.40_scheduler_prototypes/verification_capsule.md
-- 40.40_scheduler_prototypes/harness.py
-- 40.40_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
-- 40.10_math_prototypes/software_description.md
-- 40.440_regulator_prototypes/software_description.md
-- 40.480_tick_cycle_skeleton/software_description.md
-- 40.520_snapshot_prototypes/software_description.md
-- 40.530_event_log_prototypes/software_description.md
-- 40.540_experiment_runner/software_description.md
+- 40.05_master_program_guide.md
+- 40.160_tp_lifecycle/prototype.py
+- 40.160_tp_lifecycle/harness.py
+- 40.160_tp_lifecycle/software_description.md
+- 40.160_tp_lifecycle/verification_capsule.md
+- 40.160_tp_lifecycle/requirements_delta.md
+- 40.160_tp_lifecycle/artifacts/tp_state.json
+- 40.160_tp_lifecycle/artifacts/determinism_run2.json
+- 40.160_tp_lifecycle/artifacts/determinism_run3.json
+- 40.260_basin_prototypes/software_description.md
+- 40.260_basin_prototypes/verification_capsule.md
+- 40.260_basin_prototypes/harness.py
+- 40.260_basin_prototypes/artifacts/basin_verification_run_2026-05-27.json
+- 40.270_scheduler_prototypes/software_description.md
+- 40.270_scheduler_prototypes/verification_capsule.md
+- 40.270_scheduler_prototypes/harness.py
+- 40.270_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
+- 40.1200_math_prototypes/software_description.md
+- 40.1100_regulator_prototypes/software_description.md
+- 40.280_tick_cycle_skeleton/software_description.md
+- 40.290_snapshot_prototypes/software_description.md
+- 40.2600_event_log_prototypes/software_description.md
+- 40.310_experiment_runner/software_description.md
 
 SCAFFOLD (created to complete required directory coverage):
-- 40.32_cob_prototypes/*
-- 40.33_cil_prototypes/*
-- 40.34_cop_prototypes/*
-- 40.37_tr_router_prototypes/*
-- 40.100_inb_prototypes/*
-- 40.110_oub_prototypes/*
+- 40.110_cob_prototypes/*
+- 40.120_cil_prototypes/*
+- 40.3400_cop_prototypes/*
+- 40.240_tr_router_prototypes/*
+- 40.50_inb_prototypes/*
+- 40.180_oub_prototypes/*
 
 ARCHIVED (moved to layer-local archive):
-- archive/2026-06-03_layer-cleanup/40.10_math_prototypes/failures.md
-- archive/2026-06-03_layer-cleanup/40.10_math_prototypes/insights.md
-- archive/2026-06-03_layer-cleanup/40.10_math_prototypes/requirements_traceability.md
-- archive/2026-06-03_layer-cleanup/40.10_math_prototypes/updated_requirements.md
-- archive/2026-06-03_layer-cleanup/40.10_math_prototypes/verification_summary.md
+- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/failures.md
+- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/insights.md
+- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/requirements_traceability.md
+- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/updated_requirements.md
+- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/verification_summary.md
 - archive/2026-06-03_layer-cleanup/**/__pycache__/* (bytecode cache directories)
 
 NEEDS_EDIT:

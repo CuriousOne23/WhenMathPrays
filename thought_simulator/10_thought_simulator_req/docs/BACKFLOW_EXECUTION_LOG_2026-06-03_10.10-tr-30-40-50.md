@@ -21,7 +21,7 @@ Primary risk if unpropagated:
 ## 2. Impacted Targets and Changes Applied
 
 ### 40 layer (playground governance)
-- Updated: thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+- Updated: thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - Applied:
   - Mandatory TR alignment trigger tied to 10.10.10/20/40/50 changes.
   - TR-specific integrity checks (RB->TR iff gate, dirty-flag lifecycle semantics).
@@ -60,7 +60,7 @@ Primary risk if unpropagated:
 - Updated: thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md
 - Applied:
   - Added TR dirty-flag alignment addendum in capsule with explicit RB/TR iff-gate and lifecycle assertions.
-  - Implemented and executed TR scenario set in 40.20 harness and prototype (initialization, iff gate, success-clear, failure-preserve).
+  - Implemented and executed TR scenario set in 40.160 harness and prototype (initialization, iff gate, success-clear, failure-preserve).
   - Updated capsule and delta to record run evidence and close prior open-validation note.
   - Preserved audit accuracy by separating historical records from the new 2026-06-03 executed run row.
   - Performed legacy-path normalization in the 30.20 requirements delta so archive-era references now point to current 20.x anchors.
@@ -90,15 +90,15 @@ Results:
 
 ## 4. Cross-Layer Changed File List
 
-- thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+- thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
 - thought_simulator/50_thought_simulator_design/50.35_tp_design.md
 - thought_simulator/30_verification/30.30_verification_glossary.md
 - thought_simulator/30_verification/glossary_term_registry.json
 - thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md
 - thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md
-- thought_simulator/40_thought_simulator_playground/40.20_tp_lifecycle/prototype.py
-- thought_simulator/40_thought_simulator_playground/40.20_tp_lifecycle/harness.py
+- thought_simulator/40_thought_simulator_playground/40.160_tp_lifecycle/prototype.py
+- thought_simulator/40_thought_simulator_playground/40.160_tp_lifecycle/harness.py
 
 ## 5. Lineage Note (20 -> 10 -> 30/40/50)
 
@@ -119,7 +119,7 @@ Signoff date: 2026-06-03
 Signoff basis:
 - Active, non-archive files under 10.50, 30, 40, and 50 were remediated to current 20 and 10.10 anchor semantics.
 - Layer-local archive disposition was applied for non-applicable legacy files in the 40 layer.
-- Targeted harness executions succeeded for updated evidence generators (40.20, 40.30, 40.40), and synchronized JSON evidence was regenerated.
+- Targeted harness executions succeeded for updated evidence generators (40.160, 40.260, 40.270), and synchronized JSON evidence was regenerated.
 - Final compliance sweep across 10.50/30/40/50 (`*.md`, `*.py`, `*.json`) returned zero matches for stale legacy anchor patterns used in this transaction.
 
 Final status: SIGNED OFF

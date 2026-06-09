@@ -1,0 +1,8 @@
+"""Scaffold prototype for 40.220_dcb_stability_prototypes.
+
+Corresponds to 20.165_dcb_stability_requirements.md.
+Qualitative stability exploration only — no numerics, no algorithms.
+"""
+
+def not_implemented() -> None:
+    raise NotImplementedError('Scaffold module 40.220: implementation pending (Phase A approval required first)')

@@ -70,7 +70,7 @@ Also, **steps D and E on every rename** (rewrite governance docs, CI scripts, co
 - a new tier/band pattern is introduced, or
 - a rename touches a **documented example** that uses the old address as normative illustration
 
-For a routine `40.392` → `40.400` rename, updating `40.510`, module refs, and cross-tier citations should suffice. Rewriting `CONTRIBUTING_CHANGE_WORKFLOW.md` each time adds noise and review cost.
+For a routine `40.100` → `40.2700` rename, updating `40.510`, module refs, and cross-tier citations should suffice. Rewriting `CONTRIBUTING_CHANGE_WORKFLOW.md` each time adds noise and review cost.
 
 **Recommendation:** Split propagation into:
 
@@ -105,7 +105,7 @@ The plan correctly flags Python. Add explicit rules:
 
 - **Folder rename** → imports must update (blocking)
 - **JSON run artifacts** → either rewrite in-place, or freeze old artifacts in `archive/` and stop citing them in active capsules. Don’t leave capsules pointing at paths that no longer exist.
-- **`ARTIFACT_NAME` constants** → follow band only if policy says artifact filenames are identity-bearing (your `40.392` harness uses dated artifact names — clarify whether band is embedded)
+- **`ARTIFACT_NAME` constants** → follow band only if policy says artifact filenames are identity-bearing (your `40.100` harness uses dated artifact names — clarify whether band is embedded)
 
 ---
 

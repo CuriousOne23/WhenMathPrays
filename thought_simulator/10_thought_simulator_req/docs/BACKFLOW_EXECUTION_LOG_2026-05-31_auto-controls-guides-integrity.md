@@ -14,7 +14,7 @@ Status: completed
 
 1. thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md
 2. thought_simulator/30_verification/README.md
-3. thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md
+3. thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 4. thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
 
 ## Automatic Integrity Check Results
@@ -30,8 +30,8 @@ Detailed checks:
 - PASS thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md:162 -> Minimum integrity-check scope
 - PASS thought_simulator/30_verification/README.md:43 -> automatic backward-flow execution log creation/update
 - PASS thought_simulator/30_verification/README.md:46 -> Minimum verification-layer integrity check
-- PASS thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md:153 -> Automatic Controls on Backward-Flow Request (Mandatory)
-- PASS thought_simulator/40_thought_simulator_playground/40.20_master_program_guide.md:158 -> post-update integrity check
+- PASS thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md:153 -> Automatic Controls on Backward-Flow Request (Mandatory)
+- PASS thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md:158 -> post-update integrity check
 - PASS thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md:97 -> automatically created/updated
 - PASS thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md:249 -> integrity-check evidence
 

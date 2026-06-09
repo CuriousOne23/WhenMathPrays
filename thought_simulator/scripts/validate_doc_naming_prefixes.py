@@ -3,7 +3,7 @@
 
 Rules (tier-local only):
 - For top-level numbered tiers (e.g. 40_thought_simulator_playground), any immediate
-  numbered subsystem directory (e.g. 40.20_tp_lifecycle) must start with the tier
+  numbered subsystem directory (e.g. 40.160_tp_lifecycle) must start with the tier
   number prefix ("40.").
 - Any markdown filename with a numeric prefix under a tier must start with that tier
   number prefix.
@@ -22,7 +22,7 @@ NOTE on component numbering independence (as of post-renumber policy):
     an existing 10.50 peer; 10.50 comes first as the canonical requirements anchor).
   - Cross-layer component number alignment (previously "uniform .xx across 40/30/10.50/50")
     is no longer required or enforced by this validator. See validate_30_10_50_pairing.py
-    for the only remaining cross-tier name rule, and the updated 40.20 / 30.00 / 50.05
+    for the only remaining cross-tier name rule, and the updated 40.160 / 30.00 / 50.05
     guidance documents.
 """
 

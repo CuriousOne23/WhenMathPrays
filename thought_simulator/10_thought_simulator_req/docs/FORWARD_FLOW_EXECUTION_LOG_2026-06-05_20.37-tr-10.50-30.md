@@ -21,7 +21,7 @@
 ## Not Updated (explicit scope)
 
 - `50_thought_simulator_design/50.37_tr_software_spec.md` — deferred until integration harness evidence
-- `40.37_tr_router_prototypes/*` — proxy unchanged
+- `40.240_tr_router_prototypes/*` — proxy unchanged
 - `20.37` — initiating source (already edited prior to this log)
 
 ## Integrity Check

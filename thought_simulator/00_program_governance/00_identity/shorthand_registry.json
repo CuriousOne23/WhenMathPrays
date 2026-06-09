@@ -281,7 +281,7 @@
     {
       "id": "governance_examples",
       "paths": [
-        "40_thought_simulator_playground/40.20_master_program_guide.md",
+        "40_thought_simulator_playground/40.05_master_program_guide.md",
         "30_verification/30.00_verification_user_guide.md",
         "00_program_governance/00_foundations/00.00.42_document_addressing_and_insertion_policy.md"
       ],

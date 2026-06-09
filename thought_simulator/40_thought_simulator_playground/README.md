@@ -10,7 +10,7 @@ It is intentionally separate from production-facing paths so we can iterate quic
 
 | Document | Role |
 |----------|------|
-| [40.20_master_program_guide.md](40.20_master_program_guide.md) | **Process** — how to build modules (capsules, evidence, flows) — Approved v0.12 |
+| [40.05_master_program_guide.md](40.05_master_program_guide.md) | **Process** — how to build modules (capsules, evidence, flows) — Approved v0.12 |
 | [40.510_refactor.md](40.510_refactor.md) | **Program** — what to build/redo, phase order, §5 tracking table — Active v0.5 |
 
 Module scheduling and status: **[40.510 §5](40.510_refactor.md)**. Legacy `40.xx` numbering collisions: **[40.510 §3](40.510_refactor.md)** — renumbering prohibited unless a GATE row authorizes it.
@@ -99,7 +99,7 @@ Why this coherence is required:
 - predictable promotion path from exploration to design release artifacts
 - reduced process drift between subsystem teams and module owners
 
-Exception policy for `40.10_math_prototypes/`:
+Exception policy for `40.1200_math_prototypes/`:
 
 - math prototypes may use a lighter documentation burden while still keeping the same file/folder names where practical
 - early mathematical exploration may not immediately impact canonical requirements or design contracts
@@ -117,54 +117,54 @@ Why the exception exists:
 
 ### Program & process docs
 
-- [40.20_master_program_guide.md](40.20_master_program_guide.md) — process owner (how)
+- [40.05_master_program_guide.md](40.05_master_program_guide.md) — process owner (how)
 - [40.510_refactor.md](40.510_refactor.md) — refactor program inventory (what/when)
 
 ### Track H / intake (Pipeline A entry)
 
-- [40.100_inb_prototypes/](40.100_inb_prototypes/) — InB surface normalization (`done` Phase 1)
-- [40.101_iiinb_prototypes/](40.101_iiinb_prototypes/) — IIInB `input_semantic_repair` (`done` Phase 1)
-- [40.207_replay_prototypes/](40.207_replay_prototypes/) — REPLAY_CLASS_7 C7-A..E harness (`done` Phase 1)
+- [40.50_inb_prototypes/](40.50_inb_prototypes/) — InB surface normalization (`done` Phase 1)
+- [40.60_iiinb_prototypes/](40.60_iiinb_prototypes/) — IIInB `input_semantic_repair` (`done` Phase 1)
+- [40.70_replay_prototypes/](40.70_replay_prototypes/) — REPLAY_CLASS_7 C7-A..E harness (`done` Phase 1)
 
 ### Conversation layer (B3)
 
-- [40.32_cob_prototypes/](40.32_cob_prototypes/) — COB object promotion
-- [40.33_cil_prototypes/](40.33_cil_prototypes/) — CIL clarification FIFO
-- [40.34_cop_prototypes/](40.34_cop_prototypes/) — COP async coprocessor
+- [40.110_cob_prototypes/](40.110_cob_prototypes/) — COB object promotion
+- [40.120_cil_prototypes/](40.120_cil_prototypes/) — CIL clarification FIFO
+- [40.3400_cop_prototypes/](40.3400_cop_prototypes/) — COP async coprocessor
 
 ### Meaning carriers & Pipeline A basins (Wave 3 — W3)
 
-- [40.20_tp_lifecycle/](40.20_tp_lifecycle/) — ThoughtPoint lifecycle (W3 redo: intake-bound fields)
-- [40.115_mtp_prototypes/](40.115_mtp_prototypes/) — MTP lifecycle; `commit_id` / `mtp_update` *(new W3)*
-- [40.130_split_merge_prototypes/](40.130_split_merge_prototypes/) — split/merge; `lineage_delta`; ΔH% *(new W3)*
-- [40.140_truth_done_prototypes/](40.140_truth_done_prototypes/) — Truth/Done terminal gate *(new W3)*
-- [40.460_rb_prototypes/](40.460_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
-- [40.401_ob_prototypes/](40.401_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.40 scheduler)*
-- [40.106_dcb_prototypes/](40.106_dcb_prototypes/) — DCB geometric meta-basin *(new W3)*
-- [40.500_tb_prototypes/](40.500_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
-- [40.30_basin_prototypes/](40.30_basin_prototypes/) — generic basin (W3 full redo → normative A basins)
-- [40.35_ib_prototypes/](40.35_ib_prototypes/) — inquiry basin (W3 extension: escalation routing)
-- [40.37_tr_router_prototypes/](40.37_tr_router_prototypes/) — Thought Router (W3 extension: DCB/TR gating)
-- [40.165_dcb_stability_prototypes/](40.165_dcb_stability_prototypes/) — DCB stability qualitative (W3 implement)
+- [40.160_tp_lifecycle/](40.160_tp_lifecycle/) — ThoughtPoint lifecycle (W3 redo: intake-bound fields)
+- [40.150_mtp_prototypes/](40.150_mtp_prototypes/) — MTP lifecycle; `commit_id` / `mtp_update` *(new W3)*
+- [40.170_split_merge_prototypes/](40.170_split_merge_prototypes/) — split/merge; `lineage_delta`; ΔH% *(new W3)*
+- [40.180_truth_done_prototypes/](40.180_truth_done_prototypes/) — Truth/Done terminal gate *(new W3)*
+- [40.190_rb_prototypes/](40.190_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
+- [40.1600_ob_prototypes/](40.1600_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.270 scheduler)*
+- [40.210_dcb_prototypes/](40.210_dcb_prototypes/) — DCB geometric meta-basin *(new W3)*
+- [40.230_tb_prototypes/](40.230_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
+- [40.260_basin_prototypes/](40.260_basin_prototypes/) — generic basin (W3 full redo → normative A basins)
+- [40.250_ib_prototypes/](40.250_ib_prototypes/) — inquiry basin (W3 extension: escalation routing)
+- [40.240_tr_router_prototypes/](40.240_tr_router_prototypes/) — Thought Router (W3 extension: DCB/TR gating)
+- [40.220_dcb_stability_prototypes/](40.220_dcb_stability_prototypes/) — DCB stability qualitative (W3 implement)
 
 ### Governance & diagnostics (B6)
 
-- [40.36_gb_prototypes/](40.36_gb_prototypes/) — Governing Basin supervisory
+- [40.130_gb_prototypes/](40.130_gb_prototypes/) — Governing Basin supervisory
 - [40.39_mb_prototypes/](40.39_mb_prototypes/) — Monitoring Basin diagnostics
 
 ### Pipeline B & expression (B4)
 
-- [40.110_oub_prototypes/](40.110_oub_prototypes/) — OuB output realization (scaffold)
+- [40.180_oub_prototypes/](40.180_oub_prototypes/) — OuB output realization (scaffold)
 
 ### Orchestration, replay glue & cross-cutting (B5/B7)
 
-- [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.401_*` when created)
-- [40.440_regulator_prototypes/](40.440_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
-- [40.480_tick_cycle_skeleton/](40.480_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
-- [40.520_snapshot_prototypes/](40.520_snapshot_prototypes/) — snapshot patterns
-- [40.530_event_log_prototypes/](40.530_event_log_prototypes/) — event log / replay
-- [40.540_experiment_runner/](40.540_experiment_runner/) — experiment orchestration
-- [40.10_math_prototypes/](40.10_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
+- [40.270_scheduler_prototypes/](40.270_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.1600_*` when created)
+- [40.1100_regulator_prototypes/](40.1100_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
+- [40.280_tick_cycle_skeleton/](40.280_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
+- [40.290_snapshot_prototypes/](40.290_snapshot_prototypes/) — snapshot patterns
+- [40.2600_event_log_prototypes/](40.2600_event_log_prototypes/) — event log / replay
+- [40.310_experiment_runner/](40.310_experiment_runner/) — experiment orchestration
+- [40.1200_math_prototypes/](40.1200_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
 
 ### Shared
 

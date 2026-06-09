@@ -1,8 +1,8 @@
-# Design Sync Log: 50.05 on 40.37 (50.37 TR Software Spec)
+# Design Sync Log: 50.05 on 40.240 (50.37 TR Software Spec)
 
 **Date:** 2026-06-05  
 **Methodology:** `50_thought_simulator_design/50.05_software_spec_construction_guide.md`  
-**Source evidence:** Approved `40.37_tr_router_prototypes` (40.20 pass); `30.37` v0.4; `10.50.37`
+**Source evidence:** Approved `40.240_tr_router_prototypes` (40.160 pass); `30.37` v0.4; `10.50.37`
 
 ## Outputs
 

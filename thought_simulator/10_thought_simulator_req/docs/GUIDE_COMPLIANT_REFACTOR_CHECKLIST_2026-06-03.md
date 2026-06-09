@@ -4,7 +4,7 @@ Status: Draft execution checklist
 Date: 2026-06-03
 Scope: 10_req, 30_verification, 40_playground, 50_design
 Primary guides:
-- 40.20 master program guide
+- 40.160 master program guide
 - 50.05 software spec construction guide
 
 ## 0. Objective
@@ -107,7 +107,7 @@ Perform in this order only.
 - [ ] Keep change sets small and auditable
 
 ## 10. Module Batch Template
-Use this for each module (40.20, 40.30, 40.40, etc.).
+Use this for each module (40.160, 40.260, 40.270, etc.).
 
 Module:
 - Canonical anchor(s):
