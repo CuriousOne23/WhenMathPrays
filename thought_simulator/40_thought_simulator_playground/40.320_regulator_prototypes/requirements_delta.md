@@ -1,8 +1,8 @@
 ﻿# Requirements Delta
 
-## Flows Alignment Statement (per 40.160)
+## Flows Alignment Statement (per 40.05)
 
-- **Forward Flow (10/20-series)**: Driven by the detailed architecture in 10.10.40_scheduler_and_regulator_architecture.md (regulator role, ΔH% / fan-out / cost / overflow / memory / cycle time enforcement, interrupt generation, separation) and the listed 20-series sources in the 40.50 software_description.md (TCU budgeting, safety constraints, functional model fan-out/overflow, OB/IB bounds and TCU, parameter table enforcement, traceability).
+- **Forward Flow (10/20-series)**: Driven by the detailed architecture in 10.10.40_scheduler_and_regulator_architecture.md (regulator role, ΔH% / fan-out / cost / overflow / memory / cycle time enforcement, interrupt generation, separation) and the listed 20-series sources in the 40.320_regulator_prototypes/software_description.md (TCU budgeting, safety constraints, functional model fan-out/overflow, OB/IB bounds and TCU, parameter table enforcement, traceability).
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold. Preliminary prototype/harness exist but full Phase B evidence collection awaits Phase A approval.
 - **Iterative Design Flow (50-series influence)**: Downstream 10.50.50_regulator_requirements.md (HLR-20.450-001..003 + TCU) and 50.50_regulator_design_support.md exist as anchors. This scaffold (and future Phase B) can explore and provide evidence to refine or validate those.
 
@@ -57,10 +57,10 @@
 - Regulator prototype now emits rich, versioned, replay-safe observability (per-area enforcements, interrupt_level, obs with boundary/policy_signature, history_len) in every decision.
 - Contract remains stable; added multi-area support, interrupt_level, obs, history are additive and backward-compatible.
 - All JSON produced with sort_keys + digest for exact replay.
-- 30.50/ will hold the promoted verification record; this 40.50 delta is the exploratory source-of-truth.
+- 30.50/ will hold the promoted verification record; this 40.320 delta is the exploratory source-of-truth.
 - Future deltas should append (or reference prior) rather than wholesale replace.
 
 ## Testbench-Driven Changes
-(none this iteration; all evidence from 40 harness per 40.160. Future real testbenches under testbenches/ will feed only via 30.tb/ normalized records.)
+(none this iteration; all evidence from 40 harness per 40.05. Future real testbenches under testbenches/ will feed only via 30.tb/ normalized records.)
 	- `negative_negative_pressure` PASS
 

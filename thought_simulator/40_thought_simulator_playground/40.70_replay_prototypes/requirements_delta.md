@@ -63,7 +63,7 @@ The full 20.207 HLR set (001–030) and 20.36 Class 7 HLRs (058–064) are visib
 - Created Class 7 harness: C7-A..E per 20.36 §9; composes 40.50 + 40.60
 - Initial C7 5/5 PASS; Phase A approved (CP review, 2026-06-08)
 
-## Phase B delta (40.160)
+## Phase B delta (40.05)
 - Extended `prototype.py`: regen validation/merge, `b_regeneration_equivalent_scaffold`, `export_replay_diagnostics`, `REPLAY_VERDICTS`, B envelope guards
 - Expanded harness from 6 → 18 scenarios: strip variants, determinism, intake path order, Class 1 strip demo, regen negatives/scaffold, fixture IDs, diagnostic export
 - Full test matrix PASS; artifact `replay_class7_verification_run_2026-06-08.json`

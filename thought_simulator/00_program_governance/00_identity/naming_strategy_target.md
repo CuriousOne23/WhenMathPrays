@@ -195,6 +195,8 @@ Use these as soft review prompts — not CI gates:
 4. Does a new **40** module avoid the `40.00`–`40.49` and `40.510` reserved zones?
 5. Is the next module band the next stride-10 slot in the tier inventory, not an ad hoc gap-fill?
 6. If deviating from this document, is the exception noted in §7 or the relevant tier inventory Notes?
+7. For bulk migration PRs: does the change set include the approved manifest, name-table updates, and inventory rows — with **no** bare band substring replace?
+8. After a bulk pass: were governance tokens checked (`40.05` guide, `40.160_tp` module vs guide shorthand) and `validate_doc_reference_targets.py` run clean?
 
 ---
 
@@ -206,7 +208,7 @@ Use these as soft review prompts — not CI gates:
 | [00.00.42](../00_foundations/00.00.42_document_addressing_and_insertion_policy.md) | Normative insertion and subfields |
 | [00.00.43](../00_foundations/00.00.43_controlled_identity_rename_policy.md) | Normative controlled renames |
 | [README.md](README.md) | Identity name tables and rename commands |
-| [40.160](../../40_thought_simulator_playground/40.05_master_program_guide.md) | 40 process (how to work) |
+| [40.05](../../40_thought_simulator_playground/40.05_master_program_guide.md) | 40 process (how to work) |
 | [30.00](../../30_verification/30.00_verification_user_guide.md) | 30 process |
 | [50.05](../../50_thought_simulator_design/50.05_software_spec_construction_guide.md) | 50 construction and Level-2 rules |
 
@@ -218,3 +220,4 @@ Use these as soft review prompts — not CI gates:
 |---------|------|---------|
 | 0.1 | 2026-06-09 | Initial target strategy — 40 / 10.50 / 30 / 50 layout, migration order, exceptions |
 | 0.2 | 2026-06-09 | Phase-1 40 renumber complete — checkpoint and exception ledger updated |
+| 0.3 | 2026-06-09 | Post-renumber canon sweep + bulk-migration drift prompts (§9 items 7–8) |

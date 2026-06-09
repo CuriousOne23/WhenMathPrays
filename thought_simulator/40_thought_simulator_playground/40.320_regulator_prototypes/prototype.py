@@ -71,7 +71,7 @@ class RegulatorDecision:
 
 def evaluate_regulator(contract: dict[str, object]) -> RegulatorDecision:
 	"""Evaluate a deterministic regulator decision from a JSON-style contract.
-	Supports multiple enforcement areas per the 40.50 Phase A "What Phase B Must Explore".
+	Supports multiple enforcement areas per the 40.320 Phase A "What Phase B Must Explore".
 	Exploratory only — numeric thresholds and exact policy algos are non-canonical (see Non-Goals, governed by 20.95/50-series and 10.50.50).
 	"""
 	policy = _require_policy(contract.get("policy"))

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Canonical verification report for `40.3400_cop_prototypes` after Phase B execution.
+Canonical verification report for `40.340_cop_prototypes` after Phase B execution.
 
 ## Glossary References
 
@@ -13,7 +13,7 @@ Canonical verification report for `40.3400_cop_prototypes` after Phase B executi
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-06-03 | 40.3400_cop_prototypes | python harness.py | deterministic proposal queue + GB staging + safe-boundary commit + overload handling + fixed rejects | PASS | 0 | artifacts/cop_verification_run_2026-06-03.json | HLR-20.033-002, HLR-20.033-003, HLR-20.033-006, HLR-20.033-013, HLR-20.033-011, HLR-20.033-012, HLR-20.033-008 | LLR-COP-PROP-001, LLR-COP-COMMIT-001, LLR-COP-OL-001, LLR-COP-PROF-001, LLR-COP-SEQ-001, LLR-COP-SAFE-001, LLR-COP-REJ-001 | thought_simulator/20_requirements/20.34_cop_requirements.md; thought_simulator/20_requirements/20.10_ts_architectural_principles.md; thought_simulator/20_requirements/20.30_ts_functional_model.md; thought_simulator/20_requirements/20.80_gb_requirements.md; thought_simulator/20_requirements/20.150_tcu_budgeting_requirements.md; thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md; thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md | Normative Requirements 1/2/3/4/6/7/8/11/12/13/14/18/19/20/22 | Digests and queue order were stable for the executed scenario set. |
+| 2026-06-03 | 40.340_cop_prototypes | python harness.py | deterministic proposal queue + GB staging + safe-boundary commit + overload handling + fixed rejects | PASS | 0 | artifacts/cop_verification_run_2026-06-03.json | HLR-20.033-002, HLR-20.033-003, HLR-20.033-006, HLR-20.033-013, HLR-20.033-011, HLR-20.033-012, HLR-20.033-008 | LLR-COP-PROP-001, LLR-COP-COMMIT-001, LLR-COP-OL-001, LLR-COP-PROF-001, LLR-COP-SEQ-001, LLR-COP-SAFE-001, LLR-COP-REJ-001 | thought_simulator/20_requirements/20.34_cop_requirements.md; thought_simulator/20_requirements/20.10_ts_architectural_principles.md; thought_simulator/20_requirements/20.30_ts_functional_model.md; thought_simulator/20_requirements/20.80_gb_requirements.md; thought_simulator/20_requirements/20.150_tcu_budgeting_requirements.md; thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.10_system_architecture.md; thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md | Normative Requirements 1/2/3/4/6/7/8/11/12/13/14/18/19/20/22 | Digests and queue order were stable for the executed scenario set. |
 
 ## Positive Scenario Ledger
 

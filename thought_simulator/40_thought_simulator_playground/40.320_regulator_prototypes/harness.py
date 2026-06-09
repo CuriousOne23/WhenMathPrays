@@ -143,7 +143,7 @@ def main() -> None:
     passed = sum(1 for s in scenarios if s["result"] == "PASS")
     status = "PASS" if passed == len(scenarios) else "FAIL"
     report = {
-        "module": "40.1100_regulator_prototypes",
+        "module": "40.320_regulator_prototypes",
         "run_command": "python harness.py",
         "run_timestamp_utc": "2026-06-06",
         "summary": {
@@ -166,7 +166,7 @@ def main() -> None:
         "scenarios": scenarios,
     }
     artifact_path = _write_artifact(report)
-    print(f"Module: 40.1100_regulator_prototypes")
+    print(f"Module: 40.320_regulator_prototypes")
     print(f"Artifact: {artifact_path}")
     for s in scenarios:
         print(f"{s['scenario']}: {s['result']}")

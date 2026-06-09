@@ -8,7 +8,7 @@ It validates the core idea of deterministic routing + consistent ΔH% tagging ba
 It is **not** the full Thought Router (TR) from 20.37 that populates the complete TP.TR semantic block.
 
 ### Why this structure?
-- Simple class + factory function for harness compatibility (following 40.160 macro style).
+- Simple class + factory function for harness compatibility (following 40.05 macro style).
 - Pure functions, no side effects.
 - Keyword-based rules as a stand-in for future semantic cue extraction from OB input_fields.
 - Fixed delta_h values per route class (monotonic, auditable).

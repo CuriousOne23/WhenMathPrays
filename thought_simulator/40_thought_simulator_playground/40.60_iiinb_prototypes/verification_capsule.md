@@ -5,7 +5,7 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (19/19 PASS; 
 
 ## Evidence Summary
 - Artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
-- Evidence types (40.160): behavioral, structural (intake ordering, basin-chain exclusion), negative (escalate, caps, rejected handoff, USP load failure), replay, golden diff (diagnostic export)
+- Evidence types (40.05): behavioral, structural (intake ordering, basin-chain exclusion), negative (escalate, caps, rejected handoff, USP load failure), replay, golden diff (diagnostic export)
 - Core invariants demonstrated:
   - `profile_enabled` gate with zero semantic effect on skip
   - Read-only USP apply; snapshot immutability; version ref pinning

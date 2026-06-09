@@ -2,7 +2,7 @@
 
 **Module ID:** 40.240  
 **Version:** 0.3  
-**Date:** 2026-06-05 (40.160 pass)  
+**Date:** 2026-06-05 (40.05 pass)  
 **Status:** Evidence-backed proxy deltas. Integration HLRs anchored, not harness-proven.
 
 ## Purpose
@@ -20,8 +20,8 @@ Requirement-change and implementer-feedback record for `40.240_tr_router_prototy
 | Fixed ΔH% per route class | ✅ Implemented | TC001–TC004 outputs | HLR-20.437-002 |
 | No randomness in routing | ✅ Implemented | code review + 3 runs | HLR-20.437-001 |
 | Explicit error path | ✅ Implemented | TC005, TC006 | HLR-20.437-003 |
-| Artifacts in `artifacts/` | ✅ Implemented | harness.py | 40.160 structure |
-| Multi-run determinism | ✅ Implemented | run1/2/3 match | 40.160 evidence |
+| Artifacts in `artifacts/` | ✅ Implemented | harness.py | 40.05 structure |
+| Multi-run determinism | ✅ Implemented | run1/2/3 match | 40.05 evidence |
 | Proxy scope metadata in JSON | ✅ Implemented | harness `evidence_scope`, `hlr_proven` | 2026-06-05 |
 
 ## Anchored Not Proven (20.37 Integration — Phase C)
@@ -34,10 +34,10 @@ Requirement-change and implementer-feedback record for `40.240_tr_router_prototy
 | RB iff gate + `TP.TR` consumption | 📋 Anchored | §5, §7; HLR-039, -051 |
 | DCB ephemeral hints | 📋 Anchored | §4.4; 20.106 |
 
-## Structural / Process Requirements (40.160 Alignment)
+## Structural / Process Requirements (40.05 Alignment)
 
 - `software_description.md` — Phase A/B/C, Alignment Summary, 20.37 contract table (2026-06-05)
-- `verification_capsule.md` — ledgers, integration-open table, 40.160 checklist
+- `verification_capsule.md` — ledgers, integration-open table, 40.05 checklist
 - `requirements_delta.md` — this file
 - `artifacts/tr_verification_run{1,2,3}_2026-06-03.json` — regenerated 2026-06-05 (6/6 pass)
 - `docs/` — experiments, prototype_notes, reasoning_trail
@@ -45,7 +45,7 @@ Requirement-change and implementer-feedback record for `40.240_tr_router_prototy
 ## Rationale
 
 - 40.240 remains a **basin-selection + ΔH% proxy**, not the full TR routine in 20.37.
-- 40.160 pass adds TC005/TC006 so error-path claims are artifact-backed.
+- 40.05 pass adds TC005/TC006 so error-path claims are artifact-backed.
 - Integration contract is documented for promotion traceability without inflating evidence.
 
 ## Impacted Documents
@@ -68,4 +68,4 @@ Reserved for Phase C per `software_description.md`.
 
 ## Summary
 
-40.160 pass complete for **Phase B proxy**: 6/6 tests, 3-run determinism, proxy-only JSON metadata, capsule/delta aligned with updated 20.37. Integration verification remains open.
+40.05 pass complete for **Phase B proxy**: 6/6 tests, 3-run determinism, proxy-only JSON metadata, capsule/delta aligned with updated 20.37. Integration verification remains open.

@@ -1,0 +1,7 @@
+{
+  "schema_version": "30_1050_renumber_manifest_v1",
+  "description": "Placeholder for Phase-2 coupled 10.50+30 renumber. Populate with one row per atomic pair before execution.",
+  "approved_by": null,
+  "executed": null,
+  "pairs": []
+}

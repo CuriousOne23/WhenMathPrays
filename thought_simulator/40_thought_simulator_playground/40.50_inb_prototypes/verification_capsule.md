@@ -5,7 +5,7 @@ Part B complete (2026-06-08). Harness **16/16 PASS**.
 
 ## Evidence Summary
 - Artifact: `artifacts/inb_verification_run_2026-06-08.json`
-- Evidence types (40.160): behavioral, structural, negative, replay, golden diff (diagnostic export)
+- Evidence types (40.05): behavioral, structural, negative, replay, golden diff (diagnostic export)
 - Core invariants demonstrated:
   - Non-semantic deterministic canonicalization (Unicode NFKC, surface forms)
   - Bounded intake with deterministic reject + fixed audit reason codes

@@ -6,7 +6,7 @@
 
 ## Phase B Deliverables (Executed)
 - Harness executed 19 scenarios; artifact: `artifacts/iiinb_verification_run_2026-06-08.json`
-- Evidence types (per 40.160): behavioral, structural (intake path ordering, basin-chain exclusion), negative (escalate, caps, rejected handoff, USP load failure), replay, golden diff (diagnostic export)
+- Evidence types (per 40.05): behavioral, structural (intake path ordering, basin-chain exclusion), negative (escalate, caps, rejected handoff, USP load failure), replay, golden diff (diagnostic export)
 - Core invariants demonstrated: `profile_enabled` gate, read-only USP apply/immutability, escalate-without-guess, `InB → IIInB → RB` ordering, apply/segment caps, envelope guard (semantic_core, TP.TR, Pipeline B), deterministic replay/segmentation, multi-rule precedence, USP version pinning, TCU reporting, audit record per pass, diagnostic export ordering, non-blocking escalation handoff
 - HLR coverage (exploratory, with harness evidence): 001–012, 014–022, 024, 026–028
 - Remaining HLR exploration: 013 (MI_VAGUE/MI_INCOMP non-resolution), 023 (IMR same-cycle isolation), 025 (parent invariant cross-check), `FAIL_ENVELOPE` negatives (40.510-207)

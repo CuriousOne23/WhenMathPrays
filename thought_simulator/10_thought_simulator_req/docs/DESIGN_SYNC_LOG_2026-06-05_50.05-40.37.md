@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-05  
 **Methodology:** `50_thought_simulator_design/50.05_software_spec_construction_guide.md`  
-**Source evidence:** Approved `40.240_tr_router_prototypes` (40.160 pass); `30.37` v0.4; `10.50.37`
+**Source evidence:** Approved `40.240_tr_router_prototypes` (40.05 pass); `30.37` v0.4; `10.50.37`
 
 ## Outputs
 

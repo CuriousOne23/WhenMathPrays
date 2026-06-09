@@ -58,8 +58,8 @@ Optional Track H prefix: `InB → IIInB → RB → …` (W1 modules).
 
 **Out of scope:**
 - Pipeline B realization (W4)
-- A↔B orchestration glue (40.1606 — W5)
-- Full multi-lane scheduler integration (40.502 — W5)
+- A↔B orchestration glue (40.206 — W5)
+- Full multi-lane scheduler integration (40.270 — W5)
 
 ## Flows Alignment Statement
 

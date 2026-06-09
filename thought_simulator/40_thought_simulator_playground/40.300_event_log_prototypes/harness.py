@@ -65,7 +65,7 @@ def main() -> None:
     ]
     status = "PASS" if all(item["result"] == "PASS" for item in scenarios) else "FAIL"
     report = {
-        "module": "40.2600_event_log_prototypes",
+        "module": "40.300_event_log_prototypes",
         "date": "2026-05-28",
         "status": status,
         "scenarios": scenarios,

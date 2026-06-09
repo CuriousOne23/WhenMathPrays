@@ -126,7 +126,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md with the proposed new requirement IDs for phase-order determinism and tick monotonicity).
 
-Next (per 40.160): human may request further iteration on the skeleton, addition of more scenarios (e.g. phase-level evidence richness, integration stubs), or promotion consideration once evidence is mapped to canonical 10-series anchors. The concrete demonstration of monotonic + ordered phase enforcement with replay digests is now available to inform the 10.10.40 cycle model and any 10.50.60 tick cycle requirements.
+Next (per 40.05): human may request further iteration on the skeleton, addition of more scenarios (e.g. phase-level evidence richness, integration stubs), or promotion consideration once evidence is mapped to canonical 10-series anchors. The concrete demonstration of monotonic + ordered phase enforcement with replay digests is now available to inform the 10.10.40 cycle model and any 10.50.60 tick cycle requirements.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the tick cycle enforcement.
 

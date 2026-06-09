@@ -7,7 +7,7 @@
     ],
     "provenance_queue_digest": "eadf853b5cf713daaae1319dc31c8fc9572c247cdafb21407517d7ed6b50dbe4"
   },
-  "module": "40.3400_cop_prototypes",
+  "module": "40.340_cop_prototypes",
   "requirements_anchors": [
     "thought_simulator/20_requirements/20.34_cop_requirements.md",
     "thought_simulator/20_requirements/20.30_ts_functional_model.md",
@@ -152,7 +152,7 @@
       ],
       "contract_version": "1.0",
       "env_default_profile": "P1",
-      "module": "40.3400_cop_prototypes",
+      "module": "40.340_cop_prototypes",
       "pending_queue": [],
       "policy": {
         "fairness_policy": "safety_first",
@@ -244,7 +244,7 @@
       ],
       "contract_version": "1.0",
       "env_default_profile": "P1",
-      "module": "40.3400_cop_prototypes",
+      "module": "40.340_cop_prototypes",
       "pending_queue": [
         {
           "basis_snapshot": "snap-f",
@@ -321,7 +321,7 @@
       ],
       "contract_version": "1.0",
       "env_default_profile": "P2",
-      "module": "40.3400_cop_prototypes",
+      "module": "40.340_cop_prototypes",
       "pending_queue": [
         {
           "basis_snapshot": "snap-a",

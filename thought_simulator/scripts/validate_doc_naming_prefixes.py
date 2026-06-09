@@ -22,7 +22,7 @@ NOTE on component numbering independence (as of post-renumber policy):
     an existing 10.50 peer; 10.50 comes first as the canonical requirements anchor).
   - Cross-layer component number alignment (previously "uniform .xx across 40/30/10.50/50")
     is no longer required or enforced by this validator. See validate_30_10_50_pairing.py
-    for the only remaining cross-tier name rule, and the updated 40.160 / 30.00 / 50.05
+    for the only remaining cross-tier name rule, and the updated 40.05 / 30.00 / 50.05
     guidance documents.
 """
 

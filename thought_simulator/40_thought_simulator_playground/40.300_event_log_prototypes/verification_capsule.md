@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.2600_event_log_prototypes`.
+Track verification evidence for `40.300_event_log_prototypes`.
 
 ## Phase State
 

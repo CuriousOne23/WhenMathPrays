@@ -8,7 +8,7 @@ from typing import Any
 import json
 
 
-MODULE_NAME = "40.3400_cop_prototypes"
+MODULE_NAME = "40.340_cop_prototypes"
 CONTRACT_VERSION = "1.0"
 
 EVENT_SUBMIT_PROPOSAL = "submit_proposal"

@@ -12,7 +12,7 @@ from prototype import create_router
 def run_harness(run_id: str = "tr_verification_run_2026-06-03") -> dict:
     """Run verification scenarios and return results.
     
-    Supports multiple runs for determinism evidence (modeled after 40.160).
+    Supports multiple runs for determinism evidence (modeled after 40.160_tp_lifecycle).
     """
     
     router = create_router()
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     import os
     os.makedirs("artifacts", exist_ok=True)
     
-    # Run multiple times for determinism evidence (aligned with 40.160 style)
+    # Run multiple times for determinism evidence (aligned with 40.05 style)
     for run_label in ["run1", "run2", "run3"]:
         run_id = f"tr_verification_{run_label}_2026-06-03"
         artifact = run_harness(run_id=run_id)

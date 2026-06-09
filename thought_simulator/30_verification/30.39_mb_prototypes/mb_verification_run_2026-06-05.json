@@ -1,5 +1,5 @@
 {
-  "module": "40.39_mb_prototypes",
+  "module": "40.350_mb_prototypes",
   "notes": "Phase B forward-flow execution from 20.70. All outputs are deterministic and non-mutating. Prototype is exploratory only.",
   "run_command": "python harness.py",
   "run_timestamp_utc": "2026-06-05T17:01:58.433614+00:00",

@@ -48,7 +48,7 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 | Blockers | **None** — Phase B authorized |
 
 ## Required Next Step
-Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series). The delta and capsule documents **SHALL** also carry explicit Flows Alignment + Agreement Statements per 40.160.
+Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series). The delta and capsule documents **SHALL** also carry explicit Flows Alignment + Agreement Statements per 40.05.
 
 ## Traceability
 - 20.165_dcb_stability_requirements.md (source)

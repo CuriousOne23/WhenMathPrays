@@ -62,7 +62,7 @@ HLR-013, 023, and 025 are intentionally excluded here and tracked in the Open / 
 - Created IIInB module: `profile_enabled` gate, read-only USP apply, intake-bound TP writes, `run_intake_path` ordering
 - Phase A approved (CP, 2026-06-08)
 
-## Phase B delta (40.160)
+## Phase B delta (40.05)
 - Added `export_repair_diagnostics`, extended envelope guard (`exec_plan`, `exec_trace`), `REASON_CODES` assert
 - Added `INB_HANDOFF_REJECTED`; `BASIN_CHAIN_STAGES` / `INTAKE_PATH_STAGES` constants
 - Expanded harness from 6 → 19 scenarios; full test matrix PASS

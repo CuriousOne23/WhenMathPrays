@@ -113,7 +113,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Next (per 40.160 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.40 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.40 refinements or 50.40_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
+Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.40 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.40 refinements or 50.40_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the scheduler (see invariants in capsule).
 

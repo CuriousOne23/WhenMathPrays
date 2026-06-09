@@ -218,12 +218,12 @@ def main() -> int:
     # 4. Global reference updates
     changed = _apply_text_replacements(replacements)
 
-    # 5. Restore guide governance ID (band shorthand 40.20->40.160 must not apply to 40.05)
+    # 5. Restore guide governance ID (band shorthand 40.20->40.05 must not apply to 40.05)
     if guide_dst.is_file():
         guide_text = guide_dst.read_text(encoding="utf-8")
         original_guide = guide_text
         for old, new in [
-            ("# 40.160 Master Program Guide", "# 40.05 Master Program Guide"),
+            ("# 40.05 Master Program Guide", "# 40.05 Master Program Guide"),
             ("**Document ID:** 40.160", "**Document ID:** 40.05"),
             ("| **40.160** (this guide) |", "| **40.05** (this guide) |"),
         ]:

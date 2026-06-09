@@ -1,4 +1,4 @@
-﻿\"\"\"Scaffold prototype for 40.180_oub_prototypes.\"\"\"
+﻿\"\"\"Scaffold prototype for 40.140_oub_prototypes.\"\"\"
 
 
 def not_implemented() -> None:

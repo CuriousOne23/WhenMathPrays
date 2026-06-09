@@ -12,7 +12,7 @@
 ## Scaffold Metadata
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.130_splitting_and_merging_requirements.md](../../20_requirements/20.130_splitting_and_merging_requirements.md)
-- upstream_playground_modules: [40.160_tp](../40.160_tp_lifecycle/software_description.md), [40.501](../40.190_rb_prototypes/software_description.md) (split/merge arbitration), [40.150](../40.150_mtp_prototypes/software_description.md) (merge into MTP)
+- upstream_playground_modules: [40.160_tp](../40.160_tp_lifecycle/software_description.md), [40.190](../40.190_rb_prototypes/software_description.md) (split/merge arbitration), [40.150](../40.150_mtp_prototypes/software_description.md) (merge into MTP)
 - applicability: lane **split/merge** with `lineage_delta`, ΔH% ledger, safe-boundary gating
 - program_wave: **W3**
 
@@ -51,7 +51,7 @@ Split follows routing; merge precedes truth/done.
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms split/merge before truth/done, `lineage_delta` audit, and ΔH% ledger per 20.130. Phase B must evidence RB arbitration handoff (40.501) and MTP-bound merge (40.150) without repair logic bleed.
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms split/merge before truth/done, `lineage_delta` audit, and ΔH% ledger per 20.130. Phase B must evidence RB arbitration handoff (40.190) and MTP-bound merge (40.150) without repair logic bleed.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -61,7 +61,7 @@ Split follows routing; merge precedes truth/done.
 | 20.130 split/merge + `lineage_delta` | Pass |
 | ΔH% ledger obligations | Pass |
 | A-chain placement (split before OB; merge before truth) | Pass |
-| Handoffs to 40.160_tp / 40.501 / 40.150 | Pass |
+| Handoffs to 40.160_tp / 40.190 / 40.150 | Pass |
 | Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)

@@ -6,7 +6,7 @@
 
 ## Phase B Deliverables (Executed)
 - Harness executed 16 scenarios; artifact: `artifacts/inb_verification_run_2026-06-08.json`
-- Evidence types (per 40.160): behavioral, structural (handoff/schema), negative, replay, golden diff (diagnostic export)
+- Evidence types (per 40.05): behavioral, structural (handoff/schema), negative, replay, golden diff (diagnostic export)
 - Core invariants demonstrated: non-semantic canonicalization, bounded reject-with-audit, FIFO preservation, deterministic replay, provenance emission, isolation, explicit handoff contract (`InB → IIInB → RB`), schema validation, transport isolation, tick-boundary first stage, zero-event window, profile activation deferral, diagnostic export ordering, timestamp-as-metadata
 - HLR coverage (exploratory, with harness evidence): 001–008, 009–012, 014–016, 018–023, 025–026
 - Remaining HLR exploration: 013 (per-input profile reject demonstrated; signature-bound precedence not fully modeled), 017 (reason-code registry partial), 024 (parent invariant cross-check deferred to 30-series)
@@ -264,7 +264,7 @@ This module **SHALL NOT**:
 - Ensuring the skeleton remains strictly non-semantic even when exploring full HLR load.
 
 ## Required Next Step
-Phase B complete per 40.160. Next: 30-series normalization when promotion is scheduled (HLR-013 signature precedence, HLR-017 registry, HLR-024 parent cross-check). Cross-validate handoff with 40.60 IIInB harness on integrated intake path runs.
+Phase B complete per 40.05. Next: 30-series normalization when promotion is scheduled (HLR-013 signature precedence, HLR-017 registry, HLR-024 parent cross-check). Cross-validate handoff with 40.60 IIInB harness on integrated intake path runs.
 
 ## Traceability
 - 10.10.10_system_architecture.md (InB as input normalization stage, MTP/TP state model, module-local temporary buffers, deterministic cycles)

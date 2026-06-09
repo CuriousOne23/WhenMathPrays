@@ -16,7 +16,7 @@
 - upstream_playground_modules: [40.50](../40.50_inb_prototypes/software_description.md), [40.60](../40.60_iiinb_prototypes/software_description.md), [40.240](../40.240_tr_router_prototypes/software_description.md)
 - applicability: **Routing Basin (RB)** — fan-out after intake repair; `InB → IIInB → RB` handoff
 - program_wave: **W3**
-- numbering_note: suffix `.501` aligns with 20.50; folder `40.1100_regulator_prototypes/` is the regulator (20.150 ΔH%) — distinct collision per [40.510 §3](../40.510_refactor.md)
+- numbering_note: suffix `.501` aligns with 20.50; folder `40.320_regulator_prototypes/` is the regulator (20.150 ΔH%) — distinct collision per [40.510 §3](../40.510_refactor.md)
 
 ## Purpose
 
@@ -52,7 +52,7 @@ RB follows intake repair; precedes split and OB stages.
 ## Flows Alignment Statement
 
 - **Forward Flow (20-series):** [20.50](../../20_requirements/20.50_rb_requirements.md) HLR-001–045; [20.101](../../20_requirements/20.101_iiinb_requirements.md) handoff; [20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1.1.
-- **Backward Flow (40-series evidence):** W1 40.50/101 demonstrate intake; RB module isolates post-repair fan-out.
+- **Backward Flow (40-series evidence):** W1 40.50/60 demonstrate intake; RB module isolates post-repair fan-out.
 - **Iterative Design Flow (50-series influence):** None yet.
 
 **Agreement Statement**: Aligned — CP review 2026-06-08 confirms RB as routing-only post-intake per 20.50; `InB → IIInB → RB` handoff with no repair logic in RB. Phase B must prove TR gating (40.240) and split/merge arbitration handoff (40.170).
@@ -66,7 +66,7 @@ RB follows intake repair; precedes split and OB stages.
 | `InB → IIInB → RB` handoff (20.36 §2.1.1) | Pass |
 | No repair logic in RB | Pass |
 | TR gating / split-merge arbitration scope | Pass |
-| Handoffs to 40.50/101/37/130 | Pass |
+| Handoffs to 40.50/60/240/170 | Pass |
 | Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)

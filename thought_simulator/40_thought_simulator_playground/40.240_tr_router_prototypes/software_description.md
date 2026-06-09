@@ -16,7 +16,7 @@ Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to im
 - Negative: reject TR run when flag false; reject DCB-direct RB consumption
 - Preserve existing proxy scenarios as regression subset until full integration supersedes
 
-**W3 Phase B maps to legacy Phase C (on-TP integration)** below — scoped to 40.510-410 handoffs with 40.1600/40.210/40.501.
+**W3 Phase B maps to legacy Phase C (on-TP integration)** below — scoped to 40.510-410 handoffs with 40.200/40.210/40.190.
 
 **Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 extension scope against 20.37 Semantic Interpretation Flow Contract (HLR-20.037-049/050/051). Legacy proxy Phase B evidence retained as regression baseline; integration HLRs deferred to W3 Phase B.
 
@@ -85,7 +85,7 @@ The following is the normative cycle this prototype **defers**; it is summarized
 
 ---
 
-## Phase B Deliverables (Executed + 40.160-aligned)
+## Phase B Deliverables (Executed + 40.05-aligned)
 
 - Minimal deterministic content-based router (keyword proxy for semantic cues)
 - Consistent ΔH% assignment per route decision
@@ -112,7 +112,7 @@ Phase C will implement the full `20.37` Semantic Interpretation Flow Contract on
 - DCB post-OB / pre-TR ephemeral event consumption under TR gate (20.106, 20.37 §4.4)
 - Conformance evidence for `HLR-20.037-049`, `-050`, `-051`
 
-Until Phase C exists, **40.240 Phase B artifacts remain the authoritative evidence** for basin-selection proxy only (`HLR-20.437-*`). 40.160 must not treat proxy harness output as proof of integration HLRs.
+Until Phase C exists, **40.240 Phase B artifacts remain the authoritative evidence** for basin-selection proxy only (`HLR-20.437-*`). 40.05 must not treat proxy harness output as proof of integration HLRs.
 
 ---
 
@@ -261,7 +261,7 @@ Reserved for subsequent 40.x iterations or 50.37 after integration harness evide
 
 - Harness 4/4 pass; multi-run determinism artifacts
 - `requirements_delta.md` and `verification_capsule.md` with three-flow statements
-- Phase A software_description approved; 40.160 structural alignment
+- Phase A software_description approved; 40.05 structural alignment
 - Partial promotion to 10.50.37 (`HLR-20.437-*`) and 30.37
 
 **Open before integration promotion:**

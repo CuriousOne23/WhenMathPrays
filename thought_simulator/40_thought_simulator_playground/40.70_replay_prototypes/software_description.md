@@ -6,7 +6,7 @@
 
 ## Phase B Deliverables (Executed)
 - Harness executed 18 scenarios; artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
-- Evidence types (per 40.160): behavioral, structural (intake path, fixture IDs, B envelope guards), negative (regen input / forbidden lane_id), replay, golden diff (strip + diagnostic export digests)
+- Evidence types (per 40.05): behavioral, structural (intake path, fixture IDs, B envelope guards), negative (regen input / forbidden lane_id), replay, golden diff (strip + diagnostic export digests)
 - Core invariants demonstrated: C7-A..E (live + simulated), E1 strip scope and `semantic_core` retention, Class 7 suite determinism, intake path ordering, Class 1 strip demo, regen input validation + fixture-root merge, `b_regeneration_equivalent` scaffold, B envelope `lane_id`/`tp_id` guard, replay diagnostic export ordering
 - HLR coverage (exploratory, with harness evidence): 20.36-017, 018, 021, 053, 058–062; 20.207-001, 004, 007, 017, 019, 020, 028, 029
 - Remaining exploration: Classes 2–6 full runners, live E2 regeneration execution, live UPI/GB/CIL for C7-D/E, YAML golden import — see Test Matrix
@@ -40,7 +40,7 @@ The harness also demonstrates **E1 strip replay** (remove `exec_plan` + `exec_tr
 The replay harness is responsible for:
 - Loading and executing C7-A..E fixture runners with falsifiable assertions per 20.36 §9
 - Composing InB → IIInB intake paths via upstream 40.50/40.60 prototypes
-- Emitting `replay_class`, `fixture_id`, `sub_id`, per-assertion pass/fail, and artifact JSON per 40.160 evidence standards
+- Emitting `replay_class`, `fixture_id`, `sub_id`, per-assertion pass/fail, and artifact JSON per 40.05 evidence standards
 - Providing `strip_b_envelopes()` for E1 strip scope `[exec_plan, exec_trace]`
 - Computing canonical JSON digests (20.95 ordering) for replay diff baselines
 - Preserving deterministic replay: identical inputs → identical assertion outcomes and digests

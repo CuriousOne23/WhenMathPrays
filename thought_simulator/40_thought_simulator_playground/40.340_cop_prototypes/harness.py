@@ -1,4 +1,4 @@
-﻿"""Deterministic verification harness for 40.3400_cop_prototypes."""
+﻿"""Deterministic verification harness for 40.340_cop_prototypes."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import traceback
 from prototype import COPDeterministicReject, COPState
 
 
-MODULE_NAME = "40.3400_cop_prototypes"
+MODULE_NAME = "40.340_cop_prototypes"
 RUN_COMMAND = "python harness.py"
 ARTIFACT_DIR = Path(__file__).resolve().parent / "artifacts"
 ARTIFACT_PATH = ARTIFACT_DIR / "cop_verification_run_2026-06-03.json"

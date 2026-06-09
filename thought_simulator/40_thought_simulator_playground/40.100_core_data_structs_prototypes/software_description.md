@@ -18,7 +18,7 @@
 - applicability: shared **conversation-layer and intake struct** prototypes — canonical shapes for W2 wire-up across USP/UPI/IIInB/COB
 - disposition_target: promote (structural evidence; feeds 30.392 when normalized)
 - program_wave: **W2** per [40.510_refactor.md](../40.510_refactor.md) §4.2
-- numbering_note: suffix `.392` avoids collision with `40.39_mb_prototypes` (Monitoring Basin)
+- numbering_note: suffix `.392` avoids collision with `40.350_mb_prototypes` (Monitoring Basin)
 
 ## Purpose
 
@@ -136,7 +136,7 @@ Key anchors for this module: HLR-20.039-021 through -025 (conversation-layer par
 
 ## Risks & Unknowns
 - Whether `40.60` inline types migrate in-place or via import from this module (Phase B decision)
-- Golden fixture location: `artifacts/` vs `fixtures/` (follow 40.160 convention)
+- Golden fixture location: `artifacts/` vs `fixtures/` (follow 40.05 convention)
 - Level of `TpLaneView` coverage in W2 vs deferred to W3
 
 ## Traceability

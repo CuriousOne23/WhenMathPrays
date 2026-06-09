@@ -1,4 +1,4 @@
-# 40.1600_ob_prototypes / software_description.md
+# 40.200_ob_prototypes / software_description.md
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
@@ -12,7 +12,7 @@
 ## Scaffold Metadata
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.40_ob_requirements.md](../../20_requirements/20.40_ob_requirements.md)
-- upstream_playground_modules: [40.501](../40.190_rb_prototypes/software_description.md), [40.240](../40.240_tr_router_prototypes/software_description.md), [40.210](../40.210_dcb_prototypes/software_description.md)
+- upstream_playground_modules: [40.190](../40.190_rb_prototypes/software_description.md), [40.240](../40.240_tr_router_prototypes/software_description.md), [40.210](../40.210_dcb_prototypes/software_description.md)
 - applicability: **Pipeline A OB** — lane-local evidence extraction; pattern detector not interpreter
 - program_wave: **W3**
 - numbering_note: suffix `.401` aligns with 20.40; folder `40.270_scheduler_prototypes/` is scheduler glue (W5)
@@ -53,7 +53,7 @@ OB executes after routing/splitting; before TB and DCB→TR overlay in same cycl
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms OB as A-only lane-local evidence basin per 20.40, distinct from B-side OpBeh (W4) and DCB (40.210). Phase B must wire TR-input + `tr_needs_update` handoff for 40.240 and evidence path to 40.601 (TB).
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms OB as A-only lane-local evidence basin per 20.40, distinct from B-side OpBeh (W4) and DCB (40.210). Phase B must wire TR-input + `tr_needs_update` handoff for 40.240 and evidence path to 40.230 (TB).
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -64,7 +64,7 @@ OB executes after routing/splitting; before TB and DCB→TR overlay in same cycl
 | TR-input + `tr_needs_update` emission | Pass |
 | Not geometric meta-basin (DCB separate) | Pass |
 | Approved MTP read-set boundaries | Pass |
-| Handoffs to 40.501 / 40.240 / 40.210 / 40.601 | Pass |
+| Handoffs to 40.190 / 40.240 / 40.210 / 40.230 | Pass |
 | Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)

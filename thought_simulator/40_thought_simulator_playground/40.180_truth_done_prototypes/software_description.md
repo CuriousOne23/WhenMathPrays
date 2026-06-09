@@ -13,7 +13,7 @@
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.140_truth_evaluation_requirements.md](../../20_requirements/20.140_truth_evaluation_requirements.md)
 - intended_20_secondary: [20.60](../../20_requirements/20.60_tb_requirements.md) (TB inputs only — no re-interpretation)
-- upstream_playground_modules: [40.601](../40.230_tb_prototypes/software_description.md), [40.170](../40.170_split_merge_prototypes/software_description.md), [40.150](../40.150_mtp_prototypes/software_description.md)
+- upstream_playground_modules: [40.230](../40.230_tb_prototypes/software_description.md), [40.170](../40.170_split_merge_prototypes/software_description.md), [40.150](../40.150_mtp_prototypes/software_description.md)
 - applicability: **Truth/Done terminal evaluation** — explicit completion gate before `mtp_update`
 - program_wave: **W3**
 
@@ -45,7 +45,7 @@ Does **not**:
 - **Backward Flow (40-series evidence):** None — Phase A.
 - **Iterative Design Flow (50-series influence):** None yet.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms Truth/Done as explicit A-chain completion gate before `mtp_update`; TB-input-only consumption per 20.140. Phase B must prove ordering relative to 40.601 (TB) and 40.150 (commit gate).
+**Agreement Statement**: Aligned — CP review 2026-06-08 confirms Truth/Done as explicit A-chain completion gate before `mtp_update`; TB-input-only consumption per 20.140. Phase B must prove ordering relative to 40.230 (TB) and 40.150 (commit gate).
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -55,7 +55,7 @@ Does **not**:
 | 20.140 truth/done terminal evaluation | Pass |
 | TB-input-only (no OB re-interpretation) | Pass |
 | A-chain placement (after merge; before `mtp_update`) | Pass |
-| Handoffs to 40.601 / 40.170 / 40.150 | Pass |
+| Handoffs to 40.230 / 40.170 / 40.150 | Pass |
 | Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)

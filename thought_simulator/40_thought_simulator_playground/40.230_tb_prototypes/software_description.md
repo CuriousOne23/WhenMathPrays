@@ -12,7 +12,7 @@
 ## Scaffold Metadata
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.60_tb_requirements.md](../../20_requirements/20.60_tb_requirements.md)
-- upstream_playground_modules: [40.1600](../40.1600_ob_prototypes/software_description.md), [40.180](../40.180_truth_done_prototypes/software_description.md)
+- upstream_playground_modules: [40.200](../40.200_ob_prototypes/software_description.md), [40.180](../40.180_truth_done_prototypes/software_description.md)
 - applicability: **TB interpretation** — five-channel truth hypothesis inputs **before** Truth/Done
 - program_wave: **W3**
 - numbering_note: suffix `.601` aligns with 20.60; folder `40.280_tick_cycle_skeleton/` is tick glue (W5)

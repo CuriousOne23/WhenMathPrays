@@ -2,7 +2,7 @@ import sys
 from prototype import not_implemented
 
 if __name__ == "__main__":
-    print("40.501: Phase A only")
+    print("40.190: Phase A only")
     try:
         not_implemented()
     except NotImplementedError:

@@ -6,7 +6,7 @@ Phase A **approved** (CP review, 2026-06-08). Phase B **approved** (18/18 PASS; 
 ## Evidence Summary
 - Artifact: `artifacts/replay_class7_verification_run_2026-06-08.json`
 - Command: `py -3 harness.py` (from module directory)
-- Evidence types (40.160): behavioral, structural (fixture IDs, intake path, B envelope guards), negative (regen input / forbidden lane_id), replay, golden diff (strip + diagnostic export digests)
+- Evidence types (40.05): behavioral, structural (fixture IDs, intake path, B envelope guards), negative (regen input / forbidden lane_id), replay, golden diff (strip + diagnostic export digests)
 - Core invariants demonstrated:
   - REPLAY_CLASS_7 C7-A..E (live 40.50/40.60 + simulated UPI/GB for C7-D/E)
   - E1 strip scope `[exec_plan, exec_trace]`; `semantic_core` retained

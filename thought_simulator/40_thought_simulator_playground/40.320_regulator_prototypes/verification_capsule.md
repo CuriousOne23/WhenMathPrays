@@ -2,26 +2,26 @@
 
 ## Purpose
 
-Track verification evidence for `40.1100_regulator_prototypes`.
+Track verification evidence for `40.320_regulator_prototypes`.
 
 ## Phase State
 
 - Phase A (software_description): approved (per CP review of anchors)
 - Phase B (prototype + harness + evidence): executed 2026-06-06 (15/15 PASS)
 
-## Flows Alignment Statement (per 40.160)
+## Flows Alignment Statement (per 40.05)
 
-- **Forward Flow (10/20-series)**: See 40.50 software_description.md for full mapping from 10.10.40 regulator architecture + 20.150/20.170/20.30/20.40/20.90/20.200 + 20.90_ts_parameter_table.
+- **Forward Flow (10/20-series)**: See 40.320_regulator_prototypes/software_description.md for full mapping from 10.10.40 regulator architecture + 20.150/20.170/20.30/20.40/20.90/20.200 + 20.90_ts_parameter_table.
 - **Backward Flow (40-series evidence)**: This capsule + the 2026-06-06 artifact + 15/15 harness results constitute executed Phase B evidence. All 12 "What Phase B Must Explore" items have scenario coverage. Evidence is normalized here for promotion to 30.50.
 - **Iterative Design Flow (50-series influence)**: Downstream 10.50.50_regulator_requirements.md (HLR-20.450-001..003 + TCU) and 50.50_regulator_design_support.md shaped initial scope; Phase B evidence (rich multi-area enforcement, interrupt levels, bounded history, obs) can drive refinements.
 
-**Agreement Statement**: With Phase A approved per CP review and Phase B executed (15/15 PASS artifact covering all 12 required exploration items + core invariants from 10.10.40 + 20-series), the three flows are aligned on the regulator as the non-cognitive, deterministic safety and resource enforcement layer. Forward from 10.10.40/20s + 10.50.50 defines normative responsibilities. Backward from 40.50/30.50 supplies verified evidence (deterministic decisions per area, explicit obs, bounded state, validation, interrupt generation). Iterative from 50.50/10.50.50 influenced contracts; evidence feeds back. All work preserved non-cognitive / deterministic / bounded / replayable / safety-first + strict separation. Open items (action taxonomy, simultaneous violations) noted for 10.50.50/50.50.
+**Agreement Statement**: With Phase A approved per CP review and Phase B executed (15/15 PASS artifact covering all 12 required exploration items + core invariants from 10.10.40 + 20-series), the three flows are aligned on the regulator as the non-cognitive, deterministic safety and resource enforcement layer. Forward from 10.10.40/20s + 10.50.50 defines normative responsibilities. Backward from 40.320/30.50 supplies verified evidence (deterministic decisions per area, explicit obs, bounded state, validation, interrupt generation). Iterative from 50.50/10.50.50 influenced contracts; evidence feeds back. All work preserved non-cognitive / deterministic / bounded / replayable / safety-first + strict separation. Open items (action taxonomy, simultaneous violations) noted for 10.50.50/50.50.
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-06-06 | 40.1100_regulator_prototypes | python harness.py | 15 scenarios exercising all 12 Phase B Must-Explore items + 10.10.40 invariants + 10.50.50 HLRs | PASS | 0 | artifacts/regulator_verification_run_2026-06-06.json | HLR-20.450-001..003 + 10.10.40 regulator items (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, obs, bounded, validation) | LLR-30.50-001 | 10.10.40 + 20.150/170/30/40/90 + 10.50.50 | source-index anchored per software_description | policy; enforcement_area; pressure/max; action; applied_delta; rationale; interrupt_level; obs (enforcements, areas_covered, boundary_marker, policy_signature, history_len); verification_digest | negative_invalid_policy; negative_negative_pressure | Phase B executed per approved software_description.md (CP review anchors). 15/15 PASS covering 12 items. Supersedes prior 2026-05-28 run. |
+| 2026-06-06 | 40.320_regulator_prototypes | python harness.py | 15 scenarios exercising all 12 Phase B Must-Explore items + 10.10.40 invariants + 10.50.50 HLRs | PASS | 0 | artifacts/regulator_verification_run_2026-06-06.json | HLR-20.450-001..003 + 10.10.40 regulator items (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, obs, bounded, validation) | LLR-30.50-001 | 10.10.40 + 20.150/170/30/40/90 + 10.50.50 | source-index anchored per software_description | policy; enforcement_area; pressure/max; action; applied_delta; rationale; interrupt_level; obs (enforcements, areas_covered, boundary_marker, policy_signature, history_len); verification_digest | negative_invalid_policy; negative_negative_pressure | Phase B executed per approved software_description.md (CP review anchors). 15/15 PASS covering 12 items. Supersedes prior 2026-05-28 run. |
 
 ## Positive Scenario Ledger
 
@@ -72,8 +72,8 @@ Track verification evidence for `40.1100_regulator_prototypes`.
 - `10.10.40_scheduler_and_regulator_architecture.md`: primary (regulator roles, enforcement details, separation, safety envelopes, logging/replay)
 - `10.50.50_regulator_requirements.md`: canonical anchor (HLR-20.450-001..003 + TCU)
 - `20.150_tcu_budgeting_requirements.md`, `20.170_safety_requirements.md`, `20.200_traceability_matrix.md`, `20.30_ts_functional_model.md`, `20.40_ob_requirements.md`, `20.90_ib_requirements.md`, `20.90_ts_parameter_table.md` (as listed in software_description)
-- 10.10 supporting architecture + 40.160/30.00 process docs
-- This 40.50 capsule is the exploratory verification record (30.50 holds canonical promotion).
+- 10.10 supporting architecture + 40.05/30.00 process docs
+- This 40.320 capsule is the exploratory verification record (30.50 holds canonical promotion).
 
 ## Requirements Delta Summary
 
@@ -84,7 +84,7 @@ Track verification evidence for `40.1100_regulator_prototypes`.
 
 ## Architectural Evaluation
 
-- Structure coherence: aligned with canonical playground module layout + 40.160.
+- Structure coherence: aligned with canonical playground module layout + 40.05.
 - Verification maturity: 15 scenarios, full artifact, invariants ledger, three-flow statements in delta/capsule/software_description.
 - Contract clarity: IO (evaluate returns action/applied/rationale/interrupt/obs/digest), policy boundaries, and observability explicit and replay-safe.
 - Next required milestone (per software_description): 30.00 promotion to 30.50 (if requested); use Phase B evidence to inform 10.50.50 or 50.50_regulator_design_support.md (and main 50.50 spec) construction via 50.05. Open action taxonomy / simultaneous violations remain with 10.50.50/50.50.

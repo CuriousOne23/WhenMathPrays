@@ -1,4 +1,4 @@
-﻿# 40.3400_cop_prototypes / software_description.md
+﻿# 40.340_cop_prototypes / software_description.md
 
 ## Approval State
 Phase A draft complete and approved for execution. Phase B implementation executed on 2026-06-03.

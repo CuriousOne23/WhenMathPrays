@@ -45,7 +45,7 @@ COMPLIANT (updated in current transaction):
 NEEDS_EDIT:
 - none (legacy-pattern sweep: clear)
 
-Note: 30.20 evidence JSON artifacts were refreshed from the current 40.160 harness output in this pass and are treated as active evidence.
+Note: 30.20 evidence JSON artifacts were refreshed from the current 40.05 harness output in this pass and are treated as active evidence.
 
 ## 3. 40 Layer
 
@@ -67,27 +67,27 @@ COMPLIANT (updated in current transaction):
 - 40.270_scheduler_prototypes/verification_capsule.md
 - 40.270_scheduler_prototypes/harness.py
 - 40.270_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
-- 40.1200_math_prototypes/software_description.md
-- 40.1100_regulator_prototypes/software_description.md
+- 40.330_math_prototypes/software_description.md
+- 40.320_regulator_prototypes/software_description.md
 - 40.280_tick_cycle_skeleton/software_description.md
 - 40.290_snapshot_prototypes/software_description.md
-- 40.2600_event_log_prototypes/software_description.md
+- 40.300_event_log_prototypes/software_description.md
 - 40.310_experiment_runner/software_description.md
 
 SCAFFOLD (created to complete required directory coverage):
 - 40.110_cob_prototypes/*
 - 40.120_cil_prototypes/*
-- 40.3400_cop_prototypes/*
+- 40.340_cop_prototypes/*
 - 40.240_tr_router_prototypes/*
 - 40.50_inb_prototypes/*
-- 40.180_oub_prototypes/*
+- 40.140_oub_prototypes/*
 
 ARCHIVED (moved to layer-local archive):
-- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/failures.md
-- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/insights.md
-- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/requirements_traceability.md
-- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/updated_requirements.md
-- archive/2026-06-03_layer-cleanup/40.1200_math_prototypes/verification_summary.md
+- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/failures.md
+- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/insights.md
+- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/requirements_traceability.md
+- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/updated_requirements.md
+- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/verification_summary.md
 - archive/2026-06-03_layer-cleanup/**/__pycache__/* (bytecode cache directories)
 
 NEEDS_EDIT:

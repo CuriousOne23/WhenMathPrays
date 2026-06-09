@@ -12,10 +12,10 @@
 The generic pre-partition basin model SHALL be decomposed or realigned to normative Pipeline A basins per [20.01](../../20_requirements/20.01_architecture_map.md) B2 and [40.510](../40.510_refactor.md) A-chain bundle (405–411):
 
 - RB / OB / DCB / TB / IB roles MUST NOT collapse into a single generic basin type
-- Phase B may retain shared harness utilities but MUST split basin contracts to match 40.501, 40.1600, 40.210, 40.601, 40.250 boundaries
+- Phase B may retain shared harness utilities but MUST split basin contracts to match 40.190, 40.200, 40.210, 40.230, 40.250 boundaries
 - Strip-replay fixtures SHALL not depend on legacy generic basin IDs after W3 closure
 
-**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 full redo scope: decompose generic basin model to normative A-basin boundaries per 20.01 B2; legacy verification artifacts retained until Phase B maps regression to 40.501/40.1600/40.210/40.601/40.250 contracts.
+**Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 full redo scope: decompose generic basin model to normative A-basin boundaries per 20.01 B2; legacy verification artifacts retained until Phase B maps regression to 40.190/40.200/40.210/40.230/40.250 contracts.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -24,7 +24,7 @@ The generic pre-partition basin model SHALL be decomposed or realigned to normat
 | W3 full redo scope vs 40.510-412 | Pass |
 | 20.01 B2 normative A-basin decomposition | Pass |
 | No collapse of RB/OB/DCB/TB/IB roles | Pass |
-| Handoff to 40.501/401/106/601/35 boundaries | Pass |
+| Handoff to 40.190/200/210/230/250 boundaries | Pass |
 | Legacy artifacts retained until Phase B regression map | Pass |
 | Blockers | **None** — Phase B authorized |
 

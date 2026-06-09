@@ -9,7 +9,7 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 - `../../30_verification/30.30_verification_glossary.md`
 - `../40.05_master_program_guide.md`
 
-## Flows Alignment Statement (per 40.160)
+## Flows Alignment Statement (per 40.05)
 
 - **Forward Flow (10/20-series)**: See requirements_delta.md for full mapping. Driven by 10.10.40 (scheduler as non-cognitive deterministic controller for ordering/cycle/timing/interrupts/preemption/readiness/safety/logging) + 20.30/20.40/20.90/20.150/20.170/20.200.
 - **Backward Flow (40-series evidence)**: This capsule + the 2026-06-06 artifact + 12/12 harness results constitute executed Phase B evidence. All 10 "What Phase B Must Explore" items (software_description.md) have scenario coverage. Evidence is normalized here for promotion to 30.40.
@@ -107,7 +107,7 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 
 ## Architectural Evaluation
 
-- Structure coherence: aligned with canonical playground module layout + 40.160.
+- Structure coherence: aligned with canonical playground module layout + 40.05.
 - Verification maturity: 12 scenarios, full artifact, invariants ledger, three-flow statements present in delta/capsule/software_description.
 - Contract clarity: IO (via from_contract/apply_contract/snapshot), policy boundaries, and observability fields are explicit and replay-safe.
 - Next required milestone (per software_description): 30.00 promotion to 30.40 (if requested); use Phase B evidence to inform 10.50.40 or 50.40_scheduler_design_spec.md. Open policy/tie-break decisions remain with 50/10.50.

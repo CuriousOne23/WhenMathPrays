@@ -62,7 +62,7 @@ HLR-013, 017, and 024 are intentionally excluded here and tracked in the Open / 
 - Added `handoff` contract: `next_stage=input_semantic_repair`, ordering InB→IIInB→RB
 - Scenario: `positive_iiinb_handoff_contract` — PASS
 
-## Phase B delta (40.160)
+## Phase B delta (40.05)
 - Added schema validation (`INTAKE_SCHEMA_VERSION`, `WIRE_MAP_VERSION`)
 - Added `process_tick_intake`, `request_profile_activation`, `apply_safe_boundary`, `export_intake_diagnostics`, `run_first_stage`
 - Expanded harness from 8 → 16 scenarios; full test matrix PASS

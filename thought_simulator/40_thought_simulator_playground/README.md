@@ -99,7 +99,7 @@ Why this coherence is required:
 - predictable promotion path from exploration to design release artifacts
 - reduced process drift between subsystem teams and module owners
 
-Exception policy for `40.1200_math_prototypes/`:
+Exception policy for `40.330_math_prototypes/`:
 
 - math prototypes may use a lighter documentation burden while still keeping the same file/folder names where practical
 - early mathematical exploration may not immediately impact canonical requirements or design contracts
@@ -130,7 +130,7 @@ Why the exception exists:
 
 - [40.110_cob_prototypes/](40.110_cob_prototypes/) — COB object promotion
 - [40.120_cil_prototypes/](40.120_cil_prototypes/) — CIL clarification FIFO
-- [40.3400_cop_prototypes/](40.3400_cop_prototypes/) — COP async coprocessor
+- [40.340_cop_prototypes/](40.340_cop_prototypes/) — COP async coprocessor
 
 ### Meaning carriers & Pipeline A basins (Wave 3 — W3)
 
@@ -139,7 +139,7 @@ Why the exception exists:
 - [40.170_split_merge_prototypes/](40.170_split_merge_prototypes/) — split/merge; `lineage_delta`; ΔH% *(new W3)*
 - [40.180_truth_done_prototypes/](40.180_truth_done_prototypes/) — Truth/Done terminal gate *(new W3)*
 - [40.190_rb_prototypes/](40.190_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
-- [40.1600_ob_prototypes/](40.1600_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.270 scheduler)*
+- [40.200_ob_prototypes/](40.200_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.270 scheduler)*
 - [40.210_dcb_prototypes/](40.210_dcb_prototypes/) — DCB geometric meta-basin *(new W3)*
 - [40.230_tb_prototypes/](40.230_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
 - [40.260_basin_prototypes/](40.260_basin_prototypes/) — generic basin (W3 full redo → normative A basins)
@@ -150,21 +150,21 @@ Why the exception exists:
 ### Governance & diagnostics (B6)
 
 - [40.130_gb_prototypes/](40.130_gb_prototypes/) — Governing Basin supervisory
-- [40.39_mb_prototypes/](40.39_mb_prototypes/) — Monitoring Basin diagnostics
+- [40.350_mb_prototypes/](40.350_mb_prototypes/) — Monitoring Basin diagnostics
 
 ### Pipeline B & expression (B4)
 
-- [40.180_oub_prototypes/](40.180_oub_prototypes/) — OuB output realization (scaffold)
+- [40.140_oub_prototypes/](40.140_oub_prototypes/) — OuB output realization (scaffold)
 
 ### Orchestration, replay glue & cross-cutting (B5/B7)
 
-- [40.270_scheduler_prototypes/](40.270_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.1600_*` when created)
-- [40.1100_regulator_prototypes/](40.1100_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
-- [40.280_tick_cycle_skeleton/](40.280_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
+- [40.270_scheduler_prototypes/](40.270_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.200_*` when created)
+- [40.320_regulator_prototypes/](40.320_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.190_*` when created)
+- [40.280_tick_cycle_skeleton/](40.280_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.230_*` when created)
 - [40.290_snapshot_prototypes/](40.290_snapshot_prototypes/) — snapshot patterns
-- [40.2600_event_log_prototypes/](40.2600_event_log_prototypes/) — event log / replay
+- [40.300_event_log_prototypes/](40.300_event_log_prototypes/) — event log / replay
 - [40.310_experiment_runner/](40.310_experiment_runner/) — experiment orchestration
-- [40.1200_math_prototypes/](40.1200_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
+- [40.330_math_prototypes/](40.330_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
 
 ### Shared
 

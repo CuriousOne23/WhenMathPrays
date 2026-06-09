@@ -13,7 +13,7 @@
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.106_dcb_requirements.md](../../20_requirements/20.106_dcb_requirements.md)
 - intended_20_secondary: [20.165](../../20_requirements/20.165_dcb_stability_requirements.md) (qualitative stability bounds)
-- upstream_playground_modules: [40.1600](../40.1600_ob_prototypes/software_description.md), [40.240](../40.240_tr_router_prototypes/software_description.md), [40.220](../40.220_dcb_stability_prototypes/software_description.md)
+- upstream_playground_modules: [40.200](../40.200_ob_prototypes/software_description.md), [40.240](../40.240_tr_router_prototypes/software_description.md), [40.220](../40.220_dcb_stability_prototypes/software_description.md)
 - applicability: **DCB geometric meta-basin** — trajectory observation; ephemeral TR inputs
 - program_wave: **W3**
 
@@ -62,7 +62,7 @@ Within `ob_processing` cycle window: **OB → DCB → TR** per 20.37 §7 and 20.
 | Ephemeral events (not persisted on TP) | Pass |
 | No `tr_needs_update` write | Pass |
 | OB → DCB → TR cycle placement | Pass |
-| Handoffs to 40.1600 / 40.240 / 40.220 | Pass |
+| Handoffs to 40.200 / 40.240 / 40.220 | Pass |
 | Blockers | **None** — Phase B authorized |
 
 ## Phase B Test Matrix (draft)

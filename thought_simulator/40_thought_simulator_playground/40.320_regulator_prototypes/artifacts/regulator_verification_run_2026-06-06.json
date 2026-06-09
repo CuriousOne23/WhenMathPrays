@@ -1,5 +1,5 @@
 {
-  "module": "40.1100_regulator_prototypes",
+  "module": "40.320_regulator_prototypes",
   "requirements_anchors": [
     "20.150_tcu_budgeting_requirements.md",
     "20.170_safety_requirements.md",

@@ -4,7 +4,7 @@
 
 This file records requirement-change proposals, implementer feedback, and migration notes for `40.270_scheduler_prototypes`.
 
-## Flows Alignment Statement (per 40.160)
+## Flows Alignment Statement (per 40.05)
 
 - **Forward Flow (10/20-series)**: Primary architecture from 10.10.40_scheduler_and_regulator_architecture.md (deterministic execution controller; roles for ordering, cycle boundaries, timing budgets, interrupt windows (pre-OB/post-TB/post-TR/pre-merge etc.), preemption, message handling, safety envelopes, logging/replayability, non-cognitive/non-mutating). Supporting HLRs/guidance:
   - 20.30_ts_functional_model.md (scheduling phase, pipeline ordering)
@@ -68,5 +68,5 @@ This file records requirement-change proposals, implementer feedback, and migrat
 - Future deltas should append (or reference prior) rather than wholesale replace.
 
 ## Testbench-Driven Changes
-(none this iteration; all evidence from 40 harness per 40.160. Future real testbenches under testbenches/ will feed only via 30.tb/ normalized records.)
+(none this iteration; all evidence from 40 harness per 40.05. Future real testbenches under testbenches/ will feed only via 30.tb/ normalized records.)
 

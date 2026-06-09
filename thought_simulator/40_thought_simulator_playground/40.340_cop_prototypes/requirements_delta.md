@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file records requirement-change proposals, implementer feedback, and executed evidence deltas for `40.3400_cop_prototypes`.
+This file records requirement-change proposals, implementer feedback, and executed evidence deltas for `40.340_cop_prototypes`.
 
 ## Anchors
 

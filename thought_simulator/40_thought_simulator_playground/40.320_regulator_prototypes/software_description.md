@@ -1,4 +1,4 @@
-# 40.1100_regulator_prototypes / software_description.md
+# 40.320_regulator_prototypes / software_description.md
 
 ## Approval State
 - Phase A (software_description): approved (per CP review confirming the 20-series anchors)
@@ -125,7 +125,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Next (per 40.160 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.50 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.50 refinements or 50.50_regulator_design_support.md (and any 50.50 main spec) via 50.05 patterns, always through 30.
+Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.50 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.50 refinements or 50.50_regulator_design_support.md (and any 50.50 main spec) via 50.05 patterns, always through 30.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the regulator (see invariants in capsule).
 

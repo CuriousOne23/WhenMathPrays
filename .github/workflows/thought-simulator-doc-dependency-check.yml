@@ -158,16 +158,32 @@ jobs:
               "thought_simulator/30_verification/",
               "thought_simulator/40_thought_simulator_playground/",
               "thought_simulator/50_thought_simulator_design/",
+              "thought_simulator/10_thought_simulator_req/50_design/",
           )
-          # Note: 40, 20, and 50 now have standalone component numbering (independent .xx).
+          AUTO_40_INVENTORY = "thought_simulator/40_thought_simulator_playground/40.510_refactor.md"
+          AUTO_40_README = "thought_simulator/40_thought_simulator_playground/README.md"
+          # Note: 40, 20, and 50 have standalone component numbering.
           # 30 numbering is coupled only to 10.50 (see validate_30_10_50_pairing.py).
-          # The rename guard still triggers maintenance requirements if you *do* rename
-          # files inside these scopes (to keep glossaries/indexes in sync for the layers
-          # that do have intra- or 30/10.50 coupling). Renames purely inside 40 no longer
-          # imply 30/50 renames.
+          # This guard enforces inventory + identity-table maintenance when governed
+          # paths or module directories are renamed.
 
           def run_git(args):
               return subprocess.check_output(["git", *args], text=True).splitlines()
+
+          def in_scope(path: str) -> bool:
+              return path.startswith(SCOPE_PREFIXES)
+
+          def is_module_dir(path: str) -> bool:
+              parts = path.rstrip("/").split("/")
+              if len(parts) < 2:
+                  return False
+              leaf = parts[-1]
+              parent = parts[-2]
+              if parent == "40_thought_simulator_playground" and leaf.startswith("40."):
+                  return True
+              if parent == "30_verification" and leaf.startswith("30."):
+                  return True
+              return False
 
           event_name = os.getenv("GITHUB_EVENT_NAME", "")
           if event_name == "pull_request":
@@ -187,7 +203,7 @@ jobs:
 
           status_lines = run_git(["diff", "--name-status", diff_range])
           changed_paths = set()
-          renamed_md = []
+          renamed_items = []
 
           for line in status_lines:
               parts = line.split("\t")
@@ -200,16 +216,15 @@ jobs:
 
               if status.startswith("R") and len(paths) >= 2:
                   old_path, new_path = paths[0], paths[1]
-                  in_scope = (
-                      old_path.startswith(SCOPE_PREFIXES)
-                      or new_path.startswith(SCOPE_PREFIXES)
-                  )
+                  if not (in_scope(old_path) or in_scope(new_path)):
+                      continue
                   is_md = old_path.endswith(".md") or new_path.endswith(".md")
-                  if in_scope and is_md:
-                      renamed_md.append((old_path, new_path))
+                  is_dir_rename = is_module_dir(old_path) or is_module_dir(new_path)
+                  if is_md or is_dir_rename:
+                      renamed_items.append((old_path, new_path))
 
-          if not renamed_md:
-              print("No markdown renames detected in 30/40/50; rename-triggered maintenance guard passed.")
+          if not renamed_items:
+              print("No governed renames detected in 30/40/50/10.50; rename-triggered maintenance guard passed.")
               sys.exit(0)
 
           required_paths = {AUTO_GLOSSARY, AUTO_REGISTRY}
@@ -217,32 +232,47 @@ jobs:
           rename_touches_50 = any(
               old.startswith("thought_simulator/50_thought_simulator_design/")
               or new.startswith("thought_simulator/50_thought_simulator_design/")
-              for old, new in renamed_md
+              for old, new in renamed_items
           )
           rename_touches_30 = any(
               old.startswith("thought_simulator/30_verification/")
               or new.startswith("thought_simulator/30_verification/")
-              for old, new in renamed_md
+              for old, new in renamed_items
+          )
+          rename_touches_1050 = any(
+              old.startswith("thought_simulator/10_thought_simulator_req/50_design/")
+              or new.startswith("thought_simulator/10_thought_simulator_req/50_design/")
+              for old, new in renamed_items
+          )
+          rename_touches_40 = any(
+              old.startswith("thought_simulator/40_thought_simulator_playground/")
+              or new.startswith("thought_simulator/40_thought_simulator_playground/")
+              for old, new in renamed_items
           )
           if rename_touches_50:
               required_paths.add(AUTO_50_INDEX)
-          if rename_touches_30:
+          if rename_touches_30 or rename_touches_1050:
               required_paths.add(AUTO_30_INDEX)
+          if rename_touches_40:
+              required_paths.add(AUTO_40_INVENTORY)
+              required_paths.add(AUTO_40_README)
 
           missing = sorted(p for p in required_paths if p not in changed_paths)
           if missing:
               print("ERROR: rename-triggered maintenance guard failed.")
-              print("Detected markdown renames in governed scope:")
-              for old, new in renamed_md:
+              print("Detected governed renames:")
+              for old, new in renamed_items:
                   print(f"- {old} -> {new}")
               print("Required auto-maintenance updates missing from this change set:")
               for path in missing:
                   print(f"- {path}")
+              if rename_touches_30 and rename_touches_1050:
+                  print("Note: 30 <-> 10.50 coupled renames must update both peers atomically.")
               sys.exit(1)
 
           print("Rename-triggered maintenance guard passed.")
-          print("Detected markdown renames:")
-          for old, new in renamed_md:
+          print("Detected governed renames:")
+          for old, new in renamed_items:
               print(f"- {old} -> {new}")
           print("Required auto-maintenance paths were updated.")
           PY
