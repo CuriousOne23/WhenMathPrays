@@ -1,44 +1,57 @@
-**Architectural comments on CP’s analysis and proposal (comments only).**
+**Architectural comments on the proposed rename of `10_thought_simulator_req/10_system_architecture/` (comments only).**
 
-### On the core problem identified
+### 1. The rename itself and the three options
 
-CP correctly surfaces a real and growing semantic collision. The introduction of `05_system_architecture/` as the home for meta/cross-layer governance (the flow-down protocol, construction rules, promotion obligations, etc.) makes the existing `10_thought_simulator_req/10_system_architecture/` directory name actively misleading. 
+The conflict you and CP have identified is real and has become sharper with the introduction of the 05 tier. `05_system_architecture/` is explicitly positioned as the home for meta/cross-layer governance (flow rules, construction protocols, promotion obligations, downward refinement mechanics). Anything named “system_architecture” that lives inside a requirements tier inevitably reads as claiming the same scope, even when its actual content is narrower.
 
-The 10/ subdirectory contains requirement-level specifications (10.10.10_system_architecture.md, module contracts, interrupts model, scheduler architecture, etc.). These are *not* system-wide architecture governance; they are the architectural *requirements* that live inside the 10-tier. Naming it “system_architecture” under the 10 tree creates exactly the kind of ambiguity the 05 tier was meant to eliminate. This is a classic case of accumulated naming that no longer matches the intentional layering model you are now enforcing.
+All three proposed names are improvements because they subordinate the directory to the 10-series semantics:
 
-### On CP’s interpretation of the layers
+- **Option A (`10_design_contract_architecture/`)** is the strongest of the three for precision. It keeps the word “architecture” (which accurately describes the 10.10.xx content) while qualifying it as “design contract.” This creates a clean parallel with the 10.50 design-requirements files and the role 10 plays as the “realization-ready design requirements anchor” layer. It also makes the distinction from 05 explicit in the directory name itself.
 
-The distinction CP draws is sound:
+- **Option B (`10_design_contracts/`)** is the most readable and least risky long-term. By dropping “architecture” entirely at the directory level, it reduces the chance of future name collisions and aligns the 10 tier more clearly with a contracts/requirements-contracts identity. This may be the best choice if the long-term intent is to keep “architecture” language mostly inside 05 and 20.
 
-- 05 = architecture *of the system* (the rules that govern how the tiers relate to one another).
-- 10 = architecture *of requirements* (the requirement anchors, design contracts, and requirement-level structures that 10.50 and the rest of the 10 tier own).
+- **Option C (`10_architecture_requirements/`)** is the most defensive. It explicitly labels the content as requirements, which is accurate. However, it still places “architecture” at the front of the directory name, which partially recreates the surface-level ambiguity the rename is trying to solve (people scanning the tree will still see “architecture” under both 05 and 10).
 
-This aligns with the broader tiering you have been establishing (05 governance, 10 requirements, 20 design, 30 verification, 40 prototypes + authoring guidance, 50 specs). It also respects the explicit statement in 40.05 that each tier’s numbering is independent and that cross-layer handoffs must be explicit. The current “10_system_architecture” name violates that independence by borrowing system-level language for a requirements-tier artifact.
+Any of the three is acceptable; none violate the naming-independence principle stated in 40.05. Option A or B would be my preference for balancing clarity and future-proofing.
 
-### On the proposed rename
+### 2. Difficulty assessment
 
-All three options CP offers are improvements over the status quo. A few observations on each:
+This rename is **non-trivial** (medium-to-high difficulty) for the following reasons:
 
-- `10_design_contract_architecture/` is the most precise of the three. It directly names what the directory actually contains (design contracts expressed as requirements) and keeps the word “architecture” only where it is scoped to the 10 tier. It also creates a nice parallel with the 10.50 files (which are themselves design requirements).
+- The directory is not empty or self-contained. It currently holds multiple requirement-level architecture documents (10.10.10_system_architecture.md through 10.10.60_..., plus README). Those files contain internal cross-references and are referenced from many other governance and design artifacts.
 
-- `10_design_contracts/` is the cleanest and most readable. It drops the overloaded “architecture” word entirely for the directory, which reduces future collision risk. This may be the strongest choice if you want the 10 tier to feel like a requirements/contracts tier rather than an architecture tier.
+- External references are widespread and of several types:
+  - Markdown relative and absolute links in 10_thought_simulator_req/docs/ (promotion_protocol.md, various BACKFLOW/DESIGN_SYNC/FORWARD_FLOW logs, the two guides we discussed earlier, ALIGNMENT_LOGs, etc.).
+  - Traceability mappings in 50.00_design_traceability_index.md.
+  - Cross-references in 30_verification/ (wave coverage notes, 30.00, 30.01).
+  - References in 40_thought_simulator_playground/ (40.510, 40.05, the 40-to-10.50 guide once moved, module-level capsules/deltas that cite 10.10 architecture principles).
+  - Mentions in 00_program_governance/, 20_requirements/, 50-series specs, and scripts that perform validation or renumbering.
+  - Any CI or validation scripts that walk the 10/ tree or hard-code paths.
 
-- `10_architecture_requirements/` is explicit and defensive. It makes the “requirements” qualifier unmistakable. The downside is that it still uses “architecture” at the directory level, which could continue to cause the same surface-level confusion when people scan the tree (they will still see “architecture” under 10 and under 05).
+- Because the 10 tier participates in both forward promotion (40 → 10.50/30 → 50) and controlled backward flow (per promotion_protocol §12), a directory rename touches the “spine” of the layering model. Even small broken links become visible during wave reviews or 50 insight work.
 
-None of the three options break the independence rule that 40.05 articulates. They all make the 10 tier’s contents subordinate to the 10-series semantics rather than pretending to be system-level.
+- Precedent from prior renames (30↔10.50, 40-series cleanups, 50-series adjustments) shows that these operations are treated as controlled identity changes precisely because they are error-prone when done by hand.
 
-### On the broader layering and governance implications
+Manual rename would be risky and time-consuming. Automated is preferable once the exact target name is chosen.
 
-This rename is a necessary supporting move for the 05 tier to do its job. The two documents we discussed earlier (the flow-down protocol now proposed as 05.20 and the 40-to-10.50 guide) only make sense if the 10-tier’s own architecture artifacts are clearly *not* claiming the system-architecture role. Otherwise you recreate the exact ambiguity the 05/40 placements were meant to resolve.
+### 3. Recommendation on generating a directory-rename + link-update script
 
-One minor tension worth noting: several files inside the current `10_system_architecture/` directory carry names like `10.10.10_system_architecture.md`. Those internal names already use “system” language. A directory rename alone will not fully clean the semantics unless the file-level naming inside is also eventually aligned (e.g., toward “design contract” or “requirement architecture” terminology). That is a separate but related cleanup.
+Yes, I recommend generating a script for this rename.
 
-The rename also reinforces the pattern we saw with the two guides: governance that crosses layers (05) or that is specific to how one tier feeds another (40.07) gets its own explicit home, while intra-tier requirement architecture stays clearly inside its tier (10).
+You already have established patterns and tooling for exactly this class of operation:
+- rename_identity.py (tier “30-1050”)
+- apply_30_1050_* migration scripts + fix_post_renumber scripts
+- Various 40-series and 50-series rename/update scripts
 
-### On CP’s overall framing
+A similar controlled script for this 10-series directory rename would be consistent with the repo’s own governance approach to structural changes. The script should at minimum:
+- Perform the directory move/rename.
+- Update all internal references within the moved files.
+- Scan and update references across 00/, 10/, 20/, 30/, 40/, 50/, and scripts/ (with a manifest or allow-list to keep the change auditable).
+- Update any 50.00 index entries, 30.01 notes, wave notes, and promotion_protocol cross-references that mention the old path.
+- Produce a clear before/after report and a “Forward-Equivalence State” style assertion for the links.
 
-CP’s diagnosis that this is “the right moment to fix the architectural confusion” is accurate. The 05 tier only delivers its intended clarity if the existing directory that sounds like it is doing the same job is disambiguated. Leaving the name as-is would make the 05 tier feel like it is fighting the 10 tier for the word “system architecture” rather than defining a distinct meta layer.
+Treating this rename with the same formality as the 30-10.50 and 40 renames reinforces the architectural intent rather than treating it as an ad-hoc cleanup. It also reduces the chance that the rename itself becomes another source of accumulated, half-fixed references.
 
-The proposal is minimal, targeted, and directly serves the goal of making the repository reflect thought rather than accumulated artifacts. It is consistent with the tiering model you have been articulating and with the independence principle already documented in 40.05.
+The rename is worthwhile and the tooling precedent already exists; a script is the lower-risk path that matches how the project has handled prior tier-alignment work.
 
-These are the substantive architectural observations on CP’s comment.
+These are the architectural observations on the proposal, difficulty, and script question. No other actions are being taken or suggested here.
