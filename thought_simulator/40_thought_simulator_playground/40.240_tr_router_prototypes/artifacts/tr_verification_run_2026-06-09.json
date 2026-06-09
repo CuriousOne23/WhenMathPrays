@@ -1,0 +1,235 @@
+{
+  "run_id": "tr_verification_run_2026-06-09",
+  "timestamp": "2026-06-09T17:44:40.107503+00:00",
+  "prototype_version": "0.2-w3-phase-b",
+  "evidence_scope": "proxy_regression + w3_on_tp_20.37_integration",
+  "hlr_proven": [
+    "HLR-20.437-001..003 (proxy)",
+    "HLR-20.037-049..051 (W3 integration)"
+  ],
+  "hlr_deferred": [],
+  "phase": "B (W3 extension)",
+  "total_tests": 10,
+  "passed_tests": 10,
+  "results": [
+    {
+      "test_id": "TC001",
+      "input": {
+        "content": "Calculate the integral of x^2"
+      },
+      "output": {
+        "route": "math_basin",
+        "priority": "high",
+        "delta_h": 0.15
+      },
+      "expected_route": "math_basin",
+      "expected_delta_h": 0.15,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "TC002",
+      "input": {
+        "content": "Think about the meaning of existence"
+      },
+      "output": {
+        "route": "thought_basin",
+        "priority": "medium",
+        "delta_h": 0.08
+      },
+      "expected_route": "thought_basin",
+      "expected_delta_h": 0.08,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "TC003",
+      "input": {
+        "content": "What is the weather like?"
+      },
+      "output": {
+        "route": "general_basin",
+        "priority": "low",
+        "delta_h": 0.05
+      },
+      "expected_route": "general_basin",
+      "expected_delta_h": 0.05,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "TC004",
+      "input": {
+        "content": "Explain quantum entanglement mathematically"
+      },
+      "output": {
+        "route": "math_basin",
+        "priority": "high",
+        "delta_h": 0.15
+      },
+      "expected_route": "math_basin",
+      "expected_delta_h": 0.15,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "TC005",
+      "input": {},
+      "output": {
+        "route": "error",
+        "reason": "invalid_input"
+      },
+      "expected_route": "error",
+      "expected_delta_h": null,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "TC006",
+      "input": null,
+      "output": {
+        "route": "error",
+        "reason": "invalid_input"
+      },
+      "expected_route": "error",
+      "expected_delta_h": null,
+      "route_passed": true,
+      "delta_h_passed": true,
+      "reason_passed": true,
+      "overall_passed": true,
+      "scope": "proxy_regression"
+    },
+    {
+      "test_id": "W3-TC001",
+      "input": {
+        "tr_needs_update": false,
+        "dcb_events_count": 1
+      },
+      "output": {
+        "status": "success",
+        "TP.TR": {
+          "semantic_interpretation": {
+            "route": "math_basin",
+            "priority": "high",
+            "delta_h": 0.156,
+            "dcb_events_incorporated": 1,
+            "interpretation_note": "combined OB TR-input + permitted DCB events"
+          },
+          "source_tr_input": {
+            "content_hint": "math problem",
+            "cues": [
+              "calculate",
+              "integral"
+            ]
+          },
+          "dcb_events_used": 1,
+          "delta_h_contrib": 0.156,
+          "cycle_id": "c-20260609-001"
+        },
+        "tr_needs_update": false,
+        "tr_input_consumed": true,
+        "dcb_events_consumed": true
+      },
+      "expected": {
+        "status": "success",
+        "tr_needs_update": false,
+        "dcb_events_consumed": true
+      },
+      "overall_passed": true,
+      "scope": "w3_on_tp_extension"
+    },
+    {
+      "test_id": "W3-TC002",
+      "input": {
+        "tr_needs_update": false,
+        "dcb_events_count": 0
+      },
+      "output": {
+        "status": "success",
+        "TP.TR": {
+          "semantic_interpretation": {
+            "route": "thought_basin",
+            "priority": "medium",
+            "delta_h": 0.08,
+            "dcb_events_incorporated": 0,
+            "interpretation_note": "combined OB TR-input + permitted DCB events"
+          },
+          "source_tr_input": {
+            "content_hint": "reasoning",
+            "cues": [
+              "think",
+              "existence"
+            ]
+          },
+          "dcb_events_used": 0,
+          "delta_h_contrib": 0.08,
+          "cycle_id": "c-20260609-002"
+        },
+        "tr_needs_update": false,
+        "tr_input_consumed": true,
+        "dcb_events_consumed": false
+      },
+      "expected": {
+        "status": "success",
+        "tr_needs_update": false,
+        "dcb_events_consumed": false
+      },
+      "overall_passed": true,
+      "scope": "w3_on_tp_extension"
+    },
+    {
+      "test_id": "W3-TC003-negative-flag-false",
+      "input": {
+        "tr_needs_update": false,
+        "dcb_events_count": 1
+      },
+      "output": {
+        "status": "skipped",
+        "reason": "tr_needs_update_false",
+        "tr_input_consumed": false,
+        "dcb_events_consumed": false
+      },
+      "expected": {
+        "status": "skipped",
+        "reason": "tr_needs_update_false"
+      },
+      "overall_passed": true,
+      "scope": "w3_on_tp_extension"
+    },
+    {
+      "test_id": "W3-TC004-negative-dcb-direct",
+      "input": {
+        "tr_needs_update": true,
+        "dcb_events_count": 1
+      },
+      "output": {
+        "status": "rejected",
+        "reason": "dcb_direct_without_tr_input",
+        "tr_input_consumed": false,
+        "dcb_events_consumed": false
+      },
+      "expected": {
+        "status": "rejected",
+        "reason": "dcb_direct_without_tr_input"
+      },
+      "overall_passed": true,
+      "scope": "w3_on_tp_extension"
+    }
+  ],
+  "notes": "Legacy proxy cases (TC001\u2013TC006) preserved exactly for regression. New W3 cases exercise tr_needs_update gating + DCB consumption + atomic TP.TR + flag clear."
+}

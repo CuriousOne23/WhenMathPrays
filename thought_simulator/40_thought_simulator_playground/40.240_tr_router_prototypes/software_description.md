@@ -4,7 +4,7 @@
 
 - Legacy Phase A/B (proxy routing): **approved** (Copilot; proxy subset only)
 - **W3 Phase A** (40.510-410 extension): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- W3 Phase B (DCB ephemeral TR events; `tr_needs_update` gating per 20.37): **cleared to start** — pending implementation
+- W3 Phase B (DCB ephemeral TR events; `tr_needs_update` gating per 20.37): **complete** (2026-06-09; 10/10 PASS including W3 on-TP scenarios; see verification_capsule.md)
 - Program row: **40.510-410** (W3)
 
 ## W3 Extension Scope (40.510-410)
@@ -19,6 +19,8 @@ Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to im
 **W3 Phase B maps to legacy Phase C (on-TP integration)** below — scoped to 40.510-410 handoffs with 40.200/40.210/40.190.
 
 **Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 extension scope against 20.37 Semantic Interpretation Flow Contract (HLR-20.037-049/050/051). Legacy proxy Phase B evidence retained as regression baseline; integration HLRs deferred to W3 Phase B.
+
+**W3 Phase B Evidence Note (2026-06-09)**: Extension complete. New harness scenarios (W3-TC001..004) + prototype.process_tr_step() verify: tr_needs_update gating, OB TR-input + DCB event consumption, atomic TP.TR write + flag clear on success, reject on flag=false or DCB-direct. 10/10 tests PASS (6 proxy regression identical to 2026-06-03 baseline + 4 W3). Artifact: artifacts/tr_verification_run_2026-06-09.json. Full details in verification_capsule.md and requirements_delta.md. 40.510-410 row ready for approval.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -38,8 +40,8 @@ Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to im
 | Phase | Status | Scope |
 |-------|--------|--------|
 | **A** | Complete (approved) | This `software_description.md` only |
-| **B** | Complete (executed) | Proxy: `prototype.py`, `harness.py`, verification artifacts, proxy-only evidence |
-| **C** | Not started | Full 20.37 integration on TP structures (see Phase C section below) |
+| **B** | Complete (W3 2026-06-09) | Proxy regression + full on-TP 20.37 integration (gating, DCB consumption, atomic TP.TR + flag clear). Legacy proxy preserved. |
+| **C** | Complete for W3 scope | W3 extension verified; any further 50-series field population deferred. |
 
 **Global 40.* rule:** Mandatory stop after Phase A until human approval. Phase B followed approval. Phase C requires separate approval before implementation.
 
