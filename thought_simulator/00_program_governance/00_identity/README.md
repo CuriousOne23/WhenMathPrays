@@ -13,9 +13,10 @@ Machine-readable canonical identity registry for controlled renames across tiers
 | `rename_request.template.json` | Example rename request for `rename_identity.py` |
 | `shorthand_registry.json` | Governed locations where band-only prefix shorthand is legal |
 
-## Policy
+## Policy and targets
 
-Full process: [00.00.43_controlled_identity_rename_policy.md](../00_foundations/00.00.43_controlled_identity_rename_policy.md)
+- **Controlled renames (normative):** [00.00.43_controlled_identity_rename_policy.md](../00_foundations/00.00.43_controlled_identity_rename_policy.md)
+- **Naming layout target (guidance only):** [naming_strategy_target.md](naming_strategy_target.md)
 
 ## Commands
 
