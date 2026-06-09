@@ -58,3 +58,18 @@ Schema/audit per 20.50 exercised directly (canonical ob_ids, filter fields, over
 - 50 insight: routing_filter schema and arbitration surface are prime candidates for 50.50 / 50.37 design specs.
 
 All deltas incorporated as of 2026-06-09 Phase B completion. No outstanding from Phase A.
+
+
+See the [W3 wave coverage note](../../../30_verification/W3_pipeline_a_wave_coverage_note.md) for:
+
+- Aggregated HLR mapping and contract checks across the W3 wave (401–412)
+
+- Open gaps and 50 insight targets
+
+- Glossary alignment (30.30)
+
+- 10.50 peer references (where applicable for this module)
+
+The primary evidence for promotion is the module's `verification_capsule.md` and the 2026-06-09 artifact(s) (or legacy baseline as noted). No separate 30.XXX capsule was created here unless already present in 30_verification/; the wave note serves as the 30 deliverable for the slice.
+
+For modules with existing 30.XXX (e.g., 30.150 for this), cross-reference there.

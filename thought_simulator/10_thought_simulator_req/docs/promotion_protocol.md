@@ -228,3 +228,12 @@ Backward-flow transactions are also incomplete until the full design synchroniza
 - Added controlled backward-flow governance for 20 -> 10 -> 30/40/50 process.
 - Added explicit ambiguity confirmation requirement for forward vs backward direction.
 - Added release-block criteria for cross-layer synchronization completeness.
+
+## 16. Related Cross-Layer Flow Documents (2026-06-09 additions)
+
+This protocol is complemented by two new focused guides that close gaps in the 40/30/10.50/50 flow:
+
+- [40_to_10.50_design_requirements_guide.md](40_to_10.50_design_requirements_guide.md) — Dedicated guidance for translating 40 playground Phase B evidence (capsules, deltas, artifacts, three-flows) directly into 10.50 realization-ready design requirements. Covers batch/wave patterns (e.g. W3) and the relationship to 30.00 (which mandates 10.50 peers during verification promotion).
+- [50_to_10.50_flow_down_protocol.md](50_to_10.50_flow_down_protocol.md) — Controlled downward flow from 50-series design work and wave 50 insight back into 10.50 anchors (refinements, gaps discovered in design, new contracts). Includes triggers, process, logs, 50.00 synchronization, and optional 30 cascade. Symmetric to the 20→10 backward flow in §12.
+
+These were created in response to the observation that while forward promotion (40 → 10.50/30 → 50) and some 20→10 backward flow were defined, the 40→10.50 translation and 50→10.50 downward legs lacked dedicated operational documents.

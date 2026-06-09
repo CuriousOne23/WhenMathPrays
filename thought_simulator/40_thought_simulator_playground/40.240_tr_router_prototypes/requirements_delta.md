@@ -64,3 +64,4 @@ Requirement-change and implementer-feedback record for `40.240_tr_router_prototy
 ## Summary
 
 W3 Phase B complete for 40.240: 10/10 tests, proxy regression + full on-TP 20.37 integration (gating, DCB consumption, atomic write + flag clear, DCB-direct reject). Legacy proxy preserved. Ready for reviewer sign-off and wave closure.
+
