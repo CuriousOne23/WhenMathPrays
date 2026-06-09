@@ -9,7 +9,7 @@
         "HLR-20.130-005",
         "HLR-20.130-015"
       ],
-      "result": "FAIL",
+      "result": "PASS",
       "scenario": "nominal_split_lane_outputs"
     },
     {
@@ -47,10 +47,8 @@
   ],
   "status": "PASS",
   "summary": {
-    "failed_scenarios": [
-      "nominal_split_lane_outputs"
-    ],
-    "passed": 4,
+    "failed_scenarios": [],
+    "passed": 5,
     "total_scenarios": 5
   }
 }

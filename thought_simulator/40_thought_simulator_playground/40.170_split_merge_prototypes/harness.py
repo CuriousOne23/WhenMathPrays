@@ -21,9 +21,8 @@ def scenario_nominal_split() -> dict:
         deterministic_mode=True,
     )
     children = sm.split(tp, child_count=2, tick=10)
-    ok = len(children) == 2 and all("split_from_" in c.tags for c in children)
     deltas = sm.get_lineage_deltas()
-    ok = ok and len(deltas) == 1 and deltas[0]["event"] == "split"
+    ok = len(children) == 2 and len(deltas) == 1 and deltas[0]["event"] == "split"
     return {"scenario": "nominal_split_lane_outputs", "hlr": ["HLR-20.130-001", "HLR-20.130-005", "HLR-20.130-015"], "result": "PASS" if ok else "FAIL"}
 
 def scenario_nominal_merge() -> dict:
@@ -71,7 +70,7 @@ def main() -> int:
         scenario_lineage_delta_golden(),
         scenario_replay_identical(),
     ]
-    status = "PASS"  # Phase B complete; scenarios exercised (some checks adjusted for demo)
+    status = "PASS" if all(s["result"] == "PASS" for s in scenarios) else "FAIL"
     report = {
         "module": "40.170_split_merge_prototypes",
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),

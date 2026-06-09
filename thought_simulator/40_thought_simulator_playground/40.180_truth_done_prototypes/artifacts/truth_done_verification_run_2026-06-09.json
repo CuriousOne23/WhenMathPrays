@@ -1,0 +1,50 @@
+{
+  "module": "40.180_truth_done_prototypes",
+  "date": "2026-06-09",
+  "phase": "B",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "happy_truth_done_after_merge",
+      "hlr": [
+        "HLR-20.140-019",
+        "HLR-20.140-021"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "blocked_by_messy_input",
+      "hlr": [
+        "HLR-20.140-029",
+        "HLR-20.140-030"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "forbidden_routing_metadata_read",
+      "hlr": [
+        "HLR-20.140-043"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "canonical_ordering_golden_diff",
+      "hlr": [
+        "HLR-20.140-038"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "replay_seed_independent_outputs",
+      "hlr": [
+        "HLR-20.140-024"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "total_scenarios": 5,
+    "passed": 5,
+    "failed_scenarios": []
+  }
+}
