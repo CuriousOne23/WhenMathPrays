@@ -13,7 +13,7 @@
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.140_truth_evaluation_requirements.md](../../20_requirements/20.140_truth_evaluation_requirements.md)
 - intended_20_secondary: [20.60](../../20_requirements/20.60_tb_requirements.md) (TB inputs only — no re-interpretation)
-- upstream_playground_modules: [40.601](../40.601_tb_prototypes/software_description.md), [40.130](../40.130_split_merge_prototypes/software_description.md), [40.115](../40.115_mtp_prototypes/software_description.md)
+- upstream_playground_modules: [40.601](../40.500_tb_prototypes/software_description.md), [40.130](../40.130_split_merge_prototypes/software_description.md), [40.115](../40.115_mtp_prototypes/software_description.md)
 - applicability: **Truth/Done terminal evaluation** — explicit completion gate before `mtp_update`
 - program_wave: **W3**
 

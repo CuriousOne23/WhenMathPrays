@@ -1,4 +1,4 @@
-# 40.601_tb_prototypes / software_description.md
+# 40.500_tb_prototypes / software_description.md
 
 ## Approval State
 - Phase A (software_description): **approved** (CP review, 2026-06-08; 40.510-409)

@@ -1,34 +1,38 @@
-"""Verification harness for snapshot prototype."""
+"""Verification harness for experiment runner prototype."""
 
 from __future__ import annotations
 
 from pathlib import Path
 import json
 
-from prototype import dump_snapshot, load_snapshot
+from prototype import run_batch, run_experiment
 
 
-ARTIFACT_NAME = "snapshot_verification_run_2026-05-28.json"
+ARTIFACT_NAME = "experiment_runner_verification_run_2026-05-28.json"
 
 
-def _positive_round_trip() -> dict[str, object]:
-    state = {"tp_id": "tp-001", "state_counter": 3, "entropy": {"total": 0.2}}
-    snap = dump_snapshot(state)
-    loaded = load_snapshot(snap)
-    return {
-        "scenario": "positive_round_trip",
-        "result": "PASS" if loaded["state"] == state else "FAIL",
-        "snapshot": snap,
-    }
+def _base_request() -> dict[str, object]:
+    return {"experiment_id": "exp-001", "max_ticks": 5, "seed": 42}
 
 
 def _positive_deterministic_replay() -> dict[str, object]:
-    state = {"tp_id": "tp-001", "state_counter": 3, "entropy": {"total": 0.2}}
-    a = dump_snapshot(state)
-    b = dump_snapshot(state)
+    req = _base_request()
+    a = run_experiment(req)
+    b = run_experiment(req)
     return {
         "scenario": "positive_deterministic_replay",
         "result": "PASS" if a == b else "FAIL",
+        "run": a,
+    }
+
+
+def _positive_batch_run() -> dict[str, object]:
+    requests = [_base_request(), {"experiment_id": "exp-002", "max_ticks": 3, "seed": 7}]
+    out = run_batch(requests)
+    return {
+        "scenario": "positive_batch_run",
+        "result": "PASS" if out["result_count"] == 2 else "FAIL",
+        "batch_digest": out["verification_digest"],
     }
 
 
@@ -49,25 +53,21 @@ def _write_artifact(report: dict[str, object]) -> Path:
 
 
 def main() -> None:
-    sample = dump_snapshot({"x": 1})
-    broken = dict(sample)
-    broken["digest"] = "bad"
-
     scenarios = [
-        _positive_round_trip(),
         _positive_deterministic_replay(),
-        _expect_value_error("negative_corrupt_digest", lambda: load_snapshot(broken)),
-        _expect_value_error("negative_schema_mismatch", lambda: load_snapshot(sample, expected_schema="v2")),
+        _positive_batch_run(),
+        _expect_value_error("negative_invalid_max_ticks", lambda: run_experiment({"experiment_id": "exp-bad", "max_ticks": 0, "seed": 1})),
+        _expect_value_error("negative_empty_request_list", lambda: run_batch([])),
     ]
     status = "PASS" if all(item["result"] == "PASS" for item in scenarios) else "FAIL"
     report = {
-        "module": "40.70_snapshot_prototypes",
+        "module": "40.540_experiment_runner",
         "date": "2026-05-28",
         "status": status,
         "scenarios": scenarios,
     }
     artifact_path = _write_artifact(report)
-    print(f"snapshot harness status: {status}")
+    print(f"experiment-runner harness status: {status}")
     print(f"artifact: {artifact_path}")
 
 

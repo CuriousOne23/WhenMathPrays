@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.50_regulator_prototypes`.
+Track verification evidence for `40.440_regulator_prototypes`.
 
 ## Phase State
 
@@ -21,7 +21,7 @@ Track verification evidence for `40.50_regulator_prototypes`.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-06-06 | 40.50_regulator_prototypes | python harness.py | 15 scenarios exercising all 12 Phase B Must-Explore items + 10.10.40 invariants + 10.50.50 HLRs | PASS | 0 | artifacts/regulator_verification_run_2026-06-06.json | HLR-20.450-001..003 + 10.10.40 regulator items (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, obs, bounded, validation) | LLR-30.50-001 | 10.10.40 + 20.150/170/30/40/90 + 10.50.50 | source-index anchored per software_description | policy; enforcement_area; pressure/max; action; applied_delta; rationale; interrupt_level; obs (enforcements, areas_covered, boundary_marker, policy_signature, history_len); verification_digest | negative_invalid_policy; negative_negative_pressure | Phase B executed per approved software_description.md (CP review anchors). 15/15 PASS covering 12 items. Supersedes prior 2026-05-28 run. |
+| 2026-06-06 | 40.440_regulator_prototypes | python harness.py | 15 scenarios exercising all 12 Phase B Must-Explore items + 10.10.40 invariants + 10.50.50 HLRs | PASS | 0 | artifacts/regulator_verification_run_2026-06-06.json | HLR-20.450-001..003 + 10.10.40 regulator items (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, obs, bounded, validation) | LLR-30.50-001 | 10.10.40 + 20.150/170/30/40/90 + 10.50.50 | source-index anchored per software_description | policy; enforcement_area; pressure/max; action; applied_delta; rationale; interrupt_level; obs (enforcements, areas_covered, boundary_marker, policy_signature, history_len); verification_digest | negative_invalid_policy; negative_negative_pressure | Phase B executed per approved software_description.md (CP review anchors). 15/15 PASS covering 12 items. Supersedes prior 2026-05-28 run. |
 
 ## Positive Scenario Ledger
 

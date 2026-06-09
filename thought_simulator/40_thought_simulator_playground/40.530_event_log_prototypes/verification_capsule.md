@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.90_experiment_runner`.
+Track verification evidence for `40.530_event_log_prototypes`.
 
 ## Phase State
 
@@ -11,26 +11,25 @@ Track verification evidence for `40.90_experiment_runner`.
 
 ## Invariants
 
-- Experiment runner output identity is deterministic for equivalent requests.
-- Batch result ordering remains stable and traceable.
+- Event logs are append-only and sequence-ordered.
+- Replay from event logs is deterministic for equivalent traces.
 
 ## Verification Steps (executed)
 
-1. Deterministic replay of identical single-run requests.
-2. Deterministic batch-run validation with stable result ordering and digest output.
-3. Negative-path validation for invalid `max_ticks` and empty request batch.
+1. Deterministic replay comparison across identical event sequences.
+2. Negative-path validation for out-of-order sequence numbers.
+3. Negative-path validation for malformed events with missing required fields.
 
 ## Evidence
 
 - Harness command: `.venv/Scripts/python.exe harness.py`
 - Harness result: PASS
 - Artifacts:
-	- `artifacts/experiment_runner_verification_run_2026-05-28.json`
+	- `artifacts/event_log_verification_run_2026-05-28.json`
 - Scenarios:
 	- `positive_deterministic_replay` PASS
-	- `positive_batch_run` PASS
-	- `negative_invalid_max_ticks` PASS
-	- `negative_empty_request_list` PASS
+	- `negative_out_of_order_sequence` PASS
+	- `negative_missing_field` PASS
 
 ## Status
 

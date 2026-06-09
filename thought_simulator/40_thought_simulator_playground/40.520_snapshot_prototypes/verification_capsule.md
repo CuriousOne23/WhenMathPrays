@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.60_tick_cycle_skeleton`.
+Track verification evidence for `40.520_snapshot_prototypes`.
 
 ## Phase State
 
@@ -11,25 +11,26 @@ Track verification evidence for `40.60_tick_cycle_skeleton`.
 
 ## Invariants
 
-- Tick sequencing is deterministic for equivalent inputs.
-- Phase order remains stable and no duplicate phase execution occurs per tick.
+- Snapshot serialization is deterministic under equivalent inputs.
+- Snapshot reload preserves required state identity fields.
 
 ## Verification Steps (executed)
 
-1. Replay two identical tick sequences and compare per-tick outputs.
-2. Negative-path validation for non-monotonic tick progression.
-3. Negative-path validation for invalid phase ordering.
+1. Deterministic snapshot round-trip comparison for equivalent state payloads.
+2. Deterministic replay check on repeated snapshot dumps.
+3. Negative-path validation for corrupt digest and schema mismatch.
 
 ## Evidence
 
 - Harness command: `.venv/Scripts/python.exe harness.py`
 - Harness result: PASS
 - Artifacts:
-	- `artifacts/tick_cycle_verification_run_2026-05-28.json`
+	- `artifacts/snapshot_verification_run_2026-05-28.json`
 - Scenarios:
+	- `positive_round_trip` PASS
 	- `positive_deterministic_replay` PASS
-	- `negative_non_monotonic_tick` PASS
-	- `negative_invalid_phase_order` PASS
+	- `negative_corrupt_digest` PASS
+	- `negative_schema_mismatch` PASS
 
 ## Status
 

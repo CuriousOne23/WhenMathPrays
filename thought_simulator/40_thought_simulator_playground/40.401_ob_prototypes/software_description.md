@@ -12,7 +12,7 @@
 ## Scaffold Metadata
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.40_ob_requirements.md](../../20_requirements/20.40_ob_requirements.md)
-- upstream_playground_modules: [40.501](../40.501_rb_prototypes/software_description.md), [40.37](../40.37_tr_router_prototypes/software_description.md), [40.106](../40.106_dcb_prototypes/software_description.md)
+- upstream_playground_modules: [40.501](../40.460_rb_prototypes/software_description.md), [40.37](../40.37_tr_router_prototypes/software_description.md), [40.106](../40.106_dcb_prototypes/software_description.md)
 - applicability: **Pipeline A OB** — lane-local evidence extraction; pattern detector not interpreter
 - program_wave: **W3**
 - numbering_note: suffix `.401` aligns with 20.40; folder `40.40_scheduler_prototypes/` is scheduler glue (W5)

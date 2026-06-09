@@ -12,7 +12,7 @@
 ## Scaffold Metadata
 - scaffold_status: Phase A complete — stub only
 - intended_20_anchor: [20.130_splitting_and_merging_requirements.md](../../20_requirements/20.130_splitting_and_merging_requirements.md)
-- upstream_playground_modules: [40.20_tp](../40.20_tp_lifecycle/software_description.md), [40.501](../40.501_rb_prototypes/software_description.md) (split/merge arbitration), [40.115](../40.115_mtp_prototypes/software_description.md) (merge into MTP)
+- upstream_playground_modules: [40.20_tp](../40.20_tp_lifecycle/software_description.md), [40.501](../40.460_rb_prototypes/software_description.md) (split/merge arbitration), [40.115](../40.115_mtp_prototypes/software_description.md) (merge into MTP)
 - applicability: lane **split/merge** with `lineage_delta`, ΔH% ledger, safe-boundary gating
 - program_wave: **W3**
 
