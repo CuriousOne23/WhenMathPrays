@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- Phase B (prototype + harness + evidence): **cleared to start** — pending implementation
+- Phase B (prototype + harness + evidence): **complete** — harness PASS 2026-06-09; artifact generated; ready for 30/50
 - Program row: **40.510-401** (W3) — **A-chain anchor** (`commit_id` / `mtp_update`)
 
 ## Two-Phase Execution Model (Global 40.* Rule)

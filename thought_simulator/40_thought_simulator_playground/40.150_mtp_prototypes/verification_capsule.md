@@ -1,7 +1,7 @@
 # 40.150_mtp_prototypes / verification_capsule.md
 
 ## Status
-**Phase A only** — no harness runs. Phase B evidence pending.
+**Phase B complete** — harness PASS on 2026-06-09. W3 Phase B evidence recorded.
 
 ## Flows Alignment Statement
 
