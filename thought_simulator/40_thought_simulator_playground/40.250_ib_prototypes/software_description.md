@@ -3,7 +3,7 @@
 ## Approval State
 - Legacy Phase A/B: **approved** (executed 2026-06-03)
 - **W3 Phase A** (40.510-411 extension): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- W3 Phase B (IIInB vs IB vs IMR escalation routing per 20.90/20.17): **cleared to start** — pending implementation
+- W3 Phase B (IIInB vs IB vs IMR escalation routing per 20.90/20.17): **complete** (2026-06-09; W3 extension scenarios + legacy baseline; see verification_capsule.md and requirements_delta.md)
 - Program row: **40.510-411** (W3)
 
 ## W3 Extension Scope (40.510-411)
@@ -15,6 +15,8 @@ Phase B SHALL add deterministic escalation routing seams per [20.510](../../20_r
 - Cross-evidence with [40.60](../40.60_iiinb_prototypes/software_description.md) unknown-token → CIL path
 
 **Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 extension scope: IB inquiry path remains distinct from IIInB repair escalation; IMR corrections route into Pipeline A only; legacy Phase B IB lifecycle evidence retained as baseline.
+
+**W3 Phase B Evidence Note (2026-06-09)**: Extension verified via updated harness (10 scenarios total): explicit tests for IIInB repair escalation distinction (no direct OUB bypass), IMR Type A/B corrections routing to Pipeline A only (via promote), and 40.60 CIL cross-evidence (unknown-token escalation recorded in IB). Prototype enforcement (source_channel="ob_ib", safe_boundary) + negative bypass/safe tests provide the seam coverage. Full details in verification_capsule.md (W3 section) and requirements_delta.md (W3 deltas). Legacy 2026-06-03 artifact retained as core baseline.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 

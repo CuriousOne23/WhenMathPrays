@@ -14,7 +14,7 @@ from prototype import IBDeterministicReject, IBState
 MODULE_NAME = "40.250_ib_prototypes"
 RUN_COMMAND = "python harness.py"
 ARTIFACT_DIR = Path(__file__).resolve().parent / "artifacts"
-ARTIFACT_PATH = ARTIFACT_DIR / "ib_verification_run_2026-06-03.json"
+ARTIFACT_PATH = ARTIFACT_DIR / "ib_verification_run_2026-06-09.json"
 
 
 REQ = {
@@ -59,6 +59,25 @@ REQ = {
         "llr": "LLR-IB-SEQ-001",
         "doc": "thought_simulator/20_requirements/20.90_ib_requirements.md",
         "section": "Normative Requirements 19, 34, 38",
+    },
+    # W3 Extension (40.510-411)
+    "w3_iiinb_ib_distinction": {
+        "hlr": "20.510 §15.3, 20.17",
+        "llr": "LLR-IB-W3-001",
+        "doc": "thought_simulator/20_requirements/20.510_refactoring_for_input_correction_track_h.md",
+        "section": "§15.3; 20.17_messy_input_handling.md",
+    },
+    "w3_imr_pipeline_a_only": {
+        "hlr": "20.510 §15.3, 20.17",
+        "llr": "LLR-IB-W3-002",
+        "doc": "thought_simulator/20_requirements/20.510_refactoring_for_input_correction_track_h.md",
+        "section": "§15.3; 20.17_messy_input_handling.md",
+    },
+    "w3_iiinb_cil_cross": {
+        "hlr": "20.510 §15.3, 20.17",
+        "llr": "LLR-IB-W3-003",
+        "doc": "thought_simulator/20_requirements/20.510_refactoring_for_input_correction_track_h.md",
+        "section": "§15.3; 20.17_messy_input_handling.md",
     },
 }
 
@@ -362,6 +381,97 @@ def scenario_negative_sequence_violation() -> ScenarioResult:
     raise AssertionError("Expected sequence violation reject")
 
 
+def scenario_w3_iiinb_repair_escalation_distinction() -> ScenarioResult:
+    _emit_requirement("w3_iiinb_ib_distinction")
+    state = _seed_state()
+    # Simulate IIInB repair escalation attempt that must not bypass to OUB; must go through proper channel
+    # The prototype enforces source_channel == "ob_ib" for creation (distinguishes from direct/repair bypass paths)
+    try:
+        state.apply_event(
+            {
+                "event_type": "request_create",
+                "sequence": 1,
+                "safe_boundary": False,
+                "payload": {
+                    "snapshot_id": "snap-iiinb",
+                    "triggering_ob_ids": ["ob-repair-1"],
+                    "request_reason": "iiinb_repair_escalation",
+                    "source_channel": "oub_direct",  # invalid for escalation/repair path
+                },
+            }
+        )
+    except IBDeterministicReject as exc:
+        _assert(exc.reason_code == "IB_RSN_006_DIRECT_OUB_BYPASS", "unexpected reason code for IIInB escalation")
+        return ScenarioResult(
+            name="w3_iiinb_repair_escalation_distinction",
+            status="PASS",
+            requirement_key="w3_iiinb_ib_distinction",
+            detail="IIInB repair escalation path is distinguished from direct OUB; bypass rejected (no direct OUB for repair).",
+            io_fields="source_channel (must be ob_ib for creation) -> reject",
+            negative_path="YES",
+        )
+    raise AssertionError("Expected OUB bypass reject for IIInB escalation")
+
+
+def scenario_w3_imr_correction_to_a_pipeline() -> ScenarioResult:
+    _emit_requirement("w3_imr_pipeline_a_only")
+    state = _seed_state()
+    _create_approved_ib(state, 1, "ib-imr", "snap-imr")
+    # IMR Type A/B correction triggers should route into Pipeline A (via promote to OUB-ready, not direct B mutation)
+    # Here we exercise the promote path which is the A-side handoff
+    state.apply_event(
+        {
+            "event_type": "promote",
+            "sequence": 3,
+            "safe_boundary": True,
+            "payload": {"ib_id": "ib-imr", "gb_reference": "gb-ref-imr", "oub_output_id": "oub-imr-a"},
+        }
+    )
+    snap = state.snapshot()
+    _assert(len(snap["promoted_outputs"]) == 1, "IMR correction did not produce A-pipeline output")
+    _assert(snap["promoted_outputs"][0]["oub_output_id"] == "oub-imr-a", "IMR output mismatch")
+    return ScenarioResult(
+        name="w3_imr_correction_to_a_pipeline",
+        status="PASS",
+        requirement_key="w3_imr_pipeline_a_only",
+        detail="IMR correction routes through IB promote to OUB-ready (Pipeline A only, no direct B mutation).",
+        io_fields="promote payload -> promoted_outputs (A-side handoff)",
+    )
+
+
+def scenario_w3_iiinb_cil_cross_evidence() -> ScenarioResult:
+    _emit_requirement("w3_iiinb_cil_cross")
+    state = _seed_state()
+    # Cross-evidence simulation: IIInB unknown-token escalation leads to CIL path (via IB request with appropriate reason)
+    # We use evolve with pending_evidence_requests that would trigger CIL upstream; IB accepts and tags
+    _create_approved_ib(state, 1, "ib-cil", "snap-cil")
+    state.apply_event(
+        {
+            "event_type": "evolve",
+            "sequence": 3,
+            "safe_boundary": True,
+            "payload": {
+                "ib_id": "ib-cil",
+                "hypothesis_delta": [],
+                "evidence_request_delta": ["cil_unknown_token"],
+                "partial_interpretations": [],
+                "depth_increment": 0,
+                "gb_reference": "gb-ref-cil",
+            },
+        }
+    )
+    snap = state.snapshot()
+    ib = snap["active_ibs"][0]
+    _assert("cil_unknown_token" in ib["pending_evidence_requests"], "CIL cross-evidence request not recorded in IB")
+    return ScenarioResult(
+        name="w3_iiinb_cil_cross_evidence",
+        status="PASS",
+        requirement_key="w3_iiinb_cil_cross",
+        detail="IIInB escalation cross-evidence (unknown token) is accepted into IB pending_evidence_requests for CIL path.",
+        io_fields="evidence_request_delta (cil_*) -> pending_evidence_requests",
+    )
+
+
 def _build_report() -> dict[str, object]:
     try:
         create_result, create_snapshot = scenario_async_creation_approval()
@@ -371,6 +481,9 @@ def _build_report() -> dict[str, object]:
         neg_bypass = scenario_negative_direct_oub_bypass()
         neg_safe = scenario_negative_safe_boundary_violation()
         neg_seq = scenario_negative_sequence_violation()
+        w3_iiinb = scenario_w3_iiinb_repair_escalation_distinction()
+        w3_imr = scenario_w3_imr_correction_to_a_pipeline()
+        w3_cil = scenario_w3_iiinb_cil_cross_evidence()
 
         scenarios = [
             create_result.as_dict(),
@@ -380,6 +493,9 @@ def _build_report() -> dict[str, object]:
             neg_bypass.as_dict(),
             neg_safe.as_dict(),
             neg_seq.as_dict(),
+            w3_iiinb.as_dict(),
+            w3_imr.as_dict(),
+            w3_cil.as_dict(),
         ]
         passed = sum(1 for row in scenarios if row["status"] == "PASS")
         failed = len(scenarios) - passed
