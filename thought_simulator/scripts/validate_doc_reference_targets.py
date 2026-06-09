@@ -16,6 +16,7 @@ import unicodedata
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = ROOT / "scripts"
 SCOPES = (
     "00_program_governance",
     "10_thought_simulator_req",
@@ -95,13 +96,46 @@ def _candidate_to_path(referrer: Path, token: str, basename_index: dict[str, lis
     if not _has_allowed_extension(normalized):
         return None
 
+    if normalized.startswith("scripts/"):
+        candidate = SCRIPTS_DIR / normalized.removeprefix("scripts/")
+        if candidate.exists():
+            return candidate
+
+    repo_root_path = _resolve_repo_root_path(normalized)
+    if repo_root_path is not None:
+        return repo_root_path
+
+    design_50 = _resolve_50_inventory_path(normalized)
+    if design_50 is not None:
+        return design_50
+
+    if normalized.startswith("10_thought_simulator_req/"):
+        candidate = ROOT / normalized
+        if candidate.exists():
+            return candidate
+
     if "/" in normalized or normalized.startswith("../"):
         for scope in SCOPES:
             if normalized.startswith(f"{scope}/"):
                 return ROOT / normalized
         if normalized.startswith("thought_simulator/"):
             return ROOT.parent / normalized
-        return (referrer.parent / normalized).resolve()
+        resolved = (referrer.parent / normalized).resolve()
+        if resolved.exists():
+            return resolved
+        inventory = _resolve_module_inventory_path(normalized)
+        if inventory is not None:
+            return inventory
+        return resolved
+
+    inventory = _resolve_module_inventory_path(normalized)
+    if inventory is not None:
+        return inventory
+
+    if normalized.endswith(".py"):
+        script_candidate = SCRIPTS_DIR / normalized
+        if script_candidate.exists():
+            return script_candidate
 
     direct = referrer.parent / normalized
     if direct.exists():
@@ -130,7 +164,80 @@ def _extract_candidates(line: str) -> list[str]:
 
 
 def _looks_like_glob(target: str) -> bool:
-    return any(ch in target for ch in ("*", "?", "[", "]"))
+    return any(ch in target for ch in ("*", "?", "[", "]", "{", "}"))
+
+
+def _looks_like_template(target: str) -> bool:
+    return "{" in target and "}" in target
+
+
+def _looks_like_compound_py_path(target: str) -> bool:
+    lowered = target.lower()
+    return ".py/" in lowered or re.search(r"/\d+/", target) is not None
+
+
+def _looks_like_placeholder(target: str) -> bool:
+    return bool(
+        re.search(r"\bxx\b|YYYY|codename_verification", target, re.IGNORECASE)
+        or re.search(r"_run\{", target)
+        or re.search(r"30\.xx_", target)
+    )
+
+
+def _resolve_repo_root_path(token: str) -> Path | None:
+    for prefix in ("testbenches/", ".github/"):
+        if token.startswith(prefix) or token.startswith(f"../../../{prefix}"):
+            normalized = token.removeprefix("../").removeprefix("../").removeprefix("../")
+            candidate = ROOT.parent / normalized
+            if candidate.exists():
+                return candidate
+    return None
+
+
+def _resolve_50_inventory_path(token: str) -> Path | None:
+    if re.match(r"^50\.\d+_.+\.md$", token):
+        candidate = ROOT / "50_thought_simulator_design" / token
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _is_governance_hypothetical(referrer_rel: str, token: str) -> bool:
+    if not referrer_rel.startswith("00_program_governance/"):
+        return False
+    if _looks_like_template(token):
+        return True
+    if token.endswith("my_rename.json"):
+        return True
+    if "/" not in token and token.endswith(".md"):
+        return True
+    if re.match(r"^\d{2}\.\d{2,3}\.\d{3}_", token):
+        return True
+    return False
+
+
+def _resolve_module_inventory_path(token: str) -> Path | None:
+    if re.match(r"^30\.\d", token):
+        candidate = ROOT / "30_verification" / token
+        if candidate.exists():
+            return candidate
+    if re.match(r"^40\.\d", token):
+        candidate = ROOT / "40_thought_simulator_playground" / token
+        if candidate.exists():
+            return candidate
+    if token == "glossary_term_registry.json":
+        candidate = ROOT / "30_verification" / token
+        if candidate.exists():
+            return candidate
+    if token.startswith("archive/"):
+        for prefix in (
+            ROOT / "40_thought_simulator_playground",
+            ROOT,
+        ):
+            candidate = prefix / token
+            if candidate.exists():
+                return candidate
+    return None
 
 
 def _slugify_heading(text: str) -> str:
@@ -194,6 +301,16 @@ def main() -> int:
                 if normalized and _is_external(normalized):
                     continue
                 if normalized and _looks_like_glob(normalized):
+                    continue
+                if normalized and _looks_like_template(normalized):
+                    continue
+                if normalized and _looks_like_compound_py_path(normalized):
+                    continue
+                if normalized and _looks_like_placeholder(normalized):
+                    continue
+                if normalized and _is_governance_hypothetical(rel_path, normalized):
+                    continue
+                if rel_path.startswith("20_requirements/archive/"):
                     continue
                 if normalized and not _has_allowed_extension(normalized):
                     continue

@@ -35,7 +35,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 | HLR-20.440-008 (tie-break provenance) | Strongly demonstrated | positive_tie_break_provenance | tie_break_rationale (incl. "stable tp_id asc"), selected | Explicit rationale + secondary key sort for equal scores |
 | HLR-20.440-005 (bounded internal state) | Strongly demonstrated | positive_bounded_history | history_max, history (len <= max after trim), assert_invariants | history_max=4 exercised; trim on _record_event + init; invariants check bound |
 | HLR-20.440-003 (negative empty active) | Strongly demonstrated | negative_empty_tp_id (and construction contract) | tp_id (empty) | Empty active set at init rejected deterministically (per "empty active set" example in software_description) |
-| LLR-30.210-001 (artifact emission) | Strongly demonstrated | (all) + harness main | full report with summary 12/12, per-scenario io_fields + status, run_timestamp | artifacts/scheduler_verification_run_2026-06-06.json (sorted JSON) |
+| LLR-30.210-001 (artifact emission) | Strongly demonstrated | (all) + harness main | full report with summary 12/12, per-scenario io_fields + status, run_timestamp | scheduler_verification_run_2026-06-06.json (sorted JSON) |
 
 ## Rationale
 
@@ -50,7 +50,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 - `prototype.py` (bounded history, rich obs payload/snapshot, interrupt/window/budget/cohort support, select returns rationale+meta, invariants)
 - `harness.py` (12 scenarios covering 10 items + repro; refreshed anchors + artifact 2026-06-06)
 - `verification_capsule.md` (expanded ledger, invariants, flows/agreement)
-- `artifacts/scheduler_verification_run_2026-06-06.json`
+- `scheduler_verification_run_2026-06-06.json`
 - Downstream (future): 30.210_* (promotion), 10.50.210 (updated with HLR-004..008), 50.210_scheduler_design_spec.md
 
 ## Open Validation Needed (unchanged from prior; now with data)

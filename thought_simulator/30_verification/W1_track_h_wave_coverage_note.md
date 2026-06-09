@@ -8,9 +8,9 @@
 
 | 30 module | 40 source | Harness | HLR coverage |
 |-----------|-----------|---------|--------------|
-| [30.220_inb_prototypes/](30.220_inb_prototypes/) | 40.50 | 16/16 PASS | 23/26 [20.100](../20_requirements/20.100_inb_requirements.md) |
-| [30.230_iiinb_prototypes/](30.230_iiinb_prototypes/) | 40.60 | 19/19 PASS | 25/28 [20.101](../20_requirements/20.101_iiinb_requirements.md) |
-| [30.240_replay_prototypes/](30.240_replay_prototypes/) | 40.70 | 18/18 PASS | 17 anchors [20.36](../20_requirements/20.36_canonical_end_to_end_trace.md) §9 + [20.207](../20_requirements/20.207_execution_replay_specification.md) |
+| [30.50_inb_prototypes/](30.50_inb_prototypes/) | 40.50 | 16/16 PASS | 23/26 [20.100](../20_requirements/20.100_inb_requirements.md) |
+| [30.60_iiinb_prototypes/](30.60_iiinb_prototypes/) | 40.60 | 19/19 PASS | 25/28 [20.101](../20_requirements/20.101_iiinb_requirements.md) |
+| [30.70_replay_prototypes/](30.70_replay_prototypes/) | 40.70 | 18/18 PASS | 17 anchors [20.36](../20_requirements/20.36_canonical_end_to_end_trace.md) §9 + [20.207](../20_requirements/20.207_execution_replay_specification.md) |
 
 ## Contract check (W1 insight targets)
 
@@ -22,7 +22,7 @@
 | Intake envelope guards (`semantic_core`, caps) | OK | 30.230 envelope guard scenarios |
 | Deterministic replay at intake | OK | 30.220/101 replay scenarios; 30.240 strip + suite determinism |
 
-## Glossary alignment ([30.160](30.160_verification_glossary.md))
+## Glossary alignment ([30.160](30.30_verification_glossary.md))
 
 - No new verification terms required for W1 promotion.
 - Reason-code registries (`REASON_CODES`) exercised in 40.60/40.70 harnesses; full immutable dictionary export remains open (HLR-20.100-017).

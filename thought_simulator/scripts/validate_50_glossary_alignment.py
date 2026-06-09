@@ -142,15 +142,6 @@ def main() -> int:
             f"50_thought_simulator_design/50.01_50_series_glossary.md: term '{term}' is not required by glossary_term_registry.json"
         )
 
-    # Advisory scan: surface candidate terms observed in 50 design docs that are not yet in the glossary.
-    # This helps notify on md adds/mods that may affect glossary freshness. Purely warning; human decides.
-    candidates = _scan_50_design_candidates()
-    new_candidates = sorted(candidates - glossary_terms)
-    for term in new_candidates:
-        warnings.append(
-            f"50_thought_simulator_design: candidate term '{term}' observed in design docs but missing from 50.01_50_series_glossary.md"
-        )
-
     if warnings:
         print("50 glossary alignment warnings:")
         for item in warnings:

@@ -155,7 +155,7 @@ Document intentional deviation here when the target cannot be met yet. Update wh
 
 | Item | Current state | Target disposition |
 |------|---------------|-------------------|
-| ~~`50.45_data_structures`~~ | ~~Misaligned~~ | **Resolved 2026-06-09** — nested `50.140.010_data_structures` |
+| ~~`50.140.010_data_structures`~~ | ~~Misaligned~~ | **Resolved 2026-06-09** — nested `50.140.010_data_structures` |
 | ~~`50.09_geometry_engine`~~ | ~~Misaligned~~ | **Resolved 2026-06-09** — `50.270_geometry_engine_design` |
 | ~~Dual `50.40_*` (scheduler + interaction)~~ | ~~Two primaries~~ | **Resolved 2026-06-09** — `50.210_scheduler` + `50.210.010_interaction_layer` |
 | `50.70`/`50.80`/`50.90` duplicate bands | Headroom docs share bands with component peers | **Expected** — `shorthand_eligible: false` for duplicates; use full canonical paths |
@@ -177,6 +177,7 @@ For a live list of disk-vs-target gaps, see [30.01](../../30_verification/30.01_
 | 2026-06-09 | Phase-1 40 renumber (`40_renumber_manifest.json`, `apply_40_renumber_migration.py`) | 31 survivors at `40.50`–`40.350` stride 10; 17 duplicates removed; guide at `40.05` |
 | 2026-06-09 | Phase-2 10.50+30 renumber (`30_1050_renumber_manifest.json`, `apply_30_1050_renumber_migration.py`) | 23 coupled pairs at stride 10 from `.50`; `fix_30_1050_post_renumber_refs.py` for governance-doc repair |
 | 2026-06-09 | Phase-3 50 renumber (`50_renumber_manifest.json`, `apply_50_renumber_migration.py`) | 27 file renames; level-2 nest for interaction/data structs; `fix_50_post_renumber_refs.py` for 50.00 rebuild |
+| 2026-06-09 | Post-pass residual cleanup (`fix_post_renumber_residual_refs.py`) | Manifest-driven + `CASCADE_REPAIRS` / `FILE_SPECIFIC_REPAIRS`; strips forbidden 50→40 path refs; repairs substring collisions (e.g. `30.220_inb` → `30.50_inb`); **does not** modify manifest JSON |
 
 **Alignment checkpoint (update after migrations):**
 
@@ -198,7 +199,10 @@ Use these as soft review prompts — not CI gates:
 5. Is the next module band the next stride-10 slot in the tier inventory, not an ad hoc gap-fill?
 6. If deviating from this document, is the exception noted in §7 or the relevant tier inventory Notes?
 7. For bulk migration PRs: does the change set include the approved manifest, name-table updates, and inventory rows — with **no** bare band substring replace?
-8. After a bulk pass: were governance tokens checked (`40.05` guide, `40.160_tp` module vs guide shorthand) and `validate_doc_reference_targets.py` run clean?
+8. After a bulk pass: were governance tokens checked (`40.05` guide, `40.160_tp` module vs guide shorthand) and blocking validators (§00.00.43 §11.4) run clean?
+9. Was `fix_post_renumber_residual_refs.py` run after tier fixers, with any new collision rows appended to that script rather than hand-edited across canon?
+10. Are manifests left immutable (pre-migration `entry_id` values preserved) and refactor logs written under `archive/refactors/`?
+11. For 50 design specs: do cross-layer source lists avoid `40_thought_simulator_playground/` prefixes and use aligned `Document ID` / `LLR-50.{band}-` values?
 
 ---
 
@@ -225,3 +229,4 @@ Use these as soft review prompts — not CI gates:
 | 0.3 | 2026-06-09 | Post-renumber canon sweep + bulk-migration drift prompts (§9 items 7–8) |
 | 0.4 | 2026-06-09 | Phase-2 10.50+30 renumber complete — §8 checkpoint updated |
 | 0.5 | 2026-06-09 | Phase-3 50 renumber complete — §7 exceptions resolved; §8 50 aligned |
+| 0.6 | 2026-06-09 | Bulk-migration pipeline canon — §8 residual pass; §9 drift prompts 9–11; aligns with 00.00.43 §11.2 |

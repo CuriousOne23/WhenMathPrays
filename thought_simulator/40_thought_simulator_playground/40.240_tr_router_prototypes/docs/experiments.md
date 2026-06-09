@@ -6,7 +6,7 @@
 - Goal: Validate that identical inputs always produce identical route + delta_h decisions.
 - Implementation: 4 hand-crafted test cases in harness (math, thought, general, mixed).
 - Result: 4/4 PASS. Route and ΔH% both validated.
-- Artifact: artifacts/tr_verification_run_2026-06-03.json
+- Artifact: ../artifacts/tr_verification_run1_2026-06-03.json
 - Observations: Keyword proxy works for this narrow scope. Clean error path for invalid input.
 
 ### Experiment 2: ΔH% Consistency Under Variation (2026-06-03)

@@ -1,29 +1,13 @@
 #!/usr/bin/env python3
-"""Validate numbered directory/file naming prefix consistency.
+"""Validate numbered directory/file naming against 00.00.42 prefix convention.
 
-Rules (tier-local only):
-- For top-level numbered tiers (e.g. 40_thought_simulator_playground), any immediate
-  numbered subsystem directory (e.g. 40.160_tp_lifecycle) must start with the tier
-  number prefix ("40.").
-- Any markdown filename with a numeric prefix under a tier must start with that tier
-  number prefix.
-- If a markdown file is inside a numbered subsystem directory and the file itself has
-  a numeric prefix, it must match the subsystem prefix exactly.
-- Special case for tier 10 (10_thought_simulator_req): subdirs like 10_system_architecture
-  require files prefixed 10.10.* ; 50_design requires 10.50.* . This catches misplaced
-  numbers such as a 10.50.43 file living in the 10.10 architecture area (should be 10.10.36
-  or the design variant under 50_design/).
+Full alignment (warnings only):
+- Organizational subdirs (50_design/, 00_foundations/) are exempt from band-prefix rules.
+- 40 tier: validate module subdirectory names only (40.{band}_*/), not files inside modules.
+- Other tiers: validate module dirs and numbered markdown files with full subfield depth.
+- 10_ tier: 10_system_architecture → 10.10.*, 50_design → 10.50.* (startswith, not exact match).
 
-Files without numeric prefixes are allowed.
-
-NOTE on component numbering independence (as of post-renumber policy):
-  - 40, 20, and 50 have standalone/independent naming for their .xx component numbers.
-  - Only 30 and 10.50 are required to share the same numeric band (30 names must match
-    an existing 10.50 peer; 10.50 comes first as the canonical requirements anchor).
-  - Cross-layer component number alignment (previously "uniform .xx across 40/30/10.50/50")
-    is no longer required or enforced by this validator. See validate_30_10_50_pairing.py
-    for the only remaining cross-tier name rule, and the updated 40.05 / 30.00 / 50.05
-    guidance documents.
+Does not fail CI (exit 0); reports warnings for human review.
 """
 
 from __future__ import annotations
@@ -32,26 +16,16 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+from doc_address import (
+    FILE_ADDRESS_RE,
+    MODULE_DIR_RE,
+    ORGANIZATIONAL_DIRS,
+    TEN_SUBSYSTEM_BAND_PREFIX,
+    is_organizational_dir,
+)
 
 TIER_DIR_RE = re.compile(r"^(\d+)_")
-# Support arbitrary-depth dotted numeric prefixes for subfield extensions
-# (e.g. 20.40, 20.40.010, 20.40.010.005, 50.130.010.020.001, etc.).
-# Per 00.00.42 Document Addressing and Insertion Policy. Depth is unlimited.
-SUBSYSTEM_DIR_RE = re.compile(r"^(\d+(?:\.\d+)*)_")
-FILE_PREFIX_RE = re.compile(r"^(\d+(?:\.\d+)*)")
-
-# Enforce strict tier-prefix alignment for canonical numbered tiers, including
-# governance tier 00 now that governance documents are normalized to 00.* prefixes.
 ENFORCED_TIER_PREFIXES = {"00", "10", "20", "30", "40", "50"}
-
-# For the special 10_ tier (canonical requirements layer), sub-directories map to
-# specific 10.xx prefixes. This prevents e.g. 10.50.43 files from living under
-# the 10.10 system architecture docs (they belong under 50_design/ as 10.50.43_*).
-TEN_SUBSYSTEM_PREFIX_MAP = {
-    "10_system_architecture": "10.10",
-    "50_design": "10.50",
-    # Add more if 10_ grows additional numbered sub-areas (e.g. 10.20_xxx etc.)
-}
 
 
 @dataclass
@@ -67,23 +41,60 @@ def iter_tier_dirs(root: Path):
             yield entry
 
 
-def validate_tier(tier_dir: Path, root: Path) -> list[Issue]:
+def _tier_major(tier_dir: Path) -> str | None:
+    match = TIER_DIR_RE.match(tier_dir.name)
+    if not match:
+        return None
+    return match.group(1)
+
+
+def _validate_40_subdirectory_level(tier_dir: Path, root: Path) -> list[Issue]:
+    """40: check only immediate module directories under the playground tier."""
     issues: list[Issue] = []
-
-    tier_match = TIER_DIR_RE.match(tier_dir.name)
-    if not tier_match:
-        return issues
-    tier_major = tier_match.group(1)
-    if tier_major not in ENFORCED_TIER_PREFIXES:
-        return issues
-    tier_prefix = f"{tier_major}."
-
-    # Validate immediate subsystem directory prefixes.
+    tier_prefix = "40."
     for sub in tier_dir.iterdir():
         if not sub.is_dir():
             continue
-        sm = SUBSYSTEM_DIR_RE.match(sub.name)
-        if sm and not sub.name.startswith(tier_prefix):
+        rel = sub.relative_to(root).as_posix()
+        if is_organizational_dir(tier_dir.name, sub.name):
+            continue
+        match = MODULE_DIR_RE.match(sub.name)
+        if not match:
+            issues.append(
+                Issue(
+                    path=rel,
+                    line=1,
+                    message=(
+                        f"40 module subdirectory expected form '40.{{band}}_{{slug}}/', got '{sub.name}'"
+                    ),
+                )
+            )
+            continue
+        if not match.group(1).startswith(tier_prefix):
+            issues.append(
+                Issue(
+                    path=rel,
+                    line=1,
+                    message=f"40 subdirectory band must start with '{tier_prefix}', got '{match.group(1)}'",
+                )
+            )
+    return issues
+
+
+def _validate_tier_except_40(tier_dir: Path, root: Path) -> list[Issue]:
+    issues: list[Issue] = []
+    tier_major = _tier_major(tier_dir)
+    if not tier_major or tier_major not in ENFORCED_TIER_PREFIXES:
+        return issues
+    tier_prefix = f"{tier_major}."
+
+    for sub in tier_dir.iterdir():
+        if not sub.is_dir():
+            continue
+        if is_organizational_dir(tier_dir.name, sub.name):
+            continue
+        match = MODULE_DIR_RE.match(sub.name)
+        if match and not sub.name.startswith(tier_prefix):
             issues.append(
                 Issue(
                     path=sub.relative_to(root).as_posix(),
@@ -95,61 +106,93 @@ def validate_tier(tier_dir: Path, root: Path) -> list[Issue]:
                 )
             )
 
-    # Validate markdown filename prefixes recursively.
     for md in tier_dir.rglob("*.md"):
         rel = md.relative_to(root).as_posix()
-        name_match = FILE_PREFIX_RE.match(md.name)
-        if name_match and not md.name.startswith(tier_prefix):
-            issues.append(
-                Issue(
-                    path=rel,
-                    line=1,
-                    message=(
-                        f"filename prefix mismatch: expected '{tier_prefix}*' under tier "
-                        f"'{tier_dir.name}', got '{md.name}'"
-                    ),
-                )
-            )
+        if _path_under_organizational(tier_dir.name, rel):
+            continue
 
-        # Standard subsystem dir check (for 20/30/40/50 etc.)
-        parent_match = SUBSYSTEM_DIR_RE.match(md.parent.name)
-        if parent_match and name_match:
-            subsystem_prefix = f"{parent_match.group(1)}"
-            file_prefix = name_match.group(1)
-            if file_prefix != subsystem_prefix:
+        name_match = FILE_ADDRESS_RE.match(md.name)
+        if not name_match:
+            continue
+
+        file_prefix = name_match.group(1)
+        if not file_prefix.startswith(tier_prefix.replace(".", "") if tier_major == "10" else tier_prefix):
+            if tier_major != "10" and not md.name.startswith(tier_prefix):
                 issues.append(
                     Issue(
                         path=rel,
                         line=1,
                         message=(
-                            f"file/subdirectory mismatch: file prefix '{file_prefix}' does not match "
-                            f"parent subsystem prefix '{subsystem_prefix}'"
+                            f"filename prefix mismatch: expected '{tier_prefix}*' under tier "
+                            f"'{tier_dir.name}', got '{md.name}'"
                         ),
                     )
                 )
 
-        # Special handling for 10_ tier's manually organized sub-areas (10_system_architecture etc.)
-        # This ensures e.g. a file named 10.50.43_* under 10_system_architecture/ is flagged
-        # (it should be 10.10.36_* or live in 50_design/ as 10.50.43_*).
-        if tier_major == "10" and name_match:
-            subdir_name = md.parent.name
-            expected_for_sub = TEN_SUBSYSTEM_PREFIX_MAP.get(subdir_name)
-            if expected_for_sub:
-                file_prefix = name_match.group(1)
-                if file_prefix != expected_for_sub:
-                    issues.append(
-                        Issue(
-                            path=rel,
-                            line=1,
-                            message=(
-                                f"file/subdirectory prefix mismatch under 10_ tier: file uses '{file_prefix}' "
-                                f"but directory '{subdir_name}' expects files starting with '{expected_for_sub}' "
-                                f"(e.g. use 10.10.36 for architecture-placed GB reqs instead of 10.50.43)"
-                            ),
-                        )
+        parent_name = md.parent.name
+        if is_organizational_dir(tier_dir.name, parent_name):
+            _check_10_organizational_file(rel, parent_name, file_prefix, issues)
+            continue
+
+        parent_match = MODULE_DIR_RE.match(parent_name)
+        if parent_match:
+            subsystem_prefix = parent_match.group(1)
+            if not _address_compatible(subsystem_prefix, file_prefix):
+                issues.append(
+                    Issue(
+                        path=rel,
+                        line=1,
+                        message=(
+                            f"file/subdirectory mismatch: file address '{file_prefix}' does not align "
+                            f"with parent module '{subsystem_prefix}'"
+                        ),
                     )
+                )
+
+        if tier_major == "10":
+            _check_10_organizational_file(rel, parent_name, file_prefix, issues)
 
     return issues
+
+
+def _path_under_organizational(tier_dir_name: str, rel_path: str) -> bool:
+    parts = rel_path.split("/")
+    if len(parts) < 2:
+        return False
+    for part in parts[1:-1]:
+        if part in ORGANIZATIONAL_DIRS.get(tier_dir_name, frozenset()):
+            return True
+    return parts[1] in ORGANIZATIONAL_DIRS.get(tier_dir_name, frozenset())
+
+
+def _address_compatible(parent: str, child: str) -> bool:
+    return child == parent or child.startswith(parent + ".")
+
+
+def _check_10_organizational_file(rel: str, parent_name: str, file_prefix: str, issues: list[Issue]) -> None:
+    expected = TEN_SUBSYSTEM_BAND_PREFIX.get(parent_name)
+    if not expected:
+        return
+    if not (file_prefix == expected or file_prefix.startswith(expected + ".")):
+        issues.append(
+            Issue(
+                path=rel,
+                line=1,
+                message=(
+                    f"file/subdirectory prefix mismatch under 10_ tier: file uses '{file_prefix}' "
+                    f"but directory '{parent_name}' expects band prefix '{expected}.*'"
+                ),
+            )
+        )
+
+
+def validate_tier(tier_dir: Path, root: Path) -> list[Issue]:
+    tier_major = _tier_major(tier_dir)
+    if not tier_major or tier_major not in ENFORCED_TIER_PREFIXES:
+        return []
+    if tier_major == "40":
+        return _validate_40_subdirectory_level(tier_dir, root)
+    return _validate_tier_except_40(tier_dir, root)
 
 
 def main() -> int:
@@ -160,12 +203,13 @@ def main() -> int:
         issues.extend(validate_tier(tier_dir, root))
 
     if issues:
-        print("Naming prefix validation issues (warnings only; no automatic fixes or renames are performed by this script):")
+        print(
+            "Naming prefix validation issues (warnings only; organizational dirs and 40 intra-module "
+            "files are exempt per 00.00.42):"
+        )
         for issue in issues:
             print(f"- {issue.path}:{issue.line}: {issue.message}")
         print("See rename_identity.py (00.00.43 policy) for controlled identity renames.")
-        # Per policy: warnings only. This validator never mutates files and does not fail the process
-        # on naming issues (other layers may still treat as blocking via their own rules/CI).
         return 0
 
     print("Naming prefix validation passed.")

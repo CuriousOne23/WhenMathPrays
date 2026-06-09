@@ -6,8 +6,8 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 
 ## Glossary References
 
-- `../../30_verification/30.160_verification_glossary.md`
-- `../40.05_master_program_guide.md`
+- `../../30_verification/30.30_verification_glossary.md`
+- `../../40_thought_simulator_playground/40.05_master_program_guide.md`
 
 ## Flows Alignment Statement (per 40.05)
 
@@ -21,7 +21,7 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-06-06 | 40.270_scheduler_prototypes | python harness.py | 12 scenarios exercising all 10 Phase B Must-Explore items + core 10.10.40 invariants (determinism, fairness, interrupts, budgets, cohorts, obs, bounds, negatives) | PASS | 0 | artifacts/scheduler_verification_run_2026-06-06.json | HLR-20.440-001, HLR-20.440-002, HLR-20.440-003 + 10.10.40 architecture items (interrupt windows, timing, cohort, bounded state, observability) | LLR-30.210-001 | 10.10.40_scheduler_and_regulator_architecture.md; 10.50.210_scheduler_requirements.md; 20.30/20.40/20.90/20.150/20.170/20.200 + 10.10 supporting | source-index anchored per software_description Traceability | tick; policy; max_active; selected_tp_ids; thoughtpoints (wait/total/last); history; verification_digest; last_selection_rationale; last_cohort_metadata; last_window; last_budget_status; history_max; window; preempt; budget_tcu; tie_break_rationale; cohort_metadata | negative_empty_tp_id; negative_non_monotonic_tick; negative_invalid_policy (plus construction empty-active) | Phase B executed per approved software_description.md. 12/12 PASS covering 10 required exploration areas + bounded history + rich obs. Supersedes prior 2026-05-28 run. |
+| 2026-06-06 | 40.270_scheduler_prototypes | python harness.py | 12 scenarios exercising all 10 Phase B Must-Explore items + core 10.10.40 invariants (determinism, fairness, interrupts, budgets, cohorts, obs, bounds, negatives) | PASS | 0 | scheduler_verification_run_2026-06-06.json | HLR-20.440-001, HLR-20.440-002, HLR-20.440-003 + 10.10.40 architecture items (interrupt windows, timing, cohort, bounded state, observability) | LLR-30.210-001 | 10.10.40_scheduler_and_regulator_architecture.md; 10.50.210_scheduler_requirements.md; 20.30/20.40/20.90/20.150/20.170/20.200 + 10.10 supporting | source-index anchored per software_description Traceability | tick; policy; max_active; selected_tp_ids; thoughtpoints (wait/total/last); history; verification_digest; last_selection_rationale; last_cohort_metadata; last_window; last_budget_status; history_max; window; preempt; budget_tcu; tie_break_rationale; cohort_metadata | negative_empty_tp_id; negative_non_monotonic_tick; negative_invalid_policy (plus construction empty-active) | Phase B executed per approved software_description.md. 12/12 PASS covering 10 required exploration areas + bounded history + rich obs. Supersedes prior 2026-05-28 run. |
 
 ## Positive Scenario Ledger
 
@@ -69,7 +69,7 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 
 - Deterministic replay produced identical final snapshots and identical `verification_digest` values across two SchedulerPrototype instances driven by identical event lists.
 - All 12 scenarios used deterministic_mode=True; no nondeterministic paths exercised.
-- Evidence artifact: `artifacts/scheduler_verification_run_2026-06-06.json` (contains full report + per-scenario snapshots where applicable; JSON is sorted-key + includes digests)
+- Evidence artifact: `scheduler_verification_run_2026-06-06.json` (contains full report + per-scenario snapshots where applicable; JSON is sorted-key + includes digests)
 - History bounded + trimmed; digest recomputes from _snapshot_body on every change.
 
 ## Failure Record
@@ -103,7 +103,7 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 - Scheduler prototype provides executable JSON-first contract (contract_version 1.0) with history_max, rich per-decision rationale/cohort/window/budget obs, and bounded history.
 - 12/12 evidence covers determinism/replay (001), fairness+no-starvation (002), validation (003), plus the 7 additional Phase B exploration areas (interrupts, timing, cohort, rich obs, tie-break, bounds, empty-active).
 - Negative-path coverage + replay digests + bounded state now explicitly exercised.
-- All evidence is in artifacts/scheduler_verification_run_2026-06-06.json and is promotion-ready via 30.210.
+- All evidence is in scheduler_verification_run_2026-06-06.json and is promotion-ready via 30.210.
 
 ## Architectural Evaluation
 

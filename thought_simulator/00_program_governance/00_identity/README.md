@@ -21,7 +21,7 @@ Machine-readable canonical identity registry for controlled renames across tiers
 - **30 ↔ 10.50 renumber manifest (executed 2026-06-09):** [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json)
 - **50 renumber manifest (executed 2026-06-09):** [50_renumber_manifest.json](50_renumber_manifest.json)
 
-## Commands
+## Single-module rename
 
 ```powershell
 # Bootstrap / refresh tables from disk
@@ -37,6 +37,31 @@ python thought_simulator/scripts/rename_identity.py --request thought_simulator/
 python thought_simulator/scripts/rename_identity.py --request thought_simulator/00_program_governance/00_identity/my_rename.json --apply --yes
 ```
 
-Scripts: [rename_identity.py](../../scripts/rename_identity.py), [bootstrap_name_tables.py](../../scripts/bootstrap_name_tables.py), [validate_name_tables.py](../../scripts/validate_name_tables.py), [validate_shorthand_usage.py](../../scripts/validate_shorthand_usage.py).
+## Phased bulk migration (multi-module)
 
-Human-readable inventories (`30.01`, `50.00`, `40.510`) must stay aligned with these tables after any rename.
+Normative pipeline: [00.00.43 §11.2](../00_foundations/00.00.43_controlled_identity_rename_policy.md). History: [naming_strategy_target.md §8](naming_strategy_target.md).
+
+| Tier | Apply | Tier fixer | Shared residual fixer |
+|------|-------|------------|------------------------|
+| 40 | [apply_40_renumber_migration.py](../../scripts/apply_40_renumber_migration.py) | [fix_40_post_renumber_refs.py](../../scripts/fix_40_post_renumber_refs.py) | [fix_post_renumber_residual_refs.py](../../scripts/fix_post_renumber_residual_refs.py) |
+| 10.50 + 30 | [apply_30_1050_renumber_migration.py](../../scripts/apply_30_1050_renumber_migration.py) | [fix_30_1050_post_renumber_refs.py](../../scripts/fix_30_1050_post_renumber_refs.py) | same |
+| 50 | [apply_50_renumber_migration.py](../../scripts/apply_50_renumber_migration.py) | [fix_50_post_renumber_refs.py](../../scripts/fix_50_post_renumber_refs.py) | same |
+
+Manifest JSON in this directory records **pre-migration** identities only; fix scripts must not rewrite manifests.
+
+## Scripts index
+
+- Identity: [rename_identity.py](../../scripts/rename_identity.py), [bootstrap_name_tables.py](../../scripts/bootstrap_name_tables.py)
+- Validation: [validate_name_tables.py](../../scripts/validate_name_tables.py), [validate_shorthand_usage.py](../../scripts/validate_shorthand_usage.py), [validate_30_10_50_pairing.py](../../scripts/validate_30_10_50_pairing.py)
+
+Human-readable inventories (`30.01`, `50.00`, `40.510`) must stay aligned with name tables after any rename.
+
+## Directory index (coverage-aligned)
+
+- [10.50_name_table.json](10.50_name_table.json)
+- [30_name_table.json](30_name_table.json)
+- [40_name_table.json](40_name_table.json)
+- [50_name_table.json](50_name_table.json)
+- [rename_request.template.json](rename_request.template.json)
+- [shorthand_registry.json](shorthand_registry.json)
+- [rename_request_30_1050.template.json](rename_request_30_1050.template.json)

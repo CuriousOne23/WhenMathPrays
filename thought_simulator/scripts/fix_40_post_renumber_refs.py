@@ -66,7 +66,7 @@ FIXES: list[tuple[str, str]] = [
     ("40.160 / 30.00", "40.05 / 30.00"),
     ("modeled after 40.160).", "modeled after 40.160_tp_lifecycle)."),
     # Historical table in 00.00.42 — restore compression row target
-    ("40.50_regulator_prototypes | 40.1100_regulator_prototypes", "40.50_regulator_prototypes | 40.440_regulator_prototypes"),
+    ("40.50_regulator_prototypes | 40.1100_regulator_prototypes", "40.50_regulator_prototypes | 40.320_regulator_prototypes"),
     # Old RB/TB shorthand bands
     ("40.501/401/106/601/35", "40.190/200/210/230/250"),
     ("40.501/40.200/40.210/40.601/40.250", "40.190/40.200/40.210/40.230/40.250"),

@@ -54,7 +54,7 @@ Golden fixtures MUST remain byte-stable across W2 unless `schema_version` increm
 
 - **Backward Flow (40-series evidence):** W1 [40.60](../40.60_iiinb_prototypes/software_description.md) demonstrated read-only apply with inline `UspSnapshot`; this module replaces ad hoc store with normative USP semantics.
 
-- **Iterative Design Flow (50-series influence):** [50.230](../../50_thought_simulator_design/50.230_iiinb_design_spec.md) `usp_version_ref` pinning contract; USP store design remains 20.102-authoritative.
+- **Iterative Design Flow (50-series influence):** [50.230](../../50_thought_simulator_design/50.60_iiinb_design_spec.md) `usp_version_ref` pinning contract; USP store design remains 20.102-authoritative.
 
 **Agreement Statement**: Aligned — Phase A + Phase B approved (CP, 2026-06-08). Store boundaries, 8/8 harness evidence, and snapshot contract align with [20.102](../../20_requirements/20.102_usp_requirements.md) HLR-001–024; digest authority via [40.100](../40.100_core_data_structs_prototypes/software_description.md). GATE-B row 201 closed.
 

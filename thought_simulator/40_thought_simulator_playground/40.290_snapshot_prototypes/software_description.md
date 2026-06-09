@@ -16,7 +16,7 @@ Phase B execution completed; promotion remains governed by canonical 10/30/50 ar
 - `20_requirements/20.170_safety_requirements.md`
 - `20_requirements/20.40_ob_requirements.md`
 - `20_requirements/20.200_traceability_matrix.md`
-- `../40.05_master_program_guide.md`
+- `../../40_thought_simulator_playground/40.05_master_program_guide.md`
 
 ## Core Responsibilities
 

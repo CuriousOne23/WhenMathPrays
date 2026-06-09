@@ -43,6 +43,14 @@ def _validate_schema(table: dict, path: Path, errors: list[str]) -> None:
         errors.append(f"{path.name}: missing entries array")
 
 
+def _duplicate_band_expected(table: dict, band: str) -> bool:
+    """Headroom docs may share a module band when all colliders are shorthand-ineligible."""
+    colliders = [e for e in table.get("entries", []) if e.get("band") == band]
+    if len(colliders) < 2:
+        return False
+    return all(not e.get("shorthand_eligible", True) for e in colliders)
+
+
 def _validate_entries(table: dict, path: Path, errors: list[str], warnings: list[str]) -> dict[str, dict]:
     by_id: dict[str, dict] = {}
     bands: dict[str, str] = {}
@@ -59,7 +67,7 @@ def _validate_entries(table: dict, path: Path, errors: list[str], warnings: list
         if not band or not canonical_path:
             errors.append(f"{path.name}: entry {entry_id} missing band or canonical_path")
             continue
-        if band in bands and bands[band] != entry_id:
+        if band in bands and bands[band] != entry_id and not _duplicate_band_expected(table, band):
             warnings.append(f"{path.name}: duplicate band {band} ({bands[band]} and {entry_id})")
         bands.setdefault(band, entry_id)
         fs_path = ROOT / canonical_path

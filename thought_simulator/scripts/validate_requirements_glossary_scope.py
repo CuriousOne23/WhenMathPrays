@@ -19,6 +19,13 @@ SCOPES = (
     "50_thought_simulator_design",
 )
 
+# Tier guides may cite the authoritative 20.190 glossary as primitive SSOT.
+GLOSSARY_REFERENCE_ALLOWLIST = {
+    "40_thought_simulator_playground/40.05_master_program_guide.md",
+    "40_thought_simulator_playground/40.510_refactor.md",
+    "40_thought_simulator_playground/README.md",
+}
+
 PATTERNS = (
     re.compile(r"\b20\.190_glossary\.md\b", re.IGNORECASE),
     re.compile(r"\b20_requirements/20\.190_glossary\.md\b", re.IGNORECASE),
@@ -42,6 +49,8 @@ def main() -> int:
 
     for path in _iter_scope_files():
         rel = path.relative_to(ROOT).as_posix()
+        if rel in GLOSSARY_REFERENCE_ALLOWLIST:
+            continue
         text = path.read_text(encoding="utf-8")
         for line_number, line in enumerate(text.splitlines(), start=1):
             for pattern in PATTERNS:
@@ -54,7 +63,8 @@ def main() -> int:
     if warnings:
         print("20 glossary scope warnings:")
         for item in warnings:
-            print(f"- {item}")
+            safe = item.encode("ascii", errors="replace").decode("ascii")
+            print(f"- {safe}")
         print("20 glossary scope check completed with warnings (non-blocking).")
         return 0
 

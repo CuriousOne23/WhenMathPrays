@@ -42,7 +42,7 @@ This file will track how the DCB stability prototype aligns with and explores th
 - thought_simulator/30_verification/30.190_dcb_stability_prototypes/
 - thought_simulator/50_thought_simulator_design/50.190_dcb_stability_design.md
 - thought_simulator/10_thought_simulator_req/50_design/10.50.190_dcb_stability_requirements.md
-- ../40.05_master_program_guide.md (master process context)
+- ../../40_thought_simulator_playground/40.05_master_program_guide.md (master process context)
 
 ## Cross-Layer 165 Scaffolds (current state)
 20.165 plus the four matching placeholder layers created as consistent dummies:

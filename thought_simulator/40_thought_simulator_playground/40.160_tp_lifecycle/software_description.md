@@ -71,7 +71,7 @@ High-level requirements live in:
 - `00_program_governance/10_architecture/` (Manifold, TP, Basins)
 - `20_requirements/` (Lifecycle, Entropy, Identity/Provenance, Stability)
 
-Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../../30_verification/30.160_verification_glossary.md`.
+Traceability will be maintained in `verification_capsule.md` and `requirements_delta.md`, with shared vocabulary defined in `../../30_verification/30.30_verification_glossary.md`.
 
 ## 6. Public Macro API (prototype.py)
 ```python
@@ -190,12 +190,12 @@ Any non-Python consumer should ingest this payload as schema-validated JSON and 
 
 - Canonical verification report: `verification_capsule.md`
 - Requirement evolution log: `requirements_delta.md`
-- Canonical glossary: `../../30_verification/30.160_verification_glossary.md`
+- Canonical glossary: `../../30_verification/30.30_verification_glossary.md`
 - Artifact directory: `artifacts/`
 
 Required artifact expectations:
 
-- `artifacts/tp_state.json` for the current canonical deterministic run output
+- `tp_state.json` for the current canonical deterministic run output
 - `artifacts/determinism_run2.json` and `artifacts/determinism_run3.json` for reproducibility comparisons
 - a failure artifact JSON payload only when a run fails and a failure payload exists
 

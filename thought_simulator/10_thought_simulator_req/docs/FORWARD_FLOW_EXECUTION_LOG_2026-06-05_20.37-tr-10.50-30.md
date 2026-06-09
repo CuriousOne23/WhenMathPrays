@@ -41,4 +41,4 @@
 
 - Harness scenarios for `tr_needs_update` / TR commit / RB iff gate  
 - 50.180 design spec update after integration evidence  
-- Optional: extend `30.160_verification_glossary.md` if TR flow contract terms are added to registry
+- Optional: extend `../../30_verification/30.30_verification_glossary.md` if TR flow contract terms are added to registry

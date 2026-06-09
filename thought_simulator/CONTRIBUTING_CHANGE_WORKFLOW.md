@@ -40,14 +40,14 @@ This workflow applies to edits under:
 - Exploratory documents may inform decisions but do not become formal trace edges.
 
 4. Update glossary, README, or tier inventory when terminology or **structure** changes.
-- If verification terminology changes, update `30_verification/30.160_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
+- If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
 - If requirements-tier terminology changes, update `20_requirements/archive/20.150_glossary.md` and `20_requirements/glossary_term_registry.json` in the same change.
 - For 50-series design terminology (especially new concepts introduced in design specs), update `50_thought_simulator_design/50.01_50_series_glossary.md` and `50_thought_simulator_design/glossary_term_registry.json`.
 - `20.150_glossary.md` is scoped to `20_requirements/` documents.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
 - If a **30 verification module** is added, renamed, or removed, update `30_verification/30.01_verification_inventory_index.md` in the same change set.
 - If a **level-1 50 design file** is added, renamed, or removed, update `50_thought_simulator_design/50.00_design_traceability_index.md` in the same change set.
-- Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.160_verification_glossary.md` (not the exploratory 40 glossary).
+- Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
 
 **Do not** update tier inventory indexes (`30.01`, `50.00`) for content-only edits to capsules, deltas, or design specs.
 
@@ -65,7 +65,20 @@ Band-only shorthand (e.g. `40.100`, `50.220`) is legal only in locations declare
 
 **30 ↔ 10.50** renames are always **atomic** (both peers in one PR). **40** and **50** renames are tier-standalone but must propagate live cross-tier references.
 
-**Phased bulk migration** (many modules at once): use an approved manifest in `00_identity/` (e.g. `40_renumber_manifest.json`; future `30_1050_renumber_manifest.json`) plus the orchestrator script — not bare band substring replace across the tree. Rules: canonical full paths only, longest-first order, two-phase staging on collisions, corruption fixer pass for governance tokens. See [00.00.43 §11](00_program_governance/00_foundations/00.00.43_controlled_identity_rename_policy.md).
+**Phased bulk migration** (many modules at once): use an approved manifest in `00_identity/` plus the tier pipeline in [00.00.43 §11.2](00_program_governance/00_foundations/00.00.43_controlled_identity_rename_policy.md) — **not** bare band substring replace across the tree.
+
+Recommended order for full-program alignment: **40 → 10.50+30 → 50**.
+
+```powershell
+# Example: Phase-2 coupled pass (plan first, then apply)
+python thought_simulator/scripts/apply_30_1050_renumber_migration.py --plan
+python thought_simulator/scripts/apply_30_1050_renumber_migration.py --apply --yes
+python thought_simulator/scripts/fix_30_1050_post_renumber_refs.py
+python thought_simulator/scripts/fix_post_renumber_residual_refs.py
+# Then run blocking validators (00.00.43 §11.4)
+```
+
+Tier equivalents: `apply_40_*` + `fix_40_post_renumber_refs.py`; `apply_50_*` + `fix_50_post_renumber_refs.py`. Manifests are immutable audit records — fix scripts skip `00_identity/`. New substring fallout: append rows to `fix_post_renumber_residual_refs.py`, re-run, log in `archive/refactors/`.
 
 Full policy: [00.00.43_controlled_identity_rename_policy.md](00_program_governance/00_foundations/00.00.43_controlled_identity_rename_policy.md). Identity SSOT: [00_identity/](00_program_governance/00_identity/).
 
@@ -151,7 +164,7 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 - `30_verification/30.00_verification_user_guide.md` (verification process, artifact standards, and three-flow rules)
 - `30_verification/30.01_verification_inventory_index.md` (30-tier module inventory)
 - `50_thought_simulator_design/50.00_design_traceability_index.md` (cross-layer design traceability)
-- `30_verification/30.160_verification_glossary.md`
+- `30_verification/30.30_verification_glossary.md`
 
 ## Pull Request Checklist
 
@@ -162,3 +175,4 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 - [ ] `30.01` / `50.00` updated when module or level-1 design **structure** changed.
 - [ ] `10.50.xx` peer exists for every `30.01` row marked `promoted` or `approved` (or Notes record `30-only pending 10.50` while debt is open).
 - [ ] Validation suite passes locally (includes `validate_30_10_50_pairing.py` warning check).
+- [ ] Bulk renumber PRs: manifest unchanged (pre-migration IDs), tier fixer + `fix_post_renumber_residual_refs.py` run, refactor log in `archive/refactors/`.

@@ -104,7 +104,7 @@ RENAME_MAP: Dict[str, str] = {
     "50.270_geometry_engine_design.md": "50.10_geometry_engine_design.md",
     # Data Structures moved manually to 50.140.010 (see discussion: no 40/30 peer equivalent;
     # placed between .40 and .50 for Regulator alignment). Previous plan was 50.55.
-    # "50.220_data_structures.md": "50.42.010_data_structures.md",
+    # "50.220_data_structures.md": "50.140_core_data_structs_design_spec.md",
     # 10_ tier placement fixes (use full path from thought_simulator root so the
     # generalized resolver above can handle them). Example of the reported issue:
     # when correcting a GB reqs file that was placed in 10.10 architecture docs
@@ -126,7 +126,7 @@ CONTENT_UPDATE_TARGETS = [
 REPLACEMENT_PAIRS: List[Tuple[str, str]] = [
     # (old, new)
     ("50.270_geometry_engine_design.md", "50.10_geometry_engine_design.md"),
-    # ("50.220_data_structures.md", "50.42.010_data_structures.md"),  # performed manually; see 50.140.010 choice rationale above and in 50.05/50.00
+    # ("50.220_data_structures.md", "50.140_core_data_structs_design_spec.md"),  # performed manually; see 50.140.010 choice rationale above and in 50.05/50.00
     # LLRs that embed the old number (in the geometry file itself)
     ("LLR-50.270-001", "LLR-50.10-001"),
     # 10_ tier example (commented; add basename or full as needed when activating a 10 rename):
@@ -147,7 +147,7 @@ SKIP_DIRS = {"archive", "__pycache__", ".git", "node_modules"}
 
 # Files that are allowed to contain the old names after the refactor (historical reports, etc.)
 IGNORE_FILES = {
-    "RENAMING_MIGRATION_REPORT.md",
+    "archive/refactors/RENAMING_MIGRATION_REPORT.md",
     # add more historical files here if needed
 }
 
@@ -291,7 +291,7 @@ def main():
     print("    to LLR-50.10-001 for the geometry file. Review that no external references")
     print("    (outside this repo or in historical docs) rely on the old LLR numbers.")
     print("  - The 50.00 index table will be updated automatically for the two rows.")
-    print("  - Historical files like RENAMING_MIGRATION_REPORT.md are intentionally ignored.")
+    print("  - Historical files like archive/refactors/RENAMING_MIGRATION_REPORT.md are intentionally ignored.")
     print("  - **Python files (.py)**: String matches in code, comments, docstrings, or tests")
     print("    will be updated if they contain the old filename. These can have false positives.")
     print("    The script will list them prominently — review carefully before apply.")

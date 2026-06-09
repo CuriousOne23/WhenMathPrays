@@ -35,7 +35,7 @@ Primary risk if unpropagated:
   - New required TR dirty-flag conformance gate.
   - Change-control rule prohibiting legacy unconditional-TR wording.
 
-- Updated: thought_simulator/50_thought_simulator_design/50.170_tp_design.md
+- Updated: thought_simulator/50_thought_simulator_design/50.150_tp_design.md
 - Applied:
   - Source index migrated from archive-era references to active 20.30/20.31/20.37 sources.
   - TP contract expanded with TP.TR and tr_needs_update.
@@ -45,7 +45,7 @@ Primary risk if unpropagated:
   - Title corrected to 50.170 prefix.
 
 ### 30 layer (verification terminology controls)
-- Updated: thought_simulator/30_verification/30.160_verification_glossary.md
+- Updated: thought_simulator/30_verification/30.30_verification_glossary.md
 - Updated: thought_simulator/30_verification/glossary_term_registry.json
 - Applied:
   - Added TP/TR dirty-flag terminology definitions:
@@ -92,8 +92,8 @@ Results:
 
 - thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
-- thought_simulator/50_thought_simulator_design/50.170_tp_design.md
-- thought_simulator/30_verification/30.160_verification_glossary.md
+- thought_simulator/50_thought_simulator_design/50.150_tp_design.md
+- thought_simulator/30_verification/30.30_verification_glossary.md
 - thought_simulator/30_verification/glossary_term_registry.json
 - thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
 - thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md

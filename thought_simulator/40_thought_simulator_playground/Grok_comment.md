@@ -70,7 +70,7 @@ Also, **steps D and E on every rename** (rewrite governance docs, CI scripts, co
 - a new tier/band pattern is introduced, or
 - a rename touches a **documented example** that uses the old address as normative illustration
 
-For a routine `40.100` → `40.2700` rename, updating `40.510`, module refs, and cross-tier citations should suffice. Rewriting `CONTRIBUTING_CHANGE_WORKFLOW.md` each time adds noise and review cost.
+For a routine `40.100` → `40.2700` rename, updating `40.510`, module refs, and cross-tier citations should suffice. Rewriting the contributing workflow doc each time adds noise and review cost.
 
 **Recommendation:** Split propagation into:
 

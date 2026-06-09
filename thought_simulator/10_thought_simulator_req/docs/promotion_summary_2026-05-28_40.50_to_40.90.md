@@ -10,11 +10,11 @@ Promote Phase B evidence from exploratory modules `40.50` through `40.90` into c
 ## Promoted Canonical Targets
 
 - Requirements anchors:
-  - `10.50_regulator_requirements.md`
-  - `10.60_tick_cycle_requirements.md`
-  - `10.70_snapshot_requirements.md`
-  - `10.80_event_log_requirements.md`
-  - `10.90_experiment_runner_requirements.md`
+  - `../50_design/10.50.220_regulator_requirements.md`
+  - `../50_design/10.50.230_tick_cycle_requirements.md`
+  - `../50_design/10.50.240_snapshot_requirements.md`
+  - `../50_design/10.50.250_event_log_requirements.md`
+  - `../50_design/10.50.260_experiment_runner_requirements.md`
 - Verification evidence capsules/deltas:
   - `30_verification/30.220_regulator_prototypes/`
   - `30_verification/30.230_tick_cycle_skeleton/`
@@ -22,11 +22,11 @@ Promote Phase B evidence from exploratory modules `40.50` through `40.90` into c
   - `30_verification/30.250_event_log_prototypes/`
   - `30_verification/30.260_experiment_runner/`
 - Design-spec outputs (50-band supporting docs):
-  - `50.31_regulator_design_support.md`
-  - `50.100_tick_cycle_design_support.md`
+  - `50.220_regulator_design_support.md`
+  - `50.230_tick_cycle_design_support.md`
   - `50.240_snapshot_contract_design.md`
-  - `50.73_event_log_observability_design.md`
-  - `50.83_experiment_runner_testing_design.md`
+  - `50.250_event_log_observability_design.md`
+  - `50.260_experiment_runner_testing_design.md`
 
 ## Gate Compliance Notes
 

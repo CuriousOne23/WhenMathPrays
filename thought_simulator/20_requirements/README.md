@@ -87,3 +87,20 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - forward flow (typical): 20 -> 40 -> 10
 - backward flow (when selected): 20 -> 10 -> 40
 - direction MUST be explicitly user-selected before propagation.
+
+## Directory index (coverage-aligned)
+
+- [20.16_gb_responsibility_matrix.md](20.16_gb_responsibility_matrix.md)
+- [20.18_failure_modes_and_success_criteria.md](20.18_failure_modes_and_success_criteria.md)
+- [20.205_execution_packet_xp_requirements.md](20.205_execution_packet_xp_requirements.md)
+- [20.206_pipeline_a_b_synchronization_contract.md](20.206_pipeline_a_b_synchronization_contract.md)
+- [20.207_execution_replay_specification.md](20.207_execution_replay_specification.md)
+- [20.38_ts_implementation_guidelines.md](20.38_ts_implementation_guidelines.md)
+- [20.39_ts_core_data_structures.md](20.39_ts_core_data_structures.md)
+- [20.41_opbeh_requirements.md](20.41_opbeh_requirements.md)
+- [20.42_obg_requirements.md](20.42_obg_requirements.md)
+- [20.43_xlater_requirements.md](20.43_xlater_requirements.md)
+- [20.55_srp_requirements.md](20.55_srp_requirements.md)
+- [20.56_routing_table_schema.md](20.56_routing_table_schema.md)
+- [20.57_trig_rb_semantic_trigger_requirements.md](20.57_trig_rb_semantic_trigger_requirements.md)
+- [20.58_oub_execution_manifold_integration.md](20.58_oub_execution_manifold_integration.md)

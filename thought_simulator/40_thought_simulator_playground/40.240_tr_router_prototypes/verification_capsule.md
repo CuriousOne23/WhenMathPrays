@@ -13,14 +13,14 @@ Canonical verification report for `40.240_tr_router_prototypes`, per `40.05_mast
 
 ## Glossary References
 
-- `../../30_verification/30.160_verification_glossary.md`
-- `../40.05_master_program_guide.md`
+- `../../30_verification/30.30_verification_glossary.md`
+- `../../40_thought_simulator_playground/40.05_master_program_guide.md`
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref (proven) | Req Doc | Notes |
 |------|--------|---------|-----------------|--------|-----------|-----------|------------------|---------|-------|
-| 2026-06-03 | 40.240 | python harness.py | 4 TCs; keyword proxy | PASS | 0 | run1/2/3_2026-06-03.json | HLR-20.437-* (partial) | 20.37; 10.50.180 | Initial proxy; 4 tests |
+| 2026-06-03 | 40.240 | python harness.py | 4 TCs; keyword proxy | PASS | 0 | artifacts/tr_verification_run1_2026-06-03.json | HLR-20.437-* (partial) | 20.37; 10.50.180 | Initial proxy; 4 tests |
 | 2026-06-05 | 40.240 | python harness.py | 6 TCs (+ TC005/TC006 error); 3 runs; proxy_only scope | PASS | 0 | `artifacts/tr_verification_run{1,2,3}_2026-06-03.json` | HLR-20.437-001, -002, -003 | 20.37; 10.50.180.TR | **40.05 pass** after 20.37 contract sync |
 
 ## Positive Scenario Ledger

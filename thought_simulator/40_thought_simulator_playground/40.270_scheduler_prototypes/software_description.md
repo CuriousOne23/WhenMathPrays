@@ -6,7 +6,7 @@
 
 ## Phase B Deliverables (Executed)
 - Harness scenarios executed: 12/12 PASS
-- Artifact: `artifacts/scheduler_verification_run_2026-06-06.json` (generated 2026-06-06, contains full scenario ledger, deterministic digests, input/output for replay)
+- Artifact: `scheduler_verification_run_2026-06-06.json` (generated 2026-06-06, contains full scenario ledger, deterministic digests, input/output for replay)
 - Coverage of all 10 "What Phase B Must Explore" items (via dedicated positive/negative scenarios + supporting):
   - Deterministic per-tick selection (RR baseline + WRR exploratory) — positive_deterministic_replay, positive_round_robin_fairness, etc.
   - Explicit deterministic tie-breaking + provenance — positive_tie_break_provenance (rationale + stable tp_id tie-break)

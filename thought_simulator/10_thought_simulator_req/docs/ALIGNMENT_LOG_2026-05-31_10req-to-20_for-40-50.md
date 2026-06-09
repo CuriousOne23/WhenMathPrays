@@ -18,17 +18,17 @@ Record canonical-anchor refactor changes made in 10_thought_simulator_req to ali
 - Added explicit boundary note that terminology alignment follows 20.05.
 - Added explicit mention that RB naming baseline is Routing Basin.
 
-2. 10.30_basin_requirements.md
+2. ../50_design/10.50.160_basin_requirements.md
 - Added purpose-level note that RB naming follows Routing Basin terminology.
 - Expanded canonical scope to explicitly cover basin-family contract applicability across OB, RB, GB, IB, TB, InB, OuB, MB variants.
 
-3. 10.50_regulator_requirements.md
+3. ../50_design/10.50.220_regulator_requirements.md
 - Expanded canonical scope to explicitly include control-component compatibility language for Regulator, Watchdog-class actions, and Flow Modulator actions.
 
-4. 10.60_tick_cycle_requirements.md
+4. ../50_design/10.50.230_tick_cycle_requirements.md
 - Expanded canonical scope to include deterministic phase-boundary compatibility for observer-signal ingestion and split/merge arbitration ordering.
 
-5. 10.90_experiment_runner_requirements.md
+5. ../50_design/10.50.260_experiment_runner_requirements.md
 - Expanded canonical scope to include observer/orchestration boundary preservation for experiment control surfaces.
 
 ## What Was Intentionally Not Changed

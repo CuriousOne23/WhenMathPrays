@@ -16,7 +16,7 @@ Define deterministic math contracts used by exploratory geometry and dynamics ca
 - `20_requirements/20.90_ib_requirements.md`
 - `20_requirements/20.200_traceability_matrix.md`
 - `20_requirements/20.40_ob_requirements.md`
-- `../40.05_master_program_guide.md`
+- `../../40_thought_simulator_playground/40.05_master_program_guide.md`
 
 ## Core Responsibilities
 

@@ -29,9 +29,9 @@ The `10.50.xx` files are stored in `50_design/`.
 - [50_design/10.50.240_snapshot_requirements.md](50_design/10.50.240_snapshot_requirements.md)
 - [50_design/10.50.250_event_log_requirements.md](50_design/10.50.250_event_log_requirements.md)
 - [50_design/10.50.260_experiment_runner_requirements.md](50_design/10.50.260_experiment_runner_requirements.md)
-- [50_design/10.50.220_inb_design_requirements.md](50_design/10.50.220_inb_design_requirements.md)
-- [50_design/10.50.230_iiinb_design_requirements.md](50_design/10.50.230_iiinb_design_requirements.md)
-- [50_design/10.50.240_replay_design_requirements.md](50_design/10.50.240_replay_design_requirements.md)
+- [50_design/10.50.50_inb_design_requirements.md](50_design/10.50.50_inb_design_requirements.md)
+- [50_design/10.50.60_iiinb_design_requirements.md](50_design/10.50.60_iiinb_design_requirements.md)
+- [50_design/10.50.70_replay_design_requirements.md](50_design/10.50.70_replay_design_requirements.md)
 
 ## Governance Artifacts
 
@@ -61,9 +61,14 @@ Flow-control rule:
 
 - When a process step says "update 10" for promotion or backward-flow propagation, it means `10_thought_simulator_req/` unless explicitly stated otherwise.
 
+## Directory index (coverage-aligned)
 
-
-
-
-
-
+- [10_system_architecture](10_system_architecture/)
+- [20_requirements](20_requirements/)
+- [30_verification](30_verification/)
+- [40_playground](40_playground/)
+- [50_design](50_design/)
+- [60_review](60_review/)
+- [70_measurement](70_measurement/)
+- [80_safety](80_safety/)
+- [90_validation](90_validation/)

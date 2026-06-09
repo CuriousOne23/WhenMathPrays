@@ -5,6 +5,7 @@ on:
     paths:
       - "thought_simulator/**/*.md"
       - "thought_simulator/scripts/check_doc_dependencies.py"
+      - "thought_simulator/scripts/doc_address.py"
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"
@@ -38,6 +39,7 @@ on:
     paths:
       - "thought_simulator/**/*.md"
       - "thought_simulator/scripts/check_doc_dependencies.py"
+      - "thought_simulator/scripts/doc_address.py"
       - "thought_simulator/scripts/validate_doc_frontmatter_and_ids.py"
       - "thought_simulator/scripts/validate_relation_semantics.py"
       - "thought_simulator/scripts/validate_doc_naming_prefixes.py"

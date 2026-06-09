@@ -47,7 +47,7 @@ GOVERNANCE_PROTECT = (
     "30.00_verification_user_guide.md",
     "30.01_verification_inventory_index.md",
     "30.150_verification_of_semantic_specification.md",
-    "30.160_verification_glossary.md",
+    "30.30_verification_glossary.md",
     "30.160_verification_of_reference_algorithms.md",
     "30.210_evidence_trace_exemplars_non_normative.md",
 )

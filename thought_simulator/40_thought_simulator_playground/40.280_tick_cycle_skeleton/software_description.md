@@ -140,7 +140,7 @@ All Phase B work preserved the non-cognitive, deterministic, bounded, replayable
 | 20.40_ob_requirements.md | Observability of execution behavior and lifecycle | `executed_phases` list + state_digest per tick | Artifact JSON with full outputs for every scenario |
 | 20.170_safety_requirements.md | Deterministic fail-safe termination, logged safety transitions | Explicit ValueError on violation with precise messages | negative_non_monotonic_tick and negative_invalid_phase_order (PASS with error capture) |
 | 20.90_ib_requirements.md + 20.200_traceability_matrix.md | Interface contracts and traceability | Contract dict (`tick` + `phases`) → output dict | requirements_delta.md + this document's mapping |
-| ../40.05_master_program_guide.md | Playground process, self-documenting modules, three-flow alignment in software_description | This document (Flows Alignment Statement + Agreement Statement) | N/A (process compliance) |
+| ../../40_thought_simulator_playground/40.05_master_program_guide.md | Playground process, self-documenting modules, three-flow alignment in software_description | This document (Flows Alignment Statement + Agreement Statement) | N/A (process compliance) |
 | 40.280_tick_cycle_skeleton/prototype.py | Executable skeleton (CANONICAL_PHASES, monotonic enforcement, digest) | Core logic | All scenarios execute against this module |
 | 40.280_tick_cycle_skeleton/harness.py | Test scenarios for invariants | positive_deterministic_replay + two negative cases | 3/3 PASS in artifact |
 | 40.280_tick_cycle_skeleton/artifacts/tick_cycle_verification_run_2026-05-28.json | Raw deterministic evidence | Full ledger with outputs and digests | Direct artifact used for replay verification |

@@ -113,6 +113,24 @@
           "template": "30.{band}",
           "tier": "30",
           "boundary": "strict"
+        },
+        {
+          "id": "prose_ten_fifty",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "link_fifty",
+          "template": "[50.{band}]",
+          "tier": "50",
+          "boundary": "exact"
+        },
+        {
+          "id": "prose_fifty",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
         }
       ]
     },
@@ -243,8 +261,8 @@
       ]
     },
     {
-      "id": "verification_capsule",
-      "path_glob": "30_verification/30.*/*_verification_capsule.md",
+      "id": "verification_module_md",
+      "path_glob": "30_verification/30.*/*.md",
       "contexts": [
         {
           "id": "forty_source",
@@ -253,10 +271,100 @@
           "boundary": "strict"
         },
         {
+          "id": "forty_source_dir",
+          "template": "40.{band}_",
+          "tier": "40",
+          "boundary": "after"
+        },
+        {
           "id": "hlr_ref",
           "template": "HLR-10.50.{band}-",
           "tier": "10.50",
           "boundary": "after"
+        },
+        {
+          "id": "hlr_ref_20",
+          "template": "HLR-20.",
+          "tier": "20",
+          "boundary": "after"
+        },
+        {
+          "id": "llr_ref",
+          "template": "LLR-30.{band}-",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "llr_list",
+          "template": "LLR: [LLR-30.{band}-",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "derived_from",
+          "template": "derived-from: [LLR-30.{band}-",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "module_band",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        },
+        {
+          "id": "ten_fifty_band",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "traceability_llr",
+          "template": "under `LLR-30.{band}-",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "fifty_prose",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "fifty_slug",
+          "template": "50.{band}_",
+          "tier": "50",
+          "boundary": "after"
+        },
+        {
+          "id": "fifty_backtick",
+          "template": "`50.{band}`",
+          "tier": "50",
+          "boundary": "exact"
+        }
+      ]
+    },
+    {
+      "id": "playground_master_guide",
+      "path_glob": "40_thought_simulator_playground/40.05_*.md",
+      "contexts": [
+        {
+          "id": "fifty_band",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "ten_fifty_band",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "thirty_band",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
         }
       ]
     },
@@ -271,9 +379,105 @@
           "boundary": "after"
         },
         {
+          "id": "hlr_backtick",
+          "template": "`HLR-10.50.{band}-",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
           "id": "document_id",
           "template": "Document ID:** 10.50.{band}",
           "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "title",
+          "template": "# 10.50.{band} ",
+          "tier": "10.50",
+          "boundary": "exact"
+        },
+        {
+          "id": "ten_fifty_prose",
+          "template": "10.50.{band}",
+          "tier": "10.50",
+          "boundary": "strict"
+        },
+        {
+          "id": "ten_fifty_slug",
+          "template": "10.50.{band}_",
+          "tier": "10.50",
+          "boundary": "after"
+        },
+        {
+          "id": "forty_prose",
+          "template": "40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "forty_slug",
+          "template": "40.{band}_",
+          "tier": "40",
+          "boundary": "after"
+        },
+        {
+          "id": "forty_bold",
+          "template": "**40.{band}**",
+          "tier": "40",
+          "boundary": "exact"
+        },
+        {
+          "id": "thirty_prose",
+          "template": "30.{band}",
+          "tier": "30",
+          "boundary": "strict"
+        },
+        {
+          "id": "thirty_bold",
+          "template": "**30.{band}**",
+          "tier": "30",
+          "boundary": "exact"
+        },
+        {
+          "id": "thirty_slug",
+          "template": "30.{band}_",
+          "tier": "30",
+          "boundary": "after"
+        },
+        {
+          "id": "fifty_prose",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "fifty_slug",
+          "template": "50.{band}_",
+          "tier": "50",
+          "boundary": "after"
+        },
+        {
+          "id": "fifty_backtick",
+          "template": "`50.{band}`",
+          "tier": "50",
+          "boundary": "exact"
+        },
+        {
+          "id": "status_forty",
+          "template": "Incorporating 40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "evidence_from_forty",
+          "template": "from 40.{band}",
+          "tier": "40",
+          "boundary": "strict"
+        },
+        {
+          "id": "evidence_from_thirty",
+          "template": "from 30.{band}",
+          "tier": "30",
           "boundary": "strict"
         }
       ]
@@ -309,6 +513,30 @@
           "template": "10.50.{band}",
           "tier": "10.50",
           "boundary": "strict"
+        },
+        {
+          "id": "fifty_example",
+          "template": "50.{band}",
+          "tier": "50",
+          "boundary": "strict"
+        },
+        {
+          "id": "forty_backtick",
+          "template": "`40.{band}`",
+          "tier": "40",
+          "boundary": "exact"
+        },
+        {
+          "id": "thirty_backtick",
+          "template": "`30.{band}`",
+          "tier": "30",
+          "boundary": "exact"
+        },
+        {
+          "id": "fifty_backtick",
+          "template": "`50.{band}`",
+          "tier": "50",
+          "boundary": "exact"
         }
       ]
     }

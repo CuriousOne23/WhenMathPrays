@@ -62,13 +62,13 @@ If you are new to this repository, use this order:
 4. [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
 5. [30_verification/README.md](30_verification/README.md)
 6. [30_verification/30.01_verification_inventory_index.md](30_verification/30.01_verification_inventory_index.md)
-7. [30_verification/30.160_verification_glossary.md](30_verification/30.160_verification_glossary.md)
+7. [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
 
 Then review canonical requirement anchors:
 
-8. [10_thought_simulator_req/10.20_tp_requirements.md](10_thought_simulator_req/10.20_tp_requirements.md)
-9. [10_thought_simulator_req/10.30_basin_requirements.md](10_thought_simulator_req/10.30_basin_requirements.md)
-10. [10_thought_simulator_req/10.40_scheduler_requirements.md](10_thought_simulator_req/10.40_scheduler_requirements.md)
+8. [10_thought_simulator_req/50_design/10.50.150_tp_requirements.md](10_thought_simulator_req/50_design/10.50.150_tp_requirements.md)
+9. [10_thought_simulator_req/50_design/10.50.160_basin_requirements.md](10_thought_simulator_req/50_design/10.50.160_basin_requirements.md)
+10. [10_thought_simulator_req/50_design/10.50.210_scheduler_requirements.md](10_thought_simulator_req/50_design/10.50.210_scheduler_requirements.md)
 
 Then review canonical verification evidence snapshots:
 
@@ -100,7 +100,7 @@ Process control sources:
 
 - governance and promotion gates: [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
 - construction workflow rules: [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
-- shared verification vocabulary: [30_verification/30.160_verification_glossary.md](30_verification/30.160_verification_glossary.md)
+- shared verification vocabulary: [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
 
 ## Core Reading Path
 
@@ -188,7 +188,7 @@ Top-level `thought_simulator/` direct children:
 - [REFACTOR_2026-05-28_PHASE10.md](archive/refactors/REFACTOR_2026-05-28_PHASE10.md)
 - [REFACTOR_2026-05-28_PHASE11.md](archive/refactors/REFACTOR_2026-05-28_PHASE11.md)
 - [REFACTOR_2026-05-28_PHASE12.md](archive/refactors/REFACTOR_2026-05-28_PHASE12.md)
-- [RENAMING_MIGRATION_REPORT.md](RENAMING_MIGRATION_REPORT.md)
+- [RENAMING_MIGRATION_REPORT.md](archive/refactors/RENAMING_MIGRATION_REPORT.md)
 - [_broken_links.csv](_broken_links.csv)
 
 ---
@@ -196,12 +196,7 @@ Top-level `thought_simulator/` direct children:
 **Last Updated**: June 2, 2026  
 **Version**: 0.6 (Direction-Controlled 20/40/10 Flow Clarified)
 
+## Directory index (coverage-aligned)
 
-
-
-
-
-
-
-
-
+- [archive](archive/)
+- [thought_sim_dev_flow.md](thought_sim_dev_flow.md)

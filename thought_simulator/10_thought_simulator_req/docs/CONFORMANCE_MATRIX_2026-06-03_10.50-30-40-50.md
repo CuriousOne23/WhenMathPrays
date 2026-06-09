@@ -26,21 +26,21 @@ Status: COMPLIANT (checkpoint)
 ## 2. 30 Layer
 
 COMPLIANT (updated in current transaction):
-- 30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
-- 30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md
-- 30.150_tp_lifecycle/tp_state.json
-- 30.150_tp_lifecycle/determinism_run2.json
-- 30.150_tp_lifecycle/determinism_run3.json
-- 30.270_math_prototypes/30.270_math_prototypes_verification_capsule.md
-- 30.160_basin_prototypes/30.160_basin_prototypes_verification_capsule.md
-- 30.210_scheduler_prototypes/30.210_scheduler_prototypes_verification_capsule.md
-- 30.220_regulator_prototypes/30.220_regulator_prototypes_verification_capsule.md
-- 30.230_tick_cycle_skeleton/30.230_tick_cycle_skeleton_verification_capsule.md
-- 30.240_snapshot_prototypes/30.240_snapshot_prototypes_verification_capsule.md
-- 30.250_event_log_prototypes/30.250_event_log_prototypes_verification_capsule.md
-- 30.260_experiment_runner/30.260_experiment_runner_verification_capsule.md
-- 30.160_verification_glossary.md
-- glossary_term_registry.json
+- ../../30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
+- ../../30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md
+- ../../30_verification/30.150_tp_lifecycle/tp_state.json
+- ../../30_verification/30.150_tp_lifecycle/determinism_run2.json
+- ../../30_verification/30.150_tp_lifecycle/determinism_run3.json
+- ../../30_verification/30.270_math_prototypes/30.270_math_prototypes_verification_capsule.md
+- ../../30_verification/30.160_basin_prototypes/30.160_basin_prototypes_verification_capsule.md
+- ../../30_verification/30.210_scheduler_prototypes/30.210_scheduler_prototypes_verification_capsule.md
+- ../../30_verification/30.220_regulator_prototypes/30.220_regulator_prototypes_verification_capsule.md
+- ../../30_verification/30.230_tick_cycle_skeleton/30.230_tick_cycle_skeleton_verification_capsule.md
+- ../../30_verification/30.240_snapshot_prototypes/30.240_snapshot_prototypes_verification_capsule.md
+- ../../30_verification/30.250_event_log_prototypes/30.250_event_log_prototypes_verification_capsule.md
+- ../../30_verification/30.260_experiment_runner/30.260_experiment_runner_verification_capsule.md
+- ../../30_verification/30.30_verification_glossary.md
+- ../../30_verification/glossary_term_registry.json
 
 NEEDS_EDIT:
 - none (legacy-pattern sweep: clear)
@@ -50,29 +50,29 @@ Note: 30.150 evidence JSON artifacts were refreshed from the current 40.05 harne
 ## 3. 40 Layer
 
 COMPLIANT (updated in current transaction):
-- 40.05_master_program_guide.md
-- 40.160_tp_lifecycle/prototype.py
-- 40.160_tp_lifecycle/harness.py
-- 40.160_tp_lifecycle/software_description.md
-- 40.160_tp_lifecycle/verification_capsule.md
-- 40.160_tp_lifecycle/requirements_delta.md
-- 40.160_tp_lifecycle/artifacts/tp_state.json
-- 40.160_tp_lifecycle/artifacts/determinism_run2.json
-- 40.160_tp_lifecycle/artifacts/determinism_run3.json
-- 40.260_basin_prototypes/software_description.md
-- 40.260_basin_prototypes/verification_capsule.md
-- 40.260_basin_prototypes/harness.py
-- 40.260_basin_prototypes/artifacts/basin_verification_run_2026-05-27.json
-- 40.270_scheduler_prototypes/software_description.md
-- 40.270_scheduler_prototypes/verification_capsule.md
-- 40.270_scheduler_prototypes/harness.py
-- 40.270_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
-- 40.330_math_prototypes/software_description.md
-- 40.320_regulator_prototypes/software_description.md
-- 40.280_tick_cycle_skeleton/software_description.md
-- 40.290_snapshot_prototypes/software_description.md
-- 40.300_event_log_prototypes/software_description.md
-- 40.310_experiment_runner/software_description.md
+- ../../40_thought_simulator_playground/40.05_master_program_guide.md
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/prototype.py
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/harness.py
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/software_description.md
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/verification_capsule.md
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/requirements_delta.md
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/artifacts/tp_state.json
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/artifacts/determinism_run2.json
+- ../../40_thought_simulator_playground/40.160_tp_lifecycle/artifacts/determinism_run3.json
+- ../../40_thought_simulator_playground/40.260_basin_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.260_basin_prototypes/verification_capsule.md
+- ../../40_thought_simulator_playground/40.260_basin_prototypes/harness.py
+- ../../40_thought_simulator_playground/40.260_basin_prototypes/artifacts/basin_verification_run_2026-05-27.json
+- ../../40_thought_simulator_playground/40.270_scheduler_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.270_scheduler_prototypes/verification_capsule.md
+- ../../40_thought_simulator_playground/40.270_scheduler_prototypes/harness.py
+- ../../40_thought_simulator_playground/40.270_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
+- ../../40_thought_simulator_playground/40.330_math_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.320_regulator_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.280_tick_cycle_skeleton/software_description.md
+- ../../40_thought_simulator_playground/40.290_snapshot_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.300_event_log_prototypes/software_description.md
+- ../../40_thought_simulator_playground/40.310_experiment_runner/software_description.md
 
 SCAFFOLD (created to complete required directory coverage):
 - 40.110_cob_prototypes/*
@@ -83,11 +83,11 @@ SCAFFOLD (created to complete required directory coverage):
 - 40.140_oub_prototypes/*
 
 ARCHIVED (moved to layer-local archive):
-- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/failures.md
-- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/insights.md
-- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/requirements_traceability.md
-- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/updated_requirements.md
-- archive/2026-06-03_layer-cleanup/40.330_math_prototypes/verification_summary.md
+- 40_thought_simulator_playground/archive/2026-06-03_layer-cleanup/40.10_math_prototypes/failures.md
+- 40_thought_simulator_playground/archive/2026-06-03_layer-cleanup/40.10_math_prototypes/insights.md
+- 40_thought_simulator_playground/archive/2026-06-03_layer-cleanup/40.10_math_prototypes/requirements_traceability.md
+- 40_thought_simulator_playground/archive/2026-06-03_layer-cleanup/40.10_math_prototypes/updated_requirements.md
+- 40_thought_simulator_playground/archive/2026-06-03_layer-cleanup/40.10_math_prototypes/verification_summary.md
 - archive/2026-06-03_layer-cleanup/**/__pycache__/* (bytecode cache directories)
 
 NEEDS_EDIT:
@@ -97,14 +97,14 @@ NEEDS_EDIT:
 
 COMPLIANT (updated in current transaction):
 - 50.05_software_spec_construction_guide.md
-- 50.170_tp_design.md
+- 50.150_tp_design.md
 - 50.00_design_traceability_index.md
-- 50.150_geometry_engine_design.md
-- 50.31_regulator_design_support.md
-- 50.100_tick_cycle_design_support.md
+- 50.270_geometry_engine_design.md
+- 50.220_regulator_design_support.md
+- 50.230_tick_cycle_design_support.md
 - 50.240_snapshot_contract_design.md
-- 50.73_event_log_observability_design.md
-- 50.83_experiment_runner_testing_design.md
+- 50.250_event_log_observability_design.md
+- 50.260_experiment_runner_testing_design.md
 
 NEEDS_EDIT:
 - none (legacy-pattern sweep: clear)

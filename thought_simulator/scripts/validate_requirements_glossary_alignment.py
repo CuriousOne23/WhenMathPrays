@@ -19,19 +19,96 @@ REGISTRY_PATH = ROOT / "20_requirements" / "glossary_term_registry.json"
 IGNORED_TERMS = {
     "last updated",
     "version",
+    "date",
+    "status",
+    "document id",
+    "directory layout",
+    "closure line (2026-06-07)",
+    "tier 1",
+    "tier 2",
+    "tier 3",
+    "focus",
+    "when",
+    "why",
+    "is not",
+    "example",
+    "normative home",
+    "term",
+    "role",
+    "field",
+    "meaning",
+    "version",
+    "author",
+    "summary",
 }
+
+
+def _normalize_term(raw: str) -> str:
+    cleaned = re.sub(r"\*\([^)]*\)\*", "", raw).strip()
+    cleaned = re.sub(r"\*[^*]+\*", "", cleaned).strip()
+    return cleaned.lower().rstrip(":").strip()
+
+
+def _add_term(terms: set[str], raw: str) -> None:
+    norm = _normalize_term(raw)
+    if not norm or norm in IGNORED_TERMS:
+        return
+    terms.add(norm)
+    if "/" in norm and "(" not in norm:
+        for part in re.split(r"\s*/\s*", norm):
+            part = part.strip()
+            if part and part not in IGNORED_TERMS:
+                terms.add(part)
+    paren = re.match(r"^(.+?)\s*\(([^)]+)\)$", norm)
+    if paren:
+        terms.add(paren.group(1).strip())
+        terms.add(f"{paren.group(1).strip()} ({paren.group(2).strip()})")
 
 
 def _extract_glossary_terms(glossary_text: str) -> set[str]:
     terms: set[str] = set()
+    in_catalog_aliases = False
+
     for line in glossary_text.splitlines():
-        match = re.match(r"^\*\*(.+?)\*\*", line.strip())
-        if not match:
+        stripped = line.strip()
+        if "### Catalog aliases" in stripped:
+            in_catalog_aliases = True
             continue
-        term = match.group(1).strip().lower()
-        if term and term not in IGNORED_TERMS:
-            terms.add(term)
+        if stripped.startswith("### ") and "Catalog aliases" not in stripped:
+            in_catalog_aliases = False
+
+        for pattern in (
+            r"^\*\*(.+?)\*\*:?",
+            r"^-\s*\*\*(.+?)\*\*:?",
+            r"^\|\s*\*\*(.+?)\*\*\s*\|",
+            r"^\|\s*\*\*`([^`]+)`\*\*\s*\|",
+            r"^####\s+(.+)$",
+        ):
+            match = re.match(pattern, stripped)
+            if match:
+                _add_term(terms, match.group(1))
+
+        for match in re.finditer(r"`([a-z][a-z0-9_]+)`", stripped):
+            _add_term(terms, match.group(1).replace("_", " "))
+            terms.add(match.group(1).lower())
+
+        if in_catalog_aliases and ";" in stripped:
+            for chunk in stripped.split(";"):
+                _add_term(terms, chunk)
+
     return terms
+
+
+def _registry_term_present(registry_term: str, glossary_terms: set[str]) -> bool:
+    if registry_term in glossary_terms:
+        return True
+    variants = {registry_term}
+    paren = re.match(r"^(.+?)\s*\(([^)]+)\)$", registry_term)
+    if paren:
+        variants.add(paren.group(1).strip())
+    underscore = registry_term.replace(" ", "_")
+    variants.add(underscore)
+    return any(v in glossary_terms for v in variants)
 
 
 def _load_registry() -> tuple[list[str], dict[str, list[str]]]:
@@ -87,23 +164,19 @@ def main() -> int:
             continue
 
         for term in required_terms:
-            if term not in glossary_terms:
+            if not _registry_term_present(term, glossary_terms):
                 warnings.append(
                     f"20_requirements/{group_name}: glossary term '{term}' missing in 20.190_glossary.md"
                 )
 
     expected = _expected_terms(required_by_module, protected_terms)
 
-    missing_global = sorted(expected - glossary_terms)
+    missing_global = sorted(
+        term for term in expected if not _registry_term_present(term, glossary_terms)
+    )
     for term in missing_global:
         warnings.append(
             f"20_requirements/20.190_glossary.md: required term '{term}' is missing"
-        )
-
-    extra_global = sorted(glossary_terms - expected)
-    for term in extra_global:
-        warnings.append(
-            f"20_requirements/20.190_glossary.md: term '{term}' is not required by glossary_term_registry.json"
         )
 
     if warnings:

@@ -17,11 +17,11 @@ Execute `50.05_software_spec_construction_guide.md` coverage for the `40.330` to
 ## New Canonical Outputs in This Batch
 
 - Requirement anchor:
-  - `10.10_math_requirements.md`
+  - `../50_design/10.50.270_math_requirements.md`
 - Verification capsule + delta + artifact binding:
   - `30_verification/30.270_math_prototypes/`
 - Design-spec output:
-  - `50_thought_simulator_design/50.150_geometry_engine_design.md`
+  - `50_thought_simulator_design/50.270_geometry_engine_design.md`
 
 ## Gate and Boundary Notes
 
@@ -31,4 +31,4 @@ Execute `50.05_software_spec_construction_guide.md` coverage for the `40.330` to
 
 ## Non-Trivial Rationale Record
 
-- ADR: `adrs/ADR-2026-05-28-40.330-to-40.270-coverage.md`
+- ADR: `adrs/ADR-2026-05-28-40.10-to-40.40-coverage.md`
