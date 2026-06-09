@@ -1,35 +1,44 @@
-**Architectural comments on the proposed moves + renames (comments only).**
+**Architectural comments on CP’s analysis and proposal (comments only).**
 
-### 1. Directory placement
+### On the core problem identified
 
-- Introducing `05_system_architecture/` as a new top-level peer to `00_program_governance/`, `10_thought_simulator_req/`, `20_requirements/`, `30_verification/`, `40_thought_simulator_playground/`, and `50_thought_simulator_design/` is a coherent move if the intent is to carve out a dedicated home for cross-layer *governance rules* that sit above the individual tier artifacts. It signals that "how the 50/30/10.50/40 flows are supposed to interact" is a first-class architectural concern rather than being owned by any single tier (currently the two files live in `10_thought_simulator_req/docs/`, which makes them feel like 10-series supporting material).
+CP correctly surfaces a real and growing semantic collision. The introduction of `05_system_architecture/` as the home for meta/cross-layer governance (the flow-down protocol, construction rules, promotion obligations, etc.) makes the existing `10_thought_simulator_req/10_system_architecture/` directory name actively misleading. 
 
-- Placement of the flow-down protocol (`50_to_10.50...`) into the new 05 tier aligns with treating it as meta-architecture rather than a 50-series design spec. The current location under 10/docs/ (alongside promotion_protocol.md, BACKFLOW logs, DESIGN_SYNC_LOGs, etc.) treats it more as 10-layer supporting documentation. Moving it up makes the "system architecture governance" claim explicit.
+The 10/ subdirectory contains requirement-level specifications (10.10.10_system_architecture.md, module contracts, interrupts model, scheduler architecture, etc.). These are *not* system-wide architecture governance; they are the architectural *requirements* that live inside the 10-tier. Naming it “system_architecture” under the 10 tree creates exactly the kind of ambiguity the 05 tier was meant to eliminate. This is a classic case of accumulated naming that no longer matches the intentional layering model you are now enforcing.
 
-- Placement of the 40→10.50 guide into `40_thought_simulator_playground/docs/` is reasonable on its face because the content is guidance for *40-series authors* on how to produce material consumable by the 10.50 layer. However, it creates a new top-level `docs/` sibling to 40.05 and 40.510. Today, 40-series governance lives at the root of the playground (40.05, 40.510), while per-module supporting material lives inside the individual `40.xxx_*/docs/` folders. A root-level `docs/` under 40 is a mild departure from that pattern.
+### On CP’s interpretation of the layers
 
-### 2. Numeric prefixes
+The distinction CP draws is sound:
 
-- `05.20` for the flow-down protocol is internally consistent *if* a `05.10_software_spec_construction_guide.md` (or equivalent) is also being established in the same tier. The prompt positions 05.20 as following 05.10, which gives a clean 05.10 / 05.20 sequence for the two main cross-layer construction and flow rules. This mirrors the 40.05 (master process) + 40.510 (program tracker) pattern at the 40 tier.
+- 05 = architecture *of the system* (the rules that govern how the tiers relate to one another).
+- 10 = architecture *of requirements* (the requirement anchors, design contracts, and requirement-level structures that 10.50 and the rest of the 10 tier own).
 
-- `40.07` for the 40-to-10.50 guide slots logically after 40.05 (the master program guide) and before the 40.100+ module band and 40.510. Because 40.05 itself emphasizes that "40-series module names are fully independent and standalone," using a low 40.0x number for another piece of 40-tier governance guidance is consistent with the "governance before modules" ordering already visible in the playground root.
+This aligns with the broader tiering you have been establishing (05 governance, 10 requirements, 20 design, 30 verification, 40 prototypes + authoring guidance, 50 specs). It also respects the explicit statement in 40.05 that each tier’s numbering is independent and that cross-layer handoffs must be explicit. The current “10_system_architecture” name violates that independence by borrowing system-level language for a requirements-tier artifact.
 
-- One minor observation: 40.510 is a high number used for the big refactor tracker, not because of sequence but because it is a distinct program-level artifact. Using 40.07 for a guide keeps the low numbers available for governance/process documents, which matches how 40.05 is used.
+### On the proposed rename
 
-### 3. Filenames
+All three options CP offers are improvements over the status quo. A few observations on each:
 
-- `05.20_flow_down_protocol_50_to_10.50.md` is descriptive and follows the existing "number + descriptive title" style (compare 40.05_master_program_guide.md, 40.510_refactor.md, 30.00_verification_user_guide.md). The `50_to_10.50` suffix makes the cross-layer direction immediately visible, which is useful given how many files in the repo carry similar direction indicators (FORWARD_FLOW_*, BACKFLOW_*, DESIGN_SYNC_LOG, etc.).
+- `10_design_contract_architecture/` is the most precise of the three. It directly names what the directory actually contains (design contracts expressed as requirements) and keeps the word “architecture” only where it is scoped to the 10 tier. It also creates a nice parallel with the 10.50 files (which are themselves design requirements).
 
-- `40.07_40_to_10.50_design_requirements_guide.md` is similarly clear. The leading `40.07` + the explicit `40_to_10.50` direction makes the ownership and purpose obvious even when the file is viewed outside its directory. This is consistent with how other cross-boundary artifacts are named.
+- `10_design_contracts/` is the cleanest and most readable. It drops the overloaded “architecture” word entirely for the directory, which reduces future collision risk. This may be the strongest choice if you want the 10 tier to feel like a requirements/contracts tier rather than an architecture tier.
 
-### 4. Layering logic (05 = architecture governance, 40 = prototype authoring guidance)
+- `10_architecture_requirements/` is explicit and defensive. It makes the “requirements” qualifier unmistakable. The downside is that it still uses “architecture” at the directory level, which could continue to cause the same surface-level confusion when people scan the tree (they will still see “architecture” under 10 and under 05).
 
-- The proposed layering is a strengthening of the existing three-flow and promotion model. Treating 05 as the home for rules that govern *how the layers talk to each other* (especially the downward leg from 50 and the evidence-to-anchor leg from 40) is a natural evolution of the distinction already drawn in 30.00 ("10.50 + 30 before any 50"), 50.05 (pre-construction verification gate), and promotion_protocol.md (controlled backward flow). It makes the "architecture of the architecture" visible as its own tier rather than scattered across 00, 10/docs, and 50.
+None of the three options break the independence rule that 40.05 articulates. They all make the 10 tier’s contents subordinate to the 10-series semantics rather than pretending to be system-level.
 
-- Housing the 40-to-10.50 guide under 40 reinforces the point made in 40.05 that the playground is not just "throwaway prototypes" — it has a defined responsibility to produce material that can be lifted into the canonical 10.50 layer. This is consistent with the wave coverage notes (W3 in particular) already doing exactly that aggregation and noting 10.50 peers.
+### On the broader layering and governance implications
 
-- A potential tension worth noting: `00_program_governance/` already contains `10_architecture/`, and `10_thought_simulator_req/` contains `10_system_architecture/`. Introducing a 05 tier labeled "system-architecture governance" for cross-layer flow rules creates three places that sound like they could own architecture-level concerns. The proposal appears to intend 05 for *normative cross-tier process rules* (flow direction, promotion obligations, downward refinement protocols) while leaving detailed 10.10.* architectural principles and 00-level program governance where they are. That distinction is clear in intent but will need to be maintained carefully in practice so the 05 tier does not become a duplicate home for things that already live under 00 or inside 10_system_architecture.
+This rename is a necessary supporting move for the 05 tier to do its job. The two documents we discussed earlier (the flow-down protocol now proposed as 05.20 and the 40-to-10.50 guide) only make sense if the 10-tier’s own architecture artifacts are clearly *not* claiming the system-architecture role. Otherwise you recreate the exact ambiguity the 05/40 placements were meant to resolve.
 
-- The overall direction (05 for meta-governance of the flows, 40 for "how 40 authors should feed the 10.50 layer") is consistent with the repeated emphasis throughout the repo on naming independence between tiers while still requiring explicit handoff points (10.50 as the required anchor before 50, 30.00 as the verification promotion that pulls 10.50 along, wave notes as batch 30 normalize).
+One minor tension worth noting: several files inside the current `10_system_architecture/` directory carry names like `10.10.10_system_architecture.md`. Those internal names already use “system” language. A directory rename alone will not fully clean the semantics unless the file-level naming inside is also eventually aligned (e.g., toward “design contract” or “requirement architecture” terminology). That is a separate but related cleanup.
 
-These are the main architectural observations on the four requested dimensions. The moves would visibly elevate the cross-layer flow rules and give the 40 tier an explicit "authoring for the canonical requirements layer" artifact, both of which are reasonable given the current state of 40.05, the wave notes, and the existing pre-construction gates.
+The rename also reinforces the pattern we saw with the two guides: governance that crosses layers (05) or that is specific to how one tier feeds another (40.07) gets its own explicit home, while intra-tier requirement architecture stays clearly inside its tier (10).
+
+### On CP’s overall framing
+
+CP’s diagnosis that this is “the right moment to fix the architectural confusion” is accurate. The 05 tier only delivers its intended clarity if the existing directory that sounds like it is doing the same job is disambiguated. Leaving the name as-is would make the 05 tier feel like it is fighting the 10 tier for the word “system architecture” rather than defining a distinct meta layer.
+
+The proposal is minimal, targeted, and directly serves the goal of making the repository reflect thought rather than accumulated artifacts. It is consistent with the tiering model you have been articulating and with the independence principle already documented in 40.05.
+
+These are the substantive architectural observations on CP’s comment.
