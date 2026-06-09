@@ -110,5 +110,5 @@ Canonical verification report for `40.270_scheduler_prototypes`.
 - Structure coherence: aligned with canonical playground module layout + 40.05.
 - Verification maturity: 12 scenarios, full artifact, invariants ledger, three-flow statements present in delta/capsule/software_description.
 - Contract clarity: IO (via from_contract/apply_contract/snapshot), policy boundaries, and observability fields are explicit and replay-safe.
-- Next required milestone (per software_description): 30.00 promotion to 30.210 (if requested); use Phase B evidence to inform 10.50.210 or 50.40_scheduler_design_spec.md. Open policy/tie-break decisions remain with 50/10.50.
+- Next required milestone (per software_description): 30.00 promotion to 30.210 (if requested); use Phase B evidence to inform 10.50.210 or 50.210_scheduler_design_spec.md. Open policy/tie-break decisions remain with 50/10.50.
 

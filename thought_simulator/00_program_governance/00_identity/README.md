@@ -19,6 +19,7 @@ Machine-readable canonical identity registry for controlled renames across tiers
 - **Naming layout target (guidance only):** [naming_strategy_target.md](naming_strategy_target.md)
 - **40 renumber manifest (executed 2026-06-09):** [40_renumber_manifest.json](40_renumber_manifest.json)
 - **30 ↔ 10.50 renumber manifest (executed 2026-06-09):** [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json)
+- **50 renumber manifest (executed 2026-06-09):** [50_renumber_manifest.json](50_renumber_manifest.json)
 
 ## Commands
 

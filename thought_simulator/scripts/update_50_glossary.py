@@ -177,7 +177,7 @@ def main() -> int:
     print("=== REGISTRY SUGGESTIONS ===")
     # For files that have observed terms not yet declared for them
     for rel_file, terms in sorted(observed_by_file.items()):
-        key = Path(rel_file).name  # e.g. "50.36_gb_design_spec.md"
+        key = Path(rel_file).name  # e.g. "50.43_gb_design_spec.md"
         current = set(_normalize(t) for t in required_by_module.get(key, []))
         new_for_this = sorted(terms - current - protected)
         if new_for_this:

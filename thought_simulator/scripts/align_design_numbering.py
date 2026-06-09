@@ -40,13 +40,13 @@ Design goals (per project process):
     see the output of one command.
 
 Current known drift (as of 2026-06):
-  - 50 has extra governance docs at 50.00-50.09 (intended and documented in 50.05).
-  - 50.09_geometry_engine_design.md should be 50.10 to align with:
+  - 50 has extra governance docs at 50.00-50.270 (intended and documented in 50.05).
+  - 50.270_geometry_engine_design.md should be 50.10 to align with:
       10.50.270_math_requirements.md
       40.330_math_prototypes/
       30.270_math_prototypes/
-  - 50.50_data_structures.md and 50.50_regulator_design_support.md conflict on .50.
-    Regulator aligns with 10.50.220 / 40.50 / 30.220. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.45 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.
+  - 50.220_data_structures.md and 50.220_regulator_design_support.md conflict on .50.
+    Regulator aligns with 10.50.220 / 40.50 / 30.220. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.140.010 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.
 
 Component numbering convention (to be documented in 50.05 and 50.00 index):
   .10  Math/Geometry
@@ -69,11 +69,11 @@ Component numbering convention (to be documented in 50.05 and 50.00 index):
   .100 InB
   .110 OuB
 
-  In 50: 50.00-50.09 are reserved for 50-series governance/intro docs
+  In 50: 50.00-50.270 are reserved for 50-series governance/intro docs
          (index, glossary, construction guide, system architecture, etc.).
          Component docs then follow the table above.
 
-  Level 2 subs use 50.xx.yy (e.g. 50.36.10)
+  Level 2 subs use 50.xx.yy (e.g. 50.43.10)
 
 Usage:
   python thought_simulator/scripts/align_design_numbering.py --dry-run
@@ -101,16 +101,16 @@ DESIGN_50 = ROOT / "50_thought_simulator_design"
 # Files to rename (old relative name -> new relative name)
 # Only list files that actually need to change for uniformity.
 RENAME_MAP: Dict[str, str] = {
-    "50.09_geometry_engine_design.md": "50.10_geometry_engine_design.md",
-    # Data Structures moved manually to 50.45 (see discussion: no 40/30 peer equivalent;
+    "50.270_geometry_engine_design.md": "50.10_geometry_engine_design.md",
+    # Data Structures moved manually to 50.140.010 (see discussion: no 40/30 peer equivalent;
     # placed between .40 and .50 for Regulator alignment). Previous plan was 50.55.
-    # "50.50_data_structures.md": "50.45_data_structures.md",
+    # "50.220_data_structures.md": "50.42.010_data_structures.md",
     # 10_ tier placement fixes (use full path from thought_simulator root so the
     # generalized resolver above can handle them). Example of the reported issue:
     # when correcting a GB reqs file that was placed in 10.10 architecture docs
-    # but named 10.50.130 (colliding with 10.50.130_gb_design... ), it must become
+    # but named 10.50.43 (colliding with 10.50.43_gb_design... ), it must become
     # 10.10.36_gb_requirements.md -- the script must NEVER auto-pick e.g. 10.10.60.
-    # "10_thought_simulator_req/10_system_architecture/10.50.130_gb_requirements.md":
+    # "10_thought_simulator_req/10_system_architecture/10.50.43_gb_requirements.md":
     #     "10_thought_simulator_req/10_system_architecture/10.10.36_gb_requirements.md",
 }
 
@@ -125,12 +125,12 @@ CONTENT_UPDATE_TARGETS = [
 # Be conservative: only unambiguous full references.
 REPLACEMENT_PAIRS: List[Tuple[str, str]] = [
     # (old, new)
-    ("50.09_geometry_engine_design.md", "50.10_geometry_engine_design.md"),
-    # ("50.50_data_structures.md", "50.45_data_structures.md"),  # performed manually; see 50.45 choice rationale above and in 50.05/50.00
+    ("50.270_geometry_engine_design.md", "50.10_geometry_engine_design.md"),
+    # ("50.220_data_structures.md", "50.42.010_data_structures.md"),  # performed manually; see 50.140.010 choice rationale above and in 50.05/50.00
     # LLRs that embed the old number (in the geometry file itself)
-    ("LLR-50.09-001", "LLR-50.10-001"),
+    ("LLR-50.270-001", "LLR-50.10-001"),
     # 10_ tier example (commented; add basename or full as needed when activating a 10 rename):
-    # ("10.50.130_gb_requirements.md", "10.10.36_gb_requirements.md"),
+    # ("10.50.43_gb_requirements.md", "10.10.36_gb_requirements.md"),
 ]
 
 # Directories to scan for references (relative to ROOT)
@@ -219,7 +219,7 @@ def main():
 
     print("=== Design Numbering Alignment Plan ===")
     print("This script implements the uniform component numbering discussed for the")
-    print("design layers (40, 30, 10.50, 50). 50.00-50.09 remain reserved for")
+    print("design layers (40, 30, 10.50, 50). 50.00-50.270 remain reserved for")
     print("50-series governance documents per 50.05.")
     print()
     print("POLICY: Nothing happens automatically. You may manually rename files or change")
@@ -235,7 +235,7 @@ def main():
     renames: List[Tuple[Path, Path]] = []
     for old_rel, new_rel in RENAME_MAP.items():
         # Support both 50-only relative (legacy) and full paths relative to thought_simulator root
-        # (for 10_ tier corrections like 10.50.130_gb... in architecture dir -> 10.10.36_... )
+        # (for 10_ tier corrections like 10.50.43_gb... in architecture dir -> 10.10.36_... )
         if "/" in old_rel or "\\" in old_rel:
             old = ROOT / old_rel
             new = ROOT / new_rel
@@ -287,7 +287,7 @@ def main():
 
     # 3. Special notes / warnings
     print("Warnings / items requiring human review:")
-    print("  - LLR identifiers embedded in frontmatter (e.g. LLR-50.09-001) will be updated")
+    print("  - LLR identifiers embedded in frontmatter (e.g. LLR-50.270-001) will be updated")
     print("    to LLR-50.10-001 for the geometry file. Review that no external references")
     print("    (outside this repo or in historical docs) rely on the old LLR numbers.")
     print("  - The 50.00 index table will be updated automatically for the two rows.")
@@ -299,7 +299,7 @@ def main():
     print("    it will be caught by the string replacement (e.g. in links or explicit mentions).")
     print("  - After applying, run the full validation suite (see CONTRIBUTING_CHANGE_WORKFLOW.md).")
     print("  - Consider updating any external notes, old branches, or the 20-series if they")
-    print("    hard-code the old 50.09 / 50.50_data names (Data Structures is now at 50.45).")
+    print("    hard-code the old 50.270 / 50.220_data names (Data Structures is now at 50.140.010).")
     print("  - User guides, READMEs, and cross-layer references are included in the broad scan.")
     print()
 

@@ -1,0 +1,173 @@
+{
+  "approved_by": "program-maintainer",
+  "description": "Phase-3 50 design alignment to post-Phase-2 10.50/30 stride-10 bands. Headroom docs (50.07-50.08, 50.30, 50.70, 50.80, 50.90, 50.130 ui) unchanged.",
+  "executed": "2026-06-09",
+  "file_renames": [
+    {
+      "aligns": "10.50.50",
+      "entry_id": "50.100_inb_design_spec",
+      "new_band": "50",
+      "wave": "W1"
+    },
+    {
+      "aligns": "10.50.60",
+      "entry_id": "50.101_iiinb_design_spec",
+      "new_band": "60",
+      "wave": "W1"
+    },
+    {
+      "aligns": "10.50.70",
+      "entry_id": "50.207_replay_design_spec",
+      "new_band": "70",
+      "wave": "W1"
+    },
+    {
+      "aligns": "10.50.80",
+      "entry_id": "50.102_usp_design_spec",
+      "new_band": "80",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.90",
+      "entry_id": "50.103_upi_design_spec",
+      "new_band": "90",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.100",
+      "entry_id": "50.32_cob_design_support",
+      "new_band": "100",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.110",
+      "entry_id": "50.33_cil_design_support",
+      "new_band": "110",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.120",
+      "entry_id": "50.34_cop_design_support",
+      "new_band": "120",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.130",
+      "entry_id": "50.36_gb_design_spec",
+      "new_band": "130",
+      "wave": "W2"
+    },
+    {
+      "entry_id": "50.36.10_gb_signal_packet_format",
+      "level": 2,
+      "new_band": "130.10",
+      "parent_slug": "gb_design_spec",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.140",
+      "entry_id": "50.392_core_data_structs_design_spec",
+      "new_band": "140",
+      "wave": "W2"
+    },
+    {
+      "entry_id": "50.45_data_structures",
+      "level": 2,
+      "new_band": "140.010",
+      "note": "nested under core structs",
+      "wave": "W2"
+    },
+    {
+      "aligns": "10.50.150",
+      "entry_id": "50.20_tp_design",
+      "new_band": "150",
+      "wave": "W3"
+    },
+    {
+      "aligns": "10.50.170",
+      "entry_id": "50.35_ib_design_spec",
+      "new_band": "170",
+      "wave": "W3"
+    },
+    {
+      "aligns": "10.50.180",
+      "entry_id": "50.37_tr_software_spec",
+      "new_band": "180",
+      "wave": "W3"
+    },
+    {
+      "aligns": "10.50.190",
+      "entry_id": "50.165_dcb_stability_design",
+      "new_band": "190",
+      "wave": "W3"
+    },
+    {
+      "aligns": "10.50.200",
+      "entry_id": "50.39_mb_design_spec",
+      "new_band": "200",
+      "wave": "W3"
+    },
+    {
+      "aligns": "10.50.210",
+      "entry_id": "50.40_scheduler_design_spec",
+      "new_band": "210",
+      "wave": "W5"
+    },
+    {
+      "entry_id": "50.40_interaction_layer_design",
+      "level": 2,
+      "new_band": "210.010",
+      "note": "resolves dual 50.40",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.220",
+      "entry_id": "50.50_regulator_design_support",
+      "new_band": "220",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.230",
+      "entry_id": "50.60_tick_cycle_design_support",
+      "new_band": "230",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.240",
+      "entry_id": "50.53_snapshot_contract_design",
+      "new_band": "240",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.250",
+      "entry_id": "50.110_event_log_observability_design",
+      "new_band": "250",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.260",
+      "entry_id": "50.120_experiment_runner_testing_design",
+      "new_band": "260",
+      "wave": "W5"
+    },
+    {
+      "aligns": "10.50.270",
+      "entry_id": "50.09_geometry_engine_design",
+      "new_band": "270",
+      "wave": "B7"
+    },
+    {
+      "entry_id": "50.140_testing_strategy",
+      "new_band": "42",
+      "note": "frees 50.140 for core structs peer",
+      "wave": "headroom"
+    },
+    {
+      "entry_id": "50.130_ui_contract",
+      "new_band": "43",
+      "note": "frees 50.130 for GB peer",
+      "wave": "headroom"
+    }
+  ],
+  "schema_version": "50_renumber_manifest_v1"
+}

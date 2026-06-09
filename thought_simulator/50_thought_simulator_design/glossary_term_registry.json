@@ -11,7 +11,7 @@
     "supervisory decision"
   ],
   "required_by_module": {
-    "50.36_gb_design_spec.md": [
+    "50.43_gb_design_spec.md": [
       "governing basin (gb)",
       "signal monitor",
       "signal packet",

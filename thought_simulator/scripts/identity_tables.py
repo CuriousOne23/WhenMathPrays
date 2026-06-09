@@ -23,7 +23,7 @@ TIER_10_50_BASE = "10_thought_simulator_req/50_design"
 TIER_30_BASE = "30_verification"
 TIER_50_BASE = "50_thought_simulator_design"
 
-GOVERNANCE_BAND_50 = frozenset(range(0, 10))  # 50.00–50.09
+GOVERNANCE_BAND_50 = frozenset(range(0, 10))  # 50.00–50.270
 
 MODULE_40_RE = re.compile(r"^(40\.(?:\d+\.)*\d+)_(.+)$")
 MODULE_30_RE = re.compile(r"^(30\.(?:\d+\.)*\d+)_(.+)$")
@@ -92,7 +92,7 @@ def entries_by_id(table: dict[str, Any]) -> dict[str, IdentityEntry]:
 
 
 def parse_band(entry_id: str) -> str:
-    """Return numeric band from entry_id (e.g. 10.50.140 -> 392, 50.36.10 -> 36.10)."""
+    """Return numeric band from entry_id (e.g. 10.50.42 -> 392, 50.43.10 -> 36.10)."""
     if entry_id.startswith("10.50."):
         return entry_id.removeprefix("10.50.")
     if entry_id.startswith("30."):
@@ -121,7 +121,7 @@ def is_50_level1_component_file(name: str) -> bool:
     if not match:
         return False
     prefix = match.group(1)
-    # level-2 has more than one dot after 50 (e.g. 50.36.10)
+    # level-2 has more than one dot after 50 (e.g. 50.43.10)
     parts = prefix.split(".")
     return len(parts) == 2  # 50 + band
 
@@ -251,7 +251,7 @@ def bootstrap_all_tables() -> dict[str, dict[str, Any]]:
     level2_by_parent: dict[str, list[str]] = {}
     for path in sorted(fifty_dir.glob("50.*.md")):
         if FILE_50_LEVEL2_RE.match(path.name) and not is_50_level1_component_file(path.name):
-            parent = ".".join(path.name.split("_", 1)[0].split(".")[:2])  # 50.36 from 50.36.10
+            parent = ".".join(path.name.split("_", 1)[0].split(".")[:2])  # 50.43 from 50.43.10
             level2_by_parent.setdefault(parent, []).append(path.name)
 
     for path in sorted(fifty_dir.glob("50.*.md")):

@@ -20,7 +20,7 @@
 
 ## Not Updated (explicit scope)
 
-- `50_thought_simulator_design/50.37_tr_software_spec.md` — deferred until integration harness evidence
+- `50_thought_simulator_design/50.180_tr_software_spec.md` — deferred until integration harness evidence
 - `40.240_tr_router_prototypes/*` — proxy unchanged
 - `20.37` — initiating source (already edited prior to this log)
 
@@ -40,5 +40,5 @@
 ## Follow-Ups
 
 - Harness scenarios for `tr_needs_update` / TR commit / RB iff gate  
-- 50.37 design spec update after integration evidence  
+- 50.180 design spec update after integration evidence  
 - Optional: extend `30.160_verification_glossary.md` if TR flow contract terms are added to registry

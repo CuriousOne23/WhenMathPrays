@@ -32,7 +32,7 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 
 - **Forward Flow (20-series)**: Driven by 20.165 (DCB stability requirements — HLR-20.165-001 to -008), parent 20.106_dcb_requirements.md, 20.10 architectural principles, and 20.30 functional model contraction/boundedness semantics.
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
-- **Iterative Design Flow (50-series influence)**: 50.165_dcb_stability_design.md scaffold now exists (qualitative focus only). Further design elaboration will be driven by evidence from this 40.220 module.
+- **Iterative Design Flow (50-series influence)**: 50.190_dcb_stability_design.md scaffold now exists (qualitative focus only). Further design elaboration will be driven by evidence from this 40.220 module.
 
 **Agreement Statement**: Aligned — CP review 2026-06-08 confirms W3 extension scope: read-only qualitative stability observer over 40.210 event rates and trajectory geometry; no numeric thresholds, no TP writes, no algorithms in 20.165 playground layer. Phase B joint evidence with 40.210 required before promotion.
 
@@ -56,6 +56,6 @@ Implement prototype and harness behavior (when approved), then populate verifica
 - 20.10_ts_architectural_principles.md
 - 20.30_ts_functional_model.md
 - 40.05_master_program_guide.md
-- 50.165_dcb_stability_design.md
+- 50.190_dcb_stability_design.md
 - 30_verification/30.190_dcb_stability_prototypes/
 - 10.50.190_dcb_stability_requirements.md

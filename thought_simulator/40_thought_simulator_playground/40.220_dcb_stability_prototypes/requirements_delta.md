@@ -7,7 +7,7 @@
 
 - **Forward Flow (20-series)**: Driven by 20.165 (DCB stability requirements), 20.106 (DCB definition), 20.10 architectural principles, and 20.30 functional model contraction/boundedness.
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
-- **Iterative Design Flow (50-series influence)**: 50.165_dcb_stability_design.md scaffold now exists (qualitative focus). Further design elaboration will be driven by evidence from this 40.220 module.
+- **Iterative Design Flow (50-series influence)**: 50.190_dcb_stability_design.md scaffold now exists (qualitative focus). Further design elaboration will be driven by evidence from this 40.220 module.
 
 **Agreement Statement**: Scaffold stage only. Alignment will be asserted after Phase A software_description approval and Phase B execution.
 
@@ -40,7 +40,7 @@ This file will track how the DCB stability prototype aligns with and explores th
 ## Traceability Targets
 - thought_simulator/20_requirements/20.165_dcb_stability_requirements.md (primary)
 - thought_simulator/30_verification/30.190_dcb_stability_prototypes/
-- thought_simulator/50_thought_simulator_design/50.165_dcb_stability_design.md
+- thought_simulator/50_thought_simulator_design/50.190_dcb_stability_design.md
 - thought_simulator/10_thought_simulator_req/50_design/10.50.190_dcb_stability_requirements.md
 - ../40.05_master_program_guide.md (master process context)
 
@@ -49,7 +49,7 @@ This file will track how the DCB stability prototype aligns with and explores th
 - 20.165 (source requirements + qualitative stability argument)
 - 40.220 (this module: exploration scaffold)
 - 30.190 (verification capsule/delta scaffold)
-- 50.165 (design support scaffold)
+- 50.190 (design support scaffold)
 - 10.50.190 (design requirements scaffold)
 
 See also the updates in 20.200_traceability_matrix.md and 50.00_design_traceability_index.md.

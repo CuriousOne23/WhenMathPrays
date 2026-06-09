@@ -1,7 +1,7 @@
 # 40.130_gb_prototypes/prototype.py
 """
 Governing Basin (GB) Prototype - Phase B (3-Tier Iteration)
-Aligned with 50.36_gb_design_decisions.md
+Aligned with 50.43_gb_design_decisions.md
 """
 
 from typing import Dict, List, Any

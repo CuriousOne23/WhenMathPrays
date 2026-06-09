@@ -77,7 +77,7 @@ All exploration **SHALL** remain strictly deterministic, non-cognitive, and non-
 
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold. (Note: prior exploration produced HLR-20.450-* in 10.50.220, but this scaffold supports additional or refreshed exploration.)
 
-- **Iterative Design Flow (50-series influence)**: The downstream 10.50.220_regulator_requirements.md exists with HLR-20.450-001 to 003 (determinism/replay for decisions, explicit auditable action outputs, input validation for policy/pressure) + TCU regulator budget sections. The 50.50_regulator_design_support.md provides initial contracts and obligations. This scaffold can explore and provide evidence to refine or validate those.
+- **Iterative Design Flow (50-series influence)**: The downstream 10.50.220_regulator_requirements.md exists with HLR-20.450-001 to 003 (determinism/replay for decisions, explicit auditable action outputs, input validation for policy/pressure) + TCU regulator budget sections. The 50.220_regulator_design_support.md provides initial contracts and obligations. This scaffold can explore and provide evidence to refine or validate those.
 
 **Agreement Statement**: Scaffold stage only. The three flows are provisionally aligned on the regulator as the non-cognitive, deterministic safety and resource enforcement layer responsible for ΔH%, fan-out, costs, overflow, memory, cycle time, and regulatory interrupt generation, with strict separation from the scheduler (when) and GB (why). Full alignment (including explicit three-flow statements in all core docs) will be recorded after Phase A approval of this software_description and after Phase B execution produces traceable evidence against the 10.10.40 and 20-series sources.
 
@@ -125,7 +125,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.220 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.220 refinements or 50.50_regulator_design_support.md (and any 50.50 main spec) via 50.05 patterns, always through 30.
+Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.220 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.220 refinements or 50.220_regulator_design_support.md (and any 50.220 main spec) via 50.05 patterns, always through 30.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the regulator (see invariants in capsule).
 
@@ -139,7 +139,7 @@ All Phase B work preserved the non-cognitive, deterministic, bounded, replayable
 - 20.90_ib_requirements.md and 20.90_ts_parameter_table.md (IB/parameter enforcement points, TCU, bounds, logging)
 - 10.10.10_system_architecture.md, 10.10.20_interprocess_communication_and_channels.md, 10.10.30_interrupts_and_preemption_model.md, 10.10.36_gb_requirements.md, 10.10.50_module_contracts_and_visibility_rules.md, 10.10.60_coprocessor_offload_and_portability_rules.md (supporting architecture and conformance)
 - 10.50.220_regulator_requirements.md (downstream canonical anchor with HLR-20.450-001..003 + TCU regulator budgets)
-- 50.50_regulator_design_support.md (downstream design support)
+- 50.220_regulator_design_support.md (downstream design support)
 - 30.220_regulator_prototypes/ (current verification records; to be refreshed post Phase B)
 - 40.05_master_program_guide.md and 30.00_verification_user_guide.md (process)
 

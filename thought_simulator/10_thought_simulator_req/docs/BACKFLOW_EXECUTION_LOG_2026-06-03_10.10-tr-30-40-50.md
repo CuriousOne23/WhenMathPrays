@@ -35,14 +35,14 @@ Primary risk if unpropagated:
   - New required TR dirty-flag conformance gate.
   - Change-control rule prohibiting legacy unconditional-TR wording.
 
-- Updated: thought_simulator/50_thought_simulator_design/50.35_tp_design.md
+- Updated: thought_simulator/50_thought_simulator_design/50.170_tp_design.md
 - Applied:
   - Source index migrated from archive-era references to active 20.30/20.31/20.37 sources.
   - TP contract expanded with TP.TR and tr_needs_update.
   - Invariants and operation flow updated for RB->TR iff gate and success/failure clear rules.
   - Canonical field list updated with tr_needs_update and TR.
   - Incorrect artifact path corrected to 30_verification/30.150_tp_lifecycle.
-  - Title corrected to 50.35 prefix.
+  - Title corrected to 50.170 prefix.
 
 ### 30 layer (verification terminology controls)
 - Updated: thought_simulator/30_verification/30.160_verification_glossary.md
@@ -74,7 +74,7 @@ Scope required by guide controls:
 
 Results:
 1. Stale requirement references after propagation: PASS
-- 50.35 no longer references archive-era 20.30/20.140/20.160 paths in source index.
+- 50.170 no longer references archive-era 20.30/20.140/20.160 paths in source index.
 
 2. Glossary mismatch controls: PASS
 - New TR terminology is present in glossary and registered in verification glossary_term_registry.
@@ -83,7 +83,7 @@ Results:
 - Existing document IDs were preserved; updates were contract-language alignment and source-index/path correction.
 
 4. Full synchronization review across 50-series set for this anchor change: PASS
-- Keyword sweep across 50-series design files identified direct TP/TR contract impact in 50.35 and governance impact in 50.05; both updated.
+- Keyword sweep across 50-series design files identified direct TP/TR contract impact in 50.170 and governance impact in 50.05; both updated.
 
 5. 30.150 scenario-level TP lifecycle alignment and execution: PASS
 - Capsule and delta now contain explicit TR dirty-flag contract language plus executed scenario evidence from the 2026-06-03 harness run.
@@ -92,7 +92,7 @@ Results:
 
 - thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
-- thought_simulator/50_thought_simulator_design/50.35_tp_design.md
+- thought_simulator/50_thought_simulator_design/50.170_tp_design.md
 - thought_simulator/30_verification/30.160_verification_glossary.md
 - thought_simulator/30_verification/glossary_term_registry.json
 - thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md

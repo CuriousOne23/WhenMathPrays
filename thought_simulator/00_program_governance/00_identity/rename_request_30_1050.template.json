@@ -1,7 +1,7 @@
 {
   "rename_class": "A",
   "tier": "30-1050",
-  "entry_id": "10.50.140_core_data_structs_design_requirements",
+  "entry_id": "10.50.42_core_data_structs_design_requirements",
   "new_band": null,
   "new_slug_10_50": "core_data_structs_design_requirements",
   "new_slug_30": "core_data_structs_prototypes",

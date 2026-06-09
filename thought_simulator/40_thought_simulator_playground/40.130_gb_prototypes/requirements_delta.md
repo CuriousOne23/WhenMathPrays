@@ -7,7 +7,7 @@
 
 - **Forward Flow (20-series)**: Driven by core guidance in 20.10 (supervisory separation), 20.16 (responsibility matrix), 20.17 (messy input), and 20.18 (failure modes).
 - **Backward Flow (40-series evidence)**: The initial flat prototype demonstrated basic drift/oscillation detection but surfaced risks of overload, mixed timescales, and verification difficulty.
-- **Iterative Design Flow (50-series influence)**: Incorporates the minimal 3-tier hierarchy (Signal Monitors → Supervisory Integrator → Boundary Enforcer) defined in 50.36.
+- **Iterative Design Flow (50-series influence)**: Incorporates the minimal 3-tier hierarchy (Signal Monitors → Supervisory Integrator → Boundary Enforcer) defined in 50.130.
 
 **Agreement Statement**: The three flows are aligned. The 50-series hierarchy directly addresses the overload and clarity risks identified in the 20-series and observed in the first version of this prototype, while preserving all core invariants.
 

@@ -20,7 +20,7 @@ It is **not** the full Thought Router (TR) from 20.37 that populates the complet
 - No split/merge lineage additions.
 - No atomic commit semantics.
 
-These are explicitly called out as non-goals in the software_description.md and reserved for later iterations driven by 50.37 design.
+These are explicitly called out as non-goals in the software_description.md and reserved for later iterations driven by 50.180 design.
 
 ### Determinism
 All paths are deterministic by construction (no random, no time, no mutable global state).

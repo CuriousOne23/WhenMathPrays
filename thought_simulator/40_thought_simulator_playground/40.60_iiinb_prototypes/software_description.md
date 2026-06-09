@@ -375,9 +375,9 @@ Positive guard (024a) is W1-closed (`positive_pipeline_b_envelope_unchanged`). W
 - [40.100_core_data_structs_prototypes](../40.100_core_data_structs_prototypes/software_description.md) (shared struct alignment)
 
 ### Flows Alignment (W2 extension)
-- **Forward Flow:** 20.101-024b, 20.38 §8, [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) 024a/024b split
+- **Forward Flow:** 20.101-024b, 20.38 §8, [50.230](../../50_thought_simulator_design/50.230_iiinb_design_spec.md) 024a/024b split
 - **Backward Flow:** W1 30.230 / 30.240 positive evidence — extend only
-- **Iterative Design Flow:** 50.101 documents 024b in 30.240 scope
+- **Iterative Design Flow:** 50.230 documents 024b in 30.240 scope
 
 ### HLR family → Phase-B scenario mapping (W2 extension)
 

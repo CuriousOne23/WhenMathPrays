@@ -53,7 +53,7 @@ The module **does not** implement USP/UPI business logic (40.80/40.90). It defin
 
 - **Backward Flow (40-series evidence):** None yet — Phase A only. W1 [40.60](../40.60_iiinb_prototypes/software_description.md) uses inline `UspSnapshot`; this module formalizes shared shapes for W2 integration.
 
-- **Iterative Design Flow (50-series influence):** [50.101](../../50_thought_simulator_design/50.101_iiinb_design_spec.md) and [50.45](../../50_thought_simulator_design/50.45_data_structures.md) inform struct naming; no normative override of 20.39.
+- **Iterative Design Flow (50-series influence):** [50.230](../../50_thought_simulator_design/50.230_iiinb_design_spec.md) and [50.42.010](../../50_thought_simulator_design/50.42.010_data_structures.md) inform struct naming; no normative override of 20.39.
 
 **Agreement Statement**: Aligned — Phase B approved (CP, 2026-06-08). Struct shapes and 8/8 harness evidence align with 20.39 §3.1–3.2; digest compatibility with [40.60](../40.60_iiinb_prototypes/prototype.py) proven. Downstream W2 modules (102, 103, 33, 32) may treat exports as stable wire authority.
 

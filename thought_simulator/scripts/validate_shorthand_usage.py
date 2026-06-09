@@ -2,7 +2,7 @@
 """Validate band-prefix shorthand appears only in governed contexts.
 
 Scans markdown files that have file_rules in shorthand_registry.json.
-Reports bare band tokens (e.g. 40.100, 50.50) outside allowlisted patterns.
+Reports bare band tokens (e.g. 40.100, 50.220) outside allowlisted patterns.
 
 Mode: warning (exit 0) by default; --strict exits 1 on violations.
 """

@@ -17,7 +17,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 
 - **Backward Flow (40-series evidence)**: Phase B execution of this module (2026-06-06) produced 12/12 PASS scenarios + artifact exercising all 10 "What Phase B Must Explore" items from the approved software_description.md. Evidence (selection determinism + replay digests, tie-break provenance/rationale, interrupt window + preempt logging, timing/budget status modeling, cohort/merge metadata, rich last_* observability in snapshots, bounded history trim + asserts, fairness counters with starvation bounds, negative-path rejections) is now available for promotion through 30.210. This legitimately informs backward updates to 10.50.210 and 50-series without bypassing layers.
 
-- **Iterative Design Flow (50-series influence)**: Downstream 10.50.210_scheduler_requirements.md (HLR-20.440-001 determinism/replay, -002 fairness/starvation, -003 input validation + TCU scheduler budget sections) shaped the exploration scope and HLR mapping. Phase B evidence (especially new obs fields, history bound, window/preempt, cohort) can drive iterative refinement of those HLRs or the scheduler design spec (50.40 or via 50.05).
+- **Iterative Design Flow (50-series influence)**: Downstream 10.50.210_scheduler_requirements.md (HLR-20.440-001 determinism/replay, -002 fairness/starvation, -003 input validation + TCU scheduler budget sections) shaped the exploration scope and HLR mapping. Phase B evidence (especially new obs fields, history bound, window/preempt, cohort) can drive iterative refinement of those HLRs or the scheduler design spec (50.210 or via 50.05).
 
 **Agreement Statement**: The three flows are aligned on the scheduler prototype as a minimal, non-cognitive, deterministic control-plane explorer. All evidence is replayable (sorted-key JSON + verification_digest), bounded (history_max, positive contracts), and safety-first. No cognitive logic or core state mutation was introduced. Open items (canonical policy choice, exact tie-break precedence for 50) remain for higher layers; Phase B provides data not decisions. Full three-flow statements also appear in the updated verification_capsule.md and software_description.md.
 
@@ -51,7 +51,7 @@ This file records requirement-change proposals, implementer feedback, and migrat
 - `harness.py` (12 scenarios covering 10 items + repro; refreshed anchors + artifact 2026-06-06)
 - `verification_capsule.md` (expanded ledger, invariants, flows/agreement)
 - `artifacts/scheduler_verification_run_2026-06-06.json`
-- Downstream (future): 30.210_* (promotion), 10.50.210 (updated with HLR-004..008), 50.40_scheduler_design_spec.md
+- Downstream (future): 30.210_* (promotion), 10.50.210 (updated with HLR-004..008), 50.210_scheduler_design_spec.md
 
 ## Open Validation Needed (unchanged from prior; now with data)
 

@@ -61,7 +61,7 @@ Address-only renames (filename, folder, band, slug) are **identity maintenance**
 4. Update human-readable inventories (`30.01`, `50.00`, `40.510`) in the same change set
 5. Run `validate_name_tables.py`, `validate_shorthand_usage.py`, and the full pre-PR validation suite below
 
-Band-only shorthand (e.g. `40.100`, `50.50`) is legal only in locations declared in [shorthand_registry.json](00_program_governance/00_identity/shorthand_registry.json). Never use bare band shorthand in Python files or outside governed contexts.
+Band-only shorthand (e.g. `40.100`, `50.220`) is legal only in locations declared in [shorthand_registry.json](00_program_governance/00_identity/shorthand_registry.json). Never use bare band shorthand in Python files or outside governed contexts.
 
 **30 ↔ 10.50** renames are always **atomic** (both peers in one PR). **40** and **50** renames are tier-standalone but must propagate live cross-tier references.
 

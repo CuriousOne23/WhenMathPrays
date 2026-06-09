@@ -4,112 +4,211 @@
     {
       "aliases": [],
       "band": "100",
-      "canonical_name": "50.100_inb_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.100_inb_design_spec.md",
-      "entry_id": "50.100_inb_design_spec",
+      "canonical_name": "50.100_cob_design_support.md",
+      "canonical_path": "50_thought_simulator_design/50.100_cob_design_support.md",
+      "entry_id": "50.100_cob_design_support",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "inb_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "101",
-      "canonical_name": "50.101_iiinb_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.101_iiinb_design_spec.md",
-      "entry_id": "50.101_iiinb_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "iiinb_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "102",
-      "canonical_name": "50.102_usp_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.102_usp_design_spec.md",
-      "entry_id": "50.102_usp_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "usp_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "103",
-      "canonical_name": "50.103_upi_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.103_upi_design_spec.md",
-      "entry_id": "50.103_upi_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "upi_design_spec"
+      "slug": "cob_design_support"
     },
     {
       "aliases": [],
       "band": "110",
-      "canonical_name": "50.110_event_log_observability_design.md",
-      "canonical_path": "50_thought_simulator_design/50.110_event_log_observability_design.md",
-      "entry_id": "50.110_event_log_observability_design",
+      "canonical_name": "50.110_cil_design_support.md",
+      "canonical_path": "50_thought_simulator_design/50.110_cil_design_support.md",
+      "entry_id": "50.110_cil_design_support",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "event_log_observability_design"
+      "slug": "cil_design_support"
     },
     {
       "aliases": [],
       "band": "120",
-      "canonical_name": "50.120_experiment_runner_testing_design.md",
-      "canonical_path": "50_thought_simulator_design/50.120_experiment_runner_testing_design.md",
-      "entry_id": "50.120_experiment_runner_testing_design",
+      "canonical_name": "50.120_cop_design_support.md",
+      "canonical_path": "50_thought_simulator_design/50.120_cop_design_support.md",
+      "entry_id": "50.120_cop_design_support",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "experiment_runner_testing_design"
+      "slug": "cop_design_support"
+    },
+    {
+      "aliases": [],
+      "band": "130.10",
+      "canonical_name": "50.130.10_gb_signal_packet_format.md",
+      "canonical_path": "50_thought_simulator_design/50.130.10_gb_signal_packet_format.md",
+      "entry_id": "50.130.10_gb_signal_packet_format",
+      "kind": "level_2_design_file",
+      "shorthand_eligible": true,
+      "slug": "gb_signal_packet_format"
     },
     {
       "aliases": [],
       "band": "130",
-      "canonical_name": "50.130_ui_contract.md",
-      "canonical_path": "50_thought_simulator_design/50.130_ui_contract.md",
-      "entry_id": "50.130_ui_contract",
+      "canonical_name": "50.130_gb_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.130_gb_design_spec.md",
+      "children": [
+        "50.130.10_gb_signal_packet_format.md"
+      ],
+      "entry_id": "50.130_gb_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "ui_contract"
+      "slug": "gb_design_spec"
+    },
+    {
+      "aliases": [],
+      "band": "140.010",
+      "canonical_name": "50.140.010_data_structures.md",
+      "canonical_path": "50_thought_simulator_design/50.140.010_data_structures.md",
+      "entry_id": "50.140.010_data_structures",
+      "kind": "level_2_design_file",
+      "shorthand_eligible": true,
+      "slug": "data_structures"
     },
     {
       "aliases": [],
       "band": "140",
-      "canonical_name": "50.140_testing_strategy.md",
-      "canonical_path": "50_thought_simulator_design/50.140_testing_strategy.md",
-      "entry_id": "50.140_testing_strategy",
+      "canonical_name": "50.140_core_data_structs_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.140_core_data_structs_design_spec.md",
+      "children": [
+        "50.140.010_data_structures.md"
+      ],
+      "entry_id": "50.140_core_data_structs_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "testing_strategy"
+      "slug": "core_data_structs_design_spec"
     },
     {
       "aliases": [],
-      "band": "165",
-      "canonical_name": "50.165_dcb_stability_design.md",
-      "canonical_path": "50_thought_simulator_design/50.165_dcb_stability_design.md",
-      "entry_id": "50.165_dcb_stability_design",
+      "band": "150",
+      "canonical_name": "50.150_tp_design.md",
+      "canonical_path": "50_thought_simulator_design/50.150_tp_design.md",
+      "entry_id": "50.150_tp_design",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "tp_design"
+    },
+    {
+      "aliases": [],
+      "band": "170",
+      "canonical_name": "50.170_ib_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.170_ib_design_spec.md",
+      "entry_id": "50.170_ib_design_spec",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "ib_design_spec"
+    },
+    {
+      "aliases": [],
+      "band": "180",
+      "canonical_name": "50.180_tr_software_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.180_tr_software_spec.md",
+      "entry_id": "50.180_tr_software_spec",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "tr_software_spec"
+    },
+    {
+      "aliases": [],
+      "band": "190",
+      "canonical_name": "50.190_dcb_stability_design.md",
+      "canonical_path": "50_thought_simulator_design/50.190_dcb_stability_design.md",
+      "entry_id": "50.190_dcb_stability_design",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
       "slug": "dcb_stability_design"
     },
     {
       "aliases": [],
-      "band": "207",
-      "canonical_name": "50.207_replay_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.207_replay_design_spec.md",
-      "entry_id": "50.207_replay_design_spec",
+      "band": "200",
+      "canonical_name": "50.200_mb_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.200_mb_design_spec.md",
+      "entry_id": "50.200_mb_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "replay_design_spec"
+      "slug": "mb_design_spec"
     },
     {
       "aliases": [],
-      "band": "20",
-      "canonical_name": "50.20_tp_design.md",
-      "canonical_path": "50_thought_simulator_design/50.20_tp_design.md",
-      "entry_id": "50.20_tp_design",
+      "band": "210.010",
+      "canonical_name": "50.210.010_interaction_layer_design.md",
+      "canonical_path": "50_thought_simulator_design/50.210.010_interaction_layer_design.md",
+      "entry_id": "50.210.010_interaction_layer_design",
+      "kind": "level_2_design_file",
+      "shorthand_eligible": true,
+      "slug": "interaction_layer_design"
+    },
+    {
+      "aliases": [],
+      "band": "210",
+      "canonical_name": "50.210_scheduler_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.210_scheduler_design_spec.md",
+      "children": [
+        "50.210.010_interaction_layer_design.md"
+      ],
+      "entry_id": "50.210_scheduler_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "tp_design"
+      "slug": "scheduler_design_spec"
+    },
+    {
+      "aliases": [],
+      "band": "220",
+      "canonical_name": "50.220_regulator_design_support.md",
+      "canonical_path": "50_thought_simulator_design/50.220_regulator_design_support.md",
+      "entry_id": "50.220_regulator_design_support",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "regulator_design_support"
+    },
+    {
+      "aliases": [],
+      "band": "230",
+      "canonical_name": "50.230_tick_cycle_design_support.md",
+      "canonical_path": "50_thought_simulator_design/50.230_tick_cycle_design_support.md",
+      "entry_id": "50.230_tick_cycle_design_support",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "tick_cycle_design_support"
+    },
+    {
+      "aliases": [],
+      "band": "240",
+      "canonical_name": "50.240_snapshot_contract_design.md",
+      "canonical_path": "50_thought_simulator_design/50.240_snapshot_contract_design.md",
+      "entry_id": "50.240_snapshot_contract_design",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "snapshot_contract_design"
+    },
+    {
+      "aliases": [],
+      "band": "250",
+      "canonical_name": "50.250_event_log_observability_design.md",
+      "canonical_path": "50_thought_simulator_design/50.250_event_log_observability_design.md",
+      "entry_id": "50.250_event_log_observability_design",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "event_log_observability_design"
+    },
+    {
+      "aliases": [],
+      "band": "260",
+      "canonical_name": "50.260_experiment_runner_testing_design.md",
+      "canonical_path": "50_thought_simulator_design/50.260_experiment_runner_testing_design.md",
+      "entry_id": "50.260_experiment_runner_testing_design",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "experiment_runner_testing_design"
+    },
+    {
+      "aliases": [],
+      "band": "270",
+      "canonical_name": "50.270_geometry_engine_design.md",
+      "canonical_path": "50_thought_simulator_design/50.270_geometry_engine_design.md",
+      "entry_id": "50.270_geometry_engine_design",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": true,
+      "slug": "geometry_engine_design"
     },
     {
       "aliases": [],
@@ -123,156 +222,43 @@
     },
     {
       "aliases": [],
-      "band": "32",
-      "canonical_name": "50.32_cob_design_support.md",
-      "canonical_path": "50_thought_simulator_design/50.32_cob_design_support.md",
-      "entry_id": "50.32_cob_design_support",
+      "band": "42",
+      "canonical_name": "50.42_testing_strategy.md",
+      "canonical_path": "50_thought_simulator_design/50.42_testing_strategy.md",
+      "entry_id": "50.42_testing_strategy",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "cob_design_support"
+      "slug": "testing_strategy"
     },
     {
       "aliases": [],
-      "band": "33",
-      "canonical_name": "50.33_cil_design_support.md",
-      "canonical_path": "50_thought_simulator_design/50.33_cil_design_support.md",
-      "entry_id": "50.33_cil_design_support",
+      "band": "43",
+      "canonical_name": "50.43_ui_contract.md",
+      "canonical_path": "50_thought_simulator_design/50.43_ui_contract.md",
+      "entry_id": "50.43_ui_contract",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "cil_design_support"
-    },
-    {
-      "aliases": [],
-      "band": "34",
-      "canonical_name": "50.34_cop_design_support.md",
-      "canonical_path": "50_thought_simulator_design/50.34_cop_design_support.md",
-      "entry_id": "50.34_cop_design_support",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "cop_design_support"
-    },
-    {
-      "aliases": [],
-      "band": "35",
-      "canonical_name": "50.35_ib_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.35_ib_design_spec.md",
-      "entry_id": "50.35_ib_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "ib_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "36.10",
-      "canonical_name": "50.36.10_gb_signal_packet_format.md",
-      "canonical_path": "50_thought_simulator_design/50.36.10_gb_signal_packet_format.md",
-      "entry_id": "50.36.10_gb_signal_packet_format",
-      "kind": "level_2_design_file",
-      "shorthand_eligible": true,
-      "slug": "gb_signal_packet_format"
-    },
-    {
-      "aliases": [],
-      "band": "36",
-      "canonical_name": "50.36_gb_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.36_gb_design_spec.md",
-      "children": [
-        "50.36.10_gb_signal_packet_format.md"
-      ],
-      "entry_id": "50.36_gb_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "gb_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "37",
-      "canonical_name": "50.37_tr_software_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.37_tr_software_spec.md",
-      "entry_id": "50.37_tr_software_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "tr_software_spec"
-    },
-    {
-      "aliases": [],
-      "band": "392",
-      "canonical_name": "50.392_core_data_structs_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.392_core_data_structs_design_spec.md",
-      "entry_id": "50.392_core_data_structs_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "core_data_structs_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "39",
-      "canonical_name": "50.39_mb_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.39_mb_design_spec.md",
-      "entry_id": "50.39_mb_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "mb_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "40",
-      "canonical_name": "50.40_interaction_layer_design.md",
-      "canonical_path": "50_thought_simulator_design/50.40_interaction_layer_design.md",
-      "entry_id": "50.40_interaction_layer_design",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": false,
-      "slug": "interaction_layer_design"
-    },
-    {
-      "aliases": [],
-      "band": "40",
-      "canonical_name": "50.40_scheduler_design_spec.md",
-      "canonical_path": "50_thought_simulator_design/50.40_scheduler_design_spec.md",
-      "entry_id": "50.40_scheduler_design_spec",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": false,
-      "slug": "scheduler_design_spec"
-    },
-    {
-      "aliases": [],
-      "band": "45",
-      "canonical_name": "50.45_data_structures.md",
-      "canonical_path": "50_thought_simulator_design/50.45_data_structures.md",
-      "entry_id": "50.45_data_structures",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "data_structures"
+      "slug": "ui_contract"
     },
     {
       "aliases": [],
       "band": "50",
-      "canonical_name": "50.50_regulator_design_support.md",
-      "canonical_path": "50_thought_simulator_design/50.50_regulator_design_support.md",
-      "entry_id": "50.50_regulator_design_support",
+      "canonical_name": "50.50_inb_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.50_inb_design_spec.md",
+      "entry_id": "50.50_inb_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "regulator_design_support"
-    },
-    {
-      "aliases": [],
-      "band": "53",
-      "canonical_name": "50.53_snapshot_contract_design.md",
-      "canonical_path": "50_thought_simulator_design/50.53_snapshot_contract_design.md",
-      "entry_id": "50.53_snapshot_contract_design",
-      "kind": "level_1_design_file",
-      "shorthand_eligible": true,
-      "slug": "snapshot_contract_design"
+      "slug": "inb_design_spec"
     },
     {
       "aliases": [],
       "band": "60",
-      "canonical_name": "50.60_tick_cycle_design_support.md",
-      "canonical_path": "50_thought_simulator_design/50.60_tick_cycle_design_support.md",
-      "entry_id": "50.60_tick_cycle_design_support",
+      "canonical_name": "50.60_iiinb_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.60_iiinb_design_spec.md",
+      "entry_id": "50.60_iiinb_design_spec",
       "kind": "level_1_design_file",
       "shorthand_eligible": true,
-      "slug": "tick_cycle_design_support"
+      "slug": "iiinb_design_spec"
     },
     {
       "aliases": [],
@@ -281,8 +267,18 @@
       "canonical_path": "50_thought_simulator_design/50.70_error_handling_design.md",
       "entry_id": "50.70_error_handling_design",
       "kind": "level_1_design_file",
-      "shorthand_eligible": true,
+      "shorthand_eligible": false,
       "slug": "error_handling_design"
+    },
+    {
+      "aliases": [],
+      "band": "70",
+      "canonical_name": "50.70_replay_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.70_replay_design_spec.md",
+      "entry_id": "50.70_replay_design_spec",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": false,
+      "slug": "replay_design_spec"
     },
     {
       "aliases": [],
@@ -291,8 +287,18 @@
       "canonical_path": "50_thought_simulator_design/50.80_logging_and_observability_design.md",
       "entry_id": "50.80_logging_and_observability_design",
       "kind": "level_1_design_file",
-      "shorthand_eligible": true,
+      "shorthand_eligible": false,
       "slug": "logging_and_observability_design"
+    },
+    {
+      "aliases": [],
+      "band": "80",
+      "canonical_name": "50.80_usp_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.80_usp_design_spec.md",
+      "entry_id": "50.80_usp_design_spec",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": false,
+      "slug": "usp_design_spec"
     },
     {
       "aliases": [],
@@ -301,8 +307,18 @@
       "canonical_path": "50_thought_simulator_design/50.90_api_contract.md",
       "entry_id": "50.90_api_contract",
       "kind": "level_1_design_file",
-      "shorthand_eligible": true,
+      "shorthand_eligible": false,
       "slug": "api_contract"
+    },
+    {
+      "aliases": [],
+      "band": "90",
+      "canonical_name": "50.90_upi_design_spec.md",
+      "canonical_path": "50_thought_simulator_design/50.90_upi_design_spec.md",
+      "entry_id": "50.90_upi_design_spec",
+      "kind": "level_1_design_file",
+      "shorthand_eligible": false,
+      "slug": "upi_design_spec"
     }
   ],
   "schema_version": "identity_name_table_v1",

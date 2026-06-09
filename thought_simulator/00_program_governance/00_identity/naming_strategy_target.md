@@ -90,7 +90,7 @@ Across tiers that use numeric bands, we **prefer** the same mental model:
 
 **Operational SSOT:** [40.510_refactor.md](../../40_thought_simulator_playground/40.510_refactor.md), [40_name_table.json](40_name_table.json). Process: [40.05_master_program_guide.md](../../40_thought_simulator_playground/40.05_master_program_guide.md).
 
-**Independence reminder:** `40.100_*` (core structs) evidence may promote to `30.140` / `10.50.140` without matching 40 band numbers to 30/10.50.
+**Independence reminder:** `40.100_*` (core structs) evidence may promote to `30.140` / `10.50.42` without matching 40 band numbers to 30/10.50.
 
 ### 5.2 Tier 10.50 (design requirements anchors)
 
@@ -126,7 +126,7 @@ Across tiers that use numeric bands, we **prefer** the same mental model:
 | **Level 2** | `50.{band}.{yy}_*` | Supporting design detail (stride **10** at `.yy` per [50.05](../../50_thought_simulator_design/50.05_software_spec_construction_guide.md): `.10`, `.20`, …) |
 | **Level 3+** | `50.{band}.{yy}.{zz}_*` or `50.{band}.010_*` | Rare or crowded-band insertions per 00.00.42 |
 
-**50 governance may differ from 30+10.50:** platform and cross-cutting design (`50.07`–`50.09` system/architecture/contract today) **should** live in **`50.00`–`50.49`**, not in a module band that implies a 30 peer.
+**50 governance may differ from 30+10.50:** platform and cross-cutting design (`50.07`–`50.270` system/architecture/contract today) **should** live in **`50.00`–`50.49`**, not in a module band that implies a 30 peer.
 
 **Nesting rule (anti-drift):** if 10.50+30 already own band `N` for a subsystem, 50 **should not** open a second Level-1 primary at a different band for the same subsystem. Prefer:
 
@@ -155,9 +155,10 @@ Document intentional deviation here when the target cannot be met yet. Update wh
 
 | Item | Current state | Target disposition |
 |------|---------------|-------------------|
-| `50.45_data_structures` vs `10.50.140` / `30.140` | Misaligned primary band | Align to `50.392_*` or nest under `50.39.010_*` after 30/10.50 pass |
-| `50.09_geometry_engine` vs `10.50.270` / `30.270` | Misaligned primary band | Align to `50.10_*` or nest under it |
-| Dual `50.40_*` (scheduler + interaction layer) | Two Level-1 primaries at one band | One `50.40_*` + `50.40.010_*` (or `.10`) for the second |
+| ~~`50.45_data_structures`~~ | ~~Misaligned~~ | **Resolved 2026-06-09** — nested `50.140.010_data_structures` |
+| ~~`50.09_geometry_engine`~~ | ~~Misaligned~~ | **Resolved 2026-06-09** — `50.270_geometry_engine_design` |
+| ~~Dual `50.40_*` (scheduler + interaction)~~ | ~~Two primaries~~ | **Resolved 2026-06-09** — `50.210_scheduler` + `50.210.010_interaction_layer` |
+| `50.70`/`50.80`/`50.90` duplicate bands | Headroom docs share bands with component peers | **Expected** — `shorthand_eligible: false` for duplicates; use full canonical paths |
 | `50.07`–`50.08` platform docs | No 10.50/30 peers | Keep in 50 governance/headroom zone — **expected** exception |
 | `40.510_refactor.md` | Fixed inventory filename | Never assign as a module folder band |
 | 40 duplicate bands (`40.110_*`×2, `40.500_*`×2, etc.) | ~~Pre-cleanup drift~~ | **Resolved 2026-06-09** — 17 duplicates removed in Phase-1 renumber |
@@ -175,14 +176,14 @@ For a live list of disk-vs-target gaps, see [30.01](../../30_verification/30.01_
 | 2026-06 | Identity rename infrastructure (name tables, `rename_identity.py`, 00.00.43) | Enables phased migration without content re-review |
 | 2026-06-09 | Phase-1 40 renumber (`40_renumber_manifest.json`, `apply_40_renumber_migration.py`) | 31 survivors at `40.50`–`40.350` stride 10; 17 duplicates removed; guide at `40.05` |
 | 2026-06-09 | Phase-2 10.50+30 renumber (`30_1050_renumber_manifest.json`, `apply_30_1050_renumber_migration.py`) | 23 coupled pairs at stride 10 from `.50`; `fix_30_1050_post_renumber_refs.py` for governance-doc repair |
-| *Planned* | Phase 3 — 50 alignment per §6 | Not yet applied |
+| 2026-06-09 | Phase-3 50 renumber (`50_renumber_manifest.json`, `apply_50_renumber_migration.py`) | 27 file renames; level-2 nest for interaction/data structs; `fix_50_post_renumber_refs.py` for 50.00 rebuild |
 
 **Alignment checkpoint (update after migrations):**
 
 - **As of:** 2026-06-09
 - **40 vs target:** **aligned** — modules `40.50`–`40.350` stride 10; governance `40.05` + fixed `40.510`; see [40_renumber_manifest.json](40_renumber_manifest.json)
 - **10.50+30 vs target:** **aligned** — coupled pairs at `50`–`270` stride 10; see [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json)
-- **50 vs target:** partial — several known exceptions in §7
+- **50 vs target:** **aligned** — subsystem Level-1 specs at `50`–`270` stride 10; headroom at `50.42`/`50.43`; see [50_renumber_manifest.json](50_renumber_manifest.json)
 
 ---
 
@@ -223,3 +224,4 @@ Use these as soft review prompts — not CI gates:
 | 0.2 | 2026-06-09 | Phase-1 40 renumber complete — checkpoint and exception ledger updated |
 | 0.3 | 2026-06-09 | Post-renumber canon sweep + bulk-migration drift prompts (§9 items 7–8) |
 | 0.4 | 2026-06-09 | Phase-2 10.50+30 renumber complete — §8 checkpoint updated |
+| 0.5 | 2026-06-09 | Phase-3 50 renumber complete — §7 exceptions resolved; §8 50 aligned |

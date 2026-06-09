@@ -24,22 +24,22 @@ EXTENSIONS = {".md", ".py"}
 # Cascade repairs from an earlier unsafe prefix replace (30.20_ -> 30.150_ hit 30.200_*).
 CASCADE_REPAIRS: list[tuple[str, str]] = [
     ("30.1500_mb_prototypes", "30.200_mb_prototypes"),
-    ("10.50.1500_mb_design_requirements", "10.50.200_mb_design_requirements"),
-    ("10.50.1505_", "10.50.205_"),
+    ("10.50.1500_mb_design_requirements", "10.50.1500_mb_design_requirements"),
+    ("10.50.1505_", "10.50.1505_"),
 ]
 
 # Status/notes preserved from pre-renumber inventory (keyed by post-renumber entry_id).
 MODULE_META: dict[str, tuple[str, str]] = {
-    "30.50_inb_prototypes": ("approved", "W1 GATE-A 2026-06-08; CP approved; 40.50 16/16; 10.50.50"),
-    "30.60_iiinb_prototypes": ("approved", "W1 GATE-A + W2 024b 24/24 2026-06-08; CP approved; 10.50.60"),
+    "30.50_inb_prototypes": ("approved", "W1 GATE-A 2026-06-08; CP approved; 40.50 16/16; 10.50.220"),
+    "30.60_iiinb_prototypes": ("approved", "W1 GATE-A + W2 024b 24/24 2026-06-08; CP approved; 10.50.230"),
     "30.70_replay_prototypes": ("approved", "W1 GATE-A 2026-06-08; CP approved; 40.70 18/18; 10.50.70"),
     "30.80_usp_prototypes": ("approved", "W2 GATE-B 8/8 2026-06-08; CP 30.00 approved; 10.50.80"),
     "30.90_upi_prototypes": ("approved", "W2 GATE-B 8/8 2026-06-08; CP 30.00 approved; 10.50.90"),
-    "30.100_cob_prototypes": ("promoted", "W2 extension 4/4 USP pin 2026-06-08; 10.50.100"),
-    "30.110_cil_prototypes": ("promoted", "W2 extension 4/4 clarification wire 2026-06-08; 10.50.110"),
+    "30.100_cob_prototypes": ("promoted", "W2 extension 4/4 USP pin 2026-06-08; 10.50.220"),
+    "30.110_cil_prototypes": ("promoted", "W2 extension 4/4 clarification wire 2026-06-08; 10.50.250"),
     "30.120_cop_prototypes": ("seeded", ""),
-    "30.130_gb_prototypes": ("promoted", "W2 extension 4/4 UPI governance 2026-06-08; 10.50.130"),
-    "30.140_core_data_structs_prototypes": ("approved", "W2 GATE-B 8/8 2026-06-08; CP 30.00 approved; 10.50.140"),
+    "30.130_gb_prototypes": ("promoted", "W2 extension 4/4 UPI governance 2026-06-08; 10.50.43"),
+    "30.140_core_data_structs_prototypes": ("approved", "W2 GATE-B 8/8 2026-06-08; CP 30.00 approved; 10.50.42"),
     "30.150_tp_lifecycle": ("seeded", ""),
     "30.160_basin_prototypes": ("seeded", ""),
     "30.170_ib_prototypes": ("seeded", ""),
@@ -106,8 +106,8 @@ def _collect_fix_pairs(plan: list[tuple[IdentityEntry, IdentityEntry, IdentityEn
     )
     pairs.append(
         (
-            "10.50.392_core_data_structs_design_requirements.md",
-            "10.50.140_core_data_structs_design_requirements.md",
+            "10.50.42_core_data_structs_design_requirements.md",
+            "10.50.42_core_data_structs_design_requirements.md",
         )
     )
 

@@ -69,7 +69,7 @@ Authoritative full TR model: `20.37` Semantic Interpretation Flow Contract, `20.
 Harness proves deterministic basin routing, fixed ΔH% per route, and explicit error path (`HLR-20.437-*`). Does not implement or verify OB→TR→`TP.TR` integration.
 
 **Iterative Design Flow:**  
-Feeds `10.50.180.TR.*` and `30.180` (proxy promotion). Phase C and `50.37` await integration scenarios.
+Feeds `10.50.180.TR.*` and `30.180` (proxy promotion). Phase C and `50.180` await integration scenarios.
 
 **Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 integration is canonical in `software_description.md` but **verification-open** until Phase C.
 

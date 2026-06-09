@@ -97,12 +97,12 @@ NEEDS_EDIT:
 
 COMPLIANT (updated in current transaction):
 - 50.05_software_spec_construction_guide.md
-- 50.35_tp_design.md
+- 50.170_tp_design.md
 - 50.00_design_traceability_index.md
-- 50.20_geometry_engine_design.md
+- 50.150_geometry_engine_design.md
 - 50.31_regulator_design_support.md
-- 50.32_tick_cycle_design_support.md
-- 50.53_snapshot_contract_design.md
+- 50.100_tick_cycle_design_support.md
+- 50.240_snapshot_contract_design.md
 - 50.73_event_log_observability_design.md
 - 50.83_experiment_runner_testing_design.md
 

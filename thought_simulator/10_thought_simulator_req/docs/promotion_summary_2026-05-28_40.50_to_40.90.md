@@ -23,8 +23,8 @@ Promote Phase B evidence from exploratory modules `40.50` through `40.90` into c
   - `30_verification/30.260_experiment_runner/`
 - Design-spec outputs (50-band supporting docs):
   - `50.31_regulator_design_support.md`
-  - `50.32_tick_cycle_design_support.md`
-  - `50.53_snapshot_contract_design.md`
+  - `50.100_tick_cycle_design_support.md`
+  - `50.240_snapshot_contract_design.md`
   - `50.73_event_log_observability_design.md`
   - `50.83_experiment_runner_testing_design.md`
 

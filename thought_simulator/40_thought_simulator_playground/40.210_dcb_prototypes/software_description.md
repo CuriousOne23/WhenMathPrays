@@ -49,7 +49,7 @@ Within `ob_processing` cycle window: **OB → DCB → TR** per 20.37 §7 and 20.
 
 - **Forward Flow (20-series):** [20.106](../../20_requirements/20.106_dcb_requirements.md) HLR-001–036; [20.37](../../20_requirements/20.37_thought_router_tr_specification.md) §4.4 overlay.
 - **Backward Flow (40-series evidence):** None — Phase A.
-- **Iterative Design Flow (50-series influence):** [50.165](../../50_thought_simulator_design/50.165_dcb_stability_design.md) qualitative only.
+- **Iterative Design Flow (50-series influence):** [50.190](../../50_thought_simulator_design/50.190_dcb_stability_design.md) qualitative only.
 
 **Agreement Statement**: Aligned — CP review 2026-06-08 confirms DCB as geometric-only meta-basin per 20.106; ephemeral TR inputs with no `tr_needs_update` writes and no OB semantic overlap. Phase B must prove TR-only consumption (40.240) and qualitative stability cross-check (40.220).
 

@@ -21,7 +21,7 @@ Execute `50.05_software_spec_construction_guide.md` coverage for the `40.330` to
 - Verification capsule + delta + artifact binding:
   - `30_verification/30.270_math_prototypes/`
 - Design-spec output:
-  - `50_thought_simulator_design/50.20_geometry_engine_design.md`
+  - `50_thought_simulator_design/50.150_geometry_engine_design.md`
 
 ## Gate and Boundary Notes
 

@@ -20,7 +20,7 @@ This document captures the step-by-step reasoning, design decisions, and three-f
 ## Iterative Design Flow
 - 10.50.180 canonical requirements were seeded directly from this prototype's behavior (simple content-based routing + ΔH%).
 - The detailed software_description.md was written to document the proxy scope clearly.
-- Future 50.37 design will likely drive deeper 40.240 work on full TR semantics.
+- Future 50.180 design will likely drive deeper 40.240 work on full TR semantics.
 
 ## Agreement Statement
 The three flows align for the *minimal proxy scope*. The software_description explicitly calls out the deferred full TR work. No tension.

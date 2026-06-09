@@ -182,7 +182,7 @@ Extend GB prototype to evaluate UPI rule commits per [20.80](../../20_requiremen
 ### Flows Alignment (W2 extension)
 - **Forward Flow:** 20.80 §10, 20.103 GB gate, 20.102 veto semantics
 - **Backward Flow:** Prior GB 3-tier iteration (2026-06-04) — add UPI gate scenarios
-- **Iterative Design Flow:** [50.36](../../50_thought_simulator_design/50.36_gb_design_spec.md) supervisory boundaries
+- **Iterative Design Flow:** [50.43](../../50_thought_simulator_design/50.43_gb_design_spec.md) supervisory boundaries
 
 ### HLR family → Phase-B scenario mapping (W2 extension)
 

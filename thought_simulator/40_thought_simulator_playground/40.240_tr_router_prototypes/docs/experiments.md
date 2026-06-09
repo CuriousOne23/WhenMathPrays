@@ -15,7 +15,7 @@
 - Result: PASS. Values are constant functions of the route decision.
 
 ### Planned / Future Experiments (post approval)
-- Full semantic TR field population prototype (when driven by 50.37).
+- Full semantic TR field population prototype (when driven by 50.180).
 - Integration with simulated RB dirty-flag + OB semantic write scenarios.
 - GB read-only TR consumption test (supervisory signal generation).
 - Determinism across "multiple runs" with explicit nonce if identity is added.

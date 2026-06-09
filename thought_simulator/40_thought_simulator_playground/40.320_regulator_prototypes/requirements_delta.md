@@ -4,7 +4,7 @@
 
 - **Forward Flow (10/20-series)**: Driven by the detailed architecture in 10.10.40_scheduler_and_regulator_architecture.md (regulator role, ΔH% / fan-out / cost / overflow / memory / cycle time enforcement, interrupt generation, separation) and the listed 20-series sources in the 40.320_regulator_prototypes/software_description.md (TCU budgeting, safety constraints, functional model fan-out/overflow, OB/IB bounds and TCU, parameter table enforcement, traceability).
 - **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold. Preliminary prototype/harness exist but full Phase B evidence collection awaits Phase A approval.
-- **Iterative Design Flow (50-series influence)**: Downstream 10.50.220_regulator_requirements.md (HLR-20.450-001..003 + TCU) and 50.50_regulator_design_support.md exist as anchors. This scaffold (and future Phase B) can explore and provide evidence to refine or validate those.
+- **Iterative Design Flow (50-series influence)**: Downstream 10.50.220_regulator_requirements.md (HLR-20.450-001..003 + TCU) and 50.220_regulator_design_support.md exist as anchors. This scaffold (and future Phase B) can explore and provide evidence to refine or validate those.
 
 **Agreement Statement**: Scaffold stage only. The three flows are provisionally aligned on the regulator as the non-cognitive, deterministic safety/resource enforcement layer. Full alignment will be recorded after Phase A approval and Phase B execution.
 
@@ -32,7 +32,7 @@
 ## Rationale
 
 - Regulator is the core deterministic safety/resource enforcer; Phase B focused on producing auditable, replayable evidence for its obligations per 10.10.40 + the 20-series (TCU, safety, functional model, OB/IB bounds, parameters) without absorbing cognitive or scheduling logic.
-- The 12 "What Phase B Must Explore" items were each given explicit scenario coverage (plus supporting) so that 30/10.50.220/50.50 can trace specific behaviors (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, validation, obs, bounded state, determinism).
+- The 12 "What Phase B Must Explore" items were each given explicit scenario coverage (plus supporting) so that 30/10.50.220/50.220 can trace specific behaviors (ΔH%, fan-out, costs, overflow, bounds, interrupts, decisions, validation, obs, bounded state, determinism).
 - Negative paths + bounded state + rich obs prioritized to mitigate replay divergence and silent violation handling bugs.
 - Exploratory policies (clamp/attenuate/stabilize) and simple thresholds in prototype are explicitly non-canonical (documented in rationale/obs + Non-Goals); used only to generate evidence for the enforcement model.
 
@@ -43,7 +43,7 @@
 - `harness.py` (15 scenarios covering 12 items + repro + negatives; refreshed anchors + artifact 2026-06-06)
 - `verification_capsule.md` (expanded ledger, invariants, flows/agreement)
 - `artifacts/regulator_verification_run_2026-06-06.json`
-- Downstream (future): 30.220_* (promotion), 10.50.220, 50.50_regulator_design_support.md (and any main 50.50 spec)
+- Downstream (future): 30.220_* (promotion), 10.50.220, 50.220_regulator_design_support.md (and any main 50.220 spec)
 
 ## Open Validation Needed (post Phase B data)
 

@@ -8,7 +8,7 @@
 
 - **Forward Flow (20-series)**: Per 20.165 DCB stability requirements and parent 20.106.
 - **Backward Flow (40-series evidence)**: None yet.
-- **Iterative Design Flow (50-series influence)**: Awaiting 50.165.
+- **Iterative Design Flow (50-series influence)**: Awaiting 50.190.
 
 **Agreement Statement**: Not applicable — scaffold.
 

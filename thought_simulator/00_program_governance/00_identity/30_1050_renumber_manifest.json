@@ -4,67 +4,67 @@
   "executed": "2026-06-09",
   "pair_renames": [
     {
-      "entry_id_1050": "10.50.100_inb_design_requirements",
+      "entry_id_1050": "10.50.220_inb_design_requirements",
       "entry_id_30": "30.100_inb_prototypes",
       "new_band": "50",
       "wave": "W1"
     },
     {
-      "entry_id_1050": "10.50.101_iiinb_design_requirements",
+      "entry_id_1050": "10.50.230_iiinb_design_requirements",
       "entry_id_30": "30.101_iiinb_prototypes",
       "new_band": "60",
       "wave": "W1"
     },
     {
-      "entry_id_1050": "10.50.207_replay_design_requirements",
+      "entry_id_1050": "10.50.70_replay_design_requirements",
       "entry_id_30": "30.207_replay_prototypes",
       "new_band": "70",
       "wave": "W1"
     },
     {
-      "entry_id_1050": "10.50.102_usp_design_requirements",
+      "entry_id_1050": "10.50.80_usp_design_requirements",
       "entry_id_30": "30.102_usp_prototypes",
       "new_band": "80",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.103_upi_design_requirements",
+      "entry_id_1050": "10.50.90_upi_design_requirements",
       "entry_id_30": "30.103_upi_prototypes",
       "new_band": "90",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.32_cob_requirements",
+      "entry_id_1050": "10.50.100_cob_requirements",
       "entry_id_30": "30.32_cob_prototypes",
       "new_band": "100",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.33_cil_requirements",
+      "entry_id_1050": "10.50.250_cil_requirements",
       "entry_id_30": "30.33_cil_prototypes",
       "new_band": "110",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.34_cop_requirements",
+      "entry_id_1050": "10.50.260_cop_requirements",
       "entry_id_30": "30.34_cop_prototypes",
       "new_band": "120",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.36_gb_design_requirements",
+      "entry_id_1050": "10.50.43_gb_design_requirements",
       "entry_id_30": "30.36_gb_prototypes",
       "new_band": "130",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.392_core_data_structs_design_requirements",
+      "entry_id_1050": "10.50.42_core_data_structs_design_requirements",
       "entry_id_30": "30.392_core_data_structs_prototypes",
       "new_band": "140",
       "wave": "W2"
     },
     {
-      "entry_id_1050": "10.50.20_tp_requirements",
+      "entry_id_1050": "10.50.150_tp_requirements",
       "entry_id_30": "30.20_tp_lifecycle",
       "new_band": "150",
       "wave": "W3"
@@ -76,43 +76,43 @@
       "wave": "W3"
     },
     {
-      "entry_id_1050": "10.50.35_ib_requirements",
+      "entry_id_1050": "10.50.170_ib_requirements",
       "entry_id_30": "30.35_ib_prototypes",
       "new_band": "170",
       "wave": "W3"
     },
     {
-      "entry_id_1050": "10.50.37_tr_requirements",
+      "entry_id_1050": "10.50.180_tr_requirements",
       "entry_id_30": "30.37_tr_prototypes",
       "new_band": "180",
       "wave": "W3"
     },
     {
-      "entry_id_1050": "10.50.165_dcb_stability_requirements",
+      "entry_id_1050": "10.50.190_dcb_stability_requirements",
       "entry_id_30": "30.165_dcb_stability_prototypes",
       "new_band": "190",
       "wave": "W3"
     },
     {
-      "entry_id_1050": "10.50.39_mb_design_requirements",
+      "entry_id_1050": "10.50.1500_mb_design_requirements",
       "entry_id_30": "30.39_mb_prototypes",
       "new_band": "200",
       "wave": "W3"
     },
     {
-      "entry_id_1050": "10.50.40_scheduler_requirements",
+      "entry_id_1050": "10.50.210_scheduler_requirements",
       "entry_id_30": "30.40_scheduler_prototypes",
       "new_band": "210",
       "wave": "W5"
     },
     {
-      "entry_id_1050": "10.50.50_regulator_requirements",
+      "entry_id_1050": "10.50.220_regulator_requirements",
       "entry_id_30": "30.50_regulator_prototypes",
       "new_band": "220",
       "wave": "W5"
     },
     {
-      "entry_id_1050": "10.50.60_tick_cycle_requirements",
+      "entry_id_1050": "10.50.230_tick_cycle_requirements",
       "entry_id_30": "30.60_tick_cycle_skeleton",
       "new_band": "230",
       "wave": "W5"

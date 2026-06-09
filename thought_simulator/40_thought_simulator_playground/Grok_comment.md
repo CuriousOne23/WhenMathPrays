@@ -86,8 +86,8 @@ The plan bundles filename changes with HLR/LLR ID changes. Those are different r
 
 | Class | Example | ID fields change? | Re-review? |
 |-------|---------|-------------------|------------|
-| **A — slug/path** | `50.50_regulator_design_support` → `50.50_regulator_design_spec` | No | No |
-| **B — band** | `50.09` → `50.10` | Yes (`LLR-50.09-*` → `LLR-50.10-*`) | No content re-review, but **ID migration approval** required |
+| **A — slug/path** | `50.220_regulator_design_support` → `50.220_regulator_design_spec` | No | No |
+| **B — band** | `50.270` → `50.10` | Yes (`LLR-50.270-*` → `LLR-50.10-*`) | No content re-review, but **ID migration approval** required |
 
 Class B needs a broader `REPLACEMENT_PAIRS` list and explicit warning about external/historical LLR consumers. The plan should state that Class B is allowed but heavier, not equivalent to Class A.
 
@@ -95,7 +95,7 @@ Class B needs a broader `REPLACEMENT_PAIRS` list and explicit warning about exte
 
 #### 5. 20-series scope
 
-20 is independent. Propagation to 20 should be **reference-driven only** (files containing the old path string), not “all 20 release files.” The current `20.200_traceability_matrix.md` may list cross-layer paths — that row updates, but `20.102_usp_requirements.md` does not change just because `50.102` renamed unless it explicitly cites `50.102`.
+20 is independent. Propagation to 20 should be **reference-driven only** (files containing the old path string), not “all 20 release files.” The current `20.200_traceability_matrix.md` may list cross-layer paths — that row updates, but `20.102_usp_requirements.md` does not change just because `50.80` renamed unless it explicitly cites `50.80`.
 
 ---
 

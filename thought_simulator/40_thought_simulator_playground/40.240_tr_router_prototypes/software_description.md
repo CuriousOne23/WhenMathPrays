@@ -197,7 +197,7 @@ The prototype surfaced requirements the 10-series **SHALL** maintain (partially 
 - Serialization / numeric policy (20.95, 20.39) for TR subfields
 - IPC and module visibility for TR (10.10.20, 10.10.50)
 
-Promotion path: proxy evidence → `10.50.180.TR.*` + `30.180` (done); integration scenarios → extend `30.180` or sibling harness → `50.37` design spec.
+Promotion path: proxy evidence → `10.50.180.TR.*` + `30.180` (done); integration scenarios → extend `30.180` or sibling harness → `50.180` design spec.
 
 ---
 
@@ -214,7 +214,7 @@ This prototype **does not** define or implement:
 - Stochastic behavior, wall-clock dependence, or TCU budgeting for full TR
 - Full IB/Merge/Truth/OB consumer contracts
 
-Reserved for subsequent 40.x iterations or 50.37 after integration harness evidence.
+Reserved for subsequent 40.x iterations or 50.180 after integration harness evidence.
 
 ---
 
@@ -268,7 +268,7 @@ Reserved for subsequent 40.x iterations or 50.37 after integration harness evide
 
 - Harness scenarios for 20.37 flow contract (dirty flag, TR commit/clear, RB gate)
 - 30.180 `proves:` extension to HLR-20.037-049/050/051
-- 50.37 design spec update per 50.05 after integration evidence
+- 50.180 design spec update per 50.05 after integration evidence
 
 ---
 
@@ -278,7 +278,7 @@ Reserved for subsequent 40.x iterations or 50.37 after integration harness evide
 
 - **Backward Flow (40-series evidence):** Executed proxy proves deterministic basin routing + ΔH% + error path (`HLR-20.437-*`). Evidence does **not** prove HLR-20.037-049/050/051 or full OB→TR→`TP.TR` cycle.
 
-- **Iterative Design Flow:** 10.50.180 and 30.180 synchronized 2026-06-05 to split proxy vs integration scope; 50.37 remains proxy-based until integration scenarios exist.
+- **Iterative Design Flow:** 10.50.180 and 30.180 synchronized 2026-06-05 to split proxy vs integration scope; 50.180 remains proxy-based until integration scenarios exist.
 
 **Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 semantic interpretation flow is canonical and documented here as the target; verification and prototype code for that flow remain **open**.
 

@@ -113,7 +113,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.210 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.210 refinements or 50.40_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
+Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.210 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.210 refinements or 50.210_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the scheduler (see invariants in capsule).
 
@@ -127,6 +127,6 @@ All Phase B work preserved the non-cognitive, deterministic, bounded, replayable
 - 20.200_traceability_matrix.md (test obligations)
 - 10.10.10_system_architecture.md, 10.10.20_interprocess_communication_and_channels.md, 10.10.30_interrupts_and_preemption_model.md, 10.10.50_module_contracts_and_visibility_rules.md, 10.10.60_coprocessor_offload_and_portability_rules.md (supporting architecture)
 - 10.50.210_scheduler_requirements.md (downstream canonical anchor with HLR-20.440-001..008 + contract elements + TCU)
-- 50.40_scheduler_design_spec.md (constructed per 50.05)
+- 50.210_scheduler_design_spec.md (constructed per 50.05)
 
 All Phase B evidence **SHALL** be traceable to the relevant sources above.

@@ -8,7 +8,7 @@
 
 - **Forward Flow (20-series)**: Driven by 20.10, 20.16, 20.17, and 20.18 (supervisory separation, responsibility matrix, messy input, failure modes).
 - **Backward Flow (40-series evidence)**: The flat prototype proved basic supervision but highlighted overload and mixed-timescale issues.
-- **Iterative Design Flow (50-series influence)**: Incorporates the 3-tier hierarchy defined in 50.36_gb_design_decisions.md.
+- **Iterative Design Flow (50-series influence)**: Incorporates the 3-tier hierarchy defined in 50.43_gb_design_decisions.md.
 
 **Agreement Statement**: The three flows are aligned. The new hierarchy improves scalability and clarity while preserving all core invariants from the 20-series.
 
