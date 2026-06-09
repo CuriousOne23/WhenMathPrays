@@ -4,7 +4,7 @@
 
 - Legacy baseline: **approved** (pre–Two-Phase policy migration)
 - **W3 Phase A** (40.510-402 targeted redo): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- W3 Phase B (intake repair fields; `commit_id` boundary alignment): **cleared to start** — pending implementation
+- W3 Phase B (intake repair fields; `commit_id` boundary alignment): **complete** (2026-06-09 harness PASS; artifacts refreshed; see verification_capsule.md)
 - Program row: **40.510-402** (W3)
 
 ## W3 Targeted Redo Scope (40.510-402)
