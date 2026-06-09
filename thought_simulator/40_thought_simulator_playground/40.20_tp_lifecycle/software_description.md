@@ -14,7 +14,7 @@ Per [40.510](../40.510_refactor.md) and [20.105](../../20_requirements/20.105_tp
 - Track H **intake-bound** repair fields (IIInB write set per 20.38 §6; no `semantic_core` / `TP.TR`)
 - Lane-local carrier semantics aligned with normative A-chain ([20.36](../../20_requirements/20.36_canonical_end_to_end_trace.md) §2.1)
 - `commit_id` boundary awareness — TP drafts post-`mtp_update` MUST NOT alter committed snapshot for same cycle
-- Handoff shapes for [40.130](../40.130_split_merge_prototypes/software_description.md) split/merge and [40.501](../40.501_rb_prototypes/software_description.md) routing
+- Handoff shapes for [40.130](../40.130_split_merge_prototypes/software_description.md) split/merge and [40.501](../40.460_rb_prototypes/software_description.md) routing
 
 **Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 targeted redo scope (intake-bound repair fields, `commit_id` boundary, lane-local A-chain semantics, 40.130/40.501 handoffs) with no structural defects. Legacy macro API and `tp_lifecycle_io_schema_v1` remain valid; Phase B delta scoped to 20.105 §3.4 + 20.101 handoff only.
 

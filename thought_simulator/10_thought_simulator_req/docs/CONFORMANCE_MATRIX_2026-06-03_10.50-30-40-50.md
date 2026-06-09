@@ -68,11 +68,11 @@ COMPLIANT (updated in current transaction):
 - 40.40_scheduler_prototypes/harness.py
 - 40.40_scheduler_prototypes/artifacts/scheduler_verification_run_2026-05-28.json
 - 40.10_math_prototypes/software_description.md
-- 40.50_regulator_prototypes/software_description.md
-- 40.60_tick_cycle_skeleton/software_description.md
-- 40.70_snapshot_prototypes/software_description.md
-- 40.80_event_log_prototypes/software_description.md
-- 40.90_experiment_runner/software_description.md
+- 40.440_regulator_prototypes/software_description.md
+- 40.480_tick_cycle_skeleton/software_description.md
+- 40.520_snapshot_prototypes/software_description.md
+- 40.530_event_log_prototypes/software_description.md
+- 40.540_experiment_runner/software_description.md
 
 SCAFFOLD (created to complete required directory coverage):
 - 40.32_cob_prototypes/*

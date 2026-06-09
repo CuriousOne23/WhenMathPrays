@@ -1,4 +1,4 @@
-# 40.50_regulator_prototypes / software_description.md
+# 40.440_regulator_prototypes / software_description.md
 
 ## Approval State
 - Phase A (software_description): approved (per CP review confirming the 20-series anchors)

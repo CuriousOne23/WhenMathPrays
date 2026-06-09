@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.80_event_log_prototypes`.
+Track verification evidence for `40.480_tick_cycle_skeleton`.
 
 ## Phase State
 
@@ -11,25 +11,25 @@ Track verification evidence for `40.80_event_log_prototypes`.
 
 ## Invariants
 
-- Event logs are append-only and sequence-ordered.
-- Replay from event logs is deterministic for equivalent traces.
+- Tick sequencing is deterministic for equivalent inputs.
+- Phase order remains stable and no duplicate phase execution occurs per tick.
 
 ## Verification Steps (executed)
 
-1. Deterministic replay comparison across identical event sequences.
-2. Negative-path validation for out-of-order sequence numbers.
-3. Negative-path validation for malformed events with missing required fields.
+1. Replay two identical tick sequences and compare per-tick outputs.
+2. Negative-path validation for non-monotonic tick progression.
+3. Negative-path validation for invalid phase ordering.
 
 ## Evidence
 
 - Harness command: `.venv/Scripts/python.exe harness.py`
 - Harness result: PASS
 - Artifacts:
-	- `artifacts/event_log_verification_run_2026-05-28.json`
+	- `artifacts/tick_cycle_verification_run_2026-05-28.json`
 - Scenarios:
 	- `positive_deterministic_replay` PASS
-	- `negative_out_of_order_sequence` PASS
-	- `negative_missing_field` PASS
+	- `negative_non_monotonic_tick` PASS
+	- `negative_invalid_phase_order` PASS
 
 ## Status
 

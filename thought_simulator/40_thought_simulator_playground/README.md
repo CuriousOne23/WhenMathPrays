@@ -138,10 +138,10 @@ Why the exception exists:
 - [40.115_mtp_prototypes/](40.115_mtp_prototypes/) — MTP lifecycle; `commit_id` / `mtp_update` *(new W3)*
 - [40.130_split_merge_prototypes/](40.130_split_merge_prototypes/) — split/merge; `lineage_delta`; ΔH% *(new W3)*
 - [40.140_truth_done_prototypes/](40.140_truth_done_prototypes/) — Truth/Done terminal gate *(new W3)*
-- [40.501_rb_prototypes/](40.501_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
+- [40.460_rb_prototypes/](40.460_rb_prototypes/) — RB routing; post–IIInB fan-out *(new W3; not 40.50 regulator)*
 - [40.401_ob_prototypes/](40.401_ob_prototypes/) — OB lane-local evidence *(new W3; not 40.40 scheduler)*
 - [40.106_dcb_prototypes/](40.106_dcb_prototypes/) — DCB geometric meta-basin *(new W3)*
-- [40.601_tb_prototypes/](40.601_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
+- [40.500_tb_prototypes/](40.500_tb_prototypes/) — TB interpretation *(new W3; not 40.60 tick skeleton)*
 - [40.30_basin_prototypes/](40.30_basin_prototypes/) — generic basin (W3 full redo → normative A basins)
 - [40.35_ib_prototypes/](40.35_ib_prototypes/) — inquiry basin (W3 extension: escalation routing)
 - [40.37_tr_router_prototypes/](40.37_tr_router_prototypes/) — Thought Router (W3 extension: DCB/TR gating)
@@ -159,11 +159,11 @@ Why the exception exists:
 ### Orchestration, replay glue & cross-cutting (B5/B7)
 
 - [40.40_scheduler_prototypes/](40.40_scheduler_prototypes/) — scheduler (*folder*; 20.40 OB uses `40.401_*` when created)
-- [40.50_regulator_prototypes/](40.50_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
-- [40.60_tick_cycle_skeleton/](40.60_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
-- [40.70_snapshot_prototypes/](40.70_snapshot_prototypes/) — snapshot patterns
-- [40.80_event_log_prototypes/](40.80_event_log_prototypes/) — event log / replay
-- [40.90_experiment_runner/](40.90_experiment_runner/) — experiment orchestration
+- [40.440_regulator_prototypes/](40.440_regulator_prototypes/) — regulator / ΔH% (*folder*; 20.50 RB uses `40.501_*` when created)
+- [40.480_tick_cycle_skeleton/](40.480_tick_cycle_skeleton/) — tick-cycle skeleton (*folder*; 20.60 TB uses `40.601_*` when created)
+- [40.520_snapshot_prototypes/](40.520_snapshot_prototypes/) — snapshot patterns
+- [40.530_event_log_prototypes/](40.530_event_log_prototypes/) — event log / replay
+- [40.540_experiment_runner/](40.540_experiment_runner/) — experiment orchestration
 - [40.10_math_prototypes/](40.10_math_prototypes/) — math / entropy experiments (lighter doc burden per exception policy above)
 
 ### Shared

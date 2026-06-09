@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Track verification evidence for `40.70_snapshot_prototypes`.
+Track verification evidence for `40.540_experiment_runner`.
 
 ## Phase State
 
@@ -11,26 +11,26 @@ Track verification evidence for `40.70_snapshot_prototypes`.
 
 ## Invariants
 
-- Snapshot serialization is deterministic under equivalent inputs.
-- Snapshot reload preserves required state identity fields.
+- Experiment runner output identity is deterministic for equivalent requests.
+- Batch result ordering remains stable and traceable.
 
 ## Verification Steps (executed)
 
-1. Deterministic snapshot round-trip comparison for equivalent state payloads.
-2. Deterministic replay check on repeated snapshot dumps.
-3. Negative-path validation for corrupt digest and schema mismatch.
+1. Deterministic replay of identical single-run requests.
+2. Deterministic batch-run validation with stable result ordering and digest output.
+3. Negative-path validation for invalid `max_ticks` and empty request batch.
 
 ## Evidence
 
 - Harness command: `.venv/Scripts/python.exe harness.py`
 - Harness result: PASS
 - Artifacts:
-	- `artifacts/snapshot_verification_run_2026-05-28.json`
+	- `artifacts/experiment_runner_verification_run_2026-05-28.json`
 - Scenarios:
-	- `positive_round_trip` PASS
 	- `positive_deterministic_replay` PASS
-	- `negative_corrupt_digest` PASS
-	- `negative_schema_mismatch` PASS
+	- `positive_batch_run` PASS
+	- `negative_invalid_max_ticks` PASS
+	- `negative_empty_request_list` PASS
 
 ## Status
 

@@ -1,4 +1,4 @@
-# 40.501_rb_prototypes / software_description.md
+# 40.460_rb_prototypes / software_description.md
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
