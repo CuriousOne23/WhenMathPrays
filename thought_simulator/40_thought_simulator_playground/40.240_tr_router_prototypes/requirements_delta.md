@@ -53,8 +53,8 @@ Requirement-change and implementer-feedback record for `40.240_tr_router_prototy
 - `software_description.md`
 - `prototype.py`, `harness.py`
 - `verification_capsule.md`
-- `10.50.37_tr_requirements.md` (proxy + FLOW sections)
-- `30.37` (refresh if promoted with 6-test artifacts)
+- `10.50.180_tr_requirements.md` (proxy + FLOW sections)
+- `30.180` (refresh if promoted with 6-test artifacts)
 
 ## Open Validation / Phase C
 

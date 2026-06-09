@@ -32,7 +32,7 @@ GOVERNANCE_DOC_TOKENS = frozenset(
         "40.510",
         "30.00",
         "30.01",
-        "30.30",
+        "30.160",
         "50.00",
         "50.01",
         "50.05",
@@ -43,7 +43,7 @@ GOVERNANCE_DOC_TOKENS = frozenset(
 _STRICT_TAIL = r"(?![.\d_])"
 # After band in ID/path patterns (hyphen for HLR/LLR, underscore for slug)
 _AFTER_TAIL = r"(?=[\-_])"
-# Bare token must not be a substring of a longer tier address (e.g. 50.100 inside 10.50.100)
+# Bare token must not be a substring of a longer tier address (e.g. 50.100 inside 10.50.220)
 _TOKEN_LOOKBEHIND = r"(?<![.\d])"
 
 

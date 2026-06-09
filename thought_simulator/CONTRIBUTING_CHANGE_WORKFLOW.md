@@ -40,14 +40,14 @@ This workflow applies to edits under:
 - Exploratory documents may inform decisions but do not become formal trace edges.
 
 4. Update glossary, README, or tier inventory when terminology or **structure** changes.
-- If verification terminology changes, update `30_verification/30.30_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
+- If verification terminology changes, update `30_verification/30.160_verification_glossary.md` and `30_verification/glossary_term_registry.json` in the same change.
 - If requirements-tier terminology changes, update `20_requirements/archive/20.150_glossary.md` and `20_requirements/glossary_term_registry.json` in the same change.
 - For 50-series design terminology (especially new concepts introduced in design specs), update `50_thought_simulator_design/50.01_50_series_glossary.md` and `50_thought_simulator_design/glossary_term_registry.json`.
 - `20.150_glossary.md` is scoped to `20_requirements/` documents.
 - If folders/files are added, removed, moved, or renamed, update relevant `README.md` files.
 - If a **30 verification module** is added, renamed, or removed, update `30_verification/30.01_verification_inventory_index.md` in the same change set.
 - If a **level-1 50 design file** is added, renamed, or removed, update `50_thought_simulator_design/50.00_design_traceability_index.md` in the same change set.
-- Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.30_verification_glossary.md` (not the exploratory 40 glossary).
+- Outside `40_thought_simulator_playground/`, references must point to the canonical glossary at `30_verification/30.160_verification_glossary.md` (not the exploratory 40 glossary).
 
 **Do not** update tier inventory indexes (`30.01`, `50.00`) for content-only edits to capsules, deltas, or design specs.
 
@@ -102,7 +102,7 @@ Scripts live under `thought_simulator/scripts/`. **Blocking** checks fail the Gi
 | `validate_20_traceability_matrix.py` | Blocking | 20-series traceability matrix |
 | `validate_design_traceability.yml` (workflow) | Blocking | Level-1 `50.*.md` ↔ `50.00` table |
 | `validate_readme_links.py` | Blocking | README link targets exist |
-| `validate_glossary_alignment.py` | Warning | 30.30 glossary ↔ registry |
+| `validate_glossary_alignment.py` | Warning | 30.160 glossary ↔ registry |
 | `validate_requirements_glossary_alignment.py` | Warning | 20 glossary ↔ registry |
 | `validate_requirements_glossary_scope.py` | Warning | 20 glossary scope |
 | `validate_50_glossary_alignment.py` | Warning | 50.01 glossary ↔ registry |
@@ -151,7 +151,7 @@ Set-Location c:/Users/jeffg/Documents/GitHub/WhenMathPrays ; \
 - `30_verification/30.00_verification_user_guide.md` (verification process, artifact standards, and three-flow rules)
 - `30_verification/30.01_verification_inventory_index.md` (30-tier module inventory)
 - `50_thought_simulator_design/50.00_design_traceability_index.md` (cross-layer design traceability)
-- `30_verification/30.30_verification_glossary.md`
+- `30_verification/30.160_verification_glossary.md`
 
 ## Pull Request Checklist
 

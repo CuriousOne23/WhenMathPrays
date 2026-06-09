@@ -54,7 +54,7 @@ No-auto-propagation from 20-layer edits:
 
 Allowed automatic maintenance (30/40/50 scope, after explicit flow start):
 
-- update `30.30_verification_glossary.md` when terminology in 30/40/50 docs is renamed, added, or deprecated
+- update `30.160_verification_glossary.md` when terminology in 30/40/50 docs is renamed, added, or deprecated
 - update `glossary_term_registry.json` in the same change set as glossary term changes
 - repair README and markdown references/paths affected by file rename or section-name changes
 
@@ -63,7 +63,7 @@ Required backward-intake controls:
 - explicit flow direction confirmation (`backward`) before edits
 - changed canonical anchor list from `10_thought_simulator_req/`
 - impacted verification capsules and requirement deltas identified before execution
-- synchronized terminology check against `30.30_verification_glossary.md`
+- synchronized terminology check against `30.160_verification_glossary.md`
 - lineage note recorded when initiating anchors were promoted from `20_requirements/`
 - automatic backward-flow execution log creation/update under `10_thought_simulator_req/docs/`
 - automatic post-update integrity check run with result recorded in the backward-flow execution log
@@ -71,7 +71,7 @@ Required backward-intake controls:
 Minimum verification-layer integrity check:
 
 - missing or stale requirement references in impacted capsule/delta documents
-- terminology mismatch against `30.30_verification_glossary.md`
+- terminology mismatch against `30.160_verification_glossary.md`
 - missing module-level backward-flow governance section when module docs are in scope
 
 Backward-flow completion dependency for design equivalence:

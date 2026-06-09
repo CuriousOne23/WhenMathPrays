@@ -16,7 +16,7 @@
 - intended_20_secondary: [20.102](../../20_requirements/20.102_usp_requirements.md), [20.101](../../20_requirements/20.101_iiinb_requirements.md), [20.103](../../20_requirements/20.103_upi_requirements.md)
 - upstream_playground_modules: [40.60](../40.60_iiinb_prototypes/software_description.md) (inline `UspSnapshot` today), [40.50](../40.50_inb_prototypes/software_description.md)
 - applicability: shared **conversation-layer and intake struct** prototypes — canonical shapes for W2 wire-up across USP/UPI/IIInB/COB
-- disposition_target: promote (structural evidence; feeds 30.392 when normalized)
+- disposition_target: promote (structural evidence; feeds 30.140 when normalized)
 - program_wave: **W2** per [40.510_refactor.md](../40.510_refactor.md) §4.2
 - numbering_note: suffix `.392` avoids collision with `40.350_mb_prototypes` (Monitoring Basin)
 

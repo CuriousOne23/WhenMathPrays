@@ -19,7 +19,7 @@ Execute `50.05_software_spec_construction_guide.md` coverage for the `40.330` to
 - Requirement anchor:
   - `10.10_math_requirements.md`
 - Verification capsule + delta + artifact binding:
-  - `30_verification/30.10_math_prototypes/`
+  - `30_verification/30.270_math_prototypes/`
 - Design-spec output:
   - `50_thought_simulator_design/50.20_geometry_engine_design.md`
 

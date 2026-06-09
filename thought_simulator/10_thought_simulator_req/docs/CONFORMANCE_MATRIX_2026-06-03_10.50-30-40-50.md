@@ -26,26 +26,26 @@ Status: COMPLIANT (checkpoint)
 ## 2. 30 Layer
 
 COMPLIANT (updated in current transaction):
-- 30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md
-- 30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md
-- 30.20_tp_lifecycle/tp_state.json
-- 30.20_tp_lifecycle/determinism_run2.json
-- 30.20_tp_lifecycle/determinism_run3.json
-- 30.10_math_prototypes/30.10_math_prototypes_verification_capsule.md
-- 30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md
-- 30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md
-- 30.50_regulator_prototypes/30.50_regulator_prototypes_verification_capsule.md
-- 30.60_tick_cycle_skeleton/30.60_tick_cycle_skeleton_verification_capsule.md
-- 30.70_snapshot_prototypes/30.70_snapshot_prototypes_verification_capsule.md
-- 30.80_event_log_prototypes/30.80_event_log_prototypes_verification_capsule.md
-- 30.90_experiment_runner/30.90_experiment_runner_verification_capsule.md
-- 30.30_verification_glossary.md
+- 30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
+- 30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md
+- 30.150_tp_lifecycle/tp_state.json
+- 30.150_tp_lifecycle/determinism_run2.json
+- 30.150_tp_lifecycle/determinism_run3.json
+- 30.270_math_prototypes/30.270_math_prototypes_verification_capsule.md
+- 30.160_basin_prototypes/30.160_basin_prototypes_verification_capsule.md
+- 30.210_scheduler_prototypes/30.210_scheduler_prototypes_verification_capsule.md
+- 30.220_regulator_prototypes/30.220_regulator_prototypes_verification_capsule.md
+- 30.230_tick_cycle_skeleton/30.230_tick_cycle_skeleton_verification_capsule.md
+- 30.240_snapshot_prototypes/30.240_snapshot_prototypes_verification_capsule.md
+- 30.250_event_log_prototypes/30.250_event_log_prototypes_verification_capsule.md
+- 30.260_experiment_runner/30.260_experiment_runner_verification_capsule.md
+- 30.160_verification_glossary.md
 - glossary_term_registry.json
 
 NEEDS_EDIT:
 - none (legacy-pattern sweep: clear)
 
-Note: 30.20 evidence JSON artifacts were refreshed from the current 40.05 harness output in this pass and are treated as active evidence.
+Note: 30.150 evidence JSON artifacts were refreshed from the current 40.05 harness output in this pass and are treated as active evidence.
 
 ## 3. 40 Layer
 

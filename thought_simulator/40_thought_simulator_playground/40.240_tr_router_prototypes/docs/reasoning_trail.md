@@ -18,7 +18,7 @@ This document captures the step-by-step reasoning, design decisions, and three-f
 - Highlighted that this is a proxy for the basin-routing aspect; full semantic TR (12 fields, MTP reading, dirty-flag integration with OB/Merge/IB) requires future iteration.
 
 ## Iterative Design Flow
-- 10.50.37 canonical requirements were seeded directly from this prototype's behavior (simple content-based routing + ΔH%).
+- 10.50.180 canonical requirements were seeded directly from this prototype's behavior (simple content-based routing + ΔH%).
 - The detailed software_description.md was written to document the proxy scope clearly.
 - Future 50.37 design will likely drive deeper 40.240 work on full TR semantics.
 

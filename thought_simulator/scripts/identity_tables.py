@@ -92,7 +92,7 @@ def entries_by_id(table: dict[str, Any]) -> dict[str, IdentityEntry]:
 
 
 def parse_band(entry_id: str) -> str:
-    """Return numeric band from entry_id (e.g. 10.50.392 -> 392, 50.36.10 -> 36.10)."""
+    """Return numeric band from entry_id (e.g. 10.50.140 -> 392, 50.36.10 -> 36.10)."""
     if entry_id.startswith("10.50."):
         return entry_id.removeprefix("10.50.")
     if entry_id.startswith("30."):
@@ -219,7 +219,7 @@ def bootstrap_all_tables() -> dict[str, dict[str, Any]]:
     for path in sorted(thirty_dir.iterdir()):
         if path.is_dir() and path.name.startswith("30.") and path.name != "30.tb":
             band = parse_band(path.name.split("_", 1)[0].replace("30.", "30.", 1))
-            # band from dir: 30.392_core... -> entry_id 30.392
+            # band from dir: 30.140_core... -> entry_id 30.140
             entry_id = path.name.split("_", 1)[0]
             band_key = entry_id.removeprefix("30.")
             paired = ten_fifty_by_band.get(band_key)

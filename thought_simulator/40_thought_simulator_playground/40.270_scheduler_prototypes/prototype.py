@@ -298,7 +298,7 @@ class SchedulerPrototype:
 
 	def _select_for_tick(self) -> tuple[list[str], str, dict[str, Any]]:
 		"""Return (selected_ids, tie_break_rationale, cohort_metadata).
-		Exploratory only; policies and weights are not canonical (see Non-Goals and 10.50.40).
+		Exploratory only; policies and weights are not canonical (see Non-Goals and 10.50.210).
 		"""
 		ordered_ids = sorted(self.thoughtpoints)
 		selection_count = min(self.max_active, len(ordered_ids))
@@ -322,7 +322,7 @@ class SchedulerPrototype:
 
 		def weighted_score(tp: ThoughtPoint) -> float:
 			# Exploratory weights for Phase B evidence generation only.
-			# Not proposed as final policy (governed by 50-series / 10.50.40).
+			# Not proposed as final policy (governed by 50-series / 10.50.210).
 			age_weight = 1.0
 			energy_weight = 0.1
 			coherence_weight = 0.1

@@ -33,23 +33,23 @@ This file will track how the DCB stability prototype aligns with and explores th
 **Not Covered in this Prototype:** (all — awaiting implementation)
 
 ## Open Questions / Gaps for 10-series
-- Confirmation that qualitative-only stance in 20.165 is preserved in any 40 exploration (initial scaffold in 10.50.165_dcb_stability_requirements.md created to receive this)
+- Confirmation that qualitative-only stance in 20.165 is preserved in any 40 exploration (initial scaffold in 10.50.190_dcb_stability_requirements.md created to receive this)
 - Mapping of observable directional-change event rates to stability signals without semantic interpretation
-- Gating under tr_needs_update for DCB consumption (cross-ref 20.37 / 10.50.37)
+- Gating under tr_needs_update for DCB consumption (cross-ref 20.37 / 10.50.180)
 
 ## Traceability Targets
 - thought_simulator/20_requirements/20.165_dcb_stability_requirements.md (primary)
-- thought_simulator/30_verification/30.165_dcb_stability_prototypes/
+- thought_simulator/30_verification/30.190_dcb_stability_prototypes/
 - thought_simulator/50_thought_simulator_design/50.165_dcb_stability_design.md
-- thought_simulator/10_thought_simulator_req/50_design/10.50.165_dcb_stability_requirements.md
+- thought_simulator/10_thought_simulator_req/50_design/10.50.190_dcb_stability_requirements.md
 - ../40.05_master_program_guide.md (master process context)
 
 ## Cross-Layer 165 Scaffolds (current state)
 20.165 plus the four matching placeholder layers created as consistent dummies:
 - 20.165 (source requirements + qualitative stability argument)
 - 40.220 (this module: exploration scaffold)
-- 30.165 (verification capsule/delta scaffold)
+- 30.190 (verification capsule/delta scaffold)
 - 50.165 (design support scaffold)
-- 10.50.165 (design requirements scaffold)
+- 10.50.190 (design requirements scaffold)
 
 See also the updates in 20.200_traceability_matrix.md and 50.00_design_traceability_index.md.

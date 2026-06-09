@@ -42,11 +42,11 @@ Design goals (per project process):
 Current known drift (as of 2026-06):
   - 50 has extra governance docs at 50.00-50.09 (intended and documented in 50.05).
   - 50.09_geometry_engine_design.md should be 50.10 to align with:
-      10.50.10_math_requirements.md
+      10.50.270_math_requirements.md
       40.330_math_prototypes/
-      30.10_math_prototypes/
+      30.270_math_prototypes/
   - 50.50_data_structures.md and 50.50_regulator_design_support.md conflict on .50.
-    Regulator aligns with 10.50.50 / 40.50 / 30.50. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.45 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.
+    Regulator aligns with 10.50.220 / 40.50 / 30.220. Data Structures has no dedicated 40/30/10.50 equivalent, so it uses 50.45 (between scheduler .40 and regulator .50). The prior script default of 50.55 is superseded by this manual choice.
 
 Component numbering convention (to be documented in 50.05 and 50.00 index):
   .10  Math/Geometry
@@ -108,9 +108,9 @@ RENAME_MAP: Dict[str, str] = {
     # 10_ tier placement fixes (use full path from thought_simulator root so the
     # generalized resolver above can handle them). Example of the reported issue:
     # when correcting a GB reqs file that was placed in 10.10 architecture docs
-    # but named 10.50.36 (colliding with 10.50.36_gb_design... ), it must become
+    # but named 10.50.130 (colliding with 10.50.130_gb_design... ), it must become
     # 10.10.36_gb_requirements.md -- the script must NEVER auto-pick e.g. 10.10.60.
-    # "10_thought_simulator_req/10_system_architecture/10.50.36_gb_requirements.md":
+    # "10_thought_simulator_req/10_system_architecture/10.50.130_gb_requirements.md":
     #     "10_thought_simulator_req/10_system_architecture/10.10.36_gb_requirements.md",
 }
 
@@ -130,7 +130,7 @@ REPLACEMENT_PAIRS: List[Tuple[str, str]] = [
     # LLRs that embed the old number (in the geometry file itself)
     ("LLR-50.09-001", "LLR-50.10-001"),
     # 10_ tier example (commented; add basename or full as needed when activating a 10 rename):
-    # ("10.50.36_gb_requirements.md", "10.10.36_gb_requirements.md"),
+    # ("10.50.130_gb_requirements.md", "10.10.36_gb_requirements.md"),
 ]
 
 # Directories to scan for references (relative to ROOT)
@@ -235,7 +235,7 @@ def main():
     renames: List[Tuple[Path, Path]] = []
     for old_rel, new_rel in RENAME_MAP.items():
         # Support both 50-only relative (legacy) and full paths relative to thought_simulator root
-        # (for 10_ tier corrections like 10.50.36_gb... in architecture dir -> 10.10.36_... )
+        # (for 10_ tier corrections like 10.50.130_gb... in architecture dir -> 10.10.36_... )
         if "/" in old_rel or "\\" in old_rel:
             old = ROOT / old_rel
             new = ROOT / new_rel

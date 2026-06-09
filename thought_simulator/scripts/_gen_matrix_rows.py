@@ -22,11 +22,11 @@ scopes = {
 
 special = {
     "20.70_mb_requirements.md": (
-        "../30_verification/30.39_mb_prototypes/30.39_mb_prototypes_verification_capsule.md",
+        "../30_verification/30.200_mb_prototypes/30.200_mb_prototypes_verification_capsule.md",
         "../50_thought_simulator_design/50.39_mb_design_spec.md",
     ),
     "20.165_dcb_stability_requirements.md": (
-        "../30_verification/30.165_dcb_stability_prototypes/30.165_dcb_stability_prototypes_verification_capsule.md",
+        "../30_verification/30.190_dcb_stability_prototypes/30.190_dcb_stability_prototypes_verification_capsule.md",
         "../50_thought_simulator_design/50.165_dcb_stability_design.md",
     ),
 }

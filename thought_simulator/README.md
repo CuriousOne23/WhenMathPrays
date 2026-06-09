@@ -62,7 +62,7 @@ If you are new to this repository, use this order:
 4. [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
 5. [30_verification/README.md](30_verification/README.md)
 6. [30_verification/30.01_verification_inventory_index.md](30_verification/30.01_verification_inventory_index.md)
-7. [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
+7. [30_verification/30.160_verification_glossary.md](30_verification/30.160_verification_glossary.md)
 
 Then review canonical requirement anchors:
 
@@ -72,9 +72,9 @@ Then review canonical requirement anchors:
 
 Then review canonical verification evidence snapshots:
 
-11. [30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md](30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md)
-12. [30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md](30_verification/30.30_basin_prototypes/30.30_basin_prototypes_verification_capsule.md)
-13. [30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md](30_verification/30.40_scheduler_prototypes/30.40_scheduler_prototypes_verification_capsule.md)
+11. [30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md](30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md)
+12. [30_verification/30.160_basin_prototypes/30.160_basin_prototypes_verification_capsule.md](30_verification/30.160_basin_prototypes/30.160_basin_prototypes_verification_capsule.md)
+13. [30_verification/30.210_scheduler_prototypes/30.210_scheduler_prototypes_verification_capsule.md](30_verification/30.210_scheduler_prototypes/30.210_scheduler_prototypes_verification_capsule.md)
 
 ## Process Flow (Current)
 
@@ -100,7 +100,7 @@ Process control sources:
 
 - governance and promotion gates: [10_thought_simulator_req/docs/promotion_protocol.md](10_thought_simulator_req/docs/promotion_protocol.md)
 - construction workflow rules: [50_thought_simulator_design/50.05_software_spec_construction_guide.md](50_thought_simulator_design/50.05_software_spec_construction_guide.md)
-- shared verification vocabulary: [30_verification/30.30_verification_glossary.md](30_verification/30.30_verification_glossary.md)
+- shared verification vocabulary: [30_verification/30.160_verification_glossary.md](30_verification/30.160_verification_glossary.md)
 
 ## Core Reading Path
 

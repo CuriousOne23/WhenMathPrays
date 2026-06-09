@@ -31,7 +31,7 @@ Phase B SHALL extend beyond the standalone `route({"content": ...})` proxy to im
 | Two-phase model (stop after Phase A) | Pass |
 | Blockers | **None** — Phase B authorized |
 
-**2026-06-05 alignment pass:** Synchronized with `20.37` flow contract and 10.50.37 / 30.37 artifacts. W3 Phase A CP-approved 2026-06-08; proxy-only code remains until W3 Phase B lands.
+**2026-06-05 alignment pass:** Synchronized with `20.37` flow contract and 10.50.180 / 30.180 artifacts. W3 Phase A CP-approved 2026-06-08; proxy-only code remains until W3 Phase B lands.
 
 ## Execution Phases (40.* Model)
 
@@ -51,7 +51,7 @@ This document defines the **desired / explored behavior** for the Thought Router
 
 The **authoritative full TR integration model** is the Semantic Interpretation Flow Contract in `20.37_thought_router_tr_specification.md` (OB → TR-input → `tr_needs_update` → TR routine → `TP.TR` → RB, with optional DCB geometric overlay). This 40.240 module executed only a **minimal basin-selection proxy**; it does not implement that contract.
 
-Insights and evidence from the proxy inform `10.50.37` (promoted routing) and document open work toward full 20.37 conformance.
+Insights and evidence from the proxy inform `10.50.180` (promoted routing) and document open work toward full 20.37 conformance.
 
 ---
 
@@ -94,7 +94,7 @@ The following is the normative cycle this prototype **defers**; it is summarized
 - JSON artifacts in `artifacts/`
 - `docs/` with experiments.md, prototype_notes.md, reasoning_trail.md
 - Expanded verification_capsule.md and requirements_delta.md
-- Forward-flow sync to 10.50.37 and 30.37 (2026-06-05)
+- Forward-flow sync to 10.50.180 and 30.180 (2026-06-05)
 
 ---
 
@@ -155,9 +155,9 @@ This prototype was developed under guidance from (and must be traceable to):
 
 - **10.10.36 / 20.80** — GB read-only, safe-boundary supervision; no TR mutation by GB.
 
-- **10.50.37_tr_requirements.md** — Canonical anchor: promoted proxy (`HLR-20.437-*`, `10.50.37.TR.*`) plus integration flow (`10.50.37.FLOW.*` → 20.37).
+- **10.50.180_tr_requirements.md** — Canonical anchor: promoted proxy (`HLR-20.437-*`, `10.50.180.TR.*`) plus integration flow (`10.50.180.FLOW.*` → 20.37).
 
-- **30.37** — Verification capsule/delta; proves proxy only; integration contract marked open (2026-06-05).
+- **30.180** — Verification capsule/delta; proves proxy only; integration contract marked open (2026-06-05).
 
 ---
 
@@ -188,7 +188,7 @@ This prototype was developed under guidance from (and must be traceable to):
 
 ## 4. What the 10-series Must Eventually Define
 
-The prototype surfaced requirements the 10-series **SHALL** maintain (partially in 10.50.37 today):
+The prototype surfaced requirements the 10-series **SHALL** maintain (partially in 10.50.180 today):
 
 - Full TR routine contract per 20.37 (field rules, rejection, versioning)
 - Dirty-flag enforcement aligned with 20.31 §10 and 10.10.50
@@ -197,7 +197,7 @@ The prototype surfaced requirements the 10-series **SHALL** maintain (partially 
 - Serialization / numeric policy (20.95, 20.39) for TR subfields
 - IPC and module visibility for TR (10.10.20, 10.10.50)
 
-Promotion path: proxy evidence → `10.50.37.TR.*` + `30.37` (done); integration scenarios → extend `30.37` or sibling harness → `50.37` design spec.
+Promotion path: proxy evidence → `10.50.180.TR.*` + `30.180` (done); integration scenarios → extend `30.180` or sibling harness → `50.37` design spec.
 
 ---
 
@@ -262,12 +262,12 @@ Reserved for subsequent 40.x iterations or 50.37 after integration harness evide
 - Harness 4/4 pass; multi-run determinism artifacts
 - `requirements_delta.md` and `verification_capsule.md` with three-flow statements
 - Phase A software_description approved; 40.05 structural alignment
-- Partial promotion to 10.50.37 (`HLR-20.437-*`) and 30.37
+- Partial promotion to 10.50.180 (`HLR-20.437-*`) and 30.180
 
 **Open before integration promotion:**
 
 - Harness scenarios for 20.37 flow contract (dirty flag, TR commit/clear, RB gate)
-- 30.37 `proves:` extension to HLR-20.037-049/050/051
+- 30.180 `proves:` extension to HLR-20.037-049/050/051
 - 50.37 design spec update per 50.05 after integration evidence
 
 ---
@@ -278,7 +278,7 @@ Reserved for subsequent 40.x iterations or 50.37 after integration harness evide
 
 - **Backward Flow (40-series evidence):** Executed proxy proves deterministic basin routing + ΔH% + error path (`HLR-20.437-*`). Evidence does **not** prove HLR-20.037-049/050/051 or full OB→TR→`TP.TR` cycle.
 
-- **Iterative Design Flow:** 10.50.37 and 30.37 synchronized 2026-06-05 to split proxy vs integration scope; 50.37 remains proxy-based until integration scenarios exist.
+- **Iterative Design Flow:** 10.50.180 and 30.180 synchronized 2026-06-05 to split proxy vs integration scope; 50.37 remains proxy-based until integration scenarios exist.
 
 **Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 semantic interpretation flow is canonical and documented here as the target; verification and prototype code for that flow remain **open**.
 
@@ -293,8 +293,8 @@ Phase B evidence and this description **SHALL** trace to:
 - 20.106 (DCB)
 - 20.10, 20.16, 20.30, 20.38
 - 10.10.10, 10.10.20, 10.10.40, 10.10.50, 10.10.36
-- 10.50.37 (proxy + FLOW sections)
-- 30.37 verification package
+- 10.50.180 (proxy + FLOW sections)
+- 30.180 verification package
 - 40.240 local artifacts (`artifacts/`, harness, capsule, delta)
 
 ---
@@ -305,5 +305,5 @@ Phase B evidence and this description **SHALL** trace to:
 - intended_20_flow_contract: Semantic Interpretation Flow Contract (20.37); tr_needs_update: 20.31 §10; DCB: 20.106
 - intended_10_10_anchor: thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md
 - executed_as: minimal basin-selection router (proxy); full TP.TR + flow contract deferred
-- disposition_target: promote proxy (10.50.37.TR + 30.37); integration verification open
+- disposition_target: promote proxy (10.50.180.TR + 30.180); integration verification open
 - last_20_37_sync: 2026-06-05

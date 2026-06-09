@@ -161,7 +161,7 @@ def main() -> None:
             "20.90_ib_requirements.md",
             "20.90_ts_parameter_table.md",
             "10.10.40_scheduler_and_regulator_architecture.md",
-            "10.50.50_regulator_requirements.md",
+            "10.50.220_regulator_requirements.md",
         ],
         "scenarios": scenarios,
     }

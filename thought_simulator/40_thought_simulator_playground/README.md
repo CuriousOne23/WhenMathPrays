@@ -30,7 +30,7 @@ Required capsule files per module:
 
 Shared playground vocabulary:
 
-- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md)
+- [../30_verification/30.160_verification_glossary.md](../30_verification/30.160_verification_glossary.md)
 
 ## Workflow
 
@@ -172,7 +172,7 @@ Why the exception exists:
 
 ### External vocabulary
 
-- [../30_verification/30.30_verification_glossary.md](../30_verification/30.30_verification_glossary.md) — verification terms
+- [../30_verification/30.160_verification_glossary.md](../30_verification/30.160_verification_glossary.md) — verification terms
 - [../20_requirements/20.190_glossary.md](../20_requirements/20.190_glossary.md) — primitive intent catalog
 
 

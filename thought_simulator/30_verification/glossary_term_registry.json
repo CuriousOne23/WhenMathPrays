@@ -1,7 +1,7 @@
 {
   "protected_terms": [],
   "required_by_module": {
-    "30.20_tp_lifecycle": [
+    "30.150_tp_lifecycle": [
       "scenario",
       "artifact",
       "deterministic_mode",
@@ -20,7 +20,7 @@
       "verification capsule",
       "requirements delta"
     ],
-    "30.30_basin_prototypes": [
+    "30.160_basin_prototypes": [
       "scenario",
       "artifact",
       "deterministic_mode",
@@ -31,7 +31,7 @@
       "verification capsule",
       "requirements delta"
     ],
-    "30.40_scheduler_prototypes": [
+    "30.210_scheduler_prototypes": [
       "scheduler",
       "fairness",
       "tie-break",

@@ -89,7 +89,7 @@ FIXES: list[tuple[str, str]] = [
     ('"40.501:', '"40.190:'),
     ('"40.601:', '"40.230:'),
     # Regulator module conflated with 40.50_inb after renumber
-    ("This 40.50 capsule is the exploratory verification record (30.50 holds canonical promotion).", "This 40.320 capsule is the exploratory verification record (30.50 holds canonical promotion)."),
+    ("This 40.50 capsule is the exploratory verification record (30.220 holds canonical promotion).", "This 40.320 capsule is the exploratory verification record (30.220 holds canonical promotion)."),
     ("40.50 prototype/harness (Phase B)", "40.320 prototype/harness (Phase B)"),
     ("Phase B evidence from 40.50 (", "Phase B evidence from 40.320 ("),
     ("source 40.50/verification_capsule.md (and 40.50/requirements_delta.md + software_description.md)", "source 40.320_regulator_prototypes/verification_capsule.md (and 40.320_regulator_prototypes/requirements_delta.md + software_description.md)"),
@@ -109,9 +109,9 @@ FIXES: list[tuple[str, str]] = [
     ("Constructed per 50.05 from 40.39 Phase B", "Constructed per 50.05 from 40.350 Phase B"),
     ("The 40.39_mb_prototypes", "The 40.350_mb_prototypes"),
     ("40.39_mb_prototypes/", "40.350_mb_prototypes/"),
-    ("40.39/30.39", "40.350/30.39"),
-    ("from 40.39/30.39", "from 40.350/30.39"),
-    ("Backward flow from 40.39/30.39", "Backward flow from 40.350/30.39"),
+    ("40.39/30.200", "40.350/30.200"),
+    ("from 40.39/30.200", "from 40.350/30.200"),
+    ("Backward flow from 40.39/30.200", "Backward flow from 40.350/30.200"),
     ("exploratory evidence from 40.39_mb_prototypes", "exploratory evidence from 40.350_mb_prototypes"),
     ("40.340 evidence set", "40.340_cop_prototypes evidence set"),
 ]

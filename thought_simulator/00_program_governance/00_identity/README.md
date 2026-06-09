@@ -18,7 +18,7 @@ Machine-readable canonical identity registry for controlled renames across tiers
 - **Controlled renames (normative):** [00.00.43_controlled_identity_rename_policy.md](../00_foundations/00.00.43_controlled_identity_rename_policy.md)
 - **Naming layout target (guidance only):** [naming_strategy_target.md](naming_strategy_target.md)
 - **40 renumber manifest (executed 2026-06-09):** [40_renumber_manifest.json](40_renumber_manifest.json)
-- **30 ↔ 10.50 renumber manifest (planned):** [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json) — placeholder for Phase-2 coupled pass; one row per atomic pair
+- **30 ↔ 10.50 renumber manifest (executed 2026-06-09):** [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json)
 
 ## Commands
 

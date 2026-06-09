@@ -6,7 +6,7 @@ Canonical verification report for `40.110_cob_prototypes` after Phase B executio
 
 ## Glossary References
 
-- `../../30_verification/30.30_verification_glossary.md`
+- `../../30_verification/30.160_verification_glossary.md`
 - `../40.05_master_program_guide.md`
 
 ## Run Record

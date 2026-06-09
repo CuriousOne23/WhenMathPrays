@@ -16,11 +16,11 @@ Promote Phase B evidence from exploratory modules `40.50` through `40.90` into c
   - `10.80_event_log_requirements.md`
   - `10.90_experiment_runner_requirements.md`
 - Verification evidence capsules/deltas:
-  - `30_verification/30.50_regulator_prototypes/`
-  - `30_verification/30.60_tick_cycle_skeleton/`
-  - `30_verification/30.70_snapshot_prototypes/`
-  - `30_verification/30.80_event_log_prototypes/`
-  - `30_verification/30.90_experiment_runner/`
+  - `30_verification/30.220_regulator_prototypes/`
+  - `30_verification/30.230_tick_cycle_skeleton/`
+  - `30_verification/30.240_snapshot_prototypes/`
+  - `30_verification/30.250_event_log_prototypes/`
+  - `30_verification/30.260_experiment_runner/`
 - Design-spec outputs (50-band supporting docs):
   - `50.31_regulator_design_support.md`
   - `50.32_tick_cycle_design_support.md`

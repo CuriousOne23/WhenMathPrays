@@ -83,7 +83,7 @@ Perform in this order only.
 
 ## 6. Integrity Checks (Mandatory)
 - [ ] Stale-reference scan across 30/40/50
-- [ ] Glossary consistency check against 30.30_verification_glossary
+- [ ] Glossary consistency check against 30.160_verification_glossary
 - [ ] HLR/LLR mapping completeness check
 - [ ] 50.00 index consistency check (all rows valid)
 - [ ] Link/path validity check for renamed or moved files

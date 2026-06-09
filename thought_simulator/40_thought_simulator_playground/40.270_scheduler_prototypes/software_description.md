@@ -61,15 +61,15 @@ All exploration **SHALL** remain strictly deterministic, non-cognitive, and non-
   - 20.170_safety_requirements.md (fair progress, starvation prevention, and deterministic failure behavior)
   - 20.200_traceability_matrix.md (test obligations for fairness and determinism)
 
-- **Backward Flow (40-series evidence)**: Phase B execution (this module) produced concrete deterministic evidence against the 10.10.40 architecture and 20-series HLRs/guidance. Evidence is captured in the 12-scenario artifact + verification_capsule.md + requirements_delta.md. This provides backward input for refinement of 10.50.40 and 50-series scheduler specs (e.g., confirming bounded history, rich obs emission, interrupt window logging, cohort metadata as useful for audit).
+- **Backward Flow (40-series evidence)**: Phase B execution (this module) produced concrete deterministic evidence against the 10.10.40 architecture and 20-series HLRs/guidance. Evidence is captured in the 12-scenario artifact + verification_capsule.md + requirements_delta.md. This provides backward input for refinement of 10.50.210 and 50-series scheduler specs (e.g., confirming bounded history, rich obs emission, interrupt window logging, cohort metadata as useful for audit).
 
-- **Iterative Design Flow (50-series influence)**: The downstream 10.50.40_scheduler_requirements.md (updated with HLR-20.440-001 to 008 + contract elements) exists as the canonical anchor. Phase B evidence can explore and provide evidence to refine or validate those.
+- **Iterative Design Flow (50-series influence)**: The downstream 10.50.210_scheduler_requirements.md (updated with HLR-20.440-001 to 008 + contract elements) exists as the canonical anchor. Phase B evidence can explore and provide evidence to refine or validate those.
 
 **Agreement Statement**: With Phase A approved and Phase B executed (12/12 PASS artifact covering all 10 required exploration items + core invariants from 10.10.40), the three flows are aligned:
 
 - Forward: implementation and evidence directly traceable to 10.10.40 (roles, ordering, interrupts, timing, safety, replay) + listed 20 anchors (determinism, fairness, TCU, safety, OB replay, params).
-- Backward: the generated artifact, capsule, and delta now supply concrete evidence (selection determinism, tie-break provenance, window/preempt handling, budget modeling, cohort/merge meta, bounded history, rich logs, negative-path rejection, starvation prevention) that can legitimately drive targeted updates to 10.50.40 HLRs or 50-series specs via the 30 promotion path (no bypass).
-- Iterative: downstream 10.50.40 (HLR-20.440-001..008 + contract elements + TCU scheduler budgets) influenced the scope; Phase B evidence can now feed iterative refinement (e.g. explicit rationale logging, history bound as measurable).
+- Backward: the generated artifact, capsule, and delta now supply concrete evidence (selection determinism, tie-break provenance, window/preempt handling, budget modeling, cohort/merge meta, bounded history, rich logs, negative-path rejection, starvation prevention) that can legitimately drive targeted updates to 10.50.210 HLRs or 50-series specs via the 30 promotion path (no bypass).
+- Iterative: downstream 10.50.210 (HLR-20.440-001..008 + contract elements + TCU scheduler budgets) influenced the scope; Phase B evidence can now feed iterative refinement (e.g. explicit rationale logging, history bound as measurable).
 
 All work preserved non-cognitive / deterministic / bounded / replayable / safety-first nature (no cognitive interpretation, no core state mutation, sorted JSON + digest for replay, history_max enforced, contract validation, monotonic ticks).
 
@@ -98,7 +98,7 @@ Phase B **SHALL** explore and produce concrete (deterministic, replayable) evide
 This module **SHALL NOT**:
 - Perform any cognitive, semantic, or interpretation logic (strictly non-cognitive per 10.10.40)
 - Mutate TP, MTP, or other cognitive state
-- Define or hard-code final policy algorithms, tie-break orders, or numeric thresholds (these are governed by 20.95/50-series and 10.50.40)
+- Define or hard-code final policy algorithms, tie-break orders, or numeric thresholds (these are governed by 20.95/50-series and 10.50.210)
 - Implement the full control plane (regulator, GB supervisory, etc.); focus on core scheduler selection and observability logic
 - Assume specific hardware or runtime details beyond the portable contracts in 10.10.60
 
@@ -113,7 +113,7 @@ This module **SHALL NOT**:
 ## Required Next Step
 Phase B complete (see Phase B Deliverables above and updates to requirements_delta.md + verification_capsule.md with full evidence + three-flow statements).
 
-Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.40 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.40 refinements or 50.40_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
+Next (per 40.05 + 30.00): human may request 30.00 promotion step on this module (copy artifact + refresh 30.210 delta/capsule as canonical verification record). Evidence is now available to inform 10.50.210 refinements or 50.40_scheduler_design_spec.md construction (via 50.05 patterns), always through 30.
 
 All Phase B work preserved the non-cognitive, deterministic, bounded, replayable, and safety-first nature of the scheduler (see invariants in capsule).
 
@@ -126,7 +126,7 @@ All Phase B work preserved the non-cognitive, deterministic, bounded, replayable
 - 20.170_safety_requirements.md (fairness and failure behavior)
 - 20.200_traceability_matrix.md (test obligations)
 - 10.10.10_system_architecture.md, 10.10.20_interprocess_communication_and_channels.md, 10.10.30_interrupts_and_preemption_model.md, 10.10.50_module_contracts_and_visibility_rules.md, 10.10.60_coprocessor_offload_and_portability_rules.md (supporting architecture)
-- 10.50.40_scheduler_requirements.md (downstream canonical anchor with HLR-20.440-001..008 + contract elements + TCU)
+- 10.50.210_scheduler_requirements.md (downstream canonical anchor with HLR-20.440-001..008 + contract elements + TCU)
 - 50.40_scheduler_design_spec.md (constructed per 50.05)
 
 All Phase B evidence **SHALL** be traceable to the relevant sources above.

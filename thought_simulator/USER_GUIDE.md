@@ -448,7 +448,7 @@ CI should enforce the following:
 7. Incomplete forward-flow promotion (`30.01` rows with status `promoted` or `approved` but no matching `10.50.{band}_*.md` in `10_thought_simulator_req/50_design/`) is reported by `validate_30_10_50_pairing.py` (non-blocking warning; one-way 30 → 10.50 only).
 8. Local pre-PR runs may use `validate_50_traceability_index.py` (non-blocking warning) as a mirror of the blocking 50.00 workflow check.
 9. If a PR renames any markdown file under `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`, CI must fail unless the same change set includes:
-  - `30_verification/30.30_verification_glossary.md`
+  - `30_verification/30.160_verification_glossary.md`
   - `30_verification/glossary_term_registry.json`
   - `50_thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `50_thought_simulator_design/`)
   Note: The 50-series glossary (`50.01_50_series_glossary.md` + registry) is under CI warning checks (non-blocking) so the team is notified of potential freshness issues, but updates are decided by humans rather than enforced.

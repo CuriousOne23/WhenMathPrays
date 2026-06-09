@@ -370,7 +370,7 @@ def _build_report() -> dict[str, Any]:
         },
         "requirements_anchors": [
             "10.10.40_scheduler_and_regulator_architecture.md",
-            "10.50.40_scheduler_requirements.md",
+            "10.50.210_scheduler_requirements.md",
             "20.30_ts_functional_model.md",
             "20.40_ob_requirements.md",
             "20.90_ib_requirements.md",

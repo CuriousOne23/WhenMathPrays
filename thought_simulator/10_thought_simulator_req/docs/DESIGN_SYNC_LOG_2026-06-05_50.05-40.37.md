@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-05  
 **Methodology:** `50_thought_simulator_design/50.05_software_spec_construction_guide.md`  
-**Source evidence:** Approved `40.240_tr_router_prototypes` (40.05 pass); `30.37` v0.4; `10.50.37`
+**Source evidence:** Approved `40.240_tr_router_prototypes` (40.05 pass); `30.180` v0.4; `10.50.180`
 
 ## Outputs
 
@@ -13,7 +13,7 @@
 
 ## Evidence coupling (50.05 §5.2)
 
-Cited verification: `30_verification/30.37_tr_prototypes/tr_verification_run{1,2,3}_2026-06-03.json` (6/6, `evidence_scope: proxy_only`).
+Cited verification: `30_verification/30.180_tr_prototypes/tr_verification_run{1,2,3}_2026-06-03.json` (6/6, `evidence_scope: proxy_only`).
 
 **Proven in design:** HLR-20.437-001/002/003 via proxy contract §3.1.
 
@@ -21,6 +21,6 @@ Cited verification: `30_verification/30.37_tr_prototypes/tr_verification_run{1,2
 
 ## Forward-Equivalence State
 
-**YES** for proxy scope — 50.37 aligns with 10.50.37 and 30.37 without claiming integration verification.
+**YES** for proxy scope — 50.37 aligns with 10.50.180 and 30.180 without claiming integration verification.
 
 **NO** for full TR integration equivalence — Phase C documented as open in §7.2.

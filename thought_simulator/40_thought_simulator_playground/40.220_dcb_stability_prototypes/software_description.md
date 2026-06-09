@@ -14,7 +14,7 @@ Phase B SHALL implement qualitative stability invariants per [20.165](../../20_r
 - scaffold_status: Phase A complete — stub only; W3 Phase B pending
 - program_wave: **W3**
 - intended_20_anchor: thought_simulator/20_requirements/20.165_dcb_stability_requirements.md
-- intended_10_10-anchor: (to be determined via 10.50.165)
+- intended_10_10-anchor: (to be determined via 10.50.190)
 - applicability: planned exploratory module for DCB stability qualitative invariants
 - disposition_target: promote
 
@@ -57,5 +57,5 @@ Implement prototype and harness behavior (when approved), then populate verifica
 - 20.30_ts_functional_model.md
 - 40.05_master_program_guide.md
 - 50.165_dcb_stability_design.md
-- 30_verification/30.165_dcb_stability_prototypes/
-- 10.50.165_dcb_stability_requirements.md
+- 30_verification/30.190_dcb_stability_prototypes/
+- 10.50.190_dcb_stability_requirements.md

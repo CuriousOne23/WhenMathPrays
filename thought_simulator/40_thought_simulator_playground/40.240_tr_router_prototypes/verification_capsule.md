@@ -13,15 +13,15 @@ Canonical verification report for `40.240_tr_router_prototypes`, per `40.05_mast
 
 ## Glossary References
 
-- `../../30_verification/30.30_verification_glossary.md`
+- `../../30_verification/30.160_verification_glossary.md`
 - `../40.05_master_program_guide.md`
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref (proven) | Req Doc | Notes |
 |------|--------|---------|-----------------|--------|-----------|-----------|------------------|---------|-------|
-| 2026-06-03 | 40.240 | python harness.py | 4 TCs; keyword proxy | PASS | 0 | run1/2/3_2026-06-03.json | HLR-20.437-* (partial) | 20.37; 10.50.37 | Initial proxy; 4 tests |
-| 2026-06-05 | 40.240 | python harness.py | 6 TCs (+ TC005/TC006 error); 3 runs; proxy_only scope | PASS | 0 | `artifacts/tr_verification_run{1,2,3}_2026-06-03.json` | HLR-20.437-001, -002, -003 | 20.37; 10.50.37.TR | **40.05 pass** after 20.37 contract sync |
+| 2026-06-03 | 40.240 | python harness.py | 4 TCs; keyword proxy | PASS | 0 | run1/2/3_2026-06-03.json | HLR-20.437-* (partial) | 20.37; 10.50.180 | Initial proxy; 4 tests |
+| 2026-06-05 | 40.240 | python harness.py | 6 TCs (+ TC005/TC006 error); 3 runs; proxy_only scope | PASS | 0 | `artifacts/tr_verification_run{1,2,3}_2026-06-03.json` | HLR-20.437-001, -002, -003 | 20.37; 10.50.180.TR | **40.05 pass** after 20.37 contract sync |
 
 ## Positive Scenario Ledger
 
@@ -69,7 +69,7 @@ Authoritative full TR model: `20.37` Semantic Interpretation Flow Contract, `20.
 Harness proves deterministic basin routing, fixed ΔH% per route, and explicit error path (`HLR-20.437-*`). Does not implement or verify OB→TR→`TP.TR` integration.
 
 **Iterative Design Flow:**  
-Feeds `10.50.37.TR.*` and `30.37` (proxy promotion). Phase C and `50.37` await integration scenarios.
+Feeds `10.50.180.TR.*` and `30.180` (proxy promotion). Phase C and `50.37` await integration scenarios.
 
 **Agreement Statement:** Flows agree on **bounded proxy scope**. Full 20.37 integration is canonical in `software_description.md` but **verification-open** until Phase C.
 
@@ -88,5 +88,5 @@ Feeds `10.50.37.TR.*` and `30.37` (proxy promotion). Phase C and `50.37` await i
 ## Next Steps
 
 - Human / CP review of 40.05 pass package.
-- Re-promote or refresh `30.37` if artifact test count change (6/6) must be reflected.
+- Re-promote or refresh `30.180` if artifact test count change (6/6) must be reflected.
 - Phase C: integration harness per `software_description.md` Phase C section.

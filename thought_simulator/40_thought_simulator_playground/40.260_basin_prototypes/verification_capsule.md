@@ -6,14 +6,14 @@ Canonical verification report for `40.260_basin_prototypes`.
 
 ## Glossary References
 
-- `../../30_verification/30.30_verification_glossary.md`
+- `../../30_verification/30.160_verification_glossary.md`
 - `../40.05_master_program_guide.md`
 
 ## Run Record
 
 | Date | Module | Command | Inputs / Config | Result | Exit Code | Artifacts | HLR Ref | LLR Ref | Req Doc | Req Section | IO Fields Exercised | Negative-Path Coverage | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2026-05-27 | 40.260_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.105_tp_requirements.md; 20.40_ob_requirements.md; 20.200_traceability_matrix.md; 20.90_ib_requirements.md; 20.170_safety_requirements.md; 20.30_ts_functional_model.md; ../../30_verification/30.30_verification_glossary.md; 20.200_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
+| 2026-05-27 | 40.260_basin_prototypes | python harness.py | deterministic replay plus negative-path validation | PASS | 0 | artifacts/basin_verification_run_2026-05-27.json | HLR-? | LLR-? | 20.105_tp_requirements.md; 20.40_ob_requirements.md; 20.200_traceability_matrix.md; 20.90_ib_requirements.md; 20.170_safety_requirements.md; 20.30_ts_functional_model.md; ../../30_verification/30.160_verification_glossary.md; 20.200_traceability_matrix.md | source-index anchored | basin_id; tp_id; state_counter; deterministic_mode; entropy_vector; provenance_ids; history; verification_digest | negative_empty_basin_id; negative_duplicate_provenance; negative_entropy_length_mismatch | First executed basin prototype run; no basin-specific requirement document exists yet. |
 
 ## Positive Scenario Ledger
 
@@ -50,7 +50,7 @@ Canonical verification report for `40.260_basin_prototypes`.
 - `20.90_ib_requirements.md`: JSON-compatible contract shape
 - `20.170_safety_requirements.md`: monotonic state transition discipline
 - `20.30_ts_functional_model.md`: phase-boundary consistency for basin updates
-- `../../30_verification/30.30_verification_glossary.md`: canonical verification terms used in the module contract
+- `../../30_verification/30.160_verification_glossary.md`: canonical verification terms used in the module contract
 - `20.200_traceability_matrix.md`: requirement-to-test traceability
 
 ## Requirements Delta Summary

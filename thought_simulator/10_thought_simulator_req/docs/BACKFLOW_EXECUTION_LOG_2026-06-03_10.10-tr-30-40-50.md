@@ -41,11 +41,11 @@ Primary risk if unpropagated:
   - TP contract expanded with TP.TR and tr_needs_update.
   - Invariants and operation flow updated for RB->TR iff gate and success/failure clear rules.
   - Canonical field list updated with tr_needs_update and TR.
-  - Incorrect artifact path corrected to 30_verification/30.20_tp_lifecycle.
+  - Incorrect artifact path corrected to 30_verification/30.150_tp_lifecycle.
   - Title corrected to 50.35 prefix.
 
 ### 30 layer (verification terminology controls)
-- Updated: thought_simulator/30_verification/30.30_verification_glossary.md
+- Updated: thought_simulator/30_verification/30.160_verification_glossary.md
 - Updated: thought_simulator/30_verification/glossary_term_registry.json
 - Applied:
   - Added TP/TR dirty-flag terminology definitions:
@@ -53,17 +53,17 @@ Primary risk if unpropagated:
     - tr_needs_update
     - tr dirty-flag lifecycle
     - rb-tr gate
-  - Registered terms in glossary_term_registry for 30.20_tp_lifecycle.
+  - Registered terms in glossary_term_registry for 30.150_tp_lifecycle.
 
 ### 30 layer (TP lifecycle scenario-level alignment)
-- Updated: thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md
-- Updated: thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md
+- Updated: thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
+- Updated: thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md
 - Applied:
   - Added TR dirty-flag alignment addendum in capsule with explicit RB/TR iff-gate and lifecycle assertions.
   - Implemented and executed TR scenario set in 40.05 harness and prototype (initialization, iff gate, success-clear, failure-preserve).
   - Updated capsule and delta to record run evidence and close prior open-validation note.
   - Preserved audit accuracy by separating historical records from the new 2026-06-03 executed run row.
-  - Performed legacy-path normalization in the 30.20 requirements delta so archive-era references now point to current 20.x anchors.
+  - Performed legacy-path normalization in the 30.150 requirements delta so archive-era references now point to current 20.x anchors.
 
 ## 3. Integrity Check Results
 
@@ -85,7 +85,7 @@ Results:
 4. Full synchronization review across 50-series set for this anchor change: PASS
 - Keyword sweep across 50-series design files identified direct TP/TR contract impact in 50.35 and governance impact in 50.05; both updated.
 
-5. 30.20 scenario-level TP lifecycle alignment and execution: PASS
+5. 30.150 scenario-level TP lifecycle alignment and execution: PASS
 - Capsule and delta now contain explicit TR dirty-flag contract language plus executed scenario evidence from the 2026-06-03 harness run.
 
 ## 4. Cross-Layer Changed File List
@@ -93,10 +93,10 @@ Results:
 - thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md
 - thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md
 - thought_simulator/50_thought_simulator_design/50.35_tp_design.md
-- thought_simulator/30_verification/30.30_verification_glossary.md
+- thought_simulator/30_verification/30.160_verification_glossary.md
 - thought_simulator/30_verification/glossary_term_registry.json
-- thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_verification_capsule.md
-- thought_simulator/30_verification/30.20_tp_lifecycle/30.20_tp_lifecycle_requirements_delta.md
+- thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_verification_capsule.md
+- thought_simulator/30_verification/30.150_tp_lifecycle/30.150_tp_lifecycle_requirements_delta.md
 - thought_simulator/40_thought_simulator_playground/40.160_tp_lifecycle/prototype.py
 - thought_simulator/40_thought_simulator_playground/40.160_tp_lifecycle/harness.py
 

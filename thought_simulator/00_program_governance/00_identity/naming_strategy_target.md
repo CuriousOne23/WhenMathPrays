@@ -90,7 +90,7 @@ Across tiers that use numeric bands, we **prefer** the same mental model:
 
 **Operational SSOT:** [40.510_refactor.md](../../40_thought_simulator_playground/40.510_refactor.md), [40_name_table.json](40_name_table.json). Process: [40.05_master_program_guide.md](../../40_thought_simulator_playground/40.05_master_program_guide.md).
 
-**Independence reminder:** `40.100_*` (core structs) evidence may promote to `30.392` / `10.50.392` without matching 40 band numbers to 30/10.50.
+**Independence reminder:** `40.100_*` (core structs) evidence may promote to `30.140` / `10.50.140` without matching 40 band numbers to 30/10.50.
 
 ### 5.2 Tier 10.50 (design requirements anchors)
 
@@ -155,8 +155,8 @@ Document intentional deviation here when the target cannot be met yet. Update wh
 
 | Item | Current state | Target disposition |
 |------|---------------|-------------------|
-| `50.45_data_structures` vs `10.50.392` / `30.392` | Misaligned primary band | Align to `50.392_*` or nest under `50.39.010_*` after 30/10.50 pass |
-| `50.09_geometry_engine` vs `10.50.10` / `30.10` | Misaligned primary band | Align to `50.10_*` or nest under it |
+| `50.45_data_structures` vs `10.50.140` / `30.140` | Misaligned primary band | Align to `50.392_*` or nest under `50.39.010_*` after 30/10.50 pass |
+| `50.09_geometry_engine` vs `10.50.270` / `30.270` | Misaligned primary band | Align to `50.10_*` or nest under it |
 | Dual `50.40_*` (scheduler + interaction layer) | Two Level-1 primaries at one band | One `50.40_*` + `50.40.010_*` (or `.10`) for the second |
 | `50.07`–`50.08` platform docs | No 10.50/30 peers | Keep in 50 governance/headroom zone — **expected** exception |
 | `40.510_refactor.md` | Fixed inventory filename | Never assign as a module folder band |
@@ -174,13 +174,14 @@ For a live list of disk-vs-target gaps, see [30.01](../../30_verification/30.01_
 | pre-renumber branch | 40 folder compression to stride-10 subdirectories while preserving `40.510` | Recorded in [00.00.42 §10](../00_foundations/00.00.42_document_addressing_and_insertion_policy.md); interim layout (`40.420`–`40.540` range) |
 | 2026-06 | Identity rename infrastructure (name tables, `rename_identity.py`, 00.00.43) | Enables phased migration without content re-review |
 | 2026-06-09 | Phase-1 40 renumber (`40_renumber_manifest.json`, `apply_40_renumber_migration.py`) | 31 survivors at `40.50`–`40.350` stride 10; 17 duplicates removed; guide at `40.05` |
-| *Planned* | Phase 2 — 10.50+30; Phase 3 — 50 alignment per §6 | Not yet applied |
+| 2026-06-09 | Phase-2 10.50+30 renumber (`30_1050_renumber_manifest.json`, `apply_30_1050_renumber_migration.py`) | 23 coupled pairs at stride 10 from `.50`; `fix_30_1050_post_renumber_refs.py` for governance-doc repair |
+| *Planned* | Phase 3 — 50 alignment per §6 | Not yet applied |
 
 **Alignment checkpoint (update after migrations):**
 
 - **As of:** 2026-06-09
 - **40 vs target:** **aligned** — modules `40.50`–`40.350` stride 10; governance `40.05` + fixed `40.510`; see [40_renumber_manifest.json](40_renumber_manifest.json)
-- **10.50+30 vs target:** partial — bands exist but not normalized to stride-10 from `.50`
+- **10.50+30 vs target:** **aligned** — coupled pairs at `50`–`270` stride 10; see [30_1050_renumber_manifest.json](30_1050_renumber_manifest.json)
 - **50 vs target:** partial — several known exceptions in §7
 
 ---
@@ -221,3 +222,4 @@ Use these as soft review prompts — not CI gates:
 | 0.1 | 2026-06-09 | Initial target strategy — 40 / 10.50 / 30 / 50 layout, migration order, exceptions |
 | 0.2 | 2026-06-09 | Phase-1 40 renumber complete — checkpoint and exception ledger updated |
 | 0.3 | 2026-06-09 | Post-renumber canon sweep + bulk-migration drift prompts (§9 items 7–8) |
+| 0.4 | 2026-06-09 | Phase-2 10.50+30 renumber complete — §8 checkpoint updated |
