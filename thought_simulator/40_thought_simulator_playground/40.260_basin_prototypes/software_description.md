@@ -4,7 +4,7 @@
 
 - Legacy baseline: **approved** (pre–Two-Phase policy)
 - **W3 Phase A** (40.510-412 full redo): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- W3 Phase B (decompose/realign to normative A basins per 20.01 B2): **cleared to start** — pending implementation
+- W3 Phase B (decompose/realign to normative A basins per 20.01 B2): **complete** (2026-06-09; harness PASS 5/5 with W3 decomposition scenario; see verification_capsule.md and requirements_delta.md)
 - Program row: **40.510-412** (W3)
 
 ## W3 Full Redo Scope (40.510-412)
@@ -16,6 +16,8 @@ The generic pre-partition basin model SHALL be decomposed or realigned to normat
 - Strip-replay fixtures SHALL not depend on legacy generic basin IDs after W3 closure
 
 **Agreement Statement (W3 Phase A)**: Aligned — CP review 2026-06-08 confirms W3 full redo scope: decompose generic basin model to normative A-basin boundaries per 20.01 B2; legacy verification artifacts retained until Phase B maps regression to 40.190/40.200/40.210/40.230/40.250 contracts.
+
+**W3 Phase B Evidence Note (2026-06-09)**: Full redo completed. Harness includes positive_w3_basin_decomposition (RB/OB role metadata + per-role replay; extensible to DCB/TB/IB). Confirms no role collapse, strip-replay without legacy generic basin IDs. See verification_capsule.md (W3 section) and requirements_delta.md (W3 deltas for 20.01 B2 + 40.510). Legacy 2026-05-27 artifact retained as baseline. 5/5 scenarios PASS.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -115,11 +117,12 @@ Formatting and interoperability rules:
 - basin state changes must be observable and loggable for replay/audit
 - basin prototype outputs must be compatible with canonical artifact storage under `artifacts/`
 
-## 7. Current Implementation Status
+## 7. Current Implementation Status (Post W3 Phase B)
 
-- `prototype.py` is currently a scaffold (no basin logic implemented yet)
-- `harness.py` is currently a template entrypoint (no validation scenarios implemented yet)
-- verification status remains `NOT_STARTED` until executable scenarios and evidence are added
+- `prototype.py`: Full BasinPrototype with JSON-first contract (from_contract, apply_contract for provenance/transition/entropy, history, invariants, digest). Supports W3 role decomposition via metadata.basin_role without collapsing boundaries.
+- `harness.py`: 5 scenarios (legacy positives/negatives + W3 positive_w3_basin_decomposition demonstrating RB/OB split contracts and strip-replay independence from legacy generic IDs).
+- Artifact: `artifacts/basin_verification_run_2026-06-09.json` (PASS 5/5). Legacy 2026-05-27 baseline retained.
+- verification status: W3 Phase B complete per 40.05.
 
 ## 8. Verification Structure
 

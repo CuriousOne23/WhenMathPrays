@@ -13,7 +13,7 @@ from prototype import BasinPrototype
 MODULE_NAME = "40.260_basin_prototypes"
 RUN_COMMAND = "python harness.py"
 ARTIFACT_DIR = Path(__file__).resolve().parent / "artifacts"
-ARTIFACT_PATH = ARTIFACT_DIR / "basin_verification_run_2026-05-27.json"
+ARTIFACT_PATH = ARTIFACT_DIR / "basin_verification_run_2026-06-09.json"
 
 
 def _base_contract() -> dict[str, Any]:
@@ -102,12 +102,72 @@ def _negative_entropy_length_mismatch() -> dict[str, Any]:
 	raise AssertionError("Mismatched entropy_vector length should have failed")
 
 
+def _positive_w3_basin_decomposition() -> dict[str, Any]:
+	# W3 full redo: demonstrate decomposition to normative A-basin boundaries (RB/OB/DCB/TB/IB)
+	# Using the generic prototype with role metadata to simulate split contracts without collapsing roles
+	# Test that strip-replay works with role-specific contracts (no legacy generic basin IDs dependency in replay)
+	sequence_rb = [
+		{"event_type": "provenance_add", "tick": 1, "provenance_id": "prov.rb", "note": "RB role"},
+		{"event_type": "entropy_update", "tick": 2, "entropy_vector": [0.30, 0.70], "provenance_id": "prov.rb", "note": "RB entropy"},
+	]
+	sequence_ob = [
+		{"event_type": "provenance_add", "tick": 1, "provenance_id": "prov.ob", "note": "OB role"},
+		{"event_type": "transition", "tick": 2, "target_basin_id": "basin.ob-target", "provenance_id": "prov.ob", "note": "OB transition"},
+	]
+
+	base_rb = _base_contract()
+	base_rb["metadata"] = {"basin_role": "rb", "source_module": "40.190_rb_prototypes"}
+	base_ob = _base_contract()
+	base_ob["metadata"] = {"basin_role": "ob", "source_module": "40.200_ob_prototypes"}
+
+	rb1 = BasinPrototype.from_contract(base_rb)
+	for event in sequence_rb:
+		rb1.apply_contract(event)
+	rb1_snap = rb1.snapshot()
+
+	ob1 = BasinPrototype.from_contract(base_ob)
+	for event in sequence_ob:
+		ob1.apply_contract(event)
+	ob1_snap = ob1.snapshot()
+
+	# Replay
+	rb2 = BasinPrototype.from_contract(base_rb)
+	for event in sequence_rb:
+		rb2.apply_contract(event)
+	ob2 = BasinPrototype.from_contract(base_ob)
+	for event in sequence_ob:
+		ob2.apply_contract(event)
+
+	if rb1_snap != rb2.snapshot() or ob1_snap != ob2.snapshot():
+		raise AssertionError("W3 decomposition replay failed for role-specific basins")
+
+	# Verify roles are preserved and not collapsed
+	if rb1_snap["metadata"]["basin_role"] != "rb":
+		raise AssertionError("RB role not preserved")
+	if ob1_snap["metadata"]["basin_role"] != "ob":
+		raise AssertionError("OB role not preserved")
+	if rb1_snap["basin_id"] == ob1_snap["basin_id"]:
+		raise AssertionError("Roles must not collapse to same basin_id")
+
+	return {
+		"name": "positive_w3_basin_decomposition",
+		"status": "PASS",
+		"io_fields": ["basin_id", "metadata.basin_role", "history", "verification_digest"],
+		"snapshot_rb": rb1_snap,
+		"snapshot_ob": ob1_snap,
+		"evidence_digest_rb": rb1_snap["verification_digest"],
+		"evidence_digest_ob": ob1_snap["verification_digest"],
+		"note": "Demonstrates split contracts for RB/OB (and extensible to DCB/TB/IB); strip-replay independent of legacy generic IDs",
+	}
+
+
 def _build_report() -> dict[str, Any]:
 	scenarios = [
 		_positive_deterministic_replay(),
 		_negative_empty_basin_id(),
 		_negative_duplicate_provenance(),
 		_negative_entropy_length_mismatch(),
+		_positive_w3_basin_decomposition(),
 	]
 	passed = sum(1 for scenario in scenarios if scenario["status"] == "PASS")
 	failed = len(scenarios) - passed
