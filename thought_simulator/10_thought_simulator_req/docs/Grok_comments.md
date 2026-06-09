@@ -1,42 +1,26 @@
 **Architectural comments on the proposed 10.00 / 10.10 / 10.20 / 10.30 structure (comments only).**
 
-### 1. Whether this structure (10.00 / 10.10 / 10.20 / 10.30) correctly reflects the semantics described
+The structure you outline aligns closely with the semantic layering discussed earlier. It treats the 10-tier as the home for requirement-level design-contract and architecture work while explicitly deferring system-level requirements to the 20-tier. The numeric sub-ranges create an internal taxonomy within the 10-tier that separates the pointer to system requirements (10.00) from the various flavors of design-contract and requirement-architecture content (10.10–10.30). This keeps the “system architecture” terminology out of the 10-tier, which directly supports the distinction between 05-tier system-architecture governance (meta/cross-layer rules) and 10-tier requirement-architecture (design contracts and realization-ready anchors).
 
-The structure largely aligns with the semantic layering we have been discussing. 
+On the specific points:
 
-- `10.00_system_requirements/` as the entry point that explicitly defers to 20 makes the consumption relationship from system requirements into the 10-tier visible and non-duplicative.
-- The progression through `10.10_design_contract_architecture/`, `10.20_design_contracts/`, and `10.30_architecture_requirements/` creates a coherent internal taxonomy inside the 10-tier for different emphases of requirement-level design work. This keeps the 10-tier focused on *requirement* architecture and design contracts rather than system-wide governance.
-- Housing them under a `10_architecture/` container provides a single, self-contained entry point for anyone entering the 10-tier’s architecture-related material.
+**Whether this structure (10.00 / 10.10 / 10.20 / 10.30) correctly reflects the semantics described**  
+Yes, in its core logic. It positions 20 as the owner of system requirements, uses the 10-tier to organize requirement-architecture and design-contract material, and applies sequential 10.xx prefixes to create coherent sub-ranges inside the 10-tier. The progression from a system-requirements pointer into specialized design-contract and architecture-requirements sub-areas mirrors the forward flow from 20 → 10 that has been referenced in prior governance documents and wave notes. The structure also helps surface the 10-tier as a distinct layer with its own internal organization rather than a flat collection of files.
 
-One minor semantic observation: the outer container still uses the word “architecture” at the 10-tier surface. While the numeric sub-ranges and qualified sub-names help subordinate it, the container name itself echoes the term that the 05-tier is now claiming for cross-layer governance. The numeric banding (10.xx) does make it clear that these are 10-tier artifacts, but the container word choice remains the most visible point of potential surface confusion when people scan the 10/ tree.
+**Whether linking 10.00_system_requirements to 20_requirements is the correct approach**  
+Linking (rather than duplicating or moving content) is consistent with the tier-ownership and non-duplication principles that have appeared throughout the program. 20_requirements remains the canonical source for system-level HLRs; the 10.00 entry functions as a consumption or contextualization point inside the 10-tier. This preserves traceability (via the 50.00 index and cross-layer references) while making the hand-off explicit. It also aligns with the pattern already used for other controlled flows (e.g., the relationship between 10.50 anchors and 30 verification).
 
-### 2. Whether linking 10.00_system_requirements to 20_requirements is the correct approach
+**Whether this is preferable to the earlier 08 / 10 / 12 proposal**  
+The 10.00–10.30 banding under a 10_architecture/ container feels more native to the 10-tier’s existing numbering conventions than the 08 / 10 / 12 approach. The 10.xx prefixes keep the sub-ranges visibly inside the 10-series namespace, which reduces the sense of inserting an external sub-convention. It also produces a more linear and self-documenting progression (00 for the system pointer, then 10/20/30 for the design-contract and architecture-requirements distinctions). The earlier 08 / 10 / 12 scheme, while attempting to create separation, sat less comfortably inside the 10-tier’s own numbering idiom and risked looking like a parallel system rather than an internal organization of 10-tier content.
 
-Yes. Linking (as opposed to copying or moving content) is the appropriate mechanism. 
+**Whether this structure should be encoded in the 05.500_directory_rename_governance_and_refactor_plan.md document**  
+Yes. The 05.500 document has been positioned as the authoritative record of the rename rationale, semantic boundary decisions (particularly the 05 vs. 10 distinction), chosen names, blast radius, and resulting directory organization. Recording the final 10-tier internal structure—its container, the 10.00 link, the 10.10–10.30 sub-ranges, and the rationale for each—belongs in that plan. It ensures the cross-layer implications (references from 05.20, 40.07, 20 HLRs, 30 wave notes, 50.00 index, promotion_protocol, etc.) are documented before any implementation.
 
-20_requirements remains the authoritative home for system-level requirements. A pointer-style entry inside the 10-tier makes the flow explicit (“system requirements are consumed and specialized here for requirement-architecture purposes”) without violating tier ownership or creating duplication. This is consistent with the broader pattern of controlled hand-offs we have seen in promotion_protocol.md and the wave notes, where lower tiers reference higher-tier canonical sources rather than re-owning them.
+**Whether any adjustments to the naming or prefix ranges are recommended**  
+The numeric progression (10.00 → 10.10 → 10.20 → 10.30) is clear and sequential, which aids readability. The separation of concerns (system pointer vs. design-contract architecture vs. design contracts vs. architecture requirements) is semantically coherent with the 10-tier’s role as the layer that translates 20 guidance into realization-ready design requirements.
 
-### 3. Whether this is preferable to the earlier 08 / 10 / 12 proposal
+One observation on the outer container: naming it `10_architecture/` still places the word “architecture” at the 10-tier surface. While the sub-names qualify the content as design-contract and requirement-oriented, the container itself echoes the term that the 05-tier now owns for system-architecture governance. This is not a fatal collision, but it is the element most likely to require explicit justification in the 05.500 plan so that future readers understand why “architecture” appears inside the 10-tier at all.
 
-This 10.00 / 10.10 / 10.20 / 10.30 banding is semantically cleaner than the 08 / 10 / 12 proposal. 
-
-The 08 / 10 / 12 scheme felt like an arbitrary sub-range inserted into the 10-tier without a strong tie to the existing numbering conventions already in use (10.10.*, 40.100+, 50.xx, etc.). The current proposal re-uses the 10.xx prefix style that the repository already employs for internal organization within a tier. This makes the sub-ranges feel like a natural extension of the 10-tier’s own numbering discipline rather than a new parallel system.
-
-It also keeps the entire set of options visibly inside the 10-series namespace (via the 10.xx prefixes), which reduces the risk of the earlier proposal’s fragmentation while still achieving separation of the semantic flavors.
-
-### 4. Whether this structure should be encoded in the 05.500_directory_rename_governance_and_refactor_plan.md document
-
-Yes. Any final decision on how the 10-tier will organize its internal design-contract and requirement-architecture material, how it will present its relationship to 20_requirements, and what container and prefix convention it will use is exactly the kind of cross-layer structural choice that belongs in the 05.500 governance document.
-
-The 05.500 plan was positioned as the place to record the rationale for the rename, the semantic boundary between 05 and 10, the blast radius, the chosen names, and the resulting directory layout. Including this 10.00–10.30 structure (or whichever variant is selected) ensures the decision is captured before implementation and remains traceable for future maintainers and for any 50 insight or wave-level work that touches these artifacts.
-
-### 5. Whether any adjustments to the naming or prefix ranges are recommended
-
-A few observations (still as comments):
-
-- The numeric progression 10.00 → 10.10 → 10.20 → 10.30 is clear and sequential, which is helpful. It mirrors the style used inside the old 10.10.* files and elsewhere.
-- If the outer container `10_architecture/` is retained, its name is the element most likely to need careful justification in the 05.500 document, given the 05-tier’s use of “system architecture.”
-- An alternative that could be worth recording as an option (without preference) is whether the three semantic items need a container at all, or whether they can simply appear as direct siblings under `10_thought_simulator_req/` using the 10.xx prefixes for grouping. Either approach is viable; the choice mainly affects navigability versus surface-area “architecture” wording.
-- The 10.00 item should probably be documented as a lightweight link/pointer rather than a content-owning sub-directory, to reinforce that 20 remains the source of truth.
+The 10.00 item being a link rather than a content owner is already the right signal; any documentation in 05.500 should reinforce that it is a pointer, not a duplicate or redefinition of 20_requirements.
 
 These comments address the five points directly. No renames, scripts, or structural changes are being performed.
