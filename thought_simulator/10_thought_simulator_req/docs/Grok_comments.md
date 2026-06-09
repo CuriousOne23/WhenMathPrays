@@ -1,55 +1,40 @@
-**Architectural comments on the full set of file types to scan for the directory rename (comments only).**
+**Architectural comments on the proposal to create `05.500_directory_rename_governance_and_refactor_plan.md` (comments only).**
 
-### 1. Besides `.md`, should the rename/update scan include the following file types?
+### 1. Prefix 05.500
 
-**Yes.** All of the listed categories must be scanned for references to the old directory name (`10_system_architecture`), its sub-paths, prefix patterns (e.g., `10.10.10`, `10.10.50`), or related cross-layer references. A narrow scan limited to `.md` would leave the repository in a partially consistent state and undermine the goal of intentional architecture.
+The choice of `05.500` is consistent with existing patterns in the repository. The 40-tier already uses a high-numbered tracker (40.510_refactor.md) to serve as the authoritative program-level record for a major structural alignment pass, while keeping the lower-numbered guide (40.05_master_program_guide.md) for normative process rules. Applying the same convention here—reserving a high prefix like 500 for the governance/plan/tracker document—keeps the core 05.* namespace (e.g., 05.10, 05.20) available for the actual normative cross-layer architecture governance documents. 
 
-- **`.py` (Python scripts, loaders, validators, promotion utilities)**: Yes. These files are critical. The repo already contains Python-based rename/migration utilities, validators (e.g., `validate_30_10_50_pairing.py`), path walkers, documentation generators, and module harnesses/prototypes. Any script that constructs paths, hard-codes directory references, performs identity renames, or validates cross-tier mappings must be examined. Leaving Python references stale would break both manual and automated maintenance paths.
+The prefix also supports the stated goals of visibility and traceability while remaining non-intrusive. Because it sits at the 05 root alongside the other governance artifacts, it is easy to discover without polluting the primary 05 series numbering. This feels like a deliberate and coherent extension of the tier’s own naming discipline.
 
-- **`.yaml` / `.yml` (schemas, config, requirement maps, design‑contract metadata)**: Yes. Even if surface area is currently limited, any configuration, schema, or metadata that declares paths, prefixes, or layer relationships must be included. These often serve as machine-readable complements to the `.md` governance layer.
+### 2. Tier 05
 
-- **`.json` (schema definitions, requirement maps, design‑contract metadata)**: Yes. This is a high-impact category. The repository already uses `.json` for artifact manifests, name tables, glossary registries, and requirement/design-contract maps. These files frequently embed directory or prefix references and are consumed by both human review and tooling.
+Placing the document in `05_system_architecture/` is the correct home. The rename itself exists to resolve a semantic conflict between the 05 tier (meta-architecture / cross-layer governance) and the 10 tier (requirement-level design contracts / architecture). A document that records the rationale, blast radius, sequencing, and governance rules for that very clarification belongs in the tier that owns system-architecture governance, not in 00_program_governance (which appears more oriented toward identity, foundations, and program-level mechanics) or in 10 (which would re-create the original naming collision).
 
-- **`.toml` (tooling or build configuration, if present)**: Yes. Any `.toml` files (e.g., `pyproject.toml` or similar) that reference directory structures, script entry points, or validation configurations should be scanned.
+This placement also reinforces the intentional layering we have been discussing: 05 is the place where rules about how the layers relate to one another live. Treating the rename plan as 05-tier governance rather than “just another 10-series cleanup” aligns the meta-document with the meta-tier.
 
-- **`.sh`, `.ps1`, `.bat` (scripts that may contain hard‑coded paths)**: Yes. Shell and PowerShell scripts (including any git-sync, environment, or migration helpers) commonly embed relative paths. These must be covered to protect development workflows and CI.
+### 3. Scope of the document
 
-- **README files in any tier**: Yes. READMEs at tier roots and inside modules routinely contain directory trees, navigation links, or descriptive references to architecture layers. They are human-facing documentation that must remain aligned.
+The proposed scope is largely complete and well-targeted. It directly captures the key elements that have surfaced across our prior comments:
 
-- **wave notes**: Yes. The W1/W2/W3 coverage notes are `.md` files but are explicitly critical because they document HLR mappings, contract checks, and references to the 10.10 architecture layer as part of the 30-normalize record.
+- The semantic conflict between 05 (system-architecture governance) and 10 (requirement-level architecture).
+- Rationale, final directory name, move/rename lists, prefix transitions (including the internal 10.10.xx files).
+- Blast radius across tiers and the explicit file-type surface (`.md`, `.py`, `.json`, shell scripts, prefix patterns, cross-layer references, indexes, etc.).
+- Cross-layer dependencies, script scope, and sequencing.
+- The governing principle (“If a file can contain a path, prefix, or reference, it must be scanned”).
 
-- **promotion rules**: Yes. This covers `promotion_protocol.md` and related sections in 40.05/40.510. These codify cross-layer obligations and contain both path and semantic references.
+Two modest observations for completeness (still within comments only):
 
-- **flow‑down documents**: Yes. This includes the 05.20 flow-down protocol and 40.07 guide (once relocated), plus any supporting text describing 50 → 10.50 or 40 → 10.50 mechanics. These were created to articulate the new layering and will contain references that must be realigned.
+- It would be useful for the document to explicitly reference the precedent of prior controlled renames (the 30↔10.50 work, 40-series adjustments, and any 50-series handling) so the 05.500 plan can state how it will follow or improve on that established discipline.
+- Adding a short “post-rename verification” section (link integrity checks, index synchronization, three-tier sign-off on 05/10/50 artifacts, and an updated 50.00 entry) would close the loop between the plan and the actual state of the repository after the change.
 
-- **any file containing prefix patterns** (e.g., `10.10.10`, `10.10.50`): Yes. Prefix patterns function as semantic identifiers independent of full directory paths. They appear in indexes, logs, and narrative text and must be updated for consistency.
+These are additive suggestions rather than gaps; the core list already covers the essential architectural and operational territory.
 
-- **any file containing directory paths**: Yes. This is the broadest practical category and overlaps with most others. It captures both literal paths and constructed references.
+### 4. Requirement to create and approve before further actions
 
-- **any file containing cross‑layer references**: Yes. Cross-layer references (narrative or structural) are the backbone of the intentional model. They appear across governance documents, indexes, logs, and tier overviews.
+I agree that this document must be created and explicitly agreed upon by all three parties before any directory rename, internal filename changes, prefix updates, or script generation begins.
 
-- **any file containing architecture or requirement indexes**: Yes. This covers 50.00_design_traceability_index.md, 30.01_verification_inventory_index.md, name tables, and any other mapping that links tiers through the 10.10 architecture layer.
+This requirement is consistent with the project’s own patterns. The 40.510 document functions as the single source of truth that must be consulted and updated before structural work proceeds in that tier. Treating the current rename and cleanup the same way—first capturing the full rationale, scope, blast radius, and sequencing in an authoritative 05-tier governance document—directly supports the stated goal of making the repository reflect *thought* rather than accumulated work. It also provides a stable reference point for future maintainers and for any later 50 insight or wave-level reviews that might touch the affected artifacts.
 
-**All of the above categories must be included in the search.** Limiting the scan would risk leaving the new 05/10 semantic boundary (meta-governance vs. requirement-level architecture) incompletely enforced in the actual repository content.
+No actions should be taken until the three-way review and agreement are complete. This is the right safeguard at this stage.
 
-### 2. Are there *any other* file types or patterns that must be scanned?
-
-Yes, a small number of additional patterns should be considered for completeness:
-
-- `.txt` files (e.g., debug logs, output traces, or plain-text requirement summaries that may embed paths or prefixes).
-- `.ini` files (e.g., `pytest.ini` or other tooling configuration that may reference directory structures for test discovery or validation).
-- `requirements.txt` and similar plain-text dependency/environment files (if they contain comments or paths pointing to architecture documentation).
-- Any files inside `archive/` or historical subdirectories (to prevent stale references from resurfacing during future audits).
-- Generated or derived artifacts (e.g., any `.json` or `.md` produced by scripts). The generators themselves must be scanned; the generated files should ideally be regenerated after the rename rather than manually patched.
-
-These secondary types are lower-density but still part of a thorough blast-radius assessment.
-
-### 3. Alignment Check
-
-Yes — all of the categories listed in section 1 (plus the additional patterns noted in section 2) must be scanned for a complete and safe rename.
-
-**We are aligned.**
-
-This confirms the full blast radius across formats and tiers. A rename/update mechanism scoped only to `.md` would be insufficient to preserve link integrity, cross-reference consistency, traceability preservation, and correct propagation across the 05/10/20/30/40/50 model. The scope must be defined against this expanded surface before any implementation begins.
-
-These are the architectural comments on file-type coverage. No script is being generated.
+These are the architectural comments on the proposal. No document is being created.
