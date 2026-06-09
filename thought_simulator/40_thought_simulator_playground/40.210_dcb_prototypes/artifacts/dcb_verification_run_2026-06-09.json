@@ -1,0 +1,49 @@
+{
+  "module": "40.210_dcb_prototypes",
+  "date": "2026-06-09",
+  "phase": "B",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "curvature_exceed_event_emit",
+      "hlr": [
+        "HLR-20.106-010",
+        "HLR-20.106-011"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "per_cycle_emission_bound",
+      "hlr": [
+        "HLR-20.106-036"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "no_tr_needs_update_write",
+      "hlr": [
+        "HLR-20.106-020"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "event_batch_canonical_order",
+      "hlr": [
+        "HLR-20.106-028"
+      ],
+      "result": "PASS"
+    },
+    {
+      "scenario": "forbidden_semantic_field_read",
+      "hlr": [
+        "HLR-20.106-035"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "total_scenarios": 5,
+    "passed": 5,
+    "failed_scenarios": []
+  }
+}

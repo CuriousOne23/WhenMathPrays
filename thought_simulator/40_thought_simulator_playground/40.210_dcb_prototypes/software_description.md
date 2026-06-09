@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- Phase B: **cleared to start** — pending implementation
+- Phase B: **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-407** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)
@@ -47,11 +47,11 @@ Within `ob_processing` cycle window: **OB → DCB → TR** per 20.37 §7 and 20.
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series):** [20.106](../../20_requirements/20.106_dcb_requirements.md) HLR-001–036; [20.37](../../20_requirements/20.37_thought_router_tr_specification.md) §4.4 overlay.
-- **Backward Flow (40-series evidence):** None — Phase A.
-- **Iterative Design Flow (50-series influence):** [50.190](../../50_thought_simulator_design/50.190_dcb_stability_design.md) qualitative only.
+- **Forward Flow (20-series):** [20.106](../../20_requirements/20.106_dcb_requirements.md) HLR-001–036; [20.37](../../20_requirements/20.37_thought_router_tr_specification.md) §4.4 (ephemeral DCB events); after OB (40.200), before TR (40.240).
+- **Backward Flow (40-series evidence):** Phase B harness (5/5 PASS, artifact dcb_verification_run_2026-06-09.json) confirms curvature-driven events, per-cycle bound, no tr_needs_update writes, canonical order, and forbidden semantic reads (audit + suppress). Joint stability with 40.220; TR hook with 40.240.
+- **Iterative Design Flow (50-series influence):** Evidence package ready for 50.190 qualitative stability design.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms DCB as geometric-only meta-basin per 20.106; ephemeral TR inputs with no `tr_needs_update` writes and no OB semantic overlap. Phase B must prove TR-only consumption (40.240) and qualitative stability cross-check (40.220).
+**Agreement Statement**: Phase B complete 2026-06-09 per 40.05/40.510 W3. CP Phase A (2026-06-08) confirmed geometric-only + ephemeral boundaries; Phase B proved the matrix (curvature emit 010/011, bound 036, no flag 020, order 028, forbidden 035) with deterministic geometric observation. Handoffs to 40.200/40.240/40.220 verified. 40.190 review passed; 40.200 under review.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
