@@ -34,8 +34,11 @@ import re
 
 
 TIER_DIR_RE = re.compile(r"^(\d+)_")
-SUBSYSTEM_DIR_RE = re.compile(r"^(\d+\.\d+)_")
-FILE_PREFIX_RE = re.compile(r"^(\d+\.\d+)")
+# Support arbitrary-depth dotted numeric prefixes for subfield extensions
+# (e.g. 20.40, 20.40.010, 20.40.010.005, 50.36.010.020.001, etc.).
+# Per 00.00.42 Document Addressing and Insertion Policy. Depth is unlimited.
+SUBSYSTEM_DIR_RE = re.compile(r"^(\d+(?:\.\d+)*)_")
+FILE_PREFIX_RE = re.compile(r"^(\d+(?:\.\d+)*)")
 
 # Enforce strict tier-prefix alignment for canonical numbered tiers, including
 # governance tier 00 now that governance documents are normalized to 00.* prefixes.
