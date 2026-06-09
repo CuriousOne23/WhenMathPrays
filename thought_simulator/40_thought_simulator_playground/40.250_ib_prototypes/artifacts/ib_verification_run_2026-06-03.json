@@ -3,7 +3,7 @@
     "active_ids_after_creation": [
       "ib-001"
     ],
-    "creation_digest": "4ae3fad6d20bf1be3629f9c7530063dffecd5c0e6a4ad053b2ac8d45639e0374",
+    "creation_digest": "e4e37b037e50536eaff258d75d4ca36f3fa6ffb579709f6b4193b2e32d4ed050",
     "pending_requests_after_creation": 0
   },
   "module": "40.250_ib_prototypes",
@@ -16,7 +16,7 @@
     "thought_simulator/10_thought_simulator_req/10_system_architecture/10.10.50_module_contracts_and_visibility_rules.md"
   ],
   "run_command": "python harness.py",
-  "run_timestamp_utc": "2026-06-03T15:55:35.465465+00:00",
+  "run_timestamp_utc": "2026-06-09T17:11:40.863072+00:00",
   "scenarios": [
     {
       "detail": "Asynchronous GB approval creates IB state only from approved pending inquiry snapshots.",
@@ -180,7 +180,7 @@
       "promoted_outputs": [],
       "retired_ibs": [],
       "sequence": 2,
-      "verification_digest": "4ae3fad6d20bf1be3629f9c7530063dffecd5c0e6a4ad053b2ac8d45639e0374"
+      "verification_digest": "e4e37b037e50536eaff258d75d4ca36f3fa6ffb579709f6b4193b2e32d4ed050"
     }
   },
   "summary": {
