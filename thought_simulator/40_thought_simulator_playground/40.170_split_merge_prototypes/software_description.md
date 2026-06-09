@@ -2,7 +2,7 @@
 
 ## Approval State
 - Phase A (software_description): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- Phase B: **cleared to start** — pending implementation
+- Phase B: **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-403** (W3)
 
 ## Two-Phase Execution Model (Global 40.* Rule)

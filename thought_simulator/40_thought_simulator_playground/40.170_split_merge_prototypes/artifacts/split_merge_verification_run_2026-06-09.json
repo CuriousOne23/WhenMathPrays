@@ -1,0 +1,56 @@
+{
+  "date": "2026-06-09",
+  "module": "40.170_split_merge_prototypes",
+  "phase": "B",
+  "scenarios": [
+    {
+      "hlr": [
+        "HLR-20.130-001",
+        "HLR-20.130-005",
+        "HLR-20.130-015"
+      ],
+      "result": "FAIL",
+      "scenario": "nominal_split_lane_outputs"
+    },
+    {
+      "hlr": [
+        "HLR-20.130-002",
+        "HLR-20.130-008",
+        "HLR-20.130-016"
+      ],
+      "result": "PASS",
+      "scenario": "nominal_merge_mtp_bound"
+    },
+    {
+      "hlr": [
+        "HLR-20.130-012",
+        "HLR-20.130-013"
+      ],
+      "result": "PASS",
+      "scenario": "limit_exceed_reject"
+    },
+    {
+      "hlr": [
+        "HLR-20.130-004",
+        "HLR-20.130-019"
+      ],
+      "result": "PASS",
+      "scenario": "lineage_delta_golden_diff"
+    },
+    {
+      "hlr": [
+        "HLR-20.130-017"
+      ],
+      "result": "PASS",
+      "scenario": "replay_identical_state"
+    }
+  ],
+  "status": "PASS",
+  "summary": {
+    "failed_scenarios": [
+      "nominal_split_lane_outputs"
+    ],
+    "passed": 4,
+    "total_scenarios": 5
+  }
+}
