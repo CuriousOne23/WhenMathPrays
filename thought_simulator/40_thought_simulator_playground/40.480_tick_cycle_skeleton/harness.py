@@ -50,7 +50,7 @@ def main() -> None:
     ]
     status = "PASS" if all(item["result"] == "PASS" for item in scenarios) else "FAIL"
     report = {
-        "module": "40.60_tick_cycle_skeleton",
+        "module": "40.480_tick_cycle_skeleton",
         "date": "2026-05-28",
         "status": status,
         "scenarios": scenarios,

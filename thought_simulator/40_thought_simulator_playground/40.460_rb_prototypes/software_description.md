@@ -16,7 +16,7 @@
 - upstream_playground_modules: [40.100](../40.100_inb_prototypes/software_description.md), [40.101](../40.101_iiinb_prototypes/software_description.md), [40.37](../40.37_tr_router_prototypes/software_description.md)
 - applicability: **Routing Basin (RB)** — fan-out after intake repair; `InB → IIInB → RB` handoff
 - program_wave: **W3**
-- numbering_note: suffix `.501` aligns with 20.50; folder `40.50_regulator_prototypes/` is the regulator (20.150 ΔH%) — distinct collision per [40.510 §3](../40.510_refactor.md)
+- numbering_note: suffix `.501` aligns with 20.50; folder `40.440_regulator_prototypes/` is the regulator (20.150 ΔH%) — distinct collision per [40.510 §3](../40.510_refactor.md)
 
 ## Purpose
 

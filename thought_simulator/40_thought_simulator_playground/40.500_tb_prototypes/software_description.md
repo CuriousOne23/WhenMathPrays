@@ -15,7 +15,7 @@
 - upstream_playground_modules: [40.401](../40.401_ob_prototypes/software_description.md), [40.140](../40.140_truth_done_prototypes/software_description.md)
 - applicability: **TB interpretation** — five-channel truth hypothesis inputs **before** Truth/Done
 - program_wave: **W3**
-- numbering_note: suffix `.601` aligns with 20.60; folder `40.60_tick_cycle_skeleton/` is tick glue (W5)
+- numbering_note: suffix `.601` aligns with 20.60; folder `40.480_tick_cycle_skeleton/` is tick glue (W5)
 
 ## Purpose
 
