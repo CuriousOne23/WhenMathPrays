@@ -3,7 +3,7 @@
 ## Approval State
 - Legacy scaffold: not implementation-complete
 - **W3 Phase A** (40.510-408): **approved** (CP W3 Phase A review, 2026-06-08 — no blockers)
-- W3 Phase B (qualitative stability per 20.165; joint with 40.210): **cleared to start** — pending implementation
+- W3 Phase B (qualitative stability per 20.165; joint with 40.210): **complete** (2026-06-09 harness PASS; artifact generated; see verification_capsule.md)
 - Program row: **40.510-408** (W3)
 
 ## W3 Extension Scope (40.510-408)
@@ -30,11 +30,11 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series)**: Driven by 20.165 (DCB stability requirements — HLR-20.165-001 to -008), parent 20.106_dcb_requirements.md, 20.10 architectural principles, and 20.30 functional model contraction/boundedness semantics.
-- **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
-- **Iterative Design Flow (50-series influence)**: 50.190_dcb_stability_design.md scaffold now exists (qualitative focus only). Further design elaboration will be driven by evidence from this 40.220 module.
+- **Forward Flow (20-series)**: Driven by 20.165 (qualitative DCB stability — HLR-20.165-001 to -008) as read-only observer of 40.210 events and geometry.
+- **Backward Flow (40-series evidence)**: Phase B harness (5/5 PASS, artifact dcb_stability_verification_run_2026-06-09.json) confirms qualitative detection of non-amplification, no oscillation/runaway, read-only behavior, contraction signals, and replay-identical verdicts. Strictly qualitative per HLR-20.165-005.
+- **Iterative Design Flow (50-series influence)**: Evidence package ready for 50.190 qualitative stability design.
 
-**Agreement Statement**: Aligned — CP review 2026-06-08 confirms W3 extension scope: read-only qualitative stability observer over 40.210 event rates and trajectory geometry; no numeric thresholds, no TP writes, no algorithms in 20.165 playground layer. Phase B joint evidence with 40.210 required before promotion.
+**Agreement Statement**: Phase B complete 2026-06-09 per 40.05/40.510 W3 extension. CP Phase A (2026-06-08) confirmed qualitative-only read-only observer scope; Phase B proved the invariants via qualitative labels on mocked 40.210 sequences. Joint with 40.210. 40.200 review passed; 40.210 under review.
 
 ## CP W3 Phase A Review Record (2026-06-08)
 
@@ -47,8 +47,8 @@ It corresponds directly to `20.165_dcb_stability_requirements.md` (DCB geometric
 | Two-phase model (stop after Phase A) | Pass |
 | Blockers | **None** — Phase B authorized |
 
-## Required Next Step
-Implement prototype and harness behavior (when approved), then populate verification_capsule.md and requirements_delta.md with executed evidence. All work remains qualitative per 20.165 guidance (no numeric policy here; see 20.95 / 50-series). The delta and capsule documents **SHALL** also carry explicit Flows Alignment + Agreement Statements per 40.05.
+## Phase B Status
+Phase B complete (2026-06-09). See verification_capsule.md and requirements_delta.md for executed qualitative evidence. All work remains strictly qualitative per 20.165 guidance (no numeric thresholds or algorithms in the 40-layer; see 20.95 / 50.190).
 
 ## Traceability
 - 20.165_dcb_stability_requirements.md (source)

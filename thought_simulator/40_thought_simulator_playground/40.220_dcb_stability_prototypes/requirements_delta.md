@@ -1,55 +1,54 @@
 # 40.220_dcb_stability_prototypes / requirements_delta.md
 
-**Last Updated:** 2026-06-05  
-**Status:** Scaffold - Phase A pending
+## Status
+Phase B complete — HLR mapping exercised and recorded from 2026-06-09 verification run (5/5 PASS). Artifact: artifacts/dcb_stability_verification_run_2026-06-09.json
+
+**Last Updated:** 2026-06-09
+
+## Primary 20-series anchors
+- [20.165_dcb_stability_requirements.md](../../20_requirements/20.165_dcb_stability_requirements.md) — HLR-20.165-001 to 008 (qualitative geometric feedback stability, non-amplification, no oscillation/runaway, non-recursive, contraction preservation, qualitative-only stance, deterministic observability)
+- [20.106_dcb_requirements.md](../../20_requirements/20.106_dcb_requirements.md) — parent DCB definition and bounded feedback
+- [20.10_ts_architectural_principles.md](../../20_requirements/20.10_ts_architectural_principles.md) + [20.30_ts_functional_model.md](../../20_requirements/20.30_ts_functional_model.md) — contraction and boundedness
 
 ## Flows Alignment Statement
 
-- **Forward Flow (20-series)**: Driven by 20.165 (DCB stability requirements), 20.106 (DCB definition), 20.10 architectural principles, and 20.30 functional model contraction/boundedness.
-- **Backward Flow (40-series evidence)**: No evidence collected yet; this is the initial scaffold.
-- **Iterative Design Flow (50-series influence)**: 50.190_dcb_stability_design.md scaffold now exists (qualitative focus). Further design elaboration will be driven by evidence from this 40.220 module.
+- **Forward Flow (20-series):** Qualitative stability observer driven by 20.165 over 40.210 DCB events and geometry; supports the qualitative argument in HLR-20.165-007/008.
+- **Backward Flow (40-series evidence):** Phase B runs provide deterministic qualitative evidence that DCB feedback (as observed) does not amplify curvature, does not produce oscillation/runaway, does not recursively modify state (observer is read-only), preserves contraction signals, and yields replay-identical qualitative verdicts. All strictly qualitative (no numeric thresholds per HLR-20.165-005).
+- **Iterative Design Flow (50-series influence):** Evidence package directly informs 50.190_dcb_stability_design.md (qualitative focus).
 
-**Agreement Statement**: Scaffold stage only. Alignment will be asserted after Phase A software_description approval and Phase B execution.
+**Agreement Statement**: Phase B complete per 40.05 and 40.510 W3 (extension row 408). Full evidence package ready for 30/50. 40.220 supplies the 40-layer qualitative observer evidence for 20.165. Joint with 40.210. 40.200 review passed; 40.210 under CP+CuriousOne23 review.
 
----
+## Phase B HLR Exercise Summary (2026-06-09 harness run)
 
-## Summary
-This file will track how the DCB stability prototype aligns with and explores the 20.165 guidance, with explicit HLR traceability.
+- Non-amplifying stable sequence: HLR-20.165-001. Evidence: majority non-increasing curvature sequence → "no_clear_amplification" + overall "stable".
+- Bounded no oscillation/runaway: HLR-20.165-002. Evidence: moderate non-runaway sequence → "no_oscillation_detected" + "stable".
+- Read-only no recursive modification: HLR-20.165-003. Evidence: input events + trajectory identical before/after assess() → "no_recursive_modification_observed".
+- Contraction preserved bounded influence: HLR-20.165-004. Evidence: event count remains low relative to trajectory length → "contraction_appears_preserved".
+- Replay identical qualitative assessment: HLR-20.165-006. Evidence: identical (events, trajectory) → identical report.as_dict() via sort_keys.
 
-## Key 20-Series Guidance Being Explored (from 20.165)
+All 008 HLRs addressed at high level via the 5 scenarios + qualitative trend/rate labels (no numbers, no algorithms). The module demonstrates that stability violations are detectable through deterministic observability of event rates and geometry (HLR-20.165-006) while preserving the "qualitative only" contract (HLR-20.165-005).
 
-| 20-Series Document | HLR References                          | Key Guidance / SHALL                              | Status in This Prototype | Notes |
-|--------------------|-----------------------------------------|---------------------------------------------------|--------------------------|-------|
-| **20.165**         | HLR-20.165-001 to HLR-20.165-008        | DCB geometric feedback stability, non-amplification of curvature, no oscillation/runaway, non-recursive self-modification, preservation of TS contraction | Scaffold                 | Qualitative only |
-| **20.106**         | HLR-20.106-001..021 (esp. bounded feedback) | DCB as geometric meta-basin, bounded non-expansive feedback | Scaffold                 | Parent |
-| **20.10 / 20.30**  | (contraction, bounded routing)          | Non-expansive feedback under TS contraction rules | Scaffold                 | Cross-ref |
+## Impacted / Referenced Documents
+- 40.210_dcb_prototypes (direct joint — consumes DCB event format and trajectory geometry)
+- 20.165, 20.106, 20.10, 20.30 (as above)
+- 40.05_master_program_guide.md (process)
+- 30.190_dcb_stability_prototypes/ (future 30 capsule)
+- 50.190_dcb_stability_design.md (receives this evidence)
+- 10.50.190_dcb_stability_requirements.md (cross-layer)
+- 40.510_refactor.md (program tracking + W3 wave)
 
-## Requirements Delta Summary
+## Migration / Implementation Notes
+- Self-contained with mocked DCB events + trajectory (shape compatible with 40.210 prototype output) for Phase B isolation.
+- DCBStabilityObserver.assess(dcb_events, trajectory, *, policy_signature, cycle_id) → StabilityReport (qualitative labels only).
+- All detection is relative/trend-based (e.g. "majority increasing", "alternating pattern", "event count vs trajectory length") — no hard-coded numeric cutoffs in this module.
+- Observer is pure and side-effect free by design (read-only contract).
+- Replay support via assess_replay() helper for identical-input determinism tests.
+- When live 40.210 is integrated, the same harness scenarios can be re-run with real event lists.
 
-**Strongly Demonstrated:** (none — scaffold)
+## Open Items / Gaps
+- Full cross-check with live 40.210 output shapes and 40.240 consumption gating (tr_needs_update) — deferred to joint runs.
+- 30.00 promotion will require 10.50 peer + normalized 30 capsule citing this + 40.210 evidence.
+- 50 insight: the qualitative labels and report shape here are inputs to 50.190 design elaboration.
+- Numeric bounds and any procedural stability algorithms remain outside this module (20.95 / 50.190 territory).
 
-**Partially Demonstrated:** (none)
-
-**Not Covered in this Prototype:** (all — awaiting implementation)
-
-## Open Questions / Gaps for 10-series
-- Confirmation that qualitative-only stance in 20.165 is preserved in any 40 exploration (initial scaffold in 10.50.190_dcb_stability_requirements.md created to receive this)
-- Mapping of observable directional-change event rates to stability signals without semantic interpretation
-- Gating under tr_needs_update for DCB consumption (cross-ref 20.37 / 10.50.180)
-
-## Traceability Targets
-- thought_simulator/20_requirements/20.165_dcb_stability_requirements.md (primary)
-- thought_simulator/30_verification/30.190_dcb_stability_prototypes/
-- thought_simulator/50_thought_simulator_design/50.190_dcb_stability_design.md
-- thought_simulator/10_thought_simulator_req/50_design/10.50.190_dcb_stability_requirements.md
-- ../../40_thought_simulator_playground/40.05_master_program_guide.md (master process context)
-
-## Cross-Layer 165 Scaffolds (current state)
-20.165 plus the four matching placeholder layers created as consistent dummies:
-- 20.165 (source requirements + qualitative stability argument)
-- 40.220 (this module: exploration scaffold)
-- 30.190 (verification capsule/delta scaffold)
-- 50.190 (design support scaffold)
-- 10.50.190 (design requirements scaffold)
-
-See also the updates in 20.200_traceability_matrix.md and 50.00_design_traceability_index.md.
+All deltas incorporated as of 2026-06-09 Phase B completion. This module completes the 40-layer qualitative half of the 20.165 argument.

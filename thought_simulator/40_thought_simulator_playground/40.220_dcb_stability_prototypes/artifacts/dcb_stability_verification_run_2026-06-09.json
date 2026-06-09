@@ -1,0 +1,38 @@
+{
+  "module": "40.220_dcb_stability_prototypes",
+  "date": "2026-06-09",
+  "phase": "B",
+  "status": "PASS",
+  "scenarios": [
+    {
+      "scenario": "non_amplifying_stable_sequence",
+      "hlr": ["HLR-20.165-001"],
+      "result": "PASS"
+    },
+    {
+      "scenario": "bounded_no_runaway",
+      "hlr": ["HLR-20.165-002"],
+      "result": "PASS"
+    },
+    {
+      "scenario": "read_only_no_recursive_modification",
+      "hlr": ["HLR-20.165-003"],
+      "result": "PASS"
+    },
+    {
+      "scenario": "contraction_preserved_bounded_influence",
+      "hlr": ["HLR-20.165-004"],
+      "result": "PASS"
+    },
+    {
+      "scenario": "replay_identical_qualitative_assessment",
+      "hlr": ["HLR-20.165-006"],
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "total_scenarios": 5,
+    "passed": 5,
+    "failed_scenarios": []
+  }
+}
