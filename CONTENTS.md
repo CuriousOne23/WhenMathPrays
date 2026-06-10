@@ -20,6 +20,14 @@ Every document is listed here with a short description of what it contains.
 
 ---
 
+## 📄 Published Papers
+
+| Document | What it is |
+|---|---|
+| [`docs/The_Missing_Science_of_the_AI_Age.md`](docs/The_Missing_Science_of_the_AI_Age.md) | **The Missing Science of the AI Age: A Case for Relational Physics** — standalone public paper co-authored by CuriousOne23, Copilot, and Grok. Argues that the relational verbal space is the largest unstudied domain in science and that the AI age makes formalizing it urgent. Includes the GRP recurrence equation, primitive profile table, and a call to the research community. |
+
+---
+
 ## 🌌 General Relational Physics — Theory & Mathematics
 
 | Document | What it is |
@@ -33,12 +41,13 @@ Every document is listed here with a short description of what it contains.
 
 ---
 
-## 🧠 Epistemology & Philosophy
+## 🧠 Epistemology & Foundation
 
 | Document | What it is |
 |---|---|
 | [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) | The epistemic OS update — why relational systems require verb-mind perception, and how to develop it |
-| [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) | The full argument for GRP as a legitimate and urgently needed scientific research space |
+| [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) | The full internal argument for GRP as a legitimate and urgently needed scientific research space |
+| [`docs/The_Missing_Science_of_the_AI_Age.md`](docs/The_Missing_Science_of_the_AI_Age.md) | Public paper — the case for relational physics in the AI age (see Published Papers above) |
 
 ---
 
@@ -49,8 +58,8 @@ Every document is listed here with a short description of what it contains.
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Technical architecture of the interactive editor — MVC + Command pattern, component roles, and design principles |
 | [`SOFTWARE_MODULES.md`](SOFTWARE_MODULES.md) | Module-by-module breakdown of the codebase |
 | [`AI_Architecture_WhichWill_Scale.md`](AI_Architecture_WhichWill_Scale.md) | Architecture guidance for AI collaboration and extension of the GRP system |
-| [`docs/architecture/`](docs/architecture/) | Architecture decision records, refactoring plans, and coding standards |
 | [`docs/architecture/05_CODING_GUIDELINES.md`](docs/architecture/05_CODING_GUIDELINES.md) | Naming conventions, state management standards, and code quality expectations |
+| [`docs/architecture/`](docs/architecture/) | Full set of architecture decision records and refactoring plans |
 
 ---
 
@@ -63,6 +72,7 @@ Every document is listed here with a short description of what it contains.
 | [`scenarios/`](scenarios/) | Library of pre-built scenario CSV files ready to run through the cockpit |
 | [`results/`](results/) | Generated trajectory plots (PNG) from simulation runs |
 | [`simulations/`](simulations/) | Batch simulation outputs |
+| [`data/`](data/) | Supporting data files for scenarios and analysis |
 
 ---
 
@@ -74,6 +84,7 @@ Every document is listed here with a short description of what it contains.
 | [`tools/editor/`](tools/editor/) | PyQtGraph-based Python cockpit — the primary interactive interface |
 | [`core/`](core/) | GRP math engine — the recurrence computation layer |
 | [`scripts/`](scripts/) | Automation and utility scripts |
+| [`skins/`](skins/) | Visual themes and display customizations for the editor |
 | [`assets/GRP_SpreadSheet.xlsm`](assets/GRP_SpreadSheet.xlsm) | Excel cockpit — visual interface for scenario exploration |
 | [`assets/GRP_AI.xlsm`](assets/GRP_AI.xlsm) | AI-extended Excel cockpit |
 
@@ -86,6 +97,15 @@ Every document is listed here with a short description of what it contains.
 | [`tests/`](tests/) | Automated test suite |
 | [`testbenches/`](testbenches/) | Formal test benches for system-level validation |
 | [`verification/`](verification/) | Verification capsules and test procedures |
+| [`logs/baseline/`](logs/baseline/) | Baseline run logs for regression comparison |
+
+---
+
+## 🤖 AI Integration & MCP Tools
+
+| Directory | What it is |
+|---|---|
+| [`mcps/grok_com_github/tools/`](mcps/grok_com_github/tools/) | MCP tool definitions for Grok integration with the repository |
 
 ---
 
@@ -94,7 +114,7 @@ Every document is listed here with a short description of what it contains.
 | Document | What it is |
 |---|---|
 | [`docs/THE_STORY_OF_GRP.md`](docs/THE_STORY_OF_GRP.md) | The human narrative of how General Relational Physics came to be |
-| [`docs/Reality in Motion: Conversations with Grok & Copilot.md`](docs/) | Conversations with AI systems that shaped the development of GRP |
+| [`docs/Reality in Motion: Conversations with Grok & Copilot.md`](docs/Reality%20in%20Motion:%20Conversations%20with%20Grok%20%26%20Copilot.md) | Conversations with AI systems that shaped the development of GRP |
 
 ---
 
@@ -120,7 +140,7 @@ within WhenMathPrays, organized by engineering phase.
 | [`thought_simulator/10_thought_simulator_req/`](thought_simulator/10_thought_simulator_req/) | Requirements, design specs, and flow-down protocols |
 | [`thought_simulator/30_verification/`](thought_simulator/30_verification/) | Verification methodology and test capsules |
 | [`thought_simulator/40_thought_simulator_playground/`](thought_simulator/40_thought_simulator_playground/) | Prototype implementations — TR Router, IB, TB, Basin prototypes |
-| [`thought_simulator/50_design/`](thought_simulator/50_thought_simulator_design/) | Design documentation and formal specifications |
+| [`thought_simulator/50_design/`](thought_simulator/50_thought_simulator_playground/) | Design documentation and formal specifications |
 
 ---
 
@@ -131,6 +151,7 @@ within WhenMathPrays, organized by engineering phase.
 | I'm new to the project | [`STARTHERE.md`](STARTHERE.md) |
 | I want the conceptual overview | [`README.md`](README.md) |
 | I want to understand why this matters | [`WHY_THIS_MATTERS.md`](WHY_THIS_MATTERS.md) |
+| I want the published public paper | [`docs/The_Missing_Science_of_the_AI_Age.md`](docs/The_Missing_Science_of_the_AI_Age.md) |
 | I want to see the math | [`GRP_rev3.md`](GRP_rev3.md) |
 | I need the epistemic foundation | [`docs/Verb Mind Epistemology for Relational Physics.md`](docs/Verb%20Mind%20Epistemology%20for%20Relational%20Physics.md) |
 | I want to run a scenario now | [`STARTHERE.md §5`](STARTHERE.md) |
@@ -138,6 +159,3 @@ within WhenMathPrays, organized by engineering phase.
 | I want to understand the software | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
 | I want to contribute | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | I want everything, indexed | You are here |
-```
-
----
