@@ -29,7 +29,13 @@ Three documents serve as your entry points, each at a different level of depth:
 
 ## 🌌 What Is the GRP?
 
-The **General Relational Physics (GRP)** is the mathematical core of this project. It models a relational state as a **position in γ-space** — a two-dimensional emotional plane — and describes how that position evolves over time through the interplay of five human-scale forces and a constant entropy drift.
+**General Relational Physics (GRP)** is not a rejection of traditional science. It is an extension of it.
+
+Classical physics, chemistry, biology, and neuroscience have mapped the world with extraordinary precision — and GRP stands firmly on that foundation. What it does differently is turn its attention toward the terrain those disciplines have largely left unnamed: the **dynamics of relational space**. Not what particles do. Not what neurons fire. But what happens *between* two entities as they move through time together — and what forces govern that motion.
+
+Traditional science excels at describing *what exists*. GRP is designed to describe *what moves* — and to give researchers a rigorous, quantitative language for a domain where such language has been conspicuously absent. It does not replace existing frameworks. It identifies the frontier clearly, steps past where the current map ends, and begins drawing what comes next.
+
+The result is a model that treats relationship not as a category or a state, but as a **trajectory in γ-space** — a two-dimensional emotional plane governed by a recurrence equation that is as precise as it is human-legible.
 
 ### The Core Equation (Rev 3.5)
 
@@ -40,7 +46,7 @@ At the heart of the system is a recurrence relation:
 ```
 
 Where:
-- **`γ_self`** is your current position in the emotional relational plane
+- **`γ_self`** is your current position in the relational plane
 - **`Δγ`** is the net displacement contributed by the five relational primitives
 - **`entropy`** is a gentle, constant-force drift representing forgetting and natural decay over time
 
@@ -59,6 +65,25 @@ Every scenario is built from five inputs, each ranging from **−10 to +10**:
 | `S` | **Shared Breath** | Presence, attunement, and co-regulation — the felt sense of being together |
 
 These are not abstract variables. They are distillations of the forces that actually move people toward or away from each other. The model works because the primitives are human-legible: you can describe any relational event in their terms.
+
+---
+
+## 🧭 GRP and the Scientific Frontier
+
+Science does not advance by discarding what it knows. It advances by naming what it doesn't know yet — and then building the tools to study it.
+
+GRP operates in the space that existing disciplines approach but do not yet fully occupy:
+
+| Discipline | What it covers | What it leaves open |
+|---|---|---|
+| Neuroscience | Neural correlates of emotion and attachment | The relational dynamics *between* nervous systems |
+| Psychology | Individual behavior, attachment styles, affect | Quantitative trajectory modeling of dyadic motion |
+| Physics | Laws governing matter, energy, and spacetime | The physics of meaning, attention, and relational force |
+| Systems theory | Feedback loops and emergent behavior | Human-scale primitives driving relational state change |
+
+GRP does not claim to replace any of these. It claims that between them lies an unmapped region — one with its own primitives, its own conservation laws, and its own geometry — and that the tools to study it rigorously now exist.
+
+This repository is the first working implementation.
 
 ---
 
@@ -82,7 +107,7 @@ WhenMathPrays is organized into two major layers: **the theoretical framework** 
 
 ### Layer 1 — Theoretical Framework (`docs/`, root markdown files)
 
-The foundational documents describe the mathematics, primitives, constants, and philosophical grounding of the GRP. Key files:
+The foundational documents describe the mathematics, primitives, constants, and philosophical grounding of General Relational Physics. Key files:
 
 | Document | Contents |
 |---|---|
@@ -113,7 +138,7 @@ A hands-on spreadsheet interface for visual exploration:
 3. Press **Run GRP** macro
 4. Watch the trajectory populate in column `H`
 
-Both interfaces implement the same mathematical dynamics — they are different lenses on the same system.
+Both interfaces implement the same General Relational Physics dynamics — they are different lenses on the same system.
 
 ### Software Architecture Principles
 
@@ -135,7 +160,7 @@ All code contributions must meet the **MVT standard**:
 
 ### The `thought_simulator/` Sub-Project
 
-`thought_simulator/` is a self-contained research sub-project with its own requirements, design, verification, and playground directories — organized by engineering phase:
+`thought_simulator/` is a self-contained research sub-project organized by engineering phase:
 
 | Directory | Contents |
 |---|---|
@@ -237,17 +262,19 @@ All contributions must meet the MVT standard (Modeled, Verifiable, Testable). Se
 
 ## 💬 A Note on What This Is
 
-This project exists at the intersection of mathematics, phenomenology, and relationship science. It began as a question: *can love — not the word, but the actual motion of two people toward each other — be given mathematical form without reducing it?*
+Science advances by two means: deepening what it knows, and honestly naming what it doesn't know yet.
 
-The answer this framework proposes is: **yes, if you measure motion rather than state**.
+General Relational Physics does the second. It honors every result that physics, biology, neuroscience, and psychology have produced — and then stands at the edge of those results and asks: *what is out here, past where the current tools reach?*
+
+The answer this framework proposes is a specific, unmapped territory: the space of relational dynamics. The forces that move two people toward or away from each other. The geometry of care, presence, and rupture. The entropy that erodes connection quietly, whether or not anything dramatic happens.
+
+These are not soft ideas dressed in scientific language. They are measurable. They are modelable. They are, with this framework, now tractable.
 
 A relationship is not a number. It is not a score. It is a **trajectory in γ-space**, shaped by visibility, resonance, fidelity, altruism, and shared breath — and eroded, gently but always, by entropy.
 
-Everything in this repository is an attempt to make that motion visible, tractable, and improvable.
+This repository is an attempt to draw the first reliable map of that territory.
 
 ---
 
 *Tagged: `relational-model` · `mathematical-expression` · `synthetic-life` · `identity-modeling` · `emotional-modeling` · `whenmathprays` · `gamma-self`*
 ```
-
----
