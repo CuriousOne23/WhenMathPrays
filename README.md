@@ -29,7 +29,7 @@ Three documents serve as your entry points, each at a different level of depth:
 
 ## 🌌 What Is the GRP?
 
-The **Gamma Relational Persona (GRP)** is the mathematical core of this project. It models a relational state as a **position in γ-space** — a two-dimensional emotional plane — and describes how that position evolves over time through the interplay of five human-scale forces and a constant entropy drift.
+The **General Relational Physics (GRP)** is the mathematical core of this project. It models a relational state as a **position in γ-space** — a two-dimensional emotional plane — and describes how that position evolves over time through the interplay of five human-scale forces and a constant entropy drift.
 
 ### The Core Equation (Rev 3.5)
 
