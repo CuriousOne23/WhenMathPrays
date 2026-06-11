@@ -43,14 +43,14 @@ TS Inference is a **semantic correction and completion algorithm**.
 
 Given:
 
-- a prior meaning state `$M_0$`  
-- a candidate meaning `$M_c$`  
+- a prior meaning state $M_0$  
+- a candidate meaning $M_c$  
 - explicit structure (fields, referents, envelopes, MI tags)  
 - explicit constraints (types, envelopes, routing rules)  
 
 TS Inference returns:
 
-- a corrected meaning `$M'$`, or  
+- a corrected meaning $M'$, or  
 - an escalation (ask the user, clarify, or reject)
 
 TS Inference does **not**:
@@ -77,7 +77,7 @@ TS Inference operates in **three and only three modes**.
 
 ## **3.1 Mode 1 — Input Error Correction (Primary Mode)**
 
-TS Inference runs when the user’s input produces a candidate meaning `$M_c$` that contains:
+TS Inference runs when the user’s input produces a candidate meaning $M_c$ that contains:
 
 - missing referents  
 - incomplete shorthand  
@@ -91,9 +91,9 @@ TS Inference runs when the user’s input produces a candidate meaning `$M_c$` t
 
 In this mode, TS Inference:
 
-1. Detects issues in `$M_c$`  
+1. Detects issues in $M_c$  
 2. Generates local repair options  
-3. Projects to the nearest valid meaning `$M'$`  
+3. Projects to the nearest valid meaning $M'$  
 4. Escalates if no valid meaning exists  
 
 This is the **primary purpose** of TS Inference.
@@ -168,7 +168,7 @@ It is a **semantic correctness engine**.
 # **4. Detection**  
 ### *Identify what is wrong or incomplete*
 
-Detection is a structural analysis of the candidate meaning `$M_c$`.  
+Detection is a structural analysis of the candidate meaning $M_c$.  
 It identifies issues that must be resolved before meaning can be committed.
 
 Detection finds:
@@ -230,16 +230,16 @@ Projection is the **actual inference**.
 
 Given:
 
-- the prior meaning `$M_0$`  
-- the candidate meaning `$M_c$`  
-- the detected issues `$I$`  
+- the prior meaning $M_0$  
+- the candidate meaning $M_c$  
+- the detected issues $I$  
 - the envelope constraints  
 - the MI tags  
 - the USP rules  
 
 Projection computes:
 
-> **the nearest valid meaning `$M'$` that satisfies all constraints.**
+> **the nearest valid meaning $M'$ that satisfies all constraints.**
 
 Projection is a **tiny discrete optimization problem** over a **small, typed structure**.
 
@@ -250,15 +250,15 @@ Projection is implemented by the **ISc**.
 # **6. The TS Projection Algorithm**
 
 ## **Input**
-- `$M_0$`: prior meaning  
-- `$M_c$`: candidate meaning  
-- `$I = \{ i_1, ..., i_k \}$`: detected issues  
+- $M_0$: prior meaning  
+- $M_c$: candidate meaning  
+- $I = \{ i_1, ..., i_k \}$: detected issues  
 - envelope constraints  
 - USP rules  
 - MI tags  
 
 ## **Output**
-- `$M'$`: nearest valid meaning  
+- $M'$: nearest valid meaning  
 - OR escalation  
 
 ---
@@ -281,14 +281,14 @@ If ambiguity grows → escalate.
 
 For each combination:
 
-- apply the local fixes to `$M_c$`  
-- produce a candidate meaning `$M'_k$`  
+- apply the local fixes to $M_c$  
+- produce a candidate meaning $M'_k$  
 
 ---
 
 ## **Step 4 — Validate constraints**
 
-Discard any `$M'_k$` that violates:
+Discard any $M'_k$ that violates:
 
 - envelope  
 - types  
@@ -313,7 +313,7 @@ Where:
 
 - **EditCost** = number of structural edits  
 - **MIResolutionCost** = penalty for resolving ambiguity  
-- **`ΔH%`** = semantic distance from `$M_0$`  
+- **`ΔH%`** = semantic distance from $M_0$  
 
 ---
 
