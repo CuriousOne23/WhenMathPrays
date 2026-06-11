@@ -398,22 +398,157 @@ Just:
 
 ---
 
-# **7. Why TS Inference Is Effective**
+# 7 How TS Inference Works, and How It Compares to Today’s AI
 
-TS inference is effective because:
+TS Inference is a **semantic correctness engine**, not a reasoning engine, not a generative model, and not a statistical predictor.  
+Its purpose is to ensure that every meaning entering the TS pipeline is:
 
-- it resolves ambiguity deterministically  
-- it respects user intent  
-- it respects prior meaning  
-- it respects envelope constraints  
-- it never hallucinates  
-- it never guesses  
-- it never drifts  
-- it always escalates when needed  
+- structurally valid  
+- envelope‑compatible  
+- unambiguous  
+- contradiction‑free  
+- safe to merge  
+- minimally corrected  
 
-Projection is:
+TS Inference does this through a **deterministic projection algorithm** that computes the **nearest valid meaning** under a rule‑bound cost metric.  
+This is fundamentally different from how modern AI systems (LLMs, transformers, diffusion models) operate.
 
-> **choosing the nearest valid meaning from a tiny, structured, constrained space.**
+---
+
+## 7.1 How TS Inference Works (Conceptual Overview)
+
+TS Inference takes three inputs:
+
+- **M₀** — the prior meaning  
+- **$M_c$** — the candidate meaning  
+- **I** — the set of detected issues  
+
+It then performs a **bounded, deterministic search** over a small set of explicit structural repairs:
+
+1. **Generate local repair options** for each issue  
+2. **Enumerate candidate meanings** by combining repairs  
+3. **Apply repairs** to produce complete meanings  
+4. **Validate constraints** (types, envelopes, routing, contradictions)  
+5. **Compute cost** for each valid meaning  
+6. **Select the minimum‑cost meaning**  
+7. **Escalate** if no valid meaning exists  
+
+This is a **projection**, not a prediction.  
+TS does not guess, infer intent, or use probability.  
+It computes the meaning that requires the **least distortion** to become valid.
+
+---
+
+## 7.2 Why TS Inference Works (The Core Principles)
+
+TS Inference is effective because it is built on four principles:
+
+### **A. Determinism**  
+The same input always produces the same output.  
+There is no sampling, no randomness, no temperature.
+
+### **B. Boundedness**  
+TS never explores an unbounded search space.  
+All repairs are explicit, finite, and structural.
+
+### **C. Transparency**  
+Every repair, cost, and constraint is logged.  
+Every projection is explainable and replayable.
+
+### **D. Non‑Generativity**  
+TS never invents meaning.  
+It only corrects explicit structural defects.
+
+These principles make TS Inference safe, predictable, and trustworthy.
+
+---
+
+## 7.3 Advantages Over Today’s AI
+
+### **A. No Hallucinations**  
+TS cannot invent facts or meaning.  
+Modern AI frequently does.
+
+### **B. No Guessing or Over‑Interpretation**  
+TS escalates when ambiguity exists.  
+LLMs often “pick one” and confidently assert it.
+
+### **C. Deterministic Behavior**  
+TS is replay‑safe.  
+LLMs are inherently stochastic.
+
+### **D. Transparent Decision‑Making**  
+TS can explain exactly why it chose a meaning.  
+LLMs cannot.
+
+### **E. Envelope‑Constrained Safety**  
+TS cannot violate type constraints, routing rules, or semantic envelopes.  
+LLMs routinely do.
+
+### **F. Minimal Correction, Not Rewriting**  
+TS preserves user meaning with minimal edits.  
+LLMs often rewrite or reinterpret.
+
+### **G. No Model Drift**  
+TS behavior is stable over time.  
+LLMs drift as context grows or as models update.
+
+### **H. No Training Cost**  
+TS Inference does not require GPUs, embeddings, or neural training.  
+LLMs require massive compute and retraining cycles.
+
+---
+
+## 7.4. Disadvantages Compared to Today’s AI
+
+### **A. TS Inference is Not a Reasoning Engine**  
+It cannot:
+
+- generate ideas  
+- plan  
+- simulate  
+- expand meaning  
+- perform multi‑step reasoning  
+
+LLMs can.
+
+### **B. TS Inference Cannot Resolve Deep Ambiguity**  
+If meaning is unclear, TS escalates.  
+LLMs will “take a guess.”
+
+### **C. TS Inference Cannot Create New Meaning**  
+It cannot:
+
+- write  
+- summarize  
+- translate  
+- elaborate  
+
+LLMs can.
+
+### **D. TS Inference Requires a Valid Envelope**  
+If the envelope is missing or malformed, TS cannot proceed.  
+LLMs do not require envelopes.
+
+### **E. TS Inference is Conservative**  
+It always chooses the **least‑distorting** meaning.  
+LLMs can be more flexible (but also more dangerous).
+
+---
+
+## 7.5 Summary: TS Inference vs. Today’s AI
+
+| Dimension | TS Inference | Modern AI (LLMs) |
+|----------|--------------|------------------|
+| **Purpose** | Correctness | Generation |
+| **Core Operation** | Projection | Prediction |
+| **Determinism** | Yes | No |
+| **Hallucinations** | Impossible | Common |
+| **Ambiguity Handling** | Escalate | Guess |
+| **Explainability** | Full | None |
+| **Safety** | Hard‑bounded | Soft‑bounded |
+| **Training Cost** | Zero | Massive |
+| **User Experience** | Stable, predictable | Fluent, but unreliable |
 
 ---
 
