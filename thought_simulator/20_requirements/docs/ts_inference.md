@@ -202,13 +202,9 @@ Detection finds:
 
 Detection outputs a set of issues:
 
-```
-
 $$
 I = \{ i_1, i_2, ..., i_k \}
 $$
-
-```
 
 Each issue includes:
 
