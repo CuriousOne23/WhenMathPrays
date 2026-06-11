@@ -304,10 +304,13 @@ This is not incremental improvement. This is architectural superiority.
 
 ## **8. Comparison: TS vs. Modern AI**
 
-### **Basic Function Coverage**
+### **Function Coverage**
 
-| **Function** | **Today's AI (LLMs)** | **TS** | **Notes** |
+| **Function** | **Today's AI** | **TS** | **Notes** |
 | --- | --- | --- | --- |
+| Hallucination / Factual Grounding | Prone to confident fabrication; no structural boundary between known and generated content | Structurally bounded — meaning committed at ``commit_id`` freeze; uncertain or incomplete input tagged via ``MI_*`` rather than silently gap-filled | TS does not eliminate factual error, but it eliminates a structural class of hallucination: generation that contradicts committed meaning |
+| Tool Use / Function Calling | Supported via structured function-calling APIs; tools are invoked by the model generatively | **COP Port** — bounded, versioned, sandboxed co-processor invocation | TS tool integration is structurally more rigorous: interfaces are deterministic contracts, not generative guesses |
+| Multimodality | Native image, audio, and video input/output in leading models (GPT-4o, Gemini, Claude) | Addressable via domain-specific **COP3** modules; not in current kernel scope | TS kernel is text-native; multimodal input is a co-processor concern, not an architectural barrier |
 | Inference | Variable; latency grows with context length due to quadratic KV-cache accumulation; large batches required for throughput efficiency | **Bounded**; Pipeline A + B are O(1) — no attention, no KV-cache growth, no stochastic sampling overhead | TS inference latency does not degrade with context length; deterministic pipelines carry no sampling overhead |
 | High Performance Inference | High-throughput batched serving via datacenter GPU clusters; tensor cores and HBM sustain high tok/s at scale | Via **COP2** co-processor (1B–7B parameters); 20–80+ tok/s on consumer GPU | Both architectures achieve high-performance inference in their respective deployment contexts |
 | Meaning Construction | Emergent, unstable | Deterministic, explicit | Committed to `semantic_core` at Pipeline A completion; frozen at `commit_id` via `mtp_update` |
