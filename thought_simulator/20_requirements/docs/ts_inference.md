@@ -167,7 +167,7 @@ before TS commits it.
 # **3. Detection**  
 ### *Identify what is wrong or incomplete*
 
-Detection is a structural analysis of the candidate meaning $M\_c$.  
+Detection is a structural analysis of the candidate meaning $M_c$.  
 It identifies issues that must be resolved before meaning can be committed.
 
 Detection finds:
@@ -201,7 +201,9 @@ Detection finds:
 
 Detection outputs a set of issues:
 
-$ I = \{ i\_1, i\_2, ..., i\_k \} $
+$$
+I = \{ i_1, i_2, ..., i_k \}
+$$
 
 Each issue includes:
 
@@ -212,6 +214,11 @@ Each issue includes:
 Detection does **not** fix anything.  
 It only identifies problems and possible local repairs.
 
+Detection is implemented by the **IIInB** and SHALL be limited to **local semantic defect identification only**.  
+The “local repair options” attached to each issue are **descriptive suggestions** for how the structure *could* be repaired; they are not applied by IIInB.  
+The IIInB SHALL NOT perform projection, correction, referent resolution, or any modification of $M_0$ or $M_c$.  
+All semantic projection and correction, including “minimal” corrections, SHALL be performed outside IIInB (see Section 4, Projection).
+
 ---
 
 # **4. Projection**  
@@ -221,8 +228,8 @@ Projection is the **actual inference**.
 
 Given:
 
-- the prior meaning $M\_0$  
-- the candidate meaning $M\_c$  
+- the prior meaning $M_0$  
+- the candidate meaning $M_c$  
 - the detected issues $I$  
 - the envelope constraints  
 - the MI tags  
@@ -233,6 +240,19 @@ Projection computes:
 > **the nearest valid meaning $M'$ that satisfies all constraints.**
 
 Projection is a **tiny discrete optimization problem** over a **small, typed structure**.
+
+Projection is implemented by the **ISc**.  
+The ISc SHALL:
+
+- compare $M_0$ and $M_c$ against the envelope and constraints  
+- use the detected issues $I$ and their local repair options to generate and evaluate candidate repairs  
+- compute the nearest valid meaning $M'$ and its projection cost  
+- propose $M'$ as a corrected meaning to the IB  
+
+If a defect corresponds to an underspecified referent and the envelope yields **exactly one unambiguous candidate**, the ISc SHALL propose that referent as the correction as part of $M'$.  
+
+The ISc SHALL compute **all** semantic corrections, including minimal corrections and referent resolutions, subject to envelope and USP constraints.  
+The ISc SHALL NOT unilaterally apply corrections; the IB SHALL decide whether to accept or reject the proposed $M'$.
 
 ---
 
