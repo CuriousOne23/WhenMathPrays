@@ -16,6 +16,10 @@ This is the strategic split that defines the entire Thought Simulator architectu
 - **IB (Inquiry Basin)** is where creativity, exploration, and hypothesis generation occur —  
   but slowly, deliberately, and under supervision.
 
+In other words:
+- TS Inference protects meaning on the input side.
+- While the IB expands meaning on the output side.
+
 This document explains **only the input‑side inference** — the part that protects meaning.
 
 ---
