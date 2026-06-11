@@ -304,10 +304,12 @@ This is not incremental improvement. This is architectural superiority.
 
 ## **8. Comparison: TS vs. Modern AI**
 
-### **Function Coverage**
+### **Basic Function Coverage**
 
 | **Function** | **Today's AI (LLMs)** | **TS** | **Notes** |
-|---|---|---|---|
+| --- | --- | --- | --- |
+| Inference | Variable; latency grows with context length due to quadratic KV-cache accumulation; large batches required for throughput efficiency | **Bounded**; Pipeline A + B are O(1) — no attention, no KV-cache growth, no stochastic sampling overhead | TS inference latency does not degrade with context length; deterministic pipelines carry no sampling overhead |
+| High Performance Inference | High-throughput batched serving via datacenter GPU clusters; tensor cores and HBM sustain high tok/s at scale | Via **COP2** co-processor (1B–7B parameters); 20–80+ tok/s on consumer GPU | Both architectures achieve high-performance inference in their respective deployment contexts |
 | Meaning Construction | Emergent, unstable | Deterministic, explicit | Committed to `semantic_core` at Pipeline A completion; frozen at `commit_id` via `mtp_update` |
 | Input / Semantic Error Correction | Implicit in weights; no durable user lexicon; clarification is generative | Profile-gated **IIInB** + **USP/UPI** + **CIL** clarification | `profile_enabled=false` skips IIInB entirely; rules are replay-pinned via `usp_version_ref` |
 | Messy-Input Handling | Smoothed silently in generation | Explicit `MI_*` taxonomy; tags preserved in `semantic_core` | Contradiction, vagueness, affect, incompleteness — classified and retained, not guessed away |
