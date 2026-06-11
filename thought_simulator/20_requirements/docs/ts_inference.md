@@ -297,13 +297,9 @@ Discard any $M'_k$ that violates:
 
 ## **Step 5 — Compute cost**
 
-```
-
 $$
 \text{Cost}(M'_k) = \text{EditCost} + \text{MIResolutionCost} + \Delta H\%
 $$
-
-```
 
 Where:
 
@@ -315,13 +311,9 @@ Where:
 
 ## **Step 6 — Choose the minimum‑cost meaning**
 
-```
-
 $$
 M' = \arg\min_k \text{Cost}(M'_k)
 $$
-
-```
 
 This is the **nearest valid meaning**.
 
