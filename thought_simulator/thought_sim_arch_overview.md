@@ -26,30 +26,54 @@ This document provides a conceptual overview of the TS architecture, its structu
 
 ---
 
-## **2. The Core Insight: Dual‑Pipeline Cognition**
+# **2. The Core Insight: Dual‑Pipeline Cognition**
 
 TS is built on a simple but transformative principle:
 
-> **Meaning and realization must be separate.**
+> **Understanding and expression must be separate.**
 
-Modern AI entangles both inside a single neural network. TS splits them into two deterministic pipelines.
+Modern AI entangles both inside a single neural network. TS splits them into two deterministic pipelines, each with a single, well‑defined responsibility.
 
-### **Pipeline A — Meaning Construction**
+---
 
-- Builds semantic structures in **`semantic_core`** (the committed meaning envelope)  
-- Tracks commitments through **`commit_id`** freeze at `mtp_update`  
-- Maintains stable, replayable meaning across turns  
-- Tags messy input explicitly via the `MI_*` taxonomy; handles inquiry and meaning‑side consistency  
-- Optionally applies semantic shorthand repair via **IIInB** (profile‑gated, pre‑pipeline)
+## **Pipeline A — Understanding / Reading / Meaning Construction**
 
-### **Pipeline B — Realization**
+Pipeline A performs the system’s **understanding**. It reads the user’s input, interprets it, resolves ambiguity, and constructs explicit meaning.
 
-- Converts a frozen meaning snapshot into natural language — **one pass per `commit_id` per cycle**  
-- Handles style, tone, and surface expression  
-- Delegates fuzzy pattern generation to the Intuition Module (COP2)  
-- Fully bounded; post‑output mismatch is handled by **IMR** (Interpretation Mismatch Routine)
+Pipeline A:
 
-### **Runtime Sketch (Conceptual)**
+- reads and interprets the user’s input  
+- builds semantic structures in **`semantic_core`**  
+- tags messy or incomplete input via the `MI_*` taxonomy  
+- applies optional semantic shorthand repair via **IIInB** (profile‑gated)  
+- resolves contradictions through inquiry (IB) when commitment is blocked  
+- commits meaning at `mtp_update`, freezing it under a **`commit_id`**  
+
+Once meaning is committed, it becomes **immutable** for the duration of the turn.  
+This is the system’s “understanding” — explicit, replayable, and deterministic.
+
+---
+
+## **Pipeline B — Expression / Realization of Meaning into Language**
+
+Pipeline B performs **expression**. It takes the frozen meaning snapshot from Pipeline A and realizes it into natural language.
+
+Pipeline B:
+
+- receives the committed meaning (`commit_id` snapshot)  
+- produces a single natural‑language realization per cycle  
+- handles style, tone, and surface expression  
+- delegates fuzzy pattern generation to **COP2** (Intuition Module)  
+- routes any mismatch between intended meaning and surface output to **IMR**  
+
+Pipeline B does **not** reinterpret meaning.  
+It expresses meaning — nothing more, nothing less.
+
+This strict separation ensures that meaning remains stable, auditable, and replayable.
+
+---
+
+## **Runtime Sketch (Conceptual)**
 
 ```text
 External → CIL (conversation) → InB (surface intake)
@@ -61,15 +85,27 @@ Conversation layer (durable, not per-cycle meaning):
 ```
 
 - **InB** — deterministic surface normalization only; no semantic guessing  
-- **IIInB** — optional, profile‑gated semantic shorthand repair via explicit **USP** rules; unknowns escalate to clarification  
-- **CIL / COB / USP / UPI** — multi‑turn conversation integration and durable user lexicon  
-- **`profile_enabled = false`** — skips IIInB entirely; zero Track‑H cost on the hot path  
+- **IIInB** — optional semantic shorthand repair via explicit **USP** rules  
+- **CIL / COB / USP / UPI** — durable conversation‑layer primitives  
+- **`profile_enabled = false`** — skips IIInB entirely; zero Track‑H cost  
 
-This separation resolves the three structural failures of modern AI:
+---
 
-1. **No determinism**  
-2. **No stable meaning**  
-3. **No modularity**
+## **Why This Separation Matters**
+
+This architectural split resolves the three structural failures of modern AI:
+
+1. **No determinism** — transformers entangle meaning and expression inside stochastic generation  
+2. **No stable meaning** — semantics drift across turns  
+3. **No modularity** — all cognition fused into one opaque model  
+
+TS replaces this with:
+
+- deterministic understanding (Pipeline A)  
+- deterministic expression (Pipeline B)  
+- bounded neural intuition (COP2)  
+- explicit correction wires (InB, IIInB, IB, IMR)  
+- stable, replayable meaning (`commit_id` freeze)  
 
 Once the dual‑pipeline architecture exists, everything else is mechanics.
 
