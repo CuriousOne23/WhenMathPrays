@@ -76,7 +76,26 @@
     "input_repair_tag",
     "iiinb_escalation_ref",
     "profile_enabled",
-    "semantic input error correction"
+    "semantic input error correction",
+
+    /* --- NEW TERMS FROM ARCHITECTURE DISCUSSION --- */
+
+    "cex (context extractor)",
+    "ce (context envelope)",
+    "ts processing path (normal path)",
+    "ts processing path (clarification path)",
+    "ts processing path (inference path)",
+    "ts processing path (post-ts interrogation path)",
+    "intake envelope",
+    "candidate_set{}",
+    "cil (context input layer)",
+    "isc (initial semantic classifier)",
+    "merge (semantic gatekeeper)",
+    "tpu (trusted processing unit)",
+    "post-ts interrogation path",
+    "inb path selector",
+    "context-shaping primitive",
+    "semantic primitive"
   ],
   "required_by_module": {}
 }
