@@ -1,11 +1,3 @@
-Not yet — the rewrite was still in progress when the session ended. Picking it up now.
-
-Got it. Writing the full second draft now.
-
-Done! Here's the complete second draft:
-
----
-
 # **Thought Simulator Architecture Overview**
 ### *A Structural Alternative to Modern AI Systems*
 
