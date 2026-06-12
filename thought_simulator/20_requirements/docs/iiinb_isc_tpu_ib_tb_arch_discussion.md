@@ -917,3 +917,152 @@ The architecture:
 This is the minimal, correct, and stable solution.
 
 ---
+
+# **11. Proposed CE Schema (v0) — For Review**
+
+This section introduces a **proposed schema** for the ContextEnvelope (CE).  
+It is intentionally labeled **v0** to emphasize that it is a *proposal*, not a final specification.  
+The purpose of including it now is to capture the **identity**, **intent**, and **structural essence** of CE so that reviewers can evaluate and refine it.
+
+The schema reflects the architectural principles established in Sections 8–10:
+
+- CE must be **bounded**  
+- CE must be **deterministic**  
+- CE must be **replayable**  
+- CE must be **non‑semantic**  
+- CE must be **safe for ISc**  
+- CE must be **derived only through CEx**  
+- CE must **never** expose raw CIL structures  
+
+---
+
+## **11.1 CE Schema (v0)**  
+*(Proposed — subject to review)*
+
+```
+ContextEnvelope (CE):
+  turn_id: String
+  lineage_id: String
+  active_objects: [ObjectID]
+  active_referents: [ReferentID]
+  usp_relevant: [USPEntryID]
+  mtp_slice:
+    commitments: [CommitmentID]
+    constraints: [ConstraintID]
+  cob_relevant: [COBObjectID]
+  discourse_state:
+    thread_id: String
+    turn_position: Integer
+  flags:
+    requires_disambiguation: Boolean
+    referent_conflict: Boolean
+    shorthand_detected: Boolean
+```
+
+### **Notes on the schema**
+
+- **turn_id** and **lineage_id** anchor CE to the conversation structure.  
+- **active_objects** and **active_referents** provide the minimal referential context.  
+- **usp_relevant**, **mtp_slice**, and **cob_relevant** provide bounded slices of global structures.  
+- **discourse_state** captures thread‑level context without exposing history.  
+- **flags** allow CEx to signal conditions that ISc may need to consider.
+
+This schema is intentionally minimal.  
+It captures the **identity** of CE without overcommitting to implementation details.
+
+---
+
+## **11.2 Why this schema is included now**
+
+Even if the schema is not final, including it now:
+
+- anchors the concept of CE in something concrete  
+- gives reviewers a starting point  
+- captures the *essence* of CE’s identity  
+- prevents drift or misinterpretation  
+- ensures CEx and ISc have a shared contract  
+- allows 20.33 and 20.101 to reference a real structure  
+- makes the architecture implementable  
+- clarifies what is *not* allowed in CE (e.g., raw CIL, unbounded history)  
+
+This is the right moment to introduce it.
+
+---
+
+# **12. Implications of the CE Schema Proposal**
+
+The introduction of a CE schema has several architectural implications.
+
+---
+
+## **12.1 Implications for CEx**
+
+CEx now has a **clear contract**:
+
+- It must produce CE objects that conform to the schema.  
+- It must enforce bounding rules.  
+- It must ensure determinism.  
+- It must select only the fields defined in the schema.  
+- It must not expose raw CIL structures.  
+- It must not introduce semantic content.  
+
+This makes CEx implementable and reviewable.
+
+---
+
+## **12.2 Implications for ISc**
+
+ISc now receives:
+
+- a stable, predictable, bounded CE  
+- a deterministic input structure  
+- no global state  
+- no unbounded history  
+- no raw CIL objects  
+
+This preserves ISc’s purity and replayability.
+
+---
+
+## **12.3 Implications for CIL (20.33)**
+
+CIL’s role is clarified:
+
+- CIL remains a **reference layer**  
+- CIL is not a pipeline stage  
+- CIL is not exposed to ISc  
+- CIL is only accessed by CEx  
+- CIL’s internal structures remain hidden behind CE  
+
+This strengthens the boundaries defined in 20.33.
+
+---
+
+## **12.4 Implications for IIInB (20.101)**
+
+IIInB remains:
+
+- a repair primitive  
+- not a context integrator  
+- not a semantic engine  
+- not a CIL reader  
+
+IIInB hands off to CEx for context extraction.  
+This preserves the purity of IIInB’s role.
+
+---
+
+## **12.5 Implications for TP, TPU, Merge, IB, TB**
+
+The schema ensures:
+
+- TPU receives clean, validated updates  
+- Merge has a stable context for validation  
+- IB/TB remain downstream governance layers  
+- No upstream drift occurs  
+- No global state contaminates scoring or repair  
+
+This stabilizes the entire TS architecture.
+
+---
+
