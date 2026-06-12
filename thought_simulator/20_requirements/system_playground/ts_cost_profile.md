@@ -119,31 +119,65 @@ $$
 
 ---
 
-# **4. Combined Cost (Input‑Side + Full Lifecycle)**
+### 4. Combined cost overview (Path A, Path B, OB/RB/GB)
 
-### **Typical combined cost**
+Assumptions:
+
+- CPU: single 3.5 GHz core  
+- OB count: \(75\)  
+- RB count: \(75\)  
+- GB: \(1\)  
+
+#### 4.1 Consolidated cycle cost table
+
+| Component / Path | Typical cycles (per thought) | Heavy cycles (per thought) | Notes |
+|------------------|-----------------------------:|----------------------------:|-------|
+| **Path A — Input pipeline** (InB→IIInB→CEx→CE→ISc→Merge→TPU→TP) | $3{,}000\text{–}8{,}000$ | $15{,}000\text{–}55{,}000$ | Refinement only |
+| **OBs** (75 × OB) | $15{,}000\text{–}30{,}000$ | $60{,}000\text{–}112{,}500$ | Observation fan‑out |
+| **RBs** (75 × RB) | $22{,}500\text{–}45{,}000$ | $75{,}000\text{–}150{,}000$ | Routing fan‑out |
+| **GB** | $500\text{–}1{,}000$ | $2{,}000\text{–}4{,}000$ | Global basin consolidation |
+| **Other TS lifecycle** (semantic\_core, IMR, candidate\_set{}, scoring, selection, IB/TB) | $\approx 4{,}500\text{–}11{,}000$ | $\approx 20{,}000\text{–}70{,}000$ | As in §3 |
+| **Total Path B — Full thought** | **$\approx 41{,}000\text{–}84{,}000$** | **$\approx 152{,}000\text{–}321{,}500$** | Includes Path A + OB + RB + GB + lifecycle |
+
+You can keep §2 and §3 as‑is; this table just pulls them together and adds OB/RB/GB explicitly.
+
+---
+
+### 4.2 Path A and Path B latency
+
+Using a 3.5 GHz core:
+
+- **Path A (input pipeline only)**  
+  - Typical:
 
 $$
-\approx 7{,}500\text{–}19{,}000\ \text{cycles}
-$$
-
-Microseconds:
-
-$$
-\approx 2.1\text{–}5.4\ \mu s
-$$
-
-### **Heavy combined cost**
+    3{,}000\text{–}8{,}000\ \text{cycles} \approx 0.9\text{–}2.3\ \mu s
+$$  
+  - Heavy:
 
 $$
-\approx 35{,}000\text{–}125{,}000\ \text{cycles}
+    15{,}000\text{–}55{,}000\ \text{cycles} \approx 4.3\text{–}15.7\ \mu s
 $$
 
-Microseconds:
+- **Path B (full thought, including OB/RB/GB)**  
+  - Typical:
+ 
+$$
+    41{,}000\text{–}84{,}000\ \text{cycles} \approx 12\text{–}24\ \mu s
+$$  
+  - Heavy:
+$$ 
+    152{,}000\text{–}321{,}500\ \text{cycles} \approx 43\text{–}92\ \mu s
+$$
 
-$$
-\approx 10\text{–}36\ \mu s
-$$
+---
+
+### 4.3 Why OB/RB/GB matter
+
+- **OBs dominate fan‑out cost**: with \(50\text{–}100\) OBs, even cheap per‑OB work adds up.  
+- **RBs dominate routing cost**: same story—small per‑RB cost × many RBs.  
+- **GB is cheap but central**: one GB per thought adds a small fixed consolidation cost.  
+- **Path A is still small**: even with all this, the original input pipeline remains a minor fraction of Path B.
 
 ---
 
