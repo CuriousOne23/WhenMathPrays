@@ -361,16 +361,6 @@ This is the architecture that all 20‑series documents must align with.
 
 ---
 
-Absolutely, Jeff — here is a **clean, drop‑in Section 8** for your playground paper, written to follow Sections 1–7 (problem description) and begin the **proposed solution**.  
-It includes:
-
-- **Section 8** (the proposal)  
-- **Section 8.1–8.4** (definitions, pipeline, rationale, and why it works)  
-- Written in the same tone and structure as your requirements documents  
-- Ready to paste directly into your active tab (`iiinb_isc_tpu_ib_tb_arch_discussion.md`)
-
----
-
 # **8. Proposed Solution: Introducing CEx and CE to Stabilize Contextual Scoring**
 
 Sections 1–7 describe the architectural drift and the core problem:  
@@ -416,35 +406,106 @@ This schema is intentionally minimal and can evolve.
 
 ---
 
-## **8.2 ContextExtractor (CEx)**  
-**CEx is the only primitive allowed to read CIL.**  
-Its job is to extract a bounded, deterministic CE from global conversation state.
+# **8.2 ContextExtractor (CEx)**
 
-CEx sits between IIInB and ISc:
+CEx is the **bridge** between:
+
+- the structured intake envelope produced by **IIInB**,  
+- the global conversation state maintained by **CIL**, and  
+- the bounded, deterministic **ContextEnvelope (CE)** consumed by **ISc**.
+
+This relationship is captured in the following diagram:
 
 ```
-IIInB → CEx → CE → ISc
+IIInB ───► CEx ───► CE ───► ISc
+           ▲
+           │
+          CIL   (reference only)
 ```
 
-**CEx responsibilities:**
+### **Interpretation of the diagram**
 
-- Read IIInB’s structured envelope  
-- Consult CIL as a *reference service*  
-- Select only relevant context  
-- Bound the context (size, complexity)  
-- Produce CE deterministically  
-- Ensure CE is safe for ISc consumption  
+- **IIInB** produces a cleaned, structurally valid intake envelope.  
+- **CEx** reads that envelope and consults **CIL** *as a reference service only*.  
+- **CEx** extracts only the *relevant*, *bounded*, *deterministic* context and shapes it into **CE**.  
+- **ISc** consumes **CE**, not CEx and not CIL.  
+- **CIL** never becomes a pipeline stage; it is read‑only and tangential.
 
-**CEx non‑responsibilities:**
+This is the minimal architecture that preserves determinism, replayability, and safe boundaries while still giving ISc the context it needs.
 
-- No scoring  
-- No semantic interpretation  
-- No TP writing  
-- No governance  
-- No interrogation  
-- No user‑facing behavior  
+---
 
-CEx is a **context shaper**, not a semantic engine.
+## **CEx responsibilities**
+
+CEx is a **context‑shaping primitive**, not a semantic engine.  
+Its responsibilities are:
+
+1. **Read IIInB output**  
+   - Accept the structured, repaired intake envelope.
+
+2. **Consult CIL safely**  
+   - Read MTP, COB, USP, lineage, active objects, and commitments.  
+   - Never modify CIL.  
+   - Never expose CIL directly to ISc.
+
+3. **Select relevant context**  
+   - Identify only the context needed for this turn.  
+   - Ignore irrelevant or stale context.
+
+4. **Bound the context**  
+   - Enforce strict size and complexity limits.  
+   - Ensure CE is finite and replayable.
+
+5. **Produce CE deterministically**  
+   - Same IIInB envelope + same CIL state ⇒ same CE.  
+   - CE must be stable across replays.
+
+6. **Isolate ISc from global state**  
+   - CE is the *only* context object ISc may consume.  
+   - ISc must never read CIL directly.
+
+---
+
+## **Why this works**
+
+This design solves the core architectural tension described in Sections 1–7:
+
+### **1. ISc gets the context it needs**  
+ISc requires active objects, referents, commitments, lineage, and other contextual signals to score interpretations correctly.
+
+CE provides exactly that — no more, no less.
+
+### **2. ISc remains deterministic and replayable**  
+CIL is global and unbounded.  
+ISc cannot read it directly without breaking determinism.
+
+CE is bounded and deterministic, so ISc remains stable.
+
+### **3. CIL stays in its proper role**  
+CIL is a **reference layer**, not a pipeline stage.  
+CEx is the only primitive allowed to read it.
+
+This preserves the integrity of 20.33.
+
+### **4. IIInB stays focused on repair**  
+IIInB does short‑term repair only.  
+It does not read CIL.  
+It does not extract context.
+
+This preserves the integrity of 20.101.
+
+### **5. Long‑term repair becomes possible but safe**  
+If long‑term repair is retained, it can use CE (not CIL) to perform deeper corrections without violating safe boundaries.
+
+### **6. The entire TS architecture stabilizes**  
+- No global state leaks into scoring  
+- No unsafe context reaches ISc  
+- No drift of TB/IB upstream  
+- No violation of safe boundaries  
+- No replay failures  
+- No semantic contamination  
+
+This is the minimal, clean, and stable solution.
 
 ---
 
