@@ -235,71 +235,136 @@ This breaks 20.30 and 20.105.
 If TB or IB appear upstream of ISc, replay becomes ambiguous.
 
 ---
+Absolutely, Jeff — here is the **clean, updated section** you asked for, ready to paste directly into your open GitHub editor tab  
+(**iiinb_isc_tpu_ib_tb_arch_discussion.md**, tabId **1146962434**).
 
-## **5. Proposed Solution (After Problem Description)**
+I’m giving you **only the text**, no tools, no formatting surprises — just the exact architectural update you requested.
 
-### **5.1. Restore IB/TB to their original role**  
-They belong **after TP**, not before.
+---
+
+## **5. Architectural Invariant: InB as Path Selector**
+
+InB is the **sole authority** that determines which processing path TS will take.  
+This is a foundational invariant of the architecture.
+
+InB examines the incoming envelope and decides:
+
+- whether the input is **clean and resolvable**  
+- whether the input is **ambiguous or malformed**  
+- whether the input requires **semantic interpretation**  
+- whether the input requires **user clarification**  
+- whether the input requires **TS inference**  
+- whether the input should bypass inference entirely  
+
+This decision determines which of the three TS paths (plus the post‑TS path) is activated.
+
+---
+
+# **6. The Four Distinct Processing Paths**
+
+TS has **four** non‑overlapping pipelines.  
+They must never be merged in diagrams or requirements.
+
+---
+
+## **6.1 Normal Path (default, no ambiguity, no errors)**
+
+This is the **happy path** — the system simply responds.
+
+No IIInB.  
+No ISc.  
+No TPU.  
+No scoring.  
+No governance.  
+No interrogation.
+
+```
+InB → OB → RB → Path B → OuB
+```
+
+This is the **default conversational path**.
+
+---
+
+## **6.2 Clarification Path (fallback when input is unclear)**
+
+Triggered when **InB detects something it cannot resolve**:
+
+- malformed  
+- ambiguous  
+- incomplete  
+- contradictory  
+- unknown  
+- structurally invalid  
+
+In this case, InB escalates to IIInB, which attempts to normalize.  
+If normalization cannot resolve the issue, the system asks the user.
+
+```
+InB → IIInB → Path B → OuB → User
+```
+
+This is the **user clarification path**, not inference.
+
+---
+
+## **6.3 Inference Path (semantic scoring + TP update)**
+
+Triggered only when:
+
+- the input is valid  
+- AND it requires semantic interpretation  
+- AND TS must update TP  
+
+This is the **semantic / scoring / TP‑update pipeline**:
+
+```
+InB → IIInB → ISc → TPU (Merge) → TP
+```
+
+Notes:
+
+- **ISc** is the first semantic decision point.  
+- **Merge** validates the update request.  
+- **TPU** is the *only* safe writer to TP.  
+- This path is **rare** compared to the normal path.
+
+---
+
+## **6.4 Post‑TS Interrogation Path (truth, grounding, governance)**
+
+Triggered only when **TP itself is unclear** or when TS has exhausted its ability to resolve meaning.
+
+This is the **truth‑checking / grounding / governance loop**:
 
 ```
 TP → IB → TB → GBIB → GB
 ```
 
-They are **post‑TS interrogation primitives**, not intake primitives.
+Notes:
 
-### **5.2. Remove TB from the input pipeline**  
-The correct input pipeline becomes:
-
-```
-InB → IIInB → RB → (semantic interpreter) → ISc → Merge → TPU → TP
-```
-
-### **5.3. Introduce or identify the true semantic interpreter**  
-We must choose one:
-
-- OB  
-- a new primitive (SB)  
-- TB‑Interpretation (split TB)  
-- or another name  
-
-This primitive produces:
-
-- candidate_set{}  
-- structured interpretations  
-- features for ISc  
-
-### **5.4. Restore TPU to its original purpose**  
-TPU is:
-
-> **The sole safe writer to TP.**
-
-Nothing more.
-
-### **5.5. Redraw the architecture**  
-We will produce:
-
-- a corrected core inference diagram  
-- a corrected post‑TS interrogation diagram  
-- a corrected safe‑write diagram  
-- a corrected semantic interpretation diagram  
-
-### **5.6. Update the 20‑series documents**  
-Once this discussion stabilizes, we will update:
-
-- 20.44 (ISc)  
-- 20.46 (TPU)  
-- 20.101 (IIInB)  
-- ts_inference.md  
-- 20.30 (safe boundaries)  
-- 20.105 (writer authority)  
+- This path is **not** part of intake.  
+- This path is **not** part of scoring.  
+- This path is **not** part of TP writing.  
+- This path is **after** TS has already done its best.
 
 ---
 
-## **6. Next Steps**  
-We must now answer the key architectural question:
+# **7. Why This Separation Matters**
 
-# **Who produces the candidate_set{} for ISc?**
+This four‑path model:
 
-Once we answer that, the entire architecture locks into place.
+- restores the original TS architecture  
+- eliminates the drift that placed TB/IB upstream  
+- clarifies TS vs GB responsibilities  
+- prevents unsafe boundary violations  
+- clarifies when ISc is used (rare)  
+- clarifies when TPU is used (only for TP writes)  
+- clarifies when IIInB is used (only for normalization or fallback)  
+- clarifies that the normal path bypasses inference entirely  
+
+This is the architecture that all 20‑series documents must align with.
 
 ---
+
+# **8. Next Steps**
