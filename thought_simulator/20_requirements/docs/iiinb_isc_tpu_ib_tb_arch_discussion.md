@@ -1066,3 +1066,82 @@ This stabilizes the entire TS architecture.
 
 ---
 
+# **13. CEx Requirements Block (v0 — Proposed)**
+
+This section defines the initial requirements for the ContextExtractor (CEx).  
+These requirements formalize CEx’s identity and ensure it remains the **only** safe bridge between IIInB, CIL, and CE.
+
+### **CEx‑R1 — Single Responsibility**  
+CEx SHALL perform only context extraction and shaping.  
+CEx SHALL NOT perform scoring, semantic interpretation, TP writing, governance, or user‑facing behavior.
+
+### **CEx‑R2 — Exclusive CIL Access**  
+CEx SHALL be the only primitive in the intake/inference path permitted to read CIL.  
+IIInB, ISc, Merge, TPU, IB, and TB SHALL NOT read CIL directly.
+
+### **CEx‑R3 — CE Schema Compliance**  
+CEx SHALL produce CE objects that conform to the CE schema (v0 or later).  
+Malformed CE instances SHALL be rejected or repaired before reaching ISc.
+
+### **CEx‑R4 — Bounded Extraction**  
+CEx SHALL enforce strict bounds on CE size and complexity.  
+Excess context SHALL be truncated or summarized.
+
+### **CEx‑R5 — Deterministic Behavior**  
+Given the same IIInB envelope and the same CIL state, CEx SHALL produce the same CE.  
+No randomness or nondeterministic inputs are allowed.
+
+### **CEx‑R6 — Non‑Semantic Behavior**  
+CEx SHALL NOT introduce new semantic content.  
+It may only expose existing structures already present in CIL.
+
+### **CEx‑R7 — No Raw CIL Exposure**  
+CEx SHALL NOT expose raw CIL objects or internal CIL structures in CE.  
+All context MUST be mapped into schema‑defined CE fields.
+
+### **CEx‑R8 — Forward‑Only Flow**  
+CEx SHALL operate in a forward‑only manner.  
+It SHALL NOT modify CIL or TP.
+
+---
+
+# **14. CE Validation Ruleset (v0 — Proposed)**
+
+This section defines what makes a CE instance **valid**, **safe**, and **usable** by ISc.
+
+### **CE‑V1 — Schema Conformity**  
+A CE instance MUST conform to the CE schema (field presence, types, constraints).  
+Invalid CE MUST NOT be passed to ISc.
+
+### **CE‑V2 — Bounded Size**  
+All list‑valued fields MUST respect configured maximum lengths.  
+If bounds are exceeded, CEx MUST truncate or summarize.
+
+### **CE‑V3 — No Raw CIL Structures**  
+CE MUST NOT contain raw CIL objects, pointers, or opaque blobs.  
+All content MUST be represented via IDs or schema‑defined fields.
+
+### **CE‑V4 — Deterministic Content**  
+CE MUST be reproducible from (IIInB envelope, CIL state).  
+If CE cannot be reproduced deterministically, it is invalid.
+
+### **CE‑V5 — Non‑Semantic Nature**  
+CE MUST NOT introduce new semantic commitments.  
+All references MUST point to pre‑existing entities in CIL.
+
+### **CE‑V6 — Referential Integrity**  
+All IDs in CE MUST resolve in CIL at the time of CE construction.  
+Dangling or unresolved IDs render CE invalid.
+
+### **CE‑V7 — Safety for ISc**  
+CE MUST be safe for direct consumption by ISc:  
+- no unbounded history  
+- no recursive structures  
+- no cycles  
+- no fields requiring additional global lookups  
+
+### **CE‑V8 — Versioning**  
+CE SHOULD carry a schema version identifier.  
+ISc MUST reject incompatible versions.
+
+---
