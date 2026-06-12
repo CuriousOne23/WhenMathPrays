@@ -509,40 +509,81 @@ This is the minimal, clean, and stable solution.
 
 ---
 
-## **8.3 Updated Pipeline with CEx and CE**
+# **8.3 Updated Inference Path With CEx and CE**
 
-### **Normal Path (unchanged)**  
+The introduction of **CEx** and **CE** modifies the inference path to ensure that semantic scoring (ISc) receives the context it needs **without ever touching global state directly**.  
+This preserves determinism, replayability, and safe boundaries while enabling context‑aware interpretation.
 
-```
-InB → OB → RB → Path B → OuB
-```
-
-### **Short‑Term Repair Path (unchanged)**  
+The updated inference pipeline is:
 
 ```
-InB → IIInB → Path B → OuB → User
+IIInB ───► CEx ───► CE ───► ISc ───► Merge ───► TPU ───► TP
+           ▲
+           │
+          CIL   (reference only)
 ```
 
-### **Inference Path (updated)**  
+### **Interpretation of the updated pipeline**
 
-```
-InB → IIInB → CEx → CE → ISc → Merge → TPU → TP
-```
+- **IIInB** produces a cleaned, structurally valid intake envelope.  
+- **CEx** reads that envelope and consults **CIL** (Conversation Integration Layer) as a **reference service only**.  
+- **CEx** extracts only the *relevant*, *bounded*, *deterministic* context and shapes it into **CE**.  
+- **ISc** consumes **CE**, not CEx and not CIL.  
+- **Merge** validates the semantic update request.  
+- **TPU** applies the update to TP safely and deterministically.  
+- **TP** is updated only after all constraints are satisfied.
 
-### **Long‑Term Repair Path (optional)**  
-If long‑term repair is retained:
+This architecture ensures that:
 
-```
-InB → IIInB → CEx → CE → LongTermRepair → ISc → Merge → TPU → TP
-```
+- ISc remains **pure**, **bounded**, and **replayable**  
+- CIL remains a **reference layer**, not a pipeline stage  
+- IIInB remains a **repair primitive**, not a context integrator  
+- TPU remains the **only writer** to TP  
+- Merge remains the **semantic gatekeeper**  
+- No global state leaks into scoring  
 
-### **Post‑TS Interrogation Path (unchanged)**  
+---
 
-```
-TP → IB → TB → GBIB → GB
-```
+## **Why this works**
 
-This preserves the original architecture while adding the missing contextual bridge.
+### **1. It preserves determinism and replayability**  
+ISc must be deterministic.  
+CIL is global and unbounded.  
+CEx converts global state into a **bounded CE**, ensuring ISc remains stable.
+
+### **2. It restores architectural purity**  
+Each primitive returns to its intended role:
+
+- **IIInB** = repair  
+- **CEx** = context extraction  
+- **CE** = bounded context  
+- **ISc** = semantic scoring  
+- **Merge** = validation  
+- **TPU** = writing  
+- **CIL** = reference only  
+
+No primitive is overloaded.
+
+### **3. It cleanly separates short‑term and long‑term repair**  
+- Short‑term repair stays in IIInB.  
+- Long‑term repair (if retained) uses CE, not CIL.  
+- Neither repair path touches global state directly.
+
+### **4. It aligns with 20.33 (CIL) and 20.101 (IIInB)**  
+- CIL remains a reference layer.  
+- IIInB does not read CIL.  
+- CEx becomes the correct bridge.  
+- ISc remains isolated from global state.
+
+### **5. It stabilizes the entire TS architecture**  
+- No global state leaks into scoring  
+- No unsafe context reaches ISc  
+- No drift of TB/IB upstream  
+- No violation of safe boundaries  
+- No replay failures  
+- No semantic contamination  
+
+This is the minimal, clean, and stable solution that resolves the architectural tension described in Sections 1–7.
 
 ---
 
