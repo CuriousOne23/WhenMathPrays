@@ -587,43 +587,146 @@ This is the minimal, clean, and stable solution that resolves the architectural 
 
 ---
 
-## **8.4 Why This Works**
+# **8.4 Why This Architecture Works**
 
-### **1. It protects ISc from global state**  
-ISc must remain deterministic, bounded, and replayable.  
-CIL is global, unbounded, and dynamic.  
-CE is the safe middle layer.
+The updated inference architecture succeeds because it resolves the core tension identified in Sections 1–7:  
+**ISc requires contextual information to score interpretations correctly, but cannot safely read global state (CIL) directly.**
 
-### **2. It restores architectural purity**  
-- IIInB handles repair  
-- CEx handles context extraction  
-- ISc handles scoring  
-- TPU handles writing  
-- CIL remains a reference layer  
-- IB/TB remain post‑TS governance  
+The introduction of **CEx** and **CE** provides the minimal, stable, and safe bridge needed to support context‑aware scoring without violating determinism or safe boundaries.
 
-No primitive is overloaded.
+---
 
-### **3. It cleanly separates short‑term and long‑term repair**  
-- Short‑term repair stays in IIInB  
-- Long‑term repair (if kept) uses CE  
-- Neither repair path touches CIL directly  
+## **1. CEx isolates ISc from global state**
 
-### **4. It aligns with 20.33 (CIL) and 20.101 (IIInB)**  
-- CIL remains a reference layer  
-- IIInB remains a repair primitive  
-- Neither is misused  
-- CEx becomes the correct bridge  
+CIL contains:
 
-### **5. It stabilizes the entire TS architecture**  
-- No global state leaks into scoring  
-- No unsafe context reaches ISc  
-- No drift of TB/IB upstream  
-- No violation of safe boundaries  
-- No replay failures  
-- No semantic contamination  
+- MTP  
+- COB  
+- USP  
+- lineage  
+- active objects  
+- commitments  
 
-This is the minimal, clean, and stable solution.
+These structures are **global, unbounded, and dynamic**.
+
+ISc must remain:
+
+- deterministic  
+- bounded  
+- replayable  
+- safe  
+
+CEx is the **only** primitive allowed to read CIL, and it produces a **bounded CE** that ISc can safely consume.
+
+This prevents global state from leaking into scoring.
+
+---
+
+## **2. CE provides exactly the context ISc needs — no more, no less**
+
+CE is a **bounded, deterministic snapshot** of the relevant conversation context at time *n*.
+
+It contains only what ISc needs:
+
+- active referents  
+- active objects  
+- relevant USP entries  
+- relevant MTP slices  
+- lineage identifiers  
+- commitments or constraints  
+
+CE is:
+
+- finite  
+- replayable  
+- stable  
+- non‑semantic  
+
+This ensures ISc receives the right context without inheriting global complexity.
+
+---
+
+## **3. IIInB stays focused on repair, not context integration**
+
+IIInB performs:
+
+- short‑term repair  
+- structural normalization  
+- envelope cleanup  
+
+IIInB does **not**:
+
+- read CIL  
+- extract context  
+- perform semantic interpretation  
+
+This preserves the intent of 20.101 and prevents IIInB from becoming overloaded.
+
+---
+
+## **4. CIL remains a reference layer, not a pipeline stage**
+
+CIL is consulted by CEx, but never appears in the pipeline.
+
+This preserves the intent of 20.33:
+
+- CIL is global  
+- CIL is read‑only  
+- CIL is not part of intake  
+- CIL is not part of scoring  
+- CIL is not part of repair  
+
+CEx is the correct bridge.
+
+---
+
+## **5. TPU remains the only writer to TP**
+
+The updated pipeline:
+
+```
+IIInB → CEx → CE → ISc → Merge → TPU → TP
+```
+
+ensures that:
+
+- ISc never writes  
+- CEx never writes  
+- CE never writes  
+- IIInB never writes  
+- only TPU writes to TP  
+
+This preserves safe boundaries and prevents semantic contamination.
+
+---
+
+## **6. Long‑term repair becomes possible but safe**
+
+If long‑term repair is retained, it can use **CE**, not CIL, to perform deeper corrections.
+
+This allows:
+
+- context‑aware repair  
+- without global‑state access  
+- without violating determinism  
+- without contaminating ISc  
+
+This is the cleanest way to support both short‑term and long‑term repair.
+
+---
+
+## **7. The entire TS architecture stabilizes**
+
+This architecture:
+
+- prevents drift  
+- prevents unsafe boundary violations  
+- prevents TB/IB from drifting upstream  
+- prevents global state from leaking into scoring  
+- preserves determinism and replayability  
+- restores the original TS design intent  
+
+It is the minimal, correct, and stable solution.
 
 ---
 
