@@ -165,7 +165,9 @@ $$
 $$
     41{,}000\text{–}84{,}000\ \text{cycles} \approx 12\text{–}24\ \mu s
 $$  
+
   - Heavy:
+
 $$ 
     152{,}000\text{–}321{,}500\ \text{cycles} \approx 43\text{–}92\ \mu s
 $$
