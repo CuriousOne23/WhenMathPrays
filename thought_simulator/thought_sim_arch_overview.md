@@ -372,7 +372,11 @@ And adds capabilities modern AI cannot:
 
 # **8. Comparison: TS vs. Modern AI**
 
-The table below compares the functional coverage of today’s transformer‑based AI systems with the Thought Simulator architecture. It includes the new clarification that TS replaces the *functional role* of attention heads through explicit routing primitives (CIL, COB, USP, UPI).
+The purpose of this section is not to argue whether TS has identified the correct primitives of thought — that is a separate question, and one that can be debated indefinitely. Instead, this section demonstrates something more concrete and immediately verifiable:
+
+> **Regardless of whether TS’s cognitive primitives are ultimately correct, TS is architected to deliver the full functional coverage of today’s AI systems — and to do so deterministically, transparently, and with bounded computation.**
+
+The table below presents a comprehensive comparison between the functional capabilities of modern transformer‑based AI systems and the Thought Simulator architecture. It shows that TS is designed to match (and in many cases structurally improve upon) every major functional dimension of today’s AI. This includes the explicit clarification that TS replaces the *functional role* of attention heads through deterministic routing primitives (CIL, COB, USP, UPI), rather than through emergent softmax‑based attention.
 
 ---
 
