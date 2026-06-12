@@ -370,17 +370,81 @@ And adds capabilities modern AI cannot:
 
 ---
 
-## **8. Comparison: TS vs. Modern AI**
+# **8. Comparison: TS vs. Modern AI**
 
-*(Table preserved exactly; polished for clarity.)*
-
-[**Table omitted here for brevity — but in your final output I will include the full polished table exactly as in your document.**]
+The table below compares the functional coverage of today’s transformer‑based AI systems with the Thought Simulator architecture. It includes the new clarification that TS replaces the *functional role* of attention heads through explicit routing primitives (CIL, COB, USP, UPI).
 
 ---
 
-## **9. Runtime Primitives & Normative References**
+## **8.1 Function Coverage Table**
 
-*(Section preserved exactly; polished for clarity.)*
+| **Function** | **Today’s AI** | **TS** | **Notes** |
+| --- | --- | --- | --- |
+| **Attention heads (focus, routing, grouping)** | Multi‑head attention; emergent focus patterns; quadratic cost | **CIL + COB + USP/UPI** — explicit conversational routing and grouping | TS achieves the same functional outcomes as attention heads, but deterministically and O(1) |
+| **Hallucination / Factual Grounding** | Prone to confident fabrication; no structural boundary between known and generated content | Structurally bounded — meaning committed at `commit_id` freeze; uncertain or incomplete input tagged via `MI_*` | TS eliminates a structural class of hallucination: generation that contradicts committed meaning |
+| **Tool Use / Function Calling** | Generative function‑calling APIs; tool invocation inferred from model output | **COP Port** — bounded, versioned, sandboxed co‑processor invocation | TS tool integration is deterministic and contract‑based |
+| **Multimodality** | Native image/audio/video in leading models | Via domain‑specific **COP3** modules | Kernel is text‑native; multimodality is a co‑processor concern |
+| **Inference** | Latency grows with context length; quadratic KV‑cache accumulation; stochastic sampling | **Bounded**; Pipeline A + B are O(1); no attention, no KV‑cache, no sampling | TS inference latency does not degrade with context length |
+| **High‑Performance Inference** | Datacenter GPU clusters; tensor cores; HBM | **COP2** (1B–7B) on consumer GPU; 20–80+ tok/s | Both achieve high throughput in their respective regimes |
+| **Meaning Construction** | Emergent, unstable | Deterministic, explicit | Committed to `semantic_core` at Pipeline A completion |
+| **Input / Semantic Error Correction** | Implicit in weights; no durable user lexicon | **IIInB + USP/UPI + CIL** | `profile_enabled=false` skips IIInB entirely |
+| **Messy‑Input Handling** | Smoothed silently in generation | Explicit `MI_*` taxonomy; tags preserved in `semantic_core` | Contradiction, vagueness, affect, incompleteness retained, not guessed away |
+| **Multi‑Turn Conversation State** | Context window only; degrades with length | **CIL / COB** conversation layer | Durable object lineage; survives turns without context‑window pressure |
+| **User‑Specific Lexicon** | Session‑fuzzy; no auditable rule store | **USP** under **COB**; **UPI** is sole writer | Fully auditable and replayable |
+| **Reasoning** | Approximate, stochastic | Deterministic via **COP1** + TS kernel | No stochastic sampling on reasoning path |
+| **Planning** | Weak, emergent | Deterministic **XP pipeline** | Explicit planning primitives |
+| **Memory** | Context window only | Structured, persistent | `commit_id`‑anchored replay; COB durability |
+| **Input Correction (surface)** | Mixed with semantic repair | **InB** only — deterministic surface normalization | Semantic repair lives in IIInB |
+| **Output Correction** | No structural mechanism | **IMR** — Type A/B/C | Type determines re‑trigger target |
+| **Inquiry / Ambiguity** | Generative follow‑up | **IB** (Inquiry Basin), GB‑gated | Fires only on `MI_INCOMP` path |
+| **Semantic Stability** | Drifts over context | Stable across turns | `commit_id` freeze prevents drift |
+| **Replayability** | Impossible | Perfect, deterministic replay | Any turn replayable from its `commit_id` snapshot |
+| **Explainability** | Hidden in weights | Fully transparent | Every pipeline stage visible |
+| **Modularity** | None; monolithic model | **COP Port** + basins + primitives | Replaceable, versioned, sandboxed |
+| **Governance / Caps** | Implicit in weights | **GB** gates IB, UPI, IMR‑C | Explicit, auditable supervisory policy |
+| **Intuition** | Entire model is intuition | **COP2 only** | Bounded neural intuition |
+| **Creativity** | Emergent across full model | **COP2‑driven**; scoped to frozen meaning | Creativity bounded to realization layer |
+| **Style Control** | Approximate | Deterministic separation + COP2 | Meaning committed before style |
+| **Hardware Needs** | Datacenter GPUs; HBM; multi‑GPU | Consumer hardware; **0–1 GPUs** | 7B COP2 fits on mid‑range GPU |
+| **Power Use** | Kilowatts | **5–40W** (COP2) + **<1W** (TS core) | Laptop‑class envelope |
+| **Cost** | Very high | Very low | 10×–100× hardware cost reduction |
+| **Privacy** | Cloud‑based | **Local** — fully offline | No data transmission |
+| **Determinism** | None | **Full** | Pipelines A and B deterministic |
+| **Safety** | Emergent | **Structural** — GB‑enforced | Behavior bounded by architecture |
+
+---
+
+# **9. Runtime Primitives & Normative References**
+
+This overview describes TS at the architectural level.  
+The **authoritative, normative specifications** live in the 20‑series.
+
+---
+
+## **9.1 Where to Start in the 20‑Series**
+
+| **Reader Need** | **Start Here** |
+|---|---|
+| Pipeline blocks B0–B8 in runtime order | `20.01_architecture_map.md` |
+| “What it is / is not” per primitive | `20.190_glossary.md` (Primitive Intent Catalog) |
+| End‑to‑end functional topology | `20.30_ts_functional_model.md` |
+| Input error correction (Track H) | `20.101`–`20.103` (IIInB, USP, UPI) |
+| Dual‑pipeline handoff | `20.500_refactoring_for_dual_TS_pipeline.md` (closed program archive) |
+
+---
+
+## **9.2 Architectural Evolution (Non‑Normative)**
+
+The 20‑series refined TS through four cumulative refactors — each narrowing the authoritative core and pushing specialization to the periphery:
+
+| # | Refactor | What It Established |
+|---|---|---|
+| 1 | Manifold not integral to TS | Realization (`exec_plan`, `exec_trace`, OuB) separable and strip‑replayable from meaning |
+| 2 | Specialized primitives | InB, IB, basins, CIL, COB, IMR, GB — single‑duty writers; cataloged in `20.190` |
+| 3 | Dual pipelines | Pipeline A (lane‑parallel meaning) → freeze at `commit_id` → Pipeline B (singular realization) |
+| 4 | Input error correction | Semantic repair moved out of InB → **IIInB + clarification + UPI/USP** |
+
+Track H (refactor 4) did not reopen 1–3; it composed on top of them.
 
 ---
 
@@ -402,6 +466,3 @@ TS makes intelligence:
 **local · efficient · deterministic · modular · explainable · correctable · future‑proof**
 
 ---
-- or polish the entire 20‑series for consistency  
-
-Just tell me what direction you want.
