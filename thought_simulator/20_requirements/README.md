@@ -77,7 +77,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
 - [glossary_term_registry.json](glossary_term_registry.json)
-- [docs/](docs/)
+- [system_playground/](system_playground/)
 - [Grok_review_in_20.md](Grok_review_in_20.md)
 
 ## Rules
