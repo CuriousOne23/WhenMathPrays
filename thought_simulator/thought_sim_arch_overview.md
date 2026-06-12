@@ -437,7 +437,7 @@ The **authoritative, normative specifications** live in the 20‑series.
 
 ---
 
-## **9.2 Architectural Evolution (Non‑Normative)**
+## **9.2 Architectural Evolution**
 
 The 20‑series refined TS through four cumulative refactors — each narrowing the authoritative core and pushing specialization to the periphery:
 
@@ -452,21 +452,23 @@ Track H (refactor 4) did not reopen 1–3; it composed on top of them.
 
 ---
 
-## **10. Conclusion**
-
+# **10. Conclusion**  
 TS is not a variant of modern AI — it is a **replacement architecture**.
 
 It delivers:
 
-- the capabilities of today’s AI  
+- the full functional capabilities of today’s AI  
 - at a fraction of the cost and power  
 - with deterministic, modular, correctable cognition  
 - with new capabilities modern AI cannot achieve  
+- with explicit, visible thought‑processing  
+- with structural scalability and expandability  
 
 Once the dual‑pipeline architecture exists, everything else is mechanics.
 
 TS makes intelligence:
 
-**local · efficient · deterministic · modular · explainable · correctable · future‑proof**
+**local · efficient · deterministic · modular · explainable · correctable · visible · expandable · scalable · future‑proof**
 
 ---
+
