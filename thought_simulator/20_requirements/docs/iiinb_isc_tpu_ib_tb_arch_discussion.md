@@ -730,3 +730,190 @@ It is the minimal, correct, and stable solution.
 
 ---
 
+# **9. Efficiency, Implementability, and Cost Profile of the Proposed Architecture**
+
+The introduction of **CEx** and **CE** not only resolves the architectural tension described in Sections 1–7, but also produces a design that is **clean, CPU‑friendly, implementable, and low‑cost**.  
+This section explains why the proposed solution is practical and efficient in real systems.
+
+---
+
+## **9.1 Clean Separation of Responsibilities**
+
+Each primitive now has a single, crisp responsibility:
+
+- **IIInB** — short‑term repair  
+- **CEx** — context extraction  
+- **CE** — bounded context object  
+- **ISc** — semantic scoring  
+- **Merge** — semantic validation  
+- **TPU** — TP writing  
+- **CIL** — reference layer  
+
+No primitive is overloaded.  
+No primitive leaks into another’s domain.  
+No circular dependencies exist.
+
+This yields a clean, maintainable architecture.
+
+---
+
+## **9.2 CPU‑Friendly by Design**
+
+The new architecture is computationally light:
+
+- **CEx** performs only selection, bounding, and shaping — no heavy logic.  
+- **CE** is intentionally small and finite.  
+- **ISc** receives only a cleaned envelope and a small CE.  
+- **CIL** is consulted once per turn, by one primitive.  
+- **No global scans**, no recursion, no backtracking.
+
+This keeps per‑turn compute extremely low.
+
+---
+
+## **9.3 Highly Implementable**
+
+The primitives map directly to real software components:
+
+- IIInB → parser/normalizer  
+- CEx → context selector  
+- CE → struct/record  
+- ISc → scoring function  
+- TPU → state writer  
+- CIL → global context store  
+
+There is no exotic machinery.  
+No complex data structures.  
+No nondeterministic behavior.
+
+This architecture can be implemented in any mainstream language (Rust, Go, C++, Python, Java, TypeScript) with minimal overhead.
+
+---
+
+## **9.4 Low‑Cost to Operate**
+
+The architecture avoids:
+
+- GPUs  
+- embeddings  
+- matrix operations  
+- large memory allocations  
+- deep history traversal  
+- expensive graph operations  
+
+CEx is O(1) or O(n) with tiny n.  
+CE is tiny.  
+ISc is bounded.  
+TPU writes are small.
+
+This makes the system inexpensive to run at scale.
+
+---
+
+## **9.5 Stability and Predictability**
+
+Because CE is deterministic and bounded:
+
+- ISc remains deterministic  
+- replay remains valid  
+- safe boundaries remain intact  
+- TP updates remain predictable  
+- governance remains enforceable  
+
+This stability is essential for TS.
+
+---
+
+# **10. Implications for 20.33 (CIL) and 20.101 (IIInB)**
+
+The introduction of **CEx** and **CE** clarifies and strengthens the requirements in 20.33 and 20.101.  
+This section summarizes the implications for both documents.
+
+---
+
+## **10.1 Implications for 20.33 — CIL Requirements**
+
+The proposed architecture reinforces the intended role of CIL:
+
+### **CIL remains a reference layer, not a pipeline stage**
+
+- CIL is **never** part of the intake pipeline.  
+- CIL is **never** part of the scoring pipeline.  
+- CIL is **never** part of repair.  
+- CIL is **never** part of TP writing.  
+- CIL is **never** part of governance.
+
+### **CEx becomes the only primitive allowed to read CIL**
+
+This ensures:
+
+- controlled access  
+- bounded extraction  
+- deterministic shaping  
+- no global state leakage into ISc  
+
+### **CIL’s responsibilities remain unchanged**
+
+CIL continues to maintain:
+
+- MTP  
+- COB  
+- USP  
+- lineage  
+- active objects  
+- commitments  
+
+But now these structures are consumed safely through CE.
+
+---
+
+## **10.2 Implications for 20.101 — IIInB Requirements**
+
+The proposed architecture restores IIInB to its intended role:
+
+### **IIInB performs short‑term repair only**
+
+IIInB:
+
+- cleans malformed input  
+- normalizes structure  
+- resolves local shorthand  
+- prepares the envelope for downstream processing  
+
+IIInB does **not**:
+
+- read CIL  
+- extract context  
+- perform semantic interpretation  
+- perform long‑term repair  
+- influence scoring directly  
+
+### **IIInB hands off to CEx for context extraction**
+
+This ensures:
+
+- IIInB stays lightweight  
+- IIInB stays deterministic  
+- IIInB stays bounded  
+- IIInB does not drift into semantic or contextual responsibilities  
+
+### **Long‑term repair (if retained) uses CE, not CIL**
+
+This keeps long‑term repair safe and bounded.
+
+---
+
+## **10.3 System‑Wide Implications**
+
+The architecture:
+
+- prevents drift  
+- prevents unsafe boundary violations  
+- prevents TB/IB from drifting upstream  
+- prevents global state from leaking into scoring  
+- preserves determinism and replayability  
+- restores the original TS design intent  
+
+This is the minimal, correct, and stable solution.
+
+---
