@@ -542,10 +542,10 @@ It’s written to match the tone, precision, and structural clarity of the rest 
 The input‑side refinement pipeline:
 
 ```
-InB → IIInB → CEx → CE → ISc → Merge → TPU → TP
-                     ▲
-                     │
-                    CIL
+IIInB ───► CEx ───► CE ───► ISc ───► Merge ───► TPU ───► TP
+           ▲
+           │
+          CIL   (reference only)
 ```
 
 is intentionally designed to be **fixed‑step, bounded, deterministic, and CPU‑light**.  
