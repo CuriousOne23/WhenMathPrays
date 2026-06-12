@@ -55,6 +55,8 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.103_upi_requirements.md](20.103_upi_requirements.md)
 - [20.105_tp_requirements.md](20.105_tp_requirements.md)
 - [20.106_dcb_requirements.md](20.106_dcb_requirements.md)
+- [20.107_cex_extract.md](20.107_cex_extract.md)
+- [20.108_ce_envelope.md](20.108_ce_envelope.md)
 - [20.110_oub_requirements.md](20.110_oub_requirements.md)
 - [20.115_mtp_requirements.md](20.115_mtp_requirements.md)
 - [20.120_mtp_schema_requirements.md](20.120_mtp_schema_requirements.md)
