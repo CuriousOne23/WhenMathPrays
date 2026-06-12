@@ -111,23 +111,23 @@ Once the dual‑pipeline architecture exists, everything else is mechanics.
 
 ---
 
-## **3. Why TS Outperforms Traditional AI Architectures**
+# **3. Why TS Outperforms Traditional AI Architectures**
 
-TS outperforms transformer‑based AI not through incremental improvements, but by operating in a fundamentally different computational regime.
+TS outperforms transformer‑based AI not through incremental optimization, but by operating in a **different computational regime** — structural cognition rather than statistical prediction. Modern AI buries the mechanics of thought inside large neural networks. TS begins with explicit primitives of thought and builds the cognitive system around them. When the primitives are correct, the system becomes transparent, deterministic, inspectable, and computationally efficient. Hardware efficiency is not an optimization goal — it is a *structural consequence*.
 
-TS begins with explicit primitives of thought and builds the cognitive system around them. When the primitives are correct, the mechanics become transparent, deterministic, inspectable, and computationally efficient. Hardware efficiency is a *consequence* of structural correctness — not a design target.
+---
 
-### **3.1 A Different Computational Regime**
+## **3.1 A Different Computational Regime**
 
-Transformers rely on:
+Transformers implement cognition through:
 
 - large matrix multiplications  
 - multi‑head attention  
 - high‑dimensional embeddings  
 - stochastic token prediction  
-- emergent reasoning  
+- emergent reasoning behavior  
 
-These require HBM bandwidth, tensor cores, multi‑GPU parallelism, and high power.
+These operations require HBM bandwidth, tensor‑core acceleration, multi‑GPU parallelism, and high power envelopes.
 
 TS replaces them with:
 
@@ -137,24 +137,31 @@ TS replaces them with:
 - **incremental state updates**  
 - **modular co‑processor calls**
 
-This is the primary reason TS achieves higher efficiency and stability.
+This shift — from statistical emergence to structural cognition — is the primary reason TS achieves higher stability and efficiency.
 
-### **3.2 Why Transformers Became GPU‑Centric**
+---
 
-Transformers map directly onto GPU hardware:
+## **3.2 Why Transformers Became GPU‑Centric**
+
+The transformer architecture (*Attention Is All You Need*, 2017) maps directly onto GPU hardware:
 
 - attention → tensor cores  
 - activations → HBM  
 - scaling → multi‑GPU clusters  
 
-This created a hardware‑architecture feedback loop.
+This created a hardware–architecture feedback loop:
+
+- GPUs evolved to accelerate transformers  
+- transformers evolved to exploit GPUs  
+- research pipelines organized around tensor operations  
 
 TS does not participate in this loop because it does not use the operations that require it.
 
-### **3.3 Deterministic Meaning Construction vs. Emergent Semantics**
+---
 
-Transformers generate meaning implicitly through distributed activations.
+## **3.3 Deterministic Meaning Construction vs. Emergent Semantics**
 
+Transformers generate meaning implicitly through distributed activations.  
 TS constructs meaning explicitly through:
 
 - semantic commitments locked at `commit_id`  
@@ -162,47 +169,87 @@ TS constructs meaning explicitly through:
 - replayable transitions via `mtp_update`  
 - deterministic operators across Pipeline A  
 
-Meaning is explicit, not emergent — eliminating the need for large models, HBM, or stochastic sampling.
+Because meaning is explicit rather than emergent, TS does not require:
 
-### **3.4 Separation of Meaning and Realization**
+- large models  
+- high‑bandwidth memory  
+- stochastic sampling  
+- massive parallelism  
 
-Transformers entangle meaning and realization.
+It operates efficiently on commodity hardware.
 
-TS separates them:
+---
 
-- **Pipeline A** commits meaning  
-- **Pipeline B** realizes that meaning  
+## **3.4 Separation of Understanding and Expression**
+
+Transformers entangle meaning and realization inside a single model.  
+TS separates them cleanly:
+
+- **Pipeline A** performs understanding — reading, interpreting, and constructing meaning  
+- **Pipeline B** performs expression — realizing that frozen meaning into language  
 - **IMR** corrects post‑output mismatch  
-- **CIL / USP / UPI** handle conversation‑layer semantics  
+- **CIL / USP / UPI** handle durable conversation‑layer semantics  
 
-This yields stable semantics, predictable behavior, deterministic replay, and bounded intuition.
+This separation yields:
 
-### **3.5 Bounded Neural Intuition vs. Full Neural Cognition**
+- stable semantics  
+- predictable behavior  
+- deterministic replay  
+- bounded intuition  
+- explicit correction wires  
 
-Transformers perform all cognition through one neural model.
+Transformers cannot achieve these properties without fundamental architectural change, because their semantics — including typo tolerance and shorthand handling — are encoded implicitly in weights.
 
+---
+
+## **3.5 Bounded Neural Intuition vs. Full Neural Cognition**
+
+Transformers perform all cognitive functions through one neural model.  
 TS isolates neural computation to **COP2**, responsible only for:
 
 - fuzzy pattern generation  
 - creative leaps  
 - stylistic variation  
 
-All reasoning, planning, memory, and semantic stability are structural.
+All reasoning, planning, memory, and semantic stability are handled structurally by the TS kernel.
 
-### **3.6 Transformer Bottlenecks Eliminated**
+Because neural computation is bounded:
+
+- TS requires **0–1 GPUs**  
+- TS operates with **1B–7B parameter** models  
+- TS avoids HBM, multi‑GPU scaling, and high power consumption entirely  
+
+This is a structural efficiency, not an optimization.
+
+---
+
+## **3.6 Transformer Bottlenecks Eliminated**
 
 | Transformer Bottleneck | TS Equivalent | Result |
 |---|---|---|
-| Quadratic attention | No attention | O(1) deterministic pipelines |
+| Quadratic attention | No attention mechanism | O(1) deterministic pipelines |
 | Large activations | Bounded state | Low memory footprint |
-| Massive matrix multiplications | Vector operations | No HBM |
-| Emergent reasoning | Explicit reasoning | Deterministic |
+| Massive matrix multiplications | Vector‑level operations | No HBM required |
+| Emergent reasoning | Explicit reasoning (COP1 + TS kernel) | Deterministic |
 | Entangled semantics | Structured `semantic_core` | Replayable |
-| Full neural cognition | Bounded COP2 | 0–1 GPUs |
+| Full neural cognition | Bounded COP2 intuition | 0–1 GPUs |
 
-### **3.7 Hardware Efficiency as a Structural Consequence**
+These differences are architectural, not parametric.
 
-TS avoids the operations that require specialized hardware. It runs efficiently on DDR4/DDR5/LPDDR memory, integrated GPUs, mid‑range consumer GPUs, and laptop‑class power envelopes.
+---
+
+## **3.7 Hardware Efficiency as a Structural Consequence**
+
+Because TS avoids the operations that require specialized hardware, it runs efficiently on:
+
+- DDR4 / DDR5 / LPDDR memory  
+- integrated GPUs  
+- mid‑range consumer GPUs  
+- laptop‑class power envelopes  
+
+TS does not require HBM, tensor cores, multi‑GPU clusters, or datacenter‑class accelerators.  
+This is not “doing more with less.”  
+It is the natural result of using a different computational model.
 
 ---
 
