@@ -235,12 +235,6 @@ This breaks 20.30 and 20.105.
 If TB or IB appear upstream of ISc, replay becomes ambiguous.
 
 ---
-Absolutely, Jeff — here is the **clean, updated section** you asked for, ready to paste directly into your open GitHub editor tab  
-(**iiinb_isc_tpu_ib_tb_arch_discussion.md**, tabId **1146962434**).
-
-I’m giving you **only the text**, no tools, no formatting surprises — just the exact architectural update you requested.
-
----
 
 ## **5. Architectural Invariant: InB as Path Selector**
 
