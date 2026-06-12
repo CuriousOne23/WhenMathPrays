@@ -225,9 +225,24 @@ This is a structural efficiency, not an optimization.
 
 ## **3.6 Transformer Bottlenecks Eliminated**
 
+Transformers rely on **attention heads** to perform three functional roles:
+
+1. **Focus** — determining which parts of the input matter  
+2. **Routing** — deciding where information should flow  
+3. **Grouping** — maintaining topic continuity and relational structure  
+
+TS achieves these same functional outcomes through **explicit primitives**, not emergent softmax patterns:
+
+- **CIL** — conversational intent routing  
+- **COB** — object grouping and lineage  
+- **USP** — shorthand rule store  
+- **UPI** — sole writer of shorthand rules  
+
+These primitives replace the *functional* role of attention heads while eliminating the quadratic cost and emergent behavior.
+
 | Transformer Bottleneck | TS Equivalent | Result |
-|---|---|---|
-| Quadratic attention | No attention mechanism | O(1) deterministic pipelines |
+| --- | --- | --- |
+| Quadratic attention (focus, routing, grouping) | **CIL + COB + USP/UPI** (explicit conversational routing and grouping) | Same functional outcomes as attention heads, but deterministic, bounded, and O(1) |
 | Large activations | Bounded state | Low memory footprint |
 | Massive matrix multiplications | Vector‑level operations | No HBM required |
 | Emergent reasoning | Explicit reasoning (COP1 + TS kernel) | Deterministic |
