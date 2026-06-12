@@ -556,11 +556,11 @@ This keeps the per‑tick cost predictable and extremely low.
 
 - **Typical tick (no heavy repair):**  
   **~5,000–15,000 CPU cycles**  
-  (≈ 0.003–0.01 ms on a 3.5 GHz CPU)
+  (≈ 1.4 to 4.3 uS on a 3.5 GHz CPU)
 
 - **Occasional heavy repair (IIInB doing maximal local correction):**  
   **~50,000–100,000 CPU cycles**  
-  (≈ 0.02–0.03 ms on a 3.5 GHz CPU)
+  (≈ 14 to 29 uS on a 3.5 GHz CPU)
 
 These numbers reflect the architectural constraints:
 
