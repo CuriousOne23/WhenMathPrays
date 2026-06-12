@@ -361,4 +361,167 @@ This is the architecture that all 20‑series documents must align with.
 
 ---
 
-# **8. Next Steps**
+Absolutely, Jeff — here is a **clean, drop‑in Section 8** for your playground paper, written to follow Sections 1–7 (problem description) and begin the **proposed solution**.  
+It includes:
+
+- **Section 8** (the proposal)  
+- **Section 8.1–8.4** (definitions, pipeline, rationale, and why it works)  
+- Written in the same tone and structure as your requirements documents  
+- Ready to paste directly into your active tab (`iiinb_isc_tpu_ib_tb_arch_discussion.md`)
+
+---
+
+# **8. Proposed Solution: Introducing CEx and CE to Stabilize Contextual Scoring**
+
+Sections 1–7 describe the architectural drift and the core problem:  
+**ISc requires contextual information to score interpretations correctly, but cannot safely read CIL or global state directly.**  
+This creates tension between determinism, replayability, and the need for contextual awareness.
+
+The solution is to introduce two new primitives:
+
+- **CEx — ContextExtractor**  
+- **CE — ContextEnvelope**
+
+These two components allow TS to use CIL safely, without violating determinism, safe boundaries, or replay invariants.
+
+---
+
+## **8.1 ContextEnvelope (CE)**  
+**CE is a bounded, deterministic, replayable context object** that contains only the minimal conversation context required for ISc to perform semantic scoring.
+
+CE is **not** a history, log, or lineage record.  
+CE is **not** a semantic object.  
+CE is **not** a TP writer.
+
+CE is a **snapshot** of relevant context at time *n*, extracted from CIL and shaped into a safe, finite structure.
+
+**CE properties:**
+
+- **Bounded** — finite size; no unbounded history  
+- **Deterministic** — same inputs ⇒ same CE  
+- **Replayable** — CE can be logged and reused for scoring  
+- **Non‑semantic** — CE does not create new meaning  
+- **Isolated** — CE shields ISc from global state  
+
+**CE may include (playground schema):**
+
+- active conversation objects  
+- active referents  
+- thread lineage identifiers  
+- relevant USP entries  
+- relevant MTP slices  
+- relevant commitments or constraints  
+
+This schema is intentionally minimal and can evolve.
+
+---
+
+## **8.2 ContextExtractor (CEx)**  
+**CEx is the only primitive allowed to read CIL.**  
+Its job is to extract a bounded, deterministic CE from global conversation state.
+
+CEx sits between IIInB and ISc:
+
+```
+IIInB → CEx → CE → ISc
+```
+
+**CEx responsibilities:**
+
+- Read IIInB’s structured envelope  
+- Consult CIL as a *reference service*  
+- Select only relevant context  
+- Bound the context (size, complexity)  
+- Produce CE deterministically  
+- Ensure CE is safe for ISc consumption  
+
+**CEx non‑responsibilities:**
+
+- No scoring  
+- No semantic interpretation  
+- No TP writing  
+- No governance  
+- No interrogation  
+- No user‑facing behavior  
+
+CEx is a **context shaper**, not a semantic engine.
+
+---
+
+## **8.3 Updated Pipeline with CEx and CE**
+
+### **Normal Path (unchanged)**  
+
+```
+InB → OB → RB → Path B → OuB
+```
+
+### **Short‑Term Repair Path (unchanged)**  
+
+```
+InB → IIInB → Path B → OuB → User
+```
+
+### **Inference Path (updated)**  
+
+```
+InB → IIInB → CEx → CE → ISc → Merge → TPU → TP
+```
+
+### **Long‑Term Repair Path (optional)**  
+If long‑term repair is retained:
+
+```
+InB → IIInB → CEx → CE → LongTermRepair → ISc → Merge → TPU → TP
+```
+
+### **Post‑TS Interrogation Path (unchanged)**  
+
+```
+TP → IB → TB → GBIB → GB
+```
+
+This preserves the original architecture while adding the missing contextual bridge.
+
+---
+
+## **8.4 Why This Works**
+
+### **1. It protects ISc from global state**  
+ISc must remain deterministic, bounded, and replayable.  
+CIL is global, unbounded, and dynamic.  
+CE is the safe middle layer.
+
+### **2. It restores architectural purity**  
+- IIInB handles repair  
+- CEx handles context extraction  
+- ISc handles scoring  
+- TPU handles writing  
+- CIL remains a reference layer  
+- IB/TB remain post‑TS governance  
+
+No primitive is overloaded.
+
+### **3. It cleanly separates short‑term and long‑term repair**  
+- Short‑term repair stays in IIInB  
+- Long‑term repair (if kept) uses CE  
+- Neither repair path touches CIL directly  
+
+### **4. It aligns with 20.33 (CIL) and 20.101 (IIInB)**  
+- CIL remains a reference layer  
+- IIInB remains a repair primitive  
+- Neither is misused  
+- CEx becomes the correct bridge  
+
+### **5. It stabilizes the entire TS architecture**  
+- No global state leaks into scoring  
+- No unsafe context reaches ISc  
+- No drift of TB/IB upstream  
+- No violation of safe boundaries  
+- No replay failures  
+- No semantic contamination  
+
+This is the minimal, clean, and stable solution.
+
+---
+
