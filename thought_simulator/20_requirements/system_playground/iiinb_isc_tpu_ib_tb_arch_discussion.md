@@ -1,37 +1,39 @@
-# **iiinb_isc_tpu_ib_tb_arch_discussion.md**  
-*(Architecture Discussion — Input‑Side Only)*  
+ **iiinb_isc_tpu_ib_tb_arch_discussion.md**  
+*(Architecture Discussion — Input‑Side Only)*
 
 ---
 
-# **Scope Note (Added for Clarity)**  
+# **Scope Note (Corrected and Clarified)**  
 This document defines the **input‑side architecture only**.  
 Throughout this document:
 
-- **“ISc” refers exclusively to the input‑side inference scorer (20.44)**.  
-- **Semantic repair, Path‑B interrogation, and post‑TS primitives (IB, TB, GBIB, GB, and the semantic projection engine) are out of scope** and will be documented separately.  
-- **CIL and COB are referenced only as read‑only context sources**, not as pipeline stages.
+- **“ISc” refers exclusively to the input‑side inference scorer** 
+- **Semantic repair, Path‑B interrogation, and post‑TS primitives (IB, TB, GBIB, GB, and the semantic projection engine) are out of scope**   
+- **CIL and COB are referenced only as read‑only context sources**, not as pipeline stages  
 
-This document covers only:
+This document covers the primitives involved in the **input‑side inference path**, culminating in the handoff to semantic collapse and routing:
 
 ```
-InB → IIInB → CEx → CE → ISc → Merge → TPU → TP
+InB → IIInB → CEx → CE → ISc → TPU → {OB → RB}; {Path A basic}
 ```
+
+**Important:**  
+- **Merge is a process, not a primitive.**  
+- Merge is performed *inside* TPU and must not appear in primitive flow diagrams.  
+- **TP is a structure, not a stage**, and must not appear in primitive flow diagrams.
 
 ---
 
 # **1. Purpose of This Document (Informative)**  
-This document is a **scratchpad for architectural clarity**.  
-It exists because several TS primitives (IIInB, ISc, TPU, and the intake pipeline) have experienced **semantic drift**, **role confusion**, and **pipeline misplacement** across the 20‑series documents.
+This document is a **scratchpad for architectural clarity**. It exists because several TS primitives (IIInB, ISc, TPU, and the intake pipeline) have experienced **semantic drift**, **role confusion**, and **pipeline misplacement** across the 20‑series documents.
 
-This file is **not normative**.  
-It is a place to:
+This file is **not normative**. It is used to:
 
-- describe the problems  
 - identify contradictions  
-- map the drift  
+- map drift  
 - clarify original intent  
 - propose corrections  
-- orchestrate the true flow of the **input‑side TS pipeline**  
+- restore the true flow of the **input‑side TS pipeline**  
 
 Once clarity is achieved here, the formal requirements documents (20.44, 20.46, 20.101, etc.) will be updated.
 
@@ -80,7 +82,6 @@ But if TB is restored to its original role (truth validator), then:
 - TB cannot produce candidate_set{}  
 - IB cannot produce candidate_set{}  
 - OB might produce it  
-- Or a new primitive (SB) might be needed  
 - Or TB must be split into two roles  
 
 This was previously undefined.
@@ -115,7 +116,10 @@ We could not answer cleanly:
 - Who interrogates unresolved meaning?  
 - Who writes to TP?  
 - Where do IB/TB belong?  
-- Where does ISc sit relative to semantic interpretation?  
+- Where does ISc sit relative to semantic interpretation?
+- Separate process (merge) from primitive (TPU)
+- Separate reference objects (TB) from TP flow primitives (IB, IIInB, OB, RB)
+- Seperate governing objects, decision and coordination (GB and GBIB) from referece objects (TB)
 
 This ambiguity was dangerous because it affected:
 
@@ -124,11 +128,15 @@ This ambiguity was dangerous because it affected:
 - writer authority  
 - escalation  
 - TP mutation rules  
-- the entire 20‑series  
+- the entire 20‑series
+- conflated process with primitives, merge (process) with TPU (primitive)
+- conflated references objects with flow primitives (TB <--> IB, IIInB, OB, RB)
+- conflated governing with reference (TB <--> GB, GBIB)
+
 
 ---
 
-# **3. What Needs to Be Resolved (Explicit List)**
+# **3. What Must Be Corrected**
 
 ### **3.1. Placement of IB/TB**  
 We must decide:
@@ -168,26 +176,18 @@ We must define:
 
 And ensure they do not conflict.
 
-### **3.5. Primitive responsibilities**  
+## **3.5 Primitive responsibilities**  
 We must clarify:
 
 - IIInB  
 - CEx  
 - CE  
 - ISc  
-- Merge  
 - TPU  
 - (IB/TB out of scope here)
+- Clarify process from primitive, e.g., merge is a process not a primitive
 
 Each must have a **single, clear, non‑overlapping role**.
-
-### **3.6. Drift correction**  
-We must identify:
-
-- where drift occurred  
-- why it occurred  
-- how to correct it  
-- which documents must be updated  
 
 ---
 
@@ -274,12 +274,7 @@ This decision determines which of the three TS paths (plus the post‑TS path) i
 
 # **6. The Four Distinct Processing Paths**
 
-TS has **four** non‑overlapping pipelines.  
-They must never be merged in diagrams or requirements.
-
----
-
-## **6.1 Normal Path (default, no ambiguity, no errors)**
+## **6.1 Normal Path**  
 
 This is the **happy path** — the system simply responds.
 
@@ -296,10 +291,7 @@ InB → OB → RB → Path B → OuB
 
 This is the **default conversational path**.
 
----
-
-## **6.2 Clarification Path (fallback when input is unclear)**
-
+## **6.2 Clarification Path**  
 Triggered when **InB detects something it cannot resolve**:
 
 - malformed  
@@ -307,7 +299,7 @@ Triggered when **InB detects something it cannot resolve**:
 - incomplete  
 - contradictory  
 - unknown  
-- structurally invalid  
+- structurally invalid
 
 In this case, InB escalates to IIInB, which attempts to normalize.  
 If normalization cannot resolve the issue, the system asks the user.
@@ -318,36 +310,31 @@ InB → IIInB → Path B → OuB → User
 
 This is the **user clarification path**, not inference.
 
----
+## **6.3 Inference Path (Corrected)**  
+Triggered when:
 
-## **6.3 Inference Path (semantic scoring + TP update)**
+- input is valid  
+- semantic interpretation is required  
+- TS must update TP   
 
-Triggered only when:
-
-- the input is valid  
-- AND it requires semantic interpretation  
-- AND TS must update TP  
-
-This is the **semantic / scoring / TP‑update pipeline**:
+### **Corrected Path A (basic):**
 
 ```
-InB → IIInB → CEx → CE → ISc → Merge → TPU → TP
+InB → IIInB → CEx → CE → ISc → TPU → {OB → RB}; {Path A basic}
 ```
 
-Notes:
-
+**Notes:**
+ 
+- **TP is a structure**, not a stage.  
+- **OB → RB** is the semantic collapse + routing continuation.
 - **ISc** is the first semantic decision point.  
-- **Merge** validates the update request.  
+- **Merge** validates the update request and is a process not a primitive.
 - **TPU** is the *only* safe writer to TP.  
 - This path is **rare** compared to the normal path.
 
----
+## **6.4 Post‑TS Interrogation Path**  
 
-## **6.4 Post‑TS Interrogation Path (truth, grounding, governance)**
-
-Triggered only when **TP itself is unclear** or when TS has exhausted its ability to resolve meaning.
-
-This is the **truth‑checking / grounding / governance loop**:
+This is the **user clarification path**, not inference. Used only when TP itself is unclear  
 
 ```
 TP → IB → TB → GBIB → GB
@@ -362,7 +349,7 @@ Notes:
 
 ---
 
-# **7. Why This Separation Matters**
+# **7. Why This Separation Matters**  
 
 This four‑path model:
 
@@ -379,7 +366,8 @@ This is the architecture that all 20‑series documents must align with.
 
 ---
 
-# **8. Introducing CEx and CE to Stabilize Contextual Scoring**
+# **8. Introducing CEx and CE**
+
 
 Sections 1–7 describe the architectural drift and the core problem:  
 **ISc requires contextual information to score interpretations correctly, but cannot safely read CIL or global state directly.**  
@@ -435,7 +423,7 @@ CEx is the **bridge** between:
 This relationship is captured in the following diagram:
 
 ```
-IIInB ───► CEx ───► CE ───► ISc ───► Merge ───► TPU ───► TP
+IIInB ───► CEx ───► CE ───► ISc ───► TPU ───► {OB ───► RB}; {Path A basic}
            ▲
            │
           CIL   (reference only)
@@ -492,7 +480,7 @@ This preserves determinism, replayability, and safe boundaries while enabling co
 The updated inference pipeline is:
 
 ```
-IIInB ───► CEx ───► CE ───► ISc ───► Merge ───► TPU ───► TP
+IIInB ───► CEx ───► CE ───► ISc ───► TPU ───► {OB ───► RB}; {Path A basic}
            ▲
            │
           CIL   (reference only)
@@ -528,21 +516,12 @@ The introduction of **CEx** and **CE** provides the minimal, stable, and safe br
 
 ---
 
-Here’s a clean, architectural‑grade write‑up you can paste directly into **Section 9: Efficiency, Implementability, and Cost Profile** of  
-`iiinb_isc_tpu_ib_tb_arch_discussion.md`.
-
-It’s written to match the tone, precision, and structural clarity of the rest of the document — no fluff, no hype, just the engineering truth.
-
----
-
-# **Section 9 — Efficiency, Implementability, and Cost Profile**
-
-### **9.x CPU Cost Profile for the Input‑Side Pipeline**
+# **9. Efficiency, Implementability, and Cost Profile**
 
 The input‑side refinement pipeline:
 
 ```
-IIInB ───► CEx ───► CE ───► ISc ───► Merge ───► TPU ───► TP
+IIInB ───► CEx ───► CE ───► ISc ───► TPU ───► {OB ───► RB}; {Path A basic}
            ▲
            │
           CIL   (reference only)
@@ -576,6 +555,6 @@ These numbers reflect the architectural constraints:
 There are **no multi‑candidate expansions**, **no recursive descent**, and **no semantic search** in this path.  
 The pipeline is **single‑pass** and **non‑explosive**, making it suitable for real‑time or low‑power environments.
 
-This cost profile is stable across inputs and scales linearly with tick count, not with input complexity.
+This cost profile is stable across inputs and scales linearly with tick count, not with input complexity.(Section preserved; diagram corrected to match the new primitive‑only form.)
 
 ---
