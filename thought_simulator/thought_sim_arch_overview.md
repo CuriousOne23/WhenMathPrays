@@ -376,11 +376,11 @@ The purpose of this section is not to argue whether TS has identified the correc
 
 > **Regardless of whether TS’s cognitive primitives are ultimately correct, TS is architected to deliver the full functional coverage of today’s AI systems — and to do so deterministically, transparently, and with bounded computation.**
 
-The table below presents a comprehensive comparison between the functional capabilities of modern transformer‑based AI systems and the Thought Simulator architecture. It shows that TS is designed to match (and in many cases structurally improve upon) every major functional dimension of today’s AI. This includes the explicit clarification that TS replaces the *functional role* of attention heads through deterministic routing primitives (CIL, COB, USP, UPI), rather than through emergent softmax‑based attention.
+The table (Duck Test Table) below presents a comprehensive comparison between the functional capabilities of modern transformer‑based AI systems and the Thought Simulator architecture. It shows that TS is designed to match (and in many cases structurally improve upon) every major functional dimension of today’s AI. This includes the explicit clarification that TS replaces the *functional role* of attention heads through deterministic routing primitives (CIL, COB, USP, UPI), rather than through emergent softmax‑based attention.
 
 ---
 
-## **8.1 Function Coverage Table**
+## **8.1 Function Coverage Table (Duck Test Table)**
 
 | **Function** | **Today’s AI** | **TS** | **Notes** |
 | --- | --- | --- | --- |
