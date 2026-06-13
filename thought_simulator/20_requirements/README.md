@@ -30,7 +30,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.10_ts_architectural_principles.md](20.10_ts_architectural_principles.md)
 - [20.12_ts_invariants.md](20.12_ts_invariants.md)
 - [20.17_messy_input_handling.md](20.17_messy_input_handling.md)
-- [20.20_ts_primitives.md](20.20_ts_primitives.md)
+- [20.20_ts_prim_proc_ref_gov.md](20.20_ts_primprim_proc_ref_gov.md)
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
 - [20.31_semantic_specification.md](20.31_semantic_specification.md)
 - [20.35_reference_algorithms.md](20.35_reference_algorithms.md)
