@@ -35,6 +35,38 @@ Path A **never repairs** structure; it only scores what is present.
 
 ---
 
+## **A.1.1.1 structural_score formulization**
+
+Path‑A structural scoring is a **weighted completeness + penalty model**.
+
+### **Formula**
+
+$$
+s =
+w_{rc}\cdot rc +
+w_{ap}\cdot ap +
+w_{cb}\cdot cb +
+w_{pp}\cdot pp -
+w_{sa}\cdot sa
+$$
+
+Where:
+
+- rc = role completeness score  
+- ap = adjacency plausibility  
+- cb = clause boundary clarity  
+- pp = POS‑pattern conformity  
+- sa = structural anomaly magnitude  
+
+All components are normalized to [0,1].
+
+### **Interpretation**
+
+- High (s) → structurally coherent  
+- Low (s) → missing roles, unclear boundaries, or structural anomalies  
+
+---
+
 ## **A.1.2 lexical_score**
 
 `lexical_score ∈ [0,1]`
@@ -56,6 +88,31 @@ It is computed from:
 - $0.00$ → lexically uninterpretable
 
 Path A **never corrects** lexical anomalies; it only flags them.
+
+---
+
+## **A.1.2.1 lexical_score Formulization**
+
+Lexical scoring is a **surface‑form plausibility model**.
+
+### **Formula**
+
+$$
+l =
+w_{tc}\cdot tc +
+w_{dp}\cdot dp +
+w_{pf}\cdot pf -
+w_{la}\cdot la
+$$
+
+Where:
+
+- tc = token canonicality  
+- dp = dictionary plausibility  
+- pf = POS lexical fit  
+- la = lexical anomaly magnitude  
+
+All components normalized to [0,1].
 
 ---
 
@@ -109,7 +166,7 @@ Thresholds prevent Path A from committing structurally invalid or unsupported pr
 
 ---
 
-# **A.2.3 confidence (GitHub‑friendly math formatting)**
+# **A.2.3 confidence*
 
 `confidence ∈ [0,1]`
 
@@ -146,6 +203,7 @@ The final confidence is this value **clipped to** `[0,1]`:
 
 - confidence = min(1, max(0, $confidence_{raw}$)),
 - conceptually: “raw score, but never below 0 or above 1”.
+- confidence = min(1, max(0, $confidence_{raw}$))
 
 ### Input Domains
 
@@ -153,7 +211,7 @@ The final confidence is this value **clipped to** `[0,1]`:
 - $lexical\_{score}\  in\ [0,1]$  
 - $\Delta H\ in\ [-1, +1]$  
 - $anomaly\_{penalty}\  in\ [0,1]$  
-- $incompleteness\_{penalty}\  in\ [0,1]$  
+- $incompleteness\_{penalty}\  in\ [0,1]$
 
 ### Interpretation
 
@@ -161,72 +219,6 @@ The final confidence is this value **clipped to** `[0,1]`:
 - $confidence < threshold$ → commit suppressed  
 
 Confidence is **not** a probability of truth — it is a **structural‑support measure**.
-
----
-
-# **A.1 Structural and Lexical Score Formulas (GitHub‑safe)**
-
-## **A.1.1 structural_score**
-
-Path‑A structural scoring is a **weighted completeness + penalty model**.
-
-### **Formula**
-
-$$
-s =
-w_{rc}\cdot rc +
-w_{ap}\cdot ap +
-w_{cb}\cdot cb +
-w_{pp}\cdot pp -
-w_{sa}\cdot sa
-$$
-
-Where:
-
-- rc = role completeness score  
-- ap = adjacency plausibility  
-- cb = clause boundary clarity  
-- pp = POS‑pattern conformity  
-- sa = structural anomaly magnitude  
-
-All components are normalized to [0,1].
-
-### **Interpretation**
-
-- High (s) → structurally coherent  
-- Low (s) → missing roles, unclear boundaries, or structural anomalies  
-
----
-
-## **A.1.2 lexical_score**
-
-Lexical scoring is a **surface‑form plausibility model**.
-
-### **Formula**
-
-$$
-l =
-w_{tc}\cdot tc +
-w_{dp}\cdot dp +
-w_{pf}\cdot pf -
-w_{la}\cdot la
-$$
-
-Where:
-
-- tc = token canonicality  
-- dp = dictionary plausibility  
-- pf = POS lexical fit  
-- la = lexical anomaly magnitude  
-
-All components normalized to [0,1].
-
----
-
-### **Corrected clipping line**
-
-
-confidence = min(1, max(0, $confidence_{raw}$))
 
 ---
 
