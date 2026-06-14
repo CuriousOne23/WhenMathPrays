@@ -1035,14 +1035,15 @@ Commit statuses are **semantic metadata**, not diagnostics — therefore they **
 
 # **E.1 Overview of Commit Statuses**
 
-Path A uses six commit statuses:
+Path A uses **seven** commit statuses (six original + one added in Case 15):
 
 1. **COMMITTED**  
 2. **COMMITTED_WITH_WARNINGS**  
 3. **COMMITTED_AMBIGUOUS**  
 4. **COMMITTED_MULTI_TRACE**  
 5. **COMMITTED_MINIMAL**  
-6. **REJECTED** *(not present in the 14‑case simulation)*
+6. **COMMITTED_WITH_AFFECT_FLAGS** *(added in Case 15)*  
+7. **REJECTED** *(not present in the 15‑case simulation)*
 
 Each status corresponds to a distinct structural condition in the pipeline.
 
@@ -1058,7 +1059,7 @@ A clean commit: the candidate is structurally valid, lexically interpretable, an
 - no structural incompleteness  
 - no ambiguity  
 - no multi‑trace structure  
-- no lexical anomalies requiring warnings  
+- no lexical or affective anomalies requiring warnings  
 
 ### **TP Contents**
 - semantic_core (single proposition or event)  
@@ -1178,7 +1179,39 @@ Input is fragmentary, but a minimal viable proposition can still be extracted.
 
 ---
 
-# **E.7 REJECTED** *(Not Present in the 14 Cases)*
+# **E.7 COMMITTED_WITH_AFFECT_FLAGS** *(Added in Case 15)*
+
+### **Definition**
+Commit succeeded, but **affective‑metaphor anomalies** or **affective‑intensifier patterns** were detected.  
+These do **not** break structure but require explicit semantic marking.
+
+### **Triggered When**
+- `confidence ≥ threshold`  
+- affective intensifiers modify predicates  
+- predicate is used metaphorically (non‑literal action)  
+- emotional state clause is structurally linked  
+- factual core is extractable but emotionally loaded  
+
+### **Typical Causes**
+- metaphorical predicates (“destroyed”, “crushed”, “obliterated”)  
+- emotional intensifiers (“totally”, “absolutely”)  
+- humiliation/shame states linked to metaphorical events  
+
+### **TP Contents**
+- semantic_core with factual core only  
+- affect flags:  
+  - `AFFECTIVE_METAPHOR`  
+  - `AFFECT_INTENSIFIER_PRESENT`  
+  - `AFFECT_STATE_PRESENT`  
+- missing_mass for unspecified factual details  
+- no literalization of metaphor  
+
+### **Examples**
+- **Case 15 — “He totally destroyed her… she was absolutely humiliated.”**
+
+---
+
+# **E.8 REJECTED** *(Not Present in the 15 Cases)*
 
 ### **Definition**
 Candidate fails to meet the minimum structural or lexical requirements for commit.
@@ -1199,20 +1232,21 @@ Candidate fails to meet the minimum structural or lexical requirements for commi
 
 ---
 
-# **E.8 Summary Table**
+# **E.9 Summary Table**
 
-| commit_status            | Meaning | Trigger | TP Contents |
-|--------------------------|---------|---------|-------------|
+| commit_status                 | Meaning | Trigger | TP Contents |
+|-------------------------------|---------|---------|-------------|
 | **COMMITTED** | Clean commit | Above threshold, no anomalies | Single semantic_core |
-| **COMMITTED_WITH_WARNINGS** | Commit with anomalies | Above threshold + lexical/structural issues | semantic_core + flags |
+| **COMMITTED_WITH_WARNINGS** | Commit with lexical/structural anomalies | Above threshold + anomalies | semantic_core + flags |
 | **COMMITTED_AMBIGUOUS** | Multiple candidates | Irreducible ambiguity | Multiple propositions + ambiguity flags |
 | **COMMITTED_MULTI_TRACE** | Multiple structural traces | Negation/structural ambiguity | Multi‑trace semantic_core |
 | **COMMITTED_MINIMAL** | Fragmentary commit | Incomplete structure | Minimal core + missing_mass |
+| **COMMITTED_WITH_AFFECT_FLAGS** | Affective‑metaphor or intensifier anomalies | Above threshold + affective load | semantic_core + affect flags + missing_mass |
 | **REJECTED** | No commit | Below threshold | No TP |
 
 ---
 
-# **E.9 Architectural Principle**
+# **E.10 Architectural Principle**
 
 > **Commit status encodes the structural integrity of the thought, not its truth or correctness.**  
 > Path A commits *structure*, not *meaning*.
@@ -1222,6 +1256,7 @@ Commit statuses ensure that:
 - ambiguity is preserved  
 - missing information is preserved  
 - lexical anomalies are preserved  
+- affective load is preserved  
 - Path B cannot hallucinate or infer missing content  
 - replay reconstructs the exact structural state  
 
@@ -1255,12 +1290,14 @@ Path A recognizes the following role‑slots:
 - **modifier** (adverbial or adjectival)  
 - **aspect**  
 - **negation**  
+- **affect_intensifier** *(added for Case 15)*  
 
 ### **Structural Roles**
 - **connector**  
 - **article**  
 - **pronoun_referent**  
 - **cause_of** (for state predicates)  
+- **affect_metaphor_flag** *(added for Case 15)*  
 
 Each role‑slot may be:
 
@@ -1287,12 +1324,14 @@ The main event or state expressed by the verb or adjective.
 - VERB tokens  
 - ADJ tokens in copular or fragmentary structures  
 - AUX+VERB combinations  
+- metaphorical predicates (Case 15)  
 
 ### **Examples**
 - “went”  
 - “forgot”  
 - “works”  
 - “tired”  
+- **“destroyed” (metaphorical, Case 15)**  
 
 ### **Notes**
 The predicate is **always required**.  
@@ -1320,6 +1359,7 @@ If no agent is present:
 ### **Examples**
 - Case 1 — both events missing agents  
 - Case 10 — gerund phrase missing agent  
+- Case 15 — “He destroyed…” → agent = He  
 
 ---
 
@@ -1333,12 +1373,10 @@ The entity acted upon.
 - NOUN after the verb  
 - DET+NOUN sequences  
 
-### **Notes**
-Object is optional — some predicates do not require one.
-
 ### **Examples**
 - “forgot wallet” → object = wallet  
 - “typed … word” → object = word  
+- **Case 15 — “destroyed her” → object = her**  
 
 ---
 
@@ -1368,6 +1406,7 @@ The entity experiencing a state.
 
 ### **Examples**
 - Case 7 — “tired” → subject = UNKNOWN  
+- **Case 15 — “she was humiliated” → subject = she**  
 
 ---
 
@@ -1401,8 +1440,8 @@ Spatial anchor for the event.
 - NOUN with locative preposition  
 - adjacency when preposition is missing (MI_NOISE)  
 
-### **Notes**
-Not present in the 14 cases, but supported.
+### **Examples**
+- **Case 15 — “in that meeting” → location = meeting**  
 
 ---
 
@@ -1447,6 +1486,25 @@ Negation marker attached to predicate or event.
 ### **Examples**
 - Case 5 — negation scope ambiguous  
 - Case 6 — “never works”  
+
+---
+
+## **F.3.6 affect_intensifier** *(Added for Case 15)*
+
+### **Definition**
+A token that increases emotional load without adding factual structure.
+
+### **Detection**
+- ADV modifying predicate (“totally”, “absolutely”)  
+- evaluative intensifiers  
+
+### **Examples**
+- Case 6 — “stupid” (evaluative ADJ)  
+- **Case 15 — “totally”, “absolutely”**  
+
+### **Notes**
+Affect intensifiers do **not** alter structural roles.  
+They are stored in the `affect_layer`.
 
 ---
 
@@ -1513,11 +1571,31 @@ The entity a pronoun refers to.
 Causal relation for state predicates.
 
 ### **Detection**
-- explicit causal markers (not present in the 14 cases)  
+- explicit causal markers  
 - adjacency in fragmentary structures  
 
-### **Example**
+### **Examples**
 - Case 7 — “tired” → cause_of = UNKNOWN  
+- **Case 15 — humiliation state with unspecified cause → cause_of = UNKNOWN**  
+
+---
+
+## **F.4.5 affect_metaphor_flag** *(Added for Case 15)*
+
+### **Definition**
+Indicates that the predicate is used metaphorically to express emotional intensity rather than literal action.
+
+### **Detection**
+- predicate semantics inconsistent with literal frame  
+- intensifiers modifying a metaphorical predicate  
+- emotional state clause linked to metaphorical event  
+
+### **Examples**
+- **Case 15 — “destroyed” (non‑literal)**  
+
+### **Notes**
+This flag does **not** alter structural extraction.  
+It ensures Path B does not literalize metaphorical predicates.
 
 ---
 
@@ -1535,6 +1613,7 @@ Examples:
 { agent_slot: 1 unresolved }
 { connector_slot: 1 unresolved }
 { pronoun_referent: unresolved }
+{ cause_detail: unresolved }
 ```
 
 This ensures Path A:
@@ -1555,9 +1634,10 @@ It ensures that:
 - ambiguity is preserved  
 - missing information is explicitly recorded  
 - lexical anomalies do not corrupt structure  
+- affective load and metaphorical predicates are preserved without literalization  
 - Path B receives a clean, honest structural representation  
 
-This taxonomy underlies all 14 cases in the simulation and is essential for interpreting Path‑A behavior.
+This taxonomy underlies all **15 cases** in the simulation and is essential for interpreting Path‑A behavior.
 
 ---
 
