@@ -97,7 +97,7 @@ This section formalizes the behavior of each primitive in the Path‑A pipeline.
 
 ## **2.5 ISc — Inference Scorer**
 
-- Computes `$ΔH\%$` (normalized hypothesis‑mass delta)  
+- Computes $ΔH\%$ (normalized hypothesis‑mass delta)  
 - Computes `confidence`  
 - Applies `threshold`  
 - Does **not** perform semantic inference  
