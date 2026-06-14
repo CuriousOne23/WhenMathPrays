@@ -50,20 +50,92 @@ w_{pp}\cdot pp -
 w_{sa}\cdot sa
 $$
 
-Where:
+**Variables are defined**
 
-- rc = role completeness score  
-- ap = adjacency plausibility  
-- cb = clause boundary clarity  
-- pp = POS‑pattern conformity  
-- sa = structural anomaly magnitude  
+- **rc** = *role completeness score*  
+  Fraction of required semantic roles present (agent, predicate, object, modifiers).  
+  Computed as:
+   
+  ```
+  rc = (# roles present) / (# roles required)
+  ```
 
-All components are normalized to [0,1].
+- **ap** = *adjacency plausibility*  
+  Measures whether syntactic neighbors appear in plausible order (subject–verb, verb–object, modifier–noun).  
+  Computed from adjacency checks in the CE envelope.
+
+- **cb** = *clause boundary clarity*  
+  Measures whether clause boundaries are well‑formed (no fused clauses, no missing connectors).  
+  Computed from boundary markers and dependency segmentation.
+
+- **pp** = *POS‑pattern conformity*  
+  Measures whether the token sequence matches expected structural POS patterns (e.g., N–V–O, Adj-N, Prep–NP). Computed from POS‑tag pattern matching.
+  - **sa** = *structural anomaly magnitude*  
+  Aggregated severity of structural anomalies (missing subject, missing predicate, broken dependency chain, orphaned modifier, etc.).  
+  Normalized to [0,1].
+
+---
+
+**Weight Definitions for Structural Score (w_rc, w_ap, w_cb, w_pp, w_sa)**
+
+These weights determine the **relative contribution** of each structural component to the overall structural_score. They are fixed by the **TS‑20 numeric policy** and are **not tuned per example**.
+
+**Definition of weights**
+
+- **w_rc** — weight for role completeness  
+  Reflects the architectural requirement that a proto‑proposition must contain its core semantic roles.  
+  Higher weight because missing roles severely degrade structural validity.
+
+- **w_ap** — weight for adjacency plausibility  
+  Measures how strongly adjacency contributes to structural coherence.  
+  Medium weight because adjacency errors degrade clarity but do not always break structure.
+
+- **w_cb** — weight for clause boundary clarity  
+  Determines the importance of clean clause segmentation.  
+  Medium‑high weight because fused or ambiguous boundaries destabilize the proposition.
+
+- **w_pp** — weight for POS‑pattern conformity  
+  Reflects how strongly expected POS patterns contribute to structural stability.  
+  Medium weight; POS patterns guide structure but do not override role completeness.
+
+- **w_sa** — weight for structural anomaly magnitude  
+  Penalty weight applied to structural anomalies (missing subject, broken dependency chain, orphaned modifier, etc.).  
+  High penalty weight because anomalies directly reduce structural integrity.
+
+**General constraints**
+
+All structural weights satisfy:
+
+$$
+w_{rc},\ w_{ap},\ w_{cb},\ w_{pp},\ w_{sa} \in [0,1]
+$$
+
+And the positive‑contribution weights typically satisfy:
+
+$$
+w_{rc} + w_{ap} + w_{cb} + w_{pp} = 1
+$$
+
+while **w_sa** is a penalty weight applied independently.
+
+**Interpretation**
+
+- Higher **w_rc** → structure depends strongly on role completeness  
+- Higher **w_cb** → clause clarity is prioritized  
+- Higher **w_sa** → anomalies sharply reduce structural_score  
+- Lower **w_pp** → POS patterns are supportive but not dominant  
+
+These weights encode the **architectural priorities** of Path‑A:  
+**roles → boundaries → adjacency → POS patterns → anomalies (penalty)**.
+
+**All components are normalized to [0,1].**
 
 ### **Interpretation**
 
-- High (s) → structurally coherent  
-- Low (s) → missing roles, unclear boundaries, or structural anomalies  
+- High \(s\) → structurally coherent  
+- Low \(s\) → missing roles, unclear boundaries, or structural anomalies  
+
+All components are normalized to [0,1].
 
 ---
 
