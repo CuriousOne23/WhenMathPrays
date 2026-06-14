@@ -63,7 +63,7 @@ Path A **never corrects** lexical anomalies; it only flags them.
 For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
 
 $$
-\Delta H\% \;=\; \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
+\Delta H\\% = \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
 $$
 
 Where:
@@ -149,11 +149,11 @@ The final confidence is this value **clipped to** `[0,1]`:
 
 ### Input Domains
 
-- $structural\_score \in [0,1]$  
-- $lexical\_score \in [0,1]$  
-- $\Delta H \in [-1, +1]$  
-- $anomaly\_penalty \in [0,1]$  
-- $incompleteness\_penalty \in [0,1]$  
+- $structural\_{score}\  in\ [0,1]$  
+- $lexical\_{score}\  in\ [0,1]$  
+- $\Delta H\ in\ [-1, +1]$  
+- $anomaly\_{penalty}\  in\ [0,1]$  
+- $incompleteness\_{penalty}\  in\ [0,1]$  
 
 ### Interpretation
 
@@ -161,6 +161,130 @@ The final confidence is this value **clipped to** `[0,1]`:
 - $confidence < threshold$ → commit suppressed  
 
 Confidence is **not** a probability of truth — it is a **structural‑support measure**.
+
+---
+
+# **A.1 Structural and Lexical Score Formulas (GitHub‑safe)**
+
+## **A.1.1 structural_score**
+
+Path‑A structural scoring is a **weighted completeness + penalty model**.
+
+### **Formula**
+
+$$
+s =
+w_{rc}\cdot rc +
+w_{ap}\cdot ap +
+w_{cb}\cdot cb +
+w_{pp}\cdot pp -
+w_{sa}\cdot sa
+$$
+
+Where:
+
+- rc = role completeness score  
+- ap = adjacency plausibility  
+- cb = clause boundary clarity  
+- pp = POS‑pattern conformity  
+- sa = structural anomaly magnitude  
+
+All components are normalized to [0,1].
+
+### **Interpretation**
+
+- High (s) → structurally coherent  
+- Low (s) → missing roles, unclear boundaries, or structural anomalies  
+
+---
+
+## **A.1.2 lexical_score**
+
+Lexical scoring is a **surface‑form plausibility model**.
+
+### **Formula**
+
+$$
+l =
+w_{tc}\cdot tc +
+w_{dp}\cdot dp +
+w_{pf}\cdot pf -
+w_{la}\cdot la
+$$
+
+Where:
+
+- tc = token canonicality  
+- dp = dictionary plausibility  
+- pf = POS lexical fit  
+- la = lexical anomaly magnitude  
+
+All components normalized to [0,1].
+
+---
+
+### **Corrected clipping line**
+
+
+confidence = min(1, max(0, $confidence_{raw}$))
+
+---
+
+# **A.2.4 anomaly_penalty (NEW)**
+
+Anomaly penalty aggregates **structural**, **lexical**, **ambiguity**, and **affective** anomaly magnitudes.
+
+### **Formula**
+
+$$
+a =
+w_{st}\cdot st +
+w_{lx}\cdot lx +
+w_{am}\cdot am +
+w_{af}\cdot af
+$$
+
+Where:
+
+- st = structural anomaly magnitude  
+- lx = lexical anomaly magnitude  
+- am = ambiguity anomaly magnitude  
+- af = affective‑noise anomaly magnitude  
+
+All components normalized to [0,1].
+
+### **Interpretation**
+
+- Higher $(a)$ → more anomaly burden → lower confidence  
+- Path‑A **never repairs** anomalies; it only measures them  
+
+---
+
+# **A.2.5 incompleteness_penalty (NEW)**
+
+Incompleteness penalty measures **missing‑mass** in the candidate.
+
+### **Formula**
+
+$$
+c =
+w_{mr}\cdot mr +
+w_{mc}\cdot mc +
+w_{mb}\cdot mb
+$$
+
+Where:
+
+- mr = missing required roles  
+- mc = missing connectors  
+- mb = missing boundary or tense normalization  
+
+All components normalized to [0,1].
+
+### **Interpretation**
+
+- Higher (c) → more missing information → lower confidence  
+- Path‑A **never fills missing mass**  
 
 ---
 
