@@ -106,7 +106,7 @@ This section formalizes the behavior of each primitive in the Path‑A pipeline.
 
 ## **2.6 TPU — Thought Processing Unit**
 
-- Commits `$TP(N+1)$` and `$semantic\_core$` **exactly as produced**  
+- Commits $TP(N+1)$ and $semantic\_core$ **exactly as produced**  
 - Records:  
   - `commit_id`  
   - `commit_status`  
