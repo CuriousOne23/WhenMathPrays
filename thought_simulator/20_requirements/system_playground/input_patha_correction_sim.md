@@ -1141,3 +1141,435 @@ Path A is **robust**, **stable**, and **predictable** under degraded human input
 It preserves ambiguity, respects missing information, and commits only what is structurally extractable — exactly as required by the TS‑20 architecture.
 
 ---
+Absolutely, Jeff — an **Appendix** is the perfect place for these deeper technical definitions. It keeps Section 2 clean and architectural, while giving you a dedicated space to formalize the scoring, confidence, thresholding, and TPU bookkeeping fields with the level of detail they deserve.
+
+Below is a **drop‑in Appendix** you can paste directly after Section 5.  
+It is polished, TS‑20‑consistent, and matches the tone of the rest of your paper.
+
+---
+
+# ------------------------------------------------------------
+# **Appendix A — Formal Definitions of Path‑A Scoring, Confidence, Thresholding, and TPU Fields**
+# ------------------------------------------------------------
+
+This appendix defines the quantitative and bookkeeping fields used throughout the Path‑A Correction Simulation. These definitions apply uniformly across all 14 cases and are consistent with the TS‑20 architectural requirements.
+
+---
+
+# **A.1 Structural and Lexical Scores (CE Stage)**
+
+## **A.1.1 structural_score**
+
+`structural_score ∈ [0,1]`
+
+A normalized measure of **how well the candidate’s internal structure conforms to a valid proto‑proposition** under Path‑A rules.
+
+It is computed from:
+
+- role completeness (agent, object, predicate, etc.)  
+- adjacency plausibility  
+- clause boundary clarity  
+- POS‑pattern conformity  
+- penalties for structural anomalies (missing subject, missing connector, etc.)
+
+**Interpretation:**
+
+- `$1.00$` → structurally perfect  
+- `$0.70$` → structurally sound with minor issues  
+- `$0.40$` → structurally degraded but still parseable  
+- `$0.00$` → structurally invalid (would be rejected)
+
+Path A **never repairs** structure; it only scores what is present.
+
+---
+
+## **A.1.2 lexical_score**
+
+`lexical_score ∈ [0,1]`
+
+A normalized measure of **surface lexical plausibility** of the tokens in the candidate.
+
+It is computed from:
+
+- token canonicality  
+- dictionary plausibility  
+- penalties for lexical anomalies (misspellings, double‑key, transposition, etc.)  
+- part‑of‑speech lexical fit  
+
+**Interpretation:**
+
+- `$1.00$` → lexically clean  
+- `$0.50$` → lexically degraded but interpretable  
+- `$0.30$` → lexically anomalous  
+- `$0.00$` → lexically uninterpretable
+
+Path A **never corrects** lexical anomalies; it only flags them.
+
+---
+
+# **A.2 ΔH%, Confidence, and Threshold (ISc Stage)**
+
+## **A.2.1 ΔH% — Hypothesis‑Mass Delta**
+
+`ΔH% ∈ [-1, +1]` (normalized)
+
+A measure of **how much new, structurally supported information** the candidate adds relative to the intake envelope.
+
+- Positive `$ΔH\%$` → new information added  
+- Zero `$ΔH\%$` → pure ambiguity (no new mass)  
+- Negative `$ΔH\%$` → missing information (fragmentary input)
+
+This is **not** a probability — it is a **mass‑accounting metric**.
+
+---
+
+## **A.2.2 threshold**
+
+`threshold ∈ [0,1]`
+
+The **minimum confidence required for TPU commit**.
+
+Thresholds vary by MI_class:
+
+- `MI_INCOMP` → lower thresholds (e.g., `$0.35$`)  
+- `MI_NOISE` → medium thresholds (e.g., `$0.50$`)  
+- `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., `$0.45$`)  
+
+Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
+
+---
+
+## **A.2.3 confidence**
+
+`confidence ∈ [0,1]`
+
+A scalar computed from:
+
+- structural_score  
+- lexical_score  
+- `$ΔH\%$`  
+- anomaly penalties  
+- candidate completeness  
+
+**Interpretation:**
+
+- `$confidence ≥ threshold$` → commit allowed  
+- `$confidence < threshold$` → commit suppressed (candidate rejected)
+
+Confidence is **not** a probability of truth — it is a **structural‑support measure**.
+
+---
+
+# **A.3 TPU Bookkeeping Fields**
+
+## **A.3.1 commit_id**
+
+A unique identifier for the TPU commit event.
+
+Format:
+
+```
+PATHA-SIM-CXX-YYY
+```
+
+Where:
+
+- `CXX` = case number  
+- `YYY` = commit sequence number  
+
+This ensures reproducibility and traceability.
+
+---
+
+## **A.3.2 commit_status**
+
+Indicates **how** the TPU committed the candidate(s):
+
+- `COMMITTED` — clean commit  
+- `COMMITTED_WITH_WARNINGS` — structural or lexical anomalies present  
+- `COMMITTED_AMBIGUOUS` — multiple candidates preserved  
+- `COMMITTED_MULTI_TRACE` — multiple negation‑scope or structural traces  
+- `COMMITTED_MINIMAL` — fragmentary input, minimal viable proposition  
+- `REJECTED` — (not seen in your 14 cases) confidence < threshold  
+
+Path A **never repairs**; it only commits or rejects.
+
+---
+
+## **A.3.3 missing_mass**
+
+A structured record of **which semantic or structural slots could not be filled** due to degraded input.
+
+Examples:
+
+```
+{ agent_slot: 1 unresolved }
+{ connector_slot: 1 unresolved }
+{ pronoun_referent: unresolved }
+{ tense_normalization_slot: 1 }
+```
+
+Missing mass is **not** an error — it is an **accounting mechanism** ensuring Path A never fabricates content.
+
+---
+
+# **A.4 Summary**
+
+This appendix formalizes the quantitative and bookkeeping fields used throughout the Path‑A Correction Simulation. These definitions ensure:
+
+- transparency  
+- reproducibility  
+- architectural consistency  
+- correct interpretation of the 14‑case results  
+
+Absolutely, Jeff — here is **Appendix B**, written in the same polished, architectural, TS‑20‑consistent style as Appendix A. It cleanly explains **what Path A does and does not record in the TP**, why, and how this affects replay, ambiguity, and downstream processing.
+
+You can paste this directly after Appendix A.
+
+---
+
+# ------------------------------------------------------------
+# **Appendix B — TP Recording Policy for Path‑A Commits**
+# ------------------------------------------------------------
+
+This appendix defines **which fields from the Path‑A pipeline are recorded in the Thought Packet (TP)** and which fields are **not**, along with the architectural rationale. These rules apply uniformly across all 14 simulation cases and across all TS‑20‑compliant Path‑A implementations.
+
+---
+
+# **B.1 Overview**
+
+Path A produces many **diagnostic** fields during execution:
+
+- `structural_score`  
+- `lexical_score`  
+- `ΔH%`  
+- `confidence`  
+- `threshold`  
+- `MI_class`  
+- `candidate_count`  
+- `extraction_basis`  
+- anomaly penalties  
+
+However:
+
+> **Path A does not record diagnostic fields in the TP.**  
+> **Only the semantic and structural results of the commit are stored.**
+
+This ensures that the TP remains a **semantic artifact**, not a scoring log.
+
+---
+
+# **B.2 Fields *Not* Recorded in the TP**
+
+The following fields **evaporate** after TPU commit:
+
+### **B.2.1 structural_score**
+Used only to evaluate structural plausibility.  
+Not part of the thought.  
+Not needed for replay.
+
+### **B.2.2 lexical_score**
+Used only to penalize lexical anomalies.  
+Not part of the semantic content.
+
+### **B.2.3 ΔH%**
+A mass‑accounting metric, not semantic content.  
+Not recorded.
+
+### **B.2.4 confidence**
+A decision‑support scalar.  
+Not part of the thought.
+
+### **B.2.5 threshold**
+A control parameter, not semantic content.
+
+### **B.2.6 MI_class**
+A classification of input degradation.  
+Useful for diagnostics, not for semantic replay.
+
+### **B.2.7 candidate_count**
+Internal to CEx; not semantically meaningful.
+
+### **B.2.8 extraction_basis**
+Describes how candidates were extracted.  
+Not part of the thought.
+
+### **B.2.9 anomaly penalties**
+Used to adjust scores; not recorded.
+
+**Architectural reason:**  
+These fields are **implementation‑dependent**, **non‑semantic**, and **not required** for Path B or replay.  
+The TP must remain a **pure semantic record**.
+
+---
+
+# **B.3 Fields Recorded in the TP**
+
+The TP **does** record the following fields, because they are part of the semantic or structural outcome of the commit.
+
+---
+
+## **B.3.1 commit_id**
+
+A unique identifier for the TPU commit event.
+
+Purpose:
+
+- reproducibility  
+- traceability  
+- debugging  
+- cross‑case comparison  
+
+Format:
+
+```
+PATHA-SIM-CXX-YYY
+```
+
+This is stored in the TP.
+
+---
+
+## **B.3.2 commit_status**
+
+Indicates **how** the TPU committed the candidate(s):
+
+- `COMMITTED`  
+- `COMMITTED_WITH_WARNINGS`  
+- `COMMITTED_AMBIGUOUS`  
+- `COMMITTED_MULTI_TRACE`  
+- `COMMITTED_MINIMAL`  
+- `REJECTED` (not seen in the 14 cases)
+
+This is stored because it affects:
+
+- how Path B interprets the TP  
+- how replay reconstructs the thought  
+- how ambiguity is preserved  
+
+---
+
+## **B.3.3 semantic_core**
+
+The **main payload** of the TP.
+
+Contains:
+
+- propositions  
+- roles  
+- slots  
+- UNKNOWN placeholders  
+- ambiguity branches  
+- affect layers (when present)  
+- warnings (as flags)  
+
+This is the **entire purpose** of the TP.
+
+---
+
+## **B.3.4 flags**
+
+Flags represent **surface anomalies that affect semantics**, such as:
+
+- `MISSING_AGENT_SLOT`  
+- `MISSING_CONNECTOR`  
+- `PRONOUN_REFERENT_AMBIGUOUS`  
+- `LEXICAL_ANOMALY`  
+- `NEGATION_SCOPE_AMBIGUOUS`  
+
+Flags are stored because they:
+
+- preserve ambiguity  
+- preserve missing information  
+- prevent Path B from inferring content that Path A did not extract  
+
+---
+
+## **B.3.5 missing_mass**
+
+A structured record of **which semantic or structural slots could not be filled**.
+
+Examples:
+
+```
+{ agent_slot: 1 unresolved }
+{ connector_slot: 1 unresolved }
+{ pronoun_referent: unresolved }
+{ tense_normalization_slot: 1 }
+```
+
+This is stored because:
+
+- Path A must never fabricate content  
+- Path B must never assume content  
+- replay must preserve the exact structural incompleteness  
+
+Missing mass is a **first‑class semantic artifact**, not a diagnostic.
+
+---
+
+# **B.4 Why Path A Does Not Store Scores**
+
+Path A is a **front‑end structural extractor**, not a reasoning engine.
+
+Scores are:
+
+- ephemeral  
+- implementation‑dependent  
+- not part of the thought  
+- not needed for replay  
+- not needed for Path B  
+- not stable across versions  
+
+The TP must remain:
+
+- semantic  
+- structural  
+- minimal  
+- replayable  
+- architecture‑neutral  
+
+Therefore, **scores are never recorded**.
+
+---
+
+# **B.5 Why Path A *Does* Store Missing Mass and Flags**
+
+Missing mass and flags:
+
+- preserve ambiguity  
+- preserve incompleteness  
+- prevent hallucination  
+- prevent inference  
+- ensure Path B cannot “fix” or “complete” the thought  
+- ensure replay reconstructs the exact degraded structure  
+
+These fields are essential for **semantic integrity**.
+
+---
+
+# **B.6 Summary**
+
+### **Not recorded:**
+- structural_score  
+- lexical_score  
+- ΔH%  
+- confidence  
+- threshold  
+- MI_class  
+- extraction_basis  
+- candidate_count  
+- anomaly penalties  
+
+### **Recorded:**
+- commit_id  
+- commit_status  
+- semantic_core  
+- flags  
+- missing_mass  
+
+### **Architectural Principle:**
+> **The TP stores only semantic and structural outcomes, not diagnostic or scoring metadata.**
+
+---
+
