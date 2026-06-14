@@ -109,7 +109,7 @@ Thresholds prevent Path A from committing structurally invalid or unsupported pr
 
 ---
 
-## **A.2.3 confidence**
+# **A.2.3 confidence (GitHub‑friendly math formatting)**
 
 `confidence ∈ [0,1]`
 
@@ -121,10 +121,44 @@ A scalar computed from:
 - anomaly penalties  
 - candidate completeness  
 
-**Interpretation:**
+### Confidence formula (Path‑A simulation)
 
-- $confidence ≥ threshold$ → commit allowed  
-- $confidence < threshold$ → commit suppressed (candidate rejected)
+We first compute an unclipped raw score:
+
+$$
+c_{\mathrm{raw}} =
+w_s\cdot s +
+w_l\cdot l +
+w_h\cdot \frac{\Delta H + 1}{2} -
+w_a\cdot a -
+w_c\cdot c
+$$
+
+where:
+
+- $s$ = structural\_score  
+- $l$ = lexical\_score  
+- $\Delta H$ = structural entropy delta (from A.2.1)  
+- $a$ = anomaly\_penalty  
+- $c$ = incompleteness\_penalty  
+
+The final confidence is this value **clipped to** `[0,1]`:
+
+- confidence = min(1, max(0, $confidence_{raw}$)),
+- conceptually: “raw score, but never below 0 or above 1”.
+
+### Input Domains
+
+- $structural\_score \in [0,1]$  
+- $lexical\_score \in [0,1]$  
+- $\Delta H \in [-1, +1]$  
+- $anomaly\_penalty \in [0,1]$  
+- $incompleteness\_penalty \in [0,1]$  
+
+### Interpretation
+
+- $confidence \ge threshold$ → commit allowed  
+- $confidence < threshold$ → commit suppressed  
 
 Confidence is **not** a probability of truth — it is a **structural‑support measure**.
 
