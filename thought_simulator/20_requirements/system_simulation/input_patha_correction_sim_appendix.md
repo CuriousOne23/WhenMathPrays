@@ -185,7 +185,7 @@ Incompleteness penalty measures **missing‑mass** in the candidate.
 ### **Formula**
 
 $$
-c =
+c_{inc} =
 w_{mr}\cdot mr +
 w_{mc}\cdot mc +
 w_{mb}\cdot mb
@@ -201,7 +201,7 @@ All components normalized to [0,1].
 
 ### **Interpretation**
 
-- Higher (c) → more missing information → lower confidence  
+- Higher ($c_{inc}$) → more missing information → lower confidence  
 - Path‑A **never fills missing mass**
 
 ---
@@ -243,7 +243,6 @@ The final confidence is this value **clipped to** `[0,1]`:
 
 - confidence = min(1, max(0, $confidence_{raw}$)),
 - conceptually: “raw score, but never below 0 or above 1”.
-- confidence = min(1, max(0, $confidence_{raw}$))
 
 ### Input Domains
 
