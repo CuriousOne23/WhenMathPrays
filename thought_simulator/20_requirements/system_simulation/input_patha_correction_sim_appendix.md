@@ -82,23 +82,23 @@ These weights determine the **relative contribution** of each structural compone
 
 **Definition of weights**
 
-- **$w_rc$** — weight for role completeness  
+- **$w_{rc}$** — weight for role completeness  
   Reflects the architectural requirement that a proto‑proposition must contain its core semantic roles.  
   Higher weight because missing roles severely degrade structural validity.
 
-- **$w_ap$** — weight for adjacency plausibility  
+- **$w_{ap}$** — weight for adjacency plausibility  
   Measures how strongly adjacency contributes to structural coherence.  
   Medium weight because adjacency errors degrade clarity but do not always break structure.
 
-- **$w_cb$** — weight for clause boundary clarity  
+- **$w_{cb}$** — weight for clause boundary clarity  
   Determines the importance of clean clause segmentation.  
   Medium‑high weight because fused or ambiguous boundaries destabilize the proposition.
 
-- **$w_pp$** — weight for POS‑pattern conformity  
+- **$w_{pp}$** — weight for POS‑pattern conformity  
   Reflects how strongly expected POS patterns contribute to structural stability.  
   Medium weight; POS patterns guide structure but do not override role completeness.
 
-- **$w_sa$** — weight for structural anomaly magnitude  
+- **$w_{sa}$** — weight for structural anomaly magnitude  
   Penalty weight applied to structural anomalies (missing subject, broken dependency chain, orphaned modifier, etc.).  
   High penalty weight because anomalies directly reduce structural integrity.
 
@@ -120,10 +120,10 @@ while **w_sa** is a penalty weight applied independently.
 
 **Interpretation**
 
-- Higher **$w_rc$** → structure depends strongly on role completeness  
-- Higher **$w_cb$** → clause clarity is prioritized  
-- Higher **$w_sa$** → anomalies sharply reduce structural_score  
-- Lower **$w_pp$** → POS patterns are supportive but not dominant  
+- Higher **$w_{rc}$** → structure depends strongly on role completeness  
+- Higher **$w_{cb}$** → clause clarity is prioritized  
+- Higher **$w_{sa}$** → anomalies sharply reduce structural_score  
+- Lower **$w_{pp}$** → POS patterns are supportive but not dominant  
 
 These weights encode the **architectural priorities** of Path‑A:  
 **roles → boundaries → adjacency → POS patterns → anomalies (penalty)**.
@@ -192,16 +192,16 @@ These weights determine the **relative contribution** of each lexical component 
 
 ### **Definition of weights**
 
-- **$w_tc$** — weight for token canonicality  
+- **$w_{tc}$** — weight for token canonicality  
   Reflects the importance of clean, canonical surface forms. High weight because malformed tokens directly degrade lexical plausibility.
 
-- **$w_dp$** — weight for dictionary plausibility  
+- **$w_{dp}$** — weight for dictionary plausibility  
   Measures how strongly dictionary‑valid tokens contribute to lexical stability. Medium‑high weight; unknown tokens reduce interpretability.
 
-- **$w_pf$** — weight for POS lexical fit  
+- **$w_{pf}$** — weight for POS lexical fit  
   Determines how much lexical POS correctness contributes to plausibility. Medium weight; POS lexical fit supports interpretation but does not dominate.
 
-- **$w_la$** — weight for lexical anomaly magnitude  
+- **$w_{la}$** — weight for lexical anomaly magnitude  
   Penalty weight applied to lexical anomalies (misspellings, double‑key, transpositions, OCR‑noise, partial tokens). High penalty weight because lexical anomalies directly reduce clarity.
 
 ### **General constraints**
@@ -222,10 +222,10 @@ while **w_la** is a penalty weight applied independently.
 
 ### **Interpretation**
 
-- Higher **$w_tc$** → lexical cleanliness is prioritized  
-- Higher **$w_dp$** → dictionary validity is emphasized  
-- Higher **$w_pf$** → POS lexical correctness is more influential  
-- Higher **$w_la$** → lexical anomalies sharply reduce lexical_score  
+- Higher **$w_{tc}$** → lexical cleanliness is prioritized  
+- Higher **$w_{dp}$** → dictionary validity is emphasized  
+- Higher **$w_{p}f$** → POS lexical correctness is more influential  
+- Higher **$w_{la}$** → lexical anomalies sharply reduce lexical_score  
 
 These weights encode the **architectural priorities** of Path‑A:  
 **canonical tokens → dictionary validity → POS lexical fit → anomalies (penalty)**.
@@ -321,16 +321,16 @@ These weights determine the **relative contribution** of each anomaly type to th
 
 ### **Definition of weights**
 
-- **$w_st$** — weight for structural anomalies  
+- **$w_{st}$** — weight for structural anomalies  
   High penalty weight because structural anomalies directly degrade proposition integrity.
 
-- **$w_lx$** — weight for lexical anomalies  
+- **$w_{lx}$** — weight for lexical anomalies  
   Medium‑high penalty weight; lexical noise reduces clarity but does not always break structure.
 
-- **$w_am$** — weight for ambiguity anomalies  
+- **$w_{am}$** — weight for ambiguity anomalies  
   Medium weight; ambiguity reduces stability but is sometimes tolerable in MI_VAGUE.
 
-- **$w_af$** — weight for affective‑noise anomalies  
+- **$w_{af}$** — weight for affective‑noise anomalies  
   Lower weight; affective noise degrades clarity but rarely breaks structural validity.
 
 ### **General constraints**
@@ -349,10 +349,10 @@ $$
 
 ### **Interpretation**
 
-- Higher **$w_st$** → structural anomalies dominate penalty  
-- Higher **$w_lx$** → lexical noise strongly penalized  
-- Higher **$w_am$** → ambiguity treated as more harmful  
-- Higher **$w_af$** → affective noise treated as more harmful  
+- Higher **$w_{st}$** → structural anomalies dominate penalty  
+- Higher **$w_{lx}$** → lexical noise strongly penalized  
+- Higher **$w_{am}$** → ambiguity treated as more harmful  
+- Higher **$w_{af}$** → affective noise treated as more harmful  
 
 - Higher $(a)$ → more anomaly burden → lower confidence  
 - Path‑A **never repairs** anomalies; it only measures them
@@ -408,13 +408,13 @@ These weights determine the **relative contribution** of each missing‑mass com
 
 ### **Definition of weights**
 
-- **$w_mr$** — weight for missing required roles  
+- **$w_{mr}$** — weight for missing required roles  
   Highest weight because missing core roles directly destabilize the proposition.
 
-- **$w_mc$** — weight for missing connectors  
+- **$w_{mc}$** — weight for missing connectors  
   Medium weight; missing connectors degrade clarity but do not always break structure.
 
-- **$w_mb$** — weight for missing boundaries / tense normalization  
+- **$w_{mb}$** — weight for missing boundaries / tense normalization  
   Lower weight; missing boundaries reduce stability but are often recoverable in MI_VAGUE.
 
 **General constraints**
@@ -433,9 +433,9 @@ $$
 
 **Interpretation**
 
-- Higher **$w_mr$** → missing core roles strongly penalized  
-- Higher **$w_mc$** → missing connectors treated as more harmful  
-- Higher **$w_mb$** → missing boundaries treated as more harmful  
+- Higher **$w_{mr}$** → missing core roles strongly penalized  
+- Higher **$w_{mc}$** → missing connectors treated as more harmful  
+- Higher **$w_{mb}$** → missing boundaries treated as more harmful  
 
 These weights encode the **architectural priorities** of Path‑A:  
 **missing core roles > missing connectors > missing boundaries**.
