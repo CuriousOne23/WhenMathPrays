@@ -206,7 +206,7 @@ All components normalized to [0,1].
 
 ---
 
-# **A.2.1 confidence*
+# **A.4.1 confidence*
 
 `confidence ∈ [0,1]`
 
@@ -262,7 +262,7 @@ Confidence is **not** a probability of truth — it is a **structural‑support 
 
 ---
 
-## **A.2.2 threshold**
+## **A.4.2 threshold**
 
 Thresholds in Path A are architectural tolerances, not empirical tuning parameters. They are derived from the TS‑20 invariants and from the structural properties of each MI_class.The  thresholds are qualitative (relative ordering) rather than quantitative (precise numeric values), and they apply uniformly across all inputs of a given MI_class. The 15 simulation cases demonstrate these thresholds; they do not determine them. No thresholds were adjusted to fit specific examples, and no example‑level tuning is permitted by the architecture.
 
@@ -280,7 +280,7 @@ Thresholds prevent Path A from committing structurally invalid or unsupported pr
 
 ---
 
-## **A.2.3 commit_status**
+## **A.4.3 commit_status**
 
 Indicates **how** the TPU committed the candidate(s):
 
