@@ -1141,12 +1141,6 @@ Path A is **robust**, **stable**, and **predictable** under degraded human input
 It preserves ambiguity, respects missing information, and commits only what is structurally extractable — exactly as required by the TS‑20 architecture.
 
 ---
-Absolutely, Jeff — an **Appendix** is the perfect place for these deeper technical definitions. It keeps Section 2 clean and architectural, while giving you a dedicated space to formalize the scoring, confidence, thresholding, and TPU bookkeeping fields with the level of detail they deserve.
-
-Below is a **drop‑in Appendix** you can paste directly after Section 5.  
-It is polished, TS‑20‑consistent, and matches the tone of the rest of your paper.
-
----
 
 # ------------------------------------------------------------
 # **Appendix A — Formal Definitions of Path‑A Scoring, Confidence, Thresholding, and TPU Fields**
@@ -1572,4 +1566,245 @@ These fields are essential for **semantic integrity**.
 > **The TP stores only semantic and structural outcomes, not diagnostic or scoring metadata.**
 
 ---
+
+# ------------------------------------------------------------
+# **Appendix C — MI_class Taxonomy and Input‑Degradation Categories**
+# ------------------------------------------------------------
+
+The **MI_class** (Messy‑Input Class) taxonomy categorizes the *type* of degradation present in the intake envelope.  
+It is assigned during **IIInB** and influences:
+
+- threshold selection  
+- anomaly expectations  
+- missing‑mass accounting  
+- ambiguity handling  
+- structural penalties  
+
+MI_class **does not** determine meaning, truth, or correction.  
+It is strictly a **local structural classification**.
+
+---
+
+# **C.1 Overview of MI_class**
+
+Path A recognizes five high‑level messy‑input categories:
+
+1. **MI_INCOMP** — Incomplete structure  
+2. **MI_VAGUE** — Ambiguous structure  
+3. **MI_AFFECT** — Affective noise mixed with factual content  
+4. **MI_NOISE** — Surface‑form lexical anomalies  
+5. **MI_CONTRA** — Local contradictions (not present in the 14 cases)
+
+Each class corresponds to a **distinct failure mode** in human input.
+
+---
+
+# **C.2 MI_INCOMP — Incomplete Structure**
+
+### **Definition**
+Structural incompleteness: one or more required syntactic or semantic slots are missing.
+
+### **Typical causes**
+- missing subject  
+- missing main clause  
+- missing connector  
+- fragmentary clause  
+- ellipsis without recoverable structure  
+
+### **Detection (IIInB)**
+Triggered when:
+
+- required roles are absent  
+- clause boundaries are incomplete  
+- POS patterns indicate missing anchors  
+
+### **Path‑A behavior**
+- lower threshold (e.g., `$0.35$`)  
+- missing_mass recorded  
+- UNKNOWN placeholders preserved  
+- no repair or insertion  
+
+### **Examples from the 14 cases**
+- Case 1 — Missing subject  
+- Case 7 — Fragment only  
+- Case 8 — Missing connector  
+- Case 10 — Missing agent  
+
+---
+
+# **C.3 MI_VAGUE — Ambiguous Structure**
+
+### **Definition**
+Multiple structurally valid interpretations exist, and Path A cannot choose between them.
+
+### **Typical causes**
+- ambiguous pronoun referent  
+- ambiguous role assignment  
+- ambiguous negation scope  
+- NP‑NP‑V patterns  
+
+### **Detection (IIInB)**
+Triggered when:
+
+- two or more role assignments are equally plausible  
+- pronoun antecedents are locally ambiguous  
+- negation can attach to multiple scopes  
+
+### **Path‑A behavior**
+- ambiguity preserved  
+- `$ΔH\% = 0.00$` (no new mass)  
+- threshold moderate (e.g., `$0.45$`)  
+- TPU commits **multiple candidates**  
+
+### **Examples from the 14 cases**
+- Case 2 — NP‑NP‑V ambiguity  
+- Case 4 — Pronoun ambiguity  
+- Case 5 — Negation‑scope ambiguity  
+
+---
+
+# **C.4 MI_AFFECT — Affective Noise**
+
+### **Definition**
+Affective or emotional tokens co‑occur with factual content.
+
+### **Typical causes**
+- interjections (“Ugh”)  
+- evaluative adjectives (“stupid”)  
+- emotional intensifiers  
+
+### **Detection (IIInB)**
+Triggered when:
+
+- INTJ or evaluative ADJ tokens appear  
+- affective tone is separable from factual structure  
+
+### **Path‑A behavior**
+- affect stripped into `affect_layer`  
+- factual core extracted normally  
+- no sentiment inference  
+- threshold unchanged  
+
+### **Examples from the 14 cases**
+- Case 6 — “Ugh this stupid thing never works.”  
+
+---
+
+# **C.5 MI_NOISE — Surface‑Form Lexical Noise**
+
+### **Definition**
+Lexical anomalies that do not break structural integrity.
+
+### **Typical causes**
+- misspellings  
+- dropped letters  
+- double‑key errors  
+- transposition errors  
+- tense drift  
+- uninflected verbs  
+
+### **Detection (IIInB)**
+Triggered when:
+
+- token surface form is non‑canonical  
+- POS tagging still yields a valid structural frame  
+
+### **Path‑A behavior**
+- structural_score usually high  
+- lexical_score penalized  
+- threshold medium (e.g., `$0.50$`)  
+- anomalies preserved as flags  
+- no correction  
+
+### **Examples from the 14 cases**
+- Case 3 — Missing preposition  
+- Case 9 — Tense/aspect drift  
+- Case 11 — Dropped letter  
+- Case 12 — Double‑key  
+- Case 13 — Stable misspelling  
+- Case 14 — Transposition error  
+
+---
+
+# **C.6 MI_CONTRA — Local Contradiction (Not Present in the 14 Cases)**
+
+### **Definition**
+Local structural contradiction within the same clause or event.
+
+### **Typical causes**
+- contradictory modifiers  
+- incompatible tense/aspect markers  
+- mutually exclusive roles  
+
+### **Detection (IIInB)**
+Triggered when:
+
+- two tokens impose incompatible structural constraints  
+- contradiction is local (not global truth‑value contradiction)  
+
+### **Path‑A behavior**
+- both contradictory traces extracted  
+- TPU may commit a **multi‑trace** structure  
+- no resolution attempted  
+
+### **Example (not in your dataset)**
+`He is running but also completely still.`  
+→ two incompatible state predicates extracted.
+
+---
+
+# **C.7 Why MI_class Matters**
+
+MI_class influences:
+
+### **1. Threshold selection**
+- MI_INCOMP → lower threshold  
+- MI_VAGUE → ambiguity‑tolerant threshold  
+- MI_NOISE → medium threshold  
+- MI_AFFECT → normal threshold  
+- MI_CONTRA → multi‑trace threshold  
+
+### **2. Expected anomalies**
+Each class predicts a different anomaly pattern.
+
+### **3. Missing‑mass accounting**
+MI_INCOMP → missing slots  
+MI_VAGUE → unresolved ambiguity  
+MI_NOISE → lexical anomalies  
+MI_AFFECT → affect layer  
+MI_CONTRA → contradictory traces  
+
+### **4. TPU commit_status**
+MI_class determines whether the commit is:
+
+- clean  
+- with warnings  
+- ambiguous  
+- multi‑trace  
+- minimal  
+
+---
+
+# **C.8 Summary**
+
+The MI_class taxonomy provides a **structural diagnosis** of degraded human input.  
+It does **not**:
+
+- infer meaning  
+- repair grammar  
+- choose a correct interpretation  
+- normalize tokens  
+
+Instead, it ensures that Path A:
+
+- preserves ambiguity  
+- preserves missing information  
+- preserves lexical anomalies  
+- commits only what is structurally extractable  
+- never hallucinates or repairs  
+
+This taxonomy is essential for understanding the behavior of the 14‑case simulation and for interpreting Path‑A outputs in general.
+
+---
+
 
