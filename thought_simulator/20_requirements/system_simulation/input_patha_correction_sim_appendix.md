@@ -116,7 +116,97 @@ All components normalized to [0,1].
 
 ---
 
-# **A.2.3 confidence*
+### A.2 **ΔH% Definition (Path‑A Simulation)**  
+For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
+
+$$
+\Delta H\\% = \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
+$$
+
+Where:
+
+- **$H_{\text{before}}$** = structural entropy of the CE envelope  
+  (missing slots, ambiguity, missing‑mass, structural warnings)
+
+- **$H_{\text{after}}$** = structural entropy after ISc scoring  
+  (post‑scoring stability, resolved structure, remaining ambiguity)
+
+- **$H_{\max}$** = MI‑class‑normalized maximum entropy for the case  
+  (fixed per MI_class; ensures ΔH% ∈ [-1, +1])
+
+### **Interpretation**
+- **Positive ΔH%** → structure became more stable (new supported mass added)  
+- **Zero ΔH%** → ambiguity preserved; no structural change  
+- **Negative ΔH%** → structure became less stable (fragmentary or missing mass)
+
+### **Notes**
+- ΔH% is **not** a probability.  
+- ΔH% is **not** derived from confidence.  
+- ΔH% is a **structural‑mass accounting metric**, consistent with  
+  **HLR‑20.030‑015 (Unified ΔH% Structural‑Entropy Delta)**.  
+- Path‑A uses the **ISc‑level entropy model**, not the OB‑level model.
+
+---
+
+# **A.3 anomaly_penalty (NEW)**
+
+Anomaly penalty aggregates **structural**, **lexical**, **ambiguity**, and **affective** anomaly magnitudes.
+
+### **Formula**
+
+$$
+a =
+w_{st}\cdot st +
+w_{lx}\cdot lx +
+w_{am}\cdot am +
+w_{af}\cdot af
+$$
+
+Where:
+
+- st = structural anomaly magnitude  
+- lx = lexical anomaly magnitude  
+- am = ambiguity anomaly magnitude  
+- af = affective‑noise anomaly magnitude  
+
+All components normalized to [0,1].
+
+### **Interpretation**
+
+- Higher $(a)$ → more anomaly burden → lower confidence  
+- Path‑A **never repairs** anomalies; it only measures them 
+
+---
+
+# **A.4 incompleteness_penalty (NEW)**
+
+Incompleteness penalty measures **missing‑mass** in the candidate.
+
+### **Formula**
+
+$$
+c =
+w_{mr}\cdot mr +
+w_{mc}\cdot mc +
+w_{mb}\cdot mb
+$$
+
+Where:
+
+- mr = missing required roles  
+- mc = missing connectors  
+- mb = missing boundary or tense normalization  
+
+All components normalized to [0,1].
+
+### **Interpretation**
+
+- Higher (c) → more missing information → lower confidence  
+- Path‑A **never fills missing mass**
+
+---
+
+# **A.2.1 confidence*
 
 `confidence ∈ [0,1]`
 
@@ -172,63 +262,7 @@ Confidence is **not** a probability of truth — it is a **structural‑support 
 
 ---
 
-# **A.2.4 anomaly_penalty (NEW)**
-
-Anomaly penalty aggregates **structural**, **lexical**, **ambiguity**, and **affective** anomaly magnitudes.
-
-### **Formula**
-
-$$
-a =
-w_{st}\cdot st +
-w_{lx}\cdot lx +
-w_{am}\cdot am +
-w_{af}\cdot af
-$$
-
-Where:
-
-- st = structural anomaly magnitude  
-- lx = lexical anomaly magnitude  
-- am = ambiguity anomaly magnitude  
-- af = affective‑noise anomaly magnitude  
-
-All components normalized to [0,1].
-
-### **Interpretation**
-
-- Higher $(a)$ → more anomaly burden → lower confidence  
-- Path‑A **never repairs** anomalies; it only measures them  
-
----
-
-# **A.2.5 incompleteness_penalty (NEW)**
-
-Incompleteness penalty measures **missing‑mass** in the candidate.
-
-### **Formula**
-
-$$
-c =
-w_{mr}\cdot mr +
-w_{mc}\cdot mc +
-w_{mb}\cdot mb
-$$
-
-Where:
-
-- mr = missing required roles  
-- mc = missing connectors  
-- mb = missing boundary or tense normalization  
-
-All components normalized to [0,1].
-
-### **Interpretation**
-
-- Higher (c) → more missing information → lower confidence  
-- Path‑A **never fills missing mass**
-
-## **A.2.6 threshold**
+## **A.2.2 threshold**
 
 Thresholds in Path A are architectural tolerances, not empirical tuning parameters. They are derived from the TS‑20 invariants and from the structural properties of each MI_class.The  thresholds are qualitative (relative ordering) rather than quantitative (precise numeric values), and they apply uniformly across all inputs of a given MI_class. The 15 simulation cases demonstrate these thresholds; they do not determine them. No thresholds were adjusted to fit specific examples, and no example‑level tuning is permitted by the architecture.
 
@@ -244,36 +278,20 @@ Thresholds vary by MI_class:
 
 Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
 
+---
 
-### A.3 **ΔH% Definition (Path‑A Simulation)**  
-For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
+## **A.2.3 commit_status**
 
-$$
-\Delta H\\% = \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
-$$
+Indicates **how** the TPU committed the candidate(s):
 
-Where:
+- `COMMITTED` — clean commit  
+- `COMMITTED_WITH_WARNINGS` — structural or lexical anomalies present  
+- `COMMITTED_AMBIGUOUS` — multiple candidates preserved  
+- `COMMITTED_MULTI_TRACE` — multiple negation‑scope or structural traces  
+- `COMMITTED_MINIMAL` — fragmentary input, minimal viable proposition  
+- `REJECTED` — (not seen in your 14 cases) confidence < threshold  
 
-- **$H_{\text{before}}$** = structural entropy of the CE envelope  
-  (missing slots, ambiguity, missing‑mass, structural warnings)
-
-- **$H_{\text{after}}$** = structural entropy after ISc scoring  
-  (post‑scoring stability, resolved structure, remaining ambiguity)
-
-- **$H_{\max}$** = MI‑class‑normalized maximum entropy for the case  
-  (fixed per MI_class; ensures ΔH% ∈ [-1, +1])
-
-### **Interpretation**
-- **Positive ΔH%** → structure became more stable (new supported mass added)  
-- **Zero ΔH%** → ambiguity preserved; no structural change  
-- **Negative ΔH%** → structure became less stable (fragmentary or missing mass)
-
-### **Notes**
-- ΔH% is **not** a probability.  
-- ΔH% is **not** derived from confidence.  
-- ΔH% is a **structural‑mass accounting metric**, consistent with  
-  **HLR‑20.030‑015 (Unified ΔH% Structural‑Entropy Delta)**.  
-- Path‑A uses the **ISc‑level entropy model**, not the OB‑level model.
+Path A **never repairs**; it only commits or rejects. 
 
 ---
 
@@ -295,21 +313,6 @@ Where:
 - `YYY` = commit sequence number  
 
 This ensures reproducibility and traceability.
-
----
-
-## **A.3.2 commit_status**
-
-Indicates **how** the TPU committed the candidate(s):
-
-- `COMMITTED` — clean commit  
-- `COMMITTED_WITH_WARNINGS` — structural or lexical anomalies present  
-- `COMMITTED_AMBIGUOUS` — multiple candidates preserved  
-- `COMMITTED_MULTI_TRACE` — multiple negation‑scope or structural traces  
-- `COMMITTED_MINIMAL` — fragmentary input, minimal viable proposition  
-- `REJECTED` — (not seen in your 14 cases) confidence < threshold  
-
-Path A **never repairs**; it only commits or rejects.
 
 ---
 
