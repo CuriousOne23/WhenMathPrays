@@ -26,10 +26,10 @@ It is computed from:
 
 **Interpretation:**
 
-- `$1.00$` → structurally perfect  
-- `$0.70$` → structurally sound with minor issues  
-- `$0.40$` → structurally degraded but still parseable  
-- `$0.00$` → structurally invalid (would be rejected)
+- $1.00$ → structurally perfect  
+- $0.70$ → structurally sound with minor issues  
+- $0.40$ → structurally degraded but still parseable  
+- $0.00$ → structurally invalid (would be rejected)
 
 Path A **never repairs** structure; it only scores what is present.
 
@@ -50,10 +50,10 @@ It is computed from:
 
 **Interpretation:**
 
-- `$1.00$` → lexically clean  
-- `$0.50$` → lexically degraded but interpretable  
-- `$0.30$` → lexically anomalous  
-- `$0.00$` → lexically uninterpretable
+- $1.00$ → lexically clean  
+- $0.50$ → lexically degraded but interpretable  
+- $0.30$ → lexically anomalous  
+- $0.00$ → lexically uninterpretable
 
 Path A **never corrects** lexical anomalies; it only flags them.
 
@@ -67,9 +67,9 @@ Path A **never corrects** lexical anomalies; it only flags them.
 
 A measure of **how much new, structurally supported information** the candidate adds relative to the intake envelope.
 
-- Positive `$ΔH\%$` → new information added  
-- Zero `$ΔH\%$` → pure ambiguity (no new mass)  
-- Negative `$ΔH\%$` → missing information (fragmentary input)
+- Positive $ΔH\\%$ → new information added  
+- Zero $ΔH\\%$ → pure ambiguity (no new mass)  
+- Negative $ΔH\\%$ → missing information (fragmentary input)
 
 This is **not** a probability — it is a **mass‑accounting metric**.
 
@@ -85,9 +85,9 @@ The **minimum confidence required for TPU commit**.
 
 Thresholds vary by MI_class:
 
-- `MI_INCOMP` → lower thresholds (e.g., `$0.35$`)  
-- `MI_NOISE` → medium thresholds (e.g., `$0.50$`)  
-- `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., `$0.45$`)  
+- `MI_INCOMP` → lower thresholds (e.g., $0.35$)  
+- `MI_NOISE` → medium thresholds (e.g., $0.50$)  
+- `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., $0.45$)  
 
 Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
 
@@ -101,14 +101,14 @@ A scalar computed from:
 
 - structural_score  
 - lexical_score  
-- `$ΔH\%$`  
+- $ΔH\%$  
 - anomaly penalties  
 - candidate completeness  
 
 **Interpretation:**
 
-- `$confidence ≥ threshold$` → commit allowed  
-- `$confidence < threshold$` → commit suppressed (candidate rejected)
+- $confidence ≥ threshold$ → commit allowed  
+- $confidence < threshold$ → commit suppressed (candidate rejected)
 
 Confidence is **not** a probability of truth — it is a **structural‑support measure**.
 
