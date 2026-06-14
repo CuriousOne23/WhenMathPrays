@@ -447,7 +447,7 @@ Path A recognizes five high‑level messy‑input categories:
 2. **MI_VAGUE** — Ambiguous structure  
 3. **MI_AFFECT** — Affective noise mixed with factual content  
 4. **MI_NOISE** — Surface‑form lexical anomalies  
-5. **MI_CONTRA** — Local contradictions (not present in the 14 cases)
+5. **MI_CONTRA** — Local contradictions (not present in the 15 cases)
 
 Each class corresponds to a **distinct failure mode** in human input.
 
@@ -478,7 +478,7 @@ Triggered when:
 - UNKNOWN placeholders preserved  
 - no repair or insertion  
 
-### **Examples from the 14 cases**
+### **Examples from the 15 cases**
 - Case 1 — Missing subject  
 - Case 7 — Fragment only  
 - Case 8 — Missing connector  
@@ -510,7 +510,7 @@ Triggered when:
 - threshold moderate (e.g., `$0.45$`)  
 - TPU commits **multiple candidates**  
 
-### **Examples from the 14 cases**
+### **Examples from the 15 cases**
 - Case 2 — NP‑NP‑V ambiguity  
 - Case 4 — Pronoun ambiguity  
 - Case 5 — Negation‑scope ambiguity  
@@ -520,27 +520,33 @@ Triggered when:
 # **C.4 MI_AFFECT — Affective Noise**
 
 ### **Definition**
-Affective or emotional tokens co‑occur with factual content.
+Affective or emotional tokens co‑occur with factual content, or predicates are used metaphorically with emotional intensity.
 
 ### **Typical causes**
 - interjections (“Ugh”)  
 - evaluative adjectives (“stupid”)  
-- emotional intensifiers  
+- emotional intensifiers (“totally”, “absolutely”)  
+- metaphorical predicates used affectively (“destroyed” meaning “defeated verbally”)  
 
 ### **Detection (IIInB)**
 Triggered when:
 
 - INTJ or evaluative ADJ tokens appear  
+- affective intensifiers modify predicates  
+- predicates are used metaphorically in a way that increases emotional load  
 - affective tone is separable from factual structure  
 
 ### **Path‑A behavior**
 - affect stripped into `affect_layer`  
 - factual core extracted normally  
+- metaphorical predicates **not** literalized  
 - no sentiment inference  
 - threshold unchanged  
+- missing_mass used to capture unspecified factual details  
 
-### **Examples from the 14 cases**
+### **Examples from the 15 cases**
 - Case 6 — “Ugh this stupid thing never works.”  
+- **Case 15 — Affective metaphor + humiliation state (“He totally destroyed her… she was absolutely humiliated.”)**  
 
 ---
 
@@ -556,6 +562,7 @@ Lexical anomalies that do not break structural integrity.
 - transposition errors  
 - tense drift  
 - uninflected verbs  
+- missing prepositions  
 
 ### **Detection (IIInB)**
 Triggered when:
@@ -570,7 +577,7 @@ Triggered when:
 - anomalies preserved as flags  
 - no correction  
 
-### **Examples from the 14 cases**
+### **Examples from the 15 cases**
 - Case 3 — Missing preposition  
 - Case 9 — Tense/aspect drift  
 - Case 11 — Dropped letter  
@@ -580,7 +587,7 @@ Triggered when:
 
 ---
 
-# **C.6 MI_CONTRA — Local Contradiction (Not Present in the 14 Cases)**
+# **C.6 MI_CONTRA — Local Contradiction (Not Present in the 15 Cases)**
 
 ### **Definition**
 Local structural contradiction within the same clause or event.
@@ -622,11 +629,11 @@ MI_class influences:
 Each class predicts a different anomaly pattern.
 
 ### **3. Missing‑mass accounting**
-MI_INCOMP → missing slots  
-MI_VAGUE → unresolved ambiguity  
-MI_NOISE → lexical anomalies  
-MI_AFFECT → affect layer  
-MI_CONTRA → contradictory traces  
+- MI_INCOMP → missing slots  
+- MI_VAGUE → unresolved ambiguity  
+- MI_NOISE → lexical anomalies  
+- MI_AFFECT → affect layer + metaphor flags  
+- MI_CONTRA → contradictory traces  
 
 ### **4. TPU commit_status**
 MI_class determines whether the commit is:
@@ -636,6 +643,7 @@ MI_class determines whether the commit is:
 - ambiguous  
 - multi‑trace  
 - minimal  
+- affect‑flagged  
 
 ---
 
@@ -654,10 +662,11 @@ Instead, it ensures that Path A:
 - preserves ambiguity  
 - preserves missing information  
 - preserves lexical anomalies  
+- preserves affective load without literalizing it  
 - commits only what is structurally extractable  
 - never hallucinates or repairs  
 
-This taxonomy is essential for understanding the behavior of the 14‑case simulation and for interpreting Path‑A outputs in general.
+This taxonomy is essential for understanding the behavior of the 15‑case simulation and for interpreting Path‑A outputs in general.
 
 ---
 
@@ -665,7 +674,7 @@ This taxonomy is essential for understanding the behavior of the 14‑case simul
 # **Appendix D — Anomaly Types and Penalties in Path‑A Processing**
 # ------------------------------------------------------------
 
-This appendix defines the anomaly types encountered in the 14‑case simulation and describes how Path A detects, scores, and propagates them.  
+This appendix defines the anomaly types encountered in the **15‑case simulation** and describes how Path A detects, scores, and propagates them.  
 Anomalies are **never repaired**; they are **diagnosed**, **penalized**, and **preserved** in the TP.
 
 Anomalies fall into four broad categories:
@@ -839,6 +848,20 @@ Verb form inconsistent with temporal adverb or aspect marker.
 
 ---
 
+## **D.2.6 Missing Preposition**
+
+### **Definition**
+A required preposition is absent but the structural frame remains recoverable.
+
+### **Penalty**
+- lexical_score ↓  
+- flag: `MISSING_PREPOSITION`  
+
+### **Example**
+- Case 3 — “I go store yesterday.”
+
+---
+
 # **D.3 Ambiguity Anomalies**
 
 Ambiguity anomalies arise when **multiple structurally valid interpretations exist**.
@@ -895,7 +918,7 @@ Negation can attach to multiple structural positions.
 
 # **D.4 Affective Anomalies**
 
-Affective anomalies arise when **emotional tokens** appear alongside factual content.
+Affective anomalies arise when **emotional tokens or affective metaphors** appear alongside factual content.
 
 ---
 
@@ -911,6 +934,36 @@ Interjections or evaluative adjectives that do not alter factual structure.
 
 ### **Example**
 - Case 6 — “Ugh this stupid thing never works.”
+
+---
+
+## **D.4.2 Affective‑Metaphor Predicate**
+
+### **Definition**
+A predicate is used metaphorically to express emotional intensity rather than literal action.
+
+Examples:  
+- “destroyed” meaning “defeated verbally”  
+- “crushed” meaning “outperformed emotionally”  
+
+### **Detection**
+IIInB detects:
+
+- predicate semantics inconsistent with literal frame  
+- intensifiers modifying a metaphorical predicate  
+- emotional state clause linked to metaphorical event  
+
+### **Penalty**
+- lexical_score ↓ (metaphor penalty)  
+- structural_score preserved  
+- flags:  
+  - `AFFECTIVE_METAPHOR`  
+  - `AFFECT_INTENSIFIER_PRESENT`  
+- missing_mass added for unspecified factual details  
+- commit_status: `COMMITTED_WITH_AFFECT_FLAGS`  
+
+### **Example**
+- **Case 15 — “He totally destroyed her… she was absolutely humiliated.”**
 
 ---
 
@@ -935,8 +988,9 @@ Interjections or evaluative adjectives that do not alter factual structure.
 
 ### **Affective anomalies**
 - do not reduce structural_score  
-- produce affect_layer  
-- commit_status usually clean
+- produce affect_layer or metaphor flags  
+- commit_status usually clean or `WITH_AFFECT_FLAGS`  
+- missing_mass captures unspecified factual content
 
 ---
 
