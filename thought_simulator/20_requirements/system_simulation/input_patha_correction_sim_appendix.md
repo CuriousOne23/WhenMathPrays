@@ -182,7 +182,53 @@ Where:
 - tc = token canonicality  
 - dp = dictionary plausibility  
 - pf = POS lexical fit  
-- la = lexical anomaly magnitude  
+- la = lexical anomaly magnitude
+
+---
+
+**Weight Definitions for Lexical Score (w_tc, w_dp, w_pf, w_la)**  
+
+These weights determine the **relative contribution** of each lexical component to the overall lexical_score. They are fixed by the **TS‑20 numeric policy** and are **not tuned per example**.
+
+### **Definition of weights**
+
+- **w_tc** — weight for token canonicality  
+  Reflects the importance of clean, canonical surface forms. High weight because malformed tokens directly degrade lexical plausibility.
+
+- **w_dp** — weight for dictionary plausibility  
+  Measures how strongly dictionary‑valid tokens contribute to lexical stability. Medium‑high weight; unknown tokens reduce interpretability.
+
+- **w_pf** — weight for POS lexical fit  
+  Determines how much lexical POS correctness contributes to plausibility. Medium weight; POS lexical fit supports interpretation but does not dominate.
+
+- **w_la** — weight for lexical anomaly magnitude  
+  Penalty weight applied to lexical anomalies (misspellings, double‑key, transpositions, OCR‑noise, partial tokens). High penalty weight because lexical anomalies directly reduce clarity.
+
+### **General constraints**
+
+All lexical weights satisfy:
+
+$$
+w_{tc},\ w_{dp},\ w_{pf},\ w_{la} \in [0,1]
+$$
+
+And the positive‑contribution weights typically satisfy:
+
+$$
+w_{tc} + w_{dp} + w_{pf} = 1
+$$
+
+while **w_la** is a penalty weight applied independently.
+
+### **Interpretation**
+
+- Higher **w_tc** → lexical cleanliness is prioritized  
+- Higher **w_dp** → dictionary validity is emphasized  
+- Higher **w_pf** → POS lexical correctness is more influential  
+- Higher **w_la** → lexical anomalies sharply reduce lexical_score  
+
+These weights encode the **architectural priorities** of Path‑A:  
+**canonical tokens → dictionary validity → POS lexical fit → anomalies (penalty)**.
 
 All components normalized to [0,1].
 
@@ -239,9 +285,77 @@ Where:
 - st = structural anomaly magnitude  
 - lx = lexical anomaly magnitude  
 - am = ambiguity anomaly magnitude  
-- af = affective‑noise anomaly magnitude  
+- af = affective‑noise anomaly magnitude
 
-All components normalized to [0,1].
+---
+
+# **A.3.1 anomaly_penalty variables**
+
+Anomaly penalty aggregates **structural**, **lexical**, **ambiguity**, and **affective‑noise** anomalies into a single normalized penalty term.
+
+### **Where each variable is defined**
+
+- **st** = *structural anomaly magnitude*  
+  Severity of structural defects (missing subject, missing predicate, broken dependency chain, orphaned modifier, malformed clause).  
+  Normalized to [0,1].
+
+- **lx** = *lexical anomaly magnitude*  
+  Severity of lexical defects (misspellings, double‑key, transpositions, repeated characters, partial tokens, OCR‑noise).  
+  Normalized to [0,1].
+
+- **am** = *ambiguity anomaly magnitude*  
+  Degree of unresolved structural or referential ambiguity (multiple possible parses, unresolved pronoun referent, unclear attachment).  
+  Normalized to [0,1].
+
+- **af** = *affective‑noise anomaly magnitude*  
+  Measures emotional, emphatic, or stylistic noise that degrades structural clarity (elongated vowels, expressive punctuation, repeated characters used for emphasis).  
+  Normalized to [0,1].
+
+All anomaly components are normalized to [0,1].
+
+---
+
+# **A.3.2 anomaly_penalty weight definitions**
+
+These weights determine the **relative contribution** of each anomaly type to the overall anomaly_penalty. They are fixed by the **TS‑20 numeric policy** and are **not tuned per example**.
+
+### **Definition of weights**
+
+- **w_st** — weight for structural anomalies  
+  High penalty weight because structural anomalies directly degrade proposition integrity.
+
+- **w_lx** — weight for lexical anomalies  
+  Medium‑high penalty weight; lexical noise reduces clarity but does not always break structure.
+
+- **w_am** — weight for ambiguity anomalies  
+  Medium weight; ambiguity reduces stability but is sometimes tolerable in MI_VAGUE.
+
+- **w_af** — weight for affective‑noise anomalies  
+  Lower weight; affective noise degrades clarity but rarely breaks structural validity.
+
+### **General constraints**
+
+All anomaly weights satisfy:
+
+$$
+w_{st},\ w_{lx},\ w_{am},\ w_{af} \in [0,1]
+$$
+
+And the penalty weights typically satisfy:
+
+$$
+w_{st} + w_{lx} + w_{am} + w_{af} = 1
+$$
+
+### **Interpretation**
+
+- Higher **w_st** → structural anomalies dominate penalty  
+- Higher **w_lx** → lexical noise strongly penalized  
+- Higher **w_am** → ambiguity treated as more harmful  
+- Higher **w_af** → affective noise treated as more harmful  
+
+These weights encode the **architectural priorities** of Path‑A:  
+**structural anomalies > lexical anomalies > ambiguity > affective noise**.
 
 ### **Interpretation**
 
