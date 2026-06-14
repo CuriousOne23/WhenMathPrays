@@ -19,11 +19,13 @@ The simulation was executed **mechanically and a‑priori** by **Microsoft Copil
 
 - **20.10 — Architectural Requirements**  
 - **20.12 — TS Invariants**  
-- **20.20 — Path A Requirements**  
-- **20.30 — Input Basin Requirements**  
-- **20.40 — Candidate Extraction Requirements**  
-- **20.50 — Candidate Evaluation Requirements**  
-- **20.60 — TPU Commit Requirements**
+- **20.100 — InB Requirements**
+- **20.101 - IIInB Requirements**
+- **20.107 - CEx Extraction**
+- **20.108 - CE Envelope**
+- **20.44 - ISc Scoring**
+- **20.46 - TPU Requirements** 
+- **20.30 — TS Functional Model**  
 
 The pipeline executed for each case is:
 
