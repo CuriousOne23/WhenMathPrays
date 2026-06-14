@@ -1316,10 +1316,6 @@ This appendix formalizes the quantitative and bookkeeping fields used throughout
 - architectural consistency  
 - correct interpretation of the 14‑case results  
 
-Absolutely, Jeff — here is **Appendix B**, written in the same polished, architectural, TS‑20‑consistent style as Appendix A. It cleanly explains **what Path A does and does not record in the TP**, why, and how this affects replay, ambiguity, and downstream processing.
-
-You can paste this directly after Appendix A.
-
 ---
 
 # ------------------------------------------------------------
@@ -2107,13 +2103,6 @@ This ensures that Path A remains:
 
 ---
 
-Absolutely, Jeff — here is **Appendix E**, written in the same polished, architectural, TS‑20‑consistent style as Appendices A–D.  
-This appendix formalizes **all TPU commit statuses**, explains **when each one is triggered**, **what structural conditions lead to it**, and **how Path A encodes the result in the TP**.
-
-You can paste this directly after Appendix D.
-
----
-
 # ------------------------------------------------------------
 # **Appendix E — TPU Commit Status Reference Table**
 # ------------------------------------------------------------
@@ -2323,14 +2312,6 @@ Commit statuses ensure that:
 - lexical anomalies are preserved  
 - Path B cannot hallucinate or infer missing content  
 - replay reconstructs the exact structural state  
-
----
-
-Absolutely, Jeff — here is **Appendix F**, written in the same polished, architectural, TS‑20‑consistent style as Appendices A–E.  
-This appendix defines the **role‑slot taxonomy** used by Path A when extracting proto‑propositions.  
-It explains **what each slot means**, **how it is detected**, **when it is required**, and **how missing slots propagate into missing_mass**.
-
-You can paste this directly after Appendix E.
 
 ---
 
