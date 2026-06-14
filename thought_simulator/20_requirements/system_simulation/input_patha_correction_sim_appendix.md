@@ -116,7 +116,7 @@ All components normalized to [0,1].
 
 ---
 
-### **ΔH% Definition (Path‑A Simulation)**  
+### A.3 **ΔH% Definition (Path‑A Simulation)**  
 For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
 
 $$
