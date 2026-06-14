@@ -116,38 +116,6 @@ All components normalized to [0,1].
 
 ---
 
-### A.3 **ΔH% Definition (Path‑A Simulation)**  
-For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
-
-$$
-\Delta H\\% = \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
-$$
-
-Where:
-
-- **$H_{\text{before}}$** = structural entropy of the CE envelope  
-  (missing slots, ambiguity, missing‑mass, structural warnings)
-
-- **$H_{\text{after}}$** = structural entropy after ISc scoring  
-  (post‑scoring stability, resolved structure, remaining ambiguity)
-
-- **$H_{\max}$** = MI‑class‑normalized maximum entropy for the case  
-  (fixed per MI_class; ensures ΔH% ∈ [-1, +1])
-
-### **Interpretation**
-- **Positive ΔH%** → structure became more stable (new supported mass added)  
-- **Zero ΔH%** → ambiguity preserved; no structural change  
-- **Negative ΔH%** → structure became less stable (fragmentary or missing mass)
-
-### **Notes**
-- ΔH% is **not** a probability.  
-- ΔH% is **not** derived from confidence.  
-- ΔH% is a **structural‑mass accounting metric**, consistent with  
-  **HLR‑20.030‑015 (Unified ΔH% Structural‑Entropy Delta)**.  
-- Path‑A uses the **ISc‑level entropy model**, not the OB‑level model.
-
----
-
 # **A.2.3 confidence*
 
 `confidence ∈ [0,1]`
@@ -275,6 +243,37 @@ Thresholds vary by MI_class:
 - `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., $0.45$)  
 
 Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
+
+
+### A.3 **ΔH% Definition (Path‑A Simulation)**  
+For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
+
+$$
+\Delta H\\% = \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
+$$
+
+Where:
+
+- **$H_{\text{before}}$** = structural entropy of the CE envelope  
+  (missing slots, ambiguity, missing‑mass, structural warnings)
+
+- **$H_{\text{after}}$** = structural entropy after ISc scoring  
+  (post‑scoring stability, resolved structure, remaining ambiguity)
+
+- **$H_{\max}$** = MI‑class‑normalized maximum entropy for the case  
+  (fixed per MI_class; ensures ΔH% ∈ [-1, +1])
+
+### **Interpretation**
+- **Positive ΔH%** → structure became more stable (new supported mass added)  
+- **Zero ΔH%** → ambiguity preserved; no structural change  
+- **Negative ΔH%** → structure became less stable (fragmentary or missing mass)
+
+### **Notes**
+- ΔH% is **not** a probability.  
+- ΔH% is **not** derived from confidence.  
+- ΔH% is a **structural‑mass accounting metric**, consistent with  
+  **HLR‑20.030‑015 (Unified ΔH% Structural‑Entropy Delta)**.  
+- Path‑A uses the **ISc‑level entropy model**, not the OB‑level model.
 
 ---
 
