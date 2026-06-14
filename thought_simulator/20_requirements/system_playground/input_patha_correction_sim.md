@@ -49,6 +49,8 @@ All 14 cases **PASS**, demonstrating that Path A is stable under a wide range of
 
 This section formalizes the behavior of each primitive in the Path‑A pipeline.
 
+For detail definitions of measurement metrics see [input_patha_correction_sim_appendix.md](input_patha_correction_sim_appendix.md)
+
 ---
 
 ## **2.1 InB — Input Basin**
