@@ -549,7 +549,11 @@ Confidence is **not** a probability of truth — it is a **structural‑support 
 
 ## **A.4.2 threshold**
 
-Thresholds in Path A are architectural tolerances, not empirical tuning parameters. They are derived from the TS‑20 invariants and from the structural properties of each MI_class.The  thresholds are qualitative (relative ordering) rather than quantitative (precise numeric values), and they apply uniformly across all inputs of a given MI_class. The 15 simulation cases demonstrate these thresholds; they do not determine them. No thresholds were adjusted to fit specific examples, and no example‑level tuning is permitted by the architecture.
+Thresholds in Path‑A are **architectural tolerances**, not empirical tuning parameters. They are derived from the **TS‑20 invariants** and from the **structural properties of each MI_class**. Thresholds are **qualitative** (relative ordering across MI_classes) rather than **quantitative** (precise numeric values), and they apply **uniformly** across all inputs of a given MI_class.
+
+The 15 simulation cases **illustrate** these thresholds; they do **not** determine them. No thresholds were adjusted to fit specific examples, and **example‑level tuning is prohibited** by the architecture.
+
+**Thresholds apply only to confidence; ΔH% is never thresholded directly.**
 
 `threshold ∈ [0,1]`
 
