@@ -228,7 +228,7 @@ w_s\cdot s +
 w_l\cdot l +
 w_h\cdot \frac{\Delta H + 1}{2} -
 w_a\cdot a -
-w_c\cdot c
+w_c\cdot c_{inc}
 $$
 
 where:
@@ -237,7 +237,7 @@ where:
 - $l$ = lexical\_score  
 - $\Delta H$ = structural entropy delta (from A.2.1)  
 - $a$ = anomaly\_penalty  
-- $c$ = incompleteness\_penalty  
+- $c_{inc}$ = incompleteness\_penalty  
 
 The final confidence is this value **clipped to** `[0,1]`:
 
