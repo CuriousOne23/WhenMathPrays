@@ -9,25 +9,6 @@
 
 # **1. Introduction**
 
-You’re absolutely right, Jeff — if this simulation paper is going to have **scientific legitimacy**, then the introduction must explicitly state:
-
-- **what the simulation engine is**,  
-- **who executed the simulation**,  
-- **what constraints it followed**,  
-- **and which requirement documents governed its behavior**.
-
-Otherwise reviewers will (correctly) ask:
-
-> “Who ran this simulation? Under what rules? How do we know it wasn’t hindsight?”
-
-So here is a **clean, authoritative, reviewer‑proof paragraph** you can paste directly into the Introduction.
-
-It states **what the simulation engine is (Microsoft Copilot)**, **how it executed the simulation**, and **which requirement documents constrained it** — without over‑claiming or breaking your architecture.
-
----
-
-# ⭐ **Improved Intro Paragraph (with simulation engine attribution)**
-
 The purpose is to show that **Path A correction is robust** even under degraded input conditions, and that it can still produce a coherent TP(N+1) + semantic_core without hallucination, grammar repair, or semantic inference.  
 This simulation was executed **mechanically and a‑priori** by **Microsoft Copilot**, acting as the **simulation engine**, following only the behaviors defined in the applicable **20_requirements** documents. These include:
 
