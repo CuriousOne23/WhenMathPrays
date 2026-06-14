@@ -1,5 +1,4 @@
-# Appendix for 
-[input_patha_correction_sim.md](input_patha_correction_sim.md])
+# Appendix for [input_patha_correction_sim.md](input_patha_correction_sim.md)
 
 # ------------------------------------------------------------
 # **Appendix A — Formal Definitions of Path‑A Scoring, Confidence, Thresholding, and TPU Fields**
