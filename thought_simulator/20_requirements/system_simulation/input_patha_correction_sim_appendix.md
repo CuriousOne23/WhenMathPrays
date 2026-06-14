@@ -59,19 +59,35 @@ Path A **never corrects** lexical anomalies; it only flags them.
 
 ---
 
-# **A.2 ΔH%, Confidence, and Threshold (ISc Stage)**
+### **ΔH% Definition (Path‑A Simulation)**  
+For each candidate, ISc computes ΔH% as the **normalized structural‑entropy delta** between the CE envelope and the ISc‑evaluated envelope:
 
-## **A.2.1 ΔH% — Hypothesis‑Mass Delta**
+$$
+\Delta H\% \;=\; \frac{H_{\text{before}} - H_{\text{after}}}{H_{\max}}
+$$
 
-`ΔH% ∈ [-1, +1]` (normalized)
+Where:
 
-A measure of **how much new, structurally supported information** the candidate adds relative to the intake envelope.
+- **$H_{\text{before}}$** = structural entropy of the CE envelope  
+  (missing slots, ambiguity, missing‑mass, structural warnings)
 
-- Positive $ΔH\\%$ → new information added  
-- Zero $ΔH\\%$ → pure ambiguity (no new mass)  
-- Negative $ΔH\\%$ → missing information (fragmentary input)
+- **$H_{\text{after}}$** = structural entropy after ISc scoring  
+  (post‑scoring stability, resolved structure, remaining ambiguity)
 
-This is **not** a probability — it is a **mass‑accounting metric**.
+- **$H_{\max}$** = MI‑class‑normalized maximum entropy for the case  
+  (fixed per MI_class; ensures ΔH% ∈ [-1, +1])
+
+### **Interpretation**
+- **Positive ΔH%** → structure became more stable (new supported mass added)  
+- **Zero ΔH%** → ambiguity preserved; no structural change  
+- **Negative ΔH%** → structure became less stable (fragmentary or missing mass)
+
+### **Notes**
+- ΔH% is **not** a probability.  
+- ΔH% is **not** derived from confidence.  
+- ΔH% is a **structural‑mass accounting metric**, consistent with  
+  **HLR‑20.030‑015 (Unified ΔH% Structural‑Entropy Delta)**.  
+- Path‑A uses the **ISc‑level entropy model**, not the OB‑level model.
 
 ---
 
