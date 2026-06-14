@@ -1193,42 +1193,45 @@ All affective intensifiers handled as MI_AFFECT with missing_mass retained.
 
 ---
 
-# **4. Summary Table**
+# **4. Summary Table (Updated with Case 15)**
 
-| # | Input (abbreviated)         | MI_class   | Cands | struct | lex  | ΔH%   | thresh | conf | commit_status           | Pass? |
-|---|-----------------------------|------------|-------|--------|------|-------|--------|------|-------------------------|-------|
-| 1 | Went store forgot wallet    | MI_INCOMP  | 2     | 0.62   | 0.40 | +0.03 | 0.45   | 0.55 | COMMITTED               | ✅    |
-| 2 | The mouse the cat chased    | MI_VAGUE   | 2     | 0.58   | 0.52 | 0.00  | 0.45   | 0.48 | COMMITTED_AMBIGUOUS     | ✅    |
-| 3 | I go store yesterday        | MI_NOISE   | 1     | 0.74   | 0.45 | +0.05 | 0.50   | 0.63 | COMMITTED_WITH_WARNINGS | ✅    |
-| 4 | John told Mark he was wrong | MI_VAGUE   | 2     | 0.70   | 0.60 | 0.00  | 0.45   | 0.50 | COMMITTED_AMBIGUOUS     | ✅    |
-| 5 | I didn't say you stole…     | MI_VAGUE   | 3     | 0.68   | 0.55 | 0.00  | 0.45   | 0.52 | COMMITTED_MULTI_TRACE   | ✅    |
-| 6 | Ugh this stupid thing…      | MI_AFFECT  | 1     | 0.80   | 0.70 | +0.04 | 0.50   | 0.70 | COMMITTED               | ✅    |
-| 7 | Because tired               | MI_INCOMP  | 1     | 0.40   | 0.30 | -0.02 | 0.35   | 0.40 | COMMITTED_MINIMAL       | ✅    |
-| 8 | I was late the car broke    | MI_INCOMP  | 2     | 0.72   | 0.65 | +0.03 | 0.50   | 0.60 | COMMITTED               | ✅    |
-| 9 | He go yesterday but…        | MI_NOISE   | 2     | 0.75   | 0.50 | +0.03 | 0.50   | 0.58 | COMMITTED_WITH_WARNINGS | ✅    |
-|10 | Fixing the car now          | MI_INCOMP  | 1     | 0.68   | 0.55 | +0.02 | 0.45   | 0.57 | COMMITTED_WITH_WARNINGS | ✅    |
-|11 | I am hiting the ball        | MI_NOISE   | 1     | 0.82   | 0.38 | +0.02 | 0.50   | 0.54 | COMMITTED_WITH_WARNINGS | ✅    |
-|12 | I am hhitting the ball      | MI_NOISE   | 1     | 0.82   | 0.32 | +0.01 | 0.50   | 0.51 | COMMITTED_WITH_WARNINGS | ✅    |
-|13 | I definately need help      | MI_NOISE   | 1     | 0.84   | 0.36 | +0.02 | 0.50   | 0.55 | COMMITTED_WITH_WARNINGS | ✅    |
-|14 | I typed hte wrong word      | MI_NOISE   | 1     | 0.83   | 0.34 | +0.02 | 0.50   | 0.53 | COMMITTED_WITH_WARNINGS | ✅    |
+| #  | Input (abbreviated)               | MI_class   | Cands | struct | lex  | ΔH%   | thresh | conf | commit_status               | Pass? |
+|----|-----------------------------------|------------|-------|--------|------|-------|--------|------|-----------------------------|-------|
+| 1  | Went store forgot wallet          | MI_INCOMP  | 2     | 0.62   | 0.40 | +0.03 | 0.45   | 0.55 | COMMITTED                   | ✅    |
+| 2  | The mouse the cat chased          | MI_VAGUE   | 2     | 0.58   | 0.52 | 0.00  | 0.45   | 0.48 | COMMITTED_AMBIGUOUS         | ✅    |
+| 3  | I go store yesterday              | MI_NOISE   | 1     | 0.74   | 0.45 | +0.05 | 0.50   | 0.63 | COMMITTED_WITH_WARNINGS     | ✅    |
+| 4  | John told Mark he was wrong       | MI_VAGUE   | 2     | 0.70   | 0.60 | 0.00  | 0.45   | 0.50 | COMMITTED_AMBIGUOUS         | ✅    |
+| 5  | I didn't say you stole…           | MI_VAGUE   | 3     | 0.68   | 0.55 | 0.00  | 0.45   | 0.52 | COMMITTED_MULTI_TRACE       | ✅    |
+| 6  | Ugh this stupid thing…            | MI_AFFECT  | 1     | 0.80   | 0.70 | +0.04 | 0.50   | 0.70 | COMMITTED                   | ✅    |
+| 7  | Because tired                     | MI_INCOMP  | 1     | 0.40   | 0.30 | -0.02 | 0.35   | 0.40 | COMMITTED_MINIMAL           | ✅    |
+| 8  | I was late the car broke          | MI_INCOMP  | 2     | 0.72   | 0.65 | +0.03 | 0.50   | 0.60 | COMMITTED                   | ✅    |
+| 9  | He go yesterday but…              | MI_NOISE   | 2     | 0.75   | 0.50 | +0.03 | 0.50   | 0.58 | COMMITTED_WITH_WARNINGS     | ✅    |
+|10  | Fixing the car now                | MI_INCOMP  | 1     | 0.68   | 0.55 | +0.02 | 0.45   | 0.57 | COMMITTED_WITH_WARNINGS     | ✅    |
+|11  | I am hiting the ball              | MI_NOISE   | 1     | 0.82   | 0.38 | +0.02 | 0.50   | 0.54 | COMMITTED_WITH_WARNINGS     | ✅    |
+|12  | I am hhitting the ball            | MI_NOISE   | 1     | 0.82   | 0.32 | +0.01 | 0.50   | 0.51 | COMMITTED_WITH_WARNINGS     | ✅    |
+|13  | I definately need help            | MI_NOISE   | 1     | 0.84   | 0.36 | +0.02 | 0.50   | 0.55 | COMMITTED_WITH_WARNINGS     | ✅    |
+|14  | I typed hte wrong word            | MI_NOISE   | 1     | 0.83   | 0.34 | +0.02 | 0.50   | 0.53 | COMMITTED_WITH_WARNINGS     | ✅    |
+|15  | He totally destroyed her…         | MI_AFFECT  | 2     | 0.78   | 0.41 | +0.38 | 0.50   | 0.56 | COMMITTED_WITH_AFFECT_FLAGS | ✅    |
 
 ---
 
-# **5. Cross‑Case Observations**
+# **5. Cross‑Case Observations (Updated)**
 
 ### **MI_class Distribution**
 - **MI_INCOMP** (Cases 1, 7, 8, 10)  
-  Missing slots dominate structural failure modes.  
-  All committed with `missing_mass` accounting.
+  Missing slots dominate structural failure modes.
 
 - **MI_VAGUE** (Cases 2, 4, 5)  
-  Ambiguity preserved; `$ΔH\% = 0.00$` in all cases — correct for pure ambiguity.
+  Ambiguity preserved; ΔH% = 0.00 across all.
 
 - **MI_NOISE** (Cases 3, 9, 11, 12, 13, 14)  
-  Surface‑level anomalies absorbed by structure; lexical penalties applied.
+  Surface anomalies handled with lexical penalties.
+
+- **MI_AFFECT** (Cases 6, 15)  
+  Affective intensifiers preserved; metaphorical predicates not literalized.
 
 ### **Structural Stability**
-Across all 14 cases, Path A:
+Across all 15 cases, Path A:
 
 - Never repairs grammar  
 - Never inserts missing words  
@@ -1238,14 +1241,14 @@ Across all 14 cases, Path A:
 - Always commits exactly what the primitives produce  
 
 ### **TPU Behavior**
-- All 14 cases **COMMITTED**  
-- Ambiguous cases → `COMMITTED_AMBIGUOUS`  
-- Multi‑trace negation → `COMMITTED_MULTI_TRACE`  
-- Fragmentary input → `COMMITTED_MINIMAL`  
-- Lexical anomalies → `COMMITTED_WITH_WARNINGS`  
+- All 15 cases **COMMITTED**  
+- Ambiguous → `COMMITTED_AMBIGUOUS`  
+- Multi‑trace → `COMMITTED_MULTI_TRACE`  
+- Fragmentary → `COMMITTED_MINIMAL`  
+- Noise → `COMMITTED_WITH_WARNINGS`  
+- Affective → `COMMITTED_WITH_AFFECT_FLAGS`  
 
 ### **Overall Conclusion**
-Path A is **robust**, **stable**, and **predictable** under degraded human input.  
-It preserves ambiguity, respects missing information, and commits only what is structurally extractable — exactly as required by the TS‑20 architecture.
+Path A remains **robust**, **stable**, and **predictable** across all MI classes, including the newly added **MI_AFFECT** case. The pipeline preserves ambiguity, respects missing information, and commits only what is structurally extractable — exactly as required by TS‑20.
 
 ---
