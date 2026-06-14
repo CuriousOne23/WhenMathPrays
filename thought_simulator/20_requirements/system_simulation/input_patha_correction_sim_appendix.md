@@ -148,24 +148,6 @@ Where:
 
 ---
 
-## **A.2.2 threshold**
-
-Thresholds in Path A are architectural tolerances, not empirical tuning parameters. They are derived from the TS‑20 invariants and from the structural properties of each MI_class.The  thresholds are qualitative (relative ordering) rather than quantitative (precise numeric values), and they apply uniformly across all inputs of a given MI_class. The 15 simulation cases demonstrate these thresholds; they do not determine them. No thresholds were adjusted to fit specific examples, and no example‑level tuning is permitted by the architecture.
-
-`threshold ∈ [0,1]`
-
-The **minimum confidence required for TPU commit**.
-
-Thresholds vary by MI_class:
-
-- `MI_INCOMP` → lower thresholds (e.g., $0.35$)  
-- `MI_NOISE` → medium thresholds (e.g., $0.50$)  
-- `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., $0.45$)  
-
-Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
-
----
-
 # **A.2.3 confidence*
 
 `confidence ∈ [0,1]`
@@ -276,7 +258,23 @@ All components normalized to [0,1].
 ### **Interpretation**
 
 - Higher (c) → more missing information → lower confidence  
-- Path‑A **never fills missing mass**  
+- Path‑A **never fills missing mass**
+
+## **A.2.6 threshold**
+
+Thresholds in Path A are architectural tolerances, not empirical tuning parameters. They are derived from the TS‑20 invariants and from the structural properties of each MI_class.The  thresholds are qualitative (relative ordering) rather than quantitative (precise numeric values), and they apply uniformly across all inputs of a given MI_class. The 15 simulation cases demonstrate these thresholds; they do not determine them. No thresholds were adjusted to fit specific examples, and no example‑level tuning is permitted by the architecture.
+
+`threshold ∈ [0,1]`
+
+The **minimum confidence required for TPU commit**.
+
+Thresholds vary by MI_class:
+
+- `MI_INCOMP` → lower thresholds (e.g., $0.35$)  
+- `MI_NOISE` → medium thresholds (e.g., $0.50$)  
+- `MI_VAGUE` → ambiguity‑tolerant thresholds (e.g., $0.45$)  
+
+Thresholds prevent Path A from committing structurally invalid or unsupported propositions.
 
 ---
 
