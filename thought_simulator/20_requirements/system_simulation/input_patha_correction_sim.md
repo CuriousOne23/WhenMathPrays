@@ -1089,6 +1089,110 @@ corrected to 'the'.
 
 ---
 
+# **CASE 15 — Affective Distortion (MI_AFFECT)**  
+**Input:** `He totally destroyed her in that meeting, she was absolutely humiliated.`
+
+### **InB**
+```
+tokens:                [He, totally, destroyed, her, in, that, meeting, ,, she,
+                        was, absolutely, humiliated, .]
+POS:                   [PRON, ADV, VERB, PRON, ADP, DET, NOUN, PUNCT, PRON,
+                        AUX, ADV, ADJ/STATE, PUNCT]
+intake_envelope_status: valid_degraded_affective
+```
+
+### **IIInB**
+```
+anomaly_detected:   affective-intensifier pattern ('totally', 'absolutely');
+                    predicate 'destroyed' flagged as non-literal/affective
+MI_class:           MI_AFFECT
+structural_cues:    C1 = He destroyed her in that meeting
+                    C2 = she was humiliated
+                    both clauses structurally well-formed; affective load high
+```
+
+### **CEx**
+```
+candidate_count:    2
+
+cand1 (event):
+  predicate:        destroyed   (affective/metaphorical)
+  agent:            He
+  patient:          her
+  context:          meeting
+  affect_mod:       totally
+  missing_mass:     [ACTION_DETAIL, OUTCOME_DETAIL]
+
+cand2 (state):
+  predicate:        humiliated  (affective state)
+  experiencer:      she
+  affect_mod:       absolutely
+  missing_mass:     [CAUSE_DETAIL]
+```
+
+### **CE**
+```
+ENV_1 (event):
+  structural_score: 0.78
+  lexical_score:    0.41
+  warnings:         [AFFECTIVE_METAPHOR — 'destroyed' non-literal]
+
+ENV_2 (state):
+  structural_score: 0.81
+  lexical_score:    0.47
+  warnings:         [AFFECTIVE_STATE — 'humiliated' intensity unclear]
+```
+
+### **ISc**
+```
+ENV_1:
+  ΔH%:        +0.38
+  threshold:   0.50
+  confidence:  0.56   → commit_with_affect_flag
+
+ENV_2:
+  ΔH%:        +0.44
+  threshold:   0.50
+  confidence:  0.59   → commit_with_affect_flag
+```
+
+### **Anomaly Handling**
+
+| Primitive | Anomaly Detected                         | Action Taken                                                     |
+|-----------|-------------------------------------------|------------------------------------------------------------------|
+| InB       | affective intensifiers                    | passed through; tagged ADV[affective]                            |
+| IIInB     | metaphorical predicate 'destroyed'        | MI_AFFECT assigned; literal interpretation suppressed            |
+| CEx       | non-literal predicate + missing details   | extracted with missing_mass fields                               |
+| CE        | affective load                            | lexical_score penalty; AFFECTIVE_METAPHOR / AFFECTIVE_STATE tags |
+| ISc       | high affect → uncertainty                 | ΔH% moderate; confidence lifted by structural integrity           |
+
+### **TPU Commit**
+```
+commit_id:     PATHA-SIM-C15-001
+semantic_core:
+  prop[0]: { predicate: negative_interaction,
+             agent: He,
+             patient: her,
+             context: meeting,
+             affect_flag: true,
+             missing_mass: [ACTION_DETAIL, OUTCOME_DETAIL] }
+
+  prop[1]: { predicate: humiliation_state,
+             experiencer: she,
+             affect_flag: true,
+             missing_mass: [CAUSE_DETAIL] }
+
+flags:         [MI_AFFECT, AFFECTIVE_LANGUAGE_USED]
+commit_status: COMMITTED_WITH_AFFECT_WARNINGS
+```
+
+### **Assessment:** ✅ **PASS**  
+Affective language preserved without literalization.  
+Semantic_core commits only stable social‑interaction and emotional‑state propositions.  
+All affective intensifiers handled as MI_AFFECT with missing_mass retained.
+
+---
+
 # **4. Summary Table**
 
 | # | Input (abbreviated)         | MI_class   | Cands | struct | lex  | ΔH%   | thresh | conf | commit_status           | Pass? |
