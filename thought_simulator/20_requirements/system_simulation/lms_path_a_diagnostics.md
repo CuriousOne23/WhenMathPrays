@@ -1,5 +1,5 @@
 # LMS Path A Diagnostics
-**Authors:** Grok (based on logical simulation of v3.3 test suite)  
+**Authors:** CuriousOne23, Grok, Copilot (based on logical simulation of v3.3 test suite)  
 **Version:** 1.0  
 **Date:** June 2026  
 
