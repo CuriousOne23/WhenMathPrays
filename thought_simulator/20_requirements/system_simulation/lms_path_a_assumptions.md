@@ -1,6 +1,6 @@
 # LMS Path A Assumptions
 **Authors:** CuriousOne23, Grok, Copilot  
-**Version:** 1.0  
+**Version:** 1.2  
 **Date:** June 2026  
 **Scope:** Foundational assumptions for the Path A (pre-meaning structural pipeline) implementation. These assumptions support the requirements in 20.10, 20.30, 20.31, 20.37, 20.40, 20.50, 20.106, 20.131, and 20.165, and the v3.3 test suite.
 
@@ -37,15 +37,16 @@ This document serves as a living reference for evaluation, coding, prove-out, an
 **ΔH% Contribution (simplified structural entropy delta)**
 
 $$
-\Delta H\% = \frac{H_{\text{after}} - H_{\text{before}}}{H_{\text{max}}} \times 100
+\Delta H\\% = \frac{H_{after} - H_{before}}{H_{max}} \cdot 100
 $$
 
-(used in OB/TR for bounded contribution tracking; normalized per 20.30/20.95)
+(used in OB/TR for bounded contribution tracking; normalized per 20.30/20.95.  
+**Important Note:** When combining with TP, the TP must *subtract* the ΔH% contribution (TP subtracts ΔH%). Minus signs are easily lost during merging — always treat incoming ΔH% as a value that TP subtracts to maintain correct structural entropy accounting.)
 
 **Routing Fan-out Score (RB)**
 
 $$
-\text{FanOutScore} = \min\left( \text{baseScore} \times \text{weightFactor}, \text{routing.fanout.max_per_tp} \right)
+\text{FanOutScore} = \min\left( \text{baseScore} \cdot \text{weightFactor}, \text{routing.fanout.max}_{per\\_tp} \right)
 $$
 
 **Curvature Deviation (DCB)**
@@ -162,3 +163,4 @@ All algorithms, formulas, and thresholds are designed for deterministic, auditab
 ---
 
 **End of Document**  
+This assumptions document provides the technical foundation for coding, prove-out, and testing of Path A. It will be updated as implementation insights emerge.
