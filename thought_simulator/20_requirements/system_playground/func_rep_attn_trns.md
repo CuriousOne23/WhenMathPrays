@@ -503,9 +503,382 @@ $$
 
 ---
 
-## 5. Feasibility Argument
-Why each module is implementable with deterministic operators.
+# **## 5. Feasibility Argument**
 
-## 6. Micro-Examples
-Short, minimal examples showing the pipeline performing the same functional work as attention.
+This section establishes that the OB → RB → TE → RB → OB pipeline is not only a functional replacement for attention + Transformer layers, but also **feasible to implement** using deterministic, modular components.  
+The goal is to show that each module’s required behavior can be satisfied without relying on emergent, opaque, or unbounded mechanisms.
+
+---
+
+## **5.1 Feasibility Criterion**
+
+A module is considered *feasible* if:
+
+1. Its **inputs** and **outputs** are well‑defined  
+2. Its **responsibilities** can be satisfied by deterministic operators  
+3. Its **invariants** can be enforced explicitly  
+4. Its **failure modes** are detectable and recoverable  
+5. Its **computational cost** is bounded and predictable  
+
+The following subsections evaluate each module under this criterion.
+
+---
+
+## **5.2 OB (Object Basin) Feasibility**
+
+OB requires:
+
+- token grouping  
+- boundary detection  
+- identity assignment  
+- traceability  
+
+These are all **deterministic operations** that can be implemented using:
+
+- lexical cues  
+- syntactic heuristics  
+- statistical segmentation  
+- rule‑based boundary detection  
+- stable ID generation  
+
+OB does **not** require global context or emergent behavior.  
+Its responsibilities are local and linear in cost.
+
+**Conclusion:** OB is feasible.
+
+---
+
+## **5.3 RB (Routing Basin) Feasibility**
+
+RB requires:
+
+- dependency detection  
+- sparse graph construction  
+- routing schedule generation  
+
+These are standard operations in:
+
+- dependency parsing  
+- graph construction  
+- scheduling algorithms  
+- topological ordering  
+
+All can be implemented deterministically with:
+
+- bounded fan‑out  
+- explicit edge creation rules  
+- cycle detection  
+- priority‑based routing  
+
+RB does **not** require global all‑to‑all interactions.
+
+**Conclusion:** RB is feasible.
+
+---
+
+## **5.4 TE (Local Interpreter) Feasibility**
+
+TE requires:
+
+- local interpretation  
+- reference resolution  
+- semantic role assignment  
+- state updates  
+
+These are the same operations performed by:
+
+- classical NLP pipelines  
+- semantic parsers  
+- rule‑based interpreters  
+- local inference engines  
+
+TE operates on **bounded context** of size $k$ with $k \ll n$, making its cost predictable.
+
+TE does **not** require global recomputation or emergent behavior.  
+It only needs to update the routed object and its immediate dependencies.
+
+**Conclusion:** TE is feasible.
+
+---
+
+## **5.5 RB₂ (Integration Routing) Feasibility**
+
+RB₂ requires:
+
+- propagating updates along dependency edges  
+- maintaining global consistency  
+- avoiding unnecessary recomputation  
+
+These are standard operations in:
+
+- incremental graph updates  
+- constraint propagation  
+- dependency‑driven refresh systems  
+- incremental compilers  
+
+RB₂ operates on a **sparse graph**, ensuring bounded cost.
+
+**Conclusion:** RB₂ is feasible.
+
+---
+
+## **5.6 OB₂ (Final Consolidation) Feasibility**
+
+OB₂ requires:
+
+- producing a stable final representation  
+- preserving identity  
+- ensuring traceability  
+- guaranteeing internal consistency  
+
+These are standard operations in:
+
+- structured data consolidation  
+- snapshot generation  
+- state serialization  
+- audit‑friendly data models  
+
+OB₂ is a **linear pass** with no global recomputation.
+
+**Conclusion:** OB₂ is feasible.
+
+---
+
+## **5.7 Feasibility of the Full Pipeline**
+
+Each module:
+
+- has deterministic inputs and outputs  
+- has bounded computational cost  
+- uses well‑understood algorithms  
+- avoids global all‑to‑all operations  
+- maintains explicit structure  
+- supports traceability and debugging  
+
+Therefore, the full OB → RB → TE → RB → OB pipeline is **feasible to implement** using standard algorithmic components.
+
+---
+
+## **5.8 Summary of Feasibility Argument**
+
+- No module requires emergent behavior  
+- No module requires global attention  
+- No module requires unbounded computation  
+- All modules rely on well‑known algorithmic primitives  
+- The pipeline is modular, deterministic, and auditable  
+- The computational cost is linear or near‑linear  
+
+Therefore:
+
+$$
+\text{Functional replacement} \;\;+\;\; \text{deterministic modules} \;\; \Rightarrow \;\; \text{feasible architecture.}
+$$
+
+---
+
+# **## 6. Micro‑Examples**
+
+This section provides small, concrete examples showing how the OB → RB → TE → RB → OB pipeline performs the same functional roles as attention + Transformer layers.  
+The goal is not to demonstrate full linguistic competence, but to illustrate **how the pipeline handles interpretation, routing, and integration** in a structured manner.
+
+Each example is intentionally minimal.
+
+---
+
+# **### 6.1 Example 1: Simple Reference Resolution**
+
+**Input sentence:**  
+```
+Alice dropped the glass. It shattered.
+```
+
+### **OB (Initial Grouping)**  
+Objects identified:
+
+- $O_1$: “Alice”  
+- $O_2$: “dropped the glass”  
+- $O_3$: “It”  
+- $O_4$: “shattered”
+
+### **RB (Forward Routing)**  
+Dependencies detected:
+
+- $O_3$ depends on $O_2$ (candidate antecedent: “glass”)  
+- $O_4$ depends on $O_3$ (subject needed)
+
+Graph (simplified):
+
+$$
+O_1 \rightarrow O_2 \rightarrow O_3 \rightarrow O_4
+$$
+
+### **TE (Local Interpretation)**  
+- TE resolves $O_3$ (“It”) → refers to “glass”  
+- TE updates $O_4$ → subject = “glass”
+
+### **RB₂ (Integration Routing)**  
+Propagate updates:
+
+- $O_4$ now inherits the identity of “glass”
+
+### **OB₂ (Final Consolidation)**  
+Final interpreted structure:
+
+- Event: glass shattered  
+- Cause: Alice dropped the glass  
+
+**Functional match:**  
+A Transformer would use attention to route “It” → “glass”.  
+The pipeline does the same via explicit routing and local interpretation.
+
+---
+
+# **### 6.2 Example 2: Long‑Range Dependency**
+
+**Input sentence:**  
+```
+The book that John said Mary liked was missing.
+```
+
+### **OB**  
+Objects:
+
+- $O_1$: “book”  
+- $O_2$: “John said”  
+- $O_3$: “Mary liked [book]”  
+- $O_4$: “was missing”
+
+### **RB**  
+Dependencies:
+
+- $O_3$ depends on $O_1$ (object of “liked”)  
+- $O_4$ depends on $O_1$ (subject of “was missing”)  
+- $O_3$ depends on $O_2$ (reported speech)
+
+Graph:
+
+$$
+O_1 \rightarrow \{O_3, O_4\}, \quad O_2 \rightarrow O_3
+$$
+
+### **TE**  
+- TE resolves the implicit object of “liked” → “book”  
+- TE assigns “book” as the subject of “was missing”
+
+### **RB₂**  
+Propagate updates to $O_4$.
+
+### **OB₂**  
+Final structure:
+
+- Entity: book  
+- Properties: liked by Mary, mentioned by John, missing
+
+**Functional match:**  
+Transformers handle this via multi‑head attention across layers.  
+The pipeline handles it via sparse dependency routing.
+
+---
+
+# **### 6.3 Example 3: Ambiguity Resolution**
+
+**Input sentence:**  
+```
+Sam saw the man with the telescope.
+```
+
+### **OB**  
+Objects:
+
+- $O_1$: “Sam”  
+- $O_2$: “saw”  
+- $O_3$: “the man”  
+- $O_4$: “with the telescope”
+
+### **RB**  
+Two possible attachments:
+
+1. $O_4$ modifies $O_3$ (the man has the telescope)  
+2. $O_4$ modifies $O_2$ (Sam used the telescope)
+
+RB marks $O_4$ as ambiguous and routes it to TE with both candidates.
+
+### **TE**  
+TE evaluates local context:
+
+- If the verb “saw” commonly takes an instrument phrase → attach to $O_2$  
+- If the noun “man” commonly takes a modifier → attach to $O_3$
+
+TE selects one interpretation (or preserves ambiguity if unresolved).
+
+### **RB₂**  
+Propagate the chosen attachment.
+
+### **OB₂**  
+Final structure reflects the resolved (or explicitly ambiguous) interpretation.
+
+**Functional match:**  
+Transformers implicitly resolve ambiguity through learned attention patterns.  
+The pipeline resolves it through explicit routing and local evaluation.
+
+---
+
+# **### 6.4 Example 4: Causal Inference (Minimal)**
+
+**Input sentence:**  
+```
+It rained. The streets were wet.
+```
+
+### **OB**  
+Objects:
+
+- $O_1$: “rained”  
+- $O_2$: “streets were wet”
+
+### **RB**  
+Potential causal link:
+
+$$
+O_1 \rightarrow O_2
+$$
+
+### **TE**  
+TE evaluates:
+
+- common causal pattern: rain → wet streets  
+- temporal adjacency  
+- world knowledge (optional)
+
+TE marks $O_1$ as a plausible cause of $O_2$.
+
+### **RB₂**  
+Propagate causal annotation.
+
+### **OB₂**  
+Final structure includes:
+
+- Event: rain  
+- Effect: wet streets  
+- Relation: causal
+
+**Functional match:**  
+Transformers approximate this via distributed pattern matching.  
+The pipeline does it via explicit evaluation of causal templates.
+
+---
+
+# **### 6.5 Summary of Micro‑Examples**
+
+Across all examples, the pipeline performs:
+
+- object formation  
+- dependency routing  
+- local interpretation  
+- integration  
+- consolidation  
+
+These are the same **functional roles** performed by attention + Transformer layers, but expressed through **explicit, structured operations** rather than global, dense attention.
+
+---
 
