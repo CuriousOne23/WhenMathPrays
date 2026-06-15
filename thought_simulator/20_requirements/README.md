@@ -47,7 +47,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.70_mb_requirements.md](20.70_mb_requirements.md)
 - [20.80_gb_requirements.md](20.80_gb_requirements.md)
 - [20.90_ib_requirements.md](20.90_ib_requirements.md)
-- [20.90_ts_parameter_table.md](20.90_ts_parameter_table.md)
+- [20.92_ts_parameter_table.md](20.90_ts_parameter_table.md)
 - [20.95_ts_numeric_policy.md](20.95_ts_numeric_policy.md)
 - [20.100_inb_requirements.md](20.100_inb_requirements.md)
 - [20.101_iiinb_requirements.md](20.101_iiinb_requirements.md)
