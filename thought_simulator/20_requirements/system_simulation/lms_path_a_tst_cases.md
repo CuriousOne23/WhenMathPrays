@@ -217,36 +217,258 @@ Ensure Path A handles clause boundaries, sequencing, and anaphora cues.
 
 ---
 
-(The remaining tests 4–10 follow the same pattern with surgical enhancements applied identically: expanded TR fields, strengthened invariants with read-only/determinism notes, and strictly geometric DCB language. Full file continuity preserved.)
+**Here are Tests 4 through 10**, written in the exact same style and level of detail as the first three tests I provided earlier. You can copy-paste them directly after Test 3 in your `lms_cognition_tst_cases.md` file.
+
+---
 
 # **TEST 4 — Ambiguity Detection (No Resolution)**
-... (original content kept + invariants strengthened with “No smoothing, read-only boundaries, no resolution”)
+### **Purpose**
+Ensure Path A flags ambiguity but does not resolve it.
+### **Input**
+> “The engineer inspected the panel near the generator, but it was still overheating.”
+### **Expected Path‑A Output**
+**OB**  
+- Entities: engineer, panel, generator  
+- Pronoun “it” flagged ambiguous  
+- `messy_tags`: preserved (if present)  
+- `tr_needs_update = true`
+
+**TE**  
+- Verbs: inspected, overheating  
+- Structural relations only
+
+**TR**  
+- `logical_structure = "ambiguous_reference"`  
+- `routing_semantics = {ambiguous_pronoun:"it", candidates:["panel","generator"]}` (canonical ordering)  
+- `epistemic_shading = ambiguous`, `tension = mild`  
+- `canonical_ordering = preserved`  
+- `tr_needs_update = false` (cleared)
+
+**RB**  
+- Routes to DCB for geometric hint only  
+- Does NOT resolve ambiguity
+
+### **Invariants**
+- No meaning leakage  
+- No smoothing or resolution  
+- Ambiguity and messy tags preserved  
+- Read-only boundaries upheld  
+- Deterministic replay and canonical ordering
+
+### **Metrics**
+- Ambiguity Detection Recall  
+- False Positive Rate
+
+### **HLRs**
+20.17 messy preservation, 20.37 structural separation
+
+---
 
 # **TEST 5 — Modifier Importance Weighting**
-... (TR importance_weights + canonical ordering note added)
+### **Purpose**
+Ensure Path A identifies critical vs. decorative modifiers.
+### **Input**
+> “The corroded steel pipe in the basement is leaking rapidly.”
+### **Expected Path‑A Output**
+**OB**  
+- Entity: pipe  
+- Modifiers: “corroded” (high), “steel” (medium), “basement” (low)  
+- `tr_needs_update = true`
+
+**TE**  
+- Verb: leaking  
+- Modifier “rapidly” → high importance (behavioral)
+
+**TR**  
+- `routing_semantics` includes importance hints  
+- `importance_weights = {"corroded": high, "rapidly": high, "steel": medium, "basement": low}` (Q32.32 placeholders)  
+- `modifier_types = {structural, behavioral, material, location}`  
+- `epistemic_shading = neutral`  
+- `canonical_ordering = preserved`  
+- `tr_needs_update = false`
+
+### **Invariants**
+- No semantic inference  
+- Deterministic weighting and ordering  
+- Read-only boundaries upheld
+
+### **Metrics**
+- Importance Weight Correlation  
+- Critical Modifier Recall
+
+### **HLRs**
+20.40, 20.37
+
+---
 
 # **TEST 6 — RB Routing Correctness**
-... (routing trace kept; added `tr_needs_update` state at each step)
+### **Purpose**
+Ensure RB routes correctly between OB → TE → TR → DCB.
+### **Input**
+> “The unstable manifold shifted unexpectedly during the test.”
+### **Expected Path‑A Routing Trace**
+1. OB extracts entities + modifiers; `tr_needs_update=true`  
+2. RB sees verb missing → TE  
+3. TE extracts “shifted”  
+4. RB sees unresolved modifiers → OB  
+5. OB attaches “unstable”, “unexpectedly”  
+6. RB → TR routine  
+7. TR organizes structure; clears `tr_needs_update`  
+8. RB → DCB for geometric hint (if curvature deviation detected)
+
+### **Invariants**
+- No infinite loops  
+- Deterministic routing and TR gating  
+- Canonical ordering preserved  
+- Read-only boundaries upheld
+
+### **Metrics**
+- Routing Accuracy  
+- Loop Detection Rate  
+- Unnecessary Routing Rate
+
+### **HLRs**
+20.37 §5–7, 20.50
+
+---
 
 # **TEST 7 — Token‑Level Nonsemantic Handling**
-... (original + canonical ordering)
+### **Purpose**
+Ensure Path A works even when input has no semantics.
+### **Input**
+> ["obj7", "relX", "tokenA", "verbQ", "tokenA"]
+### **Expected Path‑A Output**
+**OB**  
+- Entities: obj7, tokenA  
+- Cycle detected for tokenA  
+- `messy_tags`: preserved  
+- `tr_needs_update = true`
+
+**TE**  
+- Verb: verbQ  
+- Relation: (obj7 → verbQ → tokenA)
+
+**TR**  
+- `logical_structure = "token_graph"`  
+- `cycle_flags = ["tokenA"]`  
+- `canonical_ordering = preserved`  
+- `tr_needs_update = false`
+
+### **Invariants**
+- No smoothing  
+- No semantic inference  
+- Deterministic token grouping and ordering
+
+### **Metrics**
+- Cycle Detection Accuracy  
+- Token Grouping Consistency
+
+### **HLRs**
+20.40 token handling
+
+---
 
 # **TEST 8 — DCB Geometric Hints (Strictly Ephemeral)**
-**DCB**  
-- Emits ephemeral geometric hint: curvature_shift, deviation flag (strictly geometric)  
-- No domain inference, no semantics  
+### **Purpose**
+Ensure DCB emits ephemeral geometric hints without meaning.
+### **Input**
+> “The relational basin drift increased after the attractor weakened.”
+### **Expected Path‑A Output**
+**OB**  
+- Entities: relational basin drift, attractor  
+- `tr_needs_update = true`
 
-**TR** consumes hint into `routing_semantics` (when gated).  
-(Invariants: Ephemeral, strictly geometric, no leakage)
+**TE**  
+- Verbs: increased, weakened
+
+**DCB**  
+- Emits ephemeral geometric hint: curvature_shift / deviation flag (strictly geometric)  
+- No domain inference, no semantics
+
+**TR**  
+- Consumes hint (when gated) into `routing_semantics` (geometric only)  
+- `epistemic_shading = neutral` (or geometric hint)  
+- `canonical_ordering = preserved`  
+- `tr_needs_update = false`
+
+### **Invariants**
+- DCB strictly geometric and ephemeral  
+- No meaning leakage  
+- Events consumed once then discarded  
+- Read-only boundaries and determinism upheld
+
+### **Metrics**
+- Geometric Hint Detection  
+- No semantic drift
+
+### **HLRs**
+20.106, 20.165, 20.37 §4.4
+
+---
 
 # **TEST 9 — No Meaning Leakage**
-... (original kept, invariants reinforced)
+### **Purpose**
+Ensure Path A never assigns meaning.
+### **Input**
+> “The manifold responded differently when the boundary conditions changed.”
+### **Expected Path‑A Output**
+- Entities: manifold, boundary conditions  
+- Verbs: responded, changed  
+- Relations: structural only  
+- Meaning fields: **empty**  
+- No interpretation of “differently”  
+- `epistemic_shading = neutral`, `tension = none`  
+- `canonical_ordering = preserved`
+
+### **Invariants**
+- Meaning Leakage Rate = 0  
+- No smoothing  
+- Deterministic replay and read-only boundaries
+
+### **Metrics**
+- Meaning Leakage Rate  
+- Semantic Drift Rate
+
+### **HLRs**
+20.10 structural/semantic separation
+
+---
 
 # **TEST 10 — Path A → Path B Readiness Check**
+### **Purpose**
+Ensure Path A produces a complete structure that Path B can consume.
+### **Input**
+> “When the cooling array clogged, the airflow dropped and the patio overheated.”
+### **Expected Path‑A Output**
+**OB**  
+- Entities: cooling array, airflow, patio
+
+**TE**  
+- Verbs: clogged, dropped, overheated  
+- Relations: complete chain
+
 **TR**  
 - `logical_structure = "multi_event_chain"`  
-- `sequence = ["clogged","dropped","overheated"]`  
-- `ready_for_path_B = true` (complete structural substrate for `mtp_update`)
+- `sequence = ["clogged","dropped","overheated"]` (canonical)  
+- No unresolved references  
+- `ready_for_path_B = true`  
+- `canonical_ordering = preserved`  
+- `tr_needs_update = false`
+
+### **Invariants**
+- No unresolved references  
+- No missing structural fields  
+- Deterministic replay and full canonical ordering
+
+### **Metrics**
+- Completeness Score  
+- Consistency Score  
+- Unresolved Reference Count
+
+### **HLRs**
+20.30 §3–4, 20.37
+
+---
 
 **Invariants**: No unresolved references, full canonical ordering, deterministic replay.
 
@@ -258,5 +480,3 @@ Ensure Path A handles clause boundaries, sequencing, and anaphora cues.
 - Ready for 40-series playground harness.
 
 ---
-
-**This is the surgically refined version** — all original content and detail preserved, with targeted enhancements for precision and alignment. Paste directly into GitHub. Let me know if you need the full expanded file (with tests 4-10 fully written out) or the JSON suite next. Ready to proceed!
