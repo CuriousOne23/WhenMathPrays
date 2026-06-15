@@ -1,0 +1,1 @@
+# LMS Path A Assumptions
