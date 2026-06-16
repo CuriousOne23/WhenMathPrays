@@ -352,6 +352,132 @@ TS‑level concepts are invariants, not execution units, but we can still expres
 
 ---
 
+# **## 6. OB‑Regions (Orthogonal Extraction Regions)**
+
+**OB‑Regions** are optional, parallelizable clusters of OB‑prm instances that operate on the **same TP** to extract **orthogonal semantic slices**.  
+They provide safe parallelism inside Path A without introducing TP‑splitting, entropy fragmentation, or merge‑tree complexity.
+
+### **6.1 Definition**
+
+An **OB‑Region (OBR‑prc)** is a *parallel fan‑out stage* in Path A:
+
+- The **same TP** is provided as input to each OB‑prm in the region.  
+- Each OB‑prm extracts a **different, orthogonal semantic dimension**.  
+- OB‑prms in a region **do not modify the TP**.  
+- OB‑prms in a region **do not spawn new TPs**.  
+- OB‑prms in a region **do not require semantic merging** with each other.
+
+### **6.2 Purpose**
+
+OB‑Regions allow Path A to:
+
+- extract multiple semantic dimensions in parallel,  
+- reduce latency,  
+- maintain deterministic semantics,  
+- avoid the complexity of TP splitting.
+
+### **6.3 Examples of OB‑Region Lanes**
+
+Typical OB‑prm lanes inside an OB‑Region include:
+
+- **OB‑intent** — extracts user intent  
+- **OB‑topic** — extracts topic domain  
+- **OB‑constraints** — extracts explicit constraints  
+- **OB‑tone** — extracts affective tone  
+- **OB‑entities** — extracts named entities and referents  
+- **OB‑temporal** — extracts temporal references  
+- **OB‑spatial** — extracts spatial references  
+
+These lanes are **orthogonal**: each extracts a different semantic slice and does not depend on the others.
+
+### **6.4 Execution Semantics**
+
+- TS fans out the TP to all OB‑prms in the region.  
+- All OB‑prms run **in parallel** or **serially** depending on implementation.  
+- TS waits until **all OB‑prms in the region complete**.  
+- Their outputs are collected for MTP assembly.
+
+### **6.5 No TP Splitting**
+
+OB‑Regions **do not**:
+
+- split TPs,  
+- create new TPs,  
+- modify the TP,  
+- require conflict resolution.
+
+They are strictly **parallel extraction**, not semantic branching.
+
+---
+
+# **## 7. MTP (v1) — Turn Semantic Package**
+
+The **MTP (v1)** is the final output of Path A: a **structured bundle** of all OB outputs produced during the turn.  
+It is intentionally simple, deterministic, and free of merge‑logic complexity.
+
+### **7.1 Definition**
+
+The **MTP (v1)** is:
+
+> **A Turn Semantic Package containing all orthogonal semantic slices extracted by the OB‑Region.**
+
+It is created **after all OB‑prms in the OB‑Region complete**.
+
+### **7.2 Purpose**
+
+The MTP (v1):
+
+- provides a **single, coherent meaning object** for Path B,  
+- bundles orthogonal semantic slices into a structured record,  
+- performs **no semantic merging**,  
+- performs **no conflict resolution**,  
+- does **not** modify the TP,  
+- does **not** maintain cross‑turn memory.
+
+It is a **pure packaging step**, not a semantic engine.
+
+### **7.3 Structure**
+
+The MTP is a simple record:
+
+```
+MTP = {
+  intent: <OB-intent output>,
+  topic: <OB-topic output>,
+  constraints: <OB-constraints output>,
+  tone: <OB-tone output>,
+  entities: <OB-entities output>,
+  temporal: <OB-temporal output>,
+  spatial: <OB-spatial output>,
+  ...
+}
+```
+
+Fields are populated directly from OB‑prm outputs.  
+No merging, reconciliation, or inference occurs here.
+
+### **7.4 Path A Completion Semantics**
+
+Path A completes when:
+
+1. All OB‑prms in the OB‑Region have finished, **and**  
+2. The MTP (v1) has been assembled from their outputs.
+
+The resulting MTP is then passed to Path B.
+
+### **7.5 Notes for Future Versions**
+
+Future versions of the system may expand the MTP to:
+
+- merge multiple TPs,  
+- reconcile conflicting slices,  
+- maintain cross‑turn semantic memory,  
+- integrate multi‑modal meaning fragments.
+
+But **v1 intentionally avoids all of this** to preserve clarity, determinism, and simplicity.
+
+---
+
 ## 6. Summary
 
 Path A is the meaning‑construction pipeline. It consists of:
