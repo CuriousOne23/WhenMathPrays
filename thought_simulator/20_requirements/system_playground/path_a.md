@@ -60,13 +60,13 @@ Primitive flows describe the **actual execution order** of primitives.
 **Flow diagram**
 
 ```text
-InB → IIInB → IE → CEx → CE → ISc → TPU → OB → TE → RB → TR → OB
+InB → IIInB → IE → CEx → CE → ISc → TPU → OB → TE → TR → RB → OB
 ```
 
 **Formal boundary**
 
 ```text
-{InB‑prm} → IIInB‑prm → IE‑prm → CEx‑prm → CE‑prm → ISc‑prm → TPU‑prm → OB‑prm → TE‑prm → RB‑prm → TR‑prm → {OB‑prm}
+{InB‑prm} → IIInB‑prm → IE‑prm → CEx‑prm → CE‑prm → ISc‑prm → TPU‑prm → OB‑prm → TE‑prm → TR‑prm → RB‑prm  → {OB‑prm}
 ```
 
 #### Primitive flow table (PthA‑cor)
@@ -91,10 +91,10 @@ InB → IIInB → IE → CEx → CE → ISc → TPU → OB → TE → RB → TR 
 |   |        | **Example:** Stores merged TP snapshot | |
 | 9 | TE‑prm | Structural merge | No semantic interpretation |
 |   |        | **Example:** Merges structure, not meaning | |
-| 10 | RB‑prm | Router; arbitration | Appears twice in Path A |
-|    |        | **Example:** Chooses next stage | |
-| 11 | TR‑prm | Interpretation | — |
+| 10 | TR‑prm | Interpretation | — |
 |    |        | **Example:** Applies post‑TE interpretation | |
+| 11 | RB‑prm | Router; arbitration | Appears twice in Path A |
+|    |        | **Example:** Chooses next stage | |
 | 12 | OB‑prm | Final output buffer | End of Path A |
 |    |        | **Example:** Output ready for downstream use | |
 
