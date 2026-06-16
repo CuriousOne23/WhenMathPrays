@@ -4,7 +4,7 @@
 
 ## **Relationship Between Path A and Path B**
 
-### **Path A — Understanding Pipeline**  
+## **Path A — Understanding Pipeline**  
 Path A builds the system’s **internal representation** of what the user said.  
 It determines:
 
@@ -15,10 +15,7 @@ It determines:
 Path A is **state‑locating** and **state‑updating**.  
 It writes to **TP/MTP** and shapes the **meaning manifold**.
 
-# Introduction
-   [clean new Path A vs Path B distinction]
-
-# Path B — Realization & Expression Pipeline
+## Path B — Realization & Expression Pipeline
 *(Meaning‑read‑only; Expression‑constructive)*
 
 Path B is the realization pipeline...
@@ -26,7 +23,7 @@ Where Path A constructs meaning, Path B expresses meaning...
 Path B never writes to TP...
 Path B is the expression manifold complementing Path A’s meaning manifold...
 
-## Path B — Realization & Expression Pipeline  
+## **Path B — Realization & Expression Pipeline**  
 *(Internal‑state‑read‑only; Behavior‑constructive)*
 
 Path B is the **realization pipeline** of the Thought Simulator.  
