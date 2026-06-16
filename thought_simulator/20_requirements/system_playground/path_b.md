@@ -1,10 +1,12 @@
 # `path_b.md`
 
+---
+
 # **Introduction**
 
 ## **Relationship Between Path A and Path B**
 
-## **Path A — Understanding Pipeline**  
+### **Path A — Understanding Pipeline**  
 Path A builds the system’s **internal representation** of what the user said.  
 It determines:
 
@@ -15,15 +17,9 @@ It determines:
 Path A is **state‑locating** and **state‑updating**.  
 It writes to **TP/MTP** and shapes the **meaning manifold**.
 
-## Path B — Realization & Expression Pipeline
-*(Meaning‑read‑only; Expression‑constructive)*
+---
 
-Path B is the realization pipeline...
-Where Path A constructs meaning, Path B expresses meaning...
-Path B never writes to TP...
-Path B is the expression manifold complementing Path A’s meaning manifold...
-
-## **Path B — Realization & Expression Pipeline**  
+### **Path B — Realization & Expression Pipeline**  
 *(Internal‑state‑read‑only; Behavior‑constructive)*
 
 Path B is the **realization pipeline** of the Thought Simulator.  
@@ -38,26 +34,7 @@ Path B:
 - **constructs the system’s next behavioral move**  
 - **stabilizes that behavior in the Realization Basin (ReB)**  
 
-Path B operates in the **expression manifold**, selecting and realizing the system’s outward trajectory based on the internal state produced by Path A.
-
----
-
-# Path B — Realization & Expression Pipeline  
-*(Meaning‑read‑only; Expression‑constructive)*
-
-Path B is the **realization pipeline** of the Thought Simulator.  
-Where **Path A constructs meaning**, Path B **expresses meaning** into coherent, stable, behaviorally‑consistent output.
-
-Path B:
-
-- **never writes to TP or semantic_core**  
-- **never performs semantic merge**  
-- **never interprets meaning**  
-- **consumes TP/MTP read‑only**  
-- **constructs and stabilizes realized behavior**  
-- **commits expression into a Realization Basin (ReB)**  
-
-Path B is the **expression manifold**, complementing Path A’s **meaning manifold**.
+Path B operates in the **expression manifold**, selecting and realizing the system’s outward trajectory — its response — based on the internal state produced by Path A.
 
 ---
 
