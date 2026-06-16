@@ -77,10 +77,7 @@ Path B does not branch the way Path A does — but both diagrams are included fo
 |  | **Example:** TP contains: “Explain Bayesian updating simply, friendly tone, avoid math notation.” REx extracts: intent=*explain simply*; tone=*friendly*; constraint=*no notation*; audience=*non‑technical*. |  |
 | **RPlan‑prm** | Constructs one or more candidate realization plans from the REx output. Plans include structure, tone, pacing, and channel constraints. |  |
 |  | **Flow:** `REx‑prm → RPlan‑prm → RPU‑prm` |  |
-|  | **Example:** Given: friendly tone, short length, no notation. RPlan generates candidates such as: |  |
-|  |• Plan A: 3‑sentence analogy |  |  
-|  |• Plan B: bullet‑point explanation |  |
-|  |• Plan C: 1‑paragraph story‑based explanation |  |
+|  | **Example:** Given: friendly tone, short length, no notation. RPlan generates candidates such as: <br>&nbsp;&nbsp;&nbsp;• Plan A: 3‑sentence analogy <br>&nbsp;&nbsp;&nbsp;• Plan B: bullet‑point explanation <br>&nbsp;&nbsp;&nbsp;• Plan C: 1‑paragraph story‑based explanation |  |
 | **RPU‑prm** | Central Path B primitive. Selects, updates, and commits the chosen realization plan into the realization manifold. |  |
 |  | **Flow:** `RPlan‑prm → RPU‑prm → ReB‑prm` |  |
 |  | **Example:** Governance indicates user prefers analogies. RPU selects Plan A, enforces tone constraints, removes jargon, and finalizes the realization plan. |  |
@@ -96,16 +93,10 @@ Path B does not branch the way Path A does — but both diagrams are included fo
 | --- | --- | --- |
 | **RPlan‑prc** | Orchestrates construction of candidate realization plans. |  |
 |  | **Flow:** `REx‑prm → RPlan‑prc → RPlan‑prm` |  |
-|  | **Example:** From the extracted slice (formal tone, long answer allowed), RPlan‑prc generates: |  |
-|  | • a structured essay plan  |  |
-|  | • a step‑by‑step explanation |  |
-|  | • a definition‑first plan |  |
+|  | **Example:** From the extracted slice (formal tone, long answer allowed), RPlan‑prc generates: <br>&nbsp;&nbsp;&nbsp;• a structured essay plan <br>&nbsp;&nbsp;&nbsp;• a step‑by‑step explanation <br>&nbsp;&nbsp;&nbsp;• a definition‑first plan |  |
 | **RSelect‑prc** | Selects the best realization plan based on governance and coherence constraints. |  |
 |  | **Flow:** `RPlan‑prm → RSelect‑prc → RPU‑prm` |  |
-|  | **Example:** Given three candidate plans, RSelect‑prc chooses the one that best satisfies: |  |
-|  | • safety constraints |  |
-|  | • tone alignment |  |
-|  | • pacing requirements |  |
+|  | **Example:** Given three candidate plans, RSelect‑prc chooses the one that best satisfies: <br>&nbsp;&nbsp;&nbsp;• safety constraints <br>&nbsp;&nbsp;&nbsp;• tone alignment <br>&nbsp;&nbsp;&nbsp;• pacing requirements |  |
 | **RStyle‑prc** | Applies style/timbre constraints (conceptual; not a primitive). |  |
 |  | **Flow:** `RPlan‑prm → RStyle‑prc → RPlan‑prm` |  |
 |  | **Example:** A plan initially written in a neutral tone is adjusted to “warm and encouraging” to match user preference. |  |
