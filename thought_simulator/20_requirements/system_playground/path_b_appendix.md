@@ -1,369 +1,523 @@
-# 📘 **Appendix A — Path B Operational Examples**  
-### *Each example begins with MB‑observable Path A output and shows how Path B resolves it.*
+# 📘 path_b_appendix.md  
+### Path B Operational Examples (Replay‑Accurate, TP‑Accurate, Log‑Accurate)
+
+This appendix shows **exact, concrete, low‑level examples** of Path B execution.
+
+Each example includes:
+
+- **TP Before** (Path A output only)  
+- **Primitive Operation**  
+- **Log Entry Written**  
+- **TP After** (Path B reference fields added)  
+- **Object Passed Forward**  
+
+This appendix is the *runtime‑accurate* version of Path B behavior.
 
 ---
 
-# **A.1 Primitive Examples**
+# A.1 Primitive Examples (Replay‑Accurate)
 
 ---
 
-## **A.1.1 — REx‑prm Example (Expression Extractor)**
+## A.1.1 — REx‑prm Example (Expression Extractor)
 
-### **Input (Path A output)**  
-TP contains structured meaning:
+### **TP Before (Path A output only)**
 
-- intent: *“Explain Bayesian updating”*  
-- audience: *non‑technical*  
-- tone: *gentle*  
-- constraints: *avoid equations*  
-- semantic_core: stable  
-
-### **Operation**  
-REx extracts only the expression‑relevant slice:
-
-- intent → *explain simply*  
-- tone → *gentle*  
-- constraint → *no equations*  
-- audience → *non‑technical*  
-
-### **Output (to RPlan‑prm)**  
-RP‑ref (expression slice):
-
-```
+```json
 {
-  intent: "simple explanation",
-  tone: "gentle",
-  constraint: "no equations",
-  audience: "non-technical"
+  "message": { "meaning": "Explain Bayesian updating" },
+  "intent": "explain",
+  "topic": "Bayesian updating",
+  "tone_hint": "gentle",
+  "constraints": ["avoid equations"],
+  "audience": "non-technical",
+  "channel_hint": "text",
+  "semantic_core_ref": "<id1>",
+  "pathB": {}
 }
 ```
 
 ---
 
-## **A.1.2 — RPlan‑prm Example (Realization Planner)**
+### **Operation**
 
-### **Input (from REx‑prm)**  
-Expression slice:
+REx reads Path A fields and extracts the **expression slice**:
 
-```
-intent: "simple explanation"
-tone: "gentle"
-constraint: "no equations"
-audience: "non-technical"
-```
-
-### **Operation**  
-RPlan generates candidate plans:
-
-- **Plan A:** 3‑sentence analogy  
-- **Plan B:** bullet‑point explanation  
-- **Plan C:** short story‑based explanation  
-
-### **Output (to RPU‑prm)**  
-RPlan‑ref containing all candidate plans.
+- intent → "simple explanation"  
+- tone → "gentle"  
+- constraints → ["avoid equations"]  
+- audience → "non-technical"  
+- channel → "text"  
 
 ---
 
-## **A.1.3 — RPU‑prm Example (Realization Plan Updater)**
-
-### **Input (from RPlan‑prm)**  
-Candidate plans A, B, C.
-
-### **Operation**  
-Governance flags:
-
-- user prefers analogies  
-- tone must remain gentle  
-- avoid technical terms  
-
-RPU:
-
-- selects Plan A  
-- softens transitions  
-- removes jargon  
-- enforces tone constraints  
-
-### **Output (to ReB‑prm)**  
-Final RPlan‑ref:
+### **Log Entry Written**
 
 ```
-Plan A (final):
-  - 3-sentence analogy
-  - gentle tone
-  - no jargon
-  - no equations
+rex_slice_log[id2] = {
+  "intent": "simple explanation",
+  "tone": "gentle",
+  "constraints": ["avoid equations"],
+  "audience": "non-technical",
+  "channel": "text"
+}
 ```
 
 ---
 
-## **A.1.4 — ReB‑prm Example (Realization Basin)**
+### **TP After**
 
-### **Input (from RPU‑prm)**  
-Final plan: 3‑sentence gentle analogy.
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2"
+  }
+}
+```
 
-### **Operation**  
+---
+
+### **Object Passed Forward (RP‑ref)**
+
+```json
+{
+  "intent": "simple explanation",
+  "tone": "gentle",
+  "constraints": ["avoid equations"],
+  "audience": "non-technical",
+  "channel": "text"
+}
+```
+
+---
+
+## A.1.2 — RPlan‑prm Example (Realization Planner)
+
+### **TP Before**
+
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2"
+  }
+}
+```
+
+---
+
+### **Operation**
+
+RPlan generates **candidate plans**:
+
+- Plan A: 3‑sentence analogy  
+- Plan B: bullet‑point explanation  
+- Plan C: short story‑based explanation  
+
+---
+
+### **Log Entry Written**
+
+```
+rplan_candidates_log[id3] = {
+  "plans": [
+    {
+      "structure": "3-sentence analogy",
+      "tone": "gentle",
+      "pacing": "short",
+      "channel": "text",
+      "constraints": ["avoid equations"]
+    },
+    {
+      "structure": "bullet explanation",
+      "tone": "gentle",
+      "pacing": "medium",
+      "channel": "text",
+      "constraints": ["avoid equations"]
+    },
+    {
+      "structure": "story-based explanation",
+      "tone": "gentle",
+      "pacing": "medium",
+      "channel": "text",
+      "constraints": ["avoid equations"]
+    }
+  ]
+}
+```
+
+---
+
+### **TP After**
+
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2",
+    "rplan_candidates_ref": "id3"
+  }
+}
+```
+
+---
+
+### **Object Passed Forward (RPlan‑ref)**
+
+```json
+{
+  "plans": [
+    { "structure": "3-sentence analogy", ... },
+    { "structure": "bullet explanation", ... },
+    { "structure": "story-based explanation", ... }
+  ]
+}
+```
+
+---
+
+## A.1.3 — RPU‑prm Example (Realization Plan Updater)
+
+### **TP Before**
+
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2",
+    "rplan_candidates_ref": "id3"
+  }
+}
+```
+
+---
+
+### **Operation**
+
+RPU applies:
+
+- governance rules  
+- coherence rules  
+- style adjustments  
+- timing adjustments  
+
+RPU selects **Plan A** and applies adjustments:
+
+- softened transitions  
+- removed jargon  
+- ensured gentle tone  
+
+---
+
+### **Log Entries Written**
+
+#### Selected Plan
+
+```
+rpu_selected_plan_log[id4] = {
+  "plan": {
+    "structure": "3-sentence analogy",
+    "tone": "gentle",
+    "pacing": "smooth",
+    "channel": "text",
+    "constraints": ["avoid equations"]
+  }
+}
+```
+
+#### Adjustments
+
+```
+rpu_adjustments_log[id5] = {
+  "governance_adjustments": ["removed jargon"],
+  "coherence_adjustments": ["aligned tone with history"],
+  "style_adjustments": ["softened transitions"],
+  "timing_adjustments": ["smoothed pacing"]
+}
+```
+
+---
+
+### **TP After**
+
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2",
+    "rplan_candidates_ref": "id3",
+    "rpu_selected_plan_ref": "id4",
+    "rpu_adjustments_ref": "id5"
+  }
+}
+```
+
+---
+
+### **Object Passed Forward**
+
+```json
+{
+  "plan": {
+    "structure": "3-sentence analogy",
+    "tone": "gentle",
+    "pacing": "smooth",
+    "channel": "text",
+    "constraints": ["avoid equations"]
+  }
+}
+```
+
+---
+
+## A.1.4 — ReB‑prm Example (Realization Basin)
+
+### **TP Before**
+
+```json
+{
+  "pathB": {
+    "rpu_selected_plan_ref": "id4",
+    "rpu_adjustments_ref": "id5"
+  }
+}
+```
+
+---
+
+### **Operation**
+
 ReB stabilizes:
 
 - pacing  
-- tone consistency  
-- sentence flow  
+- tone  
+- flow  
 - channel formatting  
 
-### **Output (external)**  
-A coherent, gentle, 3‑sentence analogy explaining Bayesian updating.
+---
+
+### **Log Entry Written**
+
+```
+reb_output_log[id6] = {
+  "final_behavior_summary": "gentle 3-sentence analogy explaining Bayesian updating",
+  "pacing": "smooth",
+  "tone": "gentle",
+  "channel": "text"
+}
+```
 
 ---
 
-# **A.2 Process Examples**
+### **TP After**
+
+```json
+{
+  "pathB": {
+    "rex_slice_ref": "id2",
+    "rplan_candidates_ref": "id3",
+    "rpu_selected_plan_ref": "id4",
+    "rpu_adjustments_ref": "id5",
+    "reb_output_ref": "id6"
+  }
+}
+```
 
 ---
 
-## **A.2.1 — RPlan‑prc Example**
+### **External Output**
 
-### **Input**  
+A gentle, smooth, 3‑sentence analogy explaining Bayesian updating.
+
+---
+
+# A.2 Process Examples (Replay‑Accurate)
+
+These examples show **process‑level** Path B behavior using the same TP/log model.
+
+---
+
+## A.2.1 — RPlan‑prc Example
+
+### Input  
 Expression slice: “formal tone, long answer allowed.”
 
-### **Operation**  
+### Operation  
 RPlan‑prc generates:
 
 - structured essay  
 - step‑by‑step explanation  
 - definition‑first plan  
 
-### **Output**  
-Candidate plans passed to RPlan‑prm.
+### Output  
+Written to `rplan_candidates_log[idX]`.
 
 ---
 
-## **A.2.2 — RSelect‑prc Example**
+## A.2.2 — RSelect‑prc Example
 
-### **Input**  
+### Input  
 Two candidate plans:
 
-- **Plan A:** neutral tone, long pacing  
-- **Plan B:** warm tone, short pacing  
+- Plan A: neutral tone  
+- Plan B: warm tone  
 
-### **Operation**  
+### Operation  
 User emotional state = “anxious.”  
 Warm tone preferred.
 
-RSelect‑prc chooses **Plan B**.
-
-### **Output**  
-Selected plan → RPU‑prm.
+### Output  
+Selected plan → `rpu_selected_plan_log[idY]`.
 
 ---
 
-## **A.2.3 — RStyle‑prc Example**
+## A.2.3 — RStyle‑prc Example
 
-### **Input**  
-Plan: neutral tone, medium warmth.
+### Input  
+Plan: neutral tone.
 
-### **Operation**  
+### Operation  
 User preference: “encouraging tone.”
 
-RStyle‑prc adjusts:
-
-- tone: neutral → warm  
-- warmth: medium → high  
-
-### **Output**  
-Updated plan → RPlan‑prm.
+### Output  
+Style adjustments → `rpu_adjustments_log[idZ]`.
 
 ---
 
-## **A.2.4 — RTiming‑prc Example**
+## A.2.4 — RTiming‑prc Example
 
-### **Input**  
+### Input  
 Plan: long paragraph.
 
-### **Operation**  
-RTiming‑prc detects pacing mismatch.
-
-Transforms:
+### Operation  
+RTiming‑prc transforms:
 
 - long paragraph → 3 short paragraphs  
-- adds natural pauses  
 
-### **Output**  
-Updated pacing → RPlan‑prm.
+### Output  
+Timing adjustments → `rpu_adjustments_log[idZ2]`.
 
 ---
 
-## **A.2.5 — RChannel‑prc Example**
+## A.2.5 — RChannel‑prc Example
 
-### **Input**  
+### Input  
 Plan includes visual metaphors.
 
-### **Operation**  
+### Operation  
 Channel = text‑only.
 
-RChannel‑prc removes:
-
-- references to diagrams  
-- visual metaphors  
-
-### **Output**  
-Text‑appropriate plan → RPlan‑prm.
+### Output  
+Channel‑appropriate plan → `rpu_selected_plan_log[idZ3]`.
 
 ---
 
-# **A.3 Reference Object Examples**
+# A.3 Reference Object Examples
+
+These examples show the **actual shapes** of Path B reference objects.
 
 ---
 
-## **A.3.1 — RP‑ref Example**
+## A.3.1 — RP‑ref Example
 
-### **Input**  
-Candidate plan selected.
-
-### **Operation**  
-RP‑ref stores:
-
+```json
+{
+  "intent": "simple explanation",
+  "tone": "gentle",
+  "constraints": ["avoid equations"],
+  "audience": "non-technical",
+  "channel": "text"
+}
 ```
-structure: bullets
-tone: warm
-length: short
-channel: text
-```
-
-### **Output**  
-Passed to RPU‑prm.
 
 ---
 
-## **A.3.2 — RPlan‑ref Example**
+## A.3.2 — RPlan‑ref Example
 
-### **Input**  
-RPlan‑prm output.
-
-### **Operation**  
-RPlan‑ref holds:
-
-- structure  
-- tone  
-- pacing  
-- channel  
-- constraints  
-
-### **Output**  
-Used by RPU‑prm to finalize behavior.
+```json
+{
+  "plans": [
+    { "structure": "3-sentence analogy", ... },
+    { "structure": "bullet explanation", ... }
+  ]
+}
+```
 
 ---
 
-## **A.3.3 — RStyle‑ref Example**
+## A.3.3 — RStyle‑ref Example
 
-### **Input**  
-Style metadata.
-
-### **Operation**  
-RStyle‑ref contains:
-
+```json
+{
+  "tone": "gentle",
+  "warmth": 0.7,
+  "formality": "low"
+}
 ```
-tone: "gentle"
-warmth: 0.7
-formality: low
-```
-
-### **Output**  
-Used by RPU‑prm.
 
 ---
 
-## **A.3.4 — RTiming‑ref Example**
+## A.3.4 — RTiming‑ref Example
 
-### **Input**  
-Pacing metadata.
-
-### **Operation**  
-RTiming‑ref contains:
-
+```json
+{
+  "sentence_length": "short",
+  "pause_density": "low"
+}
 ```
-sentence_length: short
-pause_density: low
-```
-
-### **Output**  
-Used by RPU‑prm.
 
 ---
 
-## **A.3.5 — RChannel‑ref Example**
+## A.3.5 — RChannel‑ref Example
 
-### **Input**  
-Channel metadata.
-
-### **Operation**  
-RChannel‑ref contains:
-
+```json
+{
+  "channel": "text",
+  "multimodal": false
+}
 ```
-channel: "text"
-multimodal: false
-```
-
-### **Output**  
-Used by RPU‑prm.
 
 ---
 
-# **A.4 TS‑Concept Examples**
+# A.4 TS‑Concept Examples
+
+These examples show how TS‑concepts influence Path B logs.
 
 ---
 
-## **A.4.1 — BC‑tsc Example (Behavioral Coherence)**
+## A.4.1 — BC‑tsc Example (Behavioral Coherence)
 
-### **Input**  
-Plan uses humor.
-
-### **Operation**  
-Internal state: user is grieving.  
+Plan uses humor.  
+User is grieving.  
 BC‑tsc rejects humor.
 
-### **Output**  
-RPU‑prm must choose a different plan.
+→ RPU adjustments log records: `"removed humor"`.
 
 ---
 
-## **A.4.2 — SC‑tsc Example (Style Coherence)**
+## A.4.2 — SC‑tsc Example (Style Coherence)
 
-### **Input**  
-Plan tone = neutral.
+Plan tone = neutral.  
+History tone = warm.
 
-### **Operation**  
-Conversation history tone = warm.  
-SC‑tsc adjusts tone to match.
-
-### **Output**  
-Style‑coherent plan.
+→ RPU adjustments log records: `"aligned tone with history"`.
 
 ---
 
-## **A.4.3 — TC‑tsc Example (Timing Coherence)**
+## A.4.3 — TC‑tsc Example (Timing Coherence)
 
-### **Input**  
 Plan pacing = abrupt.
 
-### **Operation**  
-TC‑tsc smooths pacing:
-
-- adds transitions  
-- shortens sentences  
-
-### **Output**  
-Timing‑coherent plan.
+→ RPU adjustments log records: `"smoothed pacing"`.
 
 ---
 
-## **A.4.4 — CC‑tsc Example (Channel Coherence)**
+## A.4.4 — CC‑tsc Example (Channel Coherence)
 
-### **Input**  
-Plan includes visual references.
+Plan includes visual references.  
+Channel = text‑only.
 
-### **Operation**  
-Channel = text‑only.  
-CC‑tsc removes visual elements.
+→ RPU adjustments log records: `"removed visual metaphors"`.
 
-### **Output**  
-Channel‑coherent plan.
+---
+
+# End of path_b_appendix.md
+```
 
 ---
