@@ -131,26 +131,7 @@ Path B does not branch the way Path A does — but both diagrams are included fo
 
 ---
 
-# **6. Governance Flow Table (Corrected Examples Only)**
-
-| Governance Object | Description | Notes |
-| --- | --- | --- |
-| **GB‑gov** | Behavioral governance for expression. |  |
-|  | **Flow:** `RPU‑prm → GB‑gov → RPU‑prm` |  |
-|  | **Example:** GB‑gov blocks a plan containing sarcasm because the user’s emotional state requires supportive tone. |  |
-| **GPIB‑gov** | Pre‑interpretation governance bridge. |  |
-|  | **Flow:** `REx‑prm → GPIB‑gov → RPlan‑prm` |  |
-|  | **Example:** GPIB‑gov filters out a potentially sensitive topic extracted by REx before planning begins. |  |
-| **TB‑ref** | Truth Basin reference (read‑only). |  |
-|  | **Flow:** `RPU‑prm → TB‑ref → RPU‑prm` |  |
-|  | **Example:** TB‑ref provides factual constraints that prevent RPU from committing a plan containing an incorrect claim. |  |
-| **IB‑prc** | Interpretation Bridge (read‑only). |  |
-|  | **Flow:** `REx‑prm → IB‑prc → RPlan‑prm` |  |
-|  | **Example:** IB‑prc supplies a clarification hint (“user likely means X”) that helps RPlan choose a more accurate structure. |  |
-
----
-
-# **7. TS‑Concept Flow Table (Corrected Examples Only)**
+# **6. TS‑Concept Flow Table (Corrected Examples Only)**
 
 | TS‑Concept | Description | Notes |
 | --- | --- | --- |
@@ -170,7 +151,7 @@ Path B does not branch the way Path A does — but both diagrams are included fo
 
 ---
 
-# 8. Future Extensions (Not Implemented Yet)
+# 7. Future Extensions (Not Implemented Yet)
 
 Path B may eventually decompose realization into finer‑grained primitives:
 
@@ -492,70 +473,11 @@ Used by RPU‑prm.
 
 ---
 
-# **A.4 Governance Examples**
+# **A.4 TS‑Concept Examples**
 
 ---
 
-## **A.4.1 — GB‑gov Example**
-
-### **Input**  
-Plan contains sarcasm.
-
-### **Operation**  
-User emotional state = “distressed.”  
-GB‑gov blocks sarcasm.
-
-### **Output**  
-RPU‑prm must revise plan.
-
----
-
-## **A.4.2 — GPIB‑gov Example**
-
-### **Input**  
-REx extracts a sensitive topic.
-
-### **Operation**  
-GPIB‑gov filters it out before planning.
-
-### **Output**  
-Safe expression slice → RPlan‑prm.
-
----
-
-## **A.4.3 — TB‑ref Example**
-
-### **Input**  
-Plan contains incorrect factual claim.
-
-### **Operation**  
-TB‑ref flags mismatch.
-
-### **Output**  
-RPU‑prm corrects or removes the claim.
-
----
-
-## **A.4.4 — IB‑prc Example**
-
-### **Input**  
-Ambiguous user intent.
-
-### **Operation**  
-IB‑prc provides clarification hint:
-
-> “User likely means X.”
-
-### **Output**  
-RPlan‑prm chooses more accurate structure.
-
----
-
-# **A.5 TS‑Concept Examples**
-
----
-
-## **A.5.1 — BC‑tsc Example (Behavioral Coherence)**
+## **A.4.1 — BC‑tsc Example (Behavioral Coherence)**
 
 ### **Input**  
 Plan uses humor.
@@ -569,7 +491,7 @@ RPU‑prm must choose a different plan.
 
 ---
 
-## **A.5.2 — SC‑tsc Example (Style Coherence)**
+## **A.4.2 — SC‑tsc Example (Style Coherence)**
 
 ### **Input**  
 Plan tone = neutral.
@@ -583,7 +505,7 @@ Style‑coherent plan.
 
 ---
 
-## **A.5.3 — TC‑tsc Example (Timing Coherence)**
+## **A.4.3 — TC‑tsc Example (Timing Coherence)**
 
 ### **Input**  
 Plan pacing = abrupt.
@@ -599,7 +521,7 @@ Timing‑coherent plan.
 
 ---
 
-## **A.5.4 — CC‑tsc Example (Channel Coherence)**
+## **A.4.4 — CC‑tsc Example (Channel Coherence)**
 
 ### **Input**  
 Plan includes visual references.
