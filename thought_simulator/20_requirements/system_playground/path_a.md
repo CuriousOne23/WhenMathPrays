@@ -111,7 +111,7 @@ InB → OB → TE → RB → TR → OB
 **Formal boundary**
 
 ```text
-{InB‑prm} → OB‑prm → TE‑prm → RB‑prm → TR‑prm → {OB‑prm}
+{InB‑prm} → OB‑prm → TE‑prm → TR‑prm → RB‑prm → {OB‑prm}
 ```
 
 #### Primitive flow table (PthA‑ncor)
@@ -124,10 +124,10 @@ InB → OB → TE → RB → TR → OB
 |   |        | **Example:** Input copied to OB without correction | |
 | 3 | TE‑prm | Structural merge | No semantic work |
 |   |        | **Example:** Merges trivial structure | |
-| 4 | RB‑prm | Router | Arbitration |
-|   |        | **Example:** Chooses next stage | |
-| 5 | TR‑prm | Interpretation | Minimal interpretation |
+| 4 | TR‑prm | Interpretation | Minimal interpretation |
 |   |        | **Example:** Applies minimal interpretation to trivial output | |
+| 5 | RB‑prm | Router | Arbitration |
+|   |        | **Example:** Chooses next stage | |
 | 6 | OB‑prm | Final output buffer | End of fast path |
 |   |        | **Example:** Output ready | |
 
