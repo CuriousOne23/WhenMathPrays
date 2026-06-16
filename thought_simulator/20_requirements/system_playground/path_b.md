@@ -1,6 +1,6 @@
 # `path_b.md`
 
-# **Introductoin**
+# **Introduction**
 
 ## **Relationship Between Path A and Path B**
 
