@@ -176,7 +176,7 @@ They are listed here only to show how Path B could evolve into a richer behavior
 
 ## **A.1.1 — REx‑prm Example (Expression Extractor)**
 
-### **Input (MB‑observable Path A output)**  
+### **Input (Path A output)**  
 TP contains structured meaning:
 
 - intent: *“Explain Bayesian updating”*  
