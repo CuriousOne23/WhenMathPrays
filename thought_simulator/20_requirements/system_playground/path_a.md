@@ -225,7 +225,7 @@ They appear inside processes; flows still begin and end with primitives.
 **Formal flow**
 
 ```text
-{CE‑prm} → CE‑RefGen‑prc → {RPU‑prm}
+{CE‑prm} → CE‑RefGen‑prc → {TPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
@@ -240,7 +240,7 @@ They appear inside processes; flows still begin and end with primitives.
 **Formal flow**
 
 ```text
-{ISc‑prm} → ISc‑Delta‑prc → {RPU‑prm}
+{ISc‑prm} → ISc‑Delta‑prc → {TPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
@@ -342,7 +342,7 @@ TS‑level concepts are invariants, not execution units, but we can still expres
 **Formal flow**
 
 ```text
-{ISc‑prm} → SD‑tsc → {RPU‑prm}
+{ISc‑prm} → SD‑tsc → {TPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
