@@ -70,19 +70,21 @@ Path B does not branch the way Path A does — but both diagrams are included fo
 
 # 3. Primitive Flow Table (Dual‑Row Format)
 
-| Order | TS Object | Description | Notes |
-| --- | --- | --- | --- |
-| **1** | **REx‑prm** | Extracts the subset of the internal semantic state needed for expression. Reads ``{TP, ``MTP}`` read‑only and produces an expression‑ready slice. | **Example:** Identify tone cues, user intent, and structural hints relevant for constructing a response. |
-|  |  | **Flow:** ``{TP, ``MTP} ``→ ``REx‑prm ``→ ``RPlan‑prm`` |  |
-| **2** | **RPlan‑prm** | Constructs one or more candidate realization plans from the REx output. Plans include structure, tone, pacing, and channel constraints. | **Example:** Build a plan specifying: “concise structure, neutral tone, text channel.” |
-|  |  | **Flow:** ``REx‑prm ``→ ``RPlan‑prm ``→ ``RPU‑prm`` |  |
-| **3** | **RPU‑prm** | Central Path B primitive. Selects, updates, and commits the chosen realization plan into the realization manifold. | **Example:** Apply governance constraints and finalize the plan that best fits coherence and behavioral rules. |
-|  |  | **Flow:** ``RPlan‑prm ``→ ``RPU‑prm ``→ ``ReB‑prm`` |  |
-| **4** | **ReB‑prm** | Stabilizes the realized behavior. Serves as the attractor basin for expression before externalization. | **Example:** The finalized response settles into a coherent basin before being emitted as output. |
-|  |  | **Flow:** ``RPU‑prm ``→ ``ReB‑prm ``→ ``External ``Output`` |  |
-
+| TS Object | Description | Notes |
+| --- | --- | --- |
+| **REx‑prm** | Extracts the subset of the internal semantic state needed for expression. Reads ``{TP, ``MTP}`` read‑only and produces an expression‑ready slice. |  |
+|  | **Flow:** ``{TP, ``MTP} ``→ ``REx‑prm ``→ ``RPlan‑prm`` |  |
+|  | **Example:** Identify tone cues, user intent, and structural hints relevant for constructing a response. |  |
+| **RPlan‑prm** | Constructs one or more candidate realization plans from the REx output. Plans include structure, tone, pacing, and channel constraints. |  |
+|  | **Flow:** ``REx‑prm ``→ ``RPlan‑prm ``→ ``RPU‑prm`` |  |
+|  | **Example:** Build a plan specifying: “concise structure, neutral tone, text channel.” |  |
+| **RPU‑prm** | Central Path B primitive. Selects, updates, and commits the chosen realization plan into the realization manifold. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RPU‑prm ``→ ``ReB‑prm`` |  |
+|  | **Example:** Apply governance constraints and finalize the plan that best fits coherence and behavioral rules. |  |
+| **ReB‑prm** | Stabilizes the realized behavior. Serves as the attractor basin for expression before externalization. |  |
+|  | **Flow:** ``RPU‑prm ``→ ``ReB‑prm ``→ ``External ``Output`` |  |
+|  | **Example:** The finalized response settles into a coherent basin before being emitted as output. |  |
 This is the **complete minimal primitive set** for Path B.
-
 
 ---
 
@@ -90,44 +92,21 @@ This is the **complete minimal primitive set** for Path B.
 
 | Process | Description | Notes |
 | --- | --- | --- |
-| **RPlan‑prc** | Orchestrates construction of candidate realization plans. | **Example:** Generate multiple candidate response structures (short, long, bullet‑pointed) before selection. |
+| **RPlan‑prc** | Orchestrates construction of candidate realization plans. |  |
 |  | **Flow:** ``REx‑prm ``→ ``RPlan‑prc ``→ ``RPlan‑prm`` |  |
-| **RSelect‑prc** | Selects the best realization plan based on governance and coherence constraints. | **Example:** Choose the plan that best satisfies tone and pacing requirements. |
+|  | **Example:** Generate multiple candidate response structures (short, long, bullet‑pointed) before selection. |  |
+| **RSelect‑prc** | Selects the best realization plan based on governance and coherence constraints. |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``RSelect‑prc ``→ ``RPU‑prm`` |  |
-| **RStyle‑prc** | Applies style/timbre constraints (conceptual; not a primitive). | **Example:** Adjust the plan to ensure the tone matches the user’s emotional context. |
+|  | **Example:** Choose the plan that best satisfies tone and pacing requirements. |  |
+| **RStyle‑prc** | Applies style/timbre constraints (conceptual; not a primitive). |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``RStyle‑prc ``→ ``RPlan‑prm`` |  |
-| **RTiming‑prc** | Applies timing/turn‑taking constraints (conceptual). | **Example:** Modify pacing to ensure the response is neither abrupt nor overly long. |
+|  | **Example:** Adjust the plan to ensure the tone matches the user’s emotional context. |  |
+| **RTiming‑prc** | Applies timing/turn‑taking constraints (conceptual). |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``RTiming‑prc ``→ ``RPlan‑prm`` |  |
-| **RChannel‑prc** | Applies channel/format constraints (conceptual). | **Example:** Ensure the plan is appropriate for text output rather than voice or multimodal output. |
+|  | **Example:** Modify pacing to ensure the response is neither abrupt nor overly long. |  |
+| **RChannel‑prc** | Applies channel/format constraints (conceptual). |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``RChannel‑prc ``→ ``RPlan‑prm`` |  |
-
-### **RPlan‑prc**
-```
-REx‑prm → RPlan‑prc → RPlan‑prm
-```
-
-### **RSelect‑prc**
-```
-RPlan‑prm → RSelect‑prc → RPU‑prm
-```
-
-### **RStyle‑prc** *(conceptual, but still must be anchored)*
-```
-RPlan‑prm → RStyle‑prc → RPlan‑prm
-```
-
-### **RTiming‑prc**
-```
-RPlan‑prm → RTiming‑prc → RPlan‑prm
-```
-
-### **RChannel‑prc**
-```
-RPlan‑prm → RChannel‑prc → RPlan‑prm
-```
-
-**Why these boundaries?**  
-Because all style/timing/channel adjustments happen *inside* the RPlan construction cycle, not outside it.
+|  | **Example:** Ensure the plan is appropriate for text output rather than voice or multimodal output. |  |
 
 These processes operate **within** RPlan‑prm and RPU‑prm.
 
@@ -135,41 +114,23 @@ These processes operate **within** RPlan‑prm and RPU‑prm.
 
 # 5. Reference Object Flow Table
 
-| Governance Object | Description | Notes |
+| Reference Object | Description | Notes |
 | --- | --- | --- |
-| **GB‑gov** | Behavioral governance for expression. | **Example:** Enforce safety, tone, and behavioral constraints during realization. |
-|  | **Flow:** ``RPU‑prm ``→ ``GB‑gov ``→ ``RPU‑prm`` |  |
-| **GPIB‑gov** | Pre‑interpretation governance bridge. | **Example:** Ensure that the extracted slice from REx is allowed and safe before planning. |
-|  | **Flow:** ``REx‑prm ``→ ``GPIB‑gov ``→ ``RPlan‑prm`` |  |
-| **TB‑ref** | Truth Basin reference (read‑only). | **Example:** Provide factual grounding constraints to RPU during plan commitment. |
-|  | **Flow:** ``RPU‑prm ``→ ``TB‑ref ``→ ``RPU‑prm`` |  |
-| **IB‑prc** | Interpretation Bridge (read‑only). | **Example:** Provide inquiry‑related constraints or expansions to RPlan when needed. |
-|  | **Flow:** ``REx‑prm ``→ ``IB‑prc ``→ ``RPlan‑prm`` |  |
-
-### **RP‑ref**
-```
-RPlan‑prm → RP‑ref → RPU‑prm
-```
-
-### **RPlan‑ref**
-```
-RPlan‑prm → RPlan‑ref → RPU‑prm
-```
-
-### **RStyle‑ref**
-```
-RPlan‑prm → RStyle‑ref → RPU‑prm
-```
-
-### **RTiming‑ref**
-```
-RPlan‑prm → RTiming‑ref → RPU‑prm
-```
-
-### **RChannel‑ref**
-```
-RPlan‑prm → RChannel‑ref → RPU‑prm
-```
+| **RP‑ref** | Realization Plan reference object. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RP‑ref ``→ ``RPU‑prm`` |  |
+|  | **Example:** A structured representation of the selected plan passed from RPlan to RPU. |  |
+| **RPlan‑ref** | Structured plan for expression. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RPlan‑ref ``→ ``RPU‑prm`` |  |
+|  | **Example:** Contains tone, structure, pacing, and channel metadata. |  |
+| **RStyle‑ref** | Style/timbre metadata. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RStyle‑ref ``→ ``RPU‑prm`` |  |
+|  | **Example:** “Neutral tone, medium warmth.” |  |
+| **RTiming‑ref** | Timing/pacing metadata. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RTiming‑ref ``→ ``RPU‑prm`` |  |
+|  | **Example:** “Short response, minimal delay.” |  |
+| **RChannel‑ref** | Channel/format metadata. |  |
+|  | **Flow:** ``RPlan‑prm ``→ ``RChannel‑ref ``→ ``RPU‑prm`` |  |
+|  | **Example:** “Text output, no multimodal elements.” |  |
 
 **Why these boundaries?**  
 Because reference objects are **data structures** passed from RPlan to RPU — they never originate or terminate anywhere else.
@@ -182,33 +143,18 @@ These are data structures, not execution units.
 
 | Governance Object | Description | Notes |
 | --- | --- | --- |
-| **GB‑gov** | Behavioral governance for expression. | **Example:** Enforce safety, tone, and behavioral constraints during realization. |
+| **GB‑gov** | Behavioral governance for expression. |  |
 |  | **Flow:** ``RPU‑prm ``→ ``GB‑gov ``→ ``RPU‑prm`` |  |
-| **GPIB‑gov** | Pre‑interpretation governance bridge. | **Example:** Ensure that the extracted slice from REx is allowed and safe before planning. |
+|  | **Example:** Enforce safety, tone, and behavioral constraints during realization. |  |
+| **GPIB‑gov** | Pre‑interpretation governance bridge. |  |
 |  | **Flow:** ``REx‑prm ``→ ``GPIB‑gov ``→ ``RPlan‑prm`` |  |
-| **TB‑ref** | Truth Basin reference (read‑only). | **Example:** Provide factual grounding constraints to RPU during plan commitment. |
+|  | **Example:** Ensure that the extracted slice from REx is allowed and safe before planning. |  |
+| **TB‑ref** | Truth Basin reference (read‑only). |  |
 |  | **Flow:** ``RPU‑prm ``→ ``TB‑ref ``→ ``RPU‑prm`` |  |
-| **IB‑prc** | Interpretation Bridge (read‑only). | **Example:** Provide inquiry‑related constraints or expansions to RPlan when needed. |
+|  | **Example:** Provide factual grounding constraints to RPU during plan commitment. |  |
+| **IB‑prc** | Interpretation Bridge (read‑only). |  |
 |  | **Flow:** ``REx‑prm ``→ ``IB‑prc ``→ ``RPlan‑prm`` |  |
-
-### **GB‑gov**
-```
-RPU‑prm → GB‑gov → RPU‑prm
-```
-
-### **GPIB‑gov**
-```
-REx‑prm → GPIB‑gov → RPlan‑prm
-```
-
-### **TB‑ref (read‑only)**
-```
-RPU‑prm → TB‑ref → RPU‑prm
-```
-
-### **IB‑prc (read‑only)**
-```
-REx‑prm → IB‑prc → RPlan‑prm
+|  | **Example:** Provide inquiry‑related constraints or expansions to RPlan when needed. |  |
 ```
 
 **Why these boundaries?**  
@@ -222,33 +168,18 @@ Path B **uses** governance but does not own it.
 
 | TS‑Concept | Description | Notes |
 | --- | --- | --- |
-| **BC‑tsc** | Behavioral Coherence — ensures expression matches the internal state. | **Example:** Ensure the response tone matches the user’s emotional context. |
+| **BC‑tsc** | Behavioral Coherence — ensures expression matches the internal state. |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``BC‑tsc ``→ ``RPU‑prm`` |  |
-| **SC‑tsc** | Style Coherence — ensures style is consistent with context. | **Example:** Maintain consistent tone across multi‑turn responses. |
+|  | **Example:** Ensure the response tone matches the user’s emotional context. |  |
+| **SC‑tsc** | Style Coherence — ensures style is consistent with context. |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``SC‑tsc ``→ ``RPU‑prm`` |  |
-| **TC‑tsc** | Timing Coherence — ensures pacing is appropriate. | **Example:** Ensure the response is neither too abrupt nor overly verbose. |
+|  | **Example:** Maintain consistent tone across multi‑turn responses. |  |
+| **TC‑tsc** | Timing Coherence — ensures pacing is appropriate. |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``TC‑tsc ``→ ``RPU‑prm`` |  |
-| **CC‑tsc** | Channel Coherence — ensures channel matches user intent. | **Example:** Ensure the response is formatted correctly for text output. |
+|  | **Example:** Ensure the response is neither too abrupt nor overly verbose. |  |
+| **CC‑tsc** | Channel Coherence — ensures channel matches user intent. |  |
 |  | **Flow:** ``RPlan‑prm ``→ ``CC‑tsc ``→ ``RPU‑prm`` |  |
-
-### **BC‑tsc (Behavioral Coherence)**
-```
-RPlan‑prm → BC‑tsc → RPU‑prm
-```
-
-### **SC‑tsc (Style Coherence)**
-```
-RPlan‑prm → SC‑tsc → RPU‑prm
-```
-
-### **TC‑tsc (Timing Coherence)**
-```
-RPlan‑prm → TC‑tsc → RPU‑prm
-```
-
-### **CC‑tsc (Channel Coherence)**
-```
-RPlan‑prm → CC‑tsc → RPU‑prm
+|  | **Example:** Ensure the response is formatted correctly for text output. |  |
 ```
 
 **Why these boundaries?**  
