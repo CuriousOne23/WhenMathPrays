@@ -1,24 +1,74 @@
-# **`path_a.md`**  
+Absolutely, Jeff — and thank you for the clarity.  
+Since you chose **Option 3**, I’ll produce the **entire final `path_a.md` right here in chat**, using:
+
+- **Two‑row entries per table item**  
+- **Simple diagrams (Option B)**  
+- **Formal boundary notation only in tables**  
+- **`{}` only for multiple primitives**  
+- **`[]` only for parallel processes**  
+- **All flows begin and end with primitives**  
+- **Notation Guide included**  
+- **Separation Rules removed**  
+
+Here is the complete paper, ready to paste into GitHub.
+
+---
+
+# `path_a.md`  
 ## **Path A — Meaning Construction Pipeline**
 
-Path A is the **only** pipeline that constructs meaning, updates TP/MTP, performs ΔH% accounting, and executes the semantic merge.  
+Path A is the meaning‑construction pipeline of the TS system.  
+It is the only pipeline that:
+
+- constructs meaning  
+- updates TP and MTP  
+- performs ΔH% accounting  
+- executes semantic merge  
+- produces meaning‑aligned outputs  
+
 This document defines:
 
-- Path A **primitive flows** (actual execution order of primitives)  
-- Path A **process flows** (conceptual flows using reference objects)  
+- Path A **primitive flows**  
+- Path A **process flows**  
 - Path A **reference‑object flows**  
 - Path A **governance flows**  
 - Path A **TS‑concept flows**  
-- Clear **WHERE / WHEN / WHY** separation rules  
+- A **notation guide** for reading all flows  
 
-Primitive flows and process flows must never be mixed.
+All flows begin and end with **primitives**.
+
+---
+
+# **Notation Guide**
+
+### **Primitive Sets**
+- Single primitive: `primA`  
+- Multiple primitives: `{primA, primB, primC}`  
+- Used **only** for primitive boundaries.
+
+### **Processes**
+- Serial processes:  
+  `proc1‑prc → proc2‑prc`
+- Parallel processes:  
+  `[proc1‑prc, proc2‑prc]`
+- Used **only** for conceptual units.
+
+### **Flow Structure**
+Every flow follows:
+
+```
+{primitive inputs} → [parallel processes] → serial processes → {primitive outputs}
+```
+
+### **Diagrams**
+- Diagrams remain simple (Option B).
+- Formal notation appears only in tables.
 
 ---
 
 # **1. Path A Primitive Flows**
 
-Primitive flows describe the **actual execution order** of primitives.  
-They define determinism, replay equivalence, and stage boundaries.
+Primitive flows describe the **actual execution order** of primitives.
 
 ---
 
@@ -26,29 +76,110 @@ They define determinism, replay equivalence, and stage boundaries.
 
 ### **Flow Diagram**
 ```
-InB → IIInB → IE → CEx → CE → ISc → TPU(Merg) → OB → TE → RB → TR → OB
+InB → IIInB → IE → CEx → CE → ISc → TPU → OB → TE → RB → TR → OB
 ```
 
 ### **Primitive Flow Table**
 
-| Order | TS Object | Description | Notes |
-|------|-----------|-------------|-------|
-| 1 | **InB‑prm** | Input buffer; receives raw input | Entry point for Path A |
-| 2 | **IIInB‑prm** | Initial inspection; structural sanity check | May trigger USP‑Flow |
-| 3 | **IE‑prm** | Input enrichment; normalization/expansion | Optional; no‑op if not needed |
-| 4 | **CEx‑prm** | Context extraction | Consumes USP‑ref if present |
-| 5 | **CE‑prm** | Concept extraction | Produces CE‑ref |
-| 6 | **ISc‑prm** | Intermediate scoring | Computes ΔH% contributions |
-| 7 | **TPU‑prm** | Semantic merge | Only writer to TP |
-| 8 | **OB‑prm** | Output buffer | Holds post‑merge TP snapshot |
-| 9 | **TE‑prm** | Structural merge | No semantic interpretation |
-| 10 | **RB‑prm** | Router; arbitration | Appears twice in Path A |
-| 11 | **TR‑prm** | Interpretation | Applies post‑TE interpretation |
-| 12 | **OB‑prm** | Final output buffer | End of Path A |
+---
+
+**Order:** 1  
+**TS Object:** InB‑prm  
+**Description:** Input buffer; receives raw input  
+**Example:** “User sends: *Explain entropy in simple terms*”  
+**Notes:** Entry point for Path A  
 
 ---
 
-## **1.2 PthA‑ncor — Minimal Primitive Flow (No Correction)**
+**Order:** 2  
+**TS Object:** IIInB‑prm  
+**Description:** Initial inspection; structural sanity check  
+**Example:** Detects malformed JSON or missing context  
+**Notes:** May trigger USP‑Flow  
+
+---
+
+**Order:** 3  
+**TS Object:** IE‑prm  
+**Description:** Input enrichment; normalization/expansion  
+**Example:** Expands pronouns: “it” → “the previous concept”  
+**Notes:** Optional; no‑op if not needed  
+
+---
+
+**Order:** 4  
+**TS Object:** CEx‑prm  
+**Description:** Context extraction  
+**Example:** Extracts: *topic=entropy, domain=physics*  
+**Notes:** Consumes USP‑ref if present  
+
+---
+
+**Order:** 5  
+**TS Object:** CE‑prm  
+**Description:** Concept extraction  
+**Example:** Identifies: *entropy, disorder, information*  
+**Notes:** Produces CE‑ref  
+
+---
+
+**Order:** 6  
+**TS Object:** ISc‑prm  
+**Description:** Intermediate scoring  
+**Example:** Computes ΔH% for concept alignment  
+**Notes:** No meaning creation  
+
+---
+
+**Order:** 7  
+**TS Object:** TPU‑prm  
+**Description:** Semantic merge  
+**Example:** Writes new meaning to TP  
+**Notes:** Only writer to TP  
+
+---
+
+**Order:** 8  
+**TS Object:** OB‑prm  
+**Description:** Output buffer  
+**Example:** Stores merged TP snapshot  
+**Notes:** —  
+
+---
+
+**Order:** 9  
+**TS Object:** TE‑prm  
+**Description:** Structural merge  
+**Example:** Merges structure, not meaning  
+**Notes:** No semantic interpretation  
+
+---
+
+**Order:** 10  
+**TS Object:** RB‑prm  
+**Description:** Router; arbitration  
+**Example:** Chooses next stage  
+**Notes:** Appears twice in Path A  
+
+---
+
+**Order:** 11  
+**TS Object:** TR‑prm  
+**Description:** Interpretation  
+**Example:** Applies post‑TE interpretation  
+**Notes:** —  
+
+---
+
+**Order:** 12  
+**TS Object:** OB‑prm  
+**Description:** Final output buffer  
+**Example:** Output ready  
+**Notes:** End of Path A  
+
+---
+
+## **1.2 PthA‑ncor — Minimal Primitive Flow**
 
 ### **Flow Diagram**
 ```
@@ -57,21 +188,61 @@ InB → OB → TE → RB → TR → OB
 
 ### **Primitive Flow Table**
 
-| Order | TS Object | Description | Notes |
-|------|-----------|-------------|-------|
-| 1 | **InB‑prm** | Input buffer | Entry point |
-| 2 | **OB‑prm** | Output buffer | Direct pass‑through |
-| 3 | **TE‑prm** | Structural merge | No semantic work |
-| 4 | **RB‑prm** | Router | Arbitration |
-| 5 | **TR‑prm** | Interpretation | Minimal interpretation |
-| 6 | **OB‑prm** | Final output buffer | End of fast path |
+---
+
+**Order:** 1  
+**TS Object:** InB‑prm  
+**Description:** Input buffer  
+**Example:** “User sends: *Hello*”  
+**Notes:** Entry point  
+
+---
+
+**Order:** 2  
+**TS Object:** OB‑prm  
+**Description:** Output buffer  
+**Example:** Direct pass‑through  
+**Notes:** No correction  
+
+---
+
+**Order:** 3  
+**TS Object:** TE‑prm  
+**Description:** Structural merge  
+**Example:** Merges trivial structure  
+**Notes:** No semantic work  
+
+---
+
+**Order:** 4  
+**TS Object:** RB‑prm  
+**Description:** Router  
+**Example:** Arbitration  
+**Notes:** —  
+
+---
+
+**Order:** 5  
+**TS Object:** TR‑prm  
+**Description:** Interpretation  
+**Example:** Minimal interpretation  
+**Notes:** —  
+
+---
+
+**Order:** 6  
+**TS Object:** OB‑prm  
+**Description:** Final output buffer  
+**Example:** Output ready  
+**Notes:** End of fast path  
 
 ---
 
 # **2. Path A Process Flows**
 
-Processes describe **conceptual flows** that may span multiple primitives and reference objects.  
-They explain *what* the system is doing, not *how primitives are ordered*.
+Processes describe conceptual operations that may span multiple primitives.
+
+All flows begin and end with primitives.
 
 ---
 
@@ -82,11 +253,18 @@ They explain *what* the system is doing, not *how primitives are ordered*.
 IIInB → USP-ref → CEx
 ```
 
-| Step | Object | Description | Notes |
-|------|--------|-------------|-------|
-| 1 | **IIInB‑prm** | Initial inspection | Detects need for USP |
-| 2 | **USP‑ref** | Understanding support reference | Provides contextual scaffolding |
-| 3 | **CEx‑prm** | Context extraction | Consumes USP‑ref |
+### **Formal Flow (Table Notation)**
+```
+{IIInB‑prm} → USP‑prc → {CEx‑prm}
+```
+
+---
+
+**Order:** 1  
+**TS Object:** USP‑prc  
+**Description:** Understanding Support Process  
+**Example:** Expands ambiguous pronouns before CEx  
+**Notes:** Provides contextual scaffolding  
 
 ---
 
@@ -94,17 +272,21 @@ IIInB → USP-ref → CEx
 
 ### **Flow Diagram**
 ```
-OuB → MTP-Process → MTP-ref
-MTP-ref → MTP-Process → OuB
+OuB → MTP-Process → MTP-ref → MTP-Process → OuB
 ```
 
-| Step | Object | Description | Notes |
-|------|--------|-------------|-------|
-| 1 | **OuB‑prm** | Output buffer | Source of MTP updates |
-| 2 | **MTP‑Process‑prc** | MTP maintenance | Reads/writes MTP‑ref |
-| 3 | **MTP‑ref** | MTP reference object | Persistent meaning memory |
+### **Formal Flow**
+```
+{OuB‑prm} → MTP‑Process‑prc → MTP‑ref → MTP‑Process‑prc → {OuB‑prm}
+```
 
-> **Note:** TPU does *not* perform MTP maintenance.
+---
+
+**Order:** 1  
+**TS Object:** MTP‑Process‑prc  
+**Description:** MTP maintenance loop  
+**Example:** Updates long‑term meaning memory  
+**Notes:** TPU does not perform MTP maintenance  
 
 ---
 
@@ -115,70 +297,138 @@ MTP-ref → MTP-Process → OuB
 OuB → IB → TB-ref → GPIB-gov → GB-gov
 ```
 
-| Step | Object | Description | Notes |
-|------|--------|-------------|-------|
-| 1 | **OuB‑prm** | Output buffer | Source of interpretation |
-| 2 | **IB‑prc** | Interpretation bridge | Prepares TB‑ref |
-| 3 | **TB‑ref** | Trace behavior reference | Input to governance |
-| 4 | **GPIB‑gov** | Governance pre‑interpretation | Applies governance rules |
-| 5 | **GB‑gov** | Governance behavior | Final governance output |
+### **Formal Flow**
+```
+{OuB‑prm} → IB‑prc → TB‑ref → [GPIB‑gov, GB‑gov] → {OuB‑prm}
+```
 
 ---
 
-# **3. Path A Reference‑Object Flows**
-
-Reference objects are **data**, not execution units.  
-They appear inside processes, not primitive flows.
-
-| Flow Name | Diagram | Description |
-|-----------|---------|-------------|
-| **CE‑RefGen** | `CE → CE-ref` | Concept extraction reference generation |
-| **ISc‑Delta** | `ISc → ΔH%` | Scoring and entropy contribution |
-| **TPU‑Req** | `TPU → tp_update_request` | Semantic merge request envelope |
+**Order:** 1  
+**TS Object:** IB‑prc  
+**Description:** Interpretation bridge  
+**Example:** Converts output into TB‑ref  
+**Notes:** Pre‑governance stage  
 
 ---
 
-# **4. Path A Governance Flows**
-
-| Flow Name | Diagram | Description |
-|-----------|---------|-------------|
-| **Gov‑Interp** | `TB-ref → GPIB-gov → GB-gov` | Governance interpretation chain |
+# **3. Reference‑Object Flows**
 
 ---
 
-# **5. Path A TS‑Concept Flows**
+### **CE‑RefGen**
 
-TS‑level concepts are invariants, not primitives or processes.
+**Flow:**  
+```
+{CE‑prm} → CE‑RefGen‑prc → {TPU‑prm}
+```
 
-| Concept | Short Name | Description |
-|---------|------------|-------------|
-| Meaning Commitment | **MC‑tsc** | Meaning commitment invariant |
-| Semantic Span | **SS‑tsc** | Span of semantic coverage |
-| Structural Validity | **SV‑tsc** | Structural correctness invariant |
-| Semantic Density | **SD‑tsc** | Density of meaning per unit |
-
----
-
-# **6. Separation Rules (WHERE / WHEN / WHY)**
-
-## **6.1 Primitive Flow Rules**
-- **WHERE:** Define actual execution order  
-- **WHEN:** Determinism, replay equivalence, stage boundaries  
-- **WHY:** Primitives are mechanical execution units  
-
-## **6.2 Process Flow Rules**
-- **WHERE:** Conceptual operations spanning primitives  
-- **WHEN:** Meaning construction, context expansion, governance  
-- **WHY:** Processes explain *what*, not *how*  
-
-## **6.3 Reference Object Flow Rules**
-- **WHERE:** Inside processes  
-- **WHEN:** Plans, graphs, mappings, envelopes  
-- **WHY:** Reference objects are data, not execution units  
+**Description:** Generates CE‑ref  
+**Example:** Extracted concepts packaged for TPU  
+**Notes:** —  
 
 ---
 
-# **7. Summary**
+### **ISc‑Delta**
+
+**Flow:**  
+```
+{ISc‑prm} → ISc‑Delta‑prc → {TPU‑prm}
+```
+
+**Description:** Computes ΔH%  
+**Example:** Entropy contribution for merge  
+**Notes:** —  
+
+---
+
+### **TPU‑Req**
+
+**Flow:**  
+```
+{TPU‑prm} → TPU‑Req‑prc → {OB‑prm}
+```
+
+**Description:** Semantic merge request envelope  
+**Example:** TP update request  
+**Notes:** —  
+
+---
+
+# **4. Governance Flows**
+
+---
+
+### **Gov‑Interp**
+
+**Flow:**  
+```
+{OuB‑prm} → IB‑prc → TB‑ref → [GPIB‑gov, GB‑gov] → {OuB‑prm}
+```
+
+**Description:** Governance interpretation chain  
+**Example:** Safety and behavior checks  
+**Notes:** Parallel governance stages  
+
+---
+
+# **5. TS‑Concept Flows**
+
+---
+
+### **MC‑tsc**
+
+**Flow:**  
+```
+{TPU‑prm} → MC‑tsc → {OB‑prm}
+```
+
+**Description:** Meaning commitment invariant  
+**Example:** Ensures meaning consistency  
+**Notes:** —  
+
+---
+
+### **SS‑tsc**
+
+**Flow:**  
+```
+{CEx‑prm} → SS‑tsc → {CE‑prm}
+```
+
+**Description:** Semantic span invariant  
+**Example:** Ensures coverage of extracted context  
+**Notes:** —  
+
+---
+
+### **SV‑tsc**
+
+**Flow:**  
+```
+{IIInB‑prm} → SV‑tsc → {IE‑prm}
+```
+
+**Description:** Structural validity invariant  
+**Example:** Ensures input is structurally sound  
+**Notes:** —  
+
+---
+
+### **SD‑tsc**
+
+**Flow:**  
+```
+{ISc‑prm} → SD‑tsc → {TPU‑prm}
+```
+
+**Description:** Semantic density invariant  
+**Example:** Ensures meaning density is sufficient  
+**Notes:** —  
+
+---
+
+# **6. Summary**
 
 Path A is the meaning‑construction pipeline.  
 It consists of:
@@ -188,8 +438,19 @@ It consists of:
 - **Reference‑object flows**  
 - **Governance flows**  
 - **TS‑concept flows**  
-- **Strict separation rules**  
+- **Notation rules** ensuring clarity and non‑drift  
 
-This document is the **canonical reference** for all Path A behavior in the TS architecture.
+This document is the canonical reference for all Path A behavior.
 
 ---
+
+Jeff — this is the **final, complete, canonical `path_a.md`**, fully aligned with your architecture and ready to paste into GitHub.
+
+If you want, I can now generate:
+
+- **path_b.md**  
+- **realizer‑prm**  
+- **XP‑ref**  
+- or update **20.30** to reference PthA‑cor and PthA‑ncor cleanly.
+
+Just tell me.
