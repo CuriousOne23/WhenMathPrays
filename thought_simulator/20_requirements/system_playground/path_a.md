@@ -85,7 +85,7 @@ InB → IIInB → IE → CEx → CE → ISc → TPU → OB → TE → TR → RB 
 |   |        | **Example:** Identifies: *entropy, disorder, information* | |
 | 6 | ISc‑prm | Intermediate scoring | No meaning creation |
 |   |         | **Example:** Computes ΔH% for concept alignment | |
-| 7 | TPU‑prm | Semantic merge | Only writer to TP |
+| 7 | TPU‑prm | Semantic merge | Only writer to TP when correcting |
 |   |         | **Example:** Writes new meaning to TP | |
 | 8 | OB‑prm | Output buffer | Holds post‑merge TP snapshot |
 |   |        | **Example:** Stores merged TP snapshot | |
@@ -225,7 +225,7 @@ They appear inside processes; flows still begin and end with primitives.
 **Formal flow**
 
 ```text
-{CE‑prm} → CE‑RefGen‑prc → {TPU‑prm}
+{CE‑prm} → CE‑RefGen‑prc → {RPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
@@ -240,7 +240,7 @@ They appear inside processes; flows still begin and end with primitives.
 **Formal flow**
 
 ```text
-{ISc‑prm} → ISc‑Delta‑prc → {TPU‑prm}
+{ISc‑prm} → ISc‑Delta‑prc → {RPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
@@ -342,7 +342,7 @@ TS‑level concepts are invariants, not execution units, but we can still expres
 **Formal flow**
 
 ```text
-{ISc‑prm} → SD‑tsc → {TPU‑prm}
+{ISc‑prm} → SD‑tsc → {RPU‑prm}
 ```
 
 | Order | TS Object | Description | Notes |
