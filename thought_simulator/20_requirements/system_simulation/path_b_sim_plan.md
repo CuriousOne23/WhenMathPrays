@@ -169,3 +169,16 @@ This is the final confidence test before implementation.
 This order builds confidence layer‑by‑layer, exactly like validating a compiler pipeline.
 
 ---
+
+## **6. Expected Performance of TS vs Today's AI**
+
+| Simulation | TS Expected | Today’s AI | Why Today’s AI Fails |
+| --- | --- | --- | --- |
+| **B1 – Wiring + Determinism** | **99–100%** | **20–40%** | No deterministic replay; outputs drift run‑to‑run |
+| **B2 – Meaning vs Expression** | **97–99%** | **0–10%** | They mutate meaning constantly; no semantic_core |
+| **B3 – Multi‑Step Planning** | **92–96%** | **30–50%** | No explicit plan object; planning is emergent, not structured |
+| **B4 – Hard Constraints** | **90–95%** | **40–60%** | Tone, channel, and token limits are unreliable |
+| **B5 – Failure Modes** | **95–100%** | **10–30%** | They hallucinate instead of failing gracefully |
+| **B6 – Replay Consistency** | **98–100%** | **0–5%** | Same prompt + same seed ≠ same output |
+| **B7 – Plan Swapping** | **93–97%** | **0%** | They have no plan layer to swap |
+| **B8 – Stress Test** | **88–94%** | **30–50%** | Drift, hallucination, and instability under load |
