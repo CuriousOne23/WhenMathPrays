@@ -17,148 +17,141 @@ The goal is to **prove** that Path B behaves as a *closed algebra* that never 
 
 ---
 
-## **2. Simulation Overview Table**
+# **2. Simulation Overview Table (with Metrics)**
 
-| Simulation ID | Name | Input Complexity | Primary Goal | What Success Looks Like |
-|---------------|------|------------------|--------------|--------------------------|
-| **B1** | Minimal “Hello World” | Very low | Validate wiring + determinism | Identical output for same seed; no invariant violations |
-| **B2** | Style Variation | Low | Prove meaning vs expression separation | Meaning unchanged; surface varies with seed |
-| **B3** | Multi‑Step Planning | Medium | Validate RPlan/RPU as real planners | Structured output matches plan; no semantic drift |
-| **B4** | Hard Constraints | Medium | Validate constraint enforcement | Output respects tone/channel/length limits |
-| **B5** | Failure Modes | Medium | Validate graceful degradation | Path B returns constrained‑failure state, not violations |
-| **B6** | Replay Consistency | Low | Validate deterministic replay | Same seed → identical output; different seed → bounded variation |
-| **B7** | Plan Swapping | Medium | Prove plan is independent of meaning | Changing plan changes structure only, not meaning |
-| **B8** | Stress Test | High | Validate stability under load | No leakage into Path A; no invariant breaks |
-
----
-
-## **3. Simulation Details**
+| Sim ID | Name | Input Complexity | Primary Goal | Key Metrics | Success Thresholds |
+|--------|------|------------------|--------------|-------------|--------------------|
+| **B1** | Minimal “Hello World” | Very Low | Wiring + determinism | - Replay Hash Match Rate<br>- Invariant Violation Count | - **100%** identical replay<br>- **0** invariant violations |
+| **B2** | Style Variation | Low | Meaning vs expression separation | - semantic_core Drift Score<br>- Surface Variation Entropy | - Drift Score **0.00**<br>- Entropy **> 0.25** across seeds |
+| **B3** | Multi‑Step Planning | Medium | Validate RPlan/RPU planning | - Plan Fidelity Score<br>- Step Alignment Ratio | - Fidelity **≥ 0.95**<br>- Alignment **≥ 0.90** |
+| **B4** | Hard Constraints | Medium | Constraint enforcement | - Constraint Violation Count<br>- Token Budget Accuracy | - Violations **0**<br>- Token error **≤ 5%** |
+| **B5** | Failure Modes | Medium | Graceful degradation | - Failure‑State Correctness<br>- Invariant Violation Count | - Correctness **= 1.0**<br>- Violations **0** |
+| **B6** | Replay Consistency | Low | Deterministic replay | - Replay Hash Stability<br>- Seed Sensitivity Index | - Stability **= 1.0**<br>- Sensitivity **> 0.20** |
+| **B7** | Plan Swapping | Medium | Plan independence from meaning | - Meaning Drift Score<br>- Structural Divergence Score | - Drift **0.00**<br>- Divergence **≥ 0.40** |
+| **B8** | Stress Test | High | Stability under load | - Invariant Violation Count<br>- Latency Delta<br>- Memory Footprint Delta | - Violations **0**<br>- Latency Δ **< 15%**<br>- Memory Δ **< 10%** |
 
 ---
 
-### **B1 — Minimal “Hello World”**
-
-| Component | Description |
-|----------|-------------|
-| **Input** | semantic_core with intent=ANSWER_DIRECT, tone=NEUTRAL |
-| **What We Test** | Basic pipeline correctness |
-| **Expected** | REx → RPlan → RPU → ReB produce a single‑sentence output |
-| **Proof** | Replay with same seed yields identical output |
-
-**Why this matters:**  
-This confirms Path B is wired correctly and deterministic.
+# **3. Simulation Details (with Metrics)**
 
 ---
 
-### **B2 — Style Variation (Same Meaning, Different Seeds)**
+## **B1 — Minimal “Hello World”**
 
-| Component | Description |
-|----------|-------------|
-| **Input** | Same semantic_core(commit_id), multiple seeds |
-| **What We Test** | Meaning vs expression separation |
-| **Expected** | Meaning unchanged; surface form varies |
-| **Proof** | semantic_core identical; only ReB output differs |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Replay Hash Match Rate** | Hash(output₁) == Hash(output₂) | **100%** |
+| **Invariant Violations** | Count of broken Path B rules | **0** |
+| **Pipeline Latency** | REx→RPlan→RPU→ReB time | Informational only |
 
-**Why this matters:**  
-This is the *core TS claim*: Path A ≠ Path B.
-
----
-
-### **B3 — Multi‑Step Planning**
-
-| Component | Description |
-|----------|-------------|
-| **Input** | semantic_core with structure_hint=“3–5 bullets” |
-| **What We Test** | RPlan’s ability to build structured plans |
-| **Expected** | Plan object visible; RPU fills steps without inventing meaning |
-| **Proof** | Changing plan changes structure, not meaning |
-
-**Why this matters:**  
-Shows Path B is a real planner, not a text generator.
+**Why:**  
+This proves the pipeline is wired correctly and deterministic.
 
 ---
 
-### **B4 — Hard Constraints**
+## **B2 — Style Variation**
 
-| Component | Description |
-|----------|-------------|
-| **Input** | tone=FORMAL_ONLY, channel=BULLETS_ONLY, max_tokens=80 |
-| **What We Test** | Constraint enforcement |
-| **Expected** | Output obeys all constraints |
-| **Proof** | No paragraphs; no tone drift; no length violations |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **semantic_core Drift Score** | Δ between meaning snapshots | **0.00** |
+| **Surface Variation Entropy** | Shannon entropy across outputs | **> 0.25** |
+| **Seed Sensitivity Index** | Δoutput / Δseed | **> 0.20** |
 
-**Why this matters:**  
-Proves Path B respects constraints without mutating meaning.
-
----
-
-### **B5 — Failure Modes**
-
-| Component | Description |
-|----------|-------------|
-| **Input** | Impossible constraints (e.g., “Explain quantum mechanics in 10 tokens”) |
-| **What We Test** | Graceful degradation |
-| **Expected** | Path B returns a constrained‑failure state |
-| **Proof** | No invariant violations; no fallback to Path A |
-
-**Why this matters:**  
-Shows Path B fails safely, not by breaking architecture.
+**Why:**  
+This is the *core TS claim*: meaning is invariant, expression is variable.
 
 ---
 
-### **B6 — Replay Consistency**
+## **B3 — Multi‑Step Planning**
 
-| Component | Description |
-|----------|-------------|
-| **Input** | semantic_core(commit_id), fixed seed |
-| **What We Test** | Deterministic replay |
-| **Expected** | Identical output across runs |
-| **Proof** | ReB output hash matches |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Plan Fidelity Score** | How closely output follows plan | **≥ 0.95** |
+| **Step Alignment Ratio** | Steps realized / steps planned | **≥ 0.90** |
+| **Semantic Drift Score** | Meaning deviation | **0.00–0.02** |
 
-**Why this matters:**  
+**Why:**  
+Proves Path B is a real planner, not a text generator.
+
+---
+
+## **B4 — Hard Constraints**
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Constraint Violations** | Tone, channel, length errors | **0** |
+| **Token Budget Accuracy** | |tokens_out − tokens_max| / tokens_max | **≤ 5%** |
+| **Tone Compliance Score** | Match to required tone | **≥ 0.95** |
+
+**Why:**  
+Shows Path B respects constraints without mutating meaning.
+
+---
+
+## **B5 — Failure Modes**
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Failure‑State Correctness** | Correct failure type returned | **1.0** |
+| **Invariant Violations** | Should remain zero | **0** |
+| **Fallback Attempts** | Attempts to call Path A | **0** |
+
+**Why:**  
+Path B must fail safely, not by breaking architecture.
+
+---
+
+## **B6 — Replay Consistency**
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Replay Hash Stability** | Hash(output₁) == Hash(output₂) | **1.0** |
+| **Seed Sensitivity Index** | Variation across seeds | **> 0.20** |
+| **Plan Stability** | Plan unchanged across replays | **1.0** |
+
+**Why:**  
 Replay invariants are foundational to TS.
 
 ---
 
-### **B7 — Plan Swapping**
+## **B7 — Plan Swapping**
 
-| Component | Description |
-|----------|-------------|
-| **Input** | Same semantic_core, different RPlan templates |
-| **What We Test** | Plan independence from meaning |
-| **Expected** | Structure changes; meaning does not |
-| **Proof** | semantic_core unchanged; plan object differs |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Meaning Drift Score** | semantic_core change | **0.00** |
+| **Structural Divergence Score** | Δstructure(plan₁, plan₂) | **≥ 0.40** |
+| **Output Structural Fidelity** | Output matches plan | **≥ 0.95** |
 
-**Why this matters:**  
+**Why:**  
 Proves Path B is modular and composable.
 
 ---
 
-### **B8 — Stress Test**
+## **B8 — Stress Test**
 
-| Component | Description |
-|----------|-------------|
-| **Input** | Long semantic_core with multiple constraints |
-| **What We Test** | Stability under load |
-| **Expected** | No invariant violations; no leakage into Path A |
-| **Proof** | All boundaries respected; deterministic behavior maintained |
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **Invariant Violations** | Under heavy load | **0** |
+| **Latency Delta** | (latency_stress − latency_base) / base | **< 15%** |
+| **Memory Footprint Delta** | Memory change under load | **< 10%** |
+| **Output Stability Score** | No structural collapse | **≥ 0.90** |
 
-**Why this matters:**  
+**Why:**  
 This is the final confidence test before implementation.
 
 ---
 
-## **4. What We Are Trying to Prove (Summary Table)**
+# **4. What We Are Trying to Prove (with Metrics)**
 
-| Claim | Simulation(s) | Proof Signal |
-|-------|----------------|--------------|
-| **Meaning ≠ Expression** | B2, B7 | semantic_core unchanged; ReB varies |
-| **Deterministic Replay** | B1, B6 | identical output for same seed |
-| **Constraint Obedience** | B4 | tone/channel/length respected |
-| **No Semantic Writes in Path B** | All | semantic_core never mutated |
-| **Plan‑Driven Realization** | B3, B7 | structure follows plan, not meaning |
-| **Graceful Failure** | B5 | constrained‑failure state, no invariant breaks |
-| **Pipeline Purity** | All | no calls into Path A; no CIL/COB contamination |
+| Claim | Simulation(s) | Metric(s) | Threshold |
+|-------|----------------|-----------|-----------|
+| **Meaning ≠ Expression** | B2, B7 | Drift Score | **0.00** |
+| **Deterministic Replay** | B1, B6 | Replay Hash Stability | **1.0** |
+| **Constraint Obedience** | B4 | Violation Count | **0** |
+| **No Semantic Writes in Path B** | All | Drift Score | **0.00** |
+| **Plan‑Driven Realization** | B3, B7 | Fidelity Score | **≥ 0.95** |
+| **Graceful Failure** | B5 | Failure Correctness | **1.0** |
+| **Pipeline Purity** | All | Invariant Violations | **0** |
 
 ---
 
