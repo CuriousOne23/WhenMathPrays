@@ -58,14 +58,14 @@ The new Path A removes TE‑prm and introduces:
 ### **Flow diagram**
 
 ```text
-InB → IIInB → IE → CEx → CE → ISc → TPU → OB0 → RB → {OB1 … OBn} → CTP → RB → {OB1a … OBna} → CTP → RB → OB-final
+InB → IIInB → IE → CEx → CE → ISc → TPU → OB0 → RB → RBU → {OB1 … OBn} → CTP → RB → {OB1a … OBna} → CTP → RB → OB-final
 ```
 
 ### **Formal boundary**
 
 ```text
 {InB‑prm} → IIInB‑prm → IE‑prm → CEx‑prm → CE‑prm → ISc‑prm → TPU‑prm → OB‑prm 
-→ RB‑prm → {OB‑prm} → CTP‑prm → RB‑prm → {OB‑prm} → CTP‑prm → RB‑prm → {OB‑prm}
+→ RB‑prm → {OB‑prm} → CTP‑prm → RB‑prm → RBU-prm → {OB‑prm} → CTP‑prm → RB‑prm → RBU-prm → {OB‑prm}
 ```
 
 ### **Key changes**
@@ -83,7 +83,7 @@ InB → IIInB → IE → CEx → CE → ISc → TPU → OB0 → RB → {OB1 … 
 ### **Flow diagram**
 
 ```text
-InB → OB0 → RB → {OB1 … OBn} → CTP → RB → OB-final
+InB → OB0 → RB → RBU → {OB1 … OBn} → CTP → RB→ RBU → OB-final
 ```
 
 ### **Notes**
@@ -164,7 +164,7 @@ All semantic resolution happens in **Path B**.
 The new canonical Path A loop is:
 
 ```text
-OB0 → RB → {OB1 … OBn} → CTP → RB → {OB1a … OBna} → CTP → RB → …
+OB0 → RB → RBU → {OB1 … OBn} → CTP → RB → RBU → {OB1a … OBna} → CTP → RB → RBU → …
 ```
 
 ### 5.1 TS orchestration
