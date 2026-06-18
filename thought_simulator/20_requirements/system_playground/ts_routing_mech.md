@@ -24,7 +24,7 @@ The purpose of routing is to:
 This document describes:
 
 - the **TP→SOB→RB→OB** routing loop  
-- the **four pre‑semantic OB layers** (SOB, PrSOB, CrOB, FsOB)  
+- the **four pre‑semantic OB layers** (SOB, SROB, CnOB, SmOB)  
 - the **geometric requirements** of the OB address space  
 - how this applies to **Path A**  
 - why **Path B has no OB/RB layer and must never have one**
@@ -38,7 +38,14 @@ This document describes:
 At the highest level, Path A routing is:
 
 ```text
-TP_in → SOB (structural OBs) → RB (routing block) → OB (selected OB or OB set) → RB (again, with new residue) → OB (next OB) → ...→ TP_out (fully interpreted, ready for Path B)
+TP_in
+  → SOB (structural OBs)
+  → RB (routing block)
+  → OB (selected OB or OB set)
+  → RB (again, with new residue)
+  → OB (next OB)
+  → ...
+  → TP_out (fully interpreted, ready for Path B)
 ```
 
 The loop is:
@@ -122,14 +129,14 @@ Partial matches are still governed by the **same geometric rules** (monotonic, s
 Before deep semantic OBs, Path A passes through four foundational OB layers:
 
 1. **SOB — Structural OBs**  
-2. **PrSOB — Pre‑Semantic OBs**  
-3. **CrOB — Constraint OBs**  
-4. **FsOB — First‑Semantic OBs**
+2. **SROB — Structural‑Refinement OBs**  
+3. **CnOB — Constraint OBs**  
+4. **SmOB — Semantic OBs (entry layer)**
 
 These layers progressively:
 
 - extract structure  
-- refine hints  
+- refine structure  
 - make constraints explicit  
 - begin semantic extraction  
 
@@ -137,7 +144,7 @@ They ensure that **deep semantic OBs never guess**.
 
 ---
 
-### 3.1 SOB — Structural OBs
+## 3.1 SOB — Structural OBs
 
 **Role:** Extract **structure before meaning**.
 
@@ -166,53 +173,43 @@ SOBs do **not** interpret meaning; they prepare the message for interpretation.
 
 ---
 
-### 3.2 PrSOB — Pre‑Semantic OBs
+## 3.2 SROB — Structural‑Refinement OBs
 
-**Role:** Refine the coarse hints from SOBs without yet extracting meaning.
+**Role:** Refine the structural output of SOBs.
 
-**What PrSOBs do:**
+**What SROBs do:**
 
-- **Sharpen domain classification**  
-  - e.g., “math‑like” → “symbolic algebra” vs “probability”  
-- **Sharpen operator classification**  
-  - e.g., “explain” vs “derive” vs “compare”  
-- **Refine tone/subculture**  
-  - e.g., “technical‑supportive” vs “formal‑academic”  
-- **Normalize structure**  
-  - clean up segmentation, remove noise, standardize forms  
-- **Detect contradictions**  
-- **Detect missing metadata**  
-- **Detect implicit operators and constraints**  
-- **Reduce entropy** in the residue
+- sharpen segmentation  
+- normalize structure  
+- reduce structural ambiguity  
+- identify implicit structural operators  
+- detect missing structural metadata  
+- reduce structural entropy  
+- prepare residue for constraint extraction and semantic entry
 
 **Trip level:**  
-- Triggered when SOBs leave **non‑trivial residue** with ambiguous or incomplete metadata.
+- Triggered when SOBs leave **non‑trivial structural residue**.
 
 **Output:**  
-- A **cleaner, sharper, lower‑entropy residue**.
+- A **cleaner, sharper, lower‑entropy structural residue**.
 
-PrSOBs are the **semantic staging area**.
+SROBs are the **structural cleanup and sharpening layer**.
 
 ---
 
-### 3.3 CrOB — Constraint OBs
+## 3.3 CnOB — Constraint OBs
 
 **Role:** Extract and enforce **constraints** that shape downstream semantic interpretation.
 
-**What CrOBs do:**
+**What CnOBs do:**
 
 - **Precision level**  
-  - informal intuition vs rigorous derivation  
 - **Determinism level**  
-  - exploratory vs definitive  
 - **Safety constraints**  
-  - content boundaries, risk levels  
 - **Politeness and tone constraints**  
 - **Conciseness and verbosity constraints**  
 - **Formatting constraints**  
-  - bullet lists, tables, code, proofs, etc.  
-- **Domain‑specific constraints**  
-  - legal formality, medical caution, mathematical rigor, etc.
+- **Domain‑specific constraints**
 
 **Trip level:**  
 - Triggered when residue contains **explicit or implicit constraints**.
@@ -220,33 +217,33 @@ PrSOBs are the **semantic staging area**.
 **Output:**  
 - A residue with **explicit constraints and no hidden assumptions**.
 
-CrOBs ensure that semantic OBs operate within **clear, stable boundaries**.
+CnOBs ensure that semantic OBs operate within **clear, stable boundaries**.
 
 ---
 
-### 3.4 FsOB — First‑Semantic OBs
+## 3.4 SmOB — Semantic OBs (entry layer)
 
-**Role:** Perform the **first layer of true semantic extraction**.
+**Role:** Perform the **first layer of semantic extraction**.
 
-FsOBs are not deep semantic OBs; they are the **first interpreters**.
+SmOBs are the **semantic entry point**, not the deep semantic OBs.
 
-**What FsOBs do:**
+**What SmOBs do:**
 
-- Extract **high‑level meaning**  
-- Identify **semantic roles**  
-- Identify **entities**  
-- Identify **relationships**  
-- Identify **intent**  
-- Identify **semantic operators**  
-- Produce **structured semantic fragments**
+- extract **high‑level meaning**  
+- identify **semantic roles**  
+- identify **entities**  
+- identify **relationships**  
+- identify **intent**  
+- identify **semantic operators**  
+- produce **structured semantic fragments**
 
 **Trip level:**  
-- Triggered when structure, domain, operators, and constraints are **sufficiently refined**.
+- Triggered when structure and constraints are sufficiently refined.
 
 **Output:**  
 - A **partially interpreted semantic structure** + remaining residue.
 
-After FsOBs, the system can safely route into **domain‑specific semantic OBs** and **fine‑semantic OBs**.
+After SmOBs, the system can safely route into **domain‑specific semantic OBs** and **fine‑semantic OBs**.
 
 ---
 
@@ -270,23 +267,12 @@ For routing to be:
 If similarity increases, routing confidence must **never decrease**.  
 If similarity decreases, routing confidence must **never increase**.
 
-Formally:
-
-- Let $ d $ be a distance (or dissimilarity) measure.  
-- Let $ f(d) $ be the routing confidence (or similarity score).  
-
-Then:
-
-- If $ d_1 < d_2 $, then $ f(d_1) \ge f(d_2) $.  
-
 This prevents:
 
 - routing chaos  
 - oscillation  
 - non‑deterministic jumps  
 - “why did it pick that OB?” behavior
-
-Monotonicity is the **stability guarantee**.
 
 ---
 
@@ -300,40 +286,19 @@ The similarity gradient must be **smooth**:
 
 Small changes in residue → **small changes** in routing behavior.
 
-This ensures:
-
-- graceful partial matches  
-- predictable threshold behavior  
-- no “cliff effects” where tiny changes cause huge routing shifts
-
 ---
 
-### 4.3 Curvature invariance (predictable geometry)
-
-This is the deeper requirement:
+### 4.3 Curvature invariance
 
 > **Same distance → same slope → same curvature → same routing behavior.**
-
-For any OB (including FsOB1, FsOB2, etc.):
-
-- If a random message is at distance $ d $ from OB1  
-- And another random message is at distance $ d $ from OB1  
-
-Then:
-
-- the **value** of the similarity  
-- the **first derivative** (slope)  
-- the **second derivative** (curvature)  
-
-must all be **identical**.
 
 This must hold:
 
 - for all OBs  
-- for all layers (SOB, PrSOB, CrOB, FsOB, semantic OBs)  
+- for all layers  
 - for all directions in the address space
 
-This is what makes the routing space a **true metric space** with consistent meaning.
+This is what makes the routing space a **true metric space**.
 
 ---
 
@@ -341,9 +306,8 @@ This is what makes the routing space a **true metric space** with consistent mea
 
 The similarity function and its derivatives must be **OB‑invariant**:
 
-- FsOB1 and FsOB2 must behave identically at the same distance.  
+- SmOB1 and SmOB2 must behave identically at the same distance.  
 - No OB is “more sensitive” or “less sensitive” than another at the same similarity score.  
-- The shape of the gradient is **universal**.
 
 This guarantees:
 
@@ -352,44 +316,6 @@ This guarantees:
 - predictable fallback  
 - zero drift  
 - perfect replay
-
----
-
-### 4.5 Why this makes TS efficient
-
-Because TS is **not** searching all possible meanings.
-
-It is searching a **small, structured, geometric address space** that is:
-
-- monotonic  
-- smooth  
-- curvature‑invariant  
-- OB‑invariant  
-
-Transformers operate in:
-
-- dense  
-- entangled  
-- non‑monotonic  
-- non‑geometric  
-
-vector spaces.
-
-TS operates in:
-
-- sparse  
-- structured  
-- geometric  
-
-address spaces.
-
-This is why TS can be:
-
-- smaller  
-- cheaper  
-- deterministic  
-- hallucination‑free  
-- CPU‑friendly
 
 ---
 
@@ -411,12 +337,10 @@ Path A is the **semantic front‑end**:
 ```text
 User Input
   → TP_in
-  → SOB → PrSOB → CrOB → FsOB → semantic OBs
+  → SOB → SROB → CnOB → SmOB → semantic OBs
   → TP_out (fully interpreted)
   → Path B
 ```
-
-All interpretation, classification, and disambiguation **must** happen in Path A.
 
 ---
 
@@ -424,7 +348,7 @@ All interpretation, classification, and disambiguation **must** happen in Path�
 
 Path B is a **deterministic realization path**.
 
-Current primitive flow (horizontal):
+Horizontal primitive flow:
 
 ```text
 LI‑prm → REx‑prm → RPlan‑prm → RPU‑prm → ReB‑prm → [Sty‑prm / Vo‑prm / Ti‑prm / Ch‑prm] → CE → ISc
@@ -439,41 +363,14 @@ LI‑prm → REx‑prm → RPlan‑prm → RPU‑prm → ReB‑prm → [Sty‑pr
 - no addressing  
 - no geometric similarity  
 
-Path B:
-
-- executes reasoning  
-- applies operators  
-- follows a plan  
-- bundles results  
-- formats output  
-- validates against instructions
-
 Path B **does not interpret meaning**.
 
 ---
 
 ### 5.3 Architectural invariant: Path B must never have OBs or routing
 
-This is a core architectural rule:
-
 > **Invariant:** Path B must never contain OBs, RBs, routing, residue, addressing, or any semantic interpretation mechanism.  
 > If Path B appears to need interpretation, that logic must be moved into Path A.
-
-Rationale:
-
-- Interpretation is **non‑deterministic, branching, semantic**.  
-- Path B must be **deterministic, linear, execution‑only**.  
-- If Path B starts interpreting, you get:  
-  - semantic drift  
-  - double interpretation  
-  - inconsistent meaning  
-  - circular dependencies  
-  - loss of replay and correctness
-
-Therefore:
-
-- **All OB/RB work belongs in Path A.**  
-- **Path B must remain OB‑free and routing‑free.**
 
 ---
 
@@ -484,9 +381,15 @@ Therefore:
 - The core loop is **TP → SOB → RB → OB → … → TP_out**.  
 - Routing is driven by **residue**, **address fragments**, and **XOR‑based addressing**.  
 - The OB address space must be **monotonic, smooth, curvature‑invariant, and OB‑invariant**.  
-- The four pre‑semantic OB layers (SOB, PrSOB, CrOB, FsOB) prepare the TP so deep semantic OBs never guess.  
+- The four pre‑semantic OB layers are now:  
+  - **SOB** — Structural OB  
+  - **SROB** — Structural‑Refinement OB  
+  - **CnOB** — Constraint OB  
+  - **SmOB** — Semantic OB (entry layer)  
 - Path B is a **deterministic reasoning pipeline** with **no OBs and no routing**.  
 - If Path B ever appears to need OBs or routing, that is a design error—**the work must be pushed back into Path A**.
 
 This document is the **playground‑level architectural description** of TS routing mechanics and the separation of concerns between Path A and Path B.
 ```
+
+---
