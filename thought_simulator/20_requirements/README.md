@@ -62,7 +62,6 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.111_mli.md](20.111_mli.md)
 - [20.115_mtp_requirements.md](20.115_mtp_requirements.md)
 - [20.120_mtp_schema_requirements.md](20.120_mtp_schema_requirements.md)
-- [20.131_te_split_merge.md](20.131_te_split_merge.md)
 - [20.140_truth_done_requirements.md](20.140_truth_done_requirements.md)
 - [20.145_ctp_prm.md](20.145_ctp_prm.md)
 - [20.150_tcu_budgeting_requirements.md](20.150_tcu_budgeting_requirements.md)
