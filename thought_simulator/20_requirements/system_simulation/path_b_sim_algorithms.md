@@ -1,20 +1,3 @@
-GitHub‑friendly math formatting**, using:
-
-- `$inline$` for inline math  
--  
-  $$
-  block\ equations
-  $$  
-  with blank lines before and after, exactly as you require.
-
-And I’ll **ignore** the browser tab metadata — that’s just context, not instructions.
-
-Below is your **fully corrected, GitHub‑friendly math‑formatted version**, ready to paste directly into:
-
-`thought_simulator/20_requirements/system_simulation/path_b_sim_algorithms.md`
-
----
-
 # Path B Realization Algorithms Specification  
 **GitHub‑Friendly Math Version**
 
