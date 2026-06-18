@@ -126,7 +126,7 @@ All formulas below are now in **GitHub‑friendly math formatting**.
 
 ### 3.1 Meaning Drift
 
-Inline form: `$drift = 0.00$`
+Inline form: $drift = 0.00$
 
 Block form:
 
@@ -186,7 +186,7 @@ Inline: $replay\\_hash = hash(\text{canonical\\_payload})$
   
 $$
 replay\\_hash = \text{Hash}\left(
-\text{serialize}\_{\text{stable}}(payload)
+serialize\\_stable(payload)
 \right)
 $$
   
