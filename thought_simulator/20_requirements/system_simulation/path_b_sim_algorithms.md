@@ -145,11 +145,11 @@ Where:
 
 ### 3.2 Surface Variation Entropy
 
-Inline: $H = -\sum p(t)\log_2 p(t)$
+Inline: $H = -\sum p(t)\cdot log_2 p(t)$
 
   
 $$
-H = - \sum_{t} p(t)\,\log_2 p(t)
+H = - \sum_{t} p(t)\cdot log_2 p(t)
 $$
   
 
