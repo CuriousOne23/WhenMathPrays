@@ -257,6 +257,7 @@ For routing to be:
 - deterministic  
 - drift‑free  
 - replayable  
+- predictable  
 
 …the OB address space and similarity function must satisfy strict geometric properties.
 
@@ -302,7 +303,43 @@ This is what makes the routing space a **true metric space**.
 
 ---
 
-### 4.4 OB‑invariant geometry
+### 4.4 Predictability
+
+Predictability is the requirement that **routing behavior must be identical for identical geometric conditions**, regardless of:
+
+- which OB is being approached  
+- which residue fragments produced the query address  
+- which direction the query address approached from  
+- which TP produced the residue  
+
+Formally:
+
+If two query addresses \( q_1 \) and \( q_2 \) satisfy:
+
+- \( d(q_1, OB_i) = d(q_2, OB_i) \)  
+- and their local gradients and curvature match  
+
+then the routing decision must be **identical**:
+
+- same similarity value  
+- same slope  
+- same curvature  
+- same threshold behavior  
+- same OB selection outcome  
+
+Predictability ensures:
+
+- **replayability**  
+- **no drift**  
+- **no sensitivity explosions**  
+- **no “chaotic zones” in the address space**  
+- **consistent routing across all OBs**  
+
+Predictability is the *operational guarantee* that the geometric rules (monotonicity, smoothness, curvature invariance, OB‑invariance) produce **identical routing behavior for identical geometric conditions**.
+
+---
+
+### 4.5 OB‑invariant geometry
 
 The similarity function and its derivatives must be **OB‑invariant**:
 
