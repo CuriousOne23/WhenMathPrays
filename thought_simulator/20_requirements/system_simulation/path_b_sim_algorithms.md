@@ -498,7 +498,7 @@ $drift = 0.00$
 
   
 $$
-H = - \sum_{t} p(t)\,\log_2 p(t)
+H = - \sum_{t} p(t)\cdot\log_2 p(t)
 $$
   
 
