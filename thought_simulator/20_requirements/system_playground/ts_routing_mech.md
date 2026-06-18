@@ -411,22 +411,95 @@ Path B **does not interpret meaning**.
 
 ---
 
-## 6. Summary
+## 6. TS Has No Training
 
-- TS separates **interpretation (Path A)** from **realization (Path B)**.  
-- Routing is a **Path A‑only** concern.  
-- The core loop is **TP → SOB → RB → OB → … → TP_out**.  
-- Routing is driven by **residue**, **address fragments**, and **XOR‑based addressing**.  
-- The OB address space must be **monotonic, smooth, curvature‑invariant, and OB‑invariant**.  
-- The four pre‑semantic OB layers are now:  
-  - **SOB** — Structural OB  
-  - **SROB** — Structural‑Refinement OB  
-  - **CnOB** — Constraint OB  
-  - **SmOB** — Semantic OB (entry layer)  
-- Path B is a **deterministic reasoning pipeline** with **no OBs and no routing**.  
-- If Path B ever appears to need OBs or routing, that is a design error—**the work must be pushed back into Path A**.
+TS is fundamentally different from statistical or machine‑learned systems.  
+Because of the architectural properties described above — monotonicity, smoothness, curvature invariance, predictability, and OB‑invariant geometry — **TS does not require training of any kind**.
 
-This document is the **playground‑level architectural description** of TS routing mechanics and the separation of concerns between Path A and Path B.
-```
+There are no parameters to optimize, no gradients to descend, no loss functions, and no stochastic updates.  
+Instead, TS relies on **fixed operators, fixed OB addresses, fixed primitives, and fixed routing geometry**.
+
+### 6.1 No training — only validation, prove‑out, and simulation
+
+TS development consists of:
+
+- **Validation**  
+  Ensuring that routing, OB behavior, primitives, and invariants behave correctly under all conditions.
+
+- **Prove‑out**  
+  Demonstrating that the system is deterministic, stable, drift‑free, and replayable.  
+  This is mathematical and architectural, not statistical.
+
+- **Simulation**  
+  Running the system end‑to‑end to confirm that routing, residue propagation, OB selection, and Path A→Path B transitions behave as expected.
+
+There is **no learning phase**, no data‑dependent behavior, and no model drift.
+
+### 6.2 Why TS can remain deterministic
+
+Because:
+
+- OB addresses never move  
+- similarity gradients never change  
+- routing thresholds never drift  
+- primitives never adapt  
+- operators never mutate  
+- Path A never reinterprets meaning differently over time  
+- Path B never re‑reasons differently for the same input
+
+This gives TS:
+
+- determinism  
+- stability  
+- replayability  
+- testability  
+- inspectability  
+- zero drift  
+- zero hallucination  
+- zero dependence on training data
+
+### 6.3 The architectural payoff
+
+With the above properties:
+
+- TS is **not trained**  
+- TS is **validated**  
+- TS is **proven out**  
+- TS is **simulated**  
+- TS is **mechanical**, not statistical  
+- TS is **geometric**, not probabilistic  
+- TS is **deterministic**, not stochastic  
+
+This is one of the defining advantages of TS over modern AI architectures.
 
 ---
+
+## 7. Summary
+
+TS separates **interpretation (Path A)** from **realization (Path B)**.  
+Routing is a **Path A‑only** concern, driven by residue, address fragments, and a fixed geometric address space.
+
+The OB hierarchy is:
+
+- **SOB** — Structural OB  
+- **SROB** — Structural‑Refinement OB  
+- **CnOB** — Constraint OB  
+- **SmOB** — Semantic OB (entry layer)
+
+These layers ensure that deep semantic OBs never guess and that all interpretation is complete before Path B begins.
+
+The OB address space must satisfy strict geometric requirements:
+
+- **monotonicity**  
+- **smoothness**  
+- **curvature invariance**  
+- **predictability**  
+- **OB‑invariant geometry**
+
+These properties guarantee deterministic, drift‑free routing.
+
+Path B is a **deterministic reasoning pipeline** with no OBs, no routing, and no interpretation.  
+If Path B ever appears to need OBs or routing, that logic must be moved into Path A.
+
+Finally, because TS is built on fixed operators, fixed OB addresses, and fixed geometric invariants, **TS has no training**.  
+It relies solely on **validation, prove‑out, and simulation**, making it stable, predictable, replayable, and fundamentally different from statistical AI systems.
