@@ -351,7 +351,7 @@ $$
 - **Range:**  
 
 $$
-0 \le \text{replay\_hash\_match\_rate} \le 1
+0 \le \text{replay\\_hash\\_match\\_rate} \le 1
 $$
 
 - **Interpretation:**  
