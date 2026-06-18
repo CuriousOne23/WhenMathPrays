@@ -145,7 +145,7 @@ Where:
 
 ### 3.2 Surface Variation Entropy
 
-Inline: `$H = -\sum p(t)\log_2 p(t)$`
+Inline: $H = -\sum p(t)\log_2 p(t)$
 
   
 $$
@@ -153,7 +153,7 @@ H = - \sum_{t} p(t)\,\log_2 p(t)
 $$
   
 
-Where `$p(t)$` is token frequency across outputs from different seeds.
+Where $p(t)$ is token frequency across outputs from different seeds.
 
 ---
 
