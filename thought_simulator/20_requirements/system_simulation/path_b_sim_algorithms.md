@@ -272,10 +272,6 @@ Invariants checked at each boundary.
 - On failure: return structured failure state, never degrade silently.  
 - Test replay by running same seed twice and comparing logs + output.
 
-Here’s a drop‑in section you can add (e.g., as **“7. Operational Ranges and Interpretations”**) to `path_b_sim_algorithms.md`.
-
-All `\text{}` underscores use `\\_` so GitHub will render cleanly.
-
 ---
 
 ## 7. Operational ranges and interpretations
@@ -287,40 +283,40 @@ This section summarizes the **expected range of operation** for each metric and 
 - **Range:**  
   - Theoretically:  
 
-    $$
-    drift \ge 0
-    $$
+$$
+drift \ge 0
+$$
 
   - For Path B (by design):  
 
-    $$
-    drift = 0.00
-    $$
+$$
+drift = 0.00
+$$
 
 - **Interpretation:**  
-  - **Low / Optimum:** `drift = 0.00` → no semantic change (required for Path B).  
-  - **High:** any `drift > 0` → invariant violation; Path B must be treated as incorrect.
+  - **Low / Optimum:** drift = 0.00 → no semantic change (required for Path B).  
+  - **High:** any drift > 0 → invariant violation; Path B must be treated as incorrect.
 
 ---
 
-### 7.2 Surface variation entropy `H`
+### 7.2 Surface variation entropy H
 
 - **Range:**  
 
-  $$
-  0 \le H \le H\_{\max}
-  $$
+$$
+0 \le H \le H\_{\max}
+$$
 
-  where `$H\_{\max}$` depends on vocabulary and output length.
+  where $H\_{\max}$ depends on vocabulary and output length.
 
 - **Interpretation:**  
-  - **Low:** `$H \approx 0.0$` → nearly identical surface forms across seeds (rigid expression).  
-  - **Optimum:** moderate `$H$` (e.g., `0.2–0.6` in current sims) → healthy variation with stable meaning.  
-  - **High:** very large `$H$` → highly unstable expression; may hurt replay/debuggability.
+  - **Low:** $H \approx 0.0$ → nearly identical surface forms across seeds (rigid expression).  
+  - **Optimum:** moderate $H$ (e.g., 0.2–0.6 in current sims) → healthy variation with stable meaning.  
+  - **High:** very large $H$ → highly unstable expression; may hurt replay/debuggability.
 
 ---
 
-### 7.3 Plan fidelity `\text{plan\\_fidelity}`
+### 7.3 Plan fidelity $\text{plan\\_fidelity}$
 
 - **Range:**  
 
@@ -329,23 +325,23 @@ This section summarizes the **expected range of operation** for each metric and 
   $$
 
 - **Interpretation:**  
-  - **Low:** `< 0.8` → realized output frequently deviates from planned structure.  
-  - **Optimum:** `\ge 0.95` (e.g., `0.97` in B3) → output closely follows the plan.  
+  - **Low:** < 0.8 → realized output frequently deviates from planned structure.  
+  - **Optimum:** $\ge 0.95$ (e.g., 0.97 in B3) → output closely follows the plan.  
   - **High (near 1.0):** ideal; plan is faithfully realized.
 
 ---
 
-### 7.4 Step alignment ratio `\text{step\\_alignment\\_ratio}`
+### 7.4 Step alignment ratio $\text{step\\_alignment\\_ratio}$
 
 - **Range:**  
 
-  $$
-  0 \le \text{step\\_alignment\\_ratio} \le 1
-  $$
+$$
+0 \le \text{step\\_alignment\\_ratio} \le 1
+$$
 
 - **Interpretation:**  
-  - **Low:** `< 0.8` → step ordering/roles often misaligned.  
-  - **Optimum:** `\ge 0.9` → realized structure matches planned sequence.  
+  - **Low:** < 0.8 → step ordering/roles often misaligned.  
+  - **Optimum:** $\ge 0.9$ → realized structure matches planned sequence.  
   - **High (near 1.0):** ideal; steps are correctly ordered and fulfilled.
 
 ---
@@ -354,81 +350,81 @@ This section summarizes the **expected range of operation** for each metric and 
 
 - **Range:**  
 
-  $$
-  0 \le \text{replay\_hash\_match\_rate} \le 1
-  $$
+$$
+0 \le \text{replay\_hash\_match\_rate} \le 1
+$$
 
 - **Interpretation:**  
-  - **Low:** `< 1.0` → nondeterminism or logging gaps; replay is not exact.  
+  - **Low:** < 1.0 → nondeterminism or logging gaps; replay is not exact.  
   - **Optimum / Required:**  
 
-    $$
-    \text{replay\_hash\_match\_rate} = 1.0
-    $$
+$$
+\text{replay\\_hash\\_match\\_rate} = 1.0
+$$
 
     for identical inputs and seed.  
-  - **High:** cannot exceed `1.0`.
+  - **High:** cannot exceed 1.0.
 
 ---
 
-### 7.6 Tone compliance `\text{tone\\_compliance}`
+### 7.6 Tone compliance $\text{tone\\_compliance}$
 
 - **Range:**  
 
-  $$
-  0 \le \text{tone\\_compliance} \le 1
-  $$
+$$
+0 \le \text{tone\\_compliance} \le 1
+$$
 
 - **Interpretation:**  
-  - **Low:** `< 0.8` → tone frequently misses the target.  
-  - **Optimum:** `\ge 0.95` (e.g., `0.96` in B4) → tone closely matches requested profile.  
+  - **Low:** < 0.8 → tone frequently misses the target.  
+  - **Optimum:** $\ge 0.95$ (e.g., 0.96 in B4) → tone closely matches requested profile.  
   - **High (near 1.0):** ideal; tone is essentially perfect.
 
 ---
 
-### 7.7 Seed sensitivity index `\text{seed\\_sensitivity}`
+### 7.7 Seed sensitivity index $\text{seed\\_sensitivity}$
 
 - **Range:**  
 
-  $$
-  0 \le \text{seed\\_sensitivity}
-  $$
+$$
+0 \le \text{seed\\_sensitivity}
+$$
 
   (upper bound depends on chosen distance metric).
 
 - **Interpretation:**  
-  - **Low:** near `0.0` → almost no variation across seeds (rigid expression).  
-  - **Optimum:** small‑to‑moderate values (e.g., `0.2–0.4` as in B2/B6) → healthy stylistic variation with stable meaning.  
+  - **Low:** near 0.0 → almost no variation across seeds (rigid expression).  
+  - **Optimum:** small‑to‑moderate values (e.g., 0.2–0.4 as in B2/B6) → healthy stylistic variation with stable meaning.  
   - **High:** very large values → expression may be too unstable; harder to reason about.
 
 ---
 
-### 7.8 Structural divergence `\text{structural\\_divergence}`
+### 7.8 Structural divergence $\text{structural\\_divergence}$
 
 - **Range:**  
 
-  $$
-  0 \le \text{structural\\_divergence} \le 1
-  $$
+$$
+0 \le \text{structural\\_divergence} \le 1
+$$
 
 - **Interpretation:**  
-  - **Low:** near `0.0` → alternative plans are structurally almost identical.  
-  - **Optimum:** moderate values (e.g., `\approx 0.4–0.5` as in B7) → genuinely different structures with identical meaning.  
-  - **High:** near `1.0` → radically different structures; still acceptable if drift remains `0.0`.
+  - **Low:** near 0.0 → alternative plans are structurally almost identical.  
+  - **Optimum:** moderate values (e.g., $\approx 0.4–0.5$ as in B7) → genuinely different structures with identical meaning.  
+  - **High:** near 1.0 → radically different structures; still acceptable if drift remains 0.0.
 
 ---
 
-### 7.9 Output stability `\text{output\\_stability}`
+### 7.9 Output stability $\text{output\\_stability}$
 
 - **Range:**  
 
-  $$
-  0 \le \text{output\\_stability} \le 1
-  $$
+$$
+0 \le \text{output\\_stability} \le 1
+$$
 
 - **Interpretation:**  
-  - **Low:** `< 0.8` → outputs vary significantly under load; fragile behavior.  
-  - **Optimum:** `\ge 0.9` (e.g., `0.93` in B8) → stable behavior even under stress.  
+  - **Low:** < 0.8 → outputs vary significantly under load; fragile behavior.  
+  - **Optimum:** $\ge 0.9$ (e.g., 0.93 in B8) → stable behavior even under stress.  
   - **High (near 1.0):** ideal; highly stable realization.
 
 ---
@@ -437,22 +433,147 @@ This section summarizes the **expected range of operation** for each metric and 
 
 - **Latency delta:** typically expressed as percentage change vs. baseline.
 
-  $$
-  \Delta\text{latency} \approx +0\% \text{ to } +10\%
-  $$
+$$
+\Delta\text{latency} \approx +0\% \text{ to } +10\%
+$$
 
-  - **Low / Optimum:** small positive delta (e.g., `+0–5%`) under stress.  
-  - **Acceptable:** up to `+10%` in heavy B8‑style loads.  
+  - **Low / Optimum:** small positive delta (e.g., +0–5%) under stress.  
+  - **Acceptable:** up to +10% in heavy B8‑style loads.  
   - **High:** larger increases suggest performance tuning needed.
 
 - **Memory delta:** similarly, percentage change vs. baseline.
 
-  $$
-  \Delta\text{memory} \approx +0\% \text{ to } +10\%
-  $$
+$$
+\Delta\text{memory} \approx +0\% \text{ to } +10\%
+$$
 
-  - **Low / Optimum:** `+0–5%`.  
-  - **Acceptable:** up to `+10%` under stress.  
+  - **Low / Optimum:** +0–5%.  
+  - **Acceptable:** up to +10% under stress.  
   - **High:** beyond that indicates inefficient plan or realization structures.
+
+---
+
+# 8. Target Operating Envelope (TOE)
+
+The **Target Operating Envelope (TOE)** defines the expected, acceptable, and optimal ranges for all Path B metrics under normal and stress conditions. These values come from the validated B‑series simulations and the architectural invariants of Path B.
+
+This table is meant for engineers, reviewers, and implementers to quickly understand **what “good” looks like** for each metric.
+
+---
+
+## 8.1 Summary Table (GitHub‑safe)
+
+| Metric | Symbol / Formula | Expected Range | Optimum | Low / Warning | High / Violation |
+|--------|------------------|----------------|---------|----------------|------------------|
+| Meaning Drift | $drift$ | $0.00$ | $0.00$ | Any > 0 = **violation** | Any > 0 |
+| Surface Variation Entropy | $H$ | 0.1–0.6 | 0.2–0.4 | < 0.1 (too rigid) | > 0.6 (unstable) |
+| Plan Fidelity | $\text{plan\\_fidelity}$ | 0.9–1.0 | ≥ 0.95 | < 0.9 | < 0.8 severe |
+| Step Alignment Ratio | $\text{step\\_alignment\\_ratio}$ | 0.9–1.0 | ≥ 0.95 | < 0.9 | < 0.8 severe |
+| Replay Hash Match Rate | $1.0$ | $1.0$ | $1.0$ | < 1.0 nondeterminism | < 1.0 |
+| Tone Compliance | $\text{tone\\_compliance}$ | 0.9–1.0 | ≥ 0.95 | < 0.9 | < 0.8 |
+| Seed Sensitivity Index | $\text{seed\\_sensitivity}$ | 0.2–0.4 | 0.25–0.35 | < 0.1 rigid | > 0.5 unstable |
+| Structural Divergence | $\text{structural\\_divergence}$ | 0.3–0.6 | ≈ 0.4–0.5 | < 0.2 too similar | > 0.7 too divergent |
+| Output Stability | $\text{output\\_stability}$ | 0.9–1.0 | ≥ 0.93 | < 0.9 | < 0.85 |
+| Latency Delta | $\Delta\text{latency}$ | +0–10% | +0–5% | > +10% | > +15% |
+| Memory Delta | $\Delta\text{memory}$ | +0–10% | +0–5% | > +10% | > +15% |
+
+---
+
+## 8.2 GitHub‑safe equations for each metric
+
+### Meaning Drift
+
+  
+$$
+drift = \lVert H_{\text{sem\\_before}} - H_{\text{sem\\_after}} \rVert
+$$
+  
+
+Target:  
+$drift = 0.00$
+
+---
+
+### Surface Variation Entropy
+
+  
+$$
+H = - \sum_{t} p(t)\,\log_2 p(t)
+$$
+  
+
+---
+
+### Plan Fidelity
+
+  
+$$
+\text{plan\\_fidelity} =
+\frac{\text{matching\\_steps}}{\text{total\\_planned\\_steps}}
+$$
+  
+
+---
+
+### Step Alignment Ratio
+
+  
+$$
+\text{step\\_alignment\\_ratio} =
+\frac{\text{aligned\\_steps}}{\text{total\\_steps}}
+$$
+  
+
+---
+
+### Tone Compliance
+
+  
+$$
+\text{tone\\_compliance} =
+\cos\!\left(\vec{o},\,\vec{t}\right)
+$$
+  
+
+---
+
+### Seed Sensitivity
+
+  
+$$
+\text{seed\\_sensitivity} =
+\frac{2}{n(n-1)}
+\sum_{i<j} d(O_i, O_j)
+$$
+  
+
+---
+
+### Structural Divergence
+
+  
+$$
+\text{structural\\_divergence} \in [0,1]
+$$
+  
+
+---
+
+## 8.3 Interpretation Notes
+
+- **Meaning drift must always be zero.**  
+  Any nonzero value is a **hard invariant violation**.
+
+- **Entropy, seed sensitivity, and structural divergence** should be **moderate**, not extreme.  
+  Too low → rigid, brittle expression.  
+  Too high → unstable, noisy expression.
+
+- **Replay hash must always match.**  
+  This is the core determinism guarantee.
+
+- **Tone compliance** is a soft constraint but should remain high (≥ 0.95).
+
+- **Latency and memory deltas** are performance indicators, not correctness indicators.  
+  They matter for scaling and parallel execution.
 
 ---
