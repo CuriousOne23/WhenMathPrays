@@ -38,14 +38,7 @@ This document describes:
 At the highest level, Path A routing is:
 
 ```text
-TP_in
-  → SOB (structural OBs)
-  → RB (routing block)
-  → OB (selected OB or OB set)
-  → RB (again, with new residue)
-  → OB (next OB)
-  → ...
-  → TP_out (fully interpreted, ready for Path B)
+TP_in → SOB (structural OBs) → RB (routing block) → OB (selected OB or OB set) → RB (again, with new residue) → OB (next OB) → ...→ TP_out (fully interpreted, ready for Path B)
 ```
 
 The loop is:
