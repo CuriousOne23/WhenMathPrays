@@ -132,14 +132,14 @@ Block form:
 
   
 $$
-drift = \lVert H_{\text{sem\_before}} - H_{\text{sem\_after}} \rVert
+drift = \lVert H_{\text{sem\\_before}} - H_{\text{sem\\_after}} \rVert
 $$
   
 
 Where:
 
-- `$H_{\text{sem\_before}}$` = semantic hash of TP before Path B  
-- `$H_{\text{sem\_after}}$` = semantic hash after Path B (should be identical)
+- $H_\text{sem\\_before}$ = semantic hash of TP before Path B  
+- $H_\text{sem\\_after}$ = semantic hash after Path B (should be identical)
 
 ---
 
@@ -161,8 +161,8 @@ Where `$p(t)$` is token frequency across outputs from different seeds.
 
   
 $$
-\text{plan\_fidelity} = 
-\frac{\text{matching\_steps}}{\text{total\_planned\_steps}}
+\text{plan\\_fidelity} = 
+\frac{\text{matching\\_steps}}{\text{total\\_planned\\_steps}}
 $$
   
 
@@ -172,8 +172,8 @@ $$
 
   
 $$
-\text{step\_alignment\_ratio} =
-\frac{\text{aligned\_steps}}{\text{total\_steps}}
+\text{step\\_alignment\\_ratio} =
+\frac{\text{aligned\\_steps}}{\text{total\\_steps}}
 $$
   
 
@@ -181,11 +181,11 @@ $$
 
 ### 3.5 Replay Hash
 
-Inline: `$replay\_hash = hash(\text{canonical\_payload})$`
+Inline: $replay\\_hash = hash(\text{canonical\\_payload})$
 
   
 $$
-replay\_hash = \text{Hash}\!\left(
+replay\\_hash = \text{Hash}\left(
 \text{serialize}\_{\text{stable}}(payload)
 \right)
 $$
@@ -199,15 +199,15 @@ Where `payload` includes all logs + output + seed.
 
   
 $$
-\text{tone\_compliance} = 
+\text{tone\\_compliance} = 
 \cos(\vec{o}, \vec{t})
 $$
   
 
 Where:
 
-- `$\vec{o}$` = embedding of output  
-- `$\vec{t}$` = embedding of tone exemplar  
+- $\vec{o}$ = embedding of output  
+- $\vec{t}$ = embedding of tone exemplar  
 
 Or rule‑based equivalent.
 
@@ -217,13 +217,13 @@ Or rule‑based equivalent.
 
   
 $$
-\text{seed\_sensitivity} =
+\text{seed\\_sensitivity} =
 \frac{2}{n(n-1)}
 \sum_{i<j} d(O_i, O_j)
 $$
   
 
-Where `$d$` is token‑ or embedding‑distance.
+Where $d$ is token‑ or embedding‑distance.
 
 ---
 
@@ -231,7 +231,7 @@ Where `$d$` is token‑ or embedding‑distance.
 
   
 $$
-\text{structural\_divergence} \in [0,1]
+\text{structural\\_divergence} \in [0,1]
 $$
   
 
@@ -256,11 +256,11 @@ Invariants checked at each boundary.
 
 ## 5. Determinism & Purity Rules
 
-- `$seed$` fixed ⇒ identical output  
-- No writes to `$TP$` or `$MTP$`  
+- $seed$ fixed ⇒ identical output  
+- No writes to $TP$ or $MTP$  
 - Randomness bounded to expression layer  
-- Drift invariant: `$drift = 0.00$`  
-- Replay invariant: `$replay\_hash$` stable  
+- Drift invariant: $drift = 0.00$  
+- Replay invariant: $replay\\_hash$ stable  
 
 ---
 
