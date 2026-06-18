@@ -531,7 +531,7 @@ $$
   
 $$
 \text{tone\\_compliance} =
-\cos\!\left(\vec{o},\,\vec{t}\right)
+\cos\left(\vec{o},\vec{t}\right)
 $$
   
 
