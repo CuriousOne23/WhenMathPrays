@@ -32,6 +32,14 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.17_messy_input_handling.md](20.17_messy_input_handling.md)
 - [20.20_ts_prim_proc_ref_gov.md](20.20_ts_primprim_proc_ref_gov.md)
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
+- [20.30.010_ts_ops.md] (20.30.010_ts_ops.md)
+- [20.30.020_cycle_alloc.md](20.30.020_cycle_alloc.md)
+- [20.30.030_tcu_budgeting.md](20.30.030_tcu_budgeting.md)
+- [20.30.040_mcs_rules.md](20.30.040_mcs_rules.md)
+- [20.30.050_merge_formal.md](20.30.050_merge_formal.md)
+- [20.30.060_truth_completion.md](20.30.060_truth_completion.md)
+- [20.30.070_tpu_mtp_sem.md](20.30.070_tpu_mtp_sem.md)
+- [20.30.080_resp_gen_sem.md](20.30.080_resp_gen_sem.md)
 - [20.31_semantic_specification.md](20.31_semantic_specification.md)
 - [20.32_cob_requirements.md](20.32_cob_requirements.md)
 - [20.33_cil_requirements.md](20.33_cil_requirements.md)
@@ -79,7 +87,12 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 ## Coordination Programs (Non-Normative)
 - [20.500_refactoring_for_dual_TS_pipeline.md](20.500_refactoring_for_dual_TS_pipeline.md) — dual-pipeline refactor (**complete** 2026-06-07)
 - [20.510_refactoring_for_input_correction_track_h.md](20.510_refactoring_for_input_correction_track_h.md) — Track H input correction (IIInB / USP / UPI) — **complete** 2026-06-07
-
+- [20.30.500_old2new_hlr_idx.md](20.30.500_old2new_hlr_idx.md)
+- **complete** 2026-06-17
+- [20.30.500.000_old_shalls_semantic.md](20.30.500.000_old_shalls_semantic.md)
+- **complete** 2026-06-17
+- [20.30.500.004_new_hlr_semantics.md](20.30.500.004_new_hlr_semantics.md)
+- **complete** 2026-06-17
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
