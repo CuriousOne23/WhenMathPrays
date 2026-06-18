@@ -48,6 +48,10 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.36_canonical_end_to_end_trace.md](20.36_canonical_end_to_end_trace.md)
 - [20.37_thought_router_tr_specification.md](20.37_thought_router_tr_specification.md)
 - [20.40_ob_requirements.md](20.40_ob_requirements.md)
+- [20.40.010_sob_prim.md](20.40.010_sob_prim.md)
+- [20.40.020_srob_prim.md](20.40.010_srob_prim.md)
+- [20.40.030_cnob_prim.md](20.40.030_cnob_prim.md)
+- [20.40.040_smob_prim.md](20.40.040_smob_prim.md)
 - [20.44_ts_isc_scoring.md](20.44_ts_isc_scoring.md)
 - [20.45_imr_requirements.md](20.45_imr_requirements.md)
 - [20.50_rb_requirements.md](20.50_rb_requirements.md)
@@ -93,6 +97,10 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - **complete** 2026-06-17
 - [20.30.500.004_new_hlr_semantics.md](20.30.500.004_new_hlr_semantics.md)
 - **complete** 2026-06-17
+- [20.40.500_old_hlr_semantic_ref.md](20.40.500_old_hlr_semantic_ref.md)
+- **complete** 2026-06-18
+- [20.40.510_new_hlr_semantic_ref.md](20.40.510_new_hlr_semantic_ref.md)
+- **complete** 2026-06-18
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
