@@ -1,11 +1,11 @@
 # Path A+B Integration Evaluation Report
 
-**Report ID:** TS-EVAL-AB-2026-06-19
-**Operator:** CuriousOne23
-**Simulation**: Copilot
-**Evaluation Framework:** TS-ITP-AB-002
-**Evaluation Date:** 2026-06-19
-**Scoring System:** Three-dimensional numeric — A-Score / B-Score / AB-Score (scale 0–100)
+**Report ID:** TS-EVAL-AB-2026-06-19  
+**Operator:** CuriousOne23  
+**Simulation**: Copilot  
+**Evaluation Framework:** TS-ITP-AB-002  
+**Evaluation Date:** 2026-06-19  
+**Scoring System:** Three-dimensional numeric — A-Score / B-Score / AB-Score (scale 0–100)  
 
 ---
 
