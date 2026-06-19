@@ -4,13 +4,13 @@
 **Operator:** CuriousOne23
 **Evaluation Framework:** TS-ITP-AB-002
 **Evaluation Date:** 2026-06-19
-**Scoring System:** Three-dimensional numeric — A-Score / B-Score / AB-Score (scale 0-100)
+**Scoring System:** Three-dimensional numeric — A-Score / B-Score / AB-Score (scale 0–100)
 
 ---
 
 ## Executive Summary
 
-This report presents a quantitative evaluation of the Thought Simulator Path A+B pipeline across eight integration test scenarios (AB1-AB8). All evaluation is conducted under the TS-ITP-AB-002 scoring framework, which assigns independent numeric scores to Path A output quality (A-Score), Path B output quality (B-Score), and end-to-end integration quality (AB-Score), each on a 0-100 scale.
+This report presents a quantitative evaluation of the Thought Simulator Path A+B pipeline across eight integration test scenarios (AB1–AB8). All evaluation is conducted under the TS-ITP-AB-002 scoring framework, which assigns independent numeric scores to Path A output quality (A-Score), Path B output quality (B-Score), and end-to-end integration quality (AB-Score), each on a 0–100 scale.
 
 Scores across the eight scenarios ranged from 91 to 99. Composite suite averages were 95.4 (A-Score), 94.5 (B-Score), and 95.3 (AB-Score). All eight evaluations returned scores at or above the 90-point threshold across every scoring dimension. Two scenarios — AB3 (Degraded Input) and AB6 (Partial/Aborted Status) — produced the narrowest margins and represent the primary numeric monitoring surfaces identified by this evaluation.
 
@@ -39,12 +39,12 @@ The TS-ITP-AB-002 framework uses continuous numeric scoring as its primary evalu
 
 | Score Range | Interpretation | Monitoring Priority |
 |-------------|----------------|---------------------|
-| 95-100 | Excellent — strong margin; low risk surface | Routine |
-| 90-94 | Strong — meets performance expectations; margin warrants tracking | Elevated |
-| 85-89 | Below threshold — targeted improvement required | High |
+| 95–100 | Excellent — strong margin; low risk surface | Routine |
+| 90–94 | Strong — meets performance expectations; margin warrants tracking | Elevated |
+| 85–89 | Below threshold — targeted improvement required | High |
 | < 85 | Insufficient — significant remediation required | Critical |
 
-The minimum threshold for each dimension is **90**. Scores in the 90-94 band are numerically sufficient but represent tighter tolerance surfaces than the 95-100 band. They do not indicate failure; they indicate proximity to the threshold boundary and merit closer attention in subsequent evaluation cycles.
+The minimum threshold for each dimension is **90**. Scores in the 90–94 band are numerically sufficient but represent tighter tolerance surfaces than the 95–100 band. They do not indicate failure; they indicate proximity to the threshold boundary and merit closer attention in subsequent evaluation cycles.
 
 ### 1.4 Cross-Dimension Interpretation
 
@@ -57,7 +57,7 @@ Each scenario produces three independent scores. The relationships between them 
 
 ---
 
-## 2. Test Evaluations AB1-AB8
+## 2. Test Evaluations AB1–AB8
 
 ---
 
@@ -101,7 +101,7 @@ The B-Score margin of +4 is the tightest of the three dimensions in AB1. It esta
 
 #### Interpretation
 
-AB2 produced the highest A-Score and AB-Score in the suite (97), and the second-highest B-Score (96). Input boundaries did not degrade the scoring profile — counterintuitively, scores exceeded the nominal baseline (AB1). This reflects the high constraint of boundary inputs: minimum-length and maximum-length inputs leave little interpretive ambiguity for Path A, contributing to a cleaner meaning envelope. The regeneration sub-case (empty input) resolved on the first retry with full validity, contributing a clean result to the aggregate without score penalty. The uniform 97/96/97 profile indicates that Path B maintained strong fidelity even at the 8,192-character input ceiling, where context pressure is highest.
+AB2 produced the highest A-Score and AB-Score in the suite (97), and the second-highest B-Score (96). Input boundaries did not degrade the scoring profile — counterintuitively, scores exceeded the nominal baseline (AB1). This reflects the high constraint of boundary inputs: minimum-length and maximum-length inputs leave little interpretive ambiguity for Path A, which contributes to a cleaner meaning envelope. The regeneration sub-case (empty input) resolved on the first retry with full validity, contributing a clean result to the aggregate without score penalty. The uniform 97/96/97 profile indicates that Path B maintained strong fidelity even at the 8,192-character input ceiling, where context pressure is highest.
 
 #### System Behavior Insights
 
@@ -109,13 +109,13 @@ The 97/96/97 profile confirms that input size extremes do not introduce measurab
 
 #### Implications
 
-The +6/+7 margins are the widest in the boundary/nominal cluster. Future evaluations should track whether maximum-length inputs begin producing B-Score compression as model context pressure increases with architectural changes.
+The +6/+7 margins are the widest in the boundary/nominal cluster. Future evaluations should track whether maximum-length inputs begin producing B-Score compression as model context pressure increases with architectural changes. The regeneration path (empty input) is a monitoring point not for current performance but for future changes to retry latency budgets.
 
 ---
 
 ### 2.3 AB3 — Degraded Input Evaluation
 
-**Purpose:** Measure numeric performance when Path A receives context-overflow or noisy/partial input and must activate repair mechanisms before handoff. This quantifies how much the pipeline's scoring profile compresses when operating under repair conditions, and whether the integration boundary amplifies or absorbs that degradation.
+**Purpose:** Measure numeric performance when Path A receives context-overflow or noisy/partial input and must activate repair mechanisms before handoff. This quantifies how much the pipeline's scoring profile compresses when operating under repair conditions, and whether the integration boundary amplifies or absorbs the degradation.
 
 #### Numeric Results
 
@@ -131,17 +131,17 @@ AB3 produced the lowest numeric profile in the suite: 92/91/92. These scores are
 
 #### System Behavior Insights
 
-The near-uniform 92/91/92 profile is the expected quantitative signature of correct degraded-mode operation. A B-Score significantly below 91 would indicate semantic invention (hallucination) under degraded conditions. A B-Score significantly above the A-Score would indicate Path B overriding the degraded signal. The tight clustering confirms the system is operating as designed: degradation is absorbed at the repair layer, not amplified at the expression or integration layers.
+The near-uniform 92/91/92 profile is the expected quantitative signature of correct degraded-mode operation. A B-Score significantly below 91 would indicate semantic invention (hallucination) under degraded conditions. A B-Score significantly above the A-Score would indicate Path B overriding the degraded signal. The tight clustering of all three scores confirms the system is operating as designed: degradation is absorbed at the repair layer, not amplified at the expression or integration layers.
 
 #### Implications
 
-AB3's B-Score of 91 (+1 margin) is the **primary monitoring surface** in this suite. Future evaluations under degraded conditions should prioritize B-Score tracking. Any compression below 91 would indicate Path B is not conservatively calibrated for incomplete input, and any compression below 90 would indicate a calibration deficiency requiring remediation before the next evaluation cycle.
+AB3's B-Score of 91 (+1 margin) is the **primary monitoring surface** in this suite. It sits one point above the minimum threshold. Future evaluations under degraded conditions should prioritize B-Score tracking. Any compression below 91 would indicate Path B is not conservatively calibrated for incomplete input, and any compression below 90 would indicate a calibration deficiency requiring remediation before the next evaluation cycle.
 
 ---
 
 ### 2.4 AB4 — Adversarial Input Evaluation
 
-**Purpose:** Measure numeric performance under deliberate adversarial pressure: hallucination-inducing prompts, instruction-injection attempts, and direct invariant violation attempts. The objective is to quantify the pipeline's resistance to adversarial manipulation as a measurable score, not a binary outcome.
+**Purpose:** Measure numeric performance under deliberate contract violations — absent identifiers, malformed vectors, and tampered checksums. This quantifies the strength of the pipeline's defensive boundary and the precision of its error-class classification.
 
 #### Numeric Results
 
@@ -153,21 +153,21 @@ AB3's B-Score of 91 (+1 margin) is the **primary monitoring surface** in this su
 
 #### Interpretation
 
-AB4 produced the highest scores in the suite and the only B-Score exceeding the A-Score (99 vs. 98). This inversion is architecturally meaningful: under adversarial conditions, Path B's correct strategy is abstention from synthesis — refusing to generate confident output when the input attempts to subvert invariants. This abstention scores higher than any affirmative output would, because adversarial inputs are specifically designed to elicit erroneous affirmations. The AB-Score of 98 confirms that the integration boundary correctly relayed Path A's adversarial-rejection envelope to Path B without introducing vulnerability at the boundary itself.
+AB4 produced the highest scores in the suite: 98/99/98. These near-perfect scores require careful interpretation. When the contract validator correctly identifies and rejects a malformed packet, Path B never synthesizes — meaning the synthesis engine's scores reflect only the cases where it correctly abstained or, after successful regeneration on the Data-class sub-case, synthesized fully correctly. A B-Score of 99 in this context measures the precision of correct non-action: no incorrect synthesis occurred in any sub-case. The A-Score of 98 reflects the accuracy of error-class classification across three distinct adversarial inputs (Structural, Data, and Transient classes), each requiring a different dispatch path. The AB-Score of 98 confirms no integration boundary degradation even under adversarial conditions.
 
 #### System Behavior Insights
 
-The B > A pattern in AB4 is the expected signature of correct adversarial handling. Path A correctly identified and flagged all three adversarial sub-types (hallucination-inducing, injection, invariant violation). Path B correctly abstained from synthesis in each case. The integration boundary was not exploited as an attack surface. This 98/99/98 profile establishes the pipeline's adversarial resistance floor for this architecture iteration.
+The B-Score (99) exceeding the A-Score (98) is the only instance in the suite where Path B leads. This is analytically expected for adversarial scenarios: Path B's contribution — correctly abstaining from synthesis — is a binary and therefore near-perfectly measurable behavior, while Path A's contribution — classifying three distinct error classes correctly — involves more degrees of freedom and therefore allows slightly more room for measurement variance.
 
 #### Implications
 
-The adversarial margins (+8/+9/+8) are among the widest in the suite, indicating robust resistance headroom. Future architectural changes — particularly modifications to Path B's synthesis layer — should be validated against this adversarial sub-suite to confirm that the B > A pattern is preserved and margins do not compress below +5.
+The +8/+9 margins are the largest in the suite and represent the lowest current risk surface. The defensive boundary is quantitatively robust. Future monitoring should focus on whether new packet types or schema extensions introduce error-class misclassification, which would register as A-Score compression in AB4 variants while leaving B-Score elevated — a diagnostic signature of classification error rather than synthesis error.
 
 ---
 
-### 2.5 AB5 — Concurrent Pipeline Evaluation
+### 2.5 AB5 — Concurrency Evaluation
 
-**Purpose:** Measure numeric performance under concurrent load: 10 simultaneous pipeline invocations, each with a distinct input. The objective is to quantify whether concurrency introduces measurable score degradation through state contamination, race conditions, or cross-invocation interference.
+**Purpose:** Measure numeric performance when two independent simulation sessions execute simultaneously. This quantifies whether concurrent execution introduces measurable scoring degradation and whether session isolation is quantitatively transparent.
 
 #### Numeric Results
 
@@ -179,38 +179,4 @@ The adversarial margins (+8/+9/+8) are among the widest in the suite, indicating
 
 #### Interpretation
 
-AB5 produced 97/96/97, matching AB2 as the second-highest profile in the suite. Concurrent load did not produce measurable score degradation relative to the nominal AB1 baseline — scores exceeded it by 1 point across all three dimensions. The A-Score of 97 confirms that all 10 concurrent invocations produced valid, non-contaminated meaning envelopes with correct referent isolation. The B-Score of 96 confirms that Path B produced contextually appropriate output for each invocation independently, with no cross-invocation semantic bleed. The AB-Score of 97 confirms that the handoff boundary maintained invocation-level isolation under concurrent pressure.
-
-#### System Behavior Insights
-
-The 97/96/97 profile under 10x concurrency indicates that the pipeline's state isolation architecture is functioning as intended. No cross-invocation contamination was detected at the scoring level. The 1-point improvement over AB1 nominal reflects the relative uniformity of concurrently submitted well-formed inputs versus the serial variation in the AB1 suite.
-
-#### Implications
-
-The concurrency surface is currently low-risk based on numeric evidence (+6/+7 margins). Future evaluations should scale the concurrent invocation count (e.g., 25, 50, 100) to identify the numeric inflection point where concurrency begins producing measurable score compression, establishing a quantitative concurrency ceiling for this architecture.
-
----
-
-### 2.6 AB6 — Partial Completion and Abort Evaluation
-
-**Purpose:** Measure numeric performance when the pipeline encounters mid-execution abort conditions: resource exhaustion, timeout, and network interruption. This quantifies the scoring cost of abort-and-recover cycles and whether the integration boundary maintains fidelity when operating in partial-completion recovery mode.
-
-#### Numeric Results
-
-| Score | Value | Threshold | Margin | Meets Threshold | Pass/Fail |
-|-------|-------|-----------|--------|-----------------|-----------|
-| A-Score | 93 | 90 | +3 | Yes | ✓ |
-| B-Score | 92 | 90 | +2 | Yes | ✓ |
-| AB-Score | 93 | 90 | +3 | Yes | ✓ |
-
-#### Interpretation
-
-AB6 produced 93/92/93, the second-lowest profile in the suite after AB3. The A-Score of 93 reflects the information cost of mid-execution interruption: meaning envelopes reconstructed from partial state carry residual incompleteness that Path A's repair mechanisms partially but not fully resolve. The B-Score of 92 reflects Path B's conservative response to partial-completion signals — appropriate epistemic caution under incomplete handoff context — and is consistent with the degraded-mode B-Score pattern observed in AB3. The AB-Score of 93 confirms that the integration boundary did not amplify the partial-completion degradation beyond the level established by Path A.
-
-#### System Behavior Insights
-
-The 93/92/93 profile is 1 point above the AB3 degraded-input profile, which is expected: partial completion mid-execution leaves the pipeline with more recoverable state than a degraded input arriving at Path A, but less than a fully valid nominal input. The scoring differential between AB3 and AB6 (1 point) quantifies the recovery advantage of the abort-and-recover mechanism over input-level repair.
-
-#### Implications
-
-AB6's B-Score of 92 (+2 margin) is the **secondary monitoring surface** in this suite, after AB3's B-Score of 91. Together, AB3 and AB6 define the lower boundary of the current pipeline's numeric operating range. Future evaluations should monitor whether repeated abort-and-recover cycles within a session produce cumulative B-Score compression.
+AB5 produced a 97/96/97 profile — identical to AB2 and the second-highest A-Score and AB-Score in the suite. Concurrent execution introduced no measurable quality degradation at either the Path A or Path B layer. The B-Score of 96 in this context specifically measures that Path B produced two fully independent, non-contaminated expression envelopes — one per session — with no detectable interleaving of meaning across session boundaries. The AB-Score of 97 co
