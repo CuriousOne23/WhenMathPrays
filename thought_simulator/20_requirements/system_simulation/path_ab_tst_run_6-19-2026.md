@@ -59,6 +59,8 @@ Each test evaluation produces three scores. Analytical interpretation proceeds i
 
 ## 2. Individual Test Evaluations
 
+**Copilot ran the logic simulations below:**
+
 ### 2.1 AB1 — Nominal Path Evaluation
 
 **Purpose:** Establish the quantitative baseline for the pipeline operating under clean, well-formed inputs with no anomalies. All scores from this scenario serve as the reference point against which degradation in subsequent scenarios is measured.
