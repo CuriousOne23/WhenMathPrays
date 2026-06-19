@@ -24,7 +24,7 @@ This document records the results of a structured A+B integration test run execu
 | Run Type | Rerun (re-execution of prior test suite against current build) |
 | Test Count | 8 (AB1 – AB8) |
 | Environment | Development / Integration |
-| Operator | Jeff Ganger |
+| Operator | CuriousOne23 |
 
 **Context note:** This run constitutes a re-execution of the full AB battery, initiated to validate system state following recent build changes. Results are compared against the prior run baseline. No modifications were made to test definitions or acceptance criteria between runs. Warning-flagged passes are expected to surface boundary-condition behaviors and do not constitute failures; they are logged here for traceability and downstream action assessment.
 
