@@ -14,6 +14,8 @@ This report presents a quantitative evaluation of the Thought Simulator Path A+B
 
 Scores across the eight scenarios ranged from 91 to 99. Composite suite averages were 95.4 (A-Score), 94.5 (B-Score), and 95.3 (AB-Score). All eight evaluations returned scores at or above the 90-point threshold across every scoring dimension. Two scenarios — AB3 (Degraded Input) and AB6 (Partial/Aborted Status) — produced the narrowest margins and represent the primary numeric monitoring surfaces identified by this evaluation.
 
+Although the AB‑suite is safety‑driven, safety evaluations on new architectures naturally reveal structural assumptions, boundary behaviors, and potential weaknesses. In this sense, the AB1–AB8 results also serve as a practical lens for understanding the characteristics of the TS Path A+B design.
+
 ---
 
 ## 1. Scoring Framework
