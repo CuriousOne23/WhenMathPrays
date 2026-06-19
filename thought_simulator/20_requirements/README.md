@@ -38,7 +38,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.30.040_mcs_rules.md](20.30.040_mcs_rules.md)
 - [20.30.050_merge_formal.md](20.30.050_merge_formal.md)
 - [20.30.060_truth_completion.md](20.30.060_truth_completion.md)
-- [20.30.070_rpu_mtp_sem.md](20.30.070_rpu_mtp_sem.md)
+- [20.30.070_rbu_mtp_sem.md](20.30.070_rbu_mtp_sem.md)
 - [20.30.080_resp_gen_sem.md](20.30.080_resp_gen_sem.md)
 - [20.31_semantic_specification.md](20.31_semantic_specification.md)
 - [20.32_cob_requirements.md](20.32_cob_requirements.md)
