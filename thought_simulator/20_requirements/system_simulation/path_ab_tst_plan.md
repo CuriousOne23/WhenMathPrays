@@ -84,7 +84,10 @@ Each test now has:
 
 # **2. Test Cases**
 
-Below is the rewritten version of **AB1–AB8**, now with numeric scoring and separate expectations.
+### **2.0 Why These Eight Tests (Rationale for the AB‑Suite)**  
+The AB1–AB8 suite is not specific to any one architecture. These eight tests represent the minimal, complete, and orthogonal set of failure modes that any cognitive or reasoning system can exhibit, regardless of implementation details. Any system that processes meaning, maintains internal state, and produces structured output can fail in only eight distinct ways: (1) failure on the clean path, (2) failure at boundaries, (3) failure under degraded input, (4) failure under structural faults, (5) failure of isolation when multiple thought streams are active, (6) failure of semantic integrity within its internal representations, (7) failure to correctly handle contradictions within the content itself, and (8) failure to maintain stability over extended sequences (drift).
+
+Each AB test isolates exactly one of these failure modes. Together, they provide full coverage of the invariants required for stable reasoning: correctness, boundary safety, repair‑without‑invention, structural integrity, isolation, semantic integrity, contradiction preservation, and long‑horizon stability. The tests do not overlap, and removing any one of them would leave a blind spot in the system’s safety or correctness guarantees. This makes the AB‑suite the smallest set of tests that still provides complete architectural validation for any system intended to perform reliable cognitive or semantic processing.
 
 ---
 
