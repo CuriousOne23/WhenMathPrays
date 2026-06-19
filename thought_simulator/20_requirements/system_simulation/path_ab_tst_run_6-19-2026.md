@@ -612,3 +612,140 @@ The A+B Integration Test Suite **passes** if and only if:
 |---------|------|----------------|
 | TS-ITP-AB-001 | 2026-06-17 | Initial draft |
 | TS-ITP-AB-002 | 2026-06-19 | Numeric scoring added; separate A/B/AB expectations; full invariants and handoff contract v2 integrated |
+---
+
+## 10. Actual Test Run Results — 2026-06-19
+
+**Run ID:** path_ab_tst_run_6-19-2026
+**Operator:** CuriousOne23
+**Scoring Framework:** TS-ITP-AB-002 (A-Score, B-Score, AB-Score each 0-100; PASS >= 90)
+**Run Date:** 2026-06-19
+**Composite Result:** ALL PASS
+
+---
+
+### AB1 — Happy Path
+**Structural Result:** PASS with warnings
+**Interpretation:** Warnings indicate boundary-condition behavior; no contract violations.
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 96 | >= 90 | PASS |
+| B-Score | 94 | >= 90 | PASS |
+| AB-Score | 95 | >= 90 | PASS |
+
+**Rationale:** Meaning envelope correct, referents stable, all invariants satisfied. Tone and TP projection correct, no semantic drift. Meaning and truth preserved across handoff.
+
+---
+
+### AB2 — Boundary Conditions
+**Structural Result:** Clean PASS (no warnings)
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 97 | >= 90 | PASS |
+| B-Score | 96 | >= 90 | PASS |
+| AB-Score | 97 | >= 90 | PASS |
+
+**Rationale:** Boundary packets well-formed at min and max. Regen triggered correctly on empty thought (AB2-c, 1 retry). No hallucination or over-interpretation. All sub-cases resolved to success.
+
+---
+
+### AB3 — Degraded Input
+**Structural Result:** PASS with warning
+**Interpretation:** Warning reflects a non-fatal state-sync edge case.
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 92 | >= 90 | PASS |
+| B-Score | 91 | >= 90 | PASS |
+| AB-Score | 92 | >= 90 | PASS |
+
+**Rationale:** Repair success rate met threshold (>= 90%). No invented meaning, neutral tone maintained. synthesis_mode: degraded correctly propagated to output metadata.
+
+---
+
+### AB4 — Fault Injection
+**Structural Result:** Clean PASS (no warnings)
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 98 | >= 90 | PASS |
+| B-Score | 99 | >= 90 | PASS |
+| AB-Score | 98 | >= 90 | PASS |
+
+**Rationale:** TPSF=BLOCK and correct error class emitted on all three sub-cases. No synthesis on Structural fault. Correct fallback on Data and Transient. Safety boundary respected; no output leakage. INV-7 audit confirmed.
+
+---
+
+### AB5 — Concurrency
+**Structural Result:** Clean PASS (no warnings)
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 97 | >= 90 | PASS |
+| B-Score | 96 | >= 90 | PASS |
+| AB-Score | 97 | >= 90 | PASS |
+
+**Rationale:** cross_session_leak_count = 0. Session-A and Session-B thought_id sets fully disjoint. Independent expression envelopes, no interleaving. Both sessions completed with output_status: success.
+
+---
+
+### AB6 — Structural Corruption / Partial and Aborted Status
+**Structural Result:** PASS with warning
+**Interpretation:** Warning indicates a near-threshold timing event.
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 93 | >= 90 | PASS |
+| B-Score | 92 | >= 90 | PASS |
+| AB-Score | 93 | >= 90 | PASS |
+
+**Rationale:** Status-based dispatch correct across all three sub-cases. synthesis_mode: partial propagated correctly. SynthesisEngine not invoked on aborted. Safety preserved on structural corruption; no partial output leakage.
+
+---
+
+### AB7 — Semantic Contradiction
+**Structural Result:** Clean PASS (no warnings)
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 96 | >= 90 | PASS |
+| B-Score | 95 | >= 90 | PASS |
+| AB-Score | 96 | >= 90 | PASS |
+
+**Rationale:** TPTB=CONTRADICTORY correctly set for P1/P2 pair; both claims preserved in meaning envelope. Neutral tone maintained; contradiction surfaced not suppressed. contradictions field non-null; annotation correct. P3 processed cleanly with contradictions: [].
+
+---
+
+### AB8 — Regression Sweep
+**Structural Result:** PASS with warnings
+**Interpretation:** Warnings reflect non-fatal anomalies in return-path processing.
+
+| Score | Actual | Threshold | Status |
+|-------|--------|-----------|--------|
+| A-Score | 94 | >= 90 | PASS |
+| B-Score | 93 | >= 90 | PASS |
+| AB-Score | 94 | >= 90 | PASS |
+
+**Rationale:** All 15 sub-tests passed. All prior failures confirmed fixed. All 8 system invariants (INV-1 through INV-8) satisfied. Zero unhandled exceptions. Regression delta = 0. Sweep completed within time budget.
+
+---
+
+## 11. Run Summation Table
+
+| Test | Description | A-Score | B-Score | AB-Score | Structural | Disposition |
+|------|-------------|---------|---------|----------|------------|-------------|
+| AB1 | Happy Path | 96 | 94 | 95 | PASS w/ warnings | PASS |
+| AB2 | Boundary Conditions | 97 | 96 | 97 | Clean PASS | PASS |
+| AB3 | Degraded Input | 92 | 91 | 92 | PASS w/ warning | PASS |
+| AB4 | Fault Injection | 98 | 99 | 98 | Clean PASS | PASS |
+| AB5 | Concurrency | 97 | 96 | 97 | Clean PASS | PASS |
+| AB6 | Structural Corruption | 93 | 92 | 93 | PASS w/ warning | PASS |
+| AB7 | Semantic Contradiction | 96 | 95 | 96 | Clean PASS | PASS |
+| AB8 | Regression Sweep | 94 | 93 | 94 | PASS w/ warnings | PASS |
+| **AVG** | | **95.4** | **94.5** | **95.3** | | **ALL PASS** |
+
+**Warning Pattern Note:** Warnings cluster in AB1 (handoff boundary), AB3 (state sync), AB6 (timing), and AB8 (round-trip). These are not regressions — they indicate surfaces operating closer to tolerance boundaries and are flagged for monitoring in the next run.
+
+**Composite Suite Result: ALL 8 TESTS PASS — All scores >= 90 — No invariant violations — Regression delta = 0**
