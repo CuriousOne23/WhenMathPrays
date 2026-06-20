@@ -1,172 +1,131 @@
 # OB Pipeline Examples
 **ob_pipeline_examples.md**  
-**Revision:** 1.1 (Invariant‑Safe Structural Examples)  
-**Date:** 2026‑06‑20  
-**Status:** Stabilized Draft – Ready for Lock**
+**Revision:** 1.2 (Medium Validation Set)  
+**Date:** 2026-06-20  
+**Status:** Working Draft – For Review by CuriousOne23 & CP  
 
 ---
 
-## 1. Purpose
+### 1. Purpose
 
-This document provides concrete **end‑to‑end structural examples** of the OB pipeline:
+This document provides a **medium-sized set of structural examples** of the full OB pipeline (SOB → SROB → CnOB → SmOB).  
 
-**SOB → SROB → CnOB → SmOB**
+These examples are designed to:
+- Validate core flow and invariants
+- Expose common edge cases and ambiguity patterns
+- Test monotonicity, residue quality, and RB readiness
+- Serve as a practical regression corpus
 
-The goals are to:
+### 2. Core Validation Criteria (Applied to Every Example)
 
-- Validate pipeline flow and invariants  
-- Expose edge cases and ambiguity handling  
-- Test monotonicity, residue formation, and routing readiness  
-- Serve as a living test corpus for future changes  
-
-Examples are intentionally minimal to moderate in complexity.
-
----
-
-## 2. Core Validation Criteria (Per Example)
-
-Each example is checked for:
-
-- Strict pre‑semantic boundaries  
-- Monotonic entropy reduction  
-- No semantic leakage  
-- Correct provenance and traceability  
-- Proper uncertainty / gap propagation  
-- RB‑ready output (`structural_signature`, `residue`, `bindings`)  
+- Strict pre-semantic boundaries maintained
+- Monotonic entropy reduction
+- No semantic leakage
+- Correct provenance and traceability
+- Proper uncertainty / gap propagation
+- RB-ready output (`structural_signature`, `residue`, `bindings`)
 
 ---
 
-## 3. Example 1 — Minimal Clean Input
+### 3. Examples
 
-**Input:**  
-`Hello world.`
+#### Example 1 – Minimal Clean Input
+**Input:** `Hello world.`  
+**Key Behavior:** Clean, unambiguous flow.  
+**SOB:** Basic tokens + adjacent relation.  
+**SROB:** Canonical span, no rules triggered.  
+**CnOB:** No constraints.  
+**SmOB:** Slot marker on span, anchor points on tokens, clean residue.  
+**Validation:** Perfect happy path.
 
-### SOB Output (SOB_ATOM_SET)
+#### Example 2 – Simple Repetition
+**Input:** `The the quick quick brown fox.`  
+**Key Behavior:** Repetition handling.  
+**SOB:** Detects `REPEAT_UNIT` on "the" and "quick".  
+**SROB:** No collapse; uncertainty marker on repetition pattern.  
+**CnOB:** Cardinality constraint on repeated units.  
+**SmOB:** Gap marker + uncertainty propagated.  
+**Validation:** Repetition preserved as structural, not interpreted.
 
-- Atoms:  
-  - TOKEN("Hello")  
-  - TOKEN("world")  
-  - PUNCT(".")  
-- Tags:  
-  - ADJACENT(Hello → world)  
-  - PUNCT  
-- Rhythm:  
-  - EVEN_SPACING  
+#### Example 3 – Punctuation Noise
+**Input:** `Hello... world !! ? what ?`  
+**Key Behavior:** Heavy punctuation.  
+**SOB:** Strong `PUNCT_CLUSTER` and `LOCAL_DENSE`.  
+**SROB:** Cluster merge + uncertainty on boundaries.  
+**CnOB:** Closure and adjacency constraints triggered.  
+**SmOB:** Gap marker + boundary marker around noisy region.  
+**Validation:** Noise isolated structurally.
 
-### SROB Output (SROB_GRAPH)
+#### Example 4 – Structural Ambiguity
+**Input:** `Time flies like an arrow.`  
+**Key Behavior:** Classic ambiguity.  
+**SOB:** Multiple possible groupings and relations.  
+**SROB:** No forced resolution; uncertainty on grouping.  
+**CnOB:** Multiple slot presence and ordering constraints.  
+**SmOB:** Multiple slot markers + high uncertainty carry.  
+**Validation:** Ambiguity preserved for RB.
 
-- Canonical span created  
-- No rewrite rules triggered  
-- `structural_signature` generated  
+#### Example 5 – Contradiction / Inconsistency
+**Input:** `John is here. John is not here.`  
+**Key Behavior:** Direct contradiction.  
+**SOB:** Parallel structures detected.  
+**SROB:** No collapse.  
+**CnOB:** Strong contradiction constraint flagged.  
+**SmOB:** Gap marker + explicit contradiction propagation.  
+**Validation:** Contradiction preserved, not resolved.
 
-### CnOB Output (CONSTRAINT_LATTICE)
+#### Example 6 – Longer Multi-Sentence Flow
+**Input:** `The team worked hard. They succeeded. However, challenges remain.`  
+**Key Behavior:** Discourse flow.  
+**SOB:** Multiple spans and adjacency chains.  
+**SROB:** Span normalization.  
+**CnOB:** Ordering and dependency constraints.  
+**SmOB:** Boundary markers between sentences + residue for discourse.  
+**Validation:** Maintains structure across sentences.
 
-- No slot, ordering, adjacency, or closure constraints detected  
+#### Example 7 – Very Short / Edge Input
+**Input:** `Yes.`  
+**Key Behavior:** Minimal input.  
+**SOB:** Single token + punctuation.  
+**SROB:** Minimal processing.  
+**CnOB:** Slot presence constraint (incomplete thought).  
+**SmOB:** High uncertainty + gap marker.  
+**Validation:** Graceful handling of minimal cases.
 
-### SmOB Output (SEMANTIC_SKELETON)
-
-- Slot Marker on full span  
-- Anchor Points on each token  
-- No uncertainty markers  
-- Residue: structural atoms + edges  
-
-**Validation:** Clean flow, no ambiguity, invariants satisfied.
-
----
-
-## 4. Example 2 — Moderate Input with Repetition
-
-**Input:**  
-`The the quick quick brown fox.`
-
-### SOB Output
-
-- TOKEN("The") ×2  
-- TOKEN("quick") ×2  
-- TOKEN("brown"), TOKEN("fox"), PUNCT(".")  
-- Tags:  
-  - REPEAT_UNIT on repeated tokens  
-  - ADJACENT edges  
-  - PUNCT  
-
-### SROB Output
-
-- R2 (Punctuation Cluster Merge) applied  
-- Repeated tokens preserved (no collapse)  
-- `REFINEMENT_UNCERTAINTY` attached to ambiguous repetition patterns  
-
-### CnOB Output
-
-- C3 (Cardinality) on repeated structural units  
-- C1 (Slot Presence) where repetition suggests possible missing structure  
-- No semantic interpretation of repetition  
-
-### SmOB Output
-
-- Gap Marker on ambiguous repeated regions  
-- Uncertainty Marker propagated  
-- Slot Markers preserved  
-- Residue includes repetition structure  
-
-**Validation:** Repetition preserved; uncertainty propagated; no semantic inference.
-
----
-
-## 5. Example 3 — Degraded / Noisy Input
-
-**Input:**  
-`Hello... world !! ? what ?`
-
-### SOB Output
-
-- TOKENs for words  
-- PUNCT_CLUSTER("...")  
-- PUNCT_CLUSTER("!!")  
-- PUNCT("?")  
-- Tags:  
-  - LOCAL_DENSE around punctuation bursts  
-
-### SROB Output
-
-- R2 (Punctuation Cluster Merge) applied  
-- `REFINEMENT_UNCERTAINTY` on ambiguous punctuation boundaries  
-
-### CnOB Output
-
-- C7 (Closure) on unmatched punctuation  
-- C4 (Adjacency) where punctuation interrupts structural adjacency  
-- No attempt to interpret punctuation  
-
-### SmOB Output
-
-- Gap Marker on noisy region  
-- Uncertainty Marker propagated  
-- Boundary Marker around punctuation cluster  
-- Residue highlights structurally unstable region  
-
-**Validation:** Degradation handled structurally; no invented meaning.
+#### Example 8 – Degraded / Messy Real-World
+**Input:** `Hello world!!  what  r u doing  ???`  
+**Key Behavior:** Typos, irregular spacing, heavy punctuation.  
+**SOB:** Dense punctuation + noise patterns.  
+**SROB:** Noise markers + high uncertainty.  
+**CnOB:** Multiple closure and adjacency violations.  
+**SmOB:** Strong gap and uncertainty markers.  
+**Validation:** Pipeline degrades gracefully without hallucinating structure.
 
 ---
 
-## 6. Validation Summary Table
+### 4. Validation Summary Table
 
-| Example | Monotonicity | Pre‑Semantic | Residue Quality | RB Readiness | Uncertainty Handled |
-|---------|--------------|--------------|-----------------|--------------|---------------------|
-| 1 (Clean) | Yes | Yes | High | High | N/A |
-| 2 (Repetition) | Yes | Yes | Medium | Good | Yes |
-| 3 (Noisy) | Yes | Yes | Medium | Good | Yes |
-
----
-
-## 7. Next Steps / Open Items
-
-- Add longer, multi‑sentence examples  
-- Add adversarial / contradictory structure cases  
-- Build automated regression suite  
-- Use examples to validate future OB evolution proposals  
+| Example                  | Monotonicity | Pre-Semantic | Residue Quality | RB Readiness | Uncertainty Handled |
+|--------------------------|--------------|--------------|-----------------|--------------|---------------------|
+| 1 Clean                  | Yes          | Yes          | High            | High         | N/A                 |
+| 2 Repetition             | Yes          | Yes          | Medium          | Good         | Yes                 |
+| 3 Punctuation Noise      | Yes          | Yes          | Medium          | Good         | Yes                 |
+| 4 Ambiguity              | Yes          | Yes          | High            | High         | Yes                 |
+| 5 Contradiction          | Yes          | Yes          | High            | Good         | Yes                 |
+| 6 Multi-Sentence         | Yes          | Yes          | High            | Good         | Low                 |
+| 7 Very Short             | Yes          | Yes          | Medium          | Medium       | High                |
+| 8 Messy/Degraded         | Yes          | Yes          | Medium          | Good         | High                |
 
 ---
 
-**End of Revision 1.1 — ob_pipeline_examples.md**
+### 5. Next Steps / Open Items
+
+- Expand to 15–20 examples (including adversarial cases)
+- Create automated validation suite based on this corpus
+- Use as regression tests for any future OB changes
+
+---
+
+**End of Revision 1.2 — ob_pipeline_examples.md**
 
 ---
