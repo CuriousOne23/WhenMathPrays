@@ -8,6 +8,8 @@
 
 ### 1. Purpose
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 This document defines the **purely structural rewrite rules (R1–Rk)** used by the SROB layer to refine SOB output into a cleaner, canonical structural graph.
 
 All rules are strictly semantics-free, monotonic, and designed to reduce entropy without destroying legitimate structural information or ambiguity.
