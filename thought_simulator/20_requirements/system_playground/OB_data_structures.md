@@ -16,6 +16,8 @@ These structures are designed to:
 - Guarantee realizability and efficiency of RB routing
 - Support safe, monotonic evolution and pluggable behavior (rulesets, routing policies)
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 ---
 
 ### 2. Core Principles (Locked)
