@@ -8,6 +8,8 @@
 
 ### 1. Purpose
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 This document defines the **critical handoff guidelines** between the structural OB pipeline (SOB → SROB → CnOB → SmOB) and the semantic stages (RB / TB / MTP).
 
 Its goal is to protect the strict separation between **structure** and **meaning** while ensuring RB has everything it needs to perform reliable, content-addressable routing.
