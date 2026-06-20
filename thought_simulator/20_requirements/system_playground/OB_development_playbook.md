@@ -1,4 +1,4 @@
-# OB Developemnt Playbook
+# OB Developmnt Playbook
 **OB_development_playbook.md**  
 **Revision:** 1.3 (Added numerical output requirement and format)  
 **Date:** 2026-06-20  
