@@ -10,6 +10,8 @@
 
 This document defines the **frozen, finite, purely structural tag set** used exclusively by the SOB layer.  
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 These tags represent the maximal structural information that can be extracted from raw input without any semantic, pragmatic, or interpretive inference.
 
 This tag set supports:
