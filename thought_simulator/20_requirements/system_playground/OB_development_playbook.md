@@ -27,21 +27,21 @@ It serves as the canonical reference for contributors, implementers, and reviewe
 
 **Core Architecture & Pipeline**  
 - [OB_pipeline_spec.md](OB_pipeline_spec.md) 
-- [OB_data_structures.md] (OB_data_structures.md)
-- `OB_development_playbook.md` (this document)
+- [OB_data_structures.md](OB_data_structures.md)  
+- `OB_development_playbook.md` (this document)  
 
 **Layer Specifications**  
-- [sob_tag_set.md(sob_tag_set.md)  
+- [sob_tag_set.md](sob_tag_set.md)  
 - [srob_rewrite_rules.md](srob_rewrite_rules.md)  
 - [cnob_constraint_families.md](cnob_constraint_families.md  )  
-- [smob_mapping_hooks.md](smob_mapping_hooks.md)
+- [smob_mapping_hooks.md](smob_mapping_hooks.md)  
 
 **Seam & Integration**  
-- [ob_smob_rb_handoff_guidelines.md](ob_smob_rb_handoff_guidelines.md)
+- [ob_smob_rb_handoff_guidelines.md](ob_smob_rb_handoff_guidelines.md)  
 
 **Validation & Examples**  
 - [ob_pipeline_examples.md](ob_pipeline_examples.md)  
-- [ob_validation_test_corpus.md](ob_validation_test_corpus.md)
+- [ob_validation_test_corpus.md](ob_validation_test_corpus.md)  
 
 **Notes:**  
 - This list is authoritative; all new OB documents must be added here.  
