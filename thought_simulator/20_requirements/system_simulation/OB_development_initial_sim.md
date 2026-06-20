@@ -8,7 +8,7 @@
 
 ### 1. Purpose of This Document
 
-The following is a copy of [../system_playground/OB_development_playbook.md](../system_playground/OB_development_playbook.md) which is in system_playground.
+The following is a copy of [../system_playground/OB_development_playbook.md](OB_development_playbook.md) which is in system_playground.
 
 This playbook exists to **protect the integrity of the Thought Simulator (TS)** while allowing creative, iterative development of the OB pipeline and future components.
 
