@@ -2,6 +2,8 @@
 
 This is the current agreed baseline. Suitable for integration into 20.40.
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 **1. SOB — Structural Object Basin**  
 **Purpose:** Maximal raw structural extraction with zero transformation.  
 **Output Type:** `SOB_ATOM_SET`
