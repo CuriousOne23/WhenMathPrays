@@ -1,6 +1,6 @@
 # OB Validation Test Corpus
 **ob_validation_test_corpus.md**  
-**Revision:** 1.0 (Initial Draft)  
+**Revision:** 1.1 (Added Numerical output and format requirement)  
 **Date:** 2026-06-20  
 **Status:** Working Draft – For Review by CuriousOne23 & CP  
 
@@ -222,6 +222,6 @@ For each new test case, record:
 
 ---
 
-**End of Draft – ob_validation_test_corpus.md (Rev 1.0)**
+**End of Draft – ob_validation_test_corpus.md (Rev 1.1)**
 
 ---
