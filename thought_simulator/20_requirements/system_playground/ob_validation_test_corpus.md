@@ -8,6 +8,8 @@
 
 ### 1. Purpose
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 This document is the **official validation test corpus** for the OB pipeline (SOB → SROB → CnOB → SmOB).
 
 It contains a growing set of test cases designed to:
