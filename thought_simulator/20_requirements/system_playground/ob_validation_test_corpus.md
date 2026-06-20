@@ -35,7 +35,96 @@ Every test case must be evaluated against these criteria:
 
 ---
 
-### 3. Test Cases
+# **3. Standardized Output Format (Required for All Test Evaluations)**
+
+To ensure consistent, comparable results across contributors and LLM‑based simulators (e.g., Grok, Copilot), all OB validation tests **must** report results using the following schema.  
+This standardization enables deterministic evaluation, automated comparison, and uniform pass/fail logic across revisions.
+
+---
+
+### **3.1 Required Metrics**
+
+Each test must output the following fields:
+
+- **`entropy_delta`** — numeric, expected ≤ 0  
+- **`curvature_score`** — numeric, expected ≥ 0  
+- **`routing_correct`** — boolean  
+- **`provenance_preserved`** — boolean  
+- **`replay_equivalence`** — boolean  
+- **`residue_quality`** — numeric in [0,1]  
+- **`layer_independence`** — boolean  
+
+---
+
+### **3.2 Thresholds for Pass/Fail**
+
+A test **passes** if:
+
+- `entropy_delta ≤ -0.01`  
+- `curvature_score ≥ 0`  
+- `routing_correct = true`  
+- `provenance_preserved = true`  
+- `replay_equivalence = true`  
+- `residue_quality ≥ 0.85`  
+- `layer_independence = true`  
+
+If any invariant fails, the test fails.
+
+---
+
+### **3.3 Required Output Format**
+
+Simulators must output results in the following JSON structure:
+
+```json
+{
+  "test_id": "OBx",
+  "metrics": {
+    "entropy_delta": -0.12,
+    "curvature_score": 0.03,
+    "routing_correct": true,
+    "provenance_preserved": true,
+    "replay_equivalence": true,
+    "residue_quality": 0.91,
+    "layer_independence": true
+  },
+  "overall_pass": true,
+  "notes": "Optional freeform commentary."
+}
+```
+
+---
+
+### **3.4 Aggregate Summary (Multi‑Test Runs)**
+
+For multi‑test runs, simulators must also output:
+
+```json
+{
+  "total_tests": N,
+  "passed": P,
+  "failed": F,
+  "pass_rate": P/N
+}
+```
+
+---
+
+### **3.5 Purpose of This Standard**
+
+This schema ensures:
+
+- reproducibility  
+- cross‑revision comparability  
+- consistent Grok/Copilot behavior  
+- machine‑readable results  
+- clear invariant enforcement  
+
+It also prevents drift in how tests are interpreted or reported.
+
+---
+
+### 4. Test Cases
 
 #### Category 1: Clean / Happy Path
 **Test 1.1** – Simple declarative sentence  
@@ -103,7 +192,7 @@ Every test case must be evaluated against these criteria:
 
 ---
 
-### 4. Validation Summary Template
+### 5. Validation Summary Template
 
 For each new test case, record:
 
@@ -115,7 +204,7 @@ For each new test case, record:
 
 ---
 
-### 5. Usage Guidelines
+### 6. Usage Guidelines
 
 - Run the full corpus after any change to tags, rules, constraints, or hooks.
 - Maintain a results log showing pass/fail + metrics.
@@ -124,7 +213,7 @@ For each new test case, record:
 
 ---
 
-### 6. Next Steps / Open Items
+### 7. Next Steps / Open Items
 
 - Expand corpus to 20–30 cases (including adversarial and long-context)
 - Add automated validation harness when implementation begins
