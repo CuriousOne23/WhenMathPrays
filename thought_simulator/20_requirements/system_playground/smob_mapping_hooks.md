@@ -8,6 +8,8 @@
 
 ### 1. Purpose
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 This document defines the **H1–Hn mapping hooks** used by the SmOB (Semantic Mapping Object Basin) layer.
 
 These hooks create **neutral, pre-semantic scaffolding** that allows RB (Relational Basin) and TB (Truth Basin) to attach meaning later, without SmOB performing any interpretation, inference, or semantic preparation.
