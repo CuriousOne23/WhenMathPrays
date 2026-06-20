@@ -1,5 +1,6 @@
+# OB Developemnt Playbook
 **OB_development_playbook.md**  
-**Revision:** 1.0 (Initial Draft)  
+**Revision:** 1.1 (Two-Phase Development Rules Added)  
 **Date:** 2026-06-20  
 **Status:** Working Draft – For Review by CuriousOne23 & CP  
 
@@ -7,95 +8,90 @@
 
 ### 1. Purpose of This Document
 
-This playbook exists to **protect the integrity of the Thought Simulator (TS)** while allowing creative, iterative development of the OB pipeline.
+This playbook exists to **protect the integrity of the Thought Simulator (TS)** while allowing creative, iterative development of the OB pipeline and future components.
 
-The OB layers are the foundation of Path A. If we accidentally weaken invariants, introduce semantic leakage, or make non-monotonic changes, the entire system can slowly degrade — even if simulations appear to pass in the short term.
-
-**Why this document is needed:**
-
-- We are building something new. New things evolve.
-- Evolution must be **disciplined**, not chaotic.
-- We want maximum creative freedom **and** high confidence that we are not breaking the core architecture.
-- This playbook serves as a shared "memory" and guardrail for all three of us (and future contributors or simulations).
-
-It is **not** a rigid rulebook that kills joy. It is a lightweight set of practices that lets us play confidently in the sandbox.
+It provides lightweight guardrails so we can explore freely in the early stages without quietly breaking core invariants.
 
 ### 2. How to Use This Playbook
 
-- **Before any significant change** to the OB pipeline, review the relevant checklist.
-- Use it as a **pre-flight checklist** for new layers, rule changes, or major refactors.
-- Reference it during code reviews and simulation debriefs.
-- Update it as we learn what works (this is a living document).
-- When in doubt, err on the side of **explicit documentation and testing** rather than "it should be fine."
+- Review the relevant sections before making significant changes.
+- Use it as a shared reference during discussions and code reviews.
+- Update it as we learn what works best.
+- When in doubt, favor explicit documentation and testing.
 
-Think of it as the adult supervision that stays *inside* the sandbox with us — not the one yelling from outside.
+### 3. Development Phases
 
-### 3. Core Invariants Checklist (Must Verify Before Changes)
+We operate under a **Two-Phase** model to balance flexibility during discovery with stability later.
 
-Before modifying any OB layer, adding a new one, or changing rules, confirm:
+#### Phase 1 – Active Development / Exploration (Current Phase)
+**Goal:** Maximum learning speed and design flexibility.
 
-- [ ] **Provenance & Traceability** — Full backward lineage is preserved
-- [ ] **Replay Equivalence** — Stripping envelopes yields identical structural processing
-- [ ] **Monotonic Entropy Reduction** — Entropy never increases across layers
-- [ ] **Non-Negative Curvature** — No structural bending or semantic leakage introduced
-- [ ] **Pre-Semantic Boundaries** — No layer assigns meaning, stance, or intent
-- [ ] **RB Routing Compatibility** — `structural_signature`, `residue`, `bindings` (or equivalents) remain available
-- [ ] **Layer Independence** — No forward peeking or dependency on later layers
-- [ ] **Explicit Uncertainty** — No silent corrections or hidden assumptions
+**Allowed:**
+- Delete, rename, or replace fields and objects
+- Make major structural changes
+- Experiment with new approaches
+- Fix mistakes quickly
 
-### 4. Change Taxonomy
+**Recommended:**
+- Record major design decisions or breaking changes when practical
+- Minor fixes do not require formal documentation
 
-**Safe Changes** (Generally Low Risk)
-- Adding new optional fields (`ext`, new metadata)
-- Adding new tag values or hook types
-- Adding new OB layers via the OB Map
-- Introducing new rulesets (R1–Rk, C1–C7, H1–Hn)
-- Adding new simulation policies
+**Transition Trigger to Phase 2:**
+When the core OB objects and pipeline feel reasonably stable and we are mostly tuning rather than redesigning.
 
-**Dangerous Changes** (Requires Extra Care + Testing)
-- Modifying the meaning or interpretation of existing fields
-- Changing routing-critical structures (`structural_signature`, `residue`, `bindings`)
-- Altering error propagation behavior
-- Adding new required fields
+#### Phase 2 – Stabilization / Production
+**Goal:** Protect reliability, provenance, and backward compatibility.
 
-**Forbidden Changes**
-- Weakening or removing locked invariants
+**Rules:**
+- No free deletion or replacement of core fields/objects
+- Major changes require proper versioning (`_v1` → `_v2`)
+- Deprecation process must be followed
+- Occasional breaking changes are allowed but treated as **major version releases**
+
+**Breaking Changes in Phase 2:**
+- Must be clearly documented
+- Should include a migration path when possible
+- Users/environments needing strict repeatability can pin to specific versions
+
+### 4. Core Invariants Checklist (Must Verify Before Changes)
+
+- [ ] Provenance & Traceability preserved
+- [ ] Replay Equivalence maintained
+- [ ] Monotonic Entropy Reduction
+- [ ] Non-Negative Curvature
+- [ ] Pre-Semantic Boundaries
+- [ ] RB Routing Compatibility
+- [ ] Layer Independence
+
+### 5. Change Taxonomy
+
+**Safe Changes** (Low Risk)
+- Adding optional fields or new tags/hooks/rules
+- Adding new OB layers via OB Map
+
+**Dangerous Changes** (Requires Care)
+- Modifying meaning of existing fields
+- Changing routing-critical structures
+
+**Forbidden in Phase 2**
+- Weakening locked invariants
 - Making provenance optional
-- Removing fields required by RB routing
-- Introducing semantic leakage into any OB layer
 
-### 5. Simulation & Validation Protocol
+### 6. Simulation & Validation Protocol
 
 For any non-trivial change:
-
-1. Run the **standard OB test corpus** (to be built) through both old and new versions.
-2. Compare key metrics:
-   - Entropy progression per layer
-   - Constraint density and conflict rate
-   - Residue size and quality
-   - RB routing decisions and scores
-   - Replay equivalence
-3. Document differences and rationale.
-4. Run at least one degraded/noisy input test.
-5. Verify no new semantic leakage appears.
-
-### 6. Evolution & Rollback Strategy
-
-- Every change must be **versioned** (via OB Map and ruleset IDs).
-- Use the `ext` fields for safe forward-compatible extensions.
-- Deprecate first — remove only after a clear migration path exists and no active routing depends on the old behavior.
-- Maintain at least one known-good ruleset version for rollback.
+- Run the standard test corpus
+- Compare key metrics (entropy, residue quality, routing behavior)
+- Document differences
 
 ### 7. Guiding Mindset
 
-- **Stay in the sandbox** — explore freely, but document and test honestly.
-- **Monotonic progress** — we can extend and refine, but we should not regress on core invariants.
-- **Joy + Rigor** — the process should remain fun and creative while protecting what makes TS special.
-
-This playbook is our shared commitment to building something that can last and evolve without quietly breaking.
+- Stay in the sandbox — explore freely, but honestly.
+- Value the process and each coherent step.
+- Protect what makes TS special while allowing it to evolve.
 
 ---
 
-**End of Draft – OB_development_playbook.md (Rev 1.0)**
+**End of Revision 1.1 — OB_development_playbook.md**
 
 ---
