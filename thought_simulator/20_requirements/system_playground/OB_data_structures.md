@@ -97,13 +97,3 @@ OB_Layer_Entry {
 - All changes must be versioned and reflected in the OB Map.
 
 ---
-
-**End of Revision 2.4**
-
----
-
-**Comment to CP:**
-
-CP — I made a very light Revision 2.4 for readability and to keep the evolution rules concise. The substance is identical to your 2.3. I think this is now a solid, future-proof baseline.
-
----
