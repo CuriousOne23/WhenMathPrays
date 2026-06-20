@@ -1,5 +1,5 @@
 **OB_data_structures.md**  
-**Revision:** 2.4 (Stabilized Baseline)  
+**Revision:** 2.5 (Stabilized + Pluggable Rulesets & Routing)  
 **Date:** 2026-06-20  
 **Status:** Stabilized Draft – Ready for Integration into 20.40 Series
 
@@ -14,7 +14,7 @@ These structures are designed to:
 - Support all search and tagging rules from `OB_search_and_tag_spec.md` (Rev 1.2)
 - Guarantee realizability and efficiency of Path A meaning construction
 - Guarantee realizability and efficiency of RB routing
-- Support safe, monotonic evolution of the OB pipeline over time
+- Support safe, monotonic evolution and pluggable behavior (rulesets, routing policies)
 
 ---
 
@@ -26,74 +26,160 @@ These structures are designed to:
 - Pre-semantic boundaries
 - Monotonic entropy reduction
 - Non-negative curvature
-- Explicit uncertainty, gaps, and errors
+- Explicit representation of uncertainty, gaps, and errors
 - Serialization-ready
-- Monotonic evolution (extensions allowed, destructive changes forbidden)
+- Monotonic evolution (extensions allowed, destructive changes controlled)
+- Pluggable behavior via rulesets and policies
 
 ---
 
 ### 3. Layer-by-Layer Data Structures
 
-(Sections 3.1 through 3.4 remain exactly as in CP’s Rev 2.3 — with `version`, `ext`, closed unions, `structural_signature`, `residue`, `bindings`, etc.)
-
----
-
-### 4. OB Map & Evolution
-
-**4.1 OB Map**  
-The central registry of all OB layers:
+#### 3.1 SOB — Structural Object Basin
+**Output Type:** `SOB_ATOM_SET`
 
 ```markdown
-OB_Map {
-  layers: Array<OB_Layer_Entry>
-}
-
-OB_Layer_Entry {
-  name: OBLayerName          // e.g. "SOB", "NewTemporalOB"
+SOB_ATOM_SET {
   version: OBVersion
-  output_type: OBOutputType
-  status: OBStatus           // ACTIVE | DEPRECATED | REMOVED
-  invariants: InvariantSummary
+  atoms: Array<SOB_Atom>
+  provenance: InputReference
+  metadata: {
+    timestamp,
+    input_hash,
+    entropy_estimate,
+    ruleset_id: RulesetID?          // Optional for future SOB rulesets
+  }
 }
 ```
 
-**4.2 Evolution Rules (Monotonic Only)**
+**SOB_Atom** (with extensibility)
 
-**Allowed:**
-- Adding new optional fields (`ext`, new metadata)
-- Adding new tag values or hook types
-- Adding new OB layers via OB Map
-- Adding new constraint families or rewrite rules
+```markdown
+SOB_Atom {
+  id: AtomID
+  type: SOB_TAG
+  payload: SOB_Payload
+  tags: Array<SOB_TAG>
+  position: SourceLocation
+  rhythm: RhythmInfo?
+  ext: ExtensibleMetadata?
+}
+```
 
-**Forbidden:**
-- Changing the meaning of existing fields
-- Removing required fields (`structural_signature`, `residue`, `bindings`, provenance, etc.)
-- Weakening any locked invariant
+**SOB_Payload** (Closed Union)
 
-**Deprecation:**
-- Layers or fields may be marked `DEPRECATED` in the OB Map.
-- Removal is allowed only after a defined migration path and when no active routing depends on them.
+```markdown
+SOB_Payload = 
+    TOKEN_DATA 
+  | SPAN_DATA 
+  | REL_DATA 
+  | GROUP_DATA 
+  | ORDER_DATA 
+  | PUNCT_DATA
+```
 
 ---
 
-### 5. Global Requirements (Locked)
+#### 3.2 SROB — Structural Refinement Object Basin
+**Output Type:** `SROB_GRAPH`
 
-- Full Provenance Chain
-- Replay Safety
-- Deterministic Serialization
-- Explicit Error & Uncertainty Propagation
-- Geometric Compliance
-- RB Routing Compatibility
-- Monotonic Evolution
+```markdown
+SROB_GRAPH {
+  version: OBVersion
+  nodes: Array<SROB_Node>
+  edges: Array<StructuralEdge>
+  annotations: Array<Annotation>
+  provenance: SOB_Reference
+  metadata: {
+    structural_signature,
+    ruleset_id: RulesetID,           // RefinementRuleset (R1–Rk)
+    applied_rules: Array<RuleID>,
+    entropy_delta
+  }
+}
+```
+
+---
+
+#### 3.3 CnOB — Constraint Object Basin
+**Output Type:** `CONSTRAINT_LATTICE`
+
+```markdown
+CONSTRAINT_LATTICE {
+  version: OBVersion
+  base_graph: SROB_Reference
+  constraints: Array<Constraint>
+  entailment_edges: Array<EntailmentEdge>
+  conflicts: Array<CONSTRAINT_CONFLICT>
+  provenance: SROB_Reference
+  metadata: {
+    ruleset_id: RulesetID,           // ConstraintRuleset (C1–C7)
+    lattice_depth,
+    entailment_count
+  }
+}
+```
+
+---
+
+#### 3.4 SmOB — Semantic Mapping Object Basin
+**Output Type:** `SEMANTIC_SKELETON`
+
+```markdown
+SEMANTIC_SKELETON {
+  version: OBVersion
+  slots: Array<Slot>
+  referents: Array<ReferentAnchor>
+  hooks: Array<MappingHook>
+  bindings: Array<BindingEdge>
+  residue: Array<NodeID | ConstraintID>
+  carry_forward: {
+    constraints: CONSTRAINT_LATTICE,
+    uncertainty: Array<UncertaintyMarker>
+  }
+  provenance: CnOB_Reference
+  metadata: {
+    ruleset_id: RulesetID,           // HookRuleset (H1–Hn)
+    semantic_boundary_markers
+  }
+  ext: ExtensibleMetadata?
+}
+```
+
+---
+
+### 4. Pluggable Behavior
+
+**RulesetID**  
+A versioned identifier for pluggable rule sets (e.g., refinement rules, constraint families, mapping hooks). Allows swapping behavior without changing core structures.
+
+**RB_RoutingPolicy** (Stored with runs/experiments)
+
+```markdown
+RB_RoutingPolicy {
+  signature_strategy: SignatureStrategyID
+  ruleset_id: RulesetID?
+  residue_weight: float
+  binding_weight: float
+  threshold: float
+  fallback_policy: FallbackStrategy
+}
+```
+
+---
+
+### 5. OB Map & Evolution
+
+(Section remains as in Rev 2.3 – OB_Map registry, monotonic evolution rules, deprecation handling.)
 
 ---
 
 ### 6. Extensibility Guidelines (For Future OB Layers)
 
-- New layers must be inserted at a documented point in the pipeline.
-- Each new layer must define its own output type and layer-local tag set.
-- Must respect pre-semantic boundaries (unless post-SmOB).
-- Must expose required routing fields (`structural_signature`, `residue`, `bindings` or equivalents).
-- All changes must be versioned and reflected in the OB Map.
+(Section remains as in Rev 2.3 – controlled addition of new layers via OB Map.)
+
+---
+
+**End of Revision 2.5**
 
 ---
