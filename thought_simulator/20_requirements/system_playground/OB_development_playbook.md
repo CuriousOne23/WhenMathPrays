@@ -1,6 +1,6 @@
 # OB Developemnt Playbook
 **OB_development_playbook.md**  
-**Revision:** 1.2 (Added list of all OB development documents)  
+**Revision:** 1.3 (Added numerical output requirement and format)  
 **Date:** 2026-06-20  
 **Status:** Working Draft – For Review by CuriousOne23 & CP  
 
@@ -123,6 +123,95 @@ For any non-trivial change:
 
 ---
 
-**End of Revision 1.2 — OB_development_playbook.md**
+# **9. Standardized Simulation Output Format (Required for Logical Simulation Tools)**
+
+To ensure consistent, comparable results across contributors and LLM‑based simulators (e.g., Grok, Copilot), all OB logical simulations **must** report results using the following schema.  
+This standardization enables deterministic evaluation, automated comparison, and uniform pass/fail logic across revisions.
+
+---
+
+### **9.1 Required Metrics**
+
+Each test must output the following fields:
+
+- **`entropy_delta`** — numeric, expected ≤ 0  
+- **`curvature_score`** — numeric, expected ≥ 0  
+- **`routing_correct`** — boolean  
+- **`provenance_preserved`** — boolean  
+- **`replay_equivalence`** — boolean  
+- **`residue_quality`** — numeric in [0,1]  
+- **`layer_independence`** — boolean  
+
+---
+
+### **9.2 Thresholds for Pass/Fail**
+
+A test **passes** if:
+
+- `entropy_delta ≤ -0.01`  
+- `curvature_score ≥ 0`  
+- `routing_correct = true`  
+- `provenance_preserved = true`  
+- `replay_equivalence = true`  
+- `residue_quality ≥ 0.85`  
+- `layer_independence = true`  
+
+If any invariant fails, the test fails.
+
+---
+
+### **9.3 Required Output Format**
+
+Simulators must output results in the following JSON structure:
+
+```json
+{
+  "test_id": "OBx",
+  "metrics": {
+    "entropy_delta": -0.12,
+    "curvature_score": 0.03,
+    "routing_correct": true,
+    "provenance_preserved": true,
+    "replay_equivalence": true,
+    "residue_quality": 0.91,
+    "layer_independence": true
+  },
+  "overall_pass": true,
+  "notes": "Optional freeform commentary."
+}
+```
+
+---
+
+### **9.4 Aggregate Summary (Multi‑Test Runs)**
+
+For multi‑test runs, simulators must also output:
+
+```json
+{
+  "total_tests": N,
+  "passed": P,
+  "failed": F,
+  "pass_rate": P/N
+}
+```
+
+---
+
+### **9.5 Purpose of This Standard**
+
+This schema ensures:
+
+- reproducibility  
+- cross‑revision comparability  
+- consistent Grok/Copilot behavior  
+- machine‑readable results  
+- clear invariant enforcement  
+
+It also prevents drift in how tests are interpreted or reported.
+
+---
+
+**End of Revision 1.3 — OB_development_playbook.md**
 
 ---
