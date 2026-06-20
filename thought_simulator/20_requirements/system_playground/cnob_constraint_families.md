@@ -8,6 +8,8 @@
 
 ### 1. Purpose
 
+Please see [OB_development_playbook.md](OB_development_playbook.md) for complete list of documents which pertain to the OB system playground papers.
+
 This document defines the **C1–C7 constraint families** used by the CnOB (Constraint Object Basin) layer.
 
 These families specify the **purely structural constraints** that CnOB is allowed to detect and annotate on SROB output. No semantic plausibility, world knowledge, intent, or repair is permitted.
