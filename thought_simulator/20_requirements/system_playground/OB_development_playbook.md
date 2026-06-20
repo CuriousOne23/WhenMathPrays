@@ -1,6 +1,6 @@
 # OB Developemnt Playbook
 **OB_development_playbook.md**  
-**Revision:** 1.1 (Two-Phase Development Rules Added)  
+**Revision:** 1.2 (Added list of all OB development documents)  
 **Date:** 2026-06-20  
 **Status:** Working Draft – For Review by CuriousOne23 & CP  
 
@@ -19,7 +19,38 @@ It provides lightweight guardrails so we can explore freely in the early stages 
 - Update it as we learn what works best.
 - When in doubt, favor explicit documentation and testing.
 
-### 3. Development Phases
+---
+
+## **3. OB Document Index (Authoritative List)**  
+This section provides a complete, centralized index of all OB‑related documents.  
+It serves as the canonical reference for contributors, implementers, and reviewers.
+
+**Core Architecture & Pipeline**  
+- [OB_pipeline_spec.md](OB_pipeline_spec.md) 
+- [OB_data_structures.md] (OB_data_structures.md)
+- `OB_development_playbook.md` (this document)
+
+**Layer Specifications**  
+- [sob_tag_set.md(sob_tag_set.md)  
+- [srob_rewrite_rules.md](srob_rewrite_rules.md)  
+- [cnob_constraint_families.md](cnob_constraint_families.md  )  
+- [smob_mapping_hooks.md](smob_mapping_hooks.md)
+
+**Seam & Integration**  
+- [ob_smob_rb_handoff_guidelines.md](ob_smob_rb_handoff_guidelines.md)
+
+**Validation & Examples**  
+- [ob_pipeline_examples.md](ob_pipeline_examples.md)  
+- [ob_validation_test_corpus.md](ob_validation_test_corpus.md)
+
+**Notes:**  
+- This list is authoritative; all new OB documents must be added here.  
+- Deprecated documents should be marked clearly and versioned appropriately.  
+- This index ensures discoverability and prevents architectural drift.
+
+---
+
+### 4. Development Phases
 
 We operate under a **Two-Phase** model to balance flexibility during discovery with stability later.
 
@@ -53,7 +84,7 @@ When the core OB objects and pipeline feel reasonably stable and we are mostly t
 - Should include a migration path when possible
 - Users/environments needing strict repeatability can pin to specific versions
 
-### 4. Core Invariants Checklist (Must Verify Before Changes)
+### 5. Core Invariants Checklist (Must Verify Before Changes)
 
 - [ ] Provenance & Traceability preserved
 - [ ] Replay Equivalence maintained
@@ -63,7 +94,7 @@ When the core OB objects and pipeline feel reasonably stable and we are mostly t
 - [ ] RB Routing Compatibility
 - [ ] Layer Independence
 
-### 5. Change Taxonomy
+### 6. Change Taxonomy
 
 **Safe Changes** (Low Risk)
 - Adding optional fields or new tags/hooks/rules
@@ -77,14 +108,14 @@ When the core OB objects and pipeline feel reasonably stable and we are mostly t
 - Weakening locked invariants
 - Making provenance optional
 
-### 6. Simulation & Validation Protocol
+### 7. Simulation & Validation Protocol
 
 For any non-trivial change:
 - Run the standard test corpus
 - Compare key metrics (entropy, residue quality, routing behavior)
 - Document differences
 
-### 7. Guiding Mindset
+### 8. Guiding Mindset
 
 - Stay in the sandbox — explore freely, but honestly.
 - Value the process and each coherent step.
@@ -92,6 +123,6 @@ For any non-trivial change:
 
 ---
 
-**End of Revision 1.1 — OB_development_playbook.md**
+**End of Revision 1.2 — OB_development_playbook.md**
 
 ---
