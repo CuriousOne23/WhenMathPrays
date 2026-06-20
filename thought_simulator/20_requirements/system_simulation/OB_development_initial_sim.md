@@ -28,22 +28,22 @@ This section provides a complete, centralized index of all OB‑related document
 It serves as the canonical reference for contributors, implementers, and reviewers.
 
 **Core Architecture & Pipeline**  
-- [OB_pipeline_spec.md](OB_pipeline_spec.md) 
-- [OB_data_structures.md](OB_data_structures.md)  
+- [OB_pipeline_spec.md](../system_playground/OB_pipeline_spec.md) 
+- [OB_data_structures.md](../system_playground/OB_data_structures.md)  
 - `OB_development_playbook.md` (this document)  
 
 **Layer Specifications**  
-- [sob_tag_set.md](sob_tag_set.md)  
-- [srob_rewrite_rules.md](srob_rewrite_rules.md)  
-- [cnob_constraint_families.md](cnob_constraint_families.md  )  
-- [smob_mapping_hooks.md](smob_mapping_hooks.md)  
+- [sob_tag_set.md](../system_playground/sob_tag_set.md)  
+- [srob_rewrite_rules.md](../system_playground/srob_rewrite_rules.md)  
+- [cnob_constraint_families.md](../system_playground/cnob_constraint_families.md  )  
+- [smob_mapping_hooks.md](../system_playground/smob_mapping_hooks.md)  
 
 **Seam & Integration**  
-- [ob_smob_rb_handoff_guidelines.md](ob_smob_rb_handoff_guidelines.md)  
+- [ob_smob_rb_handoff_guidelines.md](../system_playground/ob_smob_rb_handoff_guidelines.md)  
 
 **Validation & Examples**  
-- [ob_pipeline_examples.md](ob_pipeline_examples.md)  
-- [ob_validation_test_corpus.md](ob_validation_test_corpus.md)  
+- [ob_pipeline_examples.md](../system_playground/ob_pipeline_examples.md)  
+- [ob_validation_test_corpus.md](../system_playground/ob_validation_test_corpus.md)  
 
 **Notes:**  
 - This list is authoritative; all new OB documents must be added here.  
