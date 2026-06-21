@@ -1,102 +1,94 @@
-# ob_structural_signature_generator.md
-**Revision:** 1.0 (Initial Proposal)  
+# OB Structural Signature Generator
+**ob_structural_signature_generator.md**  
+**Revision:** 1.2 (Aligned & Polished)  
 **Date:** 2026-06-20  
-**Status:** Proposal – For Review by CuriousOne23 & CP  
+**Status:** Working Draft – For Review by CuriousOne23 & CP  
 
 ---
 
-## 1. Purpose
+### 1. Purpose
 
-This document proposes the addition of a new, small, focused primitive called the **Structural Signature Generator**.
+This document defines the **Structural Signature Generator** — a small, single-responsibility block that converts the final output of the SmOB layer into a compact, stable vector suitable for cosine similarity and RB routing.
 
-Its sole responsibility is to take the final output of the OB pipeline (SmOB) and produce a compact, consistent **structural vector** (signature) that can be used for efficient similarity comparison and routing in RB.
+Its only job is **structural compression**, not tokenization, not semantic analysis, and not routing.
 
----
+### 2. Architectural Positioning
 
-## 2. Why This Is Needed
+```
+Raw Input
+   ↓
+Message Correction (IIInB)
+   ↓
+SOB → SROB → CnOB → SmOB   ← Full OB pipeline (structural analysis)
+   ↓
+**Structural Signature Generator**   ← New block
+   ↓
+RB (routing, similarity, reuse, caching)
+```
 
-As we develop the routing and reuse capabilities of TS, we need an efficient way to determine how similar a new input is to previously processed OBs.
+- The OB pipeline ends at SmOB.
+- The Signature Generator is the entry point into RB.
+- This keeps responsibilities clean and respects the pre-semantic boundary.
 
-The current design gives us excellent structural information through the OB pipeline, but we do not yet have a clean, standardized way to turn that structural information into a comparable form for distance calculations.
+### 3. Core Principles
 
-Without this capability, routing and structural reuse would be inefficient or overly complex.
+- Strictly operates on **structural output** from SmOB (never on raw text).
+- Produces a **deterministic**, **stable**, and **versioned** vector.  
+  **The Structural Signature Generator must be a pure function**: no randomness, no external state, no semantic interpretation.
+- Handles natural correlations between structural features gracefully.
+- Must preserve routing-critical structure (signature, residue, bindings, entailment edges) without aggressive loss.
+- Must support versioning and extensibility.
+- Must be lightweight and efficient.
 
----
+### 4. Input & Output
 
-## 3. Design Principles
+**Input:** `STRUCTURAL_SKELETON` (from SmOB)  
+**Output:** `STRUCTURAL_SIGNATURE`
 
-This new block must follow the core TS principle:
+```markdown
+STRUCTURAL_SIGNATURE {
+  version: SignatureVersion
+  vector: FloatVector          // dense or sparse vector
+  metadata: {
+    source_smob_version,
+    ruleset_ids,
+    entropy_estimate,
+    timestamp
+  }
+}
+```
 
-> **Each block should have one clear, narrow responsibility.**  
-> Complexity should come from composition, not from making any single block complex.
+### 5. High-Level Design
 
-Therefore, the Structural Signature Generator should:
-- Be small and focused
-- Have a single, well-defined job
-- Not perform semantic interpretation
-- Not modify the core OB pipeline
-- Be easy to understand and maintain
+The Signature Generator will:
 
----
+1. Extract relevant structural features from SmOB output (tags, constraints, residue, bindings, etc.).
+2. Apply weighting and normalization.
+3. Convert the features into a consistent vector representation.
+4. Produce a versioned signature suitable for cosine similarity.
 
-## 4. Proposed Position in the Pipeline
+No text tokenization occurs here — all input comes from the already-processed structural representation.
 
-**Recommended placement:** Immediately after SmOB.
+### 6. Why This Design
 
-**Pipeline flow:**
+- Keeps OB focused on deep structural analysis.
+- Keeps the Signature Generator focused on compression.
+- Allows RB to do fast similarity comparisons without heavy computation.
+- Supports future optimizations (caching, selective processing, reuse) without changing core OB.
 
-1. Raw Input
-2. Message Correction (IIInB)
-3. SOB → SROB → CnOB → SmOB
-4. **Structural Signature Generator** ← New block here
-5. RB (routing, similarity search, reuse logic)
+### 7. Open Questions for Discussion
 
-This placement ensures the signature is generated from the **final, refined structural output** of the OB pipeline.
-
----
-
-## 5. Responsibilities of the Structural Signature Generator
-
-The block should:
-
-- Accept the final `SEMANTIC_SKELETON` (or a defined subset of it) as input
-- Produce a compact, consistent structural vector (the signature)
-- Be deterministic and reproducible
-- Remain strictly structural (no semantic interpretation)
-- Be versionable (support future improvements to how signatures are generated)
-
-It should **not**:
-- Perform any part of the OB pipeline
-- Make semantic decisions
-- Modify the residue or hooks
-- Be responsible for routing logic itself
-
----
-
-## 6. Benefits
-
-- Enables efficient structural similarity search for RB routing
-- Supports future capabilities such as structural reuse and caching
-- Keeps the core OB layers clean and focused on their primary jobs
-- Provides a clean, testable interface between the structural and routing layers
-- Allows independent evolution of how signatures are generated without changing the OB pipeline
-
----
-
-## 7. Open Questions for Discussion
-
-1. Should this block take the full `SEMANTIC_SKELETON` as input, or only a curated subset?
-2. What should the initial vector representation look like? (sparse feature vector, small dense embedding, etc.)
-3. Should we start with a simpler method (e.g., weighted feature bag) and evolve to cosine similarity later?
-4. How should versioning of the signature generation logic be handled?
-5. Should this block be optional in early implementations, or required from the start?
+- Optimal vector dimensionality and sparsity strategy
+- Feature weighting scheme
+- Versioning strategy for signatures
+- Whether to support both dense and sparse vectors
 
 ---
 
-## 8. Recommendation
-
-I recommend we create this as a **new, small, dedicated primitive** rather than embedding the logic inside SmOB or RB. This keeps the architecture clean and aligned with the principle of focused, composable blocks.
+**End of Revision 1.2**
 
 ---
 
-**End of Proposal**
+---
+
+**Jeff —** This should now be well-aligned with CP’s vision. Would you like any changes before we lock it, or should we move on?
