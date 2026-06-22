@@ -1,5 +1,3 @@
-**Here is the revised Draft of `phi_G_simulation_requirements.md`** with the iterative round structure incorporated (minimum expectations for Round 1, framework for later rounds, and clear deliverables).
-
 # phi-G Simulation Requirements
 
 ## Purpose
@@ -17,7 +15,7 @@ The dimensionality of G must remain constant across all time-steps and all input
 Required input elements:
 - Fixed-dimensional G vector (token-based or semantic-based path).
 - Current state context (basin deformation signals, resonance metrics, time-step index).
-- Any required flags for singularity proximity or fuzziness level.
+- Required singularity proximity flag and normalization metadata.
 
 ## Output from phi-G (to RB)
 - Transformed relational state suitable for RB update (e.g., adjusted trajectory, curvature delta, resonance modulation, entropy term).
@@ -34,22 +32,26 @@ Required input elements:
 ## Simulation Rounds and Minimum Expectations
 We will use an iterative simulation approach:
 
-**Round 1 (Learning / Exploration)**  
-Minimum expectations:
-- Successful construction of G vector from the OB pipeline via SSG.
-- Deterministic phi-G transformation on basic inputs (normal operation cases).
-- Basic handling of fuzziness and singularity proximity signals.
-- Output compatible with simple RB update.
-- Confirmation that the structure supports fixed-time-step execution on laptop hardware with acceptable performance.
-- Documentation of observed behaviors, edge effects, and any immediate gaps.
-
-Accomplishing more (e.g., additional edge cases or preliminary resonance metrics) is welcome but not required for Round 1 success.
+**Round 1 (Learning / Exploration)** — Completed  
+Minimum expectations (achieved):  
+- Successful construction of G vector from the OB pipeline via SSG.  
+- Deterministic phi-G transformation on basic inputs.  
+- Basic handling of fuzziness and singularity proximity signals.  
+- Output compatible with simple RB update.  
+- Confirmation of laptop-scale performance.  
+- Documentation of observed behaviors and gaps.
 
 **Round 2 (Confidence Increase / Refinement)**  
-Minimum expectations to be defined after Round 1 results (focus on tightening invariants, improving stability near singularities, and expanding test coverage).
+Minimum expectations:  
+- Stability margin ≤ 0.12 in singularity approach scenarios.  
+- Output validity ≥ 97% across all scenarios.  
+- Implementation and testing of refined normalization and required singularity proximity flag in G.  
+- At least two additional edge cases (identity wobble and basin boundary transition).  
+- Collection of quantitative resonance/curvature metrics.  
+- Average performance still under 8 ms/step while increasing scenario complexity.
 
 **Round 3 (Final Stabilization)**  
-Minimum expectations to be defined after Round 2 (full validation against key scenarios, performance targets, and principle confirmation).
+Minimum expectations to be defined after Round 2 results (full validation against key scenarios, performance targets, and principle confirmation).
 
 **Verification Phase**  
 Full logic simulation runs against validation scenarios (Paper #3) to confirm architectural soundness and laptop realizability.
@@ -71,7 +73,7 @@ Full logic simulation runs against validation scenarios (Paper #3) to confirm ar
 - Updates required to 20_requirements traceability matrix.
 
 ## Open Questions / Observations for Refinement
-- Preferred initial path (token-based vs semantic-based) for Round 1.
+- Preferred initial path (token-based vs semantic-based) for Round 2.
 - Exact numeric bounds for vector dimension and per-step compute.
 - Additional state variables needed for phi-G bookkeeping.
 
