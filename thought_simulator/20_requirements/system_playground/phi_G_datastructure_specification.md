@@ -1,8 +1,3 @@
-**Here is Round 1 Draft of `phi_G_datastructure_specification.md`**
-
-I’ve included a **generic, extendable example** of a G vector structure (with explicit reasoning for why it is extendable). This keeps the paper at the right abstraction level while giving a concrete mental model.
-
-```markdown:disable-run
 # phi-G Data-Structure Specification
 
 ## Purpose
