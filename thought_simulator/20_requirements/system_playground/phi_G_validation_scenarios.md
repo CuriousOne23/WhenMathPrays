@@ -1,5 +1,3 @@
-**Here is Draft 1 of Paper #3: `phi_G_validation_scenarios.md`**
-
 # phi-G Validation Scenarios
 
 ## Purpose
@@ -12,42 +10,52 @@ Define concrete, testable scenarios and success criteria for the G-to-phi logic 
 - Supports the iterative simulation rounds defined in Paper #2B.
 
 ## Overall Success Criteria (Across Rounds)
-- Deterministic behavior (same input → same output).
+- Determinism (same input → same output).
 - Preservation of relational invariants (non-objectifying near singularities, manifold coherence).
 - Stable, bounded output suitable for RB.
 - Acceptable laptop performance (low-millisecond per step).
 - Observable, documentable behavior that increases architectural confidence.
 
-## Round 1 Validation Scenarios (Learning / Exploration)
+## Round 1 Validation Scenarios (Learning / Exploration) — Completed
 **Minimum Required Scenarios**
-1. **Basic Normal Operation**  
-   Input: Standard G vector from SSG (mixed token/semantic path).  
-   Expected: Deterministic phi-G transformation, valid RB-compatible output, no crashes or unbounded growth.
+1. **Basic Normal Operation** — Achieved
+2. **Light Fuzziness Handling** — Achieved
+3. **Light Singularity Approach** — Achieved (marginal on stability/validity)
 
-2. **Light Fuzziness Handling**  
-   Input: G with moderate ambiguity or incomplete signals.  
-   Expected: Graceful degradation or controlled variation, stable output.
+**Round 1 Summary**: Pass with valuable lessons on normalization and singularity signaling.
 
-3. **Singularity Proximity (Light Approach)**  
-   Input: G with increasing resonance/curvature signals.  
-   Expected: Observable dominance effect without collapse or instability.
+## Round 2 Validation Scenarios (Confidence Increase / Refinement)
+**Minimum Required Scenarios**
+1. **Improved Singularity Approach**  
+   Input: G with refined normalization and required singularity proximity flag.  
+   Expected: Stability margin ≤ 0.12, output validity ≥ 97%, bounded dominance without collapse.
 
-**Success for Round 1**  
-- All scenarios run deterministically.  
-- Behavior is observable and documented (including unexpected effects).  
-- No fundamental violations of invariants.  
-- Performance within laptop targets.
+2. **Identity Wobble Test**  
+   Input: G with identity wobble signals.  
+   Expected: Stable recovery, deterministic behavior, no unbounded drift.
 
-## Round 2 & Round 3 Scenarios (To Be Refined)
-- Expanded edge cases (identity wobble, basin boundary transitions, recovery from high fuzziness).  
-- Quantitative metrics (stability scores, resonance consistency, curvature behavior).  
-- Stress tests near singularity.  
-- Cross-family validation (token-based vs semantic-based G).
+3. **Basin Boundary Transition**  
+   Input: G at basin boundary conditions.  
+   Expected: Controlled transition, preserved coherence, valid RB output.
+
+**Additional Round 2 Goals**
+- Collect quantitative metrics (curvature, resonance strength, stability scores).
+- Test refined normalization block under high-resonance cases.
+- Verify required singularity flag effectiveness.
+- Maintain average performance under 8 ms/step.
+
+**Success for Round 2**  
+- All scenarios meet tightened thresholds.  
+- Clear evidence of improved robustness from Round 1 refinements.  
+- Actionable observations for Round 3.
+
+## Round 3 (Final Stabilization) — To Be Defined After Round 2
+Focus on comprehensive coverage, edge-case stress testing, and principle-level confirmation.
 
 ## Verification Phase Goals
 - High confidence that the phi-G principles hold under realistic conditions.  
 - Evidence that the architecture is realizable with today’s technology (normal laptop).  
-- Identification of any principle-level issues requiring re-architecture (unlikely at this stage).  
+- Identification of any principle-level issues requiring re-architecture.  
 - Clear documentation of what was achieved vs. what needs refinement in later implementation.
 
 ## Traceability
