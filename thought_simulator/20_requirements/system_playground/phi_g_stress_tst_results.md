@@ -69,6 +69,7 @@ Conduct targeted stress testing on the phi-G relationship to identify remaining 
 - **Comparison to Today’s AI**: TS seamless switching vs mode collapse or inconsistency.
 
 ## Summary Table of Results
+
 | Scenario | Determinism | Stability (max Δ) | Output Validity | Performance (ms/step) | Overall |
 |---------------------------------|-------------|-------------------|-----------------|-----------------------|---------|
 | 1. High-Frequency Oscillation | 100% (≥99.8%; +0.2%) | 0.11 (≤0.12; +0.01) | 98.2% (≥97%; +1.2%) | 6.9 (≤10; +3.1) | Pass |
@@ -80,6 +81,7 @@ Conduct targeted stress testing on the phi-G relationship to identify remaining 
 | **Overall** | **100%** | **0.102** | **97.65%** | **6.7** | **Strong Pass** |
 
 ## Comparison to Today’s AI Estimated Performance (Summary)
+
 | Aspect | This TS Stress Test | Typical Modern LLM (estimated) | Notes |
 |---------------------------|--------------------------|--------------------------------|-------|
 | Determinism | 100% | ~70–85% (with temperature) | TS significantly more deterministic |
@@ -88,6 +90,7 @@ Conduct targeted stress testing on the phi-G relationship to identify remaining 
 | Singularity-like handling | Observable & bounded | No model; instability/hallucination risk | Architectural advantage |
 
 ## Comparison to Today’s AI Estimated Performance (Per-Scenario)
+  
 | Scenario | This TS Stress Test | Typical Modern LLM (estimated) | Notes |
 |---------------------------------|--------------------------------------|---------------------------------------------------------|-------|
 | High-Frequency Oscillation | 100% deterministic, stable (0.11 Δ) | Likely mode collapse or oscillating contradictory outputs | TS maintains coherence under rapid resonance changes; LLM typically becomes unstable or hallucinates. |
