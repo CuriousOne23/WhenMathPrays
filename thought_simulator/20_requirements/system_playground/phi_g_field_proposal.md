@@ -80,7 +80,7 @@ The Residual stage normalizes across these structural differences by operating o
 
 ### 3.2 Multi-Asset Composability
 
-$\varphi\text{–$G}$ fields constructed via RSGC are additive under a well-defined inner product. Cross-asset $\varphi	ext{-G}$ interaction tensors can be assembled from single-asset RSGC outputs without re-running the full pipeline, enabling modular multi-leg construction.
+$\varphi\text{–G}$ fields constructed via RSGC are additive under a well-defined inner product. Cross-asset $\varphi	ext{-G}$ interaction tensors can be assembled from single-asset RSGC outputs without re-running the full pipeline, enabling modular multi-leg construction.
 
 ### 3.3 Temporal Generality
 
