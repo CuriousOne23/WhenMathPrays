@@ -1,6 +1,5 @@
 **Here is the revised Draft 1 of Paper #2** with CP’s two tiny refinements incorporated.
 
-```markdown:disable-run
 # phi-G Simulation Requirements
 
 ## Purpose
