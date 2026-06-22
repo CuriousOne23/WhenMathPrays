@@ -99,7 +99,16 @@ The system demonstrated strong determinism and acceptable performance. The light
 - Begin collecting quantitative resonance/curvature metrics.  
 - Target average performance still under 8 ms/step while increasing scenario complexity.
 
----
+### 8. Lessons Learned
+**Key Takeaways from Round 1**
+- The core pipeline (OB → SSG → phi-G → RB) is fundamentally sound and deterministic.
+- Normalization in the G structure is currently the weakest link under high-resonance/singularity conditions — this directly impacted marginal stability in Scenario 3.
+- Singularity proximity signaling needs to be promoted from optional to required with a defined encoding to improve predictability.
+- The fixed-dimensional vector approach works well but benefits from explicit version/refinement metadata for future extensibility.
+- Performance and basic stability are already strong enough for laptop use — the focus in Round 2 should be on robustness near edge cases rather than speed.
+- No evidence of fundamental architectural flaws; refinements will be incremental.
 
-**Round 1 Conclusion**  
-The first logic simulation was successful as a learning round. The architecture is feasible and the principles hold. We have clear, data-driven directions for Round 2 refinement. Ready to proceed when you are.
+**Implications for Next Steps**
+These lessons directly inform targeted updates to Paper #2A (G data structure) and Paper #2B (simulation requirements) before Round 2 begins. The architecture is viable and the iterative process is working as intended.
+
+---
