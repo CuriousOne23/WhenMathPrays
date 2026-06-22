@@ -89,7 +89,7 @@ The system demonstrated strong determinism and acceptable performance. The light
 | Determinism               | 100%                     | ~70–85% (with temperature)     | TS significantly more deterministic |
 | Per-step latency          | ~5.4 ms                  | 20–80 ms (token generation)    | TS much faster per logical step |
 | Stability under fuzziness | Good                     | Variable (hallucination risk)  | TS more controlled |
-| Singularity-like handling | Observable & bounded     | Not explicitly modeled         | Architectural advantage |
+| Singularity-like handling | Observable & bounded     | No model; instability/hallucination risk.        | Architectural advantage |
 
 ### 7. Suggested Goals for Round 2 Simulations
 - Improve stability margin in singularity approach to ≤ 0.12.  
