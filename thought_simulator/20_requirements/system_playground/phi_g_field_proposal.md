@@ -107,11 +107,11 @@ Each stage of the pipeline has a closed-form or semi-closed-form representation.
 Let $D_t \in \mathbb{R}^{2L}$ be the depth vector at time $t$ (bid side concatenated with ask side, each of length $L$).
 
 $$
-\mu_t = \mathrm{EMA}(D_t,\; \tau_{\text{baseline}})
+\mu_t = \mathrm{EMA}(D_t, \tau_{\text{baseline}})
 $$
 
 $$
-\sigma_t = \mathrm{EMA}\!\left(\left|D_t - \mu_t\right|,\; \tau_{\text{baseline}}\right)
+\sigma_t = \mathrm{EMA}\left(\left|D_t - \mu_t\right|, \tau_{\text{baseline}}\right)
 $$
 
 $$
@@ -125,7 +125,7 @@ $R_t$ is the normalized residual depth vector. The baseline timescale $\tau_{\te
 **Smooth Stage**
 
 $$
-S_t = \mathcal{K}(R_t,\; \tau_{\text{smooth}})
+S_t = \mathcal{K}(R_t, \tau_{\text{smooth}})
 $$
 
 where $\mathcal{K}$ is a causal smoothing operator (exponential, Gaussian, or wavelet-based). The smooth timescale $\tau_{\text{smooth}} \ll \tau_{\text{baseline}}$ targets signal-preserving noise suppression.
@@ -135,7 +135,8 @@ where $\mathcal{K}$ is a causal smoothing operator (exponential, Gaussian, or wa
 **Gate Stage**
 
 $$
-g_t = \sigma\!\left(W_{\text{gate}} \cdot \begin{bmatrix} S_t \\ c_t \end{bmatrix} + b_{\text{gate}}\right)
+g_t = \sigma\left(W_{\text{gate}} \cdot \begin{bmatrix} S_t \\
+c_t \end{bmatrix} + b_{\text{gate}}\right)
 $$
 
 $$
@@ -154,11 +155,11 @@ $c_t$ is an optional context vector (spread, session time, recent volatility) th
 **Classify-by-Bandwidth Stage**
 
 $$
-\{C_k\}_{k=1}^{K} = \mathrm{BandwidthDecompose}(\hat{S}_t)
+\\{C_k\\}_{k=1}^{K} = \mathrm{BandwidthDecompose}(\hat{S}_t)
 $$
 
 $$
-\varphi_k = P_\varphi \, C_k, \qquad G_k = P_G \, C_k
+\varphi_k = P_\varphi \ C_k, \qquad G_k = P_G \ C_k
 $$
 
 $\mathrm{BandwidthDecompose}$ partitions $\hat{S}_t$ into $K$ bandwidth bands (e.g., via DWT, EMD, or a learnable filter bank), each labeled by its characteristic frequency or decay rate. The $\varphi$ and $G$ transforms are linear projections per band, enabling interpretable field components indexed by timescale.
@@ -181,7 +182,7 @@ The pipeline complexity scales linearly with depth levels $L$. In practice, the 
 
 ### 5.3 Bandwidth Band Scaling
 
-The number of bandwidth bands $K$ is a design choice. Typical deployments use $K = 3$–$5$ bands (e.g., sub-second, seconds, tens-of-seconds, minutes, session). Adding bands increases field richness linearly but does not change the Residual or Smooth stages.
+The number of bandwidth bands $K$ is a design choice. Typical deployments use $K = 3–5$ bands (e.g., sub-second, seconds, tens-of-seconds, minutes, session). Adding bands increases field richness linearly but does not change the Residual or Smooth stages.
 
 ### 5.4 Incremental Updates
 
@@ -261,7 +262,7 @@ To verify alignment before deploying a new simulator or market model:
 4. Compute KL divergence of $\varphi$ and $G$ marginal distributions per band. Practical acceptance criterion:
 
 $$
-D_{\mathrm{KL}}\!\left(p_{\text{live}} \;\|\; p_{\text{sim}}\right) < 0.1 \text{ nats}
+D_{\mathrm{KL}}\left(p_{\text{live}} \| p_{\text{sim}}\right) < 0.1 \text{ nats}
 $$
 
 ---
@@ -274,7 +275,7 @@ The $\varphi\text{-G}$ system operates in environments where AI inference (large
 
 ### 8.2 How RSGC Minimizes Token Cost
 
-**Compression by design.** The RSGC pipeline compresses a $2L$-dimensional raw OB snapshot (often $L = 10$–$20$, so 20–40 floats per side) into $K$ bandwidth-classified scalar or low-rank field components. For $K = 4$ bands with a scalar projection, the full $\varphi\text{-G}$ field state is representable as **8 numbers** (4 $\varphi$ values + 4 $G$ values), compared to 40+ raw depth levels.
+**Compression by design.** The RSGC pipeline compresses a $2L$-dimensional raw OB snapshot (often $L = 10–20$, so 20–40 floats per side) into $K$ bandwidth-classified scalar or low-rank field components. For $K = 4$ bands with a scalar projection, the full $\varphi\text{-G}$ field state is representable as **8 numbers** (4 $\varphi$ values + 4 $G$ values), compared to 40+ raw depth levels.
 
 **Interpretable bandwidth labels.** Because each band is labeled by its characteristic timescale (e.g., "sub-second," "seconds," "minutes"), the AI component can reason about field state in natural language without requiring numeric precision. A prompt such as:
 
@@ -310,23 +311,23 @@ The terse 4-band format is the recommended default for AI-in-the-loop deployment
                     │   RESIDUAL      │  Normalize to session-local
                     │                 │  baseline (EMA mean + scale)
                     │  R_t = (D_t     │
-                    │  - μ_t) / σ_t  │
+                    │  - μ_t) / σ_t   │
                     └────────┬────────┘
                              │
                     ┌────────▼────────┐
                     │    SMOOTH       │  Causal kernel smoothing
-                    │  S_t = K(R_t)  │  (EMA / Gaussian / wavelet)
+                    │  S_t = K(R_t)   │  (EMA / Gaussian / wavelet)
                     └────────┬────────┘
                              │
                     ┌────────▼────────┐
                     │     GATE        │  Suppress sparse / irrelevant
-                    │  Ŝ_t = g_t ⊙  │  price levels
+                    │  Ŝ_t = g_t ⊙   │  price levels
                     │       S_t       │  (learned or rule-based)
                     └────────┬────────┘
                              │
                ┌─────────────▼─────────────┐
                │  CLASSIFY-BY-BANDWIDTH    │  Decompose into K timescale
-               │  {C_k} = BWDecomp(Ŝ_t)  │  bands (DWT / filter bank)
+               │  {C_k} = BWDecomp(Ŝ_t)    │  bands (DWT / filter bank)
                └──┬────────────────────┬───┘
                   │                    │
          ┌────────▼──────┐    ┌────────▼──────┐
