@@ -60,7 +60,7 @@ The Residual → Smooth → Gate → Classify-by-Bandwidth pipeline addresses ea
 | **Residual** | Non-stationarity; absolute scale sensitivity | Mean-centered, normalized OB deviation |
 | **Smooth** | High-frequency noise; temporal discontinuity | Locally smooth field representation |
 | **Gate** | Sparse levels; regime-dependent relevance | Attended, masked field with suppressed noise |
-| **Classify-by-Bandwidth** | Dimensionality; heterogeneous signal timescales | Bandwidth-labeled $\varphi$–$G$ components |
+| **Classify-by-Bandwidth** | Dimensionality; heterogeneous signal timescales | Bandwidth-labeled $\varphi\text{–G}$ components |
 
 The result is a field that is stationary, smooth, selectively attended, and decomposed by informational timescale — satisfying the mathematical prerequisites of the φ–G update equations while remaining computationally tractable.
 
@@ -80,7 +80,7 @@ The Residual stage normalizes across these structural differences by operating o
 
 ### 3.2 Multi-Asset Composability
 
-$\varphi$–$G$ fields constructed via RSGC are additive under a well-defined inner product. Cross-asset $\varphi$–$G$ interaction tensors can be assembled from single-asset RSGC outputs without re-running the full pipeline, enabling modular multi-leg construction.
+$\varphi\text{–$G}$ fields constructed via RSGC are additive under a well-defined inner product. Cross-asset $\varphi	ext{-G}$ interaction tensors can be assembled from single-asset RSGC outputs without re-running the full pipeline, enabling modular multi-leg construction.
 
 ### 3.3 Temporal Generality
 
@@ -144,7 +144,7 @@ $$
 
 The gate $g_t \in [0,1]^{2L}$ is either:
 
-- **Learned:** via a lightweight linear layer trained on downstream $\varphi$–$G$ prediction residuals.
+- **Learned:** via a lightweight linear layer trained on downstream $\varphi	ext{-G}$ prediction residuals.
 - **Rule-based:** threshold on local depth variance or spread proxy (zero learnable parameters).
 
 $c_t$ is an optional context vector (spread, session time, recent volatility) that modulates gate sensitivity.
@@ -193,7 +193,7 @@ All EMA and gating state is $\mathcal{O}(1)$ to update per tick. The pipeline su
 
 ### 6.1 Why Smoothness Is a Hard Requirement
 
-The $\varphi$–$G$ field update equations and any gradient-based learner operating on the field require that:
+The $\varphi	ext{-G}$ field update equations and any gradient-based learner operating on the field require that:
 
 1. **$\varphi$ is differentiable** with respect to price level — enabling gradient computation for optimal execution path planning.
 2. **$G$ is Lipschitz-continuous** with respect to time — ensuring that gain estimates do not exhibit jumps that destabilize downstream controllers.
@@ -231,7 +231,7 @@ Standard diagnostics to verify that an RSGC-processed field satisfies smoothness
 
 ### 7.1 The Simulation-Reality Gap in OB Field Systems
 
-A persistent failure mode in OB-based field systems is simulation drift: a $\varphi$–$G$ field that behaves correctly in historical backtest diverges from live behavior because the simulation does not faithfully reproduce the statistical properties of OB dynamics — particularly:
+A persistent failure mode in OB-based field systems is simulation drift: a $\varphi	ext{-G}$ field that behaves correctly in historical backtest diverges from live behavior because the simulation does not faithfully reproduce the statistical properties of OB dynamics — particularly:
 
 - Queue depletion and refill patterns.
 - Hidden order / iceberg effects.
@@ -240,7 +240,7 @@ A persistent failure mode in OB-based field systems is simulation drift: a $\var
 
 ### 7.2 RSGC as a Simulation-Agnostic Interface
 
-The RSGC pipeline acts as a **normalization layer** between raw simulation output and the $\varphi$–$G$ field. Because:
+The RSGC pipeline acts as a **normalization layer** between raw simulation output and the $\varphi	ext{-G}$ field. Because:
 
 - The Residual stage normalizes to session-local statistics, the absolute depth levels of the simulation do not need to match the live market exactly — only the relative dynamics need to be qualitatively correct.
 - The Smooth stage filters timescales below the kernel bandwidth, making the field insensitive to the specific mechanics of queue updates at sub-kernel resolution.
@@ -270,11 +270,11 @@ $$
 
 ### 8.1 Motivation for Token Efficiency
 
-The $\varphi$–$G$ system operates in environments where AI inference (large language model calls, neural network forward passes, or autoregressive sampling) may be part of the signal generation loop. In such architectures, token cost is a first-class engineering constraint. A field representation that requires lengthy natural-language descriptions, high-dimensional numeric summaries, or verbose structured prompts to communicate its state to an AI component will be prohibitively expensive in both latency and dollar cost.
+The $\varphi	ext{-G}$ system operates in environments where AI inference (large language model calls, neural network forward passes, or autoregressive sampling) may be part of the signal generation loop. In such architectures, token cost is a first-class engineering constraint. A field representation that requires lengthy natural-language descriptions, high-dimensional numeric summaries, or verbose structured prompts to communicate its state to an AI component will be prohibitively expensive in both latency and dollar cost.
 
 ### 8.2 How RSGC Minimizes Token Cost
 
-**Compression by design.** The RSGC pipeline compresses a $2L$-dimensional raw OB snapshot (often $L = 10$–$20$, so 20–40 floats per side) into $K$ bandwidth-classified scalar or low-rank field components. For $K = 4$ bands with a scalar projection, the full $\varphi$–$G$ field state is representable as **8 numbers** (4 $\varphi$ values + 4 $G$ values), compared to 40+ raw depth levels.
+**Compression by design.** The RSGC pipeline compresses a $2L$-dimensional raw OB snapshot (often $L = 10$–$20$, so 20–40 floats per side) into $K$ bandwidth-classified scalar or low-rank field components. For $K = 4$ bands with a scalar projection, the full $\varphi	ext{-G}$ field state is representable as **8 numbers** (4 $\varphi$ values + 4 $G$ values), compared to 40+ raw depth levels.
 
 **Interpretable bandwidth labels.** Because each band is labeled by its characteristic timescale (e.g., "sub-second," "seconds," "minutes"), the AI component can reason about field state in natural language without requiring numeric precision. A prompt such as:
 
@@ -291,9 +291,9 @@ conveys actionable signal in ~12 tokens rather than a full depth-of-book table r
 | Representation | Bands $K$ | Tokens (approx.) |
 |---|---|---|
 | Full raw OB ($L = 10$ levels) | — | 120–160 |
-| RSGC $\varphi$–$G$ summary, terse | 4 | 30–50 |
-| RSGC $\varphi$–$G$ summary, verbose | 4 | 60–90 |
-| RSGC $\varphi$–$G$ summary, terse | 3 | 20–35 |
+| RSGC $\varphi	ext{-G}$ summary, terse | 4 | 30–50 |
+| RSGC $\varphi	ext{-G}$ summary, verbose | 4 | 60–90 |
+| RSGC $\varphi	ext{-G}$ summary, terse | 3 | 20–35 |
 
 The terse 4-band format is the recommended default for AI-in-the-loop deployments.
 
@@ -407,7 +407,7 @@ All state updates are $\mathcal{O}(L)$ per tick with no memory of prior ticks be
 
 | Topic | Description | Priority |
 |---|---|---|
-| **Gate learning objective** | Define the loss for training the gate layer — candidates include $\varphi$–$G$ prediction MSE, downstream PnL, or mutual information maximization. | High |
+| **Gate learning objective** | Define the loss for training the gate layer — candidates include $\varphi	ext{-G}$ prediction MSE, downstream PnL, or mutual information maximization. | High |
 | **Bandwidth basis selection** | Evaluate DWT vs. EMD vs. learnable filter bank for the Classify-by-Bandwidth stage across instruments with different autocorrelation structure. | High |
 | **Cross-asset gate sharing** | Explore whether a single gate network generalizes across instruments or whether per-instrument gates are required. | Medium |
 | **Non-stationary regimes** | Investigate adaptive $\tau_{\text{baseline}}$ that adjusts to volatility regime shifts (e.g., news events, open/close transitions). | Medium |
