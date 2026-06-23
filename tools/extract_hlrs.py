@@ -5,28 +5,31 @@ TARGET_DIR = "thought_simulator/20_requirements"
 OUTPUT_FILE = os.path.join(TARGET_DIR, "20.525.015_old_hlr_num_in_files.md")
 
 # Regex for HLR numbers
-HLR_PATTERN = re.compile(r"HLR[-_ ]?(\d{2}\.\d{3}\.\d{3})", re.IGNORECASE)
+HLR_PATTERN = re.compile(
+    r"HLR[\s\-_–—‑‒‐]*20\.\d{2,3}(?:\.\d{3})?[\s\-_–—‑‒‐]*\d{3}",
+    re.IGNORECASE
+)
 
 def strip_yaml(text):
-    """
-    Remove YAML front matter if present.
-    YAML is defined as a block starting with '---' or '```yaml' and ending with '---' or '```'.
-    """
     lines = text.splitlines()
     if not lines:
         return text
 
-    # Case 1: --- YAML ---
+    # Only strip the FIRST YAML block
     if lines[0].strip() == "---":
         for i in range(1, len(lines)):
             if lines[i].strip() == "---":
+                # Return everything AFTER the first YAML block
                 return "\n".join(lines[i+1:])
+        # If no closing --- found, return original
+        return text
 
-    # Case 2: ```yaml ... ```
+    # Handle ```yaml fenced blocks
     if lines[0].strip().lower().startswith("```yaml"):
         for i in range(1, len(lines)):
             if lines[i].strip().startswith("```"):
                 return "\n".join(lines[i+1:])
+        return text
 
     return text
 
@@ -65,7 +68,7 @@ def main():
             out.write(f"## {entry['file']}\n")
             if entry["hlrs"]:
                 for h in entry["hlrs"]:
-                    out.write(f"- HLR-{h}\n")
+                    out.write(f"{h}\n")
             else:
                 out.write("- *(No HLR numbers found)*\n")
             out.write("\n")
