@@ -93,7 +93,6 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.169_reb_prm.md](20.166_reb_prm.md)
 - [20.170_safety_requirements.md](20.170_safety_requirements.md)
 - [20.180_conversational_relevance_requirements.md](20.180_conversational_relevance_requirements.md)
-- [20.190_glossary.md](20.190_glossary.md)
 - [20.200_traceability_matrix.md](20.200_traceability_matrix.md)
 - [20.206_pipeline_a_b_synchronization_contract.md](20.206_pipeline_a_b_synchronization_contract.md)
 - [20.207_execution_replay_specification.md](20.207_execution_replay_specification.md)
@@ -111,6 +110,10 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - **complete** 2026-06-18
 - [20.40.510_new_hlr_semantic_ref.md](20.40.510_new_hlr_semantic_ref.md)
 - **complete** 2026-06-18
+
+## Reference Documents
+- [20.190_glossary.md](20.190_glossary.md)
+- [20.705_ts_flow_dgms.md](20.705_ts_flow_dgms.md)
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
