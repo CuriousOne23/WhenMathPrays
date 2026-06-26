@@ -29,7 +29,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 ### Core Document Tiers
 - [00_program_governance/](00_program_governance/) — project intent, architecture framing, and philosophical governance
 - [20_requirements/system_playground/](20_requirements/system_playground/) - exploratory system architecture
-- 20_requirements/[system_simulation/](20_requirements/system_simulation/) - system logical simulation done with AI with respect to 20_requirements
+- [20_requirements/system_simulation/](20_requirements/system_simulation/) - system logical simulation done with AI with respect to 20_requirements
 - [10_thought_simulator_req/](10_thought_simulator_req/) — formalized requirement anchor layer used for coding and architecture realization
 - [20_requirements/](20_requirements/) — primary collaborative requirement layer and traceability source
 - [30_verification/](30_verification/) — verification capsules and deterministic evidence artifacts
