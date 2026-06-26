@@ -115,7 +115,21 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 
 ## Reference Documents
 - [20.190_glossary.md](20.190_glossary.md)
-- [20.705_ts_flow_dgms.md](20.705_ts_flow_dgms.md)
+- [20.700_master_glossary.md](20.700_master_glossary.md)
+- [20.700.010_primitives_glossary.md](20.700.010_primitives_glossary.md)
+- [20.700.020_processes_glossary.md](20.700.020_processes_glossary.md
+- [20.700.030_reference_objects_glossary.md](20.700.030_reference_objects_glossary.md)
+- [20.700.040_governance_glossary.md]20.700.040_governance_glossary.md
+- [20.700.050_ts_level_concepts_glossary.md](20.700.050_ts_level_concepts_glossary.md)
+- [20.705_patha_pathb_flow.md](20.705_patha_pathb_flow.md)
+- [20.705.010_ts_flw_glss_cvrg.md](20.705.010_ts_flw_glss_cvrg.md)
+- [20.710_ob_data_strc.md](20.710_ob_data_strc.md)
+- [20.715_process_flows.md](20.715_process_flows.md)
+- [20.720_reference_flows.md](20.720_reference_flows.md)
+- [20.725_governance_flows.md](20.725_governance_flows.md)
+- [20.730_ts_concept_flows.md](20.730_ts_concept_flows.md)
+- [20.735_ts_flw_glss_cvrg.md](20.735_ts_flw_glss_cvrg.md)
+
 
 ## Non-Authoritative Supporting Artifacts
 - [archive/](archive/)
