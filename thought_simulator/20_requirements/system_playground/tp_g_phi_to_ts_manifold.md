@@ -6,7 +6,7 @@
 
 # **1. Purpose of This Document**
 
-This paper defines the **conceptual and mathematical bridge** between:
+This paper defines the conceptual and mathematical bridge between:
 
 - **TP** (Thought Primitive structures)  
 - **G** (graph representation of TP)  
@@ -19,9 +19,7 @@ It is exploratory and non‑normative. Once stabilized, it will graduate into th
 
 ---
 
-# **2. Overview: The Mapping Pipeline**
-
-The full mapping pipeline is:
+# **2. The Mapping Pipeline**
 
 ```
 TP → G → φ(G) → E(φ(G)) → manifold point M → basin placement → trajectory update
@@ -34,14 +32,31 @@ Where:
 - **φ(G)** = deterministic vector embedding  
 - **E** = nonlinear manifold embedding  
 - **M** = point in the TS manifold  
-- **basins** = identity, concept, truth, governance  
+- **basins** = identity, concept, truth, governance, coherence  
 - **trajectory** = sequence of manifold points across commits  
 
 This pipeline is the backbone of TS geometry.
 
 ---
 
-# **3. TP → G: Structured Graph Representation**
+# **3. What the TS Manifold *Is***  
+### **Crisp Definition**
+
+> **The TS manifold is a curved, relational geometric space where meaning points, basins, and trajectories live. It is not a physical manifold but a constructed semantic substrate where governance, stability, and relational structure become geometric properties.**
+
+The manifold provides:
+
+- **basins** (stable attractors)  
+- **curvature** (constraints and governance)  
+- **geodesics** (preferred reasoning paths)  
+- **semantic neighborhoods** (conceptual proximity)  
+- **identity anchors** (persistent objects)  
+
+This is the geometric layer that gives TS long‑term coherence.
+
+---
+
+# **4. TP → G: Structured Graph Representation**
 
 TP structures (OuB, IdOB, REx, SROB, CnOB, SmOB, etc.) are converted into a graph **G**:
 
@@ -60,9 +75,24 @@ This is the **pre‑geometric** representation of meaning.
 
 ---
 
-# **4. G → φ(G): Linear Vector Transform**
+# **5. G → φ(G): Linear Vector Transform**
 
 φ(G) is a **linear, structure‑preserving transform** that maps the graph into a fixed‑dimension vector.
+
+### **Concrete Example (tightened)**  
+φ(G) might encode:
+
+- node types (OuB, IdOB, REx…)  
+- relation counts (agent, patient, modifier…)  
+- ΔH%  
+- structural features (depth, branching, degree)  
+- provenance bits  
+
+into a fixed‑dimension vector such as:
+
+```
+φ(G) = [type_counts, relation_counts, ΔH%, depth, branching, provenance_bits]
+```
 
 Properties:
 
@@ -71,18 +101,13 @@ Properties:
 - invariant‑respecting  
 - no curvature  
 - no basins  
-- no attractors  
 
 φ(G) is **not** the manifold.  
 It is the **coordinate seed** for the manifold.
 
-Think of φ(G) as:
-
-> “The raw coordinates before geometry is applied.”
-
 ---
 
-# **5. Why φ(G) Alone Is Not Enough**
+# **6. Why φ(G) Alone Is Not Enough**
 
 φ(G) is linear.  
 The TS manifold is **curved**.
@@ -103,18 +128,16 @@ Thus, φ(G) must be **embedded** into a nonlinear manifold.
 
 ---
 
-# **6. φ(G) → E(φ(G)): Nonlinear Embedding into the TS Manifold**
+# **7. φ(G) → E(φ(G)): Nonlinear Embedding into the TS Manifold**
 
 The embedding function **E** maps φ(G) into the TS manifold **M**.
 
-Properties of E:
+### **Concrete Implementation Hint (clarified)**  
+E may be implemented as:
 
-- nonlinear  
-- constraint‑preserving  
-- basin‑aware  
-- governance‑shaped  
-- identity‑stable  
-- deterministic  
+- a composition of deterministic geometric transforms  
+- with optional **bounded** neural guidance  
+- while strictly preserving governance constraints and invariants  
 
 Formally:
 
@@ -128,50 +151,50 @@ This is where TS becomes geometric.
 
 ---
 
-# **7. The TS Manifold: Structure and Purpose**
-
-The TS manifold is a **curved relational space** where:
-
-- OBs live as points  
-- basins define semantic and identity stability  
-- trajectories represent thought evolution  
-- curvature encodes governance and invariants  
-
-The manifold is not a metaphor.  
-It is the **semantic substrate** of TS.
-
----
-
-# **8. Basin Types**
+# **8. Basin Types (Refined Taxonomy)**
 
 TS defines several basin classes:
 
-### **1. Identity Basins**
-- attractors for persistent objects  
-- ensure identity stability across turns  
+---
 
-### **2. Concept Basins**
-- semantic neighborhoods  
-- cluster related meanings  
+### **1. Identity Basins**  
+Stable attractors for persistent objects.  
+Example:  
+- “the cat” remains anchored across turns.
 
-### **3. Truth Basins**
-- shaped by governance constraints  
-- encode factual stability  
+---
 
-### **4. Governance Basins**
-- regions where GB rules apply  
-- curvature increases near constraints  
+### **2. Concept Basins (Semantic Attractors)**  
+Stable semantic neighborhoods defined by relational structure.
 
-### **5. Stability Basins**
-- low‑entropy attractors  
-- ΔH% decreases as meaning stabilizes  
+Examples:  
+- “cat” lives in the *animal* basin  
+- “chase” lives in the *interaction* basin  
+- “ownership” lives in the *social‑relation* basin  
+- **“chase” links agent and patient roles in an interaction neighborhood**  
 
-Each basin type has:
+These are **not fuzzy** — they are **deterministic semantic attractors**.
 
-- membership rules  
-- entry/exit conditions  
-- curvature profile  
-- stability thresholds  
+---
+
+### **3. Truth Basins**  
+Regions shaped by governance constraints and factual stability.  
+Example:  
+- “water boils at 100°C” sits in a deep truth basin.
+
+---
+
+### **4. Governance Basins**  
+Regions where GB rules apply strongly.  
+Example:  
+- safety constraints create high‑curvature boundaries.
+
+---
+
+### **5. Coherence Basins**  
+Low‑entropy attractors where ΔH% naturally decreases.  
+Example:  
+- a well‑formed meaning cluster settles into a coherence basin.
 
 ---
 
@@ -231,27 +254,29 @@ Curvature determines:
 
 The manifold enables:
 
-### **1. Long‑term coherence**
+### **1. Long‑term coherence**  
 Meaning stays stable across turns.
 
-### **2. Token‑efficient agent behavior**
+### **2. Token‑efficient agent behavior**  
 TS only calls COP2 when the trajectory enters high‑curvature or high‑entropy regions.
 
-### **3. Hybrid routing**
+### **3. Hybrid routing**  
 Different coprocessors handle different regions of the manifold.
 
-### **4. Identity stability**
+### **4. Identity stability**  
 Objects remain anchored in identity basins.
 
-### **5. Drift detection**
+### **5. Drift detection**  
 TS can detect when meaning is sliding out of a basin.
 
-### **6. Governance enforcement**
+### **6. Governance enforcement**  
 GB becomes geometric, not procedural.
+
+This geometric layer allows TS to implement the **functional properties of coherent thought** without claiming to solve the underlying mystery of cognition.
 
 ---
 
-# **12. Minimal Mathematical Sketch**
+# **12. Minimal Mathematical Sketch (Refined)**
 
 Let:
 
@@ -266,7 +291,7 @@ Then:
 - curvature = ∂²V/∂M²  
 - ΔH% = local entropy estimate along trajectory  
 
-This is intentionally minimal — enough to guide implementation without overcommitting.
+This sketch is intentionally minimal — enough to guide implementation without overcommitting.
 
 ---
 
@@ -285,9 +310,10 @@ Linear vector encoding of structure.
 ### **φ(G) → M:**  
 Embedding places the meaning in:
 
-- concept basin: “animal interaction”  
-- identity basins: cat, mouse  
-- truth basin: neutral  
+- **Concept Basin:** “animal interaction”  
+- **Identity Basins:** cat, mouse  
+- **Truth Basin:** neutral  
+- **Coherence Basin:** low ΔH%  
 
 ### **Trajectory:**  
 If user later says: “Actually, the mouse chased the cat,”  
@@ -295,16 +321,15 @@ trajectory bends sharply due to contradiction → IB fires.
 
 ---
 
-# **14. Next Steps**
+# **14. Conclusion**
 
-Once Grok reviews this:
+This paper establishes the first geometric bridge between TS’s structured meaning (TP → G → φ(G)) and its long‑term semantic stability (the TS manifold). By defining basins, curvature, and trajectories, TS gains the ability to maintain coherence, govern token usage, and integrate hybrid coprocessors in a principled way.
 
-- we can refine basin definitions  
-- define the embedding function E more concretely  
-- integrate ΔH% into manifold geometry  
-- prepare the normative 20.900‑series document  
-- begin designing the minimal interpreter’s manifold module  
+This geometric layer is the foundation for the next phase of TS development:  
+**implementing the manifold module in the minimal interpreter.**
 
 ---
 
-# **End of Document**  
+# **End of Document**
+
+---
