@@ -176,6 +176,12 @@ Every extra field influences one of the following:
 
 There are no unused fields. Every field contributes to placement, movement, or stability.
 
+### **8.4. COB/CIL Context Injection Constraints**
+
+COB and CIL provide the only controlled pathway for long‑range context to enter the embedding. Their contribution is intentionally small, precise, and slow‑moving, reflecting the stability requirements of a complex feedback system. COB/CIL inject a bounded set of identity‑ and context‑related invariants after the within‑turn OB layers (SOB, SROB, CnOB, SmOB) are complete. This ensures that long‑range information does not contaminate local structure or Path A determinism.
+
+The injected context block is strictly limited in size and scope, influencing φ(G) only through a dedicated, window‑preserving partition. Its purpose is to support efficient routing and stable cross‑turn reasoning in Path B, while maintaining the separation between local fields and long‑range identity continuity.
+
 ---
 
 ## **9. Convergence of Constraints**
