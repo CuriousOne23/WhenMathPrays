@@ -294,7 +294,7 @@ TS can detect when meaning is sliding out of a basin.
 ### **6. Governance enforcement**  
 GBMn curvature becomes geometric, not procedural.
 
-This geometric layer allows TS to implement the **functional properties of coherent thought** without claiming to solve the underlying mystery of cognition.
+This geometric layer allows TS to implement the **functional properties of coherent thought (the duck test)** without claiming to solve the underlying mystery of cognition.
 
 ---
 
