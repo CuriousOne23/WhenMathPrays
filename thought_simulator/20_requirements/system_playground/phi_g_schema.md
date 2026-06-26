@@ -13,7 +13,8 @@ This document defines the **concrete schema** for the TS embedding function `$φ
 - ranges and invariants  
 - integration of long‑range context (IdOB, COB, CIL)  
 
-`ts_embedding_constraints.md` explains **why** `$φ(G)$` must be high‑dimensional, block‑structured, and bounded.  
+The filename `phi_g_schema.md` refers to the embedding function `$φ(G)$`.  
+`ts_embedding_constraints.md` explains **why** `$φ(G)$` must be high‑dimensional and block‑structured.  
 This schema paper explains **what `$φ(G)$` looks like** in practice.
 
 Target: **512‑dimensional, fixed‑size, block‑structured embedding**, implementable on laptop‑class hardware.
@@ -27,10 +28,10 @@ Target: **512‑dimensional, fixed‑size, block‑structured embedding**, imple
 ### **2.1 Dimensional Budget**
 
 - **Total dimensions:** 512  
-- **Linguistic core:** ≈ 340–380 dims  
+- **Linguistic core:** ≈ 340–380 dims (approximate to allow future tuning)  
 - **TS‑specific invariants:** ≈ 130–170 dims (≤ 25–35%)
 
-This ensures linguistic structure remains the **dominant driver** of `$φ(G)$`, while TS‑specific fields provide only the necessary corrections for truth, governance, identity, coherence, and entropy.
+The v0.1 allocation in Section 2.2 sums to exactly 512.
 
 ### **2.2 Block Overview (v0.1)**
 
@@ -144,7 +145,7 @@ They must remain ≤ 25–35% of `$φ(G)$`.
 **Subfields:**
 
 - **E1 — Identity anchor strength (12 dims)**  
-- **E2 — Context profile hash (10 dims)**  
+- **E2 — Context profile summary (10 dims)**  
 - **E3 — Worldview curvature hints (10 dims)**  
 - **E4 — Cross‑turn coherence markers (8 dims)**  
 
@@ -213,20 +214,14 @@ Enough to carry persistent identity invariants without overwhelming the linguist
 - **J4 — Identity‑based governance hints (4 dims)**  
 
 **Why 22 dims?**  
-Small enough to keep feedback stable; large enough to carry minimal sufficient invariants for routing and cross‑turn reasoning.
+J1–J4 are deliberately small to keep long‑range feedback stable and prevent contamination of within‑turn structure.
 
 ---
 
 ## **6. Windowing and Block Separability**
 
-`$φ(G)$` must preserve:
-
-- **window boundaries**  
-- **local independence**  
-- **block separability**  
-
-Linguistic blocks (A–D) are **windowed**.  
-TS‑specific blocks (E–J) are **global per turn** but remain separable.
+Linguistic blocks (A–D) are **windowed** as defined in `ts_embedding_constraints.md`.  
+TS‑specific blocks (E–J) are **global per turn** but remain block‑separable.
 
 This ensures:
 
@@ -248,11 +243,9 @@ Each block:
 
 This allows:
 
-```
 $$
 φ^{-1}(G): \mathbb{R}^{512} \rightarrow G
 $$
-```
 
 ### **7.2 Hardware Realizability**
 
