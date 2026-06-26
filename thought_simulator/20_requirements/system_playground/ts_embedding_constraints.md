@@ -121,7 +121,64 @@ This is the fourth independent constraint.
 
 ---
 
-## **8. Convergence of Constraints**
+## **8. Constraints on Extra-Structural Fields and Partitioning Across OB Layers**
+
+TS requires a set of fields that extend beyond the linguistic categories enumerated in Section 3. These additional fields arise from TS-specific invariants: governance, truth-tracking, coherence, identity persistence, entropy modeling, windowing, and provenance. Although these fields are not linguistic in origin, they are essential for determining manifold location, curvature, and gradient.
+
+To maintain determinism, invertibility, and hardware feasibility, these extra fields must be strictly bounded and partitioned across the OB layers.
+
+### **8.1. Upper Bound on Extra Fields**
+
+The total number of non-linguistic fields must remain small relative to the linguistic core. TS imposes the following constraints:
+
+- Extra fields must not exceed 25–35% of φ(G)’s dimensionality.
+- For a 512-dimensional embedding, this yields a maximum of ≈120–160 extra dimensions.
+- These fields must be block-structured, not interleaved with linguistic features.
+- Each block must be independently interpretable and window-preserving.
+
+This ensures φ(G) remains compact, cache-friendly, and invertible.
+
+### **8.2. Partitioning of Extra Fields Across OB Layers**
+
+The OB pipeline is responsible for extracting both linguistic and TS-specific invariants. The partitioning is as follows:
+
+**SOB (Structural OB)**  
+Carries syntactic structure, morphological triggers, window boundaries.  
+Extra fields: window independence flags, structural anomaly markers.
+
+**SROB (Semantic-Role OB)**  
+Carries semantic roles, predicate–argument structure, event frames.  
+Extra fields: ΔH% local entropy around role assignments, ambiguity markers.
+
+**CnOB (Conceptual OB)**  
+Carries conceptual categories, referential structures, ontological commitments.  
+Extra fields: identity-stability hints, conceptual neighborhood curvature hints.
+
+**SmOB (Semantic-Meaning OB)**  
+Carries discourse functions, pragmatic operators, logical operators.  
+Extra fields: coherence markers, unresolved reference counts, discourse-level ΔH%.
+
+**IdOB (Identity OB)**  
+IdOB is structurally different. It does not extract linguistic categories. It extracts persistent identity invariants across turns.  
+Carries identity anchors, context profile hashes, worldview curvature hints, long-range referential stability.  
+Extra fields: identity basin proximity, identity-based governance constraints, cross-turn coherence markers.
+
+IdOB is the only OB whose fields directly influence cross-turn manifold continuity.
+
+### **8.3. How Extra Fields Affect Manifold Location and Gradient**
+
+Every extra field influences one of the following:
+
+- **Location**: identity anchors, conceptual curvature hints, governance boundary proximity, truth-value hints
+- **Gradient**: ΔH% (global and local), coherence stability, contradiction markers, safety constraint triggers
+- **Curvature**: governance markers, worldview curvature, identity-based curvature
+- **Basin Pull**: truth markers → TBMn, identity markers → CBMn, coherence markers → ChBMn, uncertainty markers → IBMn
+
+There are no unused fields. Every field contributes to placement, movement, or stability.
+
+---
+
+## **9. Convergence of Constraints**
 
 We now have four independent systems:
 
@@ -139,7 +196,7 @@ as the natural, principled embedding for TS. This is not a guess. It is the inte
 
 ---
 
-## **9. Summary**
+## **10. Summary**
 
 φ(G) is constrained by the structure of human language, the requirements of TS, the geometry of the manifold, and the realities of laptop-class hardware. These constraints converge on a **512-dimensional, block-structured embedding** that is:
 
@@ -155,7 +212,7 @@ This paper establishes the theoretical foundation for φ(G). The companion docum
 
 ---
 
-## **10. Conclusion**
+## **11. Conclusion**
 
 The embedding constraints defined here are not arbitrary design choices — they are the principled outcome of converging requirements from language, architecture, geometry, and practical hardware limits. By grounding φ(G) in this way, TS maintains a clean, deterministic bridge from structured meaning (TP → G) to geometric representation (the TS manifold), while remaining faithful to its core invariants and laptop-class philosophy.
 
