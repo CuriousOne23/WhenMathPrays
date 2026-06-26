@@ -136,7 +136,7 @@ The total number of non-linguistic fields must remain small relative to the ling
 - These fields must be block-structured, not interleaved with linguistic features.
 - Each block must be independently interpretable and window-preserving.
 
-This ensures φ(G) remains compact, cache-friendly, and invertible.
+These extra-structural fields are not free parameters. They must be tightly bounded because each one directly influences manifold location, gradient, curvature, or basin pull. Allowing too many would distort the geometry, overwhelm the linguistic core, and violate TS’s hardware constraints. The 25–35% cap ensures that linguistic structure remains the dominant driver of φ(G), while TS-specific invariants provide only the necessary corrections for truth, governance, identity, coherence, and entropy.
 
 ### **8.2. Partitioning of Extra Fields Across OB Layers**
 
@@ -163,7 +163,7 @@ IdOB is structurally different. It does not extract linguistic categories. It ex
 Carries identity anchors, context profile hashes, worldview curvature hints, long-range referential stability.  
 Extra fields: identity basin proximity, identity-based governance constraints, cross-turn coherence markers.
 
-IdOB is the only OB whose fields directly influence cross-turn manifold continuity.
+IdOB is the only OB whose fields persist across turns and directly influence manifold continuity; all other OB layers describe the structure of the current utterance only.
 
 ### **8.3. How Extra Fields Affect Manifold Location and Gradient**
 
