@@ -32,7 +32,7 @@ Where:
 - **φ(G)** = deterministic vector embedding  
 - **E** = nonlinear manifold embedding  
 - **M** = point in the TS manifold  
-- **basins** = identity, concept, truth, governance, coherence  
+- **basins** = IBMn, TBMn, GBMn, CBMn, ChBMn  
 - **trajectory** = sequence of manifold points across commits  
 
 This pipeline is the backbone of TS geometry.
@@ -46,7 +46,7 @@ This pipeline is the backbone of TS geometry.
 
 The manifold provides:
 
-- **basins** (stable attractors)  
+- **basins** (stable attractors: IBMn, TBMn, GBMn, CBMn, ChBMn)  
 - **curvature** (constraints and governance)  
 - **geodesics** (preferred reasoning paths)  
 - **semantic neighborhoods** (conceptual proximity)  
@@ -114,7 +114,7 @@ The TS manifold is **curved**.
 
 TS needs:
 
-- basins  
+- basins (IBMn, TBMn, GBMn, CBMn, ChBMn)  
 - attractors  
 - stability regions  
 - geodesics  
@@ -151,50 +151,72 @@ This is where TS becomes geometric.
 
 ---
 
-# **8. Basin Types (Refined Taxonomy)**
+# **8. Basin Types (Updated to IBMn/TBMn/GBMn/CBMn/ChBMn)**
 
-TS defines several basin classes:
+TS defines several basin classes, now expressed in the canonical manifold naming scheme:
 
 ---
 
-### **1. Identity Basins**  
-Stable attractors for persistent objects.  
-Example:  
-- “the cat” remains anchored across turns.
+### **1. CBMn-series (Context Basins)**  
+Stable attractors for persistent contextual anchors such as identity, demographic priors, worldview, and long‑term interpretive bias.
+
+Examples:  
+- CBMn1: identity anchor for “the cat”  
+- CBMn2: demographic prior  
+- CBMn3: worldview curvature field  
 
 ---
 
 ### **2. Concept Basins (Semantic Attractors)**  
-Stable semantic neighborhoods defined by relational structure.
+These remain conceptually basins but are not part of the IBMn/TBMn/GBMn series.  
+They are semantic attractors defined by relational structure.
 
 Examples:  
-- “cat” lives in the *animal* basin  
-- “chase” lives in the *interaction* basin  
-- “ownership” lives in the *social‑relation* basin  
-- **“chase” links agent and patient roles in an interaction neighborhood**  
+- “cat” in the *animal* semantic neighborhood  
+- “chase” in the *interaction* neighborhood  
 
-These are **not fuzzy** — they are **deterministic semantic attractors**.
+These are **deterministic semantic attractors**.
 
 ---
 
-### **3. Truth Basins**  
-Regions shaped by governance constraints and factual stability.  
-Example:  
-- “water boils at 100°C” sits in a deep truth basin.
+### **3. TBMn-series (Truth Basins)**  
+Regions shaped by governance constraints and factual stability.
+
+Examples:  
+- TBMn1: physical truths  
+- TBMn2: definitional truths  
+- TBMn3: stable factual clusters  
 
 ---
 
-### **4. Governance Basins**  
-Regions where GB rules apply strongly.  
-Example:  
-- safety constraints create high‑curvature boundaries.
+### **4. GBMn-series (Governing Basins)**  
+Regions where governance curvature is strong.
+
+Examples:  
+- GBMn1: safety constraints  
+- GBMn2: policy boundaries  
+- GBMn3: high-curvature governance walls  
 
 ---
 
-### **5. Coherence Basins**  
-Low‑entropy attractors where ΔH% naturally decreases.  
-Example:  
-- a well‑formed meaning cluster settles into a coherence basin.
+### **5. ChBMn-series (Coherence Basins)**  
+Low‑entropy attractors where ΔH% naturally decreases.
+
+Examples:  
+- ChBMn1: stable meaning cluster  
+- ChBMn2: narrative coherence region  
+
+---
+
+### **6. IBMn-series (Inquiry Basins)**  
+Regions representing structured uncertainty, ambiguity, or missing structure.
+
+Examples:  
+- IBMn1: ambiguity attractor  
+- IBMn2: contradiction attractor  
+- IBMn3: missing‑structure attractor  
+
+These are **not** the TS primitives — they are geometric uncertainty regions.
 
 ---
 
@@ -210,9 +232,9 @@ Each Mᵢ corresponds to a **commit_id**.
 
 Trajectory bending occurs when:
 
-- IB fires (ambiguity resolution)  
+- IBMn-series regions are entered (ambiguity)  
 - IMR fires (output mismatch correction)  
-- GB applies constraints  
+- GBMn-series curvature applies  
 - ΔH% changes significantly  
 
 Trajectories allow TS to:
@@ -236,9 +258,9 @@ Curvature in the TS manifold is induced by:
 
 Examples:
 
-- approaching a governance boundary increases curvature  
-- identity basins have strong local minima  
-- truth basins have steep walls  
+- approaching a GBMn boundary increases curvature  
+- CBMn basins have strong local minima  
+- TBMn basins have steep walls  
 - concept basins have smooth gradients  
 
 Curvature determines:
@@ -264,13 +286,13 @@ TS only calls COP2 when the trajectory enters high‑curvature or high‑entropy
 Different coprocessors handle different regions of the manifold.
 
 ### **4. Identity stability**  
-Objects remain anchored in identity basins.
+Objects remain anchored in CBMn-series basins.
 
 ### **5. Drift detection**  
 TS can detect when meaning is sliding out of a basin.
 
 ### **6. Governance enforcement**  
-GB becomes geometric, not procedural.
+GBMn curvature becomes geometric, not procedural.
 
 This geometric layer allows TS to implement the **functional properties of coherent thought** without claiming to solve the underlying mystery of cognition.
 
@@ -311,19 +333,19 @@ Linear vector encoding of structure.
 Embedding places the meaning in:
 
 - **Concept Basin:** “animal interaction”  
-- **Identity Basins:** cat, mouse  
-- **Truth Basin:** neutral  
-- **Coherence Basin:** low ΔH%  
+- **CBMn-series:** identity anchors for cat, mouse  
+- **TBMn-series:** neutral truth region  
+- **ChBMn-series:** low ΔH% coherence region  
 
 ### **Trajectory:**  
 If user later says: “Actually, the mouse chased the cat,”  
-trajectory bends sharply due to contradiction → IB fires.
+trajectory bends sharply → enters IBMn-series region.
 
 ---
 
 # **14. Conclusion**
 
-This paper establishes the first geometric bridge between TS’s structured meaning (TP → G → φ(G)) and its long‑term semantic stability (the TS manifold). By defining basins, curvature, and trajectories, TS gains the ability to maintain coherence, govern token usage, and integrate hybrid coprocessors in a principled way.
+This paper establishes the first geometric bridge between TS’s structured meaning (TP → G → φ(G)) and its long‑term semantic stability (the TS manifold). By defining basins, curvature, and trajectories using the IBMn/TBMn/GBMn/CBMn/ChBMn taxonomy, TS gains the ability to maintain coherence, govern token usage, and integrate hybrid coprocessors in a principled way.
 
 This geometric layer is the foundation for the next phase of TS development:  
 **implementing the manifold module in the minimal interpreter.**
