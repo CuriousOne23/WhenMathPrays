@@ -1,3 +1,5 @@
+**Title: The Mapping Layer as the Meaning Interpreter**-
+
 **Title: The Mapping Layer as the Meaning Interpreter**
 
 **Abstract**  
@@ -39,14 +41,15 @@ The mapping layer examines raw TS output and decides which temporal characterist
 - **Ordering** → encoded as geodesics.  
 - **Interdependence** → encoded as local coupling strengths.  
 
-Engineers define **independence** and **windowing** parameters as explicit filters:  
-- “This pattern matters → map it into geometry.”  
-- “This pattern does not matter → ignore it.”  
+Engineers define **independence** and **windowing** parameters as explicit filters. Windowing is particularly important: it restricts the temporal scope the mapping layer considers when interpreting events (e.g., a fixed or adaptive sliding window of recent time steps). This serves two critical purposes in TS:
 
-This restores semantic agency to the engineer, allowing semantics to be intentionally designed rather than statistically discovered.
+- It prevents the system from being overwhelmed by unbounded history, maintaining computational efficiency and stability.  
+- It gives the engineer fine-grained control over which temporal patterns are allowed to influence meaning. A narrower window emphasizes local, immediate structure; a wider window captures longer-range dependencies.  
+
+Together with independence settings, windowing lets the engineer declare: “This pattern matters within this scope → map it into geometry. Everything outside this window is ignored for now.” This is a deliberate design choice that restores semantic agency to the engineer, allowing semantics to be intentionally designed rather than statistically discovered.
 
 ### 5. Optional FIR-like Online Realization  
-A Finite Impulse Response (FIR)-like implementation offers a natural, tractable mapping layer. The FIR-like realization is not a requirement of TS; it is simply a practical and transparent way to implement temporal interpretation when needed.  
+A Finite Impulse Response (FIR)-like implementation offers a natural, tractable mapping layer. The FIR-like realization is not a requirement of TS; it is simply a practical and transparent way to implement temporal interpretation when needed. It pairs especially well with windowing because FIR filters are naturally causal and finite.  
 
 Key advantages include:  
 - **Causal and finite**: Processes only past and present data within a tunable window.  
@@ -64,6 +67,8 @@ Meaning in this architecture is fundamentally geometric:
 - Local couplings represent interdependence between elements.  
 
 Because the manifold is stable and explicitly constructed, meaning becomes inspectable and resistant to drift. TS simply “crawls” this geometry. The manifold becomes the stable substrate where meaning lives transparently, enabling inspectable thought-like dynamics.
+
+(The rest of the paper—comparison table, implications, future work, and conclusion—remains unchanged.)
 
 ### 7. Comparison to Transformers  
 
@@ -92,5 +97,3 @@ Promising directions include richer mapping kernels, adaptive windowing mechanis
 
 ### Conclusion  
 The Thought Simulator produces events; the mapping layer interprets their temporal structure; and the manifold encodes meaning geometrically. This clean separation gives AI engineers explicit control over semantics in ways transformers cannot match. By making the interpreter visible and tunable, TS reveals fundamental aspects of thought structure itself and points toward more transparent, stable, and engineerable cognitive systems.
-
----
