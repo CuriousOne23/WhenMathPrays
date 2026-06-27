@@ -25,7 +25,7 @@
   - For each window starting at time $t_k$, it aggregates states strictly within $[t_k, t_k + W - 1]$.  
   - No overlap or leakage between consecutive windows.  
   - Window boundaries are hard independence cuts — information from one window cannot influence mapping or state in another.
-  - Window type: Rectangular (boxcar / uniform) window.
+  - Window type: Rectangular (boxcar / uniform) window, actually ran per results below
   - The mapping layer is not distorting TS state transitions.
   - The simulation logic sees the manifold as a legitimate input.
 - **M**: Hybrid discrete manifold approximation (computational structure combining embedding coordinates with relational neighborhood graphs).  
