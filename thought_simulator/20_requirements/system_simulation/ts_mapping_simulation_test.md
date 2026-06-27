@@ -124,7 +124,7 @@ You can copy-paste them directly into `ts_mapping_simulation_test.md` (e.g., und
 ---
 
 ### Recommendation for the Document
-The **rectangular window** remains the clear winner for your use case. You can add a short note like:
+The **rectangular window** remains the clear winner:
 
 > "Comparative analysis shows that the rectangular (boxcar) window best preserves window independence and TS invariants. Tapered windows (Hanning, Gaussian) introduce edge effects and leakage that violate core requirements."
 
