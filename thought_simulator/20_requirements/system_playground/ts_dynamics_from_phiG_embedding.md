@@ -1,5 +1,5 @@
 # **ts_dynamics_from_phiG_embedding.md**  
-### *How TS Dynamics Emerge from the Embedded $\phi(G)$ Geometry*
+### *How TS Dynamics Emerge from the Embedded ϕ(G) Geometry*
 
 ---
 
