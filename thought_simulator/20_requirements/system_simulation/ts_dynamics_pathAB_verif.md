@@ -10,6 +10,8 @@
 
 This document defines and describes the Path A/B logic simulation used to verify the TS dynamical law introduced in `ts_dynamics_from_phiG_embedding.md`.
 
+Path A validates nominal governed behavior; Path B validates robustness under ambiguity, perturbation, and independence stress.
+
 The goal is to empirically test that the embedded $\phi(G)$ structure produces predictable, stable, and independence-preserving dynamics on the TS manifold, while maintaining core TS invariants (determinism, replayability, bounded drift, and governance compliance).
 
 This simulation serves as the “wind tunnel test” for the dynamics engine before advancing to inference and learning papers.
@@ -73,7 +75,16 @@ It does **not** yet address full inference, learning, or large-scale benchmarks.
 Construct minimal $\phi(G)$ vectors per scenario (512-dim block-structured, with explicit activation of only the blocks relevant to the test). Embed into manifold point $s_t \in \mathcal{M}_{TS}$. Run fixed-timestep updates for N steps (e.g., 50–200). Log full state, $\Delta_t$ components, basin type, $\Delta H\%$, curvature at each step. Replay from logs and compare.
 
 ### **5.3 Determinism & Replay Procedure**
-Replay is performed by re-executing the update rule using only logged observable state and embedded $\phi(G)$, verifying bit-exact reproduction of all $s_t$ and $\Delta_t$ values. This directly supports the replay fidelity metric.
+
+Replay is performed by re-executing the update rule using only logged observable state and embedded $\phi(G)$, verifying bit-exact reproduction of all $s_t$ and $\Delta_t$ values. Determinism assumes fixed-precision arithmetic and stable ordering of operations.
+
+```mermaid
+%% TS State Evolution (Placeholder)
+graph LR
+    s0[Initial State] --> s1[After Step 1]
+    s1 --> s2[After Step 2 (e.g. Ambiguity)]
+    s2 --> s3[After Recovery]
+```
 
 ---
 
