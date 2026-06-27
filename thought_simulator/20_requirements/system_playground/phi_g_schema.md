@@ -19,6 +19,12 @@ This schema paper explains **what `$φ(G)$` looks like** in practice.
 
 Target: **512‑dimensional, fixed‑size, block‑structured embedding**, implementable on laptop‑class hardware.
 
+**Paper series:**  
+[tp_g_phi_to_ts_manifold.md](tp_g_phi_to_ts_manifold.md)  
+[phi_g_schema.md](phi_g_schema.md)  
+[ts_embedding_constraints.md](ts_embedding_constraints.md)  
+[ts_manifold_embedding_E_phiG.md](ts_manifold_embedding_E_phiG.md)  
+
 ---
 
 ## **2. High‑Level Partitioning of φ(G)**
