@@ -70,7 +70,7 @@ $$
 with:
 
 $$
-\Delta\_t = -\eta \nabla \Phi(s\_t) + \Gamma(s\_t) + \Xi\_t
+\Delta\_t = -\eta\cdot \nabla \Phi(s\_t) + \Gamma(s\_t) + \Xi\_t
 $$
 
 where:
