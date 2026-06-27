@@ -52,7 +52,7 @@ Full JSON logs and replay verification succeeded with bit-exact match.
 - **Next Steps**: Scale to higher-dimensional φ(G) vectors, add more scenarios, or proceed to inference simulation.
 
 ### 1D Concern of this simulation vs 16D or 512D
-Given the demonstrated independence of fields within rectangular segments (see [ts_mapping_simulation_test.md](ts_mapping_simulation_test.md) ), 1D verification on representative fields provides strong evidence for local dynamic correctness. Full high-dimensional verification (e.g., 16D or 512D) is deferred to integration testing in Path B, as the core invariants and local geometry are already preserved.
+Given the demonstrated independence of fields within rectangular segments (see [ts_mapping_simulation_test.md](ts_mapping_simulation_test.md) ), 1D verification on representative fields provides strong evidence for local dynamic correctness. Full high-dimensional verification (e.g., 16D or 512D) is deferred to integration testing in Path B, as the core invariants and local geometry are already preserved. The higher dimensions can be addressed by parallel core processors followed by a CTP primitive.
 
 ## **Simulation Output Format (Required Schema)**
 
