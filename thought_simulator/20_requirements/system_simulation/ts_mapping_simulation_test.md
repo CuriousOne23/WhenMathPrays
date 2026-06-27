@@ -154,14 +154,20 @@ You can copy-paste them directly into `ts_mapping_simulation_test.md` (e.g., und
 ---
 
 ### Discussion of Window Selection
-The mapping simulation tests demonstrate that rectangular (boxcar) windows are the correct choice for TS’s independence architecture. TS requires strict, non-negotiable independence boundaries between windows, and rectangular windows enforce these boundaries with hard, discontinuous cuts that prevent any cross-window influence. In contrast, tapered windows such as Hanning and Gaussian introduce edge weighting that attenuates information within the active region and smear relational structure across window boundaries. Even with zero padding, tapered windows produced measurable leakage, increased sensitivity, and degraded downstream TS operations. These results confirm that TS is not a signal-processing system and does not benefit from smoothing or tapering; instead, it relies on discrete, deterministic separation of cognitive/relational segments. Rectangular windows therefore remain the recommended and validated default for preserving TS invariants and ensuring stable manifold mapping.
 
-### What this means
-TS does not apply a window.  
-TS only operates on independence segments.
+The mapping simulation tests demonstrate that rectangular (boxcar) windows are the correct choice for TS’s independence architecture. TS requires strict, non-negotiable independence boundaries between windows, and rectangular windows enforce these boundaries with hard, discontinuous cuts that prevent any cross-window influence. 
 
-Pre‑work applies a rectangular window to enforce strict independence boundaries and preserve full information within each segment.
+In contrast, tapered windows such as Hanning and Gaussian introduce edge weighting that attenuates information within the active region and smears relational structure across window boundaries. Even with generous padding (20–40%), tapered windows produced measurable leakage, increased sensitivity to perturbations, and degraded downstream TS operations. 
 
-Tapered windows (Hanning, Gaussian) are incompatible with TS because they attenuate interior information and introduce cross‑window leakage, even with padding.
+These results confirm that **TS is not a signal-processing system** and does not benefit from smoothing or tapering. Instead, it relies on discrete, deterministic separation of cognitive/relational segments. Rectangular windows therefore remain the recommended and validated default for preserving TS invariants and ensuring stable manifold mapping.
+
+### What This Means for TS Implementation
+
+- TS itself does **not** apply a window in the traditional signal-processing sense.  
+- TS operates directly on **independence segments**.  
+- Pre-processing / mapping layer applies a **rectangular window** solely to enforce strict independence boundaries while preserving full information content within each segment.  
+- Tapered windows (Hanning, Gaussian) are incompatible with TS because they attenuate interior information and introduce cross-window leakage, even with padding.
+
+These results confirm that treating the fields as independent within each rectangular independence segment is valid for manifold mapping and does not degrade TS invariants.
 
 ---
