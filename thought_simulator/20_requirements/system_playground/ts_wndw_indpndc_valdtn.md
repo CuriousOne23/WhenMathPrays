@@ -8,23 +8,14 @@
 
 ## **1. Motivation**
 
-TS relies on forced independence of windowed embeddings before manifold embedding. Independence is **not** applied to raw G (which is inherently interconnected). It is applied to the windowed φ(G(t)).
+TS enforces independence on the windowed embedding φ(G(t)), not on raw G. All windowing, pdf shaping, and independence enforcement must occur in a pre-TS pipeline. TS itself remains a primitive deterministic engine.
 
-Path A assumes clean, independent tracks. CTP then composes them. This paper validates that windowing achieves the required independence without subtle leakage or instability.
+This paper formalizes the pre-TS windowing pipeline and validates it for higher-D simulations.
 
 ---
 
 ## **2. Pre-TS Windowing Pipeline**
 
-All windowing, pdf shaping, and independence enforcement **must occur before TS runtime**. TS remains a primitive deterministic engine and should only perform:
-
-* mapping
-* addition/subtraction
-* fixed-form Δ_t updates
-* Γ corrections
-* invariant enforcement
-
-**Pipeline**:
 1. Build G
 2. Compute φ(G)
 3. Compute time-indexed φ(G(t))
@@ -32,44 +23,58 @@ All windowing, pdf shaping, and independence enforcement **must occur before TS 
 5. Validate independence (metrics below)
 6. Export clean activation tracks for TS
 
+TS runtime only performs mapping, Δ_t updates, Γ corrections, and invariant enforcement.
+
 ---
 
 ## **3. Overlap & Tapering Requirements**
 
-Windowing **cannot** use hard boundaries. Windows must:
+Windows **must** overlap and taper smoothly. Hard boundaries are prohibited.
 
-* overlap
-* taper smoothly
-* have influence decay to zero only at true statement start/end
-
-Hard boundaries introduce discontinuities, gradient spikes, curvature instability, excessive Γ load, and manifold violations.
-
-Overlap + tapering preserves:
-* continuity and differentiability
-* bounded drift
-* low Γ workload
-* clean CTP composition
+Requirements:
+- Adjacent windows overlap
+- Influence decays gradually (taper)
+- Influence tends to zero only at true statement start/end
+- Preserve differentiability and curvature stability
 
 ---
 
-## **4. Core Validation Questions & Metrics**
+## **4. Good vs Bad Windows for TS**
 
-(Previous metrics section — IS, LI, BD, GRL, CIP — remains here, unchanged but now clearly tied to the pipeline.)
+### **Good Windows (Recommended)**
+These are differentiable, smooth, low-leakage, and manifold-friendly:
+
+1. **Hann Window** — Excellent smoothness, low spectral leakage.
+2. **Gaussian Window** — Smooth, controllable taper via σ.
+3. **Tukey Window** (tapered cosine, α=0.5–0.75) — Good flat top + smooth edges.
+
+**Why good**: Produce stable gradients, minimal boundary drift, low Γ load, clean CTP composition.
+
+### **Bad Windows (Avoid)**
+- Rectangular (hard cut)
+- Step functions
+- Binary masks
+- Any discontinuous window
+
+**Why bad**: Cause discontinuities → gradient spikes in ∇Φ → basin instability, excessive Γ corrections, drift violations, manifold incompatibility.
 
 ---
 
-## **5. Minimal Validation Experiment Design**
+## **5. Proposed Metrics**
 
-(Previous experiment section — remains, now informed by the pipeline and overlap/tapering rules.)
+(Independence Score (IS), Leakage Index (LI), Boundary Drift (BD), Γ Repair Load (GRL), CTP Independence Preservation (CIP) — unchanged from previous draft.)
 
 ---
 
-## **6. Guidelines & Next Steps**
+## **6. Minimal Validation Experiment Design**
 
-* Preferred windows: high IS, low LI, low BD, minimal GRL, strong CIP.
-* Avoid or mitigate configurations with hard boundaries or high leakage.
-* Results will directly inform higher-D multi-track simulations.
+For each candidate window (Hann, Gaussian, Tukey):
+- Construct synthetic φ(G) with known independent blocks
+- Apply windowing with defined overlap (e.g., 20–50%) and taper parameters
+- Measure IS, LI, BD, GRL, CIP
+- Vary: window size, overlap ratio, taper strength
+- Document best configurations and unsafe ones
 
-**Next**: Run validation experiments, document results, then proceed to 16D+ simulations using validated windowing schemes.
+**Next**: Run experiments, select preferred windows, then proceed to 16D+ multi-track simulations.
 
 ---
