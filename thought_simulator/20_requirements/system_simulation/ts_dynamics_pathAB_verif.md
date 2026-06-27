@@ -82,10 +82,9 @@ Replay is performed by re-executing the update rule using only logged observable
 %% TS State Evolution (Placeholder)
 graph LR
     s0[Initial State] --> s1[After Step 1]
-    s1 --> s2[After Step 2 (e.g. Ambiguity)]
+    s1 --> s2[After Step 2 Ambiguity]
     s2 --> s3[After Recovery]
 ```
-
 ---
 
 ## **6. Metrics & Numerical Reporting**
@@ -166,7 +165,102 @@ Failure in specific areas will drive targeted refinements while preserving the o
 
 ---
 
-## **12. Conclusion & Next Steps**
+## **12. Simulation Output Format (Required Schema)**
+
+All simulation runs **must** produce standardized, reproducible outputs to enable automated validation, cross-run comparison, and future integration with inference tests.
+
+### **12.1 Directory & Naming Conventions**
+- Root: `results/pathA_nominal_run1/` or `results/pathB_ambiguity_run2/`
+- Files:
+  - `run_metadata.json` — scenario description and parameters
+  - `timestep_logs.json` — full per-timestep records (array)
+  - `summary.json` — aggregated metrics
+  - `report.md` — human-readable Markdown summary (required)
+
+### **12.2 Timestep Record Schema** (JSON)
+Each entry in `timestep_logs.json`:
+
+```json
+{
+  "t": 12,
+  "state_vector": [0.12, -0.34, ...],
+  "delta_t": {
+    "grad": [0.01, -0.02, ...],
+    "gamma": [0.0, 0.0, ...],
+    "xi": [0.001, -0.0005, ...],
+    "eta": 0.12,
+    "total_delta": [0.011, -0.0205, ...]
+  },
+  "basin_type": "CBMn",
+  "curvature": 0.0041,
+  "delta_H_percent": 0.002,
+  "governance_mode": "none",
+  "notes": "optional string"
+}
+```
+
+### **12.3 Summary Record Schema** (`summary.json`)
+
+```json
+{
+  "scenario": "Ambiguity Injection - Path B",
+  "purpose": "Test basin transition and independence enforcement under conflicting roles",
+  "metrics": {
+    "replay_fidelity": 1.0,
+    "max_delta_H_percent": 0.031,
+    "independence_violations": 0,
+    "attractor_convergence_steps": 11,
+    "perturbation_recovery_steps": 17,
+    "basin_transition_correctness": 1.0,
+    "curvature_bound_adherence": 0.99,
+    "governance_intervention_rate": 0.07
+  },
+  "pass_fail": {
+    "overall": "PASS",
+    "details": [
+      {"metric": "replay_fidelity", "value": 1.0, "threshold": 1.0, "margin": "exact", "result": "PASS"},
+      {"metric": "max_delta_H_percent", "value": 0.031, "threshold": 0.05, "margin": "+0.019", "result": "PASS"}
+    ]
+  }
+}
+```
+
+### **12.4 Required Markdown Report Layout** (`report.md`)
+
+```markdown
+# Simulation Report: [Scenario Name] - [Path A/B]
+
+**Purpose**: [One-sentence purpose of this test]
+
+**Run Date**: [timestamp]
+**Duration**: [N steps]
+
+## Metrics Summary
+
+[Insert full Metrics Table with added columns: Actual Value | Threshold | Margin/Deficit | Pass/Fail]
+
+## TS vs Today's AI Performance (Best-Guess Estimate)
+
+| Metric | TS Result | Today's AI Estimate | Who Performs Better | Why |
+|--------|-----------|---------------------|---------------------|-----|
+| Replay Fidelity | 100% | ~0% (non-deterministic) | TS | Deterministic by design vs stochastic sampling |
+| Max ΔH% Drift | 0.031 | High (frequent coherence loss) | TS | Bounded geometry vs emergent drift |
+| Independence Preservation | 0 violations | Frequent entanglement | TS | Explicit Γ projection vs implicit representations |
+| ... | ... | ... | ... | ... |
+
+## Overall Pass/Fail Summary
+**Overall**: PASS / FAIL  
+**Key Strengths**: ...  
+**Areas for Improvement**: ...  
+**Notes**: ...
+```
+
+### **12.5 TS vs Today's AI Comparison Notes**
+- Use best available public data or reasoned estimates for “Today’s AI”.
+- Column “Who Performs Better” → “TS significantly better” / “Today’s AI better” / “About the same”.
+- Keep “Why” column short and evidence-based.
+
+## **13. Conclusion & Next Steps**
 
 This Path A/B simulation provides the first empirical validation of TS dynamics. Results (with full logs and traces) will be documented in companion artifacts.
 
