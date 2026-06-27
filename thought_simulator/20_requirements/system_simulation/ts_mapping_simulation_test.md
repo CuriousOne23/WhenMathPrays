@@ -74,6 +74,7 @@ The mapping $W(\phi(G(t)), t) \to M$ is viable if invariants hold and metrics de
 
 ## Summary Table
 
+### Rectangular Window
 | Metric                          | Numerical Value | Threshold     | Margin to Spec | Rating    | Reason                              | Pass/Fail |
 |---------------------------------|-----------------|---------------|----------------|-----------|-------------------------------------|-----------|
 | Neighborhood Preservation      | 0.96            | $> 0.95$  | +0.01          | Good      | Strong relational fidelity          | Pass      |
