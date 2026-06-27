@@ -56,7 +56,7 @@ This paper introduces the **TS dynamical law** that fills this gap.
 
 TS maintains a state vector:
 
-$ s\_t \in \mathcal{M}\_{TS} $
+$s\_t \in \mathcal{M}\_{TS}$
 
 where $\mathcal{M}\_{TS}$ is the manifold induced by $\phi(G)$.
 
@@ -64,7 +64,7 @@ where $\mathcal{M}\_{TS}$ is the manifold induced by $\phi(G)$.
 
 The TS update rule is:
 
-$ s\_{t+1} = s\_t + \Delta\_t $
+$s\_{t+1} = s\_t + \Delta\_t$
 
 where:
 
