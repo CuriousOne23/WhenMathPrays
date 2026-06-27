@@ -23,6 +23,25 @@ The independence TS requires is that the windowed embedding $W(\phi(G(t)), t)$ m
 * Explains why Path A and Path B remain stable
 * Explains why higher-D simulations require window validation
 
+## **1.1 Independence Clarification: What IdOB Does and Does Not Do**
+
+IdOB has no concept of dependence or independence. These notions do not apply to IdOB and are outside its responsibilities. IdOB’s role is to interpret identity‑conditioned meaning, refine the TP, and map the routed activation pattern into the correct manifold chart. It assumes that φ(G(t)) is unique, structured, and valid — but it does not evaluate or enforce independence.
+
+Independence is enforced entirely in the pre‑TS pipeline so that the windowed embedding  
+$W(\phi(G(t)), t)$  
+maps each activation track to the correct manifold location without cross‑talk. This is the only independence TS requires.
+
+Windowing is applied per field (or per block) because IdOB recognizes **field sequences**, not isolated activations. A single field may participate in multiple sequences within a message, and each sequence must map cleanly to the manifold. Windowing ensures that each activation track influences only its intended region of the manifold.
+
+**Key implications:**
+- φ(G(t)) patterns are unique, but uniqueness does not imply independence.
+- Independence is not a property of G or φ(G); it is a property of the *mapping* into the manifold.
+- IdOB does not detect, measure, or enforce independence.
+- Independence is required so that present and future embeddings land in the correct manifold location without interference.
+- Windowing creates the independent activation tracks that TS dynamics operate on.
+
+This clarification is foundational for understanding why windowing is applied per field, why independence is enforced offline, and why TS must remain a primitive deterministic engine.
+
 ---
 
 ## **2. Pre-TS Windowing Pipeline**
@@ -75,9 +94,16 @@ This preserves continuity, differentiability, curvature stability, bounded drift
 
 ---
 
-## **6. Core Validation Metrics & Experiment Design**
+## **6. Minimal Validation Experiment Design**
 
-(Previous metrics: IS, LI, BD, GRL, CIP and the minimal experiment design remain here.)
+For each candidate window (Hann, Gaussian, Tukey):
+- Construct synthetic φ(G) with known independent blocks
+- Apply windowing with defined overlap (e.g., 20–50%) and taper parameters
+- Measure IS, LI, BD, GRL, CIP
+- Vary: window size, overlap ratio, taper strength
+- Document best configurations and unsafe ones
+
+**Next**: Run experiments, select preferred windows, then proceed to 16D+ multi-track simulations.
 
 ---
 
