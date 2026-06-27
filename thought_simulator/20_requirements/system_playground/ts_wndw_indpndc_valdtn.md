@@ -125,7 +125,7 @@ This preserves continuity, differentiability, curvature stability, bounded drift
 
 ## **5. Good vs Bad Windows for TS**
 
-**Good Windows (Recommended)**: Hann, Gaussian, Tukey (tapered cosine, α=0.5–0.75).  
+**Good Windows (Recommended)**: Good Windows (Recommended): Hann, Gaussian, Tukey (tapered cosine, α=0.5–0.75), 4‑term Blackman–Harris (for stronger sidelobe suppression).  
 **Why good**: Smooth, differentiable, low leakage, stable gradients, minimal Γ load.
 
 **Bad Windows (Avoid)**: Rectangular (hard cut), step functions, binary masks, any discontinuous window.  
