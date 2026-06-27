@@ -179,3 +179,11 @@ Although more complex tapered windows might appear elegant, the fact that TS req
 Because TS’s manifold mapping remains stable when fields are treated as independent within each rectangular segment, engineers can safely add new fields as needed without destabilizing the system. This is another strong indication that TS is the right architectural model for thought.
 
 ---
+
+**Geometric Support Region Conjecture**
+
+We conjecture that each field in TS possesses a natural geometric support region defined by its auto-correlation structure. Because rectangular segmentation preserves the full interior of this region without attenuation or distortion, it does not exclude meaningful manifold geometry. In contrast, tapered windows artificially distort this natural falloff, introducing geometry that is not cognitively relevant to TS.
+
+The simulation results strongly support this view: rectangular windows preserved neighborhood structure, curvature stability, boundary integrity, and downstream TS operations, while tapered windows (even with padding) degraded them. This outcome indicates that TS’s meaningful geometry is already sufficiently localized within fields, making additional smoothing unnecessary and often counterproductive.
+
+---
