@@ -1,7 +1,7 @@
 **Title: The Mapping Layer as the Meaning Interpreter**
 
 **Abstract**  
-The Thought Simulator (TS) functions as a deterministic geometric cognition engine that evolves state on a manifold but remains semantically blind. It emits raw events and fields without interpreting temporal structure, repetition, spacing, ordering, or interdependence. This paper introduces the **mapping layer** as the critical interpretive component that extracts meaningful temporal characteristics from TS output and embeds them into manifold geometry. In this architecture, meaning resides explicitly in the geometry of the manifold—basin depth, curvature, geodesics, and local couplings—rather than in opaque symbolic representations. Unlike transformers, which rely on emergent and entangled correlations, TS with an explicit mapping layer grants engineers direct, controllable semantics. We describe the architecture, detail a practical FIR-like online realization for the mapping layer, contrast it with transformer limitations, and discuss implications for transparent, stable, and interpretable AI systems. TS mechanisms pass a structural “duck test” for thought: its components are inspectable and engineer-tunable.
+The Thought Simulator (TS) functions as a deterministic geometric cognition engine that evolves state on a manifold but remains semantically blind. It emits raw events and fields without interpreting temporal structure, repetition, spacing, ordering, or interdependence. This paper introduces the **mapping layer** as the critical interpretive component that extracts meaningful temporal characteristics from TS output and embeds them into manifold geometry. In this architecture, meaning resides explicitly in the geometry of the manifold—basin depth, curvature, geodesics, and local couplings—rather than in opaque symbolic representations. Unlike transformers, which rely on emergent and entangled correlations, TS with an explicit mapping layer grants engineers direct, controllable semantics. We describe the architecture, detail a practical FIR-like online realization for the mapping layer, contrast it with transformer limitations, and discuss implications for transparent, stable, and interpretable AI systems. TS mechanisms pass a structural “duck test” (operational transparency) for thought: its components are inspectable and engineer-tunable.
 
 ### Problem Statement  
 Modern AI systems lack explicit mechanisms for interpreting temporal structure in a controllable way. Transformers embed meaning implicitly in high-dimensional latent spaces, making semantics emergent rather than designed. This prevents engineers from specifying which temporal patterns matter and how they should influence downstream cognition. TS introduces a clean separation between event production, temporal interpretation, and geometric meaning representation.
@@ -15,6 +15,8 @@ The Thought Simulator (TS) addresses this by design. It is a fixed-time-step sta
 The TS system operates as a closed loop:  
 **TS → Mapping Layer → Manifold Geometry → TS state evolution**  
 
+Embedding is assumed to occur upstream of TS and is not part of this paper’s scope.  
+
 - **TS** generates raw fields/events based on current state and deterministic rules.  
 - **Mapping Layer** analyzes temporal structure in the output stream.  
 - **Manifold** encodes the interpreted meaning geometrically.  
@@ -23,7 +25,7 @@ The TS system operates as a closed loop:
 This modular design keeps TS computationally clean and deterministic while delegating semantics to the engineer-controlled mapping stage.
 
 ### 3. TS as a Geometric Cognition Engine  
-TS operates after embedding and mapping; it does not compute relational structure but evolves meaning that has already been geometrically encoded. TS does not compute or infer temporal relationships; it merely emits events whose interpretation is delegated entirely to the mapping layer. It emits structured events and fields but is deliberately blind to semantics. It does not “understand” repetition, spacing, ordering, or interdependence on its own. Its core strength lies in:  
+TS operates after embedding and mapping; it does not compute relational structure but evolves meaning that has already been geometrically encoded. In the TS context, a *field* refers to a structured multidimensional output vector carrying state information from the simulator at each time step. TS does not compute or infer temporal relationships; it merely emits events whose interpretation is delegated entirely to the mapping layer. It emits structured events and fields but is deliberately blind to semantics. It does not “understand” repetition, spacing, ordering, or interdependence on its own. Its core strength lies in:  
 - Evolving state deterministically on a manifold.  
 - Preserving key invariants (identity, stability).  
 - Maintaining relational dynamics without symbolic overhead.  
@@ -74,7 +76,7 @@ Because the manifold is stable and explicitly constructed, meaning becomes inspe
 | Interpretability        | Low                                   | High (inspectable components)          |
 | Temporal Semantics      | Implicit                              | Explicit engineer control              |
 
-TS passes a structural “duck test” for thought: its production, interpretation, and geometric embodiment of meaning are transparent and controllable.
+TS passes a structural “duck test” (operational transparency) for thought: its production, interpretation, and geometric embodiment of meaning are transparent and controllable.
 
 ### 8. Implications for AI Engineering  
 This architecture offers:  
