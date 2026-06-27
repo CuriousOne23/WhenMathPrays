@@ -25,22 +25,23 @@ The independence TS requires is that the windowed embedding $W(\phi(G(t)), t)$ m
 
 ## **1.1 Independence Clarification: What IdOB Does and Does Not Do**
 
-IdOB has no concept of dependence or independence. These notions do not apply to IdOB and are outside its responsibilities. IdOB’s role is to interpret identity‑conditioned meaning, refine the TP, and map the routed activation pattern into the correct manifold chart. It assumes that φ(G(t)) is unique, structured, and valid — but it does not evaluate or enforce independence.
+IdOB has no concept of dependence or independence. These notions do not apply to IdOB and are outside its responsibilities. IdOB’s role is to interpret identity‑conditioned meaning, recognize field sequences, refine the TP, and map the routed activation pattern into the correct manifold chart. It assumes that φ(G(t)) is unique, structured, and valid — but it does not evaluate or enforce independence.
 
 Independence is enforced entirely in the pre‑TS pipeline so that the windowed embedding  
 $W(\phi(G(t)), t)$  
 maps each activation track to the correct manifold location without cross‑talk. This is the only independence TS requires.
 
-Windowing is applied per field (or per block) because IdOB recognizes **field sequences**, not isolated activations. A single field may participate in multiple sequences within a message, and each sequence must map cleanly to the manifold. Windowing ensures that each activation track influences only its intended region of the manifold.
+Field overlap in time does **not** cause any issue. Multiple fields may activate simultaneously, and a single field may participate in multiple sequences within the same message. This is normal and expected. IdOB recognizes sequences of field activations, not isolated fields, and it does not attempt to separate or orthogonalize them. Windowing is applied per field (or per block) precisely because sequences may overlap, and each sequence must map cleanly to the manifold.
+
+Windowing ensures that each activation track influences only its intended region of the manifold, even when fields overlap in time. Independence is therefore a property of the *windowed mapping* into the manifold, not of the fields themselves or of φ(G).
 
 **Key implications:**
 - φ(G(t)) patterns are unique, but uniqueness does not imply independence.
-- Independence is not a property of G or φ(G); it is a property of the *mapping* into the manifold.
 - IdOB does not detect, measure, or enforce independence.
-- Independence is required so that present and future embeddings land in the correct manifold location without interference.
+- Field overlap is normal and does not cause interference.
+- Independence is enforced offline through windowing, not by IdOB.
+- Independence ensures that present and future embeddings land in the correct manifold location without cross‑talk.
 - Windowing creates the independent activation tracks that TS dynamics operate on.
-
-This clarification is foundational for understanding why windowing is applied per field, why independence is enforced offline, and why TS must remain a primitive deterministic engine.
 
 ---
 
