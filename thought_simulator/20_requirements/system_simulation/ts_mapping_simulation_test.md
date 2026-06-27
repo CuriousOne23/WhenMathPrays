@@ -168,6 +168,6 @@ These results confirm that **TS is not a signal-processing system** and does not
 - Pre-processing / mapping layer applies a **rectangular window** solely to enforce strict independence boundaries while preserving full information content within each segment.  
 - Tapered windows (Hanning, Gaussian) are incompatible with TS because they attenuate interior information and introduce cross-window leakage, even with padding.
 
-These results confirm that treating the fields as independent within each rectangular independence segment is valid for manifold mapping and does not degrade TS invariants.
+These results confirm that treating the fields as independent within each rectangular independence segment is valid for manifold mapping and does not degrade TS invariants. Although more complex tapered windows might appear elegant, the fact that TS requires no smoothing or weighting—and operates correctly with only strict rectangular independence segmentation—strongly supports TS as the right architectural model for thought.
 
 ---
