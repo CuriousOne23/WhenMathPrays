@@ -104,24 +104,21 @@ This mapping ensures modularity and traceability.
 
 Within a basin (e.g., CBMn identity anchors, ChBMn coherence regions), TS follows gradient flow toward the local attractor with low $\Delta H\%$ drift.
 
-### **6.2 Basin Transitions**
-
+### 6.2 Basin Transitions
 Transitions occur when:
 
-- curvature changes sign or exceeds a governance threshold  
-- independence constraints activate (Γ term dominates)  
-- uncertainty blocks activate and shift the dominant mode  
+* curvature changes sign or exceeds a governance threshold
+* independence constraints activate (Γ term dominates)
+* uncertainty blocks activate and shift the dominant mode
 
-**Example:**  
-Input: *“The cat chased the mouse.”*  
-TS enters a concept + CBMn basin with a stable animal‑interaction attractor.  
-Follow‑up: *“Actually, the mouse chased the cat.”*  
-This triggers:
+**Example:** Input: “The cat chased the mouse.” TS enters a concept + CBMn basin with a stable animal-interaction attractor. Follow-up: “Actually, the mouse chased the cat.” This triggers:
 
-- IBMn activation (ambiguity)  
-- a sharp curvature change  
-- a Γ‑driven correction to prevent entanglement with prior attractor  
-- possible escalation to governance review  
+* IBMn activation (ambiguity)
+* a sharp curvature change
+* Γ-driven correction (to prevent entanglement with the prior attractor)
+* possible escalation to governance review
+
+In terms of the update rule, the trajectory shift appears in Δ_t as a large Γ(s_t) component (orthogonal projection away from the conflicting direction) combined with a modified ∇Φ(s_t) due to the new dominant uncertainty mode. The net result is a sharp bend in the manifold trajectory, observable in the state evolution and event log.  
 
 ### **6.3 Attractor Interpretation**
 
