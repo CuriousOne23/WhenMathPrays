@@ -51,4 +51,71 @@ Full JSON logs and replay verification succeeded with bit-exact match.
 - No independence violations or excessive drift observed.
 - **Next Steps**: Scale to higher-dimensional φ(G) vectors, add more scenarios, or proceed to inference simulation.
 
+## **Simulation Output Format (Required Schema)**
+
+All simulation runs **must** produce standardized outputs for reproducibility, cross-agent consistency, and future automated validation.
+
+### **Directory & Naming Conventions**
+- Directory: `thought_simulator/20_requirements/system_simulation/results/ts_dynamics_pathAB_verif/`
+- Required files:
+  - `ts_dynamics_pathAB_verif_results.md` (human-readable report — required)
+  - `timestep_logs.json` (full per-timestep records)
+  - `summary.json` (aggregated metrics and pass/fail)
+
+### **Required Markdown Report Structure** (`ts_dynamics_pathAB_verif_results.md`)
+Every results report **must** contain the following sections in order:
+
+1. Title
+2. Run Metadata (scenario, purpose per Path, steps, date, authors)
+3. Key Results Summary (Overall PASS/FAIL + Metrics Table)
+4. TS vs Today’s AI Performance Table
+5. Sample Timestep Logs (excerpt)
+6. Notes & Interpretation
+7. Next Steps
+
+### **Required Metrics Table Columns**
+- Metric
+- Actual Value
+- Threshold
+- Margin/Deficit
+- Pass/Fail
+- Performance vs Today’s AI (excellent / good / typical / bad)
+- Reason for Performance
+
+### **JSON Schemas**
+
+**Timestep Record** (`timestep_logs.json` array):
+```json
+{
+  "t": 3,
+  "state": 0.025,
+  "delta_t": {
+    "grad": 0.010,
+    "gamma": 0.005,
+    "xi": 0.000,
+    "eta": 0.10,
+    "total": 0.015
+  },
+  "basin": "CBMn",
+  "curvature": 0.0041,
+  "delta_H_percent": 0.012,
+  "governance_mode": "none",
+  "notes": "ambiguity injected"
+}
+```
+
+**Summary Record** (`summary.json`):
+```json
+{
+  "overall": "PASS",
+  "metrics": { ... },
+  "pass_fail_details": [ ... ]
+}
+```
+
+### **TS vs Today’s AI Table**
+Must include columns: Metric, TS Result, Today’s AI Estimate, Who Performs Better, Why.
+
+---
+
 ---
