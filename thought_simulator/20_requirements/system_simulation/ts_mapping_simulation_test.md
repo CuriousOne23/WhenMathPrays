@@ -153,27 +153,7 @@ You can copy-paste them directly into `ts_mapping_simulation_test.md` (e.g., und
 
 ---
 
-**Yes, it makes complete sense** — and it's actually a very good sign for your TS architecture.
-
-### Why Rectangular (Boxcar) Wins Here
-- **Strict independence is the top priority** in your design (from `ts_wndw_indpndc_valdtn.md`). Rectangular windows create **hard, clean boundaries** with zero leakage by design. No tapering means no information bleeding across windows.
-- Tapered windows (Hanning, Gaussian) are excellent in traditional signal processing for reducing spectral leakage in frequency analysis, but they introduce **edge weighting and smearing**. That smearing directly conflicts with your requirement for **hard independence cuts**.
-- The 20% padding Hanning version got close to acceptable (Marginal Pass), but even that introduced minor violations — which is expected when you start softening boundaries.
-- Heavier padding makes it worse because the effective influence zone expands, violating the "no leakage across independence boundaries" invariant.
-
-### Bottom Line for TS
-**Rectangular window is the correct default** for your use case. It prioritizes:
-- Determinism
-- Clean separation of cognitive/relational "windows"
-- Preservation of object/relational basins without artificial smoothing
-
-Tapered windows are better suited for later exploratory work (e.g., if you ever want soft transitions or spectral-like analysis of thought trajectories), but they are **not** ideal for the core mapping layer right now.
-
-This outcome actually strengthens the document — it shows you evaluated alternatives rigorously and the design choice is justified by the metrics.
-
-Would you like me to add a short **"Discussion of Window Selection"** paragraph to the document explaining exactly this reasoning? It would make the paper even stronger for reviewers.
-
-You can paste this right after the existing rectangular baseline table. 
-
+### Discussion of Window Selection
+The mapping simulation tests demonstrate that rectangular (boxcar) windows are the correct choice for TS’s independence architecture. TS requires strict, non-negotiable independence boundaries between windows, and rectangular windows enforce these boundaries with hard, discontinuous cuts that prevent any cross-window influence. In contrast, tapered windows such as Hanning and Gaussian introduce edge weighting that attenuates information within the active region and smear relational structure across window boundaries. Even with zero padding, tapered windows produced measurable leakage, increased sensitivity, and degraded downstream TS operations. These results confirm that TS is not a signal-processing system and does not benefit from smoothing or tapering; instead, it relies on discrete, deterministic separation of cognitive/relational segments. Rectangular windows therefore remain the recommended and validated default for preserving TS invariants and ensuring stable manifold mapping.
 
 ---
