@@ -72,6 +72,44 @@ All window multiplications are performed in the pre-TS pipeline. TS runtime rece
 **Architectural Realizability on Typical Laptops (2026)**:  
 For realistic statement lengths and 512-dim φ(G), the pre-computed windowed tensor per statement is small (a few MB). Even with thousands of statements, total memory usage remains in the tens to low hundreds of MB — comfortably within RAM on any typical modern laptop (8–16 GB+ RAM). Occasional disk fetches for older context (via OS caching + SSDs) introduce negligible latency. TS runtime remains lightweight.
 
+### **3.1 Zero Padding Outside Window Support**
+
+For each field (or block) $i$, the windowed activation $\phi_i^{wnd}(t)$ is defined as:
+
+$$
+\phi_i^{wnd}(t) = w_i(t)\,\phi_i(G(t))
+$$
+
+By definition, the window function satisfies $w_i(t) = 0$ outside its active support.  
+Therefore:
+
+$$
+\phi_i^{wnd}(t) = 0 \quad \text{whenever } w_i(t) = 0
+$$
+
+This means that **each field’s windowed activation is represented as a zero‑padded sequence**. No special markers, masks, sentinel values, or NaNs are used. Zero represents “no influence” and ensures that inactive fields do not contribute to the embedding.
+
+Zero padding is essential because:
+
+- It preserves a **fixed‑length, dense representation** for all $t$  
+- It ensures **clean independence** between activation tracks  
+- It guarantees **deterministic manifold mapping**  
+- It avoids introducing artificial curvature or drift  
+- It keeps TS runtime free of masking or conditional logic  
+
+All zero padding is performed in the **pre‑TS pipeline**. TS runtime receives only the fully windowed vector:
+
+$$
+x_t = W(\phi(G(t)), t)
+$$
+
+which already incorporates tapering, overlap, and zero padding.
+
+**How many zeros?**  
+Exactly as many as required by the window function. Outside the active window, the field contributes **zero for all remaining timesteps**. This produces a consistent tensor shape (T × D) for every statement, regardless of how many fields are active at any given time.
+
+This representation is efficient, deterministic, and compatible with TS invariants.
+
 ---
 
 ## **4. Overlap & Tapering Requirements**
