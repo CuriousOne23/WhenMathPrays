@@ -18,10 +18,10 @@ This is the first document that explains **how TS becomes geometric**, not just 
 It is exploratory and non‑normative. Once stabilized, it will graduate into the 20.900‑series.
 
 **Paper series:**  
-[tp_g_phi_to_ts_manifold.md](tp_g_phi_to_ts_manifold.md)  
-[phi_g_schema.md](phi_g_schema.md)  
-[ts_embedding_constraints.md](ts_embedding_constraints.md)  
-[ts_manifold_embedding_E_phiG.md](ts_manifold_embedding_E_phiG.md)  
+[tp_g_phi_to_ts_manifold.md](tp_g_phi_to_ts_manifold.md) - Exploratory system‑playground mapping from TP → G → φ(G) → TS geometry  
+[phi_g_schema.md](phi_g_schema.md) - The authoritative schema: what φ(G) must contain and why.  
+[ts_embedding_constraints.md](ts_embedding_constraints.md) - The constraints that force φ(G) to embed into TS the way it does.  
+[ts_manifold_embedding_E_phiG.md](ts_manifold_embedding_E_phiG.md) - The deterministic embedding: how each φ(G) block becomes curvature, basins, gradients, trajectories.  
 
 ---
 
