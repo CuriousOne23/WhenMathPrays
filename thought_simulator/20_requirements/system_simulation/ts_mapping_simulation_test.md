@@ -38,7 +38,7 @@ Successful mapping yields metrics exceeding thresholds (e.g., neighborhood prese
 
 ## Implications of the Test Results with Respect to TS
 
-Positive outcomes reinforce TS architectural integrity and support advancing to integrated Path B simulations. Marginal or failing results highlight targeted refinements in$\phi\), windowing, or M without invalidating the TS core.
+Positive outcomes reinforce TS architectural integrity and support advancing to integrated Path B simulations. Marginal or failing results highlight targeted refinements in$\phi$, windowing, or M without invalidating the TS core.
 
 ## Assessment of Viability of the Manifold Mapping to TS
 
