@@ -18,6 +18,7 @@ This is the first document that explains **how TS becomes geometric**, not just 
 It is exploratory and non‑normative. Once stabilized, it will graduate into the 20.900‑series.
 
 **Paper series:**  
+[tp_g_phi_to_ts_manifold.md](tp_g_phi_to_ts_manifold.md)  
 [phi_g_schema.md](phi_g_schema.md)  
 [ts_embedding_constraints.md](ts_embedding_constraints.md)  
 [ts_manifold_embedding_E_phiG.md](ts_manifold_embedding_E_phiG.md)  
