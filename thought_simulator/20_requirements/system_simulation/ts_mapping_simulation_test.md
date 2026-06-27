@@ -17,6 +17,17 @@
 5. Introduce perturbations and re-evaluate.  
 6. Run downstream TS operations on mapped states.
 
+## Inputs to the Simulation
+
+- **G(t)**: Time-indexed graph state (directed graph with object/relational nodes and edges evolving over discrete time steps).  
+- **$\phi$**: Feature-extraction / embedding transform preserving relational and object properties.  
+- **W(⋅, t)**: **Non-overlapping fixed-length independence window** of size **W = 10 time steps** (configurable).  
+  - For each window starting at time $ t_k $, it aggregates states strictly within $[t_k, t_k + W - 1]$.  
+  - No overlap or leakage between consecutive windows.  
+  - Window boundaries are hard independence cuts — information from one window cannot influence mapping or state in another.  
+- **M**: Hybrid discrete manifold approximation (computational structure combining embedding coordinates with relational neighborhood graphs).  
+- Constraints inherited from `ts_wndw_indpndc_valdtn.md` and `ts_mapping_layer_design.md`.
+
 ## Evaluation Metrics
 
 All metrics report numerical values, pass/fail thresholds, margin to spec, qualitative rating (bad/good/excellent), rationale, and overall pass/fail.
