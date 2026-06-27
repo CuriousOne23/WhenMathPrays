@@ -118,7 +118,7 @@ Transitions occur when:
 * Γ-driven correction (to prevent entanglement with the prior attractor)
 * possible escalation to governance review
 
-In terms of the update rule, the trajectory shift appears in Δ_t as a large Γ(s_t) component (orthogonal projection away from the conflicting direction) combined with a modified ∇Φ(s_t) due to the new dominant uncertainty mode. The net result is a sharp bend in the manifold trajectory, observable in the state evolution and event log.  
+In terms of the update rule, the trajectory shift appears in $\Delta_t$ as a large $\Gamma(s_t)$ component (orthogonal projection away from the conflicting direction) combined with a modified $\Delta\Phi(s_t)$ due to the new dominant uncertainty mode. The net result is a sharp bend in the manifold trajectory, observable in the state evolution and event log.  
 
 ### **6.3 Attractor Interpretation**
 
