@@ -16,6 +16,12 @@ This paper formalizes the **constraints** that shape φ(G). These constraints ar
 
 The purpose of this document is to show that φ(G)’s dimensionality, block structure, and invariants are not arbitrary design choices. They are **forced** by the nature of language, the needs of TS, and the practical realities of implementation.
 
+**Paper series:**  
+[tp_g_phi_to_ts_manifold.md](tp_g_phi_to_ts_manifold.md)  
+[phi_g_schema.md](phi_g_schema.md)  
+[ts_embedding_constraints.md](ts_embedding_constraints.md)  
+[ts_manifold_embedding_E_phiG.md](ts_manifold_embedding_E_phiG.md)  
+
 ---
 
 ## **2. Purpose of This Paper**
