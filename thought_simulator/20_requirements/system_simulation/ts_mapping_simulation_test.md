@@ -34,7 +34,7 @@ All metrics report numerical values, pass/fail thresholds, margin to spec, quali
 
 ## Expected Results
 
-Successful mapping yields metrics exceeding thresholds (e.g., neighborhood preservation $\geq 0.96$, sensitivity $\leq 0.08$) with “good” or “excellent” ratings and positive margins, due to faithful preservation of TS invariants.
+Successful mapping yields metrics exceeding thresholds (e.g., neighborhood preservation $\geq 0.96$, sensitivity $\leq 0.08$ with “good” or “excellent” ratings and positive margins, due to faithful preservation of TS invariants.
 
 ## Implications of the Test Results with Respect to TS
 
