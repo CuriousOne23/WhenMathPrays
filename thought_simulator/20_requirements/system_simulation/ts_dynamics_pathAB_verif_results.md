@@ -1,5 +1,6 @@
 # **TS Dynamics Path A/B Verification – Pilot Simulation Results**
 
+# Introduction
 Grok executed a **deterministic logic simulation** per the specification in [ts_dynamics_pathAB_verif.md](ts_dynamics_pathAB_verif.md) (including the output schema from Section 12/13). This is a simplified but faithful 1D pilot implementation of the dynamical law to demonstrate the mechanics, logging, replay, and reporting.
 
 ### **Run Metadata**
