@@ -117,5 +117,3 @@ Every results report **must** contain the following sections in order:
 Must include columns: Metric, TS Result, Today’s AI Estimate, Who Performs Better, Why.
 
 ---
-
----
