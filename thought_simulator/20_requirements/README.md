@@ -60,6 +60,8 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.47_ssg_prim.md](20.47_ssg_prim.md)
 - [20.50_rb_requirements.md](20.50_rb_requirements.md)
 - [20.51_rbu_prim.md](20.51_rbu_prim.md)
+- [20.52_ssr_prim.md](20.52_ssr_prim.md)
+- [20.53_rrw_prim.md](20.53_rrw_prim.md)
 - [20.60_tb_requirements.md](20.60_tb_requirements.md)
 - [20.64_tptb_prim.md](20.64_tptb_prim.md)
 - [20.66_tpsf_prim.md](20.66_tpsf_prim.md)
