@@ -166,4 +166,3 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.55_srp_requirements.md](20.55_srp_requirements.md)
 - [20.56_routing_table_schema.md](20.56_routing_table_schema.md)
 - [20.57_trig_rb_semantic_trigger_requirements.md](20.57_trig_rb_semantic_trigger_requirements.md)
-- [20.58_oub_execution_manifold_integration.md](20.58_oub_execution_manifold_integration.md)
