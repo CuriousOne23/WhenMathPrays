@@ -25,7 +25,7 @@ TS needs:
 
 - a grammar‑atomic knowledge database (KnDt),
 - a three‑level grounding pipeline (KnC → KnM → KnF),
-- entropy fields ($H\\%\_{SSR}\ and\ H_{Kn}$),
+- entropy fields ($H\_{SSR}\ and\ H_{Kn}$),
 - deterministic interface primitives,
 - and a grounding‑aware SSR structure.
 
@@ -90,7 +90,7 @@ SSR (output of Path A, input to KnB) contains:
 - `messy_input_record`  
 - `lane_local_identity`  
 - `completion_state`  
-- `delta_h_percent` (this is $H\\%\_{SSR}$)  
+- `delta_h_percent` (this is $H\_{SSR}$)  
 - `policy_markers[]`  
 - `ob_trace[]`, `tb_trace[]`  
 - `routing_epoch_id`
@@ -118,7 +118,7 @@ Where:
 Path B uses:
 
 $$
-H_{total} = H\\%_{SSR} + H_{Kn}
+H_{total} = H_{SSR} + H_{Kn}
 $$
 
 If $H_{total}$ is above threshold, Path B **asks surgical questions** instead of expressing.
