@@ -56,6 +56,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.40.040_smob_prim.md](20.40.040_smob_prim.md)
 - [20.40.050_idob_prim.md](20.40.050_idob_prim.md)
 - [20.40.060_ouba_prim.md](20.40.060_ouba_prim.md)
+- [20.40.060.010_ouba_input_data_spec.md](20.40.060.010_ouba_input_data_spec.md
 - [20.44_ts_isc_scoring.md](20.44_ts_isc_scoring.md)
 - [20.45_imr_requirements.md](20.45_imr_requirements.md)
 - [20.47_ssg_prim.md](20.47_ssg_prim.md)
