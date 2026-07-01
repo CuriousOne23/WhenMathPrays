@@ -22,6 +22,8 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 
 **Detailed Status Paper:** [TS_and_LMS_AI_status_6-26-2026.md](TS_and_LMS_AI_status_6-26-2026.md)
 
+**Overview paper:** [From LLM To TS](20_requirements/system_playground/from_llm_to_ts.md)
+
 ---
 
 ## Repository Structure (thought_simulator/)
