@@ -25,7 +25,8 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 **Overview papers:**  
 [From LLM To TS](20_requirements/system_playground/from_llm_to_ts.md)  
 [Why TS Uses the Manifold Model](20_requirements/system_playground/why_ts_uses_manifold_model.md)
-
+[Why TS Requires Atomization](20_requirements/system_playground/why_ts_requires_atomization.md)
+[TS As a Meaning Compiler](20_requirements/system_playground/ts_as_meaning_compiler.md)
 ---
 
 ## Repository Structure (thought_simulator/)
