@@ -35,14 +35,14 @@ $$
 \text{Attention}(Q, K, V) = \text{softmax}\left( \frac{QK^T}{\sqrt{d_k}} \right) V
 $$
 
-Residual updates follow standard forms (e.g., $X_{\ell+1} = X_\ell + \text{FFN}(\text{LN}(X_\ell + \text{MHA}(X_\ell)))$).
+Residual updates follow standard forms $(e.g.,\ X\_{\ell+1} = X\_\ell + \text{FFN}(\text{LN}(X\_\ell + \text{MHA}(X\_\ell))))$.
 
 ## 3. Architectural Inefficiencies of Transformers
 
 Despite their power, transformers embed several structural inefficiencies that become scaling bottlenecks.
 
 - Repeated Q/K/V recomputation and **attention head interference**: Multiple heads and layers introduce interference patterns in the residual stream.
-- Quadratic attention ($O(n^2 d)$).
+- Quadratic attention $(O(n^2 d)).$
 - Uniform layer stacks.
 - **KV Cache Growth**: The key/value cache grows linearly with sequence length, consuming substantial memory.
 - Lack of structural memory.
