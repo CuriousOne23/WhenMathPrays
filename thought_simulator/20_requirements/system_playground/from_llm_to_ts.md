@@ -219,5 +219,36 @@ By eliminating repeated recomputation, quadratic pairwise attention, undifferent
 
 As frontier deployment demands shift from “can it generate plausible text?” to “can it maintain coherent, verifiable, long-horizon reasoning at acceptable cost?”, the transition from transformer-based LLMs to architectures such as TS becomes not merely advantageous but inevitable. The future of reliable AI lies in simulating thought structurally rather than predicting tokens statistically.
 
----
+## 14. References
 
+**Transformers and Attention**  
+- Vaswani, A., et al. *Attention Is All You Need.* NeurIPS, 2017.  
+- Bahdanau, D., Cho, K., Bengio, Y. *Neural Machine Translation by Jointly Learning to Align and Translate.* ICLR, 2015.
+
+**Scaling Laws and Efficiency**  
+- Kaplan, J., et al. *Scaling Laws for Neural Language Models.* arXiv:2001.08361, 2020.  
+- Hoffmann, J., et al. *Training Compute-Optimal Large Language Models (Chinchilla).* arXiv:2203.15556, 2022.  
+- Henighan, T., et al. *Scaling Language Models: Methods, Analysis & Insights.* arXiv:2102.06701, 2021.
+
+**Context Length, Attention, and Degradation**  
+- Liu, H., et al. *Lost in the Middle: How Language Models Use Long Contexts.* arXiv:2307.03172, 2023.  
+- Press, O., et al. *Train Short, Test Long: Attention with Linear Biases.* arXiv:2108.12409, 2021.  
+- Xiong, W., et al. *Efficient Attention: Attention with Linear Complexities.* arXiv:2002.04745, 2020.
+
+**Residual Stream, Interference, and Layer Dynamics**  
+- Elhage, N., et al. *A Mathematical Framework for Transformer Circuits.* Anthropic, 2022.  
+- Nanda, N., et al. *Emergent Linear Representations in Transformers.* arXiv:2309.00950, 2023.
+
+**Memory, Retrieval, and Structural Limitations**  
+- Borgeaud, S., et al. *Improving Language Models by Retrieving from Trillions of Tokens.* arXiv:2112.04426, 2021.  
+- Khandelwal, U., et al. *Generalization through Memorization: Nearest Neighbor Language Models.* arXiv:1911.00172, 2019.
+
+**Manifold Learning and Geometric Representations**  
+- Tenenbaum, J., et al. *A Global Geometric Framework for Nonlinear Dimensionality Reduction.* Science, 2000.  
+- Belkin, M., Niyogi, P. *Laplacian Eigenmaps for Dimensionality Reduction.* Neural Computation, 2003.
+
+**State Machines, Deterministic Systems, and Cognitive Modeling**  
+- Newell, A., Simon, H. *Human Problem Solving.* Prentice-Hall, 1972.  
+- Marr, D. *Vision: A Computational Investigation.* MIT Press, 1982.
+
+---
