@@ -50,7 +50,7 @@ TS does not reject the cognitive primitive discovered by transformers. TS preser
 * Transformers use Q/K/V projections, attention matrices, and layer stacks.
 * TS uses objects, dependencies, invariants, and geometric manifolds.
 
-Transformers discovered *what* cognition needs. TS provides an architecture that supports cognition efficiently, deterministically, and with explicit structural grounding.
+Transformers discovered *what* cognition needs. TS provides an architecture that supports cognition efficiently, deterministically, and with explicit structural grounding. TS is not only more efficient and deterministic; it shifts the scientific focus from approximating thought statistically to defining and simulating thought structurally.
 
 ## 3. The Transformer Architecture: Foundations and Mechanisms
 
