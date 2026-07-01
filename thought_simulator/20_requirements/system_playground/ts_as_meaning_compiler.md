@@ -63,7 +63,7 @@ Treating TS as a meaning compiler yields:
 
 ## TS in the Broader Architecture
 
-TS is not an isolated module. It forms the deterministic core of a larger system that combines human-like relational meaning with machine precision. The compiler design allows TS to coexist with LLMs (as front-end parsers) while providing the reliability and structure that generative models cannot guarantee.
+TS is designed as a standalone system. It does not require an LLM. However, hybrid architectures that use LLMs as front-end parsers or proposers while delegating structured reasoning, long-horizon coherence, and deterministic realization to TS can fix many of the reliability, hallucination, and efficiency issues inherent in pure generative models. The compiler design gives TS this flexibility without dependence.
 
 ## Mapping Pipeline
 
