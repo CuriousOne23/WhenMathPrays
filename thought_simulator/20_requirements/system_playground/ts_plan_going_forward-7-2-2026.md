@@ -13,6 +13,7 @@
 - **Future Multi-Repo Strategy**: Split implementation, tools, and heavy data as needed.
 
 ### 2. Directory Structure (Explicit)
+```
 thought_simulator/
 ├── 00_program_governance/         # Existing – project intent & governance
 ├── 05_system_architecture/        # Existing – high-level architecture
@@ -57,6 +58,7 @@ thought_simulator/
 │   └── simulation/                # Future runtime tests
 ├── src/                           # Implementation (populated later)
 └── extensions/                    # User-contributed modules (gitignore or separate)
+```
 
 ### 3. Reference File Strategy
 - **Core Files** (in repo, KB–low MB): Minimal dictionary, KnDt seed, basic RSG mappings (**JSON / JSONL**).
