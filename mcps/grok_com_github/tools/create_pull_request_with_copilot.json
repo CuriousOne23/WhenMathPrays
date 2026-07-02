@@ -10,7 +10,8 @@
       },
       "owner": {
         "type": "string",
-        "description": "Repository owner. You can guess the owner, but confirm it with the user before proceeding."
+        "description": "Repository owner. You can guess the owner, but confirm it with the user before proceeding.",
+        "x-mcp-header": "owner"
       },
       "problem_statement": {
         "type": "string",
@@ -18,7 +19,8 @@
       },
       "repo": {
         "type": "string",
-        "description": "Repository name. You can guess the repository name, but confirm it with the user before proceeding."
+        "description": "Repository name. You can guess the repository name, but confirm it with the user before proceeding.",
+        "x-mcp-header": "repo"
       },
       "title": {
         "type": "string",
