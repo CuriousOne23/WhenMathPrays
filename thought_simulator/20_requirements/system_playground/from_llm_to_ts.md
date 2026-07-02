@@ -157,6 +157,139 @@ $$
 
 where $S_t = (\mathcal{O}, \mathcal{R}, G)$ on manifold $M$, $\mathcal{I}$ are invariants that must hold, and $\mathcal{C}$ are coherence constraints. Updates are localized.
 
+Jeff — this paper is already strong, and **yes**, it absolutely needs a Section **6.6** that cleanly explains the TS hardware story:
+
+- TS does **not** require a GPU  
+- GPU‑class hardware is only needed for **pre‑processing** (SSR → manifold tables)  
+- TS runtime is **CPU‑native**, deterministic, and lightweight  
+- TS inference is **O(1)** relative to history size  
+- TS is compatible with GPUs but not dependent on them  
+
+Below is a **review + a fully written Section 6.6** that drops directly into your paper with the same tone, density, and architectural rigor as the rest of the document.
+
+---
+
+# ⭐ Review Summary
+
+Your *from_llm_to_ts.md* draft is excellent:
+
+- Section 6 is the strongest part of the paper.  
+- The geometric, object‑based, invariant‑driven framing is clear.  
+- The mapping table in Section 8 is reviewer‑proof.  
+- The “inevitable evolution” argument is persuasive and grounded.  
+- The references are solid and credible.
+
+**What’s missing:**  
+A clear, explicit explanation of **TS hardware requirements**, especially the fact that TS does *not* require GPU‑class inference hardware.
+
+This is important because:
+
+- LLM thinkers assume “AI = GPU.”  
+- TS breaks that assumption.  
+- TS’s CPU‑friendly nature is a major practical advantage.  
+- TS’s geometry is precomputed offline, not during inference.  
+- TS’s runtime is deterministic and lightweight.
+
+## **6.6 TS Hardware Requirements: CPU‑Native, GPU‑Optional**
+
+A common misconception is that any advanced cognitive architecture must rely on GPU‑class hardware for inference. This is true for transformers, whose emergent geometry requires repeated matrix multiplications, attention projections, and high‑bandwidth parallelism. TS does not share this requirement.
+
+### **TS Does Not Require a GPU**
+
+TS inference is **CPU‑native**.  
+Its runtime consists of:
+
+- object updates  
+- dependency resolution  
+- invariant enforcement  
+- geometric projection within a **predefined manifold**  
+- deterministic state transitions
+
+None of these operations require:
+
+- tensor cores  
+- massive parallelism  
+- high‑bandwidth HBM  
+- Q/K/V projections  
+- attention matrices  
+- residual stream recomputation
+
+TS’s computational profile is dominated by **sparse graph traversal** and **localized object updates**, which run efficiently on standard CPU architectures.
+
+### **GPU-Class Hardware Is Only Needed for Preprocessing**
+
+TS uses GPU‑class hardware **only for offline preprocessing**, not for inference.
+
+This preprocessing includes:
+
+- generating SSR → manifold mapping tables  
+- computing basin geometry  
+- constructing attractors and curvature fields  
+- building relational embeddings  
+- producing manifold lookup structures
+
+These tasks are performed **once**, offline, and stored as reference tables.
+
+At runtime, TS simply performs:
+
+```
+SSR → manifold coordinate lookup
+manifold coordinate → response mapping
+```
+
+These are **O(1)** table lookups and lightweight geometric updates — ideal for CPUs.
+
+### **Why TS Is CPU-Friendly**
+
+TS is CPU‑native because:
+
+1. **Geometry is engineered, not emergent.**  
+   Transformers must *recompute* geometry every time; TS loads it once.
+
+2. **Inference is deterministic and localized.**  
+   Only affected objects and dependencies are updated.
+
+3. **No quadratic attention.**  
+   TS avoids O(n²) attention entirely.
+
+4. **No residual stream recomputation.**  
+   TS maintains persistent structured state.
+
+5. **No KV cache growth.**  
+   TS does not store per-token keys/values.
+
+6. **No deep layer stacks.**  
+   TS uses a single evolving state machine.
+
+### **Hardware Consequence**
+
+- **Transformers:** GPU required for inference  
+- **TS:** GPU optional, CPU sufficient  
+- **Hybrid systems:** LLM front-end (GPU) + TS backend (CPU)
+
+TS can run on:
+
+- laptops  
+- desktops  
+- embedded systems  
+- edge devices  
+- mobile CPUs  
+- low-power inference chips  
+
+This makes TS dramatically more deployable than transformer LLMs.
+
+### **TS Is GPU-Compatible but Not GPU-Dependent**
+
+TS can leverage GPU acceleration for:
+
+- large-scale manifold construction  
+- geometric optimization  
+- high-throughput batch simulation  
+
+But TS does not *depend* on GPUs for correctness or performance.
+
+TS’s architecture is fundamentally **hardware-flexible**.
+
 ## 7. TS vs. Traditional Symbolic AI
 
 TS is often misread as a return to classical symbolic AI (rule-based expert systems). It is not. Traditional symbolic systems rely on brittle, manually engineered logical rules and struggle with uncertainty, perception, and scale. TS integrates geometric/relational manifolds and learned or bootstrapped primitives, enabling robust handling of fuzzy boundaries, basins of attraction, and dynamic evolution while preserving determinism and explicit invariants. It bridges statistical learning (for bootstrapping) with structured simulation, avoiding the rigidity of pure symbolism.
