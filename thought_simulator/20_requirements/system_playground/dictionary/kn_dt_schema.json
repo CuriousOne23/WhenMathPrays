@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TS Dictionary Entry Schema",
+  "description": "Starter schema for Thought Simulator dictionary entries.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique stable identifier for the dictionary entry."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the concept."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["entity", "relation", "property", "event", "state", "operator"],
+      "description": "High-level category of the concept."
+    },
+    "description": {
+      "type": "string",
+      "description": "Concise explanation of the concept's meaning."
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional list of alternative names or synonyms."
+    },
+    "relations": {
+      "type": "array",
+      "description": "List of relational structures involving this concept.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "relation": { "type": "string" },
+          "target": { "type": "string" },
+          "notes": { "type": "string" }
+        },
+        "required": ["relation", "target"]
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Optional semantic or logical constraints.",
+      "properties": {
+        "required_context": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "forbidden_combinations": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "manifold": {
+      "type": "object",
+      "description": "Optional manifold-related metadata.",
+      "properties": {
+        "region": { "type": "string" },
+        "coordinates": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "expression_surfaces": {
+      "type": "array",
+      "description": "Optional expression-manifold surfaces relevant for RSG.",
+      "items": { "type": "string" }
+    },
+    "examples": {
+      "type": "array",
+      "description": "Human-readable examples of usage.",
+      "items": { "type": "string" }
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Version of this dictionary schema.",
+      "const": "0.1"
+    }
+  },
+  "required": ["id", "name", "type", "description", "schema_version"]
+}
