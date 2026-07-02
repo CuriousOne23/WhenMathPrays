@@ -13,35 +13,50 @@
 - **Future Multi-Repo Strategy**: Split implementation, tools, and heavy data as needed.
 
 ### 2. Directory Structure (Explicit)
-```
-WhenMathPrays/
-├── docs/
-│   ├── papers/
-│   ├── guides/
-│   ├── requirements/          # 20-series HLRs
-│   └── planning/              # This plan + lifecycle doc
-├── specs/
-│   ├── core/                  # Dictionary, KnDt schemas
-│   ├── manifold/              # Engineered geometric manifold specification (central)
-│   ├── rsg/                   # Relational Semantic Geometry specs
-│   ├── testbenches/           # Logical equivalence testbenches
-│   └── interfaces/            # Contracts between subsystems
-├── starter-kit/
+thought_simulator/
+├── 00_program_governance/         # Existing – project intent & governance
+├── 05_system_architecture/        # Existing – high-level architecture
+├── 10_thought_simulator_req/      # Existing – formal requirement anchors
+├── 20_requirements/               # Existing – primary collaborative requirements
+│   ├── system_playground/
+│   └── system_simulation/
+├── 30_verification/               # Existing
+├── 40_thought_simulator_playground/ # Existing – prototypes & experiments
+├── 50_thought_simulator_design/   # Existing – formal design specs
+├── 60_review/                     # Existing
+├── 70_measurement/                # Existing
+├── 80_safety/                     # Existing (or planned)
+├── 90_validation_certification/   # Existing (or planned)
+│
+├── docs/                          # Existing – documentation
+├── dynamics/                      # Existing – flow & dynamics artifacts
+├── scripts/                       # Existing – utility scripts
+├── archive/                       # Existing – refactors & history
+│
+├── specs/                         # New – formal specs (fits alongside 20_requirements)
+│   ├── core/                      # Dictionary, KnDt schemas
+│   ├── manifold/                  # Engineered geometric manifold specification (central)
+│   ├── rsg/                       # Relational Semantic Geometry specs
+│   ├── testbenches/               # Logical equivalence testbenches
+│   └── interfaces/                # Contracts between subsystems
+│
+├── starter-kit/                   # New – minimal expandable foundation
 │   ├── dictionary/
 │   ├── kndt/
 │   ├── rsg/
 │   ├── inputs/
 │   └── examples/
-├── data/                      # Local development data (gitignore large files)
+│
+├── data/                          # New – local development data (gitignore large files)
 │   ├── core/
-│   └── external/              # Large packs (not in repo)
-├── tools/                     # Refactoring, validation, hygiene scripts
+│   └── external/                  # Large packs (not committed)
+│
+├── tools/                         # New or merge with scripts/ – validation, hygiene, growth tools
 ├── tests/
-│   ├── logical/               # Pre-coding testbenches
-│   └── simulation/            # Future runtime tests
-├── src/                       # Implementation (populated later)
-└── extensions/                # User-contributed modules (gitignore or separate)
-```
+│   ├── logical/                   # Pre-coding testbenches
+│   └── simulation/                # Future runtime tests
+├── src/                           # Implementation (populated later)
+└── extensions/                    # User-contributed modules (gitignore or separate)
 
 ### 3. Reference File Strategy
 - **Core Files** (in repo, KB–low MB): Minimal dictionary, KnDt seed, basic RSG mappings (**JSON / JSONL**).
