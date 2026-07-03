@@ -23,12 +23,12 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 **Detailed Status Paper:** [TS_and_LMS_AI_status_6-26-2026.md](TS_and_LMS_AI_status_6-26-2026.md)
 
 **Overview papers:**  
-[From LLM To TS](20_requirements/system_playground/from_llm_to_ts.md)  
-[Why TS Uses the Manifold Model](20_requirements/system_playground/why_ts_uses_manifold_model.md)  
-[Why TS Requires Atomization](20_requirements/system_playground/why_ts_requires_atomization.md)  
-[TS As a Meaning Compiler](20_requirements/system_playground/ts_as_meaning_compiler.md)  
-[What is New About TS](20_requirements/system_playground/ts_what_is_new.md)  
-[Architecture Manifold Description of TS](20_requirements/system_playground/architecture_manifold_description_of_ts.md)  
+[From LLM To TS](20_requirements/system_playground/papers/from_llm_to_ts.md)  
+[Why TS Uses the Manifold Model](20_requirements/system_playground/papers/why_ts_uses_manifold_model.md)  
+[Why TS Requires Atomization](20_requirements/system_playground/papers/why_ts_requires_atomization.md)  
+[TS As a Meaning Compiler](20_requirements/system_playground/papers/ts_as_meaning_compiler.md)  
+[What is New About TS](20_requirements/system_playground/papers/ts_what_is_new.md)  
+[Architecture Manifold Description of TS](20_requirements/system_playground/papers/architecture_manifold_description_of_ts.md)  
 
 ---
 
