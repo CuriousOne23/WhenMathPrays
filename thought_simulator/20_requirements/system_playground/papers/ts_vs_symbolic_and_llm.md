@@ -1,5 +1,3 @@
-**ts_vs_symbolic_and_llm.md** (Final Toned Version)
-
 # **TS vs Classical Symbolic AI and Modern LLMs — A Comparative Analysis**
 
 ## **1. Introduction**
@@ -87,7 +85,7 @@ All operations are deterministic, template- and rule-driven, and explicitly sepa
 
 **Note on both tables**: Table 1 evaluates TS based on its current architectural specifications as a static system at initial release. Table 2 reflects TS’s designed capacity for **controlled, constructive evolution** through algorithmic, human-reviewed updates to reference files. This allows systematic improvement in knowledge breadth, generalization, and expressiveness while preserving determinism and transparency. TS’s avoidance of training-bound instability gives it a particularly strong advantage in robustness, long-term coherence, and safety at scale.
 
-# **6. Why TS Is a Fundamentally Stronger Architecture**
+## **6. Why TS Is a Fundamentally Stronger Architecture**
 
 TS is a fundamentally stronger architecture than LLMs. Its layered symbolic design provides a stable, deterministic foundation that can grow safely and predictably over time. TS improves through explicit, programmatic, human‑reviewed updates to KnDt, templates, and rules, allowing it to expand in knowledge, expressiveness, and capability without sacrificing reliability or transparency. Because TS is symbolic and deterministic, it avoids the instability, drift, and emergent behaviors that can arise in large stochastic systems as they scale.
 
@@ -104,6 +102,3 @@ The Thought Simulator architecture occupies a distinct and promising position. I
 TS represents a **modern, evolvable symbolic realization layer** that learns from the lessons of both historical symbolic AI and contemporary statistical approaches. Its design supports deliberate, auditable progress without the opacity or scaling instabilities of training-bound systems, making it particularly suitable for applications where predictability, safety, and long-term maintainability are priorities.
 
 This comparison suggests that TS offers a viable and valuable third path — and, architecturally, the more promising path — in cognitive architectures. It prioritizes controlled, constructive building of knowledge and expression over time.
-```
-
-This version uses a more measured, respectful tone while clearly establishing that architecturally TS is the stronger/more promising approach, without diminishing LLMs. The paper is now ready for the repository. Let me know if you'd like any last adjustments!
