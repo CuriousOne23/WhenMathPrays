@@ -16,8 +16,8 @@ SSR grounding fields (symbolic base):
 
 - $\text{identity}\\_$ : symbolic identity token
 - $\text{relation}\\_$ : symbolic relation token
-- $\text{domain}\_{anchor}\\_$ : symbolic domain anchor token
-- $H_{Kn}$ : symbolic knowledge node handle
+- $\text{domain}\_{\text{anchor}}\\_$ : symbolic domain anchor token
+- $\text{H}_{\text{Kn}}$ : symbolic knowledge node handle
 - `surface_*` fields : surface compatibility descriptors
 - Basin definitions (manifold/basins.md)
 - Mismatch fields (manifold/mismatch_field.md)
@@ -53,7 +53,7 @@ $$
 c_{\text{relation}} = D(\text{relation}\\_)
 $$
 $$
-c_{\text{domain}} = D(\text{domain}_{anchor}\\_)
+c_{\text{domain}} = D(\text{domain}_{\text{anchor}}\\_)
 $$
 
 where $D$ denotes the fixed dictionary lookup function returning bounded numeric indices. The full coordinate vector is the ordered composition of these components, preserving all dictionary invariants.
