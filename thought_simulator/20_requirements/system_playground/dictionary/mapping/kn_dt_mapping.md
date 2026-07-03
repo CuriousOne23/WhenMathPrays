@@ -1,6 +1,5 @@
 **kn_dt_mapping.md** (Final Approved Version)
 
-```markdown
 # **kn_dt_mapping — KnDt → SSR → Pre‑Manifold → Manifold → RSG → RG Mapping Rules**
 
 ## **1. Title and Purpose**
