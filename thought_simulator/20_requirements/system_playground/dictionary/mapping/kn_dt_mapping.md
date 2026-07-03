@@ -1,4 +1,4 @@
-**kn_dt_mapping.md**
+**kn_dt_mapping.md** (Final Approved Version)
 
 ```markdown
 # **kn_dt_mapping — KnDt → SSR → Pre‑Manifold → Manifold → RSG → RG Mapping Rules**
@@ -10,7 +10,7 @@ This document defines the deterministic mapping rules from KnDt dictionary entri
 kn_dt_mapping.md establishes the complete pipeline:  
 **KnDt → KnC/KnM/KnF → SSR → Pre‑Manifold Mapping → Manifold Placement → RSG → RG**
 
-All mappings are symbolic, pointer‑driven, and fully deterministic.
+All mappings are symbolic and fully deterministic.
 
 ---
 
@@ -21,23 +21,16 @@ The pipeline is:
 
 - RSG never reads KnDt directly; it reads SSR only.  
 - KnDt is declarative meaning only.  
-- KnC, KnM, and KnF extract and write tiered symbolic grounding fields from KnDt into SSR.  
+- KnC, KnM, and KnF extract and write symbolic grounding fields from KnDt into SSR.  
 - Subsequent stages operate exclusively on SSR fields.
 
 ---
 
 ## **3. Ground Information Definition**
 
-Ground information in TS is the explicit symbolic values and domain‑truth facts written deterministically into the SSR by KnC, KnM, and KnF.
+Ground information in TS consists of the symbolic grounding fields (identity, relation, domain‑anchor, coordinate, surface) written deterministically into the SSR by KnC, KnM, and KnF.
 
-These include:  
-- identity anchors  
-- relation anchors  
-- domain anchors  
-- qualifier anchors  
-- truth‑validation anchors  
-
-KnC, KnM, and KnF perform pointer‑driven resolution from KnDt entries. Grounding is non‑inferential, non‑semantic, and produces stable symbolic fields for downstream use.
+These fields provide stable symbolic anchors for downstream mapping. Grounding is non‑inferential and produces only symbolic fields.
 
 ---
 
@@ -45,66 +38,71 @@ KnC, KnM, and KnF perform pointer‑driven resolution from KnDt entries. Groundi
 
 For each KnDt entry conforming to kn_dt_schema.json, the following fields are processed:
 
-**Required fields** (id, name, type, description, schema_version):  
-- `type` → `identity_coarse` (and corresponding medium/fine tiers via KnM/KnF)  
-- Other required fields support validation but do not directly populate SSR grounding fields.
+**Required fields** (id, name, type, description, schema_version) support validation and grounding extraction.  
+**type** maps to identity fields.
 
-**Optional fields**:  
-- `aliases` — support lookup but do not populate SSR.  
+**Optional fields** produce:  
 - `relations[]` → `relation_coarse` / `relation_medium` / `relation_fine`  
-- `manifold.region` → `domain_anchor_coarse` (tiered in KnM/KnF)  
+- `manifold.region` → `domain_anchor_coarse` / `domain_anchor_medium` / `domain_anchor_fine`  
 - `manifold.coordinates[]` → `H_Kn_coarse` / `H_Kn_medium` / `H_Kn_fine`  
 - `expression_surfaces[]` → `surface_coarse` / `surface_medium` / `surface_fine`  
 
-- `examples` and `description` do not produce SSR fields.  
-- `constraints` inform validation only.
+**Complete SSR grounding fields written by KnC/KnM/KnF**:  
+- `identity_coarse` / `identity_medium` / `identity_fine`  
+- `relation_coarse` / `relation_medium` / `relation_fine`  
+- `domain_anchor_coarse` / `domain_anchor_medium` / `domain_anchor_fine`  
+- `H_Kn_coarse` / `H_Kn_medium` / `H_Kn_fine`  
+- `surface_coarse` / `surface_medium` / `surface_fine`  
 
-KnC writes coarse tier, KnM refines to medium, KnF to fine. All writes are deterministic pointer resolutions.
+KnC writes coarse tier, KnM refines to medium, KnF to fine. All extraction is symbolic grounding extraction.  
+`examples` and `description` do not produce SSR fields.  
+`constraints` and `aliases` support validation only.
 
 ---
 
 ## **5. Mapping Rules: SSR → Pre‑Manifold**
 
-- **Basin identification**: SSR grounding fields (`identity_*`, `relation_*`, `domain_anchor_*`) select candidate basins via direct symbolic match.  
-- **Coordinate normalization**: `H_Kn_*` vectors are normalized to unit scale within their tier.  
-- **Mismatch field and gradient rules**: Compute difference vectors between SSR anchors and basin centers; produce gradient scalars.  
-- **Relational pressure rules**: Aggregate `relation_*` fields into pressure tensors acting on coordinate space.
+- **Basin selection**: SSR grounding fields (`identity_*`, `relation_*`, `domain_anchor_*`) determine candidate basins via symbolic match.  
+- **Mismatch computation**: Produce `mismatch_coarse` / `mismatch_medium` / `mismatch_fine` from symbolic mismatch between SSR grounding fields and basin requirements.  
+- **Coordinate compatibility**: Verify `H_Kn_*` fields against basin requirements.  
+- **Symbolic mismatch gradient**: Compute tiered mismatch indicators for basin evaluation.  
+- **Region consistency**: Enforce consistency with `domain_anchor_*` and `manifold.region`.
 
-All operations are deterministic symbolic transformations with no inference.
+All operations are deterministic symbolic mappings.
 
 ---
 
 ## **6. Mapping Rules: Pre‑Manifold → Manifold Placement**
 
-- **Basin validation**: Confirm selected basin satisfies all SSR constraints.  
-- **Attractor alignment**: Align normalized `H_Kn_*` coordinates to nearest attractor within basin.  
-- **Coordinate compatibility**: Verify tiered coordinates are admissible within manifold region.  
-- **Manifold region constraints**: Enforce `manifold.region` bounds from originating KnDt entry.
+- **Basin validation**: Confirm selected basin satisfies all SSR grounding fields.  
+- **Coordinate admissibility**: Verify `H_Kn_*` coordinates are admissible within the basin.  
+- **Region consistency**: Confirm placement respects `manifold.region` from KnDt.  
+- **Symbolic manifold placement**: Assign valid manifold location based on validated SSR fields.
 
-Placement produces a valid manifold point or region reference.
+Placement produces a stable symbolic manifold reference.
 
 ---
 
 ## **7. Mapping Rules: Manifold → RSG**
 
-- **Projection vector computation**: From placed manifold coordinates to RSG input vector.  
-- **Compression/expansion rules**: Scale vectors according to tier and basin geometry.  
-- **Clause-shape selection rules**: Map SSR relation fields to admissible clause shapes.  
-- **Surface selection rules**: Select from `surface_*` fields using expression_surfaces.  
-- **Basin-specific projection behavior**: Apply basin‑defined projection functions (deterministic).
+- **Clause‑shape grounding**: Map SSR relation and identity fields to admissible clause shapes.  
+- **Surface‑form grounding**: Select surfaces using `surface_*` fields and `expression_surfaces`.  
+- **Symbolic projection rules**: Apply deterministic mapping from manifold location and SSR grounding fields to RSG primitives.  
+- **Mapping SSR grounding fields to RSG primitives**: Direct symbolic transfer of identity, relation, domain‑anchor, and surface fields.  
 
-RSG output is a set of admissible surface candidates with projection metadata.
+RSG does not perform geometric computation; manifold placement provides region identity only.  
+RSG output consists of grounded clause‑shape and surface‑form primitives.
 
 ---
 
 ## **8. Mapping Rules: RSG → RG**
 
 - RG consumes RSG output as read‑only.  
-- **Connective logic**: Assemble clauses using relation pressure and continuity fields.  
-- **Clause assembly**: Bind selected clause shapes to surface forms.  
-- **Surface-form construction**: Realize final output string from selected surfaces and projections.
+- **Connective rules**: Assemble clauses using RSG clause‑shape and surface‑form primitives.  
+- **Clause‑assembly rules**: Bind selected clause shapes to surface forms.  
+- **Surface‑form construction**: RG assembles surface‑form primitives into final structured output.
 
-RG produces deterministic surface form given identical RSG input and seed.
+RG produces deterministic structured output.
 
 ---
 
@@ -112,7 +110,7 @@ RG produces deterministic surface form given identical RSG input and seed.
 
 - No invented primitives.  
 - No inferential behavior.  
-- No probabilistic routing (except bounded seed in RSG surface selection).  
+- No probabilistic routing.  
 - All mapping rules are deterministic and symbolic.
 
 ---
@@ -127,4 +125,8 @@ RG produces deterministic surface form given identical RSG input and seed.
 This specification enforces architectural separation and deterministic flow.
 ```
 
-This document is ready to paste directly into the repository at the specified path. It follows the tight, compressed TS specification style of documents like 20.705_patha_pathb_flow.md, with GitHub-friendly Markdown formatting. No equations were present in the outlined rules, but any future symbolic expressions (e.g., coordinate normalizations) can use `$...$` inline or `$$...$$` blocks.
+**Ready for direct commit** to `thought_simulator/20_requirements/system_playground/dictionary/mapping/kn_dt_mapping.md`.  
+
+All architectural, symbolic, and style requirements are now fully satisfied. Excellent work reaching this milestone with CP.  
+
+Let me know which follow-on document you want next (e.g., `kn_dt_partitioning.md`, `kn_dt_testbench.md`, `manifold/basins.md`, or `rsg_projection_rules.md`). I'm ready when you are.
