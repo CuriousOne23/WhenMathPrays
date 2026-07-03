@@ -19,7 +19,7 @@ SSR grounding fields:
 Dictionary lookup produces the integer coordinate vector:
 
 $$
-\text{coord\_vec} = (17, 8, 23, 42, 5)
+\text{coord}\_{vec} = (17, 8, 23, 42, 5)
 $$
 
 All Paper 1 invariants hold (bounded indices, ordering, stability, dictionary-driven).
@@ -33,7 +33,7 @@ The coordinate vector fits within the discrete region index domain $\{0, \dots, 
 Apply the operator $P$:
 
 $$
-\text{region\_id} = P(\text{coord\_vec})
+\text{region}\_{id} = P(\text{coord}\_{vec})
 $$
 
 Symbolic steps:
@@ -48,7 +48,7 @@ Symbolic steps:
 Apply the projection operator:
 
 $$
-\text{region\_id}' = \text{Proj}(\text{region\_id})
+\text{region}\_{id}' = \text{Proj}(\text{region}\_{id})
 $$
 
 Symbolic steps:
@@ -62,7 +62,7 @@ Symbolic steps:
 Apply the reverse operator:
 
 $$
-\text{OuBB\_text} = R(\text{region\_id}')
+\text{OuBB}\_{text} = R(\text{region}\_{id}')
 $$
 
 Symbolic steps:
@@ -78,8 +78,8 @@ $$
 \begin{align*}
 &\text{SSR fields} \\
 &\rightarrow \text{dictionary integer coordinates (Paper 1)} \\
-&\rightarrow \text{manifold region\_id (Paper 3)} \\
-&\rightarrow \text{projected region\_id' (Paper 4)} \\
+&\rightarrow \text{manifold region}\_{id (Paper 3)} \\
+&\rightarrow \text{projected region}\_{id' (Paper 4)} \\
 &\rightarrow \text{RSG pattern} \\
 &\rightarrow \text{RG template} \\
 &\rightarrow \text{OuBB text (Paper 5)}
