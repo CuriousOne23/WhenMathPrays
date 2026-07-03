@@ -2,73 +2,109 @@
 
 ## Purpose
 
-This document defines the deterministic, symbolic-only transfer function from SSR grounding fields to manifold surface placement. It fills the architectural link between SSR → manifold → RSG → RG → OuBB.
+This document defines the full deterministic transfer function:
 
-The mapping performs only symbolic admissibility checking, basin selection, mismatch resolution, and region identity assignment. No geometry. No numeric operations. No inference. No dynamic meaning.
+$$
+\text{SSR grounding fields} \rightarrow \text{numeric coordinate vector} \rightarrow \text{manifold surface projection} \rightarrow \text{surface-form pattern selection} \rightarrow \text{text realization}
+$$
+
+The mapping is numeric in the TS sense: stable, deterministic, bounded, non-semantic, non-probabilistic, and non-learned. It bridges SSR → manifold → RSG → RG → OuBB while preserving all architectural constraints.
 
 ## Inputs
 
-SSR grounding fields (symbolic):
+SSR grounding fields (symbolic base):
 
-- `identity_` : symbolic identity token
-- `relation_` : symbolic relation token
-- `domain_anchor_` : symbolic domain anchor token
-- `H_Kn_` : symbolic knowledge node handle
+- $\text{identity}\\_$ : symbolic identity token
+- $\text{relation}\\_$  : symbolic relation token
+- $\text{domain}\_{\text{anchor}}\\_$ : symbolic domain anchor token
+- `H_{Kn}` : symbolic knowledge node handle
 - `surface_*` fields : surface compatibility descriptors
 - Basin definitions (from manifold/basins.md)
 - Mismatch fields (from manifold/mismatch_field.md)
-- Region definitions (symbolic partitions on manifold surface)
+- Region definitions (symbolic partitions)
+- Dictionary coordinate rules (from dictionary subsystem)
+- RSG projection rules (from rsg_projection_rules.md)
+- RG surface-form rules (from rg_surface_forms.md)
 
-All inputs are treated as pure symbols for admissibility and selection rules.
+## Numeric Coordinate Construction
 
-## Outputs
+SSR grounding fields are mapped to a bounded numeric coordinate vector using dictionary-defined rules. The coordinate basis is fixed and symbolic-derived.
 
-Symbolic outputs consumed by RSG:
+Coordinate vector construction:
 
-- Manifold coordinates (symbolic only, e.g., region identifiers and basin labels)
-- Region identity
-- Admissibility record (symbolic pass/fail with mismatch tags)
-- Manifold placement record (composite symbolic structure passed downstream)
+$$
+coord\_{vec} = \left( c_1, c_2, \dots, c_n \right)
+$$
 
-## Mapping Rules
+where each $c_i$ is a deterministic integer or bounded real derived from field hashing/mapping (non-semantic, dictionary-driven).
 
-The deterministic mapping pipeline consists of the following symbolic steps:
+**Normalization and Bounding:**
 
-1. **Basin Selection**  
-   Match `identity_`, `relation_`, and `domain_anchor_` against basin definitions using exact symbolic compatibility.  
-   Select the unique admissible basin or apply default mismatch basin if none match.
+$$
+c_i' = \text{clamp}\left( \text{normalize}(f(\text{field}_i)), -B, B \right)
+$$
 
-2. **Coordinate Admissibility**  
-   Verify `H_Kn_` and `surface_*` fields against selected basin constraints using pure symbolic matching.  
-   Produce admissibility record as a set of symbolic tags.
+**Coordinate Invariants:**
 
-3. **Mismatch Resolution**  
-   If mismatch fields are present, apply deterministic symbolic resolution rules (defined in mismatch_field.md) to adjust placement without semantic interpretation.
+- Ordering preserved by field priority (`identity_ > relation_ > domain_anchor_`)
+- Basin alignment via component-wise matching
+- Mismatch correction via additive offset within bounds
 
-4. **Region Identity Assignment**  
-   Assign region identity based on basin and admissibility record using predefined symbolic region partitioning.
+All operations are deterministic fixed mappings with no runtime computation beyond lookup and bounded arithmetic.
 
-5. **Construction of Manifold Placement Record**  
-   Assemble the final record as a symbolic composite:  
-   $$
-   \text{placement} = \{ \text{basin_label}, \text{region_id}, \text{admissibility_tags}, \text{mismatch_resolution} \}
-   $$
+## Projection Formula
 
-All operations remain strictly symbolic and deterministic.
+Projection from numeric coordinates to manifold surface:
+
+$$
+\text{surface}\_{coord} = P(\text{coord}\_{vec})
+$$
+
+where $P$ is the deterministic projection operator implementing:
+
+- Region selection: nearest admissible region by coordinate distance (bounded metric)
+- Basin alignment: component projection onto basin constraints
+- Mismatch correction: symbolic rule application with numeric offset
+- Surface coordinate collapse: reduction to discrete surface index
+
+$$
+\text{surface}\_{index} = \left\lfloor \sum_{i} w_i \cdot c_i' \right\rfloor \mod R
+$$
+
+(with weights $w_i$ fixed from dictionary, $R$ = number of regions).
+
+This yields a discrete surface position aligned with basin and region definitions.
+
+## Manifold Surface Mapping
+
+The surface position selects admissible surface patterns per RSG rules. Mismatch fields trigger deterministic corrections that adjust the surface index within bounded regions without altering invariants.
+
+## Reverse Projection to Text
+
+Deterministic reverse path:
+
+1. Manifold surface position → RSG pattern lookup (clause_shapes.md)
+2. RSG pattern → RG surface-form template (rg_assembly_rules.md)
+3. RG surface form → OuBB text assembly (oubb_assembly_rules.md, oubb_surface_forms.md)
+
+$$
+\text{text} = \text{assemble}\left(\ RG_{template}(\ RSG\_{pattern}(\ surface_{index})) \right)
+$$
+
+All steps are pure lookup and concatenation with no inference.
 
 ## Integration
 
-- **RSG Consumption**: RSG receives the manifold placement record as input for projection and surface assembly (see rsg_projection_rules.md and rsg_assembly_rules.md).
-- **RG Unaffected**: RG operates on downstream surface forms independently (see rg_surface_forms.md).
-- **Path A Isolation**: This mapping is isolated from Path A processes.
-- **OuBB Reception**: OuBB receives finalized surface-form outputs after RG processing (see oubb_surface_forms.md).
+- **RSG**: Consumes surface coordinates/index for pattern projection and clause assembly.
+- **RG**: Consumes selected surface-form patterns for template application.
+- **OuBB**: Receives final assembled text output.
+- **Path A**: Remains fully isolated; this mapping operates exclusively in the manifold path.
 
 ## Constraints
 
 - No geometry
-- No numeric operations
+- No numeric meaning (coordinates are indices only)
 - No inference
-- No dynamic meaning
 - No semantic expansion
 - No probabilistic behavior
 - No learning
