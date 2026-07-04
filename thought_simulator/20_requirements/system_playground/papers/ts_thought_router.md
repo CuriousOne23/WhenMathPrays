@@ -42,7 +42,7 @@ Unlike black-box models where even experts struggle to point to concrete mechani
 
 The router’s behavior can be weighed, measured, simulated, and criticized because it is built on explicit, deterministic rules and pre-mapped structures. You can examine the mappings, trace routing decisions, test stability under different conditions, and identify exactly where improvements are needed.
 
-This visibility is intentional. It was designed to promote open exploration of the fundamental question “what is thought?” — a question that much of current AI work tends to avoid, largely out of concern that any proposed answer will only ever be partially true at best.
+This visibility is intentional. It was designed to promote open exploration of the fundamental question “what is thought?” — a question that much of current AI work tends to avoid, largely out of concern that any proposed answer will only ever be partially true at best. The pre-work is still computationally heavy; however, TS promotes structured pre-work, which will encourage standardization, its own language, analysis, and optimization methodology.
 
 This stands in contrast to current large language models, which offer little in terms of progressing our understanding of cognition. There is almost nothing mechanistic to criticize or build upon — validation rests almost entirely on performance, and many approaches actively treat thought as a defended black box.
 
