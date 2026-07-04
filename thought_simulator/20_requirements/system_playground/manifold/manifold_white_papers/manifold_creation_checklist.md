@@ -15,11 +15,14 @@ Use this checklist during pre-work to produce a visible, navigable, and engineer
 - [ ] Dictionary numeric coordinate scheme is established (e.g., surface + region tuples).
 - [ ] Expected surfaces, regions, and basins have been sketched at a high level.
 - [ ] Tools for freezing, serializing, and visualizing the manifold are ready.
+- [ ] Numericalization rules (domain, range, normalization method, monotonicity conventions) are defined and documented.
 
 ## 2. Field Extraction & Initial Construction
 
 - [ ] Extract fields from SSR (embeddings, relations, symbolic features).
 - [ ] Assign initial dictionary numeric coordinates.
+- [ ] Apply defined numericalization rules to convert SSR fields to numeric values.
+- [ ] Verify initial numeric values satisfy traceability, monotonicity, and semantic anchoring criteria.
 - [ ] Construct surfaces as continuous regions of related structure.
 - [ ] Verify that initial surfaces do not unintentionally overlap or collapse.
 - [ ] Partition into named regions with clear boundaries.
@@ -35,6 +38,8 @@ Use this checklist during pre-work to produce a visible, navigable, and engineer
 - [ ] Field interaction effects: Relational strength tightens basins; ambiguity widens transitions.
 - [ ] Coordinate meaning: Each coordinate is traceable back to SSR content.
 - [ ] Stability: Repeated runs on equivalent SSR yield consistent results (low variance).
+- [ ] Numerical field values are stable and traceable back to SSR attributes.
+- [ ] Correlations between fields produce expected geometric effects.
 
 **Stop and fix** if any of the above fail before proceeding.
 
