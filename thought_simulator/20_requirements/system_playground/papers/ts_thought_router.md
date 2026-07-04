@@ -57,7 +57,7 @@ The TS architecture offers a fundamentally different path. Below is a high-level
 | Transparency / Criticizability | High (rules are explicit) but inflexible | Very low (black box)                 | High (inspectable mappings + routing)             |
 | Scalability               | Poor (manual maintenance explodes)   | Expensive & energy-hungry            | Strong (decoupled pre-work + simple core)         |
 | Handling Complexity       | Struggles with ambiguity & scale     | Handles ambiguity well but unpredictably | Pre-work manages richness (encourages standardization and research); router stays clean  |
-| Progress Mechanism        | Manual refinement of rules           | More data / parameters               | Iterative improvement of mappings + measurable routing |
+| Progress Mechanism        | Manual refinement of rules           | More data / parameters               | Iterative improvement of mappings + measurable routing; encourages standardization and research |
 | Inquiry into "What is Thought?" | Explicit but limited                 | Largely avoided                      | Actively supported through visibility             |
 | Main Disadvantage         | Brittle, poor generalization         | Opaque, costly, hits scalability walls | Requires high-quality pre-work (addressable)      |
 
