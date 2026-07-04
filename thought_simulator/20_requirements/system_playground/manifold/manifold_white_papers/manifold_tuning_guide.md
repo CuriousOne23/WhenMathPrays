@@ -55,6 +55,16 @@ Use these criteria when inspecting a manifold snapshot:
 
 **Important**: All tuning must preserve determinism. Never introduce stochastic elements.
 
+### 2.1 Numerical Field Tuning (SSR → Numeric Values)
+
+See Section 6.2 of prework_manifold_and_back.md for full details. Key tuning actions include:
+
+- Adjust normalization ranges or scaling methods when fields lack discriminability or stability.
+- Refine monotonicity rules or semantic anchoring if human review shows poor traceability.
+- Modify correlation computation (weights, similarity metrics) when field interactions do not produce expected basin or surface geometry.
+- Re-validate numerical values after changes using the stability, discriminability, and behavioral tests.
+- Document all numericalization rules in the manifold snapshot for reproducibility.
+
 ## 3. Diagnostic Workflow
 
 1. Run pre-work and freeze manifold snapshot.
