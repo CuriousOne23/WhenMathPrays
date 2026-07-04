@@ -85,5 +85,59 @@ The TS thought router offers a description of cognition that can be weighed, mea
 
 ---
 
-**References**  
-(Links to related 20-series docs, GitHub repo, prior papers, etc. can be added here.)
+# **References**
+
+**Foundational AI & Cognitive Science Background**
+
+1. Newell, A., & Simon, H. A. *Human Problem Solving*. Prentice‑Hall, 1972.  
+   (Classical symbolic reasoning foundations.)
+
+2. Rumelhart, D. E., Hinton, G. E., & Williams, R. J. *Learning representations by back‑propagating errors*. Nature, 1986.  
+   (Neural network learning foundations.)
+
+3. Bengio, Y., Goodfellow, I., & Courville, A. *Deep Learning*. MIT Press, 2016.  
+   (Modern neural architectures and statistical learning.)
+
+4. Vaswani, A. et al. *Attention Is All You Need*. NeurIPS, 2017.  
+   (Transformer architecture underlying modern LLMs.)
+
+5. Marcus, G. *The Next Decade in AI: Four Steps Towards Robust Artificial Intelligence*. arXiv:2002.06177.  
+   (Critique of black‑box AI and call for mechanistic transparency.)
+
+6. Lake, B. M., Ullman, T., Tenenbaum, J., & Gershman, S. *Building machines that learn and think like people*. Behavioral and Brain Sciences, 2017.  
+   (Cognitive science perspective on structured reasoning.)
+
+---
+
+**Thought Simulator (TS) Internal Documentation**
+
+7. CuriousOne23. *Thought Simulator: System Requirements Overview (20‑Series)*.  
+   GitHub: WhenMathPrays/thought_simulator/20_requirements/  
+   (Primary architectural overview of TS.)
+
+8. CuriousOne23. *Dictionary Numeric Coordinate Specification*.  
+   GitHub: WhenMathPrays/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/dictionary_numeric_coordinate_spec.md  
+   (Formal definition of TS’s symbolic coordinate system.)
+
+9. CuriousOne23. *Manifold Architecture White Papers (Series)*.  
+   GitHub: WhenMathPrays/thought_simulator/20_requirements/system_playground/manifold/manifold_white_papers/  
+   (Foundational documents describing TS’s manifold, surfaces, regions, and routing logic.)
+
+10. CuriousOne23. *TS Thought Router Specification*.  
+    GitHub: WhenMathPrays/thought_simulator/20_requirements/system_playground/papers/ts_thought_router.md  
+    (Core description of the deterministic routing engine.)
+
+---
+
+**Contextual Works on Mechanistic Interpretability**
+
+11. Olah, C. et al. *A Survey of Mechanistic Interpretability*. Anthropic, 2024.  
+    (Efforts toward understanding internal structure of modern AI systems.)
+
+12. Mitchell, M. *Artificial Intelligence: A Guide for Thinking Humans*. Farrar, Straus and Giroux, 2019.  
+    (Accessible critique of black‑box AI and the need for conceptual clarity.)
+
+13. Pearl, J. *The Book of Why: The New Science of Cause and Effect*. Basic Books, 2018.  
+    (Causal reasoning frameworks relevant to structured cognition.)
+
+---
