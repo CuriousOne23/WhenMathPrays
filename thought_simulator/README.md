@@ -30,6 +30,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [What is New About TS](20_requirements/system_playground/papers/ts_what_is_new.md)  
 [Architecture Manifold Description of TS](20_requirements/system_playground/papers/architecture_manifold_description_of_ts.md)  
 [TS Versus Symbolic and LLM](system_playground/papers/ts_vs_symbolic_and_llm.md)  
+[TS is a Thought Router](system_playground/papers/ts_thought_router.md)  
 
 ---
 
