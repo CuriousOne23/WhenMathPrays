@@ -94,7 +94,3 @@ Use these criteria when inspecting a manifold snapshot:
 - Tuning log tracking changes and quality metrics.
 
 ---
-
-This guide is practical, checklist-oriented, and directly usable by engineers working on the TS project.
-
-Let me know when you're ready for the next item (e.g., **Manifold Validation Checklist** as a separate shorter doc, **Common Pitfalls** expansion, or anything else).
