@@ -65,10 +65,6 @@ The TS architecture offers a fundamentally different path. Below is a high-level
 
 By design, the visibility of the router and mappings invites ongoing exploration rather than treating thought as a black box.
 
-**Understood — CP's feedback is thoughtful and useful.**
-
-It keeps the strength of your point while making the claim more precise and less likely to be misread as overconfidence in one specific implementation. Here's a **revised Section 6** that incorporates the spirit of CP's suggestion:
-
 ---
 
 ### This Is Inevitable
