@@ -55,7 +55,7 @@ The TS architecture offers a fundamentally different path. Below is a high-level
 | Core Mechanism            | Rigid, hand-crafted rules             | Statistical pattern matching in opaque layers | Deterministic routing over pre-digested maps      |
 | Real-time Compute         | Lightweight but brittle               | Heavy (GPU-intensive)                | Lightweight (no GPU needed for routing)           |
 | Transparency / Criticizability | High (rules are explicit) but inflexible | Very low (black box)                 | High (inspectable mappings + routing)             |
-| Scalability               | Poor (manual maintenance explodes)   | Expensive & energy-hungry            |Strong (decoupled pre-work + simple core);  allows improvements in pre-work to be fomalized and shared. |
+| Scalability               | Poor (manual maintenance explodes)   | Expensive & energy-hungry            |Strong (decoupled pre-work + simple core);  allows improvements in pre-work to be formalized and shared. |
 | Handling Complexity       | Struggles with ambiguity & scale     | Handles ambiguity well but unpredictably | Pre-work manages richness (encourages standardization and research); router stays clean  |
 | Progress Mechanism        | Manual refinement of rules           | More data / parameters               | Iterative improvement of mappings + measurable routing; encourages standardization and research |
 | Inquiry into "What is Thought?" | Explicit but limited                 | Largely avoided                      | Actively supported through visibility             |
