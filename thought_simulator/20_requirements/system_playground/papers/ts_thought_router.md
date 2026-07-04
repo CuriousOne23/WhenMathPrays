@@ -9,7 +9,7 @@ Current AI systems excel in utility but treat cognition as an opaque black box, 
 
 Today's dominant AI systems — large language models and their variants — are undeniably impressive. They can generate fluent text, solve problems, and handle complex tasks with surprising capability. Yet beneath this surface success lies a growing problem.
 
-These models treat thought as a black box. Their "understanding" emerges from massive training on data, but we have almost no clear, mechanistic explanation of how cognition actually works inside them. When challenged, defenders typically point only to performance metrics: "It works, doesn't it?" There is little concrete structure to examine, criticize, or improve in a principled way. Progress relies on scaling compute, data, and parameters — an approach that is expensive, energy-intensive, and increasingly hitting hard limits in real-time reliability, predictability, and control.
+These models treat thought as a black box. Their "understanding" emerges from massive training on data, but we have almost no clear, mechanistic explanation of how cognition actually works inside them. When challenged, defenders typically point only to performance metrics: "It works, doesn't it?" There is little concrete structure to examine, criticize, or improve in a principled way. Progress relies on scaling compute, data, and parameters — an approach that is expensive, energy-intensive, and increasingly hitting hard limits in real-time reliability, stability, predictability, and control.
 
 We have built powerful tools, but we have not built a clear understanding of cognition itself. This is the wall we are facing: systems that succeed in utility but fail to illuminate the underlying processes.
 
