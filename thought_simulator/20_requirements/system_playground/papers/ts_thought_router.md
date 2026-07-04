@@ -21,7 +21,7 @@ First, there is the **pre-work** — the heavy digestion phase. This is where al
 
 Second, there is the **real-time experience** handled by the **TS machine itself**, which functions as a simple **thought router**. At each fixed time step, it takes the pre-digested, well-mapped structures and makes clean, deterministic routing decisions: "Given the current state and input, where does the thought flow next?"
 
-This separation is like a GPS navigation system. The pre-work builds and updates the detailed maps (heavy computation done ahead of time), while the router simply follows the maps to guide you efficiently in real time. The result is lightweight, controllable real-time cognition that does not require a GPU.
+This separation is like a GPS navigation system. The pre-work builds and updates the detailed maps (heavy computation done ahead of time), while the router simply follows the maps to guide you efficiently in real time. The result is lightweight, energy efficient, low cost and controllable real-time cognition that does not require a GPU.
 
 ### How the Thought Router Works (Simple View)
 
