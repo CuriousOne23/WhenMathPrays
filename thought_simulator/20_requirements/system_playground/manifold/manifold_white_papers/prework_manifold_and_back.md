@@ -1,6 +1,6 @@
 # The Pre-Work Manifold and Back: A Practical Engineering Guide to TS Latent Space
 
-**Version**: 0.1 (Draft for review)  
+**Version**: 0.2 (Refined per CP review)  
 **Date**: 2026-07-04  
 **Author**: Generated for CuriousOne23 / WhenMathPrays Thought Simulator (TS) Project  
 **Repository**: CuriousOne23/WhenMathPrays  
@@ -9,7 +9,7 @@
 
 The Thought Simulator (TS) is a deterministic, fixed-time-step state machine designed for reproducible cognitive modeling. Unlike traditional neural architectures with opaque latent spaces, TS separates **pre-work** (manifold construction) from **runtime routing** (consumption of the manifold).
 
-The **pre-work manifold** serves as an explicit, engineerable latent space. It is constructed during pre-work from Symbolic-Semantic Representations (SSR) and provides:
+This transforms latent space from an emergent statistical artifact into a controllable engineering substrate. The **pre-work manifold** serves as an explicit, engineerable latent space. It is constructed during pre-work from Symbolic-Semantic Representations (SSR) and provides:
 
 - Visible geometry of cognitive surfaces, regions, and basins.
 - Navigable, characterizable, and nameable structures.
@@ -21,7 +21,7 @@ This separation ensures TS remains inspectable, testable, and refinable. Pre-wor
 
 The manifold $\mathcal{M}$ is a collection of surfaces embedded in a coordinate space derived from SSR field extractions. Key definitions:
 
-- **Surfaces**: Continuous regions of related semantic or relational structure.
+- **Surfaces**: Continuous regions of related semantic or relational structure. Surfaces and regions are symbolic constructs, not neural embeddings.
 - **Regions**: Named partitions within or across surfaces, bounded by transition thresholds.
 - **Basins**: Areas of attraction or stability within the manifold (e.g., object basins for entity persistence, relational basins for dynamic associations).
 - **Dictionary numeric coordinates**: Discrete integer or tuple identifiers mapped to manifold locations, e.g., $(s_i, r_j)$ for surface $s_i$ and region $r_j$.
@@ -33,6 +33,7 @@ The manifold $\mathcal{M}$ is a collection of surfaces embedded in a coordinate 
 Inline example: $f: \text{SSR} \rightarrow \mathcal{M}$
 
 Block math:
+
 $$
 x_{\text{manifold}} = P(f_{\text{SSR}})
 $$
@@ -43,7 +44,7 @@ Region boundaries are defined by similarity or distance thresholds in the extrac
 
 ## 3. Continuity Requirements
 
-TS routing operates on discrete fixed-time steps and requires only $C^0$ (positional) continuity for basic deterministic routing. Higher-order continuity ($C^1$ for velocity, $C^2$ for acceleration) is optional for gradient-informed or smoother future routing variants.
+TS routing operates on discrete fixed-time steps and requires only $C^0$ (positional) continuity for basic deterministic routing. Continuity is required only to the order of differentiation used by TS routing. Higher-order continuity ($C^1$ for velocity, $C^2$ for acceleration) is optional for gradient-informed or smoother future routing variants.
 
 $$
 \text{Routing requires } C^0 \text{ continuity at minimum.}
@@ -60,6 +61,8 @@ Engineers smooth these using cubic splines. Cubic splines are ideal because they
 - $C^2$ continuous (smooth first and second derivatives).
 - Locally controllable.
 - Efficient to evaluate.
+
+Spline smoothing occurs entirely in pre-work; TS never performs smoothing at runtime.
 
 **Cubic spline segment** between points $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$ with control over derivatives:
 
@@ -82,7 +85,7 @@ The core value of the pre-work manifold is practical engineering control:
 - **Refine transitions**: Adjust splines or re-run targeted pre-work on problematic subdomains.
 - **Re-run pre-work**: Iteratively improve the manifold with refined SSR inputs or mapping rules.
 
-This workflow makes TS a scientific tool: the latent space is a map that can be explored, debugged, and versioned like any engineered artifact.
+This workflow is unique: TS is the first architecture where latent space is explicitly navigable and version-controlled. This makes TS a scientific tool: the latent space is a map that can be explored, debugged, and versioned like any engineered artifact.
 
 ## 6. Transfer Function: SSR → Manifold
 
@@ -95,7 +98,7 @@ $$
 Components:
 - **Field extraction**: Pull numeric features (embeddings, relations, context vectors) from SSR.
 - **Coordinate construction**: Assign dictionary numeric coordinates based on clustering or hashing.
-- **Mapping constraints**: Enforce symbolic continuity and basin stability.
+- **Mapping constraints**: Enforce symbolic continuity and basin stability. SSR fields must be stable enough to produce consistent manifold coordinates across pre-work runs.
 - **Smoothing**: Apply cubic splines at discontinuities.
 - **Region assignment**: Label partitions and compute boundary functions.
 
@@ -114,12 +117,12 @@ This includes:
 - **Surface selection**: Via dictionary coordinates and routing rules.
 - **Region-to-output mapping**: Deterministic lookup + interpolation.
 - **Stability constraints**: Enforce basin attraction to prevent drift.
-- **Deterministic routing**: Fixed-time-step evaluation over the frozen manifold.
+- **Deterministic routing**: Fixed-time-step evaluation over the frozen manifold. Projection is deterministic; the same manifold coordinate always produces the same OuBB/RG output.
 
 ## 8. Engineering Workflow
 
 1. Run pre-work on SSR inputs to extract initial fields.
-2. Construct the manifold ($\mathcal{M} = T(\text{SSR})$).
+2. Construct the manifold $(\mathcal{M} = T(\text{SSR}))$.
 3. Smooth discontinuities with cubic splines.
 4. Freeze manifold (serialize coordinates, boundaries, splines).
 5. Inspect and drive around: visualize, test paths, identify issues.
@@ -128,9 +131,12 @@ This includes:
 8. TS routes deterministically over the improved manifold.
 9. Produce outputs via OuBB/RG projection.
 
+Each iteration produces a new versioned manifold snapshot, enabling scientific comparison and regression testing.
+
 ## 9. Examples
 
 **Discontinuity** (unsmoothed jump):
+
 $$
 y(x) = \begin{cases} 
 x & x < 0 \\
@@ -144,9 +150,11 @@ $$
 Boundary defined by $d(\mathbf{v}_1, \mathbf{v}_2) > \theta$ where $\mathbf{v}$ are feature vectors.
 
 **Surface transition**:
+
 $$
 x_{\text{manifold}}(t) = (1-t) \cdot x_s + t \cdot x_{s+1}, \quad t \in [0,1]
 $$
+
 with spline interpolation on $t$.
 
 **Dictionary numeric coordinate projection**:
@@ -155,10 +163,12 @@ Input SSR → coordinate $(s_3, r_7)$ → manifold point → OuBB output.
 **Routing path**:
 Sequence of coordinates: $(s_1,r_2) \to (s_1,r_5) \to (s_2,r_1)$ with spline-smoothed transitions, verified for stability.
 
+**Basin visualization**: A simple numeric depth map or stability gradient (e.g., higher values indicate stronger attraction in object/relational basins).
+
 ## 10. Conclusion
 
 The pre-work manifold makes latent space tangible, engineerable, inspectable, deterministic, and scientific. It is standardizable across TS instances and supports version control, testing, and collaborative refinement.
 
-TS is the first architecture where the latent space is explicitly a map — not a mystery. Engineers can see it, drive it, fix it, and ship it. This shifts cognitive modeling from alchemy to reliable systems engineering.
+This paper establishes the manifold as a first-class engineering artifact within TS. TS is the first architecture where the latent space is explicitly a map — not a mystery. Engineers can see it, drive it, fix it, and ship it. This shifts cognitive modeling from alchemy to reliable systems engineering.
 
 **Next steps**: Integrate with TS 20-series requirements, add visualization scripts, and validate via mapping simulation tests.
