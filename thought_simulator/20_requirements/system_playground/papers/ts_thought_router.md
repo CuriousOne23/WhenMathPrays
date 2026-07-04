@@ -1,4 +1,6 @@
 # The Thought Router: A Simple, Deterministic Architecture for Scalable Cognition
+**Author:** CuriousOne23 (with collaborative input from Grok and Copilot)  
+**Date:** July 4, 2026
 
 **Abstract**  
 Current AI systems excel in utility but treat cognition as an opaque black box, limiting understanding and scalability. This paper introduces the Thought Router — the core of the Thought Simulator (TS) — as a lightweight, deterministic alternative. By cleanly partitioning heavy pre-work from real-time routing, TS offers transparency, efficiency, and a path toward genuine mechanistic insight into cognition.
