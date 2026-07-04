@@ -72,6 +72,37 @@ The core value of the pre-work manifold is practical engineering control:
 
 This workflow is unique: TS is the first architecture where latent space is explicitly navigable and version-controlled.
 
+### **5.1 Visualizing the Manifold Pipeline**
+
+```mermaid
+flowchart TD
+    A[SSR Input] --> B[Pre-Work: Field Extraction]
+    B --> C[Construct Manifold\nSurfaces + Regions + Basins]
+    C --> D[Spline Smoothing\nDiscontinuities]
+    D --> E[Freeze Versioned Manifold\n+ Dictionary Coordinates]
+    E --> F[Engineer Inspection & Driving]
+    F --> G{Tune?}
+    G -->|Yes| B
+    G -->|No| H[TS Runtime Routing\nOver Frozen Manifold]
+    H --> I[Projection Operator Π]
+    I --> J[OuBB or RG Output]
+    
+    subgraph "Evaluation & Tuning Layer"
+        K[Field Coherence & Stability]
+        L[Semantic Gradients & Boundaries]
+        M[Routing Path Meaning]
+        N[Projection Fidelity & Determinism]
+    end
+    
+    E --> K
+    E --> L
+    H --> M
+    I --> N
+    K & L & M & N --> G
+```
+
+> **Figure 1: TS Pre-Work Manifold Pipeline.** SSR inputs feed pre-work construction of the manifold. Engineers inspect, evaluate (field coherence, semantic gradients, routing meaning, projection fidelity), tune, and freeze the manifold before deterministic runtime routing and projection to OuBB/RG. Versioned snapshots enable regression testing and iterative refinement.
+
 ## 6. Transfer Function: SSR → Manifold
 
 $$
