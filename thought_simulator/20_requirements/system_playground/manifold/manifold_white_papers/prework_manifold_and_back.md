@@ -26,9 +26,6 @@ The manifold $\mathcal{M}$ is a collection of surfaces embedded in a coordinate 
 
 **Coordinate charts** and transitions use standard differential geometry adapted for engineering:
 
-Inline example: $f: \text{SSR} \rightarrow \mathcal{M}$
-
-Block math:
 $$
 x_{\text{manifold}} = P(f_{\text{SSR}})
 $$
@@ -54,6 +51,7 @@ Pre-work extraction from SSR can produce discontinuities at region or surface bo
 Engineers smooth these using cubic splines. Cubic splines are ideal because they are piecewise cubic polynomials, $C^2$ continuous, locally controllable, and efficient to evaluate. Spline smoothing occurs entirely in pre-work; TS never performs smoothing at runtime.
 
 **Cubic spline segment**:
+
 $$
 S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
 $$
