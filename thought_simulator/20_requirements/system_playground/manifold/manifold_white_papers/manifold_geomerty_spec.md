@@ -19,7 +19,7 @@ The manifold $\mathcal{M}$ is a geometric structure built from numeric fields. I
 - **Regions**: Named partitions within or across surfaces.
 - **Basins**: Areas of attraction and stability.
 - **Transitions**: Spline-smoothed boundaries between surfaces/regions.
-- **Dictionary numeric coordinates**: Tuples (e.g., $(s_i, r_j)$) that locate points in the geometry.
+- **Dictionary numeric coordinates**: Tuples (e.g., $(s_i, r_j))$ that locate points in the geometry.
 
 The geometry is fully deterministic and versioned. It turns numeric data into a map that engineers can see, drive, test, and refine.
 
