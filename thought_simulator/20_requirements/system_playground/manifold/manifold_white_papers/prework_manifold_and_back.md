@@ -6,7 +6,7 @@
 **Repository**: CuriousOne23/WhenMathPrays  
 
 **Core Architecture Papers** (same directory):  
-[ssr_numericalization_guide.md](ssr_numericalization_guide.md) | [manifold_geometry_spec.md](manifold_geometry_spec.md) | [dictionary_projection_spec.md & glossary](dictionary_projection_spec.md)
+[ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md) | [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md) | [dictionary_projection_spec.md & glossary, paper 3](dictionary_projection_spec.md)
 
 **Companion Documents**:  
 [manifold_creation_checklist.md](manifold_creation_checklist.md) | [manifold_tuning_guide.md](manifold_tuning_guide.md)
@@ -52,9 +52,9 @@ flowchart TD
 - **New Manifold**: Start with [manifold_creation_checklist.md](manifold_creation_checklist.md)
 - **Troubleshooting / Tuning**: Use [manifold_tuning_guide.md](manifold_tuning_guide.md)
 - **Deep Dive**:
-  - Symbolic → Numeric → [ssr_numericalization_guide.md](ssr_numericalization_guide.md)
-  - Numeric → Geometry → [manifold_geometry_spec.md](manifold_geometry_spec.md)
-  - Geometry → Text + Reverse → [dictionary_projection_spec.md](dictionary_projection_spec.md)
+  - Symbolic → Numeric → [ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md)
+  - Numeric → Geometry → [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)
+  - Geometry → Text + Reverse → [dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)
 
 **Hardware Note**: Pre-work runs efficiently on standard CPU hardware (no GPU required for typical use).
 
