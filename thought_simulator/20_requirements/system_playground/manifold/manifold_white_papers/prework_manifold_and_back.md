@@ -31,18 +31,18 @@ flowchart TD
     B --> C[Paper 2 - Manifold Geometry]
     C --> D[Dictionary Construction]
     D --> E[Paper 5 - Projection Π]
-    E --> F[Expressive Output (OuBB/RG)]
-   
+    E --> F[Expressive Output]
+    
     subgraph Engineer Access
         G[Inspection Validation Tuning]
     end
-   
+    
     B --> G
     C --> G
     D --> G
     E --> G
     F --> G
-   
+    
     G --> B
     G --> C
     G --> D
