@@ -1,46 +1,48 @@
-# The Pre-Work Manifold and Back: A Practical Engineering Guide to TS Latent Space
-
-**Version**: 0.6 (High-Level Overview)  
-**Date**: 2026-07-04  
+# The Pre-Work Manifold and Back: A Practical Engineering Guide to TS Latent Space  
+**Version**: 0.7 (Unified Ontology Edition)  
+**Date**: 2026-07-05  
 **Author**: Generated for CuriousOne23 / WhenMathPrays Thought Simulator (TS) Project  
 **Repository**: CuriousOne23/WhenMathPrays  
 
-**Core Architecture Papers** (same directory):  
-[ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md) | [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md) | [dictionary_projection_spec.md & glossary, paper 3](dictionary_projection_spec.md)
+**Core Architecture Papers** (same directory):
 
-**Companion Documents**:  
-[manifold_creation_checklist.md](manifold_creation_checklist.md) | [manifold_tuning_guide.md](manifold_tuning_guide.md)
+- [1. SSR to Manifold Transfer Guide](./ssr_to_manifold_transfer_guide.md)  
+- [2. Manifold Geometry & Shapes Specification](./manifold_geometry_shapes_spec.md)  
+- [3. Shapes Meanings — SSR, OuBB, and Mapping](./shapes_meanings_ssr_oubb_mapping.md)  
+- [4. Working Inside the Manifold — Routing & Projection](./manifold_routing_projection.md)  
+- [5. Manifold to OuBB / RG Projection & Reverse](./manifold_to_oubb_projection_reverse.md)  
+- [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)  
+
+---
 
 ## 1. Introduction
 
-The Thought Simulator (TS) separates pre-work (manifold construction) from runtime routing. This document provides the high-level architectural overview. For detailed guidance on each layer, see the specialized papers listed above.
+The Thought Simulator (TS) separates pre-work (manifold construction) from runtime routing. This document provides the high-level architectural overview.  
 
-**Pre-work** converts symbolic SSR into a visible, navigable, deterministic manifold. Runtime then routes over this manifold to produce expressive, traceable outputs.
+**Pre-work** converts symbolic SSR into a visible, navigable, deterministic **state-space constraint surface** (the manifold). Runtime then routes over this surface to produce expressive, traceable OuBB / RG outputs.
+
+The manifold is **not a literal geometric model**. It is a constraint surface shaped by SSR dynamics and OuBB interpretability requirements.
 
 ## 2. Overall TS Pipeline
 
-[ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md)  
-[manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)  
-[dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)  
-
 ```mermaid
 flowchart TD
-    A[SSR Input] --> B[Paper 1 - SSR Numericalization]
+    A[SSR Input] --> B[Paper 1 - SSR to Numeric]
     B --> C[Paper 2 - Manifold Geometry]
     C --> D[Dictionary Construction]
-    D --> E[Paper 3 - Projection Π]
-    E --> F[Expressive Output]
-    
+    D --> E[Paper 5 - Projection Π]
+    E --> F[Expressive Output (OuBB/RG)]
+   
     subgraph Engineer Access
         G[Inspection Validation Tuning]
     end
-    
+   
     B --> G
     C --> G
     D --> G
     E --> G
     F --> G
-    
+   
     G --> B
     G --> C
     G --> D
@@ -51,41 +53,37 @@ flowchart TD
 
 ## 3. Why This Architecture Matters
 
-- **Inspectable & Engineerable** latent space
-- **Deterministic** behavior with full traceability
-- **Lower cost** pre-work compared to traditional training
-- **Reusable** manifold + dictionary
-- **Debuggable** via reverse interpretation
+- **Inspectable & Engineerable** latent space (constraint surface)  
+- **Deterministic** behavior with full traceability  
+- **Lower cost** pre-work compared to traditional training  
+- **Reusable** manifold + dictionary  
+- **Debuggable** via reverse interpretation (Paper 5)  
 
 ## 4. How to Use These Documents
 
-- **New Manifold**: Start with [manifold_creation_checklist.md](manifold_creation_checklist.md)
-- **Troubleshooting / Tuning**: Use [manifold_tuning_guide.md](manifold_tuning_guide.md)
+- **New Manifold**: Start with Paper 6 (checklist) and follow Papers 1–5 in order.  
+- **Troubleshooting / Tuning**: Use Paper 6.  
 - **Deep Dive**:
-  - Symbolic → Numeric → [ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md)
-  - Numeric → Geometry → [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)
-  - Geometry → Text + Reverse → [dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)
+  - Paper 1: SSR → numeric transfer  
+  - Paper 2: Numeric → manifold geometry & shapes  
+  - Paper 3: Shape meanings across SSR, manifold, and OuBB  
+  - Paper 4: Routing and internal projection  
+  - Paper 5: Forward & reverse projection (Π)  
+  - Paper 6: Validation, tuning, and glossary  
 
 **Hardware Note**: Pre-work runs efficiently on standard CPU hardware (no GPU required for typical use).
 
-## Research and Contribution Opportunities
+## 5. Research and Contribution Opportunities
 
-The TS architecture is designed with standardization and modularity in mind. This creates a fertile ground for broad, collaborative progress across the research and engineering community.
+The modular, inspectable, and reusable nature of the TS pre-work architecture makes it well-suited for community-driven advancement.
 
-Because each layer is well-defined and separable, contributions can come from many directions:
-- Master's students can focus on improving specific techniques (e.g., better numericalization methods, basin dynamics, or meaning signature design).
-- PhD candidates can tackle deeper architectural questions, new validation metrics, or novel applications.
-- Academic labs and independent scientists can extend the framework, develop specialized tools, or explore new domains.
-- Industry engineers can adapt and harden the system for production use.
+## 6. Conclusion
 
-Over time, this process is expected to develop its own language, techniques, and best practices — much like how relational databases or compiler design evolved into mature fields. The modular, inspectable, and reusable nature of the manifold and dictionary makes it particularly well-suited for cumulative, community-driven advancement.
+This 6-paper suite provides a complete, engineer-actionable foundation for building, understanding, and extending the TS manifold. The process is deterministic, traceable, and grounded in the TS ontology of a state-space constraint surface derived from SSR dynamics and OuBB interpretability.
 
-## Conclusion
-
-The Thought Simulator represents a deliberate shift from opaque statistical models to an explicit, engineerable cognitive architecture. By separating pre-work manifold construction from runtime routing, and by providing clear, layered specifications for each stage, TS offers a path toward more inspectable, controllable, and reusable cognitive systems.
-
-This document, together with the three core papers and companion guides, provides a complete foundation for building, understanding, and extending the architecture. The process is tractable, supports broad contribution, and is designed for standardization and cumulative progress.
-
-Future work will focus on validation at scale, richer expression, specialized domain manifolds, and continued community development of the TS framework.
+Future work will focus on validation at scale, richer expression, specialized domain manifolds, and continued refinement of the suite.
 
 ---
+
+**End of Updated `prework_manifold_and_back.md`**
+```
