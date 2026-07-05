@@ -36,7 +36,7 @@ The manifold is a **state-space constraint surface**. The projection operator Π
 
 ## 3. Forward Projection (Manifold → OuBB / RG)
 
-- Use dictionary lookup on current manifold coordinate.  
+- Use dictionary (see paper 7) lookup on current manifold coordinate.  
 - Apply the projection operator Π using the coordinate, local context, and textual meaning signatures.  
 - Output is deterministic OuBB / RG text that reflects the constraint-energy behavior of the current shape (e.g., convergent language near valleys, divergent near peaks).  
 - Intermediate projections are allowed for partial or debugging output.
