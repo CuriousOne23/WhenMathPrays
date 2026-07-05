@@ -17,6 +17,8 @@
 **Top level overview**  
 [prework_manifold_and_back.md](prework_manifold_and_back.md)  
 
+**Canonical Glossary**: This document serves as the **canonical glossary** for the suite (or link to a dedicated glossary file once finalized). All terminology used across Papers 1–6 is defined here or cross-referenced.
+
 ## 1. Introduction
 
 The dictionary is the semantic Rosetta Stone of the Thought Simulator (TS). It unifies SSR meaning, numeric fields, manifold geometry, and textual output (OuBB/RG). 
