@@ -5,6 +5,7 @@
 **Companion to**: prework_manifold_and_back.md  
 **Repository**: CuriousOne23/WhenMathPrays  
 **Associated Papers**:  
+[prework_manifold_and_back.md](prework_manifold_and_back.md)  
 [manifold_geomerty_spec.md](manifold_geomerty_spec.md)  
 [dictionary_projection_spec.md](dictionary_projection_spec.md)  
 [manifold_tuning_guide.md](manifold_tuning_guide.md)  
