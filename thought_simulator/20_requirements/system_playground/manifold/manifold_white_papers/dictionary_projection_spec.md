@@ -921,40 +921,46 @@ It is the **cross-layer diagnostic engine** of the Thought Simulator.
 
 # **9. Tuning Projection**
 
-Tuning projection is the controlled process of adjusting dictionary metadata, projection tables, correlation weights, and interpolation rules to improve textual coherence, relational fidelity, tone behavior, and stability across runs. Tuning ensures that the projection operator $\Pi$ remains deterministic, expressive, and aligned with SSR-origin meaning.
+Tuning projection is the controlled process of adjusting dictionary metadata, projection tables, correlation weights, interpolation rules, and geometric parameters to ensure that the projection operator $\Pi$ produces stable, coherent, and semantically faithful OuBB/RG text. Tuning is performed when validation or debugging (Sections 8 and 11) reveal drift, misalignment, instability, or inconsistencies across layers.
 
-Tuning is a **cross-layer engineering activity**: changes in one layer (numeric, geometric, textual) propagate through the dictionary and projection pipeline. This section defines how tuning is performed, validated, and constrained.
-
----
+Tuning is a **cross‑layer engineering activity**: changes in one layer propagate through the dictionary, manifold geometry, projection, and reverse interpretation. This section defines how tuning is performed, constrained, and validated.
 
 ## **9.1 Purpose of Tuning**
 
-Tuning is required when:
+Tuning is required when any of the following occur:
 
-- projection output diverges from representative OuBB examples  
-- reverse interpretation begins mapping text to incorrect coordinates  
-- signature drift is detected  
-- basin or coordinate misalignment occurs  
-- tone, modality, or relational phrasing becomes inconsistent  
-- interpolation introduces discontinuities  
-- projection metadata becomes outdated or insufficient  
+- **Projection drift:**  
+  $\Pi(c)$ diverges from representative OuBB examples $t_c$.
+
+- **Signature drift:**  
+  Textual meaning signatures $\sigma_c$ change unexpectedly across runs or versions.
+
+- **Reverse interpretation failure:**  
+  $\Pi^{-1}(\Pi(c)) \not\approx c$.
+
+- **Metadata inconsistency:**  
+  Tone, modality, relational phrasing, or shading become misaligned.
+
+- **Geometric instability:**  
+  Basin boundaries, curvature, or coordinate placement shift unexpectedly.
+
+- **Interpolation discontinuities:**  
+  Gradients lose smoothness across nearby coordinates.
 
 Tuning restores:
 
-- **semantic fidelity**  
-- **textual coherence**  
-- **gradient smoothness**  
-- **coordinate stability**  
-- **deterministic behavior**  
+- semantic fidelity  
+- textual coherence  
+- gradient smoothness  
+- coordinate stability  
+- deterministic behavior  
 
----
+## **9.2 Components Eligible for Tuning**
 
-## **9.2 Components That Can Be Tuned**
-
-Engineers may tune the following components (as listed in the original Section 9 at   [Current page](citation-section://1146966522/24)):
+The following components may be tuned (as originally listed in Section 9):
 
 ### **1. Projection Tables**
-Rules that convert metadata-conditioned signatures into text:
+Rules that convert metadata‑conditioned signatures into text:
 
 - connective selection  
 - syntactic templates  
@@ -987,21 +993,27 @@ Changes affect basin behavior, curvature, and semantic gradients.
 ### **4. Interpolation and Stability Rules**
 Spline smoothing, gradient continuity, and basin transition rules:
 
-- $C^0$, $C^1$, $C^2$ continuity  
+- $C^0$, $C^1$, or $C^2$ continuity  
 - cubic spline interpolation  
-- fixed-time-step movement  
+- fixed‑time‑step movement  
 
 ### **5. Conditional Routing Logic**
 Rules determining how projection behaves near basin boundaries or transitions.
 
----
+### **6. Geometric Parameters**
+Adjustments to:
+
+- basin boundaries  
+- curvature  
+- attractor strength  
+- region transitions  
 
 ## **9.3 Tuning Workflow**
 
 Tuning follows a structured workflow:
 
 ### **Step 1 — Identify the Issue**
-Using debugging tools (Section 8), engineers determine whether the problem is:
+Using debugging tools (Section 8), determine whether the problem is:
 
 - projection drift  
 - signature drift  
@@ -1015,10 +1027,9 @@ Determine whether the issue originates in:
 
 - SSR → numeric  
 - numeric → geometry  
-- geometry → text  
-- dictionary metadata  
-- projection tables  
-- reverse interpretation  
+- geometry → dictionary  
+- dictionary → projection  
+- projection → reverse interpretation  
 
 ### **Step 3 — Apply Controlled Adjustments**
 Adjust only the components necessary to correct the issue:
@@ -1028,6 +1039,7 @@ Adjust only the components necessary to correct the issue:
 - adjust correlation weights  
 - modify projection tables  
 - refine interpolation rules  
+- adjust geometric parameters  
 
 ### **Step 4 — Validate**
 Run the full forward–reverse loop:
@@ -1080,7 +1092,10 @@ Projection metadata must remain internally consistent:
 - shading ↔ narrative role  
 
 ### **Coordinate Stability**
-Coordinates must remain in expected basins unless explicitly re-clustered.
+Coordinates must remain in expected basins unless explicitly re‑clustered.
+
+### **Signature Alignment**
+Signatures must remain aligned with representative OuBB examples.
 
 ## **9.5 Examples of Tuning Scenarios**
 
@@ -1112,8 +1127,6 @@ If $\Pi^{-1}(\Pi(c))$ returns $c' \neq c$:
 - refine projection metadata  
 - adjust correlation structure  
 - validate geometric stability  
-
----
 
 ## **9.6 Summary**
 
