@@ -166,7 +166,7 @@ Defined relationships between numeric fields and how they influence geometry. La
 **dictionary**  
 Multi-layer mapping that unifies SSR, numeric, geometric, and textual meaning. Layer: cross-layer. Role: The semantic Rosetta Stone enabling traceability and deterministic projection.
 
-**dictionary coordinate** (e.g., $(s_i, r_j)$)  
+**dictionary coordinate** (e.g., $(s_i, r_j))$   
 Stable identifier locating a point in the manifold geometry. Layer: cross-layer. Role: Provides discrete addressing for routing and debugging.
 
 **discriminability**  
