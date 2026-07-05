@@ -1150,9 +1150,245 @@ flowchart TD
     end
 ```
 
-## 11. Validation Procedures
+# **11. Validation Procedures**
 
-Validate dictionary correctness, projection fidelity, reverse interpretation accuracy, meaning stability, discriminability, and traceability.
+Validation procedures ensure that dictionary construction, projection, reverse interpretation, tuning, and geometric behavior remain stable, deterministic, and traceable across manifold versions. Validation is performed after each major update (dictionary rebuild, metadata tuning, manifold re‑clustering, signature extraction) and serves as the final correctness gate before projection is considered reliable.
+
+Validation spans **all layers**:
+
+- SSR → numeric  
+- numeric → geometry  
+- geometry → dictionary  
+- dictionary → projection  
+- projection → reverse interpretation  
+- reverse interpretation → SSR  
+
+This section defines the required validation steps, criteria, and acceptance thresholds.
+
+## **11.1 Forward–Reverse Validation**
+
+The core validation loop ensures that projection and reverse interpretation remain mutually consistent:
+
+$$
+c \xrightarrow{\Pi} t \xrightarrow{\Pi^{-1}} c'
+$$
+
+Validation requires:
+
+$$
+c' \approx c
+$$
+
+within defined tolerance.
+
+Failures indicate:
+
+- signature drift  
+- projection drift  
+- metadata inconsistency  
+- correlation structure changes  
+- geometric instability  
+- basin misalignment  
+
+This test is mandatory for every coordinate in the dictionary.
+
+## **11.2 Signature Stability Validation**
+
+Textual meaning signatures must remain stable across:
+
+- runs  
+- tuning cycles  
+- manifold versions  
+
+Validation checks:
+
+### **Cross‑run stability**
+
+$$
+\sigma_{c,\text{run1}} \approx \sigma_{c,\text{run2}}
+$$
+
+### **Cross‑version stability**
+
+$$
+\sigma_{c,M_v} \approx \sigma_{c,M_{v+1}}
+$$
+
+### **Example alignment**
+
+Projection must remain close to representative OuBB examples:
+
+$$
+\Pi(c) \approx t_c
+$$
+
+Signature drift is one of the earliest indicators of instability.
+
+## **11.3 Projection Stability Validation**
+
+Projection must remain deterministic and smooth across coordinates, basins, and semantic gradients.
+
+Validation checks:
+
+### **Determinism**
+
+$$
+\Pi_{\text{run1}}(c) = \Pi_{\text{run2}}(c)
+$$
+
+### **Gradient smoothness**
+
+Projection must vary smoothly along semantic gradients:
+
+$$
+\Pi(c_i) \rightarrow \Pi(c_j)
+\quad\text{for}\quad c_i \sim c_j
+$$
+
+### **Metadata alignment**
+
+Output must reflect:
+
+- tone  
+- modality  
+- relational phrasing  
+- syntactic structure  
+- shading  
+- narrative role  
+
+### **Spline continuity**
+
+Interpolation must satisfy $C^1$ or $C^2$ continuity depending on basin requirements.
+
+Projection stability validation ensures that $\Pi$ behaves predictably across the manifold.
+
+## **11.4 Reverse Interpretation Validation**
+
+Reverse interpretation must reliably recover the correct coordinate and meaning.
+
+Validation checks:
+
+### **Coordinate recovery**
+
+$$
+\Pi^{-1}(t) = c
+$$
+
+for all canonical outputs $t = \Pi(c)$.
+
+### **Discriminability**
+
+Distinct coordinates must remain separable:
+
+$$
+d(\sigma_{c_i}, \sigma_{c_j}) > \epsilon
+$$
+
+### **Metadata consistency**
+
+Recovered text features must align with projection metadata for the coordinate.
+
+Reverse interpretation failures indicate deeper structural issues.
+
+## **11.5 Geometric Stability Validation**
+
+Geometric context must remain stable across manifold versions.
+
+Validation checks:
+
+### **Coordinate stability**
+
+$$
+c(M_v) \approx c(M_{v+1})
+$$
+
+### **Basin stability**
+
+Coordinates must remain in expected basins unless explicitly re‑clustered.
+
+### **Curvature stability**
+
+Curvature changes must remain within tolerance.
+
+### **Transition boundary stability**
+
+Basin boundaries must not shift unpredictably.
+
+Geometric instability propagates upward into projection and reverse interpretation.
+
+## **11.6 Metadata Coherence Validation**
+
+Projection metadata must remain internally consistent and aligned with:
+
+- textual meaning signatures  
+- representative OuBB examples  
+- correlation structure  
+- geometric context  
+
+Validation checks:
+
+- tone ↔ modality coherence  
+- relational phrasing ↔ syntactic structure coherence  
+- shading ↔ narrative role coherence  
+
+Metadata incoherence often causes subtle drift before major failures appear.
+
+## **11.7 Correlation Structure Validation**
+
+Correlation structure must accurately reflect deterministic relationships between numeric fields and geometric/textual behavior.
+
+Validation checks:
+
+### **Numeric → geometry consistency**
+
+$$
+\text{numeric}(c) \rightarrow \text{geom}(c)
+$$
+
+must remain stable.
+
+### **Numeric → text consistency**
+
+Correlation must predict:
+
+- tone  
+- relational phrasing  
+- modality  
+- shading  
+
+### **Cross‑version consistency**
+
+Correlation weights must remain stable across manifold versions unless intentionally tuned.
+
+## **11.8 Full Validation Cycle**
+
+A complete validation cycle includes:
+
+1. **Forward–reverse consistency**  
+2. **Signature stability**  
+3. **Projection stability**  
+4. **Reverse interpretation stability**  
+5. **Geometric stability**  
+6. **Metadata coherence**  
+7. **Correlation structure stability**  
+8. **Gradient smoothness**  
+9. **Example alignment**  
+10. **Regression testing across basins and coordinates**
+
+Validation must pass **all** checks before projection is considered reliable.
+
+## **11.9 Summary**
+
+Validation procedures:
+
+- ensure cross‑layer fidelity  
+- detect drift and misalignment  
+- confirm determinism and stability  
+- preserve traceability  
+- protect dictionary integrity  
+- guarantee projection and reverse interpretation correctness  
+
+Validation is the **final correctness gate** of the Thought Simulator.
 
 ## 12. Validation Checklist
 
