@@ -40,6 +40,35 @@ The manifold is a **state-space constraint surface**. The projection operator Π
 - Output is deterministic OuBB / RG text that reflects the constraint-energy behavior of the current shape (e.g., convergent language near valleys, divergent near peaks).  
 - Intermediate projections are allowed for partial or debugging output.
 
+### 3.1 Position Fields vs. Projection Fields
+
+**Manifold position** is determined entirely by the numeric SSR‑derived fields defined in Paper 1. These include:
+
+- **Identity fields** — concept presence and intensity  
+- **Relational fields** — association strengths  
+- **Ambiguity fields** — degrees of uncertainty  
+- **Contextual fields** — situational modifiers  
+- **Structural fields** — hierarchical or compositional roles  
+- **Alignment / Anti‑alignment values** — coherence and conflict signals computed from the above fields
+
+These numeric fields determine the **coordinate** on the manifold’s constraint surface and drive shape behavior (valleys, peaks, saddles, ridges, channels) as described in Paper 3. They do **not** determine phrasing or textual coloration.
+
+**Projection**, by contrast, is determined by:
+
+- **Textual meaning signatures** stored in the dictionary  
+- **Local shape meaning** (Paper 3)  
+- **The current manifold coordinate**
+
+Meaning signatures encode how a region “speaks” when projected into OuBB/RG. They do **not** influence manifold position. Position fields determine *where the state is*; meaning signatures determine *how that location expresses itself*.
+
+The projection operator Π combines:
+
+1. the manifold coordinate (position fields),  
+2. the local shape meaning, and  
+3. the meaning signature (dictionary),
+
+to produce deterministic OuBB/RG output. This separation ensures stable geometry, interpretable projection, and fully traceable reverse interpretation.
+
 ## 4. Reverse Interpretation (OuBB / RG → Manifold)
 
 Full reverse pipeline:
