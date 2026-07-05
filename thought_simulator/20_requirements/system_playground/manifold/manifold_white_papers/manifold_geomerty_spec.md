@@ -28,6 +28,22 @@ The manifold $\mathcal{M}$ is a geometric structure built from numeric fields. I
 
 The geometry is fully deterministic and versioned. It turns numeric data into a map that engineers can see, drive, test, and refine.
 
+### 2.1 Manifold Geometry Construction & Routing Flow
+
+```mermaid
+flowchart TD
+    A[Numeric Fields] --> B[Surface Construction]
+    B --> C[Region Partitioning]
+    C --> D[Basin Formation]
+    D --> E[Transition Smoothing]
+    E --> F[Dictionary Coordinates]
+    F --> G[Deterministic Routing]
+    G --> H[Inspect & Tune]
+    H --> I{Geometry Quality OK?}
+    I -->|Yes| J[Frozen Manifold]
+    I -->|No| B
+```
+
 ## 3. Constructing Surfaces
 
 Numeric fields are clustered into surfaces based on similarity and relational coherence. A surface represents a semantically consistent region in the numeric space. Surface identity is determined by dominant field patterns. Boundaries are initially defined by distance or density thresholds.
