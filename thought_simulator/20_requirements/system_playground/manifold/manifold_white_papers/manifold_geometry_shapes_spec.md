@@ -46,7 +46,7 @@ This document specifies the shapes the pre-work engineer must instantiate when c
 ### 3.2 Peaks (Local Maxima – Repelling)
 - **Description**: Regions where states are repelled (high constraint energy).  
 - **Creation**: Arise from **strongly anti-aligned SSR field interactions** (semantic conflict → repulsion → high constraint energy).  
-- **Metrics**: Constraint-energy height, principal curvatures (\(\kappa_1, \kappa_2\)), Gaussian curvature \(K > 0\), Hessian eigenvalues, gradient norm.  
+- **Metrics**: Constraint-energy height, principal curvatures $(\kappa_1, \kappa_2)$, Gaussian curvature $K > 0$, Hessian eigenvalues, gradient norm.  
 - **Engineer Action**: Instantiate from anti-alignment patterns; measure rejection strength.
 
 ### 3.3 Valleys / Wells (Local Minima – Attracting)
