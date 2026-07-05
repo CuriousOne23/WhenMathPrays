@@ -57,8 +57,7 @@ $$
 (c, M_v, t_c) \longrightarrow \sigma_c
 $$
 
-where $\sigma_c$ is decomposed along the **Textual Output Dimensions** [dictionary_projection_spec.md](../manifold/manifold_white_papers
-/dictionary_projection_spec.md) glossary:
+where $\sigma_c$ is decomposed along the **Textual Output Dimensions** [dictionary_projection_spec.md](../manifold/manifold_white_papers/dictionary_projection_spec.md) glossary:
 
 - lexical emphasis  
 - syntactic structure  
