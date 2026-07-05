@@ -32,7 +32,7 @@ The manifold is **not a literal geometric model**. It is a constraint surface sh
 flowchart TD
     A[SSR Input] --> B[Paper 1 - SSR to Numeric]
     B --> C[Paper 2 - Manifold Geometry]
-    C --> D[Dictionary Construction]
+    C --> D[Paper 7 - Dictionary Construction]
     D --> E[Paper 5 - Projection Π]
     E --> F[Expressive Output]
     
