@@ -25,7 +25,7 @@ The dictionary is the semantic Rosetta Stone of the Thought Simulator (TS). It u
 
 This paper covers the final layer: how manifold geometry is mapped to deterministic textual meaning via the dictionary and projection operator $\Pi$. It also details reverse interpretation and debugging of meaning drift. It does not cover SSR numericalization [ssr_numericalization_guide.md](ssr_numericalization_guide.md)  or [manifold_geomerty_spec.md](manifold_geomerty_spec.md).
 
-### 1.1 Forward Projection & Reverse Interpretation Flow
+### 1.1 Forward Projection & Reverse Interpretation Flow (Runtime Behavior)
 
 ```mermaid
 flowchart TD
@@ -122,7 +122,7 @@ Engineers tune by adjusting:
 
 Tuning directly affects textual coherence, tone, and relational fidelity.
 
-## 10. Dictionary Construction Workflow
+## 10. Dictionary Construction Workflow (Pre-Work)
 
 ```mermaid
 flowchart TD
