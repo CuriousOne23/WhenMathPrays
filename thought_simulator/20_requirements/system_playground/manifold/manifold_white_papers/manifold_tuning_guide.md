@@ -8,7 +8,7 @@
 [prework_manifold_and_back.md](prework_manifold_and_back.md)  
 [ssr_numericalization_guide.md](ssr_numericalization_guide.md)  
 [manifold_geomerty_spec.md](manifold_geomerty_spec.md)  
-[dictionary_projection_spec.md](dictionary_projection_spec.md)  
+[dictionary_projection_spec.md & glossary](dictionary_projection_spec.md)  
 [manifold_creation_checklist.md](manifold_creation_checklist.md)  
 
 ## Purpose
