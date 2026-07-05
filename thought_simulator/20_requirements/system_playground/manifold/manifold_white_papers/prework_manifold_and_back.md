@@ -26,18 +26,19 @@ flowchart TD
     C --> D[Dictionary Construction]
     D --> E[Paper 3 - Projection Π]
     
-    subgraph Engineering
-        F[Creation Checklist] --> G[Tuning Guide]
-        G --> H[Validation]
+    E --> F[Expressive Output]
+    
+    subgraph Engineering Layer
+        G[Creation Checklist + Tuning Guide] 
     end
     
-    E --> I[Expressive Output]
-    I --> J[Reverse Interpretation]
-    
-    F & G & H --> B & C & D & E
+    F --> G
+    G --> B
+    G --> C
+    G --> D
 ```
 
-**Caption**: End-to-end TS process showing the three core layers and supporting documents.
+**Caption**: End-to-end TS process with feedback for iteration and tuning.
 
 ## 3. Why This Architecture Matters
 
