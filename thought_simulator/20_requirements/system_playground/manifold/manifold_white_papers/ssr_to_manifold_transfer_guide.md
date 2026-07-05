@@ -45,7 +45,7 @@ Extract the following field types from SSR:
 
 ## 4. Numeric Domain & Normalization
 
-- Use bounded, interpretable ranges (default [0.0, 1.0]).  
+- Use bounded, interpretable ranges (default [0.0000, 1.0000]).  
 - Apply min-max, z-score, or domain-specific normalization.  
 - Preserve monotonicity and semantic anchoring.  
 - Document expected alignment and correlation structure.
