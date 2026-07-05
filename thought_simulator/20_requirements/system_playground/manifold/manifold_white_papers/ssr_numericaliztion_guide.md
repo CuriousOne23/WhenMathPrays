@@ -16,6 +16,19 @@ SSR Numericalization is the first critical layer in the Thought Simulator (TS) a
 
 This paper focuses **only** on the symbolic → numeric transformation. It does not cover manifold geometry (Paper 2) or projection/dictionary mechanics (Paper 3). Proper numericalization ensures the manifold is traceable, stable, discriminable, and semantically meaningful.
 
+### 1.1 Overall Numericalization Pipeline
+
+```mermaid
+flowchart TD
+    A[SSR Input] --> B[Field Extraction]
+    B --> C[Normalization & Scaling]
+    C --> D[Correlation & Gradients]
+    D --> E[Validation Tests]
+    E --> F{Numeric Fields Ready?}
+    F -->|Yes| G[Numeric Field Vector]
+    F -->|No| B
+```
+
 ## 2. SSR Field Extraction
 
 Engineers extract the following field types deterministically from SSR:
