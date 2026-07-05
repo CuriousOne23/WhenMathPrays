@@ -12,6 +12,9 @@
 - [5. Manifold to OuBB / RG Projection & Reverse](./manifold_to_oubb_projection_reverse.md)  
 - **[6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)** (this document)  
 
+**Top level overview**  
+[prework_manifold_and_back.md](prework_manifold_and_back.md)
+
 **Canonical Glossary**: This document serves as the **canonical glossary** for the suite (or link to a dedicated glossary file once finalized). All terminology used across Papers 1–5 is defined here or cross-referenced.
 
 ---
@@ -83,6 +86,46 @@ The manifold is a **state-space constraint surface**. All steps must maintain st
 - After pre-work, snapshot the manifold + dictionary.  
 - Re-run full validation suite after any SSR changes or tuning.  
 - Use this checklist as the gate for releasing new manifolds.
+
+## 7. Glossary (Canonical)
+
+**constraint surface**  
+The manifold itself. A state-space structure shaped by SSR dynamics and OuBB interpretability requirements. Not a literal geometric model.
+
+**constraint-energy**  
+Metaphor for the strength of attraction or repulsion at a location on the manifold. Valleys = low constraint energy (attraction/coherence). Peaks = high constraint energy (repulsion/conflict).
+
+**aligned SSR fields**  
+Semantic coherence between fields → leads to valleys (attraction).
+
+**anti-aligned SSR fields**  
+Semantic conflict between fields → leads to peaks (repulsion).
+
+**projection operator Π**  
+Deterministic function that maps manifold coordinates + context to OuBB/RG text using the dictionary and meaning signatures.
+
+**dictionary (Rosetta Stone)**  
+Multi-layer mapping structure that unifies SSR, numeric fields, manifold geometry, and textual meaning. Enables full forward and reverse traceability.
+
+**meaning signature**  
+Structured representation of textual qualities (lexical emphasis, syntactic structure, relational phrasing, tone, etc.) used by Π.
+
+**meaning drift**  
+Unintended change in semantic interpretation across runs or steps. Detected and fixed via reverse interpretation.
+
+**fixed-time-step routing**  
+Deterministic movement of states through the manifold at regular intervals.
+
+**stability**  
+Consistency of numeric values, manifold structure, routing, and output under equivalent SSR inputs.
+
+**discriminability**  
+Ability of numeric vectors or manifold regions to separate distinct SSR concepts.
+
+**traceability**  
+Ability to map forward (SSR → OuBB) and backward (OuBB → SSR) with full fidelity.
+
+(Additional terms can be added here as the suite evolves.)
 
 ---
 
