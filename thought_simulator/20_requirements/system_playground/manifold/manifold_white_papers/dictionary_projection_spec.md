@@ -329,15 +329,202 @@ Textual meaning signatures:
 
 They are the **textual half** of the Semantic Rosetta Stone.
 
-## 6. Projection Operator Π
+# **6. Projection Operator Π**
 
-The deterministic projection operator $\Pi$ maps manifold geometry (via dictionary coordinates) to OuBB/RG text:
+The projection operator Π is the deterministic function that converts manifold geometry and dictionary metadata into coherent OuBB/RG text. Π ensures that textual output is stable, reproducible, and traceable back to SSR-origin meaning. Projection is governed by dictionary coordinates, geometric context, textual meaning signatures, correlation structure, and projection metadata. 
+
+## **6.1 Inputs to Π**
+
+Projection begins with a dictionary coordinate:
 
 $$
-\text{OuBB} = \Pi(\text{coordinate}, \text{context})
+c = (s_i, r_j)
 $$
 
-It uses meaning signatures, correlation data, and projection mapping tables. Interpolation and stability constraints ensure smooth, deterministic outputs. Ambiguity and relational strength are handled via dictionary metadata.
+where $s_i$ is the surface index and $r_j$ is the region index.  
+  [Current page](citation-section://1146966522/12)
+
+For each coordinate, Π consumes:
+
+- **Geometric context:** basin, curvature, attractor strength, transition boundaries.  
+- **Textual meaning signature** $\sigma_c$ (Section 5).  
+- **Correlation structure:** deterministic relationships between numeric fields and geometric influence.  
+- **Projection metadata:** phrasing tendencies, tone behavior, syntactic structure preferences, relational phrasing patterns, modality levels, narrative role expectations, shading influences.  
+- **Projection tables:** mapping rules for converting coordinate + metadata into text.  
+  [Current page](citation-section://1146966522/19)
+
+Formally:
+
+$$
+\text{OuBB} = \Pi(c,\, \text{geom}(c),\, \sigma_c,\, \text{corr}(c),\, \text{meta}(c))
+$$
+
+## **6.2 Core Projection Process**
+
+Π proceeds through four deterministic stages:
+
+### **1. Geometric Interpretation**
+Π interprets the coordinate’s geometric context:
+
+- basin depth → stability of phrasing  
+- basin attraction → strength of relational emphasis  
+- curvature → tone modulation  
+- transitions → syntactic shifts or modality changes  
+  [Current page](citation-section://1146966522/34)
+
+This produces a **geometric influence vector**:
+
+$$
+g_c = \text{geom}(c)
+$$
+
+### **2. Signature Alignment**
+Π aligns the geometric influence vector with the textual meaning signature:
+
+$$
+a_c = f(\sigma_c, g_c)
+$$
+
+This determines:
+
+- lexical emphasis  
+- syntactic structure  
+- relational phrasing  
+- tone and modality  
+- narrative role  
+- shading  
+  [Current page](citation-section://1146966522/51)
+
+### **3. Metadata Conditioning**
+Projection metadata refines the aligned signature:
+
+$$
+m_c = h(a_c,\, \text{meta}(c))
+$$
+
+Metadata ensures:
+
+- stable phrasing  
+- consistent tone  
+- basin‑appropriate relational structure  
+- deterministic modality  
+- correct narrative role  
+  [Current page](citation-section://1146966522/59)
+
+### **4. Text Realization**
+Finally, Π uses projection tables to convert $m_c$ into OuBB/RG text:
+
+$$
+\text{OuBB} = T(m_c)
+$$
+
+Projection tables define:
+
+- connective selection  
+- block/line formatting  
+- sequencing  
+- relational expression  
+- tone and modality realization  
+  [Current page](citation-section://1146966522/60)
+
+## **6.3 Interpolation and Stability Constraints**
+
+Projection must remain smooth across nearby coordinates. Π enforces:
+
+### **Geometric interpolation**
+Coordinates in the same basin must produce smoothly varying text:
+
+$$
+\Pi(c_i) \approx \Pi(c_j)
+\quad\text{for}\quad c_i \sim c_j
+$$
+
+### **Signature continuity**
+Textual meaning signatures must interpolate cleanly across semantic gradients:
+
+$$
+\sigma_{c_i} \rightarrow \sigma_{c_j}
+$$
+
+### **Spline smoothing**
+Cubic spline interpolation is used to eliminate discontinuities in phrasing or tone.  
+  [Current page](citation-section://1146966522/67)
+
+### **Deterministic routing**
+Fixed‑time‑step movement ensures reproducible projection behavior.  
+  [Current page](citation-section://1146966522/45)
+
+
+## **6.4 Handling Ambiguity and Relational Strength**
+
+Ambiguity fields and relational fields directly influence projection:
+
+- **Ambiguity fields** adjust modality and shading.  
+  High ambiguity → softer modality, hedged phrasing.  
+  Low ambiguity → assertive modality, crisp phrasing.  
+  [Current page](citation-section://1146966522/32)
+
+- **Relational fields** determine relational phrasing strength.  
+  Strong relational fields → explicit relational statements.  
+  Weak relational fields → implicit or backgrounded relations.  
+  [Current page](citation-section://1146966522/61)
+
+Π integrates these fields through correlation structure and projection metadata.
+
+## **6.5 Determinism and Reproducibility**
+
+Projection must be fully deterministic:
+
+$$
+\Pi_{\text{run1}}(c) = \Pi_{\text{run2}}(c)
+$$
+
+unless:
+
+- the manifold version changes,  
+- the dictionary entry changes, or  
+- projection metadata is updated.
+
+Determinism is validated through:
+
+- coordinate stability checks (Section 4.4)  
+- projection drift tests (Section 4.5)  
+- reverse interpretation consistency  
+  [Current page](citation-section://1146966522/26)
+
+## **6.6 Projection and Reverse Interpretation Coupling**
+
+Projection and reverse interpretation form a closed loop:
+
+$$
+c \xrightarrow{\Pi} t \xrightarrow{\Pi^{-1}} c
+$$
+
+Reverse interpretation must recover the original coordinate:
+
+$$
+\Pi^{-1}(\Pi(c)) \approx c
+$$
+
+This ensures:
+
+- traceability  
+- drift detection  
+- debugging of projection errors  
+  [Current page](citation-section://1146966522/22)
+
+## **6.7 Summary**
+
+The projection operator Π:
+
+- consumes dictionary coordinates, geometric context, signatures, correlation structure, and metadata  
+- produces deterministic, stable OuBB/RG text  
+- enforces continuity across basins and gradients  
+- handles ambiguity and relational strength through metadata  
+- supports full reverse interpretation  
+- is the final stage of the Semantic Rosetta Stone pipeline  
+
+Π is the **text‑realization engine** of TS.
 
 ## 7. Reverse Interpretation
 
