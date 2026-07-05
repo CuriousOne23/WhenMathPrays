@@ -216,16 +216,16 @@ These dimensions form a structured vector:
 
 $$
 \sigma_c = 
-\{
-\text{lexical},\,
-\text{syntactic},\,
-\text{relational},\,
-\text{tone},\,
-\text{modality},\,
-\text{narrative},\,
-\text{context},\,
+\\{
+\text{lexical},\ 
+\text{syntactic},\ 
+\text{relational},\ 
+\text{tone},\ 
+\text{modality},\ 
+\text{narrative},\ 
+\text{context},\ 
 \text{shading}
-\}
+\\}
 $$
 
 where each component is extracted from curated OuBB examples associated with coordinate $c$.
