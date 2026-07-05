@@ -364,6 +364,9 @@ The manifold itself; shaped by SSR dynamics and interpretability requirements.
 **constraint-energy**  
 Metaphor for attraction/repulsion strength at a location. Valleys = coherence; peaks = conflict.
 
+**geometric clustering**  
+Deterministic grouping of numeric-field vectors into coherent geometric regions (basins, ridges, transitions) during manifold construction. These clustered regions form the semantic topology from which meaning signatures are extracted and provide the coordinate neighborhoods used by Π and Π⁻¹.
+
 **aligned SSR fields**  
 Semantic coherence between fields → valleys (attraction).
 
