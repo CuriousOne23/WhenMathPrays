@@ -6,7 +6,7 @@
 **Repository**: CuriousOne23/WhenMathPrays  
 
 **Core Architecture Papers** (same directory):  
-[ssr_numericalization_guide.md](ssr_numericalization_guide.md) | [manifold_geometry_spec.md](manifold_geometry_spec.md) | [dictionary_projection_spec.md](dictionary_projection_spec.md)
+[ssr_numericalization_guide.md](ssr_numericalization_guide.md) | [manifold_geometry_spec.md](manifold_geometry_spec.md) | [dictionary_projection_spec.md & glossary](dictionary_projection_spec.md)
 
 **Companion Documents**:  
 [manifold_creation_checklist.md](manifold_creation_checklist.md) | [manifold_tuning_guide.md](manifold_tuning_guide.md)
