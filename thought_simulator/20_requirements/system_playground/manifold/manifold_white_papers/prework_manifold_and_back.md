@@ -21,28 +21,34 @@ The Thought Simulator (TS) separates pre-work (manifold construction) from runti
 
 [ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md)  
 [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)  
-[dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)
+[dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)  
+
 
 ```mermaid
 flowchart TD
-    A[SSR Input] --> B[Paper 1 - SSR Numericalization]
-    B --> C[Paper 2 - Manifold Geometry]
+    A[SSR Input] --> B[Paper 1: SSR Numericalization]
+    B --> C[Paper 2: Manifold Geometry]
     C --> D[Dictionary Construction]
-    D --> E[Paper 3 - Projection Π]
+    D --> E[Paper 3: Projection Π]
+    E --> F[Expressive Output\n(OuBB / RG)]
     
-    E --> F[Expressive Output]
-    
-    subgraph Engineering Layer
-        G[Creation Checklist + Tuning Guide] 
+    subgraph "Engineer Access & Control"
+        G[Inspection, Validation & Tuning]
     end
     
+    B --> G
+    C --> G
+    D --> G
+    E --> G
     F --> G
+    
     G --> B
     G --> C
     G --> D
+    G --> E
 ```
 
-**Caption**: End-to-end TS process with feedback for iteration and tuning.
+**Caption**: Full TS engineering flow. Engineers have direct access to inspect, validate, and tune any layer at any time.
 
 ## 3. Why This Architecture Matters
 
