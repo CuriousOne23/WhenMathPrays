@@ -19,6 +19,10 @@ The Thought Simulator (TS) separates pre-work (manifold construction) from runti
 
 ## 2. Overall TS Pipeline
 
+[ssr_numericalization_guide.md, paper 1](ssr_numericalization_guide.md)  
+[manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)  
+[dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)
+
 ```mermaid
 flowchart TD
     A[SSR Input] --> B[Paper 1 - SSR Numericalization]
