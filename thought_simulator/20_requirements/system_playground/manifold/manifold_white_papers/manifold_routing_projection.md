@@ -57,6 +57,8 @@ This document describes how states move and project **inside** the manifold duri
 - Intermediate projections help with debugging and partial output generation.  
 - All internal projections must respect the same SSR ↔ OuBB meaning preservation rules defined in Paper 5.
 
+Note: Although dictionary entries are indexed by discrete coordinates, the expressive behavior used during projection is region‑stable rather than point‑exact. Coordinates within the same region share the same qualitative expressive tendencies, and representative examples $t_c$ are selected to reflect this regional stability. This ensures smooth projection across semantic gradients and stable reverse interpretation.
+
 ## 5. Implementation Notes for Engineers
 
 - Implement routing as fixed-time-step updates on the numeric field vector, influenced by local constraint-energy gradients.  
