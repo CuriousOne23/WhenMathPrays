@@ -83,7 +83,7 @@ The modular, inspectable, and reusable nature of the TS pre-work architecture ma
 
 ## 6. Conclusion
 
-This 6-paper suite provides a complete, engineer-actionable foundation for building, understanding, and extending the TS manifold. The process is deterministic, traceable, and grounded in the TS ontology of a state-space constraint surface derived from SSR dynamics and OuBB interpretability.
+This 7-paper suite provides a complete, engineer-actionable foundation for building, understanding, and extending the TS manifold. The process is deterministic, traceable, and grounded in the TS ontology of a state-space constraint surface derived from SSR dynamics and OuBB interpretability.
 
 Future work will focus on validation at scale, richer expression, specialized domain manifolds, and continued refinement of the suite.
 
