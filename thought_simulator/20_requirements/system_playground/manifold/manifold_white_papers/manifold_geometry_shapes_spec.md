@@ -67,16 +67,15 @@ These features are instantiated using the same SSR-alignment logic as peaks and 
 
 ### 4.1 Continuity Requirements and Spline Smoothing
 
-The TS manifold must remain continuous and differentiable across all regions to
-support deterministic routing. If numeric-field interactions produce an abrupt
-junction or discontinuity (for example, a sharp gradient break between adjacent
-clusters), the engineer must apply cubic spline smoothing to restore continuity.
+The TS manifold must maintain **C² continuity** across all regions to support deterministic routing and stable constraint‑energy behavior. If numeric-field interactions produce an abrupt junction or discontinuity (for example, a sharp gradient break between adjacent clusters), the engineer must apply cubic spline smoothing to restore continuity.
+
+Importantly, spline smoothing also enables the engineer to introduce **artificial geometric shapes of arbitrary width** (such as rectangular plateaus, wide basins, or narrow ridges) into the manifold. These shapes may initially contain sharp edges or discontinuous curvature, but a cubic spline fit will smooth the transitions while preserving the intended semantic structure. This allows the manifold surface design to have custom perturbations while still meeting TS continuity requirements, giving the engineer maximum flexibility in meaning‑to‑expression transfer.
 
 Spline smoothing ensures:
 
-- $C^2$ continuity across the constraint surface
+- **C² continuity** across the constraint surface
 - stable routing behavior for Paper 5 (Working Inside the Manifold)
-- consistent constraint-energy gradients for shape interpretation
+- consistent constraint‑energy gradients for shape interpretation
 - predictable basin boundaries and transition behavior
 - deterministic projection behavior for Π
 
