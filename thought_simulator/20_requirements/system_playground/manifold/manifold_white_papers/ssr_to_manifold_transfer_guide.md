@@ -10,7 +10,10 @@
 - [3. Shapes Meanings — SSR, OuBB, and Mapping](./shapes_meanings_ssr_oubb_mapping.md)  
 - [4. Working Inside the Manifold — Routing & Projection](./manifold_routing_projection.md)  
 - [5. Manifold to OuBB / RG Projection & Reverse](./manifold_to_oubb_projection_reverse.md)  
-- [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)  
+- [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)
+
+**Top level overview**  
+[prework_manifold_and_back.md](prework_manifold_and_back.md)
 
 **Canonical Glossary**: See Paper 6 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
 
