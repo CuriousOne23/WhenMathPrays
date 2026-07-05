@@ -1,7 +1,7 @@
 # Dictionary and Projection Specification: The Semantic Rosetta Stone of TS
 
-**Version**: 0.1  
-**Date**: 2026-07-04  
+**Version**: 0.2  
+**Date**: 2026-07-05  
 **Companion to**: prework_manifold_and_back.md, ssr_numericalization_guide.md, and manifold_geometry_spec.md  
 **Repository**: CuriousOne23/WhenMathPrays  
 **Part of the 7-paper pre-work suite**:
@@ -142,145 +142,120 @@ Validate dictionary correctness, projection fidelity, reverse interpretation acc
 
 The dictionary is the unifying semantic Rosetta Stone of TS. It connects symbolic, numeric, geometric, and textual meaning into a single traceable structure. Together with the projection operator $\Pi$, it enables deterministic, debuggable, and engineerable meaning flow in both forward and reverse directions.
 
-## Glossary
+## Glossary (Paper 7 — Dictionary & Projection Specification)
 
-**ambiguity fields**  
-Fields representing uncertainty or multiple possible interpretations in SSR. Layer: SSR → numeric. Role: Allows the system to handle vague or context-dependent input without forcing false precision.
+### Core Dictionary & Projection Concepts
+**dictionary (Rosetta Stone)**  
+Multi-layer mapping unifying SSR, numeric fields, manifold geometry, and textual meaning. Enables deterministic projection and full reverse traceability.
 
-**attractor**  
-Region in the manifold with strong pull on routing paths. Layer: numeric → geometry. Role: Provides stability and predictable behavior in cognitive flows.
+**dictionary coordinate**  
+Stable identifier locating a point in the manifold. Used for projection, reverse interpretation, and debugging.
 
-**basin**  
-Area of attraction or stability in the manifold (object or relational). Layer: numeric → geometry. Role: Models persistence and dynamic associations.
-
-**basin attraction**  
-Strength with which a basin pulls nearby routing paths. Layer: geometry. Role: Influences deterministic movement through the latent space.
-
-**basin depth**  
-Measure of stability or strength within a basin. Layer: geometry. Role: Determines how strongly a state resists change.
-
-**basin misalignment**  
-When routing or projection behavior does not match expected basin influence. Layer: cross-layer. Role: Common source of meaning drift that engineers must debug.
-
-**continuity (C⁰, C¹, C²)**  
-Degree of smoothness between surfaces/regions (C⁰ = positional, C¹ = velocity, C² = acceleration). Layer: geometry. Role: Ensures stable, predictable routing.
-
-**coordinate misalignment**  
-Mismatch between expected and actual dictionary coordinate behavior. Layer: cross-layer. Role: Leads to projection or routing errors.
-
-**correlation structure**  
-Defined relationships between numeric fields and how they influence geometry. Layer: SSR → numeric / cross-layer. Role: Produces predictable manifold effects.
-
-**dictionary**  
-Multi-layer mapping that unifies SSR, numeric, geometric, and textual meaning. Layer: cross-layer. Role: The semantic Rosetta Stone enabling traceability and deterministic projection.
-
-**dictionary coordinate** (e.g., $(s_i, r_j))$   
-Stable identifier locating a point in the manifold geometry. Layer: cross-layer. Role: Provides discrete addressing for routing and debugging.
-
-**discriminability**  
-Ability of numeric values or regions to separate distinct concepts. Layer: SSR → numeric / geometry. Role: Prevents semantic collapse.
-
-**fidelity**  
-How faithfully meaning is preserved across layers. Layer: cross-layer. Role: Core quality metric for the entire architecture.
-
-**fixed-time-step movement**  
-Deterministic stepping through the manifold at regular intervals. Layer: geometry. Role: Ensures reproducible routing behavior.
-
-**geometric clustering**  
-Grouping of numeric fields into surfaces and regions. Layer: numeric → geometry. Role: Forms the core structure of the latent space.
-
-**geometric continuity**  
-Smoothness of transitions in the manifold geometry. Layer: geometry. Role: Supports stable routing.
-
-**geometric discriminability**  
-Separation of distinct geometric regions. Layer: geometry. Role: Maintains semantic clarity in the latent space.
-
-**geometric stability**  
-Consistency of manifold structure across runs. Layer: geometry. Role: Enables version control and regression testing.
-
-**identity fields**  
-Fields capturing core entity or concept presence. Layer: SSR → numeric. Role: Foundation for object persistence.
-
-**lexical emphasis**  
-Word choice and highlighting in textual output. Layer: geometry → text. Role: Conveys importance and tone.
-
-**manifold**  
-Explicit geometric latent space built from numeric fields. Layer: numeric → geometry. Role: Makes the latent space visible, navigable, and engineerable.
-
-**meaning drift**  
-Unintended change in semantic interpretation across runs or steps. Layer: cross-layer. Role: Primary issue engineers debug using reverse interpretation.
-
-**meaning reconstruction**  
-Reverse process of going from output text back to SSR meaning. Layer: geometry → text (reverse). Role: Enables full traceability and debugging.
-
-**modality**  
-Expression of certainty, possibility, or necessity in text. Layer: geometry → text. Role: Preserves nuance in output.
-
-**narrative role**  
-Function of a statement in the broader context (e.g., conclusion, explanation). Layer: geometry → text. Role: Supports coherent textual flow.
-
-**normalization**  
-Scaling raw values to a consistent numeric domain. Layer: SSR → numeric. Role: Ensures comparable and stable fields.
-
-**numeric field vector**  
-Vector of normalized values extracted from SSR. Layer: SSR → numeric. Role: Input substrate for manifold construction.
-
-**projection operator Π**  
-Deterministic function mapping manifold geometry (via dictionary) to OuBB/RG text. Layer: geometry → text. Role: Produces final output while preserving meaning.
-
-**projection table**  
-Mapping rules used by Π to convert coordinates and context into text. Layer: geometry → text. Role: Controls textual realization.
-
-**relational fields**  
-Fields capturing strength and type of associations. Layer: SSR → numeric. Role: Drives relational basins and dynamic behavior.
-
-**relational phrasing**  
-How relationships are expressed in text. Layer: geometry → text. Role: Preserves relational meaning in output.
-
-**reverse interpretation**  
-Full pipeline from text output back through dictionary, geometry, numeric fields, to SSR. Layer: cross-layer. Role: Critical for debugging and validation.
-
-**semantic gradients**  
-Smooth numeric changes reflecting semantic similarity. Layer: SSR → numeric. Role: Produces natural manifold transitions.
-
-**semantic shading**  
-Subtle coloring of meaning in text (e.g., positive/negative valence). Layer: geometry → text. Role: Adds expressive precision.
-
-**signature drift**  
-Change in textual meaning signatures over time or runs. Layer: geometry → text. Role: Source of output inconsistency.
-
-**spline smoothing**  
-Cubic spline interpolation used to smooth discontinuities. Layer: geometry. Role: Ensures stable transitions without losing semantic intent.
-
-**SSR (Symbolic-Semantic Representation)**  
-Structured symbolic input representing concepts, relations, and context. Layer: input. Role: Starting point for the entire TS pipeline.
-
-**stability**  
-Consistency of numeric values or geometry across equivalent inputs. Layer: SSR → numeric / geometry. Role: Enables reproducibility and testing.
-
-**structural fields**  
-Fields representing hierarchical or compositional relationships. Layer: SSR → numeric. Role: Captures organization of meaning.
-
-**surface**  
-Coherent area of related numeric structure in the manifold. Layer: numeric → geometry. Role: Primary unit of semantic organization.
-
-**syntactic structure**  
-Grammatical organization in generated text. Layer: geometry → text. Role: Ensures readable, natural output.
+**meaning signature**  
+Structured representation of textual qualities (lexical emphasis, syntactic structure, relational phrasing, tone, modality, shading, narrative role) stored in the dictionary.
 
 **textual meaning signature**  
-Stored representation of how a coordinate should be expressed in text. Layer: geometry → text. Role: Guides deterministic projection.
+The subset of meaning signatures specifically used by Π to generate OuBB/RG text.
+
+**projection operator Π**  
+Deterministic function mapping manifold coordinates + meaning signatures + shape meaning into OuBB/RG text.
+
+**projection table**  
+Mapping rules used by Π to convert coordinates and context into text. Controls phrasing, tone, and structural realization.
+
+**reverse interpretation**  
+Full pipeline from text → dictionary → manifold → numeric → SSR. Used for debugging, validation, and drift detection.
+
+**meaning reconstruction**  
+Reverse process of recovering intended SSR meaning from generated text using dictionary metadata.
+
+---
+
+### Textual Output Dimensions (Used by Π)
+**lexical emphasis**  
+Word choice and highlighting in textual output.
+
+**syntactic structure**  
+Grammatical organization in generated text.
+
+**relational phrasing**  
+How relationships are expressed in text.
 
 **tone**  
-Emotional or attitudinal coloring of text. Layer: geometry → text. Role: Preserves expressive intent.
+Emotional or attitudinal coloring of text.
 
+**modality**  
+Expression of certainty, possibility, or necessity.
+
+**narrative role**  
+Function of a statement in broader context (e.g., conclusion, explanation).
+
+**semantic shading**  
+Subtle coloring of meaning (e.g., positive/negative valence).
+
+---
+
+### Cross-Layer Stability, Drift & Traceability
 **traceability**  
-Ability to follow meaning from any layer back to original SSR. Layer: cross-layer. Role: Core requirement for engineering confidence and debugging.
+Ability to follow meaning forward (SSR → text) and backward (text → SSR).
 
-**transition**  
-Boundary or movement between surfaces/regions. Layer: geometry. Role: Connects different semantic areas smoothly.
+**fidelity**  
+How faithfully meaning is preserved across layers.
 
-**tuning**  
-Systematic adjustment of parameters to improve behavior. Layer: cross-layer. Role: Allows engineers to refine the system iteratively.
+**meaning drift**  
+Unintended change in semantic interpretation across runs or steps.
 
-**validation**  
-Process of confirming correctness and fidelity across layers. Layer: cross-layer. Role: Ensures the architecture meets engineering standards.
+**signature drift**  
+Change in textual meaning signatures over time or runs.
+
+**coordinate misalignment**  
+Mismatch between expected and actual dictionary coordinate behavior.
+
+**basin misalignment**  
+When projection or routing behavior does not match expected basin influence.
+
+**correlation structure**  
+Defined relationships between numeric fields and how they influence geometry and projection.
+
+**semantic gradients**  
+Smooth numeric changes reflecting semantic similarity.
+
+---
+
+### SSR → Numeric Fields (Stored in Dictionary Entries)
+**numeric field vector**  
+Vector of normalized values extracted from SSR.
+
+**identity fields**  
+Fields capturing core entity or concept presence.
+
+**relational fields**  
+Fields capturing strength and type of associations.
+
+**ambiguity fields**  
+Fields representing uncertainty or multiple interpretations.
+
+**structural fields**  
+Fields representing hierarchical or compositional relationships.
+
+**normalization**  
+Scaling raw values to a consistent numeric domain.
+
+---
+
+### Manifold Concepts (Because Dictionary Entries Store Coordinates)
+**manifold**  
+Explicit geometric latent space built from numeric fields.
+
+**constraint surface**  
+The manifold itself; shaped by SSR dynamics and interpretability requirements.
+
+**constraint-energy**  
+Metaphor for attraction/repulsion strength at a location. Valleys = coherence; peaks = conflict.
+
+**aligned SSR fields**  
+Semantic coherence between fields → valleys (attraction).
+
+**anti-aligned SSR fields**  
+Semantic conflict between fields → peaks (repulsion).
+
