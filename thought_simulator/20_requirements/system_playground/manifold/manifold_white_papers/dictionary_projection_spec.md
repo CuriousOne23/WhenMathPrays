@@ -65,8 +65,9 @@ The dictionary is frozen as part of every manifold snapshot.
 
 During pre-work:
 - Coordinates are assigned based on geometric clustering.
-- SSR-origin meaning, numeric vectors, and geometric context are recorded.
+- SSR-origin meaning, numeric vectors, and geometric context are recorded in the dictionary structure.
 - Textual meaning signatures are extracted from representative OuBB examples.
+    - To build the dictionary, look at actual OuBB text examples, then extract the textual qualities that define how meaning is expressed (see Textual Output Dimensions in the glossary below)
 - Correlations and projection metadata are computed and stored.
 - The entire dictionary is versioned with the manifold.
 
