@@ -88,6 +88,116 @@ Projection metadata records how these geometric influences map into textual outp
 
 Both correlation structure and projection metadata are stored inside each dictionary entry so Π and Π⁻¹ can rely on stable, interpretable links between numeric fields, geometry, and expression.
 
+# **4.3 Semantic Gradient Validation**
+
+Semantic gradients must remain smooth, monotonic, and geometrically consistent across the manifold. During pre‑work, each coordinate’s numeric field vector is checked to ensure that semantic similarity corresponds to predictable geometric proximity.
+
+**Gradient monotonicity**  
+Adjacent coordinates $c_i$ and $c_j$ must satisfy:
+
+$$
+\Delta \text{semantic}(c_i, c_j) \propto \Delta \text{numeric}(c_i, c_j)
+$$
+
+where proportionality is defined by basin curvature and field weighting.
+
+**Basin‑consistent transitions**  
+Movement within a basin must produce smooth changes in textual meaning signatures and projection behavior. Abrupt changes indicate drift or misalignment.
+
+**Cross‑basin checks**  
+Transitions across basin boundaries must reflect expected semantic shifts (e.g., contrastive phrasing, modality changes):
+
+$$
+c \in B_k \rightarrow c' \in B_{k+1}
+$$
+
+Expected changes include tone adjustments, relational phrasing shifts, or narrative role transitions.
+
+**Stability across versions**  
+Gradients are compared across manifold versions $M_v$ and $M_{v+1}$ to ensure updates do not introduce discontinuities.
+
+Semantic gradient validation ensures that meaning moves smoothly across the manifold and that projection $\Pi$ behaves predictably for all coordinates.
+
+---
+
+# **4.4 Coordinate Stability Checks**
+
+Each dictionary coordinate must exhibit stable geometric and textual behavior across runs. Stability checks ensure that coordinates remain aligned with their intended meaning, basin context, and projection metadata.
+
+**Geometric stability**  
+Coordinate $c$ must remain in its expected basin or region across manifold versions unless explicitly re‑clustered:
+
+$$
+c(M_v) \approx c(M_{v+1})
+$$
+
+**Projection stability**  
+Projection $\Pi(c)$ must produce text consistent with the coordinate’s meaning signature and representative OuBB examples. Deviations indicate projection drift or metadata misalignment.
+
+**Reverse interpretation stability**  
+Reverse interpretation must satisfy:
+
+$$
+\Pi^{-1}(\Pi(c)) \approx c
+$$
+
+within tolerance. If $\Pi^{-1}$ maps projected text to a different coordinate, the dictionary entry requires review.
+
+**Signature stability**  
+Textual meaning signatures $\sigma_c$ must remain consistent across runs. Signature drift signals changes in phrasing, tone, or relational structure that require investigation.
+
+Coordinate stability checks ensure that dictionary entries behave consistently and remain aligned with SSR-origin meaning and geometric context.
+
+---
+
+# **4.5 Projection Drift Tests**
+
+Projection drift occurs when $\Pi$ begins producing text that diverges from expected phrasing, tone, or structure for a coordinate. Drift tests ensure projection remains deterministic and aligned with dictionary metadata.
+
+**Example alignment**  
+Projection output must remain close to representative OuBB examples $t_c$:
+
+$$
+\Pi(c) \approx t_c
+$$
+
+within defined tolerance.
+
+**Metadata alignment**  
+Projection output must reflect the coordinate’s projection metadata:
+
+- lexical emphasis  
+- syntactic structure  
+- relational phrasing  
+- tone  
+- modality  
+- narrative role  
+- shading  
+
+**Gradient‑consistent phrasing**  
+Projection must change smoothly along semantic gradients. Abrupt shifts indicate drift.
+
+**Cross‑run consistency**  
+Projection must remain stable across runs:
+
+$$
+\Pi_{run1}(c) \approx \Pi_{run2}(c)
+$$
+
+unless metadata or manifold geometry changed.
+
+**Reverse interpretation check**  
+Drift is confirmed if:
+
+$$
+\Pi^{-1}(\Pi(c)) \not\approx c
+$$
+
+indicating that projection output no longer maps back to the correct coordinate.
+
+Projection drift tests ensure that $\Pi$ remains stable, predictable, and invertible across runs and manifold versions.
+
+
 ## 5. Textual Meaning Signatures
 
 Textual meaning signatures capture:
