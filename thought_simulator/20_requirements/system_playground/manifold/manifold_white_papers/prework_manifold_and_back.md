@@ -24,7 +24,14 @@ The Thought Simulator (TS) separates pre-work (manifold construction) from runti
 
 **Pre-work** converts symbolic SSR into a visible, navigable, deterministic **state-space constraint surface** (the manifold). Runtime then routes over this surface to produce expressive, traceable OuBB / RG outputs.
 
-The manifold is **not a literal geometric model**. It is a constraint surface shaped by SSR dynamics and OuBB interpretability requirements.
+The manifold is **not a literal geometric model**. It is a constraint surface shaped by SSR dynamics and OuBB interpretability requirements. 
+
+**TS Forward Pipeline: Manifold → Dictionary → Π**  
+**TS Reverse Pipeline (engineering only): Π⁻¹ → Dictionary → Manifold → Numeric → SSR**
+
+- In TS, the manifold tells you what the system means.  
+- The dictionary tells you how that meaning is expressed.  
+- Projection Π performs the expression.
 
 ## 2. Overall TS Pipeline
 
