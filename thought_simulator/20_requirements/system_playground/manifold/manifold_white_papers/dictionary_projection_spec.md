@@ -197,19 +197,137 @@ indicating that projection output no longer maps back to the correct coordinate.
 
 Projection drift tests ensure that $\Pi$ remains stable, predictable, and invertible across runs and manifold versions.
 
+# **5. Textual Meaning Signatures**
 
-## 5. Textual Meaning Signatures
+A **textual meaning signature** is the stored, multi‑dimensional representation of how a dictionary coordinate expresses meaning in text. It is derived from representative OuBB examples and decomposed along the Textual Output Dimensions. The signature provides the primary constraint for projection and reverse interpretation, ensuring deterministic phrasing, tone, relational structure, and shading.
 
 Textual meaning signatures capture:
-- Lexical emphasis and phrasing
-- Syntactic structure
-- Relational phrasing
-- Tone and modality
-- Narrative role
-- Contextual cues
-- Semantic shading
 
-These signatures guide the projection operator to produce coherent OuBB/RG text.
+- **Lexical emphasis and phrasing**  
+- **Syntactic structure**  
+- **Relational phrasing**  
+- **Tone and modality**  
+- **Narrative role**  
+- **Contextual cues**  
+- **Semantic shading**  
+    [Current page](citation-section://1146966522/18)
+
+These dimensions form a structured vector:
+
+$$
+\sigma_c = 
+\{
+\text{lexical},\,
+\text{syntactic},\,
+\text{relational},\,
+\text{tone},\,
+\text{modality},\,
+\text{narrative},\,
+\text{context},\,
+\text{shading}
+\}
+$$
+
+where each component is extracted from curated OuBB examples associated with coordinate $c$.
+
+---
+
+### **5.1 Extraction**
+
+For each dictionary coordinate $c$:
+
+1. Representative OuBB examples $t_c$ are selected.  
+2. Each example is decomposed along the Textual Output Dimensions.  
+3. The resulting components are normalized and combined into the signature $\sigma_c$.  
+4. The signature is stored inside the dictionary entry for $c$.
+
+Formally:
+
+$$
+t_c \longrightarrow \sigma_c
+$$
+
+Extraction ensures that the signature reflects **canonical**, **stable**, and **semantically aligned** textual behavior.
+
+---
+
+### **5.2 Role in Projection**
+
+During projection, the operator $\Pi$ uses the textual meaning signature as the primary constraint on output behavior:
+
+$$
+\text{OuBB} = \Pi(c,\, \sigma_c,\, \text{geom}(c),\, \text{metadata}(c))
+$$
+
+The signature determines:
+
+- phrasing tendencies  
+- tone and modality  
+- relational expression  
+- syntactic structure  
+- shading and nuance  
+
+Projection metadata and correlation structure refine these tendencies, but the signature provides the **semantic anchor** for deterministic text generation.
+
+---
+
+### **5.3 Role in Reverse Interpretation**
+
+Reverse interpretation uses the signature to map text back to the correct coordinate:
+
+$$
+\Pi^{-1}(t) \longrightarrow c
+$$
+
+The signature ensures:
+
+- discriminability between coordinates  
+- stability across runs  
+- resistance to meaning drift  
+- correct reconstruction of SSR-origin meaning  
+
+If $\Pi^{-1}(t)$ fails to recover $c$, signature drift or coordinate misalignment is suspected.
+
+---
+
+### **5.4 Stability Requirements**
+
+A textual meaning signature must remain stable across:
+
+- manifold versions  
+- projection runs  
+- tuning cycles  
+- dictionary updates  
+
+Stability is validated through:
+
+- semantic gradient checks (Section 4.3)  
+- coordinate stability checks (Section 4.4)  
+- projection drift tests (Section 4.5)
+
+A signature is considered stable when:
+
+$$
+\Pi(c) \approx t_c
+\quad\text{and}\quad
+\Pi^{-1}(t_c) \approx c
+$$
+
+within defined tolerances.
+
+---
+
+### **5.5 Summary**
+
+Textual meaning signatures:
+
+- encode how meaning *should* be expressed  
+- anchor projection and reverse interpretation  
+- ensure deterministic, debuggable textual behavior  
+- unify semantic, geometric, and numeric layers  
+- provide the core expressive metadata for each dictionary coordinate
+
+They are the **textual half** of the Semantic Rosetta Stone.
 
 ## 6. Projection Operator Π
 
