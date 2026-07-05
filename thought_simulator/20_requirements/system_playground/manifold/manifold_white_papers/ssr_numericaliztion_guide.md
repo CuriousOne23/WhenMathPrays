@@ -14,7 +14,7 @@
 
 SSR Numericalization is the first critical layer in the Thought Simulator (TS) architecture. It converts symbolic-semantic representations (SSR) — concepts, relations, context, attributes — into stable, deterministic numeric fields that serve as the substrate for manifold construction.
 
-This paper focuses **only** on the symbolic → numeric transformation. It does not cover manifold geometry (Paper 2) or projection/dictionary mechanics (Paper 3). Proper numericalization ensures the manifold is traceable, stable, discriminable, and semantically meaningful.
+This paper focuses **only** on the symbolic → numeric transformation. It does not cover [manifold_geomerty_spec.md](manifold_geomerty_spec.md)  or [dictionary_projection_spec.md](dictionary_projection_spec.md). Proper numericalization ensures the manifold is traceable, stable, discriminable, and semantically meaningful.
 
 ### 1.1 Overall Numericalization Pipeline
 
