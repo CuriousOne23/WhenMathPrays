@@ -15,7 +15,7 @@
 
 The dictionary is the semantic Rosetta Stone of the Thought Simulator (TS). It unifies SSR meaning, numeric fields, manifold geometry, and textual output (OuBB/RG). 
 
-This paper covers the final layer: how manifold geometry is mapped to deterministic textual meaning via the dictionary and projection operator $\Pi$. It also details reverse interpretation and debugging of meaning drift. It does not cover SSR numericalization [ssr_numericaliztion_guide.md](ssr_numericaliztion_guide.md)  or [manifold_geomerty_spec.md](manifold_geomerty_spec.md).
+This paper covers the final layer: how manifold geometry is mapped to deterministic textual meaning via the dictionary and projection operator $\Pi$. It also details reverse interpretation and debugging of meaning drift. It does not cover SSR numericalization [ssr_numericalization_guide.md](ssr_numericalization_guide.md)  or [manifold_geomerty_spec.md](manifold_geomerty_spec.md).
 
 ### 1.1 Forward Projection & Reverse Interpretation Flow
 
