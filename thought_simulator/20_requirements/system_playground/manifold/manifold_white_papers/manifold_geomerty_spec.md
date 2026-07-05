@@ -5,7 +5,8 @@
 **Companion to**: prework_manifold_and_back.md and ssr_numericalization_guide.md  
 **Repository**: CuriousOne23/WhenMathPrays  
 **Associated Papers**:  
-[ssr_numericaliztion_guide.md](ssr_numericaliztion_guide.md)  
+[prework_manifold_and_back.md](prework_manifold_and_back.md)  
+[ssr_numericalization_guide.md](ssr_numericalization_guide.md)  
 [dictionary_projection_spec.md](dictionary_projection_spec.md)  
 [manifold_tuning_guide.md](manifold_tuning_guide.md)  
 [manifold_creation_checklist.md](manifold_creation_checklist.md)  
