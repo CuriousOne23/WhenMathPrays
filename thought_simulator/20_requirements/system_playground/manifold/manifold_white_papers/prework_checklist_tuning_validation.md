@@ -41,6 +41,16 @@ The manifold is a **state-space constraint surface**. All steps must maintain st
 - Ensure shapes follow SSR-alignment logic (aligned → valleys, anti-aligned → peaks).  
 - Validate stability under small SSR perturbations.
 
+### System Layer Overview (Summary Table)
+
+| Layer | What it uses | What it determines |
+| --- | --- | --- |
+| **Manifold Position** | Identity, relational, ambiguity, contextual, structural fields; alignment/anti‑alignment | Where the state sits on the constraint surface |
+| **Manifold Shape** | Alignment patterns | Peaks, valleys, saddles, ridges, channels |
+| **Routing** | Constraint‑energy gradients | How the state moves |
+| **Projection (Π)** | Meaning signatures + shape meaning + coordinate | What text is produced |
+| **Reverse Interpretation** | Meaning signatures → coordinate → numeric → SSR | Full traceability |
+
 ### Phase 3: Shapes & Meanings (Papers 2–3)
 - Confirm each shape’s constraint-energy behavior matches Paper 3 meanings.  
 - Verify shapes expose interpretable structure for Π.
