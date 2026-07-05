@@ -33,6 +33,8 @@ The manifold is a **state-space constraint surface**. Numeric fields must preser
 - Reverse mapping from numeric fields back to SSR must be accurate.  
 - All steps must be version-controlled and reproducible.
 
+Note: These numeric fields determine manifold position (Paper 2). Projection behavior is governed by meaning signatures defined in Paper 5.
+
 ## 3. SSR Field Extraction
 
 Extract the following field types from SSR:
