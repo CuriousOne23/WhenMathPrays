@@ -122,23 +122,134 @@ Engineers tune by adjusting:
 
 Tuning directly affects textual coherence, tone, and relational fidelity.
 
-## 10. Validation Procedures
+## 10. Dictionary Construction Workflow
+
+```mermaid
+flowchart TD
+    A[SSR Input] --> B[Extract Numeric Fields - Paper 1]
+    B --> C[Compute Manifold Coordinate - Paper 2]
+    C --> D[Derive Meaning Signature - Paper 7]
+    D --> E[Attach Projection Metadata - Paper 7]
+    E --> F[Attach Reverse Metadata - Paper 7]
+    F --> G[Validate Entry - Paper 6]
+    G --> H[Version and Add to Dictionary - Paper 7]
+
+    subgraph Engineer Actions
+        B
+        C
+        D
+        E
+        F
+        G
+        H
+    end
+```
+
+## 11. Validation Procedures
 
 Validate dictionary correctness, projection fidelity, reverse interpretation accuracy, meaning stability, discriminability, and traceability.
 
-## 11. Validation Checklist
+## 12. Validation Checklist
 
-- [ ] Dictionary entries fully link all layers
-- [ ] Projection produces deterministic, semantically faithful outputs
-- [ ] Reverse interpretation reconstructs original SSR meaning
-- [ ] Meaning signatures accurately guide textual generation
+### Layer Linking & Structural Integrity
+- [ ] Dictionary entry links SSR → numeric → manifold → meaning signature → projection metadata → text
+- [ ] Coordinate (sᵢ, rⱼ) is stable across runs and matches expected geometric behavior
+- [ ] Numeric field vector is normalized and consistent with SSR definitions
+
+### Meaning Signature Validation
+- [ ] Lexical emphasis, syntactic structure, relational phrasing, tone, modality, and shading are stable across runs
+- [ ] Meaning signature accurately reflects the semantic intent of the coordinate
+- [ ] No signature drift across runs or tuning cycles
+
+### Projection Fidelity
+- [ ] Projection Π produces deterministic, semantically faithful text
+- [ ] Projection table rules match meaning signature and coordinate behavior
+- [ ] No unintended phrasing, tone, or structural artifacts
+
+### Reverse Interpretation Fidelity
+- [ ] Π⁻¹ reconstructs original SSR meaning with high fidelity
+- [ ] Reverse interpretation correctly resolves ambiguity fields
+- [ ] No coordinate misalignment or basin misalignment detected
+
+### Discriminability & Drift
+- [ ] Entry is discriminable from neighboring coordinates (no semantic collapse)
 - [ ] No unintended drift across runs
+- [ ] Correlation structure remains consistent with manifold geometry
 
-## 12. Examples
+### Versioning & Documentation
+- [ ] Entry is versioned with change history
+- [ ] Tuning notes and validation results are recorded
 
-(Examples of coordinate-to-text projection, reverse interpretation, meaning drift debugging, and tuning corrections would go here in a full expansion.)
 
-## 13. Conclusion
+## 13. Examples
+
+### Example 1 — Coordinate → Text Projection
+**Coordinate:** (s₁, r₃)  
+**Meaning Signature:**  
+- lexical emphasis: “strong preference”  
+- syntactic structure: declarative  
+- relational phrasing: “is associated with”  
+- tone: neutral  
+- modality: high certainty  
+
+**Projection Table Rule:**  
+If (s₁, r₃) and modality=high → use “clearly” in phrasing.
+
+**Output (Π):**  
+“Entity A is clearly associated with Entity B.”
+
+---
+
+### Example 2 — Reverse Interpretation (Π⁻¹)
+**Text:**  
+“Entity A is clearly associated with Entity B.”
+
+**Recovered:**  
+- SSR identity fields: A, B  
+- relational field: association(strong)  
+- modality: high  
+- tone: neutral  
+- coordinate: (s₁, r₃)  
+- meaning signature: matches stored signature  
+
+Reverse interpretation confirms fidelity.
+
+---
+
+### Example 3 — Meaning Drift Debugging
+**Symptom:**  
+Projection output changed from  
+“Entity A is clearly associated with Entity B.”  
+to  
+“Entity A might be associated with Entity B.”
+
+**Diagnosis:**  
+- modality signature drifted from “high” to “uncertain”  
+- coordinate (s₁, r₃) unchanged → drift is in meaning signature  
+- projection table applied correct rule for new signature  
+
+**Fix:**  
+Restore modality signature to “high certainty.”
+
+---
+
+### Example 4 — Tuning Correction
+**Issue:**  
+Output text is overly formal:  
+“Entity A demonstrates a significant relational alignment with Entity B.”
+
+**Cause:**  
+- syntactic structure signature set to “academic”  
+- tone signature set to “formal”  
+
+**Correction:**  
+Change syntactic structure → “plain declarative”  
+Change tone → “neutral”
+
+**New Output:**  
+“Entity A is clearly associated with Entity B.”
+
+## 14. Conclusion
 
 The dictionary is the unifying semantic Rosetta Stone of TS. It connects symbolic, numeric, geometric, and textual meaning into a single traceable structure. Together with the projection operator $\Pi$, it enables deterministic, debuggable, and engineerable meaning flow in both forward and reverse directions.
 
