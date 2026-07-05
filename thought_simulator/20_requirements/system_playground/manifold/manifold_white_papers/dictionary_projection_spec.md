@@ -73,6 +73,7 @@ During pre-work:
     - To build the dictionary, look at actual OuBB text examples, then extract the textual qualities that define how meaning is expressed (see Textual Output Dimensions in the glossary below).
 - Correlations and projection metadata are computed and stored.  
     - For correlation, see *correlation structure* in the glossary below.
+    - For projection metadata, see in the glossary below.
 - The entire dictionary is versioned with the manifold.
 
 #### **4.2 Notes on Correlation Structure and Projection Metadata**
