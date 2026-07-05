@@ -14,7 +14,7 @@
 
 This paper specifies the second conceptual layer of the Thought Simulator (TS): how numeric fields (produced by SSR numericalization) are transformed into explicit manifold geometry — surfaces, regions, basins, and transitions. 
 
-This geometry is deterministic, inspectable, version-controlled, and forms the navigable latent space over which TS routing operates. This paper does **not** cover SSR numericalization (Paper 1) or dictionary/projection mechanics (Paper 3).
+This geometry is deterministic, inspectable, version-controlled, and forms the navigable latent space over which TS routing operates. This paper does **not** cover [ssr_numericaliztion_guide.md](ssr_numericaliztion_guide.md) or [dictionary_projection_spec.md](dictionary_projection_spec.md).
 
 ## 2. Manifold Overview
 
