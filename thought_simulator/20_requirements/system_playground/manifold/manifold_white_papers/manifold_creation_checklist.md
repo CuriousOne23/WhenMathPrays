@@ -10,6 +10,10 @@
 [dictionary_projection_spec.md](dictionary_projection_spec.md)  
 [manifold_tuning_guide.md](manifold_tuning_guide.md)  
 
+## Hardware Requirements
+
+Pre-work is designed to run efficiently on standard CPU hardware (no GPU or HBM required). A modern multi-core CPU with 16–64 GB RAM is typically sufficient. GPUs provide only marginal benefit except for extremely large-scale manifolds.
+
 Use this checklist during pre-work to produce a high-quality TS manifold. Follow links for detailed guidance.
 
 ## 1. Preparation
