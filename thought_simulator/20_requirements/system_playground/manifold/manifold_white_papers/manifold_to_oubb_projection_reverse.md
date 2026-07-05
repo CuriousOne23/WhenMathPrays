@@ -16,7 +16,7 @@
 **Top level overview**  
 [prework_manifold_and_back.md](prework_manifold_and_back.md)  
 
-**Canonical Glossary**: See Paper 6 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
+**Canonical Glossary**: See Paper 7 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
 
 ---
 
