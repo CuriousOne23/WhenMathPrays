@@ -23,17 +23,16 @@ The Thought Simulator (TS) separates pre-work (manifold construction) from runti
 [manifold_geometry_spec.md, paper 2](manifold_geometry_spec.md)  
 [dictionary_projection_spec.md, paper 3](dictionary_projection_spec.md)  
 
-
 ```mermaid
 flowchart TD
-    A[SSR Input] --> B[Paper 1: SSR Numericalization]
-    B --> C[Paper 2: Manifold Geometry]
+    A[SSR Input] --> B[Paper 1 - SSR Numericalization]
+    B --> C[Paper 2 - Manifold Geometry]
     C --> D[Dictionary Construction]
-    D --> E[Paper 3: Projection Π]
-    E --> F[Expressive Output\n(OuBB / RG)]
+    D --> E[Paper 3 - Projection Π]
+    E --> F[Expressive Output]
     
-    subgraph "Engineer Access & Control"
-        G[Inspection, Validation & Tuning]
+    subgraph Engineer Access
+        G[Inspection Validation Tuning]
     end
     
     B --> G
