@@ -356,7 +356,7 @@ For each coordinate, Π consumes:
 Formally:
 
 $$
-\text{OuBB} = \Pi(c,\, \text{geom}(c),\, \sigma_c,\, \text{corr}(c),\, \text{meta}(c))
+\text{OuBB} = \Pi(c,\  \text{geom}(c),\  \sigma_c,\  \text{corr}(c),\  \text{meta}(c))
 $$
 
 ## **6.2 Core Projection Process**
@@ -399,7 +399,7 @@ This determines:
 Projection metadata refines the aligned signature:
 
 $$
-m_c = h(a_c,\, \text{meta}(c))
+m_c = h(a_c,\  \text{meta}(c))
 $$
 
 Metadata ensures:
@@ -590,7 +590,7 @@ $$
 Π⁻¹ compares $\phi(t)$ against all textual meaning signatures $\sigma_c$ in the dictionary:
 
 $$
-c^\* = \arg\min_{c} \, d(\phi(t), \sigma_c)
+c^\* = \arg\min_{c} \  d(\phi(t), \sigma_c)
 $$
 
 where $d$ is a discriminability‑preserving distance metric.
