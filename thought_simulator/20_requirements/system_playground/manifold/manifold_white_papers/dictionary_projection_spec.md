@@ -256,7 +256,7 @@ Extraction ensures that the signature reflects **canonical**, **stable**, and **
 During projection, the operator $\Pi$ uses the textual meaning signature as the primary constraint on output behavior:
 
 $$
-\text{OuBB} = \Pi(c,\, \sigma_c,\, \text{geom}(c),\, \text{metadata}(c))
+\text{OuBB} = \Pi(c,\  \sigma_c,\  \text{geom}(c),\  \text{metadata}(c))
 $$
 
 The signature determines:
