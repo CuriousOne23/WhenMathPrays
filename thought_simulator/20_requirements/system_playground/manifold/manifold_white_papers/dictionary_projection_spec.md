@@ -122,7 +122,7 @@ Engineers tune by adjusting:
 
 Tuning directly affects textual coherence, tone, and relational fidelity.
 
-## 10. Dictionary Construction Workflow (Pre-Work)
+## 10. Dictionary Construction Workflow (Pre-Work/Construction)
 
 ```mermaid
 flowchart TD
