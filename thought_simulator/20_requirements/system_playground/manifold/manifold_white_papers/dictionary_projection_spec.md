@@ -526,23 +526,393 @@ The projection operator Π:
 
 Π is the **text‑realization engine** of TS.
 
-## 7. Reverse Interpretation
+# **7. Reverse Interpretation Operator Π⁻¹**
 
-The full reverse pipeline is:
-- OuBB text → dictionary lookup (via meaning signatures)
-- Dictionary coordinate → manifold geometry
-- Geometry → numeric fields
-- Numeric fields → SSR meaning
+Reverse interpretation is the deterministic process of mapping OuBB/RG text back to its originating dictionary coordinate, manifold geometry, numeric fields, and SSR meaning. Π⁻¹ ensures full traceability across layers, supports debugging of meaning drift, and validates projection fidelity. It is the inverse of the projection operator Π (Section 6), forming a closed semantic loop.
 
-This enables full traceability from output back to input semantics.
+The original Section 7 describes the pipeline briefly   [Current page](citation-section://1146966522/22).  
+This rewrite expands it into a complete specification.
 
-## 8. Debugging Projection Meaning
+---
 
-Structured workflow for debugging meaning drift:
-- Compare expected vs. actual textual output
-- Trace active coordinates and meaning signatures
-- Check for basin misalignment, projection table errors, or signature drift
-- Validate against ground-truth SSR examples
+## **7.1 Inputs to Π⁻¹**
+
+Reverse interpretation begins with an OuBB/RG text instance:
+
+$$
+t = \text{OuBB/RG output}
+$$
+
+Π⁻¹ consumes:
+
+- **Textual features** extracted from $t$  
+- **Textual meaning signature space** (Section 5)  
+- **Projection metadata**  
+- **Correlation structure**  
+- **Dictionary coordinate index**  
+- **Manifold geometry snapshot**  
+- **SSR field reconstruction rules**
+
+Formally:
+
+$$
+c = \Pi^{-1}(t)
+$$
+
+where $c$ is the recovered dictionary coordinate.
+
+---
+
+## **7.2 Reverse Interpretation Pipeline**
+
+Reverse interpretation proceeds through five deterministic stages:
+
+### **1. Text Feature Extraction**
+
+Π⁻¹ extracts structured features from the text:
+
+- lexical emphasis  
+- syntactic structure  
+- relational phrasing  
+- tone and modality  
+- narrative role  
+- contextual cues  
+- semantic shading  
+
+This produces a **text feature vector**:
+
+$$
+\phi(t)
+$$
+
+### **2. Signature Matching**
+
+Π⁻¹ compares $\phi(t)$ against all textual meaning signatures $\sigma_c$ in the dictionary:
+
+$$
+c^\* = \arg\min_{c} \, d(\phi(t), \sigma_c)
+$$
+
+where $d$ is a discriminability‑preserving distance metric.
+
+This step identifies the coordinate whose signature best matches the observed text.
+
+### **3. Metadata Consistency Check**
+
+Projection metadata for $c^\*$ is used to verify that the text’s phrasing, tone, and relational structure are consistent with expected behavior:
+
+$$
+\text{consistent}(t, \text{meta}(c^\*))
+$$
+
+If inconsistent, Π⁻¹ flags:
+
+- signature drift  
+- projection drift  
+- coordinate misalignment  
+- basin misalignment  
+
+### **4. Geometric Reconstruction**
+
+Once the coordinate is identified, Π⁻¹ retrieves its geometric context:
+
+$$
+\text{geom}(c^\*) = ( \text{surface}, \text{region}, \text{basin}, \text{curvature} )
+$$
+
+Geometric reconstruction ensures that the recovered meaning aligns with manifold structure.
+
+### **5. Numeric Field Recovery and SSR Meaning Reconstruction**
+
+Finally, Π⁻¹ recovers the numeric field vector and reconstructs SSR meaning:
+
+$$
+\text{SSR}(t) = \text{SSR}(\text{numeric}(c^\*))
+$$
+
+This completes the reverse pipeline:
+
+$$
+t \rightarrow c^\* \rightarrow \text{geom}(c^\*) \rightarrow \text{numeric}(c^\*) \rightarrow \text{SSR meaning}
+$$
+
+---
+
+## **7.3 Determinism and Stability Requirements**
+
+Reverse interpretation must satisfy:
+
+### **Forward–Reverse Consistency**
+
+$$
+\Pi^{-1}(\Pi(c)) \approx c
+$$
+
+### **Cross‑run Stability**
+
+$$
+\Pi^{-1}_{\text{run1}}(t) \approx \Pi^{-1}_{\text{run2}}(t)
+$$
+
+### **Signature Stability**
+
+If $\Pi^{-1}(t)$ begins mapping to a different coordinate, this signals:
+
+- signature drift  
+- projection drift  
+- correlation structure changes  
+- basin misalignment  
+
+### **Discriminability**
+
+Coordinates must remain separable:
+
+$$
+d(\sigma_{c_i}, \sigma_{c_j}) > \epsilon
+\quad\text{for distinct meanings}
+$$
+
+---
+
+## **7.4 Role in Debugging and Validation**
+
+Reverse interpretation is central to debugging meaning drift (Section 8 at   [Current page](citation-section://1146966522/23)):
+
+- **Detect drift:**  
+  If $\Pi^{-1}(t)$ returns a coordinate different from the one used in projection, drift has occurred.
+
+- **Validate projection:**  
+  Reverse interpretation confirms that Π produced text aligned with dictionary metadata.
+
+- **Traceability:**  
+  Engineers can trace any output back to its SSR origin.
+
+- **Coordinate health:**  
+  Misalignment indicates issues in:  
+  - signature extraction  
+  - projection metadata  
+  - correlation structure  
+  - geometric clustering  
+  - basin definitions  
+
+---
+
+## **7.5 Summary**
+
+The reverse interpretation operator Π⁻¹:
+
+- maps text back to dictionary coordinates  
+- reconstructs geometric and numeric meaning  
+- validates projection fidelity  
+- detects drift and misalignment  
+- ensures full traceability across TS layers  
+
+Together, Π and Π⁻¹ form the **bidirectional semantic engine** of the Thought Simulator.
+
+# **8. Debugging Projection Meaning**
+
+Debugging projection meaning is the process of verifying that the projection operator $\Pi$ and reverse interpretation operator $\Pi^{-1}$ preserve SSR-origin meaning across all layers of the Thought Simulator. This section defines the procedures, checks, and diagnostics used to detect drift, misalignment, instability, and metadata inconsistencies. Debugging ensures full traceability from SSR → numeric → geometry → text and back.
+
+## **8.1 Purpose of Debugging**
+
+Debugging projection meaning ensures:
+
+- **Meaning fidelity:**  
+  $\Pi(c)$ must express the intended SSR meaning stored in the dictionary entry for $c$.
+
+- **Invertibility:**  
+  $\Pi^{-1}(\Pi(c)) \approx c$ must hold within tolerance.
+
+- **Stability:**  
+  Projection must remain consistent across runs, tuning cycles, and manifold versions.
+
+- **Traceability:**  
+  Engineers must be able to follow any output back to its SSR origin.
+
+- **Drift detection:**  
+  Changes in signatures, metadata, or geometry must be identified early.
+
+Debugging is a cross-layer requirement and is essential for engineering confidence.
+
+## **8.2 Forward–Reverse Consistency Check**
+
+The primary debugging test is the forward–reverse consistency loop:
+
+$$
+c \xrightarrow{\Pi} t \xrightarrow{\Pi^{-1}} c'
+$$
+
+Debugging verifies:
+
+$$
+c' \approx c
+$$
+
+If $c' \neq c$ beyond tolerance, one or more of the following has occurred:
+
+- signature drift  
+- projection drift  
+- correlation structure changes  
+- metadata misalignment  
+- geometric instability  
+- basin misalignment  
+
+This test is the foundation of projection debugging.
+
+## **8.3 Signature Drift Detection**
+
+Signature drift occurs when textual meaning signatures $\sigma_c$ change unexpectedly across runs or versions.
+
+Debugging checks:
+
+- **Cross-run signature stability:**  
+  $\sigma_{c,\text{run1}} \approx \sigma_{c,\text{run2}}$
+
+- **Cross-version stability:**  
+  $\sigma_{c,M_v} \approx \sigma_{c,M_{v+1}}$
+
+- **Example alignment:**  
+  $\Pi(c)$ must remain close to representative OuBB examples $t_c$.
+
+If drift is detected, engineers inspect:
+
+- representative examples  
+- signature extraction  
+- projection metadata  
+- correlation structure  
+- geometric clustering  
+
+Signature drift is one of the earliest indicators of system instability.
+
+
+## **8.4 Projection Drift Detection**
+
+Projection drift occurs when $\Pi(c)$ begins producing text that diverges from expected phrasing, tone, or relational structure.
+
+Debugging checks:
+
+- **Example alignment:**  
+$$
+  \Pi(c) \approx t_c
+$$
+
+- **Metadata alignment:**  
+  Output must reflect projection metadata (tone, modality, relational phrasing, shading).
+
+- **Gradient consistency:**  
+  Projection must vary smoothly along semantic gradients.
+
+- **Cross-run consistency:**  
+$$
+  \Pi_{\text{run1}}(c) \approx \Pi_{\text{run2}}(c)
+$$
+
+If drift is detected, engineers examine:
+
+- projection tables  
+- metadata conditioning  
+- geometric influence vector  
+- spline smoothing behavior  
+
+Projection drift is often caused by metadata changes or geometric instability.
+
+## **8.5 Coordinate Misalignment Detection**
+
+Coordinate misalignment occurs when projection or reverse interpretation begins mapping text to the wrong coordinate.
+
+Debugging checks:
+
+- **Reverse interpretation mismatch:**  
+$$
+  \Pi^{-1}(\Pi(c)) \not\approx c
+$$
+
+- **Signature discriminability:**  
+$$
+  d(\sigma_{c_i}, \sigma_{c_j}) > \epsilon
+$$  
+  must hold for distinct meanings.
+
+- **Basin consistency:**  
+  Coordinates must remain in expected basins across versions.
+
+Misalignment indicates deeper issues in:
+
+- geometric clustering  
+- basin definitions  
+- correlation structure  
+- signature extraction  
+
+## **8.6 Metadata Consistency Checks**
+
+Projection metadata must remain aligned with:
+
+- geometric context  
+- textual meaning signatures  
+- representative examples  
+- correlation structure  
+
+Debugging verifies:
+
+- tone behavior  
+- syntactic structure preferences  
+- relational phrasing patterns  
+- modality levels  
+- narrative role expectations  
+- shading influences  
+
+Metadata inconsistencies often cause subtle drift before major failures appear.
+
+## **8.7 Geometric Stability Checks**
+
+Debugging verifies that geometric context remains stable:
+
+$$
+c(M_v) \approx c(M_{v+1})
+$$
+
+Checks include:
+
+- basin stability  
+- curvature stability  
+- attractor strength  
+- transition boundaries  
+
+Geometric instability propagates upward into projection and reverse interpretation.
+
+## **8.8 Full Debugging Loop**
+
+A complete debugging cycle evaluates:
+
+1. **Projection:**  
+   $c \rightarrow \Pi(c)$  
+2. **Reverse interpretation:**  
+   $\Pi(c) \rightarrow \Pi^{-1}(\Pi(c))$  
+3. **Signature stability:**  
+   $\sigma_c$ across runs/versions  
+4. **Metadata consistency:**  
+   tone, modality, relational structure  
+5. **Geometric stability:**  
+   basin, curvature, transitions  
+6. **Example alignment:**  
+   $\Pi(c)$ vs. $t_c$  
+7. **Gradient consistency:**  
+   smoothness across semantic gradients  
+
+This loop ensures full cross-layer fidelity.
+
+## **8.9 Summary**
+
+Debugging projection meaning:
+
+- validates projection and reverse interpretation  
+- detects drift and misalignment  
+- ensures stability across runs and versions  
+- maintains traceability from text back to SSR  
+- protects the integrity of dictionary entries  
+- ensures the manifold behaves as intended  
+
+It is the **cross-layer diagnostic engine** of the Thought Simulator.
 
 ## 9. Tuning Projection
 
