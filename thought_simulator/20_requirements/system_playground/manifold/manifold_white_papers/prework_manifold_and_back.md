@@ -14,6 +14,8 @@
 - [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)  
 - [7. Dictionary Projection Specification](dictionary_projection_spec.md)  
 
+**Canonical Glossary**: See Paper 7 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
+
 ---
 
 ## 1. Introduction
