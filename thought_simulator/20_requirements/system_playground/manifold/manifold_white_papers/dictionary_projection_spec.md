@@ -61,15 +61,31 @@ Each dictionary entry for a dictionary numeric coordinate (e.g., $(s_i, r_j)),\ 
 
 The dictionary is frozen as part of every manifold snapshot.
 
-## 4. Creating the Dictionary
+### **4. Creating the Dictionary**
+
+#### **4.1 Pre‑Work Pipeline**
 
 During pre-work:
+
 - Coordinates are assigned based on geometric clustering.
 - SSR-origin meaning, numeric vectors, and geometric context are recorded in the dictionary structure.
-- Textual meaning signatures are extracted from representative OuBB examples.
-    - To build the dictionary, look at actual OuBB text examples, then extract the textual qualities that define how meaning is expressed (see Textual Output Dimensions in the glossary below)
-- Correlations and projection metadata are computed and stored.
+- Textual meaning signatures are extracted from representative OuBB examples.  
+    - To build the dictionary, look at actual OuBB text examples, then extract the textual qualities that define how meaning is expressed (see Textual Output Dimensions in the glossary below).
+- Correlations and projection metadata are computed and stored.  
+    - For correlation, see *correlation structure* in the glossary below.
 - The entire dictionary is versioned with the manifold.
+
+#### **4.2 Notes on Correlation Structure and Projection Metadata**
+
+These notes explain the two components computed during pre‑work that determine how numeric fields influence geometry and how geometry influences textual expression.
+
+Correlation structure and projection metadata are computed during pre‑work by analyzing how SSR‑derived numeric fields jointly influence manifold geometry and textual expression. 
+
+Correlation structure captures the deterministic relationships between identity, relational, structural, and ambiguity fields and how these combinations shape basin behavior, curvature, and semantic gradients. 
+
+Projection metadata records how these geometric influences map into textual output dimensions (lexical emphasis, tone, syntactic structure, relational phrasing, modality, shading, narrative role). 
+
+Both correlation structure and projection metadata are stored inside each dictionary entry so Π and Π⁻¹ can rely on stable, interpretable links between numeric fields, geometry, and expression.
 
 ## 5. Textual Meaning Signatures
 
@@ -327,12 +343,32 @@ Mismatch between expected and actual dictionary coordinate behavior.
 When projection or routing behavior does not match expected basin influence.
 
 **correlation structure**  
-Defined relationships between numeric fields and how they influence geometry and projection.
+Defined, *non‑statistical* relationships between SSR‑derived numeric fields and their joint influence on manifold geometry and projection behavior. A correlation structure specifies:
+
+- **Field influence:** which numeric fields (identity, relational, structural, ambiguity) contribute most to basin shape, ridge formation, and curvature.
+- **Combined effects:** how specific combinations of fields (e.g., high identity + high relational, high ambiguity + low structural) change constraint‑energy, basin width, and transition behavior.
+- **Projection impact:** how these field relationships modulate textual output dimensions (lexical emphasis, tone, relational phrasing, modality, shading, narrative role) for a given coordinate.
+- **Stability expectations:** the expected geometric and textual behavior for a coordinate given its field relationships, used to detect drift, misalignment, or unexpected routing.
+
+Correlation structure is computed during pre‑work and stored in each dictionary entry as part of projection metadata, so Π and Π⁻¹ can rely on stable, interpretable links between numeric fields, geometry, and expression.
 
 **semantic gradients**  
-Smooth numeric changes reflecting semantic similarity.
+Smooth, monotonic changes in numeric-field values that reflect increasing or
+decreasing semantic similarity across the manifold. Semantic gradients define
+how meaning shifts as coordinates move within or between basins, and they ensure
+predictable projection behavior by providing stable transitions in geometric
+context. They are used to detect drift (when gradients become irregular or
+non‑monotonic), maintain coordinate alignment, and guarantee that Π and Π⁻¹
+produce consistent meaning-to-text and text-to-meaning mappings across runs.
 
----
+**projection metadata**  
+Rules and parameters stored in each dictionary entry that determine how Π converts
+a coordinate’s geometric context and textual meaning signature into deterministic
+OuBB/RG text. Projection metadata specifies phrasing tendencies, tone behavior,
+syntactic structure preferences, relational phrasing patterns, modality levels,
+narrative role expectations, and shading influences. It ensures that projection
+is stable, reproducible, and aligned with the coordinate’s intended semantic
+behavior.
 
 ### SSR → Numeric Fields (Stored in Dictionary Entries)
 **numeric field vector**  
