@@ -19,20 +19,22 @@ The Thought Simulator (TS) separates pre-work (manifold construction) from runti
 
 ## 2. Overall TS Pipeline
 
+## 2. Overall TS Pipeline
+
 ```mermaid
 flowchart TD
-    A[SSR Input] --> B[Paper 1: SSR Numericalization\n(symbolic → numeric fields)]
-    B --> C[Paper 2: Manifold Geometry\n(numeric → surfaces, regions, basins)]
-    C --> D[Dictionary Construction\n(Rosetta Stone mapping)]
-    D --> E[Paper 3: Projection Π\n(geometry → OuBB/RG text)]
+    A[SSR Input] --> B[Paper 1 - SSR Numericalization]
+    B --> C[Paper 2 - Manifold Geometry]
+    C --> D[Dictionary Construction]
+    D --> E[Paper 3 - Projection Π]
     
-    subgraph "Engineering Layer"
+    subgraph Engineering
         F[Creation Checklist] --> G[Tuning Guide]
-        G --> H[Validation & Debugging]
+        G --> H[Validation]
     end
     
     E --> I[Expressive Output]
-    I --> J[Reverse Interpretation\n(text → SSR)]
+    I --> J[Reverse Interpretation]
     
     F & G & H --> B & C & D & E
 ```
@@ -59,12 +61,3 @@ flowchart TD
 **Hardware Note**: Pre-work runs efficiently on standard CPU hardware (no GPU required for typical use).
 
 ---
-
-This restored overview document is now concise, visual, and serves as the perfect entry point.
-
-Would you like me to:
-- Add this as a new file in the workspace?
-- Refine the diagram or add more sections?
-- Or update anything else?
-
-Let me know how you'd like to proceed.
