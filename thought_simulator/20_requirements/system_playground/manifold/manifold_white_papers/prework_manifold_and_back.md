@@ -12,6 +12,7 @@
 - [4. Working Inside the Manifold — Routing & Projection](./manifold_routing_projection.md)  
 - [5. Manifold to OuBB / RG Projection & Reverse](./manifold_to_oubb_projection_reverse.md)  
 - [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)  
+- [7. Dictionary Projection Specification](dictionary_projection_spec.md)  
 
 ---
 
