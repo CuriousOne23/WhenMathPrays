@@ -3,7 +3,7 @@
 **Date**: 2026-07-05  
 **Companion to**: prework_manifold_and_back.md, Paper 2, Paper 3, and Paper 4  
 **Repository**: CuriousOne23/WhenMathPrays  
-**Part of the 6-paper pre-work suite**:
+**Part of the 7-paper pre-work suite**:
 
 - [1. SSR to Manifold Transfer Guide](./ssr_to_manifold_transfer_guide.md)  
 - [2. Manifold Geometry & Shapes Specification](./manifold_geometry_shapes_spec.md)  
@@ -11,9 +11,10 @@
 - [4. Working Inside the Manifold — Routing & Projection](./manifold_routing_projection.md)  
 - **[5. Manifold to OuBB / RG Projection & Reverse](./manifold_to_oubb_projection_reverse.md)** (this document)  
 - [6. Pre-work Checklist, Tuning & Validation](./prework_checklist_tuning_validation.md)  
+- [7. Dictionary Projection Specification](dictionary_projection_spec.md) 
 
 **Top level overview**  
-[prework_manifold_and_back.md](prework_manifold_and_back.md)
+[prework_manifold_and_back.md](prework_manifold_and_back.md)  
 
 **Canonical Glossary**: See Paper 6 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
 
