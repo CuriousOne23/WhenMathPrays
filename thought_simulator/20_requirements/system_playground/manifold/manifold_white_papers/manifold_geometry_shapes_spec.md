@@ -65,6 +65,24 @@ These features are instantiated using the same SSR-alignment logic as peaks and 
 - Validate each shape against SSR input variation and OuBB output fidelity.  
 - Shapes must remain stable and interpretable by the projection operator Π.
 
+### 4.1 Continuity Requirements and Spline Smoothing
+
+The TS manifold must remain continuous and differentiable across all regions to
+support deterministic routing. If numeric-field interactions produce an abrupt
+junction or discontinuity (for example, a sharp gradient break between adjacent
+clusters), the engineer must apply cubic spline smoothing to restore continuity.
+
+Spline smoothing ensures:
+
+- $C^2$ continuity across the constraint surface
+- stable routing behavior for Paper 5 (Working Inside the Manifold)
+- consistent constraint-energy gradients for shape interpretation
+- predictable basin boundaries and transition behavior
+- deterministic projection behavior for Π
+
+Any standard cubic spline implementation is acceptable as long as continuity is
+restored and validated using the Paper 6 stability and fidelity checks.
+
 ## 5. Next Steps for Engineer
 
 After reading this document, proceed to:  
