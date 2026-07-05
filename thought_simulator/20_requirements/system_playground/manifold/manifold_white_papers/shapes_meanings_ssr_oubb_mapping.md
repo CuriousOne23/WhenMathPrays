@@ -58,7 +58,36 @@ This unified view ensures consistent routing, projection, and debugging across t
 ### 3.4 Saddles, Ridges, Channels, Inflections, and Other Features
 (Meanings will be expanded once Paper 3 and Paper 2 are fully synchronized with the unified ontology. These features generally serve as transition, guidance, or phase-shift structures.)
 
-## 4. Cross-Layer Implications and Tuning Notes
+## 4. Position Fields vs. Projection Fields (Cross‑Reference)
+
+Manifold **position** is determined by the numeric SSR‑derived fields defined in Paper 1:
+
+- identity  
+- relational  
+- ambiguity  
+- contextual  
+- structural  
+- alignment / anti‑alignment  
+
+These fields drive the constraint‑energy behavior that produces the shapes described in this paper (valleys, peaks, saddles, ridges, channels). They determine **where** a state sits on the manifold and how it moves during routing (Paper 4). They do **not** determine phrasing or textual coloration.
+
+Manifold **projection**, by contrast, is determined by:
+
+- textual meaning signatures (dictionary layer, Paper 5)  
+- the local shape meaning (this paper)  
+- the current manifold coordinate  
+
+Meaning signatures encode how a region “speaks” when projected into OuBB/RG. They do **not** influence manifold position. Position fields determine *location*; meaning signatures determine *expression*.
+
+Projection operator Π (Paper 5) combines:
+
+1. the manifold coordinate (from position fields),  
+2. the shape meaning (from this paper), and  
+3. the meaning signature (dictionary),
+
+to produce deterministic OuBB/RG output. This separation ensures stable geometry, interpretable projection, and fully traceable reverse interpretation.
+
+## 5. Cross-Layer Implications and Tuning Notes
 
 - Shapes must remain stable under small SSR perturbations.  
 - Every shape must expose interpretable structure for the projection operator Π.  
