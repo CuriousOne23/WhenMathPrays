@@ -72,7 +72,8 @@ flowchart TD
   - Paper 3: Shape meanings across SSR, manifold, and OuBB  
   - Paper 4: Routing and internal projection  
   - Paper 5: Forward & reverse projection (Π)  
-  - Paper 6: Validation, tuning, and glossary  
+  - Paper 6: Validation, tuning, and glossary
+  - Paper 7: Dictionary, specifies how manifold coordinates become text.
 
 **Hardware Note**: Pre-work runs efficiently on standard CPU hardware (no GPU required for typical use).
 
