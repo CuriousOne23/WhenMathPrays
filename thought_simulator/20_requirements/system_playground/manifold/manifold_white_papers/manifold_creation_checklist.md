@@ -4,6 +4,11 @@
 **Date**: 2026-07-04  
 **Companion to**: prework_manifold_and_back.md, ssr_numericalization_guide.md, manifold_geometry_spec.md, dictionary_projection_spec.md  
 **Repository**: CuriousOne23/WhenMathPrays  
+**Associated Papers**:  
+[ssr_numericaliztion_guide.md](ssr_numericaliztion_guide.md)  
+[manifold_geomerty_spec.md](manifold_geomerty_spec.md)  
+[dictionary_projection_spec.md](dictionary_projection_spec.md)  
+[manifold_tuning_guide.md](manifold_tuning_guide.md)  
 
 Use this checklist during pre-work to produce a high-quality TS manifold. Follow links for detailed guidance.
 
