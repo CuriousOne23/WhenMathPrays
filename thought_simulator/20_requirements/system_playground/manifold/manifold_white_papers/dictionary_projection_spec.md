@@ -4,7 +4,7 @@
 **Date**: 2026-07-04  
 **Companion to**: prework_manifold_and_back.md, ssr_numericalization_guide.md, and manifold_geometry_spec.md  
 **Repository**: CuriousOne23/WhenMathPrays  
-**Associated Papers**:
+**Associated Papers**:  
 [ssr_numericaliztion_guide.md](ssr_numericaliztion_guide.md)  
 [manifold_geomerty_spec.md](manifold_geomerty_spec.md)   
 [manifold_tuning_guide.md](manifold_tuning_guide.md)  
