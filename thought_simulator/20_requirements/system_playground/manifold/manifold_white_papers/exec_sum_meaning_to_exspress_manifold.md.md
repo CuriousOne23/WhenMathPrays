@@ -77,6 +77,8 @@ The same object or idea can also carry many different variables and implications
 
 Manifold geometry is a strong foundation for modeling this because it naturally supports both distinct points (clear, concrete meanings) and continuous regions where fuzziness, gradation, and smooth transitions can exist. It allows stable locations for meaning while also accommodating multiple interacting dimensions and context-dependent trajectories — precisely the flexible structure needed to represent how humans actually think, communicate, and navigate ambiguity in language.
 
+---
+
 ### Stage 3 — Manifold → Expression (OuBB)
 
 Each meaning signature is linked to a set of expression rules stored in a dictionary. These rules define tone, lexical choices, syntactic patterns, hedging, rhythm, and other surface characteristics of language.
