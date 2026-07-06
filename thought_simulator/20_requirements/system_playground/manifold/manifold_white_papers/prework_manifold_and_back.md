@@ -16,6 +16,9 @@
 
 **Canonical Glossary**: See Paper 7 (or a dedicated glossary file once finalized). All terminology in this document is defined there.
 
+**Executive Paper Overview of the Manifold:**  
+[exec_sum_meaning_to_exspress_manifold.md.md](exec_sum_meaning_to_exspress_manifold.md.md)  
+
 ---
 
 ## 1. Introduction
