@@ -17,6 +17,9 @@
 **Top level overview**  
 [prework_manifold_and_back.md](prework_manifold_and_back.md)  
 
+**Executive Paper Overview of the Manifold:**  
+[exec_sum_meaning_to_exspress_manifold.md.md](exec_sum_meaning_to_exspress_manifold.md.md)  
+
 **Canonical Glossary**: This document serves as the **canonical glossary** for the suite (or link to a dedicated glossary file once finalized). All terminology used across Papers 1–6 is defined here or cross-referenced.
 
 ## 1. Introduction
