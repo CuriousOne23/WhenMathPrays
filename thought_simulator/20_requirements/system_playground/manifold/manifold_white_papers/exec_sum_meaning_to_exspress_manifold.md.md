@@ -111,7 +111,9 @@ The core insight is straightforward:
 
 **Meaning can be treated as geometry, and expression can be treated as controlled projection.**
 
-Traditional systems collapse meaning and expression into the same space; TS separates them and reconnects them through geometry. The manifold supplies the missing middle layer — a stable, geometrically constrained surface on which semantic relationships are explicitly encoded as shapes and trajectories. This geometric substrate makes the subsequent mapping to expression reliable, reversible, and engineerable rather than guessed or statistically approximated.
+Previous systems often treated meaning as rigidly defined categories, isolated from context and the natural fuzziness of language — where a single idea, statement, or word has blurred boundaries that shift with usage. Today's LLMs treat language statistically: highly productive in utility, yet offering little insight into the nature of thought itself. This approach, combined with scale, has led to instability and ever-longer training periods.
+
+TS takes a different path. Traditional systems collapse meaning and expression into the same space; TS separates them and reconnects them through geometry. The manifold supplies the missing middle layer — a stable, geometrically constrained surface on which semantic relationships are explicitly encoded as shapes and trajectories. This geometric substrate makes the subsequent mapping to expression reliable, reversible, and engineerable rather than guessed or statistically approximated.
 
 That single conceptual move — inserting an explicit geometric meaning space between structured input and surface expression — is what renders the whole system realizable with ordinary engineering discipline.
 
