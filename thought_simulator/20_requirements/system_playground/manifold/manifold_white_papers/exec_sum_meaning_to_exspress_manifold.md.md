@@ -126,12 +126,13 @@ That single conceptual move — inserting an explicit geometric meaning space be
 Earlier approaches struggled because several necessary pieces were missing:
 
 - Meaning was treated primarily as text or token sequences rather than as structured, measurable semantic fields that could be projected into geometry.
-- There was no stable, inspectable middle layer between raw semantics and surface expression.
+- Independent language domains were not clearly identified, leading to entanglement of meaning and realization (expression).
+- There was no stable, inspectable middle layer between raw semantics and surface expression, and the proper placement of rules versus fuzziness (statistical components) was not clearly separated or gracefully merged.
 - The meaning representation (SSR) was not cleanly separated from the expression generation layer (OuBB).
 - Geometric constraints (spline-fit surfaces) were not used to encode and enforce semantic behavior.
 - Stable meaning signatures were not used as explicit attractors to anchor projection rules.
 
-Without these elements, mappings remained brittle, non-deterministic, or impossible to debug and maintain at scale.
+Present-day statistical approaches have achieved real utility through scaling, but this has come with growing costs in opacity, instability, and resource demands. Without these missing pieces, mappings remained brittle, non-deterministic, or impossible to debug and maintain at scale.
 
 ---
 
