@@ -33,7 +33,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.20_ts_prim_proc_ref_gov.md](20.20_ts_primprim_proc_ref_gov.md)
 - [20.30_ts_functional_model.md](20.30_ts_functional_model.md)
 - [20.30.005_rtu_prim.md](20.30.005_rtu_prim.md)
-- [20.30.010_ts_ops.md] (20.30.010_ts_ops.md)
+- [20.30.010_ts_ops.md](20.30.010_ts_ops.md)  
 - [20.30.020_cycle_alloc.md](20.30.020_cycle_alloc.md)
 - [20.30.030_tcu_budgeting.md](20.30.030_tcu_budgeting.md)
 - [20.30.040_mcs_rules.md](20.30.040_mcs_rules.md)
