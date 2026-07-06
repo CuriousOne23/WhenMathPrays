@@ -65,7 +65,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.44_ts_isc_scoring.md](20.44_ts_isc_scoring.md)
 - [20.44_ts_isc_scoring.md](20.44_ts_isc_scoring.md)
 - [20.45_imr_requirements.md](20.45_imr_requirements.md)
-- [20.46_tpu_req.md](20.46_tpu_req.md
+- [20.46_tpu_req.md](20.46_tpu_req.md)  
 - [20.47_ssg_prim.md](20.47_ssg_prim.md)
 - [20.48.010_knc_prim.md](20.41.010_knc_prim.md)
 - [20.48.020_knm_prim.md](20.41.020_knm_prim.md)
