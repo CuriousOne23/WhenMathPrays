@@ -1,6 +1,6 @@
 # Meaning to Expression via the Manifold — Executive Summary
-**Authors: CuriousOne23, Grok and Copilot** 
-**Date: 7/6/2026**
+**Authors: CuriousOne23, Grok and Copilot**  
+**Date: 7/6/2026**  
 
 **exec_sum_meaning_to_express_manifold.md**  
 *High-level conceptual overview of the Thought Simulator meaning-to-expression pipeline*
