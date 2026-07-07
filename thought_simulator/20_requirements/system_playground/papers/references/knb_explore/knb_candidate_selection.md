@@ -24,16 +24,20 @@ Path A requires KnB candidate selection to enable bounded, deterministic candida
 - **Candidate provenance:** Traceable origin from CE/ISc/structural cues.  
 - **Candidate monotonicity and stability:** Once selected, candidates are stable for the cycle.
 
-**Finite candidate set:**
+**Finite candidate set:**  
+
 $$
 C = \{c_1, c_2, \dots, c_n\}
 $$  
+
 (Gloss: finite candidate set.)
 
-**Candidate generation:**
+**Candidate generation:**  
+
 $$
 c_i = \Gamma(\text{CE}, \text{ISc}, \text{StructuralSignals})
 $$  
+
 (Gloss: each candidate is generated deterministically from CE, ISc, and structural cues.)
 
 ---
@@ -55,6 +59,7 @@ Rules govern normalization operators, canonical field ordering, grouping, envelo
 $$
 c_i^{\text{norm}} = N(c_i)
 $$  
+
 (Gloss: normalized candidate.)
 
 ---
@@ -66,6 +71,7 @@ Rules govern allowlist/denylist, structural-compatibility, identity-compatibilit
 $$
 C_{\text{filtered}} = \{c_i \in C \mid F(c_i) = \text{true}\}
 $$  
+
 (Gloss: filtered candidate set.)
 
 - Filtering SHALL NOT introduce new candidates.  
@@ -80,11 +86,13 @@ Rules govern scoring distribution, entropy, confidence, rationale, and determini
 $$
 S(c_i) = \text{Score}(c_i, \text{CE}, \text{ISc})
 $$  
+
 (Gloss: deterministic scoring.)
 
 $$
 \text{Distribution} = \frac{e^{S(c_i)}}{\sum_j e^{S(c_j)}}
 $$  
+
 (Gloss: normalized scoring distribution.)
 
 - Scoring SHALL NOT generate meaning.  
@@ -97,8 +105,9 @@ $$
 Rules govern top-candidate selection, threshold selection, multi-candidate selection, deterministic tie-breaking, and replay-deterministic selection.
 
 $$
-c^\ast = \arg\max_{c_i \in C_{\text{filtered}}} S(c_i)
+c^\ast = \arg\max_{c_i \in C_{filtered}} S(c_i)
 $$  
+
 (Gloss: selected candidate.)
 
 - Selection SHALL NOT modify candidate geometry.  
@@ -113,6 +122,7 @@ Rules govern correction boundaries, depth limits, cooldowns, invariants, and rep
 $$
 C^{(n+1)} = \Psi_{\text{corr}}(C^{(n)}, \text{CorrectionContext})
 $$  
+
 (Gloss: bounded candidate correction.)
 
 - Corrections SHALL NOT introduce new structural fields.  
@@ -130,6 +140,7 @@ $$
 $$
 \text{Serialize}(C) = \text{CanonicalForm}(C)
 $$  
+
 (Gloss: candidate sets must serialize deterministically.)
 
 ---
@@ -139,6 +150,7 @@ $$
 $$
 \text{CandidateDeterministic} \iff f(x) = f(y) \;\text{whenever}\; x = y
 $$  
+
 (Gloss: identical inputs yield identical candidate sets.)
 
 All candidate operators are deterministic, seed-free, and replay-equivalent.
