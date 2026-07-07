@@ -37,7 +37,7 @@ RG and RSG shall operate on isolated expression substrates and shall not write t
 The primary transfer function is:
 
 $$
-\text{Expression} = \text{RSG}\left( \text{RG}\left( \text{SSR}, \text{TPTB}, \text{TPSF}, \text{continuity}\_{fields}, \text{exec_plan} \right), \text{seed} \right)
+\text{Expression} = \text{RSG}\left( \text{RG}\left( \text{SSR}, \text{TPTB}, \text{TPSF}, \text{continuity}\_{fields}, \text{exec}\_{plan} \right), \text{seed} \right)
 $$
 
 Path B shall produce deterministic output for any fixed SSR and fixed response-generator seed (modulo allowed stylistic variation).
