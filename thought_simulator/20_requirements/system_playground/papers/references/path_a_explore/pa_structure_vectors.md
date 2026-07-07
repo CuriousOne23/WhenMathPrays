@@ -27,12 +27,15 @@ Structure vectors differ from raw structural fields (they are normalized encodin
 - **Structural tags and envelopes.**
 
 **Structural graph:**
+  
 $$
 G = (V, E, \lambda)
 $$  
+
 (Gloss: structural graph with nodes, edges, and labels.)
 
-**Structure vector:**
+**Structure vector:**  
+  
 $$
 v_{\text{struct}} = h(G)
 $$  
@@ -70,6 +73,7 @@ Rules govern how structure vectors feed SSG, constrain meaning, constrain routin
 $$
 \sigma = \varphi(v_{\text{norm}})
 $$  
+
 (Gloss: SSG signature derived from normalized structure vector.)
 
 - Meaning rules SHALL NOT modify structure vectors.  
@@ -109,7 +113,7 @@ $$
 ## 8. Deterministic Structure Vector Guarantees
 
 $$
-\text{StructDeterministic} \iff f(x) = f(y) \;\text{whenever}\; x = y
+\text{StructDeterministic} \iff f(x) = f(y) \ \text{whenever}\ x = y
 $$  
 
 (Gloss: identical structural inputs yield identical structure vectors.)
