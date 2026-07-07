@@ -1,18 +1,17 @@
-# knb_candidate_selection.md
-
+# knb_candidate_selection.md  
 **Document ID:** 20.XXX_knb_candidate_selection  
-**Version:** 0.1  
+**Version:** 0.2  
 **Date:** 2026-07-07  
 **Status:** Draft — Realization Paper (KnB)  
-**Purpose:** Define candidate selection for the Knowing-by-Binding (KnB) primitive in Path A.
+**Purpose:** Define candidate selection for the Knowing-by-Binding (KnB) primitive operating over SSR and the manifold, producing knowledge anchors consumed by Path B.
 
 ---
 
 ## 1. Overview
 
-KnB (Knowing-by-Binding) is the primitive responsible for generating, filtering, validating, and selecting candidates for meaning construction and identity resolution. Candidate selection bridges CE, ISc, and the OB-family primitives while preserving determinism and replay equivalence.
+KnB (Knowing-by-Binding) is the primitive responsible for generating, filtering, validating, and selecting candidates for knowledge anchoring over **SSR(t−1)** and producing stable, deterministic anchors for **SSR(t)**. Candidate selection bridges CE, ISc, SSR, and manifold geometry while preserving determinism, replay equivalence, and projection compatibility.
 
-Path A requires KnB candidate selection to enable bounded, deterministic candidate sets that support structural → meaning transitions and safe Path B handoff without introducing nondeterminism or semantic leakage.
+KnB operates **outside Path A**. It consumes SSR-exposed fields and produces SSR-visible knowledge anchors that the manifold and Path B (CoHI, LI, REx, RPlan, RPU, ReB, OuBB) rely on. Candidate selection MUST guarantee manifold projectability and Path‑B consumption safety.
 
 ---
 
@@ -21,127 +20,113 @@ Path A requires KnB candidate selection to enable bounded, deterministic candida
 - **Candidate envelopes:** Structured, bounded collections of candidates.  
 - **Candidate fields:** identity_candidate[], relation_candidate[], domain_anchor_candidate[], qualifier_candidate[], truth_validation_candidate[], KnDt_keywords[], KnDt_addresses[].  
 - **Candidate geometry:** Finite sets with provenance.  
-- **Candidate provenance:** Traceable origin from CE/ISc/structural cues.  
-- **Candidate monotonicity and stability:** Once selected, candidates are stable for the cycle.
+- **Candidate provenance:** Traceable origin from CE/ISc/SSR(t−1).  
+- **Candidate monotonicity and stability:** Once selected, candidates are stable for the cycle and frozen into SSR(t).
 
-**Finite candidate set:**  
+**Finite candidate set:** 
 
 $$
 C = \{c_1, c_2, \dots, c_n\}
-$$  
-
-(Gloss: finite candidate set.)
+$$
 
 **Candidate generation:**  
 
 $$
-c_i = \Gamma(\text{CE}, \text{ISc}, \text{StructuralSignals})
-$$  
-
-(Gloss: each candidate is generated deterministically from CE, ISc, and structural cues.)
+c_i = \Gamma(\text{CE}, \text{ISc}, \text{SSR}(t-1))
+$$
 
 ---
 
 ## 3. Candidate Generation Rules
 
-Rules govern deterministic extraction from CE, expansion from ISc, binding from structural geometry, bounded candidate count, canonical ordering, and replay-deterministic generation.
+Rules govern deterministic extraction from CE, expansion from ISc, and binding from SSR(t−1) fields.
 
 - Candidate generation SHALL NOT infer new meaning.  
-- Candidate generation SHALL NOT modify structural fields.  
-- Candidate generation SHALL NOT depend on routing signals.
+- Candidate generation SHALL NOT modify SSR(t−1).  
+- Candidate generation SHALL NOT depend on Path‑B routing signals.  
+- Candidate generation SHALL read only SSR-exposed fields, never raw Path‑A fields.
 
 ---
 
 ## 4. Candidate Normalization Rules
 
-Rules govern normalization operators, canonical field ordering, grouping, envelope shape, and replay-deterministic normalization.
-
 $$
 c_i^{\text{norm}} = N(c_i)
-$$  
+$$
 
-(Gloss: normalized candidate.)
+Normalization ensures canonical field ordering, grouping, envelope shape, and replay-deterministic normalization.
 
 ---
 
 ## 5. Candidate Filtering Rules
 
-Rules govern allowlist/denylist, structural-compatibility, identity-compatibility, domain-compatibility, and truth-validation filters.
-
 $$
-C_{\text{filtered}} = \{c_i \in C \mid F(c_i) = \text{true}\}
-$$  
+C_{\text{filtered}} = \\{c_i \in C \mid F(c_i) = \text{true}\\}
+$$
 
-(Gloss: filtered candidate set.)
+Filtering governs allowlist/denylist, structural-compatibility, identity-compatibility, domain-compatibility, and truth-validation filters.
 
 - Filtering SHALL NOT introduce new candidates.  
-- Filtering SHALL NOT modify candidate geometry.
+- Filtering SHALL NOT modify candidate geometry.  
+- Filtering SHALL NOT violate SSR freeze rules.
 
 ---
 
 ## 6. Candidate Scoring Rules
 
-Rules govern scoring distribution, entropy, confidence, rationale, and deterministic scoring function.
-
 $$
-S(c_i) = \text{Score}(c_i, \text{CE}, \text{ISc})
-$$  
-
-(Gloss: deterministic scoring.)
+S(c_i) = \text{Score}(c_i, \text{CE}, \text{ISc}, \text{SSR}(t-1))
+$$
 
 $$
 \text{Distribution} = \frac{e^{S(c_i)}}{\sum_j e^{S(c_j)}}
-$$  
-
-(Gloss: normalized scoring distribution.)
+$$
 
 - Scoring SHALL NOT generate meaning.  
-- Scoring SHALL NOT modify structural geometry.
+- Scoring SHALL NOT modify SSR(t−1).  
+- Scoring MUST remain deterministic and seed-free.
 
 ---
 
 ## 7. Candidate Selection Rules
 
+$$
+c^\ast = \arg\max_{c_i \in C_{\text{filtered}}} S(c_i)
+$$
+
 Rules govern top-candidate selection, threshold selection, multi-candidate selection, deterministic tie-breaking, and replay-deterministic selection.
 
-$$
-c^\ast = \arg\max_{c_i \in C_{filtered}} S(c_i)
-$$  
-
-(Gloss: selected candidate.)
-
 - Selection SHALL NOT modify candidate geometry.  
-- Selection SHALL NOT generate new candidates.
+- Selection SHALL NOT generate new candidates.  
+- Selection MUST produce SSR‑compatible anchors.
 
 ---
 
 ## 8. Candidate Correction Rules (IMR Type B)
 
-Rules govern correction boundaries, depth limits, cooldowns, invariants, and replay equivalence.
-
 $$
 C^{(n+1)} = \Psi_{\text{corr}}(C^{(n)}, \text{CorrectionContext})
-$$  
+$$
 
-(Gloss: bounded candidate correction.)
+Corrections govern boundaries, depth limits, cooldowns, invariants, and replay equivalence.
 
 - Corrections SHALL NOT introduce new structural fields.  
-- Corrections SHALL NOT alter structural geometry.  
-- Corrections SHALL NOT generate meaning.
+- Corrections SHALL NOT alter candidate geometry.  
+- Corrections SHALL NOT generate meaning.  
+- Corrections MUST preserve SSR determinism.
 
 ---
 
 ## 9. Candidate Serialization Rules
 
-- Canonical ordering, naming, and grouping.  
-- Canonical candidate envelope shape.  
-- Replay-deterministic serialization.
-
 $$
 \text{Serialize}(C) = \text{CanonicalForm}(C)
-$$  
+$$
 
-(Gloss: candidate sets must serialize deterministically.)
+Serialization governs canonical ordering, naming, grouping, envelope shape, and replay-deterministic serialization.
+
+- Serialization MUST produce SSR‑visible canonical forms.  
+- Serialization MUST satisfy manifold projection requirements.
 
 ---
 
@@ -149,27 +134,60 @@ $$
 
 $$
 \text{CandidateDeterministic} \iff f(x) = f(y) \;\text{whenever}\; x = y
-$$  
+$$
 
-(Gloss: identical inputs yield identical candidate sets.)
-
-All candidate operators are deterministic, seed-free, and replay-equivalent.
+All candidate operators are deterministic, seed-free, replay-equivalent, and SSR-consistent.
 
 ---
 
-## 11. Realization Notes
+## 11. SSR Integration Requirements
+
+- Candidate selection operates over **SSR(t−1)** and produces anchors for **SSR(t)**.  
+- All candidate fields MUST serialize into SSR using canonical SSR field names.  
+- Candidate ranking MUST be finite, deterministic, replay-stable, and seed-independent.  
+- Candidate outputs MUST satisfy SSRGn projection rules (freeze, sanitization, provenance).  
+- Candidate selection SHALL NOT read raw Path‑A fields; it SHALL read only SSR-exposed fields.  
+- Candidate outputs MUST be visible to manifold operators Π and Π⁻¹.
+
+---
+
+## 12. Manifold Compatibility Requirements
+
+- Candidate outputs MUST map to manifold shapes defined in `manifold_geometry_shapes_spec.md`.  
+- Each candidate MUST expose a meaning‑signature‑compatible structure (finite, typed, stable).  
+- Candidate identity, relations, anchors, qualifiers MUST be geometrically projectable.  
+- Candidate outputs MUST satisfy manifold routing constraints (curvature, locality, basin rules).  
+- Candidate outputs MUST NOT introduce non‑projectable structures (infinite sets, unstable fields).  
+- Candidate provenance MUST be preserved for manifold → OuBB reverse projection (Π⁻¹).
+
+---
+
+## 13. Path‑B Consumption Guarantees
+
+- Candidate outputs MUST be consumable by LI (20.112) as stable meaning‑layer inputs.  
+- Candidate ranking MUST support continuity_fields computed by CoHI.  
+- Candidate outputs MUST satisfy OuBB requirements for truth/safety expression.  
+- Candidate outputs MUST be compatible with RG/RSG surface‑form generation rules.  
+- Candidate outputs MUST NOT require Path‑B to perform grounding or fact‑stability work.  
+- Candidate outputs MUST remain unchanged after SSR freeze (SSR(t) is immutable to Path‑B).
+
+---
+
+## 14. Realization Notes
 
 - **Implementation:** Implement generation, normalization, filtering, scoring, and selection as deterministic functions with bounded sets and guards.  
-- **Validation:** Assert finiteness, provenance, separation, and normalization invariants.  
-- **Testing:** Replay tests, clean/corrected candidate paths, edge cases.  
-- **Serialization:** Enforce canonical form for candidate envelopes.  
-- **Integration:** Candidates feed OB-family primitives, support ISc → TPU flow, and prepare for Path B eligibility.  
-- **New primitives:** Declare candidate interactions and satisfy existing determinism/separation invariants.
+- **Validation:** Assert finiteness, provenance, separation, SSR compliance, and normalization invariants.  
+- **Testing:** Replay tests, clean/corrected candidate paths, manifold projection tests, Path‑B consumption tests.  
+- **Serialization:** Enforce canonical SSR form for candidate envelopes.  
+- **Integration:** Candidates feed grounding (KnC/KnM/KnF), SSRGn, manifold projection, and Path‑B primitives.  
+- **New primitives:** Declare candidate interactions and satisfy SSR/manifold/Path‑B invariants.
 
 ---
 
-## 12. Summary
+## 15. Summary
 
-KnB candidate selection provides a deterministic, bounded pipeline for generating, filtering, scoring, and selecting candidates from CE, ISc, and structural cues. It maintains strict separation from meaning and structural mutation while enabling identity resolution and Path B handoff. All operations are replay-equivalent and support clean correction boundaries.
+KnB candidate selection operates over SSR(t−1) to produce deterministic, bounded, manifold‑compatible knowledge anchors for SSR(t). It maintains strict separation from meaning generation and structural mutation while enabling stable identity resolution, manifold projection, and safe Path‑B consumption. All operations are replay-equivalent, seed-free, and SSR-consistent.
 
 **End of knb_candidate_selection.md**
+
+---
