@@ -46,6 +46,7 @@ TS is guided by a set of core principles that shape every primitive and flow:
 
 - **Strict Typing** — every sub-processing block is narrow and well-defined.  
 - **Modularity** — components are designed for plug-and-play experimentation.  
+- **Expandability** — new functionality can be incorporated into the system architecture relatively easily or at least in a controlled and methodical manner.  
 - **Traceability** — every decision and transformation is logged and inspectable.  
 - **Falsifiability** — cognitive hypotheses can be explicitly tested and disproven.  
 - **Cognitive Visibility** — assumptions are forced to surface rather than hide in emergent behavior.  
