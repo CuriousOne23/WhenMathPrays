@@ -1,7 +1,7 @@
 # pb_identity_continuity.md
 
 **Title:** Path B Identity Continuity — Expression-Side Preservation Across Turns and Variants  
-**Document ID:** 20.30.100  
+**Document ID:** future-HLR  
 **Version:** 1.0 (Playground White Paper)  
 **Date:** 2026-07-07  
 **Status:** Complete — Playground Reference  
@@ -45,14 +45,14 @@ These inputs are read-only.
 
 ## 4. Deterministic Continuity Rules
 
-**Rule 20.30.100-001:** Path B shall map SSR identity structures to surface expressions using only the provided continuity_fields and grounded referents.
+**Rule future-HLR-001:** Path B shall map SSR identity structures to surface expressions using only the provided continuity_fields and grounded referents.
 
-**Rule 20.30.100-002:** All expression primitives (RG, RSG, OuBB) shall treat continuity_fields as immutable for the duration of the turn.
+**Rule future-HLR-002:** All expression primitives (RG, RSG, OuBB) shall treat continuity_fields as immutable for the duration of the turn.
 
-**Rule 20.30.100-003:** The continuity transfer function shall be:
+**Rule future-HLR-003:** The continuity transfer function shall be:
 
 $$
-\text{Expressed\_Identity} = \text{Project}\left( \text{SSR.continuity\_fields} \cup \text{KnB.identity\_tiers} \cup \text{LI.meaning} \right)
+\text{Expressed}\_{Identity} = \text{Project}\left( \text{SSR.continuity}\_{fields} \cup \text{KnB.identity}\_{tiers} \cup \text{LI.meaning} \right)
 $$
 
 where Project preserves all identity anchors and relational bindings.
@@ -63,7 +63,7 @@ where Project preserves all identity anchors and relational bindings.
 
 Stylistic variation controlled by the response-generator seed shall affect only surface phrasing and shall never alter identity referents, core identifiers, or relational bindings.
 
-**Rule 20.30.100-004:** Seed variation shall be identity-neutral. Any expressed output with identical SSR shall collapse to the same identity representation when stylistic variation is stripped.
+**Rule future-HLR-004:** Seed variation shall be identity-neutral. Any expressed output with identical SSR shall collapse to the same identity representation when stylistic variation is stripped.
 
 ---
 
@@ -82,7 +82,7 @@ Path B shall not:
 
 Path B consumes the manifold projection present in the SSR.
 
-**Rule 20.30.100-005:** Manifold identity structures (basin assignments, relational geometry) shall be preserved in expression through consistent grounding tier selection and referent anchoring. Path B performs basin-preserving linearization of identity but does not navigate or modify manifold geometry.
+**Rule future-HLR-005:** Manifold identity structures (basin assignments, relational geometry) shall be preserved in expression through consistent grounding tier selection and referent anchoring. Path B performs basin-preserving linearization of identity but does not navigate or modify manifold geometry.
 
 ---
 
@@ -90,7 +90,7 @@ Path B consumes the manifold projection present in the SSR.
 
 KnB provides tiered identity grounding (coarse → medium → fine) that Path B uses for expression.
 
-**Rule 20.30.100-006:** Path B shall select the lowest sufficient KnB identity tier consistent with total entropy. Higher-precision tiers (KnF) shall respect constraints from lower tiers (KnM/KnC) when ambiguity persists.
+**Rule future-HLR-006:** Path B shall select the lowest sufficient KnB identity tier consistent with total entropy. Higher-precision tiers (KnF) shall respect constraints from lower tiers (KnM/KnC) when ambiguity persists.
 
 This ensures stable identity expression without invention of detail.
 
@@ -100,7 +100,7 @@ This ensures stable identity expression without invention of detail.
 
 OuBB is the final commit boundary for Path B expression.
 
-**Rule 20.30.100-007:** At OuBB commit, identity continuity shall be fully captured in the expressed artifact such that replay can recover the originating SSR identity structures exactly.
+**Rule future-HLR-007:** At OuBB commit, identity continuity shall be fully captured in the expressed artifact such that replay can recover the originating SSR identity structures exactly.
 
 Incomplete-meaning or continuity faults shall be routed via IMR without mutating SSR identity fields.
 
@@ -122,7 +122,7 @@ All Path B primitives shall operate read-only on identity inputs.
 
 Replay shall verify that identity continuity is preserved across turns.
 
-**Rule 20.30.100-008:** Replay fixtures shall confirm that stripping stylistic variation from any sequence of OuBB artifacts recovers the exact sequence of SSR identity structures and continuity_fields.
+**Rule future-HLR-008:** Replay fixtures shall confirm that stripping stylistic variation from any sequence of OuBB artifacts recovers the exact sequence of SSR identity structures and continuity_fields.
 
 Replay shall be seed-aware and shall validate collapse to a single canonical identity representation per SSR.
 
