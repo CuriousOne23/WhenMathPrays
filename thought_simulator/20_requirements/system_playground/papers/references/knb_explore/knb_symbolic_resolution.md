@@ -27,7 +27,7 @@ Symbolic resolution is required to handle symbolic references deterministically,
 **Finite set of symbolic-resolution entries:**  
 
 $$
-R_{\text{sym}} = \{s_1, s_2, \dots, s_p\}
+R_{\text{sym}} = \\{s_1, s_2, \dots, s_p\\}
 $$  
 
 (Gloss: finite set of symbolic-resolution entries.)
