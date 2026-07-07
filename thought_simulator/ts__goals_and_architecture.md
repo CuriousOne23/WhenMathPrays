@@ -9,11 +9,15 @@
 
 ---
 
+## Executive Summary
+
+The Thought Simulator (TS) is the first cognitive architecture intentionally designed **first and foremost** as an exploratory cognitive engine. TS is the first architecture built to make thought observable. It serves as a scientific laboratory instrument for investigating, quantifying, exposing, and refining the processes of thought, while incorporating practical considerations of utility.
+
+---
+
 ## Introduction
 
 The Thought Simulator (TS) is the first cognitive architecture intentionally designed primarily as an exploratory cognitive engine. TS exists to investigate, quantify, expose, and refine the processes of thought. While considerations of utility, power, area, and processing efficiency were incorporated into the design (as they are necessary for any viable basis of the AI age), the primary aim is scientific: to serve as a laboratory instrument for answering the fundamental question “What is thought?”
-
-TS makes thought observable. It is the first architecture built to make cognitive processes explicitly visible, measurable, and correctable.
 
 ---
 
@@ -31,8 +35,6 @@ TS functions as a scientific instrument for cognition. It is the first architect
 - **Measurable** — narrow, typed stages enable quantitative evaluation of cognitive behaviors and invariants.  
 - **Inspectable** — every transformation and decision is traceable.  
 - **Correctable** — errors or incomplete models can be isolated and refined without rebuilding the system.
-
-By making the invisible mechanics of thought observable, TS accelerates the transition of cognition from art and heuristics toward a rigorous, evidence-based discipline.
 
 ---
 
@@ -55,7 +57,7 @@ TS is deterministic by design, so cognitive behaviors are reproducible and debug
 
 ## 4. Strict Architectural Typing as Mechanism of Discovery
 
-Every TS sub-processing block is intentionally narrow and well-defined. This strictness is the core mechanism of discovery. Without strict typing, cognition collapses into emergent behavior and becomes impossible to study. Strictness:
+Every TS sub-processing block is intentionally narrow and well-defined. Without strict typing, cognition collapses into emergent behavior and becomes impossible to study rigorously. This strictness is the core mechanism of discovery because it:
 
 - Forces assumptions about cognition to surface explicitly.  
 - Makes errors local and traceable to specific requirements or primitives.  
@@ -112,6 +114,14 @@ Contemporary AI systems often obscure the boundary between statistical pattern m
 
 The TS pipeline is organized into distinct phases that transform raw input into grounded, realized output. Each stage is intentionally narrow to expose assumptions and enable precise debugging.
 
+**Path A (Meaning Construction)** → **Boundary Freeze** → **Knowledge Block** → **Path B**
+
+```
+Path A → SSR → Knowledge → Path B
+```
+
+**Detailed Flow:**
+
 **Path A (Meaning Construction):**  
 InB (Beginning of Path A) → IIInB → IE → Isc → CEx → CE → TPU → IMR → SOB → SROB → CnOB → SmOB → SSG → RBU → CTP → RB → RTU → IdOB → TR → OuBA (End of Path A)
 
@@ -124,8 +134,6 @@ SSRGn → KnC (Beginning of Knowledge) → KnM → KnF (End of Knowledge)
 **Path B (Truth, Safety, Identity, Expression Construction):**  
 KnF → TPTB (Beginning of Path B) → TPSF → CoHI → LI → RG → RSG → OuBB (End of Path B)
 
-Each stage contributes a specific, narrowly scoped transformation. The strict boundaries ensure that cognitive assumptions are exposed, errors are localizable, and the entire pipeline remains a visible laboratory for exploration.
-
 ---
 
 ## 12. The Future of TS
@@ -133,3 +141,4 @@ Each stage contributes a specific, narrowly scoped transformation. The strict bo
 TS is a foundational research vehicle. Its success will be measured not by deployment metrics but by the depth of cognitive understanding it enables. As TS reveals what thought truly requires, subsequent architectures will build upon this knowledge — shifting from exploration to optimized, efficient, and scalable implementations suitable for the broader AI age.
 
 *End of ts_goals_and_architecture.md*
+```
