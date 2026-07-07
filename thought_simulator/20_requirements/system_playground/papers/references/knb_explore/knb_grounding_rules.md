@@ -111,7 +111,7 @@ $$
 ## 8. Deterministic Grounding Guarantees
 
 $$
-\text{GroundDeterministic} \iff f(x) = f(y) \;\text{whenever}\; x = y
+\text{GroundDeterministic} \iff f(x) = f(y) \ \text{whenever}\  x = y
 $$ 
 
 (Gloss: identical inputs yield identical grounded outputs.)
