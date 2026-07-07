@@ -17,7 +17,9 @@ The Thought Simulator (TS) is the first cognitive architecture intentionally des
 
 ## Introduction
 
-The Thought Simulator (TS) is the first cognitive architecture intentionally designed primarily as an exploratory cognitive engine. TS exists to investigate, quantify, expose, and refine the processes of thought. While considerations of utility, power, area, and processing efficiency were incorporated into the design (as they are necessary for any viable basis of the AI age), the primary aim is scientific: to serve as a laboratory instrument for answering the fundamental question “What is thought?” Power and cost relative to today’s LLM architectures were consciously considered as secondary but important constraints.
+The Thought Simulator (TS) is the first cognitive architecture intentionally designed primarily as an exploratory cognitive engine. TS exists to investigate, quantify, expose, and refine the processes of thought. It takes a **top-down view of cognition**, starting from observed high-level behavior and working inward, rather than a bottom-up statistical or connectionist approach. 
+
+While considerations of utility, power, area, and processing efficiency were incorporated into the design (as they are necessary for any viable basis of the AI age), the primary aim is scientific: to serve as a laboratory instrument for answering the fundamental question “What is thought?” Because there is still no universally accepted formal definition of cognition, the hypothetical architecture of TS is largely driven by a **duck test observation** — if something behaves as cognition, responds in real time, interprets meaning, makes decisions, and maintains continuity, then it qualifies as cognition for the purposes of this exploratory system. Power and cost relative to today’s LLM architectures were consciously considered as important secondary constraints.
 
 ---
 
