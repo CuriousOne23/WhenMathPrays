@@ -26,14 +26,17 @@ The separation between structural/pre-semantic processing (early OB layers + SSG
 - **Envelope geometry:** Governed by InB → ... → CTP → OuBA. Maintains canonical shape and serialization.
 
 **Key operators:**  
+
 $$
 F_{\text{struct}}^{(n+1)} = \Pi_{\text{struct}}(F_{\text{struct}}^{(n)}, \text{Signals})
 $$  
+
 (Gloss: structural field evolution via deterministic projection operator.)
 
 $$
 F_{\text{meaning}}^{(n+1)} = \Phi_{\text{id}}(F_{\text{meaning}}^{(n)}, \text{IdentityProfile})
 $$  
+
 (Gloss: meaning field evolution conditioned on identity manifold.)
 
 ---
@@ -54,10 +57,12 @@ Hypotheses govern identity-conditioned refinement, meaning-field stability, cons
 
 ## 5. Routing Field Geometry Hypotheses
 
-- SSG produces normalized structural signature.  
+- SSG produces normalized structural signature.
+  
 $$
 \sigma = \frac{\varphi(G)}{\lVert \varphi(G) \rVert_2}
 $$  
+
 (Gloss: normalized structural signature vector used for routing geometry.)  
 
 - TR and RB operate on relational topology derived from $\sigma$, `TP.TR`, and routing metadata.  
@@ -68,9 +73,11 @@ $$
 ## 6. Envelope Geometry Hypotheses
 
 Envelopes maintain canonical shape across primitives.  
+
 $$
 E_{n+1} = f_{\text{env}}(E_n, F_{\text{struct}}, F_{\text{meaning}}, F_{\text{routing}})
 $$  
+
 (Gloss: envelope evolution as a deterministic function of all field geometries.)
 
 Correction-context envelopes (IMR Type B) are bounded and carry explicit `target_field_ids[]`.
@@ -90,8 +97,9 @@ Correction-context envelopes (IMR Type B) are bounded and carry explicit `target
 ## 8. Deterministic Geometry Guarantees
 
 $$
-\text{GeometryDeterministic} \iff f(x) = f(y) \;\text{whenever}\; x = y
+\text{GeometryDeterministic} \iff f(x) = f(y) \ \text{whenever}\ x = y
 $$  
+
 (Gloss: identical inputs yield identical geometric outputs.)
 
 All field projections, normalizations, and transitions are deterministic, seed-free, and replay-equivalent.
