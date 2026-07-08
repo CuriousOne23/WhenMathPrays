@@ -43,7 +43,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.30.080_rg_resp_gen_sem.md](20.30.080_rg_resp_gen_sem.md)
 - [20.30.085_rsg_prim.md](20.30.085_rsg_prim.md)
 - [20.30.090_rsg_mapping_rules.md](20.30.090_rsg_mapping_rules.md)
-- [20.31_patha_semantic_spec.md](20.31_patha_semantic_spec.md)
+- [20.31_patha_meaning_spec.md](20.31_patha_meaning_spec.md)
 - [20.32_cob_requirements.md](20.32_cob_requirements.md)
 - [20.33_cil_requirements.md](20.33_cil_requirements.md)
 - [20.34_cop_requirements.md](20.34_cop_requirements.md)
