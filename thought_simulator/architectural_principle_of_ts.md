@@ -1,6 +1,6 @@
 # The Architectural Principle of the Thought Simulator: Separation of Meaning Construction, Routing, and Expression
 
-**Authors:** CuriousOne23, Copilot, Grok
+**Authors:** CuriousOne23, Copilot, Grok  
 **Audience:** Cognitive-architecture researchers, symbolic-AI experts, hybrid-AI designers, and LLM theorists  
 **Version:** 0.2 (Refined Draft)  
 **Date:** 2026-07-08  
@@ -9,7 +9,7 @@
 This paper introduces the foundational architectural principle of the Thought Simulator (TS): the strict separation of meaning construction (Path A), routing, and expression (Path B). This separation eliminates the combinatorial (NP-complete-like) explosion inherent in prior cognitive architectures by freezing committed meaning into a sanitized semantic snapshot (SSR) that carries its own routing record (RRw).
 
 ### 2. Introduction
-Traditionally cognitive machines have entangled meaning, routing, and expression within the same representational substrate. Symbolic systems fused them in frames and production rules; hybrid approaches embedded them in weighted graphs or probabilistic networks; modern LLMs encoded them implicitly in shared tensor spaces where attention mechanisms repeatedly recompute relational paths.
+For decades, cognitive architectures have traditionally entangled meaning, routing, and expression within the same representational substrate. Symbolic systems fused them in frames and production rules; hybrid approaches embedded them in weighted graphs or probabilistic networks; modern LLMs encoded them implicitly in shared tensor spaces where attention mechanisms repeatedly recompute relational paths.
 
 TS is the first architecture to explicitly freeze routing with committed meaning. By breaking the conventional pattern and separating these three functions into distinct layers, TS makes cognition tractable. The core insight is that natural language itself provides objects and the relational chains connecting them; TS extracts and freezes this structure once rather than reconstructing routing internally.
 
@@ -58,12 +58,12 @@ Consider the sentence: “John gave Mary the book that Sarah recommended after r
 
 ### 7. Comparison of Architectures
 
-| Architecture | Meaning     | Routing     | Expression  | Result                  |
-|--------------|-------------|-------------|-------------|-------------------------|
-| Symbolic     | fused      | fused      | fused      | Brittle, combinatorial |
-| Hybrid       | fused      | fused      | fused      | Heavy, unstable        |
-| LLM          | fused (meaning + routing + expression) | dynamically reconstructed for every token at every layer (quadratic attention cost) | fused | High power and compute requirements due to continuous reconstruction of meaning, routing, and expression |
-| TS           | separated  | frozen (content-derived) | deterministic | Efficient, stable      |
+| Architecture | Meaning                          | Routing                                      | Expression     | Result                              |
+|--------------|----------------------------------|----------------------------------------------|----------------|-------------------------------------|
+| Symbolic     | fused                            | fused                                        | fused          | Brittle, combinatorial             |
+| Hybrid       | fused                            | fused                                        | fused          | Heavy, unstable                    |
+| LLM          | fused                            | dynamically reconstructed per layer/token    | fused          | High power/compute (quadratic cost)|
+| TS           | separated                        | frozen (content-derived)                     | deterministic  | Efficient, stable                  |
 
 ### 8. Conclusion
 The Thought Simulator is efficient because it separates meaning construction, routing, and expression into distinct architectural layers. Routing is extracted once from the inherent relational structure of language and frozen with the committed meaning in SSR. This principle — overlooked by previous cognitive machines — renders cognition tractable without internal combinatorial search. It provides a stable foundation for deterministic, traceable, and scalable hybrid symbolic systems.
@@ -83,21 +83,15 @@ Path B: Deterministic Realization & Expression (consumers only)
 Output (OuBB)
 ```
 
-### **References**
+### References
+#### TS Core Architecture (20‑Series Requirements)
+- **20.52 SSR Data Packet** — Definition of SSR fields, routing record (RRw), and freeze semantics.
+- **20.54 SSRGn** — SSR generation, sanitization, and freeze rules.
+- **20.40.060 OuBA** — Meaning freeze boundary and upstream routing validation.
+- **20.64 TPTB**, **20.66 TPSF**, **20.113 CoHI**, **20.112 LI**, **20.110 OuBB / 20.110.010**, **20.30.080 RG**, **20.30.085 RSG**, **20.705 Path A / Path B Flow** — Key primitives and separation mechanics.
+(See full repository: [https://github.com/CuriousOne23/WhenMathPrays/tree/main/thought_simulator/20_requirements](https://github.com/CuriousOne23/WhenMathPrays/tree/main/thought_simulator/20_requirements))
 
-#### **TS Core Architecture (20‑Series Requirements at [https://github.com/CuriousOne23/WhenMathPrays/tree/main/thought_simulator](https://github.com/CuriousOne23/WhenMathPrays/tree/main/thought_simulator)**  
-- **20.52 SSR Data Packet** — Definition of SSR fields, routing record (RRw), and freeze semantics.  
-- **20.54 SSRGn** — SSR generation, sanitization, and freeze rules.  
-- **20.40.060 OuBA** — Meaning freeze boundary and upstream routing validation.  
-- **20.64 TPTB** — Representation layer fields and meaning construction inputs.  
-- **20.66 TPSF** — Scoring layer fields and semantic weighting.  
-- **20.113 CoHI** — Continuity integrator and continuity_fields computation.  
-- **20.112 LI** — Meaning commitment and candidate selection.  
-- **20.110 OuBB** — Expression selection and realization constraints.  
-- **20.110.010 OuBB Stack** — Surface‑form generation pipeline.  
-- **20.30.080 Response Generator (RG)** — Realization semantics.  
-- **20.30.085 Surface Generator (RSG)** — Surface‑form construction.  
-- **20.705 Path A / Path B Flow** — Architectural separation of meaning, routing, and expression.
+---
 
 #### **Manifold Layer (Optional but Recommended)**  
 - **SSR → Manifold Transfer Guide** — Numeric extraction and manifold grounding.  
