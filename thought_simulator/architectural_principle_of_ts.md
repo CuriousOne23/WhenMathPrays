@@ -87,7 +87,7 @@ Output (OuBB)
 
 ### **References**
 
-#### **TS Core Architecture (20‑Series Requirements at [https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator](https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator)**  
+#### **TS Core Architecture (20‑Series Requirements at [https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator]([https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator](https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator)**  
 - **20.52 SSR Data Packet** — Definition of SSR fields, routing record (RRw), and freeze semantics.  
 - **20.54 SSRGn** — SSR generation, sanitization, and freeze rules.  
 - **20.40.060 OuBA** — Meaning freeze boundary and upstream routing validation.  
