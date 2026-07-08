@@ -51,10 +51,13 @@ Consider the sentence: “John gave Mary the book that Sarah recommended after r
 
 **Traditional entangled systems** must simultaneously resolve 5+ objects, 4+ relational layers, nested clauses, and temporal/causal dependencies. This produces a combinatorial explosion in possible routing graphs or attention patterns.
 
-**In TS**:
-- Path A extracts objects and relations, commits meaning to SSR, and embeds the routing record (RRw) derived directly from the content.
-- SSR freezes the resolved structure.
-- Path B operates deterministically on the snapshot — no recomputation, no search, no explosion.
+**In TS**, routing is dynamic yet strictly bounded to the current message:
+- Path A (via primitives such as SOB, SROB, CnOB, SmOB, IdOB, and RB) extracts the relevant objects and relations directly from the input structure.
+- It builds a focused routing record (RRw) that captures only the meaningful paths present in this message — e.g., the transfer relation (“gave”), the recommendation chain (“recommended”), and the temporal/causal ordering (“after reading”).
+- OuBA commits the resolved meaning + RRw into the immutable SSR.
+- Path B consumes this frozen snapshot deterministically. Primitives such as REx, RPlan, RPU, ReB, RG, and RSG operate solely on the pre-extracted routes and grounded structure — there is no search, no backtracking, and no recomputation of alternative graphs. Only the routes that are explicitly supported by the message content are activated and expressed.
+
+The result is a single, content-derived routing pass followed by deterministic realization. Combinatorial explosion is avoided because TS never explores hypothetical routes outside the message’s own relational structure.
 
 ### 7. Comparison of Architectures
 
