@@ -14,7 +14,7 @@ Input: KnC provides coarse identity anchor with low continuity weight; KnM refin
 Mapping equations:  
 $coarse = KnC[id] \times w_c$  
 $medium = KnM[id] \oplus coarse$  
-$final = KnF[id] \times (1 + truth_factor)$
+$final = KnF[id] \times (1 + truth_{factor})$
 
 Result: `identity_mapping` resolves to the fine-grained anchor with continuity ordering applied.
 
