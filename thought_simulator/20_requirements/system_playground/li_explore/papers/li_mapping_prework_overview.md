@@ -1,6 +1,6 @@
-# li_mapping_library_prework.md
+# li_mapping_prework_overview.md
 
-**Title:** LI Mapping Library — Pre-work Reference  
+**Title:** LI Mapping Prework Overview — Pre-work Reference  
 **Document ID:** Future-HLR  
 **Version:** 0.2 (Pre-work — Exploratory)  
 **Date:** 2026-07-07  
