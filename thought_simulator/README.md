@@ -18,6 +18,9 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - Governance layer (IB → GBIB → GB) fully specified
 - Co-processor architecture defined for hybrid integration
 
+**Architecture Verification and Readiness Paper:**  
+[TS architecture readiness paper/announcement](ts_architecture_validation_and_readiness.md)
+
 **Implementation phase** is next.
 
 **Detailed Status Paper:** [TS_and_LMS_AI_status_6-26-2026.md](TS_and_LMS_AI_status_6-26-2026.md)
