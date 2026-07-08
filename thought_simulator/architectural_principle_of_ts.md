@@ -1,8 +1,6 @@
-**architectural_principle_of_ts.md**
+# The Architectural Principle of the Thought Simulator: Separation of Meaning Construction, Routing, and Expression
 
-**Title:** The Architectural Principle of the Thought Simulator: Separation of Meaning Construction, Routing, and Expression
 **Authors:** CuriousOne23, Copilot, Grok
-
 **Audience:** Cognitive-architecture researchers, symbolic-AI experts, hybrid-AI designers, and LLM theorists  
 **Version:** 0.2 (Refined Draft)  
 **Date:** 2026-07-08  
