@@ -1,11 +1,17 @@
 # TS Architecture Validation and Readiness
 
-**Paper ID:** Future HLR number (not used in this paper)  
+**Authors:** CuriousOne23, Grok and Copilot
 **Version:** 0.1 (Draft)  
 **Date:** 2026-07-08  
 
 ### 1. Introduction
-This paper announces a major architectural milestone for the Thought Simulator (TS): the core architecture is now validated as coherent, realizable, and ready for engineering implementation. It summarizes why the design is sound and why the next phase is realization.
+This paper announces a major architectural milestone for the Thought Simulator (TS): the core architecture is now validated as a coherent, realizable **basic cognitive machine**.
+
+A basic cognitive machine is understood here as a system that performs meaning construction, routing, grounding, continuity management, and deterministic expression in a structured, inspectable, and controllable manner — without relying on massive statistical training or opaque emergent behavior.
+
+TS will not initially compete with today’s large language models in raw fluency or breadth of knowledge. However, the architectural advantages of TS — strict separation of meaning, routing, and expression; frozen deterministic routing; invariant-controlled mapping; and geometric manifold projection — position it for rapid improvement in transparency, stability, and controllability. TS is unlikely to suffer the scaling instabilities common in current statistical systems, and its modular, inspectable design supports a learn-as-you-go engineering process. These traits suggest that TS-like architectures can deliver reliable, explainable cognition that improves predictably with engineering effort.
+
+This paper summarizes why the architecture is valid and why the next step is implementation.
 
 ### 2. Architectural Completeness
 The TS architecture is now fully specified end-to-end:
@@ -13,7 +19,7 @@ The TS architecture is now fully specified end-to-end:
 - Path A constructs meaning and extracts routing, freezing both into the SSR(t) via OuBA and SSRGn.
 - KnB grounding (KnC → KnM → KnF) produces stable symbolic anchors.
 - Governance tags (TPTB truth_tags, TPSF safety_flags) and continuity enrichment (CoHI) prepare the SSR for Path B.
-- LI mapping layer refines grounded fields into structured, continuity-aware outputs (identity, relation, domain, qualifier, ordering, and realization plan mappings).
+- LI mapping layer refines grounded fields into structured, continuity-aware outputs.
 - The manifold pipeline converts SSR-derived numeric coordinates into geometric constraint surfaces with basins, trajectories, and admissibility regions.
 - RSG performs deterministic projection from the manifold to surface form, feeding RG → ReB → RPU → OuBB.
 
@@ -40,8 +46,6 @@ TS is designed for practical engineering:
 - **Viewable and Understandable**: Intermediate artifacts (SSR, LI mappings, manifold coordinates) are inspectable, supporting a learn-as-you-go process.
 - **Supportable**: Clear invariants and validation rules enable measurable progress and regression testing.
 - **Laptop-Friendly**: Core deterministic pipeline and logic simulations run on ordinary hardware with reasonable performance.
-
-Short examples of deterministic operators include continuity ordering and semantic weighting, all expressed with standard numeric and symbolic techniques.
 
 ### 5. End-to-End Flow Validation
 The validated chain is:
