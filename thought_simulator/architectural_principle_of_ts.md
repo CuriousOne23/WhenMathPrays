@@ -42,7 +42,7 @@ These relational chains are precisely where combinatorial complexity arises in t
 ### 5. Why Previous Cognitive Machines Failed
 - **Symbolic systems**: Meaning, rules, and templates are tightly coupled. Adding relations requires updating rule sets and potentially recomputing consistency across the knowledge base.
 - **Hybrid systems**: Representations fuse semantics with weighted connections; inference repeatedly traverses or updates the graph.
-- **LLMs**: All elements reside in the same high-dimensional space. Attention recomputes contextual routing at every layer (source of quadratic attention cost) and is sensitive to prompt variations.
+- **LLMs**: All representational elements (meaning, routing, and expression tendencies) reside in the same high‑dimensional tensor space. During training and inference, self‑attention repeatedly recomputes contextual routing at every layer for every token — the source of quadratic attention cost. Because meaning, routing, and expression are jointly encoded and dynamically reconstructed for every token at every layer, LLMs incur quadratic attention costs during both training and inference, resulting in substantial power and compute requirements.
 
 In each case, new concepts or relations trigger broad recomputation across the entangled substrate. This is the root of observed inefficiencies and instabilities.
 
@@ -62,7 +62,7 @@ Consider the sentence: “John gave Mary the book that Sarah recommended after r
 |--------------|-------------|-------------|-------------|-------------------------|
 | Symbolic     | fused      | fused      | fused      | Brittle, combinatorial |
 | Hybrid       | fused      | fused      | fused      | Heavy, unstable        |
-| LLM          | fused      | fused (recomputed per layer) | fused | Quadratic cost, drift  |
+| LLM          | fused (meaning + routing + expression) | dynamically reconstructed for every token at every layer (quadratic attention cost) | fused | High power and compute requirements due to continuous reconstruction of meaning, routing, and expression |
 | TS           | separated  | frozen (content-derived) | deterministic | Efficient, stable      |
 
 ### 8. Conclusion
