@@ -1,4 +1,4 @@
-# LI Mapping Library Specification
+#  Local Inference (LI) Mapping Library Specification
 
 **Paper ID:** Future HLR number  
 **Version:** 0.1 (Draft)  
