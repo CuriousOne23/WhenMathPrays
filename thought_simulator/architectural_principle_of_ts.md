@@ -9,9 +9,9 @@
 This paper introduces the foundational architectural principle of the Thought Simulator (TS): the strict separation of meaning construction (Path A), routing, and expression (Path B). This separation eliminates the combinatorial (NP-complete-like) explosion inherent in prior cognitive architectures by freezing committed meaning into a sanitized semantic snapshot (SSR) that carries its own routing record (RRw).
 
 ### 2. Introduction
-For seventy years, cognitive machines have entangled meaning, routing, and expression within the same representational substrate. Symbolic systems fused them in frames and production rules; hybrid approaches embedded them in weighted graphs or probabilistic networks; modern LLMs encoded them implicitly in shared tensor spaces where attention mechanisms repeatedly recompute relational paths.
+Traditionally cognitive machines have entangled meaning, routing, and expression within the same representational substrate. Symbolic systems fused them in frames and production rules; hybrid approaches embedded them in weighted graphs or probabilistic networks; modern LLMs encoded them implicitly in shared tensor spaces where attention mechanisms repeatedly recompute relational paths.
 
-TS is the first architecture to explicitly freeze routing with committed meaning. By breaking this 70-year pattern and separating these three functions into distinct layers, TS makes cognition tractable. The core insight is that natural language itself provides objects and the relational chains connecting them; TS extracts and freezes this structure once rather than reconstructing routing internally.
+TS is the first architecture to explicitly freeze routing with committed meaning. By breaking the conventional pattern and separating these three functions into distinct layers, TS makes cognition tractable. The core insight is that natural language itself provides objects and the relational chains connecting them; TS extracts and freezes this structure once rather than reconstructing routing internally.
 
 ### 3. Architectural Principle of TS
 TS rests on a clean separation:
