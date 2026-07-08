@@ -118,7 +118,7 @@ LI produces structured realization plans.
 LI selects grounding level using:
 
 $$
-\text{grounding_level} = f(\text{entropy}, \text{task_needs}, \text{continuity})
+\text{grounding}_{level} = f(\text{entropy}, \text{task_needs}, \text{continuity})
 $$
 
 **Decision Flow**:
