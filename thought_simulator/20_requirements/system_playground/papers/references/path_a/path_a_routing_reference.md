@@ -81,6 +81,11 @@ OuBA handles termination with path_b_eligible signaling.
 
 **HLR-PA-RTE-011:** Termination geometry produces final envelopes with eligibility flags.  
 **HLR-PA-RTE-012:** Termination respects entropy-based routing decisions.
+**HLR-PA-RTE-013:** Termination threshold is defined as tp_entropy_score ≤ 0.25.
+**HLR-PA-RTE-014:** When tp_entropy_score ≤ 0.25, RB SHALL route to OuBA for termination.
+**HLR-PA-RTE-015:** When tp_entropy_score > 0.25, RB SHALL route to IdOB/RBU for continued refinement.
+HLR-PA-RTE-016: The termination threshold is deterministic, replay-safe, and invariant across all Path A executions.
+
 
 ---
 
