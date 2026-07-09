@@ -16,6 +16,9 @@ identity_fields:
   - name: "stance_tone_fields"
     type: "map"
     description: "Stance and tone integration"
+  - name: "cue_envelope"
+    type: "map"
+    description: "Non-semantic lexical, structural, and constraint cues produced by STPX (20.49)"
 meaning_geometry:
   - name: "identity_conditioned_chart"
     anchors:
@@ -28,13 +31,13 @@ meaning_geometry:
       - "bounded_refinement"
 refinement_operators:
   - operator: "identity_conditioned_refinement"
-    domain: "structural_cues"
+    domain: "structural_cues + cue_envelope"
     codomain: "meaning_fields"
-    description: "Refinement guided by identity profile"
+    description: "Refinement guided by identity profile and non-semantic cues"
   - operator: "object_binding"
-    domain: "semantic_cues"
+    domain: "semantic_cues + cue_envelope"
     codomain: "meaning_fields"
-    description: "Binding structural entities to meaning"
+    description: "Binding structural entities to meaning with non-semantic cue support"
 invariants:
   - "structural_immutability"
   - "referential_stability"
