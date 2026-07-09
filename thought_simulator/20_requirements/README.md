@@ -70,6 +70,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.48.010_knc_prim.md](20.41.010_knc_prim.md)
 - [20.48.020_knm_prim.md](20.41.020_knm_prim.md)
 - [20.48.030_knf_prim.md](20.41.030_knf_prim.md)
+- [20.49_stpx_prim.md]([20.49_stpx_prim.md])  
 - [20.50_rb_requirements.md](20.50_rb_requirements.md)
 - [20.51_rbu_prim.md](20.51_rbu_prim.md)
 - [20.52_ssr_data_packet.md](20.52_ssr_data_packet.md)
