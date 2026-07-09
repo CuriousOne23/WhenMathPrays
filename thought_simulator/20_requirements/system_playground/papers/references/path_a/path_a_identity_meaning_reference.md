@@ -16,7 +16,7 @@ This document establishes the canonical identity and meaning geometry specificat
 
 ## 2. Identity & Meaning Domain Overview
 
-The identity and meaning domain applies identity profiles to refined structural outputs for object binding and meaning refinement. All operations are post-structural and identity-conditioned.
+The identity and meaning domain applies identity profiles to refined structural outputs for object binding and meaning refinement. All operations are post-structural and identity-conditioned. The identity and meaning domain may consume cue_envelope as a non-semantic structural signal.
 
 ---
 
@@ -27,6 +27,10 @@ Meaning geometry evolves within identity-selected manifold charts. Refinement fo
 $$
 F_{\text{meaning}}^{(n+1)} = \Phi_{\text{id}}(F_{\text{meaning}}^{(n)}, \text{IdentityProfile})
 $$
+
+## 3.1 STPX Non‑Semantic Input Layer (Informative)
+
+STPX (20.49) produces the cue_envelope, a non-semantic structural/lexical/constraint cue layer consumed by IdOB and RBU. Cue_envelope does not modify meaning geometry or identity profiles. It provides bounded, replay-safe surface cues that support referential stability, stance/tone integration, and identity-conditioned refinement without semantic inference.
 
 ---
 
@@ -61,8 +65,8 @@ Meaning manifold refinement applies identity-conditioned updates.
 
 | Primitive | Allowed Fields |
 |-----------|----------------|
-| IdOB | identity_profile, structural_cues, meaning_fields, referential_stability_markers |
-| RBU | identity_profile, stance_tone_fields, refined_meaning_fields, provenance |
+| IdOB | identity_profile, structural_cues, **cue_envelope**, meaning_fields, referential_stability_markers |
+| RBU | identity_profile, stance_tone_fields, refined_meaning_fields, **cue_envelope**, provenance |
 
 ---
 
