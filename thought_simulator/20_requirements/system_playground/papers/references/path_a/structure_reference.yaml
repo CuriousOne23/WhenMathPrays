@@ -22,6 +22,16 @@ structure_fields:
   - name: "structural_signature"
     type: "vector"
     description: "Normalized structure vector"
+stpx_inputs:
+  - structural_geometry
+  - canonical_tokens
+stpx_outputs:
+  - cue_envelope
+cue_envelope_fields:
+  lexical_cues: "list"
+  structural_cues: "list"
+  constraint_cues: "list"
+  repair_markers: "list"
 invariants:
   - "monotonic_accumulation"
   - "structural_immutability_outside_smob"
