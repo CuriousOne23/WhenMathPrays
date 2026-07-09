@@ -17,7 +17,9 @@ Path A is the deterministic meaning-construction pipeline of the Thought Simulat
 ## 2. Clean Path A Flow Diagram (Conceptual)
 
 ```
-InB → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → RB → RTU → IdOB → RBU → CTP → RB → RTU → IdOB → RBU → ... → OuBA
+InB → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → ISc → RB → RTU → IdOB → RBU → TR → CTP → ISc → RB → RTU → IdOB → RBU → ... 
+OR
+→ TR → CTP → ISc → RB → RTU → OuBA
 ```
 
 ---
@@ -25,35 +27,40 @@ InB → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → RB →
 ## 3. Corrected Path A Flow Diagram (Conceptual)
 
 ```
-InB → IIInB → IE → ISc → CEx → CE → TPU → IMR → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → RB → RTU → IdOB → RBU → ... → CTP → RB → RTU → OuBA
+InB → IIInB → IE → ISc → CEx → CE → TPU → IMR → 
+SOB → SROB → CnOB → SmOB → SSG → RBU → 
+TR → CTP → ISc → RB → RTU → IdOB → RBU → 
+TR → CTP → ISc → RB → RTU → IdOB → RBU → ...
+OR
+TR → CTP → ISc → RB → RTU → OuBA
 ```
 
 ---
 
 ## 4. Path A Primitive Inventory
 
-| Primitive | Governing Reference Manuals | Description | Notes |
-|-----------|-----------------------------|-------------|-------|
-| InB | pa_boundary_conditions.md | Raw external signal intake and canonicalization | Enforces input envelope and provenance invariants |
-| IIInB | pa_boundary_conditions.md | Surface normalization with deterministic repairs | Preserves order without semantic inference (Corrected Path A) |
-| IE | pa_boundary_conditions.md | Structured envelope with tokens and tags | Provides bounded input (Corrected Path A) |
-| ISc | pa_boundary_conditions.md, pa_interpretation_constraints.md | Candidate set scoring and entropy calculation | Pre-semantic escalation (Corrected Path A) |
-| CEx | pa_boundary_conditions.md | Explicit context expansion | Allowlisted hypotheses (Corrected Path A) |
-| CE | pa_boundary_conditions.md | Context envelope selection | Sole context object (Corrected Path A) |
-| TPU | pa_boundary_conditions.md | Truth Primitive writer with authority matrix | Atomic commitment (Corrected Path A) |
-| IMR | pa_text_correction.md, pa_boundary_conditions.md, pa_error_manifolds.md | Mismatch classification and bounded correction | Governs correction_context (Corrected Path A) |
-| SOB | pa_structure_vectors.md, pa_grammatical_structure.md | Structural segmentation and hint extraction | Pre-semantic cue extraction |
-| SROB | pa_structure_vectors.md, pa_grammatical_structure.md | Structure normalization and refinement | Sharpens hints |
-| CnOB | pa_structure_vectors.md, pa_grammatical_structure.md | Monotonic structural constraints (C1–C7) | Detects conflicts |
-| SmOB | pa_structure_vectors.md, pa_grammatical_structure.md | Residue compression (hashing only here) and cue extraction | Sole hashing primitive |
-| SSG | pa_ssg.md | Semantic structure geometry and normalized routing signatures | Produces σ |
-| RBU | pa_meaning_rules.md | Registers identity, stance, tone into meaning fields | Runs after SSG (initialization) and after IdOB (refinement); does not modify structural geometry |
-| TR | pa_boundary_conditions.md | Relational routing preparation | Consumes committed TP |
-| CTP | pa_boundary_conditions.md | Immutable TP snapshot collection | Terminal handoff |
-| RB | pa_boundary_conditions.md | Relational routing filter | Multi-core isolation |
-| RTU | pa_boundary_conditions.md | Routing update construction | Activation signals |
-| IdOB | pa_idob.md | Identity profiles, object binding, referential stability, meaning refinement | Identity-conditioned stage |
-| OuBA | pa_boundary_conditions.md | Terminal output with path_b_eligible | Clean handoff to Path B |
+| Primitive | Governing Reference Manuals | Description | TP Fields Read | TP Fields Written | Notes |
+|-----------|-----------------------------|-------------|----------------|-------------------|-------|
+| InB | pa_boundary_conditions.md | Raw external signal intake and canonicalization | None | Raw payload + provenance | Enforces input envelope |
+| IIInB | pa_boundary_conditions.md | Surface normalization with deterministic repairs | Raw payload | Normalized surface form | Corrected Path A |
+| IE | pa_boundary_conditions.md | Structured envelope with tokens and tags | Normalized form | Structured envelope | Corrected Path A |
+| ISc | pa_boundary_conditions.md, pa_interpretation_constraints.md | Candidate set scoring and entropy calculation | Envelope / TP snapshot | tp_entropy_score | Dual role: front-end + routing loop |
+| CEx | pa_boundary_conditions.md | Explicit context expansion | Envelope | Correction hypotheses | Corrected Path A |
+| CE | pa_boundary_conditions.md | Context envelope selection | Hypotheses | Selected context | Corrected Path A |
+| TPU | pa_boundary_conditions.md | Truth Primitive writer with authority matrix | Context | Committed TP | Corrected Path A |
+| IMR | pa_text_correction.md, pa_boundary_conditions.md, pa_error_manifolds.md | Mismatch classification and bounded correction | TP snapshot | correction_context | Governs correction_context |
+| SOB | pa_structure_vectors.md, pa_grammatical_structure.md | Structural segmentation and hint extraction | Committed TP | Structural hints | Pre-semantic |
+| SROB | pa_structure_vectors.md, pa_grammatical_structure.md | Structure normalization and refinement | Structural hints | Refined structure | - |
+| CnOB | pa_structure_vectors.md, pa_grammatical_structure.md | Monotonic structural constraints (C1–C7) | Refined structure | Constraints + conflicts | - |
+| SmOB | pa_structure_vectors.md, pa_grammatical_structure.md | Residue compression (hashing only here) and cue extraction | Constraints | Residue-compressed structure | Sole hashing primitive |
+| SSG | pa_ssg.md | Semantic structure geometry and normalized routing signatures | Refined structure | σ + semantic geometry | - |
+| RBU | pa_meaning_rules.md | Registers identity, stance, tone into meaning fields | Identity profile + meaning fields | Refined meaning fields | Dual role: after SSG (init) + after IdOB (refine) |
+| TR | pa_boundary_conditions.md | Relational routing preparation | Committed TP | Routing-prep fields | Precedes every CTP |
+| CTP | pa_boundary_conditions.md | Immutable TP snapshot collection | Committed fields | TP snapshot | Requires preceding TR |
+| RB | pa_boundary_conditions.md | Relational routing filter | TP snapshot + tp_entropy_score | Routing filter | Entropy-based decision |
+| RTU | pa_boundary_conditions.md | Routing update construction | Routing filter | Routing updates | - |
+| IdOB | pa_idob.md | Identity profiles, object binding, referential stability, meaning refinement | σ + meaning fields | Identity-conditioned meaning | Post-structural |
+| OuBA | pa_boundary_conditions.md | Terminal output with path_b_eligible | Final TP snapshot | path_b_eligible + final envelope | End of Path A |
 
 ---
 
