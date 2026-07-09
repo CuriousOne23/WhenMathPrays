@@ -16,7 +16,7 @@ This document establishes the canonical structural geometry specifications for t
 
 ## 2. Structural Domain Overview
 
-The structural domain encompasses segmentation, refinement, constraint application, and residue management. All operations maintain monotonic accumulation, bounded behavior, and pre-semantic separation.
+The structural domain encompasses segmentation, refinement, constraint application, and residue management. All operations maintain monotonic accumulation, bounded behavior, and pre-semantic separation. STPX consumes structural geometry but does not modify it.
 
 ---
 
@@ -31,6 +31,10 @@ $$
 $$
 v_{\text{norm}} = \frac{v_{\text{struct}}}{\lVert v_{\text{struct}} \rVert_2}
 $$
+
+## 3.1 STPX Structural Inputs (Informative)
+
+STPX (20.49) consumes cleaned structural geometry and canonical tokens produced by SOB, SROB, CnOB, and SmOB. STPX does not modify structural geometry. It extracts lexical, structural, and constraint cues from the structural domain for downstream routing-adjacent processing. STPX operates strictly post-SSG and pre-RBU in Path A.
 
 ---
 
@@ -78,6 +82,7 @@ Residue accumulates monotonically. Compression occurs only in SmOB via bounded h
 | SROB | refined_structure, normalized_hints, repair_metadata |
 | CnOB | constraint_signals, missing_slot_flags, conflict_flags |
 | SmOB | residue_accumulation, compressed_residue, structural_cues |
+| STPX | structural_geometry, canonical_tokens |
 
 ---
 
@@ -89,6 +94,7 @@ Residue accumulates monotonically. Compression occurs only in SmOB via bounded h
 | SROB | meaning_fields, semantic_inference |
 | CnOB | meaning_fields, structural_geometry_modification |
 | SmOB | meaning_fields, non_bounded_hashing |
+| STPX | semantic_fields, identity_fields, routing_fields, entropy_fields, TPU_fields |
 
 ---
 
@@ -140,6 +146,16 @@ provenance: {timestamp, source_id, ...}
 | HLR-PA-STR-010 | 10 | Refinement maintains structural invariants |
 | HLR-PA-STR-011 | 11 | Structural tests verify monotonicity and replay |
 | HLR-PA-STR-012 | 11 | Field allowance tests are mandatory |
+|HLR-PA-STR-013 | 3.1 | STPX produces deterministic cue_envelope |
+|HLR-PA-STR-014 | 3.1 | STPX operates only on cleaned structural geometry |
+|HLR-PA-STR-015 | 3.1 | STPX emits lexical surface cues |
+|HLR-PA-STR-016 | 3.1 | STPX emits structural cues |
+|HLR-PA-STR-017 | 3.1 | STPX emits constraint cues |
+|HLR-PA-STR-018 | 3.1 | STPX emits repair-region markers when present |
+|HLR-PA-STR-019 | 3.1 | STPX does not perform semantic interpretation |
+|HLR-PA-STR-020 | 3.1 | STPX does not modify TPU, meaning, identity, routing, or truth fields |
+|HLR-PA-STR-021 | 3.1 | STPX cue_envelope is bounded and replay-safe |
+|HLR-PA-STR-022 | 3.1 | STPX cue_envelope schema is deterministic |
 
-**End of path_a_structure_reference.md**
-```
+---
+
