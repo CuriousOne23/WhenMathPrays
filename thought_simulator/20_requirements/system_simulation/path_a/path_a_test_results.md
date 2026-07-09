@@ -21,6 +21,8 @@ This document records the results of the Path A test suite using Option 4 compos
 
 ## Test Suite Overview
 
+Note that the simulations were ran with references defined under [system_playground/papers/references](../system_playground/papers/references)  
+
 **Option Chosen:** 4 — Composite Score
 
 **Scoring Components:**
