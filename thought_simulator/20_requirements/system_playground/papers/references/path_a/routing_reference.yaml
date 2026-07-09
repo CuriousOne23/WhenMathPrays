@@ -1,0 +1,6 @@
+﻿document_id: "20.XXX_routing_reference"
+version: "0.1"
+status: "Draft"
+reference_type: "routing"
+primitive_family: "rtu_rb_primitives"
+
