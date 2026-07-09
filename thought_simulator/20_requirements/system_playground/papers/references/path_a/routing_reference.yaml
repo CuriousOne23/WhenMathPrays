@@ -1,6 +1,64 @@
-﻿document_id: "20.XXX_routing_reference"
+document_id: "20.XXX_routing_reference"
 version: "0.1"
 status: "Draft"
 reference_type: "routing"
 primitive_family: "rtu_rb_primitives"
-
+routing_fields:
+  - name: "committed_snapshot"
+    type: "map"
+    description: "Immutable TP snapshot"
+  - name: "tp_entropy_score"
+    type: "float"
+    description: "Entropy score for routing decision"
+  - name: "routing_update"
+    type: "map"
+    description: "Pure routing update signal"
+  - name: "routing_filter"
+    type: "map"
+    description: "Routing filter for lane decision"
+  - name: "path_b_eligible"
+    type: "boolean"
+    description: "Termination eligibility flag"
+routing_geometry:
+  - name: "routing_state_geometry"
+    components:
+      - "snapshot"
+      - "entropy"
+      - "update"
+      - "filter"
+    constraints:
+      - "deterministic_evolution"
+      - "bounded_size"
+      - "replay_safe"
+entropy_rules:
+  - rule: "entropy_based_termination"
+    description: "Low entropy routes to termination"
+  - rule: "entropy_informed_routing"
+    description: "High entropy routes to refinement"
+termination_envelopes:
+  - envelope: "terminal_path_a_envelope"
+    description: "Final envelope with path_b_eligible flag"
+  - envelope: "snapshot_envelope"
+    description: "Immutable CTP snapshot envelope"
+routing_operators:
+  - operator: "routing_update_construction"
+    domain: "snapshot + entropy"
+    codomain: "routing_update"
+    description: "Constructs pure routing update signal"
+  - operator: "routing_filter_construction"
+    domain: "routing_update"
+    codomain: "routing_filter"
+    description: "Constructs routing filter for decision"
+invariants:
+  - "pre_routing_separation"
+  - "deterministic_snapshot"
+  - "replay_equivalence"
+  - "bounded_routing_geometry"
+examples:
+  - input:
+      committed_snapshot: {fields: {...}}
+      tp_entropy_score: 0.35
+    output:
+      routing_update: {activation: "refine"}
+      routing_filter: {lane: "idob"}
+      path_b_eligible: false
