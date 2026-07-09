@@ -55,4 +55,3 @@ examples:
       refined_structure: {nodes: ["A", "B"], edges: ["A->B"]}
       structural_signature: [0.577, 0.816]
       residue_accumulation: []
-
