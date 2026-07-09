@@ -3,4 +3,51 @@ version: "0.1"
 status: "Draft"
 reference_type: "boundary"
 primitive_family: "boundary_primitives"
-
+boundary_fields:
+  - name: "transport_metadata"
+    type: "map"
+    description: "Transport and provenance information"
+  - name: "raw_payload"
+    type: "string"
+    description: "Raw external signal payload"
+  - name: "normalized_surface"
+    type: "string"
+    description: "Canonical surface form"
+  - name: "repairs_metadata"
+    type: "list"
+    description: "Attached repair metadata"
+  - name: "structural_tags"
+    type: "list"
+    description: "Pre-semantic structural tags"
+  - name: "provenance"
+    type: "map"
+    description: "Audit and source provenance"
+invariants:
+  - "deterministic_canonicalization"
+  - "replay_equivalence"
+  - "bounded_envelope_size"
+  - "pre_semantic_separation"
+geometry:
+  envelopes:
+    - name: "canonical_intake_envelope"
+      structure: "transport_metadata + payload + repairs + tags + provenance"
+      constraints:
+        - "fixed_shape"
+        - "deterministic_evolution"
+        - "provenance_complete"
+refinement:
+  - operator: "surface_normalization"
+    domain: "raw_payload"
+    codomain: "normalized_surface"
+  - operator: "tag_extraction"
+    domain: "normalized_surface"
+    codomain: "structural_tags"
+examples:
+  - input:
+      transport_metadata: {source: "user", timestamp: "2026-07-09T12:00:00Z"}
+      raw_payload: "Example input signal"
+    output:
+      normalized_surface: "Example input signal"
+      repairs_metadata: []
+      structural_tags: ["sentence"]
+      provenance: {processed_by: "InB"}
