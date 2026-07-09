@@ -52,4 +52,3 @@ examples:
     output:
       meaning_fields: {binding1: "resolved_meaning"}
       referential_stability_markers: ["stable_id1"]
-
