@@ -1,6 +1,55 @@
-﻿document_id: "20.XXX_identity_meaning_reference"
+document_id: "20.XXX_identity_meaning_reference"
 version: "0.1"
 status: "Draft"
 reference_type: "identity_meaning"
 primitive_family: "idob_primitives"
+identity_fields:
+  - name: "identity_profile"
+    type: "map"
+    description: "Aggregated identity fields and context"
+  - name: "referential_stability_markers"
+    type: "list"
+    description: "Cross-sentence identity anchors"
+  - name: "meaning_fields"
+    type: "map"
+    description: "Identity-conditioned meaning entries"
+  - name: "stance_tone_fields"
+    type: "map"
+    description: "Stance and tone integration"
+meaning_geometry:
+  - name: "identity_conditioned_chart"
+    anchors:
+      - "object_binding"
+      - "referential_stability"
+      - "meaning_refinement"
+    constraints:
+      - "monotonic_accumulation"
+      - "deterministic_projection"
+      - "bounded_refinement"
+refinement_operators:
+  - operator: "identity_conditioned_refinement"
+    domain: "structural_cues"
+    codomain: "meaning_fields"
+    description: "Refinement guided by identity profile"
+  - operator: "object_binding"
+    domain: "semantic_cues"
+    codomain: "meaning_fields"
+    description: "Binding structural entities to meaning"
+invariants:
+  - "structural_immutability"
+  - "referential_stability"
+  - "identity_conditioned_separation"
+  - "replay_equivalence"
+identity_rules:
+  - rule: "referential_consistency"
+    description: "Maintains consistent identity across sentences"
+  - rule: "monotonic_meaning_update"
+    description: "Meaning fields accumulate monotonically"
+examples:
+  - input:
+      identity_profile: {entity: "user", context: "conversation"}
+      structural_cues: ["entity1", "rel1"]
+    output:
+      meaning_fields: {binding1: "resolved_meaning"}
+      referential_stability_markers: ["stable_id1"]
 
