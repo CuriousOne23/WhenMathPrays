@@ -17,9 +17,9 @@ Path A is the deterministic meaning-construction pipeline of the Thought Simulat
 ## 2. Clean Path A Flow Diagram (Conceptual)
 
 ```
-InB → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → ISc → RB → RTU → IdOB → RBU → TR → CTP → ISc → RB → RTU → IdOB → RBU → ... 
+InB → SOB → SROB → CnOB → SmOB → SSG → RBU → TR → CTP → ISc → RTU → RB → IdOB → RBU → TR → CTP → ISc → RTU → RB → IdOB → RBU → ... 
 OR
-→ TR → CTP → ISc → RB → RTU → OuBA
+→ TR → CTP → ISc → RTU → RB → OuBA
 ```
 
 ---
@@ -29,10 +29,10 @@ OR
 ```
 InB → IIInB → IE → ISc → CEx → CE → TPU → IMR → 
 SOB → SROB → CnOB → SmOB → SSG → RBU → 
-TR → CTP → ISc → RB → RTU → IdOB → RBU → 
-TR → CTP → ISc → RB → RTU → IdOB → RBU → ...
+TR → CTP → ISc → RTU → RB → IdOB → RBU → 
+TR → CTP → ISc → RTU → RB → IdOB → RBU → ...
 OR
-TR → CTP → ISc → RB → RTU → OuBA
+TR → CTP → ISc → RTU → RB → OuBA
 ```
 
 ---
@@ -57,8 +57,8 @@ TR → CTP → ISc → RB → RTU → OuBA
 | RBU | pa_meaning_rules.md | Registers identity, stance, tone into meaning fields | Identity profile + meaning fields | Refined meaning fields | Dual role: after SSG (init) + after IdOB (refine) |
 | TR | pa_boundary_conditions.md | Relational routing preparation | Committed TP | Routing-prep fields | Precedes every CTP |
 | CTP | pa_boundary_conditions.md | Immutable TP snapshot collection | Committed fields | TP snapshot | Requires preceding TR |
-| RB | pa_boundary_conditions.md | Relational routing filter | TP snapshot + tp_entropy_score | Routing filter | Entropy-based decision |
 | RTU | pa_boundary_conditions.md | Routing update construction | Routing filter | Routing updates | - |
+| RB | pa_boundary_conditions.md | Relational routing filter | TP snapshot + tp_entropy_score | Routing filter | Entropy-based decision |
 | IdOB | pa_idob.md | Identity profiles, object binding, referential stability, meaning refinement | σ + meaning fields | Identity-conditioned meaning | Post-structural |
 | OuBA | pa_boundary_conditions.md | Terminal output with path_b_eligible | Final TP snapshot | path_b_eligible + final envelope | End of Path A |
 
