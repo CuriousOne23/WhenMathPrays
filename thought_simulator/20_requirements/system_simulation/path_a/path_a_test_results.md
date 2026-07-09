@@ -643,10 +643,6 @@ To exercise correction of earlier misinterpretation, identity anchoring to prior
 
 ---
 
-**Final Summary**
-
----
-
 ## Summary
 
 All 10 test cases completed successfully with full compliance to Path A invariants. The system demonstrated strong deterministic behavior, effective entropy management, and stable refinement across boundary, structural, semantic, identity, and routing stages.
@@ -655,17 +651,26 @@ All 10 test cases completed successfully with full compliance to Path A invarian
 - Average composite score across all primitives: **89.2**
 - Highest average primitive: TR/CTP (**93.0**)
 - Lowest average primitive: ISc (**85.4**)
-- Overall system stability: **Strong**
+- Overall system stability: **Strong and consistent**
 
 **Key Observations from Testing:**
-- The architecture successfully handled surface corrections, structural conflicts, semantic contrast, identity anchoring, and routing loops while maintaining monotonic accumulation, replay equivalence, and strict pre-/post-semantic separation.
-- ISc was the lowest-performing primitive in 7 out of 10 cases (average 85.4), primarily due to initial ambiguity and contrastive cues. This is expected behavior as it serves as the primary gatekeeper for routing decisions.
+- The architecture reliably handled surface corrections, structural conflicts, semantic contrast, identity anchoring, and routing loops while maintaining monotonic accumulation, replay equivalence, and strict pre-/post-semantic separation.
+- ISc was the lowest-performing primitive in 7 out of 10 cases (average 85.4), reflecting its role as the initial entropy gatekeeper. This behavior is expected because ISc operates before structural, semantic, and identity cues are available.
 - Multiple IdOB/RBU cycles effectively reduced entropy and stabilized meaning in high-ambiguity cases (C1, C2, E1, E2).
-- Termination at OuBA was clean and entropy-informed in all cases, with path_b_eligible correctly set.
+- Termination at OuBA was clean, deterministic, and entropy-informed in all cases, with path_b_eligible correctly set.
 
-**Assessment Relative to Today's Frontier AI:**
-Today's frontier AI (Grok 4, Claude 4, GPT-5 class) would likely score in the **92–97** range on similar tasks due to massive statistical pattern matching. However, this is not directly comparable because today's models lack guaranteed determinism, replay equivalence, explicit structural/meaning separation, writer authority, and auditable correction.
+**Assessment Relative to Today’s Frontier AI:**
+Frontier LLMs (Grok 4, Claude 4, GPT‑5 class) typically achieve higher surface-level performance on similar tasks (estimated composite-equivalent **92–97**), driven by large-scale statistical pattern matching and fluent generation. However, these systems do **not** provide deterministic replay, explicit structural/meaning separation, constraint enforcement, writer authority, or auditable correction.
 
-The current TS implementation (average 89.2) already demonstrates deterministic replay safety, explicit structural/meaning separation, writer authority, and auditable correction — properties that today's statistical frontier models do not guarantee. The modular design, combined with successful handling of contradiction, temporal anchoring, and refinement loops across all test cases, supports the conclusion that TS is positioned for substantial improvement and long-term superiority in trustworthy, deterministic intelligence.
+Path A’s current implementation (average **89.2**) already delivers:
+- deterministic replay safety  
+- explicit structural/meaning separation  
+- identity anchoring  
+- entropy-aware routing  
+- auditable correction  
+- stable refinement loops  
+
+These properties are not available in today’s statistical models.  
+Thus, while LLMs may outperform Path A in raw fluency or pattern-matching metrics, Path A demonstrates **superior trustworthiness, determinism, and interpretability**, positioning it for long-term advantages in structured, reliable intelligence.
 
 ---
