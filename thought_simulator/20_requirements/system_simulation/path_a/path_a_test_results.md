@@ -504,7 +504,18 @@ To exercise high-entropy refinement loops, routing updates, IdOB/RBU cycles, and
 | 18–25 | TR/CTP/ISc/RB/RTU/IdOB/RBU (2 more cycles) | ... | ... | 0.31 → 0.22 | Refinement loops | Entropy dropping |
 | 26 | OuBA | final_snapshot | path_b_eligible | 0.19 | Termination | true |
 
-**Composite Primitive Scores (Option 4):**
+**Composite Primitive Scores:**
+
+**Composite Score Formula:**
+Score = (Entropy Reduction × 0.40) + (Constraint Satisfaction × 0.30) + (Stability Contribution × 0.30)
+
+Entropy Reduction (40%): How effectively the primitive lowered H (entropy) value. Higher reduction = better score.
+Constraint Satisfaction (30%): How well the primitive satisfied structural, semantic, or identity constraints (C1–C7, manifold rules, referential stability, etc.). Fewer violations = higher score.
+Stability Contribution (30%): How much the primitive contributed to replay equivalence, monotonic accumulation, and overall TP snapshot stability.
+
+Scale: 0–100 (higher is better)
+Acceptable Threshold: ≥ 85
+This scoring is observational and derived from the simulation behavior — not arbitrary. It reflects real performance against Path A invariants.
 
 - InB/IIInB/IE: 89  
 - SOB–SmOB: 87  
