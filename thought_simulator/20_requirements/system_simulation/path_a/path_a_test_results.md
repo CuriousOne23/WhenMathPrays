@@ -23,6 +23,10 @@ This document records the results of the Path A test suite using Option 4 compos
 
 Note that the simulations were ran with references defined under [system_playground/papers/references](../system_playground/papers/references)  
 
+**Entropy Simulation H Value:**
+- H ≤ 0.25 → Route to OuBA (low entropy, sufficient stability)
+- H > 0.25 → Continue refinement loop (IdOB/RBU cycle)
+
 **Option Chosen:** 4 — Composite Score
 
 **Scoring Components:**
