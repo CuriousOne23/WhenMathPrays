@@ -3,4 +3,56 @@ version: "0.1"
 status: "Draft"
 reference_type: "structure"
 primitive_family: "structure_primitives"
+structure_fields:
+  - name: "raw_structure"
+    type: "graph"
+    description: "Initial structural representation"
+  - name: "segmentation_hints"
+    type: "list"
+    description: "Extracted structural hints"
+  - name: "refined_structure"
+    type: "graph"
+    description: "Normalized and refined structure"
+  - name: "constraint_signals"
+    type: "list"
+    description: "C1-C7 constraint outputs"
+  - name: "residue_accumulation"
+    type: "list"
+    description: "Monotonic residue buffer"
+  - name: "structural_signature"
+    type: "vector"
+    description: "Normalized structure vector"
+invariants:
+  - "monotonic_accumulation"
+  - "structural_immutability_outside_smob"
+  - "replay_equivalence"
+  - "pre_semantic_separation"
+geometry:
+  structural_forms:
+    - name: "canonical_structural_graph"
+      components:
+        - "nodes"
+        - "edges"
+        - "labels"
+      constraints:
+        - "bounded_size"
+        - "deterministic_projection"
+        - "monotonic_evolution"
+accumulation_rules:
+  - rule: "monotonic_residue"
+    description: "Residue accumulates without deletion"
+  - rule: "smob_compression"
+    description: "Residue compression occurs only in SmOB"
+replay_rules:
+  - rule: "snapshot_comparison"
+    description: "Corrected paths compare to baseline after artifact stripping"
+  - rule: "deterministic_replay"
+    description: "All structural operations are seed-free and replay-safe"
+examples:
+  - input:
+      raw_structure: {nodes: ["A", "B"], edges: ["A->B"]}
+    output:
+      refined_structure: {nodes: ["A", "B"], edges: ["A->B"]}
+      structural_signature: [0.577, 0.816]
+      residue_accumulation: []
 
