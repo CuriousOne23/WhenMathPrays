@@ -16,7 +16,7 @@ This document establishes the canonical routing geometry specifications for the 
 
 ## 2. Routing Domain Overview
 
-The routing domain prepares committed snapshots, computes entropy, constructs routing updates and filters, and determines termination. All operations maintain bounded behavior and deterministic handoffs.
+The routing domain prepares committed snapshots, computes entropy, constructs routing updates and filters, and determines termination. All operations maintain bounded behavior and deterministic handoffs. STPX (20.49) provides the cue_envelope signal layer immediately before routing preparation.
 
 ---
 
@@ -27,6 +27,10 @@ Routing geometry operates on committed snapshots and normalized signatures. Evol
 $$
 \text{RoutingState}_{n+1} = f_{\text{det}}(\text{Snapshot}_n, \text{EntropyScore})
 $$
+
+## 3.1 Pre‑Routing Signalization (STPX)
+
+STPX (20.49) extracts lexical, structural, and constraint cues from cleaned structural geometry and canonical tokens. It produces the cue_envelope, a deterministic, bounded, replay‑safe signal layer consumed by RBU, TR, CTP, ISc, RB, and IdOB. STPX does not perform semantic interpretation or modify TPU, meaning geometry, identity fields, routing fields, or truth-evaluation fields.
 
 ---
 
@@ -98,6 +102,7 @@ HLR-PA-RTE-016: The termination threshold is deterministic, replay-safe, and inv
 | ISc | snapshot, entropy_metadata |
 | RTU | snapshot, tp_entropy_score, routing_update |
 | RB | routing_update, routing_filter |
+| STPX | structural_geometry, canonical_tokens, cue_envelope |
 | OuBA | final_snapshot, path_b_eligible, terminal_envelope |
 
 ---
@@ -111,6 +116,7 @@ HLR-PA-RTE-016: The termination threshold is deterministic, replay-safe, and inv
 | ISc | routing_decision_fields, meaning_refinement_fields |
 | RTU | routing_filter_construction, decision_logic |
 | RB | routing_update_modification, meaning_fields |
+| STPX | semantic_fields, identity_fields, routing_fields, entropy_fields, TPU_fields |
 | OuBA | mutable_fields, pre-termination_updates |
 
 ---
@@ -167,6 +173,16 @@ provenance: {timestamp, source_id, ...}
 | HLR-PA-RTE-014 | 12 | Routing operations maintain replay equivalence |
 | HLR-PA-RTE-015 | 13 | Routing tests verify determinism |
 | HLR-PA-RTE-016 | 13 | Field allowance tests are mandatory |
+| HLR-PA-RTE-017 | 3.1 | STPX produces deterministic cue_envelope |
+| HLR-PA-RTE-018 | 3.1 | STPX operates only on cleaned structural geometry |
+| HLR-PA-RTE-019 | 3.1 | STPX emits lexical surface cues |
+| HLR-PA-RTE-020 | 3.1 | STPX emits structural cues |
+| HLR-PA-RTE-021 | 3.1 | STPX emits constraint cues |
+| HLR-PA-RTE-022 | 3.1 | STPX emits repair-region markers when present |
+| HLR-PA-RTE-023 | 3.1 | STPX does not perform semantic interpretation |
+| HLR-PA-RTE-024 | 3.1 | STPX does not modify TPU, meaning, identity, routing, or truth fields |
+| HLR-PA-RTE-025 | 3.1 | STPX cue_envelope is bounded and replay-safe |
+| HLR-PA-RTE-026 | 3.1 | STPX cue_envelope schema is deterministic |
 
 **End of path_a_routing_reference.md**
 ```
