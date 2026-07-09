@@ -1,6 +1,52 @@
-﻿document_id: "20.XXX_semantic_geometry_reference"
+document_id: "20.XXX_semantic_geometry_reference"
 version: "0.1"
 status: "Draft"
 reference_type: "semantic_geometry"
 primitive_family: "meaning_geometry_primitives"
-
+geometry_fields:
+  - name: "semantic_structure_geometry"
+    type: "graph"
+    description: "Integrated semantic structure graph"
+  - name: "normalized_sigma"
+    type: "vector"
+    description: "L2-normalized routing signature"
+  - name: "manifold_projections"
+    type: "map"
+    description: "Projection onto semantic manifold charts"
+  - name: "semantic_cues"
+    type: "list"
+    description: "Pre-routing semantic cues"
+manifolds:
+  - name: "identity_conditioned_manifold"
+    chart: "meaning_refinement_chart"
+    dimensions: 8
+    constraints:
+      - "bounded_projection"
+      - "deterministic_mapping"
+      - "identity_anchoring"
+refinement_operators:
+  - operator: "sigma_normalization"
+    domain: "semantic_structure_geometry"
+    codomain: "normalized_sigma"
+    description: "L2 normalization of semantic geometry"
+  - operator: "manifold_projection"
+    domain: "normalized_sigma"
+    codomain: "manifold_projections"
+    description: "Projection onto semantic manifold charts"
+invariants:
+  - "structural_precedence"
+  - "pre_routing_separation"
+  - "replay_equivalence"
+  - "deterministic_projection"
+meaning_rules:
+  - rule: "identity_conditioned_refinement"
+    description: "Meaning refinement guided by identity profile"
+  - rule: "monotonic_meaning_accumulation"
+    description: "Meaning fields accumulate monotonically"
+examples:
+  - input:
+      semantic_structure_geometry: {nodes: ["entity1", "entity2"], relations: ["rel1"]}
+      normalized_sigma: [0.6, 0.8]
+    output:
+      manifold_projections: {chart1: [0.4, 0.7]}
+      semantic_cues: ["cue1", "cue2"]
