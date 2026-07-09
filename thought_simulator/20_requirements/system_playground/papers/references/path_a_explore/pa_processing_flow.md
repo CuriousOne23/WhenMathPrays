@@ -57,8 +57,8 @@ TR → CTP → ISc → RTU → RB → OuBA
 | RBU | pa_meaning_rules.md | Registers identity, stance, tone into meaning fields | Identity profile + meaning fields | Refined meaning fields | Dual role: after SSG (init) + after IdOB (refine) |
 | TR | pa_boundary_conditions.md | Relational routing preparation | Committed TP | Routing-prep fields | Precedes every CTP |
 | CTP | pa_boundary_conditions.md | Immutable TP snapshot collection | Committed fields | TP snapshot | Requires preceding TR |
-| RTU | pa_boundary_conditions.md | Routing update construction | Routing filter | Routing updates | - |
-| RB | pa_boundary_conditions.md | Relational routing filter | TP snapshot + tp_entropy_score | Routing filter | Entropy-based decision |
+| RTU | pa_boundary_conditions.md, 20.30.005_rtu_prim.md | Routing update construction from TP snapshot and entropy | TP snapshot + tp_entropy_score + routing_metadata | routing_update | Pure routing-signal constructor; no arbitration |
+| RB  | pa_boundary_conditions.md, 20.50_rb_requirements.md | Relational routing filter and lane decision from routing_update | routing_update + routing_metadata | routing_filter | Sole routing decision primitive (IdOB / OuBA); entropy-informed via upstream ISc |
 | IdOB | pa_idob.md | Identity profiles, object binding, referential stability, meaning refinement | σ + meaning fields | Identity-conditioned meaning | Post-structural |
 | OuBA | pa_boundary_conditions.md | Terminal output with path_b_eligible | Final TP snapshot | path_b_eligible + final envelope | End of Path A |
 
