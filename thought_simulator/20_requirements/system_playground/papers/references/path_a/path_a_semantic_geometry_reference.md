@@ -16,7 +16,7 @@ This document establishes the canonical semantic geometry specifications for the
 
 ## 2. Semantic Geometry Domain Overview
 
-The semantic geometry domain integrates grammatical and structural outputs into normalized signatures and manifold projections. All operations remain pre-routing and maintain structural invariants.
+The semantic geometry domain integrates grammatical and structural outputs into normalized signatures and manifold projections. All operations remain pre-routing and maintain structural invariants. STPX follows SSG in the Path A pipeline but does not consume semantic geometry.
 
 ---
 
@@ -27,6 +27,10 @@ Semantic geometry consists of refined graphs and normalized vectors derived from
 $$
 \sigma = \frac{\varphi(G)}{\lVert \varphi(G) \rVert_2}
 $$
+
+## 3.1 STPX Position in Path A (Informative)
+
+After SSG produces semantic_structure_geometry, normalized_σ, and manifold_projections, STPX (20.49) runs next in the Path A pipeline. STPX does not consume semantic geometry. It operates strictly on cleaned structural geometry and canonical tokens and produces the cue_envelope for downstream routing-adjacent primitives. STPX maintains pre-routing separation and does not modify semantic fields.
 
 ---
 
@@ -62,6 +66,7 @@ Routing signatures encode pre-routing semantic geometry for downstream use.
 | Primitive | Allowed Fields |
 |-----------|----------------|
 | SSG | semantic_structure_geometry, normalized_σ, manifold_projections, semantic_cues, provenance |
+|STPX | structural_geometry, canonical_tokens |
 
 ---
 
@@ -70,6 +75,7 @@ Routing signatures encode pre-routing semantic geometry for downstream use.
 | Primitive | Forbidden Fields |
 |-----------|------------------|
 | SSG | meaning_fields, routing_decision_fields, identity_conditioned_fields |
+| STPX | semantic_structure_geometry, normalized_σ, manifold_projections, semantic_cues |
 
 ---
 
