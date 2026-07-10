@@ -112,6 +112,21 @@ This ensures the dictionary remains deterministic, consistent, and aligned with 
 
 ---
 
+### **2.4 Optional but Recommended Fields**
+
+#### **grammatical_identity** *(optional, recommended)*  
+Defines the grammatical class of the word.  
+Not required for TS semantic routing, but recommended for future syntactic and morphological extensions.
+
+```yaml
+grammatical_identity:
+  pos: <noun|verb|adjective|adverb|relation-marker>
+```
+
+This field is optional in the schema but recommended for new entries.
+
+---
+
 ## **3. Field Definitions**
 
 ### **3.1 id**
