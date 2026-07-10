@@ -75,6 +75,22 @@ entry:
     required: false
     description: "Optional human-readable commentary."
 
+  grammatical_identity:
+    type: object
+    required: false
+    description: "Optional but recommended grammatical classification."
+    fields:
+      pos:
+        type: string
+        required: true
+        allowed_values:
+          - noun
+          - verb
+          - adjective
+          - adverb
+          - relation-marker
+        description: "Part of speech classification."
+
 validation:
   missing_schema_behavior:
     on_missing_schema:
