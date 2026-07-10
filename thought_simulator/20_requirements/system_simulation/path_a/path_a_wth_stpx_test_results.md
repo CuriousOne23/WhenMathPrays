@@ -801,12 +801,14 @@ STPX provided cleaner cues, slightly improving stability during cross-turn refin
 - With STPX: **89.7**
 - Improvement from STPX: **+0.5**
 
+---
+
 **Summary**
 
 All 10 test cases completed successfully with full Path A invariant compliance. The addition of STPX provided a modest but consistent improvement (+0.5 overall average) by delivering cleaner, more structured cues to downstream primitives.
 
 Today's frontier LLMs would likely score in the 92–96 range on similar tasks due to superior statistical pattern matching and fluency. However, Path A TS (with or without STPX) demonstrates deterministic replay safety, explicit structural/meaning separation, writer authority, auditable correction, and controlled refinement — properties that today's LLMs fundamentally lack.
 
-STPX is a valuable addition that enhances cue quality and pipeline stability. The architecture is solid and positioned for further iterative improvement toward long-term superiority in trustworthy, deterministic intelligence.
+STPX is a valuable addition that enhances cue quality and pipeline stability. The architecture is solid and positioned for further iterative improvement — including potential TS score gains in future phases — but such metric‑driven optimization is explicitly deferred. The present focus is on realizing TS as a viable, trustworthy, deterministic system.
 
 ---
