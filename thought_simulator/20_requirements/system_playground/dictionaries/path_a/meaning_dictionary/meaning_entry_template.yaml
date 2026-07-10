@@ -1,0 +1,16 @@
+word: <WORD>
+entry:
+  id: <WORD>_<primitive>_v1
+  primitive: <primitive>
+  invariants:
+    - <invariant1>
+    - <invariant2>
+  cue_envelope:
+    triggers: [<trigger1>, <trigger2>]
+    suppressors: [<suppressor1>, <suppressor2>]
+  routing_signature:
+    route_class: <route_class>
+    constraints:
+      - <constraint1>
+  identity_anchor:
+    continuity_hint: default_<WORD>_<primitive>
