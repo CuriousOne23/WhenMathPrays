@@ -248,11 +248,63 @@ All entries must parse cleanly.
 
 ## **7. Schema Evolution Rules**
 
-### **7.1 Schema Versioning**
-Schema includes a version number.
+The meaning dictionary is validated against a **single authoritative schema file**:
 
-### **7.2 Change Detection**
-If the schema changes:
+```
+system_playground/dictionaries/path_a/meaning_dictionary_schema.yaml
+```
+
+This file defines the structure, required fields, optional fields, conditional fields, allowed primitives, routing classes, and constraints.  
+**Only changes to this schema file constitute a schema change.**  
+CSV or JSON batch-entry files do *not* define schema and do *not* trigger schema change detection.
+
+---
+
+### **7.1 Schema File Format**
+The schema is stored as a **YAML file**:
+
+- human-readable  
+- supports nested structures  
+- supports field typing  
+- supports constraints  
+- easy to diff and version  
+- easy for the batch-entry script to load and validate against  
+
+This file is the *single source of truth* for dictionary structure.
+
+---
+
+### **7.2 Schema Versioning**
+The schema file includes a version number:
+
+```yaml
+schema_version: 1.0.0
+```
+
+This version increments whenever:
+
+- fields are added  
+- fields are removed  
+- fields are renamed  
+- field types change  
+- constraints change  
+- allowed values change  
+
+Versioning allows the script to detect schema evolution reliably.
+
+---
+
+### **7.3 Schema Change Detection**
+Schema change detection is triggered **only** when the schema definition file changes.
+
+The script compares:
+
+- previous schema version  
+- current schema version  
+- previous field structure  
+- current field structure  
+
+If differences are found:
 
 - added fields  
 - removed fields  
@@ -263,24 +315,45 @@ If the schema changes:
 The script warns:
 
 ```
-WARNING: Schema has changed. Applying the new schema will affect ALL dictionary entries.
+WARNING: The meaning dictionary schema has changed.
+Applying the new schema will affect ALL dictionary entries.
+
 Proceed? (y/n)
 ```
 
-### **7.3 Global Revalidation**
-If user proceeds:
+CSV or JSON batch-entry files **never** trigger schema change detection.  
+They are validated *against* the schema, not used to define it.
 
-- entire dictionary is revalidated  
+---
+
+### **7.4 Global Revalidation**
+If the user chooses to proceed:
+
+- the entire dictionary is revalidated against the new schema  
 - entries requiring modification are reported  
-- automatic fixes applied where possible  
-- rejected entries listed  
+- automatic fixes are applied where possible  
+- invalid entries are rejected with detailed error messages  
 
-### **7.4 Schema Update Report**
-Generated as:
+This ensures the dictionary remains deterministic and consistent.
+
+---
+
+### **7.5 Schema Update Report**
+After applying a schema update, the script generates:
 
 ```
 schema_update_report.md
 ```
+
+This report includes:
+
+- summary of schema changes  
+- list of affected dictionary entries  
+- automatic corrections applied  
+- entries requiring manual correction  
+- validation results  
+
+This provides full transparency for schema evolution.
 
 ---
 
