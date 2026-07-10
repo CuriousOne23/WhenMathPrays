@@ -45,6 +45,9 @@ Each dictionary entry is a YAML object with the following structure:
 ```
 
 ### **2.1 Required Fields**
+The following fields **must** appear in every dictionary entry.  
+Entries missing any of these fields are invalid and must be rejected by the batch‑entry script.
+
 - `id`  
 - `word`  
 - `identity_anchor`  
@@ -53,9 +56,59 @@ Each dictionary entry is a YAML object with the following structure:
 - `routing_signature.route_class`  
 - `routing_signature.constraints`
 
+These fields form the core semantic and routing structure required by TS specifications (20.105, 20.31, 20.37).
+
 ### **2.2 Optional Fields**
+These fields may be included for clarity or documentation but are not required for TS determinism.
+
 - `notes`  
 - future extension fields (declared in schema)
+
+Optional fields must not affect routing, invariants, or meaning signatures.
+
+---
+
+### **2.3 Conditionally Required Fields**
+Some fields are required only when certain primitives or routing classes are used.  
+These rules ensure deterministic meaning interpretation while allowing flexibility across lexical categories.
+
+#### **2.3.1 meaning_signature.cue_envelope**
+Cue envelopes are:
+
+- **Required** for:  
+  - `modifier`  
+  - `relation`
+
+- **Optional** for:  
+  - `agent`  
+  - `action`  
+  - `state`
+
+Modifiers and relations rely on contextual activation/suppression, while agents, actions, and states often do not.
+
+#### **2.3.2 cue_envelope.triggers / suppressors**
+If a cue envelope is present:
+
+- At least **one** of the following must be provided:  
+  - `triggers`  
+  - `suppressors`
+
+An empty cue envelope is invalid.
+
+#### **2.3.3 Routing constraints for specific route classes**
+Some route classes may define additional constraints in future schema versions.  
+If the schema specifies such constraints, they become conditionally required.
+
+#### **2.3.4 Schema enforcement**
+The batch‑entry script must:
+
+- reject entries missing required fields  
+- reject entries missing conditionally required fields when applicable  
+- accept entries omitting optional fields  
+- provide clear error messages indicating missing or invalid fields  
+- revalidate all entries when the schema changes  
+
+This ensures the dictionary remains deterministic, consistent, and aligned with TS specifications.
 
 ---
 
