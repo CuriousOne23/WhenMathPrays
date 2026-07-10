@@ -55,7 +55,7 @@ Primitive roles are **semantic**, not grammatical:
 - “object” is not a primitive; it is a **role** derived from relation + action,
 - “modifier” is not “adjective/adverb”; it is a semantic refiner.
 
-Path A never uses POS tags, parse trees, or grammatical roles to determine primitives.
+Path A never uses Part of Speech (POS) tags, parse trees, or grammatical roles to determine primitives.
 
 ---
 
