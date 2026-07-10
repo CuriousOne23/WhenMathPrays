@@ -287,6 +287,45 @@ This report includes:
 
 This provides full transparency for schema evolution.
 
+Yes — Section 4 needs that addition, and it’s the right architectural move.  
+And since I can see your **meaning_dct_spec.md** in your active tab, I’ll give you the exact text you should add, written to match the tone and structure of the existing spec.
+
+Below is the **precise subsection** you should insert into Section 4, right after **4.1 Schema File Format** (or at the end of Section 4 if you prefer). It integrates cleanly with the rest of the document.
+
+---
+
+### **4.6 Missing Schema File Handling**
+
+If the schema file:
+
+```
+system_playground/dictionaries/path_a/meaning_dictionary_schema.yaml
+```
+
+is not found when the dictionary-entry script starts, the program must:
+
+1. **Warn the user** that the schema file is missing:
+
+```
+ERROR: meaning_dictionary_schema.yaml not found.
+The meaning dictionary cannot be validated or modified without a schema.
+No changes have been applied.
+```
+
+2. **Exit immediately** without performing any operations, including:
+   - adding entries  
+   - modifying entries  
+   - deleting entries  
+   - revalidating the dictionary  
+
+3. **Guarantee safety** by ensuring:
+   - no partial updates occur  
+   - no dictionary corruption is possible  
+   - no assumptions are made about schema structure  
+
+The schema file is the authoritative definition of dictionary structure.  
+Without it, the program cannot safely interpret or validate any dictionary entries.
+
 ---
 
 ## **5. Batch Entry Formats**
