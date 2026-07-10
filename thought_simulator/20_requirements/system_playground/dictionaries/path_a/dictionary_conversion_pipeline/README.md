@@ -18,7 +18,7 @@ The output of this pipeline is:
 meaning_dictionary.yaml
 ```
 
-This file is consumed at runtime by SOB → SROB → CnOB → SmOB → SSG.
+This file is consumed at runtime by InB → IIInB → CEx  → CE & SOB → SROB → CnOB → SmOB → SSG.
 
 ---
 
