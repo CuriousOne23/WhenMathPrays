@@ -333,7 +333,7 @@ This separation is fundamental to TS.
 
 ## 10. Comparison: Grammar/POS vs TS Semantic Routing
 
-A reader coming from NLP or linguistics will naturally assume that meaning is extracted from **grammar**, **syntax**, or **POS tags**. Path A does not use any of these. This section provides a direct comparison between the traditional grammatical organization of language and TS’s semantic routing architecture.
+A reader coming from Natural Language Processing (NLP) or linguistics will naturally assume that meaning is extracted from **grammar**, **syntax**, or **POS tags**. Path A does not use any of these. This section provides a direct comparison between the traditional grammatical organization of language and TS’s semantic routing architecture.
 
 ### 10.1 Grammar/POS: Noun‑Thinking
 
