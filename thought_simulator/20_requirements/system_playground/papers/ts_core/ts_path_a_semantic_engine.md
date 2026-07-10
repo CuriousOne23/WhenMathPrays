@@ -22,9 +22,10 @@ Those belong to Path B.
 
 ---
 
-## 2. Semantic primitives
+## **2. Semantic primitives**
 
-Path A decomposes meaning using **semantic primitives**, not grammatical categories.
+Path A decomposes meaning using **semantic primitives**, not grammatical categories.  
+This approach aligns with long‑standing insights in lexical semantics (e.g., WordNet’s separation of word senses), but Path A extends this by assigning each semantic identity a primitive, invariants, cue envelopes, and routing signatures that support deterministic semantic routing.
 
 ### 2.1 Primitive set
 
@@ -474,23 +475,34 @@ TS requires a **semantic engine** because meaning is fundamentally **relational*
 
 Path A is that engine.
 
+---
 
 ## 11. Implications and uniqueness
 
-Path A introduces a **new computational paradigm**:
+Path A builds on a foundational insight long recognized in cognitive science and exemplified by **WordNet**:  
+**a word is not a meaning, and meanings must be stored separately.**
 
-- meaning is routed, not grammar,
-- words have **semantic identities** with primitives, invariants, cues, and routing signatures,
-- interpretation is a **geometric projection** onto a semantic manifold,
+Like WordNet, Path A:
+
+- treats multi‑word expressions (e.g., *bank run*) as atomic semantic identities,
+- separates meanings rather than collapsing them under a single word,
+- uses gloss‑level definitions as the seed for semantic identity construction.
+
+However, Path A goes far beyond WordNet and introduces a **new computational paradigm**:
+
+- meanings are routed, not grammatically parsed,
+- each semantic identity carries **primitives, invariants, cue envelopes, and routing signatures**,  
+- interpretation is a **geometric projection** onto a pre‑work semantic manifold,
 - stability is measured via **entropy H**,
 - ambiguity is resolved by **valid binding + lowest entropy**, not by grammatical heuristics.
 
-No existing NLP, linguistic, or AI system:
+No existing NLP, linguistic, or AI system — including WordNet —:
 
 - uses semantic primitives with invariants and cue envelopes,
 - performs deterministic semantic routing,
 - operates on a pre‑work semantic manifold,
-- separates meaning (Path A) from expression (Path B) in this way.
+- separates meaning (Path A) from expression (Path B),
+- or treats semantic identity as a geometric object with entropy‑based stability.
 
 Path A is the **core semantic engine** of Thought Simulator and the foundation for all downstream routing, truth‑relations, and expression.
 
