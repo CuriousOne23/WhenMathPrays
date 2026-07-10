@@ -22,9 +22,10 @@ Those belong to Path B.
 
 ---
 
-## 2. Semantic primitives
+## **2. Semantic primitives**
 
-Path A decomposes meaning using **semantic primitives**, not grammatical categories.
+Path A decomposes meaning using **semantic primitives**, not grammatical categories.  
+This approach aligns with long‑standing insights in lexical semantics (e.g., WordNet’s separation of word senses), but Path A extends this by assigning each semantic identity a primitive, invariants, cue envelopes, and routing signatures that support deterministic semantic routing.
 
 ### 2.1 Primitive set
 
