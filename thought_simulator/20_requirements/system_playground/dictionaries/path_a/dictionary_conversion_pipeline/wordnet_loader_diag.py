@@ -191,26 +191,22 @@ def diag_data_file(file_path):
             try:
                 real_result = real_parse(fields, gloss)
             except Exception as e:
-                print("----------------------------------------------------")
-                print("REAL PARSER ERROR")
-                print("Raw line:")
-                print(line)
-                print("Exception:", e)
+                log("----------------------------------------------------")
+                log("REAL PARSER ERROR")
+                log("Raw line:")
+                log(line)
+                log(f"Exception: {e}")
+                log("")
             
-                print("\nClassified fields:")
+                log("Classified fields:")
                 for i, f, kind in classify_line(fields):
-                    print(f"  [{i}] {f:20} -> {kind}")
+                    log(f"  [{i}] {f:20} -> {kind}")
             
-                print("----------------------------------------------------\n")
+                log("----------------------------------------------------\n")
             
                 diff_count += 1
                 if diff_count >= MAX_DIFFERENCES:
-                    print(">>> Reached 3 differences. Exiting diagnostics.")
-                    return
-                continue
-                diff_count += 1
-                if diff_count >= MAX_DIFFERENCES:
-                    print(">>> Reached 3 differences. Exiting diagnostics.")
+                    print(f">>> Reached {MAX_DIFFERENCES} differences. Full details in {LOG_FILE}.")
                     return
                 continue
 
@@ -222,29 +218,33 @@ def diag_data_file(file_path):
                 line_passed = True
                 continue
 
-            # Print differences
-            print("----------------------------------------------------")
-            print("DIFFERENCE DETECTED")
-            print("Raw line:")
-            print(line)
-            print("\nDifferences:")
+            # Log differences
+            log("----------------------------------------------------")
+            log("DIFFERENCE DETECTED")
+            log("Raw line:")
+            log(line)
+            log("")
+            
+            log("Differences:")
             for d in differences:
-                print("  Field:", d[0])
-                print("  Real:", d[1])
-                print("  Diag:", d[2])
-                print()
-
-            print("----------------------------------------------------\n")
-
+                log(f"  Field: {d[0]}")
+                log(f"  Real:  {d[1]}")
+                log(f"  Diag:  {d[2]}")
+                log("")
+            
+            log("----------------------------------------------------\n")
+            
             diff_count += 1
             if diff_count >= MAX_DIFFERENCES:
-                print(">>> Reached 3 differences. Exiting diagnostics.")
+                print(f">>> Reached {MAX_DIFFERENCES} differences. Full details in {LOG_FILE}.")
                 return
 
     # Only print success ONCE per file
     if diff_count == 0:
-        print("Real code parsing has passed for this file.")
-    
+        print(f"No differences found for {file_path}.")
+    else:
+        print(f"{diff_count} differences found for {file_path}. See {LOG_FILE} for details.")
+        
 def run_diag(base_dir="wordnet_raw"):
     base = Path(base_dir)
 
@@ -258,6 +258,8 @@ def run_diag(base_dir="wordnet_raw"):
     for pos, file_path in data_files.items():
         diag_data_file(file_path)
 
+    print("\nDiagnostics complete.")
+    print(f"Full detailed output written to {LOG_FILE}.")
 
 if __name__ == "__main__":
     run_diag()
