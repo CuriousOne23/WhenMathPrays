@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-MAX_DIFFERENCES = 5
+MAX_DIFFERENCES = 3
 
 # ------------------------------------------------------------
 # REAL PARSER LOGIC (embedded copy from your wordnet_loader.py)
@@ -238,7 +238,7 @@ def diag_data_file(file_path):
 
             diff_count += 1
             if diff_count >= MAX_DIFFERENCES:
-                print(">>> Reached 10 differences. Exiting diagnostics.")
+                print(">>> Reached 3 differences. Exiting diagnostics.")
                 return
 
     # Only print success ONCE per file
