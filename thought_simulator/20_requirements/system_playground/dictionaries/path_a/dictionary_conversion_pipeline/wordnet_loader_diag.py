@@ -1,7 +1,7 @@
 # wordnet_loader_diag.py
 # Standalone diagnostics for WordNet 2.1 data.* files.
 # Compares DIAG parsing vs REAL parsing logic (embedded here).
-# Prints up to 10 differences, then exits.
+# Prints up to 3 differences, then exits.
 
 from pathlib import Path
 
@@ -205,12 +205,12 @@ def diag_data_file(file_path):
             
                 diff_count += 1
                 if diff_count >= MAX_DIFFERENCES:
-                    print(">>> Reached 10 differences. Exiting diagnostics.")
+                    print(">>> Reached 3 differences. Exiting diagnostics.")
                     return
                 continue
                 diff_count += 1
                 if diff_count >= MAX_DIFFERENCES:
-                    print(">>> Reached 10 differences. Exiting diagnostics.")
+                    print(">>> Reached 3 differences. Exiting diagnostics.")
                     return
                 continue
 
