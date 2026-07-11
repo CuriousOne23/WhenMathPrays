@@ -45,51 +45,51 @@ class WordNetLoader:
     # ------------------------------------------------------------
     # INDEX FILE PARSER
     # ------------------------------------------------------------
-def _load_index_files(self):
-    """
-    Correct WordNet index.* format:
-        lemma  pos  synset_cnt  p_cnt  ptr...  sense_cnt  tagsense_cnt  offsets...
-    """
-    for pos, file_path in self.index_files.items():
-        with open(file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-
-                parts = line.split()
-
-                # Skip malformed or header lines
-                if len(parts) < 6:
-                    continue
-
-                lemma = parts[0]
-                pos_code = parts[1]
-
-                # synset_cnt and p_cnt must be integers
-                if not parts[2].isdigit() or not parts[3].isdigit():
-                    continue
-
-                synset_cnt = int(parts[2])
-                p_cnt = int(parts[3])
-
-                # Pointer symbols start at index 4
-                ptr_start = 4
-                ptr_end = ptr_start + p_cnt
-
-                # After pointer symbols:
-                #   sense_cnt, tagsense_cnt, then offsets
-                sense_cnt = int(parts[ptr_end])
-                tagsense_cnt = int(parts[ptr_end + 1])
-
-                offset_start = ptr_end + 2
-                offset_end = offset_start + sense_cnt
-
-                offsets = parts[offset_start:offset_end]
-
-                self.index.setdefault(lemma, [])
-                for o in offsets:
-                    self.index[lemma].append((pos, int(o)))
+    def _load_index_files(self):
+        """
+        Correct WordNet index.* format:
+            lemma  pos  synset_cnt  p_cnt  ptr...  sense_cnt  tagsense_cnt  offsets...
+        """
+        for pos, file_path in self.index_files.items():
+            with open(file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+    
+                    parts = line.split()
+    
+                    # Skip malformed or header lines
+                    if len(parts) < 6:
+                        continue
+    
+                    lemma = parts[0]
+                    pos_code = parts[1]
+    
+                    # synset_cnt and p_cnt must be integers
+                    if not parts[2].isdigit() or not parts[3].isdigit():
+                        continue
+    
+                    synset_cnt = int(parts[2])
+                    p_cnt = int(parts[3])
+    
+                    # Pointer symbols start at index 4
+                    ptr_start = 4
+                    ptr_end = ptr_start + p_cnt
+    
+                    # After pointer symbols:
+                    #   sense_cnt, tagsense_cnt, then offsets
+                    sense_cnt = int(parts[ptr_end])
+                    tagsense_cnt = int(parts[ptr_end + 1])
+    
+                    offset_start = ptr_end + 2
+                    offset_end = offset_start + sense_cnt
+    
+                    offsets = parts[offset_start:offset_end]
+    
+                    self.index.setdefault(lemma, [])
+                    for o in offsets:
+                        self.index[lemma].append((pos, int(o)))
 
     # ------------------------------------------------------------
     # DATA FILE PARSER
