@@ -55,6 +55,7 @@ class WordNetLoader:
     # INDEX FILE PARSER
     # ------------------------------------------------------------
     def _load_index_files(self):
+        print(">>> ACTIVE _load_data_files START")
         """
         Correct WordNet index.* format:
             lemma  pos  synset_cnt  p_cnt  ptr...  sense_cnt  tagsense_cnt  offsets...
