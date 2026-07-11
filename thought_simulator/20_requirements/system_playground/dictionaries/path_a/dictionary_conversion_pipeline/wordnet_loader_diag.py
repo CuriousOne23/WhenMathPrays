@@ -74,6 +74,52 @@ def diag_parse(fields, gloss):
         "gloss": gloss,
     }
 
+# ------------------------------------------------------------
+# FIELD CLASSIFIER (Option 1 structural mapping)
+# ------------------------------------------------------------
+def classify_field(f):
+    # Basic categories
+    if f.isdigit():
+        return "INT"
+
+    # Offset (8-digit)
+    if len(f) == 8 and f.isdigit():
+        return "OFFSET"
+
+    # POS
+    if f in {"n", "v", "a", "s", "r"}:
+        return "POS"
+
+    # Pointer symbols
+    if f in {"@", "~", "+", "-", "%p", "&", "!", "^", "$", ">", "*", "\\"}:
+        return "POINTER_SYMBOL"
+
+    # Morph / domain markers
+    if f in {";c", ";u", "#m"}:
+        return "MORPH_MARKER"
+
+    # Satellite / sense markers (single letters)
+    if len(f) == 1 and f.isalpha():
+        return "SENSE_MARKER"
+
+    # Lex_id-like (single digit)
+    if len(f) == 1 and f.isdigit():
+        return "LEX_ID"
+
+    # Zero-prefixed class markers like 0a, 0b, 0c, 0d, 0f
+    if len(f) == 2 and f[0] == "0" and f[1].isalpha():
+        return "CLASS_MARKER"
+
+    # Frame codes like 0101, 0202, 0301, etc.
+    if len(f) == 4 and f.isdigit():
+        return "FRAME_CODE"
+
+    # Everything else: lemma or unknown
+    return "LEMMA_OR_OTHER"
+
+
+def classify_line(fields):
+    return [(i, f, classify_field(f)) for i, f in enumerate(fields)]
 
 # ------------------------------------------------------------
 # DIFF ENGINE
@@ -145,12 +191,24 @@ def diag_data_file(file_path):
             try:
                 real_result = real_parse(fields, gloss)
             except Exception as e:
+                except Exception as e:
                 print("----------------------------------------------------")
                 print("REAL PARSER ERROR")
                 print("Raw line:")
                 print(line)
                 print("Exception:", e)
+            
+                print("\nClassified fields:")
+                for i, f, kind in classify_line(fields):
+                    print(f"  [{i}] {f:20} -> {kind}")
+            
                 print("----------------------------------------------------\n")
+            
+                diff_count += 1
+                if diff_count >= MAX_DIFFERENCES:
+                    print(">>> Reached 10 differences. Exiting diagnostics.")
+                    return
+                continue
                 diff_count += 1
                 if diff_count >= MAX_DIFFERENCES:
                     print(">>> Reached 10 differences. Exiting diagnostics.")
