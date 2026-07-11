@@ -51,6 +51,8 @@ class BatchConverter:
         print(f"Writing YAML dictionary to {self.output_file}...")
         write_yaml(ts_entries, self.output_file)
 
+        print("File meaning_dictionary.yaml has been created.")
+
         print("Done.")
 
 
