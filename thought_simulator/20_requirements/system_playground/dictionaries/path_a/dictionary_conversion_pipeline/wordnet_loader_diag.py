@@ -1,15 +1,35 @@
 # wordnet_loader_diag.py
-# Standalone diagnostics for WordNet 2.1 data.* files
-# Does NOT build synsets — only prints field structure differences.
+# Incremental diagnostics for WordNet 2.1 data.* files.
+# Prints only 10 NEW field layouts, then exits.
 
 from pathlib import Path
 
-def diag_data_file(file_path):
+MAX_NEW_LAYOUTS = 10
+
+def layout_signature(fields):
+    """
+    Create a signature based on the *shape* of the fields,
+    not the exact content. This helps detect structural differences.
+    """
+    sig = []
+    for f in fields:
+        if f.isdigit():
+            sig.append("INT")
+        elif f.isalpha():
+            sig.append("ALPHA")
+        elif f.isalnum():
+            sig.append("ALNUM")
+        else:
+            sig.append("OTHER")
+    return tuple(sig)
+
+
+def diag_data_file(file_path, seen_shapes):
     print("\n====================================================")
     print("DIAGNOSTICS FOR:", file_path)
     print("====================================================\n")
 
-    seen_layouts = set()
+    new_count = 0
 
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -28,12 +48,11 @@ def diag_data_file(file_path):
                 data_part, gloss = line, ""
 
             fields = data_part.split()
+            sig = layout_signature(fields)
 
-            # Record the layout signature
-            layout_sig = tuple(fields)
-
-            if layout_sig not in seen_layouts:
-                seen_layouts.add(layout_sig)
+            if sig not in seen_shapes:
+                seen_shapes.add(sig)
+                new_count += 1
 
                 print("----------------------------------------------------")
                 print("NEW FIELD LAYOUT DETECTED")
@@ -45,8 +64,14 @@ def diag_data_file(file_path):
 
                 print("\nGloss:")
                 print(gloss)
-
                 print("----------------------------------------------------\n")
+
+                if new_count >= MAX_NEW_LAYOUTS:
+                    print(">>> Reached limit of 10 new layouts. Exiting diagnostics.")
+                    return True  # signal to stop
+
+    return False  # continue
+
 
 def run_diag(base_dir="wordnet_raw"):
     base = Path(base_dir)
@@ -58,8 +83,13 @@ def run_diag(base_dir="wordnet_raw"):
         "adv":  base / "data.adv",
     }
 
+    seen_shapes = set()
+
     for pos, file_path in data_files.items():
-        diag_data_file(file_path)
+        stop = diag_data_file(file_path, seen_shapes)
+        if stop:
+            break
+
 
 if __name__ == "__main__":
     run_diag()
