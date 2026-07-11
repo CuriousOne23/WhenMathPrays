@@ -21,28 +21,33 @@ def log(msg: str) -> None:
 # ------------------------------------------------------------
 def real_parse(fields, gloss):
     """
-    This is a copy of your real parsing logic.
-    It returns a dict describing what the real parser thinks the synset contains.
+    Real WordNet 2.1 parser, updated to handle:
+    - hex-encoded lemma counts (w_cnt) like 0a, 0b, 0c, 0d, etc.
+    - hex-encoded lex_ids (including 'a'..'f')
+    - verb frames after the pointer block
     """
 
     offset = int(fields[0])
     lex_filenum = int(fields[1])
     pos_code = fields[2]
 
-    lemma_count = int(fields[3])
+    # WordNet w_cnt is hex (e.g., 0a, 0b, 04, etc.)
+    # This is what your log shows as "CLASS_MARKER".
+    lemma_count = int(fields[3], 16)
     lemma_start = 4
 
     lemmas = []
     lex_ids = []
 
-    # WordNet 2.1 alternates lemma and lex_id
+    # Lemma / lex_id pairs; lex_id is also hex.
     for i in range(lemma_count):
         lemma = fields[lemma_start + 2 * i]
-        lex_id = int(fields[lemma_start + 2 * i + 1])
+        lex_id_raw = fields[lemma_start + 2 * i + 1]
+        lex_id = int(lex_id_raw, 16)
         lemmas.append(lemma)
         lex_ids.append(lex_id)
 
-    # Pointer count index
+    # Pointer count index (p_cnt is decimal)
     ptr_count_index = lemma_start + 2 * lemma_count
     ptr_count = int(fields[ptr_count_index])
 
@@ -61,7 +66,34 @@ def real_parse(fields, gloss):
             }
         )
 
-    return {
+    # Verb frames: only verbs have these, after the pointer block.
+    frames = []
+    if pos_code == "v" and len(fields) > ptr_end:
+        # f_cnt is decimal
+        f_cnt_raw = fields[ptr_end]
+        try:
+            f_cnt = int(f_cnt_raw)
+        except ValueError:
+            f_cnt = 0
+
+        frame_start = ptr_end + 1
+        frame_end = frame_start + 2 * f_cnt
+        frames_raw = fields[frame_start:frame_end]
+
+        for i in range(0, len(frames_raw), 2):
+            try:
+                frame_num = int(frames_raw[i])
+                word_index = int(frames_raw[i + 1])
+            except (ValueError, IndexError):
+                continue
+            frames.append(
+                {
+                    "frame": frame_num,
+                    "word_index": word_index,
+                }
+            )
+
+    result = {
         "offset": offset,
         "pos": pos_code,
         "lex_filenum": lex_filenum,
@@ -72,6 +104,10 @@ def real_parse(fields, gloss):
         "gloss": gloss,
     }
 
+    if frames:
+        result["frames"] = frames
+
+    return result
 
 # ------------------------------------------------------------
 # DIAGNOSTIC PARSER (raw fields only)
