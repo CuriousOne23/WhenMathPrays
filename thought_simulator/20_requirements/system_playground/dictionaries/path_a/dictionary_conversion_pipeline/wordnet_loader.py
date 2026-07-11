@@ -45,45 +45,51 @@ class WordNetLoader:
     # ------------------------------------------------------------
     # INDEX FILE PARSER
     # ------------------------------------------------------------
-    def _load_index_files(self):
-        """
-        index.* format:
-            lemma  pos_cnt  p_cnt  sense_cnt  tagsense_cnt  ptr...  offsets...
-        """
-        for pos, file_path in self.index_files.items():
-            with open(file_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#"):
-                        continue
+def _load_index_files(self):
+    """
+    Correct WordNet index.* format:
+        lemma  pos  synset_cnt  p_cnt  ptr...  sense_cnt  tagsense_cnt  offsets...
+    """
+    for pos, file_path in self.index_files.items():
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
 
-                    parts = line.split()
+                parts = line.split()
 
-                    # Skip malformed or header lines
-                    if len(parts) < 6:
-                        continue
-                    if not parts[2].isdigit() or not parts[3].isdigit():
-                        continue
+                # Skip malformed or header lines
+                if len(parts) < 6:
+                    continue
 
-                    lemma = parts[0]
-                    pos_cnt = int(parts[1])
-                    p_cnt = int(parts[2])
-                    sense_cnt = int(parts[3])
-                    tagsense_cnt = int(parts[4])
+                lemma = parts[0]
+                pos_code = parts[1]
 
-                    # Pointer symbols start at index 5
-                    ptr_start = 5
-                    ptr_end = ptr_start + p_cnt
+                # synset_cnt and p_cnt must be integers
+                if not parts[2].isdigit() or not parts[3].isdigit():
+                    continue
 
-                    # Offsets follow pointer symbols
-                    offset_start = ptr_end
-                    offset_end = offset_start + sense_cnt
+                synset_cnt = int(parts[2])
+                p_cnt = int(parts[3])
 
-                    offsets = parts[offset_start:offset_end]
+                # Pointer symbols start at index 4
+                ptr_start = 4
+                ptr_end = ptr_start + p_cnt
 
-                    self.index.setdefault(lemma, [])
-                    for o in offsets:
-                        self.index[lemma].append((pos, int(o)))
+                # After pointer symbols:
+                #   sense_cnt, tagsense_cnt, then offsets
+                sense_cnt = int(parts[ptr_end])
+                tagsense_cnt = int(parts[ptr_end + 1])
+
+                offset_start = ptr_end + 2
+                offset_end = offset_start + sense_cnt
+
+                offsets = parts[offset_start:offset_end]
+
+                self.index.setdefault(lemma, [])
+                for o in offsets:
+                    self.index[lemma].append((pos, int(o)))
 
     # ------------------------------------------------------------
     # DATA FILE PARSER
