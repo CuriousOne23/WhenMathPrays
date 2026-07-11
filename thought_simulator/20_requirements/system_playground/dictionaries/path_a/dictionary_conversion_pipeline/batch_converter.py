@@ -4,18 +4,30 @@ batch_converter.py
 
 Runs the full TS Path A dictionary conversion pipeline:
 
-    WordNet → Synset → TS Entry → YAML Dictionary
+    WordNet → Synset → TS Entry → Chunked JSON Dictionary
 
 This module orchestrates:
     • WordNetLoader
     • TSEntryBuilder
-    • YAMLWriter
+    • JSONGzipWriter (chunk-aware)
 
 Produces:
-    meaning_dictionary.json.gz
+    dictionaries_dev/
+        meaning_dictionary_dev_01.json.gz
+        meaning_dictionary_dev_02.json.gz
+        meaning_dictionary_dev_03.json.gz
+        meaning_dictionary_dev_04.json.gz
+        meaning_dictionary_dev_05.json.gz
+        meaning_dictionary_dev_06.json.gz
+        manifest.json
 """
 
+import json
 from pathlib import Path
+
+from config import WORDNET_DIR, DEV_OUTPUT_DIR, MANIFEST_FILENAME
+from utils import ensure_dir, write_manifest
+
 from wordnet_loader import load_wordnet
 from ts_entry_builder import TSEntryBuilder
 from json_gzip_writer import JSONGzipWriter
@@ -26,21 +38,25 @@ class BatchConverter:
     High-level orchestrator for TS dictionary generation.
     """
 
-    def __init__(self, base_dir=None, output_file="meaning_dictionary_dev.json.gz"):
-        # Always resolve paths relative to THIS file, not the working directory.
+    def __init__(self, base_dir=None, output_dir=None):
         script_dir = Path(__file__).parent
 
+        # WordNet directory
         if base_dir is None:
-            # WordNet directory lives next to this script
-            base_dir = script_dir / "wordnet_raw"
+            self.base_dir = WORDNET_DIR
         else:
-            # If user passes a relative path, resolve it relative to this script
-            base_dir = script_dir / base_dir
+            self.base_dir = (script_dir / base_dir).resolve()
 
-        self.base_dir = base_dir.resolve()
-        self.output_file = (script_dir / output_file).resolve()
+        # Developer dictionary output directory
+        if output_dir is None:
+            self.output_dir = DEV_OUTPUT_DIR
+        else:
+            self.output_dir = (script_dir / output_dir).resolve()
+
+        ensure_dir(self.output_dir)
+
         self.entry_builder = TSEntryBuilder()
-        self.json_writer = JSONGzipWriter(self.output_file)
+        self.json_writer = JSONGzipWriter(self.output_dir)
 
     def run(self):
         """
@@ -50,7 +66,6 @@ class BatchConverter:
         print(f">>> Using WordNet directory: {self.base_dir}")
 
         index, synsets = load_wordnet(self.base_dir)
-
         print(f"Loaded {len(synsets)} synsets.")
 
         ts_entries = []
@@ -62,15 +77,19 @@ class BatchConverter:
 
         print(f"Built {len(ts_entries)} TS entries.")
 
-        print(f"Writing JSON GZIP developer dictionary to {self.output_file}...")
-        self.json_writer.write(ts_entries)
-        
-        print("File meaning_dictionary_dev.json.gz has been created.")
+        print(f"Writing chunked JSON GZIP developer dictionary to {self.output_dir}...")
+        manifest = self.json_writer.write(ts_entries)
+
+        # Write manifest.json using utils
+        manifest_path = write_manifest(manifest, self.output_dir, MANIFEST_FILENAME)
+
+        print(f"[batch_converter] Wrote manifest.json to {manifest_path}")
+        print("[batch_converter] Developer dictionary chunks created successfully.")
 
 
 # Convenience function
-def run_batch_conversion(base_dir="wordnet_raw", output_file="meaning_dictionary.json.gz"):
-    BatchConverter(base_dir, output_file).run()
+def run_batch_conversion(base_dir="wordnet_raw", output_dir="dictionaries_dev"):
+    BatchConverter(base_dir, output_dir).run()
 
 
 if __name__ == "__main__":
