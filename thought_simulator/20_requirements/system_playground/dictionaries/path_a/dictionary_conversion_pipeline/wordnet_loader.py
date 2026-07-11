@@ -118,6 +118,7 @@ class WordNetLoader:
                         continue
 
                     # Skip header lines that do NOT begin with a numeric offset
+                    # This is the bulletproof fix.
                     if not line[0].isdigit():
                         continue
 
