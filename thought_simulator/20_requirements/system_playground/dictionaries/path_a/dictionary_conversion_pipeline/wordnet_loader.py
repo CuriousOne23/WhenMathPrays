@@ -124,7 +124,8 @@ class WordNetLoader:
                     # "This software and database is being provided..."
                     # "WordNet 3.0 Copyright..."
                     # These must be skipped.
-                    if not line[0].isdigit():
+                    # Skip header lines: they do NOT begin with an 8-digit synset offset
+                    if len(line) < 8 or not line[:8].isdigit():
                         continue
 
                     # Split gloss
