@@ -142,12 +142,19 @@ class WordNetLoader:
 
                     lemma_count = int(fields[3])
                     lemma_start = 4
-                    lemma_end = lemma_start + lemma_count
-
-                    lemmas = fields[lemma_start:lemma_end]
-                    lex_ids = [int(x) for x in fields[lemma_end:lemma_end + lemma_count]]
-
-                    ptr_count_index = lemma_end + lemma_count
+                    
+                    lemmas = []
+                    lex_ids = []
+                    
+                    # WordNet 2.1 alternates lemma and lex_id
+                    for i in range(lemma_count):
+                        lemma = fields[lemma_start + 2*i]
+                        lex_id = int(fields[lemma_start + 2*i + 1])
+                        lemmas.append(lemma)
+                        lex_ids.append(lex_id)
+                    
+                    # After lemma/lex_id pairs, next field is pointer count
+                    ptr_count_index = lemma_start + 2 * lemma_count
                     ptr_count = int(fields[ptr_count_index])
 
                     ptr_start = ptr_count_index + 1
