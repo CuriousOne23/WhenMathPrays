@@ -5,12 +5,15 @@ class WordNetSynset:
     """
     Represents a single WordNet synset loaded from data.* files.
     """
-    def __init__(self, offset, pos, lemma_list, gloss, pointers):
+    def __init__(self, offset, pos, lex_filenum, lemmas, lex_ids,
+                 pointers, gloss):
         self.offset = offset          # integer offset in data file
         self.pos = pos                # noun, verb, adj, adv
-        self.lemmas = lemma_list      # list of lemmas
+        self.lex_filenum = lex_filenum
+        self.lemmas = lemmas          # list of lemmas
+        self.lex_ids = lex_ids        # list of lex_ids (parallel to lemmas)
+        self.pointers = pointers      # list of pointer dicts
         self.gloss = gloss            # raw gloss text
-        self.pointers = pointers      # semantic relations
 
     def __repr__(self):
         return f"<Synset {self.pos}:{self.offset} {self.lemmas}>"
@@ -38,9 +41,12 @@ class WordNetLoader:
             "adv":  self.base_dir / "data.adv",
         }
 
-        self.index = {}   # lemma → list of synset offsets
-        self.synsets = {} # offset → WordNetSynset
+        self.index = {}   # lemma → list of (pos, offset)
+        self.synsets = {} # (pos, offset) → WordNetSynset
 
+    # ------------------------------------------------------------
+    # PUBLIC API
+    # ------------------------------------------------------------
     def load(self):
         self._load_index_files()
         self._load_data_files()
@@ -50,23 +56,18 @@ class WordNetLoader:
     # INDEX FILE PARSER
     # ------------------------------------------------------------
     def _load_index_files(self):
+        """
+        index.* format:
+            lemma  pos_cnt  p_cnt  sense_cnt  tagsense_cnt  offset offset ...
+        """
         for pos, file_path in self.index_files.items():
             with open(file_path, "r", encoding="utf-8") as f:
                 for line in f:
-                    if line.startswith("  ") or line.startswith(" "):
-                        continue
-                    if line.startswith("synset"):
-                        continue
-                    if line.startswith("lemma"):
-                        continue
-                    if line.startswith("  "):
-                        continue
-                    if line.strip() == "":
-                        continue
-                    if line.startswith("#"):
+                    line = line.strip()
+                    if not line or line.startswith("#"):
                         continue
 
-                    parts = line.strip().split()
+                    parts = line.split()
                     lemma = parts[0]
                     synset_count = int(parts[3])
                     offsets = parts[-synset_count:]
@@ -78,38 +79,62 @@ class WordNetLoader:
     # DATA FILE PARSER
     # ------------------------------------------------------------
     def _load_data_files(self):
+        """
+        data.* format:
+            offset lex_filenum pos lemma_cnt lemma lex_id ... ptr_cnt ptr... | gloss
+        """
         for pos, file_path in self.data_files.items():
             with open(file_path, "r", encoding="utf-8") as f:
                 for line in f:
-                    if line.startswith("  ") or line.startswith(" "):
-                        continue
-                    if line.strip() == "":
-                        continue
-                    if line.startswith("#"):
+                    line = line.strip()
+                    if not line or line.startswith("#"):
                         continue
 
-                    parts = line.strip().split(" | ")
-                    data_part = parts[0]
-                    gloss = parts[1] if len(parts) > 1 else ""
+                    # Split gloss
+                    if " | " in line:
+                        data_part, gloss = line.split(" | ", 1)
+                    else:
+                        data_part, gloss = line, ""
 
                     fields = data_part.split()
+
+                    # Core fields
                     offset = int(fields[0])
+                    lex_filenum = int(fields[1])
+                    pos_code = fields[2]
+
                     lemma_count = int(fields[3])
-                    lemma_list = fields[4:4 + lemma_count]
+                    lemma_start = 4
+                    lemma_end = lemma_start + lemma_count
 
-                    pointer_count_index = 4 + lemma_count
-                    pointer_count = int(fields[pointer_count_index])
-                    pointer_start = pointer_count_index + 1
-                    pointer_end = pointer_start + pointer_count
+                    lemmas = fields[lemma_start:lemma_end]
+                    lex_ids = [int(x) for x in fields[lemma_end:lemma_end + lemma_count]]
 
-                    pointers = fields[pointer_start:pointer_end]
+                    # Pointer fields
+                    ptr_count_index = lemma_end + lemma_count
+                    ptr_count = int(fields[ptr_count_index])
+
+                    ptr_start = ptr_count_index + 1
+                    ptr_end = ptr_start + ptr_count * 4  # each pointer has 4 fields
+
+                    pointers_raw = fields[ptr_start:ptr_end]
+                    pointers = []
+                    for i in range(0, len(pointers_raw), 4):
+                        pointers.append({
+                            "symbol": pointers_raw[i],
+                            "offset": int(pointers_raw[i+1]),
+                            "pos": pointers_raw[i+2],
+                            "src_tgt": pointers_raw[i+3],
+                        })
 
                     synset = WordNetSynset(
                         offset=offset,
                         pos=pos,
-                        lemma_list=lemma_list,
-                        gloss=gloss,
-                        pointers=pointers
+                        lex_filenum=lex_filenum,
+                        lemmas=lemmas,
+                        lex_ids=lex_ids,
+                        pointers=pointers,
+                        gloss=gloss
                     )
 
                     self.synsets[(pos, offset)] = synset
