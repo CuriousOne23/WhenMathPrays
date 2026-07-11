@@ -12,7 +12,7 @@ This module orchestrates:
     • YAMLWriter
 
 Produces:
-    meaning_dictionary.yaml
+    meaning_dictionary.json.gz
 """
 
 from pathlib import Path
@@ -69,7 +69,7 @@ class BatchConverter:
 
 
 # Convenience function
-def run_batch_conversion(base_dir="wordnet_raw", output_file="meaning_dictionary.yaml"):
+def run_batch_conversion(base_dir="wordnet_raw", output_file="meaning_dictionary.json.gz"):
     BatchConverter(base_dir, output_file).run()
 
 
