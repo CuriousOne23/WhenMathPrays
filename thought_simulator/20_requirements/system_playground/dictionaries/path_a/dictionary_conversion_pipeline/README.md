@@ -25,31 +25,30 @@ This file is consumed at runtime by InB → IIInB → CEx  → CE & SOB → SROB
 ## Directory Structure
 
 ```
-dictionary_conversion_pipeline/
-│
-├── lemma_normalizer.py
-├── wordnet_loader.py
-├── gloss_extractor.py
-├── primitive_classifier.py
-├── invariant_generator.py
-├── cue_envelope_generator.py
-├── routing_signature_generator.py
-├── identity_anchor_generator.py
-├── ts_entry_builder.py
-├── yaml_writer.py
-├── batch_converter.py
-├── utils.py
-├── config.py
-│
-└── wordnet_raw/
-    ├── index.noun
-    ├── index.verb
-    ├── index.adj
-    ├── index.adv
-    ├── data.noun
-    ├── data.verb
-    ├── data.adj
-    ├── data.adv
+dictionaries/
+└── path_a/
+    ├── dictionary_conversion_pipeline/
+    │   ├── yaml_writer.py
+    │   ├── json_gzip_writer.py        ← NEW
+    │   ├── ts_meaning_dct_path_a.py   ← NEW (runtime stripper)
+    │   ├── batch_converter.py
+    │   ├── ts_entry_builder.py
+    │   ├── ... (other pipeline modules)
+    │   └── wordnet_raw/
+    │       ├── index.noun
+    │       ├── index.verb
+    │       ├── index.adj
+    │       ├── index.adv
+    │       ├── data.noun
+    │       ├── data.verb
+    │       ├── data.adj
+    │       └── data.adv
+    │
+    ├── dictionaries_dev/
+    │   └── meaning_dictionary_dev.json.gz
+    │
+    └── dictionaries_runtime/
+        └── ts_meaning_dictionary.json.gz
 ```
 
 ---
@@ -160,14 +159,16 @@ Produces the final in‑memory representation.
 
 ---
 
-### **10. `yaml_writer.py`**
+### **10. `json_gzip_writer.py`**
 Writes TS dictionary entries into:
 
 ```
-meaning_dictionary.yaml
+meaning_dictionary.json.gz
 ```
 
 Supports chunking or single‑file output.
+
+yaml_writer.py writes meaning_dictionary.yaml but it will be a lot slower in writing and use a lot more memory, highly reccommend you use json_gzip_writer.py.
 
 ---
 
@@ -213,6 +214,54 @@ Configuration for:
 
 ---
 
+Here is **section 14** written in the exact style and structure of your existing README, matching tone, formatting, and semantic clarity. It fits directly after section 13.
+
+---
+
+### **14. `ts_meaning_dct_path_a.py`**
+Produces the **TS‑efficient runtime dictionary** for Path A by stripping all non‑essential developer metadata from the full dictionary.
+
+This module loads:
+
+```
+dictionaries_dev/meaning_dictionary_dev.json.gz
+```
+
+and writes the compact, machine‑optimized runtime dictionary:
+
+```
+dictionaries_runtime/ts_meaning_dictionary.json.gz
+```
+
+The runtime dictionary contains **only the fields required by TS Path A routing**, including:
+
+- lemma  
+- alternate lemmas  
+- primitive  
+- invariants  
+- cue envelope  
+- routing signature  
+- identity anchor  
+
+All developer‑oriented fields are removed:
+
+- gloss  
+- WordNet pointers  
+- raw synset metadata  
+- diagnostic fields  
+- intermediate pipeline artifacts  
+
+The resulting file is **small, fast to load, and fully deterministic**, making it ideal for:
+
+- InB → IIInB → CEx → CE & SOB → SROB → CnOB → SmOB → SSG  
+- runtime semantic routing  
+- geometric manifold projection  
+- stable meaning selection  
+
+This is the dictionary consumed by TS Path A at runtime.
+
+---
+
 ## Execution Order
 
 The pipeline must run in this exact order:
@@ -226,7 +275,7 @@ The pipeline must run in this exact order:
 7. **routing_signature_generator.py**  
 8. **identity_anchor_generator.py**  
 9. **ts_entry_builder.py**  
-10. **yaml_writer.py**  
+10. **json_gzip_writer.py**  
 11. **batch_converter.py** (runs everything)
 
 ---
@@ -256,10 +305,10 @@ These are the official Princeton WordNet 3.0 raw files.
 
 ## Output Files
 
-Generated in the pipeline directory:
+Generated in the pipeline directory dictonaries_dev by batch_converter.py:
 
 ```
-meaning_dictionary.yaml
+dictionaries_dev/meaning_dictionary.json.gz
 ```
 
 This file contains all TS semantic identities with:
