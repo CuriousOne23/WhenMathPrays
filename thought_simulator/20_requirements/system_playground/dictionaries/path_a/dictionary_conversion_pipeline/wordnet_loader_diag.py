@@ -101,7 +101,10 @@ def diff(real, diag):
         # diag pointer count is fields[lemma_start + 2*lemma_count]
         lemma_count = len(real["lemmas"])
         diag_ptr_count = diag["fields"][4 + 2 * lemma_count]
-        if str(real["ptr_count"]) != diag_ptr_count:
+        # Normalize diag pointer count (strip leading zeros)
+        diag_ptr_norm = diag_ptr_count.lstrip("0") or "0"
+        
+        if str(real["ptr_count"]) != diag_ptr_norm:
             differences.append(("ptr_count", real["ptr_count"], diag_ptr_count))
 
     return differences
