@@ -59,3 +59,6 @@ class BatchConverter:
 # Convenience function
 def run_batch_conversion(base_dir="wordnet_raw", output_file="meaning_dictionary.yaml"):
     BatchConverter(base_dir, output_file).run()
+
+if __name__ == "__main__":
+    run_batch_conversion()
