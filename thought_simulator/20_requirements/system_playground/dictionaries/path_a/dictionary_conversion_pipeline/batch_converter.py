@@ -58,7 +58,7 @@ class BatchConverter:
         print("Building TS entries...")
         for (pos, offset), synset in synsets.items():
             entry = self.entry_builder.build(synset)
-            ts_entries.append(entry)
+            ts_entries.append(entry.to_dict())
 
         print(f"Built {len(ts_entries)} TS entries.")
 
