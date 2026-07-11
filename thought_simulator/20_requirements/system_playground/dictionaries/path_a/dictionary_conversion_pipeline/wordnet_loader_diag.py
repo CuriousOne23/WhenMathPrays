@@ -119,6 +119,7 @@ def diag_data_file(file_path):
     print("====================================================\n")
 
     diff_count = 0
+    line_passed = False   # <-- REQUIRED INITIALIZATION
 
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -154,14 +155,14 @@ def diag_data_file(file_path):
                 if diff_count >= MAX_DIFFERENCES:
                     print(">>> Reached 10 differences. Exiting diagnostics.")
                     return
-
                 continue
 
             # Compare
             differences = diff(real_result, diag_result)
 
+            # Only record that this line passed; do NOT print anything yet
             if not differences:
-                print("Real code parsing has passed.")
+                line_passed = True
                 continue
 
             # Print differences
@@ -183,7 +184,10 @@ def diag_data_file(file_path):
                 print(">>> Reached 10 differences. Exiting diagnostics.")
                 return
 
-
+    # Only print success ONCE per file
+    if diff_count == 0:
+        print("Real code parsing has passed for this file.")
+    
 def run_diag(base_dir="wordnet_raw"):
     base = Path(base_dir)
 
