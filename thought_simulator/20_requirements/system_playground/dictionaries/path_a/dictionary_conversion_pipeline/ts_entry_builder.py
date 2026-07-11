@@ -119,7 +119,11 @@ class TSEntryBuilder:
         TSEntry
         """
         # 1. Normalize lemma
-        lemma = normalize_lemma(synset.lemma)
+        # Primary lemma
+        lemma = normalize_lemma(synset.lemmas[0])
+        
+        # Optional: alternate lemmas
+        alternate_lemmas = [normalize_lemma(l) for l in synset.lemmas[1:]]
 
         # 2. Extract gloss
         gloss = extract_gloss_from_synset(synset)
