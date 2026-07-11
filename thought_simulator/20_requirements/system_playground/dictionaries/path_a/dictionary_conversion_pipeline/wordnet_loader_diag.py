@@ -6,6 +6,9 @@ from pathlib import Path
 
 MAX_NEW_LAYOUTS = 10
 
+# Start with an empty whitelist; you will add shapes here as you learn them.
+KNOWN_LAYOUTS = set()
+
 def layout_signature(fields):
     """
     Create a signature based on the *shape* of the fields,
@@ -17,14 +20,14 @@ def layout_signature(fields):
             sig.append("INT")
         elif f.isalpha():
             sig.append("ALPHA")
-        elif f.isalnum():
+        elif f.replace("_", "").isalnum():
             sig.append("ALNUM")
         else:
             sig.append("OTHER")
     return tuple(sig)
 
 
-def diag_data_file(file_path, seen_shapes):
+def diag_data_file(file_path, known_shapes):
     print("\n====================================================")
     print("DIAGNOSTICS FOR:", file_path)
     print("====================================================\n")
@@ -50,25 +53,29 @@ def diag_data_file(file_path, seen_shapes):
             fields = data_part.split()
             sig = layout_signature(fields)
 
-            if sig not in seen_shapes:
-                seen_shapes.add(sig)
-                new_count += 1
+            # Skip known shapes
+            if sig in known_shapes:
+                continue
 
-                print("----------------------------------------------------")
-                print("NEW FIELD LAYOUT DETECTED")
-                print("Raw line:")
-                print(line)
-                print("\nFields:")
-                for i, f in enumerate(fields):
-                    print(f"  [{i}] {f}")
+            # New shape detected
+            known_shapes.add(sig)
+            new_count += 1
 
-                print("\nGloss:")
-                print(gloss)
-                print("----------------------------------------------------\n")
+            print("----------------------------------------------------")
+            print("NEW FIELD LAYOUT DETECTED")
+            print("Raw line:")
+            print(line)
+            print("\nFields:")
+            for i, f in enumerate(fields):
+                print(f"  [{i}] {f}")
 
-                if new_count >= MAX_NEW_LAYOUTS:
-                    print(">>> Reached limit of 10 new layouts. Exiting diagnostics.")
-                    return True  # signal to stop
+            print("\nGloss:")
+            print(gloss)
+            print("----------------------------------------------------\n")
+
+            if new_count >= MAX_NEW_LAYOUTS:
+                print(">>> Reached limit of 10 new layouts. Exiting diagnostics.")
+                return True  # signal to stop
 
     return False  # continue
 
@@ -83,12 +90,16 @@ def run_diag(base_dir="wordnet_raw"):
         "adv":  base / "data.adv",
     }
 
-    seen_shapes = set()
+    known_shapes = set(KNOWN_LAYOUTS)
 
     for pos, file_path in data_files.items():
-        stop = diag_data_file(file_path, seen_shapes)
+        stop = diag_data_file(file_path, known_shapes)
         if stop:
             break
+
+    print("\n>>> FINAL KNOWN SHAPES (add these to KNOWN_LAYOUTS):")
+    for shape in known_shapes:
+        print(shape)
 
 
 if __name__ == "__main__":
