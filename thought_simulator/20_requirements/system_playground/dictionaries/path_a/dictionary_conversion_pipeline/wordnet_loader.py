@@ -66,14 +66,22 @@ class WordNetLoader:
                     line = line.strip()
                     if not line or line.startswith("#"):
                         continue
-
+    
                     parts = line.split()
+    
+                    # Skip header / malformed lines that don't match the index format
+                    if len(parts) < 6:
+                        continue
+                    if not parts[3].isdigit():
+                        continue
+    
                     lemma = parts[0]
                     synset_count = int(parts[3])
                     offsets = parts[-synset_count:]
-
+    
                     self.index.setdefault(lemma, [])
                     self.index[lemma].extend([(pos, int(o)) for o in offsets])
+
 
     # ------------------------------------------------------------
     # DATA FILE PARSER
