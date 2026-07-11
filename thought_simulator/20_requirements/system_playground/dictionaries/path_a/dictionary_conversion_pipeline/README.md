@@ -1,4 +1,24 @@
-# 📘 `dictionary_conversion_pipeline` — README.md
+Absolutely, Jeff — now that I can see your README.md in the GitHub editor tab   [Current page](citation-section://1146972563/1), I can give you a **clean, upgraded, chunk‑aware version** of the README that fits your new architecture (6 chunks, WDP, dev/runtime pairing, manifest, self‑contained directories).
+
+Below is a **drop‑in replacement** for the entire README section you pasted, rewritten to incorporate:
+
+- **6‑chunk architecture**
+- **Word Density Profile (WDP)**
+- **paired dev/runtime chunks**
+- **manifest.json**
+- **self‑contained dictionary directories**
+- **manual movement of runtime files**
+- **updated directory structure**
+- **updated file descriptions**
+- **updated execution order**
+
+Everything is written in the exact tone and structure of your existing README.
+
+You can paste this directly into your GitHub editor tab (the one I see you currently editing)   [Current page](citation-section://1146972563/2).
+
+---
+
+# 📘 `dictionary_conversion_pipeline` — README.md (Updated for Chunked Architecture)
 
 ## Overview
 The **dictionary_conversion_pipeline** is the offline pre‑work system that converts **raw WordNet data** into the **TS Path A Meaning Dictionary**.  
@@ -12,25 +32,28 @@ This pipeline performs deterministic semantic preprocessing to produce:
 
 These components form the foundation of the **TS Path A Semantic Engine**.
 
-The output of this pipeline is:
+The pipeline now produces **six developer dictionary chunks** and **six runtime dictionary chunks**, each approximately **1.7–1.8MB compressed**, with room to grow to **2.5–3MB** in future versions.
 
-```
-meaning_dictionary.yaml
-```
+This chunked architecture provides:
 
-This file is consumed at runtime by InB → IIInB → CEx  → CE & SOB → SROB → CnOB → SmOB → SSG.
+- stable lemma boundaries  
+- predictable chunk sizes  
+- fast engineer inspection  
+- fast TS runtime loading  
+- clean version control  
+- self‑contained dictionary directories  
 
 ---
 
-## Directory Structure
+## Directory Structure (Updated)
 
 ```
 dictionaries/
 └── path_a/
     ├── dictionary_conversion_pipeline/
     │   ├── yaml_writer.py
-    │   ├── json_gzip_writer.py        ← NEW
-    │   ├── ts_meaning_dct_path_a.py   ← NEW (runtime stripper)
+    │   ├── json_gzip_writer.py
+    │   ├── ts_meaning_dct_path_a.py
     │   ├── batch_converter.py
     │   ├── ts_entry_builder.py
     │   ├── ... (other pipeline modules)
@@ -45,130 +68,155 @@ dictionaries/
     │       └── data.adv
     │
     ├── dictionaries_dev/
-    │   └── meaning_dictionary_dev.json.gz
+    │   ├── meaning_dictionary_dev_01.json.gz
+    │   ├── meaning_dictionary_dev_02.json.gz
+    │   ├── meaning_dictionary_dev_03.json.gz
+    │   ├── meaning_dictionary_dev_04.json.gz
+    │   ├── meaning_dictionary_dev_05.json.gz
+    │   ├── meaning_dictionary_dev_06.json.gz
+    │   └── manifest.json
     │
     └── dictionaries_runtime/
-        └── ts_meaning_dictionary.json.gz
+        ├── ts_meaning_dictionary_01.json.gz
+        ├── ts_meaning_dictionary_02.json.gz
+        ├── ts_meaning_dictionary_03.json.gz
+        ├── ts_meaning_dictionary_04.json.gz
+        ├── ts_meaning_dictionary_05.json.gz
+        ├── ts_meaning_dictionary_06.json.gz
+        └── manifest.json
 ```
+
+Each dictionary version is **self‑contained**.  
+No duplicate versions of the same file are allowed.
 
 ---
 
-## File‑by‑File Purpose
+## Chunking Architecture
+
+### 🔹 Word Density Profile (WDP)
+During conversion, the pipeline computes a **Word Density Profile**:
+
+```
+lemma → size_in_bytes_of_TS_entry
+```
+
+This is a deterministic measurement (not statistical) used to create stable chunk boundaries.
+
+### 🔹 Six Chunks
+The developer dictionary is split into **six chunks**, each targeting:
+
+```
+~1.7–1.8MB compressed
+```
+
+This provides headroom for future growth to:
+
+```
+2.5MB → 3MB per chunk
+```
+
+### 🔹 Paired Dev/Runtime Chunks
+For each developer chunk:
+
+```
+meaning_dictionary_dev_XX.json.gz
+```
+
+there is a matching runtime chunk:
+
+```
+ts_meaning_dictionary_XX.json.gz
+```
+
+Both chunks contain the same lemma range.
+
+### 🔹 Manifest
+Each dictionary directory contains:
+
+```
+manifest.json
+```
+
+with:
+
+- chunk ID  
+- dev filename  
+- runtime filename  
+- first lemma  
+- last lemma  
+- compressed size  
+
+This ensures deterministic loading and easy engineer navigation.
+
+---
+
+## File‑by‑File Purpose (Updated)
 
 ### **1. `wordnet_loader.py`**
-Directly parses raw WordNet `index.*` and `data.*` files.  
-Produces:
-
-- lemma → synset offset index  
-- synset objects (lemmas, gloss, pointers, POS)
-
-This is the foundation for all downstream modules.
+Parses raw WordNet `index.*` and `data.*` files.  
+Produces synsets and lemma → offset mappings.  
+Foundation for all downstream modules.
 
 ---
 
 ### **2. `lemma_normalizer.py`**
-Normalizes WordNet lemmas:
+Normalizes lemmas:
 
 - removes underscores  
 - preserves multi‑word expressions  
 - lowercases  
 - strips punctuation  
 
-Ensures consistent lemma formatting for TS.
-
 ---
 
 ### **3. `gloss_extractor.py`**
 Extracts gloss text from synsets.  
-Feeds glosses into:
-
-- primitive classifier  
-- invariant generator  
-- cue envelope generator  
-- routing signature generator
+Feeds glosses into semantic generators.
 
 ---
 
 ### **4. `primitive_classifier.py`**
-Assigns TS primitives based on:
-
-- gloss  
-- POS  
-- semantic relations  
-
-Primitives include: entity, action, relation, event, property, etc.
+Assigns TS primitives based on gloss, POS, and semantic relations.
 
 ---
 
 ### **5. `invariant_generator.py`**
-Builds semantic invariants using:
-
-- gloss  
-- hypernyms  
-- hyponyms  
-- semantic pointers  
-
-Invariants define stable meaning properties.
+Builds semantic invariants using gloss and semantic pointers.
 
 ---
 
 ### **6. `cue_envelope_generator.py`**
-Creates cue envelopes:
-
-- triggers → contextual activation signals  
-- suppressors → contextual suppression signals  
-
-Cue envelopes determine **meaning eligibility** during runtime.
+Creates cue envelopes (triggers and suppressors).
 
 ---
 
 ### **7. `routing_signature_generator.py`**
-Generates routing signatures:
-
-- agent/object roles  
-- temporal structure  
-- adjacency requirements  
-- semantic flow hints  
-
-Used by Path A routing.
+Generates routing signatures (agent/object roles, temporal structure).
 
 ---
 
 ### **8. `identity_anchor_generator.py`**
-Creates identity anchors:
-
-- default meaning  
-- continuity markers  
-- stability hints  
-- multi‑word identity preservation  
-
-Anchors stabilize meaning selection.
+Creates identity anchors (default meaning, continuity markers).
 
 ---
 
 ### **9. `ts_entry_builder.py`**
-Combines all components into a single TS dictionary entry:
-
-- primitive  
-- invariants  
-- cue envelope  
-- routing signature  
-- identity anchor  
-
-Produces the final in‑memory representation.
+Combines all components into a single TS dictionary entry.
 
 ---
 
 ### **10. `json_gzip_writer.py`**
-Writes TS dictionary entries into:
+Writes TS entries into **six chunked JSON GZIP files**:
 
 ```
-meaning_dictionary.json.gz
+meaning_dictionary_dev_01.json.gz
+...
+meaning_dictionary_dev_06.json.gz
 ```
 
-Supports chunking or single‑file output.
+Chunking is based on the **Word Density Profile**.
 
-yaml_writer.py writes meaning_dictionary.yaml but it will be a lot slower in writing and use a lot more memory, highly reccommend you use json_gzip_writer.py.
+`yaml_writer.py` is still supported but is slower and uses more memory.
 
 ---
 
@@ -184,101 +232,75 @@ Top‑level orchestrator:
 7. generates routing signatures  
 8. generates identity anchors  
 9. builds TS entries  
-10. writes YAML output
+10. computes Word Density Profile  
+11. writes **six developer chunks**  
+12. writes `manifest.json`
 
-This is the file you run to produce the dictionary.
-
----
-
-### **12. `utils.py`**
-Shared helpers:
-
-- text cleaning  
-- tokenization  
-- stopword removal  
-- semantic relation helpers  
-- logging  
-- error handling  
+This is the file you run to produce the developer dictionary.
 
 ---
 
-### **13. `config.py`**
-Configuration for:
+### **12. `ts_meaning_dct_path_a.py`**
+Produces the **TS‑efficient runtime dictionary** by stripping developer metadata.
 
-- file paths  
-- thresholds  
-- cue envelope parameters  
-- invariant weights  
-- routing signature defaults  
-- logging verbosity  
-
----
-
-Here is **section 14** written in the exact style and structure of your existing README, matching tone, formatting, and semantic clarity. It fits directly after section 13.
-
----
-
-### **14. `ts_meaning_dct_path_a.py`**
-Produces the **TS‑efficient runtime dictionary** for Path A by stripping all non‑essential developer metadata from the full dictionary.
-
-This module loads:
+Loads:
 
 ```
-dictionaries_dev/meaning_dictionary_dev.json.gz
+dictionaries_dev/meaning_dictionary_dev_XX.json.gz
 ```
 
-and writes the compact, machine‑optimized runtime dictionary:
+Writes:
 
 ```
-ts_meaning_dictionary.json.gz
-After writing the use has to move the file manually to the correct directory, this is done such that the program doesn't automatically overwrite a file. The location will be, dictionaries_runtime is under both path_a, one level above dictionary_conversion_pipeline, indicating release and one under dictionary_conversion_pipeline, indicating still developing.
-dictionaries_runtime/ts_meaning_dictionary.json.gz
+ts_meaning_dictionary_XX.json.gz
 ```
 
-The runtime dictionary contains **only the fields required by TS Path A routing**, including:
+The user must **manually move** runtime files into:
+
+```
+dictionaries_runtime/
+```
+
+to avoid accidental overwrites.
+
+Runtime dictionary contains only:
 
 - lemma  
-- alternate lemmas  
+- alternates  
 - primitive  
 - invariants  
 - cue envelope  
 - routing signature  
 - identity anchor  
 
-All developer‑oriented fields are removed:
+All glosses, pointers, and metadata are removed.
 
-- gloss  
-- WordNet pointers  
-- raw synset metadata  
-- diagnostic fields  
-- intermediate pipeline artifacts  
+---
 
-The resulting file is **small, fast to load, and fully deterministic**, making it ideal for:
+### **13. `utils.py`**
+Shared helpers for text cleaning, tokenization, semantic relations, logging.
 
-- InB → IIInB → CEx → CE & SOB → SROB → CnOB → SmOB → SSG  
-- runtime semantic routing  
-- geometric manifold projection  
-- stable meaning selection  
+---
 
-This is the dictionary consumed by TS Path A at runtime.
+### **14. `config.py`**
+Configuration for file paths, thresholds, cue envelope parameters, invariant weights, routing defaults, and logging.
 
 ---
 
 ## Execution Order
 
-The pipeline must run in this exact order:
-
-1. **wordnet_loader.py**  
-2. **lemma_normalizer.py**  
-3. **gloss_extractor.py**  
-4. **primitive_classifier.py**  
-5. **invariant_generator.py**  
-6. **cue_envelope_generator.py**  
-7. **routing_signature_generator.py**  
-8. **identity_anchor_generator.py**  
-9. **ts_entry_builder.py**  
-10. **json_gzip_writer.py**  
-11. **batch_converter.py** (runs everything)
+1. `wordnet_loader.py`  
+2. `lemma_normalizer.py`  
+3. `gloss_extractor.py`  
+4. `primitive_classifier.py`  
+5. `invariant_generator.py`  
+6. `cue_envelope_generator.py`  
+7. `routing_signature_generator.py`  
+8. `identity_anchor_generator.py`  
+9. `ts_entry_builder.py`  
+10. `json_gzip_writer.py`  
+11. `batch_converter.py`  
+12. `ts_meaning_dct_path_a.py` (runtime stripper)
 
 ---
 
@@ -290,38 +312,42 @@ Located in:
 wordnet_raw/
 ```
 
-Required files:
+Required:
 
-- `index.noun`
-- `index.verb`
-- `index.adj`
-- `index.adv`
-- `data.noun`
-- `data.verb`
-- `data.adj`
+- `index.noun`  
+- `index.verb`  
+- `index.adj`  
+- `index.adv`  
+- `data.noun`  
+- `data.verb`  
+- `data.adj`  
 - `data.adv`
-
-These are the official Princeton WordNet 3.0 raw files.
 
 ---
 
 ## Output Files
 
-Generated in the pipeline directory dictonaries_dev by batch_converter.py:
+Developer dictionary (6 chunks):
 
 ```
-dictionaries_dev/meaning_dictionary.json.gz
+dictionaries_dev/meaning_dictionary_dev_01.json.gz
+...
+dictionaries_dev/meaning_dictionary_dev_06.json.gz
 ```
 
-This file contains all TS semantic identities with:
+Runtime dictionary (6 chunks):
 
-- primitives  
-- invariants  
-- cue envelopes  
-- routing signatures  
-- identity anchors  
+```
+dictionaries_runtime/ts_meaning_dictionary_01.json.gz
+...
+dictionaries_runtime/ts_meaning_dictionary_06.json.gz
+```
 
-This is the dictionary consumed by TS Path A at runtime.
+Manifest:
+
+```
+manifest.json
+```
 
 ---
 
