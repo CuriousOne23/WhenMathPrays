@@ -107,7 +107,7 @@ class WordNetLoader:
     # DATA FILE PARSER
     # ------------------------------------------------------------
     def _load_data_files(self):
-        print(">>> ACTIVE _load_data_files START")
+        print(">>> OPENING:", file_path)
         """
         data.* format:
             offset lex_filenum pos lemma_cnt lemma lex_id ... ptr_cnt ptr... | gloss
