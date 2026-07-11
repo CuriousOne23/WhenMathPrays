@@ -1,38 +1,121 @@
 # wordnet_loader_diag.py
-# Incremental diagnostics for WordNet 2.1 data.* files.
-# Prints only 10 NEW field layouts, then exits.
+# Standalone diagnostics for WordNet 2.1 data.* files.
+# Compares DIAG parsing vs REAL parsing logic (embedded here).
+# Prints up to 10 differences, then exits.
 
 from pathlib import Path
 
-MAX_NEW_LAYOUTS = 10
+MAX_DIFFERENCES = 10
 
-# Start with an empty whitelist; you will add shapes here as you learn them.
-KNOWN_LAYOUTS = set()
-
-def layout_signature(fields):
+# ------------------------------------------------------------
+# REAL PARSER LOGIC (embedded copy from your wordnet_loader.py)
+# ------------------------------------------------------------
+def real_parse(fields, gloss):
     """
-    Create a signature based on the *shape* of the fields,
-    not the exact content. This helps detect structural differences.
+    This is a copy of your real parsing logic.
+    It returns a dict describing what the real parser thinks the synset contains.
     """
-    sig = []
-    for f in fields:
-        if f.isdigit():
-            sig.append("INT")
-        elif f.isalpha():
-            sig.append("ALPHA")
-        elif f.replace("_", "").isalnum():
-            sig.append("ALNUM")
-        else:
-            sig.append("OTHER")
-    return tuple(sig)
+
+    offset = int(fields[0])
+    lex_filenum = int(fields[1])
+    pos_code = fields[2]
+
+    lemma_count = int(fields[3])
+    lemma_start = 4
+
+    lemmas = []
+    lex_ids = []
+
+    # WordNet 2.1 alternates lemma and lex_id
+    for i in range(lemma_count):
+        lemma = fields[lemma_start + 2*i]
+        lex_id = int(fields[lemma_start + 2*i + 1])
+        lemmas.append(lemma)
+        lex_ids.append(lex_id)
+
+    # Pointer count index
+    ptr_count_index = lemma_start + 2 * lemma_count
+    ptr_count = int(fields[ptr_count_index])
+
+    ptr_start = ptr_count_index + 1
+    ptr_end = ptr_start + ptr_count * 4
+
+    pointers_raw = fields[ptr_start:ptr_end]
+    pointers = []
+    for i in range(0, len(pointers_raw), 4):
+        pointers.append({
+            "symbol": pointers_raw[i],
+            "offset": int(pointers_raw[i+1]),
+            "pos": pointers_raw[i+2],
+            "src_tgt": pointers_raw[i+3],
+        })
+
+    return {
+        "offset": offset,
+        "pos": pos_code,
+        "lex_filenum": lex_filenum,
+        "lemmas": lemmas,
+        "lex_ids": lex_ids,
+        "ptr_count": ptr_count,
+        "pointers": pointers,
+        "gloss": gloss,
+    }
 
 
-def diag_data_file(file_path, known_shapes):
+# ------------------------------------------------------------
+# DIAGNOSTIC PARSER (raw fields only)
+# ------------------------------------------------------------
+def diag_parse(fields, gloss):
+    """
+    The diagnostic parser simply returns the raw fields and gloss.
+    """
+    return {
+        "fields": fields,
+        "gloss": gloss,
+    }
+
+
+# ------------------------------------------------------------
+# DIFF ENGINE
+# ------------------------------------------------------------
+def diff(real, diag):
+    """
+    Compare real parser output vs diag parser output.
+    Return a list of differences.
+    """
+
+    differences = []
+
+    # Compare lemma list
+    if "lemmas" in real:
+        if real["lemmas"] != diag["fields"][4:4 + 2 * len(real["lemmas"]):2]:
+            differences.append(("lemmas", real["lemmas"], diag["fields"]))
+
+    # Compare lex_ids
+    if "lex_ids" in real:
+        if real["lex_ids"] != [int(x) for x in diag["fields"][5:5 + 2 * len(real["lex_ids"]):2]]:
+            differences.append(("lex_ids", real["lex_ids"], diag["fields"]))
+
+    # Compare pointer count
+    if "ptr_count" in real:
+        # diag pointer count is fields[lemma_start + 2*lemma_count]
+        lemma_count = len(real["lemmas"])
+        diag_ptr_count = diag["fields"][4 + 2 * lemma_count]
+        if str(real["ptr_count"]) != diag_ptr_count:
+            differences.append(("ptr_count", real["ptr_count"], diag_ptr_count))
+
+    return differences
+
+
+# ------------------------------------------------------------
+# MAIN DIAGNOSTIC LOOP
+# ------------------------------------------------------------
+def diag_data_file(file_path):
     print("\n====================================================")
     print("DIAGNOSTICS FOR:", file_path)
     print("====================================================\n")
 
-    new_count = 0
+    diff_count = 0
 
     with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -40,7 +123,7 @@ def diag_data_file(file_path, known_shapes):
             if not line:
                 continue
 
-            # Skip header lines — real synset lines always begin with 8-digit offset
+            # Skip header lines
             if len(line) < 8 or not line[:8].isdigit():
                 continue
 
@@ -51,33 +134,51 @@ def diag_data_file(file_path, known_shapes):
                 data_part, gloss = line, ""
 
             fields = data_part.split()
-            sig = layout_signature(fields)
 
-            # Skip known shapes
-            if sig in known_shapes:
+            # Run both parsers
+            diag_result = diag_parse(fields, gloss)
+
+            try:
+                real_result = real_parse(fields, gloss)
+            except Exception as e:
+                print("----------------------------------------------------")
+                print("REAL PARSER ERROR")
+                print("Raw line:")
+                print(line)
+                print("Exception:", e)
+                print("----------------------------------------------------\n")
+                diff_count += 1
+                if diff_count >= MAX_DIFFERENCES:
+                    print(">>> Reached 10 differences. Exiting diagnostics.")
+                    return
+
                 continue
 
-            # New shape detected
-            known_shapes.add(sig)
-            new_count += 1
+            # Compare
+            differences = diff(real_result, diag_result)
 
+            if not differences:
+                print("Real code parsing has passed.")
+                continue
+
+            # Print differences
             print("----------------------------------------------------")
-            print("NEW FIELD LAYOUT DETECTED")
+            print("DIFFERENCE DETECTED")
             print("Raw line:")
             print(line)
-            print("\nFields:")
-            for i, f in enumerate(fields):
-                print(f"  [{i}] {f}")
+            print("\nDifferences:")
+            for d in differences:
+                print("  Field:", d[0])
+                print("  Real:", d[1])
+                print("  Diag:", d[2])
+                print()
 
-            print("\nGloss:")
-            print(gloss)
             print("----------------------------------------------------\n")
 
-            if new_count >= MAX_NEW_LAYOUTS:
-                print(">>> Reached limit of 10 new layouts. Exiting diagnostics.")
-                return True  # signal to stop
-
-    return False  # continue
+            diff_count += 1
+            if diff_count >= MAX_DIFFERENCES:
+                print(">>> Reached 10 differences. Exiting diagnostics.")
+                return
 
 
 def run_diag(base_dir="wordnet_raw"):
@@ -90,16 +191,8 @@ def run_diag(base_dir="wordnet_raw"):
         "adv":  base / "data.adv",
     }
 
-    known_shapes = set(KNOWN_LAYOUTS)
-
     for pos, file_path in data_files.items():
-        stop = diag_data_file(file_path, known_shapes)
-        if stop:
-            break
-
-    print("\n>>> FINAL KNOWN SHAPES (add these to KNOWN_LAYOUTS):")
-    for shape in known_shapes:
-        print(shape)
+        diag_data_file(file_path)
 
 
 if __name__ == "__main__":
