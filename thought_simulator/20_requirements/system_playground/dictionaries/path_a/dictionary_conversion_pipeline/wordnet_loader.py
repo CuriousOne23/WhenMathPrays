@@ -106,86 +106,108 @@ class WordNetLoader:
     # ------------------------------------------------------------
     # DATA FILE PARSER
     # ------------------------------------------------------------
-    def _load_data_files(self):
-        """
-        data.* format:
-            offset lex_filenum pos lemma_cnt lemma lex_id ... ptr_cnt ptr... | gloss
-        """
-        for pos, file_path in self.data_files.items():
-            print(">>> OPENING:", file_path)
-            with open(file_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
+def _load_data_files(self):
+    """
+    Correct WordNet 2.1 data.* parser:
+    - hex lemma counts (w_cnt)
+    - hex lex_ids
+    - pointer blocks
+    - verb frames
+    """
+    for pos, file_path in self.data_files.items():
+        print(">>> OPENING:", file_path)
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
 
-                    # Skip ALL header lines:
-                    # WordNet data files begin with many lines like:
-                    # "This software and database is being provided..."
-                    # "WordNet 3.0 Copyright..."
-                    # These must be skipped.
-                    # Skip header lines: they do NOT begin with an 8-digit synset offset
-                    if len(line) < 8 or not line[:8].isdigit():
-                        continue
+                # Skip header lines (not starting with 8-digit offset)
+                if len(line) < 8 or not line[:8].isdigit():
+                    continue
 
-                    # Split gloss
-                    if " | " in line:
-                        data_part, gloss = line.split(" | ", 1)
-                    else:
-                        data_part, gloss = line, ""
+                # Split gloss
+                if " | " in line:
+                    data_part, gloss = line.split(" | ", 1)
+                else:
+                    data_part, gloss = line, ""
 
-                    fields = data_part.split()
+                fields = data_part.split()
 
-                    offset = int(fields[0])
-                    lex_filenum = int(fields[1])
-                    pos_code = fields[2]
+                offset = int(fields[0])
+                lex_filenum = int(fields[1])
+                pos_code = fields[2]
 
-                    lemma_count = int(fields[3])
-                    lemma_start = 4
-                    
-                    lemmas = []
-                    lex_ids = []
-                    
-                    # WordNet 2.1 alternates lemma and lex_id
-                    for i in range(lemma_count):
-                        lemma = fields[lemma_start + 2*i]
-                        lex_id = int(fields[lemma_start + 2*i + 1])
-                        lemmas.append(lemma)
-                        lex_ids.append(lex_id)
-                    
-                    # Find the first integer after lemma/lex_id pairs
-                    ptr_count_index = lemma_start + 2 * lemma_count
-                    
-                    # Skip non-integer fields until we find the pointer count
-                    while not fields[ptr_count_index].isdigit():
-                        ptr_count_index += 1
-                    
-                    ptr_count = int(fields[ptr_count_index])
-                    
-                    ptr_start = ptr_count_index + 1
-                    ptr_end = ptr_start + ptr_count * 4
+                # w_cnt is hex (0a, 0b, 04, etc.)
+                lemma_count = int(fields[3], 16)
+                lemma_start = 4
 
-                    pointers_raw = fields[ptr_start:ptr_end]
-                    pointers = []
-                    for i in range(0, len(pointers_raw), 4):
-                        pointers.append({
-                            "symbol": pointers_raw[i],
-                            "offset": int(pointers_raw[i+1]),
-                            "pos": pointers_raw[i+2],
-                            "src_tgt": pointers_raw[i+3],
+                lemmas = []
+                lex_ids = []
+
+                # lemma / lex_id pairs; lex_id is also hex
+                for i in range(lemma_count):
+                    lemma = fields[lemma_start + 2*i]
+                    lex_id_raw = fields[lemma_start + 2*i + 1]
+                    lex_id = int(lex_id_raw, 16)
+                    lemmas.append(lemma)
+                    lex_ids.append(lex_id)
+
+                # pointer count (decimal)
+                ptr_count_index = lemma_start + 2 * lemma_count
+                ptr_count = int(fields[ptr_count_index])
+
+                ptr_start = ptr_count_index + 1
+                ptr_end = ptr_start + ptr_count * 4
+
+                pointers_raw = fields[ptr_start:ptr_end]
+                pointers = []
+                for i in range(0, len(pointers_raw), 4):
+                    pointers.append({
+                        "symbol": pointers_raw[i],
+                        "offset": int(pointers_raw[i+1]),
+                        "pos": pointers_raw[i+2],
+                        "src_tgt": pointers_raw[i+3],
+                    })
+
+                # Verb frames (only verbs)
+                frames = []
+                if pos_code == "v" and len(fields) > ptr_end:
+                    f_cnt_raw = fields[ptr_end]
+                    try:
+                        f_cnt = int(f_cnt_raw)
+                    except ValueError:
+                        f_cnt = 0
+
+                    frame_start = ptr_end + 1
+                    frame_end = frame_start + 2 * f_cnt
+                    frames_raw = fields[frame_start:frame_end]
+
+                    for i in range(0, len(frames_raw), 2):
+                        try:
+                            frame_num = int(frames_raw[i])
+                            word_index = int(frames_raw[i+1])
+                        except (ValueError, IndexError):
+                            continue
+                        frames.append({
+                            "frame": frame_num,
+                            "word_index": word_index,
                         })
 
-                    synset = WordNetSynset(
-                        offset=offset,
-                        pos=pos,
-                        lex_filenum=lex_filenum,
-                        lemmas=lemmas,
-                        lex_ids=lex_ids,
-                        pointers=pointers,
-                        gloss=gloss,
-                    )
+                synset = WordNetSynset(
+                    offset=offset,
+                    pos=pos_code,
+                    lex_filenum=lex_filenum,
+                    lemmas=lemmas,
+                    lex_ids=lex_ids,
+                    pointers=pointers,
+                    gloss=gloss,
+                )
 
-                    self.synsets[(pos, offset)] = synset
+                if frames:
+                    synset.frames = frames
+
+                self.synsets[(pos, offset)] = synset
 
 def load_wordnet(base_dir="wordnet_raw"):
     loader = WordNetLoader(base_dir)
