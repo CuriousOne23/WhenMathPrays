@@ -24,6 +24,10 @@ Produces:
 
 import json
 from pathlib import Path
+
+from config import WORDNET_DIR, DEV_OUTPUT_DIR, MANIFEST_FILENAME
+from utils import ensure_dir, write_manifest
+
 from wordnet_loader import load_wordnet
 from ts_entry_builder import TSEntryBuilder
 from json_gzip_writer import JSONGzipWriter
@@ -34,17 +38,22 @@ class BatchConverter:
     High-level orchestrator for TS dictionary generation.
     """
 
-    def __init__(self, base_dir=None, output_dir="dictionaries_dev"):
-        # Resolve paths relative to this script
+    def __init__(self, base_dir=None, output_dir=None):
         script_dir = Path(__file__).parent
 
+        # WordNet directory
         if base_dir is None:
-            base_dir = script_dir / "wordnet_raw"
+            self.base_dir = WORDNET_DIR
         else:
-            base_dir = script_dir / base_dir
+            self.base_dir = (script_dir / base_dir).resolve()
 
-        self.base_dir = base_dir.resolve()
-        self.output_dir = (script_dir / output_dir).resolve()
+        # Developer dictionary output directory
+        if output_dir is None:
+            self.output_dir = DEV_OUTPUT_DIR
+        else:
+            self.output_dir = (script_dir / output_dir).resolve()
+
+        ensure_dir(self.output_dir)
 
         self.entry_builder = TSEntryBuilder()
         self.json_writer = JSONGzipWriter(self.output_dir)
@@ -71,10 +80,8 @@ class BatchConverter:
         print(f"Writing chunked JSON GZIP developer dictionary to {self.output_dir}...")
         manifest = self.json_writer.write(ts_entries)
 
-        # Write manifest.json
-        manifest_path = self.output_dir / "manifest.json"
-        with open(manifest_path, "w", encoding="utf-8") as f:
-            json.dump(manifest, f, indent=2, ensure_ascii=False)
+        # Write manifest.json using utils
+        manifest_path = write_manifest(manifest, self.output_dir, MANIFEST_FILENAME)
 
         print(f"[batch_converter] Wrote manifest.json to {manifest_path}")
         print("[batch_converter] Developer dictionary chunks created successfully.")
