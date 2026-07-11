@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-MAX_DIFFERENCES = 10
+MAX_DIFFERENCES = 5
 
 # ------------------------------------------------------------
 # REAL PARSER LOGIC (embedded copy from your wordnet_loader.py)
