@@ -153,10 +153,15 @@ class WordNetLoader:
                         lemmas.append(lemma)
                         lex_ids.append(lex_id)
                     
-                    # After lemma/lex_id pairs, next field is pointer count
+                    # Find the first integer after lemma/lex_id pairs
                     ptr_count_index = lemma_start + 2 * lemma_count
+                    
+                    # Skip non-integer fields until we find the pointer count
+                    while not fields[ptr_count_index].isdigit():
+                        ptr_count_index += 1
+                    
                     ptr_count = int(fields[ptr_count_index])
-
+                    
                     ptr_start = ptr_count_index + 1
                     ptr_end = ptr_start + ptr_count * 4
 
