@@ -45,51 +45,69 @@ class WordNetLoader:
     # ------------------------------------------------------------
     # INDEX FILE PARSER
     # ------------------------------------------------------------
-    def _load_index_files(self):
+    def _load_data_files(self):
         """
-        Correct WordNet index.* format:
-            lemma  pos  synset_cnt  p_cnt  ptr...  sense_cnt  tagsense_cnt  offsets...
+        data.* format:
+            offset lex_filenum pos lemma_cnt lemma lex_id ... ptr_cnt ptr... | gloss
         """
-        for pos, file_path in self.index_files.items():
+        for pos, file_path in self.data_files.items():
             with open(file_path, "r", encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
-                    if not line or line.startswith("#"):
+                    if not line:
                         continue
     
-                    parts = line.split()
-    
-                    # Skip malformed or header lines
-                    if len(parts) < 6:
+                    # Skip header lines that do NOT begin with a numeric offset
+                    # WordNet data files begin with several human-readable header lines.
+                    if not line[0].isdigit():
                         continue
     
-                    lemma = parts[0]
-                    pos_code = parts[1]
+                    # Split gloss
+                    if " | " in line:
+                        data_part, gloss = line.split(" | ", 1)
+                    else:
+                        data_part, gloss = line, ""
     
-                    # synset_cnt and p_cnt must be integers
-                    if not parts[2].isdigit() or not parts[3].isdigit():
-                        continue
+                    fields = data_part.split()
     
-                    synset_cnt = int(parts[2])
-                    p_cnt = int(parts[3])
+                    offset = int(fields[0])
+                    lex_filenum = int(fields[1])
+                    pos_code = fields[2]
     
-                    # Pointer symbols start at index 4
-                    ptr_start = 4
-                    ptr_end = ptr_start + p_cnt
+                    lemma_count = int(fields[3])
+                    lemma_start = 4
+                    lemma_end = lemma_start + lemma_count
     
-                    # After pointer symbols:
-                    #   sense_cnt, tagsense_cnt, then offsets
-                    sense_cnt = int(parts[ptr_end])
-                    tagsense_cnt = int(parts[ptr_end + 1])
+                    lemmas = fields[lemma_start:lemma_end]
+                    lex_ids = [int(x) for x in fields[lemma_end:lemma_end + lemma_count]]
     
-                    offset_start = ptr_end + 2
-                    offset_end = offset_start + sense_cnt
+                    ptr_count_index = lemma_end + lemma_count
+                    ptr_count = int(fields[ptr_count_index])
     
-                    offsets = parts[offset_start:offset_end]
+                    ptr_start = ptr_count_index + 1
+                    ptr_end = ptr_start + ptr_count * 4
     
-                    self.index.setdefault(lemma, [])
-                    for o in offsets:
-                        self.index[lemma].append((pos, int(o)))
+                    pointers_raw = fields[ptr_start:ptr_end]
+                    pointers = []
+                    for i in range(0, len(pointers_raw), 4):
+                        pointers.append({
+                            "symbol": pointers_raw[i],
+                            "offset": int(pointers_raw[i+1]),
+                            "pos": pointers_raw[i+2],
+                            "src_tgt": pointers_raw[i+3],
+                        })
+    
+                    synset = WordNetSynset(
+                        offset=offset,
+                        pos=pos,
+                        lex_filenum=lex_filenum,
+                        lemmas=lemmas,
+                        lex_ids=lex_ids,
+                        pointers=pointers,
+                        gloss=gloss,
+                    )
+    
+                    self.synsets[(pos, offset)] = synset
 
     # ------------------------------------------------------------
     # DATA FILE PARSER
