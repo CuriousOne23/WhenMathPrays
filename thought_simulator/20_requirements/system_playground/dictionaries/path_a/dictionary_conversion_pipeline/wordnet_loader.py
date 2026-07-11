@@ -1,5 +1,7 @@
 from pathlib import Path
 
+print(">>> USING wordnet_loader.py FROM:", __file__)
+
 class WordNetSynset:
     """
     Represents a single WordNet synset loaded from data.* files.
