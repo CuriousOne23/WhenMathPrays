@@ -191,7 +191,6 @@ def diag_data_file(file_path):
             try:
                 real_result = real_parse(fields, gloss)
             except Exception as e:
-                except Exception as e:
                 print("----------------------------------------------------")
                 print("REAL PARSER ERROR")
                 print("Raw line:")
