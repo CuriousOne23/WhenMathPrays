@@ -188,9 +188,10 @@ def diff(real, diag):
 
     # Compare lex_ids
     if "lex_ids" in real:
-        if real["lex_ids"] != [
-            int(x) for x in diag["fields"][5 : 5 + 2 * len(real["lex_ids"]) : 2]
-        ]:
+        diag_lex_ids = [
+            int(x, 16) for x in diag["fields"][5 : 5 + 2 * len(real["lex_ids"]) : 2]
+        ]
+        if real["lex_ids"] != diag_lex_ids:
             differences.append(("lex_ids", real["lex_ids"], diag["fields"]))
 
     # Compare pointer count
