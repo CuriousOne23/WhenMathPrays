@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 class WordNetSynset:
     """
     Represents a single WordNet synset loaded from data.* files.
@@ -117,8 +116,11 @@ class WordNetLoader:
                     if not line:
                         continue
 
-                    # Skip header lines that do NOT begin with a numeric offset
-                    # This is the bulletproof fix.
+                    # Skip ALL header lines:
+                    # WordNet data files begin with many lines like:
+                    # "This software and database is being provided..."
+                    # "WordNet 3.0 Copyright..."
+                    # These must be skipped.
                     if not line[0].isdigit():
                         continue
 
@@ -168,7 +170,6 @@ class WordNetLoader:
                     )
 
                     self.synsets[(pos, offset)] = synset
-
 
 def load_wordnet(base_dir="wordnet_raw"):
     loader = WordNetLoader(base_dir)
