@@ -1,197 +1,288 @@
-# wordnet_parser.py
-# Final WordNet 2.1 data.* parser (robust to hex counts and markers)
+# wordnet_loader_diag.py
+# Standalone diagnostics for WordNet 2.1 data.* files.
+# Compares DIAG parsing vs REAL parsing logic (embedded here).
+# Logs detailed differences to a file, prints only summaries to terminal.
 
 from pathlib import Path
-
 import os
 
-# ------------------------------------------------------------
-# FIELD CLASSIFIER (same spirit as your diag)
-# ------------------------------------------------------------
-def classify_field(f):
-    if len(f) == 8 and f.isdigit():
-        return "OFFSET"
+MAX_DIFFERENCES = 10
+LOG_FILE = "wordnet_diag.log"
 
-    if f.isdigit():
-        return "INT"
 
-    if f in {"n", "v", "a", "s", "r"}:
-        return "POS"
-
-    if f in {"@", "~", "+", "-", "%p", "&", "!", "^", "$", ">", "*", "\\"}:
-        return "POINTER_SYMBOL"
-
-    if f in {";c", ";u", "#m"}:
-        return "MORPH_MARKER"
-
-    if len(f) == 2 and f[0] == "0" and f[1].isalpha():
-        return "CLASS_MARKER"
-
-    if len(f) == 1 and f.isalpha():
-        return "SENSE_MARKER"
-
-    if len(f) == 4 and f.isdigit():
-        return "FRAME_CODE"
-
-    return "LEMMA_OR_OTHER"
+def log(msg: str) -> None:
+    """Append a single line to the log file."""
+    with open(LOG_FILE, "a", encoding="utf-8") as lf:
+        lf.write(msg + "\n")
 
 
 # ------------------------------------------------------------
-# CORE LINE PARSER
+# REAL PARSER LOGIC (embedded copy from your wordnet_loader.py)
 # ------------------------------------------------------------
-def parse_wordnet_line(line):
+def real_parse(fields, gloss):
     """
-    Parse a single WordNet 2.1 data.* line into a structured dict.
-    Handles:
-      - hex word counts (0a, 0b, 0c, 0d, ...)
-      - extra markers (class markers, morph markers, etc.)
-      - pointers
-      - leaves any trailing structural stuff in 'extra_fields'
+    This is a copy of your real parsing logic.
+    It returns a dict describing what the real parser thinks the synset contains.
     """
 
-    # Split gloss
-    if " | " in line:
-        data_part, gloss = line.split(" | ", 1)
-    else:
-        data_part, gloss = line, ""
-
-    fields = data_part.split()
-    if len(fields) < 4:
-        return None  # header or malformed
-
-    # Offset, lex_filenum, POS
     offset = int(fields[0])
     lex_filenum = int(fields[1])
-    pos = fields[2]
+    pos_code = fields[2]
 
-    # Word count is hex (e.g., 0b -> 11)
-    w_cnt_raw = fields[3]
-    try:
-        w_cnt = int(w_cnt_raw, 16)
-    except ValueError:
-        # Fallback: if it's not hex, try decimal
-        w_cnt = int(w_cnt_raw)
+    lemma_count = int(fields[3])
+    lemma_start = 4
 
     lemmas = []
     lex_ids = []
 
-    idx = 4
-    # Collect lemmas + lex_ids using classifier, until we reach w_cnt lemmas
-    while idx < len(fields) and len(lemmas) < w_cnt:
-        kind = classify_field(fields[idx])
+    # WordNet 2.1 alternates lemma and lex_id
+    for i in range(lemma_count):
+        lemma = fields[lemma_start + 2 * i]
+        lex_id = int(fields[lemma_start + 2 * i + 1])
+        lemmas.append(lemma)
+        lex_ids.append(lex_id)
 
-        if kind == "LEMMA_OR_OTHER":
-            lemma = fields[idx]
-            lex_id = 0
+    # Pointer count index
+    ptr_count_index = lemma_start + 2 * lemma_count
+    ptr_count = int(fields[ptr_count_index])
 
-            # Try to read a following INT as lex_id
-            if idx + 1 < len(fields) and classify_field(fields[idx + 1]) == "INT":
-                lex_id = int(fields[idx + 1])
-                idx += 2
-            else:
-                idx += 1
+    ptr_start = ptr_count_index + 1
+    ptr_end = ptr_start + ptr_count * 4
 
-            lemmas.append(lemma)
-            lex_ids.append(lex_id)
-
-        else:
-            # Skip markers that appear between count and lemmas (rare)
-            idx += 1
-
-    # Pointer count
-    if idx >= len(fields):
-        ptr_count = 0
-        pointers = []
-        extra_fields = []
-    else:
-        ptr_count_raw = fields[idx]
-        try:
-            ptr_count = int(ptr_count_raw)
-        except ValueError:
-            # If something weird is here, treat as 0 and push into extras
-            ptr_count = 0
-
-        idx += 1
-
-        pointers = []
-        for _ in range(ptr_count):
-            if idx + 3 >= len(fields):
-                break
-            symbol = fields[idx]
-            offset_p = int(fields[idx + 1])
-            pos_p = fields[idx + 2]
-            src_tgt = fields[idx + 3]
-            pointers.append({
-                "symbol": symbol,
-                "offset": offset_p,
-                "pos": pos_p,
-                "src_tgt": src_tgt,
-            })
-            idx += 4
-
-        # Anything left is structural stuff we’re not fully decoding yet
-        extra_fields = fields[idx:]
+    pointers_raw = fields[ptr_start:ptr_end]
+    pointers = []
+    for i in range(0, len(pointers_raw), 4):
+        pointers.append(
+            {
+                "symbol": pointers_raw[i],
+                "offset": int(pointers_raw[i + 1]),
+                "pos": pointers_raw[i + 2],
+                "src_tgt": pointers_raw[i + 3],
+            }
+        )
 
     return {
         "offset": offset,
+        "pos": pos_code,
         "lex_filenum": lex_filenum,
-        "pos": pos,
-        "w_cnt_raw": w_cnt_raw,
-        "w_cnt": w_cnt,
         "lemmas": lemmas,
         "lex_ids": lex_ids,
         "ptr_count": ptr_count,
         "pointers": pointers,
-        "extra_fields": extra_fields,
         "gloss": gloss,
-        "raw_fields": fields,
     }
 
 
 # ------------------------------------------------------------
-# FILE PARSER
+# DIAGNOSTIC PARSER (raw fields only)
 # ------------------------------------------------------------
-def parse_wordnet_file(path):
+def diag_parse(fields, gloss):
     """
-    Parse an entire WordNet data.* file.
-    Returns a list of synset dicts.
+    The diagnostic parser simply returns the raw fields and gloss.
     """
-    synsets = []
-    with open(path, "r", encoding="utf-8") as f:
+    return {
+        "fields": fields,
+        "gloss": gloss,
+    }
+
+
+# ------------------------------------------------------------
+# FIELD CLASSIFIER (Option 1 structural mapping)
+# ------------------------------------------------------------
+def classify_field(f):
+    # Basic categories
+    if f.isdigit():
+        return "INT"
+
+    # Offset (8-digit)
+    if len(f) == 8 and f.isdigit():
+        return "OFFSET"
+
+    # POS
+    if f in {"n", "v", "a", "s", "r"}:
+        return "POS"
+
+    # Pointer symbols
+    if f in {"@", "~", "+", "-", "%p", "&", "!", "^", "$", ">", "*", "\\"}:
+        return "POINTER_SYMBOL"
+
+    # Morph / domain markers
+    if f in {";c", ";u", "#m"}:
+        return "MORPH_MARKER"
+
+    # Satellite / sense markers (single letters)
+    if len(f) == 1 and f.isalpha():
+        return "SENSE_MARKER"
+
+    # Lex_id-like (single digit)
+    if len(f) == 1 and f.isdigit():
+        return "LEX_ID"
+
+    # Zero-prefixed class markers like 0a, 0b, 0c, 0d, 0f
+    if len(f) == 2 and f[0] == "0" and f[1].isalpha():
+        return "CLASS_MARKER"
+
+    # Frame codes like 0101, 0202, 0301, etc.
+    if len(f) == 4 and f.isdigit():
+        return "FRAME_CODE"
+
+    # Everything else: lemma or unknown
+    return "LEMMA_OR_OTHER"
+
+
+def classify_line(fields):
+    return [(i, f, classify_field(f)) for i, f in enumerate(fields)]
+
+
+# ------------------------------------------------------------
+# DIFF ENGINE
+# ------------------------------------------------------------
+def diff(real, diag):
+    """
+    Compare real parser output vs diag parser output.
+    Return a list of differences.
+    """
+
+    differences = []
+
+    # Compare lemma list
+    if "lemmas" in real:
+        if real["lemmas"] != diag["fields"][4 : 4 + 2 * len(real["lemmas"]) : 2]:
+            differences.append(("lemmas", real["lemmas"], diag["fields"]))
+
+    # Compare lex_ids
+    if "lex_ids" in real:
+        if real["lex_ids"] != [
+            int(x) for x in diag["fields"][5 : 5 + 2 * len(real["lex_ids"]) : 2]
+        ]:
+            differences.append(("lex_ids", real["lex_ids"], diag["fields"]))
+
+    # Compare pointer count
+    if "ptr_count" in real:
+        lemma_count = len(real["lemmas"])
+        diag_ptr_count = diag["fields"][4 + 2 * lemma_count]
+        # Normalize diag pointer count (strip leading zeros)
+        diag_ptr_norm = diag_ptr_count.lstrip("0") or "0"
+
+        if str(real["ptr_count"]) != diag_ptr_norm:
+            differences.append(("ptr_count", real["ptr_count"], diag_ptr_count))
+
+    return differences
+
+
+# ------------------------------------------------------------
+# MAIN DIAGNOSTIC LOOP
+# ------------------------------------------------------------
+def diag_data_file(file_path: Path):
+    print("\n====================================================")
+    print("DIAGNOSTICS FOR:", file_path)
+    print("====================================================\n")
+
+    diff_count = 0
+
+    with open(file_path, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
-            # Skip header lines (non-digit at start)
+
+            # Skip header lines
             if len(line) < 8 or not line[:8].isdigit():
                 continue
 
-            syn = parse_wordnet_line(line)
-            if syn is not None:
-                synsets.append(syn)
-    return synsets
+            # Split gloss
+            if " | " in line:
+                data_part, gloss = line.split(" | ", 1)
+            else:
+                data_part, gloss = line, ""
+
+            fields = data_part.split()
+
+            # Run both parsers
+            diag_result = diag_parse(fields, gloss)
+
+            try:
+                real_result = real_parse(fields, gloss)
+            except Exception as e:
+                log("----------------------------------------------------")
+                log("REAL PARSER ERROR")
+                log("Raw line:")
+                log(line)
+                log(f"Exception: {e}")
+                log("")
+                log("Classified fields:")
+                for i, fval, kind in classify_line(fields):
+                    log(f"  [{i}] {fval:20} -> {kind}")
+                log("----------------------------------------------------\n")
+
+                diff_count += 1
+                if diff_count >= MAX_DIFFERENCES:
+                    print(
+                        f">>> Reached {MAX_DIFFERENCES} differences in {file_path}. "
+                        f"Full details in {LOG_FILE}."
+                    )
+                    return
+                continue
+
+            # Compare
+            differences = diff(real_result, diag_result)
+
+            if not differences:
+                # Line parsed cleanly; no logging needed
+                continue
+
+            # Log differences
+            log("----------------------------------------------------")
+            log("DIFFERENCE DETECTED")
+            log("Raw line:")
+            log(line)
+            log("")
+            log("Differences:")
+            for d in differences:
+                log(f"  Field: {d[0]}")
+                log(f"  Real:  {d[1]}")
+                log(f"  Diag:  {d[2]}")
+                log("")
+            log("----------------------------------------------------\n")
+
+            diff_count += 1
+            if diff_count >= MAX_DIFFERENCES:
+                print(
+                    f">>> Reached {MAX_DIFFERENCES} differences in {file_path}. "
+                    f"Full details in {LOG_FILE}."
+                )
+                return
+
+    # Terminal summary per file
+    if diff_count == 0:
+        print(f"No differences found for {file_path}.")
+    else:
+        print(
+            f"{diff_count} differences found for {file_path}. "
+            f"See {LOG_FILE} for details."
+        )
 
 
-# ------------------------------------------------------------
-# EXAMPLE DRIVER
-# ------------------------------------------------------------
-def parse_all_wordnet(base_dir="wordnet_raw"):
+def run_diag(base_dir="wordnet_raw"):
+    # Reset log at start of run
+    if os.path.exists(LOG_FILE):
+        os.remove(LOG_FILE)
+
     base = Path(base_dir)
-    files = {
+
+    data_files = {
         "noun": base / "data.noun",
         "verb": base / "data.verb",
-        "adj":  base / "data.adj",
-        "adv":  base / "data.adv",
+        "adj": base / "data.adj",
+        "adv": base / "data.adv",
     }
 
-    all_data = {}
-    for pos, fp in files.items():
-        all_data[pos] = parse_wordnet_file(fp)
-    return all_data
+    for pos, file_path in data_files.items():
+        diag_data_file(file_path)
+
+    print("\nDiagnostics complete.")
+    print(f"Full detailed output written to {LOG_FILE}.")
 
 
 if __name__ == "__main__":
-    data = parse_all_wordnet()
-    # Minimal summary
-    for pos, synsets in data.items():
-        print(f"{pos}: {len(synsets)} synsets parsed.")
+    run_diag()
