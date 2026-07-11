@@ -18,7 +18,7 @@ Produces:
 from pathlib import Path
 from wordnet_loader import load_wordnet
 from ts_entry_builder import TSEntryBuilder
-from yaml_writer import write_yaml
+from json_gzip_writer import JSONGzipWriter
 
 
 class BatchConverter:
@@ -26,7 +26,7 @@ class BatchConverter:
     High-level orchestrator for TS dictionary generation.
     """
 
-    def __init__(self, base_dir=None, output_file="meaning_dictionary.yaml"):
+    def __init__(self, base_dir=None, output_file="meaning_dictionary_dev.json.gz"):
         # Always resolve paths relative to THIS file, not the working directory.
         script_dir = Path(__file__).parent
 
@@ -40,6 +40,7 @@ class BatchConverter:
         self.base_dir = base_dir.resolve()
         self.output_file = (script_dir / output_file).resolve()
         self.entry_builder = TSEntryBuilder()
+        self.json_writer = JSONGzipWriter(self.output_file)
 
     def run(self):
         """
@@ -61,11 +62,10 @@ class BatchConverter:
 
         print(f"Built {len(ts_entries)} TS entries.")
 
-        print(f"Writing YAML dictionary to {self.output_file}...")
-        write_yaml(ts_entries, self.output_file)
-
-        print("File meaning_dictionary.yaml has been created.")
-        print("Done.")
+        print(f"Writing JSON GZIP developer dictionary to {self.output_file}...")
+        self.json_writer.write(ts_entries)
+        
+        print("File meaning_dictionary_dev.json.gz has been created.")
 
 
 # Convenience function
