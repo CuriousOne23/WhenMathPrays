@@ -55,33 +55,45 @@ class WordNetLoader:
     # ------------------------------------------------------------
     # INDEX FILE PARSER
     # ------------------------------------------------------------
-    def _load_index_files(self):
-        """
-        index.* format:
-            lemma  pos_cnt  p_cnt  sense_cnt  tagsense_cnt  offset offset ...
-        """
-        for pos, file_path in self.index_files.items():
-            with open(file_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line or line.startswith("#"):
-                        continue
-    
-                    parts = line.split()
-    
-                    # Skip header / malformed lines that don't match the index format
-                    if len(parts) < 6:
-                        continue
-                    if not parts[3].isdigit():
-                        continue
-    
-                    lemma = parts[0]
-                    synset_count = int(parts[3])
-                    offsets = parts[-synset_count:]
-    
-                    self.index.setdefault(lemma, [])
-                    self.index[lemma].extend([(pos, int(o)) for o in offsets])
+def _load_index_files(self):
+    """
+    index.* format:
+        lemma  pos_cnt  p_cnt  sense_cnt  tagsense_cnt  ptr...  offsets...
+    """
+    for pos, file_path in self.index_files.items():
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
 
+                parts = line.split()
+
+                # Skip malformed or header lines
+                if len(parts) < 6:
+                    continue
+                if not parts[2].isdigit() or not parts[3].isdigit():
+                    continue
+
+                lemma = parts[0]
+                pos_cnt = int(parts[1])
+                p_cnt = int(parts[2])
+                sense_cnt = int(parts[3])
+                tagsense_cnt = int(parts[4])
+
+                # Pointer symbols start at index 5
+                ptr_start = 5
+                ptr_end = ptr_start + p_cnt
+
+                # Offsets follow pointer symbols
+                offset_start = ptr_end
+                offset_end = offset_start + sense_cnt
+
+                offsets = parts[offset_start:offset_end]
+
+                self.index.setdefault(lemma, [])
+                for o in offsets:
+                    self.index[lemma].append((pos, int(o)))
 
     # ------------------------------------------------------------
     # DATA FILE PARSER
