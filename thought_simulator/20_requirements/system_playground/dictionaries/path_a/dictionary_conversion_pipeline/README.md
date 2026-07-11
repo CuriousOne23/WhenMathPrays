@@ -230,6 +230,8 @@ dictionaries_dev/meaning_dictionary_dev.json.gz
 and writes the compact, machine‑optimized runtime dictionary:
 
 ```
+ts_meaning_dictionary.json.gz
+After writing the use has to move the file manually to the correct directory, this is done such that the program doesn't automatically overwrite a file. The location will be, dictionaries_runtime is under both path_a, one level above dictionary_conversion_pipeline, indicating release and one under dictionary_conversion_pipeline, indicating still developing.
 dictionaries_runtime/ts_meaning_dictionary.json.gz
 ```
 
