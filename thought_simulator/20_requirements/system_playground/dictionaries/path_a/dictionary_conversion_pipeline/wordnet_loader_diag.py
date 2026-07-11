@@ -5,7 +5,14 @@
 
 from pathlib import Path
 
-MAX_DIFFERENCES = 3
+import os
+
+MAX_DIFFERENCES = 10
+LOG_FILE = "wordnet_diag.log"
+
+def log(msg):
+    with open(LOG_FILE, "a", encoding="utf-8") as lf:
+        lf.write(msg + "\n")
 
 # ------------------------------------------------------------
 # REAL PARSER LOGIC (embedded copy from your wordnet_loader.py)
@@ -78,7 +85,11 @@ def diag_parse(fields, gloss):
 # FIELD CLASSIFIER (Option 1 structural mapping)
 # ------------------------------------------------------------
 def classify_field(f):
-    # Basic categories
+    # Offset (8-digit)
+    if len(f) == 8 and f.isdigit():
+        return "OFFSET"
+
+    # Basic integer
     if f.isdigit():
         return "INT"
 
@@ -246,6 +257,10 @@ def diag_data_file(file_path):
         print(f"{diff_count} differences found for {file_path}. See {LOG_FILE} for details.")
         
 def run_diag(base_dir="wordnet_raw"):
+    # Clear previous log
+    if os.path.exists(LOG_FILE):
+        os.remove(LOG_FILE)
+
     base = Path(base_dir)
 
     data_files = {
