@@ -25,6 +25,29 @@ This chunked architecture provides:
 
 ---
 
+## 📘 How to Generate and Modify Dictionaries
+
+This README describes the **architecture** of the dictionary conversion pipeline — how chunking works, how manifest.json is produced, how developer/runtime dictionaries differ, and how the pipeline processes WordNet.
+
+For **step‑by‑step instructions** on:
+
+- generating a new dictionary version  
+- changing dictionary output directories  
+- changing dictionary naming  
+- running `batch_converter.py`  
+- running `ts_meaning_dct_path_a.py`  
+- understanding input/output file locations  
+- knowing what you must modify and must not modify  
+- manually moving runtime files into `dictionaries_runtime/`  
+
+please see:
+
+👉 **[How to Make Changes to the Path A Dictionary](how_to_gen_change_dct.md)**
+
+This companion document provides a **practical workflow guide** for engineers who need to regenerate or version dictionaries. It complements this README by focusing on **user actions**, while this README focuses on **system architecture**.
+
+---
+
 ## Directory Structure (Updated)
 
 ```
