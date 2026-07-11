@@ -107,12 +107,12 @@ class WordNetLoader:
     # DATA FILE PARSER
     # ------------------------------------------------------------
     def _load_data_files(self):
-        print(">>> OPENING:", file_path)
         """
         data.* format:
             offset lex_filenum pos lemma_cnt lemma lex_id ... ptr_cnt ptr... | gloss
         """
         for pos, file_path in self.data_files.items():
+            print(">>> OPENING:", file_path)
             with open(file_path, "r", encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
