@@ -168,7 +168,8 @@ with:
 - dev filename  
 - runtime filename  
 - first lemma  
-- last lemma  
+- last lemma
+- entry count
 - compressed size  
 
 This ensures deterministic loading and easy engineer navigation.
