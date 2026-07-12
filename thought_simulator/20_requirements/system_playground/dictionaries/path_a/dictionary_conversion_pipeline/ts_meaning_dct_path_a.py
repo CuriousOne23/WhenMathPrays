@@ -117,6 +117,8 @@ class TSMeaningDctPathA:
             print(f"  - Stripping developer metadata for chunk {chunk_id}...")
             runtime_entries = [self._strip_entry(e) for e in dev_entries]
 
+            print(f"    • runtime entry count: {len(runtime_entries)}")
+
             print(f"  - Writing runtime chunk {chunk_id}...")
             runtime_filename = self._write_runtime_chunk(chunk_id, runtime_entries)
 
