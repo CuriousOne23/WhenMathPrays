@@ -1,1 +1,2 @@
-
+dev_dictionary_dir: "../../dictionaries_dev/dct_rev00/"
+dev_chunk_prefix: "meaning_dictionary_dev_"
