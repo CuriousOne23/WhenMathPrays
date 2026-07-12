@@ -38,7 +38,9 @@ For **step‑by‑step instructions** on:
 - running `ts_meaning_dct_path_a.py`  
 - understanding input/output file locations  
 - knowing what you must modify and must not modify  
-- manually moving runtime files into `dictionaries_runtime/`  
+- manually moving runtime files into `dictionaries_runtime/`
+- modifying existing developer dictionary entries using `modify_dev_dct.py`
+  👉 See **[modify_development_dct_userguide.md](modify_development_dct_userguide.md)** for the full user guide.
 
 please see:
 
@@ -166,7 +168,8 @@ with:
 - dev filename  
 - runtime filename  
 - first lemma  
-- last lemma  
+- last lemma
+- entry count
 - compressed size  
 
 This ensures deterministic loading and easy engineer navigation.
