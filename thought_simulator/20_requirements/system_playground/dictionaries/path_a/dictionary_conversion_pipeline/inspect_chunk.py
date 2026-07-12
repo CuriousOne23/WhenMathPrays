@@ -4,6 +4,14 @@ import argparse
 from pathlib import Path
 from pprint import pprint
 
+# Import pipeline configuration
+try:
+    from config import BASE_DIR, DEV_OUTPUT_DIR
+except ImportError:
+    # Fallback: assume current directory
+    BASE_DIR = Path(__file__).parent.resolve()
+    DEV_OUTPUT_DIR = BASE_DIR / "dictionaries_dev"
+
 
 def load_chunk(chunk_path: Path):
     """
@@ -46,6 +54,31 @@ def inspect_entries(entries, lemma=None, fields=None, limit=None):
             break
 
 
+def resolve_chunk_path(chunk_name_or_path: str) -> Path:
+    """
+    Resolve chunk path:
+    - If user gives a full path → use it.
+    - If user gives a filename → assume DEV_OUTPUT_DIR.
+    """
+    p = Path(chunk_name_or_path)
+
+    # Full path provided
+    if p.exists():
+        return p
+
+    # Filename provided → assume dictionaries_dev/
+    candidate = DEV_OUTPUT_DIR / p.name
+    if candidate.exists():
+        return candidate
+
+    raise FileNotFoundError(
+        f"Chunk not found: {chunk_name_or_path}\n"
+        f"Checked:\n"
+        f"  - {p.resolve()}\n"
+        f"  - {candidate.resolve()}"
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Inspect a TS developer dictionary chunk (meaning_dictionary_dev_XX.json.gz)."
@@ -54,7 +87,7 @@ def main():
     parser.add_argument(
         "chunk",
         type=str,
-        help="Path to meaning_dictionary_dev_XX.json.gz"
+        help="Chunk filename or full path"
     )
 
     parser.add_argument(
@@ -81,10 +114,10 @@ def main():
 
     args = parser.parse_args()
 
-    chunk_path = Path(args.chunk)
-
-    if not chunk_path.exists():
-        print(f"[inspect_chunk] Error: file not found: {chunk_path}")
+    try:
+        chunk_path = resolve_chunk_path(args.chunk)
+    except FileNotFoundError as e:
+        print(f"[inspect_chunk] {e}")
         return
 
     print(f"[inspect_chunk] Loading {chunk_path} ...")
