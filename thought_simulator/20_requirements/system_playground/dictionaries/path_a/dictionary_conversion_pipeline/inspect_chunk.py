@@ -67,7 +67,7 @@ def slice_entries(entries, limit):
 
 
 def write_log(chunk_name, entries, fields):
-    log_path = LOG_DIR / f"inspect_log_{chunk_name}.txt"
+    log_path = LOG_DIR / f"inspect_log_{chunk_name}.log"
 
     with log_path.open("w", encoding="utf-8") as f:
         for entry in entries:
