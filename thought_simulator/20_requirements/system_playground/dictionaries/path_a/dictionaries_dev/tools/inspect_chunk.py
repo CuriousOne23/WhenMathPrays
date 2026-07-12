@@ -1,33 +1,53 @@
 import gzip
 import json
 import argparse
+import yaml
 from pathlib import Path
 from pprint import pformat
 
-# Import pipeline configuration
-try:
-    from config import BASE_DIR, DEV_OUTPUT_DIR
-except ImportError:
-    BASE_DIR = Path(__file__).parent.resolve()
-    DEV_OUTPUT_DIR = BASE_DIR / "dictionaries_dev"
 
+# ------------------------------------------------------------
+# Load setup file: inspect_chunk_setup.yaml
+# ------------------------------------------------------------
+BASE_DIR = Path(__file__).parent.resolve()
+SETUP_FILE = BASE_DIR / "inspect_chunk_setup.yaml"
 
-LOG_DIR = BASE_DIR / "inspection_logs"
+if not SETUP_FILE.exists():
+    raise FileNotFoundError(
+        f"Required setup file not found:\n  {SETUP_FILE}\n"
+        f"Create inspect_chunk_setup.yaml in the tools directory."
+    )
+
+with SETUP_FILE.open("r", encoding="utf-8") as f:
+    cfg = yaml.safe_load(f)
+
+DEV_DICTIONARY_DIR = Path(cfg["dev_dictionary_dir"]).resolve()
+DEV_CHUNK_PREFIX = cfg["dev_chunk_prefix"]
+LOG_DIR = BASE_DIR / cfg["log_dir"]
+
 LOG_DIR.mkdir(exist_ok=True)
 
 
+# ------------------------------------------------------------
+# Load a developer dictionary chunk
+# ------------------------------------------------------------
 def load_chunk(chunk_path: Path):
     with gzip.open(chunk_path, "rt", encoding="utf-8") as f:
         return json.load(f)
 
 
+# ------------------------------------------------------------
+# Resolve chunk path using setup file configuration
+# ------------------------------------------------------------
 def resolve_chunk_path(chunk_name_or_path: str) -> Path:
     p = Path(chunk_name_or_path)
 
+    # Direct path provided?
     if p.exists():
         return p
 
-    candidate = DEV_OUTPUT_DIR / p.name
+    # Try developer dictionary directory
+    candidate = DEV_DICTIONARY_DIR / p.name
     if candidate.exists():
         return candidate
 
@@ -39,6 +59,9 @@ def resolve_chunk_path(chunk_name_or_path: str) -> Path:
     )
 
 
+# ------------------------------------------------------------
+# Filtering and slicing
+# ------------------------------------------------------------
 def filter_entries(entries, lemma=None):
     if lemma is None:
         return entries
@@ -46,18 +69,11 @@ def filter_entries(entries, lemma=None):
 
 
 def slice_entries(entries, limit):
-    """
-    limit can be:
-        None → return all
-        [N] → return first N
-        [MIN, MAX] → return MIN..MAX inclusive
-    """
     if limit is None:
         return entries
 
     if len(limit) == 1:
-        n = limit[0]
-        return entries[:n]
+        return entries[:limit[0]]
 
     if len(limit) == 2:
         lo, hi = limit
@@ -66,6 +82,9 @@ def slice_entries(entries, limit):
     raise ValueError("limit must be N or MIN MAX")
 
 
+# ------------------------------------------------------------
+# Write log file
+# ------------------------------------------------------------
 def write_log(chunk_name, entries, fields):
     log_path = LOG_DIR / f"inspect_log_{chunk_name}.log"
 
@@ -81,6 +100,9 @@ def write_log(chunk_name, entries, fields):
     return log_path
 
 
+# ------------------------------------------------------------
+# Main
+# ------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(
         description="Inspect a TS developer dictionary chunk."
@@ -108,13 +130,9 @@ def main():
 
     print(f"[inspect_chunk] Loaded {len(entries)} entries.")
 
-    # Apply lemma filter
     filtered = filter_entries(entries, args.lemma)
-
-    # Apply limit slicing
     sliced = slice_entries(filtered, args.limit)
 
-    # Write log file
     log_path = write_log(chunk_name, sliced, args.fields)
 
     print("=" * 60)
