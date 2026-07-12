@@ -1,112 +1,170 @@
-# **modify_development_dct_userguide.md**
+# **modify_development_dct_userguide.md**  
+### *Developer Dictionary Modification Tool — TS Path A*
 
-## **Overview**
-`modify_dev_dct.py` is the developer‑layer dictionary editor for Path A.  
-It allows controlled, revision‑tracked updates to the **developer dictionary** by adding, modifying, or deleting entries.  
+`modify_dev_dct.py` is the developer‑layer dictionary editor for TS Path A.  
+It performs controlled, revision‑tracked updates to the **developer dictionary** by adding, modifying, or deleting entries.  
 It preserves dictionary geometry, chunk numbering, and manifest history.
 
-This tool is intentionally conservative:  
-- It **never deletes existing dictionary files**  
-- It **never overwrites manifests**  
-- It **forces explicit user decisions** when structural changes are required  
-- It **requires batch mode** when chunk sizes exceed safe limits
+This tool is intentionally conservative:
+
+- **Never deletes existing dictionary files**  
+- **Never overwrites existing manifests**  
+- **Never writes into release directories**  
+- **Never writes into dictionaries_dev/**  
+- **Requires explicit user action** when structural changes are needed  
+- **Requires batch mode** when chunk sizes exceed safe limits  
+
+All output is written into the **tools directory**, and users manually move files into the appropriate release directory.
 
 ---
 
-## **Modes of Operation**
+# 🔹 1. Directory Structure (New Architecture)
+
+Under the new TS Path A layout:
+
+```
+dictionaries_dev/
+    dct_rev00/
+        meaning_dictionary_dev_01.json.gz
+        meaning_dictionary_dev_02.json.gz
+        manifest.json
+        ...
+    tools/
+        modify_dev_dct.py
+        modify_dev_dct_setup.yaml
+        output/
+```
+
+### ✔ Release directories (`dct_revNN/`)  
+Contain dictionary chunks and manifest files.
+
+### ✔ Tools directory  
+Contains:
+
+- `modify_dev_dct.py`  
+- `modify_dev_dct_setup.yaml`  
+- `output/` (where new chunks + new manifest revisions are written)
+
+Tools **never** write into release directories.  
+Users manually move output files into the correct release directory.
+
+---
+
+# 🔹 2. Setup File (Required)
+
+`modify_dev_dct.py` reads configuration from:
+
+```
+dictionaries_dev/tools/modify_dev_dct_setup.yaml
+```
+
+Example:
+
+```yaml
+dev_dictionary_dir: "../dct_rev00/"
+dev_chunk_prefix: "meaning_dictionary_dev_"
+input_file: "../dct_rev00/modify_entries.json"
+```
+
+This file tells the tool:
+
+- which release directory to read  
+- where the input file lives  
+- how chunk filenames are prefixed  
+
+This replaces all command‑line directory arguments.
+
+---
+
+# 🔹 3. Modes of Operation
+
 `modify_dev_dct.py` has two modes:
 
-### **1. Normal Mode (default)**
+---
+
+## **1. Normal Mode (default)**  
 Used for small, local edits:
-- Add entries  
-- Modify entries  
-- Delete entries  
+
+- add entries  
+- modify entries  
+- delete entries  
 
 Normal mode:
-- Loads the **highest manifest revision** in the target directory  
+
+- Loads the **highest manifest revision** in the release directory  
 - Applies edits locally  
-- Writes new chunk files  
-- Writes a new manifest revision  
-- Enforces chunk size limits (2.5–3.0 MB)
+- Writes new chunk files into `tools/output/`  
+- Writes a new manifest revision into `tools/output/`  
+- Enforces chunk size limits (2.5–3.0 MB)  
+- Never overwrites existing files  
 
 If any chunk exceeds the limit, normal mode **stops** and instructs the user to run batch mode.
 
 ---
 
-### **2. Batch Mode (`--batch`)**
-Used when chunk sizes exceed the limit and the dictionary must be **re‑chunked**.
+## **2. Batch Mode (`--batch`)**  
+Used when chunk sizes exceed limits and the dictionary must be **re‑chunked**.
 
 Batch mode:
-- Requires the user to **manually increase `CHUNK_COUNT`** in `config.py`  
+
+- Requires user to manually increase `CHUNK_COUNT` in the release directory’s `config.py.json`  
 - Loads all entries from all chunks  
 - Recomputes WDP (Word Density Profile)  
 - Re-chunks the entire dictionary  
-- Writes a new full set of chunk files  
-- Writes a new manifest revision  
+- Writes new chunk files into `tools/output/`  
+- Writes a new manifest revision into `tools/output/`  
 
-Batch mode is the only mode that changes dictionary geometry.
-
----
-
-## **Directory Structure**
-By default, the tool operates in:
-
-```
-dictionaries_dev/
-```
-
-Users may override this:
-
-```
-python modify_dev_dct.py --dir path/to/other_directory
-```
-
-This allows users to:
-- Work on older revisions  
-- Maintain multiple dictionary branches  
-- Avoid accidental edits to the main dictionary  
+Batch mode is the **only** mode that changes dictionary geometry.
 
 ---
 
-## **Manifest Discovery**
-Inside the target directory:
+# 🔹 4. Manifest Discovery
 
-1. If files matching `manifest_revNN.json` exist:
+Inside the release directory (`dev_dictionary_dir`):
+
+1. If files matching `manifest_revNN.json` exist:  
    - The **highest NN** is loaded  
-2. Otherwise:
-   - `manifest.json` is loaded
+2. Otherwise:  
+   - `manifest.json` is loaded  
 
 This ensures:
-- The newest revision is always used  
-- No accidental rollback  
-- Full revision history is preserved  
+
+- newest revision is always used  
+- full revision history is preserved  
+- no accidental rollback  
 
 ---
 
-## **Input File**
+# 🔹 5. Input File
+
 ### **Default name**
 ```
 modify_entries.json
 ```
 
 ### **Default location**
-Same directory being edited:
+Inside the release directory:
 
 ```
-dictionaries_dev/modify_entries.json
+dct_rev00/modify_entries.json
 ```
 
-### **Override**
+### **Configured via setup file**
+In `modify_dev_dct_setup.yaml`:
+
+```yaml
+input_file: "../dct_rev00/modify_entries.json"
 ```
-python modify_dev_dct.py --input my_changes.json
-```
+
+No command‑line override is used in the new architecture.
 
 ---
 
-## **Input File Format**
+# 🔹 6. Input File Format
+
 The input file contains a list of operations.
 
-### **Example**
+### Example
 ```json
 [
   {
@@ -123,65 +181,31 @@ The input file contains a list of operations.
   }
 ]
 ```
-
-## **Allowed Operations (How to Use Them)**
-
-Each entry in `modify_entries.json` must specify an `"operation"` field.  
-There are **three** allowed operations:
-
-- `"add"` — insert a new dictionary entry  
-- `"modify"` — replace an existing entry with a new version  
-- `"delete"` — remove an entry by lemma  
-
-### ✔ How to apply operations (examples)
-
-```json
-[
-  {
-    "operation": "add",
-    "entry": {
-      "lemma": "new concept",
-      "gloss": "a description of the new concept",
-      "primitive": "ENTITY",
-      "cue_envelope": { ... },
-      "invariant": { ... },
-      "identity_anchor": { ... },
-      "routing_signature": { ... }
-    }
-  },
-  {
-    "operation": "modify",
-    "entry": {
-      "lemma": "chieftaincy",
-      "gloss": "updated gloss text",
-      "primitive": "ENTITY",
-      "cue_envelope": { ... },
-      "invariant": { ... },
-      "identity_anchor": { ... },
-      "routing_signature": { ... }
-    }
-  },
-  {
-    "operation": "delete",
-    "lemma": "chief petty officer"
-  }
-]
-```
-
-This example shows the **format**, not the content.  
-Users can add, modify, or delete entries using this structure.
 
 ---
 
-## **Required Fields (What This Refers To)**
+# 🔹 7. Allowed Operations
 
-This section refers to the **required fields inside each dictionary entry**, *not* the command‑line options or the modify_dev_dct.py program itself.
+### `"add"`  
+Insert a new dictionary entry.
 
-These fields are required because they define a **complete TS developer dictionary entry**.
+### `"modify"`  
+Replace an existing entry.
 
-### ✔ Required fields for `"add"` and `"modify"` operations
+### `"delete"`  
+Remove an entry by lemma.
 
-These operations must supply a **full TS entry**, containing:
+Each operation must specify:
+
+- `"operation"`  
+- `"entry"` (for add/modify)  
+- `"lemma"` (for delete)
+
+---
+
+# 🔹 8. Required Fields for Add/Modify
+
+Each entry must contain:
 
 - `lemma`  
 - `gloss`  
@@ -191,88 +215,12 @@ These operations must supply a **full TS entry**, containing:
 - `identity_anchor`  
 - `routing_signature`
 
-These are the same fields present in your developer dictionary chunks.
-
-### ✔ Required fields for `"delete"` operations
-
-Only:
-
-- `lemma`
-
-is required.
-
-The tool uses the lemma to locate and remove the entry.
+These fields define a complete TS developer dictionary entry.
 
 ---
 
-## **What manifest_revNN.json Contains**
+# 🔹 9. Chunk Selection
 
-Every time modify_dev_dct.py runs (normal or batch mode), it produces a new manifest:
-
-```
-manifest_revNN.json
-```
-
-This file contains **all the same information as the original manifest.json**, plus any updated metadata resulting from edits.
-
-### ✔ Contents of manifest_revNN.json
-
-Each manifest revision includes:
-
-- `total_entries` — total number of entries across all chunks  
-- `chunks` — a list of chunk metadata objects  
-
-Each chunk object contains:
-
-- `chunk_id` — integer chunk number  
-- `filename` — name of the chunk file  
-- `first_lemma` — lexicographically first lemma in the chunk  
-- `last_lemma` — lexicographically last lemma in the chunk  
-- `entry_count` — number of entries in the chunk  
-- `uncompressed_size` — size in bytes before gzip  
-- `compressed_size` — size in bytes after gzip  
-
-### ✔ Example chunk entry in manifest_revNN.json
-
-```json
-{
-  "chunk_id": 3,
-  "filename": "meaning_dictionary_dev_rev05_03.json.gz",
-  "first_lemma": "fastidious",
-  "last_lemma": "labanotation",
-  "entry_count": 19551,
-  "uncompressed_size": 11796337,
-  "compressed_size": 1968803
-}
-```
-
-### ✔ Why manifest_revNN.json exists
-
-- It preserves revision history  
-- It prevents accidental overwrites  
-- It allows rollback  
-- It allows users to work from older revisions by pointing to a different directory  
-- It ensures modify_dev_dct.py always uses the **latest** revision unless told otherwise  
-
----
-
-## **Validation Rules**
-Before applying any mutation, the tool validates:
-
-- Required fields present  
-- Correct types  
-- No illegal characters  
-- Lists contain valid elements  
-- Primitive is valid  
-- Identity anchor vector is valid  
-- Routing signature codes are valid  
-- No malformed structures  
-
-Invalid entries are **skipped** with detailed log messages.
-
----
-
-## **Chunk Selection**
 Given a lemma:
 
 1. Read manifest  
@@ -280,70 +228,69 @@ Given a lemma:
    ```
    first_lemma <= lemma <= last_lemma
    ```
-3. If lemma falls outside all ranges:
+3. If lemma falls outside all ranges:  
    - Determine correct chunk by lexicographic position  
    - Insert into that chunk  
-   - Update boundaries  
 
 Chunk numbering **never changes** in normal mode.
 
 ---
 
-## **Mutation Behavior**
+# 🔹 10. Mutation Behavior
 
 ### **Add**
 - Determine correct chunk  
-- Load chunk  
 - Insert entry in sorted order  
-- Update metadata  
-- Write new chunk file  
+- Write new chunk file to `tools/output/`  
 - Update manifest  
 
 ### **Modify**
-- Load chunk  
 - Replace entry  
 - Re-sort  
-- Update metadata  
 - Write new chunk file  
 - Update manifest  
 
 ### **Delete**
-- Load chunk  
 - Remove entry  
 - Re-sort  
-- Update metadata  
 - Write new chunk file  
 - Update manifest  
 
+All new files are written into:
+
+```
+dictionaries_dev/tools/output/
+```
+
+Users manually move them into the correct release directory.
+
 ---
 
-## **Chunk Size Enforcement**
-After all edits:
+# 🔹 11. Chunk Size Enforcement
+
+After edits:
 
 - Compute uncompressed size of each chunk  
-- If **any chunk > 2.5–3.0 MB**:
+- If **any chunk > 3 MB**, normal mode stops  
 
-### **Normal mode stops**  
 Message:
 
 ```
-Chunk 3 exceeds 2.5 MB limit (actual: 3.12 MB).
+Chunk 3 exceeds 3 MB limit.
 Normal mode cannot continue.
 
-Please increase CHUNK_COUNT in config.py from X to X+1.
+Please increase CHUNK_COUNT in config.py.json.
 Then run:
 
     python modify_dev_dct.py --batch
 ```
 
-This forces a conscious user decision.
-
-### **Batch mode proceeds**  
-Batch mode is allowed to exceed limits temporarily because it will re-chunk.
+Batch mode is required to re‑chunk.
 
 ---
 
-## **Batch Mode Workflow**
+# 🔹 12. Batch Mode Workflow
+
 Triggered by:
 
 ```
@@ -353,21 +300,20 @@ python modify_dev_dct.py --batch
 Batch mode:
 
 1. Loads highest manifest revision  
-2. Reads `config.py`  
-3. Confirms `CHUNK_COUNT` was manually increased  
-4. Loads all entries from all chunks  
-5. Recomputes WDP  
-6. Re-chunks dictionary into `CHUNK_COUNT` chunks  
-7. Writes new chunk files  
-8. Writes new manifest revision  
-9. Prints summary  
+2. Confirms `CHUNK_COUNT` was manually increased  
+3. Loads all entries  
+4. Recomputes WDP  
+5. Re-chunks dictionary  
+6. Writes new chunk files to `tools/output/`  
+7. Writes new manifest revision to `tools/output/`  
 
 Batch mode is the **only** mode that changes dictionary geometry.
 
 ---
 
-## **Manifest Revisioning**
-Every run (normal or batch) produces:
+# 🔹 13. Manifest Revisioning
+
+Every run produces:
 
 ```
 manifest_revNN.json
@@ -375,46 +321,72 @@ manifest_revNN.json
 
 Where NN = highest existing revision + 1.
 
+Example:
+
+- Reads `manifest_rev00.json` → writes `manifest_rev01.json`  
+- Reads `manifest_rev01.json` → writes `manifest_rev02.json`  
+
 Old manifests are **never overwritten**.
 
-This preserves:
-- full revision history  
-- rollback capability  
-- auditability  
+---
+
+# 🔹 14. Output Location (New Architecture)
+
+All output files are written into:
+
+```
+dictionaries_dev/tools/output/
+```
+
+This includes:
+
+- new chunk files  
+- new manifest_revNN.json  
+
+Users manually move these files into the appropriate release directory:
+
+```
+dictionaries_dev/dct_revNN/
+```
+
+This prevents accidental overwrites and keeps releases clean.
 
 ---
 
-## **Summary Log Report**
-Normal mode reports:
+# 🔹 15. Summary Report
 
-- Entries added  
-- Entries modified  
-- Entries deleted  
-- Entries skipped (with reasons)  
-- Updated chunk boundaries  
-- Updated entry counts  
-- Updated total_entries  
-- Chunk sizes  
-- Whether batch mode is required  
+Normal mode prints:
 
-Batch mode reports:
+- added entries  
+- modified entries  
+- deleted entries  
+- skipped entries (with reasons)  
+- updated chunk boundaries  
+- updated entry counts  
+- updated total_entries  
+- chunk sizes  
+- whether batch mode is required  
 
-- Old chunk count  
-- New chunk count  
-- Total entries  
-- New boundaries  
-- New sizes  
-- Confirmation message  
+Batch mode prints:
+
+- old chunk count  
+- new chunk count  
+- total entries  
+- new boundaries  
+- new sizes  
+- confirmation message  
 
 ---
 
-## **Compatibility**
-This design ensures **all existing tools continue to work unchanged**, including:
+# 🔹 16. Compatibility
+
+This design ensures compatibility with:
 
 - `inspect_chunk.py`  
 - `ts_meaning_dct_path_a.py`  
-- any other dictionary utilities  
+- all dictionary utilities  
+- all release directories  
 
-No structural changes are required.
+No structural changes are required outside the tools directory.
 
 ---
