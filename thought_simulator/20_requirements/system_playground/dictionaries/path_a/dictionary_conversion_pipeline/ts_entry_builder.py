@@ -14,7 +14,7 @@ Responsibilities:
         routing_signature_generator
         identity_anchor_generator
     • Produce a complete TS dictionary entry object
-    • Provide structured output for yaml_writer.py
+    • Provide structured output for json_gzip_writer.py (also yaml_writer.py)
 
 TS entries are:
     • deterministic
