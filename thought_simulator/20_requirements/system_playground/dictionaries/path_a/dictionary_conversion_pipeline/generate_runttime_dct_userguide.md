@@ -1,5 +1,5 @@
-# 📘 **how_to_gen_change_dct.md**  
-### *How to Generate, Version, and Modify TS Path A Dictionaries*
+# 📘 **generate_runttime_dct_userguide.md**  
+### *Generate Runtime Dictionary User Guide*
 
 This guide explains **exactly** how a user generates a new TS Path A dictionary, how dictionary **versioning** works, what files are **inputs**, what files are **outputs**, what the user is **expected to modify**, and what the user must **never modify**.
 
