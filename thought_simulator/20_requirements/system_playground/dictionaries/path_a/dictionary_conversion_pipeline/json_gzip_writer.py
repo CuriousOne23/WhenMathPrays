@@ -65,6 +65,7 @@ class JSONGzipWriter:
                     - filename
                     - first_lemma
                     - last_lemma
+                    - entry_count
                     - uncompressed_size
                     - compressed_size
         """
@@ -117,6 +118,7 @@ class JSONGzipWriter:
                     "filename": filename,
                     "first_lemma": first_lemma,
                     "last_lemma": last_lemma,
+                    "entry_count": len(chunk_entries),
                     "uncompressed_size": bucket_accum,
                     "compressed_size": compressed_size
                 })
@@ -146,9 +148,15 @@ class JSONGzipWriter:
                 "filename": filename,
                 "first_lemma": first_lemma,
                 "last_lemma": last_lemma,
+                "entry_count": len(chunk_entries),
                 "uncompressed_size": bucket_accum,
                 "compressed_size": compressed_size
             })
 
         print(f"[json_gzip_writer] Wrote {len(manifest)} developer chunks to {self.output_dir}")
-        return manifest
+
+        # Add total number of entries to manifest
+        return {
+            "total_entries": len(sorted_entries),
+            "chunks": manifest
+        }
