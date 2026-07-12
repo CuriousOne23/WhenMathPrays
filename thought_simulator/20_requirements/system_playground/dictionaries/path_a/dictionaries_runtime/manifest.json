@@ -3,42 +3,48 @@
     "chunk_id": 1,
     "filename": "ts_meaning_dictionary_01.json.gz",
     "first_lemma": "15 may organization",
-    "last_lemma": "chevron",
-    "compressed_size": 952231
+    "last_lemma": "chevrotain",
+    "entry_count": 19651,
+    "compressed_size": 952285
   },
   {
     "chunk_id": 2,
     "filename": "ts_meaning_dictionary_02.json.gz",
-    "first_lemma": "chevrotain",
-    "last_lemma": "fastening",
-    "compressed_size": 948617
+    "first_lemma": "chew",
+    "last_lemma": "fastidious",
+    "entry_count": 19422,
+    "compressed_size": 948438
   },
   {
     "chunk_id": 3,
     "filename": "ts_meaning_dictionary_03.json.gz",
     "first_lemma": "fastidious",
-    "last_lemma": "lab coat",
-    "compressed_size": 950272
+    "last_lemma": "labanotation",
+    "entry_count": 19551,
+    "compressed_size": 950185
   },
   {
     "chunk_id": 4,
     "filename": "ts_meaning_dictionary_04.json.gz",
-    "first_lemma": "laban",
-    "last_lemma": "pickpocket",
-    "compressed_size": 959688
+    "first_lemma": "labdanum",
+    "last_lemma": "picks disease",
+    "entry_count": 19718,
+    "compressed_size": 959814
   },
   {
     "chunk_id": 5,
     "filename": "ts_meaning_dictionary_05.json.gz",
-    "first_lemma": "picks disease",
-    "last_lemma": "southern red cedar",
-    "compressed_size": 950979
+    "first_lemma": "pickup",
+    "last_lemma": "southern red oak",
+    "entry_count": 19622,
+    "compressed_size": 951177
   },
   {
     "chunk_id": 6,
     "filename": "ts_meaning_dictionary_06.json.gz",
-    "first_lemma": "southern red oak",
+    "first_lemma": "southern spadefoot",
     "last_lemma": "zymurgy",
-    "compressed_size": 949921
+    "entry_count": 19633,
+    "compressed_size": 950027
   }
 ]
