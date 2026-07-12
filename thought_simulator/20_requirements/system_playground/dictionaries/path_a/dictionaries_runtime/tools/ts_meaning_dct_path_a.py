@@ -1,28 +1,14 @@
+#!/usr/bin/env python3
 """
 ts_meaning_dct_path_a.py
-------------------------
 
 Creates the TS-efficient runtime dictionary for Path A by stripping
 developer-only metadata from the developer dictionary chunks.
 
-Input:
-    dictionaries_dev/
-        meaning_dictionary_dev_01.json.gz
-        meaning_dictionary_dev_02.json.gz
-        meaning_dictionary_dev_03.json.gz
-        meaning_dictionary_dev_04.json.gz
-        meaning_dictionary_dev_05.json.gz
-        meaning_dictionary_dev_06.json.gz
-        manifest.json
+Input directory is specified in:
+    ts_meaning_dct_path_a_setup.yaml
 
-Output (written to the SAME directory as this script):
-    ts_meaning_dictionary_01.json.gz
-    ts_meaning_dictionary_02.json.gz
-    ts_meaning_dictionary_03.json.gz
-    ts_meaning_dictionary_04.json.gz
-    ts_meaning_dictionary_05.json.gz
-    ts_meaning_dictionary_06.json.gz
-    manifest.json
+Output files are written into the SAME directory where this script lives.
 
 The user must manually move the runtime files into:
     dictionaries_runtime/
@@ -33,6 +19,7 @@ This prevents accidental overwrites.
 import os
 import json
 import gzip
+import yaml
 from pathlib import Path
 
 
@@ -42,19 +29,30 @@ class TSMeaningDctPathA:
     Converts developer dictionary chunks into runtime-efficient chunks.
     """
 
-    def __init__(self, dev_dir="dictionaries_dev", output_dir=None):
-        script_dir = Path(__file__).parent
+    def __init__(self):
+        # Directory where this script lives
+        self.script_dir = Path(__file__).parent.resolve()
 
-        # Developer dictionary directory
-        self.dev_dir = (script_dir / dev_dir).resolve()
+        # Load setup file
+        setup_path = self.script_dir / "ts_meaning_dct_path_a_setup.yaml"
+        if not setup_path.exists():
+            raise FileNotFoundError(
+                f"Setup file not found:\n  {setup_path}\n"
+                f"Create ts_meaning_dct_path_a_setup.yaml in the tools directory."
+            )
 
-        # Runtime output directory (same directory as this script)
-        if output_dir is None:
-            self.output_dir = script_dir.resolve()
-        else:
-            self.output_dir = (script_dir / output_dir).resolve()
+        with setup_path.open("r", encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
 
+        # Developer dictionary directory (input)
+        self.dev_dir = (self.script_dir / cfg["dev_dictionary_dir"]).resolve()
+
+        # Output directory (same directory as this script)
+        self.output_dir = self.script_dir
         os.makedirs(self.output_dir, exist_ok=True)
+
+        # Chunk prefix (developer dictionary)
+        self.dev_chunk_prefix = cfg.get("dev_chunk_prefix", "meaning_dictionary_dev_")
 
     def _load_dev_chunk(self, filename):
         """
@@ -100,7 +98,10 @@ class TSMeaningDctPathA:
         print(f"[ts_meaning_dct_path_a] Loading developer manifest from {self.dev_dir}...")
 
         manifest_path = self.dev_dir / "manifest.json"
-        with open(manifest_path, "r", encoding="utf-8") as f:
+        if not manifest_path.exists():
+            raise FileNotFoundError(f"Developer manifest not found:\n  {manifest_path}")
+
+        with manifest_path.open("r", encoding="utf-8") as f:
             dev_manifest = json.load(f)
 
         runtime_manifest = []
@@ -135,7 +136,7 @@ class TSMeaningDctPathA:
 
         # Write runtime manifest
         runtime_manifest_path = self.output_dir / "manifest.json"
-        with open(runtime_manifest_path, "w", encoding="utf-8") as f:
+        with runtime_manifest_path.open("w", encoding="utf-8") as f:
             json.dump(runtime_manifest, f, indent=2, ensure_ascii=False)
 
         print(f"[ts_meaning_dct_path_a] Runtime manifest written to {runtime_manifest_path}")
