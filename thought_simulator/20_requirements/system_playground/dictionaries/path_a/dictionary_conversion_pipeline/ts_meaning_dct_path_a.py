@@ -129,6 +129,7 @@ class TSMeaningDctPathA:
                 "filename": runtime_filename,
                 "first_lemma": chunk["first_lemma"],
                 "last_lemma": chunk["last_lemma"],
+                "entry_count": len(runtime_entries),
                 "compressed_size": compressed_size
             })
 
