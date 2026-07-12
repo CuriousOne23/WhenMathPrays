@@ -31,10 +31,11 @@ These files are compressed and not human‑readable by default.
 ### ✔ Pretty‑printed JSON output  
 ### ✔ Optional lemma filtering  
 ### ✔ Optional field filtering  
-### ✔ Optional entry limits  
+### ✔ Entry range slicing (`--limit MIN MAX`)  
 ### ✔ Automatic detection of the correct dictionary directory  
 ### ✔ Support for versioned dictionary directories  
 ### ✔ Zero‑configuration usage for users  
+### ✔ Automatic log file creation for full‑chunk inspection  
 
 It is the primary tool for inspecting developer dictionary content.
 
@@ -56,6 +57,14 @@ DEV_OUTPUT_DIR
 ```
 
 from `config.py`, so it always points to the correct dictionary version.
+
+All inspection logs are written to:
+
+```
+BASE_DIR/inspection_logs/
+```
+
+This keeps logs version‑aware and prevents clutter.
 
 ---
 
@@ -92,29 +101,62 @@ This makes the tool version‑aware and repo‑aware.
 
 # 🔹 4. Basic Usage
 
-### Inspect an entire chunk
+## **Inspect an entire chunk (writes a log file)**
 ```
 python inspect_chunk.py meaning_dictionary_dev_01.json.gz
 ```
 
-### Inspect entries containing a substring
+This produces:
+
+- a summary in the terminal  
+- a full log file at:  
+  ```
+  BASE_DIR/inspection_logs/inspect_log_meaning_dictionary_dev_01.json.gz.txt
+  ```
+
+Full‑chunk inspection **always** writes a log file to avoid overwhelming the terminal.
+
+---
+
+## **Inspect entries containing a substring**
 ```
 python inspect_chunk.py meaning_dictionary_dev_06.json.gz --lemma oak
 ```
 
-### Show only specific fields
+---
+
+## **Show only specific fields**
 ```
 python inspect_chunk.py meaning_dictionary_dev_03.json.gz --fields lemma gloss primitives
 ```
 
-### Show only the first 10 entries
+---
+
+## **Show only the first N entries**
 ```
 python inspect_chunk.py meaning_dictionary_dev_02.json.gz --limit 10
 ```
 
-### Combine filters
+---
+
+## **Show entries in a range (MIN MAX)**
 ```
-python inspect_chunk.py meaning_dictionary_dev_05.json.gz --lemma cedar --fields lemma gloss invariants --limit 5
+python inspect_chunk.py meaning_dictionary_dev_02.json.gz --limit 100 110
+```
+
+This displays entries 100 through 110 (inclusive).
+
+Range slicing works with:
+
+- lemma filtering  
+- field filtering  
+- log file output  
+
+---
+
+## **Combine filters**
+```
+python inspect_chunk.py meaning_dictionary_dev_05.json.gz --lemma cedar --fields lemma gloss invariants --limit 50 75
 ```
 
 ---
@@ -209,6 +251,12 @@ To inspect only routing signatures:
 python inspect_chunk.py meaning_dictionary_dev_03.json.gz --fields lemma routing_signature
 ```
 
+To inspect entries 200–230:
+
+```
+python inspect_chunk.py meaning_dictionary_dev_03.json.gz --limit 200 230
+```
+
 ---
 
 # 🔹 9. Troubleshooting
@@ -221,12 +269,24 @@ The tool checks:
 
 If neither exists, it prints both attempted paths.
 
+---
+
 ### **Output is too long**
-Use:
+Full‑chunk inspection automatically writes a log file.
+
+For smaller terminal output:
 
 ```
 --limit N
 ```
+
+or
+
+```
+--limit MIN MAX
+```
+
+---
 
 ### **Too much detail**
 Use:
@@ -234,6 +294,8 @@ Use:
 ```
 --fields lemma gloss
 ```
+
+---
 
 ### **Cannot find config.py**
 If the tool is run outside the repo, it falls back to:
@@ -247,6 +309,6 @@ DEV_OUTPUT_DIR = BASE_DIR / "dictionaries_dev"
 
 # 🔹 10. Summary
 
-`inspect_chunk.py` is a safe, read‑only, version‑aware inspection tool that makes developer dictionary chunks human‑readable. It is essential for debugging, validation, and semantic inspection during TS Path A dictionary development.
+`inspect_chunk.py` is a safe, read‑only, version‑aware inspection tool that makes developer dictionary chunks human‑readable. It supports full‑chunk logging, range slicing, field filtering, lemma filtering, and version‑aware directory resolution. It is essential for debugging, validation, and semantic inspection during TS Path A dictionary development.
 
 ---
