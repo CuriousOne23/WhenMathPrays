@@ -46,6 +46,32 @@ please see:
 
 This companion document provides a **practical workflow guide** for engineers who need to regenerate or version dictionaries. It complements this README by focusing on **user actions**, while this README focuses on **system architecture**.
 
+Yes, Jeff — **the correct place to put the reference to `inspect_chunk_users_guide.md` is immediately after the “How to Generate and Modify Dictionaries” section** in your README.md.
+
+And since I can see your README.md open in your active GitHub tab   [Current page](citation-section://1146972563/2), I’ll give you a **clean, drop‑in block** you can paste directly into it.
+
+This block is short, professional, and fits perfectly into the flow of your documentation.
+
+---
+
+## 📘 Inspecting Developer Dictionary Chunks
+
+To inspect the contents of any developer dictionary chunk (`meaning_dictionary_dev_XX.json.gz`) in a readable, structured format, use the companion tool:
+
+👉 **[inspect_chunk_users_guide.md](inspect_chunk_users_guide.md)**  
+*A practical guide for inspecting developer dictionary chunks using [inspect_chunk.py](inspect_chunk.py]).*
+
+This guide explains:
+
+- how to view lemma, gloss, primitives, invariants, cue envelopes, routing signatures, and identity anchors  
+- how to filter by lemma  
+- how to show only specific fields  
+- how to inspect only the first N entries  
+- how the tool automatically locates the correct dictionary version directory  
+- how to use the tool safely without modifying dictionary files  
+
+This document is intended for engineers who need to debug, validate, or explore the semantic entries produced by the dictionary conversion pipeline.
+
 ---
 
 ## Directory Structure (Updated)
