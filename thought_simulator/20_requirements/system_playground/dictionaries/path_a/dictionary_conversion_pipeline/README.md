@@ -39,34 +39,8 @@ For **step‑by‑step instructions** on:
 - understanding input/output file locations  
 - knowing what you must modify and must not modify  
 - manually moving runtime files into `dictionaries_runtime/`
-- modifying existing developer dictionary entries using `modify_dev_dct.py`
-  👉 See **[modify_development_dct_userguide.md](modify_development_dct_userguide.md)** for the full user guide.
-
-please see:
-
-👉 **[How to Make Changes to the Path A Dictionary](how_to_gen_change_dct.md)**
 
 This companion document provides a **practical workflow guide** for engineers who need to regenerate or version dictionaries. It complements this README by focusing on **user actions**, while this README focuses on **system architecture**.
-
----
-
-## 📘 Inspecting Developer Dictionary Chunks
-
-To inspect the contents of any developer dictionary chunk (`meaning_dictionary_dev_XX.json.gz`) in a readable, structured format, use the companion tool:
-
-👉 **[inspect_chunk_users_guide.md](inspect_chunk_users_guide.md)**  
-*A practical guide for inspecting developer dictionary chunks using [inspect_chunk.py](inspect_chunk.py).*
-
-This guide explains:
-
-- how to view lemma, gloss, primitives, invariants, cue envelopes, routing signatures, and identity anchors  
-- how to filter by lemma  
-- how to show only specific fields  
-- how to inspect only the first N entries  
-- how the tool automatically locates the correct dictionary version directory  
-- how to use the tool safely without modifying dictionary files  
-
-This document is intended for engineers who need to debug, validate, or explore the semantic entries produced by the dictionary conversion pipeline.
 
 ---
 
@@ -267,39 +241,7 @@ This is the file you run to produce the developer dictionary.
 ---
 
 ### **12. `ts_meaning_dct_path_a.py`**
-Produces the **TS‑efficient runtime dictionary** by stripping developer metadata.
-
-Loads:
-
-```
-dictionaries_dev/meaning_dictionary_dev_XX.json.gz
-```
-
-Writes:
-
-```
-ts_meaning_dictionary_XX.json.gz
-```
-
-The user must **manually move** runtime files into:
-
-```
-dictionaries_runtime/
-```
-
-to avoid accidental overwrites.
-
-Runtime dictionary contains only:
-
-- lemma  
-- alternates  
-- primitive  
-- invariants  
-- cue envelope  
-- routing signature  
-- identity anchor  
-
-All glosses, pointers, and metadata are removed.
+see dictionaries_runtime/tools directory
 
 ---
 
