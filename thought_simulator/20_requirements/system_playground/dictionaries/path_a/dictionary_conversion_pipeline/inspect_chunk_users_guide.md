@@ -111,7 +111,7 @@ This produces:
 - a summary in the terminal  
 - a full log file at:  
   ```
-  BASE_DIR/inspection_logs/inspect_log_meaning_dictionary_dev_01.json.gz.txt
+  BASE_DIR/inspection_logs/inspect_log_meaning_dictionary_dev_01.json.gz.log
   ```
 
 Full‑chunk inspection **always** writes a log file to avoid overwhelming the terminal.
