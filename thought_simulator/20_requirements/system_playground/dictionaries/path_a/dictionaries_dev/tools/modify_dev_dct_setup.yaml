@@ -1,1 +1,3 @@
-
+dev_dictionary_dir: "../dct_rev00/"
+dev_chunk_prefix: "meaning_dictionary_dev_"
+input_file: "../dct_rev00/modify_entries.json"
