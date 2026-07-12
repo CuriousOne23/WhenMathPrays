@@ -107,7 +107,7 @@ class TSMeaningDctPathA:
 
         print("[ts_meaning_dct_path_a] Processing developer chunks...")
 
-        for chunk in dev_manifest:
+        for chunk in dev_manifest["chunks"]:
             chunk_id = chunk["chunk_id"]
             filename = chunk["filename"]
 
