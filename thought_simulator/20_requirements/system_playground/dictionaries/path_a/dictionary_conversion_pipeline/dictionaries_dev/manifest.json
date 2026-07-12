@@ -1,50 +1,59 @@
-[
-  {
-    "chunk_id": 1,
-    "filename": "meaning_dictionary_dev_01.json.gz",
-    "first_lemma": "15 may organization",
-    "last_lemma": "chevron",
-    "uncompressed_size": 11797426,
-    "compressed_size": 1971908
-  },
-  {
-    "chunk_id": 2,
-    "filename": "meaning_dictionary_dev_02.json.gz",
-    "first_lemma": "chevrotain",
-    "last_lemma": "fastening",
-    "uncompressed_size": 11796782,
-    "compressed_size": 1982780
-  },
-  {
-    "chunk_id": 3,
-    "filename": "meaning_dictionary_dev_03.json.gz",
-    "first_lemma": "fastidious",
-    "last_lemma": "lab coat",
-    "uncompressed_size": 11796805,
-    "compressed_size": 1968963
-  },
-  {
-    "chunk_id": 4,
-    "filename": "meaning_dictionary_dev_04.json.gz",
-    "first_lemma": "laban",
-    "last_lemma": "pickpocket",
-    "uncompressed_size": 11797324,
-    "compressed_size": 1960073
-  },
-  {
-    "chunk_id": 5,
-    "filename": "meaning_dictionary_dev_05.json.gz",
-    "first_lemma": "picks disease",
-    "last_lemma": "southern red cedar",
-    "uncompressed_size": 11797006,
-    "compressed_size": 1961834
-  },
-  {
-    "chunk_id": 6,
-    "filename": "meaning_dictionary_dev_06.json.gz",
-    "first_lemma": "southern red oak",
-    "last_lemma": "zymurgy",
-    "uncompressed_size": 11795317,
-    "compressed_size": 1954889
-  }
-]
+{
+  "total_entries": 117597,
+  "chunks": [
+    {
+      "chunk_id": 1,
+      "filename": "meaning_dictionary_dev_01.json.gz",
+      "first_lemma": "15 may organization",
+      "last_lemma": "chevrotain",
+      "entry_count": 19651,
+      "uncompressed_size": 11796012,
+      "compressed_size": 1972206
+    },
+    {
+      "chunk_id": 2,
+      "filename": "meaning_dictionary_dev_02.json.gz",
+      "first_lemma": "chew",
+      "last_lemma": "fastidious",
+      "entry_count": 19422,
+      "uncompressed_size": 11795707,
+      "compressed_size": 1982866
+    },
+    {
+      "chunk_id": 3,
+      "filename": "meaning_dictionary_dev_03.json.gz",
+      "first_lemma": "fastidious",
+      "last_lemma": "labanotation",
+      "entry_count": 19551,
+      "uncompressed_size": 11796337,
+      "compressed_size": 1968803
+    },
+    {
+      "chunk_id": 4,
+      "filename": "meaning_dictionary_dev_04.json.gz",
+      "first_lemma": "labdanum",
+      "last_lemma": "picks disease",
+      "entry_count": 19718,
+      "uncompressed_size": 11795628,
+      "compressed_size": 1960139
+    },
+    {
+      "chunk_id": 5,
+      "filename": "meaning_dictionary_dev_05.json.gz",
+      "first_lemma": "pickup",
+      "last_lemma": "southern red oak",
+      "entry_count": 19622,
+      "uncompressed_size": 11795941,
+      "compressed_size": 1961547
+    },
+    {
+      "chunk_id": 6,
+      "filename": "meaning_dictionary_dev_06.json.gz",
+      "first_lemma": "southern spadefoot",
+      "last_lemma": "zymurgy",
+      "entry_count": 19633,
+      "uncompressed_size": 11793675,
+      "compressed_size": 1954726
+    }
+  ]
+}
