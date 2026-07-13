@@ -1,0 +1,130 @@
+reference_object_name: ISc
+reference_object_class: routing
+semantic_class: inference_score_routing
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines routing geometry, scoring fields, and admissible transitions for the
+    Inference Scorer (ISc) used in Path A routing.
+  long: >
+    ISc applies truth_hypotheses-prc over candidate_set{} using CE output to produce
+    deterministic routing fields (score_set, score_conflict, score_reason_code).
+    These fields are consumed by TPU and TR to determine whether Path A continues,
+    loops, or transitions (RTU, RB, IdOB). ISc does not perform semantic generation,
+    meaning construction, or global inference; it provides deterministic routing
+    geometry required for PSC replay and routing decisions.
+
+invariants:
+  - name: closed_envelope_required
+    description: >
+      Routing evaluation requires a closed envelope produced by CE + candidate_set{}.
+  - name: score_fields_required
+    description: >
+      score_set, score_conflict, and score_reason_code must be present and valid.
+  - name: no_meaning_construction
+    description: >
+      ISc must not construct meaning or evaluate truth globally; routing must be local.
+  - name: no_global_state_access
+    description: >
+      Routing must not access global inference state; all routing decisions must be deterministic.
+  - name: replay_stability_required
+    description: >
+      Routing geometry must be identical under replay for identical inputs.
+
+geometry_signature:
+  envelope_type: inference_score_routing_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: score_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: conflict_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: reason_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    Routing geometry is a bounded polytope representing scoring magnitude,
+    conflict magnitude, and reason-code stability. TR and CTP use these axes
+    to determine routing transitions (RTU, RB, IdOB).
+
+scalar_fields:
+  - name: score_set
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Deterministic score assigned to candidate_set{} under truth_hypotheses-prc.
+  - name: score_conflict
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of conflict detected among candidate interpretations.
+  - name: score_reason_code
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Encoded reason for scoring outcome; consumed by TR and CTP for routing.
+
+vector_fields:
+  - name: routing_candidate_vector
+    type: vector
+    length: 3
+    description: >
+      Routing manifold coordinates representing candidate_set{} features.
+  - name: routing_ce_vector
+    type: vector
+    length: 3
+    description: >
+      Routing manifold coordinates derived from CE output used in routing.
+
+envelope_status:
+  admissible_status:
+    - score_ready
+    - conflict_detected
+  terminal_status:
+    - invalid_geometry
+    - missing_score_fields
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy routing invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical routing geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from CE + candidate_set{}.
+
+routing:
+  admissible_inputs:
+    - CE
+    - candidate_set
+  admissible_outputs:
+    - RTU
+    - RB
+    - IdOB
+  description: >
+    Routing transitions are determined by score_set, score_conflict, and
+    score_reason_code. ISc does not merge or commit; TPU and TR perform
+    merge and routing based on ISc outputs.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ce_reference
+    - candidate_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+    - path_a_routing_flow
+
+psc_alignment:
+  - ISc must satisfy PSC routing object requirements.
+  - ISc must expose deterministic routing geometry for replay validation.
+  - ISc must align with TR, CTP, RTU, RB, and IdOB routing primitives.
+  - ISc must enforce admissible scoring envelope constraints.
