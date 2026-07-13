@@ -1,0 +1,184 @@
+# ============================================================
+# Path A — Meaning Dictionary Schema
+# Canonical semantic dictionary specification for TS
+# ============================================================
+
+schema_version: 1.0.0
+domain: path_a
+description: >
+  This schema defines the canonical structure of the Path A meaning dictionary.
+  It specifies the required fields, semantic cues, lemma tables, invariant
+  signatures, routing signatures, and indexing rules used by the TS pipeline.
+  All dev_dictionary and runtime_dictionary artifacts must be derived from this
+  schema.
+
+# ------------------------------------------------------------
+# Dictionary Metadata
+# ------------------------------------------------------------
+metadata:
+  dictionary_name: ts_meaning_dictionary
+  version: 1.0.0
+  generated_by: conversion_pipeline
+  source_corpus:
+    - wordnet_raw
+    - ts_semantic_extensions
+  chunking:
+    format: json.gz
+    strategy: fixed_size
+    target_chunk_size_kb: 2000
+
+# ------------------------------------------------------------
+# Entry Structure
+# ------------------------------------------------------------
+entry:
+  id: integer            # Unique numeric ID
+  lemma: string          # Canonical lemma
+  pos: string            # Part of speech (noun, verb, adj, adv)
+  gloss: string          # Human-readable gloss
+  examples:              # Example usages
+    - string
+
+  semantic_roles:        # Semantic role annotations
+    agent: optional string
+    patient: optional string
+    instrument: optional string
+    experiencer: optional string
+
+  meaning_signature:     # Core semantic signature
+    primitive_class: string
+    semantic_class: string
+    cue_profile: string
+    invariants:
+      - string
+
+  routing_signature:     # Routing behavior for Path A
+    admissible_transitions:
+      - string
+    envelope_behavior: string
+    anomaly_behavior: string
+
+  geometry_signature:    # Geometry behavior for Path A primitives
+    envelope_type: string
+    segmentation: string
+    admissible_shapes:
+      - string
+
+  scalar_fields:         # Scalar fields allowed at meaning level
+    - name: string
+      type: string
+      constraints:
+        - string
+
+# ------------------------------------------------------------
+# Lemma Tables
+# ------------------------------------------------------------
+lemma_tables:
+  normalization_rules:
+    - rule: string
+      description: string
+
+  lemma_variants:
+    canonical: string
+    variants:
+      - string
+
+  pos_mapping:
+    noun: [ "n" ]
+    verb: [ "v" ]
+    adjective: [ "a", "s" ]
+    adverb: [ "r" ]
+
+# ------------------------------------------------------------
+# Semantic Cues
+# ------------------------------------------------------------
+semantic_cues:
+  cue_envelopes:
+    - cue: string
+      envelope_type: string
+      strength: float
+      description: string
+
+  cue_classes:
+    - name: string
+      members:
+        - string
+
+  cue_projection:
+    operator: string
+    mapping_rules:
+      - string
+
+# ------------------------------------------------------------
+# Invariant Signatures
+# ------------------------------------------------------------
+invariant_signatures:
+  structural_invariants:
+    - name: string
+      description: string
+
+  semantic_invariants:
+    - name: string
+      description: string
+
+  replay_invariants:
+    - name: string
+      description: string
+
+# ------------------------------------------------------------
+# Routing Signatures
+# ------------------------------------------------------------
+routing_signatures:
+  envelope_status:
+    - valid_clean
+    - valid_degraded
+
+  anomaly_flags:
+    - malformed_token
+    - malformed_pos
+    - malformed_adjacency
+    - degraded_envelope
+    - degraded_clause
+
+  transitions:
+    valid_clean: PathA.clean
+    valid_degraded: PathA.corrected
+
+# ------------------------------------------------------------
+# Indexing Rules
+# ------------------------------------------------------------
+indexing:
+  index_file: meaning_dictionary_index.md
+  fields_indexed:
+    - lemma
+    - pos
+    - primitive_class
+    - semantic_class
+    - cue_profile
+
+  sort_order:
+    - lemma
+    - pos
+    - id
+
+# ------------------------------------------------------------
+# Validation Rules
+# ------------------------------------------------------------
+validation:
+  required_fields:
+    - id
+    - lemma
+    - pos
+    - gloss
+    - meaning_signature
+    - routing_signature
+
+  constraints:
+    - lemma must be non-empty
+    - gloss must be non-empty
+    - pos must be one of [noun, verb, adj, adv]
+    - meaning_signature.primitive_class must be valid
+    - routing_signature must define admissible_transitions
+
+# ============================================================
+# End of meaning_schema.yaml
+# ============================================================
