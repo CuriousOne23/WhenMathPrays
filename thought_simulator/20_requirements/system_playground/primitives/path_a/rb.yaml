@@ -1,0 +1,163 @@
+primitive_name: RB
+primitive_family: path_a
+reference_type: rb_reference
+version: 1.0.0
+
+description: >
+  RB (Relational Basin) is the Path-A routing-arbitration primitive responsible
+  for selecting the next IdOB based on structural residue, ΔH%, lineage, and
+  TR-input fields. RB performs no TP writes, no semantic interpretation, no
+  scoring, and no Path-B access. RB emits deterministic routing metadata for
+  RTU-prm and runs in the RB→RTU→IdOB loop until Truth/Done stabilizes the turn.
+
+runtime_behavior:
+  mode: routing_arbitration
+  semantic_interpretation: none
+  correction_application: none
+  truth_evaluation: none
+  tp_write: none
+  routing_computation: deterministic
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - ob_residue_vector
+    - delta_h_percent
+    - routing_lineage_vector
+    - tr_input_vector
+  optional:
+    - cue_vector
+
+outputs:
+  envelope_type: relational_basin_envelope
+  fields:
+    scalar_fields:
+      - residue_strength
+      - delta_h_percent
+      - lineage_strength
+      - tr_input_strength
+      - basin_selection_strength
+    vector_fields:
+      - structural_residue_vector
+      - routing_lineage_vector
+      - tr_input_vector
+      - basin_vector
+  status_flags:
+    - basin_ready
+    - degraded
+
+invariants:
+  structural_residue_required: true
+  delta_h_required: true
+  lineage_required: true
+  tr_input_required: true
+  deterministic_routing_required: true
+  no_path_b_access: true
+  no_tp_write: true
+  no_semantic_or_truth: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required OB/TR fields must be present; RB may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All routing fields must match expected structural shapes; no plausibility checks.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_routing_monotonicity:
+    description: >
+      basin_selection_strength must reflect deterministic routing rules and may not
+      decrease when upstream routing cues increase.
+    enforced: true
+
+  C5_no_semantic_or_truth:
+    description: >
+      RB must not modify semantic meaning, truth fields, identity fields, or cue semantics.
+    enforced: true
+
+  C6_no_path_b:
+    description: >
+      RB must not access Path-B routing tables, semantic manifolds, or MTP.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      RB must produce identical basin-selection geometry under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_structural_residue
+    - validate_delta_h
+    - validate_lineage
+    - validate_tr_input
+    - compute_routing_cues
+    - compute_basin_selection
+    - compute_scalar_fields
+    - compute_vector_fields
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  basin_ready:
+    conditions:
+      - basin_selection_strength > 0.0
+  degraded:
+    conditions:
+      - residue_strength < 0.1
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_routing_inputs:
+    triggers:
+      - structural residue, ΔH%, lineage, or TR-input missing
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical basin-selection geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from OB/TR
+
+routing:
+  admissible_inputs:
+    - OB
+    - TR
+  admissible_outputs:
+    - RTU
+  description: >
+    RB selects the next IdOB basin and emits routing metadata consumed by RTU-prm.
+    RB performs no routing transitions; RTU commits routing decisions into TP.
+
+dependencies:
+  dictionaries:
+    - routing_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - ob_reference
+    - tr_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_routing_flow
+
+psc_alignment:
+  - RB satisfies PSC routing-arbitration object requirements.
+  - RB exposes deterministic basin-selection geometry for replay validation.
+  - RB aligns with TR and RTU-prm.
+  - RB enforces admissible relational-basin envelope constraints.
