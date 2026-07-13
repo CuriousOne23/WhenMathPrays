@@ -5,114 +5,108 @@ version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Correction-Neutral Object Boundary (CnOB) in Path A.
+    Defines the geometry, invariants, admissible envelopes, and routing constraints
+    for the Constraint‑Neutral Object Boundary (CnOB) in Path A.
   long: >
-    CnOB is the neutral structural boundary between semantic/routing stabilization
-    and correction primitives. It ensures deterministic replay, enforces neutrality
-    constraints, and provides the correction-neutral envelope consumed by IE, CEx,
-    CE, and ISc. CnOB does not apply correction; it preserves semantic and routing
-    meaning while preparing the envelope for correction flow.
+    CnOB extracts structural constraint‑level residue from refined structural envelopes
+    (SROB) without performing semantic interpretation, plausibility, world‑knowledge
+    inference, or repair. CnOB emits monotonic, provably‑entailed constraint cues
+    (C1–C7 families), missing‑slot signals, underspecification markers, conflict
+    indicators, and ΔH%‑derived constraint metadata. CnOB is strictly correction‑neutral
+    and prepares constraint residue for SmOB and correction primitives.
 
 invariants:
   - name: envelope_must_be_closed
     description: >
-      CnOB must operate only on closed envelopes produced by upstream semantic or routing boundaries.
-  - name: semantic_vector_required
+      CnOB must operate only on closed structural envelopes produced by SROB.
+  - name: structural_vectors_required
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: routing_vector_required
+      structural_vector and anchor_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: no_semantic_interpretation
     description: >
-      routing_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: cue_vector_required
+      CnOB must not introduce or modify semantic fields; it operates purely on structural constraints.
+  - name: monotonic_constraint_extraction
     description: >
-      cue_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: correction_level_must_be_zero
+      Extracted constraints must be monotonic and provably entailed by structural residue; no semantic plausibility allowed.
+  - name: neutrality_required
     description: >
-      correction_level must be zero; CnOB is strictly neutral and may not apply correction.
-  - name: degradation_level_consistency
-    description: >
-      degradation_level must not increase relative to upstream boundaries.
-  - name: semantic_routing_alignment
-    description: >
-      semantic_vector and routing_vector must remain aligned according to manifold rules.
+      CnOB must not apply correction; neutrality_level must remain maximal.
   - name: replay_stability_required
     description: >
-      CnOB must produce identical neutral boundary geometry under replay for identical inputs.
+      CnOB must produce identical constraint residue geometry under replay for identical inputs.
 
 geometry_signature:
-  envelope_type: correction_neutral_boundary_envelope
+  envelope_type: constraint_neutral_boundary_envelope
   shape: bounded_polytope
   dimensions:
-    - name: semantic_axis
+    - name: constraint_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_axis
+      bounds: [0.0, 1.0]
+    - name: structural_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
+      bounds: [0.0, 1.0]
+    - name: underspec_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: degradation_axis
+      bounds: [0.0, 1.0]
+    - name: conflict_axis
       type: scalar
       bounds: [0.0, 1.0]
     - name: neutrality_axis
       type: scalar
       bounds: [0.0, 1.0]
   description: >
-    CnOB geometry is a bounded polytope representing semantic stability, routing stability,
-    cue coherence, degradation magnitude, and neutrality magnitude. This geometry determines
-    whether the envelope is ready for correction primitives (IE, CEx, CE, ISc).
+    CnOB geometry represents constraint extraction magnitude, structural residue strength,
+    underspecification level, conflict indicator magnitude, and neutrality magnitude.
+    No semantic or routing manifold axes appear here.
 
 scalar_fields:
-  - name: semantic_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of semantic meaning at the neutral boundary.
-  - name: routing_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of routing meaning at the neutral boundary.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile at the neutral boundary.
-  - name: degradation_level
+  - name: constraint_strength
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of degradation detected; must not increase relative to upstream boundaries.
+      Magnitude of extracted structural constraints (C1–C7 families).
+  - name: underspec_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree of structural underspecification detected.
+  - name: conflict_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of structural conflict indicators.
   - name: neutrality_level
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of neutrality; must be maximal before correction begins.
+      Neutrality magnitude; must remain maximal before correction begins.
+  - name: delta_h_percent
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      ΔH%‑derived constraint metadata used for downstream routing and correction scoring.
 
 vector_fields:
-  - name: semantic_vector
+  - name: structural_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates at the neutral boundary.
-  - name: routing_vector
+      Structural manifold coordinates from SROB.
+  - name: anchor_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates at the neutral boundary.
-  - name: cue_vector
+      Canonicalized structural anchor coordinates.
+  - name: constraint_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates at the neutral boundary.
+      Manifold coordinates representing extracted constraint residue (C1–C7).
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - neutral_ready
+    - constraint_ready
+    - degraded_structure
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -123,35 +117,29 @@ anomaly_flags:
     description: Envelope geometry does not satisfy CnOB invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_structural_vectors
+    description: Required structural vectors are absent or invalid.
   - name: replay_inconsistency
-    description: Replay produced non-identical neutral boundary geometry.
-  - name: inadmissible_source
-    description: Envelope did not originate from a valid upstream semantic or routing boundary.
+    description: Replay produced non-identical constraint residue geometry.
 
 routing:
   admissible_inputs:
-    - SOB
     - SROB
-    - IE
   admissible_outputs:
+    - SmOB
     - IE
     - ISc
-    - CEx
-    - CE
   description: >
-    CnOB stabilizes semantic and routing meaning without applying correction and routes
-    the neutral envelope into correction primitives depending on stability and cue coherence.
+    CnOB emits constraint‑level residue for SmOB and correction primitives. It does not
+    route into semantic scoring, routing, or identity primitives.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
+    - structure_dictionary
     - runtime_dictionary
   reference_objects:
-    - sob_reference
     - srob_reference
     - boundary_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
     - path_a_clean_flow
@@ -159,6 +147,6 @@ dependencies:
 
 psc_alignment:
   - CnOB must satisfy PSC structure object requirements.
-  - CnOB must expose deterministic geometry for replay validation.
-  - CnOB must align with correction primitives (IE, CEx, CE, ISc).
-  - CnOB must enforce admissible correction-neutral envelope constraints.
+  - CnOB must expose deterministic constraint residue geometry for replay validation.
+  - CnOB must align with SROB, SmOB, and correction primitives.
+  - CnOB must enforce admissible constraint‑neutral envelope constraints.
