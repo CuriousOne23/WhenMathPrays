@@ -83,3 +83,33 @@ examples:
     notes: >
       A weakly concave envelope is admissible as long as the region remains
       connected and closed.
+
+# ------------------------------------------------------------
+# Envelope Status (Path A Branching)
+# ------------------------------------------------------------
+envelope_status:
+  - valid_clean        # No structural anomalies detected
+  - valid_degraded     # Structural anomalies detected (requires correction)
+
+# ------------------------------------------------------------
+# Anomaly Flags (Structural Detection)
+# ------------------------------------------------------------
+anomaly_flags:
+  - malformed_token
+  - malformed_pos
+  - malformed_adjacency
+  - degraded_envelope
+  - degraded_clause
+
+# ------------------------------------------------------------
+# Routing Transitions
+# ------------------------------------------------------------
+routing:
+  valid_clean: PathA.clean
+  valid_degraded: PathA.corrected
+
+# ------------------------------------------------------------
+# External Dependencies
+# ------------------------------------------------------------
+dependencies:
+  meaning_dictionary: ts_meaning_dictionary
