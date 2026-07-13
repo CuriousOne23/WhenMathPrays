@@ -5,202 +5,142 @@ version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Thought Packet Updater (TPU) boundary object in Path A.
+    Defines the deterministic, bounded geometry and invariants for the Thought Packet
+    Updater (TPU), the sole safe writer to TP for Path‑A correction.
   long: >
-    TPU is the sole safe writer to TP in Corrected Path A. It applies CE+CEx+ISc
-    validated updates, ensures deterministic replay, enforces writer-authority
-    boundaries, and produces the updated TP envelope consumed by IMR and downstream
-    routing primitives. TPU provides deterministic geometry, invariant sets, and
-    field definitions required for PSC replay and safe TP mutation.
+    TPU applies CE + CEx + ISc validated updates to TP(N), producing TP(N+1) under a new
+    commit_id. TPU inserts and corrects message‑items, referents, constraints, and meaning
+    fields while enforcing the single‑writer invariant. TPU performs no topology, routing,
+    governance, or realization work and does not write semantic_core. TPU is Path‑A only;
+    Path‑B is meaning‑read‑only and must never invoke TPU.
 
 invariants:
-  - name: envelope_must_be_closed
+  - name: single_writer_invariant
     description: >
-      TPU must operate only on closed envelopes produced by CE and ISc.
-  - name: semantic_vector_required
+      TPU is the sole primitive permitted to write to TP during Path‑A correction.
+  - name: admissible_source_required
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate the update.
-  - name: routing_vector_required
+      TPU may only accept envelopes produced by CE + ISc; any other source is invalid.
+  - name: no_semantic_core_write
     description: >
-      routing_vector must be present and valid; missing vectors invalidate the update.
-  - name: cue_vector_required
+      TPU must not write or modify semantic_core; semantic_core is written only by OuBA.
+  - name: no_topology_or_routing_work
     description: >
-      cue_vector must be present and valid; missing vectors invalidate the update.
-  - name: correction_level_consistency
+      TPU must not perform topology, routing, governance, or realization operations.
+  - name: deterministic_update_required
     description: >
-      correction_level must be consistent with CE and ISc outputs; TPU may not alter it.
-  - name: expansion_level_consistency
+      Given identical CE + ISc inputs, TPU must produce identical TP(N+1) under replay.
+  - name: path_a_only
     description: >
-      expansion_level must be consistent with CEx and CE; TPU may not alter it.
-  - name: evaluation_level_consistency
+      TPU‑prm must not be invoked by Path‑B; Path‑B is meaning‑read‑only.
+  - name: closed_envelope_required
     description: >
-      evaluation_level must be consistent with CE; TPU may not alter it.
-  - name: score_level_required
-    description: >
-      intake_score must be present and valid; TPU may not operate without scoring.
-  - name: replay_stability_required
-    description: >
-      TPU must produce identical TP update geometry under replay for identical inputs.
-  - name: writer_authority_boundary
-    description: >
-      TPU may update TP but may not write semantic_core or any other reference object.
+      TPU may only operate on closed CE + ISc envelopes; open or partial envelopes are invalid.
 
 geometry_signature:
-  envelope_type: tp_update_envelope
+  envelope_type: tpu_update_envelope
   shape: bounded_polytope
   dimensions:
-    - name: semantic_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: degradation_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: correction_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: expansion_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: evaluation_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: score_axis
-      type: scalar
-      bounds: [0.0, 1.0]
     - name: update_axis
       type: scalar
       bounds: [0.0, 1.0]
+    - name: referent_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: constraint_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: meaning_axis
+      type: scalar
+      bounds: [0.0, 1.0]
   description: >
-    TPU geometry is a bounded polytope representing semantic stability, routing stability,
-    cue coherence, degradation magnitude, correction magnitude, expansion magnitude,
-    evaluation magnitude, intake score, and update magnitude. This geometry determines
-    the safe TP update envelope.
+    TPU geometry represents the magnitude of validated updates applied to TP, including
+    message‑item corrections, referent updates, constraint adjustments, and meaning‑field
+    updates. No semantic_core, topology, routing, or realization axes appear here.
 
 scalar_fields:
-  - name: semantic_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of semantic meaning after TP update.
-  - name: routing_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of routing signals after TP update.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile after TP update.
-  - name: degradation_level
+  - name: update_magnitude
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of degradation detected; must not increase relative to CE or ISc.
-  - name: correction_level
+      Magnitude of validated updates applied to TP(N).
+  - name: referent_update_level
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of correction applied by IE/CEx/CE; TPU may not alter it.
-  - name: expansion_level
+      Degree of referent correction or insertion.
+  - name: constraint_update_level
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of expansion applied by CEx; TPU may not alter it.
-  - name: evaluation_level
+      Degree of constraint correction or insertion.
+  - name: meaning_update_level
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of evaluation applied by CE; TPU may not alter it.
-  - name: intake_score
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Final score determining TP update validity.
-  - name: update_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of update applied by TPU.
+      Degree of meaning‑field correction or insertion.
 
 vector_fields:
-  - name: semantic_vector
+  - name: ce_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates after TP update.
-  - name: routing_vector
+      Context manifold coordinates from CE used to determine update direction.
+  - name: isc_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates after TP update.
-  - name: cue_vector
+      Scoring manifold coordinates from ISc used to determine update magnitude.
+  - name: update_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates after TP update.
+      Manifold coordinates representing the validated TP update applied by TPU.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - correction_ready
-    - expansion_ready
-    - evaluation_ready
-    - score_ready
     - update_ready
+    - referent_update_ready
+    - meaning_update_ready
   terminal_status:
     - invalid_geometry
-    - missing_vectors
+    - inadmissible_source
     - replay_violation
-    - writer_authority_violation
 
 anomaly_flags:
   - name: geometry_violation
     description: Envelope geometry does not satisfy TPU invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
-  - name: replay_inconsistency
-    description: Replay produced non-identical update geometry.
   - name: inadmissible_source
-    description: Envelope did not originate from CE or ISc.
-  - name: writer_authority_violation
-    description: TPU attempted to write outside TP.
+    description: Envelope did not originate from CE + ISc.
+  - name: replay_inconsistency
+    description: Replay produced non-identical TP update geometry.
 
 routing:
   admissible_inputs:
     - CE
     - ISc
   admissible_outputs:
-    - IMR
+    - TP
   description: >
-    TPU applies validated updates to TP and routes the updated envelope to IMR.
+    TPU applies validated updates to TP(N) and produces TP(N+1). TPU does not route to
+    any other primitive; routing occurs after TP update via TR and CTP.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
     - runtime_dictionary
   reference_objects:
     - ce_reference
     - isc_reference
     - boundary_reference
     - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
-    - path_a_corrected_flow
-    - intake_correction_flow
+    - path_a_correction_flow
 
 psc_alignment:
   - TPU must satisfy PSC boundary object requirements.
-  - TPU must expose deterministic geometry for replay validation.
-  - TPU must enforce writer-authority boundaries.
-  - TPU must align with CE, ISc, and IMR primitives.
-  - TPU must enforce admissible TP update envelope constraints.
+  - TPU must expose deterministic update geometry for replay validation.
+  - TPU must align with CE, ISc, TR, and CTP.
+  - TPU must enforce admissible TP update constraints.
