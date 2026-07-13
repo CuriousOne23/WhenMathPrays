@@ -1,0 +1,158 @@
+primitive_name: STPX
+primitive_family: path_a
+reference_type: stpx_reference
+version: 1.0.0
+
+description: >
+  STPX (Signal Transition Primitive) is the Path-A primitive responsible for
+  stabilizing and normalizing structural-signature signals produced by SSG.
+  STPX performs no semantic interpretation, no routing computation, no truth
+  evaluation, and no correction. Its sole job is to convert structural-signature
+  envelopes into stable transition-ready envelopes for InB. STPX is strictly
+  pre-semantic and replay-stable.
+
+runtime_behavior:
+  mode: signal_transition_normalization
+  semantic_interpretation: none
+  cue_extraction: none
+  routing_computation: none
+  correction_application: none
+  truth_evaluation: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - ssg_envelope
+  optional:
+    - structural_signature_vector
+    - adjacency_vector
+    - routing_signature_vector
+
+outputs:
+  envelope_type: signal_transition_envelope
+  fields:
+    scalar_fields:
+      - transition_integrity
+      - transition_strength
+      - normalization_magnitude
+      - degradation_level
+    vector_fields:
+      - normalized_signature_vector
+      - normalized_adjacency_vector
+      - normalized_routing_signature_vector
+  status_flags:
+    - stpx_ready
+    - degraded
+
+invariants:
+  ssg_envelope_required: true
+  deterministic_normalization_required: true
+  no_semantic_fields: true
+  no_routing_computation: true
+  no_truth_evaluation: true
+  no_correction: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required SSG fields must be present; STPX may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All signature and adjacency vectors must match expected structural shapes.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_normalization_determinism:
+    description: >
+      normalized_signature_vector must be stable, canonical, and identical under replay.
+    enforced: true
+
+  C5_no_semantic_or_truth:
+    description: >
+      STPX must not modify semantic meaning, truth fields, routing metadata,
+      identity fields, or cue semantics.
+    enforced: true
+
+  C6_presemantic_boundary:
+    description: >
+      STPX must remain strictly pre-semantic; no semantic manifold access allowed.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      STPX must produce identical envelopes under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_ssg_envelope
+    - extract_signature_inputs
+    - normalize_signature_vector
+    - normalize_adjacency_vector
+    - normalize_routing_signature_vector
+    - compute_scalar_fields
+    - compute_vector_fields
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  stpx_ready:
+    conditions:
+      - transition_integrity >= 0.0
+      - transition_strength >= 0.0
+  degraded:
+    conditions:
+      - degradation_level > 0.2
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_ssg_envelope:
+    triggers:
+      - SSG envelope absent or invalid
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical transition geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from SSG
+
+routing:
+  admissible_inputs:
+    - SSG
+  admissible_outputs:
+    - InB
+  description: >
+    STPX emits signal-transition envelopes consumed by InB. STPX performs no
+    routing transitions.
+
+dependencies:
+  dictionaries:
+    - structure_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - ssg_reference
+    - inb_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_clean_flow
+
+psc_alignment:
+  - STPX satisfies PSC signal-transition object requirements.
+  - STPX exposes deterministic transition geometry for replay validation.
+  - STPX aligns with SSG and InB.
+  - STPX enforces admissible signal-transition envelope constraints.
