@@ -1,136 +1,109 @@
-reference_object_name: IIInB
-reference_object_class: boundary
-semantic_class: input_inference_repair_basin
+primitive: InB
+domain: boundary
 version: 1.0.0
 
-purpose:
-  short: >
-    Applies bounded, user‑sanctioned preferences shorthand expansions (USP rules) before
-    context extraction; no inference, no meaning construction.
-  long: >
-    IIInB is the Input Inference/Repair Basin defined in 20.101. It performs
-    deterministic, user‑approved shorthand repair on intake text before any
-    semantic, routing, or correction primitives operate. IIInB is strictly a
-    pre‑semantic basin: it expands shorthand, normalizes user‑approved forms,
-    and ensures that intake is canonicalized without interpretation, candidate
-    generation, or meaning construction. It is an optional stage in
-    input_semantic_repair, ordered InB → IIInB → RB.
+description: >
+  InB defines the initial boundary envelope for Path A. It establishes the
+  admissible region, initial field constraints, and the pre‑structural
+  geometry that all subsequent primitives must inherit. InB is the canonical
+  “starting state” for any Path A traversal.
 
 invariants:
-  - name: no_meaning_construction
-    description: >
-      IIInB must not perform interpretation, candidate generation, truth
-      evaluation, or meaning construction; only USP‑bounded shorthand repair.
-  - name: usp_rules_only
-    description: >
-      All repairs must be performed strictly according to user‑sanctioned USP
-      rules; no heuristic or model‑driven inference is allowed.
-  - name: envelope_must_be_closed
-    description: >
-      The intake envelope must be closed and syntactically valid before repair.
-  - name: admissible_intake_only
-    description: >
-      IIInB may only accept envelopes produced by InB; no correction or semantic
-      envelopes are admissible.
-  - name: replay_stability_required
-    description: >
-      Given identical intake and USP rules, IIInB must produce identical repaired
-      envelopes under replay.
-  - name: no_context_extraction
-    description: >
-      IIInB must not extract context; context extraction begins only after RB.
+  # The initial envelope must be well‑formed and closed.
+  - envelope_closed: true
 
-geometry_signature:
-  envelope_type: intake_repair_envelope
-  shape: bounded_polytope
-  dimensions:
-    - name: shorthand_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: canonicalization_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: residue_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-  description: >
-    IIInB geometry represents the magnitude of shorthand detected, the degree of
-    canonicalization applied, and any remaining presemantic residue. No semantic,
-    routing, or correction axes appear here.
+  # No structural geometry may be applied before InB is established.
+  - no_prestructure: true
 
-scalar_fields:
-  - name: shorthand_detected
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of user‑sanctioned shorthand detected in the intake.
-  - name: canonicalization_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Degree of USP‑rule canonicalization applied.
-  - name: residue_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Remaining presemantic residue after repair.
+  # The initial boundary must define a single connected region.
+  - connected_region: true
 
-vector_fields:
-  - name: intake_vector
-    type: vector
-    length: 3
-    description: >
-      Presemantic manifold coordinates of the repaired intake.
-  - name: shorthand_vector
-    type: vector
-    length: 3
-    description: >
-      Coordinates representing shorthand features detected and repaired.
+  # The initial boundary must not contain semantic or identity-conditioned fields.
+  - no_semantic_fields: true
+  - no_identity_fields: true
 
+  # The initial boundary must be stable under replay.
+  - replay_stability: true
+
+geometry:
+  # The envelope is defined as a minimal bounding region with no internal
+  # segmentation. Later primitives (SOB, SROB, CnOB, etc.) may refine it.
+  envelope_type: minimal
+  segmentation: none
+  admissible_shapes:
+    - convex
+    - weakly_concave
+  coordinate_system: local
+
+fields:
+  # InB may define initial scalar fields but no semantic or identity fields.
+  scalar_fields:
+    allowed: true
+    constraints:
+      - must_be_finite
+      - must_be_initializable
+  semantic_fields:
+    allowed: false
+  identity_fields:
+    allowed: false
+
+refinement_rules:
+  # InB may be refined only by SOB or IIInB.
+  allowed_refiners:
+    - SOB
+    - IIInB
+
+  # Refinement must preserve envelope closure and connectedness.
+  must_preserve:
+    - envelope_closed
+    - connected_region
+
+examples:
+  - name: simple_initial_boundary
+    envelope: convex_region
+    fields:
+      scalar:
+        temperature: 0
+        pressure: 1
+    notes: >
+      A minimal convex envelope with two scalar fields. No structural or
+      semantic geometry applied.
+
+  - name: weakly_concave_initial_boundary
+    envelope: weakly_concave_region
+    fields:
+      scalar:
+        density: 1.0
+    notes: >
+      A weakly concave envelope is admissible as long as the region remains
+      connected and closed.
+
+# ------------------------------------------------------------
+# Envelope Status (Path A Branching)
+# ------------------------------------------------------------
 envelope_status:
-  admissible_status:
-    - stable
-    - shorthand_present
-    - repair_ready
-  terminal_status:
-    - invalid_geometry
-    - inadmissible_source
-    - replay_violation
+  - valid_clean        # No structural anomalies detected
+  - valid_degraded     # Structural anomalies detected (requires correction)
 
+# ------------------------------------------------------------
+# Anomaly Flags (Structural Detection)
+# ------------------------------------------------------------
 anomaly_flags:
-  - name: usp_violation
-    description: >
-      A repair attempted outside USP rules.
-  - name: meaning_construction_attempt
-    description: >
-      IIInB attempted interpretation or candidate generation.
-  - name: geometry_violation
-    description: >
-      Envelope geometry does not satisfy IIInB invariants.
+  - malformed_token
+  - malformed_pos
+  - malformed_adjacency
+  - degraded_envelope
+  - degraded_clause
 
+# ------------------------------------------------------------
+# Routing Transitions
+# ------------------------------------------------------------
 routing:
-  admissible_inputs:
-    - InB
-  admissible_outputs:
-    - RB
-  description: >
-    IIInB performs USP‑bounded shorthand repair and routes the repaired intake
-    envelope to RB for context extraction. No semantic or correction primitives
-    may be invoked from IIInB.
+  valid_clean: PathA.clean
+  valid_degraded: PathA.corrected
 
+# ------------------------------------------------------------
+# External Dependencies
+# ------------------------------------------------------------
 dependencies:
-  dictionaries:
-    - meaning_dictionary
-    - runtime_dictionary
-  reference_objects:
-    - inb_reference
-    - boundary_reference
-    - structure_reference
-  flow_contracts:
-    - path_a_clean_flow
-
-psc_alignment:
-  - IIInB must satisfy PSC boundary object requirements.
-  - IIInB must expose deterministic geometry for replay validation.
-  - IIInB must align with InB → IIInB → RB ordering.
-  - IIInB must enforce admissible USP‑bounded shorthand repair constraints.
+  meaning_dictionary: ts_meaning_dictionary
