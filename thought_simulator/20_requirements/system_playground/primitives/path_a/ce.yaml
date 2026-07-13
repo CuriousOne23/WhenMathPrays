@@ -1,0 +1,154 @@
+primitive_name: CE
+primitive_family: path_a
+reference_type: ce_reference
+version: 1.0.0
+
+description: >
+  CE (Correction Evaluation) is a deterministic passthrough primitive in Path A.
+  CE performs no correction, no semantic interpretation, no routing, and no truth
+  evaluation. Its sole job is to validate the correction-neutral envelope (CnOB),
+  extract evaluation-ready fields, and produce the CE envelope consumed by
+  candidate_set{} and ISc. CE is strictly local, replay-safe, and side-effect-free.
+
+runtime_behavior:
+  mode: passthrough_evaluation
+  correction_application: none
+  semantic_interpretation: none
+  routing_computation: none
+  truth_evaluation: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - cnob_envelope
+  optional:
+    - semantic_vector
+    - routing_vector
+    - cue_vector
+
+outputs:
+  envelope_type: correction_evaluation_envelope
+  fields:
+    scalar_fields:
+      - semantic_stability
+      - routing_stability
+      - cue_coherence
+      - degradation_level
+      - neutrality_level
+    vector_fields:
+      - semantic_vector
+      - routing_vector
+      - cue_vector
+  status_flags:
+    - evaluation_ready
+    - degraded
+
+invariants:
+  envelope_must_be_closed: true
+  semantic_vector_required: true
+  routing_vector_required: true
+  cue_vector_required: true
+  neutrality_preserved: true
+  no_correction_allowed: true
+  no_semantic_modification: true
+  replay_stability_required: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required structural slots must be present; CE may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All slots must match expected structural shapes; CE performs no plausibility checks.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_neutrality_preservation:
+    description: >
+      neutrality_level must remain unchanged; CE may not alter neutrality.
+    enforced: true
+
+  C5_no_correction:
+    description: >
+      CE must not apply correction or modify correction-level fields.
+    enforced: true
+
+  C6_alignment_rules:
+    description: >
+      semantic_vector and routing_vector must remain aligned according to manifold rules.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      CE must produce identical envelopes under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_required_vectors
+    - check_closed_envelope
+    - verify_neutrality_preservation
+    - copy_scalar_fields_from_cnob
+    - copy_vector_fields_from_cnob
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  evaluation_ready:
+    conditions:
+      - neutrality_level == 1.0
+      - semantic_stability >= 0.0
+      - routing_stability >= 0.0
+  degraded:
+    conditions:
+      - degradation_level > 0.2
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical envelopes
+  inadmissible_source:
+    triggers:
+      - envelope not from CnOB
+
+routing:
+  admissible_inputs:
+    - CnOB
+  admissible_outputs:
+    - candidate_set
+    - ISc
+  description: >
+    CE validates the correction-neutral envelope and produces evaluation-ready fields
+    consumed by candidate_set{} and ISc. CE performs no routing transitions.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - cnob_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+
+psc_alignment:
+  - CE satisfies PSC passthrough-object requirements.
+  - CE exposes deterministic geometry for replay validation.
+  - CE aligns with CnOB, candidate_set{}, and ISc.
+  - CE enforces admissible correction-evaluation envelope constraints.
