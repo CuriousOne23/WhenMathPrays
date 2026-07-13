@@ -1,0 +1,135 @@
+reference_object_name: SOB
+reference_object_class: structure
+semantic_class: semantic_object_boundary
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the static geometry, invariants, admissible envelopes, and routing
+    constraints for the Semantic Object Boundary (SOB) in Path A.
+  long: >
+    SOB is the structural semantic boundary object that stabilizes semantic meaning
+    before routing, scoring, or identity primitives operate. It provides deterministic
+    geometry, invariant sets, and field definitions required for PSC replay and
+    semantic manifold consistency.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      SOB must operate only on closed envelopes produced by upstream primitives.
+  - name: semantic_vector_required
+    description: >
+      semantic_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: cue_vector_required
+    description: >
+      cue_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: semantic_stability_consistency
+    description: >
+      semantic_stability must be consistent with upstream primitives; SOB may not alter it.
+  - name: replay_stability_required
+    description: >
+      SOB must produce identical semantic boundary geometry under replay for identical inputs.
+  - name: semantic_manifold_consistency
+    description: >
+      SOB must preserve semantic manifold structure and may not distort semantic axes.
+
+geometry_signature:
+  envelope_type: semantic_boundary_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: semantic_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: stability_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    SOB geometry is a bounded polytope representing semantic stability, cue coherence,
+    and boundary stability. This geometry determines whether semantic meaning is ready
+    for routing, scoring, or identity transitions.
+
+scalar_fields:
+  - name: semantic_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of semantic meaning at the semantic boundary.
+  - name: cue_coherence
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Coherence of cue profile at the semantic boundary.
+  - name: boundary_stability
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Stability of the semantic boundary envelope.
+
+vector_fields:
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic manifold coordinates at the semantic boundary.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Cue manifold coordinates at the semantic boundary.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - degraded
+    - semantic_ready
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy SOB invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical semantic boundary geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from a valid upstream semantic primitive.
+
+routing:
+  admissible_inputs:
+    - InB
+    - IIInB
+    - IE
+  admissible_outputs:
+    - ISc
+    - RTU
+    - RB
+    - IdOB
+  description: >
+    SOB stabilizes semantic meaning and routes the semantic boundary envelope into
+    scoring, routing, or identity primitives depending on semantic stability and cue coherence.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - boundary_reference
+    - semantic_reference
+    - structure_reference
+    - routing_reference
+    - identity_reference
+  flow_contracts:
+    - path_a_clean_flow
+    - path_a_corrected_flow
+
+psc_alignment:
+  - SOB must satisfy PSC structure object requirements.
+  - SOB must expose deterministic geometry for replay validation.
+  - SOB must align with scoring, routing, and identity primitives.
+  - SOB must enforce admissible semantic boundary envelope constraints.
