@@ -1,0 +1,159 @@
+primitive_name: DCB
+primitive_family: path_a
+reference_type: dcb_reference
+version: 1.0.0
+
+description: >
+  DCB (Directional Conversation Basin) is the Path-A primitive responsible for
+  computing TP position, direction vector, and curvature over the conversational
+  trajectory. DCB performs no semantic analysis, no TP modification, no routing
+  decisions, and no correction. Its sole job is to emit deterministic
+  directional-change events and curvature signals consumed by TR to avoid
+  misrouting during stance shifts, pivots, or reversals.
+
+runtime_behavior:
+  mode: trajectory_geometry_computation
+  semantic_interpretation: none
+  routing_computation: none
+  correction_application: none
+  truth_evaluation: none
+  tp_write: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - ob_envelope
+  optional:
+    - tp_position_vector
+    - tp_direction_vector
+    - tp_history_vector
+
+outputs:
+  envelope_type: directional_conversation_basin_envelope
+  fields:
+    scalar_fields:
+      - curvature_magnitude
+      - curvature_spike
+      - trajectory_stability
+      - directional_change_strength
+      - degradation_level
+    vector_fields:
+      - tp_position_vector
+      - tp_direction_vector
+      - curvature_vector
+      - directional_change_vector
+  status_flags:
+    - dcb_ready
+    - curvature_event
+
+invariants:
+  ob_envelope_required: true
+  deterministic_geometry_required: true
+  no_semantic_analysis: true
+  no_tp_write: true
+  no_routing_decision: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required OB-derived trajectory fields must be present; DCB may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All position, direction, and curvature vectors must match expected shapes.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_curvature_consistency:
+    description: >
+      curvature_magnitude and curvature_spike must reflect deterministic trajectory
+      geometry and be identical under replay.
+    enforced: true
+
+  C5_no_semantic_or_tp_write:
+    description: >
+      DCB must not modify semantic meaning, TP contents, routing metadata, or identity fields.
+    enforced: true
+
+  C6_directional_event_rules:
+    description: >
+      directional_change_strength must increase for stance shifts, pivots, and reversals.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      DCB must produce identical directional-conversation geometry under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_ob_envelope
+    - extract_trajectory_inputs
+    - compute_tp_position_vector
+    - compute_tp_direction_vector
+    - compute_curvature_vector
+    - detect_directional_change_events
+    - compute_scalar_fields
+    - compute_vector_fields
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  dcb_ready:
+    conditions:
+      - trajectory_stability >= 0.0
+  curvature_event:
+    conditions:
+      - curvature_spike > 0.0
+      - directional_change_strength > 0.0
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_ob_envelope:
+    triggers:
+      - OB envelope absent or invalid
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical trajectory geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from OB
+
+routing:
+  admissible_inputs:
+    - OB
+  admissible_outputs:
+    - TR
+  description: >
+    DCB emits directional-change events and curvature signals consumed by TR.
+    DCB performs no routing transitions and no TP writes.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ob_reference
+    - tr_reference
+    - boundary_reference
+    - routing_reference
+  flow_contracts:
+    - path_a_routing_flow
+
+psc_alignment:
+  - DCB satisfies PSC trajectory-geometry object requirements.
+  - DCB exposes deterministic curvature and directional-change geometry for replay validation.
+  - DCB aligns with OB and TR.
+  - DCB enforces admissible directional-conversation envelope constraints.
