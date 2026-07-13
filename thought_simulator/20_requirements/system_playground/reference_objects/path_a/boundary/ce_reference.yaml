@@ -1,0 +1,178 @@
+reference_object_name: CE
+reference_object_class: boundary
+semantic_class: correction_evaluation
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the static geometry, invariants, admissible envelopes, and routing
+    constraints for the Correction Evaluation (CE) boundary object in Path A.
+  long: >
+    CE evaluates the correction-expanded envelope produced by CEx. It determines
+    whether correction is sufficient, whether additional expansion is required,
+    or whether the envelope is ready for scoring by ISc. CE provides deterministic
+    geometry, invariant sets, and field definitions required for PSC replay and
+    correction routing.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      CE must evaluate only closed envelopes produced by CEx.
+  - name: semantic_vector_required
+    description: >
+      semantic_vector must be present and valid; missing vectors invalidate evaluation.
+  - name: routing_vector_required
+    description: >
+      routing_vector must be present and valid; missing vectors invalidate evaluation.
+  - name: cue_vector_required
+    description: >
+      cue_vector must be present and valid; missing vectors invalidate evaluation.
+  - name: correction_level_consistency
+    description: >
+      correction_level must be consistent with IE and CEx outputs; CE may not reduce it.
+  - name: expansion_level_consistency
+    description: >
+      expansion_level must be consistent with CEx; CE may not increase it.
+  - name: replay_stability_required
+    description: >
+      CE must produce identical evaluation geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      CE may only accept envelopes produced by CEx.
+
+geometry_signature:
+  envelope_type: correction_evaluation_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: semantic_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: routing_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: degradation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: correction_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: expansion_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: evaluation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    CE geometry is a bounded polytope representing semantic stability, routing stability,
+    cue coherence, degradation magnitude, correction magnitude, expansion magnitude,
+    and evaluation magnitude. This geometry determines whether the envelope is ready
+    for scoring by ISc or requires additional correction expansion.
+
+scalar_fields:
+  - name: semantic_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of semantic meaning after correction evaluation.
+  - name: routing_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of routing signals after correction evaluation.
+  - name: cue_coherence
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Coherence of cue profile after correction evaluation.
+  - name: degradation_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of degradation detected; must not increase relative to IE or CEx.
+  - name: correction_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of correction applied by IE/CEx; CE may not reduce it.
+  - name: expansion_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of expansion applied by CEx; CE may not increase it.
+  - name: evaluation_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of evaluation applied by CE.
+
+vector_fields:
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic manifold coordinates after correction evaluation.
+  - name: routing_vector
+    type: vector
+    length: 3
+    description: >
+      Routing manifold coordinates after correction evaluation.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Cue manifold coordinates after correction evaluation.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - degraded
+    - correction_ready
+    - expansion_ready
+    - evaluation_ready
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy CE invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical evaluation geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from CEx.
+
+routing:
+  admissible_inputs:
+    - CEx
+  admissible_outputs:
+    - ISc
+    - CEx
+  description: >
+    CE evaluates the correction-expanded envelope and either routes it to ISc for scoring
+    or back to CEx for additional correction expansion.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - cex_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_corrected_flow
+    - intake_correction_flow
+
+psc_alignment:
+  - CE must satisfy PSC boundary object requirements.
+  - CE must expose deterministic geometry for replay validation.
+  - CE must align with CEx and ISc correction primitives.
+  - CE must enforce admissible correction evaluation envelope constraints.
