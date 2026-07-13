@@ -1,0 +1,160 @@
+primitive_name: IdOB
+primitive_family: path_a
+reference_type: idob_reference
+version: 1.0.0
+
+description: >
+  IdOB (Identity Object Basin) is the Path-A primitive responsible for
+  identity-conditioned meaning refinement. IdOB consumes the routed TP snapshot
+  produced by RB→RTU, applies basin-local identity rules, and emits deterministic
+  TPU.idob_update. IdOB performs no routing, no truth evaluation, no correction,
+  and no semantic normalization. It may run multiple times in the RB→RTU→IdOB
+  cycle until identity-conditioned meaning stabilizes.
+
+runtime_behavior:
+  mode: identity_conditioned_refinement
+  semantic_interpretation: basin_local_only
+  correction_application: none
+  routing_computation: none
+  truth_evaluation: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - routed_tp_snapshot
+  optional:
+    - identity_vector
+    - semantic_adjacent_vector
+    - refinement_context
+
+outputs:
+  envelope_type: identity_refinement_envelope
+  fields:
+    scalar_fields:
+      - identity_activation
+      - refinement_magnitude
+      - basin_strength
+      - semantic_adjacent_strength
+    vector_fields:
+      - identity_vector
+      - refinement_vector
+      - semantic_adjacent_vector
+  tp_update_fields:
+    - idob_update
+  status_flags:
+    - refinement_ready
+    - basin_active
+
+invariants:
+  routed_tp_required: true
+  identity_pathway_required: true
+  deterministic_refinement: true
+  no_structural_or_routing_write: true
+  no_truth_evaluation: true
+  basin_local_semantics_only: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required routed TP fields must be present; IdOB may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All identity and semantic-adjacent fields must match expected shapes.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_identity_pathway:
+    description: >
+      RB/TR must have selected an identity basin; IdOB may not run otherwise.
+    enforced: true
+
+  C5_basin_local_semantics:
+    description: >
+      IdOB must apply only basin-local identity rules; no global semantic normalization.
+    enforced: true
+
+  C6_no_routing_or_truth:
+    description: >
+      IdOB must not modify routing metadata, truth fields, ΔH%, or TR-input.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      IdOB must produce identical TPU.idob_update under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_routed_tp
+    - verify_identity_pathway
+    - extract_identity_context
+    - apply_basin_local_rules
+    - compute_scalar_fields
+    - compute_vector_fields
+    - generate_idob_update
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  refinement_ready:
+    conditions:
+      - identity_activation >= 0.0
+      - refinement_magnitude >= 0.0
+  basin_active:
+    conditions:
+      - basin_strength > 0.0
+
+anomaly_flags:
+  missing_identity_pathway:
+    triggers:
+      - RB/TR did not select an identity basin
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical refinement geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from RB→RTU
+
+routing:
+  admissible_inputs:
+    - RB
+    - RTU
+  admissible_outputs:
+    - TPU
+  description: >
+    IdOB consumes routed TP snapshots and emits TPU.idob_update. IdOB performs no
+    routing transitions; RB and RTU govern routing.
+
+dependencies:
+  dictionaries:
+    - identity_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - rb_reference
+    - rtu_reference
+    - boundary_reference
+    - identity_reference
+    - semantic_reference
+  flow_contracts:
+    - path_a_identity_flow
+
+psc_alignment:
+  - IdOB satisfies PSC identity-refinement object requirements.
+  - IdOB exposes deterministic identity-conditioned geometry for replay validation.
+  - IdOB aligns with RB, RTU-prm, and TPU update rules.
+  - IdOB enforces admissible identity-refinement envelope constraints.
