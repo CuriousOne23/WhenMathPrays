@@ -1,105 +1,110 @@
 reference_object_name: STPX
-reference_object_class: semantic
-semantic_class: semantic_topology_extractor
+reference_object_class: structure
+semantic_class: structured_token_pattern_extractor
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the semantic topology geometry, invariants, admissible envelopes, and
-    routing constraints for the Semantic Topology Extractor (STPX) in Path A.
+    Defines the geometry, invariants, admissible envelopes, and routing constraints
+    for the Structured Token & Pattern Extractor (STPX) in Path A.
   long: >
-    STPX extracts stable semantic topology from the semantic manifold (SSG). It
-    identifies topological invariants, semantic curvature, cue‑aligned topology,
-    and routing‑aligned topology. STPX provides deterministic geometry, invariant
-    sets, and field definitions required for PSC replay and semantic‑topology
-    stability before routing and scoring primitives operate.
+    STPX extracts deterministic lexical, structural, and constraint cues from cleaned
+    structural geometry and canonical tokens. It identifies surface markers (contrastive,
+    temporal, uncertainty tokens), structural boundaries (clauses, conjunction types,
+    punctuation patterns), and constraint flags (temporal progression, causal tension,
+    referential stability). STPX emits a bounded cue_envelope consumed by RBU, ISc,
+    RB, and IdOB. STPX performs no semantic interpretation and does not modify meaning
+    geometry.
 
 invariants:
-  - name: semantic_vector_required
+  - name: envelope_must_be_closed
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate topology extraction.
-  - name: cue_vector_required
+      STPX must operate only on closed envelopes produced by SSG.
+  - name: canonical_tokens_required
     description: >
-      cue_vector must be present and valid; missing vectors invalidate topology extraction.
-  - name: topology_axes_consistent
+      canonical_tokens must be present and valid; missing tokens invalidate cue extraction.
+  - name: structural_geometry_required
     description: >
-      All topology axes must remain consistent with the semantic manifold; STPX may
-      not distort semantic geometry.
-  - name: curvature_consistency
+      cleaned_structural_geometry must be present and valid.
+  - name: deterministic_cue_extraction
     description: >
-      semantic_curvature must be consistent with SSG manifold curvature.
+      cue_envelope must be deterministically derived from structural geometry + canonical tokens.
+  - name: no_semantic_interpretation
+    description: >
+      STPX must not perform semantic interpretation, semantic plausibility, or meaning refinement.
   - name: replay_stability_required
     description: >
-      STPX must produce identical topology geometry under replay for identical inputs.
-  - name: admissible_source_only
-    description: >
-      STPX may only accept envelopes produced by SSG.
+      STPX must produce identical cue_envelopes under replay for identical inputs.
 
 geometry_signature:
-  envelope_type: semantic_topology_envelope
-  shape: semantic_topology_manifold
+  envelope_type: cue_envelope
+  shape: bounded_polytope
   dimensions:
-    - name: topology_axis
+    - name: lexical_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: curvature_axis
+      bounds: [0.0, 1.0]
+    - name: structural_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_alignment_axis
+      bounds: [0.0, 1.0]
+    - name: constraint_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_alignment_axis
+      bounds: [0.0, 1.0]
+    - name: boundary_axis
       type: scalar
-      bounds: [-1.0, 1.0]
+      bounds: [0.0, 1.0]
   description: >
-    STPX geometry defines the semantic topology manifold used for routing and scoring.
-    It provides axes for semantic topology, curvature, cue alignment, and routing
-    alignment, forming the stable semantic topology envelope.
+    STPX geometry represents lexical cue strength, structural boundary magnitude,
+    constraint flag activation, and clause/conjunction boundary stability. No semantic
+    manifold axes appear here.
 
 scalar_fields:
-  - name: semantic_topology_stability
+  - name: lexical_cue_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Stability of semantic topology extracted from the semantic manifold.
-  - name: semantic_curvature
+      Magnitude of lexical cues (contrastive, temporal, uncertainty tokens).
+  - name: structural_boundary_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Curvature of semantic meaning within the manifold.
-  - name: cue_alignment
+      Strength of structural boundaries (clauses, conjunction types, punctuation patterns).
+  - name: constraint_flag_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Alignment of semantic topology with cue manifold.
-  - name: routing_alignment
+      Magnitude of constraint cues (temporal progression, causal tension, referential stability).
+  - name: cue_entropy
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Alignment of semantic topology with routing manifold.
+      Entropy of extracted cue distribution.
 
 vector_fields:
-  - name: semantic_vector
+  - name: lexical_cue_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates used for topology extraction.
-  - name: cue_vector
+      Coordinates representing lexical cue activation.
+  - name: structural_cue_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates used for topology extraction.
-  - name: topology_vector
+      Coordinates representing structural boundary cues.
+  - name: constraint_cue_vector
     type: vector
     length: 3
     description: >
-      Extracted semantic topology coordinates.
+      Coordinates representing constraint flags.
+  - name: cue_envelope_vector
+    type: vector
+    length: 9
+    description: >
+      Combined cue vector (lexical + structural + constraint) used by RBU and scoring primitives.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - topology_ready
+    - cue_ready
+    - degraded_structure
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -110,40 +115,37 @@ anomaly_flags:
     description: Envelope geometry does not satisfy STPX invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_structural_geometry
+    description: Required structural geometry is absent or invalid.
   - name: replay_inconsistency
-    description: Replay produced non-identical topology geometry.
-  - name: inadmissible_source
-    description: Envelope did not originate from SSG.
+    description: Replay produced non-identical cue_envelopes.
 
 routing:
   admissible_inputs:
     - SSG
   admissible_outputs:
-    - SOB
-    - SROB
-    - CnOB
+    - RBU
     - ISc
+    - RB
+    - IdOB
   description: >
-    STPX extracts semantic topology and routes the topology envelope into semantic,
-    routing, correction-neutral, or scoring primitives depending on topology stability
-    and cue/routing alignment.
+    STPX emits cue_envelopes consumed by RBU, ISc, RB, and IdOB. It does not route
+    into semantic manifold formation or meaning refinement.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
+    - structure_dictionary
     - runtime_dictionary
   reference_objects:
     - ssg_reference
     - boundary_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
     - path_a_clean_flow
     - path_a_corrected_flow
 
 psc_alignment:
-  - STPX must satisfy PSC semantic object requirements.
-  - STPX must expose deterministic geometry for replay validation.
-  - STPX must align with semantic, routing, correction-neutral, and scoring primitives.
-  - STPX must enforce admissible semantic topology envelope constraints.
+  - STPX must satisfy PSC structure object requirements.
+  - STPX must expose deterministic cue geometry for replay validation.
+  - STPX must align with SSG, RBU, RB, ISc, and IdOB.
+  - STPX must enforce admissible cue_envelope constraints.
