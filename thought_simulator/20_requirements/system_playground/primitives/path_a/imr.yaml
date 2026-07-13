@@ -1,0 +1,176 @@
+primitive_name: IMR
+primitive_family: path_a
+reference_type: imr_reference
+version: 1.0.0
+
+description: >
+  IMR (Inconsistency / Mismatch Record) is the Path-A governance primitive
+  responsible for detecting deterministic mismatches between routed TP state,
+  OB residue, TR metadata, and identity-conditioned fields. IMR performs no
+  correction, no semantic interpretation, no routing, and no TP writes. Its
+  sole job is to classify mismatches, emit evaluator_signal and
+  correction_trigger, and provide TS with replay-stable governance metadata.
+
+runtime_behavior:
+  mode: mismatch_classification
+  semantic_interpretation: none
+  correction_application: none
+  routing_computation: none
+  tp_write: none
+  truth_evaluation: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - routed_tp_snapshot
+    - ob_residue_vector
+    - tr_metadata_vector
+  optional:
+    - identity_vector
+    - cue_vector
+    - semantic_vector
+
+outputs:
+  envelope_type: imr_governance_envelope
+  fields:
+    scalar_fields:
+      - mismatch_magnitude
+      - mismatch_class
+      - evaluator_signal_strength
+      - correction_trigger_strength
+    vector_fields:
+      - mismatch_vector
+      - evaluator_signal_vector
+      - correction_trigger_vector
+  status_flags:
+    - mismatch_detected
+    - stable
+    - correction_triggered
+
+invariants:
+  routed_tp_required: true
+  ob_residue_required: true
+  tr_metadata_required: true
+  deterministic_classification: true
+  no_semantic_or_routing_write: true
+  no_correction_allowed: true
+  no_global_state_access: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required routed TP, OB residue, and TR metadata fields must be present;
+      IMR may not infer or repair missing slots.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All fields must match expected structural shapes; IMR performs no plausibility checks.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_mismatch_monotonicity:
+    description: >
+      mismatch_magnitude must reflect deterministic comparison rules and may not
+      decrease when upstream discrepancies increase.
+    enforced: true
+
+  C5_no_semantic_or_routing:
+    description: >
+      IMR must not modify semantic meaning, routing metadata, identity fields,
+      or cue semantics.
+    enforced: true
+
+  C6_governance_locality:
+    description: >
+      IMR must apply only local mismatch rules; no global inference or cross-TP reasoning.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      IMR must produce identical evaluator_signal and correction_trigger under
+      replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_routed_tp
+    - validate_ob_residue
+    - validate_tr_metadata
+    - compute_mismatch_vector
+    - classify_mismatch
+    - compute_scalar_fields
+    - compute_vector_fields
+    - generate_evaluator_signal
+    - generate_correction_trigger
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  mismatch_detected:
+    conditions:
+      - mismatch_magnitude > 0.0
+  stable:
+    conditions:
+      - mismatch_magnitude == 0.0
+  correction_triggered:
+    conditions:
+      - correction_trigger_strength > 0.0
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_required_inputs:
+    triggers:
+      - routed TP, OB residue, or TR metadata missing
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical mismatch classification
+  inadmissible_source:
+    triggers:
+      - envelope not from routed TP + OB + TR
+
+routing:
+  admissible_inputs:
+    - RB
+    - RTU
+    - OB
+    - TR
+  admissible_outputs:
+    - TS
+    - CnOB
+  description: >
+    IMR emits evaluator_signal and correction_trigger for TS scheduling and
+    correction flow. IMR performs no routing transitions and no TP writes.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - rb_reference
+    - rtu_reference
+    - ob_reference
+    - tr_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+  flow_contracts:
+    - path_a_governance_flow
+    - path_a_corrected_flow
+
+psc_alignment:
+  - IMR satisfies PSC governance-object requirements.
+  - IMR exposes deterministic mismatch geometry for replay validation.
+  - IMR aligns with TS, CnOB, OB, and TR.
+  - IMR enforces admissible mismatch-classification envelope constraints.
