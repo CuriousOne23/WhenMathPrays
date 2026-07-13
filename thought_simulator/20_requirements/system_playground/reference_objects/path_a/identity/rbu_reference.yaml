@@ -1,115 +1,110 @@
 reference_object_name: RBU
 reference_object_class: identity
-semantic_class: routing_boundary_update
+semantic_class: routing_buffer_update_primitive
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the identity‑class geometry, invariants, admissible envelopes, and routing
-    constraints for the Routing Boundary Update (RBU) object in Path A.
+    Defines the geometry, invariants, admissible envelopes, and TP‑write constraints
+    for the Routing Buffer Update Primitive (RBU‑prm) in Path A.
   long: >
-    RBU is the identity‑class object that finalizes routing identity after IMR and SROB.
-    It stabilizes routing identity, enforces routing‑identity invariants, aligns routing
-    vectors with identity manifold geometry, and produces the identity‑ready envelope
-    consumed by IdOB. RBU provides deterministic geometry, invariant sets, and field
-    definitions required for PSC replay and routing‑identity stability.
+    RBU‑prm enriches the TP with interpretive metadata required for RB‑prm to perform
+    correct routing. RBU‑prm deterministically writes culture, subculture, identity,
+    register, and stance‑relevant cues into the TP snapshot before routing occurs.
+    RBU‑prm performs no routing, scoring, semantic evaluation, or identity formation.
+    It prepares TP(N) so RB‑prm can compute routing deltas correctly.
 
 invariants:
   - name: envelope_must_be_closed
     description: >
-      RBU must operate only on closed envelopes produced by IMR or SROB.
-  - name: routing_vector_required
+      RBU‑prm must operate only on closed envelopes produced by STPX or upstream
+      structural cue extractors.
+  - name: interpretive_metadata_required
     description: >
-      routing_vector must be present and valid; missing vectors invalidate identity update.
-  - name: semantic_vector_required
+      culture_vector, subculture_vector, register_vector, and stance_vector must be
+      present and valid; missing vectors invalidate the envelope.
+  - name: no_routing_computation
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate identity update.
-  - name: cue_vector_required
+      RBU‑prm must not compute routing deltas, routing lanes, or routing manifold transitions.
+  - name: no_semantic_evaluation
     description: >
-      cue_vector must be present and valid; missing vectors invalidate identity update.
-  - name: routing_identity_alignment
+      RBU‑prm must not evaluate semantic meaning, truth, stance, or plausibility.
+  - name: deterministic_tp_write
     description: >
-      routing_vector must align with identity manifold geometry; RBU may not distort identity axes.
-  - name: identity_stability_consistency
+      Given identical interpretive metadata envelopes, RBU‑prm must produce identical
+      TP(N+1) under replay.
+  - name: path_a_only
     description: >
-      identity_stability must be consistent with upstream routing boundaries.
-  - name: replay_stability_required
-    description: >
-      RBU must produce identical identity geometry under replay for identical inputs.
-  - name: admissible_source_only
-    description: >
-      RBU may only accept envelopes produced by IMR or SROB.
+      RBU‑prm must not be invoked by Path‑B; Path‑B is meaning‑read‑only.
 
 geometry_signature:
-  envelope_type: routing_identity_envelope
-  shape: identity_manifold
+  envelope_type: interpretive_metadata_envelope
+  shape: bounded_polytope
   dimensions:
-    - name: identity_axis
+    - name: culture_axis
       type: scalar
       bounds: [0.0, 1.0]
-    - name: routing_axis
+    - name: subculture_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: semantic_axis
+      bounds: [0.0, 1.0]
+    - name: register_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
+      bounds: [0.0, 1.0]
+    - name: stance_axis
       type: scalar
-      bounds: [-1.0, 1.0]
+      bounds: [0.0, 1.0]
   description: >
-    RBU geometry defines the routing‑identity manifold used by IdOB. It provides axes
-    for identity magnitude, routing stability, semantic stability, and cue coherence,
-    forming the identity‑ready envelope.
+    RBU‑prm geometry represents interpretive metadata magnitude and stability. No
+    routing, semantic, or identity manifold axes appear here.
 
 scalar_fields:
-  - name: identity_stability
+  - name: culture_strength
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Stability of routing identity at the identity boundary.
-  - name: routing_stability
+      Magnitude of cultural metadata extracted from upstream cues.
+  - name: subculture_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Stability of routing meaning at the identity boundary.
-  - name: semantic_stability
+      Magnitude of subculture metadata.
+  - name: register_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Stability of semantic meaning at the identity boundary.
-  - name: cue_coherence
+      Magnitude of register metadata.
+  - name: stance_strength
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Coherence of cue profile at the identity boundary.
+      Magnitude of stance‑relevant cues.
 
 vector_fields:
-  - name: routing_vector
+  - name: culture_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates at the identity boundary.
-  - name: semantic_vector
+      Culture manifold coordinates written into TP.
+  - name: subculture_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates at the identity boundary.
-  - name: cue_vector
+      Subculture manifold coordinates written into TP.
+  - name: register_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates at the identity boundary.
-  - name: identity_vector
+      Register manifold coordinates written into TP.
+  - name: stance_vector
     type: vector
     length: 3
     description: >
-      Identity manifold coordinates produced by RBU.
+      Stance‑relevant cue coordinates written into TP.
 
 envelope_status:
   admissible_status:
-    - stable
+    - metadata_ready
     - degraded
-    - identity_ready
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -117,41 +112,38 @@ envelope_status:
 
 anomaly_flags:
   - name: geometry_violation
-    description: Envelope geometry does not satisfy RBU invariants.
+    description: Envelope geometry does not satisfy RBU‑prm invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_metadata
+    description: Required interpretive metadata vectors are absent or invalid.
   - name: replay_inconsistency
-    description: Replay produced non-identical identity geometry.
-  - name: inadmissible_source
-    description: Envelope did not originate from IMR or SROB.
+    description: Replay produced non-identical TP writes.
 
 routing:
   admissible_inputs:
-    - IMR
-    - SROB
+    - STPX
   admissible_outputs:
-    - IdOB
+    - TP
   description: >
-    RBU stabilizes routing identity and routes the identity‑ready envelope into IdOB
-    for final identity formation.
+    RBU‑prm writes interpretive metadata into TP(N), producing TP(N+1). Routing occurs
+    only after RBU‑prm via RB‑prm.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
+    - identity_dictionary
     - runtime_dictionary
   reference_objects:
-    - imr_reference
-    - srob_reference
+    - stpx_reference
+    - boundary_reference
     - identity_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
-    - path_a_corrected_flow
-    - path_a_identity_flow
+    - path_a_clean_flow
+    - path_a_routing_enrichment_flow
 
 psc_alignment:
-  - RBU must satisfy PSC identity object requirements.
-  - RBU must expose deterministic geometry for replay validation.
-  - RBU must align with identity primitives (IdOB).
-  - RBU must enforce admissible routing‑identity envelope constraints.
+  - RBU‑prm must satisfy PSC identity‑class object requirements.
+  - RBU‑prm must expose deterministic TP‑write geometry for replay validation.
+  - RBU‑prm must align with RB‑prm and TP update rules.
+  - RBU‑prm must enforce admissible interpretive metadata envelope constraints.
