@@ -1,0 +1,157 @@
+reference_object_name: RBU
+reference_object_class: identity
+semantic_class: routing_boundary_update
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the identity‑class geometry, invariants, admissible envelopes, and routing
+    constraints for the Routing Boundary Update (RBU) object in Path A.
+  long: >
+    RBU is the identity‑class object that finalizes routing identity after IMR and SROB.
+    It stabilizes routing identity, enforces routing‑identity invariants, aligns routing
+    vectors with identity manifold geometry, and produces the identity‑ready envelope
+    consumed by IdOB. RBU provides deterministic geometry, invariant sets, and field
+    definitions required for PSC replay and routing‑identity stability.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      RBU must operate only on closed envelopes produced by IMR or SROB.
+  - name: routing_vector_required
+    description: >
+      routing_vector must be present and valid; missing vectors invalidate identity update.
+  - name: semantic_vector_required
+    description: >
+      semantic_vector must be present and valid; missing vectors invalidate identity update.
+  - name: cue_vector_required
+    description: >
+      cue_vector must be present and valid; missing vectors invalidate identity update.
+  - name: routing_identity_alignment
+    description: >
+      routing_vector must align with identity manifold geometry; RBU may not distort identity axes.
+  - name: identity_stability_consistency
+    description: >
+      identity_stability must be consistent with upstream routing boundaries.
+  - name: replay_stability_required
+    description: >
+      RBU must produce identical identity geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      RBU may only accept envelopes produced by IMR or SROB.
+
+geometry_signature:
+  envelope_type: routing_identity_envelope
+  shape: identity_manifold
+  dimensions:
+    - name: identity_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: routing_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: semantic_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+  description: >
+    RBU geometry defines the routing‑identity manifold used by IdOB. It provides axes
+    for identity magnitude, routing stability, semantic stability, and cue coherence,
+    forming the identity‑ready envelope.
+
+scalar_fields:
+  - name: identity_stability
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Stability of routing identity at the identity boundary.
+  - name: routing_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of routing meaning at the identity boundary.
+  - name: semantic_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of semantic meaning at the identity boundary.
+  - name: cue_coherence
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Coherence of cue profile at the identity boundary.
+
+vector_fields:
+  - name: routing_vector
+    type: vector
+    length: 3
+    description: >
+      Routing manifold coordinates at the identity boundary.
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic manifold coordinates at the identity boundary.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Cue manifold coordinates at the identity boundary.
+  - name: identity_vector
+    type: vector
+    length: 3
+    description: >
+      Identity manifold coordinates produced by RBU.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - degraded
+    - identity_ready
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy RBU invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical identity geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from IMR or SROB.
+
+routing:
+  admissible_inputs:
+    - IMR
+    - SROB
+  admissible_outputs:
+    - IdOB
+  description: >
+    RBU stabilizes routing identity and routes the identity‑ready envelope into IdOB
+    for final identity formation.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - imr_reference
+    - srob_reference
+    - identity_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_corrected_flow
+    - path_a_identity_flow
+
+psc_alignment:
+  - RBU must satisfy PSC identity object requirements.
+  - RBU must expose deterministic geometry for replay validation.
+  - RBU must align with identity primitives (IdOB).
+  - RBU must enforce admissible routing‑identity envelope constraints.
