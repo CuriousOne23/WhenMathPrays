@@ -1,126 +1,95 @@
 reference_object_name: ISc
 reference_object_class: structure
-semantic_class: intake_score
+semantic_class: inference_score
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, scoring fields, and routing constraints
-    for the Intake Score (ISc) reference object used in Path A.
+    Defines the structural scoring geometry, invariants, and admissible envelopes
+    for the Inference Scorer (ISc) used in Path A.
   long: >
-    ISc evaluates semantic stability, routing stability, cue coherence, degradation level,
-    and correction level to determine whether Path A continues, loops, or transitions.
-    It provides deterministic geometry, invariant sets, and field definitions required
-    for PSC replay and routing decisions.
+    ISc applies truth_hypotheses-prc over candidate_set{} using CE output to produce
+    deterministic scoring fields (score_set, score_conflict, score_reason_code)
+    consumed by TPU. ISc is strictly a local scoring mechanism: it does not perform
+    semantic generation, meaning construction, truth evaluation, or global inference.
+    It provides deterministic geometry and PSC-aligned structural fields required
+    for TPU merge and downstream routing.
 
 invariants:
-  - name: envelope_must_be_closed
+  - name: closed_envelope_required
     description: >
-      ISc must evaluate only closed envelopes produced by upstream primitives.
-  - name: semantic_vector_required
+      ISc may only evaluate closed envelopes produced by CE and candidate_set{}.
+  - name: candidate_set_required
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate scoring.
-  - name: routing_vector_required
+      candidate_set{} must be present; missing or null candidate sets invalidate scoring.
+  - name: ce_output_required
     description: >
-      routing_vector must be present and valid; missing vectors invalidate scoring.
-  - name: cue_vector_required
+      CE output must be present; missing CE fields invalidate scoring.
+  - name: no_meaning_construction
     description: >
-      cue_vector must be present and valid; missing vectors invalidate scoring.
-  - name: degradation_level_consistency
+      ISc must not construct meaning, generate semantics, or evaluate truth globally.
+  - name: no_global_state_access
     description: >
-      degradation_level must not increase relative to IE or IIInB.
-  - name: correction_level_consistency
-    description: >
-      correction_level must be consistent with IE and CEx outputs.
+      ISc must not read global inference state; scoring must be local and deterministic.
   - name: replay_stability_required
     description: >
       ISc must produce identical scoring geometry under replay for identical inputs.
 
 geometry_signature:
-  envelope_type: intake_score_envelope
+  envelope_type: inference_score_envelope
   shape: bounded_polytope
   dimensions:
-    - name: semantic_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: degradation_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: correction_axis
-      type: scalar
-      bounds: [0.0, 1.0]
     - name: score_axis
       type: scalar
       bounds: [0.0, 1.0]
+    - name: conflict_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: reason_axis
+      type: scalar
+      bounds: [0.0, 1.0]
   description: >
-    ISc geometry is a bounded polytope representing semantic stability, routing stability,
-    cue coherence, degradation magnitude, correction magnitude, and final intake score.
-    This geometry determines routing transitions in Path A.
+    ISc geometry is a bounded polytope representing local scoring magnitude,
+    conflict magnitude, and reason-code stability. These axes form the structural
+    scoring envelope consumed by TPU.
 
 scalar_fields:
-  - name: semantic_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of semantic meaning after correction.
-  - name: routing_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of routing signals after correction.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile after correction.
-  - name: degradation_level
+  - name: score_set
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of degradation detected; must not increase relative to IE.
-  - name: correction_level
+      Deterministic score assigned to candidate_set{} under truth_hypotheses-prc.
+  - name: score_conflict
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of correction applied by IE/CEx.
-  - name: intake_score
+      Magnitude of conflict detected among candidate interpretations.
+  - name: score_reason_code
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Final score determining routing transitions (RTU, RB, IdOB).
+      Encoded reason for scoring outcome; consumed by TPU for merge decisions.
 
 vector_fields:
-  - name: semantic_vector
+  - name: candidate_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates used for scoring.
-  - name: routing_vector
+      Structural manifold coordinates representing candidate_set{} features.
+  - name: ce_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates used for scoring.
-  - name: cue_vector
-    type: vector
-    length: 3
-    description: >
-      Cue manifold coordinates used for scoring.
+      Structural manifold coordinates derived from CE output used in scoring.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - correction_ready
     - score_ready
+    - conflict_detected
   terminal_status:
     - invalid_geometry
-    - missing_vectors
+    - missing_candidate_set
+    - missing_ce_output
     - replay_violation
 
 anomaly_flags:
@@ -131,36 +100,30 @@ anomaly_flags:
   - name: replay_inconsistency
     description: Replay produced non-identical scoring geometry.
   - name: inadmissible_source
-    description: Envelope did not originate from IE or CEx.
+    description: Envelope did not originate from CE + candidate_set{}.
 
 routing:
   admissible_inputs:
-    - IE
-    - CEx
+    - CE
+    - candidate_set
   admissible_outputs:
-    - RTU
-    - RB
-    - IdOB
+    - TPU
   description: >
-    ISc determines whether Path A continues, loops, or transitions based on intake_score
-    and envelope geometry.
+    ISc produces deterministic scoring fields consumed by TPU. ISc does not route
+    directly to RTU, RB, or IdOB; routing decisions occur after TPU merge.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
     - runtime_dictionary
   reference_objects:
-    - ie_reference
-    - cex_reference
-    - semantic_reference
-    - routing_reference
+    - ce_reference
+    - candidate_reference
     - structure_reference
   flow_contracts:
-    - path_a_corrected_flow
-    - intake_correction_flow
+    - path_a_inference_flow
 
 psc_alignment:
-  - ISc must satisfy PSC structure object requirements.
-  - ISc must expose deterministic geometry for replay validation.
-  - ISc must align with RTU, RB, and IdOB routing primitives.
+  - ISc must satisfy PSC structural object requirements.
+  - ISc must expose deterministic scoring geometry for replay validation.
+  - ISc must align with TPU merge and downstream routing primitives.
   - ISc must enforce admissible scoring envelope constraints.
