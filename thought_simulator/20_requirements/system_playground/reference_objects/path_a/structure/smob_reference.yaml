@@ -5,37 +5,37 @@ version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Semantic-Adjacent Object (SmOB) in Path A.
+    Defines the geometry, invariants, admissible envelopes, and routing constraints
+    for the Semantic OB (SmOB) in Path A.
   long: >
-    SmOB is a pre-semantic structural object that carries semantic-adjacent cues,
-    modality cues, affect markers, presemantic residue, and routing-adjacent signals.
-    It is used upstream of semantic manifold formation and provides deterministic
-    geometry, invariant sets, and field definitions required for PSC replay and
-    semantic-adjacent processing.
+    SmOB performs two jobs: (1) extract semantic-adjacent and pre-semantic cues from
+    SOB→SROB→CnOB residue, including modality cues, affect markers, conflict-adjacent
+    and underspecification-adjacent signals; and (2) compress all upstream residue plus
+    SmOB cues into a deterministic pre-semantic hash and TR-input cue vector used by
+    SSG and the Thought Router. SmOB performs no semantic interpretation, plausibility,
+    stance assignment, or truth evaluation.
 
 invariants:
   - name: envelope_must_be_closed
     description: >
-      SmOB must operate only on closed envelopes produced by upstream intake primitives.
-  - name: semantic_adjacent_vector_required
+      SmOB must operate only on closed envelopes produced by CnOB.
+  - name: semantic_adjacent_vectors_required
     description: >
-      semantic_adjacent_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: modality_vector_required
+      semantic_adjacent_vector, modality_vector, and affect_vector must be present and valid.
+  - name: upstream_residue_required
     description: >
-      modality_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: affect_markers_required
+      structural_vector, anchor_vector, and constraint_vector from CnOB must be present.
+  - name: deterministic_hash_required
     description: >
-      affect_markers must be present and valid; missing markers invalidate the envelope.
-  - name: presemantic_residue_consistency
-    description: >
-      presemantic_residue_hash must be consistent with upstream primitives; SmOB may not alter it.
+      presemantic_hash must be deterministically derived from upstream residue + SmOB cues.
   - name: replay_stability_required
     description: >
-      SmOB must produce identical semantic-adjacent geometry under replay for identical inputs.
-  - name: semantic_adjacent_manifold_consistency
+      SmOB must produce identical semantic-adjacent geometry and identical presemantic_hash
+      under replay for identical inputs.
+  - name: no_semantic_interpretation
     description: >
-      SmOB must preserve semantic-adjacent manifold structure and may not distort adjacent axes.
+      SmOB must not perform semantic interpretation, truth evaluation, stance assignment,
+      or semantic normalization.
 
 geometry_signature:
   envelope_type: semantic_adjacent_envelope
@@ -53,41 +53,40 @@ geometry_signature:
     - name: residue_axis
       type: scalar
       bounds: [0.0, 1.0]
-    - name: routing_adjacent_axis
+    - name: tr_input_axis
       type: scalar
       bounds: [-1.0, 1.0]
   description: >
-    SmOB geometry is a bounded polytope representing semantic-adjacent stability,
-    modality coherence, affect magnitude, presemantic residue magnitude, and routing-adjacent
-    stability. This geometry determines whether semantic-adjacent meaning is ready for
-    semantic manifold formation.
+    SmOB geometry represents semantic-adjacent cue strength, modality coherence,
+    affect magnitude, pre-semantic residue magnitude, and TR-input cue stability.
+    No semantic manifold axes appear here.
 
 scalar_fields:
-  - name: semantic_adjacent_stability
+  - name: semantic_adjacent_strength
     type: float
     bounds: [-1.0, 1.0]
     description: >
-      Stability of semantic-adjacent meaning at the adjacent boundary.
+      Magnitude of semantic-adjacent cue activation.
   - name: modality_coherence
     type: float
     bounds: [-1.0, 1.0]
     description: >
-      Coherence of modality cues at the adjacent boundary.
+      Coherence of modality cues.
   - name: affect_magnitude
     type: float
     bounds: [-1.0, 1.0]
     description: >
-      Magnitude of affect markers at the adjacent boundary.
+      Magnitude of affect markers.
   - name: residue_magnitude
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of presemantic residue.
-  - name: routing_adjacent_stability
+      Magnitude of pre-semantic residue extracted from upstream OB layers.
+  - name: tr_input_stability
     type: float
     bounds: [-1.0, 1.0]
     description: >
-      Stability of routing-adjacent meaning.
+      Stability of TR-input cue formation.
 
 vector_fields:
   - name: semantic_adjacent_vector
@@ -99,23 +98,33 @@ vector_fields:
     type: vector
     length: 3
     description: >
-      Modality manifold coordinates.
-  - name: affect_markers
+      Modality cue coordinates.
+  - name: affect_vector
     type: vector
     length: 3
     description: >
       Affect marker coordinates.
-  - name: routing_adjacent_vector
+  - name: upstream_residue_vector
     type: vector
     length: 3
     description: >
-      Routing-adjacent manifold coordinates.
+      Combined upstream residue (structural + constraint) coordinates.
+  - name: tr_input_vector
+    type: vector
+    length: 3
+    description: >
+      Deterministic TR-input cue vector derived from upstream residue + SmOB cues.
+
+hash_fields:
+  - name: presemantic_hash
+    type: hash
+    description: >
+      Deterministic hash of upstream residue + SmOB cues; used by SSG and TR.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
     - semantic_adjacent_ready
+    - degraded
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -126,38 +135,37 @@ anomaly_flags:
     description: Envelope geometry does not satisfy SmOB invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_upstream_residue
+    description: Required upstream residue vectors are absent or invalid.
   - name: replay_inconsistency
-    description: Replay produced non-identical semantic-adjacent geometry.
-  - name: inadmissible_source
-    description: Envelope did not originate from a valid upstream intake primitive.
+    description: Replay produced non-identical semantic-adjacent geometry or hash.
 
 routing:
   admissible_inputs:
-    - InB
-    - IIInB
-  admissible_outputs:
-    - SOB
-    - SROB
     - CnOB
+  admissible_outputs:
+    - SSG
+    - TR
   description: >
-    SmOB stabilizes semantic-adjacent meaning and routes the adjacent envelope into
-    semantic, routing, or correction-neutral boundaries depending on stability and cue coherence.
+    SmOB emits semantic-adjacent cues, presemantic_hash, and TR-input cue vectors
+    consumed by SSG and the Thought Router. SmOB does not route backward into structural
+    OB layers.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
+    - structure_dictionary
     - runtime_dictionary
   reference_objects:
+    - cnob_reference
     - boundary_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
+    - routing_reference
   flow_contracts:
     - path_a_clean_flow
     - path_a_corrected_flow
 
 psc_alignment:
   - SmOB must satisfy PSC structure object requirements.
-  - SmOB must expose deterministic geometry for replay validation.
-  - SmOB must align with semantic, routing, and correction-neutral boundaries.
+  - SmOB must expose deterministic semantic-adjacent geometry and deterministic hash.
+  - SmOB must align with CnOB, SSG, and TR.
   - SmOB must enforce admissible semantic-adjacent envelope constraints.
