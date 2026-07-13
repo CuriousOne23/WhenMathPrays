@@ -1,106 +1,90 @@
 reference_object_name: SROB
 reference_object_class: structure
-semantic_class: semantic_routing_object_boundary
+semantic_class: structural_refinement_object_boundary
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Semantic Routing Object Boundary (SROB) in Path A.
+    Defines the geometry, invariants, admissible envelopes, and routing constraints
+    for the Structural Refinement OB (SROB) in Path A.
   long: >
-    SROB stabilizes routing meaning after semantic boundary formation (SOB) and before
-    routing primitives (RTU, RB) or identity primitives (IdOB) operate. It ensures
-    deterministic replay, enforces routing manifold consistency, and provides the
-    structural routing envelope used throughout Path A.
+    SROB refines and canonicalizes SOB structural residue into normalized forms suitable
+    for constraint extraction and downstream OB layers. SROB performs structural
+    normalization, anchor refinement, canonical ordering, residue smoothing, and
+    refinement-level metadata generation. SROB performs no semantic interpretation.
 
 invariants:
   - name: envelope_must_be_closed
     description: >
-      SROB must operate only on closed envelopes produced by upstream semantic or routing primitives.
-  - name: routing_vector_required
+      SROB must operate only on closed structural envelopes produced by SOB.
+  - name: structural_vector_required
     description: >
-      routing_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: semantic_vector_required
+      structural_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: punctuation_mask_required
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: cue_vector_required
+      punctuation_mask_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: no_semantic_interpretation
     description: >
-      cue_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: routing_stability_consistency
+      SROB must not introduce or modify semantic fields; it operates purely on structure.
+  - name: deterministic_replay_required
     description: >
-      routing_stability must be consistent with upstream primitives; SROB may not alter it.
-  - name: semantic_routing_alignment
-    description: >
-      semantic_vector and routing_vector must remain aligned according to routing manifold rules.
-  - name: replay_stability_required
-    description: >
-      SROB must produce identical routing boundary geometry under replay for identical inputs.
+      SROB must produce identical refinement geometry under replay for identical inputs.
 
 geometry_signature:
-  envelope_type: semantic_routing_boundary_envelope
+  envelope_type: structural_refinement_envelope
   shape: bounded_polytope
   dimensions:
-    - name: routing_axis
+    - name: refinement_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: semantic_axis
+      bounds: [0.0, 1.0]
+    - name: structural_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
+      bounds: [0.0, 1.0]
     - name: stability_axis
       type: scalar
       bounds: [0.0, 1.0]
   description: >
-    SROB geometry is a bounded polytope representing routing stability, semantic stability,
-    cue coherence, and boundary stability. This geometry determines whether routing meaning
-    is ready for RTU, RB, or identity transitions.
+    SROB geometry represents refinement magnitude, structural normalization stability,
+    and canonical ordering consistency. No semantic or routing manifold axes appear here.
 
 scalar_fields:
-  - name: routing_stability
+  - name: refinement_level
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Stability of routing meaning at the routing boundary.
-  - name: semantic_stability
+      Degree of structural refinement applied to SOB residue.
+  - name: normalization_stability
     type: float
-    bounds: [-1.0, 1.0]
+    bounds: [0.0, 1.0]
     description: >
-      Stability of semantic meaning at the routing boundary.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile at the routing boundary.
+      Stability of normalized structural residue.
   - name: boundary_stability
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Stability of the routing boundary envelope.
+      Stability of the structural refinement envelope.
 
 vector_fields:
-  - name: routing_vector
+  - name: structural_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates at the routing boundary.
-  - name: semantic_vector
+      Structural manifold coordinates after refinement.
+  - name: punctuation_mask_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates at the routing boundary.
-  - name: cue_vector
+      Refined punctuation/symbol mask coordinates.
+  - name: anchor_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates at the routing boundary.
+      Canonicalized structural anchor coordinates.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - routing_ready
+    - refinement_ready
+    - degraded_structure
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -111,41 +95,35 @@ anomaly_flags:
     description: Envelope geometry does not satisfy SROB invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_structural_vectors
+    description: Required structural vectors are absent or invalid.
   - name: replay_inconsistency
-    description: Replay produced non-identical routing boundary geometry.
-  - name: inadmissible_source
-    description: Envelope did not originate from a valid upstream semantic or routing primitive.
+    description: Replay produced non-identical refinement geometry.
 
 routing:
   admissible_inputs:
     - SOB
-    - IE
-    - IMR
   admissible_outputs:
-    - RTU
-    - RB
-    - IdOB
+    - constraint_extractor
+    - downstream_structural_ob
   description: >
-    SROB stabilizes routing meaning and routes the semantic-routing boundary envelope
-    into routing or identity primitives depending on routing stability and cue coherence.
+    SROB emits refined structural residue for constraint extraction and downstream OB
+    layers. It does not route into semantic scoring, routing, or identity primitives.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
+    - structure_dictionary
     - runtime_dictionary
   reference_objects:
     - sob_reference
     - boundary_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
-    - identity_reference
   flow_contracts:
     - path_a_clean_flow
     - path_a_corrected_flow
 
 psc_alignment:
   - SROB must satisfy PSC structure object requirements.
-  - SROB must expose deterministic geometry for replay validation.
-  - SROB must align with routing and identity primitives.
-  - SROB must enforce admissible semantic-routing boundary envelope constraints.
+  - SROB must expose deterministic structural refinement geometry for replay validation.
+  - SROB must align with SOB and constraint primitives.
+  - SROB must enforce admissible structural refinement envelope constraints.
