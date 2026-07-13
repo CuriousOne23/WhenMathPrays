@@ -1,0 +1,165 @@
+reference_object_name: RB
+reference_object_class: routing
+semantic_class: relational_basin
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines deterministic routing-arbitration geometry, invariants, admissible
+    envelopes, and basin-selection constraints for the Relational Basin (RB).
+  long: >
+    RB performs deterministic routing arbitration in Path-A, selecting the next
+    IdOB based on structural residue, ΔH%, lineage, and TR-input fields. RB does
+    not move the TP; it only selects the basin for the next IdOB-prm execution.
+    RB enforces A/B separation, consumes no Path-B structures, and provides
+    replay-safe routing decisions for the RB→RTU→IdOB loop.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      RB must operate only on closed routing envelopes produced by OB, TR, and
+      routing metadata primitives.
+  - name: structural_residue_required
+    description: >
+      structural_residue_vector must be present and valid; missing residue invalidates routing.
+  - name: delta_h_required
+    description: >
+      delta_h_percent must be present and valid; missing ΔH% invalidates routing.
+  - name: lineage_required
+    description: >
+      routing_lineage_vector must be present and valid.
+  - name: tr_input_required
+    description: >
+      tr_input_vector must be present and valid; missing TR-input invalidates routing.
+  - name: deterministic_routing_required
+    description: >
+      Given identical OB/TR inputs, RB must produce identical basin selections under replay.
+  - name: no_path_b_access
+    description: >
+      RB must not access Path-B structures, routing tables, semantic manifolds, or MTP.
+  - name: no_tp_write
+    description: >
+      RB must not write or modify TP; RTU-prm performs all TP updates.
+  - name: path_a_only
+    description: >
+      RB must not be invoked by Path-B; Path-B is meaning-read-only.
+
+geometry_signature:
+  envelope_type: relational_basin_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: residue_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: delta_h_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: lineage_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: tr_input_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: basin_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    RB geometry represents structural residue magnitude, ΔH% influence, routing
+    lineage strength, TR-input magnitude, and basin-selection magnitude. No semantic,
+    identity, or scoring axes appear here.
+
+scalar_fields:
+  - name: residue_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of structural residue contributing to routing arbitration.
+  - name: delta_h_percent
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      ΔH% change magnitude used for basin selection.
+  - name: lineage_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of routing lineage metadata.
+  - name: tr_input_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of TR-input cues.
+  - name: basin_selection_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of basin-selection decision.
+
+vector_fields:
+  - name: structural_residue_vector
+    type: vector
+    length: 3
+    description: >
+      Structural residue coordinates from OB layers.
+  - name: routing_lineage_vector
+    type: vector
+    length: 3
+    description: >
+      Routing lineage coordinates.
+  - name: tr_input_vector
+    type: vector
+    length: 3
+    description: >
+      TR-input coordinates used for basin arbitration.
+  - name: basin_vector
+    type: vector
+    length: 3
+    description: >
+      Deterministic basin-selection coordinates.
+
+envelope_status:
+  admissible_status:
+    - basin_ready
+    - degraded
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy RB invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_routing_inputs
+    description: Required OB/TR inputs are absent or invalid.
+  - name: replay_inconsistency
+    description: Replay produced non-identical basin-selection geometry.
+
+routing:
+  admissible_inputs:
+    - OB
+    - TR
+  admissible_outputs:
+    - RTU
+  description: >
+    RB selects the next IdOB basin and emits routing metadata consumed by RTU-prm.
+    RB does not move TP; RTU-prm commits routing decisions into TP(N).
+
+dependencies:
+  dictionaries:
+    - routing_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - tr_reference
+    - ob_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_routing_flow
+
+psc_alignment:
+  - RB must satisfy PSC routing-arbitration object requirements.
+  - RB must expose deterministic basin-selection geometry for replay validation.
+  - RB must align with TR and RTU-prm.
+  - RB must enforce admissible relational-basin envelope constraints.
