@@ -1,0 +1,209 @@
+reference_object_name: IMR
+reference_object_class: boundary
+semantic_class: intake_meaning_reconciliation
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the static geometry, invariants, admissible envelopes, and routing
+    constraints for the Intake Meaning Reconciliation (IMR) boundary object in Path A.
+  long: >
+    IMR is the final correction-stage boundary object. It reconciles the updated TP
+    envelope produced by TPU with semantic, routing, cue, and scoring manifolds.
+    IMR ensures deterministic replay, validates reconciliation invariants, and
+    produces the reconciled envelope consumed by downstream routing and identity
+    primitives. IMR provides deterministic geometry, invariant sets, and field
+    definitions required for PSC replay and safe meaning reconciliation.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      IMR must operate only on closed envelopes produced by TPU.
+  - name: semantic_vector_required
+    description: >
+      semantic_vector must be present and valid; missing vectors invalidate reconciliation.
+  - name: routing_vector_required
+    description: >
+      routing_vector must be present and valid; missing vectors invalidate reconciliation.
+  - name: cue_vector_required
+    description: >
+      cue_vector must be present and valid; missing vectors invalidate reconciliation.
+  - name: score_level_required
+    description: >
+      intake_score must be present and valid; IMR may not operate without scoring.
+  - name: update_level_consistency
+    description: >
+      update_level must be consistent with TPU; IMR may not alter it.
+  - name: replay_stability_required
+    description: >
+      IMR must produce identical reconciliation geometry under replay for identical inputs.
+  - name: reconciliation_consistency
+    description: >
+      Reconciliation must preserve semantic and routing manifold consistency.
+
+geometry_signature:
+  envelope_type: reconciliation_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: semantic_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: routing_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: degradation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: correction_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: expansion_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: evaluation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: score_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: update_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: reconciliation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    IMR geometry is a bounded polytope representing semantic stability, routing stability,
+    cue coherence, degradation magnitude, correction magnitude, expansion magnitude,
+    evaluation magnitude, intake score, update magnitude, and reconciliation magnitude.
+    This geometry determines the reconciled envelope used by downstream routing and
+    identity primitives.
+
+scalar_fields:
+  - name: semantic_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of semantic meaning after reconciliation.
+  - name: routing_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of routing signals after reconciliation.
+  - name: cue_coherence
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Coherence of cue profile after reconciliation.
+  - name: degradation_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of degradation detected; must not increase relative to TPU.
+  - name: correction_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of correction applied by IE/CEx/CE; IMR may not alter it.
+  - name: expansion_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of expansion applied by CEx; IMR may not alter it.
+  - name: evaluation_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of evaluation applied by CE; IMR may not alter it.
+  - name: intake_score
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Final score determining reconciliation validity.
+  - name: update_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of update applied by TPU; IMR may not alter it.
+  - name: reconciliation_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of reconciliation applied by IMR.
+
+vector_fields:
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic manifold coordinates after reconciliation.
+  - name: routing_vector
+    type: vector
+    length: 3
+    description: >
+      Routing manifold coordinates after reconciliation.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Cue manifold coordinates after reconciliation.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - degraded
+    - correction_ready
+    - expansion_ready
+    - evaluation_ready
+    - score_ready
+    - update_ready
+    - reconciliation_ready
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy IMR invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical reconciliation geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from TPU.
+
+routing:
+  admissible_inputs:
+    - TPU
+  admissible_outputs:
+    - RTU
+    - RB
+    - IdOB
+  description: >
+    IMR reconciles the updated TP envelope and routes it into routing or identity
+    primitives depending on reconciliation geometry and intake_score.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - tpu_reference
+    - isc_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_corrected_flow
+    - intake_correction_flow
+
+psc_alignment:
+  - IMR must satisfy PSC boundary object requirements.
+  - IMR must expose deterministic geometry for replay validation.
+  - IMR must align with TPU, RTU, RB, and IdOB primitives.
+  - IMR must enforce admissible reconciliation envelope constraints.
