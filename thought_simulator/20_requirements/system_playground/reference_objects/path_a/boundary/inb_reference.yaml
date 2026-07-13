@@ -1,88 +1,136 @@
-primitive: InB
-domain: boundary
+reference_object_name: IIInB
+reference_object_class: boundary
+semantic_class: input_inference_repair_basin
 version: 1.0.0
-description: >
-  Input Basin — deterministic, non-inferential front door for all external signals.
-  Performs schema validation, surface canonicalization, FIFO preservation, and
-  structural admissibility evaluation using POS-category dictionary. Determines
-  whether Path A proceeds via Clean Flow or Corrected Flow (IIInB engaged).
-  Does not perform semantic repair, inference, inquiry, or routing authority.
 
-lifecycle:
-  start_conditions:
-    - external_signal_received
-    - envelope_not_initialized
-  done_conditions:
-    - envelope_initialized
-    - structural_admissibility_evaluated
-    - canonical_form_emitted
+purpose:
+  short: >
+    Applies bounded, user‑sanctioned preferences shorthand expansions (USP rules) before
+    context extraction; no inference, no meaning construction.
+  long: >
+    IIInB is the Input Inference/Repair Basin defined in 20.101. It performs
+    deterministic, user‑approved shorthand repair on intake text before any
+    semantic, routing, or correction primitives operate. IIInB is strictly a
+    pre‑semantic basin: it expands shorthand, normalizes user‑approved forms,
+    and ensures that intake is canonicalized without interpretation, candidate
+    generation, or meaning construction. It is an optional stage in
+    input_semantic_repair, ordered InB → IIInB → RB.
 
-behavioral_contract:
-  invariants:
-    - no_semantic_inference
-    - preserve_fifo_order
-    - preserve_token_boundaries
-    - envelope_must_be_closed
-    - envelope_must_be_connected
-    - envelope_stable_under_replay
-    - structural_validation_must_be_deterministic
-  geometry:
-    envelope_type: minimal
-    rules:
-      - closure_required
-      - connectedness_required
-      - no_refinement_allowed
-  fields:
-    required:
-      - raw_input
-      - canonical_tokens
-      - pos_tags
-      - admissibility_flag
-    optional:
-      - transport_metadata
-  refinement_rules:
-    - no_semantic_refinement
-    - no_clause_refinement
-    - no_envelope_refinement
-    - only_surface_canonicalization_allowed
+invariants:
+  - name: no_meaning_construction
+    description: >
+      IIInB must not perform interpretation, candidate generation, truth
+      evaluation, or meaning construction; only USP‑bounded shorthand repair.
+  - name: usp_rules_only
+    description: >
+      All repairs must be performed strictly according to user‑sanctioned USP
+      rules; no heuristic or model‑driven inference is allowed.
+  - name: envelope_must_be_closed
+    description: >
+      The intake envelope must be closed and syntactically valid before repair.
+  - name: admissible_intake_only
+    description: >
+      IIInB may only accept envelopes produced by InB; no correction or semantic
+      envelopes are admissible.
+  - name: replay_stability_required
+    description: >
+      Given identical intake and USP rules, IIInB must produce identical repaired
+      envelopes under replay.
+  - name: no_context_extraction
+    description: >
+      IIInB must not extract context; context extraction begins only after RB.
 
-envelope_evaluation:
-  envelope_status:
-    valid_clean:
-      conditions:
-        - admissibility_flag == clean
-        - no_anomalies_detected
-    valid_degraded:
-      conditions:
-        - admissibility_flag == degraded
-        - anomalies_present
-    invalid:
-      conditions:
-        - admissibility_flag == invalid
-  anomaly_flags:
-    - malformed_token
-    - malformed_pos
-    - malformed_adjacency
-    - degraded_envelope
-    - degraded_clause
+geometry_signature:
+  envelope_type: intake_repair_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: shorthand_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: canonicalization_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: residue_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    IIInB geometry represents the magnitude of shorthand detected, the degree of
+    canonicalization applied, and any remaining presemantic residue. No semantic,
+    routing, or correction axes appear here.
+
+scalar_fields:
+  - name: shorthand_detected
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of user‑sanctioned shorthand detected in the intake.
+  - name: canonicalization_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree of USP‑rule canonicalization applied.
+  - name: residue_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Remaining presemantic residue after repair.
+
+vector_fields:
+  - name: intake_vector
+    type: vector
+    length: 3
+    description: >
+      Presemantic manifold coordinates of the repaired intake.
+  - name: shorthand_vector
+    type: vector
+    length: 3
+    description: >
+      Coordinates representing shorthand features detected and repaired.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - shorthand_present
+    - repair_ready
+  terminal_status:
+    - invalid_geometry
+    - inadmissible_source
+    - replay_violation
+
+anomaly_flags:
+  - name: usp_violation
+    description: >
+      A repair attempted outside USP rules.
+  - name: meaning_construction_attempt
+    description: >
+      IIInB attempted interpretation or candidate generation.
+  - name: geometry_violation
+    description: >
+      Envelope geometry does not satisfy IIInB invariants.
 
 routing:
-  valid_clean: SOB
-  valid_degraded: IIInB
-  invalid: PathB
+  admissible_inputs:
+    - InB
+  admissible_outputs:
+    - RB
+  description: >
+    IIInB performs USP‑bounded shorthand repair and routes the repaired intake
+    envelope to RB for context extraction. No semantic or correction primitives
+    may be invoked from IIInB.
 
 dependencies:
-  meaning_dictionary: none
-  runtime_dictionary: pos_category_dictionary
-  dev_dictionary: none
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - inb_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_clean_flow
 
-reference_objects:
-  - OB
-  - SOB
-
-field_reference_tables:
-  - inb_field_schema
-
-flow_contracts:
-  - path_a_clean_flow
-  - path_a_corrected_flow
+psc_alignment:
+  - IIInB must satisfy PSC boundary object requirements.
+  - IIInB must expose deterministic geometry for replay validation.
+  - IIInB must align with InB → IIInB → RB ordering.
+  - IIInB must enforce admissible USP‑bounded shorthand repair constraints.
