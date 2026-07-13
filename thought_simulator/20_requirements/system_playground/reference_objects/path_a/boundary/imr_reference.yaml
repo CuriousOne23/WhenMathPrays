@@ -1,169 +1,93 @@
 reference_object_name: IMR
 reference_object_class: boundary
-semantic_class: intake_meaning_reconciliation
+semantic_class: mismatch_record
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Intake Meaning Reconciliation (IMR) boundary object in Path A.
+    Defines the deterministic mismatch‑classification geometry and invariants for the
+    Inconsistency/Mismatch Record (IMR), which supervises Path‑A correction without
+    performing semantic rewrite or meaning construction.
   long: >
-    IMR is the final correction-stage boundary object. It reconciles the updated TP
-    envelope produced by TPU with semantic, routing, cue, and scoring manifolds.
-    IMR ensures deterministic replay, validates reconciliation invariants, and
-    produces the reconciled envelope consumed by downstream routing and identity
-    primitives. IMR provides deterministic geometry, invariant sets, and field
-    definitions required for PSC replay and safe meaning reconciliation.
+    IMR classifies mismatches into Types A, B, and C with strict precedence ordering (C > B > A).
+    Type A triggers realization retry only; Type B may emit a CorrectionTrigger for bounded
+    semantic reconsideration; Type C is safety‑critical and GB‑gated. IMR is a supervisory
+    evaluator invoked after CTP or RTU/RBU events. It does not construct meaning, rewrite
+    semantics, or generate free‑form correction signals. IMR provides deterministic geometry,
+    invariant sets, and PSC‑aligned mismatch fields required for safe Path‑A correction.
 
 invariants:
-  - name: envelope_must_be_closed
+  - name: no_meaning_construction
     description: >
-      IMR must operate only on closed envelopes produced by TPU.
-  - name: semantic_vector_required
+      IMR must not construct meaning, rewrite semantics, or generate semantic candidates.
+  - name: no_freeform_correction
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate reconciliation.
-  - name: routing_vector_required
+      IMR may not emit arbitrary correction signals; only Type B may emit a bounded CorrectionTrigger.
+  - name: strict_precedence_ordering
     description: >
-      routing_vector must be present and valid; missing vectors invalidate reconciliation.
-  - name: cue_vector_required
+      Mismatch classification must obey C > B > A precedence; higher severity overrides lower.
+  - name: closed_envelope_required
     description: >
-      cue_vector must be present and valid; missing vectors invalidate reconciliation.
-  - name: score_level_required
-    description: >
-      intake_score must be present and valid; IMR may not operate without scoring.
-  - name: update_level_consistency
-    description: >
-      update_level must be consistent with TPU; IMR may not alter it.
+      IMR may only evaluate closed envelopes produced by CTP or RTU/RBU.
   - name: replay_stability_required
     description: >
-      IMR must produce identical reconciliation geometry under replay for identical inputs.
-  - name: reconciliation_consistency
+      IMR must produce identical mismatch classification under replay for identical inputs.
+  - name: admissible_source_only
     description: >
-      Reconciliation must preserve semantic and routing manifold consistency.
+      IMR may only accept envelopes produced by CTP or RTU/RBU.
 
 geometry_signature:
-  envelope_type: reconciliation_envelope
+  envelope_type: mismatch_record_envelope
   shape: bounded_polytope
   dimensions:
+    - name: expression_axis
+      type: scalar
+      bounds: [0.0, 1.0]
     - name: semantic_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: cue_axis
-      type: scalar
-      bounds: [-1.0, 1.0]
-    - name: degradation_axis
-      type: scalar
       bounds: [0.0, 1.0]
-    - name: correction_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: expansion_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: evaluation_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: score_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: update_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: reconciliation_axis
+    - name: safety_axis
       type: scalar
       bounds: [0.0, 1.0]
   description: >
-    IMR geometry is a bounded polytope representing semantic stability, routing stability,
-    cue coherence, degradation magnitude, correction magnitude, expansion magnitude,
-    evaluation magnitude, intake score, update magnitude, and reconciliation magnitude.
-    This geometry determines the reconciled envelope used by downstream routing and
-    identity primitives.
+    IMR geometry represents expression mismatch magnitude (Type A), semantic mismatch magnitude
+    (Type B), and safety mismatch magnitude (Type C). These axes determine mismatch classification
+    and corrective authority.
 
 scalar_fields:
-  - name: semantic_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of semantic meaning after reconciliation.
-  - name: routing_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of routing signals after reconciliation.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile after reconciliation.
-  - name: degradation_level
+  - name: expression_mismatch
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of degradation detected; must not increase relative to TPU.
-  - name: correction_level
+      Magnitude of expression mismatch; Type A triggers realization retry only.
+  - name: semantic_mismatch
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of correction applied by IE/CEx/CE; IMR may not alter it.
-  - name: expansion_level
+      Magnitude of semantic mismatch; Type B may emit a bounded CorrectionTrigger.
+  - name: safety_mismatch
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of expansion applied by CEx; IMR may not alter it.
-  - name: evaluation_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of evaluation applied by CE; IMR may not alter it.
-  - name: intake_score
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Final score determining reconciliation validity.
-  - name: update_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of update applied by TPU; IMR may not alter it.
-  - name: reconciliation_level
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of reconciliation applied by IMR.
+      Magnitude of safety mismatch; Type C is GB‑gated and highest precedence.
 
 vector_fields:
-  - name: semantic_vector
+  - name: mismatch_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates after reconciliation.
-  - name: routing_vector
-    type: vector
-    length: 3
-    description: >
-      Routing manifold coordinates after reconciliation.
-  - name: cue_vector
-    type: vector
-    length: 3
-    description: >
-      Cue manifold coordinates after reconciliation.
+      Manifold coordinates representing mismatch features across expression, semantic,
+      and safety dimensions.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - correction_ready
-    - expansion_ready
-    - evaluation_ready
-    - score_ready
-    - update_ready
-    - reconciliation_ready
+    - mismatch_detected
+    - type_a
+    - type_b
+    - type_c
   terminal_status:
     - invalid_geometry
-    - missing_vectors
+    - inadmissible_source
     - replay_violation
 
 anomaly_flags:
@@ -171,39 +95,42 @@ anomaly_flags:
     description: Envelope geometry does not satisfy IMR invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
-  - name: replay_inconsistency
-    description: Replay produced non-identical reconciliation geometry.
+  - name: precedence_violation
+    description: Mismatch classification violated C > B > A ordering.
   - name: inadmissible_source
-    description: Envelope did not originate from TPU.
+    description: Envelope did not originate from CTP or RTU/RBU.
+  - name: replay_inconsistency
+    description: Replay produced non-identical mismatch classification.
 
 routing:
   admissible_inputs:
-    - TPU
-  admissible_outputs:
+    - CTP
     - RTU
-    - RB
-    - IdOB
+    - RBU
+  admissible_outputs:
+    - realization_retry
+    - correction_trigger
+    - gb_gate
   description: >
-    IMR reconciles the updated TP envelope and routes it into routing or identity
-    primitives depending on reconciliation geometry and intake_score.
+    IMR routes mismatch outcomes according to severity: Type A → realization retry;
+    Type B → bounded CorrectionTrigger; Type C → GB‑gated safety pathway. IMR does not
+    perform semantic rewrite or correction itself.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
     - runtime_dictionary
   reference_objects:
-    - tpu_reference
-    - isc_reference
+    - ctp_reference
+    - rtu_reference
+    - rbu_reference
     - boundary_reference
-    - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
-    - path_a_corrected_flow
-    - intake_correction_flow
+    - path_a_correction_flow
+    - mismatch_evaluation_flow
 
 psc_alignment:
   - IMR must satisfy PSC boundary object requirements.
-  - IMR must expose deterministic geometry for replay validation.
-  - IMR must align with TPU, RTU, RB, and IdOB primitives.
-  - IMR must enforce admissible reconciliation envelope constraints.
+  - IMR must expose deterministic mismatch geometry for replay validation.
+  - IMR must align with CTP, RTU, RBU, and GB‑gated safety primitives.
+  - IMR must enforce admissible mismatch‑classification constraints.
