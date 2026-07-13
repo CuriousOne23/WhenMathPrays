@@ -1,126 +1,103 @@
 reference_object_name: CEx
 reference_object_class: boundary
-semantic_class: correction_expansion
+semantic_class: context_extractor
 version: 1.0.0
 
 purpose:
   short: >
-    Defines the static geometry, invariants, admissible envelopes, and routing
-    constraints for the Correction Expansion (CEx) boundary object in Path A.
+    Defines the bounded, deterministic geometry and invariants for the ContextExtractor
+    (CEx), which produces a replayable context slice (CE) for candidate generation and ISc.
   long: >
-    CEx expands the corrected intake envelope produced by IE. It increases correction
-    magnitude, adjusts semantic and routing vectors, and prepares the envelope for
-    evaluation by CE. CEx provides deterministic geometry, invariant sets, and field
-    definitions required for PSC replay and correction routing.
+    CEx extracts only the context‑relevant information from CIL needed for candidate_set{}
+    and ISc scoring. It provides a safe, bounded intermediary that prevents global‑state
+    leakage while exposing active referents, discourse entities, and local context cues.
+    CEx is not a semantic interpreter, meaning constructor, TP writer, or global‑state reader.
 
 invariants:
-  - name: envelope_must_be_closed
+  - name: closed_envelope_required
     description: >
-      CEx must produce a closed envelope geometry before CE may evaluate it.
-  - name: semantic_vector_required
+      CEx may only operate on closed envelopes produced by IE.
+  - name: no_global_state_access
     description: >
-      semantic_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: routing_vector_required
+      CEx must not read global CIL state directly; extraction must use bounded, local views.
+  - name: bounded_context_slice
     description: >
-      routing_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: cue_vector_required
+      The produced CE must be strictly bounded and replayable; no lineage or unbounded history.
+  - name: no_meaning_construction
     description: >
-      cue_vector must be present and valid; missing vectors invalidate the envelope.
-  - name: correction_level_must_increase
-    description: >
-      correction_level must be strictly greater than the correction_level in IE.
-  - name: degradation_level_consistency
-    description: >
-      degradation_level must not increase relative to IE or IIInB.
+      CEx must not construct meaning or interpret semantics; it only extracts context cues.
   - name: replay_stability_required
     description: >
-      CEx must produce identical envelope geometry under replay for identical inputs.
+      CEx must produce identical CE geometry under replay for identical inputs.
   - name: admissible_source_only
     description: >
       CEx may only accept envelopes produced by IE.
 
 geometry_signature:
-  envelope_type: correction_expansion_envelope
+  envelope_type: context_slice_envelope
   shape: bounded_polytope
   dimensions:
-    - name: semantic_axis
+    - name: referent_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: routing_axis
+      bounds: [0.0, 1.0]
+    - name: discourse_axis
       type: scalar
-      bounds: [-1.0, 1.0]
+      bounds: [0.0, 1.0]
     - name: cue_axis
       type: scalar
-      bounds: [-1.0, 1.0]
-    - name: degradation_axis
-      type: scalar
       bounds: [0.0, 1.0]
-    - name: correction_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: expansion_axis
+    - name: locality_axis
       type: scalar
       bounds: [0.0, 1.0]
   description: >
-    CEx geometry is a bounded polytope representing semantic stability, routing stability,
-    cue coherence, degradation magnitude, correction magnitude, and expansion magnitude.
-    This geometry determines whether CE can evaluate the expanded envelope.
+    CEx geometry represents active referents, discourse entities, bounded context cues,
+    and locality constraints extracted from CIL. These axes form the CE envelope consumed
+    by CE evaluation, candidate_set{}, and ISc.
 
 scalar_fields:
-  - name: semantic_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of semantic meaning after correction expansion.
-  - name: routing_stability
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Stability of routing signals after correction expansion.
-  - name: cue_coherence
-    type: float
-    bounds: [-1.0, 1.0]
-    description: >
-      Coherence of cue profile after correction expansion.
-  - name: degradation_level
+  - name: referent_strength
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of degradation detected; must not increase relative to IE.
-  - name: correction_level
+      Magnitude of active referents detected in the bounded context slice.
+  - name: discourse_coherence
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of correction applied by IE and increased by CEx.
-  - name: expansion_level
+      Coherence of local discourse entities extracted from CIL.
+  - name: cue_salience
     type: float
     bounds: [0.0, 1.0]
     description: >
-      Magnitude of expansion applied by CEx.
+      Salience of bounded context cues relevant to candidate generation.
+  - name: locality_bound
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree to which extracted context remains within allowed locality constraints.
 
 vector_fields:
-  - name: semantic_vector
+  - name: referent_vector
     type: vector
     length: 3
     description: >
-      Semantic manifold coordinates after correction expansion.
-  - name: routing_vector
+      Manifold coordinates representing active referents in the bounded context slice.
+  - name: discourse_vector
     type: vector
     length: 3
     description: >
-      Routing manifold coordinates after correction expansion.
+      Manifold coordinates representing local discourse entities.
   - name: cue_vector
     type: vector
     length: 3
     description: >
-      Cue manifold coordinates after correction expansion.
+      Manifold coordinates representing extracted context cues.
 
 envelope_status:
   admissible_status:
-    - stable
-    - degraded
-    - correction_ready
-    - expansion_ready
+    - context_ready
+    - referents_present
+    - cues_present
   terminal_status:
     - invalid_geometry
     - missing_vectors
@@ -131,10 +108,10 @@ anomaly_flags:
     description: Envelope geometry does not satisfy CEx invariants.
   - name: field_out_of_bounds
     description: One or more scalar/vector fields exceed allowed bounds.
-  - name: replay_inconsistency
-    description: Replay produced non-identical envelope geometry.
   - name: inadmissible_source
     description: Envelope did not originate from IE.
+  - name: replay_inconsistency
+    description: Replay produced non-identical CE geometry.
 
 routing:
   admissible_inputs:
@@ -142,11 +119,11 @@ routing:
   admissible_outputs:
     - CE
   description: >
-    CEx expands the corrected intake envelope and routes it into CE for evaluation.
+    CEx produces a bounded context slice (CE) consumed by CE evaluation, candidate_set{},
+    and ISc. CEx does not perform correction expansion or semantic interpretation.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
     - runtime_dictionary
   reference_objects:
     - ie_reference
@@ -155,11 +132,10 @@ dependencies:
     - routing_reference
     - structure_reference
   flow_contracts:
-    - path_a_corrected_flow
-    - intake_correction_flow
+    - path_a_inference_flow
 
 psc_alignment:
   - CEx must satisfy PSC boundary object requirements.
-  - CEx must expose deterministic geometry for replay validation.
-  - CEx must align with IE and CE correction primitives.
-  - CEx must enforce admissible correction expansion envelope constraints.
+  - CEx must expose deterministic, bounded context geometry for replay validation.
+  - CEx must align with IE, CE, candidate_set{}, and ISc.
+  - CEx must enforce admissible context extraction constraints.
