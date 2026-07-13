@@ -1,0 +1,168 @@
+primitive_name: IE
+primitive_family: path_a
+reference_type: ie_reference
+version: 1.0.0
+
+description: >
+  IE (Interpretation Extractor) is the Path-A primitive responsible for extracting
+  deterministic interpretation candidates from CE/CEx envelopes. IE performs no
+  semantic interpretation, no correction, no routing, and no truth evaluation.
+  Its sole job is to read correction-neutral and correction-expansion envelopes,
+  extract bounded candidate interpretations, and produce candidate_set{} for ISc.
+  IE is strictly local, replay-safe, and side-effect-free.
+
+runtime_behavior:
+  mode: extract_interpretation_candidates
+  semantic_interpretation: none
+  correction_application: none
+  routing_computation: none
+  truth_evaluation: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - ce_envelope
+  optional:
+    - cex_envelope
+    - semantic_vector
+    - cue_vector
+    - routing_vector
+
+outputs:
+  envelope_type: interpretation_extraction_envelope
+  fields:
+    scalar_fields:
+      - candidate_count
+      - candidate_entropy
+      - cue_alignment
+      - neutrality_level
+    vector_fields:
+      - candidate_feature_vector
+      - semantic_vector
+      - cue_vector
+      - routing_vector
+  produced_sets:
+    - candidate_set
+  status_flags:
+    - candidates_ready
+    - degraded
+
+invariants:
+  ce_or_cex_required: true
+  semantic_vector_required: true
+  cue_vector_required: true
+  routing_vector_required: true
+  neutrality_preserved: true
+  deterministic_extraction_required: true
+  no_semantic_construction: true
+  no_truth_or_routing: true
+  no_global_state_access: true
+  replay_stability_required: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required CE/CEx fields must be present; IE may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All fields must match expected structural shapes; IE performs no plausibility checks.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_neutrality_preservation:
+    description: >
+      neutrality_level must remain unchanged; IE may not alter neutrality.
+    enforced: true
+
+  C5_no_semantic_or_truth:
+    description: >
+      IE must not construct meaning, evaluate truth, or modify semantic fields.
+    enforced: true
+
+  C6_local_candidate_rules:
+    description: >
+      IE must apply only local extraction rules; no global inference or cross-TP reasoning.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      IE must produce identical candidate_set{} under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_ce_or_cex_input
+    - validate_required_vectors
+    - check_closed_envelope
+    - verify_neutrality_preservation
+    - extract_candidate_features
+    - generate_candidate_set
+    - compute_scalar_fields
+    - compute_vector_fields
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  candidates_ready:
+    conditions:
+      - candidate_count > 0
+      - neutrality_level == 1.0
+  degraded:
+    conditions:
+      - candidate_entropy > 0.7
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_ce_or_cex:
+    triggers:
+      - neither CE nor CEx envelope provided
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical candidate_set{}
+  inadmissible_source:
+    triggers:
+      - envelope not from CE or CEx
+
+routing:
+  admissible_inputs:
+    - CE
+    - CEx
+  admissible_outputs:
+    - candidate_set
+    - ISc
+  description: >
+    IE extracts deterministic candidate interpretations and produces candidate_set{}
+    consumed by ISc. IE performs no routing transitions.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ce_reference
+    - cex_reference
+    - cnob_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+    - path_a_corrected_flow
+
+psc_alignment:
+  - IE satisfies PSC interpretation-extraction object requirements.
+  - IE exposes deterministic extraction geometry for replay validation.
+  - IE aligns with CE, CEx, candidate_set{}, and ISc.
+  - IE enforces admissible interpretation-extraction envelope constraints.
