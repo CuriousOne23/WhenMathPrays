@@ -1,115 +1,88 @@
-# Path A — Boundary Domain
-# Primitive: InB (Initial Boundary)
-# Purpose: Establish the initial envelope, field constraints, and admissible
-#          geometry for the beginning of Path A before any structural operators
-#          (SOB, SROB, CnOB, etc.) are applied.
-
 primitive: InB
 domain: boundary
 version: 1.0.0
-
 description: >
-  InB defines the initial boundary envelope for Path A. It establishes the
-  admissible region, initial field constraints, and the pre‑structural
-  geometry that all subsequent primitives must inherit. InB is the canonical
-  “starting state” for any Path A traversal.
+  Input Basin — deterministic, non-inferential front door for all external signals.
+  Performs schema validation, surface canonicalization, FIFO preservation, and
+  structural admissibility evaluation using POS-category dictionary. Determines
+  whether Path A proceeds via Clean Flow or Corrected Flow (IIInB engaged).
+  Does not perform semantic repair, inference, inquiry, or routing authority.
 
-invariants:
-  # The initial envelope must be well‑formed and closed.
-  - envelope_closed: true
+lifecycle:
+  start_conditions:
+    - external_signal_received
+    - envelope_not_initialized
+  done_conditions:
+    - envelope_initialized
+    - structural_admissibility_evaluated
+    - canonical_form_emitted
 
-  # No structural geometry may be applied before InB is established.
-  - no_prestructure: true
+behavioral_contract:
+  invariants:
+    - no_semantic_inference
+    - preserve_fifo_order
+    - preserve_token_boundaries
+    - envelope_must_be_closed
+    - envelope_must_be_connected
+    - envelope_stable_under_replay
+    - structural_validation_must_be_deterministic
+  geometry:
+    envelope_type: minimal
+    rules:
+      - closure_required
+      - connectedness_required
+      - no_refinement_allowed
+  fields:
+    required:
+      - raw_input
+      - canonical_tokens
+      - pos_tags
+      - admissibility_flag
+    optional:
+      - transport_metadata
+  refinement_rules:
+    - no_semantic_refinement
+    - no_clause_refinement
+    - no_envelope_refinement
+    - only_surface_canonicalization_allowed
 
-  # The initial boundary must define a single connected region.
-  - connected_region: true
+envelope_evaluation:
+  envelope_status:
+    valid_clean:
+      conditions:
+        - admissibility_flag == clean
+        - no_anomalies_detected
+    valid_degraded:
+      conditions:
+        - admissibility_flag == degraded
+        - anomalies_present
+    invalid:
+      conditions:
+        - admissibility_flag == invalid
+  anomaly_flags:
+    - malformed_token
+    - malformed_pos
+    - malformed_adjacency
+    - degraded_envelope
+    - degraded_clause
 
-  # The initial boundary must not contain semantic or identity-conditioned fields.
-  - no_semantic_fields: true
-  - no_identity_fields: true
-
-  # The initial boundary must be stable under replay.
-  - replay_stability: true
-
-geometry:
-  # The envelope is defined as a minimal bounding region with no internal
-  # segmentation. Later primitives (SOB, SROB, CnOB, etc.) may refine it.
-  envelope_type: minimal
-  segmentation: none
-  admissible_shapes:
-    - convex
-    - weakly_concave
-  coordinate_system: local
-
-fields:
-  # InB may define initial scalar fields but no semantic or identity fields.
-  scalar_fields:
-    allowed: true
-    constraints:
-      - must_be_finite
-      - must_be_initializable
-  semantic_fields:
-    allowed: false
-  identity_fields:
-    allowed: false
-
-refinement_rules:
-  # InB may be refined only by SOB or IIInB.
-  allowed_refiners:
-    - SOB
-    - IIInB
-
-  # Refinement must preserve envelope closure and connectedness.
-  must_preserve:
-    - envelope_closed
-    - connected_region
-
-examples:
-  - name: simple_initial_boundary
-    envelope: convex_region
-    fields:
-      scalar:
-        temperature: 0
-        pressure: 1
-    notes: >
-      A minimal convex envelope with two scalar fields. No structural or
-      semantic geometry applied.
-
-  - name: weakly_concave_initial_boundary
-    envelope: weakly_concave_region
-    fields:
-      scalar:
-        density: 1.0
-    notes: >
-      A weakly concave envelope is admissible as long as the region remains
-      connected and closed.
-
-# ------------------------------------------------------------
-# Envelope Status (Path A Branching)
-# ------------------------------------------------------------
-envelope_status:
-  - valid_clean        # No structural anomalies detected
-  - valid_degraded     # Structural anomalies detected (requires correction)
-
-# ------------------------------------------------------------
-# Anomaly Flags (Structural Detection)
-# ------------------------------------------------------------
-anomaly_flags:
-  - malformed_token
-  - malformed_pos
-  - malformed_adjacency
-  - degraded_envelope
-  - degraded_clause
-
-# ------------------------------------------------------------
-# Routing Transitions
-# ------------------------------------------------------------
 routing:
-  valid_clean: PathA.clean
-  valid_degraded: PathA.corrected
+  valid_clean: SOB
+  valid_degraded: IIInB
+  invalid: PathB
 
-# ------------------------------------------------------------
-# External Dependencies
-# ------------------------------------------------------------
 dependencies:
-  meaning_dictionary: ts_meaning_dictionary
+  meaning_dictionary: none
+  runtime_dictionary: pos_category_dictionary
+  dev_dictionary: none
+
+reference_objects:
+  - OB
+  - SOB
+
+field_reference_tables:
+  - inb_field_schema
+
+flow_contracts:
+  - path_a_clean_flow
+  - path_a_corrected_flow
