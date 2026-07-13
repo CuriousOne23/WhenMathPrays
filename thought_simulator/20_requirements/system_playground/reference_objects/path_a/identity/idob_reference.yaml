@@ -1,0 +1,158 @@
+reference_object_name: IdOB
+reference_object_class: identity
+semantic_class: identity_object_basin
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines identity-conditioned meaning-refinement geometry, invariants, admissible
+    envelopes, and TP-update constraints for the Identity Object Basin (IdOB).
+  long: >
+    IdOB performs identity-conditioned meaning refinement on the routed TP, applying
+    identity-specific rules and basin-local semantics after RB/TR select the identity
+    pathway. IdOB consumes the post-routing TP view, resolves identity-conditioned
+    meaning, and emits updates via TPU.idob_update. IdOB produces no residue, no ΔH%,
+    no TR-input, and performs no routing or truth evaluation. IdOB may run multiple
+    times in the RB→RTU→IdOB cycle until identity-conditioned meaning stabilizes.
+
+invariants:
+  - name: routed_tp_required
+    description: >
+      IdOB must operate only on TP snapshots that have been routed via RB→RTU.
+  - name: identity_pathway_required
+    description: >
+      IdOB may only run when RB/TR have selected an identity basin; missing identity
+      pathway invalidates invocation.
+  - name: deterministic_refinement
+    description: >
+      Given identical routed TP inputs, IdOB must produce identical TPU.idob_update
+      outputs under replay.
+  - name: no_structural_or_routing_write
+    description: >
+      IdOB must not modify structural residue, routing metadata, ΔH%, TR-input, or
+      any routing fields; RTU-prm is the only routing writer.
+  - name: no_truth_evaluation
+    description: >
+      IdOB must not evaluate truth, stance, plausibility, or global inference.
+  - name: basin_local_semantics_only
+    description: >
+      IdOB must apply only identity-specific, basin-local semantic rules; no global
+      semantic normalization is permitted.
+  - name: path_a_only
+    description: >
+      IdOB must not be invoked by Path-B; Path-B is meaning-read-only.
+
+geometry_signature:
+  envelope_type: identity_refinement_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: identity_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: refinement_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: basin_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: semantic_adjacent_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    IdOB geometry represents identity-conditioned refinement magnitude, basin-local
+    semantic activation, and adjacent semantic cues. No structural, routing, or
+    truth-evaluation axes appear here.
+
+scalar_fields:
+  - name: identity_activation
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of identity-conditioned meaning activation.
+  - name: refinement_magnitude
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of basin-local meaning refinement.
+  - name: basin_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Strength of the selected identity basin.
+  - name: semantic_adjacent_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of semantic-adjacent cues relevant to identity refinement.
+
+vector_fields:
+  - name: identity_vector
+    type: vector
+    length: 3
+    description: >
+      Identity manifold coordinates used for basin-local meaning refinement.
+  - name: refinement_vector
+    type: vector
+    length: 3
+    description: >
+      Coordinates representing basin-local meaning refinement.
+  - name: semantic_adjacent_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic-adjacent coordinates consumed during identity refinement.
+
+tp_update_fields:
+  - name: idob_update
+    type: struct
+    description: >
+      TPU.idob_update payload containing identity-conditioned meaning updates.
+      This is the only output IdOB writes; IdOB produces no residue, ΔH%, or TR-input.
+
+envelope_status:
+  admissible_status:
+    - refinement_ready
+    - basin_active
+  terminal_status:
+    - invalid_geometry
+    - inadmissible_source
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy IdOB invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_identity_pathway
+    description: Identity pathway was not selected by RB/TR.
+  - name: replay_inconsistency
+    description: Replay produced non-identical refinement geometry.
+
+routing:
+  admissible_inputs:
+    - RB
+    - RTU
+  admissible_outputs:
+    - TPU
+  description: >
+    IdOB consumes routed TP snapshots and emits TPU.idob_update. Routing transitions
+    occur only via RB→RTU; IdOB performs no routing.
+
+dependencies:
+  dictionaries:
+    - identity_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - rb_reference
+    - rtu_reference
+    - boundary_reference
+    - identity_reference
+    - semantic_reference
+  flow_contracts:
+    - path_a_identity_flow
+
+psc_alignment:
+  - IdOB must satisfy PSC identity-refinement object requirements.
+  - IdOB must expose deterministic identity-conditioned geometry for replay validation.
+  - IdOB must align with RB, RTU-prm, and TPU update rules.
+  - IdOB must enforce admissible identity-refinement envelope constraints.
