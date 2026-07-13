@@ -1,0 +1,141 @@
+reference_object_name: DCB
+reference_family: path_a
+version: 1.0.0
+
+description: >
+  DCB (Directional Conversation Basin) is the Path-A reference object defining
+  the structural and geometric fields required to compute conversational
+  trajectory curvature, directional-change events, and TP position/direction
+  geometry. DCB is strictly pre-semantic, non-routing, non-corrective, and
+  non-persistent. It provides geometric signals consumed by TR.
+
+normative_home: 20.106
+
+object_purpose: >
+  Provide TR with geometric curvature signals indicating when the conversational
+  trajectory bends, pivots, or reverses. DCB prevents misrouting during stance
+  shifts by emitting deterministic directional-change events.
+
+is_not:
+  - OB
+  - semantic_analyzer
+  - TP_modifier
+  - persistent_writer
+  - path_b_element
+
+inputs:
+  required:
+    - ob_envelope
+  optional:
+    - tp_position_vector
+    - tp_direction_vector
+    - tp_history_vector
+
+fields:
+  scalar_fields:
+    curvature_magnitude:
+      description: >
+        Scalar measure of instantaneous conversational curvature.
+      bounds: [0.0, 1.0]
+
+    curvature_spike:
+      description: >
+        High-frequency curvature event indicating a pivot or reversal.
+      bounds: [0.0, 1.0]
+
+    trajectory_stability:
+      description: >
+        Stability of conversational direction over recent turns.
+      bounds: [0.0, 1.0]
+
+    directional_change_strength:
+      description: >
+        Strength of directional-change event emitted to TR.
+      bounds: [0.0, 1.0]
+
+    degradation_level:
+      description: >
+        Structural degradation or noise in trajectory geometry.
+      bounds: [0.0, 1.0]
+
+  vector_fields:
+    tp_position_vector:
+      description: >
+        Position of the TP in conversational geometric space.
+      shape: fixed_length
+
+    tp_direction_vector:
+      description: >
+        Direction of conversational movement.
+      shape: fixed_length
+
+    curvature_vector:
+      description: >
+        Vector representation of curvature geometry.
+      shape: fixed_length
+
+    directional_change_vector:
+      description: >
+        Vector representation of directional-change events.
+      shape: fixed_length
+
+invariants:
+  - ob_envelope_required
+  - deterministic_geometry_required
+  - no_semantic_analysis
+  - no_tp_write
+  - no_routing_decision
+  - replay_stability_required
+  - path_a_only
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required OB-derived trajectory fields must be present.
+
+  C2_slot_shape:
+    description: >
+      All position, direction, and curvature vectors must match expected shapes.
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+
+  C4_curvature_consistency:
+    description: >
+      curvature_magnitude and curvature_spike must be deterministic and stable.
+
+  C5_no_semantic_or_tp_write:
+    description: >
+      DCB must not modify semantic meaning or TP contents.
+
+  C6_directional_event_rules:
+    description: >
+      directional_change_strength increases for stance shifts, pivots, reversals.
+
+  C7_replay_determinism:
+    description: >
+      DCB must produce identical geometry under replay.
+
+routing:
+  admissible_inputs:
+    - OB
+  admissible_outputs:
+    - TR
+  description: >
+    DCB emits directional-change events and curvature signals consumed by TR.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ob_reference
+    - tr_reference
+    - boundary_reference
+    - routing_reference
+
+psc_alignment:
+  - DCB satisfies PSC trajectory-geometry object requirements.
+  - DCB exposes deterministic curvature geometry for replay validation.
+  - DCB aligns with OB and TR.
+  - DCB enforces admissible directional-conversation envelope constraints.
