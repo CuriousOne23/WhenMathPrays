@@ -1,0 +1,149 @@
+reference_object_name: STPX
+reference_object_class: semantic
+semantic_class: semantic_topology_extractor
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the semantic topology geometry, invariants, admissible envelopes, and
+    routing constraints for the Semantic Topology Extractor (STPX) in Path A.
+  long: >
+    STPX extracts stable semantic topology from the semantic manifold (SSG). It
+    identifies topological invariants, semantic curvature, cue‑aligned topology,
+    and routing‑aligned topology. STPX provides deterministic geometry, invariant
+    sets, and field definitions required for PSC replay and semantic‑topology
+    stability before routing and scoring primitives operate.
+
+invariants:
+  - name: semantic_vector_required
+    description: >
+      semantic_vector must be present and valid; missing vectors invalidate topology extraction.
+  - name: cue_vector_required
+    description: >
+      cue_vector must be present and valid; missing vectors invalidate topology extraction.
+  - name: topology_axes_consistent
+    description: >
+      All topology axes must remain consistent with the semantic manifold; STPX may
+      not distort semantic geometry.
+  - name: curvature_consistency
+    description: >
+      semantic_curvature must be consistent with SSG manifold curvature.
+  - name: replay_stability_required
+    description: >
+      STPX must produce identical topology geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      STPX may only accept envelopes produced by SSG.
+
+geometry_signature:
+  envelope_type: semantic_topology_envelope
+  shape: semantic_topology_manifold
+  dimensions:
+    - name: topology_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: curvature_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: cue_alignment_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+    - name: routing_alignment_axis
+      type: scalar
+      bounds: [-1.0, 1.0]
+  description: >
+    STPX geometry defines the semantic topology manifold used for routing and scoring.
+    It provides axes for semantic topology, curvature, cue alignment, and routing
+    alignment, forming the stable semantic topology envelope.
+
+scalar_fields:
+  - name: semantic_topology_stability
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Stability of semantic topology extracted from the semantic manifold.
+  - name: semantic_curvature
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Curvature of semantic meaning within the manifold.
+  - name: cue_alignment
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Alignment of semantic topology with cue manifold.
+  - name: routing_alignment
+    type: float
+    bounds: [-1.0, 1.0]
+    description: >
+      Alignment of semantic topology with routing manifold.
+
+vector_fields:
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Semantic manifold coordinates used for topology extraction.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Cue manifold coordinates used for topology extraction.
+  - name: topology_vector
+    type: vector
+    length: 3
+    description: >
+      Extracted semantic topology coordinates.
+
+envelope_status:
+  admissible_status:
+    - stable
+    - degraded
+    - topology_ready
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy STPX invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: replay_inconsistency
+    description: Replay produced non-identical topology geometry.
+  - name: inadmissible_source
+    description: Envelope did not originate from SSG.
+
+routing:
+  admissible_inputs:
+    - SSG
+  admissible_outputs:
+    - SOB
+    - SROB
+    - CnOB
+    - ISc
+  description: >
+    STPX extracts semantic topology and routes the topology envelope into semantic,
+    routing, correction-neutral, or scoring primitives depending on topology stability
+    and cue/routing alignment.
+
+dependencies:
+  dictionaries:
+    - meaning_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - ssg_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_clean_flow
+    - path_a_corrected_flow
+
+psc_alignment:
+  - STPX must satisfy PSC semantic object requirements.
+  - STPX must expose deterministic geometry for replay validation.
+  - STPX must align with semantic, routing, correction-neutral, and scoring primitives.
+  - STPX must enforce admissible semantic topology envelope constraints.
