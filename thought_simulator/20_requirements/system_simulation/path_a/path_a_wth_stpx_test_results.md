@@ -17,6 +17,8 @@ This document records the results of the Path A, STPX added to the lineup, test 
 - Composite performance scores
 - Lowest-performing primitive analysis with numerical score, threshold, and margin/deficit
 
+**Note (added this note 5 days after following from doing this test):** This test was done with only token_surface, as a base field, as of 7/14/2026, TS Path A is moving to 4 field base for meaning, token_surface, token_base, token_exspression, token_intent.
+
 ---
 
 ## Test Suite Overview
