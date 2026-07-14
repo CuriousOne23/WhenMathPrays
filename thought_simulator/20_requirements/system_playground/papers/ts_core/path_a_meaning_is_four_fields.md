@@ -25,7 +25,13 @@ InB initializes all fields to default values. IIInB proposes expression metadata
 
 IdOB uses the stabilized four fields under routed identity basins to finalize token_intent with identity-specific pragmatic valence. TR uses the finalized token_intent to shade truth relations. SSR integrates all four fields into the immutable SSR(t) snapshot for Path B. SSR(t) is the immutable meaning-layer handoff that guarantees A/B separation and replay-stable realization.
 
-The four fields together ensure replay-equivalent meaning construction under identical input and routing. For “really?!”, token_surface captures punctuation force and adjacency, token_expression captures intensity, token_base anchors lexical questioning role, and token_intent captures pragmatic challenge valence.
+The four fields together ensure replay-equivalent meaning construction under identical input and routing. For “really?!”, token_surface captures punctuation force and adjacency, token_expression captures intensity, token_base anchors lexical questioning role, and token_intent captures pragmatic challenge valence. 
+
+Each field directly addresses a failure mode seen in prior systems and today’s LLMs:  
+- **token_surface** isolates the instability of surface‑driven statistical models;
+- **token_base** isolates lexical ambiguity and missing role structure;
+- **token_expression** isolates expressive opacity and uncontrolled affect;
+- **token_intent** isolates the core failure of modern LLMs — the inability to deterministically represent, control, or finalize communicative force.
 
 ---
 
