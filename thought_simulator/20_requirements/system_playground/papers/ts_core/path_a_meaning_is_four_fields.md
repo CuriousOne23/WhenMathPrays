@@ -4,7 +4,6 @@ The Path A four-field token model consists of token_surface, token_base, token_e
 
 TS requires a four-field token model to support deterministic, lane-local meaning construction under the constraints of the architecture scaffold. The fields partition surface geometry, lexical identity, expressive metadata, and pragmatic force so that each Path A primitive owns only the surfaces required for its role. This partitioning prevents authority drift, preserves replay equivalence, and enables clean commitment via TPU to semantic_core. Removing any field breaks deterministic meaning construction; adding fields violates minimalism and explicit dependency rules.
 
-
 **Four-field Tokens:**
 - **token_surface:** preserves expressive geometry, adjacency cues, punctuation force, elongation, and emotional shading.
 - **token_base preserves:** lexical identity, dictionary meaning, semantic roles, and truth-relation mapping.
