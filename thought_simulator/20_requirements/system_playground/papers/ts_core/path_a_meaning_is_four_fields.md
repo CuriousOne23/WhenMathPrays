@@ -4,10 +4,10 @@ The Path A four-field token model consists of token_surface, token_base, token_e
 
 TS requires a four-field token model to support deterministic, lane-local meaning construction under the constraints of the architecture scaffold. The fields partition surface geometry, lexical identity, expressive metadata, and pragmatic force so that each Path A primitive owns only the surfaces required for its role. This partitioning prevents authority drift, preserves replay equivalence, and enables clean commitment via TPU to semantic_core. Removing any field breaks deterministic meaning construction; adding fields violates minimalism and explicit dependency rules.
 
-token_surface preserves expressive geometry, adjacency cues, punctuation force, elongation, and emotional shading.  
-token_base preserves lexical identity, dictionary meaning, semantic roles, and truth-relation mapping.  
-token_expression preserves affective and expressive metadata such as elongation, intensity, repetition, punctuation patterns, and other expressive features.  
-token_intent preserves communicative force, including supportive, clarifying, deceptive, controlling, obscurifying, challenging, hurting, or other pragmatic valence.
+- token_surface preserves expressive geometry, adjacency cues, punctuation force, elongation, and emotional shading.
+- token_base preserves lexical identity, dictionary meaning, semantic roles, and truth-relation mapping.
+- token_expression preserves affective and expressive metadata such as elongation, intensity, repetition, punctuation patterns, and other expressive features.
+- token_intent preserves communicative force, including supportive, clarifying, deceptive, controlling, obscurifying, challenging, hurting, or other pragmatic valence.
 
 InB initializes all fields to default values. IIInB proposes expression metadata only. IE commits token_surface, token_base, and token_expression while leaving token_intent empty. SOB begins low-confidence intent classification. SROB refines intent based on adjacency and roles. SmOB harmonizes intent with structural context. IdOB performs identity-conditioned meaning refinement and is the first primitive allowed to finalize token_intent. TR applies truth-relation shading based on refined intent. SSR constructs final semantic structure using all four fields.
 
