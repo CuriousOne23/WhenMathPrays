@@ -8,7 +8,7 @@
 
 ## Introduction
 
-The Path A four-field token model consists of token_surface, token_base, token_expression, and token_intent. These four fields are necessary and sufficient for meaning understanding and interpretation in Path A.
+The Path A four-field token model (FFTM) consists of token_surface, token_base, token_expression, and token_intent. These four fields are necessary and sufficient for meaning understanding and interpretation in Path A.
 
 TS requires a four-field token model to support deterministic, lane-local meaning construction under the constraints of the architecture scaffold. The fields partition surface geometry, lexical identity, expressive metadata, and pragmatic force so that each Path A primitive owns only the surfaces required for its role. This partitioning prevents authority drift, preserves replay equivalence, and enables clean commitment via TPU to semantic_core. Removing any field breaks deterministic meaning construction; adding fields violates minimalism and explicit dependency rules.
 
