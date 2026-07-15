@@ -1,0 +1,109 @@
+primitive_name: CST
+primitive_class: structure
+semantic_class: stability_tracker
+version: 1.0.0
+
+description:
+  short: >
+    Conversation Stability Tracker (CST) monitors COB identity‑layer structure for drift,
+    oscillation, collapse, and instability, emitting bounded stabilization signals.
+  long: >
+    CST evaluates the 20 identity‑layers maintained by COB and computes stability signatures,
+    drift vectors, oscillation patterns, collapse indicators, and long‑horizon noise
+    accumulation. CST does not modify structure directly; it emits bounded stabilization
+    signals that COB may apply. CST is non‑semantic, non‑routing, and non‑boundary; it
+    operates strictly within structural geometry.
+
+inputs:
+  admissible_sources:
+    - COB
+  envelope_type: stability_envelope
+  description: >
+    CST accepts structural envelopes produced by COB containing identity‑layer geometry
+    required for stability evaluation.
+
+outputs:
+  admissible_targets:
+    - stabilization_signal
+  description: >
+    CST emits bounded stabilization signals (weaken, strengthen, stabilize, merge‑candidate,
+    split‑candidate). CST does not apply structural changes; COB performs all modifications.
+
+invariants:
+  - name: no_meaning_construction
+    description: >
+      CST must not construct meaning or interpret semantics.
+  - name: no_boundary_access
+    description: >
+      CST must not read intake envelopes or boundary‑class objects.
+  - name: no_routing_authority
+    description: >
+      CST may not perform routing decisions or modify routing metadata.
+  - name: bounded_stability_geometry
+    description: >
+      CST must operate on bounded structural geometry derived from COB.
+  - name: replay_stability_required
+    description: >
+      CST must produce identical stability signatures under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      CST may only accept structural envelopes produced by COB.
+
+fields:
+  scalar_fields:
+    - name: drift_magnitude
+      type: float
+      bounds: [0.0, 1.0]
+      description: Magnitude of long‑horizon drift detected in identity‑layer structure.
+    - name: oscillation_magnitude
+      type: float
+      bounds: [0.0, 1.0]
+      description: Magnitude of oscillatory instability across identity‑layers.
+    - name: collapse_magnitude
+      type: float
+      bounds: [0.0, 1.0]
+      description: Degree of structural collapse or degradation detected.
+
+  vector_fields:
+    - name: stability_vector
+      type: vector
+      length: 3
+      description: >
+        Manifold coordinates representing drift, oscillation, and collapse signatures.
+
+status:
+  admissible_status:
+    - stable
+    - drift_detected
+    - oscillation_detected
+    - collapse_detected
+  terminal_status:
+    - invalid_geometry
+    - inadmissible_source
+    - replay_violation
+
+anomalies:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy CST invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: inadmissible_source
+    description: Envelope did not originate from COB.
+  - name: replay_inconsistency
+    description: Replay produced non-identical stability geometry.
+
+dependencies:
+  reference_objects:
+    - cst_reference
+    - cob_reference
+    - structure_reference
+  dictionaries:
+    - runtime_dictionary
+  flow_contracts:
+    - path_a_structure_flow
+
+psc_alignment:
+  - CST must satisfy PSC structural object requirements.
+  - CST must expose deterministic stability geometry for replay validation.
+  - CST must align with COB and structural primitives.
+  - CST must enforce admissible stability‑tracking constraints.
