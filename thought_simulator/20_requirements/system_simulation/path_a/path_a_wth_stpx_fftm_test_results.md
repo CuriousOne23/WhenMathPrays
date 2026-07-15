@@ -1,3 +1,10 @@
+# Path A Test Results Report
+
+**Document ID:** 20.XXX_path_a_test_results  
+**Version:** 0.1  
+**Date:** 2026-07-14  
+**Status:** Draft — Test Report (Path A)  
+
 **Path A Test Results with STPX + ISc FFTM (4-Field) — Summary**
 
 All 10 test cases completed successfully with full Path A invariant compliance. The updated ISc (using FFTM — token surface + STPX structural cues + constraint cues + repair metadata) provided richer input for entropy scoring, resulting in modestly better performance.
