@@ -174,6 +174,34 @@ With the parallel IMR path and full context integration, Path A has reached a le
 
 ---
 
+## Future Improvements (Low-Effort, High-Impact)
+
+Several inexpensive enhancements remain available to further strengthen the current architecture:
+
+1. **Adaptive ISc Scoring Threshold**  
+   Make the H threshold for refinement slightly dynamic based on IMR difficulty rating.  
+   *Expected Gain:* +0.5 to +1.5 points, cleaner termination in simple cases.
+
+2. **Lightweight Temporal Marker Propagation in SOB**  
+   Explicitly tag basic temporal markers as structural flags in residue.  
+   *Expected Gain:* +0.8 to +1.2 points in temporal/contradiction tests (C1, E1, E2).
+
+3. **SmOB Cue Prioritization**  
+   Add simple priority ordering to pre-semantic cues (e.g., contrast/causal flags get higher weight for STPX).  
+   *Expected Gain:* +0.7 to +1.0 points in contrast-heavy tests (B1, C2).
+
+4. **Minimal IMR Feedback to RBU**  
+   Let RBU read a lightweight version of IMR difficulty rating (read-only) for meaning-refinement guidance.  
+   *Expected Gain:* +0.5 to +1.0 points in refinement loops.
+
+5. **STPX Cue Enrichment**  
+   Add 1–2 more structural cue types in STPX (e.g., "repair_density" from IMR).  
+   *Expected Gain:* +0.6 to +1.0 points overall.
+
+These changes are non-disruptive and can be implemented with minimal risk while preserving all Path A invariants.
+
+---
+
 ## Progressive Evolutionary Summary
 
 **Configuration Evolution & Performance:**
