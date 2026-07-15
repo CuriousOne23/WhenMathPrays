@@ -9,6 +9,38 @@
 
 All 10 test cases completed successfully with full Path A invariant compliance. The updated ISc (using FFTM — token surface + STPX structural cues + constraint cues + repair metadata) provided richer input for entropy scoring, resulting in modestly better performance.
 
+---
+
+## Test Suite Overview
+
+Note that the simulations were ran with references defined under [system_playground/papers/references](../system_playground/papers/references)  
+
+**Entropy Simulation H Value:**
+- H ≤ 0.25 → Route to OuBA (low entropy, sufficient stability)
+- H > 0.25 → Continue refinement loop (IdOB/RBU cycle)
+
+**Composite Score Formula:**
+Score = (Entropy Reduction × 0.40) + (Constraint Satisfaction × 0.30) + (Stability Contribution × 0.30)
+
+Entropy Reduction (40%): How effectively the primitive lowered H (entropy) value. Higher reduction = better score.
+Constraint Satisfaction (30%): How well the primitive satisfied structural, semantic, or identity constraints (C1–C7, manifold rules, referential stability, etc.). Fewer violations = higher score.
+Stability Contribution (30%): How much the primitive contributed to replay equivalence, monotonic accumulation, and overall TP snapshot stability.
+
+Scale: 0–100 (higher is better)
+Acceptable Threshold: ≥ 85
+This scoring is observational and derived from the simulation behavior — not arbitrary. It reflects real performance against Path A invariants.
+
+**Option Chosen:** 4 — Composite Score
+
+**Scoring Components:**
+- Entropy reduction (40%)
+- Constraint satisfaction (30%)
+- Stability contribution (30%)
+
+**Acceptable Threshold:** Composite score ≥ 85.0
+
+---
+
 ### Test-by-Test Comparison Table
 
 | Test Case | Without STPX Avg | With STPX (previous) | With STPX + ISc FFTM | Improvement from ISc FFTM | LLM Estimated Equivalent | TS Advantage | LLM Advantage |
