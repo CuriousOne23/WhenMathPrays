@@ -1,154 +1,140 @@
 primitive_name: CE
-primitive_family: path_a
-reference_type: ce_reference
-version: 1.0.0
+primitive_class: boundary
+semantic_class: context_envelope
+version: 1.1.0
 
-description: >
-  CE (Correction Evaluation) is a deterministic passthrough primitive in Path A.
-  CE performs no correction, no semantic interpretation, no routing, and no truth
-  evaluation. Its sole job is to validate the correction-neutral envelope (CnOB),
-  extract evaluation-ready fields, and produce the CE envelope consumed by
-  candidate_set{} and ISc. CE is strictly local, replay-safe, and side-effect-free.
-
-runtime_behavior:
-  mode: passthrough_evaluation
-  correction_application: none
-  semantic_interpretation: none
-  routing_computation: none
-  truth_evaluation: none
-  replay_behavior: deterministic
+description:
+  short: >
+    CE (ContextEnvelope) validates and evaluates the bounded context slice produced
+    by CEx, ensuring deterministic, replay‑safe geometry before candidate_set{} and ISc.
+  long: >
+    CE is a deterministic context‑evaluation primitive. It reads all TP‑stream fields
+    but does not modify or commit any. CE validates bounded geometry, checks referent,
+    discourse, cue, and locality fields, ensures semantic/meaning/process/supervisor
+    invariants remain unchanged, and produces an evaluation‑ready CE envelope for
+    candidate generation and scoring. CE is strictly local, replay‑safe, and side‑effect‑free.
 
 inputs:
-  required:
-    - cnob_envelope
-  optional:
-    - semantic_vector
-    - routing_vector
-    - cue_vector
+  admissible_sources:
+    - CEx
+  envelope_type: context_envelope
+  description: >
+    CE accepts the bounded context envelope produced by CEx. CE may not accept envelopes
+    from any other source.
 
 outputs:
-  envelope_type: correction_evaluation_envelope
-  fields:
-    scalar_fields:
-      - semantic_stability
-      - routing_stability
-      - cue_coherence
-      - degradation_level
-      - neutrality_level
-    vector_fields:
-      - semantic_vector
-      - routing_vector
-      - cue_vector
+  envelope_type: context_envelope
+  scalar_fields:
+    - referent_strength
+    - discourse_coherence
+    - cue_salience
+    - locality_bound
+  vector_fields:
+    - referent_vector
+    - discourse_vector
+    - cue_vector
   status_flags:
-    - evaluation_ready
-    - degraded
+    - context_ready
+    - referents_present
+    - cues_present
+    - evaluation_valid
+  description: >
+    CE forwards the validated context envelope to candidate_set{} and ISc without
+    modification of TP‑stream fields.
 
 invariants:
-  envelope_must_be_closed: true
-  semantic_vector_required: true
-  routing_vector_required: true
-  cue_vector_required: true
-  neutrality_preserved: true
-  no_correction_allowed: true
-  no_semantic_modification: true
-  replay_stability_required: true
-
-constraint_families:
-  C1_slot_presence:
+  - name: closed_envelope_required
     description: >
-      All required structural slots must be present; CE may not infer or repair.
-    enforced: true
-
-  C2_slot_shape:
+      CE may only operate on closed envelopes produced by CEx.
+  - name: no_tp_modification
     description: >
-      All slots must match expected structural shapes; CE performs no plausibility checks.
-    enforced: true
-
-  C3_slot_bounds:
+      CE must not modify any TP‑stream fields; all meaning/process/supervisor fields
+      must remain unchanged.
+  - name: bounded_context_required
     description: >
-      All scalar and vector fields must remain within declared bounds.
-    enforced: true
-
-  C4_neutrality_preservation:
+      CE must validate that all context geometry remains within bounded limits.
+  - name: no_semantic_interpretation
     description: >
-      neutrality_level must remain unchanged; CE may not alter neutrality.
-    enforced: true
-
-  C5_no_correction:
+      CE must not interpret or construct meaning; it only validates context geometry.
+  - name: no_routing_authority
     description: >
-      CE must not apply correction or modify correction-level fields.
-    enforced: true
-
-  C6_alignment_rules:
+      CE must not perform routing decisions or modify routing metadata.
+  - name: replay_stability_required
     description: >
-      semantic_vector and routing_vector must remain aligned according to manifold rules.
-    enforced: true
-
-  C7_replay_determinism:
+      CE must produce identical output envelopes under replay for identical inputs.
+  - name: admissible_source_only
     description: >
-      CE must produce identical envelopes under replay for identical inputs.
-    enforced: true
+      CE may only accept envelopes produced by CEx.
 
 evaluation_logic:
   steps:
-    - validate_required_vectors
+    - validate_ce_envelope_shape
     - check_closed_envelope
-    - verify_neutrality_preservation
-    - copy_scalar_fields_from_cnob
-    - copy_vector_fields_from_cnob
-    - apply_constraint_families
-    - determine_envelope_status
-    - produce_output_envelope
+    - verify_scalar_bounds
+    - verify_vector_bounds
+    - verify_tp_stream_unchanged
+    - determine_context_status
+    - determine_evaluation_validity
+    - forward_envelope_unchanged
 
 status_determination:
-  evaluation_ready:
+  context_ready:
     conditions:
-      - neutrality_level == 1.0
-      - semantic_stability >= 0.0
-      - routing_stability >= 0.0
-  degraded:
+      - referent_strength >= 0.0
+      - discourse_coherence >= 0.0
+      - cue_salience >= 0.0
+  referents_present:
     conditions:
-      - degradation_level > 0.2
+      - referent_strength > 0.0
+  cues_present:
+    conditions:
+      - cue_salience > 0.0
+  evaluation_valid:
+    conditions:
+      - locality_bound >= 0.0
+      - no_tp_modification
 
 anomaly_flags:
-  geometry_violation:
+  - name: geometry_violation
     triggers:
       - envelope geometry violates invariants
-  field_out_of_bounds:
+  - name: field_out_of_bounds
     triggers:
       - scalar or vector fields exceed bounds
-  replay_inconsistency:
+  - name: inadmissible_source
+    triggers:
+      - envelope not from CEx
+  - name: tp_stream_modified
+    triggers:
+      - any TP‑stream field differs from upstream committed values
+  - name: replay_inconsistency
     triggers:
       - replay produces non-identical envelopes
-  inadmissible_source:
-    triggers:
-      - envelope not from CnOB
 
 routing:
   admissible_inputs:
-    - CnOB
+    - CEx
   admissible_outputs:
     - candidate_set
     - ISc
   description: >
-    CE validates the correction-neutral envelope and produces evaluation-ready fields
-    consumed by candidate_set{} and ISc. CE performs no routing transitions.
+    CE validates and evaluates the bounded context envelope and forwards it to
+    candidate_set{} and ISc. CE performs no routing transitions.
 
 dependencies:
   dictionaries:
-    - meaning_dictionary
     - runtime_dictionary
   reference_objects:
-    - cnob_reference
+    - ce_reference
+    - cex_reference
     - boundary_reference
     - semantic_reference
-    - routing_reference
     - structure_reference
   flow_contracts:
     - path_a_inference_flow
 
 psc_alignment:
-  - CE satisfies PSC passthrough-object requirements.
-  - CE exposes deterministic geometry for replay validation.
-  - CE aligns with CnOB, candidate_set{}, and ISc.
-  - CE enforces admissible correction-evaluation envelope constraints.
+  - CE satisfies PSC boundary-object requirements.
+  - CE exposes deterministic, bounded context geometry for replay validation.
+  - CE aligns with CEx, candidate_set{}, and ISc.
+  - CE enforces admissible context‑envelope constraints.
