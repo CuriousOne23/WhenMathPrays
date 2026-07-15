@@ -1,0 +1,128 @@
+reference_object_name: SSRGn
+reference_object_class: semantic
+semantic_class: semantic_snapshot_generator
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the deterministic semantic‑projection geometry and invariants for the
+    Semantic Snapshot Generator (SSRGn), which produces the replayable semantic
+    snapshot (SSR) consumed by COB, CIL, and CST.
+  long: >
+    SSRGn projects semantic_core, meaning‑layer geometry, identity‑conditioned overlays,
+    and truth‑relation metadata into a bounded semantic snapshot (SSR). SSRGn is the
+    sole A→B semantic boundary producer: OuBA commits semantic_core, and SSRGn generates
+    the stable semantic projection used by all downstream Path‑A primitives. SSRGn does
+    not construct new meaning, rewrite semantics, or perform routing; it provides
+    deterministic, PSC‑aligned semantic geometry for safe inference.
+
+invariants:
+  - name: no_meaning_construction
+    description: >
+      SSRGn must not construct new meaning; it only projects committed semantic_core.
+  - name: no_boundary_access
+    description: >
+      SSRGn must not read intake envelopes or boundary‑class objects.
+  - name: no_routing_authority
+    description: >
+      SSRGn may not perform routing decisions or modify routing metadata.
+  - name: bounded_semantic_projection
+    description: >
+      SSRGn must produce a bounded semantic snapshot with no unbounded lineage or history.
+  - name: replay_stability_required
+    description: >
+      SSRGn must produce identical semantic geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      SSRGn may only accept semantic_core committed by OuBA.
+
+geometry_signature:
+  envelope_type: semantic_snapshot_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: meaning_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: identity_overlay_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: truth_relation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    SSR geometry represents meaning‑layer magnitude, identity‑conditioned semantic
+    overlays, and truth‑relation geometry. These axes form the semantic snapshot
+    consumed by COB, CIL, and CST.
+
+scalar_fields:
+  - name: meaning_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of meaning‑layer projection from semantic_core.
+  - name: identity_overlay_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Strength of identity‑conditioned semantic overlays.
+  - name: truth_relation_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of truth‑relation geometry in the semantic snapshot.
+
+vector_fields:
+  - name: semantic_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing meaning, identity overlays, and truth‑relation
+      geometry in the semantic snapshot.
+
+envelope_status:
+  admissible_status:
+    - semantic_ready
+    - meaning_present
+    - identity_overlay_present
+    - truth_relations_present
+  terminal_status:
+    - invalid_geometry
+    - inadmissible_source
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy SSRGn invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: inadmissible_source
+    description: Envelope did not originate from OuBA semantic_core.
+  - name: replay_inconsistency
+    description: Replay produced non-identical semantic geometry.
+
+routing:
+  admissible_inputs:
+    - OuBA
+  admissible_outputs:
+    - SSR
+  description: >
+    SSRGn produces the semantic snapshot (SSR) consumed by COB, CIL, and CST. SSRGn does
+    not perform semantic rewrite, correction expansion, or routing decisions.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - semantic_reference
+    - identity_meaning_reference
+    - structure_reference
+    - routing_reference
+  flow_contracts:
+    - path_a_semantic_flow
+    - path_a_inference_flow
+
+psc_alignment:
+  - SSRGn must satisfy PSC semantic object requirements.
+  - SSRGn must expose deterministic semantic geometry for replay validation.
+  - SSRGn must align with OuBA, COB, CIL, and CST.
+  - SSRGn must enforce admissible semantic‑projection constraints.
