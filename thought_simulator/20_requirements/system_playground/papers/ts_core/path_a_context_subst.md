@@ -1,305 +1,99 @@
-# **Path A Context Paper (Draft v0.1)**  
-*TS Core — Intake Boundary, Envelope Guarantees, and Cross‑Packet Foundations*
+**Yes, that makes perfect sense.**
+
+This is exactly the right way to handle it: a **living working paper** that surfaces the hard questions and gaps first, then proposes solutions iteratively. It can grow as we explore, then shrink as we converge on decisions.
+
+Here is the updated **v0.4** of `path_a_context_subst.md`, restructured as a working paper with explicit **Open Questions** and **Proposed Directions** sections (especially focused on COB, CST, and CIL as you requested).
 
 ---
 
-## **1. Purpose of Path A**
+**path_a_context_subst.md**  
+**Path A Context Substrate** (Working Paper v0.4)
 
-Path A is the **intake boundary** of the Thought Simulator. Its job is to transform raw user text into a **deterministic, normalized, replayable envelope** that downstream primitives (COB, CIL, CST, CEx, SSRGn) can rely on.
+### 1. Purpose
+This living working paper defines the stable, deterministic substrate that Path A must produce so the conversation-layer primitives (COB, CST, CIL) and supporting blocks (CEx, SSRGn) can be properly specified and implemented.  
 
-Path A does **not** interpret meaning, extract structure, infer identity, or regenerate semantics.  
-It provides the **stable substrate** on which all cross‑packet primitives operate.
+It will grow with open questions and proposals, then shrink as we agree on solutions.
 
-Path A guarantees:
+### 2. Scope & Current Architecture Context
+- Path A = full meaning-construction pipeline ending at OuBA → SSRGn.
+- The **Context Substrate** = Intake Envelope (IE), TP metadata (20.105), and post-OuBA SSRGn artifacts.
+- Goal: Ensure long-horizon continuity, stability, and deterministic context extraction without breaking replay safety or the A/B boundary.
 
-- deterministic normalization  
-- bounded repairs  
-- bounded defect detection  
-- stable envelope schema  
-- stable referent candidates  
-- stable structural tokens  
-- stable lineage markers  
-- replayable output  
+### 3. Intake Guarantees (Early Path A)
+(Stable for now — see prior drafts for IE/TP metadata details.)
 
-Path A is the **ground truth** for continuity, identity, extraction, and regeneration.
+### 4. Conversation-Layer Primitives — Current State & Gaps
 
----
+**COB (Conversation Object Basin)**
+- Current: Maintains ≤20 identity-layers, referent maps, lineage.
+- Gaps: Internal data model, update/merge rules, conflict resolution with new SSRGn, layer lifecycle (creation/retirement/aging).
 
-## **2. The Intake Pipeline**
+**CST (Conversation Stability Tracker)**
+- Current: Detects drift/oscillation/collapse and issues correction signals.
+- Gaps: Metrics, windows, thresholds, signal schema, feedback loop with COB.
 
-Path A consists of three primitives:
+**CIL (Conversation Integration Layer)**
+- Current: Merges short-term cues with COB snapshot; produces intake packet for CEx.
+- Gaps: Precise merging logic, flag-generation rules, handling of ambiguity.
 
-```
-InB → IIInB → IE
-```
+**Supporting: CEx & SSRGn**
+- Better specified, but need tighter contracts with the above.
 
-### **2.1 InB — Intake Boundary**
-Responsibilities:
-- accept raw input  
-- validate basic shape  
-- reject malformed packets  
-- assign initial metadata  
+### 5. Open Questions (Where We Are Getting in Trouble)
 
-Not responsible for:
-- normalization  
-- repair  
-- structure  
-- identity  
-- extraction  
+#### COB Questions
+- What is the exact schema for an identity-layer and its referent map?
+- How are new layers created or old ones retired when we hit the 20-layer limit?
+- How does COB resolve conflicts between incoming SSRGn meaning and existing layers?
+- What is the update/merge algorithm when CST signals arrive?
+- How do we ensure replay safety for the entire COB state over long sessions?
 
-### **2.2 IIInB — Bounded Intake Inspection**
-Responsibilities:
-- detect bounded defects  
-- detect unicode noise  
-- detect structural breaks  
-- detect misspellings (bounded)  
-- detect repeating‑letter noise  
-- detect shorthand/informal forms  
-- detect empty input  
-- detect length violations  
+#### CST Questions
+- What quantitative metrics define drift, oscillation, or collapse?
+- Over what time windows and with what thresholds do we trigger signals?
+- What is the full set of correction signals and their parameters?
+- How does CST avoid over-correction or oscillation itself?
+- Is CST fully deterministic and replay-safe?
 
-Not responsible for:
-- repairing defects  
-- interpreting meaning  
-- extracting structure  
+#### CIL Questions
+- Exactly how does CIL merge short-term TP/IE cues with COB snapshot?
+- What rules govern certainty flags, field-importance hints, and ambiguity flags?
+- How does CIL handle partial or conflicting information from COB?
 
-### **2.3 IE — Intake Envelope**
-Responsibilities:
-- normalize whitespace  
-- normalize punctuation  
-- remove unicode noise  
-- repair structural tokens  
-- apply bounded repairs  
-- enforce envelope constraints  
-- produce deterministic normalized text  
-- produce deterministic envelope metadata  
+#### Cross-Cutting Questions
+- What is the precise timing and handoff protocol (SSRGn → COB/CST/CIL)?
+- How are all signals and state changes auditable and replay-safe?
+- How do these blocks interact with Path B (CoHI, etc.) without breaking the A/B boundary?
+- What invariants must hold to prevent conversational collapse or identity wobble?
 
-Not responsible for:
-- semantic interpretation  
-- identity resolution  
-- structure typing  
-- extraction  
-- regeneration  
+### 6. Proposed Directions (Starting Points)
 
----
+**For COB**
+- Adopt a fixed 20-slot array with priority/strength scores per layer.
+- Define explicit merge rules (e.g., strength-weighted averaging of referent maps).
+- Add aging/decay based on recency and usage frequency.
 
-## **3. Intake Envelope Schema (IE Output)**
+**For CST**
+- Use multi-scale metrics: short-term oscillation (last 3–5 turns), medium-term drift (last 20 turns), long-term entropy of layer usage.
+- Define a small set of typed signals with strength parameters.
+- Require CST to log justification for each signal.
 
-The Intake Envelope is the **canonical output** of Path A.  
-All downstream primitives consume this schema.
+**For CIL**
+- Simple weighted merge of short-term cues and COB snapshot.
+- Rule-based flag generation (e.g., low confidence if conflicting referents).
 
-### **3.1 Required Fields**
-- `normalized_text` — deterministic normalized string  
-- `repairs` — ordered list of bounded repairs  
-- `defects` — ordered list of bounded defects  
-- `structural_tokens` — stable structural markers  
-- `referent_candidates` — surface‑form candidates (no interpretation)  
-- `envelope_id` — deterministic ID  
-- `lineage_marker` — deterministic replay marker  
-- `metadata` — timestamps, length, flags  
+**General**
+- All state changes go through explicit, versioned snapshots for replay.
+- Add a small set of quantitative test cases (e.g., oscillation scenario, new identity emergence, referent conflict) that the subsystem must pass.
 
-### **3.2 Deterministic Replay Requirements**
-The envelope must be:
-
-- stable under replay  
-- stable under re‑normalization  
-- stable under re‑inspection  
-- stable under re‑repair  
-
-This stability is required for:
-
-- COB identity layers  
-- CST drift detection  
-- CIL linking  
-- CEx extraction  
-- SSRGn regeneration  
+### 7. Next Steps
+1. Agree on or refine the questions above.
+2. Pick one block (e.g., COB) and expand its section with detailed proposals.
+3. Iterate until each primitive has enough to become a full requirements doc.
+4. Shrink this paper as decisions are extracted into their own specs.
 
 ---
 
-## **4. Dictionary Dependencies**
+This format gives us room to grow the questions and proposals without losing focus.  
 
-Path A uses dictionaries in **bounded, non‑semantic** ways:
-
-### **4.1 Meaning Dictionary**
-Used only for:
-- bounded misspelling detection  
-- bounded shorthand detection  
-
-Not used for:
-- semantic interpretation  
-- identity resolution  
-- extraction  
-
-### **4.2 Runtime Dictionary**
-Used for:
-- structural token validation  
-- unicode normalization rules  
-
-### **4.3 Dev Dictionary**
-Used for:
-- debugging  
-- deterministic replay validation  
-
-### **4.4 Reference Objects**
-Path A does **not** interpret reference objects.  
-It only produces **referent candidates**.
-
-### **4.5 Field Reference Tables**
-Path A does **not** extract fields.  
-It only preserves structural tokens.
-
----
-
-## **5. Deterministic Replay Model**
-
-Path A must produce envelopes that are:
-
-- deterministic  
-- replayable  
-- stable across runs  
-- stable across environments  
-- stable across dictionary versions (within a version)  
-
-Replay model includes:
-
-- stable envelope IDs  
-- stable lineage markers  
-- stable repair ordering  
-- stable defect ordering  
-- stable referent candidate ordering  
-
-This is required for CST drift metrics and COB identity stability.
-
----
-
-## **6. Multi‑Packet Context Model**
-
-Path A itself is **single‑packet**, but its output must support **multi‑packet primitives**.
-
-Downstream primitives require:
-
-### **6.1 COB — Conversation Object Basin**
-Needs:
-- stable referent candidates  
-- stable structural tokens  
-- stable lineage markers  
-- stable envelope IDs  
-
-### **6.2 CST — Conversation Stability Tracker**
-Needs:
-- stable envelope sequence  
-- stable referent candidate sequence  
-- stable structural token sequence  
-- stable lineage markers  
-
-### **6.3 CIL — Cross‑Intake Linking**
-Needs:
-- stable referent candidates  
-- stable structural tokens  
-- stable envelope metadata  
-
-### **6.4 CEx — Cross‑Extraction**
-Needs:
-- stable structural tokens  
-- stable referent candidates  
-- stable normalized text  
-
-### **6.5 SSRGn — Semantic Structure Regeneration**
-Needs:
-- stable normalized text  
-- stable structural tokens  
-- stable referent candidates  
-
-Path A must guarantee stability for all of these.
-
----
-
-## **7. Interfaces for COB, CIL, CST, CEx**
-
-### **7.1 COB Reads**
-- normalized_text  
-- referent_candidates  
-- structural_tokens  
-- envelope_id  
-- lineage_marker  
-
-### **7.2 COB Writes**
-- identity layers  
-- referent maps  
-- lineage structures  
-
-### **7.3 CST Reads**
-- envelope sequence  
-- referent candidate sequence  
-- structural token sequence  
-- lineage markers  
-
-### **7.4 CST Writes**
-- correction signals (merge, split, promote, demote, stabilize, weaken, strengthen)  
-
-### **7.5 CIL Reads**
-- referent candidates  
-- structural tokens  
-- envelope metadata  
-
-### **7.6 CIL Writes**
-- cross‑intake links  
-
-### **7.7 CEx Reads**
-- normalized_text  
-- structural_tokens  
-- referent_candidates  
-
-### **7.8 CEx Writes**
-- extracted fields  
-- extraction lineage  
-
----
-
-## **8. What Path A Does *Not* Do**
-
-Path A does **not**:
-
-- interpret meaning  
-- resolve identity  
-- track continuity  
-- type structure  
-- extract fields  
-- regenerate semantics  
-- merge referents  
-- split referents  
-- detect drift  
-- produce correction signals  
-
-These belong to:
-
-- COB  
-- CST  
-- CIL  
-- CEx  
-- SSRGn  
-
-Path A provides the **stable substrate** for them.
-
----
-
-## **9. Summary**
-
-Path A is the intake boundary.  
-Its output — the Intake Envelope — is the foundation for all cross‑packet primitives.
-
-This paper defines:
-
-- Path A’s purpose  
-- Path A’s boundaries  
-- the intake pipeline  
-- the envelope schema  
-- deterministic replay rules  
-- dictionary dependencies  
-- multi‑packet context requirements  
-- interfaces for COB/CIL/CST/CEx  
-- what Path A does not do  
-
-This context is required before COB, CIL, CST, and CEx can be fully specified or implemented.
-
----
+Does this structure feel right? Which block or set of questions should we tackle first?
