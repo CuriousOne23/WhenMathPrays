@@ -139,7 +139,10 @@ def main():
         run_test_case(test, log)
 
     log.close()
+
+    # Show full log path in terminal
     print("\nAll tests complete.")
+    print(f"Log file written to:\n  {os.path.abspath(log.name)}")
     print("Full results written to log file (ignored by git).")
 
 if __name__ == "__main__":
