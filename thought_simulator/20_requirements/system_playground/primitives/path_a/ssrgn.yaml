@@ -1,0 +1,107 @@
+# Path A Primitive: SSRGn (Semantic‑Routing Grounding)
+# Provides deterministic grounding between semantic-layer geometry and routing-layer geometry.
+# Consumed by RTU, RBU, IMR, CIL, and CST.
+
+primitive:
+  name: ssrgn
+  version: 1.0.0
+  description: >
+    SSRGn (Semantic‑Routing Grounding) aligns semantic-layer geometry with routing-layer
+    geometry. It provides deterministic grounding rules, routing-vector normalization,
+    semantic-conditioned routing alignment, and routing-residue stabilization. SSRGn
+    ensures routing-layer determinism under replay and supports mismatch classification
+    (IMR), identity-layer stabilization (CIL), and routing operations (RTU, RBU).
+
+  inputs:
+    semantic_vector:
+      type: vector
+      length: 12
+      source: semantic_dictionary.semantic_vector
+
+    semantic_residue:
+      type: vector
+      length: 6
+      source: semantic_dictionary.semantic_residue
+
+    routing_vector:
+      type: vector
+      length: 8
+      source: routing_dictionary.routing_vector
+
+    routing_residue:
+      type: vector
+      length: 4
+      source: routing_dictionary.routing_residue
+
+    routing_metadata:
+      type: struct
+      source: routing_dictionary.routing_metadata
+
+  outputs:
+    grounded_routing_vector:
+      type: vector
+      length: 8
+      description: >
+        Routing vector aligned to semantic-layer geometry and normalized for stability.
+
+    grounded_routing_residue:
+      type: vector
+      length: 4
+      description: >
+        Stabilized routing residue consistent with semantic-conditioned routing rules.
+
+    grounding_metadata:
+      type: struct
+      description: >
+        Deterministic grounding metadata including route_class, route_confidence,
+        and route_stability.
+
+  grounding_rules:
+    - name: semantic_alignment
+      description: >
+        Routing vectors must be aligned with semantic-layer geometry to maintain
+        deterministic grounding.
+
+    - name: residue_normalization
+      description: >
+        Routing residue must be normalized to remain within declared stability bounds.
+
+    - name: stability_enforcement
+      description: >
+        Grounded routing-layer fields must satisfy routing-stability constraints.
+
+    - name: replay_determinism
+      description: >
+        Grounding operations must produce identical results under replay.
+
+  bounds:
+    grounded_routing_vector_bounds:
+      min: -1.0
+      max: 1.0
+
+    grounded_routing_residue_bounds:
+      min: -0.5
+      max: 0.5
+
+    grounding_metadata_bounds:
+      route_confidence: [0.0, 1.0]
+      route_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_grounding
+      description: Grounding results must be deterministic under replay.
+
+    - name: bounded_grounding_fields
+      description: All grounded fields must remain within declared bounds.
+
+    - name: no_semantic_interpretation
+      description: SSRGn defines geometry only; no semantic meaning is constructed.
+
+    - name: path_a_only
+      description: SSRGn applies exclusively to Path-A primitives.
+
+  references:
+    routing_reference: routing/ssrgn_reference.yaml
+    semantic_reference: semantic/semantic_reference.yaml
+    structure_reference: structure/structure_reference.yaml
+    identity_reference: identity/cil_reference.yaml
