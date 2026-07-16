@@ -1,1 +1,81 @@
 # Path A Structure Dictionary Index
+# Defines structural‑layer geometry, identity‑layer fields, stability geometry,
+# collapse/drift/oscillation bounds, and admissible structure‑class fields used by
+# COB, CST, CIL, IMR, and SSRGn.
+
+structure_dictionary:
+  version: 1.0.0
+  description: >
+    The Path‑A Structure Dictionary defines identity‑layer geometry, structural manifold
+    coordinates, stability signatures, collapse/drift/oscillation bounds, and admissible
+    structure‑class fields. It provides deterministic structural definitions used by
+    COB (identity‑layer construction), CST (stability evaluation), CIL (identity‑layer
+    stabilization), IMR (mismatch classification), and SSRGn (semantic‑routing grounding).
+
+  structure_fields:
+    - name: identity_layer_vector
+      type: vector
+      length: 20
+      description: >
+        Primary identity‑layer manifold coordinates maintained by COB and consumed by CST,
+        CIL, IMR, and SSRGn.
+
+    - name: stability_signature
+      type: vector
+      length: 3
+      description: >
+        Structural stability geometry representing drift, oscillation, and collapse
+        signatures computed by CST.
+
+    - name: structural_residue
+      type: vector
+      length: 6
+      description: >
+        Residual structural geometry produced by COB and consumed by CST and IMR.
+
+    - name: structure_metadata
+      type: struct
+      fields:
+        - name: structure_class
+          type: enum
+          values: [identity_layer, stability_geometry, residue, collapse_indicator]
+        - name: structure_confidence
+          type: float
+          bounds: [0.0, 1.0]
+        - name: structure_stability
+          type: float
+          bounds: [0.0, 1.0]
+      description: >
+        Deterministic structural metadata used for stability evaluation and mismatch
+        classification.
+
+  structure_bounds:
+    identity_layer_vector_bounds:
+      min: -1.0
+      max: 1.0
+    stability_signature_bounds:
+      drift: [0.0, 1.0]
+      oscillation: [0.0, 1.0]
+      collapse: [0.0, 1.0]
+    structural_residue_bounds:
+      min: -0.5
+      max: 0.5
+    structure_metadata_bounds:
+      structure_confidence: [0.0, 1.0]
+      structure_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_structure_geometry
+      description: Structural vectors and metadata must be deterministic under replay.
+    - name: bounded_structure_fields
+      description: All structural fields must remain within declared bounds.
+    - name: no_semantic_interpretation
+      description: Structure dictionary defines geometry only; no semantic meaning.
+    - name: path_a_only
+      description: Structure dictionary applies exclusively to Path‑A primitives.
+
+  psc_alignment:
+    - Structure dictionary satisfies PSC structural‑object requirements.
+    - Structure dictionary exposes deterministic structural geometry for replay validation.
+    - Structure dictionary aligns with COB, CST, CIL, IMR, and SSRGn.
+    - Structure dictionary enforces admissible structural‑layer constraints.
