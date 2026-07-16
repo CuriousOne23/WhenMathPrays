@@ -1,9 +1,3 @@
-**CP’s v0.1 is good — clear contract style and consistent with the series.**
-
-Here is my revised **v0.2** of `cob_interface_to_cil.md`. I tightened the language, clarified the cue structures, strengthened safety rules, and improved flow.
-
----
-
 **cob_interface_to_cil.md**  
 **Conversation Object Basin — Interface to CIL** (Working Draft v0.2)
 
@@ -120,13 +114,3 @@ COB ingests CIL packets using deterministic merge logic, assignment algorithm, a
 
 Packets must be complete, ordered, deterministic, replay-safe, structurally consistent, ambiguity-aware, lineage-aware, and relevance-aware.
 
-### 9. Next Steps
-- Draft `cob_interface_to_cex.md`.
-- Begin extracting stable answers into formal 20.x requirement documents.
-- Shrink this paper as answers stabilize.
-
----
-
-This version is ready.  
-
-We now have a very consistent set of interface papers. Let me know if you want the final one (`cob_interface_to_cex.md`) or any adjustments.
