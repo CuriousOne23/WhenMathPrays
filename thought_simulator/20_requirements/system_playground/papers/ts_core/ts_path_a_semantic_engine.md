@@ -2,7 +2,7 @@
 
 ## 1. Purpose of Path A
 
-Path A is the **semantic engine** of Thought Simulator (TS).
+Conceptual overview of Path A’s semantic engine. Path A is the **semantic engine** of Thought Simulator (TS). This document describes the conceptual semantic engine of Path A. For the operational flow, see [20.710.010_patha_operational_flow.md](20.710.010_patha_operational_flow.md).
 
 Its job is to:
 
