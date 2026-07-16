@@ -1,8 +1,8 @@
-# Path A Test Results Report
-**Document ID:** 20.XXX_path_a_cex_ce_imr_test_run
-**Version:** 0.1
-**Date:** 2026-07-15
-**Status:** Draft — Test Report (Path A)
+# Path A Test Results Report  
+**Document ID:** 20.XXX_path_a_cex_ce_imr_test_run  
+**Version:** 0.1  
+**Date:** 2026-07-15, ran by Grok  
+**Status:** Draft — Test Report (Path A)  
 
 # Path A Test Results with STPX + FFTM + ISc (after SmOB) + Active CEx/CE + Enhanced SOB–SmOB + Parallel IMR Path — Summary
 
