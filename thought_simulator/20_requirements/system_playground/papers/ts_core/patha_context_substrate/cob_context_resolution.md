@@ -1,39 +1,41 @@
 # **cob_context_resolution.md**  
-### *Conversation Object Basin — Resolution Paper (Working Draft v0.3)*
+### *Conversation Object Basin — Resolution Paper (Working Draft v0.4)*
 
 ---
 
 ## **0. Purpose**
 This paper provides the **answers and design resolutions** for the Conversation Object Basin (COB), the long‑horizon identity substrate of the TS context layer.
 
-All **questions** for COB are maintained separately in:
+All questions for COB are maintained separately in:
 
 ```
-papers/ts_core/patha_context_substrate/questions_for_cob_substrate.md
+questions_for_cob_substrate.md (v0.4)
 ```
 
 This paper does **not** repeat those questions.  
-Instead, it answers them — directly or indirectly — and will grow into multiple resolution papers if needed.
+Instead, it answers them — directly or indirectly — and will expand into additional resolution papers as needed.
 
-COB is the keystone of the TS context layer.  
-Once COB is resolved, CST, CIL, CEx, SSRGn, temporal ordering, snapshot strategy, and collapse/recovery follow naturally.
-
----
-
-# **1. Reference: COB Question Substrate**
-All operational, structural, determinism, interaction, and failure‑mode questions for COB are defined in:
-
-**`questions_for_cob_substrate.md` (v0.4)**
-
-This resolution paper answers those questions in structured form.
+COB is the keystone. Once COB is resolved, CST, CIL, CEx, SSRGn, temporal ordering, snapshot strategy, and collapse/recovery follow naturally.
 
 ---
 
-# **2. Resolution Scope**
+## **1. Reference: COB Question Substrate**
+All operational, structural, determinism, interaction, and failure‑mode questions are defined in:
+
+```
+questions_for_cob_substrate.md (v0.4)
+```
+
+This resolution paper focuses on the **highest‑priority answers first** — the ones required before any other block can be resolved.
+
+---
+
+## **2. Resolution Scope**
 COB resolution will be delivered across **three papers**:
 
 1. **`cob_context_resolution.md`**  
-   *Core identity model, referent model, merge/split logic, deterministic replay.*
+   *Core identity model, referent model, merge/split logic, deterministic replay.*  
+   *(This paper.)*
 
 2. **`cob_lifecycle_and_capacity.md`**  
    *Layer lifecycle, assignment, eviction, decay, pruning, compression.*
@@ -41,25 +43,24 @@ COB resolution will be delivered across **three papers**:
 3. **`cob_interaction_and_safety.md`**  
    *CST/CIL/CEx/SSRGn interactions, collapse detection, recovery, freeze/thaw.*
 
-This paper (v0.3) covers the **core identity substrate**, which must be answered first.
+This modular structure ensures clarity and prevents overloading a single document.
 
 ---
 
-# **3. COB Identity Layer Model (Resolution)**
+# **3. Identity Layer Model (Resolution)**
 
 The identity layer is the atomic unit of long‑horizon continuity.
 
 ### **3.1 Identity Layer Schema (Foundational Answer)**
-Each identity layer is a structured object:
 
-```
+```json
 IdentityLayer {
-    layer_id: StableID,
+    layer_id: StableID,                    // deterministic across replay
     referent_map: ReferentMap,
     lineage: LineageStructure,
-    strength: float,
-    importance: float,
-    ambiguity: float,
+    strength: float,                       // centrality to user
+    importance: float,                     // centrality to conversation
+    ambiguity: float,                      // internal referent conflict
     decay_state: float,
     timestamps: {
         created: TurnID,
@@ -70,26 +71,27 @@ IdentityLayer {
 
 **Notes:**
 
-- `layer_id` is deterministic across replay.  
-- `strength` measures how central the identity is to the user.  
-- `importance` measures how central the identity is to the conversation.  
+- `layer_id` is stable across replay and versioning.  
+- `strength` measures user-centric relevance.  
+- `importance` measures conversation-centric relevance.  
 - `ambiguity` measures internal referent conflict.  
-- `decay_state` controls pruning and aging.  
+- `decay_state` drives pruning and aging.  
 - `lineage` provides continuity across turns.
 
-This schema answers the highest‑priority question in the substrate.
+This schema resolves the highest‑priority question in the substrate.
 
 ---
 
 # **4. Referent Map Model (Resolution)**
 
-The referent map is the structured representation of identity‑linked referents.
+The referent map is the structured representation of identity-linked referents.
 
 ### **4.1 Referent Map Entry Schema**
-```
+
+```json
 ReferentEntry {
     referent_id: StableID,
-    surface_forms: [string],
+    surface_forms: [string],               // supports multi-word referents
     attributes: { key: value },
     strength: float,
     confidence: float,
@@ -103,7 +105,8 @@ ReferentEntry {
 ```
 
 ### **4.2 Referent Map Structure**
-```
+
+```json
 ReferentMap {
     entries: [ReferentEntry],
     ordering: DeterministicOrderingRule
@@ -127,11 +130,12 @@ This resolves the second keystone question.
 Merge logic determines how new SSRGn meaning integrates into COB.
 
 ### **5.1 Deterministic Merge Algorithm**
+
 When new meaning arrives:
 
 1. **Identify target layer** using assignment rules (defined in lifecycle paper).  
-2. **Match referents** by referent_id or surface_form similarity.  
-3. **Merge attributes** using deterministic field‑wise rules.  
+2. **Match referents** by `referent_id` or surface-form similarity.  
+3. **Merge attributes** using deterministic field-wise rules.  
 4. **Update strength** using weighted averaging:  
    ```
    new_strength = α * old_strength + (1 - α) * incoming_strength
@@ -210,30 +214,7 @@ This resolves the fifth keystone question.
 
 ---
 
-# **8. Assignment & Eviction (Resolution Overview)**
-
-Full details will be in `cob_lifecycle_and_capacity.md`, but core rules are:
-
-### **8.1 Assignment**
-New information is assigned based on:
-
-- referent similarity  
-- lineage continuity  
-- strength/importance  
-- ambiguity thresholds  
-- CST override signals  
-
-### **8.2 Eviction**
-When the 21st conversation appears:
-
-- compute eviction score = f(strength, importance, recency, decay)  
-- evict the lowest‑score layer  
-- optionally merge before eviction  
-- CST may override eviction
-
----
-
-# **9. Next Steps**
+# **8. Next Steps**
 - Expand lifecycle and capacity rules in `cob_lifecycle_and_capacity.md`.  
 - Expand interaction and safety rules in `cob_interaction_and_safety.md`.  
 - Begin integrating answers into formal 20.x requirement documents.  
