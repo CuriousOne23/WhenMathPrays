@@ -105,15 +105,12 @@ tests:
   # 7. Long input (generated dynamically)
   # ----------------------------------------------------------
   - id: "long.input"
-    description: "Long input should be truncated deterministically."
+    description: "Long input should be passed through unchanged (stub IE)."
     generate_long_input: true
     long_length: 5000
     expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
     expected_ie_status: "normalized"
-    expected_repairs:
-      - "length.truncated"
+    expected_repairs: []
     expected_normalized: null
-    expected_repairs:
-      - "length.truncated"
 
