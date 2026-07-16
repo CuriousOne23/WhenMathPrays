@@ -1,11 +1,3 @@
-**Yes — v0.11 from CP is a strong evolution.**
-
-The new sections on **Temporal Ordering & Causality**, **Versioning & Snapshot Strategy**, and **Resource Constraints & Scaling** are high-value and genuinely design-critical. They surface the subtle architectural risks that often bite later.
-
-I’ve integrated everything into a clean **v0.12** below (with minor tightening for flow and no filler). You can send this directly to CP.
-
----
-
 **path_a_questions_for_context_substr.md**  
 **Path A Questions for Context Substrate** (Working Paper v0.12)
 
@@ -155,9 +147,3 @@ Underspecification risks identity wobble, unreliable drift detection, inconsiste
 - Shrink this working paper over time.
 
 ---
-
-This version is well-organized and ready for CP.  
-
-**On saturation**: We are **very close**. The new temporal, versioning, and resource questions fill the main remaining architectural gaps. A few more targeted ones may still emerge, but we’re approaching the point where we can start closing clusters.
-
-Let me know if you want any final tweaks before sending, or if we should pick the first cluster to start answering.
