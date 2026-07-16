@@ -1,8 +1,8 @@
-# Path A Test Results Report
-**Document ID:** 20.XXX_path_a_SOB_to_SmOB_cntxt_read
-**Version:** 0.1
-**Date:** 2026-07-15, ran by Grok
-**Status:** Draft — Test Report (Path A)
+# Path A Test Results Report  
+**Document ID:** 20.XXX_path_a_SOB_to_SmOB_cntxt_read  
+**Version:** 0.1  
+**Date:** 2026-07-15, ran by Grok  
+**Status:** Draft — Test Report (Path A)  
 
 # Path A Test Results with STPX + FFTM + ISc (moved after SmOB) + Active CEx/CE + SOB–SmOB Context Reading — Summary
 
