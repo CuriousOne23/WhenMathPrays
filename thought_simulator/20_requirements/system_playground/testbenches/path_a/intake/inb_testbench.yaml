@@ -97,7 +97,8 @@ tests:
   # ----------------------------------------------------------
   - id: "long.input"
     description: "Input exceeding IE bounds should be truncated deterministically."
-    input: "A" * 5000
+    generate_long_input: true
+    long_length: 5000
     expect:
       inb_status: "ok"
       iiinb_defects:
