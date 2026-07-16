@@ -1,0 +1,82 @@
+# Path A CIL Reference Object
+# Identity-layer stabilization reference for Context Identity Layer (CIL).
+# Defines identity-layer geometry, stabilization rules, drift/oscillation constraints,
+# and admissible identity-layer fields consumed by COB, CST, IMR, and SSRGn.
+
+cil_reference:
+  version: 1.0.0
+  description: >
+    The CIL Reference Object defines identity-layer stabilization geometry, identity-layer
+    correction rules, drift/oscillation constraints, and admissible identity-layer fields.
+    It provides deterministic identity-layer definitions used by CIL for stabilization,
+    COB for identity-layer construction, CST for stability evaluation, IMR for mismatch
+    classification, and SSRGn for semantic-routing grounding.
+
+  identity_layer_fields:
+    - name: identity_vector
+      type: vector
+      length: 20
+      description: >
+        Primary identity-layer manifold coordinates stabilized by CIL and consumed by COB,
+        CST, IMR, and SSRGn.
+
+    - name: identity_residue
+      type: vector
+      length: 6
+      description: >
+        Residual identity-layer geometry produced by COB and stabilized by CIL.
+
+    - name: identity_metadata
+      type: struct
+      fields:
+        - name: identity_class
+          type: enum
+          values: [core_identity, contextual_identity, stabilized_identity]
+        - name: identity_confidence
+          type: float
+          bounds: [0.0, 1.0]
+        - name: identity_stability
+          type: float
+          bounds: [0.0, 1.0]
+      description: >
+        Deterministic identity-layer metadata used for stabilization and mismatch evaluation.
+
+  stabilization_rules:
+    - name: drift_correction
+      description: >
+        Identity-layer drift must be corrected to remain within declared stability bounds.
+
+    - name: oscillation_damping
+      description: >
+        Identity-layer oscillation must be damped to maintain replay determinism.
+
+    - name: collapse_prevention
+      description: >
+        Identity-layer collapse must be prevented by enforcing structural invariants.
+
+  identity_bounds:
+    identity_vector_bounds:
+      min: -1.0
+      max: 1.0
+    identity_residue_bounds:
+      min: -0.5
+      max: 0.5
+    identity_metadata_bounds:
+      identity_confidence: [0.0, 1.0]
+      identity_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_identity_geometry
+      description: Identity-layer vectors and metadata must be deterministic under replay.
+    - name: bounded_identity_fields
+      description: All identity-layer fields must remain within declared bounds.
+    - name: no_semantic_interpretation
+      description: Identity-layer reference defines geometry only; no semantic meaning.
+    - name: path_a_only
+      description: CIL reference applies exclusively to Path-A primitives.
+
+  psc_alignment:
+    - CIL reference satisfies PSC identity-object requirements.
+    - CIL reference exposes deterministic identity-layer geometry for replay validation.
+    - CIL reference aligns with COB, CST, IMR, and SSRGn.
+    - CIL reference enforces admissible identity-layer constraints.
