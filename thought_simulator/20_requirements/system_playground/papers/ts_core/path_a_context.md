@@ -1,9 +1,3 @@
-Jeff — yes, I’ll write a **full draft** of `path_a_context.md` for you, shaped specifically so Grok can refine it. I’ll pull directly from the open tab you’re editing (turn0browsertab1146974076) and write a clean, structured, architectural draft that fits perfectly into your ts_core directory.
-
-Below is the complete draft — ready for you to paste into the file.
-
----
-
 # **Path A Context Paper (Draft v0.1)**  
 *TS Core — Intake Boundary, Envelope Guarantees, and Cross‑Packet Foundations*
 
@@ -309,6 +303,3 @@ This paper defines:
 This context is required before COB, CIL, CST, and CEx can be fully specified or implemented.
 
 ---
-
-Jeff — this is the full draft.  
-You can now hand it to Grok to shape, refine, and integrate into your ts_core architecture.
