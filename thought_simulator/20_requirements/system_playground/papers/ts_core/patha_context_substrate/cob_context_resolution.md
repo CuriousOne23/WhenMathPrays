@@ -1,281 +1,242 @@
 # **cob_context_resolution.md**  
-### *Conversation Object Basin — Working Paper v0.1*  
-*(Questions first, then highest‑priority proposed answers)*
+### *Conversation Object Basin — Resolution Paper (Working Draft v0.3)*
 
 ---
 
 ## **0. Purpose**
-This working paper defines the open questions and early proposed answers for the **Conversation Object Basin (COB)** — the long‑horizon identity substrate for Path A → Path B continuity.
+This paper provides the **answers and design resolutions** for the Conversation Object Basin (COB), the long‑horizon identity substrate of the TS context layer.
 
-COB is the keystone block:  
-CST measures it, CIL merges with it, CEx extracts from it, and SSRGn regenerates meaning into it.
-
-This paper will grow until the questions saturate, then shrink as answers stabilize and move into formal 20.x requirement documents.
-
----
-
-# **1. Open Questions for COB (Full Set)**  
-*(These are the questions we must answer before COB can be implemented.)*
-
----
-
-## **1.1 Identity Layer Model**
-- What is the exact schema of an identity layer?  
-- What fields must each layer contain (referent map, lineage, strength, ambiguity, timestamps)?  
-- Are identity layers a fixed array of 20 slots or dynamic with a hard cap?  
-- How is lineage represented (tree, DAG, linked list, versioned history)?  
-- How are multi‑word referents represented?  
-- How is ambiguity represented inside a layer?  
-- How is referent strength/importance stored?  
-- How is confidence stored?  
-- How are “competing referents” stored?
-
----
-
-## **1.2 Referent Map Model**
-- What is the schema of a referent map entry?  
-- How are surface forms stored?  
-- How are attributes stored?  
-- How are strength/importance scores stored?  
-- How are ambiguity scores stored?  
-- How are timestamps stored?  
-- How are lineage pointers stored?  
-- How are multi‑turn referent updates merged?
-
----
-
-## **1.3 Layer Lifecycle**
-- How are new identity layers created?  
-- How are layers split?  
-- How are layers merged?  
-- How are layers weakened?  
-- How are layers strengthened?  
-- How are layers retired?  
-- How does aging/decay work?  
-- What happens when all 20 layers are full?  
-- What triggers a new layer creation vs. merging into an existing layer?
-
----
-
-## **1.4 Update Mechanics**
-- How does COB ingest new SSRGn meaning?  
-- How does COB merge SSRGn referents with existing referent maps?  
-- How does COB handle conflicting referents?  
-- How does COB handle ambiguous referents?  
-- How does COB handle partial referents?  
-- How does COB handle referent collapse?  
-- How does COB handle referent explosion?  
-- How does COB handle multi‑turn referent drift?
-
----
-
-## **1.5 Determinism & Replay**
-- How is COB state replayed deterministically?  
-- How are identity layer IDs stabilized?  
-- How are referent map IDs stabilized?  
-- How are lineage markers stabilized?  
-- How are updates ordered deterministically?  
-- How are merge/split operations made deterministic?  
-- How are decay operations made deterministic?  
-- How are timestamps normalized for replay?
-
----
-
-## **1.6 Interaction with CST**
-- What COB fields does CST read?  
-- What COB fields does CST write?  
-- How does COB acknowledge CST signals?  
-- How does COB reject CST signals?  
-- How does COB apply merge/split signals?  
-- How does COB apply weaken/strengthen signals?  
-- How does COB apply freeze/unfreeze signals?  
-- How does COB maintain determinism under CST correction?
-
----
-
-## **1.7 Interaction with CIL**
-- What COB fields does CIL read?  
-- How does CIL merge short‑term cues with COB identity layers?  
-- How does CIL handle ambiguous COB layers?  
-- How does CIL handle conflicting COB layers?  
-- How does CIL handle partial COB layers?  
-- How does CIL produce flags based on COB state?
-
----
-
-## **1.8 Interaction with CEx**
-- What COB fields does CEx read?  
-- How does CEx use referent maps?  
-- How does CEx use lineage?  
-- How does CEx use strength/importance?  
-- How does CEx handle ambiguous referents?  
-- How does CEx handle multi‑turn referents?
-
----
-
-## **1.9 Interaction with SSRGn**
-- What SSRGn fields does COB ingest?  
-- How does COB merge regenerated meaning?  
-- How does COB handle regenerated ambiguity?  
-- How does COB handle regenerated structure?  
-- How does COB handle regenerated referents?  
-- How does COB handle regenerated lineage?
-
----
-
-## **1.10 Collapse & Recovery**
-- What constitutes identity collapse?  
-- What constitutes referent collapse?  
-- What constitutes lineage collapse?  
-- What constitutes continuity collapse?  
-- What emergency signals exist?  
-- How does COB recover from collapse?  
-- How does COB prevent collapse?  
-- How does COB detect collapse early?
-
----
-
-## **1.11 Resource Constraints**
-- Maximum referents per identity layer?  
-- Maximum ambiguity entries per referent?  
-- Maximum lineage depth?  
-- Maximum strength/importance resolution?  
-- Maximum number of updates per turn?  
-- Maximum number of merges per turn?  
-- Maximum number of splits per turn?
-
----
-
-# **2. Highest‑Priority Questions (Must Answer First)**  
-*(These unlock all other COB, CST, CIL, CEx, SSRGn design.)*
-
-These are the **keystone questions** — the ones we must answer before anything else.
-
----
-
-## **2.1 What is the exact schema of an identity layer?**  
-This is the single most important question.
-
-Everything depends on it:
-
-- CST metrics  
-- CIL merge logic  
-- CEx extraction  
-- SSRGn regeneration  
-- temporal ordering  
-- snapshot strategy  
-- collapse/recovery  
-
-**Proposed direction (early answer):**
-
-An identity layer should contain:
+All **questions** for COB are maintained separately in:
 
 ```
-{
-  layer_id: stable deterministic ID,
-  referent_map: { ... },
-  lineage: { ... },
-  strength: float,
-  importance: float,
-  ambiguity: { ... },
-  timestamps: { created, updated },
-  decay_state: float
+papers/ts_core/patha_context_substrate/questions_for_cob_substrate.md
+```
+
+This paper does **not** repeat those questions.  
+Instead, it answers them — directly or indirectly — and will grow into multiple resolution papers if needed.
+
+COB is the keystone of the TS context layer.  
+Once COB is resolved, CST, CIL, CEx, SSRGn, temporal ordering, snapshot strategy, and collapse/recovery follow naturally.
+
+---
+
+# **1. Reference: COB Question Substrate**
+All operational, structural, determinism, interaction, and failure‑mode questions for COB are defined in:
+
+**`questions_for_cob_substrate.md` (v0.4)**
+
+This resolution paper answers those questions in structured form.
+
+---
+
+# **2. Resolution Scope**
+COB resolution will be delivered across **three papers**:
+
+1. **`cob_context_resolution.md`**  
+   *Core identity model, referent model, merge/split logic, deterministic replay.*
+
+2. **`cob_lifecycle_and_capacity.md`**  
+   *Layer lifecycle, assignment, eviction, decay, pruning, compression.*
+
+3. **`cob_interaction_and_safety.md`**  
+   *CST/CIL/CEx/SSRGn interactions, collapse detection, recovery, freeze/thaw.*
+
+This paper (v0.3) covers the **core identity substrate**, which must be answered first.
+
+---
+
+# **3. COB Identity Layer Model (Resolution)**
+
+The identity layer is the atomic unit of long‑horizon continuity.
+
+### **3.1 Identity Layer Schema (Foundational Answer)**
+Each identity layer is a structured object:
+
+```
+IdentityLayer {
+    layer_id: StableID,
+    referent_map: ReferentMap,
+    lineage: LineageStructure,
+    strength: float,
+    importance: float,
+    ambiguity: float,
+    decay_state: float,
+    timestamps: {
+        created: TurnID,
+        updated: TurnID
+    }
 }
 ```
 
-This is a *proposal*, not a final answer.
+**Notes:**
+
+- `layer_id` is deterministic across replay.  
+- `strength` measures how central the identity is to the user.  
+- `importance` measures how central the identity is to the conversation.  
+- `ambiguity` measures internal referent conflict.  
+- `decay_state` controls pruning and aging.  
+- `lineage` provides continuity across turns.
+
+This schema answers the highest‑priority question in the substrate.
 
 ---
 
-## **2.2 What is the schema of a referent map entry?**  
-This is the second most important question.
+# **4. Referent Map Model (Resolution)**
 
-CIL, CEx, and SSRGn all depend on referent map structure.
+The referent map is the structured representation of identity‑linked referents.
 
-**Proposed direction (early answer):**
-
+### **4.1 Referent Map Entry Schema**
 ```
-{
-  referent_id: stable deterministic ID,
-  surface_forms: [ ... ],
-  attributes: { ... },
-  strength: float,
-  confidence: float,
-  ambiguity: float,
-  lineage_pointer: ID,
-  timestamps: { created, updated }
+ReferentEntry {
+    referent_id: StableID,
+    surface_forms: [string],
+    attributes: { key: value },
+    strength: float,
+    confidence: float,
+    ambiguity: float,
+    lineage_pointer: StableID,
+    timestamps: {
+        created: TurnID,
+        updated: TurnID
+    }
 }
 ```
 
-Again: proposal, not final.
+### **4.2 Referent Map Structure**
+```
+ReferentMap {
+    entries: [ReferentEntry],
+    ordering: DeterministicOrderingRule
+}
+```
+
+**Notes:**
+
+- `surface_forms` supports multi‑word referents.  
+- `attributes` supports structured semantic fields.  
+- `ambiguity` supports referent collision detection.  
+- `lineage_pointer` ties referents to identity history.  
+- `ordering` ensures deterministic replay.
+
+This resolves the second keystone question.
 
 ---
 
-## **2.3 How does COB merge new SSRGn meaning?**  
-This is the third keystone question.
+# **5. Merge Logic (Resolution)**
 
-If merge logic is undefined, continuity collapses.
+Merge logic determines how new SSRGn meaning integrates into COB.
 
-**Proposed direction (early answer):**
+### **5.1 Deterministic Merge Algorithm**
+When new meaning arrives:
 
-- Merge by referent_id  
-- Strength‑weighted averaging  
-- Ambiguity‑weighted conflict resolution  
-- Timestamp‑weighted decay  
-- Deterministic ordering of merge operations  
+1. **Identify target layer** using assignment rules (defined in lifecycle paper).  
+2. **Match referents** by referent_id or surface_form similarity.  
+3. **Merge attributes** using deterministic field‑wise rules.  
+4. **Update strength** using weighted averaging:  
+   ```
+   new_strength = α * old_strength + (1 - α) * incoming_strength
+   ```
+5. **Update ambiguity** based on referent conflict.  
+6. **Update timestamps** deterministically.  
+7. **Normalize ordering** using deterministic sort.
+
+### **5.2 Conflict Resolution**
+Conflicts are resolved by:
+
+- confidence weighting  
+- ambiguity penalties  
+- lineage continuity  
+- CST override signals  
+
+This resolves the third keystone question.
 
 ---
 
-## **2.4 How does COB split identity layers?**  
-This is the fourth keystone question.
+# **6. Split / Merge Lifecycle (Resolution)**
 
-Split logic is required for:
+### **6.1 Split Conditions**
+A layer splits when:
 
-- ambiguity resolution  
-- drift correction  
-- collapse prevention  
-
-**Proposed direction (early answer):**
-
-Split when:
-
-- ambiguity > threshold  
+- ambiguity exceeds threshold  
 - referent clusters diverge  
-- CST signals “split”  
+- CST issues a split signal  
+- lineage continuity breaks  
+
+### **6.2 Split Algorithm**
+1. Cluster referents deterministically.  
+2. Create new layers with stable IDs.  
+3. Distribute referents based on cluster membership.  
+4. Copy lineage pointers.  
+5. Normalize strength/importance.  
+6. Update timestamps.
+
+### **6.3 Merge Conditions**
+Layers merge when:
+
+- referent clusters converge  
+- ambiguity drops below threshold  
+- CST issues a merge signal  
+- decay suggests consolidation  
+
+This resolves the fourth keystone question.
 
 ---
 
-## **2.5 How does COB maintain deterministic replay?**  
-This is the fifth keystone question.
+# **7. Deterministic Replay Model (Resolution)**
 
-Replay safety is required for:
+Replay determinism is required for CST, CIL, CEx, SSRGn, and Path B.
 
-- CST drift detection  
-- CIL merging  
-- CEx extraction  
-- SSRGn regeneration  
+### **7.1 Deterministic Replay Requirements**
+COB replay must guarantee:
 
-**Proposed direction (early answer):**
+- stable layer IDs  
+- stable referent IDs  
+- stable ordering  
+- stable merge/split outcomes  
+- stable decay outcomes  
+- stable timestamps (normalized)  
+- stable lineage reconstruction  
 
-- deterministic IDs  
-- deterministic ordering  
-- deterministic merge/split rules  
-- deterministic decay  
-- deterministic timestamps (normalized)  
+### **7.2 Replay Algorithm**
+Replay reconstructs COB state by:
+
+1. Replaying SSRGn packets in deterministic order.  
+2. Applying merge/split rules deterministically.  
+3. Applying decay rules deterministically.  
+4. Reconstructing lineage deterministically.  
+5. Producing identical snapshots.
+
+This resolves the fifth keystone question.
 
 ---
 
-# **3. Next Steps**
-1. Review the keystone questions (2.1–2.5).  
-2. Decide which proposed directions should be expanded first.  
-3. Begin drafting the next version of this paper with partial answers.  
-4. Extract stable answers into formal 20.x requirement documents.  
+# **8. Assignment & Eviction (Resolution Overview)**
+
+Full details will be in `cob_lifecycle_and_capacity.md`, but core rules are:
+
+### **8.1 Assignment**
+New information is assigned based on:
+
+- referent similarity  
+- lineage continuity  
+- strength/importance  
+- ambiguity thresholds  
+- CST override signals  
+
+### **8.2 Eviction**
+When the 21st conversation appears:
+
+- compute eviction score = f(strength, importance, recency, decay)  
+- evict the lowest‑score layer  
+- optionally merge before eviction  
+- CST may override eviction
 
 ---
-- expand any of the proposed answers  
-- generate diagrams  
-- generate a merge/split algorithm  
-- generate a referent map schema  
-- generate a deterministic replay model  
 
-Just tell me which part you want to deepen next.
+# **9. Next Steps**
+- Expand lifecycle and capacity rules in `cob_lifecycle_and_capacity.md`.  
+- Expand interaction and safety rules in `cob_interaction_and_safety.md`.  
+- Begin integrating answers into formal 20.x requirement documents.  
+- Shrink this paper as answers stabilize.
+
+---
