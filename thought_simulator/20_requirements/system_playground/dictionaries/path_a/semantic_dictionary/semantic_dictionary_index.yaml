@@ -1,1 +1,68 @@
 # Path A Semantic Dictionary Index
+# Defines semantic‑layer geometry, semantic vectors, semantic residue shapes,
+# and admissible semantic‑class fields used by SSRGn, CE, CEx, IMR, and ISc.
+
+semantic_dictionary:
+  version: 1.0.0
+  description: >
+    The Path‑A Semantic Dictionary defines semantic‑layer vocabulary, semantic manifold
+    coordinates, semantic residue geometry, semantic stability bounds, and admissible
+    semantic‑class fields. It provides deterministic semantic‑layer definitions used by
+    semantic‑routing grounding (SSRGn), context evaluation (CE, CEx), mismatch
+    classification (IMR), and intake‑stability classification (ISc).
+
+  semantic_fields:
+    - name: semantic_vector
+      type: vector
+      length: 12
+      description: >
+        Primary semantic manifold coordinates used by SSRGn, CE, CEx, and IMR.
+
+    - name: semantic_residue
+      type: vector
+      length: 6
+      description: >
+        Residual semantic geometry produced by semantic‑layer primitives and consumed by IMR.
+
+    - name: semantic_metadata
+      type: struct
+      fields:
+        - name: semantic_class
+          type: enum
+          values: [literal, contextual, inferred, identity_conditioned]
+        - name: semantic_confidence
+          type: float
+          bounds: [0.0, 1.0]
+        - name: semantic_stability
+          type: float
+          bounds: [0.0, 1.0]
+      description: >
+        Deterministic semantic metadata used for mismatch classification and stability evaluation.
+
+  semantic_bounds:
+    semantic_vector_bounds:
+      min: -1.0
+      max: 1.0
+    semantic_residue_bounds:
+      min: -0.5
+      max: 0.5
+    semantic_metadata_bounds:
+      semantic_confidence: [0.0, 1.0]
+      semantic_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_semantic_geometry
+      description: Semantic vectors and metadata must be deterministic under replay.
+    - name: bounded_semantic_fields
+      description: All semantic fields must remain within declared bounds.
+    - name: no_meaning_construction
+      description: Semantic dictionary defines geometry only; no meaning or interpretation.
+    - name: path_a_only
+      description: Semantic dictionary applies exclusively to Path‑A primitives.
+
+  psc_alignment:
+    - Semantic dictionary satisfies PSC semantic‑object requirements.
+    - Semantic dictionary exposes deterministic semantic geometry for replay validation.
+    - Semantic dictionary aligns with SSRGn, CE, CEx, IMR, and ISc.
+    - Semantic dictionary enforces admissible semantic‑layer constraints.
+
