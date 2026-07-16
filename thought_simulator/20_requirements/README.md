@@ -143,6 +143,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.700.040_governance_glossary.md]20.700.040_governance_glossary.md
 - [20.700.050_ts_level_concepts_glossary.md](20.700.050_ts_level_concepts_glossary.md)
 - [20.705_patha_pathb_flow.md](20.705_patha_pathb_flow.md)
+- [20.705.020_patha_stability_requirements.md](20.705.020_patha_stability_requirements.md)
 - [20.705.010_ts_flw_glss_cvrg.md](20.705.010_ts_flw_glss_cvrg.md)
 - [20.709_ob_data_strc.md](20.709_ob_data_strc.md)
 - [20.710_primitive_flows.md](20.710_primitive_flows.md)
