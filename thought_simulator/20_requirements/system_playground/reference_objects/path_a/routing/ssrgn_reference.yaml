@@ -1,0 +1,84 @@
+# Path A SSRGn Reference Object
+# Routing-layer grounding reference for Semantic-Routing Grounding (SSRGn).
+# Defines routing-layer geometry, semantic-routing alignment rules, routing residue
+# constraints, and admissible routing-layer fields consumed by RTU, RBU, IMR, and CIL.
+
+ssrgn_reference:
+  version: 1.0.0
+  description: >
+    The SSRGn Reference Object defines routing-layer grounding geometry, semantic-routing
+    alignment rules, routing residue constraints, and admissible routing-layer fields.
+    It provides deterministic routing-layer definitions used by SSRGn for grounding,
+    RTU and RBU for routing operations, IMR for mismatch classification, and CIL for
+    identity-layer stabilization.
+
+  routing_layer_fields:
+    - name: routing_vector
+      type: vector
+      length: 8
+      description: >
+        Primary routing manifold coordinates grounded by SSRGn and consumed by RTU, RBU,
+        IMR, and CIL.
+
+    - name: routing_residue
+      type: vector
+      length: 4
+      description: >
+        Residual routing geometry produced by routing primitives and aligned by SSRGn.
+
+    - name: routing_metadata
+      type: struct
+      fields:
+        - name: route_class
+          type: enum
+          values: [direct, indirect, semantic_conditioned, identity_conditioned]
+        - name: route_confidence
+          type: float
+          bounds: [0.0, 1.0]
+        - name: route_stability
+          type: float
+          bounds: [0.0, 1.0]
+      description: >
+        Deterministic routing metadata used for grounding, mismatch evaluation, and
+        stability assessment.
+
+  grounding_rules:
+    - name: semantic_routing_alignment
+      description: >
+        Routing vectors must be aligned with semantic-layer geometry to maintain
+        deterministic grounding.
+
+    - name: routing_residue_normalization
+      description: >
+        Routing residue must be normalized to remain within declared stability bounds.
+
+    - name: routing_stability_enforcement
+      description: >
+        Routing-layer stability must be enforced to prevent drift and oscillation.
+
+  routing_bounds:
+    routing_vector_bounds:
+      min: -1.0
+      max: 1.0
+    routing_residue_bounds:
+      min: -0.5
+      max: 0.5
+    routing_metadata_bounds:
+      route_confidence: [0.0, 1.0]
+      route_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_routing_geometry
+      description: Routing vectors and metadata must be deterministic under replay.
+    - name: bounded_routing_fields
+      description: All routing-layer fields must remain within declared bounds.
+    - name: no_semantic_interpretation
+      description: Routing reference defines geometry only; no semantic meaning.
+    - name: path_a_only
+      description: SSRGn reference applies exclusively to Path-A primitives.
+
+  psc_alignment:
+    - SSRGn reference satisfies PSC routing-object requirements.
+    - SSRGn reference exposes deterministic routing geometry for replay validation.
+    - SSRGn reference aligns with RTU, RBU, IMR, and CIL.
+    - SSRGn reference enforces admissible routing-layer constraints.
