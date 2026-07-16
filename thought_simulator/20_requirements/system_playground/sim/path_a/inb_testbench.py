@@ -76,7 +76,14 @@ def run_test_case(test, log):
 
     print(f"Running: {name} ...", end=" ")
 
-    tp = ThoughtPacket(raw_input=test["input"])
+    # Generate long input if requested
+    if test.get("generate_long_input", False):
+        length = test.get("long_length", 5000)
+        raw_input = "A" * length
+    else:
+        raw_input = test["input"]
+
+    tp = ThoughtPacket(raw_input=raw_input)
 
     # Execute primitives
     tp = InB(tp)
