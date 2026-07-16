@@ -146,6 +146,7 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.705.010_ts_flw_glss_cvrg.md](20.705.010_ts_flw_glss_cvrg.md)
 - [20.709_ob_data_strc.md](20.709_ob_data_strc.md)
 - [20.710_primitive_flows.md](20.710_primitive_flows.md)
+- [20.710.010_patha_operational_flow.md](20.710.010_patha_operational_flow.md)
 - [20.715_process_flows.md](20.715_process_flows.md)
 - [20.720_reference_flows.md](20.720_reference_flows.md)
 - [20.725_governance_flows.md](20.725_governance_flows.md)
