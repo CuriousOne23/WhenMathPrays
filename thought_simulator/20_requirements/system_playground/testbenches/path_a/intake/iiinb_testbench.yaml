@@ -1,0 +1,121 @@
+# ============================================================
+# Path A Intake Testbench — IIInB (Bounded Intake Inspection)
+# ============================================================
+# Purpose:
+#   Provide deterministic, replayable scenarios for exercising
+#   the bounded intake inspection primitive (IIInB).
+#
+#   This testbench is intentionally minimal. It is designed
+#   for simulation alignment, not requirement coverage.
+# ============================================================
+
+testbench_id: "path_a.intake.iiinb"
+version: "1.0.0"
+description: "Testbench for bounded intake inspection (IIInB)."
+
+simulation:
+  deterministic: true
+  replayable: true
+  seed: 42
+
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean input — no defects
+  # ----------------------------------------------------------
+  - id: "clean.simple"
+    description: "Clean input should produce no defects."
+    input: "The dog chased the cat."
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects: []
+
+  # ----------------------------------------------------------
+  # 2. Unicode noise
+  # ----------------------------------------------------------
+  - id: "unicode.noise"
+    description: "Unicode noise should be flagged."
+    input: "The dog chased the cat. � �"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "unicode.invalid"
+
+  # ----------------------------------------------------------
+  # 3. Structural break
+  # ----------------------------------------------------------
+  - id: "structural.break"
+    description: "Malformed structural tokens should be detected."
+    input: "The dog chased the cat <broken>"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "structural.malformed"
+
+  # ----------------------------------------------------------
+  # 4. Empty input
+  # ----------------------------------------------------------
+  - id: "empty.input"
+    description: "Empty input should produce an empty-input defect."
+    input: ""
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "empty.input"
+
+  # ----------------------------------------------------------
+  # 5. Long input (generated dynamically)
+  # ----------------------------------------------------------
+  - id: "long.input"
+    description: "Long input generated dynamically to test length bounds."
+    generate_long_input: true
+    long_length: 5000
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "length.exceeds.bound"
+
+      # ----------------------------------------------------------
+  # 6. Repeating‑letter noise
+  # ----------------------------------------------------------
+  - id: "repeating.letters"
+    description: "Excessive repeating letters should be flagged."
+    input: "YYYYYYYYYYEEEEEAAAAHHHH"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "letters.repeating.excess"
+
+  # ----------------------------------------------------------
+  # 7. Shorthand / informal contraction
+  # ----------------------------------------------------------
+  - id: "shorthand.plz"
+    description: "Informal shorthand 'plz' should be flagged."
+    input: "plz help me"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "spelling.informal"
+
+  # ----------------------------------------------------------
+  # 8. Misspelling: transposition ('hte' → 'the')
+  # ----------------------------------------------------------
+  - id: "misspelling.transposition"
+    description: "Transposed letters should be detected."
+    input: "hte dog chased the cat"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "spelling.transposed"
+
+  # ----------------------------------------------------------
+  # 9. Misspelling: missing letter ('rd' → 'red' or 'word')
+  # ----------------------------------------------------------
+  - id: "misspelling.missing"
+    description: "Missing-letter misspelling should be detected."
+    input: "The rd fox jumped."
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_defects:
+      - "spelling.missing"
+
