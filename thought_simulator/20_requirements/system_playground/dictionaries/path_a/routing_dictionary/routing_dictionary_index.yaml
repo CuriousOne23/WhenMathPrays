@@ -1,1 +1,67 @@
 # Path A Routing Dictionary Index
+# Defines routing‑layer geometry, routing vectors, routing metadata shapes,
+# and admissible routing‑class fields used by RTU, RBU, SSRGn, IMR, and ISc.
+
+routing_dictionary:
+  version: 1.0.0
+  description: >
+    The Path‑A Routing Dictionary defines routing‑layer vocabulary, routing manifold
+    coordinates, routing metadata shapes, routing residue geometry, and routing
+    stability bounds. It provides deterministic routing‑layer definitions used by
+    routing primitives (RTU, RBU), semantic‑routing grounding (SSRGn), mismatch
+    classification (IMR), and intake‑stability classification (ISc).
+
+  routing_fields:
+    - name: routing_vector
+      type: vector
+      length: 8
+      description: >
+        Primary routing manifold coordinates used by RTU, RBU, and SSRGn.
+
+    - name: routing_residue
+      type: vector
+      length: 4
+      description: >
+        Residual routing geometry produced by routing primitives and consumed by IMR.
+
+    - name: routing_metadata
+      type: struct
+      fields:
+        - name: route_class
+          type: enum
+          values: [direct, indirect, semantic_conditioned, identity_conditioned]
+        - name: route_confidence
+          type: float
+          bounds: [0.0, 1.0]
+        - name: route_stability
+          type: float
+          bounds: [0.0, 1.0]
+      description: >
+        Deterministic routing metadata used for mismatch classification and stability evaluation.
+
+  routing_bounds:
+    routing_vector_bounds:
+      min: -1.0
+      max: 1.0
+    routing_residue_bounds:
+      min: -0.5
+      max: 0.5
+    routing_metadata_bounds:
+      route_confidence: [0.0, 1.0]
+      route_stability: [0.0, 1.0]
+
+  invariants:
+    - name: deterministic_routing_geometry
+      description: Routing vectors and metadata must be deterministic under replay.
+    - name: bounded_routing_fields
+      description: All routing fields must remain within declared bounds.
+    - name: no_semantic_interpretation
+      description: Routing dictionary defines geometry only; no semantic meaning.
+    - name: path_a_only
+      description: Routing dictionary applies exclusively to Path‑A primitives.
+
+  psc_alignment:
+    - Routing dictionary satisfies PSC routing‑object requirements.
+    - Routing dictionary exposes deterministic routing geometry for replay validation.
+    - Routing dictionary aligns with RTU, RBU, SSRGn, IMR, and ISc.
+    - Routing dictionary enforces admissible routing‑layer constraints.
