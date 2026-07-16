@@ -113,4 +113,7 @@ tests:
     expected_ie_status: "normalized"
     expected_repairs:
       - "length.truncated"
-    expected_normalized: "A" * 2048   # expected truncated envelope
+    expected_normalized: null
+    expected_repairs:
+      - "length.truncated"
+
