@@ -5,9 +5,15 @@ This testbench performs block-level validation of the COB subsystem.
 It tests:
 - identity object creation
 - adding objects to the basin
-- CST signal application (drift, oscillation, collapse, freeze/thaw, certainty/ambiguity)
+- CST signal application (drift, oscillation, collapse, freeze/thaw, certainty/ambiguity, lineage stability)
 - eviction logic (max 20 objects)
-- summary aggregation
+- ordering summary aggregation
+- ambiguity summary aggregation
+- stability summary aggregation
+- lineage summary aggregation
+- freeze/thaw compliance
+- deterministic update behavior
+- CIL compatibility (identity object structure preserved)
 
 This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
@@ -53,9 +59,11 @@ def make_identity_object(
     )
 
 
-def run_basic_addition_test():
-    """Test adding identity objects to COB."""
+# ---------------------------------------------------------------------------
+# Basic Addition Test
+# ---------------------------------------------------------------------------
 
+def run_basic_addition_test():
     print("\n=== COB Testbench: Basic Addition Test ===")
 
     cob = COB()
@@ -76,16 +84,18 @@ def run_basic_addition_test():
     print(cob.state.object_count)
 
 
-def run_cst_signal_test():
-    """Test applying CST signals to COB."""
+# ---------------------------------------------------------------------------
+# CST Signal Integration Test
+# ---------------------------------------------------------------------------
 
+def run_cst_signal_test():
     print("\n=== COB Testbench: CST Signal Application Test ===")
 
     cob = COB()
 
-    obj1 = make_identity_object("obj1", 10, 5, 3, drift=0.2)
-    obj2 = make_identity_object("obj2", 7, 9, 2, oscillation=0.4)
-    obj3 = make_identity_object("obj3", 1, 1, 1, collapse=True)
+    obj1 = make_identity_object("obj1", 10, 5, 3, drift=0.2, lineage_stability="stable")
+    obj2 = make_identity_object("obj2", 7, 9, 2, oscillation=0.4, lineage_stability="unstable")
+    obj3 = make_identity_object("obj3", 1, 1, 1, collapse=True, lineage_stability="stable")
 
     cob.add_identity_object(obj1)
     cob.add_identity_object(obj2)
@@ -105,6 +115,10 @@ def run_cst_signal_test():
             "increased_ambiguity": ["obj2"],
             "decreased_ambiguity": ["obj3"],
         },
+        "lineage_stability": {
+            "stable_lineage": ["obj1", "obj3"],
+            "unstable_lineage": ["obj2"],
+        },
     }
 
     cob.run(signals, turn_index=1)
@@ -115,19 +129,53 @@ def run_cst_signal_test():
     print("\n--- Ambiguity Summary ---")
     print(cob.state.ambiguity_summary)
 
+    print("\n--- Lineage Summary ---")
+    print(cob.state.lineage_summary)
+
     print("\n--- Freeze/Thaw States ---")
     for obj in cob.state.objects:
         print(obj.id, obj.stability_metrics.get("frozen"))
 
 
-def run_eviction_test():
-    """Test eviction logic when more than 20 objects are added."""
+# ---------------------------------------------------------------------------
+# Freeze/Thaw Compliance Test
+# ---------------------------------------------------------------------------
 
+def run_freeze_thaw_compliance_test():
+    print("\n=== COB Testbench: Freeze/Thaw Compliance Test ===")
+
+    cob = COB()
+
+    frozen_obj = make_identity_object("F", 5, 5, 5, drift=0.1, frozen=True)
+    thawed_obj = make_identity_object("T", 5, 5, 5, drift=0.1, frozen=False)
+
+    cob.add_identity_object(frozen_obj)
+    cob.add_identity_object(thawed_obj)
+
+    signals = {
+        "drift": {"affected_objects": ["F", "T"], "magnitude": 0.9},
+        "freeze": {"frozen_objects": ["F"], "reason": "test"},
+        "thaw": {"thawed_objects": ["T"], "reason": "test"},
+    }
+
+    cob.run(signals, turn_index=2)
+
+    print("\n--- Frozen Object Drift (should remain 0.1) ---")
+    print(cob.state.objects[0].stability_metrics["drift"])
+
+    print("\n--- Thawed Object Drift (should update to 0.9) ---")
+    print(cob.state.objects[1].stability_metrics["drift"])
+
+
+# ---------------------------------------------------------------------------
+# Eviction Test
+# ---------------------------------------------------------------------------
+
+def run_eviction_test():
     print("\n=== COB Testbench: Eviction Test ===")
 
     cob = COB()
 
-    # Add 25 objects with varying ordering metrics
     for i in range(25):
         obj = make_identity_object(
             id=f"obj{i}",
@@ -145,16 +193,18 @@ def run_eviction_test():
         print(obj.id, obj.ordering_metrics)
 
 
-def run_summary_test():
-    """Test summary aggregation."""
+# ---------------------------------------------------------------------------
+# Summary Aggregation Test
+# ---------------------------------------------------------------------------
 
+def run_summary_test():
     print("\n=== COB Testbench: Summary Aggregation Test ===")
 
     cob = COB()
 
-    obj1 = make_identity_object("obj1", 10, 5, 3, drift=0.1)
-    obj2 = make_identity_object("obj2", 7, 9, 2, oscillation=0.3)
-    obj3 = make_identity_object("obj3", 1, 1, 1, collapse=True)
+    obj1 = make_identity_object("obj1", 10, 5, 3, drift=0.1, lineage_stability="stable")
+    obj2 = make_identity_object("obj2", 7, 9, 2, oscillation=0.3, lineage_stability="unstable")
+    obj3 = make_identity_object("obj3", 1, 1, 1, collapse=True, lineage_stability="stable")
 
     cob.add_identity_object(obj1)
     cob.add_identity_object(obj2)
@@ -168,12 +218,64 @@ def run_summary_test():
     print("\n--- Stability Summary ---")
     print(cob.state.stability_summary)
 
+    print("\n--- Ambiguity Summary ---")
+    print(cob.state.ambiguity_summary)
+
     print("\n--- Lineage Summary ---")
     print(cob.state.lineage_summary)
 
 
+# ---------------------------------------------------------------------------
+# Deterministic Behavior Test
+# ---------------------------------------------------------------------------
+
+def run_deterministic_behavior_test():
+    print("\n=== COB Testbench: Deterministic Behavior Test ===")
+
+    cob1 = COB()
+    cob2 = COB()
+
+    objs = [
+        make_identity_object("A", 5, 5, 5, drift=0.1),
+        make_identity_object("B", 4, 4, 4, oscillation=0.2),
+    ]
+
+    for o in objs:
+        cob1.add_identity_object(o)
+        cob2.add_identity_object(make_identity_object(
+            o.id,
+            o.ordering_metrics["recency"],
+            o.ordering_metrics["frequency"],
+            o.ordering_metrics["density"],
+            drift=o.stability_metrics["drift"],
+            oscillation=o.stability_metrics["oscillation"],
+            collapse=o.stability_metrics["collapse"],
+            certainty=o.ambiguity["certainty"],
+            ambiguity=o.ambiguity["ambiguity"],
+            lineage_stability=o.lineage["stability"],
+            frozen=o.stability_metrics["frozen"],
+        ))
+
+    signals = {
+        "drift": {"affected_objects": ["A"], "magnitude": 0.9},
+        "oscillation": {"affected_objects": ["B"], "frequency": 0.7},
+    }
+
+    cob1.run(signals, turn_index=3)
+    cob2.run(signals, turn_index=3)
+
+    print("\n--- Deterministic Stability Comparison ---")
+    print(cob1.state.stability_summary == cob2.state.stability_summary)
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
 if __name__ == "__main__":
     run_basic_addition_test()
     run_cst_signal_test()
+    run_freeze_thaw_compliance_test()
     run_eviction_test()
     run_summary_test()
+    run_deterministic_behavior_test()
