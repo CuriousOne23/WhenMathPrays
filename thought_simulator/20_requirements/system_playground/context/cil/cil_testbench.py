@@ -57,7 +57,6 @@ def run_basic_test():
 
     print("\n=== CIL Testbench: Basic Test ===")
 
-    # Create sample identity objects
     obj1 = make_identity_object(
         id="obj1",
         recency=10,
@@ -99,13 +98,9 @@ def run_basic_test():
 
     cob_objects = [obj1, obj2, obj3]
 
-    # Instantiate CIL
     cil = CIL()
-
-    # Run CIL for turn 1
     packet = cil.run(cob_objects, turn_index=1)
 
-    # Print results
     print("\n--- Identity Selection Block ---")
     for entry in packet.identity_selection_block:
         print(entry["id"], entry["ordering_metrics"])
@@ -165,7 +160,45 @@ def run_stability_aggregation_test():
     print(packet.stability_block)
 
 
+def run_lineage_aggregation_test():
+    """Test aggregation of lineage stability indicators."""
+
+    print("\n=== CIL Testbench: Lineage Aggregation Test ===")
+
+    objs = [
+        make_identity_object("L1", recency=5, frequency=2, density=1, lineage_stability="stable"),
+        make_identity_object("L2", recency=4, frequency=3, density=2, lineage_stability="unstable"),
+        make_identity_object("L3", recency=3, frequency=1, density=1, lineage_stability="stable"),
+    ]
+
+    cil = CIL()
+    packet = cil.run(objs, turn_index=4)
+
+    print("\n--- Lineage Block ---")
+    print(packet.lineage_block)
+
+
+def run_ordering_aggregation_test():
+    """Test aggregation of recency, frequency, and density metrics."""
+
+    print("\n=== CIL Testbench: Ordering Aggregation Test ===")
+
+    objs = [
+        make_identity_object("O1", recency=10, frequency=1, density=5),
+        make_identity_object("O2", recency=7, frequency=4, density=2),
+        make_identity_object("O3", recency=3, frequency=9, density=1),
+    ]
+
+    cil = CIL()
+    packet = cil.run(objs, turn_index=5)
+
+    print("\n--- Ordering Block ---")
+    print(packet.ordering_block)
+
+
 if __name__ == "__main__":
     run_basic_test()
     run_selection_priority_test()
     run_stability_aggregation_test()
+    run_lineage_aggregation_test()
+    run_ordering_aggregation_test()
