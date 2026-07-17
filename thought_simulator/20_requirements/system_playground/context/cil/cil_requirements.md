@@ -97,7 +97,7 @@ A typical packet includes:
 Example block equation:
 
 $$
-\text{Packet} = \{ \text{IdentitySet}, \text{Ordering}, \text{Ambiguity}, \text{Stability}, \text{Lineage} \}
+\text{Packet} = \\{ \text{IdentitySet},\ \text{Ordering},\ \text{Ambiguity},\ \text{Stability},\ \text{Lineage} \\}
 $$
 
 ---
