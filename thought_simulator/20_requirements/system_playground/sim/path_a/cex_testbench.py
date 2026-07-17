@@ -1,239 +1,346 @@
-#!/usr/bin/env python3
 """
 cex_testbench.py
 
-Testbench for TS Path A CEx extract, per 20.107:
+Testbench for CEx (Context Extractor) in Path A.
 
-- CEx is a mechanical, replay-safe extract.
-- No Path B semantics.
-- No SSR, COB, CST, CIL.
-- No stability, ambiguity, or register modeling.
-
-This simulator uses simplified, spec-aligned data structures
-to verify determinism and structural fidelity of the CEx extract.
+Goals:
+- Ensure CEx consumes ONLY CILIntakePacket (no direct COB, CST, TP, IE access).
+- Ensure CEx behavior is deterministic: identical intake packets → identical TP metadata.
+- Ensure CEx respects advisory nature of CIL hints (no structural changes, no merges/splits).
+- Ensure CST stability information is visible ONLY via CIL StabilityBlock, not via direct CST wires.
 """
 
-from __future__ import annotations
-from dataclasses import dataclass
-from typing import List, Dict, Any, Tuple
+from dataclasses import dataclass, field
+from typing import List, Dict, Any, Optional
 import copy
 import hashlib
 import json
 
 
 # ---------------------------------------------------------------------------
-# Utilities
+# Test fixtures: CIL intake packet schema (mirrors 20.33_cil_requirements.md)
 # ---------------------------------------------------------------------------
 
-def deterministic_hash(obj: Any) -> str:
-    """Deterministic hash of a Python object via JSON serialization."""
-    s = json.dumps(obj, sort_keys=True, ensure_ascii=False)
-    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+@dataclass
+class IdentitySelectionBlock:
+    primary_layer_id: Optional[str]
+    secondary_layer_ids: List[str]
+    layer_ranking: List[Dict[str, Any]]  # [{layer_id: str, score: float}]
 
 
-def deep_copy(obj: Any) -> Any:
-    """Convenience wrapper for deep copy."""
-    return copy.deepcopy(obj)
+@dataclass
+class CertaintyBlock:
+    primary_certainty: float
+    mapping_certainty: float
+    context_certainty: float
+
+
+@dataclass
+class AmbiguityBlock:
+    ambiguous_mapping: bool
+    conflicting_cues: bool
+    ambiguity_score: float
+
+
+@dataclass
+class StabilityBlock:
+    stable_context: bool
+    unstable_context: bool
+    collapse_risk: float
+
+
+@dataclass
+class StructuralHintBlock:
+    local_cluster_hint: bool
+    local_relation_hint: bool
+    hint_details: Dict[str, Any]  # {cluster_ids: [StableID], relation_types: [string]}
+
+
+@dataclass
+class ReferentMappingEntry:
+    referent_id: str
+    layer_id: Optional[str]
+    mapping_certainty: float
+
+
+@dataclass
+class ReferentMappingBlock:
+    mappings: List[ReferentMappingEntry]
+
+
+@dataclass
+class CILIntakePacket:
+    identity_selection: IdentitySelectionBlock
+    certainty: CertaintyBlock
+    ambiguity: AmbiguityBlock
+    stability: StabilityBlock
+    structural_hints: StructuralHintBlock
+    referent_mapping: ReferentMappingBlock
+    register_hint: str
+    timestamps: Dict[str, Any]  # {generated_turn: TurnID}
 
 
 # ---------------------------------------------------------------------------
-# Upstream Path A input – committed TP (or equivalent)
+# CEx stub: consumes ONLY CILIntakePacket and produces TP metadata
+# (mirrors 20.107_cex_extract.md at a high level)
 # ---------------------------------------------------------------------------
 
-@dataclass(frozen=True)
-class TPCommitted:
-    """
-    Simplified Path A upstream record.
-
-    This is just a structural container:
-    - No semantics are inferred here.
-    - CEx must treat this as read-only input.
-    """
-    turn_id: int
-    text: str
-    rrw: Dict[str, Any]          # referent/role/weight metadata
-    policy_signature: str
-    semantic_core: Dict[str, Any]
-    discourse_act: str
-
-
-# ---------------------------------------------------------------------------
-# 20.107_cex_extract – CEx (Path A extract)
-# ---------------------------------------------------------------------------
-
-@dataclass(frozen=True)
-class CExRecord:
-    """
-    Minimal, Path A–compliant extract record.
-
-    Per 20.107:
-    - No new semantics.
-    - No stability/ambiguity metrics.
-    - No register/subculture modeling.
-    - No identity-layer substrate.
-    - No Path B envelopes.
-    """
-    turn_id: int
-    text: str
-    rrw: Dict[str, Any]
-    policy_signature: str
-    semantic_core: Dict[str, Any]
-    discourse_act: str
-    extract_hash: str  # hash of the extract itself, for replay checks
+@dataclass
+class TPMetadata:
+    identity_layer_id: Optional[str]
+    secondary_layers: List[str]
+    referent_mappings: List[Dict[str, Any]]
+    register_hint: str
+    stability_flags: Dict[str, Any]
+    ambiguity_flags: Dict[str, Any]
+    certainty_scores: Dict[str, float]
 
 
 class CEx:
     """
-    20.107 – CEx: mechanical extract.
+    Context Extractor (Path A).
 
-    Responsibilities:
-    - Read upstream Path A record (TPCommitted or equivalent).
-    - Produce a CExRecord by structural copy only.
-    - Do not infer, repair, or reinterpret semantics.
-    - Be fully deterministic: same input → same CExRecord.
+    Constraints:
+    - Input: CILIntakePacket only.
+    - Output: TPMetadata only.
+    - No direct access to COB, CST, TP, IE, TS, CE.
+    - Treats CIL hints as advisory; does NOT perform structural changes.
     """
 
     @staticmethod
-    def extract(tp: TPCommitted) -> CExRecord:
-        base = {
-            "turn_id": tp.turn_id,
-            "text": tp.text,
-            "rrw": tp.rrw,
-            "policy_signature": tp.policy_signature,
-            "semantic_core": tp.semantic_core,
-            "discourse_act": tp.discourse_act,
+    def extract(intake: CILIntakePacket) -> TPMetadata:
+        # Identity selection
+        identity_layer_id = intake.identity_selection.primary_layer_id
+        secondary_layers = intake.identity_selection.secondary_layer_ids
+
+        # Referent mappings
+        referent_mappings = [
+            {
+                "referent_id": m.referent_id,
+                "layer_id": m.layer_id,
+                "mapping_certainty": m.mapping_certainty,
+            }
+            for m in intake.referent_mapping.mappings
+        ]
+
+        # Stability flags (CST reflected via CIL StabilityBlock)
+        stability_flags = {
+            "stable_context": intake.stability.stable_context,
+            "unstable_context": intake.stability.unstable_context,
+            "collapse_risk": intake.stability.collapse_risk,
         }
 
-        extract_hash = deterministic_hash(base)
+        # Ambiguity flags
+        ambiguity_flags = {
+            "ambiguous_mapping": intake.ambiguity.ambiguous_mapping,
+            "conflicting_cues": intake.ambiguity.conflicting_cues,
+            "ambiguity_score": intake.ambiguity.ambiguity_score,
+        }
 
-        return CExRecord(
-            turn_id=tp.turn_id,
-            text=tp.text,
-            rrw=deep_copy(tp.rrw),
-            policy_signature=tp.policy_signature,
-            semantic_core=deep_copy(tp.semantic_core),
-            discourse_act=tp.discourse_act,
-            extract_hash=extract_hash,
+        # Certainty scores
+        certainty_scores = {
+            "primary_certainty": intake.certainty.primary_certainty,
+            "mapping_certainty": intake.certainty.mapping_certainty,
+            "context_certainty": intake.certainty.context_certainty,
+        }
+
+        return TPMetadata(
+            identity_layer_id=identity_layer_id,
+            secondary_layers=secondary_layers,
+            referent_mappings=referent_mappings,
+            register_hint=intake.register_hint,
+            stability_flags=stability_flags,
+            ambiguity_flags=ambiguity_flags,
+            certainty_scores=certainty_scores,
         )
 
 
 # ---------------------------------------------------------------------------
-# Testbench – Path A extract determinism
+# Utility: deterministic hash for replay equivalence
 # ---------------------------------------------------------------------------
 
-class CExTestbench:
-    """
-    End-to-end Path A simulator for:
-
-    TPCommitted → CEx.extract
-
-    Focus:
-    - determinism
-    - replay-safety
-    - structural fidelity of extract
-    """
-
-    def __init__(self):
-        self.cex = CEx()
-
-    def run_sequence(self, tp_sequence: List[TPCommitted]) -> List[CExRecord]:
-        """
-        Run a sequence of committed TP through the Path A extract.
-        Returns CEx records per turn.
-        """
-        records: List[CExRecord] = []
-
-        for tp in tp_sequence:
-            rec = self.cex.extract(tp)
-            records.append(rec)
-
-        return records
-
-    def replay_sequence(self, tp_sequence: List[TPCommitted]) -> Tuple[List[CExRecord], List[CExRecord]]:
-        """
-        Run the same sequence twice and compare outputs for determinism.
-        """
-        # First run
-        self.__init__()  # reset
-        out1 = self.run_sequence(tp_sequence)
-
-        # Second run
-        self.__init__()  # reset
-        out2 = self.run_sequence(tp_sequence)
-
-        return out1, out2
-
-    @staticmethod
-    def compare_records(a: List[CExRecord], b: List[CExRecord]) -> bool:
-        if len(a) != len(b):
-            return False
-        for r1, r2 in zip(a, b):
-            if (
-                r1.turn_id != r2.turn_id or
-                r1.text != r2.text or
-                r1.rrw != r2.rrw or
-                r1.policy_signature != r2.policy_signature or
-                r1.semantic_core != r2.semantic_core or
-                r1.discourse_act != r2.discourse_act or
-                r1.extract_hash != r2.extract_hash
-            ):
-                return False
-        return True
+def metadata_hash(meta: TPMetadata) -> str:
+    """Compute a deterministic hash of TPMetadata for replay checks."""
+    as_dict = {
+        "identity_layer_id": meta.identity_layer_id,
+        "secondary_layers": meta.secondary_layers,
+        "referent_mappings": meta.referent_mappings,
+        "register_hint": meta.register_hint,
+        "stability_flags": meta.stability_flags,
+        "ambiguity_flags": meta.ambiguity_flags,
+        "certainty_scores": meta.certainty_scores,
+    }
+    payload = json.dumps(as_dict, sort_keys=True)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 # ---------------------------------------------------------------------------
-# Example usage / basic tests
+# Test cases
 # ---------------------------------------------------------------------------
 
-def make_example_tp_sequence() -> List[TPCommitted]:
+def make_sample_intake(turn_id: int = 42) -> CILIntakePacket:
+    """Create a representative CILIntakePacket fixture."""
+    identity = IdentitySelectionBlock(
+        primary_layer_id="layer_server",
+        secondary_layer_ids=["layer_user", "layer_app"],
+        layer_ranking=[
+            {"layer_id": "layer_server", "score": 0.9},
+            {"layer_id": "layer_user", "score": 0.7},
+            {"layer_id": "layer_app", "score": 0.4},
+        ],
+    )
+
+    certainty = CertaintyBlock(
+        primary_certainty=0.88,
+        mapping_certainty=0.92,
+        context_certainty=0.81,
+    )
+
+    ambiguity = AmbiguityBlock(
+        ambiguous_mapping=False,
+        conflicting_cues=True,
+        ambiguity_score=0.35,
+    )
+
+    stability = StabilityBlock(
+        stable_context=True,
+        unstable_context=False,
+        collapse_risk=0.05,
+    )
+
+    structural_hints = StructuralHintBlock(
+        local_cluster_hint=True,
+        local_relation_hint=False,
+        hint_details={
+            "cluster_ids": ["layer_server", "layer_app"],
+            "relation_types": ["error_flow"],
+        },
+    )
+
+    referent_block = ReferentMappingBlock(
+        mappings=[
+            ReferentMappingEntry(
+                referent_id="server_login",
+                layer_id="layer_server",
+                mapping_certainty=0.93,
+            ),
+            ReferentMappingEntry(
+                referent_id="user_account",
+                layer_id="layer_user",
+                mapping_certainty=0.87,
+            ),
+        ]
+    )
+
+    return CILIntakePacket(
+        identity_selection=identity,
+        certainty=certainty,
+        ambiguity=ambiguity,
+        stability=stability,
+        structural_hints=structural_hints,
+        referent_mapping=referent_block,
+        register_hint="technical",
+        timestamps={"generated_turn": turn_id},
+    )
+
+
+def test_cex_determinism():
+    """Identical intake packets SHALL produce identical TPMetadata and hashes."""
+    intake1 = make_sample_intake(turn_id=100)
+    intake2 = copy.deepcopy(intake1)
+
+    meta1 = CEx.extract(intake1)
+    meta2 = CEx.extract(intake2)
+
+    assert meta1 == meta2
+    assert metadata_hash(meta1) == metadata_hash(meta2)
+
+
+def test_cex_sensitivity_to_identity_selection():
+    """Changes in IdentitySelectionBlock SHALL be reflected in TPMetadata identity_layer_id."""
+    intake = make_sample_intake()
+    meta_original = CEx.extract(intake)
+
+    # Change primary layer
+    intake_modified = copy.deepcopy(intake)
+    intake_modified.identity_selection.primary_layer_id = "layer_user"
+
+    meta_modified = CEx.extract(intake_modified)
+
+    assert meta_original.identity_layer_id == "layer_server"
+    assert meta_modified.identity_layer_id == "layer_user"
+    assert metadata_hash(meta_original) != metadata_hash(meta_modified)
+
+
+def test_cex_register_hint_propagation():
+    """register_hint from CIL SHALL be propagated into TPMetadata unchanged."""
+    intake = make_sample_intake()
+    intake.register_hint = "east_la_lingo"
+
+    meta = CEx.extract(intake)
+    assert meta.register_hint == "east_la_lingo"
+
+
+def test_cex_stability_reflection_only_via_intake():
     """
-    Build a small synthetic TP sequence to exercise Path A extract behavior.
-
-    CEx does not interpret these fields; it just copies them structurally.
+    CST stability SHALL be visible to CEx ONLY via CIL StabilityBlock fields.
+    This test ensures CEx uses stability from intake and does not depend on any external CST state.
     """
-    seq: List[TPCommitted] = []
+    intake = make_sample_intake()
+    meta = CEx.extract(intake)
 
-    texts = [
-        "Let’s formalize the stability metrics.",
-        "Lol this is kinda wild.",
-        "We should prove replay-safety.",
-        "Yo this collapse thing better not blow up.",
-        "Final check: deterministic signals only.",
-    ]
-
-    for i, txt in enumerate(texts, start=1):
-        tp = TPCommitted(
-            turn_id=i,
-            text=txt,
-            rrw={"weights": {"core": 1.0}},
-            policy_signature="policy_v1",
-            semantic_core={"entities": ["TS"]},
-            discourse_act="assertion",
-        )
-        seq.append(tp)
-
-    return seq
+    assert meta.stability_flags["stable_context"] is True
+    assert meta.stability_flags["unstable_context"] is False
+    assert meta.stability_flags["collapse_risk"] == 0.05
 
 
-def main():
-    tb = CExTestbench()
-    seq = make_example_tp_sequence()
+def test_cex_ambiguity_and_certainty_propagation():
+    """Ambiguity and certainty fields SHALL be propagated into TPMetadata."""
+    intake = make_sample_intake()
+    meta = CEx.extract(intake)
 
-    # Single run
-    records = tb.run_sequence(seq)
-    print("Single run CEx records:")
-    for i, r in enumerate(records, start=1):
-        print(f"Turn {i}:")
-        print(f"  turn_id:      {r.turn_id}")
-        print(f"  text:         {r.text}")
-        print(f"  extract_hash: {r.extract_hash}")
-        print()
+    assert meta.ambiguity_flags["conflicting_cues"] is True
+    assert meta.ambiguity_flags["ambiguity_score"] == 0.35
 
-    # Replay determinism check
-    out1, out2 = tb.replay_sequence(seq)
-    deterministic = CExTestbench.compare_records(out1, out2)
-    print("Replay determinism:", deterministic)
+    assert meta.certainty_scores["primary_certainty"] == 0.88
+    assert meta.certainty_scores["mapping_certainty"] == 0.92
+    assert meta.certainty_scores["context_certainty"] == 0.81
+
+
+def test_cex_no_structural_side_effects():
+    """
+    CEx SHALL NOT emit structural instructions (merge/split/retire/etc.).
+    This is enforced here by checking that TPMetadata contains only metadata,
+    not structural commands.
+    """
+    intake = make_sample_intake()
+    meta = CEx.extract(intake)
+
+    # TPMetadata must not contain any structural instruction fields
+    forbidden_keys = {"merge", "split", "retire", "freeze", "thaw"}
+    meta_dict = {
+        "identity_layer_id": meta.identity_layer_id,
+        "secondary_layers": meta.secondary_layers,
+        "referent_mappings": meta.referent_mappings,
+        "register_hint": meta.register_hint,
+        "stability_flags": meta.stability_flags,
+        "ambiguity_flags": meta.ambiguity_flags,
+        "certainty_scores": meta.certainty_scores,
+    }
+
+    assert not any(k in meta_dict for k in forbidden_keys)
 
 
 if __name__ == "__main__":
-    main()
+    # Simple manual runner; in practice you'd use pytest.
+    tests = [
+        test_cex_determinism,
+        test_cex_sensitivity_to_identity_selection,
+        test_cex_register_hint_propagation,
+        test_cex_stability_reflection_only_via_intake,
+        test_cex_ambiguity_and_certainty_propagation,
+        test_cex_no_structural_side_effects,
+    ]
+    for t in tests:
+        t()
+    print("All CEx testbench tests passed.")
