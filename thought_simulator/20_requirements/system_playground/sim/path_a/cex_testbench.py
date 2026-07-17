@@ -1,355 +1,146 @@
 """
-cex_testbench.py
-
-Testbench for CEx (Context Extractor) in Path A.
-
-CEx responsibilities tested here:
-- Consume ONLY CILIntakePacket.
-- Use present TP (from IIInB) for continuity.
-- Override continuity only when CIL certainty is high AND ambiguity is low.
-- Detect collapse and choose fallback identity-layer.
-- If context is indeterminate, choose latest conversation-layer and mark result as "undetermined".
-- Deterministic replay: identical inputs → identical outputs.
+cex_testbench.py — Modern CEx Determinism & Continuity Testbench
+Aligned with:
+  - 20.107_cex_extract.md
+  - 20.108_ce_envelope.md
+  - 20.32_cob_requirements.md
+  - 20.32.010_cst_requirements.md
+  - 20.33_cil_requirements.md
+  - Updated Path-A pipeline (InB → IIInB → IE → CEx → CE → ISc → TPU)
 """
 
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
-import copy
-import hashlib
-import json
+import unittest
+from typing import List, Dict, Any
+
+from cex_extract import cex_extract
+from ce_envelope import build_ce
+from fixtures import (
+    make_ie,
+    make_cob_snapshot,
+    make_ordering_metrics,
+)
 
 
-# ---------------------------------------------------------------------------
-# Intake packet schema (20.33)
-# ---------------------------------------------------------------------------
+class TestCEx(unittest.TestCase):
 
-@dataclass
-class IdentitySelectionBlock:
-    primary_layer_id: Optional[str]
-    secondary_layer_ids: List[str]
-    layer_ranking: List[Dict[str, Any]]
+    # -------------------------------------------------------------
+    # 1. Identity-layer selection determinism
+    # -------------------------------------------------------------
+    def test_identity_layer_selection_deterministic(self):
+        ie = make_ie("User asked about the weather in Phoenix.")
+        cob = make_cob_snapshot(
+            layers=["weather", "sports"],
+            continuity={"weather": 0.92, "sports": 0.10}
+        )
+        ordering = make_ordering_metrics()
 
+        ce1 = build_ce(cex_extract(ie, cob, ordering))
+        ce2 = build_ce(cex_extract(ie, cob, ordering))
 
-@dataclass
-class CertaintyBlock:
-    primary_certainty: float
-    mapping_certainty: float
-    context_certainty: float
+        self.assertEqual(ce1["selected_layer"], "weather")
+        self.assertEqual(ce1, ce2)  # replay determinism
 
+    # -------------------------------------------------------------
+    # 2. Continuity vs override
+    # -------------------------------------------------------------
+    def test_continuity_override(self):
+        ie = make_ie("Switch topic to basketball.")
+        cob = make_cob_snapshot(
+            layers=["weather", "sports"],
+            continuity={"weather": 0.91, "sports": 0.12},
+            override_signal="sports"
+        )
+        ordering = make_ordering_metrics()
 
-@dataclass
-class AmbiguityBlock:
-    ambiguous_mapping: bool
-    conflicting_cues: bool
-    ambiguity_score: float
+        ce = build_ce(cex_extract(ie, cob, ordering))
+        self.assertEqual(ce["selected_layer"], "sports")
+        self.assertEqual(ce["continuity_status"], "override")
 
+    # -------------------------------------------------------------
+    # 3. Ambiguity detection
+    # -------------------------------------------------------------
+    def test_ambiguity_detection(self):
+        ie = make_ie("He said it was fine.")
+        cob = make_cob_snapshot(
+            layers=["person_a", "person_b"],
+            referent_ambiguity=True
+        )
+        ordering = make_ordering_metrics()
 
-@dataclass
-class StabilityBlock:
-    stable_context: bool
-    unstable_context: bool
-    collapse_risk: float
+        ce = build_ce(cex_extract(ie, cob, ordering))
+        self.assertTrue(ce["ambiguity_flag"])
+        self.assertEqual(ce["fallback_reason"], "referent_ambiguity")
 
+    # -------------------------------------------------------------
+    # 4. Collapse fallback
+    # -------------------------------------------------------------
+    def test_collapse_fallback(self):
+        ie = make_ie("Continue.")
+        cob = make_cob_snapshot(
+            layers=["topic_a"],
+            collapse_flag=True
+        )
+        ordering = make_ordering_metrics()
 
-@dataclass
-class StructuralHintBlock:
-    local_cluster_hint: bool
-    local_relation_hint: bool
-    hint_details: Dict[str, Any]
+        ce = build_ce(cex_extract(ie, cob, ordering))
+        self.assertEqual(ce["fallback_reason"], "collapse")
+        self.assertEqual(ce["selected_layer"], "fallback")
 
-
-@dataclass
-class ReferentMappingEntry:
-    referent_id: str
-    layer_id: Optional[str]
-    mapping_certainty: float
-
-
-@dataclass
-class ReferentMappingBlock:
-    mappings: List[ReferentMappingEntry]
-
-
-@dataclass
-class CILIntakePacket:
-    identity_selection: IdentitySelectionBlock
-    certainty: CertaintyBlock
-    ambiguity: AmbiguityBlock
-    stability: StabilityBlock
-    structural_hints: StructuralHintBlock
-    referent_mapping: ReferentMappingBlock
-    register_hint: str
-    timestamps: Dict[str, Any]
-
-
-# ---------------------------------------------------------------------------
-# TPMetadata output (20.107)
-# ---------------------------------------------------------------------------
-
-@dataclass
-class TPMetadata:
-    identity_layer_id: Optional[str]
-    continuity_status: str  # "continuous", "switched", "fallback", "undetermined"
-    referent_mappings: List[Dict[str, Any]]
-    register_hint: str
-    stability_flags: Dict[str, Any]
-    ambiguity_flags: Dict[str, Any]
-    certainty_scores: Dict[str, float]
-
-
-# ---------------------------------------------------------------------------
-# CEx implementation stub
-# ---------------------------------------------------------------------------
-
-class CEx:
-    """
-    CEx chooses identity-layer context using:
-    - present TP identity (from IIInB)
-    - CIL intake packet
-    - continuity rules (20.107)
-    - fallback rule: if indeterminate → latest conversation-layer + "undetermined"
-    """
-
-    @staticmethod
-    def extract(intake: CILIntakePacket, previous_tp_identity: Optional[str]) -> TPMetadata:
-
-        # 1. If collapse → fallback to highest-ranked stable layer
-        if intake.stability.collapse_risk > 0.8:
-            fallback_layer = intake.identity_selection.layer_ranking[0]["layer_id"]
-            return TPMetadata(
-                identity_layer_id=fallback_layer,
-                continuity_status="fallback",
-                referent_mappings=[
-                    {
-                        "referent_id": m.referent_id,
-                        "layer_id": m.layer_id,
-                        "mapping_certainty": m.mapping_certainty,
-                    }
-                    for m in intake.referent_mapping.mappings
-                ],
-                register_hint=intake.register_hint,
-                stability_flags={
-                    "stable_context": intake.stability.stable_context,
-                    "unstable_context": intake.stability.unstable_context,
-                    "collapse_risk": intake.stability.collapse_risk,
-                },
-                ambiguity_flags={
-                    "ambiguous_mapping": intake.ambiguity.ambiguous_mapping,
-                    "conflicting_cues": intake.ambiguity.conflicting_cues,
-                    "ambiguity_score": intake.ambiguity.ambiguity_score,
-                },
-                certainty_scores={
-                    "primary_certainty": intake.certainty.primary_certainty,
-                    "mapping_certainty": intake.certainty.mapping_certainty,
-                    "context_certainty": intake.certainty.context_certainty,
-                },
-            )
-
-        # 2. If CIL certainty is high and ambiguity is low → switch identity
-        if (
-            intake.certainty.primary_certainty > 0.85
-            and intake.ambiguity.ambiguity_score < 0.2
-        ):
-            return TPMetadata(
-                identity_layer_id=intake.identity_selection.primary_layer_id,
-                continuity_status="switched",
-                referent_mappings=[
-                    {
-                        "referent_id": m.referent_id,
-                        "layer_id": m.layer_id,
-                        "mapping_certainty": m.mapping_certainty,
-                    }
-                    for m in intake.referent_mapping.mappings
-                ],
-                register_hint=intake.register_hint,
-                stability_flags={
-                    "stable_context": intake.stability.stable_context,
-                    "unstable_context": intake.stability.unstable_context,
-                    "collapse_risk": intake.stability.collapse_risk,
-                },
-                ambiguity_flags={
-                    "ambiguous_mapping": intake.ambiguity.ambiguous_mapping,
-                    "conflicting_cues": intake.ambiguity.conflicting_cues,
-                    "ambiguity_score": intake.ambiguity.ambiguity_score,
-                },
-                certainty_scores={
-                    "primary_certainty": intake.certainty.primary_certainty,
-                    "mapping_certainty": intake.certainty.mapping_certainty,
-                    "context_certainty": intake.certainty.context_certainty,
-                },
-            )
-
-        # 3. If CIL identity is indeterminate → default to previous TP identity
-        if intake.identity_selection.primary_layer_id is None:
-            return TPMetadata(
-                identity_layer_id=previous_tp_identity,
-                continuity_status="undetermined",
-                referent_mappings=[
-                    {
-                        "referent_id": m.referent_id,
-                        "layer_id": m.layer_id,
-                        "mapping_certainty": m.mapping_certainty,
-                    }
-                    for m in intake.referent_mapping.mappings
-                ],
-                register_hint=intake.register_hint,
-                stability_flags={
-                    "stable_context": intake.stability.stable_context,
-                    "unstable_context": intake.stability.unstable_context,
-                    "collapse_risk": intake.stability.collapse_risk,
-                },
-                ambiguity_flags={
-                    "ambiguous_mapping": intake.ambiguity.ambiguous_mapping,
-                    "conflicting_cues": intake.ambiguity.conflicting_cues,
-                    "ambiguity_score": intake.ambiguity.ambiguity_score,
-                },
-                certainty_scores={
-                    "primary_certainty": intake.certainty.primary_certainty,
-                    "mapping_certainty": intake.certainty.mapping_certainty,
-                    "context_certainty": intake.certainty.context_certainty,
-                },
-            )
-
-        # 4. Otherwise → continuity
-        return TPMetadata(
-            identity_layer_id=previous_tp_identity,
-            continuity_status="continuous",
-            referent_mappings=[
-                {
-                    "referent_id": m.referent_id,
-                    "layer_id": m.layer_id,
-                    "mapping_certainty": m.mapping_certainty,
-                }
-                for m in intake.referent_mapping.mappings
-            ],
-            register_hint=intake.register_hint,
-            stability_flags={
-                "stable_context": intake.stability.stable_context,
-                "unstable_context": intake.stability.unstable_context,
-                "collapse_risk": intake.stability.collapse_risk,
-            },
-            ambiguity_flags={
-                "ambiguous_mapping": intake.ambiguity.ambiguous_mapping,
-                "conflicting_cues": intake.ambiguity.conflicting_cues,
-                "ambiguity_score": intake.ambiguity.ambiguity_score,
-            },
-            certainty_scores={
-                "primary_certainty": intake.certainty.primary_certainty,
-                "mapping_certainty": intake.certainty.mapping_certainty,
-                "context_certainty": intake.certainty.context_certainty,
-            },
+    # -------------------------------------------------------------
+    # 5. Ordering metric integration
+    # -------------------------------------------------------------
+    def test_ordering_metric_integration(self):
+        ie = make_ie("Tell me more.")
+        cob = make_cob_snapshot(
+            layers=["topic_a", "topic_b"],
+            continuity={"topic_a": 0.51, "topic_b": 0.49}
+        )
+        ordering = make_ordering_metrics(
+            ordering_preference="topic_b"
         )
 
+        ce = build_ce(cex_extract(ie, cob, ordering))
+        self.assertEqual(ce["selected_layer"], "topic_b")
+        self.assertEqual(ce["ordering_used"], True)
 
-# ---------------------------------------------------------------------------
-# Deterministic hash
-# ---------------------------------------------------------------------------
+    # -------------------------------------------------------------
+    # 6. CE schema validation
+    # -------------------------------------------------------------
+    def test_ce_schema(self):
+        ie = make_ie("What time is it?")
+        cob = make_cob_snapshot(layers=["time"])
+        ordering = make_ordering_metrics()
 
-def metadata_hash(meta: TPMetadata) -> str:
-    payload = json.dumps({
-        "identity_layer_id": meta.identity_layer_id,
-        "continuity_status": meta.continuity_status,
-        "referent_mappings": meta.referent_mappings,
-        "register_hint": meta.register_hint,
-        "stability_flags": meta.stability_flags,
-        "ambiguity_flags": meta.ambiguity_flags,
-        "certainty_scores": meta.certainty_scores,
-    }, sort_keys=True)
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+        ce = build_ce(cex_extract(ie, cob, ordering))
 
+        required_fields = [
+            "selected_layer",
+            "continuity_status",
+            "fallback_reason",
+            "ambiguity_flag",
+            "collapse_flag",
+            "ordering_used",
+            "normalized_tokens",
+            "metadata"
+        ]
 
-# ---------------------------------------------------------------------------
-# Test fixtures
-# ---------------------------------------------------------------------------
+        for field in required_fields:
+            self.assertIn(field, ce)
 
-def make_intake(primary="layer_server", certainty=0.88, ambiguity=0.1, collapse=0.0):
-    return CILIntakePacket(
-        identity_selection=IdentitySelectionBlock(
-            primary_layer_id=primary,
-            secondary_layer_ids=["layer_user"],
-            layer_ranking=[
-                {"layer_id": "layer_server", "score": 0.9},
-                {"layer_id": "layer_user", "score": 0.7},
-            ],
-        ),
-        certainty=CertaintyBlock(
-            primary_certainty=certainty,
-            mapping_certainty=0.92,
-            context_certainty=0.81,
-        ),
-        ambiguity=AmbiguityBlock(
-            ambiguous_mapping=False,
-            conflicting_cues=False,
-            ambiguity_score=ambiguity,
-        ),
-        stability=StabilityBlock(
-            stable_context=True,
-            unstable_context=False,
-            collapse_risk=collapse,
-        ),
-        structural_hints=StructuralHintBlock(
-            local_cluster_hint=False,
-            local_relation_hint=False,
-            hint_details={},
-        ),
-        referent_mapping=ReferentMappingBlock(
-            mappings=[
-                ReferentMappingEntry("server_login", "layer_server", 0.93)
-            ]
-        ),
-        register_hint="technical",
-        timestamps={"generated_turn": 100},
-    )
+    # -------------------------------------------------------------
+    # 7. Replay determinism (1000 iterations)
+    # -------------------------------------------------------------
+    def test_replay_determinism(self):
+        ie = make_ie("Where is the nearest store?")
+        cob = make_cob_snapshot(layers=["location"])
+        ordering = make_ordering_metrics()
 
+        ce0 = build_ce(cex_extract(ie, cob, ordering))
 
-# ---------------------------------------------------------------------------
-# Tests
-# ---------------------------------------------------------------------------
-
-def test_continuity():
-    intake = make_intake(primary="layer_user", certainty=0.5, ambiguity=0.5)
-    meta = CEx.extract(intake, previous_tp_identity="layer_server")
-    assert meta.identity_layer_id == "layer_server"
-    assert meta.continuity_status == "continuous"
-
-
-def test_switch_on_high_certainty_low_ambiguity():
-    intake = make_intake(primary="layer_user", certainty=0.95, ambiguity=0.05)
-    meta = CEx.extract(intake, previous_tp_identity="layer_server")
-    assert meta.identity_layer_id == "layer_user"
-    assert meta.continuity_status == "switched"
-
-
-def test_fallback_on_collapse():
-    intake = make_intake(primary="layer_user", collapse=0.95)
-    meta = CEx.extract(intake, previous_tp_identity="layer_server")
-    assert meta.continuity_status == "fallback"
-    assert meta.identity_layer_id == "layer_server"  # highest-ranked stable
-
-
-def test_undetermined_default():
-    intake = make_intake(primary=None)
-    meta = CEx.extract(intake, previous_tp_identity="layer_server")
-    assert meta.continuity_status == "undetermined"
-    assert meta.identity_layer_id == "layer_server"
-
-
-def test_determinism():
-    intake1 = make_intake()
-    intake2 = copy.deepcopy(intake1)
-    meta1 = CEx.extract(intake1, previous_tp_identity="layer_server")
-    meta2 = CEx.extract(intake2, previous_tp_identity="layer_server")
-    assert metadata_hash(meta1) == metadata_hash(meta2)
+        for _ in range(1000):
+            ceN = build_ce(cex_extract(ie, cob, ordering))
+            self.assertEqual(ceN, ce0)
 
 
 if __name__ == "__main__":
-    tests = [
-        test_continuity,
-        test_switch_on_high_certainty_low_ambiguity,
-        test_fallback_on_collapse,
-        test_undetermined_default,
-        test_determinism,
-    ]
-    for t in tests:
-        t()
-    print("All CEx tests passed.")
+    unittest.main()
