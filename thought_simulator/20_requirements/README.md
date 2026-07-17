@@ -88,8 +88,6 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.95_ts_numeric_policy.md](20.95_ts_numeric_policy.md)
 - [20.100_inb_requirements.md](20.100_inb_requirements.md)
 - [20.101_iiinb_requirements.md](20.101_iiinb_requirements.md)
-- [20.102_usp_requirements.md](20.102_usp_requirements.md)
-- [20.103_upi_requirements.md](20.103_upi_requirements.md)
 - [20.105_tp_requirements.md](20.105_tp_requirements.md)
 - [20.105.010_tp_meta_fields.md](20.105.010_tp_meta_fields.md)
 - [20.105.020_tp_meta_provenance.md](20.105.020_tp_meta_provenance.md)
