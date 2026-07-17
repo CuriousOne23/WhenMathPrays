@@ -136,7 +136,7 @@ def main():
     tests = testbench.get("tests", [])
 
     print(f"Loaded {len(tests)} test cases.")
-    print("Starting InB → IIInB → IE testbench...\n")
+    print("Starting InB -> IIInB -> IE testbench...\n")
 
     log = create_log_file()
 
