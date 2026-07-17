@@ -57,7 +57,63 @@ These signals are consumed by COB and indirectly by CIL.
 
 ---
 
-## **5. High‑Level Requirements (HLRs)**  
+---
+
+## **5. Testing (system_playground)**
+
+The system_playground version of CST is validated using a block‑level Python testbench (`cst_testbench.py`).  
+This testbench verifies that CST produces deterministic stability signals based on identity‑layer object inputs.
+
+### **5.1 Tested Behaviors**
+
+The following CST behaviors are explicitly tested:
+
+- **Drift Detection**  
+  CST identifies identity‑layer objects exhibiting referent or anchor divergence and reports affected objects and drift magnitude.
+
+- **Oscillation Detection**  
+  CST detects alternating incompatible states and reports affected objects, oscillation frequency, and amplitude.
+
+- **Collapse Detection**  
+  CST identifies identity‑layer objects that have structurally collapsed and reports severity.
+
+- **Freeze / Thaw Detection**  
+  CST reports objects marked as frozen or thawed based on stability conditions.
+
+- **Certainty Adjustment**  
+  CST increases or decreases certainty indicators based on ambiguity and referent stability.
+
+- **Ambiguity Adjustment**  
+  CST increases or decreases ambiguity indicators based on identity‑layer conditions.
+
+- **Lineage Stability Detection**  
+  CST identifies stable and unstable lineage conditions across identity‑layer objects.
+
+### **5.2 Behaviors Not Tested in system_playground**
+
+The following behaviors are **not** tested at this stage:
+
+- **Merge Detection (full implementation)**  
+- **Split Detection (full implementation)**  
+- **Multi‑block interactions with COB or CIL**  
+- **Full pipeline stability propagation**  
+- **Deterministic replay across multiple turns**
+
+These behaviors are reserved for **system_simulation**, where CST participates in multi‑block, multi‑stage flows.
+
+### **5.3 Testbench Characteristics**
+
+- Deterministic execution  
+- No external dependencies  
+- No multi‑block orchestration  
+- Pure block‑level validation  
+- Mirrors the structure of `cst_signals.yaml` and `cst_state.yaml`
+
+The testbench ensures that CST behaves consistently with the system_playground requirements and produces stability signals suitable for COB integration.
+
+---
+
+## **6. High‑Level Requirements (HLRs)**  
 *(All SHALL statements appear only here. Each HLR contains exactly one SHALL.)*
 
 ### **HLR‑CST‑001: Drift Detection**  
@@ -92,7 +148,7 @@ CST SHALL produce deterministic stability signals under identical inputs.
 
 ---
 
-## **6. Stability Metrics**  
+## **7. Stability Metrics**  
 *(Informative — no SHALL statements)*
 
 CST evaluates stability using metrics such as:
@@ -117,7 +173,7 @@ $$
 
 ---
 
-## **7. Drift Rules**  
+## **8. Drift Rules**  
 *(Informative — no SHALL statements)*
 
 Drift is detected when referent or anchor positions diverge across turns.  
@@ -125,7 +181,7 @@ Drift magnitude influences certainty and ambiguity adjustments.
 
 ---
 
-## **8. Oscillation Rules**  
+## **9. Oscillation Rules**  
 *(Informative — no SHALL statements)*
 
 Oscillation occurs when identity‑layer objects alternate between incompatible states across turns.  
@@ -133,7 +189,7 @@ Oscillation frequency influences freeze/thaw decisions.
 
 ---
 
-## **9. Collapse Rules**  
+## **10. Collapse Rules**  
 *(Informative — no SHALL statements)*
 
 Collapse occurs when identity‑layer objects lose structural integrity or become incompatible with referent maps.  
@@ -141,7 +197,7 @@ Collapse signals trigger COB merge or eviction behavior.
 
 ---
 
-## **10. Merge/Split Rules**  
+## **11. Merge/Split Rules**  
 *(Informative — no SHALL statements)*
 
 Merge conditions arise when identity‑layer objects converge in referent or anchor space.  
@@ -149,7 +205,7 @@ Split conditions arise when identity‑layer objects diverge into incompatible s
 
 ---
 
-## **11. Freeze/Thaw Behavior**  
+## **12. Freeze/Thaw Behavior**  
 *(Informative — no SHALL statements)*
 
 Freeze signals prevent COB from modifying identity‑layer objects.  
@@ -157,7 +213,7 @@ Thaw signals restore normal update behavior.
 
 ---
 
-## **12. Interface Contracts**  
+## **13. Interface Contracts**  
 *(Informative — no SHALL statements)*
 
 ### **CST → COB**  
@@ -171,14 +227,14 @@ CST influences CEx only through COB and CIL.
 
 ---
 
-## **13. Determinism Notes**  
+## **14. Determinism Notes**  
 *(Informative — no SHALL statements)*
 
 Deterministic signal generation ensures reproducible behavior in COB and CIL under identical identity‑layer inputs.
 
 ---
 
-## **14. Error Handling**  
+## **15. Error Handling**  
 *(Informative — no SHALL statements)*
 
 CST rejects malformed identity‑layer objects.  
@@ -187,7 +243,7 @@ CST ensures internal consistency of stability signals.
 
 ---
 
-## **15. Playground Notes**  
+## **16. Playground Notes**  
 *(Informative — no SHALL statements)*
 
 This document defines the system_playground version of CST.  
