@@ -47,7 +47,53 @@ This packet is consumed by **CEx**.
 
 ---
 
-## **5. High‑Level Requirements (HLRs)**  
+## **5. Testing (system_playground)**
+
+The system_playground version of CIL is validated using a block‑level Python testbench (`cil_testbench.py`).  
+This testbench verifies that CIL performs deterministic identity selection and correctly aggregates identity‑layer indicators before constructing the CIL Intake Packet.
+
+### **5.1 Tested Behaviors**
+
+The following CIL behaviors are explicitly tested:
+
+- **Identity Selection**
+  - Deterministic ordering based on recency, frequency, and density.
+  - Selection of the top‑ranked identity objects (default max: 5).
+
+- **Certainty Aggregation**
+  - Extraction and aggregation of certainty indicators from selected identity objects.
+  - Extraction and aggregation of ambiguity indicators.
+
+- **Stability Aggregation**
+  - Aggregation of drift, oscillation, collapse, merge/split, and freeze/thaw metrics.
+  - Preservation of per‑object stability values in the stability block.
+
+- **Lineage Aggregation**
+  - Aggregation of lineage stability indicators.
+  - Collection of lineage records for selected identity objects.
+
+- **Ordering Aggregation**
+  - Aggregation of recency, frequency, and density metrics.
+  - Preservation of ordering distributions for selected identity objects.
+
+- **Intake Packet Construction**
+  - Deterministic construction of the CIL Intake Packet.
+  - Inclusion of identity selection block, certainty block, stability block, lineage block, ordering block, and packet metadata.
+
+### **5.2 Behaviors Not Tested in system_playground**
+
+The following behaviors are **not** tested at this stage:
+
+- Multi‑block interactions with COB or CST.
+- Full pipeline integration with CE Envelope or CEx.
+- Deterministic replay across multiple turns.
+- High‑level simulation of identity‑layer evolution.
+
+These behaviors are reserved for **system_simulation**, where CIL participates in multi‑block, multi‑stage flows
+
+---
+
+## **6. High‑Level Requirements (HLRs)**  
 *(All SHALL statements appear only here. Each HLR contains exactly one SHALL.)*
 
 ### **HLR‑CIL‑001: Intake Packet Construction**  
@@ -82,7 +128,7 @@ CIL SHALL incorporate stability metrics into identity selection decisions.
 
 ---
 
-## **6. Intake Packet Structure**  
+## **7. Intake Packet Structure**  
 *(Informative — no SHALL statements)*
 
 The CIL Intake Packet contains structured fields representing identity‑layer context.  
@@ -102,7 +148,7 @@ $$
 
 ---
 
-## **7. Identity Selection Rules**  
+## **8. Identity Selection Rules**  
 *(Informative — no SHALL statements)*
 
 Identity selection uses ordering metrics from COB:
@@ -115,7 +161,7 @@ Ambiguity and stability indicators influence selection priority.
 
 ---
 
-## **8. Interface Contracts**  
+## **9. Interface Contracts**  
 *(Informative — no SHALL statements)*
 
 ### **CIL → CEx**  
@@ -131,7 +177,7 @@ CIL incorporates CST stability information indirectly through COB and directly w
 
 ---
 
-## **9. Determinism Notes**  
+## **10. Determinism Notes**  
 *(Informative — no SHALL statements)*
 
 Deterministic packet generation ensures reproducible behavior in CEx under identical COB and CST inputs.  
@@ -139,7 +185,7 @@ This supports deterministic correction expansion in Path A.
 
 ---
 
-## **10. Error Handling**  
+## **11. Error Handling**  
 *(Informative — no SHALL statements)*
 
 CIL rejects malformed identity‑layer objects.  
@@ -148,7 +194,7 @@ CIL ensures internal consistency of packet fields.
 
 ---
 
-## **11. Playground Notes**  
+## **12. Playground Notes**  
 *(Informative — no SHALL statements)*
 
 This document defines the system_playground version of CIL.  
