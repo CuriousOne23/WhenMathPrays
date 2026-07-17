@@ -122,20 +122,29 @@ class COB:
         # Apply drift
         for obj in self.state.objects:
             if obj.id in drift.get("affected_objects", []):
+                # Skip updates if frozen
+                if obj.stability_metrics.get("frozen"):
+                    continue
                 obj.stability_metrics["drift"] = drift.get("magnitude")
 
         # Apply oscillation
         for obj in self.state.objects:
             if obj.id in oscillation.get("affected_objects", []):
+                if obj.stability_metrics.get("frozen"):
+                    continue
                 obj.stability_metrics["oscillation"] = oscillation.get("frequency")
 
         # Apply collapse
         for obj in self.state.objects:
             if obj.id in collapse.get("collapsed_objects", []):
+                if obj.stability_metrics.get("frozen"):
+                    continue
                 obj.stability_metrics["collapse"] = True
 
         # Apply certainty adjustments
         for obj in self.state.objects:
+            if obj.stability_metrics.get("frozen"):
+                continue
             if obj.id in certainty_adj.get("increased_certainty", []):
                 obj.ambiguity["certainty"] = "high"
             if obj.id in certainty_adj.get("decreased_certainty", []):
@@ -143,6 +152,8 @@ class COB:
 
         # Apply ambiguity adjustments
         for obj in self.state.objects:
+            if obj.stability_metrics.get("frozen"):
+                continue
             if obj.id in ambiguity_adj.get("increased_ambiguity", []):
                 obj.ambiguity["ambiguity"] = "high"
             if obj.id in ambiguity_adj.get("decreased_ambiguity", []):
