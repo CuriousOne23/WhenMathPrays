@@ -46,6 +46,68 @@ CIL integrates this into the CIL Intake Packet consumed by CEx.
 
 ---
 
+## **5. Testing (system_playground)**
+
+The system_playground version of COB is validated using a block‑level Python testbench (`cob_testbench.py`).  
+This testbench verifies that COB maintains a deterministic, stable identity‑layer basin and correctly integrates CST signals before passing identity‑layer objects to CIL.
+
+### **5.1 Tested Behaviors**
+
+The following COB behaviors are explicitly tested:
+
+- **Bounded Identity Store (HLR‑COB‑001)**  
+  - COB maintains no more than 20 identity‑layer objects.  
+  - Eviction removes the lowest‑priority object based on ordering metrics.
+
+- **Deterministic Stability Integration (HLR‑COB‑002)**  
+  - CST drift, oscillation, collapse, freeze, thaw, certainty adjustments, ambiguity adjustments, and lineage stability indicators are applied deterministically.  
+  - Stability metrics inside identity objects update consistently across runs.
+
+- **Referential Integrity (HLR‑COB‑003)**  
+  - Identity objects preserve referent map structure when updated.  
+  - Collapse, freeze, thaw, and ambiguity adjustments do not corrupt referent maps.
+
+- **Ordering Metrics (HLR‑COB‑004)**  
+  - Recency, frequency, and density metrics are preserved and aggregated.  
+  - Eviction uses ordering metrics to determine lowest‑priority objects.
+
+- **Ambiguity Tracking (HLR‑COB‑005)**  
+  - Ambiguity and certainty indicators are updated based on CST signals.  
+  - COB maintains ambiguity summaries across identity objects.
+
+- **Lineage Stability (HLR‑COB‑006)**  
+  - Lineage stability indicators are preserved and aggregated.  
+  - COB maintains lineage summaries for CIL consumption.
+
+- **CIL Compatibility (HLR‑COB‑008)**  
+  - Identity objects produced by COB match the structure required by the CIL Intake Packet.  
+  - Ordering, stability, ambiguity, and lineage fields remain consistent with CIL expectations.
+
+- **Freeze/Thaw Compliance (HLR‑COB‑010)**  
+  - Frozen identity objects remain unchanged until thawed.  
+  - Thaw signals restore update capability deterministically.
+
+### **5.2 Behaviors Not Tested in system_playground**
+
+The following behaviors are **not** tested at this stage:
+
+- Full merge and split operations (placeholders in system_playground).  
+- Multi‑block interactions with CIL or CST beyond direct signal integration.  
+- Deterministic replay across multiple turns (reserved for system_simulation).  
+- High‑level pipeline behavior involving CE Envelope or CEx.
+
+These behaviors are reserved for **system_simulation**, where COB participates in multi‑block, multi‑stage flows.
+
+### **5.3 Testbench Characteristics**
+
+- Deterministic execution.  
+- No external dependencies.  
+- Pure block‑level validation.  
+- Mirrors the structure of `cob_structures.yaml` and `cob_state.yaml`.  
+- Ensures COB behaves consistently with system_playground requirements and produces identity‑layer objects suitable for CIL integration.
+
+---
+
 ## **5. High‑Level Requirements (HLRs)**
 
 ### **HLR‑COB‑001: Bounded Identity Store**  
