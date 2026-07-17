@@ -1,0 +1,132 @@
+# CST State Schema
+# System Playground Version
+# This file contains no SHALL statements and no HLRs.
+
+cst_state:
+  description: >
+    Internal state representation for the Conversation Stability Tracker (CST).
+    Tracks drift, oscillation, collapse, merge, split, freeze, thaw,
+    certainty adjustments, ambiguity adjustments, and lineage stability indicators.
+
+  version: 1.0
+
+  fields:
+
+    drift_state:
+      description: >
+        Current drift indicators representing divergence in referent or anchor positions.
+      type: object
+      fields:
+        magnitude:
+          type: number
+        direction:
+          type: string
+        affected_objects:
+          type: list
+
+    oscillation_state:
+      description: >
+        Current oscillation indicators representing alternating incompatible states.
+      type: object
+      fields:
+        frequency:
+          type: number
+        amplitude:
+          type: number
+        affected_objects:
+          type: list
+
+    collapse_state:
+      description: >
+        Current collapse indicators representing structural failure of identity-layer objects.
+      type: object
+      fields:
+        collapsed_objects:
+          type: list
+        severity:
+          type: number
+
+    merge_state:
+      description: >
+        Current merge indicators representing convergence of identity-layer objects.
+      type: object
+      fields:
+        merge_pairs:
+          type: list
+        confidence:
+          type: number
+
+    split_state:
+      description: >
+        Current split indicators representing divergence of identity-layer objects.
+      type: object
+      fields:
+        split_objects:
+          type: list
+        confidence:
+          type: number
+
+    freeze_state:
+      description: >
+        Current freeze signals preventing COB from modifying specific identity-layer objects.
+      type: object
+      fields:
+        frozen_objects:
+          type: list
+        reason:
+          type: string
+
+    thaw_state:
+      description: >
+        Current thaw signals restoring normal update behavior for identity-layer objects.
+      type: object
+      fields:
+        thawed_objects:
+          type: list
+        reason:
+          type: string
+
+    certainty_state:
+      description: >
+        Current adjustments to certainty indicators for identity-layer objects.
+      type: object
+      fields:
+        increased_certainty:
+          type: list
+        decreased_certainty:
+          type: list
+
+    ambiguity_state:
+      description: >
+        Current adjustments to ambiguity indicators for identity-layer objects.
+      type: object
+      fields:
+        increased_ambiguity:
+          type: list
+        decreased_ambiguity:
+          type: list
+
+    lineage_stability_state:
+      description: >
+        Current lineage stability indicators for identity-layer objects.
+      type: object
+      fields:
+        stable_lineage:
+          type: list
+        unstable_lineage:
+          type: list
+
+    metadata:
+      description: >
+        Metadata describing the current CST state.
+      type: object
+      fields:
+        turn_index:
+          type: integer
+        timestamp:
+          type: string
+
+  notes:
+    - "This schema defines the system_playground version of CST state."
+    - "It mirrors global CST architecture while remaining scoped for simulation and testing."
+    - "No SHALL statements appear in this file."
