@@ -2,23 +2,28 @@
 """
 cex_testbench.py
 
-Testbench for TS Path A/Path B stability:
-- 20.54_ssrgn_prim (SSR generator)
-- 20.32_cob_requirements (COB: identity-layer substrate, incl. register)
-- 20.32.010_cst_requirements (CST: stability integration + signals)
-- 20.33_cil_requirements (CIL: intake packet + register_hint)
+Testbench for TS Path A CEx extract, per 20.107:
+
+- 20.54_ssrgn_prim (SSR generator: last primitive to read TP, then freeze)
+- 20.107_cex_extract (CEx: mechanical extract from SSR → CE-like record)
 
 This is a logic simulator: it uses simplified, spec-aligned data structures
-to verify determinism, stability, and replay-safety of the pipeline.
+to verify determinism and replay-safety of the Path A extract pipeline.
+
+Deliberate exclusions (per 20.107):
+- No CST stability integration
+- No COB identity-layer substrate
+- No register/subculture modeling
+- No ambiguity or "drift" metrics
+- No Path B envelopes, TPU, or semantic repair
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple
 import copy
 import hashlib
 import json
-import random
 
 
 # ---------------------------------------------------------------------------
@@ -98,370 +103,120 @@ class SSRGn:
 
 
 # ---------------------------------------------------------------------------
-# 20.32_cob_requirements – COB (identity-layer substrate)
+# 20.107_cex_extract – CEx (Path A extract from SSR)
 # ---------------------------------------------------------------------------
 
-@dataclass
-class IdentityLayer:
-    layer_id: str
-    referent: Dict[str, Any]
-    temporal_anchor: Dict[str, Any]
-    discourse_anchor: Dict[str, Any]
-    field_importance: Dict[str, Any]
-    lineage: Dict[str, Any]
-    register: str  # subculture / communication style
-    eviction_score: float = 0.0
-    strength: float = 1.0
-
-
-@dataclass
-class COBSnapshot:
-    layers: List[IdentityLayer] = field(default_factory=list)
-    history_hash: str = ""  # for replay checks
-
-
-class COB:
+@dataclass(frozen=True)
+class CExRecord:
     """
-    20.32 – COB: identity-layer substrate, including register.
-    - Ingests SSRGn packets.
-    - Applies CST signals.
-    - Maintains deterministic, bounded identity-layer set.
+    Minimal, Path A–compliant extract record.
+
+    Per 20.107:
+    - No new semantics
+    - No stability/ambiguity metrics
+    - No register/subculture modeling
+    - No identity-layer substrate
+    - No CST signals
     """
-
-    MAX_LAYERS = 20
-
-    def __init__(self):
-        self.layers: List[IdentityLayer] = []
-
-    def _make_layer_from_ssr(self, ssr: SSR) -> IdentityLayer:
-        # Simplified mapping: referent/anchors from semantic_core/rrw.
-        referent = {"entities": ssr.semantic_core.get("entities", [])}
-        temporal_anchor = {"turn_id": ssr.turn_id}
-        discourse_anchor = {"act": ssr.discourse_act}
-        field_importance = {"weights": ssr.rrw.get("weights", {})}
-        lineage = {"origin_ssr": ssr.ssr_id}
-        register = ssr.semantic_core.get("register", "neutral")
-        layer_id = f"IL-{ssr.turn_id}-{ssr.ssr_id[:8]}"
-        return IdentityLayer(
-            layer_id=layer_id,
-            referent=referent,
-            temporal_anchor=temporal_anchor,
-            discourse_anchor=discourse_anchor,
-            field_importance=field_importance,
-            lineage=lineage,
-            register=register,
-        )
-
-    def ingest_ssr(self, ssr: SSR) -> None:
-        """
-        Deterministic ingestion from SSRGn.
-        """
-        new_layer = self._make_layer_from_ssr(ssr)
-        self.layers.append(new_layer)
-        self._apply_capacity_constraints()
-
-    def apply_cst_signals(self, signals: List[Dict[str, Any]]) -> None:
-        """
-        Apply CST correction signals deterministically.
-        Signals examples:
-        - {"type": "strengthen_register", "layer_id": "...", "delta": 0.1}
-        - {"type": "weaken_register", "layer_id": "...", "delta": 0.1}
-        - {"type": "merge", "source_id": "...", "target_id": "..."}
-        - {"type": "split", "layer_id": "..."}
-        """
-        for sig in signals:
-            t = sig.get("type")
-            if t in ("strengthen_register", "weaken_register"):
-                self._apply_register_signal(sig)
-            elif t == "merge":
-                self._apply_merge_signal(sig)
-            elif t == "split":
-                self._apply_split_signal(sig)
-            # collapse/freeze/thaw would be handled similarly, but omitted for brevity
-
-        self._apply_capacity_constraints()
-
-    def _apply_register_signal(self, sig: Dict[str, Any]) -> None:
-        layer_id = sig.get("layer_id")
-        delta = sig.get("delta", 0.0)
-        for layer in self.layers:
-            if layer.layer_id == layer_id:
-                # Strength/weakening modeled via strength field.
-                layer.strength = max(0.0, min(2.0, layer.strength + delta))
-
-    def _apply_merge_signal(self, sig: Dict[str, Any]) -> None:
-        source_id = sig.get("source_id")
-        target_id = sig.get("target_id")
-        source = None
-        target = None
-        for layer in self.layers:
-            if layer.layer_id == source_id:
-                source = layer
-            if layer.layer_id == target_id:
-                target = layer
-        if source and target and source is not target:
-            # Simple merge: average strength, keep target register.
-            target.strength = (target.strength + source.strength) / 2.0
-            # Eviction source.
-            self.layers = [l for l in self.layers if l.layer_id != source_id]
-
-    def _apply_split_signal(self, sig: Dict[str, Any]) -> None:
-        layer_id = sig.get("layer_id")
-        for layer in self.layers:
-            if layer.layer_id == layer_id:
-                # Simple split: create a new layer with slightly modified register.
-                new_register = layer.register + "_variant"
-                new_layer = IdentityLayer(
-                    layer_id=f"{layer.layer_id}-split",
-                    referent=deep_copy(layer.referent),
-                    temporal_anchor=deep_copy(layer.temporal_anchor),
-                    discourse_anchor=deep_copy(layer.discourse_anchor),
-                    field_importance=deep_copy(layer.field_importance),
-                    lineage=deep_copy(layer.lineage),
-                    register=new_register,
-                    strength=layer.strength * 0.9,
-                )
-                self.layers.append(new_layer)
-                break
-
-    def _apply_capacity_constraints(self) -> None:
-        """
-        Enforce MAX_LAYERS via eviction_score.
-        """
-        if len(self.layers) <= self.MAX_LAYERS:
-            return
-        # Evict lowest strength layers first.
-        self.layers.sort(key=lambda l: l.strength)
-        self.layers = self.layers[-self.MAX_LAYERS :]
-
-    def snapshot(self) -> COBSnapshot:
-        snap_layers = deep_copy(self.layers)
-        history_hash = deterministic_hash(
-            [{"layer_id": l.layer_id, "register": l.register, "strength": l.strength}
-             for l in snap_layers]
-        )
-        return COBSnapshot(layers=snap_layers, history_hash=history_hash)
+    turn_id: int
+    ssr_id: str
+    projection_hash: str
+    text: str
+    rrw: Dict[str, Any]
+    policy_signature: str
+    semantic_core: Dict[str, Any]
+    discourse_act: str
+    extract_hash: str  # hash of the extract itself, for replay checks
 
 
-# ---------------------------------------------------------------------------
-# 20.32.010_cst_requirements – CST (stability integration + signals)
-# ---------------------------------------------------------------------------
-
-@dataclass
-class CSTMetrics:
-    identity_drift: float
-    referent_drift: float
-    temporal_drift: float
-    discourse_drift: float
-    field_importance_drift: float
-    register_drift: float
-    register_ambiguity: float
-    register_continuity: float
-    register_collapse_score: float
-
-
-class CST:
+class CExExtract:
     """
-    20.32.010 – CST: stability integration over COB snapshot.
-    Emits correction signals deterministically, including register axis.
-    """
+    20.107 – CEx: mechanical extract from SSR.
 
-    def __init__(self):
-        self.history: List[COBSnapshot] = []
-
-    def integrate(self, snapshot: COBSnapshot) -> CSTMetrics:
-        """
-        Compute simplified metrics from snapshot.
-        In a real implementation, this would use long-horizon windows.
-        """
-        self.history.append(snapshot)
-        layers = snapshot.layers
-
-        # Simplified drift: variance of strength across layers.
-        strengths = [l.strength for l in layers] or [0.0]
-        mean_strength = sum(strengths) / len(strengths)
-        drift_strength = sum((s - mean_strength) ** 2 for s in strengths) / len(strengths)
-
-        # Register drift: count of distinct registers.
-        registers = [l.register for l in layers]
-        distinct_registers = len(set(registers))
-        register_drift = float(distinct_registers - 1) if distinct_registers > 0 else 0.0
-
-        # Ambiguity: heuristic – more distinct registers → more ambiguity.
-        register_ambiguity = min(1.0, register_drift / 5.0)
-
-        # Continuity: heuristic – if same register appears across many layers.
-        continuity_score = 0.0
-        if registers:
-            most_common = max(set(registers), key=registers.count)
-            continuity_score = registers.count(most_common) / max(1, len(registers))
-
-        # Collapse: heuristic – if continuity is very low but drift is high.
-        collapse_score = 1.0 if continuity_score < 0.2 and register_drift > 3 else 0.0
-
-        return CSTMetrics(
-            identity_drift=drift_strength,
-            referent_drift=0.0,  # omitted for brevity
-            temporal_drift=0.0,
-            discourse_drift=0.0,
-            field_importance_drift=0.0,
-            register_drift=register_drift,
-            register_ambiguity=register_ambiguity,
-            register_continuity=continuity_score,
-            register_collapse_score=collapse_score,
-        )
-
-    def emit_signals(self, snapshot: COBSnapshot, metrics: CSTMetrics) -> List[Dict[str, Any]]:
-        """
-        Emit correction signals based on metrics.
-        Respect deterministic ordering:
-        collapse → freeze/thaw → structural → ambiguity/drift → relevance.
-        Here we focus on register-related signals.
-        """
-        signals: List[Dict[str, Any]] = []
-        layers = snapshot.layers
-
-        # 1. Collapse handling (simplified: weaken all registers).
-        if metrics.register_collapse_score > 0.0:
-            for l in layers:
-                signals.append({
-                    "type": "weaken_register",
-                    "layer_id": l.layer_id,
-                    "delta": -0.2,
-                })
-
-        # 2. Structural (merge/split) – simplified: merge weakest into strongest if drift high.
-        if metrics.register_drift > 2.0 and len(layers) >= 2:
-            sorted_layers = sorted(layers, key=lambda x: x.strength)
-            weakest = sorted_layers[0]
-            strongest = sorted_layers[-1]
-            signals.append({
-                "type": "merge",
-                "source_id": weakest.layer_id,
-                "target_id": strongest.layer_id,
-            })
-
-        # 3. Ambiguity/drift – strengthen dominant register, weaken outliers.
-        if metrics.register_ambiguity > 0.0 and layers:
-            registers = [l.register for l in layers]
-            dominant = max(set(registers), key=registers.count)
-            for l in layers:
-                if l.register == dominant:
-                    signals.append({
-                        "type": "strengthen_register",
-                        "layer_id": l.layer_id,
-                        "delta": +0.1,
-                    })
-                else:
-                    signals.append({
-                        "type": "weaken_register",
-                        "layer_id": l.layer_id,
-                        "delta": -0.05,
-                    })
-
-        return signals
-
-
-# ---------------------------------------------------------------------------
-# 20.33_cil_requirements – CIL (intake packet + register_hint)
-# ---------------------------------------------------------------------------
-
-@dataclass
-class CILIntakePacket:
-    identity_layer_ids: List[str]
-    stability_score: float
-    ambiguity_score: float
-    register_hint: str
-    snapshot_hash: str
-
-
-class CIL:
-    """
-    20.33 – CIL: read-only intake from COB snapshot.
-    Emits advisory packet including register_hint.
+    Responsibilities:
+    - Read SSR (Path A boundary object)
+    - Produce a CE-like extract record
+    - Do not infer, repair, or reinterpret semantics
+    - Be fully deterministic: same SSR → same CExRecord
     """
 
     @staticmethod
-    def build_intake(snapshot: COBSnapshot, metrics: CSTMetrics) -> CILIntakePacket:
-        layers = snapshot.layers
-        ids = [l.layer_id for l in layers]
+    def extract(ssr: SSR) -> CExRecord:
+        # Structural copy only; no semantic transformation.
+        base = {
+            "turn_id": ssr.turn_id,
+            "ssr_id": ssr.ssr_id,
+            "projection_hash": ssr.projection_hash,
+            "text": ssr.text if hasattr(ssr, "text") else None,
+            "rrw": ssr.rrw,
+            "policy_signature": ssr.policy_signature,
+            "semantic_core": ssr.semantic_core,
+            "discourse_act": ssr.discourse_act,
+        }
+        # Note: SSR does not carry text directly in this simplified model,
+        # so we re-project from semantic_core if needed. Here we keep it simple
+        # and rely on TPCommitted → SSRGn.project for text fidelity.
+        # To avoid hidden semantics, we do not modify any fields.
 
-        # Stability: inverse of identity_drift (simplified).
-        stability = max(0.0, 1.0 - min(1.0, metrics.identity_drift))
+        # In this implementation, we re-use projection_hash as the text source:
+        # the text is not strictly required for Path A replay checks, but we
+        # include it for completeness by re-projecting from semantic_core if
+        # desired. For now, we omit text reconstruction and keep it None.
+        base["text"] = None
 
-        # Ambiguity: use register_ambiguity.
-        ambiguity = metrics.register_ambiguity
+        extract_hash = deterministic_hash(base)
 
-        # Register hint: dominant register.
-        if layers:
-            registers = [l.register for l in layers]
-            dominant = max(set(registers), key=registers.count)
-        else:
-            dominant = "neutral"
-
-        return CILIntakePacket(
-            identity_layer_ids=ids,
-            stability_score=stability,
-            ambiguity_score=ambiguity,
-            register_hint=dominant,
-            snapshot_hash=snapshot.history_hash,
+        return CExRecord(
+            turn_id=ssr.turn_id,
+            ssr_id=ssr.ssr_id,
+            projection_hash=ssr.projection_hash,
+            text=base["text"],
+            rrw=deep_copy(ssr.rrw),
+            policy_signature=ssr.policy_signature,
+            semantic_core=deep_copy(ssr.semantic_core),
+            discourse_act=ssr.discourse_act,
+            extract_hash=extract_hash,
         )
 
 
 # ---------------------------------------------------------------------------
-# Testbench – pipeline simulation
+# Testbench – Path A extract determinism
 # ---------------------------------------------------------------------------
 
 class CExTestbench:
     """
-    End-to-end simulator for:
-    SSRGn → COB → CST → COB → CIL
+    End-to-end Path A simulator for:
+
+    TPCommitted → SSRGn → CExExtract
 
     Focus:
     - determinism
-    - stability
-    - register/subculture behavior
+    - replay-safety
+    - structural fidelity of extract
     """
 
     def __init__(self):
         self.ssrgn = SSRGn()
-        self.cob = COB()
-        self.cst = CST()
-        self.cil = CIL()
+        self.cex = CExExtract()
 
-    def run_sequence(self, tp_sequence: List[TPCommitted]) -> List[CILIntakePacket]:
+    def run_sequence(self, tp_sequence: List[TPCommitted]) -> List[CExRecord]:
         """
-        Run a sequence of committed TP through the pipeline.
-        Returns CIL intake packets per cycle.
+        Run a sequence of committed TP through the Path A pipeline.
+        Returns CEx extract records per turn.
         """
-        intake_packets: List[CILIntakePacket] = []
+        records: List[CExRecord] = []
 
         for tp in tp_sequence:
-            # 1. SSRGn
+            # 1. SSRGn: freeze TP into SSR
             ssr = self.ssrgn.freeze(tp)
 
-            # 2. COB ingest
-            self.cob.ingest_ssr(ssr)
+            # 2. CEx: mechanical extract from SSR
+            rec = self.cex.extract(ssr)
+            records.append(rec)
 
-            # 3. Snapshot
-            snapshot = self.cob.snapshot()
+        return records
 
-            # 4. CST integrate + signals
-            metrics = self.cst.integrate(snapshot)
-            signals = self.cst.emit_signals(snapshot, metrics)
-
-            # 5. COB apply signals
-            self.cob.apply_cst_signals(signals)
-
-            # 6. New snapshot + CIL intake
-            new_snapshot = self.cob.snapshot()
-            new_metrics = self.cst.integrate(new_snapshot)
-            intake = self.cil.build_intake(new_snapshot, new_metrics)
-            intake_packets.append(intake)
-
-        return intake_packets
-
-    def replay_sequence(self, tp_sequence: List[TPCommitted]) -> Tuple[List[CILIntakePacket], List[CILIntakePacket]]:
+    def replay_sequence(self, tp_sequence: List[TPCommitted]) -> Tuple[List[CExRecord], List[CExRecord]]:
         """
         Run the same sequence twice and compare outputs for determinism.
         """
@@ -476,16 +231,20 @@ class CExTestbench:
         return out1, out2
 
     @staticmethod
-    def compare_intake_sequences(a: List[CILIntakePacket], b: List[CILIntakePacket]) -> bool:
+    def compare_records(a: List[CExRecord], b: List[CExRecord]) -> bool:
         if len(a) != len(b):
             return False
-        for p1, p2 in zip(a, b):
+        for r1, r2 in zip(a, b):
             if (
-                p1.identity_layer_ids != p2.identity_layer_ids or
-                abs(p1.stability_score - p2.stability_score) > 1e-9 or
-                abs(p1.ambiguity_score - p2.ambiguity_score) > 1e-9 or
-                p1.register_hint != p2.register_hint or
-                p1.snapshot_hash != p2.snapshot_hash
+                r1.turn_id != r2.turn_id or
+                r1.ssr_id != r2.ssr_id or
+                r1.projection_hash != r2.projection_hash or
+                r1.text != r2.text or
+                r1.rrw != r2.rrw or
+                r1.policy_signature != r2.policy_signature or
+                r1.semantic_core != r2.semantic_core or
+                r1.discourse_act != r2.discourse_act or
+                r1.extract_hash != r2.extract_hash
             ):
                 return False
         return True
@@ -497,7 +256,10 @@ class CExTestbench:
 
 def make_example_tp_sequence() -> List[TPCommitted]:
     """
-    Build a small synthetic TP sequence to exercise register/subculture behavior.
+    Build a small synthetic TP sequence to exercise Path A extract behavior.
+
+    Note: We keep the same example texts/registers, but CEx does not
+    interpret "register" – it simply passes semantic_core through.
     """
     seq: List[TPCommitted] = []
 
@@ -529,20 +291,20 @@ def main():
     seq = make_example_tp_sequence()
 
     # Single run
-    packets = tb.run_sequence(seq)
-    print("Single run intake packets:")
-    for i, p in enumerate(packets, start=1):
+    records = tb.run_sequence(seq)
+    print("Single run CEx records:")
+    for i, r in enumerate(records, start=1):
         print(f"Turn {i}:")
-        print(f"  identity_layer_ids: {p.identity_layer_ids}")
-        print(f"  stability_score:    {p.stability_score:.3f}")
-        print(f"  ambiguity_score:    {p.ambiguity_score:.3f}")
-        print(f"  register_hint:      {p.register_hint}")
-        print(f"  snapshot_hash:      {p.snapshot_hash}")
+        print(f"  turn_id:        {r.turn_id}")
+        print(f"  ssr_id:         {r.ssr_id}")
+        print(f"  projection_hash:{r.projection_hash}")
+        print(f"  extract_hash:   {r.extract_hash}")
+        print(f"  semantic_core:  {r.semantic_core}")
         print()
 
     # Replay determinism check
     out1, out2 = tb.replay_sequence(seq)
-    deterministic = CExTestbench.compare_intake_sequences(out1, out2)
+    deterministic = CExTestbench.compare_records(out1, out2)
     print("Replay determinism:", deterministic)
 
 
