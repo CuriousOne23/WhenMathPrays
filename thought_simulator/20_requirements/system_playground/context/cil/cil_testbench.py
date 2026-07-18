@@ -8,6 +8,7 @@ It tests:
 - stability aggregation
 - lineage aggregation
 - ordering aggregation
+- CST signal integration
 - intake packet construction
 
 This is NOT a full system simulation. It is a shaping testbench used
@@ -16,6 +17,10 @@ inside system_playground before system_simulation.
 
 from cil import CIL, IdentityObject
 
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
 def make_identity_object(
     id: str,
@@ -51,6 +56,27 @@ def make_identity_object(
         },
     )
 
+
+def make_cst_signals():
+    """Synthetic CST signals for testing."""
+    return {
+        "drift": {"affected_objects": [], "magnitude": 0},
+        "oscillation": {"affected_objects": [], "frequency": 0, "amplitude": 0},
+        "collapse": {"collapsed_objects": [], "severity": 0},
+        "merge": {"merge_pairs": [], "confidence": 0},
+        "split": {"split_objects": [], "confidence": 0},
+        "freeze": {"frozen_objects": [], "reason": None},
+        "thaw": {"thawed_objects": [], "reason": None},
+        "certainty_adjustment": {"increased_certainty": [], "decreased_certainty": []},
+        "ambiguity_adjustment": {"increased_ambiguity": [], "decreased_ambiguity": []},
+        "lineage_stability": {"stable_lineage": [], "unstable_lineage": []},
+        "metadata": {"turn_index": None},
+    }
+
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
 
 def run_basic_test():
     """Run a basic CIL test with three identity objects."""
@@ -97,9 +123,10 @@ def run_basic_test():
     )
 
     cob_objects = [obj1, obj2, obj3]
+    cst_signals = make_cst_signals()
 
     cil = CIL()
-    packet = cil.run(cob_objects, turn_index=1)
+    packet = cil.run(cob_objects, cst_signals, turn_index=1)
 
     print("\n--- Identity Selection Block ---")
     for entry in packet.identity_selection_block:
@@ -108,7 +135,7 @@ def run_basic_test():
     print("\n--- Certainty Block ---")
     print(packet.referent_certainty_block)
 
-    print("\n--- Stability Block ---")
+    print("\n--- Stability Block (COB-derived) ---")
     print(packet.stability_block)
 
     print("\n--- Lineage Block ---")
@@ -116,6 +143,9 @@ def run_basic_test():
 
     print("\n--- Ordering Block ---")
     print(packet.ordering_block)
+
+    print("\n--- CST Block (CST-derived) ---")
+    print(packet.cst_block)
 
     print("\n--- Packet Metadata ---")
     print(packet.packet_metadata)
@@ -135,7 +165,7 @@ def run_selection_priority_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, turn_index=2)
+    packet = cil.run(objs, make_cst_signals(), turn_index=2)
 
     print("\n--- Selection Order (Top 5) ---")
     for entry in packet.identity_selection_block:
@@ -154,9 +184,9 @@ def run_stability_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, turn_index=3)
+    packet = cil.run(objs, make_cst_signals(), turn_index=3)
 
-    print("\n--- Stability Block ---")
+    print("\n--- Stability Block (COB-derived) ---")
     print(packet.stability_block)
 
 
@@ -172,7 +202,7 @@ def run_lineage_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, turn_index=4)
+    packet = cil.run(objs, make_cst_signals(), turn_index=4)
 
     print("\n--- Lineage Block ---")
     print(packet.lineage_block)
@@ -190,11 +220,15 @@ def run_ordering_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, turn_index=5)
+    packet = cil.run(objs, make_cst_signals(), turn_index=5)
 
     print("\n--- Ordering Block ---")
     print(packet.ordering_block)
 
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     run_basic_test()
