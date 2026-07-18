@@ -18,13 +18,13 @@ All commands below assume you are inside this directory.
 Run:
 
 ```
-python -m context.cst.cst_testbench
+python -m cst.cst_testbench
 ```
 
 Log output:
 
 ```
-python -m context.cst.cst_testbench > cst.log
+python -m cst.cst_testbench > cst.log
 ```
 
 `cst.log` will appear in the **context/** directory.
@@ -36,25 +36,25 @@ python -m context.cst.cst_testbench > cst.log
 ### Standard COB Testbench
 
 ```
-python -m context.cob.cob_testbench
+python -m cob.cob_testbench
 ```
 
 Log:
 
 ```
-python -m context.cob.cob_testbench > cob.log
+python -m cob.cob_testbench > cob.log
 ```
 
 ### Merge/Split Structural Testbench
 
 ```
-python -m context.cob.cob_testbench_merge_split
+python -m cob.cob_testbench_merge_split
 ```
 
 Log:
 
 ```
-python -m context.cob.cob_testbench_merge_split > cob_merge_split.log
+python -m cob.cob_testbench_merge_split > cob_merge_split.log
 ```
 
 ---
@@ -62,13 +62,13 @@ python -m context.cob.cob_testbench_merge_split > cob_merge_split.log
 ## CIL Testbench
 
 ```
-python -m context.cil.cil_testbench
+python -m cil.cil_testbench
 ```
 
 Log:
 
 ```
-python -m context.cil.cil_testbench > cil.log
+python -m cil.cil_testbench > cil.log
 ```
 
 ---
@@ -76,13 +76,13 @@ python -m context.cil.cil_testbench > cil.log
 ## Unified Context Testbench
 
 ```
-python -m context.context_testbench
+python -m context_testbench
 ```
 
 Log:
 
 ```
-python -m context.context_testbench > context.log
+python -m context_testbench > context.log
 ```
 
 ---
