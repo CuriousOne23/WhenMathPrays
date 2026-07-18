@@ -44,6 +44,17 @@ COB maintains a bounded set of identity‑layer objects containing referent maps
 COB provides CIL with stabilized identity‑layer objects, ordering metrics, ambiguity flags, lineage hints, and stability‑adjusted referent maps.  
 CIL integrates this into the CIL Intake Packet consumed by CEx.
 
+### **4.3 Conversation‑Level Ordering Metrics**
+
+COB provides CIL with conversation‑level ordering metrics required for intake packet construction.  
+These include:
+
+- the total number of times the conversation has been accessed  
+- a chronological ordering vector of access events  
+- a sliding‑window frequency distribution over the last 10 access events  
+
+These metrics allow CIL to incorporate global conversation‑level ordering signals alongside identity‑layer ordering metrics.
+
 ---
 
 ## **5. Testing (system_playground)**
@@ -139,6 +150,15 @@ COB SHALL evict the lowest‑priority identity‑layer object when more than 20 
 
 ### **HLR‑COB‑010: Freeze/Thaw Compliance**  
 COB SHALL respect CST freeze and thaw signals when updating identity‑layer objects.
+
+### **HLR‑COB‑011: Conversation Access Count**  
+COB SHALL track the total number of times the conversation has been accessed.
+
+### **HLR‑COB‑012: Conversation Access Order**  
+COB SHALL maintain a chronological ordering vector of conversation access events.
+
+### **HLR‑COB‑013: Sliding‑Window Frequency (Last 10 Accesses)**  
+COB SHALL compute a sliding‑window frequency distribution over the last 10 conversation access events.
 
 ---
 
