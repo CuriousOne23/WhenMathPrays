@@ -119,7 +119,7 @@ These behaviors are reserved for **system_simulation**, where COB participates i
 
 ---
 
-## **5. High‑Level Requirements (HLRs)**
+## **6. High‑Level Requirements (HLRs)**
 
 ### **HLR‑COB‑001: Bounded Identity Store**  
 COB SHALL maintain no more than 20 identity‑layer objects at any time.
@@ -162,7 +162,7 @@ COB SHALL compute a sliding‑window frequency distribution over the last 10 con
 
 ---
 
-## **6. Lifecycle Rules**  
+## **7. Lifecycle Rules**  
 *(Informative — no SHALL statements)*
 
 Identity‑layer objects are created when new referents or anchors appear.  
@@ -173,7 +173,7 @@ Frozen objects remain unchanged until CST issues a thaw signal.
 
 ---
 
-## **7. Interface Contracts**  
+## **8. Interface Contracts**  
 *(Informative — no SHALL statements)*
 
 COB receives stability signals from CST.  
@@ -182,14 +182,14 @@ CEx consumes COB output indirectly through the CIL Intake Packet.
 
 ---
 
-## **8. Determinism Notes**  
+## **9. Determinism Notes**  
 *(Informative — no SHALL statements)*
 
 Deterministic behavior ensures stable identity‑layer context for CIL and CEx under identical CST signals, identical turn data, and identical ordering metrics.
 
 ---
 
-## **9. Error Handling**  
+## **10. Error Handling**  
 *(Informative — no SHALL statements)*
 
 COB rejects malformed referent maps and invalid CST signals.  
@@ -198,7 +198,7 @@ COB protects identity‑layer objects from corruption.
 
 ---
 
-## **10. Playground Notes**  
+## **11. Playground Notes**  
 *(Informative — no SHALL statements)*
 
 This document defines the system_playground version of COB.  
