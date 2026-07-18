@@ -52,6 +52,10 @@ def run_merge_test():
     # Correct CST merge signal format for cob.py
     signals = {"merge": {"pairs": [("objA", "objB")]}}
 
+    print("Objects before merge:")
+    for obj in cob.state.objects:
+        print(f"- {obj.id}: referents={obj.referent_map}")
+
     cob.run(signals, turn_index=1)
 
     print("Objects after merge:")
@@ -80,6 +84,10 @@ def run_split_test():
     # Correct CST split signal format for cob.py
     signals = {"split": {"objects": ["objX"]}}
 
+    print("Objects before split:")
+    for obj in cob.state.objects:
+        print(f"- {obj.id}: referents={obj.referent_map}")
+    
     cob.run(signals, turn_index=2)
 
     print("Objects after split:")
