@@ -16,8 +16,8 @@ This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
 """
 
-from cst.cst import CST
-from cil.cil import IdentityObject
+from context.cst.cst import CST
+from context.cil.cil import IdentityObject
 
 
 # ---------------------------------------------------------------------------
