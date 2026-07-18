@@ -387,7 +387,8 @@ These metrics allow CIL to incorporate global conversation‑level ordering sign
 
 - access count = **12**  
 - access order = `[0, 1, 2, ..., 11]`  
-- sliding‑window frequency reflects last 10 turn indices  
+- sliding‑window frequency reflects last 10 turn indices
+   - {'2': 1, '3': 1, '4': 1, '5': 1, '6': 1, '7': 1, '8': 1, '9': 1, '10': 1, '11': 1}
 
 ### **Requirements Validated**
 
