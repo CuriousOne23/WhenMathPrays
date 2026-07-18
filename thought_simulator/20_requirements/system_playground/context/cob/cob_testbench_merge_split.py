@@ -1,0 +1,140 @@
+"""
+COB Merge/Split Testbench
+System Playground — Context Subsystem
+Validates merge/split structural operations at the COB level.
+
+This testbench covers:
+- deterministic merge behavior
+- deterministic split behavior
+- referential integrity (HLR‑COB‑003)
+- deterministic replay (HLR‑COB‑007)
+- bounded identity store interactions (HLR‑COB‑001)
+"""
+
+from cob import COB
+from identity_object import IdentityObject
+
+
+# ------------------------------------------------------------
+# Helper: Construct identity objects with referents + anchors
+# ------------------------------------------------------------
+
+def make_identity_object(name, referents, anchors=None, lineage=None, ordering=None):
+    return IdentityObject(
+        name=name,
+        referent_map=referents,
+        anchors=anchors or {"temporal": 0.0, "discourse": 0.0},
+        lineage=lineage or {"parent": None, "history": []},
+        ambiguity={"certainty": 1.0, "ambiguity": 0.0},
+        stability={"drift": 0.0, "oscillation": 0.0, "collapse": 0.0},
+        ordering=ordering or {"recency": 0, "frequency": 0, "density": 0},
+    )
+
+
+# ------------------------------------------------------------
+# Merge Test
+# ------------------------------------------------------------
+
+def run_merge_test():
+    print("\n=== MERGE TEST ===")
+
+    cob = COB()
+
+    # Two identity objects with overlapping referents
+    objA = make_identity_object(
+        "objA",
+        referents={"user": ["he", "him"], "topic": ["math"]},
+        anchors={"temporal": 0.2, "discourse": 0.3},
+        ordering={"recency": 10, "frequency": 5, "density": 2},
+    )
+
+    objB = make_identity_object(
+        "objB",
+        referents={"user": ["he"], "topic": ["math", "algebra"]},
+        anchors={"temporal": 0.25, "discourse": 0.35},
+        ordering={"recency": 9, "frequency": 4, "density": 2},
+    )
+
+    cob.add_identity_object(objA)
+    cob.add_identity_object(objB)
+
+    # CST merge signal
+    signals = {"merge": [("objA", "objB")]}
+
+    cob.run(signals, turn_index=1)
+
+    print("Objects after merge:")
+    for obj in cob.state.objects:
+        print(f"- {obj.name}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering}")
+
+
+# ------------------------------------------------------------
+# Split Test
+# ------------------------------------------------------------
+
+def run_split_test():
+    print("\n=== SPLIT TEST ===")
+
+    cob = COB()
+
+    # One identity object with bimodal referents
+    objX = make_identity_object(
+        "objX",
+        referents={
+            "user": ["he", "she"],
+            "topic": ["math", "cooking"],  # two clusters
+        },
+        anchors={"temporal": 0.5, "discourse": 0.1},
+        ordering={"recency": 7, "frequency": 3, "density": 1},
+    )
+
+    cob.add_identity_object(objX)
+
+    # CST split signal
+    signals = {"split": ["objX"]}
+
+    cob.run(signals, turn_index=2)
+
+    print("Objects after split:")
+    for obj in cob.state.objects:
+        print(f"- {obj.name}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering}")
+
+
+# ------------------------------------------------------------
+# Deterministic Replay Test
+# ------------------------------------------------------------
+
+def run_merge_split_replay_test():
+    print("\n=== MERGE/SPLIT REPLAY TEST ===")
+
+    # First run
+    cob1 = COB()
+    obj1A = make_identity_object("objA", {"topic": ["math"]})
+    obj1B = make_identity_object("objB", {"topic": ["math", "algebra"]})
+    cob1.add_identity_object(obj1A)
+    cob1.add_identity_object(obj1B)
+    cob1.run({"merge": [("objA", "objB")]}, turn_index=1)
+
+    snapshot1 = [(obj.name, obj.referent_map) for obj in cob1.state.objects]
+
+    # Second run (identical inputs)
+    cob2 = COB()
+    obj2A = make_identity_object("objA", {"topic": ["math"]})
+    obj2B = make_identity_object("objB", {"topic": ["math", "algebra"]})
+    cob2.add_identity_object(obj2A)
+    cob2.add_identity_object(obj2B)
+    cob2.run({"merge": [("objA", "objB")]}, turn_index=1)
+
+    snapshot2 = [(obj.name, obj.referent_map) for obj in cob2.state.objects]
+
+    print("Replay deterministic:", snapshot1 == snapshot2)
+
+
+# ------------------------------------------------------------
+# Main
+# ------------------------------------------------------------
+
+if __name__ == "__main__":
+    run_merge_test()
+    run_split_test()
+    run_merge_split_replay_test()
