@@ -11,9 +11,9 @@ It does NOT simulate CEx; it focuses on CST → COB → CIL behavior and a TP-li
 datastream that records what each block did and when.
 """
 
-from context.cst.cst import CST
-from context.cob.cob import COB
-from context.cil.cil import CIL, IdentityObject
+from cst.cst import CST
+from cob.cob import COB
+from cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
