@@ -1,6 +1,13 @@
+# CIL Requirements
+
 ## **1. Purpose**
 
-The **Conversation Identity Layer (CIL)** integrates identity‑layer objects from COB and stability signals from CST into a single, structured **CIL Intake Packet**.  
+The **Conversation Identity Layer (CIL)** integrates two distinct input streams:
+
+- identity‑layer objects from **COB**
+- stability signals originating from **CST**
+
+These are combined into a single, structured **CIL Intake Packet**.  
 This packet is consumed exclusively by **CEx**, the first Path A primitive.  
 CIL provides the stabilized identity‑layer context required for correction expansion.
 
@@ -23,11 +30,16 @@ This document does **not** redefine the global CIL architecture in **20.33**; gl
 
 ## **3. Inputs**
 
+CIL operates over **two coordinated inputs**: identity‑layer objects from COB and stability information derived from CST.  
+Both inputs contribute to the construction of the CIL Intake Packet and to the historical information captured in TP.
+
 ### **3.1 COB Identity‑Layer Objects**  
-CIL receives up to 20 stabilized identity‑layer objects from COB, including referent maps, anchors, lineage, ambiguity indicators, stability metrics, and ordering metrics.
+CIL receives up to 20 stabilized identity‑layer objects from COB, including referent maps, anchors, lineage, ambiguity indicators, stability metrics, and ordering metrics.  
+These objects form the primary identity context that CIL selects and packs for CEx.
 
 ### **3.2 CST Stability Signals**  
-CIL receives stability‑related signals from CST indirectly through COB and directly when required by global rules.
+CIL receives stability‑related signals from CST indirectly through COB and directly when required by global rules.  
+These signals influence stability aggregation, ambiguity handling, and the stability‑aware portions of the CIL Intake Packet.
 
 ---
 
@@ -47,7 +59,14 @@ This packet is consumed by **CEx**.
 
 ## **5. Testing**
 
-The system_playground version of CIL is validated using a deterministic, block‑level Python testbench (cil_testbench.py). This testbench evaluates how CIL integrates identity‑layer objects from COB and stability indicators from CST into a structured CIL Intake Packet. The goal is to confirm that CIL behaves predictably under controlled inputs and produces stable packet structures suitable for consumption by CEx.
+The system_playground version of CIL is validated using a deterministic, block‑level Python testbench (cil_testbench.py).  
+This testbench evaluates how CIL integrates **two inputs**:
+
+- identity‑layer objects from COB  
+- stability indicators originating from CST  
+
+into a structured CIL Intake Packet.  
+The goal is to confirm that CIL behaves predictably under controlled COB and CST inputs and produces stable packet structures suitable for consumption by CEx.
 
 ---
 
