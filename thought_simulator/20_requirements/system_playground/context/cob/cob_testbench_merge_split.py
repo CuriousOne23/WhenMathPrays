@@ -5,7 +5,7 @@ Validates merge/split structural operations at the COB level.
 """
 
 from cob import COB
-from identity_object import IdentityObject
+from cob import IdentityObject
 
 
 # ------------------------------------------------------------
