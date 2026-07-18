@@ -394,7 +394,81 @@ These metrics allow CIL to incorporate global conversation‑level ordering sign
 
 - **HLR‑COB‑011** — Conversation access count  
 - **HLR‑COB‑012** — Conversation access order  
-- **HLR‑COB‑013** — Sliding‑window frequency  
+- **HLR‑COB‑013** — Sliding‑window frequency
+
+---
+
+## **5.8 Merge/Split Structural Operations Test**
+
+### **Purpose**
+
+This test validates COB’s ability to apply CST‑issued **merge** and **split** signals deterministically.  
+Merge/split operations are the most structurally complex behaviors in COB because they modify:
+
+- the number of identity‑layer objects  
+- referent‑map structure  
+- temporal/discourse anchors  
+- lineage records  
+- ordering metrics  
+
+This test ensures COB preserves referential integrity, lineage correctness, ordering consistency, and deterministic replay across merge/split operations, as required by **HLR‑COB‑003** and the lifecycle rules.  
+
+### **Method**
+
+#### **Merge Scenario**
+
+1. Create two identity objects (`objA`, `objB`) with partially overlapping referent maps and converging anchors.  
+2. Insert both into COB.  
+3. Inject CST signal:  
+   ```python
+   signals = {"merge": [("objA", "objB")]}
+   ```  
+4. Call `cob.run(signals, turn_index=1)`.  
+5. Inspect basin contents and verify:
+   - `objA` and `objB` are replaced by a single merged object  
+   - referent maps are deterministically unified  
+   - lineage is merged deterministically  
+   - ordering metrics recompute correctly  
+   - no corruption of other identity objects  
+
+#### **Split Scenario**
+
+1. Create one identity object (`objX`) with a bimodal referent map and diverging anchors.  
+2. Insert it into COB.  
+3. Inject CST signal:  
+   ```python
+   signals = {"split": ["objX"]}
+   ```  
+4. Call `cob.run(signals, turn_index=2)`.  
+5. Inspect basin contents and verify:
+   - `objX` is replaced by two new objects (`objX1`, `objX2`)  
+   - referent maps are partitioned deterministically  
+   - lineage forks deterministically  
+   - ordering metrics propagate correctly  
+   - basin size updates correctly  
+
+### **Expected Output**
+
+```
+Merge:
+- objA + objB → merged_obj
+- merged_obj.referents = union(objA, objB)
+- merged_obj.lineage = deterministic merge lineage
+- object count decreases by 1
+
+Split:
+- objX → objX1, objX2
+- referents partitioned deterministically
+- lineage forked
+- object count increases by 1
+```
+
+### **Requirements Validated**
+
+- **HLR‑COB‑003** — Referential integrity  
+- **HLR‑COB‑007** — Deterministic replay  
+- **HLR‑COB‑001** — Bounded identity store (merge/split interacts with eviction)  
+- **Lifecycle Rules** — Merge/split behavior (informative)  
 
 ---
 
@@ -409,6 +483,7 @@ These metrics allow CIL to incorporate global conversation‑level ordering sign
 | HLR‑COB‑005 | Ambiguity tracking | `run_cst_signal_test()` / `run_summary_test()` | ✔ |
 | HLR‑COB‑006 | Lineage stability | `run_cst_signal_test()` / `run_summary_test()` | ✔ |
 | HLR‑COB‑010 | Freeze/thaw compliance | `run_freeze_thaw_compliance_test()` | ✔ |
+| HLR‑COB‑003 | Referential integrity across merge/split | `run_merge_split_test()` | ✔ |
 
 All requirements are fully covered.
 
@@ -469,12 +544,11 @@ This ensures:
 
 Potential additions for system_simulation:
 
-- merge/split testbench  
 - referent‑map evolution tests  
 - anchor dynamics tests  
 - multi‑block CST→COB→CIL pipeline tests  
 - CE Envelope integration tests  
-- CEx extraction tests  
+- CEx extraction tests
 
 These are out of scope for system_playground.
 
