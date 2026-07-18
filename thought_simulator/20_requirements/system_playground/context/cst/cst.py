@@ -92,7 +92,7 @@ class CST:
         for obj in identity_objects:
             drift_val = obj.stability_metrics.get("drift")
             if drift_val:
-                affected.append(ob.id)
+                affected.append(obj.id)
                 magnitudes.append(drift_val)
 
         self.state.drift_state = {
