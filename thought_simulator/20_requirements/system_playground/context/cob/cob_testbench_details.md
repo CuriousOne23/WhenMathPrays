@@ -153,111 +153,247 @@ This matches HLR‑COB‑001.
 
 ---
 
-## **5. Detailed Test Descriptions**
+# **5. Detailed Test Descriptions**
 
-### **5.1 Basic Addition Test**
+## **5.1 Basic Addition Test**
 
-**Purpose:**  
-Validate identity object creation and basin insertion.
+### **Purpose**
 
-**Validates:**  
-- HLR‑COB‑003 (referential integrity)  
-- ordering metric preservation  
-- object count correctness  
+This test validates the foundational COB behavior: identity‑layer objects must be created correctly and inserted into the basin with their ordering metrics preserved. Before COB can integrate CST signals or perform eviction, it must reliably store identity objects in a deterministic structure.
 
-**Expected Output:**  
-Three objects appear with correct ordering metrics.
+This test ensures:
+
+- identity objects retain their referent maps, anchors, lineage, ambiguity, stability metrics, and ordering metrics  
+- COB’s internal basin (`state.objects`) stores objects in the order they are added  
+- ordering metrics (recency, frequency, density) are preserved exactly  
+- object count is updated correctly  
+- no unintended mutation occurs during insertion  
+
+This establishes baseline correctness for all subsequent COB operations.
+
+### **Method**
+
+1. Instantiate a fresh COB instance.  
+2. Create three identity objects with distinct ordering metrics.  
+3. Insert them using `cob.add_identity_object()`.  
+4. Inspect basin contents and object count.  
+5. Verify:
+   - all objects appear in the basin  
+   - ordering metrics match creation values  
+   - object count equals 3  
+   - no eviction occurs  
+
+### **Expected Output**
+
+```
+obj1 {'recency': 10, 'frequency': 5, 'density': 3}
+obj2 {'recency': 7, 'frequency': 9, 'density': 2}
+obj3 {'recency': 1, 'frequency': 1, 'density': 1}
+Object Count: 3
+```
+
+### **Requirements Validated**
+
+- **HLR‑COB‑003** — Referential integrity  
+- **HLR‑COB‑004** — Ordering metrics  
+- **HLR‑COB‑008** — CIL compatibility  
 
 ---
 
-### **5.2 CST Signal Application Test**
+## **5.2 CST Signal Application Test**
 
-**Purpose:**  
-Validate deterministic integration of CST signals.
+### **Purpose**
 
-**Signals tested:**  
-- drift  
-- oscillation  
-- collapse  
-- freeze  
-- thaw  
-- certainty adjustment  
-- ambiguity adjustment  
+This test validates deterministic integration of CST signals into identity‑layer objects. COB must apply drift, oscillation, collapse, certainty adjustments, ambiguity adjustments, and lineage stability updates consistently across runs.
+
+This test ensures:
+
+- CST signals modify only the targeted identity objects  
+- frozen objects skip updates  
+- ambiguity and certainty adjustments behave deterministically  
+- lineage stability indicators propagate correctly  
+- stability metrics remain internally consistent  
+
+### **Method**
+
+1. Create three identity objects with initial stability and lineage values.  
+2. Insert them into COB.  
+3. Construct a CST signal bundle containing:
+   - drift  
+   - oscillation  
+   - collapse  
+   - freeze/thaw  
+   - certainty adjustments  
+   - ambiguity adjustments  
+   - lineage stability  
+4. Call `cob.run(signals, turn_index=1)`.  
+5. Inspect stability, ambiguity, and lineage summaries.
+
+### **Expected Output**
+
+- obj1 drift updated  
+- obj2 oscillation updated  
+- obj3 collapse preserved  
+- freeze/thaw applied  
+- certainty/ambiguity updated  
+- lineage stability updated  
+
+### **Requirements Validated**
+
+- **HLR‑COB‑002** — Deterministic stability integration  
+- **HLR‑COB‑005** — Ambiguity tracking  
+- **HLR‑COB‑006** — Lineage stability  
+- **HLR‑COB‑010** — Freeze/thaw compliance  
+
+---
+
+## **5.3 Freeze/Thaw Compliance Test**
+
+### **Purpose**
+
+This test isolates freeze/thaw behavior to ensure frozen objects do not update stability metrics, while thawed objects resume updates deterministically.
+
+### **Method**
+
+1. Create two identity objects:
+   - one frozen  
+   - one thawed  
+2. Insert both into COB.  
+3. Apply a drift signal affecting both objects.  
+4. Apply freeze to the frozen object and thaw to the thawed object.  
+5. Run COB and inspect drift values.
+
+### **Expected Output**
+
+```
+Frozen Object Drift (should remain 0.1) → 0.1
+Thawed Object Drift (should update to 0.9) → 0.9
+```
+
+### **Requirements Validated**
+
+- **HLR‑COB‑010** — Freeze/thaw compliance  
+
+---
+
+## **5.4 Eviction Test**
+
+### **Purpose**
+
+This test validates COB’s bounded identity store and deterministic eviction policy. COB must maintain no more than 20 identity objects and evict the lowest‑priority object based on ordering metrics.
+
+### **Method**
+
+1. Create 25 identity objects with varying ordering metrics.  
+2. Insert all objects into COB.  
+3. COB automatically evicts objects when the count exceeds 20.  
+4. Inspect final basin contents.
+
+### **Expected Output**
+
+- final object count = **20**  
+- remaining objects match highest ordering priority  
+- eviction ordering is deterministic  
+
+### **Requirements Validated**
+
+- **HLR‑COB‑001** — Bounded identity store  
+- **HLR‑COB‑009** — Eviction policy  
+- **HLR‑COB‑004** — Ordering metrics  
+
+---
+
+## **5.5 Summary Aggregation Test**
+
+### **Purpose**
+
+This test validates COB’s ability to aggregate ordering, stability, ambiguity, and lineage summaries for CIL consumption. Summaries must reflect the current basin state and remain structurally consistent.
+
+### **Method**
+
+1. Create three identity objects with distinct ordering and stability metrics.  
+2. Insert them into COB.  
+3. Call `cob.aggregate_summaries()`.  
+4. Inspect ordering, stability, ambiguity, and lineage summaries.
+
+### **Expected Output**
+
+Correct distributions for:
+
+- recency  
+- frequency  
+- density  
+- drift/oscillation/collapse  
+- certainty/ambiguity  
 - lineage stability  
 
-**Validates:**  
-- HLR‑COB‑002 (deterministic stability integration)  
-- HLR‑COB‑005 (ambiguity tracking)  
-- HLR‑COB‑006 (lineage stability)  
-- HLR‑COB‑010 (freeze/thaw compliance — partial)  
+### **Requirements Validated**
 
-**Expected Output:**  
-Stability, ambiguity, and lineage summaries reflect applied signals.
+- **HLR‑COB‑004** — Ordering metrics  
+- **HLR‑COB‑005** — Ambiguity tracking  
+- **HLR‑COB‑006** — Lineage stability  
+- **HLR‑COB‑008** — CIL compatibility  
 
 ---
 
-### **5.3 Freeze/Thaw Compliance Test**
+## **5.6 Deterministic Behavior Test**
 
-**Purpose:**  
-Ensure frozen objects do not update stability metrics.
+### **Purpose**
 
-**Validates:**  
-- HLR‑COB‑010 (freeze/thaw compliance)
+This test ensures COB behaves deterministically under identical inputs. Two COB instances receiving identical identity objects and identical CST signals must produce identical summaries.
 
-**Expected Behavior:**  
-- Frozen object drift remains unchanged  
-- Thawed object drift updates  
+### **Method**
 
-**Expected Output:**  
-```
-Frozen Object Drift (should remain 0.1) --- 0.1
-Thawed Object Drift (should update to 0.9) --- 0.9
-```
+1. Create two COB instances.  
+2. Insert identical identity objects into both.  
+3. Apply identical CST signals.  
+4. Compare stability summaries.
 
----
+### **Expected Output**
 
-### **5.4 Eviction Test**
-
-**Purpose:**  
-Validate bounded store and deterministic eviction.
-
-**Validates:**  
-- HLR‑COB‑001 (bounded store ≤20)  
-- deterministic ordering‑based eviction  
-
-**Expected Output:**  
-Object count becomes 20.  
-Remaining objects match highest ordering priority.
-
----
-
-### **5.5 Summary Aggregation Test**
-
-**Purpose:**  
-Validate ordering, stability, ambiguity, and lineage summaries.
-
-**Validates:**  
-- HLR‑COB‑004 (ordering metrics)  
-- HLR‑COB‑005 (ambiguity tracking)  
-- HLR‑COB‑006 (lineage stability)  
-
-**Expected Output:**  
-Correct distributions and summaries.
-
----
-
-### **5.6 Deterministic Behavior Test**
-
-**Purpose:**  
-Ensure identical inputs produce identical outputs.
-
-**Validates:**  
-- HLR‑COB‑002 (deterministic stability integration)
-
-**Expected Output:**  
 ```
 True
 ```
+
+### **Requirements Validated**
+
+- **HLR‑COB‑002** — Deterministic stability integration  
+- **HLR‑COB‑007** — Deterministic replay  
+
+---
+
+## **5.7 Conversation‑Level Ordering Metrics Test**
+
+### **Purpose**
+
+This test validates the three new conversation‑level ordering metrics required by CIL:
+
+- total access count  
+- chronological access order  
+- sliding‑window frequency (last 10 accesses)
+
+These metrics allow CIL to incorporate global conversation‑level ordering signals alongside identity‑layer ordering metrics.
+
+### **Method**
+
+1. Instantiate a COB instance.  
+2. Call `cob.run({}, turn_index=i)` for 12 consecutive turns.  
+3. Inspect:
+   - `conversation_access_count`  
+   - `conversation_access_order`  
+   - `conversation_frequency_last_10`  
+
+### **Expected Output**
+
+- access count = **12**  
+- access order = `[0, 1, 2, ..., 11]`  
+- sliding‑window frequency reflects last 10 turn indices  
+
+### **Requirements Validated**
+
+- **HLR‑COB‑011** — Conversation access count  
+- **HLR‑COB‑012** — Conversation access order  
+- **HLR‑COB‑013** — Sliding‑window frequency  
 
 ---
 
