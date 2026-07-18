@@ -92,7 +92,7 @@ class CST:
         for obj in identity_objects:
             drift_val = obj.stability_metrics.get("drift")
             if drift_val:
-                affected.append(obj["id"])
+                affected.append(ob.id)
                 magnitudes.append(drift_val)
 
         self.state.drift_state = {
@@ -114,7 +114,7 @@ class CST:
         for obj in identity_objects:
             osc_val = obj.stability_metrics.get("oscillation")
             if osc_val:
-                affected.append(obj["id"])
+                affected.append(obj.id)
                 frequencies.append(osc_val)
 
         self.state.oscillation_state = {
@@ -129,7 +129,7 @@ class CST:
 
     def detect_collapse(self, identity_objects: List[Dict[str, Any]]):
         collapsed = [
-            obj["id"]
+            obj.id
             for obj in identity_objects
             if obj.stability_metrics.get("collapse")
         ]
@@ -178,9 +178,9 @@ class CST:
         for obj in identity_objects:
             sm = obj.stability_metrics
             if sm.get("frozen") is True:
-                frozen.append(obj["id"])
+                frozen.append(obj.id)
             if sm.get("frozen") is False:
-                thawed.append(obj["id"])
+                thawed.append(obj.id
 
         self.state.freeze_state = {
             "frozen_objects": frozen,
@@ -206,14 +206,14 @@ class CST:
         for obj in identity_objects:
             amb = obj.ambiguity
             if amb.get("certainty") == "high":
-                increased_certainty.append(obj["id"])
+                increased_certainty.append(obj.id
             if amb.get("certainty") == "low":
-                decreased_certainty.append(obj["id"])
+                decreased_certainty.append(obj.id)
 
             if amb.get("ambiguity") == "high":
-                increased_ambiguity.append(obj["id"])
+                increased_ambiguity.append(obj.id)
             if amb.get("ambiguity") == "low":
-                decreased_ambiguity.append(obj["id"])
+                decreased_ambiguity.append(obj.id)
 
         self.state.certainty_state = {
             "increased_certainty": increased_certainty,
@@ -236,9 +236,9 @@ class CST:
         for obj in identity_objects:
             lineage = obj.lineage
             if lineage.get("stability") == "stable":
-                stable.append(obj["id"])
+                stable.append(obj.id)
             if lineage.get("stability") == "unstable":
-                unstable.append(obj["id"])
+                unstable.append(obj.id)
 
         self.state.lineage_stability_state = {
             "stable_lineage": stable,
