@@ -62,6 +62,23 @@ def run_merge_test():
     for obj in cob.state.objects:
         print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
 
+    # --- TP-facing checks for MERGE ---
+    print("TP.lineage_log after merge:")
+    for evt in cob.state.lineage_log:
+        print(f"- event_type={evt['event_type']}, parent_ref={evt['parent_ref']}, child_refs={evt['child_refs']}")
+
+    print("TP.cob_state_snapshot after merge:")
+    print(f"keys={list(cob.state.cob_state_snapshot.keys())}")
+
+    # basic assertions to validate TP fields for CST
+    assert len(cob.state.lineage_log) == 1, "Expected exactly one MERGE event in TP.lineage_log"
+    merge_evt = cob.state.lineage_log[0]
+    assert merge_evt["event_type"] == "MERGE", "Expected MERGE event_type"
+    assert merge_evt["parent_ref"] == ["objA", "objB"], "MERGE parent_ref mismatch"
+    assert len(merge_evt["child_refs"]) == 1, "MERGE should produce exactly one child_ref"
+
+    assert "objects" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'objects'"
+    assert "metadata" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'metadata'"
 
 # ------------------------------------------------------------
 # Split Test
@@ -94,6 +111,23 @@ def run_split_test():
     for obj in cob.state.objects:
         print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
 
+    # --- TP-facing checks for SPLIT ---
+    print("TP.lineage_log after split:")
+    for evt in cob.state.lineage_log:
+        print(f"- event_type={evt['event_type']}, parent_ref={evt['parent_ref']}, child_refs={evt['child_refs']}")
+
+    print("TP.cob_state_snapshot after split:")
+    print(f"keys={list(cob.state.cob_state_snapshot.keys())}")
+
+    # basic assertions to validate TP fields for CST
+    assert len(cob.state.lineage_log) == 1, "Expected exactly one SPLIT event in TP.lineage_log"
+    split_evt = cob.state.lineage_log[0]
+    assert split_evt["event_type"] == "SPLIT", "Expected SPLIT event_type"
+    assert split_evt["parent_ref"] == ["objX"], "SPLIT parent_ref mismatch"
+    assert len(split_evt["child_refs"]) == 2, "SPLIT should produce exactly two child_refs"
+
+    assert "objects" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'objects'"
+    assert "metadata" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'metadata'"
 
 # ------------------------------------------------------------
 # Deterministic Replay Test
@@ -110,6 +144,8 @@ def run_merge_split_replay_test():
     cob1.run({"merge": {"pairs": [("objA", "objB")]}}, turn_index=1)
 
     snapshot1 = [(obj.id, obj.referent_map) for obj in cob1.state.objects]
+    lineage_log1 = cob1.state.lineage_log
+    cob_snapshot1 = cob1.state.cob_state_snapshot
 
     cob2 = COB()
     obj2A = make_identity_object("objA", {"topic": ["math"]})
@@ -119,9 +155,16 @@ def run_merge_split_replay_test():
     cob2.run({"merge": {"pairs": [("objA", "objB")]}}, turn_index=1)
 
     snapshot2 = [(obj.id, obj.referent_map) for obj in cob2.state.objects]
+    lineage_log2 = cob2.state.lineage_log
+    cob_snapshot2 = cob2.state.cob_state_snapshot
 
-    print("Replay deterministic:", snapshot1 == snapshot2)
+    print("Replay deterministic (objects):", snapshot1 == snapshot2)
+    print("Replay deterministic (TP.lineage_log):", lineage_log1 == lineage_log2)
+    print("Replay deterministic (TP.cob_state_snapshot):", cob_snapshot1 == cob_snapshot2)
 
+    assert snapshot1 == snapshot2, "Object-level replay must be deterministic"
+    assert lineage_log1 == lineage_log2, "TP.lineage_log replay must be deterministic"
+    assert cob_snapshot1 == cob_snapshot2, "TP.cob_state_snapshot replay must be deterministic"
 
 # ------------------------------------------------------------
 # Main
