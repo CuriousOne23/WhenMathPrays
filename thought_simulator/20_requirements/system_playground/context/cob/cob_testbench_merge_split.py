@@ -2,13 +2,6 @@
 COB Merge/Split Testbench
 System Playground — Context Subsystem
 Validates merge/split structural operations at the COB level.
-
-This testbench covers:
-- deterministic merge behavior
-- deterministic split behavior
-- referential integrity (HLR‑COB‑003)
-- deterministic replay (HLR‑COB‑007)
-- bounded identity store interactions (HLR‑COB‑001)
 """
 
 from cob import COB
@@ -40,7 +33,6 @@ def run_merge_test():
 
     cob = COB()
 
-    # Two identity objects with overlapping referents
     objA = make_identity_object(
         "objA",
         referents={"user": ["he", "him"], "topic": ["math"]},
@@ -77,13 +69,9 @@ def run_split_test():
 
     cob = COB()
 
-    # One identity object with bimodal referents
     objX = make_identity_object(
         "objX",
-        referents={
-            "user": ["he", "she"],
-            "topic": ["math", "cooking"],  # two clusters
-        },
+        referents={"user": ["he", "she"], "topic": ["math", "cooking"]},
         anchors=[0.5, 0.1],
         ordering={"recency": 7, "frequency": 3, "density": 1},
     )
@@ -107,7 +95,6 @@ def run_split_test():
 def run_merge_split_replay_test():
     print("\n=== MERGE/SPLIT REPLAY TEST ===")
 
-    # First run
     cob1 = COB()
     obj1A = make_identity_object("objA", {"topic": ["math"]})
     obj1B = make_identity_object("objB", {"topic": ["math", "algebra"]})
@@ -117,7 +104,6 @@ def run_merge_split_replay_test():
 
     snapshot1 = [(obj.id, obj.referent_map) for obj in cob1.state.objects]
 
-    # Second run (identical inputs)
     cob2 = COB()
     obj2A = make_identity_object("objA", {"topic": ["math"]})
     obj2B = make_identity_object("objB", {"topic": ["math", "algebra"]})
