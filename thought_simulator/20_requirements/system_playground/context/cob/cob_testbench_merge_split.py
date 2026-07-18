@@ -7,7 +7,6 @@ Validates merge/split structural operations at the COB level.
 from cob import COB
 from cob import IdentityObject
 
-
 # ------------------------------------------------------------
 # Helper: Construct identity objects with referents + anchors
 # ------------------------------------------------------------
