@@ -48,6 +48,9 @@ class COBState:
 
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+    # TP-facing fields (for CST via TP)
+    lineage_log: List[Dict[str, Any]] = field(default_factory=list)
+    cob_state_snapshot: Dict[str, Any] = field(default_factory=dict)
 
 # ---------------------------------------------------------------------------
 # COB Implementation (system_playground)
@@ -58,6 +61,12 @@ class COB:
 
     def __init__(self):
         self.state = COBState()
+        # deterministic sequence for lineage_log entries
+        self._lineage_seq = 0
+
+    def _next_lineage_seq(self) -> int:
+        self._lineage_seq += 1
+        return self._lineage_seq
 
     # -----------------------------------------------------------------------
     # Identity Object Lifecycle
@@ -164,6 +173,16 @@ class COB:
                 if not objA or not objB:
                     continue
 
+                # capture before-state for lineage_log
+                before_referent = {
+                    idA: objA.referent_map.copy(),
+                    idB: objB.referent_map.copy(),
+                }
+                before_ordering = {
+                    idA: objA.ordering_metrics.copy(),
+                    idB: objB.ordering_metrics.copy(),
+                }
+
                 # Deterministic referent-map union
                 merged_referents = {}
                 for key in set(objA.referent_map.keys()).union(objB.referent_map.keys()):
@@ -199,6 +218,18 @@ class COB:
                     ordering_metrics=merged_ordering,
                 )
 
+                # append MERGE event to lineage_log (TP.lineage_log[])
+                self.state.lineage_log.append({
+                    "event_type": "MERGE",
+                    "parent_ref": [idA, idB],
+                    "child_refs": [merged_obj.id],
+                    "referent_map_before": before_referent,
+                    "referent_map_after": {merged_obj.id: merged_referents},
+                    "ordering_before": before_ordering,
+                    "ordering_after": {merged_obj.id: merged_ordering},
+                    "lineage_seq": self._next_lineage_seq(),
+                })
+
                 self.state.objects.remove(objA)
                 self.state.objects.remove(objB)
                 self.state.objects.append(merged_obj)
@@ -209,6 +240,10 @@ class COB:
                 objX = next((o for o in self.state.objects if o.id == idX), None)
                 if not objX:
                     continue
+
+                # capture before-state for lineage_log
+                before_referent = {idX: objX.referent_map.copy()}
+                before_ordering = {idX: objX.ordering_metrics.copy()}
 
                 keys = sorted(objX.referent_map.keys())
                 half = len(keys) // 2
@@ -252,6 +287,24 @@ class COB:
                     stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
                     ordering_metrics=ordering2,
                 )
+
+                # append SPLIT event to lineage_log (TP.lineage_log[])
+                self.state.lineage_log.append({
+                    "event_type": "SPLIT",
+                    "parent_ref": [idX],
+                    "child_refs": [objX1.id, objX2.id],
+                    "referent_map_before": before_referent,
+                    "referent_map_after": {
+                        objX1.id: referents1,
+                        objX2.id: referents2,
+                    },
+                    "ordering_before": before_ordering,
+                    "ordering_after": {
+                        objX1.id: ordering1,
+                        objX2.id: ordering2,
+                    },
+                    "lineage_seq": self._next_lineage_seq(),
+                })
 
                 self.state.objects.remove(objX)
                 self.state.objects.append(objX1)
@@ -336,4 +389,26 @@ class COB:
         self._evict_if_needed()
         self.aggregate_summaries()
 
+        # TP.cob_state_snapshot: stabilized identity-layer snapshot
+        self.state.cob_state_snapshot = {
+            "objects": [
+                {
+                    "id": obj.id,
+                    "referent_map": obj.referent_map,
+                    "anchors": obj.anchors,
+                    "lineage": obj.lineage,
+                    "ambiguity": obj.ambiguity,
+                    "stability_metrics": obj.stability_metrics,
+                    "ordering_metrics": obj.ordering_metrics,
+                }
+                for obj in self.state.objects
+            ],
+            "ordering_summary": self.state.ordering_summary,
+            "stability_summary": self.state.stability_summary,
+            "ambiguity_summary": self.state.ambiguity_summary,
+            "lineage_summary": self.state.lineage_summary,
+            "metadata": self.state.metadata,
+        }
+
         return self.state
+
