@@ -89,6 +89,8 @@ Example:
 - Turn 2: `anchors=[0.2, 0.1]`  
 - Turn 3: `anchors=[0.3, 0.1]`
 
+These Turn datasets represent a controlled, monotonic drift pattern. Each turn increases one anchor value by 0.1 while keeping the other fixed at 0.1. This lets CST detect real drift (gradual divergence) while confirming that no oscillation or collapse is present. It also ensures CST behaves deterministically and adjusts certainty/ambiguity consistently across turns.
+
 ### **Why the test exists**
 Drift is the most common form of instability.  
 CST must detect it reliably and deterministically.
