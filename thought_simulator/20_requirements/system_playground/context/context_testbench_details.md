@@ -211,7 +211,123 @@ A successful unified context testbench run produces:
 - lineage continuity is preserved  
 - deterministic replay is confirmed  
 
-If all of these conditions are met, the unified context subsystem is functioning correctly.
+---
+
+## **5.5 Instability Check After a Merge or Split COB Event**
+
+This subsection describes how the unified context testbench validates CST, COB, and CIL behavior in the presence of **structural identity changes** — specifically **merge** and **split** events performed by COB.  
+These events require special handling because they temporarily destabilize identity‑layer structure.
+
+The testbench evaluates two complementary behaviors:
+
+1. **Suppression of structural instability**  
+2. **Pass‑through of valid instability**
+
+Both behaviors must be verified to ensure correct identity evolution and stable TP historical continuity.
+
+---
+
+### **5.5.1 Structural Instability Suppression Window**
+
+When COB performs a **merge** or **split**, CST enters a **10‑turn structural suppression window**.  
+During this window, CST does **not** emit instability signals that arise *directly* from the structural change.
+
+Examples of instability that must be suppressed:
+
+- drift caused by merging referent maps  
+- oscillation caused by anchor redistribution  
+- collapse caused by identity fragmentation  
+- ambiguity changes caused by structural reallocation  
+- certainty changes caused by structural reallocation  
+- lineage instability caused by merge/split  
+- freeze/thaw events triggered by structural change  
+- merge/split feedback instability  
+
+Formally, instability referencing identities involved in the structural change is suppressed:
+
+$$
+\text{SuppressIfStructural}(i) =
+\begin{cases}
+\text{True}, & i \in \text{MergeSplitSet} \\
+\text{False}, & \text{otherwise}
+\end{cases}
+$$
+
+The testbench verifies that:
+
+- CIL stability block shows **None** or **False** for suppressed instability  
+- COB stability metrics do not reflect structural instability  
+- TP logs show structural continuity events but no instability events  
+- CST block in the CIL Intake Packet omits structural instability  
+
+---
+
+### **5.5.2 Valid Instability Pass‑Through**
+
+The suppression window does **not** block instability signals that arise from **valid, non‑structural causes**.
+
+Examples of valid instability:
+
+- referent drift due to new TP input  
+- oscillation patterns unrelated to merge/split  
+- collapse caused by external TP lineage changes  
+- ambiguity increases due to new referent evidence  
+- certainty decreases due to new referent evidence  
+- lineage instability caused by external TP factors  
+
+Valid instability must pass through even during the suppression window:
+
+$$
+\text{AllowIfValid}(i) =
+\begin{cases}
+\text{True}, & i \notin \text{MergeSplitSet} \\
+\text{True}, & i \in \text{MergeSplitSet} \land \text{Cause} \neq \text{Structural} \\
+\text{False}, & i \in \text{MergeSplitSet} \land \text{Cause} = \text{Structural}
+\end{cases}
+$$
+
+The testbench verifies that:
+
+- CIL stability block reflects valid instability  
+- COB stability metrics update accordingly  
+- TP logs show valid instability events  
+- CST block in the CIL Intake Packet includes valid instability  
+
+---
+
+### **5.5.3 Cycle‑by‑Cycle Validation**
+
+The testbench simulates multiple cycles after a merge or split:
+
+- **Cycle 0:** COB performs merge or split  
+- **Cycles 1–10:**  
+  - structural instability → suppressed  
+  - valid instability → allowed  
+- **Cycle 11+:**  
+  - all instability emitted normally  
+
+The testbench checks:
+
+- suppression behavior  
+- pass‑through behavior  
+- correct CIL packet construction  
+- correct COB stability metric propagation  
+- correct TP historical continuity  
+
+---
+
+### **5.5.4 Why This Test Is Required**
+
+This test ensures:
+
+- identity evolution remains stable after structural changes  
+- false instability does not propagate  
+- valid instability is not lost  
+- CIL stability block remains accurate  
+- TP historical continuity is preserved  
+- deterministic replay behavior is maintained  
+
+This section provides the detailed behavior that complements the summary in Section 5 and the TP field descriptions in Section 8.
 
 ---
 
