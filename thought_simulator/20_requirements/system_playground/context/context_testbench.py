@@ -156,15 +156,15 @@ def run_unified_basic_test():
     # Add raw identity objects to COB
     for obj in ouba_objects:
         cob.add_identity_object(obj)
-    
-    # Run COB with CST signals
+
+    # Run COB with CST signals (as dict)
     cob_state = cob.run(
-        signals=cst_signals,
+        signals=cst_signals.__dict__,
         turn_index=1,
     )
 
     print("\n--- COB Identity Objects ---")
-    for obj in cob_state:
+    for obj in cob_state.objects:
         print(
             obj.id,
             {
@@ -180,7 +180,7 @@ def run_unified_basic_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state,
+        cob_state=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=1,
     )
@@ -256,15 +256,17 @@ def run_unified_selection_stability_test():
     )
 
     cob = COB()
+    for obj in objs:
+        cob.add_identity_object(obj)
+
     cob_state = cob.run(
-        raw_objects=objs,
-        cst_signals=cst_signals,
+        signals=cst_signals.__dict__,
         turn_index=2,
     )
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state,
+        cob_state=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=2,
     )
@@ -305,15 +307,17 @@ def run_unified_tp_focus_test():
     )
 
     cob = COB()
+    for obj in objs:
+        cob.add_identity_object(obj)
+
     cob_state = cob.run(
-        raw_objects=objs,
-        cst_signals=cst_signals,
+        signals=cst_signals.__dict__,
         turn_index=3,
     )
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state,
+        cob_state=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=3,
     )
@@ -340,4 +344,3 @@ if __name__ == "__main__":
     run_unified_basic_test()
     run_unified_selection_stability_test()
     run_unified_tp_focus_test()
-
