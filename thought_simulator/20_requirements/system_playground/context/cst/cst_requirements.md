@@ -57,59 +57,179 @@ These signals are consumed by COB and indirectly by CIL.
 
 ---
 
+### **5. Testing (system_playground)**  
+The system_playground version of CST is validated using a block‑level Python testbench (`cst_testbench.py`).  
+These tests ensure CST produces deterministic stability signals, correctly interprets structural continuity markers from TP, and remains synchronized with COB across merge, split, drift, oscillation, collapse, and ambiguity conditions.
+
 ---
 
-## **5. Testing (system_playground)**
+## **5.1 Drift, Oscillation, and Collapse Tests**
 
-The system_playground version of CST is validated using a block‑level Python testbench (`cst_testbench.py`).  
-This testbench verifies that CST produces deterministic stability signals based on identity‑layer object inputs.
+### **Drift Tests**  
+These tests evaluate CST’s ability to detect referent‑map and anchor divergence.
 
-### **5.1 Tested Behaviors**
+**Setup:**  
+Identity‑layer objects are constructed with gradually diverging referent maps or anchor values across synthetic turns.
 
-The following CST behaviors are explicitly tested:
+**Execution:**  
+Objects and turn fragments are fed into CST. Drift signals are recorded.
 
-- **Drift Detection**  
-  CST identifies identity‑layer objects exhibiting referent or anchor divergence and reports affected objects and drift magnitude.
+**Expected Behavior:**  
+- Drift is reported only when divergence exceeds configured thresholds.  
+- Drift magnitude reflects the degree of divergence.  
+- No oscillation or collapse signals appear when divergence is monotonic.
 
-- **Oscillation Detection**  
-  CST detects alternating incompatible states and reports affected objects, oscillation frequency, and amplitude.
+---
 
-- **Collapse Detection**  
-  CST identifies identity‑layer objects that have structurally collapsed and reports severity.
+### **Oscillation Tests**  
+These tests evaluate CST’s ability to detect alternating incompatible states.
 
-- **Freeze / Thaw Detection**  
-  CST reports objects marked as frozen or thawed based on stability conditions.
+**Setup:**  
+Identity‑layer objects alternate between incompatible referent or anchor states across turns.
 
-- **Certainty Adjustment**  
-  CST increases or decreases certainty indicators based on ambiguity and referent stability.
+**Execution:**  
+Alternating states are fed into CST. Oscillation signals are recorded.
 
-- **Ambiguity Adjustment**  
-  CST increases or decreases ambiguity indicators based on identity‑layer conditions.
+**Expected Behavior:**  
+- Oscillation frequency reflects the alternation pattern.  
+- No collapse signals appear when oscillation remains reversible.  
+- Freeze/thaw behavior is exercised when oscillation exceeds stability limits.
 
-- **Lineage Stability Detection**  
-  CST identifies stable and unstable lineage conditions across identity‑layer objects.
+---
 
-### **5.2 Behaviors Not Tested in system_playground**
+### **Collapse Tests**  
+These tests evaluate CST’s ability to detect structural failure.
 
-The following behaviors are **not** tested at this stage:
+**Setup:**  
+Identity‑layer objects are constructed with invalid referent maps, contradictory anchors, or lineage inconsistencies.
 
-- **Merge Detection (full implementation)**  
-- **Split Detection (full implementation)**  
-- **Multi‑block interactions with COB or CIL**  
-- **Full pipeline stability propagation**  
-- **Deterministic replay across multiple turns**
+**Execution:**  
+Objects are fed into CST. Collapse signals are recorded.
 
-These behaviors are reserved for **system_simulation**, where CST participates in multi‑block, multi‑stage flows.
+**Expected Behavior:**  
+- Collapse is reported when structural integrity is lost.  
+- Drift or oscillation may accompany collapse but do not suppress it.  
+- Collapse signals are deterministic under identical inputs.
 
-### **5.3 Testbench Characteristics**
+---
 
-- Deterministic execution  
-- No external dependencies  
-- No multi‑block orchestration  
-- Pure block‑level validation  
-- Mirrors the structure of `cst_signals.yaml` and `cst_state.yaml`
+## **5.2 Merge/Split Stability Tests**
 
-The testbench ensures that CST behaves consistently with the system_playground requirements and produces stability signals suitable for COB integration.
+These tests ensure CST correctly interprets structural continuity markers from COB and TP, and does not misclassify legitimate structural transformations as instability.
+
+### **Merge Stability Tests**
+
+**Setup:**  
+COB performs a deterministic MERGE of two identity‑layer objects.  
+`TP.lineage_log[]` and `TP.cob_state_snapshot` are captured.
+
+**Execution:**  
+CST consumes the post‑merge snapshot and lineage markers.  
+Stability signals are recorded.
+
+**Expected Behavior:**  
+- MERGE markers in `TP.lineage_log[]` are interpreted as legitimate consolidation.  
+- CST does not emit false collapse or oscillation signals due to parent disappearance.  
+- CST updates its internal topology to track the merged child layer.  
+- CST remains synchronized with COB’s identity‑layer state.
+
+---
+
+### **Split Stability Tests**
+
+**Setup:**  
+COB performs a deterministic SPLIT of one identity‑layer object into two child layers.  
+`TP.lineage_log[]` and `TP.cob_state_snapshot` are captured.
+
+**Execution:**  
+CST consumes the post‑split snapshot and lineage markers.  
+Stability signals are recorded.
+
+**Expected Behavior:**  
+- SPLIT markers in `TP.lineage_log[]` are interpreted as legitimate divergence.  
+- CST does not emit false oscillation or collapse signals due to child appearance.  
+- CST updates its internal topology to track both child layers.  
+- Lineage continuity is preserved across the split.
+
+---
+
+### **Merge/Split Compensation Tests**
+
+**Setup:**  
+Sequences of MERGE and SPLIT events are generated across multiple turns.  
+Each turn produces updated TP lineage markers and snapshots.
+
+**Execution:**  
+CST consumes the sequence and updates its state machine accordingly.
+
+**Expected Behavior:**  
+- CST compensates for structural changes indicated by lineage markers.  
+- CST’s internal topology remains synchronized with COB across all turns.  
+- No spurious instability signals appear when structural continuity is preserved.  
+- Drift, oscillation, and collapse signals reflect true instability, not structural transitions.
+
+---
+
+## **5.3 Freeze/Thaw, Certainty, and Ambiguity Tests**
+
+### **Freeze/Thaw Tests**
+
+**Setup:**  
+Identity‑layer objects are constructed with varying stability metrics.
+
+**Execution:**  
+CST evaluates stability and produces freeze/thaw signals.
+
+**Expected Behavior:**  
+- Freeze is issued when instability exceeds thresholds.  
+- Thaw is issued when stability is restored.  
+- COB respects freeze/thaw signals in subsequent updates.
+
+---
+
+### **Certainty/Ambiguity Adjustment Tests**
+
+**Setup:**  
+Objects are constructed with controlled drift, oscillation, and ambiguity patterns.
+
+**Execution:**  
+CST produces certainty and ambiguity adjustments.
+
+**Expected Behavior:**  
+- Certainty increases when ambiguity decreases and stability improves.  
+- Ambiguity increases when drift or oscillation rises.  
+- Adjustments are deterministic under identical inputs.
+
+---
+
+## **5.4 Deterministic Replay Tests**
+
+### **Single‑Turn Determinism**
+
+**Setup:**  
+CST is run twice with identical identity‑layer inputs and identical TP lineage/snapshot fields.
+
+**Execution:**  
+Signal sets are compared.
+
+**Expected Behavior:**  
+- CST produces identical stability signals across both runs.
+
+---
+
+### **Multi‑Turn Determinism (Merge/Split Sequences)**
+
+**Setup:**  
+COB generates a multi‑turn sequence containing MERGE and SPLIT events.  
+TP lineage markers and snapshots are captured each turn.
+
+**Execution:**  
+CST consumes the sequence twice.
+
+**Expected Behavior:**  
+- CST produces identical signal sequences across both runs.  
+- CST’s state machine remains synchronized with COB across both runs.  
+- Replay safety is preserved across structural transformations.
 
 ---
 
