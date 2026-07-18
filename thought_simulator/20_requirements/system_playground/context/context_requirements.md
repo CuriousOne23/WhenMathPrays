@@ -196,6 +196,84 @@ The testbench verifies that TP captures:
 - metadata  
 - lineage continuity  
 
+## **7.5 Instability Check After a Split or Merge**
+
+Structural identity changes such as **merge** and **split** operations introduce temporary instability in the identity‑layer. To prevent false instability propagation, the unified context subsystem applies a **post‑structure stability window** during which instability signals *caused by* the merge or split are suppressed.
+
+### **7.5.1 Structural Instability Suppression Window**
+
+When COB performs a merge or split, CST enters a **10‑turn suppression window**.  
+During this window, CST does **not** emit instability signals that arise *directly* from the structural change.
+
+Examples of suppressed instability include:
+
+- drift caused by merging referent maps  
+- oscillation caused by anchor redistribution  
+- collapse caused by identity fragmentation  
+- ambiguity changes caused by structural reallocation  
+- certainty changes caused by structural reallocation  
+- lineage instability caused by merge/split  
+- freeze/thaw events triggered by structural change  
+- merge/split instability feedback loops
+
+Formally, instability signals referencing identities involved in the structural change are suppressed:
+
+$$
+\text{SuppressIfStructural}(i) = 
+\begin{cases}
+\text{True}, & i \in \text{MergeSplitSet} \\
+\text{False}, & \text{otherwise}
+\end{cases}
+$$
+
+### **7.5.2 Valid Instability Pass‑Through**
+
+The suppression window does **not** block instability signals that arise from **valid, non‑structural causes**.
+
+Examples of valid instability include:
+
+- referent drift due to new input  
+- oscillation patterns unrelated to merge/split  
+- collapse caused by external TP lineage changes  
+- ambiguity increases due to new referent evidence  
+- certainty decreases due to new referent evidence  
+- lineage instability caused by external TP factors  
+
+Valid instability is allowed to pass through even during the suppression window:
+
+$$
+\text{AllowIfValid}(i) = 
+\begin{cases}
+\text{True}, & i \notin \text{MergeSplitSet} \\
+\text{True}, & i \in \text{MergeSplitSet} \land \text{Cause} \neq \text{Structural} \\
+\text{False}, & i \in \text{MergeSplitSet} \land \text{Cause} = \text{Structural}
+\end{cases}
+$$
+
+### **7.5.3 Cycle‑by‑Cycle Behavior**
+
+During the 10‑turn window:
+
+- **Structural instability → suppressed**  
+- **Valid instability → allowed**  
+
+After the window expires:
+
+- All instability signals are emitted normally.
+
+### **7.5.4 Purpose of the Rule**
+
+This mechanism ensures:
+
+- stability of identity evolution after structural changes  
+- prevention of false instability propagation  
+- correct lineage, ambiguity, and certainty behavior  
+- accurate CIL stability block construction  
+- correct TP historical continuity  
+- deterministic replay behavior  
+
+This section defines the expected behavior for instability handling following merge and split operations in the unified context subsystem.
+
 ---
 
 ## **8. Behaviors Not Tested (Informative)**
