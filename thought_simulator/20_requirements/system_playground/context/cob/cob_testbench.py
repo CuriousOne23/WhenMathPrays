@@ -300,3 +300,4 @@ if __name__ == "__main__":
     run_eviction_test()
     run_summary_test()
     run_deterministic_behavior_test()
+    run_conversation_ordering_metrics_test()
