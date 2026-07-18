@@ -90,7 +90,7 @@ class CST:
         magnitudes = []
 
         for obj in identity_objects:
-            drift_val = obj.get("stability_metrics", {}).get("drift")
+            drift_val = obj.stability_metrics.get("drift")
             if drift_val:
                 affected.append(obj["id"])
                 magnitudes.append(drift_val)
@@ -112,7 +112,7 @@ class CST:
         frequencies = []
 
         for obj in identity_objects:
-            osc_val = obj.get("stability_metrics", {}).get("oscillation")
+            osc_val = obj.stability_metrics.get("oscillation")
             if osc_val:
                 affected.append(obj["id"])
                 frequencies.append(osc_val)
@@ -131,7 +131,7 @@ class CST:
         collapsed = [
             obj["id"]
             for obj in identity_objects
-            if obj.get("stability_metrics", {}).get("collapse")
+            if obj.stability_metrics.get("collapse")
         ]
 
         self.state.collapse_state = {
@@ -176,7 +176,7 @@ class CST:
         thawed = []
 
         for obj in identity_objects:
-            sm = obj.get("stability_metrics", {})
+            sm = obj.stability_metrics
             if sm.get("frozen") is True:
                 frozen.append(obj["id"])
             if sm.get("frozen") is False:
@@ -204,7 +204,7 @@ class CST:
         decreased_ambiguity = []
 
         for obj in identity_objects:
-            amb = obj.get("ambiguity", {})
+            amb = obj.ambiguity
             if amb.get("certainty") == "high":
                 increased_certainty.append(obj["id"])
             if amb.get("certainty") == "low":
@@ -234,7 +234,7 @@ class CST:
         unstable = []
 
         for obj in identity_objects:
-            lineage = obj.get("lineage", {})
+            lineage = obj.lineage
             if lineage.get("stability") == "stable":
                 stable.append(obj["id"])
             if lineage.get("stability") == "unstable":
@@ -290,7 +290,7 @@ class CST:
 
                 # Remove parents from instability consideration
                 compensated_objects = [
-                    obj for obj in compensated_objects if obj["id"] not in parent_ids
+                    obj for obj in compensated_objects if obj.id not in parent_ids
                 ]
 
                 # Children are legitimate new layers; no instability should be triggered
@@ -301,7 +301,7 @@ class CST:
 
                 # Remove parent from instability consideration
                 compensated_objects = [
-                    obj for obj in compensated_objects if obj["id"] != parent_id
+                    obj for obj in compensated_objects if obj.id != parent_id
                 ]
 
                 # Children are legitimate new layers; no instability should be triggered
