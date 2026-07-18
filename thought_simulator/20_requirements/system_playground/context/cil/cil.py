@@ -9,9 +9,12 @@ of the CIL subsystem. It mirrors the structure defined in:
 - cil_state.yaml
 - cil_intake_packet.yaml
 
-This is NOT a full simulation engine. It is a local behavioral block
-used inside system_playground for shaping, validating, and inspecting
-identity‑layer behavior before system_simulation.
+CIL integrates two coordinated inputs:
+1. Identity-layer objects from COB
+2. Stability signals originating from CST
+
+CIL constructs the CIL Intake Packet consumed by CEx and contributes
+historical continuity fields to TP.
 """
 
 from dataclasses import dataclass, field
@@ -42,6 +45,7 @@ class CILState:
     stability_state: Dict[str, Any] = field(default_factory=dict)
     lineage_state: Dict[str, Any] = field(default_factory=dict)
     ordering_state: Dict[str, Any] = field(default_factory=dict)
+    cst_state: Dict[str, Any] = field(default_factory=dict)  # NEW: CST input
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -53,6 +57,7 @@ class CILIntakePacket:
     stability_block: Dict[str, Any]
     lineage_block: Dict[str, Any]
     ordering_block: Dict[str, Any]
+    cst_block: Dict[str, Any]           # NEW: CST stability summary
     packet_metadata: Dict[str, Any]
 
 
@@ -66,8 +71,10 @@ class CIL:
 
     Responsibilities:
     - Select identity-layer objects from COB
+    - Integrate CST stability signals
     - Aggregate certainty, ambiguity, stability, lineage, ordering
-    - Construct the CIL Intake Packet
+    - Construct the CIL Intake Packet for CEx
+    - Provide TP-compatible metadata for historical continuity
     - Maintain deterministic behavior
     """
 
@@ -95,6 +102,29 @@ class CIL:
         self.state.selected_identity_objects = sorted_objs[:max_count]
 
     # -----------------------------------------------------------------------
+    # CST Integration
+    # -----------------------------------------------------------------------
+
+    def integrate_cst(self, cst_signals: Dict[str, Any]):
+        """
+        Integrate CST stability signals into CIL state.
+        These signals are packed into the CIL Intake Packet and TP.
+        """
+        self.state.cst_state = {
+            "drift": cst_signals.get("drift", {}),
+            "oscillation": cst_signals.get("oscillation", {}),
+            "collapse": cst_signals.get("collapse", {}),
+            "merge": cst_signals.get("merge", {}),
+            "split": cst_signals.get("split", {}),
+            "freeze": cst_signals.get("freeze", {}),
+            "thaw": cst_signals.get("thaw", {}),
+            "certainty_adjustment": cst_signals.get("certainty_adjustment", {}),
+            "ambiguity_adjustment": cst_signals.get("ambiguity_adjustment", {}),
+            "lineage_stability": cst_signals.get("lineage_stability", {}),
+            "metadata": cst_signals.get("metadata", {}),
+        }
+
+    # -----------------------------------------------------------------------
     # Aggregation Blocks
     # -----------------------------------------------------------------------
 
@@ -113,7 +143,7 @@ class CIL:
         }
 
     def aggregate_stability(self):
-        """Aggregate stability metrics."""
+        """Aggregate stability metrics from COB objects."""
         drift = []
         oscillation = []
         collapse = []
@@ -193,6 +223,7 @@ class CIL:
             stability_block=self.state.stability_state,
             lineage_block=self.state.lineage_state,
             ordering_block=self.state.ordering_state,
+            cst_block=self.state.cst_state,  # NEW: CST integration
             packet_metadata=self.state.metadata,
         )
 
@@ -202,19 +233,22 @@ class CIL:
     # Main Entry Point
     # -----------------------------------------------------------------------
 
-    def run(self, cob_objects: List[IdentityObject], turn_index: int):
+    def run(self, cob_objects: List[IdentityObject], cst_signals: Dict[str, Any], turn_index: int):
         """
         Main CIL execution for system_playground.
         Deterministic sequence:
-        1. Select identities
-        2. Aggregate blocks
-        3. Build packet
+        1. Integrate CST signals
+        2. Select identities
+        3. Aggregate blocks
+        4. Build packet
         """
+
         self.state.metadata = {
             "turn_index": turn_index,
-            "selected_object_count": len(cob_objects),
+            "input_object_count": len(cob_objects),
         }
 
+        self.integrate_cst(cst_signals)
         self.select_identities(cob_objects)
         self.aggregate_certainty()
         self.aggregate_stability()
