@@ -40,10 +40,16 @@ class COBState:
     objects: List[IdentityObject] = field(default_factory=list)
     object_count: int = 0
 
+    # NEW conversation-level ordering metrics
+    conversation_access_count: int = 0
+    conversation_access_order: List[int] = field(default_factory=list)
+    conversation_frequency_last_10: Dict[str, int] = field(default_factory=dict)
+
+    # existing summaries
     ordering_summary: Dict[str, Any] = field(default_factory=dict)
-    ambiguity_summary: Dict[str, Any] = field(default_factory=dict)
-    stability_summary: Dict[str, Any] = field(default_factory=dict)
-    lineage_summary: Dict[str, Any] = field(default_factory=dict)
+    stability_summary: List[Dict[str, Any]] = field(default_factory=list)
+    ambiguity_summary: List[Dict[str, Any]] = field(default_factory=list)
+    lineage_summary: List[Dict[str, Any]] = field(default_factory=list)
 
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -233,6 +239,19 @@ class COB:
         2. Evict if needed
         3. Aggregate summaries
         """
+
+        # Track total access count
+        self.state.conversation_access_count += 1
+        
+        # Track chronological access order
+        self.state.conversation_access_order.append(turn_index)
+        
+        # Compute sliding-window frequency (last 10 accesses)
+        window = self.state.conversation_access_order[-10:]
+        self.state.conversation_frequency_last_10 = {
+            str(idx): window.count(idx) for idx in window
+        }      
+                
         self.state.metadata = {
             "turn_index": turn_index,
             "object_count": len(self.state.objects),
