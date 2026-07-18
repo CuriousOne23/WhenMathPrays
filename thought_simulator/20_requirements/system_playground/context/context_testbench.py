@@ -153,14 +153,18 @@ def run_unified_basic_test():
     # -----------------------------------------------------------------------
 
     cob = COB()
-    cob_objects = cob.run(
-        raw_objects=ouba_objects,
-        cst_signals=cst_signals,
+    # Add raw identity objects to COB
+    for obj in ouba_objects:
+        cob.add_identity_object(obj)
+    
+    # Run COB with CST signals
+    cob_state = cob.run(
+        signals=cst_signals,
         turn_index=1,
     )
 
     print("\n--- COB Identity Objects ---")
-    for obj in cob_objects:
+    for obj in cob_state:
         print(
             obj.id,
             {
@@ -176,7 +180,7 @@ def run_unified_basic_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_objects=cob_objects,
+        cob_state=cob_state,
         cst_signals=cst_signals,
         turn_index=1,
     )
@@ -209,7 +213,7 @@ def run_unified_basic_test():
 
     tp_datastream = {
         "cst_signals": cst_signals,
-        "cob_objects": cob_objects,
+        "cob_state": cob_state,
         "cil_packet": cil_packet,
         "metadata": {
             "turn_index": 1,
@@ -252,7 +256,7 @@ def run_unified_selection_stability_test():
     )
 
     cob = COB()
-    cob_objects = cob.run(
+    cob_state = cob.run(
         raw_objects=objs,
         cst_signals=cst_signals,
         turn_index=2,
@@ -260,7 +264,7 @@ def run_unified_selection_stability_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_objects=cob_objects,
+        cob_state=cob_state,
         cst_signals=cst_signals,
         turn_index=2,
     )
@@ -301,7 +305,7 @@ def run_unified_tp_focus_test():
     )
 
     cob = COB()
-    cob_objects = cob.run(
+    cob_state = cob.run(
         raw_objects=objs,
         cst_signals=cst_signals,
         turn_index=3,
@@ -309,14 +313,14 @@ def run_unified_tp_focus_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_objects=cob_objects,
+        cob_state=cob_state,
         cst_signals=cst_signals,
         turn_index=3,
     )
 
     tp_datastream = {
         "cst_signals": cst_signals,
-        "cob_objects": cob_objects,
+        "cob_state": cob_state,
         "cil_packet": cil_packet,
         "metadata": {
             "turn_index": 3,
