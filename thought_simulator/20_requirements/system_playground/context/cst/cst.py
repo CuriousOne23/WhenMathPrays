@@ -180,7 +180,7 @@ class CST:
             if sm.get("frozen") is True:
                 frozen.append(obj.id)
             if sm.get("frozen") is False:
-                thawed.append(obj.id
+                thawed.append(obj.id)
 
         self.state.freeze_state = {
             "frozen_objects": frozen,
@@ -206,7 +206,7 @@ class CST:
         for obj in identity_objects:
             amb = obj.ambiguity
             if amb.get("certainty") == "high":
-                increased_certainty.append(obj.id
+                increased_certainty.append(obj.id)
             if amb.get("certainty") == "low":
                 decreased_certainty.append(obj.id)
 
