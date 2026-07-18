@@ -267,6 +267,27 @@ def run_deterministic_behavior_test():
     print("\n--- Deterministic Stability Comparison ---")
     print(cob1.state.stability_summary == cob2.state.stability_summary)
 
+# ---------------------------------------------------------------------------
+# Conversation-Level Ordering Metrics Test
+# ---------------------------------------------------------------------------
+
+def run_conversation_ordering_metrics_test():
+    print("\n=== COB Testbench: Conversation-Level Ordering Metrics Test ===")
+
+    cob = COB()
+
+    # Simulate 12 conversation turns
+    for turn in range(12):
+        cob.run(signals={}, turn_index=turn)
+
+    print("\n--- Conversation Access Count (should be 12) ---")
+    print(cob.state.conversation_access_count)
+
+    print("\n--- Conversation Access Order (should be [0..11]) ---")
+    print(cob.state.conversation_access_order)
+
+    print("\n--- Sliding-Window Frequency (last 10 accesses) ---")
+    print(cob.state.conversation_frequency_last_10)
 
 # ---------------------------------------------------------------------------
 # Main
