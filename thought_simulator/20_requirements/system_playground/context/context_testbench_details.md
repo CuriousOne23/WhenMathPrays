@@ -472,12 +472,12 @@ The unified testbench verifies:
 
 $$
 \text{TP}_{\text{out}} =
-\{ 
-\text{CST\_Signals},\ 
-\text{COB\_IdentityObjects},\ 
-\text{CIL\_IntakePacket},\ 
+\\{ 
+\text{CST}\\_\text{Signals},\ 
+\text{COB}\\_\text{IdentityObjects},\ 
+\text{CIL}\\_\text{IntakePacket},\ 
 \text{Metadata}
-\}
+\\}
 $$
 
 Where each block is validated against expected synthetic inputs.
