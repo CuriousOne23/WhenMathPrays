@@ -180,7 +180,7 @@ def run_unified_basic_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state.objects,
+        cob_objects=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=1,
     )
@@ -266,7 +266,7 @@ def run_unified_selection_stability_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state.objects,
+        cob_objects=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=2,
     )
@@ -317,7 +317,7 @@ def run_unified_tp_focus_test():
 
     cil = CIL()
     cil_packet = cil.run(
-        cob_state=cob_state.objects,
+        cob_objects=cob_state.objects,
         cst_signals=cst_signals,
         turn_index=3,
     )
