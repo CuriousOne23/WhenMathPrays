@@ -45,51 +45,126 @@ CIL produces a structured packet containing:
 
 This packet is consumed by **CEx**.
 
+## **5. Testing**
+
+The system_playground version of CIL is validated using a deterministic, block‑level Python testbench (cil_testbench.py). This testbench evaluates how CIL integrates identity‑layer objects from COB and stability indicators from CST into a structured CIL Intake Packet. The goal is to confirm that CIL behaves predictably under controlled inputs and produces stable packet structures suitable for consumption by CEx.
+
 ---
 
-## **5. Testing (system_playground)**
+## **5.1 Tested Behaviors (Expanded)**
 
-The system_playground version of CIL is validated using a block‑level Python testbench (`cil_testbench.py`).  
-This testbench verifies that CIL performs deterministic identity selection and correctly aggregates identity‑layer indicators before constructing the CIL Intake Packet.
+The testbench exercises several core behaviors to ensure CIL produces consistent and interpretable packet structures.  
+Each behavior is validated using synthetic identity‑layer objects and ordering metrics.
 
-### **5.1 Tested Behaviors**
+### **Identity Selection**
+CIL selects identity‑layer objects using deterministic ordering rules derived from COB.  
+  
+The testbench verifies that:
 
-The following CIL behaviors are explicitly tested:
+- ordering scores produce stable rankings  
+- ties are resolved deterministically  
+- the top‑ranked objects (default maximum: 5) are consistently selected across repeated runs  
 
-- **Identity Selection**
-  - Deterministic ordering based on recency, frequency, and density.
-  - Selection of the top‑ranked identity objects (default max: 5).
+If ordering metrics are represented as a vector $[r, f, d]$ for recency, frequency, and density, CIL applies a deterministic scoring function such as:
 
-- **Certainty Aggregation**
-  - Extraction and aggregation of certainty indicators from selected identity objects.
-  - Extraction and aggregation of ambiguity indicators.
+$$
+\text{Score}(o) = w_r\cdot r + w_f\cdot f + w_d\cdot d
+$$
 
-- **Stability Aggregation**
-  - Aggregation of drift, oscillation, collapse, merge/split, and freeze/thaw metrics.
-  - Preservation of per‑object stability values in the stability block.
+where $w_r, w_f, w_d$ are fixed weights defined in system_playground.
 
-- **Lineage Aggregation**
-  - Aggregation of lineage stability indicators.
-  - Collection of lineage records for selected identity objects.
+### **Certainty Aggregation**
+CIL extracts certainty and ambiguity indicators from selected identity objects.  
+The testbench confirms:
 
-- **Ordering Aggregation**
-  - Aggregation of recency, frequency, and density metrics.
-  - Preservation of ordering distributions for selected identity objects.
+- certainty fields are aggregated into a unified certainty block  
+- ambiguity fields are aggregated into a unified ambiguity block  
+- missing fields are handled gracefully  
+- ordering of certainty indicators remains deterministic  
 
-- **Intake Packet Construction**
-  - Deterministic construction of the CIL Intake Packet.
-  - Inclusion of identity selection block, certainty block, stability block, lineage block, ordering block, and packet metadata.
+### **Stability Aggregation**
+CIL aggregates stability metrics originating from CST (drift, oscillation, collapse, merge/split, freeze/thaw).  
+The testbench ensures:
 
-### **5.2 Behaviors Not Tested in system_playground**
+- per‑object stability metrics are preserved  
+- aggregated stability summaries reflect the selected identity set  
+- stability blocks remain structurally consistent across runs  
 
-The following behaviors are **not** tested at this stage:
+### **Lineage Aggregation**
+CIL collects lineage stability indicators and lineage records for selected identity objects.  
+The testbench verifies:
 
-- Multi‑block interactions with COB or CST.
-- Full pipeline integration with CE Envelope or CEx.
-- Deterministic replay across multiple turns.
-- High‑level simulation of identity‑layer evolution.
+- lineage stability values are preserved  
+- lineage hints are included in the packet  
+- lineage blocks remain deterministic  
 
-These behaviors are reserved for **system_simulation**, where CIL participates in multi‑block, multi‑stage flows
+### **Ordering Aggregation**
+CIL aggregates ordering metrics (recency, frequency, density) for selected identity objects.  
+The testbench confirms:
+
+- ordering distributions are preserved  
+- ordering blocks remain deterministic  
+- ordering metrics are correctly associated with each identity object  
+
+### **Intake Packet Construction**
+The testbench validates that CIL constructs the CIL Intake Packet deterministically.  
+It checks:
+
+- identity selection block  
+- certainty block  
+- stability block  
+- lineage block  
+- ordering block  
+- packet metadata  
+
+A typical packet structure can be expressed as:
+
+$$
+\text{Packet} = \\{ \text{IdentitySet},\ \text{Ordering},\ \text{Ambiguity},\ \text{Stability},\ \text{Lineage} \\}
+$$
+
+---
+
+## **5.2 Behaviors Not Tested (Expanded)**
+
+The system_playground version of CIL intentionally omits several behaviors that require multi‑block integration or full pipeline execution.  
+
+### **Multi‑Block Interactions**
+CIL is not tested in combination with COB or CST beyond basic identity‑layer object intake.  
+Full multi‑block flows require simulation of:
+
+- COB identity evolution  
+- CST stability propagation  
+- TP lineage continuity  
+- CE Envelope interactions  
+
+### **Pipeline Integration with CEx**
+CIL is not tested in the context of CEx execution.  
+CEx consumes the CIL Intake Packet, but system_playground does not simulate:
+
+- correction expansion  
+- referent updates  
+- ambiguity resolution  
+- multi‑turn packet evolution  
+
+### **Deterministic Replay Across Turns**
+CIL is not tested for multi‑turn replay determinism.  
+Replay determinism requires:
+
+- stable ordering across turns  
+- stable lineage propagation  
+- stable ambiguity evolution  
+
+These behaviors belong to system_simulation.
+
+### **High‑Level Identity‑Layer Evolution**
+CIL does not simulate identity‑layer evolution across turns.  
+Evolution requires:
+
+- merge/split propagation  
+- referent map drift  
+- anchor updates  
+- lineage branching   
 
 ---
 
