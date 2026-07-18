@@ -16,7 +16,8 @@ This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
 """
 
-from cst import CST
+from cst.cst import CST
+from cil.cil import IdentityObject
 
 
 # ---------------------------------------------------------------------------
@@ -33,21 +34,22 @@ def make_identity_object(
     lineage_stability=None,
     frozen=None,
 ):
-    """Helper to create identity-layer objects as dictionaries for CST."""
+    """Helper to create IdentityObject instances for CST."""
 
-    return {
-        "id": id,
-        "referent_map": {"r1": "value"},
-        "anchors": ["a1", "a2"],
-        "lineage": {"stability": lineage_stability},
-        "ambiguity": {"certainty": certainty, "ambiguity": ambiguity},
-        "stability_metrics": {
+    return IdentityObject(
+        id=id,
+        referent_map={"r1": "value"},
+        anchors=["a1", "a2"],
+        lineage={"stability": lineage_stability},
+        ambiguity={"certainty": certainty, "ambiguity": ambiguity},
+        stability_metrics={
             "drift": drift,
             "oscillation": oscillation,
             "collapse": collapse,
             "frozen": frozen,
         },
-    }
+        ordering_metrics={"recency": 0, "frequency": 0, "density": 0},
+    )
 
 
 def empty_tp_fields():
@@ -200,10 +202,9 @@ def run_lineage_stability_test():
 def run_merge_compensation_test():
     print("\n=== CST Testbench: MERGE Structural Compensation ===")
 
-    # Parent objects would normally disappear after merge
     objs = [
-        make_identity_object("objA", drift=0.5),  # would falsely look unstable
-        make_identity_object("objB", oscillation=0.7),  # would falsely look unstable
+        make_identity_object("objA", drift=0.5),
+        make_identity_object("objB", oscillation=0.7),
         make_identity_object("objA_objB_merged", drift=None, oscillation=None),
     ]
 
@@ -238,7 +239,7 @@ def run_split_compensation_test():
     print("\n=== CST Testbench: SPLIT Structural Compensation ===")
 
     objs = [
-        make_identity_object("objX", drift=0.4),  # parent would falsely look unstable
+        make_identity_object("objX", drift=0.4),
         make_identity_object("objX_1", drift=None),
         make_identity_object("objX_2", oscillation=None),
     ]
@@ -273,7 +274,6 @@ def run_split_compensation_test():
 def run_post_structure_stability_test():
     print("\n=== CST Testbench: 10-Turn Post-Structure Stability Window ===")
 
-    # After merge, no instability should appear for 10 turns
     tp_lineage = [
         {
             "event_type": "MERGE",
@@ -286,7 +286,7 @@ def run_post_structure_stability_test():
 
     cst = CST()
 
-    for turn in range(1, 12):  # 11 turns to test window behavior
+    for turn in range(1, 12):
         objs = [
             make_identity_object("objA_objB_merged", drift=None, oscillation=None)
         ]
