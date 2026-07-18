@@ -98,11 +98,18 @@ The following COB behaviors are explicitly tested:
   - Frozen identity objects remain unchanged until thawed.  
   - Thaw signals restore update capability deterministically.
 
+### **Merge/Split Structural Operations (HLR‑COB‑003)**  
+- COB SHALL apply CST merge and split signals deterministically.  
+- Merge operations SHALL preserve referent‑map integrity, lineage continuity, and ordering metrics.  
+- Split operations SHALL partition referent maps deterministically, fork lineage, and update ordering metrics.  
+- Merge/split SHALL be replay‑deterministic under identical CST signals and identical COB snapshots.
+
+---
+
 ### **5.2 Behaviors Not Tested in system_playground**
 
 The following behaviors are **not** tested at this stage:
 
-- Full merge and split operations (placeholders in system_playground).  
 - Multi‑block interactions with CIL or CST beyond direct signal integration.  
 - Deterministic replay across multiple turns (reserved for system_simulation).  
 - High‑level pipeline behavior involving CE Envelope or CEx.
