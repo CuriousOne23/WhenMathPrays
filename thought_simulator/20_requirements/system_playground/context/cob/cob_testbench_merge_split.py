@@ -19,15 +19,15 @@ from identity_object import IdentityObject
 # Helper: Construct identity objects with referents + anchors
 # ------------------------------------------------------------
 
-def make_identity_object(name, referents, anchors=None, lineage=None, ordering=None):
+def make_identity_object(obj_id, referents, anchors=None, lineage=None, ordering=None):
     return IdentityObject(
-        name=name,
+        id=obj_id,
         referent_map=referents,
-        anchors=anchors or {"temporal": 0.0, "discourse": 0.0},
+        anchors=anchors or [0.0, 0.0],  # temporal, discourse
         lineage=lineage or {"parent": None, "history": []},
         ambiguity={"certainty": 1.0, "ambiguity": 0.0},
-        stability={"drift": 0.0, "oscillation": 0.0, "collapse": 0.0},
-        ordering=ordering or {"recency": 0, "frequency": 0, "density": 0},
+        stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
+        ordering_metrics=ordering or {"recency": 0, "frequency": 0, "density": 0},
     )
 
 
@@ -44,28 +44,28 @@ def run_merge_test():
     objA = make_identity_object(
         "objA",
         referents={"user": ["he", "him"], "topic": ["math"]},
-        anchors={"temporal": 0.2, "discourse": 0.3},
+        anchors=[0.2, 0.3],
         ordering={"recency": 10, "frequency": 5, "density": 2},
     )
 
     objB = make_identity_object(
         "objB",
         referents={"user": ["he"], "topic": ["math", "algebra"]},
-        anchors={"temporal": 0.25, "discourse": 0.35},
+        anchors=[0.25, 0.35],
         ordering={"recency": 9, "frequency": 4, "density": 2},
     )
 
     cob.add_identity_object(objA)
     cob.add_identity_object(objB)
 
-    # CST merge signal
-    signals = {"merge": [("objA", "objB")]}
+    # Correct CST merge signal format for cob.py
+    signals = {"merge": {"pairs": [("objA", "objB")]}}
 
     cob.run(signals, turn_index=1)
 
     print("Objects after merge:")
     for obj in cob.state.objects:
-        print(f"- {obj.name}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering}")
+        print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
 
 
 # ------------------------------------------------------------
@@ -84,20 +84,20 @@ def run_split_test():
             "user": ["he", "she"],
             "topic": ["math", "cooking"],  # two clusters
         },
-        anchors={"temporal": 0.5, "discourse": 0.1},
+        anchors=[0.5, 0.1],
         ordering={"recency": 7, "frequency": 3, "density": 1},
     )
 
     cob.add_identity_object(objX)
 
-    # CST split signal
-    signals = {"split": ["objX"]}
+    # Correct CST split signal format for cob.py
+    signals = {"split": {"objects": ["objX"]}}
 
     cob.run(signals, turn_index=2)
 
     print("Objects after split:")
     for obj in cob.state.objects:
-        print(f"- {obj.name}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering}")
+        print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
 
 
 # ------------------------------------------------------------
@@ -113,9 +113,9 @@ def run_merge_split_replay_test():
     obj1B = make_identity_object("objB", {"topic": ["math", "algebra"]})
     cob1.add_identity_object(obj1A)
     cob1.add_identity_object(obj1B)
-    cob1.run({"merge": [("objA", "objB")]}, turn_index=1)
+    cob1.run({"merge": {"pairs": [("objA", "objB")]}}, turn_index=1)
 
-    snapshot1 = [(obj.name, obj.referent_map) for obj in cob1.state.objects]
+    snapshot1 = [(obj.id, obj.referent_map) for obj in cob1.state.objects]
 
     # Second run (identical inputs)
     cob2 = COB()
@@ -123,9 +123,9 @@ def run_merge_split_replay_test():
     obj2B = make_identity_object("objB", {"topic": ["math", "algebra"]})
     cob2.add_identity_object(obj2A)
     cob2.add_identity_object(obj2B)
-    cob2.run({"merge": [("objA", "objB")]}, turn_index=1)
+    cob2.run({"merge": {"pairs": [("objA", "objB")]}}, turn_index=1)
 
-    snapshot2 = [(obj.name, obj.referent_map) for obj in cob2.state.objects]
+    snapshot2 = [(obj.id, obj.referent_map) for obj in cob2.state.objects]
 
     print("Replay deterministic:", snapshot1 == snapshot2)
 
