@@ -350,7 +350,7 @@ def run_unified_merge_split_instability_test():
     # MERGE SCENARIO: A + B → AB
     # -----------------------------------------------------------------------
 
-    print("\n--- MERGE SCENARIO (A + B → AB) ---")
+    print("\n--- MERGE SCENARIO (A + B -> AB) ---")
 
     # OuBA identity objects BEFORE merge
     A = make_ouba_identity_object("A", recency=5, frequency=3, density=2)
@@ -463,7 +463,7 @@ def run_unified_merge_split_instability_test():
     # SPLIT SCENARIO: C → C1, C2
     # -----------------------------------------------------------------------
 
-    print("\n--- SPLIT SCENARIO (C → C1, C2) ---")
+    print("\n--- SPLIT SCENARIO (C -> C1, C2) ---")
 
     C = make_ouba_identity_object("C", recency=7, frequency=5, density=3)
 
