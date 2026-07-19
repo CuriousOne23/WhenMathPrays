@@ -288,6 +288,24 @@ This mechanism ensures:
 
 ---
 
+## **7.5.6 One‑Time Structural Corrections Do NOT Produce Instability (New Requirement)**
+
+A sudden, one‑time structural correction — such as fixing an accidental mis‑naming, mis‑labeling, or other human conversational mistake — will not produce drift, oscillation, collapse, ambiguity changes, certainty changes, or lineage instability.  
+CST must treat such corrections as **legitimate clarifying events**, not instability events.
+
+A one‑time correction does **not** constitute drift or oscillation and therefore must be accepted by CST and propagated through COB and CIL as a normal clarifying update. COB SHALL store the corrected identity‑layer structure, and CIL SHALL surface the corrected structure in the intake packet.
+
+This ensures:
+
+- human conversational mistakes do not trigger instability  
+- identity continuity remains stable  
+- lineage continuity remains correct  
+- ambiguity/certainty behavior remains correct  
+- deterministic replay remains valid  
+- TP historical continuity remains accurate  
+
+---
+
 ## **8. Behaviors Not Tested (Informative)**
 
 The unified context testbench does not test:
@@ -328,6 +346,9 @@ The unified context subsystem SHALL preserve merge/split structural continuity a
 
 ### **HLR‑CnTxt‑008: CEx Compatibility**  
 The unified context subsystem SHALL produce a CIL Intake Packet conforming to the schema required by CEx.
+
+### **HLR‑CnTxt‑009: Sudden One Time Structural Correction**  
+A sudden one‑time structural correction SHALL not cause any instability signals to be emitted by CST. CST SHALL update its internal state machine to reflect the corrected structural fields, and COB SHALL accept the corrected identity‑layer structure as a legitimate clarifying update.
 
 ---
 
