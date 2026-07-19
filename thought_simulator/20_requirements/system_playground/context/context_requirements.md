@@ -196,83 +196,95 @@ The testbench verifies that TP captures:
 - metadata  
 - lineage continuity  
 
-## **7.5 Instability Check After a Split or Merge**
+---
 
-Structural identity changes such as **merge** and **split** operations introduce temporary instability in the identity‑layer. To prevent false instability propagation, the unified context subsystem applies a **post‑structure stability window** during which instability signals *caused by* the merge or split are suppressed.
+## **7.5 Instability Check After a Split or Merge (Corrected)**
 
-### **7.5.1 Structural Instability Suppression Window**
+### **7.5.1 Merge/Split Events Do NOT Produce Instability**
 
-When COB performs a merge or split, CST enters a **10‑turn suppression window**.  
-During this window, CST does **not** emit instability signals that arise *directly* from the structural change.
+A merge or split event **shall not** produce drift, oscillation, collapse, ambiguity changes, certainty changes, or lineage instability.  
+CST must treat merge/split as a **structural continuity event**, not an instability event.
 
-Examples of suppressed instability include:
+The unified testbench validates this by performing a merge/split and confirming that **no instability signals are emitted** at cycle 0 or in subsequent cycles unless new information is introduced.
 
-- drift caused by merging referent maps  
-- oscillation caused by anchor redistribution  
-- collapse caused by identity fragmentation  
-- ambiguity changes caused by structural reallocation  
-- certainty changes caused by structural reallocation  
-- lineage instability caused by merge/split  
-- freeze/thaw events triggered by structural change  
-- merge/split instability feedback loops
+---
 
-Formally, instability signals referencing identities involved in the structural change are suppressed:
+### **7.5.2 CST’s 10‑Turn Window Is a Monitoring Window, Not a Suppression Window**
 
-$$
-\text{SuppressIfStructural}(i) = 
-\begin{cases}
-\text{True}, & i \in \text{MergeSplitSet} \\
-\text{False}, & \text{otherwise}
-\end{cases}
-$$
+After a merge or split, CST enters a **10‑turn monitoring window**.
 
-### **7.5.2 Valid Instability Pass‑Through**
+During this window, CST must ensure:
 
-The suppression window does **not** block instability signals that arise from **valid, non‑structural causes**.
+- the merge/split itself does not produce instability  
+- identity continuity remains stable  
+- lineage continuity remains stable  
+- ambiguity/certainty continuity remains stable  
+- ordering continuity remains stable  
 
-Examples of valid instability include:
+CST does **not** suppress valid instability during this window.
 
-- referent drift due to new input  
-- oscillation patterns unrelated to merge/split  
-- collapse caused by external TP lineage changes  
-- ambiguity increases due to new referent evidence  
-- certainty decreases due to new referent evidence  
-- lineage instability caused by external TP factors  
+---
 
-Valid instability is allowed to pass through even during the suppression window:
+### **7.5.3 Valid Instability Must Pass Through Immediately**
 
-$$
-\text{AllowIfValid}(i) = 
-\begin{cases}
-\text{True}, & i \notin \text{MergeSplitSet} \\
-\text{True}, & i \in \text{MergeSplitSet} \land \text{Cause} \neq \text{Structural} \\
-\text{False}, & i \in \text{MergeSplitSet} \land \text{Cause} = \text{Structural}
-\end{cases}
-$$
+Instability caused by **new information** (i.e., changes to COB‑owned fields that appear in OuBA identity objects) must be detected and emitted by CST **even if it occurs within the 10‑turn window**.
 
-### **7.5.3 Cycle‑by‑Cycle Behavior**
+Valid instability includes:
 
-During the 10‑turn window:
+- drift  
+- oscillation  
+- collapse  
+- ambiguity changes  
+- certainty changes  
+- lineage instability  
 
-- **Structural instability → suppressed**  
-- **Valid instability → allowed**  
+These are allowed because they are **not caused by the merge/split itself**.
 
-After the window expires:
+The unified testbench validates this by:
 
-- All instability signals are emitted normally.
+- performing a merge/split  
+- waiting several cycles  
+- modifying COB‑owned fields in OuBA identity objects  
+- confirming CST detects and emits valid instability  
+- confirming COB propagates it  
+- confirming CIL packages it  
+- confirming TP records it  
 
-### **7.5.4 Purpose of the Rule**
+---
+
+### **7.5.4 Structural vs. Valid Instability (Formal Rule)**
+
+Let:
+
+- **MergeSplitSet** = identities involved in the merge or split  
+- **Cause** = origin of instability (structural or valid)
+
+Then:
+
+```
+If Cause = Structural:
+    CST SHALL NOT emit instability signals.
+
+If Cause = Valid:
+    CST SHALL emit instability signals immediately.
+```
+
+This rule ensures correct behavior during and after merge/split events.
+
+---
+
+### **7.5.5 Purpose of the Rule**
 
 This mechanism ensures:
 
-- stability of identity evolution after structural changes  
-- prevention of false instability propagation  
-- correct lineage, ambiguity, and certainty behavior  
-- accurate CIL stability block construction  
-- correct TP historical continuity  
-- deterministic replay behavior  
-
-This section defines the expected behavior for instability handling following merge and split operations in the unified context subsystem.
+- merge/split events do not falsely trigger instability  
+- valid instability is never blocked  
+- identity evolution remains stable  
+- lineage continuity remains correct  
+- ambiguity/certainty behavior remains correct  
+- CIL stability blocks remain accurate  
+- TP historical continuity remains correct  
+- deterministic replay behavior is preserved  
 
 ---
 
