@@ -224,7 +224,6 @@ def run_unified_basic_test():
     print("\n--- TP Datastream (Unified View) ---")
     print(tp_datastream)
 
-
 def run_unified_selection_stability_test():
     """
     Test unified behavior focusing on selection ordering and stability propagation.
@@ -277,7 +276,6 @@ def run_unified_selection_stability_test():
 
     print("\n--- CIL Stability Block ---")
     print(cil_packet.stability_block)
-
 
 def run_unified_tp_focus_test():
     """
@@ -335,6 +333,201 @@ def run_unified_tp_focus_test():
     print("\n--- TP Datastream (Structure Check) ---")
     print(tp_datastream)
 
+def run_unified_merge_split_instability_test():
+    """
+    Unified Context Testbench: Merge/Split Instability Test (OuBA-driven)
+
+    This test validates:
+    1. CST's ability to detect merge/split events from OuBA identity objects.
+    2. CST's suppression of structural instability for 10 cycles.
+    3. CST's pass-through of valid instability during suppression.
+    4. COB and CIL propagation of suppressed vs. valid instability.
+    """
+
+    print("\n=== Unified Context Testbench: Merge/Split Instability Test ===")
+
+    # -----------------------------------------------------------------------
+    # MERGE SCENARIO: A + B → AB
+    # -----------------------------------------------------------------------
+
+    print("\n--- MERGE SCENARIO (A + B → AB) ---")
+
+    # OuBA identity objects BEFORE merge
+    A = make_ouba_identity_object("A", recency=5, frequency=3, density=2)
+    B = make_ouba_identity_object("B", recency=4, frequency=2, density=1)
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    # Cycle 0: OuBA performs merge → OuBA now outputs AB instead of A and B
+    AB = make_ouba_identity_object(
+        "AB",
+        recency=6,
+        frequency=5,
+        density=3,
+        lineage_stability="stable",
+    )
+
+    # CST sees AB appear and A/B disappear → detects merge
+    cst = CST()
+    cst_signals = cst.run(
+        identity_objects=[AB],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=0,
+    )
+
+    cob = COB()
+    cob.add_identity_object(AB)
+    cob_state = cob.run(signals=cst_signals.__dict__, turn_index=0)
+
+    cil = CIL()
+    cil_packet = cil.run(
+        cob_objects=cob_state.objects,
+        cst_signals=cst_signals.__dict__,
+        turn_index=0,
+    )
+
+    print("\nCycle 0 — Merge Event Detected")
+    print("CIL Stability Block:", cil_packet.stability_block)
+
+    # -----------------------------------------------------------------------
+    # Cycles 1–10: Structural instability must be suppressed
+    # -----------------------------------------------------------------------
+
+    print("\n--- Merge Scenario: Structural Instability Suppression Window ---")
+
+    for cycle in range(1, 11):
+
+        # Fake structural instability: modify AB's stability metrics
+        AB.stability_metrics["drift"] = 0.9
+        AB.stability_metrics["collapse"] = True
+
+        # Valid instability: modify unrelated object X
+        X = make_ouba_identity_object(
+            "X",
+            recency=2,
+            frequency=1,
+            density=1,
+            oscillation=0.4,  # valid instability
+        )
+
+        # OuBA now outputs AB and X
+        ouba_objects = [AB, X]
+
+        cst_signals = cst.run(
+            identity_objects=ouba_objects,
+            tp_lineage_log=tp_lineage_log,
+            tp_snapshot=tp_snapshot,
+            turn_index=cycle,
+        )
+
+        cob_state = cob.run(signals=cst_signals.__dict__, turn_index=cycle)
+        cil_packet = cil.run(
+            cob_objects=cob_state.objects,
+            cst_signals=cst_signals.__dict__,
+            turn_index=cycle,
+        )
+
+        print(f"\nCycle {cycle} — Suppression Window")
+        print("CIL Stability Block:", cil_packet.stability_block)
+
+    # -----------------------------------------------------------------------
+    # Cycle 11: Suppression window ends → structural instability allowed
+    # -----------------------------------------------------------------------
+
+    print("\nCycle 11 — Suppression Window Ends")
+
+    # Real instability on AB
+    AB.stability_metrics["drift"] = 0.5
+    AB.stability_metrics["collapse"] = True
+
+    ouba_objects = [AB]
+
+    cst_signals = cst.run(
+        identity_objects=ouba_objects,
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=11,
+    )
+
+    cob_state = cob.run(signals=cst_signals.__dict__, turn_index=11)
+    cil_packet = cil.run(
+        cob_objects=cob_state.objects,
+        cst_signals=cst_signals.__dict__,
+        turn_index=11,
+    )
+
+    print("CIL Stability Block:", cil_packet.stability_block)
+
+    # -----------------------------------------------------------------------
+    # SPLIT SCENARIO: C → C1, C2
+    # -----------------------------------------------------------------------
+
+    print("\n--- SPLIT SCENARIO (C → C1, C2) ---")
+
+    C = make_ouba_identity_object("C", recency=7, frequency=5, density=3)
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    # Cycle 0: OuBA performs split → outputs C1 and C2
+    C1 = make_ouba_identity_object("C1", recency=4, frequency=3, density=2)
+    C2 = make_ouba_identity_object("C2", recency=3, frequency=2, density=1)
+
+    cst_signals = cst.run(
+        identity_objects=[C1, C2],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=0,
+    )
+
+    cob = COB()
+    cob.add_identity_object(C1)
+    cob.add_identity_object(C2)
+
+    cob_state = cob.run(signals=cst_signals.__dict__, turn_index=0)
+
+    cil = CIL()
+    cil_packet = cil.run(
+        cob_objects=cob_state.objects,
+        cst_signals=cst_signals.__dict__,
+        turn_index=0,
+    )
+
+    print("\nCycle 0 — Split Event Detected")
+    print("CIL Stability Block:", cil_packet.stability_block)
+
+    # Cycles 1–10 identical suppression logic
+    print("\n--- Split Scenario: Structural Instability Suppression Window ---")
+
+    for cycle in range(1, 11):
+
+        # Fake structural instability on C1/C2
+        C1.stability_metrics["collapse"] = True
+        C2.stability_metrics["drift"] = 0.8
+
+        # Valid instability on unrelated Y
+        Y = make_ouba_identity_object("Y", recency=1, frequency=1, density=1, oscillation=0.3)
+
+        ouba_objects = [C1, C2, Y]
+
+        cst_signals = cst.run(
+            identity_objects=ouba_objects,
+            tp_lineage_log=tp_lineage_log,
+            tp_snapshot=tp_snapshot,
+            turn_index=cycle,
+        )
+
+        cob_state = cob.run(signals=cst_signals.__dict__, turn_index=cycle)
+        cil_packet = cil.run(
+            cob_objects=cob_state.objects,
+            cst_signals=cst_signals.__dict__,
+            turn_index=cycle,
+        )
+
+        print(f"\nCycle {cycle} — Suppression Window")
+        print("CIL Stability Block:", cil_packet.stability_block)
+
+    print("\n=== End of Merge/Split Instability Test ===")
 
 # ---------------------------------------------------------------------------
 # Main
@@ -344,3 +537,4 @@ if __name__ == "__main__":
     run_unified_basic_test()
     run_unified_selection_stability_test()
     run_unified_tp_focus_test()
+    run_unified_merge_split_instability_test()
