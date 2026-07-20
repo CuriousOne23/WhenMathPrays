@@ -222,6 +222,37 @@ CIL SHALL incorporate stability metrics into identity selection decisions.
 
 ---
 
+## **Next‑Turn Context Integration (TP.next_context_fields Cross‑Reference)**
+
+### **HLR‑CIL‑011: Next‑Turn Context Intake**  
+CIL SHALL ingest next‑turn clarifying/context fields from COB’s stabilized identity‑layer snapshot, where COB has merged next‑turn context originating from `TP.next_context{}` as defined in **20.105_tp_requirements.md**.
+
+### **HLR‑CIL‑012: Next‑Turn Context Placement**  
+CIL SHALL place next‑turn context fields into the CIL Intake Packet exactly as provided by COB, without modification, reinterpretation, or repair.
+
+### **HLR‑CIL‑013: Deterministic Next‑Turn Context Representation**  
+CIL SHALL represent next‑turn context fields deterministically in the intake packet such that identical COB snapshots and CST signals produce identical next‑turn context output.
+
+### **HLR‑CIL‑014: Continuity Preservation**  
+CIL SHALL preserve next‑turn context continuity across turns by reflecting the next‑turn context fields provided by COB in the intake packet without mutation.
+
+### **HLR‑CIL‑015: No Derivation Rule**  
+CIL SHALL NOT derive next‑turn context fields from clarifying fields, referent maps, ordering metrics, or stability metrics; next‑turn context SHALL originate exclusively from COB’s stabilized snapshot.
+
+### **HLR‑CIL‑016: CEx Compatibility for Next‑Turn Context**  
+CIL SHALL include next‑turn context fields in the intake packet in a structure compatible with CEx extraction rules defined in **20.107**, without renaming or structural changes.
+
+### **HLR‑CIL‑017: Freeze/Thaw Continuity**  
+CIL SHALL preserve next‑turn context fields across freeze/thaw cycles without loss, mutation, or reordering.
+
+### **HLR‑CIL‑018: No Field Duplication Rule**  
+CIL SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
+
+### **HLR‑CIL‑019: Structural‑Only Handling**  
+CIL SHALL treat next‑turn context fields strictly as structural metadata and SHALL NOT perform semantic interpretation, meaning inference, or context repair.
+
+---
+
 ## **7. Intake Packet Structure**  
 *(Informative — no SHALL statements)*
 
