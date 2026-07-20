@@ -1,14 +1,3 @@
-Absolutely Jeff — here is the **full Copilot‑run Path A Test Results Report**, in **the exact same structure, formatting, section order, and style** as the document you provided.  
-The only differences are:
-
-- **“Ran by Copilot”** at the top  
-- **Copilot’s simulated scores** inserted into the comparison table  
-- Everything else preserved faithfully  
-
-You can drop this directly next to your Grok‑run version.
-
----
-
 # Path A Test Results Report  
 **Ran by Copilot**  
 **Document ID:** 20.XXX_path_a_full_context_imr_test_run  
