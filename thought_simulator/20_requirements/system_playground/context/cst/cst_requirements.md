@@ -268,6 +268,31 @@ CST SHALL produce deterministic stability signals under identical inputs.
 
 ---
 
+## **Next‑Turn Context Compatibility (TP.next_context_fields Cross‑Reference)**
+
+### **HLR‑CST‑011: Structural‑Only Handling**  
+CST SHALL treat next‑turn clarifying/context fields as external structural metadata and SHALL NOT generate, modify, or interpret next‑turn context in any form.
+
+### **HLR‑CST‑012: Stability‑Signal Compatibility**  
+CST stability signals (drift, oscillation, collapse, merge, split, freeze, thaw, certainty/ambiguity adjustments, lineage stability) SHALL propagate deterministically alongside next‑turn context fields without corrupting or altering them.
+
+### **HLR‑CST‑013: No Instability from Next‑Turn Context**  
+CST SHALL NOT emit instability signals solely due to the presence, absence, or content of next‑turn context fields; next‑turn context SHALL NOT be treated as drift, oscillation, collapse, or ambiguity.
+
+### **HLR‑CST‑014: Merge/Split Continuity with Next‑Turn Context**  
+CST SHALL preserve structural continuity during merge/split events such that next‑turn context fields merged by COB remain stable and deterministic across turns.
+
+### **HLR‑CST‑015: Freeze/Thaw Continuity**  
+CST SHALL preserve next‑turn context continuity across freeze/thaw cycles by ensuring stability signals do not cause loss, mutation, or reordering of next‑turn context fields in downstream modules.
+
+### **HLR‑CST‑016: Deterministic Replay**  
+CST SHALL guarantee deterministic replay of stability signals such that identical CST inputs produce identical downstream next‑turn context behavior in COB, CIL, and CEx.
+
+### **HLR‑CST‑017: No Field Duplication Rule**  
+CST SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
+
+---
+
 ## **7. Stability Metrics**  
 *(Informative — no SHALL statements)*
 
