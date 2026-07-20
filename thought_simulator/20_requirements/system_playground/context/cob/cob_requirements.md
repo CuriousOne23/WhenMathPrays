@@ -1,10 +1,11 @@
-# **COB Requirements**  
+# **COB Requirements (Revised, Consolidated HLR Section)**  
 *Conversation Object Basin — Context Subsystem*  
 *System Playground Version*
 
 ---
 
-## **1. Purpose**
+## **1. Purpose**  
+*(Informative — no SHALL statements)*
 
 The Conversation Object Basin (COB) maintains the identity‑layer context for the system_playground.  
 It stores up to 20 stabilized identity‑layer objects representing referents, anchors, lineage, ambiguity, and stability metrics across conversation turns.  
@@ -13,7 +14,8 @@ CIL produces the intake packet used by CEx, making COB an upstream context subsy
 
 ---
 
-## **2. Scope**
+## **2. Scope**  
+*(Informative — no SHALL statements)*
 
 This document defines the system_playground version of COB.  
 It describes identity‑layer object lifecycle, ordering metrics, stability integration, and the interface between COB, CST, and CIL.  
@@ -21,182 +23,198 @@ This document does not redefine the global COB architecture in 20.32; global req
 
 ---
 
-## **3. Inputs**
+## **3. Inputs**  
+*(Informative — no SHALL statements)*
 
-### **3.1 CST Signals**
-
+### **3.1 CST Signals**  
 COB receives stability‑related signals from CST, including drift, oscillation, collapse, merge, split, freeze, thaw, certainty adjustments, ambiguity adjustments, and lineage stability indicators.
 
-### **3.2 Conversation Turn Identity Fragments**
-
+### **3.2 Conversation Turn Identity Fragments**  
 COB receives identity‑layer fragments extracted from the current turn before IE and before CEx.
 
 ---
 
-## **4. Outputs**
+## **4. Outputs**  
+*(Informative — no SHALL statements)*
 
-### **4.1 Identity‑Layer Object Set**
-
+### **4.1 Identity‑Layer Object Set**  
 COB maintains a bounded set of identity‑layer objects containing referent maps, anchors, lineage records, ambiguity indicators, stability metrics, and ordering metrics.
 
-### **4.2 COB → CIL Transfer Block**
-
+### **4.2 COB → CIL Transfer Block**  
 COB provides CIL with stabilized identity‑layer objects, ordering metrics, ambiguity flags, lineage hints, and stability‑adjusted referent maps.  
 CIL integrates this into the CIL Intake Packet consumed by CEx.
 
-### **4.3 Conversation‑Level Ordering Metrics**
-
+### **4.3 Conversation‑Level Ordering Metrics**  
 COB provides CIL with conversation‑level ordering metrics required for intake packet construction.  
 These include:
 
-- the total number of times the conversation has been accessed  
-- a chronological ordering vector of access events  
-- a sliding‑window frequency distribution over the last 10 access events  
-
-These metrics allow CIL to incorporate global conversation‑level ordering signals alongside identity‑layer ordering metrics.
+- total access count  
+- chronological ordering vector  
+- sliding‑window frequency distribution over the last 10 access events  
 
 ---
 
-## **5. Testing (system_playground)**
+## **5. Testing (system_playground)**  
+*(Tests preserved, corrected, expanded)*
 
 The system_playground version of COB is validated using a block‑level Python testbench (`cob_testbench.py`).  
-This testbench verifies that COB maintains a deterministic, stable identity‑layer basin and correctly integrates CST signals before passing identity‑layer objects to CIL.
+This testbench verifies deterministic identity‑layer basin behavior and correct CST signal integration.
 
 ### **5.1 Tested Behaviors**
 
-The following COB behaviors are explicitly tested:
-
 - **Bounded Identity Store (HLR‑COB‑001)**  
-  - COB maintains no more than 20 identity‑layer objects.  
+  - Test ensures COB never exceeds 20 identity‑layer objects.  
   - Eviction removes the lowest‑priority object based on ordering metrics.
 
 - **Deterministic Stability Integration (HLR‑COB‑002)**  
-  - CST drift, oscillation, collapse, freeze, thaw, certainty adjustments, ambiguity adjustments, and lineage stability indicators are applied deterministically.  
-  - Stability metrics inside identity objects update consistently across runs.
+  - Test verifies deterministic application of CST drift, oscillation, collapse, freeze, thaw, certainty adjustments, ambiguity adjustments, and lineage stability indicators.
 
 - **Referential Integrity (HLR‑COB‑003)**  
-  - Identity objects preserve referent map structure when updated.  
-  - Collapse, freeze, thaw, and ambiguity adjustments do not corrupt referent maps.
+  - Test ensures referent maps remain structurally consistent across updates, merges, splits, and collapses.
 
 - **Ordering Metrics (HLR‑COB‑004)**  
-  - Recency, frequency, and density metrics are preserved and aggregated.  
-  - Eviction uses ordering metrics to determine lowest‑priority objects.
+  - Test verifies recency, frequency, and density metrics are preserved and aggregated correctly.
 
 - **Ambiguity Tracking (HLR‑COB‑005)**  
-  - Ambiguity and certainty indicators are updated based on CST signals.  
-  - COB maintains ambiguity summaries across identity objects.
+  - Test ensures ambiguity and certainty indicators update deterministically.
 
 - **Lineage Stability (HLR‑COB‑006)**  
-  - Lineage stability indicators are preserved and aggregated.  
-  - COB maintains lineage summaries for CIL consumption.
+  - Test verifies lineage stability indicators are preserved and aggregated.
+
+- **Deterministic Replay (HLR‑COB‑007)**  
+  - Test ensures identical CST signals and identical COB snapshots produce identical updates.
 
 - **CIL Compatibility (HLR‑COB‑008)**  
-  - Identity objects produced by COB match the structure required by the CIL Intake Packet.  
-  - Ordering, stability, ambiguity, and lineage fields remain consistent with CIL expectations.
+  - Test ensures COB output matches the CIL Intake Packet schema.
+
+- **Eviction Policy (HLR‑COB‑009)**  
+  - Test ensures eviction selects the lowest‑priority object.
 
 - **Freeze/Thaw Compliance (HLR‑COB‑010)**  
-  - Frozen identity objects remain unchanged until thawed.  
-  - Thaw signals restore update capability deterministically.
+  - Test ensures frozen objects remain unchanged until thawed.
 
-### **Merge/Split Structural Operations (HLR‑COB‑011)**  
-- COB SHALL apply CST merge and split signals deterministically.  
-- Merge operations SHALL preserve referent‑map integrity, lineage continuity, and ordering metrics.  
-- Split operations SHALL partition referent maps deterministically, fork lineage, and update ordering metrics.  
-- Merge/split SHALL be replay‑deterministic under identical CST signals and identical COB snapshots.
+- **Conversation Access Count (HLR‑COB‑011)**  
+  - Test verifies access count increments deterministically.
 
----
+- **Conversation Access Order (HLR‑COB‑012)**  
+  - Test verifies chronological ordering vector updates deterministically.
 
-## **Next‑Turn Context Integration (TP.next_context_fields Cross‑Reference)**
+- **Sliding‑Window Frequency (HLR‑COB‑013)**  
+  - Test verifies correct computation of sliding‑window frequency over last 10 accesses.
 
-### **HLR‑COB‑012: Next‑Turn Context Ingestion**  
-COB SHALL ingest next‑turn clarifying/context fields from `TP.next_context{}` as defined in **20.105_tp_requirements.md**, and treat them as short‑term clarifying candidates for identity‑layer continuity.
+- **Merge/Split Structural Operations (HLR‑COB‑014)**  
+  - Test ensures merge/split operations preserve referent‑map integrity, lineage continuity, and ordering metrics.  
+  - Test ensures replay determinism.
 
-### **HLR‑COB‑013: Next‑Turn Context Validation**  
-COB SHALL validate next‑turn context fields using stabilized identity‑layer objects, referent continuity, lineage continuity, ambiguity indicators, and register consistency.
+### **Next‑Turn Context Integration Tests**
 
-### **HLR‑COB‑014: Next‑Turn Context Merge**  
-COB SHALL merge validated next‑turn context fields into identity‑layer clarifying structures using deterministic long‑horizon continuity rules defined in **20.32**.
+- **Next‑Turn Context Ingestion (HLR‑COB‑015)**  
+- **Next‑Turn Context Validation (HLR‑COB‑016)**  
+- **Next‑Turn Context Merge (HLR‑COB‑017)**  
+- **Next‑Turn Context Importance Update (HLR‑COB‑018)**  
+- **Next‑Turn Context Exposure to CIL (HLR‑COB‑019)**  
+- **Deterministic Replay of Next‑Turn Context (HLR‑COB‑020)**  
+- **Freeze/Thaw Continuity for Next‑Turn Context (HLR‑COB‑021)**  
+- **No Field Duplication Rule (HLR‑COB‑022)**  
+- **Structural‑Only Handling (HLR‑COB‑023)**  
 
-### **HLR‑COB‑015: Next‑Turn Context Importance Update**  
-COB SHALL update clarifying‑field importance using next‑turn context importance values combined with long‑horizon continuity metrics (recency, frequency, density, ambiguity, lineage).
+### **5.2 Behaviors Not Tested**  
+*(Informative)*
 
-### **HLR‑COB‑016: Next‑Turn Context Exposure to CIL**  
-COB SHALL expose merged next‑turn context fields in the stabilized identity‑layer snapshot provided to CIL, without modification or reinterpretation.
+Multi‑block interactions, multi‑turn replay, and pipeline‑level behavior are reserved for system_simulation.
 
-### **HLR‑COB‑017: Deterministic Replay of Next‑Turn Context**  
-COB SHALL guarantee deterministic replay of next‑turn context ingestion such that identical `TP.next_context{}` values and identical CST signals produce identical identity‑layer updates.
+### **5.3 Testbench Characteristics**  
+*(Informative)*
 
-### **HLR‑COB‑018: Freeze/Thaw Continuity**  
-COB SHALL preserve next‑turn context fields across freeze/thaw cycles without mutation, loss, or reordering.
-
-### **HLR‑COB‑019: No Field Duplication Rule**  
-COB SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
-
-### **HLR‑COB‑020: Structural‑Only Handling**  
-COB SHALL treat next‑turn context fields strictly as structural clarifying metadata and SHALL NOT perform semantic interpretation or meaning reconstruction.
+Deterministic, pure block‑level validation mirroring `cob_structures.yaml` and `cob_state.yaml`.
 
 ---
 
-### **5.2 Behaviors Not Tested in system_playground**
+## **6. Consolidated High‑Level Requirements (HLRs)**  
+*(All SHALL statements consolidated here; renumbered; new HLRs begin at 021)*
 
-The following behaviors are **not** tested at this stage:
+### **Identity Store & Ordering**
 
-- Multi‑block interactions with CIL or CST beyond direct signal integration.  
-- Deterministic replay across multiple turns (reserved for system_simulation).  
-- High‑level pipeline behavior involving CE Envelope or CEx.
+**HLR‑COB‑001**  
+COB SHALL maintain no more than 20 identity‑layer objects.
 
-These behaviors are reserved for **system_simulation**, where COB participates in multi‑block, multi‑stage flows.
+**HLR‑COB‑002**  
+COB SHALL integrate CST stability signals deterministically.
 
-### **5.3 Testbench Characteristics**
+**HLR‑COB‑003**  
+COB SHALL preserve referent‑map integrity across updates, merges, splits, and collapses.
 
-- Deterministic execution.  
-- No external dependencies.  
-- Pure block‑level validation.  
-- Mirrors the structure of `cob_structures.yaml` and `cob_state.yaml`.  
-- Ensures COB behaves consistently with system_playground requirements and produces identity‑layer objects suitable for CIL integration.
+**HLR‑COB‑004**  
+COB SHALL maintain recency, frequency, and density ordering metrics.
 
----
-
-## **6. High‑Level Requirements (HLRs)**
-
-### **HLR‑COB‑001: Bounded Identity Store**  
-COB SHALL maintain no more than 20 identity‑layer objects at any time.
-
-### **HLR‑COB‑002: Deterministic Stability Integration**  
-COB SHALL integrate CST signals deterministically.
-
-### **HLR‑COB‑003: Referential Integrity**  
-COB SHALL preserve internal referent map consistency across merges, splits, and collapses.
-
-### **HLR‑COB‑004: Ordering Metrics**  
-COB SHALL maintain recency, frequency, and density metrics for identity‑layer objects.
-
-### **HLR‑COB‑005: Ambiguity Tracking**  
-COB SHALL track ambiguity indicators for identity‑layer objects.
-
-### **HLR‑COB‑006: Lineage Stability**  
-COB SHALL maintain lineage records and stability indicators for identity‑layer objects.
-
-### **HLR‑COB‑007: Deterministic Replay**  
-COB SHALL behave deterministically under replay conditions defined in global COB requirements.
-
-### **HLR‑COB‑008: CIL Compatibility**  
-COB SHALL produce identity‑layer structures compatible with the CIL Intake Packet schema.
-
-### **HLR‑COB‑009: Eviction Policy**  
+**HLR‑COB‑009**  
 COB SHALL evict the lowest‑priority identity‑layer object when more than 20 objects exist.
 
-### **HLR‑COB‑010: Freeze/Thaw Compliance**  
-COB SHALL respect CST freeze and thaw signals when updating identity‑layer objects.
+### **Ambiguity, Lineage, Stability**
 
-### **HLR‑COB‑011: Conversation Access Count**  
-COB SHALL track the total number of times the conversation has been accessed.
+**HLR‑COB‑005**  
+COB SHALL track ambiguity indicators for identity‑layer objects.
 
-### **HLR‑COB‑012: Conversation Access Order**  
-COB SHALL maintain a chronological ordering vector of conversation access events.
+**HLR‑COB‑006**  
+COB SHALL maintain lineage records and stability indicators.
 
-### **HLR‑COB‑013: Sliding‑Window Frequency (Last 10 Accesses)**  
-COB SHALL compute a sliding‑window frequency distribution over the last 10 conversation access events.
+**HLR‑COB‑010**  
+COB SHALL respect CST freeze/thaw signals.
+
+### **Determinism & Replay**
+
+**HLR‑COB‑007**  
+COB SHALL behave deterministically under replay conditions.
+
+### **CIL Compatibility**
+
+**HLR‑COB‑008**  
+COB SHALL produce identity‑layer structures compatible with the CIL Intake Packet schema.
+
+### **Conversation‑Level Ordering Metrics**
+
+**HLR‑COB‑011**  
+COB SHALL track total conversation access count.
+
+**HLR‑COB‑012**  
+COB SHALL maintain a chronological ordering vector of access events.
+
+**HLR‑COB‑013**  
+COB SHALL compute a sliding‑window frequency distribution over the last 10 access events.
+
+### **Merge/Split Structural Operations**
+
+**HLR‑COB‑014**  
+COB SHALL apply CST merge and split signals deterministically, preserving referent‑map integrity, lineage continuity, and ordering metrics.
+
+### **Next‑Turn Context Integration (New HLRs begin here)**
+
+**HLR‑COB‑015**  
+COB SHALL ingest next‑turn context fields from `TP.next_context{}`.
+
+**HLR‑COB‑016**  
+COB SHALL validate next‑turn context fields using stabilized identity‑layer objects.
+
+**HLR‑COB‑017**  
+COB SHALL merge validated next‑turn context fields using deterministic continuity rules.
+
+**HLR‑COB‑018**  
+COB SHALL update clarifying‑field importance using continuity metrics.
+
+**HLR‑COB‑019**  
+COB SHALL expose merged next‑turn context fields to CIL without modification.
+
+**HLR‑COB‑020**  
+COB SHALL guarantee deterministic replay of next‑turn context ingestion.
+
+**HLR‑COB‑021**  
+COB SHALL preserve next‑turn context fields across freeze/thaw cycles.
+
+**HLR‑COB‑022**  
+COB SHALL NOT define next‑turn context field names.
+
+**HLR‑COB‑023**  
+COB SHALL treat next‑turn context fields strictly as structural metadata without semantic interpretation.
 
 ---
 
@@ -204,10 +222,10 @@ COB SHALL compute a sliding‑window frequency distribution over the last 10 con
 *(Informative — no SHALL statements)*
 
 Identity‑layer objects are created when new referents or anchors appear.  
-Existing objects are updated using CST signals and new turn data.  
+Existing objects update using CST signals and new turn data.  
 Objects may merge or split based on CST signals.  
-Eviction follows ordering metrics when the object count exceeds 20.  
-Frozen objects remain unchanged until CST issues a thaw signal.
+Eviction follows ordering metrics.  
+Frozen objects remain unchanged until thawed.
 
 ---
 
