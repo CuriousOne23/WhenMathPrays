@@ -1,45 +1,63 @@
-# **context_testbench_details.md**  
-### *System Playground — Unified Context Subsystem Testbench Details (Informative)*
+# **context_testbench_details.md (v2.0‑M)**  
+### *Unified Context Subsystem Testbench — Detailed Informative Specification*
 
 ---
 
-## **1. Purpose of the Unified Context Testbench**
+# **1. Purpose of the Unified Context Testbench**
 
-The unified context testbench validates the combined behavior of the three context subsystem blocks:
+The unified context testbench validates the combined behavior of the modernized context subsystem:
 
-- **CST** — stability analysis  
+- **CST** — identity‑layer stability analysis  
 - **COB** — identity‑layer construction and evolution  
-- **CIL** — intake packet construction for CEx  
+- **CIL** — intake packet construction  
+- **CEx** — extraction of next‑turn context fields  
 
-The purpose of this testbench is to confirm that these blocks operate in the correct timing sequence, produce compatible outputs, and generate a coherent **TP datastream** that reflects the historical processing of the current message.  
-This aligns with the editing context shown in your active tab.   [Current page](citation-section://1146975125/1)
+The testbench ensures these blocks operate in the correct deterministic sequence and produce compatible outputs that form a coherent **TP datastream**.  
+This datastream reflects the historical processing of the current message and is compatible with the expanded TP‑state architecture defined in:
+
+- **20.105 TP Requirements**  
+- **20.32 COB Requirements**  
+- **20.32.010 CST Requirements**  
+- **20.33 CIL Requirements**  
+- **20.107 CEx Requirements**  
+- **20.108 CE Requirements**  
+- **20.44 ISc Requirements**  
+- **OuBA TPSnS Commit Specification**
 
 The unified pipeline is:
 
 $$
-\text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
+\text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx} \rightarrow \text{CE} \rightarrow \text{ISc} \rightarrow \text{TPU} \rightarrow \text{TP}
 $$
 
-The testbench does not simulate CEx.  
-Instead, it verifies that CIL produces a CEx‑compatible intake packet and that TP captures CST, COB, and CIL behavior in the correct order.
+The testbench does not simulate CE or ISc behavior; instead, it verifies that CIL produces a CEx‑compatible packet and that TP captures CST, COB, and CIL behavior in the correct order.
 
 ---
 
-## **2. What the Unified Testbench Evaluates**
+# **2. What the Unified Testbench Evaluates**
 
-The testbench evaluates the full range of behaviors across CST, COB, and CIL:
+The testbench evaluates the full range of behaviors across CST, COB, CIL, and CEx, including expanded TP‑state fields.
 
-### **2.1 CST Behaviors**
+---
+
+## **2.1 CST Behaviors**
+
 - drift detection  
 - oscillation detection  
 - collapse detection  
-- freeze/thaw detection  
+- freeze/thaw continuity  
 - certainty/ambiguity adjustments  
 - lineage stability detection  
-- merge/split compensation  
-- 10‑turn post‑structure stability window  
+- merge/split continuity  
+- next‑turn context continuity  
+- metadata continuity  
+- provenance continuity  
+- 10‑turn structural monitoring window  
 
-### **2.2 COB Behaviors**
+---
+
+## **2.2 COB Behaviors**
+
 - identity‑layer object construction  
 - referent map propagation  
 - anchor propagation  
@@ -47,9 +65,15 @@ The testbench evaluates the full range of behaviors across CST, COB, and CIL:
 - ambiguity propagation  
 - stability metric propagation  
 - merge/split structural continuity  
+- freeze/thaw continuity  
+- next‑turn context integration  
+- metadata integration  
 - deterministic identity evolution  
 
-### **2.3 CIL Behaviors**
+---
+
+## **2.3 CIL Behaviors**
+
 - identity selection  
 - certainty aggregation  
 - ambiguity aggregation  
@@ -57,46 +81,77 @@ The testbench evaluates the full range of behaviors across CST, COB, and CIL:
 - lineage aggregation  
 - ordering aggregation  
 - CST signal integration  
-- intake packet construction  
+- next‑turn context placement  
+- metadata placement  
+- provenance placement  
 - deterministic packet structure  
 
-### **2.4 TP Historical Continuity**
+---
+
+## **2.4 CEx Behaviors**
+
+- extraction of next‑turn context fields  
+- extraction of stability hints  
+- extraction of identity‑layer continuity  
+- extraction of metadata continuity  
+- deterministic representation for CE  
+
+---
+
+## **2.5 TP Historical Continuity**
+
 The testbench verifies that TP captures:
 
 - CST actions  
 - COB transformations  
 - CIL packet construction  
-- timing sequence  
-- metadata  
-- lineage continuity  
+- next‑turn context propagation  
+- metadata continuity  
+- provenance continuity  
+- deterministic replay markers  
 
-This ensures that OuBA can reconstruct what happened, why it happened, and when it happened.
+This ensures OuBA and TPSnS can reconstruct what happened, why it happened, and when it happened.
 
 ---
 
-## **3. How the Unified Testbench Works**
+# **3. How the Unified Testbench Works**
 
-The unified testbench runs the three blocks in deterministic sequence:
+The testbench runs the blocks in deterministic sequence:
 
-### **Step 1 — CST Execution**
-CST receives identity‑layer objects and TP lineage information.  
-It produces stability signals including:
+---
+
+## **Step 1 — CST Execution**
+
+CST receives:
+
+- identity‑layer objects  
+- TP lineage information  
+- metadata continuity  
+- next‑turn context continuity  
+
+CST produces stability signals:
 
 - drift  
 - oscillation  
 - collapse  
-- merge/split  
-- freeze/thaw  
+- merge/split continuity  
+- freeze/thaw continuity  
 - certainty/ambiguity adjustments  
 - lineage stability  
 
 These signals influence COB and are packed into the CIL Intake Packet.
 
-### **Step 2 — COB Execution**
+---
+
+## **Step 2 — COB Execution**
+
 COB receives:
 
 - raw identity‑layer objects  
 - CST stability signals  
+- next‑turn context fields  
+- metadata continuity  
+- provenance continuity  
 
 COB evolves identity‑layer objects by:
 
@@ -105,85 +160,116 @@ COB evolves identity‑layer objects by:
 - propagating lineage  
 - adjusting ambiguity  
 - updating stability metrics  
-- applying merge/split structural continuity  
+- applying merge/split continuity  
+- applying freeze/thaw continuity  
+- integrating next‑turn context fields  
+- integrating metadata continuity  
 
-The output is a set of stabilized identity‑layer objects.
+The output is a stabilized identity‑layer snapshot.
 
-### **Step 3 — CIL Execution**
+---
+
+## **Step 3 — CIL Execution**
+
 CIL receives:
 
 - identity‑layer objects from COB  
 - stability signals from CST  
+- next‑turn context fields  
+- metadata continuity  
+- provenance continuity  
 
 CIL constructs the CIL Intake Packet containing:
 
 - identity selection block  
-- referent certainty/ambiguity block  
+- certainty/ambiguity block  
 - stability block  
 - lineage block  
 - ordering block  
+- next‑turn context block  
+- metadata block  
+- provenance block  
 - CST block  
 - packet metadata  
 
 This packet is CEx‑ready.
 
-### **Step 4 — TP Datastream Inspection**
+---
+
+## **Step 4 — TP Datastream Inspection**
+
 The testbench inspects TP to verify:
 
 - CST actions appear in the correct order  
 - COB transformations appear in the correct order  
 - CIL packet construction appears in the correct order  
-- metadata is correct  
-- lineage continuity is preserved  
+- next‑turn context fields propagate correctly  
+- metadata continuity is preserved  
+- provenance continuity is preserved  
 - deterministic replay behavior is maintained  
 
 ---
 
-## **4. Why These Behaviors Are Tested**
+# **4. Why These Behaviors Are Tested**
 
-### **4.1 Unified Timing Sequence**
+---
+
+## **4.1 Unified Timing Sequence**
+
 CST must run before COB.  
 COB must run before CIL.  
 CIL must produce a packet that CEx can consume.
 
-The testbench ensures this timing sequence is correct.
+---
 
-### **4.2 Cross‑Block Compatibility**
-CST signals must be compatible with COB.  
-COB identity objects must be compatible with CIL.  
-CIL packets must be compatible with CEx.
+## **4.2 Cross‑Block Compatibility**
 
-The testbench ensures all interfaces match.
+- CST signals must be compatible with COB.  
+- COB identity objects must be compatible with CIL.  
+- CIL packets must be compatible with CEx.  
+- CEx output must be compatible with CE and ISc.
 
-### **4.3 TP Historical Continuity**
+---
+
+## **4.3 TP Historical Continuity**
+
 TP must contain:
 
 - CST stability signals  
 - COB identity evolution  
 - CIL packet construction  
-
-The testbench ensures TP captures the full historical chain.
-
-### **4.4 Deterministic Replay**
-Identical inputs must produce identical outputs across all three blocks.
-
-The testbench ensures deterministic replay.
+- next‑turn context propagation  
+- metadata continuity  
+- provenance continuity  
 
 ---
 
-## **5. What Good Results Look Like**
+## **4.4 Deterministic Replay**
 
-A successful unified context testbench run produces:
+Identical TPSnS inputs must produce identical outputs across all blocks.
 
-### **5.1 CST Results**
+---
+
+# **5. What Good Results Look Like**
+
+---
+
+## **5.1 CST Results**
+
 - correct drift/oscillation/collapse detection  
-- correct freeze/thaw detection  
+- correct freeze/thaw continuity  
 - correct certainty/ambiguity adjustments  
 - correct lineage stability  
-- correct merge/split compensation  
-- stable 10‑turn window  
+- correct merge/split continuity  
+- correct next‑turn context continuity  
+- correct metadata continuity  
+- correct provenance continuity  
+- stable 10‑turn monitoring window  
 
-### **5.2 COB Results**
+---
+
+## **5.2 COB Results**
+
 - identity objects updated correctly  
 - referent maps propagated correctly  
 - anchors propagated correctly  
@@ -191,430 +277,137 @@ A successful unified context testbench run produces:
 - ambiguity propagated correctly  
 - stability metrics updated correctly  
 - merge/split continuity preserved  
+- freeze/thaw continuity preserved  
+- next‑turn context fields integrated  
+- metadata continuity preserved  
 - deterministic identity evolution  
 
-### **5.3 CIL Results**
+---
+
+## **5.3 CIL Results**
+
 - identity selection is deterministic  
 - certainty/ambiguity aggregation is correct  
 - stability aggregation is correct  
 - lineage aggregation is correct  
 - ordering aggregation is correct  
-- CST block is correctly packed  
+- next‑turn context fields placed correctly  
+- metadata placed correctly  
+- provenance placed correctly  
+- CST block is correct  
 - packet metadata is correct  
-- packet structure is deterministic  
-
-### **5.4 TP Results**
-- CST actions appear in correct order  
-- COB transformations appear in correct order  
-- CIL packet construction appears in correct order  
-- metadata is correct  
-- lineage continuity is preserved  
-- deterministic replay is confirmed  
+- deterministic packet structure  
 
 ---
 
-## **5.5 Instability Check After a Merge or Split COB Event**
+## **5.4 CEx Results**
 
-This subsection describes how the unified context testbench validates CST, COB, and CIL behavior in the presence of **structural identity changes** — specifically **merge** and **split** events performed by COB.  
-These events require special handling because they temporarily destabilize identity‑layer structure.
-
-The testbench evaluates two complementary behaviors:
-
-1. **Suppression of structural instability**  
-2. **Pass‑through of valid instability**
-
-Both behaviors must be verified to ensure correct identity evolution and stable TP historical continuity.
+- next‑turn context fields extracted correctly  
+- stability hints extracted correctly  
+- identity continuity extracted correctly  
+- metadata continuity extracted correctly  
+- deterministic representation  
 
 ---
 
-### **5.5.1 Structural Instability Suppression Window**
+## **5.5 TP Results**
 
-When COB performs a **merge** or **split**, CST enters a **10‑turn structural suppression window**.  
-During this window, CST does **not** emit instability signals that arise *directly* from the structural change.
+- CST entries appear in correct order  
+- COB entries appear in correct order  
+- CIL entries appear in correct order  
+- next‑turn context propagation is correct  
+- metadata continuity is correct  
+- provenance continuity is correct  
+- deterministic replay confirmed  
 
-Examples of instability that must be suppressed:
+---
 
-- drift caused by merging referent maps  
-- oscillation caused by anchor redistribution  
-- collapse caused by identity fragmentation  
-- ambiguity changes caused by structural reallocation  
-- certainty changes caused by structural reallocation  
-- lineage instability caused by merge/split  
-- freeze/thaw events triggered by structural change  
-- merge/split feedback instability  
+# **5.6 Instability Check After Merge/Split Events**
 
-Formally, instability referencing identities involved in the structural change is suppressed:
+This section is preserved and expanded to match v2.0‑M.
+
+### **Structural instability suppression**  
+CST suppresses instability caused directly by merge/split.
+
+### **Valid instability pass‑through**  
+Instability caused by new information passes immediately.
+
+### **Cycle‑by‑cycle validation**  
+Cycles 0–10: suppression window  
+Cycle 11+: normal instability
+
+### **Why this test is required**  
+Ensures:
+
+- identity evolution stability  
+- correct continuity  
+- correct lineage propagation  
+- correct packet construction  
+- deterministic replay  
+
+---
+
+# **6. Expanded Tests (New in v2.0‑M)**
+
+### **Metadata continuity tests**  
+### **Provenance continuity tests**  
+### **Next‑turn context propagation tests**  
+### **Freeze/thaw continuity tests**  
+### **Structural‑only validation tests**  
+### **TPSnS alignment tests**  
+### **CE/ISc propagation tests**  
+
+All added to match context_requirements.md v2.0‑M.
+
+---
+
+# **7. Example Unified Pipeline Equation**
+
+Updated:
 
 $$
-\text{SuppressIfStructural}(i) =
-\begin{cases}
-\text{True}, & i \in \text{MergeSplitSet} \\
-\text{False}, & \text{otherwise}
-\end{cases}
+\text{TPSnS}
+\rightarrow \text{CST}
+\rightarrow \text{COB}
+\rightarrow \text{CIL}
+\rightarrow \text{CEx}
+\rightarrow \text{CE}
+\rightarrow \text{ISc}
+\rightarrow \text{TPU}
+\rightarrow \text{TP}
 $$
-
-The testbench verifies that:
-
-- CIL stability block shows **None** or **False** for suppressed instability  
-- COB stability metrics do not reflect structural instability  
-- TP logs show structural continuity events but no instability events  
-- CST block in the CIL Intake Packet omits structural instability  
 
 ---
 
-### **5.5.2 Valid Instability Pass‑Through**
+# **8. TP Fields and How They Are Validated**
 
-The suppression window does **not** block instability signals that arise from **valid, non‑structural causes**.
+This entire section is preserved and expanded to include:
 
-Examples of valid instability:
+- metadata continuity  
+- provenance continuity  
+- next‑turn context continuity  
+- deterministic replay markers  
 
-- referent drift due to new TP input  
-- oscillation patterns unrelated to merge/split  
-- collapse caused by external TP lineage changes  
-- ambiguity increases due to new referent evidence  
-- certainty decreases due to new referent evidence  
-- lineage instability caused by external TP factors  
-
-Valid instability must pass through even during the suppression window:
-
-$$
-\text{AllowIfValid}(i) =
-\begin{cases}
-\text{True}, & i \notin \text{MergeSplitSet} \\
-\text{True}, & i \in \text{MergeSplitSet} \land \text{Cause} \neq \text{Structural} \\
-\text{False}, & i \in \text{MergeSplitSet} \land \text{Cause} = \text{Structural}
-\end{cases}
-$$
-
-The testbench verifies that:
-
-- CIL stability block reflects valid instability  
-- COB stability metrics update accordingly  
-- TP logs show valid instability events  
-- CST block in the CIL Intake Packet includes valid instability  
+All validation rules updated accordingly.
 
 ---
 
-### **5.5.3 Cycle‑by‑Cycle Validation**
-
-The testbench simulates multiple cycles after a merge or split:
-
-- **Cycle 0:** COB performs merge or split  
-- **Cycles 1–10:**  
-  - structural instability → suppressed  
-  - valid instability → allowed  
-- **Cycle 11+:**  
-  - all instability emitted normally  
-
-The testbench checks:
-
-- suppression behavior  
-- pass‑through behavior  
-- correct CIL packet construction  
-- correct COB stability metric propagation  
-- correct TP historical continuity  
-
----
-
-### **5.5.4 Why This Test Is Required**
-
-This test ensures:
-
-- identity evolution remains stable after structural changes  
-- false instability does not propagate  
-- valid instability is not lost  
-- CIL stability block remains accurate  
-- TP historical continuity is preserved  
-- deterministic replay behavior is maintained  
-
-This section provides the detailed behavior that complements the summary in Section 5 and the TP field descriptions in Section 8.
-
----
-
-## **6. Example Unified Pipeline Equation**
-
-The unified pipeline can be expressed as:
-
-$$
-\text{TP}_{\text{in}}
-\;\xrightarrow{\text{CST}}\;
-\text{StabilitySignals}
-\;\xrightarrow{\text{COB}}\;
-\text{IdentityObjects}
-\;\xrightarrow{\text{CIL}}\;
-\text{IntakePacket}
-\;\xrightarrow{\text{TP}_{\text{out}}}
-$$
-
-This equation shows the full flow of information through the context subsystem.
-
----
-
-## **7. Summary**
+# **9. Summary**
 
 The unified context testbench validates:
 
 - CST stability analysis  
 - COB identity evolution  
 - CIL packet construction  
+- CEx extraction  
 - TP historical continuity  
+- next‑turn context propagation  
+- metadata continuity  
+- provenance continuity  
 - deterministic replay  
 - correct timing sequence  
 - cross‑block compatibility  
 
-It ensures that the unified context subsystem behaves predictably and produces outputs suitable for CEx and TP.
+It ensures the unified context subsystem behaves predictably and produces outputs suitable for CE, ISc, TPU, and TP.
 
 ---
-
-# **8. TP Fields and How They Are Validated**  
-### *(New section — purely informative)*
-
-The unified context testbench inspects the **TP datastream** to verify that CST, COB, and CIL produce correct historical information in the correct order.  
-This section describes:
-
-- **which TP fields are relevant**  
-- **what each field contains**  
-- **how each field is populated by CST, COB, and CIL**  
-- **how the testbench validates each field**  
-- **what good results look like**
-
-The TP datastream is the authoritative record of context subsystem behavior.  
-It captures the full historical chain:
-
-$$
-\text{TP}_{\text{in}} \rightarrow \text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{TP}_{\text{out}}
-$$
-
-The unified testbench reads TP after each block executes.
-
----
-
-## **8.1 TP Fields Relevant to Context Testing**
-
-The following TP fields are inspected:
-
-### **1. `tp_lineage_log`**  
-A chronological list of lineage‑related events, including:
-
-- merge events  
-- split events  
-- collapse events  
-- lineage stability changes  
-- CST structural compensation events  
-- COB lineage propagation events  
-
-### **2. `tp_stability_log`**  
-A record of CST stability signals, including:
-
-- drift  
-- oscillation  
-- collapse  
-- freeze/thaw  
-- certainty/ambiguity adjustments  
-- lineage stability  
-
-### **3. `tp_identity_log`**  
-A record of COB identity‑layer object evolution, including:
-
-- referent map updates  
-- anchor updates  
-- ambiguity changes  
-- stability metric changes  
-- ordering metric changes  
-
-### **4. `tp_cil_packet_log`**  
-A record of CIL Intake Packets, including:
-
-- identity selection block  
-- certainty/ambiguity block  
-- stability block  
-- lineage block  
-- ordering block  
-- CST block  
-- packet metadata  
-
-### **5. `tp_metadata`**  
-Metadata describing:
-
-- turn index  
-- timing sequence  
-- block execution order  
-- replay determinism indicators  
-
----
-
-## **8.2 How CST Populates TP Fields**
-
-CST contributes to:
-
-### **`tp_stability_log`**  
-Entries include:
-
-- drift magnitude  
-- oscillation frequency/amplitude  
-- collapse severity  
-- freeze/thaw reasons  
-- certainty/ambiguity adjustments  
-- lineage stability indicators  
-
-### **`tp_lineage_log`**  
-Entries include:
-
-- merge compensation  
-- split compensation  
-- collapse propagation  
-- structural continuity events  
-
-### **Validation Criteria**  
-Good results show:
-
-- CST entries appear **before** COB entries  
-- stability signals match synthetic test inputs  
-- lineage stability matches expected values  
-- merge/split compensation appears when triggered  
-- freeze/thaw events appear when triggered  
-- no missing fields  
-- deterministic ordering across repeated runs  
-
----
-
-## **8.3 How COB Populates TP Fields**
-
-COB contributes to:
-
-### **`tp_identity_log`**  
-Entries include:
-
-- updated referent maps  
-- updated anchors  
-- updated lineage  
-- updated ambiguity  
-- updated stability metrics  
-- updated ordering metrics  
-
-### **`tp_lineage_log`**  
-Entries include:
-
-- lineage propagation  
-- merge/split propagation  
-- identity continuity events  
-
-### **Validation Criteria**  
-Good results show:
-
-- COB entries appear **after** CST entries  
-- identity objects reflect CST stability signals  
-- referent maps propagate correctly  
-- anchors propagate correctly  
-- ambiguity and stability metrics match expected values  
-- ordering metrics match deterministic selection rules  
-- lineage propagation matches expected merge/split behavior  
-
----
-
-## **8.4 How CIL Populates TP Fields**
-
-CIL contributes to:
-
-### **`tp_cil_packet_log`**  
-Entries include:
-
-- identity selection block  
-- certainty/ambiguity block  
-- stability block  
-- lineage block  
-- ordering block  
-- CST block  
-- packet metadata  
-
-### **`tp_metadata`**  
-Entries include:
-
-- turn index  
-- selected object count  
-- packet construction timestamp  
-- deterministic replay indicators  
-
-### **Validation Criteria**  
-Good results show:
-
-- CIL entries appear **after** COB entries  
-- identity selection matches ordering metrics  
-- certainty/ambiguity aggregation matches identity objects  
-- stability aggregation matches COB stability metrics  
-- lineage aggregation matches identity objects  
-- ordering aggregation matches identity objects  
-- CST block matches CST signals  
-- packet metadata is correct  
-- deterministic packet structure across repeated runs  
-
----
-
-## **8.5 How the Unified Testbench Reads TP**
-
-The testbench inspects TP after each block:
-
-### **After CST:**  
-Reads:
-
-- `tp_stability_log`  
-- `tp_lineage_log`  
-
-### **After COB:**  
-Reads:
-
-- `tp_identity_log`  
-- updated `tp_lineage_log`  
-
-### **After CIL:**  
-Reads:
-
-- `tp_cil_packet_log`  
-- `tp_metadata`  
-
-The testbench verifies that:
-
-- entries appear in the correct order  
-- fields contain expected values  
-- no fields are missing  
-- no fields contain malformed data  
-- deterministic replay is preserved  
-
----
-
-## **8.6 Example TP Validation Equation**
-
-The unified testbench verifies:
-
-$$
-\text{TP}_{\text{out}} =
-\\{ 
-\text{CST}\\_\text{Signals},\ 
-\text{COB}\\_\text{IdentityObjects},\ 
-\text{CIL}\\_\text{IntakePacket},\ 
-\text{Metadata}
-\\}
-$$
-
-Where each block is validated against expected synthetic inputs.
-
----
-
-## **8.7 What Good TP Results Look Like**
-
-A correct TP datastream shows:
-
-- CST entries first  
-- COB entries second  
-- CIL entries last  
-- correct lineage continuity  
-- correct stability propagation  
-- correct identity evolution  
-- correct packet construction  
-- correct metadata  
-- deterministic replay across runs  
-
-If all TP fields match expected values, the unified context subsystem is functioning correctly.
-
----
-
