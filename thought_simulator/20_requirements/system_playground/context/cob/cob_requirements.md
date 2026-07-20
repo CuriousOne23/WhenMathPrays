@@ -98,11 +98,42 @@ The following COB behaviors are explicitly tested:
   - Frozen identity objects remain unchanged until thawed.  
   - Thaw signals restore update capability deterministically.
 
-### **Merge/Split Structural Operations (HLR‑COB‑003)**  
+### **Merge/Split Structural Operations (HLR‑COB‑011)**  
 - COB SHALL apply CST merge and split signals deterministically.  
 - Merge operations SHALL preserve referent‑map integrity, lineage continuity, and ordering metrics.  
 - Split operations SHALL partition referent maps deterministically, fork lineage, and update ordering metrics.  
 - Merge/split SHALL be replay‑deterministic under identical CST signals and identical COB snapshots.
+
+---
+
+## **Next‑Turn Context Integration (TP.next_context_fields Cross‑Reference)**
+
+### **HLR‑COB‑012: Next‑Turn Context Ingestion**  
+COB SHALL ingest next‑turn clarifying/context fields from `TP.next_context{}` as defined in **20.105_tp_requirements.md**, and treat them as short‑term clarifying candidates for identity‑layer continuity.
+
+### **HLR‑COB‑013: Next‑Turn Context Validation**  
+COB SHALL validate next‑turn context fields using stabilized identity‑layer objects, referent continuity, lineage continuity, ambiguity indicators, and register consistency.
+
+### **HLR‑COB‑014: Next‑Turn Context Merge**  
+COB SHALL merge validated next‑turn context fields into identity‑layer clarifying structures using deterministic long‑horizon continuity rules defined in **20.32**.
+
+### **HLR‑COB‑015: Next‑Turn Context Importance Update**  
+COB SHALL update clarifying‑field importance using next‑turn context importance values combined with long‑horizon continuity metrics (recency, frequency, density, ambiguity, lineage).
+
+### **HLR‑COB‑016: Next‑Turn Context Exposure to CIL**  
+COB SHALL expose merged next‑turn context fields in the stabilized identity‑layer snapshot provided to CIL, without modification or reinterpretation.
+
+### **HLR‑COB‑017: Deterministic Replay of Next‑Turn Context**  
+COB SHALL guarantee deterministic replay of next‑turn context ingestion such that identical `TP.next_context{}` values and identical CST signals produce identical identity‑layer updates.
+
+### **HLR‑COB‑018: Freeze/Thaw Continuity**  
+COB SHALL preserve next‑turn context fields across freeze/thaw cycles without mutation, loss, or reordering.
+
+### **HLR‑COB‑019: No Field Duplication Rule**  
+COB SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
+
+### **HLR‑COB‑020: Structural‑Only Handling**  
+COB SHALL treat next‑turn context fields strictly as structural clarifying metadata and SHALL NOT perform semantic interpretation or meaning reconstruction.
 
 ---
 
