@@ -1,431 +1,382 @@
-# **context_requirements.md**  
-### *System Playground — Unified Context Subsystem Requirements*
+# **context_requirements.md (v2.0‑M)**  
+### *Unified Context Subsystem Requirements — Modernized Architecture*
 
 ---
 
-## **1. Purpose**
+# **0. Introduction (Informative — No SHALLs)**
 
-The unified **Context Subsystem** integrates three coordinated blocks:
+The unified **Context Subsystem** is now a **full TP‑state constructor**, not merely a stability/identity packet generator.  
+It integrates four coordinated blocks:
 
-- **CST** — stability analysis  
+- **CST** — identity‑layer stability analysis  
 - **COB** — identity‑layer construction and evolution  
 - **CIL** — intake packet construction for CEx  
+- **CEx** — extraction of next‑turn context fields for CE  
 
-The purpose of this document is to define the **system_playground requirements** for validating the combined behavior of these three blocks using a unified testbench.  
-The unified testbench evaluates whether CST, COB, and CIL operate in the correct timing sequence, produce compatible outputs, and generate a coherent **TP datastream** that reflects the historical processing of the current message.
+This v2.0 modernization aligns the subsystem with:
 
-The unified context pipeline is:
+- expanded TP metadata envelope  
+- expanded TP.next_context envelope  
+- expanded TP provenance envelope  
+- identity‑layer snapshot (TP.cob_state_snapshot)  
+- deterministic TPSnS commit envelope  
+- COB/CST/CIL/CEx/CE/ISc global requirements  
+- merge/split continuity rules  
+- freeze/thaw continuity rules  
+- structural‑only validation rules  
 
-$$
-\text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
-$$
-
-This testbench does not simulate CEx; instead, it verifies that CIL produces a CEx‑compatible intake packet and that the TP datastream contains the correct historical information from CST, COB, and CIL.
+This document replaces the older “OuBA‑like input” model with the **TPSnS identity‑layer snapshot**, ensuring compatibility with the full Path A → OuBA → TPSnS → COB → CST → CIL → CEx → CE → ISc pipeline.
 
 ---
 
-## **2. Scope**
+# **1. Purpose (Normative)**
 
-This document defines the **system_playground** version of the unified context subsystem.  
-It covers:
+The unified context subsystem SHALL:
+
+- integrate CST, COB, CIL, and CEx into a deterministic pipeline  
+- propagate identity‑layer continuity  
+- propagate next‑turn context fields  
+- propagate metadata and provenance  
+- construct a CEx‑compatible intake packet  
+- maintain TP historical continuity  
+- support deterministic replay across turns  
+
+---
+
+# **2. Scope (Normative)**
+
+This document defines:
 
 - CST stability signal generation  
-- COB identity‑layer object construction  
+- COB identity‑layer evolution  
 - CIL intake packet construction  
+- CEx extraction behavior  
+- TP.next_context propagation  
+- metadata and provenance propagation  
+- deterministic replay rules  
+- merge/split continuity  
+- freeze/thaw continuity  
+- structural‑only validation rules  
+
+It does **not** redefine global architecture in:
+
+- **20.105 TP Requirements**  
+- **20.32 COB Requirements**  
+- **20.32.010 CST Requirements**  
+- **20.33 CIL Requirements**  
+- **20.107 CEx Requirements**  
+- **20.108 CE Requirements**  
+- **20.44 ISc Requirements**
+
+Global documents remain authoritative.
+
+---
+
+# **3. Inputs (Normative)**
+
+### **3.1 TPSnS Identity‑Layer Snapshot**  
+The unified context subsystem SHALL ingest:
+
+- `TP.cob_state_snapshot`  
+- `TP.lineage_log[]`  
+- `TP.metadata.*`  
+- `TP.next_context.*`  
+- `TP.semantic.*` (identity‑relevant fields only)
+
+### **3.2 CST Stability Signals**  
+CST SHALL produce stability signals derived from:
+
+- identity‑layer objects  
+- lineage continuity  
+- metadata continuity  
+- next‑turn context continuity  
+- freeze/thaw state  
+
+---
+
+# **4. Outputs (Normative)**
+
+### **4.1 COB Identity‑Layer Objects**  
+COB SHALL produce stabilized identity‑layer objects containing:
+
+- referent maps  
+- anchors  
+- lineage continuity  
+- ambiguity/certainty metrics  
+- stability metrics  
+- merge/split continuity  
+- freeze/thaw continuity  
+- next‑turn context integration  
+
+### **4.2 CST Stability Signals**  
+CST SHALL produce:
+
+- drift  
+- oscillation  
+- collapse  
+- merge/split continuity  
+- freeze/thaw continuity  
+- certainty/ambiguity adjustments  
+- lineage stability  
+
+### **4.3 CIL Intake Packet**  
+CIL SHALL produce a structured packet containing:
+
+- stabilized identity‑layer objects  
+- CST stability block  
+- ordering metrics  
+- ambiguity/certainty summaries  
+- lineage hints  
+- next‑turn context fields  
+- packet metadata  
+
+### **4.4 TP Historical Datastream**  
+TP SHALL record:
+
+- CST actions  
+- COB transformations  
+- CIL packet construction  
+- next‑turn context propagation  
+- metadata continuity  
+- provenance continuity  
+- deterministic replay markers  
+
+---
+
+# **5. Unified Context Pipeline (Normative)**
+
+The pipeline SHALL execute in the deterministic sequence:
+
+```
+TPSnS → CST → COB → CIL → CEx → CE → ISc → TPU → TP
+```
+
+This replaces the older “OuBA‑like input” model.
+
+---
+
+# **6. Unified Testing (Normative + Informative)**
+
+The unified context testbench SHALL validate:
+
+- CST stability signal generation  
+- COB identity‑layer evolution  
+- CIL packet construction  
+- CEx extraction correctness  
+- CE representation correctness  
+- ISc consumption correctness  
 - TP historical continuity  
-- deterministic replay behavior  
-- timing and sequencing rules  
-- interface compatibility across all three blocks  
-
-This document does **not** redefine global context architecture in **20.32**, **20.33**, or **20.105**.  
-Global requirements remain authoritative.
-
----
-
-## **3. Inputs**
-
-The unified context subsystem receives two coordinated inputs:
-
-### **3.1 OuBA‑Like Input**
-Synthetic identity‑layer objects and referent‑layer structures representing the output of OuBA.  
-These objects are used to drive COB and CST behavior in system_playground.
-
-### **3.2 CST Stability Signals**
-CST produces stability signals derived from identity‑layer objects and TP lineage information.  
-These signals influence COB identity evolution and are packed into the CIL Intake Packet.
+- deterministic replay  
+- merge/split continuity  
+- freeze/thaw continuity  
+- next‑turn context propagation  
+- metadata continuity  
+- provenance continuity  
 
 ---
 
-## **4. Outputs**
+# **7. Tested Behaviors (Expanded)**
 
-### **4.1 COB Identity‑Layer Objects**
-COB produces stabilized identity‑layer objects containing:
+### **7.1 CST Behavior**  
+CST SHALL detect:
+
+- drift  
+- oscillation  
+- collapse  
+- valid instability  
+- freeze/thaw continuity  
+- lineage stability  
+- ambiguity/certainty changes  
+- merge/split continuity  
+- next‑turn context continuity  
+
+### **7.2 COB Behavior**  
+COB SHALL propagate:
 
 - referent maps  
 - anchors  
 - lineage  
-- ambiguity indicators  
+- ambiguity/certainty  
 - stability metrics  
-- ordering metrics  
+- merge/split continuity  
+- freeze/thaw continuity  
+- next‑turn context fields  
 
-These objects are consumed by CIL.
+### **7.3 CIL Behavior**  
+CIL SHALL construct packets containing:
 
-### **4.2 CST Stability Signals**
-CST produces stability signals including:
-
-- drift  
-- oscillation  
-- collapse  
-- merge/split  
-- freeze/thaw  
-- certainty/ambiguity adjustments  
-- lineage stability  
-
-These signals are consumed by COB and CIL.
-
-### **4.3 CIL Intake Packet**
-CIL produces a structured packet containing:
-
-- selected identity‑layer objects  
-- ordering metrics  
-- ambiguity indicators  
-- stability summaries  
+- identity‑layer objects  
+- CST stability signals  
+- next‑turn context fields  
+- metadata continuity  
 - lineage hints  
-- referent certainty/ambiguity fields  
-- CST stability block  
-- packet metadata  
+- ordering metrics  
 
-This packet is consumed by CEx.
+### **7.4 CEx Behavior**  
+CEx SHALL extract:
 
-### **4.4 TP Historical Datastream**
-The unified testbench inspects the TP datastream to verify:
+- next‑turn context fields  
+- stability hints  
+- identity‑layer continuity  
+- metadata continuity  
 
-- CST actions  
+### **7.5 CE Behavior**  
+CE SHALL represent:
+
+- next‑turn context fields  
+- continuity_status  
+- stability_status  
+
+### **7.6 ISc Behavior**  
+ISc SHALL consume:
+
+- next‑turn context fields  
+- structural metadata  
+- stability metadata  
+
+### **7.7 TP Historical Continuity**  
+TP SHALL record:
+
+- CST signals  
 - COB transformations  
-- CIL packet construction  
-- timing sequence  
-- historical continuity  
+- CIL packet structure  
+- CEx extraction  
+- CE representation  
+- ISc consumption  
 
 ---
 
-## **5. Unified Context Pipeline**
+# **8. Additional Tests (New)**
 
-The unified context pipeline processes information in a deterministic sequence:
+### **8.1 Metadata Continuity Tests**  
+Verify propagation of:
 
-1. **CST** analyzes identity‑layer objects and produces stability signals.  
-2. **COB** evolves identity‑layer objects using CST signals.  
-3. **CIL** selects identity‑layer objects and constructs the intake packet for CEx.  
-4. **TP** captures historical information from all three blocks.
+- alignment  
+- identity shift  
+- topic anchor  
+- continuity record  
+- intent record  
 
-This sequence is expressed as:
+### **8.2 Provenance Continuity Tests**  
+Verify propagation of:
 
-$$
-\text{TP}_{\text{in}} \xrightarrow{\text{CST}} 
-\text{StabilitySignals} \xrightarrow{\text{COB}} 
-\text{IdentityObjects} \xrightarrow{\text{CIL}} 
-\text{IntakePacket} \xrightarrow{\text{TP}_{\text{out}}}
-$$
+- lineage_log[]  
+- signature_history[]  
+- entropy_history[]  
 
-The unified testbench verifies that each block receives the correct inputs, produces the correct outputs, and maintains deterministic behavior.
+### **8.3 Next‑Turn Context Tests**  
+Verify propagation of:
 
----
+- topic  
+- stance  
+- intent  
+- continuity  
+- direction  
+- coherence  
+- importance  
+- clarifying_fields[]  
 
-## **6. Unified Testing (system_playground)**
+### **8.4 Freeze/Thaw Continuity Tests**  
+Verify:
 
-The unified context testbench (`context_testbench.py`) validates:
+- no instability on freeze/thaw  
+- continuity preserved  
+- metadata preserved  
 
-- CST stability signal generation  
-- COB identity‑layer object construction  
-- CIL intake packet construction  
-- TP historical continuity  
-- deterministic replay across turns  
-- merge/split propagation  
-- ordering, ambiguity, stability, and lineage aggregation  
-- correct timing sequence across CST → COB → CIL  
+### **8.5 Merge/Split Continuity Tests**  
+Verify:
 
-The testbench uses OuBA‑like synthetic inputs and inspects the TP datastream to confirm that all three blocks behave correctly.
-
----
-
-## **7. Tested Behaviors (Informative)**
-
-### **7.1 CST Behavior**
-The testbench verifies:
-
-- drift detection  
-- oscillation detection  
-- collapse detection  
-- freeze/thaw detection  
-- certainty/ambiguity adjustments  
-- lineage stability detection  
-- merge/split compensation  
-- 10‑turn post‑structure stability window  
-
-### **7.2 COB Behavior**
-The testbench verifies:
-
-- identity‑layer object construction  
-- referent map propagation  
-- anchor propagation  
-- lineage propagation  
-- ambiguity propagation  
-- stability metric propagation  
-- merge/split structural continuity  
-- deterministic identity evolution  
-
-### **7.3 CIL Behavior**
-The testbench verifies:
-
-- identity selection  
-- certainty aggregation  
-- ambiguity aggregation  
-- stability aggregation  
-- lineage aggregation  
-- ordering aggregation  
-- CST signal integration  
-- intake packet construction  
-- deterministic packet structure  
-
-### **7.4 TP Historical Continuity**
-The testbench verifies that TP captures:
-
-- CST actions  
-- COB transformations  
-- CIL packet construction  
-- timing sequence  
-- metadata  
-- lineage continuity  
+- no instability caused by merge/split  
+- valid instability passes immediately  
+- lineage continuity preserved  
 
 ---
 
-## **7.5 Instability Check After a Split or Merge (Corrected)**
+# **9. High‑Level Requirements (HLRs)**  
+*(All SHALL statements appear only here)*
 
-### **7.5.1 Merge/Split Events Do NOT Produce Instability**
+### **HLR‑CnTxt‑001**  
+The unified context subsystem SHALL execute CST → COB → CIL → CEx → CE → ISc in deterministic sequence.
 
-A merge or split event **shall not** produce drift, oscillation, collapse, ambiguity changes, certainty changes, or lineage instability.  
-CST must treat merge/split as a **structural continuity event**, not an instability event.
+### **HLR‑CnTxt‑002**  
+CST SHALL provide stability signals to COB, CIL, and CEx.
 
-The unified testbench validates this by performing a merge/split and confirming that **no instability signals are emitted** at cycle 0 or in subsequent cycles unless new information is introduced.
+### **HLR‑CnTxt‑003**  
+COB SHALL evolve identity‑layer objects using CST stability signals.
 
----
+### **HLR‑CnTxt‑004**  
+CIL SHALL construct an intake packet using identity‑layer objects and CST stability signals.
 
-### **7.5.2 CST’s 10‑Turn Window Is a Monitoring Window, Not a Suppression Window**
+### **HLR‑CnTxt‑005**  
+TP SHALL record historical continuity from CST, COB, CIL, CEx, CE, and ISc.
 
-After a merge or split, CST enters a **10‑turn monitoring window**.
+### **HLR‑CnTxt‑006**  
+The unified context subsystem SHALL produce deterministic outputs under identical inputs.
 
-During this window, CST must ensure:
+### **HLR‑CnTxt‑007**  
+Merge/split events SHALL preserve structural continuity and SHALL NOT produce instability.
 
-- the merge/split itself does not produce instability  
-- identity continuity remains stable  
-- lineage continuity remains stable  
-- ambiguity/certainty continuity remains stable  
-- ordering continuity remains stable  
+### **HLR‑CnTxt‑008**  
+CIL SHALL produce a packet conforming to the schema required by CEx.
 
-CST does **not** suppress valid instability during this window.
+### **HLR‑CnTxt‑009**  
+One‑time structural corrections SHALL NOT produce instability signals.
 
----
+### **HLR‑CnTxt‑010**  
+Next‑turn context fields SHALL propagate deterministically through COB → CIL → CEx → CE → ISc.
 
-### **7.5.3 Valid Instability Must Pass Through Immediately**
+### **HLR‑CnTxt‑011**  
+COB SHALL ingest next‑turn context fields and incorporate them into identity‑layer continuity.
 
-Instability caused by **new information** (i.e., changes to COB‑owned fields that appear in OuBA identity objects) must be detected and emitted by CST **even if it occurs within the 10‑turn window**.
+### **HLR‑CnTxt‑012**  
+CIL SHALL place next‑turn context fields into the intake packet without modification.
 
-Valid instability includes:
+### **HLR‑CnTxt‑013**  
+CEx SHALL extract next‑turn context fields exactly as defined in 20.107.
 
-- drift  
-- oscillation  
-- collapse  
-- ambiguity changes  
-- certainty changes  
-- lineage instability  
+### **HLR‑CnTxt‑014**  
+CE SHALL represent next‑turn context fields deterministically and expose them to ISc.
 
-These are allowed because they are **not caused by the merge/split itself**.
+### **HLR‑CnTxt‑015**  
+ISc SHALL consume next‑turn context fields as structural metadata.
 
-The unified testbench validates this by:
+### **HLR‑CnTxt‑016**  
+Next‑turn context propagation SHALL be deterministically replayable.
 
-- performing a merge/split  
-- waiting several cycles  
-- modifying COB‑owned fields in OuBA identity objects  
-- confirming CST detects and emits valid instability  
-- confirming COB propagates it  
-- confirming CIL packages it  
-- confirming TP records it  
+### **HLR‑CnTxt‑017**  
+Next‑turn context field names SHALL originate exclusively from 20.105.
 
----
+### **HLR‑CnTxt‑018**  
+Next‑turn context validation SHALL be structural‑only.
 
-### **7.5.4 Structural vs. Valid Instability (Formal Rule)**
-
-Let:
-
-- **MergeSplitSet** = identities involved in the merge or split  
-- **Cause** = origin of instability (structural or valid)
-
-Then:
-
-```
-If Cause = Structural:
-    CST SHALL NOT emit instability signals.
-
-If Cause = Valid:
-    CST SHALL emit instability signals immediately.
-```
-
-This rule ensures correct behavior during and after merge/split events.
+### **HLR‑CnTxt‑019**  
+Next‑turn context fields SHALL remain stable across freeze/thaw cycles.
 
 ---
 
-### **7.5.5 Purpose of the Rule**
-
-This mechanism ensures:
-
-- merge/split events do not falsely trigger instability  
-- valid instability is never blocked  
-- identity evolution remains stable  
-- lineage continuity remains correct  
-- ambiguity/certainty behavior remains correct  
-- CIL stability blocks remain accurate  
-- TP historical continuity remains correct  
-- deterministic replay behavior is preserved  
+# **10. Determinism Notes (Informative)**  
+Deterministic replay ensures identical TPSnS inputs produce identical CST, COB, CIL, CEx, CE, and ISc outputs.
 
 ---
 
-## **7.5.6 One‑Time Structural Corrections Do NOT Produce Instability (New Requirement)**
+# **11. Interface Contracts (Informative)**
 
-A sudden, one‑time structural correction — such as fixing an accidental mis‑naming, mis‑labeling, or other human conversational mistake — will not produce drift, oscillation, collapse, ambiguity changes, certainty changes, or lineage instability.  
-CST must treat such corrections as **legitimate clarifying events**, not instability events.
-
-A one‑time correction does **not** constitute drift or oscillation and therefore must be accepted by CST and propagated through COB and CIL as a normal clarifying update. COB SHALL store the corrected identity‑layer structure, and CIL SHALL surface the corrected structure in the intake packet.
-
-This ensures:
-
-- human conversational mistakes do not trigger instability  
-- identity continuity remains stable  
-- lineage continuity remains correct  
-- ambiguity/certainty behavior remains correct  
-- deterministic replay remains valid  
-- TP historical continuity remains accurate  
+- CST → COB  
+- CST → CIL  
+- COB → CIL  
+- CIL → CEx  
+- CEx → CE  
+- CE → ISc  
+- Context → TP  
 
 ---
 
-## **8. Behaviors Not Tested (Informative)**
-
-The unified context testbench does not test:
-
-- CEx execution  
-- CE Envelope behavior  
-- multi‑turn referent evolution  
-- full system_simulation flows  
-- global context subsystem interactions outside CST/COB/CIL  
-
-These behaviors are reserved for system_simulation.
+# **12. Error Handling (Informative)**  
+Malformed identity‑layer objects, CST signals, or packet structures are rejected.
 
 ---
 
-## **9. High‑Level Requirements (HLRs)**  
-*(All SHALL statements appear only here. Each HLR contains exactly one SHALL.)*
-
-### **HLR‑CnTxt‑001: Unified Pipeline Execution**  
-The unified context subsystem SHALL execute CST, COB, and CIL in the deterministic sequence defined in this document.
-
-### **HLR‑CnTxt‑002: CST Signal Availability**  
-The unified context subsystem SHALL provide CST stability signals to both COB and CIL.
-
-### **HLR‑CnTxt‑003: COB Identity Evolution**  
-The unified context subsystem SHALL evolve identity‑layer objects using CST stability signals.
-
-### **HLR‑CnTxt‑004: CIL Packet Construction**  
-The unified context subsystem SHALL construct a CIL Intake Packet using identity‑layer objects from COB and stability signals from CST.
-
-### **HLR‑CnTxt‑005: TP Historical Continuity**  
-The unified context subsystem SHALL produce a TP datastream containing historical information from CST, COB, and CIL.
-
-### **HLR‑CnTxt‑006: Deterministic Replay**  
-The unified context subsystem SHALL produce deterministic outputs under identical inputs across CST, COB, and CIL.
-
-### **HLR‑CnTxt‑007: Merge/Split Continuity**  
-The unified context subsystem SHALL preserve merge/split structural continuity across CST, COB, and CIL.
-
-### **HLR‑CnTxt‑008: CEx Compatibility**  
-The unified context subsystem SHALL produce a CIL Intake Packet conforming to the schema required by CEx.
-
-### **HLR‑CnTxt‑009: Sudden One Time Structural Correction**  
-A sudden one‑time structural correction SHALL not cause any instability signals to be emitted by CST. CST SHALL update its internal state machine to reflect the corrected structural fields, and COB SHALL accept the corrected identity‑layer structure as a legitimate clarifying update.
-
----
-
-## **Next‑Turn Context Integration (TP.next_context_fields Cross‑Reference)**
-
-### **HLR‑CnTxt‑010: Next‑Turn Context Pipeline Inclusion**  
-The unified context subsystem SHALL validate that next‑turn clarifying/context fields generated by MCB and stored in `TP.next_context{}` (per 20.105) propagate deterministically through COB → CIL → CEx → CE → ISc.
-
-### **HLR‑CnTxt‑011: COB Ingestion Validation**  
-The unified context subsystem SHALL verify that COB ingests next‑turn context fields from `TP.next_context{}` and incorporates them into identity‑layer continuity, importance refinement, and context‑shift handling (per 20.32).
-
-### **HLR‑CnTxt‑012: CIL Placement Validation**  
-The unified context subsystem SHALL verify that CIL places next‑turn context fields from COB’s stabilized snapshot into the CIL Intake Packet without modification (per 20.33).
-
-### **HLR‑CnTxt‑013: CEx Extraction Validation**  
-The unified context subsystem SHALL verify that CEx extracts next‑turn context fields from the CIL Intake Packet and includes them in `CE.context_fields{}` exactly as defined in 20.107.
-
-### **HLR‑CnTxt‑014: CE Representation Validation**  
-The unified context subsystem SHALL verify that CE represents next‑turn context fields deterministically, preserves continuity_status, and exposes them to ISc without modification (per 20.108).
-
-### **HLR‑CnTxt‑015: ISc Consumption Validation**  
-The unified context subsystem SHALL verify that ISc consumes next‑turn context fields from CE as pre‑semantic structural metadata and passes them unchanged to TPU (per 20.44).
-
-### **HLR‑CnTxt‑016: Deterministic Replay of Next‑Turn Context**  
-The unified context subsystem SHALL guarantee deterministic replay of next‑turn context propagation such that identical MCB outputs produce identical COB, CIL, CEx, CE, and ISc behavior.
-
-### **HLR‑CnTxt‑017: No Field Duplication Rule**  
-The unified context subsystem SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
-
-### **HLR‑CnTxt‑018: Structural‑Only Validation**  
-The unified context subsystem SHALL validate next‑turn context propagation strictly at the structural level and SHALL NOT perform semantic interpretation, meaning inference, or context repair.
-
-### **HLR‑CnTxt‑019: Freeze/Thaw Continuity**  
-The unified context subsystem SHALL verify that next‑turn context fields remain stable across freeze/thaw cycles in COB, CIL, CEx, CE, and ISc.
-
----
-
-## **10. Determinism Notes**  
-*(Informative — no SHALL statements)*
-
-Deterministic replay ensures that identical OuBA‑like inputs produce identical CST signals, COB identity objects, CIL packets, and TP historical records.  
-This supports deterministic correction expansion in Path A.
-
----
-
-## **11. Interface Contracts**  
-*(Informative — no SHALL statements)*
-
-### **CST → COB**  
-CST provides stability signals to COB.
-
-### **COB → CIL**  
-COB provides identity‑layer objects to CIL.
-
-### **CST → CIL**  
-CST provides stability signals directly to CIL.
-
-### **CIL → CEx**  
-CIL provides the intake packet to CEx.
-
-### **Context → TP**  
-The unified context subsystem contributes historical information to TP.
-
----
-
-## **12. Error Handling**  
-*(Informative — no SHALL statements)*
-
-The unified context subsystem rejects malformed identity‑layer objects, malformed CST signals, and malformed packet structures.  
-It ensures internal consistency across CST, COB, and CIL outputs.
-
----
-
-## **13. Playground Notes**  
-*(Informative — no SHALL statements)*
-
-This document defines the system_playground version of the unified context subsystem.  
-It mirrors global architecture while remaining scoped for simulation and testing.
+# **13. Simulation Notes (Informative)**  
+This document defines the system_playground version of the unified context subsystem.
 
 ---
