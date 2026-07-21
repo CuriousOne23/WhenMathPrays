@@ -35,7 +35,7 @@ class COBState:
     objects: List[IdentityObject] = field(default_factory=list)
     object_count: int = 0
 
-    # NEW conversation-level ordering metrics
+    # conversation-level ordering metrics
     conversation_access_count: int = 0
     conversation_access_order: List[int] = field(default_factory=list)
     conversation_frequency_last_10: Dict[str, int] = field(default_factory=dict)
@@ -51,6 +51,7 @@ class COBState:
     # TP-facing fields (for CST via TP)
     lineage_log: List[Dict[str, Any]] = field(default_factory=list)
     cob_state_snapshot: Dict[str, Any] = field(default_factory=dict)
+
 
 # ---------------------------------------------------------------------------
 # COB Implementation (system_playground)
@@ -175,37 +176,62 @@ class COB:
 
                 # capture before-state for lineage_log
                 before_referent = {
-                    idA: objA.referent_map.copy(),
-                    idB: objB.referent_map.copy(),
+                    idA: objA.referent_map,
+                    idB: objB.referent_map,
                 }
                 before_ordering = {
-                    idA: objA.ordering_metrics.copy(),
-                    idB: objB.ordering_metrics.copy(),
+                    idA: objA.ordering_metrics,
+                    idB: objB.ordering_metrics,
                 }
 
-                # Deterministic referent-map union
-                merged_referents = {}
-                for key in set(objA.referent_map.keys()).union(objB.referent_map.keys()):
-                    valsA = objA.referent_map.get(key, [])
-                    valsB = objB.referent_map.get(key, [])
-                    merged_referents[key] = sorted(set(valsA + valsB))
+                # structural merge: preserve both parents' semantics without reinterpretation
+                merged_referents = {
+                    "parents": {
+                        idA: objA.referent_map,
+                        idB: objB.referent_map,
+                    }
+                }
 
-                # Deterministic anchor merge
-                merged_anchors = [(a + b) / 2 for a, b in zip(objA.anchors, objB.anchors)]
+                merged_anchors = [
+                    (idA, objA.anchors),
+                    (idB, objB.anchors),
+                ]
 
-                # Deterministic lineage merge
                 merged_lineage = {
-                    "parent": None,
-                    "history": objA.lineage.get("history", []) +
-                               objB.lineage.get("history", []) +
-                               [f"merge({idA},{idB})"]
+                    "parents": [idA, idB],
+                    "stability": {
+                        idA: objA.lineage.get("stability"),
+                        idB: objB.lineage.get("stability"),
+                    },
                 }
 
-                # Deterministic ordering merge
+                merged_ambiguity = {
+                    "parents": {
+                        idA: objA.ambiguity,
+                        idB: objB.ambiguity,
+                    }
+                }
+
+                merged_stability = {
+                    "parents": {
+                        idA: objA.stability_metrics,
+                        idB: objB.stability_metrics,
+                    }
+                }
+
                 merged_ordering = {
-                    "recency": max(objA.ordering_metrics["recency"], objB.ordering_metrics["recency"]),
-                    "frequency": max(objA.ordering_metrics["frequency"], objB.ordering_metrics["frequency"]),
-                    "density": max(objA.ordering_metrics["density"], objB.ordering_metrics["density"]),
+                    "recency": max(
+                        objA.ordering_metrics.get("recency", 0),
+                        objB.ordering_metrics.get("recency", 0),
+                    ),
+                    "frequency": max(
+                        objA.ordering_metrics.get("frequency", 0),
+                        objB.ordering_metrics.get("frequency", 0),
+                    ),
+                    "density": max(
+                        objA.ordering_metrics.get("density", 0),
+                        objB.ordering_metrics.get("density", 0),
+                    ),
                 }
 
                 merged_obj = IdentityObject(
@@ -213,8 +239,8 @@ class COB:
                     referent_map=merged_referents,
                     anchors=merged_anchors,
                     lineage=merged_lineage,
-                    ambiguity={"certainty": "medium", "ambiguity": "medium"},
-                    stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
+                    ambiguity=merged_ambiguity,
+                    stability_metrics=merged_stability,
                     ordering_metrics=merged_ordering,
                 )
 
@@ -242,73 +268,60 @@ class COB:
                     continue
 
                 # capture before-state for lineage_log
-                before_referent = {idX: objX.referent_map.copy()}
-                before_ordering = {idX: objX.ordering_metrics.copy()}
+                before_referent = {idX: objX.referent_map}
+                before_ordering = {idX: objX.ordering_metrics}
 
-                keys = sorted(objX.referent_map.keys())
-                half = len(keys) // 2
-                keys1 = keys[:half]
-                keys2 = keys[half:]
-
-                referents1 = {k: objX.referent_map[k] for k in keys1}
-                referents2 = {k: objX.referent_map[k] for k in keys2}
-
-                anchors1 = [a * 0.95 for a in objX.anchors]
-                anchors2 = [a * 1.05 for a in objX.anchors]
-
-                lineage1 = {
+                # TS-correct split: copy all semantics to both children
+                child1_lineage = {
                     "parent": objX.id,
-                    "history": objX.lineage.get("history", []) + [f"split({idX})_1"]
+                    "stability": objX.lineage.get("stability"),
                 }
-                lineage2 = {
+                child2_lineage = {
                     "parent": objX.id,
-                    "history": objX.lineage.get("history", []) + [f"split({idX})_2"]
+                    "stability": objX.lineage.get("stability"),
                 }
 
-                ordering1 = objX.ordering_metrics.copy()
-                ordering2 = objX.ordering_metrics.copy()
-
-                objX1 = IdentityObject(
+                child1 = IdentityObject(
                     id=f"{idX}_1",
-                    referent_map=referents1,
-                    anchors=anchors1,
-                    lineage=lineage1,
-                    ambiguity=objX.ambiguity.copy(),
-                    stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
-                    ordering_metrics=ordering1,
+                    referent_map=objX.referent_map,
+                    anchors=list(objX.anchors),
+                    lineage=child1_lineage,
+                    ambiguity=dict(objX.ambiguity),
+                    stability_metrics=dict(objX.stability_metrics),
+                    ordering_metrics=dict(objX.ordering_metrics),
                 )
 
-                objX2 = IdentityObject(
+                child2 = IdentityObject(
                     id=f"{idX}_2",
-                    referent_map=referents2,
-                    anchors=anchors2,
-                    lineage=lineage2,
-                    ambiguity=objX.ambiguity.copy(),
-                    stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
-                    ordering_metrics=ordering2,
+                    referent_map=objX.referent_map,
+                    anchors=list(objX.anchors),
+                    lineage=child2_lineage,
+                    ambiguity=dict(objX.ambiguity),
+                    stability_metrics=dict(objX.stability_metrics),
+                    ordering_metrics=dict(objX.ordering_metrics),
                 )
 
                 # append SPLIT event to lineage_log (TP.lineage_log[])
                 self.state.lineage_log.append({
                     "event_type": "SPLIT",
                     "parent_ref": [idX],
-                    "child_refs": [objX1.id, objX2.id],
+                    "child_refs": [child1.id, child2.id],
                     "referent_map_before": before_referent,
                     "referent_map_after": {
-                        objX1.id: referents1,
-                        objX2.id: referents2,
+                        child1.id: child1.referent_map,
+                        child2.id: child2.referent_map,
                     },
                     "ordering_before": before_ordering,
                     "ordering_after": {
-                        objX1.id: ordering1,
-                        objX2.id: ordering2,
+                        child1.id: child1.ordering_metrics,
+                        child2.id: child2.ordering_metrics,
                     },
                     "lineage_seq": self._next_lineage_seq(),
                 })
 
                 self.state.objects.remove(objX)
-                self.state.objects.append(objX1)
-                self.state.objects.append(objX2)
+                self.state.objects.append(child1)
+                self.state.objects.append(child2)
 
     # -----------------------------------------------------------------------
     # Eviction Logic
@@ -411,4 +424,3 @@ class COB:
         }
 
         return self.state
-
