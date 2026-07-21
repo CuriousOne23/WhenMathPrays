@@ -28,7 +28,8 @@ This document explains **how** the COB testbench verifies those behaviors.
 Specifically:
 
 - Section 5 of the requirements file lists the tested behaviors  
-- This document expands each behavior into a full methodological description  
+- This document expands each behavior into a full methodological description
+- The recent additions to `cob_requirements.md` introducing structural referent‑map compression (HLR‑COB‑024) and merge/split structural propagation with post‑compression (HLR‑COB‑025) are fully reflected in this document. New test descriptions have been added to validate compression behavior and post‑merge/split compression determinism.
 - Expected terminal output is provided for reproducibility  
 - Each test is mapped to the requirement(s) it validates  
 
@@ -47,7 +48,8 @@ It validates:
 - ambiguity and lineage tracking  
 - bounded store + eviction  
 - summary aggregation  
-- deterministic behavior across runs  
+- deterministic behavior across runs
+- The testbench also validates structural referent‑map compression and post‑merge/split compression behavior, ensuring that compression is deterministic, structural, token‑set‑based, and non‑semantic.
 
 The testbench interacts with:
 
@@ -115,7 +117,7 @@ Signals include drift, oscillation, collapse, freeze, thaw, certainty adjustment
 3. Aggregate summaries  
 4. Return updated state  
 
-This sequence is deterministic.
+This sequence is deterministic. After merge or split operations, COB performs a structural compression pass over referent maps. The testbench verifies that this compression step is deterministic, removes duplicate referents, removes token‑subset referents, and preserves lineage continuity.
 
 ### **4.5 Summary Aggregation**
 
@@ -480,7 +482,8 @@ They must be deterministic and preserve structural integrity.
 - referent maps unified/partitioned deterministically  
 - lineage merged/forked correctly  
 - ordering metrics recomputed correctly  
-- basin size updated correctly  
+- basin size updated correctly
+- post‑merge/split compression behaves deterministically and preserves structural integrity.
 
 **Bad result:**  
 - nondeterministic merge/split  
@@ -489,42 +492,106 @@ They must be deterministic and preserve structural integrity.
 
 ---
 
-## **5.9 NEW TEST — Next‑Turn Context Integration Test**  
-*(Added for completeness)*
+## 5.9 Referent‑Map Structural Compression Test  
+*(Expanded — Informative)*
 
-### **Purpose**
+### Purpose
 
-Validates ingestion, validation, merge, importance update, exposure, replay determinism, and freeze/thaw continuity for next‑turn context fields.
+Validates deterministic structural compression of referent maps after updates, merges, and splits.
 
-### **Why This Test Exists**
+### Why This Test Exists
 
-Next‑turn context is essential for identity‑layer continuity across turns.
+Structural compression ensures that referent maps remain concise, non‑redundant, and structurally consistent without semantic interpretation.  
+Compression is required to remove:
 
-### **Method**
+- exact duplicate referent entries  
+- referent entries whose token sets are strict subsets of other entries  
 
-1. Create identity objects  
-2. Insert them  
-3. Provide `TP.next_context{}` fields  
-4. Run COB  
-5. Inspect clarifying structures  
+This preserves referent‑map integrity and ensures deterministic replay.
 
-### **Expected Output**
+### Method
 
-- fields ingested  
-- validated  
-- merged  
-- importance updated  
-- exposed to CIL  
-- deterministic replay  
-- preserved across freeze/thaw  
+1. Create identity objects with overlapping referent entries  
+2. Insert them into COB  
+3. Trigger update, merge, or split operations  
+4. Inspect referent maps after compression  
+5. Verify removal of duplicates and token‑subset entries  
+6. Verify lineage continuity is preserved  
 
-### **Interpretation**
+### Expected Output
+
+- duplicate referents removed  
+- subset referents removed  
+- referent‑map structure preserved  
+- compression deterministic across runs  
+
+### Interpretation
 
 **Good result:**  
-- All steps behave deterministically  
+- compression behaves deterministically  
+- referent maps contain only structurally maximal entries  
+- lineage continuity preserved  
 
 **Bad result:**  
-- any mutation, duplication, or semantic interpretation  
+- nondeterministic compression  
+- semantic interpretation  
+- incorrect removal or retention of referents  
+
+---
+
+## 5.10 Merge/Split Structural Propagation and Post‑Compression Test  
+*(Expanded — Informative)*
+
+### Purpose
+
+Validates structural propagation of semantic fields during merge/split and the deterministic compression that follows.
+
+### Why This Test Exists
+
+Merge and split operations must:
+
+- embed or duplicate semantic fields structurally  
+- avoid semantic reconstruction  
+- apply compression only after structural embedding/duplication  
+
+This ensures compliance with HLR‑COB‑025 and preserves deterministic replay.
+
+### Method
+
+#### Merge Scenario
+
+1. Create two parent identity objects  
+2. Trigger a CST merge signal  
+3. Inspect merged child’s semantic fields  
+4. Verify structural embedding of both parents  
+5. Verify compression removes duplicate or subset referents  
+
+#### Split Scenario
+
+1. Create a parent identity object  
+2. Trigger a CST split signal  
+3. Inspect both children  
+4. Verify full structural duplication of semantic fields  
+5. Verify compression removes duplicate or subset referents  
+
+### Expected Output
+
+- merged child contains structural embeddings of both parents  
+- split children contain full structural copies  
+- compression applied deterministically after merge/split  
+- no semantic reconstruction  
+
+### Interpretation
+
+**Good result:**  
+- structural propagation correct  
+- compression correct and deterministic  
+- lineage continuity preserved  
+
+**Bad result:**  
+- semantic reconstruction  
+- nondeterministic compression  
+- incorrect embedding or duplication  
 
 ---
 
@@ -540,6 +607,8 @@ Next‑turn context is essential for identity‑layer continuity across turns.
 | HLR‑COB‑006 | Lineage stability | `run_cst_signal_test()` / `run_summary_test()` | ✔ |
 | HLR‑COB‑010 | Freeze/thaw compliance | `run_freeze_thaw_compliance_test()` | ✔ |
 | HLR‑COB‑003 | Referential integrity across merge/split | `run_merge_split_test()` | ✔ |
+| HLR‑COB‑024 | Structural referent‑map compression | `run_compression_test()` | ✔ |
+| HLR‑COB‑025 | Merge/split propagation + post‑compression | `run_merge_split_compression_test()` | ✔ |
 
 All requirements are fully covered.
 
@@ -583,6 +652,10 @@ The full terminal output from a successful run is included for reproducibility.
 ## **9. Notes on Determinism**
 
 COB in system_playground is intentionally deterministic:
+
+Structural compression is also fully deterministic.  
+Given identical referent maps, merge/split signals, and ordering metrics, compression produces identical results across runs.  
+This ensures that compression does not introduce nondeterministic behavior into the basin.
 
 - no randomness  
 - no time‑dependent behavior  
