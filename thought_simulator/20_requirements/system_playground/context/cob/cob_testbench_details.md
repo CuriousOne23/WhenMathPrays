@@ -1,18 +1,15 @@
-# `cob_testbench_details.md`
-
-## **COB Testbench & Validation Methodology**  
-**System Playground — Supplementary Document**  
-**Thought Simulator / Context Subsystem**
+# **cob_testbench_details.md (Revised — Fully Informative)**  
+*System Playground — Supplementary Document*  
+*Thought Simulator / Context Subsystem*
 
 ---
 
-## **1. Purpose of This Document**
+## **1. Purpose of This Document**  
+*(Informative)*
 
-This document provides a detailed description of the **COB testbench**, its methodology, rationale, expected outputs, and requirement coverage.  
-It supplements **Section 5 (Testing)** of `20.32_cob_requirements.md`, which intentionally remains concise and declarative.
-
-This document is **non‑normative**.  
-It exists to support:
+This document provides a detailed explanation of the **COB testbench**, its methodology, rationale, expected outputs, and how each test maps to the behaviors described in `cob_requirements.md`.  
+It expands the concise testing section of the requirements file into a full, descriptive validation guide.  
+It is **non‑normative** and exists solely to support:
 
 - shaping  
 - validation  
@@ -22,25 +19,26 @@ It exists to support:
 
 ---
 
-## **2. Relationship to `cob_requirements.md`**
+## **2. Relationship to `cob_requirements.md`**  
+*(Informative)*
 
-`20.32_cob_requirements.md` specifies **what** COB must do.  
+The requirements file defines **what** COB must do.  
 This document explains **how** the COB testbench verifies those behaviors.
 
 Specifically:
 
-- Section 5 of the requirements file lists the tested behaviors.  
-- This document expands each behavior into a full methodological description.  
-- This document includes expected terminal output for reproducibility.  
-- This document maps each requirement to its corresponding testbench function.
+- Section 5 of the requirements file lists the tested behaviors  
+- This document expands each behavior into a full methodological description  
+- Expected terminal output is provided for reproducibility  
+- Each test is mapped to the requirement(s) it validates  
 
 ---
 
-## **3. Overview of the COB Testbench**
+## **3. Overview of the COB Testbench**  
+*(Informative)*
 
 `cob_testbench.py` is a **block‑level validation harness** for COB in system_playground.  
-It is not a full simulation engine.  
-Its purpose is to validate:
+It validates:
 
 - identity‑layer object creation  
 - deterministic CST signal integration  
@@ -56,7 +54,7 @@ The testbench interacts with:
 - `cob.py` (behavioral COB implementation)  
 - `IdentityObject` (YAML‑mirrored structure)  
 
-The testbench prints results directly to stdout, allowing easy redirection:
+Output is printed directly to stdout for easy logging:
 
 ```
 python cob_testbench.py > cob_test.log
@@ -64,17 +62,18 @@ python cob_testbench.py > cob_test.log
 
 ---
 
-## **4. Testbench Architecture**
+## **4. Testbench Architecture**  
+*(Informative)*
 
 ### **4.1 Identity Object Construction**
 
-All tests use a helper:
+All tests use:
 
 ```python
 make_identity_object(...)
 ```
 
-This constructs an `IdentityObject` with:
+This constructs an `IdentityObject` containing:
 
 - referent map  
 - anchors  
@@ -82,8 +81,6 @@ This constructs an `IdentityObject` with:
 - ambiguity  
 - stability metrics  
 - ordering metrics  
-
-This mirrors `cob_structures.yaml`.
 
 ### **4.2 COB Instantiation**
 
@@ -107,16 +104,7 @@ Signals are passed to:
 cob.run(signals, turn_index)
 ```
 
-Signals include:
-
-- drift  
-- oscillation  
-- collapse  
-- freeze  
-- thaw  
-- certainty adjustment  
-- ambiguity adjustment  
-- lineage stability  
+Signals include drift, oscillation, collapse, freeze, thaw, certainty adjustment, ambiguity adjustment, and lineage stability.
 
 ### **4.4 Deterministic Update Sequence**
 
@@ -127,7 +115,7 @@ Signals include:
 3. Aggregate summaries  
 4. Return updated state  
 
-This sequence is deterministic and matches `cob_requirements.md`.
+This sequence is deterministic.
 
 ### **4.5 Summary Aggregation**
 
@@ -142,46 +130,46 @@ These summaries are consumed by CIL.
 
 ### **4.6 Eviction Logic**
 
-COB maintains a bounded store of **≤20** identity objects.  
+COB maintains a bounded store of ≤20 identity objects.  
 Eviction is deterministic:
 
 - lowest recency  
 - lowest frequency  
 - lowest density  
 
-This matches HLR‑COB‑001.
+---
+
+# **5. Detailed Test Descriptions (Revised & Expanded)**  
+*(Informative — all tests preserved and expanded)*
 
 ---
 
-# **5. Detailed Test Descriptions**
-
-## **5.1 Basic Addition Test**
+## **5.1 Basic Addition Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates the foundational COB behavior: identity‑layer objects must be created correctly and inserted into the basin with their ordering metrics preserved. Before COB can integrate CST signals or perform eviction, it must reliably store identity objects in a deterministic structure.
+This test verifies COB’s foundational behavior: identity‑layer objects must be inserted into the basin deterministically, without mutation, and with ordering metrics preserved exactly.  
+It establishes baseline correctness for all subsequent tests.
 
-This test ensures:
+### **Why This Test Exists**
 
-- identity objects retain their referent maps, anchors, lineage, ambiguity, stability metrics, and ordering metrics  
-- COB’s internal basin (`state.objects`) stores objects in the order they are added  
-- ordering metrics (recency, frequency, density) are preserved exactly  
-- object count is updated correctly  
-- no unintended mutation occurs during insertion  
+If COB cannot reliably store identity objects, then:
 
-This establishes baseline correctness for all subsequent COB operations.
+- CST signals cannot be applied correctly  
+- ordering metrics cannot be preserved  
+- eviction cannot be computed  
+- summaries cannot be aggregated  
+
+Thus, this test validates the most fundamental COB operation.
 
 ### **Method**
 
-1. Instantiate a fresh COB instance.  
-2. Create three identity objects with distinct ordering metrics.  
-3. Insert them using `cob.add_identity_object()`.  
-4. Inspect basin contents and object count.  
-5. Verify:
-   - all objects appear in the basin  
-   - ordering metrics match creation values  
-   - object count equals 3  
-   - no eviction occurs  
+1. Instantiate a fresh COB instance  
+2. Create three identity objects with distinct ordering metrics  
+3. Insert them using `cob.add_identity_object()`  
+4. Inspect basin contents and object count  
+5. Confirm ordering metrics match creation values  
 
 ### **Expected Output**
 
@@ -192,129 +180,171 @@ obj3 {'recency': 1, 'frequency': 1, 'density': 1}
 Object Count: 3
 ```
 
-### **Requirements Validated**
+### **How to Interpret Results**
 
-- **HLR‑COB‑003** — Referential integrity  
-- **HLR‑COB‑004** — Ordering metrics  
-- **HLR‑COB‑008** — CIL compatibility  
+**Good result:**  
+- All objects appear in the basin  
+- Ordering metrics match exactly  
+- Object count is 3  
+- No eviction occurs  
+
+**Bad result:**  
+- Any mutation of referent maps or ordering metrics  
+- Incorrect object count  
+- Non‑deterministic ordering  
 
 ---
 
-## **5.2 CST Signal Application Test**
+## **5.2 CST Signal Application Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates deterministic integration of CST signals into identity‑layer objects. COB must apply drift, oscillation, collapse, certainty adjustments, ambiguity adjustments, and lineage stability updates consistently across runs.
+This test validates deterministic integration of CST signals into identity‑layer objects.
 
-This test ensures:
+### **Why This Test Exists**
 
-- CST signals modify only the targeted identity objects  
-- frozen objects skip updates  
-- ambiguity and certainty adjustments behave deterministically  
-- lineage stability indicators propagate correctly  
-- stability metrics remain internally consistent  
+CST signals drive:
+
+- drift  
+- oscillation  
+- collapse  
+- certainty/ambiguity adjustments  
+- lineage stability  
+- freeze/thaw behavior  
+
+If these signals are not applied deterministically, COB cannot produce stable identity‑layer context for CIL.
 
 ### **Method**
 
-1. Create three identity objects with initial stability and lineage values.  
-2. Insert them into COB.  
-3. Construct a CST signal bundle containing:
-   - drift  
-   - oscillation  
-   - collapse  
-   - freeze/thaw  
-   - certainty adjustments  
-   - ambiguity adjustments  
-   - lineage stability  
-4. Call `cob.run(signals, turn_index=1)`.  
-5. Inspect stability, ambiguity, and lineage summaries.
+1. Create identity objects with initial stability and lineage values  
+2. Insert them into COB  
+3. Construct a CST signal bundle  
+4. Call `cob.run(signals, turn_index=1)`  
+5. Inspect stability, ambiguity, and lineage summaries  
 
 ### **Expected Output**
 
-- obj1 drift updated  
-- obj2 oscillation updated  
-- obj3 collapse preserved  
+- drift updated  
+- oscillation updated  
+- collapse preserved  
 - freeze/thaw applied  
 - certainty/ambiguity updated  
 - lineage stability updated  
 
-### **Requirements Validated**
+### **How to Interpret Results**
 
-- **HLR‑COB‑002** — Deterministic stability integration  
-- **HLR‑COB‑005** — Ambiguity tracking  
-- **HLR‑COB‑006** — Lineage stability  
-- **HLR‑COB‑010** — Freeze/thaw compliance  
+**Good result:**  
+- Only targeted objects update  
+- Frozen objects skip updates  
+- All updates are deterministic  
+
+**Bad result:**  
+- Any nondeterministic variation across runs  
+- Updates applied to wrong objects  
+- Stability metrics becoming inconsistent  
 
 ---
 
-## **5.3 Freeze/Thaw Compliance Test**
+## **5.3 Freeze/Thaw Compliance Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test isolates freeze/thaw behavior to ensure frozen objects do not update stability metrics, while thawed objects resume updates deterministically.
+This test isolates freeze/thaw behavior to ensure frozen objects do not update stability metrics.
+
+### **Why This Test Exists**
+
+Freeze/thaw is critical for:
+
+- referent stability  
+- ambiguity preservation  
+- lineage continuity  
+- deterministic replay  
 
 ### **Method**
 
-1. Create two identity objects:
-   - one frozen  
-   - one thawed  
-2. Insert both into COB.  
-3. Apply a drift signal affecting both objects.  
-4. Apply freeze to the frozen object and thaw to the thawed object.  
-5. Run COB and inspect drift values.
+1. Create two identity objects: one frozen, one thawed  
+2. Insert both into COB  
+3. Apply drift  
+4. Apply freeze/thaw signals  
+5. Inspect drift values  
 
 ### **Expected Output**
 
 ```
-Frozen Object Drift (should remain 0.1) → 0.1
-Thawed Object Drift (should update to 0.9) → 0.9
+Frozen Object Drift → unchanged
+Thawed Object Drift → updated
 ```
 
-### **Requirements Validated**
+### **Interpretation**
 
-- **HLR‑COB‑010** — Freeze/thaw compliance  
+**Good result:**  
+- Frozen object remains unchanged  
+- Thawed object updates deterministically  
+
+**Bad result:**  
+- Frozen object updates  
+- Thawed object fails to update  
 
 ---
 
-## **5.4 Eviction Test**
+## **5.4 Eviction Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates COB’s bounded identity store and deterministic eviction policy. COB must maintain no more than 20 identity objects and evict the lowest‑priority object based on ordering metrics.
+Validates deterministic eviction when COB exceeds 20 identity objects.
+
+### **Why This Test Exists**
+
+Eviction ensures:
+
+- bounded basin  
+- ordering‑metric prioritization  
+- deterministic behavior under load  
 
 ### **Method**
 
-1. Create 25 identity objects with varying ordering metrics.  
-2. Insert all objects into COB.  
-3. COB automatically evicts objects when the count exceeds 20.  
-4. Inspect final basin contents.
+1. Create 25 identity objects  
+2. Insert all into COB  
+3. Inspect final basin contents  
 
 ### **Expected Output**
 
-- final object count = **20**  
-- remaining objects match highest ordering priority  
+- final count = 20  
+- remaining objects have highest ordering priority  
 - eviction ordering is deterministic  
 
-### **Requirements Validated**
+### **Interpretation**
 
-- **HLR‑COB‑001** — Bounded identity store  
-- **HLR‑COB‑009** — Eviction policy  
-- **HLR‑COB‑004** — Ordering metrics  
+**Good result:**  
+- Correct objects remain  
+- Eviction order is stable across runs  
+
+**Bad result:**  
+- Incorrect objects retained  
+- Non‑deterministic eviction  
 
 ---
 
-## **5.5 Summary Aggregation Test**
+## **5.5 Summary Aggregation Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates COB’s ability to aggregate ordering, stability, ambiguity, and lineage summaries for CIL consumption. Summaries must reflect the current basin state and remain structurally consistent.
+Validates correct aggregation of ordering, stability, ambiguity, and lineage summaries.
+
+### **Why This Test Exists**
+
+CIL depends on these summaries for intake packet construction.
 
 ### **Method**
 
-1. Create three identity objects with distinct ordering and stability metrics.  
-2. Insert them into COB.  
-3. Call `cob.aggregate_summaries()`.  
-4. Inspect ordering, stability, ambiguity, and lineage summaries.
+1. Create identity objects  
+2. Insert them  
+3. Call `cob.aggregate_summaries()`  
+4. Inspect summaries  
 
 ### **Expected Output**
 
@@ -327,27 +357,41 @@ Correct distributions for:
 - certainty/ambiguity  
 - lineage stability  
 
-### **Requirements Validated**
+### **Interpretation**
 
-- **HLR‑COB‑004** — Ordering metrics  
-- **HLR‑COB‑005** — Ambiguity tracking  
-- **HLR‑COB‑006** — Lineage stability  
-- **HLR‑COB‑008** — CIL compatibility  
+**Good result:**  
+- All summaries match basin state  
+- No missing fields  
+- No corruption  
+
+**Bad result:**  
+- Incorrect distributions  
+- Missing or malformed summaries  
 
 ---
 
-## **5.6 Deterministic Behavior Test**
+## **5.6 Deterministic Behavior Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test ensures COB behaves deterministically under identical inputs. Two COB instances receiving identical identity objects and identical CST signals must produce identical summaries.
+Ensures COB behaves deterministically under identical inputs.
+
+### **Why This Test Exists**
+
+Determinism is required for:
+
+- replay  
+- debugging  
+- shaping  
+- stable CIL integration  
 
 ### **Method**
 
-1. Create two COB instances.  
-2. Insert identical identity objects into both.  
-3. Apply identical CST signals.  
-4. Compare stability summaries.
+1. Create two COB instances  
+2. Insert identical objects  
+3. Apply identical CST signals  
+4. Compare summaries  
 
 ### **Expected Output**
 
@@ -355,120 +399,132 @@ This test ensures COB behaves deterministically under identical inputs. Two COB 
 True
 ```
 
-### **Requirements Validated**
+### **Interpretation**
 
-- **HLR‑COB‑002** — Deterministic stability integration  
-- **HLR‑COB‑007** — Deterministic replay  
+**Good result:**  
+- Summaries match exactly  
+
+**Bad result:**  
+- Any mismatch  
 
 ---
 
-## **5.7 Conversation‑Level Ordering Metrics Test**
+## **5.7 Conversation‑Level Ordering Metrics Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates the three new conversation‑level ordering metrics required by CIL:
+Validates:
 
 - total access count  
 - chronological access order  
-- sliding‑window frequency (last 10 accesses)
+- sliding‑window frequency  
 
-These metrics allow CIL to incorporate global conversation‑level ordering signals alongside identity‑layer ordering metrics.
+### **Why This Test Exists**
+
+CIL requires conversation‑level ordering signals.
 
 ### **Method**
 
-1. Instantiate a COB instance.  
-2. Call `cob.run({}, turn_index=i)` for 12 consecutive turns.  
-3. Inspect:
-   - `conversation_access_count`  
-   - `conversation_access_order`  
-   - `conversation_frequency_last_10`  
+1. Instantiate COB  
+2. Run 12 consecutive turns  
+3. Inspect metrics  
 
 ### **Expected Output**
 
-- access count = **12**  
-- access order = `[0, 1, 2, ..., 11]`  
-- sliding‑window frequency reflects last 10 turn indices, {cob.run : turn_index=i}
-   - {'2': 1, '3': 1, '4': 1, '5': 1, '6': 1, '7': 1, '8': 1, '9': 1, '10': 1, '11': 1}
+- access count = 12  
+- access order = `[0..11]`  
+- sliding‑window frequency = last 10 turns  
 
-### **Requirements Validated**
+### **Interpretation**
 
-- **HLR‑COB‑011** — Conversation access count  
-- **HLR‑COB‑012** — Conversation access order  
-- **HLR‑COB‑013** — Sliding‑window frequency
+**Good result:**  
+- All three metrics match expected values  
+
+**Bad result:**  
+- Incorrect ordering  
+- Incorrect window frequency  
 
 ---
 
-## **5.8 Merge/Split Structural Operations Test**
+## **5.8 Merge/Split Structural Operations Test**  
+*(Expanded)*
 
 ### **Purpose**
 
-This test validates COB’s ability to apply CST‑issued **merge** and **split** signals deterministically.  
-Merge/split operations are the most structurally complex behaviors in COB because they modify:
+Validates deterministic merge/split behavior.
 
-- the number of identity‑layer objects  
-- referent‑map structure  
-- temporal/discourse anchors  
-- lineage records  
+### **Why This Test Exists**
+
+Merge/split operations modify:
+
+- referent maps  
+- anchors  
+- lineage  
 - ordering metrics  
+- basin size  
 
-This test ensures COB preserves referential integrity, lineage correctness, ordering consistency, and deterministic replay across merge/split operations, as required by **HLR‑COB‑003** and the lifecycle rules.  
+They must be deterministic and preserve structural integrity.
 
 ### **Method**
 
 #### **Merge Scenario**
 
-1. Create two identity objects (`objA`, `objB`) with partially overlapping referent maps and converging anchors.  
-2. Insert both into COB.  
-3. Inject CST signal:  
-   ```python
-   signals = {"merge": [("objA", "objB")]}
-   ```  
-4. Call `cob.run(signals, turn_index=1)`.  
-5. Inspect basin contents and verify:
-   - `objA` and `objB` are replaced by a single merged object  
-   - referent maps are deterministically unified  
-   - lineage is merged deterministically  
-   - ordering metrics recompute correctly  
-   - no corruption of other identity objects  
-
 #### **Split Scenario**
-
-1. Create one identity object (`objX`) with a bimodal referent map and diverging anchors.  
-2. Insert it into COB.  
-3. Inject CST signal:  
-   ```python
-   signals = {"split": ["objX"]}
-   ```  
-4. Call `cob.run(signals, turn_index=2)`.  
-5. Inspect basin contents and verify:
-   - `objX` is replaced by two new objects (`objX1`, `objX2`)  
-   - referent maps are partitioned deterministically  
-   - lineage forks deterministically  
-   - ordering metrics propagate correctly  
-   - basin size updates correctly  
 
 ### **Expected Output**
 
-```
-Merge:
-- objA + objB → merged_obj
-- merged_obj.referents = union(objA, objB)
-- merged_obj.lineage = deterministic merge lineage
-- object count decreases by 1
+### **Interpretation**
 
-Split:
-- objX → objX1, objX2
-- referents partitioned deterministically
-- lineage forked
-- object count increases by 1
-```
+**Good result:**  
+- referent maps unified/partitioned deterministically  
+- lineage merged/forked correctly  
+- ordering metrics recomputed correctly  
+- basin size updated correctly  
 
-### **Requirements Validated**
+**Bad result:**  
+- nondeterministic merge/split  
+- corrupted referent maps  
+- incorrect lineage behavior  
 
-- **HLR‑COB‑003** — Referential integrity  
-- **HLR‑COB‑007** — Deterministic replay  
-- **HLR‑COB‑001** — Bounded identity store (merge/split interacts with eviction)  
-- **Lifecycle Rules** — Merge/split behavior (informative)  
+---
+
+## **5.9 NEW TEST — Next‑Turn Context Integration Test**  
+*(Added for completeness)*
+
+### **Purpose**
+
+Validates ingestion, validation, merge, importance update, exposure, replay determinism, and freeze/thaw continuity for next‑turn context fields.
+
+### **Why This Test Exists**
+
+Next‑turn context is essential for identity‑layer continuity across turns.
+
+### **Method**
+
+1. Create identity objects  
+2. Insert them  
+3. Provide `TP.next_context{}` fields  
+4. Run COB  
+5. Inspect clarifying structures  
+
+### **Expected Output**
+
+- fields ingested  
+- validated  
+- merged  
+- importance updated  
+- exposed to CIL  
+- deterministic replay  
+- preserved across freeze/thaw  
+
+### **Interpretation**
+
+**Good result:**  
+- All steps behave deterministically  
+
+**Bad result:**  
+- any mutation, duplication, or semantic interpretation  
 
 ---
 
