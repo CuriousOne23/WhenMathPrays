@@ -21,7 +21,7 @@ This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
 """
 
-from context.cob.cob import COB, IdentityObject
+from cob.cob import COB, IdentityObject
 
 
 def make_identity_object(
