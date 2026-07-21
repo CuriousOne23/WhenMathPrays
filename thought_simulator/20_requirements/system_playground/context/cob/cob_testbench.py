@@ -13,14 +13,16 @@ It tests:
 - lineage summary aggregation
 - freeze/thaw compliance
 - deterministic update behavior
-- CIL compatibility (identity object structure preserved)
+- conversation-level ordering metrics
+- structural referent-map compression
+- merge/split structural propagation and post-compression
 
 This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
 """
 
-from context.cob.cob import COB
-from context.cil.cil import IdentityObject
+from context.cob.cob import COB, IdentityObject
+
 
 def make_identity_object(
     id: str,
@@ -242,19 +244,21 @@ def run_deterministic_behavior_test():
 
     for o in objs:
         cob1.add_identity_object(o)
-        cob2.add_identity_object(make_identity_object(
-            o.id,
-            o.ordering_metrics["recency"],
-            o.ordering_metrics["frequency"],
-            o.ordering_metrics["density"],
-            drift=o.stability_metrics["drift"],
-            oscillation=o.stability_metrics["oscillation"],
-            collapse=o.stability_metrics["collapse"],
-            certainty=o.ambiguity["certainty"],
-            ambiguity=o.ambiguity["ambiguity"],
-            lineage_stability=o.lineage["stability"],
-            frozen=o.stability_metrics["frozen"],
-        ))
+        cob2.add_identity_object(
+            make_identity_object(
+                o.id,
+                o.ordering_metrics["recency"],
+                o.ordering_metrics["frequency"],
+                o.ordering_metrics["density"],
+                drift=o.stability_metrics["drift"],
+                oscillation=o.stability_metrics["oscillation"],
+                collapse=o.stability_metrics["collapse"],
+                certainty=o.ambiguity["certainty"],
+                ambiguity=o.ambiguity["ambiguity"],
+                lineage_stability=o.lineage["stability"],
+                frozen=o.stability_metrics["frozen"],
+            )
+        )
 
     signals = {
         "drift": {"affected_objects": ["A"], "magnitude": 0.9},
@@ -266,6 +270,7 @@ def run_deterministic_behavior_test():
 
     print("\n--- Deterministic Stability Comparison ---")
     print(cob1.state.stability_summary == cob2.state.stability_summary)
+
 
 # ---------------------------------------------------------------------------
 # Conversation-Level Ordering Metrics Test
@@ -289,6 +294,79 @@ def run_conversation_ordering_metrics_test():
     print("\n--- Sliding-Window Frequency (last 10 accesses) ---")
     print(cob.state.conversation_frequency_last_10)
 
+
+# ---------------------------------------------------------------------------
+# Referent-Map Structural Compression Test (HLR-COB-024)
+# ---------------------------------------------------------------------------
+
+def run_referent_map_compression_test():
+    print("\n=== COB Testbench: Referent-Map Structural Compression Test ===")
+
+    cob = COB()
+
+    # Identity object with redundant and subset surface forms
+    obj = make_identity_object("C", 5, 5, 5)
+    obj.referent_map = [
+        "dog",
+        "australian shepherd dog",
+        "dog",
+        "shepherd dog",
+    ]
+
+    cob.add_identity_object(obj)
+
+    cob_state = cob.run(signals={}, turn_index=0)
+
+    print("\n--- Compressed Referent Map ---")
+    for o in cob_state.objects:
+        print(o.id, o.referent_map)
+
+
+# ---------------------------------------------------------------------------
+# Merge/Split Structural Propagation + Post-Compression Test (HLR-COB-025)
+# ---------------------------------------------------------------------------
+
+def run_merge_split_compression_test():
+    print("\n=== COB Testbench: Merge/Split Structural Propagation + Post-Compression Test ===")
+
+    cob = COB()
+
+    # Parents with overlapping referent maps
+    A = make_identity_object("A", 5, 3, 2)
+    B = make_identity_object("B", 4, 2, 1)
+
+    A.referent_map = ["dog", "australian shepherd dog"]
+    B.referent_map = ["dog", "border collie dog"]
+
+    cob.add_identity_object(A)
+    cob.add_identity_object(B)
+
+    # MERGE signals
+    merge_signals = {
+        "merge": {"pairs": [("A", "B")]},
+    }
+
+    cob_state = cob.run(signals=merge_signals, turn_index=1)
+
+    print("\n--- After MERGE ---")
+    for obj in cob_state.objects:
+        print(obj.id, obj.referent_map)
+
+    # Find merged child id
+    merged_id = "A_B_merged"
+
+    # SPLIT signals on merged child
+    split_signals = {
+        "split": {"objects": [merged_id]},
+    }
+
+    cob_state = cob.run(signals=split_signals, turn_index=2)
+
+    print("\n--- After SPLIT ---")
+    for obj in cob_state.objects:
+        print(obj.id, obj.referent_map)
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -301,3 +379,5 @@ if __name__ == "__main__":
     run_summary_test()
     run_deterministic_behavior_test()
     run_conversation_ordering_metrics_test()
+    run_referent_map_compression_test()
+    run_merge_split_compression_test()
