@@ -2,7 +2,7 @@
 CIL — Conversation Identity Layer
 System Playground Version
 
-This module implements a lightweight, block‑level Python representation
+This module implements a lightweight, block-level Python representation
 of the CIL subsystem. It mirrors the structure defined in:
 
 - cil_requirements.md
@@ -45,7 +45,7 @@ class CILState:
     stability_state: Dict[str, Any] = field(default_factory=dict)
     lineage_state: Dict[str, Any] = field(default_factory=dict)
     ordering_state: Dict[str, Any] = field(default_factory=dict)
-    cst_state: Dict[str, Any] = field(default_factory=dict)  # NEW: CST input
+    cst_state: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -57,7 +57,7 @@ class CILIntakePacket:
     stability_block: Dict[str, Any]
     lineage_block: Dict[str, Any]
     ordering_block: Dict[str, Any]
-    cst_block: Dict[str, Any]           # NEW: CST stability summary
+    cst_block: Dict[str, Any]
     packet_metadata: Dict[str, Any]
 
 
@@ -96,9 +96,8 @@ class CIL:
                 -obj.ordering_metrics.get("recency", 0),
                 -obj.ordering_metrics.get("frequency", 0),
                 -obj.ordering_metrics.get("density", 0),
-            )
+            ),
         )
-
         self.state.selected_identity_objects = sorted_objs[:max_count]
 
     # -----------------------------------------------------------------------
@@ -130,8 +129,8 @@ class CIL:
 
     def aggregate_certainty(self):
         """Aggregate certainty and ambiguity indicators."""
-        certainty_levels = {}
-        ambiguity_levels = {}
+        certainty_levels: Dict[str, Any] = {}
+        ambiguity_levels: Dict[str, Any] = {}
 
         for obj in self.state.selected_identity_objects:
             certainty_levels[obj.id] = obj.ambiguity.get("certainty", None)
@@ -143,7 +142,7 @@ class CIL:
         }
 
     def aggregate_stability(self):
-        """Aggregate stability metrics from COB objects."""
+        """Aggregate stability metrics from selected identity objects."""
         drift = []
         oscillation = []
         collapse = []
@@ -167,7 +166,7 @@ class CIL:
         }
 
     def aggregate_lineage(self):
-        """Aggregate lineage stability indicators."""
+        """Aggregate lineage stability indicators and records."""
         lineage_records = []
         lineage_stability = []
 
@@ -204,18 +203,20 @@ class CIL:
 
     def build_intake_packet(self) -> CILIntakePacket:
         """Construct the CIL Intake Packet consumed by CEx."""
+        identity_block: List[Dict[str, Any]] = []
 
-        identity_block = []
         for obj in self.state.selected_identity_objects:
-            identity_block.append({
-                "id": obj.id,
-                "referent_map": obj.referent_map,
-                "anchors": obj.anchors,
-                "lineage": obj.lineage,
-                "ambiguity": obj.ambiguity,
-                "stability_metrics": obj.stability_metrics,
-                "ordering_metrics": obj.ordering_metrics,
-            })
+            identity_block.append(
+                {
+                    "id": obj.id,
+                    "referent_map": obj.referent_map,
+                    "anchors": obj.anchors,
+                    "lineage": obj.lineage,
+                    "ambiguity": obj.ambiguity,
+                    "stability_metrics": obj.stability_metrics,
+                    "ordering_metrics": obj.ordering_metrics,
+                }
+            )
 
         packet = CILIntakePacket(
             identity_selection_block=identity_block,
@@ -223,26 +224,30 @@ class CIL:
             stability_block=self.state.stability_state,
             lineage_block=self.state.lineage_state,
             ordering_block=self.state.ordering_state,
-            cst_block=self.state.cst_state,  # NEW: CST integration
+            cst_block=self.state.cst_state,
             packet_metadata=self.state.metadata,
         )
-
         return packet
 
     # -----------------------------------------------------------------------
     # Main Entry Point
     # -----------------------------------------------------------------------
 
-    def run(self, cob_objects: List[IdentityObject], cst_signals: Dict[str, Any], turn_index: int):
+    def run(
+        self,
+        cob_objects: List[IdentityObject],
+        cst_signals: Dict[str, Any],
+        turn_index: int,
+    ) -> CILIntakePacket:
         """
         Main CIL execution for system_playground.
+
         Deterministic sequence:
         1. Integrate CST signals
         2. Select identities
         3. Aggregate blocks
         4. Build packet
         """
-
         self.state.metadata = {
             "turn_index": turn_index,
             "input_object_count": len(cob_objects),
