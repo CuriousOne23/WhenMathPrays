@@ -366,6 +366,89 @@ def run_merge_split_compression_test():
     for obj in cob_state.objects:
         print(obj.id, obj.referent_map)
 
+# ---------------------------------------------------------------------------
+# MERGE Detection Test
+# ---------------------------------------------------------------------------
+
+def run_merge_detection_test():
+    print("\n=== COB Testbench: MERGE Detection Test ===")
+
+    cob = COB()
+
+    # Two objects with overlapping referent maps (structural similarity)
+    objA = IdentityObject(
+        id="A",
+        referent_map={"dog": ["australian shepherd dog"]},
+        anchors=["a1"],
+        lineage={"stability": "stable"},
+        ambiguity={"certainty": "high", "ambiguity": "low"},
+        stability_metrics={"drift": None, "oscillation": None, "collapse": False},
+        ordering_metrics={"recency": 5, "frequency": 3, "density": 2},
+    )
+
+    objB = IdentityObject(
+        id="B",
+        referent_map={"dog": ["border collie dog"]},
+        anchors=["a1"],
+        lineage={"stability": "stable"},
+        ambiguity={"certainty": "high", "ambiguity": "low"},
+        stability_metrics={"drift": None, "oscillation": None, "collapse": False},
+        ordering_metrics={"recency": 5, "frequency": 3, "density": 2},
+    )
+
+    # Add both objects to COB
+    cob.add_object(objA)
+    cob.add_object(objB)
+
+    # Ask COB to detect structural merge
+    merge_detected, merge_child = cob.detect_merge()
+
+    print("\n--- Merge Detected ---")
+    print(merge_detected)
+
+    print("\n--- Merge Child ---")
+    print(merge_child.id if merge_child else None)
+
+    print("\n--- Merge Child Referent Map ---")
+    print(merge_child.referent_map if merge_child else None)
+
+# ---------------------------------------------------------------------------
+# SPLIT Detection Test
+# ---------------------------------------------------------------------------
+
+def run_split_detection_test():
+    print("\n=== COB Testbench: SPLIT Detection Test ===")
+
+    cob = COB()
+
+    # Parent object with expanded referent map (structural divergence)
+    merged = IdentityObject(
+        id="A_B_merged",
+        referent_map={
+            "parents": {
+                "A": ["australian shepherd dog"],
+                "B": ["border collie dog"]
+            },
+            "child_expansion": ["shepherd mix dog", "collie mix dog"]
+        },
+        anchors=["a1"],
+        lineage={"stability": "unstable"},
+        ambiguity={"certainty": "low", "ambiguity": "high"},
+        stability_metrics={"drift": 0.8, "oscillation": None, "collapse": False},
+        ordering_metrics={"recency": 10, "frequency": 1, "density": 1},
+    )
+
+    cob.add_object(merged)
+
+    # Ask COB to detect structural split
+    split_detected, children = cob.detect_split()
+
+    print("\n--- Split Detected ---")
+    print(split_detected)
+
+    print("\n--- Split Children ---")
+    for child in children:
+        print(child.id, child.referent_map)
 
 # ---------------------------------------------------------------------------
 # Main
@@ -381,3 +464,6 @@ if __name__ == "__main__":
     run_conversation_ordering_metrics_test()
     run_referent_map_compression_test()
     run_merge_split_compression_test()
+    run_merge_detection_test()  
+    run_split_detection_test()
+    
