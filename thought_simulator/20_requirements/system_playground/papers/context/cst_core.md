@@ -258,104 +258,140 @@ Thus CST Core treats ambiguity as a critical stability metric.
 
 ## 6. Collapse Detection  
 Collapse is CST Core’s strongest instability signal. Where drift measures change, oscillation measures flipping, and ambiguity measures confusion, collapse measures structural failure — the point at which continuity cannot be maintained without intervention.
-Collapse is computed from stability metrics. Let S^{f}(L,\; t\right)be the stability score for feature fat turn tfor layer L.
+
+Collapse is computed from stability metrics. Let $S^{f}(L,\ t)$ be the stability score for feature fat turn tfor layer L.
+
 Stability scores are domain specific and may incorporate:
-	referent continuity
-	temporal anchor persistence
-	discourse anchor coherence
-	lineage link stability
-	register consistency
-	field importance stability
+- referent continuity
+- temporal anchor persistence
+- discourse anchor coherence
+- lineage link stability
+- register consistency
+- field importance stability
+
 CST Core integrates stability over the 10 turn window.
-Integrated stability over window
-{\bar{S}}^{f}(L\right)=\frac{1}{10}\sum_{k=t-9}^{t} S^{f}(L,\; k\right)
+
+**Integrated stability over window**  
+
+$$
+{\bar{S}}^{f}(L)=\frac{1}{10}\sum_{k=t-9}^{t} S^{f}(L,\ k)
+$$
 
 This produces a normalized stability score between 0 and 1.
-	\bar{S}=1→ fully stable
-	\bar{S}=0→ fully collapsed
-	intermediate values → partial stability
-Collapse score
+- $\bar{S}=1→$ fully stable
+- $\bar{S}=0→$ fully collapsed
+- intermediate values → partial stability
+
+**Collapse score** 
 Collapse is defined as the complement of stability:
-C^{f}(L\right)=1-{\bar{S}}^{f}(L\right)
+
+$$
+C^{f}(L)=1-{\bar{S}}^{f}(L)
+$$
 
 Interpretation:
-	C=0→ no collapse
-	C=0.1–0.3→ mild instability
-	C=0.4–0.6→ moderate collapse risk
-	C≥0.7→ high collapse risk
-	C=1→ full collapse
+- C=0→ no collapse
+- C=0.1–0.3→ mild instability
+- C=0.4–0.6→ moderate collapse risk
+- C≥0.7→ high collapse risk
+- C=1→ full collapse
+
 Collapse is feature specific and layer specific.
-Threshold comparison
+
+**Threshold comparison**  
 CST Core compares collapse against a monotonic threshold:
-C^{f}(L\right)\gt {\theta }_{\text{collapse}}(L\right)
+
+$$
+C^{f}(L)\gt {\theta }_{\text{collapse}}(L)
+$$
 
 If true, CST Core emits a collapse signal for layer L.
+
 Thresholds:
-	are deterministic
-	are monotonic
-	differ per identity layer
-	evolve only through CST Core’s threshold update rules
-Why collapse matters
+- are deterministic
+- are monotonic
+- differ per identity layer
+- evolve only through CST Core’s threshold update rules
+
+**Why collapse matters**
 Collapse is the most severe stability signal. It indicates that the system can no longer maintain continuity without corrective action.
+
 Collapse often triggers:
-	freeze (Section 7)
-	thaw gating (Section 8)
-	continuity restoration (Section 9)
-	threshold adaptation (Section 10)
+- freeze (Section 7)
+- thaw gating (Section 8)
+- continuity restoration (Section 9)
+- threshold adaptation (Section 10)
+
 Collapse is the point where CST Core must intervene to prevent structural failure.
-Continuing exactly as requested — Section 7, fully rendered in chat, clean math, no GitHub assumptions, no agent involvement, and not pulling from your open tabs. We stay entirely inside the CST Core white paper.
-7. Freeze Detection
+
+## 7. Freeze Detection
 Freeze is CST Core’s emergency stabilization mechanism. When drift, oscillation, ambiguity, or collapse exceed safe limits, CST Core may freeze a structural layer to prevent further degradation.
+
 Freeze is not collapse. Freeze is a protective action that halts structural updates until stability can be restored.
+
 Freeze is triggered when:
-	collapse is high
-	ambiguity is high
-	oscillation is high
-	drift is high
-	continuity is threatened
-	stability cannot be guaranteed
+- collapse is high
+- ambiguity is high
+- oscillation is high
+- drift is high
+- continuity is threatened
+- stability cannot be guaranteed
+
 Freeze ensures that the system does not continue updating a layer that is already unstable.
-Freeze condition
-Let C_{\text{total}}(L\right)be the combined instability score for layer L. This score is computed from:
-	drift
-	oscillation
-	ambiguity
-	collapse
+
+**Freeze condition**  
+Let $C_{\text{total}}(L)$ be the combined instability score for layer L. This score is computed from:
+- drift
+- oscillation
+- ambiguity
+- collapse
+
 CST Core triggers freeze when:
+
+$$
 C_{\text{total}}(L\right)\gt {\theta }_{\text{freeze}}(L\right)
+$$
 
 Interpretation:
-	Below threshold → layer continues updating normally
-	Above threshold → layer freezes immediately
+- Below threshold → layer continues updating normally
+- Above threshold → layer freezes immediately
+
 Freeze is layer specific and does not affect other layers unless their own thresholds are exceeded.
-What freeze does
+
+**What freeze does**  
 When a layer freezes:
-	Snapshots stop updating {\text{snapshot}}_{t}(L\right)is held constant.
-	Stability metrics stop updating Drift, oscillation, ambiguity, and collapse are paused.
-	Thresholds stop adapting Threshold evolution halts for that layer.
-	Continuity is preserved The layer cannot degrade further.
+- Snapshots stop updating {\text{snapshot}}_{t}(L\right)is held constant.
+- Stability metrics stop updating Drift, oscillation, ambiguity, and collapse are paused.
+- Thresholds stop adapting Threshold evolution halts for that layer.
+- Continuity is preserved The layer cannot degrade further.
+
 Freeze is a hard stop on structural evolution.
-Why freeze matters
+
+**Why freeze matters**  
 Freeze prevents:
-	referent collapse
-	temporal collapse
-	discourse collapse
-	lineage collapse
-	register collapse
-	field importance collapse
+- referent collapse
+- temporal collapse
+- discourse collapse
+- lineage collapse
+- register collapse
+- field importance collapse
+
 Freeze is the system’s last line of defense before structural failure.
-Freeze duration
+
+**Freeze duration**  
 Freeze persists until thaw conditions are met (Section 8). Freeze is not time based; it is condition based.
+
 A layer remains frozen until:
-	collapse decreases
-	ambiguity decreases
-	oscillation decreases
-	drift decreases
-	stability improves
-	continuity is restored
+- collapse decreases
+- ambiguity decreases
+- oscillation decreases
+- drift decreases
+- stability improves
+- continuity is restored
+
 Only then can thaw occur.
-Continuing exactly as requested — Section 8, fully rendered in chat, clean math, no GitHub assumptions, no agent involvement, and not pulling from your open tabs. We stay entirely inside the CST Core white paper.
-8. Thaw Detection
+
+## 8. Thaw Detection
 Thaw is the controlled reversal of freeze. Where freeze halts structural updates to prevent collapse, thaw restores normal operation once stability returns.
 Thaw is never time based. Thaw is strictly condition based.
 A layer remains frozen until CST Core determines that:
