@@ -102,9 +102,51 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
 - **Sliding‑Window Frequency (HLR‑COB‑013)**  
   - Test verifies correct computation of sliding‑window frequency over last 10 accesses.
 
-- **Merge/Split Structural Operations (HLR‑COB‑014)**  
-  - Test ensures merge/split operations preserve referent‑map integrity, lineage continuity, and ordering metrics.  
-  - Test ensures replay determinism.
+**HLR‑COB‑014**  
+COB SHALL apply CST merge and split signals deterministically, preserving referent‑map integrity, lineage continuity, and ordering metrics, and SHALL NOT perform semantic reconstruction of identity‑layer fields.
+
+- For **MERGE**, COB SHALL:
+  - preserve each parent’s referent map, anchors, ambiguity, and stability metrics structurally in the merged child;  
+  - combine ordering metrics using deterministic, non‑semantic rules;  
+  - record MERGE events in `TP.lineage_log[]` with explicit parent and child references.
+
+- For **SPLIT**, COB SHALL:
+  - copy all semantic fields (referent map, anchors, ambiguity, stability metrics, ordering metrics) from the parent to each child;  
+  - avoid any semantic partitioning or probabilistic splitting of fields;  
+  - record SPLIT events in `TP.lineage_log[]` with explicit parent and child references.
+
+### **5.1.1 Merge/Split Difficulty and TS‑Correct Solution**  
+*(Informative — clarifies rationale behind HLR‑COB‑014)*  
+
+Merge and split at the identity‑layer are structurally simple but semantically dangerous.  
+Naïve implementations tend to:
+
+- average anchors  
+- union referent lists  
+- invent lineage history strings  
+- reset stability metrics  
+- reinterpret ambiguity  
+
+All of these behaviors violate TS constraints on determinism, referent‑map integrity, and non‑semantic handling of identity‑layer fields.
+
+To avoid semantic reconstruction while still honoring CST merge/split commands, COB in system_playground adopts the following TS‑correct solution:
+
+- **MERGE (structural only):**  
+  - COB SHALL preserve *both* parents’ semantic fields structurally.  
+  - `referent_map` for the merged child SHALL contain a structural embedding of each parent’s referent map (e.g., a `parents{}` sub‑structure keyed by parent id).  
+  - `anchors`, `ambiguity`, and `stability_metrics` for the merged child SHALL preserve each parent’s values structurally, without averaging, unioning, or reinterpretation.  
+  - `ordering_metrics` for the merged child SHALL be combined using deterministic, non‑semantic rules (e.g., max of recency/frequency/density).  
+
+- **SPLIT (structural only):**  
+  - COB SHALL copy *all* semantic fields from the parent object to *each* child object.  
+  - `referent_map`, `anchors`, `ambiguity`, `stability_metrics`, and `ordering_metrics` SHALL be duplicated, not partitioned, and SHALL NOT be modified semantically at split time.  
+  - Subsequent CST/COB cycles MAY prune or differentiate children over time based on drift, oscillation, collapse, and turn‑level identity fragments, but SPLIT itself SHALL NOT perform semantic partitioning.
+
+This behavior is validated in `cob_testbench_merge_split.py`, which asserts:
+
+- merged children structurally embed both parents’ semantics;  
+- split children receive full semantic copies;  
+- replay of identical CST merge/split signals produces identical COB state, lineage_log, and cob_state_snapshot.
 
 ### **Next‑Turn Context Integration Tests**
 
@@ -242,6 +284,13 @@ CEx consumes COB output indirectly through the CIL Intake Packet.
 *(Informative — no SHALL statements)*
 
 Deterministic behavior ensures stable identity‑layer context for CIL and CEx under identical CST signals, identical turn data, and identical ordering metrics.
+
+A special case of determinism applies to merge/split:
+
+- MERGE determinism requires that identical CST merge signals over identical COB state produce merged children with structurally identical embeddings of parent semantics and identical `TP.lineage_log[]` entries.  
+- SPLIT determinism requires that identical CST split signals over identical COB state produce children with identical full copies of the parent’s semantic fields and identical `TP.lineage_log[]` entries.
+
+COB SHALL rely only on structural, non‑semantic rules for merge/split, ensuring that no content‑based or random decisions affect identity‑layer continuity.
 
 ---
 
