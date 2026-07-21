@@ -296,6 +296,36 @@ def run_post_structure_stability_test():
         print(f"\n--- Turn {turn} Stability Window ---")
         print(cst.state.post_structure_stability_window)
 
+# ---------------------------------------------------------------------------
+# Real Instability During 10-Turn Post-Structure Window Test
+# ---------------------------------------------------------------------------
+
+def run_post_structure_real_instability_test():
+    print("\n=== CST Testbench: Real Instability During 10-Turn Window ===")
+
+    # MERGE event (structural)
+    tp_lineage = [
+        {
+            "event_type": "MERGE",
+            "parent_ref": ["objA", "objB"],
+            "child_refs": ["objA_objB_merged"],
+        }
+    ]
+
+    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
+
+    cst = CST()
+
+    # Turns 1–3: stable child (no real instability)
+    for turn in range(1, 4):
+        objs = [make_identity_object("objA_objB_merged", drift=None)]
+        signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=turn)
+        print(f"Turn {turn} (stable) — Drift:", signals.drift)
+
+    # Turn 4: REAL instability appears (drift = 0.8)
+    objs = [make_identity_object("objA_objB_merged", drift=0.8)]
+    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=4)
+    print("\nTurn 4 (real instability) — Drift:", signals.drift)
 
 # ---------------------------------------------------------------------------
 # Main
@@ -311,3 +341,4 @@ if __name__ == "__main__":
     run_merge_compensation_test()
     run_split_compensation_test()
     run_post_structure_stability_test()
+    run_post_structure_real_instability_test()
