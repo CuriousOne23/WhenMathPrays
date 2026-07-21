@@ -25,7 +25,7 @@ At each turn t, CST Core extracts a snapshot of structural features for each ide
 Snapshots are stored as:
 
 $$
-{\text{snapshot}}_{t}\left(L\right)
+{\text{snapshot}}_{t}(L)
 $$
 
 These snapshots form the basis for all stability metrics.
@@ -36,7 +36,7 @@ CST Core tracks how often a structural feature fappears across the last 10 turns
 Total count over window
 
 $$
-C^{f}\left(L\right)=\sum_{k=t-9}^{t} 1\left[f\in {\text{snapshot}}_{k}\left(L\right)\right]
+C^{f}(L)=\sum_{k=t-9}^{t} 1[f\in {\text{snapshot}}_{k}(L)]
 $$
 
 This counts the number of turns in which feature fappears.
@@ -44,7 +44,7 @@ This counts the number of turns in which feature fappears.
 Frequency over window
 
 $$
-F^{f}\left(L\right)=\frac{C^{f}\left(L\right)}{10}
+F^{f}(L)=\frac{C^{f}(L)}{10}
 $$
 
 This normalizes the count to a 0–1 frequency.
@@ -52,7 +52,7 @@ This normalizes the count to a 0–1 frequency.
 Ordered reference history
 
 $$
-H^{f}\left(L\right)=\left(h_{t-9},\ h_{t-8},\ \ldots ,\ h_{t}\right)
+H^{f}(L)=(h_{t-9},\ h_{t-8},\ \ldots ,\ h_{t})
 $$
 
 where each $h_{k}$ encodes the presence, strength, or importance of feature fat turn k.
@@ -60,7 +60,7 @@ where each $h_{k}$ encodes the presence, strength, or importance of feature fat 
 ## 3. Drift Detection
 CST Core computes drift metrics for identity, referent, temporal, discourse, lineage, and register structures. Drift measures how much a structural feature changes from one turn to the next, and whether those changes accumulate enough to threaten stability.
 
-Let $x_{t}^{\left(L\right)}$ be the structural feature vector for layer Lat turn t. This vector may encode:
+Let $x_{t}^{(L)}$ be the structural feature vector for layer Lat turn t. This vector may encode:
 - referent distribution
 - anchor positions
 - lineage connections
@@ -72,11 +72,11 @@ Let $x_{t}^{\left(L\right)}$ be the structural feature vector for layer Lat turn
 Drift at a single turn compares the structure at turn tto the structure at turn t-1:
 
 $$
-D\left(L,\ t\right)=d(x_{t}^{\left(L\right)},x_{t-1}^{\left(L\right)})
+D(L,\ t)=d(x_{t}^{(L)},x_{t-1}^{(L)})
 $$
 
 Here:
-- $d\left(\cdot ,\ \cdot \right)$ is a deterministic structural distance function
+- $d(\cdot ,\ \cdot)$ is a deterministic structural distance function
 - No randomness or sampling is allowed
 - The distance function is chosen per metric type
 
@@ -91,16 +91,16 @@ Examples of valid distance functions:
 CST Core integrates drift over the last 10 turns to detect sustained instability:
 
 $$
-\bar{D}\left(L\right)=\frac{1}{10}\sum_{k=t-9}^{t} D\left(L,\ k\right)
+\bar{D}(L)=\frac{1}{10}\sum_{k=t-9}^{t} D(L,\ k)
 $$
 
 
 This produces a normalized drift score between 0 and the maximum possible structural distance.
 
-If $\bar{D}\left(L\right)$ exceeds a drift threshold, CST Core emits a drift signal for layer L.
+If $\bar{D}(L)$ exceeds a drift threshold, CST Core emits a drift signal for layer L.
 
 **Distance function specification**
-The distance function $d\left(\cdot ,\ \cdot \right)$ is deterministic and metric specific:
+The distance function $d(\cdot ,\ \cdot)$ is deterministic and metric specific:
 - identity_drift Measures change in overall identity structure.
 - referent_drift Measures change in referent map (e.g., referent reassignment, disappearance, or instability).
 - lineage_drift Measures change in lineage connections (e.g., parent/child structural links).
@@ -112,7 +112,7 @@ Each metric uses a distance function appropriate to its structural domain.
 CST Core compares integrated drift against monotonic thresholds:
 
 $$
-\bar{D}\left(L\right)\gt {\theta }_{\text{drift}}\left(L\right)
+\bar{D}(L)\gt {\theta }_{\text{drift}}(L)
 $$
 
 If this condition is true, CST Core emits a drift signal for layer L.
