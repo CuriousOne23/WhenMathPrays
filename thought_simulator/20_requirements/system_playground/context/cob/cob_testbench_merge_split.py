@@ -1,22 +1,25 @@
 """
 COB Merge/Split Testbench
 System Playground — Context Subsystem
-Validates merge/split structural operations at the COB level.
+Validates TS‑correct structural merge/split behavior:
+- MERGE: child contains BOTH parents’ semantics (no blending)
+- SPLIT: BOTH children receive ALL semantics (no partitioning)
 """
 
 from context.cob.cob import COB
 from context.cil.cil import IdentityObject
 
+
 # ------------------------------------------------------------
-# Helper: Construct identity objects with referents + anchors
+# Helper: Construct identity objects
 # ------------------------------------------------------------
 
 def make_identity_object(obj_id, referents, anchors=None, lineage=None, ordering=None):
     return IdentityObject(
         id=obj_id,
         referent_map=referents,
-        anchors=anchors or [0.0, 0.0],  # temporal, discourse
-        lineage=lineage or {"parent": None, "history": []},
+        anchors=anchors or [0.0, 0.0],
+        lineage=lineage or {"parent": None},
         ambiguity={"certainty": 1.0, "ambiguity": 0.0},
         stability_metrics={"drift": 0.0, "oscillation": 0.0, "collapse": False, "frozen": False},
         ordering_metrics=ordering or {"recency": 0, "frequency": 0, "density": 0},
@@ -24,7 +27,7 @@ def make_identity_object(obj_id, referents, anchors=None, lineage=None, ordering
 
 
 # ------------------------------------------------------------
-# Merge Test
+# MERGE TEST
 # ------------------------------------------------------------
 
 def run_merge_test():
@@ -49,39 +52,44 @@ def run_merge_test():
     cob.add_identity_object(objA)
     cob.add_identity_object(objB)
 
-    # Correct CST merge signal format for cob.py
     signals = {"merge": {"pairs": [("objA", "objB")]}}
 
-    print("Objects before merge:")
+    print("Objects BEFORE merge:")
     for obj in cob.state.objects:
         print(f"- {obj.id}: referents={obj.referent_map}")
 
     cob.run(signals, turn_index=1)
 
-    print("Objects after merge:")
+    print("\nObjects AFTER merge:")
     for obj in cob.state.objects:
-        print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
+        print(f"- {obj.id}: referents={obj.referent_map}, anchors={obj.anchors}, lineage={obj.lineage}")
 
-    # --- TP-facing checks for MERGE ---
-    print("TP.lineage_log after merge:")
-    for evt in cob.state.lineage_log:
-        print(f"- event_type={evt['event_type']}, parent_ref={evt['parent_ref']}, child_refs={evt['child_refs']}")
+    # --- Validate MERGE semantics ---
+    merged_obj = cob.state.objects[0]
 
-    print("TP.cob_state_snapshot after merge:")
-    print(f"keys={list(cob.state.cob_state_snapshot.keys())}")
+    # 1. Child must contain BOTH parents’ referent maps structurally
+    assert "parents" in merged_obj.referent_map, "Merged referent_map must contain both parents"
+    assert "objA" in merged_obj.referent_map["parents"], "Merged referent_map missing objA"
+    assert "objB" in merged_obj.referent_map["parents"], "Merged referent_map missing objB"
 
-    # basic assertions to validate TP fields for CST
-    assert len(cob.state.lineage_log) == 1, "Expected exactly one MERGE event in TP.lineage_log"
-    merge_evt = cob.state.lineage_log[0]
-    assert merge_evt["event_type"] == "MERGE", "Expected MERGE event_type"
-    assert merge_evt["parent_ref"] == ["objA", "objB"], "MERGE parent_ref mismatch"
-    assert len(merge_evt["child_refs"]) == 1, "MERGE should produce exactly one child_ref"
+    # 2. Anchors must contain BOTH parents’ anchors
+    assert isinstance(merged_obj.anchors, list), "Merged anchors must be a list"
+    assert len(merged_obj.anchors) == 2, "Merged anchors must contain both parents"
+    assert merged_obj.anchors[0][0] == "objA", "Merged anchors missing objA"
+    assert merged_obj.anchors[1][0] == "objB", "Merged anchors missing objB"
 
-    assert "objects" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'objects'"
-    assert "metadata" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'metadata'"
+    # 3. TP lineage_log correctness
+    assert len(cob.state.lineage_log) == 1, "Expected exactly one MERGE event"
+    evt = cob.state.lineage_log[0]
+    assert evt["event_type"] == "MERGE"
+    assert evt["parent_ref"] == ["objA", "objB"]
+    assert len(evt["child_refs"]) == 1
+
+    print("\nMERGE test passed.")
+
 
 # ------------------------------------------------------------
-# Split Test
+# SPLIT TEST
 # ------------------------------------------------------------
 
 def run_split_test():
@@ -98,36 +106,48 @@ def run_split_test():
 
     cob.add_identity_object(objX)
 
-    # Correct CST split signal format for cob.py
     signals = {"split": {"objects": ["objX"]}}
 
-    print("Objects before split:")
+    print("Objects BEFORE split:")
     for obj in cob.state.objects:
         print(f"- {obj.id}: referents={obj.referent_map}")
-    
+
     cob.run(signals, turn_index=2)
 
-    print("Objects after split:")
+    print("\nObjects AFTER split:")
     for obj in cob.state.objects:
-        print(f"- {obj.id}: referents={obj.referent_map}, lineage={obj.lineage}, ordering={obj.ordering_metrics}")
+        print(f"- {obj.id}: referents={obj.referent_map}, anchors={obj.anchors}, lineage={obj.lineage}")
 
-    # --- TP-facing checks for SPLIT ---
-    print("TP.lineage_log after split:")
-    for evt in cob.state.lineage_log:
-        print(f"- event_type={evt['event_type']}, parent_ref={evt['parent_ref']}, child_refs={evt['child_refs']}")
+    # --- Validate SPLIT semantics ---
+    assert len(cob.state.objects) == 2, "Split must produce exactly two children"
 
-    print("TP.cob_state_snapshot after split:")
-    print(f"keys={list(cob.state.cob_state_snapshot.keys())}")
+    child1, child2 = cob.state.objects
 
-    # basic assertions to validate TP fields for CST
-    assert len(cob.state.lineage_log) == 1, "Expected exactly one SPLIT event in TP.lineage_log"
-    split_evt = cob.state.lineage_log[0]
-    assert split_evt["event_type"] == "SPLIT", "Expected SPLIT event_type"
-    assert split_evt["parent_ref"] == ["objX"], "SPLIT parent_ref mismatch"
-    assert len(split_evt["child_refs"]) == 2, "SPLIT should produce exactly two child_refs"
+    # 1. Both children must receive ALL semantics (full copy)
+    assert child1.referent_map == child2.referent_map == objX.referent_map, \
+        "Both children must receive full referent_map copy"
 
-    assert "objects" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'objects'"
-    assert "metadata" in cob.state.cob_state_snapshot, "cob_state_snapshot must contain 'metadata'"
+    assert child1.anchors == child2.anchors == objX.anchors, \
+        "Both children must receive full anchors copy"
+
+    assert child1.ambiguity == child2.ambiguity == objX.ambiguity, \
+        "Both children must receive full ambiguity copy"
+
+    assert child1.stability_metrics == child2.stability_metrics == objX.stability_metrics, \
+        "Both children must receive full stability_metrics copy"
+
+    assert child1.ordering_metrics == child2.ordering_metrics == objX.ordering_metrics, \
+        "Both children must receive full ordering_metrics copy"
+
+    # 2. TP lineage_log correctness
+    assert len(cob.state.lineage_log) == 1, "Expected exactly one SPLIT event"
+    evt = cob.state.lineage_log[0]
+    assert evt["event_type"] == "SPLIT"
+    assert evt["parent_ref"] == ["objX"]
+    assert len(evt["child_refs"]) == 2
+
+    print("\nSPLIT test passed.")
+
 
 # ------------------------------------------------------------
 # Deterministic Replay Test
@@ -136,6 +156,7 @@ def run_split_test():
 def run_merge_split_replay_test():
     print("\n=== MERGE/SPLIT REPLAY TEST ===")
 
+    # First run
     cob1 = COB()
     obj1A = make_identity_object("objA", {"topic": ["math"]})
     obj1B = make_identity_object("objB", {"topic": ["math", "algebra"]})
@@ -147,6 +168,7 @@ def run_merge_split_replay_test():
     lineage_log1 = cob1.state.lineage_log
     cob_snapshot1 = cob1.state.cob_state_snapshot
 
+    # Second run
     cob2 = COB()
     obj2A = make_identity_object("objA", {"topic": ["math"]})
     obj2B = make_identity_object("objB", {"topic": ["math", "algebra"]})
@@ -165,6 +187,9 @@ def run_merge_split_replay_test():
     assert snapshot1 == snapshot2, "Object-level replay must be deterministic"
     assert lineage_log1 == lineage_log2, "TP.lineage_log replay must be deterministic"
     assert cob_snapshot1 == cob_snapshot2, "TP.cob_state_snapshot replay must be deterministic"
+
+    print("\nReplay test passed.")
+
 
 # ------------------------------------------------------------
 # Main
