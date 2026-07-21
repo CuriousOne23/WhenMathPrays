@@ -72,11 +72,11 @@ Let $x_{t}^{\left(L\right)}$ be the structural feature vector for layer Lat turn
 Drift at a single turn compares the structure at turn tto the structure at turn t-1:
 
 $$
-D\left(L,\; t\right)=d(x_{t}^{\left(L\right)},x_{t-1}^{\left(L\right)})
+D\left(L,\ t\right)=d(x_{t}^{\left(L\right)},x_{t-1}^{\left(L\right)})
 $$
 
 Here:
-- $d\left(\cdot ,\; \cdot \right)$ is a deterministic structural distance function
+- $d\left(\cdot ,\ \cdot \right)$ is a deterministic structural distance function
 - No randomness or sampling is allowed
 - The distance function is chosen per metric type
 
@@ -91,7 +91,7 @@ Examples of valid distance functions:
 CST Core integrates drift over the last 10 turns to detect sustained instability:
 
 $$
-\bar{D}\left(L\right)=\frac{1}{10}\sum_{k=t-9}^{t} D\left(L,\; k\right)
+\bar{D}\left(L\right)=\frac{1}{10}\sum_{k=t-9}^{t} D\left(L,\ k\right)
 $$
 
 
@@ -100,7 +100,7 @@ This produces a normalized drift score between 0 and the maximum possible struct
 If $\bar{D}\left(L\right)$ exceeds a drift threshold, CST Core emits a drift signal for layer L.
 
 **Distance function specification**
-The distance function $d\left(\cdot ,\; \cdot \right)$ is deterministic and metric specific:
+The distance function $d\left(\cdot ,\ \cdot \right)$ is deterministic and metric specific:
 - identity_drift Measures change in overall identity structure.
 - referent_drift Measures change in referent map (e.g., referent reassignment, disappearance, or instability).
 - lineage_drift Measures change in lineage connections (e.g., parent/child structural links).
