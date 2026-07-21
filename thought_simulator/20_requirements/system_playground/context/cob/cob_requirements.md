@@ -71,6 +71,7 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
 
 - **Referential Integrity (HLR‑COB‑003)**  
   - Test ensures referent maps remain structurally consistent across updates, merges, splits, and collapses. Referent‑map integrity includes deterministic structural compression as defined in HLR‑COB‑024.
+  - Test verifies referent‑map integrity after structural compression.
 
 - **Ordering Metrics (HLR‑COB‑004)**  
   - Test verifies recency, frequency, and density metrics are preserved and aggregated correctly.
@@ -101,6 +102,21 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
 
 - **Sliding‑Window Frequency (HLR‑COB‑013)**  
   - Test verifies correct computation of sliding‑window frequency over last 10 accesses.
+
+- **Referent‑Map Structural Compression (HLR‑COB‑024)**  
+  - Test verifies deterministic structural compression of referent maps after updates, merges, and splits.  
+  - Test ensures exact duplicate referent entries are removed.  
+  - Test ensures referent entries whose token sets are strict subsets of other entries are removed.  
+  - Test verifies compression preserves referent‑map integrity and lineage continuity.  
+  - Test ensures compression operates strictly on token‑set structure without semantic interpretation.  
+  - Test verifies deterministic replay of compression behavior.
+
+- **Merge/Split Structural Propagation and Post‑Compression (HLR‑COB‑025)**  
+  - Test verifies MERGE structurally embeds each parent’s semantic fields before compression.  
+  - Test verifies SPLIT duplicates all semantic fields structurally into each child before compression.  
+  - Test ensures compression occurs only after structural embedding or duplication.  
+  - Test verifies compression does not modify semantic fields except through structural compression rules.  
+  - Test ensures deterministic replay of merge/split propagation and post‑compression behavior.
 
 **HLR‑COB‑014**  
 COB SHALL apply CST merge and split signals deterministically, preserving referent‑map integrity, lineage continuity, and ordering metrics, and SHALL NOT perform semantic reconstruction of identity‑layer fields. COB SHALL perform structural compression after merge and split operations as defined in HLR‑COB‑024 and SHALL NOT treat compression as semantic reconstruction.
@@ -189,7 +205,7 @@ Multi‑block interactions, multi‑turn replay, and pipeline‑level behavior a
 ### **5.3 Testbench Characteristics**  
 *(Informative)*
 
-Deterministic, pure block‑level validation mirroring `cob_structures.yaml` and `cob_state.yaml`.
+Deterministic, pure block‑level validation mirroring `cob_structures.yaml` and `cob_state.yaml`. The testbench includes deterministic validation of structural compression and post‑merge/split compression behavior.
 
 ---
 
