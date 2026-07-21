@@ -70,12 +70,103 @@ class COB:
         return self._lineage_seq
 
     # -----------------------------------------------------------------------
+    # Structural Compression Helpers (HLR-COB-024)
+    # -----------------------------------------------------------------------
+
+    @staticmethod
+    def _tokenize_surface_form(value: str) -> List[str]:
+        """
+        Structural tokenization: split on whitespace.
+        No semantic interpretation, purely structural.
+        """
+        if not isinstance(value, str):
+            return []
+        return value.split()
+
+    @classmethod
+    def _compress_surface_forms(cls, forms: List[str]) -> List[str]:
+        """
+        Structural compression over a list of surface forms:
+        - remove exact duplicates
+        - remove forms whose token sets are strict subsets of other forms
+        """
+        if not isinstance(forms, list):
+            return forms
+
+        # remove exact duplicates (preserve order deterministically)
+        seen = set()
+        unique = []
+        for f in forms:
+            if f not in seen:
+                seen.add(f)
+                unique.append(f)
+
+        # remove subset forms
+        keep = []
+        token_sets = [set(cls._tokenize_surface_form(f)) for f in unique]
+
+        for i, f_i in enumerate(unique):
+            tokens_i = token_sets[i]
+            drop = False
+            for j, f_j in enumerate(unique):
+                if i == j:
+                    continue
+                tokens_j = token_sets[j]
+                # strict subset: tokens_i ⊂ tokens_j
+                if tokens_i and tokens_i.issubset(tokens_j) and tokens_i != tokens_j:
+                    drop = True
+                    break
+            if not drop:
+                keep.append(f_i)
+
+        return keep
+
+    @classmethod
+    def _compress_referent_map(cls, referent_map: Any) -> Any:
+        """
+        Structural compression applied to referent_map.
+
+        Rules:
+        - If referent_map is a list of strings, compress that list.
+        - If referent_map is a dict with 'surface_forms', compress that list.
+        - If referent_map is a dict with 'parents', recurse into each parent map.
+        - Otherwise, leave referent_map unchanged (non-semantic, structural-only).
+        """
+        # list-of-strings case
+        if isinstance(referent_map, list):
+            return cls._compress_surface_forms(referent_map)
+
+        # dict cases
+        if isinstance(referent_map, dict):
+            # compress surface_forms if present
+            if "surface_forms" in referent_map and isinstance(referent_map["surface_forms"], list):
+                referent_map["surface_forms"] = cls._compress_surface_forms(
+                    referent_map["surface_forms"]
+                )
+
+            # recurse into parents sub-structure if present
+            if "parents" in referent_map and isinstance(referent_map["parents"], dict):
+                for pid, pmap in referent_map["parents"].items():
+                    referent_map["parents"][pid] = cls._compress_referent_map(pmap)
+
+        return referent_map
+
+    def _compress_all_referent_maps(self):
+        """
+        Apply structural compression to all identity-layer referent maps
+        after updates, merges, and splits (HLR-COB-024, HLR-COB-025).
+        """
+        for obj in self.state.objects:
+            obj.referent_map = self._compress_referent_map(obj.referent_map)
+
+    # -----------------------------------------------------------------------
     # Identity Object Lifecycle
     # -----------------------------------------------------------------------
 
     def add_identity_object(self, obj: IdentityObject):
         self.state.objects.append(obj)
         self.state.object_count = len(self.state.objects)
+        # compression is applied globally in run(), not on add
         self._evict_if_needed()
 
     def update_identity_object(self, obj_id: str, updates: Dict[str, Any]):
@@ -83,6 +174,8 @@ class COB:
             if obj.id == obj_id:
                 for key, value in updates.items():
                     setattr(obj, key, value)
+                # if referent_map updated, compress structurally
+                obj.referent_map = self._compress_referent_map(obj.referent_map)
                 break
 
     # -----------------------------------------------------------------------
@@ -398,7 +491,13 @@ class COB:
             "object_count": len(self.state.objects),
         }
 
+        # CST signals (including merge/split)
         self.apply_cst_signals(signals)
+
+        # Structural compression after updates, merges, and splits
+        self._compress_all_referent_maps()
+
+        # Eviction and summaries
         self._evict_if_needed()
         self.aggregate_summaries()
 
