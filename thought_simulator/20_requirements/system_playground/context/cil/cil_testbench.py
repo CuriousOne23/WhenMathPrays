@@ -15,7 +15,7 @@ This is NOT a full system simulation. It is a shaping testbench used
 inside system_playground before system_simulation.
 """
 
-from context.cil.cil import CIL, IdentityObject
+from cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
