@@ -1,14 +1,18 @@
-# CIL Requirements
+# **CIL Requirements (Revised, Consolidated HLR Section)**  
+*Conversation Identity Layer — Context Subsystem*  
+*System Playground Version*
 
-## **1. Purpose**
+---
 
-The **Conversation Identity Layer (CIL)** integrates two distinct input streams:
+## **1. Purpose**  
+*(Informative — no SHALL statements)*
 
-- identity‑layer objects from **COB**
-- stability signals originating from **CST**
+The Conversation Identity Layer (CIL) integrates two coordinated input streams:
 
-These are combined into a single, structured **CIL Intake Packet**.  
-This packet is consumed exclusively by **CEx**, the first Path A primitive.  
+- identity‑layer objects from COB  
+- stability signals originating from CST  
+
+These are combined into a structured **CIL Intake Packet**, consumed exclusively by **CEx**, the first Path A primitive.  
 CIL provides the stabilized identity‑layer context required for correction expansion.
 
 CIL is the final stage of the context subsystem:
@@ -17,33 +21,37 @@ $$
 \text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
 $$
 
+(Sections   [Current page](citation-section://1146975448/3),   [Current page](citation-section://1146975448/4))
+
 ---
 
-## **2. Scope**
+## **2. Scope**  
+*(Informative — no SHALL statements)*
 
 This document defines the **system_playground implementation** of CIL.  
-It describes the intake process, packet structure, ordering rules, ambiguity handling, and compatibility requirements with CEx.
-
-This document does **not** redefine the global CIL architecture in **20.33**; global requirements remain authoritative.
+It describes intake processing, packet structure, ordering rules, ambiguity handling, and compatibility requirements with CEx.  
+Global architecture defined in **20.33** remains authoritative.  
+(Section   [Current page](citation-section://1146975448/7))
 
 ---
 
-## **3. Inputs**
+## **3. Inputs**  
+*(Informative — no SHALL statements)*
 
-CIL operates over **two coordinated inputs**: identity‑layer objects from COB and stability information derived from CST.  
-Both inputs contribute to the construction of the CIL Intake Packet and to the historical information captured in TP.
+CIL operates over two coordinated inputs:
 
 ### **3.1 COB Identity‑Layer Objects**  
 CIL receives up to 20 stabilized identity‑layer objects from COB, including referent maps, anchors, lineage, ambiguity indicators, stability metrics, and ordering metrics.  
-These objects form the primary identity context that CIL selects and packs for CEx.
+(Section   [Current page](citation-section://1146975448/12))
 
 ### **3.2 CST Stability Signals**  
 CIL receives stability‑related signals from CST indirectly through COB and directly when required by global rules.  
-These signals influence stability aggregation, ambiguity handling, and the stability‑aware portions of the CIL Intake Packet.
+(Section   [Current page](citation-section://1146975448/15))
 
 ---
 
-## **4. Outputs**
+## **4. Outputs**  
+*(Informative — no SHALL statements)*
 
 ### **4.1 CIL Intake Packet**  
 CIL produces a structured packet containing:
@@ -55,208 +63,136 @@ CIL produces a structured packet containing:
 - lineage hints  
 - referent certainty/ambiguity fields  
 
-This packet is consumed by **CEx**.
-
-## **5. Testing**
-
-The system_playground version of CIL is validated using a deterministic, block‑level Python testbench (cil_testbench.py).  
-This testbench evaluates how CIL integrates **two inputs**:
-
-- identity‑layer objects from COB  
-- stability indicators originating from CST  
-
-into a structured CIL Intake Packet.  
-The goal is to confirm that CIL behaves predictably under controlled COB and CST inputs and produces stable packet structures suitable for consumption by CEx.
+This packet is consumed by CEx.  
+(Section   [Current page](citation-section://1146975448/16))
 
 ---
 
-## **5.1 Tested Behaviors (Expanded)**
+## **5. Testing (system_playground)**  
+*(Informative — no SHALL statements)*
 
-The testbench exercises several core behaviors to ensure CIL produces consistent and interpretable packet structures.  
-Each behavior is validated using synthetic identity‑layer objects and ordering metrics.
+The system_playground version of CIL is validated using a deterministic Python testbench (`cil_testbench.py`).  
+It evaluates how CIL integrates identity‑layer objects from COB and stability indicators originating from CST into a structured CIL Intake Packet.
 
-### **Identity Selection**
+---
+
+## **5.1 Tested Behaviors (Informative)**
+
+### **Identity Selection**  
 CIL selects identity‑layer objects using deterministic ordering rules derived from COB.  
-  
-The testbench verifies that:
-
-- ordering scores produce stable rankings  
-- ties are resolved deterministically  
-- the top‑ranked objects (default maximum: 5) are consistently selected across repeated runs  
-
-If ordering metrics are represented as a vector $[r, f, d]$ for recency, frequency, and density, CIL applies a deterministic scoring function such as:
+Ordering scores are computed using a deterministic scoring function:
 
 $$
-\text{Score}(o) = w_r\cdot r + w_f\cdot f + w_d\cdot d
+\text{Score}(o) = w_r r + w_f f + w_d d
 $$
 
-where $w_r, w_f, w_d$ are fixed weights defined in system_playground.
+(Section   [Current page](citation-section://1146975448/17))
 
-### **Certainty Aggregation**
-CIL extracts certainty and ambiguity indicators from selected identity objects.  
-The testbench confirms:
+### **Certainty Aggregation**  
+CIL aggregates certainty and ambiguity indicators into unified blocks.
 
-- certainty fields are aggregated into a unified certainty block  
-- ambiguity fields are aggregated into a unified ambiguity block  
-- missing fields are handled gracefully  
-- ordering of certainty indicators remains deterministic  
+### **Stability Aggregation**  
+CIL aggregates stability metrics originating from CST.
 
-### **Stability Aggregation**
-CIL aggregates stability metrics originating from CST (drift, oscillation, collapse, merge/split, freeze/thaw).  
-The testbench ensures:
+### **Lineage Aggregation**  
+CIL collects lineage stability indicators and lineage records.
 
-- per‑object stability metrics are preserved  
-- aggregated stability summaries reflect the selected identity set  
-- stability blocks remain structurally consistent across runs  
+### **Ordering Aggregation**  
+CIL aggregates ordering metrics (recency, frequency, density).
 
-### **Lineage Aggregation**
-CIL collects lineage stability indicators and lineage records for selected identity objects.  
-The testbench verifies:
-
-- lineage stability values are preserved  
-- lineage hints are included in the packet  
-- lineage blocks remain deterministic  
-
-### **Ordering Aggregation**
-CIL aggregates ordering metrics (recency, frequency, density) for selected identity objects.  
-The testbench confirms:
-
-- ordering distributions are preserved  
-- ordering blocks remain deterministic  
-- ordering metrics are correctly associated with each identity object  
-
-### **Intake Packet Construction**
-The testbench validates that CIL constructs the CIL Intake Packet deterministically.  
-It checks:
-
-- identity selection block  
-- certainty block  
-- stability block  
-- lineage block  
-- ordering block  
-- packet metadata  
-
-A typical packet structure can be expressed as:
+### **Intake Packet Construction**  
+CIL constructs a deterministic packet:
 
 $$
-\text{Packet} = \\{ \text{IdentitySet},\ \text{Ordering},\ \text{Ambiguity},\ \text{Stability},\ \text{Lineage} \\}
+\text{Packet} = \{ \text{IdentitySet},\ \text{Ordering},\ \text{Ambiguity},\ \text{Stability},\ \text{Lineage} \}
 $$
 
 ---
 
-## **5.2 Behaviors Not Tested (Expanded)**
+## **5.2 Behaviors Not Tested (Informative)**
 
-The system_playground version of CIL intentionally omits several behaviors that require multi‑block integration or full pipeline execution.  
+System_playground does not test:
 
-### **Multi‑Block Interactions**
-CIL is not tested in combination with COB or CST beyond basic identity‑layer object intake.  
-Full multi‑block flows require simulation of:
+- multi‑block interactions  
+- pipeline integration with CEx  
+- multi‑turn replay determinism  
+- identity‑layer evolution across turns  
 
-- COB identity evolution  
-- CST stability propagation  
-- TP lineage continuity  
-- CE Envelope interactions  
-
-### **Pipeline Integration with CEx**
-CIL is not tested in the context of CEx execution.  
-CEx consumes the CIL Intake Packet, but system_playground does not simulate:
-
-- correction expansion  
-- referent updates  
-- ambiguity resolution  
-- multi‑turn packet evolution  
-
-### **Deterministic Replay Across Turns**
-CIL is not tested for multi‑turn replay determinism.  
-Replay determinism requires:
-
-- stable ordering across turns  
-- stable lineage propagation  
-- stable ambiguity evolution  
-
-These behaviors belong to system_simulation.
-
-### **High‑Level Identity‑Layer Evolution**
-CIL does not simulate identity‑layer evolution across turns.  
-Evolution requires:
-
-- merge/split propagation  
-- referent map drift  
-- anchor updates  
-- lineage branching   
+(Sections   [Current page](citation-section://1146975448/17)–  [Current page](citation-section://1146975448/20))
 
 ---
 
-## **6. High‑Level Requirements (HLRs)**  
-*(All SHALL statements appear only here. Each HLR contains exactly one SHALL.)*
+# **6. Consolidated High‑Level Requirements (HLRs)**  
+*(All SHALL statements appear only here; renumbered; new HLRs begin at 020)*
 
-### **HLR‑CIL‑001: Intake Packet Construction**  
+### **Intake Packet Construction & Selection**
+
+**HLR‑CIL‑001**  
 CIL SHALL construct a CIL Intake Packet containing identity‑layer objects selected from COB.
 
-### **HLR‑CIL‑002: Ordering Metric Preservation**  
+**HLR‑CIL‑002**  
 CIL SHALL preserve ordering metrics (recency, frequency, density) received from COB.
 
-### **HLR‑CIL‑003: Ambiguity Propagation**  
+**HLR‑CIL‑003**  
 CIL SHALL propagate ambiguity indicators from COB into the CIL Intake Packet.
 
-### **HLR‑CIL‑004: Stability Integration**  
+**HLR‑CIL‑004**  
 CIL SHALL integrate stability information derived from CST signals into the intake packet.
 
-### **HLR‑CIL‑005: Lineage Preservation**  
+**HLR‑CIL‑005**  
 CIL SHALL preserve lineage hints and stability indicators for identity‑layer objects.
 
-### **HLR‑CIL‑006: Packet Determinism**  
+**HLR‑CIL‑006**  
 CIL SHALL produce deterministic intake packets under identical COB and CST inputs.
 
-### **HLR‑CIL‑007: CEx Compatibility**  
+**HLR‑CIL‑007**  
 CIL SHALL produce intake packets conforming to the schema required by CEx.
 
-### **HLR‑CIL‑008: Identity Selection Rules**  
+**HLR‑CIL‑008**  
 CIL SHALL select identity‑layer objects according to ordering metrics defined in global CIL requirements.
 
-### **HLR‑CIL‑009: Ambiguity‑Aware Selection**  
+**HLR‑CIL‑009**  
 CIL SHALL incorporate ambiguity indicators into identity selection decisions.
 
-### **HLR‑CIL‑010: Stability‑Aware Selection**  
+**HLR‑CIL‑010**  
 CIL SHALL incorporate stability metrics into identity selection decisions.
 
 ---
 
-## **Next‑Turn Context Integration (TP.next_context_fields Cross‑Reference)**
+### **Next‑Turn Context Integration (New HLRs begin here)**
 
-### **HLR‑CIL‑011: Next‑Turn Context Intake**  
-CIL SHALL ingest next‑turn clarifying/context fields from COB’s stabilized identity‑layer snapshot, where COB has merged next‑turn context originating from `TP.next_context{}` as defined in **20.105_tp_requirements.md**.
+**HLR‑CIL‑011**  
+CIL SHALL ingest next‑turn context fields from COB’s stabilized identity‑layer snapshot.
 
-### **HLR‑CIL‑012: Next‑Turn Context Placement**  
-CIL SHALL place next‑turn context fields into the CIL Intake Packet exactly as provided by COB, without modification, reinterpretation, or repair.
+**HLR‑CIL‑012**  
+CIL SHALL place next‑turn context fields into the intake packet exactly as provided by COB.
 
-### **HLR‑CIL‑013: Deterministic Next‑Turn Context Representation**  
-CIL SHALL represent next‑turn context fields deterministically in the intake packet such that identical COB snapshots and CST signals produce identical next‑turn context output.
+**HLR‑CIL‑013**  
+CIL SHALL represent next‑turn context fields deterministically.
 
-### **HLR‑CIL‑014: Continuity Preservation**  
-CIL SHALL preserve next‑turn context continuity across turns by reflecting the next‑turn context fields provided by COB in the intake packet without mutation.
+**HLR‑CIL‑014**  
+CIL SHALL preserve next‑turn context continuity across turns.
 
-### **HLR‑CIL‑015: No Derivation Rule**  
-CIL SHALL NOT derive next‑turn context fields from clarifying fields, referent maps, ordering metrics, or stability metrics; next‑turn context SHALL originate exclusively from COB’s stabilized snapshot.
+**HLR‑CIL‑015**  
+CIL SHALL NOT derive next‑turn context fields from referent maps, ordering metrics, or stability metrics.
 
-### **HLR‑CIL‑016: CEx Compatibility for Next‑Turn Context**  
-CIL SHALL include next‑turn context fields in the intake packet in a structure compatible with CEx extraction rules defined in **20.107**, without renaming or structural changes.
+**HLR‑CIL‑016**  
+CIL SHALL include next‑turn context fields in a structure compatible with CEx extraction rules.
 
-### **HLR‑CIL‑017: Freeze/Thaw Continuity**  
-CIL SHALL preserve next‑turn context fields across freeze/thaw cycles without loss, mutation, or reordering.
+**HLR‑CIL‑017**  
+CIL SHALL preserve next‑turn context fields across freeze/thaw cycles.
 
-### **HLR‑CIL‑018: No Field Duplication Rule**  
-CIL SHALL NOT define next‑turn context field names; all field definitions SHALL originate exclusively from **20.105_tp_requirements.md**.
+**HLR‑CIL‑018**  
+CIL SHALL NOT define next‑turn context field names.
 
-### **HLR‑CIL‑019: Structural‑Only Handling**  
-CIL SHALL treat next‑turn context fields strictly as structural metadata and SHALL NOT perform semantic interpretation, meaning inference, or context repair.
+**HLR‑CIL‑019**  
+CIL SHALL treat next‑turn context fields strictly as structural metadata.
 
 ---
 
-## **7. Intake Packet Structure**  
+# **7. Intake Packet Structure**  
 *(Informative — no SHALL statements)*
 
-The CIL Intake Packet contains structured fields representing identity‑layer context.  
 A typical packet includes:
 
 - identity selection block  
@@ -265,12 +201,6 @@ A typical packet includes:
 - lineage block  
 - ordering metrics block  
 
-Example block equation:
-
-$$
-\text{Packet} = \\{ \text{IdentitySet},\ \text{Ordering},\ \text{Ambiguity},\ \text{Stability},\ \text{Lineage} \\}
-$$
-
 ---
 
 ## **8. Identity Selection Rules**  
@@ -278,9 +208,9 @@ $$
 
 Identity selection uses ordering metrics from COB:
 
-- **Recency**: most recent objects preferred  
-- **Frequency**: frequently referenced objects preferred  
-- **Density**: objects with dense referent maps preferred  
+- recency  
+- frequency  
+- density  
 
 Ambiguity and stability indicators influence selection priority.
 
@@ -289,33 +219,23 @@ Ambiguity and stability indicators influence selection priority.
 ## **9. Interface Contracts**  
 *(Informative — no SHALL statements)*
 
-### **CIL → CEx**  
-CIL provides the intake packet directly to CEx.  
-CEx consumes no other context subsystem output.
-
-### **CIL → COB**  
-CIL consumes identity‑layer objects from COB.  
-CIL does not modify COB state.
-
-### **CIL → CST**  
-CIL incorporates CST stability information indirectly through COB and directly when required.
+CIL → CEx: CIL provides the intake packet directly to CEx.  
+CIL → COB: CIL consumes identity‑layer objects from COB.  
+CIL → CST: CIL incorporates CST stability information indirectly through COB.
 
 ---
 
 ## **10. Determinism Notes**  
 *(Informative — no SHALL statements)*
 
-Deterministic packet generation ensures reproducible behavior in CEx under identical COB and CST inputs.  
-This supports deterministic correction expansion in Path A.
+Deterministic packet generation ensures reproducible behavior in CEx under identical COB and CST inputs.
 
 ---
 
 ## **11. Error Handling**  
 *(Informative — no SHALL statements)*
 
-CIL rejects malformed identity‑layer objects.  
-CIL rejects packets that violate global CIL schema rules.  
-CIL ensures internal consistency of packet fields.
+CIL rejects malformed identity‑layer objects and packets violating global schema rules.
 
 ---
 
@@ -326,3 +246,4 @@ This document defines the system_playground version of CIL.
 It mirrors global architecture while remaining scoped for simulation and testing.
 
 ---
+Just tell me what you want next.
