@@ -70,7 +70,7 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
   - Test verifies deterministic application of CST drift, oscillation, collapse, freeze, thaw, certainty adjustments, ambiguity adjustments, and lineage stability indicators.
 
 - **Referential Integrity (HLR‑COB‑003)**  
-  - Test ensures referent maps remain structurally consistent across updates, merges, splits, and collapses.
+  - Test ensures referent maps remain structurally consistent across updates, merges, splits, and collapses. Referent‑map integrity includes deterministic structural compression as defined in HLR‑COB‑024.
 
 - **Ordering Metrics (HLR‑COB‑004)**  
   - Test verifies recency, frequency, and density metrics are preserved and aggregated correctly.
@@ -103,7 +103,7 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
   - Test verifies correct computation of sliding‑window frequency over last 10 accesses.
 
 **HLR‑COB‑014**  
-COB SHALL apply CST merge and split signals deterministically, preserving referent‑map integrity, lineage continuity, and ordering metrics, and SHALL NOT perform semantic reconstruction of identity‑layer fields.
+COB SHALL apply CST merge and split signals deterministically, preserving referent‑map integrity, lineage continuity, and ordering metrics, and SHALL NOT perform semantic reconstruction of identity‑layer fields. COB SHALL perform structural compression after merge and split operations as defined in HLR‑COB‑024 and SHALL NOT treat compression as semantic reconstruction.
 
 - For **MERGE**, COB SHALL:
   - preserve each parent’s referent map, anchors, ambiguity, and stability metrics structurally in the merged child;  
@@ -148,6 +148,11 @@ This behavior is validated in `cob_testbench_merge_split.py`, which asserts:
 - split children receive full semantic copies;  
 - replay of identical CST merge/split signals produces identical COB state, lineage_log, and cob_state_snapshot.
 
+**Structural Compression After Merge/Split (Informative)**  
+After structural embedding (MERGE) or structural duplication (SPLIT), COB applies a deterministic structural compression step.  
+Compression removes duplicate referent entries and removes referent entries whose token sets are strict subsets of other entries.  
+Compression is structural, deterministic, and non‑semantic, and therefore does not violate the prohibition on semantic reconstruction.
+
 ### **Next‑Turn Context Integration Tests**
 
 - **Next‑Turn Context Ingestion (HLR‑COB‑015)**  
@@ -158,7 +163,23 @@ This behavior is validated in `cob_testbench_merge_split.py`, which asserts:
 - **Deterministic Replay of Next‑Turn Context (HLR‑COB‑020)**  
 - **Freeze/Thaw Continuity for Next‑Turn Context (HLR‑COB‑021)**  
 - **No Field Duplication Rule (HLR‑COB‑022)**  
-- **Structural‑Only Handling (HLR‑COB‑023)**  
+- **Structural‑Only Handling (HLR‑COB‑023)**
+
+**HLR‑COB‑024**  
+COB SHALL apply a deterministic structural compression step to each identity‑layer referent map after updates, merges, and splits.  
+Compression SHALL:  
+1. remove exact duplicate referent entries;  
+2. remove referent entries whose token sets are strict subsets of other referent entries;  
+3. preserve referent‑map integrity and lineage continuity;  
+4. operate strictly on token‑set structure without semantic interpretation;  
+5. maintain deterministic replay behavior.
+
+**HLR‑COB‑025**  
+COB SHALL apply deterministic structural propagation of semantic fields during merge and split operations.  
+For MERGE, COB SHALL embed each parent’s semantic fields structurally in the merged child before compression.  
+For SPLIT, COB SHALL duplicate all semantic fields structurally into each child before compression.  
+Compression SHALL occur only after structural embedding or duplication, and SHALL NOT modify semantic fields except through structural compression defined in HLR‑COB‑024.
+
 
 ### **5.2 Behaviors Not Tested**  
 *(Informative)*
