@@ -349,7 +349,7 @@ Let $C_{\text{total}}(L)$ be the combined instability score for layer L. This sc
 CST Core triggers freeze when:
 
 $$
-C_{\text{total}}(L\right)\gt {\theta }_{\text{freeze}}(L\right)
+C\_{\text{total}}(L)\gt {\theta }\_{\text{freeze}}(L)
 $$
 
 Interpretation:
@@ -360,12 +360,12 @@ Freeze is layer specific and does not affect other layers unless their own thres
 
 **What freeze does**  
 When a layer freezes:
-- Snapshots stop updating {\text{snapshot}}_{t}(L\right)is held constant.
+- Snapshots stop updating ${\text{snapshot}}_{t}(L)$ is held constant.
 - Stability metrics stop updating Drift, oscillation, ambiguity, and collapse are paused.
 - Thresholds stop adapting Threshold evolution halts for that layer.
 - Continuity is preserved The layer cannot degrade further.
 
-Freeze is a hard stop on structural evolution.
+Freeze is a _hard stop_ on structural evolution.
 
 **Why freeze matters**  
 Freeze prevents:
