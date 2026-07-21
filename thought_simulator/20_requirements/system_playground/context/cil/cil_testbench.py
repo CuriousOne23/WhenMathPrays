@@ -57,7 +57,7 @@ def make_identity_object(
     )
 
 
-def make_cst_signals():
+def make_cst_signals(turn_index: int = None):
     """Synthetic CST signals for testing."""
     return {
         "drift": {"affected_objects": [], "magnitude": 0},
@@ -70,7 +70,7 @@ def make_cst_signals():
         "certainty_adjustment": {"increased_certainty": [], "decreased_certainty": []},
         "ambiguity_adjustment": {"increased_ambiguity": [], "decreased_ambiguity": []},
         "lineage_stability": {"stable_lineage": [], "unstable_lineage": []},
-        "metadata": {"turn_index": None},
+        "metadata": {"turn_index": turn_index},
     }
 
 
@@ -123,7 +123,7 @@ def run_basic_test():
     )
 
     cob_objects = [obj1, obj2, obj3]
-    cst_signals = make_cst_signals()
+    cst_signals = make_cst_signals(turn_index=1)
 
     cil = CIL()
     packet = cil.run(cob_objects, cst_signals, turn_index=1)
@@ -165,7 +165,7 @@ def run_selection_priority_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(), turn_index=2)
+    packet = cil.run(objs, make_cst_signals(turn_index=2), turn_index=2)
 
     print("\n--- Selection Order (Top 5) ---")
     for entry in packet.identity_selection_block:
@@ -184,7 +184,7 @@ def run_stability_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(), turn_index=3)
+    packet = cil.run(objs, make_cst_signals(turn_index=3), turn_index=3)
 
     print("\n--- Stability Block (COB-derived) ---")
     print(packet.stability_block)
@@ -202,7 +202,7 @@ def run_lineage_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(), turn_index=4)
+    packet = cil.run(objs, make_cst_signals(turn_index=4), turn_index=4)
 
     print("\n--- Lineage Block ---")
     print(packet.lineage_block)
@@ -220,7 +220,7 @@ def run_ordering_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(), turn_index=5)
+    packet = cil.run(objs, make_cst_signals(turn_index=5), turn_index=5)
 
     print("\n--- Ordering Block ---")
     print(packet.ordering_block)
