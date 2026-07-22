@@ -277,27 +277,27 @@ if __name__ == "__main__":
     print("\n=== CST‑Mux Testbench: Running All Tests ===")
 
     test_activation_flags()
-    print("✓ Activation flag test passed")
+    print("[PASS] Activation flag test passed")
 
     test_freeze_flags()
-    print("✓ Freeze flag test passed")
+    print("[PASS] Freeze flag test passed")
 
     test_thaw_flags()
-    print("✓ Thaw flag test passed")
+    print("[PASS] Thaw flag test passed")
 
     test_continuity_flags()
-    print("✓ Continuity flag test passed")
+    print("[PASS] Continuity flag test passed")
 
     test_usp_construction()
-    print("✓ USP construction test passed")
+    print("[PASS] USP construction test passed")
 
     test_merge_split_neutrality()
-    print("✓ Merge/split neutrality test passed")
+    print("[PASS] Merge/split neutrality test passed")
 
     test_usp_window_length()
-    print("✓ USP window test passed")
+    print("[PASS] USP window test passed")
 
     test_determinism_replay()
-    print("✓ Determinism/replay test passed")
+    print("[PASS] Determinism/replay test passed")
 
     print("\n=== CST‑Mux Testbench: All Tests Completed ===")
