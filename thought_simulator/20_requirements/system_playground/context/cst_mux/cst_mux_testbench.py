@@ -1,7 +1,7 @@
 """
-CST‑Mux Testbench — System Playground Version
+CST-Mux Testbench — System Playground Version
 
-Validates CST‑Mux against:
+Validates CST-Mux against:
 - cst-mux.md (architecture)
 - cst-mux_requirements.md (HLR-CST-MUX-nnn)
 - cst-ms.py (upstream synthesis module)
@@ -274,7 +274,7 @@ def test_determinism_replay():
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    print("\n=== CST‑Mux Testbench: Running All Tests ===")
+    print("\n=== CST-Mux Testbench: Running All Tests ===")
 
     test_activation_flags()
     print("[PASS] Activation flag test passed")
@@ -300,4 +300,4 @@ if __name__ == "__main__":
     test_determinism_replay()
     print("[PASS] Determinism/replay test passed")
 
-    print("\n=== CST‑Mux Testbench: All Tests Completed ===")
+    print("\n=== CST-Mux Testbench: All Tests Completed ===")
