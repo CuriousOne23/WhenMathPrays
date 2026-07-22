@@ -391,46 +391,59 @@ A layer remains frozen until:
 
 Only then can thaw occur.
 
-## 8. Thaw Detection
+## 8. Thaw Detection  
 Thaw is the controlled reversal of freeze. Where freeze halts structural updates to prevent collapse, thaw restores normal operation once stability returns.
+
 Thaw is never time based. Thaw is strictly condition based.
+
 A layer remains frozen until CST Core determines that:
-	collapse has decreased
-	ambiguity has decreased
-	oscillation has decreased
-	drift has decreased
-	stability has improved
-	continuity is safe again
+- collapse has decreased
+- ambiguity has decreased
+- oscillation has decreased
+- drift has decreased
+- stability has improved
+- continuity is safe again
+
 Only then can thaw occur.
-Thaw condition
-Let C_{\text{total}}(L\right)be the combined instability score for layer L. Thaw occurs when instability falls below a recovery threshold:
-C_{\text{total}}(L\right)\leq {\theta }_{\text{recover}}(L\right)
+
+**Thaw condition**
+Let $C_{\text{total}}(L)$ be the combined instability score for layer L. Thaw occurs when instability falls below a recovery threshold:
+
+$$
+C_{\text{total}}(L)\leq {\theta }_{\text{recover}}(L)
+$$
 
 Interpretation:
-	Above threshold → layer remains frozen
-	Below threshold → layer thaws and resumes normal updates
+- Above threshold → layer remains frozen
+- Below threshold → layer thaws and resumes normal updates
+
 Thaw thresholds are:
-	deterministic
-	monotonic
-	layer specific
-	distinct from freeze thresholds
-	updated only through CST Core’s threshold update rules
-What thaw does
+- deterministic
+- monotonic
+- layer specific
+- distinct from freeze thresholds
+- updated only through CST Core’s threshold update rules
+
+**What thaw does**  
 When thaw occurs:
-	Snapshots resume updating {\text{snapshot}}_{t}(L\right)begins capturing new structural states again.
-	Stability metrics resume updating Drift, oscillation, ambiguity, and collapse calculations restart.
-	Thresholds resume adapting Layer specific thresholds begin evolving again.
-	Continuity restoration begins The layer re enters normal structural evolution.
+1. Snapshots resume updating ${\text{snapshot}}_{t}(L)$ begins capturing new structural states again.
+2. Stability metrics resume updating Drift, oscillation, ambiguity, and collapse calculations restart.
+3. Thresholds resume adapting Layer specific thresholds begin evolving again.
+4. Continuity restoration begins The layer re enters normal structural evolution.
+
 Thaw is a soft restart of structural dynamics.
-Why thaw matters
+
+**Why thaw matters**  
 Thaw ensures that freeze is not permanent. Freeze protects stability, but thaw restores flexibility.
+
 Without thaw:
-	layers would remain frozen indefinitely
-	structural evolution would halt
-	referent continuity could stagnate
-	temporal anchors could become outdated
-	discourse structure could become rigid
-	lineage and register signals could fail to adapt
+- layers would remain frozen indefinitely
+- structural evolution would halt
+- referent continuity could stagnate
+- temporal anchors could become outdated
+- discourse structure could become rigid
+- lineage and register signals could fail to adapt
+
 Thaw ensures that CST Core can recover from instability and resume normal operation.
 Freeze–thaw cycle
 The freeze–thaw cycle is central to CST Core’s stability model:
