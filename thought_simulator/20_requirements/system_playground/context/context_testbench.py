@@ -97,21 +97,28 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
     cst_ms = CST_MS()
     cst_ms_signals = cst_ms.run(cst_core_signals, turn_index).__dict__
 
-    # 3. CST-Mux
+    # 3. CST-Mux (sees CST-Core via CST-MS)
     cst_mux = CST_MUX()
     usp = cst_mux.run(cst_ms_signals, turn_index)
 
-    # 4. COB
+    # 4. COB (sees OuBA + CST-Core + CST-MS/USP)
     cob = COB()
     for obj in objs:
         cob.add_identity_object(obj)
-    cob_state = cob.run(signals=cst_core_signals, turn_index=turn_index)
+    cob_state = cob.run(
+        core_signals=cst_core_signals,
+        ms_signals=cst_ms_signals,
+        usp=usp,
+        turn_index=turn_index,
+    )
 
-    # 5. CIL
+    # 5. CIL (sees COB objects + synthesized context)
     cil = CIL()
     cil_packet = cil.run(
         cob_objects=cob_state.objects,
-        cst_signals=cst_core_signals,
+        cst_core_signals=cst_core_signals,
+        cst_ms_signals=cst_ms_signals,
+        usp=usp,
         turn_index=turn_index,
     )
 
@@ -291,6 +298,7 @@ def run_new_id_context_test():
 
     print("[PASS] New ID-context boundary test passed")
 
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -299,4 +307,3 @@ if __name__ == "__main__":
     run_unified_basic_test()
     run_unified_merge_split_test()
     run_new_id_context_test()
-
