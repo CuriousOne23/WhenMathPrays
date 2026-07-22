@@ -492,9 +492,12 @@ class COB:
     # Main Entry Point
     # -----------------------------------------------------------------------
 
-    def run(self, signals: Dict[str, Any], turn_index: int):
+    def run(self, core_signals: Dict[str, Any], ms_signals: Dict[str, Any], turn_index: int):
         """Deterministic COB execution sequence."""
 
+        # Merge signals
+        signals = {**core_signals, **ms_signals}
+    
         # Conversation-level metrics
         self.state.conversation_access_count += 1
         self.state.conversation_access_order.append(turn_index)
