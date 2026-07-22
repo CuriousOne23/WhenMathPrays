@@ -155,10 +155,9 @@ class COB:
         """
         Apply structural compression to all identity-layer referent maps
         after updates, merges, and splits (HLR-COB-024, HLR-COB-025).
+        Compression is global and structural-only.
         """
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
-                continue
+        for obj in self.state.objects:
             obj.referent_map = self._compress_referent_map(obj.referent_map)
 
     # -----------------------------------------------------------------------
@@ -172,13 +171,14 @@ class COB:
         self._evict_if_needed()
 
     def update_identity_object(self, obj_id: str, updates: Dict[str, Any]):
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
-                continue
+        """
+        Deterministic identity-object update.
+        Structural compression is applied if referent_map changes.
+        """
+        for obj in self.state.objects:
             if obj.id == obj_id:
                 for key, value in updates.items():
                     setattr(obj, key, value)
-                # if referent_map updated, compress structurally
                 obj.referent_map = self._compress_referent_map(obj.referent_map)
                 break
 
@@ -190,7 +190,7 @@ class COB:
         """Apply CST signals deterministically."""
 
         apply_only = signals.get("apply_to_only", None)
-        
+
         # Freeze/thaw
         frozen_ids = signals.get("freeze", {}).get("frozen_objects", [])
         thawed_ids = signals.get("thaw", {}).get("thawed_objects", [])
@@ -209,8 +209,8 @@ class COB:
         # -------------------------
         # Freeze / Thaw
         # -------------------------
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.id in frozen_ids:
                 obj.stability_metrics["frozen"] = True
@@ -220,8 +220,8 @@ class COB:
         # -------------------------
         # Drift
         # -------------------------
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.id in drift.get("affected_objects", []):
                 if obj.stability_metrics.get("frozen"):
@@ -231,8 +231,8 @@ class COB:
         # -------------------------
         # Oscillation
         # -------------------------
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.id in oscillation.get("affected_objects", []):
                 if obj.stability_metrics.get("frozen"):
@@ -242,8 +242,8 @@ class COB:
         # -------------------------
         # Collapse
         # -------------------------
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.id in collapse.get("collapsed_objects", []):
                 if obj.stability_metrics.get("frozen"):
@@ -253,8 +253,8 @@ class COB:
         # -------------------------
         # Certainty / Ambiguity
         # -------------------------
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.stability_metrics.get("frozen"):
                 continue
@@ -263,8 +263,8 @@ class COB:
             if obj.id in certainty_adj.get("decreased_certainty", []):
                 obj.ambiguity["certainty"] = "low"
 
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
+        for obj in self.state.objects:
+            if apply_only and obj.id != apply_only:
                 continue
             if obj.stability_metrics.get("frozen"):
                 continue
@@ -468,9 +468,7 @@ class COB:
         stability_levels = []
         lineage_levels = []
 
-        for obj in self.state.objects:     
-            if apply_only and obj.id != apply_only:         
-                continue
+        for obj in self.state.objects:
             om = obj.ordering_metrics
             recency.append(om.get("recency"))
             frequency.append(om.get("frequency"))
@@ -516,7 +514,7 @@ class COB:
         # -------------------------------------------------------------------
         if signals.get("new_context_required", False):
             new_id = f"ctx_{turn_index}"
-        
+
             new_obj = IdentityObject(
                 id=new_id,
                 referent_map=signals.get("next_context", {}).get("referent_map", {}),
@@ -526,10 +524,10 @@ class COB:
                 stability_metrics={"frozen": False},
                 ordering_metrics={"recency": turn_index, "frequency": 1, "density": 1},
             )
-        
+
             # Add new identity object immediately
             self.add_identity_object(new_obj)
-        
+
             # COB must NOT evolve previous objects when a new context is required
             # So we skip CST signal application for existing objects
             # and only evolve the new object using CST signals
