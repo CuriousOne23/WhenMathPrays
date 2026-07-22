@@ -23,32 +23,32 @@ The CST subsystem consists of **three coordinated modules**:
 
 ### CST‑Core Testbench
 ```
-python -m cst_core.cst_core_testbench
+python -m cst-core.cst-core_testbench
 ```
 
 Log:
 ```
-python -m cst_core.cst_core_testbench > cst_core.log
+python -m cst-core.cst-core_testbench > cst-core.log
 ```
 
 ### CST‑MS Testbench
 ```
-python -m cst_ms.cst_ms_testbench
+python -m cst-ms.cst-ms_testbench
 ```
 
 Log:
 ```
-python -m cst_ms.cst_ms_testbench > cst_ms.log
+python -m cst-ms.cst-ms_testbench > cst-ms.log
 ```
 
 ### CST‑Mux Testbench
 ```
-python -m cst_mux.cst_mux_testbench
+python -m cst-mux.cst-mux_testbench
 ```
 
 Log:
 ```
-python -m cst_mux.cst_mux_testbench > cst_mux.log
+python -m cst-mux.cst-mux_testbench > cst-mux.log
 ```
 
 ---
