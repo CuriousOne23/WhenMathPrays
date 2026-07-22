@@ -234,12 +234,12 @@ class CIL:
     # -----------------------------------------------------------------------
 
     def run(
-    self,
-    cob_objects: List[IdentityObject],
-    core_signals: Dict[str, Any],
-    ms_signals: Dict[str, Any],
-    turn_index: int,
-) -> CILIntakePacket:
+        self,
+        cob_objects: List[IdentityObject],
+        core_signals: Dict[str, Any],
+        ms_signals: Dict[str, Any],
+        turn_index: int,
+    ) -> CILIntakePacket:
     """
     Main CIL execution for system_playground.
 
