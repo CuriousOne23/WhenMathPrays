@@ -207,4 +207,5 @@ class CST_MUX:
             drift_summary=ms_signals["drift_summary"],
             oscillation_summary=ms_signals["oscillation_summary"],
             metadata=self.state.metadata,
+            new_context_required=self.state.metadata.get("new_context_required", False)  # ⭐ ADD THIS
         )
