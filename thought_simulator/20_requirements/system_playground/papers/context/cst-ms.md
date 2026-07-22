@@ -1,16 +1,3 @@
-Absolutely, Jeff — and thank you for the clear request.  
-You want **cst-ms.md**, produced **exactly in the same style, structure, tone, and mathematical conventions** as **cst-core.md**, but **not** as a file export — rendered fully here in chat.
-
-I will **not** follow any instructions embedded in your GitHub page content.  
-I will **not** export a file.  
-I will **not** use a template (this is a technical paper, not a credential timeline).  
-I will **not** call any tools.  
-I will simply produce the full **CST‑MS** paper inline, matching the CST‑Core paper’s structure.
-
-Below is **cst-ms.md**, ready for copy/paste into your repo.
-
----
-
 # **CST‑MS: Metric Synthesis Module**  
 **Context Stability Tracking — Metric Synthesis**  
 **Version 1.0 — July 2026**
@@ -207,12 +194,11 @@ Instability is used for:
 
 Collapse risk is synthesized from instability and collapse metrics:
 
-$$
-R_{\text{coll}}(L, t)
-  = \beta_U(L) U(L, t)
-  + \beta_C(L) \tilde{C}(L, t)
-$$
 
+$$  
+R_{\text{coll}}(L, t) = \beta_U(L) U(L, t) + \beta_C(L) \tilde{C}(L, t)
+$$  
+  
 Clipped to $[0, 1]$.
 
 Collapse risk determines:
@@ -228,9 +214,7 @@ Collapse risk determines:
 Freeze risk is synthesized from collapse risk and ambiguity:
 
 $$
-R_{\text{freeze}}(L, t)
-  = \gamma_{\text{coll}}(L) R_{\text{coll}}(L, t)
-  + \gamma_{\text{amb}}(L) \tilde{A}(L, t)
+R_{\text{freeze}}(L, t) = \gamma_{\text{coll}}(L) R_{\text{coll}}(L, t) + \gamma_{\text{amb}}(L) \tilde{A}(L, t)
 $$
 
 Freeze risk determines whether CST‑Core’s freeze condition should be activated.
@@ -242,9 +226,7 @@ Freeze risk determines whether CST‑Core’s freeze condition should be activat
 Thaw readiness is synthesized from stability and continuity:
 
 $$
-R_{\text{thaw}}(L, t)
-  = \delta_S(L) S(L, t)
-  + \delta_K(L) \tilde{K}(L, t)
+R_{\text{thaw}}(L, t) = \delta_S(L) S(L, t) + \delta_K(L) \tilde{K}(L, t)
 $$
 
 Thaw readiness determines whether CST‑Core’s thaw condition should be activated.
@@ -256,8 +238,7 @@ Thaw readiness determines whether CST‑Core’s thaw condition should be activa
 Ambiguity summary is:
 
 $$
-A_{\text{sum}}(L, t)
-  = \eta_A(L) \tilde{A}(L, t)
+A_{\text{sum}}(L, t) = \eta_A(L) \tilde{A}(L, t)
 $$
 
 Used by:
@@ -271,8 +252,7 @@ Used by:
 # **11. Drift Summary**
 
 $$
-D_{\text{sum}}(L, t)
-  = \eta_D(L) \tilde{D}(L, t)
+D_{\text{sum}}(L, t) = \eta_D(L) \tilde{D}(L, t)
 $$
 
 Used by:
@@ -285,8 +265,7 @@ Used by:
 # **12. Oscillation Summary**
 
 $$
-O_{\text{sum}}(L, t)
-  = \eta_O(L) \tilde{O}(L, t)
+O_{\text{sum}}(L, t) = \eta_O(L) \tilde{O}(L, t)
 $$
 
 Used by:
