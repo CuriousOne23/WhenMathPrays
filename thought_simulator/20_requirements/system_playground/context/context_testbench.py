@@ -117,7 +117,11 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
     #     turn_index=turn_index,
     # )
 
-    cob_state = cob.run(signals=cst_core_signals, turn_index=turn_index)
+    cob_state = cob.run(
+        core_signals=cst_core_signals,
+        ms_signals=cst_ms_signals,
+        turn_index=turn_index,
+    )
 
     # 5. CIL
     cil = CIL()
