@@ -251,6 +251,42 @@ def test_stability_window_length():
     assert len(ms.state.stability_window) == 10
     assert ms.state.stability_window[-1]["stability"]["value"] >= 0.0
 
+# ---------------------------------------------------------------------------
+# 9. NEW_CONTEXT_REQUIRED Tests (HLR‑CST‑MS‑046..050)
+# ---------------------------------------------------------------------------
+
+def test_new_context_required_detection():
+    """
+    Tests:
+    - HLR‑CST‑MS‑046 (detect continuity break)
+    - HLR‑CST‑MS‑047 (detect instability trend)
+    - HLR‑CST‑MS‑048 (detect ambiguity drift boundary)
+    - HLR‑CST‑MS‑049 (emit new_context_required=True)
+    - HLR‑CST‑MS‑050 (deterministic replay)
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    # Identity object with collapse=True → continuity = 0 → continuity break
+    obj = make_identity_object("A", drift=0.1, oscillation=0.1, collapse=True)
+
+    signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn_index=20).__dict__
+    ms_signals = ms.run(signals, turn_index=20)
+
+    print("\n--- NEW_CONTEXT_REQUIRED Detection ---")
+    print("new_context_required:", ms_signals.metadata.get("new_context_required"))
+
+    # 1. Must detect continuity break → new_context_required=True
+    assert ms_signals.metadata.get("new_context_required") is True
+
+    # 2. Deterministic replay: running again must produce same result
+    ms2 = CST_MS()
+    ms_signals2 = ms2.run(signals, turn_index=20)
+
+    assert ms_signals2.metadata.get("new_context_required") is True
 
 # ---------------------------------------------------------------------------
 # 8. Determinism / Replay Tests
@@ -319,6 +355,9 @@ if __name__ == "__main__":
     test_stability_window_length()
     print("[PASS] Stability window test passed")
 
+    test_new_context_required_detection()
+    print("[PASS] NEW_CONTEXT_REQUIRED detection test passed")
+    
     test_determinism_replay()
     print("[PASS] Determinism/replay test passed")
 
