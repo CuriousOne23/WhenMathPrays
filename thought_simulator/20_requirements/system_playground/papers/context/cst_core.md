@@ -91,13 +91,13 @@ Examples of valid distance functions:
 CST Core integrates drift over the last 10 turns to detect sustained instability:
 
 $$
-\bar{D}(L)=\frac{1}{10}\sum_{k=t-9}^{t} D(L,\ k)
+\overline{D}(L)=\frac{1}{10}\sum_{k=t-9}^{t} D(L,\ k)
 $$
 
 
 This produces a normalized drift score between 0 and the maximum possible structural distance.
 
-If $\bar{D}(L)$ exceeds a drift threshold, CST Core emits a drift signal for layer L.
+If $\overline{D}(L)$ exceeds a drift threshold, CST Core emits a drift signal for layer L.
 
 **Distance function specification**  
 The distance function $d(\cdot ,\ \cdot)$ is deterministic and metric specific:
@@ -112,7 +112,7 @@ Each metric uses a distance function appropriate to its structural domain.
 CST Core compares integrated drift against monotonic thresholds:
 
 $$
-\bar{D}(L)\gt {\theta }_{\text{drift}}(L)
+\overline{D}(L)\gt {\theta }_{\text{drift}}(L)
 $$
 
 If this condition is true, CST Core emits a drift signal for layer L.
@@ -216,16 +216,16 @@ The exact ambiguity function is deterministic and domain specific.
 CST Core integrates ambiguity over the last 10 turns:
 
 $$
-{\bar{A}}^{f}(L)=\frac{1}{10}\sum_{k=t-9}^{t} A^{f}(L,\ k)
+{\overline{A}}^{f}(L)=\frac{1}{10}\sum_{k=t-9}^{t} A^{f}(L,\ k)
 $$
 
 This produces a normalized ambiguity score between 0 and the maximum ambiguity allowed by the metric.
 
 **Interpretation**  
--	$\bar{A}=0$ No ambiguity. Structure is fully clear.
--	$\bar{A}=0.1\text{-}0.3$ Mild ambiguity. Acceptable for dynamic contexts.
--	$\bar{A}=0.4\text{-}0.6$ Moderate ambiguity. CST Core begins monitoring for collapse.
--	$\bar{A}\geq 0.7$ High ambiguity. CST Core emits an ambiguity warning.
+-	$\overline{A}=0$ No ambiguity. Structure is fully clear.
+-	$\overline{A}=0.1\text{-}0.3$ Mild ambiguity. Acceptable for dynamic contexts.
+-	$\overline{A}=0.4\text{-}0.6$ Moderate ambiguity. CST Core begins monitoring for collapse.
+-	$\overline{A}\geq 0.7$ High ambiguity. CST Core emits an ambiguity warning.
 
 Ambiguity is feature specific and layer specific.
 
@@ -233,7 +233,7 @@ Ambiguity is feature specific and layer specific.
 CST Core compares integrated ambiguity against a monotonic threshold:
 
 $$
-{\bar{A}}^{f}(L)\gt {\theta }_{\text{amb}}(L)
+{\overline{A}}^{f}(L)\gt {\theta }_{\text{amb}}(L)
 $$
 
 If true, CST Core emits an ambiguity signal for layer L.
@@ -274,19 +274,19 @@ CST Core integrates stability over the 10 turn window.
 **Integrated stability over window**  
 
 $$
-{\bar{S}}^{f}(L)=\frac{1}{10}\sum_{k=t-9}^{t} S^{f}(L,\ k)
+{\overline{S}}^{f}(L)=\frac{1}{10}\sum_{k=t-9}^{t} S^{f}(L,\ k)
 $$
 
 This produces a normalized stability score between 0 and 1.
-- $\bar{S}=1→$ fully stable
-- $\bar{S}=0→$ fully collapsed
+- $\overline{S}=1→$ fully stable
+- $\overline{S}=0→$ fully collapsed
 - intermediate values → partial stability
 
 **Collapse score** 
 Collapse is defined as the complement of stability:
 
 $$
-C^{f}(L)=1-{\bar{S}}^{f}(L)
+C^{f}(L)=1-{\overline{S}}^{f}(L)
 $$
 
 Interpretation:
@@ -484,14 +484,14 @@ Examples of continuity domains:
 CST Core integrates continuity over the last 10 turns:
 
 $$
-\bar{K}(L)=\frac{1}{10}\sum_{k=t-9}^{t} K(L,\ k)
+\overline{K}(L)=\frac{1}{10}\sum_{k=t-9}^{t} K(L,\ k)
 $$
 
 Interpretation:
-- $\bar{K}=1→$ perfect continuity
-- $\bar{K}=0.7\text{-}0.9→$ strong continuity
-- $\bar{K}=0.4\text{-}0.6→$ moderate continuity
-- $\bar{K}\lt 0.3→$ continuity failure
+- $\overline{K}=1→$ perfect continuity
+- $\overline{K}=0.7\text{-}0.9→$ strong continuity
+- $\overline{K}=0.4\text{-}0.6→$ moderate continuity
+- $\overline{K}\lt 0.3→$ continuity failure
 
 Continuity is layer specific.
 
@@ -499,7 +499,7 @@ Continuity is layer specific.
 CST Core restores continuity when:
 
 $$
-\bar{K}(L)\geq {\theta }_{\text{cont,recover}}(L)
+\overline{K}(L)\geq {\theta }_{\text{cont,recover}}(L)
 $$
 
 If true:
