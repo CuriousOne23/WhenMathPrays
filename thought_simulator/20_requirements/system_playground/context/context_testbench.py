@@ -1,32 +1,41 @@
-```python
 """
-Unified Context Testbench — System Playground Version
+Unified Context Testbench — System Playground Version (v2.0‑M)
 
-This testbench performs block-level validation of the unified context subsystem:
-- CST (stability analysis)
-- COB (identity-layer construction and evolution)
+This testbench performs block‑level validation of the unified context subsystem:
+- CST‑Core (stability signal generation)
+- CST‑MS (metric synthesis)
+- CST‑Mux (USP multiplexing)
+- COB (identity‑layer construction and evolution)
 - CIL (intake packet construction for CEx)
 
+It validates the deterministic pipeline:
+CST‑Core → CST‑MS → CST‑Mux → COB → CIL
+
 It is a shaping testbench used inside system_playground before system_simulation.
-It does NOT simulate CEx; it focuses on CST → COB → CIL behavior and a TP-like
+It does NOT simulate CEx; it focuses on CST → COB → CIL behavior and a TP‑like
 datastream that records what each block did and when, consistent with:
 
-- system_playground context_requirements.md
-- cst_requirements.md
+- system_playground context_requirements.md (v2.0‑M)
+- cst-core_requirements.md
+- cst-ms_requirements.md
+- cst-mux_requirements.md
 - cob_requirements.md
 - cil_requirements.md
 """
 
-from cst.cst import CST
-from cob.cob import COB
-from cil.cil import CIL, IdentityObject
+from context.cst_core.cst_core import CST as CSTCore
+from context.cst_ms.cst_ms import CST_MS
+from context.cst_mux.cst_mux import CST_MUX
+
+from context.cob.cob import COB
+from context.cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def make_ouba_identity_object(
+def make_identity_object(
     id: str,
     recency: int,
     frequency: int,
@@ -38,20 +47,7 @@ def make_ouba_identity_object(
     ambiguity=None,
     lineage_stability=None,
 ):
-    """
-    Helper to create OuBA-like IdentityObject instances for unified testing.
-
-    These objects approximate the identity-layer structures that OuBA would
-    provide to the context subsystem in system_playground. They carry:
-
-    - referent_map
-    - anchors
-    - lineage stability hints
-    - certainty/ambiguity indicators
-    - stability metrics (drift, oscillation, collapse, merge/split, freeze/thaw)
-    - ordering metrics (recency, frequency, density)
-    """
-
+    """OuBA‑like identity object for unified testing."""
     return IdentityObject(
         id=id,
         referent_map={"r1": "value"},
@@ -62,8 +58,6 @@ def make_ouba_identity_object(
             "drift": drift,
             "oscillation": oscillation,
             "collapse": collapse,
-            "merge_split": None,
-            "freeze_thaw": None,
         },
         ordering_metrics={
             "recency": recency,
@@ -74,19 +68,60 @@ def make_ouba_identity_object(
 
 
 def make_tp_placeholders():
-    """
-    Create TP-like placeholder structures for system_playground.
-
-    In system_simulation, these would be real TP records. Here they are
-    simple dictionaries used to track what CST, COB, and CIL did:
-
-    - tp_lineage_log: structural continuity markers
-    - tp_snapshot: stabilized identity-layer snapshot
-    """
-
+    """TP‑like placeholder structures."""
     tp_lineage_log = []
     tp_snapshot = {"turn_index": None, "objects": []}
     return tp_lineage_log, tp_snapshot
+
+
+# ---------------------------------------------------------------------------
+# Unified Pipeline Runner
+# ---------------------------------------------------------------------------
+
+def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
+    """
+    Runs the full unified pipeline:
+    CST‑Core → CST‑MS → CST‑Mux → COB → CIL
+    """
+
+    # 1. CST‑Core
+    cst_core = CSTCore()
+    cst_core_signals = cst_core.run(
+        identity_objects=objs,
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=turn_index,
+    ).__dict__
+
+    # 2. CST‑MS
+    cst_ms = CST_MS()
+    cst_ms_signals = cst_ms.run(cst_core_signals, turn_index).__dict__
+
+    # 3. CST‑Mux
+    cst_mux = CST_MUX()
+    usp = cst_mux.run(cst_ms_signals, turn_index)
+
+    # 4. COB
+    cob = COB()
+    for obj in objs:
+        cob.add_identity_object(obj)
+    cob_state = cob.run(signals=cst_core_signals, turn_index=turn_index)
+
+    # 5. CIL
+    cil = CIL()
+    cil_packet = cil.run(
+        cob_objects=cob_state.objects,
+        cst_signals=cst_core_signals,
+        turn_index=turn_index,
+    )
+
+    return {
+        "cst_core": cst_core_signals,
+        "cst_ms": cst_ms_signals,
+        "cst_mux": usp,
+        "cob_state": cob_state,
+        "cil_packet": cil_packet,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -94,450 +129,98 @@ def make_tp_placeholders():
 # ---------------------------------------------------------------------------
 
 def run_unified_basic_test():
-    """
-    Run a basic unified context test with three identity objects.
-
-    Sequence:
-    1. CST processes OuBA-like identity objects and TP lineage/snapshot.
-    2. COB evolves identity-layer objects using CST signals.
-    3. CIL constructs the intake packet using COB objects and CST signals.
-    4. TP-like datastream is assembled to show historical continuity.
-
-    This test gives a baseline view of:
-    - stability signals from CST
-    - bounded identity store and ordering in COB
-    - identity selection, certainty, stability, lineage, and ordering blocks in CIL
-    """
-
     print("\n=== Unified Context Testbench: Basic Test ===")
 
-    # OuBA-like identity objects
-    obj1 = make_ouba_identity_object(
-        id="obj1",
-        recency=10,
-        frequency=5,
-        density=3,
-        drift=0.1,
-        oscillation=0.0,
-        collapse=False,
-        certainty="high",
-        ambiguity="low",
-        lineage_stability="stable",
-    )
+    objs = [
+        make_identity_object("obj1", 10, 5, 3, drift=0.1, certainty="high", ambiguity="low", lineage_stability="stable"),
+        make_identity_object("obj2", 7, 9, 2, drift=0.3, oscillation=0.2, certainty="low", ambiguity="high", lineage_stability="unstable"),
+        make_identity_object("obj3", 1, 1, 1, collapse=True, lineage_stability="stable"),
+    ]
 
-    obj2 = make_ouba_identity_object(
-        id="obj2",
-        recency=7,
-        frequency=9,
-        density=2,
-        drift=0.3,
-        oscillation=0.2,
-        collapse=False,
-        certainty="low",
-        ambiguity="high",
-        lineage_stability="unstable",
-    )
-
-    obj3 = make_ouba_identity_object(
-        id="obj3",
-        recency=1,
-        frequency=1,
-        density=1,
-        drift=None,
-        oscillation=None,
-        collapse=True,
-        certainty=None,
-        ambiguity=None,
-        lineage_stability="stable",
-    )
-
-    ouba_objects = [obj1, obj2, obj3]
     tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    # -----------------------------------------------------------------------
-    # 1. CST Execution
-    # -----------------------------------------------------------------------
+    out = run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index=1)
 
-    cst = CST()
-    cst_signals = cst.run(
-        identity_objects=ouba_objects,
-        tp_lineage_log=tp_lineage_log,
-        tp_snapshot=tp_snapshot,
-        turn_index=1,
-    )
+    print("\n--- CST‑Core Signals ---")
+    print(out["cst_core"])
 
-    print("\n--- CST Signals ---")
-    print(cst_signals)
+    print("\n--- CST‑MS Signals ---")
+    print(out["cst_ms"])
 
-    # -----------------------------------------------------------------------
-    # 2. COB Execution
-    # -----------------------------------------------------------------------
-
-    cob = COB()
-    for obj in ouba_objects:
-        cob.add_identity_object(obj)
-
-    cob_state = cob.run(
-        signals=cst_signals.__dict__,
-        turn_index=1,
-    )
+    print("\n--- CST‑Mux USP ---")
+    print(out["cst_mux"])
 
     print("\n--- COB Identity Objects ---")
-    for obj in cob_state.objects:
-        print(
-            obj.id,
-            {
-                "recency": obj.ordering_metrics.get("recency"),
-                "frequency": obj.ordering_metrics.get("frequency"),
-                "density": obj.ordering_metrics.get("density"),
-            },
-        )
+    for obj in out["cob_state"].objects:
+        print(obj.id, obj.ordering_metrics)
 
-    # -----------------------------------------------------------------------
-    # 3. CIL Execution
-    # -----------------------------------------------------------------------
-
-    cil = CIL()
-    cil_packet = cil.run(
-        cob_objects=cob_state.objects,
-        cst_signals=cst_signals.__dict__,
-        turn_index=1,
-    )
-
-    print("\n--- CIL Identity Selection Block ---")
-    for entry in cil_packet.identity_selection_block:
-        print(entry["id"], entry["ordering_metrics"])
-
-    print("\n--- CIL Certainty Block ---")
-    print(cil_packet.referent_certainty_block)
-
-    print("\n--- CIL Stability Block ---")
-    print(cil_packet.stability_block)
-
-    print("\n--- CIL Lineage Block ---")
-    print(cil_packet.lineage_block)
-
-    print("\n--- CIL Ordering Block ---")
-    print(cil_packet.ordering_block)
-
-    print("\n--- CIL CST Block ---")
-    print(cil_packet.cst_block)
-
-    print("\n--- CIL Packet Metadata ---")
-    print(cil_packet.packet_metadata)
-
-    # -----------------------------------------------------------------------
-    # 4. TP-like Datastream Assembly
-    # -----------------------------------------------------------------------
-
-    tp_datastream = {
-        "cst_signals": cst_signals.__dict__,
-        "cob_state": cob_state,
-        "cil_packet": cil_packet,
-        "metadata": {
-            "turn_index": 1,
-            "input_object_count": len(ouba_objects),
-        },
-    }
-
-    print("\n--- TP Datastream (Unified View) ---")
-    print(tp_datastream)
+    print("\n--- CIL Packet ---")
+    print(out["cil_packet"].packet_metadata)
 
 
-def run_unified_selection_stability_test():
+def run_unified_merge_split_test():
     """
-    Test unified behavior focusing on selection ordering and stability propagation.
+    Unified Merge/Split Pipeline Test (HLR‑CnTxt‑007A + Section 8.6)
 
-    This test checks:
-    - CST stability signals for a varied set of objects
-    - COB evolution under those signals
-    - CIL selection ordering and stability aggregation
-
-    It is useful for visually confirming that:
-    - ordering metrics drive identity selection deterministically
-    - stability metrics from CST are preserved and aggregated in CIL
+    Validates:
+    - CST‑Core detects MERGE/SPLIT
+    - CST‑MS preserves structural neutrality
+    - CST‑Mux produces stable USP flags
+    - COB evolves identity‑layer objects correctly
+    - CIL constructs correct post‑merge/post‑split packet
     """
 
-    print("\n=== Unified Context Testbench: Selection + Stability Test ===")
+    print("\n=== Unified Merge/Split Pipeline Test ===")
 
-    objs = [
-        make_ouba_identity_object("A", recency=1, frequency=1, density=1, drift=0.1),
-        make_ouba_identity_object("B", recency=5, frequency=1, density=1, oscillation=0.2),
-        make_ouba_identity_object("C", recency=5, frequency=3, density=1, collapse=False),
-        make_ouba_identity_object("D", recency=5, frequency=3, density=4, collapse=True),
-        make_ouba_identity_object("E", recency=2, frequency=9, density=9, drift=0.4),
+    # MERGE: A + B → AB
+    A = make_identity_object("A", 5, 3, 2)
+    B = make_identity_object("B", 4, 2, 1)
+
+    tp_lineage_log = [
+        {"event_type": "MERGE", "parent_ref": ["A", "B"], "child_refs": ["AB"]}
     ]
+    tp_snapshot = {"turn_index": 0, "objects": []}
 
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+    AB = make_identity_object("AB", 6, 5, 3, lineage_stability="stable")
 
-    cst = CST()
-    cst_signals = cst.run(
-        identity_objects=objs,
-        tp_lineage_log=tp_lineage_log,
-        tp_snapshot=tp_snapshot,
-        turn_index=2,
-    )
+    out_merge = run_pipeline([AB], tp_lineage_log, tp_snapshot, turn_index=0)
 
-    cob = COB()
-    for obj in objs:
-        cob.add_identity_object(obj)
+    print("\n--- MERGE: CST‑Core Signals ---")
+    print(out_merge["cst_core"])
 
-    cob_state = cob.run(
-        signals=cst_signals.__dict__,
-        turn_index=2,
-    )
+    print("\n--- MERGE: CST‑MS Signals ---")
+    print(out_merge["cst_ms"])
 
-    cil = CIL()
-    cil_packet = cil.run(
-        cob_objects=cob_state.objects,
-        cst_signals=cst_signals.__dict__,
-        turn_index=2,
-    )
+    print("\n--- MERGE: CST‑Mux USP ---")
+    print(out_merge["cst_mux"])
 
-    print("\n--- Selection Order (CIL Identity Selection Block) ---")
-    for entry in cil_packet.identity_selection_block:
-        print(entry["id"], entry["ordering_metrics"])
+    print("\n--- MERGE: CIL Stability Block ---")
+    print(out_merge["cil_packet"].stability_block)
 
-    print("\n--- CIL Stability Block ---")
-    print(cil_packet.stability_block)
+    # SPLIT: C → C1, C2
+    C = make_identity_object("C", 7, 5, 3)
 
-
-def run_unified_tp_focus_test():
-    """
-    Test unified behavior with emphasis on TP-like datastream structure.
-
-    This test is less about numeric values and more about:
-    - presence of CST, COB, and CIL contributions
-    - ordering of entries
-    - metadata consistency
-
-    It helps confirm that a TP-like record can capture:
-    - what CST did
-    - what COB did
-    - what CIL produced
-    - when each action occurred
-    """
-
-    print("\n=== Unified Context Testbench: TP Focus Test ===")
-
-    objs = [
-        make_ouba_identity_object("T1", recency=3, frequency=2, density=1),
-        make_ouba_identity_object("T2", recency=6, frequency=4, density=2),
+    tp_lineage_log = [
+        {"event_type": "SPLIT", "parent_ref": ["C"], "child_refs": ["C1", "C2"]}
     ]
+    tp_snapshot = {"turn_index": 0, "objects": []}
 
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+    C1 = make_identity_object("C1", 4, 3, 2)
+    C2 = make_identity_object("C2", 3, 2, 1)
 
-    cst = CST()
-    cst_signals = cst.run(
-        identity_objects=objs,
-        tp_lineage_log=tp_lineage_log,
-        tp_snapshot=tp_snapshot,
-        turn_index=3,
-    )
+    out_split = run_pipeline([C1, C2], tp_lineage_log, tp_snapshot, turn_index=0)
 
-    cob = COB()
-    for obj in objs:
-        cob.add_identity_object(obj)
+    print("\n--- SPLIT: CST‑Core Signals ---")
+    print(out_split["cst_core"])
 
-    cob_state = cob.run(
-        signals=cst_signals.__dict__,
-        turn_index=3,
-    )
+    print("\n--- SPLIT: CST‑MS Signals ---")
+    print(out_split["cst_ms"])
 
-    cil = CIL()
-    cil_packet = cil.run(
-        cob_objects=cob_state.objects,
-        cst_signals=cst_signals.__dict__,
-        turn_index=3,
-    )
+    print("\n--- SPLIT: CST‑Mux USP ---")
+    print(out_split["cst_mux"])
 
-    tp_datastream = {
-        "cst_signals": cst_signals.__dict__,
-        "cob_state": cob_state,
-        "cil_packet": cil_packet,
-        "metadata": {
-            "turn_index": 3,
-            "input_object_count": len(objs),
-        },
-    }
-
-    print("\n--- TP Datastream (Structure Check) ---")
-    print(tp_datastream)
-
-
-def run_unified_merge_split_instability_test():
-    """
-    Unified Context Testbench: Merge/Split Structural Stability Test (OuBA-driven)
-
-    This test validates:
-    1. CST's interpretation of merge/split events from OuBA identity objects.
-    2. CST's ability to avoid false instability during structural transitions.
-    3. CST's pass-through of real instability on unrelated objects.
-    4. COB and CIL propagation of structural vs. real instability.
-
-    It does not enforce a specific suppression window; instead it inspects how
-    CST, COB, and CIL behave across multiple cycles around merge/split events.
-    """
-
-    print("\n=== Unified Context Testbench: Merge/Split Structural Stability Test ===")
-
-    # -----------------------------------------------------------------------
-    # MERGE SCENARIO: A + B → AB
-    # -----------------------------------------------------------------------
-
-    print("\n--- MERGE SCENARIO (A + B -> AB) ---")
-
-    # OuBA identity objects BEFORE merge (conceptual)
-    A = make_ouba_identity_object("A", recency=5, frequency=3, density=2)
-    B = make_ouba_identity_object("B", recency=4, frequency=2, density=1)
-
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
-
-    # Cycle 0: OuBA performs merge → OuBA now outputs AB instead of A and B
-    AB = make_ouba_identity_object(
-        "AB",
-        recency=6,
-        frequency=5,
-        density=3,
-        lineage_stability="stable",
-    )
-
-    cst = CST()
-    cst_signals = cst.run(
-        identity_objects=[AB],
-        tp_lineage_log=tp_lineage_log,
-        tp_snapshot=tp_snapshot,
-        turn_index=0,
-    )
-
-    cob = COB()
-    cob.add_identity_object(AB)
-    cob_state = cob.run(signals=cst_signals.__dict__, turn_index=0)
-
-    cil = CIL()
-    cil_packet = cil.run(
-        cob_objects=cob_state.objects,
-        cst_signals=cst_signals.__dict__,
-        turn_index=0,
-    )
-
-    print("\nCycle 0 — Merge Event Observed")
-    print("CIL Stability Block:", cil_packet.stability_block)
-
-    # -----------------------------------------------------------------------
-    # Cycles 1–5: Observe structural behavior and real instability on X
-    # -----------------------------------------------------------------------
-
-    print("\n--- Merge Scenario: Structural vs Real Instability Observation ---")
-
-    for cycle in range(1, 6):
-
-        # Structural changes on AB (simulated)
-        AB.stability_metrics["drift"] = 0.9
-        AB.stability_metrics["collapse"] = True
-
-        # Real instability on unrelated object X
-        X = make_ouba_identity_object(
-            "X",
-            recency=2,
-            frequency=1,
-            density=1,
-            oscillation=0.4,
-        )
-
-        ouba_objects = [AB, X]
-
-        cst_signals = cst.run(
-            identity_objects=ouba_objects,
-            tp_lineage_log=tp_lineage_log,
-            tp_snapshot=tp_snapshot,
-            turn_index=cycle,
-        )
-
-        cob_state = cob.run(signals=cst_signals.__dict__, turn_index=cycle)
-        cil_packet = cil.run(
-            cob_objects=cob_state.objects,
-            cst_signals=cst_signals.__dict__,
-            turn_index=cycle,
-        )
-
-        print(f"\nCycle {cycle} — Merge Scenario")
-        print("CIL Stability Block:", cil_packet.stability_block)
-
-    # -----------------------------------------------------------------------
-    # SPLIT SCENARIO: C → C1, C2
-    # -----------------------------------------------------------------------
-
-    print("\n--- SPLIT SCENARIO (C -> C1, C2) ---")
-
-    C = make_ouba_identity_object("C", recency=7, frequency=5, density=3)
-
-    tp_lineage_log, tp_snapshot = make_tp_placeholders()
-
-    # Cycle 0: OuBA performs split → outputs C1 and C2
-    C1 = make_ouba_identity_object("C1", recency=4, frequency=3, density=2)
-    C2 = make_ouba_identity_object("C2", recency=3, frequency=2, density=1)
-
-    cst_signals = cst.run(
-        identity_objects=[C1, C2],
-        tp_lineage_log=tp_lineage_log,
-        tp_snapshot=tp_snapshot,
-        turn_index=0,
-    )
-
-    cob = COB()
-    cob.add_identity_object(C1)
-    cob.add_identity_object(C2)
-
-    cob_state = cob.run(signals=cst_signals.__dict__, turn_index=0)
-
-    cil = CIL()
-    cil_packet = cil.run(
-        cob_objects=cob_state.objects,
-        cst_signals=cst_signals.__dict__,
-        turn_index=0,
-    )
-
-    print("\nCycle 0 — Split Event Observed")
-    print("CIL Stability Block:", cil_packet.stability_block)
-
-    print("\n--- Split Scenario: Structural vs Real Instability Observation ---")
-
-    for cycle in range(1, 6):
-
-        # Structural changes on C1/C2 (simulated)
-        C1.stability_metrics["collapse"] = True
-        C2.stability_metrics["drift"] = 0.8
-
-        # Real instability on unrelated Y
-        Y = make_ouba_identity_object(
-            "Y",
-            recency=1,
-            frequency=1,
-            density=1,
-            oscillation=0.3,
-        )
-
-        ouba_objects = [C1, C2, Y]
-
-        cst_signals = cst.run(
-            identity_objects=ouba_objects,
-            tp_lineage_log=tp_lineage_log,
-            tp_snapshot=tp_snapshot,
-            turn_index=cycle,
-        )
-
-        cob_state = cob.run(signals=cst_signals.__dict__, turn_index=cycle)
-        cil_packet = cil.run(
-            cob_objects=cob_state.objects,
-            cst_signals=cst_signals.__dict__,
-            turn_index=cycle,
-        )
-
-        print(f"\nCycle {cycle} — Split Scenario")
-        print("CIL Stability Block:", cil_packet.stability_block)
-
-    print("\n=== End of Merge/Split Structural Stability Test ===")
+    print("\n--- SPLIT: CIL Stability Block ---")
+    print(out_split["cil_packet"].stability_block)
 
 
 # ---------------------------------------------------------------------------
@@ -546,7 +229,4 @@ def run_unified_merge_split_instability_test():
 
 if __name__ == "__main__":
     run_unified_basic_test()
-    run_unified_selection_stability_test()
-    run_unified_tp_focus_test()
-    run_unified_merge_split_instability_test()
-```
+    run_unified_merge_split_test()
