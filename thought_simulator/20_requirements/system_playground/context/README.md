@@ -23,32 +23,32 @@ The CST subsystem consists of **three coordinated modules**:
 
 ### CST‑Core Testbench
 ```
-python -m context.cst_core.cst_core_testbench
+python -m cst_core.cst_core_testbench
 ```
 
 Log:
 ```
-python -m context.cst_core.cst_core_testbench > cst_core.log
+python -m cst_core.cst_core_testbench > cst_core.log
 ```
 
 ### CST‑MS Testbench
 ```
-python -m context.cst_ms.cst_ms_testbench
+python -m cst_ms.cst_ms_testbench
 ```
 
 Log:
 ```
-python -m context.cst_ms.cst_ms_testbench > cst_ms.log
+python -m cst_ms.cst_ms_testbench > cst_ms.log
 ```
 
 ### CST‑Mux Testbench
 ```
-python -m context.cst_mux.cst_mux_testbench
+python -m cst_mux.cst_mux_testbench
 ```
 
 Log:
 ```
-python -m context.cst_mux.cst_mux_testbench > cst_mux.log
+python -m cst_mux.cst_mux_testbench > cst_mux.log
 ```
 
 ---
@@ -57,34 +57,34 @@ python -m context.cst_mux.cst_mux_testbench > cst_mux.log
 
 ### Standard COB Testbench
 ```
-python -m context.cob.cob_testbench
+python -m cob.cob_testbench
 ```
 
 Log:
 ```
-python -m context.cob.cob_testbench > cob.log
+python -m cob.cob_testbench > cob.log
 ```
 
 ### Merge/Split Structural Testbench
 ```
-python -m context.cob.cob_testbench_merge_split
+python -m cob.cob_testbench_merge_split
 ```
 
 Log:
 ```
-python -m context.cob.cob_testbench_merge_split > cob_merge_split.log
+python -m cob.cob_testbench_merge_split > cob_merge_split.log
 ```
 
 ---
 
 ## 3. CIL Testbench
 ```
-python -m context.cil.cil_testbench
+python -m cil.cil_testbench
 ```
 
 Log:
 ```
-python -m context.cil.cil_testbench > cil.log
+python -m cil.cil_testbench > cil.log
 ```
 
 ---
@@ -98,12 +98,12 @@ CST‑Core → CST‑MS → CST‑Mux → COB → CIL
 
 Run:
 ```
-python -m context.context_testbench
+python -m context_testbench
 ```
 
 Log:
 ```
-python -m context.context_testbench > context.log
+python -m context_testbench > context.log
 ```
 
 ---
