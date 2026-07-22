@@ -295,6 +295,9 @@ Verify:
 ### 8.6 Unified Merge/Split Pipeline Test (New)
 The unified context testbench SHALL validate that CST‑Core detects MERGE/SPLIT events, CST‑MS preserves structural neutrality, CST‑Mux produces stable USP flags, COB evolves identity‑layer objects correctly under structural transitions, and CIL constructs an intake packet that reflects the correct post‑merge/post‑split identity‑layer topology. The test SHALL confirm that structural transitions do not produce false instability and that valid instability on unrelated objects is preserved.
 
+### 8.7 New Identity Context Boundary Tests (New)
+The unified context testbench SHALL validate that CST‑MS detects identity‑layer context boundary breaks, CST‑Mux propagates new_context_required=True, COB creates a new identity‑layer object in the same turn, CIL constructs an intake packet using the new identity context, and CEx/CE/ISc propagate continuity accordingly. The test SHALL confirm that context boundary detection is present‑tense and SHALL NOT be delayed by Path A validation.
+
 ---
 
 # **9. High‑Level Requirements (HLRs)**  
@@ -321,7 +324,10 @@ The unified context subsystem SHALL produce deterministic outputs under identica
 ### **HLR‑CnTxt‑007**  
 Merge/split events SHALL preserve structural continuity and SHALL NOT produce instability.
 
-### **HLR‑CnTxt‑020** — Unified Merge/Split Detection and Propagation
+### **HLR‑CnTxt‑021 — New Identity Context Boundary Detection and Propagation**
+The unified context subsystem (CST‑Core, CST‑MS, CST‑Mux, COB, and CIL) SHALL detect identity‑layer context boundary breaks and SHALL propagate the control signal new_context_required deterministically across all stages of the pipeline. When new_context_required=True, COB SHALL create a new identity‑layer object in the same turn, CIL SHALL treat the turn as a new context boundary, and downstream components (CEx, CE, ISc) SHALL propagate continuity accordingly. Context boundary detection SHALL NOT be delayed by Path A validation and SHALL occur in the present turn.
+
+### **HLR‑CnTxt‑020 — Unified Merge/Split Detection and Propagation**
 The unified context subsystem (CST‑Core, CST‑MS, CST‑Mux, COB, and CIL) SHALL detect MERGE and SPLIT events originating from the identity‑layer snapshot and SHALL propagate structural continuity deterministically across all stages of the pipeline. MERGE/SPLIT events SHALL NOT produce instability signals, and valid instability on unrelated objects SHALL pass immediately.
 
 ### **HLR‑CnTxt‑008**  
