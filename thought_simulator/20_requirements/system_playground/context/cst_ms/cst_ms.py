@@ -290,54 +290,71 @@ class CST_MS:
     # Main Entry Point
     # -----------------------------------------------------------------------
 
-    def run(self, cst_signals: Dict[str, Any], turn_index: int) -> MSSignals:
-        """
-        Deterministic CST‑MS execution.
-        """
+def run(self, cst_signals: Dict[str, Any], turn_index: int) -> MSSignals:
+    """
+    Deterministic CST‑MS execution.
+    """
 
-        # Metadata
-        self.state.metadata = {
-            "turn_index": turn_index,
-        }
+    # Metadata
+    self.state.metadata = {
+        "turn_index": turn_index,
+    }
 
-        # 1. Interpret structural events
-        self.interpret_structural_events(cst_signals)
+    # DEBUG 1 — Raw CST-Core signals
+    print("\n[CST-MS DEBUG] Raw CST-Core signals:")
+    print(cst_signals)
 
-        # 2. Neutralize merge/split
-        signals = self.neutralize_structure(cst_signals)
+    # 1. Interpret structural events
+    self.interpret_structural_events(cst_signals)
 
-        # 3. Normalize
-        self.normalize(signals)
+    # 2. Neutralize merge/split
+    signals = self.neutralize_structure(cst_signals)
 
-        # 4. Weight
-        self.weight()
+    # DEBUG 2 — After merge/split neutralization
+    print("\n[CST-MS DEBUG] Signals after structural neutralization:")
+    print(signals)
 
-        # 5. Stability synthesis
-        self.synthesize_stability()
+    # 3. Normalize
+    self.normalize(signals)
 
-        # 6. Risk computation
-        self.compute_risks()
+    # DEBUG 3 — Normalized metrics
+    print("\n[CST-MS DEBUG] Normalized metrics:")
+    print(self.state.normalized_metrics)
 
-        # 7. Summaries
-        self.compute_summaries(signals)
+    # 4. Weight
+    self.weight()
 
-        # 8. Track 10-turn window
-        self.track_window()
+    # 5. Stability synthesis
+    self.synthesize_stability()
 
-        # 9. Detect new context requirement
-        self.detect_new_context()
-        
-        # Package signals
-        return MSSignals(
-            normalized_metrics=self.state.normalized_metrics,
-            weighted_metrics=self.state.weighted_metrics,
-            stability=self.state.stability,
-            instability=self.state.instability,
-            collapse_risk=self.state.collapse_risk,
-            freeze_risk=self.state.freeze_risk,
-            thaw_readiness=self.state.thaw_readiness,
-            ambiguity_summary=self.state.ambiguity_summary,
-            drift_summary=self.state.drift_summary,
-            oscillation_summary=self.state.oscillation_summary,
-            metadata=self.state.metadata,
-        )
+    # 6. Risk computation
+    self.compute_risks()
+
+    # 7. Summaries
+    self.compute_summaries(signals)
+
+    # 8. Track 10-turn window
+    self.track_window()
+
+    # 9. Detect new context requirement
+    self.detect_new_context()
+
+    # DEBUG 4 — Final new_context_required decision
+    print("\n[CST-MS DEBUG] new_context_required =", 
+          self.state.metadata.get("new_context_required"))
+
+    # Package signals
+    return MSSignals(
+        normalized_metrics=self.state.normalized_metrics,
+        weighted_metrics=self.state.weighted_metrics,
+        stability=self.state.stability,
+        instability=self.state.instability,
+        collapse_risk=self.state.collapse_risk,
+        freeze_risk=self.state.freeze_risk,
+        thaw_readiness=self.state.thaw_readiness,
+        ambiguity_summary=self.state.ambiguity_summary,
+        drift_summary=self.state.drift_summary,
+        oscillation_summary=self.state.oscillation_summary,
+        metadata=self.state.metadata,
+    )
+
