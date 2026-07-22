@@ -23,12 +23,12 @@ datastream that records what each block did and when, consistent with:
 - cil_requirements.md
 """
 
-from context.cst_core.cst_core import CST as CSTCore
-from context.cst_ms.cst_ms import CST_MS
-from context.cst_mux.cst_mux import CST_MUX
+from cst_core.cst_core import CST as CSTCore
+from cst_ms.cst_ms import CST_MS
+from cst_mux.cst_mux import CST_MUX
 
-from context.cob.cob import COB
-from context.cil.cil import CIL, IdentityObject
+from cob.cob import COB
+from cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
