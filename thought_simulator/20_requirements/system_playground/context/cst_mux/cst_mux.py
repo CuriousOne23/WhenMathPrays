@@ -54,7 +54,7 @@ class USP:
     drift_summary: Dict[str, Any]
     oscillation_summary: Dict[str, Any]
     metadata: Dict[str, Any]
-
+    new_context_required: bool = False
 
 # ---------------------------------------------------------------------------
 # CST‑Mux Implementation
