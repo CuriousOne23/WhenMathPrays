@@ -240,7 +240,6 @@ class CIL:
         ms_signals: Dict[str, Any],
         turn_index: int,
     ) -> CILIntakePacket:
-        
         """
         Main CIL execution for system_playground.
     
@@ -250,24 +249,25 @@ class CIL:
         3. Aggregate blocks
         4. Build packet
         """
+    
+        # Merge CST-Core + CST-MS signals
+        signals = {**core_signals, **ms_signals}
+    
+        # Metadata (now includes new_context_required)
+        self.state.metadata = {
+            "turn_index": turn_index,
+            "input_object_count": len(cob_objects),
+            "new_context_required": signals.get("new_context_required", False),
+        }
+    
+        # Use merged signals instead of CST-Core only
+        self.integrate_cst(signals)
+        self.select_identities(cob_objects)
+        self.aggregate_certainty()
+        self.aggregate_stability()
+        self.aggregate_lineage()
+        self.aggregate_ordering()
+    
+        return self.build_intake_packet()
 
-    # Merge CST-Core + CST-MS signals
-    signals = {**core_signals, **ms_signals}
-
-    # Metadata (now includes new_context_required)
-    self.state.metadata = {
-        "turn_index": turn_index,
-        "input_object_count": len(cob_objects),
-        "new_context_required": signals.get("new_context_required", False),
-    }
-
-    # Use merged signals instead of CST-Core only
-    self.integrate_cst(signals)
-    self.select_identities(cob_objects)
-    self.aggregate_certainty()
-    self.aggregate_stability()
-    self.aggregate_lineage()
-    self.aggregate_ordering()
-
-    return self.build_intake_packet()
 
