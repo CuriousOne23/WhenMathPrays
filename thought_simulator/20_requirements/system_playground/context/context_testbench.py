@@ -144,7 +144,8 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
 
     cil_packet = cil.run(
         cob_objects=cob_state.objects,
-        cst_signals=cst_core_signals,
+        core_signals=cst_core_signals,
+        ms_signals=cst_ms_signals,
         turn_index=turn_index,
     )
 
