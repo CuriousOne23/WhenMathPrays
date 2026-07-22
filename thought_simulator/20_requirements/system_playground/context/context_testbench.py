@@ -276,7 +276,7 @@ def run_new_id_context_test():
     assert cst_ms["metadata"].get("new_context_required") is True
 
     # 2. CST-Mux must propagate the flag
-    assert cst_mux.get("new_context_required") is True
+    assert cst_mux.new_context_required is True
 
     # 3. COB must create a new identity object immediately
     new_ids = [o.id for o in cob_state.objects]
