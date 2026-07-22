@@ -194,7 +194,7 @@ Ambiguity arises when:
 -	register signals conflict
 -	field importance weights become unstable
 
-Let $A^{f}(L,\; t)$ be the ambiguity score for feature fat turn tfor layer L.
+Let $A^{f}(L,\  t)$ be the ambiguity score for feature fat turn tfor layer L.
 
 **Per turn ambiguity**  
 Each turn produces an ambiguity score:
@@ -445,160 +445,203 @@ Without thaw:
 - lineage and register signals could fail to adapt
 
 Thaw ensures that CST Core can recover from instability and resume normal operation.
-Freeze–thaw cycle
+
+**Freeze–thaw cycle**  
 The freeze–thaw cycle is central to CST Core’s stability model:
-	Freeze prevents collapse.
-	Thaw restores continuity.
-	Thresholds govern transitions.
-	Metrics determine when transitions occur.
+- Freeze prevents collapse.
+- Thaw restores continuity.
+- Thresholds govern transitions.
+- Metrics determine when transitions occur.
+
 This cycle ensures deterministic, safe, and adaptive structural behavior.
 
-9. Continuity Restoration
+## 9. Continuity Restoration  
 Continuity restoration is CST Core’s mechanism for rebuilding structural stability after instability, freeze, or collapse. Where freeze protects a layer from further degradation, continuity restoration repairs the layer so it can safely resume normal evolution.
+
 Continuity restoration is triggered when:
-	drift decreases
-	oscillation decreases
-	ambiguity decreases
-	collapse decreases
-	lineage continuity improves
-	register stability improves
-	field importance stability improves
+- drift decreases
+- oscillation decreases
+- ambiguity decreases
+- collapse decreases
+- lineage continuity improves
+- register stability improves
+- field importance stability improves
+
 CST Core uses continuity restoration to ensure that structural signals return to a coherent, deterministic state.
-Continuity score
-Let K(L,\; t\right)be the continuity score for layer Lat turn t. This score measures how well the structure at turn taligns with the structure at turn t-1.
+
+**Continuity score**  
+Let $K(L,\ t)$ be the continuity score for layer Lat turn t. This score measures how well the structure at turn taligns with the structure at turn t-1.
+
 Examples of continuity domains:
-	lineage continuity
-	identity continuity
-	referent continuity
-	temporal continuity
-	discourse continuity
-	register continuity
-Integrated continuity over window
+- lineage continuity
+- identity continuity
+- referent continuity
+- temporal continuity
+- discourse continuity
+- register continuity
+
+**Integrated continuity over window**  
 CST Core integrates continuity over the last 10 turns:
-\bar{K}(L\right)=\frac{1}{10}\sum_{k=t-9}^{t} K(L,\; k\right)
+
+$$
+\bar{K}(L)=\frac{1}{10}\sum_{k=t-9}^{t} K(L,\ k)
+$$
 
 Interpretation:
-	\bar{K}=1→ perfect continuity
-	\bar{K}=0.7\text{-}0.9→ strong continuity
-	\bar{K}=0.4\text{-}0.6→ moderate continuity
-	\bar{K}\lt 0.3→ continuity failure
+- $\bar{K}=1→$ perfect continuity
+- $\bar{K}=0.7\text{-}0.9→$ strong continuity
+- $\bar{K}=0.4\text{-}0.6→$ moderate continuity
+- $\bar{K}\lt 0.3→$ continuity failure
+
 Continuity is layer specific.
-Continuity restoration condition
+
+**Continuity restoration condition**
 CST Core restores continuity when:
-\bar{K}(L\right)\geq {\theta }_{\text{cont,recover}}(L\right)
+
+$$
+\bar{K}(L)\geq {\theta }_{\text{cont,recover}}(L)
+$$
 
 If true:
-	thaw becomes possible (Section 8)
-	freeze can be lifted
-	structural updates resume
-	queued corrections can be applied
-	stability metrics restart normally
+- thaw becomes possible (Section 8)
+- freeze can be lifted
+- structural updates resume
+- queued corrections can be applied
+- stability metrics restart normally
+
 Continuity restoration is the gateway to thaw.
-What continuity restoration does
+
+**What continuity restoration does**  
 When continuity restoration is active:
-	Structural corrections are applied Merge, split, retire, weaken, strengthen signals queued during freeze are executed deterministically.
-	Snapshots resume normal evolution {\text{snapshot}}_{t}(L\right)begins updating again.
-	Stability metrics restart Drift, oscillation, ambiguity, collapse, and register metrics resume.
-	Thresholds resume adapting Layer specific thresholds begin evolving again.
-	Identity coherence is rebuilt The layer returns to a stable structural trajectory.
+- Structural corrections are applied Merge, split, retire, weaken, strengthen signals queued during freeze are executed deterministically.
+- Snapshots resume normal evolution ${\text{snapshot}}_{t}(L)$ begins updating again.
+- Stability metrics restart Drift, oscillation, ambiguity, collapse, and register metrics resume.
+- Thresholds resume adapting Layer specific thresholds begin evolving again.
+- Identity coherence is rebuilt The layer returns to a stable structural trajectory.
+
 Continuity restoration is the system’s recovery phase.
-Why continuity restoration matters
+
+**Why continuity restoration matters**  
 Without continuity restoration:
-	freeze would be permanent
-	layers would stagnate
-	identity evolution would halt
-	referent and anchor structures would become outdated
-	lineage and register signals would fail to adapt
-	collapse recovery would be impossible
+- freeze would be permanent
+- layers would stagnate
+- identity evolution would halt
+- referent and anchor structures would become outdated
+- lineage and register signals would fail to adapt
+- collapse recovery would be impossible
+
 Continuity restoration ensures that CST Core can repair, recover, and resume deterministic structural behavior.
-10. Determinism, Thresholds, and Replay
+
+## 10. Determinism, Thresholds, and Replay  
 CST Core is governed by strict determinism rules. All metrics, thresholds, and signals must be reproducible, replay safe, and independent of external state. This ensures that identity layer evolution is fully deterministic, even across long horizons.
+
 Determinism is enforced through:
-	pure functional metrics
-	monotonic thresholds
-	replay safe update rules
-	no randomness
-	no wall clock time
-	no external state
-	complete logging of metric history
+- pure functional metrics
+- monotonic thresholds
+- replay safe update rules
+- no randomness
+- no wall clock time
+- no external state
+- complete logging of metric history
+
 These constraints guarantee that CST Core behaves identically under replay, simulation, or long horizon analysis.
-10.1 Deterministic Metric Functions
+
+### 10.1 Deterministic Metric Functions  
 Every CST Core metric is a pure function of:
-	the COB snapshot
-	OuBA cues
-	previous CST signals
-	deterministic metric history
+- the COB snapshot
+- OuBA cues
+- previous CST signals
+- deterministic metric history
+
 Formally, for any metric M:
-M_{t}=f({\text{snapshot}}_{t},\; {\text{OuBA}}_{t},\; {\text{CST}}_{t-1},\; \text{history}\right)
+
+$$
+M_{t}=f({\text{snapshot}}_{t},\  {\text{OuBA}}_{t},\  {\text{CST}}_{t-1},\  \text{history})
+$$
 
 There is no randomness, no sampling, and no external state.
+
 This ensures:
-	replay consistency
-	deterministic evolution
-	predictable stability behavior
-	safe long horizon integration
-10.2 Monotonic Thresholds
+- replay consistency
+- deterministic evolution
+- predictable stability behavior
+- safe long horizon integration
+
+### 10.2 Monotonic Thresholds  
 Thresholds evolve deterministically according to monotonic update rules.
-Let {\theta }_{t}be a threshold at turn t. Thresholds update according to:
-{\theta }_{t+1}=g({\theta }_{t},\; \text{metric\ history}\right)
+
+Let ${\theta }_{t}$ be a threshold at turn t. Thresholds update according to:
+
+$$
+{\theta }_{t+1}=g({\theta }_{t},\  \text{metric\ history})
+$$
 
 Where:
-	gis deterministic
-	thresholds never decrease unless explicitly allowed
-	thresholds never increase unless explicitly allowed
-	thresholds remain within bounded ranges
-	thresholds are replay safe
+- g is deterministic
+- thresholds never decrease unless explicitly allowed
+- thresholds never increase unless explicitly allowed
+- thresholds remain within bounded ranges
+- thresholds are replay safe
+
 Each layer Lhas its own threshold set:
-	drift threshold
-	oscillation threshold
-	ambiguity threshold
-	collapse threshold
-	freeze threshold
-	thaw/recovery threshold
-	continuity threshold
-	register stability threshold
-	field importance stability threshold
+- drift threshold
+- oscillation threshold
+- ambiguity threshold
+- collapse threshold
+- freeze threshold
+- thaw/recovery threshold
+- continuity threshold
+- register stability threshold
+- field importance stability threshold
+
 Thresholds ensure that CST Core reacts consistently to structural changes.
-10.3 Replay Safety
+
+### 10.3 Replay Safety  
 Replay safety means that CST Core produces identical outputs when given identical inputs and history.
+
 Replay safety requires:
-	deterministic metric functions
-	deterministic threshold updates
-	deterministic freeze/thaw logic
-	deterministic collapse logic
-	deterministic signal ordering
-	complete logging of metric values
+- deterministic metric functions
+- deterministic threshold updates
+- deterministic freeze/thaw logic
+- deterministic collapse logic
+- deterministic signal ordering
+- complete logging of metric values
+
 Replay safety is essential for:
-	debugging
-	long horizon analysis
-	identity layer evolution
-	deterministic merge/split behavior in CST MS
-	deterministic signal aggregation in CST Mux
-10.4 Deterministic Signal Ordering
+- debugging
+- long horizon analysis
+- identity layer evolution
+- deterministic merge/split behavior in CST MS
+- deterministic signal aggregation in CST Mux
+
+### 10.4 Deterministic Signal Ordering
 CST Core emits signals in a deterministic order:
-	drift
-	oscillation
-	ambiguity
-	collapse
-	continuity
-	freeze
-	thaw
-	register stability
-	field importance stability
+- drift
+- oscillation
+- ambiguity
+- collapse
+- continuity
+- freeze
+- thaw
+- register stability
+- field importance stability
+
 Signal ordering ensures:
-	no race conditions
-	no ambiguous behavior
-	deterministic downstream processing
-	safe integration with CST MS and CST Mux
-10.5 Summary of Determinism Guarantees
+- no race conditions
+- no ambiguous behavior
+- deterministic downstream processing
+- safe integration with CST MS and CST Mux
+
+### 10.5 Summary of Determinism Guarantees
 CST Core guarantees:
-	deterministic metric computation
-	deterministic threshold evolution
-	deterministic freeze/thaw behavior
-	deterministic collapse detection
-	deterministic continuity restoration
-	deterministic register and field importance stability
-	deterministic replay across identity layer evolution
+- deterministic metric computation
+- deterministic threshold evolution
+- deterministic freeze/thaw behavior
+- deterministic collapse detection
+- deterministic continuity restoration
+- deterministic register and field importance stability
+- deterministic replay across identity layer evolution
+
 These guarantees make CST Core the foundation of the CST architecture.
 
 
