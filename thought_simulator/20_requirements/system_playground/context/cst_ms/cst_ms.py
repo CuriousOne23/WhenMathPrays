@@ -242,6 +242,49 @@ class CST_MS:
             window.pop(0)
 
         self.state.stability_window = window
+        
+    def detect_new_context(self):
+        nm = self.state.normalized_metrics
+        st = self.state.stability
+        inst = self.state.instability
+        collapse = self.state.collapse_risk
+        freeze = self.state.freeze_risk
+        ambiguity = self.state.ambiguity_summary
+    
+        # 1. Continuity break
+        continuity_break = nm["continuity"] < 0.40
+    
+        # 2. Multi-turn instability trend
+        window = self.state.stability_window
+        if window:
+            avg_instability = sum(entry["instability"]["value"] for entry in window) / len(window)
+        else:
+            avg_instability = 0.0
+        instability_trend = avg_instability > 0.60
+    
+        # 3. Collapse risk spike
+        collapse_spike = collapse["value"] > 0.50
+    
+        # 4. Ambiguity drift spike
+        ambiguity_spike = ambiguity["count"] > 3  # deterministic threshold
+    
+        # 5. Freeze risk spike
+        freeze_spike = freeze["value"] > 0.50
+    
+        # 6. Merge/split fragmentation
+        structural_event = len(self.state.structural_events) > 0
+        fragmentation = structural_event and nm["continuity"] < 0.75
+    
+        new_context_required = (
+            continuity_break
+            or instability_trend
+            or collapse_spike
+            or ambiguity_spike
+            or freeze_spike
+            or fragmentation
+        )
+    
+        self.state.metadata["new_context_required"] = new_context_required
 
     # -----------------------------------------------------------------------
     # Main Entry Point
@@ -281,6 +324,9 @@ class CST_MS:
         # 8. Track 10-turn window
         self.track_window()
 
+        # 9. Detect new context requirement
+        self.detect_new_context()
+        
         # Package signals
         return MSSignals(
             normalized_metrics=self.state.normalized_metrics,
