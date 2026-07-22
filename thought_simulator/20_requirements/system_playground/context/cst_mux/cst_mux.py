@@ -133,6 +133,8 @@ class CST_MUX:
             "freeze_flags": self.state.freeze_flags,
             "thaw_flags": self.state.thaw_flags,
             "continuity_flags": self.state.continuity_flags,
+             # NEW: propagate new_context_required
+            "new_context_required": self.state.metadata.get("new_context_required", False),
             "stability": ms_signals["stability"],
             "instability": ms_signals["instability"],
             "collapse_risk": ms_signals["collapse_risk"],
@@ -172,6 +174,12 @@ class CST_MUX:
             "turn_index": turn_index,
         }
 
+        # -------------------------------------------------------------------
+        # NEW_CONTEXT_REQUIRED — accept and propagate CST‑MS control signal
+        # -------------------------------------------------------------------
+        new_ctx = ms_signals.get("metadata", {}).get("new_context_required", False)
+        self.state.metadata["new_context_required"] = new_ctx
+        
         # 1. Compute flags
         self.compute_activation_flags(ms_signals)
         self.compute_freeze_flags(ms_signals)
