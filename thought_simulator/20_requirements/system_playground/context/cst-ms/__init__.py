@@ -2,4 +2,4 @@
 CST-MS package.
 """
 
-from .cst_ms import CST_MS
+from .cst-ms import CST-MS
