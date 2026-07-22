@@ -9,6 +9,8 @@
 CST‑Mux multiplexes synthesized stability signals from CST‑MS across all identity layers and produces the **Unified Stability Packet (USP)**.  
 Where CST‑Core measures raw stability metrics and CST‑MS synthesizes them, CST‑Mux **packages** stability signals into a deterministic, layer‑indexed structure consumed by COB and CIL.
 
+CST‑Mux presents stability information to CIL solely for replay reconstruction. CIL does not generate stability signals consumed by any primitive, and no CST‑driven stability behavior occurs inside the Thought Process. For this reason, no separate CIL stability requirements document is needed.
+
 CST‑Mux is a pure functional module:
 
 - deterministic  
