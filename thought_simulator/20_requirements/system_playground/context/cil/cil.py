@@ -241,15 +241,15 @@ class CIL:
         turn_index: int,
     ) -> CILIntakePacket:
         
-    """
-    Main CIL execution for system_playground.
-
-    Deterministic sequence:
-    1. Integrate CST signals (Core + MS)
-    2. Select identities
-    3. Aggregate blocks
-    4. Build packet
-    """
+        """
+        Main CIL execution for system_playground.
+    
+        Deterministic sequence:
+        1. Integrate CST signals (Core + MS)
+        2. Select identities
+        3. Aggregate blocks
+        4. Build packet
+        """
 
     # Merge CST-Core + CST-MS signals
     signals = {**core_signals, **ms_signals}
