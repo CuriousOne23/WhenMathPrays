@@ -1,325 +1,211 @@
-# **CST Requirements (Revised, Consolidated HLR Section)**  
-*Conversation Stability Tracker — Context Subsystem*  
-*System Playground Version*
+# **cst-core_requirements.md**  
+**CST‑Core Testbench Requirements**
 
 ---
 
-## **1. Purpose**  
-*(Informative — no SHALL statements)*
+## **0. Document Purpose (Informative)**  
+This document defines the testbench requirements for **CST‑Core**, the foundational module responsible for structural stability tracking in the Thought Simulator. The purpose of this testbench is to verify that CST‑Core behaves deterministically, computes stability metrics correctly, handles dynamic conditions such as drift, oscillation, ambiguity, collapse, freeze, thaw, and continuity restoration, and maintains replay‑safe behavior across all identity layers.
 
-The Conversation Stability Tracker (CST) evaluates stability conditions across identity‑layer objects.  
-It detects drift, oscillation, collapse, merge, split, freeze, thaw, and certainty/ambiguity changes.  
-CST produces stability signals consumed by COB and indirectly by CIL.
+The testbench evaluates:
 
-CST is the first stage of the context subsystem:
-
-$$
-\text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
-$$
-
----
-
-## **2. Scope**  
-*(Informative — no SHALL statements)*
-
-This document defines the **system_playground implementation** of CST.  
-It describes stability signal generation, drift detection, oscillation detection, collapse conditions, merge/split rules, freeze/thaw behavior, and ambiguity/certainty adjustments.
-
-Global architecture defined in **20.32.010** remains authoritative.
+- basic functionality  
+- dynamic stability behavior  
+- threshold behavior  
+- freeze/thaw correctness  
+- continuity restoration  
+- determinism and replay consistency  
+- operational functions required for TS integrity  
 
 ---
 
-## **3. Inputs**  
-*(Informative — no SHALL statements)*
+# **1. Snapshot Extraction Tests**
 
-### **3.1 Identity‑Layer Objects from COB**  
-CST receives identity‑layer objects containing referent maps, anchors, lineage, ambiguity indicators, and ordering metrics.
+## **1.1 Purpose (Informative)**  
+Snapshot extraction is the foundation of CST‑Core. The testbench verifies that snapshots are produced deterministically and contain all required structural fields.
 
-### **3.2 Conversation Turn Identity Fragments**  
-CST receives identity‑layer fragments extracted from the current turn before COB integration.
+## **1.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑001**  
+The testbench SHALL verify that CST‑Core extracts a structural snapshot for every identity layer at each turn.
 
----
+**HLR‑CST‑CORE‑002**  
+The testbench SHALL verify that snapshot extraction is deterministic under replay.
 
-## **4. Outputs**  
-*(Informative — no SHALL statements)*
-
-### **4.1 Stability Signals**  
-CST produces stability signals including:
-
-- drift  
-- oscillation  
-- collapse  
-- merge  
-- split  
-- freeze  
-- thaw  
-- certainty adjustments  
-- ambiguity adjustments  
-- lineage stability indicators  
-
-These signals are consumed by COB and indirectly by CIL.
+**HLR‑CST‑CORE‑003**  
+The testbench SHALL verify that snapshots contain all required structural fields: referent structure, temporal anchors, discourse anchors, lineage continuity, register state, and field‑importance weights.
 
 ---
 
-## **5. Testing (system_playground)**  
-*(Informative — no SHALL statements)*
+# **2. Counting and History Tests**
 
-The system_playground version of CST is validated using a block‑level Python testbench (`cst_testbench.py`).  
-Tests ensure CST produces deterministic stability signals, correctly interprets structural continuity markers from TP, and remains synchronized with COB across merge, split, drift, oscillation, collapse, and ambiguity conditions.
+## **2.1 Purpose (Informative)**  
+CST‑Core maintains counts, frequencies, and histories over a 10‑turn window. The testbench ensures these values are computed correctly and consistently.
 
----
+## **2.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑004**  
+The testbench SHALL verify that feature counts are computed over a fixed 10‑turn sliding window.
 
-## **5.1 Drift, Oscillation, and Collapse Tests**  
-*(Informative)*
+**HLR‑CST‑CORE‑005**  
+The testbench SHALL verify that normalized feature frequencies are computed correctly.
 
-### **Drift Tests**  
-Evaluate CST’s ability to detect referent‑map and anchor divergence.
-
-**Expected behavior:**  
-- Drift reported only when divergence exceeds thresholds  
-- Drift magnitude reflects divergence  
-- No oscillation/collapse when divergence is monotonic  
-
-### **Oscillation Tests**  
-Evaluate CST’s ability to detect alternating incompatible states.
-
-**Expected behavior:**  
-- Oscillation frequency reflects alternation  
-- No collapse when oscillation is reversible  
-- Freeze/thaw exercised when oscillation exceeds limits  
-
-### **Collapse Tests**  
-Evaluate CST’s ability to detect structural failure.
-
-**Expected behavior:**  
-- Collapse reported when structural integrity is lost  
-- Drift/oscillation may accompany collapse  
-- Collapse signals deterministic  
+**HLR‑CST‑CORE‑006**  
+The testbench SHALL verify that ordered feature histories are maintained for all tracked features.
 
 ---
 
-## **5.2 Merge/Split Stability Tests**  
-*(Informative)*
+# **3. Drift Tests**
 
-### **Merge Stability Tests**  
-Ensure CST interprets MERGE markers as legitimate consolidation.
+## **3.1 Purpose (Informative)**  
+Drift measures structural change across turns. The testbench ensures drift is computed deterministically and triggers instability when appropriate.
 
-### **Split Stability Tests**  
-Ensure CST interprets SPLIT markers as legitimate divergence.
+## **3.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑007**  
+The testbench SHALL verify that per‑turn drift is computed using deterministic structural distance functions.
 
-### **Merge/Split Compensation Tests**  
-Ensure CST remains synchronized with COB across structural transformations.
+**HLR‑CST‑CORE‑008**  
+The testbench SHALL verify that integrated drift over 10 turns is computed correctly.
 
----
-
-## **5.3 Freeze/Thaw, Certainty, and Ambiguity Tests**  
-*(Informative)*
-
-### **Freeze/Thaw Tests**  
-Freeze issued when instability exceeds thresholds; thaw issued when stability restored.
-
-### **Certainty/Ambiguity Adjustment Tests**  
-Certainty increases when ambiguity decreases; ambiguity increases when drift/oscillation rises.
+**HLR‑CST‑CORE‑009**  
+The testbench SHALL verify that drift signals are emitted when integrated drift exceeds the layer‑specific threshold.
 
 ---
 
-## **5.4 Deterministic Replay Tests**  
-*(Informative)*
+# **4. Oscillation Tests**
 
-### **Single‑Turn Determinism**  
-Identical inputs → identical signals.
+## **4.1 Purpose (Informative)**  
+Oscillation measures how often structural features flip state. The testbench ensures oscillation detection is correct and stable.
 
-### **Multi‑Turn Determinism**  
-Merge/split sequences produce identical signal sequences across runs.
+## **4.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑010**  
+The testbench SHALL verify that oscillation is computed as the count of state flips between consecutive turns.
 
----
-
-# **6. Consolidated High‑Level Requirements (HLRs)**  
-*(All SHALL statements appear only here; new HLRs begin at 018)*
-
-### **Core Stability Detection**
-
-**HLR‑CST‑001**  
-CST SHALL detect drift conditions in identity‑layer objects.
-
-**HLR‑CST‑002**  
-CST SHALL detect oscillation conditions in identity‑layer objects.
-
-**HLR‑CST‑003**  
-CST SHALL detect collapse conditions and produce collapse signals.
-
-### **Structural Transformations**
-
-**HLR‑CST‑004**  
-CST SHALL detect merge conditions between identity‑layer objects.
-
-**HLR‑CST‑005**  
-CST SHALL detect split conditions within identity‑layer objects.
-
-### **Stability Signaling**
-
-**HLR‑CST‑006**  
-CST SHALL issue freeze and thaw signals based on stability conditions.
-
-**HLR‑CST‑007**  
-CST SHALL adjust certainty indicators for identity‑layer objects.
-
-**HLR‑CST‑008**  
-CST SHALL adjust ambiguity indicators for identity‑layer objects.
-
-**HLR‑CST‑009**  
-CST SHALL evaluate lineage stability for identity‑layer objects.
-
-### **Determinism**
-
-**HLR‑CST‑010**  
-CST SHALL produce deterministic stability signals under identical inputs.
+**HLR‑CST‑CORE‑011**  
+The testbench SHALL verify that oscillation signals are emitted when oscillation exceeds the layer‑specific threshold.
 
 ---
 
-### **Next‑Turn Context Compatibility (New HLRs begin here)**
+# **5. Ambiguity Tests**
 
-**HLR‑CST‑011**  
-CST SHALL treat next‑turn context fields as external structural metadata without generating, modifying, or interpreting them.
+## **5.1 Purpose (Informative)**  
+Ambiguity measures uncertainty in structural interpretation. The testbench ensures ambiguity is computed correctly and contributes to instability.
 
-**HLR‑CST‑012**  
-CST SHALL propagate stability signals deterministically alongside next‑turn context fields without corrupting or altering them.
+## **5.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑012**  
+The testbench SHALL verify that per‑turn ambiguity is computed using deterministic ambiguity functions.
 
-**HLR‑CST‑013**  
-CST SHALL NOT emit instability signals solely due to the presence, absence, or content of next‑turn context fields.
+**HLR‑CST‑CORE‑013**  
+The testbench SHALL verify that integrated ambiguity over 10 turns is computed correctly.
 
-**HLR‑CST‑014**  
-CST SHALL preserve structural continuity during merge/split events such that next‑turn context fields remain stable across turns.
-
-**HLR‑CST‑015**  
-CST SHALL preserve next‑turn context continuity across freeze/thaw cycles.
-
-**HLR‑CST‑016**  
-CST SHALL guarantee deterministic replay of stability signals such that identical inputs produce identical downstream next‑turn context behavior.
-
-**HLR‑CST‑017**  
-CST SHALL NOT define next‑turn context field names.
+**HLR‑CST‑CORE‑014**  
+The testbench SHALL verify that ambiguity signals are emitted when integrated ambiguity exceeds the layer‑specific threshold.
 
 ---
 
-### **New HLRs Added for Global Alignment (Option C)**
+# **6. Collapse Tests**
 
-**HLR‑CST‑018**  
-CST SHALL synchronize its internal topology with COB’s identity‑layer structure across merge and split events.
+## **6.1 Purpose (Informative)**  
+Collapse indicates structural failure. The testbench ensures collapse detection is correct and deterministic.
 
-**HLR‑CST‑019**  
-CST SHALL interpret TP lineage markers deterministically when evaluating merge, split, drift, oscillation, and collapse.
+## **6.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑015**  
+The testbench SHALL verify that stability scores are computed per turn for all structural domains.
 
-**HLR‑CST‑020**  
-CST SHALL maintain deterministic structural continuity across multi‑turn sequences involving merge, split, drift, oscillation, and collapse.
+**HLR‑CST‑CORE‑016**  
+The testbench SHALL verify that integrated stability over 10 turns is computed correctly.
 
-**HLR‑CST‑021**  
-CST SHALL ensure freeze/thaw signals do not cause loss, mutation, or reordering of identity‑layer objects in downstream modules.
+**HLR‑CST‑CORE‑017**  
+The testbench SHALL verify that collapse is computed as the complement of integrated stability.
 
-**HLR‑CST‑022**  
-CST SHALL ensure certainty/ambiguity adjustments remain consistent with drift, oscillation, and collapse metrics across turns.
-
-**HLR‑CST‑023**  
-CST SHALL ensure merge/split compensation does not introduce spurious instability signals.
-
-**HLR‑CST‑024**  
-CST SHALL ensure lineage stability evaluation remains consistent across structural transformations.
+**HLR‑CST‑CORE‑018**  
+The testbench SHALL verify that collapse signals are emitted when collapse exceeds the layer‑specific threshold.
 
 ---
 
-## **7. Stability Metrics**  
-*(Informative — no SHALL statements)*
+# **7. Freeze Tests**
 
-CST evaluates stability using metrics such as:
+## **7.1 Purpose (Informative)**  
+Freeze prevents further degradation when instability becomes unsafe. The testbench ensures freeze behavior is correct and deterministic.
 
-- referent drift  
-- anchor drift  
-- lineage divergence  
-- ambiguity density  
-- oscillation frequency  
+## **7.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑019**  
+The testbench SHALL verify that combined instability is computed from drift, oscillation, ambiguity, and collapse.
 
-Example:
+**HLR‑CST‑CORE‑020**  
+The testbench SHALL verify that freeze is triggered when combined instability exceeds the layer‑specific freeze threshold.
 
-$$
-\text{StabilityScore} = \text{Drift} + \text{Oscillation} + \text{AmbiguityDensity}
-$$
+**HLR‑CST‑CORE‑021**  
+The testbench SHALL verify that snapshot updates halt for frozen layers.
 
----
+**HLR‑CST‑CORE‑022**  
+The testbench SHALL verify that stability‑metric updates halt for frozen layers.
 
-## **8. Drift Rules**  
-*(Informative — no SHALL statements)*
-
-Drift is detected when referent or anchor positions diverge across turns.  
-Drift magnitude influences certainty and ambiguity adjustments.
+**HLR‑CST‑CORE‑023**  
+The testbench SHALL verify that threshold adaptation halts for frozen layers.
 
 ---
 
-## **9. Oscillation Rules**  
-*(Informative — no SHALL statements)*
+# **8. Thaw Tests**
 
-Oscillation occurs when identity‑layer objects alternate between incompatible states across turns.  
-Oscillation frequency influences freeze/thaw decisions.
+## **8.1 Purpose (Informative)**  
+Thaw restores normal structural evolution once stability returns. The testbench ensures thaw behavior is correct and deterministic.
 
----
+## **8.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑024**  
+The testbench SHALL verify that thaw is triggered when combined instability falls below the layer‑specific recovery threshold.
 
-## **10. Collapse Rules**  
-*(Informative — no SHALL statements)*
+**HLR‑CST‑CORE‑025**  
+The testbench SHALL verify that snapshot updates resume upon thaw.
 
-Collapse occurs when identity‑layer objects lose structural integrity or become incompatible with referent maps.  
-Collapse signals trigger COB merge or eviction behavior.
+**HLR‑CST‑CORE‑026**  
+The testbench SHALL verify that stability‑metric updates resume upon thaw.
 
----
-
-## **11. Merge/Split Rules**  
-*(Informative — no SHALL statements)*
-
-Merge conditions arise when identity‑layer objects converge in referent or anchor space.  
-Split conditions arise when identity‑layer objects diverge into incompatible states.
+**HLR‑CST‑CORE‑027**  
+The testbench SHALL verify that threshold adaptation resumes upon thaw.
 
 ---
 
-## **12. Freeze/Thaw Behavior**  
-*(Informative — no SHALL statements)*
+# **9. Continuity Restoration Tests**
 
-Freeze signals prevent COB from modifying identity‑layer objects.  
-Thaw signals restore normal update behavior.
+## **9.1 Purpose (Informative)**  
+Continuity restoration repairs structural stability after freeze or collapse. The testbench ensures continuity restoration behaves correctly.
 
----
+## **9.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑028**  
+The testbench SHALL verify that continuity scores are computed per turn for each identity layer.
 
-## **13. Interface Contracts**  
-*(Informative — no SHALL statements)*
+**HLR‑CST‑CORE‑029**  
+The testbench SHALL verify that integrated continuity over 10 turns is computed correctly.
 
-### **CST → COB**  
-CST provides stability signals directly to COB.
+**HLR‑CST‑CORE‑030**  
+The testbench SHALL verify that continuity restoration is triggered when integrated continuity exceeds the layer‑specific recovery threshold.
 
-### **CST → CIL**  
-CST influences CIL indirectly through COB and directly when required by global rules.
-
-### **CST → CEx (Indirect)**  
-CST influences CEx only through COB and CIL.
+**HLR‑CST‑CORE‑031**  
+The testbench SHALL verify that queued structural corrections are applied deterministically during continuity restoration.
 
 ---
 
-## **14. Determinism Notes**  
-*(Informative — no SHALL statements)*
+# **10. Determinism and Replay Tests**
 
-Deterministic signal generation ensures reproducible behavior in COB and CIL under identical identity‑layer inputs.
+## **10.1 Purpose (Informative)**  
+CST‑Core must behave identically under replay. The testbench ensures full determinism.
+
+## **10.2 Requirements (Normative)**  
+**HLR‑CST‑CORE‑032**  
+The testbench SHALL verify that all metrics are computed as pure functions of snapshots, OuBA cues, previous CST signals, and deterministic history.
+
+**HLR‑CST‑CORE‑033**  
+The testbench SHALL verify that threshold updates follow deterministic, monotonic rules.
+
+**HLR‑CST‑CORE‑034**  
+The testbench SHALL verify that replay produces identical metric values, thresholds, and signals.
+
+**HLR‑CST‑CORE‑035**  
+The testbench SHALL verify that stability signals are emitted in a deterministic, fixed order.
+
+**HLR‑CST‑CORE‑036**  
+The testbench SHALL verify that all logged values required for replay consistency are present and correct.
 
 ---
 
-## **15. Error Handling**  
-*(Informative — no SHALL statements)*
-
-CST rejects malformed identity‑layer objects.  
-CST rejects invalid referent or anchor structures.  
-CST ensures internal consistency of stability signals.
-
----
-
-## **16. Playground Notes**  
-*(Informative — no SHALL statements)*
-
-This document defines the system_playground version of CST.  
-It mirrors global architecture while remaining scoped for simulation and testing.
+# **End of Document**
 
 ---
