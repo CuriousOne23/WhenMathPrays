@@ -7,9 +7,9 @@ Provides:
 - CIL (intake packet construction)
 """
 
-from . import cst-core
-from . import cst-ms
-from . import cst-mux
+from . import cst_core
+from . import cst_ms
+from . import cst_mux
 from . import cob
 from . import cil
 
