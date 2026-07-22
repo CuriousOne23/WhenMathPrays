@@ -234,30 +234,39 @@ class CIL:
     # -----------------------------------------------------------------------
 
     def run(
-        self,
-        cob_objects: List[IdentityObject],
-        cst_signals: Dict[str, Any],
-        turn_index: int,
-    ) -> CILIntakePacket:
-        """
-        Main CIL execution for system_playground.
+    self,
+    cob_objects: List[IdentityObject],
+    core_signals: Dict[str, Any],
+    ms_signals: Dict[str, Any],
+    turn_index: int,
+) -> CILIntakePacket:
+    """
+    Main CIL execution for system_playground.
 
-        Deterministic sequence:
-        1. Integrate CST signals
-        2. Select identities
-        3. Aggregate blocks
-        4. Build packet
-        """
-        self.state.metadata = {
-            "turn_index": turn_index,
-            "input_object_count": len(cob_objects),
-        }
+    Deterministic sequence:
+    1. Integrate CST signals (Core + MS)
+    2. Select identities
+    3. Aggregate blocks
+    4. Build packet
+    """
 
-        self.integrate_cst(cst_signals)
-        self.select_identities(cob_objects)
-        self.aggregate_certainty()
-        self.aggregate_stability()
-        self.aggregate_lineage()
-        self.aggregate_ordering()
+    # Merge CST-Core + CST-MS signals
+    signals = {**core_signals, **ms_signals}
 
-        return self.build_intake_packet()
+    # Metadata (now includes new_context_required)
+    self.state.metadata = {
+        "turn_index": turn_index,
+        "input_object_count": len(cob_objects),
+        "new_context_required": signals.get("new_context_required", False),
+    }
+
+    # Use merged signals instead of CST-Core only
+    self.integrate_cst(signals)
+    self.select_identities(cob_objects)
+    self.aggregate_certainty()
+    self.aggregate_stability()
+    self.aggregate_lineage()
+    self.aggregate_ordering()
+
+    return self.build_intake_packet()
+
