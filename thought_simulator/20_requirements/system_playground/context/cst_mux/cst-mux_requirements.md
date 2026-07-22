@@ -33,6 +33,9 @@ The testbench SHALL verify that CST‑Mux accepts deterministic layer ordering.
 **HLR‑CST‑MUX‑003**  
 The testbench SHALL verify that CST‑Mux accepts activation, freeze, thaw, and continuity flags for each identity layer.
 
+**HLR‑CST‑MUX‑034 — New Context Creation Signal Acceptance**
+The testbench SHALL verify that CST‑Mux accepts the CST‑MS control signal new_context_required and SHALL propagate this flag into the Unified Stability Packet (USP) without modification.
+
 ---
 
 # **2. Layer Indexing Tests**
@@ -123,6 +126,9 @@ The testbench SHALL verify that USP is constructed as a deterministic, layer‑i
 **HLR‑CST‑MUX‑017**  
 The testbench SHALL verify that USP includes all aligned signals and flags.
 
+**HLR‑CST‑MUX‑035 — USP Inclusion of New Context Creation Signal**
+The testbench SHALL verify that the USP includes the new_context_required flag exactly as emitted by CST‑MS, and SHALL ensure that this flag is indexed and ordered deterministically with other USP fields
+
 **HLR‑CST‑MUX‑018**  
 The testbench SHALL verify that USP is replay‑safe.
 
@@ -191,6 +197,9 @@ The testbench SHALL verify that threshold comparisons are deterministic and mono
 
 **HLR‑CST‑MUX‑032**  
 The testbench SHALL verify that replay produces identical USP outputs for identical inputs.
+
+**HLR‑CST‑MUX‑036 — Replay Determinism for New Context Creation Signal**
+The testbench SHALL verify that replaying identical CST‑MS inputs produces identical new_context_required values in the USP.
 
 **HLR‑CST‑MUX‑033**  
 The testbench SHALL verify that all USP outputs are emitted in a deterministic, fixed order.
