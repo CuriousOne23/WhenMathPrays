@@ -1,7 +1,7 @@
 """
-CST‑MS Testbench — System Playground Version
+CST-MS Testbench — System Playground Version
 
-Validates CST‑MS against:
+Validates CST-MS against:
 - cst-ms.md (architecture)
 - cst-ms_requirements.md (HLR-CST-MS-nnn)
 - context_testbench.py (integration)
@@ -296,7 +296,7 @@ def test_determinism_replay():
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    print("\n=== CST‑MS Testbench: Running All Tests ===")
+    print("\n=== CST-MS Testbench: Running All Tests ===")
 
     test_normalization_basic()
     print("[PASS] Normalization test passed")
@@ -322,4 +322,4 @@ if __name__ == "__main__":
     test_determinism_replay()
     print("[PASS] Determinism/replay test passed")
 
-    print("\n=== CST‑MS Testbench: All Tests Completed ===")
+    print("\n=== CST-MS Testbench: All Tests Completed ===")
