@@ -1,21 +1,21 @@
 """
-Unified Context Testbench — System Playground Version (v2.0‑M)
+Unified Context Testbench — System Playground Version (v2.0-M)
 
-This testbench performs block‑level validation of the unified context subsystem:
-- CST‑Core (stability signal generation)
-- CST‑MS (metric synthesis)
-- CST‑Mux (USP multiplexing)
-- COB (identity‑layer construction and evolution)
+This testbench performs block-level validation of the unified context subsystem:
+- CST-Core (stability signal generation)
+- CST-MS (metric synthesis)
+- CST-Mux (USP multiplexing)
+- COB (identity-layer construction and evolution)
 - CIL (intake packet construction for CEx)
 
 It validates the deterministic pipeline:
-CST‑Core → CST‑MS → CST‑Mux → COB → CIL
+CST-Core → CST-MS → CST-Mux → COB → CIL
 
 It is a shaping testbench used inside system_playground before system_simulation.
-It does NOT simulate CEx; it focuses on CST → COB → CIL behavior and a TP‑like
+It does NOT simulate CEx; it focuses on CST → COB → CIL behavior and a TP-like
 datastream that records what each block did and when, consistent with:
 
-- system_playground context_requirements.md (v2.0‑M)
+- system_playground context_requirements.md (v2.0-M)
 - cst-core_requirements.md
 - cst-ms_requirements.md
 - cst-mux_requirements.md
@@ -47,7 +47,7 @@ def make_identity_object(
     ambiguity=None,
     lineage_stability=None,
 ):
-    """OuBA‑like identity object for unified testing."""
+    """OuBA-like identity object for unified testing."""
     return IdentityObject(
         id=id,
         referent_map={"r1": "value"},
@@ -68,7 +68,7 @@ def make_identity_object(
 
 
 def make_tp_placeholders():
-    """TP‑like placeholder structures."""
+    """TP-like placeholder structures."""
     tp_lineage_log = []
     tp_snapshot = {"turn_index": None, "objects": []}
     return tp_lineage_log, tp_snapshot
@@ -81,10 +81,10 @@ def make_tp_placeholders():
 def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
     """
     Runs the full unified pipeline:
-    CST‑Core → CST‑MS → CST‑Mux → COB → CIL
+    CST-Core → CST-MS → CST-Mux → COB → CIL
     """
 
-    # 1. CST‑Core
+    # 1. CST-Core
     cst_core = CSTCore()
     cst_core_signals = cst_core.run(
         identity_objects=objs,
@@ -93,11 +93,11 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
         turn_index=turn_index,
     ).__dict__
 
-    # 2. CST‑MS
+    # 2. CST-MS
     cst_ms = CST_MS()
     cst_ms_signals = cst_ms.run(cst_core_signals, turn_index).__dict__
 
-    # 3. CST‑Mux
+    # 3. CST-Mux
     cst_mux = CST_MUX()
     usp = cst_mux.run(cst_ms_signals, turn_index)
 
@@ -141,13 +141,13 @@ def run_unified_basic_test():
 
     out = run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index=1)
 
-    print("\n--- CST‑Core Signals ---")
+    print("\n--- CST-Core Signals ---")
     print(out["cst_core"])
 
-    print("\n--- CST‑MS Signals ---")
+    print("\n--- CST-MS Signals ---")
     print(out["cst_ms"])
 
-    print("\n--- CST‑Mux USP ---")
+    print("\n--- CST-Mux USP ---")
     print(out["cst_mux"])
 
     print("\n--- COB Identity Objects ---")
@@ -160,14 +160,14 @@ def run_unified_basic_test():
 
 def run_unified_merge_split_test():
     """
-    Unified Merge/Split Pipeline Test (HLR‑CnTxt‑007A + Section 8.6)
+    Unified Merge/Split Pipeline Test (HLR-CnTxt-007A + Section 8.6)
 
     Validates:
-    - CST‑Core detects MERGE/SPLIT
-    - CST‑MS preserves structural neutrality
-    - CST‑Mux produces stable USP flags
-    - COB evolves identity‑layer objects correctly
-    - CIL constructs correct post‑merge/post‑split packet
+    - CST-Core detects MERGE/SPLIT
+    - CST-MS preserves structural neutrality
+    - CST-Mux produces stable USP flags
+    - COB evolves identity-layer objects correctly
+    - CIL constructs correct post-merge/post-split packet
     """
 
     print("\n=== Unified Merge/Split Pipeline Test ===")
@@ -185,13 +185,13 @@ def run_unified_merge_split_test():
 
     out_merge = run_pipeline([AB], tp_lineage_log, tp_snapshot, turn_index=0)
 
-    print("\n--- MERGE: CST‑Core Signals ---")
+    print("\n--- MERGE: CST-Core Signals ---")
     print(out_merge["cst_core"])
 
-    print("\n--- MERGE: CST‑MS Signals ---")
+    print("\n--- MERGE: CST-MS Signals ---")
     print(out_merge["cst_ms"])
 
-    print("\n--- MERGE: CST‑Mux USP ---")
+    print("\n--- MERGE: CST-Mux USP ---")
     print(out_merge["cst_mux"])
 
     print("\n--- MERGE: CIL Stability Block ---")
@@ -210,13 +210,13 @@ def run_unified_merge_split_test():
 
     out_split = run_pipeline([C1, C2], tp_lineage_log, tp_snapshot, turn_index=0)
 
-    print("\n--- SPLIT: CST‑Core Signals ---")
+    print("\n--- SPLIT: CST-Core Signals ---")
     print(out_split["cst_core"])
 
-    print("\n--- SPLIT: CST‑MS Signals ---")
+    print("\n--- SPLIT: CST-MS Signals ---")
     print(out_split["cst_ms"])
 
-    print("\n--- SPLIT: CST‑Mux USP ---")
+    print("\n--- SPLIT: CST-Mux USP ---")
     print(out_split["cst_mux"])
 
     print("\n--- SPLIT: CIL Stability Block ---")
