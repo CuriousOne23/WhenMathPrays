@@ -257,7 +257,7 @@ class CIL:
         self.state.metadata = {
             "turn_index": turn_index,
             "input_object_count": len(cob_objects),
-            "new_context_required": signals.get("new_context_required", False),
+            "new_context_required": signals.get("metadata", {}).get("new_context_required", False),
         }
     
         # Use merged signals instead of CST-Core only
