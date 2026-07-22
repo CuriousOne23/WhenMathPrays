@@ -295,8 +295,16 @@ Verify:
 ### 8.6 Unified Merge/Split Pipeline Test (New)
 The unified context testbench SHALL validate that CST‑Core detects MERGE/SPLIT events, CST‑MS preserves structural neutrality, CST‑Mux produces stable USP flags, COB evolves identity‑layer objects correctly under structural transitions, and CIL constructs an intake packet that reflects the correct post‑merge/post‑split identity‑layer topology. The test SHALL confirm that structural transitions do not produce false instability and that valid instability on unrelated objects is preserved.
 
-### 8.7 New Identity Context Boundary Tests (New)
-The unified context testbench SHALL validate that CST‑MS detects identity‑layer context boundary breaks, CST‑Mux propagates new_context_required=True, COB creates a new identity‑layer object in the same turn, CIL constructs an intake packet using the new identity context, and CEx/CE/ISc propagate continuity accordingly. The test SHALL confirm that context boundary detection is present‑tense and SHALL NOT be delayed by Path A validation.
+### 8.7 - New Identity Context Boundary Tests
+The unified context testbench SHALL validate that CST‑MS detects identity‑layer
+context boundary breaks and emits the control signal `new_context_required=True`.
+The testbench SHALL verify that CST‑Mux propagates this signal into the USP,
+COB SHALL create a new identity‑layer object in the same turn, CIL SHALL
+construct an intake packet using the new identity context, and CEx/CE/ISc SHALL
+propagate continuity accordingly. The test SHALL confirm that context boundary
+detection is present‑tense, deterministic, and SHALL NOT be delayed by Path A
+validation.
+
 
 ---
 
