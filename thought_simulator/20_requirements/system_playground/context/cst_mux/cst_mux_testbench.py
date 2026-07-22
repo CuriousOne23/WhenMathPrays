@@ -307,20 +307,19 @@ def test_new_context_required_flag():
     - Replay determinism
     """
 
-    # Object that triggers continuity break → collapse=True
     obj = make_identity_object("A", collapse=True)
 
     usp, mux = run_pipeline([obj], turn_index=50)
 
     print("\n--- NEW_CONTEXT_REQUIRED Flag ---")
-    print("USP new_context_required:", usp.get("new_context_required"))
+    print("USP new_context_required:", usp.new_context_required)
 
     # 1. USP must contain new_context_required=True
-    assert usp.get("new_context_required") is True
+    assert usp.new_context_required is True
 
     # 2. Replay determinism
     usp2, mux2 = run_pipeline([obj], turn_index=50)
-    assert usp2.get("new_context_required") is True
+    assert usp2.new_context_required is True
 
 # ---------------------------------------------------------------------------
 # Main
