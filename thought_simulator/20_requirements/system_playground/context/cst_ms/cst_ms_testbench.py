@@ -299,27 +299,27 @@ if __name__ == "__main__":
     print("\n=== CST‑MS Testbench: Running All Tests ===")
 
     test_normalization_basic()
-    print("✓ Normalization test passed")
+    print("[PASS] Normalization test passed")
 
     test_weighting_basic()
-    print("✓ Weighting test passed")
+    print("[PASS] Weighting test passed")
 
     test_stability_instability_synthesis()
-    print("✓ Stability/instability synthesis test passed")
+    print("[PASS] Stability/instability synthesis test passed")
 
     test_risk_computation()
-    print("✓ Risk computation test passed")
+    print("[PASS] Risk computation test passed")
 
     test_summary_computation()
-    print("✓ Summary computation test passed")
+    print("[PASS] Summary computation test passed")
 
     test_merge_split_neutrality()
-    print("✓ Merge/split neutrality test passed")
+    print("[PASS] Merge/split neutrality test passed")
 
     test_stability_window_length()
-    print("✓ Stability window test passed")
+    print("[PASS] Stability window test passed")
 
     test_determinism_replay()
-    print("✓ Determinism/replay test passed")
+    print("[PASS] Determinism/replay test passed")
 
     print("\n=== CST‑MS Testbench: All Tests Completed ===")
