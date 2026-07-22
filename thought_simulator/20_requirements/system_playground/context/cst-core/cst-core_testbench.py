@@ -1,19 +1,19 @@
 """
-CST Testbench — System Playground Version
+CST-Core Testbench — System Playground Version
 
-This testbench performs block-level validation of the CST subsystem.
-It tests:
-- drift detection
-- oscillation detection
-- collapse detection
-- freeze/thaw detection
+This testbench validates the CST-Core implementation against:
+- cst-core_requirements.md
+- cst-core.md
+- context_testbench.py
+
+It focuses on:
+- snapshot-level stability behavior (drift, oscillation, collapse)
+- freeze/thaw behavior
 - certainty/ambiguity adjustments
-- lineage stability detection
-- merge/split structural compensation
-- 10-turn post-structure stability behavior
-
-This is NOT a full system simulation. It is a shaping testbench used
-inside system_playground before system_simulation.
+- lineage stability
+- MERGE/SPLIT structural compensation
+- 10-turn post-structure stability window
+- determinism and replay consistency
 """
 
 from cst.cst import CST
@@ -29,12 +29,15 @@ def make_identity_object(
     drift=None,
     oscillation=None,
     collapse=False,
+    frozen=None,
     certainty=None,
     ambiguity=None,
     lineage_stability=None,
-    frozen=None,
 ):
-    """Helper to create IdentityObject instances for CST."""
+    """
+    Helper to create IdentityObject instances for CST-Core testing.
+    Mirrors the OuBA-like objects used in context_testbench.py.
+    """
 
     return IdentityObject(
         id=id,
@@ -48,297 +51,342 @@ def make_identity_object(
             "collapse": collapse,
             "frozen": frozen,
         },
-        ordering_metrics={"recency": 0, "frequency": 0, "density": 0},
+        ordering_metrics={
+            "recency": 0,
+            "frequency": 0,
+            "density": 0,
+        },
     )
 
 
-def empty_tp_fields():
-    """TP lineage/snapshot placeholders for tests that do not involve merge/split."""
-    return [], {"objects": [], "metadata": {}}
+def make_tp_placeholders():
+    """
+    Create TP-like placeholder structures for CST-Core testing.
+    """
+
+    tp_lineage_log = []
+    tp_snapshot = {"turn_index": None, "objects": []}
+    return tp_lineage_log, tp_snapshot
 
 
 # ---------------------------------------------------------------------------
-# Drift Test
+# Basic Functionality Tests
 # ---------------------------------------------------------------------------
 
-def run_drift_test():
-    print("\n=== CST Testbench: Drift Detection ===")
-
-    objs = [
-        make_identity_object("A", drift=0.1),
-        make_identity_object("B", drift=0.3),
-        make_identity_object("C", drift=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
+def test_basic_drift_oscillation_collapse():
+    """
+    Test basic drift, oscillation, and collapse detection.
+    Covers:
+    - HLR-CST-CORE-001..009, 015..018
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=1)
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    print("\n--- Drift State ---")
-    print(signals.drift)
+    obj1 = make_identity_object("obj1", drift=0.1, oscillation=0.0, collapse=False)
+    obj2 = make_identity_object("obj2", drift=0.3, oscillation=0.2, collapse=False)
+    obj3 = make_identity_object("obj3", drift=None, oscillation=None, collapse=True)
+
+    signals = cst.run(
+        identity_objects=[obj1, obj2, obj3],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=1,
+    )
+
+    # Drift: affected objects and magnitude
+    assert "obj1" in signals.drift["affected_objects"]
+    assert "obj2" in signals.drift["affected_objects"]
+    assert signals.drift["magnitude"] == 0.3
+
+    # Oscillation: affected objects, frequency, amplitude
+    assert "obj2" in signals.oscillation["affected_objects"]
+    assert signals.oscillation["frequency"] == 0.2
+    assert signals.oscillation["amplitude"] == len(
+        signals.oscillation["affected_objects"]
+    )
+
+    # Collapse: collapsed objects and severity
+    assert "obj3" in signals.collapse["collapsed_objects"]
+    assert signals.collapse["severity"] == 1
 
 
 # ---------------------------------------------------------------------------
-# Oscillation Test
+# Freeze / Thaw Tests
 # ---------------------------------------------------------------------------
 
-def run_oscillation_test():
-    print("\n=== CST Testbench: Oscillation Detection ===")
-
-    objs = [
-        make_identity_object("A", oscillation=0.2),
-        make_identity_object("B", oscillation=0.5),
-        make_identity_object("C", oscillation=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
+def test_freeze_thaw_behavior():
+    """
+    Test freeze/thaw detection based on stability_metrics['frozen'].
+    Covers:
+    - HLR-CST-CORE-019..023, 024..027
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=2)
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    print("\n--- Oscillation State ---")
-    print(signals.oscillation)
+    obj_frozen = make_identity_object("F", frozen=True)
+    obj_thawed = make_identity_object("T", frozen=False)
+
+    signals = cst.run(
+        identity_objects=[obj_frozen, obj_thawed],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=2,
+    )
+
+    assert "F" in signals.freeze["frozen_objects"]
+    assert "T" in signals.thaw["thawed_objects"]
+    assert signals.freeze["reason"] == "stability_condition"
+    assert signals.thaw["reason"] == "stability_condition"
 
 
 # ---------------------------------------------------------------------------
-# Collapse Test
+# Certainty / Ambiguity Tests
 # ---------------------------------------------------------------------------
 
-def run_collapse_test():
-    print("\n=== CST Testbench: Collapse Detection ===")
-
-    objs = [
-        make_identity_object("A", collapse=True),
-        make_identity_object("B", collapse=False),
-        make_identity_object("C", collapse=True),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
+def test_certainty_ambiguity_adjustments():
+    """
+    Test certainty/ambiguity adjustments.
+    Covers:
+    - HLR-CST-CORE-012..014
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=3)
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    print("\n--- Collapse State ---")
-    print(signals.collapse)
+    obj_high_cert = make_identity_object("HC", certainty="high", ambiguity="low")
+    obj_low_cert = make_identity_object("LC", certainty="low", ambiguity="high")
+
+    signals = cst.run(
+        identity_objects=[obj_high_cert, obj_low_cert],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=3,
+    )
+
+    assert "HC" in signals.certainty_adjustment["increased_certainty"]
+    assert "LC" in signals.certainty_adjustment["decreased_certainty"]
+    assert "LC" in signals.ambiguity_adjustment["increased_ambiguity"]
+    assert "HC" in signals.ambiguity_adjustment["decreased_ambiguity"]
 
 
 # ---------------------------------------------------------------------------
-# Freeze / Thaw Test
+# Lineage Stability Tests
 # ---------------------------------------------------------------------------
 
-def run_freeze_thaw_test():
-    print("\n=== CST Testbench: Freeze/Thaw Detection ===")
-
-    objs = [
-        make_identity_object("A", frozen=True),
-        make_identity_object("B", frozen=False),
-        make_identity_object("C", frozen=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
+def test_lineage_stability():
+    """
+    Test lineage stability detection.
+    Covers:
+    - HLR-CST-CORE-028..031
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=4)
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    print("\n--- Freeze State ---")
-    print(signals.freeze)
+    obj_stable = make_identity_object("S", lineage_stability="stable")
+    obj_unstable = make_identity_object("U", lineage_stability="unstable")
 
-    print("\n--- Thaw State ---")
-    print(signals.thaw)
+    signals = cst.run(
+        identity_objects=[obj_stable, obj_unstable],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=4,
+    )
+
+    assert "S" in signals.lineage_stability["stable_lineage"]
+    assert "U" in signals.lineage_stability["unstable_lineage"]
 
 
 # ---------------------------------------------------------------------------
-# Certainty / Ambiguity Test
+# MERGE / SPLIT Structural Compensation Tests
 # ---------------------------------------------------------------------------
 
-def run_certainty_ambiguity_test():
-    print("\n=== CST Testbench: Certainty/Ambiguity Detection ===")
-
-    objs = [
-        make_identity_object("A", certainty="high", ambiguity="low"),
-        make_identity_object("B", certainty="low", ambiguity="high"),
-        make_identity_object("C", certainty=None, ambiguity=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
+def test_merge_split_compensation_no_false_instability():
+    """
+    Test that MERGE/SPLIT structural events do not produce false instability.
+    Covers:
+    - HLR-CST-CORE-019..023 (structural neutrality)
+    - Merge/split compensation behavior
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=5)
 
-    print("\n--- Certainty Adjustment ---")
-    print(signals.certainty_adjustment)
-
-    print("\n--- Ambiguity Adjustment ---")
-    print(signals.ambiguity_adjustment)
-
-
-# ---------------------------------------------------------------------------
-# Lineage Stability Test
-# ---------------------------------------------------------------------------
-
-def run_lineage_stability_test():
-    print("\n=== CST Testbench: Lineage Stability Detection ===")
-
-    objs = [
-        make_identity_object("A", lineage_stability="stable"),
-        make_identity_object("B", lineage_stability="unstable"),
-        make_identity_object("C", lineage_stability="stable"),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=6)
-
-    print("\n--- Lineage Stability ---")
-    print(signals.lineage_stability)
-
-
-# ---------------------------------------------------------------------------
-# Merge Compensation Test
-# ---------------------------------------------------------------------------
-
-def run_merge_compensation_test():
-    print("\n=== CST Testbench: MERGE Structural Compensation ===")
-
-    objs = [
-        make_identity_object("objA", drift=0.5),
-        make_identity_object("objB", oscillation=0.7),
-        make_identity_object("objA_objB_merged", drift=None, oscillation=None),
-    ]
-
-    tp_lineage = [
+    # MERGE: parents P1, P2 → child C
+    tp_lineage_log = [
         {
             "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
+            "parent_ref": ["P1", "P2"],
+            "child_refs": ["C"],
         }
     ]
+    tp_snapshot = {"turn_index": 0, "objects": []}
 
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
+    P1 = make_identity_object("P1", drift=0.9, collapse=True)
+    P2 = make_identity_object("P2", drift=0.8, collapse=True)
+    C = make_identity_object("C", drift=None, collapse=False)
+
+    signals = cst.run(
+        identity_objects=[P1, P2, C],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=5,
+    )
+
+    # Parents should be compensated out of instability consideration
+    assert "P1" not in signals.collapse["collapsed_objects"]
+    assert "P2" not in signals.collapse["collapsed_objects"]
+
+    # Child C is legitimate new layer; no collapse expected
+    assert "C" not in signals.collapse["collapsed_objects"]
+
+
+def test_split_compensation_no_false_instability():
+    """
+    Test that SPLIT structural events do not produce false instability.
+    Covers:
+    - HLR-CST-CORE-019..023 (structural neutrality)
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=7)
 
-    print("\n--- Drift State (should be empty or minimal) ---")
-    print(signals.drift)
-
-    print("\n--- Oscillation State (should be empty or minimal) ---")
-    print(signals.oscillation)
-
-    print("\n--- Collapse State (should be empty) ---")
-    print(signals.collapse)
-
-
-# ---------------------------------------------------------------------------
-# Split Compensation Test
-# ---------------------------------------------------------------------------
-
-def run_split_compensation_test():
-    print("\n=== CST Testbench: SPLIT Structural Compensation ===")
-
-    objs = [
-        make_identity_object("objX", drift=0.4),
-        make_identity_object("objX_1", drift=None),
-        make_identity_object("objX_2", oscillation=None),
-    ]
-
-    tp_lineage = [
+    # SPLIT: parent P → children C1, C2
+    tp_lineage_log = [
         {
             "event_type": "SPLIT",
-            "parent_ref": ["objX"],
-            "child_refs": ["objX_1", "objX_2"],
+            "parent_ref": ["P"],
+            "child_refs": ["C1", "C2"],
         }
     ]
+    tp_snapshot = {"turn_index": 0, "objects": []}
 
-    tp_snapshot = {"objects": ["objX_1", "objX_2"], "metadata": {}}
+    P = make_identity_object("P", drift=0.7, collapse=True)
+    C1 = make_identity_object("C1", drift=None, collapse=False)
+    C2 = make_identity_object("C2", drift=None, collapse=False)
+
+    signals = cst.run(
+        identity_objects=[P, C1, C2],
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=6,
+    )
+
+    # Parent should be compensated out of instability consideration
+    assert "P" not in signals.collapse["collapsed_objects"]
+
+    # Children are legitimate new layers; no collapse expected
+    assert "C1" not in signals.collapse["collapsed_objects"]
+    assert "C2" not in signals.collapse["collapsed_objects"]
+
+
+# ---------------------------------------------------------------------------
+# Post-Structure Stability Window Tests (10 turns)
+# ---------------------------------------------------------------------------
+
+def test_post_structure_stability_window_length():
+    """
+    Test that CST tracks a 10-turn post-structure stability window.
+    Covers:
+    - HLR-CST-CORE-032..036 (determinism, replay, window behavior)
+    """
 
     cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=8)
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
-    print("\n--- Drift State (should be empty or minimal) ---")
-    print(signals.drift)
+    obj = make_identity_object("X", drift=0.1)
 
-    print("\n--- Oscillation State (should be empty or minimal) ---")
-    print(signals.oscillation)
+    # Run CST for 15 turns; window should cap at 10
+    for turn in range(1, 16):
+        signals = cst.run(
+            identity_objects=[obj],
+            tp_lineage_log=tp_lineage_log,
+            tp_snapshot=tp_snapshot,
+            turn_index=turn,
+        )
+        assert signals.metadata["turn_index"] == turn
 
-    print("\n--- Collapse State (should be empty) ---")
-    print(signals.collapse)
+    assert len(cst.state.post_structure_stability_window) == 10
+    # Last entry should correspond to turn 15
+    last_signals = cst.state.post_structure_stability_window[-1]
+    assert last_signals.metadata["turn_index"] == 15
 
 
 # ---------------------------------------------------------------------------
-# 10-Turn Post-Structure Stability Test
+# Determinism / Replay Tests
 # ---------------------------------------------------------------------------
 
-def run_post_structure_stability_test():
-    print("\n=== CST Testbench: 10-Turn Post-Structure Stability Window ===")
+def test_determinism_replay_consistency():
+    """
+    Test that CST produces identical outputs under replay for identical inputs.
+    Covers:
+    - HLR-CST-CORE-032..036
+    """
 
-    tp_lineage = [
-        {
-            "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
-        }
+    cst1 = CST()
+    cst2 = CST()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    objs = [
+        make_identity_object("A", drift=0.2, oscillation=0.1, collapse=False),
+        make_identity_object("B", drift=0.3, oscillation=0.0, collapse=True),
     ]
 
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
+    signals1 = cst1.run(
+        identity_objects=objs,
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=10,
+    )
 
-    cst = CST()
+    signals2 = cst2.run(
+        identity_objects=objs,
+        tp_lineage_log=tp_lineage_log,
+        tp_snapshot=tp_snapshot,
+        turn_index=10,
+    )
 
-    for turn in range(1, 12):
-        objs = [
-            make_identity_object("objA_objB_merged", drift=None, oscillation=None)
-        ]
+    assert signals1.drift == signals2.drift
+    assert signals1.oscillation == signals2.oscillation
+    assert signals1.collapse == signals2.collapse
+    assert signals1.freeze == signals2.freeze
+    assert signals1.thaw == signals2.thaw
+    assert signals1.certainty_adjustment == signals2.certainty_adjustment
+    assert signals1.ambiguity_adjustment == signals2.ambiguity_adjustment
+    assert signals1.lineage_stability == signals2.lineage_stability
+    assert signals1.metadata == signals2.metadata
 
-        signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=turn)
-
-        print(f"\n--- Turn {turn} Stability Window ---")
-        print(cst.state.post_structure_stability_window)
-
-# ---------------------------------------------------------------------------
-# Real Instability During 10-Turn Post-Structure Window Test
-# ---------------------------------------------------------------------------
-
-def run_post_structure_real_instability_test():
-    print("\n=== CST Testbench: Real Instability During 10-Turn Window ===")
-
-    # MERGE event (structural)
-    tp_lineage = [
-        {
-            "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
-        }
-    ]
-
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
-
-    cst = CST()
-
-    # Turns 1–3: stable child (no real instability)
-    for turn in range(1, 4):
-        objs = [make_identity_object("objA_objB_merged", drift=None)]
-        signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=turn)
-        print(f"Turn {turn} (stable) — Drift:", signals.drift)
-
-    # Turn 4: REAL instability appears (drift = 0.8)
-    objs = [make_identity_object("objA_objB_merged", drift=0.8)]
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=4)
-    print("\nTurn 4 (real instability) — Drift:", signals.drift)
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    run_drift_test()
-    run_oscillation_test()
-    run_collapse_test()
-    run_freeze_thaw_test()
-    run_certainty_ambiguity_test()
-    run_lineage_stability_test()
-    run_merge_compensation_test()
-    run_split_compensation_test()
-    run_post_structure_stability_test()
-    run_post_structure_real_instability_test()
+    print("\n=== CST-Core Testbench: Running All Tests ===")
+
+    test_basic_drift_oscillation_collapse()
+    print("✓ Basic drift/oscillation/collapse test passed")
+
+    test_freeze_thaw_behavior()
+    print("✓ Freeze/thaw behavior test passed")
+
+    test_certainty_ambiguity_adjustments()
+    print("✓ Certainty/ambiguity adjustments test passed")
+
+    test_lineage_stability()
+    print("✓ Lineage stability test passed")
+
+    test_merge_split_compensation_no_false_instability()
+    print("✓ MERGE structural compensation test passed")
+
+    test_split_compensation_no_false_instability()
+    print("✓ SPLIT structural compensation test passed")
+
+    test_post_structure_stability_window_length()
+    print("✓ Post-structure stability window length test passed")
+
+    test_determinism_replay_consistency()
+    print("✓ Determinism/replay consistency test passed")
+
+    print("\n=== CST-Core Testbench: All Tests Completed ===")
