@@ -18,7 +18,7 @@ Tests cover:
 """
 
 from cst_mux import CST_MUX
-from cst_ms import CST_MS
+from cst_ms.cst_ms import CST_MS
 from cst_core.cst_core import CST
 from cil.cil import IdentityObject
 
