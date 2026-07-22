@@ -97,28 +97,50 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
     cst_ms = CST_MS()
     cst_ms_signals = cst_ms.run(cst_core_signals, turn_index).__dict__
 
-    # 3. CST-Mux (sees CST-Core via CST-MS)
+    # 3. CST-Mux
     cst_mux = CST_MUX()
     usp = cst_mux.run(cst_ms_signals, turn_index)
 
-    # 4. COB (sees OuBA + CST-Core + CST-MS/USP)
+    # 4. COB
     cob = COB()
     for obj in objs:
         cob.add_identity_object(obj)
-    cob_state = cob.run(
-        core_signals=cst_core_signals,
-        ms_signals=cst_ms_signals,
-        usp=usp,
-        turn_index=turn_index,
-    )
 
-    # 5. CIL (sees COB objects + synthesized context)
+    # CURRENT COB SIGNATURE:
+    # cob_state = cob.run(signals=cst_core_signals, turn_index=turn_index)
+
+    # REQUIRED BY SPEC (HLR‑CnTxt‑021):
+    # cob_state = cob.run(
+    #     core_signals=cst_core_signals,
+    #     ms_signals=cst_ms_signals,
+    #     usp=usp,
+    #     turn_index=turn_index,
+    # )
+
+    cob_state = cob.run(signals=cst_core_signals, turn_index=turn_index)
+
+    # 5. CIL
     cil = CIL()
+
+    # CURRENT CIL SIGNATURE:
+    # cil_packet = cil.run(
+    #     cob_objects=cob_state.objects,
+    #     cst_signals=cst_core_signals,
+    #     turn_index=turn_index,
+    # )
+
+    # REQUIRED BY SPEC (HLR‑CnTxt‑021):
+    # cil_packet = cil.run(
+    #     cob_objects=cob_state.objects,
+    #     cst_core_signals=cst_core_signals,
+    #     cst_ms_signals=cst_ms_signals,
+    #     usp=usp,
+    #     turn_index=turn_index,
+    # )
+
     cil_packet = cil.run(
         cob_objects=cob_state.objects,
-        cst_core_signals=cst_core_signals,
-        cst_ms_signals=cst_ms_signals,
-        usp=usp,
+        cst_signals=cst_core_signals,
         turn_index=turn_index,
     )
 
@@ -129,7 +151,6 @@ def run_pipeline(objs, tp_lineage_log, tp_snapshot, turn_index):
         "cob_state": cob_state,
         "cil_packet": cil_packet,
     }
-
 
 # ---------------------------------------------------------------------------
 # Unified Tests
