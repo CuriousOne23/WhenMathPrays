@@ -138,6 +138,48 @@ def run_cst_signal_test():
     for obj in cob.state.objects:
         print(obj.id, obj.stability_metrics.get("frozen"))
 
+# ---------------------------------------------------------------------------
+# NEW_CONTEXT_REQUIRED Test (HLR‑COB‑010A)
+# ---------------------------------------------------------------------------
+
+def run_new_context_required_test():
+    print("\n=== COB Testbench: NEW_CONTEXT_REQUIRED Test ===")
+
+    cob = COB()
+
+    # Add an existing object to verify it is NOT evolved when new context is required
+    existing = make_identity_object("old1", 5, 5, 5, drift=0.1)
+    cob.add_identity_object(existing)
+
+    # Signals from CST‑MS indicating a new context must be created
+    signals = {
+        "new_context_required": True,
+        "next_context": {
+            "referent_map": {"surface_forms": ["new topic", "fresh start"]},
+            "anchors": ["anchor_new"],
+        },
+        # Drift/oscillation should NOT apply to old1 when new context is required
+        "drift": {"affected_objects": ["old1"], "magnitude": 0.9},
+    }
+
+    cob_state = cob.run(signals, turn_index=99)
+
+    print("\n--- COB Objects After NEW_CONTEXT_REQUIRED ---")
+    for obj in cob_state.objects:
+        print(obj.id, obj.referent_map, obj.ordering_metrics)
+
+    print("\n--- Verifications ---")
+    # 1. New object must exist
+    new_ids = [obj.id for obj in cob_state.objects]
+    print("New object created:", any("ctx_99" == oid for oid in new_ids))
+
+    # 2. Old object must NOT be updated by drift
+    old_obj = next(o for o in cob_state.objects if o.id == "old1")
+    print("Old object drift unchanged (should be 0.1):", old_obj.stability_metrics["drift"])
+
+    # 3. New object must have correct referent map
+    new_obj = next(o for o in cob_state.objects if o.id == "ctx_99")
+    print("New object referent_map:", new_obj.referent_map)
 
 # ---------------------------------------------------------------------------
 # Freeze/Thaw Compliance Test
@@ -380,3 +422,4 @@ if __name__ == "__main__":
     run_conversation_ordering_metrics_test()
     run_referent_map_compression_test()
     run_merge_split_compression_test()
+    run_new_context_required_test()
