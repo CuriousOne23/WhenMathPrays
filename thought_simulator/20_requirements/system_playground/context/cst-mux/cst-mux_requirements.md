@@ -1,325 +1,202 @@
-# **CST Requirements (Revised, Consolidated HLR Section)**  
-*Conversation Stability Tracker — Context Subsystem*  
-*System Playground Version*
+# **cst-mux_requirements.md**  
+**CST‑Mux Testbench Requirements**
 
 ---
 
-## **1. Purpose**  
-*(Informative — no SHALL statements)*
+## **0. Document Purpose (Informative)**  
+This document defines the testbench requirements for **CST‑Mux**, the Stability Signal Multiplexing Module in the Context Stability Tracking pipeline. The purpose of this testbench is to verify that CST‑Mux correctly aligns, indexes, and multiplexes synthesized CST‑MS signals into the Unified Stability Packet (USP), maintains deterministic ordering, handles activation/freeze/thaw/continuity flags correctly, and behaves deterministically under replay.
 
-The Conversation Stability Tracker (CST) evaluates stability conditions across identity‑layer objects.  
-It detects drift, oscillation, collapse, merge, split, freeze, thaw, and certainty/ambiguity changes.  
-CST produces stability signals consumed by COB and indirectly by CIL.
+The testbench evaluates:
 
-CST is the first stage of the context subsystem:
-
-$$
-\text{CST} \rightarrow \text{COB} \rightarrow \text{CIL} \rightarrow \text{CEx}
-$$
-
----
-
-## **2. Scope**  
-*(Informative — no SHALL statements)*
-
-This document defines the **system_playground implementation** of CST.  
-It describes stability signal generation, drift detection, oscillation detection, collapse conditions, merge/split rules, freeze/thaw behavior, and ambiguity/certainty adjustments.
-
-Global architecture defined in **20.32.010** remains authoritative.
+- basic multiplexing functionality  
+- layer indexing correctness  
+- signal alignment correctness  
+- flag computation correctness  
+- merge/split neutrality  
+- replay determinism  
+- operational functions required for TS integrity  
 
 ---
 
-## **3. Inputs**  
-*(Informative — no SHALL statements)*
+# **1. Input Acceptance Tests**
 
-### **3.1 Identity‑Layer Objects from COB**  
-CST receives identity‑layer objects containing referent maps, anchors, lineage, ambiguity indicators, and ordering metrics.
+## **1.1 Purpose (Informative)**  
+CST‑Mux must accept all synthesized CST‑MS signals and layer‑state flags. The testbench verifies correct ingestion and deterministic handling of inputs.
 
-### **3.2 Conversation Turn Identity Fragments**  
-CST receives identity‑layer fragments extracted from the current turn before COB integration.
+## **1.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑001**  
+The testbench SHALL verify that CST‑Mux accepts stability, instability, collapse risk, freeze risk, thaw readiness, ambiguity summary, drift summary, and oscillation summary for each identity layer.
 
----
+**HLR‑CST‑MUX‑002**  
+The testbench SHALL verify that CST‑Mux accepts deterministic layer ordering.
 
-## **4. Outputs**  
-*(Informative — no SHALL statements)*
-
-### **4.1 Stability Signals**  
-CST produces stability signals including:
-
-- drift  
-- oscillation  
-- collapse  
-- merge  
-- split  
-- freeze  
-- thaw  
-- certainty adjustments  
-- ambiguity adjustments  
-- lineage stability indicators  
-
-These signals are consumed by COB and indirectly by CIL.
+**HLR‑CST‑MUX‑003**  
+The testbench SHALL verify that CST‑Mux accepts activation, freeze, thaw, and continuity flags for each identity layer.
 
 ---
 
-## **5. Testing (system_playground)**  
-*(Informative — no SHALL statements)*
+# **2. Layer Indexing Tests**
 
-The system_playground version of CST is validated using a block‑level Python testbench (`cst_testbench.py`).  
-Tests ensure CST produces deterministic stability signals, correctly interprets structural continuity markers from TP, and remains synchronized with COB across merge, split, drift, oscillation, collapse, and ambiguity conditions.
+## **2.1 Purpose (Informative)**  
+CST‑Mux assigns deterministic indices to identity layers. The testbench ensures indexing is stable and replay‑safe.
 
----
+## **2.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑004**  
+The testbench SHALL verify that CST‑Mux assigns deterministic indices to all identity layers.
 
-## **5.1 Drift, Oscillation, and Collapse Tests**  
-*(Informative)*
-
-### **Drift Tests**  
-Evaluate CST’s ability to detect referent‑map and anchor divergence.
-
-**Expected behavior:**  
-- Drift reported only when divergence exceeds thresholds  
-- Drift magnitude reflects divergence  
-- No oscillation/collapse when divergence is monotonic  
-
-### **Oscillation Tests**  
-Evaluate CST’s ability to detect alternating incompatible states.
-
-**Expected behavior:**  
-- Oscillation frequency reflects alternation  
-- No collapse when oscillation is reversible  
-- Freeze/thaw exercised when oscillation exceeds limits  
-
-### **Collapse Tests**  
-Evaluate CST’s ability to detect structural failure.
-
-**Expected behavior:**  
-- Collapse reported when structural integrity is lost  
-- Drift/oscillation may accompany collapse  
-- Collapse signals deterministic  
+**HLR‑CST‑MUX‑005**  
+The testbench SHALL verify that layer indexing is stable across replay.
 
 ---
 
-## **5.2 Merge/Split Stability Tests**  
-*(Informative)*
+# **3. Signal Alignment Tests**
 
-### **Merge Stability Tests**  
-Ensure CST interprets MERGE markers as legitimate consolidation.
+## **3.1 Purpose (Informative)**  
+CST‑Mux aligns all synthesized signals by identity layer. The testbench ensures alignment is correct and deterministic.
 
-### **Split Stability Tests**  
-Ensure CST interprets SPLIT markers as legitimate divergence.
+## **3.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑006**  
+The testbench SHALL verify that CST‑Mux aligns all synthesized signals by identity layer.
 
-### **Merge/Split Compensation Tests**  
-Ensure CST remains synchronized with COB across structural transformations.
+**HLR‑CST‑MUX‑007**  
+The testbench SHALL verify that aligned signals maintain deterministic ordering.
 
----
-
-## **5.3 Freeze/Thaw, Certainty, and Ambiguity Tests**  
-*(Informative)*
-
-### **Freeze/Thaw Tests**  
-Freeze issued when instability exceeds thresholds; thaw issued when stability restored.
-
-### **Certainty/Ambiguity Adjustment Tests**  
-Certainty increases when ambiguity decreases; ambiguity increases when drift/oscillation rises.
+**HLR‑CST‑MUX‑008**  
+The testbench SHALL verify that aligned signals are replay‑safe.
 
 ---
 
-## **5.4 Deterministic Replay Tests**  
-*(Informative)*
+# **4. Activation Flag Tests**
 
-### **Single‑Turn Determinism**  
-Identical inputs → identical signals.
+## **4.1 Purpose (Informative)**  
+Activation flags determine whether a layer participates in identity evolution. The testbench ensures activation flags are computed correctly.
 
-### **Multi‑Turn Determinism**  
-Merge/split sequences produce identical signal sequences across runs.
+## **4.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑009**  
+The testbench SHALL verify that activation flags are computed using deterministic activation thresholds.
 
----
-
-# **6. Consolidated High‑Level Requirements (HLRs)**  
-*(All SHALL statements appear only here; new HLRs begin at 018)*
-
-### **Core Stability Detection**
-
-**HLR‑CST‑001**  
-CST SHALL detect drift conditions in identity‑layer objects.
-
-**HLR‑CST‑002**  
-CST SHALL detect oscillation conditions in identity‑layer objects.
-
-**HLR‑CST‑003**  
-CST SHALL detect collapse conditions and produce collapse signals.
-
-### **Structural Transformations**
-
-**HLR‑CST‑004**  
-CST SHALL detect merge conditions between identity‑layer objects.
-
-**HLR‑CST‑005**  
-CST SHALL detect split conditions within identity‑layer objects.
-
-### **Stability Signaling**
-
-**HLR‑CST‑006**  
-CST SHALL issue freeze and thaw signals based on stability conditions.
-
-**HLR‑CST‑007**  
-CST SHALL adjust certainty indicators for identity‑layer objects.
-
-**HLR‑CST‑008**  
-CST SHALL adjust ambiguity indicators for identity‑layer objects.
-
-**HLR‑CST‑009**  
-CST SHALL evaluate lineage stability for identity‑layer objects.
-
-### **Determinism**
-
-**HLR‑CST‑010**  
-CST SHALL produce deterministic stability signals under identical inputs.
+**HLR‑CST‑MUX‑010**  
+The testbench SHALL verify that activation flags are included correctly in USP.
 
 ---
 
-### **Next‑Turn Context Compatibility (New HLRs begin here)**
+# **5. Freeze and Thaw Flag Tests**
 
-**HLR‑CST‑011**  
-CST SHALL treat next‑turn context fields as external structural metadata without generating, modifying, or interpreting them.
+## **5.1 Purpose (Informative)**  
+Freeze and thaw flags determine whether a layer is allowed to evolve or integrate. The testbench ensures freeze/thaw flags are computed correctly.
 
-**HLR‑CST‑012**  
-CST SHALL propagate stability signals deterministically alongside next‑turn context fields without corrupting or altering them.
+## **5.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑011**  
+The testbench SHALL verify that freeze flags are computed using deterministic freeze thresholds.
 
-**HLR‑CST‑013**  
-CST SHALL NOT emit instability signals solely due to the presence, absence, or content of next‑turn context fields.
+**HLR‑CST‑MUX‑012**  
+The testbench SHALL verify that thaw flags are computed using deterministic thaw thresholds.
 
-**HLR‑CST‑014**  
-CST SHALL preserve structural continuity during merge/split events such that next‑turn context fields remain stable across turns.
-
-**HLR‑CST‑015**  
-CST SHALL preserve next‑turn context continuity across freeze/thaw cycles.
-
-**HLR‑CST‑016**  
-CST SHALL guarantee deterministic replay of stability signals such that identical inputs produce identical downstream next‑turn context behavior.
-
-**HLR‑CST‑017**  
-CST SHALL NOT define next‑turn context field names.
+**HLR‑CST‑MUX‑013**  
+The testbench SHALL verify that freeze and thaw flags are included correctly in USP.
 
 ---
 
-### **New HLRs Added for Global Alignment (Option C)**
+# **6. Continuity Flag Tests**
 
-**HLR‑CST‑018**  
-CST SHALL synchronize its internal topology with COB’s identity‑layer structure across merge and split events.
+## **6.1 Purpose (Informative)**  
+Continuity flags indicate whether a layer is stable enough for integration. The testbench ensures continuity flags are computed correctly.
 
-**HLR‑CST‑019**  
-CST SHALL interpret TP lineage markers deterministically when evaluating merge, split, drift, oscillation, and collapse.
+## **6.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑014**  
+The testbench SHALL verify that continuity flags are computed using deterministic continuity thresholds.
 
-**HLR‑CST‑020**  
-CST SHALL maintain deterministic structural continuity across multi‑turn sequences involving merge, split, drift, oscillation, and collapse.
-
-**HLR‑CST‑021**  
-CST SHALL ensure freeze/thaw signals do not cause loss, mutation, or reordering of identity‑layer objects in downstream modules.
-
-**HLR‑CST‑022**  
-CST SHALL ensure certainty/ambiguity adjustments remain consistent with drift, oscillation, and collapse metrics across turns.
-
-**HLR‑CST‑023**  
-CST SHALL ensure merge/split compensation does not introduce spurious instability signals.
-
-**HLR‑CST‑024**  
-CST SHALL ensure lineage stability evaluation remains consistent across structural transformations.
+**HLR‑CST‑MUX‑015**  
+The testbench SHALL verify that continuity flags are included correctly in USP.
 
 ---
 
-## **7. Stability Metrics**  
-*(Informative — no SHALL statements)*
+# **7. USP Construction Tests**
 
-CST evaluates stability using metrics such as:
+## **7.1 Purpose (Informative)**  
+USP is the final multiplexed packet consumed by COB and CIL. The testbench ensures USP is constructed deterministically and completely.
 
-- referent drift  
-- anchor drift  
-- lineage divergence  
-- ambiguity density  
-- oscillation frequency  
+## **7.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑016**  
+The testbench SHALL verify that USP is constructed as a deterministic, layer‑indexed packet.
 
-Example:
+**HLR‑CST‑MUX‑017**  
+The testbench SHALL verify that USP includes all aligned signals and flags.
 
-$$
-\text{StabilityScore} = \text{Drift} + \text{Oscillation} + \text{AmbiguityDensity}
-$$
+**HLR‑CST‑MUX‑018**  
+The testbench SHALL verify that USP is replay‑safe.
 
 ---
 
-## **8. Drift Rules**  
-*(Informative — no SHALL statements)*
+# **8. Merge/Split Neutrality Tests**
 
-Drift is detected when referent or anchor positions diverge across turns.  
-Drift magnitude influences certainty and ambiguity adjustments.
+## **8.1 Purpose (Informative)**  
+Merge and split events are structural transitions that should not produce instability signals or alter USP unless genuine instability occurs. The testbench ensures merge/split neutrality.
 
----
+## **8.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑019**  
+The testbench SHALL verify that merge events do not produce instability signals when no genuine instability occurs.
 
-## **9. Oscillation Rules**  
-*(Informative — no SHALL statements)*
+**HLR‑CST‑MUX‑020**  
+The testbench SHALL verify that split events do not produce instability signals when no genuine instability occurs.
 
-Oscillation occurs when identity‑layer objects alternate between incompatible states across turns.  
-Oscillation frequency influences freeze/thaw decisions.
+**HLR‑CST‑MUX‑021**  
+The testbench SHALL verify that merge/split events do not alter aligned signals or flags unless genuine instability occurs.
 
----
-
-## **10. Collapse Rules**  
-*(Informative — no SHALL statements)*
-
-Collapse occurs when identity‑layer objects lose structural integrity or become incompatible with referent maps.  
-Collapse signals trigger COB merge or eviction behavior.
+**HLR‑CST‑MUX‑022**  
+The testbench SHALL verify that merge/split events do not modify USP structure or ordering.
 
 ---
 
-## **11. Merge/Split Rules**  
-*(Informative — no SHALL statements)*
+# **9. Merge/Split Detection Tests**
 
-Merge conditions arise when identity‑layer objects converge in referent or anchor space.  
-Split conditions arise when identity‑layer objects diverge into incompatible states.
+## **9.1 Purpose (Informative)**  
+CST‑Mux must detect merge/split events correctly and update USP state without producing instability unless genuine instability occurs. The testbench ensures correct detection behavior.
 
----
+## **9.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑023**  
+The testbench SHALL verify that CST‑Mux detects valid merge events when two identity‑layer structures unify.
 
-## **12. Freeze/Thaw Behavior**  
-*(Informative — no SHALL statements)*
+**HLR‑CST‑MUX‑024**  
+The testbench SHALL verify that CST‑Mux detects valid split events when one identity‑layer structure divides.
 
-Freeze signals prevent COB from modifying identity‑layer objects.  
-Thaw signals restore normal update behavior.
+**HLR‑CST‑MUX‑025**  
+The testbench SHALL verify that merge/split detection is deterministic and replay‑safe.
 
----
+**HLR‑CST‑MUX‑026**  
+The testbench SHALL verify that merge/split detection does not emit instability signals unless genuine instability occurs.
 
-## **13. Interface Contracts**  
-*(Informative — no SHALL statements)*
+**HLR‑CST‑MUX‑027**  
+The testbench SHALL verify that merge/split detection correctly updates USP state without altering stability‑neutral behavior.
 
-### **CST → COB**  
-CST provides stability signals directly to COB.
+**HLR‑CST‑MUX‑028**  
+The testbench SHALL verify that if genuine instability occurs after a merge event, CST‑Mux emits the correct instability‑related flags.
 
-### **CST → CIL**  
-CST influences CIL indirectly through COB and directly when required by global rules.
-
-### **CST → CEx (Indirect)**  
-CST influences CEx only through COB and CIL.
-
----
-
-## **14. Determinism Notes**  
-*(Informative — no SHALL statements)*
-
-Deterministic signal generation ensures reproducible behavior in COB and CIL under identical identity‑layer inputs.
+**HLR‑CST‑MUX‑029**  
+The testbench SHALL verify that if genuine instability occurs after a split event, CST‑Mux emits the correct instability‑related flags.
 
 ---
 
-## **15. Error Handling**  
-*(Informative — no SHALL statements)*
+# **10. Determinism and Replay Tests**
 
-CST rejects malformed identity‑layer objects.  
-CST rejects invalid referent or anchor structures.  
-CST ensures internal consistency of stability signals.
+## **10.1 Purpose (Informative)**  
+CST‑Mux must behave identically under replay. The testbench ensures full determinism.
+
+## **10.2 Requirements (Normative)**  
+**HLR‑CST‑MUX‑030**  
+The testbench SHALL verify that all outputs are computed as pure functions of CST‑MS inputs and layer states.
+
+**HLR‑CST‑MUX‑031**  
+The testbench SHALL verify that threshold comparisons are deterministic and monotonic.
+
+**HLR‑CST‑MUX‑032**  
+The testbench SHALL verify that replay produces identical USP outputs for identical inputs.
+
+**HLR‑CST‑MUX‑033**  
+The testbench SHALL verify that all USP outputs are emitted in a deterministic, fixed order.
 
 ---
 
-## **16. Playground Notes**  
-*(Informative — no SHALL statements)*
-
-This document defines the system_playground version of CST.  
-It mirrors global architecture while remaining scoped for simulation and testing.
+# **End of Document**
 
 ---
