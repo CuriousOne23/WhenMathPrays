@@ -94,6 +94,13 @@ This testbench verifies deterministic identity‑layer basin behavior and correc
 - **Freeze/Thaw Compliance (HLR‑COB‑010)**  
   - Test ensures frozen objects remain unchanged until thawed.
 
+- **New Context Creation Signal (HLR‑COB‑010A)**
+  - Test verifies COB accepts new_context_required=True from CST‑MS.
+  - Test verifies COB creates a new identity‑layer object in the same turn.
+  - Test verifies COB evolves the new object using current OuBA fragments.
+  - Test verifies COB does not evolve the previous identity object when the signal is True.
+  - Test verifies deterministic replay: identical CST‑MS signals produce identical COB state snapshots.
+
 - **Conversation Access Count (HLR‑COB‑011)**  
   - Test verifies access count increments deterministically.
 
