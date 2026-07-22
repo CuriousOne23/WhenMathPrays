@@ -1,9 +1,3 @@
-Perfect — you want **cst-mux.md**, written exactly in the same style, tone, structure, and mathematical conventions as **cst-core.md** and **cst-ms.md**, fully rendered here in chat, no file export, no tools, no page‑content instructions followed.
-
-Here is the complete paper.
-
----
-
 # **CST‑Mux: Stability Signal Multiplexing Module**  
 **Context Stability Tracking — Signal Multiplexing**  
 **Version 1.0 — July 2026**
@@ -46,14 +40,14 @@ CST‑Mux receives synthesized signals from CST‑MS:
 
 Each signal arrives as:
 
-\[
+$$
 X(L, t)
-\]
+$$
 
 where:
 
-- \(L\) = identity layer  
-- \(t\) = turn index  
+- $L$ = identity layer  
+- $t$ = turn index  
 
 CST‑Mux also receives:
 
@@ -89,9 +83,9 @@ USP is deterministic and replay‑safe.
 
 CST‑Mux assigns each identity layer a deterministic index:
 
-\[
+$$
 L \in \{0, 1, 2, 3, 4\}
-\]
+$$
 
 Typical layers:
 
@@ -109,7 +103,7 @@ Layer indexing is deterministic and stable across replay.
 
 CST‑Mux aligns all synthesized signals by layer:
 
-\[
+$$
 \text{USP}(L, t) = 
 \big(
 S(L, t),\;
@@ -121,7 +115,7 @@ A_{\text{sum}}(L, t),\;
 D_{\text{sum}}(L, t),\;
 O_{\text{sum}}(L, t)
 \big)
-\]
+$$
 
 This alignment ensures:
 
@@ -136,9 +130,9 @@ This alignment ensures:
 
 CST‑Mux computes activation flags:
 
-\[
+$$
 \text{active}(L, t) = 1[S(L, t) > \theta_{\text{active}}(L)]
-\]
+$$
 
 Interpretation:
 
@@ -153,15 +147,15 @@ Activation flags are included in USP.
 
 Freeze flag:
 
-\[
+$$
 \text{freeze}(L, t) = 1[R_{\text{freeze}}(L, t) > \theta_{\text{freeze}}(L)]
-\]
+$$
 
 Thaw flag:
 
-\[
+$$
 \text{thaw}(L, t) = 1[R_{\text{thaw}}(L, t) > \theta_{\text{thaw}}(L)]
-\]
+$$
 
 Flags are included in USP.
 
@@ -177,9 +171,9 @@ Freeze/thaw flags determine:
 
 Continuity flag:
 
-\[
+$$
 \text{cont}(L, t) = 1[S(L, t) > \theta_{\text{cont}}(L)]
-\]
+$$
 
 Continuity flags indicate whether a layer is stable enough for:
 
@@ -193,12 +187,12 @@ Continuity flags indicate whether a layer is stable enough for:
 
 USP is constructed as:
 
-\[
+$$
 \text{USP}(t) =
 \big\{
 (L,\; \text{USP}(L, t),\; \text{active}(L, t),\; \text{freeze}(L, t),\; \text{thaw}(L, t),\; \text{cont}(L, t))
 \big\}_{L=0}^4
-\]
+$$
 
 USP is:
 
