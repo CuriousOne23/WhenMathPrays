@@ -8,7 +8,7 @@ Provides:
 """
 
 from . import cst-core
-from . import cs-_ms
+from . import cst-ms
 from . import cst-mux
 from . import cob
 from . import cil
