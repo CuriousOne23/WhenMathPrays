@@ -223,6 +223,74 @@ def run_unified_merge_split_test():
     print(out_split["cil_packet"].stability_block)
 
 
+def run_new_id_context_test():
+    """
+    New Identity Context Boundary Test (HLR‑CnTxt‑021 + Section 8.7)
+
+    Validates:
+    - CST-MS detects continuity break → new_context_required=True
+    - CST-Mux propagates new_context_required into USP
+    - COB creates a new identity-layer object immediately
+    - CIL constructs an intake packet using the new identity context
+    - Pipeline behaves deterministically
+    """
+
+    print("\n=== Unified New ID-Context Boundary Test ===")
+
+    # Object that forces continuity break (collapse=True)
+    obj = make_identity_object(
+        id="old1",
+        recency=5,
+        frequency=5,
+        density=5,
+        drift=0.1,
+        oscillation=0.1,
+        collapse=True,            # ← continuity break trigger
+        lineage_stability="stable"
+    )
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    # Run pipeline
+    out = run_pipeline([obj], tp_lineage_log, tp_snapshot, turn_index=99)
+
+    cst_ms = out["cst_ms"]
+    cst_mux = out["cst_mux"]
+    cob_state = out["cob_state"]
+    cil_packet = out["cil_packet"]
+
+    print("\n--- CST-MS Metadata ---")
+    print(cst_ms["metadata"])
+
+    print("\n--- CST-Mux USP ---")
+    print(cst_mux)
+
+    print("\n--- COB Identity Objects ---")
+    for o in cob_state.objects:
+        print(o.id, o.ordering_metrics)
+
+    print("\n--- CIL Packet Metadata ---")
+    print(cil_packet.packet_metadata)
+
+    # 1. CST-MS must detect continuity break
+    assert cst_ms["metadata"].get("new_context_required") is True
+
+    # 2. CST-Mux must propagate the flag
+    assert cst_mux.get("new_context_required") is True
+
+    # 3. COB must create a new identity object immediately
+    new_ids = [o.id for o in cob_state.objects]
+    assert any("ctx_99" == oid for oid in new_ids)
+
+    # 4. Old object must NOT be evolved (drift unchanged)
+    old_obj = next(o for o in cob_state.objects if o.id == "old1")
+    assert old_obj.stability_metrics["drift"] == 0.1
+
+    # 5. CIL must treat the turn as a new context boundary
+    assert cil_packet.packet_metadata.get("new_context_required") is True
+
+    print("[PASS] New ID-context boundary test passed")
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -230,3 +298,5 @@ def run_unified_merge_split_test():
 if __name__ == "__main__":
     run_unified_basic_test()
     run_unified_merge_split_test()
+    run_new_id_context_test()
+
