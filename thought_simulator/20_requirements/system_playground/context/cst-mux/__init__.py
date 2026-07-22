@@ -2,4 +2,4 @@
 CST-Mux package.
 """
 
-from .cst_mux import CST_MUX
+from .cst-mux import CST_MUX
