@@ -1,17 +1,22 @@
 """
 CST — Conversation Stability Tracker
-System Playground Version
+System Playground Version (Testbench-Compatible)
 
-This module implements a lightweight, block-level Python representation
-of the CST subsystem. It mirrors the structure defined in:
+This module is fully compatible with:
+- context_testbench.py
+- cst-core_requirements.md
+- cst-core.md
+- cst-core_testbench.py (to be created)
 
-- cst_requirements.md
-- cst_signals.yaml
-- cst_state.yaml
-
-This is NOT a full simulation engine. It is a local behavioral block
-used inside system_playground for shaping, validating, and inspecting
-stability behavior before system_simulation.
+It provides deterministic, replay-safe CST behavior for:
+- drift
+- oscillation
+- collapse
+- merge/split compensation
+- freeze/thaw
+- certainty/ambiguity
+- lineage stability
+- 10-turn post-structure stability window
 """
 
 from dataclasses import dataclass, field
@@ -37,7 +42,7 @@ class CSTState:
     lineage_stability_state: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-    # NEW — structural continuity + 10‑turn stability window
+    # Structural continuity + 10‑turn stability window
     structural_events: List[Dict[str, Any]] = field(default_factory=list)
     post_structure_stability_window: List[Dict[str, Any]] = field(default_factory=list)
 
@@ -64,14 +69,16 @@ class CSTSignals:
 
 class CST:
     """
-    Lightweight CST implementation for system_playground.
+    Deterministic CST implementation for system_playground.
 
     Responsibilities:
-    - Detect drift, oscillation, collapse, merge, split
+    - Detect drift, oscillation, collapse
+    - Detect merge/split (placeholder)
+    - Compensate for structural transitions
     - Issue freeze/thaw signals
     - Adjust certainty and ambiguity
     - Evaluate lineage stability
-    - Produce deterministic stability signals
+    - Track 10-turn post-structure stability
     """
 
     def __init__(self):
@@ -81,17 +88,13 @@ class CST:
     # Drift Detection
     # -----------------------------------------------------------------------
 
-    def detect_drift(self, identity_objects: List[Dict[str, Any]]):
-        """
-        Drift occurs when referent or anchor positions diverge across turns.
-        This is a simplified system_playground version.
-        """
+    def detect_drift(self, identity_objects: List[Any]):
         affected = []
         magnitudes = []
 
         for obj in identity_objects:
             drift_val = obj.stability_metrics.get("drift")
-            if drift_val:
+            if drift_val is not None:
                 affected.append(obj.id)
                 magnitudes.append(drift_val)
 
@@ -104,16 +107,13 @@ class CST:
     # Oscillation Detection
     # -----------------------------------------------------------------------
 
-    def detect_oscillation(self, identity_objects: List[Dict[str, Any]]):
-        """
-        Oscillation occurs when identity-layer objects alternate between incompatible states.
-        """
+    def detect_oscillation(self, identity_objects: List[Any]):
         affected = []
         frequencies = []
 
         for obj in identity_objects:
             osc_val = obj.stability_metrics.get("oscillation")
-            if osc_val:
+            if osc_val is not None:
                 affected.append(obj.id)
                 frequencies.append(osc_val)
 
@@ -127,11 +127,11 @@ class CST:
     # Collapse Detection
     # -----------------------------------------------------------------------
 
-    def detect_collapse(self, identity_objects: List[Dict[str, Any]]):
+    def detect_collapse(self, identity_objects: List[Any]):
         collapsed = [
             obj.id
             for obj in identity_objects
-            if obj.stability_metrics.get("collapse")
+            if obj.stability_metrics.get("collapse") is True
         ]
 
         self.state.collapse_state = {
@@ -140,28 +140,20 @@ class CST:
         }
 
     # -----------------------------------------------------------------------
-    # Merge Detection
+    # Merge Detection (placeholder)
     # -----------------------------------------------------------------------
 
-    def detect_merge(self, identity_objects: List[Dict[str, Any]]):
-        """
-        Merge detection placeholder for system_playground.
-        Full merge logic will be implemented in system_simulation.
-        """
+    def detect_merge(self, identity_objects: List[Any]):
         self.state.merge_state = {
             "merge_pairs": [],
             "confidence": 0,
         }
 
     # -----------------------------------------------------------------------
-    # Split Detection
+    # Split Detection (placeholder)
     # -----------------------------------------------------------------------
 
-    def detect_split(self, identity_objects: List[Dict[str, Any]]):
-        """
-        Split detection placeholder for system_playground.
-        Full split logic will be implemented in system_simulation.
-        """
+    def detect_split(self, identity_objects: List[Any]):
         self.state.split_state = {
             "split_objects": [],
             "confidence": 0,
@@ -171,7 +163,7 @@ class CST:
     # Freeze / Thaw
     # -----------------------------------------------------------------------
 
-    def detect_freeze_thaw(self, identity_objects: List[Dict[str, Any]]):
+    def detect_freeze_thaw(self, identity_objects: List[Any]):
         frozen = []
         thawed = []
 
@@ -196,7 +188,7 @@ class CST:
     # Certainty / Ambiguity Adjustments
     # -----------------------------------------------------------------------
 
-    def detect_certainty_ambiguity(self, identity_objects: List[Dict[str, Any]]):
+    def detect_certainty_ambiguity(self, identity_objects: List[Any]):
         increased_certainty = []
         decreased_certainty = []
 
@@ -229,7 +221,7 @@ class CST:
     # Lineage Stability
     # -----------------------------------------------------------------------
 
-    def detect_lineage_stability(self, identity_objects: List[Dict[str, Any]]):
+    def detect_lineage_stability(self, identity_objects: List[Any]):
         stable = []
         unstable = []
 
@@ -250,88 +242,49 @@ class CST:
     # -----------------------------------------------------------------------
 
     def interpret_structural_events(self, tp_lineage_log: List[Dict[str, Any]]):
-        """
-        Reads TP.lineage_log[] and records MERGE/SPLIT structural events.
-        CST uses this to suppress false instability and update its topology.
-        """
-
-        structural_events = []
-
-        for evt in tp_lineage_log:
-            etype = evt.get("event_type")
-            if etype in ("MERGE", "SPLIT"):
-                structural_events.append(evt)
-
-        # Store structural events in CST state
+        structural_events = [
+            evt for evt in tp_lineage_log
+            if evt.get("event_type") in ("MERGE", "SPLIT")
+        ]
         self.state.structural_events = structural_events
 
     # -----------------------------------------------------------------------
     # Structural Compensation (MERGE / SPLIT)
     # -----------------------------------------------------------------------
 
-    def compensate_for_structure(self, identity_objects: List[Dict[str, Any]]):
-        """
-        Prevents CST from misinterpreting MERGE/SPLIT as instability.
-        Updates CST's internal topology to match COB.
-        """
-
-        # If no MERGE/SPLIT events, nothing to compensate
+    def compensate_for_structure(self, identity_objects: List[Any]):
         if not self.state.structural_events:
             return identity_objects
 
-        compensated_objects = identity_objects.copy()
+        compensated = identity_objects.copy()
 
         for evt in self.state.structural_events:
             etype = evt.get("event_type")
 
             if etype == "MERGE":
                 parent_ids = evt.get("parent_ref", [])
-                child_ids = evt.get("child_refs", [])
-
-                # Remove parents from instability consideration
-                compensated_objects = [
-                    obj for obj in compensated_objects if obj.id not in parent_ids
+                compensated = [
+                    obj for obj in compensated if obj.id not in parent_ids
                 ]
-
-                # Children are legitimate new layers; no instability should be triggered
 
             elif etype == "SPLIT":
                 parent_id = evt.get("parent_ref", [None])[0]
-                child_ids = evt.get("child_refs", [])
-
-                # Remove parent from instability consideration
-                compensated_objects = [
-                    obj for obj in compensated_objects if obj.id != parent_id
+                compensated = [
+                    obj for obj in compensated if obj.id != parent_id
                 ]
 
-                # Children are legitimate new layers; no instability should be triggered
-
-        return compensated_objects
+        return compensated
 
     # -----------------------------------------------------------------------
     # Post-Structure Stability Tracking (10 TS cycles)
     # -----------------------------------------------------------------------
 
     def track_post_structure_stability(self, signals: Dict[str, Any]):
-        """
-        Tracks stability for 10 turns after MERGE/SPLIT.
-        Ensures no delayed instability appears due to structural changes.
-        """
-
         window = self.state.post_structure_stability_window
-
-        # Append current turn's signals
         window.append(signals)
-
-        # Keep only the last 10 turns
         if len(window) > 10:
             window.pop(0)
-
         self.state.post_structure_stability_window = window
-    
-    # -----------------------------------------------------------------------
-    # Main Entry Point
-    # -----------------------------------------------------------------------
 
     # -----------------------------------------------------------------------
     # Main Entry Point
@@ -339,27 +292,12 @@ class CST:
 
     def run(
         self,
-        identity_objects: List[Dict[str, Any]],
+        identity_objects: List[Any],
         tp_lineage_log: List[Dict[str, Any]],
         tp_snapshot: Dict[str, Any],
         turn_index: int
     ) -> CSTSignals:
-        """
-        Main CST execution for system_playground.
-        Deterministic sequence:
-        1. Interpret structural continuity markers (MERGE/SPLIT)
-        2. Compensate identity objects for structural transitions
-        3. Detect drift
-        4. Detect oscillation
-        5. Detect collapse
-        6. Detect merge/split (placeholder)
-        7. Detect freeze/thaw
-        8. Detect certainty/ambiguity adjustments
-        9. Detect lineage stability
-        10. Track 10-turn post-structure stability
-        """
 
-        # Metadata
         self.state.metadata = {
             "turn_index": turn_index,
             "object_count": len(identity_objects),
@@ -371,7 +309,7 @@ class CST:
         # 2. Compensate identity objects for MERGE/SPLIT
         compensated_objects = self.compensate_for_structure(identity_objects)
 
-        # 3–9. Run all existing detection methods on compensated objects
+        # 3–9. Run all detection methods
         self.detect_drift(compensated_objects)
         self.detect_oscillation(compensated_objects)
         self.detect_collapse(compensated_objects)
