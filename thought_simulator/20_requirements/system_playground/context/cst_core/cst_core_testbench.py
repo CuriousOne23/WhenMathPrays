@@ -366,27 +366,27 @@ if __name__ == "__main__":
     print("\n=== CST-Core Testbench: Running All Tests ===")
 
     test_basic_drift_oscillation_collapse()
-    print("✓ Basic drift/oscillation/collapse test passed")
+    print("[PASS] Basic drift/oscillation/collapse test passed")
 
     test_freeze_thaw_behavior()
-    print("✓ Freeze/thaw behavior test passed")
+    print("[PASS] Freeze/thaw behavior test passed")
 
     test_certainty_ambiguity_adjustments()
-    print("✓ Certainty/ambiguity adjustments test passed")
+    print("[PASS] Certainty/ambiguity adjustments test passed")
 
     test_lineage_stability()
-    print("✓ Lineage stability test passed")
+    print("[PASS] Lineage stability test passed")
 
     test_merge_split_compensation_no_false_instability()
-    print("✓ MERGE structural compensation test passed")
+    print("[PASS] MERGE structural compensation test passed")
 
     test_split_compensation_no_false_instability()
-    print("✓ SPLIT structural compensation test passed")
+    print("[PASS] SPLIT structural compensation test passed")
 
     test_post_structure_stability_window_length()
-    print("✓ Post-structure stability window length test passed")
+    print("[PASS] Post-structure stability window length test passed")
 
     test_determinism_replay_consistency()
-    print("✓ Determinism/replay consistency test passed")
+    print("[PASS] Determinism/replay consistency test passed")
 
     print("\n=== CST-Core Testbench: All Tests Completed ===")
