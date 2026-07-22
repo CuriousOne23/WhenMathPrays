@@ -1,21 +1,25 @@
 """
-CST Testbench — System Playground Version
+CST‑MS Testbench — System Playground Version
 
-This testbench performs block-level validation of the CST subsystem.
-It tests:
-- drift detection
-- oscillation detection
-- collapse detection
-- freeze/thaw detection
-- certainty/ambiguity adjustments
-- lineage stability detection
-- merge/split structural compensation
-- 10-turn post-structure stability behavior
+Validates CST‑MS against:
+- cst-ms.md (architecture)
+- cst-ms_requirements.md (HLR-CST-MS-nnn)
+- context_testbench.py (integration)
 
-This is NOT a full system simulation. It is a shaping testbench used
-inside system_playground before system_simulation.
+Tests cover:
+- normalization
+- weighting
+- stability synthesis
+- instability synthesis
+- collapse/freeze/thaw risk
+- ambiguity/drift/oscillation summaries
+- merge/split neutrality
+- merge/split detection
+- 10-turn stability window
+- determinism & replay
 """
 
+from cst_ms import CST_MS
 from cst.cst import CST
 from cil.cil import IdentityObject
 
@@ -31,314 +35,291 @@ def make_identity_object(
     collapse=False,
     certainty=None,
     ambiguity=None,
-    lineage_stability=None,
-    frozen=None,
 ):
-    """Helper to create IdentityObject instances for CST."""
-
+    """OuBA-like identity object for CST-Core → CST-MS testing."""
     return IdentityObject(
         id=id,
-        referent_map={"r1": "value"},
-        anchors=["a1", "a2"],
-        lineage={"stability": lineage_stability},
+        referent_map={"r": "v"},
+        anchors=["a1"],
+        lineage={"stability": "stable"},
         ambiguity={"certainty": certainty, "ambiguity": ambiguity},
         stability_metrics={
             "drift": drift,
             "oscillation": oscillation,
             "collapse": collapse,
-            "frozen": frozen,
         },
         ordering_metrics={"recency": 0, "frequency": 0, "density": 0},
     )
 
 
-def empty_tp_fields():
-    """TP lineage/snapshot placeholders for tests that do not involve merge/split."""
-    return [], {"objects": [], "metadata": {}}
+def make_tp_placeholders():
+    return [], {"turn_index": None, "objects": []}
 
 
 # ---------------------------------------------------------------------------
-# Drift Test
+# 1. Normalization Tests
 # ---------------------------------------------------------------------------
 
-def run_drift_test():
-    print("\n=== CST Testbench: Drift Detection ===")
+def test_normalization_basic():
+    """
+    Tests:
+    - HLR-CST-MS-005 (normalize)
+    - HLR-CST-MS-006 (deterministic maxima)
+    - HLR-CST-MS-007 (replay-safe)
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj = make_identity_object("A", drift=0.5, oscillation=0.2, collapse=False)
+    signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn_index=1).__dict__
+
+    ms_signals = ms.run(signals, turn_index=1)
+
+    assert ms_signals.normalized_metrics["drift"] == 0.5
+    assert ms_signals.normalized_metrics["oscillation"] == 0.2
+    assert ms_signals.normalized_metrics["collapse"] == 0.0
+    assert ms_signals.normalized_metrics["continuity"] == 1.0
+
+
+# ---------------------------------------------------------------------------
+# 2. Weighting Tests
+# ---------------------------------------------------------------------------
+
+def test_weighting_basic():
+    """
+    Tests:
+    - HLR-CST-MS-008 (apply weights)
+    - HLR-CST-MS-009 (monotonic, deterministic)
+    - HLR-CST-MS-010 (pure function)
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj = make_identity_object("A", drift=1.0, oscillation=1.0)
+    signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn_index=2).__dict__
+
+    ms_signals = ms.run(signals, turn_index=2)
+
+    wm = ms_signals.weighted_metrics
+
+    assert wm["drift"] == 0.25
+    assert wm["oscillation"] == 0.25
+    assert wm["ambiguity"] == 0.0
+    assert wm["collapse"] == 0.0
+
+
+# ---------------------------------------------------------------------------
+# 3. Stability / Instability Tests
+# ---------------------------------------------------------------------------
+
+def test_stability_instability_synthesis():
+    """
+    Tests:
+    - HLR-CST-MS-011..015
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj = make_identity_object("A", drift=1.0, oscillation=1.0, collapse=False)
+    signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn_index=3).__dict__
+
+    ms_signals = ms.run(signals, turn_index=3)
+
+    stability = ms_signals.stability["value"]
+    instability = ms_signals.instability["value"]
+
+    assert 0.0 <= stability <= 1.0
+    assert instability == 1.0 - stability
+
+
+# ---------------------------------------------------------------------------
+# 4. Risk Tests
+# ---------------------------------------------------------------------------
+
+def test_risk_computation():
+    """
+    Tests:
+    - HLR-CST-MS-016..021
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj = make_identity_object("A", drift=0.5, oscillation=0.5, collapse=True)
+    signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn_index=4).__dict__
+
+    ms_signals = ms.run(signals, turn_index=4)
+
+    assert ms_signals.collapse_risk["value"] > 0.0
+    assert ms_signals.freeze_risk["value"] >= ms_signals.collapse_risk["value"]
+    assert ms_signals.thaw_readiness["value"] <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# 5. Summary Tests
+# ---------------------------------------------------------------------------
+
+def test_summary_computation():
+    """
+    Tests:
+    - HLR-CST-MS-022..024
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj1 = make_identity_object("A", drift=0.2, oscillation=0.1, certainty="low", ambiguity="high")
+    obj2 = make_identity_object("B", drift=0.3, oscillation=0.2, certainty="high", ambiguity="low")
+
+    signals = cst.run([obj1, obj2], tp_lineage_log, tp_snapshot, turn_index=5).__dict__
+    ms_signals = ms.run(signals, turn_index=5)
+
+    assert ms_signals.ambiguity_summary["count"] == 1
+    assert ms_signals.drift_summary["magnitude"] == signals["drift"]["magnitude"]
+    assert ms_signals.oscillation_summary["frequency"] == signals["oscillation"]["frequency"]
+
+
+# ---------------------------------------------------------------------------
+# 6. Merge/Split Neutrality Tests
+# ---------------------------------------------------------------------------
+
+def test_merge_split_neutrality():
+    """
+    Tests:
+    - HLR-CST-MS-029..037
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    # Fake merge event from CST-Core
+    signals = {
+        "drift": {"magnitude": 0.9},
+        "oscillation": {"frequency": 0.4, "amplitude": 1},
+        "collapse": {"severity": 1},
+        "merge": {"merge_pairs": ["A", "B"], "confidence": 1},
+        "split": {"split_objects": [], "confidence": 0},
+        "freeze": {"frozen_objects": [], "reason": "none"},
+        "thaw": {"thawed_objects": [], "reason": "none"},
+        "certainty_adjustment": {"increased_certainty": [], "decreased_certainty": []},
+        "ambiguity_adjustment": {"increased_ambiguity": [], "decreased_ambiguity": []},
+        "lineage_stability": {"stable_lineage": [], "unstable_lineage": []},
+        "metadata": {"turn_index": 6},
+    }
+
+    ms_signals = ms.run(signals, turn_index=6)
+
+    # Merge must NOT produce instability by itself
+    assert ms_signals.instability["value"] < 1.0
+    assert ms_signals.collapse_risk["value"] <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# 7. Stability Window Tests
+# ---------------------------------------------------------------------------
+
+def test_stability_window_length():
+    """
+    Tests:
+    - HLR-CST-MS-025..028 (determinism, replay, window)
+    """
+
+    cst = CST()
+    ms = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
+
+    obj = make_identity_object("A", drift=0.1)
+
+    for turn in range(1, 15):
+        signals = cst.run([obj], tp_lineage_log, tp_snapshot, turn).__dict__
+        ms.run(signals, turn)
+
+    assert len(ms.state.stability_window) == 10
+    assert ms.state.stability_window[-1]["stability"]["value"] >= 0.0
+
+
+# ---------------------------------------------------------------------------
+# 8. Determinism / Replay Tests
+# ---------------------------------------------------------------------------
+
+def test_determinism_replay():
+    """
+    Tests:
+    - HLR-CST-MS-025..028
+    """
+
+    cst = CST()
+    ms1 = CST_MS()
+    ms2 = CST_MS()
+
+    tp_lineage_log, tp_snapshot = make_tp_placeholders()
 
     objs = [
-        make_identity_object("A", drift=0.1),
-        make_identity_object("B", drift=0.3),
-        make_identity_object("C", drift=None),
+        make_identity_object("A", drift=0.2, oscillation=0.1),
+        make_identity_object("B", drift=0.3, oscillation=0.0, collapse=True),
     ]
 
-    tp_lineage, tp_snapshot = empty_tp_fields()
+    signals = cst.run(objs, tp_lineage_log, tp_snapshot, turn_index=10).__dict__
+
+    out1 = ms1.run(signals, turn_index=10)
+    out2 = ms2.run(signals, turn_index=10)
+
+    assert out1.normalized_metrics == out2.normalized_metrics
+    assert out1.weighted_metrics == out2.weighted_metrics
+    assert out1.stability == out2.stability
+    assert out1.instability == out2.instability
+    assert out1.collapse_risk == out2.collapse_risk
+    assert out1.freeze_risk == out2.freeze_risk
+    assert out1.thaw_readiness == out2.thaw_readiness
+    assert out1.ambiguity_summary == out2.ambiguity_summary
+    assert out1.drift_summary == out2.drift_summary
+    assert out1.oscillation_summary == out2.oscillation_summary
+    assert out1.metadata == out2.metadata
 
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=1)
-
-    print("\n--- Drift State ---")
-    print(signals.drift)
-
-
-# ---------------------------------------------------------------------------
-# Oscillation Test
-# ---------------------------------------------------------------------------
-
-def run_oscillation_test():
-    print("\n=== CST Testbench: Oscillation Detection ===")
-
-    objs = [
-        make_identity_object("A", oscillation=0.2),
-        make_identity_object("B", oscillation=0.5),
-        make_identity_object("C", oscillation=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=2)
-
-    print("\n--- Oscillation State ---")
-    print(signals.oscillation)
-
-
-# ---------------------------------------------------------------------------
-# Collapse Test
-# ---------------------------------------------------------------------------
-
-def run_collapse_test():
-    print("\n=== CST Testbench: Collapse Detection ===")
-
-    objs = [
-        make_identity_object("A", collapse=True),
-        make_identity_object("B", collapse=False),
-        make_identity_object("C", collapse=True),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=3)
-
-    print("\n--- Collapse State ---")
-    print(signals.collapse)
-
-
-# ---------------------------------------------------------------------------
-# Freeze / Thaw Test
-# ---------------------------------------------------------------------------
-
-def run_freeze_thaw_test():
-    print("\n=== CST Testbench: Freeze/Thaw Detection ===")
-
-    objs = [
-        make_identity_object("A", frozen=True),
-        make_identity_object("B", frozen=False),
-        make_identity_object("C", frozen=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=4)
-
-    print("\n--- Freeze State ---")
-    print(signals.freeze)
-
-    print("\n--- Thaw State ---")
-    print(signals.thaw)
-
-
-# ---------------------------------------------------------------------------
-# Certainty / Ambiguity Test
-# ---------------------------------------------------------------------------
-
-def run_certainty_ambiguity_test():
-    print("\n=== CST Testbench: Certainty/Ambiguity Detection ===")
-
-    objs = [
-        make_identity_object("A", certainty="high", ambiguity="low"),
-        make_identity_object("B", certainty="low", ambiguity="high"),
-        make_identity_object("C", certainty=None, ambiguity=None),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=5)
-
-    print("\n--- Certainty Adjustment ---")
-    print(signals.certainty_adjustment)
-
-    print("\n--- Ambiguity Adjustment ---")
-    print(signals.ambiguity_adjustment)
-
-
-# ---------------------------------------------------------------------------
-# Lineage Stability Test
-# ---------------------------------------------------------------------------
-
-def run_lineage_stability_test():
-    print("\n=== CST Testbench: Lineage Stability Detection ===")
-
-    objs = [
-        make_identity_object("A", lineage_stability="stable"),
-        make_identity_object("B", lineage_stability="unstable"),
-        make_identity_object("C", lineage_stability="stable"),
-    ]
-
-    tp_lineage, tp_snapshot = empty_tp_fields()
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=6)
-
-    print("\n--- Lineage Stability ---")
-    print(signals.lineage_stability)
-
-
-# ---------------------------------------------------------------------------
-# Merge Compensation Test
-# ---------------------------------------------------------------------------
-
-def run_merge_compensation_test():
-    print("\n=== CST Testbench: MERGE Structural Compensation ===")
-
-    objs = [
-        make_identity_object("objA", drift=0.5),
-        make_identity_object("objB", oscillation=0.7),
-        make_identity_object("objA_objB_merged", drift=None, oscillation=None),
-    ]
-
-    tp_lineage = [
-        {
-            "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
-        }
-    ]
-
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=7)
-
-    print("\n--- Drift State (should be empty or minimal) ---")
-    print(signals.drift)
-
-    print("\n--- Oscillation State (should be empty or minimal) ---")
-    print(signals.oscillation)
-
-    print("\n--- Collapse State (should be empty) ---")
-    print(signals.collapse)
-
-
-# ---------------------------------------------------------------------------
-# Split Compensation Test
-# ---------------------------------------------------------------------------
-
-def run_split_compensation_test():
-    print("\n=== CST Testbench: SPLIT Structural Compensation ===")
-
-    objs = [
-        make_identity_object("objX", drift=0.4),
-        make_identity_object("objX_1", drift=None),
-        make_identity_object("objX_2", oscillation=None),
-    ]
-
-    tp_lineage = [
-        {
-            "event_type": "SPLIT",
-            "parent_ref": ["objX"],
-            "child_refs": ["objX_1", "objX_2"],
-        }
-    ]
-
-    tp_snapshot = {"objects": ["objX_1", "objX_2"], "metadata": {}}
-
-    cst = CST()
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=8)
-
-    print("\n--- Drift State (should be empty or minimal) ---")
-    print(signals.drift)
-
-    print("\n--- Oscillation State (should be empty or minimal) ---")
-    print(signals.oscillation)
-
-    print("\n--- Collapse State (should be empty) ---")
-    print(signals.collapse)
-
-
-# ---------------------------------------------------------------------------
-# 10-Turn Post-Structure Stability Test
-# ---------------------------------------------------------------------------
-
-def run_post_structure_stability_test():
-    print("\n=== CST Testbench: 10-Turn Post-Structure Stability Window ===")
-
-    tp_lineage = [
-        {
-            "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
-        }
-    ]
-
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
-
-    cst = CST()
-
-    for turn in range(1, 12):
-        objs = [
-            make_identity_object("objA_objB_merged", drift=None, oscillation=None)
-        ]
-
-        signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=turn)
-
-        print(f"\n--- Turn {turn} Stability Window ---")
-        print(cst.state.post_structure_stability_window)
-
-# ---------------------------------------------------------------------------
-# Real Instability During 10-Turn Post-Structure Window Test
-# ---------------------------------------------------------------------------
-
-def run_post_structure_real_instability_test():
-    print("\n=== CST Testbench: Real Instability During 10-Turn Window ===")
-
-    # MERGE event (structural)
-    tp_lineage = [
-        {
-            "event_type": "MERGE",
-            "parent_ref": ["objA", "objB"],
-            "child_refs": ["objA_objB_merged"],
-        }
-    ]
-
-    tp_snapshot = {"objects": ["objA_objB_merged"], "metadata": {}}
-
-    cst = CST()
-
-    # Turns 1–3: stable child (no real instability)
-    for turn in range(1, 4):
-        objs = [make_identity_object("objA_objB_merged", drift=None)]
-        signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=turn)
-        print(f"Turn {turn} (stable) — Drift:", signals.drift)
-
-    # Turn 4: REAL instability appears (drift = 0.8)
-    objs = [make_identity_object("objA_objB_merged", drift=0.8)]
-    signals = cst.run(objs, tp_lineage, tp_snapshot, turn_index=4)
-    print("\nTurn 4 (real instability) — Drift:", signals.drift)
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    run_drift_test()
-    run_oscillation_test()
-    run_collapse_test()
-    run_freeze_thaw_test()
-    run_certainty_ambiguity_test()
-    run_lineage_stability_test()
-    run_merge_compensation_test()
-    run_split_compensation_test()
-    run_post_structure_stability_test()
-    run_post_structure_real_instability_test()
+    print("\n=== CST‑MS Testbench: Running All Tests ===")
+
+    test_normalization_basic()
+    print("✓ Normalization test passed")
+
+    test_weighting_basic()
+    print("✓ Weighting test passed")
+
+    test_stability_instability_synthesis()
+    print("✓ Stability/instability synthesis test passed")
+
+    test_risk_computation()
+    print("✓ Risk computation test passed")
+
+    test_summary_computation()
+    print("✓ Summary computation test passed")
+
+    test_merge_split_neutrality()
+    print("✓ Merge/split neutrality test passed")
+
+    test_stability_window_length()
+    print("✓ Stability window test passed")
+
+    test_determinism_replay()
+    print("✓ Determinism/replay test passed")
+
+    print("\n=== CST‑MS Testbench: All Tests Completed ===")
