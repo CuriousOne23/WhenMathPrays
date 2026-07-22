@@ -219,6 +219,33 @@ The testbench SHALL verify that merge/split events do not modify layer‑specifi
 **HLR‑CST‑MS‑037**  
 The testbench SHALL verify that replay of merge/split events produces identical stability‑neutral behavior and identical instability detection for identical input sequences.
 
+## **11.3 Merge/Split Detection Requirements (Normative)**  
+*(These continue numbering from HLR‑CST‑MS‑037)*
+
+**HLR‑CST‑MS‑038**  
+The testbench SHALL verify that CST‑MS detects a valid merge event when two identity‑layer structures combine into a single unified structure as defined by CST‑Core.
+
+**HLR‑CST‑MS‑039**  
+The testbench SHALL verify that CST‑MS detects a valid split event when one identity‑layer structure divides into two distinct structures as defined by CST‑Core.
+
+**HLR‑CST‑MS‑040**  
+The testbench SHALL verify that merge and split detection is deterministic and replay‑safe for identical input sequences.
+
+**HLR‑CST‑MS‑041**  
+The testbench SHALL verify that merge/split detection does not emit any instability signal by itself when no genuine instability occurs within the 10‑turn CST‑MS state window.
+
+**HLR‑CST‑MS‑042**  
+The testbench SHALL verify that merge/split detection correctly updates CST‑MS’s internal state window without altering normalized metrics, weighted metrics, or synthesized stability values.
+
+**HLR‑CST‑MS‑043**  
+The testbench SHALL verify that if a genuine instability occurs after a detected merge event but within the 10‑turn CST‑MS state window, CST‑MS emits the correct instability signal.
+
+**HLR‑CST‑MS‑044**  
+The testbench SHALL verify that if a genuine instability occurs after a detected split event but within the 10‑turn CST‑MS state window, CST‑MS emits the correct instability signal.
+
+**HLR‑CST‑MS‑045**  
+The testbench SHALL verify that merge/split detection does not suppress, delay, or modify instability signals when genuine instability occurs within the 10‑turn window.
+
 ---
 
 # **End of Document**
