@@ -84,7 +84,7 @@ USP is deterministic and replay‑safe.
 CST‑Mux assigns each identity layer a deterministic index:
 
 $$
-L \in \{0, 1, 2, 3, 4\}
+L \in \\{0, 1, 2, 3, 4\\}
 $$
 
 Typical layers:
@@ -106,13 +106,13 @@ CST‑Mux aligns all synthesized signals by layer:
 $$
 \text{USP}(L, t) = 
 \big(
-S(L, t),\;
-U(L, t),\;
-R_{\text{coll}}(L, t),\;
-R_{\text{freeze}}(L, t),\;
-R_{\text{thaw}}(L, t),\;
-A_{\text{sum}}(L, t),\;
-D_{\text{sum}}(L, t),\;
+S(L, t),\ 
+U(L, t),\ 
+R_{\text{coll}}(L, t),\ 
+R_{\text{freeze}}(L, t),\ 
+R_{\text{thaw}}(L, t),\ 
+A_{\text{sum}}(L, t),\ 
+D_{\text{sum}}(L, t),\ 
 O_{\text{sum}}(L, t)
 \big)
 $$
@@ -189,9 +189,9 @@ USP is constructed as:
 
 $$
 \text{USP}(t) =
-\big\{
-(L,\; \text{USP}(L, t),\; \text{active}(L, t),\; \text{freeze}(L, t),\; \text{thaw}(L, t),\; \text{cont}(L, t))
-\big\}_{L=0}^4
+\big\\{
+(L,\  \text{USP}(L, t),\  \text{active}(L, t),\  \text{freeze}(L, t),\  \text{thaw}(L, t),\  \text{cont}(L, t))
+\big\\}_{L=0}^4
 $$
 
 USP is:
@@ -256,5 +256,3 @@ CST‑Mux is the third module in the CST suite:
 4. CST‑CIL‑Stability — stability integration into CIL  
 
 ---
-
-Jeff, if you want, I can immediately produce **cst-cil-stability.md**, the final paper in the CST repartitioning set — just say **“next paper”**.
