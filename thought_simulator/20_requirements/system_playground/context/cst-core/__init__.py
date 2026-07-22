@@ -1,1 +1,1 @@
-from context.cst_core import CST
+from context.cst-core import CST
