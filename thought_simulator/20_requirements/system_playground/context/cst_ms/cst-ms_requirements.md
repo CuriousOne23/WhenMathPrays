@@ -246,6 +246,16 @@ The testbench SHALL verify that if a genuine instability occurs after a detected
 **HLR‑CST‑MS‑045**  
 The testbench SHALL verify that merge/split detection does not suppress, delay, or modify instability signals when genuine instability occurs within the 10‑turn window.
 
+### **12. Conversation Boundary Detection Tests**  
+with requirements:
+
+- **HLR‑CST‑MS‑046** — detect continuity break  
+- **HLR‑CST‑MS‑047** — detect multi‑turn instability boundary  
+- **HLR‑CST‑MS‑048** — detect ambiguity drift boundary  
+- **HLR‑CST‑MS‑049** — emit “new conversation required” signal  
+- **HLR‑CST‑MS‑050** — deterministic and replay‑safe boundary detection  
+
+
 ---
 
 # **End of Document**
