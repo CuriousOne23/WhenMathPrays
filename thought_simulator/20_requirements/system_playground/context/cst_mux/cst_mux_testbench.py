@@ -295,6 +295,32 @@ def test_determinism_replay():
     assert usp1.oscillation_summary == usp2.oscillation_summary
     assert usp1.metadata == usp2.metadata
 
+# ---------------------------------------------------------------------------
+# NEW_CONTEXT_REQUIRED Tests (HLR‑CST‑MUX‑003A, 017A, 032A)
+# ---------------------------------------------------------------------------
+
+def test_new_context_required_flag():
+    """
+    Tests:
+    - CST‑MS emits new_context_required=True
+    - CST‑Mux propagates new_context_required into USP
+    - Replay determinism
+    """
+
+    # Object that triggers continuity break → collapse=True
+    obj = make_identity_object("A", collapse=True)
+
+    usp, mux = run_pipeline([obj], turn_index=50)
+
+    print("\n--- NEW_CONTEXT_REQUIRED Flag ---")
+    print("USP new_context_required:", usp.get("new_context_required"))
+
+    # 1. USP must contain new_context_required=True
+    assert usp.get("new_context_required") is True
+
+    # 2. Replay determinism
+    usp2, mux2 = run_pipeline([obj], turn_index=50)
+    assert usp2.get("new_context_required") is True
 
 # ---------------------------------------------------------------------------
 # Main
@@ -327,6 +353,9 @@ if __name__ == "__main__":
     test_usp_window_length()
     print("[PASS] USP window test passed")
 
+    test_new_context_required_flag()
+    print("[PASS] NEW_CONTEXT_REQUIRED flag test passed")
+    
     test_determinism_replay()
     print("[PASS] Determinism/replay test passed")
 
