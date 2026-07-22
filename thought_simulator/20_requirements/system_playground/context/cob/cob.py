@@ -515,7 +515,7 @@ class COB:
         # -------------------------------------------------------------------
         # NEW_CONTEXT_REQUIRED — create a new identity object immediately
         # -------------------------------------------------------------------
-        if signals.get("new_context_required", False):
+        if signals.get("metadata", {}).get("new_context_required", False):
             new_id = f"ctx_{turn_index}"
 
             new_obj = IdentityObject(
