@@ -159,6 +159,33 @@ def test_usp_construction():
     assert usp.drift_summary["magnitude"] >= 0.0
     assert usp.oscillation_summary["frequency"] >= 0.0
 
+    # ---------------------------------------------------------------------------
+    # NEW_CONTEXT_REQUIRED Tests (HLR‑CST‑MUX‑003A, 017A, 032A)
+    # ---------------------------------------------------------------------------
+    
+    def test_new_context_required_flag():
+        """
+        Tests:
+        - CST‑Mux accepts new_context_required from CST‑MS
+        - CST‑Mux propagates new_context_required into USP
+        - Replay determinism
+        """
+    
+        # Create object that triggers continuity break → CST‑MS sets new_context_required=True
+        obj = make_identity_object("A", collapse=True)
+    
+        # Run pipeline
+        usp, mux = run_pipeline([obj], turn_index=50)
+    
+        print("\n--- NEW_CONTEXT_REQUIRED Flag ---")
+        print("USP new_context_required:", usp.get("new_context_required"))
+    
+        # 1. USP must contain new_context_required=True
+        assert usp.get("new_context_required") is True
+    
+        # 2. Replay determinism
+        usp2, mux2 = run_pipeline([obj], turn_index=50)
+        assert usp2.get("new_context_required") is True
 
 # ---------------------------------------------------------------------------
 # 6. Merge/Split Neutrality Tests
@@ -290,6 +317,9 @@ if __name__ == "__main__":
 
     test_usp_construction()
     print("[PASS] USP construction test passed")
+
+    test_new_context_required_flag()
+    print("[PASS] NEW_CONTEXT_REQUIRED flag test passed")
 
     test_merge_split_neutrality()
     print("[PASS] Merge/split neutrality test passed")
