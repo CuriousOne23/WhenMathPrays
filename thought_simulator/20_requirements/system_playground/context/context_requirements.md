@@ -8,7 +8,7 @@
 The unified **Context Subsystem** is now a **full TP‑state constructor**, not merely a stability/identity packet generator.  
 It integrates four coordinated blocks:
 
-- **CST** — identity‑layer stability analysis  
+- **CST Subsytem** — composed of CST‑Core, CST‑MS, and CST‑Mux — performs identity‑layer stability analysis 
 - **COB** — identity‑layer construction and evolution  
 - **CIL** — intake packet construction for CEx  
 - **CEx** — extraction of next‑turn context fields for CE  
@@ -40,6 +40,8 @@ The unified context subsystem SHALL:
 - construct a CEx‑compatible intake packet  
 - maintain TP historical continuity  
 - support deterministic replay across turns  
+
+In this document, “CST” refers to the unified CST subsystem composed of CST‑Core, CST‑MS, and CST‑Mux
 
 ---
 
@@ -290,6 +292,9 @@ Verify:
 - valid instability passes immediately  
 - lineage continuity preserved  
 
+### 8.6 Unified Merge/Split Pipeline Test (New)
+The unified context testbench SHALL validate that CST‑Core detects MERGE/SPLIT events, CST‑MS preserves structural neutrality, CST‑Mux produces stable USP flags, COB evolves identity‑layer objects correctly under structural transitions, and CIL constructs an intake packet that reflects the correct post‑merge/post‑split identity‑layer topology. The test SHALL confirm that structural transitions do not produce false instability and that valid instability on unrelated objects is preserved.
+
 ---
 
 # **9. High‑Level Requirements (HLRs)**  
@@ -315,6 +320,9 @@ The unified context subsystem SHALL produce deterministic outputs under identica
 
 ### **HLR‑CnTxt‑007**  
 Merge/split events SHALL preserve structural continuity and SHALL NOT produce instability.
+
+### **HLR‑CnTxt‑020** — Unified Merge/Split Detection and Propagation
+The unified context subsystem (CST‑Core, CST‑MS, CST‑Mux, COB, and CIL) SHALL detect MERGE and SPLIT events originating from the identity‑layer snapshot and SHALL propagate structural continuity deterministically across all stages of the pipeline. MERGE/SPLIT events SHALL NOT produce instability signals, and valid instability on unrelated objects SHALL pass immediately.
 
 ### **HLR‑CnTxt‑008**  
 CIL SHALL produce a packet conforming to the schema required by CEx.
