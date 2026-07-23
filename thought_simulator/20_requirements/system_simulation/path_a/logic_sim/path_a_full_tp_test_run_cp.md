@@ -213,7 +213,7 @@ No external 20‑series documents.
 All metadata native to TP.
 
 **Result:**  
-**94.5 average**, matching Grok’s unified‑TP run and confirming the architecture’s stability, determinism, and auditability.
+**94.5 average**
 
 ---
 
