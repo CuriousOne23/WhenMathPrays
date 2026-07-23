@@ -50,6 +50,10 @@ invariants:
   - name: bounded_context_slice
     description: >
       The produced CE must be strictly bounded and replayable; no lineage or unbounded history.
+    - name: no_lineage_fields
+    description: >
+      CE must not contain lineage, history, or any unbounded temporal fields; 
+      all extracted geometry must be strictly bounded and replayable.
   - name: no_meaning_construction
     description: >
       CEx must not construct meaning or interpret semantics; it only extracts context cues.
