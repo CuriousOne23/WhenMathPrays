@@ -219,7 +219,7 @@ Everything else is ignored.
 
 This makes TS:
 
-- kilobyte‑scale  
+- fit within a normal configured laptop 
 - deterministic  
 - replayable  
 - stable  
