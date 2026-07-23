@@ -126,7 +126,7 @@ def run_basic_test():
     cst_signals = make_cst_signals(turn_index=1)
 
     cil = CIL()
-    packet = cil.run(cob_objects, cst_signals, turn_index=1)
+    packet = cil.run(cob_objects, cst_signals, {}, 1)
 
     print("\n--- Identity Selection Block ---")
     for entry in packet.identity_selection_block:
@@ -165,7 +165,7 @@ def run_selection_priority_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=2), turn_index=2)
+    packet = cil.run(objs, make_cst_signals(turn_index=2), {}, 2)
 
     print("\n--- Selection Order (Top 5) ---")
     for entry in packet.identity_selection_block:
@@ -184,7 +184,7 @@ def run_stability_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=3), turn_index=3)
+    packet = cil.run(objs, make_cst_signals(turn_index=3), {}, 3)
 
     print("\n--- Stability Block (COB-derived) ---")
     print(packet.stability_block)
@@ -202,7 +202,7 @@ def run_lineage_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=4), turn_index=4)
+    packet = cil.run(objs, make_cst_signals(turn_index=4), {}, 4)
 
     print("\n--- Lineage Block ---")
     print(packet.lineage_block)
@@ -220,7 +220,7 @@ def run_ordering_aggregation_test():
     ]
 
     cil = CIL()
-    packet = cil.run(objs, make_cst_signals(turn_index=5), turn_index=5)
+    packet = cil.run(objs, make_cst_signals(turn_index=5), {}, 5)
 
     print("\n--- Ordering Block ---")
     print(packet.ordering_block)
