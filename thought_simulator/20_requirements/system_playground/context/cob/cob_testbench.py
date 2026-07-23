@@ -388,7 +388,7 @@ def run_merge_split_compression_test():
         "merge": {"pairs": [("A", "B")]},
     }
 
-    cob_state = cob.run(signals=merge_signals, ms_signals={}, turn_index=1)
+    cob_state = cob.run(merge_signals, {}, 1)
 
     print("\n--- After MERGE ---")
     for obj in cob_state.objects:
