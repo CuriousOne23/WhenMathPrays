@@ -116,7 +116,7 @@ def run_test_case(test, log):
 def main():
     yaml_path = os.path.join(
         os.path.dirname(__file__),
-        "../../testbenches/path_a/intake/iiinb_testbench.yaml"
+        "../../../04_testbenches/path_a/testbenches/path_a/intake/iiinb_testbench.yaml"
     )
 
     testbench = load_testbench(yaml_path)
