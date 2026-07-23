@@ -5,20 +5,21 @@
 
 ## **1. Introduction**
 
-For decades, artificial intelligence has oscillated between two dominant paradigms:
+Artificial intelligence has spent decades trapped between two paradigms:
 
-1. **Symbolic AI** — rule‑based, noun‑centric, brittle  
-2. **Latent‑space AI (LLMs)** — statistical, enumerative, power‑hungry  
+1. **Symbolic AI** — brittle, rule‑stacked, noun‑centric  
+2. **Latent‑space AI (LLMs)** — massive, enumerative, power‑hungry  
 
-Both attempt to encode meaning, but both do so by **describing or storing every possible relationship**. Symbolic AI does this explicitly through rules; LLMs do it implicitly through latent vectors.
+Both attempt to encode meaning by **describing or storing every possible relationship**.  
+Symbolic AI does this explicitly through rules; LLMs do it implicitly through latent vectors.
 
 This paper introduces a third paradigm:
 
 # **Thought Simulator (TS): Relational Curvature Cognition**
 
-TS does not encode every relationship.  
-TS does not freeze meaning inside objects.  
-TS does not enumerate the universe.
+TS does not freeze nouns.  
+TS does not enumerate rules.  
+TS does not compress the universe into vectors.
 
 TS recognizes meaning as **curvature** created by relationships between categories.
 
@@ -28,7 +29,7 @@ Meaning is not in the latent vector.
 
 Meaning is in the **composite state** formed when concepts interact.
 
-This paper explains that shift.
+This is the geometry of meaning.
 
 ---
 
@@ -36,9 +37,9 @@ This paper explains that shift.
 
 ### **2.1 Symbolic AI: Noun Thinking and Rule Enumeration**
 
-Symbolic AI (GOFAI) treated concepts as **frozen objects**:
+Symbolic AI treated concepts as **fixed objects**:
 
-- “Dog” is a noun with a fixed definition.  
+- “Dog” is a noun with a static definition.  
 - “Bites” is a rule.  
 - “Dog bites man” is an IF–THEN chain.
 
@@ -60,7 +61,7 @@ It failed.
 
 ### **2.2 LLMs: Latent Enumeration at Massive Scale**
 
-LLMs repeat the same mistake, but at industrial scale.
+LLMs repeat the same mistake at industrial scale.
 
 Instead of enumerating rules, they **encode every possible relationship** in a dense latent space:
 
@@ -98,6 +99,8 @@ TS recognizes that:
 # **Meaning emerges from relationships, not objects.**
 
 Meaning is **relational**, **contextual**, **dynamic**, and **composite**.
+
+TS shifts cognition from **noun‑centric description** to **verb‑centric relational meaning**.
 
 TS focuses on:
 
@@ -152,7 +155,7 @@ TS infers meaning by following this curvature.
 Symbolic AI cannot do this — it has no geometry.  
 LLMs cannot do this — they store the entire manifold instead of navigating it.
 
-TS navigates the manifold.
+TS navigates the manifold **conceptually**, through emergent relational curvature.
 
 ---
 
@@ -160,24 +163,21 @@ TS navigates the manifold.
 
 To make curvature concrete, consider two identity patches:
 
-- **sport** → category pull: speed, performance, competition  
-- **car** → category pull: vehicle, transport, machine  
+- **sport** → performance gradient  
+- **car** → vehicle gradient  
 
 TS does not store “sports car.”  
 TS has never seen “sports car.”  
 TS does not need a rule or a training example.
 
-TS simply recognizes that:
+TS computes the composite state by:
 
-- “sport” contributes a **performance gradient**  
-- “car” contributes a **vehicle gradient**  
-- the composite state is the **curvature** created by combining these gradients  
+- **Aligning** the performance gradient from “sport” with the vehicle gradient from “car”  
+- **Applying clarifying fields** to resolve ambiguities (e.g., performance in the context of transport)  
+- **Stabilizing the identity patch** into a coherent meaning:  
+  a car whose attributes refine toward speed, handling, and competition  
 
-This curvature produces a new meaning:
-
-> A *sports car* is a car whose identity is refined by sport‑related attributes (speed, performance, handling).
-
-TS infers this relational meaning deterministically, without enumeration or latent-space compression.
+This is relational curvature cognition in action.
 
 ---
 
