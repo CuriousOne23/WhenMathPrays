@@ -340,8 +340,7 @@ class CST_MS:
         self.detect_new_context()
     
         # DEBUG 4 — Final new_context_required decision
-        # print("\n[CST-MS DEBUG] new_context_required =", 
-              self.state.metadata.get("new_context_required"))
+        # print("\n[CST-MS DEBUG] new_context_required =", self.state.metadata.get("new_context_required"))
     
         # Package signals
         return MSSignals(
