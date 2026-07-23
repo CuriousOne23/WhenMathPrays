@@ -123,7 +123,7 @@ def run_cst_signal_test():
         },
     }
 
-    cob.run(signals, turn_index=1)
+    cob.run(signals, ms_signals={}, turn_index=1)
 
     print("\n--- Stability Summary ---")
     print(cob.state.stability_summary)
@@ -162,7 +162,7 @@ def run_new_context_required_test():
         "drift": {"affected_objects": ["old1"], "magnitude": 0.9},
     }
 
-    cob_state = cob.run(signals, turn_index=99)
+    cob_state = cob.run(signals, ms_signals={}, turn_index=99)
 
     print("\n--- COB Objects After NEW_CONTEXT_REQUIRED ---")
     for obj in cob_state.objects:
@@ -202,7 +202,7 @@ def run_freeze_thaw_compliance_test():
         "thaw": {"thawed_objects": ["T"], "reason": "test"},
     }
 
-    cob.run(signals, turn_index=2)
+    cob.run(signals, ms_signals={}, turn_index=2)
 
     print("\n--- Frozen Object Drift (should remain 0.1) ---")
     print(cob.state.objects[0].stability_metrics["drift"])
@@ -307,8 +307,8 @@ def run_deterministic_behavior_test():
         "oscillation": {"affected_objects": ["B"], "frequency": 0.7},
     }
 
-    cob1.run(signals, turn_index=3)
-    cob2.run(signals, turn_index=3)
+    cob1.run(signals, ms_signals={}, turn_index=3)
+    cob2.run(signals, ms_signals={}, turn_index=3)
 
     print("\n--- Deterministic Stability Comparison ---")
     print(cob1.state.stability_summary == cob2.state.stability_summary)
@@ -325,7 +325,7 @@ def run_conversation_ordering_metrics_test():
 
     # Simulate 12 conversation turns
     for turn in range(12):
-        cob.run(signals={}, turn_index=turn)
+        cob.run(signals={}, ms_signals={}, turn_index=turn)
 
     print("\n--- Conversation Access Count (should be 12) ---")
     print(cob.state.conversation_access_count)
@@ -357,7 +357,7 @@ def run_referent_map_compression_test():
 
     cob.add_identity_object(obj)
 
-    cob_state = cob.run(signals={}, turn_index=0)
+    cob_state = cob.run(signals={}, ms_signals={}, turn_index=0)
 
     print("\n--- Compressed Referent Map ---")
     for o in cob_state.objects:
@@ -388,7 +388,7 @@ def run_merge_split_compression_test():
         "merge": {"pairs": [("A", "B")]},
     }
 
-    cob_state = cob.run(signals=merge_signals, turn_index=1)
+    cob_state = cob.run(signals=merge_signals, ms_signals={}, turn_index=1)
 
     print("\n--- After MERGE ---")
     for obj in cob_state.objects:
@@ -402,7 +402,7 @@ def run_merge_split_compression_test():
         "split": {"objects": [merged_id]},
     }
 
-    cob_state = cob.run(signals=split_signals, turn_index=2)
+    cob_state = cob.run(signals=split_signals, ms_signals={}, turn_index=2)
 
     print("\n--- After SPLIT ---")
     for obj in cob_state.objects:
