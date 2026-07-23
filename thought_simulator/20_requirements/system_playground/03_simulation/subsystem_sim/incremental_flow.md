@@ -1,171 +1,151 @@
 # Incremental Flow — Path A Subsystem Simulation
-
-This document describes the incremental, multi‑primitive execution flow for Path A.  
-It is subsystem‑level: it shows how primitives interact when executed in sequence.  
+This document describes the subsystem‑level execution flow for Path A using
+the canonical primitive definitions from **20.190**.  
 Primitive‑local behavior remains inside each primitive’s folder under `../path_a/`.
 
-The goal is to provide a clear, stepwise view of how envelopes move through Path A.
+This file explains how envelopes move through Path A, how each primitive
+hands off to the next, and how multi‑cycle replay stabilizes meaning.
 
 ---
 
-## 1. Context → CEx → CE Initialization
+# 1. InB → IIInB → IE
+**InB (Input Basin)**  
+- Normalizes external input.  
+- Produces neutral TP‑stream defaults.  
+- No meaning construction or inference.
 
-**Inputs:**
-- Context machinery (CIL, COB, CST‑Core, CST‑MS, CST‑Mux)
-- Intake Envelope (IE)
+**IIInB (Input Inference/Repair Basin)**  
+- Detects user‑sanctioned shorthand expansions.  
+- Produces repair proposals but commits nothing.
 
-**Flow:**
-1. IE is produced by upstream intake processing.
-2. CEx extracts a bounded, replay‑stable CE from IE.
-3. CE becomes the initial subsystem envelope for Path A.
+**IE (Intake Envelope)**  
+- Applies all IIInB repair proposals deterministically.  
+- Commits **semantics/meaning** and **processes**.  
+- Supervisor remains empty.  
+- Produces the first committed TP‑stream envelope.
 
-**Outputs:**
-- CE (Context Envelope)
-- Replay‑stable geometry for downstream primitives
-
----
-
-## 2. InB → IIInB → IE → CEx → CE → TPU
-
-This stage validates the front of Path A.
-
-**Flow:**
-1. InB receives initial envelope.
-2. IIInB performs inference/repair operations.
-3. IE is re‑validated.
-4. CEx re‑extracts CE (replay stability check).
-5. CE flows into TPU.
-6. TPU performs the first transform operations.
-
-**Outputs:**
-- CE after TPU transformation
-- Verified replay stability across early primitives
+**Subsystem effect:**  
+A stable, replayable intake representation is created for downstream primitives.
 
 ---
 
-## 3. TPU → SOB → SROB → CnOB → SmOB → ISc
+# 2. IE → CEx → CE
+**CEx (Context Extractor)**  
+- Evaluates relevance using MSL tokens, qualifiers, continuity signals.  
+- Produces deterministic context decisions.
 
-This stage builds and refines structural and semantic objects.
+**CE (Context Envelope)**  
+- Copies forward prior `MCB.next_context` when relevant.  
+- Otherwise initializes a reset shell.  
+- Provides safe, isolated context for routing and identity.
 
-**Flow:**
-1. TPU output enters SOB.
-2. SOB constructs structural objects.
-3. SROB performs structural rewrite operations.
-4. CnOB applies canonical object rules.
-5. SmOB applies semantic object rules.
-6. ISc receives the refined envelope.
-
-**Outputs:**
-- Envelope with structural and semantic geometry
-- ISc‑ready envelope for signature generation
+**Subsystem effect:**  
+A bounded, replay‑safe context shell is prepared for Path A.
 
 ---
 
-## 4. ISc → SSG → STPX → RBU → DCB
+# 3. CE → ISc → TPU
+**ISc (Inference Scorer)**  
+- Reads CE and candidate_set{}.  
+- Applies truth_hypotheses‑prc.  
+- Produces scoring fields for TPU.  
+- Does not modify TP‑stream fields.
 
-This stage generates signatures and applies routing boundaries.
+**TPU (Thought Packet Updater)**  
+- Sole writer for Path‑A correction.  
+- Applies meaning‑layer corrections based on ISc scoring.  
+- Preserves upstream commitments to semantics/meaning, processes, supervisor.
 
-**Flow:**
-1. ISc prepares envelope for signature generation.
-2. SSG generates structural signatures.
-3. STPX applies structural transform processing.
-4. RBU applies routing boundary rules.
-5. DCB applies deterministic context boundary constraints.
-
-**Outputs:**
-- Envelope with signatures and boundary constraints
-- Ready for routing and transition resolution
-
----
-
-## 5. DCB → RB → TR → CTP → ISc
-
-This stage performs routing and transition resolution.
-
-**Flow:**
-1. DCB output enters RB.
-2. RB applies routing boundary logic.
-3. TR resolves transitions.
-4. CTP applies canonical transform processing.
-5. Envelope returns to ISc.
-
-**Outputs:**
-- Envelope after routing and canonical transforms
-- ISc receives updated envelope for next cycle
+**Subsystem effect:**  
+TPU produces the next committed TP state (TP(N+1)) under deterministic rules.
 
 ---
 
-## 6. ISc → RTU → RB → IdOB → MCB
+# 4. TPU → SOB → SROB → CnOB → SmOB → SSG → STPX
+**SOB (Structural OB)**  
+- Extracts first‑pass structural cues (boundaries, anchors, masks).  
+- Produces base structural residue.
 
-This stage handles identity and multi‑cycle boundaries.
+**SROB (Structural Refinement OB)**  
+- Canonicalizes and normalizes SOB residue.  
+- Produces refinement‑consistent structural fragments.
 
-**Flow:**
-1. ISc prepares envelope for routing transform.
-2. RTU applies routing transform operations.
-3. RB re‑applies routing boundary logic.
-4. IdOB applies identity object rules.
-5. MCB applies multi‑cycle boundary constraints.
+**CnOB (Constraint OB)**  
+- Extracts constraint‑level residue (missing‑slot signals, conflict markers).  
+- Produces constraint metadata for routing.
 
-**Outputs:**
-- Envelope prepared for multi‑cycle replay
-- Ready for next RBU/DCB cycle
+**SmOB (Semantic OB)**  
+- Job 1: Extract semantic‑adjacent cues.  
+- Job 2: Compress upstream residue into deterministic pre‑semantic hash + TR‑input vector.
 
----
+**SSG (Semantic Signal Generator)**  
+- Produces semantic‑adjacent activation vectors and routing‑adjacent signals.
 
-## 7. MCB → RBU → DCB → RB → TR → CTP
+**STPX (Semantic TP Extractor)**  
+- Extracts semantic‑layer cues and referent‑adjacent signals.  
+- Produces semantic‑layer residue hashes.
 
-This stage repeats the boundary and transition cycle.
-
-**Flow:**
-1. MCB output enters RBU.
-2. RBU applies routing boundary rules.
-3. DCB applies deterministic context boundary.
-4. RB re‑routes envelope.
-5. TR resolves transitions.
-6. CTP applies canonical transforms.
-
-**Outputs:**
-- Envelope ready for final ISc cycle
-- Replay stability validated across cycles
+**Subsystem effect:**  
+A complete structural + constraint + semantic residue set is prepared for routing.
 
 ---
 
-## 8. CTP → ISc → RTU → RB → OuBA
+# 5. STPX → RB → TR → RB → IdOB
+**TR (Thought Router)**  
+- Computes deterministic routing vector TP.TR.  
+- Consumes OB and DCB signals.  
+- Does not select basins.
 
-This stage terminates Path A.
+**RB (Routing Basin)**  
+- Uses structural residue, semantic‑adjacent cues, semantic‑layer cues, SSG signals.  
+- Selects the appropriate identity basin.
 
-**Flow:**
-1. CTP output enters ISc.
-2. ISc prepares final routing transform.
-3. RTU applies final routing transform.
-4. RB applies final routing boundary logic.
-5. OuBA produces the final output boundary artifact.
+**IdOB (Identity Object Builder)**  
+- Performs identity‑conditioned semantic interpretation.  
+- Refines referents, qualifiers, subculture.  
+- May run multiple cycles.
 
-**Outputs:**
-- OuBA (final Path A output)
-- Envelope ready for downstream system components
-
----
-
-## 9. OuBA + Context Processing
-
-Final validation step.
-
-**Flow:**
-1. OuBA is checked against context constraints.
-2. Context machinery validates final envelope geometry.
-3. Replay stability is confirmed across entire subsystem flow.
-
-**Outputs:**
-- Final subsystem‑validated envelope
-- Ready for system‑level integration
+**Subsystem effect:**  
+Identity‑conditioned meaning construction occurs, possibly across multiple cycles.
 
 ---
 
-## Notes
+# 6. IdOB → MCB → CTP → RB → (repeat cycles)
+**MCB (Message Context Builder)**  
+- Writes short‑term context for next turn.  
+- Produces `MCB.next_context` containing qualifiers, stance, direction, coherence.
 
-- All primitive names follow 20.190 exactly.
-- No acronym expansions are invented.
-- This document describes subsystem‑level flow, not primitive‑local behavior.
+**CTP‑prm (Collect/Consolidate Thought Point)**  
+- Consolidates all IdOB outputs into a single deterministic packet.  
+- Provides replay‑safe input for RB arbitration.
+
+**RB (Routing Basin)**  
+- Reads consolidated packet.  
+- Decides whether meaning is stable, needs correction, or requires another IdOB cycle.
+
+**Subsystem effect:**  
+Multi‑cycle replay stabilizes meaning until RB signals completion.
+
+---
+
+# 7. Completion → OuBA → SSRGn
+**OuBA (Output Basin)**  
+- Commits finalized Path‑A meaning into immutable semantic snapshot.  
+- Writes commit‑time metadata and DF‑readiness indicators.
+
+**SSRGn (Semantic Snapshot Reference Generator)**  
+- Converts committed TP snapshot into SSR.  
+- Performs projection, sanitization, metadata binding.  
+- Produces Path‑B‑ready frozen meaning.
+
+**Subsystem effect:**  
+Path A terminates with a deterministic, immutable meaning snapshot.
+
+---
+
+# Notes
+- All primitive names and descriptions come directly from **20.190**.  
+- No expansions or terminology are invented.  
+- This file describes subsystem‑level flow, not primitive‑local behavior.  
 - Primitive‑local simulation remains under `../path_a/`.
 
