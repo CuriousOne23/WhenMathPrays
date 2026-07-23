@@ -301,8 +301,8 @@ class CST_MS:
         }
     
         # DEBUG 1 — Raw CST-Core signals
-        print("\n[CST-MS DEBUG] Raw CST-Core signals:")
-        print(cst_signals)
+        # print("\n[CST-MS DEBUG] Raw CST-Core signals:")
+        # print(cst_signals)
     
         # 1. Interpret structural events
         self.interpret_structural_events(cst_signals)
@@ -311,15 +311,15 @@ class CST_MS:
         signals = self.neutralize_structure(cst_signals)
     
         # DEBUG 2 — After merge/split neutralization
-        print("\n[CST-MS DEBUG] Signals after structural neutralization:")
-        print(signals)
+        # print("\n[CST-MS DEBUG] Signals after structural neutralization:")
+        # print(signals)
     
         # 3. Normalize
         self.normalize(signals)
     
         # DEBUG 3 — Normalized metrics
-        print("\n[CST-MS DEBUG] Normalized metrics:")
-        print(self.state.normalized_metrics)
+        # print("\n[CST-MS DEBUG] Normalized metrics:")
+        # print(self.state.normalized_metrics)
     
         # 4. Weight
         self.weight()
@@ -340,7 +340,7 @@ class CST_MS:
         self.detect_new_context()
     
         # DEBUG 4 — Final new_context_required decision
-        print("\n[CST-MS DEBUG] new_context_required =", 
+        # print("\n[CST-MS DEBUG] new_context_required =", 
               self.state.metadata.get("new_context_required"))
     
         # Package signals
