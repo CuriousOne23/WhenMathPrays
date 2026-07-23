@@ -153,12 +153,13 @@ def run_new_context_required_test():
 
     # Signals from CST‑MS indicating a new context must be created
     signals = {
-        "new_context_required": True,
+        "metadata": {
+            "new_context_required": True
+        },
         "next_context": {
             "referent_map": {"surface_forms": ["new topic", "fresh start"]},
             "anchors": ["anchor_new"],
         },
-        # Drift/oscillation should NOT apply to old1 when new context is required
         "drift": {"affected_objects": ["old1"], "magnitude": 0.9},
     }
 
