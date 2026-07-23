@@ -30,7 +30,7 @@ Prior test is preserved (summary → lineup → test descriptions → table → 
 
 ---
 
-# **1. Summary of This Copilot Run**
+# **1. Summary of This Run**
 
 All 10 test cases completed successfully with **full Path A invariant compliance** under the unified TP architecture.
 
