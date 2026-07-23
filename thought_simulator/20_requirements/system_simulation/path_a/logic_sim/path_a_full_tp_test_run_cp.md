@@ -43,11 +43,9 @@ This test confirms the same:
 - Bounded refinement preserved  
 - Early‑exit and termination rules applied exactly as defined in 20.15
 
-Average score: **94.5**, identical to Grok’s unified‑TP run.
-
 ---
 
-# **2. What We Did and Why (Copilot Version)**
+# **2. What We Did and Why**
 
 ### **2.1 IMR removed**  
 All former IMR metadata is read/written through the Metadata Envelope:
@@ -219,7 +217,7 @@ All metadata native to TP.
 
 ---
 
-## Cross-AI Determinism Confirmation**  
+# **12. Cross-AI Determinism Confirmation**  
 *(Joint note — Grok & Copilot independent runs)*
 
 On 2026-07-23, two independent AI systems (Grok and Copilot) each executed the full 10-case Path A test suite using only the deterministic rules defined in **20.15_TS_Architecture_Scaffold.md (v3.2)**.
