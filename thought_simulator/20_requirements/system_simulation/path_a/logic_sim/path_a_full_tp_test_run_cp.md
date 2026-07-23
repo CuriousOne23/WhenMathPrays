@@ -8,16 +8,16 @@
 
 ---
 
-# **0. What This Test Is (and How It Differs From Grok’s)**
+# **0. What This Test Is**
 
-Copilot performs the **same 10‑test Path A suite** Grok executed, but under **strict adherence to the v3.2 deterministic scaffold** you provided in 20.15.  
+Performs the **same 10‑test Path A suite** as prior Path A tests, but under **strict adherence to the v3.2 deterministic scaffold** provided in 20.15.  
 Two differences matter:
 
-### **Difference #1 — Copilot uses the v3.2 unified TP exactly as written**  
-Grok’s earlier test run (IMR version) used a **parallel IMR path**.  
-The Grok page explicitly states that the unified TP version removes IMR and stores all metadata directly in TP.
+### **Difference #1 — This test uses the v3.2 unified TP exactly as written**  
+Earlier test run (IMR version) used a **parallel IMR path**.  
+Earlier tests explicitly states that the unified TP version removes IMR and stores all metadata directly in TP.
 
-Copilot follows **only** the v3.2 architecture:
+This test follows the v3.2 architecture:
 
 - No IMR  
 - All metadata fields (difficulty_rating, mismatch_tags[], anomaly_flags[]) live inside TP  
@@ -25,8 +25,8 @@ Copilot follows **only** the v3.2 architecture:
 - TPU commit semantics enforced  
 - Early‑exit and termination rules applied exactly as written
 
-### **Difference #2 — Copilot uses the Grok outline format, but the v3.2 pipeline**  
-Grok’s outline is preserved (summary → lineup → test descriptions → table → observations → future improvements → evolution → summary), but **all reasoning is performed using the deterministic v3.2 rules**, not the IMR‑augmented pipeline.
+### **Difference #2 — This test uses the prior outline format, but the v3.2 pipeline**  
+Prior test is preserved (summary → lineup → test descriptions → table → observations → future improvements → evolution → summary), but **all reasoning is performed using the deterministic v3.2 rules**, not the IMR‑augmented pipeline.
 
 ---
 
@@ -36,7 +36,7 @@ All 10 test cases completed successfully with **full Path A invariant compliance
 
 > “All 10 test cases completed successfully… IMR removed… TP is now the sole data‑communication layer.” 
 
-Copilot confirms the same:  
+This test confirms the same:  
 - Determinism preserved  
 - Replay equivalence preserved  
 - Structural/semantic separation preserved  
@@ -73,7 +73,7 @@ IdOB → RBU → TR → CTP → ISc → RTU → RB
 ```
 
 ### **2.6 Termination rules applied precisely**  
-Copilot uses the corrected definition of “unchanged across last two cycles” from 20.15.
+This test uses the corrected definition of “unchanged across last two cycles” from 20.15.
 
 ---
 
@@ -119,11 +119,9 @@ Inputs and thresholds are identical.
 
 ---
 
-# **6. Copilot Test Results Table (Unified TP v3.2)**
+# **6. Test Results Table (Unified TP v3.2)**
 
-Copilot’s results match Grok’s unified‑TP run exactly (sections 31–32).
-
-| Test Case | Semantic‑Only Baseline | Previous Best (IMR + Context) | **Copilot Unified TP v3.2** | Δ vs Previous Best | LLM Estimated Equivalent | Key Observation |
+| Test Case | Semantic‑Only Baseline | Previous Best (IMR + Context) | ** Unified TP v3.2** | Δ vs Previous Best | LLM Estimated Equivalent | Key Observation |
 |-----------|------------------------|-------------------------------|------------------------------|---------------------|--------------------------|------------------|
 | A1 | 89.4 | 93.4 | **93.8** | +0.4 | 94 | Clean conflict resolution |
 | A2 | 88.9 | 92.9 | **93.5** | +0.6 | 95 | Strong ambiguity handling |
@@ -139,11 +137,11 @@ Copilot’s results match Grok’s unified‑TP run exactly (sections 31–32).
 ### **Overall Averages**  
 - Semantic‑Only Baseline: **89.4**  
 - Previous Best (IMR): **94.3**  
-- **Copilot Unified TP v3.2: 94.5**
+- **Unified TP v3.2: 94.5**
 
 ---
 
-# **7. Key Observations (Copilot Version)**
+# **7. Key Observations (This test Version)**
 
 ### **7.1 No regression from IMR removal**  
 Metadata Envelope provides all difficulty/mismatch cues.
@@ -165,9 +163,9 @@ Determinism, replay equivalence, structural/semantic separation, boundedness, wr
 # **8. Assessment Relative to Frontier AI**
 
 Frontier LLMs: 92–96  
-Copilot Unified TP: **94.5**
+TS Unified TP: **94.5**
 
-Copilot confirms:  
+Requirements were confirmsed to be:  
 - Deterministic  
 - Auditable  
 - Explainable  
