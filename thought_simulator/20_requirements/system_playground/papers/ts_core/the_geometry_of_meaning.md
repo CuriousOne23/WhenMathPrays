@@ -1,9 +1,9 @@
-# **the_geometry_of_meaning.md**  
-### *Relational Curvature Cognition and the Emergence of Category‑Centric AI*
+# The Geometry of Meaning  
+### Relational Curvature Cognition and the Emergence of Category‑Centric AI
 
 ---
 
-## **1. Introduction**
+## 1. Introduction
 
 Artificial intelligence has spent decades trapped between two paradigms:
 
@@ -33,9 +33,9 @@ This is the geometry of meaning.
 
 ---
 
-## **2. Historical Background**
+## 2. Historical Background
 
-### **2.1 Symbolic AI: Noun Thinking and Rule Enumeration**
+### 2.1 Symbolic AI: Noun Thinking and Rule Enumeration
 
 Symbolic AI treated concepts as **fixed objects**:
 
@@ -59,7 +59,7 @@ It failed.
 
 ---
 
-### **2.2 LLMs: Latent Enumeration at Massive Scale**
+### 2.2 LLMs: Latent Enumeration at Massive Scale
 
 LLMs repeat the same mistake at industrial scale.
 
@@ -86,7 +86,7 @@ LLMs **memorize** them.
 
 ---
 
-## **3. TS: A Category‑Centric, Relational Model of Meaning**
+## 3. TS: A Category‑Centric, Relational Model of Meaning
 
 TS breaks from both paradigms.
 
@@ -118,9 +118,9 @@ This is the breakthrough.
 
 ---
 
-## **4. The Geometry of Meaning**
+## 4. The Geometry of Meaning
 
-### **4.1 Category Pull**
+### 4.1 Category Pull
 
 Every category has a **directional pull**:
 
@@ -133,13 +133,13 @@ When combined:
 
 TS does not need training examples.  
 TS does not need rules.  
-TS does not need latent-space enumeration.
+TS does not need latent‑space enumeration.
 
 TS only needs the **gradient** created by the relationship.
 
 ---
 
-### **4.2 Curvature and Composite State**
+### 4.2 Curvature and Composite State
 
 When two concepts interact, they create **curvature** in conceptual space.
 
@@ -155,11 +155,11 @@ TS infers meaning by following this curvature.
 Symbolic AI cannot do this — it has no geometry.  
 LLMs cannot do this — they store the entire manifold instead of navigating it.
 
-TS navigates the manifold **conceptually**, through emergent relational curvature.
+TS navigates the manifold conceptually through emergent relational curvature.
 
 ---
 
-### **4.2.1 Worked Example: “Sport” + “Car” → “Sports Car”**
+### 4.2.1 Worked Example: “Sport” + “Car” → “Sports Car”
 
 To make curvature concrete, consider two identity patches:
 
@@ -177,11 +177,13 @@ TS computes the composite state by:
 - **Stabilizing the identity patch** into a coherent meaning:  
   a car whose attributes refine toward speed, handling, and competition  
 
+This deterministic process scales from simple composites to complex, long‑horizon reasoning in Path B.
+
 This is relational curvature cognition in action.
 
 ---
 
-### **4.3 Identity Patches and Clarifying Fields**
+### 4.3 Identity Patches and Clarifying Fields
 
 TS represents concepts as **identity patches**:
 
@@ -195,11 +197,15 @@ Clarifying fields act as **transition maps** between patches.
 
 This is why TS is manifold‑structured, even if Path A does not explicitly use manifold terminology.
 
-Although TS can be described geometrically, Path A does not require explicit manifold computation. Path A operates through deterministic category selection, clarifying-field refinement, and identity stabilization. The geometric language is a conceptual model of how meaning emerges, not a requirement for implementation. Path B, which handles multi-topic continuity and long-horizon reasoning, benefits more directly from manifold framing because it stitches multiple identity patches into coherent regions of thought.
+Although TS can be described geometrically, Path A does not require explicit manifold computation.  
+Path A operates through deterministic category selection, clarifying‑field refinement, and identity stabilization.  
+The geometric language is a conceptual model of how meaning emerges, not a requirement for implementation.
+
+Path B, which handles multi‑topic continuity and long‑horizon reasoning, benefits more directly from manifold framing because it stitches multiple identity patches into coherent regions of thought.
 
 ---
 
-## **5. Why TS Is Efficient**
+## 5. Why TS Is Efficient
 
 TS only processes:
 
@@ -224,13 +230,13 @@ TS is **relational without enumeration**.
 
 ---
 
-## **6. Engineering Implications: Programmable Cognitive Geometry**
+## 6. Engineering Implications: Programmable Cognitive Geometry
 
 Once we understand that TS infers meaning from relational curvature, we can **pre‑engineer the geometry TS is likely to travel**.
 
 This is offline mapping — not training.
 
-### **6.1 Small Applications → Small Geometry**
+### 6.1 Small Applications → Small Geometry
 
 An AI toaster needs:
 
@@ -243,7 +249,7 @@ Tiny curvature.
 Tiny manifold.  
 Tiny category space.
 
-### **6.2 Large Applications → Large Geometry**
+### 6.2 Large Applications → Large Geometry
 
 An AI work assistant needs:
 
@@ -263,24 +269,24 @@ TS scales because its geometry is **modular** and **engineered**, not learned.
 
 ---
 
-## **7. TS vs Symbolic vs LLM**
+## 7. TS vs Symbolic vs LLM
 
-| Property | Symbolic AI | LLMs | TS |
-|---------|-------------|------|----|
-| Meaning location | inside nouns | inside latent vectors | in relationships |
-| Relationship handling | rule enumeration | latent enumeration | relational recognition |
-| Complexity | combinatorial explosion | quadratic in context length | O(k) (active context) |
-| Brittleness | high | medium | low |
-| Efficiency | low | low | high |
-| Scalability | poor | costly | modular |
-| Geometry | none | implicit, huge | explicit, engineered |
-| Training / Mapping Approach | hand-crafted rules | gradient descent on massive corpora | engineered offline cognitive geometry |
+| Property                    | Symbolic AI              | LLMs                          | TS                              |
+|-----------------------------|--------------------------|-------------------------------|---------------------------------|
+| Meaning location            | inside nouns             | inside latent vectors         | in relationships                |
+| Relationship handling       | rule enumeration         | latent enumeration            | relational recognition          |
+| Complexity                  | combinatorial explosion  | quadratic in context length   | O(k) (active context)           |
+| Brittleness                 | high                     | medium                        | low                             |
+| Efficiency                  | low                      | low                           | high                            |
+| Scalability                 | poor                     | costly                        | modular                         |
+| Geometry                    | none                     | implicit, huge                | explicit, engineered            |
+| Training / Mapping Approach | hand-crafted rules       | gradient descent on massive corpora | engineered offline cognitive geometry |
 
 TS is the first architecture that gets relational cognition *right*.
 
 ---
 
-## **8. Conclusion**
+## 8. Conclusion
 
 TS introduces a new paradigm:
 
@@ -302,8 +308,9 @@ This makes TS:
 - industrializable  
 - geometrically programmable  
 
-TS’s geometric approach also avoids the scaling instabilities seen in both symbolic and latent systems. Symbolic AI collapses under rule explosion; LLMs degrade under distribution shift and require exponential compute to maintain coherence. TS’s category-centric geometry keeps cognitive growth bounded, deterministic, and stable. This aligns with the broader RSL/ISL/WDAS principles: stability emerges from regulated relational structure, not from brute-force enumeration.
+TS’s geometric approach also avoids the scaling instabilities seen in both symbolic and latent systems. Symbolic AI collapses under rule explosion; LLMs degrade under distribution shift and require exponential compute to maintain coherence. TS’s category‑centric geometry keeps cognitive growth bounded, deterministic, and stable.
+
+This aligns with the broader RSL/ISL/WDAS principles:  
+stability emerges from regulated relational structure, not from brute‑force enumeration.
 
 This is the geometry of meaning.
-
----
