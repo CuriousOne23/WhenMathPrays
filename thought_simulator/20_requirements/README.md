@@ -46,7 +46,6 @@ These four documents are sufficient to bootstrap TS reasoning in a new conversat
 - [20.30.090_rsg_mapping_rules.md](20.30.090_rsg_mapping_rules.md)
 - [20.31_patha_meaning_spec.md](20.31_patha_meaning_spec.md)
 - [20.32_cob_requirements.md](20.32_cob_requirements.md)
-- [20.32.010_cst_requirements](20.32.010_cst_requirements.md)
 - [20.32.010.010_cst-core.md](20.32.010.010_cst-core.md)
 - [20.32.010.020_cst-ms.md](20.32.010.020_cst-core.md)
 - [20.32.010.030_cst-mux.md](20.32.010.030_cst-mux.md)
