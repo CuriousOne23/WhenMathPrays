@@ -219,7 +219,7 @@ Everything else is ignored.
 
 This makes TS:
 
-- fit within a normal configured laptop 
+- runs comfortably on a normally configured laptop
 - deterministic  
 - replayable  
 - stable  
@@ -234,7 +234,7 @@ TS is **relational without enumeration**.
 
 Once we understand that TS infers meaning from relational curvature, we can **pre‑engineer the geometry TS is likely to travel**.
 
-This is offline mapping — not training.
+This is offline mapping — not training. Meaning geometry can be engineered, shared, and studied as its own artifact — independent of any specific TS implementation.
 
 ### 6.1 Small Applications → Small Geometry
 
