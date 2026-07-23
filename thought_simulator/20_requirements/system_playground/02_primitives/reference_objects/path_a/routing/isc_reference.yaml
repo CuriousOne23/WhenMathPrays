@@ -1,0 +1,134 @@
+reference_object_name: ISc
+reference_object_class: inference
+semantic_class: inference_scorer
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines deterministic scoring geometry, invariants, admissible envelopes, and
+    scoring‑field constraints for the Inference Scorer (ISc) in Path A.
+  long: >
+    ISc applies truth_hypotheses‑prc over candidate_set{} using CE output to produce
+    deterministic scoring fields (score_set, score_conflict, score_reason_code) for
+    TPU inclusion in update_structure. ISc performs no semantic interpretation, no
+    meaning construction, no global inference, and no TP writes. ISc provides local,
+    replay‑safe scoring metadata consumed by TPU and TR.
+
+invariants:
+  - name: closed_envelope_required
+    description: >
+      ISc must operate only on closed envelopes produced by CE + candidate_set{}.
+  - name: candidate_set_required
+    description: >
+      candidate_set{} must be present and valid; missing or partial sets invalidate scoring.
+  - name: ce_fields_required
+    description: >
+      ce_vector and ce_fields must be present and valid.
+  - name: deterministic_scoring_required
+    description: >
+      Given identical CE + candidate_set{} inputs, ISc must produce identical scoring fields.
+  - name: no_semantic_interpretation
+    description: >
+      ISc must not interpret semantic meaning, truth globally, stance, or plausibility.
+  - name: no_global_state_access
+    description: >
+      ISc must not access global inference state; scoring must be local and bounded.
+  - name: no_tp_write
+    description: >
+      ISc must not write or modify TP; TPU performs all TP updates.
+  - name: path_a_only
+    description: >
+      ISc must not be invoked by Path‑B; Path‑B is meaning‑read‑only.
+
+geometry_signature:
+  envelope_type: inference_score_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: score_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: conflict_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: reason_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    ISc geometry represents scoring magnitude, conflict magnitude, and reason‑code
+    stability. No semantic, routing, or identity manifold axes appear here.
+
+scalar_fields:
+  - name: score_set
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Deterministic score assigned to candidate_set{} under truth_hypotheses‑prc.
+  - name: score_conflict
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of conflict detected among candidate interpretations.
+  - name: score_reason_code
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Encoded reason for scoring outcome; consumed by TPU and TR.
+
+vector_fields:
+  - name: candidate_feature_vector
+    type: vector
+    length: 3
+    description: >
+      Local feature coordinates derived from candidate_set{}.
+  - name: ce_vector
+    type: vector
+    length: 3
+    description: >
+      Local CE coordinates used in scoring.
+
+envelope_status:
+  admissible_status:
+    - score_ready
+    - conflict_detected
+  terminal_status:
+    - invalid_geometry
+    - missing_score_fields
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy ISc invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_candidate_set
+    description: Required candidate_set{} is absent or invalid.
+  - name: replay_inconsistency
+    description: Replay produced non‑identical scoring geometry.
+
+routing:
+  admissible_inputs:
+    - CE
+    - candidate_set
+  admissible_outputs:
+    - TPU
+    - TR
+  description: >
+    ISc emits scoring fields consumed by TPU for TP updates and by TR for routing
+    metadata. ISc does not perform routing transitions or TP commits.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ce_reference
+    - candidate_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+
+psc_alignment:
+  - ISc must satisfy PSC inference‑object requirements.
+  - ISc must expose deterministic scoring geometry for replay validation.
+  - ISc must align with TPU and TR.
+  - ISc must enforce admissible scoring envelope constraints.

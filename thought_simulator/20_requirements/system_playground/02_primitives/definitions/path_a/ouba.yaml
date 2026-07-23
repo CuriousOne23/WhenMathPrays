@@ -1,0 +1,171 @@
+primitive_name: OuBA
+primitive_family: path_a
+reference_type: ouba_reference
+version: 1.0.0
+
+description: >
+  OuBA (Output Basin — Path A Commit) is the Path-A primitive responsible for
+  freezing the finalized meaning-layer state into an immutable semantic snapshot
+  containing semantic_core, meaning-bearing fields, commit-time metadata,
+  resolution flags, and DF-readiness indicators. OuBA performs no semantic
+  correction, no truth evaluation, no routing, and no governance decisions.
+  OuBA runs once per Path-A cycle after meaning construction stabilizes and
+  produces the committed TP snapshot consumed by DF beginning at IB.
+
+runtime_behavior:
+  mode: semantic_commit_freeze
+  semantic_interpretation: none
+  correction_application: none
+  routing_computation: none
+  truth_evaluation: none
+  tp_write: commit_only
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - stabilized_tp_snapshot
+  optional:
+    - semantic_core_vector
+    - meaning_vector
+    - resolution_vector
+    - df_readiness_vector
+
+outputs:
+  envelope_type: semantic_commit_envelope
+  fields:
+    scalar_fields:
+      - semantic_core_strength
+      - meaning_stability
+      - commit_metadata_strength
+      - resolution_flag_strength
+      - df_readiness_strength
+    vector_fields:
+      - semantic_core_vector
+      - meaning_vector
+      - commit_metadata_vector
+      - resolution_vector
+      - df_readiness_vector
+  tp_update_fields:
+    - semantic_commit_snapshot
+  status_flags:
+    - commit_ready
+    - stabilized
+
+invariants:
+  stabilized_meaning_required: true
+  semantic_core_required: true
+  meaning_fields_required: true
+  deterministic_commit: true
+  no_semantic_correction: true
+  no_truth_or_routing: true
+  no_df_invocation: true
+  single_commit_per_cycle: true
+  path_a_only: true
+  replay_stability_required: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required stabilized TP fields must be present; OuBA may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All semantic_core and meaning-bearing fields must match expected shapes.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_commit_integrity:
+    description: >
+      semantic_commit_snapshot must be complete, immutable, and stable once produced.
+    enforced: true
+
+  C5_no_semantic_or_truth:
+    description: >
+      OuBA must not modify semantic meaning, truth fields, routing metadata,
+      identity fields, or cue semantics.
+    enforced: true
+
+  C6_df_readiness_rules:
+    description: >
+      DF-readiness indicators must reflect deterministic commit-time conditions.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      OuBA must produce identical semantic_commit_snapshot under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_stabilized_tp
+    - validate_semantic_core
+    - validate_meaning_fields
+    - compute_commit_metadata
+    - compute_resolution_flags
+    - compute_df_readiness
+    - compute_scalar_fields
+    - compute_vector_fields
+    - freeze_semantic_commit_snapshot
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  commit_ready:
+    conditions:
+      - semantic_core_strength >= 0.0
+      - meaning_stability >= 0.0
+  stabilized:
+    conditions:
+      - resolution_flag_strength > 0.0
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_semantic_core:
+    triggers:
+      - semantic_core absent or invalid
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical commit geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from stabilized TP
+
+routing:
+  admissible_inputs:
+    - IdOB
+    - TPU
+  admissible_outputs:
+    - DF
+  description: >
+    OuBA consumes stabilized TP snapshots and emits the immutable semantic commit
+    snapshot. DF ingress begins at IB; OuBA performs no routing transitions.
+
+dependencies:
+  dictionaries:
+    - semantic_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - idob_reference
+    - tpu_reference
+    - boundary_reference
+    - semantic_reference
+  flow_contracts:
+    - path_a_commit_flow
+    - df_ingress_flow
+
+psc_alignment:
+  - OuBA satisfies PSC commit-object requirements.
+  - OuBA exposes deterministic commit geometry for replay validation.
+  - OuBA aligns with DF ingress (IB → TB → GBIB → GB).
+  - OuBA enforces admissible semantic-commit envelope constraints.

@@ -1,0 +1,142 @@
+reference_object_name: CE
+reference_object_class: boundary
+semantic_class: context_envelope
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the bounded, deterministic geometry and invariants for the ContextEnvelope (CE),
+    which delivers safe, isolated context to ISc without exposing global conversation state.
+  long: >
+    CE is the replayable context slice produced by CEx. It contains only the bounded,
+    context‑relevant information required for candidate_set{} and ISc scoring. CE does not
+    expose global CIL state, history, lineage, semantic interpretation, or TP information.
+    It provides deterministic geometry and PSC‑aligned fields required for safe inference.
+
+invariants:
+  - name: closed_envelope_required
+    description: >
+      CE must be a closed envelope produced by CEx; incomplete or open envelopes are invalid.
+  - name: bounded_context_only
+    description: >
+      CE must contain only bounded context cues; no history, lineage, or global state.
+  - name: no_meaning_construction
+    description: >
+      CE must not construct meaning or interpret semantics; it only carries context cues.
+  - name: no_global_state_access
+    description: >
+      CE must not expose or depend on global CIL state; all context must be locally extracted.
+  - name: replay_stability_required
+    description: >
+      CE must produce identical geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      CE may only accept envelopes produced by CEx.
+
+geometry_signature:
+  envelope_type: context_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: referent_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: discourse_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: locality_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    CE geometry represents active referents, local discourse entities, bounded context cues,
+    and locality constraints extracted by CEx. These axes form the safe context envelope
+    consumed by candidate_set{} and ISc.
+
+scalar_fields:
+  - name: referent_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of active referents present in the bounded context slice.
+  - name: discourse_coherence
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Coherence of local discourse entities relevant to candidate generation.
+  - name: cue_salience
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Salience of bounded context cues extracted by CEx.
+  - name: locality_bound
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree to which extracted context remains within locality constraints.
+
+vector_fields:
+  - name: referent_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing active referents in the context slice.
+  - name: discourse_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing local discourse entities.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing extracted context cues.
+
+envelope_status:
+  admissible_status:
+    - context_ready
+    - referents_present
+    - cues_present
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy CE invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: inadmissible_source
+    description: Envelope did not originate from CEx.
+  - name: replay_inconsistency
+    description: Replay produced non-identical CE geometry.
+
+routing:
+  admissible_inputs:
+    - CEx
+  admissible_outputs:
+    - candidate_set
+    - ISc
+  description: >
+    CE delivers safe, bounded context to candidate_set{} and ISc. CE does not perform
+    semantic interpretation, correction expansion, or routing decisions.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - cex_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+
+psc_alignment:
+  - CE must satisfy PSC boundary object requirements.
+  - CE must expose deterministic, bounded context geometry for replay validation.
+  - CE must align with CEx, candidate_set{}, and ISc.
+  - CE must enforce admissible context‑slice constraints.

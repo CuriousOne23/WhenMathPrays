@@ -1,0 +1,141 @@
+reference_object_name: CEx
+reference_object_class: boundary
+semantic_class: context_extractor
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the bounded, deterministic geometry and invariants for the ContextExtractor
+    (CEx), which produces a replayable context slice (CE) for candidate generation and ISc.
+  long: >
+    CEx extracts only the context‑relevant information from CIL needed for candidate_set{}
+    and ISc scoring. It provides a safe, bounded intermediary that prevents global‑state
+    leakage while exposing active referents, discourse entities, and local context cues.
+    CEx is not a semantic interpreter, meaning constructor, TP writer, or global‑state reader.
+
+invariants:
+  - name: closed_envelope_required
+    description: >
+      CEx may only operate on closed envelopes produced by IE.
+  - name: no_global_state_access
+    description: >
+      CEx must not read global CIL state directly; extraction must use bounded, local views.
+  - name: bounded_context_slice
+    description: >
+      The produced CE must be strictly bounded and replayable; no lineage or unbounded history.
+  - name: no_meaning_construction
+    description: >
+      CEx must not construct meaning or interpret semantics; it only extracts context cues.
+  - name: replay_stability_required
+    description: >
+      CEx must produce identical CE geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      CEx may only accept envelopes produced by IE.
+
+geometry_signature:
+  envelope_type: context_slice_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: referent_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: discourse_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: cue_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: locality_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    CEx geometry represents active referents, discourse entities, bounded context cues,
+    and locality constraints extracted from CIL. These axes form the CE envelope consumed
+    by CE evaluation, candidate_set{}, and ISc.
+
+scalar_fields:
+  - name: referent_strength
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Magnitude of active referents detected in the bounded context slice.
+  - name: discourse_coherence
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Coherence of local discourse entities extracted from CIL.
+  - name: cue_salience
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Salience of bounded context cues relevant to candidate generation.
+  - name: locality_bound
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree to which extracted context remains within allowed locality constraints.
+
+vector_fields:
+  - name: referent_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing active referents in the bounded context slice.
+  - name: discourse_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing local discourse entities.
+  - name: cue_vector
+    type: vector
+    length: 3
+    description: >
+      Manifold coordinates representing extracted context cues.
+
+envelope_status:
+  admissible_status:
+    - context_ready
+    - referents_present
+    - cues_present
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy CEx invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: inadmissible_source
+    description: Envelope did not originate from IE.
+  - name: replay_inconsistency
+    description: Replay produced non-identical CE geometry.
+
+routing:
+  admissible_inputs:
+    - IE
+  admissible_outputs:
+    - CE
+  description: >
+    CEx produces a bounded context slice (CE) consumed by CE evaluation, candidate_set{},
+    and ISc. CEx does not perform correction expansion or semantic interpretation.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - ie_reference
+    - boundary_reference
+    - semantic_reference
+    - routing_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+
+psc_alignment:
+  - CEx must satisfy PSC boundary object requirements.
+  - CEx must expose deterministic, bounded context geometry for replay validation.
+  - CEx must align with IE, CE, candidate_set{}, and ISc.
+  - CEx must enforce admissible context extraction constraints.

@@ -1,0 +1,127 @@
+primitive_name: CEx
+primitive_class: boundary
+semantic_class: context_extractor
+version: 1.0.0
+
+description:
+  short: >
+    CEx (Context Extractor) produces the bounded, replayable context envelope (CE)
+    from IE output. CEx performs no semantic interpretation, no correction, no routing,
+    and no truth evaluation.
+  long: >
+    CEx extracts only bounded context cues from IE envelopes: active referents,
+    discourse entities, cue salience, and locality constraints. CEx does not construct
+    meaning, rewrite semantics, or read global CIL state. It produces the CE envelope
+    consumed by CE (Evaluation), candidate_set{}, and ISc.
+
+inputs:
+  admissible_sources:
+    - IE
+  envelope_type: ie_envelope
+  description: >
+    CEx accepts closed IE envelopes containing bounded intake geometry. CEx may not
+    accept envelopes from any other source.
+
+outputs:
+  envelope_type: context_envelope
+  scalar_fields:
+    - referent_strength
+    - discourse_coherence
+    - cue_salience
+    - locality_bound
+  vector_fields:
+    - referent_vector
+    - discourse_vector
+    - cue_vector
+  status_flags:
+    - context_ready
+    - referents_present
+    - cues_present
+  description: >
+    CEx produces the CE envelope consumed by CE (Evaluation), candidate_set{}, and ISc.
+
+invariants:
+  - name: closed_envelope_required
+    description: >
+      CEx may only operate on closed envelopes produced by IE.
+  - name: no_global_state_access
+    description: >
+      CEx must not read global CIL state; extraction must use bounded, local views.
+  - name: bounded_context_slice
+    description: >
+      The produced CE must be strictly bounded and replayable; no lineage or unbounded history.
+  - name: no_meaning_construction
+    description: >
+      CEx must not construct meaning or interpret semantics; it only extracts context cues.
+  - name: replay_stability_required
+    description: >
+      CEx must produce identical CE geometry under replay for identical inputs.
+  - name: admissible_source_only
+    description: >
+      CEx may only accept envelopes produced by IE.
+
+evaluation_logic:
+  steps:
+    - validate_ie_envelope
+    - check_closed_envelope
+    - extract_referent_features
+    - extract_discourse_features
+    - extract_cue_features
+    - compute_scalar_fields
+    - compute_vector_fields
+    - determine_envelope_status
+    - produce_ce_envelope
+
+status_determination:
+  context_ready:
+    conditions:
+      - referent_strength >= 0.0
+      - discourse_coherence >= 0.0
+      - cue_salience >= 0.0
+  referents_present:
+    conditions:
+      - referent_strength > 0.0
+  cues_present:
+    conditions:
+      - cue_salience > 0.0
+
+anomaly_flags:
+  - name: geometry_violation
+    triggers:
+      - envelope geometry violates invariants
+  - name: field_out_of_bounds
+    triggers:
+      - scalar or vector fields exceed bounds
+  - name: inadmissible_source
+    triggers:
+      - envelope not from IE
+  - name: replay_inconsistency
+    triggers:
+      - replay produces non-identical CE geometry
+
+routing:
+  admissible_inputs:
+    - IE
+  admissible_outputs:
+    - CE
+  description: >
+    CEx produces the CE envelope consumed by CE (Evaluation), candidate_set{}, and ISc.
+    CEx performs no routing transitions.
+
+dependencies:
+  dictionaries:
+    - runtime_dictionary
+  reference_objects:
+    - cex_reference
+    - ie_reference
+    - boundary_reference
+    - semantic_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_inference_flow
+
+psc_alignment:
+  - CEx satisfies PSC boundary object requirements.
+  - CEx exposes deterministic, bounded context geometry for replay validation.
+  - CEx aligns with IE, CE, candidate_set{}, and ISc.
+  - CEx enforces admissible context-extraction constraints.

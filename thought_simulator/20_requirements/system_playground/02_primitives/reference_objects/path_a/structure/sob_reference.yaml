@@ -1,0 +1,129 @@
+reference_object_name: SOB
+reference_object_class: structure
+semantic_class: structural_object_boundary
+version: 1.0.0
+
+purpose:
+  short: >
+    Defines the static geometry, invariants, admissible envelopes, and routing
+    constraints for the Structural OB (SOB) in Path A.
+  long: >
+    SOB extracts first-pass structural cues from TP content, producing base structural
+    residue (clause boundaries, syntactic shape, punctuation/symbol masks, negation
+    markers, modality markers, structural anchors, and structural tags) with no semantic
+    interpretation. SOB provides deterministic low-level structural residue consumed by
+    downstream OB layers and routing.
+
+invariants:
+  - name: envelope_must_be_closed
+    description: >
+      SOB must operate only on closed structural envelopes produced by upstream primitives.
+  - name: structural_vector_required
+    description: >
+      structural_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: punctuation_mask_required
+    description: >
+      punctuation_mask_vector must be present and valid; missing vectors invalidate the envelope.
+  - name: no_semantic_interpretation
+    description: >
+      SOB must not introduce or modify semantic fields; it operates purely on structure.
+  - name: replay_stability_required
+    description: >
+      SOB must produce identical structural boundary geometry under replay for identical inputs.
+
+geometry_signature:
+  envelope_type: structural_boundary_envelope
+  shape: bounded_polytope
+  dimensions:
+    - name: structural_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: punctuation_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+    - name: boundary_stability_axis
+      type: scalar
+      bounds: [0.0, 1.0]
+  description: >
+    SOB geometry represents clause boundary strength, punctuation/symbol patterning,
+    and structural boundary stability. No semantic manifold axes appear here.
+
+scalar_fields:
+  - name: boundary_stability
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Stability of structural boundaries (clauses, anchors) in the envelope.
+  - name: negation_marker_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree and density of negation markers detected structurally.
+  - name: modality_marker_level
+    type: float
+    bounds: [0.0, 1.0]
+    description: >
+      Degree and density of modality markers detected structurally.
+
+vector_fields:
+  - name: structural_vector
+    type: vector
+    length: 3
+    description: >
+      Structural manifold coordinates (clause boundaries, syntactic shape, anchors).
+  - name: punctuation_mask_vector
+    type: vector
+    length: 3
+    description: >
+      Punctuation and symbol mask manifold coordinates.
+  - name: marker_vector
+    type: vector
+    length: 3
+    description: >
+      Combined negation/modality marker coordinates.
+
+envelope_status:
+  admissible_status:
+    - structural_ready
+    - degraded_structure
+  terminal_status:
+    - invalid_geometry
+    - missing_vectors
+    - replay_violation
+
+anomaly_flags:
+  - name: geometry_violation
+    description: Envelope geometry does not satisfy SOB invariants.
+  - name: field_out_of_bounds
+    description: One or more scalar/vector fields exceed allowed bounds.
+  - name: missing_structural_vectors
+    description: Required structural vectors are absent or invalid.
+  - name: replay_inconsistency
+    description: Replay produced non-identical structural boundary geometry.
+
+routing:
+  admissible_inputs:
+    - TP
+  admissible_outputs:
+    - downstream_structural_ob
+    - constraint_extractor
+  description: >
+    SOB emits structural residue envelopes for downstream OB layers and constraint
+    extraction. It does not route directly into semantic scoring or identity primitives.
+
+dependencies:
+  dictionaries:
+    - structure_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_clean_flow
+    - path_a_corrected_flow
+
+psc_alignment:
+  - SOB must satisfy PSC structure object requirements.
+  - SOB must expose deterministic structural geometry for replay validation.
+  - SOB must align with downstream OB and constraint primitives.
+  - SOB must enforce admissible structural boundary envelope constraints.

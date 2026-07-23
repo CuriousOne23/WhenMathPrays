@@ -1,0 +1,148 @@
+primitive_name: SOB
+primitive_family: path_a
+reference_type: sob_reference
+version: 1.0.0
+
+description: >
+  SOB (Structural Object Boundary) is the Path-A primitive responsible for
+  extracting structural slots from the raw OB envelope. SOB performs no semantic
+  interpretation, no cue extraction, no routing computation, and no correction.
+  Its sole job is to produce a deterministic structural-boundary envelope for
+  SROB. SOB is strictly pre-semantic and replay-stable.
+
+runtime_behavior:
+  mode: extract_structural_slots
+  semantic_interpretation: none
+  cue_extraction: none
+  routing_computation: none
+  correction_application: none
+  replay_behavior: deterministic
+
+inputs:
+  required:
+    - ob_envelope
+
+outputs:
+  envelope_type: structural_boundary_envelope
+  fields:
+    scalar_fields:
+      - structural_integrity
+      - slot_count
+      - slot_shape_score
+      - degradation_level
+    vector_fields:
+      - structural_slot_vector
+      - structural_residue_vector
+  status_flags:
+    - sob_ready
+    - degraded
+
+invariants:
+  ob_envelope_required: true
+  structural_slots_required: true
+  no_semantic_fields: true
+  no_routing_fields: true
+  no_cue_fields: true
+  deterministic_extraction: true
+  replay_stability_required: true
+  path_a_only: true
+
+constraint_families:
+  C1_slot_presence:
+    description: >
+      All required structural slots must be present; SOB may not infer or repair.
+    enforced: true
+
+  C2_slot_shape:
+    description: >
+      All structural slots must match expected shapes; no plausibility checks.
+    enforced: true
+
+  C3_slot_bounds:
+    description: >
+      All scalar and vector fields must remain within declared bounds.
+    enforced: true
+
+  C4_no_semantic_or_routing:
+    description: >
+      SOB must not produce semantic, routing, or cue vectors.
+    enforced: true
+
+  C5_residue_consistency:
+    description: >
+      structural_residue_vector must reflect deterministic residue extraction.
+    enforced: true
+
+  C6_presemantic_boundary:
+    description: >
+      SOB must remain strictly pre-semantic; no semantic manifold access allowed.
+    enforced: true
+
+  C7_replay_determinism:
+    description: >
+      SOB must produce identical envelopes under replay for identical inputs.
+    enforced: true
+
+evaluation_logic:
+  steps:
+    - validate_ob_envelope
+    - extract_structural_slots
+    - compute_structural_residue
+    - compute_scalar_fields
+    - compute_vector_fields
+    - apply_constraint_families
+    - determine_envelope_status
+    - produce_output_envelope
+
+status_determination:
+  sob_ready:
+    conditions:
+      - structural_integrity >= 0.0
+      - slot_count > 0
+  degraded:
+    conditions:
+      - degradation_level > 0.2
+
+anomaly_flags:
+  geometry_violation:
+    triggers:
+      - envelope geometry violates invariants
+  field_out_of_bounds:
+    triggers:
+      - scalar or vector fields exceed bounds
+  missing_ob_envelope:
+    triggers:
+      - OB envelope absent or invalid
+  replay_inconsistency:
+    triggers:
+      - replay produces non-identical structural geometry
+  inadmissible_source:
+    triggers:
+      - envelope not from OB
+
+routing:
+  admissible_inputs:
+    - OB
+  admissible_outputs:
+    - SROB
+  description: >
+    SOB emits structural-boundary envelopes consumed by SROB. SOB performs no
+    routing transitions.
+
+dependencies:
+  dictionaries:
+    - structure_dictionary
+    - runtime_dictionary
+  reference_objects:
+    - ob_reference
+    - srob_reference
+    - boundary_reference
+    - structure_reference
+  flow_contracts:
+    - path_a_clean_flow
+
+psc_alignment:
+  - SOB satisfies PSC structural-boundary object requirements.
+  - SOB exposes deterministic structural geometry for replay validation.
+  - SOB aligns with SROB and CnOB.
+  - SOB enforces admissible structural-boundary envelope constraints.

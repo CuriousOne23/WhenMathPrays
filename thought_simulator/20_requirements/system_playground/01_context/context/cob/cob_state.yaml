@@ -1,0 +1,119 @@
+# COB State Schema
+# System Playground Version
+# This file contains no SHALL statements and no HLRs.
+
+cob_state:
+  description: >
+    Internal state representation for the Conversation Object Basin (COB).
+    Tracks identity-layer objects, ordering metrics, ambiguity summaries,
+    stability summaries, lineage summaries, and basin metadata.
+
+  version: 1.0
+
+  fields:
+
+    objects:
+      description: >
+        Identity-layer objects currently stored in COB.
+        Maximum count is limited to 20 by global COB requirements.
+      type: list
+      items:
+        type: object
+        fields:
+          id:
+            type: string
+            description: >
+              Unique identifier for the identity-layer object.
+
+          referent_map:
+            type: object
+            description: >
+              Stabilized referent map representing identity-layer referents.
+
+          anchors:
+            type: list
+            description: >
+              Anchor set associated with the identity-layer object.
+
+          lineage:
+            type: object
+            description: >
+              Lineage record and lineage stability indicators.
+
+          ambiguity:
+            type: object
+            description: >
+              Ambiguity indicators for referents and anchors.
+
+          stability_metrics:
+            type: object
+            description: >
+              Stability metrics derived from CST signals.
+
+          ordering_metrics:
+            type: object
+            description: >
+              Recency, frequency, and density metrics used for selection and eviction.
+
+    object_count:
+      description: >
+        Number of identity-layer objects currently stored in COB.
+      type: integer
+
+    ordering_summary:
+      description: >
+        Aggregated ordering metrics across all identity-layer objects in the basin.
+      type: object
+      fields:
+        recency_distribution:
+          type: list
+        frequency_distribution:
+          type: list
+        density_distribution:
+          type: list
+
+    ambiguity_summary:
+      description: >
+        Aggregated ambiguity indicators across the basin.
+      type: object
+
+    stability_summary:
+      description: >
+        Aggregated stability metrics across the basin.
+      type: object
+      fields:
+        drift_levels:
+          type: list
+        oscillation_levels:
+          type: list
+        collapse_flags:
+          type: list
+        merge_split_events:
+          type: list
+        freeze_thaw_events:
+          type: list
+
+    lineage_summary:
+      description: >
+        Aggregated lineage stability indicators across the basin.
+      type: object
+      fields:
+        lineage_records:
+          type: list
+        lineage_stability_levels:
+          type: list
+
+    metadata:
+      description: >
+        Metadata describing the current COB basin state.
+      type: object
+      fields:
+        turn_index:
+          type: integer
+        timestamp:
+          type: string
+
+  notes:
+    - "This schema defines the system_playground version of COB state."
+    - "It mirrors global COB architecture while remaining scoped for simulation and testing."
+    - "No SHALL statements appear in this file."
