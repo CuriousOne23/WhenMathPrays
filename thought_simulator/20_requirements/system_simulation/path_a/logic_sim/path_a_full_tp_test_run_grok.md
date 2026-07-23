@@ -213,4 +213,4 @@ Neither system referenced the other’s scores or intermediate results.
 
 This cross-model agreement demonstrates that Path A, under the v3.2 unified-TP scaffold, is fully deterministic, replay-stable, and sufficiently well-specified to yield reproducible outcomes across independent evaluators.
 
-Grok and Copilot read 20.15 document which was created to summarize Path A for logical simulation and read prior test reports to replicate prior Path A test results documentation outline.
+Grok and Copilot read 20.15 document which was created to summarize Path A for logical simulation and read prior test reports to define the tests, scoring system and report outline.
