@@ -49,7 +49,7 @@ This led to:
 - rule explosion  
 - brittleness  
 - global consistency requirements  
-- Oⁿ complexity  
+- combinatorial blowup  
 - immediate collapse under novelty  
 
 Symbolic AI tried to describe the entire relational universe.
@@ -156,6 +156,31 @@ TS navigates the manifold.
 
 ---
 
+### **4.2.1 Worked Example: “Sport” + “Car” → “Sports Car”**
+
+To make curvature concrete, consider two identity patches:
+
+- **sport** → category pull: speed, performance, competition  
+- **car** → category pull: vehicle, transport, machine  
+
+TS does not store “sports car.”  
+TS has never seen “sports car.”  
+TS does not need a rule or a training example.
+
+TS simply recognizes that:
+
+- “sport” contributes a **performance gradient**  
+- “car” contributes a **vehicle gradient**  
+- the composite state is the **curvature** created by combining these gradients  
+
+This curvature produces a new meaning:
+
+> A *sports car* is a car whose identity is refined by sport‑related attributes (speed, performance, handling).
+
+TS infers this relational meaning deterministically, without enumeration or latent-space compression.
+
+---
+
 ### **4.3 Identity Patches and Clarifying Fields**
 
 TS represents concepts as **identity patches**:
@@ -169,6 +194,8 @@ TS represents concepts as **identity patches**:
 Clarifying fields act as **transition maps** between patches.
 
 This is why TS is manifold‑structured, even if Path A does not explicitly use manifold terminology.
+
+Although TS can be described geometrically, Path A does not require explicit manifold computation. Path A operates through deterministic category selection, clarifying-field refinement, and identity stabilization. The geometric language is a conceptual model of how meaning emerges, not a requirement for implementation. Path B, which handles multi-topic continuity and long-horizon reasoning, benefits more directly from manifold framing because it stitches multiple identity patches into coherent regions of thought.
 
 ---
 
@@ -242,11 +269,12 @@ TS scales because its geometry is **modular** and **engineered**, not learned.
 |---------|-------------|------|----|
 | Meaning location | inside nouns | inside latent vectors | in relationships |
 | Relationship handling | rule enumeration | latent enumeration | relational recognition |
-| Complexity | Oⁿ | O(n²) | O(k) (active context) |
+| Complexity | combinatorial explosion | quadratic in context length | O(k) (active context) |
 | Brittleness | high | medium | low |
 | Efficiency | low | low | high |
 | Scalability | poor | costly | modular |
 | Geometry | none | implicit, huge | explicit, engineered |
+| Training / Mapping Approach | hand-crafted rules | gradient descent on massive corpora | engineered offline cognitive geometry |
 
 TS is the first architecture that gets relational cognition *right*.
 
@@ -273,6 +301,8 @@ This makes TS:
 - scalable  
 - industrializable  
 - geometrically programmable  
+
+TS’s geometric approach also avoids the scaling instabilities seen in both symbolic and latent systems. Symbolic AI collapses under rule explosion; LLMs degrade under distribution shift and require exponential compute to maintain coherence. TS’s category-centric geometry keeps cognitive growth bounded, deterministic, and stable. This aligns with the broader RSL/ISL/WDAS principles: stability emerges from regulated relational structure, not from brute-force enumeration.
 
 This is the geometry of meaning.
 
