@@ -19,10 +19,10 @@ import yaml
 import unittest
 
 # Import lean CEx implementation
-from thought_simulator.20_requirements.system_playground.03_simulation.path_a.lean.lean_path_a.lean_nodes.cex.cex import CEx
+from thought_simulator.requirements_20.system_playground.simulation.path_a.lean.lean_path_a.lean_nodes.cex.cex import CEx
 
 # Import CILIntakePacket generator (lean CIL)
-from thought_simulator.20_requirements.system_playground.01_context.context.cil.cil import CIL, IdentityObject
+from thought_simulator.requirements_20.system_playground.context.context.cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ def load_cex_reference():
     """Load cex_reference.yaml for structural validation."""
     ref_path = os.path.join(
         os.path.dirname(__file__),
-        "../../../../../../02_primitives/reference_objects/path_a/boundary/cex_reference.yaml"
+        "../../../../primitives/reference_objects/path_a/boundary/cex_reference.yaml"
     )
     with open(ref_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
