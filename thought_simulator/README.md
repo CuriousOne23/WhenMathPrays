@@ -23,7 +23,9 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 
 **Implementation phase** is next.
 
-**Status Test Run:** [Latest Test Run 7/15/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_context_imr_test_run_cp.md)
+**Status Test Runs (Same test ran independently):**  
+[Latest Test Run, Copilot 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_cp.md)  
+[Latest Test Run, Grok 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_grok.md)  
 
 **Overview papers:**  
 [From LLM To TS](requirements_20/system_playground/design/papers/meta_and_planning/from_llm_to_ts.md)  
@@ -34,12 +36,12 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [Architecture Manifold Description of TS](requirements_20/system_playground/design/papers/ts_core/architecture_manifold_description_of_ts.md)  
 [TS Versus Symbolic and LLM](requirements_20/system_playground/design/papers/ts_core/ts_vs_symbolic_and_llm.md)  
 [TS is a Thought Router](requirements_20/system_playground/design/papers/ts_core/ts_thought_router.md)  
-[Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
+[Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/design/papers/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
 [Architecture Principles of TS](architectural_principle_of_ts.md)  
 
 **Engineering papers**  
-[Manifold Engineering Tuning paper](requirements_20/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)  
+[Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/prework_manifold_and_back.md)  
 
 ---
 
@@ -56,8 +58,8 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - [thought_simulator_design/](thought_simulator_design/) — formal design specifications
 - [review/](review/) — grouped review bundles and decision artifacts
 - [measurement/](measurement/) — metrics, instrumentation, and evaluation methodology
-- [80_safety/](80_safety/) — safety constraints and protective controls
-- [validation_certification/](validation_certification/) — validation and conformance
+- [80_safety/](thought_simulator_req/80_safety/) — safety constraints and protective controls
+- [90_validation/](thought_simulator_req/90_validation/) — validation and conformance
 
 ### Key Flow Catalog Files (20-series)
 - [20.705_patha_pathb_flow.md](requirements_20/20.705_patha_pathb_flow.md) — Core flow diagrams and conventions
@@ -99,17 +101,13 @@ In practice:
 
 The process flow is direction-controlled:
 - Requirements collaboration and intent shaping in [requirements_20/](requirements_20/)
-- Evidence/prototype development in [thought_simulator_playground/](thought_simulator_playground/)
-- Formal realization anchors in [thought_simulator_req/](thought_simulator_req/)
-
-Direction examples:
-1. Forward (typical): 20 → 40 → 10 → 30/50
-2. Backward (when selected): 20 → 10 → 40 → 30/50
+- System Development [system_playground/](system_playground/)
+- system Logic Simulation [system_simulation/](system_simulation/)
 
 ---
 
-**Last Updated**: June 26, 2026  
-**Version**: 0.7 (Flow Catalog Integration + Status Paper)
+**Last Updated**: Juuly 27th, 2026  
+**Version**: 0.8 (Flow Catalog Integration + Status Paper)
 
 ---
 
