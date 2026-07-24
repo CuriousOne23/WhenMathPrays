@@ -36,13 +36,32 @@ sys.path.insert(0, repo_root)
 
 ACTIVE_TEST_MODULES = [
 
+    # --------------------------------------------------------
+    # Path A — Intake Testbenches (InB → IIInB → IE)
+    # --------------------------------------------------------
+
+    # --- InB Intake Testbench ---
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+
+    # --- IIInB Intake Inspection Testbench ---
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
+
+    # --- IE Intake Envelope Testbench ---
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+
+    # --------------------------------------------------------
+    # Path A — CEx Testbenches
+    # --------------------------------------------------------
+
     # --- CEx Intake Testbench ---
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
 
     # --- CEx Boundary Testbench ---
     "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
 
+    # --------------------------------------------------------
     # Add more tests here later:
+    # --------------------------------------------------------
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.test_cex_output",
     # "thought_simulator.requirements_20.system_playground.testbenches.path_b.context.test_context_engine",
 ]
