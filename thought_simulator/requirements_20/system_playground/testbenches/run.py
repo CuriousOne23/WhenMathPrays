@@ -41,7 +41,7 @@ ACTIVE_TEST_MODULES = [
     # --------------------------------------------------------
 
     # --- InB Intake Testbench ---
-    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
 
     # --- IIInB Intake Inspection Testbench ---
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
@@ -57,7 +57,7 @@ ACTIVE_TEST_MODULES = [
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
 
     # --- CEx Boundary Testbench ---
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
 
     # --------------------------------------------------------
     # Add more tests here later:
