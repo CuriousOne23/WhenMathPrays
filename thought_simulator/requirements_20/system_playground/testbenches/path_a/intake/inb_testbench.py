@@ -66,11 +66,10 @@ class TestInBIntake(unittest.TestCase):
 
     def test_inb_cases(self):
         for test in self.tests:
-            print("\nDEBUG RAW TEST ENTRY:", test)   # <‑‑ ADD THIS
-        
+
             name = test.get("id", "unnamed")
             print(f"Running: {name} ...", end=" ")
-            
+
             # Generate long input if requested
             if test.get("generate_long_input", False):
                 length = test.get("long_length", 5000)
@@ -97,20 +96,47 @@ class TestInBIntake(unittest.TestCase):
 
             passed = defects_ok and repairs_ok and normalized_ok
 
-            print("DEBUG CHECKS:", {
-                "defects_ok": defects_ok,
-                "repairs_ok": repairs_ok,
-                "normalized_ok": normalized_ok,
-                "tp.defects": tp.defects,
-                "expected_defects": expected_defects,
-                "tp.repairs": tp.repairs,
-                "expected_repairs": expected_repairs,
-                "tp.normalized": tp.normalized,
-                "expected_normalized": expected_normalized,
-            })
+            # ------------------------------------------------------------------
+            # Requirement-aware PASS/FAIL messaging
+            # ------------------------------------------------------------------
+            if passed:
+                reasons = []
 
-            print("PASS" if passed else "FAIL")
-            
+                if expected_defects:
+                    reasons.append(f"Detected expected defects: {expected_defects}")
+
+                if expected_repairs:
+                    reasons.append(f"Applied expected repairs: {expected_repairs}")
+
+                if expected_normalized != raw_input:
+                    reasons.append("Normalization matched expected output")
+
+                if not reasons:
+                    reasons.append("All expectations met")
+
+                print("PASS — " + "; ".join(reasons))
+
+            else:
+                fail_reasons = []
+
+                if not defects_ok:
+                    fail_reasons.append(
+                        f"Defect mismatch: expected {expected_defects}, got {tp.defects}"
+                    )
+
+                if not repairs_ok:
+                    fail_reasons.append(
+                        f"Repair mismatch: expected {expected_repairs}, got {tp.repairs}"
+                    )
+
+                if not normalized_ok:
+                    fail_reasons.append(
+                        f"Normalization mismatch: expected '{expected_normalized}', got '{tp.normalized}'"
+                    )
+
+                print("FAIL — " + "; ".join(fail_reasons))
+
+            # unittest assertion
             self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
