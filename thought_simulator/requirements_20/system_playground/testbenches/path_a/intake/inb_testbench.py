@@ -52,26 +52,10 @@ def load_testbench(yaml_path: str):
         return yaml.safe_load(f)
 
 # ---------------------------------------------------------------------------
-# Logging Setup
-# ---------------------------------------------------------------------------
-
-def create_log_file():
-    logs_dir = os.path.join(
-        os.path.dirname(__file__),
-        "../../testbenches/path_a/intake/logs"
-    )
-    os.makedirs(logs_dir, exist_ok=True)
-
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_path = os.path.join(logs_dir, f"inb_run_{timestamp}.log")
-
-    return open(log_path, "w", encoding="utf-8")
-
-# ---------------------------------------------------------------------------
 # Test Execution
 # ---------------------------------------------------------------------------
 
-def run_test_case(test, log):
+def run_test_case(test):
     name = test.get("name", "unnamed")
 
     print(f"Running: {name} ...", end=" ")
@@ -102,20 +86,7 @@ def run_test_case(test, log):
 
     passed = defects_ok and repairs_ok and normalized_ok
 
-    # Terminal output (short)
     print("PASS" if passed else "FAIL")
-
-    # Log file output (full detail)
-    log.write(f"\n=== Test Case: {name} ===\n")
-    log.write(f"Input: {tp.raw_input}\n")
-    log.write(f"Normalized: {tp.normalized}\n")
-    log.write(f"Defects: {tp.defects}\n")
-    log.write(f"Repairs: {tp.repairs}\n")
-    log.write(f"Metadata: {tp.metadata}\n")
-    log.write(f"Expected defects: {expected_defects}\n")
-    log.write(f"Expected repairs: {expected_repairs}\n")
-    log.write(f"Expected normalized: {expected_normalized}\n")
-    log.write(f"Result: {'PASS' if passed else 'FAIL'}\n")
 
 # ---------------------------------------------------------------------------
 # Main Entry Point
@@ -124,7 +95,7 @@ def run_test_case(test, log):
 def main():
     yaml_path = os.path.join(
         os.path.dirname(__file__),
-        "../../../04_testbenches/path_a/testbenches/path_a/intake/inb_testbench.yaml"
+        "inb_testbench.yaml"
     )
 
     testbench = load_testbench(yaml_path)
@@ -133,17 +104,10 @@ def main():
     print(f"Loaded {len(tests)} test cases.")
     print("Starting InB → IIInB → IE testbench...\n")
 
-    log = create_log_file()
-
     for test in tests:
-        run_test_case(test, log)
+        run_test_case(test)   # <-- no log argument
 
-    log.close()
-
-    # Show full log path in terminal
     print("\nAll tests complete.")
-    print(f"Log file written to:\n  {os.path.abspath(log.name)}")
-    print("Full results written to log file (ignored by git).")
 
 if __name__ == "__main__":
     main()
