@@ -17,11 +17,9 @@ It ensures:
 
 import unittest
 
-# Lean CEx implementation
-from thought_simulator.20_requirements.system_playground.03_simulation.path_a.lean.lean_path_a.lean_nodes.cex.cex import CEx
-
-# Real CIL implementation
-from thought_simulator.20_requirements.system_playground.01_context.context.cil.cil import CIL, IdentityObject
+# Lean CEx implementation & Real CIL implementation
+from thought_simulator.requirements_20.system_playground.simulation.path_a.lean.lean_path_a.lean_nodes.cex.cex import CEx
+from thought_simulator.requirements_20.system_playground.context.context.cil.cil import CIL, IdentityObject
 
 
 # ---------------------------------------------------------------------------
