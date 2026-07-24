@@ -1,15 +1,12 @@
 """
-inb_testbench.py
-TS Path A — Intake Testbench Driver
-Executes: InB → IIInB → IE
-
-- Terminal output: short PASS/FAIL summary
-- Log file output: full detailed trace (ignored by .gitignore)
+InB Intake Testbench — Path A
+Runs: InB → IIInB → IE
+Designed to be executed by run.py
 """
 
-import yaml
 import os
-import datetime
+import yaml
+import unittest
 from dataclasses import dataclass, field
 
 # ---------------------------------------------------------------------------
@@ -47,67 +44,64 @@ def IE(tp: ThoughtPacket):
 # Testbench Loader
 # ---------------------------------------------------------------------------
 
-def load_testbench(yaml_path: str):
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
-
-# ---------------------------------------------------------------------------
-# Test Execution
-# ---------------------------------------------------------------------------
-
-def run_test_case(test):
-    name = test.get("name", "unnamed")
-
-    print(f"Running: {name} ...", end=" ")
-
-    # Generate long input if requested
-    if test.get("generate_long_input", False):
-        length = test.get("long_length", 5000)
-        raw_input = "A" * length
-    else:
-        raw_input = test["input"]
-
-    tp = ThoughtPacket(raw_input=raw_input)
-
-    # Execute primitives
-    tp = InB(tp)
-    tp = IIInB(tp)
-    tp = IE(tp)
-
-    # Expected values
-    expected_defects = test.get("expected_defects", [])
-    expected_repairs = test.get("expected_repairs", [])
-    expected_normalized = test.get("expected_normalized", tp.raw_input)
-
-    # Checks
-    defects_ok = (tp.defects == expected_defects)
-    repairs_ok = (tp.repairs == expected_repairs)
-    normalized_ok = (tp.normalized == expected_normalized)
-
-    passed = defects_ok and repairs_ok and normalized_ok
-
-    print("PASS" if passed else "FAIL")
-
-# ---------------------------------------------------------------------------
-# Main Entry Point
-# ---------------------------------------------------------------------------
-
-def main():
+def load_testbench():
     yaml_path = os.path.join(
         os.path.dirname(__file__),
         "inb_testbench.yaml"
     )
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
-    testbench = load_testbench(yaml_path)
-    tests = testbench.get("tests", [])
+# ---------------------------------------------------------------------------
+# Testbench Class (unittest-compatible)
+# ---------------------------------------------------------------------------
 
-    print(f"Loaded {len(tests)} test cases.")
-    print("Starting InB → IIInB → IE testbench...\n")
+class TestInBIntake(unittest.TestCase):
 
-    for test in tests:
-        run_test_case(test)   # <-- no log argument
+    @classmethod
+    def setUpClass(cls):
+        cls.testbench = load_testbench()
+        cls.tests = cls.testbench.get("tests", [])
+        print(f"Loaded {len(cls.tests)} InB intake test cases.\n")
 
-    print("\nAll tests complete.")
+    def test_inb_cases(self):
+        for test in self.tests:
+            name = test.get("name", "unnamed")
+            print(f"Running: {name} ...", end=" ")
+
+            # Generate long input if requested
+            if test.get("generate_long_input", False):
+                length = test.get("long_length", 5000)
+                raw_input = "A" * length
+            else:
+                raw_input = test["input"]
+
+            tp = ThoughtPacket(raw_input=raw_input)
+
+            # Execute primitives
+            tp = InB(tp)
+            tp = IIInB(tp)
+            tp = IE(tp)
+
+            # Expected values
+            expected_defects = test.get("expected_defects", [])
+            expected_repairs = test.get("expected_repairs", [])
+            expected_normalized = test.get("expected_normalized", tp.raw_input)
+
+            # Checks
+            defects_ok = (tp.defects == expected_defects)
+            repairs_ok = (tp.repairs == expected_repairs)
+            normalized_ok = (tp.normalized == expected_normalized)
+
+            passed = defects_ok and repairs_ok and normalized_ok
+
+            print("PASS" if passed else "FAIL")
+
+            self.assertTrue(passed, f"Test failed: {name}")
+
+# ---------------------------------------------------------------------------
+# Main (only used when running directly)
+# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
