@@ -26,17 +26,17 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 **Status Test Run:** [Latest Test Run 7/15/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_context_imr_test_run_cp.md)
 
 **Overview papers:**  
-[From LLM To TS](requirements_20/system_playground/papers/meta_and_planning/from_llm_to_ts.md)  
-[Why TS Uses the Manifold Model](requirements_20/system_playground/papers/ts_core/why_ts_uses_manifold_model.md)  
-[Why TS Requires Atomization](requirements_20/system_playground/papers/ts_core/why_ts_requires_atomization.md)  
-[TS As a Meaning Compiler](requirements_20/system_playground/papers/ts_core/ts_as_meaning_compiler.md)  
-[What is New About TS](requirements_20/system_playground/papers/ts_core/ts_what_is_new.md)  
-[Architecture Manifold Description of TS](requirements_20/system_playground/papers/ts_core/architecture_manifold_description_of_ts.md)  
-[TS Versus Symbolic and LLM](requirements_20/system_playground/papers/ts_core/ts_vs_symbolic_and_llm.md)  
-[TS is a Thought Router](requirements_20/system_playground/papers/ts_core/ts_thought_router.md)  
+[From LLM To TS](requirements_20/system_playground/design/papers/meta_and_planning/from_llm_to_ts.md)  
+[Why TS Uses the Manifold Model](requirements_20/system_playground/design/papers/ts_core/why_ts_uses_manifold_model.md)  
+[Why TS Requires Atomization](requirements_20/system_playground/design/papers/ts_core/why_ts_requires_atomization.md)  
+[TS As a Meaning Compiler](requirements_20/system_playground/design/papers/ts_core/ts_as_meaning_compiler.md)  
+[What is New About TS](requirements_20/system_playground/design/papers/ts_core/ts_what_is_new.md)  
+[Architecture Manifold Description of TS](requirements_20/system_playground/design/papers/ts_core/architecture_manifold_description_of_ts.md)  
+[TS Versus Symbolic and LLM](requirements_20/system_playground/design/papers/ts_core/ts_vs_symbolic_and_llm.md)  
+[TS is a Thought Router](requirements_20/system_playground/design/papers/ts_core/ts_thought_router.md)  
 [Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
-[Key Reason why TS is more efficent than today's AI LLM and prior AI machines](architectural_principle_of_ts.md)  
+[Architecture Principles of TS](architectural_principle_of_ts.md)  
 
 **Engineering papers**  
 [Manifold Engineering Tuning paper](requirements_20/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)  

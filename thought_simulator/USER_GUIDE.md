@@ -28,25 +28,25 @@ In practice, this is both the current repository method and the recommended work
 
 Use these roles consistently:
 
-- `thought_simulator/00_program_governance/`:
+- `thought_simulator/program_governance/`:
   governance, repo-wide control, direction, and policy
-- `thought_simulator/10_thought_simulator_req/`:
+- `thought_simulator/thought_simulator_req/`:
   architecture, top-level system shape, invariants, and decomposition
-- `thought_simulator/20_requirements/`:
+- `thought_simulator/requirements_20/`:
   requirements, normative "what TS must be", and traceable HLRs
-- `thought_simulator/30_verification/`:
+- `thought_simulator/verification/`:
   verification of the design, review, and evidence that the design is sound (see `30.00_verification_user_guide.md` for the standard process, artifact templates, and three-flow requirements)
-- `thought_simulator/40_thought_simulator_playground/`:
+- `thought_simulator/thought_simulator_playground/`:
   playground, experiments, exploratory work, and interactive prototyping
-- `thought_simulator/50_thought_simulator_design/`:
+- `thought_simulator/thought_simulator_design/`:
   design, implementation design, realization details, and concrete spec-to-code mapping
-- `thought_simulator/60_review/`:
+- `thought_simulator/review/`:
   review, critique, architectural draft review, and decision analysis
-- `thought_simulator/70_measurement/`:
+- `thought_simulator/measurement/`:
   measurement, metrics, instrumentation, and evaluation methodology
-- `thought_simulator/80_safety/`:
+- `thought_simulator/safety/`:
   safety, constraints, failure containment, and protective controls
-- `thought_simulator/90_validation_certification/`:
+- `thought_simulator/validation_certification/`:
   validation and certification, conformance, acceptance, and formal sign-off
 
 ## Test Benches (High-Level Overview)
@@ -55,7 +55,7 @@ Test benches are high-fidelity, external verification infrastructure (not explor
 
 **Only the test bench programs, scripts, and documentation** are stored in the repository under `testbenches/`. All generated outputs, logs, artifacts, plots, traces, CSV results, and raw data are excluded via .gitignore (they may live locally in ignored subdirectories inside the bench folder or externally).
 
-They generate evidence that can validate, challenge, or extend requirements and design contracts. All test bench evidence is normalized and promoted through the 30-series via the `30_verification/30.tb/` structure (see `30.tb/README.md`), which stores **only normalized text records** (capsules and deltas containing textual summaries, three-flow statements, HLR mappings, and "Testbench-Driven Changes" notes). Raw data payloads are never committed to the repo.
+They generate evidence that can validate, challenge, or extend requirements and design contracts. All test bench evidence is normalized and promoted through the 30-series via the `verification/30.tb/` structure (see `30.tb/README.md`), which stores **only normalized text records** (capsules and deltas containing textual summaries, three-flow statements, HLR mappings, and "Testbench-Driven Changes" notes). Raw data payloads are never committed to the repo.
 
 Test bench results can drive backward flow updates into 10.50-series design requirements and 50-series design specs (and, when sufficiently strong, even into 20-series requirements). The path is always: test bench → 30-series delta/capsule → higher layers.
 
@@ -67,15 +67,15 @@ Future high-fidelity test benches will also feed 30-series verification evidence
 
 When you request "update 10" in flow execution, this means:
 
-- `10_thought_simulator_req/` by default
+- `thought_simulator_req/` by default
 
-Only reference `00_program_governance/` when you explicitly name it.
+Only reference `program_governance/` when you explicitly name it.
 
 ## Where The User Should Edit
 
 ## No Automatic Propagation From 20 (Mandatory)
 
-Edits in `20_requirements/` must not automatically trigger updates in `10_thought_simulator_req/`, `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`.
+Edits in `requirements_20/` must not automatically trigger updates in `thought_simulator_req/`, `verification/`, `thought_simulator_playground/`, or `thought_simulator_design/`.
 
 Allowed AI-agent behavior after a 20-layer edit:
 
@@ -85,9 +85,9 @@ Allowed AI-agent behavior after a 20-layer edit:
 
 Disallowed behavior:
 
-- automatic cross-layer edits initiated only because `20_requirements/` changed
+- automatic cross-layer edits initiated only because `requirements_20/` changed
 
-Allowed automatic maintenance inside `30_verification/`, `40_thought_simulator_playground/`, and `50_thought_simulator_design/` after explicit forward/backward flow start:
+Allowed automatic maintenance inside `verification/`, `thought_simulator_playground/`, and `thought_simulator_design/` after explicit forward/backward flow start:
 
 - glossary and terminology synchronization updates
 - README path and reference repairs
@@ -98,15 +98,15 @@ Allowed automatic maintenance inside `30_verification/`, `40_thought_simulator_p
 
 User edits usually begin in one of:
 
-- `20_requirements/` for architecture/rationale changes
-- `40_thought_simulator_playground/` for exploratory module behavior and evidence
+- `requirements_20/` for architecture/rationale changes
+- `thought_simulator_playground/` for exploratory module behavior and evidence
 
 The AI agent then promotes and synchronizes into canonical layers.
 
 For `40.05`-governed exploratory module work, the forward-flow sequence after the module is executed and human-approved is explicit:
 
-1. create or update the corresponding `10.50.*` canonical anchor in `10_thought_simulator_req/50_design/`
-2. create the matching `30.*` verification subdirectory and canonical verification artifacts in `30_verification/`
+1. create or update the corresponding `10.50.*` canonical anchor in `thought_simulator_req/50_design/`
+2. create the matching `30.*` verification subdirectory and canonical verification artifacts in `verification/`
 3. execute `50.05` to create or update the corresponding `50.*` design artifact and synchronize `50.00_design_traceability_index.md`
 
 This means an approved `40.*` module does not promote directly to `50.*`; it first establishes its `10.50.*` anchor and `30.*` verification package.
@@ -115,9 +115,9 @@ This means an approved `40.*` module does not promote directly to `50.*`; it fir
 
 User edits usually begin with canonical anchor updates in:
 
-- `10_thought_simulator_req/`
+- `thought_simulator_req/`
 
-If those 10-anchor changes were derived from `20_requirements/`, backward flow still treats 10 as the normative trigger source.
+If those 10-anchor changes were derived from `requirements_20/`, backward flow still treats 10 as the normative trigger source.
 
 ## Forward Flow Runbook
 
@@ -128,11 +128,11 @@ Use this prompt when you want promotion/synchronization from exploratory work:
 ```text
 Run FORWARD FLOW from updated exploratory sources.
 Source edits:
-- <list files under 20_requirements and/or 40_thought_simulator_playground>
+- <list files under requirements_20 and/or thought_simulator_playground>
 Targets:
-- 10_thought_simulator_req
-- 30_verification (see `30.00_verification_user_guide.md` for the full verification process, artifact requirements, and three-flow rules)
-- 50_thought_simulator_design
+- thought_simulator_req
+- verification (see `30.00_verification_user_guide.md` for the full verification process, artifact requirements, and three-flow rules)
+- thought_simulator_design
 Requirements:
 - preserve IDs unless explicitly approved for change
 - update traceability references
@@ -146,14 +146,14 @@ The AI agent should:
 1. Confirm direction as `forward` (or request clarification if ambiguous).
 2. If the initiating source is approved `40.05` exploratory module work, create or update the corresponding `10.50.*` canonical anchor first.
 3. Create the matching `30.*` verification package for that approved `40.*` module.
-4. Update impacted `50_thought_simulator_design/` files only after the `10.50.*` and `30.*` artifacts exist.
+4. Update impacted `thought_simulator_design/` files only after the `10.50.*` and `30.*` artifacts exist.
 5. Synchronize `50.00_design_traceability_index.md` if any design mapping changed.
-6. Create/update execution log under `10_thought_simulator_req/docs/`.
+6. Create/update execution log under `thought_simulator_req/docs/`.
 7. Run integrity check and report pass/fail summary.
 
 Forward flow must start only after explicit user request; a 20-layer edit alone is not sufficient to execute propagation.
 
-`40.05` itself is not limited to forward flow. It can also be an impacted layer during backward flow when updated `10_thought_simulator_req/` anchors need to propagate into `40_thought_simulator_playground/`.
+`40.05` itself is not limited to forward flow. It can also be an impacted layer during backward flow when updated `thought_simulator_req/` anchors need to propagate into `thought_simulator_playground/`.
 
 ## Backward Flow Runbook
 
@@ -162,13 +162,13 @@ Forward flow must start only after explicit user request; a 20-layer edit alone 
 Use this prompt when canonical anchors are already updated and must be propagated:
 
 ```text
-Run BACKWARD FLOW from updated 10_thought_simulator_req anchors.
+Run BACKWARD FLOW from updated thought_simulator_req anchors.
 Initiating lineage:
-- 20_requirements -> 10_thought_simulator_req (if applicable)
+- requirements_20 -> thought_simulator_req (if applicable)
 Targets:
-- 30_verification
-- 40_thought_simulator_playground
-- 50_thought_simulator_design
+- verification
+- thought_simulator_playground
+- thought_simulator_design
 Requirements:
 - automatic execution log
 - automatic integrity check
@@ -181,13 +181,13 @@ Requirements:
 The AI agent should:
 
 1. Confirm direction as `backward` (or stop for clarification if ambiguous).
-2. Treat `10_thought_simulator_req/` as normative trigger source.
+2. Treat `thought_simulator_req/` as normative trigger source.
 3. Propagate updates in order:
-   - `30_verification`
-   - `40_thought_simulator_playground`
-   - `50_thought_simulator_design`
+   - `verification`
+   - `thought_simulator_playground`
+   - `thought_simulator_design`
 4. Update all impacted design files and synchronize `50.00_design_traceability_index.md` if mappings changed.
-5. Create/update backward-flow execution log in `10_thought_simulator_req/docs/`.
+5. Create/update backward-flow execution log in `thought_simulator_req/docs/`.
 6. Run integrity checks and record results.
 7. Record final completion assertion:
    - `Forward-Equivalence State: YES`
@@ -196,10 +196,10 @@ Backward flow must start only after explicit user request; a 20-layer edit alone
 
 ## 20-Series Refactor Prompt Template
 
-Use this prompt when you want the AI Agent to refactor the entire `20_requirements/` directory into a new 20-series structure while keeping all downstream layers unchanged unless explicitly approved.
+Use this prompt when you want the AI Agent to refactor the entire `requirements_20/` directory into a new 20-series structure while keeping all downstream layers unchanged unless explicitly approved.
 
 ```text
-You are refactoring the entire `20_requirements/` directory of the Thought Simulator (TS) repository.
+You are refactoring the entire `requirements_20/` directory of the Thought Simulator (TS) repository.
 
 This refactor must be deterministic, safe, complete, and fully aligned with the TS architecture.
 
@@ -379,7 +379,7 @@ including:
 Do not modify:
 
 - 40_design
-- 30_verification
+- verification
 - 10_program
 - 50_playground
 
@@ -402,7 +402,7 @@ Minimum confirmation record:
 
 Execution logs must be stored under:
 
-- `thought_simulator/10_thought_simulator_req/docs/`
+- `thought_simulator/thought_simulator_req/docs/`
 
 Recommended naming pattern:
 
@@ -432,25 +432,25 @@ CI should enforce the following:
    - `Integrity Check Requirements`
    - `CI Checks Associated With This Guide`
 3. All required governance files referenced by this guide exist:
-   - `thought_simulator/10_thought_simulator_req/docs/promotion_protocol.md`
-   - `thought_simulator/30_verification/README.md`
-   - `thought_simulator/30_verification/30.00_verification_user_guide.md`
-   - `thought_simulator/40_thought_simulator_playground/40.05_master_program_guide.md`
-   - `thought_simulator/50_thought_simulator_design/50.05_software_spec_construction_guide.md`
-   - `thought_simulator/50_thought_simulator_design/50.00_design_traceability_index.md`
-   - `thought_simulator/30_verification/30.01_verification_inventory_index.md`
+   - `thought_simulator/thought_simulator_req/docs/promotion_protocol.md`
+   - `thought_simulator/verification/README.md`
+   - `thought_simulator/verification/30.00_verification_user_guide.md`
+   - `thought_simulator/thought_simulator_playground/40.05_master_program_guide.md`
+   - `thought_simulator/thought_simulator_design/50.05_software_spec_construction_guide.md`
+   - `thought_simulator/thought_simulator_design/50.00_design_traceability_index.md`
+   - `thought_simulator/verification/30.01_verification_inventory_index.md`
 4. If a PR includes backward-flow changes to 30/40/50, CI must fail unless:
-   - at least one matching backward-flow execution log exists in `10_thought_simulator_req/docs/`
+   - at least one matching backward-flow execution log exists in `thought_simulator_req/docs/`
    - the log contains `Forward-Equivalence State: YES`
    - integrity check summary is present
-5. If a PR changes any file under `50_thought_simulator_design/`, CI must run the traceability-index consistency rule from `50.00_design_traceability_index.md` (blocking workflow).
+5. If a PR changes any file under `thought_simulator_design/`, CI must run the traceability-index consistency rule from `50.00_design_traceability_index.md` (blocking workflow).
 6. Structural drift between `30.01_verification_inventory_index.md` and on-disk `30.*` module directories is reported by `validate_30_inventory_index.py` (non-blocking warning).
-7. Incomplete forward-flow promotion (`30.01` rows with status `promoted` or `approved` but no matching `10.50.{band}_*.md` in `10_thought_simulator_req/50_design/`) is reported by `validate_30_10_50_pairing.py` (non-blocking warning; one-way 30 → 10.50 only).
+7. Incomplete forward-flow promotion (`30.01` rows with status `promoted` or `approved` but no matching `10.50.{band}_*.md` in `thought_simulator_req/50_design/`) is reported by `validate_30_10_50_pairing.py` (non-blocking warning; one-way 30 → 10.50 only).
 8. Local pre-PR runs may use `validate_50_traceability_index.py` (non-blocking warning) as a mirror of the blocking 50.00 workflow check.
-9. If a PR renames any markdown file under `30_verification/`, `40_thought_simulator_playground/`, or `50_thought_simulator_design/`, CI must fail unless the same change set includes:
-  - `30_verification/30.30_verification_glossary.md`
-  - `30_verification/glossary_term_registry.json`
-  - `50_thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `50_thought_simulator_design/`)
+9. If a PR renames any markdown file under `verification/`, `thought_simulator_playground/`, or `thought_simulator_design/`, CI must fail unless the same change set includes:
+  - `verification/30.verification_glossary.md`
+  - `verification/glossary_term_registry.json`
+  - `thought_simulator_design/50.00_design_traceability_index.md` (required when the rename touches `thought_simulator_design/`)
   Note: The 50-series glossary (`50.01_50_series_glossary.md` + registry) is under CI warning checks (non-blocking) so the team is notified of potential freshness issues, but updates are decided by humans rather than enforced.
 10. If a PR introduces broken markdown file references or broken markdown heading anchors in governed docs, CI must fail.
   - Governance policy note: this failing check is a red warning signal by default and is merge-blocking only when configured as a required status check in repository branch-protection/ruleset settings.
