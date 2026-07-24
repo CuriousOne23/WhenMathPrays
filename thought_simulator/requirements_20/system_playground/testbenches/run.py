@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add repo root to Python path
+repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
+sys.path.insert(0, repo_root)
+
 """
 Thought Simulator — Testbench Runner
 ------------------------------------
