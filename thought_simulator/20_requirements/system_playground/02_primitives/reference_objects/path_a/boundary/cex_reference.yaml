@@ -1,141 +1,230 @@
 reference_object_name: CEx
 reference_object_class: boundary
 semantic_class: context_extractor
-version: 1.0.0
+version: 2.0.0
 
 purpose:
   short: >
-    Defines the bounded, deterministic geometry and invariants for the ContextExtractor
-    (CEx), which produces a replayable context slice (CE) for candidate generation and ISc.
+    Defines the bounded, deterministic geometry and invariants for the ContextExtractor (CEx),
+    which transforms a CIL intake packet into a replayable context envelope (CE) written into
+    TP.metadata.context_metadata.
   long: >
-    CEx extracts only the context‑relevant information from CIL needed for candidate_set{}
-    and ISc scoring. It provides a safe, bounded intermediary that prevents global‑state
-    leakage while exposing active referents, discourse entities, and local context cues.
-    CEx is not a semantic interpreter, meaning constructor, TP writer, or global‑state reader.
+    CEx consumes the CILIntakePacket produced by CIL and extracts only the explicit,
+    structured context fields required for TP.metadata.context_metadata, CE evaluation,
+    candidate_set{}, and ISc scoring. It performs deterministic identity-layer selection,
+    clarifying-field normalization, and next-turn context reflection without semantic
+    interpretation or global-state access. CEx is a TP metadata writer restricted to
+    TP.metadata.context_metadata and a replay boundary object for context envelopes.
 
 invariants:
-  - name: closed_envelope_required
+  - name: cil_intake_packet_required
     description: >
-      CEx may only operate on closed envelopes produced by IE.
-  - name: no_global_state_access
-    description: >
-      CEx must not read global CIL state directly; extraction must use bounded, local views.
-  - name: bounded_context_slice
-    description: >
-      The produced CE must be strictly bounded and replayable; no lineage or unbounded history.
-  - name: no_meaning_construction
-    description: >
-      CEx must not construct meaning or interpret semantics; it only extracts context cues.
-  - name: replay_stability_required
-    description: >
-      CEx must produce identical CE geometry under replay for identical inputs.
+      CEx may only operate on deterministic intake packets produced by CIL that conform
+      to the CILIntakePacket schema (20.33).
   - name: admissible_source_only
     description: >
-      CEx may only accept envelopes produced by IE.
+      CEx must accept intake packets exclusively from CIL; IE envelopes and other
+      upstream objects are not admissible inputs.
+  - name: no_global_state_access
+    description: >
+      CEx must not read global TP.semantic, TP.process, TP.metadata (outside
+      context_metadata), MTP, routing_metadata, ΔH%, or semantic_core fields.
+  - name: bounded_context_slice
+    description: >
+      The produced CE must be strictly bounded and replayable; no lineage or unbounded
+      history beyond what is reflected in CE.metadata.context_provenance.
+  - name: no_meaning_construction
+    description: >
+      CEx must not construct meaning or interpret semantics; it only extracts and
+      normalizes context cues, identity-layer selection, clarifying fields, and
+      next-turn context.
+  - name: replay_stability_required
+    description: >
+      CEx must produce identical CE geometry and metadata under replay for identical
+      CILIntakePacket inputs and identical policy_signature.
+  - name: allowlist_only_extraction
+    description: >
+      CEx must enforce allowlist-only extraction of context strings, timestamps,
+      structural metadata, conversation window slices, explicit parameters, and
+      next-turn context fields, dropping denylisted material with audit entries.
+  - name: tp_context_metadata_only
+    description: >
+      CEx may write only TP.metadata.context_metadata fields (relevance_flags,
+      copy_forward_flags, reset_flags, context_fields, context_provenance,
+      extraction_audit, continuity_status) and must treat all other TP fields
+      as read-only.
+  - name: deterministic_identity_selection
+    description: >
+      CEx must select the identity-layer context deterministically using
+      CIL.identity_selection_block and TP.process.identity_layer_prev, together
+      with ordering metrics (recency, frequency, density, ordering_score).
+  - name: deterministic_next_context_reflection
+    description: >
+      CEx must reflect TP.next_context{} fields into CE.context_fields exactly
+      as defined in 20.105, without derivation or semantic interpretation.
 
-geometry_signature:
-  envelope_type: context_slice_envelope
-  shape: bounded_polytope
-  dimensions:
-    - name: referent_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: discourse_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: cue_axis
-      type: scalar
-      bounds: [0.0, 1.0]
-    - name: locality_axis
-      type: scalar
-      bounds: [0.0, 1.0]
+cil_intake_contract:
+  schema: CILIntakePacket
   description: >
-    CEx geometry represents active referents, discourse entities, bounded context cues,
-    and locality constraints extracted from CIL. These axes form the CE envelope consumed
-    by CE evaluation, candidate_set{}, and ISc.
+    CEx consumes the CILIntakePacket produced by CIL (20.33). The packet is the
+    sole admissible input and is treated as a closed, replayable envelope.
+  fields:
+    identity_selection_block:
+      description: >
+        Ordered list of identity-layer objects and metrics used for deterministic
+        identity selection. Includes primary_layer_id, secondary_layer_ids,
+        layer_ranking, last_referred, total_referrals, recent_referrals,
+        ordering_score.
+    referent_certainty_block:
+      description: >
+        Certainty and ambiguity indicators for referents, temporal anchors,
+        and discourse anchors. CEx consumes these as explicit certainty/ambiguity
+        fields without modification.
+    stability_block:
+      description: >
+        Stability indicators reflected from USP + COB snapshot (drift, oscillation,
+        collapse, merge_split, freeze_thaw). CEx treats these as context metadata
+        only and does not exercise structural authority.
+    lineage_block:
+      description: >
+        Lineage records and lineage_stability indicators for identity-layer objects.
+        CEx may reflect lineage stability into CE.metadata.context_provenance but
+        does not extend or modify lineage.
+    ordering_block:
+      description: >
+        Recency, frequency, and density metrics used to resolve low-certainty or
+        high-ambiguity identity selection deterministically.
+    cst_block:
+      description: >
+        CST-derived stability signals (Core + MS) packed by CIL. CEx treats these
+        as replay metadata only and does not issue control decisions.
+    packet_metadata:
+      description: >
+        Turn-level metadata (turn_index, input_object_count, new_context_required)
+        used for CE.metadata.context_provenance and continuity_status.
 
-scalar_fields:
-  - name: referent_strength
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Magnitude of active referents detected in the bounded context slice.
-  - name: discourse_coherence
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Coherence of local discourse entities extracted from CIL.
-  - name: cue_salience
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Salience of bounded context cues relevant to candidate generation.
-  - name: locality_bound
-    type: float
-    bounds: [0.0, 1.0]
-    description: >
-      Degree to which extracted context remains within allowed locality constraints.
+ce_structure:
+  envelope_type: context_envelope
+  description: >
+    CE is the bounded, structured context envelope written into TP.metadata.context_metadata.
+    It contains identity-layer selection, clarifying-field topology, next-turn context,
+    structural hints, referent mappings, and extraction audit metadata.
+  tp_mapping:
+    relevance_flags:
+      description: >
+        Flags indicating which context fields are relevant for downstream primitives
+        (RB, IdOB, ISc, MCB, OuBA, SSRGn). Derived deterministically from
+        CILIntakePacket and policy_signature.
+    copy_forward_flags:
+      description: >
+        Flags indicating which context fields may be copied forward across turns
+        under continuity rules. CEx sets these without modifying meaning-layer fields.
+    reset_flags:
+      description: >
+        Flags indicating which context segments must be reset (e.g., when
+        new_context_required is true or collapse_risk exceeds thresholds).
+    context_fields:
+      description: >
+        Structured context fields extracted from CILIntakePacket, including:
+        identity-layer selection, clarifying fields, structural hints,
+        referent mappings, register_hint, next-turn context fields, and
+        bounded stability indicators.
+      components:
+        identity_layer_context:
+          description: >
+            Selected identity-layer object for the present turn, including
+            primary_layer_id, continuity metadata, and ordering metrics.
+        clarifying_fields:
+          description: >
+            Hierarchical clarifying fields (max 10), subfields (max 100),
+            depth ≤ 4, with importance scores and provenance preserved.
+        structural_hints:
+          description: >
+            Structural cues and intake_metadata reflected from CIL without
+            modification, used as context geometry hints.
+        referent_mapping:
+          description: >
+            Referent maps, temporal anchors, and discourse anchors extracted
+            from identity_selection_block and referent_certainty_block.
+        register_hint:
+          description: >
+            Deterministic register hint derived by CIL from TP.process.register_cues
+            and COB register fields; CEx reflects this into CE without reinterpretation.
+        next_context_fields:
+          description: >
+            Next-turn context fields read from TP.next_context{} via CIL and
+            included exactly as defined in 20.105:
+            topic, stance, intent, register, politeness, epistemic_shading,
+            continuity, direction, coherence, shift_required, importance.
+    context_provenance:
+      description: >
+        Origin and last_update identifiers for CE, aligned with 20.105.020.
+        Includes source = "CIL", turn_index, packet_id (if present), and
+        lineage_stability summary from lineage_block.
+    extraction_audit:
+      description: >
+        Deterministic audit records for drops, truncations, topology compressions,
+        bounded-limit enforcement, and normalization adjustments applied during
+        CE construction. Includes references to clarifying_fields, next_context_fields,
+        and structural_hints.
+    continuity_status:
+      description: >
+        Continuity status for identity-layer selection and clarifying-field continuity.
+        Values include "stable", "fallback", "undetermined", and "reset_required",
+        aligned with HLR-20.107-021 and 20.33-050.
 
-vector_fields:
-  - name: referent_vector
-    type: vector
-    length: 3
+determinism_and_audit:
+  identity_selection:
     description: >
-      Manifold coordinates representing active referents in the bounded context slice.
-  - name: discourse_vector
-    type: vector
-    length: 3
+      CEx must select the identity-layer context deterministically using
+      CIL.identity_selection_block, TP.process.identity_layer_prev, and
+      ordering_block (recency, frequency, density, ordering_score). Fallback
+      selections must be marked with continuity_status = "undetermined".
+  clarifying_fields:
     description: >
-      Manifold coordinates representing local discourse entities.
-  - name: cue_vector
-    type: vector
-    length: 3
+      CEx must enforce bounded limits on clarifying fields (10), subfields (100),
+      and depth (4), dropping excess entries with extraction_audit records and
+      preserving topology and importance scores.
+  next_turn_context:
     description: >
-      Manifold coordinates representing extracted context cues.
-
-envelope_status:
-  admissible_status:
-    - context_ready
-    - referents_present
-    - cues_present
-  terminal_status:
-    - invalid_geometry
-    - missing_vectors
-    - replay_violation
-
-anomaly_flags:
-  - name: geometry_violation
-    description: Envelope geometry does not satisfy CEx invariants.
-  - name: field_out_of_bounds
-    description: One or more scalar/vector fields exceed allowed bounds.
-  - name: inadmissible_source
-    description: Envelope did not originate from IE.
-  - name: replay_inconsistency
-    description: Replay produced non-identical CE geometry.
+      CEx must treat TP.next_context{} fields as read-only structural metadata,
+      include them in CE.context_fields exactly as defined in 20.105, and record
+      any drops or truncations in extraction_audit.
+  replay_guarantees:
+    description: >
+      For identical CILIntakePacket, TP.process.identity_layer_prev, and
+      policy_signature, CEx must produce identical CE, including context_fields,
+      context_provenance, extraction_audit, and continuity_status.
 
 routing:
   admissible_inputs:
-    - IE
+    - CILIntakePacket
   admissible_outputs:
     - CE
   description: >
-    CEx produces a bounded context slice (CE) consumed by CE evaluation, candidate_set{},
-    and ISc. CEx does not perform correction expansion or semantic interpretation.
+    CEx consumes the CILIntakePacket produced by CIL and emits CE into
+    TP.metadata.context_metadata. CE is then consumed by RB, IdOB, ISc, MCB,
+    OuBA, and SSRGn as defined in 20.105.030. CEx does not perform correction
+    expansion or semantic interpretation and does not trigger downstream modules
+    directly.
 
 dependencies:
   dictionaries:
     - runtime_dictionary
   reference_objects:
-    - ie_reference
+    - cil_reference
     - boundary_reference
     - semantic_reference
     - routing_reference
     - structure_reference
+    - tp_metadata_reference
   flow_contracts:
     - path_a_inference_flow
+    - cil_to_cex_intake_flow
 
 psc_alignment:
-  - CEx must satisfy PSC boundary object requirements.
-  - CEx must expose deterministic, bounded context geometry for replay validation.
-  - CEx must align with IE, CE, candidate_set{}, and ISc.
-  - CEx must enforce admissible context extraction constraints.
+  - CEx must satisfy PSC boundary object requirements for replayable context envelopes.
+  - CEx must expose deterministic, bounded context geometry for replay validation,
+    aligned with CILIntakePacket and TP.metadata.context_metadata.
+  - CEx must align with CIL, CE, candidate_set{}, and ISc, enforcing admissible
+    context extraction constraints and TP write-boundary discipline.
