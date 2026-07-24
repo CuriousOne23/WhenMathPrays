@@ -137,6 +137,11 @@ class TestInBIntake(unittest.TestCase):
                 print("FAIL — " + "; ".join(fail_reasons))
 
             # unittest assertion
+            print("DEBUG passed:", passed)
+            print("DEBUG defects_ok:", defects_ok)
+            print("DEBUG repairs_ok:", repairs_ok)
+            print("DEBUG normalized_ok:", normalized_ok)
+
             self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
