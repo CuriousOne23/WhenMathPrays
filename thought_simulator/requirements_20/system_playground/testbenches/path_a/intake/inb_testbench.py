@@ -1,6 +1,6 @@
 """
 InB Intake Testbench — Path A
-Runs: InB → IIInB → IE
+Runs: InB only
 Designed to be executed by run.py
 """
 
@@ -16,29 +16,17 @@ from dataclasses import dataclass, field
 @dataclass
 class ThoughtPacket:
     raw_input: str
-    metadata: dict = field(default_factory=dict)
+    messy_input_record: str = ""
     defects: list = field(default_factory=list)
     repairs: list = field(default_factory=list)
     normalized: str = ""
+    metadata: dict = field(default_factory=dict)
 
 # ---------------------------------------------------------------------------
-# Primitive stubs (replace with real implementations later)
+# Import REAL InB primitive
 # ---------------------------------------------------------------------------
 
-def InB(tp: ThoughtPacket):
-    tp.metadata["inb_status"] = "accepted"
-    return tp
-
-def IIInB(tp: ThoughtPacket):
-    tp.metadata["iiinb_status"] = "inspected"
-    tp.defects = []  # clean path default
-    return tp
-
-def IE(tp: ThoughtPacket):
-    tp.metadata["ie_status"] = "normalized"
-    tp.normalized = tp.raw_input
-    tp.repairs = []  # clean path default
-    return tp
+from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
 
 # ---------------------------------------------------------------------------
 # Testbench Loader
@@ -79,10 +67,8 @@ class TestInBIntake(unittest.TestCase):
 
             tp = ThoughtPacket(raw_input=raw_input)
 
-            # Execute primitives
+            # Execute REAL InB primitive
             tp = InB(tp)
-            tp = IIInB(tp)
-            tp = IE(tp)
 
             # Expected values
             expected_defects = test.get("expected_defects", [])
@@ -99,15 +85,12 @@ class TestInBIntake(unittest.TestCase):
             # ------------------------------------------------------------------
             # Requirement-aware PASS/FAIL messaging
             # ------------------------------------------------------------------
-            # Determine expected outcome
             expected_failure = test.get("expected_failure", False)
-            
-            # Requirement-aware PASS/FAIL messaging
+
             if passed:
                 if expected_failure:
                     print(f"EXPECTED FAILURE — {name}")
                     print("PASS: This test case contains known defects. A failure was expected and the system behaved correctly.\n")
-                    # Expected failure → PASS → do NOT fail unittest
                 else:
                     print(f"PASS — {name}\n")
             else:
