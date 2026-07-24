@@ -25,7 +25,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 
 **Status Test Run:**  
 [Latest Test Run, Copilot 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_cp.md)  
-[Latest Test Run, Copilot 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_grpk.md)  
+[Latest Test Run, Grok 7/23/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_tp_test_run_grok.md)  
 
 **Overview papers:**  
 [From LLM To TS](requirements_20/system_playground/design/papers/meta_and_planning/from_llm_to_ts.md)  
