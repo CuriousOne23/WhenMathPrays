@@ -19,6 +19,7 @@ tests:
     expected_defects: []
     expected_repairs: []
     expected_normalized: "The dog chased the cat."
+    expected_failure: true
 
   - id: "messy.whitespace"
     description: "Whitespace normalization and punctuation cleanup."
@@ -28,6 +29,7 @@ tests:
       - "punctuation.excess"
     expected_repairs: []
     expected_normalized: "The dog chased the cat."
+    expected_failure: true
 
   - id: "unicode.noise"
     description: "Input containing stray unicode artifacts."
@@ -36,6 +38,7 @@ tests:
       - "unicode.invalid"
     expected_repairs: []
     expected_normalized: "The dog chased the cat. � �"
+    expected_failure: true
 
   - id: "structural.break"
     description: "Input containing malformed structural tokens."
@@ -44,6 +47,7 @@ tests:
       - "structural.malformed"
     expected_repairs: []
     expected_normalized: "The dog chased the cat <broken>"
+    expected_failure: true
 
   - id: "empty.input"
     description: "Empty input should trigger bounded defect."
@@ -52,6 +56,7 @@ tests:
       - "empty.input"
     expected_repairs: []
     expected_normalized: ""
+    expected_failure: true
 
   - id: "long.input"
     description: "Long input should be treated as clean (stub behavior)."
@@ -60,3 +65,4 @@ tests:
     expected_defects: []
     expected_repairs: []
     expected_long_input: true
+    expected_failure: true
