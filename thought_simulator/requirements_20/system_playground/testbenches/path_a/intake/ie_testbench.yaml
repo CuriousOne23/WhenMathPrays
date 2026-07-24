@@ -112,5 +112,4 @@ tests:
     expected_iiinb_status: "inspected"
     expected_ie_status: "normalized"
     expected_repairs: []
-    expected_normalized: null
-
+    expected_long_input: true
