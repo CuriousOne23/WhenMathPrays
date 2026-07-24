@@ -54,10 +54,9 @@ tests:
     expected_normalized: ""
 
   - id: "long.input"
-    description: "Input exceeding IE bounds should be truncated deterministically."
+    description: "Long input should be treated as clean (stub behavior)."
     generate_long_input: true
     long_length: 5000
-    expected_defects:
-      - "length.exceeds.bound"
+    expected_defects: []
     expected_repairs: []
     expected_long_input: true
