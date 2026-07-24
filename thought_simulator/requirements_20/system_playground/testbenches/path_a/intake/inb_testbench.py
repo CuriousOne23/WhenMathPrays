@@ -99,55 +99,26 @@ class TestInBIntake(unittest.TestCase):
             # ------------------------------------------------------------------
             # Requirement-aware PASS/FAIL messaging
             # ------------------------------------------------------------------
+            # Determine expected outcome
+            expected_failure = test.get("expected_failure", False)
+            
+            # Requirement-aware PASS/FAIL messaging
             if passed:
-                reasons = []
-
-                if expected_defects:
-                    reasons.append(f"Detected expected defects: {expected_defects}")
-
-                if expected_repairs:
-                    reasons.append(f"Applied expected repairs: {expected_repairs}")
-
-                if expected_normalized != raw_input:
-                    reasons.append("Normalization matched expected output")
-
-                if not reasons:
-                    reasons.append("All expectations met")
-
-                print("PASS — " + "; ".join(reasons))
-
+                if expected_failure:
+                    print(f"EXPECTED FAILURE — {name}")
+                    print("PASS: This test case contains known defects. A failure was expected and the system behaved correctly.\n")
+                    # Expected failure → PASS → do NOT fail unittest
+                else:
+                    print(f"PASS — {name}\n")
             else:
-                fail_reasons = []
-
-                if not defects_ok:
-                    fail_reasons.append(
-                        f"Defect mismatch: expected {expected_defects}, got {tp.defects}"
-                    )
-
-                if not repairs_ok:
-                    fail_reasons.append(
-                        f"Repair mismatch: expected {expected_repairs}, got {tp.repairs}"
-                    )
-
-                if not normalized_ok:
-                    fail_reasons.append(
-                        f"Normalization mismatch: expected '{expected_normalized}', got '{tp.normalized}'"
-                    )
-
-                print("FAIL — " + "; ".join(fail_reasons))
-
-            # unittest assertion
-            print("DEBUG — raw_input:", raw_input)
-            print("DEBUG — tp.defects:", tp.defects)
-            print("DEBUG — expected_defects:", expected_defects)
-            print("DEBUG — tp.normalized:", tp.normalized)
-            print("DEBUG — expected_normalized:", expected_normalized)
-            print("DEBUG — defects_ok:", defects_ok)
-            print("DEBUG — repairs_ok:", repairs_ok)
-            print("DEBUG — normalized_ok:", normalized_ok)
-            print("DEBUG — passed:", passed)
-
-            self.assertTrue(passed, f"Test failed: {name}")
+                if expected_failure:
+                    print(f"UNEXPECTED PASS — {name}")
+                    print("FAIL: This test case contains known defects, but the system did not detect them.\n")
+                    self.fail(f"Unexpected pass for test case: {name}")
+                else:
+                    print(f"UNEXPECTED FAILURE — {name}")
+                    print("FAIL: This test case should have passed. The failure indicates a real defect in the system.\n")
+                    self.fail(f"Unexpected failure for test case: {name}")
 
 # ---------------------------------------------------------------------------
 # Main (only used when running directly)
