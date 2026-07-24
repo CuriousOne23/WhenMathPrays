@@ -26,7 +26,7 @@ It is intentionally modular so each layer of the simulation can be understood in
 ```
 system_playground/
 │
-├── 01_context/
+├── context/
 │   └── context/
 │       ├── cil/
 │       ├── cob/
@@ -36,7 +36,7 @@ system_playground/
 │       ├── context_requirements.md
 │       └── context_testbench.py
 │
-├── 02_primitives/
+├── primitives/
 │   ├── definitions/
 │   │   └── path_a/
 │   │       ├── inb.yaml
@@ -59,58 +59,58 @@ system_playground/
 │   ├── rsg/
 │   └── ssr/
 │
-├── 03_simulation/
+├── simulation/
 │   ├── path_a/
-│   │   ├── 01_InB/
-│   │   ├── 02_IIInB/
-│   │   ├── 03_IE/
-│   │   ├── 04_CEx/
-│   │   ├── 05_CE/
-│   │   ├── 06_TPU/
-│   │   ├── 07_SOB/
-│   │   ├── 08_SROB/
-│   │   ├── 09_CnOB/
-│   │   ├── 10_SmOB/
-│   │   ├── 11_ISc/
-│   │   ├── 12_SSG/
-│   │   ├── 13_STPX/
-│   │   ├── 14_RBU/
-│   │   ├── 15_DCB/
-│   │   ├── 16_RB/
-│   │   ├── 17_TR/
-│   │   ├── 18_CTP/
-│   │   ├── 19_ISc/
-│   │   ├── 20_RTU/
-│   │   ├── 21_RB/
-│   │   ├── 22_IdOB/
-│   │   ├── 23_MCB/
-│   │   ├── 24_RBU/
-│   │   ├── 25_DCB/
-│   │   ├── 26_RB/
-│   │   ├── 27_TR/
-│   │   ├── 28_CTP/
-│   │   ├── 29_ISc/
-│   │   ├── 30_RTU/
-│   │   ├── 31_RB/
-│   │   ├── 32_IdOB/
-│   │   ├── 33_MCB/
-│   │   ├── 34_RBU/
-│   │   └── 35_OuBA/
+│   │   ├── InB/
+│   │   ├── IIInB/
+│   │   ├── IE/
+│   │   ├── CEx/
+│   │   ├── CE/
+│   │   ├── TPU/
+│   │   ├── SOB/
+│   │   ├── SROB/
+│   │   ├── CnOB/
+│   │   ├── SmOB/
+│   │   ├── ISc/
+│   │   ├── SSG/
+│   │   ├── STPX/
+│   │   ├── RBU/
+│   │   ├── DCB/
+│   │   ├── RB/
+│   │   ├── TR/
+│   │   ├── CTP/
+│   │   ├── ISc/
+│   │   ├── RTU/
+│   │   ├── RB/
+│   │   ├── IdOB/
+│   │   ├── MCB/
+│   │   ├── RBU/
+│   │   ├── DCB/
+│   │   ├── RB/
+│   │   ├── TR/
+│   │   ├── CTP/
+│   │   ├── ISc/
+│   │   ├── RTU/
+│   │   ├── RB/
+│   │   ├── IdOB/
+│   │   ├── MCB/
+│   │   ├── RBU/
+│   │   └── OuBA/
 │   └── exploration/
 │
-├── 04_testbenches/
+├── testbenches/
 │   ├── path_a/
 │   ├── context/
 │   ├── primitives/
 │   ├── shared/
 │   └── helpers/
 │
-├── 05_design/
+├── design/
 │   ├── design_models/
 │   ├── dictionaries/
 │   └── papers/
 │
-└── 99_archive/
+└── archive/
     ├── logs/
     └── scratch/
 ```
