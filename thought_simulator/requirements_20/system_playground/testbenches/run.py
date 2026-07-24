@@ -14,7 +14,7 @@ Usage:
                python thought_simulator/requirements_20/system_playground/testbenches/run.py > cex.log
 
            Or from inside testbenches:
-               python run.py > cex.log
+               python run.py *> cex.log
 
     This script adds the repo root to PYTHONPATH so imports always resolve.
 """
