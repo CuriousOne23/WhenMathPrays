@@ -99,17 +99,13 @@ In practice:
 
 The process flow is direction-controlled:
 - Requirements collaboration and intent shaping in [requirements_20/](requirements_20/)
-- Evidence/prototype development in [thought_simulator_playground/](thought_simulator_playground/)
-- Formal realization anchors in [thought_simulator_req/](thought_simulator_req/)
-
-Direction examples:
-1. Forward (typical): 20 → 40 → 10 → 30/50
-2. Backward (when selected): 20 → 10 → 40 → 30/50
+- System Development [system_playground/](system_playground/)
+- system Logic Simulation [system_simulation/](system_simulation/)
 
 ---
 
-**Last Updated**: June 26, 2026  
-**Version**: 0.7 (Flow Catalog Integration + Status Paper)
+**Last Updated**: Juuly 27th, 2026  
+**Version**: 0.8 (Flow Catalog Integration + Status Paper)
 
 ---
 
