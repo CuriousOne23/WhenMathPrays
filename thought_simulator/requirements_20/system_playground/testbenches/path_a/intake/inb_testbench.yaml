@@ -38,10 +38,9 @@ tests:
   - id: "clean.simple"
     description: "Simple clean input with no defects."
     input: "The dog chased the cat."
-    expect:
-      inb_status: "ok"
-      iiinb_defects: []
-      ie_normalized: true
+    expected_defects: []
+    expected_repairs: []
+    expected_normalized: "The dog chased the cat."
 
   # ----------------------------------------------------------
   # 2. Messy whitespace + punctuation
@@ -49,12 +48,11 @@ tests:
   - id: "messy.whitespace"
     description: "Whitespace normalization and punctuation cleanup."
     input: "   The   dog   chased   the   cat   !!! "
-    expect:
-      inb_status: "ok"
-      iiinb_defects:
-        - "whitespace.excess"
-        - "punctuation.excess"
-      ie_normalized: true
+    expected_defects:
+      - "whitespace.excess"
+      - "punctuation.excess"
+    expected_repairs: []
+    expected_normalized: "The dog chased the cat."
 
   # ----------------------------------------------------------
   # 3. Unicode noise
@@ -62,11 +60,13 @@ tests:
   - id: "unicode.noise"
     description: "Input containing stray unicode artifacts."
     input: "The dog chased the cat. � �"
-    expect:
-      inb_status: "ok"
-      iiinb_defects:
-        - "unicode.invalid"
-      ie_normalized: true
+  - id: "unicode.noise"
+    description: "Input containing stray unicode artifacts."
+    input: "The dog chased the cat. � �"
+    expected_defects:
+      - "unicode.invalid"
+    expected_repairs: []
+    expected_normalized: "The dog chased the cat. � �"
 
   # ----------------------------------------------------------
   # 4. Structural break
@@ -74,11 +74,10 @@ tests:
   - id: "structural.break"
     description: "Input containing malformed structural tokens."
     input: "The dog chased the cat <broken>"
-    expect:
-      inb_status: "ok"
-      iiinb_defects:
-        - "structural.malformed"
-      ie_normalized: true
+    expected_defects:
+      - "structural.malformed"
+    expected_repairs: []
+  expected_normalized: "The dog chased the cat <broken>"
 
   # ----------------------------------------------------------
   # 5. Empty input
@@ -86,11 +85,10 @@ tests:
   - id: "empty.input"
     description: "Empty input should trigger bounded defect."
     input: ""
-    expect:
-      inb_status: "empty"
-      iiinb_defects:
-        - "empty.input"
-      ie_normalized: false
+    expected_defects:
+      - "empty.input"
+    expected_repairs: []
+    expected_normalized: ""
 
   # ----------------------------------------------------------
   # 6. Extremely long input (bounded truncation)
@@ -99,12 +97,10 @@ tests:
     description: "Input exceeding IE bounds should be truncated deterministically."
     generate_long_input: true
     long_length: 5000
-    expect:
-      inb_status: "ok"
-      iiinb_defects:
-        - "length.exceeds.bound"
-      ie_normalized: true
-      ie_truncated: true
+    expected_defects:
+      - "length.exceeds.bound"
+    expected_repairs: []
+    expected_normalized: "A" * <truncated_length>
 
 # ------------------------------------------------------------
 # End of testbench
