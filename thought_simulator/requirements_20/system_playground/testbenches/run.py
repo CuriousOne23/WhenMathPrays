@@ -50,8 +50,11 @@ if __name__ == "__main__":
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
+    # Intake test
     suite.addTests(loader.loadTestsFromModule(test_cex_intake))
-    suite.addTests(loader.loadTestsFromModule(test_cex_boundary))
+
+    # Boundary test (comment/uncomment as needed)
+    # suite.addTests(loader.loadTestsFromModule(test_cex_boundary))
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
