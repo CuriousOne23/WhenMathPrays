@@ -33,7 +33,7 @@ def load_cex_reference():
     """Load cex_reference.yaml for structural validation."""
     ref_path = os.path.join(
         os.path.dirname(__file__),
-        "../../../../primitives/reference_objects/path_a/boundary/cex_reference.yaml"
+        "../../../../system_playground/primitives/reference_objects/path_a/boundary/cex_reference.yaml"
     )
     with open(ref_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
