@@ -66,9 +66,11 @@ class TestInBIntake(unittest.TestCase):
 
     def test_inb_cases(self):
         for test in self.tests:
+            print("\nDEBUG RAW TEST ENTRY:", test)   # <‑‑ ADD THIS
+        
             name = test.get("name", "unnamed")
             print(f"Running: {name} ...", end=" ")
-
+            
             # Generate long input if requested
             if test.get("generate_long_input", False):
                 length = test.get("long_length", 5000)
@@ -95,8 +97,20 @@ class TestInBIntake(unittest.TestCase):
 
             passed = defects_ok and repairs_ok and normalized_ok
 
-            print("PASS" if passed else "FAIL")
+            print("DEBUG CHECKS:", {
+                "defects_ok": defects_ok,
+                "repairs_ok": repairs_ok,
+                "normalized_ok": normalized_ok,
+                "tp.defects": tp.defects,
+                "expected_defects": expected_defects,
+                "tp.repairs": tp.repairs,
+                "expected_repairs": expected_repairs,
+                "tp.normalized": tp.normalized,
+                "expected_normalized": expected_normalized,
+            })
 
+            print("PASS" if passed else "FAIL")
+            
             self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
