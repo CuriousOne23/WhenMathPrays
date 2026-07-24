@@ -3,22 +3,20 @@ Thought Simulator — Testbench Runner
 ------------------------------------
 
 Usage:
-    To run ONLY the CEx intake + boundary tests:
+    To run specific testbenches:
 
-        1. Uncomment the TWO CEx test lines below.
-        2. Comment out any other test imports.
-        3. From the repo root, run:
+        1. In the HEADER below, comment/uncomment the test modules you want to run.
+           All test selections are grouped together in one place.
 
+        2. Do NOT modify the runner code at the bottom.
+
+        3. Run from repo root:
                python thought_simulator/requirements_20/system_playground/testbenches/run.py > cex.log
 
-        Or if you are already inside testbenches:
+           Or from inside testbenches:
                python run.py > cex.log
 
-    This will produce a full log of the CEx testbench run in cex.log.
-
-    IMPORTANT:
-        - Running from repo root OR from testbenches both work,
-          because this script adds the repo root to PYTHONPATH.
+    This script adds the repo root to PYTHONPATH so imports always resolve.
 """
 
 import sys
@@ -33,28 +31,33 @@ repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..
 sys.path.insert(0, repo_root)
 
 # ============================================================
-# === SELECT WHICH TESTBENCHES TO RUN ========================
+# === SELECT WHICH TESTBENCHES TO RUN (ONLY EDIT HERE) ========
 # ============================================================
 
-# --- CEx Intake Testbench ---
-from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake import test_cex_intake
+ACTIVE_TEST_MODULES = [
 
-# --- CEx Boundary Testbench ---
-# from thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary import test_cex_boundary
+    # --- CEx Intake Testbench ---
+    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
+
+    # --- CEx Boundary Testbench ---
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
+
+    # Add more tests here later:
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.test_cex_output",
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_b.context.test_context_engine",
+]
 
 # ============================================================
-# === RUNNER ==================================================
+# === RUNNER (DO NOT EDIT BELOW THIS LINE) ====================
 # ============================================================
 
 if __name__ == "__main__":
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
-    # Intake test
-    suite.addTests(loader.loadTestsFromModule(test_cex_intake))
-
-    # Boundary test (comment/uncomment as needed)
-    # suite.addTests(loader.loadTestsFromModule(test_cex_boundary))
+    for module_path in ACTIVE_TEST_MODULES:
+        module = __import__(module_path, fromlist=[''])
+        suite.addTests(loader.loadTestsFromModule(module))
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
