@@ -1,40 +1,18 @@
 # ============================================================
 # Path A Intake Testbench — InB / IIInB / IE
 # ============================================================
-# Purpose:
-#   Provide deterministic, replayable intake scenarios for
-#   exercising the Path A intake boundary (InB), bounded
-#   intake inspection (IIInB), and intake envelope (IE).
-#
-#   This testbench is intentionally minimal. It is designed
-#   for simulation alignment, not requirement coverage.
-#
-#   Deeper behavioral tests belong in:
-#     - 20.100_inb_requirements.md
-#     - 20.101_iiinb_requirements.md
-#     - 20.109_ie_prim.md
-# ============================================================
 
 testbench_id: "path_a.intake.inb"
 version: "1.0.0"
 description: "Testbench for Path A intake boundary (InB), bounded inspection (IIInB), and IE normalization."
 
-# ------------------------------------------------------------
-# Global simulation parameters
-# ------------------------------------------------------------
 simulation:
   deterministic: true
   replayable: true
   seed: 42
 
-# ------------------------------------------------------------
-# Test cases
-# ------------------------------------------------------------
 tests:
 
-  # ----------------------------------------------------------
-  # 1. Clean, well‑formed input
-  # ----------------------------------------------------------
   - id: "clean.simple"
     description: "Simple clean input with no defects."
     input: "The dog chased the cat."
@@ -42,9 +20,6 @@ tests:
     expected_repairs: []
     expected_normalized: "The dog chased the cat."
 
-  # ----------------------------------------------------------
-  # 2. Messy whitespace + punctuation
-  # ----------------------------------------------------------
   - id: "messy.whitespace"
     description: "Whitespace normalization and punctuation cleanup."
     input: "   The   dog   chased   the   cat   !!! "
@@ -54,12 +29,6 @@ tests:
     expected_repairs: []
     expected_normalized: "The dog chased the cat."
 
-  # ----------------------------------------------------------
-  # 3. Unicode noise
-  # ----------------------------------------------------------
-  - id: "unicode.noise"
-    description: "Input containing stray unicode artifacts."
-    input: "The dog chased the cat. � �"
   - id: "unicode.noise"
     description: "Input containing stray unicode artifacts."
     input: "The dog chased the cat. � �"
@@ -68,20 +37,14 @@ tests:
     expected_repairs: []
     expected_normalized: "The dog chased the cat. � �"
 
-  # ----------------------------------------------------------
-  # 4. Structural break
-  # ----------------------------------------------------------
   - id: "structural.break"
     description: "Input containing malformed structural tokens."
     input: "The dog chased the cat <broken>"
     expected_defects:
       - "structural.malformed"
     expected_repairs: []
-  expected_normalized: "The dog chased the cat <broken>"
+    expected_normalized: "The dog chased the cat <broken>"
 
-  # ----------------------------------------------------------
-  # 5. Empty input
-  # ----------------------------------------------------------
   - id: "empty.input"
     description: "Empty input should trigger bounded defect."
     input: ""
@@ -90,9 +53,6 @@ tests:
     expected_repairs: []
     expected_normalized: ""
 
-  # ----------------------------------------------------------
-  # 6. Extremely long input (bounded truncation)
-  # ----------------------------------------------------------
   - id: "long.input"
     description: "Input exceeding IE bounds should be truncated deterministically."
     generate_long_input: true
@@ -100,8 +60,4 @@ tests:
     expected_defects:
       - "length.exceeds.bound"
     expected_repairs: []
-    expected_normalized: "A" * <truncated_length>
-
-# ------------------------------------------------------------
-# End of testbench
-# ------------------------------------------------------------
+    expected_long_input: true
