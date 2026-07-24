@@ -88,7 +88,10 @@ class TestIE(unittest.TestCase):
             expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
             expected_ie_status = test.get("expected_ie_status", "normalized")
             expected_repairs = test.get("expected_repairs", [])
-            expected_normalized = test.get("expected_normalized", tp.raw_input)
+            if test.get("expected_long_input", False):
+                expected_normalized = raw_input
+            else:
+                expected_normalized = test.get("expected_normalized", tp.raw_input) 
 
             # Checks
             inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
