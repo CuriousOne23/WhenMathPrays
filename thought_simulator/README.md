@@ -23,49 +23,49 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 
 **Implementation phase** is next.
 
-**Status Test Run:** [Latest Test Run 7/15/22026](20_requirements/system_simulation/path_a/logic_sim/path_a_full_context_imr_test_run_cp.md)
+**Status Test Run:** [Latest Test Run 7/15/22026](requirements_20/system_simulation/path_a/logic_sim/path_a_full_context_imr_test_run_cp.md)
 
 **Overview papers:**  
-[From LLM To TS](20_requirements/system_playground/papers/meta_and_planning/from_llm_to_ts.md)  
-[Why TS Uses the Manifold Model](20_requirements/system_playground/papers/ts_core/why_ts_uses_manifold_model.md)  
-[Why TS Requires Atomization](20_requirements/system_playground/papers/ts_core/why_ts_requires_atomization.md)  
-[TS As a Meaning Compiler](20_requirements/system_playground/papers/ts_core/ts_as_meaning_compiler.md)  
-[What is New About TS](20_requirements/system_playground/papers/ts_core/ts_what_is_new.md)  
-[Architecture Manifold Description of TS](20_requirements/system_playground/papers/ts_core/architecture_manifold_description_of_ts.md)  
-[TS Versus Symbolic and LLM](20_requirements/system_playground/papers/ts_core/ts_vs_symbolic_and_llm.md)  
-[TS is a Thought Router](20_requirements/system_playground/papers/ts_core/ts_thought_router.md)  
-[Executive Overview of Meaning to Exspression via Manifold](20_requirements/system_playground/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
+[From LLM To TS](requirements_20/system_playground/papers/meta_and_planning/from_llm_to_ts.md)  
+[Why TS Uses the Manifold Model](requirements_20/system_playground/papers/ts_core/why_ts_uses_manifold_model.md)  
+[Why TS Requires Atomization](requirements_20/system_playground/papers/ts_core/why_ts_requires_atomization.md)  
+[TS As a Meaning Compiler](requirements_20/system_playground/papers/ts_core/ts_as_meaning_compiler.md)  
+[What is New About TS](requirements_20/system_playground/papers/ts_core/ts_what_is_new.md)  
+[Architecture Manifold Description of TS](requirements_20/system_playground/papers/ts_core/architecture_manifold_description_of_ts.md)  
+[TS Versus Symbolic and LLM](requirements_20/system_playground/papers/ts_core/ts_vs_symbolic_and_llm.md)  
+[TS is a Thought Router](requirements_20/system_playground/papers/ts_core/ts_thought_router.md)  
+[Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
 [Key Reason why TS is more efficent than today's AI LLM and prior AI machines](architectural_principle_of_ts.md)  
 
 **Engineering papers**  
-[Manifold Engineering Tuning paper](20_requirements/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)  
+[Manifold Engineering Tuning paper](requirements_20/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)  
 
 ---
 
 ## Repository Structure (thought_simulator/)
 
 ### Core Document Tiers
-- [00_program_governance/](00_program_governance/) — project intent, architecture framing, and philosophical governance
-- [20_requirements/system_playground/](20_requirements/system_playground/) - exploratory system architecture
-- [20_requirements/system_simulation/](20_requirements/system_simulation/) - system logical simulation done with AI with respect to 20_requirements
-- [10_thought_simulator_req/](10_thought_simulator_req/) — formalized requirement anchor layer used for coding and architecture realization
-- [20_requirements/](20_requirements/) — primary collaborative requirement layer and traceability source
-- [30_verification/](30_verification/) — verification capsules and deterministic evidence artifacts
-- [40_thought_simulator_playground/](40_thought_simulator_playground/) — exploratory prototypes and experiments
-- [50_thought_simulator_design/](50_thought_simulator_design/) — formal design specifications
-- [60_review/](60_review/) — grouped review bundles and decision artifacts
-- [70_measurement/](70_measurement/) — metrics, instrumentation, and evaluation methodology
+- [program_governance/](program_governance/) — project intent, architecture framing, and philosophical governance
+- [requirements_20/system_playground/](requirements_20/system_playground/) - exploratory system architecture
+- [requirements_20/system_simulation/](requirements_20/system_simulation/) - system logical simulation done with AI with respect to requirements_20
+- [thought_simulator_req/](thought_simulator_req/) — formalized requirement anchor layer used for coding and architecture realization
+- [requirements_20/](requirements_20/) — primary collaborative requirement layer and traceability source
+- [verification/](verification/) — verification capsules and deterministic evidence artifacts
+- [thought_simulator_playground/](thought_simulator_playground/) — exploratory prototypes and experiments
+- [thought_simulator_design/](thought_simulator_design/) — formal design specifications
+- [review/](review/) — grouped review bundles and decision artifacts
+- [measurement/](measurement/) — metrics, instrumentation, and evaluation methodology
 - [80_safety/](80_safety/) — safety constraints and protective controls
-- [90_validation_certification/](90_validation_certification/) — validation and conformance
+- [validation_certification/](validation_certification/) — validation and conformance
 
 ### Key Flow Catalog Files (20-series)
-- [20.705_patha_pathb_flow.md](20_requirements/20.705_patha_pathb_flow.md) — Core flow diagrams and conventions
-- [20.710_primitive_flows.md](20_requirements/20.710_primitive_flows.md) — Primitive Flows (PF)
-- [20.715_process_flows.md](20_requirements/20.715_process_flows.md) — Process Flows (PRF)
-- [20.720_reference_flows.md](20_requirements/20.720_reference_flows.md) — Reference-Object Flows (ROF)
-- [20.725_governance_flows.md](20_requirements/20.725_governance_flows.md) — Governance Flows (GVF)
-- [20.730_ts_concept_flows.md](20_requirements/20.730_ts_concept_flows.md) — TS-Concept Flows (TSCF)
+- [20.705_patha_pathb_flow.md](requirements_20/20.705_patha_pathb_flow.md) — Core flow diagrams and conventions
+- [20.710_primitive_flows.md](requirements_20/20.710_primitive_flows.md) — Primitive Flows (PF)
+- [20.715_process_flows.md](requirements_20/20.715_process_flows.md) — Process Flows (PRF)
+- [20.720_reference_flows.md](requirements_20/20.720_reference_flows.md) — Reference-Object Flows (ROF)
+- [20.725_governance_flows.md](requirements_20/20.725_governance_flows.md) — Governance Flows (GVF)
+- [20.730_ts_concept_flows.md](requirements_20/20.730_ts_concept_flows.md) — TS-Concept Flows (TSCF)
 
 ### High-Level Documents
 - [thought_sim_arch_overview.md](thought_sim_arch_overview.md) — Conceptual overview and Duck Test comparison
@@ -89,18 +89,18 @@ In practice:
 1. [README.md](README.md) (this file)
 2. [thought_sim_arch_overview.md](thought_sim_arch_overview.md)
 3. [TS_and_LMS_AI_status_6-26-2026.md](TS_and_LMS_AI_status_6-26-2026.md)
-4. [20.705_patha_pathb_flow.md](20_requirements/20.705_patha_pathb_flow.md)
+4. [20.705_patha_pathb_flow.md](requirements_20/20.705_patha_pathb_flow.md)
 5. The 20.710–20.730 flow catalog files
-6. [10_thought_simulator_req/](10_thought_simulator_req/) for formal anchors
+6. [thought_simulator_req/](thought_simulator_req/) for formal anchors
 
 ---
 
 ## Process Flow (Current)
 
 The process flow is direction-controlled:
-- Requirements collaboration and intent shaping in [20_requirements/](20_requirements/)
-- Evidence/prototype development in [40_thought_simulator_playground/](40_thought_simulator_playground/)
-- Formal realization anchors in [10_thought_simulator_req/](10_thought_simulator_req/)
+- Requirements collaboration and intent shaping in [requirements_20/](requirements_20/)
+- Evidence/prototype development in [thought_simulator_playground/](thought_simulator_playground/)
+- Formal realization anchors in [thought_simulator_req/](thought_simulator_req/)
 
 Direction examples:
 1. Forward (typical): 20 → 40 → 10 → 30/50
