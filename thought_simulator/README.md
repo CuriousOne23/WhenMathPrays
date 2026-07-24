@@ -57,7 +57,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - [review/](review/) — grouped review bundles and decision artifacts
 - [measurement/](measurement/) — metrics, instrumentation, and evaluation methodology
 - [80_safety/](thought_simulator_req/80_safety/) — safety constraints and protective controls
-- [90_validation_certification/](thought_simulator_req/90_validation_certification/) — validation and conformance
+- [90_validation/](thought_simulator_req/90_validation/) — validation and conformance
 
 ### Key Flow Catalog Files (20-series)
 - [20.705_patha_pathb_flow.md](requirements_20/20.705_patha_pathb_flow.md) — Core flow diagrams and conventions
