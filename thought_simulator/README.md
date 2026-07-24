@@ -34,12 +34,12 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [Architecture Manifold Description of TS](requirements_20/system_playground/design/papers/ts_core/architecture_manifold_description_of_ts.md)  
 [TS Versus Symbolic and LLM](requirements_20/system_playground/design/papers/ts_core/ts_vs_symbolic_and_llm.md)  
 [TS is a Thought Router](requirements_20/system_playground/design/papers/ts_core/ts_thought_router.md)  
-[Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
+[Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
 [Architecture Principles of TS](architectural_principle_of_ts.md)  
 
 **Engineering papers**  
-[Manifold Engineering Tuning paper](requirements_20/system_playground/manifold/manifold_white_papers/prework_manifold_and_back.md)  
+[Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/prework_manifold_and_back.md)  
 
 ---
 
