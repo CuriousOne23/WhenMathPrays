@@ -68,7 +68,7 @@ class TestInBIntake(unittest.TestCase):
         for test in self.tests:
             print("\nDEBUG RAW TEST ENTRY:", test)   # <‑‑ ADD THIS
         
-            name = test.get("name", "unnamed")
+            name = test.get("id", "unnamed")
             print(f"Running: {name} ...", end=" ")
             
             # Generate long input if requested
