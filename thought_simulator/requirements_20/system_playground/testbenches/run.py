@@ -37,10 +37,10 @@ sys.path.insert(0, repo_root)
 ACTIVE_TEST_MODULES = [
 
     # --- CEx Intake Testbench ---
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
 
     # --- CEx Boundary Testbench ---
-    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
+    "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
 
     # Add more tests here later:
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.test_cex_output",
