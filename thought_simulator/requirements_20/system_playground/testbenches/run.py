@@ -39,7 +39,7 @@ import unittest
 from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake import test_cex_intake
 
 # --- CEx Boundary Testbench (UNCOMMENT TO RUN) ---
-from thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary import test_cex_boundary
+# from thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary import test_cex_boundary
 
 # ============================================================
 # === ADD OTHER TESTBENCHES BELOW (COMMENT OUT AS NEEDED) ====
