@@ -104,7 +104,7 @@ class PipelineHarness:
 
 def run_testbench():
     tests = load_testbench()
-    print("Loaded {} IE test cases (3-test mode).\n".format(len(tests)))
+    print("Loaded {} IE test cases.\n".format(len(tests)))
 
     harness = PipelineHarness(CONFIG)
 
