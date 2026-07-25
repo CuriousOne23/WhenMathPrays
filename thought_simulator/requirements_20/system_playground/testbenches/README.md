@@ -148,10 +148,10 @@ This is ideal for debugging, CI, and deterministic replay.
 
 ## Hot key control for commenting out multiple lines on
 
-**Windows / Linux**
+**Windows / Linux**  
     Ctrl + /
 
-**Mac**
+**Mac**  
     Cmd + /
 
 This will toggle comments on all selected lines:
