@@ -5,18 +5,13 @@
 #   Provide deterministic, replayable scenarios for exercising
 #   the Intake Envelope (IE) primitive.
 #
-#   IE is responsible for:
-#     - final normalization of intake text
-#     - applying bounded repairs
-#     - enforcing envelope constraints
-#
-#   This testbench is intentionally minimal. It is designed
-#   for simulation alignment, not requirement coverage.
+#   This trimmed version includes only the first 3 tests
+#   to validate testbench flow before expanding to full 7.
 # ============================================================
 
 testbench_id: "path_a.intake.ie"
-version: "1.0.0"
-description: "Testbench for Intake Envelope (IE) normalization and repairs."
+version: "1.0.1"
+description: "Trimmed IE testbench (3 tests) for flow validation."
 
 simulation:
   deterministic: true
@@ -62,54 +57,3 @@ tests:
     expected_repairs:
       - "punctuation.cleaned"
     expected_normalized: "The dog chased the cat!"
-
-  # ----------------------------------------------------------
-  # 4. Unicode cleanup
-  # ----------------------------------------------------------
-  - id: "normalize.unicode"
-    description: "Invalid unicode artifacts should be removed."
-    input: "The dog chased the cat. � �"
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "unicode.removed"
-    expected_normalized: "The dog chased the cat."
-
-  # ----------------------------------------------------------
-  # 5. Structural token repair
-  # ----------------------------------------------------------
-  - id: "normalize.structural"
-    description: "Malformed structural tokens should be repaired."
-    input: "The dog chased the cat <broken>"
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "structural.repaired"
-    expected_normalized: "The dog chased the cat"
-
-  # ----------------------------------------------------------
-  # 6. Empty input — IE should not normalize
-  # ----------------------------------------------------------
-  - id: "empty.input"
-    description: "Empty input should not be normalized."
-    input: ""
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs: []
-    expected_normalized: ""
-
-  # ----------------------------------------------------------
-  # 7. Long input (generated dynamically)
-  # ----------------------------------------------------------
-  - id: "long.input"
-    description: "Long input should be passed through unchanged (stub IE)."
-    generate_long_input: true
-    long_length: 5000
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs: []
-    expected_long_input: true
