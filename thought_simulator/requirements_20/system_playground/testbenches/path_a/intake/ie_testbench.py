@@ -110,6 +110,8 @@ class TestIE(unittest.TestCase):
         cls.harness = PipelineHarness(CONFIG)
 
     def test_ie_cases(self):
+        expect_failure = CONFIG.get("expect_failure", False)
+
         for test in self.tests:
             name = test.get("id", "unnamed")
             print(f"Running: {name} ...", end=" ")
@@ -146,8 +148,20 @@ class TestIE(unittest.TestCase):
 
             passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
 
-            print("PASS" if passed else "FAIL")
-            self.assertTrue(passed, f"Test failed: {name}")
+            # ------------------------------------------------------------
+            # EXPECTATION LOGIC (from run.py)
+            # ------------------------------------------------------------
+            if expect_failure:
+                # User expects failure → test passes if pipeline FAILED
+                if passed:
+                    print("FAIL (unexpected success)")
+                else:
+                    print("PASS (failure correctly detected)")
+                self.assertFalse(passed, f"Test should have failed: {name}")
+            else:
+                # User expects success → test passes if pipeline SUCCEEDED
+                print("PASS" if passed else "FAIL")
+                self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
 # Main (only used when running directly)
