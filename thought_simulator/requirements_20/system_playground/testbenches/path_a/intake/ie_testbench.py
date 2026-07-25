@@ -151,13 +151,20 @@ class TestIE(unittest.TestCase):
             # ------------------------------------------------------------
             # EXPECTATION LOGIC (from run.py)
             # ------------------------------------------------------------
+            # 1. Always print expectation-based message
             if expect_failure:
-                # User expects failure → test passes if pipeline FAILED
                 if passed:
                     print("FAIL, Expectation (Fail, no failure detected, primitive report)")
                 else:
-                    print("PASS, Expectation (Fail, failure seen, primitive report)")
-                self.assertFalse(passed, f"Test should have failed: {name}")
+                    print("PASS, Expectation (Fail, failure detected by primitive)")
+            else:
+                if passed:
+                    print("PASS, Expectation (Pass, clean result detected by primitive)")
+                else:
+                    print("FAIL, Expectation (Pass, primitive reported failure)")
+            
+            # 2. unittest ALWAYS asserts primitive truth ONLY
+            self.assertTrue(passed, f"Primitive reported failure: {name}")
 
 # ---------------------------------------------------------------------------
 # Main (only used when running directly)
