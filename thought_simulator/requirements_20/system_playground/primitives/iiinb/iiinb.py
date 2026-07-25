@@ -131,10 +131,10 @@ def IIInB(tp):
             i = j
         return "".join(result)
 
-    # Only apply collapse if the string is a single run‑based token
-    # (matches the testbench case "YYYYYYYYYYEEEEEAAAAHHHH").
-    if re.fullmatch(r"[A-Za-z]+", normalized):
-        collapsed = collapse_runs(normalized)
+    # Only collapse repeated letters if the string is SHORT
+    # (i.e., expressive noise, not long input)
+    if len(normalized) < 200 and re.fullmatch(r"[A-Za-z]+", normalized):
+        normalized = collapse_runs(normalized)
         normalized = collapsed
 
     # ------------------------------------------------------------
