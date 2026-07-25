@@ -81,26 +81,26 @@ def IIInB(tp):
 
     # ------------------------------------------------------------
     # 4. Spelling corrections — transposition and missing letter
-    #    (simple deterministic mappings for testbench cases)
     # ------------------------------------------------------------
     spelling_map = {
-        "hte": ("the", "iiinb.spelling.transposed"),
-        "rd": ("red", "iiinb.spelling.missing"),
+        "hte": ("the", "iiinb.spelling.transposed", "correct_transposition"),
+        "rd": ("red", "iiinb.spelling.missing", "correct_missing_letter"),
     }
-
+    
     tokens = normalized.split()
     changed = False
     for i, t in enumerate(tokens):
         if t in spelling_map:
-            replacement, rule_id = spelling_map[t]
+            replacement, rule_id, op_name = spelling_map[t]
             tokens[i] = replacement
             tp.repairs.append({
-                "op": "correct_spelling",
+                "op": op_name,
                 "target": t,
                 "replacement": replacement,
                 "rule_id": rule_id,
             })
             changed = True
+    
     if changed:
         normalized = " ".join(tokens)
 
