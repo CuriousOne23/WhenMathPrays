@@ -1,7 +1,6 @@
 """
 IE Intake Envelope Testbench — Path A
-Supports standalone and progressive execution.
-Configuration is passed from run.py via set_testbench_config().
+Three‑test version to validate flow before expanding to full 7 tests.
 """
 
 import os
@@ -42,17 +41,17 @@ def InB(tp: ThoughtPacket):
 
 def IIInB(tp: ThoughtPacket):
     tp.metadata["iiinb_status"] = "inspected"
-    tp.defects = []  # clean path default
+    tp.defects = []
     return tp
 
 def IE(tp: ThoughtPacket):
     tp.metadata["ie_status"] = "normalized"
     tp.normalized = tp.raw_input
-    tp.repairs = []  # clean path default
+    tp.repairs = []
     return tp
 
 # ---------------------------------------------------------------------------
-# Testbench Loader
+# Load YAML testbench
 # ---------------------------------------------------------------------------
 
 def load_testbench():
@@ -61,10 +60,14 @@ def load_testbench():
         "ie_testbench.yaml"
     )
     with open(yaml_path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        full_yaml = yaml.safe_load(f)
+
+    # Only keep first 3 tests
+    trimmed = full_yaml.get("tests", [])[:3]
+    return trimmed
 
 # ---------------------------------------------------------------------------
-# Pipeline Harness (simple version for IE testbench)
+# Pipeline Harness
 # ---------------------------------------------------------------------------
 
 class PipelineHarness:
@@ -78,35 +81,32 @@ class PipelineHarness:
         if self.use_inb:
             tp = InB(tp)
         else:
-            tp.metadata["inb_status"] = "accepted"  # stub
+            tp.metadata["inb_status"] = "accepted"
 
         # IIInB
         if self.use_iiinb:
             tp = IIInB(tp)
         else:
-            tp.metadata["iiinb_status"] = "inspected"  # stub
+            tp.metadata["iiinb_status"] = "inspected"
 
         # IE
         if self.use_ie:
             tp = IE(tp)
         else:
-            tp.metadata["ie_status"] = "normalized"  # stub
+            tp.metadata["ie_status"] = "normalized"
 
         return tp
 
 # ---------------------------------------------------------------------------
-# Testbench Class (unittest-compatible)
+# Testbench Class
 # ---------------------------------------------------------------------------
 
 class TestIE(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.testbench = load_testbench()
-        cls.tests = cls.testbench.get("tests", [])
-        print(f"Loaded {len(cls.tests)} IE intake envelope test cases.\n")
-
-        # Build harness from run.py configuration
+        cls.tests = load_testbench()
+        print(f"Loaded {len(cls.tests)} IE test cases (3‑test mode).\n")
         cls.harness = PipelineHarness(CONFIG)
 
     def test_ie_cases(self):
@@ -116,16 +116,10 @@ class TestIE(unittest.TestCase):
             name = test.get("id", "unnamed")
             print(f"Running: {name} ...", end=" ")
 
-            # Generate long input if requested
-            if test.get("generate_long_input", False):
-                length = test.get("long_length", 5000)
-                raw_input = "A" * length
-            else:
-                raw_input = test["input"]
-
+            raw_input = test["input"]
             tp = ThoughtPacket(raw_input=raw_input)
 
-            # Execute pipeline via harness
+            # Execute pipeline
             tp = self.harness.run(tp)
 
             # Expected values
@@ -133,11 +127,7 @@ class TestIE(unittest.TestCase):
             expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
             expected_ie_status = test.get("expected_ie_status", "normalized")
             expected_repairs = test.get("expected_repairs", [])
-
-            if test.get("expected_long_input", False):
-                expected_normalized = raw_input
-            else:
-                expected_normalized = test.get("expected_normalized", tp.raw_input)
+            expected_normalized = test.get("expected_normalized", raw_input)
 
             # Checks
             inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
@@ -149,25 +139,26 @@ class TestIE(unittest.TestCase):
             passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
 
             # ------------------------------------------------------------
-            # EXPECTATION LOGIC (from run.py)
+            # EXPECTATION LOGIC (log only)
             # ------------------------------------------------------------
-            # 1. Always print expectation-based message
             if expect_failure:
                 if passed:
-                    print("FAIL, Expectation (Fail, no failure detected, primitive report)")
+                    print("FAIL, Expectation (Fail, no failure detected)")
                 else:
-                    print("PASS, Expectation (Fail, failure detected by primitive)")
+                    print("PASS, Expectation (Fail, failure detected)")
             else:
                 if passed:
-                    print("PASS, Expectation (Pass, clean result detected by primitive)")
+                    print("PASS, Expectation (Pass, clean result)")
                 else:
                     print("FAIL, Expectation (Pass, primitive reported failure)")
-            
-            # 2. unittest ALWAYS asserts primitive truth ONLY
+
+            # ------------------------------------------------------------
+            # unittest asserts primitive truth ONLY
+            # ------------------------------------------------------------
             self.assertTrue(passed, f"Primitive reported failure: {name}")
 
 # ---------------------------------------------------------------------------
-# Main (only used when running directly)
+# Main
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
