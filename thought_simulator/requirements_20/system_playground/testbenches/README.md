@@ -146,6 +146,22 @@ This is ideal for debugging, CI, and deterministic replay.
 
 ---
 
+## Hot key control for commenting out multiple lines on
+
+**Windows / Linux**
+    Ctrl + /
+
+**Mac**
+    Cmd + /
+
+This will toggle comments on all selected lines:
+- If the lines are uncommented → it adds # to each line
+- If the lines are commented → it removes the #
+
+This is the fastest way to comment out a whole testbench tuple.
+
+---
+
 ## **Summary**
 - **run.py is the only file you edit.**
 - Each testbench is represented by a **single tuple**.
