@@ -10,19 +10,7 @@ class ThoughtPacket:
     normalized: str = ""
     metadata: dict = field(default_factory=dict)
 
-
 def InB(tp: ThoughtPacket) -> ThoughtPacket:
-    """
-    InB — Intake Buffer (20.100 + 20.15 aligned, minimal first pass)
-
-    - Reads:  tp.raw_input
-    - Writes: tp.messy_input_record
-              tp.defects
-              tp.metadata["inb_status"]
-              tp.metadata["intake_audit"]
-              tp.metadata["signature_history"]
-    """
-
     raw = tp.raw_input
     tp.messy_input_record = raw
 
@@ -34,12 +22,12 @@ def InB(tp: ThoughtPacket) -> ThoughtPacket:
         defects.append("empty.input")
         audit.append({"reason": "empty.input"})
 
-    # Excess whitespace (simple heuristic: double spaces)
+    # Excess whitespace
     if "  " in raw:
         defects.append("whitespace.excess")
         audit.append({"reason": "whitespace.excess"})
 
-    # Excess punctuation (simple heuristic: triple exclamation)
+    # Excess punctuation
     if "!!!" in raw:
         defects.append("punctuation.excess")
         audit.append({"reason": "punctuation.excess"})
@@ -56,7 +44,9 @@ def InB(tp: ThoughtPacket) -> ThoughtPacket:
 
     tp.defects = defects
 
-    # Minimal metadata writes
+    # ⭐ REQUIRED FOR CLEAN CASES
+    tp.normalized = raw
+
     tp.metadata.setdefault("signature_history", []).append("inb_v1")
     tp.metadata["intake_audit"] = audit
     tp.metadata["inb_status"] = "accepted" if not defects else "degraded"
