@@ -76,7 +76,7 @@ ACTIVE_TEST_MODULES = [
 
     # --- IE Intake Envelope Testbench ---
     (
-        "thought_simulator.requirements_20.system_playground/testbenches/path_a/intake/ie_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
             "mode": "standalone",      # or "progressive"
             "use_inb": False,          # True for progressive
