@@ -2,31 +2,22 @@
 Thought Simulator — Testbench Runner
 ------------------------------------
 
-Process Overview:
-    • User selects which testbenches to run by commenting/uncommenting
-      entries in ACTIVE_TEST_MODULES.
+Process:
+    • User selects testbenches by commenting/uncommenting entries
+      in ACTIVE_TEST_MODULES.
 
-    • Each testbench tuple contains:
-          - module path
-          - configuration dict
+    • Each testbench receives:
+          - mode: "standalone" or "progressive"
+          - upstream toggles: use_inb, use_iiinb, use_ie
+          - expect_failure: { test_id: True/False }
 
-    • Configuration supports:
-          mode: "standalone" or "progressive"
-          use_inb: True/False
-          use_iiinb: True/False
-          use_ie: True/False
-          expect_failure: True/False
-
-      These flags determine how far upstream the pipeline runs.
+      This allows per‑test expectation control without modifying YAML.
 
     • Primitive correctness is enforced inside each testbench.
       Expectation correctness is logged (stdout → redirected to file).
 
     • Run from repo root:
-          python thought_simulator/requirements_20/system_playground/testbenches/run.py > results.log
-
-      Or from inside testbenches:
-          python run.py > results.log
+          python thought_simulator/.../testbenches/run.py > results.log
 """
 
 import sys
@@ -47,34 +38,8 @@ sys.path.insert(0, repo_root)
 ACTIVE_TEST_MODULES = [
 
     # --------------------------------------------------------
-    # Path A — Intake Testbenches (InB → IIInB → IE)
-    # --------------------------------------------------------
-
-    # Example: InB only (standalone)
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-    #     {
-    #         "mode": "standalone",
-    #         "use_inb": True,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "expect_failure": False
-    #     }
-    # ),
-
-    # Example: IIInB only (standalone)
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
-    #     {
-    #         "mode": "standalone",
-    #         "use_inb": False,
-    #         "use_iiinb": True,
-    #         "use_ie": False,
-    #         "expect_failure": False
-    #     }
-    # ),
-
     # IE Intake Envelope Testbench (3‑test mode)
+    # --------------------------------------------------------
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
@@ -82,35 +47,19 @@ ACTIVE_TEST_MODULES = [
             "use_inb": False,          # True → include InB upstream
             "use_iiinb": False,        # True → include IIInB upstream
             "use_ie": True,            # IE always runs for IE testbench
-            "expect_failure": False    # User sets expectation
+
+            # Per‑test expectations (user controls these)
+            "expect_failure": {
+                "clean.simple": False,
+                "normalize.whitespace": True,
+                "normalize.punctuation": False
+            }
         }
     ),
 
     # --------------------------------------------------------
-    # Path A — CEx Testbenches (examples)
+    # Add more testbenches here later
     # --------------------------------------------------------
-
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.test_cex_intake",
-    #     {
-    #         "mode": "standalone",
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "expect_failure": False
-    #     }
-    # ),
-
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.boundary.test_cex_boundary",
-    #     {
-    #         "mode": "standalone",
-    #         "use_inb": False,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "expect_failure": True
-    #     }
-    # ),
 ]
 
 # ============================================================
