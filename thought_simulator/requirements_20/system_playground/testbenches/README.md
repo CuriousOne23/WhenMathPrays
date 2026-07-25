@@ -227,6 +227,118 @@ This toggles comments on all selected lines.
 
 ---
 
+## **Adding New Downstream Primitives (Path A Integration)**
+
+Every downstream primitive in Path A follows the same pattern:
+
+### **1. You add a new testbench tuple in `run.py`**
+
+Example for a future primitive `inb`:
+
+```python
+(
+    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+    {
+        "mode": "progressive",
+        "use_inb": True,
+        "use_iiinb": False,
+        "use_ie": False,
+
+        "tests_to_run": {
+            "inb.clean.simple": "Yes",
+            "inb.detect.defect": "Yes"
+        },
+
+        "expect_failure": {
+            "inb.clean.simple": False,
+            "inb.detect.defect": True
+        }
+    }
+),
+```
+
+### ✔ run.py is the **only place** where new primitives are added  
+### ✔ run.py imports the testbench module  
+### ✔ run.py injects configuration  
+### ✔ run.py calls `run_testbench()`  
+
+You never modify the primitive testbench to add it to the system — run.py handles that.
+
+---
+
+### **2. The primitive testbench must call the primitive progressively**
+
+Every primitive testbench must:
+
+- import its primitive (e.g., `from primitives.inb.inb import InB`)
+- build a ThoughtPacket
+- call the primitive in standalone or progressive mode
+- compare primitive output to YAML expectations
+
+Example pattern:
+
+```python
+from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
+
+class PipelineHarness:
+    def __init__(self, cfg):
+        self.use_inb = cfg.get("use_inb", False)
+        self.use_iiinb = cfg.get("use_iiinb", False)
+        self.use_ie = cfg.get("use_ie", False)
+
+    def run(self, tp):
+        if self.use_inb:
+            tp = InB(tp)
+        if self.use_iiinb:
+            tp = IIInB(tp)
+        if self.use_ie:
+            tp = IE(tp)
+        return tp
+```
+
+### ✔ This ensures progressive chaining  
+### ✔ This ensures standalone mode works  
+### ✔ This ensures Path A primitives can be validated in isolation or in sequence  
+
+---
+
+### **3. YAML test files define the primitive’s expected behavior**
+
+Each primitive has its own YAML file:
+
+```
+inb_testbench.yaml
+iiinb_testbench.yaml
+ie_testbench.yaml
+```
+
+The YAML defines:
+
+- test IDs  
+- raw input  
+- expected metadata  
+- expected defects  
+- expected repairs  
+- expected normalized output  
+
+The testbench loads the YAML and runs only the tests selected in run.py.
+
+---
+
+### **4. run.py + testbench + YAML = complete primitive integration**
+
+This triad is the entire Path A testing system:
+
+| Component | Responsibility |
+|----------|----------------|
+| **run.py** | Selects testbenches, injects config, runs them |
+| **prim_testbench.py** | Calls primitive progressively, compares results |
+| **prim_testbench.yaml** | Defines deterministic test cases |
+
+This is the correct architecture for all downstream primitives.
+
+---
+
 ## **Summary**
 
 - **run.py is the only file you edit**  
