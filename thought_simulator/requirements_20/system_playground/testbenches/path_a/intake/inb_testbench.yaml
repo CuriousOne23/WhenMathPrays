@@ -66,3 +66,13 @@ tests:
     expected_repairs: []
     expected_long_input: true
     expected_failure: true
+
+    - id: multi.defects
+      input: "Bad   text!!! with � and <broken> tokens."
+      expected_defects:
+        - whitespace.excess
+        - punctuation.excess
+        - unicode.invalid
+        - structural.malformed
+      expected_failure: true
+
