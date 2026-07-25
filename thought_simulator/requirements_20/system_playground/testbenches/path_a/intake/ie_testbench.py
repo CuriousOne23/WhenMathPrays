@@ -145,16 +145,25 @@ def run_testbench():
         passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
 
         # Expectation logic
+        # ------------------------------------------------------------
+        # EXPECTATION LOGIC (log only)
+        # ------------------------------------------------------------
         if expect_failure:
+            # We EXPECT primitive to FAIL
             if passed:
-                print("FAIL, Expectation (Fail, no failure detected)")
+                # Primitive PASSED → expectation violated
+                print("FAIL, Expectation (Pass, no failure detected)")
             else:
+                # Primitive FAILED → expectation satisfied
                 print("PASS, Expectation (Fail, failure detected)")
         else:
+            # We EXPECT primitive to PASS
             if passed:
+                # Primitive PASSED → expectation satisfied
                 print("PASS, Expectation (Pass, clean result)")
             else:
-                print("FAIL, Expectation (Pass, primitive reported failure)")
+                # Primitive FAILED → expectation violated
+                print("FAIL, Expectation (Fail, primitive reported failure)")
 
         # Development-mode primitive failure logging
         if not passed:
