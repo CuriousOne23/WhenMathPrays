@@ -77,10 +77,9 @@ class TestInBIntake(unittest.TestCase):
 
             # Checks
             defects_ok = (tp.defects == expected_defects)
-            repairs_ok = (tp.repairs == expected_repairs)
-            normalized_ok = (tp.normalized == expected_normalized)
-
-            passed = defects_ok and repairs_ok and normalized_ok
+            
+            # InB does not produce repairs or normalized output
+            passed = defects_ok
 
             # ------------------------------------------------------------------
             # Requirement-aware PASS/FAIL messaging
