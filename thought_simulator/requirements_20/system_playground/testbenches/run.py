@@ -44,10 +44,10 @@ ACTIVE_TEST_MODULES = [
     # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
 
     # --- IIInB Intake Inspection Testbench ---
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
+    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
 
     # --- IE Intake Envelope Testbench ---
-    # "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
 
     # --------------------------------------------------------
     # Path A — CEx Testbenches
