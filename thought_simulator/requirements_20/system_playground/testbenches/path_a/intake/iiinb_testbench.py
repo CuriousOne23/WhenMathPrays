@@ -31,7 +31,8 @@ def InB(tp: ThoughtPacket):
 
 def IIInB(tp: ThoughtPacket):
     tp.metadata["iiinb_status"] = "inspected"
-    tp.defects = []  # clean path default
+    tp.repairs = []       # IIInB proposes repairs
+    tp.normalized = tp.raw_input  # default normalized surface
     return tp
 
 # ---------------------------------------------------------------------------
@@ -77,16 +78,18 @@ class TestIIInB(unittest.TestCase):
             tp = IIInB(tp)
 
             # Expected values
-            expected_defects = test.get("expected_defects", [])
             expected_inb_status = test.get("expected_inb_status", "accepted")
             expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
+            expected_repairs = test.get("expected_repairs", [])
+            expected_normalized = test.get("expected_normalized", raw_input)
 
             # Checks
-            defects_ok = (tp.defects == expected_defects)
             inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
             iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
+            repairs_ok = (tp.repairs == expected_repairs)
+            normalized_ok = (tp.normalized == expected_normalized)
 
-            passed = defects_ok and inb_ok and iiinb_ok
+            passed = inb_ok and iiinb_ok and repairs_ok and normalized_ok
 
             print("PASS" if passed else "FAIL")
 
