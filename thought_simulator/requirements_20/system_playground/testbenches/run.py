@@ -48,15 +48,15 @@ ACTIVE_TEST_MODULES = [
                 "repair.punctuation": "Yes"
             },
 
-            # expect_failure enter in True or False
+            # expect_failure enter in PASS or FAIL
             "expect_failure": {
-                "clean.simple": False,
-                "normalize.whitespace": True,
-                "normalize.punctuation": False,
-                "detect.excessive_whitespace": False,
-                "detect.excessive_punctuation": False,
-                "repair.whitespace": False,
-                "repair.punctuation": False
+                "clean.simple": PASS,
+                "normalize.whitespace": PASS,
+                "normalize.punctuation": FAIL,
+                "detect.excessive_whitespace": FAIL,
+                "detect.excessive_punctuation": FAIL,
+                "repair.whitespace": FAIL,
+                "repair.punctuation": FAIL
             }
         }
     ),
