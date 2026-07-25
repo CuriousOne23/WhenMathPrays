@@ -1,15 +1,26 @@
-# **README.md — Testbench Runner (Updated for Single‑Line UX)**
+# **README.md — Thought Simulator Testbenches (Path A)**
 
 ## **Overview**
-The `testbenches/` directory contains all unit and integration tests for the Thought Simulator primitives and pipeline.  
+The `testbenches/` directory contains all development‑mode test harnesses for the Thought Simulator primitives and pipeline.
+
 All tests are executed through **one file**:
 
 ```
 run.py
 ```
 
-This script is the **only user interface** for running tests.  
-You never need to open or edit any primitive testbench file.
+This is the **only user interface** for running tests.  
+You never edit the testbench modules themselves.
+
+The design supports:
+
+- Standalone primitive testing  
+- Progressive pipeline testing (InB → IIInB → IE → …)  
+- Per‑test selection (`Yes` / `No`)  
+- Per‑test expectation (`True` / `False`)  
+- YAML‑driven deterministic test cases  
+- Full development‑mode execution (no early exit)  
+- Complete primitive failure summaries  
 
 ---
 
@@ -26,44 +37,50 @@ Or from inside the `testbenches/` directory:
 python run.py > results.log
 ```
 
-All output is written to `results.log` (or any filename you choose).
+All output is written to the log file you choose.
 
 ---
 
-## **Selecting Which Tests to Run (Single‑Line UX)**
-Inside `run.py`, tests are listed in `ACTIVE_TEST_MODULES` as **tuples**:
+## **Selecting Which Testbenches to Run (Single‑Line UX)**
+
+Inside `run.py`, testbenches are listed in `ACTIVE_TEST_MODULES` as **tuples**:
 
 ```python
 ACTIVE_TEST_MODULES = [
+
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
             "mode": "standalone",
             "use_inb": False,
             "use_iiinb": False,
-            "use_ie": True
+            "use_ie": True,
+
+            # tests_to_run: User inputs "Yes" or "No"
+            "tests_to_run": {
+                "clean.simple": "Yes",
+                "normalize.whitespace": "Yes",
+                "normalize.punctuation": "Yes"
+            },
+
+            # expect_failure: User inputs True or False
+            "expect_failure": {
+                "clean.simple": False,
+                "normalize.whitespace": True,
+                "normalize.punctuation": False
+            }
         }
     ),
 
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-    #     {
-    #         "mode": "standalone",
-    #         "use_inb": True,
-    #         "use_iiinb": False,
-    #         "use_ie": False
-    #     }
-    # ),
+    # Add more testbenches here later
 ]
 ```
 
-Each tuple represents **one testbench** and its configuration.
-
 ### ✔ To enable a testbench  
-Make sure the tuple **does not** start with `#`.
+Ensure the tuple is **not commented out**.
 
 ### ✔ To disable a testbench  
-Place **one `#` at the start of the tuple**:
+Place **one `#`** at the start of the tuple:
 
 ```python
 # (
@@ -77,64 +94,116 @@ Place **one `#` at the start of the tuple**:
 ),
 ```
 
-### ⭐ Only one `#` is required  
-You do **not** need to comment out every line.  
-Commenting out the **first line** of the tuple disables the entire block.
-
-Python ignores the whole tuple automatically.
+Only the first `#` is needed — Python ignores the entire tuple.
 
 ---
 
-## **Standalone vs Progressive Testing**
-You configure the pipeline behavior **inside the tuple**, not inside the testbench.
+## **Standalone vs Progressive Pipeline**
+
+Pipeline behavior is configured **inside the tuple**, not inside the testbench.
 
 ### **Standalone IE Example**
 ```python
-(
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-    {
-        "mode": "standalone",
-        "use_inb": False,
-        "use_iiinb": False,
-        "use_ie": True
-    }
-),
+"mode": "standalone",
+"use_inb": False,
+"use_iiinb": False,
+"use_ie": True
 ```
 
-### **Progressive IE Example (InB → IIInB → IE)**
+### **Full Progressive Example (InB → IIInB → IE)**
 ```python
-(
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-    {
-        "mode": "progressive",
-        "use_inb": True,
-        "use_iiinb": True,
-        "use_ie": True
-    }
-),
+"mode": "progressive",
+"use_inb": True,
+"use_iiinb": True,
+"use_ie": True
 ```
 
 ### **Partial Progressive Example (IIInB → IE only)**
 ```python
-(
-    "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-    {
-        "mode": "progressive",
-        "use_inb": False,
-        "use_iiinb": True,
-        "use_ie": True
-    }
-),
+"mode": "progressive",
+"use_inb": False,
+"use_iiinb": True,
+"use_ie": True
 ```
 
-The testbench automatically receives this configuration from `run.py` and configures the pipeline harness accordingly.
+The testbench automatically receives this configuration from `run.py`.
 
-You never edit the testbench itself.
+---
+
+## **Per‑Test Selection (Yes / No)**
+
+Inside each testbench configuration:
+
+```python
+"tests_to_run": {
+    "clean.simple": "Yes",
+    "normalize.whitespace": "No",
+    "normalize.punctuation": "Yes"
+}
+```
+
+- `"Yes"` → test runs  
+- `"No"` → test is skipped  
+- All test IDs remain visible (no accidental deletion)
+
+---
+
+## **Per‑Test Expectation (True / False)**
+
+Expectation is independent of primitive behavior:
+
+```python
+"expect_failure": {
+    "clean.simple": False,
+    "normalize.whitespace": True,
+    "normalize.punctuation": False
+}
+```
+
+Your intended semantics:
+
+- `expect_failure = False` → expect primitive **FAIL**  
+- `expect_failure = True` → expect primitive **PASS**
+
+The testbench compares:
+
+```
+expected primitive result  vs  actual primitive result
+```
+
+and reports:
+
+- PASS, Expectation  
+- FAIL, Expectation  
+
+Interior parentheses always describe the **primitive result**.
+
+---
+
+## **Development‑Mode Execution (No unittest)**
+
+The testbench:
+
+- runs all selected tests  
+- logs primitive results  
+- logs expectation results  
+- never stops early  
+- prints a final primitive failure summary  
+
+Example:
+
+```
+=== Primitive Failure Summary ===
+Primitive failures detected in:
+  - normalize.whitespace
+  - normalize.punctuation
+```
+
+This is ideal for debugging and deterministic replay.
 
 ---
 
 ## **Redirecting Output to Logs**
-Any test run can be redirected:
 
 ```
 python run.py > ie.log
@@ -142,34 +211,34 @@ python run.py > pipeline.log
 python run.py > full_suite.log
 ```
 
-This is ideal for debugging, CI, and deterministic replay.
-
 ---
 
-## Hot key Control for Commenting Out Multiple Lines
+## **Hotkey Control for Commenting Out Multiple Lines**
 
-First select the lines you want to comment or uncomment, following are the hot key cntrl per OS:
-- **Windows / Linux**
-    - Ctrl + /
-- **Mac**
-    - Cmd + /
+Select the lines you want to toggle:
 
-This will toggle comments on all selected lines:
-- If the lines are uncommented → it adds # to each line
-- If the lines are commented → it removes the #
+### Windows / Linux  
+**Ctrl + /**
 
-This is the fastest way to comment out a whole testbench tuple.
+### Mac  
+**Cmd + /**
+
+This toggles comments on all selected lines.
 
 ---
 
 ## **Summary**
-- **run.py is the only file you edit.**
-- Each testbench is represented by a **single tuple**.
-- You enable/disable tests by adding **one `#`** at the start of the tuple.
-- Standalone vs progressive testing is configured **inside the tuple**.
-- Testbenches and the harness never need editing.
-- Output can be redirected to any log file.
 
-This design keeps the entire testing workflow simple, centralized, and user‑friendly.
+- **run.py is the only file you edit**  
+- Each testbench is a **single tuple**  
+- Enable/disable testbenches with **one `#`**  
+- Configure standalone/progressive mode inside the tuple  
+- Select tests using **Yes/No**  
+- Set expectations using **True/False**  
+- Testbenches never need editing  
+- Output is fully logged  
+- Development‑mode execution ensures full visibility  
+
+This README serves as the reference for all downstream Path A work.
 
 ---
