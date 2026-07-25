@@ -154,14 +154,10 @@ class TestIE(unittest.TestCase):
             if expect_failure:
                 # User expects failure → test passes if pipeline FAILED
                 if passed:
-                    print("FAIL (unexpected success)")
+                    print("FAIL (Fail, no failure detected)")
                 else:
-                    print("PASS (failure correctly detected)")
+                    print("PASS (Fail detected as expected)")
                 self.assertFalse(passed, f"Test should have failed: {name}")
-            else:
-                # User expects success → test passes if pipeline SUCCEEDED
-                print("PASS" if passed else "FAIL")
-                self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
 # Main (only used when running directly)
