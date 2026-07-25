@@ -68,7 +68,7 @@ def load_testbench():
     with open(yaml_path, "r", encoding="utf-8") as f:
         full_yaml = yaml.safe_load(f)
 
-    return full_yaml.get("tests", [])[:3]
+    return full_yaml.get("tests", [])
 
 # ---------------------------------------------------------------------------
 # Pipeline Harness
