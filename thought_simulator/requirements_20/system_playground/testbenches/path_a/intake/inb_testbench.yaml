@@ -19,7 +19,7 @@ tests:
     expected_defects: []
     expected_repairs: []
     expected_normalized: "The dog chased the cat."
-    expected_failure: true
+    expected_failure: false
 
   - id: "messy.whitespace"
     description: "Whitespace normalization and punctuation cleanup."
