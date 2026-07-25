@@ -57,3 +57,55 @@ tests:
     expected_repairs:
       - "punctuation.cleaned"
     expected_normalized: "The dog chased the cat!"
+
+  # ----------------------------------------------------------
+  # 4. Excessive whitespace detection (future IE behavior)
+  # ----------------------------------------------------------
+  - id: "detect.excessive_whitespace"
+    description: "IE should detect excessive whitespace even if repairs are not yet implemented."
+    input: "The    dog      chased   the   cat."
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_ie_status: "normalized"
+    expected_repairs:
+      - "whitespace.detected"
+    expected_normalized: "The dog chased the cat."
+
+  # ----------------------------------------------------------
+  # 5. Excessive punctuation detection (future IE behavior)
+  # ----------------------------------------------------------
+  - id: "detect.excessive_punctuation"
+    description: "IE should detect excessive punctuation even if repairs are not yet implemented."
+    input: "The dog chased the cat!!!!!!"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_ie_status: "normalized"
+    expected_repairs:
+      - "punctuation.detected"
+    expected_normalized: "The dog chased the cat!"
+
+  # ----------------------------------------------------------
+  # 6. Whitespace repair (future IE behavior)
+  # ----------------------------------------------------------
+  - id: "repair.whitespace"
+    description: "IE should repair excessive whitespace."
+    input: "   The    dog   chased    the   cat.   "
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_ie_status: "normalized"
+    expected_repairs:
+      - "whitespace.normalized"
+    expected_normalized: "The dog chased the cat."
+
+  # ----------------------------------------------------------
+  # 7. Punctuation repair (future IE behavior)
+  # ----------------------------------------------------------
+  - id: "repair.punctuation"
+    description: "IE should repair excessive punctuation."
+    input: "The dog chased the cat!!!!"
+    expected_inb_status: "accepted"
+    expected_iiinb_status: "inspected"
+    expected_ie_status: "normalized"
+    expected_repairs:
+      - "punctuation.cleaned"
+    expected_normalized: "The dog chased the cat!"
