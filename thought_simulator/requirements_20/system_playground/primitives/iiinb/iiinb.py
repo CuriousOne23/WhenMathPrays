@@ -132,10 +132,11 @@ def IIInB(tp):
         return "".join(result)
 
     # Only collapse repeated letters if the string is SHORT
-    # (i.e., expressive noise, not long input)
+    # (expressive noise, not long input)
     if len(normalized) < 200 and re.fullmatch(r"[A-Za-z]+", normalized):
-        normalized = collapse_runs(normalized)
+        collapsed = collapse_runs(normalized)
         normalized = collapsed
+
 
     # ------------------------------------------------------------
     # 6. Long input / empty input
