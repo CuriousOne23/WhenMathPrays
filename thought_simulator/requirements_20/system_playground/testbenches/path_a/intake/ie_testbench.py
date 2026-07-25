@@ -109,7 +109,7 @@ def run_testbench():
     harness = PipelineHarness(CONFIG)
 
     tests_to_run = CONFIG.get("tests_to_run", {})
-    expect_map = CONFIG.get("expect_failure", {})
+    expect_map = CONFIG.get("user_expects_failure", {})
 
     primitive_failures = []
 
@@ -123,7 +123,7 @@ def run_testbench():
 
         print("Running: {} ... ".format(test_id), end="")
 
-        expect_failure = expect_map.get(test_id, False)
+        user_expects_failure = expect_map.get(test_id, False)
 
         tp = ThoughtPacket(raw_input=test["input"])
         tp = harness.run(tp)
@@ -150,10 +150,10 @@ def run_testbench():
         # EXPECTATION LOGIC (log only)
         # ------------------------------------------------------------
         # User semantics:
-        #   expect_failure = True  → user expects primitive FAIL
-        #   expect_failure = False → user expects primitive PASS
+        #   user_expects_failure = True  → user expects primitive FAIL
+        #   user_expects_failure = False → user expects primitive PASS
         
-        user_expects_pass = not expect_failure   # True → expect PASS, False → expect FAIL
+        user_expects_pass = not user_expects_failure   # True → expect PASS, False → expect FAIL
         
         if passed == user_expects_pass:
             # User expectation satisfied
