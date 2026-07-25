@@ -1,6 +1,7 @@
 """
 IE Intake Envelope Testbench — Path A
 Three-test version to validate flow before expanding to full 7 tests.
+
 Supports:
     • standalone vs progressive pipeline
     • per-test selection (User inputs "Yes" or "No")
@@ -11,7 +12,6 @@ Supports:
 
 import os
 import yaml
-import unittest
 from dataclasses import dataclass, field
 
 # ---------------------------------------------------------------------------
@@ -68,7 +68,6 @@ def load_testbench():
     with open(yaml_path, "r", encoding="utf-8") as f:
         full_yaml = yaml.safe_load(f)
 
-    # Only keep first 3 tests
     return full_yaml.get("tests", [])[:3]
 
 # ---------------------------------------------------------------------------
@@ -82,19 +81,16 @@ class PipelineHarness:
         self.use_ie = cfg.get("use_ie", True)
 
     def run(self, tp: ThoughtPacket):
-        # InB
         if self.use_inb:
             tp = InB(tp)
         else:
             tp.metadata["inb_status"] = "accepted"
 
-        # IIInB
         if self.use_iiinb:
             tp = IIInB(tp)
         else:
             tp.metadata["iiinb_status"] = "inspected"
 
-        # IE
         if self.use_ie:
             tp = IE(tp)
         else:
@@ -103,101 +99,80 @@ class PipelineHarness:
         return tp
 
 # ---------------------------------------------------------------------------
-# Testbench Class
+# Development-mode Testbench Runner
 # ---------------------------------------------------------------------------
 
-class TestIE(unittest.TestCase):
+def run_testbench():
+    tests = load_testbench()
+    print("Loaded {} IE test cases (3-test mode).\n".format(len(tests)))
 
-    @classmethod
-    def setUpClass(cls):
-        cls.tests = load_testbench()
-        print("Loaded {} IE test cases (3-test mode).\n".format(len(cls.tests)))
-        cls.harness = PipelineHarness(CONFIG)
+    harness = PipelineHarness(CONFIG)
 
-        # Per-test selection: User inputs "Yes" or "No"
-        cls.tests_to_run = CONFIG.get("tests_to_run", {})
+    tests_to_run = CONFIG.get("tests_to_run", {})
+    expect_map = CONFIG.get("expect_failure", {})
 
-        # Per-test expectation: User inputs True or False
-        cls.expect_map = CONFIG.get("expect_failure", {})
+    primitive_failures = []
 
-        # Collect primitive failures for final summary
-        cls.primitive_failures = []
+    for test in tests:
+        test_id = test.get("id", "unnamed")
 
-    def test_ie_cases(self):
+        # Skip tests marked "No"
+        if tests_to_run.get(test_id, "No") != "Yes":
+            print("Skipping: {} (tests_to_run = No)".format(test_id))
+            continue
 
-        for test in self.tests:
-            test_id = test.get("id", "unnamed")
+        print("Running: {} ... ".format(test_id), end="")
 
-            # Skip tests marked "No"
-            if self.tests_to_run.get(test_id, "No") != "Yes":
-                print("Skipping: {} (tests_to_run = No)".format(test_id))
-                continue
+        expect_failure = expect_map.get(test_id, False)
 
-            print("Running: {} ... ".format(test_id), end="")
+        tp = ThoughtPacket(raw_input=test["input"])
+        tp = harness.run(tp)
 
-            # Per-test expectation (default False)
-            expect_failure = self.expect_map.get(test_id, False)
+        # Expected values
+        expected_inb_status = test.get("expected_inb_status", "accepted")
+        expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
+        expected_ie_status = test.get("expected_ie_status", "normalized")
+        expected_repairs = test.get("expected_repairs", [])
+        expected_normalized = test.get("expected_normalized", tp.raw_input)
 
-            raw_input = test["input"]
-            tp = ThoughtPacket(raw_input=raw_input)
+        # Checks
+        inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
+        iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
+        ie_ok = (tp.metadata.get("ie_status") == expected_ie_status)
+        repairs_ok = (tp.repairs == expected_repairs)
+        normalized_ok = (tp.normalized == expected_normalized)
 
-            # Execute pipeline
-            tp = self.harness.run(tp)
+        passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
 
-            # Expected values
-            expected_inb_status = test.get("expected_inb_status", "accepted")
-            expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
-            expected_ie_status = test.get("expected_ie_status", "normalized")
-            expected_repairs = test.get("expected_repairs", [])
-            expected_normalized = test.get("expected_normalized", raw_input)
-
-            # Checks
-            inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
-            iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
-            ie_ok = (tp.metadata.get("ie_status") == expected_ie_status)
-            repairs_ok = (tp.repairs == expected_repairs)
-            normalized_ok = (tp.normalized == expected_normalized)
-
-            passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
-
-            # ------------------------------------------------------------
-            # EXPECTATION LOGIC (log only)
-            # ------------------------------------------------------------
-            if expect_failure:
-                if passed:
-                    print("FAIL, Expectation (Fail, no failure detected)")
-                else:
-                    print("PASS, Expectation (Fail, failure detected)")
+        # Expectation logic
+        if expect_failure:
+            if passed:
+                print("FAIL, Expectation (Fail, no failure detected)")
             else:
-                if passed:
-                    print("PASS, Expectation (Pass, clean result)")
-                else:
-                    print("FAIL, Expectation (Pass, primitive reported failure)")
-
-            # ------------------------------------------------------------
-            # DEVELOPMENT MODE: Do NOT stop on primitive failure
-            # ------------------------------------------------------------
-            if not passed:
-                self.__class__.primitive_failures.append(test_id)
-
-        # ------------------------------------------------------------
-        # FINAL SUMMARY (after all tests run)
-        # ------------------------------------------------------------
-        print("\n=== Primitive Failure Summary ===")
-        if len(self.primitive_failures) == 0:
-            print("All selected tests passed primitive correctness.\n")
+                print("PASS, Expectation (Fail, failure detected)")
         else:
-            print("Primitive failures detected in:")
-            for tid in self.primitive_failures:
-                print("  - {}".format(tid))
-            print()
+            if passed:
+                print("PASS, Expectation (Pass, clean result)")
+            else:
+                print("FAIL, Expectation (Pass, primitive reported failure)")
 
-        # unittest success: development mode always passes
-        self.assertTrue(True)
+        # Development-mode primitive failure logging
+        if not passed:
+            primitive_failures.append(test_id)
+
+    # Final summary
+    print("\n=== Primitive Failure Summary ===")
+    if len(primitive_failures) == 0:
+        print("All selected tests passed primitive correctness.\n")
+    else:
+        print("Primitive failures detected in:")
+        for tid in primitive_failures:
+            print("  - {}".format(tid))
+        print()
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    unittest.main()
+    run_testbench()
