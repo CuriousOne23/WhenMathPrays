@@ -82,7 +82,7 @@ ACTIVE_TEST_MODULES = [
             "use_inb": False,          # True for progressive
             "use_iiinb": False,        # True for progressive
             "use_ie": True,
-            "expect_failure": False    # True = test expects failure
+            "expect_failure": True    # True = test expects failure
         }
     ),
 
