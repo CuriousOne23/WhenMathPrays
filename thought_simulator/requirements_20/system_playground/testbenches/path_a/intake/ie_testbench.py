@@ -1,9 +1,9 @@
 """
 IE Intake Envelope Testbench — Path A
-Three‑test version to validate flow before expanding to full 7 tests.
+Three-test version to validate flow before expanding to full 7 tests.
 Supports:
     • standalone vs progressive pipeline
-    • per‑test expectation (from run.py)
+    • per-test expectation (from run.py)
     • upstream toggles (InB, IIInB, IE)
 """
 
@@ -109,19 +109,19 @@ class TestIE(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tests = load_testbench()
-        print(f"Loaded {len(cls.tests)} IE test cases (3‑test mode).\n")
+        print("Loaded {} IE test cases (3-test mode).\n".format(len(cls.tests)))
         cls.harness = PipelineHarness(CONFIG)
 
-        # Per‑test expectation mapping from run.py
+        # Per-test expectation mapping from run.py
         cls.expect_map = CONFIG.get("expect_failure", {})
 
     def test_ie_cases(self):
 
         for test in self.tests:
             test_id = test.get("id", "unnamed")
-            print(f"Running: {test_id} ...", end=" ")
+            print("Running: {} ... ".format(test_id), end="")
 
-            # Per‑test expectation (default False)
+            # Per-test expectation (default False)
             expect_failure = self.expect_map.get(test_id, False)
 
             raw_input = test["input"]
@@ -163,7 +163,7 @@ class TestIE(unittest.TestCase):
             # ------------------------------------------------------------
             # unittest asserts primitive truth ONLY
             # ------------------------------------------------------------
-            self.assertTrue(passed, f"Primitive reported failure: {test_id}")
+            self.assertTrue(passed, "Primitive reported failure: {}".format(test_id))
 
 # ---------------------------------------------------------------------------
 # Main
