@@ -1,30 +1,17 @@
 """
-Thought Simulator — Testbench Runner
-------------------------------------
+Thought Simulator — Development Testbench Runner
+------------------------------------------------
 
-Process Overview:
-    • User selects which testbenches to run by commenting/uncommenting
-      entries in ACTIVE_TEST_MODULES.
-
-    • Each testbench receives:
-          - mode: "standalone" or "progressive"
-          - upstream toggles: use_inb, use_iiinb, use_ie
-          - tests_to_run: User inputs "Yes" or "No"
-          - expect_failure: User inputs True or False
-
-      This allows per-test selection and per-test expectation control
-      without modifying YAML.
-
-    • Primitive correctness is enforced inside each testbench.
-      Expectation correctness is logged (stdout redirected to file).
-
-    • Run from repo root:
-          python thought_simulator/.../testbenches/run.py > results.log
+This runner:
+    • Loads selected testbench modules
+    • Injects configuration (mode, upstream toggles, tests_to_run, expect_failure)
+    • Calls each testbench's run_testbench() function directly
+    • Does NOT use unittest (development mode)
 """
 
 import sys
 import os
-import unittest
+import importlib
 
 # ============================================================
 # Add repo root to Python path
@@ -39,9 +26,6 @@ sys.path.insert(0, repo_root)
 
 ACTIVE_TEST_MODULES = [
 
-    # --------------------------------------------------------
-    # IE Intake Envelope Testbench (3-test mode)
-    # --------------------------------------------------------
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
@@ -69,27 +53,30 @@ ACTIVE_TEST_MODULES = [
         }
     ),
 
-    # --------------------------------------------------------
     # Add more testbenches here later
-    # --------------------------------------------------------
 ]
 
 # ============================================================
-# RUNNER (DO NOT EDIT BELOW THIS LINE)
+# RUNNER (NO unittest)
 # ============================================================
 
 if __name__ == "__main__":
-    loader = unittest.TestLoader()
-    suite = unittest.TestSuite()
 
     for module_path, config in ACTIVE_TEST_MODULES:
-        module = __import__(module_path, fromlist=[''])
 
-        # Inject configuration into testbench
+        print("\n============================================================")
+        print("Running Testbench Module:")
+        print("  {}".format(module_path))
+        print("============================================================\n")
+
+        module = importlib.import_module(module_path)
+
+        # Inject configuration
         if hasattr(module, "set_testbench_config"):
             module.set_testbench_config(config)
 
-        suite.addTests(loader.loadTestsFromModule(module))
-
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+        # Call development-mode runner
+        if hasattr(module, "run_testbench"):
+            module.run_testbench()
+        else:
+            print("ERROR: Module {} does not define run_testbench()".format(module_path))
