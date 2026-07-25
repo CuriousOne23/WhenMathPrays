@@ -20,102 +20,102 @@ simulation:
 
 tests:
 
-  # ----------------------------------------------------------
-  # 1. Clean input — no defects
-  # ----------------------------------------------------------
   - id: "clean.simple"
-    description: "Clean input should produce no defects."
+    description: "Clean input should produce no repairs."
     input: "The dog chased the cat."
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects: []
+    expected_repairs: []
+    expected_normalized: "The dog chased the cat."
 
-  # ----------------------------------------------------------
-  # 2. Unicode noise
-  # ----------------------------------------------------------
   - id: "unicode.noise"
-    description: "Unicode noise should be flagged."
+    description: "Unicode noise should be normalized."
     input: "The dog chased the cat. � �"
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "unicode.invalid"
+    expected_repairs:
+      - op: "normalize_unicode"
+        target: "�"
+        replacement: ""
+        rule_id: "iiinb.unicode.invalid"
+    expected_normalized: "The dog chased the cat.  "
 
-  # ----------------------------------------------------------
-  # 3. Structural break
-  # ----------------------------------------------------------
   - id: "structural.break"
-    description: "Malformed structural tokens should be detected."
+    description: "Malformed structural tokens should be repaired."
     input: "The dog chased the cat <broken>"
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "structural.malformed"
+    expected_repairs:
+      - op: "remove_structural_token"
+        target: "<broken>"
+        replacement: ""
+        rule_id: "iiinb.structural.malformed"
+    expected_normalized: "The dog chased the cat "
 
-  # ----------------------------------------------------------
-  # 4. Empty input
-  # ----------------------------------------------------------
   - id: "empty.input"
-    description: "Empty input should produce an empty-input defect."
+    description: "Empty input should produce no repairs."
     input: ""
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "empty.input"
+    expected_repairs: []
+    expected_normalized: ""
 
-  # ----------------------------------------------------------
-  # 5. Long input (generated dynamically)
-  # ----------------------------------------------------------
   - id: "long.input"
-    description: "Long input generated dynamically to test length bounds."
+    description: "Long input should be normalized deterministically."
     generate_long_input: true
     long_length: 5000
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "length.exceeds.bound"
+    expected_repairs: []
+    expected_normalized: "<long_input>"
 
-      # ----------------------------------------------------------
-  # 6. Repeating‑letter noise
-  # ----------------------------------------------------------
   - id: "repeating.letters"
-    description: "Excessive repeating letters should be flagged."
+    description: "Excessive repeating letters should be collapsed."
     input: "YYYYYYYYYYEEEEEAAAAHHHH"
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "letters.repeating.excess"
+    expected_repairs:
+      - op: "collapse_repeated_chars"
+        target: "YYYYYYYYYY"
+        replacement: "YY"
+        rule_id: "iiinb.repeating.letters"
+      - op: "collapse_repeated_chars"
+        target: "EEEEE"
+        replacement: "EE"
+        rule_id: "iiinb.repeating.letters"
+      - op: "collapse_repeated_chars"
+        target: "AAAA"
+        replacement: "AA"
+        rule_id: "iiinb.repeating.letters"
+      - op: "collapse_repeated_chars"
+        target: "HHHH"
+        replacement: "HH"
+        rule_id: "iiinb.repeating.letters"
+    expected_normalized: "YYEEAAHH"
 
-  # ----------------------------------------------------------
-  # 7. Shorthand / informal contraction
-  # ----------------------------------------------------------
   - id: "shorthand.plz"
-    description: "Informal shorthand 'plz' should be flagged."
+    description: "Informal shorthand 'plz' should be expanded."
     input: "plz help me"
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "spelling.informal"
+    expected_repairs:
+      - op: "expand_shorthand"
+        target: "plz"
+        replacement: "please"
+        rule_id: "iiinb.shorthand.plz"
+    expected_normalized: "please help me"
 
-  # ----------------------------------------------------------
-  # 8. Misspelling: transposition ('hte' → 'the')
-  # ----------------------------------------------------------
   - id: "misspelling.transposition"
-    description: "Transposed letters should be detected."
+    description: "Transposed letters should be repaired."
     input: "hte dog chased the cat"
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "spelling.transposed"
+    expected_repairs:
+      - op: "correct_transposition"
+        target: "hte"
+        replacement: "the"
+        rule_id: "iiinb.spelling.transposed"
+    expected_normalized: "the dog chased the cat"
 
-  # ----------------------------------------------------------
-  # 9. Misspelling: missing letter ('rd' → 'red' or 'word')
-  # ----------------------------------------------------------
   - id: "misspelling.missing"
-    description: "Missing-letter misspelling should be detected."
+    description: "Missing-letter misspelling should be repaired."
     input: "The rd fox jumped."
-    expected_inb_status: "accepted"
     expected_iiinb_status: "inspected"
-    expected_defects:
-      - "spelling.missing"
-
+    expected_repairs:
+      - op: "correct_missing_letter"
+        target: "rd"
+        replacement: "red"
+        rule_id: "iiinb.spelling.missing"
+    expected_normalized: "The red fox jumped."
