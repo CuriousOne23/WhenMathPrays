@@ -29,11 +29,7 @@ def InB(tp: ThoughtPacket):
     tp.metadata["inb_status"] = "accepted"
     return tp
 
-def IIInB(tp: ThoughtPacket):
-    tp.metadata["iiinb_status"] = "inspected"
-    tp.repairs = []       # IIInB proposes repairs
-    tp.normalized = tp.raw_input  # default normalized surface
-    return tp
+from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import IIInB
 
 # ---------------------------------------------------------------------------
 # Testbench Loader
