@@ -37,18 +37,26 @@ ACTIVE_TEST_MODULES = [
             "use_iiinb": False,
             "use_ie": True,
 
-            # tests_to_run: User inputs "Yes" or "No"
+            # tests_to_run enter Yes or No
             "tests_to_run": {
                 "clean.simple": "Yes",
                 "normalize.whitespace": "Yes",
-                "normalize.punctuation": "Yes"
+                "normalize.punctuation": "Yes",
+                "detect.excessive_whitespace": "Yes",
+                "detect.excessive_punctuation": "Yes",
+                "repair.whitespace": "Yes",
+                "repair.punctuation": "Yes"
             },
 
-            # expect_failure: User inputs True or False
+            # expect_failure enter in True or False
             "expect_failure": {
                 "clean.simple": False,
                 "normalize.whitespace": True,
-                "normalize.punctuation": False
+                "normalize.punctuation": False,
+                "detect.excessive_whitespace": False,
+                "detect.excessive_punctuation": False,
+                "repair.whitespace": False,
+                "repair.punctuation": False
             }
         }
     ),
