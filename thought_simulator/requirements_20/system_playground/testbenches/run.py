@@ -4,7 +4,7 @@ Thought Simulator — Development Testbench Runner
 
 This runner:
     • Loads selected testbench modules
-    • Injects configuration (mode, upstream toggles, tests_to_run, user_expect_failure)
+    • Injects configuration (mode, upstream toggles, tests_to_run, user_expects_failure)
     • Calls each testbench's run_testbench() function directly
     • Does NOT use unittest (development mode)
 """
@@ -48,8 +48,8 @@ ACTIVE_TEST_MODULES = [
                 "repair.punctuation": "Yes"
             },
 
-            # user_expect_failure enter in True or False
-            "user_expect_failure": {
+            # user_expects_failure enter in True or False
+            "user_expects_failure": {
                 "clean.simple": True,
                 "normalize.whitespace": True,
                 "normalize.punctuation": False,
