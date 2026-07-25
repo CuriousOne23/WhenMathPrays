@@ -12,9 +12,15 @@ Usage:
            ⭐ To disable a testbench, place ONE '#' at the start of the tuple.
            ⭐ You do NOT need to comment out every line.
 
-        2. Do NOT modify the runner code at the bottom.
+        2. Each tuple includes "expect_failure":
+               expect_failure = False  → test expects everything to be OK
+               expect_failure = True   → test expects a failure
 
-        3. Run from repo root:
+           Both are valid and important test modes.
+
+        3. Do NOT modify the runner code at the bottom.
+
+        4. Run from repo root:
                python thought_simulator/requirements_20/system_playground/testbenches/run.py > results.log
 
            Or from inside testbenches:
@@ -51,7 +57,8 @@ ACTIVE_TEST_MODULES = [
     #         "mode": "standalone",
     #         "use_inb": True,
     #         "use_iiinb": False,
-    #         "use_ie": False
+    #         "use_ie": False,
+    #         "expect_failure": False     # or True
     #     }
     # ),
 
@@ -62,18 +69,20 @@ ACTIVE_TEST_MODULES = [
     #         "mode": "standalone",
     #         "use_inb": False,
     #         "use_iiinb": True,
-    #         "use_ie": False
+    #         "use_ie": False,
+    #         "expect_failure": False     # or True
     #     }
     # ),
 
     # --- IE Intake Envelope Testbench ---
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+        "thought_simulator.requirements_20.system_playground/testbenches/path_a/intake/ie_testbench",
         {
             "mode": "standalone",      # or "progressive"
             "use_inb": False,          # True for progressive
             "use_iiinb": False,        # True for progressive
-            "use_ie": True
+            "use_ie": True,
+            "expect_failure": False    # True = test expects failure
         }
     ),
 
@@ -88,7 +97,8 @@ ACTIVE_TEST_MODULES = [
     #         "mode": "standalone",
     #         "use_inb": False,
     #         "use_iiinb": False,
-    #         "use_ie": False
+    #         "use_ie": False,
+    #         "expect_failure": False
     #     }
     # ),
 
@@ -99,7 +109,8 @@ ACTIVE_TEST_MODULES = [
     #         "mode": "standalone",
     #         "use_inb": False,
     #         "use_iiinb": False,
-    #         "use_ie": False
+    #         "use_ie": False,
+    #         "expect_failure": True     # Example: boundary tests often expect failure
     #     }
     # ),
 
@@ -108,11 +119,10 @@ ACTIVE_TEST_MODULES = [
     # --------------------------------------------------------
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.output.test_cex_output",
-    #     { "mode": "standalone" }
-    # ),
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_b.context.test_context_engine",
-    #     { "mode": "standalone" }
+    #     {
+    #         "mode": "standalone",
+    #         "expect_failure": False
+    #     }
     # ),
 ]
 
