@@ -146,13 +146,13 @@ This is ideal for debugging, CI, and deterministic replay.
 
 ---
 
-## Hot key control for commenting out multiple lines on
+## Hot key Control for Commenting Out Multiple Lines
 
-**Windows / Linux**  
-    Ctrl + /
-
-**Mac**  
-    Cmd + /
+First select the lines you want to comment or uncomment, following are the hot key cntrl per OS:
+- **Windows / Linux**
+    - Ctrl + /
+- **Mac**
+    - Cmd + /
 
 This will toggle comments on all selected lines:
 - If the lines are uncommented → it adds # to each line
