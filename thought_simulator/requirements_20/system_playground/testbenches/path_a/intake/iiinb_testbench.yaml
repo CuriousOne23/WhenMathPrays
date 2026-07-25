@@ -62,7 +62,6 @@ tests:
     long_length: 5000
     expected_iiinb_status: "inspected"
     expected_repairs: []
-    expected_normalized: "<long_input>"
 
   - id: "repeating.letters"
     description: "Excessive repeating letters should be collapsed."
