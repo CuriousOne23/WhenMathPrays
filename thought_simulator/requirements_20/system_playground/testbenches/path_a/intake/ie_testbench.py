@@ -149,25 +149,24 @@ def run_testbench():
         # ------------------------------------------------------------
         # EXPECTATION LOGIC (log only)
         # ------------------------------------------------------------
+        # User semantics:
+        #   expect_failure = True  → user expects primitive FAIL
+        #   expect_failure = False → user expects primitive PASS
         
-        # Your intended semantics:
-        # expect_failure = False → expect primitive FAIL
-        # expect_failure = True  → expect primitive PASS
+        user_expects_pass = not expect_failure   # True → expect PASS, False → expect FAIL
         
-        expected_pass = expect_failure  # True means expect PASS, False means expect FAIL
-        
-        if passed == expected_pass:
-            # expectation satisfied
+        if passed == user_expects_pass:
+            # User expectation satisfied
             if passed:
                 print("PASS, Expectation (Pass, clean result)")
             else:
-                print("FAIL, Expectation (Fail, failure detected)")
+                print("PASS, Expectation (Fail, failure detected)")
         else:
-            # expectation violated
+            # User expectation violated
             if passed:
                 print("FAIL, Expectation (Pass, no failure detected)")
             else:
-                print("PASS, Expectation (Fail, primitive reported failure)")
+                print("FAIL, Expectation (Fail, primitive reported failure)")
 
         # Development-mode primitive failure logging
         if not passed:
