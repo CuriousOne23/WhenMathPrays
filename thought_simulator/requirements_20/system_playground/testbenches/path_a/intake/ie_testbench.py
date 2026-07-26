@@ -171,7 +171,7 @@ def run_testbench():
             print(
                 f"Test is a FAIL. "
                 f"User expects failure = {user_expects_failure}, "
-                f"Expected primitive results is {primitive_expected_results_str} \u2260 "
+                f"Expected primitive results is {primitive_expected_results_str} <> "
                 f"Primitive result = ({primitive_result_str})"
             )
 
