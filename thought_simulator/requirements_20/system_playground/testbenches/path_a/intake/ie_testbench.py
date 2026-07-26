@@ -158,15 +158,15 @@ def run_testbench():
         if passed == user_expects_pass:
             # User expectation satisfied
             if passed:
-                print("PASS, User Expectation = (Primitive: Pass, clean result)")
+                print(f"PASS, User Expectation = User expects failure: {user_expects_failure}, (Primitive: Pass, clean result)")
             else:
-                print("PASS, User Expectation = (Primitive: Fail, failure detected)")
+                print(f"PASS, User Expectation = User expects failure: {user_expects_failure}, (Primitive: Fail, failure detected)")
         else:
             # User expectation violated
             if passed:
-                print("FAIL, User Expectation not equal to (Primitive: Pass, no failure detected)")
+                print(f"FAIL, User Expectation not equal to User expects failure: {user_expects_failure}, (Primitive: Pass, no failure detected)")
             else:
-                print("FAIL, User Expectation not equl to (Primitive: Fail, reported failure)")
+                print("FAIL, User Expectation not equl to User expects failure: {user_expects_failure}, (Primitive: Fail, reported failure)")
 
         # Development-mode primitive failure logging
         if not passed:
