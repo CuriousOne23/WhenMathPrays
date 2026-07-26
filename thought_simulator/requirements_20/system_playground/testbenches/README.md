@@ -1,4 +1,5 @@
-# **README.md — Thought Simulator Testbenches (Path A)**
+# ✅ **Corrected README.md — Thought Simulator Testbenches (Path A)**  
+*(Aligned with new architecture: no expected‑failure flags)*
 
 ## **Overview**
 The `testbenches/` directory contains all development‑mode test harnesses for the Thought Simulator primitives and pipeline.
@@ -17,10 +18,9 @@ The design supports:
 - Standalone primitive testing  
 - Progressive pipeline testing (InB → IIInB → IE → …)  
 - Per‑test selection (`Yes` / `No`)  
-- Per‑test expectation (`True` / `False`)  
 - YAML‑driven deterministic test cases  
 - Full development‑mode execution (no early exit)  
-- Complete primitive failure summaries  
+- Absolute PASS/FAIL evaluation (no “expected failure” mode)
 
 ---
 
@@ -41,7 +41,7 @@ All output is written to the log file you choose.
 
 ---
 
-## **Selecting Which Testbenches to Run (Single‑Line UX)**
+## **Selecting Which Testbenches to Run**
 
 Inside `run.py`, testbenches are listed in `ACTIVE_TEST_MODULES` as **tuples**:
 
@@ -61,13 +61,6 @@ ACTIVE_TEST_MODULES = [
                 "clean.simple": "Yes",
                 "normalize.whitespace": "Yes",
                 "normalize.punctuation": "Yes"
-            },
-
-            # expect_failure: User inputs True or False
-            "expect_failure": {
-                "clean.simple": False,
-                "normalize.whitespace": True,
-                "normalize.punctuation": False
             }
         }
     ),
@@ -148,35 +141,23 @@ Inside each testbench configuration:
 
 ---
 
-## **Per‑Test Expectation (True / False)**
+## **PASS/FAIL Is Absolute**
 
-Expectation is independent of primitive behavior:
+There is **no expected‑failure mode**.
 
-```python
-"expect_failure": {
-    "clean.simple": False,
-    "normalize.whitespace": True,
-    "normalize.punctuation": False
-}
-```
+Each testbench:
 
-Your intended semantics:
+1. Loads the YAML test file  
+2. Runs each selected test  
+3. Compares the primitive’s output to the YAML’s expected output  
+4. Reports PASS or FAIL  
 
-- `expect_failure = False` → expect primitive **FAIL**  
-- `expect_failure = True` → expect primitive **PASS**
+A test either:
 
-The testbench compares:
+- **matches the YAML expectations** → PASS  
+- **does not match the YAML expectations** → FAIL  
 
-```
-expected primitive result  vs  actual primitive result
-```
-
-and reports:
-
-- PASS, Expectation  
-- FAIL, Expectation  
-
-Interior parentheses always describe the **primitive result**.
+There is no conditional interpretation.
 
 ---
 
@@ -186,7 +167,6 @@ The testbench:
 
 - runs all selected tests  
 - logs primitive results  
-- logs expectation results  
 - never stops early  
 - prints a final primitive failure summary  
 
@@ -231,9 +211,9 @@ This toggles comments on all selected lines.
 
 Every downstream primitive in Path A follows the same pattern:
 
-### **1. You add a new testbench tuple in `run.py`**
+### **1. Add a new testbench tuple in `run.py`**
 
-Example for a future primitive `inb`:
+Example:
 
 ```python
 (
@@ -247,11 +227,6 @@ Example for a future primitive `inb`:
         "tests_to_run": {
             "inb.clean.simple": "Yes",
             "inb.detect.defect": "Yes"
-        },
-
-        "expect_failure": {
-            "inb.clean.simple": False,
-            "inb.detect.defect": True
         }
     }
 ),
@@ -270,35 +245,17 @@ You never modify the primitive testbench to add it to the system — run.py hand
 
 Every primitive testbench must:
 
-- import its primitive (e.g., `from primitives.inb.inb import InB`)
-- build a ThoughtPacket
-- call the primitive in standalone or progressive mode
-- compare primitive output to YAML expectations
+- import its primitive  
+- build a ThoughtPacket  
+- call the primitive in standalone or progressive mode  
+- compare primitive output to YAML expectations  
 
-Example pattern:
+This ensures:
 
-```python
-from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
-
-class PipelineHarness:
-    def __init__(self, cfg):
-        self.use_inb = cfg.get("use_inb", False)
-        self.use_iiinb = cfg.get("use_iiinb", False)
-        self.use_ie = cfg.get("use_ie", False)
-
-    def run(self, tp):
-        if self.use_inb:
-            tp = InB(tp)
-        if self.use_iiinb:
-            tp = IIInB(tp)
-        if self.use_ie:
-            tp = IE(tp)
-        return tp
-```
-
-### ✔ This ensures progressive chaining  
-### ✔ This ensures standalone mode works  
-### ✔ This ensures Path A primitives can be validated in isolation or in sequence  
+- progressive chaining  
+- standalone mode  
+- deterministic validation  
+- Path A primitives can be tested in isolation or sequence  
 
 ---
 
@@ -325,20 +282,6 @@ The testbench loads the YAML and runs only the tests selected in run.py.
 
 ---
 
-### **4. run.py + testbench + YAML = complete primitive integration**
-
-This triad is the entire Path A testing system:
-
-| Component | Responsibility |
-|----------|----------------|
-| **run.py** | Selects testbenches, injects config, runs them |
-| **prim_testbench.py** | Calls primitive progressively, compares results |
-| **prim_testbench.yaml** | Defines deterministic test cases |
-
-This is the correct architecture for all downstream primitives.
-
----
-
 ## **Summary**
 
 - **run.py is the only file you edit**  
@@ -346,11 +289,9 @@ This is the correct architecture for all downstream primitives.
 - Enable/disable testbenches with **one `#`**  
 - Configure standalone/progressive mode inside the tuple  
 - Select tests using **Yes/No**  
-- Set expectations using **True/False**  
+- PASS/FAIL is absolute  
 - Testbenches never need editing  
 - Output is fully logged  
 - Development‑mode execution ensures full visibility  
-
-This README serves as the reference for all downstream Path A work.
 
 ---
