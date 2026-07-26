@@ -162,6 +162,7 @@ def run_testbench():
             print(
                 f"Test is a PASS. "
                 f"User expects failure = {user_expects_failure}, "
+                f"Primitive expected results = {user_expects_pass} = "
                 f"Primitive result = ({primitive_result_str})"
             )
         else:
@@ -169,6 +170,7 @@ def run_testbench():
             print(
                 f"Test is a FAIL. "
                 f"User expects failure = {user_expects_failure}, "
+                f"Primitive expected results = {user_expects_pass} not equal to "
                 f"Primitive result = ({primitive_result_str})"
             )
 
