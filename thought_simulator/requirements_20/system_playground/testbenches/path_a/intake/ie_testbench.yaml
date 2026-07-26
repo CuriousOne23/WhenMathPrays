@@ -1,111 +1,204 @@
 # ============================================================
-# Path A Intake Testbench — IE (Intake Envelope)
+# IE Testbench — Path‑A Intake Envelope
+# Deterministic Replay Testbench for 20.109 IE Primitive
 # ============================================================
-# Purpose:
-#   Provide deterministic, replayable scenarios for exercising
-#   the Intake Envelope (IE) primitive.
-#
-#   This trimmed version includes only the first 3 tests
-#   to validate testbench flow before expanding to full 7.
-# ============================================================
-
-testbench_id: "path_a.intake.ie"
-version: "1.0.1"
-description: "Trimmed IE testbench (3 tests) for flow validation."
-
-simulation:
-  deterministic: true
-  replayable: true
-  seed: 42
 
 tests:
 
   # ----------------------------------------------------------
-  # 1. Clean input — no normalization needed
+  # 1. Repair‑Only Case (No Anomalies)
   # ----------------------------------------------------------
-  - id: "clean.simple"
-    description: "Clean input should pass through unchanged."
-    input: "The dog chased the cat."
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat."
+  - id: ie_repair_only_whitespace
+    description: "IE applies IIInB whitespace normalization repair"
+    iiinb_output:
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+      anomaly_flags: []
+    expected:
+      repairs:
+        - "whitespace.normalized"
+      normalized: "The dog"
+      ie_status: "repaired"
+      anomaly_flags: []
 
   # ----------------------------------------------------------
-  # 2. Whitespace normalization
+  # 2. Repair‑Only Case (Multiple Repairs)
   # ----------------------------------------------------------
-  - id: "normalize.whitespace"
-    description: "Excess whitespace should be normalized."
-    input: "   The   dog   chased   the   cat.   "
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "whitespace.normalized"
-    expected_normalized: "The dog chased the cat."
+  - id: ie_multiple_repairs
+    description: "IE applies multiple deterministic repairs"
+    iiinb_output:
+      repair_operations:
+        - type: "repetition.cleaned"
+          target: "cccchhhhhaaassseeedddd"
+          proposal: "chased"
+        - type: "case.normalized"
+          target: "the dog chased the cat"
+          proposal: "The dog chased the cat"
+        - type: "punctuation.cleaned"
+          target: "The dog chased the cat!!!"
+          proposal: "The dog chased the cat!"
+      anomaly_flags: []
+    expected:
+      repairs:
+        - "repetition.cleaned"
+        - "case.normalized"
+        - "punctuation.cleaned"
+      normalized: "The dog chased the cat!"
+      ie_status: "repaired"
+      anomaly_flags: []
 
   # ----------------------------------------------------------
-  # 3. Punctuation cleanup
+  # 3. Anomaly‑Only Case (No Repairs)
   # ----------------------------------------------------------
-  - id: "normalize.punctuation"
-    description: "Excess punctuation should be repaired."
-    input: "The dog chased the cat!!!"
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "punctuation.cleaned"
-    expected_normalized: "The dog chased the cat!"
+  - id: ie_anomaly_only
+    description: "IE propagates anomaly when IIInB cannot repair"
+    iiinb_output:
+      repair_operations: []
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "#"
+          location: 2
+    expected:
+      repairs:
+        - "anomaly.illegal_character.unknown"
+      normalized: "Th#e dog chased the cat"
+      ie_status: "anomaly_propagated"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "#"
+          location: 2
 
   # ----------------------------------------------------------
-  # 4. Excessive whitespace detection (future IE behavior)
+  # 4. Mixed Repairs + Anomaly
   # ----------------------------------------------------------
-  - id: "detect.excessive_whitespace"
-    description: "IE should detect excessive whitespace even if repairs are not yet implemented."
-    input: "The    dog      chased   the   cat."
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "whitespace.detected"
-    expected_normalized: "The dog chased the cat."
+  - id: ie_mixed_repairs_anomaly
+    description: "IE applies repairs and propagates unresolved anomaly"
+    iiinb_output:
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "@"
+          location: 7
+    expected:
+      repairs:
+        - "whitespace.normalized"
+        - "anomaly.illegal_character.unknown"
+      normalized: "The dog@"
+      ie_status: "anomaly_propagated"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "@"
+          location: 7
 
   # ----------------------------------------------------------
-  # 5. Excessive punctuation detection (future IE behavior)
+  # 5. Structural Normalization Case
   # ----------------------------------------------------------
-  - id: "detect.excessive_punctuation"
-    description: "IE should detect excessive punctuation even if repairs are not yet implemented."
-    input: "The dog chased the cat!!!!!!"
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "punctuation.detected"
-    expected_normalized: "The dog chased the cat!"
+  - id: ie_structural_tags
+    description: "IE preserves structural tags from IIInB"
+    iiinb_output:
+      repair_operations:
+        - type: "punctuation.cleaned"
+          target: "Hello,, world"
+          proposal: "Hello, world"
+      anomaly_flags: []
+      structure:
+        tags:
+          - type: "block.start"
+            location: 0
+          - type: "block.end"
+            location: 12
+    expected:
+      repairs:
+        - "punctuation.cleaned"
+      normalized: "Hello, world"
+      ie_status: "repaired"
+      anomaly_flags: []
+      structure:
+        tags:
+          - type: "block.start"
+            location: 0
+          - type: "block.end"
+            location: 12
 
   # ----------------------------------------------------------
-  # 6. Whitespace repair (future IE behavior)
+  # 6. Token Preservation Case
   # ----------------------------------------------------------
-  - id: "repair.whitespace"
-    description: "IE should repair excessive whitespace."
-    input: "   The    dog   chased    the   cat.   "
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "whitespace.normalized"
-    expected_normalized: "The dog chased the cat."
+  - id: ie_token_preservation
+    description: "IE preserves token boundaries exactly"
+    iiinb_output:
+      repair_operations:
+        - type: "case.normalized"
+          target: "the dog"
+          proposal: "The dog"
+      anomaly_flags: []
+      tokens:
+        - "the"
+        - "dog"
+    expected:
+      repairs:
+        - "case.normalized"
+      normalized: "The dog"
+      ie_status: "repaired"
+      anomaly_flags: []
+      tokens:
+        - "The"
+        - "dog"
 
   # ----------------------------------------------------------
-  # 7. Punctuation repair (future IE behavior)
+  # 7. Replay Determinism Case
   # ----------------------------------------------------------
-  - id: "repair.punctuation"
-    description: "IE should repair excessive punctuation."
-    input: "The dog chased the cat!!!!"
-    expected_inb_status: "accepted"
-    expected_iiinb_status: "inspected"
-    expected_ie_status: "normalized"
-    expected_repairs:
-      - "punctuation.cleaned"
-    expected_normalized: "The dog chased the cat!"
+  - id: ie_replay_determinism
+    description: "IE output must be identical for identical IIInB output"
+    iiinb_output:
+      repair_operations:
+        - type: "unicode.normalized"
+          target: "café"
+          proposal: "cafe"
+      anomaly_flags: []
+    expected:
+      repairs:
+        - "unicode.normalized"
+      normalized: "cafe"
+      ie_status: "repaired"
+      anomaly_flags: []
+
+  # ----------------------------------------------------------
+  # 8. Complex Mixed Case (Multiple Repairs + Multiple Anomalies)
+  # ----------------------------------------------------------
+  - id: ie_complex_mixed
+    description: "IE applies all repairs and propagates all anomalies"
+    iiinb_output:
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+        - type: "repetition.cleaned"
+          target: "cccaaattt"
+          proposal: "cat"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "%"
+          location: 3
+        - type: "illegal_character.unknown"
+          target: "$"
+          location: 9
+    expected:
+      repairs:
+        - "whitespace.normalized"
+        - "repetition.cleaned"
+        - "anomaly.illegal_character.unknown"
+        - "anomaly.illegal_character.unknown"
+      normalized: "The dog cat"
+      ie_status: "anomaly_propagated"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "%"
+          location: 3
+        - type: "illegal_character.unknown"
+          target: "$"
+          location: 9
