@@ -171,7 +171,6 @@ def run_testbench():
                 f"User expects failure = {user_expects_failure}, "
                 f"Primitive result = ({primitive_result_str})"
             )
-        )
 
         # Development-mode primitive failure logging
         if not passed:
