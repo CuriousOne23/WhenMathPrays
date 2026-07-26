@@ -162,7 +162,7 @@ def run_testbench():
             # User expectation satisfied
             print(
                 f"Test is a PASS. "
-                f"User expects failure = {user_expects_failure}\n "
+                f"In run.py, user expects failure = {user_expects_failure}\n "
                 f"(Expected primitive results is {primitive_expected_results_str}) = "
                 f"(Primitive result = ({primitive_result_str}))"
             )
@@ -170,7 +170,7 @@ def run_testbench():
             # User expectation violated
             print(
                 f"Test is a FAIL. "
-                f"User expects failure = {user_expects_failure}\n "
+                f"In run.py, user expects failure = {user_expects_failure}\n "
                 f"(Expected primitive results is {primitive_expected_results_str}) <> "
                 f"(Primitive result = ({primitive_result_str}))"
             )
