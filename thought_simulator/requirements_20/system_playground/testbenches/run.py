@@ -46,17 +46,6 @@ ACTIVE_TEST_MODULES = [
                 "detect.excessive_punctuation": "Yes",
                 "repair.whitespace": "Yes",
                 "repair.punctuation": "Yes"
-            },
-
-            # user_expects_failure enter in True or False
-            "user_expects_failure": {
-                "clean.simple": True,
-                "normalize.whitespace": True,
-                "normalize.punctuation": False,
-                "detect.excessive_whitespace": False,
-                "detect.excessive_punctuation": False,
-                "repair.whitespace": False,
-                "repair.punctuation": False
             }
         }
     ),
