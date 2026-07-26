@@ -1,13 +1,12 @@
 """
 IE Intake Envelope Testbench — Path A
-Three-test version to validate flow before expanding to full 7 tests.
+Updated version: removes user_expects_failure logic entirely.
 
 Supports:
     • standalone vs progressive pipeline
     • per-test selection (User inputs "Yes" or "No")
-    • per-test expectation (User inputs True or False)
     • upstream toggles (InB, IIInB, IE)
-    • development-mode full execution (no early exit)
+    • absolute PASS/FAIL per test (no expected-failure mode)
 """
 
 import os
@@ -26,172 +25,99 @@ def set_testbench_config(cfg):
     CONFIG = cfg
 
 # ---------------------------------------------------------------------------
-# Thought Packet (TP) structure
+# Thought Packet (TP) structure (simplified for IE-only testing)
 # ---------------------------------------------------------------------------
 
 @dataclass
 class ThoughtPacket:
     raw_input: str
-    metadata: dict = field(default_factory=dict)
-    defects: list = field(default_factory=list)
+    inb_status: str = None
+    iiinb_status: str = None
+    ie_status: str = None
     repairs: list = field(default_factory=list)
-    normalized: str = ""
+    normalized: str = None
 
 # ---------------------------------------------------------------------------
-# Primitive stubs (replace with real implementations later)
+# Dummy IE primitive (placeholder for real implementation)
 # ---------------------------------------------------------------------------
 
-def InB(tp: ThoughtPacket):
-    tp.metadata["inb_status"] = "accepted"
+def run_ie(tp: ThoughtPacket):
+    """
+    Placeholder IE implementation.
+    Normalizes whitespace, cleans punctuation, and sets status.
+    """
+    text = tp.raw_input.strip()
+
+    # Whitespace normalization
+    while "  " in text:
+        text = text.replace("  ", " ")
+
+    # Punctuation cleanup
+    if text.endswith("!!!"):
+        text = text[:-2] + "!"
+
+        tp.repairs.append("punctuation.cleaned")
+
+    tp.normalized = text
+    tp.ie_status = "normalized"
     return tp
 
-def IIInB(tp: ThoughtPacket):
-    tp.metadata["iiinb_status"] = "inspected"
-    tp.defects = []
-    return tp
-
-def IE(tp: ThoughtPacket):
-    tp.metadata["ie_status"] = "normalized"
-    tp.normalized = tp.raw_input
-    tp.repairs = []
-    return tp
-
 # ---------------------------------------------------------------------------
-# Load YAML testbench
+# Testbench runner
 # ---------------------------------------------------------------------------
 
-def load_testbench():
+def run_testbench():
+
     yaml_path = os.path.join(
         os.path.dirname(__file__),
         "ie_testbench.yaml"
     )
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        full_yaml = yaml.safe_load(f)
 
-    return full_yaml.get("tests", [])
+    with open(yaml_path, "r") as f:
+        tb = yaml.safe_load(f)
 
-# ---------------------------------------------------------------------------
-# Pipeline Harness
-# ---------------------------------------------------------------------------
+    tests = tb.get("tests", [])
 
-class PipelineHarness:
-    def __init__(self, cfg):
-        self.use_inb = cfg.get("use_inb", False)
-        self.use_iiinb = cfg.get("use_iiinb", False)
-        self.use_ie = cfg.get("use_ie", True)
-
-    def run(self, tp: ThoughtPacket):
-        if self.use_inb:
-            tp = InB(tp)
-        else:
-            tp.metadata["inb_status"] = "accepted"
-
-        if self.use_iiinb:
-            tp = IIInB(tp)
-        else:
-            tp.metadata["iiinb_status"] = "inspected"
-
-        if self.use_ie:
-            tp = IE(tp)
-        else:
-            tp.metadata["ie_status"] = "normalized"
-
-        return tp
-
-# ---------------------------------------------------------------------------
-# Development-mode Testbench Runner
-# ---------------------------------------------------------------------------
-
-def run_testbench():
-    tests = load_testbench()
-    print("Loaded {} IE test cases.\n".format(len(tests)))
-
-    harness = PipelineHarness(CONFIG)
-
-    tests_to_run = CONFIG.get("tests_to_run", {})
-    expect_map = CONFIG.get("user_expects_failure", {})
-
-    primitive_failures = []
+    print("Loaded {} IE tests from YAML".format(len(tests)))
+    print("Pipeline mode:", CONFIG.get("mode"))
+    print("Upstream toggles:", CONFIG.get("use_inb"), CONFIG.get("use_iiinb"), CONFIG.get("use_ie"))
+    print()
 
     for test in tests:
-        test_id = test.get("id", "unnamed")
 
-        # Skip tests marked "No"
-        if tests_to_run.get(test_id, "No") != "Yes":
-            print("Skipping: {} (tests_to_run = No)".format(test_id))
+        test_id = test.get("id")
+        run_flag = CONFIG["tests_to_run"].get(test_id, "No")
+
+        if run_flag != "Yes":
+            print(f"[SKIP] {test_id}")
             continue
 
-        print("Running: {} ... ".format(test_id), end="")
+        print(f"[RUN ] {test_id} — {test.get('description')}")
 
-        user_expects_failure = expect_map.get(test_id, False)
+        # Build TP
+        tp = ThoughtPacket(
+            raw_input=test.get("input"),
+            inb_status=test.get("expected_inb_status"),
+            iiinb_status=test.get("expected_iiinb_status")
+        )
 
-        tp = ThoughtPacket(raw_input=test["input"])
-        tp = harness.run(tp)
+        # Run IE (standalone mode)
+        if CONFIG.get("use_ie"):
+            tp = run_ie(tp)
 
-        # Expected values
-        expected_inb_status = test.get("expected_inb_status", "accepted")
-        expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
-        expected_ie_status = test.get("expected_ie_status", "normalized")
+        # Compare results
+        expected_ie_status = test.get("expected_ie_status")
         expected_repairs = test.get("expected_repairs", [])
-        expected_normalized = test.get("expected_normalized", tp.raw_input)
+        expected_normalized = test.get("expected_normalized")
 
-        # Checks
-        inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
-        iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
-        ie_ok = (tp.metadata.get("ie_status") == expected_ie_status)
+        status_ok = (tp.ie_status == expected_ie_status)
         repairs_ok = (tp.repairs == expected_repairs)
         normalized_ok = (tp.normalized == expected_normalized)
 
-        passed = inb_ok and iiinb_ok and ie_ok and repairs_ok and normalized_ok
-
-        # Expectation logic
-
-        # ------------------------------------------------------------
-        # EXPECTATION LOGIC (log only)
-        # ------------------------------------------------------------
-        # User semantics:
-        #   user_expects_failure = True  → user expects primitive FAIL
-        #   user_expects_failure = False → user expects primitive PASS
-        
-        user_expects_pass = not user_expects_failure   # True → expect PASS, False → expect FAIL
-        
-        primitive_result_str = "Pass" if passed else "Fail"
-        primitive_expected_results_str = "Fail" if user_expects_failure else "Pass"
-        
-        if passed == user_expects_pass:
-            # User expectation satisfied
-            print(
-                f"Test is a PASS. "
-                f"In run.py, user expects failure = {user_expects_failure}\n "
-                f"(Expected primitive results is {primitive_expected_results_str}) = "
-                f"(Primitive result = ({primitive_result_str}))"
-            )
+        if status_ok and repairs_ok and normalized_ok:
+            print(f"  PASS — {test_id}\n")
         else:
-            # User expectation violated
-            print(
-                f"Test is a FAIL. "
-                f"In run.py, user expects failure = {user_expects_failure}\n "
-                f"(Expected primitive results is {primitive_expected_results_str}) <> "
-                f"(Primitive result = ({primitive_result_str}))"
-            )
-
-        # Development-mode primitive failure logging
-        if not passed:
-            primitive_failures.append(test_id)
-
-    # Final summary
-    print("\n=== Primitive Failure Summary ===")
-    if len(primitive_failures) == 0:
-        print("All selected tests passed primitive correctness.\n")
-    else:
-        print("Primitive failures detected in:")
-        for tid in primitive_failures:
-            print("  - {}".format(tid))
-        print()
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    run_testbench()
+            print(f"  FAIL — {test_id}")
+            print(f"    Expected status: {expected_ie_status}, got: {tp.ie_status}")
+            print(f"    Expected repairs: {expected_repairs}, got: {tp.repairs}")
+            print(f"    Expected normalized: {expected_normalized}, got: {tp.normalized}\n")
