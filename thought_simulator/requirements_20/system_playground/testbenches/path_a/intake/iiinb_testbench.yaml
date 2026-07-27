@@ -222,12 +222,12 @@ tests:
     expected:
       iiinb_status: "inspected"
       repair_operations:
-        - type: "punctuation.cleaned"
-          target: ",,"
-          proposal: ","
         - type: "structural.cleaned"
           target: "<broken>"
           proposal: ""
+        - type: "punctuation.cleaned"
+          target: ",,"
+          proposal: ","
       anomaly_flags:
         - type: "illegal_character.unknown"
           target: "@"
