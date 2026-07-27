@@ -203,31 +203,33 @@ def IIInB(tp):
         normalized = collapse_runs(normalized)
 
     # ----------------------------------------------------------------------
-    # 9. Illegal character anomalies (corrected indexing)
+    # 9. Illegal character anomalies (FINAL CORRECT LOGIC)
     # ----------------------------------------------------------------------
+    
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?")
+    
+    # We ONLY scan the RAW INPUT for illegal characters.
+    # Characters that appear ONLY in normalized (e.g., replay determinism) MUST NOT be flagged.
     
     for idx, ch in enumerate(raw):
     
-        # Skip spaces entirely (spaces are never illegal and never counted)
+        # 1. Spaces are NEVER illegal and NEVER counted
         if ch == " ":
             continue
     
-        # Skip characters IIInB removed (they won't appear in normalized)
+        # 2. Skip characters IIInB removed (they won't appear in normalized)
         if ch not in normalized:
             continue
     
-        # Skip allowed characters
+        # 3. Skip allowed characters
         if ch in allowed:
             continue
     
-        # At this point: ch is illegal AND present in normalized
+        # 4. ch is illegal AND present in normalized.
+        #    We compute its anomaly location using RAW indexing:
+        #    Count NON-SPACE characters in raw BEFORE idx.
     
-        # Find its position in the normalized string
-        norm_index = normalized.find(ch)
-    
-        # Compute anomaly index by counting non-space characters before norm_index
-        effective = sum(1 for c in normalized[:norm_index] if c != " ")
+        effective = sum(1 for c in raw[:idx] if c != " ")
     
         tp.anomalies.append({
             "type": "illegal_character.unknown",
