@@ -20,7 +20,7 @@ Implements deterministic, pre-semantic application of IIInB output:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
 
@@ -166,29 +166,15 @@ def _compute_normalized(ie_input: IEInput) -> str:
 
     - If there are repair_operations:
         - Take the proposal of the *last* repair operation as the final normalized string.
-          This matches the idea that IIInB has already composed repairs into a final proposal.
     - If there are no repair_operations but anomalies:
-        - IE propagates anomaly; normalized string is assumed to be the upstream
-          canonical string with anomalies injected. Since we don't have the upstream
-          canonical here, we fall back to the anomaly target injection pattern
-          used in the testbench (the testbench will provide the base string).
+        - Return the anomaly target when there is exactly one anomaly.
     """
     if ie_input.repair_operations:
-        # Deterministic: last repair proposal is the final normalized string
         return ie_input.repair_operations[-1].proposal
 
-    # No repairs; anomaly-only case.
-    # The actual base string is provided by the testbench; IE itself just
-    # passes through the anomaly flags and does not invent a new string.
-    # For compatibility with the testbench expectations, we return the
-    # anomaly target if there is exactly one anomaly and no repairs.
     if ie_input.anomaly_flags and len(ie_input.anomaly_flags) == 1:
-        # The testbench will compare against a specific normalized string;
-        # IE here is intentionally minimal and defers full reconstruction
-        # to upstream context.
         return ie_input.anomaly_flags[0].target
 
-    # Fallback: empty normalized string
     return ""
 
 
@@ -197,7 +183,7 @@ def _compute_ie_status(ie_input: IEInput) -> str:
         return "anomaly_propagated"
     if ie_input.repair_operations:
         return "repaired"
-    return "repaired"  # default benign status
+    return "repaired"
 
 
 def _compute_structure(ie_input: IEInput) -> Optional[Dict[str, Any]]:
@@ -219,13 +205,9 @@ def _compute_tokens(ie_input: IEInput) -> Optional[List[str]]:
     if not ie_input.tokens:
         return None
 
-    # Simple rule consistent with token preservation test:
-    # - If there is a case.normalized repair, update the first token
-    #   to match the proposal's first token.
     tokens = list(ie_input.tokens)
     for r in ie_input.repair_operations:
         if r.type == "case.normalized" and tokens:
-            # Split proposal into tokens and use the first one
             proposal_tokens = r.proposal.split()
             if proposal_tokens:
                 tokens[0] = proposal_tokens[0]
@@ -240,26 +222,6 @@ def _compute_tokens(ie_input: IEInput) -> Optional[List[str]]:
 def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
     """
     Main IE entry point used by the testbench.
-
-    Parameters
-    ----------
-    iiinb_output : dict
-        Structure matching ie_testbench.yaml:
-        - repair_operations: list of {type, target, proposal, ...}
-        - anomaly_flags: list of {type, target, location, ...}
-        - optional structure.tags
-        - optional tokens
-
-    Returns
-    -------
-    dict
-        Structure matching `expected` in ie_testbench.yaml:
-        - repairs: list of strings
-        - normalized: string
-        - ie_status: string
-        - anomaly_flags: list of anomaly dicts
-        - optional structure.tags
-        - optional tokens
     """
     ie_input = _parse_ie_input(iiinb_output)
 
@@ -288,3 +250,4 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     return output.to_dict()
+
