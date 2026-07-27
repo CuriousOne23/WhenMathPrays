@@ -88,16 +88,28 @@ def run_testbench():
         # ------------------------------------------------------------------
         # Requirement-aware PASS/FAIL messaging
         # ------------------------------------------------------------------
+        # ------------------------------------------------------------------
+        # Improved PASS/FAIL messaging
+        # ------------------------------------------------------------------
+        
+        actual_defects = tp.defects
+        
         if passed:
             if expected_failure:
                 print(f"EXPECTED FAILURE — {name}")
-                print("PASS: This test case contains known defects. A failure was expected and the system behaved correctly.\n")
+                print(f"PASS: InB correctly detected defects {actual_defects} in input \"{raw_input}\".\n")
             else:
-                print(f"PASS — {name}\n")
+                if expected_defects:
+                    print(f"PASS — {name}")
+                    print(f"Detected expected defects {expected_defects} in input \"{raw_input}\".\n")
+                else:
+                    print(f"PASS — {name}")
+                    print(f"No defects detected, as expected, for input \"{raw_input}\".\n")
         else:
             if expected_failure:
                 print(f"UNEXPECTED PASS — {name}")
-                print("FAIL: This test case contains known defects, but the system did not detect them.\n")
+                print(f"FAIL: Expected defects {expected_defects}, but InB returned {actual_defects}.\n")
             else:
-                print(f"UNEXPECTED FAILURE — {name}")
-                print("FAIL: This test case should have passed. The failure indicates a real defect in the system.\n")
+                print(f"FAIL — {name}")
+                print(f"Expected defects {expected_defects}, but InB returned {actual_defects}.")
+                print(f"InB failed to detect required defect(s) in input \"{raw_input}\".\n")
