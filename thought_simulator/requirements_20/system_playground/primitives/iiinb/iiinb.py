@@ -219,23 +219,23 @@ def iiinb_inspect(intake: dict) -> dict:
     }
 
 class IIInB:
-    def __init__(self, intake):
-        self.intake = intake
-        self.metadata = {}
-        self.repair_operations = []
-        self.anomaly_flags = []
-        self.normalized = ""
-        self.tokens = intake.get("tokens", [])
+    def __init__(self, tp):
+        # tp is a ThoughtPacket, not a dict
+        self.tp = tp
 
     def inspect(self):
-        # run iiinb_inspect and populate attributes
-        result = iiinb_inspect(self.intake)
+        # Run the clean-room implementation using tp.surface and tp.tokens
+        result = iiinb_inspect({
+            "surface": self.tp.surface,
+            "tokens": self.tp.tokens
+        })
 
-        self.metadata["iiinb_status"] = result["iiinb_status"]
-        self.repair_operations = result["repair_operations"]
-        self.anomaly_flags = result["anomaly_flags"]
-        self.normalized = result["normalized"]
-        self.tokens = result["tokens"]
+        # Write results back into the ThoughtPacket
+        self.tp.metadata["iiinb_status"] = result["iiinb_status"]
+        self.tp.repair_operations = result["repair_operations"]
+        self.tp.anomaly_flags = result["anomaly_flags"]
+        self.tp.normalized = result["normalized"]
+        self.tp.tokens = result["tokens"]
 
-        return self
+        return self.tp
 
