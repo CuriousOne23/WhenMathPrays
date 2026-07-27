@@ -2,113 +2,111 @@
 IIInB — Input Inference/Repair Basin (Primitive)
 Path A — Bounded Intake Inspection / Repair Proposals
 
-This primitive operates on TP.intake.surface (here: tp.raw_input) and
-produces deterministic, pre‑semantic repair proposals and a suggested
-normalized surface form, without applying semantic inference.
+This primitive operates on TP.intake.surface (tp.raw_input) and produces:
+  - deterministic repair_operations
+  - deterministic anomaly_flags
+  - deterministic normalized surface
+  - optional tokens / structure metadata
 
-It is designed to be called from the Path A intake testbenches:
+It is designed for the Path A pipeline:
 InB → IIInB → IE
 """
 
 import re
 
-
 def IIInB(tp):
-    """
-    IIInB primitive.
-
-    Expected TP fields (as used by the testbenches):
-      - tp.raw_input: str
-      - tp.metadata: dict
-      - tp.repairs: list
-      - tp.normalized: str
-
-    This implementation:
-      - sets iiinb_status = "inspected"
-      - analyzes tp.raw_input
-      - proposes deterministic repairs in tp.repairs
-      - sets tp.normalized to a suggested normalized surface
-    """
-
     raw = tp.raw_input
-    tp.metadata.setdefault("iiinb_status", "inspected")
-    tp.repairs = []
+
+    # ----------------------------------------------------------------------
+    # Initialize IIInB fields
+    # ----------------------------------------------------------------------
+    tp.metadata["iiinb_status"] = "inspected"
+    tp.repairs = []            # IE expects "repair_operations"
+    tp.anomalies = []          # IE expects "anomaly_flags"
+    tp.tokens = []             # optional
+    tp.structure = {}          # optional
     normalized = raw
 
-    # ------------------------------------------------------------
-    # 1. Unicode noise normalization (e.g., '�')
-    # ------------------------------------------------------------
-    if "�" in normalized:
-        new = normalized.replace("�", "")
+    # ----------------------------------------------------------------------
+    # Helper: add a repair in IE-compatible format
+    # ----------------------------------------------------------------------
+    def add_repair(type_name, target, proposal):
         tp.repairs.append({
-            "op": "normalize_unicode",
-            "target": "�",
-            "replacement": "",
-            "rule_id": "iiinb.unicode.invalid",
+            "type": type_name,
+            "target": target,
+            "proposal": proposal,
         })
-        normalized = new
 
-    # ------------------------------------------------------------
-    # 2. Structural token removal (e.g., "<broken>")
-    # ------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # Helper: add an anomaly in IE-compatible format
+    # ----------------------------------------------------------------------
+    def add_anomaly(type_name, target, location):
+        tp.anomalies.append({
+            "type": type_name,
+            "target": target,
+            "location": location,
+        })
+
+    # ----------------------------------------------------------------------
+    # 1. Unicode invalid character removal (�)
+    # ----------------------------------------------------------------------
+    for idx, ch in enumerate(normalized):
+        if ch == "�":
+            add_repair("unicode.normalized", "�", "")
+            normalized = normalized.replace("�", "")
+
+    # ----------------------------------------------------------------------
+    # 2. Illegal character anomalies (non-alnum punctuation except allowed)
+    # ----------------------------------------------------------------------
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
+    for idx, ch in enumerate(normalized):
+        if ch not in allowed:
+            add_anomaly("illegal_character.unknown", ch, idx)
+
+    # ----------------------------------------------------------------------
+    # 3. Structural token cleanup
+    # ----------------------------------------------------------------------
     if "<broken>" in normalized:
-        new = normalized.replace("<broken>", "")
-        tp.repairs.append({
-            "op": "remove_structural_token",
-            "target": "<broken>",
-            "replacement": "",
-            "rule_id": "iiinb.structural.malformed",
-        })
-        normalized = new
+        add_repair("structural.cleaned", "<broken>", "")
+        normalized = normalized.replace("<broken>", "")
 
-    # ------------------------------------------------------------
-    # 3. Shorthand expansion (e.g., "plz" → "please")
-    # ------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # 4. Shorthand expansion ("plz" → "please")
+    # ----------------------------------------------------------------------
     tokens = normalized.split()
     changed = False
     for i, t in enumerate(tokens):
         if t == "plz":
+            add_repair("shorthand.expanded", "plz", "please")
             tokens[i] = "please"
-            tp.repairs.append({
-                "op": "expand_shorthand",
-                "target": "plz",
-                "replacement": "please",
-                "rule_id": "iiinb.shorthand.plz",
-            })
             changed = True
     if changed:
         normalized = " ".join(tokens)
 
-    # ------------------------------------------------------------
-    # 4. Spelling corrections — transposition and missing letter
-    # ------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    # 5. Spelling corrections
+    # ----------------------------------------------------------------------
     spelling_map = {
-        "hte": ("the", "iiinb.spelling.transposed", "correct_transposition"),
-        "rd": ("red", "iiinb.spelling.missing", "correct_missing_letter"),
+        "hte": ("the", "spelling.transposed"),
+        "rd": ("red", "spelling.missing"),
     }
-    
+
     tokens = normalized.split()
     changed = False
     for i, t in enumerate(tokens):
         if t in spelling_map:
-            replacement, rule_id, op_name = spelling_map[t]
+            replacement, type_name = spelling_map[t]
+            add_repair(type_name, t, replacement)
             tokens[i] = replacement
-            tp.repairs.append({
-                "op": op_name,
-                "target": t,
-                "replacement": replacement,
-                "rule_id": rule_id,
-            })
             changed = True
-    
+
     if changed:
         normalized = " ".join(tokens)
 
-    # ------------------------------------------------------------
-    # 5. Repeating‑letter noise collapse
-    #    Example: "YYYYYYYYYYEEEEEAAAAHHHH" → "YYEEAAHH"
-    # ------------------------------------------------------------
-    def collapse_runs(s: str) -> str:
+    # ----------------------------------------------------------------------
+    # 6. Repetition collapse (bounded expressive noise)
+    # ----------------------------------------------------------------------
+    def collapse_runs(s):
         result = []
         i = 0
         while i < len(s):
@@ -118,32 +116,30 @@ def IIInB(tp):
                 j += 1
             run_len = j - i
             if run_len > 2:
-                # collapse to exactly two characters
+                add_repair("repetition.cleaned", ch * run_len, ch * 2)
                 result.append(ch * 2)
-                tp.repairs.append({
-                    "op": "collapse_repeated_chars",
-                    "target": ch * run_len,
-                    "replacement": ch * 2,
-                    "rule_id": "iiinb.repeating.letters",
-                })
             else:
                 result.append(ch * run_len)
             i = j
         return "".join(result)
 
-    # Only collapse repeated letters if the string is SHORT
-    # (expressive noise, not long input)
     if len(normalized) < 200 and re.fullmatch(r"[A-Za-z]+", normalized):
-        collapsed = collapse_runs(normalized)
-        normalized = collapsed
+        normalized = collapse_runs(normalized)
 
+    # ----------------------------------------------------------------------
+    # 7. Token emission (optional but IE-compatible)
+    # ----------------------------------------------------------------------
+    tp.tokens = normalized.split()
 
-    # ------------------------------------------------------------
-    # 6. Long input / empty input
-    #    For now, IIInB does not propose repairs; it simply passes
-    #    the surface through. Length/emptiness are handled by InB.
-    # ------------------------------------------------------------
-    # (No additional logic here — normalized already set.)
+    # ----------------------------------------------------------------------
+    # 8. Structural metadata (optional)
+    # ----------------------------------------------------------------------
+    tp.structure = {
+        "tags": []
+    }
 
+    # ----------------------------------------------------------------------
+    # Final normalized output
+    # ----------------------------------------------------------------------
     tp.normalized = normalized
     return tp
