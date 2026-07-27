@@ -17,8 +17,10 @@ from dataclasses import dataclass, field
 class ThoughtPacket:
     raw_input: str
     metadata: dict = field(default_factory=dict)
-    defects: list = field(default_factory=list)
     repairs: list = field(default_factory=list)
+    anomalies: list = field(default_factory=list)
+    tokens: list = field(default_factory=list)
+    structure: dict = field(default_factory=dict)
     normalized: str = ""
 
 # ---------------------------------------------------------------------------
@@ -65,7 +67,7 @@ class TestIIInB(unittest.TestCase):
                 length = test.get("long_length", 5000)
                 raw_input = "A" * length
             else:
-                raw_input = test["input"]
+                raw_input = test.get("input", "")
 
             tp = ThoughtPacket(raw_input=raw_input)
 
@@ -73,22 +75,38 @@ class TestIIInB(unittest.TestCase):
             tp = InB(tp)
             tp = IIInB(tp)
 
-            # Expected values
-            expected_inb_status = test.get("expected_inb_status", "accepted")
-            expected_iiinb_status = test.get("expected_iiinb_status", "inspected")
-            expected_repairs = test.get("expected_repairs", [])
-            expected_normalized = test.get("expected_normalized", raw_input)
+            # Expected block (new YAML structure)
+            expected = test.get("expected", {})
+
+            expected_inb_status = expected.get("inb_status", "accepted")
+            expected_iiinb_status = expected.get("iiinb_status", "inspected")
+            expected_repairs = expected.get("repair_operations", [])
+            expected_anomalies = expected.get("anomaly_flags", [])
+            expected_normalized = expected.get("normalized", raw_input)
+            expected_tokens = expected.get("tokens", None)
+            expected_structure = expected.get("structure", None)
 
             # Checks
             inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
             iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
             repairs_ok = (tp.repairs == expected_repairs)
+            anomalies_ok = (tp.anomalies == expected_anomalies)
             normalized_ok = (tp.normalized == expected_normalized)
 
-            passed = inb_ok and iiinb_ok and repairs_ok and normalized_ok
+            tokens_ok = True
+            if expected_tokens is not None:
+                tokens_ok = (tp.tokens == expected_tokens)
+
+            structure_ok = True
+            if expected_structure is not None:
+                structure_ok = (tp.structure == expected_structure)
+
+            passed = (
+                inb_ok and iiinb_ok and repairs_ok and anomalies_ok and
+                normalized_ok and tokens_ok and structure_ok
+            )
 
             print("PASS" if passed else "FAIL")
-
             self.assertTrue(passed, f"Test failed: {name}")
 
 # ---------------------------------------------------------------------------
