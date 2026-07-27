@@ -152,3 +152,118 @@ tests:
           proposal: "red"
       anomaly_flags: []
       normalized: "The red fox jumped."
+  
+  # ----------------------------------------------------------
+  # 10. Multiple Repairs — Whitespace + Punctuation
+  # ----------------------------------------------------------
+  - id: "multi.repairs.surface"
+    description: "Whitespace and punctuation excess should produce multiple repairs."
+    input: "The   dog!!!"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+        - type: "punctuation.cleaned"
+          target: "!!!"
+          proposal: "!"
+      anomaly_flags: []
+      normalized: "The dog!"
+
+  # ----------------------------------------------------------
+  # 11. Multiple Anomalies — Illegal Characters
+  # ----------------------------------------------------------
+  - id: "multi.anomalies.illegal"
+    description: "Multiple illegal characters should produce multiple anomaly flags."
+    input: "Th#e dog$ chased the cat%"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations: []
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "#"
+          location: 2
+        - type: "illegal_character.unknown"
+          target: "$"
+          location: 7
+        - type: "illegal_character.unknown"
+          target: "%"
+          location: 22
+      normalized: "Th#e dog$ chased the cat%"
+
+  # ----------------------------------------------------------
+  # 12. Mixed Repairs + Anomalies
+  # ----------------------------------------------------------
+  - id: "mixed.repairs.anomalies"
+    description: "IIInB should apply repairs and propagate anomalies."
+    input: "The   dog@!!!"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+        - type: "punctuation.cleaned"
+          target: "!!!"
+          proposal: "!"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "@"
+          location: 8
+      normalized: "The dog@!"
+
+  # ----------------------------------------------------------
+  # 13. Structural + Surface Repairs + Anomalies
+  # ----------------------------------------------------------
+  - id: "structural.surface.mixed"
+    description: "Structural cleanup, surface repairs, and anomalies together."
+    input: "Hello,, world <broken> @"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "punctuation.cleaned"
+          target: ",,"
+          proposal: ","
+        - type: "structural.cleaned"
+          target: "<broken>"
+          proposal: ""
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "@"
+          location: 20
+      normalized: "Hello, world  @"
+
+  # ----------------------------------------------------------
+  # 14. Token Preservation Case (IIInB → IE Compatibility)
+  # ----------------------------------------------------------
+  - id: "token.preservation"
+    description: "IIInB should emit tokens for IE to preserve boundaries."
+    input: "the dog"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "case.normalized"
+          target: "the"
+          proposal: "The"
+      anomaly_flags: []
+      tokens:
+        - "the"
+        - "dog"
+      normalized: "The dog"
+
+  # ----------------------------------------------------------
+  # 15. Replay Determinism — Identical Input → Identical Output
+  # ----------------------------------------------------------
+  - id: "replay.determinism"
+    description: "IIInB output must be identical for identical input."
+    input: "café�"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "unicode.normalized"
+          target: "�"
+          proposal: ""
+      anomaly_flags: []
+      normalized: "café"
+
