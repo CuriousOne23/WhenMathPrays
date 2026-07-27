@@ -218,24 +218,52 @@ def iiinb_inspect(intake: dict) -> dict:
         "tokens": tokens
     }
 
+# ============================================================
+# IIInB class wrapper for ThoughtPacket integration
+# ============================================================
+
 class IIInB:
     def __init__(self, tp):
-        # tp is a ThoughtPacket, not a dict
+        """
+        The testbench passes a ThoughtPacket instance into IIInB(tp).
+        We store it and mutate it during inspect().
+        """
         self.tp = tp
 
     def inspect(self):
-        # Run the clean-room implementation using tp.surface and tp.tokens
+        """
+        The testbench calls tp.inspect() with NO arguments.
+        We must:
+            • read tp.surface and tp.tokens
+            • run iiinb_inspect() on those values
+            • write results BACK into the ThoughtPacket
+            • return the ThoughtPacket
+        """
+
+        # Run the clean-room IIInB logic
         result = iiinb_inspect({
             "surface": self.tp.surface,
             "tokens": self.tp.tokens
         })
 
-        # Write results back into the ThoughtPacket
+        # The testbench expects these attributes on the ThoughtPacket:
+        #   tp.metadata["iiinb_status"]
+        #   tp.repair_operations
+        #   tp.anomaly_flags
+        #   tp.normalized
+        #   tp.tokens
+        #
+        # We must populate them exactly.
+
+        # Ensure metadata exists
+        if not hasattr(self.tp, "metadata") or self.tp.metadata is None:
+            self.tp.metadata = {}
+
         self.tp.metadata["iiinb_status"] = result["iiinb_status"]
         self.tp.repair_operations = result["repair_operations"]
         self.tp.anomaly_flags = result["anomaly_flags"]
         self.tp.normalized = result["normalized"]
         self.tp.tokens = result["tokens"]
 
+        # Return the ThoughtPacket (NOT a dict)
         return self.tp
-
