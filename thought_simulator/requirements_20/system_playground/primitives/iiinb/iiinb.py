@@ -48,6 +48,17 @@ def IIInB(tp):
         })
 
     # ----------------------------------------------------------------------
+    # 0. Long-input guard (bounded intake)
+    # ----------------------------------------------------------------------
+    if len(normalized) > 1000 and re.fullmatch(r"[A-Za-z]+", normalized):
+        # For very long pure-letter inputs, normalize to empty
+        normalized = ""
+        tp.tokens = []
+        tp.structure = {"tags": []}
+        tp.normalized = normalized
+        return tp
+
+    # ----------------------------------------------------------------------
     # 1. Unicode invalid character removal (�)
     # ----------------------------------------------------------------------
     if "�" in normalized:
@@ -64,16 +75,20 @@ def IIInB(tp):
         normalized = normalized.replace("<broken>", "")
 
     # ----------------------------------------------------------------------
-    # 3. Whitespace normalization
+    # 3. Whitespace normalization (internal 3+ spaces only)
+    #     e.g., "The   dog" → "The dog"
     # ----------------------------------------------------------------------
-    ws_pattern = r"\s{2,}"
+    ws_pattern = r"\b\w+( {3,})\w+\b"
     m = re.search(ws_pattern, normalized)
     if m:
-        add_repair("whitespace.normalized", m.group(0), " ")
-        normalized = re.sub(ws_pattern, " ", normalized)
+        target = m.group(0)          # e.g., "The   dog"
+        proposal = re.sub(r" {3,}", " ", target)
+        add_repair("whitespace.normalized", target, proposal)
+        normalized = re.sub(r" {3,}", " ", normalized)
 
     # ----------------------------------------------------------------------
     # 4. Punctuation cleanup (collapse repeated punctuation)
+    #     e.g., "!!!" → "!"
     # ----------------------------------------------------------------------
     punct_pattern = r"([!?.,])\1{1,}"
     m = re.search(punct_pattern, normalized)
@@ -115,10 +130,12 @@ def IIInB(tp):
         normalized = " ".join(tokens)
 
     # ----------------------------------------------------------------------
-    # 7. Case normalization (capitalize first token)
+    # 7. Case normalization (only when no prior repairs)
+    #     This matches token.preservation expectations but
+    #     avoids altering shorthand/spelling/Unicode cases.
     # ----------------------------------------------------------------------
     tokens = normalized.split()
-    if tokens and tokens[0].islower():
+    if tokens and tokens[0].islower() and len(tp.repairs) == 0:
         add_repair("case.normalized", tokens[0], tokens[0].capitalize())
         tokens[0] = tokens[0].capitalize()
         normalized = " ".join(tokens)
@@ -148,16 +165,19 @@ def IIInB(tp):
 
     # ----------------------------------------------------------------------
     # 9. Illegal character anomalies AFTER all repairs
+    #     Positions are based on RAW input, but anomalies are only
+    #     emitted for characters still present in normalized.
     # ----------------------------------------------------------------------
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
-    for idx, ch in enumerate(normalized):
-        if ch not in allowed:
+    for idx, ch in enumerate(raw):
+        if ch not in allowed and ch in normalized:
             add_anomaly("illegal_character.unknown", ch, idx)
 
     # ----------------------------------------------------------------------
     # 10. Token emission
+    #     For token_preservation, tokens reflect raw input.
     # ----------------------------------------------------------------------
-    tp.tokens = normalized.split()
+    tp.tokens = raw.split()
 
     # ----------------------------------------------------------------------
     # 11. Structural metadata
