@@ -219,5 +219,11 @@ def iiinb_inspect(intake: dict) -> dict:
     }
 
 class IIInB:
-    def inspect(self, intake: dict) -> dict:
-        return iiinb_inspect(intake)
+    def __init__(self, intake):
+        # The testbench passes the intake object into the constructor
+        self.intake = intake
+
+    def inspect(self):
+        # The testbench calls .inspect() with no arguments
+        return iiinb_inspect(self.intake)
+
