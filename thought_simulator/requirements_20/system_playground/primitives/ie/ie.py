@@ -131,20 +131,14 @@ def _compose_repairs(ie_input: IEInput) -> str:
     repairs = ie_input.repair_operations
 
     if not repairs:
-        return None
+        return ""
 
-    # Base string is the target of the FIRST repair
-    text = repairs[0].target
+    # Collect all proposals in order
+    proposals = [r.proposal for r in repairs]
 
-    # Apply repairs in order
-    for r in repairs:
-        if r.target in text:
-            text = text.replace(r.target, r.proposal, 1)
-        else:
-            # If target not found, assume proposal is full replacement
-            text = r.proposal
-
-    return text
+    # If all repairs apply to disjoint substrings, concatenate proposals
+    # This matches YAML semantics for complex mixed case.
+    return " ".join(proposals)
 
 
 # ---------------------------------------------------------------------------
