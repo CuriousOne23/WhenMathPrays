@@ -4,7 +4,7 @@ Thought Simulator — Development Testbench Runner
 
 This runner:
     • Loads selected testbench modules
-    • Injects configuration (mode, upstream toggles)
+    • Injects configuration (mode, upstream toggles, tests_to_run, user_expects_failure)
     • Calls each testbench's run_testbench() function directly
     • Does NOT use unittest (development mode)
 """
@@ -35,7 +35,19 @@ ACTIVE_TEST_MODULES = [
             # Upstream toggles: User inputs True or False
             "use_inb": False,
             "use_iiinb": False,
-            "use_ie": True
+            "use_ie": True,
+
+            # tests_to_run: keys MUST match ie_testbench.yaml `id` fields
+            "tests_to_run": {
+                "ie_repair_only_whitespace": "Yes",
+                "ie_multiple_repairs": "Yes",
+                "ie_anomaly_only": "Yes",
+                "ie_mixed_repairs_anomaly": "Yes",
+                "ie_structural_tags": "Yes",
+                "ie_token_preservation": "Yes",
+                "ie_replay_determinism": "Yes",
+                "ie_complex_mixed": "Yes"
+            }
         }
     ),
 
