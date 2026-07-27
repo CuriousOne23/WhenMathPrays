@@ -220,10 +220,22 @@ def iiinb_inspect(intake: dict) -> dict:
 
 class IIInB:
     def __init__(self, intake):
-        # The testbench passes the intake object into the constructor
         self.intake = intake
+        self.metadata = {}
+        self.repair_operations = []
+        self.anomaly_flags = []
+        self.normalized = ""
+        self.tokens = intake.get("tokens", [])
 
     def inspect(self):
-        # The testbench calls .inspect() with no arguments
-        return iiinb_inspect(self.intake)
+        # run iiinb_inspect and populate attributes
+        result = iiinb_inspect(self.intake)
+
+        self.metadata["iiinb_status"] = result["iiinb_status"]
+        self.repair_operations = result["repair_operations"]
+        self.anomaly_flags = result["anomaly_flags"]
+        self.normalized = result["normalized"]
+        self.tokens = result["tokens"]
+
+        return self
 
