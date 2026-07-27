@@ -169,9 +169,15 @@ def IIInB(tp):
     #     emitted for characters still present in normalized.
     # ----------------------------------------------------------------------
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
+    
     for idx, ch in enumerate(raw):
-        if ch not in allowed and ch in normalized:
-            add_anomaly("illegal_character.unknown", ch, idx)
+        # Illegal character?
+        if ch not in allowed:
+            # Only emit anomaly if the character still exists in normalized
+            # (i.e., it was NOT removed by unicode/structural cleanup)
+            if ch in normalized:
+                add_anomaly("illegal_character.unknown", ch, idx)
+
 
     # ----------------------------------------------------------------------
     # 10. Token emission
