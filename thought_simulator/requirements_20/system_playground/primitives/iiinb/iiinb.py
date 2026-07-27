@@ -1,15 +1,6 @@
 """
 IIInB — Input Inference/Repair Basin (Primitive)
 Path A — Bounded Intake Inspection / Repair Proposals
-
-This primitive operates on TP.intake.surface (tp.raw_input) and produces:
-  - deterministic repair_operations
-  - deterministic anomaly_flags
-  - deterministic normalized surface
-  - optional tokens / structure metadata
-
-It is designed for the Path A pipeline:
-InB → IIInB → IE
 """
 
 import re
@@ -28,7 +19,36 @@ def IIInB(tp):
     normalized = raw
 
     # ----------------------------------------------------------------------
-    # Helper: add a repair in IE-compatible format
+    # Cumulative index shift tracker
+    # + additions
+    # - removals
+    # - spaces
+    # ----------------------------------------------------------------------
+    cumulative_shift = [0] * (len(raw) + 1)
+    shift = 0
+
+    def record_removal(start, length):
+        nonlocal shift
+        shift -= length
+        cumulative_shift[start] = shift
+
+    def record_addition(start, length):
+        nonlocal shift
+        shift += length
+        cumulative_shift[start] = shift
+
+    def record_space(idx):
+        nonlocal shift
+        shift -= 1
+        cumulative_shift[idx] = shift
+
+    # Pre‑mark spaces as removed for indexing
+    for i, ch in enumerate(raw):
+        if ch == " ":
+            record_space(i)
+
+    # ----------------------------------------------------------------------
+    # Helper: add a repair
     # ----------------------------------------------------------------------
     def add_repair(type_name, target, proposal):
         tp.repairs.append({
@@ -38,20 +58,10 @@ def IIInB(tp):
         })
 
     # ----------------------------------------------------------------------
-    # Helper: add an anomaly in IE-compatible format
-    # ----------------------------------------------------------------------
-    def add_anomaly(type_name, target, location):
-        tp.anomalies.append({
-            "type": type_name,
-            "target": target,
-            "location": location,
-        })
-
-    # ----------------------------------------------------------------------
-    # 0. Long-input guard (bounded intake)
+    # 0. Long-input guard
     # ----------------------------------------------------------------------
     if len(normalized) > 1000 and re.fullmatch(r"[A-Za-z]+", normalized):
-        # For very long pure-letter inputs, normalize to empty
+        record_removal(0, len(raw))
         normalized = ""
         tp.tokens = []
         tp.structure = {"tags": []}
@@ -59,51 +69,74 @@ def IIInB(tp):
         return tp
 
     # ----------------------------------------------------------------------
-    # 1. Unicode invalid character removal (�)
+    # 1. Unicode invalid character removal
     # ----------------------------------------------------------------------
     if "�" in normalized:
         count = normalized.count("�")
         for _ in range(count):
             add_repair("unicode.normalized", "�", "")
+        idxs = [i for i, ch in enumerate(raw) if ch == "�"]
+        for i in idxs:
+            record_removal(i, 1)
         normalized = normalized.replace("�", "")
 
     # ----------------------------------------------------------------------
-    # 2. Structural cleanup BEFORE anomaly scan
+    # 2. Structural cleanup
     # ----------------------------------------------------------------------
     if "<broken>" in normalized:
         add_repair("structural.cleaned", "<broken>", "")
+        start = raw.find("<broken>")
+        if start != -1:
+            record_removal(start, len("<broken>"))
         normalized = normalized.replace("<broken>", "")
 
     # ----------------------------------------------------------------------
-    # 3. Whitespace normalization (internal 3+ spaces only)
-    #     e.g., "The   dog" → "The dog"
+    # 3. Whitespace normalization (internal 3+ spaces)
     # ----------------------------------------------------------------------
     ws_pattern = r"\b\w+( {3,})\w+\b"
     m = re.search(ws_pattern, normalized)
     if m:
-        target = m.group(0)          # e.g., "The   dog"
+        target = m.group(0)
         proposal = re.sub(r" {3,}", " ", target)
         add_repair("whitespace.normalized", target, proposal)
+
+        # count removed spaces
+        removed = len(m.group(1)) - 1
+        start = raw.find(target)
+        if start != -1:
+            record_removal(start + target.find(m.group(1)), removed)
+
         normalized = re.sub(r" {3,}", " ", normalized)
 
     # ----------------------------------------------------------------------
-    # 4. Punctuation cleanup (collapse repeated punctuation)
-    #     e.g., "!!!" → "!"
+    # 4. Punctuation cleanup
     # ----------------------------------------------------------------------
     punct_pattern = r"([!?.,])\1{1,}"
     m = re.search(punct_pattern, normalized)
     if m:
-        add_repair("punctuation.cleaned", m.group(0), m.group(1))
+        target = m.group(0)
+        proposal = m.group(1)
+        add_repair("punctuation.cleaned", target, proposal)
+
+        removed = len(target) - 1
+        start = raw.find(target)
+        if start != -1:
+            record_removal(start, removed)
+
         normalized = re.sub(punct_pattern, r"\1", normalized)
 
     # ----------------------------------------------------------------------
-    # 5. Shorthand expansion ("plz" → "please")
+    # 5. Shorthand expansion
     # ----------------------------------------------------------------------
     tokens = normalized.split()
     changed = False
     for i, t in enumerate(tokens):
         if t == "plz":
             add_repair("shorthand.expanded", "plz", "please")
+            added = len("please") - len("plz")
+            start = raw.find("plz")
+            if start != -1:
+                record_addition(start, added)
             tokens[i] = "please"
             changed = True
     if changed:
@@ -123,6 +156,10 @@ def IIInB(tp):
         if t in spelling_map:
             replacement, type_name = spelling_map[t]
             add_repair(type_name, t, replacement)
+            added = len(replacement) - len(t)
+            start = raw.find(t)
+            if start != -1:
+                record_addition(start, added)
             tokens[i] = replacement
             changed = True
 
@@ -131,8 +168,6 @@ def IIInB(tp):
 
     # ----------------------------------------------------------------------
     # 7. Case normalization (only when no prior repairs)
-    #     This matches token.preservation expectations but
-    #     avoids altering shorthand/spelling/Unicode cases.
     # ----------------------------------------------------------------------
     tokens = normalized.split()
     if tokens and tokens[0].islower() and len(tp.repairs) == 0:
@@ -141,7 +176,7 @@ def IIInB(tp):
         normalized = " ".join(tokens)
 
     # ----------------------------------------------------------------------
-    # 8. Repetition collapse (bounded expressive noise)
+    # 8. Repetition collapse
     # ----------------------------------------------------------------------
     def collapse_runs(s):
         result = []
@@ -154,6 +189,10 @@ def IIInB(tp):
             run_len = j - i
             if run_len > 2:
                 add_repair("repetition.cleaned", ch * run_len, ch * 2)
+                removed = run_len - 2
+                start = raw.find(ch * run_len)
+                if start != -1:
+                    record_removal(start, removed)
                 result.append(ch * 2)
             else:
                 result.append(ch * run_len)
@@ -164,33 +203,28 @@ def IIInB(tp):
         normalized = collapse_runs(normalized)
 
     # ----------------------------------------------------------------------
-    # 9. Illegal character anomalies AFTER all repairs
-    #     Positions are based on RAW input, but anomalies are only
-    #     emitted for characters still present in normalized.
+    # 9. Illegal character anomalies
     # ----------------------------------------------------------------------
-    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
-    
-    for idx, ch in enumerate(raw):
-        # Illegal character?
-        if ch not in allowed:
-            # Only emit anomaly if the character still exists in normalized
-            # (i.e., it was NOT removed by unicode/structural cleanup)
-            if ch in normalized:
-                add_anomaly("illegal_character.unknown", ch, idx)
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?")
 
+    for idx, ch in enumerate(raw):
+        if ch not in allowed and ch in normalized:
+            effective = idx + cumulative_shift[idx]
+            tp.anomalies.append({
+                "type": "illegal_character.unknown",
+                "target": ch,
+                "location": effective
+            })
 
     # ----------------------------------------------------------------------
     # 10. Token emission
-    #     For token_preservation, tokens reflect raw input.
     # ----------------------------------------------------------------------
     tp.tokens = raw.split()
 
     # ----------------------------------------------------------------------
     # 11. Structural metadata
     # ----------------------------------------------------------------------
-    tp.structure = {
-        "tags": []
-    }
+    tp.structure = {"tags": []}
 
     # ----------------------------------------------------------------------
     # Final normalized output
