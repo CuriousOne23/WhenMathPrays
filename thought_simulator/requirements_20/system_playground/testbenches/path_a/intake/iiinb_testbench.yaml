@@ -1,17 +1,11 @@
 # ============================================================
 # Path A Intake Testbench — IIInB (Bounded Intake Inspection)
-# ============================================================
-# Purpose:
-#   Provide deterministic, replayable scenarios for exercising
-#   the bounded intake inspection primitive (IIInB).
-#
-#   This testbench is intentionally minimal. It is designed
-#   for simulation alignment, not requirement coverage.
+# Deterministic Replay-Compatible Testbench for Pipeline Use
 # ============================================================
 
 testbench_id: "path_a.intake.iiinb"
-version: "1.0.0"
-description: "Testbench for bounded intake inspection (IIInB)."
+version: "2.0.0"
+description: "IIInB testbench aligned with InB→IIInB→IE pipeline."
 
 simulation:
   deterministic: true
@@ -20,101 +14,141 @@ simulation:
 
 tests:
 
+  # ----------------------------------------------------------
+  # 1. Clean Input — No Repairs, No Anomalies
+  # ----------------------------------------------------------
   - id: "clean.simple"
-    description: "Clean input should produce no repairs."
+    description: "Clean input should produce no repairs or anomalies."
     input: "The dog chased the cat."
-    expected_iiinb_status: "inspected"
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat."
+    expected:
+      iiinb_status: "inspected"
+      repair_operations: []
+      anomaly_flags: []
+      normalized: "The dog chased the cat."
 
+  # ----------------------------------------------------------
+  # 2. Unicode Noise Normalization
+  # ----------------------------------------------------------
   - id: "unicode.noise"
-    description: "Unicode noise should be normalized."
+    description: "Unicode invalid characters should be normalized."
     input: "The dog chased the cat. � �"
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "normalize_unicode"
-        target: "�"
-        replacement: ""
-        rule_id: "iiinb.unicode.invalid"
-    expected_normalized: "The dog chased the cat.  "
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "unicode.normalized"
+          target: "�"
+          proposal: ""
+        - type: "unicode.normalized"
+          target: "�"
+          proposal: ""
+      anomaly_flags: []
+      normalized: "The dog chased the cat.  "
 
+  # ----------------------------------------------------------
+  # 3. Structural Token Repair
+  # ----------------------------------------------------------
   - id: "structural.break"
     description: "Malformed structural tokens should be repaired."
     input: "The dog chased the cat <broken>"
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "remove_structural_token"
-        target: "<broken>"
-        replacement: ""
-        rule_id: "iiinb.structural.malformed"
-    expected_normalized: "The dog chased the cat "
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "structural.cleaned"
+          target: "<broken>"
+          proposal: ""
+      anomaly_flags: []
+      normalized: "The dog chased the cat "
 
+  # ----------------------------------------------------------
+  # 4. Empty Input
+  # ----------------------------------------------------------
   - id: "empty.input"
-    description: "Empty input should produce no repairs."
+    description: "Empty input should produce no repairs or anomalies."
     input: ""
-    expected_iiinb_status: "inspected"
-    expected_repairs: []
-    expected_normalized: ""
+    expected:
+      iiinb_status: "inspected"
+      repair_operations: []
+      anomaly_flags: []
+      normalized: ""
 
+  # ----------------------------------------------------------
+  # 5. Long Input — Deterministic Replay
+  # ----------------------------------------------------------
   - id: "long.input"
     description: "Long input should be normalized deterministically."
     generate_long_input: true
     long_length: 5000
-    expected_iiinb_status: "inspected"
-    expected_repairs: []
+    expected:
+      iiinb_status: "inspected"
+      repair_operations: []
+      anomaly_flags: []
+      normalized: ""   # Filled by generator
 
+  # ----------------------------------------------------------
+  # 6. Repeating Letters — Collapse
+  # ----------------------------------------------------------
   - id: "repeating.letters"
     description: "Excessive repeating letters should be collapsed."
     input: "YYYYYYYYYYEEEEEAAAAHHHH"
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "collapse_repeated_chars"
-        target: "YYYYYYYYYY"
-        replacement: "YY"
-        rule_id: "iiinb.repeating.letters"
-      - op: "collapse_repeated_chars"
-        target: "EEEEE"
-        replacement: "EE"
-        rule_id: "iiinb.repeating.letters"
-      - op: "collapse_repeated_chars"
-        target: "AAAA"
-        replacement: "AA"
-        rule_id: "iiinb.repeating.letters"
-      - op: "collapse_repeated_chars"
-        target: "HHHH"
-        replacement: "HH"
-        rule_id: "iiinb.repeating.letters"
-    expected_normalized: "YYEEAAHH"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "repetition.cleaned"
+          target: "YYYYYYYYYY"
+          proposal: "YY"
+        - type: "repetition.cleaned"
+          target: "EEEEE"
+          proposal: "EE"
+        - type: "repetition.cleaned"
+          target: "AAAA"
+          proposal: "AA"
+        - type: "repetition.cleaned"
+          target: "HHHH"
+          proposal: "HH"
+      anomaly_flags: []
+      normalized: "YYEEAAHH"
 
+  # ----------------------------------------------------------
+  # 7. Shorthand Expansion
+  # ----------------------------------------------------------
   - id: "shorthand.plz"
     description: "Informal shorthand 'plz' should be expanded."
     input: "plz help me"
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "expand_shorthand"
-        target: "plz"
-        replacement: "please"
-        rule_id: "iiinb.shorthand.plz"
-    expected_normalized: "please help me"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "shorthand.expanded"
+          target: "plz"
+          proposal: "please"
+      anomaly_flags: []
+      normalized: "please help me"
 
+  # ----------------------------------------------------------
+  # 8. Misspelling — Transposition
+  # ----------------------------------------------------------
   - id: "misspelling.transposition"
     description: "Transposed letters should be repaired."
     input: "hte dog chased the cat"
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "correct_transposition"
-        target: "hte"
-        replacement: "the"
-        rule_id: "iiinb.spelling.transposed"
-    expected_normalized: "the dog chased the cat"
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "spelling.transposed"
+          target: "hte"
+          proposal: "the"
+      anomaly_flags: []
+      normalized: "the dog chased the cat"
 
+  # ----------------------------------------------------------
+  # 9. Misspelling — Missing Letter
+  # ----------------------------------------------------------
   - id: "misspelling.missing"
     description: "Missing-letter misspelling should be repaired."
     input: "The rd fox jumped."
-    expected_iiinb_status: "inspected"
-    expected_repairs:
-      - op: "correct_missing_letter"
-        target: "rd"
-        replacement: "red"
-        rule_id: "iiinb.spelling.missing"
-    expected_normalized: "The red fox jumped."
+    expected:
+      iiinb_status: "inspected"
+      repair_operations:
+        - type: "spelling.missing"
+          target: "rd"
+          proposal: "red"
+      anomaly_flags: []
+      normalized: "The red fox jumped."
