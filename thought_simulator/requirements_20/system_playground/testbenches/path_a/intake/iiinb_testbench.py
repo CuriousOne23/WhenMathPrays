@@ -87,12 +87,12 @@ def run_testbench():
 
     print(f"Selected {len(selected)} IIInB test cases.\n")
 
+    passed_count = 0
+    failed_count = 0
+    
     for test in selected:
         name = test.get("id", "unnamed")
         print(f"Running: {name}")
-
-        passed_count = 0
-        failed_count = 0
         
         # Generate long input if requested
         if test.get("generate_long_input", False):
