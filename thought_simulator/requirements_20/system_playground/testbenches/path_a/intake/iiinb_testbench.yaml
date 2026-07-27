@@ -232,7 +232,7 @@ tests:
         - type: "illegal_character.unknown"
           target: "@"
           location: 11
-      normalized: "Hello, world  @"
+      normalized: "Hello, world @"
 
   # ----------------------------------------------------------
   # 14. Token Preservation Case (IIInB → IE Compatibility)
