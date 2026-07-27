@@ -203,28 +203,26 @@ def IIInB(tp):
         normalized = collapse_runs(normalized)
 
     # ----------------------------------------------------------------------
-    # 9. Illegal character anomalies (FINAL — matches YAML exactly)
+    # 9. Illegal character anomalies (Normalized indexing, skip spaces)
     # ----------------------------------------------------------------------
     
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?")
     
-    for idx, ch in enumerate(raw):
+    for ch in normalized:
     
-        # 1. Spaces are never illegal and never counted
+        # Skip spaces entirely
         if ch == " ":
             continue
     
-        # 2. Skip characters removed by repairs (not present in normalized)
-        if ch not in normalized:
-            continue
-    
-        # 3. Skip allowed characters
+        # Skip allowed characters
         if ch in allowed:
             continue
     
-        # 4. Illegal character found — compute anomaly index
-        #    Count NON-SPACE characters in RAW before idx
-        effective = sum(1 for c in raw[:idx] if c != " ")
+        # Illegal character found in normalized
+        norm_index = normalized.index(ch)
+    
+        # Count non-space characters before norm_index
+        effective = sum(1 for c in normalized[:norm_index] if c != " ")
     
         tp.anomalies.append({
             "type": "illegal_character.unknown",
