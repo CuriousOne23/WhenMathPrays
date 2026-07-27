@@ -208,7 +208,7 @@ def IIInB(tp):
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?")
 
     for idx, ch in enumerate(raw):
-        if ch not in allowed and ch in normalized:
+        if ch != " " and ch not in allowed and ch in normalized:
             effective = idx + cumulative_shift[idx]
             tp.anomalies.append({
                 "type": "illegal_character.unknown",
