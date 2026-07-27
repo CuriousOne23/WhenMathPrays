@@ -6,7 +6,6 @@ Designed to be executed by run.py
 
 import os
 import yaml
-import unittest
 from dataclasses import dataclass, field
 
 # ---------------------------------------------------------------------------
@@ -41,70 +40,64 @@ def load_testbench():
         return yaml.safe_load(f)
 
 # ---------------------------------------------------------------------------
-# Testbench Class (unittest-compatible)
+# Configuration injection (required by run.py)
 # ---------------------------------------------------------------------------
 
-class TestInBIntake(unittest.TestCase):
+CONFIG = {}
 
-    @classmethod
-    def setUpClass(cls):
-        cls.testbench = load_testbench()
-        cls.tests = cls.testbench.get("tests", [])
-        print(f"Loaded {len(cls.tests)} InB intake test cases.\n")
+def set_testbench_config(config_dict):
+    global CONFIG
+    CONFIG = config_dict
 
-    def test_inb_cases(self):
-        for test in self.tests:
+# ---------------------------------------------------------------------------
+# Development-mode runner (no unittest)
+# ---------------------------------------------------------------------------
 
-            name = test.get("id", "unnamed")
-            print(f"Running: {name} ...", end=" ")
+def run_testbench():
 
-            # Generate long input if requested
-            if test.get("generate_long_input", False):
-                length = test.get("long_length", 5000)
-                raw_input = "A" * length
+    testbench = load_testbench()
+    tests = testbench.get("tests", [])
+
+    print(f"\nLoaded {len(tests)} InB intake test cases.\n")
+
+    for test in tests:
+
+        name = test.get("id", "unnamed")
+        print(f"Running: {name} ...", end=" ")
+
+        # Generate long input if requested
+        if test.get("generate_long_input", False):
+            length = test.get("long_length", 5000)
+            raw_input = "A" * length
+        else:
+            raw_input = test["input"]
+
+        tp = ThoughtPacket(raw_input=raw_input)
+
+        # Execute REAL InB primitive
+        tp = InB(tp)
+
+        # Expected values
+        expected_defects = test.get("expected_defects", [])
+        expected_failure = test.get("expected_failure", False)
+
+        # Checks
+        defects_ok = (tp.defects == expected_defects)
+        passed = defects_ok
+
+        # ------------------------------------------------------------------
+        # Requirement-aware PASS/FAIL messaging
+        # ------------------------------------------------------------------
+        if passed:
+            if expected_failure:
+                print(f"EXPECTED FAILURE — {name}")
+                print("PASS: This test case contains known defects. A failure was expected and the system behaved correctly.\n")
             else:
-                raw_input = test["input"]
-
-            tp = ThoughtPacket(raw_input=raw_input)
-
-            # Execute REAL InB primitive
-            tp = InB(tp)
-
-            # Expected values
-            expected_defects = test.get("expected_defects", [])
-            expected_repairs = test.get("expected_repairs", [])
-            expected_normalized = test.get("expected_normalized", tp.raw_input)
-
-            # Checks
-            defects_ok = (tp.defects == expected_defects)
-            
-            # InB does not produce repairs or normalized output
-            passed = defects_ok
-
-            # ------------------------------------------------------------------
-            # Requirement-aware PASS/FAIL messaging
-            # ------------------------------------------------------------------
-            expected_failure = test.get("expected_failure", False)
-
-            if passed:
-                if expected_failure:
-                    print(f"EXPECTED FAILURE — {name}")
-                    print("PASS: This test case contains known defects. A failure was expected and the system behaved correctly.\n")
-                else:
-                    print(f"PASS — {name}\n")
+                print(f"PASS — {name}\n")
+        else:
+            if expected_failure:
+                print(f"UNEXPECTED PASS — {name}")
+                print("FAIL: This test case contains known defects, but the system did not detect them.\n")
             else:
-                if expected_failure:
-                    print(f"UNEXPECTED PASS — {name}")
-                    print("FAIL: This test case contains known defects, but the system did not detect them.\n")
-                    self.fail(f"Unexpected pass for test case: {name}")
-                else:
-                    print(f"UNEXPECTED FAILURE — {name}")
-                    print("FAIL: This test case should have passed. The failure indicates a real defect in the system.\n")
-                    self.fail(f"Unexpected failure for test case: {name}")
-
-# ---------------------------------------------------------------------------
-# Main (only used when running directly)
-# ---------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    unittest.main()
+                print(f"UNEXPECTED FAILURE — {name}")
+                print("FAIL: This test case should have passed. The failure indicates a real defect in the system.\n")
