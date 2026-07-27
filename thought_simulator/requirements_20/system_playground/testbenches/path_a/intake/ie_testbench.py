@@ -63,9 +63,9 @@ def _compare(expected: dict, actual: dict) -> bool:
         act_val = actual.get(key)
 
         if act_val != exp_val:
-            print(f"    ❌ MISMATCH in '{key}':")
-            print(f"       expected: {exp_val}")
-            print(f"       actual:   {act_val}")
+            print(f"    MISMATCH in '{key}':")
+            print(f"    expected: {exp_val}")
+            print(f"    actual:   {act_val}")
             return False
 
     return True
@@ -108,10 +108,10 @@ def run_testbench():
 
         # Compare
         if _compare(expected, actual):
-            print(f"    ✅ PASS: {test_id}\n")
+            print(f"    PASS: {test_id}\n")
             passed += 1
         else:
-            print(f"    ❌ FAIL: {test_id}\n")
+            print(f"    FAIL: {test_id}\n")
 
     print("============================================================")
     print(f"IE Testbench Complete — {passed}/{total} tests passed")
