@@ -91,6 +91,9 @@ def run_testbench():
         name = test.get("id", "unnamed")
         print(f"Running: {name}")
 
+        passed_count = 0
+        failed_count = 0
+        
         # Generate long input if requested
         if test.get("generate_long_input", False):
             length = test.get("long_length", 5000)
@@ -173,10 +176,22 @@ def run_testbench():
 
         if passed:
             print("PASS — All fields agree with expected values:")
+            passed_count += 1
         else:
             print("FAIL — One or more fields disagree with expected values:")
-
+            failed_count += 1
+        
         for line in results:
             print(line)
 
         print("")  # blank line between tests
+
+    # ------------------------------------------------------------
+    # Summary footer
+    # ------------------------------------------------------------
+    print("\n============================================================")
+    print("SUMMARY")
+    print(f"Passed: {passed_count} / {len(tests)} tests")
+    print(f"Failed: {failed_count} / {len(tests)} tests")
+    print("============================================================\n")
+
