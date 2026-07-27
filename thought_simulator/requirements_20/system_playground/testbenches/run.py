@@ -30,8 +30,8 @@ ACTIVE_TEST_MODULES = [
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     #     {
     #         "mode": "standalone",
-    #         "use_inb": True,
-    #         "use_iiinb": False,
+    #         "use_inb": False,
+    #         "use_iiinb": True,
     #         "use_ie": False,
     #         "tests_to_run": {
     #             "inb_baseline_no_error": "Yes",
