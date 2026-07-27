@@ -1,7 +1,10 @@
 """
 IIInB Intake Inspection Testbench — Path A
-Runs: InB → IIInB
 Development-mode runner compatible with run.py
+
+Upstream rule (True-only semantics):
+    • If use_inb=True  → run real InB primitive
+    • If use_inb=False → use passthrough stub (IIInB receives YAML-defined input)
 """
 
 import os
@@ -23,14 +26,24 @@ class ThoughtPacket:
     normalized: str = ""
 
 # ============================================================
-# Primitive stubs (replace with real implementations later)
+# Primitive imports
 # ============================================================
 
-def InB(tp: ThoughtPacket):
-    tp.metadata["inb_status"] = "accepted"
-    return tp
-
+# Real IIInB primitive
 from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import IIInB
+
+# Real InB primitive (used only when use_inb=True)
+from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB as RealInB
+
+# Passthrough stub for InB when use_inb=False
+def InB_passthru(tp: ThoughtPacket):
+    """
+    Passthrough stub:
+    • Does NOT modify tp
+    • Does NOT set inb_status
+    • Allows IIInB to receive YAML-defined input directly
+    """
+    return tp
 
 # ============================================================
 # Testbench Loader
@@ -49,8 +62,7 @@ def load_testbench():
 # ============================================================
 
 TESTBENCH_CONFIG = {
-    "mode": "standalone",
-    "use_inb": True,
+    "use_inb": False,
     "use_iiinb": True,
     "use_ie": False,
     "tests_to_run": {}
@@ -88,17 +100,25 @@ def run_testbench():
 
         tp = ThoughtPacket(raw_input=raw_input)
 
-        # Execute primitives based on config
-        if TESTBENCH_CONFIG.get("use_inb", True):
-            tp = InB(tp)
+        # ====================================================
+        # Upstream primitive execution (True-only semantics)
+        # ====================================================
+
+        if TESTBENCH_CONFIG.get("use_inb", False):
+            tp = RealInB(tp)
+        else:
+            tp = InB_passthru(tp)
 
         if TESTBENCH_CONFIG.get("use_iiinb", True):
             tp = IIInB(tp)
 
-        # Expected block (new YAML structure)
+        # ====================================================
+        # Expected block (YAML)
+        # ====================================================
+
         expected = test.get("expected", {})
 
-        expected_inb_status = expected.get("inb_status", "accepted")
+        expected_inb_status = expected.get("inb_status", None)
         expected_iiinb_status = expected.get("iiinb_status", "inspected")
         expected_repairs = expected.get("repair_operations", [])
         expected_anomalies = expected.get("anomaly_flags", [])
@@ -106,7 +126,10 @@ def run_testbench():
         expected_tokens = expected.get("tokens", None)
         expected_structure = expected.get("structure", None)
 
+        # ====================================================
         # Checks with detailed diagnostics
+        # ====================================================
+
         results = []
 
         def check(label, actual, expected):
@@ -121,7 +144,11 @@ def run_testbench():
                 )
                 return False
 
-        inb_ok = check("InB status", tp.metadata.get("inb_status"), expected_inb_status)
+        # InB status only checked if YAML defines it
+        inb_ok = True
+        if expected_inb_status is not None:
+            inb_ok = check("InB status", tp.metadata.get("inb_status"), expected_inb_status)
+
         iiinb_ok = check("IIInB status", tp.metadata.get("iiinb_status"), expected_iiinb_status)
         repairs_ok = check("Repairs", tp.repairs, expected_repairs)
         anomalies_ok = check("Anomalies", tp.anomalies, expected_anomalies)
@@ -140,7 +167,10 @@ def run_testbench():
             normalized_ok and tokens_ok and structure_ok
         )
 
+        # ====================================================
         # Print detailed results
+        # ====================================================
+
         if passed:
             print("PASS — All fields agree with expected values:")
         else:
