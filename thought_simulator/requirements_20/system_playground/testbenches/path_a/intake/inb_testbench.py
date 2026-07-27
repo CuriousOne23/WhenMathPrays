@@ -60,7 +60,15 @@ def run_testbench():
 
     print(f"\nLoaded {len(tests)} InB intake test cases.\n")
 
+    passed_count = 0
+    failed_count = 0
+
     for test in tests:
+        ...
+        if all_fields_match:
+            passed_count += 1
+        else:
+            failed_count += 1
 
         name = test.get("id", "unnamed")
         print(f"Running: {name} ...", end=" ")
@@ -113,3 +121,13 @@ def run_testbench():
                 print(f"FAIL — {name}")
                 print(f"Expected defects {expected_defects}, but InB returned {actual_defects}.")
                 print(f"InB failed to detect required defect(s) in input \"{raw_input}\".\n")
+
+    # ------------------------------------------------------------
+    # Summary footer
+    # ------------------------------------------------------------
+    print("\n============================================================")
+    print("SUMMARY")
+    print(f"Passed: {passed_count} / {len(tests)} tests")
+    print(f"Failed: {failed_count} / {len(tests)} tests")
+    print("============================================================\n")
+
