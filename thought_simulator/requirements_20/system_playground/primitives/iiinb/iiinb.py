@@ -217,3 +217,7 @@ def iiinb_inspect(intake: dict) -> dict:
         "normalized": normalized,
         "tokens": tokens
     }
+
+class IIInB:
+    def inspect(self, intake: dict) -> dict:
+        return iiinb_inspect(intake)
