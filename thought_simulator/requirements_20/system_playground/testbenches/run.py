@@ -4,7 +4,7 @@ Thought Simulator — Development Testbench Runner
 
 This runner:
     • Loads selected testbench modules
-    • Injects configuration (mode, upstream toggles, tests_to_run, user_expects_failure)
+    • Injects configuration (upstream toggles, tests_to_run)
     • Calls each testbench's run_testbench() function directly
     • Does NOT use unittest (development mode)
 """
@@ -26,10 +26,11 @@ sys.path.insert(0, repo_root)
 # ============================================================
 ACTIVE_TEST_MODULES = [
     # **************************** InB Test bench ****************************************************
+    # Highest upstream True = InB (primitive under test)
+    # Pipeline: InB only, input from InB YAML
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     #     {
-    #         "mode": "standalone",
     #         "use_inb": True,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -46,19 +47,16 @@ ACTIVE_TEST_MODULES = [
     #         }
     #     }
     # ),
-    
+
     # **************************** IIInB Test bench ****************************************************
+    # Highest upstream True = InB
+    # Pipeline: InB → IIInB, input from InB YAML
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
         {
-            # Pipeline mode: "standalone" or "progressive"
-            "mode": "standalone",
-
-            # Upstream toggles: User inputs True or False
             "use_inb": True,
             "use_iiinb": True,
             "use_ie": False,
-
             "tests_to_run": {
                 "clean.simple": "Yes",
                 "unicode.noise": "Yes",
@@ -80,12 +78,13 @@ ACTIVE_TEST_MODULES = [
     ),
 
     # **************************** IE Test bench ******************************************************
+    # Highest upstream True = InB (or IIInB if you flip use_inb/use_iiinb)
+    # Pipeline: InB → IIInB → IE, input from highest upstream True YAML
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
     #     {
-    #         "mode": "standalone",
-    #         "use_inb": False,
-    #         "use_iiinb": False,
+    #         "use_inb": True,
+    #         "use_iiinb": True,
     #         "use_ie": True,
     #         "tests_to_run": {
     #             "ie_repair_only_whitespace": "Yes",
