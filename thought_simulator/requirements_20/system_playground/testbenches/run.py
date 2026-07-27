@@ -31,7 +31,7 @@ ACTIVE_TEST_MODULES = [
     #     {
     #         "mode": "standalone",
     #         "use_inb": True,
-    #         "use_iiinb": True,
+    #         "use_iiinb": False,
     #         "use_ie": False,
     #         "tests_to_run": {
     #             "inb_baseline_no_error": "Yes",
@@ -55,7 +55,7 @@ ACTIVE_TEST_MODULES = [
             "mode": "standalone",
 
             # Upstream toggles: User inputs True or False
-            "use_inb": False,
+            "use_inb": True,
             "use_iiinb": True,
             "use_ie": False,
 
