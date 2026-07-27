@@ -59,18 +59,22 @@ ACTIVE_TEST_MODULES = [
             "use_iiinb": True,
             "use_ie": False,
 
-            # tests_to_run: keys MUST match iiinb_testbench.yaml `id` fields
             "tests_to_run": {
-                "iiinb_unicode_normalization": "Yes",
-                "iiinb_structural_cleanup": "Yes",
-                "iiinb_shorthand_expansion": "Yes",
-                "iiinb_spelling_transposed": "Yes",
-                "iiinb_spelling_missing_letter": "Yes",
-                "iiinb_repetition_collapse": "Yes",
-                "iiinb_illegal_character_anomaly": "Yes",
-                "iiinb_mixed_repairs_anomalies": "Yes",
-                "iiinb_tokens_emitted": "Yes",
-                "iiinb_structure_tags_empty": "Yes"
+                "clean.simple": "Yes",
+                "unicode.noise": "Yes",
+                "structural.break": "Yes",
+                "empty.input": "Yes",
+                "long.input": "Yes",
+                "repeating.letters": "Yes",
+                "shorthand.plz": "Yes",
+                "misspelling.transposition": "Yes",
+                "misspelling.missing": "Yes",
+                "multi.repairs.surface": "Yes",
+                "multi.anomalies.illegal": "Yes",
+                "mixed.repairs.anomalies": "Yes",
+                "structural.surface.mixed": "Yes",
+                "token.preservation": "Yes",
+                "replay.determinism": "Yes"
             }
         }
     ),
