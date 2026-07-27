@@ -203,18 +203,37 @@ def IIInB(tp):
         normalized = collapse_runs(normalized)
 
     # ----------------------------------------------------------------------
-    # 9. Illegal character anomalies
+    # 9. Illegal character anomalies (corrected indexing)
     # ----------------------------------------------------------------------
     allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?")
-
+    
     for idx, ch in enumerate(raw):
-        if ch != " " and ch not in allowed and ch in normalized:
-            effective = idx + cumulative_shift[idx]
-            tp.anomalies.append({
-                "type": "illegal_character.unknown",
-                "target": ch,
-                "location": effective
-            })
+    
+        # Skip spaces entirely (spaces are never illegal and never counted)
+        if ch == " ":
+            continue
+    
+        # Skip characters IIInB removed (they won't appear in normalized)
+        if ch not in normalized:
+            continue
+    
+        # Skip allowed characters
+        if ch in allowed:
+            continue
+    
+        # At this point: ch is illegal AND present in normalized
+    
+        # Find its position in the normalized string
+        norm_index = normalized.find(ch)
+    
+        # Compute anomaly index by counting non-space characters before norm_index
+        effective = sum(1 for c in normalized[:norm_index] if c != " ")
+    
+        tp.anomalies.append({
+            "type": "illegal_character.unknown",
+            "target": ch,
+            "location": effective
+        })
 
     # ----------------------------------------------------------------------
     # 10. Token emission
