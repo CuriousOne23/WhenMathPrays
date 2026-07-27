@@ -8,10 +8,9 @@ This runner:
     • Calls each testbench's run_testbench() function directly
     • Does NOT use unittest (development mode)
 """
-import sys
-sys.stdout.reconfigure(encoding='utf-8')
 
 import sys
+sys.stdout.reconfigure(encoding='utf-8')
 import os
 import importlib
 
