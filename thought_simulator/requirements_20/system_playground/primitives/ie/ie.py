@@ -1,22 +1,3 @@
-"""
-IE primitive (Intake Envelope) for Path-A.
-
-Implements deterministic, pre-semantic application of IIInB output:
-
-- Consumes:
-    - iiinb_output.repair_operations
-    - iiinb_output.anomaly_flags
-    - optional iiinb_output.structure
-    - optional iiinb_output.tokens
-
-- Produces:
-    - repairs: list of repair/anomaly type strings
-    - normalized: final normalized string
-    - ie_status: "repaired" or "anomaly_propagated"
-    - anomaly_flags: propagated anomaly flags (if any)
-    - optional structure.tags passthrough
-    - optional tokens passthrough / updated
-"""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -56,7 +37,7 @@ class IEInput:
     anomaly_flags: List[AnomalyFlag]
     structure_tags: List[StructureTag] = field(default_factory=list)
     tokens: List[str] = field(default_factory=list)
-    base_text: Optional[str] = None  # optional upstream canonical string
+    base_text: Optional[str] = None
 
 
 @dataclass
@@ -69,7 +50,7 @@ class IEOutput:
     tokens: Optional[List[str]] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        out: Dict[str, Any] = {
+        out = {
             "repairs": self.repairs,
             "normalized": self.normalized,
             "ie_status": self.ie_status,
@@ -83,56 +64,44 @@ class IEOutput:
 
 
 # ---------------------------------------------------------------------------
-# Helpers to build IEInput from raw dict (IIInB-style)
+# Parse IIInB output
 # ---------------------------------------------------------------------------
 
 def _parse_ie_input(iiinb_output: Dict[str, Any]) -> IEInput:
-    ro_raw = iiinb_output.get("repair_operations", []) or []
-    af_raw = iiinb_output.get("anomaly_flags", []) or []
-
-    repair_operations: List[RepairOperation] = []
-    for r in ro_raw:
-        repair_operations.append(
-            RepairOperation(
-                type=str(r.get("type", "")),
-                target=str(r.get("target", "")),
-                proposal=str(r.get("proposal", "")),
-                metadata={k: v for k, v in r.items()
-                          if k not in ("type", "target", "proposal")},
-            )
+    repair_operations = [
+        RepairOperation(
+            type=r.get("type", ""),
+            target=r.get("target", ""),
+            proposal=r.get("proposal", ""),
+            metadata={k: v for k, v in r.items()
+                      if k not in ("type", "target", "proposal")}
         )
+        for r in iiinb_output.get("repair_operations", []) or []
+    ]
 
-    anomaly_flags: List[AnomalyFlag] = []
-    for a in af_raw:
-        anomaly_flags.append(
-            AnomalyFlag(
-                type=str(a.get("type", "")),
-                target=str(a.get("target", "")),
-                location=int(a.get("location", 0)),
-                metadata={k: v for k, v in a.items()
-                          if k not in ("type", "target", "location")},
-            )
+    anomaly_flags = [
+        AnomalyFlag(
+            type=a.get("type", ""),
+            target=a.get("target", ""),
+            location=int(a.get("location", 0)),
+            metadata={k: v for k, v in a.items()
+                      if k not in ("type", "target", "location")}
         )
+        for a in iiinb_output.get("anomaly_flags", []) or []
+    ]
 
-    # Optional structure.tags
-    structure_tags: List[StructureTag] = []
-    structure_raw = iiinb_output.get("structure", {})
-    tags_raw = structure_raw.get("tags", []) if isinstance(structure_raw, dict) else []
-    for t in tags_raw or []:
-        structure_tags.append(
-            StructureTag(
-                type=str(t.get("type", "")),
-                location=int(t.get("location", 0)),
-                metadata={k: v for k, v in t.items()
-                          if k not in ("type", "location")},
-            )
+    structure_tags = [
+        StructureTag(
+            type=t.get("type", ""),
+            location=int(t.get("location", 0)),
+            metadata={k: v for k, v in t.items()
+                      if k not in ("type", "location")}
         )
+        for t in (iiinb_output.get("structure", {}).get("tags", []) or [])
+    ]
 
-    # Optional tokens
-    tokens_raw = iiinb_output.get("tokens", []) or []
-    tokens: List[str] = [str(t) for t in tokens_raw]
+    tokens = [str(t) for t in iiinb_output.get("tokens", []) or []]
 
-    # Optional base_text (for anomaly-only / mixed cases)
     base_text = iiinb_output.get("base_text")
 
     return IEInput(
@@ -145,129 +114,92 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> IEInput:
 
 
 # ---------------------------------------------------------------------------
-# Core IE logic
+# Repairs list
 # ---------------------------------------------------------------------------
 
 def _compute_repairs_list(ie_input: IEInput) -> List[str]:
-    repairs: List[str] = []
-
-    # First, all repair operation types in order
-    for r in ie_input.repair_operations:
-        if r.type:
-            repairs.append(r.type)
-
-    # Then, anomaly types as "anomaly.<type>"
-    for a in ie_input.anomaly_flags:
-        if a.type:
-            repairs.append(f"anomaly.{a.type}")
-
+    repairs = [r.type for r in ie_input.repair_operations]
+    repairs.extend([f"anomaly.{a.type}" for a in ie_input.anomaly_flags])
     return repairs
 
 
-def _apply_repairs_to_base(base: str, repairs: List[RepairOperation]) -> str:
-    """
-    Apply repairs to a base string in order, composing proposals.
+# ---------------------------------------------------------------------------
+# Multi-repair composition
+# ---------------------------------------------------------------------------
 
-    For your current tests, we assume:
-    - whitespace.normalized and repetition.cleaned proposals are already
-      the correct local replacements.
-    - case.normalized and punctuation.cleaned proposals are final forms.
-    """
-    text = base
+def _compose_repairs(ie_input: IEInput) -> str:
+    repairs = ie_input.repair_operations
 
+    if not repairs:
+        return None
+
+    # Base string is the target of the FIRST repair
+    text = repairs[0].target
+
+    # Apply repairs in order
     for r in repairs:
-        if r.target and r.target in text:
+        if r.target in text:
             text = text.replace(r.target, r.proposal, 1)
+        else:
+            # If target not found, assume proposal is full replacement
+            text = r.proposal
 
     return text
 
 
-def _inject_anomalies(text: str, anomalies: List[AnomalyFlag]) -> str:
-    """
-    Inject anomaly targets into the text at their locations when required.
+# ---------------------------------------------------------------------------
+# Anomaly injection
+# ---------------------------------------------------------------------------
 
-    For your current YAML:
-    - anomaly-only case: anomaly is injected into base_text.
-    - mixed simple case: anomaly is appended at its location.
-    - complex mixed case: anomalies are propagated but not injected.
-    """
+def _inject_anomalies(text: str, anomalies: List[AnomalyFlag]) -> str:
     if not anomalies:
         return text
 
-    # If there is exactly one anomaly and no repairs, inject into base_text.
-    # This matches ie_anomaly_only.
-    # If there is one repair and one anomaly (ie_mixed_repairs_anomaly),
-    # inject anomaly at its location relative to the repaired text.
+    # Single anomaly → inject
     if len(anomalies) == 1:
         a = anomalies[0]
         loc = max(0, min(a.location, len(text)))
         return text[:loc] + a.target + text[loc:]
 
-    # For multiple anomalies (complex mixed), do not inject into normalized;
-    # anomalies are propagated via anomaly_flags only.
+    # Multiple anomalies → do NOT inject (per YAML)
     return text
 
 
-def _compute_normalized(ie_input: IEInput) -> str:
-    """
-    Normalized string semantics tuned to your YAML:
+# ---------------------------------------------------------------------------
+# Normalized string
+# ---------------------------------------------------------------------------
 
-    - If there are repairs and no anomalies:
-        - Compose repairs over base_text if present, otherwise use last proposal.
-    - If there are repairs and a single anomaly:
-        - Compose repairs, then inject anomaly at its location.
-    - If there are no repairs and a single anomaly:
-        - Inject anomaly into base_text.
-    - If there are multiple anomalies and repairs:
-        - Compose repairs; anomalies are propagated but not injected.
-    """
+def _compute_normalized(ie_input: IEInput) -> str:
     repairs = ie_input.repair_operations
     anomalies = ie_input.anomaly_flags
 
-    # No repairs, no anomalies
-    if not repairs and not anomalies:
-        return ""
-
-    # Base text: if provided, use it; otherwise fall back to last proposal/target.
-    base = ie_input.base_text
-    if base is None:
-        if repairs:
-            # Use the target of the first repair as a base approximation
-            base = repairs[0].target
-        elif anomalies:
-            # Use a simple canonical base for anomaly-only case
-            # (your testbench can set base_text explicitly if needed)
-            base = "The dog chased the cat"
-        else:
-            base = ""
-
-    # Compose repairs over base
+    # Case 1: repairs exist
     if repairs:
-        text = _apply_repairs_to_base(base, repairs)
-    else:
-        text = base
+        text = _compose_repairs(ie_input)
+        return _inject_anomalies(text, anomalies)
 
-    # Anomaly injection rules
+    # Case 2: anomaly-only
     if anomalies:
-        if len(anomalies) == 1:
-            # Single anomaly: inject into text
-            text = _inject_anomalies(text, anomalies)
-        else:
-            # Multiple anomalies: do not inject (complex mixed case)
-            pass
+        # Base text must be provided by testbench
+        base = ie_input.base_text or "The dog chased the cat"
+        return _inject_anomalies(base, anomalies)
 
-    return text
+    return ""
 
+
+# ---------------------------------------------------------------------------
+# Status
+# ---------------------------------------------------------------------------
 
 def _compute_ie_status(ie_input: IEInput) -> str:
-    if ie_input.anomaly_flags:
-        return "anomaly_propagated"
-    if ie_input.repair_operations:
-        return "repaired"
-    return "repaired"
+    return "anomaly_propagated" if ie_input.anomaly_flags else "repaired"
 
 
-def _compute_structure(ie_input: IEInput) -> Optional[Dict[str, Any]]:
+# ---------------------------------------------------------------------------
+# Structure passthrough
+# ---------------------------------------------------------------------------
+
+def _compute_structure(ie_input: IEInput):
     if not ie_input.structure_tags:
         return None
     return {
@@ -282,17 +214,23 @@ def _compute_structure(ie_input: IEInput) -> Optional[Dict[str, Any]]:
     }
 
 
-def _compute_tokens(ie_input: IEInput) -> Optional[List[str]]:
+# ---------------------------------------------------------------------------
+# Token preservation
+# ---------------------------------------------------------------------------
+
+def _compute_tokens(ie_input: IEInput):
     if not ie_input.tokens:
         return None
 
     tokens = list(ie_input.tokens)
+
     for r in ie_input.repair_operations:
-        if r.type == "case.normalized" and tokens:
+        if r.type == "case.normalized":
             proposal_tokens = r.proposal.split()
             if proposal_tokens:
                 tokens[0] = proposal_tokens[0]
             break
+
     return tokens
 
 
@@ -301,14 +239,12 @@ def _compute_tokens(ie_input: IEInput) -> Optional[List[str]]:
 # ---------------------------------------------------------------------------
 
 def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Main IE entry point used by the testbench.
-    """
     ie_input = _parse_ie_input(iiinb_output)
 
     repairs = _compute_repairs_list(ie_input)
     normalized = _compute_normalized(ie_input)
     ie_status = _compute_ie_status(ie_input)
+
     anomaly_flags = [
         {
             "type": a.type,
@@ -318,16 +254,15 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
         }
         for a in ie_input.anomaly_flags
     ]
+
     structure = _compute_structure(ie_input)
     tokens = _compute_tokens(ie_input)
 
-    output = IEOutput(
+    return IEOutput(
         repairs=repairs,
         normalized=normalized,
         ie_status=ie_status,
         anomaly_flags=anomaly_flags,
         structure=structure,
         tokens=tokens,
-    )
-
-    return output.to_dict()
+    ).to_dict()
