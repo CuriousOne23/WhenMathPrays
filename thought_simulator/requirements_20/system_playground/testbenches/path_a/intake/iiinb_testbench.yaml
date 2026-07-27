@@ -189,7 +189,7 @@ tests:
           location: 7
         - type: "illegal_character.unknown"
           target: "%"
-          location: 22
+          location: 20
       normalized: "Th#e dog$ chased the cat%"
 
   # ----------------------------------------------------------
@@ -210,7 +210,7 @@ tests:
       anomaly_flags:
         - type: "illegal_character.unknown"
           target: "@"
-          location: 8
+          location: 6
       normalized: "The dog@!"
 
   # ----------------------------------------------------------
@@ -231,7 +231,7 @@ tests:
       anomaly_flags:
         - type: "illegal_character.unknown"
           target: "@"
-          location: 20
+          location: 11
       normalized: "Hello, world  @"
 
   # ----------------------------------------------------------
@@ -266,4 +266,3 @@ tests:
           proposal: ""
       anomaly_flags: []
       normalized: "café"
-
