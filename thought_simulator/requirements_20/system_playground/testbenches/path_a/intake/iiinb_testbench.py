@@ -77,7 +77,7 @@ def run_testbench():
 
     for test in selected:
         name = test.get("id", "unnamed")
-        print(f"Running: {name} ...", end=" ")
+        print(f"Running: {name}")
 
         # Generate long input if requested
         if test.get("generate_long_input", False):
@@ -106,38 +106,47 @@ def run_testbench():
         expected_tokens = expected.get("tokens", None)
         expected_structure = expected.get("structure", None)
 
-        # Checks
-        inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
-        iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
-        repairs_ok = (tp.repairs == expected_repairs)
-        anomalies_ok = (tp.anomalies == expected_anomalies)
-        normalized_ok = (tp.normalized == expected_normalized)
+        # Checks with detailed diagnostics
+        results = []
+
+        def check(label, actual, expected):
+            if actual == expected:
+                results.append(
+                    f"  ✔ {label} AGREES — expected {expected!r}, got {actual!r}"
+                )
+                return True
+            else:
+                results.append(
+                    f"  ✘ {label} DISAGREES — expected {expected!r}, got {actual!r}"
+                )
+                return False
+
+        inb_ok = check("InB status", tp.metadata.get("inb_status"), expected_inb_status)
+        iiinb_ok = check("IIInB status", tp.metadata.get("iiinb_status"), expected_iiinb_status)
+        repairs_ok = check("Repairs", tp.repairs, expected_repairs)
+        anomalies_ok = check("Anomalies", tp.anomalies, expected_anomalies)
+        normalized_ok = check("Normalized", tp.normalized, expected_normalized)
 
         tokens_ok = True
         if expected_tokens is not None:
-            tokens_ok = (tp.tokens == expected_tokens)
+            tokens_ok = check("Tokens", tp.tokens, expected_tokens)
 
         structure_ok = True
         if expected_structure is not None:
-            structure_ok = (tp.structure == expected_structure)
+            structure_ok = check("Structure", tp.structure, expected_structure)
 
         passed = (
             inb_ok and iiinb_ok and repairs_ok and anomalies_ok and
             normalized_ok and tokens_ok and structure_ok
         )
 
-        print("PASS" if passed else "FAIL")
+        # Print detailed results
+        if passed:
+            print("PASS — All fields agree with expected values:")
+        else:
+            print("FAIL — One or more fields disagree with expected values:")
 
-        if not passed:
-            print("\n--- FAILURE DETAILS ---")
-            print("Expected repairs:", expected_repairs)
-            print("Actual repairs:", tp.repairs)
-            print("Expected anomalies:", expected_anomalies)
-            print("Actual anomalies:", tp.anomalies)
-            print("Expected normalized:", expected_normalized)
-            print("Actual normalized:", tp.normalized)
-            print("Expected tokens:", expected_tokens)
-            print("Actual tokens:", tp.tokens)
-            print("Expected structure:", expected_structure)
-            print("Actual structure:", tp.structure)
-            print("-----------------------\n")
+        for line in results:
+            print(line)
+
+        print("")  # blank line between tests
