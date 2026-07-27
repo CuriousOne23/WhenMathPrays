@@ -1,78 +1,111 @@
 # ============================================================
-# Path A Intake Testbench — InB / IIInB / IE
+# InB Testbench — Path‑A Intake Envelope
+# Deterministic Error/No‑Error Boundary for 20.100 InB Primitive
 # ============================================================
-
-testbench_id: "path_a.intake.inb"
-version: "1.0.0"
-description: "Testbench for Path A intake boundary (InB), bounded inspection (IIInB), and IE normalization."
-
-simulation:
-  deterministic: true
-  replayable: true
-  seed: 42
 
 tests:
 
-  - id: "clean.simple"
-    description: "Simple clean input with no defects."
+  # ----------------------------------------------------------
+  # 0. Baseline — No Error (Upstream for simple IE repaired cases)
+  # ----------------------------------------------------------
+  - id: inb_baseline_no_error
+    description: "InB accepts a clean intake envelope with no surface anomalies"
     input: "The dog chased the cat."
-    expected_defects: []
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat."
-    expected_failure: false
+    expected_inb_output:
+      status: "ok"
+      error_flag: false
+      error_type: null
 
-  - id: "messy.whitespace"
-    description: "Whitespace normalization and punctuation cleanup."
-    input: "   The   dog   chased   the   cat   !!! "
-    expected_defects:
-      - "whitespace.excess"
-      - "punctuation.excess"
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat."
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 1. Whitespace Anomaly (Upstream for ie_repair_only_whitespace)
+  # ----------------------------------------------------------
+  - id: inb_whitespace_anomaly
+    description: "InB detects a whitespace anomaly in the intake envelope"
+    input: "The   dog"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "surface_anomaly"
 
-  - id: "unicode.noise"
-    description: "Input containing stray unicode artifacts."
-    input: "The dog chased the cat. � �"
-    expected_defects:
-      - "unicode.invalid"
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat. � �"
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 2. Multiple Surface Anomalies (Upstream for ie_multiple_repairs)
+  # ----------------------------------------------------------
+  - id: inb_multiple_surface_anomalies
+    description: "InB detects multiple surface anomalies in the intake envelope"
+    input:
+      repetition: "cccchhhhhaaassseeedddd"
+      case: "the dog chased the cat"
+      punctuation: "The dog chased the cat!!!"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "surface_anomaly"
 
-  - id: "structural.break"
-    description: "Input containing malformed structural tokens."
-    input: "The dog chased the cat <broken>"
-    expected_defects:
-      - "structural.malformed"
-    expected_repairs: []
-    expected_normalized: "The dog chased the cat <broken>"
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 3. Illegal Character Only (Upstream for ie_anomaly_only)
+  # ----------------------------------------------------------
+  - id: inb_illegal_character_only
+    description: "InB detects an illegal character in the intake envelope"
+    input: "Th#e dog chased the cat"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "illegal_character"
 
-  - id: "empty.input"
-    description: "Empty input should trigger bounded defect."
-    input: ""
-    expected_defects:
-      - "empty.input"
-    expected_repairs: []
-    expected_normalized: ""
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 4. Mixed Whitespace + Illegal Character (Upstream for ie_mixed_repairs_anomaly)
+  # ----------------------------------------------------------
+  - id: inb_mixed_whitespace_illegal
+    description: "InB detects both whitespace anomaly and illegal character"
+    input: "The   dog@"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "mixed_surface_anomaly"
 
-  - id: "long.input"
-    description: "Long input should be treated as clean (stub behavior)."
-    generate_long_input: true
-    long_length: 5000
-    expected_defects: []
-    expected_repairs: []
-    expected_long_input: true
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 5. Structural Tags Present (Upstream for ie_structural_tags)
+  # ----------------------------------------------------------
+  - id: inb_structural_tags_present
+    description: "InB accepts intake with structural tags but flags punctuation anomaly"
+    input: "Hello,, world"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "surface_anomaly"
 
-  - id: multi.defects
-    input: "Bad   text!!! with � and <broken> tokens."
-    expected_defects:
-      - whitespace.excess
-      - punctuation.excess
-      - unicode.invalid
-      - structural.malformed
-    expected_failure: true
+  # ----------------------------------------------------------
+  # 6. Tokenizable Input (Upstream for ie_token_preservation)
+  # ----------------------------------------------------------
+  - id: inb_tokenizable_input
+    description: "InB accepts a simple tokenizable intake envelope"
+    input: "the dog"
+    expected_inb_output:
+      status: "ok"
+      error_flag: false
+      error_type: null
 
+  # ----------------------------------------------------------
+  # 7. Unicode Normalization Opportunity (Upstream for ie_replay_determinism)
+  # ----------------------------------------------------------
+  - id: inb_unicode_normalization_opportunity
+    description: "InB detects a unicode surface anomaly in the intake envelope"
+    input: "café"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "surface_anomaly"
+
+  # ----------------------------------------------------------
+  # 8. Complex Mixed Case (Upstream for ie_complex_mixed)
+  # ----------------------------------------------------------
+  - id: inb_complex_mixed_case
+    description: "InB detects multiple surface anomalies and multiple illegal characters"
+    input:
+      whitespace: "The   dog"
+      repetition: "cccaaattt"
+      anomalies: "%$"
+    expected_inb_output:
+      status: "error"
+      error_flag: true
+      error_type: "mixed_surface_anomaly"
