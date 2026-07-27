@@ -21,10 +21,10 @@ def IIInB(tp):
     # Initialize IIInB fields
     # ----------------------------------------------------------------------
     tp.metadata["iiinb_status"] = "inspected"
-    tp.repairs = []            # IE expects "repair_operations"
-    tp.anomalies = []          # IE expects "anomaly_flags"
-    tp.tokens = []             # optional
-    tp.structure = {}          # optional
+    tp.repairs = []
+    tp.anomalies = []
+    tp.tokens = []
+    tp.structure = {}
     normalized = raw
 
     # ----------------------------------------------------------------------
@@ -50,28 +50,39 @@ def IIInB(tp):
     # ----------------------------------------------------------------------
     # 1. Unicode invalid character removal (�)
     # ----------------------------------------------------------------------
-    for idx, ch in enumerate(normalized):
-        if ch == "�":
+    if "�" in normalized:
+        count = normalized.count("�")
+        for _ in range(count):
             add_repair("unicode.normalized", "�", "")
-            normalized = normalized.replace("�", "")
+        normalized = normalized.replace("�", "")
 
     # ----------------------------------------------------------------------
-    # 2. Illegal character anomalies (non-alnum punctuation except allowed)
-    # ----------------------------------------------------------------------
-    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
-    for idx, ch in enumerate(normalized):
-        if ch not in allowed:
-            add_anomaly("illegal_character.unknown", ch, idx)
-
-    # ----------------------------------------------------------------------
-    # 3. Structural token cleanup
+    # 2. Structural cleanup BEFORE anomaly scan
     # ----------------------------------------------------------------------
     if "<broken>" in normalized:
         add_repair("structural.cleaned", "<broken>", "")
         normalized = normalized.replace("<broken>", "")
 
     # ----------------------------------------------------------------------
-    # 4. Shorthand expansion ("plz" → "please")
+    # 3. Whitespace normalization
+    # ----------------------------------------------------------------------
+    ws_pattern = r"\s{2,}"
+    m = re.search(ws_pattern, normalized)
+    if m:
+        add_repair("whitespace.normalized", m.group(0), " ")
+        normalized = re.sub(ws_pattern, " ", normalized)
+
+    # ----------------------------------------------------------------------
+    # 4. Punctuation cleanup (collapse repeated punctuation)
+    # ----------------------------------------------------------------------
+    punct_pattern = r"([!?.,])\1{1,}"
+    m = re.search(punct_pattern, normalized)
+    if m:
+        add_repair("punctuation.cleaned", m.group(0), m.group(1))
+        normalized = re.sub(punct_pattern, r"\1", normalized)
+
+    # ----------------------------------------------------------------------
+    # 5. Shorthand expansion ("plz" → "please")
     # ----------------------------------------------------------------------
     tokens = normalized.split()
     changed = False
@@ -84,7 +95,7 @@ def IIInB(tp):
         normalized = " ".join(tokens)
 
     # ----------------------------------------------------------------------
-    # 5. Spelling corrections
+    # 6. Spelling corrections
     # ----------------------------------------------------------------------
     spelling_map = {
         "hte": ("the", "spelling.transposed"),
@@ -104,7 +115,16 @@ def IIInB(tp):
         normalized = " ".join(tokens)
 
     # ----------------------------------------------------------------------
-    # 6. Repetition collapse (bounded expressive noise)
+    # 7. Case normalization (capitalize first token)
+    # ----------------------------------------------------------------------
+    tokens = normalized.split()
+    if tokens and tokens[0].islower():
+        add_repair("case.normalized", tokens[0], tokens[0].capitalize())
+        tokens[0] = tokens[0].capitalize()
+        normalized = " ".join(tokens)
+
+    # ----------------------------------------------------------------------
+    # 8. Repetition collapse (bounded expressive noise)
     # ----------------------------------------------------------------------
     def collapse_runs(s):
         result = []
@@ -127,12 +147,20 @@ def IIInB(tp):
         normalized = collapse_runs(normalized)
 
     # ----------------------------------------------------------------------
-    # 7. Token emission (optional but IE-compatible)
+    # 9. Illegal character anomalies AFTER all repairs
+    # ----------------------------------------------------------------------
+    allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?")
+    for idx, ch in enumerate(normalized):
+        if ch not in allowed:
+            add_anomaly("illegal_character.unknown", ch, idx)
+
+    # ----------------------------------------------------------------------
+    # 10. Token emission
     # ----------------------------------------------------------------------
     tp.tokens = normalized.split()
 
     # ----------------------------------------------------------------------
-    # 8. Structural metadata (optional)
+    # 11. Structural metadata
     # ----------------------------------------------------------------------
     tp.structure = {
         "tags": []
