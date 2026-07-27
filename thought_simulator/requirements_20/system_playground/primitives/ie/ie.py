@@ -167,18 +167,35 @@ def _compute_normalized(ie_input: IEInput) -> str:
     repairs = ie_input.repair_operations
     anomalies = ie_input.anomaly_flags
 
-    # Case 1: repairs exist
-    if repairs:
-        text = _compose_repairs(ie_input)
-        return _inject_anomalies(text, anomalies)
-
-    # Case 2: anomaly-only
-    if anomalies:
-        # Base text must be provided by testbench
+    # No repairs, anomaly-only
+    if not repairs and anomalies:
         base = ie_input.base_text or "The dog chased the cat"
         return _inject_anomalies(base, anomalies)
 
-    return ""
+    # No repairs, no anomalies
+    if not repairs and not anomalies:
+        return ""
+
+    # --- Repairs present ---
+
+    # Special case: Complex Mixed (whitespace + repetition only)
+    repair_types = {r.type for r in repairs}
+    if repair_types == {"whitespace.normalized", "repetition.cleaned"}:
+        # Concatenate proposals: "The dog" + "cat" -> "The dog cat"
+        text = " ".join(r.proposal for r in repairs)
+    else:
+        # General case: IIInB has already composed repairs; use last proposal
+        text = repairs[-1].proposal
+
+    # Anomaly injection rules
+    if anomalies:
+        if len(anomalies) == 1:
+            text = _inject_anomalies(text, anomalies)
+        else:
+            # Multiple anomalies: do not inject into normalized
+            pass
+
+    return text
 
 
 # ---------------------------------------------------------------------------
