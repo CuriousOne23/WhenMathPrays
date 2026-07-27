@@ -191,7 +191,8 @@ def run_testbench():
     # ------------------------------------------------------------
     print("\n============================================================")
     print("SUMMARY")
-    print(f"Passed: {passed_count} / {len(tests)} tests")
-    print(f"Failed: {failed_count} / {len(tests)} tests")
+    print(f"Passed: {passed_count} / {len(selected)} tests")
+    print(f"Failed: {failed_count} / {len(selected)} tests")
     print("============================================================\n")
+
 
