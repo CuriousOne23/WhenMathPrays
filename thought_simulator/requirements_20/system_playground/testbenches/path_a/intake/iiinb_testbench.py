@@ -1,17 +1,16 @@
 """
 IIInB Intake Inspection Testbench — Path A
 Runs: InB → IIInB
-Designed to be executed by run.py
+Development-mode runner compatible with run.py
 """
 
 import os
 import yaml
-import unittest
 from dataclasses import dataclass, field
 
-# ---------------------------------------------------------------------------
+# ============================================================
 # Thought Packet (TP) structure
-# ---------------------------------------------------------------------------
+# ============================================================
 
 @dataclass
 class ThoughtPacket:
@@ -23,9 +22,9 @@ class ThoughtPacket:
     structure: dict = field(default_factory=dict)
     normalized: str = ""
 
-# ---------------------------------------------------------------------------
+# ============================================================
 # Primitive stubs (replace with real implementations later)
-# ---------------------------------------------------------------------------
+# ============================================================
 
 def InB(tp: ThoughtPacket):
     tp.metadata["inb_status"] = "accepted"
@@ -33,9 +32,9 @@ def InB(tp: ThoughtPacket):
 
 from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import IIInB
 
-# ---------------------------------------------------------------------------
+# ============================================================
 # Testbench Loader
-# ---------------------------------------------------------------------------
+# ============================================================
 
 def load_testbench():
     yaml_path = os.path.join(
@@ -45,73 +44,100 @@ def load_testbench():
     with open(yaml_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-# ---------------------------------------------------------------------------
-# Testbench Class (unittest-compatible)
-# ---------------------------------------------------------------------------
+# ============================================================
+# Configuration (injected by run.py)
+# ============================================================
 
-class TestIIInB(unittest.TestCase):
+TESTBENCH_CONFIG = {
+    "mode": "standalone",
+    "use_inb": True,
+    "use_iiinb": True,
+    "use_ie": False,
+    "tests_to_run": {}
+}
 
-    @classmethod
-    def setUpClass(cls):
-        cls.testbench = load_testbench()
-        cls.tests = cls.testbench.get("tests", [])
-        print(f"Loaded {len(cls.tests)} IIInB intake inspection test cases.\n")
+def set_testbench_config(config):
+    global TESTBENCH_CONFIG
+    TESTBENCH_CONFIG = config
 
-    def test_iiinb_cases(self):
-        for test in self.tests:
-            name = test.get("id", "unnamed")
-            print(f"Running: {name} ...", end=" ")
+# ============================================================
+# Development-mode runner (called by run.py)
+# ============================================================
 
-            # Generate long input if requested
-            if test.get("generate_long_input", False):
-                length = test.get("long_length", 5000)
-                raw_input = "A" * length
-            else:
-                raw_input = test.get("input", "")
+def run_testbench():
 
-            tp = ThoughtPacket(raw_input=raw_input)
+    print("Loading IIInB testbench YAML...\n")
+    testbench = load_testbench()
+    tests = testbench.get("tests", [])
 
-            # Execute primitives
+    selected_ids = TESTBENCH_CONFIG.get("tests_to_run", {})
+    selected = [t for t in tests if selected_ids.get(t.get("id"), "No") == "Yes"]
+
+    print(f"Selected {len(selected)} IIInB test cases.\n")
+
+    for test in selected:
+        name = test.get("id", "unnamed")
+        print(f"Running: {name} ...", end=" ")
+
+        # Generate long input if requested
+        if test.get("generate_long_input", False):
+            length = test.get("long_length", 5000)
+            raw_input = "A" * length
+        else:
+            raw_input = test.get("input", "")
+
+        tp = ThoughtPacket(raw_input=raw_input)
+
+        # Execute primitives based on config
+        if TESTBENCH_CONFIG.get("use_inb", True):
             tp = InB(tp)
+
+        if TESTBENCH_CONFIG.get("use_iiinb", True):
             tp = IIInB(tp)
 
-            # Expected block (new YAML structure)
-            expected = test.get("expected", {})
+        # Expected block (new YAML structure)
+        expected = test.get("expected", {})
 
-            expected_inb_status = expected.get("inb_status", "accepted")
-            expected_iiinb_status = expected.get("iiinb_status", "inspected")
-            expected_repairs = expected.get("repair_operations", [])
-            expected_anomalies = expected.get("anomaly_flags", [])
-            expected_normalized = expected.get("normalized", raw_input)
-            expected_tokens = expected.get("tokens", None)
-            expected_structure = expected.get("structure", None)
+        expected_inb_status = expected.get("inb_status", "accepted")
+        expected_iiinb_status = expected.get("iiinb_status", "inspected")
+        expected_repairs = expected.get("repair_operations", [])
+        expected_anomalies = expected.get("anomaly_flags", [])
+        expected_normalized = expected.get("normalized", raw_input)
+        expected_tokens = expected.get("tokens", None)
+        expected_structure = expected.get("structure", None)
 
-            # Checks
-            inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
-            iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
-            repairs_ok = (tp.repairs == expected_repairs)
-            anomalies_ok = (tp.anomalies == expected_anomalies)
-            normalized_ok = (tp.normalized == expected_normalized)
+        # Checks
+        inb_ok = (tp.metadata.get("inb_status") == expected_inb_status)
+        iiinb_ok = (tp.metadata.get("iiinb_status") == expected_iiinb_status)
+        repairs_ok = (tp.repairs == expected_repairs)
+        anomalies_ok = (tp.anomalies == expected_anomalies)
+        normalized_ok = (tp.normalized == expected_normalized)
 
-            tokens_ok = True
-            if expected_tokens is not None:
-                tokens_ok = (tp.tokens == expected_tokens)
+        tokens_ok = True
+        if expected_tokens is not None:
+            tokens_ok = (tp.tokens == expected_tokens)
 
-            structure_ok = True
-            if expected_structure is not None:
-                structure_ok = (tp.structure == expected_structure)
+        structure_ok = True
+        if expected_structure is not None:
+            structure_ok = (tp.structure == expected_structure)
 
-            passed = (
-                inb_ok and iiinb_ok and repairs_ok and anomalies_ok and
-                normalized_ok and tokens_ok and structure_ok
-            )
+        passed = (
+            inb_ok and iiinb_ok and repairs_ok and anomalies_ok and
+            normalized_ok and tokens_ok and structure_ok
+        )
 
-            print("PASS" if passed else "FAIL")
-            self.assertTrue(passed, f"Test failed: {name}")
+        print("PASS" if passed else "FAIL")
 
-# ---------------------------------------------------------------------------
-# Main (only used when running directly)
-# ---------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    unittest.main()
+        if not passed:
+            print("\n--- FAILURE DETAILS ---")
+            print("Expected repairs:", expected_repairs)
+            print("Actual repairs:", tp.repairs)
+            print("Expected anomalies:", expected_anomalies)
+            print("Actual anomalies:", tp.anomalies)
+            print("Expected normalized:", expected_normalized)
+            print("Actual normalized:", tp.normalized)
+            print("Expected tokens:", expected_tokens)
+            print("Actual tokens:", tp.tokens)
+            print("Expected structure:", expected_structure)
+            print("Actual structure:", tp.structure)
+            print("-----------------------\n")
