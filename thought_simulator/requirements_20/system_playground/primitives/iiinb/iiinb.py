@@ -283,7 +283,7 @@ class IIInB:
         on the IIInB instance itself.
         """
         # Get surface/tokens from the original ThoughtPacket if available
-        surface = getattr(self._tp, "raw_input", "")
+        surface = getattr(self._tp, "raw_input", "") or getattr(self._tp, "surface", "")
         tokens = getattr(self._tp, "tokens", [])
     
         result = iiinb_inspect({
