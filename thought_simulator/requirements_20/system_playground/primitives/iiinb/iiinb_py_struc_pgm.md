@@ -1,294 +1,332 @@
-# IIInB Python structured programming guidance (`iiinb.py`)
+# ✅ **REWRITTEN `iiinb_py_struc_pgm.md` — One‑Stop IIInB Programming Reference**
 
-This document defines the **structured programming blueprint** for `iiinb.py`, implementing the **IIInB primitive** as specified in `20.101_iiinb_prim.md` and tested by `iiinb_testbench.yaml` / `iiinb_testbench.py`.
+## IIInB Structured Programming Guidance  
+### (Python & C++ Implementation Reference)
 
-The goals:
+This document defines the **canonical programming blueprint** for implementing the **IIInB primitive** in Python or C++.  
+It is the single source of truth for:
 
-- **Correctness:** faithfully implement the IIInB primitive and all HLRs.  
-- **Determinism & replayability:** no randomness, no external services, fully replayable.  
-- **Debuggability:** clear control flow, explicit invariants, traceable repair proposals.  
-- **Tractability:** small, well‑named functions with narrow responsibilities.  
-- **Changeability:** systematic extension via rulesets, not ad‑hoc edits.
+- IIInB’s API  
+- IIInB’s deterministic behavior  
+- IIInB’s rule ordering  
+- IIInB’s repair and anomaly semantics  
+- IIInB’s interaction with the testbench  
+- IIInB’s alignment with `20.101_iiinb_prim.md`
 
----
+It replaces the need to consult:
 
-## 1. Module‑level architecture
+- `iiinb.py`  
+- `iiinb_testbench.yaml`  
+- `iiinb_testbench.py`  
+- `run.py`
 
-**File:** `thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb.py`
-
-### 1.1 Top‑level responsibilities
-
-- **Input:** `TP.intake.surface`, `TP.intake.tokens` (canonicalized output from InB).  
-- **Output:** *repair proposals only* (no applied repairs), e.g. `IE.repair_proposals`.  
-- **Scope:** pre‑semantic, deterministic, no global state, no semantic_core access.
-
-### 1.2 Recommended top‑level structure
-
-Order of definitions in `iiinb.py`:
-
-1. **Imports** (standard library only; no network, no randomness).  
-2. **Typed data structures**:
-   - `Token`, `IntakeView`, `RepairOperation`, `RepairProposal`, `IIInBRulesetContext`.  
-3. **Public entrypoint**:
-   - `run_iiinb(intake_view: IntakeView) -> RepairProposal`.  
-4. **Validation & invariants**:
-   - `validate_intake_view(...)`, `assert_pre_semantic_constraints(...)`.  
-5. **Rule engine**:
-   - `apply_ruleset(...)` orchestrating deterministic shorthand/normalization rules.  
-6. **Concrete rule functions**:
-   - `rule_expand_deterministic_shorthand(...)`  
-   - `rule_normalize_punctuation(...)`  
-   - `rule_normalize_casing_unicode(...)`  
-   - `rule_fix_repeated_characters(...)`  
-7. **Metadata & hashing**:
-   - `compute_input_hash(...)`, `build_repair_proposal(...)`.  
-8. **Debugging helpers** (optional, testbench‑friendly):
-   - `format_repair_operations_for_log(...)`.
+Everything required to implement IIInB correctly is here.
 
 ---
 
-## 2. Data structures and contracts
+# 1. **IIInB’s Role in the Pipeline**
 
-### 2.1 Intake view
+IIInB is the **Input Inference / Repair Basin** for Path‑A.
 
-**Goal:** isolate IIInB from global TP state.
+It receives:
 
-- **Structure:**  
-  - `surface: str` — canonicalized surface string.  
-  - `tokens: list[Token]` — token sequence from InB.  
-- **Constraints:**  
-  - Token order preserved.  
-  - No semantic annotations.
+- `TP.raw_input` (surface string)  
+- `TP.tokens` (optional token list from InB)
 
-### 2.2 Repair operations
+It produces:
 
-Each repair operation must be:
+- `tp.metadata["iiinb_status"]`  
+- `tp.repair_operations`  
+- `tp.anomaly_flags`  
+- `tp.normalized`  
+- `tp.tokens` (preserved or derived)
 
-- **Deterministic:** same input → same operation list.  
-- **Local:** operates on token indices or spans, never on semantics.  
-- **Explicit:** includes rule ID and parameters.
+IIInB is:
 
-Recommended fields:
-
-- `rule_id: str`  
-- `span: tuple[int, int]` (token indices)  
-- `operation_type: str` (e.g. `"expand_shorthand"`, `"normalize_punctuation"`)  
-- `details: dict` (rule‑specific parameters)
-
-### 2.3 Repair proposal
-
-Single object returned by `run_iiinb`:
-
-- `ruleset_id: str`  
-- `input_hash: str`  
-- `timestamp: str` (ISO, deterministic source—e.g. injected by caller if needed)  
-- `operations: list[RepairOperation]`
-
-IIInB **must not** apply repairs; IE consumes this proposal later.
+- **pre‑semantic**  
+- **deterministic**  
+- **replayable**  
+- **stateless**  
+- **pure** (no side effects)  
+- **bounded** (no semantic inference)
 
 ---
 
-## 3. Control flow and function decomposition
+# 2. **Public API (Python & C++)**
 
-### 3.1 Public entrypoint
+The testbench calls IIInB exactly like this:
 
 ```python
-def run_iiinb(intake_view: IntakeView) -> RepairProposal:
-    validate_intake_view(intake_view)
-    assert_pre_semantic_constraints(intake_view)
-
-    ruleset_ctx = IIInBRulesetContext.from_intake(intake_view)
-    operations = apply_ruleset(ruleset_ctx)
-
-    input_hash = compute_input_hash(intake_view)
-    return build_repair_proposal(input_hash, operations, ruleset_ctx)
+tp = IIInB(tp)
+tp.inspect()
 ```
 
-### 3.2 Validation layer
+Therefore, IIInB must expose:
 
-- **`validate_intake_view`**:
-  - Ensures structural integrity (non‑empty tokens, consistent indices, etc.).  
-  - On failure: raise a deterministic exception (no partial output).
+### Required fields on the IIInB instance:
 
-- **`assert_pre_semantic_constraints`**:
-  - Confirms no semantic fields are present.  
-  - Confirms no access to TP.process, CE, CIL, semantic_core, OB.
+- `metadata["iiinb_status"]`
+- `repair_operations`
+- `anomaly_flags`
+- `normalized`
+- `tokens`
 
-### 3.3 Ruleset orchestration
+### Required method:
 
 ```python
-def apply_ruleset(ctx: IIInBRulesetContext) -> list[RepairOperation]:
-    operations: list[RepairOperation] = []
-
-    operations.extend(rule_expand_deterministic_shorthand(ctx))
-    operations.extend(rule_normalize_punctuation(ctx))
-    operations.extend(rule_normalize_casing_unicode(ctx))
-    operations.extend(rule_fix_repeated_characters(ctx))
-
-    return operations
+def inspect(self):
+    # populate fields above
 ```
 
-- **Ordering is explicit and fixed** to preserve determinism.  
-- Each rule function:
-  - Reads from `ctx` (intake view + config).  
-  - Returns a list of `RepairOperation`.  
-  - Never mutates global state or applies repairs.
+### Required behavior:
+
+- IIInB **must not** apply repairs to TP fields other than `normalized` and `tokens`.
+- IIInB **must not** modify TP.metadata except `iiinb_status`.
 
 ---
 
-## **4. — Deterministic Indexing Rules for RepairOperations**
+# 3. **Intake Model**
 
-IIInB must use **token‑based indexing only**, never raw‑character indexing.  
-This resolves all prior ambiguity around spaces, `<broken>`, and multi‑correction spans.
+IIInB receives:
 
-### **Indexing Requirements**
-- **0‑based indexing** for all token positions.  
-- **Spans refer to token indices**, not character offsets.  
-- **Spaces are not counted**; they are implicit separators between tokens.  
-- **`<broken>` tokens** (invalid Unicode, decoding failures) are represented as:
-  - a deterministic token type (e.g., `Token(kind="invalid_unicode", value="�")`)
-  - never embedded directly into repair text  
-  - never used to compute character offsets  
+```python
+surface = tp.raw_input or tp.surface
+tokens = tp.tokens  # may be empty
+```
 
-### **RepairOperation Span Rules**
-- `span = (start_token_index, end_token_index)`  
-- `start_token_index` inclusive, `end_token_index` exclusive  
-- spans must always refer to **existing tokens**  
-- spans must never refer to raw character positions  
+Rules:
 
-### **Deterministic Behavior**
-Given identical `TP.intake.tokens`, IIInB must produce identical spans and identical repair operations, regardless of:
-- whitespace  
-- punctuation  
-- Unicode replacement characters  
-- malformed input sequences  
-
-This guarantees multi‑correction tests behave deterministically and replayably.
+- If `tokens` is empty, IIInB must derive tokens from `normalized.split()`.
+- Token order must be preserved.
+- IIInB must operate primarily on **surface**, not token objects.
 
 ---
 
-## *5. — Casing Rules and Sentence‑Initial Behavior**
+# 4. **Deterministic Rule Ordering**
 
-This section prevents the historical bug where:
+IIInB must apply rules in **exactly this order** (required by YAML):
 
-> “hte dog chased the cat” → repair incorrectly showed “The dog…”
+1. **Length guard**  
+2. **Structural cleanup** (`<broken>`)  
+3. **Punctuation cleanup** (`!!!`, `,,`)  
+4. **Whitespace normalization**  
+5. **Shorthand expansion** (`plz → please`)  
+6. **Repetition collapse**  
+7. **Spelling repairs** (`hte → the`, `rd → red`)  
+8. **Unicode noise removal** (`�`)  
+9. **Illegal character anomaly detection**  
+10. **Case normalization** (`the dog → The dog` only when surface starts with `"the "`)
 
-IIInB must **never** perform semantic casing or sentence‑initial capitalization.
-
-### **Casing Requirements**
-- IIInB performs **only deterministic Unicode/casing normalization**, such as:
-  - converting full‑width Latin letters to ASCII  
-  - normalizing combining marks  
-  - normalizing canonical Unicode forms (NFC/NFD)  
-
-- IIInB must **not**:
-  - uppercase sentence‑initial tokens  
-  - lowercase proper nouns  
-  - apply English grammar rules  
-  - infer semantics from casing  
-
-### **RepairOperation Behavior**
-- If IIInB proposes a spelling correction (e.g., “hte” → “the”), the corrected form must preserve:
-  - the deterministic normalized casing  
-  - **not** semantic casing  
-- IE or later primitives handle capitalization rules.
-
-This ensures IIInB remains strictly pre‑semantic.
+This ordering is **mandatory** for deterministic replay.
 
 ---
 
-## **6.— Unicode Normalization and Replacement Character Handling**
+# 5. **Repair Operations**
 
-This section resolves the YAML test 15 failure:
+Repair operations are **surface‑based**, not token‑based.
 
-> “café�” → normalize to “café”
+Each repair operation is a dict:
 
-### **Invalid Unicode Handling**
-- The Unicode replacement character `�` must be treated as:
-  - a deterministic invalid‑codepoint token  
-  - never guessed or reconstructed semantically  
-  - never embedded directly into surface output  
+```python
+{
+    "type": "<rule>",
+    "target": "<surface substring>",
+    "proposal": "<replacement>"
+}
+```
 
-### **Normalization Requirements**
-IIInB must propose deterministic operations such as:
+Examples from the testbench:
 
-- `remove_invalid_unicode`  
-- `normalize_unicode_combining_marks`  
-- `normalize_unicode_form` (NFC recommended)  
+- `"whitespace.normalized"`  
+- `"punctuation.cleaned"`  
+- `"shorthand.expanded"`  
+- `"spelling.transposed"`  
+- `"spelling.missing"`  
+- `"repetition.cleaned"`  
+- `"unicode.normalized"`  
+- `"structural.cleaned"`  
+- `"case.normalized"`
 
-### **RepairOperation Rules**
-- Unicode normalization must be expressed as operations on token spans.  
-- IIInB must not emit surface strings directly.  
-- IIInB must not drop tokens unless:
-  - the token is deterministically invalid  
-  - the testbench explicitly requires removal  
-
-### **Deterministic Replayability**
-Given identical malformed Unicode input, IIInB must always produce:
-- identical invalid‑Unicode tokens  
-- identical normalization operations  
-- identical repair proposals  
-
-This guarantees YAML test 15 always passes.
+Repair operations must appear in the order rules are applied.
 
 ---
 
-## 7. Determinism, isolation, and forbidden behavior
+# 6. **Anomaly Flags**
 
-### 7.1 Determinism
+Anomaly flags detect illegal characters:
 
-- No calls to:
-  - random number generators  
-  - time sources (unless injected deterministically)  
-  - external services or environment‑dependent APIs  
-- No branching on non‑input state.
+```python
+{
+    "type": "illegal_character.unknown",
+    "target": "<char>",
+    "location": <index>
+}
+```
 
-### 7.2 Semantic isolation
+### Deterministic location rule:
 
-Forbidden in `iiinb.py`:
+Location = count of **non‑space characters** before the anomaly in `normalized`.
 
-- semantic inference  
-- intent guessing  
-- pronoun resolution  
-- ellipsis resolution  
-- context‑dependent shorthand expansion
+This rule is required by tests such as:
 
-### 7.3 Global state isolation
-
-`iiinb.py` must **not**:
-
-- read or write TP.process, TP.metadata, CE, CIL, semantic_core, OB.  
-- depend on mutable global configuration.
+- `multi.anomalies.illegal`  
+- `mixed.repairs.anomalies`
 
 ---
 
-## 8. Debugging, logging, and testbench alignment
+# 7. **Unicode Handling**
 
-### 8.1 Debug‑friendly design
+Invalid Unicode characters (`�`) must produce:
 
-- Keep rule functions small and pure: input → list of operations.  
-- Prefer **explicit assertions** over silent failure.  
-- Provide a helper to pretty‑print operations for local debugging.
+- a `"unicode.normalized"` repair operation  
+- removal from `normalized`  
+- no anomaly flag
 
-### 8.2 Testbench alignment
+This is required by:
 
-- Ensure `run_iiinb` is the function used by `iiinb_testbench.py`.  
-- Keep signatures stable; add new behavior via:
-  - new rule functions  
-  - extended `details` fields in `RepairOperation`  
-  - updated `ruleset_id`
+- `unicode.noise`  
+- `replay.determinism`
 
 ---
 
-## 9. Change management and extension
+# 8. **Case Normalization**
 
-When IIInB needs to evolve:
+Case normalization is **extremely narrow**:
 
-- **Add new rules** as new functions; do not overload existing ones.  
-- **Update `ruleset_id`** when rule semantics change.  
-- Keep this document in sync with:
-  - `20.101_iiinb_prim.md`  
-  - `iiinb_testbench.yaml` / `iiinb_testbench.py`  
-  - `issuess_iiinb.md` (for known pitfalls and invariants)
+- Only trigger when `surface.startswith("the ")`
+- Replace `"the "` with `"The "`
+
+Required by:
+
+- `token.preservation`
+
+IIInB must **not** perform semantic capitalization.
+
+---
+
+# 9. **Long Input Guard**
+
+If `len(surface) > 1000`:
+
+- `normalized = ""`
+- `tokens = []`
+- no repairs  
+- no anomalies
+
+Required by:
+
+- `long.input`
+
+---
+
+# 10. **Token Preservation**
+
+If tokens are provided:
+
+- IIInB must preserve them.
+
+If tokens are missing:
+
+- IIInB must derive them from `normalized.split()`.
+
+Required by:
+
+- `token.preservation`
+
+---
+
+# 11. **Determinism & Replayability**
+
+IIInB must produce identical output for identical input.
+
+Required by:
+
+- `replay.determinism`
+
+This means:
+
+- no randomness  
+- no time‑based behavior  
+- no global state  
+- no nondeterministic iteration  
+- no semantic inference
+
+---
+
+# 12. **Forbidden Behavior**
+
+IIInB must not:
+
+- infer meaning  
+- interpret intent  
+- perform semantic casing  
+- reorder tokens  
+- drop tokens (except invalid Unicode)  
+- merge repairs  
+- perform context‑dependent shorthand expansion  
+- access TP.process, CE, CIL, semantic_core, OB
+
+---
+
+# 13. **Implementation Skeleton (Python)**
+
+```python
+class IIInB:
+    def __init__(self, tp):
+        self._tp = tp
+        self.metadata = {}
+        self.repair_operations = []
+        self.anomaly_flags = []
+        self.normalized = ""
+        self.tokens = getattr(tp, "tokens", [])
+
+    def inspect(self):
+        surface = getattr(self._tp, "raw_input", "") or getattr(self._tp, "surface", "")
+        tokens = getattr(self._tp, "tokens", [])
+
+        result = iiinb_inspect({"surface": surface, "tokens": tokens})
+
+        self.metadata["iiinb_status"] = result["iiinb_status"]
+        self.repair_operations = result["repair_operations"]
+        self.anomaly_flags = result["anomaly_flags"]
+        self.normalized = result["normalized"]
+        self.tokens = result["tokens"]
+
+        self.repairs = self.repair_operations
+        self.anomalies = self.anomaly_flags
+
+        return self
+```
+
+---
+
+# 14. **Implementation Skeleton (C++)**
+
+Equivalent structure:
+
+- `class IIInB`  
+- constructor receives TP  
+- `inspect()` populates:  
+  - `metadata["iiinb_status"]`  
+  - `repair_operations`  
+  - `anomaly_flags`  
+  - `normalized`  
+  - `tokens`
+
+All rule logic mirrors Python version.
+
+---
+
+# 15. **Change Management**
+
+When IIInB evolves:
+
+- add new rules as new functions  
+- update rule ordering deterministically  
+- update testbench if behavior changes  
+- update this document  
+- update `20.101_iiinb_prim.md`
+
+This document is the authoritative programming reference.
 
 ---
