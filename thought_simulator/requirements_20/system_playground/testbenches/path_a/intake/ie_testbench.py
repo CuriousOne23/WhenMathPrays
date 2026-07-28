@@ -105,10 +105,12 @@ def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
 
     # Progressive pipeline:
     if use_inb:
-        tp = InB(tp).inspect()
-
+        inb_obj = InB(tp).inspect()
+        tp = getattr(inb_obj, "tp", inb_obj)
+    
     if use_iiinb:
-        tp = IIInB(tp).inspect()
+        iiinb_obj = IIInB(tp).inspect()
+        tp = getattr(iiinb_obj, "tp", iiinb_obj)
 
     # Finally, run IE.
     ie_output = run_ie(tp)
