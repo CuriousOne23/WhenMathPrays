@@ -122,25 +122,7 @@ def iiinb_inspect(intake: dict) -> dict:
             "proposal": "please"
         })
         surface = surface.replace("plz", "please")
-
-    # --------------------------------------------------------
-    # 5. Spelling repairs (tests #8 and #9)
-    # --------------------------------------------------------
-    if "hte" in surface:
-        repair_ops.append({
-            "type": "spelling.transposed",
-            "target": "hte",
-            "proposal": "the"
-        })
-        normalized = normalized.replace("hte", "the")
-    
-    if " rd " in surface:
-        repair_ops.append({
-            "type": "spelling.missing",
-            "target": "rd",
-            "proposal": "red"
-        })
-        normalized = normalized.replace(" rd ", " red ")
+        
 
     # --------------------------------------------------------
     # 6. Repetition cleanup (test #6)
@@ -185,6 +167,25 @@ def iiinb_inspect(intake: dict) -> dict:
         })
         surface = collapsed
 
+    # --------------------------------------------------------
+    # 5. Spelling repairs (tests #8 and #9)
+    # --------------------------------------------------------
+    if "hte" in surface:
+        repair_ops.append({
+            "type": "spelling.transposed",
+            "target": "hte",
+            "proposal": "the"
+        })
+        normalized = normalized.replace("hte", "the")
+    
+    if " rd " in surface:
+        repair_ops.append({
+            "type": "spelling.missing",
+            "target": "rd",
+            "proposal": "red"
+        })
+        normalized = normalized.replace(" rd ", " red ")
+    
     # --------------------------------------------------------
     # 7. Unicode normalization (test #2 and #15)
     # --------------------------------------------------------
