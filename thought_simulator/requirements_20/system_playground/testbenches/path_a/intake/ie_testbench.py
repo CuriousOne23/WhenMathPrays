@@ -88,23 +88,27 @@ def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
     """
     Execute the configured pipeline from stimulus to IE output.
 
-    stimulus_case: one test case from the stimulus YAML.
-    Returns: IE output dict.
+    When no upstream primitives are enabled, IE should receive the
+    iiinb_output defined in ie_testbench.yaml, exactly like the original
+    simple testbench did.
     """
     use_inb = TESTBENCH_CONFIG.get("use_inb", False)
     use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
 
-    # Base TP from stimulus
-    tp = stimulus_case.get("tp", {})
+    # Base TP from stimulus:
+    # - If upstream primitives are disabled, use iiinb_output (IE-only mode).
+    # - If upstream primitives are enabled, use tp (full pipeline mode).
+    if not use_inb and not use_iiinb:
+        tp = stimulus_case.get("iiinb_output", {})
+    else:
+        tp = stimulus_case.get("tp", {})
 
     # Progressive pipeline:
-    # If InB enabled, run InB first.
     if use_inb:
-        tp = run_inb(tp)
+        tp = InB(tp).inspect()
 
-    # If IIInB enabled, run IIInB next.
     if use_iiinb:
-        tp = run_iiinb(tp)
+        tp = IIInB(tp).inspect()
 
     # Finally, run IE.
     ie_output = run_ie(tp)
