@@ -7,7 +7,7 @@ This module:
     • Determines pipeline configuration (upstream primitives enabled)
     • Selects appropriate stimulus YAML (ie / iiinb / inb)
     • Executes the upstream → IE pipeline
-    • Compares actual vs expected IE outputs
+    • Compares actual vs expected TP/IE outputs
     • Accounts for supported vs unsupported tests
     • Prints a structured summary (passed / failed / skipped)
 """
@@ -92,7 +92,7 @@ def _load_stimulus_yaml():
 
 def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
     """
-    Execute the configured pipeline from stimulus to IE output.
+    Execute the configured pipeline from stimulus to IE (TP) output.
 
     When no upstream primitives are enabled, IE should receive the
     iiinb_output defined in ie_testbench.yaml, exactly like the original
@@ -101,60 +101,109 @@ def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
     use_inb = TESTBENCH_CONFIG.get("use_inb", False)
     use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
 
-    # Base TP from stimulus:
+    # Base input from stimulus:
     # - If upstream primitives are disabled, use iiinb_output (IE-only mode).
     # - If upstream primitives are enabled, use tp (full pipeline mode).
     if not use_inb and not use_iiinb:
-        tp = stimulus_case.get("iiinb_output", {})
+        iiinb_output = stimulus_case.get("iiinb_output", {})
     else:
         tp = stimulus_case.get("tp", {})
 
-    # Progressive pipeline:
-    if use_inb:
-        inb_obj = InB(tp).inspect()
-        tp = getattr(inb_obj, "tp", inb_obj)
+        # Progressive pipeline:
+        if use_inb:
+            inb_obj = InB(tp).inspect()
+            tp = getattr(inb_obj, "tp", inb_obj)
 
-    if use_iiinb:
-        iiinb_obj = IIInB(tp).inspect()
-        tp = getattr(iiinb_obj, "tp", iiinb_obj)
+        if use_iiinb:
+            iiinb_obj = IIInB(tp).inspect()
+            # For now we assume IIInB emits a dict compatible with IE's intake model.
+            iiinb_output = getattr(iiinb_obj, "iiinb_output", iiinb_obj)
+        else:
+            # If IIInB is not enabled, we treat tp as iiinb_output-like.
+            iiinb_output = tp
 
-    # Finally, run IE.
-    ie_output = run_ie(tp)
+    # Finally, run IE (TP-aligned).
+    ie_output = run_ie(iiinb_output)
     return ie_output
 
 
 # ---------------------------------------------------------------------------
-# Comparison helpers
+# Comparison helpers (TP-aligned, recursive)
 # ---------------------------------------------------------------------------
+
+def _collect_missing_keys(expected: dict, actual: dict, prefix: str = "") -> list:
+    """
+    Recursively collect missing keys from actual given expected structure.
+    """
+    missing = []
+    for key, exp_val in expected.items():
+        full_key = f"{prefix}{key}" if not prefix else f"{prefix}.{key}"
+        if key not in actual:
+            missing.append(full_key)
+            continue
+        act_val = actual[key]
+        if isinstance(exp_val, dict) and isinstance(act_val, dict):
+            missing.extend(_collect_missing_keys(exp_val, act_val, full_key))
+    return missing
+
 
 def _is_test_supported(expected: dict, actual: dict) -> (bool, list):
     """
-    Determine whether a test is supported given expected IE fields
-    and the actual IE output.
+    Determine whether a test is supported given expected TP fields
+    and the actual IE (TP) output.
 
     A test is unsupported if the expected YAML defines fields that
     the IE output does not emit under the current pipeline configuration.
 
     Returns (supported: bool, missing_keys: list).
     """
-    missing = [k for k in expected.keys() if k not in actual]
+    missing = _collect_missing_keys(expected, actual)
     return (len(missing) == 0, missing)
+
+
+def _compare_values(exp_val, act_val, path: str) -> bool:
+    """
+    Compare two values (scalars, lists, dicts) recursively.
+    """
+    if isinstance(exp_val, dict) and isinstance(act_val, dict):
+        for k in exp_val.keys():
+            if k not in act_val:
+                print(f"    MISMATCH at '{path}.{k}': key missing in actual")
+                return False
+            if not _compare_values(exp_val[k], act_val[k], f"{path}.{k}"):
+                return False
+        return True
+
+    if isinstance(exp_val, list) and isinstance(act_val, list):
+        if len(exp_val) != len(act_val):
+            print(f"    MISMATCH at '{path}': list length expected {len(exp_val)}, actual {len(act_val)}")
+            return False
+        for i, (e_item, a_item) in enumerate(zip(exp_val, act_val)):
+            if not _compare_values(e_item, a_item, f"{path}[{i}]"):
+                return False
+        return True
+
+    if exp_val != act_val:
+        print(f"    MISMATCH at '{path}':")
+        print(f"      expected: {exp_val}")
+        print(f"      actual:   {act_val}")
+        return False
+
+    return True
 
 
 def _compare_expected_actual(expected: dict, actual: dict) -> bool:
     """
-    Compare expected vs actual IE output.
-    Only keys present in expected are compared.
+    Compare expected vs actual TP-aligned IE output.
+    Only keys present in expected are compared, recursively.
     """
     for key, exp_val in expected.items():
-        act_val = actual.get(key)
-
-        if act_val != exp_val:
-            print(f"    MISMATCH in '{key}':")
-            print(f"      expected: {exp_val}")
-            print(f"      actual:   {act_val}")
+        if key not in actual:
+            print(f"    MISMATCH in '{key}': key missing in actual")
             return False
-
+        act_val = actual[key]
+        if not _compare_values(exp_val, act_val, key):
+            return False
     return True
 
 
@@ -166,7 +215,7 @@ def execute_ie_testbench():
     """
     Executes IE tests under progressive lineup configuration.
     """
-    print("IE Testbench — Progressive Lineup Mode\n")
+    print("IE Testbench — Progressive Lineup Mode (TP-Aligned)\n")
 
     use_inb = TESTBENCH_CONFIG.get("use_inb", False)
     use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
@@ -179,7 +228,7 @@ def execute_ie_testbench():
     print(f"  use_ie   = {TESTBENCH_CONFIG.get('use_ie', True)}")
     print()
 
-    # Load expected IE tests
+    # Load expected IE tests (TP-aligned)
     ie_tests = _load_ie_tests()
 
     # Load stimulus YAML based on earliest upstream
@@ -219,7 +268,7 @@ def execute_ie_testbench():
             skipped += 1
             continue
 
-        # Run pipeline from stimulus to IE
+        # Run pipeline from stimulus to IE (TP) output
         actual_ie = _run_pipeline_from_stimulus(stimulus_case)
 
         # Determine if this test is supported under current pipeline/output
@@ -227,7 +276,7 @@ def execute_ie_testbench():
 
         if not is_supported:
             print("    SKIP (unsupported under current pipeline):")
-            print(f"      missing IE fields: {missing}\n")
+            print(f"      missing TP/IE fields: {missing}\n")
             skipped += 1
             continue
 
