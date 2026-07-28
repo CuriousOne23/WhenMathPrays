@@ -213,8 +213,10 @@ def iiinb_inspect(intake: dict) -> dict:
                 "location": location
             })
 
+    # --------------------------------------------------------
     # 9. Case normalization (test #14)
-    # Only normalize if the original surface started with lowercase "the "
+    # --------------------------------------------------------
+    # Only normalize case if the ORIGINAL surface started with lowercase "the "
     if surface.startswith("the "):
         repair_ops.append({
             "type": "case.normalized",
