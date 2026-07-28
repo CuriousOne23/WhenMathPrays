@@ -129,15 +129,15 @@ def iiinb_inspect(intake: dict) -> dict:
             "target": "hte",
             "proposal": "the"
         })
-        surface = surface.replace("hte", "the")
-
+        normalized = normalized.replace("hte", "the")
+    
     if " rd " in surface:
         repair_ops.append({
             "type": "spelling.missing",
             "target": "rd",
             "proposal": "red"
         })
-        surface = surface.replace(" rd ", " red ")
+    normalized = normalized.replace(" rd ", " red ")
 
     # --------------------------------------------------------
     # 6. Repetition cleanup (test #6)
