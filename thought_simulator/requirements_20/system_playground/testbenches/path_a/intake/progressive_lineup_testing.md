@@ -1,196 +1,227 @@
 # **Progressive Lineup Testing — A Comprehensive Guide**  
-### *Design, Problems, Solutions, and Structured Process for Multi‑Primitive Pipeline Testing*
+### *Design, Problems, Solutions, and Structured Process for Multi‑Primitive Pipeline Testing*  
 
 ---
 
-## **1. Purpose of Progressive Lineup Testing**
+# **1. Purpose of Progressive Lineup Testing (Generalized)**  
+Progressive lineup testing allows the user to **progressively enable any number of upstream primitives**, forming a deterministic pipeline from the earliest enabled primitive to the primitive currently under test.
 
-The Thought Simulator pipeline is composed of sequential primitives:
+The only structural rule is:
 
-```
-InB → IIInB → IE → CEx → CE → ISc → TPU → TP.semantic
-```
-
-Each primitive:
-
-- receives structured input  
-- performs deterministic, pre‑semantic transformations  
-- produces structured output  
-
-Testing each primitive **in isolation** is easy.  
-Testing each primitive **in pipeline context** is hard.
-
-**Progressive lineup testing** solves this by allowing each primitive testbench to run in three modes:
-
-1. **Primitive‑only mode**  
-2. **Primitive + immediate upstream**  
-3. **Primitive + full upstream chain**
+> **If a primitive upstream (PrimitiveX) is enabled, and the current primitive under test is PrimitiveY, then all primitives between PrimitiveX and PrimitiveY must also be enabled and executed.**  
 
 This ensures:
 
-- deterministic replay  
-- correct integration behavior  
-- correct propagation of repairs/anomalies  
-- correct structural normalization  
-- correct metadata construction  
+- the pipeline is structurally complete  
+- no gaps exist between enabled primitives  
+- downstream primitives receive valid upstream output  
+- deterministic replay is preserved  
+- repairs, anomalies, and structural metadata propagate correctly  
+
+This model supports **arbitrary progressive loading**, not just three fixed modes.  
+The user may choose:  
+- zero upstream primitives  
+- one upstream primitive  
+- several upstream primitives  
+- the entire upstream chain  
+
+The testbench automatically constructs the correct pipeline based on the user’s configuration.  
+This replaces the earlier “three modes” framing because the pipeline supports **any** progressive lineup the user desires.  
 
 ---
 
-## **2. The Four Artifacts Required for Progressive Testing**
+# **2. Required Artifacts for Progressive Lineup Testing**  
 
-Every primitive must have:
-
-### **A. `primitive.py`**  
-The implementation.
-
-### **B. `primitive_testbench.yaml`**  
-The expected outputs for primitive‑only mode.
-
-### **C. `primitive_testbench.py`**  
-The execution harness.
-
-### **D. `run.py`**  
-The orchestrator that selects:
-
-- which primitives to load  
-- which testbenches to run  
-- which YAML stimulus to use  
-
-These four artifacts must cooperate.
+Progressive lineup testing relies on four coordinated artifacts. Each plays a distinct role in enabling deterministic, replay‑safe testing across any number of upstream primitives.
 
 ---
 
-## **3. The Core Problem Progressive Testing Must Solve**
+## **2.1 `primitive.py` — Primitive Implementation**
 
-### **Problem:**  
-When testing a downstream primitive (e.g., IE), the upstream YAML stimulus (e.g., `iiinb_testbench.yaml`) **does not contain all fields required for downstream expected outputs** (e.g., IE structural tags, replay metadata, error envelope).
+Defines:
 
-This creates a mismatch:
+- rule ordering  
+- normalization logic  
+- repair/anomaly propagation  
+- structural tag construction  
+- replay metadata generation  
+- error envelope construction  
 
-- IE testbench expects IE‑level fields  
-- IIInB YAML only defines IIInB‑level fields  
-- InB YAML defines even fewer fields  
+This is the deterministic execution logic used by downstream testbenches.
+
+---
+
+## **2.2 `primitive_testbench.yaml` — Expected Outputs**
+
+Defines the **canonical expected outputs** when the primitive is tested in isolation.
+
+Contains:
+
+- input stimulus  
+- expected normalized text  
+- expected tokens  
+- expected repairs/anomalies  
+- expected structural tags  
+- expected replay metadata  
+- expected error envelope  
+
+This YAML is **always** the source of truth for expected outputs, even when upstream primitives are enabled.
+
+---
+
+## **2.3 `primitive_testbench.py` — Execution Harness**
+
+Responsible for:
+
+- detecting pipeline configuration  
+- selecting correct stimulus YAML  
+- loading all required upstream primitives  
+- executing the full upstream chain  
+- comparing output against downstream expected YAML  
+- determining supported vs unsupported tests  
+- skipping unsupported tests  
+- reporting skipped tests  
+- producing structured pass/fail/skipped summaries  
+
+This file is the **intelligent orchestrator** that makes progressive lineup testing possible.
+
+---
+
+## **2.4 `run.py` — Global Orchestrator**
+
+Controls:
+
+- which primitives are enabled  
+- which testbenches run  
+- which YAMLs are used as stimulus  
+- which tests are included/excluded  
+- the order of testbench execution  
+
+It does not execute primitive logic directly — it delegates to each primitive’s testbench.
+
+---
+
+# **3. Why Progressive Lineup Testing Is Necessary**
+
+Each primitive produces a different level of structural detail.  
+Downstream primitives depend on upstream output being complete, normalized, and deterministic.
+
+Because upstream YAML stimulus files do not contain downstream‑level fields:
+
+- IE cannot be fully tested using IIInB stimulus  
+- IIInB cannot be fully tested using InB stimulus  
+- CEx cannot be fully tested using IE stimulus  
+- etc.
 
 Therefore:
 
-### **Some IE tests cannot be evaluated when upstream stimulus is used.**
+> **Some downstream tests become unsupported when upstream primitives are enabled.**
 
-This is not a bug — it is a structural truth of the pipeline.
+Progressive lineup testing solves this by:
 
----
+1. allowing arbitrary upstream enabling  
+2. automatically loading all primitives between earliest enabled upstream and primitive under test  
+3. selecting correct stimulus YAML  
+4. running full upstream chain deterministically  
+5. comparing downstream output only against downstream expected YAML  
+6. detecting supported vs unsupported tests  
+7. skipping unsupported tests  
+8. reporting skipped tests transparently  
 
-## **4. The Required Solution**
-
-### **Downstream testbenches must:**
-
-1. Detect pipeline configuration  
-2. Select correct stimulus YAML  
-3. Load correct upstream primitives  
-4. Run the correct pipeline chain  
-5. Compare downstream output against downstream expected YAML  
-6. Detect unsupported tests  
-7. Skip unsupported tests  
-8. Report skipped tests  
-9. Adjust pass/fail summary  
-10. Print pipeline configuration  
-
-This is the correct structured behavior.
+This ensures deterministic replay and correct pipeline behavior regardless of how many upstream primitives the user enables.
 
 ---
 
-## **5. Pipeline Configuration Detection**
+# **4. Pipeline Configuration Detection**
 
-Each testbench must read:
+Each testbench must read flags such as:
 
-```python
-use_inb
-use_iiinb
-use_ie
-...
-```
+- `use_inb`  
+- `use_iiinb`  
+- `use_ie`  
+- etc.
 
-These flags determine which upstream primitives to load.
+These determine which upstream primitives must be loaded.
+
+If the user enables PrimitiveX upstream of PrimitiveY, then:
+
+> **All primitives between X and Y must also be loaded.**
+
+This guarantees structural completeness.
 
 ---
 
-## **6. Stimulus Selection Logic**
+# **5. Stimulus Selection Logic**
 
-### **Case A — No upstream primitives**
-```
-use_inb=False
-use_iiinb=False
-```
+Stimulus selection is based on the **earliest enabled upstream primitive**.
+
+### **Case A — No upstream primitives enabled**  
 Stimulus = `primitive_testbench.yaml`
 
-### **Case B — One upstream primitive**
-```
-use_inb=False
-use_iiinb=True
-```
+### **Case B — Earliest upstream is IIInB**  
 Stimulus = `iiinb_testbench.yaml`
 
-### **Case C — Two upstream primitives**
-```
-use_inb=True
-use_iiinb=True
-```
+### **Case C — Earliest upstream is InB**  
 Stimulus = `inb_testbench.yaml`
 
-This is the progressive loading model.
+### **General Rule**  
+If earliest enabled upstream is PrimitiveX, stimulus = `primitiveX_testbench.yaml`.
+
+This ensures stimulus matches the earliest stage of the pipeline.
 
 ---
 
-## **7. Pipeline Execution Logic**
+# **6. Pipeline Execution Logic**
 
-### **Case A — Primitive‑only**
-```python
-tp = stimulus_to_tp(stimulus)
-out = Primitive(tp).inspect()
+After selecting stimulus, the testbench constructs the full pipeline:
+
+```
+PrimitiveX → PrimitiveX+1 → … → PrimitiveY
 ```
 
-### **Case B — One upstream**
-```python
-tp = stimulus_to_tp(stimulus)
-tp = Upstream(tp).inspect()
-out = Primitive(tp).inspect()
-```
+Example for IE:
 
-### **Case C — Two upstream**
-```python
-tp = stimulus_to_tp(stimulus)
-tp = Upstream1(tp).inspect()
-tp = Upstream2(tp).inspect()
-out = Primitive(tp).inspect()
-```
+- If earliest upstream is IIInB:  
+  `IIInB → IE`
 
-This ensures deterministic pipeline behavior.
+- If earliest upstream is InB:  
+  `InB → IIInB → IE`
+
+- If no upstream:  
+  `IE`
+
+This ensures deterministic propagation of repairs, anomalies, tokens, and structural metadata.
 
 ---
 
-## **8. Expected Output Source**
+# **7. Expected Output Source**
 
 Regardless of upstream configuration:
 
-### **Expected output always comes from the downstream primitive’s YAML.**
+> **Expected output always comes from the downstream primitive’s YAML.**
 
-Example:
+Examples:
 
-- IE testbench always compares against `ie_testbench.yaml`
-- IIInB testbench always compares against `iiinb_testbench.yaml`
-- InB testbench always compares against `inb_testbench.yaml`
+- IE testbench → compare against `ie_testbench.yaml`  
+- IIInB testbench → compare against `iiinb_testbench.yaml`  
+- InB testbench → compare against `inb_testbench.yaml`
 
 Stimulus changes.  
 Expected output does not.
 
 ---
 
-## **9. Supported vs Unsupported Tests**
+# **8. Supported vs Unsupported Tests**
 
-### **Supported tests**  
-Tests whose expected fields exist in the downstream YAML **and** whose stimulus provides enough upstream data to evaluate them.
+A downstream test is **supported** if:
 
-### **Unsupported tests**  
-Tests whose expected fields exist in the downstream YAML **but** whose stimulus does **not** provide enough upstream data to evaluate them.
+- the downstream expected YAML defines the required fields  
+- the upstream stimulus provides enough data to evaluate them
+
+A downstream test is **unsupported** if:
+
+- the downstream expected YAML defines fields  
+- but upstream stimulus does **not** provide enough data to evaluate them
 
 Example:
 
@@ -207,17 +238,17 @@ But IIInB stimulus does not define:
 
 Therefore:
 
-### **IE structural tests must be skipped when using IIInB stimulus.**
+> **IE structural tests must be skipped when using IIInB stimulus.**
 
 ---
 
-## **10. Detecting Unsupported Tests**
+# **9. Detecting Unsupported Tests**
 
 Each testbench must include:
 
 ```python
-def is_test_supported(expected_ie, required_fields):
-    missing = [f for f in required_fields if f not in expected_ie]
+def is_test_supported(expected, required_fields):
+    missing = [f for f in required_fields if f not in expected]
     return (len(missing) == 0, missing)
 ```
 
@@ -235,7 +266,7 @@ This prevents false failures.
 
 ---
 
-## **11. Correct Pass/Fail Summary**
+# **10. Correct Pass/Fail Summary**
 
 ### **Incorrect (current):**
 ```
@@ -260,7 +291,7 @@ This is the correct structured reporting.
 
 ---
 
-## **12. Required Logging**
+# **11. Required Logging**
 
 Each testbench must print:
 
@@ -282,26 +313,19 @@ This makes the pipeline transparent.
 
 ---
 
-## **13. Benefits of Progressive Lineup Testing**
+# **12. Benefits of Progressive Lineup Testing**
 
-### ✔ Deterministic  
-No false failures.
-
-### ✔ Modular  
-Each primitive can be tested alone or in pipeline context.
-
-### ✔ Transparent  
-User sees exactly what was skipped and why.
-
-### ✔ Scalable  
-Supports future primitives and deeper pipelines.
-
-### ✔ Replay-safe  
-Matches the deterministic replay philosophy of the Thought Simulator.
+- deterministic  
+- modular  
+- transparent  
+- scalable  
+- replay‑safe  
+- pipeline‑accurate  
+- future‑proof  
 
 ---
 
-## **14. Summary**
+# **13. Summary**
 
 Progressive lineup testing is the structured method for validating primitives in isolation and in pipeline context. It requires:
 
@@ -313,5 +337,12 @@ Progressive lineup testing is the structured method for validating primitives in
 - structured pass/fail/skipped reporting  
 
 This guide defines the complete architecture for implementing progressive lineup testing across all primitives.
+
+---
+
+# **14. Closing Notes**
+
+This document is intended as a durable reference for future development, debugging, and expansion of the Thought Simulator pipeline.  
+It ensures that both you and I can reopen this topic in future conversations and immediately re‑synchronize on the entire testing philosophy.
 
 ---
