@@ -20,8 +20,8 @@ import yaml
 # ---------------------------------------------------------------------------
 
 from thought_simulator.requirements_20.system_playground.primitives.ie.ie import run_ie
-from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import run_iiinb
-from thought_simulator.requirements_20.system_playground.primitives.inb.inb import run_inb
+from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import IIInB
+from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
 
 # ---------------------------------------------------------------------------
 # Global testbench configuration (injected by run.py)
