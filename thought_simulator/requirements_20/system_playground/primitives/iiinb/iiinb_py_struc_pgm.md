@@ -1,30 +1,22 @@
-# ✅ **REWRITTEN `iiinb_py_struc_pgm.md` — One‑Stop IIInB Programming Reference**
+# ✅ **UPDATED `iiinb_py_struc_pgm.md` — One‑Stop IIInB Programming Reference**
 
 ## IIInB Structured Programming Guidance  
 ### (Python & C++ Implementation Reference)
 
-This document defines the **canonical programming blueprint** for implementing the **IIInB primitive** in Python or C++.  
-It is the single source of truth for:
-
-- IIInB’s API  
-- IIInB’s deterministic behavior  
-- IIInB’s rule ordering  
-- IIInB’s repair and anomaly semantics  
-- IIInB’s interaction with the testbench  
-- IIInB’s alignment with `20.101_iiinb_prim.md`
-
-It replaces the need to consult:
+This document is the **canonical programming blueprint** for implementing the **IIInB primitive** in Python or C++.  
+It synchronizes:
 
 - `iiinb.py`  
 - `iiinb_testbench.yaml`  
 - `iiinb_testbench.py`  
-- `run.py`
+- `run.py`  
+- `20.101_iiinb_prim.md`
 
-Everything required to implement IIInB correctly is here.
+Everything required to understand IIInB’s behavior, rule ordering, and pipeline role is here.
 
 ---
 
-# 1. **IIInB’s Role in the Pipeline**
+# 1. IIInB’s Role in the Pipeline
 
 IIInB is the **Input Inference / Repair Basin** for Path‑A.
 
@@ -47,12 +39,12 @@ IIInB is:
 - **deterministic**  
 - **replayable**  
 - **stateless**  
-- **pure** (no side effects)  
+- **pure**  
 - **bounded** (no semantic inference)
 
 ---
 
-# 2. **Public API (Python & C++)**
+# 2. Public API (Python & C++)
 
 The testbench calls IIInB exactly like this:
 
@@ -61,9 +53,9 @@ tp = IIInB(tp)
 tp.inspect()
 ```
 
-Therefore, IIInB must expose:
+IIInB must expose:
 
-### Required fields on the IIInB instance:
+### Required fields:
 
 - `metadata["iiinb_status"]`
 - `repair_operations`
@@ -80,12 +72,12 @@ def inspect(self):
 
 ### Required behavior:
 
+- IIInB **must not** modify TP metadata except `iiinb_status`.
 - IIInB **must not** apply repairs to TP fields other than `normalized` and `tokens`.
-- IIInB **must not** modify TP.metadata except `iiinb_status`.
 
 ---
 
-# 3. **Intake Model**
+# 3. Intake Model
 
 IIInB receives:
 
@@ -96,32 +88,35 @@ tokens = tp.tokens  # may be empty
 
 Rules:
 
-- If `tokens` is empty, IIInB must derive tokens from `normalized.split()`.
+- If `tokens` is empty, IIInB derives tokens from the **original surface**, not the normalized string.
 - Token order must be preserved.
-- IIInB must operate primarily on **surface**, not token objects.
+- IIInB operates primarily on **surface**, not token objects.
 
 ---
 
-# 4. **Deterministic Rule Ordering**
+# 4. Deterministic Rule Ordering  
+### (This ordering is enforced by `iiinb_testbench.yaml`)
 
-IIInB must apply rules in **exactly this order** (required by YAML):
+IIInB must apply rules in **exactly this order**:
 
 1. **Length guard**  
 2. **Structural cleanup** (`<broken>`)  
-3. **Punctuation cleanup** (`!!!`, `,,`)  
-4. **Whitespace normalization**  
+3. **Whitespace normalization**  
+4. **Punctuation cleanup** (`!!!`, `,,`)  
 5. **Shorthand expansion** (`plz → please`)  
 6. **Repetition collapse**  
 7. **Spelling repairs** (`hte → the`, `rd → red`)  
 8. **Unicode noise removal** (`�`)  
 9. **Illegal character anomaly detection**  
-10. **Case normalization** (`the dog → The dog` only when surface starts with `"the "`)
+10. **Case normalization**  
+    - Only when **original surface** starts with `"the "`  
+    - Never after spelling repair
 
-This ordering is **mandatory** for deterministic replay.
+This ordering is mandatory for deterministic replay and matches all 15/15 passing tests.
 
 ---
 
-# 5. **Repair Operations**
+# 5. Repair Operations
 
 Repair operations are **surface‑based**, not token‑based.
 
@@ -135,7 +130,7 @@ Each repair operation is a dict:
 }
 ```
 
-Examples from the testbench:
+Examples:
 
 - `"whitespace.normalized"`  
 - `"punctuation.cleaned"`  
@@ -151,7 +146,7 @@ Repair operations must appear in the order rules are applied.
 
 ---
 
-# 6. **Anomaly Flags**
+# 6. Anomaly Flags
 
 Anomaly flags detect illegal characters:
 
@@ -167,33 +162,33 @@ Anomaly flags detect illegal characters:
 
 Location = count of **non‑space characters** before the anomaly in `normalized`.
 
-This rule is required by tests such as:
+This matches:
 
 - `multi.anomalies.illegal`  
 - `mixed.repairs.anomalies`
 
 ---
 
-# 7. **Unicode Handling**
+# 7. Unicode Handling
 
 Invalid Unicode characters (`�`) must produce:
 
 - a `"unicode.normalized"` repair operation  
 - removal from `normalized`  
-- no anomaly flag
+- **no anomaly flag**
 
-This is required by:
+Required by:
 
 - `unicode.noise`  
 - `replay.determinism`
 
 ---
 
-# 8. **Case Normalization**
+# 8. Case Normalization
 
 Case normalization is **extremely narrow**:
 
-- Only trigger when `surface.startswith("the ")`
+- Only trigger when **original surface** starts with `"the "`  
 - Replace `"the "` with `"The "`
 
 Required by:
@@ -204,7 +199,7 @@ IIInB must **not** perform semantic capitalization.
 
 ---
 
-# 9. **Long Input Guard**
+# 9. Long Input Guard
 
 If `len(surface) > 1000`:
 
@@ -219,7 +214,7 @@ Required by:
 
 ---
 
-# 10. **Token Preservation**
+# 10. Token Preservation
 
 If tokens are provided:
 
@@ -227,7 +222,7 @@ If tokens are provided:
 
 If tokens are missing:
 
-- IIInB must derive them from `normalized.split()`.
+- IIInB must derive tokens from the **original surface**, not the normalized string.
 
 Required by:
 
@@ -235,7 +230,7 @@ Required by:
 
 ---
 
-# 11. **Determinism & Replayability**
+# 11. Determinism & Replayability
 
 IIInB must produce identical output for identical input.
 
@@ -253,7 +248,7 @@ This means:
 
 ---
 
-# 12. **Forbidden Behavior**
+# 12. Forbidden Behavior
 
 IIInB must not:
 
@@ -268,7 +263,7 @@ IIInB must not:
 
 ---
 
-# 13. **Implementation Skeleton (Python)**
+# 13. Implementation Skeleton (Python)
 
 ```python
 class IIInB:
@@ -300,7 +295,7 @@ class IIInB:
 
 ---
 
-# 14. **Implementation Skeleton (C++)**
+# 14. Implementation Skeleton (C++)
 
 Equivalent structure:
 
@@ -317,7 +312,7 @@ All rule logic mirrors Python version.
 
 ---
 
-# 15. **Change Management**
+# 15. Change Management
 
 When IIInB evolves:
 
