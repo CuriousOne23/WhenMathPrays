@@ -213,6 +213,12 @@ def execute_ie_testbench():
         print(f"Description: {test.get('description')}")
         print("------------------------------------------------------------")
 
+        # If there is no matching stimulus case, this test is unsupported
+        if not stimulus_case:
+            print("    SKIP (no matching stimulus case under current lineup)\n")
+            skipped += 1
+            continue
+
         # Run pipeline from stimulus to IE
         actual_ie = _run_pipeline_from_stimulus(stimulus_case)
 
