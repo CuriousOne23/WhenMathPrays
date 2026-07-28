@@ -216,14 +216,20 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 9. Case normalization (test #14)
     # --------------------------------------------------------
+    print("[DEBUG] surface:", repr(surface))
+    print("[DEBUG] normalized (before case):", repr(normalized))
+
     # Only normalize case if the ORIGINAL surface started with lowercase "the "
     if surface.startswith("the "):
+        print("[DEBUG] case normalization TRIGGERED")
         repair_ops.append({
             "type": "case.normalized",
             "target": "the",
             "proposal": "The"
         })
         normalized = "The" + normalized[3:]
+    else:
+        print("[DEBUG] case normalization SKIPPED")
 
     # --------------------------------------------------------
     # Emit final result
