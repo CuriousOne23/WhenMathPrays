@@ -136,7 +136,7 @@ tests:
           target: "hte"
           proposal: "the"
       anomaly_flags: []
-      normalized: "The dog chased the cat"
+      normalized: "the dog chased the cat"
 
   # ----------------------------------------------------------
   # 9. Misspelling — Missing Letter
