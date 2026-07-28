@@ -325,3 +325,119 @@ When IIInB evolves:
 This document is the authoritative programming reference.
 
 ---
+
+# **16. Reference Documents (Canonical IIInB Synchronization Set)**
+
+To safely modify IIInB in the future — without breaking determinism, replayability, or testbench alignment — the following four documents form the complete, synchronized contract for IIInB.  
+These documents define the **spec**, **blueprint**, **expected behavior**, and **execution harness**.
+
+Each link points to the authoritative version in the repository.
+
+---
+
+### **16.1 Structured Programming Blueprint**  
+#### *`iiinb_py_struc_pgm.md`*  
+**URL:**  
+[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md)  
+
+**Purpose:**  
+This document (the one you are reading) is the **one‑stop programming reference** for IIInB.  
+It defines:
+
+- rule ordering  
+- repair/anomaly semantics  
+- determinism and replayability constraints  
+- token‑preservation rules  
+- case‑normalization invariants  
+- forbidden behaviors  
+- Python/C++ API shape  
+- change‑management rules  
+
+This is the **top‑level blueprint** for IIInB implementation.
+
+---
+
+### **16.2 Formal Primitive Specification**  
+#### *`20.101_iiinb_prim.md`*  
+**URL:**  
+[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/20.101_iiinb_prim.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/20.101_iiinb_prim.md)  
+
+**Purpose:**  
+Defines the **conceptual responsibilities** of IIInB:
+
+- pre‑semantic boundary  
+- deterministic constraints  
+- primitive‑level invariants  
+- high‑level rule semantics  
+- architectural role in Path‑A  
+
+This is the **behavioral spec** independent of code.
+
+---
+
+### **16.3 Behavioral Contract (Expected Outputs)**  
+#### *`iiinb_testbench.yaml`*  
+**URL:**  
+[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.yaml](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.yaml)  
+
+**Purpose:**  
+Defines the **exact expected outputs** for all IIInB tests:
+
+- repair operations  
+- anomaly flags  
+- normalized output  
+- token output  
+- rule ordering  
+- long‑input behavior  
+- replay determinism  
+
+This file is the **ground truth for IIInB behavior**.
+
+---
+
+### **16.4 Mechanical Contract (Execution Harness)**  
+#### *`iiinb_testbench.py`*  
+**URL:**  
+[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.py](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.py)  
+
+**Purpose:**  
+Defines how IIInB is:
+
+- instantiated  
+- executed (`IIInB(tp).inspect()`)  
+- validated  
+- compared against YAML expectations  
+- diagnosed with detailed mismatch logs  
+
+This is the **execution model** for IIInB.
+
+---
+
+### **16.5 Optional: Pipeline Runner**  
+#### *`run.py`*  
+**URL:**  
+[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/run.py](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/run.py)  
+
+**Purpose:**  
+Controls:
+
+- which testbenches run  
+- upstream/downstream primitive toggles  
+- injection of configuration into testbenches  
+
+Useful when modifying pipeline flow or test selection.
+
+---
+
+# **Summary**
+
+To modify IIInB safely and deterministically, read these four documents:
+
+1. **iiinb_py_struc_pgm.md** — blueprint  
+2. **20.101_iiinb_prim.md** — conceptual spec  
+3. **iiinb_testbench.yaml** — expected behavior  
+4. **iiinb_testbench.py** — execution harness  
+
+These documents together define the **complete IIInB universe**.
+
+---
