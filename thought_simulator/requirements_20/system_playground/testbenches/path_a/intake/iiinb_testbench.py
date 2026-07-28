@@ -114,6 +114,7 @@ def run_testbench():
 
         if TESTBENCH_CONFIG.get("use_iiinb", True):
             tp = IIInB(tp)
+            tp.inspect()   # <-- REQUIRED
 
         # ====================================================
         # Expected block (YAML)
