@@ -270,37 +270,36 @@ class IIInB:
         # Start tokens from the ThoughtPacket if present
         self.tokens = getattr(tp, "tokens", [])
 
-    def inspect(self):
-        """
-        The testbench calls: tp.inspect()
-        with NO arguments, then reads:
-            tp.metadata.get("iiinb_status")
-            tp.repair_operations
-            tp.anomaly_flags
-            tp.normalized
-            tp.tokens
-        So we run iiinb_inspect() and populate these attributes
-        on the IIInB instance itself.
-        """
-        # Get surface/tokens from the original ThoughtPacket if available
-        surface = getattr(self._tp, "raw_input", "")
-        tokens = getattr(self._tp, "tokens", [])
+def inspect(self):
+    """
+    The testbench calls: tp.inspect()
+    with NO arguments, then reads:
+        tp.metadata.get("iiinb_status")
+        tp.repair_operations
+        tp.anomaly_flags
+        tp.normalized
+        tp.tokens
+    So we run iiinb_inspect() and populate these attributes
+    on the IIInB instance itself.
+    """
+    # Get surface/tokens from the original ThoughtPacket if available
+    surface = getattr(self._tp, "raw_input", "")
+    tokens = getattr(self._tp, "tokens", [])
 
-        result = iiinb_inspect({
-            "surface": surface,
-            "tokens": tokens
-        })
+    result = iiinb_inspect({
+        "surface": surface,
+        "tokens": tokens
+    })
 
-        # Populate attributes on the IIInB instance (what the testbench sees)
-        self.metadata["iiinb_status"] = result["iiinb_status"]
-        self.repair_operations = result["repair_operations"]
-        self.anomaly_flags = result["anomaly_flags"]
-        self.normalized = result["normalized"]
-        self.tokens = result["tokens"]
+    # Populate attributes on the IIInB instance (what the testbench sees)
+    self.metadata["iiinb_status"] = result["iiinb_status"]
+    self.repair_operations = result["repair_operations"]
+    self.anomaly_flags = result["anomaly_flags"]
+    self.normalized = result["normalized"]
+    self.tokens = result["tokens"]
 
-        # Compatibility fields expected by the testbench
-        self.repairs = self.repair_operations
-        self.anomalies = self.anomaly_flags
+    # Compatibility fields expected by the testbench
+    self.repairs = self.repair_operations
+    self.anomalies = self.anomaly_flags
 
-        # Return self, because the testbench keeps using `tp` as IIInB
-        return self
+    return self
