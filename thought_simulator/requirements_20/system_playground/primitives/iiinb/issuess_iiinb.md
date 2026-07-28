@@ -1,29 +1,42 @@
-# ⭐ The Architectural Problems in IIInB (Clear, Precise, Actionable)
+# ⭐ Architectural Issues in IIInB  
+*(Fully rewritten, all original content preserved)*
 
-## 1. **No single source of truth for the evolving text**
-### What the spec expects
-- **surface** = the *original* input string, never mutated  
-- **normalized** = the *working buffer* that every repair stage updates
+IIInB’s current implementation struggles not because individual repair rules are wrong, but because several **architectural invariants** are violated. These invariants are required by the spec and enforced by the testbench. When they are broken, even correct repair logic produces incorrect results.
 
-### What your implementation does
-- Sometimes edits `surface`
-- Sometimes edits `normalized`
-- Sometimes checks conditions against `surface` even after it has been mutated
-
-### Why this breaks everything
-The testbench’s gating logic depends on **surface being immutable**.
-
-Example:  
-Case normalization must fire **only** if the *original* input started with `"the "`.
-
-But when spelling repair mutates `surface` from `"hte dog"` → `"the dog"`,  
-case normalization fires incorrectly.
-
-This is why misspelling.transposition originally failed.
+Below is a precise, actionable breakdown of the architectural problems and the required fixes.
 
 ---
 
-## 2. **Stage ordering is not enforced**
+# 🚩 1. No Single Source of Truth for the Evolving Text
+
+## What the spec requires
+- **surface** = the *original* input string  
+  - immutable  
+  - used only for gating rules  
+- **normalized** = the *working buffer*  
+  - every repair stage updates this  
+  - final output is `normalized`
+
+## What the current implementation does
+- Sometimes edits `surface`
+- Sometimes edits `normalized`
+- Sometimes checks conditions against `surface` *after* it has been mutated
+
+## Why this breaks everything
+The testbench depends on **surface being immutable**.
+
+Example:  
+Case normalization must fire **only** if the original input started with `"the "`.
+
+If spelling repair mutates `surface` from `"hte dog"` → `"the dog"`,  
+case normalization fires incorrectly.
+
+This is why `misspelling.transposition` originally failed.
+
+---
+
+# 🚩 2. Stage Ordering Is Not Enforced
+
 The testbench implicitly defines a strict pipeline:
 
 1. unicode normalization  
@@ -37,88 +50,94 @@ The testbench implicitly defines a strict pipeline:
 9. case normalization  
 10. token preservation  
 
-Your iiinb.py has these stages **interleaved**, sometimes nested, sometimes skipped.
+## What the current implementation does
+Stages are:
+- interleaved  
+- nested  
+- skipped  
+- executed in inconsistent order
 
-### Why this breaks everything
-Repairs must happen **before** anomalies.  
-Whitespace normalization must happen **after** punctuation cleaning.  
-Case normalization must happen **after** spelling repairs.  
-Token preservation must happen **after** case normalization.
+## Why this breaks everything
+Even correct rules fail when executed in the wrong order:
 
-When the order is wrong, tests fail even if each individual rule is correct.
+- Repairs must happen **before** anomalies  
+- Whitespace normalization must happen **after** punctuation cleaning  
+- Case normalization must happen **after** spelling repairs  
+- Token preservation must happen **after** case normalization  
 
 Example:  
-In your current output:
+If spelling repair is placed too late:
 
 ```
 Normalized: 'hte dog chased the cat'
 ```
 
-This proves spelling repair never ran — not because the rule is wrong,  
-but because the rule is in the wrong place in the pipeline.
+This proves spelling repair never ran — not because the rule is wrong, but because it is in the wrong place in the pipeline.
 
 ---
 
-## 3. **The wrapper and primitive disagree about what “surface” means**
-The ThoughtPacket provides:
+# 🚩 3. Wrapper and Primitive Disagree About What “surface” Means
 
-- `tp.surface` — the original input  
+ThoughtPacket provides:
+
+- `tp.surface` — original input  
 - `tp.raw_input` — sometimes empty, sometimes preprocessed  
-- `tp.tokens` — original tokens
+- `tp.tokens` — original tokens  
 
-Your wrapper has changed multiple times:
+## What the current wrapper does
+- sometimes uses `raw_input`
+- sometimes uses `surface`
+- sometimes falls back between them
 
-- sometimes using `raw_input`
-- sometimes using `surface`
-- sometimes falling back from one to the other
-
-### Why this breaks everything
+## Why this breaks everything
 The testbench always expects:
 
 ```
 iiinb_inspect(surface=tp.surface, tokens=tp.tokens)
 ```
 
-When the wrapper passes the wrong field:
+If the wrapper passes the wrong field:
 
 - spelling repairs don’t fire  
 - case normalization fires incorrectly  
 - token preservation fails  
 - structural anomaly locations shift  
-- punctuation cleaning triggers in the wrong order
+- punctuation cleaning triggers in the wrong order  
 
-This is why your debug output showed:
+This explains debug logs like:
 
 ```
 surface: 'hte dog chased the cat'
 normalized: 'hte dog chased the cat'
 ```
 
-but spelling repair still didn’t run — because the wrapper passed a different value earlier.
+Spelling repair didn’t run because the wrapper passed a different value earlier.
 
 ---
 
-## 4. **Tokens are being treated as mutable**
-### What the testbench expects
+# 🚩 4. Tokens Are Being Treated as Mutable
+
+## What the testbench expects
 Tokens must remain **exactly the original tokens**, even if normalized changes.
 
-Example:  
-Token.preservation expects:
+Example:
 
 ```
 normalized = "The dog"
 tokens = ["the", "dog"]
 ```
 
-### What your implementation does
-Sometimes re-tokenizes normalized, sometimes mutates tokens.
+## What the current implementation does
+- sometimes re-tokenizes normalized  
+- sometimes mutates tokens  
 
-### Why this breaks everything
+## Why this breaks everything
 Token.preservation fails even when normalized is correct.
 
 ---
 
-## 5. **Repairs and anomalies are not recorded in a stable, ordered list**
+# 🚩 5. Repairs and Anomalies Are Not Recorded in a Stable, Ordered List
+
 The testbench compares:
 
 ```
@@ -127,57 +146,56 @@ repair_operations == expected_repairs
 
 Order matters.
 
-Your implementation sometimes:
-
+## What the current implementation does
 - appends repairs in the wrong order  
 - appends anomalies before repairs  
 - appends punctuation before whitespace  
-- appends structural before spelling
+- appends structural before spelling  
 
-This causes failures like:
+Example:
 
 ```
 expected: [whitespace.normalized, punctuation.cleaned]
 got:      [punctuation.cleaned, whitespace.normalized]
 ```
 
-Even though both repairs are correct.
+Both repairs are correct — but the order mismatch causes failure.
 
 ---
 
-# ⭐ The Architectural Fix (What Must Be Straightened Out)
+# ⭐ Architectural Fix (What Must Be Straightened Out)
 
-Here is the clean architecture iiinb.py must follow:
+Below is the clean architecture iiinb.py must follow.
 
 ---
 
-## **Term Definitions (Clear and Final)**
+# 📘 Term Definitions (Clear and Final)
 
 ### **surface**
-- The original input string from the ThoughtPacket.
-- **Never mutated.**
-- Used only for gating rules (e.g., case normalization).
+- Original input string  
+- **Never mutated**  
+- Used only for gating rules (e.g., case normalization)
 
 ### **normalized**
-- The working buffer.
-- Starts as `surface`.
-- Every repair stage updates this.
-- The final output string.
+- Working buffer  
+- Starts as `surface`  
+- Every repair stage updates this  
+- Final output string
 
 ### **tokens**
-- The original tokens from the ThoughtPacket.
-- **Never mutated.**
-- Returned unchanged.
+- Original tokens  
+- **Never mutated**  
+- Returned unchanged
 
 ### **repair_operations**
-- Ordered list of repairs applied to `normalized`.
+- Ordered list of repairs applied to `normalized`
 
 ### **anomaly_flags**
-- Ordered list of anomalies detected in `normalized`.
+- Ordered list of anomalies detected in `normalized`
 
 ---
 
-## **Required Pipeline (Strict Order)**
+# 📘 Required Pipeline (Strict Order)
 
 ```
 normalized = surface
@@ -205,9 +223,9 @@ Every stage:
 
 ---
 
-## **Wrapper Requirements**
+# 📘 Wrapper Requirements
 
-The wrapper must do exactly:
+Wrapper must do exactly:
 
 ```python
 surface = tp.surface
@@ -222,7 +240,7 @@ No mutation.
 
 ---
 
-# ⭐ Example (Correct Architecture)
+# 📘 Example (Correct Architecture)
 
 Input:
 
@@ -242,7 +260,7 @@ Pipeline:
 7. whitespace → no change  
 8. anomalies → none  
 9. case normalization → surface does NOT start with `"the "` → skip  
-10. tokens → unchanged
+10. tokens → unchanged  
 
 Output:
 
@@ -257,9 +275,9 @@ This passes.
 
 ---
 
-# ⭐ Why this architecture matters
+# ⭐ Why This Architecture Matters
 
-Because the testbench is not testing “your implementation.”  
+The testbench is not testing “your implementation.”  
 It is testing **this architecture**.
 
 Every failure you’ve seen is because iiinb.py is not yet aligned with this architecture.
