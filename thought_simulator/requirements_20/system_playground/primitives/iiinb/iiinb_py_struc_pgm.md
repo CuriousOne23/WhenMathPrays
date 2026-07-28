@@ -75,6 +75,56 @@ def inspect(self):
 - IIInB **must not** modify TP metadata except `iiinb_status`.
 - IIInB **must not** apply repairs to TP fields other than `normalized` and `tokens`.
 
+### **2.1 TP Envelope Shape — Dictionary Only (Required by 20.105 & 20.15)**  
+IIInB participates in the Path‑A pipeline by consuming and producing a **TP envelope**.  
+Per **20.105 TP Requirements** and **20.15 Architecture Scaffold**, the TP envelope:
+
+- **MUST be a dictionary**, not a class instance  
+- **MUST be serializable** (YAML/JSON)  
+- **MUST be deterministic and replay‑stable**  
+- **MUST contain explicit, named fields**  
+- **MUST be identical across Python and C++ implementations**  
+- **MUST be the only cross‑primitive interface**
+
+Therefore:
+
+### **IIInB MUST output a TP dictionary, not an object.**  
+Even though the Python wrapper class `IIInB` exposes convenience attributes (`metadata`, `repair_operations`, etc.), the **pipeline must extract these fields into a pure dictionary** before passing the TP downstream.
+
+This ensures:
+
+- IE receives a dict and can safely call `.get(...)`  
+- downstream primitives (CEx, CE, ISc, TPU) receive a valid TP envelope  
+- YAML testbenches remain compatible  
+- replay determinism is preserved  
+- C++ and Python pipelines behave identically  
+
+### **Required TP Output Format**
+
+IIInB must produce a dictionary shaped exactly like:
+
+```python
+{
+    "iiinb_status": <str>,
+    "repair_operations": <list>,
+    "anomaly_flags": <list>,
+    "normalized": <str>,
+    "tokens": <list>
+}
+```
+
+Section 2.1 is:
+
+- fully aligned with **20.105 TP Requirements**  
+- fully aligned with **20.15 Architecture Scaffold**  
+- consistent with your actual implementation in `iiinb.py`  
+- consistent with your IE crash (which happened because IE received an object)  
+- consistent with your testbench design  
+- consistent with your pipeline design  
+- consistent with your C++/Python parity requirements  
+
+It also fits naturally into the document’s tone and structure.
+
 ---
 
 # 3. Intake Model
