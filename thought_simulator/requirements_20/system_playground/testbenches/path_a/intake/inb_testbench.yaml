@@ -7,20 +7,26 @@ tests:
 
   - id: inb_baseline_no_error
     description: "Clean input — no defects expected"
-    input: "The dog chased the cat."
+    tp:
+      raw_input: "The dog chased the cat."
+      tokens: []
     expected_defects: []
     expected_failure: False
 
   - id: inb_whitespace_anomaly
     description: "Excess whitespace should trigger whitespace.excess"
-    input: "The   dog"
+    tp:
+      raw_input: "The   dog"
+      tokens: []
     expected_defects:
       - "whitespace.excess"
     expected_failure: False
 
   - id: inb_multiple_surface_anomalies
     description: "Multiple anomalies: whitespace + punctuation"
-    input: "The   dog!!!"
+    tp:
+      raw_input: "The   dog!!!"
+      tokens: []
     expected_defects:
       - "whitespace.excess"
       - "punctuation.excess"
@@ -28,14 +34,18 @@ tests:
 
   - id: inb_illegal_character_only
     description: "Unicode invalid character should trigger unicode.invalid"
-    input: "Th�e dog"
+    tp:
+      raw_input: "Th�e dog"
+      tokens: []
     expected_defects:
       - "unicode.invalid"
     expected_failure: False
 
   - id: inb_mixed_whitespace_illegal
     description: "Whitespace + unicode invalid"
-    input: "The   dog�"
+    tp:
+      raw_input: "The   dog�"
+      tokens: []
     expected_defects:
       - "whitespace.excess"
       - "unicode.invalid"
@@ -43,27 +53,35 @@ tests:
 
   - id: inb_structural_tags_present
     description: "Malformed structural token should trigger structural.malformed"
-    input: "Hello <broken> world"
+    tp:
+      raw_input: "Hello <broken> world"
+      tokens: []
     expected_defects:
       - "structural.malformed"
     expected_failure: False
 
   - id: inb_tokenizable_input
     description: "Simple tokenizable input — no defects expected"
-    input: "the dog"
+    tp:
+      raw_input: "the dog"
+      tokens: []
     expected_defects: []
     expected_failure: False
 
   - id: inb_unicode_normalization_opportunity
     description: "Unicode invalid character should trigger unicode.invalid"
-    input: "café�"
+    tp:
+      raw_input: "café�"
+      tokens: []
     expected_defects:
       - "unicode.invalid"
     expected_failure: False
 
   - id: inb_complex_mixed_case
     description: "Whitespace + punctuation + unicode invalid"
-    input: "The   dog!!!�"
+    tp:
+      raw_input: "The   dog!!!�"
+      tokens: []
     expected_defects:
       - "whitespace.excess"
       - "punctuation.excess"
