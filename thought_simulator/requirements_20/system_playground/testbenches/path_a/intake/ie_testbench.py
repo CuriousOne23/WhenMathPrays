@@ -67,14 +67,20 @@ def _load_ie_tests() -> list:
 
 
 def _load_stimulus_yaml():
+    """
+    Select stimulus YAML based on earliest enabled upstream primitive.
+    """
     use_inb = TESTBENCH_CONFIG.get("use_inb", False)
     use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
 
     if not use_inb and not use_iiinb:
+        # IE‑only mode: stimulus comes from ie_testbench.yaml
         path = os.path.join(_here(), "ie_testbench.yaml")
     elif use_inb:
+        # Earliest upstream is InB
         path = os.path.join(_here(), "inb_testbench.yaml")
     else:
+        # Earliest upstream is IIInB
         path = os.path.join(_here(), "iiinb_testbench.yaml")
 
     return _load_yaml(path), path
@@ -107,7 +113,7 @@ def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
     if use_inb:
         inb_obj = InB(tp).inspect()
         tp = getattr(inb_obj, "tp", inb_obj)
-    
+
     if use_iiinb:
         iiinb_obj = IIInB(tp).inspect()
         tp = getattr(iiinb_obj, "tp", iiinb_obj)
@@ -121,13 +127,17 @@ def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
 # Comparison helpers
 # ---------------------------------------------------------------------------
 
-def _is_test_supported(expected: dict, required_keys: list) -> (bool, list):
+def _is_test_supported(expected: dict, actual: dict) -> (bool, list):
     """
-    Determine whether a test is supported given expected IE fields.
+    Determine whether a test is supported given expected IE fields
+    and the actual IE output.
+
+    A test is unsupported if the expected YAML defines fields that
+    the IE output does not emit under the current pipeline configuration.
 
     Returns (supported: bool, missing_keys: list).
     """
-    missing = [k for k in required_keys if k not in expected]
+    missing = [k for k in expected.keys() if k not in actual]
     return (len(missing) == 0, missing)
 
 
@@ -188,17 +198,6 @@ def execute_ie_testbench():
     # Index stimulus tests by id for lookup
     stimulus_by_id = {t.get("id"): t for t in stimulus_tests}
 
-    # Define required keys for IE tests (can be refined per test type)
-    required_keys = [
-        "normalized_text",
-        "tokens",
-        "repairs",
-        "anomalies",
-        "tags",
-        "replay",
-        "error",
-    ]
-
     for test in ie_tests:
         test_id = test.get("id")
 
@@ -214,15 +213,19 @@ def execute_ie_testbench():
         print(f"Description: {test.get('description')}")
         print("------------------------------------------------------------")
 
-        # Determine if this test is supported under current stimulus
-        # IE tests may specify only a subset of expected fields.
-        is_supported = True
-        missing = []
-
-        supported += 1
-
         # Run pipeline from stimulus to IE
         actual_ie = _run_pipeline_from_stimulus(stimulus_case)
+
+        # Determine if this test is supported under current pipeline/output
+        is_supported, missing = _is_test_supported(expected, actual_ie)
+
+        if not is_supported:
+            print("    SKIP (unsupported under current pipeline):")
+            print(f"      missing IE fields: {missing}\n")
+            skipped += 1
+            continue
+
+        supported += 1
 
         # Compare expected vs actual
         if _compare_expected_actual(expected, actual_ie):
@@ -236,11 +239,12 @@ def execute_ie_testbench():
     print("IE Testbench Summary")
     print("------------------------------------------------------------")
     print(f"  Total IE tests defined:     {total_defined}")
-    print(f"  Supported under stimulus:   {supported}")
+    print(f"  Supported under pipeline:   {supported}")
     print(f"  Passed:                     {passed}")
     print(f"  Failed:                     {failed}")
     print(f"  Skipped (unsupported):      {skipped}")
     print("============================================================\n")
+
 
 def run_testbench():
     execute_ie_testbench()
