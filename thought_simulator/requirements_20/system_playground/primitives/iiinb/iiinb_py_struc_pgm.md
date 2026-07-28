@@ -338,7 +338,7 @@ Each link points to the authoritative version in the repository.
 ### **16.1 Structured Programming Blueprint**  
 #### *`iiinb_py_struc_pgm.md`*  
 **URL:**  
-[iiinb_py_struc_pgm.md](https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md)  
+[iiinb_py_struc_pgm.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md)  
 
 **Purpose:**  
 This document (the one you are reading) is the **one‑stop programming reference** for IIInB.  
