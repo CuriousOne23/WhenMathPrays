@@ -4,6 +4,8 @@ Path‑A Primitive (20.101)
 
 Clean, deterministic implementation aligned with:
 - 20.101_iiinb_prim.md
+- iiinb_py_struc_pgm.md
+- progressive_lineup_testing.md
 - iiinb_testbench.yaml / iiinb_testbench.py
 """
 
@@ -38,7 +40,7 @@ def is_illegal_char(ch: str) -> bool:
 
 
 # ------------------------------------------------------------
-# Main IIInB primitive
+# Main IIInB primitive (pure dict in/out)
 # ------------------------------------------------------------
 
 def iiinb_inspect(intake: dict) -> dict:
@@ -80,7 +82,7 @@ def iiinb_inspect(intake: dict) -> dict:
         }
 
     # --------------------------------------------------------
-    # 1. Structural cleanup FIRST (required by structural tests)
+    # 1. Structural cleanup (required by structural tests)
     # --------------------------------------------------------
     if "<broken>" in work:
         repair_ops.append({
@@ -91,7 +93,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = work.replace("<broken>", "")
 
     # --------------------------------------------------------
-    # 2. Whitespace normalization (test #10, #12)
+    # 2. Whitespace normalization
     # --------------------------------------------------------
     if "   " in work:
         repair_ops.append({
@@ -102,7 +104,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = work.replace("   ", " ")
 
     # --------------------------------------------------------
-    # 3. Punctuation cleanup (tests #10, #12, #13)
+    # 3. Punctuation cleanup
     # --------------------------------------------------------
     if "!!!" in work:
         repair_ops.append({
@@ -121,7 +123,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = work.replace(",,", ",")
 
     # --------------------------------------------------------
-    # 4. Shorthand expansion (test #7)
+    # 4. Shorthand expansion
     # --------------------------------------------------------
     if "plz" in work:
         repair_ops.append({
@@ -132,7 +134,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = work.replace("plz", "please")
 
     # --------------------------------------------------------
-    # 5. Repetition cleanup (test #6)
+    # 5. Repetition cleanup
     # --------------------------------------------------------
     def collapse_runs(s: str) -> str:
         out = []
@@ -173,7 +175,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = collapsed
 
     # --------------------------------------------------------
-    # 6. Spelling repairs (tests #8 and #9)
+    # 6. Spelling repairs
     # --------------------------------------------------------
     if "hte" in work:
         repair_ops.append({
@@ -192,7 +194,7 @@ def iiinb_inspect(intake: dict) -> dict:
         work = work.replace(" rd ", " red ")
 
     # --------------------------------------------------------
-    # 7. Unicode normalization (tests #2 and #15)
+    # 7. Unicode normalization
     # --------------------------------------------------------
     unicode_noise = [ch for ch in work if unicodedata.category(ch) == "So"]
 
@@ -221,9 +223,9 @@ def iiinb_inspect(intake: dict) -> dict:
             })
 
     # --------------------------------------------------------
-    # 9. Case normalization (test #14)
+    # 9. Case normalization (extremely narrow)
     # --------------------------------------------------------
-    # IMPORTANT: Only trigger if the ORIGINAL surface started with "the "
+    # Only trigger if the ORIGINAL surface started with "the "
     if original_surface.startswith("the "):
         repair_ops.append({
             "type": "case.normalized",
@@ -236,7 +238,7 @@ def iiinb_inspect(intake: dict) -> dict:
     # 10. Token handling (preservation / derivation)
     # --------------------------------------------------------
     if not tokens:
-        # Derive tokens from original surface to satisfy token.preservation test
+        # Derive tokens from original surface (token.preservation rule)
         tokens = original_surface.split()
 
     return {
@@ -249,19 +251,21 @@ def iiinb_inspect(intake: dict) -> dict:
 
 
 # ============================================================
-# IIInB class wrapper (testbench-facing API)
+# IIInB class wrapper (testbench & pipeline-facing API)
 # ============================================================
 
 class IIInB:
     def __init__(self, tp):
         """
-        The testbench calls: tp = IIInB(tp)
-        Then tp.inspect(), and reads:
+        The testbench calls: iiinb = IIInB(tp)
+        Then iiinb.inspect(), and reads:
             • metadata["iiinb_status"]
-            • repair_operations
-            • anomaly_flags
+            • repair_operations / repairs
+            • anomaly_flags / anomalies
             • normalized
             • tokens
+
+        The pipeline should use the dict returned by inspect().
         """
         self._tp = tp
 
@@ -290,4 +294,5 @@ class IIInB:
         self.repairs = self.repair_operations
         self.anomalies = self.anomaly_flags
 
-        return self
+        # IMPORTANT: return the TP dict for pipeline / IE
+        return result
