@@ -249,3 +249,6 @@ def execute_ie_testbench():
     print(f"  Failed:                     {failed}")
     print(f"  Skipped (unsupported):      {skipped}")
     print("============================================================\n")
+
+def run_testbench():
+    execute_ie_testbench()
