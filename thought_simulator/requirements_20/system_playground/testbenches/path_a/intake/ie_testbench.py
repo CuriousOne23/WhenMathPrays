@@ -66,29 +66,18 @@ def _load_ie_tests() -> list:
     return data.get("tests", [])
 
 
-def _load_stimulus_yaml() -> dict:
-    """
-    Select stimulus YAML based on earliest enabled upstream primitive.
-
-    Rules:
-        - If no upstream enabled → use ie_testbench.yaml as stimulus.
-        - If earliest upstream is IIInB → use iiinb_testbench.yaml.
-        - If earliest upstream is InB → use inb_testbench.yaml.
-    """
+def _load_stimulus_yaml():
     use_inb = TESTBENCH_CONFIG.get("use_inb", False)
     use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
 
-    # No upstream: IE-only stimulus
     if not use_inb and not use_iiinb:
         path = os.path.join(_here(), "ie_testbench.yaml")
-    # Earliest upstream: InB
     elif use_inb:
         path = os.path.join(_here(), "inb_testbench.yaml")
-    # Earliest upstream: IIInB
     else:
         path = os.path.join(_here(), "iiinb_testbench.yaml")
 
-    return _load_yaml(path)
+    return _load_yaml(path), path
 
 
 # ---------------------------------------------------------------------------
@@ -178,7 +167,7 @@ def execute_ie_testbench():
     ie_tests = _load_ie_tests()
 
     # Load stimulus YAML based on earliest upstream
-    stimulus_yaml = _load_stimulus_yaml()
+    stimulus_yaml, stimulus_yaml_path = _load_stimulus_yaml()
     stimulus_tests = stimulus_yaml.get("tests", [])
 
     print(f"Stimulus source YAML: {stimulus_yaml_path}")
