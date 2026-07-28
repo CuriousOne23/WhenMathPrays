@@ -223,7 +223,8 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 9. Case normalization (test #14)
     # --------------------------------------------------------
-    if normalized.startswith("the "):
+    # IMPORTANT: Only trigger if the ORIGINAL surface started with "the "
+    if original_surface.startswith("the "):
         repair_ops.append({
             "type": "case.normalized",
             "target": "the",
