@@ -29,25 +29,25 @@ ACTIVE_TEST_MODULES = [
     # **************************** InB Test bench ****************************************************
     # Highest upstream True = InB (primitive under test)
     # Pipeline: InB only, input from InB YAML
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-    #     {
-    #         "use_inb": True,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "tests_to_run": {
-    #             "inb_baseline_no_error": "Yes",
-    #             "inb_whitespace_anomaly": "Yes",
-    #             "inb_multiple_surface_anomalies": "Yes",
-    #             "inb_illegal_character_only": "Yes",
-    #             "inb_mixed_whitespace_illegal": "Yes",
-    #             "inb_structural_tags_present": "Yes",
-    #             "inb_tokenizable_input": "Yes",
-    #             "inb_unicode_normalization_opportunity": "Yes",
-    #             "inb_complex_mixed_case": "Yes"
-    #         }
-    #     }
-    # ),
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+        {
+            "use_inb": True,
+            "use_iiinb": False,
+            "use_ie": False,
+            "tests_to_run": {
+                "inb_baseline_no_error": "Yes",
+                "inb_whitespace_anomaly": "Yes",
+                "inb_multiple_surface_anomalies": "Yes",
+                "inb_illegal_character_only": "Yes",
+                "inb_mixed_whitespace_illegal": "Yes",
+                "inb_structural_tags_present": "Yes",
+                "inb_tokenizable_input": "Yes",
+                "inb_unicode_normalization_opportunity": "Yes",
+                "inb_complex_mixed_case": "Yes"
+            }
+        }
+    ),
 
     # **************************** IIInB Test bench ****************************************************
     # Highest upstream True = IIInB (primitive under test)
@@ -82,24 +82,24 @@ ACTIVE_TEST_MODULES = [
     # **************************** IE Test bench ******************************************************
     # Highest upstream True = IE (primitive under test)
     # Pipeline: IE only, input from IE YAML
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-        {
-            "use_inb": False,
-            "use_iiinb": True,
-            "use_ie": True,
-            "tests_to_run": {
-                "ie_repair_only_whitespace": "Yes",
-                "ie_multiple_repairs": "Yes",
-                "ie_anomaly_only": "Yes",
-                "ie_mixed_repairs_anomaly": "Yes",
-                "ie_structural_tags": "Yes",
-                "ie_token_preservation": "Yes",
-                "ie_replay_determinism": "Yes",
-                "ie_complex_mixed": "Yes"
-            }
-        }
-    )
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+    #     {
+    #         "use_inb": False,
+    #         "use_iiinb": True,
+    #         "use_ie": True,
+    #         "tests_to_run": {
+    #             "ie_repair_only_whitespace": "Yes",
+    #             "ie_multiple_repairs": "Yes",
+    #             "ie_anomaly_only": "Yes",
+    #             "ie_mixed_repairs_anomaly": "Yes",
+    #             "ie_structural_tags": "Yes",
+    #             "ie_token_preservation": "Yes",
+    #             "ie_replay_determinism": "Yes",
+    #             "ie_complex_mixed": "Yes"
+    #         }
+    #     }
+    # )
 ]
 
 # ============================================================
