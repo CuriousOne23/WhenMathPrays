@@ -6,20 +6,6 @@ Designed to be executed by run.py
 
 import os
 import yaml
-from dataclasses import dataclass, field
-
-# ---------------------------------------------------------------------------
-# Thought Packet (TP) structure
-# ---------------------------------------------------------------------------
-
-@dataclass
-class ThoughtPacket:
-    raw_input: str
-    messy_input_record: str = ""
-    defects: list = field(default_factory=list)
-    repairs: list = field(default_factory=list)
-    normalized: str = ""
-    metadata: dict = field(default_factory=dict)
 
 # ---------------------------------------------------------------------------
 # Import REAL InB primitive
@@ -65,35 +51,34 @@ def run_testbench():
         name = test.get("id", "unnamed")
         print(f"Running: {name} ...", end=" ")
 
-        # Generate long input if requested
+        # Extract TP dictionary from YAML
+        tp = test.get("tp", {})
+
+        # Handle long-input generator (optional)
         if test.get("generate_long_input", False):
             length = test.get("long_length", 5000)
-            raw_input = "A" * length
-        else:
-            raw_input = test["input"]
+            tp["raw_input"] = "A" * length
 
-        tp = ThoughtPacket(raw_input=raw_input)
+        raw_input = tp.get("raw_input", "")
 
-        # Execute REAL InB primitive
-        tp = InB(tp)
+        # Execute REAL InB primitive (returns a TP dictionary)
+        result_tp = InB(tp)
 
         # Expected values
         expected_defects = test.get("expected_defects", [])
         expected_failure = test.get("expected_failure", False)
 
+        # Actual defects from InB output
+        actual_defects = result_tp.get("defects", [])
+
         # Checks
-        defects_ok = (tp.defects == expected_defects)
+        defects_ok = (actual_defects == expected_defects)
         passed = defects_ok
 
         # ------------------------------------------------------------------
-        # Requirement-aware PASS/FAIL messaging
+        # PASS/FAIL messaging
         # ------------------------------------------------------------------
-        # ------------------------------------------------------------------
-        # Improved PASS/FAIL messaging
-        # ------------------------------------------------------------------
-        
-        actual_defects = tp.defects
-        
+
         if passed:
             if expected_failure:
                 print(f"EXPECTED FAILURE — {name}")
