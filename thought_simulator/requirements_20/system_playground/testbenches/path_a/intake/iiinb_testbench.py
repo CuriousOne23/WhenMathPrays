@@ -5,6 +5,13 @@ Development-mode runner compatible with run.py
 Upstream rule (True-only semantics):
     • If use_inb=True  → run real InB primitive
     • If use_inb=False → use passthrough stub (IIInB receives YAML-defined input)
+
+This testbench is aligned with:
+    • iiinb_py_struc_pgm.md (structured programming blueprint)
+    • 20.101_iiinb_prim.md (formal primitive spec)
+    • progressive_lineup_testing.md (pipeline / lineup rules)
+    • iiinb_testbench.yaml (behavioral contract)
+    • run.py (development runner)
 """
 
 import os
@@ -62,6 +69,7 @@ def load_testbench():
 # ============================================================
 
 TESTBENCH_CONFIG = {
+    "mode": "standalone",   # "standalone" or "progressive" (for lineup semantics)
     "use_inb": False,
     "use_iiinb": True,
     "use_ie": False,
@@ -69,6 +77,14 @@ TESTBENCH_CONFIG = {
 }
 
 def set_testbench_config(config):
+    """
+    Configuration injected by run.py.
+
+    Expected keys:
+        • mode: "standalone" or "progressive"
+        • use_inb, use_iiinb, use_ie: True/False
+        • tests_to_run: {test_id: "Yes"/"No"}
+    """
     global TESTBENCH_CONFIG
     TESTBENCH_CONFIG = config
 
@@ -77,6 +93,12 @@ def set_testbench_config(config):
 # ============================================================
 
 def run_testbench():
+
+    print("IIInB Intake Inspection Testbench — Path A")
+    print(f"Mode: {TESTBENCH_CONFIG.get('mode', 'standalone')}")
+    print(f"use_inb={TESTBENCH_CONFIG.get('use_inb', False)}, "
+          f"use_iiinb={TESTBENCH_CONFIG.get('use_iiinb', True)}, "
+          f"use_ie={TESTBENCH_CONFIG.get('use_ie', False)}\n")
 
     print("Loading IIInB testbench YAML...\n")
     testbench = load_testbench()
@@ -93,6 +115,13 @@ def run_testbench():
     for test in selected:
         name = test.get("id", "unnamed")
         print(f"Running: {name}")
+
+        # ----------------------------------------------------
+        # Stimulus selection (aligned with progressive_lineup)
+        # ----------------------------------------------------
+        # For IIInB intake testbench, stimulus is always the
+        # YAML-defined input (or generated long input).
+        # Upstream InB is optional and controlled by use_inb.
         
         # Generate long input if requested
         if test.get("generate_long_input", False):
@@ -108,13 +137,55 @@ def run_testbench():
         # ====================================================
 
         if TESTBENCH_CONFIG.get("use_inb", False):
+            # Real InB primitive; may populate metadata, tokens, etc.
             tp = RealInB(tp)
         else:
+            # Passthrough: IIInB sees YAML-defined surface directly
             tp = InB_passthru(tp)
 
+        # ====================================================
+        # IIInB execution (dictionary-aware)
+        # ====================================================
+
         if TESTBENCH_CONFIG.get("use_iiinb", True):
-            tp = IIInB(tp)
-            tp.inspect()   # <-- REQUIRED
+            iiinb_obj = IIInB(tp)
+            result = iiinb_obj.inspect()   # REQUIRED
+
+            # IIInB may return either:
+            #   • the wrapper object (current behavior)
+            #   • a TP dictionary (future behavior per iiinb_py_struc_pgm.md)
+            #
+            # We support both without losing diagnostics.
+
+            if isinstance(result, dict):
+                # Dictionary output per spec:
+                # {
+                #   "iiinb_status": <str>,
+                #   "repair_operations": <list>,
+                #   "anomaly_flags": <list>,
+                #   "normalized": <str>,
+                #   "tokens": <list>
+                # }
+                tp.metadata["iiinb_status"] = result.get("iiinb_status")
+                tp.repairs = result.get("repair_operations", [])
+                tp.anomalies = result.get("anomaly_flags", [])
+                tp.normalized = result.get("normalized", "")
+                tp.tokens = result.get("tokens", tp.tokens)
+            else:
+                # Object-style output: use attributes populated by IIInB
+                tp = iiinb_obj
+                # Expect:
+                #   tp.metadata["iiinb_status"]
+                #   tp.repairs / tp.repair_operations
+                #   tp.anomalies / tp.anomaly_flags
+                #   tp.normalized
+                #   tp.tokens
+
+                # Normalize attribute names to our TP fields
+                if hasattr(tp, "repair_operations") and not tp.repairs:
+                    tp.repairs = tp.repair_operations
+                if hasattr(tp, "anomaly_flags") and not tp.anomalies:
+                    tp.anomalies = tp.anomaly_flags
 
         # ====================================================
         # Expected block (YAML)
@@ -195,5 +266,3 @@ def run_testbench():
     print(f"Passed: {passed_count} / {len(selected)} tests")
     print(f"Failed: {failed_count} / {len(selected)} tests")
     print("============================================================\n")
-
-
