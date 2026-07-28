@@ -181,7 +181,7 @@ def execute_ie_testbench():
     stimulus_yaml = _load_stimulus_yaml()
     stimulus_tests = stimulus_yaml.get("tests", [])
 
-    print(f"Stimulus source YAML: {os.path.basename(stimulus_yaml.get('source', '')) or 'unknown'}")
+    print(f"Stimulus source YAML: {stimulus_yaml_path}")
     print(f"Expected output YAML: ie_testbench.yaml\n")
 
     passed = 0
@@ -195,11 +195,12 @@ def execute_ie_testbench():
 
     # Define required keys for IE tests (can be refined per test type)
     required_keys = [
-        "intake.normalized_text",
-        "intake.tokens",
-        "structure.tags",
-        "metadata.repair_annotations",
-        "metadata.replay",
+        "normalized_text",
+        "tokens",
+        "repairs",
+        "anomalies",
+        "tags",
+        "replay",
         "error",
     ]
 
