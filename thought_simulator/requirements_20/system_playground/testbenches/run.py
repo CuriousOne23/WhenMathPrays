@@ -52,54 +52,53 @@ ACTIVE_TEST_MODULES = [
     # **************************** IIInB Test bench ****************************************************
     # Highest upstream True = IIInB (primitive under test)
     # Pipeline: IIInB only, input from IIInB YAML
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
-        {
-            "use_inb": False,   # We are testing IIInB → upstream InB is ignored
-            "use_iiinb": True,  # Primitive under test
-            "use_ie": False,    # Downstream IE ignored
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
+    #     {
+    #         "use_inb": False,   # We are testing IIInB → upstream InB is ignored
+    #         "use_iiinb": True,  # Primitive under test
+    #         "use_ie": False,    # Downstream IE ignored
 
-            "tests_to_run": {
-                "clean.simple": "Yes",
-                "unicode.noise": "Yes",
-                "structural.break": "Yes",
-                "empty.input": "Yes",
-                "long.input": "Yes",
-                "repeating.letters": "Yes",
-                "shorthand.plz": "Yes",
-                "misspelling.transposition": "Yes",
-                "misspelling.missing": "Yes",
-                "multi.repairs.surface": "Yes",
-                "multi.anomalies.illegal": "Yes",
-                "mixed.repairs.anomalies": "Yes",
-                "structural.surface.mixed": "Yes",
-                "token.preservation": "Yes",
-                "replay.determinism": "Yes"
-            }
-        }
-    ),
-
+    #         "tests_to_run": {
+    #             "clean.simple": "Yes",
+    #             "unicode.noise": "Yes",
+    #             "structural.break": "Yes",
+    #             "empty.input": "Yes",
+    #             "long.input": "Yes",
+    #             "repeating.letters": "Yes",
+    #             "shorthand.plz": "Yes",
+    #             "misspelling.transposition": "Yes",
+    #             "misspelling.missing": "Yes",
+    #             "multi.repairs.surface": "Yes",
+    #             "multi.anomalies.illegal": "Yes",
+    #             "mixed.repairs.anomalies": "Yes",
+    #             "structural.surface.mixed": "Yes",
+    #             "token.preservation": "Yes",
+    #             "replay.determinism": "Yes"
+    #         }
+    #     }
+    # ),
     # **************************** IE Test bench ******************************************************
     # Highest upstream True = IE (primitive under test)
     # Pipeline: IE only, input from IE YAML
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-    #     {
-    #         "use_inb": False,
-    #         "use_iiinb": True,
-    #         "use_ie": True,
-    #         "tests_to_run": {
-    #             "ie_repair_only_whitespace": "Yes",
-    #             "ie_multiple_repairs": "Yes",
-    #             "ie_anomaly_only": "Yes",
-    #             "ie_mixed_repairs_anomaly": "Yes",
-    #             "ie_structural_tags": "Yes",
-    #             "ie_token_preservation": "Yes",
-    #             "ie_replay_determinism": "Yes",
-    #             "ie_complex_mixed": "Yes"
-    #         }
-    #     }
-    # )
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+        {
+            "use_inb": False,
+            "use_iiinb": False,
+            "use_ie": True,
+            "tests_to_run": {
+                "ie_repair_only_whitespace": "Yes",
+                "ie_multiple_repairs": "Yes",
+                "ie_anomaly_only": "Yes",
+                "ie_mixed_repairs_anomaly": "Yes",
+                "ie_structural_tags": "Yes",
+                "ie_token_preservation": "Yes",
+                "ie_replay_determinism": "Yes",
+                "ie_complex_mixed": "Yes"
+            }
+        }
+    )
 ]
 
 # ============================================================
