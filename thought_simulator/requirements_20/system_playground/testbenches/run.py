@@ -86,7 +86,7 @@ ACTIVE_TEST_MODULES = [
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
             "use_inb": False,
-            "use_iiinb": True,
+            "use_iiinb": False,
             "use_ie": True,
             "tests_to_run": {
                 "ie_repair_only_whitespace": "Yes",
