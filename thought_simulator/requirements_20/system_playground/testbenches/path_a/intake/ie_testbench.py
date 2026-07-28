@@ -1,20 +1,27 @@
 """
 IE Testbench — Path‑A Intake Envelope
-Development-mode testbench runner for the IE primitive.
+Progressive lineup testbench runner for the IE primitive.
 
 This module:
-    • Loads ie_testbench.yaml
-    • Applies configuration injected by run.py
-    • Calls the IE primitive (run_ie)
-    • Compares actual vs expected
-    • Prints pass/fail results
+    • Reads configuration injected by run.py (TESTBENCH_CONFIG)
+    • Determines pipeline configuration (upstream primitives enabled)
+    • Selects appropriate stimulus YAML (ie / iiinb / inb)
+    • Executes the upstream → IE pipeline
+    • Compares actual vs expected IE outputs
+    • Accounts for supported vs unsupported tests
+    • Prints a structured summary (passed / failed / skipped)
 """
 
 import os
 import yaml
 
-# Import the IE primitive
+# ---------------------------------------------------------------------------
+# Imports for primitives (pipeline)
+# ---------------------------------------------------------------------------
+
 from thought_simulator.requirements_20.system_playground.primitives.ie.ie import run_ie
+from thought_simulator.requirements_20.system_playground.primitives.iiinb.iiinb import run_iiinb
+from thought_simulator.requirements_20.system_playground.primitives.inb.inb import run_inb
 
 # ---------------------------------------------------------------------------
 # Global testbench configuration (injected by run.py)
@@ -28,33 +35,108 @@ TESTBENCH_CONFIG = {
     "tests_to_run": {}
 }
 
+
 def set_testbench_config(config: dict):
+    """
+    Called by run.py to inject configuration.
+    """
     global TESTBENCH_CONFIG
     TESTBENCH_CONFIG = config
 
 
 # ---------------------------------------------------------------------------
-# Load YAML test definitions
+# YAML loading helpers
 # ---------------------------------------------------------------------------
 
-def _load_yaml_tests():
-    """
-    Loads ie_testbench.yaml from the same directory.
-    """
-    here = os.path.dirname(__file__)
-    yaml_path = os.path.join(here, "ie_testbench.yaml")
+def _here() -> str:
+    return os.path.dirname(__file__)
 
-    with open(yaml_path, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
 
+def _load_yaml(path: str) -> dict:
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+
+def _load_ie_tests() -> list:
+    """
+    Load IE expected tests from ie_testbench.yaml.
+    """
+    yaml_path = os.path.join(_here(), "ie_testbench.yaml")
+    data = _load_yaml(yaml_path)
     return data.get("tests", [])
+
+
+def _load_stimulus_yaml() -> dict:
+    """
+    Select stimulus YAML based on earliest enabled upstream primitive.
+
+    Rules:
+        - If no upstream enabled → use ie_testbench.yaml as stimulus.
+        - If earliest upstream is IIInB → use iiinb_testbench.yaml.
+        - If earliest upstream is InB → use inb_testbench.yaml.
+    """
+    use_inb = TESTBENCH_CONFIG.get("use_inb", False)
+    use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
+
+    # No upstream: IE-only stimulus
+    if not use_inb and not use_iiinb:
+        path = os.path.join(_here(), "ie_testbench.yaml")
+    # Earliest upstream: InB
+    elif use_inb:
+        path = os.path.join(_here(), "inb_testbench.yaml")
+    # Earliest upstream: IIInB
+    else:
+        path = os.path.join(_here(), "iiinb_testbench.yaml")
+
+    return _load_yaml(path)
+
+
+# ---------------------------------------------------------------------------
+# Pipeline execution
+# ---------------------------------------------------------------------------
+
+def _run_pipeline_from_stimulus(stimulus_case: dict) -> dict:
+    """
+    Execute the configured pipeline from stimulus to IE output.
+
+    stimulus_case: one test case from the stimulus YAML.
+    Returns: IE output dict.
+    """
+    use_inb = TESTBENCH_CONFIG.get("use_inb", False)
+    use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
+
+    # Base TP from stimulus
+    tp = stimulus_case.get("tp", {})
+
+    # Progressive pipeline:
+    # If InB enabled, run InB first.
+    if use_inb:
+        tp = run_inb(tp)
+
+    # If IIInB enabled, run IIInB next.
+    if use_iiinb:
+        tp = run_iiinb(tp)
+
+    # Finally, run IE.
+    ie_output = run_ie(tp)
+    return ie_output
 
 
 # ---------------------------------------------------------------------------
 # Comparison helpers
 # ---------------------------------------------------------------------------
 
-def _compare(expected: dict, actual: dict) -> bool:
+def _is_test_supported(expected: dict, required_keys: list) -> (bool, list):
+    """
+    Determine whether a test is supported given expected IE fields.
+
+    Returns (supported: bool, missing_keys: list).
+    """
+    missing = [k for k in required_keys if k not in expected]
+    return (len(missing) == 0, missing)
+
+
+def _compare_expected_actual(expected: dict, actual: dict) -> bool:
     """
     Compare expected vs actual IE output.
     Only keys present in expected are compared.
@@ -64,8 +146,8 @@ def _compare(expected: dict, actual: dict) -> bool:
 
         if act_val != exp_val:
             print(f"    MISMATCH in '{key}':")
-            print(f"    expected: {exp_val}")
-            print(f"    actual:   {act_val}")
+            print(f"      expected: {exp_val}")
+            print(f"      actual:   {act_val}")
             return False
 
     return True
@@ -75,44 +157,95 @@ def _compare(expected: dict, actual: dict) -> bool:
 # Main testbench runner
 # ---------------------------------------------------------------------------
 
-def run_testbench():
+def execute_ie_testbench():
     """
-    Executes all IE tests selected in TESTBENCH_CONFIG.
+    Executes IE tests under progressive lineup configuration.
     """
-    print("IE Testbench — Starting\n")
+    print("IE Testbench — Progressive Lineup Mode\n")
 
-    tests = _load_yaml_tests()
-    selected = TESTBENCH_CONFIG.get("tests_to_run", {})
+    use_inb = TESTBENCH_CONFIG.get("use_inb", False)
+    use_iiinb = TESTBENCH_CONFIG.get("use_iiinb", False)
+    tests_to_run = TESTBENCH_CONFIG.get("tests_to_run", {})
 
-    total = 0
+    # Log pipeline configuration
+    print("Pipeline configuration:")
+    print(f"  use_inb  = {use_inb}")
+    print(f"  use_iiinb = {use_iiinb}")
+    print(f"  use_ie   = {TESTBENCH_CONFIG.get('use_ie', True)}")
+    print()
+
+    # Load expected IE tests
+    ie_tests = _load_ie_tests()
+
+    # Load stimulus YAML based on earliest upstream
+    stimulus_yaml = _load_stimulus_yaml()
+    stimulus_tests = stimulus_yaml.get("tests", [])
+
+    print(f"Stimulus source YAML: {os.path.basename(stimulus_yaml.get('source', '')) or 'unknown'}")
+    print(f"Expected output YAML: ie_testbench.yaml\n")
+
     passed = 0
+    failed = 0
+    skipped = 0
+    supported = 0
+    total_defined = len(ie_tests)
 
-    for test in tests:
+    # Index stimulus tests by id for lookup
+    stimulus_by_id = {t.get("id"): t for t in stimulus_tests}
+
+    # Define required keys for IE tests (can be refined per test type)
+    required_keys = [
+        "intake.normalized_text",
+        "intake.tokens",
+        "structure.tags",
+        "metadata.repair_annotations",
+        "metadata.replay",
+        "error",
+    ]
+
+    for test in ie_tests:
         test_id = test.get("id")
 
         # Skip tests not selected
-        if selected.get(test_id) != "Yes":
+        if tests_to_run and tests_to_run.get(test_id) != "Yes":
             continue
 
-        total += 1
-        print(f"------------------------------------------------------------")
-        print(f"Running Test: {test_id}")
-        print(f"Description: {test.get('description')}")
-        print(f"------------------------------------------------------------")
-
-        iiinb_output = test.get("iiinb_output", {})
         expected = test.get("expected", {})
+        stimulus_case = stimulus_by_id.get(test_id, {})
 
-        # Call IE primitive
-        actual = run_ie(iiinb_output)
+        print("------------------------------------------------------------")
+        print(f"Running IE Test: {test_id}")
+        print(f"Description: {test.get('description')}")
+        print("------------------------------------------------------------")
 
-        # Compare
-        if _compare(expected, actual):
+        # Determine if this test is supported under current stimulus
+        is_supported, missing = _is_test_supported(expected, required_keys)
+        if not is_supported:
+            skipped += 1
+            print(f"    SKIP: {test_id}")
+            print(f"    Reason: expected IE fields not fully defined for this test.")
+            print(f"    Missing fields: {missing}\n")
+            continue
+
+        supported += 1
+
+        # Run pipeline from stimulus to IE
+        actual_ie = _run_pipeline_from_stimulus(stimulus_case)
+
+        # Compare expected vs actual
+        if _compare_expected_actual(expected, actual_ie):
             print(f"    PASS: {test_id}\n")
             passed += 1
         else:
             print(f"    FAIL: {test_id}\n")
+            failed += 1
 
     print("============================================================")
-    print(f"IE Testbench Complete — {passed}/{total} tests passed")
+    print("IE Testbench Summary")
+    print("------------------------------------------------------------")
+    print(f"  Total IE tests defined:     {total_defined}")
+    print(f"  Supported under stimulus:   {supported}")
+    print(f"  Passed:                     {passed}")
+    print(f"  Failed:                     {failed}")
+    print(f"  Skipped (unsupported):      {skipped}")
     print("============================================================\n")
