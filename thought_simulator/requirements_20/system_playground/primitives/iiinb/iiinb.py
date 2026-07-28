@@ -185,15 +185,19 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 7. Unicode normalization (test #2 and #15)
     # --------------------------------------------------------
-    count = surface.count("∩┐╜")
-    if count > 0:
-        for _ in range(count):
-            repair_ops.append({
-                "type": "unicode.normalized",
-                "target": "∩┐╜",
-                "proposal": ""
-            })
-        surface = surface.replace("∩┐╜", "")
+    # Normalize any mojibake symbol characters (category "So")
+    unicode_noise = [ch for ch in surface if unicodedata.category(ch) == "So"]
+
+    for ch in unicode_noise:
+        repair_ops.append({
+            "type": "unicode.normalized",
+            "target": ch,
+            "proposal": ""
+        })
+
+    # Remove all such characters
+    for ch in unicode_noise:
+        surface = surface.replace(ch, "")
 
     normalized = surface
 
