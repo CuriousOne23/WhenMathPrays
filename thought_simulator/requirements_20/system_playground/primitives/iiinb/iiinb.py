@@ -275,5 +275,9 @@ class IIInB:
         self.normalized = result["normalized"]
         self.tokens = result["tokens"]
 
+        # Compatibility fields expected by the testbench
+        self.repairs = self.repair_operations
+        self.anomalies = self.anomaly_flags
+
         # Return self, because the testbench keeps using `tp` as IIInB
         return self
