@@ -157,25 +157,23 @@ IE must **not**:
 
 # 6. Anomaly Propagation
 
-IE must surface IIInB anomaly flags into `TP.repairs[]`:
+IE must surface IIInB anomaly flags into `TP.metadata.repair_annotations`:
 
-```python
 {
-    "type": "illegal_character.unknown",
+    "kind": "anomaly",
+    "type": "<anomaly_type>",
     "target": "<char>",
     "location": <index>
 }
-```
 
 IE must:
 
 - preserve anomaly order  
 - preserve anomaly location  
-- surface anomalies as repair markers  
-- ensure deterministic provenance for downstream primitives  
+- surface anomalies as provenance entries in `TP.metadata.repair_annotations`  
+- ensure deterministic propagation downstream  
 
-This is required by **HLR‑20.109‑016**.  
-  [github.com](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/20.109_ie_prim.md)
+This satisfies **HLR‑20.109‑016** in the TP‑aligned IE specification.
 
 ---
 
