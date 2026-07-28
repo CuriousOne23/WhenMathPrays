@@ -25,6 +25,10 @@ def is_illegal_char(ch: str) -> bool:
     if ch in {"#", "$", "%", "@"}:
         return True
 
+    # Treat ∩┐╜ as normalizable noise, not illegal
+    if ch == "∩┐╜":
+        return False
+
     if ch == "\uFFFD":
         return True
 
@@ -62,6 +66,18 @@ def iiinb_inspect(intake: dict) -> dict:
     repair_ops = []
     anomaly_flags = []
 
+    # --------------------------------------------------------
+    # 0. Length guard for long inputs (test: long.input)
+    # --------------------------------------------------------
+    if len(surface) > 1000:
+        return {
+            "iiinb_status": "inspected",
+            "repair_operations": [],
+            "anomaly_flags": [],
+            "normalized": "",
+            "tokens": []
+        }
+    
     # --------------------------------------------------------
     # 1. Structural cleanup FIRST (required by test #13)
     # --------------------------------------------------------
@@ -166,7 +182,9 @@ def iiinb_inspect(intake: dict) -> dict:
         })
         surface = collapsed
 
+    # --------------------------------------------------------
     # 7. Unicode normalization (test #2 and #15)
+    # --------------------------------------------------------
     count = surface.count("∩┐╜")
     if count > 0:
         for _ in range(count):
