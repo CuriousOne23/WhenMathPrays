@@ -42,24 +42,33 @@ class IEInput:
 
 @dataclass
 class IEOutput:
+    # IE testbench / YAML‑visible fields
     repairs: List[str]
-    normalized: str
-    ie_status: str
-    anomaly_flags: List[Dict[str, Any]]
-    structure: Optional[Dict[str, Any]] = None
+    normalized_text: str
+    anomalies: List[Dict[str, Any]]
+    tags: Optional[List[Dict[str, Any]]] = None
     tokens: Optional[List[str]] = None
+    replay: Optional[Dict[str, Any]] = None
+    error: Optional[Dict[str, Any]] = None
+
+    # Internal status (not required by testbench, but kept for debugging)
+    ie_status: str = "repaired"
 
     def to_dict(self) -> Dict[str, Any]:
         out = {
             "repairs": self.repairs,
-            "normalized": self.normalized,
+            "normalized_text": self.normalized_text,
+            "anomalies": self.anomalies,
             "ie_status": self.ie_status,
-            "anomaly_flags": self.anomaly_flags,
         }
-        if self.structure is not None:
-            out["structure"] = self.structure
+        if self.tags is not None:
+            out["tags"] = self.tags
         if self.tokens is not None:
             out["tokens"] = self.tokens
+        if self.replay is not None:
+            out["replay"] = self.replay
+        if self.error is not None:
+            out["error"] = self.error
         return out
 
 
@@ -210,26 +219,24 @@ def _compute_ie_status(ie_input: IEInput) -> str:
 # Structure passthrough
 # ---------------------------------------------------------------------------
 
-def _compute_structure(ie_input: IEInput):
+def _compute_tags(ie_input: IEInput) -> Optional[List[Dict[str, Any]]]:
     if not ie_input.structure_tags:
         return None
-    return {
-        "tags": [
-            {
-                "type": t.type,
-                "location": t.location,
-                **t.metadata,
-            }
-            for t in ie_input.structure_tags
-        ]
-    }
+    return [
+        {
+            "type": t.type,
+            "location": t.location,
+            **t.metadata,
+        }
+        for t in ie_input.structure_tags
+    ]
 
 
 # ---------------------------------------------------------------------------
 # Token preservation
 # ---------------------------------------------------------------------------
 
-def _compute_tokens(ie_input: IEInput):
+def _compute_tokens(ie_input: IEInput) -> Optional[List[str]]:
     if not ie_input.tokens:
         return None
 
@@ -246,6 +253,20 @@ def _compute_tokens(ie_input: IEInput):
 
 
 # ---------------------------------------------------------------------------
+# Replay metadata (stub)
+# ---------------------------------------------------------------------------
+
+def _compute_replay_metadata(ie_input: IEInput) -> Dict[str, Any]:
+    # Minimal replay metadata stub; can be extended to full spec later.
+    return {
+        "ruleset_id": "ie_v1",
+        "token_count": len(ie_input.tokens),
+        "repair_count": len(ie_input.repair_operations),
+        "anomaly_count": len(ie_input.anomaly_flags),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -253,10 +274,10 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
     ie_input = _parse_ie_input(iiinb_output)
 
     repairs = _compute_repairs_list(ie_input)
-    normalized = _compute_normalized(ie_input)
+    normalized_text = _compute_normalized(ie_input)
     ie_status = _compute_ie_status(ie_input)
 
-    anomaly_flags = [
+    anomalies = [
         {
             "type": a.type,
             "target": a.target,
@@ -266,14 +287,20 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
         for a in ie_input.anomaly_flags
     ]
 
-    structure = _compute_structure(ie_input)
+    tags = _compute_tags(ie_input)
     tokens = _compute_tokens(ie_input)
+    replay = _compute_replay_metadata(ie_input)
+
+    # No structured IE error envelope yet; keep None for now.
+    error: Optional[Dict[str, Any]] = None
 
     return IEOutput(
         repairs=repairs,
-        normalized=normalized,
-        ie_status=ie_status,
-        anomaly_flags=anomaly_flags,
-        structure=structure,
+        normalized_text=normalized_text,
+        anomalies=anomalies,
+        tags=tags,
         tokens=tokens,
+        replay=replay,
+        error=error,
+        ie_status=ie_status,
     ).to_dict()
