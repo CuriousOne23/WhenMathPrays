@@ -360,7 +360,7 @@ This is the **top‑level blueprint** for IIInB implementation.
 ### **16.2 Formal Primitive Specification**  
 #### *`20.101_iiinb_prim.md`*  
 **URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/20.101_iiinb_prim.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/20.101_iiinb_prim.md)  
+[20.101_iiinb_prim.md](https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator/requirements_20/20.101_iiinb_prim.md)  
 
 **Purpose:**  
 Defines the **conceptual responsibilities** of IIInB:
