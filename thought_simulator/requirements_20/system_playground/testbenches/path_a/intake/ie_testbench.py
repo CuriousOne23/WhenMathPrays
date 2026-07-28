@@ -209,13 +209,9 @@ def execute_ie_testbench():
         print("------------------------------------------------------------")
 
         # Determine if this test is supported under current stimulus
-        is_supported, missing = _is_test_supported(expected, required_keys)
-        if not is_supported:
-            skipped += 1
-            print(f"    SKIP: {test_id}")
-            print(f"    Reason: expected IE fields not fully defined for this test.")
-            print(f"    Missing fields: {missing}\n")
-            continue
+        # IE tests may specify only a subset of expected fields.
+        is_supported = True
+        missing = []
 
         supported += 1
 
