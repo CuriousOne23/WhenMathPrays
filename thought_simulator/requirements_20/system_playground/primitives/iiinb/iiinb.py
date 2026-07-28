@@ -63,6 +63,9 @@ def iiinb_inspect(intake: dict) -> dict:
     surface = intake.get("surface", "")
     tokens = intake.get("tokens", [])
 
+    # normalized starts as the original surface; all repairs update this
+    normalized = surface
+
     repair_ops = []
     anomaly_flags = []
 
@@ -137,7 +140,7 @@ def iiinb_inspect(intake: dict) -> dict:
             "target": "rd",
             "proposal": "red"
         })
-    normalized = normalized.replace(" rd ", " red ")
+        normalized = normalized.replace(" rd ", " red ")
 
     # --------------------------------------------------------
     # 6. Repetition cleanup (test #6)
