@@ -9,8 +9,6 @@ Compliant with:
 - inb_testbench.yaml
 """
 
-from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import validate_inb
-
 def InB(tp_dict):
     """
     InB receives and returns a TP envelope dictionary.
@@ -74,31 +72,17 @@ def InB(tp_dict):
     # Metadata construction (deterministic, replay‑safe)
     # ------------------------------------------------------------
     metadata = tp_dict.get("metadata", {})
-    metadata.setdefault("signature_history", []).append("inb_v2")
+    metadata.setdefault("signature_history", []).append("inb_v1")
     metadata["intake_audit"] = audit
     metadata["inb_status"] = "accepted" if not defects else "degraded"
 
     # ------------------------------------------------------------
-    # Construct primitive output envelope (pre‑rulechecker)
+    # Required TP output envelope
     # ------------------------------------------------------------
-    output = {
+    return {
         "surface": raw,
-        "defects": defects[:],   # copy for safety
+        "defects": defects,
         "tokens": tokens,
         "metadata": metadata,
-        "raw_input": raw         # required by rulechecker
+        "raw_input": raw
     }
-
-    # ------------------------------------------------------------
-    # Apply rulechecker (InB_v2 enhancement)
-    # ------------------------------------------------------------
-    rule_defects = validate_inb(output)
-
-    # Merge primitive + rulechecker defects deterministically
-    merged = sorted(set(output["defects"] + rule_defects))
-    output["defects"] = merged
-
-    # Update degraded/accepted status
-    output["metadata"]["inb_status"] = "accepted" if not merged else "degraded"
-
-    return output
