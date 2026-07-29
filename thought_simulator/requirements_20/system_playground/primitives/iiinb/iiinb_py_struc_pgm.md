@@ -1,4 +1,4 @@
-# 20.101.PY.IIINB – Python structural program for IIInB primitive
+# IIINB – Python structural program for IIInB primitive
 
 > Canonical structural specification for the Python implementation of the **IIInB** primitive, aligned with:
 > - 20.101_iiinb_prim.md (conceptual primitive spec)
