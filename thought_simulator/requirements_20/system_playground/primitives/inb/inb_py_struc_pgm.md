@@ -125,8 +125,6 @@ This ensures:
 
 ---
 
-****************************************************************************
-
 ## **0.2. `inb_input.yaml` — Purpose, Structure, Format, and Content (New)**
 
 `inb_input.yaml` is the **developer playground input file** for InB’s **general mode**.  
@@ -290,11 +288,157 @@ General mode is the **developer diagnostic harness**.
 
 This section ensures future developers immediately understand how general mode works and how `inb_input.yaml` fits into the architecture.
 
-*****************************************************************************
+---
+
+## **0.3. `<primitive>_tests_to_run.yaml` — Purpose, Structure, Format, and Content (New)**
+
+`<primitive>_tests_to_run.yaml` is the **rule‑family toggle file** for the primitive’s **testbench mode**.  
+It allows developers to selectively enable or disable groups of defect rules without modifying the regression test cases themselves.
+
+This file is **primitive‑specific**:
+
+- `inb_tests_to_run.yaml`  
+- `iiinb_tests_to_run.yaml`  
+- `ie_tests_to_run.yaml`  
+- etc.
+
+Each primitive defines its own rule families and its own toggle file.
 
 ---
 
-## 0.3 Testbench Mode — Full Regression Suite
+## **0.3.1 Purpose**
+
+The file exists to support:
+
+- targeted regression testing  
+- rapid defect‑family isolation  
+- controlled debugging  
+- selective rule activation  
+- deterministic testbench behavior  
+- safe evolution of rule semantics  
+
+It allows developers to run only the rule families they care about **without editing the testbench YAML**.
+
+This preserves the integrity of the regression suite.
+
+---
+
+## **0.3.2 Structure**
+
+The file is a simple YAML dictionary:
+
+```yaml
+tests_to_run:
+  whitespace: 1
+  punctuation: 1
+  unicode: 1
+  structural: 1
+  output: 1
+  deterministic: 0
+```
+
+Each key is a **rule family**.  
+Each value is a **toggle**:
+
+- `1` → enabled  
+- `0` → disabled  
+
+---
+
+## **0.3.3 Rule Families**
+
+Rule families are defined in `<primitive>_rules.yaml`.
+
+Example for InB:
+
+| Family | Rules |
+|--------|-------|
+| `whitespace` | `whitespace.excess`, `whitespace.leading`, `whitespace.trailing` |
+| `punctuation` | `punctuation.excess`, `punctuation.illegal` |
+| `unicode` | `unicode.invalid`, `unicode.non_ascii` |
+| `structural` | `structural.malformed`, `structural.illegal` |
+| `output` | `output.defects_list_shape` |
+| `deterministic` | `deterministic.replay`, `deterministic.no_external_state` |
+
+The testbench expands families → rule IDs using `<primitive>_rules.yaml`.
+
+---
+
+## **0.3.4 How Testbench Mode Uses This File**
+
+Testbench mode performs:
+
+1. Load `<primitive>_tests_to_run.yaml`
+2. Expand enabled families into rule IDs
+3. Filter test cases from `<primitive>_testbench.yaml`:
+   - If a test’s expected defects intersect with enabled rule IDs → **include**
+   - If a test has no expected defects → **always include**
+   - Otherwise → **exclude**
+4. Run the primitive
+5. Compare actual vs expected defects
+6. Print PASS / FAIL
+
+This allows developers to run:
+
+- only whitespace tests  
+- only punctuation tests  
+- only structural tests  
+- full suite  
+- any combination  
+
+without modifying the regression YAML.
+
+---
+
+## **0.3.5 Why This File Is Primitive‑Specific**
+
+Each primitive has:
+
+- its own defect semantics  
+- its own rule families  
+- its own rulechecker  
+- its own regression suite  
+
+Therefore:
+
+> **Each primitive must define its own `<primitive>_tests_to_run.yaml`.**
+
+This keeps rule‑family filtering aligned with the primitive’s defect model.
+
+---
+
+## **0.3.6 Relationship to General Mode**
+
+General mode **does not** use `<primitive>_tests_to_run.yaml`.
+
+General mode always runs:
+
+- all primitive defects  
+- all rulechecker defects  
+- PASS / FAIL / No test  
+- summary reporting  
+
+General mode is a diagnostic harness, not a regression suite.
+
+---
+
+## **0.3.7 Summary**
+
+`<primitive>_tests_to_run.yaml` is:
+
+- a rule‑family toggle file  
+- primitive‑specific  
+- used only in testbench mode  
+- never used in general mode  
+- essential for targeted regression testing  
+- essential for safe evolution of rule semantics  
+- essential for deterministic testbench behavior  
+
+This file ensures developers can selectively test rule families without modifying regression test cases.
+
+---
+
+## 0.4 Testbench Mode — Full Regression Suite
 
 Testbench mode uses:
 
@@ -325,7 +469,7 @@ Testbench mode is the **canonical validation path** for InB.
 
 ---
 
-## 0.4 Rule‑Family Filtering
+## 0.5 Rule‑Family Filtering
 
 Rule families are defined in `inb_rules.yaml` and mapped in `inb_testbench.py`.
 
@@ -359,7 +503,7 @@ This allows targeted testing without editing YAML test cases.
 
 ---
 
-## 0.5 File Responsibilities (Updated)
+## 0.6 File Responsibilities (Updated)
 
 | File | Responsibility |
 |------|----------------|
@@ -376,7 +520,7 @@ This table is the “map of the universe” for InB testing.
 
 ---
 
-## 0.6 Testing Flow Diagram (Updated)
+## 0.7 Testing Flow Diagram (Updated)
 
 ```
 run.py
@@ -404,7 +548,7 @@ run.py
 
 ---
 
-## 0.7 How to Modify InB Safely
+## 0.8 How to Modify InB Safely
 
 When changing InB:
 
