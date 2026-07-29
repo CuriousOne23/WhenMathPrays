@@ -1,0 +1,8 @@
+# IIInB Dictionary Rules — Punctuation Cleanup
+# Canonical family: punctuation.cleaned
+
+rules:
+  "!!!": "!"
+  "??": "?"
+  ",,": ","
+  "...": "…"
