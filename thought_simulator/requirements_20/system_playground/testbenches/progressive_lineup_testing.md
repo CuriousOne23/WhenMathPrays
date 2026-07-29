@@ -1,177 +1,277 @@
-# **Progressive Lineup Testing — A Comprehensive Guide**  
-### *Design, Problems, Solutions, and Structured Process for Multi‑Primitive Pipeline Testing*  
+# ⭐ **Updated `progressive_lineup_testing.md` (Safe Full Rewrite)**  
+### *Aligned with your new two‑mode architecture, rule‑family filtering, and InB/IIInB/IE testbench flow*
 
 ---
 
-# **1. Purpose of Progressive Lineup Testing (Generalized)**  
-Progressive lineup testing allows the user to **progressively enable any number of upstream primitives**, forming a deterministic pipeline from the earliest enabled primitive to the primitive currently under test.
+# **Progressive Lineup Testing — Updated Architecture (2026)**  
+### *Unified Model for Multi‑Primitive Pipeline Testing in Thought Simulator*
 
-The only structural rule is:
+Progressive lineup testing is the structured method for validating primitives in both isolation and pipeline context. It ensures deterministic replay, correct propagation of repairs/anomalies, and consistent TP envelope behavior across all primitives in Path‑A.
 
-> **If a primitive upstream (PrimitiveX) is enabled, and the current primitive under test is PrimitiveY, then all primitives between PrimitiveX and PrimitiveY must also be enabled and executed.**  
+This updated document reflects the **new two‑mode testbench architecture**, **rule‑family filtering**, and the **correct separation between single‑primitive testbenches (InB)** and **multi‑primitive progressive lineup testbenches (IIInB, IE, CEx, CE, ISc, TPU)**.
+
+---
+
+# **1. Overview**
+
+Progressive lineup testing allows developers to enable any number of upstream primitives. The testbench automatically constructs the correct pipeline from the earliest enabled upstream primitive to the primitive under test.
+
+The structural rule:
+
+> **If PrimitiveX is enabled upstream of PrimitiveY, then all primitives between X and Y must also be enabled.**
 
 This ensures:
 
-- the pipeline is structurally complete  
-- no gaps exist between enabled primitives  
-- downstream primitives receive valid upstream output  
-- deterministic replay is preserved  
-- repairs, anomalies, and structural metadata propagate correctly  
-
-This model supports **arbitrary progressive loading**, not just three fixed modes.  
-The user may choose:  
-- zero upstream primitives  
-- one upstream primitive  
-- several upstream primitives  
-- the entire upstream chain  
-
-The testbench automatically constructs the correct pipeline based on the user’s configuration.  
-This replaces the earlier “three modes” framing because the pipeline supports **any** progressive lineup the user desires.  
+- no gaps in the pipeline  
+- deterministic replay  
+- correct propagation of repairs/anomalies  
+- correct structural metadata  
+- correct envelope shape  
 
 ---
 
-# **2. Required Artifacts for Progressive Lineup Testing**  
+# **2. Two Testing Modes (New Architecture)**
 
-Progressive lineup testing relies on four coordinated artifacts. Each plays a distinct role in enabling deterministic, replay‑safe testing across any number of upstream primitives.
+All primitives now support two modes, selected in `run.py`:
 
----
+```python
+"mode": "general"     # developer quick check
+"mode": "testbench"   # full regression suite
+```
 
-## **2.1 `primitive.py` — Primitive Implementation**
+### **2.1 General Mode**
+Used for quick validation.
 
-Defines:
+- Loads a single TP from `<primitive>_input.yaml`
+- Runs the primitive
+- Runs the primitive’s rulechecker
+- Prints:
+  - primitive defects  
+  - rulechecker defects  
 
-- rule ordering  
-- normalization logic  
-- repair/anomaly propagation  
-- structural tag construction  
-- replay metadata generation  
-- error envelope construction  
+General mode does **not** use progressive lineup.
 
-This is the deterministic execution logic used by downstream testbenches.
+### **2.2 Testbench Mode**
+Used for full regression.
 
----
+- Loads `<primitive>_testbench.yaml`
+- Applies rule‑family filtering (InB only)
+- For multi‑primitive testbenches:
+  - detects pipeline configuration  
+  - selects stimulus based on earliest upstream primitive  
+  - executes full upstream chain  
+  - compares output against downstream expected YAML  
+  - detects supported vs unsupported tests  
+  - prints PASS / FAIL / SKIPPED  
 
-## **2.2 `primitive_testbench.yaml` — Expected Outputs**
-
-Defines the **canonical expected outputs** when the primitive is tested in isolation.
-
-Contains:
-
-- input stimulus  
-- expected normalized text  
-- expected tokens  
-- expected repairs/anomalies  
-- expected structural tags  
-- expected replay metadata  
-- expected error envelope  
-
-This YAML is **always** the source of truth for expected outputs, even when upstream primitives are enabled.
-
----
-
-## **2.3 `primitive_testbench.py` — Execution Harness**
-
-Responsible for:
-
-- detecting pipeline configuration  
-- selecting correct stimulus YAML  
-- loading all required upstream primitives  
-- executing the full upstream chain  
-- comparing output against downstream expected YAML  
-- determining supported vs unsupported tests  
-- skipping unsupported tests  
-- reporting skipped tests  
-- producing structured pass/fail/skipped summaries  
-
-This file is the **intelligent orchestrator** that makes progressive lineup testing possible.
+Testbench mode is the canonical validation path.
 
 ---
 
-## **2.4 `run.py` — Global Orchestrator**
+# **3. Where Progressive Lineup Applies**
 
-Controls:
+### ✔ Applies to:
+- IIInB  
+- IE  
+- CEx  
+- CE  
+- ISc  
+- TPU  
 
-- which primitives are enabled  
-- which testbenches run  
-- which YAMLs are used as stimulus  
-- which tests are included/excluded  
-- the order of testbench execution  
+These primitives depend on upstream output.
 
-It does not execute primitive logic directly — it delegates to each primitive’s testbench.
+### ❌ Does *not* apply to:
+- **InB**
 
----
-
-# **3. Why Progressive Lineup Testing Is Necessary**
-
-Each primitive produces a different level of structural detail.  
-Downstream primitives depend on upstream output being complete, normalized, and deterministic.
-
-Because upstream YAML stimulus files do not contain downstream‑level fields:
-
-- IE cannot be fully tested using IIInB stimulus  
-- IIInB cannot be fully tested using InB stimulus  
-- CEx cannot be fully tested using IE stimulus  
-- etc.
-
-Therefore:
-
-> **Some downstream tests become unsupported when upstream primitives are enabled.**
-
-Progressive lineup testing solves this by:
-
-1. allowing arbitrary upstream enabling  
-2. automatically loading all primitives between earliest enabled upstream and primitive under test  
-3. selecting correct stimulus YAML  
-4. running full upstream chain deterministically  
-5. comparing downstream output only against downstream expected YAML  
-6. detecting supported vs unsupported tests  
-7. skipping unsupported tests  
-8. reporting skipped tests transparently  
-
-This ensures deterministic replay and correct pipeline behavior regardless of how many upstream primitives the user enables.
+InB is the first primitive in Path‑A.  
+It has no upstream dependencies.  
+Its testbench does not perform lineup resolution, stimulus selection, or supported/unsupported detection.
 
 ---
 
 # **4. Pipeline Configuration Detection**
 
-Each testbench must read flags such as:
+Testbenches read flags:
 
 - `use_inb`  
 - `use_iiinb`  
 - `use_ie`  
-- etc.
+- …  
 
-These determine which upstream primitives must be loaded.
+The testbench determines:
 
-If the user enables PrimitiveX upstream of PrimitiveY, then:
+1. Which primitives are enabled  
+2. Which primitive is under test  
+3. Which upstream primitives must be auto‑enabled  
+4. Which stimulus YAML to load  
+5. Which pipeline to execute  
 
-> **All primitives between X and Y must also be loaded.**
+Example:
 
-This guarantees structural completeness.
+If testing IE and `use_inb = True`:
+
+```
+Pipeline = InB → IIInB → IE
+Stimulus = inb_testbench.yaml
+Expected = ie_testbench.yaml
+```
 
 ---
 
-# **5. Stimulus Selection Logic**
+# **5. Stimulus Selection (Corrected)**
 
-Stimulus selection is based on the **earliest enabled upstream primitive**.
+Stimulus is based on the **earliest enabled upstream primitive**.
 
-### **Case A — No upstream primitives enabled**  
-Stimulus = `primitive_testbench.yaml`
-
-### **Case B — Earliest upstream is IIInB**  
-Stimulus = `iiinb_testbench.yaml`
-
-### **Case C — Earliest upstream is InB**  
-Stimulus = `inb_testbench.yaml`
-
-### **General Rule**  
-If earliest enabled upstream is PrimitiveX, stimulus = `primitiveX_testbench.yaml`.
+| Earliest Enabled | Stimulus YAML |
+|------------------|---------------|
+| None             | `<primitive>_testbench.yaml` |
+| InB              | `inb_testbench.yaml` |
+| IIInB            | `iiinb_testbench.yaml` |
+| IE               | `ie_testbench.yaml` (rare; only when testing IE in isolation) |
 
 This ensures stimulus matches the earliest stage of the pipeline.
+---
+
+# **6. Stimulus Source — `primitiveX_input.yaml`**
+
+In progressive lineup testing, the **stimulus** always comes from the **last upstream primitive that is enabled**.
+
+If the earliest enabled upstream primitive is **PrimitiveX**, then:
+
+> **Stimulus = `primitiveX_input.yaml` in general mode**  
+> **Stimulus = `primitiveX_testbench.yaml` in testbench mode**
+
+This ensures the TP envelope entering the pipeline matches the structural level of the earliest enabled primitive.
+
+### Examples
+
+| Enabled Upstream | Mode | Stimulus |
+|------------------|------|----------|
+| None | general | `primitiveY_input.yaml` |
+| None | testbench | `primitiveY_testbench.yaml` |
+| InB | general | `inb_input.yaml` |
+| InB | testbench | `inb_testbench.yaml` |
+| IIInB | general | `iiinb_input.yaml` |
+| IIInB | testbench | `iiinb_testbench.yaml` |
+
+This rule is **mandatory** for deterministic replay.
 
 ---
 
-# **6. Pipeline Execution Logic**
+# **7. Rulechecking Source — `primitiveY_rulechecker.py` + `primitiveY_rules.yaml`**
+
+Regardless of how many upstream primitives are enabled:
+
+> **The primitive under test (PrimitiveY) always uses its own rulechecker and its own rules.**
+
+This ensures:
+
+- expected output is always defined by the primitive under test  
+- rule semantics do not change based on upstream configuration  
+- downstream correctness is validated consistently  
+
+### Rulechecking Components
+
+| Component | Purpose |
+|----------|---------|
+| `primitiveY_rulechecker.py` | Validates PrimitiveY’s output |
+| `primitiveY_rules.yaml` | Defines PrimitiveY’s rule families and rule IDs |
+| `primitiveY_testbench.yaml` | Defines expected output for PrimitiveY |
+
+### Example
+
+If testing **IE**:
+
+- stimulus may come from InB or IIInB  
+- but rulechecking always uses:  
+  - `ie_rulechecker.py`  
+  - `ie_rules.yaml`  
+  - `ie_testbench.yaml`
+
+This separation is essential for deterministic multi‑primitive testing.
+
+---
+
+# **8. How `run.py` Mode Selection Affects Progressive Lineup Testing**
+
+`run.py` now supports two modes:
+
+```python
+"mode": "general"
+"mode": "testbench"
+```
+
+These modes directly affect progressive lineup behavior.
+
+---
+
+## **8.1 General Mode — No Progressive Lineup**
+
+General mode is **single‑primitive only**.
+
+- No upstream primitives are executed  
+- No pipeline is constructed  
+- No supported/unsupported detection  
+- No stimulus selection based on upstream  
+- No progressive lineup logic  
+
+General mode uses:
+
+- `primitiveX_input.yaml`  
+- `primitiveY_rulechecker.py`  
+- `primitiveY_rules.yaml`  
+
+This mode is intended for **developer quick checks**.
+
+---
+
+## **8.2 Testbench Mode — Full Progressive Lineup**
+
+Testbench mode activates the full progressive lineup system.
+
+### In testbench mode:
+
+- upstream primitives **are** executed  
+- pipeline **is** constructed  
+- stimulus **is** selected based on earliest upstream  
+- supported/unsupported tests **are** detected  
+- expected output **always** comes from primitiveY  
+- rulechecking **always** uses primitiveY’s rulechecker  
+- rule‑family filtering **may** apply (InB only)
+
+### Summary Table
+
+| Mode | Upstream Execution | Stimulus | Rulechecker | Supported/Unsupported |
+|------|--------------------|----------|-------------|------------------------|
+| general | ❌ none | `primitiveX_input.yaml` | `primitiveY_rulechecker.py` | ❌ no |
+| testbench | ✔ full pipeline | `primitiveX_testbench.yaml` | `primitiveY_rulechecker.py` | ✔ yes |
+
+This is the correct interpretation of how `run.py` interacts with progressive lineup testing.
+
+---
+
+# **9. Putting It All Together**
+
+When testing PrimitiveY:
+
+1. Determine earliest enabled upstream primitive → PrimitiveX  
+2. Determine mode (`general` or `testbench`)  
+3. Select stimulus:
+   - general → `primitiveX_input.yaml`
+   - testbench → `primitiveX_testbench.yaml`
+4. Execute pipeline (testbench mode only)
+5. Validate output using:
+   - `primitiveY_rulechecker.py`
+   - `primitiveY_rules.yaml`
+   - `primitiveY_testbench.yaml`
+6. Detect supported/unsupported tests (testbench mode only)
+7. Print structured PASS / FAIL / SKIPPED summary
+
+This is the complete, updated progressive lineup testing model.
+
+---
+
+# **10. Pipeline Execution Logic**
 
 After selecting stimulus, the testbench constructs the full pipeline:
 
@@ -181,70 +281,58 @@ PrimitiveX → PrimitiveX+1 → … → PrimitiveY
 
 Example for IE:
 
-- If earliest upstream is IIInB:  
+- Earliest upstream = IIInB  
   `IIInB → IE`
 
-- If earliest upstream is InB:  
+- Earliest upstream = InB  
   `InB → IIInB → IE`
 
-- If no upstream:  
+- No upstream  
   `IE`
 
-This ensures deterministic propagation of repairs, anomalies, tokens, and structural metadata.
+Each primitive receives the TP envelope produced by the previous one.
 
 ---
 
-# **7. Expected Output Source**
+# **11. Expected Output Source (Corrected)**
 
-Regardless of upstream configuration:
+Expected output **always** comes from the primitive under test.
 
-> **Expected output always comes from the downstream primitive’s YAML.**
-
-Examples:
-
-- IE testbench → compare against `ie_testbench.yaml`  
-- IIInB testbench → compare against `iiinb_testbench.yaml`  
-- InB testbench → compare against `inb_testbench.yaml`
+| Primitive Under Test | Expected YAML |
+|----------------------|---------------|
+| InB                  | `inb_testbench.yaml` |
+| IIInB                | `iiinb_testbench.yaml` |
+| IE                   | `ie_testbench.yaml` |
 
 Stimulus changes.  
 Expected output does not.
 
 ---
 
-# **8. Supported vs Unsupported Tests**
+# **12. Supported vs Unsupported Tests (Corrected)**
 
-A downstream test is **supported** if:
-
-- the downstream expected YAML defines the required fields  
-- the upstream stimulus provides enough data to evaluate them
-
-A downstream test is **unsupported** if:
-
-- the downstream expected YAML defines fields  
-- but upstream stimulus does **not** provide enough data to evaluate them
+Downstream tests may require fields not present in upstream stimulus.
 
 Example:
 
-IE testbench expects:
+IE structural tests require:
 
 - structural tags  
 - replay metadata  
-- repair annotations  
 
-But IIInB stimulus does not define:
-
-- structural tags  
-- replay metadata  
+But IIInB stimulus does not define these.
 
 Therefore:
 
 > **IE structural tests must be skipped when using IIInB stimulus.**
 
+Testbenches must detect unsupported tests and skip them.
+
 ---
 
-# **9. Detecting Unsupported Tests**
+# **13. Supported Test Detection**
 
-Each testbench must include:
+Testbenches implement:
 
 ```python
 def is_test_supported(expected, required_fields):
@@ -252,28 +340,18 @@ def is_test_supported(expected, required_fields):
     return (len(missing) == 0, missing)
 ```
 
-Then:
+Unsupported tests:
 
-```python
-supported, missing = is_test_supported(expected, required_fields)
-
-if not supported:
-    skipped_tests.append((test_name, missing))
-    continue
-```
-
-This prevents false failures.
+- are skipped  
+- are reported  
+- do not count as failures  
 
 ---
 
-# **10. Correct Pass/Fail Summary**
+# **14. Correct Summary Format**
 
-### **Incorrect (current):**
-```
-12 / 15 tests passed
-```
+Correct structured reporting:
 
-### **Correct (pipeline-aware):**
 ```
 IE Testbench Summary
 --------------------
@@ -287,21 +365,17 @@ Skipped:  7
 Supported tests: 8 / 15
 ```
 
-This is the correct structured reporting.
+This is the required format.
 
 ---
 
-# **11. Required Logging**
+# **15. Required Logging**
 
-Each testbench must print:
+Testbenches must print:
 
-```
-Pipeline configuration:
-  use_inb = True
-  use_iiinb = True
-Stimulus source: inb_testbench.yaml
-Expected output: ie_testbench.yaml
-```
+- pipeline configuration  
+- stimulus source  
+- expected output source  
 
 And for each skipped test:
 
@@ -309,40 +383,49 @@ And for each skipped test:
 Skipping test 'structure.tags.basic' — upstream stimulus does not define required IE fields: ['structure.tags']
 ```
 
-This makes the pipeline transparent.
+---
+
+# **16. Integration with New Two‑Mode Architecture**
+
+This document now aligns with:
+
+- InB general mode  
+- InB testbench mode  
+- IIInB progressive lineup  
+- IE progressive lineup  
+- rule‑family filtering  
+- run.py mode selection  
+- deterministic TP envelope rules  
+- replay stability requirements  
 
 ---
 
-# **12. Benefits of Progressive Lineup Testing**
+# **17. Summary**
 
-- deterministic  
-- modular  
-- transparent  
-- scalable  
-- replay‑safe  
-- pipeline‑accurate  
-- future‑proof  
+Progressive lineup testing ensures:
 
----
+- deterministic pipeline behavior  
+- correct propagation of repairs/anomalies  
+- correct structural metadata  
+- correct envelope shape  
+- correct upstream/downstream alignment  
+- correct supported/unsupported detection  
+- correct structured reporting  
 
-# **13. Summary**
-
-Progressive lineup testing is the structured method for validating primitives in isolation and in pipeline context. It requires:
-
-- pipeline configuration detection  
-- stimulus selection  
-- upstream primitive loading  
-- downstream expected output comparison  
-- supported/unsupported test detection  
-- structured pass/fail/skipped reporting  
-
-This guide defines the complete architecture for implementing progressive lineup testing across all primitives.
+It is the foundation for validating multi‑primitive pipelines in Thought Simulator.
 
 ---
 
-# **14. Closing Notes**
+# **18. Closing Notes**
 
-This document is intended as a durable reference for future development, debugging, and expansion of the Thought Simulator pipeline.  
-It ensures that both you and I can reopen this topic in future conversations and immediately re‑synchronize on the entire testing philosophy.
+This updated document is now fully aligned with:
+
+- your new InB testbench architecture  
+- your new two‑mode system  
+- your rule‑family filtering  
+- your updated run.py  
+- your updated InB structural program guide  
+
+It is now safe, consistent, and future‑proof.
 
 ---
