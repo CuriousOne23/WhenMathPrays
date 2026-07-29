@@ -324,3 +324,30 @@ def main(argv: List[str] | None = None) -> int:
 if __name__ == "__main__":
     raise SystemExit(main())
 
+
+def validate_iiinb(tp):
+    """
+    Unified IIInB rulechecker entrypoint.
+    Returns a list of anomaly flags detected by rulechecker.
+    """
+
+    anomalies = []
+
+    # Spacing rules
+    anomalies.extend(check_spacing(tp))
+
+    # Punctuation rules
+    anomalies.extend(check_punctuation(tp))
+
+    # Control character rules
+    anomalies.extend(check_control_chars(tp))
+
+    # Normalization rules
+    anomalies.extend(check_normalization(tp))
+
+    # Deterministic behavior rules
+    anomalies.extend(check_deterministic(tp))
+
+    return anomalies
+
+
