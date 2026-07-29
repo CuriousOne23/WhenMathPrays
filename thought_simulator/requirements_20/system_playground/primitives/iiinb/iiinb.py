@@ -276,7 +276,7 @@ class IIInB:
         self.tokens = getattr(tp, "tokens", [])
 
     def inspect(self):
-        surface = getattr(self._tp, "raw_input", "") or getattr(self._tp, "surface", "")
+        surface = self._tp.get("raw_input", self._tp.get("surface", ""))
         tokens = getattr(self._tp, "tokens", [])
 
         result = iiinb_inspect({
