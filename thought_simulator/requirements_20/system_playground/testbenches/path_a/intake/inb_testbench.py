@@ -1,68 +1,127 @@
-# ============================================================
-# InB Intake Testbench — Path A
-# ============================================================
+"""
+InB Intake Testbench — Path A
+Supports two modes:
+    • general    → primitive + rulechecker
+    • testbench  → primitive only (regression)
+Designed to be executed by run.py
+"""
 
 import os
 import yaml
 
+# ---------------------------------------------------------------------------
+# Import REAL InB primitive (pure minimal primitive)
+# ---------------------------------------------------------------------------
+
 from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
+
+# ---------------------------------------------------------------------------
+# Import rulechecker (used ONLY in general mode)
+# ---------------------------------------------------------------------------
+
 from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import validate_inb
+
+# ---------------------------------------------------------------------------
+# Configuration injection (required by run.py)
+# ---------------------------------------------------------------------------
 
 CONFIG = {}
 
 def set_testbench_config(config_dict):
     global CONFIG
     CONFIG = config_dict
-    # Default: regression mode does NOT use rulechecker
+    CONFIG.setdefault("mode", "testbench")   # default
     CONFIG.setdefault("use_rulechecker", False)
+
+# ---------------------------------------------------------------------------
+# YAML loaders
+# ---------------------------------------------------------------------------
 
 def load_general_input():
     path = os.path.join(os.path.dirname(__file__), "inb_input.yaml")
-    return yaml.safe_load(open(path, "r", encoding="utf-8"))
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 def load_testbench():
     path = os.path.join(os.path.dirname(__file__), "inb_testbench.yaml")
-    return yaml.safe_load(open(path, "r", encoding="utf-8"))
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 def load_tests_to_run():
     path = os.path.join(os.path.dirname(__file__), "inb_tests_to_run.yaml")
-    return yaml.safe_load(open(path, "r", encoding="utf-8")).get("tests_to_run", {})
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f).get("tests_to_run", {})
+
+# ---------------------------------------------------------------------------
+# Rule-family → rule IDs
+# ---------------------------------------------------------------------------
 
 RULE_FAMILY_MAP = {
-    "whitespace": ["whitespace.excess", "whitespace.leading", "whitespace.trailing"],
-    "punctuation": ["punctuation.excess", "punctuation.illegal"],
-    "unicode": ["unicode.invalid", "unicode.non_ascii"],
-    "structural": ["structural.malformed", "structural.illegal"],
-    "output": ["output.defects_list_shape"],
-    "deterministic": ["deterministic.replay", "deterministic.no_external_state"]
+    "whitespace": [
+        "whitespace.excess",
+        "whitespace.leading",
+        "whitespace.trailing"
+    ],
+    "punctuation": [
+        "punctuation.excess",
+        "punctuation.illegal"
+    ],
+    "unicode": [
+        "unicode.invalid",
+        "unicode.non_ascii"
+    ],
+    "structural": [
+        "structural.malformed",
+        "structural.illegal"
+    ],
+    "output": [
+        "output.defects_list_shape"
+    ],
+    "deterministic": [
+        "deterministic.replay",
+        "deterministic.no_external_state"
+    ]
 }
 
+# ---------------------------------------------------------------------------
+# Filter tests based on rule-family toggles
+# ---------------------------------------------------------------------------
+
 def filter_tests_by_rule_families(all_tests):
+
     toggles = load_tests_to_run()
-    enabled_ids = set()
+    enabled_rule_ids = set()
 
     for family, enabled in toggles.items():
         if enabled:
-            enabled_ids.update(RULE_FAMILY_MAP.get(family, []))
+            enabled_rule_ids.update(RULE_FAMILY_MAP.get(family, []))
 
     filtered = []
     for test in all_tests:
-        exp = test.get("expected_defects", [])
-        if not exp or any(d in enabled_ids for d in exp):
+        expected = test.get("expected_defects", [])
+
+        # No expected defects → always include
+        if not expected:
+            filtered.append(test)
+            continue
+
+        # Include if any expected defect belongs to an enabled rule family
+        if any(d in enabled_rule_ids for d in expected):
             filtered.append(test)
 
     return filtered
 
-# ------------------------------------------------------------
-# GENERAL MODE (rulechecker enabled)
-# ------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# GENERAL MODE — primitive + rulechecker
+# ---------------------------------------------------------------------------
 
 def run_general_mode():
-    CONFIG["use_rulechecker"] = True
 
     print("\n============================================================")
     print("InB General Mode — Primitive + Rulechecker")
     print("============================================================\n")
+
+    CONFIG["use_rulechecker"] = True
 
     data = load_general_input()
     tp = data.get("tp", {})
@@ -70,19 +129,28 @@ def run_general_mode():
 
     print(f"Raw input: \"{raw}\"\n")
 
-    result = InB(tp, use_rulechecker=True)
-    print(f"Primitive defects: {result.get('primitive_defects')}")
-    print(f"Rulechecker defects: {result.get('rulechecker_defects')}\n")
+    # Run primitive (pure)
+    primitive_output = InB(tp)
+    primitive_defects = primitive_output.get("defects", [])
 
-# ------------------------------------------------------------
-# REGRESSION MODE (primitive only)
-# ------------------------------------------------------------
+    print(f"Primitive defects: {primitive_defects}")
+
+    # Run rulechecker externally
+    rulechecker_defects = validate_inb(primitive_output)
+
+    print(f"Rulechecker defects: {rulechecker_defects}\n")
+
+# ---------------------------------------------------------------------------
+# REGRESSION MODE — primitive only
+# ---------------------------------------------------------------------------
 
 def run_regression_mode():
+
     CONFIG["use_rulechecker"] = False
 
     tb = load_testbench()
-    tests = filter_tests_by_rule_families(tb.get("tests", []))
+    all_tests = tb.get("tests", [])
+    tests = filter_tests_by_rule_families(all_tests)
 
     print(f"\nLoaded {len(tests)} InB intake test cases.\n")
 
@@ -90,13 +158,15 @@ def run_regression_mode():
     fails = 0
 
     for test in tests:
-        name = test.get("id", "unnamed")
-        print(f"Running: {name} ...", end=" ")
 
+        name = test.get("id", "unnamed")
         tp = test.get("tp", {})
         raw = tp.get("raw_input", "")
 
-        result = InB(tp, use_rulechecker=False)
+        print(f"Running: {name} ...", end=" ")
+
+        # Run pure primitive
+        result = InB(tp)
         actual = result.get("defects", [])
         expected = test.get("expected_defects", [])
 
@@ -107,16 +177,25 @@ def run_regression_mode():
             fails += 1
             print(f"FAIL — {name}")
             print(f"Expected: {expected}")
-            print(f"Actual:   {actual}")
+            print(f"Actual:   {actual}\n")
 
+    # ------------------------------------------------------------
+    # PASS/FAIL SUMMARY
+    # ------------------------------------------------------------
     print("\n==================== SUMMARY ====================")
     print(f"Total tests: {len(tests)}")
     print(f"Passes:      {passes}")
     print(f"Failures:    {fails}")
     print("=================================================\n")
 
+# ---------------------------------------------------------------------------
+# MAIN ENTRYPOINT
+# ---------------------------------------------------------------------------
+
 def run_testbench():
+
     mode = CONFIG.get("mode", "testbench")
+
     if mode == "general":
         run_general_mode()
     else:
