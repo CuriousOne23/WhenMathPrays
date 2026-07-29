@@ -1,15 +1,17 @@
 """
 IIInB — Input Inference / Repair Basin
-Path‑A Primitive (20.101)
+Path‑A Primitive (20.101 / 20.105)
 
-Clean, deterministic implementation aligned with:
+Aligned with:
 - 20.101_iiinb_prim.md
 - iiinb_py_struc_pgm.md
 - progressive_lineup_testing.md
-- iiinb_testbench.yaml / iiinb_testbench.py
+- iiinb_testbench.yaml / iiinb_rules.yaml
 """
 
 import unicodedata
+from pathlib import Path
+import yaml
 
 
 # ------------------------------------------------------------
@@ -24,10 +26,6 @@ def is_illegal_char(ch: str) -> bool:
     if ch in {"#", "$", "%", "@"}:
         return True
 
-    # Treat ∩┐╜ as normalizable noise, not illegal
-    if ch == "∩┐╜":
-        return False
-
     # Unicode replacement character
     if ch == "\uFFFD":
         return True
@@ -37,6 +35,43 @@ def is_illegal_char(ch: str) -> bool:
         return True
 
     return False
+
+
+# ------------------------------------------------------------
+# Dictionary rule loader (iiinb_dct_rules)
+# ------------------------------------------------------------
+
+def load_dct_rules():
+    rule_dir = Path(__file__).parent / "iiinb_dct_rules"
+    rules = {}
+    if not rule_dir.exists():
+        return rules
+    for file in rule_dir.glob("*.yaml"):
+        data = yaml.safe_load(file.read_text())
+        rules[file.stem] = data.get("rules", {})
+    return rules
+
+
+DCT_RULES = load_dct_rules()
+
+
+# ------------------------------------------------------------
+# Repetition collapse (structural, deterministic)
+# ------------------------------------------------------------
+
+def collapse_runs(s: str) -> str:
+    out = []
+    run_char = None
+    run_len = 0
+    for ch in s:
+        if ch == run_char:
+            run_len += 1
+        else:
+            run_char = ch
+            run_len = 1
+        if run_len <= 2:
+            out.append(ch)
+    return "".join(out)
 
 
 # ------------------------------------------------------------
@@ -82,136 +117,108 @@ def iiinb_inspect(intake: dict) -> dict:
         }
 
     # --------------------------------------------------------
-    # 1. Structural cleanup (required by structural tests)
+    # 1. Structural cleanup (structural.cleaned)
     # --------------------------------------------------------
-    if "<broken>" in work:
-        repair_ops.append({
-            "type": "extension.structural.cleaned",
-            "target": "<broken>",
-            "proposal": ""
-        })
-        work = work.replace("<broken>", "")
+    structural_rules = DCT_RULES.get("structural", {})
+    for target, proposal in structural_rules.items():
+        if target in work:
+            repair_ops.append({
+                "type": "structural.cleaned",
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 2. Whitespace normalization
+    # 2. Whitespace normalization (whitespace.normalized)
     # --------------------------------------------------------
-    if "   " in work:
-        repair_ops.append({
-            "type": "whitespace.normalized",
-            "target": "   ",
-            "proposal": " "
-        })
-        work = work.replace("   ", " ")
+    whitespace_rules = DCT_RULES.get("whitespace", {})
+    for target, proposal in whitespace_rules.items():
+        if target in work:
+            repair_ops.append({
+                "type": "whitespace.normalized",
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 3. Punctuation cleanup
+    # 3. Punctuation cleanup (punctuation.cleaned)
     # --------------------------------------------------------
-    if "!!!" in work:
-        repair_ops.append({
-            "type": "punctuation.cleaned",
-            "target": "!!!",
-            "proposal": "!"
-        })
-        work = work.replace("!!!", "!")
-
-    if ",," in work:
-        repair_ops.append({
-            "type": "punctuation.cleaned",
-            "target": ",,",
-            "proposal": ","
-        })
-        work = work.replace(",,", ",")
+    punctuation_rules = DCT_RULES.get("punctuation", {})
+    for target, proposal in punctuation_rules.items():
+        if target in work:
+            repair_ops.append({
+                "type": "punctuation.cleaned",
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 4. Shorthand expansion
+    # 4. Shorthand expansion (shorthand.expanded)
     # --------------------------------------------------------
-    if "plz" in work:
-        repair_ops.append({
-            "type": "shorthand.expanded",
-            "target": "plz",
-            "proposal": "please"
-        })
-        work = work.replace("plz", "please")
+    shorthand_rules = DCT_RULES.get("shorthand", {})
+    for target, proposal in shorthand_rules.items():
+        if target in work:
+            repair_ops.append({
+                "type": "shorthand.expanded",
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 5. Repetition cleanup
+    # 5. Repetition cleanup (repetition.cleaned)
     # --------------------------------------------------------
-    def collapse_runs(s: str) -> str:
-        out = []
-        run_char = None
-        run_len = 0
-        for ch in s:
-            if ch == run_char:
-                run_len += 1
-            else:
-                run_char = ch
-                run_len = 1
-            if run_len <= 2:
-                out.append(ch)
-        return "".join(out)
-
+    repetition_rules = DCT_RULES.get("repetition", {})
     collapsed = collapse_runs(work)
-    if collapsed != work and "YYYYYYYYYY" in work:
-        repair_ops.append({
-            "type": "repetition.cleaned",
-            "target": "YYYYYYYYYY",
-            "proposal": "YY"
-        })
-        repair_ops.append({
-            "type": "repetition.cleaned",
-            "target": "EEEEE",
-            "proposal": "EE"
-        })
-        repair_ops.append({
-            "type": "repetition.cleaned",
-            "target": "AAAA",
-            "proposal": "AA"
-        })
-        repair_ops.append({
-            "type": "repetition.cleaned",
-            "target": "HHHH",
-            "proposal": "HH"
-        })
+    if collapsed != work:
+        # Only record repetition.cleaned for explicit tokens present
+        for target, proposal in repetition_rules.items():
+            if target in work:
+                repair_ops.append({
+                    "type": "repetition.cleaned",
+                    "target": target,
+                    "proposal": proposal
+                })
         work = collapsed
 
     # --------------------------------------------------------
-    # 6. Spelling repairs
+    # 6. Spelling repairs (spelling.transposed / spelling.missing)
     # --------------------------------------------------------
-    if "hte" in work:
-        repair_ops.append({
-            "type": "spelling.transposed",
-            "target": "hte",
-            "proposal": "the"
-        })
-        work = work.replace("hte", "the")
-
-    if " rd " in work:
-        repair_ops.append({
-            "type": "spelling.missing",
-            "target": "rd",
-            "proposal": "red"
-        })
-        work = work.replace(" rd ", " red ")
+    spelling_rules = DCT_RULES.get("spelling", {})
+    for target, proposal in spelling_rules.items():
+        if target in work:
+            # Simple heuristic: 3‑letter transposition vs other (missing)
+            if len(target) == 3:
+                rtype = "spelling.transposed"
+            else:
+                rtype = "spelling.missing"
+            repair_ops.append({
+                "type": rtype,
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 7. Unicode normalization
+    # 7. Unicode normalization (unicode.normalized)
     # --------------------------------------------------------
-    unicode_noise = [ch for ch in work if unicodedata.category(ch) == "So"]
-
-    for ch in unicode_noise:
-        repair_ops.append({
-            "type": "unicode.normalized",
-            "target": ch,
-            "proposal": ""
-        })
-
-    for ch in unicode_noise:
-        work = work.replace(ch, "")
+    unicode_rules = DCT_RULES.get("unicode", {})
+    for target, proposal in unicode_rules.items():
+        if target in work:
+            repair_ops.append({
+                "type": "unicode.normalized",
+                "target": target,
+                "proposal": proposal
+            })
+            work = work.replace(target, proposal)
 
     normalized = work
 
     # --------------------------------------------------------
-    # 8. Illegal character primitive flags (normalized indexing)
+    # 8. Illegal character primitive flags (illegal_character.unknown)
     # --------------------------------------------------------
     for idx, ch in enumerate(normalized):
         if is_illegal_char(ch):
@@ -223,9 +230,8 @@ def iiinb_inspect(intake: dict) -> dict:
             })
 
     # --------------------------------------------------------
-    # 9. Case normalization (extremely narrow)
+    # 9. Case normalization (case.normalized)
     # --------------------------------------------------------
-    # Only trigger if the ORIGINAL surface started with "the "
     if original_surface.startswith("the "):
         repair_ops.append({
             "type": "case.normalized",
@@ -238,7 +244,6 @@ def iiinb_inspect(intake: dict) -> dict:
     # 10. Token handling (preservation / derivation)
     # --------------------------------------------------------
     if not tokens:
-        # Derive tokens from original surface (token.preservation rule)
         tokens = original_surface.split()
 
     return {
@@ -256,17 +261,6 @@ def iiinb_inspect(intake: dict) -> dict:
 
 class IIInB:
     def __init__(self, tp):
-        """
-        The testbench calls: iiinb = IIInB(tp)
-        Then iiinb.inspect(), and reads:
-            • metadata["iiinb_status"]
-            • repair_operations / repairs
-            • primitive_flags / anomalies
-            • normalized
-            • tokens
-
-        The pipeline should use the dict returned by inspect().
-        """
         self._tp = tp
 
         self.metadata = {}
@@ -288,13 +282,11 @@ class IIInB:
         self.repair_operations = result["repair_operations"]
         self.primitive_flags = result["primitive_flags"]
         self.flags = self.primitive_flags
-        self.anomalies = self.primitive_flags   # compatibility alias
+        self.anomalies = self.primitive_flags
         self.normalized = result["normalized"]
         self.tokens = result["tokens"]
 
-        # Compatibility aliases expected by the testbench
         self.repairs = self.repair_operations
         self.anomalies = self.primitive_flags
 
-        # IMPORTANT: return the TP dict for pipeline / IE
         return result
