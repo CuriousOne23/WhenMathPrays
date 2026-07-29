@@ -8,6 +8,8 @@ Designed to be executed by run.py
 
 import os
 import yaml
+import sys
+sys.stdout.flush()
 
 # ---------------------------------------------------------------------------
 # Primitive imports
