@@ -1,493 +1,397 @@
-# ✅ **UPDATED `iiinb_py_struc_pgm.md` — One‑Stop IIInB Programming Reference**
+# 20.101.PY.IIINB – Python structural program for IIInB primitive
 
-## IIInB Structured Programming Guidance  
-### (Python & C++ Implementation Reference)
+> Canonical structural specification for the Python implementation of the **IIInB** primitive, aligned with:
+> - 20.101_iiinb_prim.md (conceptual primitive spec)
+> - 20.15_ts_architecture_scaffold.md (architecture and replay invariants)
+> - 20.105_tp_requirements.md (TP envelope requirements)
+> - 20.105.010_tp_meta_fields.md (meta‑field naming)
+> - 20.105.020_tp_meta_provenance.md (provenance)
+> - 20.105.030_tp_meta_usage.md (usage constraints)
+> - system_playground/testbenches/progressive_lineup_testing.md (progressive lineup tests)
+> - system_playground/primitives/iiinb/iiinb.py (mechanical implementation)
+> - system_playground/testbenches/path_a/intake/iiinb_testbench.yaml / iiinb_testbench.py (testbench contract)
 
-This document is the **canonical programming blueprint** for implementing the **IIInB primitive** in Python or C++.  
-It synchronizes:
-
-- `iiinb.py`  
-- `iiinb_testbench.yaml`  
-- `iiinb_testbench.py`  
-- `run.py`  
-- `20.101_iiinb_prim.md`
-
-Everything required to understand IIInB’s behavior, rule ordering, and pipeline role is here.
-
----
-
-# 1. IIInB’s Role in the Pipeline
-
-IIInB is the **Input Inference / Repair Basin** for Path‑A.
-
-It receives:
-
-- `TP.raw_input` (surface string)  
-- `TP.tokens` (optional token list from InB)
-
-It produces:
-
-- `tp.metadata["iiinb_status"]`  
-- `tp.repair_operations`  
-- `tp.anomaly_flags`  
-- `tp.normalized`  
-- `tp.tokens` (preserved or derived)
-
-IIInB is:
-
-- **pre‑semantic**  
-- **deterministic**  
-- **replayable**  
-- **stateless**  
-- **pure**  
-- **bounded** (no semantic inference)
+This document is **normative** for the Python structural program of IIInB. Any change to IIInB behavior, TP envelope shape, or replay semantics **MUST** be reflected here and synchronized with the documents listed above.
 
 ---
 
-# 2. Public API (Python & C++)
+## 1. Canonical synchronization set (required)
 
-The testbench calls IIInB exactly like this:
+**Synchronization set for IIInB:**
 
-```python
-tp = IIInB(tp)
-tp.inspect()
-```
+- **Conceptual primitive spec:**  
+  - `thought_simulator/requirements_20/20.101_iiinb_prim.md`
+- **Architecture scaffold:**  
+  - `thought_simulator/requirements_20/20.15_ts_architecture_scaffold.md`
+- **TP envelope requirements:**  
+  - `thought_simulator/requirements_20/20.105_tp_requirements.md`
+  - `thought_simulator/requirements_20/20.105.010_tp_meta_fields.md`
+  - `thought_simulator/requirements_20/20.105.020_tp_meta_provenance.md`
+  - `thought_simulator/requirements_20/20.105.030_tp_meta_usage.md`
+- **System playground & testbenches:**  
+  - `thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb.py`
+  - `thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md` (this file)
+  - `thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.yaml`
+  - `thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.py`
+  - `thought_simulator/requirements_20/system_playground/testbenches/progressive_lineup_testing.md`
 
-IIInB must expose:
+**Normative rule:**
 
-### Required fields:
+- **MUST:** Any change to IIInB’s:
+  - TP envelope shape,
+  - rule ordering,
+  - token handling,
+  - metadata behavior,
+  - replay semantics,
+  - or testbench expectations  
+  **MUST** be synchronized across all items in this set.
+- **MUST NOT:** Modify IIInB in isolation. Unsynchronized changes are considered **invalid** and **non‑compliant**.
 
-- `metadata["iiinb_status"]`
-- `repair_operations`
-- `anomaly_flags`
-- `normalized`
-- `tokens`
+---
 
-### Required method:
+## 2. TP envelope compliance (20.105 / 20.15)
 
-```python
-def inspect(self):
-    # populate fields above
-```
+IIInB is a **pre‑semantic primitive** that operates on intake text and produces a **TP envelope**. The TP envelope is the only artifact consumed by downstream pipeline stages.
 
-### Required behavior:
+### 2.1 Dict‑only TP envelope
 
-- IIInB **must not** modify TP metadata except `iiinb_status`.
-- IIInB **must not** apply repairs to TP fields other than `normalized` and `tokens`.
+- **MUST:** IIInB **MUST** output a **Python `dict`** representing the TP envelope.
+- **MUST:** The TP envelope **MUST** be:
+  - JSON‑serializable,
+  - stable under replay,
+  - free of non‑deterministic fields (no timestamps, random IDs, etc.).
+- **MUST:** Any Python wrapper class or helper object is **pure convenience** and **MUST NOT** be relied upon by downstream primitives. Downstream code consumes only the **dict**.
+- **MUST:** The TP envelope shape **MUST** be identical across:
+  - Python implementation (`iiinb.py`),
+  - C++ implementation (see §9).
 
-### **2.1 TP Envelope Shape — Dictionary Only (Required by 20.105 & 20.15)**  
-IIInB participates in the Path‑A pipeline by consuming and producing a **TP envelope**.  
-Per **20.105 TP Requirements** and **20.15 Architecture Scaffold**, the TP envelope:
+### 2.2 Canonical TP output schema
 
-- **MUST be a dictionary**, not a class instance  
-- **MUST be serializable** (YAML/JSON)  
-- **MUST be deterministic and replay‑stable**  
-- **MUST contain explicit, named fields**  
-- **MUST be identical across Python and C++ implementations**  
-- **MUST be the only cross‑primitive interface**
-
-Therefore:
-
-### **IIInB MUST output a TP dictionary, not an object.**  
-Even though the Python wrapper class `IIInB` exposes convenience attributes (`metadata`, `repair_operations`, etc.), the **pipeline must extract these fields into a pure dictionary** before passing the TP downstream.
-
-This ensures:
-
-- IE receives a dict and can safely call `.get(...)`  
-- downstream primitives (CEx, CE, ISc, TPU) receive a valid TP envelope  
-- YAML testbenches remain compatible  
-- replay determinism is preserved  
-- C++ and Python pipelines behave identically  
-
-### **Required TP Output Format**
-
-IIInB must produce a dictionary shaped exactly like:
+The canonical TP envelope produced by IIInB **MUST** have the following shape:
 
 ```python
-{
-    "iiinb_status": <str>,
-    "repair_operations": <list>,
-    "anomaly_flags": <list>,
-    "normalized": <str>,
-    "tokens": <list>
+iiinb_tp_envelope = {
+    "iiinb_status": str,        # status string for IIInB processing
+    "repair_operations": list,  # list of repair operation descriptors
+    "anomaly_flags": list,      # list of anomaly flags
+    "normalized": str,          # normalized surface string
+    "tokens": list,             # list of token strings (from original surface)
 }
 ```
 
-Section 2.1 is:
+**Normative constraints:**
 
-- fully aligned with **20.105 TP Requirements**  
-- fully aligned with **20.15 Architecture Scaffold**  
-- consistent with your actual implementation in `iiinb.py`  
-- consistent with your IE crash (which happened because IE received an object)  
-- consistent with your testbench design  
-- consistent with your pipeline design  
-- consistent with your C++/Python parity requirements  
-
-It also fits naturally into the document’s tone and structure.
+- **MUST:** All five fields **MUST** be present in every TP envelope produced by IIInB.
+- **MUST:** Field names **MUST** match exactly as above (no renaming, no casing changes).
+- **MUST:** Types **MUST** match:
+  - `iiinb_status`: `str`
+  - `repair_operations`: `list`
+  - `anomaly_flags`: `list`
+  - `normalized`: `str`
+  - `tokens`: `list`
+- **MUST NOT:** Add extra top‑level fields to the IIInB TP envelope without updating:
+  - 20.105_tp_requirements.md
+  - 20.105.010_tp_meta_fields.md
+  - 20.105.020_tp_meta_provenance.md
+  - 20.105.030_tp_meta_usage.md
+  - this structural program
+  - and the testbenches.
 
 ---
 
-# 3. Intake Model
+## 3. TP meta‑field, provenance, and usage compliance
 
-IIInB receives:
+IIInB interacts with TP metadata and provenance under strict constraints.
+
+### 3.1 Meta‑fields (20.105.010)
+
+- **MUST:** IIInB may only write to the metadata field:
+  - `metadata["iiinb_status"]`
+- **MUST NOT:** IIInB **MUST NOT** create, rename, or delete any other metadata fields.
+- **MUST:** The meaning of `iiinb_status` **MUST** be consistent with 20.101_iiinb_prim.md:
+  - e.g., `"ok"`, `"repaired"`, `"anomaly_detected"`, etc., as defined there.
+- **MUST:** Any change to allowed status values **MUST** be documented in:
+  - 20.101_iiinb_prim.md
+  - 20.105.010_tp_meta_fields.md
+  - this structural program
+  - and reflected in testbenches.
+
+### 3.2 Provenance (20.105.020)
+
+- **MUST:** `repair_operations` and `anomaly_flags` **MUST** be interpretable as provenance:
+  - Each entry describes **what** was detected or repaired,
+  - and **where** (position, token index, or other stable reference).
+- **MUST:** Provenance entries **MUST** be deterministic and reproducible under replay.
+- **MUST NOT:** Use opaque, non‑reproducible identifiers (e.g., random IDs, hash of full text) without explicit specification in 20.105.020.
+
+### 3.3 Usage constraints (20.105.030)
+
+- **MUST:** IIInB’s TP envelope is intended for:
+  - deterministic replay,
+  - pre‑semantic intake normalization,
+  - anomaly and repair tracking.
+- **MUST NOT:** IIInB **MUST NOT**:
+  - perform semantic inference,
+  - interpret user intent,
+  - modify meaning of the text.
+- **MUST:** Downstream usage of IIInB’s envelope **MUST** respect:
+  - no semantic commitments,
+  - no probabilistic interpretation of `iiinb_status`,
+  - no hidden state.
+
+---
+
+## 4. Behavior and forbidden actions (20.101 alignment)
+
+IIInB is a **pre‑semantic primitive** defined in 20.101_iiinb_prim.md. This structural program enforces that conceptual spec.
+
+### 4.1 Allowed behavior
+
+- **MUST:** Operate only on:
+  - intake surface string,
+  - tokenization derived from that surface,
+  - simple structural repairs (spacing, casing, basic normalization).
+- **MUST:** Produce:
+  - `normalized` as a structurally repaired surface,
+  - `tokens` as a tokenization of the **original** surface (see §5),
+  - `repair_operations` and `anomaly_flags` describing structural changes/detections.
+
+### 4.2 Forbidden behavior
+
+- **MUST NOT:** Perform semantic repairs (e.g., rephrasing, summarizing, translating).
+- **MUST NOT:** Infer user intent or meaning.
+- **MUST NOT:** Introduce new content not present in the original surface.
+- **MUST NOT:** Drop tokens or content unless explicitly allowed by 20.101_iiinb_prim.md and documented as a repair operation.
+- **MUST:** Any behavior change that touches semantics **MUST** be rejected and treated as non‑compliant.
+
+---
+
+## 5. Token preservation and provenance (20.105 alignment)
+
+Token handling is critical for replay and provenance.
+
+### 5.1 Token source
+
+- **MUST:** `tokens` **MUST** be derived from the **original intake surface**, not from `normalized`.
+- **MUST:** Tokenization rules **MUST** be stable and documented in 20.101_iiinb_prim.md.
+- **MUST:** Python and C++ implementations **MUST** use equivalent tokenization rules so that:
+  - token sequences are identical,
+  - indices and provenance references remain valid across languages.
+
+### 5.2 Token preservation
+
+- **MUST:** IIInB **MUST** preserve the full token sequence of the original surface, except where:
+  - a repair operation explicitly removes or merges tokens,
+  - and that operation is recorded in `repair_operations`.
+- **MUST NOT:** Silently drop or reorder tokens.
+- **MUST:** Any change to tokenization or preservation rules **MUST** be:
+  - documented in 20.101_iiinb_prim.md,
+  - reflected in 20.105_tp_requirements.md,
+  - synchronized with testbenches and this structural program.
+
+---
+
+## 6. Replay determinism (20.15 / 20.105.030)
+
+IIInB participates in the deterministic replay chain defined in 20.15_ts_architecture_scaffold.md.
+
+### 6.1 Deterministic behavior
+
+- **MUST:** Given the same intake surface and configuration, IIInB **MUST** produce:
+  - the same `normalized` string,
+  - the same `tokens` list,
+  - the same `repair_operations`,
+  - the same `anomaly_flags`,
+  - the same `iiinb_status`.
+- **MUST NOT:** Depend on:
+  - wall‑clock time,
+  - random number generators,
+  - external services,
+  - global mutable state.
+
+### 6.2 Replay chain integration
+
+- **MUST:** IIInB’s TP envelope **MUST** be sufficient to:
+  - reconstruct its behavior during replay,
+  - verify that progressive lineup tests (see §7) remain stable.
+- **MUST:** Any change that affects replay determinism **MUST** be:
+  - documented in 20.15_ts_architecture_scaffold.md,
+  - reflected in 20.105.030_tp_meta_usage.md,
+  - synchronized with testbenches and this structural program.
+
+---
+
+## 7. Progressive lineup compliance
+
+`progressive_lineup_testing.md` defines how primitives, including IIInB, are sequenced and tested.
+
+### 7.1 Rule ordering and lineup stability
+
+- **MUST:** IIInB’s internal rule ordering (e.g., normalization steps, anomaly checks) **MUST** be stable.
+- **MUST:** Progressive lineup tests rely on:
+  - fixed ordering of primitives,
+  - fixed ordering of IIInB’s internal rules.
+- **MUST:** Any change to rule ordering **MUST**:
+  - update `progressive_lineup_testing.md`,
+  - update `iiinb_testbench.yaml` and `iiinb_testbench.py`,
+  - be documented in this structural program.
+
+### 7.2 Statelessness
+
+- **MUST:** IIInB **MUST** be stateless across calls:
+  - no accumulation of state between invocations,
+  - no dependence on previous inputs.
+- **MUST:** Progressive lineup tests **MUST** be able to:
+  - run IIInB multiple times in sequence,
+  - obtain identical results for identical inputs.
+
+---
+
+## 8. Python structural program
+
+This section describes the expected Python structure for IIInB, consistent with `iiinb.py`.
+
+### 8.1 High‑level interface
+
+IIInB’s Python implementation **SHOULD** expose a primary function or class method with the following shape:
 
 ```python
-surface = tp.raw_input or tp.surface
-tokens = tp.tokens  # may be empty
+def run_iiinb(intake_surface: str, metadata: dict | None = None) -> dict:
+    """
+    Run the IIInB primitive on the given intake surface.
+
+    Parameters
+    ----------
+    intake_surface : str
+        Original intake text (pre-semantic).
+    metadata : dict | None
+        Optional metadata dict. IIInB may only write to metadata["iiinb_status"].
+
+    Returns
+    -------
+    iiinb_tp_envelope : dict
+        {
+            "iiinb_status": str,
+            "repair_operations": list,
+            "anomaly_flags": list,
+            "normalized": str,
+            "tokens": list,
+        }
+    """
+    ...
 ```
 
-Rules:
+### 8.2 Optional wrapper class
 
-- If `tokens` is empty, IIInB derives tokens from the **original surface**, not the normalized string.
-- Token order must be preserved.
-- IIInB operates primarily on **surface**, not token objects.
-
----
-
-# 4. Deterministic Rule Ordering  
-### (This ordering is enforced by `iiinb_testbench.yaml`)
-
-IIInB must apply rules in **exactly this order**:
-
-1. **Length guard**  
-2. **Structural cleanup** (`<broken>`)  
-3. **Whitespace normalization**  
-4. **Punctuation cleanup** (`!!!`, `,,`)  
-5. **Shorthand expansion** (`plz → please`)  
-6. **Repetition collapse**  
-7. **Spelling repairs** (`hte → the`, `rd → red`)  
-8. **Unicode noise removal** (`�`)  
-9. **Illegal character anomaly detection**  
-10. **Case normalization**  
-    - Only when **original surface** starts with `"the "`  
-    - Never after spelling repair
-
-This ordering is mandatory for deterministic replay and matches all 15/15 passing tests.
-
----
-
-# 5. Repair Operations
-
-Repair operations are **surface‑based**, not token‑based.
-
-Each repair operation is a dict:
-
-```python
-{
-    "type": "<rule>",
-    "target": "<surface substring>",
-    "proposal": "<replacement>"
-}
-```
-
-Examples:
-
-- `"whitespace.normalized"`  
-- `"punctuation.cleaned"`  
-- `"shorthand.expanded"`  
-- `"spelling.transposed"`  
-- `"spelling.missing"`  
-- `"repetition.cleaned"`  
-- `"unicode.normalized"`  
-- `"structural.cleaned"`  
-- `"case.normalized"`
-
-Repair operations must appear in the order rules are applied.
-
----
-
-# 6. Anomaly Flags
-
-Anomaly flags detect illegal characters:
-
-```python
-{
-    "type": "illegal_character.unknown",
-    "target": "<char>",
-    "location": <index>
-}
-```
-
-### Deterministic location rule:
-
-Location = count of **non‑space characters** before the anomaly in `normalized`.
-
-This matches:
-
-- `multi.anomalies.illegal`  
-- `mixed.repairs.anomalies`
-
----
-
-# 7. Unicode Handling
-
-Invalid Unicode characters (`�`) must produce:
-
-- a `"unicode.normalized"` repair operation  
-- removal from `normalized`  
-- **no anomaly flag**
-
-Required by:
-
-- `unicode.noise`  
-- `replay.determinism`
-
----
-
-# 8. Case Normalization
-
-Case normalization is **extremely narrow**:
-
-- Only trigger when **original surface** starts with `"the "`  
-- Replace `"the "` with `"The "`
-
-Required by:
-
-- `token.preservation`
-
-IIInB must **not** perform semantic capitalization.
-
----
-
-# 9. Long Input Guard
-
-If `len(surface) > 1000`:
-
-- `normalized = ""`
-- `tokens = []`
-- no repairs  
-- no anomalies
-
-Required by:
-
-- `long.input`
-
----
-
-# 10. Token Preservation
-
-If tokens are provided:
-
-- IIInB must preserve them.
-
-If tokens are missing:
-
-- IIInB must derive tokens from the **original surface**, not the normalized string.
-
-Required by:
-
-- `token.preservation`
-
----
-
-# 11. Determinism & Replayability
-
-IIInB must produce identical output for identical input.
-
-Required by:
-
-- `replay.determinism`
-
-This means:
-
-- no randomness  
-- no time‑based behavior  
-- no global state  
-- no nondeterministic iteration  
-- no semantic inference
-
----
-
-# 12. Forbidden Behavior
-
-IIInB must not:
-
-- infer meaning  
-- interpret intent  
-- perform semantic casing  
-- reorder tokens  
-- drop tokens (except invalid Unicode)  
-- merge repairs  
-- perform context‑dependent shorthand expansion  
-- access TP.process, CE, CIL, semantic_core, OB
-
----
-
-# 13. Implementation Skeleton (Python)
+A convenience wrapper class is allowed but **MUST** respect the dict‑only envelope requirement:
 
 ```python
 class IIInB:
-    def __init__(self, tp):
-        self._tp = tp
-        self.metadata = {}
-        self.repair_operations = []
-        self.anomaly_flags = []
-        self.normalized = ""
-        self.tokens = getattr(tp, "tokens", [])
+    def __init__(self, config: dict | None = None):
+        self._config = config or {}
 
-    def inspect(self):
-        surface = getattr(self._tp, "raw_input", "") or getattr(self._tp, "surface", "")
-        tokens = getattr(self._tp, "tokens", [])
+    def process(self, intake_surface: str, metadata: dict | None = None) -> dict:
+        # Internal steps:
+        # 1. Tokenize original surface -> tokens
+        # 2. Detect anomalies -> anomaly_flags
+        # 3. Apply structural repairs -> normalized, repair_operations
+        # 4. Set iiinb_status in metadata (if provided)
+        # 5. Build and return TP envelope dict
 
-        result = iiinb_inspect({"surface": surface, "tokens": tokens})
-
-        self.metadata["iiinb_status"] = result["iiinb_status"]
-        self.repair_operations = result["repair_operations"]
-        self.anomaly_flags = result["anomaly_flags"]
-        self.normalized = result["normalized"]
-        self.tokens = result["tokens"]
-
-        self.repairs = self.repair_operations
-        self.anomalies = self.anomaly_flags
-
-        return self
+        iiinb_tp_envelope = {
+            "iiinb_status": "...",
+            "repair_operations": [],
+            "anomaly_flags": [],
+            "normalized": "...",
+            "tokens": [],
+        }
+        return iiinb_tp_envelope
 ```
 
----
+**Normative constraints:**
 
-# 14. Implementation Skeleton (C++)
-
-Equivalent structure:
-
-- `class IIInB`  
-- constructor receives TP  
-- `inspect()` populates:  
-  - `metadata["iiinb_status"]`  
-  - `repair_operations`  
-  - `anomaly_flags`  
-  - `normalized`  
-  - `tokens`
-
-All rule logic mirrors Python version.
+- **MUST:** `process` (or equivalent) **MUST** return the canonical TP envelope dict.
+- **MUST NOT:** Expose additional mutable state that affects determinism.
+- **MUST:** Any structural change to this interface **MUST** be reflected in:
+  - `iiinb.py`,
+  - testbenches,
+  - and this structural program.
 
 ---
 
-# 15. Change Management
+## 9. C++ parity requirements
 
-When IIInB evolves:
+IIInB has or may have a C++ implementation. Cross‑language parity is required.
 
-- add new rules as new functions  
-- update rule ordering deterministically  
-- update testbench if behavior changes  
-- update this document  
-- update `20.101_iiinb_prim.md`
+### 9.1 Envelope parity
 
-This document is the authoritative programming reference.
+- **MUST:** Python and C++ implementations **MUST** produce **bit‑identical** TP envelopes after serialization:
+  - same field names,
+  - same field ordering (where relevant),
+  - same values.
+- **MUST:** Tokenization and normalization rules **MUST** be aligned so that:
+  - `normalized` strings match,
+  - `tokens` lists match.
 
----
+### 9.2 Replay and testbench parity
 
-# **16. Reference Documents (Canonical IIInB Synchronization Set)**
-
-To safely modify IIInB in the future — without breaking determinism, replayability, or testbench alignment — the following four documents form the complete, synchronized contract for IIInB.  
-These documents define the **spec**, **blueprint**, **expected behavior**, and **execution harness**.
-
-Each link points to the authoritative version in the repository.
-
----
-
-### **16.1 Structured Programming Blueprint**  
-#### *`iiinb_py_struc_pgm.md`*  
-**URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/primitives/iiinb/iiinb_py_struc_pgm.md)  
-
-**Purpose:**  
-This document (the one you are reading) is the **one‑stop programming reference** for IIInB.  
-It defines:
-
-- rule ordering  
-- repair/anomaly semantics  
-- determinism and replayability constraints  
-- token‑preservation rules  
-- case‑normalization invariants  
-- forbidden behaviors  
-- Python/C++ API shape  
-- change‑management rules  
-
-This is the **top‑level blueprint** for IIInB implementation.
+- **MUST:** Progressive lineup tests and replay tests **MUST** be able to:
+  - swap Python and C++ implementations of IIInB,
+  - obtain identical results for identical inputs.
+- **MUST:** Any divergence between Python and C++ behavior **MUST** be treated as a bug and resolved by:
+  - updating both implementations,
+  - updating this structural program,
+  - and, if necessary, updating 20.101 and 20.15.
 
 ---
 
-### **16.2 Formal Primitive Specification**  
-#### *`20.101_iiinb_prim.md`*  
-**URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator/requirements_20/20.101_iiinb_prim.md](https://github.com/CuriousOne23/WhenMathPrays/edit/main/thought_simulator/requirements_20/20.101_iiinb_prim.md)  
+## 10. Change‑management rules
 
-**Purpose:**  
-Defines the **conceptual responsibilities** of IIInB:
+### 10.1 Required synchronization
 
-- pre‑semantic boundary  
-- deterministic constraints  
-- primitive‑level invariants  
-- high‑level rule semantics  
-- architectural role in Path‑A  
+Any change to IIInB **MUST** be accompanied by:
 
-This is the **behavioral spec** independent of code.
+- **Conceptual update:**  
+  - 20.101_iiinb_prim.md
+- **Architecture update (if replay or pipeline affected):**  
+  - 20.15_ts_architecture_scaffold.md
+- **TP envelope and meta update (if fields or usage affected):**  
+  - 20.105_tp_requirements.md  
+  - 20.105.010_tp_meta_fields.md  
+  - 20.105.020_tp_meta_provenance.md  
+  - 20.105.030_tp_meta_usage.md
+- **System playground update:**  
+  - `iiinb.py`  
+  - `iiinb_py_struc_pgm.md` (this file)
+- **Testbench update:**  
+  - `iiinb_testbench.yaml`  
+  - `iiinb_testbench.py`  
+  - `progressive_lineup_testing.md`
 
----
+### 10.2 Prohibited unsynchronized changes
 
-### **16.3 Behavioral Contract (Expected Outputs)**  
-#### *`iiinb_testbench.yaml`*  
-**URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.yaml](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.yaml)  
-
-**Purpose:**  
-Defines the **exact expected outputs** for all IIInB tests:
-
-- repair operations  
-- anomaly flags  
-- normalized output  
-- token output  
-- rule ordering  
-- long‑input behavior  
-- replay determinism  
-
-This file is the **ground truth for IIInB behavior**.
+- **MUST NOT:** Modify IIInB’s behavior, envelope shape, or replay semantics in:
+  - `iiinb.py`,
+  - C++ implementation,
+  - or testbenches  
+  without updating this structural program and the synchronization set.
+- **MUST:** Treat any unsynchronized change as **non‑compliant** and subject to rollback.
 
 ---
 
-### **16.4 Mechanical Contract (Execution Harness)**  
-#### *`iiinb_testbench.py`*  
-**URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.py](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/path_a/intake/iiinb_testbench.py)  
+## 11. Summary
 
-**Purpose:**  
-Defines how IIInB is:
+IIInB’s Python structural program:
 
-- instantiated  
-- executed (`IIInB(tp).inspect()`)  
-- validated  
-- compared against YAML expectations  
-- diagnosed with detailed mismatch logs  
+- Defines a **dict‑only**, deterministic TP envelope.
+- Aligns with 20.101 (concept), 20.15 (architecture), and 20.105 (TP requirements).
+- Enforces:
+  - strict meta‑field and provenance rules,
+  - token preservation from original surface,
+  - replay determinism,
+  - progressive lineup stability,
+  - Python/C++ parity.
+- Requires synchronized change‑management across the full canonical set.
 
-This is the **execution model** for IIInB.
-
----
-
-### **16.5 Optional: Pipeline Runner**  
-#### *`run.py`*  
-**URL:**  
-[https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/run.py](https://github.com/CuriousOne23/WhenMathPrays/blob/main/thought_simulator/requirements_20/system_playground/testbenches/run.py)  
-
-**Purpose:**  
-Controls:
-
-- which testbenches run  
-- upstream/downstream primitive toggles  
-- injection of configuration into testbenches  
-
-Useful when modifying pipeline flow or test selection.
-
----
-
-# **Summary**
-
-To modify IIInB safely and deterministically, read these four documents:
-
-1. **iiinb_py_struc_pgm.md** — blueprint  
-2. **20.101_iiinb_prim.md** — conceptual spec  
-3. **iiinb_testbench.yaml** — expected behavior  
-4. **iiinb_testbench.py** — execution harness  
-
-These documents together define the **complete IIInB universe**.
-
----
+This file is the **authoritative structural contract** for IIInB in Python. Any implementation or testbench **MUST** conform to it.
+```
