@@ -18,39 +18,39 @@ inputs:
     raw_input: "I enjoyed a café latte today."
 
   # ------------------------------------------------------------
-  # 2. Spacing Anomalies
+  # 2. Spacing Repairs
   # ------------------------------------------------------------
-
+  
   - id: spacing_double
-    description: "Two spaces — should trigger spacing anomaly."
+    description: "Two spaces — IIInB should normalize spacing."
     raw_input: "The  dog ran."
-
+  
   - id: spacing_triple
-    description: "Three spaces — should trigger spacing anomaly."
+    description: "Three spaces — IIInB should normalize spacing."
     raw_input: "Hello   world"
-
+  
   - id: spacing_leading
-    description: "Leading whitespace — should trigger spacing.leading."
+    description: "Leading whitespace — IIInB should normalize spacing."
     raw_input: "   Leading spaces here"
-
+  
   - id: spacing_trailing
-    description: "Trailing whitespace — should trigger spacing.trailing."
+    description: "Trailing whitespace — IIInB should normalize spacing."
     raw_input: "Trailing spaces here   "
 
   # ------------------------------------------------------------
-  # 3. Repeated Punctuation
+  # 3. Punctuation Repairs
   # ------------------------------------------------------------
-
+  
   - id: repeated_exclamation
-    description: "Repeated exclamation — should trigger repeated punctuation."
+    description: "Repeated exclamation — IIInB should normalize punctuation."
     raw_input: "Stop!!"
-
+  
   - id: repeated_question
-    description: "Repeated question marks — should trigger repeated punctuation."
+    description: "Repeated question marks — IIInB should normalize punctuation."
     raw_input: "What??"
-
+  
   - id: ellipsis_cluster
-    description: "Ellipsis cluster — should trigger repeated punctuation."
+    description: "Ellipsis cluster — IIInB should normalize punctuation."
     raw_input: "Wait...Really..."
 
   # ------------------------------------------------------------
