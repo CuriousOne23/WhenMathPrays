@@ -350,4 +350,20 @@ def validate_iiinb(tp):
 
     return anomalies
 
+def check_spacing(tp):
+    return []
+
+def check_punctuation(tp):
+    return []
+
+def check_control_chars(tp):
+    return []
+
+def check_normalization(tp):
+    return []
+
+def check_deterministic(tp):
+    return []
+
+
 
