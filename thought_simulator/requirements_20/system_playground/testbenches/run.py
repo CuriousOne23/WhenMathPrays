@@ -45,27 +45,13 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
         {
-            "use_inb": False,   # We are testing IIInB → upstream InB is ignored
-            "use_iiinb": True,  # Primitive under test
-            "use_ie": False,    # Downstream IE ignored
-
-            "tests_to_run": {
-                "clean.simple": "Yes",
-                "unicode.noise": "Yes",
-                "structural.break": "Yes",
-                "empty.input": "Yes",
-                "long.input": "Yes",
-                "repeating.letters": "Yes",
-                "shorthand.plz": "Yes",
-                "misspelling.transposition": "Yes",
-                "misspelling.missing": "Yes",
-                "multi.repairs.surface": "Yes",
-                "multi.anomalies.illegal": "Yes",
-                "mixed.repairs.anomalies": "Yes",
-                "structural.surface.mixed": "Yes",
-                "token.preservation": "Yes",
-                "replay.determinism": "Yes"
-            }
+            "mode": "testbench",   # or "general"
+            "use_inb": False,      # Upstream InB ignored
+            "use_iiinb": True,     # Primitive under test
+            "use_ie": False,       # Downstream IE ignored
+    
+            # Test selection is now controlled by iiinb_tests_to_run.yaml
+            "tests_to_run": "see iiinb_tests_to_run.yaml"
         }
     ),
     # **************************** IE Test bench ******************************************************
