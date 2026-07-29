@@ -1,1 +1,212 @@
+# =====================================================================
+# IIInB Primitive – Canonical Rule Set
+# Deterministic structural rules for intake normalization and anomaly
+# detection, aligned with:
+#   - 20.101_iiinb_prim.md
+#   - 20.15_ts_architecture_scaffold.md
+#   - 20.105 TP Requirements (010/020/030)
+#   - iiinb_py_struc_pgm.md (structural program)
+#   - iiinb_rulechecker.py (mechanical validator)
+#   - progressive_lineup_testing.md (lineup determinism)
+# =====================================================================
+
+iiinb_rules:
+  version: "1.0.0"
+  primitive: "IIInB"
+  determinism: "strict"
+
+  # -------------------------------------------------------------------
+  # RULE ORDERING (MUST remain stable)
+  # -------------------------------------------------------------------
+  # The rule ordering below is canonical. Any change requires updates to:
+  #   - iiinb_py_struc_pgm.md
+  #   - 20.101_iiinb_prim.md
+  #   - progressive_lineup_testing.md
+  #   - iiinb_testbench.yaml
+  # -------------------------------------------------------------------
+
+  rule_order:
+    - tokenize_original_surface
+    - detect_spacing_anomalies
+    - detect_control_characters
+    - detect_repeated_punctuation
+    - normalize_whitespace
+    - normalize_basic_punctuation
+    - normalize_case_if_required
+    - finalize_normalized_surface
+
+  # -------------------------------------------------------------------
+  # RULE DEFINITIONS
+  # -------------------------------------------------------------------
+
+  rules:
+
+    # ---------------------------------------------------------------
+    # 1. Tokenization (original surface only)
+    # ---------------------------------------------------------------
+    tokenize_original_surface:
+      description: >
+        Tokenize the original intake surface using deterministic,
+        language‑agnostic structural tokenization. Tokens MUST come
+        from the original surface, not the normalized surface.
+      produces:
+        - tokens
+      forbidden:
+        - semantic_splitting
+        - semantic_merging
+      provenance:
+        type: "tokenization"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 2. Spacing anomalies
+    # ---------------------------------------------------------------
+    detect_spacing_anomalies:
+      description: >
+        Detect structural spacing anomalies such as multiple spaces,
+        missing spaces after punctuation, or irregular spacing patterns.
+      produces:
+        - anomaly_flags
+      anomaly_types:
+        - multiple_spaces
+        - missing_space_after_punctuation
+        - leading_or_trailing_space
+      provenance:
+        type: "anomaly"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 3. Control characters
+    # ---------------------------------------------------------------
+    detect_control_characters:
+      description: >
+        Detect forbidden control characters (ASCII < 32 except allowed
+        whitespace). No semantic interpretation is permitted.
+      produces:
+        - anomaly_flags
+      anomaly_types:
+        - control_char_found
+      provenance:
+        type: "anomaly"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 4. Repeated punctuation
+    # ---------------------------------------------------------------
+    detect_repeated_punctuation:
+      description: >
+        Detect repeated punctuation sequences (e.g., "!!", "??", "...").
+        No semantic interpretation is permitted.
+      produces:
+        - anomaly_flags
+      anomaly_types:
+        - repeated_punctuation
+      provenance:
+        type: "anomaly"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 5. Normalize whitespace
+    # ---------------------------------------------------------------
+    normalize_whitespace:
+      description: >
+        Apply deterministic whitespace normalization: collapse multiple
+        spaces, remove leading/trailing spaces, ensure single spaces
+        between tokens.
+      produces:
+        - normalized
+        - repair_operations
+      provenance:
+        type: "repair"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 6. Normalize basic punctuation
+    # ---------------------------------------------------------------
+    normalize_basic_punctuation:
+      description: >
+        Apply structural punctuation normalization (e.g., convert
+        repeated punctuation to single canonical punctuation).
+      produces:
+        - normalized
+        - repair_operations
+      provenance:
+        type: "repair"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 7. Normalize case (if required)
+    # ---------------------------------------------------------------
+    normalize_case_if_required:
+      description: >
+        Apply deterministic case normalization ONLY if required by
+        20.101_iiinb_prim.md. No semantic case changes allowed.
+      produces:
+        - normalized
+        - repair_operations
+      provenance:
+        type: "repair"
+        deterministic: true
+
+    # ---------------------------------------------------------------
+    # 8. Finalize normalized surface
+    # ---------------------------------------------------------------
+    finalize_normalized_surface:
+      description: >
+        Produce the final normalized surface string. MUST be stable
+        under replay and identical across Python/C++ implementations.
+      produces:
+        - normalized
+      provenance:
+        type: "finalization"
+        deterministic: true
+
+  # -------------------------------------------------------------------
+  # TP ENVELOPE REQUIREMENTS (20.105)
+  # -------------------------------------------------------------------
+  tp_envelope:
+    required_fields:
+      - iiinb_status
+      - repair_operations
+      - anomaly_flags
+      - normalized
+      - tokens
+    field_types:
+      iiinb_status: str
+      repair_operations: list
+      anomaly_flags: list
+      normalized: str
+      tokens: list
+    metadata:
+      allowed_write_fields:
+        - iiinb_status
+      forbidden_write_fields: "*"
+
+  # -------------------------------------------------------------------
+  # FORBIDDEN BEHAVIOR (20.101 / 20.105.030)
+  # -------------------------------------------------------------------
+  forbidden_behavior:
+    - semantic_inference
+    - semantic_repair
+    - content_generation
+    - token_dropping_without_provenance
+    - nondeterministic_operations
+    - external_state_dependency
+
+  # -------------------------------------------------------------------
+  # REPLAY DETERMINISM (20.15)
+  # -------------------------------------------------------------------
+  replay:
+    deterministic: true
+    stable_rule_order: true
+    stable_tokenization: true
+    stable_normalization: true
+
+  # -------------------------------------------------------------------
+  # PYTHON/C++ PARITY
+  # -------------------------------------------------------------------
+  parity:
+    cross_language_identical_output: true
+    tokenization_rules_must_match: true
+    normalization_rules_must_match: true
 
