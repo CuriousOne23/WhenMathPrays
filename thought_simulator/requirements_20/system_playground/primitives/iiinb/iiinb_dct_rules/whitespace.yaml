@@ -1,0 +1,6 @@
+# IIInB Dictionary Rules — Whitespace Normalization
+# Canonical family: whitespace.normalized
+
+rules:
+  # Collapse multiple spaces → single space
+  "  ": " "
