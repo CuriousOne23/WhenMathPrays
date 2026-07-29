@@ -29,45 +29,45 @@ ACTIVE_TEST_MODULES = [
     # **************************** InB Test bench ****************************************************
     # Highest upstream True = InB (primitive under test)
     # Pipeline: InB only, input from InB YAML
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-        {
-            "mode": "general",   # or "general"
-            "use_inb": True,
-            "use_iiinb": False,
-            "use_ie": False,
-            "tests_to_run": "see inb_tests_to_run.yaml"
-        }
-    ),
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+    #     {
+    #         "mode": "general",   # or "general"
+    #         "use_inb": True,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "tests_to_run": "see inb_tests_to_run.yaml"
+    #     }
+    # ),
     # **************************** IIInB Test bench ****************************************************
     # Highest upstream True = IIInB (primitive under test)
     # Pipeline: IIInB only, input from IIInB YAML
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
-    #     {
-    #         "use_inb": False,   # We are testing IIInB → upstream InB is ignored
-    #         "use_iiinb": True,  # Primitive under test
-    #         "use_ie": False,    # Downstream IE ignored
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
+        {
+            "use_inb": False,   # We are testing IIInB → upstream InB is ignored
+            "use_iiinb": True,  # Primitive under test
+            "use_ie": False,    # Downstream IE ignored
 
-    #         "tests_to_run": {
-    #             "clean.simple": "Yes",
-    #             "unicode.noise": "Yes",
-    #             "structural.break": "Yes",
-    #             "empty.input": "Yes",
-    #             "long.input": "Yes",
-    #             "repeating.letters": "Yes",
-    #             "shorthand.plz": "Yes",
-    #             "misspelling.transposition": "Yes",
-    #             "misspelling.missing": "Yes",
-    #             "multi.repairs.surface": "Yes",
-    #             "multi.anomalies.illegal": "Yes",
-    #             "mixed.repairs.anomalies": "Yes",
-    #             "structural.surface.mixed": "Yes",
-    #             "token.preservation": "Yes",
-    #             "replay.determinism": "Yes"
-    #         }
-    #     }
-    # ),
+            "tests_to_run": {
+                "clean.simple": "Yes",
+                "unicode.noise": "Yes",
+                "structural.break": "Yes",
+                "empty.input": "Yes",
+                "long.input": "Yes",
+                "repeating.letters": "Yes",
+                "shorthand.plz": "Yes",
+                "misspelling.transposition": "Yes",
+                "misspelling.missing": "Yes",
+                "multi.repairs.surface": "Yes",
+                "multi.anomalies.illegal": "Yes",
+                "mixed.repairs.anomalies": "Yes",
+                "structural.surface.mixed": "Yes",
+                "token.preservation": "Yes",
+                "replay.determinism": "Yes"
+            }
+        }
+    ),
     # **************************** IE Test bench ******************************************************
     # Highest upstream True = IE (primitive under test)
     # Pipeline: IE only, input from IE YAML
