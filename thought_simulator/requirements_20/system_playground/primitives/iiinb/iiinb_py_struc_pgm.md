@@ -379,7 +379,42 @@ Any change to IIInB **MUST** be accompanied by:
 
 ---
 
-## 11. Summary
+## 11. IIInB Input Playground Specification (iiinb_input.yaml)
+
+The file `iiinb_input.yaml` defines **developer‑driven exploratory inputs** for the IIInB primitive.  
+It is intentionally distinct from:
+
+- `iiinb_testbench.yaml` (formal test harness)
+- TP envelopes (runtime outputs)
+- metadata structures (pipeline‑level artifacts)
+
+This section specifies the **intent**, **structure**, and **content** of `iiinb_input.yaml` so that future developers can create and maintain it without ambiguity.
+
+### 11.1 Intent
+
+`iiinb_input.yaml` is a **pure anomaly playground** used for:
+
+- manual experimentation,
+- rule development,
+- debugging,
+- validating rule behavior outside the formal testbench.
+
+It is **not** a TP envelope, **not** a pipeline input, and **not** a testbench case list.  
+It mirrors the intent of `inb_input.yaml` in the InB primitive.
+
+### 11.2 Structure
+
+The file MUST contain a single top‑level key:
+
+```yaml
+inputs:
+  - id: <string>
+    description: <string>
+    raw_input: <string>
+
+---
+
+## 12. Summary
 
 IIInB’s Python structural program:
 
