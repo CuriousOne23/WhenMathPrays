@@ -9,6 +9,8 @@ Compliant with:
 - inb_testbench.yaml
 """
 
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import validate_inb
+
 def InB(tp_dict):
     """
     InB receives and returns a TP envelope dictionary.
@@ -40,7 +42,7 @@ def InB(tp_dict):
     audit = []
 
     # ------------------------------------------------------------
-    # Deterministic defect detection ordering
+    # Minimal deterministic defect detection (InB_v1)
     # ------------------------------------------------------------
 
     # 1. Empty input
@@ -58,12 +60,12 @@ def InB(tp_dict):
         defects.append("punctuation.excess")
         audit.append({"reason": "punctuation.excess"})
 
-    # 4. Unicode invalid
+    # 4. Unicode invalid (replacement char)
     if "�" in raw:
         defects.append("unicode.invalid")
         audit.append({"reason": "unicode.invalid"})
 
-    # 5. Structural malformed tokens
+    # 5. Structural malformed (literal match)
     if "<broken>" in raw:
         defects.append("structural.malformed")
         audit.append({"reason": "structural.malformed"})
@@ -72,16 +74,31 @@ def InB(tp_dict):
     # Metadata construction (deterministic, replay‑safe)
     # ------------------------------------------------------------
     metadata = tp_dict.get("metadata", {})
-    metadata.setdefault("signature_history", []).append("inb_v1")
+    metadata.setdefault("signature_history", []).append("inb_v2")
     metadata["intake_audit"] = audit
     metadata["inb_status"] = "accepted" if not defects else "degraded"
 
     # ------------------------------------------------------------
-    # Required TP output envelope
+    # Construct primitive output envelope (pre‑rulechecker)
     # ------------------------------------------------------------
-    return {
-        "surface": raw,          # No normalization — raw passthrough
-        "defects": defects,      # Ordered defect list
-        "tokens": tokens,        # Preserved tokens
-        "metadata": metadata     # Updated metadata
+    output = {
+        "surface": raw,
+        "defects": defects[:],   # copy for safety
+        "tokens": tokens,
+        "metadata": metadata,
+        "raw_input": raw         # required by rulechecker
     }
+
+    # ------------------------------------------------------------
+    # Apply rulechecker (InB_v2 enhancement)
+    # ------------------------------------------------------------
+    rule_defects = validate_inb(output)
+
+    # Merge primitive + rulechecker defects deterministically
+    merged = sorted(set(output["defects"] + rule_defects))
+    output["defects"] = merged
+
+    # Update degraded/accepted status
+    output["metadata"]["inb_status"] = "accepted" if not merged else "degraded"
+
+    return output
