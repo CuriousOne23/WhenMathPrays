@@ -58,24 +58,24 @@ iiinb_rules:
         type: "tokenization"
         deterministic: true
 
-  # ---------------------------------------------------------------
-  # 2. Normalize spacing (repair)
-  # ---------------------------------------------------------------
-  normalize_spacing:
-    description: >
-      Apply deterministic spacing normalization: collapse multiple
-      spaces, remove leading/trailing spaces, ensure single spaces
-      between tokens.
-    produces:
-      - normalized
-      - repair_operations
-    repair_types:
-      - multiple_spaces_collapsed
-      - missing_space_fixed
-      - leading_or_trailing_space_removed
-    provenance:
-      type: "repair"
-      deterministic: true
+    # ---------------------------------------------------------------
+    # 2. Normalize spacing (repair)
+    # ---------------------------------------------------------------
+    normalize_spacing:
+      description: >
+        Apply deterministic spacing normalization: collapse multiple
+        spaces, remove leading/trailing spaces, ensure single spaces
+        between tokens.
+      produces:
+        - normalized
+        - repair_operations
+      repair_types:
+        - multiple_spaces_collapsed
+        - missing_space_fixed
+        - leading_or_trailing_space_removed
+      provenance:
+        type: "repair"
+        deterministic: true
 
     # ---------------------------------------------------------------
     # 3. Control characters
