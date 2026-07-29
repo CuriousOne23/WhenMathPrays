@@ -414,7 +414,151 @@ inputs:
 
 ---
 
-## 12. Summary
+## 12. `iiinb_tests_to_run.yaml` — Purpose, Structure, Format, and Content
+
+`iiinb_tests_to_run.yaml` is the **rule‑family toggle file** for IIInB’s **testbench mode**.  
+It allows developers to selectively enable or disable groups of IIInB defect rules **without modifying the regression test cases themselves**.
+
+This file is **primitive‑specific**, just like:
+
+- `inb_tests_to_run.yaml`
+- `ie_tests_to_run.yaml`
+
+Each primitive defines its own rule families and its own toggle file.
+
+---
+
+### 12.1 Purpose
+
+`iiinb_tests_to_run.yaml` exists to support:
+
+- targeted regression testing  
+- rapid defect‑family isolation  
+- controlled debugging  
+- selective rule activation  
+- deterministic testbench behavior  
+- safe evolution of IIInB rule semantics  
+
+It allows developers to run only the rule families they care about **without editing iiinb_testbench.yaml**.
+
+This preserves the integrity of the regression suite.
+
+---
+
+### 12.2 Structure
+
+The file is a simple YAML dictionary:
+
+```yaml
+tests_to_run:
+  spacing: 1
+  punctuation: 1
+  control_chars: 1
+  normalization: 1
+  deterministic: 1
+```
+
+Each key is a **rule family**.  
+Each value is a **toggle**:
+
+- `1` → enabled  
+- `0` → disabled  
+
+---
+
+### 12.3 IIInB Rule Families
+
+Rule families are defined in `iiinb_rules.yaml`.
+
+| Family | Rules |
+|--------|-------|
+| `spacing` | `spacing.multiple_spaces`, `spacing.missing_space_after_punctuation`, `spacing.leading`, `spacing.trailing` |
+| `punctuation` | `punctuation.repeated`, `punctuation.cluster`, `punctuation.basic_normalization` |
+| `control_chars` | `control.tab`, `control.newline`, `control.mixed` |
+| `normalization` | `normalize.whitespace`, `normalize.punctuation`, `normalize.case` |
+| `deterministic` | `deterministic.replay`, `deterministic.no_external_state` |
+
+The testbench expands families → rule IDs using `iiinb_rules.yaml`.
+
+---
+
+### 12.4 How Testbench Mode Uses This File
+
+Testbench mode performs:
+
+1. Load `iiinb_tests_to_run.yaml`
+2. Expand enabled families into rule IDs
+3. Filter tests from `iiinb_testbench.yaml`:
+   - If a test’s expected defects intersect with enabled rule IDs → **include**
+   - If a test has no expected defects → **always include**
+   - Otherwise → **exclude**
+4. Run IIInB on each test case
+5. Compare actual vs expected defects
+6. Print PASS / FAIL
+
+This allows developers to run:
+
+- only spacing tests  
+- only punctuation tests  
+- only control‑character tests  
+- only normalization tests  
+- full suite  
+- any combination  
+
+without modifying the regression YAML.
+
+---
+
+### 12.5 Why This File Is Primitive‑Specific
+
+Each primitive has:
+
+- its own defect semantics  
+- its own rule families  
+- its own rulechecker  
+- its own regression suite  
+
+Therefore:
+
+> **Each primitive must define its own `<primitive>_tests_to_run.yaml`.**
+
+This keeps rule‑family filtering aligned with the primitive’s defect model.
+
+---
+
+### 12.6 Relationship to General Mode
+
+General mode **does not** use `iiinb_tests_to_run.yaml`.
+
+General mode always runs:
+
+- all primitive defects  
+- all rulechecker defects  
+- PASS / FAIL / No test  
+- summary reporting  
+
+General mode is a diagnostic harness, not a regression suite.
+
+---
+
+### 12.7 Summary
+
+`iiinb_tests_to_run.yaml` is:
+
+- a rule‑family toggle file  
+- primitive‑specific  
+- used only in testbench mode  
+- never used in general mode  
+- essential for targeted regression testing  
+- essential for safe evolution of rule semantics  
+- essential for deterministic testbench behavior  
+
+This section ensures future developers immediately understand how IIInB testbench mode works and how `iiinb_tests_to_run.yaml` fits into the architecture.
+```
+
+---
+
+## 13. Summary
 
 IIInB’s Python structural program:
 
