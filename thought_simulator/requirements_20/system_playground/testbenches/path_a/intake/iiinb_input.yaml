@@ -1,1 +1,94 @@
+# ============================================================
+# IIInB Generic Input Playground
+# Developer-driven exploratory inputs for IIInB primitive + rulechecker
+# ============================================================
 
+inputs:
+
+  # ------------------------------------------------------------
+  # 1. Clean / Baseline Inputs
+  # ------------------------------------------------------------
+
+  - id: clean_simple_sentence
+    description: "Simple clean input — should produce no anomalies."
+    raw_input: "The quick brown fox jumps over the lazy dog."
+
+  - id: clean_unicode_allowed
+    description: "Unicode allowed — café should not trigger anomalies."
+    raw_input: "I enjoyed a café latte today."
+
+  # ------------------------------------------------------------
+  # 2. Spacing Anomalies
+  # ------------------------------------------------------------
+
+  - id: spacing_double
+    description: "Two spaces — should trigger spacing anomaly."
+    raw_input: "The  dog ran."
+
+  - id: spacing_triple
+    description: "Three spaces — should trigger spacing anomaly."
+    raw_input: "Hello   world"
+
+  - id: spacing_leading
+    description: "Leading whitespace — should trigger spacing.leading."
+    raw_input: "   Leading spaces here"
+
+  - id: spacing_trailing
+    description: "Trailing whitespace — should trigger spacing.trailing."
+    raw_input: "Trailing spaces here   "
+
+  # ------------------------------------------------------------
+  # 3. Repeated Punctuation
+  # ------------------------------------------------------------
+
+  - id: repeated_exclamation
+    description: "Repeated exclamation — should trigger repeated punctuation."
+    raw_input: "Stop!!"
+
+  - id: repeated_question
+    description: "Repeated question marks — should trigger repeated punctuation."
+    raw_input: "What??"
+
+  - id: ellipsis_cluster
+    description: "Ellipsis cluster — should trigger repeated punctuation."
+    raw_input: "Wait...Really..."
+
+  # ------------------------------------------------------------
+  # 4. Control Characters
+  # ------------------------------------------------------------
+
+  - id: control_tab
+    description: "Tab character — should trigger control_char anomaly."
+    raw_input: "Text with\ta tab."
+
+  - id: control_newline
+    description: "Newline — should trigger control_char anomaly."
+    raw_input: "Line one.\nLine two."
+
+  - id: control_mixed
+    description: "Mixed control characters."
+    raw_input: "Here\tare\nmixed\rcases."
+
+  # ------------------------------------------------------------
+  # 5. Whitespace Normalization Stress
+  # ------------------------------------------------------------
+
+  - id: excessive_whitespace
+    description: "Multiple whitespace anomalies combined."
+    raw_input: "Too      many      spaces     here."
+
+  - id: mixed_whitespace
+    description: "Leading + internal + trailing whitespace."
+    raw_input: "   Hello   world   "
+
+  # ------------------------------------------------------------
+  # 6. Mixed / Stress Inputs
+  # ------------------------------------------------------------
+
+  - id: mixed_spacing_punctuation_control
+    description: "Spacing + repeated punctuation + control characters."
+    raw_input: "Here   we go...Multiple   issues!!  Including \t tabs and \n newlines."
+
+  - id: mixed_everything
+    description: "Stress test — multiple anomaly types combined."
+    raw_input: "  Hello!!!   café\t\n   "
