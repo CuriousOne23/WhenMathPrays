@@ -59,20 +59,16 @@ iiinb_rules:
         deterministic: true
 
     # ---------------------------------------------------------------
-    # 2. Normalize spacing (repair)
+    # 2. Normalize whitespace
     # ---------------------------------------------------------------
-    normalize_spacing:
+    normalize_whitespace:
       description: >
-        Apply deterministic spacing normalization: collapse multiple
+        Apply deterministic whitespace normalization: collapse multiple
         spaces, remove leading/trailing spaces, ensure single spaces
         between tokens.
       produces:
         - normalized
         - repair_operations
-      repair_types:
-        - multiple_spaces_collapsed
-        - missing_space_fixed
-        - leading_or_trailing_space_removed
       provenance:
         type: "repair"
         deterministic: true
@@ -109,22 +105,7 @@ iiinb_rules:
         deterministic: true
 
     # ---------------------------------------------------------------
-    # 5. Normalize whitespace
-    # ---------------------------------------------------------------
-    normalize_whitespace:
-      description: >
-        Apply deterministic whitespace normalization: collapse multiple
-        spaces, remove leading/trailing spaces, ensure single spaces
-        between tokens.
-      produces:
-        - normalized
-        - repair_operations
-      provenance:
-        type: "repair"
-        deterministic: true
-
-    # ---------------------------------------------------------------
-    # 6. Normalize basic punctuation
+    # 5. Normalize basic punctuation
     # ---------------------------------------------------------------
     normalize_basic_punctuation:
       description: >
@@ -138,7 +119,7 @@ iiinb_rules:
         deterministic: true
 
     # ---------------------------------------------------------------
-    # 7. Normalize case (if required)
+    # 6. Normalize case (if required)
     # ---------------------------------------------------------------
     normalize_case_if_required:
       description: >
@@ -152,7 +133,7 @@ iiinb_rules:
         deterministic: true
 
     # ---------------------------------------------------------------
-    # 8. Finalize normalized surface
+    # 7. Finalize normalized surface
     # ---------------------------------------------------------------
     finalize_normalized_surface:
       description: >
