@@ -123,7 +123,6 @@ def run_general_mode():
 
     CONFIG["use_rulechecker"] = True
 
-    # Load developer playground inputs
     data = load_general_input()
     inputs = data.get("inputs", [])
 
@@ -131,7 +130,10 @@ def run_general_mode():
         print("No inputs found in inb_input.yaml\n")
         return
 
-    # Iterate through all playground inputs
+    passes = 0
+    fails = 0
+    no_tests = 0
+
     for entry in inputs:
 
         input_id = entry.get("id", "unnamed")
@@ -151,12 +153,37 @@ def run_general_mode():
         primitive_output = InB(tp)
         primitive_defects = primitive_output.get("defects", [])
 
-        print(f"Primitive defects: {primitive_defects}")
-
         # Run rulechecker externally
         rulechecker_defects = validate_inb(primitive_output)
 
+        print(f"Primitive defects: {primitive_defects}")
         print(f"Rulechecker defects: {rulechecker_defects}")
+
+        # Classification logic
+        if not rulechecker_defects:
+            print("Result: No test in inb_input.yaml.")
+            no_tests += 1
+            continue
+
+        # If rulechecker has defects, evaluate pass/fail
+        # PASS = primitive defects are a subset of rulechecker defects
+        if all(d in rulechecker_defects for d in primitive_defects):
+            print("Result: PASS")
+            passes += 1
+        else:
+            print("Result: FAIL")
+            fails += 1
+
+    # ------------------------------------------------------------
+    # SUMMARY
+    # ------------------------------------------------------------
+    total = len(inputs)
+    print("\n==================== GENERAL MODE SUMMARY ====================")
+    print(f"Total inputs:        {total}")
+    print(f"PASS:                {passes}")
+    print(f"FAIL:                {fails}")
+    print(f"No test available:   {no_tests}")
+    print("==============================================================\n")
 
 # ---------------------------------------------------------------------------
 # REGRESSION MODE — primitive only
