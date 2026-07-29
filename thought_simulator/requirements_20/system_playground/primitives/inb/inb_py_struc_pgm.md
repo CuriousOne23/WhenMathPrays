@@ -125,7 +125,176 @@ This ensures:
 
 ---
 
-## 0.2 Testbench Mode — Full Regression Suite
+****************************************************************************
+
+## **0.2. `inb_input.yaml` — Purpose, Structure, Format, and Content (New)**
+
+`inb_input.yaml` is the **developer playground input file** for InB’s **general mode**.  
+It is intentionally lightweight, flexible, and **not** a TP envelope.  
+General mode wraps each entry into a TP envelope before passing it to the primitive.
+
+### **0.2.1 Purpose**
+
+`inb_input.yaml` exists to support:
+
+- fast developer experimentation  
+- multi‑input diagnostics  
+- rulechecker alignment  
+- defect‑detection exploration  
+- stress testing of surface anomalies  
+- deterministic replay validation  
+
+It is **not** used in regression mode and **not** used in progressive lineup testing.
+
+General mode uses this file exclusively.
+
+---
+
+## **0.2.2 Structure**
+
+The file contains a **list of playground inputs** under the key:
+
+```yaml
+inputs:
+  - id: ...
+    description: ...
+    raw_input: ...
+```
+
+Each entry is a simple dictionary describing a single raw input string.
+
+Example:
+
+```yaml
+inputs:
+  - id: whitespace_double
+    description: "Two spaces — should trigger whitespace.excess."
+    raw_input: "The  dog ran."
+```
+
+There is **no TP envelope** here.  
+General mode constructs the TP envelope automatically.
+
+---
+
+## **0.2.3 Required Fields**
+
+Each input entry must contain:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `id` | ✔ | Unique identifier for logging and summary reporting |
+| `raw_input` | ✔ | The raw surface string to feed into InB |
+| `description` | optional | Human‑readable explanation of the test case |
+| `tokens` | optional | Optional upstream tokens (rarely used) |
+| `metadata` | optional | Optional metadata (rarely used) |
+
+Only `id` and `raw_input` are required.
+
+---
+
+## **0.2.4 Content Semantics**
+
+`raw_input` may contain:
+
+- clean surface strings  
+- whitespace anomalies  
+- punctuation anomalies  
+- Unicode anomalies  
+- structural anomalies  
+- mixed anomalies  
+- stress‑test combinations  
+
+This file is intentionally broad and unconstrained.  
+It is meant for **exploration**, not regression.
+
+---
+
+## **0.2.5 How General Mode Uses `inb_input.yaml`**
+
+General mode:
+
+1. Loads all entries under `inputs:`  
+2. Wraps each entry into a TP envelope:
+
+```python
+tp = {
+    "raw_input": entry["raw_input"],
+    "tokens": entry.get("tokens", []),
+    "metadata": entry.get("metadata", {})
+}
+```
+
+3. Runs the primitive  
+4. Runs the rulechecker  
+5. Prints:
+   - primitive defects  
+   - rulechecker defects  
+   - PASS / FAIL / No test  
+6. Produces a summary:
+   - number passed  
+   - number failed  
+   - number with no test  
+
+This behavior is now standardized across all primitives.
+
+---
+
+## **0.2.6 Why `inb_input.yaml` Is NOT a TP Envelope**
+
+Per **20.105 TP Requirements** and **20.15 Architecture Scaffold**:
+
+- TP envelopes must be deterministic  
+- TP envelopes must be complete  
+- TP envelopes must contain metadata, audit, tokens, surface, defects  
+
+Playground inputs are **not** required to satisfy these constraints.
+
+General mode is responsible for **constructing** the TP envelope.
+
+This separation keeps:
+
+- developer exploration simple  
+- primitive behavior deterministic  
+- TP envelope rules intact  
+- testbench architecture clean  
+
+---
+
+## **0.2.7 Relationship to Testbench Mode**
+
+`inb_input.yaml` is **never** used in testbench mode.
+
+Testbench mode uses:
+
+- `inb_testbench.yaml`  
+- `inb_tests_to_run.yaml`  
+- `inb_rules.yaml`  
+
+Testbench mode is the **canonical regression suite**.  
+General mode is the **developer diagnostic harness**.
+
+---
+
+## **0.2.8 Summary**
+
+`inb_input.yaml` is:
+
+- a multi‑input playground  
+- simple and flexible  
+- not a TP envelope  
+- wrapped into a TP envelope by general mode  
+- used only for developer diagnostics  
+- never used for regression  
+- never used for progressive lineup  
+
+This section ensures future developers immediately understand how general mode works and how `inb_input.yaml` fits into the architecture.
+
+*****************************************************************************
+
+---
+
+## 0.3 Testbench Mode — Full Regression Suite
 
 Testbench mode uses:
 
@@ -156,7 +325,7 @@ Testbench mode is the **canonical validation path** for InB.
 
 ---
 
-## 0.3 Rule‑Family Filtering
+## 0.4 Rule‑Family Filtering
 
 Rule families are defined in `inb_rules.yaml` and mapped in `inb_testbench.py`.
 
@@ -190,7 +359,7 @@ This allows targeted testing without editing YAML test cases.
 
 ---
 
-## 0.4 File Responsibilities (Updated)
+## 0.5 File Responsibilities (Updated)
 
 | File | Responsibility |
 |------|----------------|
@@ -207,7 +376,7 @@ This table is the “map of the universe” for InB testing.
 
 ---
 
-## 0.5 Testing Flow Diagram (Updated)
+## 0.6 Testing Flow Diagram (Updated)
 
 ```
 run.py
@@ -235,7 +404,7 @@ run.py
 
 ---
 
-## 0.6 How to Modify InB Safely
+## 0.7 How to Modify InB Safely
 
 When changing InB:
 
