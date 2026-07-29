@@ -1,0 +1,5 @@
+# IIInB Dictionary Rules — Unicode Noise Normalization
+# Canonical family: unicode.normalized
+
+rules:
+  "�": ""
