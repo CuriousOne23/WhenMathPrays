@@ -32,7 +32,7 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
         {
-            "mode": "testbench",   # or "general"
+            "mode": "general",   # or "general"
             "use_inb": True,
             "use_iiinb": False,
             "use_ie": False,
