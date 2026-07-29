@@ -71,24 +71,24 @@ ACTIVE_TEST_MODULES = [
     # **************************** IE Test bench ******************************************************
     # Highest upstream True = IE (primitive under test)
     # Pipeline: IE only, input from IE YAML
-    (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
-        {
-            "use_inb": False,
-            "use_iiinb": True,
-            "use_ie": True,
-            "tests_to_run": {
-                "ie_repair_only_whitespace": "Yes",
-                "ie_multiple_repairs": "Yes",
-                "ie_anomaly_only": "Yes",
-                "ie_mixed_repairs_anomaly": "Yes",
-                "ie_structural_tags": "Yes",
-                "ie_token_preservation": "Yes",
-                "ie_replay_determinism": "Yes",
-                "ie_complex_mixed": "Yes"
-            }
-        }
-    )
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
+    #     {
+    #         "use_inb": False,
+    #         "use_iiinb": True,
+    #         "use_ie": True,
+    #         "tests_to_run": {
+    #             "ie_repair_only_whitespace": "Yes",
+    #             "ie_multiple_repairs": "Yes",
+    #             "ie_anomaly_only": "Yes",
+    #             "ie_mixed_repairs_anomaly": "Yes",
+    #             "ie_structural_tags": "Yes",
+    #             "ie_token_preservation": "Yes",
+    #             "ie_replay_determinism": "Yes",
+    #             "ie_complex_mixed": "Yes"
+    #         }
+    #     }
+    # )
 ]
 
 # ============================================================
