@@ -10,11 +10,11 @@ inputs:
   # ------------------------------------------------------------
 
   - id: clean_simple_sentence
-    description: "Simple clean input — should produce no anomalies."
+    description: "Simple clean input — should produce no primitive_flags and no repair_operations."
     raw_input: "The quick brown fox jumps over the lazy dog."
 
   - id: clean_unicode_allowed
-    description: "Unicode allowed — café should not trigger anomalies."
+    description: "Unicode allowed — café should not produce primitive_flags."
     raw_input: "I enjoyed a café latte today."
 
   # ------------------------------------------------------------
@@ -22,19 +22,19 @@ inputs:
   # ------------------------------------------------------------
   
   - id: spacing_double
-    description: "Two spaces — IIInB should normalize spacing."
+    description: "Two spaces — IIInB should produce whitespace repair_operations."
     raw_input: "The  dog ran."
   
   - id: spacing_triple
-    description: "Three spaces — IIInB should normalize spacing."
+    description: "Three spaces — IIInB should produce whitespace repair_operations."
     raw_input: "Hello   world"
   
   - id: spacing_leading
-    description: "Leading whitespace — IIInB should normalize spacing."
+    description: "Leading whitespace — IIInB should produce whitespace repair_operations."
     raw_input: "   Leading spaces here"
   
   - id: spacing_trailing
-    description: "Trailing whitespace — IIInB should normalize spacing."
+    description: "Trailing whitespace — IIInB should produce whitespace repair_operations."
     raw_input: "Trailing spaces here   "
 
   # ------------------------------------------------------------
@@ -42,15 +42,15 @@ inputs:
   # ------------------------------------------------------------
   
   - id: repeated_exclamation
-    description: "Repeated exclamation — IIInB should normalize punctuation."
+    description: "Repeated exclamation — IIInB should produce punctuation repair_operations."
     raw_input: "Stop!!"
   
   - id: repeated_question
-    description: "Repeated question marks — IIInB should normalize punctuation."
+    description: "Repeated question marks — IIInB should produce punctuation repair_operations."
     raw_input: "What??"
   
   - id: ellipsis_cluster
-    description: "Ellipsis cluster — IIInB should normalize punctuation."
+    description: "Ellipsis cluster — IIInB should produce punctuation repair_operations."
     raw_input: "Wait...Really..."
 
   # ------------------------------------------------------------
@@ -58,15 +58,15 @@ inputs:
   # ------------------------------------------------------------
 
   - id: control_tab
-    description: "Tab character — should trigger control_char anomaly."
+    description: "Tab character — should produce primitive_flags for illegal control characters."
     raw_input: "Text with\ta tab."
 
   - id: control_newline
-    description: "Newline — should trigger control_char anomaly."
+    description: "Newline — should produce primitive_flags for illegal control characters."
     raw_input: "Line one.\nLine two."
 
   - id: control_mixed
-    description: "Mixed control characters."
+    description: "Mixed control characters — should produce primitive_flags for illegal control characters."
     raw_input: "Here\tare\nmixed\rcases."
 
   # ------------------------------------------------------------
@@ -74,11 +74,11 @@ inputs:
   # ------------------------------------------------------------
 
   - id: excessive_whitespace
-    description: "Multiple whitespace anomalies combined."
+    description: "Multiple whitespace issues — IIInB should produce whitespace repair_operations."
     raw_input: "Too      many      spaces     here."
 
   - id: mixed_whitespace
-    description: "Leading + internal + trailing whitespace."
+    description: "Leading + internal + trailing whitespace — IIInB should produce whitespace repair_operations."
     raw_input: "   Hello   world   "
 
   # ------------------------------------------------------------
@@ -86,9 +86,9 @@ inputs:
   # ------------------------------------------------------------
 
   - id: mixed_spacing_punctuation_control
-    description: "Spacing + repeated punctuation + control characters."
+    description: "Spacing + repeated punctuation + control characters — should produce both repair_operations and primitive_flags."
     raw_input: "Here   we go...Multiple   issues!!  Including \t tabs and \n newlines."
 
   - id: mixed_everything
-    description: "Stress test — multiple anomaly types combined."
+    description: "Stress test — multiple repair_operations and primitive_flags combined."
     raw_input: "  Hello!!!   café\t\n   "
