@@ -1,0 +1,143 @@
+# ============================================================
+# InB Rule Set — Path‑A Intake Envelope
+# Declarative Static‑Analysis Rules for 20.100 InB Primitive
+# Option C Schema: id + description + params + metadata
+# ============================================================
+
+rules:
+
+  # ------------------------------------------------------------
+  # 1. Whitespace Rules
+  # ------------------------------------------------------------
+
+  - id: whitespace.excess
+    version: "1.0"
+    severity: "minor"
+    tags: ["surface", "whitespace"]
+    description: "Detect internal whitespace clusters greater than max_run."
+    params:
+      max_run: 1              # more than 1 consecutive space is a defect
+      ignore_leading: false  # leading whitespace is considered
+      ignore_trailing: false # trailing whitespace is considered
+
+  - id: whitespace.leading
+    version: "1.0"
+    severity: "minor"
+    tags: ["surface", "whitespace"]
+    description: "Detect leading whitespace at the start of raw_input."
+    params:
+      enabled: true
+
+  - id: whitespace.trailing
+    version: "1.0"
+    severity: "minor"
+    tags: ["surface", "whitespace"]
+    description: "Detect trailing whitespace at the end of raw_input."
+    params:
+      enabled: true
+
+  # ------------------------------------------------------------
+  # 2. Punctuation Rules
+  # ------------------------------------------------------------
+
+  - id: punctuation.excess
+    version: "1.0"
+    severity: "minor"
+    tags: ["surface", "punctuation"]
+    description: "Detect punctuation clusters exceeding max_cluster."
+    params:
+      max_cluster: 1
+      allowed_marks: ["!", "?", ".", ","]
+
+  - id: punctuation.illegal
+    version: "1.0"
+    severity: "major"
+    tags: ["surface", "punctuation"]
+    description: "Detect punctuation characters not in allowed_marks."
+    params:
+      allowed_marks: ["!", "?", ".", ",", ";", ":"]
+
+  # ------------------------------------------------------------
+  # 3. Unicode Rules
+  # ------------------------------------------------------------
+
+  - id: unicode.invalid
+    version: "1.0"
+    severity: "major"
+    tags: ["unicode"]
+    description: "Detect invalid UTF‑8 sequences or replacement characters."
+    params:
+      allow_replacement_char: false   # U+FFFD (�) is considered invalid
+      normalize_form: "NFC"           # expected normalization form
+
+  - id: unicode.non_ascii
+    version: "1.0"
+    severity: "minor"
+    tags: ["unicode"]
+    description: "Detect non‑ASCII characters when ASCII‑only mode is enabled."
+    params:
+      ascii_only: false               # default: allow unicode
+
+  # ------------------------------------------------------------
+  # 4. Structural Token Rules
+  # ------------------------------------------------------------
+
+  - id: structural.malformed
+    version: "1.0"
+    severity: "major"
+    tags: ["structural"]
+    description: "Detect malformed or unbalanced structural tokens."
+    params:
+      allowed_tags: ["<b>", "</b>", "<i>", "</i>"]
+      max_tag_length: 10
+      require_balanced: true
+
+  - id: structural.illegal
+    version: "1.0"
+    severity: "major"
+    tags: ["structural"]
+    description: "Detect structural tokens not present in allowed_tags."
+    params:
+      allowed_tags: ["<b>", "</b>", "<i>", "</i>"]
+
+  # ------------------------------------------------------------
+  # 5. Output Shape Rules
+  # ------------------------------------------------------------
+
+  - id: output.defects_list_shape
+    version: "1.0"
+    severity: "critical"
+    tags: ["output", "shape"]
+    description: "Ensure defects is a list of strings with no duplicates."
+    params:
+      require_unique: true
+      require_sorted: true
+      require_string_entries: true
+
+  - id: output.no_false_positives
+    version: "1.0"
+    severity: "critical"
+    tags: ["output", "validation"]
+    description: "Ensure no defects are emitted when raw_input is clean."
+    params:
+      enabled: true
+
+  # ------------------------------------------------------------
+  # 6. Deterministic Behavior Rules
+  # ------------------------------------------------------------
+
+  - id: deterministic.replay
+    version: "1.0"
+    severity: "critical"
+    tags: ["determinism"]
+    description: "Ensure identical raw_input produces identical defect sets."
+    params:
+      enabled: true
+
+  - id: deterministic.no_external_state
+    version: "1.0"
+    severity: "critical"
+    tags: ["determinism"]
+    description: "Ensure rule evaluation does not depend on external state."
+    params:
+      enabled: true
