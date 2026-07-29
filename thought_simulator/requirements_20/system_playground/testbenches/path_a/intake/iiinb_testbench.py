@@ -144,7 +144,13 @@ def filter_tests_by_rule_families(all_tests):
     filtered = []
     for test in all_tests:
         expected = test.get("expected", {})
-        expected_anomalies = expected.get("anomaly_flags", [])
+
+        # Extract anomaly IDs (IIInB anomalies may be dicts)
+        raw_anomalies = expected.get("anomaly_flags", [])
+        expected_anomalies = [
+            a["id"] if isinstance(a, dict) else a
+            for a in raw_anomalies
+        ]
 
         # No expected anomalies → always include
         if not expected_anomalies:
@@ -152,7 +158,7 @@ def filter_tests_by_rule_families(all_tests):
             continue
 
         # Include if any expected anomaly belongs to an enabled rule family
-        if any(d in enabled_rule_ids for d in expected_anomalies):
+        if any(a in enabled_rule_ids for a in expected_anomalies):
             filtered.append(test)
 
     return filtered
