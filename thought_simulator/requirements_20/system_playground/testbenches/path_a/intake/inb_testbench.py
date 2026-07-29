@@ -123,22 +123,40 @@ def run_general_mode():
 
     CONFIG["use_rulechecker"] = True
 
+    # Load developer playground inputs
     data = load_general_input()
-    tp = data.get("tp", {})
-    raw = tp.get("raw_input", "")
+    inputs = data.get("inputs", [])
 
-    print(f"Raw input: \"{raw}\"\n")
+    if not inputs:
+        print("No inputs found in inb_input.yaml\n")
+        return
 
-    # Run primitive (pure)
-    primitive_output = InB(tp)
-    primitive_defects = primitive_output.get("defects", [])
+    # Iterate through all playground inputs
+    for entry in inputs:
 
-    print(f"Primitive defects: {primitive_defects}")
+        input_id = entry.get("id", "unnamed")
+        raw = entry.get("raw_input", "")
 
-    # Run rulechecker externally
-    rulechecker_defects = validate_inb(primitive_output)
+        print(f"\n--- Input: {input_id} ---")
+        print(f"Raw input: \"{raw}\"\n")
 
-    print(f"Rulechecker defects: {rulechecker_defects}\n")
+        # Wrap playground entry into a TP dict for primitive
+        tp = {
+            "raw_input": raw,
+            "tokens": entry.get("tokens", []),
+            "metadata": entry.get("metadata", {})
+        }
+
+        # Run pure primitive
+        primitive_output = InB(tp)
+        primitive_defects = primitive_output.get("defects", [])
+
+        print(f"Primitive defects: {primitive_defects}")
+
+        # Run rulechecker externally
+        rulechecker_defects = validate_inb(primitive_output)
+
+        print(f"Rulechecker defects: {rulechecker_defects}")
 
 # ---------------------------------------------------------------------------
 # REGRESSION MODE — primitive only
