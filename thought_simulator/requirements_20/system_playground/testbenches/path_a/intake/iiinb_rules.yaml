@@ -28,9 +28,8 @@ iiinb_rules:
   rule_order:
     - tokenize_original_surface
     - detect_control_characters
-    - normalize_spacing
-    - normalize_repeated_punctuation
     - normalize_whitespace
+    - normalize_repeated_punctuation
     - normalize_basic_punctuation
     - normalize_case_if_required
     - finalize_normalized_surface
