@@ -27,9 +27,9 @@ iiinb_rules:
 
   rule_order:
     - tokenize_original_surface
-    - detect_spacing_anomalies
     - detect_control_characters
-    - detect_repeated_punctuation
+    - normalize_spacing
+    - normalize_repeated_punctuation
     - normalize_whitespace
     - normalize_basic_punctuation
     - normalize_case_if_required
@@ -58,22 +58,24 @@ iiinb_rules:
         type: "tokenization"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 2. Spacing anomalies
-    # ---------------------------------------------------------------
-    detect_spacing_anomalies:
-      description: >
-        Detect structural spacing anomalies such as multiple spaces,
-        missing spaces after punctuation, or irregular spacing patterns.
-      produces:
-        - anomaly_flags
-      anomaly_types:
-        - multiple_spaces
-        - missing_space_after_punctuation
-        - leading_or_trailing_space
-      provenance:
-        type: "anomaly"
-        deterministic: true
+  # ---------------------------------------------------------------
+  # 2. Normalize spacing (repair)
+  # ---------------------------------------------------------------
+  normalize_spacing:
+    description: >
+      Apply deterministic spacing normalization: collapse multiple
+      spaces, remove leading/trailing spaces, ensure single spaces
+      between tokens.
+    produces:
+      - normalized
+      - repair_operations
+    repair_types:
+      - multiple_spaces_collapsed
+      - missing_space_fixed
+      - leading_or_trailing_space_removed
+    provenance:
+      type: "repair"
+      deterministic: true
 
     # ---------------------------------------------------------------
     # 3. Control characters
@@ -93,16 +95,17 @@ iiinb_rules:
     # ---------------------------------------------------------------
     # 4. Repeated punctuation
     # ---------------------------------------------------------------
-    detect_repeated_punctuation:
+    normalize_repeated_punctuation:
       description: >
-        Detect repeated punctuation sequences (e.g., "!!", "??", "...").
-        No semantic interpretation is permitted.
+        Normalize repeated punctuation sequences (e.g., "!!", "??", "...")
+        to their canonical single-character form.
       produces:
-        - anomaly_flags
-      anomaly_types:
-        - repeated_punctuation
+        - normalized
+        - repair_operations
+      repair_types:
+        - repeated_punctuation_cleaned
       provenance:
-        type: "anomaly"
+        type: "repair"
         deterministic: true
 
     # ---------------------------------------------------------------
