@@ -554,7 +554,6 @@ General mode is a diagnostic harness, not a regression suite.
 - essential for deterministic testbench behavior  
 
 This section ensures future developers immediately understand how IIInB testbench mode works and how `iiinb_tests_to_run.yaml` fits into the architecture.
-```
 
 ---
 
