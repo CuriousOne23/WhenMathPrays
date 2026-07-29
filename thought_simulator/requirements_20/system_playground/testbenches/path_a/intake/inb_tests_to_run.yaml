@@ -1,0 +1,55 @@
+# ============================================================
+# InB Test Selection Toggles
+# Path‑A Intake Envelope
+# Rule-family driven test selection for regression testbench
+# ============================================================
+
+tests_to_run:
+
+  # ------------------------------------------------------------
+  # Whitespace Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - whitespace.excess
+  #   - whitespace.leading
+  #   - whitespace.trailing
+  whitespace: 1
+
+  # ------------------------------------------------------------
+  # Punctuation Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - punctuation.excess
+  #   - punctuation.illegal
+  punctuation: 1
+
+  # ------------------------------------------------------------
+  # Unicode Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - unicode.invalid
+  #   - unicode.non_ascii
+  unicode: 1
+
+  # ------------------------------------------------------------
+  # Structural Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - structural.malformed
+  #   - structural.illegal
+  structural: 1
+
+  # ------------------------------------------------------------
+  # Output Shape Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - output.defects_list_shape
+  output: 1
+
+  # ------------------------------------------------------------
+  # Deterministic Behavior Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - deterministic.replay
+  #   - deterministic.no_external_state
+  deterministic: 0
