@@ -1,0 +1,94 @@
+# ============================================================
+# InB Generic Input Playground
+# Developer-driven exploratory inputs for InB primitive + rulechecker
+# ============================================================
+
+inputs:
+
+  # ------------------------------------------------------------
+  # 1. Clean / Baseline Inputs
+  # ------------------------------------------------------------
+
+  - id: clean_simple_sentence
+    description: "Simple clean input — should produce no defects."
+    raw_input: "The quick brown fox jumps over the lazy dog."
+
+  - id: clean_unicode_allowed
+    description: "Unicode allowed — café should not trigger defects."
+    raw_input: "I enjoyed a café latte today."
+
+  # ------------------------------------------------------------
+  # 2. Whitespace Experiments
+  # ------------------------------------------------------------
+
+  - id: whitespace_double
+    description: "Two spaces — should trigger whitespace.excess."
+    raw_input: "The  dog ran."
+
+  - id: whitespace_triple
+    description: "Three spaces — should trigger whitespace.excess."
+    raw_input: "Hello   world"
+
+  - id: whitespace_leading
+    description: "Leading whitespace — should trigger whitespace.leading."
+    raw_input: "   Leading spaces here"
+
+  - id: whitespace_trailing
+    description: "Trailing whitespace — should trigger whitespace.trailing."
+    raw_input: "Trailing spaces here   "
+
+  # ------------------------------------------------------------
+  # 3. Punctuation Experiments
+  # ------------------------------------------------------------
+
+  - id: punctuation_cluster
+    description: "Excess punctuation cluster — should trigger punctuation.excess."
+    raw_input: "Wait!!! Stop!"
+
+  - id: punctuation_illegal_symbol
+    description: "Illegal punctuation symbol — should trigger punctuation.illegal."
+    raw_input: "Hello @world"
+
+  # ------------------------------------------------------------
+  # 4. Unicode Experiments
+  # ------------------------------------------------------------
+
+  - id: unicode_replacement_char
+    description: "Replacement char U+FFFD — should trigger unicode.invalid."
+    raw_input: "Bad char here �"
+
+  - id: unicode_non_ascii_ascii_only_mode
+    description: "Non-ASCII character — triggers unicode.non_ascii if ascii_only=true."
+    raw_input: "naïve approach"
+
+  # ------------------------------------------------------------
+  # 5. Structural Tag Experiments
+  # ------------------------------------------------------------
+
+  - id: structural_valid_tags
+    description: "Valid structural tags — should produce no defects."
+    raw_input: "Hello <b>world</b>"
+
+  - id: structural_malformed_tag
+    description: "Malformed structural tag — should trigger structural.malformed."
+    raw_input: "Hello <broken world"
+
+  - id: structural_illegal_tag
+    description: "Illegal tag — should trigger structural.illegal."
+    raw_input: "Hello <xyz>world</xyz>"
+
+  # ------------------------------------------------------------
+  # 6. Mixed / Stress Inputs
+  # ------------------------------------------------------------
+
+  - id: mixed_whitespace_punctuation_unicode
+    description: "Whitespace + punctuation + unicode invalid — multiple defects."
+    raw_input: "The   dog!!!�"
+
+  - id: mixed_structural_unicode
+    description: "Malformed structural + unicode invalid."
+    raw_input: "<broken> café�"
+
+  - id: mixed_everything
+    description: "Stress test — multiple anomaly types combined."
+    raw_input: "  Hello!!! <broken> café�   "
