@@ -29,25 +29,15 @@ ACTIVE_TEST_MODULES = [
     # **************************** InB Test bench ****************************************************
     # Highest upstream True = InB (primitive under test)
     # Pipeline: InB only, input from InB YAML
-    # (
-    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
-    #     {
-    #         "use_inb": True,
-    #         "use_iiinb": False,
-    #         "use_ie": False,
-    #         "tests_to_run": {
-    #             "inb_baseline_no_error": "Yes",
-    #             "inb_whitespace_anomaly": "Yes",
-    #             "inb_multiple_surface_anomalies": "Yes",
-    #             "inb_illegal_character_only": "Yes",
-    #             "inb_mixed_whitespace_illegal": "Yes",
-    #             "inb_structural_tags_present": "Yes",
-    #             "inb_tokenizable_input": "Yes",
-    #             "inb_unicode_normalization_opportunity": "Yes",
-    #             "inb_complex_mixed_case": "Yes"
-    #         }
-    #     }
-    # ),
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
+        {
+            "use_inb": True,
+            "use_iiinb": False,
+            "use_ie": False,
+            "tests_to_run": "see inb_tests_to_run.yaml"
+        }
+    ),
 
     # **************************** IIInB Test bench ****************************************************
     # Highest upstream True = IIInB (primitive under test)
