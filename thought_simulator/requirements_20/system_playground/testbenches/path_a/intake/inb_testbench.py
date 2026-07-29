@@ -1,6 +1,8 @@
 """
 InB Intake Testbench — Path A
-Runs: InB only
+Supports two modes:
+    • general    → uses inb_input.yaml + inb_rulechecker.py
+    • testbench  → uses inb_testbench.yaml + inb_tests_to_run.yaml
 Designed to be executed by run.py
 """
 
@@ -14,7 +16,25 @@ import yaml
 from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
 
 # ---------------------------------------------------------------------------
-# Load testbench YAML
+# Import InB rulechecker (for general mode)
+# ---------------------------------------------------------------------------
+
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import InB_RuleChecker
+
+# ---------------------------------------------------------------------------
+# Load general-mode input YAML
+# ---------------------------------------------------------------------------
+
+def load_general_input():
+    yaml_path = os.path.join(
+        os.path.dirname(__file__),
+        "inb_input.yaml"
+    )
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+# ---------------------------------------------------------------------------
+# Load testbench YAML (regression mode)
 # ---------------------------------------------------------------------------
 
 def load_testbench():
@@ -26,7 +46,7 @@ def load_testbench():
         return yaml.safe_load(f)
 
 # ---------------------------------------------------------------------------
-# Load rule-family toggles (inb_tests_to_run.yaml)
+# Load rule-family toggles (regression mode)
 # ---------------------------------------------------------------------------
 
 def load_tests_to_run():
@@ -79,14 +99,13 @@ def set_testbench_config(config_dict):
     CONFIG = config_dict
 
 # ---------------------------------------------------------------------------
-# Filter tests based on rule-family toggles
+# Filter tests based on rule-family toggles (regression mode)
 # ---------------------------------------------------------------------------
 
 def filter_tests_by_rule_families(all_tests):
 
     toggles = load_tests_to_run()
 
-    # Build a set of enabled rule IDs
     enabled_rule_ids = set()
     for family, enabled in toggles.items():
         if enabled:
@@ -96,27 +115,54 @@ def filter_tests_by_rule_families(all_tests):
     for test in all_tests:
         expected_defects = test.get("expected_defects", [])
 
-        # If test has no expected defects → always include
+        # No expected defects → always include
         if not expected_defects:
             filtered.append(test)
             continue
 
-        # If any expected defect belongs to an enabled rule family → include
+        # Include if any expected defect belongs to an enabled rule family
         if any(defect in enabled_rule_ids for defect in expected_defects):
             filtered.append(test)
 
     return filtered
 
 # ---------------------------------------------------------------------------
-# Development-mode runner (no unittest)
+# GENERAL MODE
 # ---------------------------------------------------------------------------
 
-def run_testbench():
+def run_general_mode():
+
+    print("\n============================================================")
+    print("InB General Mode — Using inb_input.yaml + inb_rulechecker.py")
+    print("============================================================\n")
+
+    data = load_general_input()
+    tp = data.get("tp", {})
+    raw_input = tp.get("raw_input", "")
+
+    print(f"Raw input: \"{raw_input}\"\n")
+
+    # Run primitive
+    result_tp = InB(tp)
+    primitive_defects = result_tp.get("defects", [])
+
+    print(f"Primitive defects: {primitive_defects}")
+
+    # Run rulechecker
+    rc = InB_RuleChecker()
+    rulechecker_defects = rc.check(result_tp)
+
+    print(f"Rulechecker defects: {rulechecker_defects}\n")
+
+# ---------------------------------------------------------------------------
+# REGRESSION TESTBENCH MODE
+# ---------------------------------------------------------------------------
+
+def run_regression_mode():
 
     testbench = load_testbench()
     all_tests = testbench.get("tests", [])
 
-    # Apply rule-family filtering
     tests = filter_tests_by_rule_families(all_tests)
 
     print(f"\nLoaded {len(tests)} InB intake test cases (after rule-family filtering).\n")
@@ -126,34 +172,26 @@ def run_testbench():
         name = test.get("id", "unnamed")
         print(f"Running: {name} ...", end=" ")
 
-        # Extract TP dictionary from YAML
         tp = test.get("tp", {})
 
-        # Handle long-input generator (optional)
+        # Optional long-input generator
         if test.get("generate_long_input", False):
             length = test.get("long_length", 5000)
             tp["raw_input"] = "A" * length
 
         raw_input = tp.get("raw_input", "")
 
-        # Execute REAL InB primitive (returns a TP dictionary)
+        # Execute primitive
         result_tp = InB(tp)
+        actual_defects = result_tp.get("defects", [])
 
-        # Expected values
         expected_defects = test.get("expected_defects", [])
         expected_failure = test.get("expected_failure", False)
 
-        # Actual defects from InB output
-        actual_defects = result_tp.get("defects", [])
-
-        # Checks
         defects_ok = (actual_defects == expected_defects)
         passed = defects_ok
 
-        # ------------------------------------------------------------------
         # PASS/FAIL messaging
-        # ------------------------------------------------------------------
-
         if passed:
             if expected_failure:
                 print(f"EXPECTED FAILURE — {name}")
@@ -173,3 +211,16 @@ def run_testbench():
                 print(f"FAIL — {name}")
                 print(f"Expected defects {expected_defects}, but InB returned {actual_defects}.")
                 print(f"InB failed to detect required defect(s) in input \"{raw_input}\".\n")
+
+# ---------------------------------------------------------------------------
+# MAIN ENTRYPOINT
+# ---------------------------------------------------------------------------
+
+def run_testbench():
+
+    mode = CONFIG.get("mode", "testbench")
+
+    if mode == "general":
+        run_general_mode()
+    else:
+        run_regression_mode()
