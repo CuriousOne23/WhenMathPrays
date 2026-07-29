@@ -1,0 +1,14 @@
+# IIInB Dictionary Rules — Spelling Repairs
+# Canonical families:
+#   spelling.transposed
+#   spelling.missing
+
+rules:
+  # Transpositions
+  hte: the
+
+  # Missing-letter repairs
+  rd: red
+
+  # repitition letter
+  yyes: yes
