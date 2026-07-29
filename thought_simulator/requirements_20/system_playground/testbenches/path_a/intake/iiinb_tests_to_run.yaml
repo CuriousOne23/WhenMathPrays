@@ -1,1 +1,53 @@
+# ============================================================
+# IIInB Test Selection Toggles
+# Path‑A Intake Envelope
+# Rule-family driven test selection for regression testbench
+# ============================================================
+
+tests_to_run:
+
+  # ------------------------------------------------------------
+  # Spacing Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - spacing.multiple_spaces
+  #   - spacing.missing_space_after_punctuation
+  #   - spacing.leading
+  #   - spacing.trailing
+  spacing: 1
+
+  # ------------------------------------------------------------
+  # Punctuation Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - punctuation.repeated
+  #   - punctuation.cluster
+  #   - punctuation.basic_normalization
+  punctuation: 1
+
+  # ------------------------------------------------------------
+  # Control Character Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - control.tab
+  #   - control.newline
+  #   - control.mixed
+  control_chars: 1
+
+  # ------------------------------------------------------------
+  # Normalization Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - normalize.whitespace
+  #   - normalize.punctuation
+  #   - normalize.case
+  normalization: 1
+
+  # ------------------------------------------------------------
+  # Deterministic Behavior Rule Family
+  # ------------------------------------------------------------
+  # Covers:
+  #   - deterministic.replay
+  #   - deterministic.no_external_state
+  deterministic: 1
 
