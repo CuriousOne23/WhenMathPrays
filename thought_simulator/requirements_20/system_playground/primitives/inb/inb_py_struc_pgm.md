@@ -1,4 +1,4 @@
-# ✅ **`inb_py_struc_pgm.md` — One‑Stop InB Programming Reference**  
+# ✅ **FULL UPDATED `inb_py_struc_pgm.md` — One‑Stop InB Programming Reference**  
 ### Path‑A Intake Normalization Primitive (Python & C++)
 
 This document is the **canonical programming blueprint** for implementing and testing the **InB primitive** in Python or C++.  
@@ -10,8 +10,8 @@ It synchronizes:
 - `inb_input.yaml`  
 - `inb_tests_to_run.yaml`  
 - `inb_rulechecker.py`  
-- `run.py`  
 - `inb_rules.yaml`  
+- `run.py`  
 - `20.100_inb_requirements.md`  
 - **20.105 TP Envelope Requirements**  
 - **20.15 Architecture Scaffold**
@@ -22,10 +22,10 @@ Everything required to understand InB’s behavior, defect detection, normalizat
 
 # 0. InB Testing Architecture (Updated)
 
-InB now supports **two testing modes**, selectable directly from `run.py`:
+InB supports **two testing modes**, selectable directly from `run.py`:
 
 ```python
-"mode": "general"     # developer quick check
+"mode": "general"     # developer diagnostic harness
 "mode": "testbench"   # full regression suite
 ```
 
@@ -33,29 +33,95 @@ These modes are implemented in `inb_testbench.py` and allow developers to test I
 
 ---
 
-## 0.1 General Mode — Developer Quick Check
+## 0.1 General Mode — Developer Diagnostic Harness (Updated)
 
 General mode uses:
 
 - `inb_input.yaml`  
 - `inb_rulechecker.py`  
 
-Flow:
+General mode is a **multi‑input diagnostic harness**.  
+It loads **all entries** under:
 
-1. Load a single TP from `inb_input.yaml`
-2. Run InB on the TP
-3. Capture **primitive defects** (from InB)
-4. Run **rulechecker defects** (from `inb_rulechecker.py`)
-5. Print both defect lists
+```yaml
+inputs:
+  - id: ...
+    raw_input: ...
+```
 
-Purpose:
+### **General Mode Flow**
 
-- Fast validation during development  
-- Ensures rulechecker alignment  
-- Ensures TP envelope correctness  
-- Ensures deterministic defect ordering  
+1. Load all playground inputs from `inb_input.yaml`
+2. For each input:
+   - Wrap into a TP envelope (`raw_input`, `tokens`, `metadata`)
+   - Run **InB** (primitive)
+   - Run **rulechecker** (external)
+   - Print:
+     - primitive defects  
+     - rulechecker defects  
+     - **PASS** (primitive ⊆ rulechecker)  
+     - **FAIL** (primitive ∉ rulechecker)  
+     - **No test** (rulechecker defects empty)
+3. Print a summary:
+   - number passed  
+   - number failed  
+   - number with no test  
+
+### **Purpose**
+
+- Developer exploration  
+- Rulechecker alignment  
+- TP envelope correctness  
+- Deterministic defect ordering  
+- Multi‑input stress testing  
 
 General mode does **not** use regression tests or rule‑family filtering.
+
+---
+
+## 0.1.1 PASS / FAIL / No‑Test Semantics (New)
+
+General mode evaluates each input using:
+
+- **Primitive defects** — produced by InB  
+- **Rulechecker defects** — produced by `inb_rulechecker.py`
+
+Classification:
+
+- **PASS**  
+  Primitive defects are a subset of rulechecker defects.
+
+- **FAIL**  
+  Primitive defects contradict rulechecker defects.
+
+- **No test in inb_input.yaml**  
+  Rulechecker defects list is empty.
+
+This makes general mode behave like a lightweight, developer‑friendly test harness.
+
+---
+
+## 0.1.2 TP Wrapping Behavior (New)
+
+Entries in `inb_input.yaml` are **not TP envelopes**.  
+They are developer playground inputs.
+
+General mode wraps each entry into a TP envelope:
+
+```python
+tp = {
+    "raw_input": entry["raw_input"],
+    "tokens": entry.get("tokens", []),
+    "metadata": entry.get("metadata", {})
+}
+```
+
+This ensures:
+
+- InB receives a valid TP envelope  
+- Rulechecker receives a valid TP envelope  
+- Downstream primitives remain compatible  
+- TP requirements (20.105) are satisfied  
 
 ---
 
@@ -67,7 +133,7 @@ Testbench mode uses:
 - `inb_tests_to_run.yaml`  
 - `inb_rules.yaml`  
 
-Flow:
+### **Testbench Flow**
 
 1. Load all test cases from `inb_testbench.yaml`
 2. Load rule‑family toggles from `inb_tests_to_run.yaml`
@@ -77,7 +143,7 @@ Flow:
 6. Compare actual defects vs expected defects
 7. Print PASS/FAIL
 
-Purpose:
+### **Purpose**
 
 - Full regression suite  
 - Ensures no regressions  
@@ -124,7 +190,7 @@ This allows targeted testing without editing YAML test cases.
 
 ---
 
-## 0.4 File Responsibilities (Canonical Map)
+## 0.4 File Responsibilities (Updated)
 
 | File | Responsibility |
 |------|----------------|
@@ -132,7 +198,7 @@ This allows targeted testing without editing YAML test cases.
 | `inb_testbench.yaml` | Regression test definitions |
 | `inb_tests_to_run.yaml` | Rule‑family toggles |
 | `inb_testbench.py` | Test harness (general + testbench modes) |
-| `inb_input.yaml` | General mode input |
+| `inb_input.yaml` | Developer playground containing **multiple exploratory inputs** |
 | `inb_rulechecker.py` | Rulechecker logic |
 | `inb_rules.yaml` | Rule‑family → rule‑ID mapping |
 | `run.py` | Mode selection + testbench execution |
@@ -141,17 +207,21 @@ This table is the “map of the universe” for InB testing.
 
 ---
 
-## 0.5 Testing Flow Diagram
+## 0.5 Testing Flow Diagram (Updated)
 
 ```
 run.py
    |
    |-- mode: general
    |       |
-   |       |-- inb_input.yaml
+   |       |-- inb_input.yaml (inputs: list)
+   |       |-- loop over inputs
+   |       |-- wrap each into TP envelope
    |       |-- InB(tp)
-   |       |-- inb_rulechecker.py
+   |       |-- rulechecker(tp)
    |       |-- print primitive + rulechecker defects
+   |       |-- PASS / FAIL / No test
+   |       |-- summary
    |
    |-- mode: testbench
            |
@@ -235,7 +305,7 @@ InB must expose:
 
 ---
 
-## **2.1 TP Envelope Shape — Dictionary Only (Required by 20.105 & 20.15)**
+## 2.1 TP Envelope Shape — Dictionary Only (Required by 20.105 & 20.15)
 
 InB participates in the Path‑A pipeline by consuming and producing a **TP envelope**.
 
@@ -509,7 +579,7 @@ To safely modify InB in the future — without breaking determinism, replayabili
 
 To modify InB safely and deterministically:
 
-- Use **general mode** for quick checks  
+- Use **general mode** for multi‑input diagnostics  
 - Use **testbench mode** for full regression  
 - Maintain TP envelope stability  
 - Maintain deterministic defect ordering  
