@@ -1,7 +1,7 @@
 """
 InB Intake Testbench — Path A
 Supports two modes:
-    • general    → uses inb_input.yaml + inb_rulechecker.py
+    • general    → uses inb_input.yaml + validate_inb()
     • testbench  → uses inb_testbench.yaml + inb_tests_to_run.yaml
 Designed to be executed by run.py
 """
@@ -16,10 +16,10 @@ import yaml
 from thought_simulator.requirements_20.system_playground.primitives.inb.inb import InB
 
 # ---------------------------------------------------------------------------
-# Import InB rulechecker (for general mode)
+# Import InB rulechecker (correct function import)
 # ---------------------------------------------------------------------------
 
-from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import InB_RuleChecker
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_rulechecker import validate_inb
 
 # ---------------------------------------------------------------------------
 # Load general-mode input YAML
@@ -133,7 +133,7 @@ def filter_tests_by_rule_families(all_tests):
 def run_general_mode():
 
     print("\n============================================================")
-    print("InB General Mode — Using inb_input.yaml + inb_rulechecker.py")
+    print("InB General Mode — Using inb_input.yaml + validate_inb()")
     print("============================================================\n")
 
     data = load_general_input()
@@ -148,9 +148,8 @@ def run_general_mode():
 
     print(f"Primitive defects: {primitive_defects}")
 
-    # Run rulechecker
-    rc = InB_RuleChecker()
-    rulechecker_defects = rc.check(result_tp)
+    # Run rulechecker (correct invocation)
+    rulechecker_defects = validate_inb(result_tp)
 
     print(f"Rulechecker defects: {rulechecker_defects}\n")
 
@@ -181,7 +180,7 @@ def run_regression_mode():
 
         raw_input = tp.get("raw_input", "")
 
-        # Execute primitive
+        # Execute primitive (regression mode tests primitive only)
         result_tp = InB(tp)
         actual_defects = result_tp.get("defects", [])
 
