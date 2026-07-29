@@ -1,7 +1,7 @@
 # =====================================================================
 # IIInB Primitive – Canonical Rule Set
-# Deterministic structural rules for intake normalization and anomaly
-# detection, aligned with:
+# Deterministic structural rules for intake normalization and primitive
+# flag detection, aligned with:
 #   - 20.101_iiinb_prim.md
 #   - 20.15_ts_architecture_scaffold.md
 #   - 20.105 TP Requirements (010/020/030)
@@ -17,12 +17,6 @@ iiinb_rules:
 
   # -------------------------------------------------------------------
   # RULE ORDERING (MUST remain stable)
-  # -------------------------------------------------------------------
-  # The rule ordering below is canonical. Any change requires updates to:
-  #   - iiinb_py_struc_pgm.md
-  #   - 20.101_iiinb_prim.md
-  #   - progressive_lineup_testing.md
-  #   - iiinb_testbench.yaml
   # -------------------------------------------------------------------
 
   rule_order:
@@ -40,9 +34,6 @@ iiinb_rules:
 
   rules:
 
-    # ---------------------------------------------------------------
-    # 1. Tokenization (original surface only)
-    # ---------------------------------------------------------------
     tokenize_original_surface:
       description: >
         Tokenize the original intake surface using deterministic,
@@ -57,9 +48,6 @@ iiinb_rules:
         type: "tokenization"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 2. Normalize whitespace
-    # ---------------------------------------------------------------
     normalize_whitespace:
       description: >
         Apply deterministic whitespace normalization: collapse multiple
@@ -72,24 +60,18 @@ iiinb_rules:
         type: "repair"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 3. Control characters
-    # ---------------------------------------------------------------
     detect_control_characters:
       description: >
         Detect forbidden control characters (ASCII < 32 except allowed
         whitespace). No semantic interpretation is permitted.
       produces:
-        - anomaly_flags
-      anomaly_types:
-        - control_char_found
+        - primitive_flags
+      primitive_flag_types:
+        - illegal_character.unknown
       provenance:
-        type: "anomaly"
+        type: "primitive_flag"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 4. Repeated punctuation
-    # ---------------------------------------------------------------
     normalize_repeated_punctuation:
       description: >
         Normalize repeated punctuation sequences (e.g., "!!", "??", "...")
@@ -98,18 +80,14 @@ iiinb_rules:
         - normalized
         - repair_operations
       repair_types:
-        - repeated_punctuation_cleaned
+        - repeated_punctuation.cleaned
       provenance:
         type: "repair"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 5. Normalize basic punctuation
-    # ---------------------------------------------------------------
     normalize_basic_punctuation:
       description: >
-        Apply structural punctuation normalization (e.g., convert
-        repeated punctuation to single canonical punctuation).
+        Apply structural punctuation normalization.
       produces:
         - normalized
         - repair_operations
@@ -117,9 +95,6 @@ iiinb_rules:
         type: "repair"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 6. Normalize case (if required)
-    # ---------------------------------------------------------------
     normalize_case_if_required:
       description: >
         Apply deterministic case normalization ONLY if required by
@@ -131,9 +106,6 @@ iiinb_rules:
         type: "repair"
         deterministic: true
 
-    # ---------------------------------------------------------------
-    # 7. Finalize normalized surface
-    # ---------------------------------------------------------------
     finalize_normalized_surface:
       description: >
         Produce the final normalized surface string. MUST be stable
@@ -151,13 +123,13 @@ iiinb_rules:
     required_fields:
       - iiinb_status
       - repair_operations
-      - anomaly_flags
+      - primitive_flags
       - normalized
       - tokens
     field_types:
       iiinb_status: str
       repair_operations: list
-      anomaly_flags: list
+      primitive_flags: list
       normalized: str
       tokens: list
     metadata:
@@ -192,4 +164,3 @@ iiinb_rules:
     cross_language_identical_output: true
     tokenization_rules_must_match: true
     normalization_rules_must_match: true
-

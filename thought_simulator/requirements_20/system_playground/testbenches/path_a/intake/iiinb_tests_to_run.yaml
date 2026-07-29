@@ -1,53 +1,44 @@
 # ============================================================
 # IIInB Test Selection Toggles
 # Path‑A Intake Envelope
-# Rule-family driven test selection for regression testbench
+# Testbench-driven rule-family toggles (NOT IIInB ontology)
 # ============================================================
 
 tests_to_run:
 
   # ------------------------------------------------------------
-  # Spacing Rule Family
+  # Spacing Repair Tests
   # ------------------------------------------------------------
-  # Covers:
-  #   - spacing.multiple_spaces
-  #   - spacing.missing_space_after_punctuation
-  #   - spacing.leading
-  #   - spacing.trailing
+  # Covers primitive whitespace issues that produce:
+  #   - repair_operations: whitespace.normalized
   spacing: 1
 
   # ------------------------------------------------------------
-  # Punctuation Rule Family
+  # Punctuation Repair Tests
   # ------------------------------------------------------------
-  # Covers:
-  #   - punctuation.repeated
-  #   - punctuation.cluster
-  #   - punctuation.basic_normalization
+  # Covers primitive punctuation issues that produce:
+  #   - repair_operations: punctuation.cleaned
   punctuation: 1
 
   # ------------------------------------------------------------
-  # Control Character Rule Family
+  # Control Character Tests
   # ------------------------------------------------------------
-  # Covers:
-  #   - control.tab
-  #   - control.newline
-  #   - control.mixed
+  # Covers primitive illegal characters that produce:
+  #   - primitive_flags: illegal_character.unknown
   control_chars: 1
 
   # ------------------------------------------------------------
-  # Normalization Rule Family
+  # Normalization Tests
   # ------------------------------------------------------------
-  # Covers:
-  #   - normalize.whitespace
-  #   - normalize.punctuation
-  #   - normalize.case
+  # Covers normalization behaviors that produce:
+  #   - repair_operations: whitespace.normalized
+  #   - repair_operations: punctuation.cleaned
+  #   - repair_operations: case.normalized
   normalization: 1
 
   # ------------------------------------------------------------
-  # Deterministic Behavior Rule Family
+  # Deterministic Behavior Tests
   # ------------------------------------------------------------
-  # Covers:
-  #   - deterministic.replay
-  #   - deterministic.no_external_state
+  # Covers rulechecker validations:
+  #   - rulechecker_flags: deterministic.*
   deterministic: 1
-

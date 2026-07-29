@@ -54,7 +54,7 @@ def iiinb_inspect(intake: dict) -> dict:
         {
             "iiinb_status": "inspected",
             "repair_operations": [...],
-            "anomaly_flags": [...],
+            "primitive_flags": [...],
             "normalized": str,
             "tokens": list[str]
         }
@@ -67,7 +67,7 @@ def iiinb_inspect(intake: dict) -> dict:
     work = surface
 
     repair_ops = []
-    anomaly_flags = []
+    primitive_flags = []
 
     # --------------------------------------------------------
     # 0. Length guard for long inputs (test: long.input)
@@ -76,7 +76,7 @@ def iiinb_inspect(intake: dict) -> dict:
         return {
             "iiinb_status": "inspected",
             "repair_operations": [],
-            "anomaly_flags": [],
+            "primitive_flags": [],
             "normalized": "",
             "tokens": []
         }
@@ -86,7 +86,7 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     if "<broken>" in work:
         repair_ops.append({
-            "type": "structural.cleaned",
+            "type": "extension.structural.cleaned",
             "target": "<broken>",
             "proposal": ""
         })
@@ -98,8 +98,8 @@ def iiinb_inspect(intake: dict) -> dict:
     if "   " in work:
         repair_ops.append({
             "type": "whitespace.normalized",
-            "target": "The   dog",
-            "proposal": "The dog"
+            "target": "   ",
+            "proposal": " "
         })
         work = work.replace("   ", " ")
 
@@ -211,12 +211,12 @@ def iiinb_inspect(intake: dict) -> dict:
     normalized = work
 
     # --------------------------------------------------------
-    # 8. Illegal character anomalies (normalized indexing)
+    # 8. Illegal character primitive flags (normalized indexing)
     # --------------------------------------------------------
     for idx, ch in enumerate(normalized):
         if is_illegal_char(ch):
             location = sum(1 for c in normalized[:idx] if c != " ")
-            anomaly_flags.append({
+            primitive_flags.append({
                 "type": "illegal_character.unknown",
                 "target": ch,
                 "location": location
@@ -244,7 +244,7 @@ def iiinb_inspect(intake: dict) -> dict:
     return {
         "iiinb_status": "inspected",
         "repair_operations": repair_ops,
-        "anomaly_flags": anomaly_flags,
+        "primitive_flags": primitive_flags,
         "normalized": normalized,
         "tokens": tokens
     }
@@ -261,7 +261,7 @@ class IIInB:
         Then iiinb.inspect(), and reads:
             • metadata["iiinb_status"]
             • repair_operations / repairs
-            • anomaly_flags / anomalies
+            • primitive_flags / anomalies
             • normalized
             • tokens
 
@@ -271,7 +271,7 @@ class IIInB:
 
         self.metadata = {}
         self.repair_operations = []
-        self.anomaly_flags = []
+        self.primitive_flags = []
         self.normalized = ""
         self.tokens = getattr(tp, "tokens", [])
 
@@ -286,13 +286,15 @@ class IIInB:
 
         self.metadata["iiinb_status"] = result["iiinb_status"]
         self.repair_operations = result["repair_operations"]
-        self.anomaly_flags = result["anomaly_flags"]
+        self.primitive_flags = result["primitive_flags"]
+        self.flags = self.primitive_flags
+        self.anomalies = self.primitive_flags   # compatibility alias
         self.normalized = result["normalized"]
         self.tokens = result["tokens"]
 
         # Compatibility aliases expected by the testbench
         self.repairs = self.repair_operations
-        self.anomalies = self.anomaly_flags
+        self.anomalies = self.primitive_flags
 
         # IMPORTANT: return the TP dict for pipeline / IE
         return result

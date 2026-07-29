@@ -1,12 +1,12 @@
 """
 iiinb_rulechecker.py
 
-Canonical rule checker for the IIInB primitive.
+Canonical validator for the IIInB primitive.
 
 This module validates:
 
 - iiinb_rules.yaml structure and contents
-- alignment with the canonical TP envelope schema
+- alignment with the canonical IIInB TP envelope schema
 - determinism and forbidden behavior constraints
 - basic parity expectations for Python/C++ implementations
 
@@ -31,7 +31,7 @@ import yaml
 
 CANONICAL_RULE_ORDER: List[str] = [
     "tokenize_original_surface",
-    "detect_spacing_anomalies",
+    "detect_spacing_patterns",
     "detect_control_characters",
     "detect_repeated_punctuation",
     "normalize_whitespace",
@@ -43,7 +43,7 @@ CANONICAL_RULE_ORDER: List[str] = [
 TP_REQUIRED_FIELDS: List[str] = [
     "iiinb_status",
     "repair_operations",
-    "anomaly_flags",
+    "primitive_flags",
     "normalized",
     "tokens",
 ]
@@ -51,7 +51,7 @@ TP_REQUIRED_FIELDS: List[str] = [
 TP_FIELD_TYPES: Dict[str, type] = {
     "iiinb_status": str,
     "repair_operations": list,
-    "anomaly_flags": list,
+    "primitive_flags": list,
     "normalized": str,
     "tokens": list,
 }
@@ -72,7 +72,7 @@ class RuleCheckerError(Exception):
 
 class IIInBRuleChecker:
     """
-    Rule checker for iiinb_rules.yaml.
+    Validator for iiinb_rules.yaml.
 
     Usage:
         checker = IIInBRuleChecker(Path("iiinb_rules.yaml"))
@@ -203,7 +203,6 @@ class IIInBRuleChecker:
                 raise RuleCheckerError(
                     f"tp_envelope.field_types missing entry for {field!r}."
                 )
-            # We store type names as strings in YAML; here we just check consistency.
             if type_name != expected_type.__name__:
                 raise RuleCheckerError(
                     f"tp_envelope.field_types[{field!r}] must be '{expected_type.__name__}', "
@@ -292,8 +291,6 @@ class IIInBRuleChecker:
                     f"got {type(envelope[field]).__name__}."
                 )
 
-        # Metadata write constraint is enforced in iiinb.py; here we only
-        # optionally check that iiinb_status looks like a string.
         if "iiinb_status" in envelope and not isinstance(envelope["iiinb_status"], str):
             errors.append("iiinb_status must be a string.")
 
@@ -325,45 +322,51 @@ if __name__ == "__main__":
     raise SystemExit(main())
 
 
+# ----------------------------------------------------------------------
+# Runtime rulechecker (Path A validation)
+# ----------------------------------------------------------------------
+
 def validate_iiinb(tp):
     """
     Unified IIInB rulechecker entrypoint.
-    Returns a list of anomaly flags detected by rulechecker.
+    Returns a list of rulechecker_flags describing validation outcomes.
     """
 
-    anomalies = []
+    rulechecker_flags = []
 
-    # Spacing rules
-    anomalies.extend(check_spacing(tp))
+    # Control character validation (primitive → rulechecker)
+    rulechecker_flags.extend(check_control_chars(tp))
 
-    # Punctuation rules
-    anomalies.extend(check_punctuation(tp))
+    # Deterministic behavior validation
+    rulechecker_flags.extend(check_deterministic(tp))
 
-    # Control character rules
-    anomalies.extend(check_control_chars(tp))
+    # Normalization validation (placeholder)
+    rulechecker_flags.extend(check_normalization(tp))
 
-    # Normalization rules
-    anomalies.extend(check_normalization(tp))
+    return rulechecker_flags
 
-    # Deterministic behavior rules
-    anomalies.extend(check_deterministic(tp))
-
-    return anomalies
-
-def check_spacing(tp):
-    return []
-
-def check_punctuation(tp):
-    return []
 
 def check_control_chars(tp):
-    return []
+    """
+    Convert primitive illegal-character flags into rulechecker flags.
+    """
+    flags = []
+    for f in tp.get("primitive_flags", []):
+        if f["type"].startswith("illegal_character"):
+            flags.append("illegal_character.unknown")
+    return flags
+
 
 def check_normalization(tp):
+    """
+    Placeholder for normalization validation.
+    IIInB normalization is deterministic and validated structurally.
+    """
     return []
+
 
 def check_deterministic(tp):
+    """
+    Placeholder for deterministic behavior validation.
+    """
     return []
-
-
-
