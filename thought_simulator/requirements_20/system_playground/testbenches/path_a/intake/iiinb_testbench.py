@@ -216,6 +216,19 @@ def run_general_mode():
 
         tp = run_iiinb(tp)
 
+        # ------------------------------------------------------------
+        # NEW: Show full IIInB envelope (developer harness)
+        # ------------------------------------------------------------
+        print("Normalized:", tp.get("normalized"))
+        print("Repairs:", tp.get("repairs"))
+        print("Anomalies:", tp.get("anomalies"))
+        print("Tokens:", tp.get("tokens"))
+        print("Structure:", tp.get("structure"))
+        print("")
+
+        # ------------------------------------------------------------
+        # Existing anomaly comparison logic
+        # ------------------------------------------------------------
         primitive_anomalies = extract_ids_from_list(tp.get("anomalies", []))
         rulechecker_anomalies = extract_ids_from_list(validate_iiinb(tp))
 
