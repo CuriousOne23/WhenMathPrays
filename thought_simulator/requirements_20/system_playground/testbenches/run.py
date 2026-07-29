@@ -32,13 +32,13 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
         {
+            "mode": "testbench",   # or "general"
             "use_inb": True,
             "use_iiinb": False,
             "use_ie": False,
             "tests_to_run": "see inb_tests_to_run.yaml"
         }
     ),
-
     # **************************** IIInB Test bench ****************************************************
     # Highest upstream True = IIInB (primitive under test)
     # Pipeline: IIInB only, input from IIInB YAML
