@@ -1,18 +1,182 @@
 # ✅ **`inb_py_struc_pgm.md` — One‑Stop InB Programming Reference**  
 ### Path‑A Intake Normalization Primitive (Python & C++)
 
-This document is the **canonical programming blueprint** for implementing the **InB primitive** in Python or C++.  
+This document is the **canonical programming blueprint** for implementing and testing the **InB primitive** in Python or C++.  
 It synchronizes:
 
 - `inb.py`  
 - `inb_testbench.yaml`  
 - `inb_testbench.py`  
+- `inb_input.yaml`  
+- `inb_tests_to_run.yaml`  
+- `inb_rulechecker.py`  
 - `run.py`  
+- `inb_rules.yaml`  
 - `20.100_inb_requirements.md`  
 - **20.105 TP Envelope Requirements**  
 - **20.15 Architecture Scaffold**
 
-Everything required to understand InB’s behavior, defect detection, normalization rules, and pipeline role is here.
+Everything required to understand InB’s behavior, defect detection, normalization rules, **and the full testing process** is here.
+
+---
+
+# 0. InB Testing Architecture (Updated)
+
+InB now supports **two testing modes**, selectable directly from `run.py`:
+
+```python
+"mode": "general"     # developer quick check
+"mode": "testbench"   # full regression suite
+```
+
+These modes are implemented in `inb_testbench.py` and allow developers to test InB in a **structured, controlled, deterministic** manner.
+
+---
+
+## 0.1 General Mode — Developer Quick Check
+
+General mode uses:
+
+- `inb_input.yaml`  
+- `inb_rulechecker.py`  
+
+Flow:
+
+1. Load a single TP from `inb_input.yaml`
+2. Run InB on the TP
+3. Capture **primitive defects** (from InB)
+4. Run **rulechecker defects** (from `inb_rulechecker.py`)
+5. Print both defect lists
+
+Purpose:
+
+- Fast validation during development  
+- Ensures rulechecker alignment  
+- Ensures TP envelope correctness  
+- Ensures deterministic defect ordering  
+
+General mode does **not** use regression tests or rule‑family filtering.
+
+---
+
+## 0.2 Testbench Mode — Full Regression Suite
+
+Testbench mode uses:
+
+- `inb_testbench.yaml`  
+- `inb_tests_to_run.yaml`  
+- `inb_rules.yaml`  
+
+Flow:
+
+1. Load all test cases from `inb_testbench.yaml`
+2. Load rule‑family toggles from `inb_tests_to_run.yaml`
+3. Expand rule families → rule IDs using `inb_rules.yaml`
+4. Filter tests based on enabled rule families
+5. Run InB on each test case
+6. Compare actual defects vs expected defects
+7. Print PASS/FAIL
+
+Purpose:
+
+- Full regression suite  
+- Ensures no regressions  
+- Ensures rule‑family alignment  
+- Ensures deterministic behavior  
+- Ensures correct defect semantics  
+- Ensures correct metadata semantics  
+
+Testbench mode is the **canonical validation path** for InB.
+
+---
+
+## 0.3 Rule‑Family Filtering
+
+Rule families are defined in `inb_rules.yaml` and mapped in `inb_testbench.py`.
+
+Example:
+
+```yaml
+tests_to_run:
+  whitespace: 1
+  punctuation: 1
+  unicode: 1
+  structural: 1
+  output: 1
+  deterministic: 0
+```
+
+Each family expands into rule IDs:
+
+- `whitespace` → `whitespace.excess`, `whitespace.leading`, `whitespace.trailing`
+- `punctuation` → `punctuation.excess`, `punctuation.illegal`
+- `unicode` → `unicode.invalid`, `unicode.non_ascii`
+- `structural` → `structural.malformed`, `structural.illegal`
+- `output` → `output.defects_list_shape`
+- `deterministic` → `deterministic.replay`, `deterministic.no_external_state`
+
+Filtering logic:
+
+- If a test’s expected defects intersect with enabled rule IDs → test is included  
+- If a test has no expected defects → always included  
+
+This allows targeted testing without editing YAML test cases.
+
+---
+
+## 0.4 File Responsibilities (Canonical Map)
+
+| File | Responsibility |
+|------|----------------|
+| `inb.py` | Primitive implementation |
+| `inb_testbench.yaml` | Regression test definitions |
+| `inb_tests_to_run.yaml` | Rule‑family toggles |
+| `inb_testbench.py` | Test harness (general + testbench modes) |
+| `inb_input.yaml` | General mode input |
+| `inb_rulechecker.py` | Rulechecker logic |
+| `inb_rules.yaml` | Rule‑family → rule‑ID mapping |
+| `run.py` | Mode selection + testbench execution |
+
+This table is the “map of the universe” for InB testing.
+
+---
+
+## 0.5 Testing Flow Diagram
+
+```
+run.py
+   |
+   |-- mode: general
+   |       |
+   |       |-- inb_input.yaml
+   |       |-- InB(tp)
+   |       |-- inb_rulechecker.py
+   |       |-- print primitive + rulechecker defects
+   |
+   |-- mode: testbench
+           |
+           |-- inb_testbench.yaml
+           |-- inb_tests_to_run.yaml
+           |-- rule-family filtering
+           |-- InB(tp)
+           |-- compare expected vs actual defects
+           |-- PASS/FAIL
+```
+
+---
+
+## 0.6 How to Modify InB Safely
+
+When changing InB:
+
+1. Update defect detection logic  
+2. Update testbench expectations  
+3. Update rule families if needed  
+4. Update this document  
+5. Run **both modes**  
+6. Confirm determinism (identical input → identical output)
+
+This ensures safe, controlled evolution of the primitive.
 
 ---
 
@@ -343,12 +507,15 @@ To safely modify InB in the future — without breaking determinism, replayabili
 
 # **Summary**
 
-To modify InB safely and deterministically, read these documents:
+To modify InB safely and deterministically:
 
-1. **inb_py_struc_pgm.md** — blueprint  
-2. **20.100_inb_requirements.md** — conceptual spec  
-3. **inb_testbench.yaml** — expected behavior  
-4. **inb_testbench.py** — execution harness  
+- Use **general mode** for quick checks  
+- Use **testbench mode** for full regression  
+- Maintain TP envelope stability  
+- Maintain deterministic defect ordering  
+- Update rule families only in YAML  
+- Update defect semantics only in InB  
+- Update expectations only in testbench YAML  
 
 These documents together define the **complete InB universe**.
 
