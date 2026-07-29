@@ -147,10 +147,17 @@ def filter_tests_by_rule_families(all_tests):
 
         # Extract anomaly IDs (IIInB anomalies may be dicts)
         raw_anomalies = expected.get("anomaly_flags", [])
-        expected_anomalies = [
-            a["id"] if isinstance(a, dict) else a
-            for a in raw_anomalies
-        ]
+        
+        expected_anomalies = []
+        for a in raw_anomalies:
+            if isinstance(a, str):
+                expected_anomalies.append(a)
+            elif isinstance(a, dict):
+                anomaly_id = a.get("id")
+                if anomaly_id:
+                    expected_anomalies.append(anomaly_id)
+                # If dict has no "id", skip it — cannot be rule-filtered
+            # Any other type is ignored
 
         # No expected anomalies → always include
         if not expected_anomalies:
