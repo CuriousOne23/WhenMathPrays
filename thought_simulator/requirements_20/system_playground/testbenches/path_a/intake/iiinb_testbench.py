@@ -108,7 +108,6 @@ def run_iiinb(tp):
     # Object-style output: use attributes populated by IIInB
     tp_obj = iiinb_obj
 
-    # Normalize attribute names to TP fields
     tp_dict = {
         "raw_input": getattr(tp_obj, "raw_input", tp.get("raw_input", "")),
         "metadata": getattr(tp_obj, "metadata", tp.get("metadata", {})),
@@ -119,7 +118,6 @@ def run_iiinb(tp):
         "structure": getattr(tp_obj, "structure", tp.get("structure", {})),
     }
 
-    # Fallbacks for alternate attribute names
     if hasattr(tp_obj, "repair_operations") and not tp_dict["repairs"]:
         tp_dict["repairs"] = tp_obj.repair_operations
     if hasattr(tp_obj, "anomaly_flags") and not tp_dict["anomalies"]:
@@ -128,6 +126,25 @@ def run_iiinb(tp):
         tp_dict["metadata"]["iiinb_status"] = tp_obj.metadata["iiinb_status"]
 
     return tp_dict
+
+# ---------------------------------------------------------------------------
+# Helpers: extract IDs from anomaly/repair lists
+# ---------------------------------------------------------------------------
+
+def extract_ids_from_list(items):
+    """
+    items: list of dicts or strings
+    Returns a list of IDs (strings), ignoring entries without id.
+    """
+    ids = []
+    for x in items:
+        if isinstance(x, str):
+            ids.append(x)
+        elif isinstance(x, dict):
+            _id = x.get("id")
+            if _id:
+                ids.append(_id)
+    return ids
 
 # ---------------------------------------------------------------------------
 # Filter tests based on rule-family toggles (testbench mode)
@@ -145,19 +162,8 @@ def filter_tests_by_rule_families(all_tests):
     for test in all_tests:
         expected = test.get("expected", {})
 
-        # Extract anomaly IDs (IIInB anomalies may be dicts)
         raw_anomalies = expected.get("anomaly_flags", [])
-        
-        expected_anomalies = []
-        for a in raw_anomalies:
-            if isinstance(a, str):
-                expected_anomalies.append(a)
-            elif isinstance(a, dict):
-                anomaly_id = a.get("id")
-                if anomaly_id:
-                    expected_anomalies.append(anomaly_id)
-                # If dict has no "id", skip it — cannot be rule-filtered
-            # Any other type is ignored
+        expected_anomalies = extract_ids_from_list(raw_anomalies)
 
         # No expected anomalies → always include
         if not expected_anomalies:
@@ -197,7 +203,6 @@ def run_general_mode():
         print(f"\n--- Input: {input_id} ---")
         print(f"Raw input: \"{raw}\"\n")
 
-        # Wrap playground entry into a TP dict
         tp = {
             "raw_input": raw,
             "tokens": entry.get("tokens", []),
@@ -206,25 +211,23 @@ def run_general_mode():
             "normalized": raw,
         }
 
-        # Optional upstream InB
         if CONFIG.get("use_inb", False):
             tp = RealInB(tp)
 
-        # Run IIInB primitive
         tp = run_iiinb(tp)
 
-        primitive_anomalies = tp.get("anomalies", [])
-        rulechecker_anomalies = validate_iiinb(tp)
+        primitive_anomalies = extract_ids_from_list(tp.get("anomalies", []))
+        rulechecker_anomalies = extract_ids_from_list(validate_iiinb(tp))
 
-        print(f"Primitive anomalies: {primitive_anomalies}")
-        print(f"Rulechecker anomalies: {rulechecker_anomalies}")
+        print(f"Primitive anomaly IDs: {primitive_anomalies}")
+        print(f"Rulechecker anomaly IDs: {rulechecker_anomalies}")
 
         if not rulechecker_anomalies:
             print("Result: No rulechecker test available for this input.")
             no_tests += 1
             continue
 
-        # PASS = primitive anomalies are a subset of rulechecker anomalies
+        # PASS = primitive anomaly IDs are a subset of rulechecker anomaly IDs
         if all(d in rulechecker_anomalies for d in primitive_anomalies):
             print("Result: PASS")
             passes += 1
@@ -258,7 +261,6 @@ def run_regression_mode():
         name = test.get("id", "unnamed")
         expected = test.get("expected", {})
 
-        # Stimulus: either generated long input or YAML-defined input
         if test.get("generate_long_input", False):
             length = test.get("long_length", 5000)
             raw_input = "A" * length
@@ -275,18 +277,16 @@ def run_regression_mode():
 
         print(f"Running: {name} ...", end=" ")
 
-        # Optional upstream InB
         if CONFIG.get("use_inb", False):
             tp = RealInB(tp)
 
-        # Run IIInB primitive
         tp = run_iiinb(tp)
 
-        # Expected fields
+        # Expected fields (IDs only for anomalies/repairs)
         expected_inb_status = expected.get("inb_status", None)
         expected_iiinb_status = expected.get("iiinb_status", "inspected")
-        expected_repairs = expected.get("repair_operations", [])
-        expected_anomalies = expected.get("anomaly_flags", [])
+        expected_repairs_ids = extract_ids_from_list(expected.get("repair_operations", []))
+        expected_anomaly_ids = extract_ids_from_list(expected.get("anomaly_flags", []))
         expected_normalized = expected.get("normalized", raw_input)
         expected_tokens = expected.get("tokens", None)
         expected_structure = expected.get("structure", None)
@@ -294,8 +294,8 @@ def run_regression_mode():
         # Actual fields
         actual_inb_status = tp.get("metadata", {}).get("inb_status")
         actual_iiinb_status = tp.get("metadata", {}).get("iiinb_status")
-        actual_repairs = tp.get("repairs", [])
-        actual_anomalies = tp.get("anomalies", [])
+        actual_repairs_ids = extract_ids_from_list(tp.get("repairs", []))
+        actual_anomaly_ids = extract_ids_from_list(tp.get("anomalies", []))
         actual_normalized = tp.get("normalized", raw_input)
         actual_tokens = tp.get("tokens", [])
         actual_structure = tp.get("structure", {})
@@ -321,8 +321,8 @@ def run_regression_mode():
             inb_ok = check("InB status", actual_inb_status, expected_inb_status)
 
         iiinb_ok = check("IIInB status", actual_iiinb_status, expected_iiinb_status)
-        repairs_ok = check("Repairs", actual_repairs, expected_repairs)
-        anomalies_ok = check("Anomalies", actual_anomalies, expected_anomalies)
+        repairs_ok = check("Repair IDs", sorted(actual_repairs_ids), sorted(expected_repairs_ids))
+        anomalies_ok = check("Anomaly IDs", sorted(actual_anomaly_ids), sorted(expected_anomaly_ids))
         normalized_ok = check("Normalized", actual_normalized, expected_normalized)
 
         tokens_ok = True
