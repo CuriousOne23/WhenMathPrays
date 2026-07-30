@@ -96,6 +96,11 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
     raw_tokens = re.findall(pattern, surface)
+    print("DEBUG raw_tokens repr:", [repr(t) for t in raw_tokens])
+    print("DEBUG raw_tokens codepoints:", [[hex(ord(c)) for c in t] for t in raw_tokens])
+    print("DEBUG joined:", repr("".join(raw_tokens)))
+    print("DEBUG joined == surface:", "".join(raw_tokens) == surface)
+
 
     # --- NEW: lossless fallback when regex drops characters ---
     # If concatenating regex tokens doesn't give back the original surface,
@@ -153,6 +158,9 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
         final_tokens.append(tok)
         i += 1
+
+    print("DEBUG final_tokens repr:", [repr(t) for t in final_tokens])
+    print("DEBUG final_tokens codepoints:", [[hex(ord(c)) for c in t] for t in final_tokens])
 
     return final_tokens
 
