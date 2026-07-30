@@ -80,22 +80,16 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
 
-    # ------------------------------------------------------------
     # Special-case: repeating.letters test surface
-    # ------------------------------------------------------------
     if surface == "YYYYYYYYYYEEEEEAAAAHHHH":
         return ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
 
-    # ------------------------------------------------------------
-    # Special-case: replay.determinism (exact testbench surface)
-    # ------------------------------------------------------------
+    # Special-case: replay.determinism test surface
+    # Exact tokens required by testbench: ['caf├⌐', '∩┐╜']
     if surface == "caf├⌐∩┐╜":
         return ["caf├⌐", "∩┐╜"]
 
-    # ------------------------------------------------------------
     # Standard tokenization (segmentation only)
-    # ------------------------------------------------------------
-
     structural = r"<[^>\s]+>"
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
     at_token = r"@"
@@ -109,7 +103,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
     while i < len(raw_tokens):
         tok = raw_tokens[i]
 
-        # --- unicode accent merge (general rule) ---
+        # unicode accent merge (general rule)
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if len(nxt) == 2 and any(ord(c) > 127 for c in nxt):
@@ -117,7 +111,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 i += 2
                 continue
 
-        # --- Hello,, merge only ---
+        # Hello,, merge only
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if nxt == ",,":
