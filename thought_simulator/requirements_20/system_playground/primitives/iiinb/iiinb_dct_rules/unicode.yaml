@@ -2,5 +2,6 @@
 # Canonical family: unicode.normalized
 
 rules:
-  "�": ""
-  "∩┐╜": " "
+  "�": ""        # strip replacement character
+  "∩┐╜": " "     # replace mojibake with a space
+
