@@ -1,19 +1,13 @@
 """
 iiinb_rulechecker.py
 
-Canonical validator for the IIInB primitive.
+Canonical validator for the IIInB primitive (proposal‑only, non‑mutating).
 
-This module validates:
-
+Validates:
 - iiinb_rules.yaml structure and contents
-- alignment with the canonical IIInB TP envelope schema
+- alignment with the canonical IIInB TP envelope schema (proposal/anomaly only)
 - determinism and forbidden behavior constraints
-- basic parity expectations for Python/C++ implementations
-
-It is designed to be used by:
-- iiinb_testbench.py
-- progressive lineup testing harnesses
-- ad‑hoc verification runs
+- Python/C++ parity for tokenization, proposal generation, anomaly detection
 """
 
 from __future__ import annotations
@@ -24,43 +18,46 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
-
 # ----------------------------------------------------------------------
-# Canonical constants (must match iiinb_rules.yaml and iiinb_py_struc_pgm.md)
+# Canonical constants (must match updated iiinb_rules.yaml)
 # ----------------------------------------------------------------------
 
 CANONICAL_RULE_ORDER: List[str] = [
     "tokenize_original_surface",
-    "detect_spacing_patterns",
     "detect_control_characters",
-    "detect_repeated_punctuation",
-    "normalize_whitespace",
-    "normalize_basic_punctuation",
-    "normalize_case_if_required",
-    "finalize_normalized_surface",
+    "detect_whitespace_anomalies",
+    "detect_repetition_anomalies",
+    "detect_punctuation_anomalies",
+    "detect_shorthand",
+    "detect_spelling",
+    "detect_unicode_noise",
+    "detect_case_normalization_trigger",
 ]
 
 TP_REQUIRED_FIELDS: List[str] = [
     "iiinb_status",
-    "repair_operations",
-    "primitive_flags",
-    "normalized",
-    "tokens",
+    "repair_proposals",
+    "anomaly_flags",
+    "intake_surface",
+    "intake_tokens",
 ]
 
 TP_FIELD_TYPES: Dict[str, type] = {
     "iiinb_status": str,
-    "repair_operations": list,
-    "primitive_flags": list,
-    "normalized": str,
-    "tokens": list,
+    "repair_proposals": list,
+    "anomaly_flags": list,
+    "intake_surface": str,
+    "intake_tokens": list,
 }
 
 FORBIDDEN_BEHAVIOR_CANONICAL: List[str] = [
     "semantic_inference",
     "semantic_repair",
     "content_generation",
-    "token_dropping_without_provenance",
+    "surface_mutation",
+    "token_mutation",
+    "normalization",
+    "repair_application",
     "nondeterministic_operations",
     "external_state_dependency",
 ]
@@ -72,7 +69,7 @@ class RuleCheckerError(Exception):
 
 class IIInBRuleChecker:
     """
-    Validator for iiinb_rules.yaml.
+    Validator for iiinb_rules.yaml (proposal‑only IIInB).
 
     Usage:
         checker = IIInBRuleChecker(Path("iiinb_rules.yaml"))
@@ -105,9 +102,6 @@ class IIInBRuleChecker:
     # ------------------------------------------------------------------
 
     def validate_all(self) -> None:
-        """
-        Run all validations. Raises RuleCheckerError on failure.
-        """
         self._validate_basic_metadata()
         self._validate_rule_order()
         self._validate_rules_section()
@@ -146,7 +140,6 @@ class IIInBRuleChecker:
         if not isinstance(rules_section, dict):
             raise RuleCheckerError("rules section must be a mapping.")
 
-        # Ensure all canonical rules are present
         for rule_name in CANONICAL_RULE_ORDER:
             if rule_name not in rules_section:
                 raise RuleCheckerError(f"Missing rule definition: {rule_name}")
@@ -155,7 +148,6 @@ class IIInBRuleChecker:
             if not isinstance(rule_def, dict):
                 raise RuleCheckerError(f"Rule '{rule_name}' must be a mapping.")
 
-            # Minimal structural checks
             if "description" not in rule_def:
                 raise RuleCheckerError(f"Rule '{rule_name}' missing 'description'.")
 
@@ -164,6 +156,13 @@ class IIInBRuleChecker:
                 raise RuleCheckerError(
                     f"Rule '{rule_name}' must have non-empty 'produces' list."
                 )
+
+            # Must produce only repair_proposals or anomaly_flags or intake_tokens
+            for p in produces:
+                if p not in ("repair_proposals", "anomaly_flags", "intake_tokens"):
+                    raise RuleCheckerError(
+                        f"Rule '{rule_name}' produces illegal field: {p!r}"
+                    )
 
             provenance = rule_def.get("provenance")
             if not isinstance(provenance, dict):
@@ -244,7 +243,13 @@ class IIInBRuleChecker:
         if not isinstance(replay, dict):
             raise RuleCheckerError("replay section must be a mapping.")
 
-        for key in ("deterministic", "stable_rule_order", "stable_tokenization", "stable_normalization"):
+        for key in (
+            "deterministic",
+            "stable_rule_order",
+            "stable_token_spans",
+            "stable_anomaly_spans",
+            "stable_proposal_order",
+        ):
             if replay.get(key) is not True:
                 raise RuleCheckerError(f"replay.{key} must be true.")
 
@@ -260,39 +265,29 @@ class IIInBRuleChecker:
         for key in (
             "cross_language_identical_output",
             "tokenization_rules_must_match",
-            "normalization_rules_must_match",
+            "proposal_rules_must_match",
+            "anomaly_detection_must_match",
         ):
             if parity.get(key) is not True:
                 raise RuleCheckerError(f"parity.{key} must be true.")
 
-    # ------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     # Runtime TP envelope validation (optional, used by testbench)
-    # ------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def validate_tp_envelope_instance(self, envelope: Dict[str, Any]) -> Tuple[bool, List[str]]:
-        """
-        Validate a runtime TP envelope produced by iiinb.py.
-
-        Returns:
-            (ok, errors)
-        """
         errors: List[str] = []
 
-        # Check required fields
         for field in TP_REQUIRED_FIELDS:
             if field not in envelope:
                 errors.append(f"Missing TP field: {field}")
 
-        # Check types
         for field, expected_type in TP_FIELD_TYPES.items():
             if field in envelope and not isinstance(envelope[field], expected_type):
                 errors.append(
                     f"Field {field!r} must be {expected_type.__name__}, "
                     f"got {type(envelope[field]).__name__}."
                 )
-
-        if "iiinb_status" in envelope and not isinstance(envelope["iiinb_status"], str):
-            errors.append("iiinb_status must be a string.")
 
         return (len(errors) == 0, errors)
 
@@ -334,39 +329,19 @@ def validate_iiinb(tp):
 
     rulechecker_flags = []
 
-    # Control character validation (primitive → rulechecker)
     rulechecker_flags.extend(check_control_chars(tp))
-
-    # Deterministic behavior validation
     rulechecker_flags.extend(check_deterministic(tp))
-
-    # Normalization validation (placeholder)
-    rulechecker_flags.extend(check_normalization(tp))
 
     return rulechecker_flags
 
 
 def check_control_chars(tp):
-    """
-    Convert primitive illegal-character flags into rulechecker flags.
-    """
     flags = []
-    for f in tp.get("primitive_flags", []):
-        if f["type"].startswith("illegal_character"):
-            flags.append("illegal_character.unknown")
+    for f in tp.get("anomaly_flags", []):
+        if f.get("type") == "illegal_character":
+            flags.append("illegal_character")
     return flags
 
 
-def check_normalization(tp):
-    """
-    Placeholder for normalization validation.
-    IIInB normalization is deterministic and validated structurally.
-    """
-    return []
-
-
 def check_deterministic(tp):
-    """
-    Placeholder for deterministic behavior validation.
-    """
     return []
