@@ -84,13 +84,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if surface == "YYYYYYYYYYEEEEEAAAAHHHH":
         return ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
 
-    # NEW: special-case for caf + é + replacement char
-    # Use the actual codepoints, not mojibake.
-    if surface == "caf\u00e9\uFFFD":
-        # First token: 'café' (will display as 'caf├⌐')
-        # Second token: '�' (will display as '∩┐╜')
-        return ["caf\u00e9", "\uFFFD"]
-
     # Standard tokenization (segmentation only)
     structural = r"<[^>\s]+>"
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
@@ -99,6 +92,39 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
     raw_tokens = re.findall(pattern, surface)
+
+    # --- NEW: lossless fallback when regex drops characters ---
+    # If concatenating regex tokens doesn't give back the original surface,
+    # rebuild tokens by simple whitespace segmentation and split off U+FFFD.
+    if "".join(raw_tokens) != surface:
+        # Basic whitespace-based segmentation (preserve all non-space chars)
+        tokens = []
+        current = []
+        for ch in surface:
+            if ch.isspace():
+                if current:
+                    tokens.append("".join(current))
+                    current = []
+            else:
+                current.append(ch)
+        if current:
+            tokens.append("".join(current))
+
+        # Split any token containing the replacement character U+FFFD
+        split_tokens = []
+        for tok in tokens:
+            if "\uFFFD" in tok:
+                idx = tok.index("\uFFFD")
+                if idx > 0:
+                    # prefix before replacement char
+                    split_tokens.append(tok[:idx])
+                # replacement char itself as its own token
+                split_tokens.append(tok[idx:])
+            else:
+                split_tokens.append(tok)
+
+        return split_tokens
+    # --- end fallback ---
 
     final_tokens = []
     i = 0
