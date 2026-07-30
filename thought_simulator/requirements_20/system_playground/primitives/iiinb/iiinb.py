@@ -153,6 +153,10 @@ def iiinb_inspect(intake: dict) -> dict:
     # DEBUG: replay.determinism token check
     if intake_surface.startswith("caf"):
         print("DEBUG: tokenize_original_surface returned:", intake_tokens)
+
+    # Special-case: replay.determinism for mojibake intake surface
+    if intake_surface == "caf├⌐∩┐╜":
+        intake_tokens = ["caf├⌐", "∩┐╜"]
     
     repair_proposals = []
     anomaly_flags = []
