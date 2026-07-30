@@ -9,3 +9,6 @@ rules:
 
   # Missing-letter repairs
   rd: red
+
+  # Shorthand expansions
+  "plz": "please"
