@@ -71,6 +71,11 @@ def collapse_runs(s: str) -> str:
             out.append(ch)
     return "".join(out)
 
+
+# ------------------------------------------------------------
+# Tokenization of original surface (rule 1)
+# ------------------------------------------------------------
+
 def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
@@ -78,75 +83,47 @@ def tokenize_original_surface(surface: str) -> list[str]:
     # 1. Structural tokens: <broken>, <tag>, <xyz123>
     structural = r"<[^>\s]+>"
 
-    # 2. Words: letters/numbers
-    words = r"[A-Za-z0-9]+"
+    # 2. Words that may contain internal/trailing illegal chars (#,$,%)
+    #    e.g., Th#e, dog$, cat%
+    word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
 
-    # 3. Punctuation runs: !!!, ,, , ., @, %, etc.
+    # 3. Standalone @ (so dog@!!! → dog, @, !!!)
+    at_token = r"@"
+
+    # 4. Punctuation runs: !!!, ,, , ., ∩┐╜, etc.
     punct = r"[^\w\s]+"
 
-    pattern = f"{structural}|{words}|{punct}"
+    pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
     raw_tokens = re.findall(pattern, surface)
-    
+
     final_tokens = []
     i = 0
     while i < len(raw_tokens):
         tok = raw_tokens[i]
 
-        # Split alphabetic repetition runs (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens)
-        if tok.isalpha() and len(tok) > 1:
-            # If token contains multiple distinct characters, split at boundaries
-            if len(set(tok)) != 1:
-                final_tokens.extend(split_repetition_runs(tok))
-                i += 1
-                continue
-
-        
-        # --- illegal char merge block ---
-        if tok in {"#", "$", "%", "@"} and i > 0 and i + 1 < len(raw_tokens):
-            prev_tok = final_tokens[-1]
-            next_tok = raw_tokens[i + 1]
-            # Merge only if illegal char was between letters in the original surface
-            if prev_tok.isalpha() and next_tok.isalpha() and surface.find(prev_tok + tok + next_tok) != -1:
-                final_tokens[-1] = prev_tok + tok + next_tok
-                i += 2
-                continue
-    
-        # --- unicode noise merge block ---
+        # --- unicode noise merge for caf├⌐ ---
+        # Merge ASCII word + single unicode noise token
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
-            # Merge only if next token contains non‑ASCII chars AND is not illegal
-            if any(ord(c) > 127 for c in nxt) and nxt not in {"#", "$", "%", "@"}:
+            if any(ord(c) > 127 for c in nxt) and len(nxt) <= 2:
                 final_tokens.append(tok + nxt)
                 i += 2
                 continue
 
-        # Merge word + punctuation when adjacent in surface (Hello,, → Hello,,)
+        # --- word + punctuation adjacency merge (Hello,, → Hello,,) ---
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if nxt and not nxt[0].isalnum():
-                # Check adjacency in surface
                 if surface.find(tok + nxt) != -1:
                     final_tokens.append(tok + nxt)
                     i += 2
                     continue
 
-        # --- fallback ---
         final_tokens.append(tok)
         i += 1
-    
+
     return final_tokens
 
-def split_repetition_runs(s: str) -> list[str]:
-    runs = []
-    current = s[0]
-    for ch in s[1:]:
-        if ch == current[-1]:
-            current += ch
-        else:
-            runs.append(current)
-            current = ch
-    runs.append(current)
-    return runs
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
