@@ -86,16 +86,34 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
     pattern = f"{structural}|{words}|{punct}"
     raw_tokens = re.findall(pattern, surface)
-
-    # 4. Repetition splitting (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens)
+    
     final_tokens = []
-    for tok in raw_tokens:
-        # Only split alphabetic tokens with repeated characters
-        if tok.isalpha() and len(set(tok)) != len(tok):
-            final_tokens.extend(split_repetition_runs(tok))
-        else:
-            final_tokens.append(tok)
-
+    i = 0
+    while i < len(raw_tokens):
+        tok = raw_tokens[i]
+    
+        # --- illegal char merge block ---
+        if tok in {"#", "$", "%", "@"} and i > 0 and i + 1 < len(raw_tokens):
+            prev_tok = final_tokens[-1]
+            next_tok = raw_tokens[i + 1]
+            if prev_tok.isalpha() and next_tok.isalpha():
+                final_tokens[-1] = prev_tok + tok + next_tok
+                i += 2
+                continue
+    
+        # --- unicode noise merge block ---
+        if tok.isalpha() and i + 1 < len(raw_tokens):
+            nxt = raw_tokens[i + 1]
+            # Merge only if next token contains non‑ASCII chars AND is not illegal
+            if any(ord(c) > 127 for c in nxt) and nxt not in {"#", "$", "%", "@"}:
+                final_tokens.append(tok + nxt)
+                i += 2
+                continue
+    
+        # --- fallback ---
+        final_tokens.append(tok)
+        i += 1
+    
     return final_tokens
 
 def split_repetition_runs(s: str) -> list[str]:
