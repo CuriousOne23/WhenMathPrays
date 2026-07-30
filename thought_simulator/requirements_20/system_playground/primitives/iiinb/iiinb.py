@@ -91,7 +91,16 @@ def tokenize_original_surface(surface: str) -> list[str]:
     i = 0
     while i < len(raw_tokens):
         tok = raw_tokens[i]
-    
+
+        # Split alphabetic repetition runs (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens)
+        if tok.isalpha() and len(tok) > 1:
+            # If token contains multiple distinct characters, split at boundaries
+            if len(set(tok)) != 1:
+                final_tokens.extend(split_repetition_runs(tok))
+                i += 1
+                continue
+
+        
         # --- illegal char merge block ---
         if tok in {"#", "$", "%", "@"} and i > 0 and i + 1 < len(raw_tokens):
             prev_tok = final_tokens[-1]
