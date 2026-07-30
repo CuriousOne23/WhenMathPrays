@@ -86,7 +86,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
     - Other symbols: single-character tokens
     """
     print("DEBUG surface:", repr(surface))
-    print("DEBUG codepoints:", [hex(ord(c)) for c in surface))
+    print("DEBUG codepoints:", [hex(ord(c)) for c in surface])
 
     if not surface:
         return []
