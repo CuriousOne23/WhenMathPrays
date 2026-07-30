@@ -106,32 +106,38 @@ def tokenize_original_surface(surface: str) -> list[str]:
     # If concatenating regex tokens doesn't give back the original surface,
     # rebuild tokens by simple whitespace segmentation and split off U+FFFD.
     if "".join(raw_tokens) != surface:
-        # Basic whitespace-based segmentation (preserve all non-space chars)
+        # Lossless segmentation: split on whitespace AND punctuation
         tokens = []
         current = []
+    
         for ch in surface:
             if ch.isspace():
                 if current:
                     tokens.append("".join(current))
                     current = []
-            else:
+            elif ch.isalnum():
                 current.append(ch)
+            else:
+                # punctuation or symbol
+                if current:
+                    tokens.append("".join(current))
+                    current = []
+                tokens.append(ch)
+    
         if current:
             tokens.append("".join(current))
-
-        # Split any token containing the replacement character U+FFFD
+    
+        # Split U+FFFD into its own token
         split_tokens = []
         for tok in tokens:
             if "\uFFFD" in tok:
                 idx = tok.index("\uFFFD")
                 if idx > 0:
-                    # prefix before replacement char
                     split_tokens.append(tok[:idx])
-                # replacement char itself as its own token
                 split_tokens.append(tok[idx:])
             else:
                 split_tokens.append(tok)
-
+    
         return split_tokens
     # --- end fallback ---
 
