@@ -269,7 +269,7 @@ def run_regression_mode():
             "metadata": {},
         }
 
-        print(f"Running: {name} ...", end=" ")
+        # print(f"Running: {name} ...", end=" ")
 
         if CONFIG.get("use_inb", False):
             tp = RealInB(tp)
