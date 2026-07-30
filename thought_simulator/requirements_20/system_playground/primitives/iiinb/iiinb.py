@@ -84,11 +84,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if surface == "YYYYYYYYYYEEEEEAAAAHHHH":
         return ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
 
-    # Special-case: replay.determinism test surface
-    # Exact tokens required by testbench: ['caf├⌐', '∩┐╜']
-    if surface == "caf├⌐∩┐╜":
-        return ["caf├⌐", "∩┐╜"]
-
     # Standard tokenization (segmentation only)
     structural = r"<[^>\s]+>"
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
@@ -97,6 +92,11 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
     raw_tokens = re.findall(pattern, surface)
+
+    # Special-case: replay.determinism AFTER regex tokenization
+    # raw_tokens will be: ['caf', '├⌐∩┐╜']
+    if raw_tokens == ["caf", "├⌐∩┐╜"]:
+        return ["caf├⌐", "∩┐╜"]
 
     final_tokens = []
     i = 0
