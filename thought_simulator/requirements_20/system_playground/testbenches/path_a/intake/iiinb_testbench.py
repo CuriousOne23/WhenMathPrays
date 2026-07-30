@@ -1,9 +1,12 @@
 """
 IIInB Intake Inspection Testbench — Path A
-Supports two modes:
-    • general    → primitive + rulechecker (developer harness)
-    • testbench  → primitive only (regression, rule-family filtered)
-Designed to be executed by run.py
+Compliant with 20.101 (Rewritten)
+IIInB is a pre-semantic repair-proposal primitive:
+    • emits repair_proposals (token-span)
+    • emits anomaly_flags (token-span)
+    • preserves intake_surface and intake_tokens
+    • does NOT apply repairs
+    • does NOT mutate surface or tokens
 """
 
 import os
@@ -26,7 +29,7 @@ CONFIG = {}
 def set_testbench_config(config_dict):
     global CONFIG
     CONFIG = dict(config_dict)
-    CONFIG.setdefault("mode", "testbench")   # "general" or "testbench"
+    CONFIG.setdefault("mode", "testbench")
     CONFIG.setdefault("use_inb", False)
     CONFIG.setdefault("use_iiinb", True)
     CONFIG.setdefault("use_ie", False)
@@ -51,28 +54,26 @@ def load_tests_to_run():
         return yaml.safe_load(f).get("tests_to_run", {})
 
 # ---------------------------------------------------------------------------
-# Rule-family → rule IDs (primitive/repair types)
+# Rule-family → rule IDs (proposal/anomaly types)
 # ---------------------------------------------------------------------------
 
 RULE_FAMILY_MAP = {
     "spacing": [
-        "whitespace.normalized",
+        "whitespace.normalize",
     ],
     "punctuation": [
-        "punctuation.cleaned",
-        "repeated_punctuation.cleaned",
+        "punctuation.clean",
+        "repeated_punctuation.clean",
     ],
     "control_chars": [
-        "illegal_character.unknown",
+        "illegal_character",
     ],
     "normalization": [
-        "unicode.normalized",
-        "case.normalized",
-        "structural.cleaned",
+        "unicode.normalize",
+        "case.normalize",
+        "structural.clean",
     ],
-    "deterministic": [
-        # placeholder for deterministic-related flags if added
-    ],
+    "deterministic": [],
 }
 
 # ---------------------------------------------------------------------------
@@ -81,60 +82,55 @@ RULE_FAMILY_MAP = {
 
 def run_iiinb(tp):
     """
-    tp: dict with at least raw_input, tokens, metadata, structure, normalized
-    Handles both dict-style and object-style IIInB outputs.
+    tp: dict with at least raw_input, tokens, metadata
+    IIInB now emits:
+        • repair_proposals
+        • anomaly_flags
+        • intake_surface
+        • intake_tokens
     """
     iiinb_obj = IIInB(tp)
     result = iiinb_obj.inspect()
 
-    # Dict-style output per spec
+    # Dict-style output per new spec
     if isinstance(result, dict):
         tp.setdefault("metadata", {})
         tp["metadata"]["iiinb_status"] = result.get("iiinb_status")
-        tp["repairs"] = result.get("repair_operations", [])
-        tp["primitive_flags"] = result.get("primitive_flags", [])
-        tp["normalized"] = result.get("normalized", tp.get("raw_input", ""))
-        tp["tokens"] = result.get("tokens", tp.get("tokens", []))
-        tp["structure"] = result.get("structure", tp.get("structure", {}))
+
+        tp["repair_proposals"] = result.get("repair_proposals", [])
+        tp["anomaly_flags"] = result.get("anomaly_flags", [])
+
+        tp["intake_surface"] = result.get("intake_surface", tp.get("raw_input", ""))
+        tp["intake_tokens"] = result.get("intake_tokens", tp.get("tokens", []))
+
         return tp
 
-    # Object-style output: use attributes populated by IIInB
+    # Object-style output
     tp_obj = iiinb_obj
 
     tp_dict = {
-        "raw_input": getattr(tp_obj, "raw_input", tp.get("raw_input", "")),
+        "raw_input": tp.get("raw_input", ""),
         "metadata": getattr(tp_obj, "metadata", tp.get("metadata", {})),
-        "repairs": getattr(tp_obj, "repairs", []),
-        "primitive_flags": getattr(tp_obj, "primitive_flags", []),
-        "normalized": getattr(tp_obj, "normalized", tp.get("raw_input", "")),
-        "tokens": getattr(tp_obj, "tokens", tp.get("tokens", [])),
-        "structure": getattr(tp_obj, "structure", tp.get("structure", {})),
+        "repair_proposals": getattr(tp_obj, "repair_proposals", []),
+        "anomaly_flags": getattr(tp_obj, "anomaly_flags", []),
+        "intake_surface": getattr(tp_obj, "intake_surface", tp.get("raw_input", "")),
+        "intake_tokens": getattr(tp_obj, "intake_tokens", tp.get("tokens", [])),
     }
 
-    if hasattr(tp_obj, "repair_operations") and not tp_dict["repairs"]:
-        tp_dict["repairs"] = tp_obj.repair_operations
-    if hasattr(tp_obj, "primitive_flags") and not tp_dict["primitive_flags"]:
-        tp_dict["primitive_flags"] = tp_obj.primitive_flags
-    if "iiinb_status" in getattr(tp_obj, "metadata", {}):
+    if "iiinb_status" in tp_obj.metadata:
         tp_dict["metadata"]["iiinb_status"] = tp_obj.metadata["iiinb_status"]
 
     return tp_dict
 
 # ---------------------------------------------------------------------------
-# Helpers: extract types from primitive/repair lists
+# Helpers: extract types from proposal/anomaly lists
 # ---------------------------------------------------------------------------
 
 def extract_types_from_list(items):
-    """
-    items: list of dicts or strings
-    Returns a list of types (strings), using 'type' for dict entries.
-    """
     types = []
     for x in items:
-        if isinstance(x, str):
-            types.append(x)
-        elif isinstance(x, dict):
-            t = x.get("type")
+        if isinstance(x, dict):
+            t = x.get("rule_id") or x.get("type")
             if t:
                 types.append(t)
     return types
@@ -155,15 +151,13 @@ def filter_tests_by_rule_families(all_tests):
     for test in all_tests:
         expected = test.get("expected", {})
 
-        raw_flags = expected.get("primitive_flags", [])
+        raw_flags = expected.get("anomaly_flags", [])
         expected_flag_types = extract_types_from_list(raw_flags)
 
-        # No expected primitive flags → always include
         if not expected_flag_types:
             filtered.append(test)
             continue
 
-        # Include if any expected primitive flag belongs to an enabled rule family
         if any(t in enabled_rule_types for t in expected_flag_types):
             filtered.append(test)
 
@@ -199,8 +193,6 @@ def run_general_mode():
             "raw_input": raw,
             "tokens": entry.get("tokens", []),
             "metadata": entry.get("metadata", {}),
-            "structure": entry.get("structure", {}),
-            "normalized": raw,
         }
 
         if CONFIG.get("use_inb", False):
@@ -208,21 +200,18 @@ def run_general_mode():
 
         tp = run_iiinb(tp)
 
-        # Developer harness output
-        print("Normalized:", tp.get("normalized"))
-        print("Repairs:", tp.get("repairs"))
-        print("Primitive Flags:", tp.get("primitive_flags"))
-        print("Tokens:", tp.get("tokens"))
-        print("Structure:", tp.get("structure"))
+        print("Repair Proposals:", tp.get("repair_proposals"))
+        print("Anomaly Flags:", tp.get("anomaly_flags"))
+        print("Intake Tokens:", tp.get("intake_tokens"))
+        print("Intake Surface:", tp.get("intake_surface"))
         print("")
 
-        primitive_flag_types = extract_types_from_list(tp.get("primitive_flags", []))
+        primitive_flag_types = extract_types_from_list(tp.get("anomaly_flags", []))
         rulechecker_flag_types = extract_types_from_list(validate_iiinb(tp))
 
-        print(f"Primitive flag types: {primitive_flag_types}")
-        print(f"Rulechecker flag types: {rulechecker_flag_types}")
+        print(f"Anomaly types: {primitive_flag_types}")
+        print(f"Rulechecker types: {rulechecker_flag_types}")
 
-        # PASS = primitive flag types exactly match rulechecker flag types
         if primitive_flag_types == rulechecker_flag_types:
             print("Result: PASS")
             passes += 1
@@ -246,7 +235,7 @@ def run_regression_mode():
     all_tests = tb.get("tests", [])
     tests = filter_tests_by_rule_families(all_tests)
 
-    print(f"\nLoaded {len(tests)} IIInB intake test cases (after rule-family filtering).\n")
+    print(f"\nLoaded {len(tests)} IIInB intake test cases.\n")
 
     passes = 0
     fails = 0
@@ -264,9 +253,7 @@ def run_regression_mode():
         tp = {
             "raw_input": raw_input,
             "tokens": test.get("tokens", []),
-            "metadata": test.get("metadata", {}),
-            "structure": test.get("structure", {}),
-            "normalized": raw_input,
+            "metadata": {},
         }
 
         print(f"Running: {name} ...", end=" ")
@@ -276,23 +263,17 @@ def run_regression_mode():
 
         tp = run_iiinb(tp)
 
-        # Expected fields
-        expected_inb_status = expected.get("inb_status", None)
-        expected_iiinb_status = expected.get("iiinb_status", "inspected")
-        expected_repairs_types = extract_types_from_list(expected.get("repair_operations", []))
-        expected_flag_types = extract_types_from_list(expected.get("primitive_flags", []))
-        expected_normalized = expected.get("normalized", raw_input)
-        expected_tokens = expected.get("tokens", None)
-        expected_structure = expected.get("structure", None)
+        expected_status = expected.get("iiinb_status", "inspected")
+        expected_repairs = extract_types_from_list(expected.get("repair_proposals", []))
+        expected_flags = extract_types_from_list(expected.get("anomaly_flags", []))
+        expected_tokens = expected.get("intake_tokens", None)
+        expected_surface = expected.get("intake_surface", raw_input)
 
-        # Actual fields
-        actual_inb_status = tp.get("metadata", {}).get("inb_status")
-        actual_iiinb_status = tp.get("metadata", {}).get("iiinb_status")
-        actual_repairs_types = extract_types_from_list(tp.get("repairs", []))
-        actual_flag_types = extract_types_from_list(tp.get("primitive_flags", []))
-        actual_normalized = tp.get("normalized", raw_input)
-        actual_tokens = tp.get("tokens", [])
-        actual_structure = tp.get("structure", {})
+        actual_status = tp.get("metadata", {}).get("iiinb_status")
+        actual_repairs = extract_types_from_list(tp.get("repair_proposals", []))
+        actual_flags = extract_types_from_list(tp.get("anomaly_flags", []))
+        actual_tokens = tp.get("intake_tokens", [])
+        actual_surface = tp.get("intake_surface", raw_input)
 
         results = []
 
@@ -300,37 +281,21 @@ def run_regression_mode():
             if expected is None:
                 return True
             if actual == expected:
-                results.append(
-                    f"  ✔ {label} AGREES — expected {expected!r}, got {actual!r}"
-                )
+                results.append(f"  ✔ {label} AGREES — expected {expected!r}, got {actual!r}")
                 return True
             else:
-                results.append(
-                    f"  ✘ {label} DISAGREES — expected {expected!r}, got {actual!r}"
-                )
+                results.append(f"  ✘ {label} DISAGREES — expected {expected!r}, got {actual!r}")
                 return False
 
-        inb_ok = True
-        if expected_inb_status is not None:
-            inb_ok = check("InB status", actual_inb_status, expected_inb_status)
-
-        iiinb_ok = check("IIInB status", actual_iiinb_status, expected_iiinb_status)
-        repairs_ok = check("Repair types", sorted(actual_repairs_types), sorted(expected_repairs_types))
-        flags_ok = check("Primitive flag types", sorted(actual_flag_types), sorted(expected_flag_types))
-        normalized_ok = check("Normalized", actual_normalized, expected_normalized)
-
+        status_ok = check("IIInB status", actual_status, expected_status)
+        repairs_ok = check("Repair types", sorted(actual_repairs), sorted(expected_repairs))
+        flags_ok = check("Anomaly types", sorted(actual_flags), sorted(expected_flags))
         tokens_ok = True
         if expected_tokens is not None:
             tokens_ok = check("Tokens", actual_tokens, expected_tokens)
+        surface_ok = check("Surface", actual_surface, expected_surface)
 
-        structure_ok = True
-        if expected_structure is not None:
-            structure_ok = check("Structure", actual_structure, expected_structure)
-
-        passed = (
-            inb_ok and iiinb_ok and repairs_ok and flags_ok and
-            normalized_ok and tokens_ok and structure_ok
-        )
+        passed = status_ok and repairs_ok and flags_ok and tokens_ok and surface_ok
 
         if passed:
             passes += 1
@@ -340,7 +305,7 @@ def run_regression_mode():
             print("FAIL")
             for line in results:
                 print(line)
-        print("")  # blank line between tests
+        print("")
 
     print("\n==================== TESTBENCH SUMMARY ====================")
     print(f"Total tests: {len(tests)}")
