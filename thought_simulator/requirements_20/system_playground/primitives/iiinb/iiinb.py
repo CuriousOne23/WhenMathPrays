@@ -126,7 +126,21 @@ def tokenize_original_surface(surface: str) -> list[str]:
     
         if current:
             tokens.append("".join(current))
-    
+
+        # Merge structural tags: <broken> → "<broken>"
+        merged = []
+        i = 0
+        while i < len(tokens):
+            tok = tokens[i]
+            if tok == "<" and i + 2 < len(tokens) and tokens[i+2] == ">":
+                merged.append("<" + tokens[i+1] + ">")
+                i += 3
+            else:
+                merged.append(tok)
+                i += 1
+        
+        tokens = merged
+        
         # Split U+FFFD into its own token
         split_tokens = []
         for tok in tokens:
