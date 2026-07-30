@@ -2,6 +2,7 @@
 # IIInB Test Selection Toggles
 # Path‑A Intake Envelope
 # Testbench-driven rule-family toggles (NOT IIInB ontology)
+# Compliant with 20.101 (Rewritten)
 # ============================================================
 
 tests_to_run:
@@ -9,36 +10,36 @@ tests_to_run:
   # ------------------------------------------------------------
   # Spacing Repair Tests
   # ------------------------------------------------------------
-  # Covers primitive whitespace issues that produce:
-  #   - repair_operations: whitespace.normalized
+  # Covers whitespace issues that produce:
+  #   - repair_proposals: whitespace.normalize
   spacing: 1
 
   # ------------------------------------------------------------
   # Punctuation Repair Tests
   # ------------------------------------------------------------
-  # Covers primitive punctuation issues that produce:
-  #   - repair_operations: punctuation.cleaned
+  # Covers punctuation issues that produce:
+  #   - repair_proposals: punctuation.clean
   punctuation: 1
 
   # ------------------------------------------------------------
   # Control Character Tests
   # ------------------------------------------------------------
-  # Covers primitive illegal characters that produce:
-  #   - primitive_flags: illegal_character.unknown
+  # Covers illegal characters that produce:
+  #   - anomaly_flags: illegal_character
   control_chars: 1
 
   # ------------------------------------------------------------
   # Normalization Tests
   # ------------------------------------------------------------
   # Covers normalization behaviors that produce:
-  #   - repair_operations: whitespace.normalized
-  #   - repair_operations: punctuation.cleaned
-  #   - repair_operations: case.normalized
+  #   - repair_proposals: unicode.normalize
+  #   - repair_proposals: case.normalize
+  #   - repair_proposals: structural.clean
   normalization: 1
 
   # ------------------------------------------------------------
   # Deterministic Behavior Tests
   # ------------------------------------------------------------
   # Covers rulechecker validations:
-  #   - rulechecker_flags: deterministic.*
+  #   - deterministic.* rule families
   deterministic: 1
