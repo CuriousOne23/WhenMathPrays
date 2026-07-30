@@ -108,10 +108,10 @@ def tokenize_original_surface(surface: str) -> list[str]:
     while i < len(raw_tokens):
         tok = raw_tokens[i]
 
-        # --- unicode noise merge for caf├⌐ (general case) ---
+        # --- unicode accent merge (general rule) ---
+        # Merge ASCII word + 2-char unicode accent (e.g., caf + ├⌐ → caf├⌐)
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
-            # Only merge short unicode accent-like tokens (length 2)
             if len(nxt) == 2 and any(ord(c) > 127 for c in nxt):
                 final_tokens.append(tok + nxt)
                 i += 2
