@@ -105,7 +105,8 @@ def tokenize_original_surface(surface: str) -> list[str]:
         if tok in {"#", "$", "%", "@"} and i > 0 and i + 1 < len(raw_tokens):
             prev_tok = final_tokens[-1]
             next_tok = raw_tokens[i + 1]
-            if prev_tok.isalpha() and next_tok.isalpha():
+            # Merge only if illegal char was between letters in the original surface
+            if prev_tok.isalpha() and next_tok.isalpha() and surface.find(prev_tok + tok + next_tok) != -1:
                 final_tokens[-1] = prev_tok + tok + next_tok
                 i += 2
                 continue
@@ -118,7 +119,17 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 final_tokens.append(tok + nxt)
                 i += 2
                 continue
-    
+
+        # Merge word + punctuation when adjacent in surface (Hello,, → Hello,,)
+        if tok.isalpha() and i + 1 < len(raw_tokens):
+            nxt = raw_tokens[i + 1]
+            if nxt and not nxt[0].isalnum():
+                # Check adjacency in surface
+                if surface.find(tok + nxt) != -1:
+                    final_tokens.append(tok + nxt)
+                    i += 2
+                    continue
+
         # --- fallback ---
         final_tokens.append(tok)
         i += 1
