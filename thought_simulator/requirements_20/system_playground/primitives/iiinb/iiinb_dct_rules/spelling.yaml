@@ -9,6 +9,3 @@ rules:
 
   # Missing-letter repairs
   rd: red
-
-  # repitition letter
-  yyes: yes
