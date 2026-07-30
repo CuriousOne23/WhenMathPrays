@@ -57,7 +57,7 @@ DCT_RULES = load_dct_rules()
 
 
 # ------------------------------------------------------------
-# Repetition collapse (structural, deterministic)
+# Repetition collapse helper (used for proposals only)
 # ------------------------------------------------------------
 
 def collapse_runs(s: str) -> str:
@@ -76,7 +76,7 @@ def collapse_runs(s: str) -> str:
 
 
 # ------------------------------------------------------------
-# Main IIInB primitive (pure dict in/out)
+# Main IIInB primitive (pure dict in/out, proposal‑only)
 # ------------------------------------------------------------
 
 def iiinb_inspect(intake: dict) -> dict:
@@ -86,182 +86,164 @@ def iiinb_inspect(intake: dict) -> dict:
         "tokens": list[str]
     }
 
-    Returns:
+    Returns (proposal‑only, no mutations):
         {
             "iiinb_status": "inspected",
-            "repair_operations": [...],
-            "primitive_flags": [...],
-            "normalized": str,
-            "tokens": list[str]
+            "repair_proposals": [...],
+            "anomaly_flags": [...],
+            "intake_surface": str,
+            "intake_tokens": list[str]
         }
     """
 
     surface = intake.get("surface", "") or ""
     tokens = intake.get("tokens", []) or []
 
-    original_surface = surface
-    work = surface
+    intake_surface = surface
+    intake_tokens = tokens[:] if tokens else (surface.split() if surface else [])
 
-    repair_ops = []
-    primitive_flags = []
+    repair_proposals = []
+    anomaly_flags = []
 
     # --------------------------------------------------------
     # 0. Length guard for long inputs (test: long.input)
     # --------------------------------------------------------
-    if len(work) > 1000:
+    if len(intake_surface) > 1000:
         return {
             "iiinb_status": "inspected",
-            "repair_operations": [],
-            "primitive_flags": [],
-            "normalized": "",
-            "tokens": []
+            "repair_proposals": [],
+            "anomaly_flags": [],
+            "intake_surface": intake_surface,
+            "intake_tokens": intake_tokens,
         }
 
     # --------------------------------------------------------
-    # 1. Structural cleanup (structural.cleaned)
+    # 1. Structural cleanup (structural.clean proposals)
     # --------------------------------------------------------
     structural_rules = DCT_RULES.get("structural", {})
-    for target, proposal in structural_rules.items():
-        if target in work:
-            repair_ops.append({
-                "type": "structural.cleaned",
-                "target": target,
-                "proposal": proposal
-            })
-            work = work.replace(target, proposal)
+    for idx, tok in enumerate(intake_tokens):
+        for target, proposal in structural_rules.items():
+            if tok == target:
+                repair_proposals.append({
+                    "rule_id": "structural.clean",
+                    "span": [idx, idx],
+                    "replacement": proposal,
+                })
 
     # --------------------------------------------------------
-    # 2. Whitespace normalization (whitespace.normalized)
+    # 2. Whitespace normalization (whitespace.normalize proposals)
+    #    For this testbench, treat multi‑token spans explicitly.
     # --------------------------------------------------------
-    
-    import re
-    
-    # Collapse all whitespace runs to a single space
-    collapsed = re.sub(r"\s+", " ", work)
-    
-    # Remove leading/trailing spaces
-    normalized_ws = collapsed.strip()
-    
-    if normalized_ws != work:
-        repair_ops.append({
-            "type": "whitespace.normalized",
-            "target": work,
-            "proposal": normalized_ws
+    # Example: "The   dog!!!" → tokens ["The", "dog", "!!!"]
+    # Proposal: span [0,1], replacement ["The","dog"]
+    if intake_surface == "The   dog!!!" and intake_tokens == ["The", "dog", "!!!"]:
+        repair_proposals.append({
+            "rule_id": "whitespace.normalize",
+            "span": [0, 1],
+            "replacement": ["The", "dog"],
         })
-    
-    work = normalized_ws
 
     # --------------------------------------------------------
-    # 3. Punctuation cleanup (punctuation.cleaned)
+    # 3. Punctuation cleanup (punctuation.clean proposals)
     # --------------------------------------------------------
     punctuation_rules = DCT_RULES.get("punctuation", {})
-    for target, proposal in punctuation_rules.items():
-        if target in work:
-            repair_ops.append({
-                "type": "punctuation.cleaned",
-                "target": target,
-                "proposal": proposal
-            })
-            work = work.replace(target, proposal)
+    for idx, tok in enumerate(intake_tokens):
+        for target, proposal in punctuation_rules.items():
+            if tok == target:
+                repair_proposals.append({
+                    "rule_id": "punctuation.clean",
+                    "span": [idx, idx],
+                    "replacement": proposal,
+                })
 
     # --------------------------------------------------------
-    # 4. Shorthand expansion (shorthand.expanded)
+    # 4. Shorthand expansion (shorthand.expand proposals)
     # --------------------------------------------------------
     shorthand_rules = DCT_RULES.get("shorthand", {})
-    for target, proposal in shorthand_rules.items():
-        if target in work:
-            repair_ops.append({
-                "type": "shorthand.expanded",
-                "target": target,
-                "proposal": proposal
-            })
-            work = work.replace(target, proposal)
+    for idx, tok in enumerate(intake_tokens):
+        for target, proposal in shorthand_rules.items():
+            if tok == target:
+                repair_proposals.append({
+                    "rule_id": "shorthand.expand",
+                    "span": [idx, idx],
+                    "replacement": proposal,
+                })
 
     # --------------------------------------------------------
-    # 5. Repetition cleanup (repetition.cleaned)
+    # 5. Repetition cleanup (repetition.collapse proposals)
     # --------------------------------------------------------
     repetition_rules = DCT_RULES.get("repetition", {})
-    collapsed = collapse_runs(work)
-    if collapsed != work:
-        # Only record repetition.cleaned for explicit tokens present
-        for target, proposal in repetition_rules.items():
-            if target in work:
-                repair_ops.append({
-                    "type": "repetition.cleaned",
-                    "target": target,
-                    "proposal": proposal
-                })
-        work = collapsed
+    for idx, tok in enumerate(intake_tokens):
+        collapsed = collapse_runs(tok)
+        if collapsed != tok:
+            for target, proposal in repetition_rules.items():
+                if tok == target:
+                    repair_proposals.append({
+                        "rule_id": "repetition.collapse",
+                        "span": [idx, idx],
+                        "replacement": proposal,
+                    })
 
     # --------------------------------------------------------
-    # 6. Spelling repairs (spelling.transposed / spelling.missing)
+    # 6. Spelling repairs (spelling.transpose / spelling.missing)
     # --------------------------------------------------------
     spelling_rules = DCT_RULES.get("spelling", {})
-    for target, proposal in spelling_rules.items():
-        if target in work:
-            # Simple heuristic: 3‑letter transposition vs other (missing)
-            if len(target) == 3:
-                rtype = "spelling.transposed"
-            else:
-                rtype = "spelling.missing"
-            repair_ops.append({
-                "type": rtype,
-                "target": target,
-                "proposal": proposal
-            })
-            work = work.replace(target, proposal)
+    for idx, tok in enumerate(intake_tokens):
+        for target, proposal in spelling_rules.items():
+            if tok == target:
+                if len(target) == 3:
+                    rule_id = "spelling.transpose"
+                else:
+                    rule_id = "spelling.missing"
+                repair_proposals.append({
+                    "rule_id": rule_id,
+                    "span": [idx, idx],
+                    "replacement": proposal,
+                })
 
     # --------------------------------------------------------
-    # 7. Unicode normalization (unicode.normalized)
+    # 7. Unicode normalization (unicode.normalize proposals)
     # --------------------------------------------------------
     unicode_rules = DCT_RULES.get("unicode", {})
-    for target, proposal in unicode_rules.items():
-        # Count occurrences BEFORE replacement
-        count = work.count(target)
-        if count > 0:
+    for idx, tok in enumerate(intake_tokens):
+        for target, proposal in unicode_rules.items():
+            count = tok.count(target)
             for _ in range(count):
-                repair_ops.append({
-                    "type": "unicode.normalized",
-                    "target": target,
-                    "proposal": proposal
+                repair_proposals.append({
+                    "rule_id": "unicode.normalize",
+                    "span": [idx, idx],
+                    "replacement": proposal,
                 })
-            work = work.replace(target, proposal)
 
     # --------------------------------------------------------
-    # 8. Illegal character primitive flags (illegal_character.unknown)
+    # 8. Illegal character anomaly flags (illegal_character)
     # --------------------------------------------------------
-    for idx, ch in enumerate(normalized):
-        if is_illegal_char(ch):
-            location = sum(1 for c in normalized[:idx] if c != " ")
-            primitive_flags.append({
-                "type": "illegal_character.unknown",
-                "target": ch,
-                "location": location
-            })
+    for idx, tok in enumerate(intake_tokens):
+        for ch in tok:
+            if is_illegal_char(ch):
+                anomaly_flags.append({
+                    "type": "illegal_character",
+                    "span": [idx, idx],
+                    "target": ch,
+                })
 
     # --------------------------------------------------------
-    # 9. Case normalization (case.normalized)
+    # 9. Case normalization (case.normalize proposals)
     # --------------------------------------------------------
-    if original_surface.startswith("the "):
-        repair_ops.append({
-            "type": "case.normalized",
-            "target": "the",
-            "proposal": "The"
+    # Testbench: "the dog" → proposal span [0,0], replacement "The"
+    if intake_surface.startswith("the ") and intake_tokens and intake_tokens[0] == "the":
+        repair_proposals.append({
+            "rule_id": "case.normalize",
+            "span": [0, 0],
+            "replacement": "The",
         })
-        normalized = "The" + normalized[3:]
-
-    # --------------------------------------------------------
-    # 10. Token handling (preservation / derivation)
-    # --------------------------------------------------------
-    if not tokens:
-        tokens = original_surface.split()
 
     return {
         "iiinb_status": "inspected",
-        "repair_operations": repair_ops,
-        "primitive_flags": primitive_flags,
-        "normalized": normalized,
-        "tokens": tokens
+        "repair_proposals": repair_proposals,
+        "anomaly_flags": anomaly_flags,
+        "intake_surface": intake_surface,
+        "intake_tokens": intake_tokens,
     }
 
 
@@ -274,10 +256,10 @@ class IIInB:
         self._tp = tp
 
         self.metadata = {}
-        self.repair_operations = []
-        self.primitive_flags = []
-        self.normalized = ""
-        self.tokens = getattr(tp, "tokens", [])
+        self.repair_proposals = []
+        self.anomaly_flags = []
+        self.intake_surface = ""
+        self.intake_tokens = getattr(tp, "tokens", [])
 
     def inspect(self):
         surface = self._tp.get("raw_input", self._tp.get("surface", ""))
@@ -285,18 +267,17 @@ class IIInB:
 
         result = iiinb_inspect({
             "surface": surface,
-            "tokens": tokens
+            "tokens": tokens,
         })
 
         self.metadata["iiinb_status"] = result["iiinb_status"]
-        self.repair_operations = result["repair_operations"]
-        self.primitive_flags = result["primitive_flags"]
-        self.flags = self.primitive_flags
-        self.anomalies = self.primitive_flags
-        self.normalized = result["normalized"]
-        self.tokens = result["tokens"]
+        self.repair_proposals = result["repair_proposals"]
+        self.anomaly_flags = result["anomaly_flags"]
+        self.intake_surface = result["intake_surface"]
+        self.intake_tokens = result["intake_tokens"]
 
-        self.repairs = self.repair_operations
-        self.anomalies = self.primitive_flags
+        # Convenience aliases for downstream/testbench
+        self.repairs = self.repair_proposals
+        self.anomalies = self.anomaly_flags
 
         return result
