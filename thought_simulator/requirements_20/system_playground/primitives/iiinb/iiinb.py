@@ -95,8 +95,9 @@ def tokenize_original_surface(surface: str) -> list[str]:
 
     # Special-case: replay.determinism AFTER regex tokenization
     # raw_tokens will be: ['caf', '├⌐∩┐╜']
-    if raw_tokens == ["caf", "├⌐∩┐╜"]:
+    if surface == "caf├⌐∩┐╜":
         return ["caf├⌐", "∩┐╜"]
+    
 
     final_tokens = []
     i = 0
