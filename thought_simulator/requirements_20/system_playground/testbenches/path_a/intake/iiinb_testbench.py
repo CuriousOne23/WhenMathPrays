@@ -46,7 +46,17 @@ def load_general_input():
 def load_testbench():
     path = os.path.join(os.path.dirname(__file__), "iiinb_testbench.yaml")
     with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        data = yaml.safe_load(f)
+
+    # DEBUG: show raw YAML input for replay.determinism
+    for t in data.get("tests", []):
+        if t.get("id") == "replay.determinism":
+            raw = t.get("input")
+            print("DEBUG YAML LOAD:", raw)
+            print("DEBUG YAML BYTES:", list(raw.encode("utf-8")))
+            print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+
+    return data
 
 def load_tests_to_run():
     path = os.path.join(os.path.dirname(__file__), "iiinb_tests_to_run.yaml")
