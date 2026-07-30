@@ -250,6 +250,9 @@ def run_regression_mode():
         else:
             raw_input = test.get("input", "")
 
+        # Force UTF‑8 normalization to prevent corruption (fix replay.determinism)
+        raw_input = raw_input.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
+
         tp = {
             "raw_input": raw_input,
             "tokens": test.get("tokens", []),
