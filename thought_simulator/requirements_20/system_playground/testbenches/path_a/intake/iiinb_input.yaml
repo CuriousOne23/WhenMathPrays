@@ -1,6 +1,7 @@
 # ============================================================
 # IIInB Generic Input Playground
 # Developer-driven exploratory inputs for IIInB primitive + rulechecker
+# Compliant with 20.101 (Rewritten)
 # ============================================================
 
 inputs:
@@ -10,11 +11,11 @@ inputs:
   # ------------------------------------------------------------
 
   - id: clean_simple_sentence
-    description: "Simple clean input — should produce no primitive_flags and no repair_operations."
+    description: "Simple clean input — should produce no repair_proposals and no anomaly_flags."
     raw_input: "The quick brown fox jumps over the lazy dog."
 
   - id: clean_unicode_allowed
-    description: "Unicode allowed — café should not produce primitive_flags."
+    description: "Unicode allowed — café should not produce anomaly_flags."
     raw_input: "I enjoyed a café latte today."
 
   # ------------------------------------------------------------
@@ -22,19 +23,19 @@ inputs:
   # ------------------------------------------------------------
   
   - id: spacing_double
-    description: "Two spaces — IIInB should produce whitespace repair_operations."
+    description: "Two spaces — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "The  dog ran."
   
   - id: spacing_triple
-    description: "Three spaces — IIInB should produce whitespace repair_operations."
+    description: "Three spaces — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "Hello   world"
   
   - id: spacing_leading
-    description: "Leading whitespace — IIInB should produce whitespace repair_operations."
+    description: "Leading whitespace — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "   Leading spaces here"
   
   - id: spacing_trailing
-    description: "Trailing whitespace — IIInB should produce whitespace repair_operations."
+    description: "Trailing whitespace — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "Trailing spaces here   "
 
   # ------------------------------------------------------------
@@ -42,15 +43,15 @@ inputs:
   # ------------------------------------------------------------
   
   - id: repeated_exclamation
-    description: "Repeated exclamation — IIInB should produce punctuation repair_operations."
+    description: "Repeated exclamation — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "Stop!!"
   
   - id: repeated_question
-    description: "Repeated question marks — IIInB should produce punctuation repair_operations."
+    description: "Repeated question marks — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "What??"
   
   - id: ellipsis_cluster
-    description: "Ellipsis cluster — IIInB should produce punctuation repair_operations."
+    description: "Ellipsis cluster — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "Wait...Really..."
 
   # ------------------------------------------------------------
@@ -58,15 +59,15 @@ inputs:
   # ------------------------------------------------------------
 
   - id: control_tab
-    description: "Tab character — should produce primitive_flags for illegal control characters."
+    description: "Tab character — should produce illegal_character anomaly_flags."
     raw_input: "Text with\ta tab."
 
   - id: control_newline
-    description: "Newline — should produce primitive_flags for illegal control characters."
+    description: "Newline — should produce illegal_character anomaly_flags."
     raw_input: "Line one.\nLine two."
 
   - id: control_mixed
-    description: "Mixed control characters — should produce primitive_flags for illegal control characters."
+    description: "Mixed control characters — should produce illegal_character anomaly_flags."
     raw_input: "Here\tare\nmixed\rcases."
 
   # ------------------------------------------------------------
@@ -74,11 +75,11 @@ inputs:
   # ------------------------------------------------------------
 
   - id: excessive_whitespace
-    description: "Multiple whitespace issues — IIInB should produce whitespace repair_operations."
+    description: "Multiple whitespace issues — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "Too      many      spaces     here."
 
   - id: mixed_whitespace
-    description: "Leading + internal + trailing whitespace — IIInB should produce whitespace repair_operations."
+    description: "Leading + internal + trailing whitespace — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "   Hello   world   "
 
   # ------------------------------------------------------------
@@ -86,9 +87,9 @@ inputs:
   # ------------------------------------------------------------
 
   - id: mixed_spacing_punctuation_control
-    description: "Spacing + repeated punctuation + control characters — should produce both repair_operations and primitive_flags."
+    description: "Spacing + repeated punctuation + control characters — should produce both repair_proposals and anomaly_flags."
     raw_input: "Here   we go...Multiple   issues!!  Including \t tabs and \n newlines."
 
   - id: mixed_everything
-    description: "Stress test — multiple repair_operations and primitive_flags combined."
+    description: "Stress test — multiple repair_proposals and anomaly_flags combined."
     raw_input: "  Hello!!!   café\t\n   "
