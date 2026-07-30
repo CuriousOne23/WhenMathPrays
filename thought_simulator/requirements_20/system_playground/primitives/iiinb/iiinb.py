@@ -216,15 +216,16 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     unicode_rules = DCT_RULES.get("unicode", {})
     for target, proposal in unicode_rules.items():
-        if target in work:
-            repair_ops.append({
-                "type": "unicode.normalized",
-                "target": target,
-                "proposal": proposal
-            })
+        # Count occurrences BEFORE replacement
+        count = work.count(target)
+        if count > 0:
+            for _ in range(count):
+                repair_ops.append({
+                    "type": "unicode.normalized",
+                    "target": target,
+                    "proposal": proposal
+                })
             work = work.replace(target, proposal)
-
-    normalized = work
 
     # --------------------------------------------------------
     # 8. Illegal character primitive flags (illegal_character.unknown)
