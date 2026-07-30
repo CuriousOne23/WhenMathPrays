@@ -51,34 +51,27 @@ def load_tests_to_run():
         return yaml.safe_load(f).get("tests_to_run", {})
 
 # ---------------------------------------------------------------------------
-# Rule-family → rule IDs (anomaly flags)
+# Rule-family → rule IDs (primitive/repair types)
 # ---------------------------------------------------------------------------
 
 RULE_FAMILY_MAP = {
     "spacing": [
-        "spacing.multiple_spaces",
-        "spacing.missing_space_after_punctuation",
-        "spacing.leading",
-        "spacing.trailing",
+        "whitespace.normalized",
     ],
     "punctuation": [
-        "punctuation.repeated",
-        "punctuation.cluster",
-        "punctuation.basic_normalization",
+        "punctuation.cleaned",
+        "repeated_punctuation.cleaned",
     ],
     "control_chars": [
-        "control.tab",
-        "control.newline",
-        "control.mixed",
+        "illegal_character.unknown",
     ],
     "normalization": [
-        "normalize.whitespace",
-        "normalize.punctuation",
-        "normalize.case",
+        "unicode.normalized",
+        "case.normalized",
+        "structural.cleaned",
     ],
     "deterministic": [
-        "deterministic.replay",
-        "deterministic.no_external_state",
+        # placeholder for deterministic-related flags if added
     ],
 }
 
@@ -99,7 +92,7 @@ def run_iiinb(tp):
         tp.setdefault("metadata", {})
         tp["metadata"]["iiinb_status"] = result.get("iiinb_status")
         tp["repairs"] = result.get("repair_operations", [])
-        tp["anomalies"] = result.get("anomaly_flags", [])
+        tp["primitive_flags"] = result.get("primitive_flags", [])
         tp["normalized"] = result.get("normalized", tp.get("raw_input", ""))
         tp["tokens"] = result.get("tokens", tp.get("tokens", []))
         tp["structure"] = result.get("structure", tp.get("structure", {}))
@@ -112,7 +105,7 @@ def run_iiinb(tp):
         "raw_input": getattr(tp_obj, "raw_input", tp.get("raw_input", "")),
         "metadata": getattr(tp_obj, "metadata", tp.get("metadata", {})),
         "repairs": getattr(tp_obj, "repairs", []),
-        "anomalies": getattr(tp_obj, "anomalies", []),
+        "primitive_flags": getattr(tp_obj, "primitive_flags", []),
         "normalized": getattr(tp_obj, "normalized", tp.get("raw_input", "")),
         "tokens": getattr(tp_obj, "tokens", tp.get("tokens", [])),
         "structure": getattr(tp_obj, "structure", tp.get("structure", {})),
@@ -120,31 +113,31 @@ def run_iiinb(tp):
 
     if hasattr(tp_obj, "repair_operations") and not tp_dict["repairs"]:
         tp_dict["repairs"] = tp_obj.repair_operations
-    if hasattr(tp_obj, "anomaly_flags") and not tp_dict["anomalies"]:
-        tp_dict["anomalies"] = tp_obj.anomaly_flags
+    if hasattr(tp_obj, "primitive_flags") and not tp_dict["primitive_flags"]:
+        tp_dict["primitive_flags"] = tp_obj.primitive_flags
     if "iiinb_status" in getattr(tp_obj, "metadata", {}):
         tp_dict["metadata"]["iiinb_status"] = tp_obj.metadata["iiinb_status"]
 
     return tp_dict
 
 # ---------------------------------------------------------------------------
-# Helpers: extract IDs from anomaly/repair lists
+# Helpers: extract types from primitive/repair lists
 # ---------------------------------------------------------------------------
 
-def extract_ids_from_list(items):
+def extract_types_from_list(items):
     """
     items: list of dicts or strings
-    Returns a list of IDs (strings), ignoring entries without id.
+    Returns a list of types (strings), using 'type' for dict entries.
     """
-    ids = []
+    types = []
     for x in items:
         if isinstance(x, str):
-            ids.append(x)
+            types.append(x)
         elif isinstance(x, dict):
-            _id = x.get("id")
-            if _id:
-                ids.append(_id)
-    return ids
+            t = x.get("type")
+            if t:
+                types.append(t)
+    return types
 
 # ---------------------------------------------------------------------------
 # Filter tests based on rule-family toggles (testbench mode)
@@ -152,26 +145,26 @@ def extract_ids_from_list(items):
 
 def filter_tests_by_rule_families(all_tests):
     toggles = load_tests_to_run()
-    enabled_rule_ids = set()
+    enabled_rule_types = set()
 
     for family, enabled in toggles.items():
         if enabled:
-            enabled_rule_ids.update(RULE_FAMILY_MAP.get(family, []))
+            enabled_rule_types.update(RULE_FAMILY_MAP.get(family, []))
 
     filtered = []
     for test in all_tests:
         expected = test.get("expected", {})
 
-        raw_anomalies = expected.get("anomaly_flags", [])
-        expected_anomalies = extract_ids_from_list(raw_anomalies)
+        raw_flags = expected.get("primitive_flags", [])
+        expected_flag_types = extract_types_from_list(raw_flags)
 
-        # No expected anomalies → always include
-        if not expected_anomalies:
+        # No expected primitive flags → always include
+        if not expected_flag_types:
             filtered.append(test)
             continue
 
-        # Include if any expected anomaly belongs to an enabled rule family
-        if any(a in enabled_rule_ids for a in expected_anomalies):
+        # Include if any expected primitive flag belongs to an enabled rule family
+        if any(t in enabled_rule_types for t in expected_flag_types):
             filtered.append(test)
 
     return filtered
@@ -194,7 +187,6 @@ def run_general_mode():
 
     passes = 0
     fails = 0
-    no_tests = 0
 
     for entry in inputs:
         input_id = entry.get("id", "unnamed")
@@ -216,32 +208,22 @@ def run_general_mode():
 
         tp = run_iiinb(tp)
 
-        # ------------------------------------------------------------
-        # NEW: Show full IIInB envelope (developer harness)
-        # ------------------------------------------------------------
+        # Developer harness output
         print("Normalized:", tp.get("normalized"))
         print("Repairs:", tp.get("repairs"))
-        print("Anomalies:", tp.get("anomalies"))
+        print("Primitive Flags:", tp.get("primitive_flags"))
         print("Tokens:", tp.get("tokens"))
         print("Structure:", tp.get("structure"))
         print("")
 
-        # ------------------------------------------------------------
-        # Existing anomaly comparison logic
-        # ------------------------------------------------------------
-        primitive_anomalies = extract_ids_from_list(tp.get("anomalies", []))
-        rulechecker_anomalies = extract_ids_from_list(validate_iiinb(tp))
+        primitive_flag_types = extract_types_from_list(tp.get("primitive_flags", []))
+        rulechecker_flag_types = extract_types_from_list(validate_iiinb(tp))
 
-        print(f"Primitive anomaly IDs: {primitive_anomalies}")
-        print(f"Rulechecker anomaly IDs: {rulechecker_anomalies}")
+        print(f"Primitive flag types: {primitive_flag_types}")
+        print(f"Rulechecker flag types: {rulechecker_flag_types}")
 
-        if not rulechecker_anomalies:
-            print("Result: No rulechecker test available for this input.")
-            no_tests += 1
-            continue
-
-        # PASS = primitive anomaly IDs are a subset of rulechecker anomaly IDs
-        if all(d in rulechecker_anomalies for d in primitive_anomalies):
+        # PASS = primitive flag types exactly match rulechecker flag types
+        if primitive_flag_types == rulechecker_flag_types:
             print("Result: PASS")
             passes += 1
         else:
@@ -250,10 +232,9 @@ def run_general_mode():
 
     total = len(inputs)
     print("\n==================== GENERAL MODE SUMMARY ====================")
-    print(f"Total inputs:        {total}")
-    print(f"PASS:                {passes}")
-    print(f"FAIL:                {fails}")
-    print(f"No rulechecker test: {no_tests}")
+    print(f"Total inputs: {total}")
+    print(f"PASS:         {passes}")
+    print(f"FAIL:         {fails}")
     print("==============================================================\n")
 
 # ---------------------------------------------------------------------------
@@ -295,11 +276,11 @@ def run_regression_mode():
 
         tp = run_iiinb(tp)
 
-        # Expected fields (IDs only for anomalies/repairs)
+        # Expected fields
         expected_inb_status = expected.get("inb_status", None)
         expected_iiinb_status = expected.get("iiinb_status", "inspected")
-        expected_repairs_ids = extract_ids_from_list(expected.get("repair_operations", []))
-        expected_anomaly_ids = extract_ids_from_list(expected.get("anomaly_flags", []))
+        expected_repairs_types = extract_types_from_list(expected.get("repair_operations", []))
+        expected_flag_types = extract_types_from_list(expected.get("primitive_flags", []))
         expected_normalized = expected.get("normalized", raw_input)
         expected_tokens = expected.get("tokens", None)
         expected_structure = expected.get("structure", None)
@@ -307,8 +288,8 @@ def run_regression_mode():
         # Actual fields
         actual_inb_status = tp.get("metadata", {}).get("inb_status")
         actual_iiinb_status = tp.get("metadata", {}).get("iiinb_status")
-        actual_repairs_ids = extract_ids_from_list(tp.get("repairs", []))
-        actual_anomaly_ids = extract_ids_from_list(tp.get("anomalies", []))
+        actual_repairs_types = extract_types_from_list(tp.get("repairs", []))
+        actual_flag_types = extract_types_from_list(tp.get("primitive_flags", []))
         actual_normalized = tp.get("normalized", raw_input)
         actual_tokens = tp.get("tokens", [])
         actual_structure = tp.get("structure", {})
@@ -334,8 +315,8 @@ def run_regression_mode():
             inb_ok = check("InB status", actual_inb_status, expected_inb_status)
 
         iiinb_ok = check("IIInB status", actual_iiinb_status, expected_iiinb_status)
-        repairs_ok = check("Repair IDs", sorted(actual_repairs_ids), sorted(expected_repairs_ids))
-        anomalies_ok = check("Anomaly IDs", sorted(actual_anomaly_ids), sorted(expected_anomaly_ids))
+        repairs_ok = check("Repair types", sorted(actual_repairs_types), sorted(expected_repairs_types))
+        flags_ok = check("Primitive flag types", sorted(actual_flag_types), sorted(expected_flag_types))
         normalized_ok = check("Normalized", actual_normalized, expected_normalized)
 
         tokens_ok = True
@@ -347,7 +328,7 @@ def run_regression_mode():
             structure_ok = check("Structure", actual_structure, expected_structure)
 
         passed = (
-            inb_ok and iiinb_ok and repairs_ok and anomalies_ok and
+            inb_ok and iiinb_ok and repairs_ok and flags_ok and
             normalized_ok and tokens_ok and structure_ok
         )
 
