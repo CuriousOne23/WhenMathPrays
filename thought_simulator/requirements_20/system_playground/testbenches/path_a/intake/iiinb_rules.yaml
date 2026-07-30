@@ -1,35 +1,36 @@
 # =====================================================================
-# IIInB Primitive – Canonical Rule Set
-# Deterministic structural rules for intake normalization and primitive
-# flag detection, aligned with:
-#   - 20.101_iiinb_prim.md
-#   - 20.15_ts_architecture_scaffold.md
-#   - 20.105 TP Requirements (010/020/030)
+# IIInB Primitive – Canonical Rule Set (Proposal‑Only, Non‑Mutating)
+# Compliant with:
+#   - 20.101_iiinb_prim.md (rewritten)
+#   - 20.105 TP Requirements (proposal/anomaly only)
 #   - iiinb_py_struc_pgm.md (structural program)
 #   - iiinb_rulechecker.py (mechanical validator)
 #   - progressive_lineup_testing.md (lineup determinism)
 # =====================================================================
 
 iiinb_rules:
-  version: "1.0.0"
+  version: "2.0.0"
   primitive: "IIInB"
   determinism: "strict"
 
   # -------------------------------------------------------------------
   # RULE ORDERING (MUST remain stable)
+  # IIInB performs *detection only*, never normalization or mutation.
   # -------------------------------------------------------------------
 
   rule_order:
     - tokenize_original_surface
     - detect_control_characters
-    - normalize_whitespace
-    - normalize_repeated_punctuation
-    - normalize_basic_punctuation
-    - normalize_case_if_required
-    - finalize_normalized_surface
+    - detect_whitespace_anomalies
+    - detect_repetition_anomalies
+    - detect_punctuation_anomalies
+    - detect_shorthand
+    - detect_spelling
+    - detect_unicode_noise
+    - detect_case_normalization_trigger
 
   # -------------------------------------------------------------------
-  # RULE DEFINITIONS
+  # RULE DEFINITIONS (Proposal‑Only)
   # -------------------------------------------------------------------
 
   rules:
@@ -38,100 +39,131 @@ iiinb_rules:
       description: >
         Tokenize the original intake surface using deterministic,
         language‑agnostic structural tokenization. Tokens MUST come
-        from the original surface, not the normalized surface.
+        from the original surface. No normalization or mutation allowed.
       produces:
-        - tokens
+        - intake_tokens
       forbidden:
         - semantic_splitting
         - semantic_merging
+        - token_mutation
       provenance:
         type: "tokenization"
-        deterministic: true
-
-    normalize_whitespace:
-      description: >
-        Apply deterministic whitespace normalization: collapse multiple
-        spaces, remove leading/trailing spaces, ensure single spaces
-        between tokens.
-      produces:
-        - normalized
-        - repair_operations
-      provenance:
-        type: "repair"
         deterministic: true
 
     detect_control_characters:
       description: >
         Detect forbidden control characters (ASCII < 32 except allowed
-        whitespace). No semantic interpretation is permitted.
+        whitespace). Produces anomaly_flags only.
       produces:
-        - primitive_flags
-      primitive_flag_types:
-        - illegal_character.unknown
+        - anomaly_flags
+      anomaly_types:
+        - illegal_character
       provenance:
-        type: "primitive_flag"
+        type: "anomaly"
         deterministic: true
 
-    normalize_repeated_punctuation:
+    detect_whitespace_anomalies:
       description: >
-        Normalize repeated punctuation sequences (e.g., "!!", "??", "...")
-        to their canonical single-character form.
+        Detect whitespace anomalies (leading, trailing, multi‑space runs).
+        Produces repair_proposals with deterministic token‑span indexing.
       produces:
-        - normalized
-        - repair_operations
+        - repair_proposals
       repair_types:
-        - repeated_punctuation.cleaned
+        - whitespace.normalize
       provenance:
-        type: "repair"
+        type: "repair_proposal"
         deterministic: true
 
-    normalize_basic_punctuation:
+    detect_repetition_anomalies:
       description: >
-        Apply structural punctuation normalization.
+        Detect repeated‑character anomalies (e.g., "YYYYYYYY", "EEEEE").
+        Produces repair_proposals with deterministic token‑span indexing.
       produces:
-        - normalized
-        - repair_operations
+        - repair_proposals
+      repair_types:
+        - repetition.collapse
       provenance:
-        type: "repair"
+        type: "repair_proposal"
         deterministic: true
 
-    normalize_case_if_required:
+    detect_punctuation_anomalies:
       description: >
-        Apply deterministic case normalization ONLY if required by
-        20.101_iiinb_prim.md. No semantic case changes allowed.
+        Detect repeated or malformed punctuation sequences (e.g., "!!", "??", "...").
+        Produces repair_proposals only.
       produces:
-        - normalized
-        - repair_operations
+        - repair_proposals
+      repair_types:
+        - punctuation.clean
       provenance:
-        type: "repair"
+        type: "repair_proposal"
         deterministic: true
 
-    finalize_normalized_surface:
+    detect_shorthand:
       description: >
-        Produce the final normalized surface string. MUST be stable
-        under replay and identical across Python/C++ implementations.
+        Detect informal shorthand tokens (e.g., "plz") and propose deterministic
+        expansions. No mutation allowed.
       produces:
-        - normalized
+        - repair_proposals
+      repair_types:
+        - shorthand.expand
       provenance:
-        type: "finalization"
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_spelling:
+      description: >
+        Detect misspellings (transpositions, missing letters) and produce
+        deterministic repair_proposals.
+      produces:
+        - repair_proposals
+      repair_types:
+        - spelling.transpose
+        - spelling.missing
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_unicode_noise:
+      description: >
+        Detect invalid Unicode characters (e.g., U+FFFD) and produce
+        deterministic repair_proposals.
+      produces:
+        - repair_proposals
+      repair_types:
+        - unicode.normalize
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_case_normalization_trigger:
+      description: >
+        Detect deterministic case‑normalization triggers (e.g., "the dog" → "The dog").
+        Produces repair_proposals only. No mutation allowed.
+      produces:
+        - repair_proposals
+      repair_types:
+        - case.normalize
+      provenance:
+        type: "repair_proposal"
         deterministic: true
 
   # -------------------------------------------------------------------
   # TP ENVELOPE REQUIREMENTS (20.105)
   # -------------------------------------------------------------------
+
   tp_envelope:
     required_fields:
       - iiinb_status
-      - repair_operations
-      - primitive_flags
-      - normalized
-      - tokens
+      - repair_proposals
+      - anomaly_flags
+      - intake_surface
+      - intake_tokens
     field_types:
       iiinb_status: str
-      repair_operations: list
-      primitive_flags: list
-      normalized: str
-      tokens: list
+      repair_proposals: list
+      anomaly_flags: list
+      intake_surface: str
+      intake_tokens: list
     metadata:
       allowed_write_fields:
         - iiinb_status
@@ -140,27 +172,35 @@ iiinb_rules:
   # -------------------------------------------------------------------
   # FORBIDDEN BEHAVIOR (20.101 / 20.105.030)
   # -------------------------------------------------------------------
+
   forbidden_behavior:
     - semantic_inference
     - semantic_repair
     - content_generation
-    - token_dropping_without_provenance
+    - surface_mutation
+    - token_mutation
+    - normalization
+    - repair_application
     - nondeterministic_operations
     - external_state_dependency
 
   # -------------------------------------------------------------------
   # REPLAY DETERMINISM (20.15)
   # -------------------------------------------------------------------
+
   replay:
     deterministic: true
     stable_rule_order: true
-    stable_tokenization: true
-    stable_normalization: true
+    stable_token_spans: true
+    stable_anomaly_spans: true
+    stable_proposal_order: true
 
   # -------------------------------------------------------------------
   # PYTHON/C++ PARITY
   # -------------------------------------------------------------------
+
   parity:
     cross_language_identical_output: true
     tokenization_rules_must_match: true
-    normalization_rules_must_match: true
+    proposal_rules_must_match: true
+    anomaly_detection_must_match: true
