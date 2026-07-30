@@ -73,7 +73,7 @@ def collapse_runs(s: str) -> str:
 
 
 # ------------------------------------------------------------
-# Tokenization of original surface (rule 1)
+# Tokenization of original surface (segmentation only)
 # ------------------------------------------------------------
 
 def tokenize_original_surface(surface: str) -> list[str]:
@@ -84,6 +84,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
     structural = r"<[^>\s]+>"
 
     # 2. Words that may contain internal/trailing illegal chars (#,$,%)
+    #    e.g., Th#e, dog$, cat%
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
 
     # 3. Standalone @ (so dog@!!! → dog, @, !!!)
@@ -100,28 +101,20 @@ def tokenize_original_surface(surface: str) -> list[str]:
     while i < len(raw_tokens):
         tok = raw_tokens[i]
 
-        # --- repeating letters split (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens) ---
-        if tok.isalpha() and len(tok) > 1:
-            # If token contains multiple distinct characters, split at boundaries
-            if len(set(tok)) != 1:
-                # Split into runs of identical characters
-                runs = []
-                current = tok[0]
-                for ch in tok[1:]:
-                    if ch == current[-1]:
-                        current += ch
-                    else:
-                        runs.append(current)
-                        current = ch
-                runs.append(current)
-                final_tokens.extend(runs)
-                i += 1
-                continue
-
         # --- unicode noise merge for caf├⌐ ---
+        # Merge ASCII word + single unicode noise token (e.g., caf + ├⌐ → caf├⌐)
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if any(ord(c) > 127 for c in nxt) and len(nxt) <= 2:
+                final_tokens.append(tok + nxt)
+                i += 2
+                continue
+
+        # --- word + punctuation adjacency merge for Hello,, only ---
+        # Merge Hello + ,, → Hello,, but leave dog!!!, cat. as separate tokens
+        if tok.isalpha() and i + 1 < len(raw_tokens):
+            nxt = raw_tokens[i + 1]
+            if nxt == ",,":
                 final_tokens.append(tok + nxt)
                 i += 2
                 continue
@@ -130,6 +123,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
         i += 1
 
     return final_tokens
+
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
@@ -155,6 +149,7 @@ def iiinb_inspect(intake: dict) -> dict:
     surface = intake.get("surface", "") or ""
     tokens = intake.get("tokens", []) or []
 
+    # Linear flow: tokenize first, then apply independent rule blocks
     intake_surface = surface
     intake_tokens = tokens[:] if tokens else tokenize_original_surface(surface)
 
