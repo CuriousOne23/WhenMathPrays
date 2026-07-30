@@ -110,6 +110,16 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 i += 2
                 continue
 
+        # Merge word + punctuation when adjacent in surface (e.g., cat. → cat + .)
+        if tok.isalpha() and i + 1 < len(raw_tokens):
+            nxt = raw_tokens[i + 1]
+            if nxt and not nxt[0].isalnum():
+                # Check adjacency in surface
+                if surface.find(tok + nxt) != -1:
+                    final_tokens.append(tok + nxt)
+                    i += 2
+                    continue
+        
         # --- word + punctuation adjacency merge (Hello,, → Hello,,) ---
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
