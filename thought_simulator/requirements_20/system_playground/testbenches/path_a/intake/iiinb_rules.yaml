@@ -52,19 +52,21 @@ iiinb_rules:
 
     detect_control_characters:
       description: >
-        Detect forbidden control characters (ASCII < 32 except allowed
-        whitespace). Produces anomaly_flags only.
+        Detect illegal surface characters that cannot be deterministically
+        represented or repaired (ASCII control characters < 32 except space,
+        and explicit illegal characters defined by the testbench).
+        These defects are unrepairable and MUST be flagged.
       produces:
         - anomaly_flags
       anomaly_types:
         - illegal_character
       provenance:
-        type: "anomaly"
+        type: "illegal_character"
         deterministic: true
 
-    detect_whitespace_anomalies:
+    detect_whitespace:
       description: >
-        Detect whitespace anomalies (leading, trailing, multi‑space runs).
+        Detect whitespace issues (leading, trailing, multi‑space runs).
         Produces repair_proposals with deterministic token‑span indexing.
       produces:
         - repair_proposals
@@ -74,10 +76,10 @@ iiinb_rules:
         type: "repair_proposal"
         deterministic: true
 
-    detect_repetition_anomalies:
+    detect_repetition:
       description: >
-        Detect repeated‑character anomalies (e.g., "YYYYYYYY", "EEEEE").
-        Produces repair_proposals with deterministic token‑span indexing.
+        Detect repeated-character sequences (e.g., "YYYYYYYY", "EEEEE").
+        Produces repair_proposals with deterministic token-span indexing.
       produces:
         - repair_proposals
       repair_types:
@@ -86,7 +88,7 @@ iiinb_rules:
         type: "repair_proposal"
         deterministic: true
 
-    detect_punctuation_anomalies:
+    detect_punctuation:
       description: >
         Detect repeated or malformed punctuation sequences (e.g., "!!", "??", "...").
         Produces repair_proposals only.
@@ -205,24 +207,4 @@ iiinb_rules:
     proposal_rules_must_match: true
     anomaly_detection_must_match: true
 
-  # -------------------------------------------------------------------
-  # STRUCTURES (IIInB Structural Program)
-  # -------------------------------------------------------------------
-  structures:
-
-    structure_<broken>:
-      description: "Represents an intake token containing literal angle-bracket markup that is not part of any recognized IIInB structural form."
-      classification: "noncanonical_token"
-      triggers:
-        - surface_matches_literal: "<broken>"
-        - token_type: "raw_surface_token"
-      normalization:
-        replace_with: "<broken>"
-        notes:
-          - "Token is preserved verbatim."
-          - "No semantic expansion or rewrite is performed."
-          - "Used to ensure deterministic handling of malformed or placeholder markup."
-      flags:
-        emit_flag: "iiinb_struct_broken_detected"
-        severity: "low"
 
