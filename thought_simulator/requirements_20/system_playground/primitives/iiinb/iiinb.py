@@ -77,6 +77,10 @@ def collapse_runs(s: str) -> str:
 # ------------------------------------------------------------
 
 def tokenize_original_surface(surface: str) -> list[str]:
+    # --- DEBUG: show real codepoints, not mojibake ---
+    print("DEBUG surface repr:", repr(surface))
+    print("DEBUG surface codepoints:", [hex(ord(c)) for c in surface])
+
     if not surface:
         return []
 
