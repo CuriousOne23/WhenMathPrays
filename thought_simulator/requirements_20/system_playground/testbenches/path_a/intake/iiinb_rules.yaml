@@ -206,20 +206,23 @@ iiinb_rules:
     anomaly_detection_must_match: true
 
   # -------------------------------------------------------------------
-  # Structure
+  # STRUCTURES (IIInB Structural Program)
   # -------------------------------------------------------------------
-  structure_<broken>:
-    description: "Represents an intake token containing literal angle-bracket markup that is not part of any recognized IIInB structural form."
-    classification: "noncanonical_token"
-    triggers:
-      - surface_matches_literal: "<broken>"
-      - token_type: "raw_surface_token"
-    normalization:
-      replace_with: "<broken>"
-      notes:
-        - "Token is preserved verbatim."
-        - "No semantic expansion or rewrite is performed."
-        - "Used to ensure deterministic handling of malformed or placeholder markup."
-    flags:
-      emit_flag: "iiinb_struct_broken_detected"
-      severity: "low"
+  structures:
+
+    structure_<broken>:
+      description: "Represents an intake token containing literal angle-bracket markup that is not part of any recognized IIInB structural form."
+      classification: "noncanonical_token"
+      triggers:
+        - surface_matches_literal: "<broken>"
+        - token_type: "raw_surface_token"
+      normalization:
+        replace_with: "<broken>"
+        notes:
+          - "Token is preserved verbatim."
+          - "No semantic expansion or rewrite is performed."
+          - "Used to ensure deterministic handling of malformed or placeholder markup."
+      flags:
+        emit_flag: "iiinb_struct_broken_detected"
+        severity: "low"
+
