@@ -1,100 +1,73 @@
-# ⭐ **FULL UPDATED `progressive_lineup_testing.md`**  
-### *Unified, Deterministic, Two‑Mode, Multi‑Primitive Pipeline Testing Architecture (2026)*
-
----
-
-# **Progressive Lineup Testing — A Comprehensive Guide (Updated 2026)**  
-### *Design, Problems, Solutions, and Structured Process for Multi‑Primitive Pipeline Testing*
-
-Progressive lineup testing is the structured method for validating primitives in both isolation and pipeline context. It ensures deterministic replay, correct propagation of repairs/anomalies, and consistent TP envelope behavior across all primitives in Path‑A.
-
-This updated document incorporates:
-
-- the **new two‑mode architecture**  
-- the **new multi‑input general mode**  
-- the **new TP‑wrapping behavior**  
-- the **new PASS / FAIL / No‑test semantics**  
-- the **correct separation between single‑primitive testbenches (InB)** and **multi‑primitive progressive lineup testbenches (IIInB, IE, CEx, CE, ISc, TPU)**  
-
-It is now fully aligned with the updated InB structural program guide and the updated testbench architecture.
+# ⭐ **PROGRESSIVE LINEUP TESTING — FULLY UPDATED (2026, IIInB‑COMPLIANT)**  
+### *Unified, Deterministic, Multi‑Primitive Pipeline Testing Architecture*
 
 ---
 
 # **1. Purpose of Progressive Lineup Testing**
 
-Progressive lineup testing allows the user to progressively enable any number of upstream primitives, forming a deterministic pipeline from the earliest enabled primitive to the primitive currently under test.  
-This ensures:
+Progressive lineup testing validates **multi‑primitive pipelines** in Path‑A by progressively enabling upstream primitives and ensuring:
 
-- the pipeline is structurally complete  
-- no gaps exist between enabled primitives  
-- downstream primitives receive valid upstream output  
-- deterministic replay is preserved  
-- repairs, anomalies, and structural metadata propagate correctly  
+- deterministic replay  
+- correct propagation of TP envelopes  
+- correct propagation of repairs/anomalies  
+- correct structural metadata (for primitives that produce it)  
+- correct supported/unsupported test detection  
+- correct PASS / FAIL / SKIPPED semantics  
+- correct pipeline completeness  
 
-This model supports **arbitrary progressive loading**, not just fixed modes.
+This model supports **arbitrary progressive loading**, not fixed modes.
 
 ---
 
-# **2. Two Testing Modes (Updated Architecture)**
+# **2. Two Testing Modes**
 
-All primitives now support two modes, selected in `run.py`:
+All primitives support two modes:
 
 ```python
 "mode": "general"     # developer diagnostic harness
-"mode": "testbench"   # full regression suite
+"mode": "testbench"   # full regression suite with progressive lineup
 ```
 
 ---
 
-## **2.1 General Mode — Multi‑Input Diagnostic Harness (Updated)**
+## **2.1 General Mode — Single‑Primitive Diagnostic Harness**
 
-General mode is **single‑primitive only** — no upstream pipeline is executed.
+General mode:
 
-General mode uses:
+- runs **only the primitive under test**  
+- uses `<primitive>_input.yaml`  
+- does **not** execute upstream primitives  
+- does **not** perform lineup resolution  
+- does **not** detect supported/unsupported tests  
 
-- `<primitive>_input.yaml`  
-- `<primitive>_rulechecker.py`  
-- `<primitive>_rules.yaml`  
+### **General Mode Flow**
 
-### **General Mode Flow (Updated)**
+1. Load all inputs from `<primitive>_input.yaml`
+2. Wrap each into a TP envelope
+3. Run the primitive
+4. Run the primitive’s rulechecker
+5. Print:
+   - primitive defects  
+   - rulechecker defects  
+   - PASS (primitive ⊆ rulechecker)  
+   - FAIL (primitive ∉ rulechecker)  
+   - No‑test (rulechecker defects empty)
+6. Print summary
 
-1. Load **all inputs** under `inputs:` from `<primitive>_input.yaml`
-2. For each input:
-   - Wrap into a TP envelope  
-   - Run the primitive  
-   - Run the primitive’s rulechecker  
-   - Print:
-     - primitive defects  
-     - rulechecker defects  
-     - **PASS** (primitive ⊆ rulechecker)  
-     - **FAIL** (primitive ∉ rulechecker)  
-     - **No test** (rulechecker defects empty)
-3. Print a summary:
-   - number passed  
-   - number failed  
-   - number with no test  
-
-### **General Mode Does NOT:**
-
-- execute upstream primitives  
-- perform progressive lineup  
-- detect supported/unsupported tests  
-- load upstream stimulus  
-
-General mode is a **developer diagnostic harness**, not a pipeline test.
+General mode is a **developer harness**, not a pipeline test.
 
 ---
 
 ## **2.2 Testbench Mode — Full Progressive Lineup**
 
-Testbench mode activates the full progressive lineup system.
+Testbench mode activates the **pipeline**, executing all enabled upstream primitives before the primitive under test.
 
 Testbench mode uses:
 
 - `<primitive>_testbench.yaml`  
 - `<primitive>_rules.yaml`  
 - `<primitive>_rulechecker.py`  
-- upstream stimulus YAML (based on earliest enabled upstream primitive)  
+- upstream stimulus YAML  
 
 ### **Testbench Mode Flow**
 
@@ -103,7 +76,7 @@ Testbench mode uses:
 3. Construct full pipeline  
 4. Execute upstream primitives  
 5. Execute primitive under test  
-6. Compare output against downstream expected YAML  
+6. Compare output against expected YAML  
 7. Detect supported vs unsupported tests  
 8. Print PASS / FAIL / SKIPPED summary  
 
@@ -120,10 +93,8 @@ Testbench mode uses:
 - TPU  
 
 ### ❌ Does NOT apply to:
-- **InB**
-
-InB is the first primitive in Path‑A and has no upstream dependencies.  
-Its testbench does **not** perform lineup resolution.
+- **InB**  
+InB is the first primitive in Path‑A and has no upstream dependencies.
 
 ---
 
@@ -134,26 +105,29 @@ Testbenches read flags such as:
 - `use_inb`  
 - `use_iiinb`  
 - `use_ie`  
-- …  
+- `use_cex`  
+- `use_ce`  
+- `use_isc`  
+- `use_tpu`  
 
 If the user enables PrimitiveX upstream of PrimitiveY:
 
-> **All primitives between X and Y must also be enabled and executed.**
+> **All primitives between X and Y must also be enabled.**
 
-This guarantees structural completeness.
+This ensures structural completeness.
 
 ---
 
-# **5. Stimulus Selection Logic (Updated)**
+# **5. Stimulus Selection Logic**
 
 Stimulus is based on the **earliest enabled upstream primitive**.
 
-| Earliest Enabled | Stimulus (Testbench Mode) |
-|------------------|---------------------------|
+| Earliest Enabled | Stimulus |
+|------------------|----------|
 | None             | `<primitive>_testbench.yaml` |
 | InB              | `inb_testbench.yaml` |
 | IIInB            | `iiinb_testbench.yaml` |
-| IE               | `ie_testbench.yaml` (rare) |
+| IE               | `ie_testbench.yaml` |
 
 General rule:
 
@@ -161,7 +135,7 @@ General rule:
 
 ---
 
-# **6. Stimulus Source — General Mode vs Testbench Mode (Updated)**
+# **6. Stimulus Source — General vs Testbench Mode**
 
 ### **General Mode**
 Stimulus = `<primitive>_input.yaml`  
@@ -170,8 +144,6 @@ No upstream primitives are executed.
 ### **Testbench Mode**
 Stimulus = `<PrimitiveX>_testbench.yaml`  
 Where PrimitiveX is earliest enabled upstream.
-
-This ensures deterministic replay.
 
 ---
 
@@ -183,12 +155,12 @@ Regardless of upstream configuration:
 
 This ensures:
 
+- downstream semantics remain stable  
 - expected output is always defined by the primitive under test  
-- rule semantics do not change based on upstream configuration  
 
 ---
 
-# **8. Supported vs Unsupported Tests**
+# **8. Supported vs Unsupported Tests (Updated for IIInB)**
 
 A downstream test is supported if:
 
@@ -197,18 +169,24 @@ A downstream test is supported if:
 
 Unsupported tests must be skipped.
 
-Example:
+### **Example: IE structural tests**
 
 IE structural tests require:
 
 - structural tags  
 - replay metadata  
+- semantic envelope fields  
 
-But IIInB stimulus does not define these.
+But IIInB stimulus provides only:
+
+- `repair_proposals`  
+- `anomaly_flags`  
+- `intake_surface`  
+- `intake_tokens`  
 
 Therefore:
 
-> **IE structural tests must be skipped when using IIInB stimulus.**
+> **IE structural tests must be skipped when IIInB is upstream.**
 
 ---
 
@@ -230,7 +208,7 @@ Unsupported tests:
 
 ---
 
-# **10. Correct Pass/Fail Summary (Updated)**
+# **10. PASS / FAIL / SKIPPED Summary**
 
 Correct structured reporting:
 
@@ -265,42 +243,116 @@ Skipping test 'structure.tags.basic' — upstream stimulus does not define requi
 
 ---
 
-# **12. Benefits of Progressive Lineup Testing**
+# **12. IIInB‑Specific Updates (Critical)**
+
+The rewritten IIInB primitive is:
+
+- **proposal‑only**  
+- **non‑mutating**  
+- **pre‑semantic**  
+- **token‑span indexed**  
+- **does not normalize**  
+- **does not apply repairs**  
+- **does not mutate tokens**  
+- **does not produce structural metadata**  
+- **does not produce normalized text**  
+
+Therefore:
+
+### ✔ Upstream IIInB stimulus contains only:
+- `repair_proposals`  
+- `anomaly_flags`  
+- `intake_surface`  
+- `intake_tokens`  
+
+### ✔ Downstream primitives must treat IIInB as:
+- a pure anomaly detector  
+- a pure repair‑proposal generator  
+- a non‑mutating intake inspector  
+
+### ✔ IE must not expect:
+- normalized text  
+- structural tags  
+- committed repairs  
+- mutated tokens  
+
+### ✔ CEx, CE, ISc, TPU must not expect:
+- semantic normalization  
+- structural normalization  
+- committed surface  
+
+This is the most important update to progressive lineup testing.
+
+---
+
+# **13. Replay Determinism (Updated)**
+
+Replay determinism now requires:
+
+### ✔ Stable token spans  
+### ✔ Stable anomaly spans  
+### ✔ Stable proposal order  
+### ✔ Stable rule order  
+### ✔ Stable tokenization  
+### ❌ No normalization determinism (IIInB does not normalize)  
+### ❌ No surface mutation determinism  
+
+---
+
+# **14. Pipeline Propagation Rules (Updated)**
+
+### **InB → IIInB**
+- InB produces normalized text  
+- IIInB ignores it  
+- IIInB re‑tokenizes original surface  
+- IIInB produces proposals/anomalies only  
+
+### **IIInB → IE**
+- IE receives:
+  - original surface  
+  - original tokens  
+  - proposals  
+  - anomalies  
+- IE must not expect structural metadata from IIInB  
+
+### **IE → CEx → CE → ISc → TPU**
+Propagation rules remain unchanged except:
+
+> **Downstream primitives must not assume IIInB applied repairs.**
+
+---
+
+# **15. Benefits of Progressive Lineup Testing**
 
 - deterministic  
 - modular  
 - transparent  
-- scalable  
-- replay‑safe  
 - pipeline‑accurate  
+- replay‑safe  
 - future‑proof  
+- compatible with proposal‑only IIInB  
 
 ---
 
-# **13. Summary**
+# **16. Summary**
 
 Progressive lineup testing ensures:
 
 - deterministic pipeline behavior  
-- correct propagation of repairs/anomalies  
-- correct structural metadata  
-- correct envelope shape  
-- correct upstream/downstream alignment  
+- correct propagation of IIInB proposals/anomalies  
 - correct supported/unsupported detection  
 - correct structured reporting  
+- correct upstream/downstream alignment  
+- correct replay determinism  
+- correct multi‑primitive integration  
 
----
+This document is now fully synchronized with:
 
-# **14. Closing Notes**
-
-This updated document is now fully aligned with:
-
-- the new InB general‑mode architecture  
-- the new TP‑wrapping behavior  
-- the new PASS/FAIL/No‑test semantics  
-- the updated multi‑primitive progressive lineup model  
-- the updated run.py two‑mode system  
-
-It ensures that both you and I can reopen this topic in future conversations and immediately re‑synchronize on the entire testing philosophy.
+- rewritten IIInB  
+- updated testbenches  
+- updated structural program  
+- updated rulechecker  
+- updated TP envelope  
+- updated pipeline semantics  
 
 ---
