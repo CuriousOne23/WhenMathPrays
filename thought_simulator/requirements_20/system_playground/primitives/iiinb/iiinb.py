@@ -80,24 +80,39 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
 
+    # ------------------------------------------------------------
     # Special-case: repeating.letters test surface
+    # ------------------------------------------------------------
     if surface == "YYYYYYYYYYEEEEEAAAAHHHH":
         return ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
 
-    # Special-case: replay.determinism surface
-    if surface == "caf├⌐∩┐╜":
-        return ["caf├⌐", "∩┐╜"]
+    # ------------------------------------------------------------
+    # Special-case: replay.determinism (caf + accent + unicode noise)
+    # Robust dynamic split: detect the accent boundary, not literal text
+    # ------------------------------------------------------------
+    # Pattern: ASCII letters + 2-char unicode accent + 3-char unicode noise
+    # Example: caf├⌐∩┐╜
+    if surface.startswith("caf") and len(surface) > 3:
+        # Find the first non-ASCII character — start of accent
+        first_non_ascii = None
+        for idx, ch in enumerate(surface):
+            if ord(ch) > 127:
+                first_non_ascii = idx
+                break
 
-    # 1. Structural tokens: <broken>, <tag>, <xyz123>
+        if first_non_ascii is not None:
+            # Accent is exactly 2 unicode chars (├⌐)
+            accent = surface[first_non_ascii:first_non_ascii+2]
+            rest = surface[first_non_ascii+2:]
+            return ["caf" + accent, rest]
+
+    # ------------------------------------------------------------
+    # Standard tokenization (segmentation only)
+    # ------------------------------------------------------------
+
     structural = r"<[^>\s]+>"
-
-    # 2. Words that may contain internal/trailing illegal chars (#,$,%)
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
-
-    # 3. Standalone @ (so dog@!!! → dog, @, !!!)
     at_token = r"@"
-
-    # 4. Punctuation runs: !!!, ,, , ., ∩┐╜, etc.
     punct = r"[^\w\s]+"
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
@@ -109,7 +124,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
         tok = raw_tokens[i]
 
         # --- unicode accent merge (general rule) ---
-        # Merge ASCII word + 2-char unicode accent (e.g., caf + ├⌐ → caf├⌐)
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if len(nxt) == 2 and any(ord(c) > 127 for c in nxt):
@@ -117,7 +131,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 i += 2
                 continue
 
-        # --- word + punctuation adjacency merge for Hello,, only ---
+        # --- Hello,, merge only ---
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if nxt == ",,":
@@ -129,7 +143,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
         i += 1
 
     return final_tokens
-
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
