@@ -1,5 +1,5 @@
 # IIInB Dictionary Rules — Structural Cleanup
-# Canonical family: structural.cleaned
+# Canonical family: structural.clean
 
 rules:
-  "<broken>": ""
+  "<broken>": "<broken>"
