@@ -10,9 +10,13 @@ This runner:
 """
 
 import sys
+import io
 sys.stdout.reconfigure(encoding='utf-8')
 import os
 import importlib
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 # ============================================================
 # Add repo root to Python path
