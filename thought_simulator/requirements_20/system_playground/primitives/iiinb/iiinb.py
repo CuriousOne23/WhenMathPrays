@@ -47,7 +47,8 @@ def load_dct_rules():
     if not rule_dir.exists():
         return rules
     for file in rule_dir.glob("*.yaml"):
-        data = yaml.safe_load(file.read_text())
+        with file.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f.read())
         rules[file.stem] = data.get("rules", {})
     return rules
 
