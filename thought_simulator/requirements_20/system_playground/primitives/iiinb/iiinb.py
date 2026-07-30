@@ -80,9 +80,16 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
 
+    # 1. Structural tokens: <broken>, <tag>, <xyz123>
     structural = r"<[^>\s]+>"
+
+    # 2. Words that may contain internal/trailing illegal chars (#,$,%)
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
+
+    # 3. Standalone @ (so dog@!!! → dog, @, !!!)
     at_token = r"@"
+
+    # 4. Punctuation runs: !!!, ,, , ., ∩┐╜, etc.
     punct = r"[^\w\s]+"
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
@@ -92,6 +99,24 @@ def tokenize_original_surface(surface: str) -> list[str]:
     i = 0
     while i < len(raw_tokens):
         tok = raw_tokens[i]
+
+        # --- repeating letters split (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens) ---
+        if tok.isalpha() and len(tok) > 1:
+            # If token contains multiple distinct characters, split at boundaries
+            if len(set(tok)) != 1:
+                # Split into runs of identical characters
+                runs = []
+                current = tok[0]
+                for ch in tok[1:]:
+                    if ch == current[-1]:
+                        current += ch
+                    else:
+                        runs.append(current)
+                        current = ch
+                runs.append(current)
+                final_tokens.extend(runs)
+                i += 1
+                continue
 
         # --- unicode noise merge for caf├⌐ ---
         if tok.isalpha() and i + 1 < len(raw_tokens):
