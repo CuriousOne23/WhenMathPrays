@@ -4,9 +4,6 @@
 #   spelling.missing
 
 rules:
-  # Transpositions
-  hte: the
-
   # Missing-letter repairs
   rd: red
 
