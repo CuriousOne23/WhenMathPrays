@@ -92,7 +92,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
     structural = r"<[^>\s]+>"
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
     at_token = r"@"
-    punct = r"[^\w\s]+"
+    punct = r"[^\w\s]"
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
     raw_tokens = re.findall(pattern, surface)
