@@ -132,15 +132,23 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 2. Whitespace normalization (whitespace.normalized)
     # --------------------------------------------------------
-    whitespace_rules = DCT_RULES.get("whitespace", {})
-    for target, proposal in whitespace_rules.items():
-        if target in work:
-            repair_ops.append({
-                "type": "whitespace.normalized",
-                "target": target,
-                "proposal": proposal
-            })
-            work = work.replace(target, proposal)
+    
+    import re
+    
+    # Collapse all whitespace runs to a single space
+    collapsed = re.sub(r"\s+", " ", work)
+    
+    # Remove leading/trailing spaces
+    normalized_ws = collapsed.strip()
+    
+    if normalized_ws != work:
+        repair_ops.append({
+            "type": "whitespace.normalized",
+            "target": work,
+            "proposal": normalized_ws
+        })
+    
+    work = normalized_ws
 
     # --------------------------------------------------------
     # 3. Punctuation cleanup (punctuation.cleaned)
