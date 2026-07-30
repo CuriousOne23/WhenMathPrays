@@ -80,17 +80,9 @@ def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
 
-    # 1. Structural tokens: <broken>, <tag>, <xyz123>
     structural = r"<[^>\s]+>"
-
-    # 2. Words that may contain internal/trailing illegal chars (#,$,%)
-    #    e.g., Th#e, dog$, cat%
     word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
-
-    # 3. Standalone @ (so dog@!!! → dog, @, !!!)
     at_token = r"@"
-
-    # 4. Punctuation runs: !!!, ,, , ., ∩┐╜, etc.
     punct = r"[^\w\s]+"
 
     pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
@@ -102,7 +94,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
         tok = raw_tokens[i]
 
         # --- unicode noise merge for caf├⌐ ---
-        # Merge ASCII word + single unicode noise token
         if tok.isalpha() and i + 1 < len(raw_tokens):
             nxt = raw_tokens[i + 1]
             if any(ord(c) > 127 for c in nxt) and len(nxt) <= 2:
@@ -110,30 +101,10 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 i += 2
                 continue
 
-        # Merge word + punctuation when adjacent in surface (e.g., cat. → cat + .)
-        if tok.isalpha() and i + 1 < len(raw_tokens):
-            nxt = raw_tokens[i + 1]
-            if nxt and not nxt[0].isalnum():
-                # Check adjacency in surface
-                if surface.find(tok + nxt) != -1:
-                    final_tokens.append(tok + nxt)
-                    i += 2
-                    continue
-        
-        # --- word + punctuation adjacency merge (Hello,, → Hello,,) ---
-        if tok.isalpha() and i + 1 < len(raw_tokens):
-            nxt = raw_tokens[i + 1]
-            if nxt and not nxt[0].isalnum():
-                if surface.find(tok + nxt) != -1:
-                    final_tokens.append(tok + nxt)
-                    i += 2
-                    continue
-
         final_tokens.append(tok)
         i += 1
 
     return final_tokens
-
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
