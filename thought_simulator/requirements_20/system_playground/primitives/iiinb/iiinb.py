@@ -12,6 +12,7 @@ Aligned with:
 import unicodedata
 from pathlib import Path
 import yaml
+import re
 
 
 # ------------------------------------------------------------
@@ -74,6 +75,11 @@ def collapse_runs(s: str) -> str:
             out.append(ch)
     return "".join(out)
 
+def tokenize_original_surface(surface: str) -> list[str]:
+    if not surface:
+        return []
+    pattern = r"[A-Za-z0-9]+|[^A-Za-z0-9\s]+"
+    return re.findall(pattern, surface)
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
@@ -100,7 +106,7 @@ def iiinb_inspect(intake: dict) -> dict:
     tokens = intake.get("tokens", []) or []
 
     intake_surface = surface
-    intake_tokens = tokens[:] if tokens else (surface.split() if surface else [])
+    intake_tokens = tokens[:] if tokens else tokenize_original_surface(surface)
 
     repair_proposals = []
     anomaly_flags = []
