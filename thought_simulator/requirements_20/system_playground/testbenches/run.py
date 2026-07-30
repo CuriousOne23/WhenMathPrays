@@ -45,7 +45,7 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
         {
-            "mode": "general",   # or "general"
+            "mode": "testbench",   # or "general" or "testbench"
             "use_inb": False,      # Upstream InB ignored
             "use_iiinb": True,     # Primitive under test
             "use_ie": False,       # Downstream IE ignored
