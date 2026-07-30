@@ -32,7 +32,8 @@ def is_illegal_char(ch: str) -> bool:
         return True
 
     cat = unicodedata.category(ch)
-    if cat.startswith("C"):
+    # Only flag ASCII control chars (0–31), not Unicode noise
+    if ord(ch) < 32:
         return True
 
     return False
@@ -78,8 +79,41 @@ def collapse_runs(s: str) -> str:
 def tokenize_original_surface(surface: str) -> list[str]:
     if not surface:
         return []
-    pattern = r"[A-Za-z0-9]+|[^A-Za-z0-9\s]+"
-    return re.findall(pattern, surface)
+
+    # 1. Structural tokens: <broken>, <tag>, <xyz123>
+    structural = r"<[^>\s]+>"
+
+    # 2. Words: letters/numbers
+    words = r"[A-Za-z0-9]+"
+
+    # 3. Punctuation runs: !!!, ,, , ., @, %, etc.
+    punct = r"[^\w\s]+"
+
+    pattern = f"{structural}|{words}|{punct}"
+    raw_tokens = re.findall(pattern, surface)
+
+    # 4. Repetition splitting (YYYYYYYYYYEEEEEAAAAHHHH → 4 tokens)
+    final_tokens = []
+    for tok in raw_tokens:
+        # Only split alphabetic tokens with repeated characters
+        if tok.isalpha() and len(set(tok)) != len(tok):
+            final_tokens.extend(split_repetition_runs(tok))
+        else:
+            final_tokens.append(tok)
+
+    return final_tokens
+
+def split_repetition_runs(s: str) -> list[str]:
+    runs = []
+    current = s[0]
+    for ch in s[1:]:
+        if ch == current[-1]:
+            current += ch
+        else:
+            runs.append(current)
+            current = ch
+    runs.append(current)
+    return runs
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
