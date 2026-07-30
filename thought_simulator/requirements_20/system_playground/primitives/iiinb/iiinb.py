@@ -77,112 +77,70 @@ def collapse_runs(s: str) -> str:
 # ------------------------------------------------------------
 
 def tokenize_original_surface(surface: str) -> list[str]:
-    # --- DEBUG: show real codepoints, not mojibake ---
-    print("DEBUG surface repr:", repr(surface))
-    print("DEBUG surface codepoints:", [hex(ord(c)) for c in surface])
+    """
+    Deterministic, language-agnostic, structural tokenization.
+
+    - Words: letters/digits plus some embedded illegal characters (#, $, %)
+    - Special marker: <broken>
+    - Punctuation runs: ., !, ?, , grouped
+    - Other symbols: single-character tokens
+    """
+    print("DEBUG surface:", repr(surface))
+    print("DEBUG codepoints:", [hex(ord(c)) for c in surface))
 
     if not surface:
         return []
 
-    # Special-case: repeating.letters test surface
-    if surface == "YYYYYYYYYYEEEEEAAAAHHHH":
-        return ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
-
-    # Standard tokenization (segmentation only)
-    structural = r"<[^>\s]+>"
-    word_with_illegal = r"[A-Za-z0-9]+[#\$%]?[A-Za-z0-9]*"
-    at_token = r"@"
-    punct = r"[^\w\s]"
-
-    pattern = f"{structural}|{word_with_illegal}|{at_token}|{punct}"
-    raw_tokens = re.findall(pattern, surface)
-    print("DEBUG raw_tokens repr:", [repr(t) for t in raw_tokens])
-    print("DEBUG raw_tokens codepoints:", [[hex(ord(c)) for c in t] for t in raw_tokens])
-    print("DEBUG joined:", repr("".join(raw_tokens)))
-    print("DEBUG joined == surface:", "".join(raw_tokens) == surface)
-
-
-    # --- NEW: lossless fallback when regex drops characters ---
-    # If concatenating regex tokens doesn't give back the original surface,
-    # rebuild tokens by simple whitespace segmentation and split off U+FFFD.
-    if "".join(raw_tokens) != surface:
-        # Lossless segmentation: split on whitespace AND punctuation
-        tokens = []
-        current = []
-    
-        for ch in surface:
-            if ch.isspace():
-                if current:
-                    tokens.append("".join(current))
-                    current = []
-            elif ch.isalnum():
-                current.append(ch)
-            else:
-                # punctuation or symbol
-                if current:
-                    tokens.append("".join(current))
-                    current = []
-                tokens.append(ch)
-    
-        if current:
-            tokens.append("".join(current))
-
-        # Merge structural tags: <broken> → "<broken>"
-        merged = []
-        i = 0
-        while i < len(tokens):
-            tok = tokens[i]
-            if tok == "<" and i + 2 < len(tokens) and tokens[i+2] == ">":
-                merged.append("<" + tokens[i+1] + ">")
-                i += 3
-            else:
-                merged.append(tok)
-                i += 1
-        
-        tokens = merged
-        
-        # Split U+FFFD into its own token
-        split_tokens = []
-        for tok in tokens:
-            if "\uFFFD" in tok:
-                idx = tok.index("\uFFFD")
-                if idx > 0:
-                    split_tokens.append(tok[:idx])
-                split_tokens.append(tok[idx:])
-            else:
-                split_tokens.append(tok)
-    
-        return split_tokens
-    # --- end fallback ---
-
-    final_tokens = []
+    tokens: list[str] = []
     i = 0
-    while i < len(raw_tokens):
-        tok = raw_tokens[i]
+    n = len(surface)
 
-        # unicode accent merge (general rule)
-        if tok.isalpha() and i + 1 < len(raw_tokens):
-            nxt = raw_tokens[i + 1]
-            if len(nxt) == 2 and any(ord(c) > 127 for c in nxt):
-                final_tokens.append(tok + nxt)
-                i += 2
-                continue
+    ILLEGAL_IN_WORD = {"#", "$", "%"}  # keep inside word tokens
 
-        # Hello,, merge only
-        if tok.isalpha() and i + 1 < len(raw_tokens):
-            nxt = raw_tokens[i + 1]
-            if nxt == ",,":
-                final_tokens.append(tok + nxt)
-                i += 2
-                continue
+    while i < n:
+        ch = surface[i]
 
-        final_tokens.append(tok)
+        # Skip whitespace
+        if ch.isspace():
+            i += 1
+            continue
+
+        # Special structural marker
+        if surface.startswith("<broken>", i):
+            tokens.append("<broken>")
+            i += len("<broken>")
+            continue
+
+        # Word token: letters/digits + embedded illegal chars
+        if ch.isalnum() or ch in ILLEGAL_IN_WORD:
+            start = i
+            i += 1
+            while i < n and (surface[i].isalnum() or surface[i] in ILLEGAL_IN_WORD):
+                i += 1
+
+            # Attach trailing commas to the word (e.g., "Hello,,")
+            while i < n and surface[i] == ",":
+                i += 1
+
+            tokens.append(surface[start:i])
+            continue
+
+        # Punctuation runs (., !, ?, ,) as their own tokens
+        if ch in {".", "!", "?", ","}:
+            start = i
+            i += 1
+            while i < n and surface[i] == ch:
+                i += 1
+            tokens.append(surface[start:i])
+            continue
+
+        # Everything else: single-character token (e.g., '@')
+        tokens.append(ch)
         i += 1
 
-    print("DEBUG final_tokens repr:", [repr(t) for t in final_tokens])
-    print("DEBUG final_tokens codepoints:", [[hex(ord(c)) for c in t] for t in final_tokens])
-
-    return final_tokens
+    final_tokens = ...  # any merging or adjustments you apply
+    print("DEBUG final tokens:", final_tokens)
+    return tokens
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
