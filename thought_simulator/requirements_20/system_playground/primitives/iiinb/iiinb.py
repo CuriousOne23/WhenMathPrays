@@ -27,11 +27,6 @@ def is_illegal_char(ch: str) -> bool:
     if ch in {"#", "$", "%", "@"}:
         return True
 
-    # Unicode replacement character
-    if ch == "\uFFFD":
-        return True
-
-    cat = unicodedata.category(ch)
     # Only flag ASCII control chars (0–31), not Unicode noise
     if ord(ch) < 32:
         return True
