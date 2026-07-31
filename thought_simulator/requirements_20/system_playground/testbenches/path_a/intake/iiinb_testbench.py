@@ -64,6 +64,7 @@ def load_testbench():
                     #print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
                 except Exception as e:
                     #print("DEBUG ERROR decoding codepoints:", e)
+                    pass
 
             else:
                 raw = t.get("input")
@@ -71,8 +72,10 @@ def load_testbench():
                 if raw is not None:
                     #print("DEBUG YAML BYTES:", list(raw.encode("utf-8", errors="replace")))
                     #print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+                    pass
                 else:
                     #print("DEBUG YAML LOAD: None")
+                    pass
     return data
 
 def load_tests_to_run():
