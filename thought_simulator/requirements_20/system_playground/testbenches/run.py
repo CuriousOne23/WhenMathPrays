@@ -36,7 +36,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.inb_testbench",
     #     {
-    #         "mode": "general",   # or "general" or "testbench"
+    #         "mode": "general",   # "general" or "testbench"
     #         "use_inb": True,
     #         "use_iiinb": False,
     #         "use_ie": False,
@@ -49,7 +49,7 @@ ACTIVE_TEST_MODULES = [
     # (
     #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.iiinb_testbench",
     #     {
-    #         "mode": "general",   # or "general" or "testbench"
+    #         "mode": "general",     # "general" or "testbench"
     #         "use_inb": False,      # Upstream InB ignored
     #         "use_iiinb": True,     # Primitive under test
     #         "use_ie": False,       # Downstream IE ignored
@@ -64,19 +64,13 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.intake.ie_testbench",
         {
-            "use_inb": False,
-            "use_iiinb": True,
-            "use_ie": True,
-            "tests_to_run": {
-                "ie_repair_only_whitespace": "Yes",
-                "ie_multiple_repairs": "Yes",
-                "ie_anomaly_only": "Yes",
-                "ie_mixed_repairs_anomaly": "Yes",
-                "ie_structural_tags": "Yes",
-                "ie_token_preservation": "Yes",
-                "ie_replay_determinism": "Yes",
-                "ie_complex_mixed": "Yes"
-            }
+            "mode": "testbench",   # "general" or "testbench"
+            "use_inb": False,      # Upstream InB ignored
+            "use_iiinb": False,    # If True then Synthetic IIInB input from ie_input.yaml
+            "use_ie": True,        # Primitive under test
+
+            # Test selection is now controlled by ie_tests_to_run.yaml
+            "tests_to_run": "see ie_tests_to_run.yaml"
         }
     )
 ]
