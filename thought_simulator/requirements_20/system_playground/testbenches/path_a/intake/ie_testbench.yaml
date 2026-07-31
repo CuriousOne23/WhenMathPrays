@@ -75,10 +75,12 @@ tests:
           - "chased"
           - "the"
           - "cat"
+          - "!"
         token_flags:
           - "repaired"
           - "normative"
           - "repaired"
+          - "normative"
           - "normative"
           - "normative"
       metadata:
