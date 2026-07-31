@@ -1,5 +1,5 @@
 # ============================================================
-# IE Testbench — Path‑A Intake Envelope (TP-Aligned)
+# IE Testbench — Path‑A Intake Envelope (TP-Aligned, v3.1)
 # Deterministic Replay Testbench for 20.109 IE Primitive
 # ============================================================
 
@@ -16,9 +16,18 @@ tests:
           target: "The   dog"
           proposal: "The dog"
       anomaly_flags: []
+      tokens:
+        - "The"
+        - "dog"
     expected:
       intake:
         normalized_text: "The dog"
+        tokens:
+          - "The"
+          - "dog"
+        token_flags:
+          - "repaired"
+          - "normative"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -28,6 +37,10 @@ tests:
         replay:
           repair_count: 1
           anomaly_count: 0
+          applied_repairs:
+            - "whitespace.normalized"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -47,9 +60,27 @@ tests:
           target: "The dog chased the cat!!!"
           proposal: "The dog chased the cat!"
       anomaly_flags: []
+      tokens:
+        - "The"
+        - "dog"
+        - "chased"
+        - "the"
+        - "cat"
     expected:
       intake:
         normalized_text: "The dog chased the cat!"
+        tokens:
+          - "The"
+          - "dog"
+          - "chased"
+          - "the"
+          - "cat"
+        token_flags:
+          - "repaired"
+          - "normative"
+          - "repaired"
+          - "normative"
+          - "normative"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -67,6 +98,12 @@ tests:
         replay:
           repair_count: 3
           anomaly_count: 0
+          applied_repairs:
+            - "repetition.cleaned"
+            - "case.normalized"
+            - "punctuation.cleaned"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -80,9 +117,27 @@ tests:
         - type: "illegal_character.unknown"
           target: "#"
           location: 2
+      tokens:
+        - "Th#e"
+        - "dog"
+        - "chased"
+        - "the"
+        - "cat"
     expected:
       intake:
         normalized_text: "Th#e dog chased the cat"
+        tokens:
+          - "Th#e"
+          - "dog"
+          - "chased"
+          - "the"
+          - "cat"
+        token_flags:
+          - "anomalous"
+          - "normative"
+          - "normative"
+          - "normative"
+          - "normative"
       metadata:
         repair_annotations:
           - kind: "anomaly"
@@ -92,6 +147,10 @@ tests:
         replay:
           repair_count: 0
           anomaly_count: 1
+          applied_repairs: []
+          applied_anomalies:
+            - "illegal_character.unknown"
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -108,9 +167,18 @@ tests:
         - type: "illegal_character.unknown"
           target: "@"
           location: 7
+      tokens:
+        - "The"
+        - "dog@"
     expected:
       intake:
         normalized_text: "The dog@"
+        tokens:
+          - "The"
+          - "dog@"
+        token_flags:
+          - "repaired"
+          - "anomalous"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -124,6 +192,11 @@ tests:
         replay:
           repair_count: 1
           anomaly_count: 1
+          applied_repairs:
+            - "whitespace.normalized"
+          applied_anomalies:
+            - "illegal_character.unknown"
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -143,9 +216,18 @@ tests:
             location: 0
           - type: "block.end"
             location: 12
+      tokens:
+        - "Hello,,"
+        - "world"
     expected:
       intake:
         normalized_text: "Hello, world"
+        tokens:
+          - "Hello,"
+          - "world"
+        token_flags:
+          - "repaired"
+          - "normative"
       structure:
         tags:
           - type: "block.start"
@@ -161,6 +243,10 @@ tests:
         replay:
           repair_count: 1
           anomaly_count: 0
+          applied_repairs:
+            - "punctuation.cleaned"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -183,6 +269,9 @@ tests:
         tokens:
           - "The"
           - "dog"
+        token_flags:
+          - "repaired"
+          - "normative"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -192,6 +281,10 @@ tests:
         replay:
           repair_count: 1
           anomaly_count: 0
+          applied_repairs:
+            - "case.normalized"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -205,9 +298,15 @@ tests:
           target: "café"
           proposal: "cafe"
       anomaly_flags: []
+      tokens:
+        - "café"
     expected:
       intake:
         normalized_text: "cafe"
+        tokens:
+          - "cafe"
+        token_flags:
+          - "repaired"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -217,6 +316,10 @@ tests:
         replay:
           repair_count: 1
           anomaly_count: 0
+          applied_repairs:
+            - "unicode.normalized"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
       error: null
 
   # ----------------------------------------------------------
@@ -239,9 +342,21 @@ tests:
         - type: "illegal_character.unknown"
           target: "$"
           location: 9
+      tokens:
+        - "The"
+        - "dog"
+        - "cccaaattt"
     expected:
       intake:
         normalized_text: "The dog cat"
+        tokens:
+          - "The"
+          - "dog"
+          - "cat"
+        token_flags:
+          - "repaired"
+          - "normative"
+          - "repaired"
       metadata:
         repair_annotations:
           - kind: "repair"
@@ -263,4 +378,11 @@ tests:
         replay:
           repair_count: 2
           anomaly_count: 2
+          applied_repairs:
+            - "whitespace.normalized"
+            - "repetition.cleaned"
+          applied_anomalies:
+            - "illegal_character.unknown"
+            - "illegal_character.unknown"
+        ruleset_id: "ie.v3.1"
       error: null
