@@ -69,13 +69,11 @@ def load_testbench():
             else:
                 raw = t.get("input")
                 #print("DEBUG YAML LOAD:", raw)
-                if raw is not None:
+                #if raw is not None:
                     #print("DEBUG YAML BYTES:", list(raw.encode("utf-8", errors="replace")))
                     #print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
-                    pass
-                else:
+                #else:
                     #print("DEBUG YAML LOAD: None")
-                    pass
     return data
 
 def load_tests_to_run():
@@ -348,6 +346,9 @@ def run_regression_mode():
         if passed:
             passes += 1
             print("PASS")
+            # Show full report even on PASS
+            for line in results:
+                print(line)
         else:
             fails += 1
             print("FAIL")
