@@ -85,8 +85,8 @@ def tokenize_original_surface(surface: str) -> list[str]:
     - Punctuation runs: ., !, ?, , grouped
     - Other symbols: single-character tokens
     """
-    print("DEBUG surface:", repr(surface))
-    print("DEBUG codepoints:", [hex(ord(c)) for c in surface])
+    #print("DEBUG surface:", repr(surface))
+    #print("DEBUG codepoints:", [hex(ord(c)) for c in surface])
 
     if not surface:
         return []
@@ -154,7 +154,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
         i += 1
 
     final_tokens = ...  # any merging or adjustments you apply
-    print("DEBUG final tokens:", tokens)
+    #print("DEBUG final tokens:", tokens)
     return tokens
 
 # ------------------------------------------------------------
@@ -193,7 +193,7 @@ def iiinb_inspect(intake: dict) -> dict:
 
     # DEBUG: replay.determinism token check
     if intake_surface.startswith("caf"):
-        print("DEBUG: tokenize_original_surface returned:", intake_tokens)
+        #print("DEBUG: tokenize_original_surface returned:", intake_tokens)
 
     # Special-case: replay.determinism for caf + é + replacement char
     if intake_surface == "caf\u00e9\uFFFD":
