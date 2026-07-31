@@ -54,25 +54,25 @@ def load_testbench():
 
             if "input_codepoints" in t:
                 cps = t["input_codepoints"]
-                print("DEBUG YAML LOAD (codepoints):", cps)
+                #print("DEBUG YAML LOAD (codepoints):", cps)
 
                 try:
                     raw_bytes = bytes(int(cp, 16) for cp in cps)
                     raw = raw_bytes.decode("utf-8", errors="replace")
-                    print("DEBUG YAML DECODED:", raw)
-                    print("DEBUG YAML BYTES:", list(raw_bytes))
-                    print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+                    #print("DEBUG YAML DECODED:", raw)
+                    #print("DEBUG YAML BYTES:", list(raw_bytes))
+                    #print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
                 except Exception as e:
-                    print("DEBUG ERROR decoding codepoints:", e)
+                    #print("DEBUG ERROR decoding codepoints:", e)
 
             else:
                 raw = t.get("input")
-                print("DEBUG YAML LOAD:", raw)
+                #print("DEBUG YAML LOAD:", raw)
                 if raw is not None:
-                    print("DEBUG YAML BYTES:", list(raw.encode("utf-8", errors="replace")))
-                    print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+                    #print("DEBUG YAML BYTES:", list(raw.encode("utf-8", errors="replace")))
+                    #print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
                 else:
-                    print("DEBUG YAML LOAD: None")
+                    #print("DEBUG YAML LOAD: None")
     return data
 
 def load_tests_to_run():
