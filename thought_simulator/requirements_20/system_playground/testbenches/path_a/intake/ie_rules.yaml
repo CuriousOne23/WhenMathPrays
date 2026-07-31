@@ -1,1 +1,171 @@
+# ============================================================
+# IE Rules — Deterministic Replay Ruleset for 20.109 IE Primitive
+# Version: 3.1 (Model‑A‑Aligned)
+# ============================================================
+
+ruleset_id: "ie.v3.1"
+
+rules:
+
+  # ----------------------------------------------------------
+  # 1. Deterministic Repair Application
+  # ----------------------------------------------------------
+  - id: ie.repair.apply
+    description: "IE SHALL apply all IIInB repair proposals deterministically in the order provided."
+    requires:
+      - iiinb.repair_operations
+    ensures:
+      - intake.normalized_text reflects all applied repairs
+      - metadata.repair_annotations includes all repairs in order
+      - metadata.replay.repair_count == len(iiinb.repair_operations)
+
+  # ----------------------------------------------------------
+  # 2. Deterministic Token Construction
+  # ----------------------------------------------------------
+  - id: ie.tokens.committed
+    description: "IE SHALL construct committed tokens after applying repairs, preserving boundaries unless repairs modify them."
+    requires:
+      - iiinb.tokens
+    ensures:
+      - intake.tokens is deterministic
+      - token boundaries preserved unless repair modifies them
+
+  # ----------------------------------------------------------
+  # 3. Token Flags (Normative Classification)
+  # ----------------------------------------------------------
+  - id: ie.token_flags.classification
+    description: "IE SHALL classify each token deterministically as normative, repaired, anomalous, unrecognized, or null."
+    requires:
+      - iiinb.tokens
+      - iiinb.repair_operations
+      - iiinb.anomaly_flags
+    ensures:
+      - intake.token_flags[i] corresponds to intake.tokens[i]
+      - repaired tokens marked 'repaired'
+      - anomaly‑bearing tokens marked 'anomalous'
+      - all others marked 'normative'
+
+  # ----------------------------------------------------------
+  # 4. Deterministic Anomaly Propagation
+  # ----------------------------------------------------------
+  - id: ie.anomaly.propagation
+    description: "IE SHALL propagate all IIInB anomaly_flags into repair_annotations deterministically."
+    requires:
+      - iiinb.anomaly_flags
+    ensures:
+      - metadata.repair_annotations includes all anomalies
+      - metadata.replay.anomaly_count == len(iiinb.anomaly_flags)
+
+  # ----------------------------------------------------------
+  # 5. Structural Construction
+  # ----------------------------------------------------------
+  - id: ie.structure.construction
+    description: "IE SHALL construct TP.structure deterministically from committed surface and tokens."
+    requires:
+      - intake.normalized_text
+      - intake.tokens
+    ensures:
+      - structure.tags deterministic
+      - structure.spans deterministic
+      - structure.markup deterministic
+
+  # ----------------------------------------------------------
+  # 6. Structural Preservation (When Provided by IIInB)
+  # ----------------------------------------------------------
+  - id: ie.structure.preserve
+    description: "IE SHALL preserve structural tags provided by IIInB."
+    requires:
+      - iiinb.structure.tags
+    ensures:
+      - structure.tags == iiinb.structure.tags
+
+  # ----------------------------------------------------------
+  # 7. Repair Provenance Recording
+  # ----------------------------------------------------------
+  - id: ie.repair.provenance
+    description: "IE SHALL record provenance for each applied repair."
+    requires:
+      - iiinb.repair_operations
+    ensures:
+      - metadata.repair_annotations[*].kind == 'repair'
+      - metadata.repair_annotations[*].type == repair.type
+      - metadata.repair_annotations[*].target == repair.target
+      - metadata.repair_annotations[*].proposal == repair.proposal
+
+  # ----------------------------------------------------------
+  # 8. Anomaly Provenance Recording
+  # ----------------------------------------------------------
+  - id: ie.anomaly.provenance
+    description: "IE SHALL record provenance for each anomaly."
+    requires:
+      - iiinb.anomaly_flags
+    ensures:
+      - metadata.repair_annotations[*].kind == 'anomaly'
+      - metadata.repair_annotations[*].type == anomaly.type
+      - metadata.repair_annotations[*].target == anomaly.target
+      - metadata.repair_annotations[*].location == anomaly.location
+
+  # ----------------------------------------------------------
+  # 9. Replay Metadata Construction
+  # ----------------------------------------------------------
+  - id: ie.replay.metadata
+    description: "IE SHALL construct deterministic replay metadata."
+    requires:
+      - iiinb.repair_operations
+      - iiinb.anomaly_flags
+      - intake.tokens
+    ensures:
+      - metadata.replay.repair_count == len(iiinb.repair_operations)
+      - metadata.replay.anomaly_count == len(iiinb.anomaly_flags)
+      - metadata.replay.applied_repairs is deterministic
+      - metadata.replay.applied_anomalies is deterministic
+
+  # ----------------------------------------------------------
+  # 10. Ruleset Identifier
+  # ----------------------------------------------------------
+  - id: ie.ruleset.id
+    description: "IE SHALL emit a deterministic ruleset identifier."
+    ensures:
+      - metadata.ruleset_id == "ie.v3.1"
+
+  # ----------------------------------------------------------
+  # 11. Deterministic Error Envelope
+  # ----------------------------------------------------------
+  - id: ie.error.deterministic
+    description: "IE SHALL emit TP.error only when deterministic construction fails."
+    ensures:
+      - error is null when construction succeeds
+      - error is deterministic when construction fails
+
+  # ----------------------------------------------------------
+  # 12. Prohibited Semantic Content
+  # ----------------------------------------------------------
+  - id: ie.semantic.prohibited
+    description: "IE SHALL NOT introduce semantic content or inferred meaning."
+    ensures:
+      - TP.semantic remains empty
+      - no semantic fields appear in intake, structure, or metadata
+
+  # ----------------------------------------------------------
+  # 13. Prohibited Upstream Mutation
+  # ----------------------------------------------------------
+  - id: ie.upstream.prohibited
+    description: "IE SHALL NOT modify IIInB fields."
+    ensures:
+      - iiinb.repair_operations unchanged
+      - iiinb.anomaly_flags unchanged
+      - iiinb.tokens unchanged
+      - iiinb.structure unchanged
+
+  # ----------------------------------------------------------
+  # 14. Deterministic Ordering
+  # ----------------------------------------------------------
+  - id: ie.ordering.deterministic
+    description: "IE SHALL preserve deterministic ordering of repairs, anomalies, tokens, and flags."
+    ensures:
+      - repair_annotations order == iiinb.repair_operations order
+      - anomaly order preserved
+      - token order preserved
+      - token_flags order preserved
+
 
