@@ -258,7 +258,17 @@ def run_regression_mode():
             length = test.get("long_length", 5000)
             raw_input = "A" * length
         else:
-            raw_input = test.get("input", "")
+            # --- PATCH: Support input_codepoints for deterministic byte-level tests ---
+            if "input_codepoints" in test:
+                try:
+                    raw_bytes = bytes(int(cp, 16) for cp in test["input_codepoints"])
+                    raw_input = raw_bytes.decode("utf-8", errors="replace")
+                except Exception as e:
+                    print(f"ERROR decoding input_codepoints: {e}")
+                    raw_input = ""
+            else:
+                raw_input = test.get("input", "")
+            # --- END PATCH ---
 
         # Force UTF‑8 normalization to prevent corruption (fix replay.determinism)
         raw_input = raw_input.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
