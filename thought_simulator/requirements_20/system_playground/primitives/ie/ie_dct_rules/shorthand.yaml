@@ -1,0 +1,8 @@
+# IIInB Dictionary Rules — Spelling Repairs
+# Canonical families:
+#   spelling.transposed
+#   spelling.missing
+
+rules:
+  # Shorthand expansions
+  "plz": "please"

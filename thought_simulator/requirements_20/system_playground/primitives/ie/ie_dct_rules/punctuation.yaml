@@ -1,0 +1,10 @@
+# IIInB Dictionary Rules — Punctuation Anomaly Detection
+# Canonical family: punctuation.clean
+# Proposal‑only (IIInB does NOT apply these replacements)
+
+rules:
+  "!!!": "!"
+  "??": "?"
+  ",,": ","
+  "...": "…"
+

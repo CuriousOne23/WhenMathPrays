@@ -1,0 +1,10 @@
+# IIInB Dictionary Rules — Unicode Noise Normalization
+# Canonical family: unicode.normalized
+# Proposal‑only (IIInB does NOT apply these replacements)
+
+rules:
+  "é": "é"        # NFC stabilization
+  "é": "é"       # NFD → NFC
+  "\uFFFD": "\uFFFD"   # preserve replacement character
+
+

@@ -1,0 +1,9 @@
+# IIInB Dictionary Rules — Repetition Cleanup
+# Canonical family: repetition.cleaned
+
+rules:
+  YYYYYYYYYY: YY
+  EEEEE: EE
+  AAAA: AA
+  HHHH: HH
+
