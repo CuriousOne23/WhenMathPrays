@@ -1,6 +1,6 @@
 # ============================================================
 # IE Input — General Mode Stimulus for 20.109 IE Primitive
-# Version: 3.1 (Model‑A‑Aligned)
+# Version: 3.1 (Model‑A‑Aligned, Updated for Rule B)
 # ============================================================
 
 inputs:
@@ -40,7 +40,7 @@ inputs:
         - "cccaaattt"
 
   # ----------------------------------------------------------
-  # 3. Anomaly‑Only Case
+  # 3. Anomaly‑Only Case (Updated for Rule B)
   # ----------------------------------------------------------
   - id: ie_anomaly_only
     description: "IE propagates anomaly when IIInB cannot repair."
@@ -51,11 +51,13 @@ inputs:
           target: "#"
           location: 2
       tokens:
-        - "Th#e"
+        - "Th"
+        - "#"
+        - "e"
         - "dog"
 
   # ----------------------------------------------------------
-  # 4. Mixed Repairs + Anomaly Case
+  # 4. Mixed Repairs + Anomaly Case (Updated for Rule B)
   # ----------------------------------------------------------
   - id: ie_mixed_case
     description: "IE applies repairs and propagates unresolved anomaly."
@@ -70,7 +72,9 @@ inputs:
           location: 7
       tokens:
         - "The"
-        - "dog@"
+        - "dog"
+        - "@"
+        - "!!!"
 
   # ----------------------------------------------------------
   # 5. Structural Preservation Case
@@ -123,7 +127,7 @@ inputs:
         - "café"
 
   # ----------------------------------------------------------
-  # 8. Complex Mixed Case
+  # 8. Complex Mixed Case (Updated for Rule B)
   # ----------------------------------------------------------
   - id: ie_complex_mixed
     description: "IE applies multiple repairs and propagates multiple anomalies."
@@ -146,6 +150,8 @@ inputs:
         - "The"
         - "dog"
         - "cccaaattt"
+        - "%"
+        - "$"
 
   # ----------------------------------------------------------
   # 9. Error Case — Invalid Token Sequence
@@ -168,4 +174,3 @@ inputs:
       tokens:
         - "hello"
         - "world"
-
