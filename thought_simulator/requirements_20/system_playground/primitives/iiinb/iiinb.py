@@ -192,7 +192,7 @@ def iiinb_inspect(intake: dict) -> dict:
     intake_tokens = tokens[:] if tokens else tokenize_original_surface(surface)
 
     # DEBUG: replay.determinism token check
-    if intake_surface.startswith("caf"):
+    # if intake_surface.startswith("caf"):
         #print("DEBUG: tokenize_original_surface returned:", intake_tokens)
 
     # Special-case: replay.determinism for caf + é + replacement char
