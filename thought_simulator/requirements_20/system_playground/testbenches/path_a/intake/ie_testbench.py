@@ -193,3 +193,33 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ============================================================
+# Testbench Integration Hooks for run.py
+# ============================================================
+
+_testbench_config = {
+    "mode": "testbench",
+    "use_inb": False,
+    "use_iiinb": True,
+    "use_ie": True,
+    "tests_to_run": "see ie_tests_to_run.yaml",
+}
+
+def set_testbench_config(config: dict):
+    """
+    Called by run.py to inject configuration flags.
+    We store them but IE testbench does not use them directly.
+    """
+    global _testbench_config
+    _testbench_config = config
+
+
+def run_testbench():
+    """
+    Called by run.py to execute the IE testbench.
+    This simply calls main(), which already performs the full testbench run.
+    """
+    print("IE Testbench Configuration:", _testbench_config)
+    main()
+
