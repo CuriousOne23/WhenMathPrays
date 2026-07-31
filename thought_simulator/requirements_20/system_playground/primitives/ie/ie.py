@@ -114,11 +114,10 @@ def _inject_anomalies(text: str, anomalies: List[AnomalyFlag]) -> str:
     if not anomalies:
         return text
 
-    if len(anomalies) == 1:
-        a = anomalies[0]
+    # IE v3.1: deterministic anomaly insertion
+    for a in anomalies:
         loc = max(0, min(a.location, len(text)))
-        return text[:loc] + a.target + text[loc:]
-
+        text = text[:loc] + a.target + text[loc:]
     return text
 
 
@@ -126,20 +125,20 @@ def _compute_normalized(ie_input: IEInput) -> str:
     repairs = ie_input.repair_operations
     anomalies = ie_input.anomaly_flags
 
+    # No repairs, anomalies only → inject anomalies into base_text
     if not repairs and anomalies:
-        base = ie_input.base_text or "The dog chased the cat"
+        base = ie_input.base_text or " ".join(ie_input.tokens)
         return _inject_anomalies(base, anomalies)
 
+    # No repairs, no anomalies → empty normalized_text
     if not repairs and not anomalies:
         return ""
 
-    repair_types = {r.type for r in repairs}
-    if repair_types == {"whitespace.normalized", "repetition.cleaned"}:
-        text = " ".join(r.proposal for r in repairs)
-    else:
-        text = repairs[-1].proposal
+    # Repairs exist → apply last proposal as committed normalized_text
+    text = repairs[-1].proposal
 
-    if anomalies and len(anomalies) == 1:
+    # Inject anomalies deterministically
+    if anomalies:
         text = _inject_anomalies(text, anomalies)
 
     return text
@@ -150,11 +149,9 @@ def _compute_normalized(ie_input: IEInput) -> str:
 # ---------------------------------------------------------------------------
 
 def _compute_tokens(ie_input: IEInput) -> List[str]:
-    if not ie_input.tokens:
-        return []
-
     tokens = list(ie_input.tokens)
 
+    # Apply case.normalized deterministically
     for r in ie_input.repair_operations:
         if r.type == "case.normalized":
             proposal_tokens = r.proposal.split()
@@ -162,7 +159,36 @@ def _compute_tokens(ie_input: IEInput) -> List[str]:
                 tokens[0] = proposal_tokens[0]
             break
 
+    # Apply repetition.cleaned deterministically
+    for r in ie_input.repair_operations:
+        if r.type == "repetition.cleaned":
+            proposal_tokens = r.proposal.split()
+            if proposal_tokens:
+                # Replace any token matching target
+                tokens = [proposal_tokens[0] if t == r.target else t for t in tokens]
+
     return tokens
+
+
+# ---------------------------------------------------------------------------
+# Token Flags (TP.intake.token_flags)
+# ---------------------------------------------------------------------------
+
+def _compute_token_flags(ie_input: IEInput, tokens: List[str]) -> List[str]:
+    flags = []
+
+    anomaly_locations = {a.location for a in ie_input.anomaly_flags}
+    repaired_targets = {r.target for r in ie_input.repair_operations}
+
+    for idx, t in enumerate(tokens):
+        if idx in anomaly_locations:
+            flags.append("anomalous")
+        elif t in repaired_targets:
+            flags.append("repaired")
+        else:
+            flags.append("normative")
+
+    return flags
 
 
 # ---------------------------------------------------------------------------
@@ -170,8 +196,6 @@ def _compute_tokens(ie_input: IEInput) -> List[str]:
 # ---------------------------------------------------------------------------
 
 def _compute_structure_tags(ie_input: IEInput) -> List[Dict[str, Any]]:
-    if not ie_input.structure_tags:
-        return []
     return [
         {
             "type": t.type,
@@ -216,12 +240,13 @@ def _compute_repair_annotations(ie_input: IEInput) -> List[Dict[str, Any]]:
 # Metadata.replay (TP.metadata.replay)
 # ---------------------------------------------------------------------------
 
-def _compute_replay_metadata(ie_input: IEInput) -> Dict[str, Any]:
+def _compute_replay_metadata(ie_input: IEInput, tokens: List[str]) -> Dict[str, Any]:
     return {
-        "ruleset_id": "ie_v2",
-        "token_count": len(ie_input.tokens),
         "repair_count": len(ie_input.repair_operations),
         "anomaly_count": len(ie_input.anomaly_flags),
+        "applied_repairs": [r.type for r in ie_input.repair_operations],
+        "applied_anomalies": [a.type for a in ie_input.anomaly_flags],
+        "token_count": len(tokens),
     }
 
 
@@ -230,6 +255,8 @@ def _compute_replay_metadata(ie_input: IEInput) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def _compute_error(ie_input: IEInput) -> Optional[Dict[str, Any]]:
+    if ie_input.tokens is None:
+        return {"error": "invalid_tokens"}
     return None
 
 
@@ -242,14 +269,16 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
 
     normalized_text = _compute_normalized(ie_input)
     tokens = _compute_tokens(ie_input)
+    token_flags = _compute_token_flags(ie_input, tokens)
     structure_tags = _compute_structure_tags(ie_input)
     repair_annotations = _compute_repair_annotations(ie_input)
-    replay = _compute_replay_metadata(ie_input)
+    replay = _compute_replay_metadata(ie_input, tokens)
     error = _compute_error(ie_input)
 
     intake = {
         "normalized_text": normalized_text,
         "tokens": tokens,
+        "token_flags": token_flags,
     }
 
     structure = {
@@ -261,7 +290,7 @@ def run_ie(iiinb_output: Dict[str, Any]) -> Dict[str, Any]:
     metadata = {
         "repair_annotations": repair_annotations,
         "replay": replay,
-        "ruleset_id": replay.get("ruleset_id", "ie_v2"),
+        "ruleset_id": "ie.v3.1",
     }
 
     return TPOutput(
