@@ -1,20 +1,32 @@
-# ⭐ **PROGRESSIVE LINEUP TESTING — FULLY UPDATED (2026, IIInB‑COMPLIANT)**  
-### *Unified, Deterministic, Multi‑Primitive Pipeline Testing Architecture*
-**Date:** 7/30/2026
+# ⭐ **PROGRESSIVE LINEUP TESTING — FULLY UPDATED (2026, MODEL‑A‑ALIGNED)**  
+### *Unified, Deterministic, Multi‑Primitive Pipeline Testing Architecture*  
+**Date:** 7/31/2026  
+**Status:** Active — Path‑A Testbench Specification  
 
 ---
 
-# **1. Purpose of Progressive Lineup Testing**
+# **1. Purpose of Progressive Lineup Testing** *(Informative)*
 
 Progressive lineup testing validates **multi‑primitive pipelines** in Path‑A by progressively enabling upstream primitives and ensuring:
 
 - deterministic replay  
 - correct propagation of TP envelopes  
-- correct propagation of repairs/anomalies  
+- correct propagation of IIInB proposals/anomalies  
+- correct propagation of IE token_flags  
 - correct structural metadata (for primitives that produce it)  
 - correct supported/unsupported test detection  
 - correct PASS / FAIL / SKIPPED semantics  
 - correct pipeline completeness  
+- correct synchronization of language, variables, and processing across all Path‑A primitives  
+
+Progressive lineup testing ensures that **every downstream primitive** is validated against:
+
+- the **actual upstream output**  
+- the **correct TP envelope**  
+- the **correct committed intake**  
+- the **correct structural interpretation**  
+- the **correct replay metadata**  
+- the **correct normative token classification**  
 
 This model supports **arbitrary progressive loading**, not fixed modes.
 
@@ -25,8 +37,8 @@ This model supports **arbitrary progressive loading**, not fixed modes.
 All primitives support two modes:
 
 ```python
-"mode": "general"     # developer diagnostic harness
-"mode": "testbench"   # full regression suite with progressive lineup
+"mode": "general"     # single-primitive diagnostic harness
+"mode": "testbench"   # full progressive lineup pipeline
 ```
 
 ---
@@ -40,20 +52,21 @@ General mode:
 - does **not** execute upstream primitives  
 - does **not** perform lineup resolution  
 - does **not** detect supported/unsupported tests  
+- does **not** construct a pipeline  
 
 ### **General Mode Flow**
 
-1. Load all inputs from `<primitive>_input.yaml`
-2. Wrap each into a TP envelope
-3. Run the primitive
-4. Run the primitive’s rulechecker
+1. Load all inputs from `<primitive>_input.yaml`  
+2. Wrap each into a TP envelope  
+3. Run the primitive  
+4. Run the primitive’s rulechecker  
 5. Print:
    - primitive defects  
    - rulechecker defects  
    - PASS (primitive ⊆ rulechecker)  
    - FAIL (primitive ∉ rulechecker)  
-   - No‑test (rulechecker defects empty)
-6. Print summary
+   - No‑test (rulechecker defects empty)  
+6. Print summary  
 
 General mode is a **developer harness**, not a pipeline test.
 
@@ -161,7 +174,7 @@ This ensures:
 
 ---
 
-# **8. Supported vs Unsupported Tests (Updated for IIInB)**
+# **8. Supported vs Unsupported Tests (Updated for IIInB + IE)**
 
 A downstream test is supported if:
 
@@ -175,8 +188,10 @@ Unsupported tests must be skipped.
 IE structural tests require:
 
 - structural tags  
+- spans  
+- markup  
 - replay metadata  
-- semantic envelope fields  
+- token_flags  
 
 But IIInB stimulus provides only:
 
@@ -188,6 +203,21 @@ But IIInB stimulus provides only:
 Therefore:
 
 > **IE structural tests must be skipped when IIInB is upstream.**
+
+### **Example: CEx semantic tests**
+
+CEx semantic tests require:
+
+- committed normalized_text  
+- committed tokens  
+- committed token_flags  
+- committed structure  
+
+But IE stimulus may be disabled.
+
+Therefore:
+
+> **CEx semantic tests must be skipped when IE is not enabled.**
 
 ---
 
@@ -217,7 +247,7 @@ Correct structured reporting:
 IE Testbench Summary
 --------------------
 Pipeline: InB → IIInB → IE
-Stimulus: inb_testbench.yaml
+Stimulus: iiinb_testbench.yaml
 Expected: ie_testbench.yaml
 
 Passed:   8
@@ -257,6 +287,7 @@ The rewritten IIInB primitive is:
 - **does not mutate tokens**  
 - **does not produce structural metadata**  
 - **does not produce normalized text**  
+- **does not produce token_flags**  
 
 Therefore:
 
@@ -276,17 +307,42 @@ Therefore:
 - structural tags  
 - committed repairs  
 - mutated tokens  
+- token_flags  
 
 ### ✔ CEx, CE, ISc, TPU must not expect:
 - semantic normalization  
 - structural normalization  
 - committed surface  
+- committed token_flags  
 
 This is the most important update to progressive lineup testing.
 
 ---
 
-# **13. Replay Determinism (Updated)**
+# **13. IE‑Specific Updates (Critical)**
+
+IE is now:
+
+- the **first mild semantic primitive**  
+- the **man→machine boundary**  
+- the **first committed TP constructor**  
+- the **first repair‑application primitive**  
+- the **first anomaly‑resolution primitive**  
+- the **first token‑normativity classifier**  
+
+IE produces:
+
+- committed normalized_text  
+- committed tokens  
+- committed token_flags  
+- committed structure  
+- committed replay metadata  
+
+Downstream primitives must treat IE output as the **canonical machine substrate**.
+
+---
+
+# **14. Replay Determinism (Updated)**
 
 Replay determinism now requires:
 
@@ -295,12 +351,17 @@ Replay determinism now requires:
 ### ✔ Stable proposal order  
 ### ✔ Stable rule order  
 ### ✔ Stable tokenization  
-### ❌ No normalization determinism (IIInB does not normalize)  
-### ❌ No surface mutation determinism  
+### ✔ Stable token_flags  
+### ✔ Stable structural tags  
+### ✔ Stable normalized_text (IE only)  
+
+IIInB does **not** normalize or mutate surface.
+
+IE does.
 
 ---
 
-# **14. Pipeline Propagation Rules (Updated)**
+# **15. Pipeline Propagation Rules (Updated)**
 
 ### **InB → IIInB**
 - InB produces normalized text  
@@ -309,12 +370,14 @@ Replay determinism now requires:
 - IIInB produces proposals/anomalies only  
 
 ### **IIInB → IE**
-- IE receives:
-  - original surface  
-  - original tokens  
-  - proposals  
-  - anomalies  
-- IE must not expect structural metadata from IIInB  
+IE receives:
+
+- original surface  
+- original tokens  
+- proposals  
+- anomalies  
+
+IE must not expect structural metadata from IIInB.
 
 ### **IE → CEx → CE → ISc → TPU**
 Propagation rules remain unchanged except:
@@ -323,7 +386,7 @@ Propagation rules remain unchanged except:
 
 ---
 
-# **15. Benefits of Progressive Lineup Testing**
+# **16. Benefits of Progressive Lineup Testing**
 
 - deterministic  
 - modular  
@@ -332,15 +395,19 @@ Propagation rules remain unchanged except:
 - replay‑safe  
 - future‑proof  
 - compatible with proposal‑only IIInB  
+- compatible with rule‑driven IE  
+- compatible with token_flags  
+- compatible with Model A  
 
 ---
 
-# **16. Summary**
+# **17. Summary**
 
 Progressive lineup testing ensures:
 
 - deterministic pipeline behavior  
 - correct propagation of IIInB proposals/anomalies  
+- correct propagation of IE token_flags  
 - correct supported/unsupported detection  
 - correct structured reporting  
 - correct upstream/downstream alignment  
@@ -350,6 +417,7 @@ Progressive lineup testing ensures:
 This document is now fully synchronized with:
 
 - rewritten IIInB  
+- updated IE (Version 3.1)  
 - updated testbenches  
 - updated structural program  
 - updated rulechecker  
@@ -357,3 +425,11 @@ This document is now fully synchronized with:
 - updated pipeline semantics  
 
 ---
+
+# **End of Document — progressive_lineup_testing.md (Version 3.1)**
+
+---
+
+- **20.107_cex_extract.md**  
+
+Just tell me which one you want next.
