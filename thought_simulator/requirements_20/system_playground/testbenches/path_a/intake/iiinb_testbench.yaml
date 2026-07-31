@@ -274,7 +274,15 @@ tests:
   # Python receives, not the visual representation shown in editors.
   - id: "replay.determinism"
     description: "Identical input bytes must produce identical IIInB output."
-    input_codepoints: ["0x63", "0x61", "0x66", "0xe9", "0xfffd"]
+    input_codepoints:
+      - "0x63"
+      - "0x61"
+      - "0x66"
+      - "0xc3"
+      - "0xa9"
+      - "0xef"
+      - "0xbf"
+      - "0xbd"
     expected:
       iiinb_status: "inspected"
       repair_proposals:
@@ -287,6 +295,3 @@ tests:
       anomaly_flags: []
       intake_surface: "caf├⌐∩┐╜"
       intake_tokens: ["caf├⌐", "∩┐╜"]
-
-
-
