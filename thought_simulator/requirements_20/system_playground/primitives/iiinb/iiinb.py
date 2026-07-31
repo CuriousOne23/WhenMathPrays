@@ -111,6 +111,21 @@ def tokenize_original_surface(surface: str) -> list[str]:
             i += len("<broken>")
             continue
 
+        # Repeating-letter sequence (e.g., "YYYYYYYYYY", "EEEEE", "AAAA", "HHHH")
+        # MUST come before the word-token rule, otherwise the word rule will swallow it.
+        if i + 1 < n and surface[i].isalpha():
+            ch0 = surface[i]
+            j = i + 1
+            # Count how long the run of the same letter is
+            while j < n and surface[j] == ch0:
+                j += 1
+            run_len = j - i
+            # If run length >= 3, treat as a standalone token
+            if run_len >= 3:
+                tokens.append(surface[i:j])
+                i = j
+                continue
+        
         # Word token: letters/digits + embedded illegal chars
         if ch.isalnum() or ch in ILLEGAL_IN_WORD:
             start = i
@@ -139,7 +154,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
         i += 1
 
     final_tokens = ...  # any merging or adjustments you apply
-    print("DEBUG final tokens:", final_tokens)
+    print("DEBUG final tokens:", tokens)
     return tokens
 
 # ------------------------------------------------------------
@@ -164,6 +179,13 @@ def iiinb_inspect(intake: dict) -> dict:
     """
 
     surface = intake.get("surface", "") or ""
+
+    # --------------------------------------------------------
+    # Replay determinism: normalize mojibake BEFORE tokenization
+    # Ensures caf├⌐∩┐╜ → café� deterministically
+    # --------------------------------------------------------
+    surface = surface.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
+        
     tokens = intake.get("tokens", []) or []
 
     intake_surface = surface
