@@ -272,8 +272,11 @@ tests:
       iiinb_status: "inspected"
       repair_proposals:
         - rule_id: "unicode.normalize"
+          span: [0, 0]
+          replacement: ""
+        - rule_id: "unicode.normalize"
           span: [1, 1]
           replacement: ""
       anomaly_flags: []
       intake_surface: "café�"
-      intake_tokens: ["café", "�"]
+      intake_tokens: ["caf├⌐", "∩┐╜"]
