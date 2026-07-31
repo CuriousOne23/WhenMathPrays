@@ -1,1 +1,109 @@
+# ============================================================
+# IE Tests-To-Run — Execution Control for IE Testbench (v3.1)
+# ============================================================
+
+# ------------------------------------------------------------
+# Pipeline Configuration Flags
+# These flags are read by run.py to determine which upstream
+# primitives are enabled and which tests IE is allowed to run.
+# ------------------------------------------------------------
+
+pipeline:
+  use_inb: true
+  use_iiinb: true
+  use_ie: true
+  use_cex: false
+  use_ce: false
+  use_isc: false
+  use_tpu: false
+
+# ------------------------------------------------------------
+# Supported / Unsupported Test Logic
+# ------------------------------------------------------------
+# IE tests are supported only when:
+#   - IIInB provides repair_proposals
+#   - IIInB provides anomaly_flags
+#   - IIInB provides tokens
+#   - IE is enabled
+#
+# Structural tests are supported only when:
+#   - IIInB provides structure.tags
+#
+# Token preservation tests are supported only when:
+#   - IIInB provides tokens
+#
+# Replay determinism tests are always supported when IE is enabled.
+#
+# ------------------------------------------------------------
+
+tests_to_run:
+
+  # ----------------------------------------------------------
+  # 1. Repair‑Only Case (Supported)
+  # ----------------------------------------------------------
+  - id: ie_repair_only_whitespace
+    enabled: true
+    reason: "IIInB provides repairs; IE enabled."
+
+  # ----------------------------------------------------------
+  # 2. Multiple Repairs (Supported)
+  # ----------------------------------------------------------
+  - id: ie_multiple_repairs
+    enabled: true
+    reason: "IIInB provides multiple repairs; IE enabled."
+
+  # ----------------------------------------------------------
+  # 3. Anomaly‑Only Case (Supported)
+  # ----------------------------------------------------------
+  - id: ie_anomaly_only
+    enabled: true
+    reason: "IIInB provides anomaly_flags; IE enabled."
+
+  # ----------------------------------------------------------
+  # 4. Mixed Repairs + Anomaly (Supported)
+  # ----------------------------------------------------------
+  - id: ie_mixed_repairs_anomaly
+    enabled: true
+    reason: "IIInB provides repairs and anomalies; IE enabled."
+
+  # ----------------------------------------------------------
+  # 5. Structural Tags Case
+  # ----------------------------------------------------------
+  - id: ie_structural_tags
+    enabled: true
+    reason: "IIInB provides structure.tags; IE preserves structure."
+
+  # ----------------------------------------------------------
+  # 6. Token Preservation Case
+  # ----------------------------------------------------------
+  - id: ie_token_preservation
+    enabled: true
+    reason: "IIInB provides tokens; IE must preserve boundaries."
+
+  # ----------------------------------------------------------
+  # 7. Replay Determinism Case
+  # ----------------------------------------------------------
+  - id: ie_replay_determinism
+    enabled: true
+    reason: "Replay determinism always supported when IE enabled."
+
+  # ----------------------------------------------------------
+  # 8. Complex Mixed Case
+  # ----------------------------------------------------------
+  - id: ie_complex_mixed
+    enabled: true
+    reason: "IIInB provides repairs and anomalies; IE enabled."
+
+# ------------------------------------------------------------
+# Summary
+# ------------------------------------------------------------
+summary:
+  total_tests: 8
+  enabled_tests: 8
+  disabled_tests: 0
+  notes:
+    - "All IE tests supported because IIInB is enabled and provides required fields."
+    - "Structural tests supported because IIInB provides structure.tags."
+    - "Token preservation tests supported because IIInB provides tokens."
+    - "Replay determinism tests supported because IE is enabled."
 
