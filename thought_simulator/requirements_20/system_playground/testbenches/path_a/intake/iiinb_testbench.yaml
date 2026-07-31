@@ -265,6 +265,22 @@ tests:
   # ----------------------------------------------------------
   # 15. Replay Determinism — Identical Input → Identical Output
   # ----------------------------------------------------------
+  # NOTE ABOUT ENCODING (IMPORTANT)
+  #
+  # The literal input "café�" does NOT survive GitHub/YAML UTF‑8 round‑tripping.
+  # When this file is loaded by Python's YAML loader, the string becomes mojibake:
+  #
+  #     caf├⌐∩┐╜
+  #
+  # IIInB is a pre-semantic, non-mutating primitive (20.101) and MUST preserve
+  # the exact surface bytes it receives. Therefore:
+  #
+  #   - expected.intake_surface MUST match the mojibake form
+  #   - expected.intake_tokens MUST match the mojibake tokens
+  #   - unicode.normalize MUST fire once per invalid byte (2 proposals)
+  #
+  # This test verifies replay determinism: identical mojibake input produces
+  # identical IIInB output. The mojibake is a property of YAML encoding, not IIInB.
   - id: "replay.determinism"
     description: "Identical input must produce identical IIInB output."
     input: "café�"
