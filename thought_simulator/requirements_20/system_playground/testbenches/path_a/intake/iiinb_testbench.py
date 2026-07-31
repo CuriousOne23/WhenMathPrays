@@ -48,14 +48,31 @@ def load_testbench():
     with open(path, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
-    # DEBUG: show raw YAML input for replay.determinism
+        # DEBUG: show raw YAML input for replay.determinism
     for t in data.get("tests", []):
         if t.get("id") == "replay.determinism":
-            raw = t.get("input")
-            print("DEBUG YAML LOAD:", raw)
-            print("DEBUG YAML BYTES:", list(raw.encode("utf-8")))
-            print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
 
+            if "input_codepoints" in t:
+                cps = t["input_codepoints"]
+                print("DEBUG YAML LOAD (codepoints):", cps)
+
+                try:
+                    raw_bytes = bytes(int(cp, 16) for cp in cps)
+                    raw = raw_bytes.decode("utf-8", errors="replace")
+                    print("DEBUG YAML DECODED:", raw)
+                    print("DEBUG YAML BYTES:", list(raw_bytes))
+                    print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+                except Exception as e:
+                    print("DEBUG ERROR decoding codepoints:", e)
+
+            else:
+                raw = t.get("input")
+                print("DEBUG YAML LOAD:", raw)
+                if raw is not None:
+                    print("DEBUG YAML BYTES:", list(raw.encode("utf-8", errors="replace")))
+                    print("DEBUG YAML CODEPOINTS:", [hex(ord(c)) for c in raw])
+                else:
+                    print("DEBUG YAML LOAD: None")
     return data
 
 def load_tests_to_run():
