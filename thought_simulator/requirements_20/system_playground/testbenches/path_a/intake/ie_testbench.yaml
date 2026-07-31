@@ -262,8 +262,133 @@ tests:
     iiinb_output:
       repair_operations:
         - type: "case.normalized"
-          target: "the"
-          proposal: "The"
+          target: "the dog"
+          proposal: "The dog"
       anomaly_flags: []
       tokens:
-        - "the
+        - "the"
+        - "dog"
+    expected:
+      intake:
+        normalized_text: "The dog"
+        tokens:
+          - "The"
+          - "dog"
+        token_flags:
+          - "repaired"
+          - "normative"
+      metadata:
+        repair_annotations:
+          - kind: "repair"
+            type: "case.normalized"
+            target: "the dog"
+            proposal: "The dog"
+        replay:
+          repair_count: 1
+          anomaly_count: 0
+          applied_repairs:
+            - "case.normalized"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
+      error: null
+
+  # ----------------------------------------------------------
+  # 7. Replay Determinism Case
+  # ----------------------------------------------------------
+  - id: ie_replay_determinism
+    description: "IE output must be identical for identical IIInB output"
+    iiinb_output:
+      repair_operations:
+        - type: "unicode.normalized"
+          target: "café"
+          proposal: "cafe"
+      anomaly_flags: []
+      tokens:
+        - "café"
+    expected:
+      intake:
+        normalized_text: "cafe"
+        tokens:
+          - "cafe"
+        token_flags:
+          - "repaired"
+      metadata:
+        repair_annotations:
+          - kind: "repair"
+            type: "unicode.normalized"
+            target: "café"
+            proposal: "cafe"
+        replay:
+          repair_count: 1
+          anomaly_count: 0
+          applied_repairs:
+            - "unicode.normalized"
+          applied_anomalies: []
+        ruleset_id: "ie.v3.1"
+      error: null
+
+  # ----------------------------------------------------------
+  # 8. Complex Mixed Case (Multiple Repairs + Multiple Anomalies)
+  # ----------------------------------------------------------
+  - id: ie_complex_mixed
+    description: "IE applies all repairs and propagates all anomalies"
+    iiinb_output:
+      repair_operations:
+        - type: "whitespace.normalized"
+          target: "The   dog"
+          proposal: "The dog"
+        - type: "repetition.cleaned"
+          target: "cccaaattt"
+          proposal: "cat"
+      anomaly_flags:
+        - type: "illegal_character.unknown"
+          target: "%"
+          location: 3
+        - type: "illegal_character.unknown"
+          target: "$"
+          location: 9
+      tokens:
+        - "The"
+        - "dog"
+        - "cccaaattt"
+    expected:
+      intake:
+        normalized_text: "The dog cat"
+        tokens:
+          - "The"
+          - "dog"
+          - "cat"
+        token_flags:
+          - "repaired"
+          - "normative"
+          - "repaired"
+      metadata:
+        repair_annotations:
+          - kind: "repair"
+            type: "whitespace.normalized"
+            target: "The   dog"
+            proposal: "The dog"
+          - kind: "repair"
+            type: "repetition.cleaned"
+            target: "cccaaattt"
+            proposal: "cat"
+          - kind: "anomaly"
+            type: "illegal_character.unknown"
+            target: "%"
+            location: 3
+          - kind: "anomaly"
+            type: "illegal_character.unknown"
+            target: "$"
+            location: 9
+        replay:
+          repair_count: 2
+          anomaly_count: 2
+          applied_repairs:
+            - "whitespace.normalized"
+            - "repetition.cleaned"
+          applied_anomalies:
+            - "illegal_character.unknown"
+            - "illegal_character.unknown"
+        ruleset_id: "ie.v3.1"
+      error: null
+
