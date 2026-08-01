@@ -1,435 +1,437 @@
-# ⭐ **PROGRESSIVE LINEUP TESTING — FULLY UPDATED (2026, MODEL‑A‑ALIGNED)**  
-### *Unified, Deterministic, Multi‑Primitive Pipeline Testing Architecture*  
-**Date:** 7/31/2026  
-**Status:** Active — Path‑A Testbench Specification  
+# progressive_lineup_testing.md — Path‑A Intake Progressive Lineup (Version 3.2)
+
+This document defines the **progressive lineup testing strategy** for the **Path‑A intake pipeline**, focusing on:
+
+- IIInB (Input Inference/Repair Basin, v3.2)
+- IE (Intake Envelope, v3.2)
+- TP envelope determinism
+- anomaly and repair provenance
+- replay stability
+- Python/C++ parity
+
+It is synchronized with:
+
+- `20.101_iiinb_prim.md` (IIInB primitive spec, v3.2)
+- `20.109_ie_prim.md` (IE primitive spec, v3.2)
+- `iiinb_py_struc_pgm.md` (IIInB Python structural program, v3.2)
+- `ie_py_struc_pgm.md` (IE Python structural program, v3.2)
+- `iiinb_testbench.yaml`, `iiinb_testbench.py`
+- `ie_testbench.yaml`, `ie_testbench.py`
+- `run.py` (pipeline runner)
 
 ---
 
-# **1. Purpose of Progressive Lineup Testing** *(Informative)*
+## 1. Purpose
 
-Progressive lineup testing validates **multi‑primitive pipelines** in Path‑A by progressively enabling upstream primitives and ensuring:
+The progressive lineup is a **deterministic test harness** that exercises Path‑A intake primitives in a controlled, layered fashion.
 
-- deterministic replay  
-- correct propagation of TP envelopes  
-- correct propagation of IIInB proposals/anomalies  
-- correct propagation of IE token_flags  
-- correct structural metadata (for primitives that produce it)  
-- correct supported/unsupported test detection  
-- correct PASS / FAIL / SKIPPED semantics  
-- correct pipeline completeness  
-- correct synchronization of language, variables, and processing across all Path‑A primitives  
+Goals:
 
-Progressive lineup testing ensures that **every downstream primitive** is validated against:
-
-- the **actual upstream output**  
-- the **correct TP envelope**  
-- the **correct committed intake**  
-- the **correct structural interpretation**  
-- the **correct replay metadata**  
-- the **correct normative token classification**  
-
-This model supports **arbitrary progressive loading**, not fixed modes.
+- verify IIInB’s proposal‑only, non‑mutating behavior
+- verify IE’s committed intake construction and machine‑efficiency role
+- verify anomaly and repair provenance across the pipeline
+- verify replay determinism
+- verify Python/C++ parity
 
 ---
 
-# **2. Two Testing Modes**
+## 2. Scope
 
-All primitives support two modes:
+This document covers:
+
+- IIInB → IE intake boundary
+- TP envelope shape and stability
+- anomaly taxonomy and propagation
+- repair proposal integration
+- composite merge behavior (IE only)
+- dictionary validation (IE only)
+- structural construction (IE only)
+- replay metadata
+
+It does **not** cover downstream semantic primitives (CEx, CE, ISc, TPU).
+
+---
+
+## 3. Lineup Stages
+
+The progressive lineup is organized into stages:
+
+1. **Stage A — IIInB only**  
+   - exercise IIInB’s tokenization, anomaly detection, and repair proposal generation
+
+2. **Stage B — IIInB → IE**  
+   - feed IIInB output into IE and verify committed intake construction
+
+3. **Stage C — Replay and provenance**  
+   - verify that TP envelopes can be reconstructed deterministically
+
+4. **Stage D — Python/C++ parity**  
+   - verify that Python and C++ implementations produce identical outputs
+
+Each stage builds on the previous one.
+
+---
+
+## 4. Test Inputs
+
+Test inputs are defined in:
+
+- `iiinb_input.yaml` (developer playground for intake anomalies)
+- `iiinb_testbench.yaml` (canonical IIInB test cases)
+- `ie_testbench.yaml` (canonical IE test cases)
+
+Inputs include:
+
+- clean text
+- text with illegal characters
+- malformed tokens
+- unicode anomalies
+- punctuation anomalies
+- repetition patterns
+- dictionary‑absence (`no_entry`)
+- shorthand and spelling variants
+
+---
+
+## 5. IIInB Behavior (v3.2)
+
+IIInB is:
+
+- proposal‑only
+- non‑mutating
+- pre‑semantic
+- bounded‑semantic
+- token‑span indexed
+- deterministic
+- replay‑stable
+
+IIInB output:
 
 ```python
-"mode": "general"     # single-primitive diagnostic harness
-"mode": "testbench"   # full progressive lineup pipeline
+{
+    "iiinb_status": "inspected",
+    "repair_proposals": [...],
+    "anomaly_flags": [...],
+    "intake_surface": str,
+    "intake_tokens": list[str]
+}
 ```
 
----
+Key properties:
 
-## **2.1 General Mode — Single‑Primitive Diagnostic Harness**
+- `intake_surface` is the original surface (unchanged)
+- `intake_tokens` are tokens from the original surface (unchanged)
+- `repair_proposals` are deterministic, token‑span indexed
+- `anomaly_flags` are deterministic, token‑span indexed
 
-General mode:
+IIInB does **not**:
 
-- runs **only the primitive under test**  
-- uses `<primitive>_input.yaml`  
-- does **not** execute upstream primitives  
-- does **not** perform lineup resolution  
-- does **not** detect supported/unsupported tests  
-- does **not** construct a pipeline  
-
-### **General Mode Flow**
-
-1. Load all inputs from `<primitive>_input.yaml`  
-2. Wrap each into a TP envelope  
-3. Run the primitive  
-4. Run the primitive’s rulechecker  
-5. Print:
-   - primitive defects  
-   - rulechecker defects  
-   - PASS (primitive ⊆ rulechecker)  
-   - FAIL (primitive ∉ rulechecker)  
-   - No‑test (rulechecker defects empty)  
-6. Print summary  
-
-General mode is a **developer harness**, not a pipeline test.
+- apply repairs
+- normalize surface
+- mutate tokens
+- perform composite merges
+- infer meaning
 
 ---
 
-## **2.2 Testbench Mode — Full Progressive Lineup**
+## 6. IIInB Anomaly Taxonomy (v3.2)
 
-Testbench mode activates the **pipeline**, executing all enabled upstream primitives before the primitive under test.
+IIInB emits local anomaly types, including:
 
-Testbench mode uses:
+- `illegal_character.*`
+- `malformed_token`
+- `unicode_anomaly`
+- `punctuation_anomaly`
+- `repetition_pattern`
+- `no_entry` (token has no dictionary entry as a standalone form)
 
-- `<primitive>_testbench.yaml`  
-- `<primitive>_rules.yaml`  
-- `<primitive>_rulechecker.py`  
-- upstream stimulus YAML  
+All anomalies are:
 
-### **Testbench Mode Flow**
+- local
+- bounded
+- non‑composite
+- token‑span indexed
 
-1. Detect pipeline configuration  
-2. Select stimulus based on earliest enabled upstream primitive  
-3. Construct full pipeline  
-4. Execute upstream primitives  
-5. Execute primitive under test  
-6. Compare output against expected YAML  
-7. Detect supported vs unsupported tests  
-8. Print PASS / FAIL / SKIPPED summary  
+The lineup verifies:
 
----
-
-# **3. Where Progressive Lineup Applies**
-
-### ✔ Applies to:
-- IIInB  
-- IE  
-- CEx  
-- CE  
-- ISc  
-- TPU  
-
-### ❌ Does NOT apply to:
-- **InB**  
-InB is the first primitive in Path‑A and has no upstream dependencies.
+- correct detection of each anomaly type
+- correct span and location encoding
+- deterministic behavior across runs
+- Python/C++ parity
 
 ---
 
-# **4. Pipeline Configuration Detection**
+## 7. IIInB Repair Proposals (v3.2)
 
-Testbenches read flags such as:
-
-- `use_inb`  
-- `use_iiinb`  
-- `use_ie`  
-- `use_cex`  
-- `use_ce`  
-- `use_isc`  
-- `use_tpu`  
-
-If the user enables PrimitiveX upstream of PrimitiveY:
-
-> **All primitives between X and Y must also be enabled.**
-
-This ensures structural completeness.
-
----
-
-# **5. Stimulus Selection Logic**
-
-Stimulus is based on the **earliest enabled upstream primitive**.
-
-| Earliest Enabled | Stimulus |
-|------------------|----------|
-| None             | `<primitive>_testbench.yaml` |
-| InB              | `inb_testbench.yaml` |
-| IIInB            | `iiinb_testbench.yaml` |
-| IE               | `ie_testbench.yaml` |
-
-General rule:
-
-> **Stimulus = `<PrimitiveX>_testbench.yaml` where PrimitiveX is earliest enabled upstream.**
-
----
-
-# **6. Stimulus Source — General vs Testbench Mode**
-
-### **General Mode**
-Stimulus = `<primitive>_input.yaml`  
-No upstream primitives are executed.
-
-### **Testbench Mode**
-Stimulus = `<PrimitiveX>_testbench.yaml`  
-Where PrimitiveX is earliest enabled upstream.
-
----
-
-# **7. Rulechecking Source — Always Downstream Primitive**
-
-Regardless of upstream configuration:
-
-> **The primitive under test always uses its own rulechecker and its own rules.**
-
-This ensures:
-
-- downstream semantics remain stable  
-- expected output is always defined by the primitive under test  
-
----
-
-# **8. Supported vs Unsupported Tests (Updated for IIInB + IE)**
-
-A downstream test is supported if:
-
-- the downstream expected YAML defines the required fields  
-- the upstream stimulus provides enough data to evaluate them  
-
-Unsupported tests must be skipped.
-
-### **Example: IE structural tests**
-
-IE structural tests require:
-
-- structural tags  
-- spans  
-- markup  
-- replay metadata  
-- token_flags  
-
-But IIInB stimulus provides only:
-
-- `repair_proposals`  
-- `anomaly_flags`  
-- `intake_surface`  
-- `intake_tokens`  
-
-Therefore:
-
-> **IE structural tests must be skipped when IIInB is upstream.**
-
-### **Example: CEx semantic tests**
-
-CEx semantic tests require:
-
-- committed normalized_text  
-- committed tokens  
-- committed token_flags  
-- committed structure  
-
-But IE stimulus may be disabled.
-
-Therefore:
-
-> **CEx semantic tests must be skipped when IE is not enabled.**
-
----
-
-# **9. Detecting Unsupported Tests**
-
-Testbenches implement:
+IIInB generates **repair proposals** only:
 
 ```python
-def is_test_supported(expected, required_fields):
-    missing = [f for f in required_fields if f not in expected]
-    return (len(missing) == 0, missing)
+{
+    "rule_id": str,
+    "span": [i, j],
+    "replacement": str
+}
 ```
 
-Unsupported tests:
+Examples:
 
-- are skipped  
-- are reported  
-- do not count as failures  
+- repetition collapse proposals
+- unicode normalization proposals
+- punctuation normalization proposals
+- shorthand expansion proposals
+- spelling correction proposals
+
+Constraints:
+
+- proposals are deterministic
+- proposals are not applied by IIInB
+- proposals do not mutate surface or tokens
+- proposals do not perform composite merges
+
+The lineup verifies:
+
+- correct proposal generation
+- correct span encoding
+- correct rule_id usage
+- deterministic replay
 
 ---
 
-# **10. PASS / FAIL / SKIPPED Summary**
+## 8. IE Behavior (v3.2)
 
-Correct structured reporting:
+IE is:
 
-```
-IE Testbench Summary
---------------------
-Pipeline: InB → IIInB → IE
-Stimulus: iiinb_testbench.yaml
-Expected: ie_testbench.yaml
+- the first committed intake constructor
+- the machine‑efficiency boundary between IIInB and downstream primitives
+- the first mild‑semantic primitive (meaning‑adjacent, not meaning‑inferential)
 
-Passed:   8
-Failed:   0
-Skipped:  7
-Supported tests: 8 / 15
-```
+IE receives:
 
----
-
-# **11. Required Logging**
-
-Testbenches must print:
-
-- pipeline configuration  
-- stimulus source  
-- expected output source  
-
-And for each skipped test:
-
-```
-Skipping test 'structure.tags.basic' — upstream stimulus does not define required IE fields: ['structure.tags']
-```
-
----
-
-# **12. IIInB‑Specific Updates (Critical)**
-
-The rewritten IIInB primitive is:
-
-- **proposal‑only**  
-- **non‑mutating**  
-- **pre‑semantic**  
-- **token‑span indexed**  
-- **does not normalize**  
-- **does not apply repairs**  
-- **does not mutate tokens**  
-- **does not produce structural metadata**  
-- **does not produce normalized text**  
-- **does not produce token_flags**  
-
-Therefore:
-
-### ✔ Upstream IIInB stimulus contains only:
-- `repair_proposals`  
-- `anomaly_flags`  
-- `intake_surface`  
-- `intake_tokens`  
-
-### ✔ Downstream primitives must treat IIInB as:
-- a pure anomaly detector  
-- a pure repair‑proposal generator  
-- a non‑mutating intake inspector  
-
-### ✔ IE must not expect:
-- normalized text  
-- structural tags  
-- committed repairs  
-- mutated tokens  
-- token_flags  
-
-### ✔ CEx, CE, ISc, TPU must not expect:
-- semantic normalization  
-- structural normalization  
-- committed surface  
-- committed token_flags  
-
-This is the most important update to progressive lineup testing.
-
----
-
-# **13. IE‑Specific Updates (Critical)**
-
-IE is now:
-
-- the **first mild semantic primitive**  
-- the **man→machine boundary**  
-- the **first committed TP constructor**  
-- the **first repair‑application primitive**  
-- the **first anomaly‑resolution primitive**  
-- the **first token‑normativity classifier**  
+- `intake_surface`
+- `intake_tokens`
+- `repair_proposals`
+- `anomaly_flags`
+- `metadata.iiinb`
 
 IE produces:
 
-- committed normalized_text  
-- committed tokens  
-- committed token_flags  
-- committed structure  
-- committed replay metadata  
+```json
+{
+  "intake": {
+    "tokens": ["string"],          // raw IIInB tokens (read‑only)
+    "ie_tokens": ["string"],       // committed IE tokens (post‑repair, post‑merge)
+    "token_flags": ["TokenFlag"],
+    "normalized_text": "string"
+  },
+  "structure": {
+    "tags": ["StructuralTag"],
+    "spans": ["Span"],
+    "markup": ["MarkupIndicator"]
+  },
+  "metadata": {
+    "repair_annotations": ["RepairAnnotation"],
+    "replay": "ReplayMetadata",
+    "ruleset_id": "string"
+  },
+  "error": "TPError | null"
+}
+```
 
-Downstream primitives must treat IE output as the **canonical machine substrate**.
+IE:
 
----
+- applies IIInB repairs exactly
+- performs composite merges when repairs require them
+- validates dictionary entries for merged tokens
+- constructs committed normalized surface
+- constructs committed IE tokens
+- classifies tokens via `token_flags`
+- constructs structure deterministically
+- encodes replay metadata
 
-# **14. Replay Determinism (Updated)**
+IE does **not**:
 
-Replay determinism now requires:
-
-### ✔ Stable token spans  
-### ✔ Stable anomaly spans  
-### ✔ Stable proposal order  
-### ✔ Stable rule order  
-### ✔ Stable tokenization  
-### ✔ Stable token_flags  
-### ✔ Stable structural tags  
-### ✔ Stable normalized_text (IE only)  
-
-IIInB does **not** normalize or mutate surface.
-
-IE does.
-
----
-
-# **15. Pipeline Propagation Rules (Updated)**
-
-### **InB → IIInB**
-- InB produces normalized text  
-- IIInB ignores it  
-- IIInB re‑tokenizes original surface  
-- IIInB produces proposals/anomalies only  
-
-### **IIInB → IE**
-IE receives:
-
-- original surface  
-- original tokens  
-- proposals  
-- anomalies  
-
-IE must not expect structural metadata from IIInB.
-
-### **IE → CEx → CE → ISc → TPU**
-Propagation rules remain unchanged except:
-
-> **Downstream primitives must not assume IIInB applied repairs.**
+- reinterpret IIInB repairs
+- invent repairs
+- infer meaning
+- modify upstream fields
 
 ---
 
-# **16. Benefits of Progressive Lineup Testing**
+## 9. IE Responsibilities for IIInB‑Driven Intake (HLR‑20.109‑048 → 057)
 
-- deterministic  
-- modular  
-- transparent  
-- pipeline‑accurate  
-- replay‑safe  
-- future‑proof  
-- compatible with proposal‑only IIInB  
-- compatible with rule‑driven IE  
-- compatible with token_flags  
-- compatible with Model A  
+The lineup specifically verifies IE’s new responsibilities:
 
----
-
-# **17. Summary**
-
-Progressive lineup testing ensures:
-
-- deterministic pipeline behavior  
-- correct propagation of IIInB proposals/anomalies  
-- correct propagation of IE token_flags  
-- correct supported/unsupported detection  
-- correct structured reporting  
-- correct upstream/downstream alignment  
-- correct replay determinism  
-- correct multi‑primitive integration  
-
-This document is now fully synchronized with:
-
-- rewritten IIInB  
-- updated IE (Version 3.1)  
-- updated testbenches  
-- updated structural program  
-- updated rulechecker  
-- updated TP envelope  
-- updated pipeline semantics  
+- composite merges when IIInB repairs require merging tokens
+- dictionary validation of merged tokens
+- handling `no_entry` anomalies (marking tokens as anomalous)
+- handling repetition anomalies (applying repetition‑collapse only when proposed)
+- handling illegal characters (removing only when proposed)
+- handling malformed tokens (marking as anomalous)
+- handling unicode normalization repairs (applying only when proposed)
+- preserving IIInB token order except where repairs modify spans
+- constructing normalized_text from committed IE tokens using rule‑driven normalization
+- constructing TP.structure from IIInB structural tags and deterministic IE rules
 
 ---
 
-# **End of Document — progressive_lineup_testing.md (Version 3.1)**
+## 10. Token‑Level Normative Classification
+
+IE emits `token_flags` with one entry per committed IE token:
+
+- `normative`
+- `repaired`
+- `anomalous`
+- `unrecognized`
+- `null`
+
+Classification is rule‑driven and depends on:
+
+- IIInB repair proposals
+- IIInB anomaly flags
+- dictionary validation
+- composite merge results
+- unicode normalization repairs
+- repetition collapse repairs
+- illegal character removal repairs
+
+The lineup verifies:
+
+- correct classification for each anomaly type
+- correct classification for repaired tokens
+- correct handling of `no_entry` and `malformed_token`
+- deterministic behavior across runs
 
 ---
 
-- **20.107_cex_extract.md**  
+## 11. Structural Construction and Integrity
 
-Just tell me which one you want next.
+IE constructs:
+
+- `structure.tags`
+- `structure.spans`
+- `structure.markup`
+
+from:
+
+- IIInB structural tags
+- deterministic IE structural rules
+
+The lineup verifies:
+
+- deterministic structural construction
+- valid spans and tags
+- correct markup indicators
+- correct structural provenance in replay metadata
+- deterministic error envelopes when malformed
+
+---
+
+## 12. Replay Determinism
+
+Replay determinism requires:
+
+- stable IIInB output for identical input
+- stable IE output for identical IIInB output
+- stable TP envelopes across runs and environments
+
+Replay metadata encodes:
+
+- repair operations
+- anomaly propagation
+- composite merge provenance
+- dictionary validation provenance
+- structural tags and spans
+- token boundaries
+- token_flags
+- normalization metadata
+- ruleset identifiers
+
+The lineup verifies:
+
+- exact reconstruction of TP envelopes from replay metadata
+- no dependence on external context
+- no nondeterministic fields
+
+---
+
+## 13. Python/C++ Parity
+
+Python and C++ implementations must produce identical:
+
+- IIInB tokenization
+- IIInB anomaly detection
+- IIInB repair proposals
+- IE committed tokens (`ie_tokens`)
+- IE token_flags
+- IE normalized_text
+- IE structure
+- IE metadata.repair_annotations
+- IE metadata.replay
+- IE error envelopes
+
+The lineup runs:
+
+- Python testbenches (`iiinb_testbench.py`, `ie_testbench.py`)
+- C++ equivalents (where implemented)
+
+and compares outputs.
+
+---
+
+## 14. Pipeline Propagation Rules
+
+Propagation rules:
+
+- IIInB produces proposals and anomalies only; no committed normalization, no merges
+- IE applies proposals, performs merges, validates dictionary entries, constructs committed intake
+- downstream primitives consume IE’s committed tokens and token_flags as the primary machine substrate
+- normalized_text is used for structural geometry, replay, and debugging, not required for semantic primitives
+
+The lineup verifies:
+
+- correct propagation of anomalies and repairs from IIInB to IE
+- correct construction of committed intake in IE
+- correct downstream consumption assumptions
+
+---
+
+## 15. Change Management
+
+Any change to:
+
+- IIInB behavior
+- IE behavior
+- anomaly taxonomy
+- repair semantics
+- TP envelope shape
+- replay metadata
+
+must be reflected in:
+
+- `20.101_iiinb_prim.md`
+- `20.109_ie_prim.md`
+- `iiinb_py_struc_pgm.md`
+- `ie_py_struc_pgm.md`
+- `iiinb_testbench.yaml`, `iiinb_testbench.py`
+- `ie_testbench.yaml`, `ie_testbench.py`
+- `run.py`
+- this `progressive_lineup_testing.md`
+
+Unsynchronized changes are non‑compliant.
+
+---
+
+## 16. Summary
+
+The progressive lineup is the **authoritative test harness** for Path‑A intake:
+
+- IIInB: proposal‑only, non‑mutating, bounded‑semantic, deterministic
+- IE: committed intake constructor, machine‑efficiency boundary, deterministic
+- TP envelopes: stable, replay‑equivalent, provenance‑rich
+- Python/C++: aligned
+
+This document is now aligned with **Version 3.2** of IIInB and IE.
+
+---
+
+# End of Document — progressive_lineup_testing.md (Version 3.2)
