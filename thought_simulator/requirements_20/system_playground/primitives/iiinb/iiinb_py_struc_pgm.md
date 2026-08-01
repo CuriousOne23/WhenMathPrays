@@ -1,7 +1,3 @@
-# ⭐ **Updated `iiinb_py_struc_pgm.md` (Patch 1 — Fully Compliant)**  
-### Paste this directly into your GitHub editor tab.
-
-```markdown
 # IIInB – Python Structural Program (Proposal‑Only, Non‑Mutating)
 
 This document is the **normative structural specification** for the Python implementation of the **IIInB** primitive, aligned with:
