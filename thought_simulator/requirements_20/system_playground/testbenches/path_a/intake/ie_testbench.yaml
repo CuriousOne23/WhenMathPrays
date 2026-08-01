@@ -84,7 +84,7 @@ tests:
   # 3. Anomaly‑Only Case (Corrected)
   # ----------------------------------------------------------
   - id: ie_anomaly_only
-    description: "IE applies deterministic removal of illegal character and propagates anomaly provenance."
+    description: "IE applies deterministic removal of illegal character and performs composite merge."
   
     iiinb_output:
       intake_surface: "Th#e dog"
@@ -99,6 +99,12 @@ tests:
         - anomaly_type: "illegal_character.unknown"
           target: "#"
           location: 1
+        - anomaly_type: "no_entry"
+          target: "Th"
+          location: 0
+        - anomaly_type: "no_entry"
+          target: "e"
+          location: 2
   
       metadata:
         iiinb:
@@ -119,7 +125,8 @@ tests:
         repair_annotations:
           - { rule_id: "illegal_character.removed", span: [1,1] }
           - { anomaly_type: "illegal_character.unknown", location: 1 }
-  
+          - { anomaly_type: "no_entry", location: 0 }
+          - { anomaly_type: "no_entry", location: 2 }
         replay: {}
         ruleset_id: "ie_rules_v3.1"
   
