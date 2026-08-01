@@ -1,6 +1,6 @@
-# ✅ **`ie_py_struc_pgm.md` — One‑Stop IE Programming Reference (Version 3.1)**  
+# ⭐ **`ie_py_struc_pgm.md` — One‑Stop IE Programming Reference (Version 3.2)**  
 ### *Python & C++ Implementation Blueprint for the Intake Envelope Primitive (IE)*  
-### *Aligned with 20.109 Version 3.1 (Model A)*
+### *Aligned with 20.109 Version 3.2 (Model‑A, IIInB v3.2)*
 
 This document is the **canonical programming blueprint** for implementing the **IE primitive** in Python or C++.  
 It synchronizes the following authoritative sources:
@@ -9,53 +9,50 @@ It synchronizes the following authoritative sources:
 - `ie_testbench.yaml` (expected behavior)  
 - `ie_testbench.py` (execution harness)  
 - `run.py` (pipeline runner)  
-- `20.109_ie_prim.md` (formal primitive specification)  
+- `20.109_ie_prim.md` (formal primitive specification, Version 3.2)  
 
-Everything required to understand IE’s behavior, rule ordering, structural schema, repair integration, anomaly propagation, token‑level normative classification, and deterministic replay constraints is here.
+Everything required to implement IE’s behavior, rule ordering, structural schema, repair integration, anomaly propagation, token‑level normative classification, composite merge behavior, dictionary validation, and deterministic replay constraints is here.
 
 ---
 
-# 1. IE’s Role in the Pipeline
+# **1. IE’s Role in the Pipeline**
 
-IE is the **Intake Envelope**, the **final pre‑semantic** and **first mild‑semantic** primitive in Path‑A.
+IE is the **Intake Envelope**, the **first committed intake constructor** and **first mild‑semantic primitive** in Path‑A.
 
-IE is the **boundary between human input and machine‑efficient representation**.
+IE receives IIInB’s output:
 
-IE receives:
-
-- `IIInB_Output.surface`  
-- `IIInB_Output.tokens`  
-- `IIInB_Output.repair_proposals`  
-- `IIInB_Output.anomaly_flags`  
-- `IIInB_Output.metadata.iiinb`  
+- canonicalized surface  
+- raw IIInB tokens  
+- deterministic repair proposals  
+- anomaly flags  
+- IIInB metadata  
 
 IE produces:
 
-- `IE.intake.normalized_text`  
-- `IE.intake.tokens`  
-- `IE.intake.token_flags`  
-- `IE.structure.tags`  
-- `IE.structure.spans`  
-- `IE.structure.markup`  
-- `IE.metadata.repair_annotations`  
-- `IE.metadata.replay`  
-- `IE.error`  
+- committed normalized surface  
+- committed IE tokens (`ie_tokens`)  
+- token‑level normative classification (`token_flags`)  
+- structural tags, spans, markup  
+- repair provenance  
+- anomaly provenance  
+- replay metadata  
+- deterministic error envelope  
 
 IE is:
 
-- **deterministic**  
-- **rule‑driven**  
-- **replay‑safe**  
-- **bounded**  
-- **structurally validated**  
-- **non‑inferential**  
-- **meaning‑adjacent but not meaning‑inferential**  
+- deterministic  
+- rule‑driven  
+- replay‑safe  
+- bounded  
+- structurally validated  
+- non‑inferential  
+- meaning‑adjacent but not meaning‑inferential  
 
-IE ensures downstream modules (CEx → CE → ISc → TPU) receive **clean, normalized, structurally stable, replay‑equivalent input**.
+IE ensures downstream primitives (CEx → CE → ISc → TPU) receive **clean, normalized, structurally stable, replay‑equivalent input**.
 
 ---
 
-# 2. Public API (Python & C++)
+# **2. Public API (Python & C++)**
 
 The testbench invokes IE exactly like this:
 
@@ -69,7 +66,7 @@ IE must expose:
 ### Required fields
 
 - `intake.normalized_text`  
-- `intake.tokens`  
+- `intake.ie_tokens`  
 - `intake.token_flags`  
 - `structure.tags`  
 - `structure.spans`  
@@ -87,64 +84,91 @@ def inspect(self):
 
 ### Required behavior
 
-- IE **must not** perform semantic inference.  
-- IE **must not** modify IIInB’s repair proposals.  
-- IE **must not** reorder tokens.  
-- IE **must** classify each token as normative, repaired, anomalous, unrecognized, or null.  
-- IE **must** surface anomaly provenance.  
-- IE **must** apply IIInB repairs deterministically.  
-- IE **must** follow rule‑driven behavior defined in `ie_rules.yaml`.
+IE:
+
+- applies IIInB repairs deterministically  
+- performs composite merges when repairs require them  
+- validates dictionary entries for merged tokens  
+- constructs committed normalized surface  
+- constructs committed IE tokens  
+- classifies each token using rule‑driven behavior  
+- surfaces anomaly provenance  
+- preserves IIInB token order except where repairs modify spans  
+- follows rule‑driven normalization and spacing  
+- constructs structure deterministically  
+- produces replay metadata  
+- validates schema  
+- emits deterministic error envelope when malformed  
+
+IE does **not**:
+
+- infer meaning  
+- reinterpret IIInB repairs  
+- invent repairs  
+- re‑tokenize  
+- drop tokens unless rule‑driven  
+- perform normalization not proposed by IIInB  
+- access downstream primitives  
 
 ---
 
-# 3. Intake Model
+# **3. Intake Model**
 
 IE receives IIInB output:
 
 ```python
 surface      = iiinb_output.surface
-tokens       = iiinb_output.tokens
+tokens       = iiinb_output.tokens          # raw IIInB tokens
 repairs      = iiinb_output.repair_proposals
 anomalies    = iiinb_output.anomaly_flags
 iiinb_meta   = iiinb_output.metadata.iiinb
 ```
 
-Rules:
+IE must:
 
-- IE **must apply** all IIInB repairs to produce `IE.intake.normalized_text`.  
-- IE **must preserve** token boundaries except where repairs modify them.  
-- IE **must classify** each token using rule‑driven behavior.  
-- IE **must surface** anomalies into `repair_annotations`.  
-- IE **must not** reinterpret or re‑tokenize input.  
-- IE **must not** infer meaning.  
-- IE **must** follow rule‑driven normalization and spacing.
+- apply all IIInB repairs  
+- perform composite merges when repairs require merging tokens  
+- validate dictionary entries for merged tokens  
+- apply unicode normalization only when IIInB proposes it  
+- apply repetition collapse only when IIInB proposes it  
+- remove illegal characters only when IIInB proposes it  
+- mark malformed tokens and `no_entry` tokens as anomalous  
+- preserve IIInB token order except where repairs modify spans  
+- classify tokens using rule‑driven behavior  
+- construct committed normalized surface  
+- construct committed IE tokens  
+- surface anomaly provenance  
+- construct structure deterministically  
+- encode replay metadata  
 
 ---
 
-# 4. Deterministic Rule Ordering  
+# **4. Deterministic Rule Ordering**  
 ### (Enforced by `ie_testbench.yaml`)
 
 IE must apply its operations in **exactly this order**:
 
-1. **Receive IIInB surface + tokens + repairs + anomalies**  
-2. **Apply IIInB repairs deterministically**  
-3. **Construct committed normalized_text**  
-4. **Construct committed tokens**  
-5. **Construct token_flags (normative classification)**  
-6. **Build structural tags, spans, markup**  
-7. **Integrate repair annotations**  
-8. **Surface anomaly provenance**  
-9. **Construct replay metadata**  
-10. **Validate schema**  
-11. **Emit deterministic error envelope if malformed**
+1. Receive IIInB surface + tokens + repairs + anomalies  
+2. Apply IIInB repairs deterministically  
+3. Perform composite merges when required  
+4. Validate dictionary entries for merged tokens  
+5. Construct committed normalized_text  
+6. Construct committed IE tokens  
+7. Construct token_flags (normative classification)  
+8. Build structural tags, spans, markup  
+9. Integrate repair annotations  
+10. Surface anomaly provenance  
+11. Construct replay metadata  
+12. Validate schema  
+13. Emit deterministic error envelope if malformed  
 
 This ordering is required for deterministic replay.
 
 ---
 
-# 5. Repair Integration
+# **5. Repair Integration (Updated for v3.2)**
 
-IE must incorporate **all** IIInB repair proposals **without modification**:
+IE incorporates **all** IIInB repair proposals **without modification**:
 
 ```python
 {
@@ -156,23 +180,28 @@ IE must incorporate **all** IIInB repair proposals **without modification**:
 
 IE must:
 
-- apply repairs to produce `IE.intake.normalized_text`  
-- update tokens if repair modifies token boundaries  
-- annotate repaired spans in `IE.metadata.repair_annotations`  
-- preserve ordering of repairs  
+- apply repairs exactly  
+- perform composite merges when replacement spans cover multiple tokens  
+- validate dictionary entries for merged tokens  
+- apply unicode normalization only when IIInB proposes it  
+- apply repetition collapse only when IIInB proposes it  
+- remove illegal characters only when IIInB proposes it  
+- annotate repaired spans in `metadata.repair_annotations`  
+- preserve repair ordering  
 
-IE must **not**:
+IE must not:
 
 - merge repairs  
 - reinterpret repairs  
 - drop repairs  
 - reorder repairs  
+- invent normalization  
 
 ---
 
-# 6. Anomaly Propagation
+# **6. Anomaly Propagation (Updated for v3.2)**
 
-IE must surface IIInB anomaly flags into `TP.metadata.repair_annotations`:
+IE surfaces IIInB anomaly flags into `metadata.repair_annotations`:
 
 ```json
 {
@@ -189,42 +218,63 @@ IE must:
 - preserve anomaly location  
 - classify token_flags accordingly  
 - surface anomalies as provenance entries  
+- handle new anomaly types:  
+  - `no_entry`  
+  - `malformed_token`  
+  - `illegal_character.*`  
+  - `unicode_anomaly`  
+  - `repetition_pattern`  
 - ensure deterministic propagation downstream  
 
 ---
 
-# 7. Token‑Level Normative Classification
+# **7. Token‑Level Normative Classification (Updated for v3.2)**
 
-IE must produce:
+IE produces:
 
 ```json
-IE.intake.token_flags = ["normative", "repaired", "anomalous", "unrecognized", "null"]
+IE.intake.token_flags = [
+    "normative",
+    "repaired",
+    "anomalous",
+    "unrecognized",
+    "null"
+]
 ```
 
-Rules:
+Classification rules:
 
-- classification is **rule‑driven** via `ie_rules.yaml`  
-- IE must not drop tokens unless rule says so  
-- IE must not infer meaning  
-- IE must not invent corrections  
-- IE must not expand shorthand unless IIInB proposes it  
-- IE must not correct spelling unless IIInB proposes it  
+- normative → valid dictionary entry, no anomalies  
+- repaired → token modified by IIInB repair  
+- anomalous → token flagged by IIInB anomaly  
+- unrecognized → token not in dictionary and not repaired  
+- null → structural or placeholder tokens  
+
+IE must classify tokens based on:
+
+- repair proposals  
+- anomaly flags  
+- dictionary validation  
+- composite merge results  
+- unicode normalization repairs  
+- repetition collapse repairs  
+- illegal character removal repairs  
 
 Downstream primitives use:
 
-- `tokens` + `token_flags` as the **primary machine substrate**  
-- `normalized_text` only for structural geometry, replay, and debugging
+- `ie_tokens` + `token_flags` as the **primary machine substrate**  
+- `normalized_text` only for structural geometry, replay, and debugging  
 
 ---
 
-# 8. Structural Schema
+# **8. Structural Schema (Updated for v3.2)**
 
-IE must produce:
+IE produces:
 
 ```
 IE {
     intake: {
-        tokens: [Token],
+        ie_tokens: [Token],
         token_flags: [TokenFlag],
         normalized_text: string
     },
@@ -242,29 +292,33 @@ IE {
 }
 ```
 
-IE must validate this schema before passing output to CEx.
+IE constructs structure:
+
+- exclusively from IIInB structural tags  
+- plus deterministic IE structural rules  
+- without semantic inference  
 
 ---
 
-# 9. Token Normalization
+# **9. Token Normalization (Updated for v3.2)**
 
 IE must:
 
-- preserve IIInB token boundaries  
-- apply whitespace normalization **only if rule says so**  
-- apply spacing between tokens **only if rule says so**  
-- integrate repairs into token sequence  
-- produce canonical token list  
+- preserve IIInB token order except where repairs modify spans  
+- apply whitespace normalization only when rule‑driven  
+- apply spacing between tokens only when rule‑driven  
+- integrate repairs into committed IE tokens  
+- produce canonical committed token list  
 
 IE must not:
 
 - re‑tokenize  
-- drop tokens unless rule says so  
+- drop tokens unless rule‑driven  
 - infer semantic boundaries  
 
 ---
 
-# 10. Structural Integrity
+# **10. Structural Integrity (Updated for v3.2)**
 
 IE must:
 
@@ -274,14 +328,21 @@ IE must:
 - reject malformed structures  
 - produce deterministic error envelope  
 
+IE constructs structure exclusively from:
+
+- IIInB structural tags  
+- deterministic IE structural rules  
+
 ---
 
-# 11. Replay Metadata
+# **11. Replay Metadata (Updated for v3.2)**
 
-IE must encode all information required for deterministic replay:
+IE encodes all information required for deterministic replay:
 
 - repair operations  
 - anomaly propagation  
+- composite merge provenance  
+- dictionary validation provenance  
 - structural tags  
 - token boundaries  
 - token_flags  
@@ -292,21 +353,21 @@ Replay systems must reconstruct the exact input state without external context.
 
 ---
 
-# 12. Forbidden Behavior
+# **12. Forbidden Behavior**
 
 IE must not:
 
 - infer meaning  
 - perform semantic casing  
-- reorder tokens  
-- drop tokens unless rule says so  
+- reorder tokens except where repairs require it  
+- drop tokens unless rule‑driven  
 - reinterpret repairs  
 - generate nondeterministic metadata  
 - access CEx, CE, ISc, TPU, TP.semantic  
 
 ---
 
-# 13. Implementation Skeleton (Python)
+# **13. Implementation Skeleton (Python, Updated for v3.2)**
 
 ```python
 class IE:
@@ -324,31 +385,40 @@ class IE:
         repairs   = self._src.repair_proposals
         anomalies = self._src.anomaly_flags
 
-        # 2. Apply repairs
-        committed_surface = apply_repairs(surface, repairs)
+        # 2. Apply repairs (including composite merges)
+        committed_surface, committed_tokens = apply_repairs_and_merges(
+            surface, tokens, repairs
+        )
 
-        # 3. Build intake
+        # 3. Dictionary validation for merged tokens
+        committed_tokens = validate_dictionary(committed_tokens)
+
+        # 4. Build intake
         self.intake["normalized_text"] = committed_surface
-        self.intake["tokens"] = tokens
+        self.intake["ie_tokens"] = committed_tokens
 
-        # 4. Token-level normative classification
-        self.intake["token_flags"] = classify_tokens(tokens, anomalies, repairs)
+        # 5. Token-level normative classification
+        self.intake["token_flags"] = classify_tokens(
+            committed_tokens, anomalies, repairs
+        )
 
-        # 5. Build structure
-        self.structure["tags"]   = build_structural_tags(tokens)
-        self.structure["spans"]  = build_spans(tokens)
-        self.structure["markup"] = build_markup(tokens)
+        # 6. Build structure deterministically
+        self.structure["tags"]   = build_structural_tags(committed_tokens)
+        self.structure["spans"]  = build_spans(committed_tokens)
+        self.structure["markup"] = build_markup(committed_tokens)
 
-        # 6. Repair annotations
+        # 7. Repair annotations
         self.metadata["repair_annotations"] = annotate_repairs(repairs)
 
-        # 7. Anomaly propagation
+        # 8. Anomaly propagation
         self.metadata["repair_annotations"] += surface_anomalies(anomalies)
 
-        # 8. Replay metadata
-        self.metadata["replay"] = build_replay_metadata(tokens, repairs, anomalies)
+        # 9. Replay metadata
+        self.metadata["replay"] = build_replay_metadata(
+            committed_tokens, repairs, anomalies
+        )
 
-        # 9. Schema validation
+        # 10. Schema validation
         self.error = validate_ie_schema(self)
 
         return self
@@ -356,18 +426,21 @@ class IE:
 
 ---
 
-# 14. Implementation Skeleton (C++)
+# **14. Implementation Skeleton (C++, Updated for v3.2)**
 
 Equivalent structure:
 
 - `class IE`  
 - constructor receives IIInB output  
 - `inspect()` populates all IE fields  
-- rule‑driven behavior mirrors Python version  
+- composite merges + dictionary validation  
+- rule‑driven classification  
+- deterministic structural construction  
+- replay metadata generation  
 
 ---
 
-# 15. Change Management
+# **15. Change Management**
 
 When IE evolves:
 
@@ -379,11 +452,11 @@ When IE evolves:
 - ensure anomaly provenance remains deterministic  
 - ensure token_flags remain aligned with downstream consumption  
 
-This document is the **authoritative programming reference** for IE.
+This document is the **authoritative programming reference** for IE v3.2.
 
 ---
 
-# 16. Reference Documents (Canonical IE Synchronization Set)
+# **16. Reference Documents (Canonical IE Synchronization Set)**
 
 1. **ie_py_struc_pgm.md** — programming blueprint  
 2. **20.109_ie_prim.md** — conceptual spec  
