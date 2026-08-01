@@ -277,7 +277,7 @@ tests:
 # 8. Complex Mixed Case (Corrected)
 # ----------------------------------------------------------
 - id: ie_complex_mixed
-  description: "IE applies multiple deterministic repairs and propagates multiple anomalies."
+  description: "IE applies multiple deterministic repairs; illegal characters are removed."
 
   iiinb_output:
     intake_surface: "The   dog cccaaattt % $"
@@ -292,13 +292,15 @@ tests:
         span: [2, 2]
         replacement: "cat"
 
-    anomaly_flags:
-      - anomaly_type: "illegal_character.unknown"
-        target: "%"
-        location: 3
-      - anomaly_type: "illegal_character.unknown"
-        target: "$"
-        location: 4
+      - rule_id: "illegal_character.removed"
+        span: [3, 3]
+        replacement: ""
+
+      - rule_id: "illegal_character.removed"
+        span: [4, 4]
+        replacement: ""
+
+    anomaly_flags: []   # anomalies resolved by deterministic repairs
 
     metadata:
       iiinb:
@@ -306,9 +308,9 @@ tests:
 
   expected:
     intake:
-      ie_tokens: ["The", "dog", "cat", "%", "$"]
-      token_flags: ["repaired", "normative", "repaired", "anomalous", "anomalous"]
-      normalized_text: "The dog cat % $"
+      ie_tokens: ["The", "dog", "cat"]
+      token_flags: ["repaired", "normative", "repaired"]
+      normalized_text: "The dog cat"
 
     structure:
       tags: []
@@ -319,8 +321,8 @@ tests:
       repair_annotations:
         - { rule_id: "whitespace.normalized", span: [0,1] }
         - { rule_id: "repetition.cleaned", span: [2,2] }
-        - { anomaly_type: "illegal_character.unknown", location: 3 }
-        - { anomaly_type: "illegal_character.unknown", location: 4 }
+        - { rule_id: "illegal_character.removed", span: [3,3] }
+        - { rule_id: "illegal_character.removed", span: [4,4] }
       replay: {}
       ruleset_id: "ie_rules_v3.1"
 
@@ -328,14 +330,21 @@ tests:
 
 
 # ----------------------------------------------------------
-# 9. Error Case — Invalid Token Sequence (Corrected)
+# 9. Error Case — Invalid Token Sequence (TP-field validity test)
 # ----------------------------------------------------------
+# This test does NOT represent a real IIInB output.
+# IIInB would NEVER produce intake_surface + null/malformed intake_tokens.
+# Instead, this test verifies that IE correctly rejects malformed TP fields
+# in the IIInB → IE transfer object. IE is a deterministic replay primitive
+# and MUST NOT attempt to tokenize, infer, or repair malformed token lists.
+# IE must fail deterministically when intake_tokens is not a list.
+
 - id: ie_error_invalid_tokens
-  description: "IE emits deterministic error when intake_tokens is null."
+  description: "IE emits deterministic error when intake_tokens violates the IIInB→IE contract."
 
   iiinb_output:
     intake_surface: "hello world"
-    intake_tokens: null
+    intake_tokens: "hello world"   # malformed: should be a list of tokens
     repair_proposals: []
     anomaly_flags: []
 
@@ -364,14 +373,23 @@ tests:
 
 
 # ----------------------------------------------------------
-# 10. Error Case — Missing Required Fields (Corrected)
+# 10. Error Case — Missing Required Fields (TP-field validity test)
 # ----------------------------------------------------------
+# This test does NOT represent a real IIInB output.
+# IIInB ALWAYS produces repair_proposals (possibly empty) and anomaly_flags (possibly empty).
+# This test verifies that IE correctly rejects malformed TP fields in the IIInB→IE
+# transfer object. Missing required fields is a contract violation. IE MUST NOT attempt
+# to infer, reconstruct, or repair missing fields. IE must fail deterministically.
+
 - id: ie_error_missing_fields
-  description: "IE emits deterministic error when required IIInB fields are missing."
+  description: "IE emits deterministic error when required IIInB→IE fields are missing."
 
   iiinb_output:
     intake_surface: "hello world"
     intake_tokens: ["hello", "world"]
+
+    # These fields are REQUIRED by the IIInB→IE contract.
+    # Setting them to null simulates a malformed TP object.
     repair_proposals: null
     anomaly_flags: null
 
@@ -397,3 +415,4 @@ tests:
 
     error:
       type: "missing_fields"
+
