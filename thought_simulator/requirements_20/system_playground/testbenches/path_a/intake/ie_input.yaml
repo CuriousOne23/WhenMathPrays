@@ -11,14 +11,16 @@ inputs:
   - id: ie_basic_repair
     description: "IE applies a simple whitespace normalization repair."
     iiinb_output:
-      repair_operations:
-        - type: "whitespace.normalized"
-          target: "The   dog"
-          proposal: "The dog"
+      intake_surface: "The   dog"
+      intake_tokens: ["The", "dog"]
+      repair_proposals:
+        - rule_id: "whitespace.normalized"
+          span: [0, 1]
+          replacement: "The dog"
       anomaly_flags: []
-      tokens:
-        - "The"
-        - "dog"
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 2. Multiple Repairs Case
@@ -26,18 +28,16 @@ inputs:
   - id: ie_multiple_repairs
     description: "IE applies multiple deterministic repairs."
     iiinb_output:
-      repair_operations:
-        - type: "repetition.cleaned"
-          target: "cccaaattt"
-          proposal: "cat"
-        - type: "case.normalized"
-          target: "the dog"
-          proposal: "The dog"
+      intake_surface: "the dog cccaaattt"
+      intake_tokens: ["the", "dog", "cccaaattt"]
+      repair_proposals:
+        - rule_id: "repetition.cleaned"
+          span: [2, 2]
+          replacement: "cat"
       anomaly_flags: []
-      tokens:
-        - "the"
-        - "dog"
-        - "cccaaattt"
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 3. Anomaly‑Only Case (Updated for Rule B)
@@ -45,16 +45,19 @@ inputs:
   - id: ie_anomaly_only
     description: "IE propagates anomaly when IIInB cannot repair."
     iiinb_output:
-      repair_operations: []
+      intake_surface: "Th#e dog"
+      intake_tokens: ["Th", "#", "e", "dog"]
+      repair_proposals:
+        - rule_id: "illegal_character.removed"
+          span: [1, 1]
+          replacement: ""
       anomaly_flags:
-        - type: "illegal_character.unknown"
+        - anomaly_type: "illegal_character.unknown"
           target: "#"
-          location: 2
-      tokens:
-        - "Th"
-        - "#"
-        - "e"
-        - "dog"
+          location: 1
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 4. Mixed Repairs + Anomaly Case (Updated for Rule B)
@@ -62,19 +65,22 @@ inputs:
   - id: ie_mixed_case
     description: "IE applies repairs and propagates unresolved anomaly."
     iiinb_output:
-      repair_operations:
-        - type: "whitespace.normalized"
-          target: "The   dog"
-          proposal: "The dog"
+      intake_surface: "The   dog @ !!!"
+      intake_tokens: ["The", "dog", "@", "!!!"]
+      repair_proposals:
+        - rule_id: "whitespace.normalized"
+          span: [0, 1]
+          replacement: "The dog"
+        - rule_id: "punctuation.cleaned"
+          span: [3, 3]
+          replacement: "!"
       anomaly_flags:
-        - type: "illegal_character.unknown"
+        - anomaly_type: "illegal_character.unknown"
           target: "@"
-          location: 7
-      tokens:
-        - "The"
-        - "dog"
-        - "@"
-        - "!!!"
+          location: 2
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 5. Structural Preservation Case
@@ -82,20 +88,20 @@ inputs:
   - id: ie_structural_preservation
     description: "IE preserves structural tags provided by IIInB."
     iiinb_output:
-      repair_operations:
-        - type: "punctuation.cleaned"
-          target: "Hello,, world"
-          proposal: "Hello, world"
+      intake_surface: "Hello,, world"
+      intake_tokens: ["Hello", ",,", "world"]
+      repair_proposals:
+        - rule_id: "punctuation.cleaned"
+          span: [1, 1]
+          replacement: ","
       anomaly_flags: []
       structure:
         tags:
-          - type: "block.start"
-            location: 0
-          - type: "block.end"
-            location: 12
-      tokens:
-        - "Hello,,"
-        - "world"
+          - { type: "block.start", location: 0 }
+          - { type: "block.end", location: 12 }
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 6. Token Boundary Case
@@ -103,14 +109,13 @@ inputs:
   - id: ie_token_boundary
     description: "IE preserves token boundaries unless repairs modify them."
     iiinb_output:
-      repair_operations:
-        - type: "case.normalized"
-          target: "the dog"
-          proposal: "The dog"
+      intake_surface: "the dog"
+      intake_tokens: ["the", "dog"]
+      repair_proposals: []   # case normalization forbidden
       anomaly_flags: []
-      tokens:
-        - "the"
-        - "dog"
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 7. Unicode Normalization Case
@@ -118,59 +123,67 @@ inputs:
   - id: ie_unicode_normalization
     description: "IE applies deterministic unicode normalization repair."
     iiinb_output:
-      repair_operations:
-        - type: "unicode.normalized"
-          target: "café"
-          proposal: "cafe"
+      intake_surface: "café"
+      intake_tokens: ["caf", "é"]
+      repair_proposals:
+        - rule_id: "unicode.normalized"
+          span: [0, 1]
+          replacement: "cafe"
       anomaly_flags: []
-      tokens:
-        - "café"
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
   # 8. Complex Mixed Case (Updated for Rule B)
   # ----------------------------------------------------------
   - id: ie_complex_mixed
-    description: "IE applies multiple repairs and propagates multiple anomalies."
+    description: "IE applies multiple repairs and removes illegal characters."
     iiinb_output:
-      repair_operations:
-        - type: "whitespace.normalized"
-          target: "The   dog"
-          proposal: "The dog"
-        - type: "repetition.cleaned"
-          target: "cccaaattt"
-          proposal: "cat"
-      anomaly_flags:
-        - type: "illegal_character.unknown"
-          target: "%"
-          location: 3
-        - type: "illegal_character.unknown"
-          target: "$"
-          location: 9
-      tokens:
-        - "The"
-        - "dog"
-        - "cccaaattt"
-        - "%"
-        - "$"
+      intake_surface: "The   dog cccaaattt % $"
+      intake_tokens: ["The", "dog", "cccaaattt", "%", "$"]
+      repair_proposals:
+        - rule_id: "whitespace.normalized"
+          span: [0, 1]
+          replacement: "The dog"
+        - rule_id: "repetition.cleaned"
+          span: [2, 2]
+          replacement: "cat"
+        - rule_id: "illegal_character.removed"
+          span: [3, 3]
+          replacement: ""
+        - rule_id: "illegal_character.removed"
+          span: [4, 4]
+          replacement: ""
+      anomaly_flags: []
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
-  # 9. Error Case — Invalid Token Sequence
+  # 9. Error Case — Invalid Token Sequence (TP-field validity test)
   # ----------------------------------------------------------
   - id: ie_error_invalid_tokens
-    description: "IE emits deterministic error when token sequence is invalid."
+    description: "IE emits deterministic error when intake_tokens violates the IIInB→IE contract."
     iiinb_output:
-      repair_operations: []
+      intake_surface: "hello world"
+      intake_tokens: "hello world"   # malformed: must be a list
+      repair_proposals: []
       anomaly_flags: []
-      tokens: null   # invalid for IE
+      metadata:
+        iiinb:
+          status: "inspected"
 
   # ----------------------------------------------------------
-  # 10. Error Case — Missing Required Fields
+  # 10. Error Case — Missing Required Fields (TP-field validity test)
   # ----------------------------------------------------------
   - id: ie_error_missing_fields
     description: "IE emits deterministic error when required IIInB fields are missing."
     iiinb_output:
-      repair_operations: null
-      anomaly_flags: null
-      tokens:
-        - "hello"
-        - "world"
+      intake_surface: "hello world"
+      intake_tokens: ["hello", "world"]
+      repair_proposals: null   # malformed: must be a list (possibly empty)
+      anomaly_flags: null      # malformed: must be a list (possibly empty)
+      metadata:
+        iiinb:
+          status: "inspected"
