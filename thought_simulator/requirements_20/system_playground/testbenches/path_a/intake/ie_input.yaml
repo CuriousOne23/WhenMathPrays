@@ -40,10 +40,10 @@ inputs:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 3. Anomaly‑Only Case (Updated for Rule B)
+  # 3. Anomaly‑Only Case (Updated for Rule B + local nonword)
   # ----------------------------------------------------------
   - id: ie_anomaly_only
-    description: "IE propagates anomaly when IIInB cannot repair."
+    description: "IE removes illegal character and resolves local nonword anomalies."
     iiinb_output:
       intake_surface: "Th#e dog"
       intake_tokens: ["Th", "#", "e", "dog"]
@@ -55,6 +55,12 @@ inputs:
         - anomaly_type: "illegal_character.unknown"
           target: "#"
           location: 1
+        - anomaly_type: "no_entry"
+          target: "Th"
+          location: 0
+        - anomaly_type: "no_entry"
+          target: "e"
+          location: 2
       metadata:
         iiinb:
           status: "inspected"
@@ -71,6 +77,9 @@ inputs:
         - rule_id: "whitespace.normalized"
           span: [0, 1]
           replacement: "The dog"
+        - rule_id: "illegal_character.removed"
+          span: [2, 2]
+          replacement: ""
         - rule_id: "punctuation.cleaned"
           span: [3, 3]
           replacement: "!"
