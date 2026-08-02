@@ -89,18 +89,49 @@ RULE_FAMILY_MAP = {
     "spacing": [
         "whitespace.normalize",
     ],
+
     "punctuation": [
         "punctuation.clean",
-        "repeated_punctuation.clean",
     ],
+
     "control_chars": [
-        "illegal_character",
+        "illegal_character.control",
+        "illegal_character.forbidden",
+        "illegal_character.nonprintable",
     ],
+
     "normalization": [
         "unicode.normalize",
         "case.normalize",
         "structural.clean",
     ],
+
+    "repetition": [
+        "repetition.collapse",
+    ],
+
+    "shorthand": [
+        "shorthand.expand",
+    ],
+
+    "spelling": [
+        "spelling.transpose",
+        "spelling.missing",
+        "spelling.extra",
+    ],
+
+    "malformed": [
+        "malformed_token",
+    ],
+
+    "no_entry": [
+        "no_entry",
+    ],
+
+    "long_input": [
+        "long_input.guardrail",
+    ],
+
     "deterministic": [],
 }
 
