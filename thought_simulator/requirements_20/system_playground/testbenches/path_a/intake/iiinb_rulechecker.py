@@ -19,19 +19,27 @@ from typing import Any, Dict, List, Tuple
 import yaml
 
 # ----------------------------------------------------------------------
-# Canonical constants (must match updated iiinb_rules.yaml)
+# Canonical constants (must match updated iiinb_rules.yaml v3.2.0)
 # ----------------------------------------------------------------------
 
 CANONICAL_RULE_ORDER: List[str] = [
     "tokenize_original_surface",
-    "detect_control_characters",
+    "detect_illegal_character_control",
+    "detect_illegal_character_forbidden",
+    "detect_illegal_character_nonprintable",
     "detect_whitespace_anomalies",
     "detect_repetition_anomalies",
     "detect_punctuation_anomalies",
+    "detect_unicode_anomaly",
+    "detect_malformed_token",
+    "detect_no_entry",
     "detect_shorthand",
-    "detect_spelling",
-    "detect_unicode_noise",
+    "detect_spelling_transpose",
+    "detect_spelling_missing",
+    "detect_spelling_extra",
     "detect_case_normalization_trigger",
+    "detect_structural_clean",
+    "detect_long_input_guardrail",
 ]
 
 TP_REQUIRED_FIELDS: List[str] = [
@@ -157,7 +165,6 @@ class IIInBRuleChecker:
                     f"Rule '{rule_name}' must have non-empty 'produces' list."
                 )
 
-            # Must produce only repair_proposals or anomaly_flags or intake_tokens
             for p in produces:
                 if p not in ("repair_proposals", "anomaly_flags", "intake_tokens"):
                     raise RuleCheckerError(
@@ -329,17 +336,22 @@ def validate_iiinb(tp):
 
     rulechecker_flags = []
 
-    rulechecker_flags.extend(check_control_chars(tp))
+    rulechecker_flags.extend(check_illegal_characters(tp))
     rulechecker_flags.extend(check_deterministic(tp))
 
     return rulechecker_flags
 
 
-def check_control_chars(tp):
+def check_illegal_characters(tp):
     flags = []
     for f in tp.get("anomaly_flags", []):
-        if f.get("type") == "illegal_character":
-            flags.append("illegal_character")
+        t = f.get("type")
+        if t in (
+            "illegal_character.control",
+            "illegal_character.forbidden",
+            "illegal_character.nonprintable",
+        ):
+            flags.append(t)
     return flags
 
 
