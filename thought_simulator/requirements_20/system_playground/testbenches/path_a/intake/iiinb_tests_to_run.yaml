@@ -2,7 +2,7 @@
 # IIInB Test Selection Toggles
 # Path‑A Intake Envelope
 # Testbench-driven rule-family toggles (NOT IIInB ontology)
-# Compliant with 20.101 (Rewritten)
+# Compliant with 20.101 (Version 3.2)
 # ============================================================
 
 tests_to_run:
@@ -10,36 +10,74 @@ tests_to_run:
   # ------------------------------------------------------------
   # Spacing Repair Tests
   # ------------------------------------------------------------
-  # Covers whitespace issues that produce:
-  #   - repair_proposals: whitespace.normalize
   spacing: 1
 
   # ------------------------------------------------------------
   # Punctuation Repair Tests
   # ------------------------------------------------------------
-  # Covers punctuation issues that produce:
-  #   - repair_proposals: punctuation.clean
   punctuation: 1
 
   # ------------------------------------------------------------
   # Control Character Tests
   # ------------------------------------------------------------
-  # Covers illegal characters that produce:
-  #   - anomaly_flags: illegal_character
   control_chars: 1
 
   # ------------------------------------------------------------
   # Normalization Tests
   # ------------------------------------------------------------
-  # Covers normalization behaviors that produce:
-  #   - repair_proposals: unicode.normalize
-  #   - repair_proposals: case.normalize
-  #   - repair_proposals: structural.clean
   normalization: 1
 
   # ------------------------------------------------------------
   # Deterministic Behavior Tests
   # ------------------------------------------------------------
-  # Covers rulechecker validations:
-  #   - deterministic.* rule families
   deterministic: 1
+
+  # ------------------------------------------------------------
+  # Repetition Pattern Tests
+  # ------------------------------------------------------------
+  repetition: 1
+
+  # ------------------------------------------------------------
+  # Illegal Character — Forbidden
+  # ------------------------------------------------------------
+  illegal_forbidden: 1
+
+  # ------------------------------------------------------------
+  # Illegal Character — Nonprintable
+  # ------------------------------------------------------------
+  illegal_nonprintable: 1
+
+  # ------------------------------------------------------------
+  # Unicode Anomaly Tests
+  # ------------------------------------------------------------
+  unicode_anomaly: 1
+
+  # ------------------------------------------------------------
+  # Malformed Token Tests
+  # ------------------------------------------------------------
+  malformed_token: 1
+
+  # ------------------------------------------------------------
+  # Dictionary Absence Tests
+  # ------------------------------------------------------------
+  no_entry: 1
+
+  # ------------------------------------------------------------
+  # Shorthand Expansion Tests
+  # ------------------------------------------------------------
+  shorthand: 1
+
+  # ------------------------------------------------------------
+  # Spelling Tests
+  # ------------------------------------------------------------
+  spelling: 1
+
+  # ------------------------------------------------------------
+  # Case Normalization Tests
+  # ------------------------------------------------------------
+  case_normalize: 1
+
+  # ------------------------------------------------------------
+  # Long Input Guardrail Tests
+  # ------------------------------------------------------------
+  long_input_guardrail: 1
