@@ -1,33 +1,40 @@
 # =====================================================================
 # IIInB Primitive – Canonical Rule Set (Proposal‑Only, Non‑Mutating)
 # Compliant with:
-#   - 20.101_iiinb_prim.md (rewritten)
+#   - 20.101_iiinb_prim.md (Version 3.2)
 #   - 20.105 TP Requirements (proposal/anomaly only)
-#   - iiinb_py_struc_pgm.md (structural program)
-#   - iiinb_rulechecker.py (mechanical validator)
-#   - progressive_lineup_testing.md (lineup determinism)
+#   - iiinb_py_struc_pgm.md
+#   - iiinb_rulechecker.py
+#   - progressive_lineup_testing.md
 # =====================================================================
 
 iiinb_rules:
-  version: "2.0.0"
+  version: "3.2.0"
   primitive: "IIInB"
   determinism: "strict"
 
   # -------------------------------------------------------------------
   # RULE ORDERING (MUST remain stable)
-  # IIInB performs *detection only*, never normalization or mutation.
   # -------------------------------------------------------------------
 
   rule_order:
     - tokenize_original_surface
-    - detect_control_characters
+    - detect_illegal_character_control
+    - detect_illegal_character_forbidden
+    - detect_illegal_character_nonprintable
     - detect_whitespace_anomalies
     - detect_repetition_anomalies
     - detect_punctuation_anomalies
+    - detect_unicode_anomaly
+    - detect_malformed_token
+    - detect_no_entry
     - detect_shorthand
-    - detect_spelling
-    - detect_unicode_noise
+    - detect_spelling_transpose
+    - detect_spelling_missing
+    - detect_spelling_extra
     - detect_case_normalization_trigger
+    - detect_structural_clean
+    - detect_long_input_guardrail
 
   # -------------------------------------------------------------------
   # RULE DEFINITIONS (Proposal‑Only)
@@ -37,120 +44,162 @@ iiinb_rules:
 
     tokenize_original_surface:
       description: >
-        Tokenize the original intake surface using deterministic,
-        language‑agnostic structural tokenization. Tokens MUST come
-        from the original surface. No normalization or mutation allowed.
-      produces:
-        - intake_tokens
-      forbidden:
-        - semantic_splitting
-        - semantic_merging
-        - token_mutation
+        Deterministic structural tokenization of the original surface.
+      produces: [intake_tokens]
       provenance:
         type: "tokenization"
         deterministic: true
 
-    detect_control_characters:
+    detect_illegal_character_control:
       description: >
-        Detect illegal surface characters that cannot be deterministically
-        represented or repaired (ASCII control characters < 32 except space,
-        and explicit illegal characters defined by the testbench).
-        These defects are unrepairable and MUST be flagged.
-      produces:
-        - anomaly_flags
-      anomaly_types:
-        - illegal_character
+        Detect ASCII control characters (< 32) except tab/newline/carriage return.
+      produces: [anomaly_flags]
+      anomaly_types: [illegal_character.control]
       provenance:
         type: "illegal_character"
         deterministic: true
 
-    detect_whitespace:
+    detect_illegal_character_forbidden:
       description: >
-        Detect whitespace issues (leading, trailing, multi‑space runs).
-        Produces repair_proposals with deterministic token‑span indexing.
-      produces:
-        - repair_proposals
-      repair_types:
-        - whitespace.normalize
+        Detect forbidden characters (e.g., "@", "$", "%") defined by ontology.
+      produces: [anomaly_flags]
+      anomaly_types: [illegal_character.forbidden]
+      provenance:
+        type: "illegal_character"
+        deterministic: true
+
+    detect_illegal_character_nonprintable:
+      description: >
+        Detect nonprintable characters (e.g., U+0007).
+      produces: [anomaly_flags]
+      anomaly_types: [illegal_character.nonprintable]
+      provenance:
+        type: "illegal_character"
+        deterministic: true
+
+    detect_whitespace_anomalies:
+      description: >
+        Detect leading, trailing, and multi‑space runs.
+      produces: [repair_proposals]
+      repair_types: [whitespace.normalize]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
-    detect_repetition:
+    detect_repetition_anomalies:
       description: >
-        Detect repeated-character sequences (e.g., "YYYYYYYY", "EEEEE").
-        Produces repair_proposals with deterministic token-span indexing.
-      produces:
-        - repair_proposals
-      repair_types:
-        - repetition.collapse
+        Detect excessive repeating letters.
+      produces: [repair_proposals, anomaly_flags]
+      repair_types: [repetition.collapse]
+      anomaly_types: [repetition_pattern]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
-    detect_punctuation:
+    detect_punctuation_anomalies:
       description: >
-        Detect repeated or malformed punctuation sequences (e.g., "!!", "??", "...").
-        Produces repair_proposals only.
-      produces:
-        - repair_proposals
-      repair_types:
-        - punctuation.clean
+        Detect repeated or malformed punctuation clusters.
+      produces: [repair_proposals, anomaly_flags]
+      repair_types: [punctuation.clean]
+      anomaly_types: [punctuation_anomaly]
       provenance:
         type: "repair_proposal"
+        deterministic: true
+
+    detect_unicode_anomaly:
+      description: >
+        Detect invalid Unicode characters (e.g., U+FFFD).
+      produces: [repair_proposals, anomaly_flags]
+      repair_types: [unicode.normalize]
+      anomaly_types: [unicode_anomaly]
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_malformed_token:
+      description: >
+        Detect malformed structural tokens (e.g., "<broken>").
+      produces: [anomaly_flags, repair_proposals]
+      repair_types: [structural.clean]
+      anomaly_types: [malformed_token]
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_no_entry:
+      description: >
+        Detect dictionary‑absence tokens.
+      produces: [anomaly_flags]
+      anomaly_types: [no_entry]
+      provenance:
+        type: "anomaly"
         deterministic: true
 
     detect_shorthand:
       description: >
-        Detect informal shorthand tokens (e.g., "plz") and propose deterministic
-        expansions. No mutation allowed.
-      produces:
-        - repair_proposals
-      repair_types:
-        - shorthand.expand
+        Detect shorthand tokens (e.g., "plz").
+      produces: [repair_proposals]
+      repair_types: [shorthand.expand]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
-    detect_spelling:
+    detect_spelling_transpose:
       description: >
-        Detect misspellings (transpositions, missing letters) and produce
-        deterministic repair_proposals.
-      produces:
-        - repair_proposals
-      repair_types:
-        - spelling.transpose
-        - spelling.missing
+        Detect transposition misspellings (e.g., "hte").
+      produces: [repair_proposals]
+      repair_types: [spelling.transpose]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
-    detect_unicode_noise:
+    detect_spelling_missing:
       description: >
-        Detect invalid Unicode characters (e.g., U+FFFD) and produce
-        deterministic repair_proposals.
-      produces:
-        - repair_proposals
-      repair_types:
-        - unicode.normalize
+        Detect missing‑letter misspellings (e.g., "rd" → "red").
+      produces: [repair_proposals]
+      repair_types: [spelling.missing]
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_spelling_extra:
+      description: >
+        Detect extra‑letter misspellings.
+      produces: [repair_proposals]
+      repair_types: [spelling.extra]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
     detect_case_normalization_trigger:
       description: >
-        Detect deterministic case‑normalization triggers (e.g., "the dog" → "The dog").
-        Produces repair_proposals only. No mutation allowed.
-      produces:
-        - repair_proposals
-      repair_types:
-        - case.normalize
+        Detect deterministic case normalization triggers.
+      produces: [repair_proposals]
+      repair_types: [case.normalize]
       provenance:
         type: "repair_proposal"
         deterministic: true
 
+    detect_structural_clean:
+      description: >
+        Detect structural cleanup opportunities.
+      produces: [repair_proposals]
+      repair_types: [structural.clean]
+      provenance:
+        type: "repair_proposal"
+        deterministic: true
+
+    detect_long_input_guardrail:
+      description: >
+        Detect long input streams and reject them deterministically.
+      produces: [anomaly_flags]
+      anomaly_types: [long_input_guardrail]
+      provenance:
+        type: "anomaly"
+        deterministic: true
+
   # -------------------------------------------------------------------
-  # TP ENVELOPE REQUIREMENTS (20.105)
+  # TP ENVELOPE REQUIREMENTS
   # -------------------------------------------------------------------
 
   tp_envelope:
@@ -160,19 +209,9 @@ iiinb_rules:
       - anomaly_flags
       - intake_surface
       - intake_tokens
-    field_types:
-      iiinb_status: str
-      repair_proposals: list
-      anomaly_flags: list
-      intake_surface: str
-      intake_tokens: list
-    metadata:
-      allowed_write_fields:
-        - iiinb_status
-      forbidden_write_fields: "*"
 
   # -------------------------------------------------------------------
-  # FORBIDDEN BEHAVIOR (20.101 / 20.105.030)
+  # FORBIDDEN BEHAVIOR
   # -------------------------------------------------------------------
 
   forbidden_behavior:
@@ -187,7 +226,7 @@ iiinb_rules:
     - external_state_dependency
 
   # -------------------------------------------------------------------
-  # REPLAY DETERMINISM (20.15)
+  # REPLAY DETERMINISM
   # -------------------------------------------------------------------
 
   replay:
@@ -206,5 +245,3 @@ iiinb_rules:
     tokenization_rules_must_match: true
     proposal_rules_must_match: true
     anomaly_detection_must_match: true
-
-
