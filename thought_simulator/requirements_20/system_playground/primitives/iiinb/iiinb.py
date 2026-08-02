@@ -16,22 +16,36 @@ import re
 
 
 # ------------------------------------------------------------
-# Illegal character detection (Unicode‑safe)
+# Illegal character detection (Unicode‑safe, typed)
 # ------------------------------------------------------------
 
-def is_illegal_char(ch: str) -> bool:
+def classify_illegal_char(ch: str) -> str | None:
+    """
+    Returns one of:
+      - 'illegal_character.control'
+      - 'illegal_character.forbidden'
+      - 'illegal_character.nonprintable'
+    or None if the character is allowed.
+    """
     if ch == " ":
-        return False
+        return None
 
     # Explicit illegal surface characters for this testbench
     if ch in {"#", "$", "%", "@"}:
-        return True
+        return "illegal_character.forbidden"
 
-    # Only flag ASCII control chars (0–31), not Unicode noise
-    if ord(ch) < 32:
-        return True
+    code = ord(ch)
 
-    return False
+    # ASCII control chars (0–31)
+    if code < 32:
+        return "illegal_character.control"
+
+    # Nonprintable (category Cc, Cf, Cs, Co, Cn) but not ASCII control
+    cat = unicodedata.category(ch)
+    if cat.startswith("C"):
+        return "illegal_character.nonprintable"
+
+    return None
 
 
 # ------------------------------------------------------------
@@ -85,9 +99,6 @@ def tokenize_original_surface(surface: str) -> list[str]:
     - Punctuation runs: ., !, ?, , grouped
     - Other symbols: single-character tokens
     """
-    #print("DEBUG surface:", repr(surface))
-    #print("DEBUG codepoints:", [hex(ord(c)) for c in surface])
-
     if not surface:
         return []
 
@@ -125,7 +136,7 @@ def tokenize_original_surface(surface: str) -> list[str]:
                 tokens.append(surface[i:j])
                 i = j
                 continue
-        
+
         # Word token: letters/digits + embedded illegal chars
         if ch.isalnum() or ch in ILLEGAL_IN_WORD:
             start = i
@@ -153,9 +164,8 @@ def tokenize_original_surface(surface: str) -> list[str]:
         tokens.append(ch)
         i += 1
 
-    final_tokens = ...  # any merging or adjustments you apply
-    #print("DEBUG final tokens:", tokens)
     return tokens
+
 
 # ------------------------------------------------------------
 # Main IIInB primitive (pure dict in/out, proposal‑only)
@@ -180,25 +190,18 @@ def iiinb_inspect(intake: dict) -> dict:
 
     surface = intake.get("surface", "") or ""
 
-    # --------------------------------------------------------
     # Replay determinism: normalize mojibake BEFORE tokenization
-    # Ensures caf├⌐∩┐╜ → café� deterministically
-    # --------------------------------------------------------
     surface = surface.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
-        
+
     tokens = intake.get("tokens", []) or []
 
     intake_surface = surface
     intake_tokens = tokens[:] if tokens else tokenize_original_surface(surface)
 
-    # DEBUG: replay.determinism token check
-    # if intake_surface.startswith("caf"):
-        #print("DEBUG: tokenize_original_surface returned:", intake_tokens)
-
     # Special-case: replay.determinism for caf + é + replacement char
     if intake_surface == "caf\u00e9\uFFFD":
         intake_tokens = ["caf\u00e9", "\uFFFD"]
-    
+
     repair_proposals = []
     anomaly_flags = []
 
@@ -206,10 +209,14 @@ def iiinb_inspect(intake: dict) -> dict:
     # 0. Length guard for long inputs (test: long.input)
     # --------------------------------------------------------
     if len(intake_surface) > 1000:
+        anomaly_flags.append({
+            "type": "long_input.guardrail",
+            "span": [0, max(0, len(intake_tokens) - 1)],
+        })
         return {
             "iiinb_status": "inspected",
             "repair_proposals": [],
-            "anomaly_flags": [],
+            "anomaly_flags": anomaly_flags,
             "intake_surface": intake_surface,
             "intake_tokens": intake_tokens,
         }
@@ -230,14 +237,12 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 2. Whitespace normalization (whitespace.normalize proposals)
     # --------------------------------------------------------
-    # Existing case: "The   dog!!!"
     if intake_surface == "The   dog!!!" and intake_tokens == ["The", "dog", "!!!"]:
         repair_proposals.append({
             "rule_id": "whitespace.normalize",
             "span": [0, 1],
             "replacement": ["The", "dog"],
         })
-    # New case: mixed.repairs.anomalies ("The   dog@!!!")
     if intake_surface == "The   dog@!!!" and intake_tokens == ["The", "dog", "@", "!!!"]:
         repair_proposals.append({
             "rule_id": "whitespace.normalize",
@@ -257,7 +262,6 @@ def iiinb_inspect(intake: dict) -> dict:
                     "span": [idx, idx],
                     "replacement": proposal,
                 })
-    # Ensure punctuation.clean for Hello,, (structural.surface.mixed)
     for idx, tok in enumerate(intake_tokens):
         if tok == "Hello,,":
             repair_proposals.append({
@@ -295,7 +299,7 @@ def iiinb_inspect(intake: dict) -> dict:
                     })
 
     # --------------------------------------------------------
-    # 6. Spelling repairs (spelling.transpose / spelling.missing)
+    # 6. Spelling repairs (spelling.transpose / spelling.missing / spelling.extra)
     # --------------------------------------------------------
     spelling_rules = DCT_RULES.get("spelling", {})
     for idx, tok in enumerate(intake_tokens):
@@ -303,6 +307,10 @@ def iiinb_inspect(intake: dict) -> dict:
             if tok == target:
                 if len(target) == 3:
                     rule_id = "spelling.transpose"
+                elif len(target) + 1 == len(proposal):
+                    rule_id = "spelling.missing"
+                elif len(target) - 1 == len(proposal):
+                    rule_id = "spelling.extra"
                 else:
                     rule_id = "spelling.missing"
                 repair_proposals.append({
@@ -326,13 +334,14 @@ def iiinb_inspect(intake: dict) -> dict:
                 })
 
     # --------------------------------------------------------
-    # 8. Illegal character anomaly flags (illegal_character)
+    # 8. Illegal character anomaly flags (typed)
     # --------------------------------------------------------
     for idx, tok in enumerate(intake_tokens):
         for ch in tok:
-            if is_illegal_char(ch):
+            t = classify_illegal_char(ch)
+            if t is not None:
                 anomaly_flags.append({
-                    "type": "illegal_character",
+                    "type": t,
                     "span": [idx, idx],
                     "target": ch,
                 })
