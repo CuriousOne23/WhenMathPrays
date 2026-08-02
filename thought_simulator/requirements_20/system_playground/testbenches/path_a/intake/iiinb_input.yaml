@@ -1,7 +1,7 @@
 # ============================================================
 # IIInB Generic Input Playground
 # Developer-driven exploratory inputs for IIInB primitive + rulechecker
-# Compliant with 20.101 (Rewritten)
+# Compliant with 20.101 (Version 3.2)
 # ============================================================
 
 inputs:
@@ -19,55 +19,55 @@ inputs:
     raw_input: "I enjoyed a café latte today."
 
   # ------------------------------------------------------------
-  # 2. Spacing Repairs
+  # 2. Spacing Repairs (Proposal Only)
   # ------------------------------------------------------------
-  
+
   - id: spacing_double
     description: "Two spaces — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "The  dog ran."
-  
+
   - id: spacing_triple
     description: "Three spaces — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "Hello   world"
-  
+
   - id: spacing_leading
     description: "Leading whitespace — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "   Leading spaces here"
-  
+
   - id: spacing_trailing
     description: "Trailing whitespace — IIInB should produce whitespace.normalize repair_proposals."
     raw_input: "Trailing spaces here   "
 
   # ------------------------------------------------------------
-  # 3. Punctuation Repairs
+  # 3. Punctuation Repairs (Proposal Only)
   # ------------------------------------------------------------
-  
+
   - id: repeated_exclamation
     description: "Repeated exclamation — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "Stop!!"
-  
+
   - id: repeated_question
     description: "Repeated question marks — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "What??"
-  
+
   - id: ellipsis_cluster
     description: "Ellipsis cluster — IIInB should produce punctuation.clean repair_proposals."
     raw_input: "Wait...Really..."
 
   # ------------------------------------------------------------
-  # 4. Control Characters
+  # 4. Control Characters (illegal_character.control)
   # ------------------------------------------------------------
 
   - id: control_tab
-    description: "Tab character — should produce illegal_character anomaly_flags."
+    description: "Tab character — should produce illegal_character.control anomaly_flags."
     raw_input: "Text with\ta tab."
 
   - id: control_newline
-    description: "Newline — should produce illegal_character anomaly_flags."
+    description: "Newline — should produce illegal_character.control anomaly_flags."
     raw_input: "Line one.\nLine two."
 
   - id: control_mixed
-    description: "Mixed control characters — should produce illegal_character anomaly_flags."
+    description: "Mixed control characters — should produce illegal_character.control anomaly_flags."
     raw_input: "Here\tare\nmixed\rcases."
 
   # ------------------------------------------------------------
@@ -93,3 +93,83 @@ inputs:
   - id: mixed_everything
     description: "Stress test — multiple repair_proposals and anomaly_flags combined."
     raw_input: "  Hello!!!   café\t\n   "
+
+  # ------------------------------------------------------------
+  # 7. Illegal Characters — Forbidden
+  # ------------------------------------------------------------
+
+  - id: illegal_forbidden
+    description: "Forbidden characters should produce illegal_character.forbidden anomaly_flags."
+    raw_input: "Hello @world"
+
+  # ------------------------------------------------------------
+  # 8. Illegal Characters — Nonprintable
+  # ------------------------------------------------------------
+
+  - id: illegal_nonprintable
+    description: "Nonprintable characters should produce illegal_character.nonprintable anomaly_flags."
+    raw_input: "Bad char: \u0007"
+
+  # ------------------------------------------------------------
+  # 9. Unicode Anomalies
+  # ------------------------------------------------------------
+
+  - id: unicode_anomaly
+    description: "Invalid Unicode replacement characters should produce unicode_anomaly anomaly_flags."
+    raw_input: "Here is bad unicode: � �"
+
+  # ------------------------------------------------------------
+  # 10. Malformed Structural Tokens
+  # ------------------------------------------------------------
+
+  - id: malformed_token
+    description: "Malformed structural tokens should produce malformed_token anomaly_flags."
+    raw_input: "The dog <broken> ran."
+
+  # ------------------------------------------------------------
+  # 11. Repetition Pattern
+  # ------------------------------------------------------------
+
+  - id: repetition_pattern
+    description: "Excessive repeating letters should produce repetition_pattern anomaly_flags."
+    raw_input: "Sooooo coool"
+
+  # ------------------------------------------------------------
+  # 12. Dictionary Absence — no_entry
+  # ------------------------------------------------------------
+
+  - id: dictionary_noentry
+    description: "Tokens without dictionary entries should produce no_entry anomaly_flags."
+    raw_input: "flargle jumped"
+
+  # ------------------------------------------------------------
+  # 13. Shorthand Expansion
+  # ------------------------------------------------------------
+
+  - id: shorthand_expand
+    description: "Shorthand should produce shorthand.expand repair_proposals."
+    raw_input: "plz respond"
+
+  # ------------------------------------------------------------
+  # 14. Spelling Errors
+  # ------------------------------------------------------------
+
+  - id: spelling_errors
+    description: "Spelling errors should produce spelling.* repair_proposals."
+    raw_input: "hte quikc brwon fox"
+
+  # ------------------------------------------------------------
+  # 15. Case Normalization
+  # ------------------------------------------------------------
+
+  - id: case_normalize
+    description: "Lowercase sentence start should produce case.normalize repair_proposals."
+    raw_input: "the dog ran."
+
+  # ------------------------------------------------------------
+  # 16. Long Input Guardrail
+  # ------------------------------------------------------------
+
+  - id: long_input_guardrail
+    description: "Long input should be rejected and not forwarded downstream."
+    raw_input: "A".repeat(5000)
