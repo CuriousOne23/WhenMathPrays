@@ -1,11 +1,11 @@
 # ============================================================
 # Path A Intake Testbench — IIInB (Deterministic Repair-Proposal Primitive)
-# Compliant with 20.101 (Rewritten)
+# Compliant with 20.101 (Version 3.2)
 # ============================================================
 
 testbench_id: "path_a.intake.iiinb"
-version: "3.0.0"
-description: "IIInB testbench aligned with deterministic token-span repair proposals."
+version: "3.2.0"
+description: "IIInB testbench aligned with deterministic token-span repair proposals and updated anomaly taxonomy."
 
 simulation:
   deterministic: true
@@ -28,37 +28,46 @@ tests:
       intake_tokens: ["The", "dog", "chased", "the", "cat", "."]
 
   # ----------------------------------------------------------
-  # 2. Unicode Noise Normalization (Proposal Only)
+  # 2. Unicode Anomaly (Proposal Only)
   # ----------------------------------------------------------
-  - id: "unicode.noise"
-    description: "Invalid Unicode should produce repair proposals, not applied repairs."
+  - id: "unicode.anomaly"
+    description: "Invalid Unicode should produce anomaly flags and normalization proposals."
     input: "The dog chased the cat. � �"
     expected:
       iiinb_status: "inspected"
       repair_proposals:
         - rule_id: "unicode.normalize"
-          span: [5, 5]
-          replacement: ""
-        - rule_id: "unicode.normalize"
           span: [6, 6]
           replacement: ""
-      anomaly_flags: []
+        - rule_id: "unicode.normalize"
+          span: [7, 7]
+          replacement: ""
+      anomaly_flags:
+        - type: "unicode_anomaly"
+          span: [6, 6]
+          target: "�"
+        - type: "unicode_anomaly"
+          span: [7, 7]
+          target: "�"
       intake_surface: "The dog chased the cat. � �"
       intake_tokens: ["The", "dog", "chased", "the", "cat", ".", "�", "�"]
 
   # ----------------------------------------------------------
-  # 3. Structural Token Repair (Proposal Only)
+  # 3. Structural Token — Malformed Token
   # ----------------------------------------------------------
-  - id: "structural.break"
-    description: "Malformed structural tokens should produce repair proposals."
+  - id: "structural.malformed"
+    description: "Malformed structural tokens should produce anomaly flags and cleanup proposals."
     input: "The dog chased the cat <broken>"
     expected:
       iiinb_status: "inspected"
       repair_proposals:
         - rule_id: "structural.clean"
-          span: [6, 6]
+          span: [5, 5]
           replacement: ""
-      anomaly_flags: []
+      anomaly_flags:
+        - type: "malformed_token"
+          span: [5, 5]
+          target: "<broken>"
       intake_surface: "The dog chased the cat <broken>"
       intake_tokens: ["The", "dog", "chased", "the", "cat", "<broken>"]
 
@@ -86,13 +95,12 @@ tests:
       iiinb_status: "inspected"
       repair_proposals: []
       anomaly_flags: []
-      # intake_surface and intake_tokens filled by generator
 
   # ----------------------------------------------------------
-  # 6. Repeating Letters — Collapse (Proposal Only)
+  # 6. Repetition Pattern — Proposal Only
   # ----------------------------------------------------------
-  - id: "repeating.letters"
-    description: "Excessive repeating letters should produce deterministic proposals."
+  - id: "repetition.pattern"
+    description: "Excessive repeating letters should produce deterministic repetition proposals."
     input: "YYYYYYYYYYEEEEEAAAAHHHH"
     expected:
       iiinb_status: "inspected"
@@ -109,7 +117,19 @@ tests:
         - rule_id: "repetition.collapse"
           span: [3, 3]
           replacement: "HH"
-      anomaly_flags: []
+      anomaly_flags:
+        - type: "repetition_pattern"
+          span: [0, 0]
+          target: "YYYYYYYYYY"
+        - type: "repetition_pattern"
+          span: [1, 1]
+          target: "EEEEE"
+        - type: "repetition_pattern"
+          span: [2, 2]
+          target: "AAAA"
+        - type: "repetition_pattern"
+          span: [3, 3]
+          target: "HHHH"
       intake_surface: "YYYYYYYYYYEEEEEAAAAHHHH"
       intake_tokens: ["YYYYYYYYYY", "EEEEE", "AAAA", "HHHH"]
 
@@ -130,9 +150,9 @@ tests:
       intake_tokens: ["plz", "help", "me"]
 
   # ----------------------------------------------------------
-  # 8. Misspelling — Transposition (Proposal Only)
+  # 8. Misspelling — Transposition
   # ----------------------------------------------------------
-  - id: "misspelling.transposition"
+  - id: "misspelling.transpose"
     description: "Transposed letters should produce deterministic proposals."
     input: "hte dog chased the cat"
     expected:
@@ -146,7 +166,7 @@ tests:
       intake_tokens: ["hte", "dog", "chased", "the", "cat"]
 
   # ----------------------------------------------------------
-  # 9. Misspelling — Missing Letter (Proposal Only)
+  # 9. Misspelling — Missing Letter
   # ----------------------------------------------------------
   - id: "misspelling.missing"
     description: "Missing-letter misspelling should produce deterministic proposals."
@@ -162,42 +182,45 @@ tests:
       intake_tokens: ["The", "rd", "fox", "jumped", "."]
 
   # ----------------------------------------------------------
-  # 10. Multiple Repairs — Whitespace + Punctuation (Proposal Only)
+  # 10. Punctuation Anomaly + Whitespace
   # ----------------------------------------------------------
-  - id: "multi.repairs.surface"
-    description: "Multiple deterministic repair proposals."
+  - id: "punctuation.anomaly"
+    description: "Punctuation runs should produce anomaly flags and cleanup proposals."
     input: "The   dog!!!"
     expected:
       iiinb_status: "inspected"
       repair_proposals:
         - rule_id: "whitespace.normalize"
           span: [0, 1]
-          replacement: ["The", "dog"]
+          replacement: "The dog"
         - rule_id: "punctuation.clean"
           span: [2, 2]
           replacement: "!"
-      anomaly_flags: []
+      anomaly_flags:
+        - type: "punctuation_anomaly"
+          span: [2, 2]
+          target: "!!!"
       intake_surface: "The   dog!!!"
       intake_tokens: ["The", "dog", "!!!"]
 
   # ----------------------------------------------------------
-  # 11. Multiple Anomalies — Illegal Characters
+  # 11. Illegal Characters — Subtyped
   # ----------------------------------------------------------
-  - id: "multi.anomalies.illegal"
+  - id: "illegal.characters"
     description: "Illegal characters should produce anomaly flags with spans."
     input: "Th#e dog$ chased the cat%"
     expected:
       iiinb_status: "inspected"
       repair_proposals: []
       anomaly_flags:
-        - type: "illegal_character"
-          span: [1, 1]
+        - type: "illegal_character.forbidden"
+          span: [0, 0]
           target: "#"
-        - type: "illegal_character"
-          span: [3, 3]
+        - type: "illegal_character.forbidden"
+          span: [1, 1]
           target: "$"
-        - type: "illegal_character"
-          span: [6, 6]
+        - type: "illegal_character.forbidden"
+          span: [4, 4]
           target: "%"
       intake_surface: "Th#e dog$ chased the cat%"
       intake_tokens: ["Th#e", "dog$", "chased", "the", "cat%"]
@@ -213,38 +236,32 @@ tests:
       repair_proposals:
         - rule_id: "whitespace.normalize"
           span: [0, 1]
-          replacement: ["The", "dog"]
+          replacement: "The dog"
         - rule_id: "punctuation.clean"
           span: [3, 3]
           replacement: "!"
       anomaly_flags:
-        - type: "illegal_character"
+        - type: "illegal_character.forbidden"
           span: [2, 2]
           target: "@"
       intake_surface: "The   dog@!!!"
       intake_tokens: ["The", "dog", "@", "!!!"]
 
   # ----------------------------------------------------------
-  # 13. Structural + Surface Repairs + Anomalies
+  # 13. Dictionary Absence — no_entry
   # ----------------------------------------------------------
-  - id: "structural.surface.mixed"
-    description: "Structural cleanup + surface repairs + anomalies."
-    input: "Hello,, world <broken> @"
+  - id: "dictionary.noentry"
+    description: "Tokens without dictionary entries should produce no_entry anomalies."
+    input: "flargle jumped"
     expected:
       iiinb_status: "inspected"
-      repair_proposals:
-        - rule_id: "structural.clean"
-          span: [3, 3]
-          replacement: ""
-        - rule_id: "punctuation.clean"
-          span: [0, 0]
-          replacement: ","
+      repair_proposals: []
       anomaly_flags:
-        - type: "illegal_character"
-          span: [4, 4]
-          target: "@"
-      intake_surface: "Hello,, world <broken> @"
-      intake_tokens: ["Hello,,", "world", "<broken>", "@"]
+        - type: "no_entry"
+          span: [0, 0]
+          target: "flargle"
+      intake_surface: "flargle jumped"
+      intake_tokens: ["flargle", "jumped"]
 
   # ----------------------------------------------------------
   # 14. Token Preservation Case (IIInB → IE Compatibility)
@@ -287,10 +304,15 @@ tests:
       iiinb_status: "inspected"
       repair_proposals:
         - rule_id: "unicode.normalize"
-          span: [0, 0]
+          span: [3, 3]
           replacement: ""
         - rule_id: "unicode.normalize"
-          span: [1, 1]
+          span: [4, 4]
           replacement: ""
-      anomaly_flags: []
-
+      anomaly_flags:
+        - type: "unicode_anomaly"
+          span: [3, 3]
+          target: "�"
+        - type: "unicode_anomaly"
+          span: [4, 4]
+          target: "�"
