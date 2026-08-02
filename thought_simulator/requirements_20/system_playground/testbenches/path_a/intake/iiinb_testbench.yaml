@@ -109,16 +109,16 @@ tests:
       repair_proposals:
         - rule_id: "repetition.collapse"
           span: [0, 0]
-          replacement: "YY"
+          replacement: "Y"
         - rule_id: "repetition.collapse"
           span: [1, 1]
-          replacement: "EE"
+          replacement: "E"
         - rule_id: "repetition.collapse"
           span: [2, 2]
-          replacement: "AA"
+          replacement: "A"
         - rule_id: "repetition.collapse"
           span: [3, 3]
-          replacement: "HH"
+          replacement: "H"
       anomaly_flags:
         - type: "repetition_pattern"
           span: [0, 0]
