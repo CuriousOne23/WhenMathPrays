@@ -1,5 +1,5 @@
 # IIInB Dictionary Rules — Unicode Noise Normalization
-# Canonical family: unicode.normalized
+# Canonical family: unicode.normalize
 # Proposal‑only (IIInB does NOT apply these replacements)
 
 rules:
