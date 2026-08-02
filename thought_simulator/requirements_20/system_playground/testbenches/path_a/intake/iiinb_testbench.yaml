@@ -88,13 +88,15 @@ tests:
   # 5. Long Input — Deterministic Replay
   # ----------------------------------------------------------
   - id: "long.input"
-    description: "Long input should produce deterministic repair proposals."
+    description: "Long input should be rejected and not forwarded downstream."
     generate_long_input: true
     long_length: 5000
     expected:
-      iiinb_status: "inspected"
+      iiinb_status: "error.too_long"
       repair_proposals: []
       anomaly_flags: []
+      intake_surface: ""
+      intake_tokens: []
 
   # ----------------------------------------------------------
   # 6. Repetition Pattern — Proposal Only
