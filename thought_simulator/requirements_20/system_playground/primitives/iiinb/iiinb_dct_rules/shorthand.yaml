@@ -1,7 +1,5 @@
-# IIInB Dictionary Rules — Spelling Repairs
-# Canonical families:
-#   spelling.transposed
-#   spelling.missing
+# IIInB Dictionary Rules — Shorthand Expansions
+# Canonical family: shorthand.expand
 
 rules:
   # Shorthand expansions
