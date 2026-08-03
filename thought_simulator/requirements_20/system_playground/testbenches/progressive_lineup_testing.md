@@ -197,21 +197,18 @@ The lineup verifies:
 
 ---
 
-## 8. IE Behavior (v3.2)
+## **8. IE Behavior (Updated for v3.3 — Bounded Semantic Edition)**
 
-IE is:
-
-- the first committed intake constructor
-- the machine‑efficiency boundary between IIInB and downstream primitives
-- the first mild‑semantic primitive (meaning‑adjacent, not meaning‑inferential)
+IE is the **first committed intake constructor** and the **first bounded‑semantic primitive** in Path‑A.  
+It receives IIInB’s proposal‑only output and produces a **machine‑efficient, deterministic TP envelope** consumed by all downstream primitives.
 
 IE receives:
 
-- `intake_surface`
-- `intake_tokens`
-- `repair_proposals`
-- `anomaly_flags`
-- `metadata.iiinb`
+- `intake_surface`  
+- `intake_tokens`  
+- `repair_proposals`  
+- `anomaly_flags`  
+- `metadata.iiinb`  
 
 IE produces:
 
@@ -220,7 +217,7 @@ IE produces:
   "intake": {
     "tokens": ["string"],          // raw IIInB tokens (read‑only)
     "ie_tokens": ["string"],       // committed IE tokens (post‑repair, post‑merge)
-    "token_flags": ["TokenFlag"],
+    "token_flags": ["TokenFlag"],  // bounded semantic classification
     "normalized_text": "string"
   },
   "structure": {
@@ -237,23 +234,81 @@ IE produces:
 }
 ```
 
-IE:
+IE performs the following **deterministic, bounded‑semantic operations**:
 
-- applies IIInB repairs exactly
-- performs composite merges when repairs require them
-- validates dictionary entries for merged tokens
-- constructs committed normalized surface
-- constructs committed IE tokens
-- classifies tokens via `token_flags`
-- constructs structure deterministically
-- encodes replay metadata
+### **8.1 Repair Integration**
+- applies IIInB repairs **exactly as proposed**  
+- performs composite merges **only when repair spans require merging**  
+- preserves repair order and spans  
+- records repair provenance in `metadata.repair_annotations`
 
+### **8.2 Token Construction**
+- constructs committed IE tokens (`ie_tokens`)  
+- preserves IIInB token order except where repairs modify spans  
+- validates dictionary entries for merged tokens  
+- marks `no_entry` tokens as anomalous  
+- marks malformed tokens as anomalous  
+
+### **8.3 Bounded Semantic Classification**
+IE assigns each committed token a normative class:
+
+- `normative`  
+- `repaired`  
+- `anomalous`  
+- `unrecognized`  
+- `null`  
+
+Classification is **rule‑driven**, **bounded**, and **deterministic**.
+
+### **8.4 Normalized Surface Construction**
+IE constructs `normalized_text` using:
+
+- rule‑driven whitespace behavior  
+- rule‑driven spacing  
+- rule‑driven integration of repairs  
+
+IE does **not** perform normalization unless IIInB proposes it.
+
+### **8.5 Structural Construction**
+IE constructs:
+
+- structural tags  
+- spans  
+- markup indicators  
+
+using:
+
+- IIInB structural tags  
+- deterministic IE structural rules  
+
+No semantic inference is performed.
+
+### **8.6 Replay Metadata**
+IE encodes all provenance required for deterministic replay:
+
+- repair operations  
+- anomaly propagation  
+- composite merge provenance  
+- dictionary validation provenance  
+- structural provenance  
+- token boundaries  
+- token_flags  
+- normalization metadata  
+- ruleset identifiers  
+
+Replay reconstruction must produce an identical TP envelope.
+
+### **8.7 Prohibited Behavior**
 IE does **not**:
 
-- reinterpret IIInB repairs
-- invent repairs
-- infer meaning
-- modify upstream fields
+- reinterpret IIInB repairs  
+- invent repairs  
+- infer meaning  
+- perform global semantic reasoning  
+- modify upstream fields  
+- introduce nondeterministic metadata  
+
+IE is **bounded‑semantic**, **deterministic**, and **replay‑stable**.
 
 ---
 
