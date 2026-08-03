@@ -197,21 +197,18 @@ The lineup verifies:
 
 ---
 
-## 8. IE Behavior (v3.2)
+## **8. IE Behavior (Updated for v3.3 — Bounded Semantic Edition)**
 
-IE is:
-
-- the first committed intake constructor
-- the machine‑efficiency boundary between IIInB and downstream primitives
-- the first mild‑semantic primitive (meaning‑adjacent, not meaning‑inferential)
+IE is the **first committed intake constructor** and the **first bounded‑semantic primitive** in Path‑A.  
+It receives IIInB’s proposal‑only output and produces a **machine‑efficient, deterministic TP envelope** consumed by all downstream primitives.
 
 IE receives:
 
-- `intake_surface`
-- `intake_tokens`
-- `repair_proposals`
-- `anomaly_flags`
-- `metadata.iiinb`
+- `intake_surface`  
+- `intake_tokens`  
+- `repair_proposals`  
+- `anomaly_flags`  
+- `metadata.iiinb`  
 
 IE produces:
 
@@ -220,7 +217,7 @@ IE produces:
   "intake": {
     "tokens": ["string"],          // raw IIInB tokens (read‑only)
     "ie_tokens": ["string"],       // committed IE tokens (post‑repair, post‑merge)
-    "token_flags": ["TokenFlag"],
+    "token_flags": ["TokenFlag"],  // bounded semantic classification
     "normalized_text": "string"
   },
   "structure": {
@@ -237,27 +234,132 @@ IE produces:
 }
 ```
 
-IE:
+IE performs the following **deterministic, bounded‑semantic operations**:
 
-- applies IIInB repairs exactly
-- performs composite merges when repairs require them
-- validates dictionary entries for merged tokens
-- constructs committed normalized surface
-- constructs committed IE tokens
-- classifies tokens via `token_flags`
-- constructs structure deterministically
-- encodes replay metadata
+### **8.1 Repair Integration**
+- applies IIInB repairs **exactly as proposed**  
+- performs composite merges **only when repair spans require merging**  
+- preserves repair order and spans  
+- records repair provenance in `metadata.repair_annotations`
 
+### **8.2 Token Construction**
+- constructs committed IE tokens (`ie_tokens`)  
+- preserves IIInB token order except where repairs modify spans  
+- validates dictionary entries for merged tokens  
+- marks `no_entry` tokens as anomalous  
+- marks malformed tokens as anomalous  
+
+### **8.3 Bounded Semantic Classification**
+IE assigns each committed token a normative class:
+
+- `normative`  
+- `repaired`  
+- `anomalous`  
+- `unrecognized`  
+- `null`  
+
+Classification is **rule‑driven**, **bounded**, and **deterministic**.
+
+### **8.4 Normalized Surface Construction**
+IE constructs `normalized_text` using:
+
+- rule‑driven whitespace behavior  
+- rule‑driven spacing  
+- rule‑driven integration of repairs  
+
+IE does **not** perform normalization unless IIInB proposes it.
+
+### **8.5 Structural Construction**
+IE constructs:
+
+- structural tags  
+- spans  
+- markup indicators  
+
+using:
+
+- IIInB structural tags  
+- deterministic IE structural rules  
+
+No semantic inference is performed.
+
+### **8.6 Replay Metadata**
+IE encodes all provenance required for deterministic replay:
+
+- repair operations  
+- anomaly propagation  
+- composite merge provenance  
+- dictionary validation provenance  
+- structural provenance  
+- token boundaries  
+- token_flags  
+- normalization metadata  
+- ruleset identifiers  
+
+Replay reconstruction must produce an identical TP envelope.
+
+### **8.7 Prohibited Behavior**
 IE does **not**:
 
-- reinterpret IIInB repairs
-- invent repairs
-- infer meaning
-- modify upstream fields
+- reinterpret IIInB repairs  
+- invent repairs  
+- infer meaning  
+- perform global semantic reasoning  
+- modify upstream fields  
+- introduce nondeterministic metadata  
+
+IE is **bounded‑semantic**, **deterministic**, and **replay‑stable**.
 
 ---
 
-## 9. IE Responsibilities for IIInB‑Driven Intake (HLR‑20.109‑048 → 057)
+## **9. Bounded Semantic Domain (New for v3.3)**
+
+IE operates within a **bounded semantic domain**, shared by all Path‑A primitives.
+
+### **Definition — Bounded Semantic Operation**
+A bounded semantic operation is a **local, deterministic, rule‑driven transformation** that:
+
+1. operates only on the current token or a small fixed window of adjacent tokens (≤5),  
+2. uses only information explicitly provided by upstream primitives (IIInB),  
+3. does not infer user intent, global meaning, or cross‑sentence semantics,  
+4. is deterministic and replay‑stable,  
+5. is explicitly authorized by a rule family in the primitive’s ruleset.
+
+### **IE’s Allowed Bounded Semantic Operations**
+IE MAY perform:
+
+- semantic classification (token_flags)  
+- semantic consolidation when IIInB proposes a composite merge  
+- semantic normalization only when IIInB proposes the repair  
+- semantic dictionary validation  
+- semantic anomaly propagation  
+
+These operations are **meaning‑adjacent**, not meaning‑inferential.
+
+### **IE’s Prohibited Semantic Operations**
+IE MAY NOT perform:
+
+- semantic inference  
+- semantic rewriting  
+- semantic expansion not proposed by IIInB  
+- semantic correction not proposed by IIInB  
+- context‑dependent semantic decisions  
+- global semantic interpretation  
+
+### **Purpose of Bounded Semantics**
+Bounded semantics ensures:
+
+- deterministic replay  
+- stable TP envelopes  
+- predictable downstream consumption  
+- strict separation between intake semantics and global semantics  
+- identical behavior in Python and C++ implementations  
+
+IE is the **first bounded‑semantic primitive**, and all downstream primitives inherit this model.
+
+---
+
+## 10. IE Responsibilities for IIInB‑Driven Intake (HLR‑20.109‑048 → 057)
 
 The lineup specifically verifies IE’s new responsibilities:
 
@@ -274,7 +376,7 @@ The lineup specifically verifies IE’s new responsibilities:
 
 ---
 
-## 10. Token‑Level Normative Classification
+## 11. Token‑Level Normative Classification
 
 IE emits `token_flags` with one entry per committed IE token:
 
@@ -303,7 +405,7 @@ The lineup verifies:
 
 ---
 
-## 11. Structural Construction and Integrity
+## 12. Structural Construction and Integrity
 
 IE constructs:
 
@@ -326,7 +428,7 @@ The lineup verifies:
 
 ---
 
-## 12. Replay Determinism
+## 13. Replay Determinism
 
 Replay determinism requires:
 
@@ -354,7 +456,7 @@ The lineup verifies:
 
 ---
 
-## 13. Python/C++ Parity
+## 14. Python/C++ Parity
 
 Python and C++ implementations must produce identical:
 
@@ -378,7 +480,7 @@ and compares outputs.
 
 ---
 
-## 14. Pipeline Propagation Rules
+## 15. Pipeline Propagation Rules
 
 Propagation rules:
 
@@ -395,7 +497,7 @@ The lineup verifies:
 
 ---
 
-## 15. Change Management
+## 16. Change Management
 
 Any change to:
 
@@ -421,7 +523,7 @@ Unsynchronized changes are non‑compliant.
 
 ---
 
-## 16. Summary
+## 17. Summary
 
 The progressive lineup is the **authoritative test harness** for Path‑A intake:
 
