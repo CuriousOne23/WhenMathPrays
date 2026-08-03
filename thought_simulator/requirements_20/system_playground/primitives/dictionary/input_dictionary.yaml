@@ -18,15 +18,57 @@
 # ============================================================
 
 dictionary:
+  a: a
   after: after
+  and: and
+  are: are
+  bad: bad
+  brown: brown
+  cases: cases
   cat: cat
+  char: char
   chased: chased
   dog: dog
+  enjoyed: enjoyed
   fox: fox
+  go: go
+  hello: hello
   help: help
+  here: here
+  is: is
+  issues: issues
   jumped: jumped
+  jumps: jumps
+  latte: latte
+  lazy: lazy
+  leading: leading
+  line: line
+  many: many
   me: me
+  mixed: mixed
+  multiple: multiple
+  newlines: newlines
+  one: one
+  over: over
   please: please
+  quick: quick
+  ran: ran
+  really: really
   red: red
+  respond: respond
+  spaces: spaces
+  stop: stop
+  tab: tab
+  tabs: tabs
+  text: text
   the: the
+  today: today
+  too: too
+  trailing: trailing
+  two: two
+  wait: wait
+  we: we
+  what: what
+  with: with
+  world: world
   yeah: yeah
