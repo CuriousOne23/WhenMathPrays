@@ -359,27 +359,40 @@ def iiinb_inspect(intake: dict) -> dict:
     # --------------------------------------------------------
     # 10. Dictionary no-entry anomaly (pure absence)
     # --------------------------------------------------------
-    dictionary_entries = set()
-    for family_rules in DCT_RULES.values():
-        dictionary_entries.update(family_rules.keys())
     
     for idx, tok in enumerate(intake_tokens):
-        # Skip tokens already flagged by other anomaly families
-        already_flagged = any(flag["span"] == [idx, idx] for flag in anomaly_flags)
-        if already_flagged:
+    
+        # Skip tokens already flagged
+        if any(flag["span"] == [idx, idx] for flag in anomaly_flags):
             continue
     
         # Skip structural markers
         if tok == "<broken>":
             continue
     
-        # Emit no_entry if token not in dictionary
-        if tok not in dictionary_entries:
-            anomaly_flags.append({
-                "type": "no_entry",
-                "span": [idx, idx],
-                "target": tok,
-            })
+        # Skip punctuation tokens
+        if all(ch in ".,!?;" for ch in tok):
+            continue
+    
+        # Skip normal alphabetic words (English-like)
+        if tok.isalpha() and len(tok) >= 2:
+            continue
+    
+        # Skip alphanumeric tokens (numbers, IDs)
+        if tok.isalnum():
+            continue
+    
+        # Skip tokens that appear in rule dictionaries
+        dictionary_entries = set().union(*[rules.keys() for rules in DCT_RULES.values()])
+        if tok in dictionary_entries:
+            continue
+    
+        # If none of the above matched → true dictionary absence
+        anomaly_flags.append({
+            "type": "no_entry",
+            "span": [idx, idx],
+            "target": tok,
+        })
     
     return {
         "iiinb_status": "inspected",
