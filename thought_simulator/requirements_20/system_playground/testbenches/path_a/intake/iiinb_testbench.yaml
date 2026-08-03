@@ -3,7 +3,7 @@
 # Compliant with 20.101 (Version 3.2)
 # ============================================================
 
-testbench_id: "path_a.intake.iiinb"
+testbench_id: "iiinb_testbench.yaml"
 version: "3.2.0"
 description: "IIInB testbench aligned with deterministic token-span repair proposals and updated anomaly taxonomy."
 
