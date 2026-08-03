@@ -170,6 +170,7 @@ inputs:
   # 16. Long Input Guardrail
   # ------------------------------------------------------------
 
-  - id: long_input_guardrail
-    description: "Long input should be rejected and not forwarded downstream."
-    raw_input: "A".repeat(5000)
+- id: long_input_guardrail
+  description: "Long input should be rejected and not forwarded downstream."
+  generate_long_input: true
+  long_length: 5000
