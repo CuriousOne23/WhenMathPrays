@@ -13,7 +13,7 @@ tests:
       intake_surface: "The   dog"
       intake_tokens: ["The", "dog"]
       repair_proposals:
-        - rule_id: "whitespace.normalized"
+        - rule_id: "whitespace.normalize"
           span: [0, 1]
           replacement: "The dog"
       anomaly_flags: []
@@ -32,7 +32,7 @@ tests:
         markup: []
       metadata:
         repair_annotations:
-          - { rule_id: "whitespace.normalized", span: [0,1] }
+          - { rule_id: "whitespace.normalize", span: [0,1] }
         replay: {}
         ruleset_id: "ie_rules_v3.1"
       error: null
@@ -49,7 +49,7 @@ tests:
         - rule_id: "repetition.cleaned"
           span: [2, 2]
           replacement: "cat"
-        - rule_id: "case.normalized"
+        - rule_id: "case.normalize"
           span: [0, 1]
           replacement: "The dog"
       anomaly_flags: []
@@ -75,7 +75,7 @@ tests:
       metadata:
         repair_annotations:
           - { rule_id: "repetition.cleaned", span: [2,2] }
-          - { rule_id: "case.normalized", span: [0,1] }
+          - { rule_id: "case.normalize", span: [0,1] }
         replay: {}
         ruleset_id: "ie_rules_v3.1"
       error: null
@@ -96,7 +96,7 @@ tests:
           replacement: ""
   
       anomaly_flags:
-        - anomaly_type: "illegal_character.unknown"
+        - anomaly_type: "illegal_character.forbidden"
           target: "#"
           location: 1
         - anomaly_type: "no_entry"
@@ -124,7 +124,7 @@ tests:
       metadata:
         repair_annotations:
           - { rule_id: "illegal_character.removed", span: [1,1] }
-          - { anomaly_type: "illegal_character.unknown", location: 1 }
+          - { anomaly_type: "illegal_character.forbidden", location: 1 }
           - { anomaly_type: "no_entry", location: 0 }
           - { anomaly_type: "no_entry", location: 2 }
         replay: {}
@@ -142,7 +142,7 @@ tests:
       intake_tokens: ["The", "dog", "@", "!!!"]
     
       repair_proposals:
-        - rule_id: "whitespace.normalized"
+        - rule_id: "whitespace.normalize"
           span: [0, 1]
           replacement: "The dog"
     
@@ -150,7 +150,7 @@ tests:
           span: [2, 2]
           replacement: ""
     
-        - rule_id: "punctuation.normalized"
+        - rule_id: "punctuation.clean"
           span: [3, 3]
           replacement: "!"
 
@@ -250,7 +250,7 @@ tests:
     intake_tokens: ["caf", "é"]
   
     repair_proposals:
-      - rule_id: "unicode.normalized"
+      - rule_id: "unicode.normalize"
         span: [0, 1]
         replacement: "cafe"
   
@@ -273,7 +273,7 @@ tests:
   
     metadata:
       repair_annotations:
-        - { rule_id: "unicode.normalized", span: [0,1] }
+        - { rule_id: "unicode.normalize", span: [0,1] }
       replay: {}
       ruleset_id: "ie_rules_v3.1"
   
@@ -291,7 +291,7 @@ tests:
     intake_tokens: ["The", "dog", "cccaaattt", "%", "$"]
 
     repair_proposals:
-      - rule_id: "whitespace.normalized"
+      - rule_id: "whitespace.normalize"
         span: [0, 1]
         replacement: "The dog"
 
@@ -326,7 +326,7 @@ tests:
 
     metadata:
       repair_annotations:
-        - { rule_id: "whitespace.normalized", span: [0,1] }
+        - { rule_id: "whitespace.normalize", span: [0,1] }
         - { rule_id: "repetition.cleaned", span: [2,2] }
         - { rule_id: "illegal_character.removed", span: [3,3] }
         - { rule_id: "illegal_character.removed", span: [4,4] }
