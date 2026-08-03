@@ -1,6 +1,6 @@
 # ============================================================
 # IE Input — General Mode Stimulus for 20.109 IE Primitive
-# Version: 3.1 (Model‑A‑Aligned, Updated for Rule B)
+# Version: 3.3 (Contract‑Aligned)
 # ============================================================
 
 inputs:
@@ -14,7 +14,7 @@ inputs:
       intake_surface: "The   dog"
       intake_tokens: ["The", "dog"]
       repair_proposals:
-        - rule_id: "whitespace.normalized"
+        - rule_id: "whitespace.normalize"
           span: [0, 1]
           replacement: "The dog"
       anomaly_flags: []
@@ -40,7 +40,7 @@ inputs:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 3. Anomaly‑Only Case (Updated for Rule B + local nonword)
+  # 3. Anomaly‑Only Case
   # ----------------------------------------------------------
   - id: ie_anomaly_only
     description: "IE removes illegal character and resolves local nonword anomalies."
@@ -52,21 +52,21 @@ inputs:
           span: [1, 1]
           replacement: ""
       anomaly_flags:
-        - anomaly_type: "illegal_character.unknown"
+        - type: "illegal_character.forbidden"
+          span: [1, 1]
           target: "#"
-          location: 1
-        - anomaly_type: "no_entry"
+        - type: "no_entry"
+          span: [0, 0]
           target: "Th"
-          location: 0
-        - anomaly_type: "no_entry"
+        - type: "no_entry"
+          span: [2, 2]
           target: "e"
-          location: 2
       metadata:
         iiinb:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 4. Mixed Repairs + Anomaly Case (Updated for Rule B)
+  # 4. Mixed Repairs + Anomaly Case
   # ----------------------------------------------------------
   - id: ie_mixed_case
     description: "IE applies repairs and propagates unresolved anomaly."
@@ -74,19 +74,19 @@ inputs:
       intake_surface: "The   dog @ !!!"
       intake_tokens: ["The", "dog", "@", "!!!"]
       repair_proposals:
-        - rule_id: "whitespace.normalized"
+        - rule_id: "whitespace.normalize"
           span: [0, 1]
           replacement: "The dog"
         - rule_id: "illegal_character.removed"
           span: [2, 2]
           replacement: ""
-        - rule_id: "punctuation.cleaned"
+        - rule_id: "punctuation.clean"
           span: [3, 3]
           replacement: "!"
       anomaly_flags:
-        - anomaly_type: "illegal_character.unknown"
+        - type: "illegal_character.forbidden"
+          span: [2, 2]
           target: "@"
-          location: 2
       metadata:
         iiinb:
           status: "inspected"
@@ -100,14 +100,14 @@ inputs:
       intake_surface: "Hello,, world"
       intake_tokens: ["Hello", ",,", "world"]
       repair_proposals:
-        - rule_id: "punctuation.cleaned"
+        - rule_id: "punctuation.clean"
           span: [1, 1]
           replacement: ","
       anomaly_flags: []
       structure:
         tags:
-          - { type: "block.start", location: 0 }
-          - { type: "block.end", location: 12 }
+          - { type: "block.start", span: [0,0] }
+          - { type: "block.end", span: [12,12] }
       metadata:
         iiinb:
           status: "inspected"
@@ -120,7 +120,7 @@ inputs:
     iiinb_output:
       intake_surface: "the dog"
       intake_tokens: ["the", "dog"]
-      repair_proposals: []   # case normalization forbidden
+      repair_proposals: []
       anomaly_flags: []
       metadata:
         iiinb:
@@ -135,7 +135,7 @@ inputs:
       intake_surface: "café"
       intake_tokens: ["caf", "é"]
       repair_proposals:
-        - rule_id: "unicode.normalized"
+        - rule_id: "unicode.normalize"
           span: [0, 1]
           replacement: "cafe"
       anomaly_flags: []
@@ -144,7 +144,7 @@ inputs:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 8. Complex Mixed Case (Updated for Rule B)
+  # 8. Complex Mixed Case
   # ----------------------------------------------------------
   - id: ie_complex_mixed
     description: "IE applies multiple repairs and removes illegal characters."
@@ -152,7 +152,7 @@ inputs:
       intake_surface: "The   dog cccaaattt % $"
       intake_tokens: ["The", "dog", "cccaaattt", "%", "$"]
       repair_proposals:
-        - rule_id: "whitespace.normalized"
+        - rule_id: "whitespace.normalize"
           span: [0, 1]
           replacement: "The dog"
         - rule_id: "repetition.cleaned"
@@ -170,13 +170,13 @@ inputs:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 9. Error Case — Invalid Token Sequence (TP-field validity test)
+  # 9. Error Case — Invalid Token Sequence
   # ----------------------------------------------------------
   - id: ie_error_invalid_tokens
     description: "IE emits deterministic error when intake_tokens violates the IIInB→IE contract."
     iiinb_output:
       intake_surface: "hello world"
-      intake_tokens: "hello world"   # malformed: must be a list
+      intake_tokens: "hello world"
       repair_proposals: []
       anomaly_flags: []
       metadata:
@@ -184,15 +184,15 @@ inputs:
           status: "inspected"
 
   # ----------------------------------------------------------
-  # 10. Error Case — Missing Required Fields (TP-field validity test)
+  # 10. Error Case — Missing Required Fields
   # ----------------------------------------------------------
   - id: ie_error_missing_fields
     description: "IE emits deterministic error when required IIInB fields are missing."
     iiinb_output:
       intake_surface: "hello world"
       intake_tokens: ["hello", "world"]
-      repair_proposals: null   # malformed: must be a list (possibly empty)
-      anomaly_flags: null      # malformed: must be a list (possibly empty)
+      repair_proposals: null
+      anomaly_flags: null
       metadata:
         iiinb:
           status: "inspected"
