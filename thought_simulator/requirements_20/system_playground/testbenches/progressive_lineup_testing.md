@@ -312,54 +312,7 @@ IE is **bounded‑semantic**, **deterministic**, and **replay‑stable**.
 
 ---
 
-## **9. Bounded Semantic Domain (New for v3.3)**
-
-IE operates within a **bounded semantic domain**, shared by all Path‑A primitives.
-
-### **Definition — Bounded Semantic Operation**
-A bounded semantic operation is a **local, deterministic, rule‑driven transformation** that:
-
-1. operates only on the current token or a small fixed window of adjacent tokens (≤5),  
-2. uses only information explicitly provided by upstream primitives (IIInB),  
-3. does not infer user intent, global meaning, or cross‑sentence semantics,  
-4. is deterministic and replay‑stable,  
-5. is explicitly authorized by a rule family in the primitive’s ruleset.
-
-### **IE’s Allowed Bounded Semantic Operations**
-IE MAY perform:
-
-- semantic classification (token_flags)  
-- semantic consolidation when IIInB proposes a composite merge  
-- semantic normalization only when IIInB proposes the repair  
-- semantic dictionary validation  
-- semantic anomaly propagation  
-
-These operations are **meaning‑adjacent**, not meaning‑inferential.
-
-### **IE’s Prohibited Semantic Operations**
-IE MAY NOT perform:
-
-- semantic inference  
-- semantic rewriting  
-- semantic expansion not proposed by IIInB  
-- semantic correction not proposed by IIInB  
-- context‑dependent semantic decisions  
-- global semantic interpretation  
-
-### **Purpose of Bounded Semantics**
-Bounded semantics ensures:
-
-- deterministic replay  
-- stable TP envelopes  
-- predictable downstream consumption  
-- strict separation between intake semantics and global semantics  
-- identical behavior in Python and C++ implementations  
-
-IE is the **first bounded‑semantic primitive**, and all downstream primitives inherit this model.
-
----
-
-## 10. IE Responsibilities for IIInB‑Driven Intake (HLR‑20.109‑048 → 057)
+## 9. IE Responsibilities for IIInB‑Driven Intake (HLR‑20.109‑048 → 057)
 
 The lineup specifically verifies IE’s new responsibilities:
 
@@ -376,7 +329,7 @@ The lineup specifically verifies IE’s new responsibilities:
 
 ---
 
-## 11. Token‑Level Normative Classification
+## 10. Token‑Level Normative Classification
 
 IE emits `token_flags` with one entry per committed IE token:
 
@@ -405,7 +358,7 @@ The lineup verifies:
 
 ---
 
-## 12. Structural Construction and Integrity
+## 11. Structural Construction and Integrity
 
 IE constructs:
 
@@ -428,7 +381,7 @@ The lineup verifies:
 
 ---
 
-## 13. Replay Determinism
+## 12. Replay Determinism
 
 Replay determinism requires:
 
@@ -456,7 +409,7 @@ The lineup verifies:
 
 ---
 
-## 14. Python/C++ Parity
+## 13. Python/C++ Parity
 
 Python and C++ implementations must produce identical:
 
@@ -480,7 +433,7 @@ and compares outputs.
 
 ---
 
-## 15. Pipeline Propagation Rules
+## 14. Pipeline Propagation Rules
 
 Propagation rules:
 
@@ -497,7 +450,7 @@ The lineup verifies:
 
 ---
 
-## 16. Change Management
+## 15. Change Management
 
 Any change to:
 
@@ -523,7 +476,7 @@ Unsynchronized changes are non‑compliant.
 
 ---
 
-## 17. Summary
+## 16. Summary
 
 The progressive lineup is the **authoritative test harness** for Path‑A intake:
 
