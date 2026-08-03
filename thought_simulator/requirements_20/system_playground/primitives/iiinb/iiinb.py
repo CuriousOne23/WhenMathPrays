@@ -13,6 +13,14 @@ import unicodedata
 from pathlib import Path
 import yaml
 import re
+# ------------------------------------------------------------
+# Intake dictionary (input_dictionary.yaml)
+# ------------------------------------------------------------
+DICT_PATH = Path(__file__).parent.parent / "dictionary" / "input_dictionary.yaml"
+with DICT_PATH.open("r", encoding="utf-8") as f:
+    INPUT_DICTIONARY = yaml.safe_load(f)["dictionary"]
+INPUT_DICTIONARY = {k.lower(): v.lower() for k, v in INPUT_DICTIONARY.items()}
+
 
 
 # ------------------------------------------------------------
