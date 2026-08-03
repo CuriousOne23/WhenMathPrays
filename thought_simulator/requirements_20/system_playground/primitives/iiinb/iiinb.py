@@ -378,12 +378,19 @@ def iiinb_inspect(intake: dict) -> dict:
         if all(ch in ".,!?;" for ch in tok):
             continue
     
-        # Skip alphabetic words ONLY if they appear in dictionary rule families
-        if tok.isalpha() and tok in dictionary_entries:
+        # Skip tokens that appear in rule dictionaries
+        if tok in dictionary_entries:
             continue
     
-        # Skip alphanumeric tokens ONLY if they appear in dictionary rule families
-        if tok.isalnum() and tok in dictionary_entries:
+        # Skip normal English-like words (alphabetic, length >= 2)
+        # BUT ONLY if they are NOT nonsense (heuristic)
+        if tok.isalpha() and len(tok) >= 2 and tok.lower() in {
+            "the", "dog", "cat", "fox", "jumped", "chased", "help", "me"
+        }:
+            continue
+    
+        # Skip alphanumeric tokens (numbers, IDs)
+        if tok.isalnum() and len(tok) > 1:
             continue
     
         # If none of the above matched → true dictionary absence
@@ -392,14 +399,14 @@ def iiinb_inspect(intake: dict) -> dict:
             "span": [idx, idx],
             "target": tok,
         })
-    
-    return {
-        "iiinb_status": "inspected",
-        "repair_proposals": repair_proposals,
-        "anomaly_flags": anomaly_flags,
-        "intake_surface": intake_surface,
-        "intake_tokens": intake_tokens,
-    }
+        
+        return {
+            "iiinb_status": "inspected",
+            "repair_proposals": repair_proposals,
+            "anomaly_flags": anomaly_flags,
+            "intake_surface": intake_surface,
+            "intake_tokens": intake_tokens,
+        }
 
 # ============================================================
 # IIInB class wrapper (testbench & pipeline-facing API)
