@@ -353,10 +353,10 @@ def run_regression_mode():
             if expected is None:
                 return True
             if actual == expected:
-                results.append(f"  ✔ {label} AGREES — expected {expected!r}, got {actual!r}")
+                results.append(f"  PASS {label} AGREES — expected {expected!r}, got {actual!r}")
                 return True
             else:
-                results.append(f"  ✘ {label} DISAGREES — expected {expected!r}, got {actual!r}")
+                results.append(f"  FAIL {label} DISAGREES — expected {expected!r}, got {actual!r}")
                 return False
 
         status_ok = check("IIInB status", actual_status, expected_status)
