@@ -1,0 +1,32 @@
+# ============================================================
+# Intake Dictionary (Primitive-Level)
+# ------------------------------------------------------------
+# Purpose:
+#   - Provide canonical spellings for all valid intake tokens.
+#   - Support IIInB, IE, and IB anomaly detection (e.g., no_entry).
+#   - Support spelling repairs and case normalization.
+#
+# Design:
+#   - Flat mapping: token -> canonical spelling.
+#   - All keys and values are lowercase.
+#   - Intake primitives normalize case before lookup.
+#
+# How to add new entries:
+#   - Insert a new line: token: canonical_spelling
+#   - Canonical spelling is usually identical to the token.
+#   - Keep alphabetical order for readability.
+# ============================================================
+
+dictionary:
+  after: after
+  cat: cat
+  chased: chased
+  dog: dog
+  fox: fox
+  help: help
+  jumped: jumped
+  me: me
+  please: please
+  red: red
+  the: the
+  yeah: yeah
