@@ -228,7 +228,139 @@ IE must:
 
 ---
 
-# **7. Token‑Level Normative Classification (Updated for v3.2)**
+# **7. Bounded Semantic Domain (New for v3.3)**  
+### *Formal definition of IE’s semantic permissions and prohibitions*
+
+IE is a bounded‑semantic primitive in Path‑A, extending progressively and controllably the bounded semantic model established by InB and IIInB. Its semantic domain is strictly local, deterministic, rule‑driven, and replay‑stable. This section defines the exact semantic operations IE is permitted to perform.
+
+---
+
+## **7.1 Definition — Bounded Semantic Operation**
+
+A bounded semantic operation is a **local, deterministic transformation** that:
+
+1. operates only on the current token or a small fixed window of adjacent tokens (≤5),  
+2. uses only information explicitly provided by upstream primitives (IIInB),  
+3. does not infer user intent, global meaning, or cross‑sentence semantics,  
+4. is deterministic and replay‑stable,  
+5. is explicitly authorized by a rule family in `ie_rules.yaml`.
+
+Bounded semantic operations are **meaning‑adjacent**, not meaning‑inferential.
+
+---
+
+## **7.2 Allowed Semantic Operations in IE**
+
+IE MAY perform the following semantic operations, all of which are rule‑driven and deterministic:
+
+### **7.2.1 Semantic Classification**
+IE assigns each committed token a normative class:
+
+- `normative`  
+- `repaired`  
+- `anomalous`  
+- `unrecognized`  
+- `null`
+
+Classification uses:
+
+- IIInB anomaly flags  
+- IIInB repair proposals  
+- dictionary validation  
+- composite merge results  
+- rule families in `ie_rules.yaml`
+
+### **7.2.2 Semantic Consolidation**
+IE MAY consolidate multiple IIInB tokens into one committed token **only when IIInB proposes a composite merge** via a repair span.
+
+### **7.2.3 Semantic Normalization**
+IE MAY normalize a token **only when IIInB proposes the normalization**, including:
+
+- unicode normalization  
+- punctuation normalization  
+- repetition collapse  
+- shorthand expansion  
+- spelling correction  
+
+IE does **not** invent normalization.
+
+### **7.2.4 Semantic Dictionary Validation**
+IE MAY validate dictionary entries for:
+
+- merged tokens  
+- repaired tokens  
+- anomalous tokens  
+- unrecognized tokens  
+
+Dictionary validation is deterministic and replay‑stable.
+
+### **7.2.5 Semantic Anomaly Propagation**
+IE MAY propagate anomalies into:
+
+- `metadata.repair_annotations`  
+- `token_flags`  
+- replay metadata  
+
+Propagation is deterministic and preserves IIInB ordering and spans.
+
+---
+
+## **7.3 Prohibited Semantic Operations in IE**
+
+IE SHALL NOT perform:
+
+### **7.3.1 Global Semantic Inference**
+No intent inference, no meaning inference, no context‑dependent rewriting.
+
+### **7.3.2 Semantic Expansion Not Proposed by IIInB**
+No independent:
+
+- spelling correction  
+- shorthand expansion  
+- repetition collapse  
+- unicode normalization  
+- punctuation normalization  
+
+unless IIInB explicitly proposes the repair.
+
+### **7.3.3 Semantic Rewriting**
+IE does not reinterpret repairs or invent new ones.
+
+### **7.3.4 Contextual or Cross‑Sentence Semantics**
+IE does not use:
+
+- user profile  
+- history  
+- downstream primitives  
+- external context  
+- sentence‑level meaning
+
+### **7.3.5 Nondeterministic Semantic Behavior**
+All semantic operations must be:
+
+- deterministic  
+- replay‑stable  
+- rule‑ordered  
+- span‑stable  
+
+---
+
+## **7.4 Purpose of Bounded Semantics**
+
+Bounded semantics ensures:
+
+- deterministic replay  
+- stable TP envelopes  
+- predictable downstream consumption  
+- strict separation between intake semantics and global semantics  
+- identical behavior in Python and C++ implementations  
+- alignment with IIInB’s proposal‑only model  
+
+IE is the **first bounded‑semantic primitive**, and all downstream primitives inherit this model.
+
+---
+
+# **8. Token‑Level Normative Classification (Updated for v3.2)**
 
 IE produces:
 
@@ -267,7 +399,7 @@ Downstream primitives use:
 
 ---
 
-# **8. Structural Schema (Updated for v3.2)**
+# **9. Structural Schema (Updated for v3.2)**
 
 IE produces:
 
@@ -300,7 +432,7 @@ IE constructs structure:
 
 ---
 
-# **9. Token Normalization (Updated for v3.2)**
+# **10. Token Normalization (Updated for v3.2)**
 
 IE must:
 
@@ -318,7 +450,7 @@ IE must not:
 
 ---
 
-# **10. Structural Integrity (Updated for v3.2)**
+# **11. Structural Integrity (Updated for v3.2)**
 
 IE must:
 
@@ -335,7 +467,7 @@ IE constructs structure exclusively from:
 
 ---
 
-# **11. Replay Metadata (Updated for v3.2)**
+# **12. Replay Metadata (Updated for v3.2)**
 
 IE encodes all information required for deterministic replay:
 
@@ -353,7 +485,7 @@ Replay systems must reconstruct the exact input state without external context.
 
 ---
 
-# **12. Forbidden Behavior**
+# **13. Forbidden Behavior**
 
 IE must not:
 
@@ -367,7 +499,7 @@ IE must not:
 
 ---
 
-# **13. Implementation Skeleton (Python, Updated for v3.2)**
+# **14. Implementation Skeleton (Python, Updated for v3.2)**
 
 ```python
 class IE:
@@ -426,7 +558,7 @@ class IE:
 
 ---
 
-# **14. Implementation Skeleton (C++, Updated for v3.2)**
+# **15. Implementation Skeleton (C++, Updated for v3.2)**
 
 Equivalent structure:
 
@@ -440,7 +572,7 @@ Equivalent structure:
 
 ---
 
-# **15. Change Management**
+# **16. Change Management**
 
 When IE evolves:
 
@@ -456,7 +588,7 @@ This document is the **authoritative programming reference** for IE v3.2.
 
 ---
 
-# **16. Reference Documents (Canonical IE Synchronization Set)**
+# **17. Reference Documents (Canonical IE Synchronization Set)**
 
 1. **ie_py_struc_pgm.md** — programming blueprint  
 2. **20.109_ie_prim.md** — conceptual spec  
