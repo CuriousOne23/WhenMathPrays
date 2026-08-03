@@ -1,5 +1,5 @@
 """
-IIInB Intake Inspection Testbench — Path A
+IIInB Intake Inspection Testbench - Path A
 Compliant with 20.101 (Rewritten)
 IIInB is a pre-semantic repair-proposal primitive:
     • emits repair_proposals (token-span)
@@ -223,12 +223,12 @@ def filter_tests_by_rule_families(all_tests):
     return filtered
 
 # ---------------------------------------------------------------------------
-# GENERAL MODE — primitive + rulechecker
+# GENERAL MODE - primitive + rulechecker
 # ---------------------------------------------------------------------------
 
 def run_general_mode():
     print("\n============================================================")
-    print("IIInB General Mode — Primitive + Rulechecker")
+    print("IIInB General Mode - Primitive + Rulechecker")
     print("============================================================\n")
 
     data = load_general_input()
@@ -286,7 +286,7 @@ def run_general_mode():
     print("==============================================================\n")
 
 # ---------------------------------------------------------------------------
-# REGRESSION MODE — primitive only (rule-family filtered)
+# REGRESSION MODE - primitive only (rule-family filtered)
 # ---------------------------------------------------------------------------
 
 def run_regression_mode():
@@ -353,10 +353,10 @@ def run_regression_mode():
             if expected is None:
                 return True
             if actual == expected:
-                results.append(f"  PASS {label} AGREES — expected {expected!r}, got {actual!r}")
+                results.append(f"  PASS {label} AGREES - expected {expected!r}, got {actual!r}")
                 return True
             else:
-                results.append(f"  FAIL {label} DISAGREES — expected {expected!r}, got {actual!r}")
+                results.append(f"  FAIL {label} DISAGREES - expected {expected!r}, got {actual!r}")
                 return False
 
         status_ok = check("IIInB status", actual_status, expected_status)
