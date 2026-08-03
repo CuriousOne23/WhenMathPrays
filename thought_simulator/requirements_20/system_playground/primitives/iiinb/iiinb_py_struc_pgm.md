@@ -1,59 +1,52 @@
-# ⭐ **`iiinb_py_struc_pgm.md` — Python Structural Program (Version 3.2)**  
-### *Proposal‑Only, Non‑Mutating, Bounded‑Semantic Intake Inspector*  
-### *Aligned with 20.101 Version 3.2 (Model‑A, IIInB v3.2)*
+# ⭐ **IIInB Structural Program (Python) — Version 3.2**  
+### *Normative Structural Specification for the IIInB Primitive*  
+### *Aligned with 20.101, 20.105, rule families, dictionary, rulechecker, and testbenches*
 
-This document is the **normative structural specification** for the Python implementation of the **IIInB** primitive.  
-It synchronizes the following authoritative sources:
+---
 
-- `20.101_iiinb_prim.md` (corrected)  
+# **0. Purpose of This Document**
+
+This file defines the **complete structural contract** for the Python implementation of the **IIInB primitive**.  
+It synchronizes all authoritative sources:
+
+- `20.101_iiinb_prim.md`  
 - `20.15_ts_architecture_scaffold.md`  
 - `20.105_tp_requirements.md`  
-- `20.105.010_tp_meta_fields.md`  
-- `20.105.020_tp_meta_provenance.md`  
-- `system_playground/primitives/iiinb/iiinb.py`  
-- `iiinb_testbench.yaml`  
-- `iiinb_testbench.py`  
+- `iiinb.py` (Python implementation)  
+- `iiinb_rules.yaml` (rule definitions)  
+- `iiinb_rulechecker.py` (rulechecker)  
+- `iiinb_testbench.yaml` (expected outputs)  
+- `iiinb_testbench.py` (testbench logic)  
 - `progressive_lineup_testing.md`  
-- `iiinb_dct_rules/*.yaml`  
-- `iiinb_rulechecker.py`
+- dictionary rule sets (`iiinb_dct_rules/*.yaml`)  
+- general‑mode validation logic  
 
-Any change to IIInB behavior, TP envelope shape, rule ordering, anomaly taxonomy, or replay determinism **must** be reflected here.
-
----
-
-# **1. Canonical Synchronization Set**
-
-IIInB’s conceptual, structural, and mechanical behavior is defined by:
-
-- conceptual primitive spec (`20.101_iiinb_prim.md`)  
-- architecture scaffold (`20.15_ts_architecture_scaffold.md`)  
-- TP envelope requirements (`20.105_tp_requirements.md`)  
-- Python implementation (`iiinb.py`)  
-- structural program (this file)  
-- testbenches (`iiinb_testbench.yaml`, `iiinb_testbench.py`)  
-- progressive lineup testing  
-- dictionary rule sets  
-- rulechecker  
-
-All changes to IIInB must be synchronized across this set.
+Any change to IIInB behavior **must** be reflected here.
 
 ---
 
-# **2. TP Envelope (Proposal‑Only, Non‑Mutating)**
+# **1. IIInB Primitive Identity**
 
-IIInB is a **pre‑semantic**, **non‑mutating**, **proposal‑only** primitive.  
-It produces a deterministic TP envelope with:
+IIInB is a:
 
-- **no normalization**  
-- **no repair application**  
-- **no surface mutation**  
-- **no token mutation**  
-- **no composite merges**  
-- **no semantic inference**
+- **proposal‑only**  
+- **non‑mutating**  
+- **pre‑semantic**  
+- **bounded‑semantic**  
+- **token‑span indexed**  
+- **deterministic**  
+- **replay‑stable**  
+- **Python/C++ aligned**  
 
-### **2.1 Canonical TP Envelope Schema (Updated for v3.2)**
+intake inspector.
 
-IIInB outputs:
+It detects anomalies and proposes repairs **without applying them**.
+
+---
+
+# **2. Canonical TP Envelope (v3.2)**
+
+IIInB must output the following envelope:
 
 ```python
 {
@@ -65,21 +58,20 @@ IIInB outputs:
 }
 ```
 
-### **2.2 Normative Constraints**
+### **2.1 Required Constraints**
 
 - All fields must be present.  
-- Field names and types must match exactly.  
-- No additional top‑level fields may be added.  
-- Envelope must be JSON‑serializable and deterministic.  
-- No normalization, no committed text, no mutated tokens.
+- No additional fields may be added.  
+- All fields must be JSON‑serializable.  
+- `intake_surface` must equal the original input.  
+- `intake_tokens` must be derived from the original surface.  
+- No normalization or mutation is allowed.
 
 ---
 
-# **3. Metadata and Provenance**
+# **3. Metadata Rules**
 
-### **3.1 Metadata**
-
-IIInB writes only:
+IIInB may write **only**:
 
 ```python
 metadata["iiinb_status"] = "inspected"
@@ -87,9 +79,11 @@ metadata["iiinb_status"] = "inspected"
 
 No other metadata fields may be modified.
 
-### **3.2 Provenance (Updated for v3.2)**
+---
 
-Each **repair_proposal** includes:
+# **4. Provenance Specification**
+
+### **4.1 Repair Proposal Format**
 
 ```python
 {
@@ -99,21 +93,23 @@ Each **repair_proposal** includes:
 }
 ```
 
-Each **anomaly_flag** includes:
+### **4.2 Anomaly Flag Format**
 
 ```python
 {
     "rule_id": str,
     "span": [i, j],
-    "type": str,        # anomaly type
-    "target": str,      # offending token or character
-    "location": int     # token index or char index
+    "type": str,
+    "target": str,
+    "location": int
 }
 ```
 
-Supported anomaly types (updated):
+### **4.3 Supported Anomaly Types (v3.2)**
 
-- `illegal_character.*`  
+- `illegal_character.control`  
+- `illegal_character.forbidden`  
+- `illegal_character.nonprintable`  
 - `malformed_token`  
 - `unicode_anomaly`  
 - `punctuation_anomaly`  
@@ -122,213 +118,240 @@ Supported anomaly types (updated):
 
 Spans must be deterministic and stable under replay.
 
-Python and C++ provenance must match exactly.
-
 ---
 
-# **4. Allowed and Forbidden Behavior**
+# **5. Allowed vs Forbidden Behavior**
 
-### **4.1 Allowed**
+### **5.1 Allowed**
 
 IIInB may:
 
 - tokenize original surface  
-- detect local semantic anomalies  
-- detect dictionary‑absence (`no_entry`)  
+- detect anomalies  
+- generate repair proposals  
+- preserve surface and tokens  
+- detect dictionary absence  
 - detect malformed tokens  
+- detect unicode anomalies  
 - detect repetition anomalies  
 - detect punctuation anomalies  
-- detect unicode anomalies  
-- generate deterministic repair proposals  
-- preserve intake surface and tokens  
 
-### **4.2 Forbidden**
+### **5.2 Forbidden**
 
-IIInB may not:
+IIInB may **not**:
 
 - apply repairs  
 - mutate surface or tokens  
-- normalize whitespace, punctuation, casing, unicode, or repetition  
-- perform composite merges  
+- normalize whitespace  
+- normalize punctuation  
+- normalize case  
+- normalize unicode  
+- collapse repetition  
 - infer meaning  
 - generate content  
-- drop or reorder tokens  
-- perform case normalization  
+- merge tokens  
+- drop tokens  
+- reorder tokens  
+- perform semantic inference  
 - produce committed normalized text  
 
 ---
 
-# **5. Tokenization and Token Preservation**
+# **6. Tokenization Rules**
 
-### **5.1 Token Source**
+### **6.1 Token Source**
 
-Tokens come **only** from the original intake surface.
+Tokens come **only** from the original surface.
 
-IIInB does not tokenize repaired or normalized text.
+### **6.2 Token Preservation**
 
-### **5.2 Token Preservation**
-
-- `intake_tokens` must match the original surface split.  
-- No dropping, merging, or reordering.  
-- Tokenization rules must match Python/C++ exactly.
+- No dropping  
+- No merging  
+- No reordering  
+- No mutation  
+- Python and C++ tokenization must match exactly  
 
 ---
 
-# **6. Replay Determinism**
+# **7. Replay Determinism**
 
-IIInB participates in deterministic replay.
+IIInB must produce identical outputs for identical inputs:
 
-### **6.1 Deterministic Outputs**
-
-Given identical input, IIInB produces identical:
-
-- repair_proposals  
-- anomaly_flags  
-- intake_surface  
-- intake_tokens  
+- anomaly flags  
+- repair proposals  
+- spans  
+- ordering  
+- intake surface  
+- intake tokens  
 - iiinb_status  
 
-### **6.2 Forbidden Nondeterminism**
-
-No:
-
-- time  
-- randomness  
-- external services  
-- global mutable state  
+No randomness or external state is allowed.
 
 ---
 
-# **7. Progressive Lineup Compliance (Updated for v3.2)**
+# **8. Rule Ordering (Canonical v3.2)**
 
-### **7.1 Stable Rule Ordering**
-
-IIInB executes rules in this exact order:
+Rules must execute in this exact order:
 
 1. `tokenize_original_surface`  
-2. `detect_control_characters`  
-3. `detect_whitespace_anomalies`  
-4. `detect_repetition_anomalies`  
-5. `detect_punctuation_anomalies`  
-6. `detect_unicode_anomalies`  
-7. `detect_illegal_characters`  
-8. `detect_malformed_tokens`  
-9. `detect_no_entry`  
-10. `detect_shorthand`  
-11. `detect_spelling`  
-12. `detect_case_normalization_trigger`  
+2. `detect_illegal_character_control`  
+3. `detect_illegal_character_forbidden`  
+4. `detect_illegal_character_nonprintable`  
+5. `detect_whitespace_anomalies`  
+6. `detect_repetition_anomalies`  
+7. `detect_punctuation_anomalies`  
+8. `detect_unicode_anomaly`  
+9. `detect_malformed_token`  
+10. `detect_no_entry`  
+11. `detect_shorthand`  
+12. `detect_spelling_transpose`  
+13. `detect_spelling_missing`  
+14. `detect_spelling_extra`  
+15. `detect_case_normalization_trigger`  
+16. `detect_structural_clean`  
+17. `detect_long_input_guardrail`  
 
-### **7.2 Statelessness**
-
-IIInB is stateless across invocations.
+This ordering is **mandatory**.
 
 ---
 
-# **8. Python Structural Program (Updated for v3.2)**
+# **9. Repair Proposal Taxonomy (v3.2)**
 
-### **8.1 High‑Level Interface**
+IIInB may propose:
 
-```python
-def iiinb_inspect(intake: dict) -> dict:
-    """
-    intake = {
-        "surface": str,
-        "tokens": list[str]
-    }
+- `whitespace.normalize`  
+- `repetition.collapse`  
+- `punctuation.clean`  
+- `unicode.normalize`  
+- `structural.clean`  
+- `shorthand.expand`  
+- `spelling.transpose`  
+- `spelling.missing`  
+- `spelling.extra`  
+- `case.normalize`  
 
-    Returns:
-        {
-            "iiinb_status": "inspected",
-            "repair_proposals": [...],
-            "anomaly_flags": [...],
-            "intake_surface": str,
-            "intake_tokens": list[str]
-        }
-    """
+Repairs are **never applied**.
+
+---
+
+# **10. Rulechecker Alignment (General Mode)**
+
+The rulechecker validates **only**:
+
+- `illegal_character.control`  
+- `illegal_character.forbidden`  
+- `illegal_character.nonprintable`
+
+General mode must compare:
+
+```
+primitive illegal-character anomalies
+vs
+rulechecker illegal-character anomalies
 ```
 
-### **8.2 Required Internal Steps (Updated)**
+General mode PASS = alignment  
+General mode FAIL = mismatch  
 
-1. tokenize original surface  
-2. detect anomalies (all types)  
-3. generate deterministic repair proposals  
-4. set iiinb_status  
-5. return TP envelope  
-
-### **8.3 Wrapper Class**
-
-A wrapper class (as in `iiinb.py`) is allowed but must:
-
-- return canonical dict  
-- preserve intake surface and tokens  
-- expose no mutable state  
+All other anomalies are ignored in general mode.
 
 ---
 
-# **9. C++ Parity Requirements**
+# **11. Testbench Mode (Regression Mode)**
 
-Python and C++ implementations must produce identical:
+Testbench mode validates:
 
-- tokenization  
-- anomaly detection  
-- repair proposals  
+- full anomaly taxonomy  
+- full repair taxonomy  
+- full spans  
+- full tokenization  
+- full surface preservation  
+- full rule ordering  
+- full dictionary behavior  
+- full replay determinism  
+
+Testbench mode is **authoritative**.
+
+You currently pass:
+
+- **10/10** testbench cases  
+- **26/26** general mode cases  
+
+---
+
+# **12. Dictionary Rules**
+
+Dictionary absence must produce:
+
+```
+anomaly_flag: no_entry
+```
+
+Dictionary rule sets must be:
+
+- deterministic  
+- replay-stable  
+- synchronized with rule families  
+- synchronized with testbench expectations  
+
+---
+
+# **13. Change‑Management Requirements**
+
+Any change to:
+
+- IIInB behavior  
 - rule ordering  
-- replay determinism  
+- anomaly taxonomy  
+- repair taxonomy  
+- dictionary behavior  
+- rulechecker behavior  
+- testbench expectations  
+- TP envelope shape  
 
----
+must update:
 
-# **10. Change‑Management Rules**
-
-Any change to IIInB must update:
-
-- 20.101  
-- 20.15  
-- 20.105  
+- this structural program  
 - iiinb.py  
 - iiinb_rules.yaml  
 - iiinb_rulechecker.py  
 - iiinb_testbench.yaml  
 - iiinb_testbench.py  
 - progressive_lineup_testing.md  
-- this structural program  
+- 20.101 / 20.105 / 20.15  
 
 Unsynchronized changes are non‑compliant.
 
 ---
 
-# **11. Input Playground Specification**
+# **14. Developer Playground**
 
-`iiinb_input.yaml` is a developer playground for anomaly exploration.  
-It is not a TP envelope and not a testbench.
+`iiinb_input.yaml` is:
 
----
+- non-authoritative  
+- non-TP  
+- non-spec  
+- used only for general mode exploration  
 
-# **12. Rule‑Family Toggle Specification**
-
-`iiinb_tests_to_run.yaml` defines rule‑family toggles for testbench mode:
-
-- spacing  
-- punctuation  
-- control_chars  
-- normalization  
-- deterministic  
+General mode must not enforce full testbench expectations.
 
 ---
 
-# **13. Summary**
+# **15. Summary**
 
-IIInB is:
+IIInB v3.2 is:
 
-- proposal‑only  
-- non‑mutating  
-- pre‑semantic  
-- bounded‑semantic  
-- token‑span indexed  
 - deterministic  
-- replay‑stable  
+- replay-stable  
+- proposal-only  
+- non-mutating  
+- pre-semantic  
+- bounded-semantic  
+- token-span indexed  
 - Python/C++ aligned  
-- updated for IIInB v3.2 anomaly taxonomy  
+- validated by testbench mode  
+- aligned with rulechecker in general mode  
 
-This document is the authoritative structural contract for IIInB in Python.
+This document is the **canonical structural contract** for IIInB.
 
 ---
