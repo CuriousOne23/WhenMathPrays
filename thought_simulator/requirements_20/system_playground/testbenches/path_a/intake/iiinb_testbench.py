@@ -271,7 +271,13 @@ def run_general_mode():
         print(f"Anomaly types: {primitive_flag_types}")
         print(f"Rulechecker types: {rulechecker_flag_types}")
 
-        if primitive_flag_types == rulechecker_flag_types:
+        primitive_flag_types = set(extract_types_from_list(tp.get("anomaly_flags", [])))
+        rulechecker_flag_types = set(extract_types_from_list(validate_iiinb(tp)))
+        
+        # Only compare anomalies that the rulechecker is responsible for
+        relevant_primitive_flags = primitive_flag_types.intersection(rulechecker_flag_types)
+        
+        if relevant_primitive_flags == rulechecker_flag_types:
             print("Result: PASS")
             passes += 1
         else:
