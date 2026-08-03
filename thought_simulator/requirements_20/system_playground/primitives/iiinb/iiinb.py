@@ -400,13 +400,13 @@ def iiinb_inspect(intake: dict) -> dict:
             "target": tok,
         })
         
-        return {
-            "iiinb_status": "inspected",
-            "repair_proposals": repair_proposals,
-            "anomaly_flags": anomaly_flags,
-            "intake_surface": intake_surface,
-            "intake_tokens": intake_tokens,
-        }
+    return {
+        "iiinb_status": "inspected",
+        "repair_proposals": repair_proposals,
+        "anomaly_flags": anomaly_flags,
+        "intake_surface": intake_surface,
+        "intake_tokens": intake_tokens,
+    }
 
 # ============================================================
 # IIInB class wrapper (testbench & pipeline-facing API)
