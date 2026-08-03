@@ -356,6 +356,31 @@ def iiinb_inspect(intake: dict) -> dict:
             "replacement": "The",
         })
 
+    # --------------------------------------------------------
+    # 10. Dictionary no-entry anomaly (pure absence)
+    # --------------------------------------------------------
+    dictionary_entries = set()
+    for family_rules in DCT_RULES.values():
+        dictionary_entries.update(family_rules.keys())
+    
+    for idx, tok in enumerate(intake_tokens):
+        # Skip tokens already flagged by other anomaly families
+        already_flagged = any(flag["span"] == [idx, idx] for flag in anomaly_flags)
+        if already_flagged:
+            continue
+    
+        # Skip structural markers
+        if tok == "<broken>":
+            continue
+    
+        # Emit no_entry if token not in dictionary
+        if tok not in dictionary_entries:
+            anomaly_flags.append({
+                "type": "no_entry",
+                "span": [idx, idx],
+                "target": tok,
+            })
+    
     return {
         "iiinb_status": "inspected",
         "repair_proposals": repair_proposals,
@@ -363,16 +388,6 @@ def iiinb_inspect(intake: dict) -> dict:
         "intake_surface": intake_surface,
         "intake_tokens": intake_tokens,
     }
-
-    # 10. Dictionary no-entry anomaly
-    dictionary_entries = set().union(*[rules.keys() for rules in DCT_RULES.values()])
-    for idx, tok in enumerate(intake_tokens):
-        if tok not in dictionary_entries:
-            anomaly_flags.append({
-                "type": "no_entry",
-                "span": [idx, idx],
-                "target": tok,
-            })
 
 # ============================================================
 # IIInB class wrapper (testbench & pipeline-facing API)
