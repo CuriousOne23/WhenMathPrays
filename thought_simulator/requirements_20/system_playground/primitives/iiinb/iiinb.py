@@ -214,11 +214,11 @@ def iiinb_inspect(intake: dict) -> dict:
             "span": [0, max(0, len(intake_tokens) - 1)],
         })
         return {
-            "iiinb_status": "inspected",
+            "iiinb_status": "error.too_long",
             "repair_proposals": [],
-            "anomaly_flags": anomaly_flags,
-            "intake_surface": intake_surface,
-            "intake_tokens": intake_tokens,
+            "anomaly_flags": [],
+            "intake_surface": "",
+            "intake_tokens": [],
         }
 
     # --------------------------------------------------------
@@ -364,6 +364,15 @@ def iiinb_inspect(intake: dict) -> dict:
         "intake_tokens": intake_tokens,
     }
 
+    # 10. Dictionary no-entry anomaly
+    dictionary_entries = set().union(*[rules.keys() for rules in DCT_RULES.values()])
+    for idx, tok in enumerate(intake_tokens):
+        if tok not in dictionary_entries:
+            anomaly_flags.append({
+                "type": "no_entry",
+                "span": [idx, idx],
+                "target": tok,
+            })
 
 # ============================================================
 # IIInB class wrapper (testbench & pipeline-facing API)
