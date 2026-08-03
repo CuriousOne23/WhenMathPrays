@@ -35,6 +35,8 @@ dictionary:
   hello: hello
   help: help
   here: here
+  i: i
+  including: including
   is: is
   issues: issues
   jumped: jumped
@@ -66,9 +68,11 @@ dictionary:
   too: too
   trailing: trailing
   two: two
+  unicode: unicode
   wait: wait
   we: we
   what: what
   with: with
   world: world
   yeah: yeah
+
