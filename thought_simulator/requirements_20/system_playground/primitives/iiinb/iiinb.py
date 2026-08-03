@@ -368,6 +368,9 @@ def iiinb_inspect(intake: dict) -> dict:
     # 10. Dictionary no-entry anomaly (pure absence)
     # --------------------------------------------------------
     
+    # Build a set of tokens that have repair proposals
+    tokens_with_repairs = {rp["span"][0] for rp in repair_proposals}
+    
     for idx, tok in enumerate(intake_tokens):
     
         # Skip tokens already flagged
@@ -380,6 +383,10 @@ def iiinb_inspect(intake: dict) -> dict:
     
         # Skip punctuation tokens
         if all(ch in ".,!?;" for ch in tok):
+            continue
+    
+        # Skip tokens that have repair proposals
+        if idx in tokens_with_repairs:
             continue
     
         # Dictionary membership check (lowercased)
