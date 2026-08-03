@@ -368,10 +368,6 @@ def iiinb_inspect(intake: dict) -> dict:
     # 10. Dictionary no-entry anomaly (pure absence)
     # --------------------------------------------------------
     
-    dictionary_entries = set()
-    for family_rules in DCT_RULES.values():
-        dictionary_entries.update(family_rules.keys())
-    
     for idx, tok in enumerate(intake_tokens):
     
         # Skip tokens already flagged
@@ -386,27 +382,13 @@ def iiinb_inspect(intake: dict) -> dict:
         if all(ch in ".,!?;" for ch in tok):
             continue
     
-        # Skip tokens that appear in rule dictionaries
-        if tok in dictionary_entries:
-            continue
-    
-        # Skip normal English-like words (alphabetic, length >= 2)
-        # BUT ONLY if they are NOT nonsense (heuristic)
-        if tok.isalpha() and len(tok) >= 2 and tok.lower() in {
-            "the", "dog", "cat", "fox", "jumped", "chased", "help", "me"
-        }:
-            continue
-    
-        # Skip alphanumeric tokens (numbers, IDs)
-        if tok.isalnum() and len(tok) > 1:
-            continue
-    
-        # If none of the above matched → true dictionary absence
-        anomaly_flags.append({
-            "type": "no_entry",
-            "span": [idx, idx],
-            "target": tok,
-        })
+        # Dictionary membership check (lowercased)
+        if tok.lower() not in INPUT_DICTIONARY:
+            anomaly_flags.append({
+                "type": "no_entry",
+                "span": [idx, idx],
+                "target": tok,
+            })
         
     return {
         "iiinb_status": "inspected",
