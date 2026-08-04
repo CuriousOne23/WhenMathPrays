@@ -1230,7 +1230,178 @@ This loop is:
 
 ---
 
-## **12. Summary**
+# **12. Open Questions and Future Formalization**
+
+This document establishes a speculative but architecturally grounded model for the CIL → CEx interface.  
+While the metadata contract, linear‑update model, and deterministic decision rules provide a strong foundation, several areas remain open for exploration, refinement, and eventual formalization.  
+These open questions do not undermine the viability of the model; rather, they identify the next steps required to evolve CEx from a conceptual primitive into a fully specified, testable, and implementable component of Path‑A.
+
+---
+
+## **12.1 Threshold Calibration for Decision Rules**
+
+CEx relies on scalar thresholds (e.g., “low,” “moderate,” “high”) for:
+
+- ambiguity_score  
+- collapse_risk  
+- stability_score  
+- volatility_score  
+- drift_score  
+- lineage_confidence  
+
+Open questions:
+
+- What are the optimal numeric boundaries for these categories?  
+- Should thresholds be static or adaptively tuned based on lineage density?  
+- Should thresholds be symmetric across metrics or weighted differently?  
+- How should threshold changes be validated for replay safety?
+
+These questions will require empirical testing using synthetic and real conversation traces.
+
+---
+
+## **12.2 Lineage Depth and Memory Window**
+
+The current model uses a lineage window of **N ≤ 10** turns.
+
+Open questions:
+
+- Is 10 the optimal depth for identity, clarifying, and context lineage?  
+- Should different lineage types have different depths?  
+- How does lineage depth affect ambiguity resolution?  
+- How does lineage depth affect collapse‑risk stability?  
+- Should lineage depth be configurable per primitive or globally?
+
+These questions will be explored through progressive lineup testing.
+
+---
+
+## **12.3 Topology Classification Heuristics**
+
+Conversation topology is currently classified using simple structural heuristics:
+
+- “linear”  
+- “branched”  
+- “reset‑heavy”
+
+Open questions:
+
+- Are additional topology categories needed?  
+- Should topology classification incorporate continuity lineage more deeply?  
+- Should topology classification influence threshold selection?  
+- How should topology be validated across diverse conversation patterns?
+
+Topology may become more nuanced as Path‑A primitives evolve.
+
+---
+
+## **12.4 Semantic Residue Boundaries**
+
+Semantic residue is intentionally bounded and non‑inferential:
+
+- last_topic  
+- last_intent  
+- last_register  
+
+Open questions:
+
+- Should additional residue fields be added (e.g., last_direction, last_importance)?  
+- How do we ensure residue remains non‑semantic and safe?  
+- Should residue be pruned more aggressively to avoid drift?  
+- How does residue interact with next_context projections?
+
+These questions will be addressed during formalization of OutBA → COB interfaces.
+
+---
+
+## **12.5 Interaction Between CEx and Other Primitives**
+
+CEx is designed to operate within a larger ecosystem of Path‑A primitives.
+
+Open questions:
+
+- How should CEx coordinate with primitives that also consume lineage (e.g., CTx, CSt)?  
+- Should CEx expose additional metadata to downstream primitives?  
+- Should CEx receive additional metadata from upstream primitives beyond CIL?  
+- How do we ensure primitive boundaries remain strict and non‑overlapping?
+
+These questions will be addressed when the full primitive graph is formalized.
+
+---
+
+## **12.6 Formal Specification of Linear Update Functions**
+
+Section 5.2 provides examples of linear updates, but the exact functions remain open for formalization.
+
+Open questions:
+
+- Should stability_score use a weighted moving average?  
+- Should drift_score incorporate decay?  
+- Should collapse_risk be nonlinear (e.g., logistic)?  
+- Should identity_layer_density be normalized across conversation clusters?
+
+Formalization will require:
+
+- testbench validation,  
+- replay‑safety analysis,  
+- and cross‑primitive consistency checks.
+
+---
+
+## **12.7 Testbench Coverage and Validation Strategy**
+
+The current testbench (e.g., *cex_testbench.yaml*) provides initial coverage.
+
+Open questions:
+
+- What additional test cases are required to validate ambiguous fallback?  
+- How do we test collapse‑risk behavior under extreme drift?  
+- How do we simulate multi‑cluster conversation environments?  
+- How do we validate deterministic replay across long sequences?
+
+These questions will be addressed in the next iteration of progressive lineup testing.
+
+---
+
+## **12.8 Path Toward Formal Requirements**
+
+This document is intentionally speculative and exploratory.  
+Future formalization will require:
+
+- converting metadata contracts into normative schemas,  
+- defining strict numeric thresholds,  
+- specifying exact linear‑update functions,  
+- formalizing topology classification,  
+- validating replay‑safety across full pipelines,  
+- integrating CEx with other primitives in Path‑A.
+
+The transition from speculative white paper to formal requirement will occur once:
+
+- lineage stability is validated,  
+- ambiguity resolution is reliable,  
+- collapse‑risk behavior is predictable,  
+- and CEx’s deterministic loop is proven across diverse conversation traces.
+
+---
+
+## **12.9 Summary of Open Questions**
+
+The following areas remain open:
+
+- threshold calibration  
+- lineage depth  
+- topology heuristics  
+- semantic residue boundaries  
+- primitive interactions  
+- linear‑update formalization  
+- testbench expansion  
+- full formalization pathway
+
+These questions represent the natural next steps in maturing CEx from a conceptual primitive into a fully specified, deterministic component of the Path‑A architecture.
+
+---
+
+## **13. Summary**
 
 CEx requires CIL to deliver:
 
