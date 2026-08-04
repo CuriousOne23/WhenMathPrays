@@ -1,0 +1,398 @@
+# ============================================================
+# CEx Testbench — Strict Deterministic Mode
+# ============================================================
+# PASS/FAIL is determined solely by expected outputs.
+# Rulechecker may run for diagnostics but does not affect PASS/FAIL.
+# ============================================================
+
+version: "1.0"
+primitive: "CEx"
+mode: "testbench"
+
+tests:
+
+  # ----------------------------------------------------------
+  # Test 1 — Basic Identity Selection (Normal Case)
+  # ----------------------------------------------------------
+  - id: "cex_basic_identity_selection"
+    description: "CEx selects identity layer normally using CIL.identity_selection_block."
+
+    ie_input:
+      intake:
+        ie_tokens: ["hello", "world"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "hello world"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block:
+        primary_layer_id: 3
+        primary_certainty: 0.92
+        ambiguity_score: 0.05
+        last_referred: 3
+        total_referrals: { "3": 12 }
+        recent_referrals: { "3": 4 }
+      clarifying_fields:
+        topic: "greeting"
+      stability:
+        collapse_risk: 0.01
+      next_context:
+        topic: "greeting"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 1
+
+    expected_ce_output:
+      context_fields:
+        topic: "greeting"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 1
+        clarifying_fields:
+          topic: "greeting"
+        identity_layer_id: 3
+
+      metadata:
+        continuity_status: "normal"
+        context_provenance:
+          - origin: "CEx"
+            last_update: "CEx"
+        extraction_audit: []
+
+      version_tag: "cex_v3.0"
+
+
+  # ----------------------------------------------------------
+  # Test 2 — Fallback Identity Selection (Ambiguous Case)
+  # ----------------------------------------------------------
+  - id: "cex_fallback_identity_selection"
+    description: "CEx falls back to last_referred when identity selection is ambiguous."
+
+    ie_input:
+      intake:
+        ie_tokens: ["status", "update"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "status update"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block:
+        primary_layer_id: null
+        primary_certainty: 0.10
+        ambiguity_score: 0.90
+        last_referred: 7
+        total_referrals: { "7": 3 }
+        recent_referrals: { "7": 1 }
+      clarifying_fields:
+        topic: "system"
+      stability:
+        collapse_risk: 0.02
+      next_context:
+        topic: "system"
+        stance: "neutral"
+        intent: "inform"
+        register: "formal"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+
+    expected_ce_output:
+      context_fields:
+        topic: "system"
+        stance: "neutral"
+        intent: "inform"
+        register: "formal"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+        clarifying_fields:
+          topic: "system"
+        identity_layer_id: 7
+
+      metadata:
+        continuity_status: "undetermined"
+        context_provenance:
+          - origin: "CEx"
+            last_update: "CEx"
+        extraction_audit:
+          - kind: "fallback"
+            reason: "ambiguous_identity_selection"
+
+      version_tag: "cex_v3.0"
+
+
+  # ----------------------------------------------------------
+  # Test 3 — New Conversation Detection
+  # ----------------------------------------------------------
+  - id: "cex_new_conversation"
+    description: "CEx detects new conversation when no identity layer matches."
+
+    ie_input:
+      intake:
+        ie_tokens: ["start", "fresh"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "start fresh"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block:
+        primary_layer_id: null
+        primary_certainty: 0.05
+        ambiguity_score: 0.95
+        last_referred: 2
+        total_referrals: {}
+        recent_referrals: {}
+      clarifying_fields: {}
+      stability:
+        collapse_risk: 0.00
+      next_context:
+        topic: "new"
+        stance: "neutral"
+        intent: "begin"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "reset"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: true
+        importance: 1
+
+    expected_ce_output:
+      context_fields:
+        topic: "new"
+        stance: "neutral"
+        intent: "begin"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "reset"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: true
+        importance: 1
+        clarifying_fields: {}
+        identity_layer_id: "new_conversation"
+
+      metadata:
+        continuity_status: "new_conversation"
+        context_provenance:
+          - origin: "CEx"
+            last_update: "CEx"
+        extraction_audit:
+          - kind: "new_conversation"
+            reason: "no_identity_match"
+
+      version_tag: "cex_v3.0"
+
+
+  # ----------------------------------------------------------
+  # Test 4 — Clarifying Metadata Extraction
+  # ----------------------------------------------------------
+  - id: "cex_clarifying_metadata"
+    description: "CEx extracts clarifying metadata deterministically."
+
+    ie_input:
+      intake:
+        ie_tokens: ["please", "help"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "please help"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block:
+        primary_layer_id: 4
+        primary_certainty: 0.88
+        ambiguity_score: 0.10
+        last_referred: 4
+        total_referrals: { "4": 9 }
+        recent_referrals: { "4": 3 }
+      clarifying_fields:
+        topic: "assistance"
+        urgency: "medium"
+      stability:
+        collapse_risk: 0.03
+      next_context:
+        topic: "assistance"
+        stance: "neutral"
+        intent: "request"
+        register: "polite"
+        politeness: "high"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 3
+
+    expected_ce_output:
+      context_fields:
+        topic: "assistance"
+        stance: "neutral"
+        intent: "request"
+        register: "polite"
+        politeness: "high"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 3
+        clarifying_fields:
+          topic: "assistance"
+          urgency: "medium"
+        identity_layer_id: 4
+
+      metadata:
+        continuity_status: "normal"
+        context_provenance:
+          - origin: "CEx"
+            last_update: "CEx"
+        extraction_audit: []
+
+      version_tag: "cex_v3.0"
+
+
+  # ----------------------------------------------------------
+  # Test 5 — Passthrough Case (use_cex = false)
+  # ----------------------------------------------------------
+  - id: "cex_passthrough"
+    description: "When use_cex=false, CEx output equals input (passthrough)."
+
+    passthrough: true
+
+    ie_input:
+      intake:
+        ie_tokens: ["noop"]
+        token_flags: ["normative"]
+        normalized_text: "noop"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block:
+        primary_layer_id: 1
+        primary_certainty: 0.99
+        ambiguity_score: 0.01
+        last_referred: 1
+        total_referrals: { "1": 20 }
+        recent_referrals: { "1": 5 }
+      clarifying_fields: {}
+      stability:
+        collapse_risk: 0.00
+      next_context:
+        topic: "noop"
+        stance: "neutral"
+        intent: "none"
+        register: "none"
+        politeness: "none"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 0
+
+    expected_ce_output:
+      passthrough: true
+
+
+  # ----------------------------------------------------------
+  # Test 6 — Malformed CIL (Skip Condition)
+  # ----------------------------------------------------------
+  - id: "cex_malformed_cil"
+    description: "CEx extracts only valid fields when CIL is malformed."
+
+    ie_input:
+      intake:
+        ie_tokens: ["check", "status"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "check status"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+        replay: {}
+      error: null
+
+    cil_input:
+      identity_selection_block: null
+      clarifying_fields: "MALFORMED"
+      stability: {}
+      next_context:
+        topic: "status"
+
+    expected_ce_output:
+      context_fields:
+        topic: "status"
+        clarifying_fields: {}
+        identity_layer_id: "fallback"
+
+      metadata:
+        continuity_status: "undetermined"
+        context_provenance:
+          - origin: "CEx"
+            last_update: "CEx"
+        extraction_audit:
+          - kind: "malformed_input"
+            field: "clarifying_fields"
+
+      version_tag: "cex_v3.0"
