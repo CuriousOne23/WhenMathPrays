@@ -294,7 +294,7 @@ def _compute_structure(ie_input: IEInput) -> Dict[str, Any]:
 # Metadata (TP.metadata)
 # ---------------------------------------------------------------------------
 
-def _compute_repair_annotations(ie_input: IEInput) -> List[Dict[str, Any]]]:
+def _compute_repair_annotations(ie_input: IEInput) -> List[Dict[str, Any]]:
     annotations: List[Dict[str, Any]] = []
 
     # Repairs
