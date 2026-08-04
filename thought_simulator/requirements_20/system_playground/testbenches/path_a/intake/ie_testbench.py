@@ -202,6 +202,8 @@ def main():
 
     print("\nSummary")
     print("-------")
+    total = passed + failed + skipped
+    print(f"Total:   {total}")
     print(f"Passed:  {passed}")
     print(f"Failed:  {failed}")
     print(f"Skipped: {skipped}")
