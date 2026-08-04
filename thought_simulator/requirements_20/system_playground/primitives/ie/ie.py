@@ -140,7 +140,7 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
                 tokens[span[1]] = repl_tokens[1]
 
         # repetition.cleaned: replace token at span[0]
-        elif rule == "repetition.cleaned" and len(span) == 1:
+        elif rule in ("repetition.clean", "repetition.cleaned") and len(span) == 1:
             idx = span[0]
             if 0 <= idx < len(tokens):
                 tokens[idx] = repl
