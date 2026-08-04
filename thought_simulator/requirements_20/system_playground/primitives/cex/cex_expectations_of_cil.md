@@ -668,7 +668,439 @@ This supports CEx’s ambiguous fallback logic.
 
 ---
 
-## **6. What COB Needs From OutBA to Perform Updates**
+# **6. TP Metadata Placement Rules (CIL → TP → CEx Deterministic Flow)**
+
+This section defines how CIL must place conversation‑level metadata into the **TP (Turn Package)** so that CEx can consume it deterministically.  
+These rules ensure that:
+
+- CIL delivers metadata in a **stable, non‑drifting structure**,  
+- CEx receives metadata in a **predictable location**,  
+- COB/CST can rely on CEx outputs for the next update cycle,  
+- the entire pipeline remains **bounded‑semantic**, **replay‑safe**, and **non‑inferential**.
+
+These rules complement the metadata contract defined in Section 4.2 and the computation model defined in Section 5.
+
+---
+
+## **6.1 Purpose of TP Metadata Placement**
+
+The TP is the **single source of truth** for turn‑level metadata.  
+CIL must place all lineage, continuity, topology, and scalar metrics into TP so that:
+
+- CEx can read them deterministically,  
+- downstream primitives can rely on them,  
+- COB/CST can update lineage using CEx outputs,  
+- the pipeline maintains strict separation between structural metadata and semantic content.
+
+CIL does **not** compute semantics.  
+CIL does **not** interpret IE tokens.  
+CIL only **packages** metadata computed upstream.
+
+---
+
+## **6.2 Required TP Metadata Structure**
+
+CIL must place metadata into TP under the following canonical structure:
+
+```yaml
+TP:
+  metadata:
+    cil_output:
+      identity: …
+      clarifying: …
+      context: …
+      continuity: …
+      topology: …
+      metrics: …
+      semantic_residue: …
+      next_context: …
+```
+
+This structure is **fixed** and must not drift.
+
+All fieldnames and formats must match Section 4.2 exactly.
+
+---
+
+## **6.3 Placement Rules**
+
+### **Rule 1 — No Renaming, No Reformatting**
+CIL must place fields **exactly** as defined in Section 4.2.
+
+- No renaming  
+- No restructuring  
+- No flattening  
+- No nesting changes  
+- No type changes  
+- No omission of null fields  
+
+This ensures deterministic consumption by CEx.
+
+---
+
+### **Rule 2 — Full Envelope Every Turn**
+CIL must place the **entire metadata envelope** into TP every turn, even when:
+
+- values are null,  
+- lineage is short,  
+- metrics are unchanged,  
+- continuity is ambiguous.
+
+This ensures CEx never has to guess or infer missing fields.
+
+---
+
+### **Rule 3 — No Semantic Interpretation**
+CIL must not:
+
+- interpret IE tokens,  
+- derive meaning,  
+- infer topic,  
+- infer intent,  
+- infer stance,  
+- infer register.
+
+All semantic fields in `next_context` must come from upstream primitives (OutBA, etc.), not from CIL.
+
+---
+
+### **Rule 4 — Deterministic Ordering**
+CIL must place fields in TP in the **same order** every turn.
+
+This prevents drift and ensures stable parsing by CEx.
+
+---
+
+### **Rule 5 — No Cross‑Turn Memory**
+CIL must not store state across turns.
+
+All lineage and metrics must come from COB/CST.
+
+CIL is a **stateless carrier**, not a tracker.
+
+---
+
+### **Rule 6 — No Modification of Upstream Values**
+CIL must not:
+
+- adjust scalar metrics,  
+- normalize lineage,  
+- prune fields,  
+- merge fields,  
+- reinterpret continuity,  
+- rewrite topology.
+
+CIL must surface upstream values **exactly as delivered**.
+
+---
+
+## **6.4 How CEx Reads TP Metadata**
+
+CEx reads:
+
+```yaml
+TP.metadata.cil_output
+```
+
+and consumes:
+
+- identity lineage  
+- clarifying lineage  
+- context lineage  
+- continuity lineage  
+- topology  
+- scalar metrics  
+- semantic residue  
+- next_context  
+
+CEx treats all fields as **read‑only**.
+
+CEx performs **no semantic inference**.
+
+CEx uses these fields to determine:
+
+- new conversation,  
+- specific conversation,  
+- ambiguous fallback.
+
+This behavior is defined in Section 4.3.
+
+---
+
+## **6.5 How COB Uses CEx Output for Next Update**
+
+After CEx writes:
+
+```yaml
+TP.metadata.cex_output
+```
+
+COB reads:
+
+- identity_layer_id  
+- continuity_status  
+- context_fields  
+- clarifying_fields  
+- provenance  
+- audit  
+
+COB uses these to update:
+
+- identity lineage  
+- clarifying lineage  
+- context lineage  
+- continuity lineage  
+- stability metrics  
+- collapse metrics  
+- topology  
+
+This closes the deterministic loop:
+
+```
+COB → CIL → CEx → COB → CIL → CEx → …
+```
+
+---
+
+## **6.6 Stability Guarantee**
+
+These placement rules ensure:
+
+- deterministic CEx behavior,  
+- stable TP metadata,  
+- replay‑safe lineage tracking,  
+- strict primitive boundaries,  
+- no drift in fieldnames or formats,  
+- no semantic leakage into CEx,  
+- no ambiguity in metadata consumption.
+
+This section completes the definition of the CIL → TP → CEx interface.
+
+---
+
+# **7. CEx Provenance and Audit Rules (Turn‑Level Accountability and Replay Safety)**
+
+CEx is a deterministic, bounded‑semantic primitive.  
+To maintain strict replay safety and ensure that downstream primitives (including COB/CST) can reconstruct conversation lineage without ambiguity, CEx must produce **provenance** and **audit** metadata for every turn.
+
+This section defines the rules governing how CEx generates, structures, and places provenance and audit information into TP.  
+These rules ensure that:
+
+- every decision made by CEx is traceable,  
+- every decision is reproducible under replay,  
+- COB/CST can update lineage deterministically,  
+- no semantic leakage occurs,  
+- and the pipeline maintains strict primitive boundaries.
+
+---
+
+## **7.1 Purpose of Provenance and Audit**
+
+Provenance and audit metadata serve three critical functions:
+
+### **A. Deterministic Replay**
+They allow the entire pipeline to reconstruct CEx’s decision path exactly, even months later.
+
+### **B. Lineage Update**
+COB/CST rely on CEx’s provenance to update identity, clarifying, context, and continuity lineage.
+
+### **C. Safety and Transparency**
+They ensure that CEx’s decisions are:
+
+- bounded‑semantic,  
+- non‑inferential,  
+- structurally justified,  
+- and free from semantic interpretation of IE tokens.
+
+Provenance is not a semantic explanation.  
+It is a **structural justification**.
+
+---
+
+## **7.2 Required Provenance Fields**
+
+CEx must write the following provenance fields into:
+
+```
+TP.metadata.cex_output.provenance
+```
+
+### **7.2.1 Decision Category**
+```
+decision_category: "new" | "specific" | "fallback"
+```
+
+### **7.2.2 Triggering Conditions**
+A structured record of which rule fired:
+
+```
+trigger_conditions:
+  identity_match: bool
+  ambiguity_level: "low" | "moderate" | "high"
+  collapse_level: "low" | "moderate" | "high"
+  continuity_signal: string
+  lineage_alignment: "aligned" | "diverged"
+```
+
+### **7.2.3 Metrics Snapshot**
+CEx must record the scalar metrics used:
+
+```
+metrics_snapshot:
+  primary_certainty: float
+  ambiguity_score: float
+  collapse_risk: float
+  stability_score: float
+  volatility_score: float
+  drift_score: float
+  lineage_confidence: float
+```
+
+These values must match exactly what CIL delivered.
+
+### **7.2.4 Lineage Snapshot**
+CEx must record the lineage state it consumed:
+
+```
+lineage_snapshot:
+  identity_layer_prev: int | null
+  continuity_prev: string
+  clarifying_fields_prev: { string: any }
+  context_fields_prev: { string: any }
+```
+
+This snapshot is used by COB to update lineage deterministically.
+
+---
+
+## **7.3 Required Audit Fields**
+
+Audit fields provide a minimal, bounded record of CEx’s internal actions.
+
+CEx must write:
+
+```
+TP.metadata.cex_output.audit
+```
+
+with:
+
+### **7.3.1 Rule Fired**
+```
+rule_fired: "rule_1_new" | "rule_2_specific" | "rule_3_fallback"
+```
+
+### **7.3.2 Identity Layer Selected**
+```
+identity_layer_id: int | null
+```
+
+### **7.3.3 Continuity Status Written**
+```
+continuity_status: "continue" | "reset" | "shift" | "new"
+```
+
+### **7.3.4 Context and Clarifying Fields Written**
+```
+context_fields: { string: any }
+clarifying_fields: { string: any }
+```
+
+### **7.3.5 Timestamp**
+A structural timestamp (not wall‑clock time):
+
+```
+turn_index: int
+```
+
+This ensures replay safety.
+
+---
+
+## **7.4 Provenance and Audit Placement Rules**
+
+### **Rule 1 — Exact Placement**
+All provenance and audit fields must be placed under:
+
+```
+TP.metadata.cex_output
+```
+
+### **Rule 2 — No Semantic Interpretation**
+CEx must not:
+
+- interpret IE tokens,  
+- infer meaning,  
+- derive topic or intent,  
+- rewrite upstream metadata.
+
+Provenance must reflect **structural conditions only**.
+
+### **Rule 3 — Full Record Every Turn**
+Even if values are null or unchanged, CEx must write:
+
+- decision_category  
+- trigger_conditions  
+- metrics_snapshot  
+- lineage_snapshot  
+- rule_fired  
+- identity_layer_id  
+- continuity_status  
+- context_fields  
+- clarifying_fields  
+- turn_index  
+
+### **Rule 4 — Deterministic Formatting**
+Fieldnames, ordering, and structure must remain stable across all turns.
+
+### **Rule 5 — No Cross‑Turn Memory**
+CEx must not store provenance or audit state internally.  
+All state must be reconstructed from TP.
+
+---
+
+## **7.5 How COB Uses Provenance and Audit**
+
+COB reads:
+
+```
+TP.metadata.cex_output.provenance
+TP.metadata.cex_output.audit
+```
+
+to update:
+
+- identity lineage,  
+- clarifying lineage,  
+- context lineage,  
+- continuity lineage,  
+- stability metrics,  
+- collapse metrics,  
+- topology.
+
+Provenance tells COB **why** CEx made its decision.  
+Audit tells COB **what** CEx wrote.
+
+Together, they allow COB to perform deterministic linear updates (as described in Section 5.2).
+
+---
+
+## **7.6 Stability Guarantee**
+
+These provenance and audit rules ensure:
+
+- deterministic CEx behavior,  
+- replay‑safe lineage reconstruction,  
+- strict primitive boundaries,  
+- no semantic leakage,  
+- stable TP metadata,  
+- predictable COB/CST updates.
+
+This section completes the definition of CEx’s turn‑level accountability model.
+
+---
+
+## **8. What COB Needs From OutBA to Perform Updates**
 
 COB requires **structural metadata** from OutBA (Output Behavior Analyzer):
 
@@ -691,13 +1123,13 @@ COB does **not** need global context.
 
 ---
 
-## **7. How CEx Determines Conversation Relevance**
+## **9. How CEx Determines Conversation Relevance**
 
 CEx uses the metadata delivered by CIL to determine:
 
 ---
 
-### **7.1 New Conversation**
+### **9.1 New Conversation**
 CEx declares **new conversation** when:
 
 - identity lineage has no match,  
@@ -710,7 +1142,7 @@ This is deterministic.
 
 ---
 
-### **7.2 Specific Conversation (1 of 10)**
+### **9.2 Specific Conversation (1 of 10)**
 CEx selects a specific conversation when:
 
 - identity lineage matches strongly,  
@@ -723,7 +1155,7 @@ This is deterministic.
 
 ---
 
-### **7.3 Ambiguous → Fallback**
+### **9.3 Ambiguous → Fallback**
 CEx performs fallback when:
 
 - identity lineage is weak,  
@@ -737,7 +1169,7 @@ Fallback selects:
 
 ---
 
-## **8. How CIL Loads General + Specific Conversation Description into TP**
+## **10. How CIL Loads General + Specific Conversation Description into TP**
 
 CIL must load into TP:
 
@@ -761,7 +1193,7 @@ This allows downstream primitives to operate deterministically.
 
 ---
 
-## **9. How COB Uses CEx Output for Next Update**
+## **11. How COB Uses CEx Output for Next Update**
 
 After CEx produces:
 
@@ -798,7 +1230,7 @@ This loop is:
 
 ---
 
-## **10. Summary**
+## **12. Summary**
 
 CEx requires CIL to deliver:
 
