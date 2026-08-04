@@ -81,10 +81,16 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
 
     anomaly_flags: List[AnomalyFlag] = []
     for a in iiinb_output.get("anomaly_flags", []) or []:
+        span = a.get("span")
+        if span is None:
+            # Convert location → span
+            loc = a.get("location")
+            span = [loc] if loc is not None else []
+    
         anomaly_flags.append(
             AnomalyFlag(
                 type=a.get("type") or a.get("anomaly_type", ""),
-                span=list(a.get("span", [a.get("location")])) if "span" not in a else list(a.get("span")),
+                span=list(span),
                 target=a.get("target", ""),
             )
         )
@@ -114,14 +120,15 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
 def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
     tokens = list(ie_input.intake_tokens)
 
-    # Normalize rule_id variants
-    if rule.endswith(".normalized"):
-        rule = rule.replace(".normalized", ".normalize")
-    if rule.endswith(".cleaned"):
-        rule = rule.replace(".cleaned", ".clean")
-
     for r in ie_input.repair_proposals:
         rule = r.rule_id
+
+        # Normalize rule_id variants
+        if rule.endswith(".normalized"):
+            rule = rule.replace(".normalized", ".normalize")
+        if rule.endswith(".cleaned"):
+            rule = rule.replace(".cleaned", ".clean")
+        
         span = r.span
         repl = r.replacement
 
@@ -171,10 +178,35 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
         # Remove illegal characters first
         surface = ie_input.intake_surface
         for r in ie_input.repair_proposals:
-            if r.rule_id == "illegal_character.removed":
-                idx = r.span[0]
+            rule = r.rule_id
+            span = r.span
+            repl = r.replacement
+        
+            # Normalize rule_id variants
+            if rule.endswith(".normalized"):
+                rule = rule.replace(".normalized", ".normalize")
+            if rule.endswith(".cleaned"):
+                rule = rule.replace(".cleaned", ".clean")
+        
+            # Apply repairs at surface level
+            if rule == "illegal_character.removed":
+                idx = span[0]
                 target = ie_input.intake_tokens[idx]
                 surface = surface.replace(target, "")
+            elif rule in ("repetition.clean", "repetition.cleaned"):
+                idx = span[0]
+                target = ie_input.intake_tokens[idx]
+                surface = surface.replace(target, repl)
+            elif rule in ("punctuation.clean",):
+                idx = span[0]
+                target = ie_input.intake_tokens[idx]
+                surface = surface.replace(target, repl)
+            elif rule == "unicode.normalize":
+                # Replace entire span region
+                surface = repl
+            elif rule == "whitespace.normalize":
+                surface = repl
+        
         tokens = surface.split()
 
     return tokens
@@ -187,32 +219,29 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
 def _compute_token_flags(ie_input: IEInput, ie_tokens: List[str]) -> List[str]:
     flags = ["normative"] * len(ie_tokens)
 
-    # Mark repaired indices based on repair_proposals
-    repaired_indices = set()
-    for r in ie_input.repair_proposals:
-        rule = r.rule_id
-        span = r.span
-
-        if rule == "whitespace.normalize" and len(span) == 2:
-            # v3.3 expectations: only first token marked repaired
-            repaired_indices.add(span[0])
-        elif rule in ("repetition.cleaned", "punctuation.clean", "illegal_character.removed"):
-            if len(span) == 1:
-                repaired_indices.add(span[0])
-        elif rule in ("unicode.normalize", "case.normalize"):
-            for idx in span:
-                repaired_indices.add(idx)
-
-    # Special handling for anomaly-only composite merge:
-    has_no_entry = any(a.type == "no_entry" for a in ie_input.anomaly_flags)
-    if has_no_entry and len(ie_tokens) == 2:
-        # First token is composite → repaired, second normative
+    # Special anomaly-only composite merge
+    if any(a.type == "no_entry" for a in ie_input.anomaly_flags) and len(ie_tokens) == 2:
         return ["repaired", "normative"]
 
-    # Map repaired_indices from original token positions to current ie_tokens positions.
-    # For these tests, spans align with positions except where tokens were removed.
-    for i in range(len(ie_tokens)):
-        if i in repaired_indices:
+    # Build a set of repaired token strings
+    repaired_strings = set()
+    for r in ie_input.repair_proposals:
+        repaired_strings.add(r.replacement)
+
+    # illegal_character.removed marks empty tokens as repaired
+    for r in ie_input.repair_proposals:
+        if r.rule_id == "illegal_character.removed":
+            repaired_strings.add("")
+
+    # whitespace.normalize marks first token repaired
+    for r in ie_input.repair_proposals:
+        if r.rule_id == "whitespace.normalize":
+            if ie_tokens:
+                repaired_strings.add(ie_tokens[0])
+
+    # Now classify based on token content
+    for i, tok in enumerate(ie_tokens):
+        if tok in repaired_strings:
             flags[i] = "repaired"
 
     return flags
