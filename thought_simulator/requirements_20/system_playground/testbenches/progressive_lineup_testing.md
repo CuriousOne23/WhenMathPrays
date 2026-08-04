@@ -65,6 +65,7 @@ There are **two modes**, and **every primitive** supports both.
 - The primitive is executed.  
 - Actual output is compared to expected output.  
 - PASS/FAIL is determined by exact equality.
+- In testbench mode, the rulechecker may optionally run for diagnostic purposes; however, PASS/FAIL is determined solely by the testbench YAML.
 
 ### **Passthrough Behavior:**  
 If `use_<primitive> = false` in `run.py`:
