@@ -1,34 +1,25 @@
 # ============================================================
-# CEx Testbench — Strict Deterministic Mode (Aligned with cex_expectations_of_cil.md)
+# CEx Testbench — Deterministic Mode (Aligned with cex_expectations_of_cil.md)
 # ============================================================
-# PASS/FAIL is determined solely by expected outputs.
-# Rulechecker may run for diagnostics but does not affect PASS/FAIL.
-# ============================================================
-
-version: "1.1"
+version: "2.0"
 primitive: "CEx"
 mode: "testbench"
 
 tests:
 
-  # ----------------------------------------------------------
-  # Test 1 — Specific Conversation (Strong Identity Match)
-  # ----------------------------------------------------------
-  - id: "cex_specific_conversation_identity_match"
-    description: "CEx selects a specific conversation when identity lineage matches and ambiguity/collapse are low."
+  # ===========================================================
+  # 1. SPECIFIC CONVERSATION — Strong Identity Match
+  # ===========================================================
+  - id: "cex_specific_identity_strong"
+    description: "Identity lineage matches strongly; ambiguity and collapse low."
 
     ie_input:
       intake:
         ie_tokens: ["hello", "world"]
         token_flags: ["normative", "normative"]
         normalized_text: "hello world"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
       error: null
 
     cil_input:
@@ -39,26 +30,29 @@ tests:
         identity_layer_recency: { 3: 0 }
         identity_layer_density: { 3: 1.0 }
         identity_layer_switch_count: 0
+
       clarifying:
-        clarifying_fields_prev:
-          topic: "greeting"
+        clarifying_fields_prev: { topic: "greeting" }
         clarifying_fields_lineage:
-          - topic: "greeting"
+          - { topic: "greeting" }
         clarifying_field_stability: 1.0
+
       context:
-        context_fields_prev:
-          topic: "greeting"
+        context_fields_prev: { topic: "greeting" }
         context_fields_lineage:
-          - topic: "greeting"
+          - { topic: "greeting" }
         context_shift_count: 0
+
       continuity:
         continuity_prev: "continue"
         continuity_lineage: ["continue"]
         continuity_break_count: 0
+
       topology:
         conversation_id: "conv_001"
         conversation_topology: "linear"
         conversation_length: 3
+
       metrics:
         primary_certainty: 0.92
         ambiguity_score: 0.05
@@ -67,10 +61,12 @@ tests:
         volatility_score: 0.0
         drift_score: 0.0
         lineage_confidence: 0.95
+
       semantic_residue:
         last_topic: "greeting"
         last_intent: "inform"
         last_register: "casual"
+
       next_context:
         topic: "greeting"
         stance: "neutral"
@@ -85,6 +81,9 @@ tests:
         importance: 1
 
     expected_ce_output:
+      identity_layer_id: 3
+      continuity_status: "continue"
+
       context_fields:
         topic: "greeting"
         stance: "neutral"
@@ -97,40 +96,153 @@ tests:
         coherence: "stable"
         shift_required: false
         importance: 1
+
       clarifying_fields:
         topic: "greeting"
-      identity_layer_id: 3
 
-      metadata:
+      provenance:
+        decision_category: "specific"
+        trigger_conditions:
+          identity_match: true
+          ambiguity_level: "low"
+          collapse_level: "low"
+          continuity_signal: "continue"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_2_specific"
+        identity_layer_id: 3
         continuity_status: "continue"
-        context_provenance:
-          - origin: "CEx"
-            last_update: "CEx"
-        extraction_audit:
-          - kind: "rule_2_specific"
-            reason: "strong_identity_match_low_ambiguity_low_collapse"
+        turn_index: 1
 
-      version_tag: "cex_v3.1"
+      version_tag: "cex_v3.2"
 
 
-  # ----------------------------------------------------------
-  # Test 2 — Fallback Conversation (Ambiguous Case)
-  # ----------------------------------------------------------
-  - id: "cex_ambiguous_fallback"
-    description: "CEx falls back to most recent stable conversation when identity match is weak and ambiguity/collapse are moderate."
+  # ===========================================================
+  # 2. SPECIFIC CONVERSATION — Identity Match but Slight Drift
+  # ===========================================================
+  - id: "cex_specific_identity_minor_drift"
+    description: "Identity matches but clarifying/context lineage shows minor drift."
+
+    ie_input:
+      intake:
+        ie_tokens: ["hi"]
+        token_flags: ["normative"]
+        normalized_text: "hi"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      identity:
+        primary_layer_id: 3
+        identity_layer_prev: 3
+        identity_layer_lineage: [3, 3, 3]
+        identity_layer_recency: { 3: 0 }
+        identity_layer_density: { 3: 1.0 }
+        identity_layer_switch_count: 0
+
+      clarifying:
+        clarifying_fields_prev: { topic: "greeting", mood: "friendly" }
+        clarifying_fields_lineage:
+          - { topic: "greeting", mood: "neutral" }
+        clarifying_field_stability: 0.8
+
+      context:
+        context_fields_prev: { topic: "greeting" }
+        context_fields_lineage:
+          - { topic: "greeting" }
+        context_shift_count: 0
+
+      continuity:
+        continuity_prev: "continue"
+        continuity_lineage: ["continue"]
+        continuity_break_count: 0
+
+      topology:
+        conversation_id: "conv_001"
+        conversation_topology: "linear"
+        conversation_length: 4
+
+      metrics:
+        primary_certainty: 0.85
+        ambiguity_score: 0.1
+        collapse_risk: 0.05
+        stability_score: 0.9
+        volatility_score: 0.0
+        drift_score: 0.1
+        lineage_confidence: 0.85
+
+      semantic_residue:
+        last_topic: "greeting"
+        last_intent: "inform"
+        last_register: "casual"
+
+      next_context:
+        topic: "greeting"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 1
+
+    expected_ce_output:
+      identity_layer_id: 3
+      continuity_status: "continue"
+
+      context_fields:
+        topic: "greeting"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 1
+
+      clarifying_fields:
+        topic: "greeting"
+        mood: "friendly"
+
+      provenance:
+        decision_category: "specific"
+        trigger_conditions:
+          identity_match: true
+          ambiguity_level: "low"
+          collapse_level: "low"
+          continuity_signal: "continue"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_2_specific"
+        identity_layer_id: 3
+        continuity_status: "continue"
+        turn_index: 2
+
+      version_tag: "cex_v3.2"
+
+
+  # ===========================================================
+  # 3. FALLBACK — Weak Identity Match, Moderate Ambiguity
+  # ===========================================================
+  - id: "cex_fallback_moderate_ambiguity"
+    description: "Identity weak, ambiguity moderate, collapse moderate → fallback."
 
     ie_input:
       intake:
         ie_tokens: ["status", "update"]
         token_flags: ["normative", "normative"]
         normalized_text: "status update"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
       error: null
 
     cil_input:
@@ -141,26 +253,29 @@ tests:
         identity_layer_recency: { 7: 0, 5: 2 }
         identity_layer_density: { 7: 0.67, 5: 0.33 }
         identity_layer_switch_count: 2
+
       clarifying:
-        clarifying_fields_prev:
-          topic: "system"
+        clarifying_fields_prev: { topic: "system" }
         clarifying_fields_lineage:
-          - topic: "system"
+          - { topic: "system" }
         clarifying_field_stability: 0.8
+
       context:
-        context_fields_prev:
-          topic: "system"
+        context_fields_prev: { topic: "system" }
         context_fields_lineage:
-          - topic: "system"
+          - { topic: "system" }
         context_shift_count: 1
+
       continuity:
         continuity_prev: "unknown"
         continuity_lineage: ["continue", "unknown"]
         continuity_break_count: 0
+
       topology:
         conversation_id: "conv_002"
         conversation_topology: "branched"
         conversation_length: 5
+
       metrics:
         primary_certainty: 0.4
         ambiguity_score: 0.6
@@ -169,10 +284,12 @@ tests:
         volatility_score: 0.2
         drift_score: 0.4
         lineage_confidence: 0.6
+
       semantic_residue:
         last_topic: "system"
         last_intent: "inform"
         last_register: "formal"
+
       next_context:
         topic: "system"
         stance: "neutral"
@@ -187,6 +304,9 @@ tests:
         importance: 2
 
     expected_ce_output:
+      identity_layer_id: 7
+      continuity_status: "continue"
+
       context_fields:
         topic: "system"
         stance: "neutral"
@@ -199,40 +319,152 @@ tests:
         coherence: "stable"
         shift_required: false
         importance: 2
+
       clarifying_fields:
         topic: "system"
-      identity_layer_id: 7
 
-      metadata:
+      provenance:
+        decision_category: "fallback"
+        trigger_conditions:
+          identity_match: false
+          ambiguity_level: "moderate"
+          collapse_level: "moderate"
+          continuity_signal: "unknown"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_3_fallback"
+        identity_layer_id: 7
         continuity_status: "continue"
-        context_provenance:
-          - origin: "CEx"
-            last_update: "CEx"
-        extraction_audit:
-          - kind: "rule_3_fallback"
-            reason: "weak_identity_match_moderate_ambiguity_moderate_collapse"
+        turn_index: 3
 
-      version_tag: "cex_v3.1"
+      version_tag: "cex_v3.2"
 
 
-  # ----------------------------------------------------------
-  # Test 3 — New Conversation Detection
-  # ----------------------------------------------------------
-  - id: "cex_new_conversation_detection"
-    description: "CEx declares a new conversation when identity lineage has no match, ambiguity and collapse are high, and continuity_prev is reset."
+  # ===========================================================
+  # 4. FALLBACK — Identity Switches Too Frequent
+  # ===========================================================
+  - id: "cex_fallback_high_switch_count"
+    description: "Identity switches too often → fallback."
+
+    ie_input:
+      intake:
+        ie_tokens: ["check", "logs"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "check logs"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      identity:
+        primary_layer_id: null
+        identity_layer_prev: 5
+        identity_layer_lineage: [3, 5, 2, 5]
+        identity_layer_recency: { 5: 0, 3: 1, 2: 2 }
+        identity_layer_density: { 5: 0.5, 3: 0.25, 2: 0.25 }
+        identity_layer_switch_count: 3
+
+      clarifying:
+        clarifying_fields_prev: { topic: "system" }
+        clarifying_fields_lineage:
+          - { topic: "system" }
+        clarifying_field_stability: 0.7
+
+      context:
+        context_fields_prev: { topic: "system" }
+        context_fields_lineage:
+          - { topic: "system" }
+        context_shift_count: 2
+
+      continuity:
+        continuity_prev: "shift"
+        continuity_lineage: ["continue", "shift"]
+        continuity_break_count: 0
+
+      topology:
+        conversation_id: "conv_003"
+        conversation_topology: "branched"
+        conversation_length: 7
+
+      metrics:
+        primary_certainty: 0.3
+        ambiguity_score: 0.55
+        collapse_risk: 0.45
+        stability_score: 0.4
+        volatility_score: 0.3
+        drift_score: 0.35
+        lineage_confidence: 0.5
+
+      semantic_residue:
+        last_topic: "system"
+        last_intent: "inform"
+        last_register: "formal"
+
+      next_context:
+        topic: "system"
+        stance: "neutral"
+        intent: "inform"
+        register: "formal"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+
+    expected_ce_output:
+      identity_layer_id: 5
+      continuity_status: "continue"
+
+      context_fields:
+        topic: "system"
+        stance: "neutral"
+        intent: "inform"
+        register: "formal"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+
+      clarifying_fields:
+        topic: "system"
+
+      provenance:
+        decision_category: "fallback"
+        trigger_conditions:
+          identity_match: false
+          ambiguity_level: "moderate"
+          collapse_level: "moderate"
+          continuity_signal: "shift"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_3_fallback"
+        identity_layer_id: 5
+        continuity_status: "continue"
+        turn_index: 4
+
+      version_tag: "cex_v3.2"
+
+
+  # ===========================================================
+  # 5. NEW CONVERSATION — Identity Mismatch + Reset
+  # ===========================================================
+  - id: "cex_new_conversation_reset"
+    description: "Identity mismatch + high ambiguity + reset continuity → new conversation."
 
     ie_input:
       intake:
         ie_tokens: ["start", "fresh"]
         token_flags: ["normative", "normative"]
         normalized_text: "start fresh"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
       error: null
 
     cil_input:
@@ -243,22 +475,27 @@ tests:
         identity_layer_recency: {}
         identity_layer_density: {}
         identity_layer_switch_count: 0
+
       clarifying:
         clarifying_fields_prev: {}
         clarifying_fields_lineage: []
         clarifying_field_stability: 0.0
+
       context:
         context_fields_prev: {}
         context_fields_lineage: []
         context_shift_count: 0
+
       continuity:
         continuity_prev: "reset"
         continuity_lineage: ["reset"]
         continuity_break_count: 1
+
       topology:
-        conversation_id: "conv_003"
+        conversation_id: "conv_004"
         conversation_topology: "reset-heavy"
         conversation_length: 0
+
       metrics:
         primary_certainty: 0.1
         ambiguity_score: 0.95
@@ -267,10 +504,12 @@ tests:
         volatility_score: 0.0
         drift_score: 0.0
         lineage_confidence: 0.0
+
       semantic_residue:
         last_topic: null
         last_intent: null
         last_register: null
+
       next_context:
         topic: "new"
         stance: "neutral"
@@ -285,301 +524,67 @@ tests:
         importance: 1
 
     expected_ce_output:
-      context_fields:
-        topic: "new"
-        stance: "neutral"
-        intent: "begin"
-        register: "casual"
-        politeness: "normal"
-        epistemic_shading: "none"
-        continuity: "reset"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: true
-        importance: 1
-      clarifying_fields: {}
       identity_layer_id: "new_conversation"
+      continuity_status: "new"
 
-      metadata:
-        continuity_status: "new"
-        context_provenance:
-          - origin: "CEx"
-            last_update: "CEx"
-        extraction_audit:
-          - kind: "rule_1_new"
-            reason: "identity_mismatch_high_ambiguity_high_collapse_reset_continuity"
-
-      version_tag: "cex_v3.1"
-
-
-  # ----------------------------------------------------------
-  # Test 4 — Clarifying Metadata Extraction
-  # ----------------------------------------------------------
-  - id: "cex_clarifying_metadata_extraction"
-    description: "CEx carries clarifying_fields from CIL into its output deterministically."
-
-    ie_input:
-      intake:
-        ie_tokens: ["please", "help"]
-        token_flags: ["normative", "normative"]
-        normalized_text: "please help"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
-      error: null
-
-    cil_input:
-      identity:
-        primary_layer_id: 4
-        identity_layer_prev: 4
-        identity_layer_lineage: [4, 4]
-        identity_layer_recency: { 4: 0 }
-        identity_layer_density: { 4: 1.0 }
-        identity_layer_switch_count: 0
-      clarifying:
-        clarifying_fields_prev:
-          topic: "assistance"
-          urgency: "medium"
-        clarifying_fields_lineage:
-          - topic: "assistance"
-            urgency: "medium"
-        clarifying_field_stability: 1.0
-      context:
-        context_fields_prev:
-          topic: "assistance"
-        context_fields_lineage:
-          - topic: "assistance"
-        context_shift_count: 0
-      continuity:
-        continuity_prev: "continue"
-        continuity_lineage: ["continue"]
-        continuity_break_count: 0
-      topology:
-        conversation_id: "conv_004"
-        conversation_topology: "linear"
-        conversation_length: 2
-      metrics:
-        primary_certainty: 0.88
-        ambiguity_score: 0.1
-        collapse_risk: 0.03
-        stability_score: 0.9
-        volatility_score: 0.0
-        drift_score: 0.0
-        lineage_confidence: 0.9
-      semantic_residue:
-        last_topic: "assistance"
-        last_intent: "request"
-        last_register: "polite"
-      next_context:
-        topic: "assistance"
-        stance: "neutral"
-        intent: "request"
-        register: "polite"
-        politeness: "high"
-        epistemic_shading: "none"
-        continuity: "continue"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: false
-        importance: 3
-
-    expected_ce_output:
       context_fields:
-        topic: "assistance"
+        topic: "new"
         stance: "neutral"
-        intent: "request"
-        register: "polite"
-        politeness: "high"
-        epistemic_shading: "none"
-        continuity: "continue"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: false
-        importance: 3
-      clarifying_fields:
-        topic: "assistance"
-        urgency: "medium"
-      identity_layer_id: 4
-
-      metadata:
-        continuity_status: "continue"
-        context_provenance:
-          - origin: "CEx"
-            last_update: "CEx"
-        extraction_audit: []
-
-      version_tag: "cex_v3.1"
-
-
-  # ----------------------------------------------------------
-  # Test 5 — Passthrough Case (use_cex = false)
-  # ----------------------------------------------------------
-  - id: "cex_passthrough"
-    description: "When passthrough=true, CEx output equals input (no modification)."
-
-    passthrough: true
-
-    ie_input:
-      intake:
-        ie_tokens: ["noop"]
-        token_flags: ["normative"]
-        normalized_text: "noop"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
-      error: null
-
-    cil_input:
-      identity:
-        primary_layer_id: 1
-        identity_layer_prev: 1
-        identity_layer_lineage: [1]
-        identity_layer_recency: { 1: 0 }
-        identity_layer_density: { 1: 1.0 }
-        identity_layer_switch_count: 0
-      clarifying:
-        clarifying_fields_prev: {}
-        clarifying_fields_lineage: []
-        clarifying_field_stability: 0.0
-      context:
-        context_fields_prev:
-          topic: "noop"
-        context_fields_lineage:
-          - topic: "noop"
-        context_shift_count: 0
-      continuity:
-        continuity_prev: "continue"
-        continuity_lineage: ["continue"]
-        continuity_break_count: 0
-      topology:
-        conversation_id: "conv_005"
-        conversation_topology: "linear"
-        conversation_length: 1
-      metrics:
-        primary_certainty: 0.99
-        ambiguity_score: 0.01
-        collapse_risk: 0.0
-        stability_score: 1.0
-        volatility_score: 0.0
-        drift_score: 0.0
-        lineage_confidence: 1.0
-      semantic_residue:
-        last_topic: "noop"
-        last_intent: "none"
-        last_register: "none"
-      next_context:
-        topic: "noop"
-        stance: "neutral"
-        intent: "none"
-        register: "none"
-        politeness: "none"
-        epistemic_shading: "none"
-        continuity: "continue"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: false
-        importance: 0
-
-    expected_ce_output:
-      passthrough: true
-
-
-  # ----------------------------------------------------------
-  # Test 6 — Malformed CIL (Skip Condition)
-  # ----------------------------------------------------------
-  - id: "cex_malformed_cil"
-    description: "CEx extracts only valid fields when CIL is malformed and marks audit accordingly."
-
-    ie_input:
-      intake:
-        ie_tokens: ["check", "status"]
-        token_flags: ["normative", "normative"]
-        normalized_text: "check status"
-      structure:
-        tags: []
-        spans: []
-        markup: []
-      metadata:
-        repair_annotations: []
-        replay: {}
-      error: null
-
-    cil_input:
-      identity: null
-      clarifying:
-        clarifying_fields_prev: "MALFORMED"
-        clarifying_fields_lineage: []
-        clarifying_field_stability: 0.0
-      context:
-        context_fields_prev:
-          topic: "status"
-        context_fields_lineage:
-          - topic: "status"
-        context_shift_count: 0
-      continuity:
-        continuity_prev: "unknown"
-        continuity_lineage: ["unknown"]
-        continuity_break_count: 0
-      topology:
-        conversation_id: "conv_006"
-        conversation_topology: "linear"
-        conversation_length: 1
-      metrics:
-        primary_certainty: 0.3
-        ambiguity_score: 0.7
-        collapse_risk: 0.4
-        stability_score: 0.5
-        volatility_score: 0.1
-        drift_score: 0.2
-        lineage_confidence: 0.5
-      semantic_residue:
-        last_topic: "status"
-        last_intent: null
-        last_register: null
-      next_context:
-        topic: "status"
-        stance: "neutral"
-        intent: "inform"
-        register: "formal"
+        intent: "begin"
+        register: "casual"
         politeness: "normal"
         epistemic_shading: "none"
-        continuity: "continue"
+        continuity: "reset"
         direction: "forward"
         coherence: "stable"
-        shift_required: false
-        importance: 2
+        shift_required: true
+        importance: 1
 
-    expected_ce_output:
-      context_fields:
-        topic: "status"
-        stance: "neutral"
-        intent: "inform"
-        register: "formal"
-        politeness: "normal"
-        epistemic_shading: "none"
-        continuity: "continue"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: false
-        importance: 2
       clarifying_fields: {}
-      identity_layer_id: "fallback"
 
-      metadata:
-        continuity_status: "undetermined"
-        context_provenance:
-          - origin: "CEx"
-            last_update: "CEx"
-        extraction_audit:
-          - kind: "malformed_input"
-            field: "clarifying_fields_prev"
+      provenance:
+        decision_category: "new"
+        trigger_conditions:
+          identity_match: false
+          ambiguity_level: "high"
+          collapse_level: "high"
+          continuity_signal: "reset"
+          lineage_alignment: "diverged"
 
-      version_tag: "cex_v3.1"
+      audit:
+        rule_fired: "rule_1_new"
+        identity_layer_id: "new_conversation"
+        continuity_status: "new"
+        turn_index: 5
+
+      version_tag: "cex_v3.2"
+
+
+  # ===========================================================
+  # 6. NEW CONVERSATION — High Drift + High Volatility
+  # ===========================================================
+  - id: "cex_new_conversation_high_drift"
+    description: "High drift + high volatility + identity mismatch → new conversation."
+
+    ie_input:
+      intake:
+        ie_tokens: ["restart"]
+        token_flags: ["normative"]
+        normalized_text: "restart"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      identity:
+        primary_layer_id: null
+        identity_layer_prev: 9
+        identity_layer_lineage: [2, 5, 7]
+        identity_layer_recency: { 2: 2, 5: 1, 7: 0 }
+        identity_layer_density: { 2: 0.33, 5: 0.33, 7: 0.33 }
+        identity_layer_switch_count: 3
+
+      clarifying:
+        clarifying_fields_prev: { topic: "old" }
+        clarifying_fields_lineage:
+          - { topic: "old" }
