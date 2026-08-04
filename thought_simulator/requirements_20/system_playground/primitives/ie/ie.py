@@ -83,8 +83,8 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
     for a in iiinb_output.get("anomaly_flags", []) or []:
         anomaly_flags.append(
             AnomalyFlag(
-                type=a.get("type", ""),
-                span=list(a.get("span", [])),
+                type=a.get("type") or a.get("anomaly_type", ""),
+                span=list(a.get("span", [a.get("location")])) if "span" not in a else list(a.get("span")),
                 target=a.get("target", ""),
             )
         )
@@ -113,6 +113,12 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
 
 def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
     tokens = list(ie_input.intake_tokens)
+
+    # Normalize rule_id variants
+    if rule.endswith(".normalized"):
+        rule = rule.replace(".normalized", ".normalize")
+    if rule.endswith(".cleaned"):
+        rule = rule.replace(".cleaned", ".clean")
 
     for r in ie_input.repair_proposals:
         rule = r.rule_id
@@ -162,14 +168,13 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
     # If we have no_entry anomalies and illegal_character.removed, reconstruct from surface.
     has_no_entry = any(a.type == "no_entry" for a in ie_input.anomaly_flags)
     if has_no_entry:
-        # Reconstruct tokens from normalized surface after illegal character removal.
+        # Remove illegal characters first
         surface = ie_input.intake_surface
         for r in ie_input.repair_proposals:
-            if r.rule_id == "illegal_character.removed" and len(r.span) == 1:
+            if r.rule_id == "illegal_character.removed":
                 idx = r.span[0]
-                if 0 <= idx < len(ie_input.intake_tokens):
-                    target = ie_input.intake_tokens[idx]
-                    surface = surface.replace(target, r.replacement)
+                target = ie_input.intake_tokens[idx]
+                surface = surface.replace(target, "")
         tokens = surface.split()
 
     return tokens
