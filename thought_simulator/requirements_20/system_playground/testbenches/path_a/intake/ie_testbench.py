@@ -193,12 +193,30 @@ def main():
         print(f"Desc: {description}")
         print(f"Result: {status}")
 
+        print(f"Result: {status}")
+        
         if status == "PASS":
             passed += 1
+        
+            # ------------------------------------------------------
+            # NEW: Detailed PASS output
+            # ------------------------------------------------------
+            print("  PASS DETAILS:")
+            print("    intake.ie_tokens:      ", actual["intake"].get("ie_tokens"))
+            print("    intake.token_flags:    ", actual["intake"].get("token_flags"))
+            print("    intake.normalized_text:", actual["intake"].get("normalized_text"))
+            print("    structure.tags:        ", actual["structure"].get("tags"))
+            print("    metadata.repair_annotations:")
+            for ann in actual["metadata"].get("repair_annotations", []):
+                print("      -", ann)
+            print("    metadata.ruleset_id:   ", actual["metadata"].get("ruleset_id"))
+            print("    error:                 ", actual.get("error"))
+        
         else:
             failed += 1
+            print("  FAIL DETAILS:")
             for d in diffs:
-                print(f"  - {d}")
+                print(f"    - {d}")
 
     print("\nSummary")
     print("-------")
