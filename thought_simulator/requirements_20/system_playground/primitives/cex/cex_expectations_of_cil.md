@@ -259,6 +259,159 @@ It forms the backbone of the CIL → CEx interface.
 
 ---
 
+# **4.3 CEx Decision Algorithm (Deterministic, Bounded‑Semantic, Non‑Inferential)**
+
+CEx determines conversation relevance using **only** the structured metadata delivered by CIL.  
+It performs **no semantic inference**, **no meaning extraction**, and **no global reasoning**.  
+All decisions are made through **deterministic evaluation** of lineage, continuity, and scalar metrics surfaced by CIL.
+
+This section defines the **exact decision algorithm** CEx uses to classify the present turn into one of three categories:
+
+- **new conversation**,  
+- **specific conversation (1 of N)**,  
+- **ambiguous → fallback**.
+
+The algorithm is intentionally simple, bounded, and replay‑safe, consistent with the architectural constraints described earlier in the document (e.g., CEx must rely entirely on structured metadata delivered by CIL, as stated in section 2.
+
+---
+
+## **4.3.1 Inputs to the Decision Algorithm**
+
+CEx consumes the following fields from `cil_output`:
+
+- identity lineage (identity_layer_prev, identity_layer_lineage) 
+- clarifying lineage (clarifying_fields_prev, clarifying_fields_lineage)  
+- context lineage (context_fields_prev, context_fields_lineage)  
+- continuity lineage (continuity_prev, continuity_lineage)  
+- topology (conversation_id, conversation_topology)  
+- scalar metrics (primary_certainty, ambiguity_score, collapse_risk, stability_score, volatility_score, drift_score)   
+- semantic residue (bounded structural hints)  
+- next_context (projected next‑turn metadata)
+
+These fields form the **complete decision substrate**.  
+CEx does not consult IE tokens or any semantic content.
+
+---
+
+## **4.3.2 Decision Categories**
+
+CEx must classify the present turn into exactly one of:
+
+### **A. New Conversation**  
+### **B. Specific Conversation (1 of N)**  
+### **C. Ambiguous → Fallback**
+
+These categories correspond directly to the behaviors described in section 7 of your document (e.g., “CEx declares new conversation when identity lineage has no match…”.
+
+---
+
+## **4.3.3 Deterministic Decision Rules**
+
+CEx evaluates the following conditions **in order**.  
+The first satisfied condition determines the classification.
+
+---
+
+### **Rule 1 — New Conversation**
+
+CEx declares a **new conversation** when **all** of the following are true:
+
+1. **Identity lineage mismatch**  
+   - `identity_layer_prev` is null, or  
+   - `identity_layer_lineage` contains no stable match.
+
+2. **High ambiguity**  
+   - `ambiguity_score` ≥ threshold_high.
+
+3. **High collapse risk**  
+   - `collapse_risk` ≥ threshold_high.
+
+4. **Continuity reset**  
+   - `continuity_prev == "reset"`.
+
+5. **Clarifying/context divergence**  
+   - lineage comparison indicates drift beyond threshold.
+
+These conditions reflect the description in section 7.1 (“identity lineage has no match… continuity_prev indicates reset… clarifying/context lineage diverge significantly”).
+
+If all conditions hold → **new conversation**.
+
+---
+
+### **Rule 2 — Specific Conversation (1 of N)**
+
+CEx selects a **specific conversation** when **all** of the following are true:
+
+1. **Strong identity lineage match**  
+   - `identity_layer_prev` matches a stable element of `identity_layer_lineage`.
+
+2. **Low ambiguity**  
+   - `ambiguity_score` ≤ threshold_low.
+
+3. **Low collapse risk**  
+   - `collapse_risk` ≤ threshold_low.
+
+4. **Continuity continuation**  
+   - `continuity_prev == "continue"`.
+
+5. **Clarifying/context alignment**  
+   - lineage comparison indicates stability.
+
+These conditions reflect section 7.2 (“identity lineage matches strongly… ambiguity is low… continuity_prev indicates continuation… clarifying/context lineage align”).
+
+If all conditions hold → **specific conversation**.
+
+---
+
+### **Rule 3 — Ambiguous → Fallback**
+
+If neither Rule 1 nor Rule 2 is satisfied, CEx performs **fallback**.
+
+Fallback is selected when:
+
+1. **Weak identity lineage match**, and  
+2. **Moderate ambiguity**, and  
+3. **Moderate collapse risk**, and  
+4. **Continuity_prev is unclear** (“unknown” or “shift”).
+
+These conditions reflect section 7.3 (“identity lineage is weak… ambiguity is moderate… continuity_prev is unclear”).
+
+Fallback selects:
+
+> **the most recent conversation with stable lineage.**
+
+---
+
+## **4.3.4 Deterministic Output Fields**
+
+After classification, CEx writes:
+
+- `identity_layer_id`  
+- `continuity_status`  
+- `context_fields`  
+- `clarifying_fields`  
+- provenance  
+- audit  
+
+These outputs feed COB for the next update cycle, as described in section 9 (“COB uses these to update identity lineage… continuity lineage… stability signals…”).
+
+---
+
+## **4.3.5 Replay Safety**
+
+The decision algorithm is:
+
+- deterministic,  
+- bounded‑semantic,  
+- non‑inferential,  
+- stable under replay,  
+- dependent only on CIL metadata,  
+- independent of IE tokens.
+
+This ensures the closed loop described in section 9 (“COB → CIL → CEx → COB → …”) remains stable and replay‑safe.
+
+---
+
 ## **5. How COB/CST Compute These Metrics**
 
 COB/CST must compute all metrics using **stateless linear updates**, meaning:
