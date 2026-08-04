@@ -1,12 +1,6 @@
 # ============================================================
-# IE Tests-To-Run — Execution Control for IE Testbench (v3.1)
+# IE Tests-To-Run — Execution Control for IE Testbench (v3.3)
 # ============================================================
-
-# ------------------------------------------------------------
-# Pipeline Configuration Flags
-# These flags are read by run.py to determine which upstream
-# primitives are enabled and which tests IE is allowed to run.
-# ------------------------------------------------------------
 
 pipeline:
   use_inb: true
@@ -17,93 +11,53 @@ pipeline:
   use_isc: false
   use_tpu: false
 
-# ------------------------------------------------------------
-# Supported / Unsupported Test Logic
-# ------------------------------------------------------------
-# IE tests are supported only when:
-#   - IIInB provides repair_proposals
-#   - IIInB provides anomaly_flags
-#   - IIInB provides tokens
-#   - IE is enabled
-#
-# Structural tests are supported only when:
-#   - IIInB provides structure.tags
-#
-# Token preservation tests are supported only when:
-#   - IIInB provides tokens
-#
-# Replay determinism tests are always supported when IE is enabled.
-#
-# ------------------------------------------------------------
-
 tests_to_run:
 
-  # ----------------------------------------------------------
-  # 1. Repair‑Only Case (Supported)
-  # ----------------------------------------------------------
-  - id: ie_repair_only_whitespace
+  - id: ie_basic_repair
     enabled: true
-    reason: "IIInB provides repairs; IE enabled."
+    reason: "Whitespace normalization repair; IE enabled."
 
-  # ----------------------------------------------------------
-  # 2. Multiple Repairs (Supported)
-  # ----------------------------------------------------------
   - id: ie_multiple_repairs
     enabled: true
-    reason: "IIInB provides multiple repairs; IE enabled."
+    reason: "Multiple deterministic repairs; IE enabled."
 
-  # ----------------------------------------------------------
-  # 3. Anomaly‑Only Case (Supported)
-  # ----------------------------------------------------------
   - id: ie_anomaly_only
     enabled: true
-    reason: "IIInB provides anomaly_flags; IE enabled."
+    reason: "Anomaly-only case; IE enabled."
 
-  # ----------------------------------------------------------
-  # 4. Mixed Repairs + Anomaly (Supported)
-  # ----------------------------------------------------------
-  - id: ie_mixed_repairs_anomaly
+  - id: ie_mixed_case
     enabled: true
-    reason: "IIInB provides repairs and anomalies; IE enabled."
+    reason: "Mixed repairs + anomaly; IE enabled."
 
-  # ----------------------------------------------------------
-  # 5. Structural Tags Case
-  # ----------------------------------------------------------
-  - id: ie_structural_tags
+  - id: ie_structural_preservation
     enabled: true
     reason: "IIInB provides structure.tags; IE preserves structure."
 
-  # ----------------------------------------------------------
-  # 6. Token Preservation Case
-  # ----------------------------------------------------------
-  - id: ie_token_preservation
+  - id: ie_token_boundary
     enabled: true
-    reason: "IIInB provides tokens; IE must preserve boundaries."
+    reason: "Token preservation case; IE must preserve boundaries."
 
-  # ----------------------------------------------------------
-  # 7. Replay Determinism Case
-  # ----------------------------------------------------------
-  - id: ie_replay_determinism
+  - id: ie_unicode_normalization
     enabled: true
-    reason: "Replay determinism always supported when IE enabled."
+    reason: "Unicode normalization repair; IE enabled."
 
-  # ----------------------------------------------------------
-  # 8. Complex Mixed Case
-  # ----------------------------------------------------------
   - id: ie_complex_mixed
     enabled: true
-    reason: "IIInB provides repairs and anomalies; IE enabled."
+    reason: "Complex mixed repairs + anomalies; IE enabled."
 
-# ------------------------------------------------------------
-# Summary
-# ------------------------------------------------------------
+  - id: ie_error_invalid_tokens
+    enabled: true
+    reason: "Invalid token sequence; IE must emit deterministic error."
+
+  - id: ie_error_missing_fields
+    enabled: true
+    reason: "Missing required IIInB fields; IE must emit deterministic error."
+
 summary:
-  total_tests: 8
-  enabled_tests: 8
+  total_tests: 10
+  enabled_tests: 10
   disabled_tests: 0
   notes:
-    - "All IE tests supported because IIInB is enabled and provides required fields."
-    - "Structural tests supported because IIInB provides structure.tags."
-    - "Token preservation tests supported because IIInB provides tokens."
-    - "Replay determinism tests supported because IE is enabled."
-
+    - "All IE tests enabled because IIInB provides required fields."
+    - "Structural tests enabled because IIInB provides structure.tags."
+    - "Replay determinism implicitly covered by all tests."
