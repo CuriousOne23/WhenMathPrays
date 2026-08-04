@@ -200,7 +200,7 @@ def main():
             skipped += 1
             continue
 
-        status, diffs = run_single_test(test)
+        status, diffs, pass_details = run_single_test(test)
 
         print(f"\nTest: {test_id}")
         print(f"Desc: {description}")
