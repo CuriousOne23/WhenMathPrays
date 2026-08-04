@@ -410,6 +410,195 @@ The decision algorithm is:
 
 This ensures the closed loop described in section 9 (“COB → CIL → CEx → COB → …”) remains stable and replay‑safe.
 
+
+---
+
+# **4.4 IE Token → CIL Conversation Cross‑Correlation Layer (Corrected Architecture)**  
+### *How CEx compares the current turn to the last N (≤10) conversations*
+
+CEx receives **two inputs**:
+
+### **A. Current turn (from InB)**  
+This includes:
+
+```
+ie_tokens
+normalized_text
+token_flags
+structure
+metadata
+```
+
+These represent the *current user message*.
+
+### **B. Conversation lineage (from CIL)**  
+This includes **up to 10 conversation envelopes**, each with:
+
+- identity lineage  
+- clarifying lineage  
+- context lineage  
+- continuity lineage  
+- topology  
+- metrics  
+- semantic residue  
+- next_context (projection from previous turn)  
+
+CEx must determine:
+
+- which conversation envelope the current turn belongs to  
+- whether the turn begins a new conversation  
+- whether the turn is ambiguous and must fallback  
+
+This requires **cross‑correlation** between:
+
+### **current IE tokens**  
+and  
+### **each CIL conversation envelope**
+
+---
+
+# **4.4.1 What CEx Can and Cannot Do with IE Tokens**
+
+CEx is a bounded‑semantic primitive:
+
+### **CEx cannot:**
+- infer meaning  
+- compute embeddings  
+- perform semantic similarity  
+- interpret topic or intent directly from text  
+- use global reasoning  
+
+### **CEx can:**
+- read IE tokens structurally  
+- detect structural markers (e.g., punctuation, reset cues, greeting cues)  
+- detect register shifts (formal → casual)  
+- detect continuity cues (“start over”, “new topic”, “again”)  
+- detect clarifying cues (“please help”, “status update”)  
+- detect topic hints (bounded, structural, not semantic)  
+
+CEx uses these structural signals to update **next_context_current_turn**, which is the *current turn’s structural metadata*.
+
+This is the key:
+
+> **CEx does not interpret IE tokens semantically.  
+> It converts IE tokens into structural metadata and compares that metadata to CIL’s lineage.**
+
+---
+
+# **4.4.2 How IE Tokens Are Converted into Structural Metadata**
+
+From IE tokens, CEx derives:
+
+```
+next_context_current_turn:
+  topic_hint
+  intent_hint
+  register_hint
+  politeness_hint
+  continuity_hint
+  direction_hint
+  coherence_hint
+  shift_required_hint
+  importance_hint
+```
+
+These are **structural hints**, not semantic interpretations.
+
+Examples:
+
+- “hello” → topic_hint = “greeting”  
+- “start fresh” → continuity_hint = “reset”  
+- “please help” → intent_hint = “request”  
+- “status update” → topic_hint = “system”  
+
+These hints are **not semantic**; they are **bounded structural categories**.
+
+---
+
+# **4.4.3 Cross‑Correlation Between IE Tokens and CIL Conversations**
+
+For each of the 10 conversation envelopes, CEx computes:
+
+### **A. Identity Alignment**
+Does the current turn’s topic_hint align with the envelope’s clarifying_fields_prev.topic?
+
+### **B. Clarifying Alignment**
+Does the current turn’s intent_hint align with clarifying_fields_prev.intent?
+
+### **C. Context Alignment**
+Does the current turn’s topic_hint align with context_fields_prev.topic?
+
+### **D. Continuity Alignment**
+Does continuity_hint align with continuity_prev?
+
+### **E. Drift Contribution**
+If topic_hint contradicts lineage → drift_score increases.
+
+### **F. Collapse Contribution**
+If continuity_hint contradicts continuity_prev → collapse_risk increases.
+
+### **G. Ambiguity Contribution**
+If topic_hint aligns with multiple envelopes → ambiguity_score increases.
+
+### **H. Stability Contribution**
+If topic_hint aligns strongly with one envelope → stability_score increases.
+
+This is the **cross‑correlation layer**.
+
+---
+
+# **4.4.4 Decision Logic Using Cross‑Correlation**
+
+After computing alignment scores for all 10 envelopes:
+
+### **Rule 2 — Specific Conversation**
+If one envelope has:
+- strong identity alignment  
+- strong clarifying alignment  
+- strong context alignment  
+- continuity alignment  
+- low ambiguity  
+- low collapse  
+
+→ CEx selects that conversation.
+
+### **Rule 3 — Ambiguous → Fallback**
+If multiple envelopes have moderate alignment:
+- identity weak  
+- ambiguity moderate  
+- collapse moderate  
+- continuity unclear  
+
+→ CEx selects the **most recent stable envelope**.
+
+### **Rule 1 — New Conversation**
+If **no envelope** aligns with the current turn:
+- identity mismatch  
+- high ambiguity  
+- high collapse  
+- continuity reset  
+
+→ CEx declares **new conversation**.
+
+---
+
+# **4.4.5 Why This Is Bounded‑Semantic and Replay‑Safe**
+
+Because:
+
+- IE tokens → structural hints  
+- structural hints → next_context_current_turn  
+- next_context_current_turn → lineage comparison  
+- lineage comparison → deterministic decision rules  
+
+CEx never interprets meaning.  
+CEx never uses embeddings.  
+CEx never uses semantic similarity.  
+CEx never guesses.  
+CEx never infers.
+
+It only compares **structured metadata**.
+
 ---
 
 ## **5. How COB/CST Compute These Metrics**
