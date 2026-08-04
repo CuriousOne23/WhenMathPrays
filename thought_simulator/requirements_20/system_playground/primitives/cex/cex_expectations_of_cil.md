@@ -446,6 +446,226 @@ Where `f` is:
 
 This model is trivial to implement and fully replay‑safe.
 
+Here you go, Jeff — a clean, fully‑formed **Section 5.2** written in the same speculative white‑paper tone as the rest of *cex_expectations_of_cil.md*, and aligned with the content visible in your GitHub editing tab (e.g., the linear‑update model described around lines 399–450.
+
+This section drops directly under **5.1 Linear Update Model** and expands it with concrete examples of how COB/CST compute each lineage and metric using the “previous state + current turn structural metadata” rule described in your document (e.g., “Each new value is computed from the previous value + current turn structural metadata”.
+
+---
+
+# **5.2 Examples of COB/CST Linear Update Computation**
+
+This section provides concrete examples of how COB and CST compute the fields required by CIL using **stateless linear updates**, consistent with the principles described earlier (“Each new value is computed from the previous value + current turn structural metadata”.  
+These examples illustrate how lineage, stability, ambiguity, and collapse‑risk metrics can be maintained without semantic inference, embeddings, or global reasoning.
+
+All updates follow the general recurrence pattern:
+
+```
+new_value = f(previous_value, current_turn_metadata)
+```
+
+where `f` is a simple counter, ratio, comparison, or decay function.
+
+---
+
+## **5.2.1 Identity Lineage Update**
+
+### **Inputs**
+- previous identity layer  
+- identity_layer_lineage (≤10 turns)  
+- current turn’s selected identity layer (from OutBA)
+
+### **Update**
+```
+identity_layer_prev = current_identity_layer
+identity_layer_lineage = [current_identity_layer] + identity_layer_lineage[:9]
+```
+
+### **Recency**
+```
+identity_layer_recency[layer] = 
+    0 if layer == current_identity_layer
+    previous_recency[layer] + 1 otherwise
+```
+
+### **Density**
+```
+identity_layer_density[layer] = 
+    count(layer in identity_layer_lineage) / len(identity_layer_lineage)
+```
+
+### **Switch Count**
+```
+identity_layer_switch_count += 
+    1 if current_identity_layer != identity_layer_prev else 0
+```
+
+This update is deterministic and replay‑safe.
+
+---
+
+## **5.2.2 Clarifying Lineage Update**
+
+### **Inputs**
+- clarifying_fields_prev  
+- clarifying_fields_lineage  
+- current clarifying metadata (from OutBA)
+
+### **Update**
+```
+clarifying_fields_prev = current_clarifying_fields
+clarifying_fields_lineage = [current_clarifying_fields] + clarifying_fields_lineage[:9]
+```
+
+### **Stability Score**
+A simple structural comparison:
+
+```
+matches = number_of_turns_where(current_clarifying_fields == clarifying_fields_lineage[i])
+clarifying_field_stability = matches / len(clarifying_fields_lineage)
+```
+
+This requires no semantic inference.
+
+---
+
+## **5.2.3 Context Lineage Update**
+
+### **Inputs**
+- context_fields_prev  
+- context_fields_lineage  
+- current context metadata (from OutBA)
+
+### **Update**
+```
+context_fields_prev = current_context_fields
+context_fields_lineage = [current_context_fields] + context_fields_lineage[:9]
+```
+
+### **Shift Count**
+```
+context_shift_count += 
+    1 if current_context_fields != context_fields_prev else 0
+```
+
+This captures structural drift.
+
+---
+
+## **5.2.4 Continuity Lineage Update**
+
+### **Inputs**
+- continuity_prev  
+- continuity_lineage  
+- current continuity signal (from OutBA)
+
+### **Update**
+```
+continuity_prev = current_continuity
+continuity_lineage = [current_continuity] + continuity_lineage[:9]
+```
+
+### **Break Count**
+```
+continuity_break_count += 
+    1 if current_continuity == "reset" else 0
+```
+
+This supports CEx’s Rule 1 for new conversation classification.
+
+---
+
+## **5.2.5 Stability, Volatility, Drift, and Collapse‑Risk**
+
+These scalar metrics are computed using simple ratios and decay functions.
+
+### **Stability Score**
+```
+stability_score = 
+    1 - (identity_layer_switch_count / len(identity_layer_lineage))
+```
+
+### **Volatility Score**
+```
+volatility_score = 
+    context_shift_count / len(context_fields_lineage)
+```
+
+### **Drift Score**
+A normalized measure of clarifying/context divergence:
+
+```
+drift_score = 
+    (1 - clarifying_field_stability) * 0.5 +
+    (context_shift_count / len(context_fields_lineage)) * 0.5
+```
+
+### **Collapse Risk**
+A weighted combination of volatility and drift:
+
+```
+collapse_risk = 
+    0.5 * volatility_score + 
+    0.5 * drift_score
+```
+
+These formulas are intentionally simple and bounded, consistent with the constraints described earlier (“no global inference, no semantic inference, no embeddings, no ML”   [Current page](citation-section://1146983520/6)).
+
+---
+
+## **5.2.6 Conversation Topology Update**
+
+### **Inputs**
+- conversation_id  
+- conversation_length  
+- continuity_prev  
+- identity/context lineage
+
+### **Update**
+```
+conversation_length += 1
+```
+
+### **Topology Classification**
+A simple structural heuristic:
+
+```
+if continuity_break_count > threshold:
+    conversation_topology = "reset-heavy"
+elif identity_layer_switch_count > threshold:
+    conversation_topology = "branched"
+else:
+    conversation_topology = "linear"
+```
+
+This topology is used by CEx to support ambiguous fallback and new‑conversation detection.
+
+---
+
+## **5.2.7 Semantic Residue Update**
+
+Semantic residue is bounded structural metadata:
+
+```
+semantic_residue.last_topic = current_context_fields.get("topic")
+semantic_residue.last_intent = current_context_fields.get("intent")
+semantic_residue.last_register = current_context_fields.get("register")
+```
+
+This residue is non‑semantic and safe for CEx consumption.
+
+---
+
+## **5.2.8 Lineage Confidence**
+
+A simple derived scalar:
+
+```
+lineage_confidence = 
+    (clarifying_field_stability + stability_score) / 2
+```
+
+This supports CEx’s ambiguous fallback logic.
+
 ---
 
 ## **6. What COB Needs From OutBA to Perform Updates**
