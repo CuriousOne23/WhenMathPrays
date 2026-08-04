@@ -157,7 +157,20 @@ def run_single_test(test):
     diffs = compare_envelope(expected, actual)
     status = "PASS" if not diffs else "FAIL"
 
-    return status, diffs
+    # Build PASS details here (actual is available)
+    pass_details = {}
+    if status == "PASS":
+        pass_details = {
+            "ie_tokens": actual["intake"].get("ie_tokens"),
+            "token_flags": actual["intake"].get("token_flags"),
+            "normalized_text": actual["intake"].get("normalized_text"),
+            "structure_tags": actual["structure"].get("tags"),
+            "repair_annotations": actual["metadata"].get("repair_annotations"),
+            "ruleset_id": actual["metadata"].get("ruleset_id"),
+            "error": actual.get("error"),
+        }
+
+    return status, diffs, pass_details
 
 
 # ------------------------------------------------------------
@@ -191,26 +204,21 @@ def main():
 
         print(f"\nTest: {test_id}")
         print(f"Desc: {description}")
-        print(f"Result: {status}")
 
         print(f"Result: {status}")
         
         if status == "PASS":
             passed += 1
-        
-            # ------------------------------------------------------
-            # NEW: Detailed PASS output
-            # ------------------------------------------------------
             print("  PASS DETAILS:")
-            print("    intake.ie_tokens:      ", actual["intake"].get("ie_tokens"))
-            print("    intake.token_flags:    ", actual["intake"].get("token_flags"))
-            print("    intake.normalized_text:", actual["intake"].get("normalized_text"))
-            print("    structure.tags:        ", actual["structure"].get("tags"))
+            print("    intake.ie_tokens:      ", pass_details["ie_tokens"])
+            print("    intake.token_flags:    ", pass_details["token_flags"])
+            print("    intake.normalized_text:", pass_details["normalized_text"])
+            print("    structure.tags:        ", pass_details["structure_tags"])
             print("    metadata.repair_annotations:")
-            for ann in actual["metadata"].get("repair_annotations", []):
+            for ann in pass_details["repair_annotations"]:
                 print("      -", ann)
-            print("    metadata.ruleset_id:   ", actual["metadata"].get("ruleset_id"))
-            print("    error:                 ", actual.get("error"))
+            print("    metadata.ruleset_id:   ", pass_details["ruleset_id"])
+            print("    error:                 ", pass_details["error"])
         
         else:
             failed += 1
