@@ -1,17 +1,17 @@
 # ============================================================
 # CEx Testbench — Deterministic Mode (Aligned with cex_expectations_of_cil.md)
 # ============================================================
-version: "2.0"
+version: "2.1"
 primitive: "CEx"
 mode: "testbench"
 
 tests:
 
-  # ===========================================================
-  # 1. SPECIFIC CONVERSATION — Strong Identity Match
-  # ===========================================================
-  - id: "cex_specific_identity_strong"
-    description: "Identity lineage matches strongly; ambiguity and collapse low."
+  # -----------------------------------------------------------
+  # Test 1 — Specific Conversation (Single Envelope, Strong Match)
+  # -----------------------------------------------------------
+  - id: "cex_specific_single_strong"
+    description: "Single CIL envelope; strong identity match; low ambiguity/collapse → specific conversation."
 
     ie_input:
       intake:
@@ -30,29 +30,24 @@ tests:
         identity_layer_recency: { 3: 0 }
         identity_layer_density: { 3: 1.0 }
         identity_layer_switch_count: 0
-
       clarifying:
         clarifying_fields_prev: { topic: "greeting" }
         clarifying_fields_lineage:
           - { topic: "greeting" }
         clarifying_field_stability: 1.0
-
       context:
         context_fields_prev: { topic: "greeting" }
         context_fields_lineage:
           - { topic: "greeting" }
         context_shift_count: 0
-
       continuity:
         continuity_prev: "continue"
         continuity_lineage: ["continue"]
         continuity_break_count: 0
-
       topology:
         conversation_id: "conv_001"
         conversation_topology: "linear"
         conversation_length: 3
-
       metrics:
         primary_certainty: 0.92
         ambiguity_score: 0.05
@@ -61,12 +56,10 @@ tests:
         volatility_score: 0.0
         drift_score: 0.0
         lineage_confidence: 0.95
-
       semantic_residue:
         last_topic: "greeting"
         last_intent: "inform"
         last_register: "casual"
-
       next_context:
         topic: "greeting"
         stance: "neutral"
@@ -118,123 +111,112 @@ tests:
       version_tag: "cex_v3.2"
 
 
-  # ===========================================================
-  # 2. SPECIFIC CONVERSATION — Identity Match but Slight Drift
-  # ===========================================================
-  - id: "cex_specific_identity_minor_drift"
-    description: "Identity matches but clarifying/context lineage shows minor drift."
+  # -----------------------------------------------------------
+  # Test 2 — New Conversation (Single Envelope, Reset)
+  # -----------------------------------------------------------
+  - id: "cex_new_single_reset"
+    description: "Single CIL envelope; identity mismatch + high ambiguity/collapse + reset → new conversation."
 
     ie_input:
       intake:
-        ie_tokens: ["hi"]
-        token_flags: ["normative"]
-        normalized_text: "hi"
+        ie_tokens: ["start", "fresh"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "start fresh"
       structure: { tags: [], spans: [], markup: [] }
       metadata: { repair_annotations: [], replay: {} }
       error: null
 
     cil_input:
       identity:
-        primary_layer_id: 3
-        identity_layer_prev: 3
-        identity_layer_lineage: [3, 3, 3]
-        identity_layer_recency: { 3: 0 }
-        identity_layer_density: { 3: 1.0 }
+        primary_layer_id: null
+        identity_layer_prev: null
+        identity_layer_lineage: []
+        identity_layer_recency: {}
+        identity_layer_density: {}
         identity_layer_switch_count: 0
-
       clarifying:
-        clarifying_fields_prev: { topic: "greeting", mood: "friendly" }
-        clarifying_fields_lineage:
-          - { topic: "greeting", mood: "neutral" }
-        clarifying_field_stability: 0.8
-
+        clarifying_fields_prev: {}
+        clarifying_fields_lineage: []
+        clarifying_field_stability: 0.0
       context:
-        context_fields_prev: { topic: "greeting" }
-        context_fields_lineage:
-          - { topic: "greeting" }
+        context_fields_prev: {}
+        context_fields_lineage: []
         context_shift_count: 0
-
       continuity:
-        continuity_prev: "continue"
-        continuity_lineage: ["continue"]
-        continuity_break_count: 0
-
+        continuity_prev: "reset"
+        continuity_lineage: ["reset"]
+        continuity_break_count: 1
       topology:
-        conversation_id: "conv_001"
-        conversation_topology: "linear"
-        conversation_length: 4
-
+        conversation_id: "conv_000"
+        conversation_topology: "reset-heavy"
+        conversation_length: 0
       metrics:
-        primary_certainty: 0.85
-        ambiguity_score: 0.1
-        collapse_risk: 0.05
-        stability_score: 0.9
+        primary_certainty: 0.1
+        ambiguity_score: 0.95
+        collapse_risk: 0.9
+        stability_score: 0.0
         volatility_score: 0.0
-        drift_score: 0.1
-        lineage_confidence: 0.85
-
+        drift_score: 0.0
+        lineage_confidence: 0.0
       semantic_residue:
-        last_topic: "greeting"
-        last_intent: "inform"
-        last_register: "casual"
-
+        last_topic: null
+        last_intent: null
+        last_register: null
       next_context:
-        topic: "greeting"
+        topic: "new"
         stance: "neutral"
-        intent: "inform"
+        intent: "begin"
         register: "casual"
         politeness: "normal"
         epistemic_shading: "none"
-        continuity: "continue"
+        continuity: "reset"
         direction: "forward"
         coherence: "stable"
-        shift_required: false
+        shift_required: true
         importance: 1
 
     expected_ce_output:
-      identity_layer_id: 3
-      continuity_status: "continue"
+      identity_layer_id: "new_conversation"
+      continuity_status: "new"
 
       context_fields:
-        topic: "greeting"
+        topic: "new"
         stance: "neutral"
-        intent: "inform"
+        intent: "begin"
         register: "casual"
         politeness: "normal"
         epistemic_shading: "none"
-        continuity: "continue"
+        continuity: "reset"
         direction: "forward"
         coherence: "stable"
-        shift_required: false
+        shift_required: true
         importance: 1
 
-      clarifying_fields:
-        topic: "greeting"
-        mood: "friendly"
+      clarifying_fields: {}
 
       provenance:
-        decision_category: "specific"
+        decision_category: "new"
         trigger_conditions:
-          identity_match: true
-          ambiguity_level: "low"
-          collapse_level: "low"
-          continuity_signal: "continue"
-          lineage_alignment: "aligned"
+          identity_match: false
+          ambiguity_level: "high"
+          collapse_level: "high"
+          continuity_signal: "reset"
+          lineage_alignment: "diverged"
 
       audit:
-        rule_fired: "rule_2_specific"
-        identity_layer_id: 3
-        continuity_status: "continue"
+        rule_fired: "rule_1_new"
+        identity_layer_id: "new_conversation"
+        continuity_status: "new"
         turn_index: 2
 
       version_tag: "cex_v3.2"
 
 
-  # ===========================================================
-  # 3. FALLBACK — Weak Identity Match, Moderate Ambiguity
-  # ===========================================================
-  - id: "cex_fallback_moderate_ambiguity"
-    description: "Identity weak, ambiguity moderate, collapse moderate → fallback."
+  # -----------------------------------------------------------
+  # Test 3 — Fallback (Single Envelope, Ambiguous)
+  # -----------------------------------------------------------
+  - id: "cex_fallback_single_ambiguous"
+    description: "Single CIL envelope; weak identity, moderate ambiguity/collapse, continuity unknown → fallback."
 
     ie_input:
       intake:
@@ -253,29 +235,24 @@ tests:
         identity_layer_recency: { 7: 0, 5: 2 }
         identity_layer_density: { 7: 0.67, 5: 0.33 }
         identity_layer_switch_count: 2
-
       clarifying:
         clarifying_fields_prev: { topic: "system" }
         clarifying_fields_lineage:
           - { topic: "system" }
         clarifying_field_stability: 0.8
-
       context:
         context_fields_prev: { topic: "system" }
         context_fields_lineage:
           - { topic: "system" }
         context_shift_count: 1
-
       continuity:
         continuity_prev: "unknown"
         continuity_lineage: ["continue", "unknown"]
         continuity_break_count: 0
-
       topology:
         conversation_id: "conv_002"
         conversation_topology: "branched"
         conversation_length: 5
-
       metrics:
         primary_certainty: 0.4
         ambiguity_score: 0.6
@@ -284,12 +261,10 @@ tests:
         volatility_score: 0.2
         drift_score: 0.4
         lineage_confidence: 0.6
-
       semantic_residue:
         last_topic: "system"
         last_intent: "inform"
         last_register: "formal"
-
       next_context:
         topic: "system"
         stance: "neutral"
@@ -341,68 +316,233 @@ tests:
       version_tag: "cex_v3.2"
 
 
-  # ===========================================================
-  # 4. FALLBACK — Identity Switches Too Frequent
-  # ===========================================================
-  - id: "cex_fallback_high_switch_count"
-    description: "Identity switches too often → fallback."
+  # -----------------------------------------------------------
+  # Test 4 — Clarifying Metadata Passthrough (Single Envelope)
+  # -----------------------------------------------------------
+  - id: "cex_clarifying_single"
+    description: "Single envelope; clarifying_fields carried deterministically into CEx output."
 
     ie_input:
       intake:
-        ie_tokens: ["check", "logs"]
+        ie_tokens: ["please", "help"]
         token_flags: ["normative", "normative"]
-        normalized_text: "check logs"
+        normalized_text: "please help"
       structure: { tags: [], spans: [], markup: [] }
       metadata: { repair_annotations: [], replay: {} }
       error: null
 
     cil_input:
       identity:
-        primary_layer_id: null
-        identity_layer_prev: 5
-        identity_layer_lineage: [3, 5, 2, 5]
-        identity_layer_recency: { 5: 0, 3: 1, 2: 2 }
-        identity_layer_density: { 5: 0.5, 3: 0.25, 2: 0.25 }
-        identity_layer_switch_count: 3
-
+        primary_layer_id: 4
+        identity_layer_prev: 4
+        identity_layer_lineage: [4, 4]
+        identity_layer_recency: { 4: 0 }
+        identity_layer_density: { 4: 1.0 }
+        identity_layer_switch_count: 0
       clarifying:
-        clarifying_fields_prev: { topic: "system" }
+        clarifying_fields_prev:
+          topic: "assistance"
+          urgency: "medium"
         clarifying_fields_lineage:
-          - { topic: "system" }
-        clarifying_field_stability: 0.7
-
+          - topic: "assistance"
+            urgency: "medium"
+        clarifying_field_stability: 1.0
       context:
-        context_fields_prev: { topic: "system" }
+        context_fields_prev: { topic: "assistance" }
         context_fields_lineage:
-          - { topic: "system" }
-        context_shift_count: 2
-
+          - { topic: "assistance" }
+        context_shift_count: 0
       continuity:
-        continuity_prev: "shift"
-        continuity_lineage: ["continue", "shift"]
+        continuity_prev: "continue"
+        continuity_lineage: ["continue"]
         continuity_break_count: 0
-
       topology:
-        conversation_id: "conv_003"
-        conversation_topology: "branched"
-        conversation_length: 7
+        conversation_id: "conv_004"
+        conversation_topology: "linear"
+        conversation_length: 2
+      metrics:
+        primary_certainty: 0.88
+        ambiguity_score: 0.1
+        collapse_risk: 0.03
+        stability_score: 0.9
+        volatility_score: 0.0
+        drift_score: 0.0
+        lineage_confidence: 0.9
+      semantic_residue:
+        last_topic: "assistance"
+        last_intent: "request"
+        last_register: "polite"
+      next_context:
+        topic: "assistance"
+        stance: "neutral"
+        intent: "request"
+        register: "polite"
+        politeness: "high"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 3
 
+    expected_ce_output:
+      identity_layer_id: 4
+      continuity_status: "continue"
+
+      context_fields:
+        topic: "assistance"
+        stance: "neutral"
+        intent: "request"
+        register: "polite"
+        politeness: "high"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 3
+
+      clarifying_fields:
+        topic: "assistance"
+        urgency: "medium"
+
+      provenance:
+        decision_category: "specific"
+        trigger_conditions:
+          identity_match: true
+          ambiguity_level: "low"
+          collapse_level: "low"
+          continuity_signal: "continue"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_2_specific"
+        identity_layer_id: 4
+        continuity_status: "continue"
+        turn_index: 4
+
+      version_tag: "cex_v3.2"
+
+
+  # -----------------------------------------------------------
+  # Test 5 — Passthrough (use_cex = false)
+  # -----------------------------------------------------------
+  - id: "cex_passthrough"
+    description: "When passthrough=true, CEx does not modify inputs."
+
+    passthrough: true
+
+    ie_input:
+      intake:
+        ie_tokens: ["noop"]
+        token_flags: ["normative"]
+        normalized_text: "noop"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      identity:
+        primary_layer_id: 1
+        identity_layer_prev: 1
+        identity_layer_lineage: [1]
+        identity_layer_recency: { 1: 0 }
+        identity_layer_density: { 1: 1.0 }
+        identity_layer_switch_count: 0
+      clarifying:
+        clarifying_fields_prev: {}
+        clarifying_fields_lineage: []
+        clarifying_field_stability: 0.0
+      context:
+        context_fields_prev: { topic: "noop" }
+        context_fields_lineage:
+          - { topic: "noop" }
+        context_shift_count: 0
+      continuity:
+        continuity_prev: "continue"
+        continuity_lineage: ["continue"]
+        continuity_break_count: 0
+      topology:
+        conversation_id: "conv_005"
+        conversation_topology: "linear"
+        conversation_length: 1
+      metrics:
+        primary_certainty: 0.99
+        ambiguity_score: 0.01
+        collapse_risk: 0.0
+        stability_score: 1.0
+        volatility_score: 0.0
+        drift_score: 0.0
+        lineage_confidence: 1.0
+      semantic_residue:
+        last_topic: "noop"
+        last_intent: "none"
+        last_register: "none"
+      next_context:
+        topic: "noop"
+        stance: "neutral"
+        intent: "none"
+        register: "none"
+        politeness: "none"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 0
+
+    expected_ce_output:
+      passthrough: true
+
+
+  # -----------------------------------------------------------
+  # Test 6 — Malformed CIL (Single Envelope)
+  # -----------------------------------------------------------
+  - id: "cex_malformed_single"
+    description: "Malformed clarifying_fields_prev; CEx falls back and records audit."
+
+    ie_input:
+      intake:
+        ie_tokens: ["check", "status"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "check status"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      identity: null
+      clarifying:
+        clarifying_fields_prev: "MALFORMED"
+        clarifying_fields_lineage: []
+        clarifying_field_stability: 0.0
+      context:
+        context_fields_prev: { topic: "status" }
+        context_fields_lineage:
+          - { topic: "status" }
+        context_shift_count: 0
+      continuity:
+        continuity_prev: "unknown"
+        continuity_lineage: ["unknown"]
+        continuity_break_count: 0
+      topology:
+        conversation_id: "conv_006"
+        conversation_topology: "linear"
+        conversation_length: 1
       metrics:
         primary_certainty: 0.3
-        ambiguity_score: 0.55
-        collapse_risk: 0.45
-        stability_score: 0.4
-        volatility_score: 0.3
-        drift_score: 0.35
+        ambiguity_score: 0.7
+        collapse_risk: 0.4
+        stability_score: 0.5
+        volatility_score: 0.1
+        drift_score: 0.2
         lineage_confidence: 0.5
-
       semantic_residue:
-        last_topic: "system"
-        last_intent: "inform"
-        last_register: "formal"
-
+        last_topic: "status"
+        last_intent: null
+        last_register: null
       next_context:
-        topic: "system"
+        topic: "status"
         stance: "neutral"
         intent: "inform"
         register: "formal"
@@ -415,7 +555,1098 @@ tests:
         importance: 2
 
     expected_ce_output:
-      identity_layer_id: 5
+      identity_layer_id: "fallback"
+      continuity_status: "undetermined"
+
+      context_fields:
+        topic: "status"
+        stance: "neutral"
+        intent: "inform"
+        register: "formal"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+
+      clarifying_fields: {}
+
+      provenance:
+        decision_category: "fallback"
+        trigger_conditions:
+          identity_match: false
+          ambiguity_level: "moderate"
+          collapse_level: "moderate"
+          continuity_signal: "unknown"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_3_fallback"
+        identity_layer_id: "fallback"
+        continuity_status: "undetermined"
+        turn_index: 6
+
+      version_tag: "cex_v3.2"
+
+
+  # -----------------------------------------------------------
+  # Test 7 — Multi-Conversation (10 Conversations, Clear Best Match)
+  # -----------------------------------------------------------
+  - id: "cex_multi_10_clear_match"
+    description: "CIL provides 10 conversations; one has strong identity + low ambiguity/collapse → CEx selects it."
+
+    ie_input:
+      intake:
+        ie_tokens: ["hello", "again"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "hello again"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      conversations:
+        - id: "conv_001"
+          identity:
+            primary_layer_id: 1
+            identity_layer_prev: 1
+            identity_layer_lineage: [1, 2]
+            identity_layer_recency: { 1: 0, 2: 1 }
+            identity_layer_density: { 1: 0.5, 2: 0.5 }
+            identity_layer_switch_count: 1
+          clarifying:
+            clarifying_fields_prev: { topic: "misc" }
+            clarifying_fields_lineage: [ { topic: "misc" } ]
+            clarifying_field_stability: 0.5
+          context:
+            context_fields_prev: { topic: "misc" }
+            context_fields_lineage: [ { topic: "misc" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_001"
+            conversation_topology: "branched"
+            conversation_length: 4
+          metrics:
+            primary_certainty: 0.4
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.5
+            volatility_score: 0.3
+            drift_score: 0.4
+            lineage_confidence: 0.5
+          semantic_residue:
+            last_topic: "misc"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "misc"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 1
+
+        - id: "conv_002"
+          identity:
+            primary_layer_id: 2
+            identity_layer_prev: 2
+            identity_layer_lineage: [2, 2, 2]
+            identity_layer_recency: { 2: 0 }
+            identity_layer_density: { 2: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "greeting" }
+            clarifying_fields_lineage: [ { topic: "greeting" } ]
+            clarifying_field_stability: 1.0
+          context:
+            context_fields_prev: { topic: "greeting" }
+            context_fields_lineage: [ { topic: "greeting" } ]
+            context_shift_count: 0
+          continuity:
+            continuity_prev: "continue"
+            continuity_lineage: ["continue"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_002"
+            conversation_topology: "linear"
+            conversation_length: 5
+          metrics:
+            primary_certainty: 0.93
+            ambiguity_score: 0.04
+            collapse_risk: 0.01
+            stability_score: 0.96
+            volatility_score: 0.0
+            drift_score: 0.0
+            lineage_confidence: 0.96
+          semantic_residue:
+            last_topic: "greeting"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "greeting"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        # 8 more low-quality / ambiguous conversations
+        - id: "conv_003"
+          identity:
+            primary_layer_id: 3
+            identity_layer_prev: 3
+            identity_layer_lineage: [3]
+            identity_layer_recency: { 3: 0 }
+            identity_layer_density: { 3: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "other" }
+            clarifying_fields_lineage: [ { topic: "other" } ]
+            clarifying_field_stability: 0.7
+          context:
+            context_fields_prev: { topic: "other" }
+            context_fields_lineage: [ { topic: "other" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "shift"
+            continuity_lineage: ["shift"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_003"
+            conversation_topology: "branched"
+            conversation_length: 3
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.5
+            collapse_risk: 0.4
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "other"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "other"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 1
+
+        - id: "conv_004"
+          identity:
+            primary_layer_id: 4
+            identity_layer_prev: 4
+            identity_layer_lineage: [4]
+            identity_layer_recency: { 4: 0 }
+            identity_layer_density: { 4: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "noise" }
+            clarifying_fields_lineage: [ { topic: "noise" } ]
+            clarifying_field_stability: 0.5
+          context:
+            context_fields_prev: { topic: "noise" }
+            context_fields_lineage: [ { topic: "noise" } ]
+            context_shift_count: 2
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_004"
+            conversation_topology: "reset-heavy"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.3
+            ambiguity_score: 0.7
+            collapse_risk: 0.6
+            stability_score: 0.4
+            volatility_score: 0.4
+            drift_score: 0.5
+            lineage_confidence: 0.4
+          semantic_residue:
+            last_topic: "noise"
+            last_intent: "none"
+            last_register: "casual"
+          next_context:
+            topic: "noise"
+            stance: "neutral"
+            intent: "none"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "unstable"
+            shift_required: true
+            importance: 0
+
+        - id: "conv_005"
+          identity:
+            primary_layer_id: 5
+            identity_layer_prev: 5
+            identity_layer_lineage: [5]
+            identity_layer_recency: { 5: 0 }
+            identity_layer_density: { 5: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: {}
+            clarifying_fields_lineage: []
+            clarifying_field_stability: 0.0
+          context:
+            context_fields_prev: {}
+            context_fields_lineage: []
+            context_shift_count: 0
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_005"
+            conversation_topology: "linear"
+            conversation_length: 1
+          metrics:
+            primary_certainty: 0.2
+            ambiguity_score: 0.8
+            collapse_risk: 0.5
+            stability_score: 0.3
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.3
+          semantic_residue:
+            last_topic: null
+            last_intent: null
+            last_register: null
+          next_context:
+            topic: null
+            stance: null
+            intent: null
+            register: null
+            politeness: null
+            epistemic_shading: null
+            continuity: "unknown"
+            direction: null
+            coherence: null
+            shift_required: null
+            importance: 0
+
+        - id: "conv_006"
+          identity:
+            primary_layer_id: 6
+            identity_layer_prev: 6
+            identity_layer_lineage: [6]
+            identity_layer_recency: { 6: 0 }
+            identity_layer_density: { 6: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "side" }
+            clarifying_fields_lineage: [ { topic: "side" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "side" }
+            context_fields_lineage: [ { topic: "side" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "shift"
+            continuity_lineage: ["shift"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_006"
+            conversation_topology: "branched"
+            conversation_length: 3
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.5
+            collapse_risk: 0.4
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "side"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "side"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 1
+
+        - id: "conv_007"
+          identity:
+            primary_layer_id: 7
+            identity_layer_prev: 7
+            identity_layer_lineage: [7]
+            identity_layer_recency: { 7: 0 }
+            identity_layer_density: { 7: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "other_greeting" }
+            clarifying_fields_lineage: [ { topic: "other_greeting" } ]
+            clarifying_field_stability: 0.8
+          context:
+            context_fields_prev: { topic: "other_greeting" }
+            context_fields_lineage: [ { topic: "other_greeting" } ]
+            context_shift_count: 0
+          continuity:
+            continuity_prev: "continue"
+            continuity_lineage: ["continue"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_007"
+            conversation_topology: "linear"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.7
+            ambiguity_score: 0.3
+            collapse_risk: 0.2
+            stability_score: 0.8
+            volatility_score: 0.1
+            drift_score: 0.1
+            lineage_confidence: 0.8
+          semantic_residue:
+            last_topic: "other_greeting"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "other_greeting"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 1
+
+        - id: "conv_008"
+          identity:
+            primary_layer_id: 8
+            identity_layer_prev: 8
+            identity_layer_lineage: [8]
+            identity_layer_recency: { 8: 0 }
+            identity_layer_density: { 8: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "noise2" }
+            clarifying_fields_lineage: [ { topic: "noise2" } ]
+            clarifying_field_stability: 0.4
+          context:
+            context_fields_prev: { topic: "noise2" }
+            context_fields_lineage: [ { topic: "noise2" } ]
+            context_shift_count: 2
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_008"
+            conversation_topology: "reset-heavy"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.3
+            ambiguity_score: 0.7
+            collapse_risk: 0.6
+            stability_score: 0.4
+            volatility_score: 0.4
+            drift_score: 0.5
+            lineage_confidence: 0.4
+          semantic_residue:
+            last_topic: "noise2"
+            last_intent: "none"
+            last_register: "casual"
+          next_context:
+            topic: "noise2"
+            stance: "neutral"
+            intent: "none"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "unstable"
+            shift_required: true
+            importance: 0
+
+        - id: "conv_009"
+          identity:
+            primary_layer_id: 9
+            identity_layer_prev: 9
+            identity_layer_lineage: [9]
+            identity_layer_recency: { 9: 0 }
+            identity_layer_density: { 9: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "background" }
+            clarifying_fields_lineage: [ { topic: "background" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "background" }
+            context_fields_lineage: [ { topic: "background" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "shift"
+            continuity_lineage: ["shift"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_009"
+            conversation_topology: "branched"
+            conversation_length: 3
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.5
+            collapse_risk: 0.4
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "background"
+            last_intent: "inform"
+            last_register: "casual"
+          next_context:
+            topic: "background"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 1
+
+        - id: "conv_010"
+          identity:
+            primary_layer_id: 10
+            identity_layer_prev: 10
+            identity_layer_lineage: [10]
+            identity_layer_recency: { 10: 0 }
+            identity_layer_density: { 10: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "irrelevant" }
+            clarifying_fields_lineage: [ { topic: "irrelevant" } ]
+            clarifying_field_stability: 0.5
+          context:
+            context_fields_prev: { topic: "irrelevant" }
+            context_fields_lineage: [ { topic: "irrelevant" } ]
+            context_shift_count: 2
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_010"
+            conversation_topology: "reset-heavy"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.3
+            ambiguity_score: 0.7
+            collapse_risk: 0.6
+            stability_score: 0.4
+            volatility_score: 0.4
+            drift_score: 0.5
+            lineage_confidence: 0.4
+          semantic_residue:
+            last_topic: "irrelevant"
+            last_intent: "none"
+            last_register: "casual"
+          next_context:
+            topic: "irrelevant"
+            stance: "neutral"
+            intent: "none"
+            register: "casual"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "unstable"
+            shift_required: true
+            importance: 0
+
+    expected_ce_output:
+      identity_layer_id: 2
+      continuity_status: "continue"
+
+      context_fields:
+        topic: "greeting"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "normal"
+        epistemic_shading: "none"
+        continuity: "continue"
+        direction: "forward"
+        coherence: "stable"
+        shift_required: false
+        importance: 2
+
+      clarifying_fields:
+        topic: "greeting"
+
+      provenance:
+        decision_category: "specific"
+        trigger_conditions:
+          identity_match: true
+          ambiguity_level: "low"
+          collapse_level: "low"
+          continuity_signal: "continue"
+          lineage_alignment: "aligned"
+
+      audit:
+        rule_fired: "rule_2_specific"
+        identity_layer_id: 2
+        continuity_status: "continue"
+        turn_index: 7
+
+      version_tag: "cex_v3.2"
+
+
+  # -----------------------------------------------------------
+  # Test 8 — Multi-Conversation (10 Conversations, Ambiguous → Fallback)
+  # -----------------------------------------------------------
+  - id: "cex_multi_10_ambiguous_fallback"
+    description: "10 conversations; none fully satisfy specific/new; moderate ambiguity → fallback to most recent stable."
+
+    ie_input:
+      intake:
+        ie_tokens: ["system", "status"]
+        token_flags: ["normative", "normative"]
+        normalized_text: "system status"
+      structure: { tags: [], spans: [], markup: [] }
+      metadata: { repair_annotations: [], replay: {} }
+      error: null
+
+    cil_input:
+      conversations:
+        - id: "conv_A"
+          identity:
+            primary_layer_id: 1
+            identity_layer_prev: 1
+            identity_layer_lineage: [1, 2]
+            identity_layer_recency: { 1: 0, 2: 1 }
+            identity_layer_density: { 1: 0.5, 2: 0.5 }
+            identity_layer_switch_count: 1
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.7
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_A"
+            conversation_topology: "branched"
+            conversation_length: 4
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_B"
+          identity:
+            primary_layer_id: 2
+            identity_layer_prev: 2
+            identity_layer_lineage: [2, 3]
+            identity_layer_recency: { 2: 0, 3: 1 }
+            identity_layer_density: { 2: 0.5, 3: 0.5 }
+            identity_layer_switch_count: 1
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.7
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "shift"
+            continuity_lineage: ["shift"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_B"
+            conversation_topology: "branched"
+            conversation_length: 3
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        # 8 more similar, none satisfying strong-specific or strong-new
+        - id: "conv_C"
+          identity:
+            primary_layer_id: 3
+            identity_layer_prev: 3
+            identity_layer_lineage: [3]
+            identity_layer_recency: { 3: 0 }
+            identity_layer_density: { 3: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_C"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_D"
+          identity:
+            primary_layer_id: 4
+            identity_layer_prev: 4
+            identity_layer_lineage: [4]
+            identity_layer_recency: { 4: 0 }
+            identity_layer_density: { 4: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_D"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_E"
+          identity:
+            primary_layer_id: 5
+            identity_layer_prev: 5
+            identity_layer_lineage: [5]
+            identity_layer_recency: { 5: 0 }
+            identity_layer_density: { 5: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_E"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_F"
+          identity:
+            primary_layer_id: 6
+            identity_layer_prev: 6
+            identity_layer_lineage: [6]
+            identity_layer_recency: { 6: 0 }
+            identity_layer_density: { 6: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_F"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_G"
+          identity:
+            primary_layer_id: 7
+            identity_layer_prev: 7
+            identity_layer_lineage: [7]
+            identity_layer_recency: { 7: 0 }
+            identity_layer_density: { 7: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_G"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_H"
+          identity:
+            primary_layer_id: 8
+            identity_layer_prev: 8
+            identity_layer_lineage: [8]
+            identity_layer_recency: { 8: 0 }
+            identity_layer_density: { 8: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_H"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_I"
+          identity:
+            primary_layer_id: 9
+            identity_layer_prev: 9
+            identity_layer_lineage: [9]
+            identity_layer_recency: { 9: 0 }
+            identity_layer_density: { 9: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_I"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+        - id: "conv_J"
+          identity:
+            primary_layer_id: 10
+            identity_layer_prev: 10
+            identity_layer_lineage: [10]
+            identity_layer_recency: { 10: 0 }
+            identity_layer_density: { 10: 1.0 }
+            identity_layer_switch_count: 0
+          clarifying:
+            clarifying_fields_prev: { topic: "system" }
+            clarifying_fields_lineage: [ { topic: "system" } ]
+            clarifying_field_stability: 0.6
+          context:
+            context_fields_prev: { topic: "system" }
+            context_fields_lineage: [ { topic: "system" } ]
+            context_shift_count: 1
+          continuity:
+            continuity_prev: "unknown"
+            continuity_lineage: ["unknown"]
+            continuity_break_count: 0
+          topology:
+            conversation_id: "conv_J"
+            conversation_topology: "branched"
+            conversation_length: 2
+          metrics:
+            primary_certainty: 0.5
+            ambiguity_score: 0.6
+            collapse_risk: 0.5
+            stability_score: 0.6
+            volatility_score: 0.2
+            drift_score: 0.3
+            lineage_confidence: 0.6
+          semantic_residue:
+            last_topic: "system"
+            last_intent: "inform"
+            last_register: "formal"
+          next_context:
+            topic: "system"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "normal"
+            epistemic_shading: "none"
+            continuity: "continue"
+            direction: "forward"
+            coherence: "stable"
+            shift_required: false
+            importance: 2
+
+    expected_ce_output:
+      identity_layer_id: "conv_A"
       continuity_status: "continue"
 
       context_fields:
@@ -440,151 +1671,13 @@ tests:
           identity_match: false
           ambiguity_level: "moderate"
           collapse_level: "moderate"
-          continuity_signal: "shift"
+          continuity_signal: "unknown"
           lineage_alignment: "aligned"
 
       audit:
         rule_fired: "rule_3_fallback"
-        identity_layer_id: 5
+        identity_layer_id: "conv_A"
         continuity_status: "continue"
-        turn_index: 4
+        turn_index: 8
 
       version_tag: "cex_v3.2"
-
-
-  # ===========================================================
-  # 5. NEW CONVERSATION — Identity Mismatch + Reset
-  # ===========================================================
-  - id: "cex_new_conversation_reset"
-    description: "Identity mismatch + high ambiguity + reset continuity → new conversation."
-
-    ie_input:
-      intake:
-        ie_tokens: ["start", "fresh"]
-        token_flags: ["normative", "normative"]
-        normalized_text: "start fresh"
-      structure: { tags: [], spans: [], markup: [] }
-      metadata: { repair_annotations: [], replay: {} }
-      error: null
-
-    cil_input:
-      identity:
-        primary_layer_id: null
-        identity_layer_prev: null
-        identity_layer_lineage: []
-        identity_layer_recency: {}
-        identity_layer_density: {}
-        identity_layer_switch_count: 0
-
-      clarifying:
-        clarifying_fields_prev: {}
-        clarifying_fields_lineage: []
-        clarifying_field_stability: 0.0
-
-      context:
-        context_fields_prev: {}
-        context_fields_lineage: []
-        context_shift_count: 0
-
-      continuity:
-        continuity_prev: "reset"
-        continuity_lineage: ["reset"]
-        continuity_break_count: 1
-
-      topology:
-        conversation_id: "conv_004"
-        conversation_topology: "reset-heavy"
-        conversation_length: 0
-
-      metrics:
-        primary_certainty: 0.1
-        ambiguity_score: 0.95
-        collapse_risk: 0.9
-        stability_score: 0.0
-        volatility_score: 0.0
-        drift_score: 0.0
-        lineage_confidence: 0.0
-
-      semantic_residue:
-        last_topic: null
-        last_intent: null
-        last_register: null
-
-      next_context:
-        topic: "new"
-        stance: "neutral"
-        intent: "begin"
-        register: "casual"
-        politeness: "normal"
-        epistemic_shading: "none"
-        continuity: "reset"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: true
-        importance: 1
-
-    expected_ce_output:
-      identity_layer_id: "new_conversation"
-      continuity_status: "new"
-
-      context_fields:
-        topic: "new"
-        stance: "neutral"
-        intent: "begin"
-        register: "casual"
-        politeness: "normal"
-        epistemic_shading: "none"
-        continuity: "reset"
-        direction: "forward"
-        coherence: "stable"
-        shift_required: true
-        importance: 1
-
-      clarifying_fields: {}
-
-      provenance:
-        decision_category: "new"
-        trigger_conditions:
-          identity_match: false
-          ambiguity_level: "high"
-          collapse_level: "high"
-          continuity_signal: "reset"
-          lineage_alignment: "diverged"
-
-      audit:
-        rule_fired: "rule_1_new"
-        identity_layer_id: "new_conversation"
-        continuity_status: "new"
-        turn_index: 5
-
-      version_tag: "cex_v3.2"
-
-
-  # ===========================================================
-  # 6. NEW CONVERSATION — High Drift + High Volatility
-  # ===========================================================
-  - id: "cex_new_conversation_high_drift"
-    description: "High drift + high volatility + identity mismatch → new conversation."
-
-    ie_input:
-      intake:
-        ie_tokens: ["restart"]
-        token_flags: ["normative"]
-        normalized_text: "restart"
-      structure: { tags: [], spans: [], markup: [] }
-      metadata: { repair_annotations: [], replay: {} }
-      error: null
-
-    cil_input:
-      identity:
-        primary_layer_id: null
-        identity_layer_prev: 9
-        identity_layer_lineage: [2, 5, 7]
-        identity_layer_recency: { 2: 2, 5: 1, 7: 0 }
-        identity_layer_density: { 2: 0.33, 5: 0.33, 7: 0.33 }
-        identity_layer_switch_count: 3
-
-      clarifying:
-        clarifying_fields_prev: { topic: "old" }
-        clarifying_fields_lineage:
-          - { topic: "old" }
