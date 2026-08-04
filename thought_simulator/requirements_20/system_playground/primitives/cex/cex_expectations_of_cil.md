@@ -86,42 +86,176 @@ These metrics are **historical**, not computed from the present turn.
 
 ---
 
-### **4.2 Specific Lineage Details (Structured Metadata)**  
-These allow CEx to determine relevance:
+# **4.2 Definitive CIL → CEx Metadata Contract (Names, Formats, Structures)**
 
-#### **Identity Lineage**
-- identity_layer_prev  
-- identity_layer_lineage (last N turns)  
-- identity_layer_recency  
-- identity_layer_density  
-- identity_layer_switch_count  
+CEx requires CIL to deliver a **stable, deterministic, non‑semantic metadata block** describing both the *broad summary* and *specific lineage* of the last N (≤10) turns of the conversation.  
+This section defines the **exact fieldnames**, **formats**, and **data structures** that CEx expects.  
+These names and structures are **fixed** and must not drift.
 
-#### **Clarifying Lineage**
-- clarifying_fields_prev  
-- clarifying_fields_lineage  
-- clarifying_field_stability  
+All fields are computed upstream by **COB/CST** using **linear updates** and surfaced by CIL without modification.
 
-#### **Context Lineage**
-- context_fields_prev  
-- context_fields_lineage  
-- context_shift_count  
+---
 
-#### **Continuity Lineage**
-- continuity_prev  
-- continuity_lineage  
-- continuity_break_count  
+## **4.2.1 CIL Output Envelope (Canonical Structure)**
 
-#### **Conversation Topology**
-- conversation_id  
-- conversation_topology  
-- conversation_length  
+```yaml
+cil_output:
+  identity:
+    primary_layer_id: int | null
+    identity_layer_prev: int | null
+    identity_layer_lineage: [int]            # length ≤ 10
+    identity_layer_recency: { int: int }     # layer_id → turns since last use
+    identity_layer_density: { int: float }   # layer_id → normalized frequency
+    identity_layer_switch_count: int
 
-These fields allow CEx to determine:
+  clarifying:
+    clarifying_fields_prev: { string: any }
+    clarifying_fields_lineage: [ { string: any } ]   # length ≤ 10
+    clarifying_field_stability: float                # 0.0–1.0
 
-- whether the present turn fits within a previous conversation,  
-- whether continuity should be preserved,  
-- whether fallback is appropriate,  
-- whether a new conversation should be declared.
+  context:
+    context_fields_prev: { string: any }
+    context_fields_lineage: [ { string: any } ]      # length ≤ 10
+    context_shift_count: int
+
+  continuity:
+    continuity_prev: string                          # "continue" | "reset" | "shift" | "unknown"
+    continuity_lineage: [string]                     # length ≤ 10
+    continuity_break_count: int
+
+  topology:
+    conversation_id: string                          # UUID or short hash
+    conversation_topology: string                    # "linear" | "branched" | "reset-heavy"
+    conversation_length: int
+
+  metrics:
+    primary_certainty: float                         # 0.0–1.0
+    ambiguity_score: float                           # 0.0–1.0
+    collapse_risk: float                             # 0.0–1.0
+    stability_score: float                           # 0.0–1.0
+    volatility_score: float                          # 0.0–1.0
+    drift_score: float                               # 0.0–1.0
+    lineage_confidence: float                        # 0.0–1.0 (derived from lineage stability)
+
+  semantic_residue:
+    last_topic: string | null
+    last_intent: string | null
+    last_register: string | null
+
+  next_context:
+    topic: string | null
+    stance: string | null
+    intent: string | null
+    register: string | null
+    politeness: string | null
+    epistemic_shading: string | null
+    continuity: string | null
+    direction: string | null
+    coherence: string | null
+    shift_required: bool | null
+    importance: int | null
+```
+
+---
+
+## **4.2.2 Rationale for These Fields**
+
+### **Identity lineage**  
+Allows CEx to determine whether the present turn belongs to one of the last N conversations.
+
+### **Clarifying lineage**  
+Allows CEx to detect drift or stability in clarifying metadata.
+
+### **Context lineage**  
+Allows CEx to detect continuity or shifts in conversational context.
+
+### **Continuity lineage**  
+Allows CEx to determine whether the conversation is continuing, resetting, or shifting.
+
+### **Topology**  
+Allows CEx to understand the structural shape of the conversation cluster.
+
+### **Metrics**  
+Provide scalar summaries of stability, ambiguity, collapse risk, and lineage confidence.
+
+### **Semantic residue**  
+Provides bounded structural hints from the previous turn (non‑semantic).
+
+### **Next context**  
+Provides the projected next‑turn context from upstream primitives.
+
+---
+
+## **4.2.3 Requirements for CIL Delivery**
+
+CIL must:
+
+- deliver **all fields exactly as named**,  
+- preserve **all formats exactly as specified**,  
+- surface values **computed by COB/CST**,  
+- perform **no semantic inference**,  
+- perform **no modification** of upstream metrics,  
+- deliver the envelope **deterministically**,  
+- deliver the envelope **every turn**,  
+- deliver the envelope **even when values are null**.
+
+This ensures:
+
+- deterministic CEx behavior,  
+- replay‑safe lineage tracking,  
+- stable TP metadata,  
+- no drift in fieldnames or formats.
+
+---
+
+## **4.2.4 Requirements for COB/CST Computation**
+
+COB/CST must compute all fields using:
+
+- **linear recurrence**  
+- **bounded history (≤10 turns)**  
+- **simple counters**  
+- **simple ratios**  
+- **simple comparisons**  
+- **simple decay functions**  
+
+No semantic inference.  
+No embeddings.  
+No ML.  
+No global reasoning.
+
+---
+
+## **4.2.5 Requirements for CEx Consumption**
+
+CEx must:
+
+- treat all fields as **read‑only**,  
+- use them to determine:  
+  - **new conversation**,  
+  - **specific conversation**,  
+  - **ambiguous fallback**,  
+- write continuity_status accordingly,  
+- write identity_layer_id accordingly,  
+- write context_fields accordingly,  
+- write clarifying_fields accordingly,  
+- write provenance + audit accordingly.
+
+---
+
+## **4.2.6 Stability Guarantee**
+
+This metadata contract is intended to be:
+
+- stable,  
+- non‑drifting,  
+- deterministic,  
+- pipeline‑safe,  
+- easy for CIL to deliver,  
+- easy for CEx to consume,  
+- easy for COB/CST to compute.
+
+It forms the backbone of the CIL → CEx interface.
 
 ---
 
