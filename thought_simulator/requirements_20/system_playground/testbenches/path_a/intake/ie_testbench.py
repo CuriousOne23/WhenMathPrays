@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ============================================================
-# IE Testbench — Deterministic Replay Verification (v3.1)
+# IE Testbench — Deterministic Replay Verification (v3.3)
 # Path‑A Intake Envelope — 20.109 IE Primitive
 # ============================================================
 
@@ -8,11 +8,9 @@ import yaml
 from pathlib import Path
 from thought_simulator.requirements_20.system_playground.primitives.ie.ie import run_ie
 
-
 ROOT = Path(__file__).parent
 TESTBENCH = ROOT / "ie_testbench.yaml"
 TESTS_TO_RUN = ROOT / "ie_tests_to_run.yaml"
-RULES = ROOT / "ie_rules.yaml"
 
 
 # ------------------------------------------------------------
@@ -47,7 +45,7 @@ def compare_list(expected, actual, prefix=""):
 
 
 # ------------------------------------------------------------
-# Compare full IE envelope
+# Compare full IE envelope (v3.3)
 # ------------------------------------------------------------
 def compare_envelope(expected, actual):
     diffs = []
@@ -61,12 +59,12 @@ def compare_envelope(expected, actual):
         )
     )
 
-    # intake.tokens
+    # intake.ie_tokens
     diffs.extend(
         compare_list(
-            expected["intake"].get("tokens", []),
-            actual["intake"].get("tokens", []),
-            prefix="intake.tokens: "
+            expected["intake"].get("ie_tokens", []),
+            actual["intake"].get("ie_tokens", []),
+            prefix="intake.ie_tokens: "
         )
     )
 
@@ -85,6 +83,24 @@ def compare_envelope(expected, actual):
             expected.get("structure", {}).get("tags", []),
             actual.get("structure", {}).get("tags", []),
             prefix="structure.tags: "
+        )
+    )
+
+    # structure.spans
+    diffs.extend(
+        compare_list(
+            expected.get("structure", {}).get("spans", []),
+            actual.get("structure", {}).get("spans", []),
+            prefix="structure.spans: "
+        )
+    )
+
+    # structure.markup
+    diffs.extend(
+        compare_list(
+            expected.get("structure", {}).get("markup", []),
+            actual.get("structure", {}).get("markup", []),
+            prefix="structure.markup: "
         )
     )
 
@@ -153,7 +169,7 @@ def main():
 
     enabled_ids = {t["id"] for t in tests_to_run if t.get("enabled", False)}
 
-    print("IE Testbench — Deterministic Replay Verification (v3.1)")
+    print("IE Testbench — Deterministic Replay Verification (v3.3)")
     print("========================================================")
 
     passed = 0
@@ -191,13 +207,9 @@ def main():
     print(f"Skipped: {skipped}")
 
 
-if __name__ == "__main__":
-    main()
-
-# ============================================================
-# Testbench Integration Hooks for run.py
-# ============================================================
-
+# ------------------------------------------------------------
+# Integration hooks for run.py
+# ------------------------------------------------------------
 _testbench_config = {
     "mode": "testbench",
     "use_inb": False,
@@ -207,19 +219,9 @@ _testbench_config = {
 }
 
 def set_testbench_config(config: dict):
-    """
-    Called by run.py to inject configuration flags.
-    We store them but IE testbench does not use them directly.
-    """
     global _testbench_config
     _testbench_config = config
 
-
 def run_testbench():
-    """
-    Called by run.py to execute the IE testbench.
-    This simply calls main(), which already performs the full testbench run.
-    """
     print("IE Testbench Configuration:", _testbench_config)
     main()
-
