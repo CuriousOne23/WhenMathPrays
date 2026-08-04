@@ -1,546 +1,300 @@
-# **cex_expectations_of_ie_and_cil.md**  
-### *Unified Architectural Specification — Draft v1.0*
+# **cex_expectations_of_cil.md**  
+### *Speculative White Paper — Architectural Expectations of CIL for CEx*  
+### *Draft v0.4 — Unified, CIL‑Only Specification*
 
 ---
 
-# **1. Overview**
+# **1. Purpose of This Document**
 
-This document defines the **complete set of expectations** that the CEx primitive has for:
+This white paper describes the **information CEx requires from CIL** in order to determine:
 
-- **IE** (Input Extractor)  
-- **CIL** (Conversation Identity Layer)  
-- **COB/CST** (Conversation Object Builder / Stability Tracker)
+- whether the present turn belongs to one of the last N (typically 10) conversations,  
+- whether the present turn is **new**,  
+- whether the present turn is **undetermined**,  
+- or whether the present turn should **fallback** to the most recent conversation.  
+This paper is **speculative** and serves as an **anchor for realization**, not a formal requirement document.  
+It outlines:
 
-It describes:
-
-- what IE must deliver (structural categories, continuity cues, reference‑back cues)  
-- what CIL must deliver (lineage, continuity_prev, metrics, topology)  
-- how CEx cross‑correlates IE + CIL  
-- how CEx determines conversation relevance  
-- how COB/CST update lineage  
-- how TP metadata is placed  
-- how provenance and audit are generated  
-- how replay‑safety is guaranteed
-
-CEx is a **bounded‑semantic**, **deterministic**, **non‑inferential** primitive.  
-It cannot interpret meaning.  
-It cannot use embeddings.  
-It cannot perform semantic similarity.  
-It relies entirely on **structured metadata** from IE and CIL.
+- what CIL must deliver,  
+- how COB/CST compute the required metadata,  
+- how CEx uses this metadata deterministically,  
+- how CIL loads general + specific conversation descriptions into TP,  
+- and how COB uses CEx output to update conversation state.  
 
 ---
 
-# **2. Architectural Constraints**
+# **2. Architectural Context**
 
-CEx operates under strict constraints:
+CEx is a **bounded‑semantic primitive**.  
+It cannot infer meaning.  
+It cannot compute global semantics.  
+It cannot determine conversation relevance from IE tokens alone.  
+Therefore:
 
-- **No semantic inference**  
-- **No embeddings**  
-- **No lexical matching**  
-- **No global reasoning**  
-- **No meaning extraction**  
-- **No topic inference from text**  
-- **No intent inference from text**
+> **CEx must rely entirely on structured metadata delivered by CIL.**
 
-CEx can only use:
+CIL itself does not compute semantics either.  
+CIL is a **carrier** of metadata computed by:
 
-- structural categories from IE  
-- lineage metadata from CIL  
-- scalar metrics from COB/CST  
-- continuity signals  
-- reference‑back signals  
-- shift/reset cues  
-- bounded structural hints
+- **COB** — Conversation Object Builder  
+- **CST** — Conversation Stability Tracker  
 
-All decisions must be:
-
-- deterministic  
-- replay‑safe  
-- bounded‑semantic  
-- non‑inferential  
-- stable under replay  
-- independent of raw IE tokens  
+These upstream units maintain conversation lineage using **bounded, deterministic, replay‑safe updates**.
 
 ---
 
-# **3. CEx Inputs**
+# **3. High‑Level Expectation**
 
-CEx receives **two inputs** every turn:
+CEx expects CIL to deliver **two classes of information**:   
 
-### **A. IE → Structural Metadata (Current Turn)**  
-IE must deliver:
+### **A. Broad Summary (Conversation‑Level Metrics)**  
+Scalar values summarizing the stability and ambiguity of the conversation cluster.
 
-- structural categories  
-- continuity cues  
-- shift cues  
-- reference‑back cues  
-- register/politeness hints  
-- topic/intent hints (bounded structural categories)  
-- structural token_flags  
-- normalized_text  
-- repair annotations  
-- punctuation cues  
-- interrogative/imperative cues  
-
-### **B. CIL → Conversation Lineage (Last ≤10 Conversations)**  
-CIL must deliver:
-
-- identity lineage  
-- clarifying lineage  
-- context lineage  
-- continuity lineage  
-- topology  
-- scalar metrics  
-- semantic residue  
-- next_context (previous turn projection)
-
-CEx cross‑correlates these two inputs to determine:
-
-- new conversation  
-- specific conversation  
-- ambiguous fallback  
+### **B. Specific Lineage Details (Turn‑Level and Cluster‑Level Metadata)**  
+Structured values describing identity, clarifying metadata, context, continuity, and topology of the last N turns.  
+CEx uses both classes to determine conversation relevance.
 
 ---
 
-# **4. IE → CEx Structural Requirements**
+# **4. What CIL Must Deliver to CEx**
 
-IE must deliver **bounded structural categories**, not semantic interpretations.
-
-These categories are finite, deterministic, and expandable.
-
-### **4.1 Structural Category Families**
-
-IE must produce:
-
-1. **topic_hint**  
-2. **intent_hint**  
-3. **register_hint**  
-4. **politeness_hint**  
-5. **continuity_hint**  
-6. **direction_hint**  
-7. **coherence_hint**  
-8. **importance_hint**  
-9. **reference_hint** *(new)*
-
-These categories are derived from:
-
-- token_flags  
-- punctuation  
-- structural phrases  
-- reset cues  
-- shift cues  
-- reference‑back cues  
-- interrogative/imperative forms  
-- politeness markers  
-- slang markers  
-- normalized_text patterns  
-
-### **4.2 Continuity Cues**
-
-IE must detect:
-
-- “start fresh” → reset  
-- “new topic” → shift  
-- “again” → continue  
-- “continue” → continue  
-- “switching gears” → shift  
-- “start over” → reset  
-
-### **4.3 Reference‑Back Cues**
-
-IE must detect:
-
-- “back to the earlier point” → previous  
-- “as I was saying” → previous  
-- “returning to the first question” → specific_previous  
-- “about that other thing” → ambiguous_previous  
-- “let’s go back to X” → specific_previous  
-
-### **4.4 Shift Cues**
-
-IE must detect:
-
-- “new topic”  
-- “different question”  
-- “switching gears”  
-- “moving on”  
-
-### **4.5 Expandability**
-
-IE must support:
-
-- adding new categories  
-- adding new cues  
-- adding new structural patterns  
-
-without breaking CEx.
+CIL must deliver a **structured metadata block** containing:  
 
 ---
 
-# **5. CIL → CEx Metadata Contract**
+## **4.1 Broad Summary (Scalar Metrics)**
 
-CIL must deliver the **canonical metadata envelope** exactly as defined in your existing document (Section 4.2).  
-This includes:
+Computed by COB/CST using linear updates:   
 
-- identity lineage  
-- clarifying lineage  
-- context lineage  
-- continuity lineage  
-- topology  
-- scalar metrics  
-- semantic residue  
-- next_context  
-
-All fields must be:
-
-- deterministic  
-- non‑semantic  
-- non‑drifting  
-- delivered every turn  
-- surfaced exactly as computed by COB/CST  
-
-CIL must not:
-
-- infer meaning  
-- modify upstream values  
-- rename fields  
-- omit null fields  
-- store state  
-
-CIL is a **stateless carrier**.
-
----
-
-# **6. Cross‑Correlation Layer (IE ↔ CIL)**
-
-CEx compares:
-
-### **IE structural categories (current turn)**  
-to  
-### **CIL lineage (previous turns)**
-
-This is the core of CEx.
-
-### **6.1 Alignment Dimensions**
-
-CEx computes:
-
-- identity alignment  
-- clarifying alignment  
-- context alignment  
-- continuity alignment  
-- reference‑back alignment  
-- drift contribution  
-- collapse contribution  
-- ambiguity contribution  
-- stability contribution  
-
-### **6.2 Shift Detection**
-
-If continuity_hint contradicts continuity_prev → shift.
-
-### **6.3 Reference‑Back Resolution**
-
-If reference_hint indicates previous conversation:
-
-- CEx selects the envelope with highest stability_score  
-- or the envelope matching topic_hint / intent_hint  
-- or the envelope with lowest recency  
-
-### **6.4 Ambiguity Resolution**
-
-If multiple envelopes partially align:
-
-- fallback to most recent stable envelope  
-
-### **6.5 New Conversation Detection**
-
-If no envelope aligns:
-
-- new conversation  
-
----
-
-# **7. CEx Deterministic Decision Algorithm**
-
-CEx classifies the turn as:
-
-- **new conversation**  
-- **specific conversation**  
-- **ambiguous fallback**
-
-Using the rules already defined in your document (Section 4.3), but now incorporating IE structural categories.
-
-### **Rule 1 — New Conversation**
-
-Triggered when:
-
-- identity mismatch  
-- high ambiguity  
-- high collapse risk  
-- continuity reset  
-- reference_hint = none  
-- no alignment  
-
-### **Rule 2 — Specific Conversation**
-
-Triggered when:
-
-- strong identity alignment  
-- low ambiguity  
-- low collapse risk  
-- continuity continue  
-- reference_hint = previous or specific_previous  
-- strong context/clarifying alignment  
-
-### **Rule 3 — Ambiguous → Fallback**
-
-Triggered when:
-
-- weak identity alignment  
-- moderate ambiguity  
-- continuity unclear  
-- reference_hint = ambiguous_previous  
-
----
-
-# **8. COB/CST Linear Update Model**
-
-This section remains exactly as in your existing document (Section 5), including:
-
-- linear recurrence  
-- counters  
-- ratios  
-- decay functions  
-- stability/volatility measures  
-
-All updates follow:
-
-```
-new_value = f(previous_value, current_turn_metadata)
-```
-
-This ensures:
-
-- determinism  
-- replay‑safety  
-- bounded semantics  
-
----
-
-# **9. TP Metadata Placement Rules**
-
-This section remains exactly as in your existing document (Section 6), including:
-
-- canonical TP structure  
-- no renaming  
-- no reformatting  
-- full envelope every turn  
-- deterministic ordering  
-- no semantic interpretation  
-- stateless CIL  
-
----
-
-# **10. Provenance & Audit**
-
-This section remains exactly as in your existing document (Section 7), including:
-
-- deterministic replay  
-- lineage update support  
-- transparency  
-- bounded‑semantic audit fields  
-
----
-
-# **11. Replay‑Safety Guarantees**
-
-The entire IE → CIL → CEx → COB → CIL loop is:
-
-- deterministic  
-- bounded‑semantic  
-- non‑inferential  
-- replay‑safe  
-- stable under re‑execution  
-- independent of raw IE tokens  
-- dependent only on structured metadata  
-
-This completes the unified specification.
-
----
-
-# ⭐ **Appendix: CEx Input Fields from IE (Current Turn)**  
-These are the **structural categories** and **structural cues** IE must deliver.  
-No semantics. No embeddings. No lexical matching.  
-All values are bounded, deterministic, and expandable.
-
-## **1. Structural Category Fields**
-CEx expects IE to deliver:
-
-### **topic_hint**
-- greeting  
-- assistance  
-- system  
-- misc  
-- noise  
-- other  
-*(bounded structural buckets)*
-
-### **intent_hint**
-- inform  
-- request  
-- begin  
-- none  
-
-### **register_hint**
-- casual  
-- formal  
-- informal  
-- none  
-
-### **politeness_hint**
-- high  
-- normal  
-- none  
-
-### **continuity_hint**
-- continue  
-- reset  
-- shift  
-- unknown  
-
-### **direction_hint**
-- forward  
-- backward  
-- none  
-
-### **coherence_hint**
-- stable  
-- unstable  
-- none  
-
-### **importance_hint**
-- low  
-- medium  
-- high  
-
-### **reference_hint** *(critical new field)*
-- none  
-- previous  
-- specific_previous  
-- ambiguous_previous  
-
----
-
-## **2. Structural Cue Fields**
-These are not categories but raw structural signals IE must surface:
-
-### **token_flags**
-- imperative  
-- interrogative  
-- declarative  
-- slang  
-- profanity  
-- greeting  
-- reset_phrase  
-- shift_phrase  
-- reference_back_phrase  
-
-### **normalized_text**
-Used only for structural pattern detection.
-
-### **repair_annotations**
-Used for continuity detection.
-
-### **punctuation_cues**
-- question mark  
-- ellipsis  
-- exclamation  
-- abrupt stop  
-
-### **structure**
-- sentence boundaries  
-- clause boundaries  
-- structural markers  
-
-### **metadata**
-- IE‑level structural tags  
-- non‑semantic annotations  
-
----
-
-# ⭐ **CEx Input Fields from CIL (Last ≤10 Conversations)**  
-These are the fields defined in your canonical CIL metadata contract.  
-CEx consumes them **read‑only**.
-
-## **1. Identity Lineage**
-- `primary_layer_id`  
-- `identity_layer_prev`  
-- `identity_layer_lineage`  
-- `identity_layer_recency`  
-- `identity_layer_density`  
-- `identity_layer_switch_count`  
-
-## **2. Clarifying Lineage**
-- `clarifying_fields_prev`  
-- `clarifying_fields_lineage`  
-- `clarifying_field_stability`  
-
-## **3. Context Lineage**
-- `context_fields_prev`  
-- `context_fields_lineage`  
-- `context_shift_count`  
-
-## **4. Continuity Lineage**
-- `continuity_prev`  
-- `continuity_lineage`  
-- `continuity_break_count`  
-
-## **5. Topology**
-- `conversation_id`  
-- `conversation_topology`  
-- `conversation_length`  
-
-## **6. Scalar Metrics**
 - `primary_certainty`  
 - `ambiguity_score`  
 - `collapse_risk`  
 - `stability_score`  
 - `volatility_score`  
-- `drift_score`  
-- `lineage_confidence`  
+- `drift_score`
 
-## **7. Semantic Residue (bounded structural hints)**
-- `last_topic`  
-- `last_intent`  
-- `last_register`  
+These metrics summarize:
 
-## **8. Next Context (previous turn projection)**
-- `topic`  
-- `stance`  
-- `intent`  
-- `register`  
-- `politeness`  
-- `epistemic_shading`  
-- `continuity`  
-- `direction`  
-- `coherence`  
-- `shift_required`  
-- `importance`  
+- stability of identity layer,  
+- ambiguity of identity selection,  
+- collapse risk,  
+- volatility of clarifying/context metadata,  
+- drift across turns.  
+They are **historical**, not computed from the present turn.  
 
 ---
 
-# ⭐ **Summary Table (IE + CIL Fields)**
+## **4.2 Specific Lineage Details (Structured Metadata)**
 
-| Source | Field Type | Field Names |
-|--------|------------|-------------|
-| **IE** | Structural Categories | topic_hint, intent_hint, register_hint, politeness_hint, continuity_hint, direction_hint, coherence_hint, importance_hint, reference_hint |
-| **IE** | Structural Cues | token_flags, normalized_text, repair_annotations, punctuation_cues, structure, metadata |
-| **CIL** | Identity Lineage | primary_layer_id, identity_layer_prev, identity_layer_lineage, identity_layer_recency, identity_layer_density, identity_layer_switch_count |
-| **CIL** | Clarifying Lineage | clarifying_fields_prev, clarifying_fields_lineage, clarifying_field_stability |
-| **CIL** | Context Lineage | context_fields_prev, context_fields_lineage, context_shift_count |
-| **CIL** | Continuity Lineage | continuity_prev, continuity_lineage, continuity_break_count |
-| **CIL** | Topology | conversation_id, conversation_topology, conversation_length |
-| **CIL** | Scalar Metrics | primary_certainty, ambiguity_score, collapse_risk, stability_score, volatility_score, drift_score, lineage_confidence |
-| **CIL** | Semantic Residue | last_topic, last_intent, last_register |
-| **CIL** | Next Context | topic, stance, intent, register, politeness, epistemic_shading, continuity, direction, coherence, shift_required, importance |
+These allow CEx to determine relevance:  
+
+### **Identity Lineage**
+- `identity_layer_prev`  
+- `identity_layer_lineage`  
+- `identity_layer_recency`  
+- `identity_layer_density`  
+- `identity_layer_switch_count`
+
+### **Clarifying Lineage**
+- `clarifying_fields_prev`  
+- `clarifying_fields_lineage`  
+- `clarifying_field_stability`
+
+### **Context Lineage**
+- `context_fields_prev`  
+- `context_fields_lineage`  
+- `context_shift_count`
+
+### **Continuity Lineage**
+- `continuity_prev`  
+- `continuity_lineage`  
+- `continuity_break_count`
+
+### **Conversation Topology**
+- `conversation_id`  
+- `conversation_topology`  
+- `conversation_length`
+
+These fields allow CEx to determine:
+
+- whether the present turn fits within a previous conversation,  
+- whether continuity should be preserved,  
+- whether fallback is appropriate,  
+- whether a new conversation should be declared.
+
+---
+
+# **5. How COB/CST Compute These Metrics**
+
+COB/CST compute all metrics using **stateless linear updates**, meaning:  
+> **Each new value is computed from the previous value + current turn structural metadata.**   
+This ensures:
+
+- determinism,  
+- replay safety,  
+- bounded semantics,  
+- no global inference,  
+- no semantic inference,  
+- no embeddings,  
+- no ML.  
+
+---
+
+## **5.1 Linear Update Model**
+
+For each metric:  
+```
+new_value = f(previous_value, current_turn_metadata)
+```  
+Where `f` is:  
+- a simple counter update,  
+- a simple ratio update,  
+- a simple comparison,  
+- a simple decay function,  
+- a simple stability/volatility measure.  
+
+This model is trivial to implement and fully replay‑safe.
+
+---
+
+# **6. What COB Needs From OutBA to Perform Updates**
+
+COB requires structural metadata from OutBA:  
+
+- turn boundaries  
+- structural tags  
+- clarifying metadata  
+- context metadata  
+- identity layer selection  
+- continuity signals  
+- conversation reset signals  
+- conversation shift signals  
+- provenance  
+- audit entries  
+
+COB does not need semantic content, embeddings, or global context.
+
+---
+
+# **7. How CEx Determines Conversation Relevance**
+
+CEx uses the metadata delivered by CIL to determine:   
+
+---
+
+## **7.1 New Conversation**
+
+CEx declares a new conversation when:  
+- identity lineage has no match,  
+- ambiguity is high,  
+- collapse risk is high,  
+- continuity_prev indicates reset,  
+- clarifying/context lineage diverge significantly.  
+This is deterministic.  
+
+---
+
+## **7.2 Specific Conversation (1 of 10)**
+
+CEx selects a specific conversation when:  
+- identity lineage matches strongly,  
+- ambiguity is low,  
+- collapse risk is low,  
+- continuity_prev indicates continuation,  
+- clarifying/context lineage align.  
+This is deterministic.   
+
+---
+
+## **7.3 Ambiguous → Fallback**
+
+CEx performs fallback when:  
+- identity lineage is weak,  
+- ambiguity is moderate,  
+- collapse risk is moderate,  
+- continuity_prev is unclear.   
+Fallback selects the **most recent conversation with stable lineage**.
+
+---
+
+# **8. How CIL Loads General + Specific Conversation Description into TP**
+
+CIL must load into TP:   
+
+### **General Description**
+- `stability_score`  
+- `volatility_score`  
+- `drift_score`  
+- `collapse_risk`  
+- `ambiguity_score`  
+- `primary_certainty`
+
+### **Specific Details**
+- `identity_layer_id`  
+- `clarifying_fields`  
+- `context_fields`  
+- `continuity_status`  
+- `conversation_id`  
+- `conversation_topology`
+
+This allows downstream primitives to operate deterministically.
+
+---
+
+# **9. How COB Uses CEx Output for Next Update**
+
+After CEx produces:  
+- `identity_layer_id`  
+- `continuity_status`  
+- `context_fields`  
+- `clarifying_fields`  
+- provenance  
+- audit   
+
+COB uses these to update:
+
+- identity lineage  
+- clarifying lineage  
+- context lineage  
+- continuity lineage  
+- stability signals  
+- collapse signals  
+- conversation topology  
+
+This forms a closed deterministic loop:  
+> **COB → CIL → CEx → COB → CIL → CEx → …**   
+---
+
+# **10. Summary**
+
+CEx requires CIL to deliver:  
+- broad summary metrics,  
+- specific lineage details,  
+- conversation topology,  
+- continuity signals,  
+- identity lineage,  
+- clarifying lineage,  
+- context lineage.   
+
+COB/CST compute all required fields using:  
+- stateless linear updates,  
+- simple counters,  
+- simple ratios,  
+- simple comparisons.  
+
+CEx uses these fields to determine:  
+- new conversation,  
+- specific conversation,  
+- ambiguous fallback.   
+CIL loads both general + specific conversation descriptions into TP.  
+COB uses CEx output to update conversation state for the next turn.  
+
+This architecture is:  
+- feasible,  
+- deterministic,  
+- replay‑safe,  
+- bounded‑semantic,  
+- non‑inferential,  
+- pipeline‑aligned.   
+
+---
