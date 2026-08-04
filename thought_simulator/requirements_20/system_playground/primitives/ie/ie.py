@@ -86,7 +86,7 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
             # Convert location → span
             loc = a.get("location")
             span = [loc] if loc is not None else []
-    
+
         anomaly_flags.append(
             AnomalyFlag(
                 type=a.get("type") or a.get("anomaly_type", ""),
@@ -120,6 +120,7 @@ def _parse_ie_input(iiinb_output: Dict[str, Any]) -> Optional[IEInput]:
 def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
     tokens = list(ie_input.intake_tokens)
 
+    # Apply repairs at token level
     for r in ie_input.repair_proposals:
         rule = r.rule_id
 
@@ -128,18 +129,20 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
             rule = rule.replace(".normalized", ".normalize")
         if rule.endswith(".cleaned"):
             rule = rule.replace(".cleaned", ".clean")
-        
+
         span = r.span
         repl = r.replacement
 
-        # whitespace.normalize: span [0,1], replacement "The dog"
-        if rule == "whitespace.normalize" and len(span) == 2:
+        # whitespace.normalize: use replacement tokens
+        if rule == "whitespace.normalize":
             repl_tokens = repl.split()
-            if len(repl_tokens) == 2:
+            if len(span) == 2 and len(repl_tokens) == 2:
                 tokens[span[0]] = repl_tokens[0]
                 tokens[span[1]] = repl_tokens[1]
+            else:
+                tokens = repl_tokens
 
-        # repetition.cleaned: replace token at span[0]
+        # repetition.clean(ed): replace token at span[0]
         elif rule in ("repetition.clean", "repetition.cleaned") and len(span) == 1:
             idx = span[0]
             if 0 <= idx < len(tokens):
@@ -175,19 +178,18 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
     # If we have no_entry anomalies and illegal_character.removed, reconstruct from surface.
     has_no_entry = any(a.type == "no_entry" for a in ie_input.anomaly_flags)
     if has_no_entry:
-        # Remove illegal characters first
         surface = ie_input.intake_surface
         for r in ie_input.repair_proposals:
             rule = r.rule_id
             span = r.span
             repl = r.replacement
-        
+
             # Normalize rule_id variants
             if rule.endswith(".normalized"):
                 rule = rule.replace(".normalized", ".normalize")
             if rule.endswith(".cleaned"):
                 rule = rule.replace(".cleaned", ".clean")
-        
+
             # Apply repairs at surface level
             if rule == "illegal_character.removed":
                 idx = span[0]
@@ -197,17 +199,21 @@ def _apply_repairs_to_tokens(ie_input: IEInput) -> List[str]:
                 idx = span[0]
                 target = ie_input.intake_tokens[idx]
                 surface = surface.replace(target, repl)
-            elif rule in ("punctuation.clean",):
+            elif rule == "punctuation.clean":
                 idx = span[0]
                 target = ie_input.intake_tokens[idx]
                 surface = surface.replace(target, repl)
             elif rule == "unicode.normalize":
-                # Replace entire span region
                 surface = repl
             elif rule == "whitespace.normalize":
                 surface = repl
-        
+
         tokens = surface.split()
+        return tokens
+
+    # If there are no anomalies, drop empty tokens (illegal_character.removed) for complex mixed cases
+    if not ie_input.anomaly_flags:
+        tokens = [t for t in tokens if t != ""]
 
     return tokens
 
@@ -226,16 +232,27 @@ def _compute_token_flags(ie_input: IEInput, ie_tokens: List[str]) -> List[str]:
     # Build a set of repaired token strings
     repaired_strings = set()
     for r in ie_input.repair_proposals:
+        rule = r.rule_id
+        if rule.endswith(".normalized"):
+            rule = rule.replace(".normalized", ".normalize")
+        if rule.endswith(".cleaned"):
+            rule = rule.replace(".cleaned", ".clean")
+
         repaired_strings.add(r.replacement)
 
-    # illegal_character.removed marks empty tokens as repaired
-    for r in ie_input.repair_proposals:
-        if r.rule_id == "illegal_character.removed":
+        # illegal_character.removed marks empty tokens as repaired
+        if rule == "illegal_character.removed":
             repaired_strings.add("")
 
     # whitespace.normalize marks first token repaired
     for r in ie_input.repair_proposals:
-        if r.rule_id == "whitespace.normalize":
+        rule = r.rule_id
+        if rule.endswith(".normalized"):
+            rule = rule.replace(".normalized", ".normalize")
+        if rule.endswith(".cleaned"):
+            rule = rule.replace(".cleaned", ".clean")
+
+        if rule == "whitespace.normalize":
             if ie_tokens:
                 repaired_strings.add(ie_tokens[0])
 
@@ -277,7 +294,7 @@ def _compute_structure(ie_input: IEInput) -> Dict[str, Any]:
 # Metadata (TP.metadata)
 # ---------------------------------------------------------------------------
 
-def _compute_repair_annotations(ie_input: IEInput) -> List[Dict[str, Any]]:
+def _compute_repair_annotations(ie_input: IEInput) -> List[Dict[str, Any]]]:
     annotations: List[Dict[str, Any]] = []
 
     # Repairs
