@@ -1,0 +1,221 @@
+# ============================================================
+#  cex_ie_cue_dictionary.yaml
+#  Deterministic cue dictionary for CEx‑IE (20.107.010)
+#  Supports CEx‑CCR alignment (20.107.020)
+#  Location:
+#    thought_simulator/requirements_20/system_playground/primitives/dictionary/
+# ============================================================
+
+version: 1.0
+primitive: cex_ie
+type: cue_dictionary
+
+# ------------------------------------------------------------
+# Structural Cue Categories
+# ------------------------------------------------------------
+categories:
+  continuity:
+    enum: [continue, reset, shift]
+  reference:
+    enum: [none, previous, specific_previous, ambiguous_previous]
+  intent:
+    enum: [inform, request, begin, none]
+  topic:
+    enum: [greeting, assistance, system, misc, noise, other]
+  direction:
+    enum: [forward, backward, none]
+  politeness:
+    enum: [high, normal, none]
+  register:
+    enum: [casual, formal, informal, none]
+  importance:
+    enum: [low, medium, high]
+
+# ------------------------------------------------------------
+# Cue Phrase Dictionary
+# Each cue is matched using deterministic token windows (≤5)
+# ------------------------------------------------------------
+cues:
+
+  # -------------------------
+  # Continuity Cues
+  # -------------------------
+  continuity:
+    continue:
+      - "continue"
+      - "keep going"
+      - "as I was saying"
+      - "as before"
+      - "carry on"
+    reset:
+      - "start fresh"
+      - "start over"
+      - "new topic"
+      - "let's begin again"
+      - "reset"
+    shift:
+      - "switching gears"
+      - "changing direction"
+      - "moving on"
+      - "on a different note"
+      - "another thing"
+
+  # -------------------------
+  # Reference‑Back Cues
+  # -------------------------
+  reference:
+    previous:
+      - "as I said"
+      - "like I mentioned"
+      - "as before"
+      - "earlier we talked"
+    specific_previous:
+      - "back to the first question"
+      - "regarding that earlier point"
+      - "returning to X"
+      - "about that other thing"
+    ambiguous_previous:
+      - "back to that"
+      - "about that"
+      - "that thing we discussed"
+
+  # -------------------------
+  # Intent Cues
+  # -------------------------
+  intent:
+    inform:
+      - "I want to tell you"
+      - "for your information"
+      - "just letting you know"
+      - "FYI"
+    request:
+      - "please help"
+      - "can you help"
+      - "I need to know"
+      - "could you tell me"
+      - "I need assistance"
+    begin:
+      - "let's begin"
+      - "starting now"
+      - "here we go"
+      - "beginning the topic"
+    none:
+      - "hmm"
+      - "okay"
+      - "right"
+
+  # -------------------------
+  # Topic Cues
+  # -------------------------
+  topic:
+    greeting:
+      - "hello"
+      - "hi"
+      - "hey"
+      - "good morning"
+      - "good evening"
+    assistance:
+      - "I need help"
+      - "can you assist"
+      - "please help me"
+      - "I need support"
+    system:
+      - "system message"
+      - "error"
+      - "bug report"
+      - "diagnostic"
+    misc:
+      - "random thought"
+      - "by the way"
+      - "side note"
+    noise:
+      - "uh"
+      - "um"
+      - "huh"
+      - "lol"
+    other:
+      - "general"
+
+  # -------------------------
+  # Direction Cues
+  # -------------------------
+  direction:
+    forward:
+      - "moving on"
+      - "next"
+      - "continue forward"
+      - "progressing"
+    backward:
+      - "back to"
+      - "returning to"
+      - "going back"
+      - "previously"
+
+  # -------------------------
+  # Politeness Cues
+  # -------------------------
+  politeness:
+    high:
+      - "please"
+      - "thank you"
+      - "thanks"
+      - "sorry"
+    normal:
+      - "okay"
+      - "alright"
+      - "sure"
+    none:
+      - "whatever"
+      - "just do it"
+
+  # -------------------------
+  # Register Cues
+  # -------------------------
+  register:
+    casual:
+      - "lol"
+      - "btw"
+      - "kinda"
+      - "sorta"
+    formal:
+      - "therefore"
+      - "henceforth"
+      - "in summary"
+      - "with respect to"
+    informal:
+      - "hey man"
+      - "yo"
+      - "dude"
+    none:
+      - "neutral"
+
+  # -------------------------
+  # Importance Cues
+  # -------------------------
+  importance:
+    high:
+      - "this is important"
+      - "critical"
+      - "urgent"
+      - "must know"
+    medium:
+      - "note that"
+      - "keep in mind"
+      - "remember"
+    low:
+      - "just saying"
+      - "not important"
+      - "minor detail"
+
+# ------------------------------------------------------------
+# Matching Rules
+# ------------------------------------------------------------
+matching:
+  window_size: 5
+  case_sensitive: false
+  normalize_whitespace: true
+  punctuation_sensitive: false
+
+# ------------------------------------------------------------
+# End of File
+# ------------------------------------------------------------
