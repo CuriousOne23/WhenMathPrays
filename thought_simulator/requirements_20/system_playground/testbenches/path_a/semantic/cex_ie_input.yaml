@@ -1,1 +1,319 @@
+version: 1.0
+primitive: cex_ie
+mode: general
+
+# ============================================================
+# General‑Mode Input Stimulus for CEx‑IE
+# Users may add, remove, or modify test cases freely.
+# Each test case contains ONLY input; correctness is validated
+# by cex_ie_rules.yaml + cex_ie_rulechecker.py.
+# ============================================================
+
+tests:
+
+  # ------------------------------------------------------------
+  # TEST CASE 001 — basic politeness + continuity + reference
+  # ------------------------------------------------------------
+  - id: input_001
+    TP:
+      intake:
+        ie_tokens: ["please", "continue", "as", "I", "said"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "please continue as I said"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 002 — reset continuity
+  # ------------------------------------------------------------
+  - id: input_002
+    TP:
+      intake:
+        ie_tokens: ["start", "fresh", "please"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "start fresh please"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 003 — shift continuity
+  # ------------------------------------------------------------
+  - id: input_003
+    TP:
+      intake:
+        ie_tokens: ["switching", "gears", "now"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "switching gears now"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 004 — backward direction + reference
+  # ------------------------------------------------------------
+  - id: input_004
+    TP:
+      intake:
+        ie_tokens: ["back", "to", "the", "earlier", "point"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "back to the earlier point"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 005 — forward direction
+  # ------------------------------------------------------------
+  - id: input_005
+    TP:
+      intake:
+        ie_tokens: ["moving", "on", "to", "the", "next"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "moving on to the next"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 006 — formal register
+  # ------------------------------------------------------------
+  - id: input_006
+    TP:
+      intake:
+        ie_tokens: ["therefore", "I", "request", "clarification"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "therefore I request clarification"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 007 — casual register
+  # ------------------------------------------------------------
+  - id: input_007
+    TP:
+      intake:
+        ie_tokens: ["lol", "btw", "can", "you", "help"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "lol btw can you help"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 008 — high importance
+  # ------------------------------------------------------------
+  - id: input_008
+    TP:
+      intake:
+        ie_tokens: ["this", "is", "critical"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "this is critical"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 009 — noise topic
+  # ------------------------------------------------------------
+  - id: input_009
+    TP:
+      intake:
+        ie_tokens: ["uh", "okay"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+        normalized_text: "uh okay"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 010 — no cues
+  # ------------------------------------------------------------
+  - id: input_010
+    TP:
+      intake:
+        ie_tokens: ["random", "sentence", "with", "no", "markers"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "random sentence with no markers"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 011 — conflicting cues
+  # ------------------------------------------------------------
+  - id: input_011
+    TP:
+      intake:
+        ie_tokens: ["start", "over", "as", "I", "said"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "start over as I said"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 012 — anomaly flags
+  # ------------------------------------------------------------
+  - id: input_012
+    TP:
+      intake:
+        ie_tokens: ["please", "help"]
+        token_flags:
+          - { type: anomaly }
+          - { type: word }
+        normalized_text: "please help"
+      structure:
+        tags: []
+        spans:
+          - { type: anomaly_region, start: 0, end: 0 }
+        markup: []
+      metadata:
+        repair_annotations:
+          - { type: repair_applied, index: 0 }
+
+  # ------------------------------------------------------------
+  # TEST CASE 013 — markup influence
+  # ------------------------------------------------------------
+  - id: input_013
+    TP:
+      intake:
+        ie_tokens: ["please", "help", "me"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "please help me"
+      structure:
+        tags: []
+        spans: []
+        markup:
+          - { type: bold, start: 0, end: 0 }
+      metadata:
+        repair_annotations: []
+
+  # ------------------------------------------------------------
+  # TEST CASE 014 — repair influence
+  # ------------------------------------------------------------
+  - id: input_014
+    TP:
+      intake:
+        ie_tokens: ["please", "help"]
+        token_flags:
+          - { type: repaired }
+          - { type: word }
+        normalized_text: "please help"
+      structure:
+        tags: []
+        spans:
+          - { type: repaired_segment, start: 0, end: 0 }
+        markup: []
+      metadata:
+        repair_annotations:
+          - { type: repair_applied, index: 0 }
+
+  # ------------------------------------------------------------
+  # TEST CASE 015 — multi‑token cue window
+  # ------------------------------------------------------------
+  - id: input_015
+    TP:
+      intake:
+        ie_tokens: ["as", "I", "was", "saying", "earlier"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "as I was saying earlier"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+
+# ============================================================
+# End of File
+# ============================================================
 
