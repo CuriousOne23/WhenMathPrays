@@ -204,6 +204,8 @@ A primitive is **incorrect** if:
 
 These criteria come directly from biological modelling.
 
+The meaning model introduced next is constrained by the same biological invariants and inherits their requirements for determinism, layering, bounded semantics, and drift‑resistance.
+
 ---
 
 # **8. How TS’s Definition of Meaning Subsumes Prior Theories of Meaning**  
@@ -240,7 +242,7 @@ Neuroscience defines meaning as prediction.
 TS explains all three as forms of **field‑based projection**.
 
 ### **8.4 Why TS’s Definition Is Rigorous**  
-TS’s definition is:
+TS’s definition jointly satisfies properties that prior theories do not combine:
 
 - computational  
 - deterministic  
@@ -252,7 +254,7 @@ TS’s definition is:
 - biologically constrained  
 - testable  
 
-These properties are **not jointly present in prior theories**, which is why TS requires a new definition.
+This combination of properties is what makes the definition suitable for an engineered cognitive architecture.
 
 ### **8.5 Why TS Must Use This Definition**  
 TS is an engineered cognitive architecture.  
