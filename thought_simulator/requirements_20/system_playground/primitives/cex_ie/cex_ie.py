@@ -18,13 +18,14 @@ from pathlib import Path
 # Utility: load cue dictionary
 # ------------------------------------------------------------
 def load_cex_ie_cue_dictionary() -> dict:
-    # Adjust path as needed for your repo layout
-    dict_path = Path(
-        "thought_simulator/requirements_20/system_playground/primitives/dictionary/cex_ie_cue_dictionary.yaml"
-    )
+    BASE_DIR = Path(__file__).parent
+    DICT_DIR = BASE_DIR.parent / "dictionary"
+
+    dict_path = DICT_DIR / "cex_ie_cue_dictionary.yaml"
+    dict_path = dict_path.resolve()
+
     with dict_path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
-
 
 # ------------------------------------------------------------
 # Utility: simple normalized text search
