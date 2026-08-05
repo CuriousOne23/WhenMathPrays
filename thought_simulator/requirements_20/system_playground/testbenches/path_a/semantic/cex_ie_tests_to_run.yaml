@@ -1,1 +1,85 @@
+# ============================================================
+# CEx-IE Tests-To-Run — Execution Control for CEx-IE Testbench (v1.0)
+# ============================================================
 
+pipeline:
+  use_inb: false
+  use_iiinb: false
+  use_ie: false
+  use_cex_ie: true
+  use_cex_ccr: false
+  use_cex_pck: false
+  use_ce: false
+  use_isc: false
+  use_tpu: false
+
+tests_to_run:
+
+  - id: cex_ie_basic_structural_phrases
+    enabled: true
+    reason: "Basic cue detection: greeting, request, reference; validates structural_phrases extraction."
+
+  - id: cex_ie_multiple_cues
+    enabled: true
+    reason: "Multiple cues in one utterance; validates deterministic ordering and prefix correctness."
+
+  - id: cex_ie_no_cues
+    enabled: true
+    reason: "Utterance with no dictionary cues; structural_phrases must be empty; hints must fall back."
+
+  - id: cex_ie_hint_derivation_basic
+    enabled: true
+    reason: "Single cue → correct hint derivation; validates topic_hint, intent_hint, continuity_hint."
+
+  - id: cex_ie_hint_derivation_complex
+    enabled: true
+    reason: "Multiple cues → combined hint derivation; validates precedence and deterministic rules."
+
+  - id: cex_ie_coherence_unstable
+    enabled: true
+    reason: "Anomaly spans or repair annotations present → coherence_hint must be 'unstable'."
+
+  - id: cex_ie_coherence_stable
+    enabled: true
+    reason: "No anomalies → coherence_hint must be 'stable'."
+
+  - id: cex_ie_importance_levels
+    enabled: true
+    reason: "Importance cues → high/medium/low importance_hint; validates dictionary mapping."
+
+  - id: cex_ie_register_and_politeness
+    enabled: true
+    reason: "Register + politeness cues → correct register_hint and politeness_hint."
+
+  - id: cex_ie_direction_and_reference
+    enabled: true
+    reason: "Backward/forward cues + reference cues → correct direction_hint and reference_hint."
+
+  - id: cex_ie_envelope_shape
+    enabled: true
+    reason: "Envelope must contain required fields and no forbidden fields; rulechecker enforcement."
+
+  - id: cex_ie_deterministic_copy
+    enabled: true
+    reason: "tokens, token_flags, normalized_text must match TP.intake; deterministic copy rule."
+
+  - id: cex_ie_invalid_phrase_prefix
+    enabled: true
+    reason: "Invalid structural phrase prefix → rulechecker must fail; validates prefix enforcement."
+
+  - id: cex_ie_invalid_enum
+    enabled: true
+    reason: "Invalid hint enum → rulechecker must fail; validates enum enforcement."
+
+  - id: cex_ie_forbidden_field_present
+    enabled: true
+    reason: "Forbidden field in TP.cex.ie → rulechecker must fail; validates envelope boundary rules."
+
+summary:
+  total_tests: 15
+  enabled_tests: 15
+  disabled_tests: 0
+  notes:
+    - "All CEx-IE tests enabled because CEx-IE is deterministic and bounded."
+    - "Rulechecker validation is central: envelope shape, prefix correctness, enum correctness."
+    - "Replay determinism implicitly covered by all tests."
