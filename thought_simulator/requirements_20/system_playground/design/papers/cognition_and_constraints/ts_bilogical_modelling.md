@@ -206,11 +206,6 @@ These criteria come directly from biological modelling.
 
 ---
 
-## **→ Bridge to Section 8**  
-The meaning model introduced next is constrained by the same biological invariants and inherits their requirements for determinism, layering, bounded semantics, and drift‑resistance.
-
----
-
 # **8. How TS’s Definition of Meaning Subsumes Prior Theories of Meaning**  
 
 Biological modelling provides the invariants that TS uses to define meaning as **dynamic relationship formation via field‑based projection**. This definition is computational, deterministic, and operational. It explains *why* prior theories capture partial aspects of meaning and *why* none of them jointly satisfy the constraints required for a cognitive architecture.
