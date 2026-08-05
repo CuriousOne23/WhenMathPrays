@@ -72,6 +72,22 @@ ACTIVE_TEST_MODULES = [
             # Test selection is now controlled by ie_tests_to_run.yaml
             "tests_to_run": "see ie_tests_to_run.yaml"
         }
+    ),
+    # **************************** CEx-IE Test bench ******************************************************
+    # Highest upstream True = CEx-IE (primitive under test)
+    # Pipeline: CEx-IE only, input from CEx-IE YAML
+    (
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ie_testbench",
+        {
+            "mode": "testbench",   # "general" or "testbench"
+            "use_inb": False,    # Upstream primitives ignored
+            "use_iiinb": False,
+            "use_ie": False,
+            "use_cex_ie": True,  # Primitive under test
+
+            # Test selection is controlled by cex_ie_input.yaml
+            "tests_to_run": "see cex_ie_input.yaml"
+        }
     )
 ]
 
