@@ -136,6 +136,33 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
 
     return results
 
+Below is cex_ie_testbench.py:
+
+# ------------------------------------------------------------
+# Entry point used by run.py
+# ------------------------------------------------------------
+def run_cex_ie_testbench(mode: str,
+                         testbench_path: str,
+                         input_path: str,
+                         rules_path: str) -> dict:
+    """
+    mode: "testbench" or "general"
+    testbench_path: path to cex_ie_testbench.yaml
+    input_path: path to cex_ie_input.yaml
+    rules_path: path to cex_ie_rules.yaml
+    """
+
+    if mode == "testbench":
+        return run_mode_testbench(testbench_path)
+
+    elif mode == "general":
+        return run_mode_general(input_path, rules_path)
+
+    else:
+        return {
+            "pass": False,
+            "error": f"Unknown mode: {mode}"
+        }
 
 # ------------------------------------------------------------
 # Standard entry point expected by run.py
