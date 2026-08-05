@@ -63,6 +63,7 @@ def filter_tests_by_selector(all_tests: list, selector_path: str) -> list:
 # Mode A — strict deterministic testbench
 # ------------------------------------------------------------
 def run_mode_testbench(testbench_path: str) -> dict:
+    print("\n=== Running CEx-IE Testbench (Mode A: strict deterministic) ===")
     tb = load_yaml(testbench_path)
     tests = filter_tests_by_selector(
         tb.get("tests", []),
@@ -70,25 +71,32 @@ def run_mode_testbench(testbench_path: str) -> dict:
     )
 
     results = {"pass": True, "cases": []}
+    total = 0
+    passed = 0
 
     for case in tests:
+        total += 1
         cid = case.get("id")
         tp_input = case.get("input")
         expected = case.get("expected")
 
-        # Run primitive
         primitive = CExIE(tp_input["TP"])
         tp_output = {"TP": copy.deepcopy(tp_input["TP"])}
         tp_output["TP"]["cex"] = {}
         tp_output["TP"]["cex"]["ie"] = primitive.inspect()["cex"]["ie"]
 
-        # Compare output to expected
         actual = tp_output["TP"]["cex"]["ie"]
         exp = expected["TP"]["cex"]["ie"]
 
         case_pass = (actual == exp)
-        if not case_pass:
+        if case_pass:
+            passed += 1
+            print(f"[PASS] {cid}")
+        else:
             results["pass"] = False
+            print(f"[FAIL] {cid}")
+            print("  Actual:   ", actual)
+            print("  Expected: ", exp)
 
         results["cases"].append({
             "id": cid,
@@ -97,13 +105,19 @@ def run_mode_testbench(testbench_path: str) -> dict:
             "expected": exp
         })
 
-    return results
+    print("\n=== Summary (Mode A) ===")
+    print(f"Total tests: {total}")
+    print(f"Passed:      {passed}")
+    print(f"Failed:      {total - passed}")
+    print(f"Overall:     {'PASS' if results['pass'] else 'FAIL'}\n")
 
+    return results
 
 # ------------------------------------------------------------
 # Mode B — general rule-driven validation
 # ------------------------------------------------------------
 def run_mode_general(input_path: str, rules_path: str) -> dict:
+    print("\n=== Running CEx-IE Testbench (Mode B: rule-driven) ===")
     inp = load_yaml(input_path)
     
     tests = filter_tests_by_selector(
@@ -112,22 +126,30 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
     )
 
     results = {"pass": True, "cases": []}
+    total = 0
+    passed = 0
 
     for case in tests:
+        total += 1
         cid = case.get("id")
         tp_input = case.get("TP")
 
-        # Run primitive
         primitive = CExIE(tp_input)
         tp_output = {"TP": copy.deepcopy(tp_input)}
         tp_output["TP"]["cex"] = {}
         tp_output["TP"]["cex"]["ie"] = primitive.inspect()["cex"]["ie"]
 
-        # Rule-driven validation
         rc_result = run_cex_ie_rulecheck(rules_path, {"TP": tp_input}, tp_output)
 
-        if not rc_result["pass"]:
+        if rc_result["pass"]:
+            passed += 1
+            print(f"[PASS] {cid}")
+        else:
             results["pass"] = False
+            print(f"[FAIL] {cid}")
+            print("  Errors:")
+            for err in rc_result["errors"]:
+                print("   -", err)
 
         results["cases"].append({
             "id": cid,
@@ -135,6 +157,12 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
             "errors": rc_result["errors"],
             "output": tp_output["TP"]["cex"]["ie"]
         })
+
+    print("\n=== Summary (Mode B) ===")
+    print(f"Total tests: {total}")
+    print(f"Passed:      {passed}")
+    print(f"Failed:      {total - passed}")
+    print(f"Overall:     {'PASS' if results['pass'] else 'FAIL'}\n")
 
     return results
 
