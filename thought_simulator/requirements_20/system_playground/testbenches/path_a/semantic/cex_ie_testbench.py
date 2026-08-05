@@ -136,8 +136,6 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
 
     return results
 
-Below is cex_ie_testbench.py:
-
 # ------------------------------------------------------------
 # Entry point used by run.py
 # ------------------------------------------------------------
