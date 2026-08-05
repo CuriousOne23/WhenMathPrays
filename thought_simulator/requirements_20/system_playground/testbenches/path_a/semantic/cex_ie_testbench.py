@@ -27,6 +27,18 @@ from thought_simulator.requirements_20.system_playground.testbenches.path_a.sema
 
 
 # ------------------------------------------------------------
+# Utility: run_testbench
+# -----------------------------------------------------------
+
+def run_testbench():
+    # load rules
+    # load input
+    # call primitive
+    # validate output
+    # print results
+    pass
+
+# ------------------------------------------------------------
 # Utility: load YAML
 # ------------------------------------------------------------
 def load_yaml(path: str):
