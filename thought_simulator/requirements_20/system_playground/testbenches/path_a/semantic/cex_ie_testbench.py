@@ -25,6 +25,8 @@ from thought_simulator.requirements_20.system_playground.testbenches.path_a.sema
     run_cex_ie_rulecheck
 )
 
+BASE_DIR = Path(__file__).parent
+
 # ------------------------------------------------------------
 # Utility: load YAML
 # ------------------------------------------------------------
@@ -166,17 +168,13 @@ def run_cex_ie_testbench(mode: str,
 # Standard entry point expected by run.py
 # ------------------------------------------------------------
 def run_testbench():
-    """
-    Wrapper so run.py can call this testbench.
-    Uses default paths from the YAML testbench file.
-    """
-
-    # These paths match your repo structure
-    testbench_path = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_testbench.yaml"
-    input_path     = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_input.yaml"
-    rules_path     = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_rules.yaml"
-
-    # Default mode for testbench runs
     mode = "testbench"
 
-    return run_cex_ie_testbench(mode, testbench_path, input_path, rules_path)
+    testbench_path = BASE_DIR / "cex_ie_testbench.yaml"
+    input_path     = BASE_DIR / "cex_ie_input.yaml"
+    rules_path     = BASE_DIR / "cex_ie_rules.yaml"
+
+    return run_cex_ie_testbench(mode,
+                                str(testbench_path),
+                                str(input_path),
+                                str(rules_path))
