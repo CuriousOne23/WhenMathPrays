@@ -618,14 +618,32 @@ tests:
             coherence_hint: unstable
             importance_hint: medium
 
-  # ============================================================
-  # TEST CASE 015 — multi‑token cue window
-  # ============================================================
-  - id: test_015
-    input:
-      TP:
-        intake:
-          ie_tokens: ["as", "I", "was", "saying", "earlier"]
+# ============================================================
+# TEST CASE 015 — multi‑token cue window
+# ============================================================
+- id: test_015
+  input:
+    TP:
+      intake:
+        ie_tokens: ["as", "I", "was", "saying", "earlier"]
+        token_flags:
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+          - { type: word }
+        normalized_text: "as I was saying earlier"
+      structure:
+        tags: []
+        spans: []
+        markup: []
+      metadata:
+        repair_annotations: []
+  expected:
+    TP:
+      cex:
+        ie:
+          tokens: ["as", "I", "was", "saying", "earlier"]
           token_flags:
             - { type: word }
             - { type: word }
@@ -633,26 +651,8 @@ tests:
             - { type: word }
             - { type: word }
           normalized_text: "as I was saying earlier"
-        structure:
-          tags: []
-          spans: []
-          markup: []
-        metadata:
-          repair_annotations: []
-    expected:
-      TP:
-        cex:
-          ie:
-            tokens: ["as", "I", "was", "saying", "earlier"]
-            token_flags:
-              - { type: word }
-              - { type: word }
-              - { type: word }
-              - { type: word }
-              - { type: word }
-            normalized_text: "as I was saying earlier"
-            structural_phrases:
-              - reference_previous
-              - continuity_continue
-            topic_hint: misc
-            intent_hint
+          structural_phrases:
+            - reference_previous
+            - continuity_continue
+          topic_hint: misc
+          intent_hint: continuation
