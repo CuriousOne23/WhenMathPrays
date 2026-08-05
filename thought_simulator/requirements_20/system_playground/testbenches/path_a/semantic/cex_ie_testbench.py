@@ -63,7 +63,6 @@ def filter_tests_by_selector(all_tests: list, selector_path: str) -> list:
 # Mode A — strict deterministic testbench
 # ------------------------------------------------------------
 def run_mode_testbench(testbench_path: str) -> dict:
-    print("\n=== Running CEx-IE Testbench (Mode A: strict deterministic) ===")
     tb = load_yaml(testbench_path)
     tests = filter_tests_by_selector(
         tb.get("tests", []),
@@ -71,11 +70,10 @@ def run_mode_testbench(testbench_path: str) -> dict:
     )
 
     results = {"pass": True, "cases": []}
-    total = 0
-    passed = 0
+
+    print("\n=== CEx-IE Testbench (Deterministic Mode) ===")
 
     for case in tests:
-        total += 1
         cid = case.get("id")
         tp_input = case.get("input")
         expected = case.get("expected")
@@ -89,14 +87,16 @@ def run_mode_testbench(testbench_path: str) -> dict:
         exp = expected["TP"]["cex"]["ie"]
 
         case_pass = (actual == exp)
+
         if case_pass:
-            passed += 1
-            print(f"[PASS] {cid}")
+            print(f"[PASS] {cid} — output matched expected structure")
         else:
-            results["pass"] = False
             print(f"[FAIL] {cid}")
-            print("  Actual:   ", actual)
-            print("  Expected: ", exp)
+            print(f"  reason: output did not match expected")
+            print(f"  actual:   {actual}")
+            print(f"  expected: {exp}")
+
+            results["pass"] = False
 
         results["cases"].append({
             "id": cid,
@@ -105,11 +105,13 @@ def run_mode_testbench(testbench_path: str) -> dict:
             "expected": exp
         })
 
-    print("\n=== Summary (Mode A) ===")
-    print(f"Total tests: {total}")
-    print(f"Passed:      {passed}")
-    print(f"Failed:      {total - passed}")
-    print(f"Overall:     {'PASS' if results['pass'] else 'FAIL'}\n")
+    print("\n=== Summary ===")
+    total = len(results["cases"])
+    passed = sum(1 for c in results["cases"] if c["pass"])
+    print(f"  total: {total}")
+    print(f"  passed: {passed}")
+    print(f"  failed: {total - passed}")
+    print(f"  overall: {'PASS' if results['pass'] else 'FAIL'}\n")
 
     return results
 
@@ -117,7 +119,6 @@ def run_mode_testbench(testbench_path: str) -> dict:
 # Mode B — general rule-driven validation
 # ------------------------------------------------------------
 def run_mode_general(input_path: str, rules_path: str) -> dict:
-    print("\n=== Running CEx-IE Testbench (Mode B: rule-driven) ===")
     inp = load_yaml(input_path)
     
     tests = filter_tests_by_selector(
@@ -126,11 +127,10 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
     )
 
     results = {"pass": True, "cases": []}
-    total = 0
-    passed = 0
+
+    print("\n=== CEx-IE Testbench (Rule-Driven Mode) ===")
 
     for case in tests:
-        total += 1
         cid = case.get("id")
         tp_input = case.get("TP")
 
@@ -142,14 +142,14 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
         rc_result = run_cex_ie_rulecheck(rules_path, {"TP": tp_input}, tp_output)
 
         if rc_result["pass"]:
-            passed += 1
-            print(f"[PASS] {cid}")
+            print(f"[PASS] {cid} — rulechecker accepted output")
         else:
-            results["pass"] = False
             print(f"[FAIL] {cid}")
-            print("  Errors:")
+            print("  reason: rulechecker rejected output")
             for err in rc_result["errors"]:
-                print("   -", err)
+                print(f"   - {err}")
+
+            results["pass"] = False
 
         results["cases"].append({
             "id": cid,
@@ -158,11 +158,13 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
             "output": tp_output["TP"]["cex"]["ie"]
         })
 
-    print("\n=== Summary (Mode B) ===")
-    print(f"Total tests: {total}")
-    print(f"Passed:      {passed}")
-    print(f"Failed:      {total - passed}")
-    print(f"Overall:     {'PASS' if results['pass'] else 'FAIL'}\n")
+    print("\n=== Summary ===")
+    total = len(results["cases"])
+    passed = sum(1 for c in results["cases"] if c["pass"])
+    print(f"  total: {total}")
+    print(f"  passed: {passed}")
+    print(f"  failed: {total - passed}")
+    print(f"  overall: {'PASS' if results['pass'] else 'FAIL'}\n")
 
     return results
 
