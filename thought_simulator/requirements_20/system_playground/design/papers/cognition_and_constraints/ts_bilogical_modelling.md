@@ -246,16 +246,77 @@ This is the correct way to build a cognitive engine.
 
 ---
 
-## **10. Conclusion**  
-Biological modelling provides the only reliable compass for designing a cognitive architecture. TS adopts biological invariants as design principles, extends them into deterministic primitives, and uses them to prevent drift in Path A development.
+## **10. How TS’s Definition of Meaning Subsumes All Prior Theories of Meaning**
 
-TS is the first engineered system to turn biological invariants into:
+Biological modelling provides the invariants that TS uses to define meaning as **dynamic relationship formation via field‑based projection**. This definition is not only computational and deterministic; it also subsumes every major historical theory of meaning by explaining *why each partial definition works* and *why none of them are complete*.
 
-- a deterministic cognitive pipeline  
-- a primitive specification language  
-- a bounded semantic architecture  
-- a replay‑stable cognitive engine  
+### **10.1 Meaning as Projection**
 
-This paper formalizes the role of biological modelling in TS and provides guidance for the continued development of Path A.
+TS defines meaning as:
+
+> **a projection into the correct field of consequence,  
+> where projection is the act of establishing dynamic relationships  
+> between objects, roles, events, or metaphysical descriptions.**
+
+This definition is grounded in biological invariants such as predictive meaning and layered processing. Meaning is not static; it is a progressive, field‑based process that unfolds across the TS pipeline.
+
+### **10.2 Subsuming Classical Philosophical Definitions**
+
+TS’s definition explains and unifies the major philosophical theories:
+
+- **Reference (Frege, Russell):** Reference is one type of relationship projection.  
+- **Use (Wittgenstein):** Use is field selection based on structural cues.  
+- **Intention (Grice):** Intention is agent → action → patient relationship projection.  
+- **Truth Conditions (Tarski, Montague):** Truth conditions are consequence fields.  
+- **Mental Representation (Fodor):** Representations are the structures formed by progressive projections.  
+- **Inferential Role (Brandom):** Inferential roles are downstream projections across fields.
+
+Each theory captures one slice of the projection mechanism; TS captures the whole mechanism.
+
+### **10.3 Subsuming Linguistic and Cognitive Definitions**
+
+Formal semantics defines meaning as truth conditions in possible worlds. TS treats these as one type of consequence field. Cognitive science defines meaning as mental representation; TS explains how such representations form through layered field selection. Neuroscience defines meaning as prediction; TS implements prediction as projection into consequence fields.
+
+### **10.4 Why TS’s Definition Is the First Rigorous One**
+
+TS’s definition is the first that is:
+
+- **computational**  
+- **deterministic**  
+- **replay‑stable**  
+- **layered**  
+- **field‑based**  
+- **predictive**  
+- **bounded**  
+- **biologically grounded**  
+- **testable**  
+
+This aligns directly with the biological invariants documented earlier in the paper, including raw input preservation, segmentation before interpretation, anomaly detection, predictive meaning, and geometric amplification.
+
+### **10.5 Why TS Must Use This Definition**
+
+Because TS is an engineered cognitive architecture, it requires a definition of meaning that is:
+
+- operational  
+- implementable  
+- deterministic  
+- progressive  
+- field‑based  
+- aligned with biological invariants  
+
+No existing theory provides this. As established earlier, biology is the only domain where cognition actually exists, and no better model is available   [Current page](citation-section://1146984017/10).
+
+TS’s definition of meaning is therefore the first complete, rigorous, and computationally viable model.
+
+---
+
+## **11. Conclusion**  
+Biological modelling provides the only reliable compass for designing a cognitive architecture because biology is the only domain where cognition actually exists. TS adopts the invariants biology obeys—segmentation before interpretation, raw‑input preservation, anomaly detection, predictive meaning, layered processing, and geometric amplification—and transforms them into deterministic, bounded, replay‑stable primitives. These primitives form the foundation of Path A and prevent drift by ensuring that each layer detects one class of independent variables and amplifies the value of the previous layer.
+
+This paper also establishes a rigorous definition of meaning: **dynamic relationship formation via field‑based projection**. This definition subsumes all major historical theories of meaning—reference, use, intention, truth conditions, representation, and inference—by explaining them as partial views of a single underlying mechanism. Meaning is not static; it is progressive, predictive, and layered. TS is the first engineered system to operationalize this mechanism in a computational architecture.
+
+Together, biological invariants and TS’s definition of meaning form a unified design framework. They explain why Path A primitives must be bounded, deterministic, and field‑specific; why amplification emerges naturally across layers; and why meaning resolution requires selecting the correct field at the correct time. These principles guide the continued development of Path A and ensure that TS remains aligned with real cognition while extending it into a deterministic, testable, and scalable cognitive engine.
+
+This paper formalizes the role of biological modelling and meaning modelling in TS, providing the conceptual and architectural foundation for all downstream primitives and for the progressive construction of cognition in Path A.
 
 ---
