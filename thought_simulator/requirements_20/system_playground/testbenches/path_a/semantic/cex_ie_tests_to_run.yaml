@@ -2,17 +2,6 @@
 # CEx-IE Tests-To-Run — Execution Control for CEx-IE Testbench (v1.0)
 # ============================================================
 
-pipeline:
-  use_inb: false
-  use_iiinb: false
-  use_ie: false
-  use_cex_ie: true
-  use_cex_ccr: false
-  use_cex_pck: false
-  use_ce: false
-  use_isc: false
-  use_tpu: false
-
 tests_to_run:
 
   - id: cex_ie_basic_structural_phrases
