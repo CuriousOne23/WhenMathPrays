@@ -1,1 +1,658 @@
+version: 1.0
+primitive: cex_ie
+mode: testbench
 
+tests:
+
+  # ============================================================
+  # TEST CASE 001 — politeness + continuity + reference
+  # ============================================================
+  - id: test_001
+    input:
+      TP:
+        intake:
+          ie_tokens: ["please", "continue", "as", "I", "said"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "please continue as I said"
+        structure:
+          tags:
+            - { tag: sentence_start, index: 0 }
+            - { tag: sentence_end, index: 4 }
+          spans:
+            - { type: structural_block, start: 0, end: 4 }
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["please", "continue", "as", "I", "said"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "please continue as I said"
+            structural_phrases:
+              - politeness_high
+              - continuity_continue
+              - reference_previous
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: previous
+            register_hint: none
+            politeness_hint: high
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 002 — continuity reset
+  # ============================================================
+  - id: test_002
+    input:
+      TP:
+        intake:
+          ie_tokens: ["start", "fresh", "please"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "start fresh please"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["start", "fresh", "please"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "start fresh please"
+            structural_phrases:
+              - continuity_reset
+              - politeness_high
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: reset
+            reference_hint: none
+            register_hint: none
+            politeness_hint: high
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 003 — continuity shift
+  # ============================================================
+  - id: test_003
+    input:
+      TP:
+        intake:
+          ie_tokens: ["switching", "gears", "now"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "switching gears now"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["switching", "gears", "now"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "switching gears now"
+            structural_phrases:
+              - continuity_shift
+            topic_hint: misc
+            intent_hint: begin
+            continuity_hint: shift
+            reference_hint: none
+            register_hint: none
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 004 — backward direction
+  # ============================================================
+  - id: test_004
+    input:
+      TP:
+        intake:
+          ie_tokens: ["back", "to", "the", "earlier", "point"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "back to the earlier point"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["back", "to", "the", "earlier", "point"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "back to the earlier point"
+            structural_phrases:
+              - direction_backward
+              - reference_specific_previous
+            topic_hint: misc
+            intent_hint: inform
+            continuity_hint: continue
+            reference_hint: specific_previous
+            register_hint: none
+            politeness_hint: none
+            direction_hint: backward
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 005 — forward direction
+  # ============================================================
+  - id: test_005
+    input:
+      TP:
+        intake:
+          ie_tokens: ["moving", "on", "to", "the", "next"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "moving on to the next"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["moving", "on", "to", "the", "next"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "moving on to the next"
+            structural_phrases:
+              - direction_forward
+              - continuity_shift
+            topic_hint: misc
+            intent_hint: begin
+            continuity_hint: shift
+            reference_hint: none
+            register_hint: none
+            politeness_hint: none
+            direction_hint: forward
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 006 — formal register
+  # ============================================================
+  - id: test_006
+    input:
+      TP:
+        intake:
+          ie_tokens: ["therefore", "I", "request", "clarification"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "therefore I request clarification"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["therefore", "I", "request", "clarification"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "therefore I request clarification"
+            structural_phrases:
+              - register_formal
+              - intent_request
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: formal
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 007 — casual register
+  # ============================================================
+  - id: test_007
+    input:
+      TP:
+        intake:
+          ie_tokens: ["lol", "btw", "can", "you", "help"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "lol btw can you help"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["lol", "btw", "can", "you", "help"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "lol btw can you help"
+            structural_phrases:
+              - register_casual
+              - intent_request
+              - topic_assistance
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: casual
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: low
+
+  # ============================================================
+  # TEST CASE 008 — high importance
+  # ============================================================
+  - id: test_008
+    input:
+      TP:
+        intake:
+          ie_tokens: ["this", "is", "critical"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "this is critical"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["this", "is", "critical"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "this is critical"
+            structural_phrases:
+              - importance_high
+            topic_hint: misc
+            intent_hint: inform
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: high
+
+  # ============================================================
+  # TEST CASE 009 — noise topic
+  # ============================================================
+  - id: test_009
+    input:
+      TP:
+        intake:
+          ie_tokens: ["uh", "okay"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+          normalized_text: "uh okay"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["uh", "okay"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+            normalized_text: "uh okay"
+            structural_phrases:
+              - topic_noise
+            topic_hint: noise
+            intent_hint: none
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: normal
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: low
+
+  # ============================================================
+  # TEST CASE 010 — no cues at all
+  # ============================================================
+  - id: test_010
+    input:
+      TP:
+        intake:
+          ie_tokens: ["random", "sentence", "with", "no", "markers"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "random sentence with no markers"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["random", "sentence", "with", "no", "markers"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "random sentence with no markers"
+            structural_phrases: []
+            topic_hint: misc
+            intent_hint: none
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: low
+
+  # ============================================================
+  # TEST CASE 011 — conflicting cues
+  # ============================================================
+  - id: test_011
+    input:
+      TP:
+        intake:
+          ie_tokens: ["start", "over", "as", "I", "said"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "start over as I said"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["start", "over", "as", "I", "said"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "start over as I said"
+            structural_phrases:
+              - continuity_reset
+              - reference_previous
+            topic_hint: misc
+            intent_hint: begin
+            continuity_hint: reset
+            reference_hint: previous
+            register_hint: none
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 012 — unstable coherence (anomaly flags)
+  # ============================================================
+  - id: test_012
+    input:
+      TP:
+        intake:
+          ie_tokens: ["please", "help"]
+          token_flags:
+            - { type: anomaly }
+            - { type: word }
+          normalized_text: "please help"
+        structure:
+          tags: []
+          spans:
+            - { type: anomaly_region, start: 0, end: 0 }
+          markup: []
+        metadata:
+          repair_annotations:
+            - { type: repair_applied, index: 0 }
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["please", "help"]
+            token_flags:
+              - { type: anomaly }
+              - { type: word }
+            normalized_text: "please help"
+            structural_phrases:
+              - politeness_high
+              - intent_request
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: high
+            direction_hint: none
+            coherence_hint: unstable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 013 — markup influence
+  # ============================================================
+  - id: test_013
+    input:
+      TP:
+        intake:
+          ie_tokens: ["please", "help", "me"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "please help me"
+        structure:
+          tags: []
+          spans: []
+          markup:
+            - { type: bold, start: 0, end: 0 }
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["please", "help", "me"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "please help me"
+            structural_phrases:
+              - politeness_high
+              - intent_request
+              - importance_medium
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: high
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 014 — repair influence
+  # ============================================================
+  - id: test_014
+    input:
+      TP:
+        intake:
+          ie_tokens: ["please", "help"]
+          token_flags:
+            - { type: repaired }
+            - { type: word }
+          normalized_text: "please help"
+        structure:
+          tags: []
+          spans:
+            - { type: repaired_segment, start: 0, end: 0 }
+          markup: []
+        metadata:
+          repair_annotations:
+            - { type: repair_applied, index: 0 }
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["please", "help"]
+            token_flags:
+              - { type: repaired }
+              - { type: word }
+            normalized_text: "please help"
+            structural_phrases:
+              - politeness_high
+              - intent_request
+            topic_hint: assistance
+            intent_hint: request
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: high
+            direction_hint: none
+            coherence_hint: unstable
+            importance_hint: medium
+
+  # ============================================================
+  # TEST CASE 015 — multi‑token cue window
+  # ============================================================
+  - id: test_015
+    input:
+      TP:
+        intake:
+          ie_tokens: ["as", "I", "was", "saying", "earlier"]
+          token_flags:
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+            - { type: word }
+          normalized_text: "as I was saying earlier"
+        structure:
+          tags: []
+          spans: []
+          markup: []
+        metadata:
+          repair_annotations: []
+    expected:
+      TP:
+        cex:
+          ie:
+            tokens: ["as", "I", "was", "saying", "earlier"]
+            token_flags:
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+              - { type: word }
+            normalized_text: "as I was saying earlier"
+            structural_phrases:
+              - reference_previous
+              - continuity_continue
+            topic_hint: misc
+            intent_hint
