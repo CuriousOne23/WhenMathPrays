@@ -89,7 +89,7 @@ def run_mode_testbench(testbench_path: str) -> dict:
         case_pass = (actual == exp)
 
         if case_pass:
-            print(f"[PASS] {cid} — output matched expected structure")
+            print(f"[PASS] {cid} - output matched expected structure")
         else:
             print(f"[FAIL] {cid}")
             print(f"  reason: output did not match expected")
@@ -142,7 +142,7 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
         rc_result = run_cex_ie_rulecheck(rules_path, {"TP": tp_input}, tp_output)
 
         if rc_result["pass"]:
-            print(f"[PASS] {cid} — rulechecker accepted output")
+            print(f"[PASS] {cid} - rulechecker accepted output")
         else:
             print(f"[FAIL] {cid}")
             print("  reason: rulechecker rejected output")
