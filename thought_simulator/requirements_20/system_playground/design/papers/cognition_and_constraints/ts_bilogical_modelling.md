@@ -310,6 +310,59 @@ TS’s definition of meaning is therefore the first complete, rigorous, and comp
 
 ---
 
+# **10.6 False Positive and False Negative Validation of TS’s Definition of Meaning**
+
+A rigorous definition of meaning must avoid two classical failure modes:  
+(1) **false positives**, where meaning is detected even though none exists, and  
+(2) **false negatives**, where genuine meaning is present but the system fails to detect it.  
+TS’s definition of meaning—**dynamic relationship formation via field‑based projection**—passes both tests because it is grounded in biological invariants and constrained by deterministic field selection.
+
+### **Avoiding False Positives**
+
+Meaning only exists when a cue selects a valid field of consequence.  
+If no field is selected, no relationships can be formed, and no projection can occur.  
+This prevents meaning from being assigned to:
+
+- nonsense utterances  
+- random noise  
+- malformed input  
+- hallucinated interpretations  
+- over‑semanticized embeddings  
+
+TS’s definition therefore rejects meaning when the cognitive conditions for meaning do not exist. This mirrors biological cognition, where meaningless stimuli do not trigger predictive processing.
+
+### **Avoiding False Negatives**
+
+Whenever a cue *does* select a field, TS guarantees that meaning is detected.  
+Field selection enables relationship formation, and relationship formation enables projection.  
+This ensures meaning is correctly recognized in:
+
+- minimal utterances (“Ouch.”)  
+- metaphysical or abstract statements  
+- ambiguous utterances resolved by context  
+- conversational references  
+- identity‑continuity cues  
+- emotional or affective expressions  
+
+TS therefore does not miss meaning when meaning is present.  
+This matches biological cognition, where any valid cue triggers predictive processing and consequence evaluation.
+
+### **Why TS Passes Both Tests**
+
+TS avoids both false positives and false negatives because meaning is defined as a **process**, not an object. Meaning is not stored, inferred, or globally retrieved. It is constructed dynamically through:
+
+1. cue detection  
+2. field selection  
+3. relationship formation  
+4. consequence projection  
+
+If any step is absent, meaning does not exist.  
+If all steps are present, meaning necessarily exists.  
+
+This makes the definition both **complete** and **operational**, and it aligns with biological invariants such as layered processing, predictive meaning, and geometric amplification. TS’s definition is therefore the first meaning model that is both **testable** and **drift‑resistant**, and it provides a reliable foundation for Path A cognition.
+
+---
+
 ## **11. Conclusion**  
 Biological modelling provides the only reliable compass for designing a cognitive architecture because biology is the only domain where cognition actually exists. TS adopts the invariants biology obeys—segmentation before interpretation, raw‑input preservation, anomaly detection, predictive meaning, layered processing, and geometric amplification—and transforms them into deterministic, bounded, replay‑stable primitives. These primitives form the foundation of Path A and prevent drift by ensuring that each layer detects one class of independent variables and amplifies the value of the previous layer.
 
