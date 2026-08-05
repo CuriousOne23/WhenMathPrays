@@ -25,19 +25,6 @@ from thought_simulator.requirements_20.system_playground.testbenches.path_a.sema
     run_cex_ie_rulecheck
 )
 
-
-# ------------------------------------------------------------
-# Utility: run_testbench
-# -----------------------------------------------------------
-
-def run_testbench():
-    # load rules
-    # load input
-    # call primitive
-    # validate output
-    # print results
-    pass
-
 # ------------------------------------------------------------
 # Utility: load YAML
 # ------------------------------------------------------------
@@ -151,28 +138,20 @@ def run_mode_general(input_path: str, rules_path: str) -> dict:
 
 
 # ------------------------------------------------------------
-# Entry point used by run.py
+# Standard entry point expected by run.py
 # ------------------------------------------------------------
-def run_cex_ie_testbench(mode: str,
-                         testbench_path: str,
-                         input_path: str,
-                         rules_path: str) -> dict:
+def run_testbench():
     """
-    mode: "testbench" or "general"
-    testbench_path: path to cex_ie_testbench.yaml
-    input_path: path to cex_ie_input.yaml
-    rules_path: path to cex_ie_rules.yaml
+    Wrapper so run.py can call this testbench.
+    Uses default paths from the YAML testbench file.
     """
 
-    if mode == "testbench":
-        return run_mode_testbench(testbench_path)
+    # These paths match your repo structure
+    testbench_path = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_testbench.yaml"
+    input_path     = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_input.yaml"
+    rules_path     = "thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cex_ie_rules.yaml"
 
-    elif mode == "general":
-        return run_mode_general(input_path, rules_path)
+    # Default mode for testbench runs
+    mode = "testbench"
 
-    else:
-        return {
-            "pass": False,
-            "error": f"Unknown mode: {mode}"
-        }
-
+    return run_cex_ie_testbench(mode, testbench_path, input_path, rules_path)
