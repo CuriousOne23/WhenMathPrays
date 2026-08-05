@@ -7,7 +7,7 @@ tests:
   # ============================================================
   # TEST CASE 001 — politeness + continuity + reference
   # ============================================================
-  - id: test_001
+  - id: cex_ie_basic_structural_phrases
     input:
       TP:
         intake:
@@ -57,7 +57,7 @@ tests:
   # ============================================================
   # TEST CASE 002 — continuity reset
   # ============================================================
-  - id: test_002
+  - id: cex_ie_multiple_cues
     input:
       TP:
         intake:
@@ -99,7 +99,7 @@ tests:
   # ============================================================
   # TEST CASE 003 — continuity shift
   # ============================================================
-  - id: test_003
+  - id: cex_ie_no_cues
     input:
       TP:
         intake:
@@ -140,7 +140,7 @@ tests:
   # ============================================================
   # TEST CASE 004 — backward direction
   # ============================================================
-  - id: test_004
+  - id: cex_ie_hint_derivation_basic
     input:
       TP:
         intake:
@@ -186,7 +186,7 @@ tests:
   # ============================================================
   # TEST CASE 005 — forward direction
   # ============================================================
-  - id: test_005
+  - id: cex_ie_hint_derivation_complex
     input:
       TP:
         intake:
@@ -232,7 +232,7 @@ tests:
   # ============================================================
   # TEST CASE 006 — formal register
   # ============================================================
-  - id: test_006
+  - id: cex_ie_coherence_unstable
     input:
       TP:
         intake:
@@ -276,7 +276,7 @@ tests:
   # ============================================================
   # TEST CASE 007 — casual register
   # ============================================================
-  - id: test_007
+  - id: cex_ie_coherence_stable
     input:
       TP:
         intake:
@@ -323,7 +323,7 @@ tests:
   # ============================================================
   # TEST CASE 008 — high importance
   # ============================================================
-  - id: test_008
+  - id: cex_ie_importance_levels
     input:
       TP:
         intake:
@@ -364,7 +364,7 @@ tests:
   # ============================================================
   # TEST CASE 009 — noise topic
   # ============================================================
-  - id: test_009
+  - id: cex_ie_register_and_politeness
     input:
       TP:
         intake:
@@ -403,7 +403,7 @@ tests:
   # ============================================================
   # TEST CASE 010 — no cues at all
   # ============================================================
-  - id: test_010
+  - id: cex_ie_direction_and_reference
     input:
       TP:
         intake:
@@ -447,7 +447,7 @@ tests:
   # ============================================================
   # TEST CASE 011 — conflicting cues
   # ============================================================
-  - id: test_011
+  - id: cex_ie_envelope_shape
     input:
       TP:
         intake:
@@ -493,7 +493,7 @@ tests:
   # ============================================================
   # TEST CASE 012 — unstable coherence (anomaly flags)
   # ============================================================
-  - id: test_012
+  - id: cex_ie_deterministic_copy
     input:
       TP:
         intake:
@@ -535,7 +535,7 @@ tests:
   # ============================================================
   # TEST CASE 013 — markup influence
   # ============================================================
-  - id: test_013
+  - id: cex_ie_invalid_phrase_prefix
     input:
       TP:
         intake:
@@ -579,7 +579,7 @@ tests:
   # ============================================================
   # TEST CASE 014 — repair influence
   # ============================================================
-  - id: test_014
+  - id: cex_ie_invalid_enum
     input:
       TP:
         intake:
@@ -621,7 +621,7 @@ tests:
   # ============================================================
   # TEST CASE 015 — multi‑token cue window
   # ============================================================
-  - id: test_015
+  - id: cex_ie_forbidden_field_present
     input:
       TP:
         intake:
