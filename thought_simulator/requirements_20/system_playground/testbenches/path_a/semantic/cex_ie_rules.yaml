@@ -1,1 +1,231 @@
+version: 1.0
+primitive: cex_ie
+mode: general
+
+# ============================================================
+# CEx‑IE Rule System
+# These rules are consumed by cex_ie_rulechecker.py.
+# They validate correctness of CEx‑IE output in general mode.
+# ============================================================
+
+ruleset:
+
+  # ------------------------------------------------------------
+  # 1. Envelope Shape Rules
+  # ------------------------------------------------------------
+  envelope:
+    required_fields:
+      - tokens
+      - token_flags
+      - normalized_text
+      - structural_phrases
+      - topic_hint
+      - intent_hint
+      - continuity_hint
+      - reference_hint
+      - register_hint
+      - politeness_hint
+      - direction_hint
+      - coherence_hint
+      - importance_hint
+
+    forbidden_fields:
+      - error
+      - metadata
+      - structure
+      - replay
+      - cil
+      - ccx
+      - ce
+      - isc
+      - tpu
+
+    field_types:
+      tokens: list
+      token_flags: list
+      normalized_text: string
+      structural_phrases: list
+      topic_hint: enum
+      intent_hint: enum
+      continuity_hint: enum
+      reference_hint: enum
+      register_hint: enum
+      politeness_hint: enum
+      direction_hint: enum
+      coherence_hint: enum
+      importance_hint: enum
+
+  # ------------------------------------------------------------
+  # 2. Deterministic Copy Rules
+  # ------------------------------------------------------------
+  deterministic_copy:
+    tokens_must_match_ie: true
+    token_flags_must_match_ie: true
+    normalized_text_must_match_ie: true
+
+  # ------------------------------------------------------------
+  # 3. Structural Phrase Rules
+  # ------------------------------------------------------------
+  structural_phrases:
+    allowed_prefixes:
+      - politeness_
+      - continuity_
+      - reference_
+      - intent_
+      - topic_
+      - direction_
+      - register_
+      - importance_
+
+    max_phrases: 10
+    require_dictionary_match: true
+
+  # ------------------------------------------------------------
+  # 4. Hint Derivation Rules
+  # ------------------------------------------------------------
+  hints:
+
+    topic_hint:
+      allowed: [greeting, assistance, system, misc, noise, other]
+      derive_from:
+        - structural_phrases
+        - normalized_text
+      fallback: other
+
+    intent_hint:
+      allowed: [inform, request, begin, none]
+      derive_from:
+        - structural_phrases
+        - normalized_text
+      fallback: none
+
+    continuity_hint:
+      allowed: [continue, reset, shift, unknown]
+      derive_from:
+        - structural_phrases
+      fallback: continue
+
+    reference_hint:
+      allowed: [none, previous, specific_previous, ambiguous_previous]
+      derive_from:
+        - structural_phrases
+      fallback: none
+
+    register_hint:
+      allowed: [casual, formal, informal, none]
+      derive_from:
+        - structural_phrases
+        - token_flags
+      fallback: none
+
+    politeness_hint:
+      allowed: [high, normal, none]
+      derive_from:
+        - structural_phrases
+        - normalized_text
+      fallback: none
+
+    direction_hint:
+      allowed: [forward, backward, none]
+      derive_from:
+        - structural_phrases
+      fallback: none
+
+    coherence_hint:
+      allowed: [stable, unstable, none]
+      derive_from:
+        - token_flags
+        - spans
+        - repair_annotations
+      fallback: stable
+
+    importance_hint:
+      allowed: [low, medium, high]
+      derive_from:
+        - structural_phrases
+        - markup
+      fallback: low
+
+  # ------------------------------------------------------------
+  # 5. Bounded Semantic Rules
+  # ------------------------------------------------------------
+  bounded_semantics:
+    max_token_window: 5
+    no_embeddings: true
+    no_global_semantics: true
+    no_contextual_semantics: true
+    no_cross_sentence_semantics: true
+    dictionary_required: true
+
+  # ------------------------------------------------------------
+  # 6. Determinism Rules
+  # ------------------------------------------------------------
+  determinism:
+    identical_input_produces_identical_output: true
+    no_randomness: true
+    no_time_dependent_behavior: true
+    no_order_nondeterminism: true
+
+  # ------------------------------------------------------------
+  # 7. Primitive Boundary Rules
+  # ------------------------------------------------------------
+  boundaries:
+    read_only_fields:
+      - TP.intake.ie_tokens
+      - TP.intake.token_flags
+      - TP.intake.normalized_text
+      - TP.structure.tags
+      - TP.structure.spans
+      - TP.structure.markup
+      - TP.metadata.repair_annotations
+
+    write_only_fields:
+      - TP.cex.ie
+
+    forbidden_reads:
+      - TP.cil
+      - TP.cex.ccr
+      - TP.cex.pck
+      - TP.ce
+      - TP.isc
+      - TP.tpu
+
+    forbidden_writes:
+      - TP.intake
+      - TP.structure
+      - TP.metadata
+      - TP.cil
+      - TP.cex.ccr
+      - TP.cex.pck
+
+  # ------------------------------------------------------------
+  # 8. Structural Phrase Validation Rules
+  # ------------------------------------------------------------
+  phrase_validation:
+    require_prefix: true
+    require_enum_alignment: true
+    require_dictionary_origin: true
+
+  # ------------------------------------------------------------
+  # 9. Hint Consistency Rules
+  # ------------------------------------------------------------
+  consistency:
+    topic_hint_consistent_with_intent: true
+    continuity_hint_consistent_with_reference: true
+    direction_hint_consistent_with_reference: true
+    politeness_hint_consistent_with_register: true
+
+  # ------------------------------------------------------------
+  # 10. Error Rules
+  # ------------------------------------------------------------
+  errors:
+    fail_on_missing_required_field: true
+    fail_on_forbidden_field_present: true
+    fail_on_invalid_enum: true
+    fail_on_invalid_phrase_prefix: true
+    fail_on_non_deterministic_output: true
+
+# ============================================================
+# End of File
+# ============================================================
 
