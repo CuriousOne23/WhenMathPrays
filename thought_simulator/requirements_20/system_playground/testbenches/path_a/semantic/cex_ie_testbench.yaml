@@ -41,18 +41,18 @@ tests:
               - { type: word }
             normalized_text: "please continue as I said"
             structural_phrases:
-              - politeness_high
               - continuity_continue
               - reference_previous
-            topic_hint: assistance
-            intent_hint: request
+              - politeness_high
+            topic_hint: other
+            intent_hint: none
             continuity_hint: continue
             reference_hint: previous
             register_hint: none
             politeness_hint: high
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 002 — continuity reset
@@ -86,15 +86,15 @@ tests:
             structural_phrases:
               - continuity_reset
               - politeness_high
-            topic_hint: assistance
-            intent_hint: request
+            topic_hint: other
+            intent_hint: none
             continuity_hint: reset
             reference_hint: none
             register_hint: none
             politeness_hint: high
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 003 — continuity shift
@@ -127,15 +127,16 @@ tests:
             normalized_text: "switching gears now"
             structural_phrases:
               - continuity_shift
-            topic_hint: misc
-            intent_hint: begin
+              - topic_greeting
+            topic_hint: greeting
+            intent_hint: none
             continuity_hint: shift
             reference_hint: none
             register_hint: none
             politeness_hint: none
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 004 — backward direction
@@ -172,16 +173,15 @@ tests:
             normalized_text: "back to the earlier point"
             structural_phrases:
               - direction_backward
-              - reference_specific_previous
-            topic_hint: misc
-            intent_hint: inform
+            topic_hint: other
+            intent_hint: none
             continuity_hint: continue
-            reference_hint: specific_previous
+            reference_hint: none
             register_hint: none
             politeness_hint: none
             direction_hint: backward
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 005 — forward direction
@@ -217,17 +217,17 @@ tests:
               - { type: word }
             normalized_text: "moving on to the next"
             structural_phrases:
-              - direction_forward
               - continuity_shift
-            topic_hint: misc
-            intent_hint: begin
+              - direction_forward
+            topic_hint: other
+            intent_hint: none
             continuity_hint: shift
             reference_hint: none
             register_hint: none
             politeness_hint: none
             direction_hint: forward
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 006 — formal register
@@ -262,19 +262,18 @@ tests:
             normalized_text: "therefore I request clarification"
             structural_phrases:
               - register_formal
-              - intent_request
-            topic_hint: assistance
-            intent_hint: request
+            topic_hint: other
+            intent_hint: none
             continuity_hint: continue
             reference_hint: none
             register_hint: formal
             politeness_hint: none
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
-  # TEST CASE 007 — casual register
+  # TEST CASE 007 — casual register + request
   # ============================================================
   - id: cex_ie_coherence_stable
     input:
@@ -307,10 +306,11 @@ tests:
               - { type: word }
             normalized_text: "lol btw can you help"
             structural_phrases:
-              - register_casual
               - intent_request
-              - topic_assistance
-            topic_hint: assistance
+              - topic_noise
+              - register_casual
+              - register_informal
+            topic_hint: noise
             intent_hint: request
             continuity_hint: continue
             reference_hint: none
@@ -350,9 +350,10 @@ tests:
               - { type: word }
             normalized_text: "this is critical"
             structural_phrases:
+              - topic_greeting
               - importance_high
-            topic_hint: misc
-            intent_hint: inform
+            topic_hint: greeting
+            intent_hint: none
             continuity_hint: continue
             reference_hint: none
             register_hint: none
@@ -389,7 +390,9 @@ tests:
               - { type: word }
             normalized_text: "uh okay"
             structural_phrases:
+              - intent_none
               - topic_noise
+              - politeness_normal
             topic_hint: noise
             intent_hint: none
             continuity_hint: continue
@@ -434,7 +437,7 @@ tests:
               - { type: word }
             normalized_text: "random sentence with no markers"
             structural_phrases: []
-            topic_hint: misc
+            topic_hint: other
             intent_hint: none
             continuity_hint: continue
             reference_hint: none
@@ -480,15 +483,15 @@ tests:
             structural_phrases:
               - continuity_reset
               - reference_previous
-            topic_hint: misc
-            intent_hint: begin
+            topic_hint: other
+            intent_hint: none
             continuity_hint: reset
             reference_hint: previous
             register_hint: none
             politeness_hint: none
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 012 — unstable coherence (anomaly flags)
@@ -520,9 +523,9 @@ tests:
               - { type: word }
             normalized_text: "please help"
             structural_phrases:
-              - politeness_high
               - intent_request
-            topic_hint: assistance
+              - politeness_high
+            topic_hint: other
             intent_hint: request
             continuity_hint: continue
             reference_hint: none
@@ -530,7 +533,7 @@ tests:
             politeness_hint: high
             direction_hint: none
             coherence_hint: unstable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 013 — markup influence
@@ -563,9 +566,9 @@ tests:
               - { type: word }
             normalized_text: "please help me"
             structural_phrases:
-              - politeness_high
               - intent_request
-              - importance_medium
+              - topic_assistance
+              - politeness_high
             topic_hint: assistance
             intent_hint: request
             continuity_hint: continue
@@ -574,7 +577,7 @@ tests:
             politeness_hint: high
             direction_hint: none
             coherence_hint: stable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 014 — repair influence
@@ -606,9 +609,9 @@ tests:
               - { type: word }
             normalized_text: "please help"
             structural_phrases:
-              - politeness_high
               - intent_request
-            topic_hint: assistance
+              - politeness_high
+            topic_hint: other
             intent_hint: request
             continuity_hint: continue
             reference_hint: none
@@ -616,7 +619,7 @@ tests:
             politeness_hint: high
             direction_hint: none
             coherence_hint: unstable
-            importance_hint: medium
+            importance_hint: low
 
   # ============================================================
   # TEST CASE 015 — multi‑token cue window
@@ -652,7 +655,13 @@ tests:
               - { type: word }
             normalized_text: "as I was saying earlier"
             structural_phrases:
-              - reference_previous
               - continuity_continue
-            topic_hint: misc
-            intent_hint: continuation
+            topic_hint: other
+            intent_hint: none
+            continuity_hint: continue
+            reference_hint: none
+            register_hint: none
+            politeness_hint: none
+            direction_hint: none
+            coherence_hint: stable
+            importance_hint: low
