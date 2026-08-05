@@ -33,13 +33,40 @@ def load_yaml(path: str):
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
+# ------------------------------------------------------------
+# Utility: load tests-to-run YAML and filter test list
+# ------------------------------------------------------------
+def filter_tests_by_selector(all_tests: list, selector_path: str) -> list:
+    """
+    all_tests: list of test cases from cex_ie_input.yaml or cex_ie_testbench.yaml
+    selector_path: path to cex_ie_tests_to_run.yaml
+    Returns: filtered list of tests based on enabled flags
+    """
+    selector = load_yaml(selector_path)
+    enabled_map = {}
+
+    for entry in selector.get("tests_to_run", []):
+        tid = entry.get("id")
+        enabled = entry.get("enabled", False)
+        enabled_map[tid] = enabled
+
+    filtered = []
+    for case in all_tests:
+        cid = case.get("id")
+        if enabled_map.get(cid, False):
+            filtered.append(case)
+
+    return filtered
 
 # ------------------------------------------------------------
 # Mode A — strict deterministic testbench
 # ------------------------------------------------------------
 def run_mode_testbench(testbench_path: str) -> dict:
     tb = load_yaml(testbench_path)
-    tests = tb.get("tests", [])
+    tests = filter_tests_by_selector(
+        tb.get("tests", []),
+        str(Path(testbench_path).parent / "cex_ie_tests_to_run.yaml")
+    )
 
     results = {"pass": True, "cases": []}
 
@@ -77,7 +104,11 @@ def run_mode_testbench(testbench_path: str) -> dict:
 # ------------------------------------------------------------
 def run_mode_general(input_path: str, rules_path: str) -> dict:
     inp = load_yaml(input_path)
-    tests = inp.get("tests", [])
+    
+    tests = filter_tests_by_selector(
+        inp.get("tests", []),
+        str(Path(input_path).parent / "cex_ie_tests_to_run.yaml")
+    )
 
     results = {"pass": True, "cases": []}
 
