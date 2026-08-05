@@ -39,8 +39,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [Executive Overview of Meaning to Exspression via Manifold](requirements_20/system_playground/design/papers/manifold/manifold_white_papers/exec_sum_meaning_to_exspress_manifold.md)  
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
 [Architecture Principles of TS](architectural_principle_of_ts.md)  
-[ts_bilogical_modelling.md](requirements_20/system_playground/design/papers/cognition_and_constraints
-/ts_bilogical_modelling.md)  
+[ts_bilogical_modelling.md](requirements_20/system_playground/design/papers/cognition_and_constraints/ts_bilogical_modelling.md)  
 
 **Engineering papers**  
 [Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/prework_manifold_and_back.md)  
