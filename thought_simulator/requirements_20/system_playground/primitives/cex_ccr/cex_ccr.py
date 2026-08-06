@@ -362,12 +362,13 @@ class CExCCR:
                 "reference": "none",
                 "semantic_residue": "none",
             }
+            # find conversation with highest ambiguity
+            highest_amb_conv = max(self.cil.values(), key=lambda c: c["metrics"]["ambiguity_score"])
+            
             final_scores = {
-                "ambiguity": global_ambiguity,
-                "collapse": max(conv["metrics"]["collapse_risk"] for conv in self.cil.values()),
-                "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
-                # stability must come from the SAME conversation that produced global_ambiguity
-                highest_amb_conv = max(self.cil.values(), key=lambda c: c["metrics"]["ambiguity_score"])
+                "ambiguity": highest_amb_conv["metrics"]["ambiguity_score"],
+                "collapse": highest_amb_conv["metrics"]["collapse_risk"],
+                "drift": highest_amb_conv["metrics"]["drift_score"],
                 "stability": highest_amb_conv["metrics"]["stability_score"],
             }
     
