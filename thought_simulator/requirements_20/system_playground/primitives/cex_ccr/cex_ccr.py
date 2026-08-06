@@ -282,6 +282,21 @@ class CExCCR:
                 best_conv_name = conv_name
                 best_alignments = alignments
                 best_scores = scores
+                
+            print("\n=== DEBUG: Evaluating conversation:", conv_name, "===")
+            print("IE envelope:", self.ie)
+            print("Semantic importance:", self.semantic)
+            print("CIL identity_lineage:", conv.get("identity_lineage"))
+            print("CIL context_lineage:", conv.get("context_lineage"))
+            print("CIL continuity_lineage:", conv.get("continuity_lineage"))
+            print("CIL clarifying_lineage:", conv.get("clarifying_lineage"))
+            print("CIL semantic_residue:", conv.get("semantic_residue"))
+            print("Alignment results:", alignments)
+            print("Scores:", scores)
+            print("Alignment sum:", alignment_sum)
+            print("Stability:", stability)
+            print("==============================================")
+
 
         # If nothing selected (should not happen), fall back to conv_10 if present
         if best_conv_name is None and "conv_10" in self.cil:
