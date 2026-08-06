@@ -253,16 +253,25 @@ class CExCCR:
         best_scores = None
         best_alignment_sum = -1.0
         best_stability = -1.0
-
+    
+        # Store all alignments and scores for later selection
+        all_alignments = {}
+        all_scores = {}
+    
         # Cross‑correlate IE + semantic importance with each CIL conversation
         for conv_name, conv in self.cil.items():
             aligner = CCRAlignmentComputer(self.ie, self.semantic, conv)
             alignments = aligner.compute_all()
             scores = self._extract_scores(conv)
-
+    
+            # Store for later retrieval
+            all_alignments[conv_name] = alignments
+            all_scores[conv_name] = scores
+    
             alignment_sum = sum(_alignment_level(v) for v in alignments.values())
             stability = scores["stability"]
-
+    
+            # Track best conversation by alignment sum, then stability
             if alignment_sum > best_alignment_sum:
                 best_alignment_sum = alignment_sum
                 best_stability = stability
@@ -275,7 +284,8 @@ class CExCCR:
                 best_conv_name = conv_name
                 best_alignments = alignments
                 best_scores = scores
-                
+    
+            # DEBUG
             print("\n=== DEBUG: Evaluating conversation:", conv_name, "===")
             print("IE envelope:", self.ie)
             print("Semantic importance:", self.semantic)
@@ -289,8 +299,7 @@ class CExCCR:
             print("Alignment sum:", alignment_sum)
             print("Stability:", stability)
             print("==============================================")
-
-
+    
         # If nothing selected (should not happen), fall back to conv_10 if present
         if best_conv_name is None and "conv_10" in self.cil:
             best_conv_name = "conv_10"
@@ -298,10 +307,10 @@ class CExCCR:
             aligner = CCRAlignmentComputer(self.ie, self.semantic, conv)
             best_alignments = aligner.compute_all()
             best_scores = self._extract_scores(conv)
-
+    
         # --- GLOBAL ambiguity (used ONLY for NEW decision) ---
         global_ambiguity = max(conv["metrics"]["ambiguity_score"] for conv in self.cil.values())
-        
+    
         # --- Decision logic uses:
         # NEW: global ambiguity
         # SPECIFIC: per-conversation ambiguity (best_scores)
@@ -314,7 +323,7 @@ class CExCCR:
             "global_ambiguity": global_ambiguity         # NEW uses global ambiguity
         })
         decision = decision_engine.decide()
-        
+    
         # --- Determine selected conversation ---
         if decision == "new":
             selected_conversation = None
@@ -332,7 +341,7 @@ class CExCCR:
                 "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
                 "stability": max(conv["metrics"]["stability_score"] for conv in self.cil.values()),
             }
-        
+    
         else:
             # fallback or specific → use selected conversation
             if decision == "fallback":
@@ -343,17 +352,18 @@ class CExCCR:
                     selected_conversation = best_conv_name
             else:
                 selected_conversation = best_conv_name
-        
+    
             final_alignment = all_alignments[selected_conversation]
             final_scores = all_scores[selected_conversation]
-
+    
         return {
             "cex": {
                 "ccr": {
-                    "alignment": best_alignments,
-                    "scores": best_scores,
+                    "alignment": final_alignment,
+                    "scores": final_scores,
                     "decision": decision,
                     "selected_conversation": selected_conversation,
                 }
             }
         }
+    
