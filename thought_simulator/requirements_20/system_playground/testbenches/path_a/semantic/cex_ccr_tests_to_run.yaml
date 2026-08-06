@@ -1,1 +1,39 @@
+# ============================================================
+# CEx‑CCR Tests To Run
+# Version 2.0
+# ============================================================
+
+metadata:
+  primitive: CEx-CCR
+  description: >
+    Controls which scenarios are executed by cex_ccr_testbench.py.
+    • In testbench mode: selects scenarios from cex_ccr_testbench.yaml
+    • In general mode:   selects scenarios from cex_ccr_input.yaml
+
+# ============================================================
+# OPTIONS
+# ============================================================
+#   tests_to_run: "all"
+#       → run all scenarios
+#
+#   tests_to_run:
+#       - scenario_1
+#       - scenario_3
+#       ...
+#       → run only the listed scenarios
+#
+# ============================================================
+
+tests_to_run: "all"
+
+# Example for selective execution:
+#
+# tests_to_run:
+#   - scenario_1
+#   - scenario_2
+#   - scenario_5
+#
+# ============================================================
+# END OF FILE
+# ============================================================
 
