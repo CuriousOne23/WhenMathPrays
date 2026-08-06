@@ -254,6 +254,7 @@ class CExCCR:
         }
 
     def inspect(self) -> dict:
+        # --- DEBUG: IE + semantic ---
         print("\n================ CCR.inspect() DEBUG ================")
         print("IE envelope:", self.ie)
         print("Semantic importance:", self.semantic)
@@ -265,25 +266,39 @@ class CExCCR:
         best_alignment_sum = -1.0
         best_stability = -1.0
     
+        # Store all alignments and scores for later selection
         all_alignments = {}
         all_scores = {}
     
-        # ------------------------------------------------------
-        # PHASE 1 — Evaluate all conversations
-        # ------------------------------------------------------
+        # Cross‑correlate IE + semantic importance with each CIL conversation
         for conv_name, conv in self.cil.items():
-            print(f"\n=== DEBUG: Evaluating conversation: {conv_name} ===")
-    
             aligner = CCRAlignmentComputer(self.ie, self.semantic, conv)
             alignments = aligner.compute_all()
             scores = self._extract_scores(conv)
     
+            # Store for later retrieval
             all_alignments[conv_name] = alignments
             all_scores[conv_name] = scores
     
             alignment_sum = sum(_alignment_level(v) for v in alignments.values())
             stability = scores["stability"]
     
+            # Track best conversation by alignment sum, then stability
+            if alignment_sum > best_alignment_sum:
+                best_alignment_sum = alignment_sum
+                best_stability = stability
+                best_conv_name = conv_name
+                best_alignments = alignments
+                best_scores = scores
+            elif alignment_sum == best_alignment_sum and stability > best_stability:
+                best_alignment_sum = alignment_sum
+                best_stability = stability
+                best_conv_name = conv_name
+                best_alignments = alignments
+                best_scores = scores
+    
+            # DEBUG per conversation
+            print(f"\n=== DEBUG: Evaluating conversation: {conv_name} ===")
             print("CIL identity_lineage:", conv.get("identity_lineage"))
             print("CIL context_lineage:", conv.get("context_lineage"))
             print("CIL continuity_lineage:", conv.get("continuity_lineage"))
@@ -294,35 +309,27 @@ class CExCCR:
             print("Alignment sum:", alignment_sum)
             print("Stability:", stability)
     
-            # Selection logic
-            if alignment_sum > best_alignment_sum or (
-                alignment_sum == best_alignment_sum and stability > best_stability
-            ):
-                best_alignment_sum = alignment_sum
-                best_stability = stability
-                best_conv_name = conv_name
-                best_alignments = alignments
-                best_scores = scores
+        # If nothing selected (should not happen), fall back to conv_10 if present
+        if best_conv_name is None and "conv_10" in self.cil:
+            best_conv_name = "conv_10"
+            conv = self.cil["conv_10"]
+            aligner = CCRAlignmentComputer(self.ie, self.semantic, conv)
+            best_alignments = aligner.compute_all()
+            best_scores = self._extract_scores(conv)
     
-        # ------------------------------------------------------
-        # PHASE 2 — Global ambiguity
-        # ------------------------------------------------------
+        # --- GLOBAL ambiguity (used ONLY for NEW decision) ---
         global_ambiguity = max(conv["metrics"]["ambiguity_score"] for conv in self.cil.values())
-        highest_amb_conv = max(self.cil.items(), key=lambda kv: kv[1]["metrics"]["ambiguity_score"])
-        highest_amb_name, highest_amb_conv_data = highest_amb_conv
-        highest_amb_stability = highest_amb_conv_data["metrics"]["stability_score"]
     
-        print("\n=== DEBUG: Decision phase ===")
-        print("Best conversation:", best_conv_name)
-        print("Best alignments:", best_alignments)
-        print("Best scores:", best_scores)
-        print("Global ambiguity:", global_ambiguity)
-        print("Highest ambiguity conversation:", highest_amb_name)
-        print("Highest ambiguity stability:", highest_amb_stability)
+        # Conversation with highest ambiguity (for NEW scores)
+        highest_amb_name, highest_amb_conv = max(
+            self.cil.items(),
+            key=lambda kv: kv[1]["metrics"]["ambiguity_score"]
+        )
+        highest_amb_stability = highest_amb_conv["metrics"]["stability_score"]
     
-        # ------------------------------------------------------
-        # PHASE 3 — Decision engine
-        # ------------------------------------------------------
+        # --- Decision logic uses:
+        # NEW: global ambiguity
+        # SPECIFIC/FALLBACK: per-conversation ambiguity/stability (best_scores)
         decision_engine = CCRDecisionEngine(
             best_alignments,
             {
@@ -332,16 +339,23 @@ class CExCCR:
                 "stability": best_scores["stability"],
                 "global_ambiguity": global_ambiguity,
             },
-            self.ie
+            self.ie,
         )
-    
         decision = decision_engine.decide()
+    
+        # --- DEBUG: decision phase ---
+        print("\n=== DEBUG: Decision phase ===")
+        print("Best conversation:", best_conv_name)
+        print("Best alignments:", best_alignments)
+        print("Best scores:", best_scores)
+        print("Global ambiguity:", global_ambiguity)
+        print("Highest ambiguity conversation:", highest_amb_name)
+        print("Highest ambiguity stability:", highest_amb_stability)
         print("Decision:", decision)
     
-        # ------------------------------------------------------
-        # PHASE 4 — Final selection
-        # ------------------------------------------------------
+        # --- Determine selected conversation and final outputs ---
         if decision == "new":
+            # NEW → no selected conversation; scores come from highest-ambiguity conversation
             selected_conversation = None
             final_alignment = {
                 "identity": "none",
@@ -352,26 +366,50 @@ class CExCCR:
                 "semantic_residue": "none",
             }
             final_scores = {
-                "ambiguity": global_ambiguity,
-                "collapse": max(conv["metrics"]["collapse_risk"] for conv in self.cil.values()),
-                "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
-                "stability": highest_amb_stability,
+                "ambiguity": highest_amb_conv["metrics"]["ambiguity_score"],
+                "collapse": highest_amb_conv["metrics"]["collapse_risk"],
+                "drift": highest_amb_conv["metrics"]["drift_score"],
+                "stability": highest_amb_conv["metrics"]["stability_score"],
             }
     
-        else:
-            # fallback or specific
-            if decision == "fallback":
-                stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
-                if best_scores["stability"] < stability_threshold:
-                    selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
-                else:
-                    selected_conversation = best_conv_name
-            else:
-                selected_conversation = best_conv_name
+        elif decision == "fallback":
+            # FALLBACK → choose a conversation based on semantic match + stability
+            ie_entities = {e["value"] for e in self.semantic.get("entities", [])}
+            ie_facts = {f["value"] for f in self.semantic.get("facts", [])}
     
+            def has_semantic_match(conv: dict) -> bool:
+                residue = conv.get("semantic_residue", {})
+                res_entities = set(residue.get("important_entities", []))
+                res_facts = set(residue.get("important_facts", []))
+                return bool(ie_entities & res_entities or ie_facts & res_facts)
+    
+            candidates = [
+                (name, conv)
+                for name, conv in self.cil.items()
+                if has_semantic_match(conv)
+            ]
+    
+            if candidates:
+                # pick highest stability among semantic matches
+                selected_name, selected_conv = max(
+                    candidates,
+                    key=lambda kv: kv[1]["metrics"]["stability_score"]
+                )
+            else:
+                # if no semantic match, fall back to best_conv_name
+                selected_name = best_conv_name
+                selected_conv = self.cil[best_conv_name]
+    
+            selected_conversation = selected_name
             final_alignment = all_alignments[selected_conversation]
             final_scores = all_scores[selected_conversation]
     
+        else:  # "specific"
+            selected_conversation = best_conv_name
+            final_alignment = all_alignments[selected_conversation]
+            final_scores = all_scores[selected_conversation]
+    
+        # --- DEBUG: final outputs ---
         print("Selected conversation:", selected_conversation)
         print("Final alignment (to be returned):", final_alignment)
         print("Final scores (to be returned):", final_scores)
@@ -387,3 +425,4 @@ class CExCCR:
                 }
             }
         }
+    
