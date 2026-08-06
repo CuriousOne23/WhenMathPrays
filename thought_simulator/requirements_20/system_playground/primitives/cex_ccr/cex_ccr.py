@@ -333,6 +333,18 @@ class CExCCR:
             self.ie
         )
         decision = decision_engine.decide()
+
+        print("\n=== DEBUG: Decision phase ===")
+        print("Best conversation:", best_conv_name)
+        print("Best alignments:", best_alignments)
+        print("Best scores:", best_scores)
+        print("Global ambiguity:", global_ambiguity)
+        print("Decision:", decision)
+        print("Selected conversation:", selected_conversation)
+        print("Final alignment (to be returned):", final_alignment)
+        print("Final scores (to be returned):", final_scores)
+        print("==============================================")
+
     
         # --- Determine selected conversation ---
         if decision == "new":
@@ -369,13 +381,14 @@ class CExCCR:
         return {
             "cex": {
                 "ccr": {
-                    "alignment": best_alignments,
-                    "scores": best_scores,
+                    "alignment": final_alignment,
+                    "scores": final_scores,
                     "decision": decision,
                     "selected_conversation": selected_conversation,
                 }
             }
         }
+
         
                 
     
