@@ -1,1 +1,125 @@
+# ============================================================
+# CIL Testbench (Mode A — Deterministic Testing)
+# Version 1.0
+# ============================================================
+
+metadata:
+  primitive: CIL
+  mode: testbench
+  description: >
+    Deterministic CIL lineage + metrics inputs for CEx‑CCR testbench.
+    Each scenario provides the last ≤10 conversations exactly as
+    required by cex_ccr_testbench.yaml.
+
+# ============================================================
+# SCENARIO 1 — NEW CONVERSATION
+# Matches scenario_1 in cex_ccr_testbench.yaml
+# ============================================================
+
+scenario_1:
+  TP:
+    cil:
+      conv_1:
+        identity_lineage: "greeting"
+        clarifying_lineage: "normal"
+        context_lineage: "forward"
+        continuity_lineage: "continue"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.92
+          collapse_risk: 0.10
+          stability_score: 0.55
+          drift_score: 0.20
+        semantic_residue: "none"
+        next_context: "none"
+
+      conv_2:
+        identity_lineage: "assistance"
+        clarifying_lineage: "normal"
+        context_lineage: "forward"
+        continuity_lineage: "continue"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.88
+          collapse_risk: 0.15
+          stability_score: 0.60
+          drift_score: 0.25
+        semantic_residue: "none"
+        next_context: "none"
+
+# ============================================================
+# SCENARIO 2 — SPECIFIC CONVERSATION
+# Matches scenario_2 in cex_ccr_testbench.yaml
+# ============================================================
+
+scenario_2:
+  TP:
+    cil:
+      conv_1:
+        identity_lineage: "assistance"
+        clarifying_lineage: "casual"
+        context_lineage: "forward"
+        continuity_lineage: "continue"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.05
+          collapse_risk: 0.02
+          stability_score: 0.90
+          drift_score: 0.10
+        semantic_residue: "previous"
+        next_context: "assistance"
+
+      conv_2:
+        identity_lineage: "misc"
+        clarifying_lineage: "normal"
+        context_lineage: "backward"
+        continuity_lineage: "reset"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.40
+          collapse_risk: 0.10
+          stability_score: 0.50
+          drift_score: 0.30
+        semantic_residue: "none"
+        next_context: "misc"
+
+# ============================================================
+# SCENARIO 3 — FALLBACK
+# Matches scenario_3 in cex_ccr_testbench.yaml
+# ============================================================
+
+scenario_3:
+  TP:
+    cil:
+      conv_1:
+        identity_lineage: "assistance"
+        clarifying_lineage: "normal"
+        context_lineage: "forward"
+        continuity_lineage: "continue"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.45
+          collapse_risk: 0.10
+          stability_score: 0.80
+          drift_score: 0.20
+        semantic_residue: "none"
+        next_context: "assistance"
+
+      conv_2:
+        identity_lineage: "misc"
+        clarifying_lineage: "normal"
+        context_lineage: "forward"
+        continuity_lineage: "continue"
+        topology: "linear"
+        metrics:
+          ambiguity_score: 0.50
+          collapse_risk: 0.20
+          stability_score: 0.70
+          drift_score: 0.25
+        semantic_residue: "none"
+        next_context: "misc"
+
+# ============================================================
+# END OF FILE
+# ============================================================
 
