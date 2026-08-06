@@ -1,5 +1,5 @@
 """
-CEx‑CCR Testbench (Mode A — Deterministic Testing)
+CEx‑CCR Testbench (Mode A - Deterministic Testing)
 --------------------------------------------------
 
 This testbench:
@@ -82,11 +82,11 @@ def run_testbench():
     if TESTBENCH_CONFIG["mode"] == "testbench":
         tb_data = load_yaml(TESTBENCH_PATH)
         scenarios = {k: v for k, v in tb_data.items() if k.startswith("scenario_")}
-        print("Mode: TESTBENCH — using cex_ccr_testbench.yaml\n")
+        print("Mode: TESTBENCH - using cex_ccr_testbench.yaml\n")
     else:
         tb_data = load_yaml(GENERAL_INPUT_PATH)
         scenarios = {k: v for k, v in tb_data.items() if k.startswith("scenario_")}
-        print("Mode: GENERAL — using cex_ccr_input.yaml\n")
+        print("Mode: GENERAL - using cex_ccr_input.yaml\n")
 
     # --------------------------------------------------------
     # Load tests_to_run list
