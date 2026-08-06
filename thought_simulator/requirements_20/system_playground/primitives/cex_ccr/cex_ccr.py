@@ -197,9 +197,10 @@ class CCRDecisionEngine:
     Applies decision logic from rule tables.
     """
 
-    def __init__(self, alignments: dict, scores: dict):
+    def __init__(self, alignments: dict, scores: dict, ie: dict):
         self.align = alignments
         self.scores = scores
+        self.ie = ie
 
     def decide(self) -> str:
         identity = self.align["identity"]
@@ -320,13 +321,17 @@ class CExCCR:
         # NEW: global ambiguity
         # SPECIFIC: per-conversation ambiguity (best_scores)
         # FALLBACK: per-conversation stability (best_scores)
-        decision_engine = CCRDecisionEngine(best_alignments, {
-            "ambiguity": best_scores["ambiguity"],       # SPECIFIC uses per-conv ambiguity
-            "collapse": best_scores["collapse"],
-            "drift": best_scores["drift"],
-            "stability": best_scores["stability"],
-            "global_ambiguity": global_ambiguity         # NEW uses global ambiguity
-        })
+        decision_engine = CCRDecisionEngine(
+            best_alignments,
+            {
+                "ambiguity": best_scores["ambiguity"],
+                "collapse": best_scores["collapse"],
+                "drift": best_scores["drift"],
+                "stability": best_scores["stability"],
+                "global_ambiguity": global_ambiguity
+            },
+            self.ie
+        )
         decision = decision_engine.decide()
     
         # --- Determine selected conversation ---
