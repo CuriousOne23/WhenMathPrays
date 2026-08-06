@@ -315,15 +315,37 @@ class CExCCR:
         })
         decision = decision_engine.decide()
         
-        # --- Conversation selection ---
+        # --- Determine selected conversation ---
         if decision == "new":
             selected_conversation = None
+            final_alignment = {
+                "identity": "none",
+                "clarifying": "none",
+                "context": "none",
+                "continuity": "none",
+                "reference": "none",
+                "semantic_residue": "none",
+            }
+            final_scores = {
+                "ambiguity": global_ambiguity,
+                "collapse": max(conv["metrics"]["collapse_risk"] for conv in self.cil.values()),
+                "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
+                "stability": max(conv["metrics"]["stability_score"] for conv in self.cil.values()),
+            }
+        
         else:
-            stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
-            if decision == "fallback" and best_scores["stability"] < stability_threshold:
-                selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
+            # fallback or specific → use selected conversation
+            if decision == "fallback":
+                stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
+                if best_scores["stability"] < stability_threshold:
+                    selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
+                else:
+                    selected_conversation = best_conv_name
             else:
                 selected_conversation = best_conv_name
+        
+            final_alignment = all_alignments[selected_conversation]
+            final_scores = all_scores[selected_conversation]
 
         return {
             "cex": {
