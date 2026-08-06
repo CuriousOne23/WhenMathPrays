@@ -5,6 +5,15 @@
 
 ruleset_id: "ie_rules_v3.3"
 
+pipeline:
+  chk_inb: true
+  chk_iiinb: true
+  chk_ie: true
+  chk_cex: false
+  chk_ce: false
+  chk_isc: false
+  chk_tpu: false
+
 rules:
 
   # ----------------------------------------------------------

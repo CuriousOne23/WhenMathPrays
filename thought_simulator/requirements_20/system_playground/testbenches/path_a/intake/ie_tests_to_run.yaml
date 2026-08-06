@@ -2,15 +2,6 @@
 # IE Tests-To-Run — Execution Control for IE Testbench (v3.3)
 # ============================================================
 
-pipeline:
-  use_inb: true
-  use_iiinb: true
-  use_ie: true
-  use_cex: false
-  use_ce: false
-  use_isc: false
-  use_tpu: false
-
 tests_to_run:
 
   - id: ie_basic_repair

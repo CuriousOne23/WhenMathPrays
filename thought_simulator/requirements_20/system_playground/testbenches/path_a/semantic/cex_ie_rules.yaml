@@ -8,6 +8,17 @@ mode: general
 # They validate correctness of CEx‑IE output in general mode.
 # ============================================================
 
+pipeline:
+  chk_inb: false
+  chk_iiinb: false
+  chk_ie: false
+  chk_cex_ie: true
+  chk_cex_ccr: false
+  chk_cex_pck: false
+  chk_ce: false
+  chk_isc: false
+  chk_tpu: false
+
 ruleset:
 
   # ------------------------------------------------------------
