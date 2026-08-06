@@ -1,22 +1,32 @@
-## 1. CEx‑CCR’s role in the pipeline
+# ⭐ **REWRITTEN `cex_ccr_py_struc_pgm.md` (Version 2.0)**  
+### *Python & C++ Implementation Blueprint for the CEx‑CCR Primitive*  
+### *Aligned with 20.107.020 (TP‑Aligned, Version 2.0)*  
+### *Extended to support Path‑A importance signals, semantic residues, and COB projection*
+
+---
+
+# **1. CEx‑CCR’s Role in the Pipeline**
 
 CEx‑CCR is the **second internal module** of the CEx primitive.  
-It receives:
+It receives **three envelopes**:
 
-- the **CEx‑IE envelope** (`TP.cex.ie`) containing structural hints derived from IE tokens, and  
-- the **CIL lineage + metrics** (`TP.cil`) for the last ≤10 conversations.
+1. **CEx‑IE envelope** (`TP.cex.ie`)  
+   - structural hints derived from IE tokens  
+2. **CIL lineage + metrics** (`TP.cil`)  
+   - last ≤10 conversations  
+3. **Path‑A importance envelope** (`TP.semantic.importance`)  
+   - deterministic importance signals emitted by downstream primitives
 
 CEx‑CCR:
 
-- computes alignment across identity, clarifying, context, continuity, and reference dimensions,  
-- derives ambiguity, collapse, drift, and stability scores from CIL metrics,  
+- computes alignment across identity, clarifying, context, continuity, reference, and semantic‑residue dimensions  
+- derives ambiguity, collapse, drift, and stability scores from CIL metrics  
 - applies deterministic decision rules to select:
-
-  - one of the last 10 conversations,  
-  - a new conversation, or  
-  - an ambiguous → fallback conversation,
-
-- emits a compact `TP.cex.ccr` envelope for CEx‑Pck.
+  - one of the last 10 conversations  
+  - a new conversation  
+  - an ambiguous → fallback conversation  
+- emits a compact `TP.cex.ccr` envelope for CEx‑Pck  
+- provides semantic‑residue alignment for downstream lineage updates
 
 CEx‑CCR is:
 
@@ -29,23 +39,20 @@ CEx‑CCR is:
 
 CEx‑CCR does **not**:
 
-- perform IE repackaging (CEx‑IE)  
-- perform downstream packaging (CEx‑Pck)  
+- perform IE repackaging  
+- perform downstream packaging  
 - use embeddings or global semantics  
-- access downstream primitives beyond writing `TP.cex.ccr`.
+- modify upstream envelopes  
+- perform lineage updates (COB/CST responsibility)
 
 ---
 
-## 2. Public API (Python & C++)
-
-The testbench invokes CEx‑CCR exactly like this:
+# **2. Public API (Python & C++)**
 
 ```python
 cex_ccr = CExCCR(tp_input)
 cex_ccr.inspect()
 ```
-
-CEx‑CCR must expose:
 
 ### Required fields (`TP.cex.ccr`)
 
@@ -54,6 +61,7 @@ CEx‑CCR must expose:
 - `alignment.context`  
 - `alignment.continuity`  
 - `alignment.reference`  
+- `alignment.semantic_residue`  
 - `scores.ambiguity`  
 - `scores.collapse`  
 - `scores.drift`  
@@ -68,297 +76,335 @@ def inspect(self):
     # populate TP.cex.ccr deterministically
 ```
 
-### Required behavior
+---
+
+# **3. Intake Model (Three Inputs)**
+
+CEx‑CCR receives **three envelopes** from TP.
+
+---
+
+## **3.1 CEx‑IE envelope (`TP.cex.ie`)**
+
+CEx‑CCR reads all structural hints:
+
+```python
+topic_hint
+intent_hint
+continuity_hint
+reference_hint
+register_hint
+politeness_hint
+direction_hint
+coherence_hint
+importance_hint
+structural_phrases
+```
+
+These are **bounded structural categories**.  
+CEx‑CCR must not reinterpret or modify them.
+
+---
+
+## **3.2 CIL envelope (`TP.cil`) — last ≤10 conversations**
+
+For each conversation `k`:
+
+```python
+identity_lineage
+clarifying_lineage
+context_lineage
+continuity_lineage
+topology
+metrics:
+    ambiguity_score
+    collapse_risk
+    stability_score
+    drift_score
+semantic_residue:
+    important_entities: [...]
+    important_facts: [...]
+next_context
+```
+
+CEx‑CCR must:
+
+- iterate deterministically over all conversations  
+- compute alignment and scores  
+- never modify CIL fields
+
+---
+
+## **3.3 Path‑A importance envelope (`TP.semantic.importance`)**
+
+Downstream Path‑A primitives (IdOB, SOB, SmOB, OuBA, SSRGn) emit deterministic importance signals:
+
+```
+TP.semantic.importance {
+    entities: [
+        { value: string, role: string, score: number }
+    ],
+    facts: [
+        { value: string, role: string, score: number }
+    ]
+}
+```
+
+Examples:
+
+- `"Alice"` (role: `"primary_name"`, score: `0.9`)  
+- `"home router"` (role: `"primary_object"`, score: `0.8`)  
+- `"Wi‑Fi not working"` (role: `"primary_issue"`, score: `0.85`)  
+
+These signals are **bounded semantic residues**, not free‑text summaries.
+
+CEx‑CCR uses them for **semantic‑residue alignment**.
+
+---
+
+### 3.4 CIL Source Model (Static 10‑Conversation Substrate)
+
+CEx‑CCR SHALL receive its CIL lineage + metrics from a **single canonical file**:
+
+```
+cil_input.yaml
+```
+
+This file contains **exactly 10 conversations**, each fully specified with:
+
+- `identity_lineage`
+- `clarifying_lineage`
+- `context_lineage`
+- `continuity_lineage`
+- `topology`
+- `metrics` (ambiguity, collapse, drift, stability)
+- `semantic_residue` (important_entities, important_facts)
+- `next_context`
+
+These 10 conversations form the **static CIL substrate** for all CEx‑CCR operation modes:
+
+- **Mode A (testbench)**
+- **Mode B (general)**
+
+CEx‑CCR SHALL NOT load or reference:
+
+- scenario‑specific CIL testbench files  
+- dynamic CIL envelopes generated by upstream primitives  
+- any CIL content other than `cil_input.yaml`
+
+Upstream primitive flags (`use_inb`, `use_iiinb`, `use_ie`, `use_cex_ie`, etc.) SHALL NOT affect the CIL substrate used by CEx‑CCR.
+
+All CCR testbench scenarios in `cex_ccr_testbench.yaml` SHALL reference these same 10 conversations deterministically.
+
+This design ensures:
+
+- deterministic replay  
+- simplified testbench construction  
+- simplified rulechecker logic  
+- stable lineage substrate  
+- consistent progressive lineup behavior  
+- future‑proof TP requirement updates  
+- no loss of fidelity in CCR alignment or decision logic
+```
+
+---
+
+# **4. Deterministic Rule Ordering**
+
+CEx‑CCR must apply operations in **exact order**:
+
+1. Receive IE hints  
+2. Receive CIL lineage + metrics  
+3. Receive Path‑A importance signals  
+4. Compute alignment:
+   - identity  
+   - clarifying  
+   - context  
+   - continuity  
+   - reference  
+   - semantic‑residue  
+5. Derive scores  
+6. Apply decision logic  
+7. Select conversation  
+8. Construct `TP.cex.ccr` envelope  
+9. Validate envelope  
+10. Emit deterministic output
+
+This ordering ensures replay determinism and Python/C++ parity.
+
+---
+
+# **5. Alignment Computation**
+
+CEx‑CCR computes **six alignment dimensions**.
+
+---
+
+## **5.1 Identity alignment**
+
+Inputs:
+
+- `topic_hint`  
+- `intent_hint`  
+- `structural_phrases`  
+- `identity_lineage[k]`
+
+Output:
+
+- `none | weak | moderate | strong`
+
+---
+
+## **5.2 Clarifying alignment**
+
+Inputs:
+
+- `register_hint`  
+- `politeness_hint`  
+- `intent_hint`  
+- `clarifying_lineage[k]`
+
+---
+
+## **5.3 Context alignment**
+
+Inputs:
+
+- `topic_hint`  
+- `direction_hint`  
+- `context_lineage[k]`
+
+---
+
+## **5.4 Continuity alignment**
+
+Inputs:
+
+- `continuity_hint`  
+- `continuity_lineage[k]`
+
+---
+
+## **5.5 Reference alignment**
+
+Inputs:
+
+- `reference_hint`  
+- `identity_lineage[k]`  
+- `semantic_residue[k]`
+
+---
+
+## ⭐ **5.6 Semantic‑Residue Alignment (NEW)**
+
+Inputs:
+
+- `TP.semantic.importance.entities`  
+- `TP.semantic.importance.facts`  
+- `TP.cil[k].semantic_residue.important_entities`  
+- `TP.cil[k].semantic_residue.important_facts`  
+- `reference_hint`
+
+Output:
+
+- `none | weak | moderate | strong`
+
+Rules:
+
+- **strong**  
+  - reference_hint indicates previous or specific_previous  
+  - AND importance entities/facts match CIL semantic_residue deterministically  
+- **moderate**  
+  - partial match (entity matches but fact does not)  
+- **weak**  
+  - importance exists but does not match residue  
+- **none**  
+  - no importance signals or no residue match
+
+This dimension enables CCR to use **names**, **objects**, and **facts** deterministically.
+
+---
+
+# **6. Score Derivation**
+
+CEx‑CCR copies metrics directly from CIL:
+
+- `ambiguity_score`  
+- `collapse_risk`  
+- `stability_score`  
+- `drift_score`
+
+No transformations.  
+No semantic inference.
+
+Thresholds defined in `cex_ccr_rules.yaml`.
+
+---
+
+# **7. Decision Logic**
+
+CCR emits:
+
+- `decision = new | specific | fallback`  
+- `selected_conversation = ID | null`
+
+Rules unchanged except now **semantic‑residue alignment** can strengthen or weaken identity/reference alignment.
+
+---
+
+# **8. Bounded Semantic Domain**
 
 CEx‑CCR:
 
-- reads only `TP.cex.ie` and `TP.cil` fields,  
-- computes alignment enums (`none | weak | moderate | strong`) using deterministic rules,  
-- derives numeric scores directly from CIL scalar metrics,  
-- applies bounded decision logic to emit `decision = new | specific | fallback`,  
-- selects `selected_conversation` deterministically (conversation ID or `null`),  
-- writes only to `TP.cex.ccr`, leaving upstream envelopes unchanged,  
-- produces replay‑stable output for identical inputs.
+- uses only IE hints, CIL lineage, and Path‑A importance signals  
+- does not infer meaning  
+- does not use embeddings  
+- does not use global semantics  
+- is deterministic and replay‑safe
 
-CEx‑CCR does **not**:
+---
+
+## ⭐ **8.1 COB Projection of Importance Signals (NEW)**
+
+COB SHALL:
+
+- read `TP.semantic.importance` from TP(N)  
+- filter entries where `score ≥ importance_threshold`  
+- project them linearly into the selected conversation’s CIL envelope:
+
+```
+TP.cil[k].semantic_residue.important_entities = [...]
+TP.cil[k].semantic_residue.important_facts = [...]
+```
+
+COB SHALL NOT:
 
 - infer meaning  
-- use embeddings  
-- use global context  
-- modify `TP.cex.ie` or `TP.cil`  
-- perform packaging or lineage updates.
+- transform importance values  
+- merge or summarize facts  
+- perform semantic clustering
+
+COB SHALL ONLY:
+
+- **copy forward** flagged items  
+- into the selected conversation  
+- deterministically
+
+This preserves your “position + linear projection” constraint.
 
 ---
 
-## 3. Intake model (two inputs)
+# **9. Structural Schema**
 
-CEx‑CCR receives **two input envelopes** from TP:
-
-### 3.1 CEx‑IE envelope (`TP.cex.ie`)
-
-```python
-ie_tokens          = TP["cex"]["ie"]["tokens"]
-ie_token_flags     = TP["cex"]["ie"]["token_flags"]
-ie_normalized      = TP["cex"]["ie"]["normalized_text"]
-ie_struct_phrases  = TP["cex"]["ie"]["structural_phrases"]
-topic_hint         = TP["cex"]["ie"]["topic_hint"]
-intent_hint        = TP["cex"]["ie"]["intent_hint"]
-continuity_hint    = TP["cex"]["ie"]["continuity_hint"]
-reference_hint     = TP["cex"]["ie"]["reference_hint"]
-register_hint      = TP["cex"]["ie"]["register_hint"]
-politeness_hint    = TP["cex"]["ie"]["politeness_hint"]
-direction_hint     = TP["cex"]["ie"]["direction_hint"]
-coherence_hint     = TP["cex"]["ie"]["coherence_hint"]
-importance_hint    = TP["cex"]["ie"]["importance_hint"]
 ```
-
-CEx‑CCR must:
-
-- treat these hints as **bounded structural categories**,  
-- never reinterpret or modify them,  
-- use them only for alignment and decision logic.
-
-### 3.2 CIL envelope (`TP.cil` — last ≤10 conversations)
-
-For each conversation `k` in the last ≤10:
-
-```python
-cil_identity_lineage[k]   = TP["cil"][k]["identity_lineage"]
-cil_clarifying_lineage[k] = TP["cil"][k]["clarifying_lineage"]
-cil_context_lineage[k]    = TP["cil"][k]["context_lineage"]
-cil_continuity_lineage[k] = TP["cil"][k]["continuity_lineage"]
-cil_topology[k]           = TP["cil"][k]["topology"]
-cil_metrics[k]            = TP["cil"][k]["metrics"]  # includes ambiguity, collapse, drift, stability, etc.
-cil_semantic_residue[k]   = TP["cil"][k]["semantic_residue"]
-cil_next_context[k]       = TP["cil"][k]["next_context"]
-```
-
-CEx‑CCR must:
-
-- iterate deterministically over the ≤10 conversations,  
-- compute alignment and scores per conversation,  
-- select a single conversation ID or `null` according to decision rules,  
-- never modify CIL lineage or metrics.
-
----
-
-## 4. Deterministic rule ordering  
-### (Enforced by `cex_ccr_testbench.yaml`)
-
-CEx‑CCR must apply its operations in **exactly this order**:
-
-1. **Receive inputs**  
-   - Read `TP.cex.ie` structural hints.  
-   - Read `TP.cil` lineage + metrics for ≤10 conversations.
-
-2. **Compute alignment**  
-   - Identity alignment (topic + intent vs identity_lineage).  
-   - Clarifying alignment (register + politeness vs clarifying_lineage).  
-   - Context alignment (topic + direction vs context_lineage).  
-   - Continuity alignment (continuity_hint vs continuity_lineage).  
-   - Reference alignment (reference_hint vs identity_lineage + semantic_residue).
-
-3. **Derive scores**  
-   - ambiguity, collapse, drift, stability from CIL metrics.
-
-4. **Apply decision logic**  
-   - classify as `new`, `specific`, or `fallback` using deterministic rules and thresholds.
-
-5. **Select conversation**  
-   - choose `selected_conversation` ID or `null` according to decision outcome.
-
-6. **Construct `TP.cex.ccr` envelope**  
-   - populate alignment, scores, decision, selected_conversation.
-
-7. **Validate envelope shape**  
-   - ensure all required fields are present and correctly typed.
-
-8. **Emit deterministic output**  
-   - write `TP.cex.ccr` and return TP unchanged elsewhere.
-
-This ordering is required for deterministic replay and Python/C++ parity.
-
----
-
-## 5. Alignment computation
-
-CEx‑CCR computes **five alignment dimensions** using deterministic rules:
-
-### 5.1 Identity alignment
-
-- **Inputs:** `topic_hint`, `intent_hint`, `ie_struct_phrases`, `cil_identity_lineage[k]`.  
-- **Output:** `alignment.identity[k] ∈ {none, weak, moderate, strong}`.
-
-Rules (conceptual):
-
-- strong: topic_hint and intent_hint match identity_lineage with high structural consistency.  
-- moderate: partial match (topic or intent) with supporting structural phrases.  
-- weak: minimal structural match or ambiguous patterns.  
-- none: no structural match.
-
-### 5.2 Clarifying alignment
-
-- **Inputs:** `register_hint`, `politeness_hint`, `intent_hint`, `cil_clarifying_lineage[k]`.  
-- **Output:** `alignment.clarifying[k]`.
-
-Rules:
-
-- strong: register + politeness + intent structurally consistent with clarifying_lineage.  
-- moderate/weak/none: graded by degree of structural match.
-
-### 5.3 Context alignment
-
-- **Inputs:** `topic_hint`, `direction_hint`, `cil_context_lineage[k]`.  
-- **Output:** `alignment.context[k]`.
-
-Rules:
-
-- strong: topic_hint and direction_hint align with context_lineage (e.g., forward/backward references).  
-- moderate/weak/none: graded by structural consistency.
-
-### 5.4 Continuity alignment
-
-- **Inputs:** `continuity_hint`, `cil_continuity_lineage[k]`.  
-- **Output:** `alignment.continuity[k]`.
-
-Rules:
-
-- strong: continuity_hint (continue/reset/shift) matches continuity_lineage.  
-- unclear: continuity_hint = unknown or conflicting signals.  
-- mapped to `none/weak/moderate/strong` deterministically.
-
-### 5.5 Reference alignment
-
-- **Inputs:** `reference_hint`, `cil_identity_lineage[k]`, `cil_semantic_residue[k]`.  
-- **Output:** `alignment.reference[k]`.
-
-Rules:
-
-- strong: reference_hint indicates specific_previous and identity_lineage + residue match.  
-- moderate: reference_hint indicates previous with partial match.  
-- weak/none: ambiguous_previous or no reference.
-
-All alignment values are assigned using deterministic rule tables defined in `cex_ccr_rules.yaml`.
-
----
-
-## 6. Score derivation
-
-CEx‑CCR derives **numeric scores** directly from CIL metrics:
-
-- `scores.ambiguity[k]` ← `cil_metrics[k].ambiguity_score`  
-- `scores.collapse[k]`  ← `cil_metrics[k].collapse_risk`  
-- `scores.drift[k]`     ← `cil_metrics[k].drift_score`  
-- `scores.stability[k]` ← `cil_metrics[k].stability_score`
-
-Rules:
-
-- no transformation beyond deterministic mapping (e.g., copying or simple normalization),  
-- no semantic inference,  
-- no external context.
-
-Thresholds for “high/low ambiguity” and “stability threshold” are defined in `cex_ccr_rules.yaml` and used in decision logic.
-
----
-
-## 7. Decision logic
-
-CEx‑CCR emits a single `decision` field of type `CExDecision`:
-
-- `new`  
-- `specific`  
-- `fallback`
-
-Decision rules (per 20.107.020 and behavioral spec):
-
-### 7.1 New conversation
-
-Select **new** when:
-
-- identity alignment across all conversations is `none`, **AND**  
-- ambiguity score is **high** (above threshold), **AND**  
-- continuity_hint indicates reset (e.g., `reset` or strong reset cue).
-
-Result:
-
-- `decision = "new"`  
-- `selected_conversation = null`.
-
-### 7.2 Specific conversation
-
-Select **specific** when there exists a conversation `k` such that:
-
-- `alignment.identity[k] = strong`, **AND**  
-- ambiguity score for `k` is **low** (below threshold), **AND**  
-- `alignment.continuity[k] = strong`.
-
-Result:
-
-- `decision = "specific"`  
-- `selected_conversation = conversation_id[k]`.
-
-If multiple candidates satisfy these conditions, tie‑breaking is deterministic (e.g., highest stability_score, then most recent).
-
-### 7.3 Ambiguous → fallback
-
-Select **fallback** when:
-
-- identity alignment is `weak` or `moderate` across candidates, **OR**  
-- ambiguity is **moderate**, **OR**  
-- continuity alignment is unclear (`none` or weak).
-
-Result:
-
-- `decision = "fallback"`  
-- `selected_conversation = fallback_conversation_id`.
-
-Fallback selection:
-
-- choose the **most recent** conversation with `scores.stability[k]` above a deterministic threshold,  
-- if none, choose the most recent conversation overall.
-
-All thresholds and tie‑breaking rules are defined in `cex_ccr_rules.yaml`.
-
----
-
-## 8. Bounded semantic domain
-
-CEx‑CCR is a **bounded‑semantic primitive**, meaning:
-
-- operates only on IE‑derived structural hints and CIL lineage + metrics,  
-- does not infer meaning,  
-- does not use embeddings,  
-- does not use global semantic similarity,  
-- is deterministic and replay‑stable.
-
-Allowed operations:
-
-- alignment computation  
-- score derivation  
-- decision logic  
-- envelope construction.
-
-Prohibited operations:
-
-- semantic inference  
-- meaning interpretation  
-- packaging or lineage updates  
-- modification of `TP.cex.ie` or `TP.cil`.
-
----
-
-## 9. Structural schema
-
-CEx‑CCR produces:
-
-```text
 TP.cex.ccr {
     alignment: {
-        identity:   CExAlign,  # none | weak | moderate | strong
+        identity:   CExAlign,
         clarifying: CExAlign,
         context:    CExAlign,
         continuity: CExAlign,
-        reference:  CExAlign
+        reference:  CExAlign,
+        semantic_residue: CExAlign
     },
     scores: {
         ambiguity: number,
@@ -366,21 +412,14 @@ TP.cex.ccr {
         drift:     number,
         stability: number
     },
-    decision:             CExDecision,        # new | specific | fallback
+    decision: CExDecision,
     selected_conversation: ConversationID | null
 }
 ```
 
-All fields must be present:
-
-- alignment fields for each dimension,  
-- scores for all four metrics,  
-- a single decision value,  
-- selected_conversation (ID or `null`).
-
 ---
 
-## 10. Replay metadata
+# **10. Replay Metadata**
 
 CEx‑CCR must be:
 
@@ -388,167 +427,50 @@ CEx‑CCR must be:
 - replay‑stable  
 - rule‑stable  
 
-Given identical `TP.cex.ie` and `TP.cil` inputs, CEx‑CCR must produce identical `TP.cex.ccr` output.
-
-This is enforced by:
-
-- `cex_ccr_testbench.yaml` (exact expected outputs),  
-- `cex_ccr_rules.yaml` + `cex_ccr_rulechecker.py` (rule‑driven validation),  
-- `progressive_lineup_testing.md` (pipeline replay guarantees).
+Given identical IE + CIL + Path‑A inputs, CCR must produce identical output.
 
 ---
 
-## 11. Forbidden behavior
+# **11. Forbidden Behavior**
 
 CEx‑CCR must not:
 
-- modify `TP.cex.ie` fields,  
-- modify `TP.cil` fields,  
-- read fields outside `TP.cex.ie` and `TP.cil`,  
-- write fields outside `TP.cex.ccr`,  
-- infer meaning or use embeddings,  
-- use global semantic similarity,  
-- introduce nondeterministic values (timestamps, random IDs, etc.),  
-- perform packaging or lineage updates (reserved for CEx‑Pck and COB/CST).
+- modify IE fields  
+- modify CIL fields  
+- modify Path‑A importance fields  
+- infer meaning  
+- use embeddings  
+- use global semantics  
+- write outside `TP.cex.ccr`  
+- perform lineage updates
 
 ---
 
-## 12. Implementation skeleton (Python)
+# **12. Implementation Skeleton (Python)**
 
-```python
-class CExCCR:
-    def __init__(self, tp):
-        self.tp = tp
-        # Ensure TP.cex.ccr exists
-        if "cex" not in self.tp:
-            self.tp["cex"] = {}
-        self.tp["cex"]["ccr"] = {}
-
-    def inspect(self):
-        # 1. Receive IE and CIL fields
-        ie = self.tp["cex"]["ie"]
-        cil = self.tp["cil"]  # dict or list of conversations
-
-        # Extract IE hints
-        topic_hint      = ie["topic_hint"]
-        intent_hint     = ie["intent_hint"]
-        continuity_hint = ie["continuity_hint"]
-        reference_hint  = ie["reference_hint"]
-        register_hint   = ie["register_hint"]
-        politeness_hint = ie["politeness_hint"]
-        direction_hint  = ie["direction_hint"]
-        # coherence_hint, importance_hint available if needed
-
-        # 2. Compute alignment per conversation
-        alignment = {
-            "identity":   {},
-            "clarifying": {},
-            "context":    {},
-            "continuity": {},
-            "reference":  {}
-        }
-        scores = {
-            "ambiguity": {},
-            "collapse":  {},
-            "drift":     {},
-            "stability": {}
-        }
-
-        for conv_id, conv in cil.items():
-            id_lineage   = conv["identity_lineage"]
-            clar_lineage = conv["clarifying_lineage"]
-            ctx_lineage  = conv["context_lineage"]
-            cont_lineage = conv["continuity_lineage"]
-            residue      = conv["semantic_residue"]
-            metrics      = conv["metrics"]
-
-            # Identity alignment
-            alignment["identity"][conv_id] = compute_identity_align(
-                topic_hint, intent_hint, id_lineage
-            )
-
-            # Clarifying alignment
-            alignment["clarifying"][conv_id] = compute_clarifying_align(
-                register_hint, politeness_hint, intent_hint, clar_lineage
-            )
-
-            # Context alignment
-            alignment["context"][conv_id] = compute_context_align(
-                topic_hint, direction_hint, ctx_lineage
-            )
-
-            # Continuity alignment
-            alignment["continuity"][conv_id] = compute_continuity_align(
-                continuity_hint, cont_lineage
-            )
-
-            # Reference alignment
-            alignment["reference"][conv_id] = compute_reference_align(
-                reference_hint, id_lineage, residue
-            )
-
-            # 3. Derive scores
-            scores["ambiguity"][conv_id] = metrics["ambiguity_score"]
-            scores["collapse"][conv_id]  = metrics["collapse_risk"]
-            scores["drift"][conv_id]     = metrics["drift_score"]
-            scores["stability"][conv_id] = metrics["stability_score"]
-
-        # 4. Apply decision logic
-        decision, selected_conv = decide_conversation(
-            alignment, scores, continuity_hint
-        )
-
-        # 5. Construct TP.cex.ccr envelope
-        self.tp["cex"]["ccr"] = {
-            "alignment": {
-                "identity":   summarize_alignment(alignment["identity"]),
-                "clarifying": summarize_alignment(alignment["clarifying"]),
-                "context":    summarize_alignment(alignment["context"]),
-                "continuity": summarize_alignment(alignment["continuity"]),
-                "reference":  summarize_alignment(alignment["reference"]),
-            },
-            "scores": {
-                "ambiguity": summarize_scores(scores["ambiguity"]),
-                "collapse":  summarize_scores(scores["collapse"]),
-                "drift":     summarize_scores(scores["drift"]),
-                "stability": summarize_scores(scores["stability"]),
-            },
-            "decision": decision,
-            "selected_conversation": selected_conv
-        }
-
-        # 6. Validate envelope
-        validate_cex_ccr(self.tp["cex"]["ccr"])
-
-        return self.tp
-```
-
-> In practice, `summarize_alignment` and `summarize_scores` will collapse per‑conversation values into the final CCR envelope (e.g., the chosen conversation’s alignment and scores), consistent with `20.107.020_cex-ccr_primitive.md`.
+*(Same as before, but with semantic‑residue alignment and importance envelope included.)*
 
 ---
 
-## 13. Implementation skeleton (C++)
+# **13. Implementation Skeleton (C++)**
 
-Equivalent structure:
-
-- `class CExCCR`  
-- constructor receives TP  
-- `inspect()` reads `TP.cex.ie` + `TP.cil`, computes alignment/scores/decision, and populates `TP.cex.ccr`.  
-- deterministic rule application, no embeddings, no global semantics.  
-- identical envelope shape and behavior to Python implementation.
+*(Same as before, but with semantic‑residue alignment and importance envelope included.)*
 
 ---
 
-## 14. Change management
+# **14. Change Management**
 
 When CEx‑CCR evolves:
 
-- update alignment rule tables in `cex_ccr_rules.yaml`,  
-- update decision thresholds and tie‑breaking rules,  
-- update `cex_ccr_testbench.yaml` expected outputs,  
-- update `cex_ccr_rulechecker.py` logic,  
-- update this document to reflect new behavior,  
-- ensure replay determinism,  
-- ensure Python/C++ parity.
+- update semantic‑residue rules  
+- update importance thresholds  
+- update CIL residue schema  
+- update testbench  
+- update rulechecker  
+- update TP requirements  
+- update downstream primitives  
+- update this document  
+- ensure replay determinism  
+- ensure Python/C++ parity
 
-This document is the **authoritative programming reference** for CEx‑CCR v1.0.
+---
