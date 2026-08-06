@@ -260,10 +260,10 @@ class CExCCR:
 
     def inspect(self) -> dict:
         # --- DEBUG: IE + semantic ---
-        print("\n================ CCR.inspect() DEBUG ================")
-        print("IE envelope:", self.ie)
-        print("Semantic importance:", self.semantic)
-        print("------------------------------------------------------")
+        # print("\n================ CCR.inspect() DEBUG ================")
+        # print("IE envelope:", self.ie)
+        # print("Semantic importance:", self.semantic)
+        # print("------------------------------------------------------")
     
         best_conv_name = None
         best_alignments = None
@@ -303,16 +303,16 @@ class CExCCR:
                 best_scores = scores
     
             # DEBUG per conversation
-            print(f"\n=== DEBUG: Evaluating conversation: {conv_name} ===")
-            print("CIL identity_lineage:", conv.get("identity_lineage"))
-            print("CIL context_lineage:", conv.get("context_lineage"))
-            print("CIL continuity_lineage:", conv.get("continuity_lineage"))
-            print("CIL clarifying_lineage:", conv.get("clarifying_lineage"))
-            print("CIL semantic_residue:", conv.get("semantic_residue"))
-            print("Alignment results:", alignments)
-            print("Scores:", scores)
-            print("Alignment sum:", alignment_sum)
-            print("Stability:", stability)
+            # print(f"\n=== DEBUG: Evaluating conversation: {conv_name} ===")
+            # print("CIL identity_lineage:", conv.get("identity_lineage"))
+            # print("CIL context_lineage:", conv.get("context_lineage"))
+            # print("CIL continuity_lineage:", conv.get("continuity_lineage"))
+            # print("CIL clarifying_lineage:", conv.get("clarifying_lineage"))
+            # print("CIL semantic_residue:", conv.get("semantic_residue"))
+            # print("Alignment results:", alignments)
+            # print("Scores:", scores)
+            # print("Alignment sum:", alignment_sum)
+            # print("Stability:", stability)
     
         # If nothing selected (should not happen), fall back to conv_10 if present
         if best_conv_name is None and "conv_10" in self.cil:
@@ -349,14 +349,14 @@ class CExCCR:
         decision = decision_engine.decide()
     
         # --- DEBUG: decision phase ---
-        print("\n=== DEBUG: Decision phase ===")
-        print("Best conversation:", best_conv_name)
-        print("Best alignments:", best_alignments)
-        print("Best scores:", best_scores)
-        print("Global ambiguity:", global_ambiguity)
-        print("Highest ambiguity conversation:", highest_amb_name)
-        print("Highest ambiguity stability:", highest_amb_stability)
-        print("Decision:", decision)
+        # print("\n=== DEBUG: Decision phase ===")
+        # print("Best conversation:", best_conv_name)
+        # print("Best alignments:", best_alignments)
+        # print("Best scores:", best_scores)
+        # print("Global ambiguity:", global_ambiguity)
+        # print("Highest ambiguity conversation:", highest_amb_name)
+        # print("Highest ambiguity stability:", highest_amb_stability)
+        # print("Decision:", decision)
     
         # --- Determine selected conversation and final outputs ---
         if decision == "new":
@@ -415,10 +415,10 @@ class CExCCR:
             final_scores = all_scores[selected_conversation]
     
         # --- DEBUG: final outputs ---
-        print("Selected conversation:", selected_conversation)
-        print("Final alignment (to be returned):", final_alignment)
-        print("Final scores (to be returned):", final_scores)
-        print("======================================================\n")
+        # print("Selected conversation:", selected_conversation)
+        # print("Final alignment (to be returned):", final_alignment)
+        # print("Final scores (to be returned):", final_scores)
+        # print("======================================================\n")
     
         return {
             "cex": {
