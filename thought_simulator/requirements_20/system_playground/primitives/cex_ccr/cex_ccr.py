@@ -214,7 +214,7 @@ class CCRDecisionEngine:
         # --- SPECIFIC decision uses per-conversation ambiguity ---
         if identity == DECISION_LOGIC["specific"]["identity_alignment_required"] \
            and self.scores["ambiguity"] <= SCORE_THRESHOLDS["ambiguity"]["low"] \
-           and continuity == DECISION_LOGIC["specific"]["continuity_hint_required"]:
+           and continuity == DECISION_LOGIC["specific"]["continuity_alignment_required"]:
             return "specific"
     
         return "fallback"
