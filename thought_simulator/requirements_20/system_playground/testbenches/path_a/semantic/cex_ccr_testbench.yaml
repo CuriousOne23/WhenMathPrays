@@ -1,6 +1,6 @@
 # ============================================================
 # CEx‑CCR Testbench (Mode A — Deterministic Testing)
-# Version 1.0
+# Version 2.0
 # ============================================================
 
 metadata:
@@ -8,21 +8,22 @@ metadata:
   mode: testbench
   description: >
     Deterministic testbench for the CEx‑CCR primitive.
+    Uses the static 10‑conversation CIL substrate from cil_input.yaml.
     Each scenario provides:
       - TP.cex.ie input (structural hints)
-      - TP.cil input (≤10 conversations)
+      - TP.semantic.importance (bounded semantic residues)
       - expected TP.cex.ccr output
     PASS/FAIL is determined by exact equality.
 
 # ============================================================
 # SCENARIO 1 — NEW CONVERSATION
 # identity alignment = none
-# ambiguity = high
+# ambiguity = high (conv_10)
 # continuity_hint = reset
 # ============================================================
 
 scenario_1:
-  description: "NEW conversation — identity none + ambiguity high + continuity reset"
+  description: "NEW conversation — identity none + high ambiguity + continuity reset"
 
   TP:
     cex:
@@ -41,34 +42,10 @@ scenario_1:
         coherence_hint: "stable"
         importance_hint: "low"
 
-    cil:
-      conv_1:
-        identity_lineage: "greeting"
-        clarifying_lineage: "normal"
-        context_lineage: "forward"
-        continuity_lineage: "continue"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.92
-          collapse_risk: 0.10
-          stability_score: 0.55
-          drift_score: 0.20
-        semantic_residue: "none"
-        next_context: "none"
-
-      conv_2:
-        identity_lineage: "assistance"
-        clarifying_lineage: "normal"
-        context_lineage: "forward"
-        continuity_lineage: "continue"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.88
-          collapse_risk: 0.15
-          stability_score: 0.60
-          drift_score: 0.25
-        semantic_residue: "none"
-        next_context: "none"
+    semantic:
+      importance:
+        entities: []
+        facts: []
 
   expected:
     cex:
@@ -79,21 +56,23 @@ scenario_1:
           context: "none"
           continuity: "none"
           reference: "none"
+          semantic_residue: "none"
         scores:
-          ambiguity: 0.92
-          collapse: 0.10
-          drift: 0.20
-          stability: 0.55
+          ambiguity: 0.95        # from conv_10 (highest ambiguity)
+          collapse: 0.30
+          drift: 0.40
+          stability: 0.50
         decision: "new"
         selected_conversation: null
 
 # ============================================================
 # SCENARIO 2 — SPECIFIC CONVERSATION
-# identity strong + ambiguity low + continuity strong
+# IE references previous assistance conversation
+# conv_1 (Alice router) is strong match
 # ============================================================
 
 scenario_2:
-  description: "SPECIFIC conversation — identity strong + ambiguity low + continuity strong"
+  description: "SPECIFIC conversation — strong identity + low ambiguity + strong continuity"
 
   TP:
     cex:
@@ -112,34 +91,13 @@ scenario_2:
         coherence_hint: "stable"
         importance_hint: "medium"
 
-    cil:
-      conv_1:
-        identity_lineage: "assistance"
-        clarifying_lineage: "casual"
-        context_lineage: "forward"
-        continuity_lineage: "continue"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.05
-          collapse_risk: 0.02
-          stability_score: 0.90
-          drift_score: 0.10
-        semantic_residue: "previous"
-        next_context: "assistance"
-
-      conv_2:
-        identity_lineage: "misc"
-        clarifying_lineage: "normal"
-        context_lineage: "backward"
-        continuity_lineage: "reset"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.40
-          collapse_risk: 0.10
-          stability_score: 0.50
-          drift_score: 0.30
-        semantic_residue: "none"
-        next_context: "misc"
+    semantic:
+      importance:
+        entities:
+          - { value: "Alice", role: "primary_name", score: 0.9 }
+          - { value: "home router", role: "primary_object", score: 0.8 }
+        facts:
+          - { value: "Wi‑Fi not working", role: "primary_issue", score: 0.85 }
 
   expected:
     cex:
@@ -150,21 +108,25 @@ scenario_2:
           context: "strong"
           continuity: "strong"
           reference: "strong"
+          semantic_residue: "strong"
         scores:
-          ambiguity: 0.05
-          collapse: 0.02
-          drift: 0.10
-          stability: 0.90
+          ambiguity: 0.10        # from conv_1
+          collapse: 0.05
+          drift: 0.12
+          stability: 0.88
         decision: "specific"
         selected_conversation: "conv_1"
 
 # ============================================================
 # SCENARIO 3 — FALLBACK
-# identity weak/moderate + ambiguity moderate + continuity unclear
+# IE ambiguous reference
+# identity weak/moderate across CIL
+# fallback selects highest stability among moderate candidates
+# conv_7 (Grace clinic) has stability 0.85
 # ============================================================
 
 scenario_3:
-  description: "FALLBACK — identity weak + ambiguity moderate + continuity unclear"
+  description: "FALLBACK — identity weak/moderate + ambiguity moderate + continuity unclear"
 
   TP:
     cex:
@@ -183,34 +145,12 @@ scenario_3:
         coherence_hint: "unstable"
         importance_hint: "low"
 
-    cil:
-      conv_1:
-        identity_lineage: "assistance"
-        clarifying_lineage: "normal"
-        context_lineage: "forward"
-        continuity_lineage: "continue"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.45
-          collapse_risk: 0.10
-          stability_score: 0.80
-          drift_score: 0.20
-        semantic_residue: "none"
-        next_context: "assistance"
-
-      conv_2:
-        identity_lineage: "misc"
-        clarifying_lineage: "normal"
-        context_lineage: "forward"
-        continuity_lineage: "continue"
-        topology: "linear"
-        metrics:
-          ambiguity_score: 0.50
-          collapse_risk: 0.20
-          stability_score: 0.70
-          drift_score: 0.25
-        semantic_residue: "none"
-        next_context: "misc"
+    semantic:
+      importance:
+        entities:
+          - { value: "clinic", role: "object", score: 0.6 }
+        facts:
+          - { value: "appointment scheduling", role: "fact", score: 0.55 }
 
   expected:
     cex:
@@ -221,15 +161,15 @@ scenario_3:
           context: "weak"
           continuity: "none"
           reference: "weak"
+          semantic_residue: "weak"
         scores:
-          ambiguity: 0.45
-          collapse: 0.10
-          drift: 0.20
-          stability: 0.80
+          ambiguity: 0.15        # from conv_7 (moderate ambiguity candidate)
+          collapse: 0.05
+          drift: 0.22
+          stability: 0.85
         decision: "fallback"
-        selected_conversation: "conv_1"   # highest stability_score
+        selected_conversation: "conv_7"
 
 # ============================================================
 # END OF FILE
 # ============================================================
-
