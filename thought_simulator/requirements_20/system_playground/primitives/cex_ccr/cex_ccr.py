@@ -369,12 +369,13 @@ class CExCCR:
         return {
             "cex": {
                 "ccr": {
-                    "alignment": final_alignment,
-                    "scores": final_scores,
+                    "alignment": best_alignments,
+                    "scores": best_scores,
                     "decision": decision,
                     "selected_conversation": selected_conversation,
                 }
             }
         }
+        
     
         
