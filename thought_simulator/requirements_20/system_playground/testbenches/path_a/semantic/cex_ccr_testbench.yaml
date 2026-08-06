@@ -1,5 +1,5 @@
 # ============================================================
-# CEx‑CCR Testbench (Mode A — Deterministic Testing)
+# CEx‑CCR Testbench (Mode A - Deterministic Testing)
 # Version 2.0
 # ============================================================
 
@@ -16,14 +16,14 @@ metadata:
     PASS/FAIL is determined by exact equality.
 
 # ============================================================
-# SCENARIO 1 — NEW CONVERSATION
+# SCENARIO 1 - NEW CONVERSATION
 # identity alignment = none
 # ambiguity = high (conv_10)
 # continuity_hint = reset
 # ============================================================
 
 scenario_1:
-  description: "NEW conversation — identity none + high ambiguity + continuity reset"
+  description: "NEW conversation - identity none + high ambiguity + continuity reset"
 
   TP:
     cex:
@@ -66,13 +66,13 @@ scenario_1:
         selected_conversation: null
 
 # ============================================================
-# SCENARIO 2 — SPECIFIC CONVERSATION
+# SCENARIO 2 - SPECIFIC CONVERSATION
 # IE references previous assistance conversation
 # conv_1 (Alice router) is strong match
 # ============================================================
 
 scenario_2:
-  description: "SPECIFIC conversation — strong identity + low ambiguity + strong continuity"
+  description: "SPECIFIC conversation - strong identity + low ambiguity + strong continuity"
 
   TP:
     cex:
@@ -118,7 +118,7 @@ scenario_2:
         selected_conversation: "conv_1"
 
 # ============================================================
-# SCENARIO 3 — FALLBACK
+# SCENARIO 3 - FALLBACK
 # IE ambiguous reference
 # identity weak/moderate across CIL
 # fallback selects highest stability among moderate candidates
@@ -126,7 +126,7 @@ scenario_2:
 # ============================================================
 
 scenario_3:
-  description: "FALLBACK — identity weak/moderate + ambiguity moderate + continuity unclear"
+  description: "FALLBACK - identity weak/moderate + ambiguity moderate + continuity unclear"
 
   TP:
     cex:
