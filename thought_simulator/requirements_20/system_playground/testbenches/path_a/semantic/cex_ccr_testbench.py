@@ -133,12 +133,19 @@ def run_testbench():
 
             if actual == expected:
                 print(f"PASS - {scenario_name}")
+                print("PASS - Test passed successfully.")
+                print("PASS - Expected CCR envelope:")
+                print(expected)
+                print("PASS - Actual CCR envelope:")
+                print(actual)
             else:
                 print(f"FAIL - {scenario_name}")
+                print("FAIL - Test failed.")
                 print("Expected:")
                 print(expected)
                 print("Actual:")
                 print(actual)
+
         else:
             # General mode: just print output
             print("Output TP.cex.ccr:")
