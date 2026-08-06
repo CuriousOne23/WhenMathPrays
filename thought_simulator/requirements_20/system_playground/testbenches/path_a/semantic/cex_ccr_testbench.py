@@ -132,9 +132,9 @@ def run_testbench():
             actual = TP_out["cex"]["ccr"]
 
             if actual == expected:
-                print(f"PASS — {scenario_name}")
+                print(f"PASS - {scenario_name}")
             else:
-                print(f"FAIL — {scenario_name}")
+                print(f"FAIL - {scenario_name}")
                 print("Expected:")
                 print(expected)
                 print("Actual:")
