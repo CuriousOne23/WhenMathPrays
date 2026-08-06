@@ -208,13 +208,13 @@ class CCRDecisionEngine:
         # --- NEW decision uses GLOBAL ambiguity ---
         if identity == DECISION_LOGIC["new"]["identity_alignment_required"] \
            and self.scores["global_ambiguity"] >= SCORE_THRESHOLDS["ambiguity"]["high"] \
-           and continuity == DECISION_LOGIC["new"]["continuity_alignment_required"]:
+           and continuity == DECISION_LOGIC["new"]["continuity_hint_required"]:
             return "new"
     
         # --- SPECIFIC decision uses per-conversation ambiguity ---
         if identity == DECISION_LOGIC["specific"]["identity_alignment_required"] \
            and self.scores["ambiguity"] <= SCORE_THRESHOLDS["ambiguity"]["low"] \
-           and continuity == DECISION_LOGIC["specific"]["continuity_alignment_required"]:
+           and continuity == DECISION_LOGIC["specific"]["continuity_hint_required"]:
             return "specific"
     
         return "fallback"
