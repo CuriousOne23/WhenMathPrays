@@ -1,1 +1,249 @@
+# ============================================================
+# Canonical CIL Input (Used for ALL CEx‑CCR Testing)
+# ============================================================
+
+metadata:
+  primitive: CIL
+  mode: general
+  description: >
+    Fixed 10‑conversation lineage substrate used for all CEx‑CCR
+    testing (testbench and general mode). These conversations do
+    not change across scenarios.
+
+TP:
+  cil:
+
+    # ----------------------------------------------------------
+    # Conversation 1 — Alice router troubleshooting
+    # ----------------------------------------------------------
+    conv_1:
+      identity_lineage: "assistance"
+      clarifying_lineage: "casual"
+      context_lineage: "forward"
+      continuity_lineage: "continue"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.10
+        collapse_risk: 0.05
+        stability_score: 0.88
+        drift_score: 0.12
+      semantic_residue:
+        important_entities:
+          - "Alice"
+          - "home router"
+        important_facts:
+          - "Wi‑Fi not working"
+          - "router reboot attempted"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 2 — Bob tax form question
+    # ----------------------------------------------------------
+    conv_2:
+      identity_lineage: "assistance"
+      clarifying_lineage: "normal"
+      context_lineage: "forward"
+      continuity_lineage: "continue"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.20
+        collapse_risk: 0.05
+        stability_score: 0.75
+        drift_score: 0.18
+      semantic_residue:
+        important_entities:
+          - "Bob"
+          - "IRS"
+        important_facts:
+          - "1040 form"
+          - "filing deadline"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 3 — Carol passport renewal
+    # ----------------------------------------------------------
+    conv_3:
+      identity_lineage: "assistance"
+      clarifying_lineage: "formal"
+      context_lineage: "forward"
+      continuity_lineage: "continue"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.25
+        collapse_risk: 0.08
+        stability_score: 0.82
+        drift_score: 0.20
+      semantic_residue:
+        important_entities:
+          - "Carol"
+          - "State Department"
+        important_facts:
+          - "passport renewal"
+          - "appointment scheduling"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 4 — Dave laptop overheating
+    # ----------------------------------------------------------
+    conv_4:
+      identity_lineage: "assistance"
+      clarifying_lineage: "informal"
+      context_lineage: "forward"
+      continuity_lineage: "continue"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.35
+        collapse_risk: 0.10
+        stability_score: 0.70
+        drift_score: 0.30
+      semantic_residue:
+        important_entities:
+          - "Dave"
+          - "laptop"
+        important_facts:
+          - "overheating"
+          - "fan noise"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 5 — Emma travel planning (Japan)
+    # ----------------------------------------------------------
+    conv_5:
+      identity_lineage: "misc"
+      clarifying_lineage: "casual"
+      context_lineage: "forward"
+      continuity_lineage: "shift"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.45
+        collapse_risk: 0.12
+        stability_score: 0.65
+        drift_score: 0.35
+      semantic_residue:
+        important_entities:
+          - "Emma"
+          - "Japan"
+        important_facts:
+          - "travel itinerary"
+          - "Kyoto temples"
+      next_context: "misc"
+
+    # ----------------------------------------------------------
+    # Conversation 6 — Frank banking login issue
+    # ----------------------------------------------------------
+    conv_6:
+      identity_lineage: "assistance"
+      clarifying_lineage: "normal"
+      context_lineage: "backward"
+      continuity_lineage: "continue"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.30
+        collapse_risk: 0.15
+        stability_score: 0.60
+        drift_score: 0.40
+      semantic_residue:
+        important_entities:
+          - "Frank"
+          - "bank account"
+        important_facts:
+          - "login failure"
+          - "password reset"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 7 — Grace medical appointment scheduling
+    # ----------------------------------------------------------
+    conv_7:
+      identity_lineage: "assistance"
+      clarifying_lineage: "formal"
+      context_lineage: "forward"
+      continuity_lineage: "continue"
+      topology: "tree"
+      metrics:
+        ambiguity_score: 0.15
+        collapse_risk: 0.05
+        stability_score: 0.85
+        drift_score: 0.22
+      semantic_residue:
+        important_entities:
+          - "Grace"
+          - "clinic"
+        important_facts:
+          - "appointment scheduling"
+          - "insurance verification"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 8 — Henry software installation
+    # ----------------------------------------------------------
+    conv_8:
+      identity_lineage: "assistance"
+      clarifying_lineage: "normal"
+      context_lineage: "forward"
+      continuity_lineage: "unknown"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.55
+        collapse_risk: 0.20
+        stability_score: 0.58
+        drift_score: 0.45
+      semantic_residue:
+        important_entities:
+          - "Henry"
+          - "software package"
+        important_facts:
+          - "installation failure"
+          - "missing dependencies"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 9 — Irene credit card dispute
+    # ----------------------------------------------------------
+    conv_9:
+      identity_lineage: "assistance"
+      clarifying_lineage: "normal"
+      context_lineage: "backward"
+      continuity_lineage: "shift"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.40
+        collapse_risk: 0.25
+        stability_score: 0.55
+        drift_score: 0.50
+      semantic_residue:
+        important_entities:
+          - "Irene"
+          - "credit card company"
+        important_facts:
+          - "fraud dispute"
+          - "chargeback request"
+      next_context: "assistance"
+
+    # ----------------------------------------------------------
+    # Conversation 10 — John greeting + device setup
+    # ----------------------------------------------------------
+    conv_10:
+      identity_lineage: "greeting"
+      clarifying_lineage: "casual"
+      context_lineage: "none"
+      continuity_lineage: "reset"
+      topology: "linear"
+      metrics:
+        ambiguity_score: 0.95
+        collapse_risk: 0.30
+        stability_score: 0.50
+        drift_score: 0.40
+      semantic_residue:
+        important_entities:
+          - "John"
+          - "new phone"
+        important_facts:
+          - "initial setup"
+          - "account linking"
+      next_context: "greeting"
+
+# ============================================================
+# END OF FILE
+# ============================================================
 
