@@ -305,7 +305,16 @@ class CExCCR:
             best_alignments = aligner.compute_all()
             best_scores = self._extract_scores(conv)
 
-        decision_engine = CCRDecisionEngine(best_alignments, best_scores)
+        # --- GLOBAL SCORES (required for NEW / FALLBACK decisions) ---
+        global_scores = {
+            "ambiguity": max(conv["metrics"]["ambiguity_score"] for conv in self.cil.values()),
+            "collapse": max(conv["metrics"]["collapse_risk"] for conv in self.cil.values()),
+            "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
+            "stability": max(conv["metrics"]["stability_score"] for conv in self.cil.values()),
+        }
+        
+        # Decision must use GLOBAL ambiguity, not per-conversation ambiguity
+        decision_engine = CCRDecisionEngine(best_alignments, global_scores)
         decision = decision_engine.decide()
 
         # Default conversation handling for fallback
