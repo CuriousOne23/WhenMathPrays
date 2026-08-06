@@ -76,17 +76,39 @@ ACTIVE_TEST_MODULES = [
     # **************************** CEx-IE Test bench ******************************************************
     # Highest upstream True = CEx-IE (primitive under test)
     # Pipeline: CEx-IE only, input from CEx-IE YAML
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ie_testbench",
+    #     {
+    #         "mode": "testbench",   # "general" or "testbench"
+    #         "use_inb": False,    # Upstream primitives ignored
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": True,  # Primitive under test
+
+    #         # Test selection is controlled by cex_ie_input.yaml
+    #         "tests_to_run": "see cex_ie_tests_to_run.yaml"
+    #     }
+    # ),
+    # **************************** CEx-CCR Test bench ******************************************************
+    # Highest upstream True = CEx-CCR (primitive under test)
+    # Pipeline: CEx-CCR only, input from:
+    #   • cex_ccr_testbench.yaml (scenarios)
+    #   • cil_input.yaml (static 10-conversation CIL substrate)
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ie_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_ccr_testbench",
         {
-            "mode": "testbench",   # "general" or "testbench"
-            "use_inb": False,    # Upstream primitives ignored
+            "mode": "testbench",     # general or testbench, chooses cex_ccr_input.yam. or cex_ccr_testbench.yaml
+            "use_inb": False,        # Upstream primitives ignored
             "use_iiinb": False,
             "use_ie": False,
-            "use_cex_ie": True,  # Primitive under test
+            "use_cex_ie": False,
+            "use_cex_ccr": True,     # Primitive under test
 
-            # Test selection is controlled by cex_ie_input.yaml
-            "tests_to_run": "see cex_ie_tests_to_run.yaml"
+            # Test selection controlled by cex_ccr_tests_to_run.yaml
+            "tests_to_run": "see cex_ccr_tests_to_run.yaml",
+
+            # CCR always uses static cil_input.yaml
+            "cil_source": "cil_input.yaml"
         }
     )
 ]
