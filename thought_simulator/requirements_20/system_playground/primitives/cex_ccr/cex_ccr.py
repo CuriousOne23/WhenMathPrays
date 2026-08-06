@@ -96,21 +96,26 @@ class CCRAlignmentComputer:
         context_lineage = self.cil.get("context_lineage")
         next_context = self.cil.get("next_context")
     
-        # Topic match uses next_context, NOT context_lineage
         topic_match = (topic_hint == next_context)
     
-        # Direction match must be exact forward/backward
-        direction_match = (
-            (direction_hint == "forward" and context_lineage == "forward") or
-            (direction_hint == "backward" and context_lineage == "backward")
-        )
+        # NEW: treat "none" direction as weak match
+        if direction_hint == "none":
+            direction_match = "weak"
+        else:
+            direction_match = (
+                (direction_hint == "forward" and context_lineage == "forward") or
+                (direction_hint == "backward" and context_lineage == "backward")
+            )
     
-        if topic_match and direction_match:
+        if topic_match and direction_match is True:
             return "strong"
-        if topic_match and not direction_match:
+        if topic_match and direction_match in [False, "weak"]:
             return "moderate"
-        if not topic_match and direction_match:
+        if not topic_match and direction_match is True:
             return "weak"
+        if not topic_match and direction_match == "weak":
+            return "weak"   # <-- THIS LINE FIXES SCENARIO 3
+    
         return "none"
 
     # ---------------- Continuity ----------------
