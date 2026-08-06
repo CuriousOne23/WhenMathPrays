@@ -110,7 +110,7 @@ ACTIVE_TEST_MODULES = [
             # CCR always uses static cil_input.yaml
             "cil_source": "cil_input.yaml"
         }
-    )
+    ),
 ]
 
 # ============================================================
