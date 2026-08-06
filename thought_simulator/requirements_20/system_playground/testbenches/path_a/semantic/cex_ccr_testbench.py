@@ -68,7 +68,7 @@ def load_yaml(path):
 
 def run_testbench():
 
-    print("CEx‑CCR Testbench Runner Starting...\n")
+    print("CEx-CCR Testbench Runner Starting...\n")
 
     # --------------------------------------------------------
     # Load static CIL substrate (always)
@@ -146,5 +146,5 @@ def run_testbench():
 
         print("\n")
 
-    print("CEx‑CCR Testbench Runner Complete.\n")
+    print("CEx-CCR Testbench Runner Complete.\n")
 
