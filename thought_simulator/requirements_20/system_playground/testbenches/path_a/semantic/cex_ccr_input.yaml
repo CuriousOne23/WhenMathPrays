@@ -1,1 +1,329 @@
+# ============================================================
+# CEx‑CCR General Input (Mode B — Non-testbench)
+# Version 2.0
+# ============================================================
+
+metadata:
+  primitive: CEx-CCR
+  mode: general
+  description: >
+    General-mode input for the CEx‑CCR primitive.
+    Each scenario provides:
+      • TP.cex.ie structural hints
+      • TP.semantic.importance signals
+    CIL is always loaded from cil_input.yaml (static 10-conversation substrate).
+    No expected outputs are included in general mode.
+
+# ============================================================
+# SCENARIO 1 — User greeting / new topic
+# ============================================================
+
+scenario_1:
+  description: "User starts a new topic with no reference to prior conversations."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["hello", "there"]
+        token_flags: ["norm", "norm"]
+        normalized_text: "hello there"
+        structural_phrases: ["greeting"]
+        topic_hint: "greeting"
+        intent_hint: "none"
+        continuity_hint: "reset"
+        reference_hint: "none"
+        register_hint: "casual"
+        politeness_hint: "normal"
+        direction_hint: "none"
+        coherence_hint: "stable"
+        importance_hint: "low"
+
+    semantic:
+      importance:
+        entities: []
+        facts: []
+
+# ============================================================
+# SCENARIO 2 — Assistance request (router issue)
+# ============================================================
+
+scenario_2:
+  description: "User asks about router troubleshooting — likely aligns with conv_1."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["my", "router", "is", "still", "not", "working"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "my router is still not working"
+        structural_phrases: ["issue_report"]
+        topic_hint: "assistance"
+        intent_hint: "request"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "casual"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "high"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "router", role: "primary_object", score: 0.85 }
+        facts:
+          - { value: "Wi‑Fi not working", role: "primary_issue", score: 0.90 }
+
+# ============================================================
+# SCENARIO 3 — Tax form clarification
+# ============================================================
+
+scenario_3:
+  description: "User asks about IRS 1040 form — likely aligns with conv_2."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["what", "is", "the", "deadline", "for", "the", "1040"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "what is the deadline for the 1040"
+        structural_phrases: ["question"]
+        topic_hint: "assistance"
+        intent_hint: "request"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "normal"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "IRS", role: "agency", score: 0.75 }
+        facts:
+          - { value: "1040 form", role: "document", score: 0.80 }
+
+# ============================================================
+# SCENARIO 4 — Passport renewal follow-up
+# ============================================================
+
+scenario_4:
+  description: "User continues a passport renewal conversation — aligns with conv_3."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["do", "I", "need", "an", "appointment", "for", "renewal"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "do I need an appointment for renewal"
+        structural_phrases: ["question"]
+        topic_hint: "assistance"
+        intent_hint: "request"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "formal"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "State Department", role: "agency", score: 0.80 }
+        facts:
+          - { value: "passport renewal", role: "process", score: 0.85 }
+
+# ============================================================
+# SCENARIO 5 — Laptop overheating issue
+# ============================================================
+
+scenario_5:
+  description: "User reports laptop overheating — aligns with conv_4."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["my", "laptop", "is", "overheating", "again"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "my laptop is overheating again"
+        structural_phrases: ["issue_report"]
+        topic_hint: "assistance"
+        intent_hint: "inform"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "informal"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "high"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "laptop", role: "device", score: 0.80 }
+        facts:
+          - { value: "overheating", role: "issue", score: 0.85 }
+
+# ============================================================
+# SCENARIO 6 — Travel planning (Japan)
+# ============================================================
+
+scenario_6:
+  description: "User continues Japan travel planning — aligns with conv_5."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["what", "is", "the", "best", "time", "to", "visit", "Kyoto"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "what is the best time to visit Kyoto"
+        structural_phrases: ["question"]
+        topic_hint: "misc"
+        intent_hint: "request"
+        continuity_hint: "shift"
+        reference_hint: "previous"
+        register_hint: "casual"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "Japan", role: "location", score: 0.75 }
+          - { value: "Kyoto", role: "location", score: 0.80 }
+        facts:
+          - { value: "travel itinerary", role: "topic", score: 0.70 }
+
+# ============================================================
+# SCENARIO 7 — Banking login issue
+# ============================================================
+
+scenario_7:
+  description: "User continues banking login issue — aligns with conv_6."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["I", "still", "cannot", "log", "into", "my", "account"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "I still cannot log into my account"
+        structural_phrases: ["issue_report"]
+        topic_hint: "assistance"
+        intent_hint: "inform"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "normal"
+        politeness_hint: "normal"
+        direction_hint: "backward"
+        coherence_hint: "stable"
+        importance_hint: "high"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "bank account", role: "object", score: 0.85 }
+        facts:
+          - { value: "login failure", role: "issue", score: 0.90 }
+
+# ============================================================
+# SCENARIO 8 — Medical appointment scheduling
+# ============================================================
+
+scenario_8:
+  description: "User continues clinic appointment scheduling — aligns with conv_7."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["can", "you", "help", "me", "schedule", "my", "appointment"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "can you help me schedule my appointment"
+        structural_phrases: ["request"]
+        topic_hint: "assistance"
+        intent_hint: "request"
+        continuity_hint: "continue"
+        reference_hint: "previous"
+        register_hint: "formal"
+        politeness_hint: "normal"
+        direction_hint: "forward"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "clinic", role: "location", score: 0.70 }
+        facts:
+          - { value: "appointment scheduling", role: "task", score: 0.75 }
+
+# ============================================================
+# SCENARIO 9 — Credit card dispute
+# ============================================================
+
+scenario_9:
+  description: "User continues credit card dispute — aligns with conv_9."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["what", "is", "the", "status", "of", "my", "dispute"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "what is the status of my dispute"
+        structural_phrases: ["question"]
+        topic_hint: "assistance"
+        intent_hint: "request"
+        continuity_hint: "shift"
+        reference_hint: "previous"
+        register_hint: "normal"
+        politeness_hint: "normal"
+        direction_hint: "backward"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "credit card company", role: "agency", score: 0.75 }
+        facts:
+          - { value: "fraud dispute", role: "issue", score: 0.80 }
+
+# ============================================================
+# SCENARIO 10 — Device setup (new phone)
+# ============================================================
+
+scenario_10:
+  description: "User continues new phone setup — aligns with conv_10."
+
+  TP:
+    cex:
+      ie:
+        tokens: ["how", "do", "I", "link", "my", "account", "to", "this", "phone"]
+        token_flags: ["norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm"]
+        normalized_text: "how do I link my account to this phone"
+        structural_phrases: ["question"]
+        topic_hint: "greeting"
+        intent_hint: "request"
+        continuity_hint: "reset"
+        reference_hint: "none"
+        register_hint: "casual"
+        politeness_hint: "normal"
+        direction_hint: "none"
+        coherence_hint: "stable"
+        importance_hint: "medium"
+
+    semantic:
+      importance:
+        entities:
+          - { value: "new phone", role: "device", score: 0.80 }
+        facts:
+          - { value: "account linking", role: "task", score: 0.75 }
+
+# ============================================================
+# END OF FILE
+# ============================================================
 
