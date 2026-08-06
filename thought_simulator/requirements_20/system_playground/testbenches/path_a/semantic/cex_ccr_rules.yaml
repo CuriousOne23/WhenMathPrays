@@ -1,1 +1,218 @@
+# ============================================================
+# CEx‑CCR Rule Tables
+# Version 2.1
+# ============================================================
+
+metadata:
+  primitive: CEx-CCR
+  description: >
+    Deterministic rule tables for alignment, score thresholds,
+    decision logic, and tie-breaking for the CEx‑CCR primitive.
+    These rules are consumed by:
+      • cex_ccr.py
+      • cex_ccr_rulechecker.py
+      • cex_ccr_testbench.yaml
+      • cex_ccr_input.yaml
+    All rules must be deterministic and replay-stable.
+
+# ============================================================
+# ALIGNMENT ENUMS
+# ============================================================
+
+alignment_enum:
+  none: 0
+  weak: 1
+  moderate: 2
+  strong: 3
+
+# ============================================================
+# IDENTITY ALIGNMENT RULES
+# ============================================================
+
+identity_alignment:
+  strong:
+    topic_hint_matches_identity_lineage: true
+    intent_hint_matches_identity_lineage: true
+    structural_phrase_support: true
+
+  moderate:
+    topic_hint_matches_identity_lineage: true
+    intent_hint_matches_identity_lineage: false
+    structural_phrase_support: true
+
+  weak:
+    topic_hint_matches_identity_lineage: false
+    intent_hint_matches_identity_lineage: false
+    structural_phrase_support: true
+
+  none:
+    topic_hint_matches_identity_lineage: false
+    intent_hint_matches_identity_lineage: false
+    structural_phrase_support: false
+
+# ============================================================
+# CLARIFYING ALIGNMENT RULES
+# ============================================================
+
+clarifying_alignment:
+  strong:
+    register_hint_matches: true
+    politeness_hint_matches: true
+    intent_hint_supports: true
+
+  moderate:
+    register_hint_matches: true
+    politeness_hint_matches: false
+    intent_hint_supports: true
+
+  weak:
+    register_hint_matches: false
+    politeness_hint_matches: false
+    intent_hint_supports: true
+
+  none:
+    register_hint_matches: false
+    politeness_hint_matches: false
+    intent_hint_supports: false
+
+# ============================================================
+# CONTEXT ALIGNMENT RULES
+# ============================================================
+
+context_alignment:
+  strong:
+    topic_hint_matches_context_lineage: true
+    direction_hint_matches_context_lineage: true
+
+  moderate:
+    topic_hint_matches_context_lineage: true
+    direction_hint_matches_context_lineage: false
+
+  weak:
+    topic_hint_matches_context_lineage: false
+    direction_hint_matches_context_lineage: true
+
+  none:
+    topic_hint_matches_context_lineage: false
+    direction_hint_matches_context_lineage: false
+
+# ============================================================
+# CONTINUITY ALIGNMENT RULES
+# ============================================================
+
+continuity_alignment:
+  strong:
+    continuity_hint_matches_lineage: true
+
+  moderate:
+    continuity_hint_partial_match: true
+
+  weak:
+    continuity_hint_conflicting: true
+
+  none:
+    continuity_hint_unknown: true
+
+# ============================================================
+# REFERENCE ALIGNMENT RULES
+# ============================================================
+
+reference_alignment:
+  strong:
+    reference_hint: ["previous", "specific_previous"]
+    identity_lineage_support: true
+    semantic_residue_support: true
+
+  moderate:
+    reference_hint: ["previous"]
+    identity_lineage_support: true
+    semantic_residue_support: false
+
+  weak:
+    reference_hint: ["ambiguous_previous"]
+    identity_lineage_support: false
+    semantic_residue_support: false
+
+  none:
+    reference_hint: ["none"]
+    identity_lineage_support: false
+    semantic_residue_support: false
+
+# ============================================================
+# SEMANTIC‑RESIDUE ALIGNMENT RULES
+# ============================================================
+
+semantic_residue_alignment:
+  strong:
+    importance_entities_match_residue: true
+    importance_facts_match_residue: true
+    reference_hint_supports: ["previous", "specific_previous"]
+
+  moderate:
+    importance_entities_match_residue: true
+    importance_facts_match_residue: false
+
+  weak:
+    importance_entities_match_residue: false
+    importance_facts_match_residue: false
+    importance_present: true
+
+  none:
+    importance_present: false
+
+# ============================================================
+# SCORE THRESHOLDS
+# ============================================================
+
+score_thresholds:
+  ambiguity:
+    high: 0.70
+    moderate: 0.30
+    low: 0.30
+
+  stability:
+    fallback_minimum: 0.70
+    tie_break_prefer_higher: true
+
+# ============================================================
+# DECISION LOGIC RULES
+# ============================================================
+
+decision_logic:
+
+  new:
+    identity_alignment_required: "none"
+    ambiguity_required: "high"
+    continuity_hint_required: "reset"
+    selected_conversation: null
+
+  specific:
+    identity_alignment_required: "strong"
+    ambiguity_required: "low"
+    continuity_alignment_required: "strong"
+    tie_break:
+      - "highest_stability"
+      - "most_recent"
+
+  fallback:
+    identity_alignment_allowed: ["weak", "moderate"]
+    ambiguity_allowed: ["moderate"]
+    continuity_alignment_allowed: ["none", "weak"]
+    fallback_selection:
+      prefer_stability_above_threshold: true
+      stability_threshold: 0.70
+      if_none_above_threshold: "most_recent"
+
+# ============================================================
+# TIE-BREAKING RULES
+# ============================================================
+
+tie_breaking:
+  order:
+    - stability_score_descending
+    - recency_descending
+
+# ============================================================
+# END OF FILE
+# ============================================================
 
