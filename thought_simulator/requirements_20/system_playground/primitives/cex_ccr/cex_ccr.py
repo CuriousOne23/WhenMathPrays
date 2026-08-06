@@ -203,18 +203,23 @@ class CCRDecisionEngine:
 
     def decide(self) -> str:
         identity = self.align["identity"]
-        continuity = self.align["continuity"]
     
-        # --- NEW decision uses GLOBAL ambiguity ---
+        # NEW uses IE envelope continuity_hint
+        continuity_hint = self.ie["continuity_hint"]
+    
+        # SPECIFIC uses alignment continuity
+        continuity_alignment = self.align["continuity"]
+    
+        # NEW decision
         if identity == DECISION_LOGIC["new"]["identity_alignment_required"] \
            and self.scores["global_ambiguity"] >= SCORE_THRESHOLDS["ambiguity"]["high"] \
-           and continuity == DECISION_LOGIC["new"]["continuity_hint_required"]:
+           and continuity_hint == DECISION_LOGIC["new"]["continuity_hint_required"]:
             return "new"
     
-        # --- SPECIFIC decision uses per-conversation ambiguity ---
+        # SPECIFIC decision
         if identity == DECISION_LOGIC["specific"]["identity_alignment_required"] \
            and self.scores["ambiguity"] <= SCORE_THRESHOLDS["ambiguity"]["low"] \
-           and continuity == DECISION_LOGIC["specific"]["continuity_alignment_required"]:
+           and continuity_alignment == DECISION_LOGIC["specific"]["continuity_alignment_required"]:
             return "specific"
     
         return "fallback"
