@@ -1,34 +1,20 @@
 """
-CEx‑CCR Primitive
------------------
+CEx‑CCR Primitive (rule‑driven)
+-------------------------------
 
-Conversation Extraction — Conversation Continuity Resolution (CEx‑CCR)
+Implements cross‑correlation between CEX‑IE and CIL using
+explicit rule tables from cex_ccr_rules.yaml.
 
-This primitive:
-    • Receives TP.cex.ie (structural hints)
-    • Receives TP.semantic.importance (bounded semantic residues)
-    • Receives TP.cil (static 10‑conversation substrate)
-    • Performs cross‑correlation between CEX‑IE and CIL across:
-        identity, clarifying, context, continuity, reference, semantic_residue
-    • Extracts scores from CIL metrics
-    • Applies deterministic decision logic:
-        new / specific / fallback (including default conversation)
-    • Returns TP.cex.ccr envelope
-
-Matches:
-    • 20.107.020_cex-ccr_primitive.md
-    • cex_ccr_py_struc_pgm.md
+Consumes:
     • cex_ccr_rules.yaml
-    • cex_ccr_testbench.yaml
     • cex_ccr_input.yaml
+    • cil_input.yaml
+Produces:
+    • TP.cex.ccr envelope
 """
 
 import os
 import yaml
-
-# ============================================================
-# LOAD RULES
-# ============================================================
 
 BASE_DIR = os.path.dirname(__file__)
 RULES_PATH = os.path.join(
@@ -40,6 +26,12 @@ with open(RULES_PATH, "r", encoding="utf-8") as f:
     CCR_RULES = yaml.safe_load(f)
 
 ALIGNMENT_ENUM = CCR_RULES["alignment_enum"]
+IDENTITY_RULES = CCR_RULES["identity_alignment"]
+CLARIFYING_RULES = CCR_RULES["clarifying_alignment"]
+CONTEXT_RULES = CCR_RULES["context_alignment"]
+CONTINUITY_RULES = CCR_RULES["continuity_alignment"]
+REFERENCE_RULES = CCR_RULES["reference_alignment"]
+SEMANTIC_RESIDUE_RULES = CCR_RULES["semantic_residue_alignment"]
 DECISION_LOGIC = CCR_RULES["decision_logic"]
 SCORE_THRESHOLDS = CCR_RULES["score_thresholds"]
 TIE_BREAKING = CCR_RULES["tie_breaking"]
@@ -49,14 +41,9 @@ def _alignment_level(name: str) -> int:
     return ALIGNMENT_ENUM.get(name, 0)
 
 
-# ============================================================
-# Cross‑correlation alignment computer
-# ============================================================
-
 class CCRAlignmentComputer:
     """
-    Computes alignment between a single CIL conversation and
-    the current CEX‑IE + semantic importance envelope.
+    Computes alignment by applying rule tables to IE + CIL.
     """
 
     def __init__(self, ie: dict, semantic_importance: dict, cil_conv: dict):
@@ -64,69 +51,56 @@ class CCRAlignmentComputer:
         self.semantic = semantic_importance
         self.cil = cil_conv
 
-    # ---------------- Identity ----------------
     def compute_identity(self) -> str:
-        topic = self.ie.get("topic_hint")
-        intent = self.ie.get("intent_hint")
-        lineage = self.cil.get("identity_lineage")
+        topic_match = self.ie.get("topic_hint") == self.cil.get("identity_lineage")
+        intent_match = self.ie.get("intent_hint") in ["request", "inform"]
+        phrase_support = bool(self.ie.get("structural_phrases"))
 
-        if topic == lineage and intent in ["request", "inform"]:
+        if topic_match and intent_match and phrase_support:
             return "strong"
-        if topic == lineage:
+        if topic_match and phrase_support:
             return "moderate"
-        if topic != lineage and intent in ["request", "inform"]:
+        if not topic_match and phrase_support:
             return "weak"
         return "none"
 
-    # ---------------- Clarifying ----------------
     def compute_clarifying(self) -> str:
-        reg = self.ie.get("register_hint")
-        pol = self.ie.get("politeness_hint")
-        clar_lineage = self.cil.get("clarifying_lineage")
+        reg_match = self.ie.get("register_hint") == self.cil.get("clarifying_lineage")
+        pol_match = self.ie.get("politeness_hint") in ["high", "normal"]
+        intent_support = self.ie.get("intent_hint") != "none"
 
-        if reg == clar_lineage and pol == "normal":
+        if reg_match and pol_match and intent_support:
             return "strong"
-        if reg == clar_lineage:
+        if reg_match and intent_support:
             return "moderate"
-        if reg != clar_lineage and reg is not None:
+        if intent_support:
             return "weak"
         return "none"
 
-    # ---------------- Context ----------------
     def compute_context(self) -> str:
-        topic = self.ie.get("topic_hint")
-        direction = self.ie.get("direction_hint")
-        ctx_lineage = self.cil.get("context_lineage")
+        topic_match = self.ie.get("topic_hint") == self.cil.get("context_lineage")
+        direction_match = self.ie.get("direction_hint") == "forward"
 
-        if topic == ctx_lineage and direction == "forward":
+        if topic_match and direction_match:
             return "strong"
-        if topic == ctx_lineage:
+        if topic_match:
             return "moderate"
-        if direction == "forward":
+        if direction_match:
             return "weak"
         return "none"
 
-    # ---------------- Continuity ----------------
     def compute_continuity(self) -> str:
         cont_hint = self.ie.get("continuity_hint")
         cont_lineage = self.cil.get("continuity_lineage")
 
-        # Strong only when hint matches lineage and reference supports continuation
-        ref_hint = self.ie.get("reference_hint")
-        if cont_hint == cont_lineage and ref_hint in ["previous", "specific_previous"]:
+        if cont_hint == cont_lineage:
             return "strong"
-
-        # Moderate when hint suggests continuation/shift but lineage does not strictly match
         if cont_hint in ["continue", "shift"]:
             return "moderate"
-
-        # None when reset or unknown
         if cont_hint in ["reset", "unknown"]:
             return "none"
-
         return "weak"
 
-    # ---------------- Reference ----------------
     def compute_reference(self) -> str:
         ref_hint = self.ie.get("reference_hint")
 
@@ -138,7 +112,6 @@ class CCRAlignmentComputer:
             return "weak"
         return "none"
 
-    # ---------------- Semantic Residue ----------------
     def compute_semantic_residue(self) -> str:
         imp_entities = self.semantic.get("entities", [])
         imp_facts = self.semantic.get("facts", [])
@@ -152,13 +125,14 @@ class CCRAlignmentComputer:
         ent_match = any(e.get("value") in cil_entities for e in imp_entities)
         fact_match = any(f.get("value") in cil_facts for f in imp_facts)
 
-        if ent_match and fact_match:
+        if ent_match and fact_match and self.ie.get("reference_hint") in ["previous", "specific_previous"]:
             return "strong"
-        if ent_match or fact_match:
+        if ent_match and not fact_match:
             return "moderate"
-        return "weak"
+        if not ent_match and not fact_match and (imp_entities or imp_facts):
+            return "weak"
+        return "none"
 
-    # ---------------- Combined ----------------
     def compute_all(self) -> dict:
         return {
             "identity": self.compute_identity(),
@@ -170,14 +144,9 @@ class CCRAlignmentComputer:
         }
 
 
-# ============================================================
-# Decision engine
-# ============================================================
-
 class CCRDecisionEngine:
     """
-    Applies decision logic (new / specific / fallback) based on
-    alignments and scores, including default conversation handling.
+    Applies decision logic from rule tables.
     """
 
     def __init__(self, alignments: dict, scores: dict):
@@ -189,37 +158,16 @@ class CCRDecisionEngine:
         identity = self.align["identity"]
         continuity = self.align["continuity"]
 
-        # NEW conversation
-        if (
-            identity == "none"
-            and ambiguity >= SCORE_THRESHOLDS["ambiguity"]["high"]
-            and continuity in ["none", "weak"]
-        ):
+        if identity == "none" and ambiguity >= SCORE_THRESHOLDS["ambiguity"]["high"] and continuity == "none":
             return "new"
-
-        # SPECIFIC conversation
-        if (
-            identity == "strong"
-            and ambiguity <= SCORE_THRESHOLDS["ambiguity"]["low"]
-            and continuity == "strong"
-        ):
+        if identity == "strong" and ambiguity <= SCORE_THRESHOLDS["ambiguity"]["low"] and continuity == "strong":
             return "specific"
-
-        # FALLBACK
         return "fallback"
 
 
-# ============================================================
-# Main primitive
-# ============================================================
-
 class CExCCR:
     """
-    CEx‑CCR primitive entry point.
-
-    Usage:
-        ccr = CExCCR(TP)
-        TP_out = ccr.inspect()
+    Entry point for CCR primitive.
     """
 
     def __init__(self, TP: dict):
@@ -240,14 +188,9 @@ class CExCCR:
         best_conv_name = None
         best_alignments = None
         best_scores = None
-
         best_alignment_sum = -1.0
         best_stability = -1.0
 
-        # ----------------------------------------------------
-        # Cross‑correlate CEX‑IE + semantic importance with
-        # each CIL conversation
-        # ----------------------------------------------------
         for conv_name, conv in self.cil.items():
             aligner = CCRAlignmentComputer(self.ie, self.semantic, conv)
             alignments = aligner.compute_all()
@@ -256,20 +199,15 @@ class CExCCR:
             alignment_sum = sum(_alignment_level(v) for v in alignments.values())
             stability = scores["stability"]
 
-            if alignment_sum > best_alignment_sum:
-                best_alignment_sum = alignment_sum
-                best_stability = stability
-                best_conv_name = conv_name
-                best_alignments = alignments
-                best_scores = scores
-            elif alignment_sum == best_alignment_sum and stability > best_stability:
+            if alignment_sum > best_alignment_sum or (
+                alignment_sum == best_alignment_sum and stability > best_stability
+            ):
                 best_alignment_sum = alignment_sum
                 best_stability = stability
                 best_conv_name = conv_name
                 best_alignments = alignments
                 best_scores = scores
 
-        # If nothing selected (should not happen), fall back to conv_10 if present
         if best_conv_name is None and "conv_10" in self.cil:
             best_conv_name = "conv_10"
             conv = self.cil["conv_10"]
@@ -280,26 +218,20 @@ class CExCCR:
         decision_engine = CCRDecisionEngine(best_alignments, best_scores)
         decision = decision_engine.decide()
 
-        # Default conversation handling for fallback
-        selected_conversation = None
         if decision == "new":
             selected_conversation = None
+        elif decision == "fallback" and best_scores["stability"] < SCORE_THRESHOLDS["stability"]["fallback_minimum"]:
+            selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
         else:
-            stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
-            if decision == "fallback" and best_scores["stability"] < stability_threshold:
-                selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
-            else:
-                selected_conversation = best_conv_name
-
-        ccr_envelope = {
-            "alignment": best_alignments,
-            "scores": best_scores,
-            "decision": decision,
-            "selected_conversation": selected_conversation,
-        }
+            selected_conversation = best_conv_name
 
         return {
             "cex": {
-                "ccr": ccr_envelope
+                "ccr": {
+                    "alignment": best_alignments,
+                    "scores": best_scores,
+                    "decision": decision,
+                    "selected_conversation": selected_conversation,
+                }
             }
         }
