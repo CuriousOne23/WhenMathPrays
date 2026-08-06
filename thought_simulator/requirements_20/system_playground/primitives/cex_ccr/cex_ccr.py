@@ -202,27 +202,21 @@ class CCRDecisionEngine:
         self.scores = scores
 
     def decide(self) -> str:
-        ambiguity = self.scores["ambiguity"]
         identity = self.align["identity"]
         continuity = self.align["continuity"]
-
-        # NEW conversation
-        if (
-            identity == DECISION_LOGIC["new"]["identity_alignment_required"]
-            and ambiguity >= SCORE_THRESHOLDS["ambiguity"]["high"]
-            and self._continuity_hint_is_reset()
-        ):
+    
+        # --- NEW decision uses GLOBAL ambiguity ---
+        if identity == DECISION_LOGIC["new"]["identity_alignment_required"] \
+           and self.scores["global_ambiguity"] >= SCORE_THRESHOLDS["ambiguity"]["high"] \
+           and continuity == DECISION_LOGIC["new"]["continuity_alignment_required"]:
             return "new"
-
-        # SPECIFIC conversation
-        if (
-            identity == DECISION_LOGIC["specific"]["identity_alignment_required"]
-            and ambiguity <= SCORE_THRESHOLDS["ambiguity"]["low"]
-            and continuity == DECISION_LOGIC["specific"]["continuity_alignment_required"]
-        ):
+    
+        # --- SPECIFIC decision uses per-conversation ambiguity ---
+        if identity == DECISION_LOGIC["specific"]["identity_alignment_required"] \
+           and self.scores["ambiguity"] <= SCORE_THRESHOLDS["ambiguity"]["low"] \
+           and continuity == DECISION_LOGIC["specific"]["continuity_alignment_required"]:
             return "specific"
-
-        # FALLBACK
+    
         return "fallback"
 
     def _continuity_hint_is_reset(self) -> bool:
@@ -305,25 +299,28 @@ class CExCCR:
             best_alignments = aligner.compute_all()
             best_scores = self._extract_scores(conv)
 
-        # --- GLOBAL SCORES (required for NEW / FALLBACK decisions) ---
-        global_scores = {
-            "ambiguity": max(conv["metrics"]["ambiguity_score"] for conv in self.cil.values()),
-            "collapse": max(conv["metrics"]["collapse_risk"] for conv in self.cil.values()),
-            "drift": max(conv["metrics"]["drift_score"] for conv in self.cil.values()),
-            "stability": max(conv["metrics"]["stability_score"] for conv in self.cil.values()),
-        }
+        # --- GLOBAL ambiguity (used ONLY for NEW decision) ---
+        global_ambiguity = max(conv["metrics"]["ambiguity_score"] for conv in self.cil.values())
         
-        # Decision must use GLOBAL ambiguity, not per-conversation ambiguity
-        decision_engine = CCRDecisionEngine(best_alignments, global_scores)
+        # --- Decision logic uses:
+        # NEW: global ambiguity
+        # SPECIFIC: per-conversation ambiguity (best_scores)
+        # FALLBACK: per-conversation stability (best_scores)
+        decision_engine = CCRDecisionEngine(best_alignments, {
+            "ambiguity": best_scores["ambiguity"],       # SPECIFIC uses per-conv ambiguity
+            "collapse": best_scores["collapse"],
+            "drift": best_scores["drift"],
+            "stability": best_scores["stability"],
+            "global_ambiguity": global_ambiguity         # NEW uses global ambiguity
+        })
         decision = decision_engine.decide()
-
-        # Default conversation handling for fallback
+        
+        # --- Conversation selection ---
         if decision == "new":
             selected_conversation = None
         else:
             stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
             if decision == "fallback" and best_scores["stability"] < stability_threshold:
-                # Prefer conv_10 (high ambiguity greeting) when stability is below threshold
                 selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
             else:
                 selected_conversation = best_conv_name
