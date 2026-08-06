@@ -95,17 +95,16 @@ class CCRAlignmentComputer:
         direction_hint = self.ie.get("direction_hint")
         context_lineage = self.cil.get("context_lineage")
         next_context = self.cil.get("next_context")
-
-        # Topic matches next_context (semantic context)
-        topic_match = topic_hint == next_context
-
-        # Direction match: forward/backward only, "none" never matches
-        if direction_hint in ["forward", "backward"]:
-            direction_match = direction_hint == context_lineage
-        else:
-            # For ambiguous / none direction, treat forward lineage as weak match
-            direction_match = direction_hint == "none" and context_lineage == "forward"
-
+    
+        # Topic match uses next_context, NOT context_lineage
+        topic_match = (topic_hint == next_context)
+    
+        # Direction match must be exact forward/backward
+        direction_match = (
+            (direction_hint == "forward" and context_lineage == "forward") or
+            (direction_hint == "backward" and context_lineage == "backward")
+        )
+    
         if topic_match and direction_match:
             return "strong"
         if topic_match and not direction_match:
