@@ -259,6 +259,8 @@ class CExCCR:
         best_scores = None
         best_alignment_sum = -1.0
         best_stability = -1.0
+
+        selected_conversation = None
     
         # Store all alignments and scores for later selection
         all_alignments = {}
