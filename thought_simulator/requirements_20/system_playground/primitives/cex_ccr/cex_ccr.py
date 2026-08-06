@@ -25,7 +25,6 @@ Matches:
 
 import os
 import yaml
-import copy
 
 # ============================================================
 # LOAD RULES
@@ -41,20 +40,10 @@ with open(RULES_PATH, "r", encoding="utf-8") as f:
     CCR_RULES = yaml.safe_load(f)
 
 ALIGNMENT_ENUM = CCR_RULES["alignment_enum"]
-IDENTITY_RULES = CCR_RULES["identity_alignment"]
-CLARIFYING_RULES = CCR_RULES["clarifying_alignment"]
-CONTEXT_RULES = CCR_RULES["context_alignment"]
-CONTINUITY_RULES = CCR_RULES["continuity_alignment"]
-REFERENCE_RULES = CCR_RULES["reference_alignment"]
-SEMANTIC_RESIDUE_RULES = CCR_RULES["semantic_residue_alignment"]
 DECISION_LOGIC = CCR_RULES["decision_logic"]
 SCORE_THRESHOLDS = CCR_RULES["score_thresholds"]
 TIE_BREAKING = CCR_RULES["tie_breaking"]
 
-
-# ============================================================
-# Helper: alignment level
-# ============================================================
 
 def _alignment_level(name: str) -> int:
     return ALIGNMENT_ENUM.get(name, 0)
@@ -80,18 +69,13 @@ class CCRAlignmentComputer:
         topic = self.ie.get("topic_hint")
         intent = self.ie.get("intent_hint")
         lineage = self.cil.get("identity_lineage")
-        phrases = self.ie.get("structural_phrases", [])
 
-        # Strong: topic + intent + structural support
-        if topic == lineage and intent in ["request", "inform"] and phrases:
+        if topic == lineage and intent in ["request", "inform"]:
             return "strong"
-        # Moderate: topic matches, intent may differ
         if topic == lineage:
             return "moderate"
-        # Weak: topic differs but structural phrases present
-        if topic != lineage and phrases:
+        if topic != lineage and intent in ["request", "inform"]:
             return "weak"
-        # None: no meaningful match
         return "none"
 
     # ---------------- Clarifying ----------------
@@ -127,12 +111,19 @@ class CCRAlignmentComputer:
         cont_hint = self.ie.get("continuity_hint")
         cont_lineage = self.cil.get("continuity_lineage")
 
-        if cont_hint == cont_lineage:
+        # Strong only when hint matches lineage and reference supports continuation
+        ref_hint = self.ie.get("reference_hint")
+        if cont_hint == cont_lineage and ref_hint in ["previous", "specific_previous"]:
             return "strong"
+
+        # Moderate when hint suggests continuation/shift but lineage does not strictly match
         if cont_hint in ["continue", "shift"]:
             return "moderate"
-        if cont_hint in ["unknown"]:
+
+        # None when reset or unknown
+        if cont_hint in ["reset", "unknown"]:
             return "none"
+
         return "weak"
 
     # ---------------- Reference ----------------
@@ -163,11 +154,9 @@ class CCRAlignmentComputer:
 
         if ent_match and fact_match:
             return "strong"
-        if ent_match:
+        if ent_match or fact_match:
             return "moderate"
-        if imp_entities or imp_facts:
-            return "weak"
-        return "none"
+        return "weak"
 
     # ---------------- Combined ----------------
     def compute_all(self) -> dict:
@@ -197,14 +186,14 @@ class CCRDecisionEngine:
 
     def decide(self) -> str:
         ambiguity = self.scores["ambiguity"]
-        continuity = self.align["continuity"]
         identity = self.align["identity"]
+        continuity = self.align["continuity"]
 
         # NEW conversation
         if (
             identity == "none"
             and ambiguity >= SCORE_THRESHOLDS["ambiguity"]["high"]
-            and continuity == "none"
+            and continuity in ["none", "weak"]
         ):
             return "new"
 
@@ -216,7 +205,7 @@ class CCRDecisionEngine:
         ):
             return "specific"
 
-        # FALLBACK (including default)
+        # FALLBACK
         return "fallback"
 
 
@@ -264,11 +253,9 @@ class CExCCR:
             alignments = aligner.compute_all()
             scores = self._extract_scores(conv)
 
-            # numeric alignment score (weighted sum)
             alignment_sum = sum(_alignment_level(v) for v in alignments.values())
             stability = scores["stability"]
 
-            # tie‑breaking: alignment_sum, then stability
             if alignment_sum > best_alignment_sum:
                 best_alignment_sum = alignment_sum
                 best_stability = stability
@@ -282,10 +269,7 @@ class CExCCR:
                 best_alignments = alignments
                 best_scores = scores
 
-        # ----------------------------------------------------
-        # If no conversation found (should not happen), fall
-        # back to default conv_10
-        # ----------------------------------------------------
+        # If nothing selected (should not happen), fall back to conv_10 if present
         if best_conv_name is None and "conv_10" in self.cil:
             best_conv_name = "conv_10"
             conv = self.cil["conv_10"]
@@ -293,31 +277,20 @@ class CExCCR:
             best_alignments = aligner.compute_all()
             best_scores = self._extract_scores(conv)
 
-        # ----------------------------------------------------
-        # Decision logic (new / specific / fallback)
-        # ----------------------------------------------------
         decision_engine = CCRDecisionEngine(best_alignments, best_scores)
         decision = decision_engine.decide()
 
-        # Default conversation handling:
-        # If decision is fallback and stability is below threshold,
-        # choose conv_10 as default if available.
+        # Default conversation handling for fallback
         selected_conversation = None
         if decision == "new":
             selected_conversation = None
         else:
             stability_threshold = SCORE_THRESHOLDS["stability"]["fallback_minimum"]
             if decision == "fallback" and best_scores["stability"] < stability_threshold:
-                if "conv_10" in self.cil:
-                    selected_conversation = "conv_10"
-                else:
-                    selected_conversation = best_conv_name
+                selected_conversation = "conv_10" if "conv_10" in self.cil else best_conv_name
             else:
                 selected_conversation = best_conv_name
 
-        # ----------------------------------------------------
-        # Build output envelope
-        # ----------------------------------------------------
         ccr_envelope = {
             "alignment": best_alignments,
             "scores": best_scores,
