@@ -14,7 +14,7 @@ TP:
   cil:
 
     # ----------------------------------------------------------
-    # Conversation 1 — Alice router troubleshooting
+    # Conversation 1 - Alice router troubleshooting
     # ----------------------------------------------------------
     conv_1:
       identity_lineage: "assistance"
@@ -37,7 +37,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 2 — Bob tax form question
+    # Conversation 2 - Bob tax form question
     # ----------------------------------------------------------
     conv_2:
       identity_lineage: "assistance"
@@ -60,7 +60,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 3 — Carol passport renewal
+    # Conversation 3 - Carol passport renewal
     # ----------------------------------------------------------
     conv_3:
       identity_lineage: "assistance"
@@ -83,7 +83,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 4 — Dave laptop overheating
+    # Conversation 4 - Dave laptop overheating
     # ----------------------------------------------------------
     conv_4:
       identity_lineage: "assistance"
@@ -106,7 +106,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 5 — Emma travel planning (Japan)
+    # Conversation 5 - Emma travel planning (Japan)
     # ----------------------------------------------------------
     conv_5:
       identity_lineage: "misc"
@@ -129,7 +129,7 @@ TP:
       next_context: "misc"
 
     # ----------------------------------------------------------
-    # Conversation 6 — Frank banking login issue
+    # Conversation 6 - Frank banking login issue
     # ----------------------------------------------------------
     conv_6:
       identity_lineage: "assistance"
@@ -152,7 +152,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 7 — Grace medical appointment scheduling
+    # Conversation 7 - Grace medical appointment scheduling
     # ----------------------------------------------------------
     conv_7:
       identity_lineage: "assistance"
@@ -175,7 +175,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 8 — Henry software installation
+    # Conversation 8 - Henry software installation
     # ----------------------------------------------------------
     conv_8:
       identity_lineage: "assistance"
@@ -198,7 +198,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 9 — Irene credit card dispute
+    # Conversation 9 - Irene credit card dispute
     # ----------------------------------------------------------
     conv_9:
       identity_lineage: "assistance"
@@ -221,7 +221,7 @@ TP:
       next_context: "assistance"
 
     # ----------------------------------------------------------
-    # Conversation 10 — John greeting + device setup
+    # Conversation 10 - John greeting + device setup
     # ----------------------------------------------------------
     conv_10:
       identity_lineage: "greeting"
