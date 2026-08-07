@@ -129,7 +129,7 @@ class CExPck:
         cil_meta = {
             "selected_conversation": ccr.get("selected_conversation"),
             "cil_reference": "cil_input.yaml",
-            "provenance": {                     # <-- MUST be "provenance"
+            "projection_provenance": {
                 "origin": "CEx-CCR",
                 "packaged_by": "CEx-Pck"
             }
