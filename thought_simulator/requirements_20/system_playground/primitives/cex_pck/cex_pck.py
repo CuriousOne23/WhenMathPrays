@@ -1,19 +1,19 @@
 """
-CEx‑Pck Primitive (Python Implementation)
+CEx-Pck Primitive (Python Implementation)
 ----------------------------------------
 Implements the packaging stage of the CEx primitive.
 
 Responsibilities:
-  - Read IE, CCR, semantic‑importance, next_context
+  - Read IE, CCR, semantic-importance, next_context
   - Construct context envelope
   - Construct MSL metadata
   - Construct CIL metadata
-  - Construct semantic‑residue metadata
+  - Construct semantic-residue metadata
   - Write deterministic TP metadata for downstream primitives
 
-CEx‑Pck SHALL NOT:
+CEx-Pck SHALL NOT:
   - Modify CCR output
-  - Modify semantic‑importance residues
+  - Modify semantic-importance residues
   - Modify CIL substrate content
   - Infer meaning or use embeddings
 """
@@ -26,43 +26,43 @@ class CExPck:
     # Main entry point
     # ----------------------------------------------------------
     def inspect(self):
-        print("\n[CEx‑Pck] Starting inspect()")
+        print("\n[CEx-Pck] Starting inspect()")
 
         ie = self.tp.get("cex", {}).get("ie", {})
         ccr = self.tp.get("cex", {}).get("ccr", {})
         importance = self.tp.get("semantic", {}).get("importance", {})
         next_ctx = self.tp.get("metadata", {}).get("next_context", {})
 
-        print("[CEx‑Pck] IE:", ie)
-        print("[CEx‑Pck] CCR:", ccr)
-        print("[CEx‑Pck] Importance:", importance)
-        print("[CEx‑Pck] Next‑Context:", next_ctx)
+        print("[CEx-Pck] IE:", ie)
+        print("[CEx-Pck] CCR:", ccr)
+        print("[CEx-Pck] Importance:", importance)
+        print("[CEx-Pck] Next-Context:", next_ctx)
 
         # 1. Context envelope
         context = self._build_context(ie, ccr, next_ctx)
-        print("[CEx‑Pck] Built context:", context)
+        print("[CEx-Pck] Built context:", context)
 
         # 2. MSL metadata
         msl = self._build_msl(ie, next_ctx)
-        print("[CEx‑Pck] Built MSL:", msl)
+        print("[CEx-Pck] Built MSL:", msl)
 
         # 3. CIL metadata
         cil_meta = self._build_cil_metadata(ccr)
-        print("[CEx‑Pck] Built CIL metadata:", cil_meta)
+        print("[CEx-Pck] Built CIL metadata:", cil_meta)
 
-        # 4. Semantic‑residue metadata
+        # 4. Semantic-residue metadata
         residue_meta = self._build_semantic_residue_metadata(ccr, importance)
-        print("[CEx‑Pck] Built semantic‑residue metadata:", residue_meta)
+        print("[CEx-Pck] Built semantic-residue metadata:", residue_meta)
 
         # 5. Write back into TP
         self._update_tp(context, msl, cil_meta, residue_meta)
-        print("[CEx‑Pck] TP updated successfully.")
+        print("[CEx-Pck] TP updated successfully.")
 
     # ----------------------------------------------------------
     # Context envelope construction
     # ----------------------------------------------------------
     def _build_context(self, ie, ccr, next_ctx):
-        print("[CEx‑Pck] Building context...")
+        print("[CEx-Pck] Building context...")
 
         continuity_alignment = ccr.get("alignment", {}).get("continuity", "none")
         decision = ccr.get("decision", "new")
@@ -105,7 +105,7 @@ class CExPck:
     # MSL metadata construction
     # ----------------------------------------------------------
     def _build_msl(self, ie, next_ctx):
-        print("[CEx‑Pck] Building MSL...")
+        print("[CEx-Pck] Building MSL...")
 
         msl = {
             "qualifiers": ie.get("qualifier_phrases", []),
@@ -124,12 +124,12 @@ class CExPck:
     # CIL metadata construction
     # ----------------------------------------------------------
     def _build_cil_metadata(self, ccr):
-        print("[CEx‑Pck] Building CIL metadata...")
+        print("[CEx-Pck] Building CIL metadata...")
 
         cil_meta = {
             "selected_conversation": ccr.get("selected_conversation"),
             "cil_reference": "cil_input.yaml",
-            "provenance": {
+            "projection_provenance": {
                 "origin": "CEx-CCR",
                 "packaged_by": "CEx-Pck"
             }
@@ -138,10 +138,10 @@ class CExPck:
         return cil_meta
 
     # ----------------------------------------------------------
-    # Semantic‑residue metadata construction
+    # Semantic-residue metadata construction
     # ----------------------------------------------------------
     def _build_semantic_residue_metadata(self, ccr, importance):
-        print("[CEx‑Pck] Building semantic‑residue metadata...")
+        print("[CEx-Pck] Building semantic-residue metadata...")
 
         residue_meta = {
             "entities": importance.get("entities", []),
@@ -159,7 +159,7 @@ class CExPck:
     # Write envelopes back into TP
     # ----------------------------------------------------------
     def _update_tp(self, context, msl, cil_meta, residue_meta):
-        print("[CEx‑Pck] Writing metadata into TP...")
+        print("[CEx-Pck] Writing metadata into TP...")
 
         # context metadata
         self.tp.setdefault("metadata", {}).setdefault("context", {})
