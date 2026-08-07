@@ -17,179 +17,179 @@ ruleset:
   version: "1.0"
   description: "Deterministic rulechecker for CEx‑Pck TP metadata"
 
-# ============================================================
-# 1. Context Envelope Rules
-# ============================================================
-
-context_rules:
-
-  required_fields:
-    - topic
-    - intent
-    - stance
-    - register
-    - politeness
-    - tone
-    - continuity
-    - direction
-    - coherence
-    - importance
-    - clarifying_fields
-
-  bounded_categories:
-    topic: ["network_issue", "tax_question", "passport", "travel", "banking", "medical", "software", "credit_card", "greeting"]
-    intent: ["request_help", "ask_question", "report_issue", "seek_guidance", "misc"]
-    stance: ["neutral", "positive", "negative"]
-    register: ["informal", "normal", "formal"]
-    politeness: ["neutral", "polite", "impolite"]
-    tone: ["neutral", "calm", "urgent"]
-    continuity: ["none", "weak", "moderate", "strong"]
-    direction: ["forward", "backward", "none"]
-    coherence: ["low", "medium", "high"]
-    importance: ["low", "medium", "high"]
-
-  clarifying_fields:
-    type: "array"
-    allow_empty: false
-
-  provenance_required: true
-
-# ============================================================
-# 2. MSL Metadata Rules
-# ============================================================
-
-msl_rules:
-
-  required_fields:
-    - qualifiers
-    - clarifications
-    - stance
-    - shading
-    - intent
-    - direction
-    - coherence
-    - subculture
-
-  bounded_categories:
-    stance: ["neutral", "positive", "negative"]
-    shading: ["none", "soft", "strong"]
-    intent: ["request_help", "ask_question", "report_issue", "seek_guidance", "misc"]
-    direction: ["forward", "backward", "none"]
-    coherence: ["low", "medium", "high"]
-    subculture: ["general_user", "technical_user", "formal_user"]
-
-  qualifiers:
-    type: "array"
-    allow_empty: true
-
-  clarifications:
-    type: "array"
-    allow_empty: true
-
-  provenance_required: true
-
-# ============================================================
-# 3. CIL Metadata Rules
-# ============================================================
-
-cil_rules:
-
-  required_fields:
-    - selected_conversation
-    - cil_reference
-    - projection_provenance
-
-  selected_conversation:
-    type: "integer"
-    min: 1
-    max: 10
-
-  cil_reference:
-    allowed_values: ["cil_input.yaml"]
-
-  provenance_required: true
-
-# ============================================================
-# 4. Semantic‑Residue Metadata Rules
-# ============================================================
-
-semantic_residue_rules:
-
-  required_fields:
-    - entities
-    - facts
-    - alignment_scores
-    - provenance
-
-  alignment_scores:
-    allowed_values: ["none", "weak", "moderate", "strong"]
-
-  entities:
-    type: "array"
-    object_fields:
-      - value
-      - role
-      - score
+  # ============================================================
+  # 1. Context Envelope Rules
+  # ============================================================
+  
+  context_rules:
+  
+    required_fields:
+      - topic
+      - intent
+      - stance
+      - register
+      - politeness
+      - tone
+      - continuity
+      - direction
+      - coherence
+      - importance
+      - clarifying_fields
+  
+    bounded_categories:
+      topic: ["network_issue", "tax_question", "passport", "travel", "banking", "medical", "software", "credit_card", "greeting"]
+      intent: ["request_help", "ask_question", "report_issue", "seek_guidance", "misc"]
+      stance: ["neutral", "positive", "negative"]
+      register: ["informal", "normal", "formal"]
+      politeness: ["neutral", "polite", "impolite"]
+      tone: ["neutral", "calm", "urgent"]
+      continuity: ["none", "weak", "moderate", "strong"]
+      direction: ["forward", "backward", "none"]
+      coherence: ["low", "medium", "high"]
+      importance: ["low", "medium", "high"]
+  
+    clarifying_fields:
+      type: "array"
+      allow_empty: false
+  
+    provenance_required: true
+  
+  # ============================================================
+  # 2. MSL Metadata Rules
+  # ============================================================
+  
+  msl_rules:
+  
+    required_fields:
+      - qualifiers
+      - clarifications
+      - stance
+      - shading
+      - intent
+      - direction
+      - coherence
+      - subculture
+  
+    bounded_categories:
+      stance: ["neutral", "positive", "negative"]
+      shading: ["none", "soft", "strong"]
+      intent: ["request_help", "ask_question", "report_issue", "seek_guidance", "misc"]
+      direction: ["forward", "backward", "none"]
+      coherence: ["low", "medium", "high"]
+      subculture: ["general_user", "technical_user", "formal_user"]
+  
+    qualifiers:
+      type: "array"
+      allow_empty: true
+  
+    clarifications:
+      type: "array"
+      allow_empty: true
+  
+    provenance_required: true
+  
+  # ============================================================
+  # 3. CIL Metadata Rules
+  # ============================================================
+  
+  cil_rules:
+  
+    required_fields:
+      - selected_conversation
+      - cil_reference
+      - projection_provenance
+  
+    selected_conversation:
+      type: "integer"
+      min: 1
+      max: 10
+  
+    cil_reference:
+      allowed_values: ["cil_input.yaml"]
+  
+    provenance_required: true
+  
+  # ============================================================
+  # 4. Semantic‑Residue Metadata Rules
+  # ============================================================
+  
+  semantic_residue_rules:
+  
+    required_fields:
+      - entities
+      - facts
+      - alignment_scores
       - provenance
-
-  facts:
-    type: "array"
-    object_fields:
-      - value
-      - role
-      - score
+  
+    alignment_scores:
+      allowed_values: ["none", "weak", "moderate", "strong"]
+  
+    entities:
+      type: "array"
+      object_fields:
+        - value
+        - role
+        - score
+        - provenance
+  
+    facts:
+      type: "array"
+      object_fields:
+        - value
+        - role
+        - score
+        - provenance
+  
+    provenance_required: true
+  
+  # ============================================================
+  # 5. CCR Read‑Only Rules
+  # ============================================================
+  
+  ccr_rules:
+  
+    read_only_fields:
+      - alignment.identity
+      - alignment.clarifying
+      - alignment.context
+      - alignment.continuity
+      - alignment.reference
+      - alignment.semantic_residue
+      - scores.ambiguity
+      - scores.collapse
+      - scores.drift
+      - scores.stability
+      - decision
+      - selected_conversation
       - provenance
-
-  provenance_required: true
-
-# ============================================================
-# 5. CCR Read‑Only Rules
-# ============================================================
-
-ccr_rules:
-
-  read_only_fields:
-    - alignment.identity
-    - alignment.clarifying
-    - alignment.context
-    - alignment.continuity
-    - alignment.reference
-    - alignment.semantic_residue
-    - scores.ambiguity
-    - scores.collapse
-    - scores.drift
-    - scores.stability
-    - decision
-    - selected_conversation
-    - provenance
-
-  modification_allowed: false
-
-# ============================================================
-# 6. Semantic‑Importance Read‑Only Rules
-# ============================================================
-
-importance_rules:
-
-  read_only_fields:
-    - entities[]
-    - facts[]
-
-  modification_allowed: false
-
-# ============================================================
-# 7. Determinism Rules
-# ============================================================
-
-determinism_rules:
-
-  python_cpp_parity: true
-  stable_iteration_order: true
-  no_nondeterministic_sorting: true
-  no_hash_order_dependence: true
-  replay_identical_inputs_produce_identical_outputs: true
-
-# ============================================================
-# END OF FILE
-# ============================================================
-
+  
+    modification_allowed: false
+  
+  # ============================================================
+  # 6. Semantic‑Importance Read‑Only Rules
+  # ============================================================
+  
+  importance_rules:
+  
+    read_only_fields:
+      - entities[]
+      - facts[]
+  
+    modification_allowed: false
+  
+  # ============================================================
+  # 7. Determinism Rules
+  # ============================================================
+  
+  determinism_rules:
+  
+    python_cpp_parity: true
+    stable_iteration_order: true
+    no_nondeterministic_sorting: true
+    no_hash_order_dependence: true
+    replay_identical_inputs_produce_identical_outputs: true
+  
+  # ============================================================
+  # END OF FILE
+  # ============================================================
+  
