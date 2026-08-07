@@ -99,98 +99,78 @@ input:
 # EXPECTED OUTPUT FROM CEx‑Pck
 # ============================================================
 
-expected_output:
+expected:
 
   # ----------------------------------------------------------
   # 1. Context Metadata
   # ----------------------------------------------------------
-  metadata:
-    context:
-      context_fields:
-        topic: "network_issue"
-        stance: "neutral"
-        intent: "request_help"
-        register: "informal"
-        politeness: "neutral"
-        tone: "neutral"
-        continuity: "moderate"
-        direction: "forward"
-        coherence: "medium"
-        importance: "high"
-        clarifying_fields:
-          - "router"
-          - "wifi"
-          - "disconnecting"
+  metadata.context.context_fields.topic: "network_issue"
+  metadata.context.context_fields.intent: "request_help"
+  metadata.context.context_fields.stance: "neutral"
+  metadata.context.context_fields.register: "informal"
+  metadata.context.context_fields.politeness: "neutral"
+  metadata.context.context_fields.tone: "neutral"
+  metadata.context.context_fields.continuity: "moderate"
+  metadata.context.context_fields.direction: "forward"
+  metadata.context.context_fields.coherence: "medium"
+  metadata.context.context_fields.importance: "high"
 
-      relevance_flags:
-        continuity_relevant: true
-        context_relevant: true
+  metadata.context.context_fields.clarifying_fields:
+    - "router"
+    - "wifi"
+    - "disconnecting"
 
-      copy_forward_flags:
-        next_context_used: true
+  metadata.context.relevance_flags.continuity_relevant: true
+  metadata.context.relevance_flags.context_relevant: true
 
-      reset_flags:
-        reset_context: false
+  metadata.context.copy_forward_flags.next_context_used: true
+  metadata.context.reset_flags.reset_context: false
 
-      context_provenance:
-        origin: "CEx-Pck"
-        last_update: "CEx-Pck"
-        commit_lineage: [1004]
+  metadata.context.context_provenance.origin: "CEx-Pck"
 
   # ----------------------------------------------------------
   # 2. Meaning Signal Layer (MSL)
   # ----------------------------------------------------------
-    msl:
-      qualifiers:
-        - "router"
-        - "wifi"
-      clarifications:
-        - "disconnecting"
-      stance: "neutral"
-      shading: "none"
-      intent: "request_help"
-      direction: "forward"
-      coherence: "medium"
-      subculture: "general_user"
+  metadata.msl.qualifiers:
+    - "router"
+    - "wifi"
 
-      msl_provenance:
-        origin: "CEx-Pck"
-        last_update: "CEx-Pck"
-        commit_lineage: [1004]
+  metadata.msl.clarifications:
+    - "disconnecting"
+
+  metadata.msl.stance: "neutral"
+  metadata.msl.shading: "none"
+  metadata.msl.intent: "request_help"
+  metadata.msl.direction: "forward"
+  metadata.msl.coherence: "medium"
+  metadata.msl.subculture: "general_user"
+
+  metadata.msl.msl_provenance.origin: "CEx-Pck"
 
   # ----------------------------------------------------------
   # 3. CIL Metadata
   # ----------------------------------------------------------
-    cil:
-      selected_conversation: 4
-      cil_reference: "static_cil_substrate"
-      projection_provenance:
-        origin: "CEx-CCR"
-        packaging: "CEx-Pck"
-        commit_lineage: [1004]
+  metadata.cil.selected_conversation: 4
+  metadata.cil.cil_reference: "static_cil_substrate"
+  metadata.cil.projection_provenance.origin: "CEx-CCR"
 
   # ----------------------------------------------------------
   # 4. Semantic‑Residue Metadata
   # ----------------------------------------------------------
-    semantic_residue:
-      entities:
-        - value: "router"
-          role: "primary_object"
-          score: 0.88
-          provenance: { origin: "SOB" }
+  metadata.semantic_residue.entities:
+    - value: "router"
+      role: "primary_object"
+      score: 0.88
+      provenance: { origin: "SOB" }
 
-      facts:
-        - value: "wifi disconnecting"
-          role: "primary_issue"
-          score: 0.91
-          provenance: { origin: "SmOB" }
+  metadata.semantic_residue.facts:
+    - value: "wifi disconnecting"
+      role: "primary_issue"
+      score: 0.91
+      provenance: { origin: "SmOB" }
 
-      alignment_scores: "moderate"
-
-      provenance:
-        origin: "CEx-CCR"
-        packaging: "CEx-Pck"
-        commit_lineage: [1004]
+  metadata.semantic_residue.alignment_scores: "moderate"
+  metadata.semantic_residue.provenance.origin: "CEx-CCR"
 
 # ============================================================
 # END OF FILE
