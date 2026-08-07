@@ -147,7 +147,7 @@ class CExPck:
             "entities": importance.get("entities", []),
             "facts": importance.get("facts", []),
             "alignment_scores": ccr.get("alignment", {}).get("semantic_residue", "none"),
-            "provenance": {
+            "projection_provenance": {
                 "origin": "CEx-CCR",
                 "packaged_by": "CEx-Pck"
             }
