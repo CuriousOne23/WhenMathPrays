@@ -66,6 +66,8 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     Runs cex_pck_rulechecker.py as a subprocess.
     Returns True if rulecheck passes.
     """
+
+    # Write TP before/after
     before_path = os.path.join(ROOT, "_tp_before.json")
     after_path = os.path.join(ROOT, "_tp_after.json")
 
@@ -75,24 +77,32 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     with open(after_path, "w", encoding="utf-8") as f:
         json.dump(tp_after, f, indent=2)
 
+    # NEW: Load YAML rules here in the testbench
+    rules = load_yaml(RULES_PATH)
+
+    # Convert rules to JSON for the rulechecker
+    rules_json_path = os.path.join(ROOT, "_rules_tmp.json")
+    with open(rules_json_path, "w", encoding="utf-8") as f:
+        json.dump(rules, f, indent=2)
+
     import sys
 
     cmd = [
-        sys.executable,   # <-- use the SAME interpreter running the testbench
+        sys.executable,   # use same interpreter
         RULECHECKER_PATH,
-        RULES_PATH,
+        rules_json_path,  # pass JSON rules instead of YAML
         before_path,
         after_path
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
-    
+
     # Print BOTH stdout and stderr so rulecheck failures are visible
     if result.stdout:
         print(result.stdout)
     if result.stderr:
         print(result.stderr)
-    
+
     return result.returncode == 0
 
 
@@ -160,4 +170,3 @@ if __name__ == "__main__":
         print("All active CEx‑Pck tests PASSED.")
     else:
         print("One or more CEx‑Pck tests FAILED.")
-
