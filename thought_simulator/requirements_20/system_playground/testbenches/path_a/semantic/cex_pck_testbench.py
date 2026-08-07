@@ -75,8 +75,10 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     with open(after_path, "w", encoding="utf-8") as f:
         json.dump(tp_after, f, indent=2)
 
+    import sys
+
     cmd = [
-        "python",
+        sys.executable,   # <-- use the SAME interpreter running the testbench
         RULECHECKER_PATH,
         RULES_PATH,
         before_path,
