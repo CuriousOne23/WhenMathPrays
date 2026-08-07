@@ -1,1 +1,93 @@
+# ============================================================
+# CEx‑Pck Tests To Run (Deterministic Test Selection File)
+# ============================================================
+# This file tells the testbench runner which CEx‑Pck tests to
+# execute. Each test corresponds to a specific scenario defined
+# in cex_pck_testbench.yaml.
+#
+# The testbench runner (run.py) will:
+#   - load cex_pck_input.yaml
+#   - run CEx‑Pck
+#   - validate output using cex_pck_rules.yaml
+#   - compare against expected fields in cex_pck_testbench.yaml
+#
+# ============================================================
+
+tests_to_run:
+
+  # ----------------------------------------------------------
+  # Test 1 — Router troubleshooting (Conversation 4)
+  # ----------------------------------------------------------
+  - id: "pck_test_1"
+    description: "Router troubleshooting scenario — continuity moderate, direction forward"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: true
+
+  # ----------------------------------------------------------
+  # Test 2 — Tax form question (Conversation 2)
+  # ----------------------------------------------------------
+  - id: "pck_test_2"
+    description: "Tax form scenario — continuity continue, context forward"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 3 — Passport renewal (Conversation 3)
+  # ----------------------------------------------------------
+  - id: "pck_test_3"
+    description: "Passport renewal scenario — formal clarifying lineage"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 4 — Travel planning (Conversation 5)
+  # ----------------------------------------------------------
+  - id: "pck_test_4"
+    description: "Travel planning scenario — misc identity lineage"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 5 — Banking login issue (Conversation 6)
+  # ----------------------------------------------------------
+  - id: "pck_test_5"
+    description: "Banking login scenario — backward context lineage"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 6 — Software installation (Conversation 8)
+  # ----------------------------------------------------------
+  - id: "pck_test_6"
+    description: "Software installation scenario — continuity unknown"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 7 — Credit card dispute (Conversation 9)
+  # ----------------------------------------------------------
+  - id: "pck_test_7"
+    description: "Credit card dispute scenario — shift continuity"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+  # ----------------------------------------------------------
+  # Test 8 — Greeting + device setup (Conversation 10)
+  # ----------------------------------------------------------
+  - id: "pck_test_8"
+    description: "Greeting scenario — reset continuity, high ambiguity"
+    input_file: "cex_pck_input.yaml"
+    expected_output: "cex_pck_testbench.yaml"
+    active: false
+
+# ============================================================
+# END OF FILE
+# ============================================================
 
