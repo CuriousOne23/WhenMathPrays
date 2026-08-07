@@ -101,7 +101,7 @@
         "importance": "medium",
         "clarifying_fields": []
       },
-      "context_provenance": {
+      "provenance": {
         "origin": "CEx-Pck"
       }
     },
