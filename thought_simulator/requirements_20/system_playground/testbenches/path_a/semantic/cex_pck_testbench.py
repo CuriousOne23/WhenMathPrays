@@ -84,8 +84,13 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
-    print(result.stdout)
-
+    
+    # Print BOTH stdout and stderr so rulecheck failures are visible
+    if result.stdout:
+        print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+    
     return result.returncode == 0
 
 
