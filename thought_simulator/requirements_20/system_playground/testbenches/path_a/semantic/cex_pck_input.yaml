@@ -1,1 +1,91 @@
+# ============================================================
+# CEx‑Pck Input (General Mode)
+# ============================================================
+# This file provides the canonical TP input envelope for
+# running the CEx‑Pck primitive in general mode.
+#
+# It includes:
+#   - IE structural hints
+#   - CCR output (alignment + scores + decision)
+#   - semantic‑importance residues
+#   - next_context metadata
+#   - reference to the static CIL substrate (cil_input.yaml)
+#
+# CEx‑Pck SHALL read these envelopes and produce:
+#   - context_fields
+#   - MSL metadata
+#   - CIL metadata
+#   - semantic‑residue metadata
+# ============================================================
 
+input:
+
+  # ----------------------------------------------------------
+  # 1. CEx‑IE envelope (bounded structural hints)
+  # ----------------------------------------------------------
+  cex:
+    ie:
+      topic_hint: "network_issue"
+      intent_hint: "request_help"
+      continuity_hint: "moderate"
+      reference_hint: "previous"
+      register_hint: "informal"
+      politeness_hint: "neutral"
+      direction_hint: "forward"
+      coherence_hint: "medium"
+      importance_hint: "high"
+      structural_phrases:
+        - "router"
+        - "wifi"
+        - "disconnecting"
+
+  # ----------------------------------------------------------
+  # 2. CEx‑CCR envelope (alignment + scores + decision)
+  # ----------------------------------------------------------
+    ccr:
+      alignment:
+        identity: "moderate"
+        clarifying: "weak"
+        context: "strong"
+        continuity: "moderate"
+        reference: "strong"
+        semantic_residue: "moderate"
+
+      scores:
+        ambiguity: 0.12
+        collapse: 0.03
+        drift: 0.08
+        stability: 0.91
+
+      decision: "specific"
+      selected_conversation: 4
+
+      provenance:
+        origin: "CEx-CCR"
+        last_update: "CEx-CCR"
+        commit_lineage: [1001, 1002, 1003]
+
+  # ----------------------------------------------------------
+  # 3. Semantic‑Importance envelope (bounded residues)
+  # ----------------------------------------------------------
+  semantic:
+    importance:
+      entities:
+        - value: "router"
+          role: "primary_object"
+          score: 0.88
+          provenance: { origin: "SOB" }
+
+      facts:
+        - value: "wifi disconnecting"
+          role: "primary_issue"
+          score: 0.91
+          provenance: { origin: "SmOB" }
+
+  # ----------------------------------------------------------
+  # 4. Next‑Context metadata (from prior MCB)
+  # ----------------------------------------------------------
+  metadata:
+    next_context:
+      next_context: "troubleshooting"
+      direction
