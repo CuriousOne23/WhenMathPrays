@@ -125,16 +125,16 @@ class CExPck:
     # ----------------------------------------------------------
     def _build_cil_metadata(self, ccr):
         print("[CEx-Pck] Building CIL metadata...")
-
+    
         cil_meta = {
             "selected_conversation": ccr.get("selected_conversation"),
             "cil_reference": "cil_input.yaml",
-            "projection_provenance": {
+            "provenance": {                     # <-- MUST be "provenance"
                 "origin": "CEx-CCR",
                 "packaged_by": "CEx-Pck"
             }
         }
-
+    
         return cil_meta
 
     # ----------------------------------------------------------
