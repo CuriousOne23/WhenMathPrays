@@ -118,6 +118,24 @@ def inspect(self):
 
 CEx‑Pck receives **four** bounded inputs from TP.
 
+CEx‑Pck SHALL read the **static 10‑conversation CIL substrate** from:
+
+```
+thought_simulator/requirements_20/system_playground/testbenches/path_a/semantic/cil_input.yaml
+```
+
+This file contains the canonical lineage substrate used by both **CEx‑CCR** and **CEx‑Pck**.  
+CEx‑Pck does **not** consume the full CIL substrate directly; instead, it uses:
+
+- `selected_conversation` (from CEx‑CCR)  
+- `cil_reference` (from CEx‑CCR)  
+- `semantic_residue` for the selected conversation  
+- `next_context` for the selected conversation  
+
+All other CIL fields (identity_lineage, clarifying_lineage, context_lineage, continuity_lineage, topology, metrics) are consumed by **CEx‑CCR**, **COB**, **CIL**, and **CST**, but **not** by CEx‑Pck.
+
+CEx‑Pck SHALL treat `cil_input.yaml` as a **read‑only static substrate** and SHALL NOT modify its contents.
+
 ---
 
 ## **3.1 CEx‑IE envelope (`TP.cex.ie`)**
