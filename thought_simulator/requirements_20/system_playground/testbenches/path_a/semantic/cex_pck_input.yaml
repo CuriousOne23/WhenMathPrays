@@ -19,10 +19,13 @@
 # ============================================================
 
 input:
-
-  # ----------------------------------------------------------
+  # ============================================================
+  # CEx‑Pck Input (General Mode)
+  # ============================================================
+  
+  # ------------------------------------------------------------
   # 1. CEx‑IE envelope (bounded structural hints)
-  # ----------------------------------------------------------
+  # ------------------------------------------------------------
   cex:
     ie:
       topic_hint: "network_issue"
@@ -38,10 +41,10 @@ input:
         - "router"
         - "wifi"
         - "disconnecting"
-
-  # ----------------------------------------------------------
-  # 2. CEx‑CCR envelope (alignment + scores + decision)
-  # ----------------------------------------------------------
+  
+    # ----------------------------------------------------------
+    # 2. CEx‑CCR envelope (alignment + scores + decision)
+    # ----------------------------------------------------------
     ccr:
       alignment:
         identity: "moderate"
@@ -50,24 +53,24 @@ input:
         continuity: "moderate"
         reference: "strong"
         semantic_residue: "moderate"
-
+  
       scores:
         ambiguity: 0.12
         collapse: 0.03
         drift: 0.08
         stability: 0.91
-
+  
       decision: "specific"
       selected_conversation: 4
-
+  
       provenance:
         origin: "CEx-CCR"
         last_update: "CEx-CCR"
         commit_lineage: [1001, 1002, 1003]
-
-  # ----------------------------------------------------------
+  
+  # ------------------------------------------------------------
   # 3. Semantic‑Importance envelope (bounded residues)
-  # ----------------------------------------------------------
+  # ------------------------------------------------------------
   semantic:
     importance:
       entities:
@@ -75,16 +78,16 @@ input:
           role: "primary_object"
           score: 0.88
           provenance: { origin: "SOB" }
-
+  
       facts:
         - value: "wifi disconnecting"
           role: "primary_issue"
           score: 0.91
           provenance: { origin: "SmOB" }
-
-  # ----------------------------------------------------------
+  
+  # ------------------------------------------------------------
   # 4. Next‑Context metadata (from prior MCB)
-  # ----------------------------------------------------------
+  # ------------------------------------------------------------
   metadata:
     next_context:
       next_context: "troubleshooting"
@@ -96,4 +99,3 @@ input:
         origin: "MCB"
         last_update: "MCB"
         commit_lineage: [1003]
-
