@@ -121,7 +121,7 @@
     "cil": {
       "selected_conversation": 4,
       "cil_reference": "cil_input.yaml",
-      "provenance": {
+      "projection_provenance": {
         "origin": "CEx-CCR",
         "packaged_by": "CEx-Pck"
       }
