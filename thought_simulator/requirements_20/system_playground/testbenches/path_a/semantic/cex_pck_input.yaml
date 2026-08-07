@@ -88,4 +88,12 @@ input:
   metadata:
     next_context:
       next_context: "troubleshooting"
-      direction
+      direction: "forward"
+      coherence: "medium"
+      stance: "neutral"
+      subculture: "general_user"
+      next_context_provenance:
+        origin: "MCB"
+        last_update: "MCB"
+        commit_lineage: [1003]
+
