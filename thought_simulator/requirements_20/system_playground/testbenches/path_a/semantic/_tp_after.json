@@ -1,0 +1,139 @@
+{
+  "input": {
+    "cex": {
+      "ie": {
+        "topic_hint": "network_issue",
+        "intent_hint": "request_help",
+        "continuity_hint": "moderate",
+        "reference_hint": "previous",
+        "register_hint": "informal",
+        "politeness_hint": "neutral",
+        "direction_hint": "forward",
+        "coherence_hint": "medium",
+        "importance_hint": "high",
+        "structural_phrases": [
+          "router",
+          "wifi",
+          "disconnecting"
+        ]
+      },
+      "ccr": {
+        "alignment": {
+          "identity": "moderate",
+          "clarifying": "weak",
+          "context": "strong",
+          "continuity": "moderate",
+          "reference": "strong",
+          "semantic_residue": "moderate"
+        },
+        "scores": {
+          "ambiguity": 0.12,
+          "collapse": 0.03,
+          "drift": 0.08,
+          "stability": 0.91
+        },
+        "decision": "specific",
+        "selected_conversation": 4,
+        "provenance": {
+          "origin": "CEx-CCR",
+          "last_update": "CEx-CCR",
+          "commit_lineage": [
+            1001,
+            1002,
+            1003
+          ]
+        }
+      }
+    },
+    "semantic": {
+      "importance": {
+        "entities": [
+          {
+            "value": "router",
+            "role": "primary_object",
+            "score": 0.88,
+            "provenance": {
+              "origin": "SOB"
+            }
+          }
+        ],
+        "facts": [
+          {
+            "value": "wifi disconnecting",
+            "role": "primary_issue",
+            "score": 0.91,
+            "provenance": {
+              "origin": "SmOB"
+            }
+          }
+        ]
+      }
+    },
+    "metadata": {
+      "next_context": {
+        "next_context": "troubleshooting",
+        "direction": "forward",
+        "coherence": "medium",
+        "stance": "neutral",
+        "subculture": "general_user",
+        "next_context_provenance": {
+          "origin": "MCB",
+          "last_update": "MCB",
+          "commit_lineage": [
+            1003
+          ]
+        }
+      }
+    }
+  },
+  "metadata": {
+    "context": {
+      "context_fields": {
+        "topic": null,
+        "intent": null,
+        "stance": "neutral",
+        "register": "normal",
+        "politeness": "neutral",
+        "tone": "neutral",
+        "continuity": "none",
+        "direction": null,
+        "coherence": null,
+        "importance": "medium",
+        "clarifying_fields": []
+      },
+      "context_provenance": {
+        "origin": "CEx-Pck"
+      }
+    },
+    "msl": {
+      "qualifiers": [],
+      "clarifications": [],
+      "stance": "neutral",
+      "shading": "none",
+      "intent": null,
+      "direction": null,
+      "coherence": null,
+      "subculture": "general_user",
+      "provenance": {
+        "origin": "CEx-Pck"
+      }
+    },
+    "cil": {
+      "selected_conversation": null,
+      "cil_reference": "cil_input.yaml",
+      "projection_provenance": {
+        "origin": "CEx-CCR",
+        "packaged_by": "CEx-Pck"
+      }
+    },
+    "semantic_residue": {
+      "entities": [],
+      "facts": [],
+      "alignment_scores": "none",
+      "provenance": {
+        "origin": "CEx-CCR",
+        "packaged_by": "CEx-Pck"
+      }
+    }
+  }
+}
