@@ -598,7 +598,183 @@ private:
 
 ---
 
-# **13. Change Management**
+# **13. TP Field Schema — Downstream Consumption Map (Normative)**
+
+This section defines the **complete authoritative schema** for all TP fields written by the CEx‑Pck structural program.  
+It specifies:
+
+- field names  
+- datatypes  
+- TP envelope locations  
+- provenance requirements  
+- downstream consumers  
+- purpose of consumption  
+
+All fields SHALL comply with:
+
+- **20.105_tp_requirements.md**  
+- **20.105.010_tp_meta_fields.md**  
+- **20.105.020_tp_meta_provenance.md**  
+- **20.105.030_tp_meta_usage.md**  
+- **20.15_ts_architecture_scaffold.md**  
+
+CEx‑Pck SHALL NOT write fields outside the schema defined below.
+
+---
+
+## **13.1 Context Metadata Fields (`TP.metadata.context_metadata`)**
+
+| TP Location | Field Name | Type | Allowed Values | Written By | Downstream Consumers | Purpose |
+|------------|------------|------|----------------|------------|-----------------------|---------|
+| `TP.metadata.context.context_fields.topic` | `topic` | string | bounded structural category | CEx‑Pck | CE, SOB, SROB, CnOB, SmOB, IdOB, TR, RB | Context envelope; structural + semantic‑adjacent residue; routing |
+| `TP.metadata.context.context_fields.intent` | `intent` | string | bounded structural category | CEx‑Pck | CE, IdOB | Identity‑conditioned meaning; context envelope |
+| `TP.metadata.context.context_fields.stance` | `stance` | string | bounded MSL category | CEx‑Pck | IdOB, TR, RB, CIL, CST | Identity refinement; routing; continuity |
+| `TP.metadata.context.context_fields.register` | `register` | string | bounded structural category | CEx‑Pck | CE, IdOB | Context envelope; identity refinement |
+| `TP.metadata.context.context_fields.politeness` | `politeness` | string | bounded structural category | CEx‑Pck | CE, IdOB | Context envelope; identity refinement |
+| `TP.metadata.context.context_fields.tone` | `tone` | string | bounded structural category | CEx‑Pck | CE, IdOB | Context envelope; identity refinement |
+| `TP.metadata.context.context_fields.continuity` | `continuity` | string | `none|weak|moderate|strong` | CEx‑Pck | CE, TR, RB, COB, CIL, CST | Continuity evaluation; routing; lineage stability |
+| `TP.metadata.context.context_fields.direction` | `direction` | string | bounded MSL category | CEx‑Pck | CE, IdOB, TR, RB | Routing; identity refinement |
+| `TP.metadata.context.context_fields.coherence` | `coherence` | string | bounded MSL category | CEx‑Pck | CE, IdOB, TR, RB | Routing; identity refinement |
+| `TP.metadata.context.context_fields.importance` | `importance` | string | bounded structural category | CEx‑Pck | OB‑Set, IdOB, TR | Structural + semantic‑adjacent residue; routing |
+| `TP.metadata.context.context_fields.clarifying_fields[]` | `clarifying_fields` | array | bounded clarifying metadata | CEx‑Pck | CE, IdOB, TR, COB, CIL, CST | Clarification lineage; identity refinement; continuity |
+
+### **Context Metadata Provenance**
+All fields SHALL record provenance:
+- origin = CEx‑Pck  
+- last update = CEx‑Pck  
+- commit lineage = TPU commit  
+
+---
+
+## **13.2 Meaning Signal Layer Fields (`TP.metadata.msl_metadata`)**
+
+| TP Location | Field Name | Type | Allowed Values | Written By | Downstream Consumers | Purpose |
+|------------|------------|------|----------------|------------|-----------------------|---------|
+| `TP.metadata.msl.qualifiers` | `qualifiers` | array<string> | bounded MSL tokens | CEx‑Pck | IdOB, TR, RB, CIL, CST | Identity refinement; routing; continuity |
+| `TP.metadata.msl.clarifications` | `clarifications` | array<string> | bounded MSL tokens | CEx‑Pck | IdOB, TR, COB, CIL, CST | Clarification lineage; continuity |
+| `TP.metadata.msl.stance` | `stance` | string | bounded MSL category | CEx‑Pck | IdOB, TR, RB | Identity refinement; routing |
+| `TP.metadata.msl.shading` | `shading` | string | bounded MSL category | CEx‑Pck | IdOB | Identity refinement |
+| `TP.metadata.msl.intent` | `intent` | string | bounded MSL category | CEx‑Pck | IdOB, CE | Identity refinement; context envelope |
+| `TP.metadata.msl.direction` | `direction` | string | bounded MSL category | CEx‑Pck | TR, RB, IdOB | Routing; identity refinement |
+| `TP.metadata.msl.coherence` | `coherence` | string | bounded MSL category | CEx‑Pck | TR, RB, IdOB | Routing; identity refinement |
+| `TP.metadata.msl.subculture` | `subculture` | string | bounded MSL category | CEx‑Pck | IdOB, CIL, CST | Identity refinement; continuity |
+
+### **MSL Provenance**
+All fields SHALL record provenance:
+- origin = CEx‑Pck  
+- last update = CEx‑Pck  
+
+---
+
+## **13.3 CIL Metadata Fields (`TP.metadata.cil_metadata`)**
+
+| TP Location | Field Name | Type | Allowed Values | Written By | Downstream Consumers | Purpose |
+|------------|------------|------|----------------|------------|-----------------------|---------|
+| `TP.metadata.cil.selected_conversation` | `selected_conversation` | int or null | CCR decision | CEx‑Pck | COB, CIL, CST | Conversation lineage update; continuity |
+| `TP.metadata.cil.cil_reference` | `cil_reference` | string | static CIL substrate ID | CEx‑Pck | COB, CIL, CST | Deterministic substrate selection |
+| `TP.metadata.cil.projection_provenance` | `projection_provenance` | object | provenance structure | CEx‑Pck | COB, CIL, CST | Projection lineage |
+
+### **CIL Metadata Provenance**
+All fields SHALL record provenance:
+- origin = CEx‑CCR  
+- packaging = CEx‑Pck  
+- immutable after TPU commit  
+
+---
+
+## **13.4 Semantic‑Residue Metadata Fields (`TP.metadata.semantic_residue_metadata`)**
+
+| TP Location | Field Name | Type | Allowed Values | Written By | Downstream Consumers | Purpose |
+|------------|------------|------|----------------|------------|-----------------------|---------|
+| `TP.metadata.semantic_residue.entities[]` | `entities` | array<object> | structured residues | CEx‑Pck | COB, CIL, CST, IdOB | Continuity; identity refinement; stability |
+| `TP.metadata.semantic_residue.facts[]` | `facts` | array<object> | structured residues | CEx‑Pck | COB, CIL, CST, IdOB | Continuity; identity refinement; stability |
+| `TP.metadata.semantic_residue.alignment_scores` | `alignment_scores` | string | `none|weak|moderate|strong` | CEx‑Pck | COB, CIL, CST | Residue alignment; stability |
+| `TP.metadata.semantic_residue.provenance` | `provenance` | object | provenance structure | CEx‑Pck | COB, CIL, CST | Deterministic lineage |
+
+### **Semantic‑Residue Provenance**
+All fields SHALL record provenance:
+- origin = CEx‑CCR  
+- packaging = CEx‑Pck  
+- immutable after TPU commit  
+
+---
+
+## **13.5 CCR Output Fields (Read‑Only for CEx‑Pck)**
+
+CEx‑Pck SHALL NOT modify:
+
+```
+TP.cex.ccr.alignment.*
+TP.cex.ccr.scores.*
+TP.cex.ccr.decision
+TP.cex.ccr.selected_conversation
+TP.cex.ccr.provenance
+```
+
+### **Downstream Consumers**
+- COB  
+- CIL  
+- CST  
+- IdOB  
+- CE  
+- OB‑Set  
+- TR  
+- RB  
+
+### **Purpose**
+- identity continuity  
+- conversation selection  
+- stability evaluation  
+- routing  
+- identity refinement  
+
+---
+
+## **13.6 Semantic‑Importance Fields (Read‑Only for CEx‑Pck)**
+
+CEx‑Pck SHALL NOT modify:
+
+```
+TP.semantic.importance.entities[]
+TP.semantic.importance.facts[]
+```
+
+### **Downstream Consumers**
+- CEx‑CCR  
+- COB  
+- CIL  
+- CST  
+- IdOB  
+- RBU / RB  
+
+### **Purpose**
+- semantic‑residue alignment  
+- continuity  
+- identity refinement  
+- routing  
+
+---
+
+## **13.7 Summary of Downstream Consumption**
+
+| Primitive | Consumes | Purpose |
+|----------|----------|---------|
+| **CE** | context_fields, MSL | Build context envelope |
+| **SOB/SROB/CnOB/SmOB** | context_fields, MSL | Structural + semantic‑adjacent residue |
+| **IdOB** | context_fields, MSL, semantic_residue | Identity‑conditioned meaning |
+| **TR** | context_fields, MSL | Routing vector |
+| **RB** | context_fields, MSL, CCR alignment | Basin selection |
+| **COB** | selected_conversation, semantic_residue | Project residues into CIL |
+| **CIL** | selected_conversation, semantic_residue | Continuity + lineage |
+| **CST** | CCR scores, semantic_residue | Drift/collapse/stability |
+| **TPU** | provenance | Commit lineage |
+| **CTP/RTU** | context_fields | Routing updates |
+| **OuBA** | context_fields | Freeze metadata |
+| **SSRGn** | semantic_residue | SSR projection |
+
+---
+
+# **14. Change Management**
 
 When CEx‑Pck evolves:
 
