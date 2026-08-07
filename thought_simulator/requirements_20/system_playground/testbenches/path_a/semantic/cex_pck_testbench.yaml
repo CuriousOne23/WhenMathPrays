@@ -1,1 +1,197 @@
+# ============================================================
+# CEx‑Pck Testbench (Mode A — Deterministic)
+# ============================================================
+# This file provides:
+#   - full TP input envelope for CEx‑Pck
+#   - full expected TP output envelope
+# PASS/FAIL is determined by exact equality.
+# ============================================================
 
+testbench:
+  name: "cex_pck_testbench"
+  description: "Deterministic testbench for CEx‑Pck packaging layer"
+  version: "1.0"
+
+# ============================================================
+# INPUTS TO CEx‑Pck
+# ============================================================
+
+input:
+
+  # ----------------------------------------------------------
+  # 1. CEx‑IE envelope (bounded structural hints)
+  # ----------------------------------------------------------
+  cex:
+    ie:
+      topic_hint: "network_issue"
+      intent_hint: "request_help"
+      continuity_hint: "moderate"
+      reference_hint: "previous"
+      register_hint: "informal"
+      politeness_hint: "neutral"
+      direction_hint: "forward"
+      coherence_hint: "medium"
+      importance_hint: "high"
+      structural_phrases:
+        - "router"
+        - "wifi"
+        - "disconnecting"
+
+  # ----------------------------------------------------------
+  # 2. CEx‑CCR envelope (alignment + scores + decision)
+  # ----------------------------------------------------------
+    ccr:
+      alignment:
+        identity: "moderate"
+        clarifying: "weak"
+        context: "strong"
+        continuity: "moderate"
+        reference: "strong"
+        semantic_residue: "moderate"
+
+      scores:
+        ambiguity: 0.12
+        collapse: 0.03
+        drift: 0.08
+        stability: 0.91
+
+      decision: "specific"
+      selected_conversation: 4
+
+      provenance:
+        origin: "CEx-CCR"
+        last_update: "CEx-CCR"
+        commit_lineage: [1001, 1002, 1003]
+
+  # ----------------------------------------------------------
+  # 3. Semantic‑Importance envelope (bounded residues)
+  # ----------------------------------------------------------
+  semantic:
+    importance:
+      entities:
+        - value: "router"
+          role: "primary_object"
+          score: 0.88
+          provenance: { origin: "SOB" }
+
+      facts:
+        - value: "wifi disconnecting"
+          role: "primary_issue"
+          score: 0.91
+          provenance: { origin: "SmOB" }
+
+  # ----------------------------------------------------------
+  # 4. Next‑Context metadata (from prior MCB)
+  # ----------------------------------------------------------
+  metadata:
+    next_context:
+      next_context: "troubleshooting"
+      direction: "forward"
+      coherence: "medium"
+      stance: "neutral"
+      subculture: "general_user"
+      next_context_provenance:
+        origin: "MCB"
+        last_update: "MCB"
+        commit_lineage: [1003]
+
+# ============================================================
+# EXPECTED OUTPUT FROM CEx‑Pck
+# ============================================================
+
+expected_output:
+
+  # ----------------------------------------------------------
+  # 1. Context Metadata
+  # ----------------------------------------------------------
+  metadata:
+    context:
+      context_fields:
+        topic: "network_issue"
+        stance: "neutral"
+        intent: "request_help"
+        register: "informal"
+        politeness: "neutral"
+        tone: "neutral"
+        continuity: "moderate"
+        direction: "forward"
+        coherence: "medium"
+        importance: "high"
+        clarifying_fields:
+          - "router"
+          - "wifi"
+          - "disconnecting"
+
+      relevance_flags:
+        continuity_relevant: true
+        context_relevant: true
+
+      copy_forward_flags:
+        next_context_used: true
+
+      reset_flags:
+        reset_context: false
+
+      context_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
+        commit_lineage: [1004]
+
+  # ----------------------------------------------------------
+  # 2. Meaning Signal Layer (MSL)
+  # ----------------------------------------------------------
+    msl:
+      qualifiers:
+        - "router"
+        - "wifi"
+      clarifications:
+        - "disconnecting"
+      stance: "neutral"
+      shading: "none"
+      intent: "request_help"
+      direction: "forward"
+      coherence: "medium"
+      subculture: "general_user"
+
+      msl_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
+        commit_lineage: [1004]
+
+  # ----------------------------------------------------------
+  # 3. CIL Metadata
+  # ----------------------------------------------------------
+    cil:
+      selected_conversation: 4
+      cil_reference: "static_cil_substrate"
+      projection_provenance:
+        origin: "CEx-CCR"
+        packaging: "CEx-Pck"
+        commit_lineage: [1004]
+
+  # ----------------------------------------------------------
+  # 4. Semantic‑Residue Metadata
+  # ----------------------------------------------------------
+    semantic_residue:
+      entities:
+        - value: "router"
+          role: "primary_object"
+          score: 0.88
+          provenance: { origin: "SOB" }
+
+      facts:
+        - value: "wifi disconnecting"
+          role: "primary_issue"
+          score: 0.91
+          provenance: { origin: "SmOB" }
+
+      alignment_scores: "moderate"
+
+      provenance:
+        origin: "CEx-CCR"
+        packaging: "CEx-Pck"
+        commit_lineage: [1004]
+
+# ============================================================
+# END OF FILE
+# ============================================================
