@@ -200,7 +200,7 @@ def main():
     check_determinism(rules["ruleset"], errors)
 
     if errors:
-        print("CEx‑Pck rulecheck FAILED:")
+        print("CEx-Pck rulecheck FAILED:")
         for e in errors:
             print(f"  - {e}")
         sys.exit(1)
