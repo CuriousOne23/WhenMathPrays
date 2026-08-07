@@ -2,18 +2,12 @@
 cex_pck_rulechecker.py
 
 Deterministic rulechecker for the CEx‑Pck primitive.
-Validates TP output against cex_pck_rules.yaml.
+Validates TP output against rules JSON (converted from YAML by testbench).
 """
 
 import sys
 import json
-import yaml
 from typing import Any, Dict, List
-
-
-def load_yaml(path: str) -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
 
 
 def get_nested(d: Dict[str, Any], path: str, default=None):
@@ -159,24 +153,30 @@ def check_semantic_residue(tp: Dict[str, Any], rules: Dict[str, Any], errors: Li
 
 def check_determinism(rules: Dict[str, Any], errors: List[str]):
     dr = rules["determinism_rules"]
-    # These are static expectations; we just assert they are set to True.
-    for key in ("python_cpp_parity", "stable_iteration_order",
-                "no_nondeterministic_sorting", "no_hash_order_dependence",
-                "replay_identical_inputs_produce_identical_outputs"):
+    for key in (
+        "python_cpp_parity",
+        "stable_iteration_order",
+        "no_nondeterministic_sorting",
+        "no_hash_order_dependence",
+        "replay_identical_inputs_produce_identical_outputs"
+    ):
         if not dr.get(key, False):
             errors.append(f"Determinism rule not enforced in ruleset: {key}")
 
 
 def main():
     if len(sys.argv) != 4:
-        print("Usage: python cex_pck_rulechecker.py <rules_yaml> <tp_before.json> <tp_after.json>")
+        print("Usage: python cex_pck_rulechecker.py <rules_json> <tp_before.json> <tp_after.json>")
         sys.exit(1)
 
     rules_path = sys.argv[1]
     tp_before_path = sys.argv[2]
     tp_after_path = sys.argv[3]
 
-    rules = load_yaml(rules_path)
+    # Load JSON rules (converted from YAML by testbench)
+    with open(rules_path, "r", encoding="utf-8") as f:
+        rules = json.load(f)
+
     with open(tp_before_path, "r", encoding="utf-8") as f:
         tp_before = json.load(f)
     with open(tp_after_path, "r", encoding="utf-8") as f:
@@ -211,4 +211,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
