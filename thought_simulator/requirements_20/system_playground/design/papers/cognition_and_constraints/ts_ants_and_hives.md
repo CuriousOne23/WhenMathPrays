@@ -226,7 +226,8 @@ Importance is the **currency of cognition**.
 
 ## **5.1 Visual Mapping (Mermaid Diagram)**
 
-````markdown
+The following diagram provides a visual mapping between biological colony cognition and the modular architecture of the Thought Simulator. On the left, individual ants, pheromone signals, caste roles, trail reinforcement, and nest memory represent the simple, local mechanisms that drive emergent intelligence in real colonies. On the right, each TS primitive mirrors one of these biological functions: OB‑family modules act like specialized workers, COB behaves like long‑horizon nest memory, CIL normalizes signals like pheromone regulation, and CEx performs recruitment and alignment. The arrows illustrate how biological cues correspond directly to TS processing stages, showing that emergent meaning in TS arises from the same distributed, importance‑weighted interactions that govern ant and hive cognition. 
+
 ```mermaid
 flowchart TD
 
@@ -289,7 +290,6 @@ A7 --> CEx
 %% TS internal flow
 SOB --> SROB --> CnOB --> SmOB --> IdOB --> COB --> CIL --> CEx --> CE --> TSCore --> SSG --> TSCore
 ```
-````
 
 ---
 
