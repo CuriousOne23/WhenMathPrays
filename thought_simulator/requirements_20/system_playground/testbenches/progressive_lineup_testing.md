@@ -117,6 +117,153 @@ Rules define:
 
 ---
 
+# ⭐ **New Section 3.3 — Primitive Input, Rules, Rulechecking, and Test Selection Files**
+
+The Progressive Lineup Testing Framework uses four auxiliary files to support deterministic testbench mode and rule‑driven general mode. These files define inputs, rule constraints, rulechecking behavior, and test selection.
+
+This section explains how each file is used and how they interact with `run.py` in both testing modes.
+
+---
+
+## **3.3.1 `primitive_input.yaml` — Input Source for General Mode**
+
+Used **only in Mode B (“general”)**.
+
+This file provides **user‑defined input envelopes** for the primitive under test.  
+It allows the user to construct arbitrary scenarios without requiring full expected outputs.
+
+### **Purpose**
+- Supply the primitive’s input envelope in general mode.  
+- Allow flexible scenario construction.  
+- Enable upstream variation testing.
+
+### **Flow**
+1. `run.py` is set to **general mode**.  
+2. The testbench loads `<primitive>_input.yaml`.  
+3. The primitive executes normally.  
+4. Output is validated by rulechecking (not by expected outputs).
+
+This aligns with the general‑mode behavior described in Section 3.2.
+
+---
+
+## **3.3.2 `primitive_rules.yaml` — Rule Definitions for General Mode**
+
+Used **only in Mode B (“general”)**.
+
+This file defines the **rule set** the primitive must obey.  
+Rules describe what the primitive is allowed to output, how envelopes must behave, and what constraints must hold.
+
+### **Contents**
+- Allowed fields  
+- Forbidden fields  
+- Bounded‑semantic constraints  
+- Provenance requirements  
+- Envelope boundaries  
+- Continuity expectations  
+- Replay determinism constraints  
+- Skip/fallback conditions  
+
+These rule types correspond to the rule system described in Section 3.2.
+
+### **Flow**
+1. Primitive executes using input from `primitive_input.yaml`.  
+2. `primitive_rules.yaml` is loaded by the rulechecker.  
+3. Each rule is applied to the primitive’s output.  
+4. PASS/FAIL is determined by rule compliance.
+
+---
+
+## **3.3.3 `primitive_rulescheck.py` — Rulechecker Execution Logic**
+
+This Python file performs the **actual rulechecking** in general mode.
+
+It is invoked by `primitive_testbench.py` when `run.py` is in general mode.
+
+### **Responsibilities**
+- Load `primitive_rules.yaml`.  
+- Validate the primitive’s output against all rules.  
+- Produce diagnostic information.  
+- Enforce deterministic replay behavior.  
+- Ensure envelope discipline and provenance correctness.
+
+### **Flow**
+1. Primitive runs.  
+2. Output is passed to `primitive_rulescheck.py`.  
+3. Rulechecker loads `primitive_rules.yaml`.  
+4. Rulechecker evaluates all constraints.  
+5. PASS/FAIL is returned to the testbench.
+
+This complements the rule‑driven validation described in Section 3.2.
+
+### **Note**
+In testbench mode, rulechecking may run **only for diagnostics**, but PASS/FAIL is determined solely by expected outputs (Section 3.1).
+
+---
+
+## **3.3.4 `primitive_tests_to_run.yaml` — Test Selection for Testbench Mode**
+
+Used **only in Mode A (“testbench”)**.
+
+This file determines **which testbench tests should run** for the primitive.
+
+### **Purpose**
+- Allow selective execution of testbench tests.  
+- Enable fast regression cycles.  
+- Allow skipping expensive or irrelevant tests.
+
+### **Contents**
+Each test has a boolean flag:
+
+- `true` → testbench will run the test  
+- `false` → testbench will skip the test
+
+### **Flow**
+1. `run.py` is set to **testbench mode**.  
+2. `primitive_testbench.py` loads `primitive_tests_to_run.yaml`.  
+3. Only tests marked `true` are executed.  
+4. Each test loads `<primitive>_testbench.yaml` (expected inputs + expected outputs).  
+5. Primitive runs.  
+6. Actual output is compared to expected output for PASS/FAIL.
+
+This aligns with the deterministic testbench behavior described in Section 3.1.
+
+---
+
+# ⭐ **3.3.5 Unified Flow Summary**
+
+### **Mode A — Testbench (Deterministic)**  
+Files used:
+- `<primitive>_testbench.yaml`  
+- `primitive_tests_to_run.yaml`  
+
+Flow:
+1. Load test selection.  
+2. For each enabled test:  
+   - Load full input + expected output.  
+   - Execute primitive.  
+   - Compare actual vs expected.  
+   - PASS/FAIL by equality.
+
+Rulechecker optional for diagnostics only.
+
+---
+
+### **Mode B — General (Rule‑Driven)**  
+Files used:
+- `<primitive>_input.yaml`  
+- `primitive_rules.yaml`  
+- `primitive_rulescheck.py`  
+
+Flow:
+1. Load general input.  
+2. Execute primitive.  
+3. Load rules.  
+4. Rulechecker validates output.  
+5. PASS/FAIL by rule compliance.
+
+---
+
 # **4. Progressive Upstream Selection**
 
 In **general mode**, the user may choose any upstream primitive as the starting point.
