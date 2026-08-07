@@ -18,82 +18,79 @@
 #   - semantic‑residue metadata
 # ============================================================
 
-input:
-
-  # ----------------------------------------------------------
-  # 1. CEx‑IE envelope (bounded structural hints)
-  # ----------------------------------------------------------
-  cex:
-    ie:
-      topic_hint: "network_issue"
-      intent_hint: "request_help"
-      continuity_hint: "moderate"
-      reference_hint: "previous"
-      register_hint: "informal"
-      politeness_hint: "neutral"
-      direction_hint: "forward"
-      coherence_hint: "medium"
-      importance_hint: "high"
-      structural_phrases:
-        - "router"
-        - "wifi"
-        - "disconnecting"
+# ------------------------------------------------------------
+# 1. CEx‑IE envelope (bounded structural hints)
+# ------------------------------------------------------------
+cex:
+  ie:
+    topic_hint: "network_issue"
+    intent_hint: "request_help"
+    continuity_hint: "moderate"
+    reference_hint: "previous"
+    register_hint: "informal"
+    politeness_hint: "neutral"
+    direction_hint: "forward"
+    coherence_hint: "medium"
+    importance_hint: "high"
+    structural_phrases:
+      - "router"
+      - "wifi"
+      - "disconnecting"
 
   # ----------------------------------------------------------
   # 2. CEx‑CCR envelope (alignment + scores + decision)
   # ----------------------------------------------------------
-    ccr:
-      alignment:
-        identity: "moderate"
-        clarifying: "weak"
-        context: "strong"
-        continuity: "moderate"
-        reference: "strong"
-        semantic_residue: "moderate"
+  ccr:
+    alignment:
+      identity: "moderate"
+      clarifying: "weak"
+      context: "strong"
+      continuity: "moderate"
+      reference: "strong"
+      semantic_residue: "moderate"
 
-      scores:
-        ambiguity: 0.12
-        collapse: 0.03
-        drift: 0.08
-        stability: 0.91
+    scores:
+      ambiguity: 0.12
+      collapse: 0.03
+      drift: 0.08
+      stability: 0.91
 
-      decision: "specific"
-      selected_conversation: 4
+    decision: "specific"
+    selected_conversation: 4
 
-      provenance:
-        origin: "CEx-CCR"
-        last_update: "CEx-CCR"
-        commit_lineage: [1001, 1002, 1003]
+    provenance:
+      origin: "CEx-CCR"
+      last_update: "CEx-CCR"
+      commit_lineage: [1001, 1002, 1003]
 
-  # ----------------------------------------------------------
-  # 3. Semantic‑Importance envelope (bounded residues)
-  # ----------------------------------------------------------
-  semantic:
-    importance:
-      entities:
-        - value: "router"
-          role: "primary_object"
-          score: 0.88
-          provenance: { origin: "SOB" }
+# ------------------------------------------------------------
+# 3. Semantic‑Importance envelope (bounded residues)
+# ------------------------------------------------------------
+semantic:
+  importance:
+    entities:
+      - value: "router"
+        role: "primary_object"
+        score: 0.88
+        provenance: { origin: "SOB" }
 
-      facts:
-        - value: "wifi disconnecting"
-          role: "primary_issue"
-          score: 0.91
-          provenance: { origin: "SmOB" }
+    facts:
+      - value: "wifi disconnecting"
+        role: "primary_issue"
+        score: 0.91
+        provenance: { origin: "SmOB" }
 
-  # ----------------------------------------------------------
-  # 4. Next‑Context metadata (from prior MCB)
-  # ----------------------------------------------------------
-  metadata:
-    next_context:
-      next_context: "troubleshooting"
-      direction: "forward"
-      coherence: "medium"
-      stance: "neutral"
-      subculture: "general_user"
-      next_context_provenance:
-        origin: "MCB"
-        last_update: "MCB"
-        commit_lineage: [1003]
-
+# ------------------------------------------------------------
+# 4. Next‑Context metadata (from prior MCB)
+# ------------------------------------------------------------
+metadata:
+  next_context:
+    next_context: "troubleshooting"
+    direction: "forward"
+    coherence: "medium"
+    stance: "neutral"
+    subculture: "general_user"
+    next_context_provenance:
+      origin: "MCB"
+      last_update: "MCB"
+      commit_lineage: [1003]
