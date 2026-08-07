@@ -49,7 +49,7 @@ def check_array(tp: Dict[str, Any], base_path: str, field: str,
 
 
 def check_provenance(tp: Dict[str, Any], base_path: str, errors: List[str]):
-    full = f"{base_path}.provenance"
+    full = f"{base_path}.projection_provenance"
     val = get_nested(tp, full)
     if val is None:
         errors.append(f"Missing provenance object at {full}")
@@ -77,8 +77,8 @@ def check_context(tp: Dict[str, Any], rules: Dict[str, Any], errors: List[str]):
     cf = cr["clarifying_fields"]
     check_array(tp, base, "clarifying_fields", cf["allow_empty"], errors)
 
-    if cr.get("provenance_required", False):
-        check_provenance(tp, "metadata.context", errors)
+    if cr.get("_required", False):
+        check_(tp, "metadata.context", errors)
 
 
 def check_msl(tp: Dict[str, Any], rules: Dict[str, Any], errors: List[str]):
@@ -97,7 +97,7 @@ def check_msl(tp: Dict[str, Any], rules: Dict[str, Any], errors: List[str]):
     cl = mr["clarifications"]
     check_array(tp, base, "clarifications", cl["allow_empty"], errors)
 
-    if mr.get("provenance_required", False):
+    if mr.get("_required", False):
         check_provenance(tp, "metadata.msl", errors)
 
 
