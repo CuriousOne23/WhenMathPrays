@@ -1,7 +1,7 @@
 """
 cex_pck_rulechecker.py
 
-Deterministic rulechecker for the CEx‑Pck primitive.
+Deterministic rulechecker for the CEx-Pck primitive.
 Validates TP output against rules JSON (converted from YAML by testbench).
 """
 
@@ -61,7 +61,7 @@ def check_read_only(tp_before: Dict[str, Any], tp_after: Dict[str, Any],
         before = get_nested(tp_before, path)
         after = get_nested(tp_after, path)
         if before != after:
-            errors.append(f"Read‑only field modified: {path} (before={before!r}, after={after!r})")
+            errors.append(f"Read-only field modified: {path} (before={before!r}, after={after!r})")
 
 
 def check_context(tp: Dict[str, Any], rules: Dict[str, Any], errors: List[str]):
@@ -184,13 +184,13 @@ def main():
 
     errors: List[str] = []
 
-    # Context, MSL, CIL, semantic‑residue checks
+    # Context, MSL, CIL, semantic-residue checks
     check_context(tp_after, rules["ruleset"], errors)
     check_msl(tp_after, rules["ruleset"], errors)
     check_cil(tp_after, rules["ruleset"], errors)
     check_semantic_residue(tp_after, rules["ruleset"], errors)
 
-    # Read‑only CCR and importance
+    # Read-only CCR and importance
     ccr_paths = rules["ruleset"]["ccr_rules"]["read_only_fields"]
     importance_paths = rules["ruleset"]["importance_rules"]["read_only_fields"]
     check_read_only(tp_before, tp_after, ccr_paths, errors)
@@ -205,7 +205,7 @@ def main():
             print(f"  - {e}")
         sys.exit(1)
     else:
-        print("CEx‑Pck rulecheck PASSED.")
+        print("CEx-Pck rulecheck PASSED.")
         sys.exit(0)
 
 
