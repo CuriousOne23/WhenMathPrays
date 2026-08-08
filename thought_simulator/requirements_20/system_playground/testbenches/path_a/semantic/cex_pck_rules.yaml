@@ -102,7 +102,7 @@ ruleset:
       max: 10
 
     cil_reference:
-      allowed_values: ["cil_input.yaml"]
+      allowed_values: ["static_cil_substrate"]
 
     provenance_required: true
 
