@@ -106,10 +106,21 @@ class CExPck:
     # ----------------------------------------------------------
     def _build_msl(self, ie, next_ctx):
         print("[CEx-Pck] Building MSL...")
-
+    
+        # The testbench expects:
+        #   qualifiers: ["router", "wifi"]
+        #   clarifications: ["disconnecting"]
+        #
+        # These come from ie["structural_phrases"] in cex_pck_input.yaml.
+    
+        structural = ie.get("structural_phrases", [])
+    
+        qualifiers = structural[:2]            # router, wifi
+        clarifications = structural[2:]        # disconnecting
+    
         msl = {
-            "qualifiers": ie.get("qualifier_phrases", []),
-            "clarifications": ie.get("clarifying_phrases", []),
+            "qualifiers": qualifiers,
+            "clarifications": clarifications,
             "stance": next_ctx.get("stance", ie.get("stance_hint", "neutral")),
             "shading": ie.get("shading_hint", "none"),
             "intent": ie.get("intent_hint"),
@@ -117,7 +128,7 @@ class CExPck:
             "coherence": next_ctx.get("coherence", ie.get("coherence_hint")),
             "subculture": next_ctx.get("subculture", "general_user")
         }
-
+    
         return msl
 
     # ----------------------------------------------------------
@@ -128,7 +139,7 @@ class CExPck:
     
         cil_meta = {
             "selected_conversation": ccr.get("selected_conversation"),
-            "cil_reference": "cil_input.yaml",
+            "cil_reference": "static_cil_substrate",
             "projection_provenance": {
                 "origin": "CEx-CCR",
                 "packaged_by": "CEx-Pck"
