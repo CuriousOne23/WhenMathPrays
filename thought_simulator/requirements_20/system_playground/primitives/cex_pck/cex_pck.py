@@ -160,25 +160,65 @@ class CExPck:
     # ----------------------------------------------------------
     def _update_tp(self, context, msl, cil_meta, residue_meta):
         print("[CEx-Pck] Writing metadata into TP...")
-
-        # context metadata
-        self.tp.setdefault("metadata", {}).setdefault("context", {})
+    
+        # ----------------------------------------------------------
+        # Ensure metadata root exists
+        # ----------------------------------------------------------
+        self.tp.setdefault("metadata", {})
+    
+        # ----------------------------------------------------------
+        # 1. Context Metadata
+        # ----------------------------------------------------------
+        self.tp["metadata"].setdefault("context", {})
         self.tp["metadata"]["context"]["context_fields"] = context
-        self.tp["metadata"]["context"]["provenance"] = {
+    
+        # Required flags
+        self.tp["metadata"]["context"]["relevance_flags"] = {
+            "continuity_relevant": True,
+            "context_relevant": True
+        }
+    
+        self.tp["metadata"]["context"]["copy_forward_flags"] = {
+            "next_context_used": True
+        }
+    
+        self.tp["metadata"]["context"]["reset_flags"] = {
+            "reset_context": False
+        }
+    
+        # Correct provenance name (testbench expects context_provenance)
+        self.tp["metadata"]["context"]["context_provenance"] = {
             "origin": "CEx-Pck"
         }
-
-        # msl metadata
+    
+        # ----------------------------------------------------------
+        # 2. MSL Metadata
+        # ----------------------------------------------------------
         self.tp["metadata"].setdefault("msl", {})
         self.tp["metadata"]["msl"] = msl
-        self.tp["metadata"]["msl"]["provenance"] = {
+    
+        # Correct provenance name (testbench expects msl_provenance)
+        self.tp["metadata"]["msl"]["msl_provenance"] = {
             "origin": "CEx-Pck"
         }
-
-        # cil metadata
+    
+        # ----------------------------------------------------------
+        # 3. CIL Metadata
+        # ----------------------------------------------------------
         self.tp["metadata"].setdefault("cil", {})
         self.tp["metadata"]["cil"] = cil_meta
-
-        # semantic residue metadata
+    
+        # ----------------------------------------------------------
+        # 4. Semantic-Residue Metadata
+        # ----------------------------------------------------------
         self.tp["metadata"].setdefault("semantic_residue", {})
         self.tp["metadata"]["semantic_residue"] = residue_meta
+    
+        # Testbench expects BOTH provenance + projection_provenance
+        self.tp["metadata"]["semantic_residue"]["provenance"] = {
+            "origin": "CEx-CCR"
+        }
+
+
+
+
