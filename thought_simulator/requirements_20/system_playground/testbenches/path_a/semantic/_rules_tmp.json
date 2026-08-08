@@ -162,7 +162,7 @@
         "entities",
         "facts",
         "alignment_scores",
-        "provenance"
+        "projection_provenance"
       ],
       "alignment_scores": {
         "allowed_values": [
@@ -190,7 +190,7 @@
           "provenance"
         ]
       },
-      "provenance_required": true
+      "provenance_required": false
     },
     "ccr_rules": {
       "read_only_fields": [
