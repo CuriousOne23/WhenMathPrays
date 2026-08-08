@@ -155,19 +155,25 @@ def run_testbench():
         print("\n--- Expected Output Comparison ---")
         expected_passed = compare_expected(tp_after, expected)
 
-        # Summary
+        # Detailed Summary
         print("\n=== Test Summary ===")
         print(f"Test ID: {test['id']}")
         print(f"Description: {test['description']}")
 
-        print("\nResults:")
-        print(f"  Rulecheck: {'PASSED' if rulecheck_passed else 'FAILED'}")
-        print(f"  Expected Output Comparison: {'PASSED' if expected_passed else 'FAILED'}")
+        print("\nRuleChecker:")
+        print("  Input: cex_pck_input.yaml")
+        print("  Output Check: by cex_pck_rules.yaml and cex_pck_rulechecker.py")
+        print(f"  Result: {'PASSED' if rulecheck_passed else 'FAILED'}")
+
+        print("\nComparison:")
+        print("  Input: cex_pck_input.yaml")
+        print("  Output Check: agrees with cex_pck_testbench.yaml Expected Output")
+        print(f"  Result: {'PASSED' if expected_passed else 'FAILED'}")
 
         if rulecheck_passed and expected_passed:
-            print("\nOverall: SUCCESS - TP is valid and correct.\n")
+            print("\nOverall: SUCCESS — TP is valid and correct.\n")
         else:
-            print("\nOverall: FAILURE - see details above.\n")
+            print("\nOverall: FAILURE — see details above.\n")
             return False
 
     return True
