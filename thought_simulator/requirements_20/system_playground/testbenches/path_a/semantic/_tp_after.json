@@ -101,7 +101,17 @@
           "disconnecting"
         ]
       },
-      "provenance": {
+      "relevance_flags": {
+        "continuity_relevant": true,
+        "context_relevant": true
+      },
+      "copy_forward_flags": {
+        "next_context_used": true
+      },
+      "reset_flags": {
+        "reset_context": false
+      },
+      "context_provenance": {
         "origin": "CEx-Pck"
       }
     },
@@ -114,7 +124,7 @@
       "direction": "forward",
       "coherence": "medium",
       "subculture": "general_user",
-      "provenance": {
+      "msl_provenance": {
         "origin": "CEx-Pck"
       }
     },
@@ -151,6 +161,9 @@
       "projection_provenance": {
         "origin": "CEx-CCR",
         "packaged_by": "CEx-Pck"
+      },
+      "provenance": {
+        "origin": "CEx-CCR"
       }
     }
   }
