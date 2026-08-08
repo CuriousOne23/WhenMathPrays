@@ -116,8 +116,13 @@
       }
     },
     "msl": {
-      "qualifiers": [],
-      "clarifications": [],
+      "qualifiers": [
+        "router",
+        "wifi"
+      ],
+      "clarifications": [
+        "disconnecting"
+      ],
       "stance": "neutral",
       "shading": "none",
       "intent": "request_help",
@@ -130,7 +135,7 @@
     },
     "cil": {
       "selected_conversation": 4,
-      "cil_reference": "cil_input.yaml",
+      "cil_reference": "static_cil_substrate",
       "projection_provenance": {
         "origin": "CEx-CCR",
         "packaged_by": "CEx-Pck"
