@@ -171,9 +171,9 @@ def run_testbench():
         print(f"  Result: {'PASSED' if expected_passed else 'FAILED'}")
 
         if rulecheck_passed and expected_passed:
-            print("\nOverall: SUCCESS — TP is valid and correct.\n")
+            print("\nOverall: SUCCESS - TP is valid and correct.\n")
         else:
-            print("\nOverall: FAILURE — see details above.\n")
+            print("\nOverall: FAILURE - see details above.\n")
             return False
 
     return True
