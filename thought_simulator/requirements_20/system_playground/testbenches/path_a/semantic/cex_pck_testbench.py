@@ -1,14 +1,14 @@
 """
 cex_pck_testbench.py
 
-Deterministic testbench for the CEx‑Pck primitive.
+Deterministic testbench for the CEx-Pck primitive.
 This module loads:
   - cex_pck_input.yaml
   - cex_pck_rules.yaml
   - cex_pck_tests_to_run.yaml
 
 It executes:
-  - CEx‑Pck (via cex_pck.py)
+  - CEx-Pck (via cex_pck.py)
   - Rulechecker (cex_pck_rulechecker.py)
 
 It compares:
@@ -45,7 +45,7 @@ def load_yaml(path: str) -> Dict[str, Any]:
 
 def run_cex_pck(tp_input: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Executes the CEx‑Pck primitive by importing cex_pck.py.
+    Executes the CEx-Pck primitive by importing cex_pck.py.
     Returns the updated TP dictionary.
     """
     import importlib.util
@@ -144,22 +144,31 @@ def run_testbench():
         tp_input = load_yaml(INPUT_PATH)
         tp_before = json.loads(json.dumps(tp_input))  # deep copy
 
-        # Run CEx‑Pck
+        # Run CEx-Pck
         tp_after = run_cex_pck(tp_input)
 
         # Rulecheck
         print("\n--- Rulecheck ---")
-        if not run_rulechecker(tp_before, tp_after):
-            print("Rulecheck FAILED.")
-            return False
+        rulecheck_passed = run_rulechecker(tp_before, tp_after)
 
         # Expected comparison
         print("\n--- Expected Output Comparison ---")
-        if not compare_expected(tp_after, expected):
-            print("Expected comparison FAILED.")
-            return False
+        expected_passed = compare_expected(tp_after, expected)
 
-        print(f"Test {test['id']} PASSED.\n")
+        # Summary
+        print("\n=== Test Summary ===")
+        print(f"Test ID: {test['id']}")
+        print(f"Description: {test['description']}")
+
+        print("\nResults:")
+        print(f"  Rulecheck: {'PASSED' if rulecheck_passed else 'FAILED'}")
+        print(f"  Expected Output Comparison: {'PASSED' if expected_passed else 'FAILED'}")
+
+        if rulecheck_passed and expected_passed:
+            print("\nOverall: SUCCESS — TP is valid and correct.\n")
+        else:
+            print("\nOverall: FAILURE — see details above.\n")
+            return False
 
     return True
 
@@ -167,6 +176,6 @@ def run_testbench():
 if __name__ == "__main__":
     success = run_testbench()
     if success:
-        print("All active CEx‑Pck tests PASSED.")
+        print("All active CEx-Pck tests PASSED.")
     else:
-        print("One or more CEx‑Pck tests FAILED.")
+        print("One or more CEx-Pck tests FAILED.")
