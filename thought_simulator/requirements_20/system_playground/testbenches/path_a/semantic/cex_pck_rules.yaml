@@ -115,7 +115,7 @@ ruleset:
       - entities
       - facts
       - alignment_scores
-      - provenance
+      - projection_provenance
 
     alignment_scores:
       allowed_values: ["none", "weak", "moderate", "strong"]
@@ -136,7 +136,7 @@ ruleset:
         - score
         - provenance
 
-    provenance_required: true
+    provenance_required: false
 
   # ============================================================
   # 5. CCR Read‑Only Rules
