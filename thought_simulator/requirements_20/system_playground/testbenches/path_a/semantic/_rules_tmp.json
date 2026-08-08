@@ -152,7 +152,7 @@
       },
       "cil_reference": {
         "allowed_values": [
-          "cil_input.yaml"
+          "static_cil_substrate"
         ]
       },
       "provenance_required": true
