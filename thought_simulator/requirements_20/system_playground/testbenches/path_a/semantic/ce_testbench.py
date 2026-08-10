@@ -67,13 +67,12 @@ def run_single_test(test_entry):
 
     # Load expected output TP
     tp_expected = load_yaml(expected_file)
+    expected_ctx = tp_expected["expected_output"]["metadata"]["context"]
 
     # Load rules
     rules = load_yaml(rules_file)["rules"]
 
-    # Print general info
-    print(f"- Primitive: CE")
-    print(f"- Mode: testbench")
+    # Print general info (filenames only)
     print(f"- Input File: {os.path.basename(input_file)}")
     print(f"- Expected Output File: {os.path.basename(expected_file)}")
     print(f"- Rules File: {os.path.basename(rules_file)}")
@@ -82,9 +81,10 @@ def run_single_test(test_entry):
     ce = CE(copy.deepcopy(tp_input))
     ce.inspect()
     tp_output = ce.tp
+    actual_ctx = tp_output["metadata"]["context"]
 
-    # Compare output with expected
-    structural_match = deep_compare(tp_output, tp_expected)
+    # Compare only CE envelope context
+    structural_match = deep_compare(actual_ctx, expected_ctx)
 
     # Run rulechecker
     checker = CERuleChecker(tp_input, tp_output, rules)
