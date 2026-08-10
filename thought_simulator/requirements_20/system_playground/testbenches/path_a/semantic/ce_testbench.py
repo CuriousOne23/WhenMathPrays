@@ -9,8 +9,8 @@ import yaml
 import json
 import copy
 
-from ce_rulechecker import CERuleChecker
-from ce import CE  # Your CE primitive implementation
+from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_rulechecker import CERuleChecker
+from thought_simulator.requirements_20.system_playground.primitives.ce.ce import CE
 
 
 # ------------------------------------------------------------
