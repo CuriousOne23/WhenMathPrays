@@ -1,118 +1,12 @@
 # ============================================================
 #  CE Tests To Run (Version 1.0)
-#  Execution dispatcher for CE testbench suite
-#  9 total tests defined, 3 enabled
+#  Single canonical CE testbench execution
 # ============================================================
 
 primitive: CE
 version: "1.0"
 
 tests:
-
-  # ----------------------------------------------------------
-  # Enabled Tests (3)
-  # ----------------------------------------------------------
-
   - id: ce_test_001
     description: "Canonical CE envelope construction and normalization"
     enabled: true
-    input: "ce_test_001_input.yaml"
-    expected_output: "ce_test_001_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_002
-    description: "Continuity reset: CCR decision=new + continuity=none"
-    enabled: true
-    input: "ce_test_002_input.yaml"
-    expected_output: "ce_test_002_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_003
-    description: "Continuity copy-forward: continuity=strong + next_context propagation"
-    enabled: true
-    input: "ce_test_003_input.yaml"
-    expected_output: "ce_test_003_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  # ----------------------------------------------------------
-  # Disabled Tests (6)
-  # ----------------------------------------------------------
-
-  - id: ce_test_004
-    description: "Fallback continuity behavior"
-    enabled: false
-    input: "ce_test_004_input.yaml"
-    expected_output: "ce_test_004_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_005
-    description: "MSL reconciliation edge case"
-    enabled: false
-    input: "ce_test_005_input.yaml"
-    expected_output: "ce_test_005_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_006
-    description: "Clarifying_fields edge case"
-    enabled: false
-    input: "ce_test_006_input.yaml"
-    expected_output: "ce_test_006_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_007
-    description: "Provenance extension correctness"
-    enabled: false
-    input: "ce_test_007_input.yaml"
-    expected_output: "ce_test_007_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_008
-    description: "Replay determinism across multiple runs"
-    enabled: false
-    input: "ce_test_008_input.yaml"
-    expected_output: "ce_test_008_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-  - id: ce_test_009
-    description: "Progressive lineup compatibility"
-    enabled: false
-    input: "ce_test_009_input.yaml"
-    expected_output: "ce_test_009_expected.yaml"
-    rules: "ce_rules.yaml"
-    rulechecker: "ce_rulechecker.py"
-
-# ------------------------------------------------------------
-# Progressive Lineup Configuration
-# ------------------------------------------------------------
-progressive_lineup:
-  enabled: true
-  upstream:
-    - CEx-IE
-    - CEx-CCR
-    - CEx-Pck
-  passthrough_allowed: false
-
-# ------------------------------------------------------------
-# Deterministic Replay Configuration
-# ------------------------------------------------------------
-replay:
-  enabled: true
-  iterations: 3
-  compare_mode: "deep"
-
-# ------------------------------------------------------------
-# Notes
-# ------------------------------------------------------------
-notes:
-  - Only ce_test_001, ce_test_002, and ce_test_003 are enabled.
-  - All other tests are defined but disabled.
-  - This file is aligned with CE structural program v1.0 and 20.108.
-  - CE_rulechecker.py implements all rule logic.
