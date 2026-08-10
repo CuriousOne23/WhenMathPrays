@@ -1,1 +1,138 @@
+# ============================================================
+#  CE Input (Version 1.0)
+#  Raw TP state before CE runs
+#  Aligned with:
+#    - CE structural program (v1.0)
+#    - 20.108 (CE Envelope)
+#    - 20.107.030 (CEx-Pck)
+#    - 20.105.*, 20.15
+# ============================================================
+
+mode: input
+primitive: CE
+version: "1.0"
+
+tp_identity:
+  tp_id: "tp_ce_input_001"
+  tp_seq: 42
+  cycle_id: 7
+  lane_id: "A"
+  schema_version: "1.0"
+  profile_signature: "default"
+  wire_map_version: "1.0"
+  policy_signature: "default"
+
+# ------------------------------------------------------------
+# 1. Context Metadata (Produced by CEx-Pck)
+# ------------------------------------------------------------
+metadata:
+  context:
+    context_fields:
+      topic: "travel"
+      stance: "neutral"
+      intent: "inform"
+      register: "casual"
+      politeness: "medium"
+      tone: "balanced"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+      clarifying_fields:
+        - "destination"
+        - "duration"
+
+    relevance_flags:
+      topic_relevant: true
+      stance_relevant: true
+      continuity_relevant: true
+
+    copy_forward_flags:
+      topic: true
+      direction: true
+      coherence: true
+
+    reset_flags:
+      topic: false
+      stance: false
+      intent: false
+
+    context_provenance:
+      origin: "CEx-Pck"
+      last_update: "CEx-Pck"
+      commit_lineage: ["c001", "c002"]
+
+  # ----------------------------------------------------------
+  # 2. Meaning Signal Layer (Produced by CEx-Pck)
+  # ----------------------------------------------------------
+  msl:
+    qualifiers: ["approximate", "general"]
+    clarifications: ["non-urgent"]
+    stance: "neutral"
+    shading: "none"
+    intent: "inform"
+    direction: "forward"
+    coherence: "medium"
+    subculture: "general"
+    msl_provenance:
+      origin: "CEx-Pck"
+      last_update: "CEx-Pck"
+
+  # ----------------------------------------------------------
+  # 3. Next-Context Metadata (From prior MCB turn)
+  # ----------------------------------------------------------
+  next_context:
+    next_context: "travel"
+    direction: "forward"
+    coherence: "medium"
+    stance: "neutral"
+    subculture: "general"
+    next_context_provenance:
+      origin: "MCB"
+      last_update: "MCB"
+
+# ------------------------------------------------------------
+# 4. CCR Output (Read-only for CE)
+# ------------------------------------------------------------
+cex:
+  ccr:
+    alignment:
+      identity: "aligned"
+      clarifying: "aligned"
+      context: "aligned"
+      continuity: "moderate"
+      reference: "aligned"
+      semantic_residue: "weak"
+
+    scores:
+      ambiguity: 0.1
+      collapse: 0.0
+      drift: 0.05
+      stability: 0.9
+
+    decision: "specific"
+    selected_conversation: 3
+
+    provenance:
+      origin: "CEx-CCR"
+      last_update: "CEx-CCR"
+
+# ------------------------------------------------------------
+# 5. Semantic-Importance (Read-only for CE)
+# ------------------------------------------------------------
+semantic:
+  importance:
+    entities:
+      - { value: "destination", role: "primary", score: 0.8 }
+    facts:
+      - { value: "duration", role: "secondary", score: 0.4 }
+
+# ------------------------------------------------------------
+# 6. Notes
+# ------------------------------------------------------------
+notes:
+  - CE_input.yaml contains only the raw TP state before CE runs.
+  - CE_testbench.yaml defines expected output after CE runs.
+  - CE_rules.yaml defines rule logic.
+  - CE_rulechecker.py implements rule logic.
 
