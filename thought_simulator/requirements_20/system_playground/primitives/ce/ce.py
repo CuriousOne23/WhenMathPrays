@@ -65,9 +65,9 @@ class CE:
         self._update_tp(normalized, audit)
 
         # Debug print
-        print("\n===== CE DEBUG OUTPUT =====")
-        print(json.dumps(self.tp["metadata"]["context"], indent=2))
-        print("===== END CE DEBUG OUTPUT =====\n")
+        # print("\n===== CE DEBUG OUTPUT =====")
+        # print(json.dumps(self.tp["metadata"]["context"], indent=2))
+        # print("===== END CE DEBUG OUTPUT =====\n")
 
         return self.tp
 
