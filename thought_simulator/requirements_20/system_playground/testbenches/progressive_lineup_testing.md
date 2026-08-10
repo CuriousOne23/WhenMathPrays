@@ -46,214 +46,130 @@ The lineup is **progressive** because:
 
 ---
 
-# **3. Two Testing Modes**
+## **3. Testing Modes (Authoritative Operational Definition)**  
+Testing behavior is controlled exclusively by the `mode` field injected by `run.py` into each primitive’s testbench module:
 
-Testing is controlled by `mode` in `run.py`.
+```
+mode: "testbench"   # deterministic mode
+mode: "general"     # rule-driven mode
+```
 
-There are **two modes**, and **every primitive** supports both.
+Every Path‑A primitive **must** implement both modes exactly as defined below.
 
 ---
 
-## **3.1 Mode A — “testbench” (Strict Deterministic Testing)**
+## **3.1 Mode A — “testbench” (Strict Deterministic Testing)**  
+**Input Source:**  
+```
+<primitive>_testbench.yaml
+```
 
-### **Input File:**  
-`<primitive>_testbench.yaml`
+**Operational Rule (must be followed by all testbenches):**  
+- When `mode == "testbench"`, the testbench **must load the full testbench YAML**, which contains:
+  - `input:` — the complete TP input envelope  
+  - `expected:` — the complete expected TP output envelope  
+- The primitive is executed once using the `input:` envelope.
+- The primitive’s output is compared **field‑by‑field** against `expected:`.  
+- PASS/FAIL is determined **solely** by exact equality with the expected output.
 
-### **Behavior:**  
-- The testbench loads **full inputs** for the primitive.  
-- The testbench loads **full expected outputs**.  
-- The primitive is executed.  
-- Actual output is compared to expected output.  
-- PASS/FAIL is determined by exact equality.
-- In testbench mode, the rulechecker may optionally run for diagnostic purposes; however, PASS/FAIL is determined solely by the testbench YAML.
+**Rulechecker Behavior:**  
+- The rulechecker **may run**, but only for diagnostics.  
+- Rulechecker results **do not affect PASS/FAIL** in testbench mode.
 
-### **Passthrough Behavior:**  
+**Passthrough Behavior:**  
 If `use_<primitive> = false` in `run.py`:
-
 - The primitive is **not executed**.  
-- Its input is **passed through unchanged**.  
-- This is used for pipeline debugging and isolating upstream behavior.
+- Its input envelope is **passed through unchanged**.  
+- Expected‑output comparison is skipped for that primitive.
 
-### **Purpose:**  
+**Purpose:**  
 - Canonical correctness  
 - Deterministic replay  
 - Regression testing  
-- Python/C++ parity
+- Python/C++ parity  
+- Stable envelope evolution  
 
 ---
 
-## **3.2 Mode B — “general” (Rule‑Driven Testing)**
+## **3.2 Mode B — “general” (Rule‑Driven Testing)**  
+**Input Source:**  
+```
+<primitive>_input.yaml
+```
 
-### **Input File:**  
-`<primitive>_input.yaml`
+**Operational Rule (must be followed by all testbenches):**  
+- When `mode == "general"`, the testbench **must load only the primitive’s general‑mode input file**:
+  - `<primitive>_input.yaml`
+- The primitive is executed normally.
+- The output is validated **only by rulechecking**, using:
+  - `<primitive>_rules.yaml`
+  - `<primitive>_rulechecker.py`
+- PASS/FAIL is determined **solely** by rule compliance.
 
-### **Behavior:**  
-- The testbench loads **only the primitive’s inputs**.  
-- The primitive is executed.  
-- Output is validated using **rules**, not expected outputs.
+**Expected‑output YAML is never used in general mode.**
 
-### **Rule System:**  
-- `cex_rules.yaml` (or `<primitive>_rules.yaml`)  
-- `cex_rulechecker.py` (or `<primitive>_rulechecker.py`)
-
-Rules define:
-
-- allowed fields  
-- forbidden fields  
-- bounded‑semantic constraints  
-- provenance expectations  
-- envelope boundaries  
-- skip conditions  
-- fallback behavior  
-- continuity behavior  
-- deterministic replay behavior
-
-### **Purpose:**  
+**Purpose:**  
 - Flexible exploratory testing  
-- Rapid scenario construction  
 - Upstream variation testing  
 - Rule‑driven correctness  
-- Pipeline safety validation
+- Pipeline safety validation  
+- Rapid scenario construction  
 
 ---
 
-# ⭐ **New Section 3.3 — Primitive Input, Rules, Rulechecking, and Test Selection Files**
+## ⭐ **3.3 Mandatory Input‑Source Rule (New Explicit Requirement)**  
+To prevent ambiguity and ensure deterministic behavior across all Path‑A primitives:
 
-The Progressive Lineup Testing Framework uses four auxiliary files to support deterministic testbench mode and rule‑driven general mode. These files define inputs, rule constraints, rulechecking behavior, and test selection.
+### **All primitive testbenches MUST implement the following rule:**
 
-This section explains how each file is used and how they interact with `run.py` in both testing modes.
+| `mode` value in run.py | Input file loaded by `<primitive>_testbench.py` | Output validation method |
+|------------------------|--------------------------------------------------|---------------------------|
+| `"testbench"`          | `<primitive>_testbench.yaml` (input + expected) | Exact equality comparison |
+| `"general"`            | `<primitive>_input.yaml` (input only)           | Rulechecking only         |
 
----
-
-## **3.3.1 `primitive_input.yaml` — Input Source for General Mode**
-
-Used **only in Mode B (“general”)**.
-
-This file provides **user‑defined input envelopes** for the primitive under test.  
-It allows the user to construct arbitrary scenarios without requiring full expected outputs.
-
-### **Purpose**
-- Supply the primitive’s input envelope in general mode.  
-- Allow flexible scenario construction.  
-- Enable upstream variation testing.
-
-### **Flow**
-1. `run.py` is set to **general mode**.  
-2. The testbench loads `<primitive>_input.yaml`.  
-3. The primitive executes normally.  
-4. Output is validated by rulechecking (not by expected outputs).
-
-This aligns with the general‑mode behavior described in Section 3.2.
+This rule is **mandatory**, applies to **all Path‑A primitives**, and must be implemented exactly as written.
 
 ---
 
-## **3.3.2 `primitive_rules.yaml` — Rule Definitions for General Mode**
+## ⭐ **3.4 Why This Rule Exists (Clarification for Developers)**  
+This explicit rule ensures:
 
-Used **only in Mode B (“general”)**.
+- deterministic replay in testbench mode  
+- rule‑driven flexibility in general mode  
+- correct envelope propagation  
+- correct provenance propagation  
+- correct pipeline integration  
+- correct Python/C++ parity  
+- correct behavior under progressive upstream selection  
+- correct passthrough behavior when `use_<primitive> = false`  
 
-This file defines the **rule set** the primitive must obey.  
-Rules describe what the primitive is allowed to output, how envelopes must behave, and what constraints must hold.
-
-### **Contents**
-- Allowed fields  
-- Forbidden fields  
-- Bounded‑semantic constraints  
-- Provenance requirements  
-- Envelope boundaries  
-- Continuity expectations  
-- Replay determinism constraints  
-- Skip/fallback conditions  
-
-These rule types correspond to the rule system described in Section 3.2.
-
-### **Flow**
-1. Primitive executes using input from `primitive_input.yaml`.  
-2. `primitive_rules.yaml` is loaded by the rulechecker.  
-3. Each rule is applied to the primitive’s output.  
-4. PASS/FAIL is determined by rule compliance.
+It also prevents the exact mistake that occurred in the original `cex_pck_testbench.py`, where the testbench accidentally loaded `<primitive>_input.yaml` even in testbench mode.
 
 ---
 
-## **3.3.3 `primitive_rulescheck.py` — Rulechecker Execution Logic**
-
-This Python file performs the **actual rulechecking** in general mode.
-
-It is invoked by `primitive_testbench.py` when `run.py` is in general mode.
-
-### **Responsibilities**
-- Load `primitive_rules.yaml`.  
-- Validate the primitive’s output against all rules.  
-- Produce diagnostic information.  
-- Enforce deterministic replay behavior.  
-- Ensure envelope discipline and provenance correctness.
-
-### **Flow**
-1. Primitive runs.  
-2. Output is passed to `primitive_rulescheck.py`.  
-3. Rulechecker loads `primitive_rules.yaml`.  
-4. Rulechecker evaluates all constraints.  
-5. PASS/FAIL is returned to the testbench.
-
-This complements the rule‑driven validation described in Section 3.2.
-
-### **Note**
-In testbench mode, rulechecking may run **only for diagnostics**, but PASS/FAIL is determined solely by expected outputs (Section 3.1).
-
----
-
-## **3.3.4 `primitive_tests_to_run.yaml` — Test Selection for Testbench Mode**
-
-Used **only in Mode A (“testbench”)**.
-
-This file determines **which testbench tests should run** for the primitive.
-
-### **Purpose**
-- Allow selective execution of testbench tests.  
-- Enable fast regression cycles.  
-- Allow skipping expensive or irrelevant tests.
-
-### **Contents**
-Each test has a boolean flag:
-
-- `true` → testbench will run the test  
-- `false` → testbench will skip the test
-
-### **Flow**
-1. `run.py` is set to **testbench mode**.  
-2. `primitive_testbench.py` loads `primitive_tests_to_run.yaml`.  
-3. Only tests marked `true` are executed.  
-4. Each test loads `<primitive>_testbench.yaml` (expected inputs + expected outputs).  
-5. Primitive runs.  
-6. Actual output is compared to expected output for PASS/FAIL.
-
-This aligns with the deterministic testbench behavior described in Section 3.1.
-
----
-
-# ⭐ **3.3.5 Unified Flow Summary**
+## ⭐ **3.5 Unified Flow Summary (Updated)**
 
 ### **Mode A — Testbench (Deterministic)**  
 Files used:
 - `<primitive>_testbench.yaml`  
-- `primitive_tests_to_run.yaml`  
+- `<primitive>_tests_to_run.yaml`  
 
 Flow:
 1. Load test selection.  
-2. For each enabled test:  
-   - Load full input + expected output.  
+2. For each enabled test:
+   - Load full input + expected output from `<primitive>_testbench.yaml`.  
    - Execute primitive.  
    - Compare actual vs expected.  
-   - PASS/FAIL by equality.
-
-Rulechecker optional for diagnostics only.
+   - PASS/FAIL by exact equality.  
+3. Rulechecker optional (diagnostics only).
 
 ---
 
 ### **Mode B — General (Rule‑Driven)**  
 Files used:
 - `<primitive>_input.yaml`  
-- `primitive_rules.yaml`  
-- `primitive_rulescheck.py`  
+- `<primitive>_rules.yaml`  
+- `<primitive>_rulechecker.py`  
 
 Flow:
 1. Load general input.  
