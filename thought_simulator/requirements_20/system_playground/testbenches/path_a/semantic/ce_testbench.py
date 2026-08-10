@@ -1,8 +1,8 @@
 """
 CE Testbench (Version 1.0)
 Correct behavior:
-    • All tests use ce_input.yaml as input
-    • All tests use ce_testbench.yaml as expected output
+    • All tests use the input block inside ce_testbench.yaml
+    • All tests use the expected_output block inside ce_testbench.yaml
     • Tests only toggle rule subsets or enable/disable
 """
 
@@ -57,24 +57,23 @@ def run_single_test(test_entry):
         print(f"- Test {test_id} is DISABLED. Skipping.")
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
-    # Canonical CE input/output
-    tp_expected_full = load_yaml(expected_file)
+    # Canonical CE testbench file
     expected_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
     rules_file = os.path.join(BASE_DIR, "ce_rules.yaml")
 
-    # Load input TP
-    tp_input = tp_expected_full["input"]
+    # Load full testbench YAML
+    tb = load_yaml(expected_file)
 
-    # Load expected output TP
-    tp_expected = load_yaml(expected_file)
-    expected_ctx = tp_expected["expected_output"]["metadata"]["context"]
+    # Extract input and expected output
+    tp_input = tb["input"]
+    expected_ctx = tb["expected_output"]["metadata"]["context"]
 
     # Load rules
     rules = load_yaml(rules_file)["rules"]
 
     # Print general info (filenames only)
-    print(f"- Input File: {os.path.basename(input_file)}")
-    print(f"- Expected Output File: {os.path.basename(expected_file)}")
+    print(f"- Input Source: ce_testbench.yaml (embedded input block)")
+    print(f"- Expected Output Source: ce_testbench.yaml (embedded expected_output block)")
     print(f"- Rules File: {os.path.basename(rules_file)}")
 
     # Run CE
