@@ -121,6 +121,11 @@ class CE:
         if flags["copy_forward"].get("coherence"):
             normalized["coherence"] = ctx_fields.get("coherence")
 
+        # Reset flags override everything
+        for field, should_reset in flags["reset"].items():
+            if should_reset:
+                normalized[field] = None
+
         return normalized
 
     # ------------------------------------------------------------
