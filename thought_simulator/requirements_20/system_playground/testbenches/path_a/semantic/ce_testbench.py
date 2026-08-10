@@ -58,22 +58,33 @@ def run_single_test(test_entry):
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
     # Canonical CE testbench file
-    expected_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
+    testbench_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
     rules_file = os.path.join(BASE_DIR, "ce_rules.yaml")
 
     # Load full testbench YAML
-    tb = load_yaml(expected_file)
+    tb = load_yaml(testbench_file)
+
+    # Find the matching test entry inside ce_testbench.yaml
+    tb_tests = tb.get("tests", [])
+    tb_test = None
+    for t in tb_tests:
+        if t.get("id") == test_id:
+            tb_test = t
+            break
+
+    if tb_test is None:
+        raise KeyError(f"Test ID {test_id} not found in ce_testbench.yaml")
 
     # Extract input and expected output
-    tp_input = tb["input"]
-    expected_ctx = tb["expected_output"]["metadata"]["context"]
+    tp_input = tb_test["input"]
+    expected_ctx = tb_test["expected_output"]["metadata"]["context"]
 
     # Load rules
     rules = load_yaml(rules_file)["rules"]
 
-    # Print general info (filenames only)
-    print(f"- Input Source: ce_testbench.yaml (embedded input block)")
-    print(f"- Expected Output Source: ce_testbench.yaml (embedded expected_output block)")
+    # Print general info
+    print(f"- Input Source: ce_testbench.yaml (test id: {test_id})")
+    print(f"- Expected Output Source: ce_testbench.yaml (test id: {test_id})")
     print(f"- Rules File: {os.path.basename(rules_file)}")
 
     # Run CE
@@ -110,7 +121,6 @@ def run_single_test(test_entry):
         "passed": passed,
         "errors": rule_errors
     }
-
 
 # ============================================================
 # run_testbench() - REQUIRED BY run.py
