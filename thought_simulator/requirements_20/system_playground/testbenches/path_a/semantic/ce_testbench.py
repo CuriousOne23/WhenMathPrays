@@ -58,12 +58,12 @@ def run_single_test(test_entry):
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
     # Canonical CE input/output
-    input_file = os.path.join(BASE_DIR, "ce_input.yaml")
+    tp_expected_full = load_yaml(expected_file)
     expected_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
     rules_file = os.path.join(BASE_DIR, "ce_rules.yaml")
 
     # Load input TP
-    tp_input = load_yaml(input_file)
+    tp_input = tp_expected_full["input"]
 
     # Load expected output TP
     tp_expected = load_yaml(expected_file)
