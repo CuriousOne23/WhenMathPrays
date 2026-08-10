@@ -10,6 +10,7 @@ Aligned with:
 """
 
 import copy
+import json
 
 
 class CE:
@@ -35,6 +36,10 @@ class CE:
 
         normalized = self._normalize_context(ctx_fields, msl, next_ctx, flags)
         audit = self._build_extraction_audit(normalized, msl, next_ctx, flags)
+
+        print("\n===== CE DEBUG OUTPUT =====")
+        print(json.dumps(self.tp["metadata"]["context"], indent=2))
+        print("===== END CE DEBUG OUTPUT =====\n")
 
         self._update_tp(normalized, audit)
 
