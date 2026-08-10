@@ -1,12 +1,9 @@
 """
 CE Testbench (Version 1.0)
-This module is imported by run.py.
-
-It provides:
-    • set_testbench_config(config)
-    • run_testbench()
-
-And internally runs the CE testbench runner.
+Correct behavior:
+    • All tests use ce_input.yaml as input
+    • All tests use ce_testbench.yaml as expected output
+    • Tests only toggle rule subsets or enable/disable
 """
 
 import os
@@ -22,17 +19,11 @@ from thought_simulator.requirements_20.system_playground.primitives.ce.ce import
 # ============================================================
 TESTBENCH_CONFIG = {}
 
-# ============================================================
-# Base directory for all CE testbench files
-# ============================================================
+# Base directory for CE testbench files
 BASE_DIR = os.path.dirname(__file__)
 
 
 def set_testbench_config(config):
-    """
-    Called by run.py before running the testbench.
-    Stores configuration for this testbench module.
-    """
     global TESTBENCH_CONFIG
     TESTBENCH_CONFIG = config
 
@@ -47,7 +38,6 @@ def load_yaml(path):
 
 
 def deep_compare(a, b):
-    """Deep structural comparison of two TP dictionaries."""
     return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
 
 
@@ -58,10 +48,6 @@ def deep_compare(a, b):
 def run_single_test(test_entry):
     test_id = test_entry["id"]
     enabled = test_entry.get("enabled", False)
-    input_file = os.path.join(BASE_DIR, test_entry["input"])
-    expected_file = os.path.join(BASE_DIR, test_entry["expected_output"])
-    rules_file = os.path.join(BASE_DIR, test_entry["rules"])
-    rulechecker_file = os.path.join(BASE_DIR, test_entry["rulechecker"])
 
     print("\n------------------------------------------------------------")
     print(f"Running Test: {test_id}")
@@ -70,6 +56,11 @@ def run_single_test(test_entry):
     if not enabled:
         print(f"- Test {test_id} is DISABLED. Skipping.")
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
+
+    # Canonical CE input/output
+    input_file = os.path.join(BASE_DIR, "ce_input.yaml")
+    expected_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
+    rules_file = os.path.join(BASE_DIR, "ce_rules.yaml")
 
     # Load input TP
     tp_input = load_yaml(input_file)
@@ -86,7 +77,6 @@ def run_single_test(test_entry):
     print(f"- Input File: {input_file}")
     print(f"- Expected Output File: {expected_file}")
     print(f"- Rules File: {rules_file}")
-    print(f"- Rulechecker: {rulechecker_file}")
 
     # Run CE
     ce = CE(copy.deepcopy(tp_input))
@@ -128,9 +118,6 @@ def run_single_test(test_entry):
 # ============================================================
 
 def run_testbench():
-    """
-    Called by run.py to execute the CE testbench.
-    """
     print("\n============================================================")
     print(" CE Testbench Runner — Starting Execution")
     print("============================================================")
