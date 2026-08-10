@@ -180,6 +180,236 @@ Flow:
 
 ---
 
+# ⭐ **New Section 3.6 — Primitive Discovery & Directory Schema (Mandatory)**  
+*(Fully compatible with Version 4.0 of progressive_lineup_testing.md)*
+
+### **3.6 Primitive Discovery & Directory Schema (Mandatory for All Path‑A Primitives)**  
+To eliminate repeated manual edits to `primitive_testbench.py` and ensure that **every primitive is automatically discoverable**, the following directory schema is **mandatory** for all Path‑A primitives.
+
+This schema guarantees that:
+
+- `run.py` can always locate the correct primitive module  
+- `primitive_testbench.py` can always locate the correct testbench files  
+- rulecheckers, YAMLs, and dictionaries are always found  
+- no primitive ever requires hardcoded paths  
+- pipeline execution is stable and deterministic  
+
+---
+
+## **3.6.1 Primitive Code Location (Executable Module)**  
+Every primitive’s Python implementation **must** be located at:
+
+```
+thought_simulator/
+  requirements_20/
+    system_playground/
+      primitives/
+        <primitive_name>/
+          <primitive_name>.py
+```
+
+Examples:
+
+```
+primitives/ce/ce.py
+primitives/cex_pck/cex_pck.py
+primitives/ccr/ccr.py
+```
+
+This path is **authoritative** and is used by the dynamic primitive loader.
+
+---
+
+## **3.6.2 Primitive Testbench Location (YAML + Rulechecker + Runner)**  
+All testbench files for a primitive **must** be located under:
+
+```
+thought_simulator/
+  requirements_20/
+    system_playground/
+      testbenches/
+        path_a/
+          <category>/
+            <primitive_name>_testbench.py
+            <primitive_name>_testbench.yaml
+            <primitive_name>_rules.yaml
+            <primitive_name>_tests_to_run.yaml
+```
+
+Where `<category>` ∈:
+
+```
+boundary
+identity
+intake
+mismatch
+routing
+semantic
+structure
+transform
+```
+
+Example (CE):
+
+```
+testbenches/path_a/semantic/ce_testbench.py
+testbenches/path_a/semantic/ce_testbench.yaml
+testbenches/path_a/semantic/ce_rules.yaml
+testbenches/path_a/semantic/ce_tests_to_run.yaml
+```
+
+This ensures that **every primitive testbench is discoverable by pattern**, not by hardcoded paths.
+
+---
+
+## **3.6.3 Primitive Dictionary Location (If Required)**  
+If a primitive requires dictionaries, they must be located at:
+
+```
+thought_simulator/
+  requirements_20/
+    system_playground/
+      design/
+        dictionaries/
+          path_a/
+            <dictionary_category>/
+```
+
+Where `<dictionary_category>` ∈:
+
+```
+conversion_pipeline
+meaning_dictionary
+routing_dictionary
+semantic_dictionary
+structure_dictionary
+```
+
+This ensures dictionary lookup is deterministic and uniform across primitives.
+
+---
+
+## **3.6.4 Dynamic Primitive Loader (Mandatory Behavior)**  
+`primitive_testbench.py` **must** locate primitive modules and testbench files dynamically using the directory schema above.
+
+### **Primitive module discovery rule:**
+
+```
+primitives/<primitive_name>/<primitive_name>.py
+```
+
+### **Testbench discovery rule:**
+
+```
+testbenches/path_a/**/<primitive_name>_testbench.yaml
+```
+
+### **Rules discovery rule:**
+
+```
+same directory as <primitive_name>_testbench.yaml
+```
+
+### **Tests-to-run discovery rule:**
+
+```
+same directory as <primitive_name>_testbench.yaml
+```
+
+This eliminates all hardcoded paths and ensures that **every primitive is automatically discoverable** without modifying any loader code.
+
+---
+
+## **3.6.5 Optional (Recommended): Primitive Self‑Identification**  
+Each primitive may declare its name inside its module:
+
+```python
+PRIMITIVE_NAME = "ce"
+```
+
+This allows loaders to read the primitive name directly from the module, further reducing configuration overhead..
+
+---
+
+### **3.7 Python Import Path Initialization (Mandatory for All Testbenches)**  
+To ensure that **all primitives, testbenches, rulecheckers, and dictionaries are importable without manual path edits**, every primitive testbench **must** initialize Python’s import path using the canonical project root.
+
+This rule eliminates the recurring issue where `primitive_testbench.py` cannot locate:
+
+- primitive modules  
+- testbench modules  
+- rulecheckers  
+- dictionaries  
+- shared utilities  
+
+### **3.7.1 Canonical Project Root Definition**  
+The project root is defined as:
+
+```
+thought_simulator/requirements_20/system_playground/
+```
+
+This directory **must** be added to `sys.path` by every primitive testbench.
+
+### **3.7.2 Mandatory Import Path Initialization Block**  
+Every `<primitive_name>_testbench.py` **must** include the following block at the top of the file:
+
+```python
+import os
+import sys
+
+# Determine project root dynamically
+TB_DIR = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", ".."))
+
+# Add project root to Python import path
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+```
+
+This guarantees:
+
+- `primitives/<primitive_name>/<primitive_name>.py` is importable  
+- `testbenches/path_a/<category>/<primitive_name>_rulechecker.py` is importable  
+- `design/dictionaries/path_a/<dictionary_category>` is importable  
+- shared utilities are importable  
+- no testbench ever needs manual path edits again  
+
+### **3.7.3 Why This Rule Is Mandatory**  
+Without this rule:
+
+- Python resolves imports relative to the current working directory  
+- testbenches cannot reliably import primitives  
+- primitives cannot reliably import dictionaries  
+- rulecheckers cannot reliably import shared utilities  
+- running testbenches from different directories breaks imports  
+- developers must manually patch import paths for every new primitive  
+
+With this rule:
+
+- all imports work automatically  
+- all primitives are discoverable  
+- all testbenches are discoverable  
+- all dictionaries are discoverable  
+- `run.py` works from any directory  
+- no manual path edits are ever required again  
+
+### **3.7.4 Interaction with Section 3.6 (Directory Schema)**  
+Section 3.6 defines **where** primitives and testbenches must live.  
+Section 3.7 defines **how Python finds them**.
+
+Together, they provide:
+
+- deterministic module discovery  
+- deterministic testbench discovery  
+- deterministic dictionary discovery  
+- deterministic pipeline execution  
+- deterministic progressive lineup behavior  
+
+This is the final piece needed to make Path‑A testbenches fully self‑contained and self‑discovering.
+
+---
+
 # **4. Progressive Upstream Selection**
 
 In **general mode**, the user may choose any upstream primitive as the starting point.
