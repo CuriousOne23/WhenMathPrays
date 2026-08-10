@@ -113,12 +113,12 @@ def run_single_test(test_entry):
 
 
 # ============================================================
-# run_testbench() — REQUIRED BY run.py
+# run_testbench() - REQUIRED BY run.py
 # ============================================================
 
 def run_testbench():
     print("\n============================================================")
-    print(" CE Testbench Runner — Starting Execution")
+    print(" CE Testbench Runner - Starting Execution")
     print("============================================================")
 
     tests_to_run_file = os.path.join(BASE_DIR, "ce_tests_to_run.yaml")
@@ -156,5 +156,5 @@ def run_testbench():
         print(f"- {r['id']}: {status}")
 
     print("\n============================================================")
-    print(" CE Testbench Runner — Complete")
+    print(" CE Testbench Runner - Complete")
     print("============================================================")
