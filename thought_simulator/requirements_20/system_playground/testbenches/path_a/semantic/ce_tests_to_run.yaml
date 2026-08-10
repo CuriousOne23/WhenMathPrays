@@ -1,6 +1,6 @@
 # ============================================================
 #  CE Tests To Run (Version 1.0)
-#  Single canonical CE testbench execution
+#  Multi-test CE testbench execution
 # ============================================================
 
 primitive: CE
@@ -9,4 +9,32 @@ version: "1.0"
 tests:
   - id: ce_test_001
     description: "Canonical CE envelope construction and normalization"
+    enabled: true
+
+  - id: ce_test_002
+    description: "Missing fields test"
+    enabled: true
+
+  - id: ce_test_003
+    description: "Invalid categories test"
+    enabled: true
+
+  - id: ce_test_004
+    description: "MSL override test"
+    enabled: true
+
+  - id: ce_test_005
+    description: "Copy-forward flags test"
+    enabled: true
+
+  - id: ce_test_006
+    description: "Reset flags test"
+    enabled: true
+
+  - id: ce_test_007
+    description: "Provenance lineage extension test"
+    enabled: true
+
+  - id: ce_test_008
+    description: "Clarifying fields preservation test"
     enabled: true
