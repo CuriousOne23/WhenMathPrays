@@ -138,7 +138,7 @@ ACTIVE_TEST_MODULES = [
     # Highest upstream True = CE (primitive under test)
     # Pipeline: CE only, input from:
     #   • ce_testbench.yaml (mode = "testbench")
-    #   • cil_input.yaml (mode = "general")
+    #   • ce_input.yaml (mode = "general")
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
         {
