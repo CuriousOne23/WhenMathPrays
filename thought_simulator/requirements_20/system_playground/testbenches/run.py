@@ -116,22 +116,43 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: CEx‑Pck only, input from:
     #   • cex_pck_testbench.yaml (scenarios)
     #   • cil_input.yaml (static 10‑conversation CIL substrate)
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_pck_testbench",
+    #     {
+    #         "mode": "testbench",     # general or testbench, chooses cex_pck_input.yaml or cex_pck_testbench.yaml
+    #         "use_inb": False,        # Upstream primitives ignored
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,    # CCR is NOT under test here
+    #         "use_cex_pck": True,     # Primitive under test
+
+    #         # Test selection controlled by cex_pck_tests_to_run.yaml
+    #         "tests_to_run": "see cex_pck_tests_to_run.yaml",
+
+    #         # Pck always uses static cil_input.yaml
+    #         "cil_source": "cil_input.yaml"
+    #     }
+    # ),
+    # **************************** CE Test bench ******************************************************
+    # Highest upstream True = CE (primitive under test)
+    # Pipeline: CE only, input from:
+    #   • ce_testbench.yaml (mode = "testbench")
+    #   • cil_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cex_pck_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
         {
-            "mode": "testbench",     # general or testbench, chooses cex_pck_input.yaml or cex_pck_testbench.yaml
+            "mode": "testbench",     # general or testbench
             "use_inb": False,        # Upstream primitives ignored
             "use_iiinb": False,
             "use_ie": False,
             "use_cex_ie": False,
-            "use_cex_ccr": False,    # CCR is NOT under test here
-            "use_cex_pck": True,     # Primitive under test
+            "use_cex_ccr": False,    
+            "use_cex_pck": False,     
+            "use_ce": True,     # Primitive under test
 
             # Test selection controlled by cex_pck_tests_to_run.yaml
-            "tests_to_run": "see cex_pck_tests_to_run.yaml",
-
-            # Pck always uses static cil_input.yaml
-            "cil_source": "cil_input.yaml"
+            "tests_to_run": "see ce_tests_to_run.yaml",
         }
     ),
 ]
