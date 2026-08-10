@@ -1,20 +1,11 @@
 # ============================================================
 #  CE Testbench (Version 1.0)
-#  Deterministic validation of CE envelope construction
-#  Aligned with:
-#    - 20.108 (CE Envelope)
-#    - 20.107.030 (CEx-Pck)
-#    - 20.105.*, 20.15
-#    - progressive_lineup_testing.md
 # ============================================================
 
 mode: testbench
 primitive: CE
 version: "1.0"
 
-# ------------------------------------------------------------
-# 1. Testbench Metadata
-# ------------------------------------------------------------
 metadata:
   description: >
     Validates CE canonical envelope construction, context normalization,
@@ -27,172 +18,697 @@ metadata:
   passthrough_allowed: false
   progressive_lineup_compatible: true
 
-# ------------------------------------------------------------
-# 2. Input TP (Before CE)
-# ------------------------------------------------------------
-input:
-  tp_identity:
-    tp_id: "tp_ce_test_001"
-    tp_seq: 42
-    cycle_id: 7
-    lane_id: "A"
-    schema_version: "1.0"
-    profile_signature: "default"
-    wire_map_version: "1.0"
-    policy_signature: "default"
+tests:
 
-  metadata:
-    context:
-      context_fields:
-        topic: "travel"
-        stance: "neutral"
-        intent: "inform"
-        register: "casual"
-        politeness: "medium"
-        tone: "balanced"
-        continuity: "moderate"
-        direction: "forward"
-        coherence: "medium"
-        importance: "normal"
-        clarifying_fields:
-          - "destination"
-          - "duration"
+  # ------------------------------------------------------------
+  # 1. Full-field happy path (your original test)
+  # ------------------------------------------------------------
+  - id: ce_test_001
+    input:
+      tp_identity:
+        tp_id: "tp_ce_test_001"
+        tp_seq: 42
+        cycle_id: 7
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
 
-      relevance_flags:
-        topic_relevant: true
-        stance_relevant: true
-        continuity_relevant: true
+      metadata:
+        context:
+          context_fields:
+            topic: "travel"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "medium"
+            tone: "balanced"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields:
+              - "destination"
+              - "duration"
 
-      copy_forward_flags:
-        topic: true
-        direction: true
-        coherence: true
+          relevance_flags:
+            topic_relevant: true
+            stance_relevant: true
+            continuity_relevant: true
 
-      reset_flags:
-        topic: false
-        stance: false
-        intent: false
+          copy_forward_flags:
+            topic: true
+            direction: true
+            coherence: true
 
-      context_provenance:
-        origin: "CEx-Pck"
-        last_update: "CEx-Pck"
-        commit_lineage: ["c001", "c002"]
+          reset_flags:
+            topic: false
+            stance: false
+            intent: false
 
-    msl:
-      qualifiers: ["approximate", "general"]
-      clarifications: ["non-urgent"]
-      stance: "neutral"
-      shading: "none"
-      intent: "inform"
-      direction: "forward"
-      coherence: "medium"
-      subculture: "general"
-      msl_provenance:
-        origin: "CEx-Pck"
-        last_update: "CEx-Pck"
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c001", "c002"]
 
-    next_context:
-      next_context: "travel"
-      direction: "forward"
-      coherence: "medium"
-      stance: "neutral"
-      subculture: "general"
-      next_context_provenance:
-        origin: "MCB"
-        last_update: "MCB"
-
-  cex:
-    ccr:
-      alignment:
-        identity: "aligned"
-        clarifying: "aligned"
-        context: "aligned"
-        continuity: "moderate"
-        reference: "aligned"
-        semantic_residue: "weak"
-
-      scores:
-        ambiguity: 0.1
-        collapse: 0.0
-        drift: 0.05
-        stability: 0.9
-
-      decision: "specific"
-      selected_conversation: 3
-      provenance:
-        origin: "CEx-CCR"
-        last_update: "CEx-CCR"
-
-  semantic:
-    importance:
-      entities:
-        - { value: "destination", role: "primary", score: 0.8 }
-      facts:
-        - { value: "duration", role: "secondary", score: 0.4 }
-
-# ------------------------------------------------------------
-# 3. Expected Output TP (After CE)
-# ------------------------------------------------------------
-expected_output:
-  metadata:
-    context:
-      topic: "travel"
-      stance: "neutral"
-      intent: "inform"
-      register: "casual"
-      politeness: "medium"
-      tone: "balanced"
-      continuity: "moderate"
-      direction: "forward"
-      coherence: "medium"
-      importance: "normal"
-      clarifying_fields:
-        - "destination"
-        - "duration"
-
-      relevance_flags:
-        topic_relevant: true
-        stance_relevant: true
-        continuity_relevant: true
-
-      copy_forward_flags:
-        topic: true
-        direction: true
-        coherence: true
-
-      reset_flags:
-        topic: false
-        stance: false
-        intent: false
-
-      context_provenance:
-        origin: "CE"
-        last_update: "CE"
-        commit_lineage: ["c001", "c002", "c003"]
-
-      extraction_audit:
-        normalized_fields:
-          - "topic"
-          - "stance"
-          - "intent"
-          - "direction"
-          - "coherence"
-        msl_reconciliation:
+        msl:
+          qualifiers: ["approximate", "general"]
+          clarifications: ["non-urgent"]
           stance: "neutral"
+          shading: "none"
+          intent: "inform"
           direction: "forward"
           coherence: "medium"
-        continuity_validation: "moderate"
-        importance_validation: "normal"
-        clarifying_validation:
-          - "destination"
-          - "duration"
+          subculture: "general"
+          msl_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
 
-      ce_version_tag: "CE_v1.0"
+        next_context:
+          next_context: "travel"
+          direction: "forward"
+          coherence: "medium"
+          stance: "neutral"
+          subculture: "general"
+          next_context_provenance:
+            origin: "MCB"
+            last_update: "MCB"
 
-# ------------------------------------------------------------
-# 4. Notes
-# ------------------------------------------------------------
-notes:
-  - CE testbench is fully compatible with progressive lineup execution.
-  - CE testbench validates Python/C++ parity implicitly through deterministic replay.
-  - CE testbench does not validate identity refinement or routing (IdOB/TR/RB responsibility).
+      cex:
+        ccr:
+          alignment:
+            identity: "aligned"
+            clarifying: "aligned"
+            context: "aligned"
+            continuity: "moderate"
+            reference: "aligned"
+            semantic_residue: "weak"
+
+          scores:
+            ambiguity: 0.1
+            collapse: 0.0
+            drift: 0.05
+            stability: 0.9
+
+          decision: "specific"
+          selected_conversation: 3
+          provenance:
+            origin: "CEx-CCR"
+            last_update: "CEx-CCR"
+
+      semantic:
+        importance:
+          entities:
+            - { value: "destination", role: "primary", score: 0.8 }
+          facts:
+            - { value: "duration", role: "secondary", score: 0.4 }
+
+    expected_output:
+      metadata:
+        context:
+          topic: "travel"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields:
+            - "destination"
+            - "duration"
+
+          relevance_flags:
+            topic_relevant: true
+            stance_relevant: true
+            continuity_relevant: true
+
+          copy_forward_flags:
+            topic: true
+            direction: true
+            coherence: true
+
+          reset_flags:
+            topic: false
+            stance: false
+            intent: false
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c001", "c002", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation:
+              - "destination"
+              - "duration"
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 2. Missing fields test
+  # ------------------------------------------------------------
+  - id: ce_test_002
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: null
+            stance: null
+            intent: "inform"
+            register: null
+            politeness: null
+            tone: null
+            continuity: "weak"
+            direction: null
+            coherence: null
+            importance: null
+            clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c010"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: null
+          stance: null
+          intent: "inform"
+          register: null
+          politeness: null
+          tone: null
+          continuity: "weak"
+          direction: null
+          coherence: null
+          importance: null
+          clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c010", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: null
+              direction: null
+              coherence: null
+            continuity_validation: "weak"
+            importance_validation: "normal"
+            clarifying_validation: []
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 3. Invalid categories test
+  # ------------------------------------------------------------
+  - id: ce_test_003
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "sports"
+            stance: "aggressive"
+            intent: "inform"
+            register: "casual"
+            politeness: "medium"
+            tone: "sharp"
+            continuity: "superstrong"
+            direction: "sideways"
+            coherence: "chaotic"
+            importance: "critical"
+            clarifying_fields: ["team"]
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c020"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: "sports"
+          stance: "aggressive"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "sharp"
+          continuity: "superstrong"
+          direction: "sideways"
+          coherence: "chaotic"
+          importance: "critical"
+          clarifying_fields: ["team"]
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c020", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "aggressive"
+              direction: "sideways"
+              coherence: "chaotic"
+            continuity_validation: "invalid"
+            importance_validation: "normal"
+            clarifying_validation:
+              - "team"
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 4. MSL override test
+  # ------------------------------------------------------------
+  - id: ce_test_004
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "weather"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "high"
+            tone: "calm"
+            continuity: "moderate"
+            direction: "backward"
+            coherence: "weak"
+            importance: "normal"
+            clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c030"]
+
+        msl:
+          stance: "positive"
+          direction: "forward"
+          coherence: "medium"
+
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: "weather"
+          stance: "positive"
+          intent: "inform"
+          register: "formal"
+          politeness: "high"
+          tone: "calm"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c030", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "positive"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation: []
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 5. Copy-forward flags test
+  # ------------------------------------------------------------
+  - id: ce_test_005
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "music"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "medium"
+            tone: "balanced"
+            continuity: "weak"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags:
+            topic: true
+            direction: false
+            coherence: true
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c040"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: "music"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "weak"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags:
+            topic: true
+            direction: false
+            coherence: true
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c040", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "weak"
+            importance_validation: "normal"
+            clarifying_validation: []
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 6. Reset flags test
+  # ------------------------------------------------------------
+  - id: ce_test_006
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "finance"
+            stance: "neutral"
+            intent: "inform"
+            register: "formal"
+            politeness: "medium"
+            tone: "calm"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags:
+            topic: true
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c050"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: null
+          stance: "neutral"
+          intent: "inform"
+          register: "formal"
+          politeness: "medium"
+          tone: "calm"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags:
+            topic: true
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c050", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation: []
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 7. Provenance lineage test
+  # ------------------------------------------------------------
+  - id: ce_test_007
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "science"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "medium"
+            tone: "balanced"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c010", "c011", "c012"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: "science"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields: []
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c010", "c011", "c012", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation: []
+
+          ce_version_tag: "CE_v1.0"
+
+  # ------------------------------------------------------------
+  # 8. Clarifying fields test
+  # ------------------------------------------------------------
+  - id: ce_test_008
+    input:
+      metadata:
+        context:
+          context_fields:
+            topic: "health"
+            stance: "neutral"
+            intent: "inform"
+            register: "casual"
+            politeness: "medium"
+            tone: "balanced"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields:
+              - "symptom"
+              - "duration"
+              - "severity"
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CEx-Pck"
+            last_update: "CEx-Pck"
+            commit_lineage: ["c060"]
+
+        msl: {}
+        next_context: {}
+
+    expected_output:
+      metadata:
+        context:
+          topic: "health"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields:
+            - "symptom"
+            - "duration"
+            - "severity"
+
+          relevance_flags: {}
+          copy_forward_flags: {}
+          reset_flags: {}
+
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c060", "c003"]
+
+          extraction_audit:
+            normalized_fields:
+              - "topic"
+              - "stance"
+              - "intent"
+              - "direction"
+              - "coherence"
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation:
+              - "symptom"
+              - "duration"
+              - "severity"
+
+          ce_version_tag: "CE_v1.0"
