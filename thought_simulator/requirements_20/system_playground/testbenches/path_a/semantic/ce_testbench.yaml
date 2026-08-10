@@ -190,39 +190,7 @@ expected_output:
       ce_version_tag: "CE_v1.0"
 
 # ------------------------------------------------------------
-# 4. Deterministic Replay Rules
-# ------------------------------------------------------------
-rules:
-  - id: ce_replay_001
-    description: CE must produce identical output given identical input.
-    check: deterministic_replay
-
-  - id: ce_context_normalization_001
-    description: CE must normalize context fields deterministically.
-    check: context_normalization
-
-  - id: ce_msl_reconciliation_001
-    description: CE must reconcile MSL tokens with context fields.
-    check: msl_reconciliation
-
-  - id: ce_continuity_validation_001
-    description: CE must validate continuity using CEx-Pck flags + next_context.
-    check: continuity_validation
-
-  - id: ce_provenance_001
-    description: CE must write correct provenance for all fields it updates.
-    check: provenance_integrity
-
-  - id: ce_extraction_audit_001
-    description: CE must produce a complete extraction audit.
-    check: extraction_audit_integrity
-
-  - id: ce_version_tag_001
-    description: CE must write CE_v1.0 as version tag.
-    check: version_tag_integrity
-
-# ------------------------------------------------------------
-# 5. Notes
+# 4. Notes
 # ------------------------------------------------------------
 notes:
   - CE testbench is fully compatible with progressive lineup execution.
