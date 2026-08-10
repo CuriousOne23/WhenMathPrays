@@ -1,0 +1,230 @@
+# ============================================================
+#  CE Testbench (Version 1.0)
+#  Deterministic validation of CE envelope construction
+#  Aligned with:
+#    - 20.108 (CE Envelope)
+#    - 20.107.030 (CEx-Pck)
+#    - 20.105.*, 20.15
+#    - progressive_lineup_testing.md
+# ============================================================
+
+mode: testbench
+primitive: CE
+version: "1.0"
+
+# ------------------------------------------------------------
+# 1. Testbench Metadata
+# ------------------------------------------------------------
+metadata:
+  description: >
+    Validates CE canonical envelope construction, context normalization,
+    MSL reconciliation, continuity handling, extraction_audit, CE provenance,
+    and deterministic replay behavior.
+  upstream:
+    - CEx-IE
+    - CEx-CCR
+    - CEx-Pck
+  passthrough_allowed: false
+  progressive_lineup_compatible: true
+
+# ------------------------------------------------------------
+# 2. Input TP (Before CE)
+# ------------------------------------------------------------
+input:
+  tp_identity:
+    tp_id: "tp_ce_test_001"
+    tp_seq: 42
+    cycle_id: 7
+    lane_id: "A"
+    schema_version: "1.0"
+    profile_signature: "default"
+    wire_map_version: "1.0"
+    policy_signature: "default"
+
+  metadata:
+    context:
+      context_fields:
+        topic: "travel"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "medium"
+        tone: "balanced"
+        continuity: "moderate"
+        direction: "forward"
+        coherence: "medium"
+        importance: "normal"
+        clarifying_fields:
+          - "destination"
+          - "duration"
+
+      relevance_flags:
+        topic_relevant: true
+        stance_relevant: true
+        continuity_relevant: true
+
+      copy_forward_flags:
+        topic: true
+        direction: true
+        coherence: true
+
+      reset_flags:
+        topic: false
+        stance: false
+        intent: false
+
+      context_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
+        commit_lineage: ["c001", "c002"]
+
+    msl:
+      qualifiers: ["approximate", "general"]
+      clarifications: ["non-urgent"]
+      stance: "neutral"
+      shading: "none"
+      intent: "inform"
+      direction: "forward"
+      coherence: "medium"
+      subculture: "general"
+      msl_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
+
+    next_context:
+      next_context: "travel"
+      direction: "forward"
+      coherence: "medium"
+      stance: "neutral"
+      subculture: "general"
+      next_context_provenance:
+        origin: "MCB"
+        last_update: "MCB"
+
+  cex:
+    ccr:
+      alignment:
+        identity: "aligned"
+        clarifying: "aligned"
+        context: "aligned"
+        continuity: "moderate"
+        reference: "aligned"
+        semantic_residue: "weak"
+
+      scores:
+        ambiguity: 0.1
+        collapse: 0.0
+        drift: 0.05
+        stability: 0.9
+
+      decision: "specific"
+      selected_conversation: 3
+      provenance:
+        origin: "CEx-CCR"
+        last_update: "CEx-CCR"
+
+  semantic:
+    importance:
+      entities:
+        - { value: "destination", role: "primary", score: 0.8 }
+      facts:
+        - { value: "duration", role: "secondary", score: 0.4 }
+
+# ------------------------------------------------------------
+# 3. Expected Output TP (After CE)
+# ------------------------------------------------------------
+expected_output:
+  metadata:
+    context:
+      topic: "travel"
+      stance: "neutral"
+      intent: "inform"
+      register: "casual"
+      politeness: "medium"
+      tone: "balanced"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+      clarifying_fields:
+        - "destination"
+        - "duration"
+
+      relevance_flags:
+        topic_relevant: true
+        stance_relevant: true
+        continuity_relevant: true
+
+      copy_forward_flags:
+        topic: true
+        direction: true
+        coherence: true
+
+      reset_flags:
+        topic: false
+        stance: false
+        intent: false
+
+      context_provenance:
+        origin: "CE"
+        last_update: "CE"
+        commit_lineage: ["c001", "c002", "c003"]
+
+      extraction_audit:
+        normalized_fields:
+          - "topic"
+          - "stance"
+          - "intent"
+          - "direction"
+          - "coherence"
+        msl_reconciliation:
+          stance: "neutral"
+          direction: "forward"
+          coherence: "medium"
+        continuity_validation: "moderate"
+        importance_validation: "normal"
+        clarifying_validation:
+          - "destination"
+          - "duration"
+
+      ce_version_tag: "CE_v1.0"
+
+# ------------------------------------------------------------
+# 4. Deterministic Replay Rules
+# ------------------------------------------------------------
+rules:
+  - id: ce_replay_001
+    description: CE must produce identical output given identical input.
+    check: deterministic_replay
+
+  - id: ce_context_normalization_001
+    description: CE must normalize context fields deterministically.
+    check: context_normalization
+
+  - id: ce_msl_reconciliation_001
+    description: CE must reconcile MSL tokens with context fields.
+    check: msl_reconciliation
+
+  - id: ce_continuity_validation_001
+    description: CE must validate continuity using CEx-Pck flags + next_context.
+    check: continuity_validation
+
+  - id: ce_provenance_001
+    description: CE must write correct provenance for all fields it updates.
+    check: provenance_integrity
+
+  - id: ce_extraction_audit_001
+    description: CE must produce a complete extraction audit.
+    check: extraction_audit_integrity
+
+  - id: ce_version_tag_001
+    description: CE must write CE_v1.0 as version tag.
+    check: version_tag_integrity
+
+# ------------------------------------------------------------
+# 5. Notes
+# ------------------------------------------------------------
+notes:
+  - CE testbench is fully compatible with progressive lineup execution.
+  - CE testbench validates Python/C++ parity implicitly through deterministic replay.
+  - CE testbench does not validate identity refinement or routing (IdOB/TR/RB responsibility).
