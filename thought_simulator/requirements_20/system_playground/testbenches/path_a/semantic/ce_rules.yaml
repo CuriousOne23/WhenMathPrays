@@ -1,1 +1,148 @@
+# ============================================================
+#  CE Rules (Version 1.0)
+#  Deterministic validation logic for CE envelope construction
+#  Aligned with:
+#    - 20.108 (CE Envelope)
+#    - 20.107.030 (CEx-Pck)
+#    - 20.105.*, 20.15
+#    - progressive_lineup_testing.md
+# ============================================================
+
+primitive: CE
+version: "1.0"
+
+rules:
+
+  # ----------------------------------------------------------
+  # 1. Deterministic Replay
+  # ----------------------------------------------------------
+  - id: ce_replay_001
+    description: >
+      CE must produce identical output given identical input.
+    check: deterministic_replay
+
+  # ----------------------------------------------------------
+  # 2. Context Normalization
+  # ----------------------------------------------------------
+  - id: ce_context_normalization_001
+    description: >
+      CE must normalize context fields deterministically using
+      context_fields, MSL tokens, and next_context.
+    check: context_normalization
+
+  - id: ce_context_normalization_002
+    description: >
+      CE must preserve bounded structural categories for all
+      context envelope fields.
+    check: bounded_category_integrity
+
+  # ----------------------------------------------------------
+  # 3. MSL Reconciliation
+  # ----------------------------------------------------------
+  - id: ce_msl_reconciliation_001
+    description: >
+      CE must reconcile MSL tokens with context fields without
+      semantic interpretation.
+    check: msl_reconciliation
+
+  - id: ce_msl_reconciliation_002
+    description: >
+      CE must ensure stance, direction, and coherence match
+      the reconciled MSL tokens.
+    check: msl_alignment_integrity
+
+  # ----------------------------------------------------------
+  # 4. Continuity Validation
+  # ----------------------------------------------------------
+  - id: ce_continuity_validation_001
+    description: >
+      CE must validate continuity using CEx-Pck continuity flags
+      and next_context metadata.
+    check: continuity_validation
+
+  - id: ce_continuity_validation_002
+    description: >
+      CE must preserve continuity values exactly as normalized.
+    check: continuity_integrity
+
+  # ----------------------------------------------------------
+  # 5. Importance & Clarifying Fields
+  # ----------------------------------------------------------
+  - id: ce_importance_validation_001
+    description: >
+      CE must validate importance as a bounded structural category.
+    check: importance_validation
+
+  - id: ce_clarifying_fields_001
+    description: >
+      CE must preserve clarifying_fields deterministically.
+    check: clarifying_fields_integrity
+
+  # ----------------------------------------------------------
+  # 6. Extraction Audit
+  # ----------------------------------------------------------
+  - id: ce_extraction_audit_001
+    description: >
+      CE must produce a complete extraction audit containing
+      normalized_fields, MSL reconciliation notes, continuity
+      validation, importance validation, and clarifying validation.
+    check: extraction_audit_integrity
+
+  - id: ce_extraction_audit_002
+    description: >
+      CE must ensure extraction_audit is deterministic and stable
+      under replay.
+    check: extraction_audit_replay_stability
+
+  # ----------------------------------------------------------
+  # 7. Provenance
+  # ----------------------------------------------------------
+  - id: ce_provenance_001
+    description: >
+      CE must write correct provenance for all fields it updates.
+    check: provenance_integrity
+
+  - id: ce_provenance_002
+    description: >
+      CE must preserve upstream provenance (CEx-Pck, CCR, MCB)
+      and extend provenance only through authorized CE updates.
+    check: provenance_extension_integrity
+
+  # ----------------------------------------------------------
+  # 8. Version Tag
+  # ----------------------------------------------------------
+  - id: ce_version_tag_001
+    description: >
+      CE must write CE_v1.0 as the version tag.
+    check: version_tag_integrity
+
+  # ----------------------------------------------------------
+  # 9. Forbidden Behavior
+  # ----------------------------------------------------------
+  - id: ce_forbidden_behavior_001
+    description: >
+      CE must not modify CCR fields, semantic-importance fields,
+      CIL metadata, or semantic-residue metadata.
+    check: forbidden_behavior_integrity
+
+  - id: ce_forbidden_behavior_002
+    description: >
+      CE must not infer meaning, use embeddings, or write outside
+      its authorized TP envelopes.
+    check: semantic_boundary_integrity
+
+  # ----------------------------------------------------------
+  # 10. Progressive Lineup Compatibility
+  # ----------------------------------------------------------
+  - id: ce_progressive_lineup_001
+    description: >
+      CE must operate correctly under progressive lineup execution,
+      accepting upstream envelopes regardless of use_<primitive> flags.
+    check: progressive_lineup_compatibility
+
+  - id: ce_progressive_lineup_002
+    description: >
+      CE must not rely on skipped-primitive behavior.
+    check: progressive_lineup_strictness
+
 
