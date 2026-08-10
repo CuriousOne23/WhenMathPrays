@@ -17,11 +17,15 @@ import copy
 from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_rulechecker import CERuleChecker
 from thought_simulator.requirements_20.system_playground.primitives.ce.ce import CE
 
-
 # ============================================================
 # Global config injected by run.py
 # ============================================================
 TESTBENCH_CONFIG = {}
+
+# ============================================================
+# Base directory for all CE testbench files
+# ============================================================
+BASE_DIR = os.path.dirname(__file__)
 
 
 def set_testbench_config(config):
@@ -54,10 +58,10 @@ def deep_compare(a, b):
 def run_single_test(test_entry):
     test_id = test_entry["id"]
     enabled = test_entry.get("enabled", False)
-    input_file = test_entry["input"]
-    expected_file = test_entry["expected_output"]
-    rules_file = test_entry["rules"]
-    rulechecker_file = test_entry["rulechecker"]
+    input_file = os.path.join(BASE_DIR, test_entry["input"])
+    expected_file = os.path.join(BASE_DIR, test_entry["expected_output"])
+    rules_file = os.path.join(BASE_DIR, test_entry["rules"])
+    rulechecker_file = os.path.join(BASE_DIR, test_entry["rulechecker"])
 
     print("\n------------------------------------------------------------")
     print(f"Running Test: {test_id}")
@@ -68,13 +72,13 @@ def run_single_test(test_entry):
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
     # Load input TP
-    tp_input = load_yaml(os.path.join(base_dir, input_file))
+    tp_input = load_yaml(input_file)
 
     # Load expected output TP
-    tp_expected = load_yaml(os.path.join(base_dir, expected_file))
+    tp_expected = load_yaml(expected_file)
 
     # Load rules
-    rules = load_yaml(os.path.join(base_dir, rules_file))["rules"]
+    rules = load_yaml(rules_file)["rules"]
 
     # Print general info
     print(f"- Primitive: CE")
@@ -131,8 +135,8 @@ def run_testbench():
     print(" CE Testbench Runner — Starting Execution")
     print("============================================================")
 
-    base_dir = os.path.dirname(__file__)
-    tests_to_run = load_yaml(os.path.join(base_dir, "ce_tests_to_run.yaml"))
+    tests_to_run_file = os.path.join(BASE_DIR, "ce_tests_to_run.yaml")
+    tests_to_run = load_yaml(tests_to_run_file)
     tests = tests_to_run["tests"]
 
     results = []
