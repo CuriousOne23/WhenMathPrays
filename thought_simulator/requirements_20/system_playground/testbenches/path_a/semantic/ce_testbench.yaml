@@ -1,161 +1,198 @@
-"""
-CE Testbench (Version 1.0)
-Correct behavior:
-    • All tests use ce_input.yaml as input
-    • All tests use ce_testbench.yaml as expected output
-    • Tests only toggle rule subsets or enable/disable
-"""
-
-import os
-import yaml
-import json
-import copy
-
-from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_rulechecker import CERuleChecker
-from thought_simulator.requirements_20.system_playground.primitives.ce.ce import CE
-
 # ============================================================
-# Global config injected by run.py
-# ============================================================
-TESTBENCH_CONFIG = {}
-
-# Base directory for CE testbench files
-BASE_DIR = os.path.dirname(__file__)
-
-
-def set_testbench_config(config):
-    global TESTBENCH_CONFIG
-    TESTBENCH_CONFIG = config
-
-
-# ============================================================
-# Utility helpers
+#  CE Testbench (Version 1.0)
+#  Deterministic validation of CE envelope construction
+#  Aligned with:
+#    - 20.108 (CE Envelope)
+#    - 20.107.030 (CEx-Pck)
+#    - 20.105.*, 20.15
+#    - progressive_lineup_testing.md
 # ============================================================
 
-def load_yaml(path):
-    with open(path, "r") as f:
-        return yaml.safe_load(f)
+mode: testbench
+primitive: CE
+version: "1.0"
 
+# ------------------------------------------------------------
+# 1. Testbench Metadata
+# ------------------------------------------------------------
+metadata:
+  description: >
+    Validates CE canonical envelope construction, context normalization,
+    MSL reconciliation, continuity handling, extraction_audit, CE provenance,
+    and deterministic replay behavior.
+  upstream:
+    - CEx-IE
+    - CEx-CCR
+    - CEx-Pck
+  passthrough_allowed: false
+  progressive_lineup_compatible: true
 
-def deep_compare(a, b):
-    return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+# ------------------------------------------------------------
+# 2. Input TP (Before CE)
+# ------------------------------------------------------------
+input:
+  tp_identity:
+    tp_id: "tp_ce_test_001"
+    tp_seq: 42
+    cycle_id: 7
+    lane_id: "A"
+    schema_version: "1.0"
+    profile_signature: "default"
+    wire_map_version: "1.0"
+    policy_signature: "default"
 
+  metadata:
+    context:
+      context_fields:
+        topic: "travel"
+        stance: "neutral"
+        intent: "inform"
+        register: "casual"
+        politeness: "medium"
+        tone: "balanced"
+        continuity: "moderate"
+        direction: "forward"
+        coherence: "medium"
+        importance: "normal"
+        clarifying_fields:
+          - "destination"
+          - "duration"
 
-# ============================================================
-# CE Test Runner
-# ============================================================
+      relevance_flags:
+        topic_relevant: true
+        stance_relevant: true
+        continuity_relevant: true
 
-def run_single_test(test_entry):
-    test_id = test_entry["id"]
-    enabled = test_entry.get("enabled", False)
+      copy_forward_flags:
+        topic: true
+        direction: true
+        coherence: true
 
-    print("\n------------------------------------------------------------")
-    print(f"Running Test: {test_id}")
-    print("------------------------------------------------------------")
+      reset_flags:
+        topic: false
+        stance: false
+        intent: false
 
-    if not enabled:
-        print(f"- Test {test_id} is DISABLED. Skipping.")
-        return {"id": test_id, "enabled": False, "passed": None, "errors": []}
+      context_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
+        commit_lineage: ["c001", "c002"]
 
-    # Canonical CE input/output
-    input_file = os.path.join(BASE_DIR, "ce_input.yaml")
-    expected_file = os.path.join(BASE_DIR, "ce_testbench.yaml")
-    rules_file = os.path.join(BASE_DIR, "ce_rules.yaml")
+    msl:
+      qualifiers: ["approximate", "general"]
+      clarifications: ["non-urgent"]
+      stance: "neutral"
+      shading: "none"
+      intent: "inform"
+      direction: "forward"
+      coherence: "medium"
+      subculture: "general"
+      msl_provenance:
+        origin: "CEx-Pck"
+        last_update: "CEx-Pck"
 
-    # Load input TP
-    tp_input = load_yaml(input_file)
+    next_context:
+      next_context: "travel"
+      direction: "forward"
+      coherence: "medium"
+      stance: "neutral"
+      subculture: "general"
+      next_context_provenance:
+        origin: "MCB"
+        last_update: "MCB"
 
-    # Load expected output TP
-    tp_expected = load_yaml(expected_file)
-    expected_ctx = tp_expected["expected_output"]["metadata"]["context"]
+  cex:
+    ccr:
+      alignment:
+        identity: "aligned"
+        clarifying: "aligned"
+        context: "aligned"
+        continuity: "moderate"
+        reference: "aligned"
+        semantic_residue: "weak"
 
-    # Load rules
-    rules = load_yaml(rules_file)["rules"]
+      scores:
+        ambiguity: 0.1
+        collapse: 0.0
+        drift: 0.05
+        stability: 0.9
 
-    # Print general info (filenames only)
-    print(f"- Input File: {os.path.basename(input_file)}")
-    print(f"- Expected Output File: {os.path.basename(expected_file)}")
-    print(f"- Rules File: {os.path.basename(rules_file)}")
+      decision: "specific"
+      selected_conversation: 3
+      provenance:
+        origin: "CEx-CCR"
+        last_update: "CEx-CCR"
 
-    # Run CE
-    ce = CE(copy.deepcopy(tp_input))
-    ce.inspect()
-    tp_output = ce.tp
-    actual_ctx = tp_output["metadata"]["context"]
+  semantic:
+    importance:
+      entities:
+        - { value: "destination", role: "primary", score: 0.8 }
+      facts:
+        - { value: "duration", role: "secondary", score: 0.4 }
 
-    # Compare only CE envelope context
-    structural_match = deep_compare(actual_ctx, expected_ctx)
+# ------------------------------------------------------------
+# 3. Expected Output TP (After CE)
+# ------------------------------------------------------------
+expected_output:
+  metadata:
+    context:
+      topic: "travel"
+      stance: "neutral"
+      intent: "inform"
+      register: "casual"
+      politeness: "medium"
+      tone: "balanced"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+      clarifying_fields:
+        - "destination"
+        - "duration"
 
-    # Run rulechecker
-    checker = CERuleChecker(tp_input, tp_output, rules)
-    rule_errors = checker.run()
+      relevance_flags:
+        topic_relevant: true
+        stance_relevant: true
+        continuity_relevant: true
 
-    # Determine pass/fail
-    passed = structural_match and len(rule_errors) == 0
+      copy_forward_flags:
+        topic: true
+        direction: true
+        coherence: true
 
-    # Print results
-    print("\n----- Test Result -----")
-    print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
-    print(f"- Structural Match: {'PASS' if structural_match else 'FAIL'}")
+      reset_flags:
+        topic: false
+        stance: false
+        intent: false
 
-    if rule_errors:
-        print("- Rule Violations:")
-        for rid, msg in rule_errors:
-            print(f"  * [{rid}] {msg}")
-    else:
-        print("- Rule Violations: None")
+      context_provenance:
+        origin: "CE"
+        last_update: "CE"
+        commit_lineage: ["c001", "c002", "c003"]
 
-    return {
-        "id": test_id,
-        "enabled": True,
-        "passed": passed,
-        "errors": rule_errors
-    }
+      extraction_audit:
+        normalized_fields:
+          - "topic"
+          - "stance"
+          - "intent"
+          - "direction"
+          - "coherence"
+        msl_reconciliation:
+          stance: "neutral"
+          direction: "forward"
+          coherence: "medium"
+        continuity_validation: "moderate"
+        importance_validation: "normal"
+        clarifying_validation:
+          - "destination"
+          - "duration"
 
+      ce_version_tag: "CE_v1.0"
 
-# ============================================================
-# run_testbench() — REQUIRED BY run.py
-# ============================================================
-
-def run_testbench():
-    print("\n============================================================")
-    print(" CE Testbench Runner — Starting Execution")
-    print("============================================================")
-
-    tests_to_run_file = os.path.join(BASE_DIR, "ce_tests_to_run.yaml")
-    tests_to_run = load_yaml(tests_to_run_file)
-    tests = tests_to_run["tests"]
-
-    results = []
-    total = 0
-    passed = 0
-    failed = 0
-
-    for test in tests:
-        result = run_single_test(test)
-        if not test.get("enabled", False):
-            continue
-
-        total += 1
-        if result["passed"]:
-            passed += 1
-        else:
-            failed += 1
-
-        results.append(result)
-
-    print("\n============================================================")
-    print(" CE Testbench Summary")
-    print("============================================================")
-    print(f"- Total Tests Enabled: {total}")
-    print(f"- Passed: {passed}")
-    print(f"- Failed: {failed}")
-
-    print("\nDetailed Results:")
-    for r in results:
-        status = "PASS" if r["passed"] else "FAIL"
-        print(f"- {r['id']}: {status}")
-
-    print("\n============================================================")
-    print(" CE Testbench Runner — Complete")
-    print("============================================================")
+# ------------------------------------------------------------
+# 4. Notes
+# ------------------------------------------------------------
+notes:
+  - CE testbench is fully compatible with progressive lineup execution.
+  - CE testbench validates Python/C++ parity implicitly through deterministic replay.
+  - CE testbench does not validate identity refinement or routing (IdOB/TR/RB responsibility).
