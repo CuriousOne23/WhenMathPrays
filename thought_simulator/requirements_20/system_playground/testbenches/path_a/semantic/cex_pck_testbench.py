@@ -1,9 +1,9 @@
 """
-cex_pck_testbench.py
-
-Deterministic testbench for the CEx-Pck primitive.
+CEx-Pck Testbench (Deterministic)
+---------------------------------
 This module loads:
-  - cex_pck_input.yaml
+  - cex_pck_input.yaml   (general mode)
+  - cex_pck_testbench.yaml (testbench mode)
   - cex_pck_rules.yaml
   - cex_pck_tests_to_run.yaml
 
@@ -12,7 +12,8 @@ It executes:
   - Rulechecker (cex_pck_rulechecker.py)
 
 It compares:
-  - TP output against expected fields in cex_pck_testbench.yaml
+  - TP output against expected fields in cex_pck_testbench.yaml (testbench mode)
+  - TP output against expected fields in cex_pck_testbench.yaml (general mode)
 
 This file is invoked by testbenches/run.py.
 """
@@ -23,31 +24,51 @@ import yaml
 import subprocess
 from typing import Any, Dict
 
+# ============================================================
+# Configuration injected by run.py
+# ============================================================
+
+TESTBENCH_CONFIG = {
+    "mode": "general"   # default
+}
+
+def set_testbench_config(config: Dict[str, Any]):
+    global TESTBENCH_CONFIG
+    TESTBENCH_CONFIG = config
+
+
+# ============================================================
+# Paths
+# ============================================================
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 INPUT_PATH = os.path.join(ROOT, "cex_pck_input.yaml")
 RULES_PATH = os.path.join(ROOT, "cex_pck_rules.yaml")
 TESTS_PATH = os.path.join(ROOT, "cex_pck_tests_to_run.yaml")
-EXPECTED_PATH = os.path.join(ROOT, "cex_pck_testbench.yaml")
+TESTBENCH_PATH = os.path.join(ROOT, "cex_pck_testbench.yaml")
 RULECHECKER_PATH = os.path.join(ROOT, "cex_pck_rulechecker.py")
 
-# Path to the primitive implementation
+# Primitive implementation
 CEX_PCK_IMPL = os.path.join(
     ROOT,
     "../../../primitives/cex_pck/cex_pck.py"
 )
 
 
+# ============================================================
+# YAML Loader
+# ============================================================
+
 def load_yaml(path: str) -> Dict[str, Any]:
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
+# ============================================================
+# Run CEx-Pck
+# ============================================================
+
 def run_cex_pck(tp_input: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Executes the CEx-Pck primitive by importing cex_pck.py.
-    Returns the updated TP dictionary.
-    """
     import importlib.util
 
     spec = importlib.util.spec_from_file_location("cex_pck", CEX_PCK_IMPL)
@@ -61,13 +82,11 @@ def run_cex_pck(tp_input: Dict[str, Any]) -> Dict[str, Any]:
     return pck.tp
 
 
-def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool:
-    """
-    Runs cex_pck_rulechecker.py as a subprocess.
-    Returns True if rulecheck passes.
-    """
+# ============================================================
+# Rulechecker
+# ============================================================
 
-    # Write TP before/after
+def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool:
     before_path = os.path.join(ROOT, "_tp_before.json")
     after_path = os.path.join(ROOT, "_tp_after.json")
 
@@ -77,27 +96,23 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     with open(after_path, "w", encoding="utf-8") as f:
         json.dump(tp_after, f, indent=2)
 
-    # NEW: Load YAML rules here in the testbench
     rules = load_yaml(RULES_PATH)
-
-    # Convert rules to JSON for the rulechecker
     rules_json_path = os.path.join(ROOT, "_rules_tmp.json")
+
     with open(rules_json_path, "w", encoding="utf-8") as f:
         json.dump(rules, f, indent=2)
 
     import sys
-
     cmd = [
-        sys.executable,   # use same interpreter
+        sys.executable,
         RULECHECKER_PATH,
-        rules_json_path,  # pass JSON rules instead of YAML
+        rules_json_path,
         before_path,
         after_path
     ]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
 
-    # Print BOTH stdout and stderr so rulecheck failures are visible
     if result.stdout:
         print(result.stdout)
     if result.stderr:
@@ -106,11 +121,11 @@ def run_rulechecker(tp_before: Dict[str, Any], tp_after: Dict[str, Any]) -> bool
     return result.returncode == 0
 
 
+# ============================================================
+# Expected Output Comparison
+# ============================================================
+
 def compare_expected(tp_after: Dict[str, Any], expected: Dict[str, Any]) -> bool:
-    """
-    Compares TP output against expected fields in cex_pck_testbench.yaml.
-    Only checks fields explicitly listed in expected.
-    """
     def get_nested(d: Dict[str, Any], path: str):
         cur = d
         for part in path.split("."):
@@ -130,9 +145,21 @@ def compare_expected(tp_after: Dict[str, Any], expected: Dict[str, Any]) -> bool
     return ok
 
 
+# ============================================================
+# Main Testbench Runner
+# ============================================================
+
 def run_testbench():
+
+    # Load tests_to_run
     tests = load_yaml(TESTS_PATH)["tests_to_run"]
-    expected = load_yaml(EXPECTED_PATH)["expected"]
+
+    # Determine mode
+    mode = TESTBENCH_CONFIG.get("mode", "general")
+
+    # Load expected always from testbench YAML
+    tb_yaml = load_yaml(TESTBENCH_PATH)
+    tb_expected = tb_yaml["expected"]
 
     for test in tests:
         if not test.get("active", False):
@@ -141,32 +168,51 @@ def run_testbench():
         print(f"\n=== Running Test: {test['id']} ===")
         print(f"Description: {test['description']}")
 
-        tp_input = load_yaml(INPUT_PATH)
+        # ------------------------------------------------------------
+        # Select input source based on mode
+        # ------------------------------------------------------------
+        if mode == "testbench":
+            tp_input = tb_yaml["input"]
+            expected = tb_expected
+            input_source_name = "cex_pck_testbench.yaml"
+        else:
+            tp_input = load_yaml(INPUT_PATH)
+            expected = tb_expected
+            input_source_name = "cex_pck_input.yaml"
+
         tp_before = json.loads(json.dumps(tp_input))  # deep copy
 
-        # Run CEx-Pck
+        # ------------------------------------------------------------
+        # Run primitive
+        # ------------------------------------------------------------
         tp_after = run_cex_pck(tp_input)
 
+        # ------------------------------------------------------------
         # Rulecheck
+        # ------------------------------------------------------------
         print("\n--- Rulecheck ---")
         rulecheck_passed = run_rulechecker(tp_before, tp_after)
 
+        # ------------------------------------------------------------
         # Expected comparison
+        # ------------------------------------------------------------
         print("\n--- Expected Output Comparison ---")
         expected_passed = compare_expected(tp_after, expected)
 
-        # Detailed Summary
+        # ------------------------------------------------------------
+        # Summary
+        # ------------------------------------------------------------
         print("\n=== Test Summary ===")
         print(f"Test ID: {test['id']}")
         print(f"Description: {test['description']}")
 
         print("\nRuleChecker:")
-        print("  Input: cex_pck_input.yaml")
+        print(f"  Input: {input_source_name}")
         print("  Output Check: by cex_pck_rules.yaml and cex_pck_rulechecker.py")
         print(f"  Result: {'PASSED' if rulecheck_passed else 'FAILED'}")
 
         print("\nComparison:")
-        print("  Input: cex_pck_input.yaml")
+        print(f"  Input: {input_source_name}")
         print("  Output Check: agrees with cex_pck_testbench.yaml Expected Output")
         print(f"  Result: {'PASSED' if expected_passed else 'FAILED'}")
 
@@ -178,6 +224,10 @@ def run_testbench():
 
     return True
 
+
+# ============================================================
+# Entrypoint
+# ============================================================
 
 if __name__ == "__main__":
     success = run_testbench()
