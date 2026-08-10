@@ -1,1 +1,52 @@
+# ============================================================
+#  CE Tests To Run (Version 1.0)
+#  Execution dispatcher for CE testbench
+#  Aligned with:
+#    - ce_input.yaml
+#    - ce_testbench.yaml
+#    - ce_rules.yaml
+#    - ce_rulechecker.py
+#    - progressive_lineup_testing.md
+# ============================================================
+
+primitive: CE
+version: "1.0"
+
+tests:
+  - id: ce_test_001
+    description: "Canonical CE envelope construction and normalization"
+    input: "ce_input.yaml"
+    expected_output: "ce_testbench.yaml"
+    rules: "ce_rules.yaml"
+    rulechecker: "ce_rulechecker.py"
+
+# ------------------------------------------------------------
+# Progressive Lineup Configuration
+# ------------------------------------------------------------
+progressive_lineup:
+  enabled: true
+  upstream:
+    - CEx-IE
+    - CEx-CCR
+    - CEx-Pck
+  passthrough_allowed: false
+
+# ------------------------------------------------------------
+# Deterministic Replay Configuration
+# ------------------------------------------------------------
+replay:
+  enabled: true
+  iterations: 3
+  compare_mode: "deep"
+
+# ------------------------------------------------------------
+# Notes
+# ------------------------------------------------------------
+notes:
+  - CE_tests_to_run.yaml defines which CE testbench files to execute.
+  - CE_input.yaml provides the raw TP state before CE runs.
+  - CE_testbench.yaml defines the expected TP state after CE runs.
+  - CE_rules.yaml defines rule logic.
+  - CE_rulechecker.py implements rule logic.
+  - Progressive lineup execution is enabled for CE.
 
