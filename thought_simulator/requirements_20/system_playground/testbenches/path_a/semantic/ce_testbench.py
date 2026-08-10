@@ -68,13 +68,13 @@ def run_single_test(test_entry):
         return {"id": test_id, "enabled": False, "passed": None, "errors": []}
 
     # Load input TP
-    tp_input = load_yaml(input_file)
+    tp_input = load_yaml(os.path.join(base_dir, input_file))
 
     # Load expected output TP
-    tp_expected = load_yaml(expected_file)
+    tp_expected = load_yaml(os.path.join(base_dir, expected_file))
 
     # Load rules
-    rules = load_yaml(rules_file)["rules"]
+    rules = load_yaml(os.path.join(base_dir, rules_file))["rules"]
 
     # Print general info
     print(f"- Primitive: CE")
@@ -131,7 +131,8 @@ def run_testbench():
     print(" CE Testbench Runner — Starting Execution")
     print("============================================================")
 
-    tests_to_run = load_yaml("ce_tests_to_run.yaml")
+    base_dir = os.path.dirname(__file__)
+    tests_to_run = load_yaml(os.path.join(base_dir, "ce_tests_to_run.yaml"))
     tests = tests_to_run["tests"]
 
     results = []
