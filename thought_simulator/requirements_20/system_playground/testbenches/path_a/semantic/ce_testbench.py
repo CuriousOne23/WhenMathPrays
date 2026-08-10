@@ -1,7 +1,12 @@
 """
-CE Testbench Runner (Version 1.0)
-Executes CE tests defined in ce_tests_to_run.yaml.
-Provides detailed pass/fail output, rule violations, and summary.
+CE Testbench (Version 1.0)
+This module is imported by run.py.
+
+It provides:
+    • set_testbench_config(config)
+    • run_testbench()
+
+And internally runs the CE testbench runner.
 """
 
 import os
@@ -13,9 +18,24 @@ from thought_simulator.requirements_20.system_playground.testbenches.path_a.sema
 from thought_simulator.requirements_20.system_playground.primitives.ce.ce import CE
 
 
-# ------------------------------------------------------------
+# ============================================================
+# Global config injected by run.py
+# ============================================================
+TESTBENCH_CONFIG = {}
+
+
+def set_testbench_config(config):
+    """
+    Called by run.py before running the testbench.
+    Stores configuration for this testbench module.
+    """
+    global TESTBENCH_CONFIG
+    TESTBENCH_CONFIG = config
+
+
+# ============================================================
 # Utility helpers
-# ------------------------------------------------------------
+# ============================================================
 
 def load_yaml(path):
     with open(path, "r") as f:
@@ -27,11 +47,11 @@ def deep_compare(a, b):
     return json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
 
 
-# ------------------------------------------------------------
-# Test Runner
-# ------------------------------------------------------------
+# ============================================================
+# CE Test Runner
+# ============================================================
 
-def run_ce_test(test_entry):
+def run_single_test(test_entry):
     test_id = test_entry["id"]
     enabled = test_entry.get("enabled", False)
     input_file = test_entry["input"]
@@ -81,15 +101,9 @@ def run_ce_test(test_entry):
 
     # Print results
     print("\n----- Test Result -----")
-    if passed:
-        print(f"- PASS: {test_id}")
-    else:
-        print(f"- FAIL: {test_id}")
-
-    # Print structural comparison result
+    print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
     print(f"- Structural Match: {'PASS' if structural_match else 'FAIL'}")
 
-    # Print rule errors
     if rule_errors:
         print("- Rule Violations:")
         for rid, msg in rule_errors:
@@ -105,11 +119,18 @@ def run_ce_test(test_entry):
     }
 
 
-# ------------------------------------------------------------
-# Main Execution
-# ------------------------------------------------------------
+# ============================================================
+# run_testbench() — REQUIRED BY run.py
+# ============================================================
 
-def main():
+def run_testbench():
+    """
+    Called by run.py to execute the CE testbench.
+    """
+    print("\n============================================================")
+    print(" CE Testbench Runner — Starting Execution")
+    print("============================================================")
+
     tests_to_run = load_yaml("ce_tests_to_run.yaml")
     tests = tests_to_run["tests"]
 
@@ -118,12 +139,8 @@ def main():
     passed = 0
     failed = 0
 
-    print("\n============================================================")
-    print(" CE Testbench Runner — Starting Execution")
-    print("============================================================")
-
     for test in tests:
-        result = run_ce_test(test)
+        result = run_single_test(test)
         if not test.get("enabled", False):
             continue
 
@@ -150,8 +167,3 @@ def main():
     print("\n============================================================")
     print(" CE Testbench Runner — Complete")
     print("============================================================")
-
-
-if __name__ == "__main__":
-    main()
-
