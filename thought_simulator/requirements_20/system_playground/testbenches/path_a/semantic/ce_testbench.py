@@ -74,9 +74,9 @@ def run_single_test(test_entry):
     # Print general info
     print(f"- Primitive: CE")
     print(f"- Mode: testbench")
-    print(f"- Input File: {input_file}")
-    print(f"- Expected Output File: {expected_file}")
-    print(f"- Rules File: {rules_file}")
+    print(f"- Input File: {os.path.basename(input_file)}")
+    print(f"- Expected Output File: {os.path.basename(expected_file)}")
+    print(f"- Rules File: {os.path.basename(rules_file)}")
 
     # Run CE
     ce = CE(copy.deepcopy(tp_input))
