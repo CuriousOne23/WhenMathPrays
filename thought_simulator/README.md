@@ -40,6 +40,7 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 [TS Goals and Architecture Purposes](ts__goals_and_architecture.md)  
 [Architecture Principles of TS](architectural_principle_of_ts.md)  
 [ts_bilogical_modelling.md](requirements_20/system_playground/design/papers/cognition_and_constraints/ts_bilogical_modelling.md)  
+[TS Construction of Meaning](requirements_20/system_playground/design/papers/cognition_and_constraints/ts_construction_of_meaning.md)
 
 **Engineering papers**  
 [Manifold Engineering Tuning paper](requirements_20/system_playground/design/papers /manifold/manifold_white_papers/prework_manifold_and_back.md)  
