@@ -62,7 +62,7 @@ $$
 M_t = \\{ a_1, a_2, \ldots, a_n \\}
 $$
 
-Where each \(a_i\) is an invariant attribute of meaning.
+Where each $a_i$ is an invariant attribute of meaning.
 
 These attributes collectively form the **meaning state vector**.
 
@@ -137,8 +137,8 @@ $$
 
 Where:
 
-- \(R_t\) = raw meaning  
-- \(M_t\) = canonical meaning  
+- $R_t$ = raw meaning  
+- $M_t$ = canonical meaning  
 
 This mapping:
 
