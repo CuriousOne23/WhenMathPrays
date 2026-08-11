@@ -1,13 +1,3 @@
-Here is the revised version of the paper, followed by a summary of the changes.
-
----
-
-# ⭐ **ts_meaning_theory.md (Revised)**
-### *The Formal Theory of Meaning for the Thought Simulator (TS)*
-### *With Architectural Justification and Extension Points*
-
----
-
 # **TS Meaning Theory**
 ### *A Formal Model of Meaning, Canonicalization, and Cognitive Events*
 
@@ -62,7 +52,7 @@ Meaning is a structured object, not a scalar.
 Formally (structural definition):
 
 $$
-M_t = \{ a_1, a_2, \ldots, a_n \}
+M_t = \\{ a_1, a_2, \ldots, a_n \\}
 $$
 
 where each $a_i$ is an invariant attribute of meaning.
@@ -269,19 +259,6 @@ It is the foundation on which the remaining TS papers rest.
 # **End of ts_meaning_theory.md**
 
 ---
-
-### Summary of Changes
-
-- **Consolidated architectural justification**: Removed the repeated “this was the correct choice / this validates…” paragraphs that appeared in nearly every section. Placed a single clear rationale in Section 1 and referred to it only lightly thereafter.
-- **Softened absolute claims**:  
-  – “the only definition that…” → language that emphasizes simultaneous satisfaction of the full constraint set.  
-  – “TS is the first system to combine…” → “What is distinctive is the integration of the following elements… The contribution lies in the combination…”
-- **Clarified the status of the formalism**: Explicitly noted that the equations are structural definitions (they name objects and required relationships) rather than fully specified mathematical models.
-- **Centralized and reduced extendability language**: Kept a strong, clear extension policy (especially in Sections 2 and 3) and replaced the near-identical extendability paragraphs in later sections with shorter, non-repetitive statements.
-- **Added three short clarifying notes** requested by the critique:  
-  – expected representation style of attributes (discrete / bounded / small structured objects)  
-  – recognition that attributes interact  
-  – explicit treatment of residual error after canonicalization and the role of continuity/identity mechanisms in handling it
 - **Improved traceability**: Strengthened the opening linkage to *difficulty_of_meaning.md* and made inheritance of key claims clearer.
 - **Preserved all substantive content**: Definition, state vector, mapping, continuity, identity, commitment/replay, routing, laptop-scale argument, historical positioning, and the six criteria remain intact; only presentation, claim strength, and redundancy were adjusted.
 
