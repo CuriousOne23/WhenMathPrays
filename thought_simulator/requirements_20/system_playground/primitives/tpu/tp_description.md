@@ -33,39 +33,102 @@ The goal is to restore a clear, intuitive understanding of the TP’s design.
 
 ---
 
-# **2. Full Path‑A Architecture (Upstream → TP) — Revised**
+# **2. Full Path‑A Architecture (Upstream → TP) — Corrected for CST‑Core / CST‑MS / CST‑Mux Split**
 
-The TP is the **final product** of a deterministic upstream pipeline:
+The TP is the **final product** of a deterministic upstream pipeline.  
+This corrected diagram reflects the modern Path‑A architecture, where CST is decomposed into **CST‑Core**, **CST‑MS**, and **CST‑Mux**, and where COB receives signals only from CST‑Core and CST‑MS (not CST‑Mux).
 
 ```mermaid
 flowchart LR
+
+    %% ===== Meaning Layer → Stability Layer =====
+    OuBA --> COB
     OuBA --> CSTCore
+
+    %% ===== Stability Layer =====
     CSTCore --> CSTMS
     CSTCore --> CSTMux
     CSTMS --> CSTMux
+
+    %% ===== USP → Intake =====
     CSTMux --> CIL
-    OuBA --> COB
     COB --> CIL
+
+    %% ===== Intake → Extraction =====
     CIL --> CExIE
     CExIE --> CExCCR
     CExCCR --> CExPck
+
+    %% ===== Semantic Firewall → TP =====
     CExPck --> CE
     CE --> TPU
     TPU --> TP
 ```
 
-### **Upstream Stability Layer (CST‑Core → CST‑MS → CST‑Mux)**  
-These modules compute and synthesize:
+---
 
-- drift, oscillation, ambiguity, collapse  
-- freeze, thaw, continuity‑restoration  
-- stability summaries  
-- structural commands (freeze, thaw, split, merge)  
-- Unified Stability Packet (USP)
+## **Upstream Stability Layer (CST‑Core → CST‑MS → CST‑Mux)**
 
-The USP is delivered to CIL for deterministic replay reconstruction.
+The stability layer is now composed of three primitives:
 
-### **Long‑Horizon Identity Layer (COB)**  
+### **CST‑Core (metric generator)**  
+Computes raw stability metrics:
+
+- drift  
+- oscillation  
+- ambiguity  
+- collapse  
+- continuity  
+- freeze / thaw detection  
+
+CST‑Core emits:
+
+- **Freeze**, **Thaw**, **Continuity‑restoration** → **COB**  
+- raw metrics → **CST‑MS**  
+- raw metrics + structural signals → **CST‑Mux**
+
+### **CST‑MS (metric synthesis + structural command authority)**  
+Synthesizes:
+
+- stability summary  
+- instability summary  
+- collapse risk  
+- freeze risk  
+- thaw readiness  
+- ambiguity/drift/oscillation summaries  
+
+CST‑MS emits:
+
+- structural commands (freeze, thaw, collapse‑recovery, create, split, merge) → **COB**  
+- synthesized stability signals → **CST‑Mux**
+
+### **CST‑Mux (multiplexer)**  
+CST‑Mux packages:
+
+- raw CST‑Core signals  
+- synthesized CST‑MS signals  
+- structural command records  
+- diagnostic mismatch signals  
+
+into the **Unified Stability Packet (USP)**.
+
+USP is delivered **exclusively to CIL**.
+
+CST‑Mux never connects to COB.
+
+---
+
+## **Long‑Horizon Identity Layer (COB)**
+
+COB receives:
+
+- meaning packets from **OuBA**  
+- CST‑Core correction signals  
+- CST‑MS structural commands  
+- identity‑importance (IdOB → TP → OuBA → COB)  
+- semantic‑adjacent importance (SmOB → TP → OuBA → COB)  
+- next‑turn context (MCB → TP.next_context{} → COB)
+
 COB maintains:
 
 - identity layers  
@@ -75,29 +138,43 @@ COB maintains:
 - lineage continuity  
 - next‑turn context continuity  
 - ordering metrics (recency, frequency, density)  
-- long‑horizon importance
+- long‑horizon importance  
 
-COB produces the **stabilized identity‑layer snapshot** consumed by CIL.
+COB produces the **stabilized identity‑layer snapshot** consumed by **CIL**.
 
-### **Intake Layer (CIL)**  
+---
+
+## **Intake Layer (CIL)**
+
+CIL receives:
+
+- USP from **CST‑Mux**  
+- stabilized identity‑layer snapshot from **COB**
+
 CIL normalizes:
 
 - identity selection  
-- stability indicators (from USP)  
+- stability indicators  
 - structural hints  
 - clarifying‑fields  
 - importance signals  
 - next‑turn context  
 - completeness flags  
-- register hints
+- register hints  
 
 CIL produces the **CIL Intake Packet** consumed by CEx.
 
-### **Extraction + Alignment Layer (CEx‑IE → CEx‑CCR)**  
+---
+
+## **Extraction + Alignment Layer (CEx‑IE → CEx‑CCR)**
+
 - **CEx‑IE** extracts bounded structural hints.  
 - **CEx‑CCR** computes alignment, scores, decision, selected conversation.
 
-### **Packaging Layer (CEx‑Pck)**  
+---
+
+## **Packaging Layer (CEx‑Pck)**
+
 CEx‑Pck constructs TP metadata envelopes:
 
 - context  
@@ -106,7 +183,10 @@ CEx‑Pck constructs TP metadata envelopes:
 - CIL metadata  
 - semantic‑residue metadata
 
-### **Semantic Firewall (CE → TPU)**  
+---
+
+## **Semantic Firewall (CE → TPU)**
+
 CE normalizes context metadata.  
 TPU commits metadata into the TP.
 
