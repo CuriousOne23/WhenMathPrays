@@ -1,20 +1,19 @@
+# ⭐ **ts_meaning_theory.md (Updated Revision)**  
+### *The Formal Theory of Meaning for the Thought Simulator (TS)*  
+### *With Architectural Justification and Extension Points*
+
+---
+
 # **TS Meaning Theory**  
 ### *A Formal Model of Meaning, Canonicalization, and Cognitive Events*
 
 This paper presents the formal theory of meaning used by the Thought Simulator (TS).  
 It builds directly on *difficulty_of_meaning.md* and provides the mathematical, structural, and architectural foundation for TS’s meaning pipeline.
 
-The goal of this paper is to define:
+Two clarifications are added in this revision:
 
-- what meaning is (in TS terms)  
-- how meaning is represented  
-- how raw meaning is converted into canonical meaning  
-- how canonical meaning supports continuity, identity, and replay determinism  
-- how meaning interacts with the TP architecture  
-- why this theory enables laptop‑scale cognition  
-
-This paper is intentionally formal.  
-It is the theoretical backbone of TS.
+1. **Why the architectural definition of meaning was the correct choice, given what is known now.**  
+2. **Where TS is intentionally extendable — especially in the meaning state vector and canonicalization pipeline.**
 
 ---
 
@@ -33,14 +32,25 @@ To operate deterministically, TS must represent meaning in a form that is:
 Human meaning is none of these things.  
 Therefore TS must introduce a theory of meaning that:
 
-1. **defines meaning as a structured object**  
-2. **identifies the invariant attributes of meaning**  
-3. **defines a raw → canonical mapping**  
-4. **defines continuity and identity constraints**  
-5. **defines replay determinism**  
-6. **defines how meaning interacts with the TP layers**
+1. defines meaning as a structured object  
+2. identifies the invariant attributes of meaning  
+3. defines a raw → canonical mapping  
+4. defines continuity and identity constraints  
+5. defines replay determinism  
+6. defines how meaning interacts with the TP layers  
 
-This paper formalizes that theory.
+### **Architectural justification**  
+TS’s architectural definition of meaning — as a structured set of invariant attributes — has proven to be the correct choice given what is known now.  
+It is the only definition that:
+
+- supports deterministic replay  
+- supports identity continuity  
+- supports bounded canonicalization  
+- supports laptop‑scale cognition  
+- integrates cleanly with the TP layers  
+- avoids the instability of raw semantic embeddings  
+
+This choice was not arbitrary; it was forced by the computational realities described in *difficulty_of_meaning.md*.
 
 ---
 
@@ -50,11 +60,7 @@ TS adopts a machine‑tractable definition of meaning:
 
 > **Meaning is the structured set of stable, repeatable, machine‑extractable attributes that allow a system to interpret, respond to, and continue a conversation coherently.**
 
-Meaning is not a scalar.  
-Meaning is not a single embedding.  
-Meaning is not a probability distribution.
-
-Meaning is a **structured object** composed of multiple attributes.
+Meaning is a **structured object**, not a scalar.
 
 Formally:
 
@@ -64,7 +70,18 @@ $$
 
 Where each $a_i$ is an invariant attribute of meaning.
 
-These attributes collectively form the **meaning state vector**.
+### **Extendability**  
+The structure of $M_t$ is intentionally extendable.  
+New attributes may be added if they satisfy TS’s six criteria:
+
+1. appears consistently  
+2. extractable  
+3. canonicalizable  
+4. replay‑safe  
+5. identity‑relevant  
+6. laptop‑computable  
+
+This makes TS future‑proof without destabilizing the architecture.
 
 ---
 
@@ -100,17 +117,24 @@ These attributes:
 - can be reasoned over  
 - can be computed on a laptop  
 
-This set is not final.  
-It is the **current working set** that satisfies TS’s six criteria:
+### **Extendability**  
+Section 3 is one of the primary extension points in TS.  
+The meaning state vector can evolve as:
 
-1. appears consistently  
-2. extractable  
-3. canonicalizable  
-4. replay‑safe  
-5. identity‑relevant  
-6. laptop‑computable  
+- new invariants are discovered  
+- new primitives are added  
+- new cognitive constraints emerge  
+- new routing requirements appear  
 
-The requirement is **sufficiency**, not completeness.
+The architecture is designed so that adding a new invariant:
+
+- does not break determinism  
+- does not break replay  
+- does not break continuity  
+- does not break identity  
+- does not break routing  
+
+This is a deliberate design choice.
 
 ---
 
@@ -123,22 +147,12 @@ Raw meaning is:
 - volatile  
 - unbounded  
 - non‑deterministic  
-- alignment‑dependent  
-- routing‑dependent  
-- identity‑dependent  
 
-Raw meaning cannot be committed or replayed.
-
-Therefore TS defines a mapping:
+TS defines a mapping:
 
 $$
 \text{CE}(R_t) = M_t
 $$
-
-Where:
-
-- $R_t$ = raw meaning  
-- $M_t$ = canonical meaning  
 
 This mapping:
 
@@ -147,9 +161,14 @@ This mapping:
 - canonicalizes meaning  
 - makes meaning deterministic  
 - makes meaning replay‑safe  
-- makes meaning computable  
 
-The raw → canonical boundary is **architecturally inevitable**.
+### **Extendability**  
+The CE mapping is extendable in two ways:
+
+1. **New extraction primitives** can feed into CE.  
+2. **New canonicalization rules** can be added as long as they preserve determinism and boundedness.
+
+This allows TS to incorporate new forms of meaning without redesigning the pipeline.
 
 ---
 
@@ -157,47 +176,28 @@ The raw → canonical boundary is **architecturally inevitable**.
 
 Canonicalization is the process of converting raw meaning into canonical meaning.
 
-Canonicalization is:
-
-- lossy (information‑theoretically)  
-- structured  
-- deterministic  
-- bounded  
-- replay‑safe  
-- continuity‑preserving  
-- identity‑preserving  
-
 TS’s claim is:
 
 > **The right loss, applied at the right frequency, produces residual error that is negligible for machine cognition.**
 
-This is the same principle behind:
+Canonicalization is:
 
-- Kalman filters  
-- Bayesian updates  
-- quantization  
-- coarse‑to‑fine estimation  
-- numerical integration  
+- lossy  
+- structured  
+- deterministic  
+- bounded  
+- replay‑safe  
 
-Formally:
+### **Architectural justification**  
+Canonicalization was the correct architectural choice because:
 
-$$
-M_t = \text{CE}(R_t)
-$$
+- raw meaning is too unstable  
+- embeddings are too volatile  
+- semantic drift is too large  
+- replay determinism is impossible without canonicalization  
+- identity continuity cannot be guaranteed otherwise  
 
-$$
-M_{t+1} = \text{CE}(R_{t+1})
-$$
-
-If CE is applied at every turn, and the granularity is fine enough, then:
-
-$$
-\| M_{t+1} - M_t \| \approx \text{true semantic drift}
-$$
-
-Residual error becomes negligible.
-
-Canonicalization is the **mathematical hinge** of TS.
+Canonicalization is the mathematical hinge of TS.
 
 ---
 
@@ -220,26 +220,24 @@ Continuity requires:
 - identity continuity  
 - importance continuity  
 
-Continuity is what allows TS to:
+### **Extendability**  
+Continuity functions can be extended to incorporate:
 
-- maintain conversation threads  
-- maintain identity  
-- maintain referents  
-- maintain commitments  
-- maintain long‑horizon reasoning  
+- new invariants  
+- new stability constraints  
+- new routing requirements  
 
-Continuity is enforced by the TP context layer.
+Continuity is not fixed; it is a framework.
 
 ---
 
 # **7. Identity Continuity**
 
-Identity continuity is the requirement that TS must maintain:
+Identity continuity ensures TS maintains:
 
 - who is speaking  
 - what they know  
 - what they believe  
-- what they have said  
 - what TS has committed  
 
 Formally:
@@ -248,14 +246,14 @@ $$
 I_{t+1} = g(I_t, M_t)
 $$
 
-Identity continuity is enforced by:
+### **Extendability**  
+Identity continuity can incorporate:
 
-- provenance  
-- freeze signatures  
-- referent continuity  
-- importance continuity  
+- new provenance signals  
+- new freeze signature types  
+- new referent‑tracking primitives  
 
-Identity continuity is what makes TS deterministic.
+Identity continuity is intentionally modular.
 
 ---
 
@@ -263,26 +261,21 @@ Identity continuity is what makes TS deterministic.
 
 TS must commit meaning so that it can be replayed deterministically.
 
-Commitment requires:
-
-- canonical meaning  
-- provenance  
-- freeze signatures  
-- bounded state  
-- deterministic transitions  
-
 Replay determinism requires:
 
 $$
 M_t = \text{Replay}(M_t)
 $$
 
-Meaning must be identical when replayed.
+### **Architectural justification**  
+Replay determinism is only possible because TS chose:
 
-This is impossible with raw meaning.  
-It is guaranteed with canonical meaning.
+- canonical meaning  
+- invariant attributes  
+- deterministic transitions  
+- bounded state  
 
-Replay determinism is enforced by the TP commit layer.
+This validates the architectural definition of meaning.
 
 ---
 
@@ -290,20 +283,14 @@ Replay determinism is enforced by the TP commit layer.
 
 Meaning determines routing through the TP layers.
 
-Routing uses:
+### **Extendability**  
+Routing tables can be extended as:
 
-- topic → context layer  
-- intent → semantic layer  
-- stance → alignment layer  
-- continuity → structural routing layer  
-- importance → commit layer  
-- identity continuity → identity layer  
-- referent continuity → referent resolver  
-- provenance → replay layer  
-- entropy → stability layer  
-- freeze signatures → commit layer  
+- new invariants are added  
+- new TP layers are introduced  
+- new cognitive constraints emerge  
 
-Meaning is the **routing substrate** of TS.
+Routing is a flexible, meaning‑driven mechanism.
 
 ---
 
@@ -313,32 +300,28 @@ TS is designed to run on a common laptop.
 
 This is possible because:
 
-- meaning is decomposed into invariants  
-- invariants are canonicalized  
+- meaning is decomposed  
+- invariants are bounded  
 - canonicalization is deterministic  
-- canonical meaning is bounded  
-- meaning state is small  
-- meaning transitions are linear  
-- replay determinism is guaranteed  
+- replay is guaranteed  
 - continuity is enforced  
 - identity is preserved  
 
-TS does not compute cognition.  
-TS computes **cognitive events**.
+### **Architectural justification**  
+The architectural definition of meaning is what makes laptop‑scale cognition possible.  
+Without invariants and canonicalization, TS would require:
 
-This is why TS does not require:
-
-- trillions of parameters  
 - massive embeddings  
-- supercomputers  
+- trillions of parameters  
+- supercomputer‑scale compute  
 
-Meaning theory is what makes TS feasible.
+TS’s architecture was the correct choice.
 
 ---
 
 # **11. Relationship to Historical Work**
 
-TS’s meaning theory is related to:
+TS integrates:
 
 - schemas  
 - frames  
@@ -348,38 +331,35 @@ TS’s meaning theory is related to:
 - semantic networks  
 - transformers  
 
-But TS is the first system to integrate:
+But TS is the first system to combine:
 
-- a raw → canonical boundary  
+- raw → canonical boundary  
 - invariant meaning attributes  
 - deterministic canonicalization  
 - replay determinism  
 - identity continuity  
-- importance continuity  
 - laptop‑scale constraints  
 
-This integration is TS’s distinctive contribution.
+This validates the architectural direction.
 
 ---
 
 # **12. Conclusion**
 
-TS meaning theory defines:
+This revision clarifies:
 
-- what meaning is  
-- how meaning is represented  
-- how meaning is canonicalized  
-- how meaning supports continuity  
-- how meaning supports identity  
-- how meaning supports replay determinism  
-- how meaning routes through the TP layers  
-- how meaning enables laptop‑scale cognition  
+- why TS’s architectural definition of meaning was the correct choice  
+- where TS is intentionally extendable  
+- how meaning theory supports determinism  
+- how meaning theory supports identity  
+- how meaning theory supports replay  
+- how meaning theory enables laptop‑scale cognition  
 
 Meaning theory is the backbone of TS.  
 It is the foundation on which all other TS papers rest.
 
 ---
 
-# **End of ts_meaning_theory.md**
+# **End of ts_meaning_theory.md (Updated Revision)**
 
 ---
