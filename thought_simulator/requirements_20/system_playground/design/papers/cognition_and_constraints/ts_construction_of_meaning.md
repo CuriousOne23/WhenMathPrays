@@ -1,6 +1,6 @@
 # **ts_construction_of_meaning.md**  
 ### *Thought Simulator: Construction of Meaning Through Progressive Cognitive Resolution*  
-**Version 1.0 — Draft White Paper**  
+**Version 2.0 — Semi‑Formal White Paper**  
 **Author:** CuriousOne (Jeff)  
 **System:** Thought Simulator (TS) — Path‑A Cognitive Pipeline
 
@@ -8,195 +8,187 @@
 
 # **1. Introduction**
 
-The Thought Simulator (TS) is built on a simple but profound architectural insight:
+The Thought Simulator (TS) is built on a deterministic cognitive pipeline (Path‑A) that transforms raw linguistic input into structured, stable, evaluative, and ultimately expressive cognitive meaning. Unlike symbolic AI, which relies on static hand‑built structures, and unlike modern LLMs, which rely on stochastic latent representations, TS constructs meaning through **deterministic, structured, provenance‑tracked fields** that increase in resolution as they progress downstream.
 
-> **Cognition is the progressive refinement of meaning.**
-
-Meaning begins as a low‑resolution, unstable projection of ideas and relationships.  
-As it travels down Path‑A, TS increases the resolution of meaning through deterministic, structured, replay‑safe transformations.
-
-This white paper defines:
+This paper defines:
 
 - what “meaning” is inside TS  
-- how TS constructs meaning  
+- how TS constructs meaning deterministically  
 - how meaning resolution increases across Path‑A  
-- why this is historically new compared to symbolic AI and modern LLMs  
 - where cognition emerges  
-- how TS achieves deterministic cognitive behavior
+- how TS differs from symbolic AI and LLMs  
+- why TS’s meaning architecture is historically novel  
 
 ---
 
-# **2. What TS Means by “Meaning”**
+# **2. Operational Definition of Meaning in TS**
 
-In TS, **meaning** is not a probability distribution, not a latent vector, and not a symbolic rule.
+TS defines **meaning** as:
 
-Meaning is:
+> **A structured, deterministic projection of symbolic ideas, relationships, and contextual associations onto the object of description, expressed through bounded cognitive fields whose resolution increases as they move down Path‑A.**
 
-> **the structured projection of symbolic ideas, relationships, and contextual associations onto the object being described — expressed as deterministic fields that increase in resolution as they move down Path‑A.**
+Meaning is not a probability distribution.  
+Meaning is not a latent vector.  
+Meaning is not a hand‑built ontology.
 
-Meaning is a **cognitive object**, not a guess.
+Meaning is a **fielded cognitive object** with:
 
-Meaning is:
+- explicit structure  
+- deterministic values  
+- provenance lineage  
+- bounded semantics  
+- replay‑safe behavior  
+- progressive refinement  
 
-- **structured**  
-- **deterministic**  
-- **bounded**  
-- **provenance‑tracked**  
-- **contextual**  
-- **progressively refined**  
-
-This is fundamentally different from:
-
-- symbolic AI (static meaning)  
-- hybrid systems (annotated meaning)  
-- LLMs (emergent meaning)  
-
-TS is the first system that treats meaning as a **pipeline‑level cognitive construct**.
+This definition is operational, not metaphorical.  
+Meaning is a **data object** with measurable properties.
 
 ---
 
 # **3. Meaning as Projection**
 
-Meaning begins as a **projection**:
+TS treats meaning as a **projection** of:
 
 - symbolic ideas  
 - relationships  
-- associations  
 - contextual cues  
 - identity cues  
-- semantic hints  
+- semantic associations  
 
-These projections are **raw** and **unstable** at intake.
+onto the object being described.
 
-TS stabilizes them through deterministic transformations.
+This projection is:
+
+- **low‑resolution** at intake  
+- **medium‑resolution** at semantic extraction  
+- **high‑resolution** at contextual stabilization  
+- **very‑high‑resolution** at cognitive evaluation  
+- **behavioral‑resolution** at routing  
+- **expressive‑resolution** at output assembly  
 
 Meaning is not “what the system thinks.”  
-Meaning is “what the system *constructs*.”
+Meaning is “what the system constructs deterministically.”
 
 ---
 
-# **4. Meaning Resolution Across Path‑A**
+# **4. Meaning Fields and Resolution**
 
-Path‑A is a **meaning‑resolution pipeline**.
+Meaning resolution increases as the envelope moves downstream through Path‑A.  
+Each stage adds new fields, increases determinism, and improves cognitive coherence.
 
-Meaning resolution increases as the envelope moves downstream:
+Below is the formal resolution map.
 
 ---
 
 ## **4.1 Low‑Resolution Meaning (InB → IIInB → IE)**  
-Meaning is:
+Meaning fields present:
 
-- raw  
-- noisy  
-- pre‑semantic  
-- structurally incomplete  
+- structural intake metadata  
+- anomaly repair metadata  
+- replay metadata  
+- raw semantic hints  
+
+Characteristics:
+
 - unstable  
+- pre‑semantic  
+- noisy  
+- incomplete  
 
-These primitives perform:
-
-- anomaly detection  
-- repair proposals  
-- intake normalization  
-- structural envelope construction  
-
-This is **pre‑cognitive preprocessing**.
+This stage corresponds to **sensory preprocessing**.
 
 ---
 
 ## **4.2 Medium‑Resolution Meaning (CEx)**  
-This is the **birth of cognition**.
+Meaning fields added:
 
-CEx performs:
-
-- semantic extraction  
-- intent recognition  
+- topic  
+- intent  
 - identity selection  
-- clarifying metadata extraction  
+- clarifying metadata  
+- semantic extraction  
 - next‑turn context reflection  
 - provenance extension  
 
-Meaning becomes:
+Characteristics:
 
-- semantic  
+- structured  
 - contextual  
 - identity‑aware  
-- structured  
+- semantically coherent  
 
-This is the first moment TS demonstrates **deterministic cognition**.
+This is the **birth of deterministic cognition**.
+
+CEx is the earliest point where TS performs operations that symbolic AI and LLMs do not perform deterministically.
 
 ---
 
 ## **4.3 High‑Resolution Meaning (CE)**  
-CE stabilizes cognition.
+Meaning fields added:
 
-CE performs:
-
-- stance normalization  
-- direction normalization  
-- coherence normalization  
-- continuity normalization  
-- importance normalization  
+- stance  
+- direction  
+- coherence  
+- continuity  
+- importance  
 - clarifying field preservation  
 - audit construction  
 - provenance lineage extension  
 
-Meaning becomes:
+Characteristics:
 
 - stable  
 - bounded  
 - replay‑safe  
-- cognitively coherent  
+- cognitively normalized  
 
 This is **stable cognition**.
 
 ---
 
 ## **4.4 Very‑High‑Resolution Meaning (ISc)**  
-ISc evaluates cognition.
-
-ISc performs:
+Meaning fields added:
 
 - cognitive scoring  
-- entropy updates  
+- entropy  
 - conflict detection  
-- valuation  
+- valuation metadata  
 
-Meaning becomes:
+Characteristics:
 
 - weighted  
 - conflict‑aware  
 - entropy‑aware  
 
-This is **actionable cognition**.
+This is **evaluative cognition**.
 
 ---
 
 ## **4.5 Behavioral Meaning (TR → CTP → RTU → RB)**  
-These primitives perform:
+Meaning fields added:
 
-- routing  
-- arbitration  
-- vector construction  
-- decision shaping  
+- routing vectors  
+- arbitration metadata  
+- decision structure  
 
-Meaning becomes:
+Characteristics:
 
 - behavioral intention  
-- decision structure  
+- decision‑ready meaning  
 
 This is **decision cognition**.
 
 ---
 
 ## **4.6 Expressive Meaning (OuBA)**  
-OuBA performs:
+Meaning fields added:
 
 - SSR‑A  
 - SSR‑B  
 - freeze metadata  
 - output behavior assembly  
 
-Meaning becomes:
+Characteristics:
 
 - expressive behavior  
 - final TP(N+1)  
@@ -205,79 +197,126 @@ This is **expressive cognition**.
 
 ---
 
-# **5. Why TS Meaning Construction Is Historically New**
+# **5. Why TS Meaning Construction Is Novel**
 
-### **Symbolic AI**  
-- meaning was static  
-- meaning was hand‑built  
-- meaning did not increase in resolution  
-- meaning was not extracted from input  
-- meaning was not contextual  
-- meaning was not deterministic  
+TS meaning construction is historically new because it combines:
 
-Symbolic systems never had meaning fields.
+### **1. Determinism**  
+Meaning fields are computed deterministically, not stochastically.
 
-### **Hybrid symbolic systems**  
-- meaning was annotated  
-- meaning was probabilistic  
-- meaning was not deterministic  
-- meaning was not envelope‑based  
-- meaning was not provenance‑tracked  
+### **2. Structure**  
+Meaning is represented as explicit fields, not latent vectors.
 
-Hybrid systems never produced structured cognitive envelopes.
+### **3. Provenance**  
+Every meaning field carries lineage metadata.
 
-### **LLMs**  
+### **4. Bounded Semantics**  
+Meaning fields have strict definitions and allowed values.
+
+### **5. Replay Safety**  
+Meaning fields produce identical results under identical inputs.
+
+### **6. Progressive Resolution**  
+Meaning increases in resolution across Path‑A.
+
+### **7. Cognitive Coherence**  
+Meaning fields are normalized to ensure internal consistency.
+
+No symbolic system achieved this combination.  
+No hybrid system achieved this combination.  
+No LLM achieves this combination.
+
+---
+
+# **6. Comparison to Symbolic AI and LLMs**
+
+## **6.1 Symbolic AI**
+Symbolic systems had:
+
+- rules  
+- frames  
+- ontologies  
+- logic  
+
+But meaning was:
+
+- static  
+- hand‑built  
+- non‑contextual  
+- non‑progressive  
+- non‑deterministic in extraction  
+- not provenance‑tracked  
+
+Symbolic systems never produced meaning fields.
+
+---
+
+## **6.2 Hybrid Symbolic Systems**
+Hybrid systems had:
+
+- semantic parsers  
+- dependency graphs  
+- SRL systems  
+
+But meaning was:
+
+- probabilistic  
+- annotation‑based  
+- not envelope‑based  
+- not replay‑safe  
+- not progressively refined  
+
+Hybrid systems never produced cognitive envelopes.
+
+---
+
+## **6.3 Modern LLMs**
 LLMs have:
 
 - latent vectors  
-- stochastic inference  
 - emergent semantics  
+- stochastic inference  
 
-But they do **not** have:
+But meaning is:
 
-- deterministic meaning  
-- structured meaning  
-- bounded semantics  
-- provenance  
-- meaning continuity  
-- meaning direction  
-- meaning coherence  
-- meaning importance  
-- meaning scoring  
-- meaning routing  
+- non‑deterministic  
+- non‑structured  
+- non‑bounded  
+- non‑provenance‑tracked  
+- non‑progressive  
+- non‑replay‑safe  
 
 LLMs simulate meaning.  
 TS constructs meaning.
 
 ---
 
-# **6. The Earliest Point TS Does Something Historically New**
+# **7. Earliest Point TS Demonstrates Historically New Cognition**
 
 The earliest point where TS demonstrates:
 
-- determinism  
-- structure  
+- deterministic meaning  
+- structured meaning  
 - cognitive attributes  
 
 is:
 
 # ⭐ **CEx — Cognitive Extraction**
 
-CEx is the first primitive where TS:
+CEx is the first stage where TS performs:
 
-- extracts meaning deterministically  
-- reflects context deterministically  
-- identifies identity deterministically  
-- constructs semantic envelopes deterministically  
-- produces clarifying metadata deterministically  
+- deterministic semantic extraction  
+- deterministic intent recognition  
+- deterministic identity selection  
+- deterministic clarifying metadata extraction  
+- deterministic next‑turn reflection  
+- deterministic semantic envelope construction  
 
-This is **new** in the history of cognitive systems.
-
-CEx is the **birth of deterministic cognition**.
+This is the **birth of deterministic cognition**.
 
 ---
 
-# **7. TS Cognition Defined**
+# **8. TS Cognition Defined**
 
 TS cognition is:
 
@@ -288,7 +327,7 @@ Cognition is the **progressive resolution of meaning**.
 
 ---
 
-# **8. Summary**
+# **9. Summary**
 
 TS constructs meaning through:
 
@@ -308,14 +347,14 @@ Meaning resolution increases across Path‑A:
 5. **TR/CTP/RTU/RB** — behavioral meaning  
 6. **OuBA** — expressive meaning  
 
-This is the first architecture in history where meaning is:
+This architecture introduces a novel combination of:
 
-- deterministic  
-- structured  
-- bounded  
-- provenance‑tracked  
-- progressively refined  
-- cognitively coherent  
+- determinism  
+- structured meaning fields  
+- provenance tracking  
+- bounded semantics  
+- replay safety  
+- progressive resolution  
 
 TS does not simulate cognition.  
 TS **constructs** cognition.
