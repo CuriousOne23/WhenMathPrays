@@ -1,19 +1,23 @@
-# ⭐ **ts_meaning_theory.md (Updated Revision)**  
-### *The Formal Theory of Meaning for the Thought Simulator (TS)*  
+Here is the revised version of the paper, followed by a summary of the changes.
+
+---
+
+# ⭐ **ts_meaning_theory.md (Revised)**
+### *The Formal Theory of Meaning for the Thought Simulator (TS)*
 ### *With Architectural Justification and Extension Points*
 
 ---
 
-# **TS Meaning Theory**  
+# **TS Meaning Theory**
 ### *A Formal Model of Meaning, Canonicalization, and Cognitive Events*
 
 This paper presents the formal theory of meaning used by the Thought Simulator (TS).  
-It builds directly on *difficulty_of_meaning.md* and provides the mathematical, structural, and architectural foundation for TS’s meaning pipeline.
+It builds directly on *difficulty_of_meaning.md* and supplies the structural and architectural foundation for TS’s meaning pipeline.
 
-Two clarifications are added in this revision:
+Two clarifications are central to this revision:
 
-1. **Why the architectural definition of meaning was the correct choice, given what is known now.**  
-2. **Where TS is intentionally extendable — especially in the meaning state vector and canonicalization pipeline.**
+1. Why the architectural definition of meaning was adopted, given the computational constraints established earlier.  
+2. Where TS is intentionally extendable — especially in the meaning state vector and the canonicalization pipeline.
 
 ---
 
@@ -24,13 +28,14 @@ To operate deterministically, TS must represent meaning in a form that is:
 
 - discrete  
 - bounded  
-- replay‑safe  
+- replay-safe  
 - canonical  
 - stable  
 - computable on a laptop  
 
-Human meaning is none of these things.  
-Therefore TS must introduce a theory of meaning that:
+Human meaning is none of these things.
+
+Therefore TS requires a theory of meaning that:
 
 1. defines meaning as a structured object  
 2. identifies the invariant attributes of meaning  
@@ -39,49 +44,42 @@ Therefore TS must introduce a theory of meaning that:
 5. defines replay determinism  
 6. defines how meaning interacts with the TP layers  
 
-### **Architectural justification**  
-TS’s architectural definition of meaning — as a structured set of invariant attributes — has proven to be the correct choice given what is known now.  
-It is the only definition that:
+**Architectural rationale**  
+The definition of meaning as a structured set of invariant attributes was adopted because it simultaneously satisfies the full set of constraints required by TS: deterministic replay, identity continuity, bounded canonicalization, laptop-scale computation, clean integration with the TP layers, and avoidance of the instability of raw semantic embeddings.  
 
-- supports deterministic replay  
-- supports identity continuity  
-- supports bounded canonicalization  
-- supports laptop‑scale cognition  
-- integrates cleanly with the TP layers  
-- avoids the instability of raw semantic embeddings  
-
-This choice was not arbitrary; it was forced by the computational realities described in *difficulty_of_meaning.md*.
+This choice follows directly from the computational realities described in *difficulty_of_meaning.md*. Alternative representations (unbounded embeddings, fully open semantic spaces, or purely statistical continuous states) fail one or more of the required guarantees.
 
 ---
 
 # **2. Meaning as a Structured Object**
 
-TS adopts a machine‑tractable definition of meaning:
+TS adopts the following machine-tractable definition:
 
-> **Meaning is the structured set of stable, repeatable, machine‑extractable attributes that allow a system to interpret, respond to, and continue a conversation coherently.**
+> **Meaning is the structured set of stable, repeatable, machine-extractable attributes that allow a system to interpret, respond to, and continue a conversation coherently.**
 
-Meaning is a **structured object**, not a scalar.
+Meaning is a structured object, not a scalar.
 
-Formally:
+Formally (structural definition):
 
 $$
-M_t = \\{ a_1, a_2, \ldots, a_n \\}
+M_t = \{ a_1, a_2, \ldots, a_n \}
 $$
 
-Where each $a_i$ is an invariant attribute of meaning.
+where each $a_i$ is an invariant attribute of meaning.
 
-### **Extendability**  
-The structure of $M_t$ is intentionally extendable.  
-New attributes may be added if they satisfy TS’s six criteria:
+The equations in this paper are structural: they name the objects and the required relationships. Concrete forms of the functions and the internal representation of each attribute are left to subsequent specification and implementation papers.
 
-1. appears consistently  
-2. extractable  
+**Extension policy**  
+The structure of $M_t$ is intentionally open. New attributes may be added when they satisfy TS’s six criteria:
+
+1. appears consistently across turns  
+2. machine-extractable  
 3. canonicalizable  
-4. replay‑safe  
-5. identity‑relevant  
-6. laptop‑computable  
+4. replay-safe  
+5. identity-relevant  
+6. computable on a laptop  
 
-This makes TS future‑proof without destabilizing the architecture.
+This policy is the primary governance rule for evolution of the meaning state.
 
 ---
 
@@ -109,95 +107,52 @@ $$
 These attributes:
 
 - recur across turns  
-- define the semantic identity of a turn  
+- help define the semantic identity of a turn  
 - can be extracted  
 - can be canonicalized  
 - can be committed  
 - can be replayed  
 - can be reasoned over  
-- can be computed on a laptop  
+- can be maintained on a laptop  
 
-### **Extendability**  
-Section 3 is one of the primary extension points in TS.  
-The meaning state vector can evolve as:
+**Representation and interaction notes**  
+Individual attributes are expected to be represented as discrete labels, bounded numerical values, or small structured sub-objects. They are not assumed to be fully independent; referent continuity, identity continuity, and topic, for example, interact and must be updated consistently.  
 
-- new invariants are discovered  
-- new primitives are added  
-- new cognitive constraints emerge  
-- new routing requirements appear  
-
-The architecture is designed so that adding a new invariant:
-
-- does not break determinism  
-- does not break replay  
-- does not break continuity  
-- does not break identity  
-- does not break routing  
-
-This is a deliberate design choice.
+The meaning state vector is a primary extension point. New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing, provided the update rules remain deterministic and bounded.
 
 ---
 
 # **4. Raw Meaning and the Raw → Canonical Mapping**
 
-Raw meaning is the output of extraction primitives (CEx‑Pck).  
-Raw meaning is:
+Raw meaning is the output of extraction primitives (CEx-Pck).  
+Raw meaning is noisy, volatile, unbounded, and non-deterministic.
 
-- noisy  
-- volatile  
-- unbounded  
-- non‑deterministic  
-
-TS defines a mapping:
+TS defines the structural mapping:
 
 $$
-\text{CE}(R_t) = M_t
+\mathrm{CE}(R_t) = M_t
 $$
 
-This mapping:
+This mapping stabilizes, bounds, and canonicalizes meaning, rendering it deterministic and replay-safe.
 
-- stabilizes meaning  
-- bounds meaning  
-- canonicalizes meaning  
-- makes meaning deterministic  
-- makes meaning replay‑safe  
+**Residual error**  
+Canonicalization is lossy. The governing claim, carried forward from *difficulty_of_meaning.md*, is that the right loss applied at sufficient frequency leaves residual error negligible for the purposes of continuity, identity, and machine reasoning. Continuity and identity mechanisms are the primary means of absorbing and correcting residual discrepancies across turns.
 
-### **Extendability**  
-The CE mapping is extendable in two ways:
-
-1. **New extraction primitives** can feed into CE.  
-2. **New canonicalization rules** can be added as long as they preserve determinism and boundedness.
-
-This allows TS to incorporate new forms of meaning without redesigning the pipeline.
+New extraction primitives may feed into CE, and new canonicalization rules may be added, provided they preserve determinism and boundedness.
 
 ---
 
 # **5. Canonicalization Theory**
 
-Canonicalization is the process of converting raw meaning into canonical meaning.
+Canonicalization converts raw meaning into canonical meaning.
 
-TS’s claim is:
+Core claim:
 
 > **The right loss, applied at the right frequency, produces residual error that is negligible for machine cognition.**
 
-Canonicalization is:
+Canonicalization is lossy, structured, deterministic, bounded, and replay-safe.
 
-- lossy  
-- structured  
-- deterministic  
-- bounded  
-- replay‑safe  
-
-### **Architectural justification**  
-Canonicalization was the correct architectural choice because:
-
-- raw meaning is too unstable  
-- embeddings are too volatile  
-- semantic drift is too large  
-- replay determinism is impossible without canonicalization  
-- identity continuity cannot be guaranteed otherwise  
-
-Canonicalization is the mathematical hinge of TS.
+It is required because raw meaning is too unstable, continuous embeddings are too volatile, semantic drift is otherwise uncontrolled, and neither replay determinism nor identity continuity can be guaranteed without it. Canonicalization is therefore the central mathematical and architectural hinge of the meaning pipeline.
 
 ---
 
@@ -205,77 +160,55 @@ Canonicalization is the mathematical hinge of TS.
 
 Continuity is the relationship between meaning states across turns.
 
-Formally:
+Structural definition:
 
 $$
 C_{t+1} = f(M_t, M_{t+1})
 $$
 
-Continuity requires:
+Continuity is required over at least:
 
-- topic continuity  
-- intent continuity  
-- stance continuity  
-- referent continuity  
-- identity continuity  
-- importance continuity  
+- topic  
+- intent  
+- stance  
+- referent  
+- identity  
+- importance  
 
-### **Extendability**  
-Continuity functions can be extended to incorporate:
-
-- new invariants  
-- new stability constraints  
-- new routing requirements  
-
-Continuity is not fixed; it is a framework.
+The function $f$ is itself extensible. New invariants or additional stability constraints may be incorporated as long as the overall continuity relation remains deterministic.
 
 ---
 
 # **7. Identity Continuity**
 
-Identity continuity ensures TS maintains:
+Identity continuity maintains:
 
 - who is speaking  
 - what they know  
 - what they believe  
 - what TS has committed  
 
-Formally:
+Structural definition:
 
 $$
 I_{t+1} = g(I_t, M_t)
 $$
 
-### **Extendability**  
-Identity continuity can incorporate:
-
-- new provenance signals  
-- new freeze signature types  
-- new referent‑tracking primitives  
-
-Identity continuity is intentionally modular.
+Identity continuity is modular. New provenance signals, freeze-signature types, or referent-tracking primitives may be added under the same determinism and boundedness constraints that govern the rest of the meaning state.
 
 ---
 
 # **8. Meaning Commitment and Replay Determinism**
 
-TS must commit meaning so that it can be replayed deterministically.
+TS commits meaning so that it can be replayed deterministically.
 
-Replay determinism requires:
+Requirement:
 
 $$
-M_t = \text{Replay}(M_t)
+M_t = \mathrm{Replay}(M_t)
 $$
 
-### **Architectural justification**  
-Replay determinism is only possible because TS chose:
-
-- canonical meaning  
-- invariant attributes  
-- deterministic transitions  
-- bounded state  
-
-This validates the architectural definition of meaning.
+Replay determinism is achievable only because meaning is represented in canonical form, the attributes are treated as bounded state variables, and the transitions are deterministic. This requirement is one of the strongest forces shaping the theory of meaning adopted by TS.
 
 ---
 
@@ -283,83 +216,73 @@ This validates the architectural definition of meaning.
 
 Meaning determines routing through the TP layers.
 
-### **Extendability**  
-Routing tables can be extended as:
-
-- new invariants are added  
-- new TP layers are introduced  
-- new cognitive constraints emerge  
-
-Routing is a flexible, meaning‑driven mechanism.
+Routing tables and decision rules may be extended when new invariants, new TP layers, or new cognitive constraints are introduced. Routing remains a meaning-driven, deterministic mechanism.
 
 ---
 
-# **10. Meaning Theory and Laptop‑Scale Cognition**
+# **10. Meaning Theory and Laptop-Scale Cognition**
 
-TS is designed to run on a common laptop.
+TS is designed to run on a common laptop. This is feasible because:
 
-This is possible because:
-
-- meaning is decomposed  
-- invariants are bounded  
+- meaning is decomposed into a bounded set of invariants  
 - canonicalization is deterministic  
-- replay is guaranteed  
-- continuity is enforced  
-- identity is preserved  
+- replay is guaranteed by construction  
+- continuity and identity are explicitly enforced  
 
-### **Architectural justification**  
-The architectural definition of meaning is what makes laptop‑scale cognition possible.  
-Without invariants and canonicalization, TS would require:
-
-- massive embeddings  
-- trillions of parameters  
-- supercomputer‑scale compute  
-
-TS’s architecture was the correct choice.
+The same architectural choices that produce determinism and identity continuity are also what keep the computational footprint within laptop-scale limits. Without the invariant + canonicalization approach, the system would be forced toward the resource profile of large embedding-based models.
 
 ---
 
 # **11. Relationship to Historical Work**
 
-TS integrates:
+TS draws on earlier ideas from cognitive science and AI, including schemas, frames, scripts, situation models, dialogue-state tracking, semantic networks, and aspects of transformer-based representations.
 
-- schemas  
-- frames  
-- scripts  
-- situation models  
-- dialogue‑state tracking  
-- semantic networks  
-- transformers  
+What is distinctive is the integration of the following elements into a single architecture:
 
-But TS is the first system to combine:
-
-- raw → canonical boundary  
-- invariant meaning attributes  
+- an explicit raw → canonical boundary  
+- invariant attributes treated as state variables  
 - deterministic canonicalization  
-- replay determinism  
-- identity continuity  
-- laptop‑scale constraints  
+- replay determinism as a hard requirement  
+- identity continuity as a first-class concern  
+- an explicit laptop-scale design target  
 
-This validates the architectural direction.
+The contribution lies in the combination and in the constraints that combination is required to satisfy.
 
 ---
 
 # **12. Conclusion**
 
-This revision clarifies:
+This paper has stated:
 
-- why TS’s architectural definition of meaning was the correct choice  
-- where TS is intentionally extendable  
-- how meaning theory supports determinism  
-- how meaning theory supports identity  
-- how meaning theory supports replay  
-- how meaning theory enables laptop‑scale cognition  
+- the structural definition of meaning used by TS  
+- the current working meaning state vector and its extension policy  
+- the raw → canonical mapping and the role of residual error  
+- continuity and identity as explicit functions of the meaning state  
+- the requirements of commitment and replay determinism  
+- the relationship between the meaning theory and laptop-scale operation  
 
 Meaning theory is the backbone of TS.  
-It is the foundation on which all other TS papers rest.
+It is the foundation on which the remaining TS papers rest.
 
 ---
 
-# **End of ts_meaning_theory.md (Updated Revision)**
+# **End of ts_meaning_theory.md**
 
 ---
+
+### Summary of Changes
+
+- **Consolidated architectural justification**: Removed the repeated “this was the correct choice / this validates…” paragraphs that appeared in nearly every section. Placed a single clear rationale in Section 1 and referred to it only lightly thereafter.
+- **Softened absolute claims**:  
+  – “the only definition that…” → language that emphasizes simultaneous satisfaction of the full constraint set.  
+  – “TS is the first system to combine…” → “What is distinctive is the integration of the following elements… The contribution lies in the combination…”
+- **Clarified the status of the formalism**: Explicitly noted that the equations are structural definitions (they name objects and required relationships) rather than fully specified mathematical models.
+- **Centralized and reduced extendability language**: Kept a strong, clear extension policy (especially in Sections 2 and 3) and replaced the near-identical extendability paragraphs in later sections with shorter, non-repetitive statements.
+- **Added three short clarifying notes** requested by the critique:  
+  – expected representation style of attributes (discrete / bounded / small structured objects)  
+  – recognition that attributes interact  
+  – explicit treatment of residual error after canonicalization and the role of continuity/identity mechanisms in handling it
+- **Improved traceability**: Strengthened the opening linkage to *difficulty_of_meaning.md* and made inheritance of key claims clearer.
+- **Preserved all substantive content**: Definition, state vector, mapping, continuity, identity, commitment/replay, routing, laptop-scale argument, historical positioning, and the six criteria remain intact; only presentation, claim strength, and redundancy were adjusted.
+
+The paper should now be in good condition for CP’s review, with remaining differences expected to be minor wording or emphasis rather than structural or theoretical.
