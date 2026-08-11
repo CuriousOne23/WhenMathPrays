@@ -1,8 +1,13 @@
-# **TS Continuity Theory**  
+Here is the revised version of the paper, followed by a summary of the changes.
+
+---
+
+# **TS Continuity Theory**
 ### *A Formal Model of Temporal Stability, Meaning Evolution, and Deterministic Cognition*
 
-This paper defines **continuity** — the rules and constraints governing how meaning evolves from one turn to the next inside the Thought Simulator (TS).  
-It builds directly on *difficulty_of_meaning.md* and *ts_meaning_theory.md*, and provides the temporal backbone of TS’s cognitive architecture.
+This paper defines **continuity** — the rules and constraints governing how meaning evolves from one turn to the next inside the Thought Simulator (TS).
+
+It builds directly on *difficulty_of_meaning.md* and *ts_meaning_theory.md*, and supplies the temporal backbone of TS’s cognitive architecture.
 
 Continuity is essential for:
 
@@ -10,7 +15,7 @@ Continuity is essential for:
 - identity stability  
 - referent stability  
 - replay determinism  
-- long‑horizon reasoning  
+- long-horizon reasoning  
 - coherent conversation  
 
 TS cannot function without continuity.  
@@ -24,7 +29,7 @@ Continuity is the property that ensures:
 
 > **A conversation at turn $t+1$ is meaningfully connected to turn $t$.**
 
-Human cognition achieves continuity implicitly.  
+Human cognition achieves continuity largely implicitly.  
 TS must achieve it explicitly, deterministically, and with bounded state.
 
 Continuity theory defines:
@@ -37,6 +42,8 @@ Continuity theory defines:
 6. how continuity supports replay determinism  
 7. how continuity routes meaning through the TP layers  
 8. where continuity is extendable  
+
+Continuity operates on **canonical** meaning states. It does not operate directly on raw meaning.
 
 ---
 
@@ -54,8 +61,10 @@ Where:
 - $M_{t+1}$ = canonical meaning at turn $t+1$  
 - $f$ = deterministic continuity function  
 
+The equation is structural: it names the required relationship. The concrete realization of $f$ (rules, metrics, thresholds, or soft constraints) is left to later specification.
+
 Continuity is not a single scalar.  
-It is a **relationship** between meaning states.
+It is a **relationship** between successive meaning states.
 
 Continuity requires that:
 
@@ -67,7 +76,7 @@ Continuity requires that:
 - importance is respected  
 - topic drift is controlled  
 
-Continuity is the **temporal constraint system** of TS.
+Continuity is the temporal constraint system of TS.
 
 ---
 
@@ -79,88 +88,46 @@ TS requires continuity over:
 
 ### **3.1 Topic Continuity**
 The topic cannot jump arbitrarily.  
-Topic drift must be:
-
-- bounded  
-- explainable  
-- connected to prior meaning  
+Topic drift must be bounded, explainable, and connected to prior meaning.
 
 ### **3.2 Intent Continuity**
-Intent must evolve coherently:
-
-- questions → answers  
-- requests → fulfillment  
-- assertions → clarifications  
+Intent must evolve coherently (for example: questions → answers, requests → fulfillment, assertions → clarifications).
 
 ### **3.3 Stance Continuity**
-Stance must remain stable unless explicitly changed:
-
-- agree → agree  
-- disagree → disagree  
-- neutral → neutral  
+Stance must remain stable unless an explicit change is signaled.
 
 ### **3.4 Referent Continuity**
-Referents must remain stable:
-
-- “he”  
-- “that idea”  
-- “the previous assumption”  
-
-Referent continuity is essential for identity and replay.
+Referents (“he”, “that idea”, “the previous assumption”, etc.) must remain stable.  
+Referent continuity is essential for both identity and replay.
 
 ### **3.5 Identity Continuity**
-Identity continuity ensures:
+Identity continuity ensures that who is speaking, what they know, what they believe, and what TS has committed remain coherent across turns.  
 
-- who is speaking  
-- what they know  
-- what they believe  
-- what TS has committed  
-
-Identity continuity is defined formally in *ts_identity_theory.md*.
+**Division of labor**: Continuity Theory owns the temporal relationship and the cross-attribute constraints that involve identity. The internal structure and update rules of the identity component itself are defined in *ts_identity_theory.md*.
 
 ### **3.6 Importance Continuity**
-Importance must remain consistent:
+Importance must remain consistent: high-importance items cannot be dropped silently, low-importance items cannot override high-importance ones, and commitments must be honored.
 
-- high‑importance items cannot be dropped  
-- low‑importance items cannot override high‑importance ones  
-- commitments must be honored  
-
-Importance continuity is essential for deterministic reasoning.
+These constraints are currently stated at the qualitative level. Measurable criteria, thresholds, or soft scoring methods for each constraint will be supplied in later specification work. Enforcement may ultimately be hard, soft, or hybrid; the present theory requires only that the chosen mechanism remain deterministic and bounded.
 
 ---
 
 # **4. Continuity and Canonicalization**
 
 Canonicalization is lossy.  
-Continuity is the mechanism that absorbs and corrects residual error.
+Continuity is the primary mechanism that absorbs and corrects residual discrepancy.
 
-Formally:
+Because both raw meaning ($R_t$) and canonical meaning ($M_t$) are structured objects, residual error is itself structured. It is best understood as a collection of per-attribute or relational deviations rather than a simple numeric difference.
 
-$$
-\epsilon_t = R_t - M_t
-$$
+Continuity acts to keep these deviations bounded and, where possible, corrected across turns by:
 
-Where:
-
-- $R_t$ = raw meaning  
-- $M_t$ = canonical meaning  
-- $\epsilon_t$ = residual error  
-
-Continuity ensures:
-
-$$
-\epsilon_{t+1} \approx \epsilon_t \quad \text{or is corrected}
-$$
-
-Continuity stabilizes meaning across turns by:
-
-- smoothing residual error  
 - enforcing bounded transitions  
-- maintaining referents  
-- maintaining identity  
-- maintaining commitments  
+- maintaining referent stability  
+- maintaining identity coherence  
+- preserving commitments  
+- smoothing or flagging unexplained drift  
 
-Continuity is the **error‑correction layer** of TS.
+Continuity therefore functions as the error-stabilization layer of the meaning pipeline.
 
 ---
 
@@ -168,21 +135,15 @@ Continuity is the **error‑correction layer** of TS.
 
 Continuity and identity are tightly coupled.
 
-Identity continuity is defined as:
+Identity continuity is expressed structurally as:
 
 $$
 I_{t+1} = g(I_t, M_t)
 $$
 
-Continuity ensures:
+Continuity ensures that identity does not drift unboundedly, that referents remain usable, that commitments remain valid, and that provenance and freeze signatures remain consistent with the evolving meaning state.
 
-- identity does not drift  
-- referents remain stable  
-- commitments remain valid  
-- provenance remains intact  
-- freeze signatures remain consistent  
-
-Continuity is the **temporal stabilizer** of identity.
+Continuity supplies the temporal stabilizer for identity; Identity Theory supplies the internal model of identity itself.
 
 ---
 
@@ -191,100 +152,68 @@ Continuity is the **temporal stabilizer** of identity.
 Replay determinism requires:
 
 $$
-M_t = \text{Replay}(M_t)
+M_t = \mathrm{Replay}(M_t)
 $$
 
-Continuity ensures that:
+Continuity contributes the necessary temporal guarantees:
 
 - meaning transitions are deterministic  
 - identity transitions are deterministic  
 - referent transitions are deterministic  
-- commitments are deterministic  
+- commitment state evolves deterministically  
 
-Without continuity, replay determinism is impossible.
-
-Continuity is the **temporal backbone** of replay.
+Without a deterministic continuity relation, replay determinism cannot be maintained across multiple turns. Continuity is therefore an essential temporal component of the replay guarantee.
 
 ---
 
 # **7. Continuity and Routing**
 
-Continuity determines routing through the TP layers.
+Continuity supplies information used by routing through the TP layers.
 
-Routing uses continuity to decide:
-
-- whether the topic changed  
-- whether intent changed  
-- whether stance changed  
-- whether referents changed  
-- whether identity changed  
-- whether importance changed  
-
-Continuity is the **routing substrate** of TS.
+Routing decisions may depend on whether, and how, topic, intent, stance, referents, identity, or importance have changed. Continuity therefore functions as part of the substrate that makes meaning-driven routing possible.
 
 ---
 
 # **8. Extendability of Continuity**
 
-Continuity is intentionally extendable.
+Continuity is intentionally extendable under the same governance rules that apply to the meaning state:
 
-### **8.1 New Invariants**
-If new meaning attributes are added, continuity can incorporate them.
+- New invariants may be incorporated into the continuity relation once they satisfy the six TS criteria.  
+- Additional stability constraints may be added.  
+- New routing conditions may be supported.  
+- New identity-related signals (provenance types, freeze-signature varieties, etc.) may be integrated.
 
-### **8.2 New Stability Constraints**
-Continuity can enforce new constraints as TS evolves.
-
-### **8.3 New Routing Conditions**
-Continuity can support new routing logic in the TP layers.
-
-### **8.4 New Identity Signals**
-Continuity can integrate new provenance or freeze‑signature types.
-
-Continuity is a **framework**, not a fixed set of rules.
+Continuity is a framework, not a closed set of fixed rules.
 
 ---
 
-# **9. Why Continuity Enables Laptop‑Scale Cognition**
+# **9. Why Continuity Enables Laptop-Scale Cognition**
 
 Continuity allows TS to:
 
-- avoid recomputing meaning from scratch  
-- avoid semantic drift  
-- avoid identity drift  
-- avoid referent drift  
-- avoid combinatorial explosion  
-- maintain bounded state  
+- avoid recomputing meaning from scratch on every turn  
+- limit semantic drift  
+- limit identity and referent drift  
+- keep state bounded  
 - maintain deterministic transitions  
 
-Continuity is the reason TS can run on a laptop instead of requiring:
-
-- trillion‑parameter models  
-- massive embeddings  
-- supercomputers  
-
-Continuity is the **temporal compression mechanism** of TS.
+By enforcing temporal constraints on an already canonicalized and bounded meaning state, continuity acts as a temporal compression mechanism. This is one of the reasons TS can target laptop-scale operation rather than the resource profile of large continuous-embedding models.
 
 ---
 
 # **10. Relationship to Historical Work**
 
-Continuity theory relates to:
+Continuity theory draws on earlier ideas from discourse coherence, adjacency pairs, situation models, schema theory, and dialogue-state tracking.
 
-- discourse coherence  
-- adjacency pairs  
-- situation models  
-- schema theory  
-- dialogue‑state tracking  
+What is distinctive is the integration of continuity with:
 
-But TS is the first system to integrate:
+- an explicit raw → canonical boundary  
+- invariant attributes treated as state variables  
+- identity continuity as a first-class concern  
+- replay determinism as a hard requirement  
+- an explicit laptop-scale design target  
 
-- continuity  
-- canonical meaning  
-- identity continuity  
-- replay determinism  
-- laptop‑scale constraints  
-
-Continuity is the **temporal innovation** of TS.
+The contribution lies in this combination under the stated constraints.
 
 ---
 
@@ -292,17 +221,16 @@ Continuity is the **temporal innovation** of TS.
 
 Continuity theory defines:
 
-- how meaning evolves  
-- how identity is preserved  
-- how referents remain stable  
+- how meaning is required to evolve across turns  
+- how residual canonicalization discrepancy is stabilized  
+- how identity and referents are kept coherent  
 - how commitments remain valid  
-- how replay determinism is achieved  
-- how routing is determined  
-- how TS maintains coherence  
-- how TS achieves laptop‑scale cognition  
+- how replay determinism is supported temporally  
+- how continuity information participates in routing  
+- how these mechanisms contribute to bounded, deterministic, laptop-scale cognition  
 
 Continuity is the temporal backbone of TS.  
-It is the foundation on which identity theory, routing theory, and commit theory rest.
+It is a foundation on which identity theory, routing theory, and commit theory rest.
 
 ---
 
@@ -310,3 +238,17 @@ It is the foundation on which identity theory, routing theory, and commit theory
 
 ---
 
+### Summary of Changes
+
+- **Softened novelty claim** (Section 10): Replaced “TS is the first system to integrate…” with language that emphasizes the distinctive combination under explicit constraints.
+- **Clarified structural status of formalism**: Explicitly noted that both the continuity function $f$ and the residual-error treatment are structural definitions; concrete realizations are left to later specification.
+- **Improved residual-error treatment** (Section 4): Removed the simple numeric subtraction $\epsilon_t = R_t - M_t$. Replaced it with a description of residual error as structured, per-attribute or relational deviation, and described how continuity acts on those deviations.
+- **Added division-of-labor note** (Section 3.5): Clearly separated Continuity Theory’s responsibility (temporal relationship and cross-attribute constraints) from Identity Theory’s responsibility (internal structure and update rules of identity).
+- **Added clarifying sentences**:
+  - Continuity operates on canonical meaning states (Introduction and throughout).
+  - Constraints are currently qualitative; measurable criteria and the hard/soft/hybrid nature of enforcement are future specification items (Section 3).
+  - Provenance and freeze signatures participate via identity coherence (Sections 3.5 and 5).
+- **Reduced repetitive justificatory language**: Trimmed recurring “Continuity is the temporal backbone / Without continuity… is impossible” phrasing while preserving the core claims.
+- **Preserved all substantive content**: Every major section, constraint category, linkage (identity, replay, routing, residual error, laptop-scale), and extendability policy remains; only precision, notation, and redundancy were adjusted.
+
+The paper is now aligned in style and claim strength with the revised *ts_meaning_theory.md* and should be ready for CP’s review.
