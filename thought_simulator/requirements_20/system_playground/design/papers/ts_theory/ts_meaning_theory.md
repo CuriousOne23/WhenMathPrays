@@ -74,17 +74,17 @@ The current working set of meaning attributes is:
 
 $$
 M_t = \\{
-\text{topic},\,
-\text{intent},\,
-\text{stance},\,
-\text{continuity},\,
-\text{importance},\,
-\text{clarifying fields},\,
-\text{next-turn context},\,
-\text{identity continuity},\,
-\text{referent continuity},\,
-\text{provenance},\,
-\text{entropy},\,
+\text{topic},\ 
+\text{intent},\ 
+\text{stance},\ 
+\text{continuity},\ 
+\text{importance},\ 
+\text{clarifying fields},\ 
+\text{next-turn context},\ 
+\text{identity continuity},\ 
+\text{referent continuity},\ 
+\text{provenance},\ 
+\text{entropy},\ 
 \text{freeze signatures}
 \\}
 $$
