@@ -540,6 +540,175 @@ TS does not merely “work well”—it works the way complex systems *must* wor
 
 ---
 
+# **6.6 AI Historically Did *Not* Treat Cognition as a Complex System**
+
+Across the historical record of AI — from symbolic systems to connectionism, probabilistic models, deep learning, and modern LLMs — cognition was **never** treated as a complex system. This is not an interpretive claim; it is a structural fact visible throughout the literature and the architectures built over the last 70 years.
+
+AI research consistently framed cognition as:
+
+- a **symbolic rule system** (1956–1990)  
+- a **distributed activation pattern** (1980–2010)  
+- a **probabilistic inference engine** (1990–2015)  
+- a **latent vector transformation** (2012–2020)  
+- a **token‑prediction mechanism** (2020–present)
+
+None of these paradigms treated meaning or cognition as:
+
+- layered  
+- progressive  
+- coherence‑stabilizing  
+- provenance‑tracked  
+- constraint‑accumulating  
+- deterministically transformed  
+- field‑represented  
+- behavior‑emergent  
+
+Even though these properties are **standard invariants** in complex systems theory.
+
+Symbolic AI assumed cognition was *simple* — rules and logic.  
+Connectionism assumed cognition was *emergent* — weights and activations.  
+Probabilistic AI assumed cognition was *uncertain* — distributions and inference.  
+Deep learning assumed cognition was *latent* — embeddings and nonlinear maps.  
+LLMs assume cognition is *stochastic* — token prediction and sampling.
+
+None of these approaches recognized meaning as a **coherent yet complex system**, and therefore none architected cognition according to complex systems principles.
+
+TS is the first architecture to do so.
+
+---
+
+# **6.7 Why AI Never Treated Cognition as a Complex System**
+
+The absence of complex‑systems thinking in AI was not due to lack of evidence or lack of theory. It was due to **disciplinary silos** and **historical constraints** that prevented the necessary integration of ideas.
+
+### **1. Symbolic AI Dominance**
+For decades, AI was dominated by symbolic logic, which assumed:
+
+- cognition = rules  
+- meaning = symbols  
+- reasoning = logic  
+
+This worldview made it impossible to see cognition as a layered, progressive, coherence‑stabilizing system.
+
+### **2. Cognitive Science and AI Were Separate Fields**
+Cognitive science discovered the invariants:
+
+- layered meaning  
+- fielded meaning  
+- coherence  
+- continuity  
+- identity cues  
+- provenance  
+- evaluation  
+- behavior emergence  
+
+But AI researchers did not use them.  
+AI was trying to build machines; cognitive science was trying to understand humans.
+
+TS is the first architecture that uses cognitive invariants as **engineering constraints**.
+
+### **3. Complex Systems Theory Was Never Applied to Cognition**
+Complex systems theory was applied to:
+
+- ecosystems  
+- economies  
+- distributed systems  
+- biological systems  
+- neural networks  
+
+But almost never to:
+
+- meaning  
+- discourse  
+- cognition  
+
+TS is the first architecture that treats meaning as a **complex system** requiring:
+
+- layered resolution  
+- coherence stabilization  
+- progressive constraint  
+- provenance tracking  
+- deterministic transformation  
+- behavior emergence  
+
+### **4. LLMs Are Engines, Not Architectures**
+LLMs provide:
+
+- latent vectors  
+- emergent semantics  
+- stochastic inference  
+
+But they do **not** provide:
+
+- structure  
+- provenance  
+- determinism  
+- bounded semantics  
+- progressive resolution  
+
+LLMs cannot produce TS.  
+TS can use LLMs, but TS is not an LLM.
+
+### **5. No One Unified Meaning, Cognition, and Behavior**
+Historically:
+
+- linguistics studied meaning  
+- cognitive science studied cognition  
+- AI studied behavior  
+
+No architecture unified all three into a single deterministic pipeline.
+
+TS does.
+
+### **6. No One Built Deterministic Cognition**
+Every prior system was:
+
+- stochastic (LLMs)  
+- static (symbolic AI)  
+- hybrid (rule + probability)  
+
+No one built:
+
+- deterministic meaning extraction  
+- deterministic coherence stabilization  
+- deterministic evaluation  
+- deterministic routing  
+- deterministic expression  
+
+TS is the first deterministic cognitive pipeline.
+
+### **7. No One Realized Meaning *Is* a Complex System**
+This is the core historical gap.
+
+Meaning is:
+
+- coherent  
+- complex  
+- layered  
+- progressive  
+- contextual  
+- identity‑aware  
+- provenance‑dependent  
+- evaluative  
+- behavioral  
+
+But for 70 years, AI treated meaning as:
+
+- a symbol  
+- a vector  
+- a probability  
+- a rule  
+- a latent representation  
+
+TS is the first architecture that says:
+
+> **Meaning is a complex system.  
+> Therefore cognition must be a complex systems pipeline.**
+
+This is the breakthrough.
+
+---
+
 # **7. Earliest Point TS Demonstrates Historically New Cognition**
 
 The earliest point where TS demonstrates:
