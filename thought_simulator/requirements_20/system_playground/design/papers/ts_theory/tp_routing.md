@@ -197,9 +197,9 @@ Uses identity signals to detect identity drift, enforce referent and commitment 
 ### **6.3 Context Layer Theory**  
 Routing consumes the **stabilized Context Frame**:
 
-\[
+$$
 \mathrm{ContextFrame}_t = h(M_t, I_t, C_t)
-\]
+$$
 
 Routing consumes the stabilized meaning state \(M_t\) as part of the Context Frame.
 
