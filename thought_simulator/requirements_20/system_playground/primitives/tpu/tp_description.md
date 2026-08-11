@@ -49,6 +49,10 @@ flowchart LR
     CSTCore --> CSTMS
     CSTCore --> CSTMux
     CSTMS --> CSTMux
+    CSTCore --> COB
+    CSTMS --> COB
+    COB --> CSTCore
+    COB --> CSTMS
 
     %% ===== USP → Intake =====
     CSTMux --> CIL
