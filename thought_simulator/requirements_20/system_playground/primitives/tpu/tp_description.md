@@ -78,8 +78,8 @@ The TP is composed of **envelopes** — structured, bounded, deterministic block
 ```mermaid
 flowchart TD
     A[TP Identity Block] --> B[Semantic Envelope]
-    B --> C[Context Envelope (Raw)]
-    C --> D[Context Metadata Envelope (CE)]
+    B --> C[Context Envelope Raw]
+    C --> D[Context Metadata Envelope CE]
     D --> E[MSL Metadata]
     E --> F[Continuity Metadata]
     F --> G[Semantic-Importance Envelope]
