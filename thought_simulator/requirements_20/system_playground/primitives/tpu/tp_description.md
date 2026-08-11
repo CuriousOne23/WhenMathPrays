@@ -1,6 +1,7 @@
-# Thought Packet (TP) Description White Paper
-# Deterministic, Replay‑Safe, CCR‑Aligned Architecture Overview
-# With Full Upstream Stability + Identity + Intake Integration
+# `tp_description.md`  
+### **Thought Packet (TP) Description White Paper**  
+### *Deterministic, Replay‑Safe, CCR‑Aligned Architecture Overview*  
+### *With CE → TPU Boundary Focus*
 
 ---
 
