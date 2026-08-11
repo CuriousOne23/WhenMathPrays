@@ -1,4 +1,6 @@
-# ✅ **REVISED SECTIONS 1–6 (INLINE, NO AGENT)**  
+# Thought Packet (TP) Description White Paper
+# Deterministic, Replay‑Safe, CCR‑Aligned Architecture Overview
+# With Full Upstream Stability + Identity + Intake Integration
 
 ---
 
