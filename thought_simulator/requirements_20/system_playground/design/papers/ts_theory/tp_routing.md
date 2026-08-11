@@ -201,7 +201,7 @@ $$
 \mathrm{ContextFrame}_t = h(M_t, I_t, C_t)
 $$
 
-Routing consumes the stabilized meaning state \(M_t\) as part of the Context Frame.
+Routing consumes the stabilized meaning state $M_t$ as part of the Context Frame.
 
 Routing is the point where the theory papers become operational decision logic.
 
