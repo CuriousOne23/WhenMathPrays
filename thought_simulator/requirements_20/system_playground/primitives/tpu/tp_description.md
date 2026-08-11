@@ -33,7 +33,7 @@ Here is the high‑level structure:
 flowchart TD
     A[TP Identity Block] --> B[Semantic Envelope]
     B --> C[Context Envelope]
-    C --> D[Context Metadata Envelope (CE)]
+    C --> D[Context Metadata Envelope-CE]
     D --> E[MSL Metadata]
     E --> F[Continuity Metadata]
     F --> G[Semantic-Importance Envelope]
@@ -369,39 +369,49 @@ This table gives you a complete “feel” for who writes and who reads each env
 # **7. Path‑A Flow Diagram (with CE → TPU boundary)**
 
 ```mermaid
-flowchart LR
-    A[InB] --> B[IIInB]
-    B --> C[IE]
-    C --> D[CEx-IE]
-    D --> E[CEx-CCR]
-    E --> F[CEx-Pck]
-    F --> G[CE]
-    G --> H[TPU]
-    H --> I[SOB]
-    I --> J[SROB]
-    J --> K[CnOB]
-    K --> L[SmOB]
-    L --> M[ISc]
-    M --> N[SSG]
-    N --> O[STPX]
-    O --> P[RBU]
-    P --> Q[RB]
-    Q --> R[TR]
-    R --> S[CTP]
-    S --> T[ISc]
-    T --> U[RTU]
-    U --> V[RB]
-    V --> W[IdOB]
-    W --> X[MCB]
-    X --> Y[RBU]
-    Y --> Z[DCB]
-    Z --> AA[RB]
-    AA --> AB[TR]
-    AB --> AC[CTP]
-    AC --> AD[ISc]
-    AD --> AE[RTU]
-    AE --> AF[RB]
-    AF --> AG[OuBA]
+flowchart TD
+
+%% ===== Row 1: Intake & Extraction =====
+    A1[InB] --> A2[IIInB]
+    A2 --> A3[IE]
+    A3 --> A4[CEx‑IE]
+    A4 --> A5[CEx‑CCR]
+    A5 --> A6[CEx‑Pck]
+    A6 --> A7[CE]
+    A7 --> A8[TPU]
+
+%% ===== Row 2: Structural Geometry (OB‑Set) =====
+    A8 --> B1[SOB]
+    B1 --> B2[SROB]
+    B2 --> B3[CnOB]
+    B3 --> B4[SmOB]
+    B4 --> B5[ISc]
+
+%% ===== Row 3: Semantic Layer & Routing =====
+    B5 --> C1[SSG]
+    C1 --> C2[STPX]
+    C2 --> C3[RBU]
+    C3 --> C4[RB]
+    C4 --> C5[TR]
+    C5 --> C6[CTP]
+    C6 --> C7[ISc]
+
+%% ===== Row 4: Refinement Loop =====
+    C7 --> D1[RTU]
+    D1 --> D2[RB]
+    D2 --> D3[IdOB]
+    D3 --> D4[MCB]
+    D4 --> D5[RBU]
+    D5 --> D6[DCB]
+    D6 --> D7[RB]
+    D7 --> D8[TR]
+    D8 --> D9[CTP]
+    D9 --> D10[ISc]
+    D10 --> D11[RTU]
+    D11 --> D12[RB]
+
+%% ===== Row 5: Termination =====
+    D12 --> E1[OuBA]
 ```
 
 The CE → TPU boundary is the **first commit boundary** in Path‑A.
