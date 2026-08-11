@@ -44,6 +44,7 @@ flowchart LR
     CSTCore --> CSTMux
     CSTMS --> CSTMux
     CSTMux --> CIL
+    OuBA --> COB
     COB --> CIL
     CIL --> CExIE
     CExIE --> CExCCR
