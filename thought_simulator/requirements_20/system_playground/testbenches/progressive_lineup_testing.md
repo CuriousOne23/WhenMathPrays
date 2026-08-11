@@ -406,7 +406,325 @@ Together, they provide:
 - deterministic pipeline execution  
 - deterministic progressive lineup behavior  
 
-This is the final piece needed to make Path‑A testbenches fully self‑contained and self‑discovering.
+---
+
+### **3.8 Primitive Naming & Registration Discipline (Mandatory for All Path‑A Primitives)**  
+To ensure that all primitives are discoverable, loadable, and testable without manual edits to `primitive_testbench.py`, `run.py`, or any loader, every primitive must follow strict naming and registration rules.
+
+These rules eliminate the last category of setup issues.
+
+---
+
+## **3.8.1 Primitive Directory Name Must Match Primitive Name**  
+Every primitive must be located in:
+
+```
+primitives/<primitive_name>/<primitive_name>.py
+```
+
+Where:
+
+- `<primitive_name>` is lowercase  
+- `<primitive_name>` is identical across all files  
+- `<primitive_name>` is identical to the directory name  
+
+Examples:
+
+```
+primitives/ce/ce.py
+primitives/cex_pck/cex_pck.py
+primitives/ccr/ccr.py
+```
+
+This ensures dynamic loaders can locate the primitive deterministically.
+
+---
+
+## **3.8.2 Primitive Testbench Files Must Use the Same Name**  
+All testbench files must use the exact primitive name:
+
+```
+<primitive_name>_testbench.py
+<primitive_name>_testbench.yaml
+<primitive_name>_rules.yaml
+<primitive_name>_tests_to_run.yaml
+```
+
+Example:
+
+```
+ce_testbench.py
+ce_testbench.yaml
+ce_rules.yaml
+ce_tests_to_run.yaml
+```
+
+This ensures testbench discovery works without hardcoded paths.
+
+---
+
+## **3.8.3 Primitive Must Declare Its Name Internally**  
+Every primitive must declare:
+
+```python
+PRIMITIVE_NAME = "ce"
+```
+
+This allows loaders to:
+
+- verify naming consistency  
+- auto‑register primitives  
+- auto‑locate testbenches  
+- auto‑locate dictionaries  
+- auto‑locate rulecheckers  
+
+This eliminates the need for manual configuration.
+
+---
+
+## **3.8.4 Primitive Must Provide a Minimal Registration Block**  
+Every primitive must include:
+
+```python
+def get_primitive_name():
+    return PRIMITIVE_NAME
+```
+
+This allows:
+
+- `run.py` to identify the primitive  
+- `primitive_testbench.py` to locate the correct testbench  
+- dynamic loaders to validate directory schema compliance  
+
+---
+
+## **3.8.5 Testbench Must Validate Naming Consistency**  
+Every `<primitive_name>_testbench.py` must include:
+
+```python
+from thought_simulator.requirements_20.system_playground.primitives.<primitive_name>.<primitive_name> import get_primitive_name
+
+assert get_primitive_name() == "<primitive_name>", (
+    f"Primitive name mismatch: expected <primitive_name>, got {get_primitive_name()}"
+)
+```
+
+This prevents:
+
+- accidental renaming  
+- directory mismatches  
+- file mismatches  
+- loader failures  
+- silent import errors  
+
+---
+
+## **3.8.6 Loader Must Validate Directory Schema Compliance**  
+Dynamic loaders must verify:
+
+- primitive directory exists  
+- primitive module exists  
+- testbench directory exists  
+- testbench files exist  
+- rulechecker exists  
+- tests_to_run exists  
+
+If any component is missing, the loader must raise:
+
+```
+PrimitiveDiscoveryError("<primitive_name>: missing required component")
+```
+
+This ensures developers catch setup errors immediately.
+
+---
+
+## **3.8.7 Why This Section Is Mandatory**  
+Without naming discipline:
+
+- dynamic loaders fail  
+- testbenches fail  
+- rulecheckers fail  
+- dictionaries fail  
+- pipeline execution fails  
+- progressive lineup fails  
+
+With naming discipline:
+
+- all primitives become plug‑and‑play  
+- no manual edits are ever required  
+- the entire Path‑A testing framework becomes self‑discovering  
+- new primitives can be added instantly  
+- testbenches work automatically  
+- rulecheckers work automatically  
+- dictionaries load automatically  
+
+This is the final structural requirement needed to eliminate all primitive setup issues.
+
+---
+
+# ⭐ **New Section 3.9 — Mandatory Testbench Output Format (Pass/Fail Reporting)**  
+To ensure consistent, readable, and diagnostic output across all Path‑A primitives, every primitive testbench **must** implement the following standardized output format.
+
+This format guarantees:
+
+- clear PASS/FAIL visibility  
+- consistent reporting across primitives  
+- deterministic output structure  
+- easy debugging  
+- easy CI integration  
+- easy human review  
+
+This section applies to **both**:
+
+- Mode `"testbench"`  
+- Mode `"general"`
+
+---
+
+## **3.9.1 Required Output Fields for Each Test**
+
+Every testbench **must print** the following fields for each test executed:
+
+### **1. Test Header**
+```
+------------------------------------------------------------
+Running Test: <test_id>
+------------------------------------------------------------
+```
+
+### **2. Input Source**
+Must show **which YAML file** provided the input:
+
+```
+- Input Source: <primitive_name>_testbench.yaml (testbench mode)
+```
+
+or
+
+```
+- Input Source: <primitive_name>_input.yaml (general mode)
+```
+
+### **3. Expected Output Source or Validation Method**
+Depending on mode:
+
+#### **Testbench mode**
+```
+- Expected Output Source: <primitive_name>_testbench.yaml (expected block)
+```
+
+#### **General mode**
+```
+- Checked By: <primitive_name>_rules.yaml (rule-driven validation)
+```
+
+### **4. PASS/FAIL Result**
+```
+----- Test Result -----
+- PASS: <test_id>
+```
+
+or
+
+```
+----- Test Result -----
+- FAIL: <test_id>
+```
+
+### **5. Structural Match (Testbench Mode Only)**
+```
+- Structural Match: PASS
+```
+
+or
+
+```
+- Structural Match: FAIL
+```
+
+### **6. Rule Violations (General Mode or Diagnostics)**
+If none:
+
+```
+- Rule Violations: None
+```
+
+If present:
+
+```
+- Rule Violations:
+  * [rule_id] <message>
+  * [rule_id] <message>
+```
+
+### **7. Context Summary (Mandatory)**
+Every testbench must print a short context summary:
+
+```
+Context Summary:
+- topic: <value>
+- stance: <value>
+- intent: <value>
+- continuity: <value>
+- direction: <value>
+- coherence: <value>
+- importance: <value>
+```
+
+This ensures developers can see the envelope state without opening YAML files.
+
+---
+
+## **3.9.2 Required Final Summary Block**
+
+At the end of the testbench run, every primitive testbench **must** print:
+
+```
+============================================================
+ <PRIMITIVE_NAME> Testbench Summary
+============================================================
+- Total Tests Enabled: <N>
+- Passed: <N_pass>
+- Failed: <N_fail>
+
+Detailed Results:
+- <test_id_1>: PASS
+- <test_id_2>: FAIL
+...
+============================================================
+ <PRIMITIVE_NAME> Testbench Runner - Complete
+============================================================
+```
+
+This summary is mandatory for:
+
+- CI pipelines  
+- regression testing  
+- human review  
+- deterministic replay logs  
+
+---
+
+## **3.9.3 Why This Section Is Mandatory**
+
+Without a standardized output format:
+
+- different primitives produce inconsistent logs  
+- debugging becomes harder  
+- CI pipelines cannot parse results  
+- developers must manually inspect YAML files  
+- rulechecker output becomes ambiguous  
+- structural mismatches are harder to diagnose  
+
+With this section:
+
+- all primitives produce identical output structure  
+- logs become readable and predictable  
+- debugging becomes trivial  
+- CI pipelines can parse results automatically  
+- developers can instantly see context values  
+- rule violations become easy to interpret  
 
 ---
 
