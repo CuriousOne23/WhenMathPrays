@@ -409,6 +409,137 @@ This alignment with cognitive invariants is what makes TS’s approach to meanin
 
 ---
 
+# **6.5 TS and Complex Systems Theory: Why This Architecture Is Required for Coherent Complexity**
+
+TS’s meaning architecture is not only aligned with cognitive science; it is also structurally consistent with the principles of **complex systems theory**. When a system is *coherent yet complex*—as meaning, discourse, and cognition inherently are—complex systems theory prescribes a specific architectural approach. TS follows this approach precisely.
+
+Complex systems theory identifies several invariants that govern how complex, coherent phenomena must be processed. TS’s design mirrors these invariants deterministically.
+
+### **1. Layered Resolution Is Required for Complex Phenomena**
+
+Complex systems cannot be understood at full resolution immediately. They must be processed through **progressive layers**:
+
+- coarse → medium → fine → evaluative → behavioral → expressive
+
+This layered resolution is a universal pattern across biological, cognitive, ecological, and computational systems. TS mirrors this natural progression through Path‑A:
+
+```
+IE → CEx → CE → ISc → TR/CTP → OuBA
+```
+
+Meaning resolution increases as the system moves downstream, exactly as complex systems theory prescribes.
+
+### **2. Coherence Must Be Stabilized Before Use**
+
+Complex systems exhibit coherence, but coherence is fragile. It must be stabilized before it can be used for decision or behavior.
+
+TS stabilizes coherence through:
+
+- CE normalization  
+- bounded semantics  
+- continuity  
+- direction  
+- coherence  
+- importance  
+
+This matches the complex systems requirement:
+
+> **Stabilize coherence before routing behavior.**
+
+### **3. Provenance Tracking Is Necessary for Stability**
+
+Complex systems require lineage tracking to maintain stability over time. This is true in genetics, ecosystems, distributed systems, and cognitive systems.
+
+TS formalizes provenance through:
+
+- lineage metadata  
+- clarifying fields  
+- audit structures  
+
+This ensures that meaning remains stable, traceable, and replay‑safe.
+
+### **4. Constraints Must Be Applied Progressively**
+
+Complex systems cannot be constrained all at once. They must be constrained **progressively**, layer by layer.
+
+TS enforces constraints in exactly this order:
+
+- IE: structural constraints  
+- CEx: semantic constraints  
+- CE: cognitive constraints  
+- ISc: evaluative constraints  
+- TR/CTP: behavioral constraints  
+- OuBA: expressive constraints  
+
+This progressive constraint model is a core principle of complex systems theory.
+
+### **5. Deterministic Transformations Prevent Chaotic Drift**
+
+Complex systems must transform state deterministically at each layer to avoid chaotic drift or instability.
+
+TS enforces deterministic transformations at every stage:
+
+- deterministic extraction  
+- deterministic normalization  
+- deterministic scoring  
+- deterministic routing  
+- deterministic expression  
+
+This is the correct architecture for coherent complexity.
+
+### **6. Fielded Representation Is Required for Complex State**
+
+Complex systems require **fielded state**, not monolithic state. This is true in physics, biology, cognitive science, and distributed computing.
+
+TS uses fielded meaning representations:
+
+- topic  
+- stance  
+- intent  
+- direction  
+- coherence  
+- continuity  
+- importance  
+- identity  
+- clarifying metadata  
+
+This matches the structural requirements of complex systems.
+
+### **7. Behavior Must Emerge Only After Stabilization**
+
+In complex systems, behavior must emerge only after:
+
+- extraction  
+- stabilization  
+- evaluation  
+
+TS mirrors this natural emergence pipeline:
+
+```
+CEx → CE → ISc → TR → OuBA
+```
+
+Meaning becomes behavior only after it is stable and evaluative.
+
+---
+
+### **Why This Matters**
+
+TS is not just a cognitive architecture; it is a **complex systems architecture** designed for coherent complexity. Meaning is inherently complex but coherent, and TS follows the exact structural principles that complex systems theory prescribes for such phenomena.
+
+This alignment ensures that TS’s approach to meaning is:
+
+- **sound**  
+- **natural**  
+- **stable**  
+- **deterministic**  
+- **coherent**  
+- **architecturally justified**  
+
+TS does not merely “work well”—it works the way complex systems *must* work when processing coherent complexity.
+
+---
+
 # **7. Earliest Point TS Demonstrates Historically New Cognition**
 
 The earliest point where TS demonstrates:
