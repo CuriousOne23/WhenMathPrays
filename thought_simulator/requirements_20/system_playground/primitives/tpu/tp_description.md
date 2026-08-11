@@ -1,20 +1,44 @@
-# `tp_description.md`  
-### **Thought Packet (TP) Description White Paper**  
-### *Deterministic, Replay‑Safe, CCR‑Aligned Architecture Overview*  
-### *With Full Upstream Stability + Identity + Intake Integration*
+Jeff — **yes.**  
+We can absolutely do this **inline**, section‑by‑section, without the agent, without the task card, without any of the overhead.
+
+You provided Sections **1 through 11**, and you asked:
+
+> **“Let’s do sections 1 thru 6 first then 7 thru the end section.”**
+
+Perfect.  
+Below is the **fully revised Sections 1–6**, rewritten cleanly, integrated with COB/CIL/CST upstream effects, and ready to paste directly into your GitHub file.
+
+I will not trigger any agent.  
+I will not produce a full structured document in one shot.  
+I *can* produce sections individually — and that’s exactly what you asked for.
 
 ---
 
-# **1. Introduction**
+# ✅ **REVISED SECTIONS 1–6 (INLINE, NO AGENT)**  
+### *These replace your existing Sections 1–6.*
+
+---
+
+# **1. Introduction (Revised)**
 
 The **Thought Packet (TP)** is the canonical, deterministic, lane‑local data structure used throughout **Path‑A**.  
-It is the *only* object exchanged between primitives, and the *only* object committed by TPU and frozen by OuBA.
+It is the *only* object exchanged between primitives, the *only* object committed by TPU, and the *only* object frozen by OuBA.
+
+The TP is the convergence point of:
+
+- upstream stability signals (CST‑Core → CST‑MS → CST‑Mux),  
+- long‑horizon identity continuity (COB),  
+- deterministic intake normalization (CIL),  
+- bounded extraction and alignment (CEx‑IE, CEx‑CCR),  
+- deterministic metadata packaging (CEx‑Pck),  
+- canonical context normalization (CE),  
+- and atomic commit (TPU).
 
 This white paper explains:
 
 - how the TP is **constructed**,  
-- how upstream stability and identity layers influence TP formation,  
-- how CEx‑IE, CEx‑CCR, and CEx‑Pck produce TP metadata,  
+- how upstream stability and identity layers shape TP metadata,  
+- how CEx‑IE, CEx‑CCR, and CEx‑Pck produce TP envelopes,  
 - how CE and TPU form the **semantic firewall**,  
 - how deterministic replay is guaranteed,  
 - and how downstream primitives consume TP metadata.
@@ -23,10 +47,9 @@ The goal is to restore a clear, intuitive understanding of the TP’s design.
 
 ---
 
-# **2. Full Path‑A Architecture (Upstream → TP)**
+# **2. Full Path‑A Architecture (Upstream → TP) — Revised**
 
-The TP is not created in isolation.  
-It is the **final product** of a long deterministic pipeline:
+The TP is the **final product** of a deterministic upstream pipeline:
 
 ```mermaid
 flowchart LR
@@ -44,34 +67,67 @@ flowchart LR
     TPU --> TP
 ```
 
-### **Upstream Stability Layer**
-- **CST‑Core** computes drift, oscillation, ambiguity, collapse, continuity.  
-- **CST‑MS** synthesizes stability metrics and issues structural commands (freeze, thaw, split, merge).  
-- **CST‑Mux** packages all stability signals into the **Unified Stability Packet (USP)**.
+### **Upstream Stability Layer (CST‑Core → CST‑MS → CST‑Mux)**  
+These modules compute and synthesize:
 
-### **Long‑Horizon Identity Layer**
-- **COB** maintains identity layers, referent maps, clarifying fields, importance maps, lineage continuity.  
-- COB produces the **stabilized identity‑layer snapshot** consumed by CIL.
+- drift, oscillation, ambiguity, collapse  
+- freeze, thaw, continuity‑restoration  
+- stability summaries  
+- structural commands (freeze, thaw, split, merge)  
+- Unified Stability Packet (USP)
 
-### **Intake Layer**
-- **CIL** normalizes structural cues, importance signals, clarifying fields, next‑turn context, and stability indicators into the **CIL Intake Packet**.
+The USP is delivered to CIL for deterministic replay reconstruction.
 
-### **Extraction + Alignment Layer**
+### **Long‑Horizon Identity Layer (COB)**  
+COB maintains:
+
+- identity layers  
+- referent maps  
+- clarifying fields  
+- importance maps  
+- lineage continuity  
+- next‑turn context continuity  
+- ordering metrics (recency, frequency, density)  
+- long‑horizon importance
+
+COB produces the **stabilized identity‑layer snapshot** consumed by CIL.
+
+### **Intake Layer (CIL)**  
+CIL normalizes:
+
+- identity selection  
+- stability indicators (from USP)  
+- structural hints  
+- clarifying‑fields  
+- importance signals  
+- next‑turn context  
+- completeness flags  
+- register hints
+
+CIL produces the **CIL Intake Packet** consumed by CEx.
+
+### **Extraction + Alignment Layer (CEx‑IE → CEx‑CCR)**  
 - **CEx‑IE** extracts bounded structural hints.  
 - **CEx‑CCR** computes alignment, scores, decision, selected conversation.
 
-### **Packaging Layer**
-- **CEx‑Pck** constructs TP metadata envelopes (context, MSL, continuity, CIL metadata, semantic‑residue metadata).
+### **Packaging Layer (CEx‑Pck)**  
+CEx‑Pck constructs TP metadata envelopes:
 
-### **Semantic Firewall**
-- **CE** normalizes context metadata.  
-- **TPU** commits metadata into the TP.
+- context  
+- MSL  
+- continuity  
+- CIL metadata  
+- semantic‑residue metadata
+
+### **Semantic Firewall (CE → TPU)**  
+CE normalizes context metadata.  
+TPU commits metadata into the TP.
 
 This is the full upstream context required to understand TP formation.
 
 ---
 
-# **3. High‑Level TP Architecture**
+# **3. High‑Level TP Architecture (Revised)**
 
 The TP is composed of **envelopes** — structured, bounded, deterministic blocks of metadata and semantic information.
 
@@ -96,7 +152,7 @@ Each envelope is deterministic, bounded, and replay‑safe.
 
 ---
 
-# **4. TP Envelope Overview Table (Updated)**
+# **4. TP Envelope Overview Table (Revised)**
 
 | Envelope | Purpose | Written By | Read By |
 |---------|---------|------------|---------|
@@ -117,7 +173,7 @@ Each envelope is deterministic, bounded, and replay‑safe.
 
 ---
 
-# **5. Upstream Influence on TP Formation**
+# **5. Upstream Influence on TP Formation (Revised)**
 
 TP formation depends on upstream stability and identity layers:
 
@@ -128,16 +184,45 @@ TP formation depends on upstream stability and identity layers:
 - Structural command records  
 - Unified Stability Packet (USP)
 
+USP influences:
+
+- CIL stability indicators  
+- CCR scores  
+- continuity flags  
+- fallback/reset behavior  
+- CE normalization  
+- TPU commit lineage
+
+---
+
 ### **COB**
+COB provides long‑horizon identity continuity:
+
 - identity layers  
 - referent maps  
-- clarifying fields  
+- clarifying fields (10/100/4 bounded)  
 - importance maps  
 - lineage continuity  
 - next‑turn context integration  
 - ordering metrics (recency, frequency, density)
 
+COB influences:
+
+- CIL identity selection  
+- CIL structural hints  
+- CIL clarifying‑field extraction  
+- CIL importance reflection  
+- CEx‑CCR alignment  
+- CEx‑Pck context construction  
+- continuity propagation  
+- MSL stance/shading  
+- CE normalization
+
+---
+
 ### **CIL**
+CIL produces the deterministic intake packet:
+
 - identity selection  
 - stability indicators  
 - structural hints  
@@ -147,23 +232,53 @@ TP formation depends on upstream stability and identity layers:
 - completeness flags  
 - register hints  
 
-### **CEx‑IE**
-- structural hints (topic, intent, continuity, reference, direction, coherence, politeness, register)
+CIL influences:
 
-### **CEx‑CCR**
-- alignment  
-- scores  
-- decision  
-- selected conversation  
-
-### **CEx‑Pck**
-- constructs TP metadata envelopes
-
-This upstream pipeline must be reflected in the TP description.
+- CEx‑IE structural extraction  
+- CEx‑CCR alignment  
+- CEx‑Pck context construction  
+- CEx‑Pck continuity flags  
+- CE normalization  
+- TPU commit provenance
 
 ---
 
-# **6. The CE → TPU Boundary (Semantic Firewall)**
+### **CEx‑IE**
+Extracts bounded structural hints:
+
+- topic  
+- intent  
+- continuity  
+- reference  
+- direction  
+- coherence  
+- politeness  
+- register
+
+---
+
+### **CEx‑CCR**
+Computes:
+
+- alignment  
+- scores  
+- decision  
+- selected conversation
+
+---
+
+### **CEx‑Pck**
+Constructs TP metadata envelopes:
+
+- context  
+- MSL  
+- continuity  
+- CIL metadata  
+- semantic‑residue metadata
+
+---
+
+# **6. The CE → TPU Boundary (Semantic Firewall) — Revised**
 
 The most important architectural seam in Path‑A is:
 
@@ -182,59 +297,285 @@ This boundary ensures:
 
 CE produces the **canonical context envelope**, and TPU commits it into the TP.
 
+After TPU commit, CE metadata becomes **immutable**.
+
 ---
 
-# **7. TP Envelope Details (Updated)**
+Jeff — perfect.  
+We’ll continue exactly the way you asked: **inline**, **no agent**, **no task card**, **no structured‑document trigger**, and we’ll produce **Sections 7 through the end** in the same clean, deterministic, upstream‑integrated style as Sections 1–6.
+
+Below is the **fully revised Sections 7–11**, ready to paste directly into your GitHub file.
+
+---
+
+# ✅ **REVISED SECTIONS 7–11 (INLINE, NO AGENT)**  
+### *These replace your existing Sections 7–11.*
+
+---
+
+# **7. TP Envelope Details (Fully Revised)**
+
+This section expands each envelope with explicit upstream influence (COB, CIL, CST), intake influence (CEx‑IE, CEx‑CCR), and packaging influence (CEx‑Pck), while preserving the deterministic CE → TPU commit boundary.
+
+---
 
 ## **7.1 Identity Block**
-Immutable identifiers for TP lifecycle.
 
-## **7.2 Semantic Envelope**
-Propositions and truth evidence.
+The Identity Block defines:
 
-## **7.3 Context Envelope (Raw) — Written by CEx‑Pck**
-Derived from:
-- IE hints  
-- CCR alignment  
-- next_context  
-- CIL substrate  
+- TP ID  
+- sequence number  
+- cycle  
+- lane  
+- schema version  
+- policy signature  
 
-## **7.4 Context Metadata Envelope (CE)**
-Canonical context, bounded clarifying fields, provenance.
-
-## **7.5 MSL Metadata — Written by CEx‑Pck**
-Meaning Signal Layer tokens.
-
-## **7.6 Continuity Metadata**
-Clarifying fields, topology, importance.
-
-## **7.7 Semantic‑Importance Envelope**
-Bounded semantic residues.
-
-## **7.8 CCR Output Envelope**
-Alignment, scores, decision.
-
-## **7.9 CIL Metadata — Written by CEx‑Pck**
-selected_conversation, cil_reference.
-
-## **7.10 Structural Envelope**
-Semantic geometry.
-
-## **7.11 Routing Metadata**
-Arbitration and routing path.
-
-## **7.12 Provenance Metadata**
-Commit lineage.
-
-## **7.13 Entropy Metadata**
-ΔH%, entropy trace.
-
-## **7.14 Freeze Metadata**
-Final freeze snapshot.
+It is created by **InB** and is **immutable** for the lifetime of the TP.  
+All primitives read it; none modify it.
 
 ---
 
-# **8. TP Field Producer/Consumer Table (Updated)**
+## **7.2 Semantic Envelope**
+
+Carries:
+
+- propositions  
+- truth evidence  
+- semantic tags  
+
+Produced by **IE** and **OB‑Set**.  
+Consumed by **TR** and **IdOB** for meaning refinement, truth‑relation mapping, and semantic geometry.
+
+---
+
+## **7.3 Context Envelope (Raw) — Written by CEx‑Pck**
+
+The raw context envelope is constructed by **CEx‑Pck** using:
+
+- **IE structural hints** (topic, intent, continuity, reference, direction, coherence, politeness, register)  
+- **CCR alignment** (identity, continuity, reference, semantic‑residue alignment)  
+- **CIL substrate** (identity selection, clarifying‑fields, importance signals, next‑turn context, stability indicators)  
+- **next_context metadata** (stance, direction, coherence, subculture)
+
+This envelope contains:
+
+- topic  
+- stance  
+- intent  
+- register  
+- politeness  
+- tone  
+- continuity  
+- direction  
+- coherence  
+- importance  
+- clarifying_fields[]  
+
+It is consumed exclusively by **CE**.
+
+---
+
+## **7.4 Context Metadata Envelope (CE)**
+
+CE normalizes raw context into:
+
+- canonical fields  
+- bounded clarifying metadata (10/100/4)  
+- deterministic ordering  
+- provenance  
+- extraction audit  
+- version tag  
+
+CE is **pre‑semantic**, **bounded**, **deterministic**, and **non‑inferential**.  
+TPU commits CE metadata into the TP.
+
+---
+
+## **7.5 MSL Metadata — Written by CEx‑Pck**
+
+The Meaning Signal Layer (MSL) contains:
+
+- qualifiers  
+- clarifications  
+- stance  
+- shading  
+- intent  
+- direction  
+- coherence  
+- subculture  
+
+MSL is constructed using:
+
+- IE hints  
+- next_context  
+- CIL importance signals  
+- CCR alignment  
+
+Consumed by **IdOB**, **RB**, and **MCB**.
+
+---
+
+## **7.6 Continuity Metadata**
+
+Contains:
+
+- clarifying_fields  
+- subfields  
+- topology  
+- importance  
+- continuity flags  
+- reset flags  
+- fallback flags  
+- provenance  
+
+Produced by **CE → TPU**.  
+Consumed by **IdOB**, **TR**, **CIL**, **CST**.
+
+Bounded by TPU (10/100/4).
+
+---
+
+## **7.7 Semantic‑Importance Envelope**
+
+Produced by:
+
+- **OB‑Set** (SOB, SROB, CnOB, SmOB)  
+- **IdOB**  
+- **SSRGn**
+
+Contains:
+
+- entities[]  
+- facts[]  
+- semantic roles  
+- importance scores  
+- provenance  
+
+Consumed by:
+
+- **CCR**  
+- **COB**  
+- **CIL**
+
+COB uses semantic‑importance to maintain long‑horizon identity continuity.
+
+---
+
+## **7.8 CCR Output Envelope**
+
+Contains:
+
+- alignment scores  
+- ambiguity  
+- collapse  
+- drift  
+- stability  
+- decision  
+- selected conversation  
+- provenance  
+
+Consumed by:
+
+- **CEx‑Pck**  
+- **COB**  
+- **CIL**
+
+CCR output is read‑only for all downstream primitives.
+
+---
+
+## **7.9 CIL Metadata — Written by CEx‑Pck**
+
+Contains:
+
+- selected_conversation  
+- cil_reference  
+- projection_provenance  
+
+CEx‑Pck copies CCR’s selected_conversation verbatim and sets cil_reference deterministically to the static CIL substrate.
+
+Consumed by **COB** and **CIL**.
+
+---
+
+## **7.10 Structural Envelope**
+
+Semantic geometry produced by:
+
+- **SOB**  
+- **SROB**  
+- **CnOB**  
+- **SmOB**
+
+Consumed by **ISc**.
+
+---
+
+## **7.11 Routing Metadata**
+
+Produced by:
+
+- **RB**  
+- **RBU**  
+- **RTU**
+
+Contains:
+
+- routing_pathway  
+- routing_confidence  
+- arbitration_trace  
+- routing_features  
+
+Consumed by **TR** and **IdOB**.
+
+---
+
+## **7.12 Provenance Metadata**
+
+Produced by **TPU**:
+
+- commit_id  
+- commit_sequence  
+- primitive_origin  
+- commit_timestamp  
+- commit_lineage  
+
+Immutable after commit.
+
+---
+
+## **7.13 Entropy Metadata**
+
+Produced by:
+
+- **TR**  
+- **OuBA**
+
+Contains:
+
+- ΔH%  
+- entropy_trace  
+- entropy_commit_map  
+
+Consumed by **OuBA**.
+
+---
+
+## **7.14 Freeze Metadata**
+
+Produced by **SSRGn**:
+
+- freeze_signature  
+- rrw_binding  
+- policy_signature  
+- ssr_projection_map  
+- freeze_provenance  
+
+Consumed by **OuBA**.
+
+---
+
+# **8. TP Field Producer/Consumer Table (Revised)**
 
 | Envelope | Written By | Read By |
 |---------|------------|---------|
@@ -255,7 +596,7 @@ Final freeze snapshot.
 
 ---
 
-# **9. Full Multi‑Row Path‑A Flow Diagram (Updated)**
+# **9. Full Multi‑Row Path‑A Flow Diagram (Revised)**
 
 ```mermaid
 flowchart TD
@@ -311,7 +652,7 @@ flowchart TD
 
 ---
 
-# **10. Why the TP Is Designed This Way**
+# **10. Why the TP Is Designed This Way (Revised)**
 
 The TP is designed to:
 
@@ -321,7 +662,7 @@ The TP is designed to:
 - support deterministic replay  
 - separate pre‑semantic (CE) from commit (TPU)  
 - provide stable metadata for downstream primitives  
-- maintain identity continuity  
+- maintain identity continuity across turns  
 - support CCR decision logic  
 - support CIL substrate selection  
 - support structural geometry  
@@ -333,7 +674,7 @@ Every envelope exists for a specific architectural reason.
 
 ---
 
-# **11. Conclusion**
+# **11. Conclusion (Revised)**
 
 This white paper restores the intuitive feel for the TP:
 
@@ -342,8 +683,10 @@ This white paper restores the intuitive feel for the TP:
 - who writes each field,  
 - who reads each field,  
 - how upstream stability and identity layers influence TP formation,  
+- how CEx‑IE, CEx‑CCR, and CEx‑Pck construct TP metadata,  
 - and how CE and TPU form the deterministic commit boundary.
 
 The TP is the **semantic backbone** of Path‑A — the single, authoritative, replay‑safe carrier of meaning, context, identity, structure, routing, provenance, and entropy.
 
 ---
+
