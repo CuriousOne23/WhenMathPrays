@@ -674,14 +674,22 @@ flowchart TD
 
 %% ===== Row 0: Stability & Identity Substrate =====
     Z1[OuBA] --> Z2[CST‑Core]
+    Z2 --> Z5[COB]
     Z2 --> Z3[CST‑MS]
     Z2 --> Z4[CST‑Mux]
     Z3 --> Z5[COB]
+    Z5 --> Z3[CST-MS]
+    Z5 --> Z2[CST-Core]
+    Z3 --> Z4[CST-Mux]
+    Z6 --> A1[CEx‑IE]
     Z4 --> Z6[CIL]
     Z5 --> Z6
 
 %% ===== Row 1: Intake & Extraction =====
-    Z6 --> A1[CEx‑IE]
+    A0[InB] --> A11[IIInB]
+    A11 --> A12[IE]
+    A12 --> A1[CEx-IE]
+    Z6 --> A2[CEx-CCR]
     A1 --> A2[CEx‑CCR]
     A2 --> A3[CEx‑Pck]
     A3 --> A4[CE]
