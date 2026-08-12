@@ -1,1 +1,206 @@
+# ============================================================
+#  TPU Rules (Version 1.0)
+#  Deterministic validation logic for the TP-UPDATE commit authority
+#  Aligned with:
+#    - 20.46 (TPU Requirements, Option C)
+#    - 20.105 / 20.105.010–030 (writer authority + provenance)
+#    - 20.30 (safe-boundary discipline)
+#    - 20.95 (canonical ordering)
+#    - 20.12 (replay invariants)
+#    - tpu_py_struc_pgm.md
+#    - progressive_lineup_testing.md
+# ============================================================
 
+primitive: TPU
+version: "1.0"
+
+rules:
+
+  # ----------------------------------------------------------
+  # 1. Deterministic Replay
+  # ----------------------------------------------------------
+  - id: tpu_replay_001
+    description: >
+      Identical TP(N) + identical tp_update_request must produce
+      identical TP(N+1), audit record, and error object.
+    check: deterministic_replay
+
+  - id: tpu_replay_002
+    description: >
+      Commit provenance and lineage must be stable under replay.
+    check: provenance_replay_stability
+
+  # ----------------------------------------------------------
+  # 2. Writer Authority Enforcement (20.105 / HLR-20.46-003)
+  # ----------------------------------------------------------
+  - id: tpu_writer_authority_001
+    description: >
+      Each update block (isc, cil, cob, cop, idob_update,
+      mcb_update, rbu_update) may contain only fields permitted
+      for that writer. Any violation rejects the entire request.
+    check: writer_authority_enforcement
+
+  - id: tpu_writer_authority_002
+    description: >
+      Meaning-layer blocks must not contain structural geometry
+      or process-layer fields.
+    check: writer_authority_namespace_integrity
+
+  - id: tpu_writer_authority_003
+    description: >
+      On authority violation TPU must retain TP(N) and emit
+      a deterministic tpu_error with code WRITER_AUTHORITY_VIOLATION.
+    check: writer_authority_fallback
+
+  # ----------------------------------------------------------
+  # 3. Atomic Commit (HLR-20.46-009)
+  # ----------------------------------------------------------
+  - id: tpu_atomicity_001
+    description: >
+      Updates must be applied atomically. Partial commits are forbidden.
+    check: atomic_commit_integrity
+
+  - id: tpu_atomicity_002
+    description: >
+      Either the full validated request is committed or TP(N)
+      is retained unchanged.
+    check: all_or_nothing_commit
+
+  # ----------------------------------------------------------
+  # 4. Safe-Boundary Commit (20.30 / HLR-20.46-005)
+  # ----------------------------------------------------------
+  - id: tpu_safe_boundary_001
+    description: >
+      TPU may commit only when the safe_boundary_marker is true
+      (or equivalent safe-boundary condition is met).
+    check: safe_boundary_enforcement
+
+  - id: tpu_safe_boundary_002
+    description: >
+      TPU must not commit during OB execution, RB routing,
+      TR/IdOB/MCB/RBU windows, or OuBA commit window.
+    check: safe_boundary_window_integrity
+
+  # ----------------------------------------------------------
+  # 5. 1-TP-Cycle Lag (HLR-20.46-006)
+  # ----------------------------------------------------------
+  - id: tpu_cycle_lag_001
+    description: >
+      Updates proposed in cycle N appear only in TP(N+1).
+      No subsystem may observe the committed fields in the same cycle.
+    check: one_cycle_lag_integrity
+
+  # ----------------------------------------------------------
+  # 6. Canonical Ordering (20.95 / HLR-20.46-004)
+  # ----------------------------------------------------------
+  - id: tpu_canonical_ordering_001
+    description: >
+      Arrays, maps, clarifying-fields, next-context fields,
+      lineage markers, and metadata blocks must be emitted
+      in canonical order.
+    check: canonical_ordering_enforcement
+
+  # ----------------------------------------------------------
+  # 7. Clarifying-Field Commit (HLR-20.46-017 … 026)
+  # ----------------------------------------------------------
+  - id: tpu_clarifying_001
+    description: >
+      Clarifying-field updates must respect bounded limits:
+      max 10 fields, max 100 subfields, max 4 hierarchical levels.
+    check: clarifying_field_boundedness
+
+  - id: tpu_clarifying_002
+    description: >
+      Clarifying-field provenance (producer, last-update,
+      commit lineage) must be preserved and extended correctly.
+    check: clarifying_field_provenance
+
+  - id: tpu_clarifying_003
+    description: >
+      Clarifying-field commits must be atomic and follow
+      1-TP-cycle lag semantics.
+    check: clarifying_field_atomicity_and_lag
+
+  # ----------------------------------------------------------
+  # 8. Next-Context Commit (MCB / HLR-20.46-030 … 033)
+  # ----------------------------------------------------------
+  - id: tpu_next_context_001
+    description: >
+      TPU must commit next-context fields only into
+      TP.next_context{} and must never modify current-turn context.
+    check: next_context_write_only
+
+  - id: tpu_next_context_002
+    description: >
+      Required next-context fields (topic, stance, intent,
+      direction, coherence, importance, …) must be validated
+      before commit.
+    check: next_context_field_validation
+
+  # ----------------------------------------------------------
+  # 9. Provenance Metadata (TPU-written)
+  # ----------------------------------------------------------
+  - id: tpu_provenance_001
+    description: >
+      TPU must write provenance_metadata containing
+      commit_id, commit_sequence, primitive_origin="TPU",
+      commit_timestamp, and commit_lineage[].
+    check: provenance_metadata_integrity
+
+  - id: tpu_provenance_002
+    description: >
+      Commit lineage must be append-only and deterministic.
+    check: commit_lineage_append_only
+
+  # ----------------------------------------------------------
+  # 10. Audit Record
+  # ----------------------------------------------------------
+  - id: tpu_audit_001
+    description: >
+      Every commit attempt (success, reject, or no-op) must
+      produce an append-only tpu_audit_record.
+    check: audit_record_presence
+
+  - id: tpu_audit_002
+    description: >
+      Audit record must capture writer-authority result,
+      safe-boundary result, atomicity result, TP(N)/TP(N+1)
+      hashes, and status.
+    check: audit_record_completeness
+
+  # ----------------------------------------------------------
+  # 11. Forbidden Behavior (HLR-20.46-007 / 008 + structural program)
+  # ----------------------------------------------------------
+  - id: tpu_forbidden_001
+    description: >
+      TPU must not generate meaning, interpret semantics,
+      or modify semantic_core.
+    check: no_meaning_generation
+
+  - id: tpu_forbidden_002
+    description: >
+      TPU must not modify TP.intake.*, current-turn TP.context.*,
+      or structural geometry fields.
+    check: intake_context_geometry_integrity
+
+  - id: tpu_forbidden_003
+    description: >
+      TPU must not perform routing, identity refinement,
+      or lineage updates outside commit provenance.
+    check: no_routing_or_identity_side_effects
+
+  # ----------------------------------------------------------
+  # 12. Progressive Lineup Compatibility
+  # ----------------------------------------------------------
+  - id: tpu_progressive_lineup_001
+    description: >
+      TPU must operate correctly under progressive lineup
+      execution, accepting upstream envelopes regardless of
+      intervening use_<primitive> flags.
+    check: progressive_lineup_compatibility
+
+  - id: tpu_progressive_lineup_002
+    description: >
+      When use_tpu = false the input envelope must be passed
+      through unchanged (passthrough behavior).
+    check: passthrough_integrity
