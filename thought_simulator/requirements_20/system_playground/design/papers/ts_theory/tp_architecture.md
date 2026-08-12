@@ -91,7 +91,7 @@ This is NOT the primitive list — this is the architectural structure.
 
 ## **4.1 Layer 1 — Intake Layer**  
 **Purpose:**  
-Transform raw input into the first committed meaning state \(M_t\).
+Transform raw input into the first committed meaning state $M_t$.
 
 **Meaning theory connection:**  
 Raw → canonical mapping begins here.
@@ -111,8 +111,8 @@ Apply continuity and identity constraints to produce the **Context Frame**.
 **Meaning theory connection:**  
 This layer realizes:
 
-- continuity function \(C_{t+1} = f(M_t, M_{t+1})\)  
-- identity function \(I_{t+1} = g(I_t, M_t)\)
+- continuity function $C_{t+1} = f(M_t, M_{t+1})$  
+- identity function $I_{t+1} = g(I_t, M_t)$
 
 **Outputs:**  
 - Context Frame  
@@ -189,9 +189,9 @@ This layer realizes:
 
 TP operates on the meaning state vector defined in ts_meaning_theory.md:
 
-\[
-M_t = \{ \text{topic},\ \text{intent},\ \text{stance},\ \text{continuity},\ \text{importance},\ \text{clarifying fields},\ \text{next-turn context},\ \text{identity continuity},\ \text{referent continuity},\ \text{provenance},\ \text{entropy},\ \text{freeze signatures} \}
-\]
+$$
+M_t = \\{ \text{topic},\ \text{intent},\ \text{stance},\ \text{continuity},\ \text{importance},\ \text{clarifying fields},\ \text{next-turn context},\ \text{identity continuity},\ \text{referent continuity},\ \text{provenance},\ \text{entropy},\ \text{freeze signatures} \\}
+$$
 
 TP is the architecture that:
 
@@ -246,9 +246,9 @@ SSR is the **freeze boundary**.
 
 Identity theory defines:
 
-\[
+$$
 I_{t+1} = g(I_t, M_t)
-\]
+$$
 
 TP realizes this through:
 
@@ -270,9 +270,9 @@ COB/CST‑CORE/CST‑MS/CST‑MUX maintain identity across turns.
 
 Continuity theory defines:
 
-\[
+$$
 C_{t+1} = f(M_t, M_{t+1})
-\]
+$$
 
 TP realizes this through:
 
