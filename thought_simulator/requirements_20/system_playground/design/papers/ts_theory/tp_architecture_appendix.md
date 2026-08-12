@@ -62,7 +62,7 @@ flowchart TD
 
     subgraph Intake["Layer 1: Intake Layer"]
         A[Raw Input] --> B[Structural Normalization]
-        B --> C[First Meaning Commit (Mₜ)]
+        B --> C["First Meaning Commit (Mₜ)"]
     end
 
     subgraph Context["Layer 2: Context & Relevance"]
@@ -79,7 +79,7 @@ flowchart TD
     end
 
     subgraph Commit["Layer 4: Commit Layer"]
-        I --> J[Cognitive Commit (TPU)]
+        I --> J["Cognitive Commit (TPU)"]
         J --> K[Behavioral Commit (OuBA)]
         K --> L[SSR Freeze]
     end
