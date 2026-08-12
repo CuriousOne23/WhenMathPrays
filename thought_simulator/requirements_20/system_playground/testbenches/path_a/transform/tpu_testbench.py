@@ -130,16 +130,14 @@ def run_tpu(tp_input: Dict[str, Any], update_request: Dict[str, Any]) -> Tuple[D
     # Support both (tp, audit) tuple and richer return shapes
     if isinstance(result, tuple) and len(result) >= 2:
         tp_n1 = result[0]
-        audit = result[1] if len(result) > 1 else None
-        error = result[2] if len(result) > 2 else None
+        audit = result[1]
     else:
-        # Fallback if the implementation mutates in place
         tp_n1 = getattr(tpu, "tp", result)
         audit = getattr(tpu, "audit_record", None)
-        error = getattr(tpu, "error", None)
-
+    
+    error = getattr(tpu, "error", None)   # always from the instance
+    
     return tp_n1, audit, error
-
 
 def compare_expected(actual_tp: Dict[str, Any],
                      actual_audit: Optional[Dict],
@@ -217,8 +215,8 @@ def run_single_test(test_entry: Dict[str, Any]) -> Dict[str, Any]:
         expected   = tb_test.get("expected", tb_test.get("expected_output", {}))
 
         # Split the two TPU inputs
-        update_request = full_input.pop("tp_update_request", {})
-        tp_input = full_input   # remaining fields are the TP(N)
+        update_request = copy.deepcopy(full_input.get("tp_update_request", {}))
+        tp_input = {k: v for k, v in full_input.items() if k != "tp_update_request"}
 
         print(f"- Input Source: tpu_testbench.yaml (testbench mode)")
         print(f"- Expected Output Source: tpu_testbench.yaml (expected block)")
