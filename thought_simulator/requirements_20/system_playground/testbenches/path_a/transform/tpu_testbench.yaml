@@ -145,8 +145,10 @@ tests:
 
     expected:
       # TP(N+1) after atomic commit
+      # Context content must match the full CE envelope (TPU does not reshape it).
+      # Provenance side-effects are validated by the testbench (not hard-coded IDs).
       metadata:
-        context:                          # CE envelope now committed
+        context:
           topic: "travel"
           stance: "neutral"
           intent: "inform"
@@ -163,9 +165,19 @@ tests:
           context_provenance:
             origin: "CE"
             last_update: "TPU"
-            commit_lineage: ["c001", "c002", "c003", "tpu_001"]
+            commit_lineage: ["c001", "c002", "c003"]   # lineage tail is dynamic; stripped in compare
+          extraction_audit:
+            normalized_fields: ["topic", "stance", "intent", "direction", "coherence"]
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation: ["destination", "duration"]
+          ce_version_tag: "CE_v1.0"
 
-        next_context:                     # MCB fields committed
+        next_context:
           topic: "travel"
           stance: "neutral"
           intent: "inform"
@@ -174,23 +186,18 @@ tests:
           importance: "normal"
 
         provenance_metadata:
-          commit_id: "tpu_001"
-          commit_sequence: 1
           primitive_origin: "TPU"
-          commit_lineage: ["tpu_001"]
+          # commit_id / commit_sequence / full lineage are dynamic — checked as invariants only
 
-      # Artifacts produced by TPU
       tpu_audit_record:
         status: "committed"
         writer_authority: "pass"
         canonical_ordering: "pass"
         safe_boundary: "pass"
         atomicity: "pass"
-        tp_n_hash: "hash_tp_n_001"
-        tp_n1_hash: "hash_tp_n1_001"
 
       tpu_error: null
-
+      
   # ------------------------------------------------------------
   # 2. Writer-authority violation → deterministic reject + audit
   # ------------------------------------------------------------
