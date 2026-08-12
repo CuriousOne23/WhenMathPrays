@@ -127,21 +127,6 @@ These four files are **required** for SOB to satisfy 20.40.010.
 
 ---
 
-Jeff — yes, I should rewrite **section 4.2**, because now we finally have the *correct architectural understanding* of how SOB interacts with upstream TP components:
-
-- Upstream components may provide **semantic/contextual** signals.
-- SOB performs **lexical/structural** tagging.
-- SOB may **reuse**, **affirm**, **ignore**, or **override** upstream signals **inside SOB’s own residue**.
-- SOB must **never overwrite upstream fields**.
-- SOB is the **authoritative owner** of SOB‑level tagging.
-- Keeping both upstream and SOB signals separate is **critical for TS debugging, replay, and routing**.
-
-Section 4.2 should reflect this clearly.
-
-Below is the rewritten version — clean, precise, and ready to paste into your architecture file.
-
----
-
 # **4.2 TP‑Read‑Only Dictionaries (Required for SOB Tagging)**
 
 These YAML files contain **lexical markers** that SOB uses to perform its specialized structural‑adjacent tagging.  
