@@ -1,7 +1,7 @@
 # **tp_architecture_appendix.md**  
 ### *Thought Pipeline (TP) — Architectural Appendix*  
 **Version 1.0 — Visual & Structural Maps**  
-**Author:** CuriousOne (Jeff)
+**Author:** CuriousOne 
 
 This appendix provides the **visual and structural representations** of the Thought Pipeline (TP) architecture described in **tp_architecture.md**.  
 It contains:
