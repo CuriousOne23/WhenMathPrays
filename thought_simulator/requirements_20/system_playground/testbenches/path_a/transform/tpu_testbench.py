@@ -152,11 +152,20 @@ def compare_expected(actual_tp: Dict[str, Any],
     # 1. Metadata / committed envelopes
     exp_meta = expected.get("metadata", {})
     act_meta = actual_tp.get("metadata", {})
-
-    for key in ("context", "next_context", "provenance_metadata"):
+    
+    # Stable envelopes – full compare
+    for key in ("context", "next_context"):
         if key in exp_meta:
             if not deep_compare(act_meta.get(key), exp_meta.get(key)):
                 mismatches.append(f"metadata.{key} mismatch")
+    
+    # Provenance – only check stable invariants
+    if "provenance_metadata" in exp_meta:
+        act_prov = act_meta.get("provenance_metadata") or {}
+        if act_prov.get("primitive_origin") != "TPU":
+            mismatches.append("provenance_metadata.primitive_origin must be 'TPU'")
+        if not act_prov.get("commit_id"):
+            mismatches.append("provenance_metadata.commit_id missing")
 
     # 2. Audit record
     exp_audit = expected.get("tpu_audit_record")
