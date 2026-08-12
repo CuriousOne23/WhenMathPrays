@@ -153,11 +153,23 @@ def compare_expected(actual_tp: Dict[str, Any],
     exp_meta = expected.get("metadata", {})
     act_meta = actual_tp.get("metadata", {})
     
-    # Stable envelopes – full compare
-    for key in ("context", "next_context"):
-        if key in exp_meta:
-            if not deep_compare(act_meta.get(key), exp_meta.get(key)):
-                mismatches.append(f"metadata.{key} mismatch")
+    # Stable top-level context fields – compare without provenance
+    if "context" in exp_meta:
+        act_ctx = dict(act_meta.get("context") or {})
+        exp_ctx = dict(exp_meta.get("context") or {})
+        # Ignore dynamic provenance for equality
+        act_ctx.pop("context_provenance", None)
+        exp_ctx.pop("context_provenance", None)
+        if not deep_compare(act_ctx, exp_ctx):
+            mismatches.append("metadata.context mismatch (excluding provenance)")
+        # Still require that provenance was touched by TPU
+        act_prov = (act_meta.get("context") or {}).get("context_provenance") or {}
+        if act_prov.get("last_update") != "TPU":
+            mismatches.append("context.context_provenance.last_update must be 'TPU'")
+    
+    if "next_context" in exp_meta:
+        if not deep_compare(act_meta.get("next_context"), exp_meta.get("next_context")):
+            mismatches.append("metadata.next_context mismatch")
     
     # Provenance – only check stable invariants
     if "provenance_metadata" in exp_meta:
