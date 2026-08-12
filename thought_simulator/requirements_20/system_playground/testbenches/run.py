@@ -161,7 +161,7 @@ ACTIVE_TEST_MODULES = [
     #   • tpu_testbench.yaml (mode = "testbench")
     #   • tpu_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.tpu_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,        # Upstream primitives ignored
