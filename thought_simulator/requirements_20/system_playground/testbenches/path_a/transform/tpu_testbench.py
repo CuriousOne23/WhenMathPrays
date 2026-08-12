@@ -42,7 +42,7 @@ except ImportError:
     TPU = None
 
 try:
-    from thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.tpu_rulechecker import TPURuleChecker
+    from thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_rulechecker import TPURuleChecker
 except ImportError:
     TPURuleChecker = None
 
