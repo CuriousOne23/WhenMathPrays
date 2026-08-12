@@ -1,0 +1,309 @@
+# ============================================================
+#  TPU Testbench (Version 1.0)
+# ============================================================
+# Aligned with:
+#   - 20.46 (TPU Requirements, Option C)
+#   - tpu_py_struc_pgm.md
+#   - progressive_lineup_testing.md (Section 3)
+#   - CE → TPU semantic firewall
+# ============================================================
+
+mode: testbench
+primitive: TPU
+version: "1.0"
+
+metadata:
+  description: >
+    Validates TPU as the sole deterministic commit authority.
+    Exercises writer-authority enforcement, canonical ordering,
+    atomic commit, 1-TP-cycle lag semantics, provenance writing,
+    audit-record generation, and deterministic fallback behavior.
+  upstream:
+    - CE
+  passthrough_allowed: false
+  progressive_lineup_compatible: true
+
+tests:
+
+  # ------------------------------------------------------------
+  # 1. Full-field happy-path atomic commit
+  # ------------------------------------------------------------
+  - id: tpu_test_001
+    description: "Valid tp_update_request → atomic commit + provenance + audit"
+    input:
+      # --- TP(N) arriving from CE ---
+      tp_identity:
+        tp_id: "tp_tpu_test_001"
+        tp_seq: 100
+        cycle_id: 12
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      metadata:
+        context:                          # already normalized by CE
+          topic: "travel"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields:
+            - "destination"
+            - "duration"
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c001", "c002", "c003"]
+          extraction_audit:
+            normalized_fields: ["topic", "stance", "intent", "direction", "coherence"]
+            msl_reconciliation:
+              stance: "neutral"
+              direction: "forward"
+              coherence: "medium"
+            continuity_validation: "moderate"
+            importance_validation: "normal"
+            clarifying_validation: ["destination", "duration"]
+          ce_version_tag: "CE_v1.0"
+
+        msl_metadata:
+          qualifiers: ["approximate"]
+          clarifications: ["non-urgent"]
+          stance: "neutral"
+          shading: "none"
+          intent: "inform"
+          direction: "forward"
+          coherence: "medium"
+          subculture: "general"
+
+        continuity_metadata:
+          clarifying_fields:
+            - "destination"
+            - "duration"
+          topology: "flat"
+          importance: "normal"
+          continuity_flags:
+            reset: false
+            fallback: false
+
+        next_context:
+          topic: "travel"
+          stance: "neutral"
+          intent: "inform"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+
+        cil_metadata:
+          selected_conversation: 3
+          cil_reference: "cil_substrate_v1"
+
+        semantic_residue_metadata: {}
+
+      semantic:
+        importance:
+          entities:
+            - { value: "destination", role: "primary", score: 0.8 }
+          facts:
+            - { value: "duration", role: "secondary", score: 0.4 }
+
+      cex:
+        ccr:
+          decision: "specific"
+          selected_conversation: 3
+          scores:
+            ambiguity: 0.1
+            stability: 0.9
+
+      # --- Immutable update request (from Merge) ---
+      tp_update_request:
+        isc: {}
+        cil: {}
+        cob: {}
+        cop: {}
+        idob_update: {}
+        mcb_update:
+          next_context:
+            topic: "travel"
+            stance: "neutral"
+            intent: "inform"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+        rbu_update: {}
+        metadata:
+          merge_version: "1.0"
+          canonical_ordering_hash: "coh_001"
+          safe_boundary_marker: true
+          seed: "seed_tpu_001"
+
+    expected:
+      # TP(N+1) after atomic commit
+      metadata:
+        context:                          # CE envelope now committed
+          topic: "travel"
+          stance: "neutral"
+          intent: "inform"
+          register: "casual"
+          politeness: "medium"
+          tone: "balanced"
+          continuity: "moderate"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+          clarifying_fields:
+            - "destination"
+            - "duration"
+          context_provenance:
+            origin: "CE"
+            last_update: "TPU"
+            commit_lineage: ["c001", "c002", "c003", "tpu_001"]
+
+        next_context:                     # MCB fields committed
+          topic: "travel"
+          stance: "neutral"
+          intent: "inform"
+          direction: "forward"
+          coherence: "medium"
+          importance: "normal"
+
+        provenance_metadata:
+          commit_id: "tpu_001"
+          commit_sequence: 1
+          primitive_origin: "TPU"
+          commit_lineage: ["tpu_001"]
+
+      # Artifacts produced by TPU
+      tpu_audit_record:
+        status: "committed"
+        writer_authority: "pass"
+        canonical_ordering: "pass"
+        safe_boundary: "pass"
+        atomicity: "pass"
+        tp_n_hash: "hash_tp_n_001"
+        tp_n1_hash: "hash_tp_n1_001"
+
+      tpu_error: null
+
+  # ------------------------------------------------------------
+  # 2. Writer-authority violation → deterministic reject + audit
+  # ------------------------------------------------------------
+  - id: tpu_test_002
+    description: "Block attempts to write outside authority domain → reject entire request"
+    input:
+      tp_identity:
+        tp_id: "tp_tpu_test_002"
+        tp_seq: 101
+        cycle_id: 12
+        lane_id: "A"
+        schema_version: "1.0"
+
+      metadata:
+        context:
+          topic: "weather"
+          stance: "neutral"
+          intent: "query"
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c010"]
+
+      tp_update_request:
+        isc: {}
+        cil: {}
+        cob: {}
+        cop: {}
+        idob_update:
+          # Illegal: IdOB trying to write structural geometry (forbidden)
+          structural_geometry:
+            nodes: ["illegal"]
+        mcb_update: {}
+        rbu_update: {}
+        metadata:
+          merge_version: "1.0"
+          canonical_ordering_hash: "coh_002"
+          safe_boundary_marker: true
+          seed: "seed_tpu_002"
+
+    expected:
+      # TP remains unchanged (no partial commit)
+      metadata:
+        context:
+          topic: "weather"
+          stance: "neutral"
+          intent: "query"
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c010"]
+
+      tpu_audit_record:
+        status: "rejected"
+        writer_authority: "fail"
+        reason: "idob_update attempted write outside authority domain (structural_geometry)"
+
+      tpu_error:
+        code: "WRITER_AUTHORITY_VIOLATION"
+        rationale: "idob_update block contains forbidden field structural_geometry"
+        fallback_behavior: "retain_TP_N"
+
+  # ------------------------------------------------------------
+  # 3. Missing / empty update request → no-op commit with audit
+  # ------------------------------------------------------------
+  - id: tpu_test_003
+    description: "Empty tp_update_request → TP unchanged, audit records no-op"
+    input:
+      tp_identity:
+        tp_id: "tp_tpu_test_003"
+        tp_seq: 102
+        cycle_id: 13
+        lane_id: "A"
+        schema_version: "1.0"
+
+      metadata:
+        context:
+          topic: "status"
+          stance: "neutral"
+          intent: "report"
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c020"]
+
+      tp_update_request:
+        isc: {}
+        cil: {}
+        cob: {}
+        cop: {}
+        idob_update: {}
+        mcb_update: {}
+        rbu_update: {}
+        metadata:
+          merge_version: "1.0"
+          canonical_ordering_hash: "coh_003"
+          safe_boundary_marker: true
+          seed: "seed_tpu_003"
+
+    expected:
+      metadata:
+        context:
+          topic: "status"
+          stance: "neutral"
+          intent: "report"
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c020"]
+
+      tpu_audit_record:
+        status: "no_op"
+        writer_authority: "pass"
+        note: "empty update blocks — TP retained"
+
+      tpu_error: null
