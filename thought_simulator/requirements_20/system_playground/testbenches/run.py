@@ -139,20 +139,42 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: CE only, input from:
     #   • ce_testbench.yaml (mode = "testbench")
     #   • ce_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
+    #     {
+    #         "mode": "testbench",     # general or testbench
+    #         "use_inb": False,        # Upstream primitives ignored
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,    
+    #         "use_cex_pck": False,     
+    #         "use_ce": True,     # Primitive under test
+
+    #         # Test selection controlled by cex_pck_tests_to_run.yaml
+    #         "tests_to_run": "see ce_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** TPU Test bench ******************************************************
+    # Highest upstream True = TPU (primitive under test)
+    # Pipeline: TPU only (or progressive from CE if desired), input from:
+    #   • tpu_testbench.yaml (mode = "testbench")
+    #   • tpu_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.ce_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.tpu_testbench",
         {
-            "mode": "testbench",     # general or testbench
+            "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,        # Upstream primitives ignored
             "use_iiinb": False,
             "use_ie": False,
             "use_cex_ie": False,
-            "use_cex_ccr": False,    
-            "use_cex_pck": False,     
-            "use_ce": True,     # Primitive under test
+            "use_cex_ccr": False,
+            "use_cex_pck": False,
+            "use_ce": False,         # Set to True if you want progressive CE → TPU
+            "use_tpu": True,         # Primitive under test
 
-            # Test selection controlled by cex_pck_tests_to_run.yaml
-            "tests_to_run": "see ce_tests_to_run.yaml",
+            # Test selection controlled by tpu_tests_to_run.yaml
+            "tests_to_run": "see tpu_tests_to_run.yaml",
         }
     ),
 ]
