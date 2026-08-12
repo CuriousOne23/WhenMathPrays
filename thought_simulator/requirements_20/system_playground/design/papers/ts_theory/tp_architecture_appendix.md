@@ -84,7 +84,7 @@ flowchart TD
         K --> L[SSR Freeze]
     end
 
-    subgraph LTC["Layer 5: Long‑Term Conversation"]
+    subgraph LTC["Layer 5: Long‑Term Conversation (COB, CST, CIL)"]
         L --> M[Identity Continuity]
         L --> N[Referent Continuity]
         L --> O[Next‑Turn Context]
