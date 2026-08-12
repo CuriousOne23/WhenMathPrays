@@ -112,7 +112,3 @@ The process flow is direction-controlled:
 **Version**: 0.8 (Flow Catalog Integration + Status Paper)
 
 ---
-
-Let me know if this looks good to commit, or if you'd like any small tweaks.  
-
-We're making great progress! What's the next item on your list?
