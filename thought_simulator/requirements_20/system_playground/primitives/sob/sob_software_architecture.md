@@ -15,6 +15,9 @@ The SOB layer must be:
 
 The goal is that reading `sob.py` feels **unimpressive** — simple, predictable, and easy to maintain.
 
+SOB is strictly **pre‑semantic** and **pre‑identity**.  
+It consumes upstream metadata **read‑only**, and produces structural residue for downstream routing.
+
 ---
 
 ## **2. Directory Structure**
@@ -23,24 +26,26 @@ The goal is that reading `sob.py` feels **unimpressive** — simple, predictable
 primitives/
   sob/
     sob.py                     # tiny execution core
-    sob_dictionary.yaml        # morphological + lexical forms
-    sob_punctuation.yaml       # punctuation rules
-    sob_markers.yaml           # wh-markers, conditional markers
-    sob_operators.yaml         # operator verbs
-    sob_domains.yaml           # domain-hint lexical markers
-    sob_tones.yaml             # tone-hint lexical markers
-    sob_constraints.yaml       # constraint-hint lexical markers
-    sob_morphology.yaml        # morphological rules
+    sob_dictionary.yaml        # morphological + lexical forms (SOB-owned)
+    sob_punctuation.yaml       # punctuation rules (SOB-owned)
+    sob_markers.yaml           # wh-markers, conditional markers (SOB-owned)
+    sob_operators.yaml         # operator verbs (SOB-owned)
+
+    sob_domains.yaml           # domain-hint markers (TP-read-only)
+    sob_tones.yaml             # tone-hint markers (TP-read-only)
+    sob_constraints.yaml       # constraint-hint markers (TP-read-only)
+    sob_morphology.yaml        # morphology rules (TP-read-only or SOB-owned)
+
     sob_testbench.yaml         # deterministic tests
 ```
 
 This structure ensures:
 
 - SOB is **self‑contained**  
-- all lexical resources are **local**  
 - SOB core remains **tiny**  
 - debugging is **trivial**  
 - expansion is **safe**  
+- upstream/downstream boundaries remain intact  
 
 ---
 
@@ -55,16 +60,21 @@ This structure ensures:
 3. **Classify structural modality**  
 4. **Extract structural‑adjacent hints**  
    - operator  
-   - domain  
-   - tone  
-   - constraint  
-   - discourse‑context  
+   - domain (TP‑read‑only)  
+   - tone (TP‑read‑only)  
+   - constraint (TP‑read‑only)  
+   - discourse‑context (TP‑read‑only)  
 5. **Form residue fragments**  
 6. **Return structured TP + residue**
 
 No semantic interpretation.  
 No intent inference.  
-No meaning resolution.
+No meaning resolution.  
+No identity resolution.  
+No continuity enforcement.  
+No drift detection.  
+No routing.  
+No commit logic.
 
 ### **3.2 Execution Flow**
 
@@ -73,10 +83,10 @@ load_all_yaml_files()
 tp_units = segment(tp)
 modality = classify_modality(tp_units)
 operators = extract_operator_hints(tp_units)
-domains = extract_domain_hints(tp_units)
-tones = extract_tone_hints(tp_units)
-constraints = extract_constraint_hints(tp_units)
-discourse = extract_discourse_flags(tp_units)
+domains = extract_domain_hints(tp_units)        # TP-read-only
+tones = extract_tone_hints(tp_units)            # TP-read-only
+constraints = extract_constraint_hints(tp_units)# TP-read-only
+discourse = extract_discourse_flags(tp_units)   # TP-read-only
 residue = form_residue(tp_units, modality, operators, domains, tones, constraints, discourse)
 return structured_tp, residue
 ```
@@ -97,159 +107,45 @@ Each YAML file is:
 - **easy to update**  
 - **safe to expand**  
 
-### **4.1 sob_dictionary.yaml**  
-Contains lexical forms needed for structural classification:
+### **4.1 SOB‑Owned Dictionaries (Required)**
 
-```yaml
-auxiliaries:
-  - is
-  - are
-  - was
-  - were
-  - do
-  - does
-  - did
-  - has
-  - have
-  - had
+These files contain lexical forms SOB *must* use for structural classification.
 
-modals:
-  - can
-  - could
-  - would
-  - should
-  - might
-  - may
-  - must
+#### **sob_dictionary.yaml**
+Auxiliaries, modals, pronouns, determiners.
 
-pronouns:
-  - it
-  - they
-  - this
-  - that
-  - these
-  - those
+#### **sob_punctuation.yaml**
+Sentence endings, list markers, block markers.
 
-determiners:
-  - the
-  - a
-  - an
-  - this
-  - that
-  - these
-  - those
-```
+#### **sob_markers.yaml**
+Wh‑markers, conditional markers.
 
-### **4.2 sob_punctuation.yaml**
+#### **sob_operators.yaml**
+Operator verbs.
 
-```yaml
-sentence_endings:
-  - "."
-  - "?"
-  - "!"
+These four files are **required** for SOB to satisfy 20.40.010.
 
-list_markers:
-  - "-"
-  - "*"
-  - "+"
-```
+---
 
-### **4.3 sob_markers.yaml**
+### **4.2 TP‑Read‑Only Dictionaries (Optional but Allowed)**
 
-```yaml
-wh_markers:
-  - what
-  - why
-  - how
-  - when
-  - where
-  - which
-  - who
+These files contain markers computed or influenced by upstream TP primitives.  
+SOB does **not** compute or enforce these fields — it only **reads** them if present.
 
-conditional_markers:
-  - if
-  - unless
-  - provided
-  - assuming
-```
+#### **sob_domains.yaml**  
+Domain‑hint lexical markers.
 
-### **4.4 sob_operators.yaml**
+#### **sob_tones.yaml**  
+Tone‑hint lexical markers.
 
-```yaml
-operators:
-  - summarize
-  - compare
-  - classify
-  - derive
-  - plan
-  - explain
-  - rewrite
-  - transform
-```
+#### **sob_constraints.yaml**  
+Constraint‑hint lexical markers.
 
-### **4.5 sob_domains.yaml**
+#### **sob_morphology.yaml**  
+Morphology rules (may be SOB‑owned or TP‑read‑only).
 
-```yaml
-domains:
-  math_like:
-    - theorem
-    - lemma
-    - proof
-  code_like:
-    - def
-    - class
-    - return
-  narrative_like:
-    - story
-    - character
-  legal_like:
-    - hereby
-    - pursuant
-  technical_like:
-    - system
-    - module
-```
-
-### **4.6 sob_tones.yaml**
-
-```yaml
-tones:
-  formal:
-    - therefore
-    - accordingly
-  casual:
-    - basically
-    - kinda
-  urgent:
-    - immediately
-    - asap
-```
-
-### **4.7 sob_constraints.yaml**
-
-```yaml
-constraints:
-  precision:
-    - exactly
-    - strictly
-  conciseness:
-    - briefly
-    - concise
-  politeness:
-    - please
-    - kindly
-```
-
-### **4.8 sob_morphology.yaml**
-
-```yaml
-morphology:
-  suffixes:
-    third_person_singular: "s"
-    past_tense: "ed"
-    progressive: "ing"
-  infinitive_marker: "to"
-```
+These files are **optional**.  
+If present, SOB treats them as **TP‑read‑only**.
 
 ---
 
@@ -290,9 +186,70 @@ Only structural forms.
 
 ---
 
-## **6. Testbench (`sob_testbench.yaml`)**
+## **6. Upstream Metadata Consumption (Non‑Duplicative)**
 
-Your existing SOB testbench  already validates:
+SOB consumes upstream metadata produced by:
+
+- **IIInB**  
+- **CEx**  
+- **CE**  
+- **Context Layer**  
+- **Identity Layer**  
+- **Continuity Layer**  
+- **Semantic Layer**  
+- **Routing Layer**
+
+SOB treats all upstream metadata as **read‑only**:
+
+- SOB does **not** re‑compute meaning  
+- SOB does **not** re‑compute identity  
+- SOB does **not** re‑compute continuity  
+- SOB does **not** detect drift  
+- SOB does **not** stabilize referents or commitments  
+- SOB does **not** interpret freeze signatures  
+- SOB does **not** compute semantic‑layer cues  
+- SOB does **not** compute routing signals  
+
+SOB only:
+
+- reads upstream metadata  
+- uses metadata to improve segmentation and hint extraction  
+- encodes applicable metadata into residue  
+
+---
+
+## **7. Downstream Stability Boundaries (Non‑Duplicative)**
+
+SOB must not duplicate downstream responsibilities handled by:
+
+- **IdOB**  
+- **MCB**  
+- **DCB**  
+- **TR**  
+- **RB**  
+- **OuBA**
+
+SOB does **not**:
+
+- freeze meaning  
+- freeze identity  
+- freeze commitments  
+- enforce continuity  
+- enforce identity constraints  
+- compute semantic‑layer stability  
+- compute curvature  
+- compute routing vectors  
+- compute commit eligibility  
+- perform correction  
+- perform inference  
+
+SOB only produces structural residue for downstream routing.
+
+---
+
+## **8. Testbench (`sob_testbench.yaml`)**
+
+The SOB testbench validates:
 
 - segmentation  
 - modality  
@@ -302,7 +259,7 @@ Your existing SOB testbench  already validates:
 - constraint hints  
 - discourse‑context flags  
 
-It should be extended to validate:
+It should also validate:
 
 - dictionary loading  
 - dictionary coverage  
@@ -311,7 +268,7 @@ It should be extended to validate:
 
 ---
 
-## **7. Summary**
+## **9. Summary**
 
 The SOB software architecture is:
 
@@ -322,8 +279,14 @@ The SOB software architecture is:
 - **deterministic**  
 - **debuggable**  
 - **expandable**  
+- **non‑duplicative** (upstream + downstream)  
 - **unimpressive** (in the best way)  
 
-This is exactly the architecture required to make SOB tractable, maintainable, and aligned with your rewritten 20.40.010 spec.
+This architecture keeps SOB tractable, maintainable, and perfectly aligned with:
+
+- **20.40.010_sob_prim.md**  
+- **tp_path_a_map.md**  
+- **tp_context_layer.md**  
+- **tp_commit.md**
 
 ---
