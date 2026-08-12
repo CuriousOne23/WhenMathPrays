@@ -80,7 +80,7 @@ flowchart TD
 
     subgraph Commit["Layer 4: Commit Layer"]
         I --> J["Cognitive Commit (TPU)"]
-        J --> K[Behavioral Commit (OuBA)]
+        J --> K["Behavioral Commit (OuBA)"]
         K --> L[SSR Freeze]
     end
 
