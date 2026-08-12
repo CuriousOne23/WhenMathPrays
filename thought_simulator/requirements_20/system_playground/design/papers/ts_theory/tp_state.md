@@ -15,6 +15,44 @@ This document defines the **TP state object** for Path‑A:
 
 It is the coordination substrate that lets the primitives in `tp_path_a_map.md` act as one deterministic pipeline.
 
+### **Freeze Points**
+
+A *freeze point* is a deterministic phase boundary in Path‑A where a specific subset of TP fields becomes immutable for the remainder of the turn. Freeze points are not commits (except the final one); they are local freezes that ensure determinism, prevent backtracking, and guarantee that downstream primitives cannot rewrite upstream decisions.
+
+Path‑A has four freeze points:
+
+- **IE Freeze** — intake envelope and initial meaning/identity shell  
+- **CE Freeze** — Context Frame and context metadata  
+- **OB Freeze** — structural, constraint, semantic‑adjacent, and semantic‑layer residues  
+- **Commit Freeze (OuBA)** — meaning core, identity core, commitments, freeze signatures, provenance, next_context
+
+Each freeze point locks its field group and establishes a stable substrate for the next movement.
+
+---
+
+### **Across Turns**
+
+“Across turns” describes how TP fields behave after commit.  
+There are three behaviors:
+
+1. **Not carried across turns** — residues, routing metadata, curvature, scoring, intake envelope (except committed meaning/identity).  
+2. **Carried across turns (committed snapshot)** — meaning core, identity core, commitments, freeze signatures, semantic‑importance, next_context, continuity flags, lineage fields, stance/direction/coherence, subculture, identity anchors.  
+3. **Carried indirectly (COB/CST/CIL)** — continuity objects, stability signals, cil_substrate.
+
+These behaviors define the cross‑turn contract of the TP packet.
+
+Here’s the crisp, architecturally correct answer — **“turn” means one full Path‑A traversal**, from InB all the way through OuBA, including any IdOB cycles and routing loops.
+
+But let me give you the exact definition you need for **tp_state.md**, because this is one of the most important concepts in the entire TS architecture.
+
+---
+
+### **What a Turn Is**
+
+A *turn* is one complete traversal of Path‑A, beginning at InB and ending at OuBA.  
+A turn includes intake normalization, context formation, cue extraction, routing cycles, identity‑conditioned refinement, and final commit.  
+The output of a turn is the committed TP snapshot, which becomes the input substrate for the next turn via COB/CST/CIL and next_context.
+
 ---
 
 ## 2. TP Packet Overview
