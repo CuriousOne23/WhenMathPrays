@@ -160,7 +160,8 @@ Lexical tone markers (formal, casual, urgent).
 Lexical constraint markers (precision, conciseness, politeness).
 
 #### **sob_morphology.yaml**  
-Morphology rules (suffixes, infinitive markers).  
+Morphology rules (suffixes, infinitive markers). 
+Exmaples: (“summarizing → summarize”, “explained → explain”, “compares → compare”, and detecting infinitive forms like “to classify”)
 May be SOB‑owned or TP‑read‑only depending on design.
 
 ### **Purpose**
