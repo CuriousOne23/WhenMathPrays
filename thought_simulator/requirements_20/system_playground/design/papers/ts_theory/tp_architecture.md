@@ -1,7 +1,7 @@
 # **tp_architecture.md**  
 ### *The Architectural Bridge Between TS Meaning Theory and TS Primitive Implementation*  
 **Version 1.0 — Architectural Layer Description**  
-**Author:** CuriousOne (Jeff)
+**Author:** CuriousOne
 
 ---
 
