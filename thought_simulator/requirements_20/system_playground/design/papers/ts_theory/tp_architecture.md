@@ -341,4 +341,6 @@ This is the “forest view” of the Thought Pipeline.
 
 tp_description.md is the “trees view.”
 
+See [tp_architecture_appendix.md](tp_architecture_appendix.md) for TP diagrams and flowcharts.
+
 ---
