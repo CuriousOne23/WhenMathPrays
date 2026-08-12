@@ -1,5 +1,5 @@
-# **Difficulty of Meaning**
-### *A Theory of Cognition and the Architecture Required to Realize It*
+# **Difficulty of Meaning**  
+### *A Measurable Theory of Cognition and the Architecture Required to Realize It*
 
 This paper states a measurable theory of cognition, explains why meaning is computationally difficult, and shows how the Thought Simulator (TS) realizes a workable form of cognition on a common laptop.
 
@@ -21,18 +21,18 @@ The stable products of these events form the invariant backbone of meaning. The 
 - continuity  
 - importance  
 - clarifying fields  
-- next-turn context  
+- next‑turn context  
 - identity continuity  
 - referent continuity  
 - provenance  
 - entropy  
 - freeze signatures  
 
-These invariants are the stable, machine-extractable products of successful associations. They are not themselves the atomic abstract items; they are the structured backbone that results when abstract items have been associated, stabilized, and carried forward. They are required for deterministic continuation, identity stability, and replay-safe reasoning.
+These invariants are not atomic abstract items. They are the structured, machine‑extractable backbone that results when abstract items have been associated, stabilized, and carried forward. They are required for deterministic continuation, identity stability, and replay‑safe reasoning.
 
-**Processing** (sensorimotor coupling, continuous adjustment, coordination) can occur without producing a new abstract item. On this theory, processing is not cognition. Cognition begins only when association yields a new abstract item that can itself enter further association. The boundary is treated as sharp for architectural purposes; in experience it may be graded. The theory is committed to the claim that the decisive step is the production of a new abstract item.
+**Processing** (sensorimotor coupling, continuous adjustment, coordination) can occur without producing a new abstract item. On this theory, processing is not cognition. Cognition begins only when association yields a new abstract item that can itself enter further association. The boundary is treated as sharp for architectural purposes, though in experience it may be graded. The decisive step remains the production of a new abstract item.
 
-This claim is falsifiable: if coherent, continuous, identity-stable cognition can be shown to occur without abstract association that produces new items, or without maintaining a structured invariant backbone, the theory must be revised or abandoned.
+This claim is falsifiable: if coherent, continuous, identity‑stable cognition can be shown to occur without abstract association that produces new items, or without maintaining a structured invariant backbone, the theory must be revised or abandoned.
 
 ---
 
@@ -47,10 +47,10 @@ It must satisfy five measurable criteria:
 1. **Extractability** — deterministically identifiable from raw input.  
 2. **Distinctness** — not identical to any other item in the current event.  
 3. **Associability** — capable of participating in a relation that yields a new item.  
-4. **Continuity-compatibility** — maintainable across turns under continuity constraints.  
-5. **Identity-compatibility** — maintainable across turns under identity constraints.  
+4. **Continuity‑compatibility** — maintainable across turns under continuity constraints.  
+5. **Identity‑compatibility** — maintainable across turns under identity constraints.
 
-**Association**, in this theory, is any deterministic operation that takes two abstract items and yields a third, distinct abstract item that satisfies the same five criteria. Residual ambiguity in the association step is resolved by canonicalization before the new item is admitted to the cognitive event. Only associations that produce items meeting the criteria count as cognitive.
+**Association**, in this theory, is any deterministic operation that takes two abstract items and yields a third, distinct abstract item that satisfies the same criteria. Residual ambiguity in the association step is resolved by canonicalization before the new item is admitted to the cognitive event. Only associations that produce items meeting the criteria count as cognitive.
 
 This definition closes the conceptual gap and makes cognition operational.
 
@@ -66,7 +66,7 @@ TS performs four moves:
 1. **Extraction** — identify candidate abstract items from raw input.  
 2. **Canonicalization** — convert them into bounded, deterministic forms.  
 3. **Association and update** — produce new abstract items under continuity and identity constraints.  
-4. **Commit and freeze** — stabilize the resulting structure for replay and continuation.  
+4. **Commit and freeze** — stabilize the resulting structure for replay and continuation.
 
 The raw → canonical boundary is the architectural expression of the theory: raw meaning is too unstable for deterministic machine use; canonical meaning is stable enough to serve as state.
 
@@ -81,7 +81,7 @@ Freeze signatures prevent silent alteration of committed items.
 
 Human meaning is fuzzy, foggy, fluid, combinatorially large, chaotic, contextual, relational, hierarchical, and unstable.
 
-Raw meaning is therefore noisy, volatile, unbounded, heuristic, alignment-dependent, non-deterministic, non-replayable, and identity-unsafe.
+Raw meaning is therefore noisy, volatile, unbounded, heuristic, alignment‑dependent, non‑deterministic, non‑replayable, and identity‑unsafe.
 
 Any machine that tries to operate directly on raw meaning inherits these instabilities and cannot guarantee continuity, identity, or deterministic replay. Large models can approximate raw meaning at enormous cost in parameters, compute, memory, latency, and opacity — but without the determinism TS requires.
 
@@ -100,21 +100,21 @@ Therefore TS must isolate raw meaning and convert it into canonical meaning befo
 The theory requires a separation:
 
 - **Cognition** — the phenomenon of abstract association producing new items.  
-- **Cognitive events** — the machine representation: discrete, bounded, canonical, replay-safe, deterministic realizations of that process.  
+- **Cognitive events** — the machine representation: discrete, bounded, canonical, replay‑safe, deterministic realizations of that process.
 
 TS cannot operate directly on cognition.  
-TS must operate on cognitive events.  
+TS must operate on cognitive events.
 
 This is not a retreat from the theory; it is the only known way to make the theory executable under resource constraints.
 
 ---
 
-# **6. Canonicalization Is Controlled First-Order Estimation**
+# **6. Canonicalization Is Controlled First‑Order Estimation**
 
 Canonical meaning is not “true meaning.”  
-It is a **first-order estimate** of the products of association, stable enough for machine reasoning.
+It is a **first‑order estimate** of the products of association, stable enough for machine reasoning.
 
-Canonicalization compresses, bounds, orders, and stabilizes the products of association so they become deterministic and replay-safe. The claim is that frequent coarse estimates, applied under continuity mechanisms, leave residual error negligible for machine cognition. This is the same principle underlying filtering, quantization, and numerical integration.
+Canonicalization compresses, bounds, orders, and stabilizes the products of association so they become deterministic and replay‑safe. Frequent coarse estimates, applied under continuity mechanisms, leave residual error negligible for machine cognition — the same principle underlying filtering, quantization, and numerical integration.
 
 ---
 
@@ -123,7 +123,7 @@ Canonicalization compresses, bounds, orders, and stabilizes the products of asso
 Because association initially produces foggy, fluid, combinatorially expensive material, a machine that accepts the theory must introduce a boundary:
 
 - **Raw layer** — unstable, noisy, unbounded association material.  
-- **Canonical layer** — stabilized, deterministic, bounded association products.  
+- **Canonical layer** — stabilized, deterministic, bounded association products.
 
 This boundary is not an engineering preference.  
 It is the architectural consequence of the theory.
@@ -140,16 +140,16 @@ $$
 
 Where:
 
-- **$A_t$ (Abstract Items)** — canonical items extracted or produced at turn $t$.  
-- **$C_t$ (Continuity Vector)** — mapping from $CE_{t-1} \rightarrow CE_t$ preserving trajectory.  
-- **$I_t$ (Identity Vector)** — mapping preserving agent identity across turns.  
-- **$S_t$ (Stance)** — canonical evaluative posture.  
-- **$R_t$ (Referent Continuity)** — mapping preserving referents across turns.  
-- **$P_t$ (Provenance)** — record of sources, commitments, freeze signatures.  
-- **$E_t$ (Entropy)** — measure of uncertainty or instability.  
-- **$F_t$ (Freeze Signatures)** — items that must not be silently altered.  
+- **$A_t$** (Abstract Items) — canonical items extracted or produced at turn $t$.  
+- **$C_t$** (Continuity Vector) — mapping from $CE_{t-1} \rightarrow CE_t$ preserving trajectory.  
+- **$I_t$** (Identity Vector) — mapping preserving agent identity across turns.  
+- **$S_t$** (Stance) — canonical evaluative posture.  
+- **$R_t$** (Referent Continuity) — mapping preserving referents across turns.  
+- **$P_t$** (Provenance) — record of sources, commitments, freeze signatures.  
+- **$E_t$** (Entropy) — measure of uncertainty or instability.  
+- **$F_t$** (Freeze Signatures) — items that must not be silently altered.
 
-The invariant attributes listed in Section 0 appear inside this schema as the stable, named components of the vectors and signatures. The schema is deterministic, measurable, replay-safe, and small enough for laptop-scale operation. It makes TS’s internal state explicit and falsifiable.
+The invariants listed in Section 0 appear inside this schema as the stable, named components of the vectors and signatures. The schema is deterministic, measurable, replay‑safe, and small enough for laptop‑scale operation. It makes TS’s internal state explicit and falsifiable.
 
 ---
 
@@ -158,10 +158,12 @@ The invariant attributes listed in Section 0 appear inside this schema as the st
 The invariants are selected because they recur across turns, define semantic identity, can be extracted, canonicalized, committed, replayed, and maintained on a laptop. They function as the state variables of cognitive events.
 
 **Evidence**  
-Conversation science identifies analogous structures (topic, intent, stance, repair, referent tracking). Cognitive psychology identifies similar elements (schemas, frames, situation models). Computational necessity forces any deterministic system that preserves continuity and identity to track these families of information.
+Conversation science identifies analogous structures (topic, intent, stance, repair, referent tracking).  
+Cognitive psychology identifies similar elements (schemas, frames, situation models).  
+Computational necessity forces any deterministic system that preserves continuity and identity to track these families of information.
 
 **Openness**  
-Additional invariants may be added if they satisfy the criteria: recurrence, extractability, canonicalizability, replay-safety, identity relevance, and laptop-scale computability.
+Additional invariants may be added if they satisfy the criteria: recurrence, extractability, canonicalizability, replay‑safety, identity relevance, and laptop‑scale computability.
 
 ---
 
@@ -174,22 +176,25 @@ The thesis follows directly:
 > TS operates only on cognitive events.  
 > Therefore TS can run on a laptop.
 
-The cognitive-event schema is a bounded tuple. If the invariants capture the stable backbone and canonicalization is applied frequently, the state that must be maintained remains small enough for ordinary hardware while still supporting deterministic meaning, replay, continuity, identity, and routing.
+The cognitive‑event schema is a bounded tuple. If the invariants capture the stable backbone and canonicalization is applied frequently, the state that must be maintained remains small enough for ordinary hardware while still supporting deterministic meaning, replay, continuity, identity, and routing.
 
 ---
 
 # **11. Historical Position**
 
-Cognitive science has long worked with schemas, frames, scripts, and situation models. AI has developed symbolic systems, semantic networks, embeddings, transformers, and dialogue-state tracking.
+Cognitive science has long worked with schemas, frames, scripts, and situation models.  
+AI has developed symbolic systems, semantic networks, embeddings, transformers, and dialogue‑state tracking.
 
-TS integrates a measurable theory of cognition as abstract association, a raw → canonical boundary required by that theory, invariant attributes as state variables of cognitive events, deterministic commitment and replay, identity continuity as a first-class constraint, and a design target of laptop-scale operation. That integration is the contribution.
+TS integrates a measurable theory of cognition as abstract association, a raw → canonical boundary required by that theory, invariant attributes as state variables of cognitive events, deterministic commitment and replay, identity continuity as a first‑class constraint, and a design target of laptop‑scale operation.
+
+That integration is the contribution.
 
 ---
 
 # **12. Empirical Tests That Could Falsify the Theory**
 
 **Test 1 — Association Necessity**  
-Show coherent, continuous, identity-stable cognition without abstract association that produces new items.  
+Show coherent, continuous, identity‑stable cognition without abstract association that produces new items.  
 If possible → theory falsified.
 
 **Test 2 — Invariant Backbone Necessity**  
@@ -201,12 +206,12 @@ Measure divergence between raw and canonical meaning over long trajectories.
 Consequential divergence → theory falsified.
 
 **Test 4 — Cognitive Event Sufficiency**  
-Compare TS trajectories to human trajectories on continuity-dependent tasks.  
+Compare TS trajectories to human trajectories on continuity‑dependent tasks.  
 Systematic failure → theory falsified.
 
-**Test 5 — Laptop-Scale Feasibility**  
+**Test 5 — Laptop‑Scale Feasibility**  
 Measure resource use under realistic workloads.  
-Resource blow-up → theory falsified.
+Resource blow‑up → theory falsified.
 
 These tests make the theory scientifically evaluable.
 
@@ -216,12 +221,12 @@ These tests make the theory scientifically evaluable.
 
 TS is built to realize the theory:
 
-- extract association material,  
-- canonicalize it,  
-- associate and update under continuity and identity,  
-- commit and freeze,  
-- replay and continue deterministically,  
-- operate on a common laptop.  
+- extract association material  
+- canonicalize it  
+- associate and update under continuity and identity  
+- commit and freeze  
+- replay and continue deterministically  
+- operate on a common laptop  
 
 TS does not claim to exhaust cognition.  
 TS claims to construct the cognitive events that the theory identifies as the workable core.
@@ -231,16 +236,3 @@ TS claims to construct the cognitive events that the theory identifies as the wo
 # **End of difficulty_of_meaning.md**
 
 ---
-
-### Summary of Changes
-
-- **Clarified the relationship between abstract items and the invariant list** (Section 0): invariants are the stable products of successful associations, not the atomic abstract items themselves.
-- **Defined association operationally** (Section 1): any deterministic operation that takes two abstract items and yields a third that satisfies the five criteria; residual ambiguity is resolved by canonicalization before admission.
-- **Acknowledged the processing/cognition boundary** (Section 0): treated as sharp for architecture, possibly graded in experience; the decisive step remains the production of a new abstract item.
-- **Tied the cognitive-event schema to the invariants** (Section 8): the named invariants appear as the stable components of the vectors and signatures inside $CE_t$.
-- **Linked the laptop-scale claim to the size of the schema** (Section 10): the bounded tuple is what keeps the state small.
-- **Light compression** of repetitive lists in Sections 3 and 4 while preserving all substance.
-- **Restored minimal historical anchoring** (Section 11) without expansion.
-- No dilution of the central claim; all additions increase precision and measurability.
-
-The paper is ready for CP’s review.
