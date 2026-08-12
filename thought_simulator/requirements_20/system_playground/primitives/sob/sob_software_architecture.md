@@ -127,25 +127,63 @@ These four files are **required** for SOB to satisfy 20.40.010.
 
 ---
 
-### **4.2 TP‑Read‑Only Dictionaries (Optional but Allowed)**
+Jeff — yes, I should rewrite **section 4.2**, because now we finally have the *correct architectural understanding* of how SOB interacts with upstream TP components:
 
-These files contain markers computed or influenced by upstream TP primitives.  
-SOB does **not** compute or enforce these fields — it only **reads** them if present.
+- Upstream components may provide **semantic/contextual** signals.
+- SOB performs **lexical/structural** tagging.
+- SOB may **reuse**, **affirm**, **ignore**, or **override** upstream signals **inside SOB’s own residue**.
+- SOB must **never overwrite upstream fields**.
+- SOB is the **authoritative owner** of SOB‑level tagging.
+- Keeping both upstream and SOB signals separate is **critical for TS debugging, replay, and routing**.
+
+Section 4.2 should reflect this clearly.
+
+Below is the rewritten version — clean, precise, and ready to paste into your architecture file.
+
+---
+
+# **4.2 TP‑Read‑Only Dictionaries (Required for SOB Tagging)**
+
+These YAML files contain **lexical markers** that SOB uses to perform its specialized structural‑adjacent tagging.  
+Upstream TP primitives (CEx, CE, Context Layer, Identity Layer, Semantic Layer) may already produce **semantic or contextual signals** such as tone, domain, or constraints, but they **do not** provide the lexical marker lists SOB requires for **lexical‑level tagging**.
+
+Therefore, SOB must always load these dictionaries and perform its own tagging, regardless of upstream judgments.
+
+### **How SOB Uses Upstream Signals**
+
+- **Reuse** — SOB may reuse upstream semantic signals when they align with lexical markers.  
+- **Affirmation** — SOB may use upstream signals to increase confidence in its own lexical tagging.  
+- **Ignore** — SOB may ignore upstream signals if they are irrelevant to lexical structure.  
+- **Override** — SOB may override upstream signals *inside SOB’s own residue* if its lexical logic disagrees.  
+- **Never overwrite upstream fields** — SOB only overrides its own tagging, never upstream metadata.
+
+Disagreement between SOB and upstream primitives is **allowed and informative**.  
+TS debugging, replay determinism, and routing benefit from having **two independent reference points**: upstream semantic/contextual signals and SOB lexical/structural signals.
+
+### **Files Treated as TP‑Read‑Only (Required for SOB Tagging)**
+
+These dictionaries are **required** for SOB’s lexical tagging.  
+SOB loads them every turn and treats their contents as **TP‑read‑only**, meaning SOB does not compute or enforce semantic meaning — only lexical tagging.
 
 #### **sob_domains.yaml**  
-Domain‑hint lexical markers.
+Lexical domain markers (math‑like, code‑like, legal‑like, technical‑like).
 
 #### **sob_tones.yaml**  
-Tone‑hint lexical markers.
+Lexical tone markers (formal, casual, urgent).
 
 #### **sob_constraints.yaml**  
-Constraint‑hint lexical markers.
+Lexical constraint markers (precision, conciseness, politeness).
 
 #### **sob_morphology.yaml**  
-Morphology rules (may be SOB‑owned or TP‑read‑only).
+Morphology rules (suffixes, infinitive markers).  
+May be SOB‑owned or TP‑read‑only depending on design.
 
-These files are **optional**.  
-If present, SOB treats them as **TP‑read‑only**.
+### **Purpose**
+
+These dictionaries allow SOB to produce **structural‑adjacent residue** even when upstream components have already produced semantic/contextual signals.  
+SOB’s residue is **lexical**, not semantic — and SOB must always perform its own tagging.
+
+Upstream signals help SOB, but never replace SOB.
 
 ---
 
