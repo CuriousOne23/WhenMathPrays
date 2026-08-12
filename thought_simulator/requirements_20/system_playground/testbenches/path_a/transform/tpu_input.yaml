@@ -1,1 +1,162 @@
+# ============================================================
+#  TPU General-Mode Input (Version 1.0)
+# ============================================================
+# Used when mode == "general" in run.py / tpu_testbench.py.
+# Contains a complete TP(N) plus an immutable tp_update_request.
+# Validation is performed solely by the rulechecker.
+# ============================================================
 
+# ------------------------------------------------------------
+# TP(N) arriving from CE (pre-commit state)
+# ------------------------------------------------------------
+tp_identity:
+  tp_id: "tp_tpu_general_001"
+  tp_seq: 200
+  cycle_id: 15
+  lane_id: "A"
+  schema_version: "1.0"
+  profile_signature: "default"
+  wire_map_version: "1.0"
+  policy_signature: "default"
+
+metadata:
+  context:                                  # already normalized by CE
+    topic: "project_status"
+    stance: "neutral"
+    intent: "inform"
+    register: "professional"
+    politeness: "medium"
+    tone: "balanced"
+    continuity: "strong"
+    direction: "forward"
+    coherence: "high"
+    importance: "high"
+    clarifying_fields:
+      - "milestone"
+      - "risk"
+      - "owner"
+    relevance_flags:
+      topic_relevant: true
+      stance_relevant: true
+      continuity_relevant: true
+    copy_forward_flags:
+      topic: true
+      direction: true
+      coherence: true
+    reset_flags:
+      topic: false
+      stance: false
+      intent: false
+    context_provenance:
+      origin: "CE"
+      last_update: "CE"
+      commit_lineage: ["c100", "c101", "c102"]
+    extraction_audit:
+      normalized_fields:
+        - "topic"
+        - "stance"
+        - "intent"
+        - "direction"
+        - "coherence"
+      msl_reconciliation:
+        stance: "neutral"
+        direction: "forward"
+        coherence: "high"
+      continuity_validation: "strong"
+      importance_validation: "high"
+      clarifying_validation:
+        - "milestone"
+        - "risk"
+        - "owner"
+    ce_version_tag: "CE_v1.0"
+
+  msl_metadata:
+    qualifiers: ["precise"]
+    clarifications: ["actionable"]
+    stance: "neutral"
+    shading: "none"
+    intent: "inform"
+    direction: "forward"
+    coherence: "high"
+    subculture: "engineering"
+    msl_provenance:
+      origin: "CEx-Pck"
+      last_update: "CEx-Pck"
+
+  continuity_metadata:
+    clarifying_fields:
+      - "milestone"
+      - "risk"
+      - "owner"
+    topology: "flat"
+    importance: "high"
+    continuity_flags:
+      reset: false
+      fallback: false
+
+  next_context:                             # will be committed by TPU from mcb_update
+    topic: "project_status"
+    stance: "neutral"
+    intent: "inform"
+    direction: "forward"
+    coherence: "high"
+    importance: "high"
+
+  cil_metadata:
+    selected_conversation: 5
+    cil_reference: "cil_substrate_v1"
+
+  semantic_residue_metadata: {}
+
+  # Pre-existing provenance (previous commits)
+  provenance_metadata:
+    commit_id: "ce_102"
+    commit_sequence: 3
+    primitive_origin: "CE"
+    commit_lineage: ["c100", "c101", "c102"]
+
+semantic:
+  importance:
+    entities:
+      - { value: "milestone", role: "primary", score: 0.9 }
+      - { value: "risk", role: "secondary", score: 0.7 }
+    facts:
+      - { value: "owner", role: "secondary", score: 0.6 }
+
+cex:
+  ccr:
+    decision: "specific"
+    selected_conversation: 5
+    scores:
+      ambiguity: 0.05
+      collapse: 0.0
+      drift: 0.02
+      stability: 0.95
+    provenance:
+      origin: "CEx-CCR"
+      last_update: "CEx-CCR"
+
+# ------------------------------------------------------------
+# Immutable tp_update_request (from Merge)
+# ------------------------------------------------------------
+tp_update_request:
+  isc: {}
+  cil: {}
+  cob: {}
+  cop: {}
+  idob_update: {}
+  mcb_update:
+    next_context:
+      topic: "project_status"
+      stance: "neutral"
+      intent: "inform"
+      direction: "forward"
+      coherence: "high"
+      importance: "high"
+      shift_required: false
+  rbu_update: {}
+  metadata:
+    merge_version: "1.0"
+    canonical_ordering_hash: "coh_general_001"
+    safe_boundary_marker: true
+    seed: "seed_tpu_general_001"
