@@ -164,8 +164,11 @@ def compare_expected(actual_tp: Dict[str, Any],
             mismatches.append("metadata.context mismatch (excluding provenance)")
         # Still require that provenance was touched by TPU
         act_prov = (act_meta.get("context") or {}).get("context_provenance") or {}
-        if act_prov.get("last_update") != "TPU":
-            mismatches.append("context.context_provenance.last_update must be 'TPU'")
+        # Still require that provenance was touched by TPU (successful commit only)
+        if expected.get("tpu_error") is None:
+            act_prov = (act_meta.get("context") or {}).get("context_provenance") or {}
+            if act_prov.get("last_update") != "TPU":
+                mismatches.append("context.context_provenance.last_update must be 'TPU'")
     
     if "next_context" in exp_meta:
         if not deep_compare(act_meta.get("next_context"), exp_meta.get("next_context")):
