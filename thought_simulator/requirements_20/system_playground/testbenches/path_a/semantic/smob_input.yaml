@@ -1,0 +1,88 @@
+# ============================================================
+#  SmOB Input (Version 1.0) — post-CnOB TP for general mode
+# ============================================================
+
+mode: input
+primitive: SmOB
+version: "1.0"
+
+tp_identity:
+  tp_id: "tp_smob_input_001"
+  tp_seq: 40
+  cycle_id: 1
+  lane_id: "A"
+  schema_version: "1.0"
+
+intake:
+  text: "Please explain how the structural residue is formed and then summarize the key constraints."
+
+structural:
+  srob_structural_map:
+    segments:
+      - id: seg_0
+        text: "Please explain how the structural residue is formed and then summarize the key constraints."
+        type: sentence
+        modality: interrogative
+    operators:
+      - explain
+      - summarize
+    lexical_constraints:
+      - politeness
+    discourse_flags: []
+  cnob_constraint_map:
+    constraint_families:
+      C1:
+        - family: C1
+          rule_id: c1_segment_exists
+          payload:
+            reason: segment_exists
+        - family: C1
+          rule_id: c1_operator_present
+          payload:
+            reason: operator_present
+      C2: []
+      C3: []
+      C4: []
+      C5:
+        - family: C5
+          rule_id: c5_segment_id_lineage
+          payload:
+            reason: segment_id_lineage
+      C6: []
+      C7: []
+    missing_slot_signals: []
+    underspecification_markers: []
+    conflict_indicators: []
+    constraint_importance: []
+    discourse_constraints: []
+    lineage_constraints: []
+    routing_constraints: []
+    policy_constraints: []
+  cnob_residue:
+    missing_slot_signals: []
+    underspecification_markers: []
+    conflict_indicators: []
+    constraint_importance: []
+    constraint_family_summary:
+      - C1
+      - C5
+    disagreement_flags: []
+    override_flags: []
+    constraint_residue_hash: "aabbccddeeff0011"
+
+metadata:
+  context:
+    context_fields:
+      topic: structural_residue
+      stance: neutral
+      intent: explain
+      continuity: moderate
+      direction: forward
+      coherence: medium
+      importance: normal
+  msl: {}
+  cnob_audit_record:
+    support_yaml_load_status: ok
+    provenance_lineage:
+      origin: CnOB
+      last_update: CnOB
