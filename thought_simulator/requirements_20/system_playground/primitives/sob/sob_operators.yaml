@@ -1,1 +1,120 @@
+# sob_operators.yaml
+# SOB-owned operator verb dictionary
+# Purpose: Extract operator hints (summarize, compare, classify, ...)
+# as residue fragments for downstream routing (SROB, RB, etc.).
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010 (HLR-006, HLR-007), sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Lexical operator verbs used by SOB for structural-adjacent operator-hint
+  extraction. SOB matches these forms (and their morphological variants via
+  sob_morphology.yaml) without performing intent inference or deep semantics.
+
+# ---------------------------------------------------------------------------
+# Core operators (from 20.40.010 HLR-006)
+# ---------------------------------------------------------------------------
+operators:
+  summarize:
+    - summarize
+    - summarise
+    - summary
+    - sum up
+    - recap
+    - outline
+  compare:
+    - compare
+    - contrast
+    - versus
+    - vs
+    - difference
+    - similarities
+  classify:
+    - classify
+    - categorize
+    - categorise
+    - group
+    - sort
+    - type
+  derive:
+    - derive
+    - deduce
+    - infer
+    - calculate
+    - compute
+    - obtain
+  plan:
+    - plan
+    - schedule
+    - outline steps
+    - roadmap
+    - strategy
+  explain:
+    - explain
+    - clarify
+    - elaborate
+    - describe
+    - detail
+  rewrite:
+    - rewrite
+    - rephrase
+    - reword
+    - paraphrase
+    - revise
+  transform:
+    - transform
+    - convert
+    - change
+    - map
+    - translate
+
+# ---------------------------------------------------------------------------
+# Additional common structural operators (bounded expansion)
+# ---------------------------------------------------------------------------
+additional:
+  - analyze
+  - analyse
+  - evaluate
+  - assess
+  - identify
+  - list
+  - extract
+  - generate
+  - create
+  - produce
+  - define
+  - formalize
+  - formalise
+  - prove
+  - show
+  - demonstrate
+  - illustrate
+  - implement
+  - design
+  - model
+  - simulate
+  - optimize
+  - optimise
+  - debug
+  - test
+  - validate
+  - verify
+  - review
+  - critique
+  - improve
+  - refine
+  - expand
+  - compress
+  - simplify
+  - elaborate
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Matching is case-insensitive.
+# - Morphology normalization (e.g. summarizing → summarize) is handled by
+#   sob_morphology.yaml before or during matching.
+# - Operator hints are written only into SOB-owned residue; never overwrite
+#   upstream semantic fields.
+# - Expansion must remain lexical and deterministic.
+# ---------------------------------------------------------------------------
