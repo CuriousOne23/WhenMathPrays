@@ -1,6 +1,8 @@
-# ⭐ **`srob_py_struc_pgm.md` (Version 1.0)**
+# ⭐ **`srob_py_struc_pgm.md` (Version 1.1)**
 ### *Python & C++ Implementation Blueprint for the SROB Primitive*
 ### *Aligned with 20.40.020 v2.0, srob_software_architecture.md, srob_sob_comm_architect.md, 20.105.*, 20.15*
+
+**Schema authority:** This document owns the **normative v1** field schemas for `srob_structural_map` and `srob_residue` (P6). Architecture points here; testbench expected blocks must match this schema.
 
 ---
 
@@ -24,11 +26,12 @@ SROB is responsible for:
 - **tag sharpening** inside SOB operator/domain/tone/constraint families
 - discourse flag canonicalization (when SOB flags present)
 - positional structural-importance labels
-- forming **`srob_structural_map`** (full refined map)
+- forming **`srob_structural_map`** (full refined map — P2)
 - producing **`srob_residue{}`**
 - producing **`srob_audit_record{}`**
 - optional diagnostic-only metadata
 - preserving upstream / SOB / meaning fields (read-only)
+- **preserving SOB segment ids** through refine (P1)
 
 SROB consumes:
 
@@ -84,10 +87,10 @@ def process(self):
     # load SROB YAMLs
     # validate sharpen map parents against SOB coarse vocab
     # read SOB map/residue from TP
-    # normalize structure + boundaries
-    # sharpen tags (pass-through if no refinement)
+    # normalize structure + boundaries (preserve segment ids)
+    # sharpen tags per multi_refinement_policy
     # canonicalize discourse flags
-    # apply importance rules
+    # apply importance rules (multi-label OK)
     # form srob_structural_map (full)
     # form srob_residue
     # produce audit record
@@ -123,12 +126,12 @@ SROB must apply operations in **exact order**:
 2. Load SROB support YAMLs
 3. Validate vocab coupling (sharpen maps ↔ SOB coarse category set)
 4. Read `sob_structural_map` / `sob_residue`
-5. Normalize structure (lists/tables/blocks/unit consistency)
-6. Resolve boundaries / nesting
-7. Sharpen tags within SOB families (no parent tag ⇒ no invented fine tag)
+5. Normalize structure (lists/tables/blocks/unit consistency); **preserve SOB segment ids** (P1)
+6. Resolve boundaries / nesting (still preserve ids)
+7. Sharpen tags within SOB families per **§5.4 multi-refinement policy** (P3)
 8. Canonicalize discourse flags present on SOB residue
-9. Apply structural-importance rules
-10. Build full `srob_structural_map`
+9. Apply structural-importance rules (**multi-label allowed** — P5)
+10. Build **full** `srob_structural_map` (P2)
 11. Build `srob_residue`
 12. Build `srob_audit_record`
 13. Emit deterministic TP + SROB fields
@@ -148,8 +151,7 @@ This ordering ensures:
 - Parent keys in `srob_sharpen_maps.yaml` MUST be exact SOB coarse category strings
 - Fine ids MUST be hierarchical: `parent.child`
 - Illegal parent at load/test ⇒ hard failure (`SROB_MAP_DESYNC` or equivalent)
-- Coarse tag on TP with empty/absent map entry ⇒ **pass-through** (keep coarse); optional diagnostic `unmapped_coarse`
-- **No sharpen without SOB tag** (settled lean)
+- **No sharpen without SOB tag**
 
 ### **5.2 Families in scope**
 
@@ -158,7 +160,7 @@ This ordering ensures:
 - tones
 - constraints
 
-Modality: **SOB-final** by default (lean).
+Modality: **SOB-final** by default (unless a boundary/unit change forces modality to move with the unit).
 
 ### **5.3 Growth**
 
@@ -166,13 +168,35 @@ Modality: **SOB-final** by default (lean).
 - Grow by adding children under existing parents or adding SOB coarse tags first
 - Never introduce SROB-only top-level categories
 
+### **5.4 Multi-refinement policy (P3) — NORMATIVE**
+
+For a coarse tag present on the TP and a matching parent in the sharpen map:
+
+| Map state | Primary tag field behavior |
+|-----------|----------------------------|
+| `refinements: []` or parent absent | **Pass-through** coarse id |
+| Exactly **one** child | May emit that single fine id as the refined tag |
+| **Multiple** children and **no** matching `when` | **Pass-through coarse** on primary tag fields; do **not** auto-emit all children |
+| Multiple children with `when` (future) | First matching `when` wins; else pass-through |
+
+Optional diagnostic (residue / audit only, not required for CnOB):
+
+- `available_refinements[]` — list of fine ids under the parent when multi-child pass-through occurred
+
+### **5.5 Unmapped coarse policy (P4) — NORMATIVE**
+
+If SOB emits a coarse id with **no** parent key in the sharpen map:
+
+- **Pass-through** the coarse id on primary tag fields
+- Optional diagnostic: `unmapped_coarse[]` entry in residue
+
 ---
 
 # **6. Structure Normalization**
 
 SROB normalizes using `srob_normalize_rules.yaml`:
 
-- list depth, ordering, parent indices, stable item ids
+- list depth, ordering, parent indices, **stable item ids (preserve SOB ids — P1)**
 - table header/body/cells (text content unchanged)
 - code/math blocks typed; content unchanged
 - boundary and continuation attachment
@@ -182,50 +206,64 @@ SROB does **not** invent structural units that SOB never proposed (default: no s
 
 ---
 
-# **7. SROB Residue and Map Construction**
+# **7. Normative v1 Schemas (P2, P6)**
 
-SROB constructs (illustrative shape — exact schema TBD with implementation):
+These shapes are **normative for v1**. Testbench `expected` blocks and `srob.py` SHALL conform. Optional fields may be omitted when empty; required fields must be present.
+
+## **7.1 Segment object (within `segments[]`)**
+
+| Field | Required | Notes |
+|-------|----------|--------|
+| `id` | yes | **Same as SOB segment id** (P1); do not renumber |
+| `type` | yes | Canonical unit type after normalize |
+| `text` | yes | Unchanged from SOB |
+| `modality` | yes when SOB provided | SOB-final by default |
+| `depth` | when list_item | 1-based |
+| `parent_id` | when nested | SOB id of parent or null |
+| `index_in_parent` | when list_item | 0-based within parent |
+| `ordered` | when list_item | true/false if known |
+| `structural_importance` | no | array of labels (P5 multi OK) |
+
+## **7.2 `TP.structural.srob_structural_map` (full map every run — P2)**
 
 ```
-TP.structural.srob_structural_map {
-    segments[]              # normalized units, depth, parent, type
-    list_structure{}
-    table_structure{}
-    block_structure{}
-    operators[]             # sharpened or pass-through
-    lexical_domains[]
-    lexical_tones[]
-    lexical_constraints[]
-    discourse_flags[]       # canonicalized
-    structural_importance[]
-    modality[]              # typically from SOB
-}
+srob_structural_map:
+  segments: []                 # required; segment objects per §7.1
+  list_structure: {}           # optional; summary of lists if any
+  table_structure: {}          # optional
+  block_structure: {}          # optional
+  operators: []                # refined or pass-through coarse ids
+  lexical_domains: []
+  lexical_tones: []
+  lexical_constraints: []
+  discourse_flags: []          # canonicalized when present
+  structural_importance: []    # optional aggregate; per-segment preferred
+  modality: []                 # optional aggregate from segments
 ```
 
+Tag arrays use **string ids** (coarse or fine). Primary entries follow §5.4 / §5.5.
+
+## **7.3 `TP.structural.srob_residue`**
+
 ```
-TP.structural.srob_residue {
-    refined_tags[]
-    structural_adjacent[]
-    pass_through_flags[]
-    unmapped_coarse[]       # optional diagnostic
-    disagreement_flags[]    # optional vs SOB coarse when useful
-}
+srob_residue:
+  refined_tags: []             # tags that were actually sharpened to fine ids
+  pass_through_tags: []        # coarse tags kept under P3/P4
+  structural_adjacent: []      # optional structural-adjacent fragments
+  unmapped_coarse: []          # optional diagnostic (P4)
+  available_refinements: []    # optional diagnostic (P3 multi-child)
+  disagreement_flags: []       # optional
+  override_flags: []           # optional; SROB-owned only
 ```
 
-Rules:
+## **7.4 Rules**
 
 - All fields deterministic and replay-safe
-- Full refined map (lean), not delta-only
+- **Full** refined map every successful run (not delta-only) — P2
 - Writer authority: SROB-owned fields only
 - Bounded structural / semantic-adjacent refinement only
 
-Downstream consumers:
-
-- CnOB (primary)
-- SmOB
-- ISc, SSG, STPX
-- TR / RB (via residue features)
-- IdOB (cues only)
+Downstream consumers: CnOB (primary), SmOB, ISc, SSG/STPX, TR/RB (features), IdOB (cues only).
 
 ---
 
@@ -236,7 +274,7 @@ SROB produces an audit record containing:
 - support YAML load status
 - vocab validation status / map inventory ref or hash
 - normalization decisions (summary)
-- sharpen decisions (coarse → fine or pass-through)
+- sharpen decisions (coarse → fine, single-child refine, or pass-through)
 - importance decisions
 - discourse canonicalization decisions
 - provenance lineage (`last_update`: SROB; origin linkage to SOB as applicable)
@@ -255,6 +293,8 @@ SROB must not:
 - load or re-apply SOB lexical dictionaries to raw text
 - invent coarse tags SOB did not emit
 - invent new hint **types** outside SOB families
+- auto-emit all multi-child fine ids on primary tag fields when no `when` (P3)
+- renumber SOB segment ids (P1)
 - enforce constraints
 - generate meaning or resolve referents/identity
 - modify semantic_core, intake/context, routing, identity, freeze, entropy metadata
@@ -278,12 +318,12 @@ class SROB:
         sob_map = self._read_sob_map(self.tp)
         sob_residue = self._read_sob_residue(self.tp)
 
-        units = self._normalize_structure(sob_map, rules)
+        units = self._normalize_structure(sob_map, rules)  # preserve ids
         units = self._resolve_boundaries(units, rules)
 
-        sharpened = self._sharpen_tags(sob_map, sob_residue, rules)
+        sharpened = self._sharpen_tags(sob_map, sob_residue, rules)  # P3/P4
         discourse = self._canonicalize_discourse(sob_residue, rules)
-        importance = self._apply_importance(units, sob_residue, rules)
+        importance = self._apply_importance(units, sob_residue, rules)  # P5
 
         srob_map = self._build_structural_map(
             units, sharpened, discourse, importance, sob_map
@@ -298,19 +338,6 @@ class SROB:
         self.tp["metadata"]["srob_audit_record"] = audit
 
         return self.tp
-
-    # Internal helpers:
-    # _load_support_yamls
-    # _validate_vocab_coupling
-    # _read_sob_map / _read_sob_residue
-    # _normalize_structure
-    # _resolve_boundaries
-    # _sharpen_tags
-    # _canonicalize_discourse
-    # _apply_importance
-    # _build_structural_map
-    # _build_residue
-    # _build_audit_record
 ```
 
 ---
@@ -351,7 +378,6 @@ public:
 
 private:
     TP& tp;
-    // deterministic helper methods
 };
 ```
 
@@ -359,39 +385,32 @@ private:
 
 # **12. Downstream Consumption Map (Normative Intent)**
 
-SROB writes:
-
-- `srob_structural_map`
-- `srob_residue`
-- `srob_audit_record{}`
-
 | Primitive | Consumes | Purpose |
 |-----------|----------|--------|
-| **CnOB** | srob map/residue | constraint-oriented structure + sharper constraint hints |
+| **CnOB** | srob map/residue | constraint-oriented structure + constraint hints |
 | **SmOB** | srob map/residue | semantic-adjacent cues on stable units |
 | **ISc** | srob residue | scoring features |
 | **SSG/STPX** | refined tags/structure | semantic-layer adjacent activation |
 | **TR/RB** | residue features | routing cues |
 | **IdOB** | structure/cues only | binding support; not SROB-owned meaning |
 
-SROB output must support deterministic replay and read-only consumption.
+---
+
+# **13. Locked Policies (P1–P6)**
+
+| ID | Topic | Lock |
+|----|--------|------|
+| **P1** | Segment ids | **Preserve SOB `seg_*` ids**; do not renumber |
+| **P2** | Map style | **Full** `srob_structural_map` every run |
+| **P3** | Multi-child, no `when` | **Pass-through coarse** on primary tags; optional `available_refinements`; single child may refine |
+| **P4** | Unmapped coarse | **Pass-through** + optional `unmapped_coarse` |
+| **P5** | Importance labels | **Multiple labels allowed** per segment |
+| **P6** | Schema home | **This document** owns normative v1 field schema |
+
+Other working leans: thin-3 YAML pack; always run SROB in Path-A; CnOB prefers SROB fields when present; modality SOB-final by default.
 
 ---
 
-# **13. Working Leans (from comm architect; not all locked)**
-
-| Topic | Lean |
-|-------|------|
-| YAML pack | Thin 3 (normalize incl. boundary/discourse; sharpen; importance) |
-| Map style | Full refined map |
-| Sharpen without SOB tag | Forbidden |
-| Modality | SOB-final unless unit boundary forces carry |
-| Importance | May derive positional cues from structure alone |
-| Short-circuit | Always run SROB in Path-A sequence |
-| CnOB | Prefer/require SROB fields when present in full sequence |
-
----
-
-# ⭐ **End of Document — `srob_py_struc_pgm.md` (Version 1.0)**
+# ⭐ **End of Document — `srob_py_struc_pgm.md` (Version 1.1)**
 
 ---
