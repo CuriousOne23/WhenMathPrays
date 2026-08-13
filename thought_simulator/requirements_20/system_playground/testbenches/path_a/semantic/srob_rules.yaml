@@ -1,0 +1,64 @@
+# ============================================================
+#  SROB Rules (Version 1.0)
+#  Deterministic validation logic for SROB refinement output
+#  Aligned with:
+#    - 20.40.020 v2.0
+#    - srob_py_struc_pgm.md v1.1 (P1–P6)
+#    - progressive_lineup_testing.md
+# ============================================================
+
+primitive: SROB
+version: "1.0"
+
+rules:
+
+  - id: srob_replay_001
+    description: >
+      SROB must produce identical output given identical post-SOB input.
+    check: deterministic_replay
+
+  - id: srob_structural_map_001
+    description: >
+      SROB must write srob_structural_map with segments and tag arrays.
+    check: structural_map_integrity
+
+  - id: srob_structural_map_002
+    description: >
+      Segment ids must be preserved from SOB (P1).
+    check: segment_id_preservation
+
+  - id: srob_residue_001
+    description: >
+      SROB must write srob_residue with refined_tags, pass_through_tags,
+      structural_adjacent, unmapped_coarse, disagreement_flags, override_flags.
+    check: residue_integrity
+
+  - id: srob_audit_001
+    description: >
+      SROB must produce srob_audit_record with load status and provenance.
+    check: audit_record_integrity
+
+  - id: srob_boundary_001
+    description: >
+      SROB must not modify context_fields or MSL.
+    check: upstream_read_only
+
+  - id: srob_boundary_002
+    description: >
+      SROB may write only srob_structural_map, srob_residue, srob_audit_record.
+    check: write_authority
+
+  - id: srob_no_relex_001
+    description: >
+      SROB must not invent operators absent from SOB output.
+    check: no_invented_operators
+
+  - id: srob_forbidden_001
+    description: >
+      SROB must not enforce constraints or invent semantic meaning fields.
+    check: no_constraint_enforcement
+
+  - id: srob_progressive_001
+    description: >
+      SROB must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
