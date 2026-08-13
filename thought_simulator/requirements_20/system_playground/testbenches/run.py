@@ -160,8 +160,30 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: TPU only (or progressive from CE if desired), input from:
     #   • tpu_testbench.yaml (mode = "testbench")
     #   • tpu_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,        # Upstream primitives ignored
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,         # Set to True if you want progressive CE → TPU
+    #         "use_tpu": True,         # Primitive under test
+
+    #         # Test selection controlled by tpu_tests_to_run.yaml
+    #         "tests_to_run": "see tpu_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SOB Test bench ******************************************************
+    # Highest upstream True = SOB (primitive under test)
+    # Pipeline: SOB only (or progressive from TPU if desired), input from:
+    #   • sob_testbench.yaml (mode = "testbench")
+    #   • sob_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.transform.tpu_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,        # Upstream primitives ignored
@@ -170,11 +192,12 @@ ACTIVE_TEST_MODULES = [
             "use_cex_ie": False,
             "use_cex_ccr": False,
             "use_cex_pck": False,
-            "use_ce": False,         # Set to True if you want progressive CE → TPU
-            "use_tpu": True,         # Primitive under test
+            "use_ce": False,
+            "use_tpu": False,        # Set to True if you want progressive TPU → SOB
+            "use_sob": True,         # Primitive under test
 
-            # Test selection controlled by tpu_tests_to_run.yaml
-            "tests_to_run": "see tpu_tests_to_run.yaml",
+            # Test selection controlled by sob_tests_to_run.yaml
+            "tests_to_run": "see sob_tests_to_run.yaml",
         }
     ),
 ]
