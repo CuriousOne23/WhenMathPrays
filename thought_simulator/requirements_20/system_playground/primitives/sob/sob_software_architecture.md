@@ -35,8 +35,6 @@ primitives/
     sob_tones.yaml             # tone-hint markers (TP-read-only)
     sob_constraints.yaml       # constraint-hint markers (TP-read-only)
     sob_morphology.yaml        # morphology rules (TP-read-only or SOB-owned)
-
-    sob_testbench.yaml         # deterministic tests
 ```
 
 This structure ensures:
@@ -271,28 +269,7 @@ SOB only produces structural residue for downstream routing.
 
 ---
 
-## **8. Testbench (`sob_testbench.yaml`)**
-
-The SOB testbench validates:
-
-- segmentation  
-- modality  
-- operator hints  
-- domain hints  
-- tone hints  
-- constraint hints  
-- discourse‑context flags  
-
-It should also validate:
-
-- dictionary loading  
-- dictionary coverage  
-- dictionary determinism  
-- dictionary expansion safety  
-
----
-
-## **9. Summary**
+## **8. Summary**
 
 The SOB software architecture is:
 
