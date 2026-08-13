@@ -1,1 +1,61 @@
+# ============================================================
+#  SOB Input (Version 1.0)
+#  Raw TP state before SOB runs (general / rule-driven mode)
+#  Aligned with:
+#    - 20.40.010_sob_prim.md
+#    - sob_software_architecture.md / sob_py_struc_pgm.md
+#    - progressive_lineup_testing.md v4.0
+# ============================================================
 
+mode: input
+primitive: SOB
+version: "1.0"
+
+tp_identity:
+  tp_id: "tp_sob_input_001"
+  tp_seq: 10
+  cycle_id: 1
+  lane_id: "A"
+  schema_version: "1.0"
+  profile_signature: "default"
+  wire_map_version: "1.0"
+  policy_signature: "default"
+
+# ------------------------------------------------------------
+# Committed intake text (post-TPU)
+# ------------------------------------------------------------
+intake:
+  text: "Please explain how the structural residue is formed and then summarize the key constraints."
+
+# ------------------------------------------------------------
+# Context envelope (read-only for SOB)
+# ------------------------------------------------------------
+metadata:
+  context:
+    context_fields:
+      topic: "structural_residue"
+      stance: "neutral"
+      intent: "explain"
+      register: "technical"
+      politeness: "medium"
+      tone: "neutral"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+      clarifying_fields: []
+    context_provenance:
+      origin: "CE"
+      last_update: "CE"
+      commit_lineage: ["c010"]
+
+  msl: {}
+  semantic_residue: {}
+
+# ------------------------------------------------------------
+# Notes
+# ------------------------------------------------------------
+notes:
+  - sob_input.yaml is used only in general (rule-driven) mode.
+  - sob_testbench.yaml supplies input + expected for deterministic mode.
+  - SOB must treat all upstream envelopes as read-only.
