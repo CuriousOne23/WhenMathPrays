@@ -1,0 +1,121 @@
+# srob_normalize_rules.yaml
+# SROB-owned structural normalization policy (Stream A)
+# Purpose: Canonical list/table/block geometry, boundary attachment,
+# unit consistency, and discourse-flag canonicalization.
+# Does NOT re-tag operator/domain/tone/constraint from raw text.
+# Version: 1.0
+# Aligned with: 20.40.020 v2.0, srob_software_architecture.md, srob_sob_comm_architect.md
+
+version: "1.0"
+description: >
+  Deterministic structural normalization rules for SROB. Input is SOB
+  structural units on the TP. Output contributes to srob_structural_map.
+  Original segment text content is never altered.
+
+# ---------------------------------------------------------------------------
+# Lists
+# ---------------------------------------------------------------------------
+lists:
+  unordered_markers:
+    - "-"
+    - "*"
+    - "•"
+    - "+"
+  ordered_patterns:
+    # Patterns are descriptive; implementation matches line-leading forms
+    - "N."      # 1. 2. 3.
+    - "N)"      # 1) 2)
+    - "(N)"     # (1) (2)
+  depth_from: indentation_or_numbering
+  fields_on_item:
+    - id
+    - type          # list_item
+    - depth         # 1-based
+    - parent_id     # null or segment id
+    - index_in_parent
+    - ordered       # true | false
+    - text          # unchanged from SOB
+
+# ---------------------------------------------------------------------------
+# Tables
+# ---------------------------------------------------------------------------
+tables:
+  detect_from_sob_type_or_pipe_rows: true
+  header: first_row_when_separator_or_flag
+  fields:
+    - table_id
+    - header_cells[]    # text unchanged
+    - body_rows[]       # each row: cells[] text unchanged
+  do_not_modify_cell_text: true
+
+# ---------------------------------------------------------------------------
+# Code / math blocks
+# ---------------------------------------------------------------------------
+blocks:
+  code:
+    type: code_block
+    detect: sob_type_or_fence
+    preserve_content: true
+  math:
+    type: math_block
+    detect: sob_type_or_fence
+    preserve_content: true
+
+# ---------------------------------------------------------------------------
+# Unit consistency
+# ---------------------------------------------------------------------------
+unit_types_canonical:
+  - sentence
+  - list_item
+  - table
+  - table_row
+  - code_block
+  - math_block
+  - paragraph
+  - heading
+
+# ---------------------------------------------------------------------------
+# Boundaries / nesting (deterministic attachment)
+# ---------------------------------------------------------------------------
+boundaries:
+  # Continuation lines under a list item attach to that item when indented
+  # deeper than the parent marker column (implementation detail).
+  list_continuation: indent_deeper_than_parent_marker
+  # A line matching list markers becomes list_item even if SOB labeled sentence,
+  # only when SOB already proposed a list-like segment or adjacent list context.
+  # Default no-surprise: do not invent list structure from pure prose SOB
+  # labeled as a single sentence with no list cues in the unit set.
+  invent_structure_from_prose_only: false
+  nested_list_parent: nearest_shallower_depth_above
+
+# ---------------------------------------------------------------------------
+# Discourse flag canonicalization (flags already on SOB residue)
+# ---------------------------------------------------------------------------
+discourse:
+  canonicalize:
+    temporal_shift:
+      - temporal_shift
+      - time_shift
+      - temporal_marker
+      - temporal_shift_marker
+    contrastive:
+      - contrastive
+      - contrast_marker
+      - contrastive_structural_marker
+    causal:
+      - causal
+      - cause_marker
+      - causal_structural_marker
+    recent_entity_continuity:
+      - recent_entity_continuity
+      - entity_continuity
+      - recent_entity
+  # If SOB flag not in any alias list: pass through as-is + optional diagnostic
+  unknown_flag_policy: pass_through
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - SROB does not load sob_*.yaml.
+# - Do not invent structural units SOB never proposed (invent_structure_from_prose_only: false).
+# - Expand by adding markers/patterns/rules; keep deterministic and testable.
+# ---------------------------------------------------------------------------
