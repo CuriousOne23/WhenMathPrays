@@ -1,1 +1,204 @@
+# sob_dictionary.yaml
+# SOB-owned lexical dictionary for structural tagging
+# Categories: auxiliaries, modals, pronouns, determiners
+# Purpose: Support modality classification, structural segmentation,
+#          lexical tagging, and semantic-adjacent residue formation.
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010, sob_software_architecture.md, sob_py_struc_pgm.md
 
+version: "1.0"
+description: >
+  Lexical forms for auxiliaries, modals, pronouns, and determiners used by SOB
+  for structural and semantic-adjacent tagging. SOB loads this dictionary to
+  perform deterministic lexical tagging without deep semantic interpretation.
+
+# ---------------------------------------------------------------------------
+# Auxiliaries
+# Used for modality cues (interrogative inversion, progressive, perfect),
+# structural segmentation, and residue formation.
+# ---------------------------------------------------------------------------
+auxiliaries:
+  be:
+    - be
+    - am
+    - is
+    - are
+    - was
+    - were
+    - been
+    - being
+  have:
+    - have
+    - has
+    - had
+    - having
+  do:
+    - do
+    - does
+    - did
+    - doing
+    - done
+
+# ---------------------------------------------------------------------------
+# Modals
+# Primary cues for modality (interrogative, conditional, hypothetical,
+# imperative softening) and operator-adjacent residue.
+# ---------------------------------------------------------------------------
+modals:
+  - can
+  - could
+  - may
+  - might
+  - must
+  - shall
+  - should
+  - will
+  - would
+  - ought
+  - need   # modal use
+  - dare   # modal use
+
+# ---------------------------------------------------------------------------
+# Pronouns
+# Structural anchors for segmentation, reference continuity cues (read-only),
+# and discourse-context residue (without identity inference).
+# ---------------------------------------------------------------------------
+pronouns:
+  personal:
+    subject:
+      - I
+      - you
+      - he
+      - she
+      - it
+      - we
+      - they
+    object:
+      - me
+      - you
+      - him
+      - her
+      - it
+      - us
+      - them
+    possessive_determiner:
+      - my
+      - your
+      - his
+      - her
+      - its
+      - our
+      - their
+    possessive_pronoun:
+      - mine
+      - yours
+      - his
+      - hers
+      - its
+      - ours
+      - theirs
+    reflexive:
+      - myself
+      - yourself
+      - himself
+      - herself
+      - itself
+      - ourselves
+      - yourselves
+      - themselves
+  demonstrative:
+    - this
+    - that
+    - these
+    - those
+  relative:
+    - who
+    - whom
+    - whose
+    - which
+    - that
+  interrogative:
+    - who
+    - whom
+    - whose
+    - which
+    - what
+  indefinite:
+    - someone
+    - somebody
+    - something
+    - anyone
+    - anybody
+    - anything
+    - everyone
+    - everybody
+    - everything
+    - no one
+    - nobody
+    - nothing
+    - one
+    - ones
+  reciprocal:
+    - each other
+    - one another
+
+# ---------------------------------------------------------------------------
+# Determiners
+# Closed-class items that bound noun phrases; used for structural unit
+# identification and list/table adjacency cues.
+# ---------------------------------------------------------------------------
+determiners:
+  articles:
+    - the
+    - a
+    - an
+  demonstrative:
+    - this
+    - that
+    - these
+    - those
+  possessive:
+    - my
+    - your
+    - his
+    - her
+    - its
+    - our
+    - their
+  quantifiers:
+    - some
+    - any
+    - no
+    - every
+    - each
+    - all
+    - both
+    - few
+    - many
+    - much
+    - several
+    - enough
+    - more
+    - most
+    - less
+    - least
+    - either
+    - neither
+  other:
+    - such
+    - what
+    - which
+    - whose
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Matching is case-insensitive by convention in SOB lexical tagging.
+# - Overlap between categories (e.g. "that", "this") is intentional;
+#   SOB resolves by structural position and modality rules, not by exclusive
+#   membership.
+# - This dictionary remains purely lexical; no semantic roles or intent
+#   are encoded here (see 20.40.010 HLR-021 / HLR-022).
+# - Expansion of forms must preserve determinism and must not introduce
+#   free-text or embedding-derived entries.
+# ---------------------------------------------------------------------------
