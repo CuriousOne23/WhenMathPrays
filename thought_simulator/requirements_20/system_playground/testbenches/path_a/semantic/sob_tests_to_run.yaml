@@ -1,1 +1,32 @@
+# ============================================================
+#  SOB Tests To Run (Version 1.0)
+#  Multi-test SOB testbench execution control
+# ============================================================
 
+primitive: SOB
+version: "1.0"
+
+tests:
+  - id: sob_test_001
+    description: "Happy-path declarative sentence + basic residue"
+    enabled: true
+
+  - id: sob_test_002
+    description: "Interrogative modality + operator hint"
+    enabled: true
+
+  - id: sob_test_003
+    description: "Morphology normalization (summarizing → summarize)"
+    enabled: true
+
+  - id: sob_test_004
+    description: "Domain + tone + constraint lexical hints"
+    enabled: true
+
+  - id: sob_test_005
+    description: "Boundary discipline — upstream envelopes unchanged"
+    enabled: true
+
+  - id: sob_test_006
+    description: "Multi-segment + list structure, order preservation"
+    enabled: true
