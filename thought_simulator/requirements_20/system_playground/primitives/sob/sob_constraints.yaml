@@ -1,1 +1,79 @@
+# sob_constraints.yaml
+# TP-read-only constraint-hint markers for SOB
+# Purpose: Lexical cues for constraint classification (precision, conciseness,
+# politeness, safety, formatting) as residue for later CnOB processing.
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010 (HLR-012, HLR-013), sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Lexical markers used by SOB to produce constraint-hint residue fragments.
+  SOB does not apply or enforce constraints; it only extracts structural-adjacent
+  hints for downstream (CnOB).
+
+constraints:
+  precision:
+    - precise
+    - exact
+    - accurate
+    - rigorous
+    - detailed
+    - specific
+    - "to the letter"
+    - "exactly"
+    - "precisely"
+    - "with precision"
+  conciseness:
+    - concise
+    - brief
+    - short
+    - succinct
+    - "in short"
+    - "briefly"
+    - "summarize briefly"
+    - "keep it short"
+    - "tl;dr"
+    - "tldr"
+  politeness:
+    - please
+    - kindly
+    - "would you"
+    - "could you"
+    - "if you don't mind"
+    - "thank you"
+    - respectfully
+    - "with respect"
+  safety:
+    - safe
+    - safety
+    - careful
+    - caution
+    - "do not"
+    - "don't"
+    - avoid
+    - "must not"
+    - "shall not"
+    - prohibited
+    - forbidden
+  formatting:
+    - format
+    - formatting
+    - markdown
+    - "bullet points"
+    - "numbered list"
+    - table
+    - "code block"
+    - "use headings"
+    - "structured"
+    - "as a list"
+    - "in JSON"
+    - "in YAML"
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Case-insensitive lexical matching.
+# - Constraint hints are residue only; SOB never applies constraint logic
+#   (HLR-023).
+# - Downstream CnOB is the intended consumer of these residue fragments.
+# ---------------------------------------------------------------------------
