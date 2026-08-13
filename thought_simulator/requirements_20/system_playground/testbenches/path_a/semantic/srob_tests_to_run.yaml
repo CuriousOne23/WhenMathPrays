@@ -1,0 +1,32 @@
+# ============================================================
+#  SROB Tests To Run (Version 1.0)
+#  Multi-test SROB testbench execution control
+# ============================================================
+
+primitive: SROB
+version: "1.0"
+
+tests:
+  - id: srob_test_001
+    description: "Multi-child explain pass-through; neutral.default single-child refine"
+    enabled: true
+
+  - id: srob_test_002
+    description: "List depth/parent_id; preserve SOB segment ids; list_lead"
+    enabled: true
+
+  - id: srob_test_003
+    description: "Rich multi-child tags all pass-through on primary fields"
+    enabled: true
+
+  - id: srob_test_004
+    description: "Empty refinements analyze pass-through; neutral.default refine"
+    enabled: true
+
+  - id: srob_test_005
+    description: "Unmapped coarse custom_op; upstream envelopes unchanged"
+    enabled: true
+
+  - id: srob_test_006
+    description: "Nested list depth 2; discourse temporal_marker → temporal_shift"
+    enabled: true
