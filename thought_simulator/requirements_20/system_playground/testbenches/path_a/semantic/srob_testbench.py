@@ -12,8 +12,9 @@ import yaml
 import json
 import copy
 
+# Mandatory import-path initialization (match sob_testbench.py)
 TB_DIR = os.path.dirname(__file__)
-PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", "..", "..", ".."))
+PROJECT_ROOT = os.path.abspath(os.path.join(TB_DIR, "..", "..", ".."))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
@@ -110,7 +111,6 @@ def run_single_test(test_entry):
     tp_output = srob.process()
 
     actual_struct = _normalize_for_compare(tp_output.get("structural") or {})
-    # Compare only SROB-owned structural keys + optional metadata checks
     actual_focus = {
         "srob_structural_map": actual_struct.get("srob_structural_map"),
         "srob_residue": actual_struct.get("srob_residue"),
