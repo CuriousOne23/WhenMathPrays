@@ -1,1 +1,85 @@
+# sob_punctuation.yaml
+# SOB-owned punctuation and structural delimiter dictionary
+# Purpose: Sentence endings, list markers, and block markers for
+# deterministic structural segmentation (HLR-20.40.010-001..003).
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010, sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Punctuation and structural delimiters used by SOB for segmenting the TP into
+  sentences, clauses, lists, tables, code blocks, and mathematical blocks.
+  Order of structural units is preserved exactly.
+
+# ---------------------------------------------------------------------------
+# Sentence / clause endings
+# ---------------------------------------------------------------------------
+sentence_endings:
+  - "."
+  - "!"
+  - "?"
+  - "..."
+  - "…"
+
+# ---------------------------------------------------------------------------
+# List markers (ordered and unordered)
+# ---------------------------------------------------------------------------
+list_markers:
+  unordered:
+    - "-"
+    - "*"
+    - "+"
+    - "•"
+  ordered:
+    - "1."
+    - "2."
+    - "3."
+    - "a."
+    - "b."
+    - "i."
+    - "ii."
+    - "(1)"
+    - "(a)"
+    - "(i)"
+
+# ---------------------------------------------------------------------------
+# Block markers
+# ---------------------------------------------------------------------------
+block_markers:
+  code:
+    - "```"
+    - "~~~"
+    - "    "          # indented code (leading spaces)
+  math:
+    - "$$"
+    - "$"
+    - "\\["
+    - "\\]"
+    - "\\("
+    - "\\)"
+  table:
+    - "|"
+    - "---"
+    - "|---"
+  quote:
+    - ">"
+
+# ---------------------------------------------------------------------------
+# Clause / internal separators (for finer segmentation)
+# ---------------------------------------------------------------------------
+clause_separators:
+  - ";"
+  - ":"
+  - ","
+  - "—"
+  - "–"
+  - "-"               # em/en dash contexts handled carefully
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Segmentation must preserve original order of units (HLR-002).
+# - List structures (ordered, unordered, nested) are represented explicitly.
+# - No text is modified; only structural boundaries are identified.
+# - Matching is exact on the delimiter characters/strings.
+# ---------------------------------------------------------------------------
