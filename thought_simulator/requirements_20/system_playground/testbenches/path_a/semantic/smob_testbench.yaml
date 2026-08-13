@@ -1,0 +1,428 @@
+# ============================================================
+#  SmOB Testbench (Version 1.0)
+#  CnOB-shaped inputs + expected SmOB cue/compress outputs
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+
+tests:
+
+  - id: smob_test_001
+    description: "Clean C1/C5 — modality only from SROB; no conflict/underspec"
+    input:
+      tp_identity: {tp_id: tp_smob_001}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: "The system processes input deterministically.", type: sentence, modality: declarative}
+          operators: [process]
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - {family: C1, rule_id: c1_segment_exists, payload: {reason: segment_exists}}
+              - {family: C1, rule_id: c1_operator_present, payload: {reason: operator_present}}
+            C2: []
+            C3: []
+            C4: []
+            C5:
+              - {family: C5, rule_id: c5_segment_id_lineage, payload: {reason: segment_id_lineage}}
+            C6: []
+            C7: []
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary: [C1, C5]
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000001"
+      metadata:
+        context:
+          context_fields: {topic: system_behavior, stance: neutral, intent: inform, continuity: moderate, direction: forward, coherence: medium, importance: normal}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues: []
+          modality_cues:
+            - {family: modality, cue_id: declarative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          discourse_adjacent_cues: []
+          routing_semantic_cues: []
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          tr_input_cues:
+            - {slot: modality, value: declarative}
+            - {slot: conflict, value: ""}
+            - {slot: underspec, value: ""}
+            - {slot: importance, value: ""}
+            - {slot: routing, value: ""}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [modality]
+          disagreement_flags: []
+          override_flags: []
+
+  - id: smob_test_002
+    description: "Conflict → conflict_adjacent + TR conflict"
+    input:
+      tp_identity: {tp_id: tp_smob_002}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: "Be precise and concise.", type: sentence, modality: imperative}
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families: {C1: [], C2: [], C3: [], C4: [], C5: [], C6: [], C7: []}
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators:
+            - {id: conf_001, kind: conflict, rule_id: conf_precision_vs_conciseness, segment_ids: [], participants: [precision, conciseness], note: precision_vs_conciseness}
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators:
+            - {id: conf_001, kind: conflict, rule_id: conf_precision_vs_conciseness, segment_ids: [], participants: [precision, conciseness], note: precision_vs_conciseness}
+          constraint_importance: []
+          constraint_family_summary: []
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000002"
+      metadata:
+        context:
+          context_fields: {topic: style, stance: neutral, intent: instruct, continuity: moderate, direction: forward, coherence: medium, importance: normal}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: conflict_adjacent, rule_id: cue_conflict_present, segment_ids: [], source: cnob, note: ""}
+          modality_cues:
+            - {family: modality, cue_id: imperative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals:
+            - {family: conflict_adjacent, cue_id: conflict_adjacent, rule_id: cue_conflict_present, segment_ids: [], source: cnob, note: ""}
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          discourse_adjacent_cues: []
+          routing_semantic_cues: []
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: conflict_adjacent, rule_id: cue_conflict_present, segment_ids: [], source: cnob, note: ""}
+          conflict_adjacent_signals:
+            - {family: conflict_adjacent, cue_id: conflict_adjacent, rule_id: cue_conflict_present, segment_ids: [], source: cnob, note: ""}
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          tr_input_cues:
+            - {slot: modality, value: imperative}
+            - {slot: conflict, value: conflict_adjacent}
+            - {slot: underspec, value: ""}
+            - {slot: importance, value: ""}
+            - {slot: routing, value: ""}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [semantic_adjacent, modality, conflict_adjacent]
+          disagreement_flags: []
+          override_flags: []
+
+  - id: smob_test_003
+    description: "missing_slot → gap_adjacent"
+    input:
+      tp_identity: {tp_id: tp_smob_003}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: Header, type: sentence, modality: declarative}
+            - {id: seg_1, text: "   ", type: sentence, modality: declarative}
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families: {C1: [], C2: [], C3: [], C4: [], C5: [], C6: [], C7: []}
+          missing_slot_signals:
+            - {id: miss_001, kind: missing_slot, rule_id: miss_empty_text, segment_ids: [seg_1], participants: [], note: empty_text}
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals:
+            - {id: miss_001, kind: missing_slot, rule_id: miss_empty_text, segment_ids: [seg_1], participants: [], note: empty_text}
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary: []
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000003"
+      metadata:
+        context:
+          context_fields: {topic: gap, stance: neutral, intent: inform, continuity: moderate, direction: forward, coherence: medium, importance: normal}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: gap_adjacent, rule_id: cue_missing_slot, segment_ids: [], source: cnob, note: ""}
+          modality_cues:
+            - {family: modality, cue_id: declarative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals:
+            - {family: underspecification_adjacent, cue_id: gap_adjacent, rule_id: cue_missing_slot, segment_ids: [seg_1], source: cnob, note: ""}
+          constraint_importance_adjacent_signals: []
+          discourse_adjacent_cues: []
+          routing_semantic_cues: []
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: gap_adjacent, rule_id: cue_missing_slot, segment_ids: [], source: cnob, note: ""}
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals:
+            - {family: underspecification_adjacent, cue_id: gap_adjacent, rule_id: cue_missing_slot, segment_ids: [seg_1], source: cnob, note: ""}
+          constraint_importance_adjacent_signals: []
+          tr_input_cues:
+            - {slot: modality, value: declarative}
+            - {slot: conflict, value: ""}
+            - {slot: underspec, value: underspec_adjacent}
+            - {slot: importance, value: ""}
+            - {slot: routing, value: ""}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [semantic_adjacent, modality, underspecification_adjacent]
+          disagreement_flags: []
+          override_flags: []
+
+  - id: smob_test_004
+    description: "underspec → underspec_adjacent"
+    input:
+      tp_identity: {tp_id: tp_smob_004}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: "What happens next?", type: sentence, modality: interrogative}
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families: {C1: [], C2: [], C3: [], C4: [], C5: [], C6: [], C7: []}
+          missing_slot_signals: []
+          underspecification_markers:
+            - {id: under_001, kind: underspecification, rule_id: under_question_no_operator, segment_ids: [seg_0], participants: [], note: question_without_operator}
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers:
+            - {id: under_001, kind: underspecification, rule_id: under_question_no_operator, segment_ids: [seg_0], participants: [], note: question_without_operator}
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary: []
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000004"
+      metadata:
+        context:
+          context_fields: {topic: question, stance: neutral, intent: clarify, continuity: moderate, direction: forward, coherence: medium, importance: normal}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: underspec_adjacent, rule_id: cue_underspec, segment_ids: [], source: cnob, note: ""}
+          modality_cues:
+            - {family: modality, cue_id: interrogative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals:
+            - {family: underspecification_adjacent, cue_id: underspec_adjacent, rule_id: cue_underspec, segment_ids: [seg_0], source: cnob, note: ""}
+          constraint_importance_adjacent_signals: []
+          discourse_adjacent_cues: []
+          routing_semantic_cues: []
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: underspec_adjacent, rule_id: cue_underspec, segment_ids: [], source: cnob, note: ""}
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals:
+            - {family: underspecification_adjacent, cue_id: underspec_adjacent, rule_id: cue_underspec, segment_ids: [seg_0], source: cnob, note: ""}
+          constraint_importance_adjacent_signals: []
+          tr_input_cues:
+            - {slot: modality, value: interrogative}
+            - {slot: conflict, value: ""}
+            - {slot: underspec, value: underspec_adjacent}
+            - {slot: importance, value: ""}
+            - {slot: routing, value: ""}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [semantic_adjacent, modality, underspecification_adjacent]
+          disagreement_flags: []
+          override_flags: []
+
+  - id: smob_test_005
+    description: "C7 → routing_cue"
+    input:
+      tp_identity: {tp_id: tp_smob_005}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: "Apply precision constraints.", type: sentence, modality: imperative}
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families:
+            C1: []
+            C2: []
+            C3: []
+            C4: []
+            C5: []
+            C6: []
+            C7:
+              - {family: C7, rule_id: c7_constraint_hint_present, payload: {reason: constraint_hint_present}}
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary: [C7]
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000005"
+      metadata:
+        context:
+          context_fields: {topic: routing, stance: neutral, intent: instruct, continuity: moderate, direction: forward, coherence: medium, importance: normal}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: routing_cue, rule_id: cue_routing, segment_ids: [], source: cnob, note: ""}
+          modality_cues:
+            - {family: modality, cue_id: imperative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          discourse_adjacent_cues: []
+          routing_semantic_cues:
+            - {family: routing_semantic, cue_id: routing_cue, rule_id: cue_routing, segment_ids: [], source: cnob, note: ""}
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: routing_cue, rule_id: cue_routing, segment_ids: [], source: cnob, note: ""}
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals: []
+          tr_input_cues:
+            - {slot: modality, value: imperative}
+            - {slot: conflict, value: ""}
+            - {slot: underspec, value: ""}
+            - {slot: importance, value: ""}
+            - {slot: routing, value: routing_cue}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [semantic_adjacent, modality, routing_semantic]
+          disagreement_flags: []
+          override_flags: []
+
+  - id: smob_test_006
+    description: "gap_high importance → sa_gap_high"
+    input:
+      tp_identity: {tp_id: tp_smob_006}
+      structural:
+        srob_structural_map:
+          segments:
+            - {id: seg_0, text: "Identity continuity is high.", type: sentence, modality: declarative}
+          discourse_flags: []
+        cnob_constraint_map:
+          constraint_families: {C1: [], C2: [], C3: [], C4: [], C5: [], C6: [], C7: []}
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - {labels: [gap_high], segment_ids: [], source: gap}
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - {labels: [gap_high], segment_ids: [], source: gap}
+          constraint_family_summary: []
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: "deadbeef00000006"
+      metadata:
+        context:
+          context_fields: {topic: identity, stance: neutral, intent: inform, continuity: strong, direction: forward, coherence: high, importance: high}
+        msl: {}
+    expected:
+      structural:
+        smob_cue_map:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: sa_gap_high, rule_id: imp_map_labels, segment_ids: [], source: cnob, note: ""}
+          modality_cues:
+            - {family: modality, cue_id: declarative, rule_id: cue_modality_from_srob, segment_ids: [], source: srob, note: ""}
+          affect_markers: []
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals:
+            - {family: constraint_importance_adjacent, cue_id: sa_gap_high, rule_id: imp_map_labels, segment_ids: [], source: cnob, note: ""}
+          discourse_adjacent_cues: []
+          routing_semantic_cues: []
+          delta_h_semantic_adjacent: []
+        smob_residue:
+          semantic_adjacent_cues:
+            - {family: semantic_adjacent, cue_id: sa_gap_high, rule_id: imp_map_labels, segment_ids: [], source: cnob, note: ""}
+          conflict_adjacent_signals: []
+          underspecification_adjacent_signals: []
+          constraint_importance_adjacent_signals:
+            - {family: constraint_importance_adjacent, cue_id: sa_gap_high, rule_id: imp_map_labels, segment_ids: [], source: cnob, note: ""}
+          tr_input_cues:
+            - {slot: modality, value: declarative}
+            - {slot: conflict, value: ""}
+            - {slot: underspec, value: ""}
+            - {slot: importance, value: sa_gap_high}
+            - {slot: routing, value: ""}
+            - {slot: discourse, value: ""}
+          presemantic_residue_hash: present
+          cue_family_summary: [semantic_adjacent, modality, constraint_importance_adjacent]
+          disagreement_flags: []
+          override_flags: []
