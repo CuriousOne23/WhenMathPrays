@@ -1,0 +1,89 @@
+# ============================================================
+#  SROB Input (Version 1.0)
+#  Post-SOB TP state before SROB runs (general / rule-driven mode)
+#  Aligned with:
+#    - 20.40.020 v2.0
+#    - srob_software_architecture.md / srob_py_struc_pgm.md v1.1
+#    - progressive_lineup_testing.md
+# ============================================================
+
+mode: input
+primitive: SROB
+version: "1.0"
+
+tp_identity:
+  tp_id: "tp_srob_input_001"
+  tp_seq: 20
+  cycle_id: 1
+  lane_id: "A"
+  schema_version: "1.0"
+  profile_signature: "default"
+  wire_map_version: "1.0"
+  policy_signature: "default"
+
+intake:
+  text: "Please explain how the structural residue is formed and then summarize the key constraints."
+
+structural:
+  sob_structural_map:
+    segments:
+      - id: seg_0
+        text: "Please explain how the structural residue is formed and then summarize the key constraints."
+        type: sentence
+        modality: interrogative
+    operators:
+      - verb: "explain"
+        normalized: "explain"
+        source: "lexical"
+      - verb: "summarize"
+        normalized: "summarize"
+        source: "lexical"
+    lexical_domains:
+      - "conversational_like"
+    lexical_tones:
+      - "supportive"
+    lexical_constraints:
+      - "politeness"
+    morphology_flags: []
+  sob_residue:
+    lexical_tags:
+      - operator: "explain"
+      - operator: "summarize"
+      - domain: "conversational_like"
+      - tone: "supportive"
+      - constraint: "politeness"
+    structural_adjacent:
+      - modality: interrogative
+    override_flags: []
+    disagreement_flags: []
+
+metadata:
+  context:
+    context_fields:
+      topic: "structural_residue"
+      stance: "neutral"
+      intent: "explain"
+      register: "technical"
+      politeness: "medium"
+      tone: "neutral"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+      clarifying_fields: []
+    context_provenance:
+      origin: "CE"
+      last_update: "SOB"
+      commit_lineage: ["c020"]
+  msl: {}
+  semantic_residue: {}
+  sob_audit_record:
+    dictionary_load_status: "ok"
+    provenance_lineage:
+      origin: "SOB"
+      last_update: "SOB"
+
+notes:
+  - srob_input.yaml is used only in general (rule-driven) mode.
+  - Input must include SOB-owned structural fields (post-SOB TP).
+  - srob_testbench.yaml supplies input + expected for deterministic mode.
