@@ -1,0 +1,43 @@
+# ============================================================
+#  CnOB Conflict Rules (Version 1.0)
+#  Structured conflict indicators (record only; no enforcement)
+#  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.4, Q8
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+rules:
+
+  - id: conf_precision_vs_conciseness
+    kind: conflict
+    description: >
+      Both precision and conciseness constraint hints present on the TP.
+    if:
+      lexical_constraints_contains_all:
+        - precision
+        - conciseness
+    emit:
+      participants:
+        - precision
+        - conciseness
+      note: precision_vs_conciseness
+
+  - id: conf_imperative_vs_interrogative
+    kind: conflict
+    description: >
+      Both imperative and interrogative modalities appear across segments.
+    if:
+      modalities_present_all:
+        - imperative
+        - interrogative
+    emit:
+      participants:
+        - imperative
+        - interrogative
+      note: imperative_vs_interrogative
+
+# Match notes for implementers:
+# - lexical_constraints_contains_all: true if each name appears as a full tag id
+#   OR as the parent/suffix of a fine id (e.g. precision.parameter_level counts as precision).
+# - modalities_present_all: union of segment.modality values across the map.
