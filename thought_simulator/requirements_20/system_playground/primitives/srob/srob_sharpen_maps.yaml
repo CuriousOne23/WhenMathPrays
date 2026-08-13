@@ -4,15 +4,17 @@
 # Parent keys MUST match SOB category ids exactly (vocab coupling).
 # Fine ids MUST be hierarchical: parent.child
 # Empty refinements => pass-through of coarse tag.
-# Version: 1.0
+# Version: 1.1
 # Aligned with: 20.40.020 v2.0, sob_operators/domains/tones/constraints.yaml,
-#   srob_software_architecture.md, srob_sob_comm_architect.md
+#   srob_software_architecture.md, srob_py_struc_pgm.md v1.1 (P1-P6)
 
-version: "1.0"
+version: "1.1"
 description: >
   Sharpen maps keyed by SOB coarse category strings. SROB does not invent
   new top-level types. Illegal parent keys are a load/test desync fault.
   No sharpen without a matching SOB coarse tag on the TP.
+  Multi-child lists document available depth; primary tag emission follows
+  multi_refinement_policy (P3).
 
 vocab_coupling:
   parent_source: SOB coarse category ids
@@ -20,6 +22,15 @@ vocab_coupling:
   missing_parent_in_map: pass_through_coarse
   illegal_parent_in_map: SROB_MAP_DESYNC
   no_sharpen_without_sob_tag: true
+  # P3 — NORMATIVE
+  multi_refinement_policy: pass_through_unless_single_child
+  # When multiple children and no matching when: keep coarse on primary tag
+  # fields; optional residue diagnostic available_refinements[].
+  # When exactly one child: may emit that fine id.
+  # When when: exists (future): first matching when wins; else pass-through.
+  # P4 — NORMATIVE
+  unmapped_coarse_policy: pass_through
+  # SOB coarse id with no parent key: pass-through + optional unmapped_coarse[].
 
 # ---------------------------------------------------------------------------
 # Operators — parents from sob_operators.yaml (core + normalized additional)
@@ -61,7 +72,7 @@ operators:
       - id: transform.map
   # Additional operator forms SOB may emit (from sob_operators additional list,
   # normalized to lemma-like coarse ids as SOB writes them on TP).
-  # Thin: pass-through until downstream needs depth.
+  # Thin: pass-through until downstream needs depth (empty => P3 pass-through).
   analyze:
     refinements: []
   evaluate:
@@ -215,9 +226,8 @@ constraints:
 # ---------------------------------------------------------------------------
 # Notes for implementers
 # - Match parent keys to strings SOB writes on the TP (lemma/coarse id).
-# - If SOB emits a coarse id not listed here: pass-through + optional
-#   unmapped_coarse diagnostic; then add parent key in a controlled expansion.
+# - Primary tag emission: multi_refinement_policy / unmapped_coarse_policy above.
+# - Multi-child refinements are the catalog for later when: rules; they are not
+#   auto-applied en masse under P3.
 # - Prefer few testable children over deep trees.
-# - when: conditions may be added later; v1 may choose first refinement or
-#   pass-through policy explicitly in srob.py (document choice in code).
 # ---------------------------------------------------------------------------
