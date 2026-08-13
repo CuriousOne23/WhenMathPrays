@@ -1,0 +1,223 @@
+# srob_sharpen_maps.yaml
+# SROB-owned tag refinement policy (Stream B)
+# Purpose: Higher-resolution labels WITHIN SOB coarse families only.
+# Parent keys MUST match SOB category ids exactly (vocab coupling).
+# Fine ids MUST be hierarchical: parent.child
+# Empty refinements => pass-through of coarse tag.
+# Version: 1.0
+# Aligned with: 20.40.020 v2.0, sob_operators/domains/tones/constraints.yaml,
+#   srob_software_architecture.md, srob_sob_comm_architect.md
+
+version: "1.0"
+description: >
+  Sharpen maps keyed by SOB coarse category strings. SROB does not invent
+  new top-level types. Illegal parent keys are a load/test desync fault.
+  No sharpen without a matching SOB coarse tag on the TP.
+
+vocab_coupling:
+  parent_source: SOB coarse category ids
+  fine_id_form: "parent.child"
+  missing_parent_in_map: pass_through_coarse
+  illegal_parent_in_map: SROB_MAP_DESYNC
+  no_sharpen_without_sob_tag: true
+
+# ---------------------------------------------------------------------------
+# Operators — parents from sob_operators.yaml (core + normalized additional)
+# ---------------------------------------------------------------------------
+operators:
+  summarize:
+    refinements:
+      - id: summarize.abstract
+      - id: summarize.bullets
+      - id: summarize.tldr
+  compare:
+    refinements:
+      - id: compare.contrast
+      - id: compare.rank
+  classify:
+    refinements:
+      - id: classify.categorize
+      - id: classify.group
+  derive:
+    refinements:
+      - id: derive.compute
+      - id: derive.deduce
+  plan:
+    refinements:
+      - id: plan.steps
+      - id: plan.roadmap
+  explain:
+    refinements:
+      - id: explain.clarify
+      - id: explain.detail
+      - id: explain.justify
+  rewrite:
+    refinements:
+      - id: rewrite.paraphrase
+      - id: rewrite.revise
+  transform:
+    refinements:
+      - id: transform.convert
+      - id: transform.map
+  # Additional operator forms SOB may emit (from sob_operators additional list,
+  # normalized to lemma-like coarse ids as SOB writes them on TP).
+  # Thin: pass-through until downstream needs depth.
+  analyze:
+    refinements: []
+  evaluate:
+    refinements: []
+  assess:
+    refinements: []
+  identify:
+    refinements: []
+  list:
+    refinements: []
+  extract:
+    refinements: []
+  generate:
+    refinements: []
+  create:
+    refinements: []
+  produce:
+    refinements: []
+  define:
+    refinements: []
+  formalize:
+    refinements: []
+  prove:
+    refinements: []
+  show:
+    refinements: []
+  demonstrate:
+    refinements: []
+  illustrate:
+    refinements: []
+  implement:
+    refinements:
+      - id: implement.code_action
+      - id: implement.procedure
+  design:
+    refinements: []
+  model:
+    refinements: []
+  simulate:
+    refinements: []
+  optimize:
+    refinements: []
+  debug:
+    refinements: []
+  test:
+    refinements: []
+  validate:
+    refinements: []
+  verify:
+    refinements: []
+  review:
+    refinements: []
+  critique:
+    refinements: []
+  improve:
+    refinements: []
+  refine:
+    refinements: []
+  expand:
+    refinements: []
+  compress:
+    refinements: []
+  simplify:
+    refinements: []
+  elaborate:
+    refinements: []
+
+# ---------------------------------------------------------------------------
+# Domains — parents from sob_domains.yaml
+# ---------------------------------------------------------------------------
+domains:
+  math_like:
+    refinements:
+      - id: math_like.algebra
+      - id: math_like.stats
+      - id: math_like.calculus
+  code_like:
+    refinements:
+      - id: code_like.function
+      - id: code_like.config
+      - id: code_like.test
+  narrative_like:
+    refinements: []
+  legal_like:
+    refinements:
+      - id: legal_like.obligation
+      - id: legal_like.definition
+  technical_like:
+    refinements:
+      - id: technical_like.architecture
+      - id: technical_like.api
+      - id: technical_like.ops
+  conversational_like:
+    refinements:
+      - id: conversational_like.request
+      - id: conversational_like.social
+
+# ---------------------------------------------------------------------------
+# Tones — parents from sob_tones.yaml
+# ---------------------------------------------------------------------------
+tones:
+  formal:
+    refinements:
+      - id: formal.institutional
+      - id: formal.academic
+  casual:
+    refinements: []
+  technical:
+    refinements:
+      - id: technical.precise
+      - id: technical.tutorial
+  supportive:
+    refinements:
+      - id: supportive.polite_request
+      - id: supportive.encouraging
+  urgent:
+    refinements:
+      - id: urgent.deadline
+      - id: urgent.safety
+  neutral:
+    refinements:
+      - id: neutral.default
+
+# ---------------------------------------------------------------------------
+# Constraints — parents from sob_constraints.yaml
+# Hints only; SROB never enforces constraints.
+# ---------------------------------------------------------------------------
+constraints:
+  precision:
+    refinements:
+      - id: precision.parameter_level
+      - id: precision.numeric
+      - id: precision.definitional
+  conciseness:
+    refinements:
+      - id: conciseness.short_answer
+      - id: conciseness.no_preamble
+  politeness:
+    refinements:
+      - id: politeness.request_marker
+      - id: politeness.softener
+  safety:
+    refinements:
+      - id: safety.harm_avoidance
+      - id: safety.privacy
+  formatting:
+    refinements:
+      - id: formatting.list_preferred
+      - id: formatting.code_block_preferred
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Match parent keys to strings SOB writes on the TP (lemma/coarse id).
+# - If SOB emits a coarse id not listed here: pass-through + optional
+#   unmapped_coarse diagnostic; then add parent key in a controlled expansion.
+# - Prefer few testable children over deep trees.
+# - when: conditions may be added later; v1 may choose first refinement or
+#   pass-through policy explicitly in srob.py (document choice in code).
+# ---------------------------------------------------------------------------
