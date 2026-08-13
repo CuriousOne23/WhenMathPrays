@@ -445,7 +445,9 @@ tests:
           qualifiers: ["stable"]
           stance: "neutral"
           direction: "forward"
-          coherence: "high"\n      # Only SOB-owned fields are written
+          coherence: "high"
+
+      # Only SOB-owned fields are written
       structural:
         sob_structural_map:
           segments:
