@@ -1,0 +1,43 @@
+# ============================================================
+#  CnOB Rules (Version 1.0)
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+rules:
+  - id: cnob_replay_001
+    description: CnOB must produce output given post-SROB input.
+    check: deterministic_replay
+
+  - id: cnob_map_001
+    description: cnob_constraint_map must include C1–C7 keys.
+    check: constraint_map_integrity
+
+  - id: cnob_residue_001
+    description: cnob_residue must include signals and constraint_residue_hash.
+    check: residue_integrity
+
+  - id: cnob_audit_001
+    description: cnob_audit_record required.
+    check: audit_record_integrity
+
+  - id: cnob_boundary_001
+    description: CnOB must not modify context_fields or MSL.
+    check: upstream_read_only
+
+  - id: cnob_boundary_002
+    description: CnOB writes only owned fields.
+    check: write_authority
+
+  - id: cnob_no_relex_001
+    description: CnOB must not invent operator types absent from SROB surface.
+    check: no_invented_surface_types
+
+  - id: cnob_forbidden_001
+    description: CnOB must not enforce constraints or write meaning fields.
+    check: no_enforcement_or_meaning
+
+  - id: cnob_progressive_001
+    description: Progressive lineup compatibility.
+    check: progressive_lineup_compatibility

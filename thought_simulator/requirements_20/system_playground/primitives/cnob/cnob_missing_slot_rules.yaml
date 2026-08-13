@@ -1,0 +1,42 @@
+# ============================================================
+#  CnOB Missing-Slot / Underspec Rules (Version 1.0)
+#  Gap signals over SROB TP surface
+#  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.3
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on SROB TP surface fields only — NOT on srob_*.yaml key trees.
+#  Surface contract, not dictionary sync (cnob_srob_comm_architect.md §2.4).
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+rules:
+
+  - id: miss_empty_text
+    kind: missing_slot
+    description: "Segment text is empty or whitespace-only."
+    if:
+      segment_text_empty: true
+    emit:
+      bind_segment_ids: matching_segments
+      note: empty_text
+
+  - id: under_question_no_operator
+    kind: underspecification
+    description: "Interrogative modality with no operators on the TP."
+    if:
+      any_modality: interrogative
+      operators_empty: true
+    emit:
+      bind_segment_ids: segments_with_modality_interrogative
+      note: question_without_operator
+
+  - id: under_constraint_no_operator
+    kind: underspecification
+    description: "Constraint hints present but no operator tags."
+    if:
+      lexical_constraints_non_empty: true
+      operators_empty: true
+    emit:
+      note: constraint_without_operator

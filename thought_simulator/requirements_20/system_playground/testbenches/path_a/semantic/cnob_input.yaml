@@ -1,0 +1,65 @@
+# ============================================================
+#  CnOB Input (Version 1.0) — post-SROB TP for general mode
+# ============================================================
+
+mode: input
+primitive: CnOB
+version: "1.0"
+
+tp_identity:
+  tp_id: "tp_cnob_input_001"
+  tp_seq: 30
+  cycle_id: 1
+  lane_id: "A"
+  schema_version: "1.0"
+
+intake:
+  text: "Please explain how the structural residue is formed and then summarize the key constraints."
+
+structural:
+  srob_structural_map:
+    segments:
+      - id: seg_0
+        text: "Please explain how the structural residue is formed and then summarize the key constraints."
+        type: sentence
+        modality: interrogative
+    operators:
+      - explain
+      - summarize
+    lexical_domains:
+      - conversational_like
+    lexical_tones:
+      - supportive
+    lexical_constraints:
+      - politeness
+    discourse_flags: []
+  srob_residue:
+    refined_tags: []
+    pass_through_tags:
+      - operator: explain
+      - operator: summarize
+      - domain: conversational_like
+      - tone: supportive
+      - constraint: politeness
+    structural_adjacent:
+      - modality: interrogative
+    unmapped_coarse: []
+    disagreement_flags: []
+    override_flags: []
+
+metadata:
+  context:
+    context_fields:
+      topic: "structural_residue"
+      stance: "neutral"
+      intent: "explain"
+      continuity: "moderate"
+      direction: "forward"
+      coherence: "medium"
+      importance: "normal"
+  msl: {}
+  srob_audit_record:
+    support_yaml_load_status: "ok"
+    provenance_lineage:
+      origin: "SROB"
+      last_update: "SROB"
