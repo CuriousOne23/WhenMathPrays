@@ -179,8 +179,31 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: CnOB only (post-SROB shaped TP), input from:
     #   • cnob_testbench.yaml (mode = "testbench")
     #   • cnob_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cnob_testbench",
+    #     {
+    #         "mode": "testbench",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,       # Set True for progressive SROB → CnOB later
+    #         "use_cnob": True,        # Primitive under test
+    #         "tests_to_run": "see cnob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SmOB Test bench ******************************************************
+    # Highest upstream True = SmOB (primitive under test)
+    # Pipeline: SmOB only (post-CnOB shaped TP), input from:
+    #   • smob_testbench.yaml (mode = "testbench")
+    #   • smob_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.cnob_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_testbench",
         {
             "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
@@ -192,10 +215,10 @@ ACTIVE_TEST_MODULES = [
             "use_ce": False,
             "use_tpu": False,
             "use_sob": False,
-            "use_srob": False,       # Set True for progressive SROB → CnOB later
-            "use_cnob": True,        # Primitive under test
-
-            "tests_to_run": "see cnob_tests_to_run.yaml",
+            "use_srob": False,
+            "use_cnob": False,       # Set True for progressive CnOB → SmOB later
+            "use_smob": True,        # Primitive under test
+            "tests_to_run": "see smob_tests_to_run.yaml",
         }
     ),
 ]
