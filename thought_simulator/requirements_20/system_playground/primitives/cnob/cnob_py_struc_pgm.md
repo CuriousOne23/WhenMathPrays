@@ -1,8 +1,9 @@
-# ⭐ **`cnob_py_struc_pgm.md` (Version 1.0)**
+# ⭐ **`cnob_py_struc_pgm.md` (Version 1.1)**
 ### *Python & C++ Implementation Blueprint for the CnOB Primitive*
-### *Aligned with 20.40.030 v2.0, cnob_software_architecture.md, cnob_srob_comm_architect.md*
+### *Aligned with 20.40.030 v2.0, cnob_software_architecture.md, cnob_srob_comm_architect.md v1.1*
 
-**Schema authority:** This document owns the **normative v1** field schemas for `cnob_constraint_map` and `cnob_residue` (Q6). Testbench expected blocks SHALL match.
+**Schema authority:** This document owns the **normative v1** field schemas for `cnob_constraint_map` and `cnob_residue` (Q6). Testbench expected blocks SHALL match.  
+**Coupling authority:** SROB↔CnOB is a **TP surface contract**, not dictionary sync — full matrix in `cnob_srob_comm_architect.md` §2.4 (Q9).
 
 ---
 
@@ -24,7 +25,7 @@ CnOB is responsible for:
 - preserving upstream fields (read-only)
 - referencing **SROB segment ids** (Q2)
 
-CnOB does **not**: re-normalize structure; re-lex text; invent tag types; enforce constraints; resolve meaning/referents; modify semantic_core / routing envelopes / identity.
+CnOB does **not**: re-normalize structure; re-lex text; invent tag types; enforce constraints; resolve meaning/referents; modify semantic_core / routing envelopes / identity; **require hierarchical key sync with `srob_*.yaml`**.
 
 ---
 
@@ -44,7 +45,7 @@ cnob.process()
 
 ---
 
-# **3. Intake Model**
+# **3. Intake Model and Coupling (Q9)**
 
 SROB fields required for normal operation:
 
@@ -55,12 +56,23 @@ Fallback: if SROB absent and isolation mode, may read SOB fields — **not** def
 
 All non-CnOB fields are **read-only**.
 
+### **3.1 Normative coupling rules (support-critical)**
+
+1. CnOB **SHALL NOT** load `srob_*.yaml` or `sob_*.yaml`.
+2. CnOB **SHALL NOT** require hierarchical dictionary synchronization with SROB support files (unlike SOB↔SROB parent/child maps).
+3. CnOB **SHALL** depend only on the **SROB TP surface contract**: field names and tag-space conventions written on the TP (segments, operators, lexical_*, modality, discourse_flags, structural_importance, residue cues).
+4. Every rule condition that depends on SROB **SHALL** use an **explicit predicate** whose meaning is mappable to those fields (evident in YAML `if:` blocks).
+5. Missing expected **fields** on the TP **SHALL** be treated as a **handoff/support defect** (SROB gap or rename), not as a reason to invent tags or re-lex inside CnOB.
+6. Absence of a particular SROB **fine-id child** is **not** a CnOB desync by itself when rules only require “operator present” / parent-space match.
+
+**Debug order:** inspect TP(SROB) → match rule `if:` → then CnOB encode logic.
+
 ---
 
 # **4. Deterministic Rule Ordering**
 
 1. Read TP (post-SROB)
-2. Load CnOB YAMLs
+2. Load CnOB YAMLs only
 3. Read `srob_structural_map` / `srob_residue`
 4. Encode C1–C7 (`cnob_constraint_rules.yaml`)
 5. Apply missing-slot / underspec rules
@@ -81,10 +93,10 @@ All non-CnOB fields are **read-only**.
 
 ```
 constraint_entry:
-  family: C1 | C2 | C3 | C4 | C5 | C6 | C7   # required
-  rule_id: string                            # required
-  segment_ids: []                            # optional; SROB ids
-  payload: {}                                # optional small structured notes
+  family: C1 | C2 | C3 | C4 | C5 | C6 | C7
+  rule_id: string
+  segment_ids: []
+  payload: {}
 ```
 
 ## **5.2 `TP.structural.cnob_constraint_map` (full every run — Q1)**
@@ -92,71 +104,65 @@ constraint_entry:
 ```
 cnob_constraint_map:
   constraint_families:
-    C1: []    # list of constraint_entry
+    C1: []
     C2: []
     C3: []
     C4: []
     C5: []
     C6: []
     C7: []
-  missing_slot_signals: []      # see §5.3 signal object
+  missing_slot_signals: []
   underspecification_markers: []
   conflict_indicators: []
-  constraint_importance: []     # see §5.4
-  discourse_constraints: []     # optional normalized discourse→constraint notes
-  lineage_constraints: []       # optional C5-detailed; may mirror C5 entries
-  routing_constraints: []       # optional C7-detailed
-  policy_constraints: []        # optional; empty in v1 thin
+  constraint_importance: []
+  discourse_constraints: []
+  lineage_constraints: []
+  routing_constraints: []
+  policy_constraints: []
 ```
 
 Empty lists are valid (Q4). Keys C1–C7 **must** be present.
 
-## **5.3 Signal object (missing / underspec / conflict)**
+## **5.3 Signal object**
 
 ```
 signal:
-  id: string              # e.g. miss_001, conf_001
+  id: string
   kind: missing_slot | underspecification | conflict
   rule_id: string
-  segment_ids: []         # SROB ids when local
-  participants: []        # optional; tag ids or modality labels for conflicts
-  note: string            # optional short machine note; not free meaning prose
+  segment_ids: []
+  participants: []
+  note: string
 ```
 
 ## **5.4 Constraint-importance object**
 
 ```
 constraint_importance_item:
-  labels: []              # e.g. [constraint_anchor, gap_high]
-  segment_ids: []         # optional
+  labels: []
+  segment_ids: []
   source: structural | gap | conflict | mixed
 ```
-
-Multiple labels allowed (Q3).
 
 ## **5.5 `TP.structural.cnob_residue`**
 
 ```
 cnob_residue:
-  missing_slot_signals: []       # may mirror map or be the sole copy; v1: mirror map lists
+  missing_slot_signals: []
   underspecification_markers: []
   conflict_indicators: []
   constraint_importance: []
-  constraint_family_summary: []  # optional list of family ids that are non-empty
+  constraint_family_summary: []
   disagreement_flags: []
   override_flags: []
-  constraint_residue_hash: string   # required on success
-  # optional diagnostics:
-  # rule_fire_log: []
+  constraint_residue_hash: string
 ```
 
-**v1 rule:** Map holds the authoritative structured view; residue **must** include the gap/conflict/importance arrays and **`constraint_residue_hash`**. Duplicating the three signal arrays into residue is required for SmOB-friendly consumption (parallel to SROB residue pattern).
+Residue **must** include gap/conflict/importance arrays and **`constraint_residue_hash`**.
 
 ## **5.6 Hash (Q7)**
 
-- Serialize canonical `cnob_constraint_map` (sorted keys / ordered lists) + residue signal arrays (excluding the hash field itself)
-- `constraint_residue_hash = sha256(...).hexdigest()[:16]` (or project-standard length matching SOB/SROB)
-- Audit may also store `cnob_constraint_map_hash`
+Canonical serialization of map + signal arrays (excluding the hash field); project-standard digest length (e.g. sha256 hex truncated like SOB/SROB).
 
 ## **5.7 Audit record**
 
@@ -179,49 +185,48 @@ cnob_audit_record:
 
 # **6. v1 Rule Behaviors (enough for goldens)**
 
-These behaviors are **normative for thin v1** so `cnob_testbench.yaml` can lock expected blocks. YAML may encode the same rules explicitly.
-
-### **6.1 Always-on structural families (when segments exist)**
+### **6.1 Structural families**
 
 | Condition | Emit |
 |-----------|------|
-| `len(segments) >= 1` | C1 entry `rule_id: c1_segment_exists` |
-| `len(segments) >= 2` | C3 entry `rule_id: c3_multi_segment_order` |
-| any `type == list_item` | C4 entry `rule_id: c4_list_boundary` with those segment_ids |
-| any list_item with `parent_id` set | C2 entry `rule_id: c2_list_parent_child` |
-| any segment with stable id | C5 entry `rule_id: c5_segment_id_lineage` (once per TP) |
+| `len(segments) >= 1` | C1 `c1_segment_exists` |
+| `len(segments) >= 2` | C3 `c3_multi_segment_order` |
+| any `list_item` | C4 `c4_list_boundary` |
+| any list_item with `parent_id` | C2 `c2_list_parent_child` |
+| any segment with id | C5 `c5_segment_id_lineage` (once) |
+| `len(segments) >= 2` | C6 `c6_multi_segment_change_surface` |
 
 ### **6.2 Tag-driven**
 
 | Condition | Emit |
 |-----------|------|
-| any operator present | C1 entry `rule_id: c1_operator_present` |
-| any lexical_constraints tag present | C7 entry `rule_id: c7_constraint_hint_present` |
-| discourse_flags non-empty | discourse_constraints note + C2/C3 as applicable `rule_id: c2_discourse_present` |
+| any operator | C1 `c1_operator_present` |
+| any lexical_constraints | C7 `c7_constraint_hint_present` |
+| discourse_flags non-empty | C2 `c2_discourse_present` |
 
 ### **6.3 Gaps**
 
 | Condition | Emit |
 |-----------|------|
-| segment text empty/whitespace | missing_slot `rule_id: miss_empty_text` |
-| modality interrogative and operators empty | underspecification `rule_id: under_question_no_operator` |
-| lexical_constraints non-empty and operators empty | underspecification `rule_id: under_constraint_no_operator` |
+| empty/whitespace text | missing_slot `miss_empty_text` |
+| interrogative, no operators | underspec `under_question_no_operator` |
+| constraints, no operators | underspec `under_constraint_no_operator` |
 
 ### **6.4 Conflicts (Q8)**
 
 | Condition | Emit |
 |-----------|------|
-| both `precision` and `conciseness` in lexical_constraints (string match on tag id or suffix) | conflict `rule_id: conf_precision_vs_conciseness` |
-| both imperative and interrogative modalities present across segments | conflict `rule_id: conf_imperative_vs_interrogative` |
+| precision + conciseness in lexical_constraints | `conf_precision_vs_conciseness` |
+| imperative + interrogative modalities | `conf_imperative_vs_interrogative` |
 
 ### **6.5 Importance**
 
 | Condition | Labels |
 |-----------|--------|
-| structural_importance contains `anchor_like` | `constraint_anchor` |
+| `anchor_like` | `constraint_anchor` |
 | any missing_slot | `gap_high` |
 | any conflict | `conflict_high` |
-| list_lead on segment | `order_sensitive` |
+| `list_lead` | `order_sensitive` |
 
 ---
 
@@ -230,6 +235,7 @@ These behaviors are **normative for thin v1** so `cnob_testbench.yaml` can lock 
 CnOB must not:
 
 - load `srob_*.yaml` or `sob_*.yaml`
+- require hierarchical key sync with SROB YAML trees (wrong sync model)
 - re-segment or renumber segment ids
 - invent operators/domains/tones/constraint **types** not on TP
 - fill missing content as meaning
@@ -250,7 +256,7 @@ class CnOB:
         self.tp = tp_input
 
     def process(self):
-        rules = self._load_support_yamls()
+        rules = self._load_support_yamls()  # CnOB only
         srob_map = self._read_srob_map(self.tp)
         srob_residue = self._read_srob_residue(self.tp)
 
@@ -282,13 +288,13 @@ class CnOB:
 | Primitive | Consumes | Purpose |
 |-----------|----------|--------|
 | **SmOB** | cnob map/residue | semantic-adjacent cues from constraints/gaps |
-| **SSG/TR/RB** | residue hash + routing_constraints / C7 | exact addressing + eligibility features |
+| **SSG/TR/RB** | residue hash + C7 / routing_constraints | exact addressing + eligibility |
 | **ISc** | constraint features | scoring |
-| **IdOB** | gaps/conflicts/importance as rails | reduced search; content often TPU |
+| **IdOB** | gaps/conflicts/importance | reduced search; content often TPU |
 
 ---
 
-# **10. Locked Policies (Q1–Q8)**
+# **10. Locked Policies (Q1–Q9)**
 
 | ID | Topic | Lock |
 |----|--------|------|
@@ -300,23 +306,24 @@ class CnOB:
 | **Q6** | Schema | **This document** |
 | **Q7** | Hash | Canonical map + signal arrays |
 | **Q8** | Conflict example | precision vs conciseness |
+| **Q9** | Coupling | **TP surface contract only — not dictionary sync** |
 
 ---
 
 # **11. Testbench contract (normative intent)**
 
-- Inputs: **SROB-shaped** TP (`structural.srob_*`), analogous to SROB tests using SOB-shaped inputs
-- Expected: `cnob_constraint_map` + `cnob_residue` per §5; hash may be checked as present or exact if serialization frozen
-- Minimum scenarios for a first `cnob_testbench.yaml`:
-  1. Single declarative segment + operator → C1 exists + operator rules; no conflict
-  2. List with parent/child → C2/C4
-  3. Empty text segment → missing_slot
+- Inputs: **SROB-shaped** TP (`structural.srob_*`)
+- Expected: schemas §5; triage “sync” failures with §3.1 / comm_architect §2.4
+- Minimum scenarios:
+  1. Single declarative + operator → C1; no conflict
+  2. List parent/child → C2/C4
+  3. Empty text → missing_slot
   4. Interrogative, no operator → underspecification
-  5. precision + conciseness constraints → conflict Q8
-  6. anchor_like importance → constraint_anchor label
+  5. precision + conciseness → conflict Q8
+  6. anchor_like → constraint_anchor
 
 ---
 
-# ⭐ **End of Document — `cnob_py_struc_pgm.md` (Version 1.0)**
+# ⭐ **End of Document — `cnob_py_struc_pgm.md` (Version 1.1)**
 
 ---
