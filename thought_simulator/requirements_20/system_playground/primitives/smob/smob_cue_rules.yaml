@@ -1,0 +1,75 @@
+# ============================================================
+#  SmOB Cue Rules (Version 1.0)
+#  Job 1 — pre-semantic / semantic-adjacent cue extraction
+#  Aligned with: 20.40.040 v2.0, smob_py_struc_pgm.md §6.1
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on CnOB TP surface/residue only — NOT on cnob_*.yaml key trees.
+#  Surface + residue contract (smob_cnob_comm_architect.md §2.6).
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+job: 1
+
+rules:
+
+  - id: cue_conflict_present
+    family: conflict_adjacent
+    cue_id: conflict_adjacent
+    description: "Any CnOB conflict_indicator → conflict-adjacent cue."
+    if:
+      cnob_any_conflict: true
+    emit:
+      source: cnob
+      also_semantic_adjacent: true
+
+  - id: cue_missing_slot
+    family: underspecification_adjacent
+    cue_id: gap_adjacent
+    description: "Any CnOB missing_slot_signal → gap-adjacent cue."
+    if:
+      cnob_any_missing_slot: true
+    emit:
+      source: cnob
+      also_semantic_adjacent: true
+
+  - id: cue_underspec
+    family: underspecification_adjacent
+    cue_id: underspec_adjacent
+    description: "Any CnOB underspecification_marker → underspec-adjacent cue."
+    if:
+      cnob_any_underspec: true
+    emit:
+      source: cnob
+      also_semantic_adjacent: true
+
+  - id: cue_routing
+    family: routing_semantic
+    cue_id: routing_cue
+    description: "Non-empty C7 or routing_constraints → routing semantic cue."
+    if:
+      cnob_c7_or_routing_non_empty: true
+    emit:
+      source: cnob
+      also_semantic_adjacent: true
+
+  - id: cue_modality_from_srob
+    family: modality
+    cue_id_from: srob_modalities
+    description: "Unique SROB segment modalities → modality cues (secondary surface)."
+    if:
+      srob_modalities_non_empty: true
+    emit:
+      source: srob
+      also_semantic_adjacent: false
+
+  - id: cue_importance
+    family: constraint_importance_adjacent
+    cue_id_from: importance_map
+    description: "CnOB constraint_importance present → importance-adjacent path (see smob_importance_rules)."
+    if:
+      cnob_any_constraint_importance: true
+    emit:
+      source: cnob
+      defer_to: smob_importance_rules
