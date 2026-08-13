@@ -1,5 +1,5 @@
 """
-SOB — Structural OB Layer (Version 1.0)
+SOB — Structural OB Layer (Version 1.1)
 Path-A first structural classification primitive.
 
 Responsibilities (exactly six):
@@ -9,6 +9,14 @@ Responsibilities (exactly six):
   4. Extract structural-adjacent hints (operator / domain / tone / constraint)
   5. Form residue fragments
   6. Return structured TP + residue + audit
+
+v1.1 changes:
+  - Morphology is operator-gated: suffix rules only fire when the resulting
+    base form is a known operator (prevents processes→process noise,
+    deterministically→deterministical breakage, etc.).
+  - Explicit morphology map still always applies for known operator variants.
+  - Operator records retain original surface verb + normalized base + source.
+  - Imperative detection also accepts bare operator verbs at sentence start.
 
 Aligned with:
   - 20.40.010_sob_prim.md
@@ -35,6 +43,7 @@ class SOB:
         self.tp = copy.deepcopy(tp_input) if tp_input else {}
         self.dicts = {}
         self._dict_dir = os.path.dirname(__file__)
+        self._op_forms = {}  # surface/base → canonical base
 
     # ----------------------------------------------------------
     # Public API
@@ -42,6 +51,7 @@ class SOB:
 
     def process(self):
         self._load_dictionaries()
+        self._build_operator_index()
         text = self._get_text()
         segments = self._segment(text)
         normalized_segments = self._apply_morphology(segments)
@@ -50,7 +60,6 @@ class SOB:
         residue = self._build_residue(tagged)
         audit = self._build_audit_record(structural_map, residue)
 
-        # Write only SOB-owned fields
         if "structural" not in self.tp:
             self.tp["structural"] = {}
         self.tp["structural"]["sob_structural_map"] = structural_map
@@ -63,7 +72,7 @@ class SOB:
         return self.tp
 
     # ----------------------------------------------------------
-    # Dictionary loading
+    # Dictionary loading + operator index
     # ----------------------------------------------------------
 
     def _load_dictionaries(self):
@@ -85,6 +94,26 @@ class SOB:
                     self.dicts[key] = yaml.safe_load(f) or {}
             else:
                 self.dicts[key] = {}
+
+    def _build_operator_index(self):
+        """Map every known operator surface form → canonical base."""
+        op_forms = {}
+        operators_dict = self.dicts.get("operators", {})
+        for core, forms in (operators_dict.get("operators") or {}).items():
+            core_l = str(core).lower()
+            op_forms[core_l] = core_l
+            if isinstance(forms, list):
+                for form in forms:
+                    op_forms[str(form).lower()] = core_l
+        for form in (operators_dict.get("additional") or []):
+            fl = str(form).lower()
+            op_forms[fl] = fl
+        # Also include explicit morphology targets
+        morph = self.dicts.get("morphology", {})
+        for surface, base in (morph.get("explicit_map") or {}).items():
+            op_forms[str(surface).lower()] = str(base).lower()
+            op_forms[str(base).lower()] = str(base).lower()
+        self._op_forms = op_forms
 
     # ----------------------------------------------------------
     # Text extraction
@@ -113,7 +142,6 @@ class SOB:
             if not stripped:
                 continue
 
-            # Simple list-item detection
             if re.match(r"^[-*+]\s+", stripped) or re.match(r"^\d+\.\s+", stripped):
                 segments.append({
                     "id": f"seg_{seg_id}",
@@ -124,7 +152,6 @@ class SOB:
                 seg_id += 1
                 continue
 
-            # Sentence-level split on . ! ?
             parts = re.split(r"(?<=[.!?])\s+", stripped)
             for part in parts:
                 part = part.strip()
@@ -141,36 +168,56 @@ class SOB:
         return segments
 
     # ----------------------------------------------------------
-    # Morphology normalization
+    # Morphology (operator-gated)
     # ----------------------------------------------------------
 
     def _apply_morphology(self, segments):
         morph = self.dicts.get("morphology", {})
-        explicit = morph.get("explicit_map", {}) or {}
+        explicit = {str(k).lower(): str(v).lower()
+                    for k, v in (morph.get("explicit_map") or {}).items()}
         suffix_rules = morph.get("suffix_rules", []) or []
 
         for seg in segments:
             tokens = re.findall(r"\b[\w'-]+\b", seg["text"].lower())
             normalized = []
             flags = []
+            sources = []  # parallel to tokens: "explicit" | "suffix" | None
+
             for tok in tokens:
+                # 1. Explicit map always wins for known operator variants
                 if tok in explicit:
                     base = explicit[tok]
                     flags.append(f"{tok}→{base}")
                     normalized.append(base)
+                    sources.append("explicit")
                     continue
-                base = tok
+
+                # 2. Suffix rules only if result is a known operator base
+                applied = False
                 for rule in suffix_rules:
                     suf = rule.get("suffix", "")
                     rep = rule.get("replacement", "")
-                    if suf and base.endswith(suf) and len(base) > len(suf) + 1:
-                        base = base[:-len(suf)] + rep
+                    if not suf or not tok.endswith(suf):
+                        continue
+                    if len(tok) <= len(suf) + 1:
+                        continue
+                    candidate = tok[:-len(suf)] + rep
+                    if candidate in self._op_forms:
+                        base = self._op_forms[candidate]
                         flags.append(f"{tok}→{base}")
+                        normalized.append(base)
+                        sources.append("suffix")
+                        applied = True
                         break
-                normalized.append(base)
+
+                if not applied:
+                    normalized.append(tok)
+                    sources.append(None)
+
             seg["tokens"] = tokens
             seg["normalized_tokens"] = normalized
             seg["morphology_flags"] = flags
+            seg["morphology_sources"] = sources
 
         return segments
 
@@ -179,22 +226,11 @@ class SOB:
     # ----------------------------------------------------------
 
     def _lexical_tag(self, segments):
-        operators_dict = self.dicts.get("operators", {})
         domains_dict = self.dicts.get("domains", {})
         tones_dict = self.dicts.get("tones", {})
         constraints_dict = self.dicts.get("constraints", {})
         markers_dict = self.dicts.get("markers", {})
 
-        # Flatten operator forms
-        op_forms = {}
-        for core in (operators_dict.get("operators") or {}).values():
-            if isinstance(core, list):
-                for form in core:
-                    op_forms[form.lower()] = form.lower()
-        for form in (operators_dict.get("additional") or []):
-            op_forms[form.lower()] = form.lower()
-
-        # Domain / tone / constraint marker sets
         domain_markers = {}
         for dom, forms in (domains_dict.get("domains") or {}).items():
             for f in (forms or []):
@@ -215,48 +251,75 @@ class SOB:
 
         for seg in segments:
             text_l = seg["text"].lower()
-            toks = seg.get("normalized_tokens") or seg.get("tokens") or []
+            tokens = seg.get("tokens") or []
+            norms = seg.get("normalized_tokens") or tokens
+            morph_srcs = seg.get("morphology_sources") or [None] * len(tokens)
 
-            # Modality
+            # ----- Modality -----
             modality = "declarative"
-            if text_l.rstrip().endswith("?") or any(t in wh for t in toks[:3]):
+            if text_l.rstrip().endswith("?") or any(t in wh for t in tokens[:3]):
                 modality = "interrogative"
-            elif any(t in cond for t in toks[:4]):
+            elif any(t in cond for t in tokens[:4]):
                 modality = "conditional"
-            elif text_l.startswith(("please ", "let's ", "let us ")) or \
-                 (toks and toks[0] in op_forms and not text_l.rstrip().endswith("?")):
+            elif text_l.startswith(("please ", "let's ", "let us ")):
                 modality = "imperative"
+            elif tokens:
+                # Bare operator (or its normalized form) at start → imperative
+                head = tokens[0]
+                head_n = norms[0] if norms else head
+                if head in self._op_forms or head_n in self._op_forms:
+                    if not text_l.rstrip().endswith("?"):
+                        modality = "imperative"
             seg["modality"] = modality
 
-            # Operators
+            # ----- Operators (preserve surface verb) -----
             ops = []
-            for tok in toks:
-                if tok in op_forms:
+            seen = set()
+            for i, tok in enumerate(tokens):
+                norm = norms[i] if i < len(norms) else tok
+                src_morph = morph_srcs[i] if i < len(morph_srcs) else None
+
+                matched_base = None
+                source = "lexical"
+
+                if tok in self._op_forms:
+                    matched_base = self._op_forms[tok]
+                    source = "morphology" if src_morph else "lexical"
+                elif norm in self._op_forms:
+                    matched_base = self._op_forms[norm]
+                    source = "morphology" if src_morph else "lexical"
+
+                if matched_base and matched_base not in seen:
                     ops.append({
-                        "verb": tok,
-                        "normalized": op_forms[tok],
-                        "source": "morphology" if tok in (seg.get("morphology_flags") or []) else "lexical"
+                        "verb": tok,              # original surface
+                        "normalized": matched_base,
+                        "source": source,
                     })
+                    seen.add(matched_base)
             seg["operators"] = ops
 
-            # Domains / tones / constraints (first match wins for simplicity)
+            # ----- Domains / tones / constraints -----
+            # Match on original tokens (not aggressively normalized ones)
             domains = []
             tones = []
             constraints = []
-            for tok in toks:
+            for tok in tokens:
                 if tok in domain_markers and domain_markers[tok] not in domains:
                     domains.append(domain_markers[tok])
                 if tok in tone_markers and tone_markers[tok] not in tones:
                     tones.append(tone_markers[tok])
                 if tok in constraint_markers and constraint_markers[tok] not in constraints:
                     constraints.append(constraint_markers[tok])
-            # Also scan multi-word / phrase markers lightly
+
             for phrase, dom in domain_markers.items():
                 if " " in phrase and phrase in text_l and dom not in domains:
                     domains.append(dom)
             for phrase, tone in tone_markers.items():
                 if " " in phrase and phrase in text_l and tone not in tones:
                     tones.append(tone)
+            for phrase, c in constraint_markers.items():
+                if " " in phrase and phrase in text_l and c not in constraints:
+                    constraints.append(c)
 
             seg["lexical_domains"] = domains
             seg["lexical_tones"] = tones if tones else ["neutral"]
@@ -324,7 +387,6 @@ class SOB:
             for c in seg.get("lexical_constraints", []):
                 lexical_tags.append({"constraint": c})
 
-        # Detect list structure
         if any(s.get("type") == "list_item" for s in tagged):
             structural_adjacent.append({"list_structure": "unordered"})
 
