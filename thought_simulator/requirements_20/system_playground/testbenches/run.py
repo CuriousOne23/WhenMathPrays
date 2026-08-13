@@ -182,10 +182,33 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: SOB only (or progressive from TPU if desired), input from:
     #   • sob_testbench.yaml (mode = "testbench")
     #   • sob_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
+    #     {
+    #         "mode": "general",      # "general" or "testbench"
+    #         "use_inb": False,        # Upstream primitives ignored
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,        # Set to True if you want progressive TPU → SOB
+    #         "use_sob": True,         # Primitive under test
+
+    #         # Test selection controlled by sob_tests_to_run.yaml (testbench mode only)
+    #         "tests_to_run": "see sob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** SROB Test bench ******************************************************
+    # Highest upstream True = SROB (primitive under test)
+    # Pipeline: SROB only (or progressive from SOB if desired), input from:
+    #   • srob_testbench.yaml (mode = "testbench") — post-SOB shaped TP + expected
+    #   • srob_input.yaml (mode = "general") — post-SOB TP, rule-checked
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.srob_testbench",
         {
-            "mode": "general",      # "general" or "testbench"
+            "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,        # Upstream primitives ignored
             "use_iiinb": False,
             "use_ie": False,
@@ -193,11 +216,12 @@ ACTIVE_TEST_MODULES = [
             "use_cex_ccr": False,
             "use_cex_pck": False,
             "use_ce": False,
-            "use_tpu": False,        # Set to True if you want progressive TPU → SOB
-            "use_sob": True,         # Primitive under test
+            "use_tpu": False,
+            "use_sob": False,        # Set to True if you want progressive SOB → SROB
+            "use_srob": True,        # Primitive under test
 
-            # Test selection controlled by sob_tests_to_run.yaml (testbench mode only)
-            "tests_to_run": "see sob_tests_to_run.yaml",
+            # Test selection controlled by srob_tests_to_run.yaml (testbench mode only)
+            "tests_to_run": "see srob_tests_to_run.yaml",
         }
     ),
 ]
