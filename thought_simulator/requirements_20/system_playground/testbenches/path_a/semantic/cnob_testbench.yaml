@@ -1,0 +1,616 @@
+# ============================================================
+#  CnOB Testbench (Version 1.0)
+#  SROB-shaped inputs + expected CnOB constraint outputs
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+tests:
+
+  # ----------------------------------------------------------
+  - id: cnob_test_001
+    description: "Single declarative + operator → C1; no conflict"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_001"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "The system processes input deterministically."
+              type: sentence
+              modality: declarative
+          operators:
+            - process
+          lexical_domains:
+            - technical_like
+          lexical_tones:
+            - neutral
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags:
+            - operator: process
+          structural_adjacent: []
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: system_behavior
+            stance: neutral
+            intent: inform
+            continuity: moderate
+            direction: forward
+            coherence: medium
+            importance: normal
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+              - family: C1
+                rule_id: c1_operator_present
+                payload:
+                  reason: operator_present
+            C2: []
+            C3: []
+            C4: []
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6: []
+            C7: []
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary:
+            - C1
+            - C5
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
+
+  # ----------------------------------------------------------
+  - id: cnob_test_002
+    description: "List parent/child → C2/C4"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_002"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Steps:"
+              type: sentence
+              modality: declarative
+            - id: seg_1
+              text: "open file"
+              type: list_item
+              modality: declarative
+              depth: 1
+              parent_id: null
+              index_in_parent: 0
+              ordered: false
+            - id: seg_2
+              text: "check encoding"
+              type: list_item
+              modality: declarative
+              depth: 2
+              parent_id: seg_1
+              index_in_parent: 0
+              ordered: false
+          operators: []
+          lexical_domains: []
+          lexical_tones: []
+          lexical_constraints: []
+          discourse_flags: []
+          list_structure:
+            ordered: false
+        srob_residue:
+          refined_tags: []
+          pass_through_tags: []
+          structural_adjacent: []
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: procedure
+            stance: neutral
+            intent: instruct
+            continuity: moderate
+            direction: forward
+            coherence: medium
+            importance: normal
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+            C2:
+              - family: C2
+                rule_id: c2_list_parent_child
+                segment_ids:
+                  - seg_2
+                payload:
+                  reason: list_parent_child
+            C3:
+              - family: C3
+                rule_id: c3_multi_segment_order
+                payload:
+                  reason: multi_segment_order
+            C4:
+              - family: C4
+                rule_id: c4_list_boundary
+                segment_ids:
+                  - seg_1
+                  - seg_2
+                payload:
+                  reason: list_boundary
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6:
+              - family: C6
+                rule_id: c6_multi_segment_change_surface
+                payload:
+                  reason: multi_segment_surface
+            C7: []
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary:
+            - C1
+            - C2
+            - C3
+            - C4
+            - C5
+            - C6
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
+
+  # ----------------------------------------------------------
+  - id: cnob_test_003
+    description: "Empty text → missing_slot"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_003"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Header"
+              type: sentence
+              modality: declarative
+            - id: seg_1
+              text: "   "
+              type: sentence
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones: []
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags: []
+          structural_adjacent: []
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: gap
+            stance: neutral
+            intent: inform
+            continuity: moderate
+            direction: forward
+            coherence: medium
+            importance: normal
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+            C2: []
+            C3:
+              - family: C3
+                rule_id: c3_multi_segment_order
+                payload:
+                  reason: multi_segment_order
+            C4: []
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6:
+              - family: C6
+                rule_id: c6_multi_segment_change_surface
+                payload:
+                  reason: multi_segment_surface
+            C7: []
+          missing_slot_signals:
+            - id: miss_001
+              kind: missing_slot
+              rule_id: miss_empty_text
+              segment_ids:
+                - seg_1
+              participants: []
+              note: empty_text
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - labels:
+                - gap_high
+              segment_ids: []
+              source: gap
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals:
+            - id: miss_001
+              kind: missing_slot
+              rule_id: miss_empty_text
+              segment_ids:
+                - seg_1
+              participants: []
+              note: empty_text
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - labels:
+                - gap_high
+              segment_ids: []
+              source: gap
+          constraint_family_summary:
+            - C1
+            - C3
+            - C5
+            - C6
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
+
+  # ----------------------------------------------------------
+  - id: cnob_test_004
+    description: "Interrogative, no operator → underspecification"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_004"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "What happens next?"
+              type: sentence
+              modality: interrogative
+          operators: []
+          lexical_domains: []
+          lexical_tones: []
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags: []
+          structural_adjacent:
+            - modality: interrogative
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: question
+            stance: neutral
+            intent: clarify
+            continuity: moderate
+            direction: forward
+            coherence: medium
+            importance: normal
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+            C2: []
+            C3: []
+            C4: []
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6: []
+            C7: []
+          missing_slot_signals: []
+          underspecification_markers:
+            - id: under_001
+              kind: underspecification
+              rule_id: under_question_no_operator
+              segment_ids:
+                - seg_0
+              participants: []
+              note: question_without_operator
+          conflict_indicators: []
+          constraint_importance: []
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers:
+            - id: under_001
+              kind: underspecification
+              rule_id: under_question_no_operator
+              segment_ids:
+                - seg_0
+              participants: []
+              note: question_without_operator
+          conflict_indicators: []
+          constraint_importance: []
+          constraint_family_summary:
+            - C1
+            - C5
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
+
+  # ----------------------------------------------------------
+  - id: cnob_test_005
+    description: "precision + conciseness → conflict Q8"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_005"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Be precise and concise."
+              type: sentence
+              modality: imperative
+          operators:
+            - require
+          lexical_domains: []
+          lexical_tones: []
+          lexical_constraints:
+            - precision
+            - conciseness
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags:
+            - constraint: precision
+            - constraint: conciseness
+          structural_adjacent: []
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: style
+            stance: neutral
+            intent: instruct
+            continuity: moderate
+            direction: forward
+            coherence: medium
+            importance: normal
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+              - family: C1
+                rule_id: c1_operator_present
+                payload:
+                  reason: operator_present
+            C2: []
+            C3: []
+            C4: []
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6: []
+            C7:
+              - family: C7
+                rule_id: c7_constraint_hint_present
+                payload:
+                  reason: constraint_hint_present
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators:
+            - id: conf_001
+              kind: conflict
+              rule_id: conf_precision_vs_conciseness
+              segment_ids: []
+              participants:
+                - precision
+                - conciseness
+              note: precision_vs_conciseness
+          constraint_importance:
+            - labels:
+                - conflict_high
+              segment_ids: []
+              source: conflict
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators:
+            - id: conf_001
+              kind: conflict
+              rule_id: conf_precision_vs_conciseness
+              segment_ids: []
+              participants:
+                - precision
+                - conciseness
+              note: precision_vs_conciseness
+          constraint_importance:
+            - labels:
+                - conflict_high
+              segment_ids: []
+              source: conflict
+          constraint_family_summary:
+            - C1
+            - C5
+            - C7
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
+
+  # ----------------------------------------------------------
+  - id: cnob_test_006
+    description: "anchor_like → constraint_anchor"
+    input:
+      tp_identity:
+        tp_id: "tp_cnob_006"
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Identity continuity is high."
+              type: sentence
+              modality: declarative
+              structural_importance:
+                - anchor_like
+          operators:
+            - inform
+          lexical_domains: []
+          lexical_tones: []
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags: []
+          structural_adjacent: []
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+      metadata:
+        context:
+          context_fields:
+            topic: identity
+            stance: neutral
+            intent: inform
+            continuity: strong
+            direction: forward
+            coherence: high
+            importance: high
+        msl: {}
+    expected:
+      structural:
+        cnob_constraint_map:
+          constraint_families:
+            C1:
+              - family: C1
+                rule_id: c1_segment_exists
+                payload:
+                  reason: segment_exists
+              - family: C1
+                rule_id: c1_operator_present
+                payload:
+                  reason: operator_present
+            C2: []
+            C3: []
+            C4: []
+            C5:
+              - family: C5
+                rule_id: c5_segment_id_lineage
+                payload:
+                  reason: segment_id_lineage
+            C6: []
+            C7: []
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - labels:
+                - constraint_anchor
+              segment_ids:
+                - seg_0
+              source: structural
+          discourse_constraints: []
+          lineage_constraints: []
+          routing_constraints: []
+          policy_constraints: []
+        cnob_residue:
+          missing_slot_signals: []
+          underspecification_markers: []
+          conflict_indicators: []
+          constraint_importance:
+            - labels:
+                - constraint_anchor
+              segment_ids:
+                - seg_0
+              source: structural
+          constraint_family_summary:
+            - C1
+            - C5
+          disagreement_flags: []
+          override_flags: []
+          constraint_residue_hash: present
