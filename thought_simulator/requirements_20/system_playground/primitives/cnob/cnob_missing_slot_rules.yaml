@@ -2,6 +2,10 @@
 #  CnOB Missing-Slot / Underspec Rules (Version 1.0)
 #  Gap signals over SROB TP surface
 #  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.3
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on SROB TP surface fields only — NOT on srob_*.yaml key trees.
+#  Surface contract, not dictionary sync (cnob_srob_comm_architect.md §2.4).
 # ============================================================
 
 primitive: CnOB
