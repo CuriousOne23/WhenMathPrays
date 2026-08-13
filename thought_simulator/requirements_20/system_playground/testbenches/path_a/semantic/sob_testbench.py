@@ -1,9 +1,10 @@
 """
-SOB Testbench (Version 1.0)
+SOB Testbench (Version 1.1)
 Correct behavior:
     • mode == "testbench" → load sob_testbench.yaml (input + expected)
     • mode == "general"   → load sob_input.yaml + rulecheck only
     • PASS/FAIL by exact equality (testbench) or rule compliance (general)
+    • On structural FAIL, dump actual vs expected for diagnosis
 """
 
 import os
@@ -47,6 +48,20 @@ def deep_compare(a, b):
     return json.dumps(a, sort_keys=True, default=str) == json.dumps(b, sort_keys=True, default=str)
 
 
+def _normalize_for_compare(obj):
+    """Recursively drop implementation-defined hash fields marked 'present'."""
+    if isinstance(obj, dict):
+        out = {}
+        for k, v in obj.items():
+            if k.endswith("_hash") and v == "present":
+                continue
+            out[k] = _normalize_for_compare(v)
+        return out
+    if isinstance(obj, list):
+        return [_normalize_for_compare(x) for x in obj]
+    return obj
+
+
 def _ctx_summary(tp):
     ctx = (tp or {}).get("metadata", {}).get("context", {}).get("context_fields", {})
     if not ctx:
@@ -77,6 +92,9 @@ def run_single_test(test_entry, mode="testbench"):
     rules_file = os.path.join(BASE_DIR, "sob_rules.yaml")
     rules = load_yaml(rules_file).get("rules", [])
 
+    rule_errors = []
+    tp_output = {}
+
     if mode == "testbench":
         testbench_file = os.path.join(BASE_DIR, "sob_testbench.yaml")
         tb = load_yaml(testbench_file)
@@ -93,30 +111,12 @@ def run_single_test(test_entry, mode="testbench"):
         sob = SOB(copy.deepcopy(tp_input))
         tp_output = sob.process()
 
-        # Compare SOB-owned fields
-        actual_struct = (tp_output.get("structural") or {})
-        expected_struct = (expected.get("structural") or {})
+        actual_struct = _normalize_for_compare(tp_output.get("structural") or {})
+        expected_struct = _normalize_for_compare(expected.get("structural") or {})
 
-        # Soften hash comparison: presence is enough for "present" markers
-        def _normalize_for_compare(obj):
-            if not isinstance(obj, dict):
-                return obj
-            out = {}
-            for k, v in obj.items():
-                if k.endswith("_hash") and v == "present":
-                    continue  # skip exact hash value
-                if isinstance(v, dict):
-                    out[k] = _normalize_for_compare(v)
-                else:
-                    out[k] = v
-            return out
+        structural_match = deep_compare(actual_struct, expected_struct)
 
-        structural_match = deep_compare(
-            _normalize_for_compare(actual_struct),
-            _normalize_for_compare(expected_struct),
-        )
-
-        # Also verify upstream read-only on context if expected supplies it
+        # Upstream read-only check when expected supplies context
         if "metadata" in expected and "context" in expected["metadata"]:
             ctx_in = (tp_input.get("metadata") or {}).get("context", {}).get("context_fields")
             ctx_out = (tp_output.get("metadata") or {}).get("context", {}).get("context_fields")
@@ -126,13 +126,24 @@ def run_single_test(test_entry, mode="testbench"):
         checker = SOBRuleChecker(tp_input, tp_output, rules)
         rule_errors = checker.run()
 
-        # In pure testbench mode, PASS/FAIL is structural equality;
-        # rulechecker is diagnostic only (progressive_lineup §3.1)
+        # Testbench mode: PASS/FAIL by structural equality only
         passed = structural_match
 
         print("\n----- Test Result -----")
         print(f"- {'PASS' if passed else 'FAIL'}: {test_id}")
         print(f"- Structural Match: {'PASS' if structural_match else 'FAIL'}")
+
+        if not structural_match:
+            print("\n----- Structural Diff (actual vs expected) -----")
+            print("ACTUAL structural:")
+            print(json.dumps(actual_struct, indent=2, sort_keys=True, default=str))
+            print("\nEXPECTED structural:")
+            print(json.dumps(expected_struct, indent=2, sort_keys=True, default=str))
+            # Also show audit for diagnosis
+            audit = (tp_output.get("metadata") or {}).get("sob_audit_record")
+            if audit:
+                print("\nACTUAL sob_audit_record:")
+                print(json.dumps(audit, indent=2, sort_keys=True, default=str))
 
         if rule_errors:
             print("- Rule Violations (diagnostic):")
@@ -144,7 +155,6 @@ def run_single_test(test_entry, mode="testbench"):
     else:  # general mode
         input_file = os.path.join(BASE_DIR, "sob_input.yaml")
         tp_input = load_yaml(input_file)
-        # Strip helper keys
         for k in ("mode", "primitive", "version", "notes"):
             tp_input.pop(k, None)
 
@@ -167,7 +177,7 @@ def run_single_test(test_entry, mode="testbench"):
         else:
             print("- Rule Violations: None")
 
-    summary = _ctx_summary(tp_output if 'tp_output' in dir() else {})
+    summary = _ctx_summary(tp_output)
     print("\nContext Summary:")
     for k, v in summary.items():
         print(f"- {k}: {v}")
@@ -176,7 +186,7 @@ def run_single_test(test_entry, mode="testbench"):
         "id": test_id,
         "enabled": True,
         "passed": passed,
-        "errors": rule_errors if 'rule_errors' in dir() else [],
+        "errors": rule_errors,
     }
 
 
@@ -223,6 +233,5 @@ def run_testbench():
 
 
 if __name__ == "__main__":
-    # Allow direct execution for quick checks
     set_testbench_config({"mode": "testbench"})
     run_testbench()
