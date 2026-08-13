@@ -1,17 +1,19 @@
 # **CnOB ↔ SROB Communication Architecture**
 **Document:** `primitives/cnob/cnob_srob_comm_architect.md`  
 **Status:** Design / deliberation (implementation-ready contract)  
-**Version:** 1.0  
+**Version:** 1.1  
 **Purpose:** Make the SROB → CnOB handoff explicit before YAML bodies or `cnob.py`  
 **Aligned with:** 20.40.020 v2.0 (SROB), 20.40.030 v2.0 (CnOB), 20.40.010, tp_path_a_map.md  
-**Non-goals:** Coding, full testbench YAML content (schemas below must be enough to write them)
+**Non-goals:** Coding, full testbench YAML content (schemas must be enough to write them)
 
 ---
 
 ## **1. Why this document exists**
 
 CnOB is the third OB layer. It must not become “SROB 2” or a meaning engine.  
-This file is the **communication contract**: what SROB guarantees, what CnOB does with it, what new object types CnOB owns, and what remains open.
+This file is the **communication contract**: what SROB guarantees, what CnOB does with it, what new object types CnOB owns, **how CnOB is coupled to SROB for support/debug**, and what remains open.
+
+**Support note:** Synchronization bugs between OB layers are expensive. This document states the coupling type **blatantly** so debuggers do not apply the wrong sync model.
 
 ---
 
@@ -43,6 +45,50 @@ Same TP object; CnOB **projects** into constraint space and **derives** constrai
 
 ---
 
+### **2.4 Coupling type: SURFACE CONTRACT — not dictionary sync** *(normative for support)*
+
+**This is the synchronization model. Do not confuse it with SOB ↔ SROB.**
+
+| Coupling | SOB ↔ SROB | **SROB ↔ CnOB** |
+|----------|------------|-----------------|
+| **Kind** | **Vocabulary / dictionary sync** | **TP surface contract** |
+| **Mechanism** | Sharpen-map parents ⊆ SOB coarse ids; fine ids `parent.child` | Rule `if:` predicates over **fields SROB wrote on the TP** |
+| **YAML load** | SROB does not load `sob_*.yaml` for extraction, but maps **must** nest under SOB vocab | CnOB **SHALL NOT** load `srob_*.yaml` or `sob_*.yaml` |
+| **Key-for-key tree sync** | **Required** (desync = hard failure) | **Forbidden as a design goal** — there is no parallel CnOB parent tree of SROB fine ids |
+| **What must stay aligned** | Category inventory | **Field names + tag-space conventions** on the TP |
+| **Where alignment is evident** | Hierarchical ids + load-time `SROB_MAP_DESYNC` | **Readable rule `if:` clauses** + SROB TP field table (§3) |
+| **If a rule “never fires”** | Check map parents vs SOB | Check whether SROB still **emits** the field/convention the `if:` names |
+| **If SROB adds `explain.detail`** | Must hang under `explain` | CnOB usually **unchanged** (cares “operator present,” not which fine child) |
+| **If SROB renames or drops `lexical_constraints`** | N/A to this row | **Handoff/support defect** — update SROB or CnOB predicates; do **not** invent tags inside CnOB |
+
+#### **Blatant support rules**
+
+1. **CnOB does not dictionary-sync to SROB YAMLs.** Never require CnOB rule files to list every `srob_sharpen_maps` parent/child.
+2. **CnOB is synchronized to the SROB TP surface.** Allowed dependencies are only:
+   - `segments[]` (`id`, `type`, `text`, `modality`, list geometry, …)
+   - `operators`, `lexical_domains`, `lexical_tones`, `lexical_constraints`
+   - `discourse_flags`, structural_importance labels
+   - `srob_residue` cues as secondary
+3. **Evidence of coupling must stay in the open:** every CnOB rule condition that depends on SROB must use an **explicit predicate name** that matches §3 field language (e.g. `operators_non_empty`, `lexical_constraints_contains_all`, `any_list_item`). Hidden implicit assumptions are a support hazard.
+4. **Tag-space convention:** names such as `precision` / `conciseness` in conflict rules mean the **same constraint-hint space** SROB puts on `lexical_constraints` (full id or parent/suffix of a fine id). CnOB does not invent a second constraint-hint lexicon.
+5. **Debug order when CnOB looks “wrong”:**
+   1. Inspect **TP after SROB** (map/residue present? field names?)
+   2. Match **rule `if:`** to those fields  
+   3. Only then change CnOB YAMLs  
+   4. Never “fix” by loading `srob_*.yaml` inside CnOB
+6. **Starvation classification:**
+   - Missing SROB fields CnOB needs → **SROB/handoff gap**
+   - Fields present, rule predicates wrong → **CnOB rule bug**
+   - Fields present, predicates OK, wrong constraint *objects* → **CnOB encode bug**
+   - Expectation that CnOB keys track SROB fine-id trees → **wrong sync model** (read this section)
+
+#### **One-line summary**
+
+**SOB↔SROB = synchronized vocab by hierarchical construction.**  
+**SROB↔CnOB = synchronized TP surface contract by explicit rule predicates — evident in `if:` clauses, not by a parallel dictionary tree.**
+
+---
+
 ## **3. What SROB guarantees on the TP (minimum contract)**
 
 After SROB, CnOB expects:
@@ -60,6 +106,8 @@ After SROB, CnOB expects:
 | `metadata.srob_audit_record` | Optional | Provenance / debug only |
 
 **SROB does not guarantee:** C1–C7 objects, missing-slot signals, conflict indicators, constraint-importance residues, constraint-residue hash. Those are **CnOB outputs**.
+
+**Support:** This table is the **authoritative surface checklist** for SROB↔CnOB synchronization issues.
 
 ---
 
@@ -80,8 +128,6 @@ CnOB **extracts monotonic constraint residue** from SROB’s refined structure a
 | **E. Addressing** | Canonicalize + hash constraint residue | Soft similarity / “like ideas” |
 
 ### **4.3 C1–C7 — meaning for implementation (v1 thin definitions)**
-
-These are **enough to write rules and goldens**. Deepen later without renaming families.
 
 | Family | Name | v1 trigger examples (from SROB surface) |
 |--------|------|----------------------------------------|
@@ -105,8 +151,6 @@ CnOB **records** conflict; it does **not** enforce a resolution.
 
 ### **4.5 Constraint-importance (v1)**
 
-Map from SROB structural-importance (and/or structural position) under `cnob_importance_rules.yaml`:
-
 | Example structural cue | Example constraint-importance labels |
 |------------------------|--------------------------------------|
 | `anchor_like` / first sentence | `constraint_anchor` |
@@ -114,7 +158,7 @@ Map from SROB structural-importance (and/or structural position) under `cnob_imp
 | conflict present | `conflict_high` |
 | missing_slot present | `gap_high` |
 
-Multi-label **allowed** (parallel to SROB P5).
+Multi-label **allowed**.
 
 ### **4.6 Shall / shall not**
 
@@ -124,6 +168,7 @@ Multi-label **allowed** (parallel to SROB P5).
 | Emit C1–C7, gap, conflict, importance | Re-normalize structure |
 | Write owned fields only | Invent segments or tag **types** |
 | Hash constraint residue | Enforce constraints on user text |
+| Keep rule predicates explicit vs §3 surface | Assume hierarchical sync with `srob_*.yaml` |
 | Stay bounded constraint-domain | Deep meaning, truth, referents, stance-as-conclusion |
 | Monotonic within one `process()` | Remove constraints mid-construction |
 
@@ -140,6 +185,7 @@ SOB → SROB
         ▼
       CnOB   ← reads SROB fields from TP only
         │       (does not load srob_*.yaml / sob_*.yaml)
+        │       surface-contract coupling only (§2.4)
         │  writes:
         │    structural.cnob_constraint_map
         │    structural.cnob_residue
@@ -160,7 +206,7 @@ SOB → SROB
 | `cnob_conflict_rules.yaml` | conflict indicators |
 | `cnob_importance_rules.yaml` | structural-importance → constraint-importance |
 
-Optional later: split discourse rules; diagnostic schema.
+Each file’s header SHALL state: depends on **SROB TP surface**, not on `srob_*.yaml` key trees.
 
 ---
 
@@ -173,19 +219,17 @@ Optional later: split discourse rules; diagnostic schema.
 | **IdOB** | Reduced space: obligations/gaps visible; content still often TPU |
 | **ISc** | Constraint features for scoring |
 
-Not a substitute for SmOB cue compression, RB policy, or IdOB identity work.
-
 ---
 
 ## **8. Advantages / disadvantages / holes / concerns**
 
-**Advantages:** Orthogonal to SROB; falsifiable sufficiency; parallel software shape to SROB; testable C1–C7; human-league gap visibility (missing/conflict).
+**Advantages:** Orthogonal to SROB; falsifiable sufficiency; parallel software shape; testable C1–C7; explicit surface-contract for support.
 
-**Disadvantages:** More TP maps to reason about; thin C1–C7 may feel sparse until rules grow; conflict rules can be noisy if over-broad.
+**Disadvantages:** More TP maps; thin C1–C7 until rules grow; conflict rules can be noisy.
 
-**Holes:** Exact conflict inventory; how aggressive missing-slot from operator-alone should be; progressive-lineup without SROB (SOB-only fallback scope).
+**Holes:** Exact conflict inventory; progressive-lineup without SROB.
 
-**Concerns:** Semantic creep (“infer the missing answer”); double-counting SROB constraint *tags* vs CnOB constraint *objects*; consumers ignoring CnOB and re-parsing structure.
+**Concerns:** Semantic creep; wrong sync model (treating CnOB like SROB vocab maps); consumers ignoring CnOB.
 
 ---
 
@@ -196,17 +240,18 @@ Not a substitute for SmOB cue compression, RB policy, or IdOB identity work.
 | **Q1** | Map style | **Full** `cnob_constraint_map` every run |
 | **Q2** | Segment binding | Constraint signals **reference SROB/SOB segment ids**; no renumber |
 | **Q3** | Multi-label importance | **Allowed** |
-| **Q4** | Empty constraints | Allowed: empty family lists + explicit no-gap; still emit full map |
-| **Q5** | SROB required | **Required** in full Path-A; SOB-only only if SROB absent (isolation tests) |
-| **Q6** | Schema authority | **`cnob_py_struc_pgm.md`** owns normative v1 schemas |
-| **Q7** | Hash input | Canonical serialization of `cnob_constraint_map` + core residue signals |
-| **Q8** | Conflict on tag pair precision+conciseness | **Yes** as v1 example rule |
+| **Q4** | Empty constraints | Allowed; still emit full map |
+| **Q5** | SROB required | **Required** in full Path-A |
+| **Q6** | Schema authority | **`cnob_py_struc_pgm.md`** |
+| **Q7** | Hash input | Canonical map + core residue signals |
+| **Q8** | Conflict precision+conciseness | **Yes** v1 example |
+| **Q9** | Coupling model | **Surface contract only** (§2.4) — settled |
 
 ---
 
 ## **10. Settled vs open**
 
-**Settled:** Orthogonal constraint window; no-surprise from SROB; TP-only handoff; no YAML load of SROB/SOB; owned fields; C1–C7 names; thin gap/conflict/importance; Q1–Q8 leans for v1.
+**Settled:** Orthogonal window; no-surprise; TP-only handoff; **surface-contract coupling (not dictionary sync)**; no YAML load of SROB/SOB; owned fields; C1–C7; Q1–Q9.
 
 **Still open for later depth:** Richer C6; policy_constraints body; soft similarity (out of scope for hash).
 
@@ -214,11 +259,11 @@ Not a substitute for SmOB cue compression, RB policy, or IdOB identity work.
 
 ## **11. Testbench readiness note**
 
-`cnob_py_struc_pgm.md` pins normative schemas.  
-`cnob_testbench.yaml` SHALL use **SROB-shaped TP inputs** (post-SROB), not raw text only, and expected blocks matching those schemas (parallel to SROB tests using SOB-shaped inputs).
+`cnob_testbench.yaml` SHALL use **SROB-shaped TP inputs** and expected blocks matching `cnob_py_struc_pgm.md`.  
+Failures that look like “sync” issues SHALL be triaged with §2.4 debug order.
 
 ---
 
-**End of `cnob_srob_comm_architect.md` (v1.0)**
+**End of `cnob_srob_comm_architect.md` (v1.1)**
 
 ---
