@@ -2,6 +2,10 @@
 #  CnOB Importance Rules (Version 1.0)
 #  structural-importance / gaps / conflicts → constraint-importance
 #  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.5, Q3 multi-label
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on SROB TP surface fields only — NOT on srob_*.yaml key trees.
+#  Surface contract, not dictionary sync (cnob_srob_comm_architect.md §2.4).
 # ============================================================
 
 primitive: CnOB
