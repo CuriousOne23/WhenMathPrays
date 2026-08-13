@@ -2,6 +2,11 @@
 #  CnOB Conflict Rules (Version 1.0)
 #  Structured conflict indicators (record only; no enforcement)
 #  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.4, Q8
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on SROB TP surface fields only — NOT on srob_*.yaml key trees.
+#  Surface contract, not dictionary sync (cnob_srob_comm_architect.md §2.4).
+#  Tag names (precision, conciseness) share SROB lexical_constraints space.
 # ============================================================
 
 primitive: CnOB
