@@ -1,1 +1,86 @@
+# sob_markers.yaml
+# SOB-owned markers dictionary
+# Purpose: Wh-markers and conditional markers for modality classification
+# (interrogative, conditional, hypothetical) and structural residue.
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010, sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Lexical markers used by SOB for structural modality cues and discourse-context
+  residue. Supports interrogative, conditional, and hypothetical classification
+  without intent inference.
+
+# ---------------------------------------------------------------------------
+# Wh-markers (interrogative / relative)
+# ---------------------------------------------------------------------------
+wh_markers:
+  - who
+  - whom
+  - whose
+  - what
+  - which
+  - where
+  - when
+  - why
+  - how
+  - whether
+  - whichever
+  - whatever
+  - whoever
+  - whomever
+  - wherever
+  - whenever
+  - however
+
+# ---------------------------------------------------------------------------
+# Conditional / hypothetical markers
+# ---------------------------------------------------------------------------
+conditional_markers:
+  - if
+  - unless
+  - provided that
+  - provided
+  - in case
+  - in the event that
+  - on condition that
+  - as long as
+  - so long as
+  - only if
+  - even if
+  - whether or not
+  - should   # inverted conditional
+  - were    # subjunctive
+  - had     # past perfect conditional inversion
+  - suppose
+  - supposing
+  - assuming
+  - given that
+  - provided always that
+
+# ---------------------------------------------------------------------------
+# Other structural markers useful for modality / discourse residue
+# ---------------------------------------------------------------------------
+other_markers:
+  - please          # often softens imperative
+  - let's
+  - let us
+  - would you
+  - could you
+  - can you
+  - will you
+  - shall we
+  - why not
+  - how about
+  - what if
+  - as if
+  - as though
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Case-insensitive matching.
+# - These markers feed modality classification (interrogative / conditional /
+#   hypothetical) and discourse-context residue only.
+# - No semantic role assignment or intent inference is performed here.
+# ---------------------------------------------------------------------------
