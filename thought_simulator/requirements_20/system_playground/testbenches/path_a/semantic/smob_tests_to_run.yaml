@@ -1,0 +1,31 @@
+# ============================================================
+#  SmOB Tests To Run (Version 1.0)
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+
+tests:
+  - id: smob_test_001
+    description: "Clean C1/C5 only — no conflict/underspec; hash present"
+    enabled: true
+
+  - id: smob_test_002
+    description: "CnOB conflict → conflict_adjacent + TR conflict slot"
+    enabled: true
+
+  - id: smob_test_003
+    description: "missing_slot → gap_adjacent"
+    enabled: true
+
+  - id: smob_test_004
+    description: "underspec marker → underspec_adjacent"
+    enabled: true
+
+  - id: smob_test_005
+    description: "C7 non-empty → routing_semantic_cues"
+    enabled: true
+
+  - id: smob_test_006
+    description: "constraint_importance gap_high → sa_gap_high"
+    enabled: true
