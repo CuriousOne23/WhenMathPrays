@@ -1,0 +1,60 @@
+# ============================================================
+#  SmOB Compress Rules (Version 1.0)
+#  Job 2 — TR-input vector slots + hash inclusion
+#  Aligned with: 20.40.040 Job 2, smob_py_struc_pgm.md §5.4–5.5, §6.3
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Compresses SmOB cue outputs derived from CnOB TP residue.
+#  Does not load cnob_*.yaml.
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+job: 2
+
+# Fixed ordered TR slots (R8). Empty string if inactive.
+tr_slots:
+  - index: 0
+    name: modality
+    fill: first_modality_cue_id
+
+  - index: 1
+    name: conflict
+    fill: constant_if_family_non_empty
+    family: conflict_adjacent
+    value: conflict_adjacent
+
+  - index: 2
+    name: underspec
+    fill: constant_if_family_non_empty
+    family: underspecification_adjacent
+    value: underspec_adjacent
+
+  - index: 3
+    name: importance
+    fill: first_importance_adjacent_label
+
+  - index: 4
+    name: routing
+    fill: constant_if_family_non_empty
+    family: routing_semantic
+    value: routing_cue
+
+  - index: 5
+    name: discourse
+    fill: first_discourse_adjacent_id
+
+# Hash inclusion (R6): canonical serialize these, excluding the hash field itself.
+hash_include:
+  - smob_cue_map
+  - residue_signal_arrays
+  - tr_input_cues
+
+hash:
+  algorithm: sha256
+  truncate_hex: 16
+
+# Forbidden for change/hash inputs
+forbidden_inputs:
+  - routing_metadata
+  - pipeline_b_delta_h_envelopes
