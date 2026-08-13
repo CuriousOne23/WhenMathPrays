@@ -1,0 +1,698 @@
+# ============================================================
+#  SROB Testbench (Version 1.0)
+# ============================================================
+# Path-A Structural Refinement OB (SROB) — deterministic testbench mode
+# Input is post-SOB TP (sob_structural_map / sob_residue), not raw text alone.
+# Expected conforms to srob_py_struc_pgm.md v1.1 (P1–P6).
+# Aligned with:
+#   - 20.40.020_srob_prim.md v2.0
+#   - srob_software_architecture.md
+#   - srob_py_struc_pgm.md v1.1
+#   - srob_sob_comm_architect.md
+#   - srob_normalize_rules.yaml / srob_sharpen_maps.yaml / srob_importance_rules.yaml
+#   - progressive_lineup_testing.md
+# ============================================================
+
+mode: testbench
+primitive: SROB
+version: "1.0"
+
+metadata:
+  description: >
+    Validates SROB structure normalization, tag pass-through / single-child
+    sharpen (P3), unmapped coarse pass-through (P4), segment id preservation
+    (P1), full srob_structural_map (P2), multi-label importance (P5),
+    owned-field writes only, and no re-lex of raw text.
+  upstream:
+    - SOB
+  passthrough_allowed: false
+  progressive_lineup_compatible: true
+  support_files_required:
+    - srob_normalize_rules.yaml
+    - srob_sharpen_maps.yaml
+    - srob_importance_rules.yaml
+  schema_authority: srob_py_struc_pgm.md v1.1
+
+tests:
+
+  # ------------------------------------------------------------
+  # 1. Multi-child operator → pass-through coarse (P3)
+  # ------------------------------------------------------------
+  - id: srob_test_001
+    description: >
+      SOB emitted operator explain (multi-child in sharpen map).
+      Primary operators stay "explain" (pass-through). Optional
+      available_refinements may list fine ids; not required for PASS
+      if checker ignores optional diagnostics.
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_001"
+        tp_seq: 1
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Can you explain the routing decision?"
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Can you explain the routing decision?"
+              type: sentence
+              modality: interrogative
+          operators:
+            - verb: "explain"
+              normalized: "explain"
+              source: "lexical"
+          lexical_domains: []
+          lexical_tones:
+            - "neutral"
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "explain"
+          structural_adjacent:
+            - modality: interrogative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "routing"
+            stance: "neutral"
+            intent: "clarify"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+          context_provenance:
+            origin: "CE"
+            last_update: "SOB"
+            commit_lineage: ["c002"]
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+
+    expected:
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Can you explain the routing decision?"
+              type: sentence
+              modality: interrogative
+              structural_importance:
+                - anchor_like
+          operators:
+            - "explain"
+          lexical_domains: []
+          lexical_tones:
+            - "neutral.default"
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags:
+            - tone: "neutral.default"
+          pass_through_tags:
+            - operator: "explain"
+          structural_adjacent:
+            - modality: interrogative
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+
+  # ------------------------------------------------------------
+  # 2. List normalize: depth, parent_id, preserve SOB ids (P1)
+  # ------------------------------------------------------------
+  - id: srob_test_002
+    description: >
+      Coarse SOB list segments refined with depth/parent_id.
+      Segment ids seg_0..seg_3 preserved. list_lead on first item.
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_002"
+        tp_seq: 2
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: |
+          First consider the following items:
+          - stability
+          - continuity
+          Then finalize the commit.
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "First consider the following items:"
+              type: sentence
+              modality: declarative
+            - id: seg_1
+              text: "- stability"
+              type: list_item
+              modality: declarative
+            - id: seg_2
+              text: "- continuity"
+              type: list_item
+              modality: declarative
+            - id: seg_3
+              text: "Then finalize the commit."
+              type: sentence
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones:
+            - "neutral"
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags: []
+          structural_adjacent:
+            - modality: declarative
+            - list_structure: unordered
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "commit_prep"
+            stance: "neutral"
+            intent: "instruct"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+
+    expected:
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "First consider the following items:"
+              type: sentence
+              modality: declarative
+              structural_importance:
+                - anchor_like
+            - id: seg_1
+              text: "- stability"
+              type: list_item
+              modality: declarative
+              depth: 1
+              parent_id: null
+              index_in_parent: 0
+              ordered: false
+              structural_importance:
+                - list_lead
+                - list_member
+            - id: seg_2
+              text: "- continuity"
+              type: list_item
+              modality: declarative
+              depth: 1
+              parent_id: null
+              index_in_parent: 1
+              ordered: false
+              structural_importance:
+                - list_member
+            - id: seg_3
+              text: "Then finalize the commit."
+              type: sentence
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones:
+            - "neutral.default"
+          lexical_constraints: []
+          discourse_flags: []
+          list_structure:
+            ordered: false
+        srob_residue:
+          refined_tags:
+            - tone: "neutral.default"
+          pass_through_tags: []
+          structural_adjacent:
+            - modality: declarative
+            - list_structure: unordered
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+
+  # ------------------------------------------------------------
+  # 3. Rich tags: multi-child families stay coarse (P3)
+  # ------------------------------------------------------------
+  - id: srob_test_003
+    description: >
+      implement / domains / tones / constraints all multi-child in maps
+      except where single child applies. Primary tags pass-through coarse
+      for multi-child; supportive stays supportive (multi); precision stays
+      precision (multi).
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_003"
+        tp_seq: 3
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Please implement the function with precise parameter checking."
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please implement the function with precise parameter checking."
+              type: sentence
+              modality: imperative
+          operators:
+            - verb: "implement"
+              normalized: "implement"
+              source: "lexical"
+          lexical_domains:
+            - "conversational_like"
+            - "code_like"
+            - "technical_like"
+          lexical_tones:
+            - "supportive"
+            - "technical"
+          lexical_constraints:
+            - "politeness"
+            - "precision"
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "implement"
+            - domain: "conversational_like"
+            - domain: "code_like"
+            - domain: "technical_like"
+            - tone: "supportive"
+            - tone: "technical"
+            - constraint: "politeness"
+            - constraint: "precision"
+          structural_adjacent:
+            - modality: imperative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "implementation"
+            stance: "neutral"
+            intent: "request"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+
+    expected:
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please implement the function with precise parameter checking."
+              type: sentence
+              modality: imperative
+              structural_importance:
+                - anchor_like
+          operators:
+            - "implement"
+          lexical_domains:
+            - "conversational_like"
+            - "code_like"
+            - "technical_like"
+          lexical_tones:
+            - "supportive"
+            - "technical"
+          lexical_constraints:
+            - "politeness"
+            - "precision"
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags:
+            - operator: "implement"
+            - domain: "conversational_like"
+            - domain: "code_like"
+            - domain: "technical_like"
+            - tone: "supportive"
+            - tone: "technical"
+            - constraint: "politeness"
+            - constraint: "precision"
+          structural_adjacent:
+            - modality: imperative
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+
+  # ------------------------------------------------------------
+  # 4. Empty refinements operator + single-child tone (P3)
+  # ------------------------------------------------------------
+  - id: srob_test_004
+    description: >
+      operator analyze has refinements: [] → pass-through analyze.
+      tone neutral has single child neutral.default → may refine.
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_004"
+        tp_seq: 4
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Analyze the referent stability."
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Analyze the referent stability."
+              type: sentence
+              modality: imperative
+          operators:
+            - verb: "analyze"
+              normalized: "analyze"
+              source: "lexical"
+          lexical_domains: []
+          lexical_tones:
+            - "neutral"
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "analyze"
+          structural_adjacent:
+            - modality: imperative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "identity"
+            stance: "neutral"
+            intent: "instruct"
+            continuity: "strong"
+            direction: "forward"
+            coherence: "high"
+            importance: "high"
+
+    expected:
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Analyze the referent stability."
+              type: sentence
+              modality: imperative
+              structural_importance:
+                - anchor_like
+          operators:
+            - "analyze"
+          lexical_domains: []
+          lexical_tones:
+            - "neutral.default"
+          lexical_constraints: []
+          discourse_flags: []
+        srob_residue:
+          refined_tags:
+            - tone: "neutral.default"
+          pass_through_tags:
+            - operator: "analyze"
+          structural_adjacent:
+            - modality: imperative
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
+
+  # ------------------------------------------------------------
+  # 5. Unmapped coarse (P4) + upstream envelopes unchanged
+  # ------------------------------------------------------------
+  - id: srob_test_005
+    description: >
+      Operator custom_op is not in sharpen map → pass-through +
+      unmapped_coarse diagnostic. context_fields / msl must remain
+      unchanged (SROB writes only owned fields).
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_005"
+        tp_seq: 5
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Please custom_op the pipeline carefully."
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please custom_op the pipeline carefully."
+              type: sentence
+              modality: imperative
+          operators:
+            - verb: "custom_op"
+              normalized: "custom_op"
+              source: "lexical"
+          lexical_domains: []
+          lexical_tones:
+            - "supportive"
+          lexical_constraints:
+            - "politeness"
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "custom_op"
+            - tone: "supportive"
+            - constraint: "politeness"
+          structural_adjacent:
+            - modality: imperative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "pipeline"
+            stance: "neutral"
+            intent: "request"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "SOB"
+            commit_lineage: ["c005"]
+        msl:
+          qualifiers: ["careful"]
+          stance: "neutral"
+
+    expected:
+      metadata:
+        context:
+          context_fields:
+            topic: "pipeline"
+            stance: "neutral"
+            intent: "request"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "SOB"
+            commit_lineage: ["c005"]
+        msl:
+          qualifiers: ["careful"]
+          stance: "neutral"
+
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please custom_op the pipeline carefully."
+              type: sentence
+              modality: imperative
+              structural_importance:
+                - anchor_like
+          operators:
+            - "custom_op"
+          lexical_domains: []
+          lexical_tones:
+            - "supportive"
+          lexical_constraints:
+            - "politeness"
+          discourse_flags: []
+        srob_residue:
+          refined_tags: []
+          pass_through_tags:
+            - operator: "custom_op"
+            - tone: "supportive"
+            - constraint: "politeness"
+          structural_adjacent:
+            - modality: imperative
+          unmapped_coarse:
+            - operator: "custom_op"
+          disagreement_flags: []
+          override_flags: []
+
+  # ------------------------------------------------------------
+  # 6. Nested list depth + discourse canonicalize
+  # ------------------------------------------------------------
+  - id: srob_test_006
+    description: >
+      Nested list_item gets depth 2 and parent_id seg_1.
+      Discourse flag temporal_marker canonicalizes to temporal_shift.
+    input:
+      tp_identity:
+        tp_id: "tp_srob_test_006"
+        tp_seq: 6
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: |
+          Steps:
+          - open file
+            - check encoding
+          - save
+
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Steps:"
+              type: sentence
+              modality: declarative
+            - id: seg_1
+              text: "- open file"
+              type: list_item
+              modality: declarative
+            - id: seg_2
+              text: "  - check encoding"
+              type: list_item
+              modality: declarative
+            - id: seg_3
+              text: "- save"
+              type: list_item
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones:
+            - "neutral"
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags: []
+          structural_adjacent:
+            - modality: declarative
+            - list_structure: unordered
+            - temporal_marker: true
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        context:
+          context_fields:
+            topic: "procedure"
+            stance: "neutral"
+            intent: "instruct"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+
+    expected:
+      structural:
+        srob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Steps:"
+              type: sentence
+              modality: declarative
+              structural_importance:
+                - anchor_like
+            - id: seg_1
+              text: "- open file"
+              type: list_item
+              modality: declarative
+              depth: 1
+              parent_id: null
+              index_in_parent: 0
+              ordered: false
+              structural_importance:
+                - list_lead
+                - list_member
+            - id: seg_2
+              text: "  - check encoding"
+              type: list_item
+              modality: declarative
+              depth: 2
+              parent_id: seg_1
+              index_in_parent: 0
+              ordered: false
+              structural_importance:
+                - list_member
+            - id: seg_3
+              text: "- save"
+              type: list_item
+              modality: declarative
+              depth: 1
+              parent_id: null
+              index_in_parent: 1
+              ordered: false
+              structural_importance:
+                - list_member
+          operators: []
+          lexical_domains: []
+          lexical_tones:
+            - "neutral.default"
+          lexical_constraints: []
+          discourse_flags:
+            - "temporal_shift"
+          list_structure:
+            ordered: false
+        srob_residue:
+          refined_tags:
+            - tone: "neutral.default"
+          pass_through_tags: []
+          structural_adjacent:
+            - modality: declarative
+            - list_structure: unordered
+          unmapped_coarse: []
+          disagreement_flags: []
+          override_flags: []
