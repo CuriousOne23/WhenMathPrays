@@ -1,0 +1,574 @@
+# ============================================================
+#  SOB Testbench (Version 1.0)
+# ============================================================
+# Path-A Structural OB (SOB) — deterministic testbench mode
+# Source of truth for exact input → expected output comparison
+# Aligned with:
+#   - 20.40.010_sob_prim.md
+#   - progressive_lineup_testing.md (v4.0)
+#   - tp_path_a_map.md, tp_context_layer.md, tp_commit.md
+#   - sob_software_architecture.md + sob dictionaries
+# ============================================================
+
+mode: testbench
+primitive: SOB
+version: "1.0"
+
+metadata:
+  description: >
+    Validates SOB structural segmentation, modality classification,
+    operator/domain/tone/constraint hint extraction, morphology
+    normalization, sob_structural_map / sob_residue / sob_audit_record
+    production, read-only discipline on upstream envelopes, and
+    deterministic replay behavior.
+  upstream:
+    - TPU
+    - CE
+    - CEx
+  passthrough_allowed: false
+  progressive_lineup_compatible: true
+  dictionaries_required:
+    - sob_dictionary.yaml
+    - sob_operators.yaml
+    - sob_markers.yaml
+    - sob_punctuation.yaml
+    - sob_domains.yaml
+    - sob_tones.yaml
+    - sob_constraints.yaml
+    - sob_morphology.yaml
+
+tests:
+
+  # ------------------------------------------------------------
+  # 1. Happy-path structural segmentation + basic residue
+  # ------------------------------------------------------------
+  - id: sob_test_001
+    description: >
+      Simple declarative sentence. Expects sentence segment, declarative
+      modality, empty operator list, neutral domain/tone, and a complete
+      sob_audit_record.
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_001"
+        tp_seq: 1
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      # Minimal committed intake text (post-TPU)
+      intake:
+        text: "The system processes the input deterministically."
+
+      metadata:
+        context:
+          context_fields:
+            topic: "system_behavior"
+            stance: "neutral"
+            intent: "inform"
+            register: "technical"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c001"]
+
+        # Upstream signals that SOB may read (read-only)
+        msl: {}
+        semantic_residue: {}
+
+    expected:
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "The system processes the input deterministically."
+              type: sentence
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones: ["neutral"]
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags: []
+          structural_adjacent:
+            - modality: declarative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "single_sentence"
+          morphology_decisions: []
+          lexical_tagging_decisions: []
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          # hashes are implementation-defined but must be present & stable
+          sob_structural_map_hash: present
+          sob_residue_hash: present
+
+  # ------------------------------------------------------------
+  # 2. Interrogative modality + operator hint
+  # ------------------------------------------------------------
+  - id: sob_test_002
+    description: >
+      Interrogative sentence containing an operator verb ("explain").
+      Expects interrogative modality and operator residue.
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_002"
+        tp_seq: 2
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Can you explain the routing decision?"
+
+      metadata:
+        context:
+          context_fields:
+            topic: "routing"
+            stance: "neutral"
+            intent: "clarify"
+            register: "casual"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c002"]
+
+    expected:
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Can you explain the routing decision?"
+              type: sentence
+              modality: interrogative
+          operators:
+            - verb: "explain"
+              normalized: "explain"
+              source: "lexical"
+          lexical_domains: []
+          lexical_tones: ["neutral"]
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "explain"
+          structural_adjacent:
+            - modality: interrogative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "single_sentence"
+          morphology_decisions: []
+          lexical_tagging_decisions:
+            - "operator:explain"
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          sob_structural_map_hash: present
+          sob_residue_hash: present
+
+  # ------------------------------------------------------------
+  # 3. Morphology normalization (operator + suffix)
+  # ------------------------------------------------------------
+  - id: sob_test_003
+    description: >
+      Operator appears in progressive form ("summarizing"). Morphology
+      must normalize to base form "summarize" before matching.
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_003"
+        tp_seq: 3
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Please start summarizing the previous turn."
+
+      metadata:
+        context:
+          context_fields:
+            topic: "summarization"
+            stance: "neutral"
+            intent: "request"
+            register: "casual"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c003"]
+
+    expected:
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please start summarizing the previous turn."
+              type: sentence
+              modality: imperative
+          operators:
+            - verb: "summarizing"
+              normalized: "summarize"
+              source: "morphology"
+          lexical_domains: []
+          lexical_tones: ["neutral"]
+          lexical_constraints: []
+          morphology_flags:
+            - "summarizing→summarize"
+        sob_residue:
+          lexical_tags:
+            - operator: "summarize"
+          structural_adjacent:
+            - modality: imperative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "single_sentence"
+          morphology_decisions:
+            - "summarizing→summarize"
+          lexical_tagging_decisions:
+            - "operator:summarize"
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          sob_structural_map_hash: present
+          sob_residue_hash: present
+
+  # ------------------------------------------------------------
+  # 4. Domain + tone + constraint hints
+  # ------------------------------------------------------------
+  - id: sob_test_004
+    description: >
+      Sentence containing lexical cues for domain (code-like), tone
+      (technical), and constraint (precision). All become residue.
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_004"
+        tp_seq: 4
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "Please implement the function with precise parameter checking."
+
+      metadata:
+        context:
+          context_fields:
+            topic: "implementation"
+            stance: "neutral"
+            intent: "request"
+            register: "technical"
+            politeness: "medium"
+            tone: "technical"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c004"]
+
+    expected:
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "Please implement the function with precise parameter checking."
+              type: sentence
+              modality: imperative
+          operators:
+            - verb: "implement"
+              normalized: "implement"
+              source: "lexical"
+          lexical_domains:
+            - "code_like"
+          lexical_tones:
+            - "technical"
+          lexical_constraints:
+            - "precision"
+          morphology_flags: []
+        sob_residue:
+          lexical_tags:
+            - operator: "implement"
+            - domain: "code_like"
+            - tone: "technical"
+            - constraint: "precision"
+          structural_adjacent:
+            - modality: imperative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "single_sentence"
+          morphology_decisions: []
+          lexical_tagging_decisions:
+            - "operator:implement"
+            - "domain:code_like"
+            - "tone:technical"
+            - "constraint:precision"
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          sob_structural_map_hash: present
+          sob_residue_hash: present
+
+  # ------------------------------------------------------------
+  # 5. Boundary discipline — SOB must not mutate upstream envelopes
+  # ------------------------------------------------------------
+  - id: sob_test_005
+    description: >
+      Verifies that context_fields, MSL, semantic_core (if present), and
+      other upstream envelopes remain byte-identical after SOB execution.
+      Only SOB-owned fields may appear or change.
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_005"
+        tp_seq: 5
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: "The referent remains stable across turns."
+
+      metadata:
+        context:
+          context_fields:
+            topic: "identity"
+            stance: "neutral"
+            intent: "inform"
+            register: "technical"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "strong"
+            direction: "forward"
+            coherence: "high"
+            importance: "high"
+            clarifying_fields: ["referent"]
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c005"]
+        msl:
+          qualifiers: ["stable"]
+          stance: "neutral"
+          direction: "forward"
+          coherence: "high"
+        semantic_residue:
+          entities: []
+          facts: []
+
+    expected:
+      # Upstream envelopes must be unchanged (read-only discipline)
+      metadata:
+        context:
+          context_fields:
+            topic: "identity"
+            stance: "neutral"
+            intent: "inform"
+            register: "technical"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "strong"
+            direction: "forward"
+            coherence: "high"
+            importance: "high"
+            clarifying_fields: ["referent"]
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c005"]
+        msl:
+          qualifiers: ["stable"]
+          stance: "neutral"
+          direction: "forward"
+          coherence: "high"\n      # Only SOB-owned fields are written
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "The referent remains stable across turns."
+              type: sentence
+              modality: declarative
+          operators: []
+          lexical_domains: []
+          lexical_tones: ["neutral"]
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags: []
+          structural_adjacent:
+            - modality: declarative
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "single_sentence"
+          morphology_decisions: []
+          lexical_tagging_decisions: []
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          sob_structural_map_hash: present
+          sob_residue_hash: present
+
+  # ------------------------------------------------------------
+  # 6. Multi-segment + list structure (order preservation)
+  # ------------------------------------------------------------
+  - id: sob_test_006
+    description: >
+      Input containing two sentences and a simple unordered list.
+      SOB must preserve order of structural units exactly (HLR-002).
+    input:
+      tp_identity:
+        tp_id: "tp_sob_test_006"
+        tp_seq: 6
+        cycle_id: 1
+        lane_id: "A"
+        schema_version: "1.0"
+        profile_signature: "default"
+        wire_map_version: "1.0"
+        policy_signature: "default"
+
+      intake:
+        text: |
+          First consider the following items:
+          - stability
+          - continuity
+          Then finalize the commit.
+
+      metadata:
+        context:
+          context_fields:
+            topic: "commit_prep"
+            stance: "neutral"
+            intent: "instruct"
+            register: "technical"
+            politeness: "medium"
+            tone: "neutral"
+            continuity: "moderate"
+            direction: "forward"
+            coherence: "medium"
+            importance: "normal"
+            clarifying_fields: []
+          context_provenance:
+            origin: "CE"
+            last_update: "CE"
+            commit_lineage: ["c006"]
+
+    expected:
+      structural:
+        sob_structural_map:
+          segments:
+            - id: seg_0
+              text: "First consider the following items:"
+              type: sentence
+              modality: imperative
+            - id: seg_1
+              text: "- stability"
+              type: list_item
+              modality: declarative
+            - id: seg_2
+              text: "- continuity"
+              type: list_item
+              modality: declarative
+            - id: seg_3
+              text: "Then finalize the commit."
+              type: sentence
+              modality: imperative
+          operators: []
+          lexical_domains: []
+          lexical_tones: ["neutral"]
+          lexical_constraints: []
+          morphology_flags: []
+        sob_residue:
+          lexical_tags: []
+          structural_adjacent:
+            - modality: imperative
+            - list_structure: unordered
+          override_flags: []
+          disagreement_flags: []
+
+      metadata:
+        sob_audit_record:
+          dictionary_load_status: "ok"
+          segmentation_decisions:
+            - "multi_segment"
+            - "list_detected"
+          morphology_decisions: []
+          lexical_tagging_decisions: []
+          override_decisions: []
+          disagreement_flags: []
+          provenance_lineage:
+            origin: "SOB"
+            last_update: "SOB"
+          sob_structural_map_hash: present
+          sob_residue_hash: present
