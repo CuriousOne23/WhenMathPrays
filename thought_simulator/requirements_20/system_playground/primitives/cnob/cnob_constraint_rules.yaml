@@ -1,0 +1,106 @@
+# ============================================================
+#  CnOB Constraint Rules (Version 1.0)
+#  C1–C7 family encoding over SROB TP surface
+#  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+# ------------------------------------------------------------
+# Rules fire on structural.srob_structural_map (+ residue cues).
+# Each matching rule emits a constraint_entry into the family.
+# ------------------------------------------------------------
+
+rules:
+
+  # ---------- C1 Existence ----------
+  - id: c1_segment_exists
+    family: C1
+    description: "At least one segment exists on the SROB map."
+    if:
+      min_segments: 1
+    emit:
+      payload:
+        reason: segment_exists
+
+  - id: c1_operator_present
+    family: C1
+    description: "At least one operator tag is present."
+    if:
+      operators_non_empty: true
+    emit:
+      payload:
+        reason: operator_present
+
+  # ---------- C2 Adjacency ----------
+  - id: c2_list_parent_child
+    family: C2
+    description: "List item with parent_id indicates parent/child adjacency."
+    if:
+      any_list_item_with_parent: true
+    emit:
+      bind_segment_ids: list_items_with_parent
+      payload:
+        reason: list_parent_child
+
+  - id: c2_discourse_present
+    family: C2
+    description: "Discourse flags present imply adjacency-relevant discourse constraints."
+    if:
+      discourse_flags_non_empty: true
+    emit:
+      payload:
+        reason: discourse_present
+
+  # ---------- C3 Ordering ----------
+  - id: c3_multi_segment_order
+    family: C3
+    description: "Two or more segments imply order constraints across the TP."
+    if:
+      min_segments: 2
+    emit:
+      payload:
+        reason: multi_segment_order
+
+  # ---------- C4 Boundary ----------
+  - id: c4_list_boundary
+    family: C4
+    description: "List items establish list/sentence boundary structure."
+    if:
+      any_list_item: true
+    emit:
+      bind_segment_ids: list_items
+      payload:
+        reason: list_boundary
+
+  # ---------- C5 Lineage ----------
+  - id: c5_segment_id_lineage
+    family: C5
+    description: "Stable segment ids support lineage constraints (once per TP)."
+    if:
+      any_segment_with_id: true
+    emit:
+      once_per_tp: true
+      payload:
+        reason: segment_id_lineage
+
+  # ---------- C6 Structural-change (thin v1) ----------
+  - id: c6_multi_segment_change_surface
+    family: C6
+    description: "Multi-segment TP is a structural-change-relevant surface (not routing ΔH%)."
+    if:
+      min_segments: 2
+    emit:
+      payload:
+        reason: multi_segment_surface
+
+  # ---------- C7 Routing-eligibility (constraint-form) ----------
+  - id: c7_constraint_hint_present
+    family: C7
+    description: "Lexical constraint hints present → routing-eligibility constraint cue."
+    if:
+      lexical_constraints_non_empty: true
+    emit:
+      payload:
+        reason: constraint_hint_present
