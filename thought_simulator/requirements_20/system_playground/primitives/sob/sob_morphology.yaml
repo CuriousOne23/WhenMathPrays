@@ -1,1 +1,108 @@
+# sob_morphology.yaml
+# Morphology rules for SOB lexical normalization
+# Purpose: Deterministic suffix stripping, infinitive detection, and form
+# normalization so that operator verbs and other lexical tags match cleanly.
+# Examples from architecture: summarizing → summarize, explained → explain,
+# compares → compare, "to classify".
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: sob_software_architecture.md, sob_py_struc_pgm.md, 20.40.010
 
+version: "1.0"
+description: >
+  Morphology rules applied by SOB during lexical tagging. Rules are applied in
+  listed order. Only structural/lexical normalization is performed; no meaning
+  change occurs.
+
+# ---------------------------------------------------------------------------
+# Infinitive detection
+# ---------------------------------------------------------------------------
+infinitive:
+  markers:
+    - "to "
+  # When a token sequence begins with "to " + verb, normalize to base form.
+
+# ---------------------------------------------------------------------------
+# Suffix stripping rules (applied longest-first where possible)
+# ---------------------------------------------------------------------------
+suffix_rules:
+  - suffix: "izing"
+    replacement: "ize"
+  - suffix: "ising"
+    replacement: "ise"
+  - suffix: "izing"
+    replacement: "ize"
+  - suffix: "ying"
+    replacement: "y"
+  - suffix: "ing"
+    replacement: ""          # then further normalize if needed
+  - suffix: "ied"
+    replacement: "y"
+  - suffix: "ed"
+    replacement: ""
+  - suffix: "es"
+    replacement: ""
+  - suffix: "s"
+    replacement: ""
+  - suffix: "ly"
+    replacement: ""
+  - suffix: "tion"
+    replacement: "te"
+  - suffix: "sion"
+    replacement: "de"
+  - suffix: "ation"
+    replacement: "ate"
+  - suffix: "ization"
+    replacement: "ize"
+  - suffix: "isation"
+    replacement: "ise"
+
+# ---------------------------------------------------------------------------
+# Explicit normalization map (high-priority overrides)
+# These take precedence over generic suffix rules for known operator forms.
+# ---------------------------------------------------------------------------
+explicit_map:
+  summarizing: summarize
+  summarising: summarise
+  summarized: summarize
+  summarised: summarise
+  comparing: compare
+  compared: compare
+  compares: compare
+  classifying: classify
+  classified: classify
+  classifies: classify
+  deriving: derive
+  derived: derive
+  derives: derive
+  planning: plan
+  planned: plan
+  plans: plan
+  explaining: explain
+  explained: explain
+  explains: explain
+  rewriting: rewrite
+  rewritten: rewrite
+  rewrites: rewrite
+  transforming: transform
+  transformed: transform
+  transforms: transform
+  analyzing: analyze
+  analysing: analyse
+  analyzed: analyze
+  analysed: analyse
+  evaluating: evaluate
+  evaluated: evaluate
+  identifies: identify
+  identifying: identify
+  identified: identify
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Apply explicit_map first, then suffix_rules in order.
+# - Resulting base forms are matched against sob_operators.yaml and other
+#   dictionaries.
+# - All transformations are deterministic and reversible in principle for
+#   audit purposes.
+# - No semantic or intent change is introduced by morphology.
+# ---------------------------------------------------------------------------
