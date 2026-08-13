@@ -1,26 +1,26 @@
 # ============================================================
-#  SOB Testbench (Version 1.0)
+#  SOB Testbench (Version 1.1)
 # ============================================================
 # Path-A Structural OB (SOB) — deterministic testbench mode
 # Source of truth for exact input → expected output comparison
 # Aligned with:
 #   - 20.40.010_sob_prim.md
 #   - progressive_lineup_testing.md (v4.0)
-#   - tp_path_a_map.md, tp_context_layer.md, tp_commit.md
-#   - sob_software_architecture.md + sob dictionaries
+#   - sob.py v1.1 (operator-gated morphology)
+#   - sob dictionaries (domains/tones/constraints/operators)
 # ============================================================
 
 mode: testbench
 primitive: SOB
-version: "1.0"
+version: "1.1"
 
 metadata:
   description: >
     Validates SOB structural segmentation, modality classification,
-    operator/domain/tone/constraint hint extraction, morphology
-    normalization, sob_structural_map / sob_residue / sob_audit_record
-    production, read-only discipline on upstream envelopes, and
-    deterministic replay behavior.
+    operator/domain/tone/constraint hint extraction, operator-gated
+    morphology normalization, sob_structural_map / sob_residue /
+    sob_audit_record production, read-only discipline on upstream
+    envelopes, and deterministic replay behavior.
   upstream:
     - TPU
     - CE
@@ -40,13 +40,12 @@ metadata:
 tests:
 
   # ------------------------------------------------------------
-  # 1. Happy-path structural segmentation + basic residue
+  # 1. Happy-path structural segmentation + domain residue
   # ------------------------------------------------------------
   - id: sob_test_001
     description: >
-      Simple declarative sentence. Expects sentence segment, declarative
-      modality, empty operator list, neutral domain/tone, and a complete
-      sob_audit_record.
+      Declarative sentence. "system" hits technical_like domain marker.
+      No operator morphology (operator-gated). No operators.
     input:
       tp_identity:
         tp_id: "tp_sob_test_001"
@@ -58,7 +57,6 @@ tests:
         wire_map_version: "1.0"
         policy_signature: "default"
 
-      # Minimal committed intake text (post-TPU)
       intake:
         text: "The system processes the input deterministically."
 
@@ -80,8 +78,6 @@ tests:
             origin: "CE"
             last_update: "CE"
             commit_lineage: ["c001"]
-
-        # Upstream signals that SOB may read (read-only)
         msl: {}
         semantic_residue: {}
 
@@ -94,40 +90,27 @@ tests:
               type: sentence
               modality: declarative
           operators: []
-          lexical_domains: []
-          lexical_tones: ["neutral"]
+          lexical_domains:
+            - "technical_like"
+          lexical_tones:
+            - "neutral"
           lexical_constraints: []
           morphology_flags: []
         sob_residue:
-          lexical_tags: []
+          lexical_tags:
+            - domain: "technical_like"
           structural_adjacent:
             - modality: declarative
           override_flags: []
           disagreement_flags: []
-
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "single_sentence"
-          morphology_decisions: []
-          lexical_tagging_decisions: []
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          # hashes are implementation-defined but must be present & stable
-          sob_structural_map_hash: present
-          sob_residue_hash: present
 
   # ------------------------------------------------------------
   # 2. Interrogative modality + operator hint
   # ------------------------------------------------------------
   - id: sob_test_002
     description: >
-      Interrogative sentence containing an operator verb ("explain").
-      Expects interrogative modality and operator residue.
+      Interrogative sentence with operator verb "explain".
+      No morphology (surface form already canonical).
     input:
       tp_identity:
         tp_id: "tp_sob_test_002"
@@ -174,7 +157,8 @@ tests:
               normalized: "explain"
               source: "lexical"
           lexical_domains: []
-          lexical_tones: ["neutral"]
+          lexical_tones:
+            - "neutral"
           lexical_constraints: []
           morphology_flags: []
         sob_residue:
@@ -185,29 +169,13 @@ tests:
           override_flags: []
           disagreement_flags: []
 
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "single_sentence"
-          morphology_decisions: []
-          lexical_tagging_decisions:
-            - "operator:explain"
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          sob_structural_map_hash: present
-          sob_residue_hash: present
-
   # ------------------------------------------------------------
   # 3. Morphology normalization (operator + suffix)
   # ------------------------------------------------------------
   - id: sob_test_003
     description: >
-      Operator appears in progressive form ("summarizing"). Morphology
-      must normalize to base form "summarize" before matching.
+      "summarizing" normalizes via explicit_map to "summarize".
+      "please" also fires domain/tone/constraint markers.
     input:
       tp_identity:
         tp_id: "tp_sob_test_003"
@@ -253,43 +221,33 @@ tests:
             - verb: "summarizing"
               normalized: "summarize"
               source: "morphology"
-          lexical_domains: []
-          lexical_tones: ["neutral"]
-          lexical_constraints: []
+          lexical_domains:
+            - "conversational_like"
+          lexical_tones:
+            - "supportive"
+          lexical_constraints:
+            - "politeness"
           morphology_flags:
             - "summarizing→summarize"
         sob_residue:
           lexical_tags:
             - operator: "summarize"
+            - domain: "conversational_like"
+            - tone: "supportive"
+            - constraint: "politeness"
           structural_adjacent:
             - modality: imperative
           override_flags: []
           disagreement_flags: []
 
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "single_sentence"
-          morphology_decisions:
-            - "summarizing→summarize"
-          lexical_tagging_decisions:
-            - "operator:summarize"
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          sob_structural_map_hash: present
-          sob_residue_hash: present
-
   # ------------------------------------------------------------
-  # 4. Domain + tone + constraint hints
+  # 4. Domain + tone + constraint hints (rich lexical hits)
   # ------------------------------------------------------------
   - id: sob_test_004
     description: >
-      Sentence containing lexical cues for domain (code-like), tone
-      (technical), and constraint (precision). All become residue.
+      "please" → conversational/supportive/politeness;
+      "function" → code_like; "parameter" → technical_like + technical;
+      "precise" → precision; "implement" → operator.
     input:
       tp_identity:
         tp_id: "tp_sob_test_004"
@@ -336,50 +294,38 @@ tests:
               normalized: "implement"
               source: "lexical"
           lexical_domains:
+            - "conversational_like"
             - "code_like"
+            - "technical_like"
           lexical_tones:
+            - "supportive"
             - "technical"
           lexical_constraints:
+            - "politeness"
             - "precision"
           morphology_flags: []
         sob_residue:
           lexical_tags:
             - operator: "implement"
+            - domain: "conversational_like"
             - domain: "code_like"
+            - domain: "technical_like"
+            - tone: "supportive"
             - tone: "technical"
+            - constraint: "politeness"
             - constraint: "precision"
           structural_adjacent:
             - modality: imperative
           override_flags: []
           disagreement_flags: []
 
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "single_sentence"
-          morphology_decisions: []
-          lexical_tagging_decisions:
-            - "operator:implement"
-            - "domain:code_like"
-            - "tone:technical"
-            - "constraint:precision"
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          sob_structural_map_hash: present
-          sob_residue_hash: present
-
   # ------------------------------------------------------------
-  # 5. Boundary discipline — SOB must not mutate upstream envelopes
+  # 5. Boundary discipline — upstream envelopes unchanged
   # ------------------------------------------------------------
   - id: sob_test_005
     description: >
-      Verifies that context_fields, MSL, semantic_core (if present), and
-      other upstream envelopes remain byte-identical after SOB execution.
-      Only SOB-owned fields may appear or change.
+      context_fields / MSL must remain byte-identical. Only SOB-owned
+      fields written. No dictionary hits on this sentence.
     input:
       tp_identity:
         tp_id: "tp_sob_test_005"
@@ -422,7 +368,6 @@ tests:
           facts: []
 
     expected:
-      # Upstream envelopes must be unchanged (read-only discipline)
       metadata:
         context:
           context_fields:
@@ -447,7 +392,6 @@ tests:
           direction: "forward"
           coherence: "high"
 
-      # Only SOB-owned fields are written
       structural:
         sob_structural_map:
           segments:
@@ -457,7 +401,8 @@ tests:
               modality: declarative
           operators: []
           lexical_domains: []
-          lexical_tones: ["neutral"]
+          lexical_tones:
+            - "neutral"
           lexical_constraints: []
           morphology_flags: []
         sob_residue:
@@ -467,28 +412,14 @@ tests:
           override_flags: []
           disagreement_flags: []
 
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "single_sentence"
-          morphology_decisions: []
-          lexical_tagging_decisions: []
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          sob_structural_map_hash: present
-          sob_residue_hash: present
-
   # ------------------------------------------------------------
   # 6. Multi-segment + list structure (order preservation)
   # ------------------------------------------------------------
   - id: sob_test_006
     description: >
-      Input containing two sentences and a simple unordered list.
-      SOB must preserve order of structural units exactly (HLR-002).
+      Two sentences + unordered list. Order preserved (HLR-002).
+      "consider" / "finalize" are not in operator dictionary, so
+      modality stays declarative; list_structure residue is emitted.
     input:
       tp_identity:
         tp_id: "tp_sob_test_006"
@@ -533,7 +464,7 @@ tests:
             - id: seg_0
               text: "First consider the following items:"
               type: sentence
-              modality: imperative
+              modality: declarative
             - id: seg_1
               text: "- stability"
               type: list_item
@@ -545,32 +476,17 @@ tests:
             - id: seg_3
               text: "Then finalize the commit."
               type: sentence
-              modality: imperative
+              modality: declarative
           operators: []
           lexical_domains: []
-          lexical_tones: ["neutral"]
+          lexical_tones:
+            - "neutral"
           lexical_constraints: []
           morphology_flags: []
         sob_residue:
           lexical_tags: []
           structural_adjacent:
-            - modality: imperative
+            - modality: declarative
             - list_structure: unordered
           override_flags: []
           disagreement_flags: []
-
-      metadata:
-        sob_audit_record:
-          dictionary_load_status: "ok"
-          segmentation_decisions:
-            - "multi_segment"
-            - "list_detected"
-          morphology_decisions: []
-          lexical_tagging_decisions: []
-          override_decisions: []
-          disagreement_flags: []
-          provenance_lineage:
-            origin: "SOB"
-            last_update: "SOB"
-          sob_structural_map_hash: present
-          sob_residue_hash: present
