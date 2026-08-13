@@ -1,0 +1,74 @@
+# srob_importance_rules.yaml
+# SROB-owned positional structural-importance policy
+# Purpose: Labels such as header_like, anchor_like, list_lead as
+# positional/structural cues only — NOT semantic roles or referent identity.
+# Version: 1.0
+# Aligned with: 20.40.020 v2.0, srob_software_architecture.md, srob_sob_comm_architect.md
+
+version: "1.0"
+description: >
+  Deterministic rules over normalized segment structure (and optional coarse
+  importance cues from SOB). SROB may derive positional cues from structure
+  alone. Does not assign agent/patient meaning or resolve entities.
+
+labels:
+  - header_like
+  - anchor_like
+  - subject_like      # positional/structural cue only
+  - object_like       # positional/structural cue only
+  - list_lead
+  - list_member
+  - constraint_bearing_span
+  - block_container
+
+# Rules evaluated in order; a segment may collect multiple labels if allowed.
+# Implementation should document single vs multi-label policy (lean: multi OK).
+rules:
+  - id: first_sentence_anchor
+    if:
+      segment_type: sentence
+      position: first
+    label: anchor_like
+
+  - id: heading_header
+    if:
+      segment_type: heading
+    label: header_like
+
+  - id: list_lead_depth1_index0
+    if:
+      segment_type: list_item
+      depth: 1
+      index_in_parent: 0
+    label: list_lead
+
+  - id: list_member
+    if:
+      segment_type: list_item
+    label: list_member
+
+  - id: code_or_math_block
+    if:
+      segment_type_in: [code_block, math_block]
+    label: block_container
+
+  - id: table_as_block
+    if:
+      segment_type: table
+    label: block_container
+
+  # Optional: if SOB residue already marked structural-importance coarse cues,
+  # preserve/refine without inventing semantic roles.
+  - id: pass_through_sob_importance
+    if:
+      sob_importance_present: true
+    label: from_sob_coarse   # implementation maps SOB cue → positional label set
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - subject_like / object_like reserved for later positional heuristics;
+#   v1 may omit emitting them until rules are test-backed.
+# - constraint_bearing_span may be set when segment carries constraint tags
+#   from SOB/SROB sharpen path (positional association, not enforcement).
+# - Expand by adding rules with stable ids; keep deterministic.
+# ---------------------------------------------------------------------------
