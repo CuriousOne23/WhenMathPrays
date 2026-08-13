@@ -1,1 +1,106 @@
+# ============================================================
+#  SOB Rules (Version 1.0)
+#  Deterministic validation logic for SOB structural residue
+#  Aligned with:
+#    - 20.40.010_sob_prim.md
+#    - progressive_lineup_testing.md v4.0
+#    - sob_software_architecture.md
+# ============================================================
 
+primitive: SOB
+version: "1.0"
+
+rules:
+
+  # ----------------------------------------------------------
+  # 1. Deterministic Replay
+  # ----------------------------------------------------------
+  - id: sob_replay_001
+    description: >
+      SOB must produce identical output given identical input.
+    check: deterministic_replay
+
+  # ----------------------------------------------------------
+  # 2. Structural Map Integrity
+  # ----------------------------------------------------------
+  - id: sob_structural_map_001
+    description: >
+      SOB must write sob_structural_map containing segments,
+      operators, lexical_domains, lexical_tones, lexical_constraints,
+      and morphology_flags.
+    check: structural_map_integrity
+
+  - id: sob_structural_map_002
+    description: >
+      Segments must preserve original order (HLR-20.40.010-002).
+    check: segment_order_integrity
+
+  # ----------------------------------------------------------
+  # 3. Residue Integrity
+  # ----------------------------------------------------------
+  - id: sob_residue_001
+    description: >
+      SOB must write sob_residue with lexical_tags,
+      structural_adjacent, override_flags, and disagreement_flags.
+    check: residue_integrity
+
+  # ----------------------------------------------------------
+  # 4. Audit Record
+  # ----------------------------------------------------------
+  - id: sob_audit_001
+    description: >
+      SOB must produce sob_audit_record with dictionary_load_status,
+      segmentation/morphology/lexical decisions, and provenance.
+    check: audit_record_integrity
+
+  # ----------------------------------------------------------
+  # 5. Boundary Discipline (Read-Only Upstream)
+  # ----------------------------------------------------------
+  - id: sob_boundary_001
+    description: >
+      SOB must not modify context_fields, MSL, semantic_core,
+      CCR, or any non-SOB-owned envelopes.
+    check: upstream_read_only
+
+  - id: sob_boundary_002
+    description: >
+      SOB may write only sob_structural_map, sob_residue,
+      and sob_audit_record.
+    check: write_authority
+
+  # ----------------------------------------------------------
+  # 6. Modality & Hints
+  # ----------------------------------------------------------
+  - id: sob_modality_001
+    description: >
+      Each segment must carry a modality classification
+      (declarative, interrogative, imperative, conditional, hypothetical).
+    check: modality_present
+
+  - id: sob_hints_001
+    description: >
+      Operator, domain, tone, and constraint hints must be
+      derived from the SOB dictionaries only.
+    check: dictionary_driven_hints
+
+  # ----------------------------------------------------------
+  # 7. Forbidden Behavior
+  # ----------------------------------------------------------
+  - id: sob_forbidden_001
+    description: >
+      SOB must not perform deep semantic interpretation,
+      intent inference, or meaning resolution (HLR-021/022).
+    check: no_semantic_inference
+
+  - id: sob_forbidden_002
+    description: >
+      SOB must not apply or enforce constraint logic (HLR-023).
+    check: no_constraint_enforcement
+
+  # ----------------------------------------------------------
+  # 8. Progressive Lineup
+  # ----------------------------------------------------------
+  - id: sob_progressive_001
+    description: >
+      SOB must operate correctly under progressive lineup execution.
+    check: progressive_lineup_compatibility
