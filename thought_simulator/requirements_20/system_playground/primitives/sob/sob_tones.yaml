@@ -1,1 +1,98 @@
+# sob_tones.yaml
+# TP-read-only tone-hint markers for SOB
+# Purpose: Lexical cues for tone classification (formal, casual, technical,
+# supportive, urgent, neutral) as structural-adjacent residue.
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010 (HLR-010, HLR-011), sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Lexical markers used by SOB to produce tone-hint residue fragments.
+  Classification remains structural / semantic-adjacent only.
+
+tones:
+  formal:
+    - hereby
+    - pursuant
+    - accordingly
+    - furthermore
+    - moreover
+    - therefore
+    - thus
+    - hence
+    - respectfully
+    - sincerely
+    - cordially
+    - "dear "
+    - "to whom it may concern"
+    - "please be advised"
+  casual:
+    - hey
+    - hi
+    - yeah
+    - yep
+    - nope
+    - cool
+    - awesome
+    - ok
+    - okay
+    - thanks
+    - thx
+    - "what's up"
+    - "how are you"
+    - lol
+    - haha
+  technical:
+    - parameter
+    - configuration
+    - implementation
+    - interface
+    - protocol
+    - algorithm
+    - specification
+    - schema
+    - runtime
+    - latency
+    - throughput
+    - deterministic
+    - invariant
+  supportive:
+    - please
+    - thank you
+    - thanks
+    - appreciate
+    - helpful
+    - glad
+    - happy to
+    - of course
+    - certainly
+    - "let me know"
+    - "feel free"
+    - "happy to help"
+  urgent:
+    - urgent
+    - immediately
+    - asap
+    - "right now"
+    - critical
+    - emergency
+    - "as soon as possible"
+    - deadline
+    - "time-sensitive"
+    - "please respond"
+  neutral:
+    - note
+    - observe
+    - consider
+    - regarding
+    - concerning
+    - with respect to
+    - in terms of
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Case-insensitive lexical matching.
+# - Tone hints become residue only; no affective inference or meaning resolution.
+# - SOB may affirm or override upstream tone signals inside its own residue.
+# ---------------------------------------------------------------------------
