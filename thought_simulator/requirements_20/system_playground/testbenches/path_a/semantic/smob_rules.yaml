@@ -1,0 +1,39 @@
+# ============================================================
+#  SmOB Rules (Version 1.0)
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+
+rules:
+  - id: smob_replay_001
+    description: SmOB must produce output given post-CnOB input.
+    check: deterministic_replay
+
+  - id: smob_map_001
+    description: smob_cue_map must include required cue family keys.
+    check: cue_map_integrity
+
+  - id: smob_residue_001
+    description: smob_residue must include tr_input_cues and presemantic_residue_hash.
+    check: residue_integrity
+
+  - id: smob_audit_001
+    description: smob_audit_record required.
+    check: audit_record_integrity
+
+  - id: smob_boundary_001
+    description: SmOB must not modify context_fields or MSL.
+    check: upstream_read_only
+
+  - id: smob_boundary_002
+    description: SmOB writes only owned fields.
+    check: write_authority
+
+  - id: smob_forbidden_001
+    description: SmOB must not enforce constraints or write meaning fields.
+    check: no_enforcement_or_meaning
+
+  - id: smob_progressive_001
+    description: Progressive lineup compatibility.
+    check: progressive_lineup_compatibility
