@@ -1,0 +1,50 @@
+# ============================================================
+#  CnOB Importance Rules (Version 1.0)
+#  structural-importance / gaps / conflicts → constraint-importance
+#  Aligned with: 20.40.030 v2.0, cnob_py_struc_pgm.md §6.5, Q3 multi-label
+# ============================================================
+
+primitive: CnOB
+version: "1.0"
+
+# Multiple labels may apply to the same segment or TP (Q3).
+
+rules:
+
+  - id: imp_anchor_like
+    description: "SROB anchor_like → constraint_anchor"
+    if:
+      structural_importance_contains: anchor_like
+    emit:
+      labels:
+        - constraint_anchor
+      source: structural
+      bind_segment_ids: segments_with_label_anchor_like
+
+  - id: imp_list_lead
+    description: "SROB list_lead → order_sensitive"
+    if:
+      structural_importance_contains: list_lead
+    emit:
+      labels:
+        - order_sensitive
+      source: structural
+      bind_segment_ids: segments_with_label_list_lead
+
+  - id: imp_gap_high
+    description: "Any missing_slot signal → gap_high"
+    if:
+      any_missing_slot: true
+    emit:
+      labels:
+        - gap_high
+      source: gap
+
+  - id: imp_conflict_high
+    description: "Any conflict indicator → conflict_high"
+    if:
+      any_conflict: true
+    emit:
+      labels:
+        - conflict_high
+      source: conflict
