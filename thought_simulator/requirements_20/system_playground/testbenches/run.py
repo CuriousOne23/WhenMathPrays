@@ -185,7 +185,7 @@ ACTIVE_TEST_MODULES = [
     (
         "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.sob_testbench",
         {
-            "mode": "testbench",     # "general" or "testbench"
+            "mode": "general",      # "general" or "testbench"
             "use_inb": False,        # Upstream primitives ignored
             "use_iiinb": False,
             "use_ie": False,
@@ -196,7 +196,7 @@ ACTIVE_TEST_MODULES = [
             "use_tpu": False,        # Set to True if you want progressive TPU → SOB
             "use_sob": True,         # Primitive under test
 
-            # Test selection controlled by sob_tests_to_run.yaml
+            # Test selection controlled by sob_tests_to_run.yaml (testbench mode only)
             "tests_to_run": "see sob_tests_to_run.yaml",
         }
     ),
