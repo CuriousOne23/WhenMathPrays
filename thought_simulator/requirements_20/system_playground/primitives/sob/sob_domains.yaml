@@ -1,1 +1,139 @@
+# sob_domains.yaml
+# TP-read-only domain-hint markers for SOB
+# Purpose: Lexical cues for domain classification (math-like, code-like, etc.)
+# as structural-adjacent residue. No deep semantic interpretation.
+# Deterministic, bounded, non-semantic, replay-safe.
+# Version: 1.0
+# Aligned with: 20.40.010 (HLR-008, HLR-009), sob_software_architecture.md
 
+version: "1.0"
+description: >
+  Lexical markers used by SOB to produce domain-hint residue fragments.
+  SOB performs only bounded, deterministic, structural/semantic-adjacent
+  classification. Upstream domain signals may be reused, affirmed, ignored,
+  or overridden inside SOB residue only.
+
+domains:
+  math_like:
+    - equation
+    - formula
+    - theorem
+    - proof
+    - lemma
+    - derivative
+    - integral
+    - matrix
+    - vector
+    - probability
+    - statistic
+    - algebra
+    - calculus
+    - geometry
+    - axiom
+    - corollary
+    - "="
+    - "+"
+    - "-"
+    - "*"
+    - "/"
+    - "^"
+    - "√"
+    - "∫"
+    - "∑"
+    - "∏"
+    - "∂"
+    - "∞"
+  code_like:
+    - function
+    - method
+    - class
+    - def
+    - return
+    - import
+    - module
+    - variable
+    - loop
+    - if statement
+    - algorithm
+    - code
+    - script
+    - compile
+    - runtime
+    - debug
+    - "```"
+    - "def "
+    - "class "
+    - "import "
+    - "from "
+    - "->"
+    - "=>"
+    - "{}"
+    - "[]"
+  narrative_like:
+    - story
+    - tale
+    - narrative
+    - plot
+    - character
+    - scene
+    - once upon
+    - chapter
+    - novel
+    - fiction
+    - anecdote
+  legal_like:
+    - statute
+    - regulation
+    - contract
+    - clause
+    - liability
+    - jurisdiction
+    - plaintiff
+    - defendant
+    - pursuant
+    - hereby
+    - whereas
+    - agreement
+    - obligation
+    - shall
+    - must not
+  technical_like:
+    - specification
+    - protocol
+    - architecture
+    - interface
+    - implementation
+    - system
+    - component
+    - module
+    - requirement
+    - design
+    - parameter
+    - configuration
+    - API
+    - schema
+  conversational_like:
+    - chat
+    - conversation
+    - discuss
+    - talk
+    - dialogue
+    - hi
+    - hello
+    - hey
+    - thanks
+    - thank you
+    - please
+    - sorry
+    - okay
+    - ok
+    - yeah
+    - yes
+    - no
+
+# ---------------------------------------------------------------------------
+# Notes for implementers
+# - Matching is case-insensitive and primarily lexical.
+# - Domain hints become residue fragments only; no meaning resolution.
+# - SOB may disagree with upstream domain judgments inside its own residue.
+# ---------------------------------------------------------------------------
