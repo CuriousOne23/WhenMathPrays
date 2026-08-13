@@ -1,0 +1,34 @@
+# ============================================================
+#  SmOB Importance Rules (Version 1.0)
+#  CnOB constraint-importance → semantic-adjacent importance cues
+#  Aligned with: 20.40.040 HLR-025–029, smob_py_struc_pgm.md §6.2
+# ------------------------------------------------------------
+#  COUPLING (support-critical):
+#  Depends on CnOB constraint_importance labels on the TP — NOT on
+#  cnob_importance_rules.yaml key trees.
+# ============================================================
+
+primitive: SmOB
+version: "1.0"
+
+# Multi-label allowed. Map is closed for v1; unknown CnOB labels pass through
+# as sa_<label> only if allow_passthrough_unknown is true.
+
+allow_passthrough_unknown: false
+
+label_map:
+  gap_high: sa_gap_high
+  conflict_high: sa_conflict_high
+  constraint_anchor: sa_anchor
+  order_sensitive: sa_order_sensitive
+
+rules:
+
+  - id: imp_map_labels
+    description: "Map each CnOB constraint_importance label through label_map."
+    if:
+      cnob_any_constraint_importance: true
+    emit:
+      family: constraint_importance_adjacent
+      source: cnob
+      also_semantic_adjacent: true
