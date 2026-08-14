@@ -262,8 +262,26 @@ This ensures that **every primitive testbench is discoverable by pattern**, not 
 
 ---
 
-## **3.6.3 Primitive Dictionary Location (If Required)**  
-If a primitive requires dictionaries, they must be located at:
+## **3.6.3 Primitive Dictionary / Lookup‑Table Location (If Required)**  
+
+Dictionaries and scalar tables may live in **one of two places**, chosen by size and ownership:
+
+### **A. Small, exclusive tables (preferred for most Path‑A primitives)**  
+When the tables are small, numerous, and owned exclusively by a single primitive (the common case for WrdNm, SOB, SROB, CnOB, SmOB, etc.), they **may** live inside the primitive directory itself:
+
+```
+thought_simulator/
+  requirements_20/
+    system_playground/
+      primitives/
+        <primitive_name>/
+          <table_or_dict>.yaml
+```
+
+This keeps the primitive self‑contained and avoids unnecessary path complexity.
+
+### **B. Large or shared dictionaries**  
+When a dictionary is large, requires formal versioning / ownership notes, or is intended for use by multiple primitives, it **must** live under the centralized design tree:
 
 ```
 thought_simulator/
@@ -286,7 +304,11 @@ structure_dictionary
 encoder_dictionary
 ```
 
-This ensures dictionary lookup is deterministic and uniform across primitives.
+### **Lookup rule**  
+Loaders and primitives SHALL look first in the primitive’s own directory, then (if not found) in the corresponding `design/dictionaries/path_a/<category>/` location.  
+Because there are only two legitimate places, discovery friction remains low.
+
+This dual‑location rule preserves simplicity for the many small tables while still providing a formal home for the few large or shared ones.
 
 ---
 
