@@ -70,11 +70,11 @@ WrdNm consumes **structured TP fields only**, as defined in:
 2. Load WrdNm YAML dictionaries  
 3. Load scalar tables  
 4. Load hash configuration  
-5. **Job 1:** convert fields  
-   - categorical → int32  
-   - boolean → 0/1  
-   - scalar → float32  
-   - hashed → uint32  
+5. Job 1: convert fields
+   - categorical → float32 (fractional precision ≤ 1/1000)
+   - boolean → 0/1
+   - scalar → float32
+   - hashed → uint32
 6. Canonical ordering of numeric fields  
 7. **Job 2:** assemble numeric feature vector  
 8. Build diagnostic record  
@@ -104,34 +104,34 @@ Each WrdNm record SHALL contain:
 
 ```
 wrdnm_record:
-  surface_id: int32
-  lemma_id: int32
-  expression_id: int32
-
-  temporal_id: int32
-  causal_id: int32
-  continuity_id: int32
-  entity_id: int32
-  thread_hash: uint32
-
-  adjacency: int8
-  ordering_id: int32
-  structural_importance: float32
-
-  constraint_family_id: int32
-  constraint_importance: float32
-  missing_slot: int8
-
-  modality: float32
-  affect: float32
-  underspec: float32
-  semantic_adjacent_importance: float32
-
-  routing_id: int32
-  transform_id: int32
-
-  identity_id: int32
-  next_context_id: int32
+   surface_id: float32
+   lemma_id: float32
+   expression_id: float32
+   
+   temporal_id: float32
+   causal_id: float32
+   continuity_id: float32
+   entity_id: float32
+   thread_hash: uint32
+   
+   adjacency: int8
+   ordering_id: float32
+   structural_importance: float32
+   
+   constraint_family_id: float32
+   constraint_importance: float32
+   missing_slot: int8
+   
+   modality: float32
+   affect: float32
+   underspec: float32
+   semantic_adjacent_importance: float32
+   
+   routing_id: float32
+   transform_id: float32
+   
+   identity_id: float32
+   next_context_id: float32
 
   provenance:
     origin: WrdNm
@@ -139,6 +139,7 @@ wrdnm_record:
     timestamp: iso8601
 ```
 
+All categorical IDs SHALL be float32 values with fractional precision ≤ 1/1000 (nnn.xxx).
 All numeric types SHALL match wrdnm_software_architecture.md.
 
 ## **5.3 Dictionary lookup**
@@ -180,9 +181,9 @@ wrdnm_audit_record:
 
 ### **6.1 Categorical**
 
-- lookup in dictionary  
-- fallback ID = `0`  
-- log missing key  
+- lookup in dictionary (float32 categorical ID, fractional precision ≤ 1/1000)
+- fallback ID = `0.000`
+- log missing key 
 
 ### **6.2 Boolean**
 
