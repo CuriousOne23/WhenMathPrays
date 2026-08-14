@@ -1,1 +1,16 @@
+# ============================================================
+# Hash Configuration (v1.0)
+# Deterministic uint32 hashing for WrdNm
+# ============================================================
+
+hash_algorithm: murmur3_32
+seed: 4278190080        # 0xFF000000 — fixed, deterministic, architecture‑approved
+
+output_type: uint32
+
+fields:
+  - thread_string        # TP field to hash
+  - any_hashed_field     # placeholder for future hashed TP fields
+
+fallback: 0             # fallback for missing or empty strings
 
