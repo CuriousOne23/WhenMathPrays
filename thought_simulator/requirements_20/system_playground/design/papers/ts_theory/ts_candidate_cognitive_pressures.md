@@ -21,7 +21,7 @@ Instead, it adopts the calibrated stance:
 > **These invariants are candidate cognitive pressures that appear repeatedly across systems already accepted as cognitive by independent scientific consensus.  
 Whether they are strictly necessary remains open to evidence.**
 
-This avoids circularity and overreach.
+To make this stance precise, we emphasize that what appears across these systems are functional analogues of the TS pressures, not the TS invariants in their operational, recoverable form.
 
 Across independently accepted cognitive systems, we repeatedly observe functional analogues of the TS pressures — structure tracking, violation detection, cue compression, routing specialization, and persistent state. These analogues appear at different levels of granularity and with different mechanisms, but the pressures themselves recur. Whether the specific TS invariants (in their operational, recoverable form) are necessary for all cognition remains open to evidence. Identity basins, in particular, may be required only for systems that maintain self-models or long-horizon continuity.
 
