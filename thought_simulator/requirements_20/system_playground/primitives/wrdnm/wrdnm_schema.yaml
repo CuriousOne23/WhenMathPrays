@@ -1,1 +1,151 @@
+# ============================================================
+# WrdNm Schema (v1.0)
+# Authoritative mapping specification for the WrdNm primitive
+# ============================================================
+
+schema_version: 1.0
+description: >
+  Schema-driven numeric encoding for WrdNm. Each field declares
+  its mapping type and the resource file used for conversion.
+
+canonical_order:
+  - surface_id
+  - lemma_id
+  - expression_id
+
+  - temporal_id
+  - causal_id
+  - continuity_id
+  - entity_id
+  - thread_hash
+
+  - adjacency
+  - ordering_id
+  - structural_importance
+
+  - constraint_family_id
+  - constraint_importance
+  - missing_slot
+
+  - modality
+  - affect
+  - underspec
+  - semantic_adjacent_importance
+
+  - routing_id
+  - transform_id
+
+  - identity_id
+  - next_context_id
+
+fields:
+
+  surface_id:
+    tp_field: normalized_surface
+    mapping_type: categorical
+    dictionary: surface_dict.yaml
+
+  lemma_id:
+    tp_field: lemma
+    mapping_type: categorical
+    dictionary: lemma_dict.yaml
+
+  expression_id:
+    tp_field: expression_marker
+    mapping_type: categorical
+    dictionary: expression_dict.yaml
+
+  temporal_id:
+    tp_field: temporal_marker
+    mapping_type: categorical
+    dictionary: temporal_dict.yaml
+
+  causal_id:
+    tp_field: causal_marker
+    mapping_type: categorical
+    dictionary: causal_dict.yaml
+
+  continuity_id:
+    tp_field: continuity_marker
+    mapping_type: categorical
+    dictionary: continuity_dict.yaml
+
+  entity_id:
+    tp_field: entity_reference
+    mapping_type: categorical
+    dictionary: entity_reference_dict.yaml
+
+  thread_hash:
+    tp_field: thread_string
+    mapping_type: hashed
+    hash_config: hash_config.yaml
+
+  adjacency:
+    tp_field: adjacency_flag
+    mapping_type: boolean
+    dictionary: adjacency_flag_dict.yaml
+
+  ordering_id:
+    tp_field: ordering_marker
+    mapping_type: categorical
+    dictionary: ordering_marker_dict.yaml
+
+  structural_importance:
+    tp_field: structural_importance
+    mapping_type: scalar
+    scalar_table: importance_scalars.yaml
+
+  constraint_family_id:
+    tp_field: constraint_family
+    mapping_type: categorical
+    dictionary: constraint_family_dict.yaml
+
+  constraint_importance:
+    tp_field: constraint_importance
+    mapping_type: scalar
+    scalar_table: importance_scalars.yaml
+
+  missing_slot:
+    tp_field: missing_slot_flag
+    mapping_type: boolean
+
+  modality:
+    tp_field: modality_marker
+    mapping_type: scalar
+    scalar_table: modality_scalars.yaml
+
+  affect:
+    tp_field: affect_marker
+    mapping_type: scalar
+    scalar_table: affect_scalars.yaml
+
+  underspec:
+    tp_field: underspec_marker
+    mapping_type: scalar
+    scalar_table: underspec_scalars.yaml
+
+  semantic_adjacent_importance:
+    tp_field: semantic_adjacent_importance
+    mapping_type: scalar
+    scalar_table: importance_scalars.yaml
+
+  routing_id:
+    tp_field: routing_marker
+    mapping_type: categorical
+    dictionary: routing_dict.yaml
+
+  transform_id:
+    tp_field: transform_marker
+    mapping_type: categorical
+    dictionary: transform_dict.yaml
+
+  identity_id:
+    tp_field: identity_marker
+    mapping_type: categorical
+    dictionary: identity_dict.yaml
+
+  next_context_id:
+    tp_field: next_context_marker
+    mapping_type: categorical
+    dictionary: next_context_dict.yaml
 
