@@ -1,1 +1,53 @@
+# ============================================================
+# WrdNm Rules (Version 1.0)
+# Deterministic validation for the Word-to-Numeric Encoder
+# Aligned with 20.44, wrdnm schema, progressive_lineup_testing v4.0
+# ============================================================
 
+primitive: WrdNm
+version: "1.0"
+
+rules:
+
+  - id: wrdnm_replay_001
+    description: >
+      WrdNm must produce output for identical structured inputs.
+    check: deterministic_output_present
+
+  - id: wrdnm_write_001
+    description: >
+      WrdNm must append a record to TP.wrdnm[] (list).
+    check: wrdnm_list_present
+
+  - id: wrdnm_write_002
+    description: >
+      Each WrdNm record must contain the canonical numeric fields
+      declared in wrdnm_schema.yaml.
+    check: canonical_fields_present
+
+  - id: wrdnm_audit_001
+    description: >
+      WrdNm must write metadata.wrdnm_audit_record with load status
+      and conversion decisions.
+    check: audit_record_present
+
+  - id: wrdnm_boundary_001
+    description: >
+      WrdNm must not modify upstream structured fields it reads.
+    check: upstream_read_only
+
+  - id: wrdnm_types_001
+    description: >
+      Categorical and scalar fields must be numeric; boolean 0/1;
+      hashed fields must be non-negative integers.
+    check: numeric_type_integrity
+
+  - id: wrdnm_forbidden_001
+    description: >
+      WrdNm must not invent semantic_meaning or inferred_intent fields.
+    check: no_semantic_inference
+
+  - id: wrdnm_progressive_001
+    description: >
+      WrdNm must operate under progressive lineup execution.
+    check: progressive_lineup_compatibility
