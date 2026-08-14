@@ -1,0 +1,302 @@
+# ============================================================
+# WrdNm Testbench (v1.0) — Deterministic cases
+# Exact-equality comparison in testbench mode
+# ============================================================
+
+tests:
+
+  # ----------------------------------------------------------
+  # 1. Clean full conversion
+  # ----------------------------------------------------------
+  - id: wrdnm_clean_full
+    description: Clean categorical + scalar + boolean + hashed conversion
+    enabled: true
+    input:
+      IE:
+        normalized_surface: run
+        lemma: think
+        expression:
+          marker: statement
+        entity:
+          reference: individual
+      CE:
+        temporal:
+          marker: present
+        causal:
+          marker: because
+        modality:
+          marker: declarative
+        affect:
+          marker: neutral
+        underspec:
+          marker: low
+      CnOB:
+        continuity:
+          marker: same_entity
+        constraint:
+          family: requirement
+          importance: medium
+      SmOB:
+        adjacency:
+          flag: adjacent
+        ordering:
+          marker: next
+        importance:
+          structural: high
+        semantic_adjacent_importance: medium
+      SROB:
+        missing:
+          slot_flag: false
+      TR:
+        routing:
+          marker: continue
+      RB:
+        transform:
+          marker: normalize
+      IdOB:
+        identity:
+          marker: user
+      CEx:
+        next_context:
+          marker: continue_thread
+      metadata:
+        thread_string: thread-alpha-001
+        context:
+          context_fields:
+            topic: navigation
+            stance: neutral
+            intent: encode
+            continuity: same_entity
+            direction: forward
+            coherence: stable
+            importance: medium
+    expected:
+      wrdnm:
+        - surface_id: 500.0
+          lemma_id: 640.0
+          expression_id: 380.0
+          temporal_id: 280.0
+          causal_id: 100.0
+          continuity_id: 140.0
+          entity_id: 200.0
+          thread_hash: 2866379511
+          adjacency: 100.0
+          ordering_id: 240.0
+          structural_importance: 0.5
+          constraint_family_id: 300.0
+          constraint_importance: 0.4
+          missing_slot: 0
+          modality: 0.8
+          affect: 0.1
+          underspec: 0.2
+          semantic_adjacent_importance: 0.4
+          routing_id: 120.0
+          transform_id: 220.0
+          identity_id: 300.0
+          next_context_id: 100.0
+
+  # ----------------------------------------------------------
+  # 2. Missing dictionary / scalar keys → fallback
+  # ----------------------------------------------------------
+  - id: wrdnm_missing_keys
+    description: Unknown categorical/scalar values fall back to 0 / 0.0
+    enabled: true
+    input:
+      IE:
+        normalized_surface: not_in_dict_xyz
+        lemma: also_missing_abc
+        expression:
+          marker: statement
+        entity:
+          reference: individual
+      CE:
+        temporal:
+          marker: present
+        causal:
+          marker: because
+        modality:
+          marker: not_a_real_modality
+        affect:
+          marker: neutral
+        underspec:
+          marker: low
+      CnOB:
+        continuity:
+          marker: same_entity
+        constraint:
+          family: requirement
+          importance: medium
+      SmOB:
+        adjacency:
+          flag: adjacent
+        ordering:
+          marker: next
+        importance:
+          structural: high
+        semantic_adjacent_importance: medium
+      SROB:
+        missing:
+          slot_flag: true
+      TR:
+        routing:
+          marker: continue
+      RB:
+        transform:
+          marker: normalize
+      IdOB:
+        identity:
+          marker: user
+      CEx:
+        next_context:
+          marker: continue_thread
+      metadata:
+        thread_string: thread-alpha-001
+    expected:
+      wrdnm:
+        - surface_id: 0.0
+          lemma_id: 0.0
+          expression_id: 380.0
+          temporal_id: 280.0
+          causal_id: 100.0
+          continuity_id: 140.0
+          entity_id: 200.0
+          thread_hash: 2866379511
+          adjacency: 100.0
+          ordering_id: 240.0
+          structural_importance: 0.5
+          constraint_family_id: 300.0
+          constraint_importance: 0.4
+          missing_slot: 1
+          modality: 0.0
+          affect: 0.1
+          underspec: 0.2
+          semantic_adjacent_importance: 0.4
+          routing_id: 120.0
+          transform_id: 220.0
+          identity_id: 300.0
+          next_context_id: 100.0
+
+  # ----------------------------------------------------------
+  # 3. Entire fields absent → deterministic fallbacks
+  # ----------------------------------------------------------
+  - id: wrdnm_missing_fields
+    description: Absent TP paths produce fallback numerics
+    enabled: true
+    input:
+      IE:
+        normalized_surface: run
+      metadata:
+        thread_string: ""
+      # most other paths intentionally omitted
+    expected:
+      wrdnm:
+        - surface_id: 500.0
+          lemma_id: 0.0
+          expression_id: 0.0
+          temporal_id: 0.0
+          causal_id: 0.0
+          continuity_id: 0.0
+          entity_id: 0.0
+          thread_hash: 0
+          adjacency: 0.0
+          ordering_id: 0.0
+          structural_importance: 0.0
+          constraint_family_id: 0.0
+          constraint_importance: 0.0
+          missing_slot: 0
+          modality: 0.0
+          affect: 0.0
+          underspec: 0.0
+          semantic_adjacent_importance: 0.0
+          routing_id: 0.0
+          transform_id: 0.0
+          identity_id: 0.0
+          next_context_id: 0.0
+
+  # ----------------------------------------------------------
+  # 4. Append-only discipline (pre-seeded wrdnm list)
+  # ----------------------------------------------------------
+  - id: wrdnm_append_only
+    description: Existing TP.wrdnm entry is preserved; new record is appended
+    enabled: true
+    input:
+      IE:
+        normalized_surface: walk
+        lemma: go
+        expression:
+          marker: statement
+        entity:
+          reference: individual
+      CE:
+        temporal:
+          marker: present
+        causal:
+          marker: because
+        modality:
+          marker: declarative
+        affect:
+          marker: neutral
+        underspec:
+          marker: low
+      CnOB:
+        continuity:
+          marker: same_entity
+        constraint:
+          family: requirement
+          importance: medium
+      SmOB:
+        adjacency:
+          flag: adjacent
+        ordering:
+          marker: next
+        importance:
+          structural: high
+        semantic_adjacent_importance: medium
+      SROB:
+        missing:
+          slot_flag: false
+      TR:
+        routing:
+          marker: continue
+      RB:
+        transform:
+          marker: normalize
+      IdOB:
+        identity:
+          marker: user
+      CEx:
+        next_context:
+          marker: continue_thread
+      metadata:
+        thread_string: thread-alpha-001
+      wrdnm:
+        - surface_id: 1.0
+          lemma_id: 1.0
+          note: prior_record
+    expected:
+      wrdnm:
+        - surface_id: 1.0
+          lemma_id: 1.0
+          note: prior_record
+        - surface_id: 700.0
+          lemma_id: 320.0
+          expression_id: 380.0
+          temporal_id: 280.0
+          causal_id: 100.0
+          continuity_id: 140.0
+          entity_id: 200.0
+          thread_hash: 2866379511
+          adjacency: 100.0
+          ordering_id: 240.0
+          structural_importance: 0.5
+          constraint_family_id: 300.0
+          constraint_importance: 0.4
+          missing_slot: 0
+          modality: 0.8
+          affect: 0.1
+          underspec: 0.2
+          semantic_adjacent_importance: 0.4
+          routing_id: 120.0
+          transform_id: 220.0
+          identity_id: 300.0
+          next_context_id: 100.0
