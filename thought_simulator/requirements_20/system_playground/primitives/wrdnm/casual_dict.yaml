@@ -1,1 +1,22 @@
+# ============================================================
+# WrdNm Dictionary: causal_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+because: 100.000
+cause: 120.000
+consequently: 140.000
+due_to: 160.000
+effect: 180.000
+hence: 200.000
+if: 220.000
+leads_to: 240.000
+otherwise: 260.000
+reason: 280.000
+result: 300.000
+since: 320.000
+so: 340.000
+therefore: 360.000
+thus: 380.000
 
