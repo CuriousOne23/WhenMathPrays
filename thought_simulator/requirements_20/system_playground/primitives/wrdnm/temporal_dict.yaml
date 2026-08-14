@@ -1,1 +1,21 @@
+# ============================================================
+# WrdNm Dictionary: temporal_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+after: 100.000
+before: 120.000
+current: 140.000
+eventual: 160.000
+future: 180.000
+immediate: 200.000
+later: 220.000
+now: 240.000
+past: 260.000
+present: 280.000
+recent: 300.000
+soon: 320.000
+then: 340.000
+upcoming: 360.000
 
