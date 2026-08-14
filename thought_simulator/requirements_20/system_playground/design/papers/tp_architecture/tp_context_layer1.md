@@ -1,10 +1,10 @@
-# ⭐ **tp_context_layer.md (Draft)**  
+# ⭐ **tp_context_layer1.md (Draft)**  
 ### *Thought Simulator — TP Architecture / Context Layer Paper*
 
 ---
 
-# **TP Context Layer (Path‑A)**  
-The **Context Layer** is the portion of the Thought Packet (TP) responsible for capturing, normalizing, and committing the contextual state of a turn.  
+# **TP Context Layer1 (Path‑A)**  
+The **Context Layer1** is the portion of the Thought Packet (TP) responsible for capturing, normalizing, and committing the contextual state of a turn.  
 It is the boundary between:
 
 - **raw, volatile, upstream‑dependent context data**, and  
