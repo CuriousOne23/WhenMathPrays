@@ -1,1 +1,18 @@
+# ============================================================
+# WrdNm Dictionary: identity_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+agent: 100.000
+character: 120.000
+entity: 140.000
+group: 160.000
+individual: 180.000
+listener: 200.000
+narrator: 220.000
+observer: 240.000
+speaker: 260.000
+system: 280.000
+user: 300.000
 
