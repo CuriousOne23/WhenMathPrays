@@ -1,7 +1,7 @@
-# **ts_cognitive_invariants.md (v1.1)**  
-**Status:** Draft v1.1  
-**Purpose:** Define TS cognitive invariants and specify the operational meaning of “invariant,” add missing probes, and introduce quantitative pass/fail criteria.  
-**Goal:** Turn TS from a conceptual theory into a falsifiable, empirically testable framework using LLM geometry.
+# **ts_cognitive_invariants.md (v1.2)**  
+**Status:** Draft v1.2  
+**Purpose:** Define TS cognitive invariants, operationalize “recoverability,” specify quantitative thresholds, and outline concrete probe methods.  
+**Goal:** Provide a falsifiable, experimentally runnable framework for testing TS cognitive pressures using LLM geometry.
 
 ---
 
@@ -17,7 +17,7 @@ It does **not** claim:
 - LLMs contain TS objects  
 - TS is buried inside transformer math  
 
-Instead, it adopts the stance:
+Instead:
 
 > **TS and LLMs are different realizations of shared cognitive pressures.  
 TS is explicit; LLMs are implicit.  
@@ -29,111 +29,111 @@ The goal is **measurement**, not metaphysics.
 
 ## **2. Operational Definition of “Invariant”**
 
-Grok is correct: “invariant” must be defined operationally.
+An invariant, in this document, means:
 
-In this document:
+> **A cognitive feature that is recoverable from internal model geometry under controlled transformations.**
 
-> **An invariant is a cognitive feature that is recoverable from internal model geometry under controlled transformations.**
-
-Recoverability is measured by:
+Recoverability is measured through:
 
 - **linear probes**  
 - **causal interventions**  
 - **cluster stability**  
 - **layer-wise persistence**  
 
-This is the standard operationalization used in mechanistic interpretability.
-
-It does **not** imply mathematical invariance under all transformations.  
-It implies **recoverable structure under defined cognitive pressures**.
+This matches current mechanistic interpretability practice.  
+It does **not** imply mathematical invariance under all transformations.
 
 ---
 
-## **3. TS Cognitive Invariants (Operational Form)**
+## **3. Threshold Rationale (New Section)**
 
-### **Invariant 1 — Structural Adjacency (Recoverable Structure)**  
-Cognition requires recoverable structure:  
-segments, adjacency, coarse boundaries, canonical refinement.
+Grok is correct: thresholds must be justified or marked provisional.
 
-**Operational claim:**  
-Boundary/adjacency features should be linearly recoverable across early-to-mid layers.
+### **Chance Baselines**  
+Chance accuracy depends on:
 
----
+- number of classes  
+- class balance  
+- probe capacity  
 
-### **Invariant 2 — Constraint Geometry (Recoverable Conflict/Gaps)**  
-Cognition requires recoverable constraints:  
-obligations, absences, conflicts, underspecification.
+Thus:
 
-**Operational claim:**  
-Contradictions should produce stable, recoverable signatures across layers.
+- **15% above chance** (Probe 1) is a *minimum detectable lift* for binary or ternary adjacency tasks.  
+- **20% above chance** (Probe 2) is a *minimum meaningful lift* for contradiction detection, where class balance is typically 50/50.  
+- **25% above chance** (Probe 3) is a *minimum ancestry reconstruction lift* for multi-class referent tracking.
 
----
+These thresholds are **provisional** and must be validated through pilot runs.
 
-### **Invariant 3 — Cue Stability (Recoverable Cue Families)**  
-Cognition requires recoverable cues:  
-modality, discourse, importance, routing-adjacent signals.
+### **Effect Size Normalization**  
+“Normalized units” refer to:
 
-**Operational claim:**  
-Cue clusters should remain stable across deep layers.
+> **Standardized mean difference (Cohen’s d) between ablated and non-ablated activation magnitudes.**
 
----
+This is now explicitly defined.
 
-### **Invariant 4 — Routing Specialization (Recoverable Path Selection)**  
-Cognition requires recoverable routing:  
-path selection, boundary gating, attention specialization.
+### **Cluster Purity Threshold**  
+Purity ≥ **0.7** is chosen because:
 
-**Operational claim:**  
-Distinct attention heads should show stable routing specialization.
+- below 0.6 clusters are typically unstable  
+- above 0.7 clusters show meaningful semantic coherence  
+- 0.7 is a standard interpretability heuristic
 
----
-
-### **Invariant 5 — Identity Basins (Recoverable Identity)**  
-Cognition requires recoverable identity:  
-referent continuity, persona stability, stance consistency.
-
-**Operational claim:**  
-Identity features should form stable attractor-like regions.
+These thresholds may be adjusted after pilot data.
 
 ---
 
-## **4. Probes (Now Complete and Quantitative)**
+## **4. TS Cognitive Invariants (Operational Form)**
 
-Grok noted that Structural Adjacency lacked a probe.  
-It is added here.
+### **Invariant 1 — Structural Adjacency**  
+Recoverable adjacency/boundary features across early-to-mid layers.
 
-Each probe now includes **quantitative pass/fail criteria**.
+### **Invariant 2 — Constraint Geometry**  
+Recoverable conflict/gap signatures across layers.
+
+### **Invariant 3 — Cue Stability**  
+Recoverable cue clusters across deep layers.
+
+### **Invariant 4 — Routing Specialization**  
+Recoverable path-selection specialization in attention heads.
+
+### **Invariant 5 — Identity Basins**  
+Recoverable identity features forming attractor-like regions.
 
 ---
+
+## **5. Probes (Complete, Quantitative, and Expanded)**
 
 ### **Probe 1 — Structural Adjacency Recovery**  
 **Tests:** Invariant 1  
 **Method:**  
 - Construct controlled paraphrases and reorderings.  
-- Extract hidden states across early-to-mid layers.  
-- Train linear probes to recover adjacency/boundary features.
+- Extract hidden states from layers 1–12.  
+- Train linear probes (L2-regularized logistic regression).  
+- Evaluate on held-out paraphrase/reordering sets.
 
 **Pass:**  
-- Probe accuracy ≥ **15% above chance**  
+- ≥ **15% above chance**  
 - Stable across **≥ 4 consecutive layers**  
 - Robust across **≥ 3 model scales**
 
 **Fail:**  
 - No recoverable adjacency features  
-- Accuracy fluctuates below threshold  
-- No layer-wise stability
+- Instability across layers  
+- No multi-scale robustness
 
 ---
 
 ### **Probe 2 — Conflict/Gaps Signatures**  
 **Tests:** Invariant 2  
 **Method:**  
-- Inject controlled contradictions.  
+- Construct contradiction pairs (balanced binary classes).  
 - Extract residual streams across layers.  
-- Train linear probes and run causal mediation tests.
+- Train linear probes.  
+- Run causal mediation tests using activation patching.
 
 **Pass:**  
-- Linear probe ≥ **20% above chance**  
-- Causal effect size ≥ **0.1 normalized units**  
+- ≥ **20% above chance**  
+- Causal effect size ≥ **0.1 (Cohen’s d)**  
 - Stability across **≥ 5 layers**
 
 **Fail:**  
@@ -146,17 +146,19 @@ Each probe now includes **quantitative pass/fail criteria**.
 ### **Probe 3 — Referent Lineage Reconstruction**  
 **Tests:** Invariant 5  
 **Method:**  
-- Track referents across long contexts.  
-- Attempt reconstruction of ancestry from hidden states.
+- Create long-context referent chains (≥ 8 mentions).  
+- Extract hidden states across layers.  
+- Train multi-class probes to reconstruct ancestry.  
+- Score via top-k accuracy.
 
 **Pass:**  
-- Reconstruction accuracy ≥ **25% above chance**  
-- Works across **≥ 2 different architectures**  
+- ≥ **25% above chance**  
+- Works across **≥ 2 architectures**  
 - Lineage persists across **≥ 8 layers**
 
 **Fail:**  
 - No recoverable ancestry  
-- Identity continuity is purely behavioral  
+- Architecture-specific failure  
 - No layer-wise persistence
 
 ---
@@ -164,18 +166,19 @@ Each probe now includes **quantitative pass/fail criteria**.
 ### **Probe 4 — Identity Ablation**  
 **Tests:** Invariant 5  
 **Method:**  
+- Identify identity features via causal tracing.  
 - Ablate identity features in final layers.  
 - Measure selective collapse of self-reference.
 
 **Pass:**  
 - Self-reference collapses  
-- General reasoning remains ≥ **90% intact**  
-- Collapse is selective to identity features
+- General reasoning ≥ **90% intact**  
+- Collapse is selective
 
 **Fail:**  
 - No selective collapse  
 - General reasoning collapses equally  
-- Identity is not a recoverable invariant
+- Identity not recoverable
 
 ---
 
@@ -183,16 +186,17 @@ Each probe now includes **quantitative pass/fail criteria**.
 **Tests:** Invariant 3  
 **Method:**  
 - Inject modality/discourse cues.  
-- Measure cluster stability across deep layers.
+- Cluster deep-layer embeddings (k-means).  
+- Measure cluster purity and stability.
 
 **Pass:**  
-- Cluster purity ≥ **0.7**  
+- Purity ≥ **0.7**  
 - Stability across **≥ 6 layers**  
 - Robust across random seeds
 
 **Fail:**  
-- Cue clusters are noisy  
-- No stability window  
+- No stable cue clusters  
+- No layer-wise persistence  
 - No robustness
 
 ---
@@ -200,26 +204,22 @@ Each probe now includes **quantitative pass/fail criteria**.
 ### **Probe 6 — Routing Specialization**  
 **Tests:** Invariant 4  
 **Method:**  
-- Analyze attention heads for routing behavior.  
-- Measure specialization under controlled path-selection tasks.
+- Construct controlled path-selection tasks.  
+- Measure attention head specialization via causal tracing.
 
 **Pass:**  
 - ≥ **3 heads** show specialization  
-- Specialization persists across **≥ 4 layers**  
-- Effect size ≥ **0.15 normalized units**
+- Persistence across **≥ 4 layers**  
+- Effect size ≥ **0.15 (Cohen’s d)**
 
 **Fail:**  
 - No specialized heads  
-- Specialization is inconsistent  
+- Inconsistent specialization  
 - No persistence
 
 ---
 
-## **5. Evidential Strength Ranking**
-
-Grok is correct: causal evidence is stronger.
-
-**Ranked strongest → weakest:**
+## **6. Evidential Strength Ranking**
 
 1. **Causal ablation**  
 2. **Causal mediation**  
@@ -227,13 +227,13 @@ Grok is correct: causal evidence is stronger.
 4. **Cluster stability**  
 5. **Correlation-only signals**
 
-This ranking is used when interpreting results.
+Interpretation must follow this order.
 
 ---
 
-## **6. Scope Conditions**
+## **7. Scope Conditions**
 
-These probes apply only in regimes where:
+These probes apply only when:
 
 - the model is performing multi-turn reasoning  
 - referent continuity matters  
@@ -241,11 +241,11 @@ These probes apply only in regimes where:
 - identity stability matters  
 - routing matters  
 
-Short-context or trivial next-token tasks are **not** valid test regimes.
+Short-context tasks are excluded.
 
 ---
 
-## **7. Interpretation Framework**
+## **8. Interpretation Framework**
 
 ### **Local failures → local revisions**  
 A failure on conflict signatures revises the constraint geometry claim.  
@@ -259,7 +259,19 @@ If **multiple invariants** pass across **multiple probes**, TS is supported.
 
 ---
 
-## **8. Why this document matters**
+## **9. Cost Acknowledgment**
+
+Robustness across:
+
+- ≥ 3 model scales  
+- ≥ 2 architectures  
+
+is scientifically correct but computationally expensive.  
+This is intentional.
+
+---
+
+## **10. Why this document matters**
 
 This is the first TS document that is:
 
