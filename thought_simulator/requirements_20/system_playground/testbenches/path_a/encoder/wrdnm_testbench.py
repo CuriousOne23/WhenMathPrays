@@ -274,12 +274,16 @@ def run_testbench():
     print(f"- Total Tests Enabled: {total}")
     print(f"- Passed: {passed}")
     print(f"- Failed: {failed}")
+    print(f"- Result: {passed}/{total} PASS, {failed}/{total} FAIL")
     print("\nDetailed Results:")
     for r in results:
         status = "PASS" if r["passed"] else "FAIL"
         print(f"- {r['id']}: {status}")
 
     print("\n============================================================")
+    overall = "PASS" if failed == 0 and total > 0 else "FAIL"
+    print(f" OVERALL: {overall}  ({passed} of {total} tests passed)")
+    print("============================================================")
     print(" WRDNM Testbench Runner - Complete")
     print("============================================================")
 
