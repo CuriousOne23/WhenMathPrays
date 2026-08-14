@@ -1,1 +1,15 @@
+# ============================================================
+# Affect Scalar Table (v1.0)
+# Deterministic float32 scalar values for affect markers
+# ============================================================
+
+neutral: 0.100
+positive: 0.200
+negative: 0.300
+surprised: 0.400
+angry: 0.500
+fearful: 0.600
+sad: 0.700
+disgusted: 0.800
+joyful: 0.900
 
