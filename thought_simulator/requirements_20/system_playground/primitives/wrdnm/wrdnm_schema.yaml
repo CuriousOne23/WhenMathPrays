@@ -82,7 +82,7 @@ fields:
 
   adjacency:
     tp_field: adjacency_flag
-    mapping_type: boolean
+    mapping_type: categorical
     dictionary: adjacency_flag_dict.yaml
 
   ordering_id:
