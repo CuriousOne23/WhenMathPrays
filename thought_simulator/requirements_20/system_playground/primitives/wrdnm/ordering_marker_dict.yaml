@@ -1,1 +1,18 @@
+# ============================================================
+# WrdNm Dictionary: ordering_marker_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+after: 100.000
+before: 120.000
+begin: 140.000
+end: 160.000
+first: 180.000
+last: 200.000
+middle: 220.000
+next: 240.000
+previous: 260.000
+start: 280.000
+then: 300.000
 
