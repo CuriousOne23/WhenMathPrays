@@ -1,4 +1,4 @@
-# **Thought Pipeline (TP) Description**  
+# **Thought Pipeline (TP) Description2**  
 ### *Unified Architectural Description of the TS Cognitive Pipeline*
 
 The Thought Pipeline (TP) is the deterministic, bounded, replay‑safe architecture that transforms external input into committed meaning and a frozen semantic snapshot (SSR).  
