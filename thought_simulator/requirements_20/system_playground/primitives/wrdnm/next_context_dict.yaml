@@ -1,1 +1,15 @@
+# ============================================================
+# WrdNm Dictionary: next_context_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+continue_thread: 100.000
+expand_context: 120.000
+hold_context: 140.000
+new_context: 160.000
+shift_context: 180.000
+start_thread: 200.000
+switch_context: 220.000
+update_context: 240.000
 
