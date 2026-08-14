@@ -9,6 +9,7 @@ description: >
   its mapping type and the resource file used for conversion.
   WrdNm reads canonical nested TP paths exactly as emitted by
   upstream primitives (20.15, 20.105). Flattening is internal-only.
+  Paths are relative to the TP envelope root (do not prefix with TP.).
 
 canonical_order:
   - surface_id
@@ -78,7 +79,7 @@ fields:
     dictionary: entity_reference_dict.yaml
 
   thread_hash:
-    tp_field: TP.metadata.thread_string
+    tp_field: metadata.thread_string
     mapping_type: hashed
     hash_config: hash_config.yaml
 
