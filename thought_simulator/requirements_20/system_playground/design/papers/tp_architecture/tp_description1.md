@@ -1,4 +1,4 @@
-# `tp_description.md`  
+# `tp_description1.md`  
 ### **Thought Packet (TP) Description White Paper**  
 ### *Deterministic, Replay‑Safe, CCR‑Aligned Architecture Overview*  
 ### *With CE → TPU Boundary Focus*
