@@ -1,1 +1,16 @@
+# ============================================================
+# WrdNm Dictionary: routing_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+branch: 100.000
+continue: 120.000
+escalate: 140.000
+fallback: 160.000
+hold: 180.000
+redirect: 200.000
+stop: 220.000
+switch: 240.000
+terminate: 260.000
 
