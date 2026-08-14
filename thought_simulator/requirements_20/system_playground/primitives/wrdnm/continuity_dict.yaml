@@ -1,1 +1,11 @@
+# ============================================================
+# WrdNm Dictionary: continuity_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+continued_entity: 100.000
+new_entity: 120.000
+same_entity: 140.000
+switch_entity: 160.000
 
