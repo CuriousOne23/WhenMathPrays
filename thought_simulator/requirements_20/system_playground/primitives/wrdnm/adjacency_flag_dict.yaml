@@ -1,1 +1,10 @@
+# ============================================================
+# WrdNm Dictionary: adjacency_flag_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+adjacent: 100.000
+non_adjacent: 120.000
+unknown: 140.000
 
