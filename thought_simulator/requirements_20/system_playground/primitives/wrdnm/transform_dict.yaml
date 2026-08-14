@@ -1,1 +1,20 @@
+# ============================================================
+# WrdNm Dictionary: transform_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+adjust: 100.000
+clarify: 120.000
+correct: 140.000
+expand: 160.000
+filter: 180.000
+merge: 200.000
+normalize: 220.000
+refine: 240.000
+simplify: 260.000
+split: 280.000
+summarize: 300.000
+transform: 320.000
+update: 340.000
 
