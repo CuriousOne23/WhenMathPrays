@@ -75,7 +75,9 @@ TS is designed as a **cognitive operating system** — a kernel that routes, sta
 - [thought_sim_arch_overview.md](thought_sim_arch_overview.md) — Conceptual overview and Duck Test comparison
 
 ### TS Theory & TP Data Packet Flow Directory
-- [TS Theory and TP Data Packet Flow](requirements_20/system_playground/design/papers/ts_theory)
+- [TS Theory](requirements_20/system_playground/design/papers/ts_theory)
+- [TP Architecture](requirements_20/system_playground/design/papers/tp_architecture)
+- [TS Path A Architecture](requirements_20/system_playground/design/papers/ts_patha_architecture)  
 
 ---
 
