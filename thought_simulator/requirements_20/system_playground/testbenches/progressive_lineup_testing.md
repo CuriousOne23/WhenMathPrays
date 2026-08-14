@@ -239,14 +239,15 @@ thought_simulator/
 Where `<category>` ∈:
 
 ```
-boundary
-identity
-intake
-mismatch
-routing
-semantic
-structure
-transform
+ boundary
+ identity
+ intake
+ mismatch
+ routing
+ semantic
+ structure
+ transform
+ encoder
 ```
 
 Example (CE):
@@ -328,6 +329,58 @@ PRIMITIVE_NAME = "ce"
 ```
 
 This allows loaders to read the primitive name directly from the module, further reducing configuration overhead..
+
+---
+
+## 3.6.6 TP Field‑Path Contract for WrdNm (Mandatory)
+To ensure deterministic, replay‑safe numeric encoding, WrdNm must read structured TP fields
+from authoritative, stable TP paths. These paths are mandatory for all Path‑A primitives and
+all testbenches.
+
+### Canonical TP Field Paths (Authoritative)
+
+| WrdNm Field | TP Field | Canonical TP Path |
+|-------------|----------|-------------------|
+| surface_id | normalized_surface | IE.normalized_surface |
+| lemma_id | lemma | IE.lemma |
+| expression_id | expression_marker | IE.expression.marker |
+| temporal_id | temporal_marker | CE.temporal.marker |
+| causal_id | causal_marker | CE.causal.marker |
+| continuity_id | continuity_marker | CnOB.continuity.marker |
+| entity_id | entity_reference | IE.entity.reference |
+| thread_hash | thread_string | TP.metadata.thread_string |
+| adjacency | adjacency_flag | SmOB.adjacency.flag |
+| ordering_id | ordering_marker | SmOB.ordering.marker |
+| structural_importance | structural_importance | SmOB.importance.structural |
+| constraint_family_id | constraint_family | CnOB.constraint.family |
+| constraint_importance | constraint_importance | CnOB.constraint.importance |
+| missing_slot | missing_slot_flag | SROB.missing.slot_flag |
+| modality | modality_marker | CE.modality.marker |
+| affect | affect_marker | CE.affect.marker |
+| underspec | underspec_marker | CE.underspec.marker |
+| semantic_adjacent_importance | semantic_adjacent_importance | SmOB.semantic.adjacent_importance |
+| routing_id | routing_marker | TR.routing.marker |
+| transform_id | transform_marker | RB.transform.marker |
+| identity_id | identity_marker | IdOB.identity.marker |
+| next_context_id | next_context_marker | CEx.next_context.marker |
+
+### Mandatory Rules
+1. WrdNm SHALL NOT infer TP paths.
+2. All TP paths above are authoritative and must be used by both Python and C.
+3. Testbenches SHALL construct TP envelopes using these exact paths.
+4. Upstream primitives SHALL populate these fields exactly at these paths.
+5. Missing fields SHALL be treated as TP defects, not WrdNm inference.
+
+### Purpose
+This section ensures:
+- deterministic WrdNm behavior
+- deterministic testbench behavior
+- deterministic pipeline behavior
+- Python/C++ parity
+- stable TP envelope structure
+- correct upstream/downstream propagation
+- correct dictionary/scalar/hash lookup
+- correct progressive lineup integration
 
 ---
 
