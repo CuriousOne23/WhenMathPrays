@@ -1,1 +1,20 @@
+# ============================================================
+# WrdNm Dictionary: constraint_family_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+capacity: 100.000
+compatibility: 120.000
+conflict: 140.000
+dependency: 160.000
+exclusion: 180.000
+limitation: 200.000
+obligation: 220.000
+permission: 240.000
+precondition: 260.000
+prohibition: 280.000
+requirement: 300.000
+restriction: 320.000
+rule: 340.000
 
