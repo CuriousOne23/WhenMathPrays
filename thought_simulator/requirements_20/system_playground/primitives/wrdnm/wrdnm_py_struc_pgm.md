@@ -10,7 +10,7 @@
 # **1. WrdNm’s Role in the Pipeline**
 
 ```
-TPU → SOB → SROB → CnOB → SmOB → SSG → TR/RB/IdOB → ISc → WrdNm → ISc (numeric scoring)
+TPU → SOB → SROB → CnOB → SmOB → SSG → TR/RB/IdOB → WrdNm → ISc (numeric scoring)
 ```
 
 WrdNm is responsible for:
