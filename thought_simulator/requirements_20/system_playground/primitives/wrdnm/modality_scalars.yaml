@@ -1,1 +1,15 @@
+# ============================================================
+# Modality Scalar Table (v1.0)
+# Deterministic float32 scalar values for modality markers
+# ============================================================
+
+assertive: 0.100
+interrogative: 0.200
+imperative: 0.300
+conditional: 0.400
+hypothetical: 0.500
+optative: 0.600
+subjunctive: 0.700
+declarative: 0.800
+emphatic: 0.900
 
