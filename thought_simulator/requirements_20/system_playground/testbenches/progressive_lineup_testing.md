@@ -354,6 +354,37 @@ This allows loaders to read the primitive name directly from the module, further
 
 ---
 
+## ⭐ **3.6.6 Nested TP Field Path Convention (Mandatory for Schema‑Driven Primitives)**  
+
+When a primitive resolves nested fields on the Thought Packet (TP) envelope — whether via a schema file (`tp_field:`), hard‑coded paths, or testbench expected blocks — the following rule is **mandatory**:
+
+### **Paths are relative to the TP envelope root**
+
+The runtime object passed into a primitive **is** the TP.  
+Field paths **must not** be prefixed with `TP.`.
+
+| Correct | Incorrect |
+|---------|-----------|
+| `metadata.thread_string` | `TP.metadata.thread_string` |
+| `IE.normalized_surface` | `TP.IE.normalized_surface` |
+| `CE.temporal.marker` | `TP.CE.temporal.marker` |
+| `SmOB.adjacency.flag` | `TP.SmOB.adjacency.flag` |
+
+### **Why this rule exists**
+
+- Prose and architecture diagrams often say “TP.metadata…” for readability.  
+- Schema authors and implementers naturally copy that prefix into machine paths.  
+- Resolvers start at the TP root, so a leading `TP.` looks for a key that does not exist and silently falls back (often to `0` / empty).  
+- That failure mode is hard to spot until exact‑equality tests fail on a single field.
+
+### **Scope**
+
+Applies to **all** Path‑A primitives that read or declare nested TP paths, including (but not limited to) schema‑driven encoders such as WrdNm and any future ISc / scoring field maps.
+
+This rule travels with every primitive test via this document and eliminates a recurring class of silent path‑resolution bugs.
+
+---
+
 ### **3.7 Python Import Path Initialization (Mandatory for All Testbenches)**  
 To ensure that **all primitives, testbenches, rulecheckers, and dictionaries are importable without manual path edits**, every primitive testbench **must** initialize Python’s import path using the canonical project root.
 
