@@ -1,1 +1,20 @@
+# ============================================================
+# WrdNm Tests To Run (v1.0)
+# ============================================================
 
+tests:
+  - id: wrdnm_clean_full
+    enabled: true
+    description: Clean categorical + scalar + boolean + hashed conversion
+
+  - id: wrdnm_missing_keys
+    enabled: true
+    description: Missing dictionary/scalar keys fall back to 0 / 0.0
+
+  - id: wrdnm_missing_fields
+    enabled: true
+    description: Absent TP fields produce deterministic fallbacks
+
+  - id: wrdnm_append_only
+    enabled: true
+    description: Second invocation appends; does not overwrite prior record
