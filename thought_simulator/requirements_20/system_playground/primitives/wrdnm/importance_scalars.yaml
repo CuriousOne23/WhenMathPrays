@@ -1,1 +1,15 @@
+# ============================================================
+# Importance Scalar Table (v1.0)
+# Deterministic float32 scalar values for importance markers
+# ============================================================
+
+none: 0.100
+very_low: 0.200
+low: 0.300
+medium: 0.400
+high: 0.500
+very_high: 0.600
+critical: 0.700
+dominant: 0.800
+overriding: 0.900
 
