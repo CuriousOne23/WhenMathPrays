@@ -101,7 +101,8 @@ All dictionaries and scalar tables are stored as **YAML files**. Each dictionary
 
 ## **4.1 Categorical Dictionaries**
 
-Each dictionary maps string keys to integer IDs (`int32`).
+Each dictionary maps string keys to categorical numeric IDs (float32), 
+supporting fractional precision up to 1/1000 (nnn.xxx).
 
 - `surface_dict.yaml`
 - `lemma_dict.yaml`
@@ -119,13 +120,14 @@ Example:
 
 ```yaml
 # surface_dict.yaml
-run: 104
-walk: 105
-jump: 106
+run: 100.000
+walk: 120.000
+jump: 140.000
 ```
 
-Numeric type: `int32`  
-Range: `0–65535` (bounded by dictionary size)
+Numeric type: float32
+Precision: up to 1/1000 (nnn.xxx)
+Range: bounded by dictionary size
 
 ## **4.2 Scalar Tables**
 
@@ -325,11 +327,10 @@ wrdnm:
 ```
 
 Numeric types:
-
-- IDs → `int32`
-- Booleans → `int8`
-- Scalars → `float32`
-- Hashes → `uint32`
+- Categorical IDs → float32 (fractional precision ≤ 1/1000)
+- Booleans → int8
+- Scalars → float32
+- Hashes → uint32
 
 ---
 
