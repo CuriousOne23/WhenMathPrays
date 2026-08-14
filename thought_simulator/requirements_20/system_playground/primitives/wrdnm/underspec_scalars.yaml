@@ -1,1 +1,15 @@
+# ============================================================
+# Underspec Scalar Table (v1.0)
+# Deterministic float32 scalar values for underspec markers
+# ============================================================
+
+none: 0.100
+low: 0.200
+medium: 0.300
+high: 0.400
+very_high: 0.500
+implicit: 0.600
+ambiguous: 0.700
+unknown: 0.800
+conflicting: 0.900
 
