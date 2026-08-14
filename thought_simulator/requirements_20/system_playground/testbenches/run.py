@@ -202,10 +202,34 @@ ACTIVE_TEST_MODULES = [
     # Pipeline: SmOB only (post-CnOB shaped TP), input from:
     #   • smob_testbench.yaml (mode = "testbench")
     #   • smob_input.yaml (mode = "general")
+    # (
+    #     "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_testbench",
+    #     {
+    #         "mode": "general",     # "general" or "testbench"
+    #         "use_inb": False,
+    #         "use_iiinb": False,
+    #         "use_ie": False,
+    #         "use_cex_ie": False,
+    #         "use_cex_ccr": False,
+    #         "use_cex_pck": False,
+    #         "use_ce": False,
+    #         "use_tpu": False,
+    #         "use_sob": False,
+    #         "use_srob": False,
+    #         "use_cnob": False,       # Set True for progressive CnOB → SmOB later
+    #         "use_smob": True,        # Primitive under test
+    #         "tests_to_run": "see smob_tests_to_run.yaml",
+    #     }
+    # ),
+    # **************************** WrdNm Test bench ******************************************************
+    # Highest upstream True = WrdNm (primitive under test)
+    # Pipeline: WrdNm only (structured TP fields → numeric vector), input from:
+    #   • wrdnm_testbench.yaml (mode = "testbench")
+    #   • wrdnm_input.yaml (mode = "general")
     (
-        "thought_simulator.requirements_20.system_playground.testbenches.path_a.semantic.smob_testbench",
+        "thought_simulator.requirements_20.system_playground.testbenches.path_a.encoder.wrdnm_testbench",
         {
-            "mode": "general",     # "general" or "testbench"
+            "mode": "testbench",     # "general" or "testbench"
             "use_inb": False,
             "use_iiinb": False,
             "use_ie": False,
@@ -216,9 +240,10 @@ ACTIVE_TEST_MODULES = [
             "use_tpu": False,
             "use_sob": False,
             "use_srob": False,
-            "use_cnob": False,       # Set True for progressive CnOB → SmOB later
-            "use_smob": True,        # Primitive under test
-            "tests_to_run": "see smob_tests_to_run.yaml",
+            "use_cnob": False,
+            "use_smob": False,
+            "use_wrdnm": True,       # Primitive under test
+            "tests_to_run": "see wrdnm_tests_to_run.yaml",
         }
     ),
 ]
