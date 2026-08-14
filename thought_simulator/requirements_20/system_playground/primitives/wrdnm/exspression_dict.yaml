@@ -1,1 +1,23 @@
+# ============================================================
+# WrdNm Dictionary: expression_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+affirmation: 100.000
+command: 120.000
+comparison: 140.000
+condition: 160.000
+conjunction: 180.000
+declaration: 200.000
+description: 220.000
+exclamation: 240.000
+hypothetical: 260.000
+interjection: 280.000
+negation: 300.000
+question: 320.000
+quotation: 340.000
+request: 360.000
+statement: 380.000
+suggestion: 400.000
 
