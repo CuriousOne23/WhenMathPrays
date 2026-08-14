@@ -1,1 +1,39 @@
+# ============================================================
+# WrdNm Dictionary: lemma_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+ask: 100.000
+change: 120.000
+choose: 140.000
+come: 160.000
+continue: 180.000
+decide: 200.000
+explain: 220.000
+feel: 240.000
+find: 260.000
+forget: 280.000
+give: 300.000
+go: 320.000
+help: 340.000
+jump: 360.000
+know: 380.000
+look: 400.000
+make: 420.000
+move: 440.000
+need: 460.000
+remember: 480.000
+run: 500.000
+say: 520.000
+see: 540.000
+start: 560.000
+stop: 580.000
+take: 600.000
+tell: 620.000
+think: 640.000
+try: 660.000
+use: 680.000
+walk: 700.000
+want: 720.000
 
