@@ -1,1 +1,72 @@
+# ============================================================
+# WrdNm General-Mode Input (v1.0)
+# Structured TP fields for rule-driven validation
+# ============================================================
 
+IE:
+  normalized_surface: run
+  lemma: think
+  expression:
+    marker: statement
+  entity:
+    reference: individual
+
+CE:
+  temporal:
+    marker: present
+  causal:
+    marker: because
+  modality:
+    marker: declarative
+  affect:
+    marker: neutral
+  underspec:
+    marker: low
+
+CnOB:
+  continuity:
+    marker: same_entity
+  constraint:
+    family: requirement
+    importance: medium
+
+SmOB:
+  adjacency:
+    flag: adjacent
+  ordering:
+    marker: next
+  importance:
+    structural: high
+  semantic_adjacent_importance: medium
+
+SROB:
+  missing:
+    slot_flag: false
+
+TR:
+  routing:
+    marker: continue
+
+RB:
+  transform:
+    marker: normalize
+
+IdOB:
+  identity:
+    marker: user
+
+CEx:
+  next_context:
+    marker: continue_thread
+
+metadata:
+  thread_string: thread-alpha-001
+  context:
+    context_fields:
+      topic: navigation
+      stance: neutral
+      intent: encode
+      continuity: same_entity
+      direction: forward
+      coherence: stable
+      importance: medium
