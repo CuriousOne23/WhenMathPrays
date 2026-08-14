@@ -1,1 +1,18 @@
+# ============================================================
+# WrdNm Dictionary: entity_reference_dict.yaml
+# Alphabetical ordering + monotonic stride (+20)
+# Fractional precision: nnn.xxx (float32 categorical IDs)
+# ============================================================
+
+agent: 100.000
+artifact: 120.000
+collective: 140.000
+event: 160.000
+group: 180.000
+individual: 200.000
+location: 220.000
+object: 240.000
+organization: 260.000
+system: 280.000
+user: 300.000
 
