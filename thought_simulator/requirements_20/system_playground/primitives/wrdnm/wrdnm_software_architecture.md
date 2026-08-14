@@ -258,7 +258,7 @@ bit_width: 32
 ### **Formula:**  
 
 $$
-H = \mathrm{murmur3\_32}(input\_string, seed)
+H = \mathrm{murmur3\\_32}(input\\_string, seed)
 $$
 
 ---
