@@ -56,8 +56,7 @@ LLMs do not, as a design commitment, separate stated content from contextual str
 
 LLMs succeed — and they succeed **statistically**, through learned geometry rather than through the explicit structure TS prioritizes.
 
-This is not a weakness.  
-It is a different approach with different strengths and different visibility properties.
+This is not a weakness. It is a different approach with different strengths and different visibility properties.
 
 ---
 
@@ -103,8 +102,7 @@ These are design targets and theoretical proposals. Their adequacy is to be test
 
 # **4. Offline Meaning Formation: LLM vs TS**
 
-Both LLMs and TS rely on an offline phase that shapes how meaning is represented.  
-The nature of that offline phase differs.
+Both LLMs and TS rely on an offline phase that shapes how meaning is represented. The nature of that offline phase differs.
 
 ### **LLM Offline Phase**  
 - statistical  
@@ -116,8 +114,7 @@ The nature of that offline phase differs.
 - shaped by loss functions  
 - shaped by preference tuning  
 
-LLMs do not propose an explicit set of underlying laws of communication of the form TS develops.  
-They learn statistical geometry.
+LLMs do not propose an explicit set of underlying laws of communication of the form TS develops. They learn statistical geometry.
 
 ### **TS Offline Phase**  
 - deterministic  
@@ -130,8 +127,7 @@ They learn statistical geometry.
 - governed by dictionary primitives  
 - governed by the meaning state vector  
 
-TS does not claim to have discovered the laws of communication.  
-TS claims those laws exist — and that discovering and formalizing them is a valid scientific project. The current formalization is a set of proposals under test.
+TS does not claim to have discovered the laws of communication. TS claims those laws exist — and that discovering and formalizing them is a valid scientific project. The current formalization is a set of proposals under test.
 
 ---
 
@@ -161,11 +157,9 @@ TS asserts:
 - that communication has structure worth making visible  
 - that cognition has rules and primitives worth testing under deterministic constraints  
 
-TS does not claim these laws are known.  
-TS claims they exist — and that an architecture oriented toward visibility can help discover, formalize, and revise them.
+TS does not claim these laws are known. TS claims they exist — and that an architecture oriented toward visibility can help discover, formalize, and revise them.
 
-TS is a scientific cognitive architecture oriented toward visibility.  
-LLMs are statistical cognitive engines oriented toward performance.
+TS is a scientific cognitive architecture oriented toward visibility. LLMs are statistical cognitive engines oriented toward performance.
 
 Both are valid.  
 Both are powerful.  
@@ -248,14 +242,11 @@ They are different instruments.
 
 # **8. Conclusion**
 
-LLMs and TS both demonstrate that machine cognition is possible.  
-They do so under different assumptions and with different primary goals.
+LLMs and TS both demonstrate that machine cognition is possible. They do so under different assumptions and with different primary goals.
 
-LLMs treat meaning as an emergent statistical pattern shaped by training constraints.  
-TS treats meaning as a structured cognitive object arising from a proposed deterministic coupling of stated content and contextual structure.
+LLMs treat meaning as an emergent statistical pattern shaped by training constraints. TS treats meaning as a structured cognitive object arising from a proposed deterministic coupling of stated content and contextual structure.
 
-LLMs largely avoid the explicit question of underlying laws in the form TS develops.  
-TS asserts those laws exist — and that discovering and formalizing them is a valid scientific project.
+LLMs largely avoid the explicit question of underlying laws in the form TS develops. TS asserts those laws exist — and that discovering and formalizing them is a valid scientific project.
 
 TS covers much of the same functional territory as LLMs, but with explicit structure, determinism, canonicalization, replay safety, identity continuity, and laptop‑scale constraints, and with the explicit goal of making its own theoretical proposals inspectable and revisable.
 
