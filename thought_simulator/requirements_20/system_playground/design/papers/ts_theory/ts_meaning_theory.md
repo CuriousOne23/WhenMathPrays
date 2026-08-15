@@ -278,20 +278,29 @@ No hybrid system ever implemented meaning as a coupling operator.
 ---
 
 ## **C. Modern LLMs (Transformers)**  
-LLMs (GPT‑style, Grok‑style, Claude‑style, Gemini‑style) encode:
+Modern LLMs (GPT‑style, Grok‑style, Claude‑style, Gemini‑style) operate on a fundamentally different premise from both symbolic systems and TS. They do not treat meaning as a structured object, nor do they separate stated content from contextual structure. Instead, they treat meaning as an emergent statistical pattern encoded in a single, high‑dimensional tensor space.
 
-- meaning  
-- context  
-- syntax  
-- semantics  
-- discourse  
-- adjacency  
-- routing  
-- intent  
+LLMs assume:
 
-all in the **same entangled tensor space**.
+$$
+\text{Meaning}_{LLM} = f(\text{All Tokens}, \text{All Layers}) \times g(\text{Training Constraints})
+$$
 
-LLMs do not:
+Where:
+
+- **f(All Tokens, All Layers)** is the *runtime forward‑pass function*, an entangled computation over embeddings, attention heads, residual streams, and MLP layers.
+- **g(Training Constraints)** is the *training‑shaped geometry*, determined by gradient descent, loss functions, dataset distribution, inductive biases, and preference tuning.
+
+This meaning representation is:
+
+- **entangled** — meaning, context, syntax, semantics, discourse, and intent occupy the same vector space  
+- **non‑deterministic** — small perturbations in input or sampling produce different outputs  
+- **non‑canonical** — no stable representation of meaning exists across runs  
+- **non‑replay‑safe** — identical inputs do not guarantee identical outputs  
+- **unbounded** — meaning is represented in a continuous, high‑dimensional embedding space  
+- **non‑selective** — the model generates meaning rather than selecting among structured candidates  
+
+LLMs do **not**:
 
 - separate stated content from contextual structure  
 - define meaning as a structured object  
@@ -302,31 +311,48 @@ LLMs do not:
 - define meaning as a coupling  
 - define meaning as a state vector  
 
-LLMs assume:
-
-$$
-\text{Meaning} = f(\text{All Tokens, All Layers})
-$$
-
-This is the opposite of TS.
+### **How TS differs**
 
 TS assumes:
 
 $$
-\text{Meaning} = \text{Stated} \times \text{Context}
+\text{Meaning}_{TS} = \text{Stated} \times \text{Context}
 $$
 
-LLMs entangle everything; TS separates, structures, and couples.
+This means TS:
 
-LLMs generate meaning; TS **selects** meaning.
+- **separates** stated content and contextual structure  
+- **couples** them deterministically  
+- **canonicalizes** meaning  
+- **commits** meaning  
+- **replays** meaning  
+- **routes** meaning  
+- **maintains identity continuity**  
+- **operates on a laptop**  
 
-LLMs drift; TS is deterministic.
+LLMs:
 
-LLMs hallucinate; TS is bounded.
+- entangle everything  
+- generate meaning  
+- drift  
+- hallucinate  
+- cannot guarantee identity continuity  
+- cannot guarantee replay determinism  
+- cannot guarantee stable meaning  
+- cannot guarantee bounded meaning  
 
-LLMs cannot guarantee identity continuity; TS requires it.
+TS:
 
-LLMs cannot guarantee replay determinism; TS enforces it.
+- separates  
+- structures  
+- couples  
+- canonicalizes  
+- commits  
+- replays  
+- routes  
+- stabilizes  
+
+This is why TS is fundamentally different from every LLM architecture.
 
 ---
 
