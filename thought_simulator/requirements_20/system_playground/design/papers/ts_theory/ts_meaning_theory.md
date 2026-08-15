@@ -136,9 +136,6 @@ These sections are fully compatible with the content in your current tab (cited 
 
 ---
 
-# ⭐ **NEW SECTION 3.1 — Independent Evidence for Meaning as Coupling**  
-*(to be inserted immediately after Section 3)*
-
 ### **3.1 Independent Evidence for Meaning as Coupling**
 
 A wide range of independent research traditions support the claim that meaning arises from the coupling of stated content and contextual structure. Although no prior theory expresses this relationship in the explicit, structured form used by TS, empirical evidence consistently shows that meaning is not recoverable from linguistic form alone.
@@ -173,9 +170,6 @@ Meaning is inherent in the interaction between the two.**
 This convergence provides independent support for TS’s coupling model.
 
 ---
-
-# ⭐ **NEW SECTION 3.2 — Cognitive Implications of Meaning as Coupling**  
-*(to be inserted immediately after Section 3.1)*
 
 ### **3.2 Cognitive Implications of Meaning as Coupling**
 
