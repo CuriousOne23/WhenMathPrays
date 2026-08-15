@@ -242,7 +242,7 @@ They are different instruments.
 
 # **8. Conclusion**
 
-LLMs and TS both demonstrate that machine cognition is possible. They do so under different assumptions and with different primary goals.
+LLMs demonstrate that machine cognition is possible and early limited logic simulations show that TS architecture has limited cognition capability. But, they do so under different assumptions and with different primary goals.
 
 LLMs treat meaning as an emergent statistical pattern shaped by training constraints. TS treats meaning as a structured cognitive object arising from a proposed deterministic coupling of stated content and contextual structure.
 
@@ -251,7 +251,7 @@ LLMs largely avoid the explicit question of underlying laws in the form TS devel
 TS covers much of the same functional territory as LLMs, but with explicit structure, determinism, canonicalization, replay safety, identity continuity, and laptop‑scale constraints, and with the explicit goal of making its own theoretical proposals inspectable and revisable.
 
 **TS as a machine for scientific visibility.**  
-TS is not built to replace LLMs or to compete with them on every performance dimension. TS is built to provide scientific visibility into a set of questions about structure in cognition. The architecture assumes that human communication is governed by underlying structure — laws, rules, invariants — even if those laws have not yet been discovered. TS does not claim to have found these laws; it claims they exist, and that an architecture oriented toward determinism, historical record, quantification, and open critique can help frame the questions more precisely. The current formalization is a set of theoretical proposals. Answers for or against those proposals are both valuable when they can be recorded specifically.
+Present stage TS is not built to replace LLMs or to compete with them on every performance dimension. TS is primarily built to provide scientific visibility into a set of questions about structure in cognition. The architecture assumes that human communication is governed by underlying structure — laws, rules, invariants — even if those laws have not yet been discovered. TS does not claim to have found these laws; it claims they exist, and that an architecture oriented toward determinism, historical record, quantification, and open critique can help frame the questions more precisely. The current formalization is a set of theoretical proposals. Answers for or against those proposals are both valuable when they can be recorded specifically.
 
 Both approaches are powerful.  
 Both are valid.  
