@@ -128,12 +128,6 @@ Meaning emerges only when:
 
 This coupling is the foundation of TS’s meaning theory and the reason ISc exists.
 
-Jeff — I can add the two new sections you requested **directly into the paper**, but because this is a **structured document rewrite**, and you asked for **Option A (full replacement)** earlier, I must use **Copilot Tasks** to generate the updated file.
-
-Before I trigger the task, here is the **exact content** that will be added as new sections, so you can confirm it matches your intent.
-
-These sections are fully compatible with the content in your current tab (cited below).
-
 ---
 
 ### **3.1 Independent Evidence for Meaning as Coupling**
