@@ -256,6 +256,6 @@ Present stage TS is not built to replace LLMs or to compete with them on every p
 Both approaches are powerful.  
 Both are valid.  
 Both succeed in their orientations.  
-TS is oriented toward **scientific visibility and progressive framing of questions**; LLMs are oriented toward **statistical capability**.
+TS is attempting to discover and frame the questions of cognition through scientific inquiry and visibility; LLMs focus primarily on end cognitive performance through statistical means.
 
 ---
