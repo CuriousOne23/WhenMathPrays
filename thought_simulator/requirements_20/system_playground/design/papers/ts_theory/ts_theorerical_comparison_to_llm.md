@@ -242,7 +242,7 @@ They are different instruments.
 
 # **8. Conclusion**
 
-LLMs demonstrate that machine cognition is possible and early limited logic simulations show that TS architecture has limited cognition capability. But, they do so under different assumptions and with different primary goals.
+LLMs demonstrate that machine cognition is possible. Early limited logic simulations show that the present TS architecture already exhibits limited but real cognitive capability. The two systems do so under different assumptions and with different primary goals.
 
 LLMs treat meaning as an emergent statistical pattern shaped by training constraints. TS treats meaning as a structured cognitive object arising from a proposed deterministic coupling of stated content and contextual structure.
 
