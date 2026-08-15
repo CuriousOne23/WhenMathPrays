@@ -263,6 +263,8 @@ TS covers the same functional territory as LLMs, but with explicit structure, de
 TS is a scientific cognitive architecture designed to give visibility into the underlying structure of cognition.  
 LLMs are statistical cognitive engines designed to approximate human communication behavior.
 
+TS as a Machine for Scientific Visibility. TS is not built to replace LLMs or compete with them. TS is built to provide scientific visibility into cognition itself. The architecture assumes that human communication is governed by underlying structure — laws, rules, invariants — even if those laws have not yet been discovered. TS does not claim to have found these laws; TS claims they exist, and that discovering and formalizing them is a valid scientific project. TS is a machine designed to expose the structure of cognition, not to avoid it. LLMs succeed at cognition through statistical approximation; TS seeks to understand cognition through structured, deterministic representation.
+
 Both are powerful.  
 Both are valid.  
 Both succeed.  
