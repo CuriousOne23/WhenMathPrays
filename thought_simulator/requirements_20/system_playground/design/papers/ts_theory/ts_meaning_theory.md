@@ -37,6 +37,14 @@ Therefore TS requires a theory of meaning that:
 6. defines how meaning interacts with the TP layers  
 7. defines how meaning arises from the coupling of stated content and contextual structure  
 
+### **Scientific Posture**
+
+TS is an instrument for framing and making visible a set of questions about structure in meaning, continuity, and identity.  
+The current invariants, coupling procedure, and meaning-state vector are theoretical proposals under test.  
+Results that support or run against those proposals are both scientifically valuable; the architecture is designed so that either outcome can be recorded specifically and left open to external measurement criteria.  
+There is no completed theory to defend. Visibility, determinism, historical record, and openness to critique are the primary design goals.  
+Evaluation criteria for performance remain external and contestable.
+
 **Architectural rationale**  
 The definition of meaning as a structured set of invariant attributes was adopted because it simultaneously satisfies the full set of constraints required by TS: deterministic replay, identity continuity, bounded canonicalization, laptop-scale computation, clean integration with the TP layers, and avoidance of the instability of raw semantic embeddings.
 
@@ -126,7 +134,8 @@ Meaning emerges only when:
 - is coupled with  
 - the contextual structure
 
-This coupling is the foundation of TS’s meaning theory and the reason ISc exists.
+This coupling is the foundation of TS’s meaning theory and the reason ISc exists.  
+The coupling itself, and the particular form in which it is realized, are theoretical proposals whose adequacy is to be tested by the residuals they produce and by external measurement criteria.
 
 ---
 
@@ -161,7 +170,7 @@ Across these fields, the consistent finding is:
 Meaning is not inherent in the context.  
 Meaning is inherent in the interaction between the two.**
 
-This convergence provides independent support for TS’s coupling model.
+This convergence provides independent support for the *direction* of TS’s coupling model. It does not constitute proof that the particular formalization adopted by TS is sufficient.
 
 ---
 
@@ -196,45 +205,46 @@ This cognitive stance is reflected directly in the architecture:
 - **TPU** commits meaning deterministically  
 - **TP layers** route meaning based on invariant attributes  
 
-The coupling model therefore serves as both a semantic theory and a cognitive theory, grounding TS’s design in a principled, machine‑tractable account of meaning.
+The coupling model therefore serves as both a semantic theory and a cognitive theory, grounding TS’s design in a principled, machine‑tractable account of meaning. These implications remain theoretical proposals under test.
 
 ---
 
 # **3.3 Historical Cognitive Machine Architectures and How TS Differs**
 
-TS’s meaning theory and cognitive architecture depart sharply from every prior class of cognitive machine. Although symbolic systems, hybrid symbolic systems, and modern LLMs each attempted to model meaning and cognition, none were built on the premise that **meaning is the deterministic coupling of stated content and contextual structure**. This section summarizes how earlier architectures were constructed and how TS differs fundamentally from all of them.
+TS’s meaning theory and cognitive architecture are distinctive in the particular combination of constraints and visibility goals they accept. Symbolic systems, hybrid symbolic systems, and modern LLMs each investigated aspects of meaning and cognition; none combined the full set of design targets that TS prioritizes: an explicit deterministic coupling of stated content and contextual structure, a bounded invariant meaning state, hard replay safety, identity continuity as a first-class requirement, laptop-scale operation, and the explicit goal of making theoretical proposals inspectable and revisable.
+
+The characterizations below are ideal types useful for clarifying architectural bets. They are not exhaustive histories.
 
 ---
 
 ## **A. Symbolic Systems (GOFAI)**  
-Symbolic systems of the 1960s–1990s (frames, scripts, semantic networks, production rules, logic engines) assumed:
+Symbolic systems of the 1960s–1990s (frames, scripts, semantic networks, production rules, logic engines) commonly assumed:
 
 - **Meaning is intrinsic to symbols.**  
 - Context is an *add‑on* (rule conditions, frame slots, inheritance).  
 - Cognition is rule application or logical inference.  
 - Determinism is achieved through fixed rules, not structured meaning.  
-- No canonicalization, no replay determinism, no invariant meaning.
+- No canonicalization, no replay determinism, no invariant meaning state vector of the form used by TS.
 
-Symbolic systems treated context as metadata, not as a co‑equal operand in meaning.  
-They assumed:
+Symbolic systems typically treated context as metadata rather than as a co‑equal operand in meaning.  
+They assumed forms closer to:
 
 $$
 \text{Meaning} = \text{Symbol}
 $$
 
-TS rejects this.  
-TS assumes:
+TS adopts a different commitment:
 
 $$
 \text{Meaning} = \text{Stated} \times \text{Context}
 $$
 
-Symbolic systems never formalized meaning as a coupling, never defined meaning as a structured state vector, and never required replay determinism or identity continuity.
+Symbolic systems did not formalize meaning as a deterministic coupling operator of this kind, did not define meaning as a bounded structured state vector under the constraints TS accepts, and did not treat replay determinism and identity continuity as hard architectural requirements of the same type.
 
 ---
 
 ## **B. Hybrid Symbolic Systems (Symbolic + Statistical / Symbolic + Neural)**  
-Hybrid systems attempted to fix symbolic brittleness by adding:
+Hybrid systems attempted to address symbolic brittleness by adding:
 
 - probabilistic weights  
 - statistical priors  
@@ -242,45 +252,34 @@ Hybrid systems attempted to fix symbolic brittleness by adding:
 - Bayesian inference  
 - graph‑based semantic weighting  
 
-These systems treated context as:
+These systems commonly treated context as:
 
 - modifiers  
 - weights  
 - priors  
 - activation probabilities  
 
-But they **never** defined meaning as:
+They generally did not define meaning as:
 
 - a deterministic coupling  
-- a structured object  
-- a canonicalized invariant  
-- a replay‑safe state  
-- a bounded meaning vector  
+- a structured, bounded object under laptop-scale constraints  
+- a canonicalized invariant state  
+- a replay‑safe historical record  
 
-Hybrid systems assumed:
+Hybrid systems typically assumed forms closer to:
 
 $$
 \text{Meaning} = \text{Symbol} + \text{Contextual Modifiers}
 $$
 
-TS is different:
-
-- context is not a modifier  
-- context is a *co‑equal operand*  
-- meaning is the *interaction*  
-- meaning is invariant at commitment  
-- meaning is canonicalized  
-- meaning is replay‑safe  
-- meaning is bounded and laptop‑scale  
-
-No hybrid system ever implemented meaning as a coupling operator.
+TS differs in treating context as a co‑equal operand, in requiring meaning to be invariant at commitment, canonicalized, replay-safe, and bounded, and in making residual error and identity continuity first-class, inspectable concerns.
 
 ---
 
 ## **C. Modern LLMs (Transformers)**  
-Modern LLMs (GPT‑style, Grok‑style, Claude‑style, Gemini‑style) operate on a fundamentally different premise from both symbolic systems and TS. They do not treat meaning as a structured object, nor do they separate stated content from contextual structure. Instead, they treat meaning as an emergent statistical pattern encoded in a single, high‑dimensional tensor space.
+Modern LLMs (GPT‑style, Grok‑style, Claude‑style, Gemini‑style) operate on a different premise. They do not treat meaning as a structured object of the form used by TS, nor do they maintain an explicit separation between stated content and contextual structure as co-equal operands. Instead, they treat meaning as an emergent statistical pattern encoded in a single, high‑dimensional tensor space.
 
-LLMs assume:
+LLMs assume forms closer to:
 
 $$
 \text{Meaning}_{LLM} = f(\text{All Tokens}, \text{All Layers}) \times g(\text{Training Constraints})
@@ -291,27 +290,23 @@ Where:
 - **f(All Tokens, All Layers)** is the *runtime forward‑pass function*, an entangled computation over embeddings, attention heads, residual streams, and MLP layers.
 - **g(Training Constraints)** is the *training‑shaped geometry*, determined by gradient descent, loss functions, dataset distribution, inductive biases, and preference tuning.
 
-This meaning representation is:
+This meaning representation is characteristically:
 
 - **entangled** — meaning, context, syntax, semantics, discourse, and intent occupy the same vector space  
-- **non‑deterministic** — small perturbations in input or sampling produce different outputs  
-- **non‑canonical** — no stable representation of meaning exists across runs  
-- **non‑replay‑safe** — identical inputs do not guarantee identical outputs  
-- **unbounded** — meaning is represented in a continuous, high‑dimensional embedding space  
-- **non‑selective** — the model generates meaning rather than selecting among structured candidates  
+- **non‑deterministic** (under typical sampling) — small perturbations in input or sampling can produce different outputs  
+- **non‑canonical** — no stable, inspectable representation of meaning of the kind TS maintains across runs  
+- **non‑replay‑safe** in the strict sense required by TS  
+- **unbounded** relative to the discrete state vector TS employs  
+- **non‑selective** in the sense that the model generates rather than selecting among structured candidates under the constraints TS accepts  
 
-LLMs do **not**:
+LLMs do not, as a design commitment:
 
-- separate stated content from contextual structure  
-- define meaning as a structured object  
-- define meaning as invariant  
-- define meaning as deterministic  
-- define meaning as replay‑safe  
-- define meaning as canonical  
-- define meaning as a coupling  
-- define meaning as a state vector  
+- separate stated content from contextual structure as co-equal operands  
+- define meaning as a structured, bounded, invariant state vector  
+- enforce deterministic commitment and hard replay safety of the form TS requires  
+- treat identity continuity as a first-class, inspectable architectural invariant of the same type  
 
-### **How TS differs**
+### **How TS differs in design targets**
 
 TS assumes:
 
@@ -319,46 +314,24 @@ $$
 \text{Meaning}_{TS} = \text{Stated} \times \text{Context}
 $$
 
-This means TS:
+This means TS is designed to:
 
-- **separates** stated content and contextual structure  
-- **couples** them deterministically  
-- **canonicalizes** meaning  
-- **commits** meaning  
-- **replays** meaning  
-- **routes** meaning  
-- **maintains identity continuity**  
-- **operates on a laptop**  
+- **separate** stated content and contextual structure  
+- **couple** them deterministically  
+- **canonicalize** meaning  
+- **commit** meaning  
+- **replay** meaning  
+- **route** meaning  
+- **maintain identity continuity** as an explicit, inspectable function  
+- **operate on a laptop** under bounded-state constraints  
 
-LLMs:
-
-- entangle everything  
-- generate meaning  
-- drift  
-- hallucinate  
-- cannot guarantee identity continuity  
-- cannot guarantee replay determinism  
-- cannot guarantee stable meaning  
-- cannot guarantee bounded meaning  
-
-TS:
-
-- separates  
-- structures  
-- couples  
-- canonicalizes  
-- commits  
-- replays  
-- routes  
-- stabilizes  
-
-This is why TS is fundamentally different from every LLM architecture.
+These are differences in architectural commitments and visibility goals, not claims of overall superiority in every performance dimension.
 
 ---
 
-## **D. Why TS Is Fundamentally Different**
+## **D. Distinctive Design Targets of TS**
 
-TS is the first cognitive architecture built on the following premises:
+TS is distinctive in combining the following design premises:
 
 1. **Meaning is a structured object.**  
 2. **Meaning arises from a deterministic coupling of stated content and contextual structure.**  
@@ -366,26 +339,14 @@ TS is the first cognitive architecture built on the following premises:
 4. **Meaning must be canonicalized.**  
 5. **Meaning must be replay‑safe.**  
 6. **Meaning must be bounded and laptop‑scale.**  
-7. **Cognition is propositional and selective, not generative.**  
+7. **Cognition is treated as propositional and selective under these constraints, not generative in the unbounded sense.**  
 8. **ISc evaluates meaning; it does not generate meaning.**  
 9. **CE generates candidates; ISc selects the invariant meaning.**  
-10. **TPU commits meaning deterministically; TP replays it.**
+10. **TPU commits meaning deterministically; TP supports historical replay.**
 
-No symbolic system, hybrid system, or LLM has ever implemented this model.
+Earlier systems investigated structure; none combined this particular set of hard constraints with the explicit goal of making the theoretical proposals themselves inspectable, quantifiable, and open to residual evidence and external critique.
 
-TS is the first architecture where:
-
-- meaning is **structured**  
-- meaning is **coupled**  
-- meaning is **invariant**  
-- meaning is **canonical**  
-- meaning is **deterministic**  
-- meaning is **bounded**  
-- meaning is **replay‑safe**  
-- meaning is **computationally tractable**  
-- meaning is **the foundation of cognition**  
-
-This is the architectural leap that distinguishes TS from every prior cognitive machine.
+The current formalization remains a set of theoretical proposals. Their adequacy is to be judged by the residuals they produce and by measurement criteria that remain external and contestable.
 
 ---
 
@@ -428,6 +389,9 @@ They are not assumed to be independent; referent continuity, identity continuity
 The meaning state vector is a primary extension point.  
 New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing.
 
+**Provisional status**  
+This vector is the current theoretical proposal. Its sufficiency is to be tested by residual error under controlled conditions and by external evaluation criteria. It is not claimed to be complete or final.
+
 ---
 
 # **5. Raw Meaning and the Raw → Canonical Mapping**
@@ -445,9 +409,9 @@ This mapping stabilizes, bounds, and canonicalizes meaning, rendering it determi
 
 **Residual error**  
 Canonicalization is lossy.  
-The governing claim, carried forward from *difficulty_of_meaning.md*, is that the right loss applied at sufficient frequency leaves residual error negligible for continuity, identity, and machine reasoning.
+The governing claim, carried forward from *difficulty_of_meaning.md*, is that the right loss applied at sufficient frequency leaves residual error manageable for continuity, identity, and machine reasoning under the constraints TS accepts.
 
-Continuity and identity mechanisms absorb and correct residual discrepancies across turns.
+Residual error is expected material for theoretical revision, not merely an engineering inconvenience. Continuity and identity mechanisms are designed to surface and absorb discrepancies across turns so that the adequacy of the current formalization remains visible.
 
 ---
 
@@ -457,7 +421,7 @@ Canonicalization converts raw meaning into canonical meaning.
 
 Core claim:
 
-> **The right loss, applied at the right frequency, produces residual error that is negligible for machine cognition.**
+> **The right loss, applied at the right frequency, produces residual error that is manageable for machine cognition under the constraints TS accepts.**
 
 Canonicalization is:
 
@@ -469,7 +433,7 @@ Canonicalization is:
 
 It is required because raw meaning is too unstable, continuous embeddings are too volatile, semantic drift is otherwise uncontrolled, and neither replay determinism nor identity continuity can be guaranteed without it.
 
-Canonicalization is the central mathematical and architectural hinge of the meaning pipeline.
+Canonicalization is the central mathematical and architectural hinge of the meaning pipeline. The claim that residual error remains manageable is itself a theoretical proposal open to measurement and critique.
 
 ---
 
@@ -529,7 +493,7 @@ $$
 
 Replay determinism is achievable only because meaning is represented in canonical form, attributes are bounded state variables, and transitions are deterministic.
 
-This requirement is one of the strongest forces shaping TS’s meaning theory.
+This requirement is one of the strongest forces shaping TS’s meaning theory. The historical post-TP record is a primary instrument of visibility.
 
 ---
 
@@ -577,8 +541,9 @@ What is distinctive is the integration of:
 - replay determinism as a hard requirement  
 - identity continuity as a first-class concern  
 - an explicit laptop-scale design target  
+- the explicit goal of making theoretical proposals inspectable and open to residual evidence  
 
-The contribution lies in the combination and the constraints that combination must satisfy.
+The contribution lies in the combination of these constraints and the visibility goals they serve.
 
 ---
 
@@ -593,11 +558,13 @@ This paper has stated:
 - the requirements of commitment and replay determinism  
 - the relationship between meaning theory and laptop-scale operation  
 - the coupling model: **meaning = stated × context**  
-- the invariant meaning boundary that distinguishes TS’s cognitive model from full human semantics  
+- the invariant meaning boundary that distinguishes TS’s cognitive model under its chosen constraints  
 
 Meaning theory is the backbone of TS.  
 It is the foundation on which the remaining TS papers rest.
 
+The current formalization is a set of theoretical proposals. TS is designed so that answers for or against those proposals can be framed specifically, recorded historically, quantified, and left open to external critique. The primary contribution is the instrument for framing and making visible a set of questions about structure in cognition, not a claim to have answered them exhaustively.
+
 ---
 
-# **End of ts_meaning_theory.md (Rewritten)**
+# **End of ts_meaning_theory.md (Revised for Scientific Posture)**
