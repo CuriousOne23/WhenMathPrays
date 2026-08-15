@@ -39,17 +39,12 @@ Therefore TS requires a theory of meaning that:
 
 ### **Scientific Posture**
 
-TS is an instrument for framing and making visible a set of questions about structure in meaning, continuity, and identity.  
-The current invariants, coupling procedure, and meaning-state vector are theoretical proposals under test.  
-Results that support or run against those proposals are both scientifically valuable; the architecture is designed so that either outcome can be recorded specifically and left open to external measurement criteria.  
-There is no completed theory to defend. Visibility, determinism, historical record, and openness to critique are the primary design goals.  
-Evaluation criteria for performance remain external and contestable.
+TS is an instrument for framing and making visible a set of questions about structure in meaning, continuity, and identity. The current invariants, coupling procedure, and meaning-state vector are theoretical proposals under test. Results that support or run against those proposals are both scientifically valuable; the architecture is designed so that either outcome can be recorded specifically and left open to external measurement criteria. There is no completed theory to defend. Visibility, determinism, historical record, and openness to critique are the primary design goals. Evaluation criteria for performance remain external and contestable.
 
 **Architectural rationale**  
 The definition of meaning as a structured set of invariant attributes was adopted because it simultaneously satisfies the full set of constraints required by TS: deterministic replay, identity continuity, bounded canonicalization, laptop-scale computation, clean integration with the TP layers, and avoidance of the instability of raw semantic embeddings.
 
-This choice follows directly from the computational realities described in *difficulty_of_meaning.md*.  
-Alternative representations (unbounded embeddings, fully open semantic spaces, or purely statistical continuous states) fail one or more of the required guarantees.
+This choice follows directly from the computational realities described in *difficulty_of_meaning.md*. Alternative representations (unbounded embeddings, fully open semantic spaces, or purely statistical continuous states) fail one or more of the required guarantees.
 
 ---
 
@@ -134,8 +129,7 @@ Meaning emerges only when:
 - is coupled with  
 - the contextual structure
 
-This coupling is the foundation of TS’s meaning theory and the reason ISc exists.  
-The coupling itself, and the particular form in which it is realized, are theoretical proposals whose adequacy is to be tested by the residuals they produce and by external measurement criteria.
+This coupling is the foundation of TS’s meaning theory and the reason ISc exists. The coupling itself, and the particular form in which it is realized, are theoretical proposals whose adequacy is to be tested by the residuals they produce and by external measurement criteria.
 
 ---
 
@@ -383,11 +377,9 @@ These attributes:
 - can be maintained on a laptop  
 
 **Representation and interaction notes**  
-Attributes are represented as discrete labels, bounded numerical values, or small structured sub-objects.  
-They are not assumed to be independent; referent continuity, identity continuity, and topic interact and must be updated consistently.
+Attributes are represented as discrete labels, bounded numerical values, or small structured sub-objects. They are not assumed to be independent; referent continuity, identity continuity, and topic interact and must be updated consistently.
 
-The meaning state vector is a primary extension point.  
-New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing.
+The meaning state vector is a primary extension point. New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing.
 
 **Provisional status**  
 This vector is the current theoretical proposal. Its sufficiency is to be tested by residual error under controlled conditions and by external evaluation criteria. It is not claimed to be complete or final.
@@ -456,8 +448,7 @@ Continuity is required over at least:
 - identity  
 - importance  
 
-The function $f$ is extensible.  
-New invariants or additional stability constraints may be incorporated as long as the continuity relation remains deterministic.
+The function $f$ is extensible. New invariants or additional stability constraints may be incorporated as long as the continuity relation remains deterministic.
 
 ---
 
