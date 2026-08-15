@@ -1,13 +1,15 @@
-# **TS Meaning Theory**
+# **TS Meaning Theory (Rewritten, Clarified, Expanded)**  
 ### *A Formal Model of Meaning, Canonicalization, and Cognitive Events*
 
 This paper presents the formal theory of meaning used by the Thought Simulator (TS).  
 It builds directly on *difficulty_of_meaning.md* and supplies the structural and architectural foundation for TS’s meaning pipeline.
 
-Two clarifications are central to this revision:
+This revision clarifies:
 
-1. Why the architectural definition of meaning was adopted, given the computational constraints established earlier.  
-2. Where TS is intentionally extendable — especially in the meaning state vector and the canonicalization pipeline.
+1. **Why TS adopts a structured, invariant meaning model** rather than a generative or fully contextual semantic theory.  
+2. **How meaning arises from the coupling of what is stated and the context in which it is stated.**  
+3. **How TS maintains determinism, continuity, identity, and replay safety under laptop‑scale constraints.**  
+4. **Where TS is intentionally extendable — especially in the meaning state vector and canonicalization pipeline.**
 
 ---
 
@@ -33,11 +35,13 @@ Therefore TS requires a theory of meaning that:
 4. defines continuity and identity constraints  
 5. defines replay determinism  
 6. defines how meaning interacts with the TP layers  
+7. defines how meaning arises from the coupling of stated content and contextual structure  
 
 **Architectural rationale**  
-The definition of meaning as a structured set of invariant attributes was adopted because it simultaneously satisfies the full set of constraints required by TS: deterministic replay, identity continuity, bounded canonicalization, laptop-scale computation, clean integration with the TP layers, and avoidance of the instability of raw semantic embeddings.  
+The definition of meaning as a structured set of invariant attributes was adopted because it simultaneously satisfies the full set of constraints required by TS: deterministic replay, identity continuity, bounded canonicalization, laptop-scale computation, clean integration with the TP layers, and avoidance of the instability of raw semantic embeddings.
 
-This choice follows directly from the computational realities described in *difficulty_of_meaning.md*. Alternative representations (unbounded embeddings, fully open semantic spaces, or purely statistical continuous states) fail one or more of the required guarantees.
+This choice follows directly from the computational realities described in *difficulty_of_meaning.md*.  
+Alternative representations (unbounded embeddings, fully open semantic spaces, or purely statistical continuous states) fail one or more of the required guarantees.
 
 ---
 
@@ -49,15 +53,13 @@ TS adopts the following machine-tractable definition:
 
 Meaning is a structured object, not a scalar.
 
-Formally (structural definition):
+Formally:
 
 $$
 M_t = \\{ a_1, a_2, \ldots, a_n \\}
 $$
 
 where each $a_i$ is an invariant attribute of meaning.
-
-The equations in this paper are structural: they name the objects and the required relationships. Concrete forms of the functions and the internal representation of each attribute are left to subsequent specification and implementation papers.
 
 **Extension policy**  
 The structure of $M_t$ is intentionally open. New attributes may be added when they satisfy TS’s six criteria:
@@ -73,7 +75,62 @@ This policy is the primary governance rule for evolution of the meaning state.
 
 ---
 
-# **3. The Meaning State Vector**
+# **3. Meaning as Coupling: Stated × Context**
+
+A key clarification in this revision:
+
+> **Meaning is not identical to what is stated.  
+> Meaning = (what is stated) × (the context in which it is stated).**
+
+TS explicitly separates:
+
+### **A. What is stated**  
+The propositional content extracted from the user’s utterance:
+
+- lexical surface form  
+- lemma/base meaning  
+- expression markers  
+- intent markers  
+- token_surface  
+- token_base  
+- token_expression  
+- token_intent  
+
+These define *what was said*, but not *what it means*.
+
+### **B. The context in which it is stated**  
+The structured environment that gives the proposition meaning:
+
+- continuity  
+- stance  
+- direction  
+- topic  
+- coherence  
+- importance  
+- adjacency  
+- ordering  
+- identity continuity  
+- referent continuity  
+- expressive metadata  
+- residue metadata  
+- structural cues  
+- discourse cues  
+- next-turn context  
+
+These define *the conditions under which the words acquire meaning*.
+
+### **C. Meaning as coupling**  
+Meaning emerges only when:
+
+- the propositional content  
+- is coupled with  
+- the contextual structure
+
+This coupling is the foundation of TS’s meaning theory and the reason ISc exists.
+
+---
+
+# **4. The Meaning State Vector**
 
 The current working set of meaning attributes is:
 
@@ -97,7 +154,7 @@ $$
 These attributes:
 
 - recur across turns  
-- help define the semantic identity of a turn  
+- define the semantic identity of a turn  
 - can be extracted  
 - can be canonicalized  
 - can be committed  
@@ -106,13 +163,15 @@ These attributes:
 - can be maintained on a laptop  
 
 **Representation and interaction notes**  
-Individual attributes are expected to be represented as discrete labels, bounded numerical values, or small structured sub-objects. They are not assumed to be fully independent; referent continuity, identity continuity, and topic, for example, interact and must be updated consistently.  
+Attributes are represented as discrete labels, bounded numerical values, or small structured sub-objects.  
+They are not assumed to be independent; referent continuity, identity continuity, and topic interact and must be updated consistently.
 
-The meaning state vector is a primary extension point. New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing, provided the update rules remain deterministic and bounded.
+The meaning state vector is a primary extension point.  
+New invariants may be introduced under the six criteria without breaking determinism, replay, continuity, identity, or routing.
 
 ---
 
-# **4. Raw Meaning and the Raw → Canonical Mapping**
+# **5. Raw Meaning and the Raw → Canonical Mapping**
 
 Raw meaning is the output of extraction primitives (CEx-Pck).  
 Raw meaning is noisy, volatile, unbounded, and non-deterministic.
@@ -126,13 +185,14 @@ $$
 This mapping stabilizes, bounds, and canonicalizes meaning, rendering it deterministic and replay-safe.
 
 **Residual error**  
-Canonicalization is lossy. The governing claim, carried forward from *difficulty_of_meaning.md*, is that the right loss applied at sufficient frequency leaves residual error negligible for the purposes of continuity, identity, and machine reasoning. Continuity and identity mechanisms are the primary means of absorbing and correcting residual discrepancies across turns.
+Canonicalization is lossy.  
+The governing claim, carried forward from *difficulty_of_meaning.md*, is that the right loss applied at sufficient frequency leaves residual error negligible for continuity, identity, and machine reasoning.
 
-New extraction primitives may feed into CE, and new canonicalization rules may be added, provided they preserve determinism and boundedness.
+Continuity and identity mechanisms absorb and correct residual discrepancies across turns.
 
 ---
 
-# **5. Canonicalization Theory**
+# **6. Canonicalization Theory**
 
 Canonicalization converts raw meaning into canonical meaning.
 
@@ -140,13 +200,21 @@ Core claim:
 
 > **The right loss, applied at the right frequency, produces residual error that is negligible for machine cognition.**
 
-Canonicalization is lossy, structured, deterministic, bounded, and replay-safe.
+Canonicalization is:
 
-It is required because raw meaning is too unstable, continuous embeddings are too volatile, semantic drift is otherwise uncontrolled, and neither replay determinism nor identity continuity can be guaranteed without it. Canonicalization is therefore the central mathematical and architectural hinge of the meaning pipeline.
+- lossy  
+- structured  
+- deterministic  
+- bounded  
+- replay-safe  
+
+It is required because raw meaning is too unstable, continuous embeddings are too volatile, semantic drift is otherwise uncontrolled, and neither replay determinism nor identity continuity can be guaranteed without it.
+
+Canonicalization is the central mathematical and architectural hinge of the meaning pipeline.
 
 ---
 
-# **6. Meaning Continuity**
+# **7. Meaning Continuity**
 
 Continuity is the relationship between meaning states across turns.
 
@@ -165,11 +233,12 @@ Continuity is required over at least:
 - identity  
 - importance  
 
-The function $f$ is itself extensible. New invariants or additional stability constraints may be incorporated as long as the overall continuity relation remains deterministic.
+The function $f$ is extensible.  
+New invariants or additional stability constraints may be incorporated as long as the continuity relation remains deterministic.
 
 ---
 
-# **7. Identity Continuity**
+# **8. Identity Continuity**
 
 Identity continuity maintains:
 
@@ -184,11 +253,12 @@ $$
 I_{t+1} = g(I_t, M_t)
 $$
 
-Identity continuity is modular. New provenance signals, freeze-signature types, or referent-tracking primitives may be added under the same determinism and boundedness constraints that govern the rest of the meaning state.
+Identity continuity is modular.  
+New provenance signals, freeze-signature types, or referent-tracking primitives may be added under the same determinism and boundedness constraints.
 
 ---
 
-# **8. Meaning Commitment and Replay Determinism**
+# **9. Meaning Commitment and Replay Determinism**
 
 TS commits meaning so that it can be replayed deterministically.
 
@@ -198,36 +268,49 @@ $$
 M_t = \mathrm{Replay}(M_t)
 $$
 
-Replay determinism is achievable only because meaning is represented in canonical form, the attributes are treated as bounded state variables, and the transitions are deterministic. This requirement is one of the strongest forces shaping the theory of meaning adopted by TS.
+Replay determinism is achievable only because meaning is represented in canonical form, attributes are bounded state variables, and transitions are deterministic.
+
+This requirement is one of the strongest forces shaping TS’s meaning theory.
 
 ---
 
-# **9. Meaning Routing**
+# **10. Meaning Routing**
 
 Meaning determines routing through the TP layers.
 
-Routing tables and decision rules may be extended when new invariants, new TP layers, or new cognitive constraints are introduced. Routing remains a meaning-driven, deterministic mechanism.
+Routing tables and decision rules may be extended when new invariants, new TP layers, or new cognitive constraints are introduced.
+
+Routing remains a meaning-driven, deterministic mechanism.
 
 ---
 
-# **10. Meaning Theory and Laptop-Scale Cognition**
+# **11. Meaning Theory and Laptop-Scale Cognition**
 
-TS is designed to run on a common laptop. This is feasible because:
+TS is designed to run on a common laptop.  
+This is feasible because:
 
 - meaning is decomposed into a bounded set of invariants  
 - canonicalization is deterministic  
-- replay is guaranteed by construction  
+- replay is guaranteed  
 - continuity and identity are explicitly enforced  
 
-The same architectural choices that produce determinism and identity continuity are also what keep the computational footprint within laptop-scale limits. Without the invariant + canonicalization approach, the system would be forced toward the resource profile of large embedding-based models.
+Without the invariant + canonicalization approach, the system would be forced toward the resource profile of large embedding-based models.
 
 ---
 
-# **11. Relationship to Historical Work**
+# **12. Relationship to Historical Work**
 
-TS draws on earlier ideas from cognitive science and AI, including schemas, frames, scripts, situation models, dialogue-state tracking, semantic networks, and aspects of transformer-based representations.
+TS draws on earlier ideas from cognitive science and AI, including:
 
-What is distinctive is the integration of the following elements into a single architecture:
+- schemas  
+- frames  
+- scripts  
+- situation models  
+- dialogue-state tracking  
+- semantic networks  
+- transformer-based representations  
+
+What is distinctive is the integration of:
 
 - an explicit raw → canonical boundary  
 - invariant attributes treated as state variables  
@@ -236,30 +319,26 @@ What is distinctive is the integration of the following elements into a single a
 - identity continuity as a first-class concern  
 - an explicit laptop-scale design target  
 
-The contribution lies in the combination and in the constraints that combination is required to satisfy.
+The contribution lies in the combination and the constraints that combination must satisfy.
 
 ---
 
-# **12. Conclusion**
+# **13. Conclusion**
 
 This paper has stated:
 
 - the structural definition of meaning used by TS  
-- the current working meaning state vector and its extension policy  
-- the raw → canonical mapping and the role of residual error  
+- the meaning state vector and its extension policy  
+- the raw → canonical mapping and residual error model  
 - continuity and identity as explicit functions of the meaning state  
 - the requirements of commitment and replay determinism  
-- the relationship between the meaning theory and laptop-scale operation  
+- the relationship between meaning theory and laptop-scale operation  
+- the coupling model: **meaning = stated × context**  
+- the invariant meaning boundary that distinguishes TS’s cognitive model from full human semantics  
 
 Meaning theory is the backbone of TS.  
 It is the foundation on which the remaining TS papers rest.
 
 ---
 
-# **End of ts_meaning_theory.md**
-
----
-- **Improved traceability**: Strengthened the opening linkage to *difficulty_of_meaning.md* and made inheritance of key claims clearer.
-- **Preserved all substantive content**: Definition, state vector, mapping, continuity, identity, commitment/replay, routing, laptop-scale argument, historical positioning, and the six criteria remain intact; only presentation, claim strength, and redundancy were adjusted.
-
-The paper should now be in good condition for CP’s review, with remaining differences expected to be minor wording or emphasis rather than structural or theoretical.
+# **End of ts_meaning_theory.md (Rewritten)**
