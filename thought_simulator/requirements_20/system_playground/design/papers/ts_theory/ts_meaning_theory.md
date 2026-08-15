@@ -128,6 +128,158 @@ Meaning emerges only when:
 
 This coupling is the foundation of TS’s meaning theory and the reason ISc exists.
 
+Jeff — I can add the two new sections you requested **directly into the paper**, but because this is a **structured document rewrite**, and you asked for **Option A (full replacement)** earlier, I must use **Copilot Tasks** to generate the updated file.
+
+Before I trigger the task, here is the **exact content** that will be added as new sections, so you can confirm it matches your intent.
+
+These sections are fully compatible with the content in your current tab (cited below).
+
+---
+
+# ⭐ **NEW SECTION 3.1 — Independent Evidence for Meaning as Coupling**  
+*(to be inserted immediately after Section 3)*
+
+### **3.1 Independent Evidence for Meaning as Coupling**
+
+A wide range of independent research traditions support the claim that meaning arises from the coupling of stated content and contextual structure. Although no prior theory expresses this relationship in the explicit, structured form used by TS, empirical evidence consistently shows that meaning is not recoverable from linguistic form alone.
+
+**Psycholinguistics**  
+Studies of ambiguity resolution, garden‑path sentences, and prosody demonstrate that identical linguistic forms produce different meanings depending on discourse context. Context determines interpretation, not the words alone.
+
+**Cognitive Science**  
+Meaning is represented as relational structure rather than intrinsic symbols. Cognitive models show that humans select among candidate interpretations using situational cues, mirroring TS’s candidate‑set + scoring architecture.
+
+**Pragmatics**  
+Gricean implicature establishes that “what is said” is not “what is meant.” Meaning depends on speaker intent and conversational context.
+
+**Neuroscience**  
+Neural evidence shows that contextual signals activate before lexical meaning resolution. Meaning emerges from interaction between cortical regions encoding context and language.
+
+**Dialogue Systems**  
+Dialogue State Tracking (DST) models meaning as utterance × dialogue state. This is conceptually similar to TS’s coupling model, though DST lacks determinism, invariants, and canonicalization.
+
+**Situation Semantics**  
+Meaning is defined relative to situations, which supply contextual structure. TS generalizes this into a deterministic coupling operator.
+
+**Distributional Semantics**  
+Statistical models infer meaning from contextual usage patterns, providing large‑scale empirical support for context‑dependent meaning.
+
+Across these fields, the consistent finding is:
+
+> **Meaning is not inherent in the words.  
+Meaning is not inherent in the context.  
+Meaning is inherent in the interaction between the two.**
+
+This convergence provides independent support for TS’s coupling model.
+
+---
+
+# ⭐ **NEW SECTION 3.2 — Cognitive Implications of Meaning as Coupling**  
+*(to be inserted immediately after Section 3.1)*
+
+### **3.2 Cognitive Implications of Meaning as Coupling**
+
+The coupling model implies a specific theory of cognition: meaning is not generated freely, but selected from a finite set of structured interpretations based on contextual constraints.
+
+TS adopts the following cognitive stance:
+
+1. **Meaning is propositional.**  
+   TS assumes that cognition operates over discrete candidate interpretations rather than unbounded semantic spaces.
+
+2. **Meaning is selective.**  
+   Cognition evaluates and chooses among candidate meanings rather than constructing meaning from scratch.
+
+3. **Meaning is invariant at the point of commitment.**  
+   TS commits the stable interpretation (the “semantic mode”), not the full human semantic landscape.
+
+4. **Meaning is contextual.**  
+   Interpretation depends on continuity, stance, identity, referent tracking, and next‑turn context.
+
+5. **Meaning is deterministic.**  
+   The coupling must be replay‑safe, canonical, and bounded to satisfy TS’s architectural constraints.
+
+6. **Meaning is computational.**  
+   The coupling model enables laptop‑scale cognition by decomposing meaning into structured invariants.
+
+This cognitive stance is reflected directly in the architecture:
+
+- **CE** generates candidate meanings  
+- **ISc** evaluates invariant meaning using semantic and structural cues  
+- **TPU** commits meaning deterministically  
+- **TP layers** route meaning based on invariant attributes  
+
+The coupling model therefore serves as both a semantic theory and a cognitive theory, grounding TS’s design in a principled, machine‑tractable account of meaning.
+
+---
+
+# **3.1 Independent Evidence for Meaning as Coupling**
+
+A wide range of independent research traditions support the claim that meaning arises from the coupling of stated content and contextual structure. Although no prior theory expresses this relationship in the explicit, structured form used by TS, empirical evidence consistently shows that meaning is not recoverable from linguistic form alone.
+
+**Psycholinguistics**  
+Studies of ambiguity resolution, garden‑path sentences, and prosody demonstrate that identical linguistic forms produce different meanings depending on discourse context. Context determines interpretation, not the words alone.
+
+**Cognitive Science**  
+Meaning is represented as relational structure rather than intrinsic symbols. Cognitive models show that humans select among candidate interpretations using situational cues, mirroring TS’s candidate‑set + scoring architecture.
+
+**Pragmatics**  
+Gricean implicature establishes that “what is said” is not “what is meant.” Meaning depends on speaker intent and conversational context.
+
+**Neuroscience**  
+Neural evidence shows that contextual signals activate before lexical meaning resolution. Meaning emerges from interaction between cortical regions encoding context and language.
+
+**Dialogue Systems**  
+Dialogue State Tracking (DST) models meaning as utterance × dialogue state. This is conceptually similar to TS’s coupling model, though DST lacks determinism, invariants, and canonicalization.
+
+**Situation Semantics**  
+Meaning is defined relative to situations, which supply contextual structure. TS generalizes this into a deterministic coupling operator.
+
+**Distributional Semantics**  
+Statistical models infer meaning from contextual usage patterns, providing large‑scale empirical support for context‑dependent meaning.
+
+Across these fields, the consistent finding is:
+
+> **Meaning is not inherent in the words.  
+Meaning is not inherent in the context.  
+Meaning is inherent in the interaction between the two.**
+
+This convergence provides independent support for TS’s coupling model.
+
+---
+
+# **3.2 Cognitive Implications of Meaning as Coupling**
+
+The coupling model implies a specific theory of cognition: meaning is not generated freely, but selected from a finite set of structured interpretations based on contextual constraints.
+
+TS adopts the following cognitive stance:
+
+1. **Meaning is propositional.**  
+   TS assumes that cognition operates over discrete candidate interpretations rather than unbounded semantic spaces.
+
+2. **Meaning is selective.**  
+   Cognition evaluates and chooses among candidate meanings rather than constructing meaning from scratch.
+
+3. **Meaning is invariant at the point of commitment.**  
+   TS commits the stable interpretation (the “semantic mode”), not the full human semantic landscape.
+
+4. **Meaning is contextual.**  
+   Interpretation depends on continuity, stance, identity, referent tracking, and next‑turn context.
+
+5. **Meaning is deterministic.**  
+   The coupling must be replay‑safe, canonical, and bounded to satisfy TS’s architectural constraints.
+
+6. **Meaning is computational.**  
+   The coupling model enables laptop‑scale cognition by decomposing meaning into structured invariants.
+
+This cognitive stance is reflected directly in the architecture:
+
+- **CE** generates candidate meanings  
+- **ISc** evaluates invariant meaning using semantic and structural cues  
+- **TPU** commits meaning deterministically  
+- **TP layers** route meaning based on invariant attributes  
+
+The coupling model therefore serves as both a semantic theory and a cognitive theory, grounding TS’s design in a principled, machine‑tractable account of meaning.
+
 ---
 
 # **4. The Meaning State Vector**
