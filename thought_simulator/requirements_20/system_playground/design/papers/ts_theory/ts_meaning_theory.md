@@ -276,6 +276,169 @@ The coupling model therefore serves as both a semantic theory and a cognitive th
 
 ---
 
+# **3.3 Historical Cognitive Machine Architectures and How TS Differs**
+
+TS’s meaning theory and cognitive architecture depart sharply from every prior class of cognitive machine. Although symbolic systems, hybrid symbolic systems, and modern LLMs each attempted to model meaning and cognition, none were built on the premise that **meaning is the deterministic coupling of stated content and contextual structure**. This section summarizes how earlier architectures were constructed and how TS differs fundamentally from all of them.
+
+---
+
+## **A. Symbolic Systems (GOFAI)**  
+Symbolic systems of the 1960s–1990s (frames, scripts, semantic networks, production rules, logic engines) assumed:
+
+- **Meaning is intrinsic to symbols.**  
+- Context is an *add‑on* (rule conditions, frame slots, inheritance).  
+- Cognition is rule application or logical inference.  
+- Determinism is achieved through fixed rules, not structured meaning.  
+- No canonicalization, no replay determinism, no invariant meaning.
+
+Symbolic systems treated context as metadata, not as a co‑equal operand in meaning.  
+They assumed:
+
+$$
+\text{Meaning} = \text{Symbol}
+$$
+
+TS rejects this.  
+TS assumes:
+
+$$
+\text{Meaning} = \text{Stated} \times \text{Context}
+$$
+
+Symbolic systems never formalized meaning as a coupling, never defined meaning as a structured state vector, and never required replay determinism or identity continuity.
+
+---
+
+## **B. Hybrid Symbolic Systems (Symbolic + Statistical / Symbolic + Neural)**  
+Hybrid systems attempted to fix symbolic brittleness by adding:
+
+- probabilistic weights  
+- statistical priors  
+- neural scoring layers  
+- Bayesian inference  
+- graph‑based semantic weighting  
+
+These systems treated context as:
+
+- modifiers  
+- weights  
+- priors  
+- activation probabilities  
+
+But they **never** defined meaning as:
+
+- a deterministic coupling  
+- a structured object  
+- a canonicalized invariant  
+- a replay‑safe state  
+- a bounded meaning vector  
+
+Hybrid systems assumed:
+
+$$
+\text{Meaning} = \text{Symbol} + \text{Contextual Modifiers}
+$$
+
+TS is different:
+
+- context is not a modifier  
+- context is a *co‑equal operand*  
+- meaning is the *interaction*  
+- meaning is invariant at commitment  
+- meaning is canonicalized  
+- meaning is replay‑safe  
+- meaning is bounded and laptop‑scale  
+
+No hybrid system ever implemented meaning as a coupling operator.
+
+---
+
+## **C. Modern LLMs (Transformers)**  
+LLMs (GPT‑style, Grok‑style, Claude‑style, Gemini‑style) encode:
+
+- meaning  
+- context  
+- syntax  
+- semantics  
+- discourse  
+- adjacency  
+- routing  
+- intent  
+
+all in the **same entangled tensor space**.
+
+LLMs do not:
+
+- separate stated content from contextual structure  
+- define meaning as a structured object  
+- define meaning as invariant  
+- define meaning as deterministic  
+- define meaning as replay‑safe  
+- define meaning as canonical  
+- define meaning as a coupling  
+- define meaning as a state vector  
+
+LLMs assume:
+
+$$
+\text{Meaning} = f(\text{All Tokens, All Layers})
+$$
+
+This is the opposite of TS.
+
+TS assumes:
+
+$$
+\text{Meaning} = \text{Stated} \times \text{Context}
+$$
+
+LLMs entangle everything; TS separates, structures, and couples.
+
+LLMs generate meaning; TS **selects** meaning.
+
+LLMs drift; TS is deterministic.
+
+LLMs hallucinate; TS is bounded.
+
+LLMs cannot guarantee identity continuity; TS requires it.
+
+LLMs cannot guarantee replay determinism; TS enforces it.
+
+---
+
+## **D. Why TS Is Fundamentally Different**
+
+TS is the first cognitive architecture built on the following premises:
+
+1. **Meaning is a structured object.**  
+2. **Meaning arises from a deterministic coupling of stated content and contextual structure.**  
+3. **Meaning must be invariant at commitment.**  
+4. **Meaning must be canonicalized.**  
+5. **Meaning must be replay‑safe.**  
+6. **Meaning must be bounded and laptop‑scale.**  
+7. **Cognition is propositional and selective, not generative.**  
+8. **ISc evaluates meaning; it does not generate meaning.**  
+9. **CE generates candidates; ISc selects the invariant meaning.**  
+10. **TPU commits meaning deterministically; TP replays it.**
+
+No symbolic system, hybrid system, or LLM has ever implemented this model.
+
+TS is the first architecture where:
+
+- meaning is **structured**  
+- meaning is **coupled**  
+- meaning is **invariant**  
+- meaning is **canonical**  
+- meaning is **deterministic**  
+- meaning is **bounded**  
+- meaning is **replay‑safe**  
+- meaning is **computationally tractable**  
+- meaning is **the foundation of cognition**  
+
+This is the architectural leap that distinguishes TS from every prior cognitive machine.
+
+---
+
 # **4. The Meaning State Vector**
 
 The current working set of meaning attributes is:
