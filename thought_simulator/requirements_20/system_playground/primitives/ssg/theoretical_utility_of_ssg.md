@@ -1,277 +1,235 @@
 # **theoretical_utility_of_ssg.md**  
-### *Structural Signal Generator — Theoretical Utility, Placement, Necessity, and Function in Path‑A*  
-### *Aligned with 20.47, 20.40.*, 20.44, 20.45, 20.15, 20.105.*, and ts_meaning_theory.md*
+### *Structural Signature Generator — Theoretical Utility, Placement, Necessity, and Function in Path‑A*  
+### *Aligned with revised 20.47, 20.15, STPX, TR, RB, IdOB, RBU, and ts_meaning_theory.md*
 
 ---
 
 # **1. Introduction**
 
-The Structural Signal Generator (SSG) is the **fifth and final OB‑Set primitive** in Path‑A.  
-It is the **structural manifold encoder** that transforms SmOB’s pre‑semantic residue and cue vector into a **deterministic geometric representation** suitable for routing, scoring, continuity, identity, and replay determinism.
+The Structural Signature Generator (SSG) is the **final structural primitive** in Path‑A.  
+Its purpose is to convert the SmOB structural graph into a **deterministic, fixed‑length structural signature** that serves as a **coordinate chart** on the structural manifold.
 
-SSG exists because Path‑A requires:
+SSG does **not** interpret semantics.  
+It does **not** construct semantic‑layer geometry.  
+It does **not** produce semantic‑adjacent signals.
 
-- a **stable structural substrate** for meaning evaluation  
-- a **geometric manifold** for routing  
-- a **deterministic freeze‑point** for structural entropy  
-- a **canonical representation** of structural cues  
-- a **bounded, laptop‑scale encoding** of upstream residue  
-- a **replay‑safe structural identity** across turns  
+Instead, SSG provides the **structural substrate** required for:
 
-Meaning theory defines meaning as:
+- deterministic routing (RB)  
+- structural cue extraction (STPX)  
+- meaning‑layer routing vector construction (TR)  
+- identity‑conditioned refinement (IdOB)  
+- meaning‑side commit (RBU)  
+- replay determinism  
+- laptop‑scale cognition  
+
+Meaning theory defines:
 
 > **Meaning = (what is stated) × (the context in which it is stated)**
 
-SSG is the primitive that **makes the contextual half computable**.  
-It encodes the structured context into a geometric manifold that ISc and downstream primitives can use deterministically.
+SSG encodes the **structural context** into a stable, bounded, replay‑safe geometric representation.
 
 ---
 
 # **2. Placement of SSG in Path‑A**
 
-SSG appears **after semantic scoring** and **before routing**, in the canonical pipeline:
+SSG appears immediately after SmOB and immediately before STPX:
 
 ```
-SOB → SROB → CnOB → SmOB → WrdNm → ISc → SSG → STPX → RBU → TR → RB → refinement loop → TPU → OuBA
+SOB → SROB → CnOB → SmOB → SSG → STPX → TR → RB → RTU → IdOB → RBU
 ```
 
 This placement is intentional:
 
-- **Upstream**: SSG consumes SmOB’s compressed pre‑semantic residue and cue vector.  
-- **Downstream**: SSG provides the structural manifold required by STPX, RBU, TR, RB, IdOB, WrdNm, and the refinement loop.
+- **Upstream:** SSG consumes the SmOB structural graph (residue nodes, arcs, labels).  
+- **Downstream:** SSG provides the structural signature used by STPX, TR, RB, IdOB, and RBU.
 
-SSG is the **boundary object** between:
+SSG is the **boundary** between:
 
-- the **semantic‑adjacent structural pipeline** (OB‑Set), and  
-- the **geometric routing pipeline** (STPX → RBU → TR → RB).
-
-It is the **last structural primitive** before routing and the **first geometric primitive** in Path‑A.
+- the **structural OB‑Set pipeline**, and  
+- the **structural‑adjacent → meaning‑layer → routing pipeline**.
 
 ---
 
 # **3. Why SSG Exists (Necessity)**
 
-SSG is necessary because:
+SSG is necessary because Path‑A requires:
 
-### **1. Structural ambiguity must be frozen before routing.**  
-SmOB produces pre‑semantic cues and compressed residue, but ambiguity remains.  
-Routing cannot operate on ambiguous structure.
+### **1. A stable structural substrate for meaning theory**  
+Meaning theory requires a stable representation of structural context.  
+SSG provides this by producing a deterministic structural signature.
 
-SSG freezes structural entropy.
+### **2. A geometric coordinate chart for routing**  
+RB performs relational routing using geometric proximity.  
+SSG provides the structural coordinate chart RB needs.
 
-### **2. Meaning theory requires a stable structural substrate.**  
-Meaning = stated × context.  
-SSG encodes the **context** side into a deterministic manifold.
+### **3. A deterministic freeze‑point for structural entropy**  
+SmOB produces a rich structural graph.  
+SSG freezes this into a bounded, canonical vector.
 
-### **3. ISc requires stable structural features.**  
-ISc consumes numeric encodings of SSG’s manifold via WrdNm.  
-Without SSG, structural features would be unstable and non‑canonical.
+### **4. Replay determinism**  
+SSG ensures:
 
-### **4. Routing requires geometric invariants.**  
-RBU, TR, and RB operate on geometric cues:
+- identical structural graphs → identical signatures  
+- deterministic ordering  
+- deterministic normalization  
+- deterministic provenance  
 
-- adjacency  
-- ordering  
-- constraint families  
-- semantic‑adjacent signals  
-- manifold hash  
-- routing‑eligibility cues  
+Replay determinism is required for TP commit safety and historical consistency.
 
-SSG produces these invariants.
-
-### **5. Replay determinism requires a canonical structural representation.**  
-SSG produces:
-
-- deterministic manifold hash  
-- deterministic structural geometry  
-- deterministic cue ordering  
-
-These are required for replay determinism.
-
-### **6. Identity continuity requires stable structural cues.**  
-IdOB relies on SSG’s manifold to maintain:
+### **5. Identity continuity**  
+IdOB relies on stable structural cues to maintain:
 
 - referent continuity  
-- identity continuity  
 - stance continuity  
 - topic continuity  
 
-### **7. Laptop‑scale cognition requires bounded geometry.**  
-SSG compresses SmOB’s residue into a bounded geometric representation.
+SSG provides the structural substrate for these continuity checks.
+
+### **6. Laptop‑scale cognition**  
+SSG compresses the structural graph into a bounded vector in $\mathbb{R}^d$, enabling:
+
+- deterministic scoring  
+- deterministic routing  
+- bounded memory footprint  
+- C++ parity  
+- progressive lineup testing
 
 ---
 
 # **4. Inputs SSG Consumes**
 
-SSG consumes **only SmOB‑owned fields**, plus read‑only metadata from the TP.
+SSG consumes **only**:
 
-## **4.1 Primary Inputs (SmOB)**
+### **SmOB structural graph**
+- residue nodes  
+- directed arcs  
+- structural labels  
 
-- semantic_adjacent_cues  
-- modality_cues  
-- affect_markers  
-- conflict_adjacent_signals  
-- underspecification_adjacent_signals  
-- constraint_importance_adjacent_signals  
-- presemantic_residue_hash  
-- TR-input cue vector  
-- semantic-adjacent change signals  
-- routing-semantic cues  
+### **Structural‑adjacent metadata (read‑only)**
+- continuity metadata  
+- expressive metadata  
+- normalization metadata  
+- provenance metadata  
+- lineage metadata  
+- entropy/signature histories  
 
-These form the **pre‑semantic structural substrate**.
+SSG does **not** consume:
 
-## **4.2 Upstream Structural Lineage (via SmOB)**
+- semantic_layer_metadata  
+- routing_metadata  
+- identity metadata  
+- meaning metadata  
+- truth/done fields  
+- any Pipeline‑B envelopes  
 
-SSG indirectly consumes:
-
-- SOB structural segmentation  
-- SROB refined structure  
-- CnOB constraint families (C1–C7)  
-- CnOB constraint residue  
-- CnOB constraint‑importance  
-- SmOB semantic‑adjacent cues  
-
-## **4.3 TP Metadata (read‑only)**
-
-SSG reads but does not modify:
-
-- context_metadata  
-- msl_metadata  
-- continuity_metadata  
-- identity_metadata  
-- semantic_importance  
-- semantic_residue_metadata  
-- CCR output  
-- CIL substrate metadata  
-- next_context_metadata  
-- provenance_metadata  
-
-These metadata envelopes provide **contextual structure** required by meaning theory.
+This preserves primitive boundaries and determinism.
 
 ---
 
 # **5. What SSG Does (Function)**
 
-SSG performs **three theoretical jobs**:
+SSG performs **three theoretical functions**:
 
 ---
 
-## **Job 1 — Structural Manifold Construction**
+## **Function 1 — Structural Invariant Extraction**
 
-SSG constructs a **geometric manifold** from SmOB’s cues and residue.
+SSG computes five invariant families:
 
-This manifold encodes:
+- arc‑pattern statistics  
+- binding‑depth measures  
+- residue‑entropy distribution  
+- curvature metrics  
+- motif‑frequency counts  
 
-- adjacency  
-- ordering  
-- constraint families  
-- semantic‑adjacent cues  
-- conflict signals  
-- underspecification signals  
-- modality cues  
-- affect cues  
-- continuity cues  
-- identity‑adjacent cues  
-- routing‑eligibility cues  
-
-This manifold is the **structural half of meaning**.
+These invariants describe **how structure is arranged**, not what it means.
 
 ---
 
-## **Job 2 — Entropy Freeze and Canonicalization**
+## **Function 2 — Canonicalization and Entropy Freeze**
 
-SSG freezes structural entropy by:
+SSG canonicalizes the structural graph by:
 
-- canonical ordering  
-- deterministic hashing  
-- bounded geometric encoding  
-- replay‑safe manifold construction  
+- deterministic ordering  
+- deterministic normalization  
+- deterministic vector assembly  
+- deterministic L2 normalization  
 
-This freeze‑point is required for:
+This freeze‑point ensures:
 
-- deterministic routing  
-- deterministic scoring  
-- deterministic replay  
+- replay determinism  
+- routing determinism  
+- scoring determinism  
 - identity continuity  
-- meaning continuity  
-- TP commit safety  
+- stable downstream behavior
 
 ---
 
-## **Job 3 — Geometric Address Formation**
+## **Function 3 — Structural Coordinate Chart Formation**
 
 SSG produces:
 
-- **semantic_layer_hash**  
-- **structural manifold hash**  
-- **geometric invariants**  
-- **routing‑eligible structural cues**
+- `tp.ssg_signature` — the structural coordinate chart  
+- `tp.ssg_layer_bitmap` — layer contribution mask  
+- `tp.ssg_reason_code` — completeness classification  
+- `tp.ssg_status` — execution status  
 
-These are consumed by:
+These fields are consumed downstream by:
 
-- WrdNm → numeric encoding  
-- ISc → semantic scoring  
-- STPX → discourse normalization  
-- RBU → routing arbitration  
-- TR → truth‑relation mapping  
-- RB → routing decision  
-- IdOB → identity continuity  
-- refinement loop → iterative meaning stabilization  
+- STPX → structural cue extraction  
+- TR → meaning‑layer routing vector  
+- RB → relational routing  
+- IdOB → identity‑conditioned refinement  
+- RBU → meaning‑side commit  
+
+SSG does **not** produce semantic‑layer geometry.
 
 ---
 
 # **6. Outputs SSG Produces**
 
-SSG writes only SSG‑owned fields:
+SSG writes **only**:
+
+- `tp.ssg_signature`  
+- `tp.ssg_layer_bitmap`  
+- `tp.ssg_reason_code`  
+- `tp.ssg_status`
+
+These fields form the **structural substrate** for all downstream primitives.
+
+SSG does **not** write:
 
 - semantic_layer_hash  
 - semantic_adjacent_signals  
 - referent_adjacent_signals  
 - modality_stance_cues  
 - structural_manifold_geometry  
-- structural_manifold_hash  
 - routing_eligibility_geometry  
-- ssg_provenance  
 
-These outputs form the **geometric substrate** for all downstream primitives.
+These responsibilities belong to STPX, TR, RB, IdOB, and RBU.
 
 ---
 
 # **7. Downstream Consumers of SSG Output**
 
-SSG’s manifold is consumed by:
-
 ### **STPX**  
-- discourse normalization  
-- structural continuity  
-- adjacency cues  
-- turn‑taking geometry  
-
-### **RBU**  
-- routing arbitration  
-- structural eligibility  
+Uses SSG’s structural signature to extract deterministic structural cues.
 
 ### **TR**  
-- truth‑relation mapping  
-- structural consistency  
+Uses structural cues (via STPX) to build the meaning‑layer routing vector.
 
 ### **RB**  
-- routing decision  
-- manifold‑based path selection  
+Uses structural signatures and TR to perform relational routing.
 
 ### **IdOB**  
-- identity continuity  
-- referent continuity  
-- stance continuity  
+Uses structural cues to maintain identity and referent continuity.
 
-### **WrdNm**  
-- numeric encoding of structural features  
-
-### **ISc**  
-- semantic scoring using structural features  
+### **RBU**  
+Uses structural cues to commit meaning‑side identity and stance.
 
 ### **Refinement Loop**  
-- iterative stabilization of meaning and routing  
+Uses structural signatures to stabilize meaning across cycles.
 
 ---
 
@@ -281,40 +239,17 @@ Meaning theory defines:
 
 > **Meaning = Stated × Context**
 
-SSG encodes the **context** operand into a **structured geometric manifold**.
+SSG encodes the **structural context** operand into a deterministic vector.
 
-### **SSG provides the contextual structure that meaning requires:**
+This allows:
 
-- continuity  
-- stance  
-- direction  
-- coherence  
-- importance  
-- adjacency  
-- ordering  
-- constraint families  
-- semantic‑adjacent cues  
-- identity continuity  
-- referent continuity  
-- next‑turn context  
-- discourse cues  
-- structural residue  
-- semantic residue alignment  
-- CCR alignment  
-- CIL substrate continuity  
+- ISc to couple stated content with structural context  
+- TR to construct meaning‑layer routing vectors  
+- RB to perform relational routing  
+- IdOB to refine identity‑conditioned meaning  
+- RBU to commit meaning‑side fields deterministically
 
-ISc then performs the coupling:
-
-- stated content (FFTM)  
-- ×  
-- SSG’s contextual manifold  
-
-TPU commits the invariant meaning.
-
-Thus:
-
-### ⭐ **SSG is the structural half of meaning.**  
-It makes the meaning theory computable.
+SSG is the primitive that makes the **context operand computable**.
 
 ---
 
@@ -322,21 +257,18 @@ It makes the meaning theory computable.
 
 SSG ensures replay determinism by:
 
-- deterministic manifold construction  
-- deterministic hashing  
-- canonical ordering  
-- provenance tracking  
-- bounded geometric encoding  
+- deterministic invariant extraction  
+- deterministic vector assembly  
+- deterministic normalization  
+- deterministic provenance  
+- bounded structural encoding  
 
 Replay determinism is required for:
 
-- meaning continuity  
-- identity continuity  
-- routing stability  
 - TP commit safety  
-- historical record integrity  
-
-SSG is the primitive that guarantees structural replay determinism.
+- routing stability  
+- identity continuity  
+- historical record integrity
 
 ---
 
@@ -344,20 +276,18 @@ SSG is the primitive that guarantees structural replay determinism.
 
 SSG enables laptop‑scale cognition by:
 
-- compressing SmOB’s residue into a bounded manifold  
+- compressing structural graphs into bounded vectors  
 - avoiding unbounded embeddings  
-- producing small, deterministic geometric structures  
-- enabling WrdNm’s numeric encoding  
-- enabling ISc’s bounded scoring  
+- enabling deterministic scoring  
 - enabling deterministic routing  
-
-Without SSG, Path‑A would require transformer‑scale continuous embeddings and lose determinism.
+- supporting C++ parity  
+- supporting progressive lineup testing
 
 ---
 
 # **11. Summary**
 
-SSG is the **structural manifold encoder** of Path‑A.
+SSG is the **structural signature generator** of Path‑A.
 
 It is necessary because:
 
@@ -369,15 +299,8 @@ It is necessary because:
 - TP requires canonical structure  
 - laptop‑scale cognition requires bounded geometry  
 
-SSG consumes SmOB’s pre‑semantic residue and cue vector, integrates TP metadata, freezes structural entropy, constructs a deterministic manifold, and produces geometric invariants consumed by all downstream primitives.
+SSG consumes the SmOB structural graph, extracts structural invariants, canonicalizes them, and produces a deterministic structural signature consumed by all downstream primitives.
 
-SSG is the primitive that makes meaning theory computable:
-
-> **Meaning = Stated × Context**  
-> **SSG encodes the Context.**  
-> **ISc performs the coupling.**  
-> **TPU commits the meaning.**
-
-SSG is the backbone of structural determinism in Path‑A.
+SSG is the primitive that makes the **structural half of meaning** computable.
 
 ---
