@@ -109,62 +109,54 @@ This ensures:
 
 ---
 
-# **3. High‑Level Program Structure**
+# **3. High‑Level Program Structure (ISc‑Aligned)**
 
-`ssg.py` follows a **single entrypoint** pattern:
-
-```python
-PRIMITIVE_NAME = "SSG"
-
-def run(tp):
-    """
-    Structural Signature Generator (SSG) entrypoint.
-
-    Args:
-        tp: Thought Packet (mutable).
-
-    Returns:
-        tp: Updated TP with SSG-owned fields set.
-    """
-    inputs = _extract_ssg_inputs(tp)
-    invariants = _compute_structural_invariants(inputs)
-    signature, bitmap, reason_code, status = _assemble_signature(invariants)
-    _write_ssg_outputs(tp, signature, bitmap, reason_code, status)
-    _record_provenance(tp)
-    return tp
-```
-
-Helper functions:
+`ssg.py` follows the **class + `process()`** pattern used by the gold‑standard ISc
+implementation so the progressive testbench can instantiate and call it uniformly.
 
 ```python
-def _extract_ssg_inputs(tp):
-    # Read SmOB structural graph + structural-adjacent metadata (read-only)
-    # Return structured input bundle (graph + metadata)
+PRIMITIVE_NAME = "ssg"   # lowercase — must match directory and progressive naming
 
-def _compute_structural_invariants(inputs):
-    # Compute f1..f5 invariant families from the structural graph
-    # Return dict: {"f1": ..., "f2": ..., "f3": ..., "f4": ..., "f5": ...}
+def get_primitive_name() -> str:
+    return PRIMITIVE_NAME
 
-def _assemble_signature(invariants):
-    # Concatenate invariants into phi(G)
-    # Compute L2-normalized signature sigma
-    # Compute layer bitmap, reason_code, status
-    # Return (signature, bitmap, reason_code, status)
+class SSG:
+    def __init__(self, tp_input=None):
+        # deep-copy input TP so upstream is not mutated by reference accidents
+        ...
 
-def _write_ssg_outputs(tp, signature, bitmap, reason_code, status):
-    # Write SSG-owned fields only
-    # No other TP fields may be modified
+    def process(self) -> dict:
+        graph = self._extract_graph(self.tp)
+        if graph is None:
+            self._write_missing()          # status=MISSING_INPUT; do NOT write signature
+            return self.tp
 
-def _record_provenance(tp):
-    # Append ssg_ref to exec_trace (per 20.47)
+        phi, layer_bits = self._compute_phi(graph)
+        signature = _l2_normalize(phi)     # or zero vector if ||phi||==0
+
+        status, reason, bitmap = self._decide_status(phi, layer_bits, graph)
+        self._write(signature, bitmap, reason, status)
+        self._append_audit(status, reason, bitmap)
+        return self.tp
+
+def run(tp: dict) -> dict:
+    """Functional alias matching older scaffold language."""
+    return SSG(tp).process()
 ```
 
-This structure is:
+### Mandatory helpers (names may vary; responsibilities may not)
 
-- deterministic  
-- testbench‑friendly  
-- C++‑parity‑friendly  
-- aligned with 20.47 HLRs
+| Helper | Responsibility |
+|--------|----------------|
+| `_extract_graph(tp)` | Read SmOB structural graph; return normalized `{nodes, arcs}` or `None` if absent |
+| `_compute_phi(graph)` | Compute provisional `f1..f5` → concatenated `phi`; also layer contribution bits |
+| `_l2_normalize(vec)` | Return unit vector or zero vector |
+| `_decide_status(...)` | Map phi / bits / emptiness → `(status, reason_code, bitmap)` |
+| `_write(...)` | Write **only** the four SSG-owned fields |
+| `_write_missing()` | `MISSING_INPUT` path: no `ssg_signature` key |
+| `_append_audit(...)` | Append deterministic `ssg_ref` to `exec_trace` |
+
+This structure is deterministic, testbench‑friendly (matches ISc control flow), C++‑parity‑friendly, and aligned with 20.47 and progressive §3.10.
 
 ---
 
@@ -291,6 +283,8 @@ $$
 
 Status logic must match 20.47 failure‑mode HLRs.
 
+`PARTIAL` as a **status** is secondary; primary status values used by the implementation are `OK | MISSING_INPUT | DEGENERATE`, with `PARTIAL` mainly as **reason_code**. That matches the current `ssg.py`.
+
 ---
 
 # **6. Primitive Boundary Discipline**
@@ -362,5 +356,105 @@ It ensures that all SSG artifacts can be written deterministically and consisten
 
 ---
 
-# **End of Document — ssg_py_struc_pgm.md (Unified Structural‑Only Rewrite)**
+# **10. Concrete Fixture Graph Shape (Provisional)**
+
+### Preferred
+```yaml
+metadata:
+  residue:
+    structural_residue:
+      nodes:
+        - id: "a"
+          label: "segment"
+          layer: 3          # 0=SOB, 1=SROB, 2=CnOB, 3=SmOB
+        - id: "b"
+          label: "constraint"
+          layer: 2
+      arcs:
+        - src: "a"
+          dst: "b"
+          label: "constrain"
+          layer: 2
+    refinement_residue: []
+    constraint_residue: []
+    semantic_adjacent_residue: []
+    presemantic_hash: "..."
+    residue_provenance:
+      origin: SmOB
+      last_update: SmOB
 ```
+
+### Acceptable alternate
+```yaml
+metadata:
+  structural_graph:
+    nodes: [...]
+    arcs: [...]
+```
+
+If neither form is present → `ssg_status = MISSING_INPUT` and **do not** write `ssg_signature`.
+
+---
+
+# **11. Provisional Dimension and Family Layout (v1)**
+
+| Family | Length | Contents (v1 stub-friendly) |
+|--------|--------|-----------------------------|
+| f1 arc patterns | 8 | Normalized counts over fixed `ARC_VOCAB` |
+| f2 binding depth | 2 | max depth / 10, mean depth / 10 |
+| f3 residue entropy | 1 | Shannon entropy of node labels |
+| f4 curvature | 2 | cycle-density proxy, clustering stub |
+| f5 motif frequencies | 7 | chain2, chain3, star, cycle3, parallel, self_loop, isolated |
+| **d** | **20** | sum of the above |
+
+`ARC_VOCAB` (fixed order): `bind, order, adj, constrain, refine, continue, segment, other`  
+Unknown arc labels → `other`.
+
+v1 φ may be deterministic stubs. The contract under test is the four-field interface, L2 discipline, status/reason/bitmap, and write boundaries — not yet geometric quality for RB.
+
+---
+
+# **12. Status / Reason Decision Table**
+
+| Condition | `ssg_status` | `ssg_reason_code` | `ssg_signature` | `ssg_layer_bitmap` |
+|-----------|--------------|-------------------|-----------------|--------------------|
+| No residue / structural_graph | `MISSING_INPUT` | `EMPTY` | **absent** | `0` |
+| Graph present, φ = 0, empty layers | `OK` | `EMPTY` | zero vector length d | `0` |
+| Graph non-empty but φ = 0 | `DEGENERATE` | `EMPTY` | zero vector | `0` |
+| Some but not all of L0–L3 | `OK` | `PARTIAL` | L2 unit vector | 1..14 |
+| All four layers | `OK` | `FULL` | L2 unit vector | `15` |
+
+Bits: `b0=SOB, b1=SROB, b2=CnOB, b3=SmOB`.
+
+---
+
+# **13. Progressive Testbench File Map for SSG**
+
+```
+primitives/ssg/ssg.py
+testbenches/path_a/structure/
+  ssg_testbench.py
+  ssg_testbench.yaml
+  ssg_input.yaml
+  ssg_rules.yaml
+  ssg_rules_to_check.yaml
+  ssg_rulechecker.py
+  ssg_tests_to_run.yaml
+```
+
+`run.py` module path:
+`thought_simulator.requirements_20.system_playground.testbenches.path_a.structure.ssg_testbench`  
+with `"use_ssg": True`.
+
+---
+
+# **14. What v1 Must Prove vs Defer**
+
+**Must prove:** four-field contract; no upstream residue mutation; status/reason/bitmap enums; L2 unit or zero; MISSING_INPUT does not write signature; determinism / progressive mechanics.
+
+**Deferred:** final f1..f5 formulas; final motif catalog; empirical clustering for RB.
+```
+
+---
+
+# **End of Document — ssg_py_struc_pgm.md (Unified Structural‑Only Rewrite)**
